@@ -10,6 +10,7 @@ import {
   createMockRuntimeConfig,
   createNoOpClerkMiddleware,
   createNoOpRateLimiterFactory,
+  createUnauthenticatedMcpAuthClerkDeps,
 } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -18,6 +19,9 @@ const SHARED_ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
 async function createBypassedApp() {
   const runtimeConfig = createMockRuntimeConfig({
     dangerouslyDisableAuth: true,
+    // Full-surface fixture: opt in to the user-search tools (gated OFF by
+    // default) so the list_tools parity assertion sees the complete set.
+    userSearchEnabled: true,
     env: { ALLOWED_HOSTS: SHARED_ALLOWED_HOSTS },
   });
   const observability = createMockObservability(runtimeConfig);
@@ -40,6 +44,7 @@ async function createEnforcedApp() {
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
+    mcpAuthClerkDeps: createUnauthenticatedMcpAuthClerkDeps(),
     rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 }
@@ -129,6 +134,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'fetch',
       'get-curriculum-model',
       'get-eef-evidence',
+      'get-keyword-graph',
       'get-misconception-graph',
       'get-prior-knowledge-graph',
       'get-thread-progressions',
@@ -140,6 +146,65 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     expect(names.toSorted((a, b) => a.localeCompare(b))).toEqual(
       expectedToolNames.toSorted((a, b) => a.localeCompare(b)),
     );
+  });
+
+  it('serves both keywords tools with mutual when-to-prefer disambiguation (G4b)', async () => {
+    const app = await createBypassedApp();
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+    expect(res.status).toBe(200);
+
+    const envelope = parseSseEnvelope(res.text);
+    const toolListResult = ToolListResultSchema.parse(envelope.result);
+    const describeTool = (name: string): string => {
+      const description = toolListResult.tools.find((t) => t.name === name)?.description;
+      return typeof description === 'string' ? description : '';
+    };
+
+    // The generated live-API tool points at the graph sibling…
+    expect(describeTool('get-keywords')).toContain('get-keyword-graph');
+    expect(describeTool('get-keywords')).toContain('LIVE');
+
+    // …and the graph tool points back, stating its snapshot semantics.
+    expect(describeTool('get-keyword-graph')).toContain('get-keywords');
+    expect(describeTool('get-keyword-graph')).toContain('snapshot');
+  });
+
+  it('serves the bounded integer limit schema for get-keyword-graph (S4)', async () => {
+    const app = await createBypassedApp();
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+    expect(res.status).toBe(200);
+
+    const envelope = parseSseEnvelope(res.text);
+    const toolListResult = ToolListResultSchema.parse(envelope.result);
+    const keywordGraph = toolListResult.tools.find((t) => t.name === 'get-keyword-graph');
+    expect(keywordGraph).toBeDefined();
+
+    // The doc text and the runtime refusal both enforce an integer in
+    // [1, 100]; the served JSON schema must declare the same bounds rather
+    // than a bare number, so callers see the contract before calling. The
+    // 100 is a deliberate literal pin of the served contract (the app does
+    // not depend on graph-corpus-sdk, where MAX_KEYWORD_LIMIT lives): if
+    // the ceiling ever changes, this safeParse fails loudly and the pin is
+    // updated as part of that deliberate change.
+    const KeywordGraphLimitSchema = z.object({
+      inputSchema: z.looseObject({
+        properties: z.looseObject({
+          limit: z.looseObject({
+            type: z.literal('integer'),
+            minimum: z.literal(1),
+            maximum: z.literal(100),
+          }),
+        }),
+      }),
+    });
+    const parsed = KeywordGraphLimitSchema.safeParse(keywordGraph);
+    expect(parsed.error?.message ?? 'conforms').toBe('conforms');
   });
 
   it('rejects missing Accept header with 406', async () => {

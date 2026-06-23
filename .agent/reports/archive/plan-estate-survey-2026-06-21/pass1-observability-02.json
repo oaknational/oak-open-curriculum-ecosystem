@@ -1,0 +1,2118 @@
+{
+  "batch_size": 12,
+  "plans_returned": 12,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/observability/current/security-observability.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending; plan is actively blocking on a beta-gate dependency, not complete or abandoned",
+          "file_line": "security-observability.plan.md:17-36"
+        },
+        {
+          "claim": "Design principles and non-goals encode decisions not duplicated elsewhere in this plan file",
+          "file_line": "security-observability.plan.md:79-98"
+        },
+        {
+          "claim": "WS1-WS5 workstream structure is concrete and actionable once the blocker clears",
+          "file_line": "security-observability.plan.md:120-205"
+        },
+        {
+          "claim": "release_gate: public-beta confirms forward scope, not a completed or archived item",
+          "file_line": "security-observability.plan.md:16"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan holds a well-reasoned, architecturally grounded scope with explicit non-goals, a clear trust-boundary principle, and a concrete test-first workstream structure. The PII-safety constraint is woven through design, workstream, and risk sections consistently. No speculative or architecturally unsound ideas are present. The only uncertainty is whether the blocking dependency (events-workspace beta-gate) has been resolved — the plan cannot speak to that. File lines 79-98 (design principles + non-goals) and 120-205 (workstreams) are the substance core.",
+      "content_quality": "strong",
+      "content_quality_note": "Each workstream section names specific files (e.g. packages/libs/mcp-auth/src/error-interceptor.ts at line 149), specific test names (lines 124, 130, 137), specific field selections (lines 150-154, 161-162), and specific acceptance criteria (lines 141, 241-245). The risk table (lines 207-212) maps risks to concrete mitigations. This is above V0-conformance — it contains implementation-guiding decisions, not just placeholders.",
+      "salvage_value": [
+        {
+          "idea": "auth_failure must emit from the Clerk error-interceptor middleware (trust boundary), not downstream handlers",
+          "class": "good",
+          "file_line": "security-observability.plan.md:82-86"
+        },
+        {
+          "idea": "rate_limit_triggered must emit from the existing rate-limit middleware wiring (ADR-158), not a new path",
+          "class": "good",
+          "file_line": "security-observability.plan.md:22-24 and 157-162"
+        },
+        {
+          "idea": "Emitted security events carry only categorical fields: origin tier, tool name, error class — never caller identity or payload",
+          "class": "good",
+          "file_line": "security-observability.plan.md:79-81 and 150-154"
+        },
+        {
+          "idea": "Conformance helper assertEventConformance imported by every emission-site test to enforce schema compliance",
+          "class": "good",
+          "file_line": "security-observability.plan.md:164-167"
+        },
+        {
+          "idea": "Redaction boundary enforcement as a dedicated unit test (security-event-redaction.unit.test.ts)",
+          "class": "good",
+          "file_line": "security-observability.plan.md:137-140"
+        },
+        {
+          "idea": "Cloudflare is the authoritative transport/bot/DDoS layer; this plan emits application-layer signal only",
+          "class": "good",
+          "file_line": "security-observability.plan.md:5-8 and 88-89"
+        },
+        {
+          "idea": "Exploration 6 (Cloudflare+Sentry complementarity) must resolve scope boundary before emission set is finalised",
+          "class": "good",
+          "file_line": "security-observability.plan.md:8-9 and 107-110"
+        },
+        {
+          "idea": "Multi-expert adversarial review: security-expert (trust boundary + PII), clerk-expert (error-path completeness), sentry-expert (emission wiring)",
+          "class": "good",
+          "file_line": "security-observability.plan.md:196-201"
+        },
+        {
+          "idea": "User-identity tracking in security events is an explicit non-goal — cardinality only, never identity",
+          "class": "good",
+          "file_line": "security-observability.plan.md:93-96"
+        },
+        {
+          "idea": "Bot detection and DDoS signals are explicit non-goals (Cloudflare handles)",
+          "class": "good",
+          "file_line": "security-observability.plan.md:92-93"
+        },
+        {
+          "idea": "Alert tuning delegated to security-observability-phase-2.plan.md, not this plan",
+          "class": "good",
+          "file_line": "security-observability.plan.md:97-98"
+        },
+        {
+          "idea": "Security runbook (docs/operations/security-runbook.md) as documentation deliverable covering auth-failure and rate-limit spike triage",
+          "class": "good",
+          "file_line": "security-observability.plan.md:172-175"
+        },
+        {
+          "idea": "Sentry beforeSendMetric sampling as a cost-cap mechanism if rate-limit emission fires at high volume during attack",
+          "class": "speculative",
+          "file_line": "security-observability.plan.md:211"
+        },
+        {
+          "idea": "Logger fan-out (ADR-143) as the carrier for structured security events (stdout + Sentry dual sink)",
+          "class": "good",
+          "file_line": "security-observability.plan.md:72-74 and 210"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING — depends on observability-events workspace + exploration 6",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes per V0 §2.1)",
+          "file_line": "security-observability.plan.md:1-38"
+        },
+        {
+          "issue": "Missing required field `node_type` with literal value \"plan\" (LOCKED, required for all plan nodes per V0 §2.1)",
+          "file_line": "security-observability.plan.md:1-38"
+        },
+        {
+          "issue": "Missing required field `kind` (enum strategic|executable, LOCKED per V0 §2.2); body todos imply executable but frontmatter is silent",
+          "file_line": "security-observability.plan.md:1-38"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED, required for executable plans per V0 §2.3; no APP-*/TOOLS-*/FRAME-* ID or \"pending\" sentinel present)",
+          "file_line": "security-observability.plan.md:1-38"
+        },
+        {
+          "issue": "Missing required field `last_updated` from frontmatter (LOCKED per V0 §2.4); value appears only in body prose at line 43",
+          "file_line": "security-observability.plan.md:43"
+        },
+        {
+          "issue": "`foundational_adr` is an explicitly dropped emergent key (V0 §2.5 — reconciled into `derives_from` edge); should be expressed as `derives_from: [\"docs/architecture/architectural-decisions/162-observability-first.md\"]`",
+          "file_line": "security-observability.plan.md:11"
+        },
+        {
+          "issue": "`derived_from: feature-workstream-template.md` uses a misspelled or unrecognised key; V0's field is `derives_from` pointing at ADR/strategy refs, not templates (V0 §2.3 — LOCKED shape)",
+          "file_line": "security-observability.plan.md:10"
+        },
+        {
+          "issue": "`strategic_parent` is not a V0 field; closest V0 construct is `serves_strategic_choice` (authority edge, LOCKED §2.3) or `depends_on` (dependency edge, LOCKED §2.3); the key is unclassified",
+          "file_line": "security-observability.plan.md:12"
+        },
+        {
+          "issue": "`blocked_on` is not a V0 field; V0 §2.3 replaces blocking dependencies with `depends_on: [{plan, kind: blocking}]` edges; owner/external blocks are the `gate` object (§3.4)",
+          "file_line": "security-observability.plan.md:13-15"
+        },
+        {
+          "issue": "`release_gate: public-beta` has no V0 equivalent field; not classified by V0 §2 or §2.5",
+          "file_line": "security-observability.plan.md:16"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly dropped emergent key (V0 §2.5 — \"plan ≈ Linear Project is universal; the projection is the projects_to edge, not a boolean\")",
+          "file_line": "security-observability.plan.md:37"
+        },
+        {
+          "issue": "Todo item `ws1-cycle-auth-failure` carries `priority: next` sub-field; V0's todo schema (§2.4, Zod sketch §6) specifies only `id`, `content`, `status` — no `priority` property",
+          "file_line": "security-observability.plan.md:21"
+        },
+        {
+          "issue": "Status expressed only as body prose (`**Status**: 🟡 PLANNING…` at line 43), not as V0 frontmatter axes; V0 §2.2 drops `status` entirely — the blocking state must be expressed as `gate:` with mandatory `expires` or as `depends_on` blocking edges",
+          "file_line": "security-observability.plan.md:43"
+        }
+      ],
+      "unclassified_keys": [
+        "derived_from",
+        "foundational_adr",
+        "strategic_parent",
+        "blocked_on",
+        "release_gate",
+        "isProject",
+        "todos[].priority"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "`blocked_on` encodes an indefinite blocking state with no expiry date — directly contradicts the LOCKED no-open-holding-state invariant (V0 §3.4: \"There is no open-ended paused state\"; \"a gate cannot outlive its expires date silently\"; gate.expires is MANDATORY). The plan has been in this blocking state since 2026-04-20 with no TTL or named resolver.",
+          "evidence": "`blocked_on` list at frontmatter lines 13-15 contains parenthetical date `2026-04-20` but no ISO `expires` field; body line 43 confirms `🟡 PLANNING` state with no expiry; V0 §3.4 maps this directly: `DRAFT — pending owner approval` / `🟡 PLANNING` → `gate: owner-decision` (+ `expires`), and §3.5 migration map row 7 confirms the same mapping.",
+          "file_line": "security-observability.plan.md:13-15"
+        }
+      ],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "PII redaction boundary is well-scoped: Design Principle 1 and Non-Goals (line 97) prohibit identity tracking; ADR-160 is cited as the mandatory redaction barrier; WS1.3 includes a dedicated redaction-boundary unit test. The control exists in the design.",
+          "file_line": "security-observability.plan.md:79-98,136-141"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS1.3 redaction test (line 136-141) asserts that emitted events 'never carry identity tokens or payload bodies', but the plan names no exhaustive enumeration of sensitive fields (e.g. JWT sub, Clerk userId, IP, user-agent, request headers). Without an explicit field allowlist in the schema or test fixture, a new categorical field added to the event schema could silently carry PII that the assertion misses. This is a completeness gap, not an absent control.",
+          "file_line": "security-observability.plan.md:136-141"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS2.1 (line 149-156) specifies 'origin tier (categorical), tool name, error class' for auth_failure emissions, but 'error class' from a Clerk error could include error messages that embed caller-identity fragments (e.g. 'User <id> not found'). The plan does not mandate stripping or normalising the error class value before emission. WS5 security-expert review is listed as a pending mitigation (line 196-201), but no pre-shipping guard is in WS1 or WS2.",
+          "file_line": "security-observability.plan.md:149-156,196-201"
+        },
+        {
+          "severity": "medium",
+          "claim": "Rate-limit emission at high cardinality (Risk table, line 210) mentions Sentry beforeSendMetric sampling as an optional cap, but the plan does not mandate a maximum emission rate or a circuit-breaker at the emission site. During a sustained attack, unbounded emission before the optional Sentry sampling kicks in could produce cost exposure or log-sink saturation. The risk table acknowledges the scenario but leaves the mitigation as 'can cap if needed', with no concrete threshold or acceptance criterion.",
+          "file_line": "security-observability.plan.md:208-212"
+        },
+        {
+          "severity": "low",
+          "claim": "WS2.2 (line 159-162) specifies 'trigger count' as an emitted field for rate_limit_triggered. A running trigger count per client is a quasi-identifier: combined with route tier and timestamp it narrows the originating client significantly. The plan prohibits 'the client identifier' but does not address whether a counter that resets per rate-limit window leaks effective identity. The WS5 security-expert review should explicitly verify this field.",
+          "file_line": "security-observability.plan.md:159-162"
+        },
+        {
+          "severity": "low",
+          "claim": "The Clerk error-path enumeration is delegated to clerk-expert review (WS5, line 198) and marked pending. If Clerk surfaces error codes or error objects whose string form varies by failure type (e.g. expired vs revoked vs missing token), the plan does not specify normalisation before emission. A non-normalised error class field widens the cardinality of the security event schema, making alert rules brittle. This is a design completeness signal, not an immediate security flaw.",
+          "file_line": "security-observability.plan.md:196-201"
+        },
+        {
+          "severity": "info",
+          "claim": "Layered security boundary (Cloudflare vs application layer) is explicitly scoped and governed by a pending exploration (Exploration 6). The non-goal declaration at line 93-98 is clear. The dependency is named in the frontmatter blocked_on. No security concern here, but the boundary remains open until Exploration 6 closes.",
+          "file_line": "security-observability.plan.md:93-98,106-109"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "This plan is beta-gate and does NOT block public alpha (cited at security-observability.plan.md:14)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "security-observability.plan.md:16 (release_gate: public-beta) and :14; corroborated by observability-events-workspace.plan.md:63-74 (owner direction: events workspace \"does not necessarily need to block public alpha, it absolutely does block public beta\"; names the sibling security-observability plan as a beta-gate emitter lane)"
+        },
+        {
+          "claim": "All todos remain pending; plan has not begun execution",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "security-observability.plan.md:20,24,27,30,33,35 (all six todo status fields = \"pending\"); body Status \"🟡 PLANNING\" at line 43; no deliverable artefacts exist (no auth-failure-emission/rate-limit-emission/security-event-redaction tests, no docs/operations/security-runbook.md, no auth_failure emission in packages/libs/mcp-auth/src)"
+        },
+        {
+          "claim": "Blocked on observability-events-workspace.plan.md for schema definitions",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "security-observability.plan.md:13-15 (blocked_on front-matter), corroborated at :104-109 (Dependencies §Blocking: \"auth_failure and rate_limit_triggered schemas live there\"); dependency target observability-events-workspace.plan.md exists at same dir, status :59-60 \"PLANNING — queued\", and owns both schemas as still-pending todos :30-35"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/current/sentry-preview-validation-and-quality-triage.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Phase 1 acceptance fully met with all four baseline probes passing",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:739"
+        },
+        {
+          "claim": "Phase 2 acceptance fully met — no inferred-positives remaining; source maps proven, deploy event registered, runtime pipe verified",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1021"
+        },
+        {
+          "claim": "Phase 3 acceptance met — full CodeQL triage table populated",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1162"
+        },
+        {
+          "claim": "Phase 4 acceptance met — full Sonar triage table populated",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1231"
+        },
+        {
+          "claim": "Phases 3-5 explicitly superseded by pr-87-architectural-cleanup.plan.md",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:8-26"
+        },
+        {
+          "claim": "Frontmatter status PARTIAL with Phases 1-2 listed as pending is contradicted by the execution findings blocks",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:35-36"
+        },
+        {
+          "claim": "Phase 6 (continuity refresh) still listed as pending with no findings block",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:28-29"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Execution findings are empirically grounded with specific Sentry issue IDs, deployment SHAs, span tables, and API call outputs (lines 682-1239). The override-gate findings for CodeQL #62/#63 (lines 1140-1141) include a reachability verification (lines 501-513). The Turbo cache mechanism diagnosis (lines 794-809) corrects an earlier wrong hypothesis. The plan distinguishes real correctness from false-positives with per-finding rationale. No findings are asserted without evidence.",
+      "content_quality": "strong",
+      "content_quality_note": "Phase 2 findings block (lines 748-1082) is unusually deep: it covers release lag, Turbo cache mechanism, passive transaction evidence (194 spans), active test-error probe with three modes, source-code upload proof, breadcrumbs, trace propagation, PII redaction empirics, Lambda runtime constraint, and custom-header capture. Phase 3 (lines 1100-1166) and Phase 4 (lines 1168-1239) each produce complete triage tables with cross-references to the PR-87 plan. Reviewer Dispositions (lines 1256-1301) show 13 absorbed findings with clear resolution of each. The plan is well above V0-conformant — it is a research-quality evidentiary record.",
+      "salvage_value": [
+        {
+          "idea": "Sentry release-name derivation rule: leftmost label of branch alias, not the full URL — captured as expected value poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:693-695"
+        },
+        {
+          "idea": "Turbo build-task caching suppresses Sentry release-publish on cache-hit deploys (docs-only commits); deployed bundle is byte-equivalent to the release artefact; release attribution is correct in substance",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:794-819"
+        },
+        {
+          "idea": "POST /mcp returns 406 (not 401) when Accept header lacks text/event-stream — content negotiation precedes auth gate; 401 is the true baseline and the one that exercises the Sentry auth-failure code path",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:711-724"
+        },
+        {
+          "idea": "Passive transaction evidence (194 spans in 1h) proves Sentry runtime pipe without owner-gated active probe; active path is supplement not substitute",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:832-866"
+        },
+        {
+          "idea": "Source-code upload empirically proven via OAK-OPEN-CURRICULUM-MCP-7/8/9 with rendered TS source-line context across handled/unhandled/rejected modes",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:956-989"
+        },
+        {
+          "idea": "Sentry issues stream silence for 401-only probe set is expected (not a wiring gap) — 4xx are deliberate control flow, not unhandled exceptions",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:870-889"
+        },
+        {
+          "idea": "localVariablesIntegration silently no-ops on Vercel Firecracker microVMs (no V8 inspector via --inspect); documented constraint, not a bug",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1057-1063"
+        },
+        {
+          "idea": "DEFAULT_TRACE_PROPAGATION_TARGETS = [] (deliberately disabled for external parties on compliance/cost grounds; extend when Search service joins same Sentry org)",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1043-1047"
+        },
+        {
+          "idea": "CodeQL #62/#63 js/polynomial-redos on remove-noise-phrases.ts:36/38 in oak-search-sdk are real correctness findings on user-controlled query input reachable from the MCP HTTP app — fires override gate",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1140-1141"
+        },
+        {
+          "idea": "CodeQL DI-opacity false-positive pattern: CodeQL cannot recognise injected RequestHandler parameters as rate-limiters; alerts #69, #70, #71, #72 all share this root cause and should be dismissed-with-rationale",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1142-1145"
+        },
+        {
+          "idea": "Sonar quality gate at ERROR: 77 violations, 5.1% duplication, 0% hotspots reviewed — baseline for PR-87 fix sequence",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1180-1186"
+        },
+        {
+          "idea": "S5843 drift finding (+1 MAJOR) closes on PR-87 Phase 1 landing (semver-DRY consolidation removes inline complex regex)",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1209-1211"
+        },
+        {
+          "idea": "test-error diagnostic route design: shared-secret auth (X-Test-Error-Secret, constant-time compare, min 16 chars), rate-limited, three modes (handled/unhandled/rejected), production-forbidden by env-schema super-refine",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:932-953"
+        },
+        {
+          "idea": "PII redaction empirically confirmed: token=[REDACTED] in captured issues matching FULLY_REDACTED_KEYS — no additional probe needed",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1049-1056"
+        },
+        {
+          "idea": "git.commit.sha tag on per-event Sentry scope is the deployed HEAD, not the release last_commit; agents and humans get exact provenance for the shipped bug",
+          "class": "good",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1012-1016"
+        },
+        {
+          "idea": "References section still cites the superseded pr-87-quality-finding-resolution.plan.md — stale pointer that would mislead a future reader",
+          "class": "bad",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1248"
+        },
+        {
+          "idea": "Phase 6 continuity refresh was listed as pending and has no findings block — closure step was not completed within this plan",
+          "class": "speculative",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:28-29"
+        },
+        {
+          "idea": "Production-readiness probe: whether main-branch builds use a different Turbo cache-key shape that would produce per-commit Sentry releases (out of scope here, flagged as future thread)",
+          "class": "speculative",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:821-826"
+        },
+        {
+          "idea": "Learning loop pattern: triage shape from this plan could be reused for future PRs via consolidate-docs",
+          "class": "speculative",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1294-1301"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🔴 PARTIAL — Phases 1-2 pending; Phases 3-5 superseded",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "file:1-30 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED, literal `\"plan\"`, required for all plan nodes)",
+          "file_line": "file:1-30 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED enum `strategic|executable`, required for all plan nodes)",
+          "file_line": "file:1-30 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED ISO date, required for all plan nodes); value appears in body prose only (`**Last Updated**: 2026-04-27`) not in frontmatter",
+          "file_line": "file:34 (body)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED, required for executable plans; plan carries `todos` so is classifiable as executable)",
+          "file_line": "file:1-30 (frontmatter block)"
+        },
+        {
+          "issue": "`status:` carried as body prose (`🔴 PARTIAL — Phases 1-2 pending; Phases 3-5 superseded`) rather than the V0 orthogonal axes (`kind`/`disposition`/`gate`); V0 §2.5 explicitly drops `status` as a free-label field and replaces it with the three durable axes",
+          "file_line": "file:35"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Phases 1 and 2 are fully executed and accepted. The plan's PARTIAL status (line 35) is stale — both phases have populated findings sections with explicit acceptance marks (lines 739, 1021–1028). Phase 2 acceptance appears twice (lines 1021 and 1074) with conflicting inferred-positive caveats, but the fuller record at lines 1021–1028 supersedes. The plan's active work is complete for these phases.",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:35"
+        },
+        {
+          "severity": "medium",
+          "claim": "The References section (line 1248) still points to `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md` as the 'receiving plan for fixes', but the plan body at lines 8–10 explicitly states that plan was superseded by `pr-87-architectural-cleanup.plan.md`. This is an internal contradiction: the reference footer assumes the superseded plan is still active, which would mislead a future agent following the reference.",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1248"
+        },
+        {
+          "severity": "medium",
+          "claim": "The override-gate for CodeQL #62/#63 (lines 479–541) documents Option A as the revised default if no owner direction is given, yet the todo item for phase-2-sentry-validation is still 'pending' (line 16) while the findings section marks Phase 2 fully accepted (line 1021). The todo status array is inconsistent with the findings record. A future agent reading the todos to decide what work remains would incorrectly start Phase 1 and Phase 2 again.",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:11-29"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 5 routing decisions (lines 448–541) were populated by `Sharded Stroustrup`, but phase-6-handoff is still listed as pending in the todos (line 27–29). The Phase 5 section ends with the override-gate trigger held for owner direction. It is not recorded whether owner direction was ever received or whether Phase 5's safe edits were committed to the PR-87 plan. This means the assumption that 'every finding has a recorded route into PR-87 or an explicit owner-gate item' is unverifiable from this plan alone.",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:479-541"
+        },
+        {
+          "severity": "low",
+          "claim": "The Foundation Document Commitment at line 163 directs reading `.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md` as a prerequisite, but the plan header already states that plan is superseded (lines 8–10). The instruction would lead a future executing agent to a superseded document rather than the active `pr-87-architectural-cleanup.plan.md`. This is a residual assumption from before the re-scope.",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:163"
+        },
+        {
+          "severity": "low",
+          "claim": "Task 2.2 passive evidence path assumes that Phase 1 baseline probes generate Sentry transactions. This was verified empirically (line 836 onwards). However, the assumption that a 401 response from POST /mcp exercises the Sentry-wired auth-failure path was refined at execution time: a 406 response fires before auth when the Accept header is wrong (line 711). The substrate plan's acceptance criteria (line 229) only specified 401; the 406-first behaviour is documented as a finding but the acceptance criteria was not updated to reflect it. An agent re-running Task 1.2 would use the old spec.",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:229"
+        },
+        {
+          "severity": "low",
+          "claim": "The Sentry release last_commit misalignment (lines 769–819) was investigated and explained as Turbo build-task caching. The plan records 'Remaining unknown: whether the production-build release-publish path uses a different cache-key shape' (lines 822–827) and flags this as a future probe. This open question is not captured in any todo or planning artifact within this plan; it relies on the Learning Loop section (lines 1294–1303) for follow-through, which has no status tracking.",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:822-827"
+        },
+        {
+          "severity": "info",
+          "claim": "The assumption-challenge gate from the pre-execution assumptions-expert review (items 7, 8, 9 in the Reviewer Dispositions table, lines 1271–1273) was absorbed into the plan body. Empirical execution confirms all three absorbed findings held: time-budget was not pressed (line 1237), all dependency fallbacks were documented, and the override gate triggered correctly for #62/#63 (line 1156). The pre-execution reviewer assumptions were accurate.",
+          "file_line": "sentry-preview-validation-and-quality-triage.plan.md:1271-1273"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "CodeQL alerts #62 and #63 are net-new real correctness findings (regex DoS) on the live query path of oak-search-sdk consumed by the MCP HTTP app — fires override gate (cited at sentry-preview-validation-and-quality-triage.plan.md:1140-1141)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "packages/sdks/oak-search-sdk/src/retrieval/create-retrieval-service.ts:97,151 (removeNoisePhrases(params.query) on live query path); git 2b1a09b8d:remove-noise-phrases.ts:15 (pre-fix unbounded /\\bthat\\s+(.+?)\\s+stuff(\\s+for)?/i); git 80d9c2c0c (2026-04-26 fix bounding the lazy capture, \"noise-redos\"); apps/oak-curriculum-mcp-streamable-http/package.json (@oaknational/oak-search-sdk workspace:*)"
+        },
+        {
+          "claim": "The vulnerable regex in oak-search-sdk sits on the live query-processing path exercised by the MCP HTTP app's search tools — Option C (not reachable) disqualified (cited at sentry-preview-validation-and-quality-triage.plan.md:508-513)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "Bridge traced first-hand end-to-end: apps/oak-curriculum-mcp-streamable-http/src/search-retrieval-factory.ts:18-21 imports createSearchRetrieval from @oaknational/oak-search-sdk; core-endpoints.ts:54 calls it as the production (non-stub) default and passes the result into handlerOptions.searchRetrieval (core-endpoints.ts:~74) feeding per-request MCP search tools; create-search-retrieval.ts:88 returns searchSdk.retrieval; create-retrieval-service.ts:69-71 returns {searchLessons,searchUnits}; create-retrieval-service.ts:97 and :151 call removeNoisePhrases(params.query); remove-noise-phrases.ts:40-49 applies NOISE_PATTERNS (the js/polynomial-redos #62/#63 regex family)."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "WS0-WS3 completed with specific commit hashes; WS4/WS5/WS6/WS7 pending — plan is in live execution, not finished",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:39-56"
+        },
+        {
+          "claim": "Status block confirms 'EXECUTING' with explicit 'Do not mark WS5 complete yet' caution",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:62-75"
+        },
+        {
+          "claim": "WS6 and WS7 todos both carry status: pending, meaning adversarial review and doc propagation have not run",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:50-55"
+        },
+        {
+          "claim": "Truth tables and 13-item ADR retraction enumeration are load-bearing design content not yet fully landed in docs",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:270-346"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every workstream has grounded motivation (file-level evidence, commit hashes, reviewer finding numbers like 'Wilma MAJOR #4', 'docs-adr-expert rev2 B1'). The truth tables are explicit and complete. The risk table addresses all known failure modes with concrete mitigations. The non-goals are principled. The only weakness is the ~2 month gap since last update with WS4-WS7 pending — which is a health/staleness concern, not a content-quality one. See file lines 270-346 (truth tables), 1489-1509 (risk table), 251-264 (non-goals).",
+      "content_quality": "strong",
+      "content_quality_note": "Plan is exceptionally detailed: exhaustive pre-flight audit methodology (Layer A/B/C at lines 455-490), 13-item ADR retraction enumeration (lines 1180-1291), typed TypeScript interface definitions inline (lines 640-678), full script implementation skeleton (lines 1079-1132), per-truth-table-row test discipline (lines 1152-1177), complete Documentation Propagation table (lines 1583-1616). Content reflects multiple rounds of adversarial reviewer feedback (docs-adr-expert rev1, rev2; Wilma MAJOR/MINOR numbered findings). This is well above adequate — it is the reference document for a complex multi-surface architectural repair.",
+      "salvage_value": [
+        {
+          "idea": "Structural SSoT via one resolveRelease function in @oaknational/build-metadata with SentryConfigEnvironment extends ReleaseInput — drift is impossible by construction, no contract test needed",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:7-15"
+        },
+        {
+          "idea": "Per-environment release identifier truth table: production=semver, preview=VERCEL_BRANCH_URL leftmost host label, dev=dev-sha, override wins everywhere",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:270-295"
+        },
+        {
+          "idea": "Production build-cancellation truth table with 5 rows, semver.lte comparator, asymmetric current/previous undefined handling",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:296-346"
+        },
+        {
+          "idea": "Pre-flight audit methodology: three-layer (string-pattern grep, import-site grep, knip+depcruise structural scan) before any code change",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:455-490"
+        },
+        {
+          "idea": "resolveGitSha split into a no-fs module (git-sha.ts) to prevent eager readFileSync cold-start exposure when sentry-node adds build-metadata as runtime dep",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:573-613"
+        },
+        {
+          "idea": "Snapshot env at boundary (typed ReleaseInput projection of process.env), never pass process.env by reference to resolveRelease",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:857-885"
+        },
+        {
+          "idea": "isValidReleaseName aligned exactly to Sentry's documented denylist with any Oak-local tightenings marked in TSDoc as Oak-local",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:809-844"
+        },
+        {
+          "idea": "Single-consumer code lives where it is consumed: cancellation script relocated from packages/core/build-metadata/build-scripts/ into apps/oak-curriculum-mcp-streamable-http/build-scripts/",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:958-969"
+        },
+        {
+          "idea": "13-item ADR-163 §10 retraction enumeration including §1 structural-fix paragraph retraction, top-level Enforcement §5 retraction, Disposition #4+#5 retraction, ADR index update",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1180-1291"
+        },
+        {
+          "idea": "Pre-landing ADR reviewer dispatch (docs-adr-expert) before WS3 commit — the same gap that caused original drift is not repeated",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:982-1017"
+        },
+        {
+          "idea": "One unit test per truth-table row with injected dependency seam (env, readFile, executeGitCommand, stdout, stderr stubs)",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1152-1177"
+        },
+        {
+          "idea": "Fetch-fallback recovery for VERCEL_GIT_PREVIOUS_SHA git-unreachable case preserved in unit tests as meaningful behaviour proof",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1163-1170"
+        },
+        {
+          "idea": "ReleaseInput must have NO arbitrary index signature [key: string]: string | undefined — preserves excess-property checking so env-key typos are compile errors",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:649-653"
+        },
+        {
+          "idea": "VERCEL_BRANCH_URL parsed via URL constructor (not string-split) to correctly handle scheme-only strings, port suffixes, userinfo, IPv4/IPv6 literals",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:712-726"
+        },
+        {
+          "idea": "Bare semver production identifiers accepted as known multi-project trade-off (org-global in Sentry, auditable via project filter) — explicitly not a goal to project-prefix",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:261-264"
+        },
+        {
+          "idea": "Optional follow-up: move ReleaseInput into @oaknational/env when a third Vercel-env-var schema is added there — trigger-gated, cost of deferral negligible",
+          "class": "speculative",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1631-1656"
+        },
+        {
+          "idea": "No replacement wiring integration test for vercel.json → script linkage — Vercel deploy probe is the gate; asserting file existence would test configuration syntax not behaviour",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1306-1319"
+        },
+        {
+          "idea": "Pre-release semver on main (1.2.3-rc.1) cancels rather than deploys — conservative, recorded as ops-discipline assumption",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:333-340"
+        },
+        {
+          "idea": "Same-version re-deploy on main is intentionally cancelled; operators use Vercel redeploy UI (bypasses ignoreCommand) for same-version rebuilds",
+          "class": "good",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:341-347"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED — required for all plans)",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED — required for all plans; value must be literal `plan`)",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED — required for all plans; body prose `🟢 EXECUTING` at line 62 implies `executable` but is not a frontmatter field)",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED — required for all plans; date present in body prose at line 61 only, not in frontmatter)",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:61"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED — required for executable plans; no strategic-choice ID or `pending` sentinel present)",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1"
+        },
+        {
+          "issue": "`isProject: false` is present — explicitly dropped by V0 §2.5 (subsumed by `projects_to` edge)",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:56"
+        },
+        {
+          "issue": "`foundational_adr` is an emergent key — V0 §2.5 maps it to the `derives_from` edge; field is not reconciled",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:27"
+        },
+        {
+          "issue": "`derived_from` is used as a template-reference string (`feature-workstream-template.md`) — not a V0 field; coincidentally named but not an ADR/strategy ref that would map to `derives_from`",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:26"
+        },
+        {
+          "issue": "`related_plans` is not a V0 field — V0 names the untyped see-also list `related`; this is a drifted key name",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:28"
+        },
+        {
+          "issue": "No frontmatter `status` field (positive; V0 drops it), but body contains residual prose status `🟢 EXECUTING` at line 62 — that prose should move to `kind`/execution-status axes, not body narrative",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:62"
+        }
+      ],
+      "unclassified_keys": [
+        "derived_from",
+        "foundational_adr",
+        "related_plans",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The structural collapse (single resolveRelease in @oaknational/build-metadata, sentry-node as thin adapter via SentryConfigEnvironment extends ReleaseInput) is architecturally clean and well-grounded. WS2 eliminates the drift surface by construction; no contract test is required. The dep-cruise edge libs <- core is confirmed permitted. Design Principles 1-6 accurately characterise the shape.",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:227-249"
+        },
+        {
+          "severity": "info",
+          "claim": "WS2 §2.0's prerequisite split of resolveGitSha out of runtime-metadata.ts is a sound architectural guard. The risk row at line 1496 correctly identifies the eager readFileSync on ROOT_PACKAGE_VERSION as a concrete serverless cold-start hazard, and the structural fix (no transitive import of @oaknational/env in the resolveRelease subgraph) is the right mitigation. The structural fitness test described at §2.0 step 5 makes this durable.",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:573-613"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan records a follow-up at line 1631 proposing that ReleaseInput could migrate to @oaknational/env if a third Vercel-env-var schema is added there. The trigger criterion is sound, but the current placement of ReleaseInput in @oaknational/build-metadata (alongside the resolver) is correct for now. No architectural defect; noting for completeness that the migration path is clear and deferred intentionally.",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1631-1656"
+        },
+        {
+          "severity": "low",
+          "claim": "The cancellation script uses semver.lte (current <= previous) for the CANCEL branch and semver.lte wraps pre-release semantics such that 1.2.3-rc.1 < 1.2.3 (so a pre-release on main cancels against a prior stable). The plan records this at lines 333-340 as an accepted ops-discipline assumption. The assumption is sound given Oak's pipeline, but it is only recorded in the plan body and the ADR amendment — not in TSDoc on the script itself. WS4's TSDoc requirement at line 1357 should explicitly include this asymmetry as a required TSDoc note, not just the cancellation rationale at large.",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:333-340"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS5 is marked in_progress (line 46) with an explicit caution that the full pnpm check sequence was NOT rerun after WS3/WS4 final handoff edits (line 1405-1407). WS6 (pending) requires deployed-state evidence that cannot be collected until an owner push. The plan is in an unverified intermediate state: WS4/WS5 partially covered, WS6/WS7 pending. This is a correct status representation, not a plan design defect — but it means the plan must not be archived or treated as complete until WS5 exits 0 and WS6 adversarial review passes.",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:46-52"
+        },
+        {
+          "severity": "low",
+          "claim": "The production/non-main row in the release-identifier truth table (line 273-278) handles the Vercel --prod-from-non-main edge case by treating the release as preview-shape. The ADR §3 environment downgrade for that case is cited. However, the plan does not name a test fixture that exercises this row end-to-end (VERCEL_ENV=production, VERCEL_GIT_COMMIT_REF != main). WS2 §2.4's atomic replacement instruction should explicitly add a fixture for this row to guard against the non-main production deploy silently picking up semver instead of branch-URL host.",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:273-279"
+        },
+        {
+          "severity": "info",
+          "claim": "The decision to accept bare semver as the production release identifier (no project prefix) and the resulting cross-project Sentry release collision risk is explicitly recorded as a known and accepted trade-off at lines 263-264 and Risk row at line 1503. The reasoning (Oak Sentry org currently has MCP and Search CLI sharing release identifiers intentionally) is sufficient. No architectural change required.",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:263-264"
+        },
+        {
+          "severity": "info",
+          "claim": "The bundle surface widening risk from adding @oaknational/build-metadata as a runtime dep of @oaknational/sentry-node (zod, @oaknational/env transitive surface) is acknowledged at line 1497 and delegated to WS6 release-readiness-expert. The architectural mitigation (resolveRelease import subgraph must not pull ROOT_PACKAGE_VERSION) is correctly separated from the bundle-size concern.",
+          "file_line": "sentry-release-identifier-single-source-of-truth.plan.md:1497"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "WS5 full aggregate gate sequence was NOT rerun after final handoff edits — WS5 is not proven complete",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "sentry-release-identifier-single-source-of-truth.plan.md:73-74 (\"**Do not mark WS5 complete yet**: the exact aggregate `pnpm check` / WS5 sequence was not rerun after final handoff edits\"); independently corroborated at :1405-1407 (\"The exact aggregate WS5 command below / full `pnpm check` was **not** rerun after final handoff doc-only edits\"); todo status `ws5-quality-gates: in_progress` at :49; status line :62 \"WS4/WS5 partly\""
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/future/ai-telemetry-wiring.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly future/strategic-brief and self-describes its non-executability until promotion trigger fires",
+          "file_line": "ai-telemetry-wiring.plan.md:11-12"
+        },
+        {
+          "claim": "Promotion trigger is testable and concrete: a commit introducing an MCP tool handler making a real LLM inference call",
+          "file_line": "ai-telemetry-wiring.plan.md:93-96"
+        },
+        {
+          "claim": "Non-goals are well-scoped and boundary-setting value is durable regardless of trigger timing",
+          "file_line": "ai-telemetry-wiring.plan.md:47-52"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan does exactly what a strategic-brief in the future lane should do: it pre-positions without speculating on implementation, names testable promotion criteria, draws hard scope boundaries, and encodes a non-trivial redaction decision (hash not text) that would otherwise be re-derived. No filler. The only risk is the high-stakes premise (no LLM-calling tools exist) which needs current verification but does not undermine the plan's value if true.",
+      "content_quality": "strong",
+      "content_quality_note": "Success signals are measurable and domain-grounded (file_line:70-77). Risks name mitigations, not just concerns (file_line:81-91). Implementation sketch is appropriately coarse for a future-lane plan — it identifies the extension points without over-specifying (file_line:104-114). Non-goals are decisive rather than hedged (file_line:47-52).",
+      "salvage_value": [
+        {
+          "idea": "Defer AI telemetry wiring until an LLM-calling MCP tool handler actually exists — no speculative instrumentation",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:11-12"
+        },
+        {
+          "idea": "Promotion trigger is a testable git event: any commit importing an LLM SDK used in a handler",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:93-96"
+        },
+        {
+          "idea": "AI spans as child spans under the existing tool_invoked span (sentry/core AI instrumentation model)",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:40"
+        },
+        {
+          "idea": "Token usage attribution per tool per model as first-class emission field",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:41"
+        },
+        {
+          "idea": "Prompt/completion redaction via categorical capture and prompt hashing — never raw prompt text in telemetry",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:84-85"
+        },
+        {
+          "idea": "Monetary cost attribution deferred to a future billing-integration plan; telemetry unit is tokens only",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:87-88"
+        },
+        {
+          "idea": "Cross-provider abstraction: provider name is a label, not a schema selector",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:89-91"
+        },
+        {
+          "idea": "AI emission schema fields: model name, provider, prompt hash, completion category, token counts, latency, outcome class",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:108-112"
+        },
+        {
+          "idea": "Redaction contract documented in schema .meta() so the events workspace is self-describing",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:113-114"
+        },
+        {
+          "idea": "L-11 in sentry-observability-maximisation-mcp is scaffolding-only and is replaced by this plan at promotion",
+          "class": "speculative",
+          "file_line": "ai-telemetry-wiring.plan.md:65-67"
+        },
+        {
+          "idea": "Regression in prompt-template quality detectable from tool_invoked outcome-class distribution before support reports",
+          "class": "speculative",
+          "file_line": "ai-telemetry-wiring.plan.md:73-75"
+        },
+        {
+          "idea": "Prompt-engineering evaluation frameworks deferred to a separate plan when LLM use-cases stabilise",
+          "class": "good",
+          "file_line": "ai-telemetry-wiring.plan.md:50-51"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Required LOCKED field `id` absent — every plan requires a stable kebab-slug graph identity",
+          "file_line": "ai-telemetry-wiring.plan.md:1-12 (frontmatter block)"
+        },
+        {
+          "issue": "Required LOCKED field `node_type: \"plan\"` absent — the registry discriminator is missing",
+          "file_line": "ai-telemetry-wiring.plan.md:1-12 (frontmatter block)"
+        },
+        {
+          "issue": "Required LOCKED field `kind` absent — `status: strategic-brief` maps to `kind: strategic` per §3.5 but the correct field is not present",
+          "file_line": "ai-telemetry-wiring.plan.md:3"
+        },
+        {
+          "issue": "Required LOCKED field `last_updated` absent from frontmatter — present only as prose in body",
+          "file_line": "ai-telemetry-wiring.plan.md:17 (body only; not in frontmatter)"
+        },
+        {
+          "issue": "Dropped key `status: strategic-brief` present — V0 §2.5 explicitly drops `status`; replacement is `kind: strategic`",
+          "file_line": "ai-telemetry-wiring.plan.md:3"
+        },
+        {
+          "issue": "Dropped/reconciled key `foundational_adr` present — V0 §2.5 reconciles this to `derives_from` edge targeting the ADR; should be `derives_from: [\"docs/architecture/architectural-decisions/162-observability-first.md\"]`",
+          "file_line": "ai-telemetry-wiring.plan.md:10"
+        },
+        {
+          "issue": "No typed edge declarations in frontmatter — `serves_strategic_choice` recommended for strategic plans; `derives_from` required to replace `foundational_adr`; `thread` recommended",
+          "file_line": "ai-telemetry-wiring.plan.md:1-12 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes '@sentry/core' ships AI span primitives ready to use at promotion time. This is a vendor-capability assumption that may not hold; Sentry's AI instrumentation surface is evolving and the plan carries no fallback if the primitive is unavailable or has changed shape by the time the trigger fires.",
+          "file_line": "ai-telemetry-wiring.plan.md:41"
+        },
+        {
+          "severity": "medium",
+          "claim": "The promotion trigger is defined as 'any import of an LLM SDK used in a handler' (line 95), but this is unobservable without active tooling. No detection mechanism, CI check, or monitoring hook is named. The plan assumes someone will notice and manually promote it, which is not a testable automatic trigger.",
+          "file_line": "ai-telemetry-wiring.plan.md:94-96"
+        },
+        {
+          "severity": "low",
+          "claim": "Success signal 'data scientists can answer which tools used which models' (line 73) assumes data scientists are active consumers of this telemetry and have access to Sentry. Neither the audience nor their tooling access is established anywhere in the plan or its referenced ADRs.",
+          "file_line": "ai-telemetry-wiring.plan.md:73-74"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes 'prompt hashing instead of prompt text' is a sufficient PII mitigation (line 85). This is a design assumption made at brief stage without validation that the hash approach satisfies the ADR-160 barrier's redaction contract — the two documents may be in tension.",
+          "file_line": "ai-telemetry-wiring.plan.md:84-86"
+        },
+        {
+          "severity": "low",
+          "claim": "'L-11 is currently scaffolding-only (per A.3 decisions)' is asserted without citing which version of sentry-observability-maximisation-mcp.plan.md this reflects. If L-11 has since been updated, the relationship described here is stale.",
+          "file_line": "ai-telemetry-wiring.plan.md:65-67"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan assumes 'token' is a provider-agnostic unit of measurement for cost telemetry (line 87). This holds for current providers but is an implicit assumption that may break for future providers using different billing units (e.g. characters, compute units).",
+          "file_line": "ai-telemetry-wiring.plan.md:87-88"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Today's MCP tool surface is deterministic SDK-backed with zero LLM inference at handler time",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "universal-tools/executor.ts:167-182 (AGGREGATED_HANDLERS — every current tool dispatches to deterministic SDK/API-backed execution: search→Elasticsearch SDK, graphs/curriculum-model/eef→in-repo aggregations, generated tools via deps.executeMcpTool API client); plan text verbatim at ai-telemetry-wiring.plan.md:28-30"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/future/cost-and-capacity-telemetry.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is strategic-brief in future/ lane — correctly dormant, not yet executable",
+          "file_line": "cost-and-capacity-telemetry.plan.md:3-11"
+        },
+        {
+          "claim": "Promotion trigger is concrete and testable — plan activates on a real event, not a date",
+          "file_line": "cost-and-capacity-telemetry.plan.md:89-100"
+        },
+        {
+          "claim": "Dependencies on sibling plans (L-7, ai-telemetry-wiring, deployment-impact-bisection) are named but not blocking — brief is self-contained",
+          "file_line": "cost-and-capacity-telemetry.plan.md:59-65"
+        },
+        {
+          "claim": "Implementation sketch explicitly deferred to promotion time — no premature execution detail",
+          "file_line": "cost-and-capacity-telemetry.plan.md:102"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan holds a well-bounded strategic deferral with concrete promotion triggers and a clear attribution strategy. Every in-scope item traces to a vendor source and a downstream consumer plan. The scope boundary (visibility vs optimisation) is explicit and principled. No speculative overreach. The one minor issue is the unanchored session-report citation at line 113.",
+      "content_quality": "strong",
+      "content_quality_note": "All five V0 plan sections present and substantive. Risks section (lines 76-86) names three distinct risks with concrete mitigations, not boilerplate. Promotion trigger (lines 89-100) is testable with named thresholds (80% quota, 5-minute rate-limit duration). Implementation sketch (lines 103-108) is appropriately thin for a strategic brief. Non-goals (lines 43-46) are sharp and differentiated.",
+      "salvage_value": [
+        {
+          "idea": "Cost observability is deliberately deferred until a cost-pressure or capacity-risk event is recorded — the plan should not be promoted by calendar",
+          "class": "good",
+          "file_line": "cost-and-capacity-telemetry.plan.md:5-11"
+        },
+        {
+          "idea": "L-7 release tagging is the deploy-correlation key that makes cost-delta-per-deploy attribution possible",
+          "class": "good",
+          "file_line": "cost-and-capacity-telemetry.plan.md:81-83"
+        },
+        {
+          "idea": "Vendor billing export adapters should be isolated per vendor to handle format variation and change",
+          "class": "good",
+          "file_line": "cost-and-capacity-telemetry.plan.md:77-79"
+        },
+        {
+          "idea": "Cost telemetry's own operational cost should be self-observed and tracked within this plan's scope",
+          "class": "good",
+          "file_line": "cost-and-capacity-telemetry.plan.md:84-86"
+        },
+        {
+          "idea": "Visibility (this plan) and optimisation decisions (separate lanes) are explicitly decoupled — optimisation opens after visibility reveals findings",
+          "class": "good",
+          "file_line": "cost-and-capacity-telemetry.plan.md:43-45"
+        },
+        {
+          "idea": "LLM spend attribution is deferred to ai-telemetry-wiring promotion — not opened independently",
+          "class": "good",
+          "file_line": "cost-and-capacity-telemetry.plan.md:64-65"
+        },
+        {
+          "idea": "Cold-boot latency observability via span attribute plus metric from composition root",
+          "class": "good",
+          "file_line": "cost-and-capacity-telemetry.plan.md:106"
+        },
+        {
+          "idea": "Sentry quota webhook alert at 80% with more than 7 days to cycle end as the concrete threshold",
+          "class": "good",
+          "file_line": "cost-and-capacity-telemetry.plan.md:93-95"
+        },
+        {
+          "idea": "Session report provenance pointer in References (§2.3 gap items 7+11) — unanchored, violates no-provenance-pointers norm",
+          "class": "bad",
+          "file_line": "cost-and-capacity-telemetry.plan.md:113"
+        },
+        {
+          "idea": "Both cost and capacity triggers may produce separate sub-divided plan promotions if both hit simultaneously",
+          "class": "speculative",
+          "file_line": "cost-and-capacity-telemetry.plan.md:99-100"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `node_type` (must be literal \"plan\"); LOCKED, required for all plans",
+          "file_line": "cost-and-capacity-telemetry.plan.md:2-11 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `id` (kebab slug, stable graph identity); LOCKED, required for all plans",
+          "file_line": "cost-and-capacity-telemetry.plan.md:2-11 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (must be `strategic`; derivable from status migration map §3.5); LOCKED, required for all plans",
+          "file_line": "cost-and-capacity-telemetry.plan.md:2-11 (frontmatter block)"
+        },
+        {
+          "issue": "`status: strategic-brief` is a dropped emergent key (V0 §2.5); must be replaced by `kind: strategic` + absence of `disposition`/`gate`",
+          "file_line": "cost-and-capacity-telemetry.plan.md:3"
+        },
+        {
+          "issue": "Missing required field `last_updated` (ISO date) in frontmatter; LOCKED, required for all plans — value appears in body prose only",
+          "file_line": "cost-and-capacity-telemetry.plan.md:16 (body only: `**Last Updated**: 2026-04-18`)"
+        },
+        {
+          "issue": "`foundational_adr` is a reconciled emergent key (V0 §2.5); must be migrated to the `derives_from` typed edge",
+          "file_line": "cost-and-capacity-telemetry.plan.md:9"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes 'bills are reviewable manually' during MVP beta without specifying who reviews them, at what cadence, or what constitutes a surprising delta. The promotion trigger relies on a human noticing and recording a bill surprise (line 28: 'a Vercel bill line that surprised someone'), but no mechanism is defined to ensure this detection reliably occurs. If no one is assigned the review cadence, the trigger may never fire even when cost pressure is real.",
+          "file_line": "cost-and-capacity-telemetry.plan.md:27-28,91"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes L-7 release tagging is already in place as a correlation key for cost-delta-per-deploy attribution (lines 72-73, 105). The dependency on 'sentry-observability-maximisation-mcp.plan.md § L-7' is listed as Related, not as a hard prerequisite. If L-7 has not shipped at promotion time, the central success signal — attributing cost delta to specific code paths — is not achievable. The prerequisite status of L-7 is understated.",
+          "file_line": "cost-and-capacity-telemetry.plan.md:60-62,69-71"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan treats 'sustained rate-limit trigger spike for >5 minutes without corresponding attack signal' (line 96) as a promotable capacity-risk event but does not specify how attack signal is distinguished from legitimate saturation in the absence of this plan's own telemetry. The mitigation for distinguishing the two is implicit, not stated.",
+          "file_line": "cost-and-capacity-telemetry.plan.md:95-97"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes 'post-launch baseline data does not yet exist' as justification for deferral (lines 6-8). This assumption is time-sensitive: if the plan was last updated 2026-04-18 and baseline data has since accumulated, the deferral premise may already be stale, potentially warranting earlier promotion.",
+          "file_line": "cost-and-capacity-telemetry.plan.md:6-8,19"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's self-observability mitigation — 'track cost-telemetry's own cost within this plan' (lines 84-85) — is stated as intent but has no implementation detail in the sketch. This is appropriate for a strategic brief but should be confirmed as a first-class acceptance criterion at promotion time.",
+          "file_line": "cost-and-capacity-telemetry.plan.md:83-85,102-109"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Attribution requires correlating deploy IDs with billing line items — mitigation: L-7 release tagging (cited at cost-and-capacity-telemetry.plan.md:81-83)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/observability/future/cost-and-capacity-telemetry.plan.md:80-82 (\"Attribution requires correlating deploy IDs with billing line items. Mitigation: L-7 release tagging gives the deploy correlation key\"); corroborated by sentry-observability-maximisation-mcp.plan.md:873-876 (L-7 objective: \"every emitted event carries a semver release tag and a git SHA tag; ... every deploy carries the commit SHA that was built\")"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/future/cross-system-correlated-tracing.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Promotion trigger is testable and not yet met — plan is correctly parked in future/",
+          "file_line": "cross-system-correlated-tracing.plan.md:11-12"
+        },
+        {
+          "claim": "Plan holds substantive design decisions (three-identifier model, trust-boundary list, fallback strategy) that must survive into the promotion-time decision phase",
+          "file_line": "cross-system-correlated-tracing.plan.md:114-124"
+        },
+        {
+          "claim": "No evidence of duplication with sentry-observability-maximisation-mcp.plan.md — authority is correctly split at line L-14 boundary",
+          "file_line": "cross-system-correlated-tracing.plan.md:66-68"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is not speculative for its lane: it holds concrete design decisions (three-identifier model at lines 118-120, trust-boundary constraint at lines 82-84, upstream-cooperation fallback at lines 85-87) that are needed at promotion time. The promotion trigger is specific and testable (lines 95-104), preventing premature execution. The authority split with adjacent plans is precise. Nothing in the plan is contradicted by the estate evidence visible here.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan goes beyond V0 structural conformance: it specifies the wire carrier (W3C traceparent header, line 108), names the three correlation identifiers with distinct roles (lines 118-120), records the outbound-vs-inbound split against MCP spec SEP-414 (lines 122-124), provides a security-aware fallback (lines 85-87), and supplies measurable success signals (lines 81-83). The implementation sketch is labelled as context-only pending promotion (line 106), which is appropriate for a strategic-brief.",
+      "salvage_value": [
+        {
+          "idea": "Cross-system trace stitching across MCP, curriculum SDK, Oak API, and Elasticsearch is currently absent and requires manual trace-id work.",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:6-9"
+        },
+        {
+          "idea": "W3C traceparent header as the standard wire carrier for outbound propagation from the MCP server.",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:108"
+        },
+        {
+          "idea": "Three-identifier canonical model: correlation_id (per HTTP request, within-invocation), traceparent (W3C, cross-system), trace_id (Sentry-scope, engineering drill-down).",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:118-120"
+        },
+        {
+          "idea": "Trust-boundary allow/deny list per host must gate which outbound hosts receive propagation headers; security review required before wiring.",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:43,82-84"
+        },
+        {
+          "idea": "Upstream-cooperation fallback: if the Oak curriculum API does not propagate traceparent, capture the boundary span and continue trace within our system only.",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:85-87"
+        },
+        {
+          "idea": "ES client decorated for dependency-span capture; regression test coverage at the SDK boundary to survive Oak-vs-generic ES client split.",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:88-91"
+        },
+        {
+          "idea": "Outbound propagation (this plan) is separated from inbound MCP spec traceparent ingestion (SEP-414 / MCP spec GA track).",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:122-124"
+        },
+        {
+          "idea": "Promotion trigger gates promotion on a concrete incident or dual-system baseline rather than on calendar time.",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:95-104"
+        },
+        {
+          "idea": "Success signal: MTTR measurably shorter for cross-system issues after promotion — a quantifiable outcome target.",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:79-80"
+        },
+        {
+          "idea": "Backend selection (distributed tracing backend) explicitly out of scope; deferred to second-backend-evaluation.plan.md.",
+          "class": "good",
+          "file_line": "cross-system-correlated-tracing.plan.md:49-50"
+        },
+        {
+          "idea": "Curriculum SDK decorated to forward active span as part of the implementation.",
+          "class": "speculative",
+          "file_line": "cross-system-correlated-tracing.plan.md:109"
+        },
+        {
+          "idea": "Sentry-native UI stitching vs ad-hoc tool for multi-backend cross-system correlation — choice deferred to promotion.",
+          "class": "speculative",
+          "file_line": "cross-system-correlated-tracing.plan.md:45-46"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "foundational_adr"
+      ],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1 LOCKED — required for all plans)",
+          "file_line": "cross-system-correlated-tracing.plan.md:1-12 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (V0 §2.1 LOCKED)",
+          "file_line": "cross-system-correlated-tracing.plan.md:1-12 (frontmatter block)"
+        },
+        {
+          "issue": "Uses dropped field `status: strategic-brief` (V0 §2.5: `status` dropped, replaced by `kind`/`disposition`/`gate`)",
+          "file_line": "cross-system-correlated-tracing.plan.md:3"
+        },
+        {
+          "issue": "Uses `foundational_adr` instead of the canonical `derives_from` edge (V0 §2.5: `foundational_adr` reconciled → `derives_from`)",
+          "file_line": "cross-system-correlated-tracing.plan.md:10"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2 LOCKED; this plan maps to `kind: strategic`)",
+          "file_line": "cross-system-correlated-tracing.plan.md:1-12 (frontmatter block)"
+        },
+        {
+          "issue": "Missing field `last_updated` in frontmatter (V0 §2.4 LOCKED — required for all; value is in body as prose at line 17 but not in frontmatter)",
+          "file_line": "cross-system-correlated-tracing.plan.md:17 (body prose, not frontmatter)"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` edge (V0 §2.3: recommended for strategic plans; required for executable)",
+          "file_line": "cross-system-correlated-tracing.plan.md:1-12 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "foundational_adr"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan defers the trust-boundary allow/deny list to exploration 5 (docs/explorations/2026-04-18-trust-boundary-trace-propagation-risk-analysis.md) but does not require that exploration to be fully resolved and its conclusions formally adopted before promotion. If the plan is promoted on the incident trigger alone, outbound traceparent propagation could be wired before the allow/deny list exists, sending trace context to hosts that have not been cleared.",
+          "file_line": "line 33-34, lines 82-84, lines 103-104"
+        },
+        {
+          "severity": "medium",
+          "claim": "The implementation sketch plans to decorate the Elasticsearch client for dependency-span capture and the curriculum SDK to forward the active span. Neither decoration path names an explicit sanitisation step to strip or truncate potentially sensitive span attributes (e.g. query bodies, PII-bearing URL parameters) before they cross a trust boundary. Span attribute leakage is a known OTel propagation risk and the plan does not flag it as an open question.",
+          "file_line": "lines 108-111"
+        },
+        {
+          "severity": "low",
+          "claim": "Three correlation identifiers are described as traveling together: correlation_id, traceparent, and trace_id (lines 119-122). The plan does not specify what happens when a downstream service reflects these identifiers back in error responses or logs. If error payloads echo trace IDs back to end-users, that can aid enumeration of internal request topology. This is a design-time decision point that should be listed as an explicit question at promotion time.",
+          "file_line": "lines 119-124"
+        },
+        {
+          "severity": "low",
+          "claim": "The W3C traceparent header is described as the wire carrier but the plan does not address whether inbound traceparent headers from untrusted callers into the MCP server will be accepted and used to attach to an existing trace. Accepting arbitrary inbound traceparent from unauthenticated callers can allow trace-injection attacks. The plan owns outbound propagation (line 124) but should explicitly scope whether inbound acceptance is also in scope or explicitly excluded.",
+          "file_line": "lines 109-124"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly references and is contingent on the trust-boundary risk analysis exploration (line 33-34) and explicitly states that wiring must respect the resulting allow/deny list (lines 82-84). This governance hook is sound security practice; promotion should be conditioned on the exploration being closed, not merely referenced.",
+          "file_line": "lines 82-84"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/future/curriculum-content-observability.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Explicitly future-gated with a testable promotion trigger; plan is correctly homed in future/ and not yet executable.",
+          "file_line": "future/curriculum-content-observability.plan.md:11"
+        },
+        {
+          "claim": "Contains non-trivial scope discipline and risk mitigations that encode real design decisions, not just aspirational text.",
+          "file_line": "future/curriculum-content-observability.plan.md:72-81"
+        },
+        {
+          "claim": "Privacy boundary (ADR-160 redaction applies to join keys) is a load-bearing constraint that must survive the re-org.",
+          "file_line": "future/curriculum-content-observability.plan.md:79-81"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes real design discipline: a testable promotion gate (line 11), explicit scope per promotion cycle (lines 88-89), a named prerequisite audit (lines 76-77), and a privacy constraint tied to an ADR (lines 79-81). Nothing is aspirational padding; all sections serve the gate or the shape of the work at promotion.",
+      "content_quality": "strong",
+      "content_quality_note": "Problem, domain boundaries, success signals, risks with mitigations, and a concrete implementation sketch are all present and specific (lines 24-107). The implementation sketch names the exact optional fields already identified (line 96). The only minor defect is the cross-reference label mismatch at lines 25 and 59 (href says observability-strategy-restructure.plan.md, label says observability-events-workspace.plan.md).",
+      "salvage_value": [
+        {
+          "idea": "Promotion gate: only a named, specific data-science request with an unanswerable correlation question triggers activation.",
+          "class": "good",
+          "file_line": "future/curriculum-content-observability.plan.md:83-89"
+        },
+        {
+          "idea": "One-question-per-promotion-cycle scope discipline to prevent scope creep.",
+          "class": "good",
+          "file_line": "future/curriculum-content-observability.plan.md:72-74"
+        },
+        {
+          "idea": "Four curriculum-identity optional fields pre-identified: thread_id, unit_id, lesson_id, year_group.",
+          "class": "good",
+          "file_line": "future/curriculum-content-observability.plan.md:95-98"
+        },
+        {
+          "idea": "Privacy constraint: join keys are categorical curriculum identifiers only; ADR-160 redaction barrier applies explicitly.",
+          "class": "good",
+          "file_line": "future/curriculum-content-observability.plan.md:79-81"
+        },
+        {
+          "idea": "Prerequisite: audit curriculum SDK for stable identifier surfaces before adding schema fields.",
+          "class": "good",
+          "file_line": "future/curriculum-content-observability.plan.md:76-77"
+        },
+        {
+          "idea": "Analytics-side join contract and event-catalog documentation as in-scope deliverables.",
+          "class": "good",
+          "file_line": "future/curriculum-content-observability.plan.md:41-43"
+        },
+        {
+          "idea": "Schema migration must be additive and non-breaking; analytics pipeline validates join at ingest.",
+          "class": "good",
+          "file_line": "future/curriculum-content-observability.plan.md:66-69"
+        },
+        {
+          "idea": "Pre-computing derived metrics is explicitly out of scope; data-science owns that layer.",
+          "class": "good",
+          "file_line": "future/curriculum-content-observability.plan.md:47-48"
+        },
+        {
+          "idea": "Cross-reference label mismatch (observability-events-workspace.plan.md label vs observability-strategy-restructure.plan.md href) — minor hygiene fix needed at promotion.",
+          "class": "speculative",
+          "file_line": "future/curriculum-content-observability.plan.md:25"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (kebab slug, stable) — V0 §2.1 LOCKED, required for all node types",
+          "file_line": "curriculum-content-observability.plan.md:1-12 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` — V0 §2.1 LOCKED, required for all",
+          "file_line": "curriculum-content-observability.plan.md:1-12 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `kind` — V0 §2.2 LOCKED, required for all; inferred `strategic` from `status: strategic-brief` via §3.5 migration map but not declared",
+          "file_line": "curriculum-content-observability.plan.md:1-12 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `last_updated` — V0 §2.4 LOCKED, required for all; value exists only in body prose (line 17) not frontmatter",
+          "file_line": "curriculum-content-observability.plan.md:17 (body only, not frontmatter)"
+        },
+        {
+          "issue": "Dropped key `status: strategic-brief` present — V0 §2.5 explicitly drops `status`, replaced by `kind` / `disposition` / `gate` axes",
+          "file_line": "curriculum-content-observability.plan.md:3"
+        },
+        {
+          "issue": "Dropped/reconciled key `foundational_adr` present — V0 §2.5 reconciles this to `derives_from` edge; the ADR ref should move to `derives_from` in frontmatter",
+          "file_line": "curriculum-content-observability.plan.md:10"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter — `serves_strategic_choice` is recommended for strategic plans and all other V0 edges are absent (V0 §2.3)",
+          "file_line": "curriculum-content-observability.plan.md:1-12 (absent from frontmatter)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan names ADR-162 as foundational but the cross-reference at line 104 cites only 'ADR-162 §Five Axes Product' with no file path. The foundational_adr front-matter at line 10 gives the full path as docs/architecture/architectural-decisions/162-observability-first.md — but the body never confirms this ADR exists or that its Five Axes clause actually governs curriculum-identity extension. If ADR-162 is missing or its scope does not cover join-key schema additions, this plan has no architectural anchor.",
+          "file_line": "curriculum-content-observability.plan.md:10,104"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan proposes optional fields (thread_id, unit_id, lesson_id, year_group) on the existing events workspace schema (lines 96-100) without specifying a schema-versioning or evolution contract. 'Non-breaking additive' is asserted in the success signals (line 68) but there is no architectural definition of what makes a field addition non-breaking for the downstream analytics pipeline — no envelope version, no field-presence semaphore, no ingest schema registry reference. This is a gap that will surface as a real integration risk at promotion time.",
+          "file_line": "curriculum-content-observability.plan.md:68,96-100"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan references 'observability-events-workspace.plan.md' twice (lines 59, 106) but the actual sibling cross-link at line 25 resolves to '../current/observability-strategy-restructure.plan.md' — a different filename. The references are inconsistent. If the MVP schema lives in observability-strategy-restructure.plan.md, the promotion trigger and schema extension logic need to cite that canonical path, not an alias. An agent promoting this plan could extend the wrong schema surface.",
+          "file_line": "curriculum-content-observability.plan.md:25,59,106"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan mentions 'audit curriculum SDK for stable identifier surfaces before schema additions' as a risk mitigation (line 81) but provides no architectural constraint or interface definition for what constitutes a stable identifier. The Oak curriculum model has a defined entity hierarchy (units, lessons, threads, year groups) via the MCP curriculum model. The sketch at lines 96-100 enumerates those identifiers but does not bind them to that source of truth. A formal join-key taxonomy referencing the curriculum model would reduce divergence risk at promotion.",
+          "file_line": "curriculum-content-observability.plan.md:81,96-100"
+        },
+        {
+          "severity": "low",
+          "claim": "ADR-160 is cited for the privacy redaction barrier (line 79) but is not listed in the foundational_adr front-matter and has no file path given anywhere in the plan. If ADR-160 does not exist or was renumbered, the privacy constraint is ungrounded and the risk mitigation for pupil/user data is hollow.",
+          "file_line": "curriculum-content-observability.plan.md:79"
+        },
+        {
+          "severity": "info",
+          "claim": "The promotion trigger is well-formed and testable (lines 84-88): a named external request with a specific missing join key. The scope-creep mitigation (line 73) — promotion scope is that specific question only — is architecturally sound and consistent with additive extension discipline. No action required; noting positive signal for classification.",
+          "file_line": "curriculum-content-observability.plan.md:73,84-88"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/future/customer-facing-status-page.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is strategic-brief and folder is future — plan is correctly positioned as not-yet-executable and awaiting a testable promotion trigger.",
+          "file_line": "line:3,10,17"
+        },
+        {
+          "claim": "Promotion trigger is concrete and verifiable, making the plan self-governing without owner intervention.",
+          "file_line": "line:80-85"
+        },
+        {
+          "claim": "Plan content is coherent, non-empty, and encodes decisions (scope boundaries, risk mitigations, sequencing) that are not captured elsewhere.",
+          "file_line": "line:38-79"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All core ideas are coherent, sequenced correctly, and grounded in real risk (reputational sensitivity from external visibility, subscriber-list ownership alignment). The plan avoids scope creep, defers implementation detail appropriately to promotion, and names concrete success signals (lines 65-69). No speculative or bad ideas identified.",
+      "content_quality": "adequate",
+      "content_quality_note": "Content is well-structured and purposeful for a strategic brief. It does not overclaim. The implementation sketch (lines 88-94) is appropriately thin. The one weak point is 'Session report §2.3 gap item 10' (line 100) as a reference — session reports are ephemeral and this pointer will rot; the insight should be absorbed into the plan body or dropped. Otherwise the plan is fit for its lifecycle stage.",
+      "salvage_value": [
+        {
+          "idea": "Public URL and discoverability for a user-facing status page as a first-class product concern separate from backend alerting",
+          "class": "good",
+          "file_line": "line:22-28"
+        },
+        {
+          "idea": "Five-axis component tree (auth / search / tool-invocation / widget) as user-visible categories on the status page",
+          "class": "good",
+          "file_line": "line:92"
+        },
+        {
+          "idea": "Subscription mechanics (email / webhook) if not covered by Statuspage default — defer decision to promotion time",
+          "class": "good",
+          "file_line": "line:42-43"
+        },
+        {
+          "idea": "Historical uptime SLO display on the public page, tied to slo-and-error-budget.plan.md",
+          "class": "good",
+          "file_line": "line:44,59-60"
+        },
+        {
+          "idea": "Explicit non-goal: do not re-implement Statuspage UI — use hosted UX",
+          "class": "good",
+          "file_line": "line:47-48"
+        },
+        {
+          "idea": "Manual-confirmation gate before external incidents publish to manage reputational risk",
+          "class": "good",
+          "file_line": "line:75-76"
+        },
+        {
+          "idea": "Conservative two-of-three probe failure trigger inherited from Statuspage integration plan",
+          "class": "good",
+          "file_line": "line:75"
+        },
+        {
+          "idea": "Align subscriber-list ownership with broader Oak user comms strategy rather than creating a siloed list",
+          "class": "speculative",
+          "file_line": "line:77-78"
+        },
+        {
+          "idea": "Integrate subscription signup into user-facing product surfaces where relevant",
+          "class": "speculative",
+          "file_line": "line:94"
+        },
+        {
+          "idea": "Reference to 'Session report §2.3 gap item 10' as a durable provenance pointer",
+          "class": "bad",
+          "file_line": "line:100"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "customer-facing-status-page.plan.md:1-11 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plans)",
+          "file_line": "customer-facing-status-page.plan.md:1-11 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans); readiness intent recoverable as `strategic` from `status: strategic-brief` via §3.5 migration map, but the V0 field is absent",
+          "file_line": "customer-facing-status-page.plan.md:3 (status: strategic-brief present instead)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans); ISO date is in body (line 16) but not in frontmatter",
+          "file_line": "customer-facing-status-page.plan.md:1-11 (frontmatter block — field absent; body line 16 carries the value)"
+        },
+        {
+          "issue": "Dropped key `status: strategic-brief` present (V0 §2.5: `status` explicitly dropped, replaced by `kind`/`disposition`/`gate`)",
+          "file_line": "customer-facing-status-page.plan.md:3"
+        },
+        {
+          "issue": "Dropped key `foundational_adr` present (V0 §2.5: reconciled → `derives_from` edge targeting ADR); should be `derives_from: [\"docs/architecture/architectural-decisions/162-observability-first.md\"]`",
+          "file_line": "customer-facing-status-page.plan.md:9"
+        },
+        {
+          "issue": "Blocking dependency on `statuspage-integration.plan.md` declared in body prose only (lines 53-55); V0 §4 requires a `depends_on` edge with `kind: blocking` in frontmatter — no typed edges declared",
+          "file_line": "customer-facing-status-page.plan.md:53-55 (body prose only)"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared; plan is `strategic` so not strictly required by V0, but no `\"pending\"` sentinel present either — edge family entirely absent from frontmatter",
+          "file_line": "customer-facing-status-page.plan.md:1-11 (frontmatter block — edge absent)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Line 92 states components should be 'aligned with five-axis user-visible categories (auth / search / tool-invocation / widget)'. ADR-162 lines 223-227 defines the five axes as Engineering, Product, Usability, Accessibility, Security. The plan conflates system components (auth/search/tool-invocation/widget) with the five-axis observability framework — these are different classification schemes and cannot be equated.",
+          "file_line": "customer-facing-status-page.plan.md:92"
+        },
+        {
+          "severity": "medium",
+          "claim": "Line 75-76 claims the 'two-of-three probe failures' trigger 'carries forward' from the Statuspage integration plan. The upstream plan (statuspage-integration.plan.md line 73) specifies 'two consecutive probe failures', not two-of-three. The semantics differ — consecutive failures vs quorum failures are distinct alerting policies. The claimed inheritance does not hold.",
+          "file_line": "customer-facing-status-page.plan.md:75"
+        },
+        {
+          "severity": "medium",
+          "claim": "The promotion trigger (lines 17, 82-83) assumes statuspage-integration.plan.md will complete and archive. That plan's own promotion trigger (statuspage-integration.plan.md line 10) is gated on an owner decision post-beta readiness — itself an undated, owner-judgement-dependent event. The chain of assumptions is: owner declares beta mature -> statuspage-integration promotes -> this plan promotes. Neither intermediate event has a schedule or measurable criterion.",
+          "file_line": "customer-facing-status-page.plan.md:17"
+        },
+        {
+          "severity": "low",
+          "claim": "Line 62 references an 'owner-managed uptime-monitor signal against /healthz' as if this is settled infrastructure supplying the probe signal. The /healthz endpoint exists only in oak-curriculum-mcp-streamable-http (verified). Whether a probe monitors it externally, and whether other app surfaces have equivalent health endpoints, is unverified and unstated.",
+          "file_line": "customer-facing-status-page.plan.md:62"
+        },
+        {
+          "severity": "low",
+          "claim": "Lines 41-42 scope out 'subscription mechanics if not covered by Statuspage default', implying Statuspage default subscription coverage is assumed sufficient. No verification that Oak's Statuspage plan tier includes the subscription mechanics needed (email/webhook) is cited.",
+          "file_line": "customer-facing-status-page.plan.md:41"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan references 'Session report §2.3 gap item 10' (line 100) without identifying which session report or date. As a strategic-brief this is tolerable, but the reference is unresolvable without that anchor, making it an unverifiable dependency citation.",
+          "file_line": "customer-facing-status-page.plan.md:100"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/future/deployment-impact-bisection.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is strategic-brief with a well-defined testable promotion trigger — plan is correctly positioned and not ready to execute",
+          "file_line": "deployment-impact-bisection.plan.md:12-13"
+        },
+        {
+          "claim": "Dependencies on L-7 release linkage (100 deploys) and a real incident are still open — plan cannot advance until those gates fire",
+          "file_line": "deployment-impact-bisection.plan.md:57-61"
+        },
+        {
+          "claim": "Plan content is non-redundant with its sibling futures (slo-and-error-budget, cost-and-capacity-telemetry) — each occupies a distinct problem slot",
+          "file_line": "deployment-impact-bisection.plan.md:68-71"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section is problem-grounded and correctly gated. The dual promotion trigger (line 12-13, 57-63) is rare discipline in future plans. Non-goals are tightly specified (lines 47-52). Success signals are measurable (lines 75-81). Risks have concrete mitigations (lines 84-91). No speculative scope-creep; no bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is well-structured and internally consistent. The implementation sketch (lines 105-111) is appropriately thin for a strategic brief — it names the Sentry release-comparison query, the alert rule shape, and the integration-test approach without prematurely committing to parameters. The only weakness is the ephemeral provenance pointer at line 115 ('Session report §2.3 gap item 12') which cannot be resolved from the repo.",
+      "salvage_value": [
+        {
+          "idea": "Bisection must be gated on release linkage stability (>=100 deploys) to avoid noisy baselines",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:57-60"
+        },
+        {
+          "idea": "A real incident proving manual attribution is slow is required as second gate, preventing premature build",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:61-63"
+        },
+        {
+          "idea": "Per-release baseline captures error rate, p50/p95/p99 latency per tool, and outcome-class distribution",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:41-43"
+        },
+        {
+          "idea": "Automated release-over-release comparison as core mechanism",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:42"
+        },
+        {
+          "idea": "Regression alert shape must define threshold, window, and confidence",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:43"
+        },
+        {
+          "idea": "Canary-deploy integration conditional on Vercel gaining canary support",
+          "class": "speculative",
+          "file_line": "deployment-impact-bisection.plan.md:44-45"
+        },
+        {
+          "idea": "Root-cause analysis, automatic rollback, and git bisect are explicitly out of scope",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:47-52"
+        },
+        {
+          "idea": "False-positive cap of <10% as a success signal",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:80"
+        },
+        {
+          "idea": "Require minimum sample size per tool before including it in bisection comparison",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:85-86"
+        },
+        {
+          "idea": "Multi-release window (smoke then 24h steady-state) to mitigate high-deploy-frequency noise",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:88-89"
+        },
+        {
+          "idea": "Promotion scope must include a decision on release-frequency caps or grouping for same-day deploys",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:90-91"
+        },
+        {
+          "idea": "Integration test: synthetic regressions in CI fire the alert",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:110-111"
+        },
+        {
+          "idea": "SLO plan complements bisection: SLO signals something is wrong, bisection identifies which deploy caused it",
+          "class": "good",
+          "file_line": "deployment-impact-bisection.plan.md:68-70"
+        },
+        {
+          "idea": "Ephemeral 'Session report §2.3 gap item 12' citation should be replaced with a durable reference at promotion",
+          "class": "bad",
+          "file_line": "deployment-impact-bisection.plan.md:115"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` — the node's stable graph identity is absent from frontmatter.",
+          "file_line": "deployment-impact-bisection.plan.md:1-13 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type` — the registry discriminator `node_type: plan` is absent.",
+          "file_line": "deployment-impact-bisection.plan.md:1-13 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` — the readiness axis replacing `status` is absent; `status: strategic-brief` maps cleanly to `kind: strategic` via the §3.5 migration map but the field itself is dropped.",
+          "file_line": "deployment-impact-bisection.plan.md:3"
+        },
+        {
+          "issue": "Dropped key `status: strategic-brief` present — V0 §2.5 explicitly drops `status` (replaced by `kind`/`disposition`/`gate`); value `strategic-brief` is the first row of the §3.5 migration map → `kind: strategic`.",
+          "file_line": "deployment-impact-bisection.plan.md:3"
+        },
+        {
+          "issue": "Dropped key `foundational_adr` present — V0 §2.5 explicitly reconciles this to the `derives_from` edge; the plan should carry `derives_from: [docs/architecture/architectural-decisions/162-observability-first.md]` instead.",
+          "file_line": "deployment-impact-bisection.plan.md:11"
+        },
+        {
+          "issue": "Missing LOCKED field `last_updated` from frontmatter — appears only as prose in the body (`**Last Updated**: 2026-04-18`), not as a frontmatter key.",
+          "file_line": "deployment-impact-bisection.plan.md:19 (body only)"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared — V0 §2.3 marks this recommended for strategic plans and required for executable; absent entirely from frontmatter.",
+          "file_line": "deployment-impact-bisection.plan.md:1-13 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan asserts that 100 production deploys is a sufficient baseline for stable bisection distributions, but provides no statistical justification for this threshold. For low-volume tools, 100 deploys could span months and still yield too few events per tool to produce reliable p95/p99 baselines. The threshold is an arbitrary round number presented as a design constraint.",
+          "file_line": "deployment-impact-bisection.plan.md:58-62"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes Sentry's per-release metrics will be the computation substrate (\"Sentry release-comparison query for per-release metrics\"), but does not verify that Sentry's release-comparison API actually supports per-tool latency distribution queries at the granularity required. This is an unvalidated vendor-capability assumption.",
+          "file_line": "deployment-impact-bisection.plan.md:107-108"
+        },
+        {
+          "severity": "medium",
+          "claim": "The second promotion trigger — \"an incident log entry records 'manual release attribution was the slowest step'\" — assumes this subjective, human-authored signal will be produced, discoverable, and legible to whoever evaluates promotion readiness. There is no definition of where ops channel entries live, who reviews them, or what counts as the trigger firing. The trigger is not mechanically testable as stated.",
+          "file_line": "deployment-impact-bisection.plan.md:99-100"
+        },
+        {
+          "severity": "low",
+          "claim": "The canary-deploy integration is listed as in-scope conditional on \"if Vercel deploys gain canary support\". This is a third-party roadmap dependency with no tracking mechanism, owner decision, or exit condition. If Vercel never ships canary support the scope clause becomes dead text with no clean resolution path.",
+          "file_line": "deployment-impact-bisection.plan.md:44-45"
+        },
+        {
+          "severity": "low",
+          "claim": "The 10% false-positive threshold in success signals is stated without a baseline. If the current manual-detection false-positive rate is already above 10%, the plan implicitly sets a bar that may be harder than it appears; if it is 0% (because humans currently don't flag regressions at all), the threshold is meaningless until the system is live. No capture of the pre-bisection baseline is planned.",
+          "file_line": "deployment-impact-bisection.plan.md:80"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly defers implementation to promotion time and marks itself strategic-brief. All load-bearing assumptions are in the sequencing and promotion-trigger sections where they are appropriately flagged as unknowns or prerequisites rather than resolved facts.",
+          "file_line": "deployment-impact-bisection.plan.md:1-13"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/future/feature-flag-provider-selection.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan explicitly defers executable steps to promotion trigger — no premature work to archive.",
+          "file_line": "feature-flag-provider-selection.plan.md:11"
+        },
+        {
+          "claim": "Promotion trigger is testable and binary — plan self-retires when condition fires.",
+          "file_line": "feature-flag-provider-selection.plan.md:99-104"
+        },
+        {
+          "claim": "Owner signal (PostHog in org) embedded with date — still actionable at promotion.",
+          "file_line": "feature-flag-provider-selection.plan.md:43-45"
+        },
+        {
+          "claim": "Folder lane (future/) matches status (strategic-brief) — no rehoming needed.",
+          "file_line": "feature-flag-provider-selection.plan.md:3"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly defers irreversible provider decisions until a concrete use case exists (line 59-62), preserves a dated owner signal about PostHog (line 43-45), names the abstraction-vs-vendor decision as a single joint decision at promotion (line 119-121), and holds a sink-side invariant that is provider-independent (line 124-127). No bad ideas detected; the one high-stakes conditional (Sink-3 landing changes the candidate set weighting, line 75-78) is speculative but correctly flagged as such.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is well-structured for a strategic brief: domain boundaries are precise (line 37-56), risks name specific failure modes with ADR-grounded mitigations (line 89-95), the promotion trigger is testable and binary (line 99-104), and the implementation sketch is explicitly labelled as context-only and not pre-committed (line 110). The PostHog signal is dated and attributed to an owner statement (line 43), which is unusually good discipline for a holding doc.",
+      "salvage_value": [
+        {
+          "idea": "Defer provider selection and wiring until a concrete use case (A/B experiment or runtime flag PR) arrives — no premature commitment.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:59-62"
+        },
+        {
+          "idea": "PostHog already in use in the Oak org is a weighting signal for the candidate set; do not pre-commit but track it.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:43-45"
+        },
+        {
+          "idea": "OpenFeature vs provider-native thin adapter is a single joint decision made at promotion, not split across time.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:119-121"
+        },
+        {
+          "idea": "Sink-side invariant: flag_evaluated schema extension and Sentry crash-context linkage are required regardless of which provider is chosen.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:124-127"
+        },
+        {
+          "idea": "If PostHog Sink 3 adapter lands before this plan promotes, the candidate set shifts to weight 'use what is already wired' against vendor independence.",
+          "class": "speculative",
+          "file_line": "feature-flag-provider-selection.plan.md:75-78"
+        },
+        {
+          "idea": "Vendor lock-in risk is mitigated by OpenFeature abstraction as the adapter surface per ADR-162 and ADR-154.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:89-91"
+        },
+        {
+          "idea": "Flag-attribution state may leak across requests if stored in module-level singletons; mitigated by per-request DI per ADR-078.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:92-94"
+        },
+        {
+          "idea": "A/B test cohort attribution should flow via product-axis events (tool_invoked, search_query) tagged with the cohort.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:49-51"
+        },
+        {
+          "idea": "Flag-evaluation volume and latency as observable signals are a success criterion.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:85"
+        },
+        {
+          "idea": "Provider-specific billing shape evaluation is out of scope for this plan; owner decides at promotion.",
+          "class": "good",
+          "file_line": "feature-flag-provider-selection.plan.md:95"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (stable kebab slug, graph identity) — LOCKED, required for all plans",
+          "file_line": "feature-flag-provider-selection.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` — LOCKED discriminator, required for all plans",
+          "file_line": "feature-flag-provider-selection.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` — LOCKED, required for all plans; inferred value would be `strategic` from status migration map §3.5",
+          "file_line": "feature-flag-provider-selection.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` — LOCKED, required for all plans; value 2026-04-23 appears in body (line 16) but not frontmatter",
+          "file_line": "feature-flag-provider-selection.plan.md:16"
+        },
+        {
+          "issue": "`status: strategic-brief` present — V0 §2.5 explicitly drops `status`; it is replaced by the `kind`/`disposition`/`gate` axes",
+          "file_line": "feature-flag-provider-selection.plan.md:3"
+        },
+        {
+          "issue": "`foundational_adr` present — V0 §2.5 explicitly reconciles this key to the `derives_from` edge; the plan carries no `derives_from` frontmatter edge",
+          "file_line": "feature-flag-provider-selection.plan.md:11"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on` all absent); related documents are referenced only as prose in the body",
+          "file_line": "feature-flag-provider-selection.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes PostHog is 'already in use elsewhere in the Oak org' (2026-04-19 owner statement) and treats this as a weighted signal in the candidate set. This assumption is not verified against any current integration inventory and may be stale by the time this plan promotes.",
+          "file_line": "feature-flag-provider-selection.plan.md:43-44"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the referenced exploration doc 'docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md' exists and is current. If that file has been superseded or removed, the candidate evaluation basis is ungrounded at promotion time.",
+          "file_line": "feature-flag-provider-selection.plan.md:72-74"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes 'second-backend-evaluation.plan.md' (Sink 3 / PostHog adapter) has a defined outcome that will shift the candidate set. The dependency is conditional but the plan does not specify how to detect whether Sink 3 has landed — creating a silent assumption that someone will notice and act.",
+          "file_line": "feature-flag-provider-selection.plan.md:75-78"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the promotion trigger ('product-owner-authored design doc' or 'PR lands requiring flag evaluation') is self-executing. There is no stated watcher or monitoring mechanism to surface the trigger; the assumption is that someone will manually promote the plan when the trigger fires.",
+          "file_line": "feature-flag-provider-selection.plan.md:99-108"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes ADR-154 (framework/consumer separation) and ADR-078 (per-request DI) are settled and stable. Both are cited as mitigations for identified risks but their stability is not verified. If either has been superseded, the stated mitigations are unreliable.",
+          "file_line": "feature-flag-provider-selection.plan.md:90-94"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly defers provider billing-shape analysis to promotion time, acknowledging the assumption is out of scope. This is sound given the strategic-brief status.",
+          "file_line": "feature-flag-provider-selection.plan.md:95-96"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "If PostHog adapter (Sink 3) lands before this plan promotes, the candidate set shifts — PostHog flags become a 'use what's already wired' option. (cited at feature-flag-provider-selection.plan.md:75-78)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "feature-flag-provider-selection.plan.md:74-77 states the claim verbatim; corroborated bidirectionally by second-backend-evaluation.plan.md:219-221 (\"PostHog hosts feature flags natively; if PostHog lands as Sink 3 before a flag consumer arrives, the provider-selection plan's candidate set shifts\") and Sink 3=PostHog defined at second-backend-evaluation.plan.md:2,53,88."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/future/mcp-http-runtime-canonicalisation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is in 'future' lane with promotion trigger unmet; it correctly defers execution and must be preserved as-is until trigger fires.",
+          "file_line": "line 14-18 (promotion_trigger), line 13 (depends_on)"
+        },
+        {
+          "claim": "Seven open architectural questions are substantive and would need re-derivation if the file were lost.",
+          "file_line": "lines 44-59"
+        },
+        {
+          "claim": "Success shape encodes net-simplification bar that guards against scope creep on promotion.",
+          "file_line": "lines 63-71"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's sole substantive contribution is the clean workstream separation: it exists to prevent the runtime-simplification work from contaminating or being contaminated by emergency repair. All seven questions (lines 44-59) are architecturally valid and non-trivial. The success-shape criteria (lines 63-71) are rigorous. No bad ideas are present; all content serves the deferred-but-valued intent.",
+      "content_quality": "adequate",
+      "content_quality_note": "The plan is well-formed for a strategic brief but contains no design content — intentionally so. Quality is adequate for its lifecycle stage. The seven questions (lines 44-59) are the highest-value content. It would be weak if it claimed to be an active plan, but as a 'future' placeholder it meets the bar. The inputs section (lines 75-84) is a useful executor handoff.",
+      "salvage_value": [
+        {
+          "idea": "Separate the runtime canonicalisation workstream from the emergency repair lane to avoid conflation.",
+          "class": "good",
+          "file_line": "lines 28-35"
+        },
+        {
+          "idea": "Decide the canonical server.ts vs main.ts deploy/local split from first principles once repair is stable.",
+          "class": "good",
+          "file_line": "lines 47-49"
+        },
+        {
+          "idea": "Evaluate whether bootstrap-app.ts and server-runtime.ts are load-bearing or accidental complexity post-repair.",
+          "class": "good",
+          "file_line": "lines 50-51"
+        },
+        {
+          "idea": "Decide whether Sentry init belongs in createHttpObservability or moves to a single explicit owned seam.",
+          "class": "good",
+          "file_line": "lines 52-53"
+        },
+        {
+          "idea": "Validate whether http.createServer(app) is still justified on Express 5 vs app.listen().on('error').",
+          "class": "good",
+          "file_line": "lines 54-55"
+        },
+        {
+          "idea": "Retire the 'application' entry once every consumer is reconciled.",
+          "class": "good",
+          "file_line": "lines 56-57"
+        },
+        {
+          "idea": "Define a target number of composition seams once deploy, local runtime, and app construction are made deliberate.",
+          "class": "good",
+          "file_line": "lines 58-59"
+        },
+        {
+          "idea": "Require a net-simplification proof before the plan earns execution (disruption must be justified).",
+          "class": "good",
+          "file_line": "lines 71"
+        },
+        {
+          "idea": "Carry forward contract-note and follow-through outcomes from the predecessor plan as inputs.",
+          "class": "good",
+          "file_line": "lines 77-78"
+        },
+        {
+          "idea": "Include real preview and Sentry evidence gathered after owner-directed preview check as a required input.",
+          "class": "good",
+          "file_line": "lines 79-80"
+        },
+        {
+          "idea": "Include reviewer findings from the abandoned canonical-layout attempt as inputs.",
+          "class": "speculative",
+          "file_line": "lines 81-82"
+        },
+        {
+          "idea": "Gather fresh Express 5 and @sentry/node primary-source evidence after repair before promoting.",
+          "class": "good",
+          "file_line": "lines 83-84"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "depends_on"
+      ],
+      "status_raw": "strategic-brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "id absent — LOCKED required field for all plan nodes (V0 §2.1)",
+          "file_line": "plan:1–18 (frontmatter block)"
+        },
+        {
+          "issue": "node_type absent — LOCKED required literal 'plan' for all plan nodes (V0 §2.1)",
+          "file_line": "plan:1–18 (frontmatter block)"
+        },
+        {
+          "issue": "kind absent — LOCKED required field replacing status; status: strategic-brief is the V0-dropped key (V0 §2.2, §2.5); status maps to kind: strategic per §3.5 but the migration has not been applied",
+          "file_line": "plan:3"
+        },
+        {
+          "issue": "status present — explicitly dropped by V0 §2.5; replaced by kind / disposition / gate axes",
+          "file_line": "plan:3"
+        },
+        {
+          "issue": "depends_on entries are bare file-path strings, not the typed { plan, kind: blocking | beneficial } objects V0 §4 requires; the blocking/beneficial classification is absent",
+          "file_line": "plan:12–13"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — LOCKED required field for all plans (V0 §2.4); it appears only as body prose (line 27)",
+          "file_line": "plan:1–18 (frontmatter block); body:plan:27"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan is correctly scoped as a strategic brief with a clear promotion trigger: the depends_on predecessor must be archived complete AND the owner must express appetite for runtime simplification. The two-gate promotion guard is architecturally sound — it prevents premature execution while the operational repair lane is still live.",
+          "file_line": "mcp-http-runtime-canonicalisation.plan.md:14-18"
+        },
+        {
+          "severity": "info",
+          "claim": "The seven scoped questions (lines 46-59) directly address the architectural ambiguities left by the emergency repair: entry-point split (server.ts vs main.ts), accidental complexity in bootstrap-app.ts and server-runtime.ts, Sentry init seam ownership, Express 5 http.createServer justification, and artefact rationalisation. Each maps to a distinct architectural decision.",
+          "file_line": "mcp-http-runtime-canonicalisation.plan.md:46-59"
+        },
+        {
+          "severity": "medium",
+          "claim": "Question 5 (line 55) asks whether http.createServer(app) is still justified on 'current Express 5' but defers the answer to promotion time. Express 5 became stable in 2024 and the answer to this is resolvable now from primary sources. Leaving it open risks the plan being promoted with a stale evidence gap: if the repair branch already proved app.listen() sufficient, that should be recorded as a resolved input rather than an open question.",
+          "file_line": "mcp-http-runtime-canonicalisation.plan.md:55-56"
+        },
+        {
+          "severity": "low",
+          "claim": "The Success Shape (lines 63-71) requires 'consumer inventory for every deleted or collapsed artefact' but the plan does not nominate where that inventory lives or how it is validated. Without a designated home, the consumer-inventory gate is unverifiable at promotion review.",
+          "file_line": "mcp-http-runtime-canonicalisation.plan.md:63-71"
+        },
+        {
+          "severity": "low",
+          "claim": "The depends_on path references a relative archive path (../archive/completed/...). If the plan is ever moved within the estate, the relative link will silently break and the promotion trigger dependency becomes unresolvable. The plan estate convention should use a stable reference form.",
+          "file_line": "mcp-http-runtime-canonicalisation.plan.md:13"
+        },
+        {
+          "severity": "info",
+          "claim": "The Non-Goals section (lines 88-93) cleanly excludes monitor creation, alert wiring, and re-opening release-linkage / source-map work. This boundary is architecturally appropriate — it prevents scope creep from observability wiring into what is a structural simplification plan.",
+          "file_line": "mcp-http-runtime-canonicalisation.plan.md:88-93"
+        }
+      ],
+      "load_bearing_claims_count": 3,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/future/no-problem-hiding-patterns-rule-reinstatement.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending; the plan is genuinely future work with a live predecessor dependency",
+          "file_line": "lines 14-28 (todos), line 136 (promotion trigger)"
+        },
+        {
+          "claim": "The non-inheritance constraints (lines 54-61) encode owner-direction context that cannot be recovered from git history alone",
+          "file_line": "lines 54-61"
+        },
+        {
+          "claim": "The plan is correctly placed in future/ and coherently sequenced behind PR-87; no displacement needed",
+          "file_line": "line 136"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's core content — non-inheritance discipline, archetype derivation from principle text, serial-sweep constraint, drift-recurrence mitigations — directly addresses a documented failure mode with owner-witnessed evidence. Every phase has a clear trigger and output artifact. The risk table (lines 128-133) is specific, not generic. No filler or speculation-as-substance detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Phase structure maps cleanly to verification criteria (lines 120-123). Archetypes are enumerated with cure and edge case guidance (lines 65-76, 80-87). The Phase 1 owner-review gate before Phase 2 (line 87) is an explicit quality checkpoint. The risk table entries each carry a specific mitigation, not a generic one (lines 128-133). No padding or placeholder sections.",
+      "salvage_value": [
+        {
+          "idea": "Enforce principles.md §'Don't hide problems' as an automated lint rule in packages/core/oak-eslint/",
+          "class": "good",
+          "file_line": "lines 1-10"
+        },
+        {
+          "idea": "Non-inheritance discipline: do not copy rule body, tests, or sweep cures from the deleted drift-authored artefact",
+          "class": "good",
+          "file_line": "lines 54-61"
+        },
+        {
+          "idea": "Phase 1 archetype catalogue with owner review before any code is written",
+          "class": "good",
+          "file_line": "lines 79-87"
+        },
+        {
+          "idea": "TDD discipline: RED (failing test per archetype) before GREEN (minimum rule body) before REFACTOR (TSDoc)",
+          "class": "good",
+          "file_line": "lines 88-93"
+        },
+        {
+          "idea": "No allowlists, exemptions, or shorthand-destructure exceptions in the rule body",
+          "class": "good",
+          "file_line": "lines 93-94"
+        },
+        {
+          "idea": "Serial-only sweep with narrate-before-apply discipline to prevent drift recurrence during activation",
+          "class": "good",
+          "file_line": "lines 99-101"
+        },
+        {
+          "idea": "Sweep commits scoped by architectural shape, not by violation count",
+          "class": "good",
+          "file_line": "lines 101-102"
+        },
+        {
+          "idea": "Parallel reviewer dispatch: architecture-expert-fred (ADR-024), code-expert, test-expert, assumptions-expert",
+          "class": "good",
+          "file_line": "lines 104-110"
+        },
+        {
+          "idea": "assumptions-expert stress-test specifically targeting drift recurrence (allowlists creeping back in)",
+          "class": "good",
+          "file_line": "lines 108-109"
+        },
+        {
+          "idea": "Phase 5 documentation: oak-eslint README rule index entry, ADR-or-PDR, TSDoc citing principles.md",
+          "class": "good",
+          "file_line": "lines 113-116"
+        },
+        {
+          "idea": "Risk: pause sweep and surface concern if sweep size discovers an architectural issue bigger than the rule — do not soften the rule to accommodate",
+          "class": "good",
+          "file_line": "lines 131-133"
+        },
+        {
+          "idea": "Consulting git log --all for deleted file for informed context only (not starting code)",
+          "class": "speculative",
+          "file_line": "line 61"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id`: V0 §2.1 requires `id` (kebab slug, stable) in frontmatter for all plans. The plan id appears only in the body (line 33) as prose, not as a frontmatter key.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:1-28 (frontmatter block — `id` absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"`: V0 §2.1 (LOCKED) requires `node_type: \"plan\"` as the registry discriminator for all plans.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:1-28 (frontmatter block — `node_type` absent)"
+        },
+        {
+          "issue": "Uses dropped field `status: future` instead of V0 axis `kind: strategic`. V0 §2.5 explicitly drops `status`; §3.5 migration map maps `future` → `kind: strategic`. The value is migratable but the field is non-conforming.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:11"
+        },
+        {
+          "issue": "`todos` present on a plan whose `status: future` maps to `kind: strategic`. V0 §2.4 (LOCKED) states `todos` is forbidden on `strategic` plans. The five todos (lines 13-28) must move to the body or the plan must be re-classified as `kind: executable` after owner decision.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:13-28"
+        },
+        {
+          "issue": "Missing recommended field `serves_strategic_choice`: V0 §2.3 marks this recommended for strategic plans. No strategic-choice ID or `\"pending\"` sentinel present.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:1-28 (frontmatter block — `serves_strategic_choice` absent)"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter. Body references a predecessor plan (PR-87 architectural cleanup, line 36) and a principle source (line 64) but no `depends_on`, `derives_from`, or `thread` edges appear in frontmatter, leaving the graph disconnected.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:1-28 (frontmatter block — all edge fields absent)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes PR-87 architectural cleanup has shipped as a hard precondition (line 136: 'Promote to current/ when PR-87 architectural cleanup ships'). No mechanism exists within the plan to verify that precondition is still current or that PR-87 is still the correct blocker — both the PR reference and the cleanup scope may have evolved since 2026-04-27.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:136"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes `principles.md` §'Don't hide problems — fix them or delete them' is stable and will remain the source-of-truth at execution time. If that section has been amended or superseded since 2026-04-27 (the last_updated date), the Phase 1 derivation discipline ('word-for-word') could produce a rule body misaligned with live doctrine. The plan does not instruct the executor to re-read the canonical principle text at Phase 1 open.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:65"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 3 imposes 'serial only — no parallel agents under any condition during the sweep' (line 99). This is stated as absolute but no enforcement mechanism or check is named. The plan assumes the executing agent will self-enforce; in a multi-agent window a parallel-execution claim could be made by another agent without the plan's prohibition being visible to them.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:99"
+        },
+        {
+          "severity": "low",
+          "claim": "The verification section (lines 120-123) assumes `pnpm lint:fix` reaches 0 violations as a terminal gate, but the sweep discipline (Phase 3) explicitly stops at a detected architectural concern bigger than the rule (Risk table, line 132). There is no reconciliation between 'sweep until zero violations' and 'pause if architectural concern emerges' — the plan does not state who unblocks the pause or what constitutes resolution before verification can be claimed complete.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:120"
+        },
+        {
+          "severity": "info",
+          "claim": "The non-inheritances section (lines 54-61) explicitly names 15 test cases and ~17 sweep-file changes from the deleted artefact. These numbers are baked in as a mental anchor. At execution time the executor is forbidden from consulting those numbers as a starting point but may unconsciously anchor their own derivation to match them. No instruction exists to treat any convergence with the prior counts as a verification signal rather than an inheritance signal.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:54"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan names `architecture-expert-fred` as the Phase 4 reviewer for ADR-024 alignment (line 105). This assumes the named agent persona is still available and active at execution time. No fallback is named if the persona is absent.",
+          "file_line": "no-problem-hiding-patterns-rule-reinstatement.plan.md:105"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    }
+  ]
+}

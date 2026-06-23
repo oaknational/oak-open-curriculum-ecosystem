@@ -93,7 +93,7 @@ argument in test code.
 filesystem use; no production runtime exposure".
 
 **Worked example**: `packages/libs/logger/src/file-sink.unit.test.ts:43` —
-`/tmp/test.log` passed alongside vi.fn() mocked `fs`. No real filesystem
+`tmp/test.log` passed alongside vi.fn() mocked `fs`. No real filesystem
 touch.
 
 ### S5332 — Clear-text protocols (`http://`)
@@ -362,6 +362,19 @@ const` (the generalised compile-time discipline of ADR-038), never typed
   The same suffix also drives the workspace ESLint code-quality ignore for the
   same architectural reason. Owner-authorised 2026-05-29.
 
+- `agent-tools/src/core/agent-identity/schemas/**` — curated naming-schema
+  wordlist data (ADR-198). Each registered era's themed word columns live in
+  one pure-data module per theme; cpd's token-sequence matching normalises
+  string-literal values, so six structurally identical data modules register
+  as ~96 duplicated lines each while their actual content is provably
+  disjoint — the curation gate tests enforce zero shared words across themes
+  per column, a strictly stronger anti-duplication property than cpd
+  measures. The material is digest-pinned and frozen at activation, so
+  "de-duplicating" (merging the files) would damage the per-theme curation
+  and review boundary to appease a false signal. The modules MUST stay pure
+  data (word arrays plus one typed export each, no logic), kept by the
+  curation gates and review. Owner-authorised 2026-06-11 (PR #189).
+
 ### What this does NOT do
 
 - It does **not** silence duplication on real source files. Findings in
@@ -377,118 +390,117 @@ const` (the generalised compile-time discipline of ADR-038), never typed
 
 ### Expansion discipline
 
-Adding a new glob to `sonar.cpd.exclusions` follows the same three-step
-gate as the multicriteria block: policy amendment first, owner
-authorisation, then `sonar-project.properties` update. The architectural
-reason must be substantive — "the gate is failing" is not a reason.
+Adding a new glob to `sonar.cpd.exclusions` requires, in order: policy
+amendment first (with the per-glob architectural reason), owner
+authorisation, then the `.sonarcloud.properties` update. The architectural
+reason must be substantive — "the gate is failing" is not a reason. See
+[§File-Based Configuration](#file-based-configuration-sonarcloudproperties).
 
-## Issue Classes (placeholder)
+## Issue Classes
 
-Issue-class policies will be added as they are codified. The same shape
+Issue-class policies are added as they are codified. The same shape
 applies: per-rule decision criteria, canonical rationale, FIX path. The
 default is `FIXED` via code change; `FALSE_POSITIVE` is the alternative
-when the defect described is genuinely not present at the site (typically
-zombie findings against stale main-branch analysis where the code has
-already been fixed; the durable cure is to push so SonarCloud
-re-analyses).
+when the defect described is genuinely not present at the site — either a
+zombie finding against stale main-branch analysis where the code has
+already been fixed (the durable cure is to push so SonarCloud re-analyses),
+or a rule that mis-fires on a shape that cannot exhibit the defect it
+describes.
 
-## Mechanical Encoding in `sonar-project.properties`
+### S8786 — Super-linear regular expressions
 
-A subset of this policy is encoded mechanically in
-[`sonar-project.properties`][sonar-config] via two distinct blocks. Each
-block has a different scope and discipline and is documented below.
+**Pattern**: Regex flagged by Sonar's runtime-complexity analyser as having
+super-linear (potentially catastrophic) backtracking. The Issue-form sibling
+of the [§S5852](#s5852--slow-regular-expressions) security hotspot: same
+underlying concern (a regex whose worst case is super-linear in input length),
+surfaced as a maintainability issue rather than a security hotspot.
 
-### Block 1 — `sonar.issue.ignore.multicriteria` (rule × glob)
+**Decision criteria**: FALSE_POSITIVE if and only if all hold:
 
-Encoded via `sonar.issue.ignore.multicriteria` entries. The encoding
-currently covers **only the three rule classes whose decision criteria
-reduce cleanly to `(rule key × test-file path glob)`**:
+- Site runs at lint/validation time, codegen time, build time, or in a
+  data-pipeline / admin CLI — never inside a request handler.
+- Input is repo-internal or upstream-controlled: repo markdown, generated
+  TypeScript, the OpenAPI schema, curriculum bulk data, or equivalent —
+  never end-user request input.
+- The pattern is anchored or character-class-bounded such that the
+  super-linear behaviour the rule describes cannot be triggered by any
+  input shape (for example, an end-anchored match over a negated character
+  class, where the negated class and the following literal cannot overlap).
 
-- S5443 (publicly-writable directories) for `**/*.test.ts`,
-  `**/*.test.tsx`, `**/tests/**`, `**/e2e-tests/**`.
-- S5332 (clear-text protocols) for the same test-file globs plus
-  `**/playwright.config.ts` and `**/vitest*.config.ts`.
-- S1313 (hardcoded IP addresses) for the same test-file globs as S5443.
+When any criterion fails — most importantly when the regex is on a
+request-handler path — the disposition is **FIXED**, not FALSE_POSITIVE.
 
-#### Why these three only
+**Canonical rationale**: "validation/build-time regex; repo-internal input;
+end-anchored over a negated character class so the flagged super-linear
+backtracking cannot occur; not a request-handler path".
 
-Their per-class decision criteria are fully decidable from the file path
-plus the rule key — no code-shape inspection is needed. The remaining
-documented rule classes (S5852, S4036, S2245, S1523, S4790, S5689) all
-require code-shape inspection to decide SAFE — for example, a
-`Math.random()` call in a non-test file may be either SAFE (jitter,
-correlation ID) or a real defect (token generation), and only the call
-site can tell. Mechanical encoding for those classes would relax
-standards; they stay in the human-review path.
+**FIX path**: when a flagged regex is on a request-handler path, rewrite it
+to linear constructs (negated character classes, anchored alternations,
+bounded quantifiers) or to plain string operations, per the rule's
+documented strategies.
 
-#### What Block 1 does NOT do
+**Worked examples** (all in agent-tooling validators, repo-internal markdown
+input, end-anchored over negated classes — disposed FALSE_POSITIVE):
 
-- It does **not** disable any rule globally.
-- It does **not** exempt production code from any rule.
-- It does **not** exempt test files from rules other than the three
-  listed above.
-- It does **not** allow additional rule×glob combinations to be silently
-  added — see "Expansion Discipline" below.
+- `agent-tools/src/validators/markdown-links/validate-markdown-links-helpers.ts`
+  — `/\s+"[^"]*"$/` strips a trailing markdown link title.
+- `agent-tools/src/validators/reference-direction/validate-reference-direction-helpers.ts`
+  — the same `/\s+"[^"]*"$/` title-strip.
+- `agent-tools/src/practice-fitness/item-count.ts` — `/[^\w-]+$/` strips a
+  trailing status annotation.
 
-### Block 2 — `sonar.cpd.exclusions` (duplication-analyser scope)
+**Delta from prior**: this is the first Issue class codified beyond the
+placeholder. It mirrors the established §S5852 hotspot class one-for-one in
+decision shape (build/validation-time + controlled input + anchored/bounded
+⇒ safe; request-handler ⇒ FIX), differing only in finding type (Issue vs
+hotspot) and therefore disposition verb (`FALSE_POSITIVE` vs `SAFE`). It
+does not relax any standard: a request-handler regex still fails the gate.
 
-Encoded via the `sonar.cpd.exclusions` key (a single comma-separated
-list). This block narrows the **duplication-analyser denominator scope**
-per the "Duplications (cpd.exclusions)" class above. The root
-`sonar-project.properties` carries the CI-based-analysis encoding, and
-the root `.sonarcloud.properties` mirrors the same list for SonarQube
-Cloud automatic analysis. It currently covers:
+## File-Based Configuration (`.sonarcloud.properties`)
 
-- `**/src/types/generated/**` — generator output.
-- `**/*.test.ts`, `**/*.test.tsx`, `**/tests/**`, `**/e2e-tests/**` —
-  test isolation.
-- `**/*.config.*` — package-local config boundary shape.
-- `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/**` —
-  owner-authorised audit-trail exception recorded on 2026-05-24. The broader
-  `**/src/types/generated/**` glob already covers this generated path, so the
-  entry is functionally redundant for analyser scope; it exists to make the
-  owner-ratified boundary visible in the mechanical encoding.
-- `**/*.external-data.ts` — external-source data snapshots (external-data file
-  convention; see the "Duplications (cpd.exclusions)" class above). The
-  pure-data contract (provenance docstring, no exported logic, types derived
-  from the `as const` data) is kept by review when the snapshot changes, not
-  by an automated gate.
+This repo uses SonarCloud **automatic analysis**, which reads **only**
+[`.sonarcloud.properties`][sonar-config]. There is deliberately no
+`sonar-project.properties` — that file is read solely by the sonar-scanner CLI
+(CI-based analysis), which this repo does not run, so it had no effect and was
+removed once confirmed dead.
 
-Block 2 is mechanically distinct from Block 1: it touches only the cpd
-analyser, never any rule analyser. All other Sonar rules continue to see
-the files listed above.
+The only file-based analysis config is:
 
-#### What Block 2 does NOT do
+- `sonar.sourceEncoding=UTF-8` — pins source decoding so the analyser cannot fall
+  back to a host JVM encoding and misdecode the repo's UTF-8.
+- `sonar.cpd.exclusions` — the duplication-analyser denominator scope documented
+  in [§Duplications](#duplications-cpdexclusions) above. It narrows only the cpd
+  denominator; it disables no rule.
 
-- It does **not** silence duplication on real source files.
-- It does **not** disable any Sonar rule analyser.
-- It does **not** authorise excluding hand-written library / app /
-  service code from the cpd corpus. Source-file duplication is cured by
-  refactor, not exclusion.
+**There is no file-based rule-ignore mechanism, by design.**
+`sonar.issue.ignore.multicriteria` (per-rule × glob disables) is a
+sonar-scanner-CLI feature that automatic analysis does not read, _and_ a
+forbidden anti-pattern under [`never-disable-checks`][no-disable] regardless: it
+suppresses a rule across every current and future matching file, blind to
+per-site context. A dead copy of such a block once lived in the unread
+`sonar-project.properties` and never took effect; it has been removed.
 
-[sonar-config]: ../../sonar-project.properties
+**Every per-issue and per-hotspot disposition is therefore made per-site,
+server-side in SonarCloud** — `FALSE_POSITIVE` for issues, `SAFE` for hotspots —
+citing the relevant policy class per [§Disposition Workflow](#disposition-workflow).
+This is the single disposition path for **all** documented classes, including
+S5443 / S5332 / S1313 in test fixtures (previously, and ineffectively, expressed
+as a glob-ignore block): a reviewer applies the class's decision criteria to the
+individual finding and dispositions it in the UI with a comment citing this
+policy. The class definitions above are the shared decision criteria for those
+per-site calls.
 
-### Expansion Discipline
+### Expansion discipline (`.sonarcloud.properties`)
 
-Adding a new entry to **either block** requires, in this order:
+The one file-based knob that carries policy is `sonar.cpd.exclusions`. Adding a
+glob requires, in order: (1) policy amendment in this file with the per-glob
+architectural reason; (2) owner authorisation — an agent may propose but must not
+enact; (3) the `.sonarcloud.properties` update. The reason must be substantive —
+"the gate is failing" is not a reason. Narrowing the duplication denominator for a
+path range is functionally a gate-scope change, so it goes through the same
+discipline as any [`never-disable-checks`][no-disable]-adjacent decision.
 
-1. **Policy amendment first** — the new class (rule×glob for Block 1, or
-   glob with architectural reason for Block 2) must be documented in
-   this file with decision criteria, canonical rationale (Block 1) or
-   per-glob architectural justification (Block 2), and — where it
-   applies — a worked-example justification for why mechanical encoding
-   does not relax standards.
-2. **Owner authorisation** — the change is owner-gated; an agent may
-   propose but must not enact.
-3. **`sonar-project.properties` update** — only after (1) and (2) are
-   landed.
-
-Expansion that bypasses this order is a violation of the
-[`never-disable-checks`][no-disable] rule's spirit even when it does not
-violate the rule's letter — silencing a rule (Block 1) or narrowing the
-duplication denominator (Block 2) for a path range is functionally
-equivalent to weakening the gate for that scope. The three-step gate
-exists to prevent the bypass.
+[sonar-config]: ../../.sonarcloud.properties
 
 ## Maintenance
 

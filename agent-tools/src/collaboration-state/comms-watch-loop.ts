@@ -1,4 +1,13 @@
+import {
+  emitWatcherError,
+  reportTimeout,
+  runWithDeadline,
+  WatcherTimeoutError,
+  type WatcherErrorKind,
+} from './comms-watch-errors.js';
 import { type DrainResult } from './types.js';
+
+export { WatcherTimeoutError, type WatcherErrorKind } from './comms-watch-errors.js';
 
 /**
  * Watch loop: drain, emit, markSeen (in that order), then wait. The drain
@@ -27,11 +36,21 @@ export async function watchCommsLoop(input: WatchCommsLoopInput): Promise<string
     lastErrorAt: null,
   };
 
-  while (needsMoreEvents(state.emitted, input.maxEvents)) {
-    const continued = await runOneIteration(input, state);
-    if (!continued) {
-      return state.output;
+  try {
+    while (needsMoreEvents(state.emitted, input.maxEvents)) {
+      const continued = await runOneIteration(input, state);
+      if (!continued) {
+        return state.output;
+      }
     }
+  } catch (error) {
+    if (error instanceof WatcherTimeoutError) {
+      state.lastErrorAt = nowIso();
+      await reportTimeout(input.emit, error, input.stepTimeoutMs);
+    }
+    // Re-throw so the failure propagates to a non-zero process exit: a
+    // timed-out step is fatal and must be visible to the supervisor.
+    throw error;
   }
 
   return state.output;
@@ -45,9 +64,18 @@ export interface WatchCommsLoopInput {
   readonly markSeen: (eventIds: readonly string[]) => Promise<void>;
   readonly tick?: (status: WatcherTickStatus) => Promise<void>;
   readonly onError?: (kind: WatcherErrorKind, error: unknown) => Promise<boolean>;
+  /**
+   * Per-step deadline in milliseconds, applied to the `drain`, `emit`, and
+   * `markSeen` awaits (NOT `waitForChange`, which is already poll-bounded by
+   * construction). A step that exceeds the deadline is the hang-but-run
+   * failure mode (2026-06-10): the loop emits a `kind=timeout` WATCHER ERROR
+   * line naming the step and then REJECTS — a timed-out step is always fatal,
+   * so the supervising Monitor/cron sees a non-zero exit it can surface and
+   * restart, rather than a silently muted watcher. When `undefined`, no
+   * deadline is applied (a hung step is awaited forever — the legacy shape).
+   */
+  readonly stepTimeoutMs?: number;
 }
-
-export type WatcherErrorKind = 'drain' | 'emit' | 'markSeen';
 
 export interface WatcherTickStatus {
   readonly lastDrainAt: string | null;
@@ -69,8 +97,10 @@ type StepResult<TValue> =
   | { readonly status: 'error'; readonly kind: WatcherErrorKind; readonly error: unknown };
 
 async function runOneIteration(input: WatchCommsLoopInput, state: LoopState): Promise<boolean> {
-  const drainOutcome = await runStep('drain', () =>
-    input.drain(remainingEvents(state.emitted, input.maxEvents)),
+  const drainOutcome = await runStep(
+    'drain',
+    () => input.drain(remainingEvents(state.emitted, input.maxEvents)),
+    input.stepTimeoutMs,
   );
   if (drainOutcome.status === 'error') {
     return await handleStepError(input, state, drainOutcome);
@@ -98,7 +128,7 @@ async function emitAndMark(
   state: LoopState,
   result: DrainResult,
 ): Promise<boolean> {
-  const emitOutcome = await runStep('emit', () => input.emit(result.output));
+  const emitOutcome = await runStep('emit', () => input.emit(result.output), input.stepTimeoutMs);
   if (emitOutcome.status === 'error') {
     const cont = await handleStepError(input, state, emitOutcome);
     // events stay unseen — next iteration will re-emit them.
@@ -108,7 +138,11 @@ async function emitAndMark(
   state.output += result.output;
   state.emitted += result.eventCount;
 
-  const markOutcome = await runStep('markSeen', () => input.markSeen(result.eventIds));
+  const markOutcome = await runStep(
+    'markSeen',
+    () => input.markSeen(result.eventIds),
+    input.stepTimeoutMs,
+  );
   if (markOutcome.status === 'error') {
     state.lastErrorAt = nowIso();
     await emitWatcherError(input.emit, markOutcome.kind, markOutcome.error, result.eventIds);
@@ -142,29 +176,18 @@ async function handleStepError(
 async function runStep<TValue>(
   kind: WatcherErrorKind,
   fn: () => Promise<TValue>,
+  timeoutMs: number | undefined,
 ): Promise<StepResult<TValue>> {
   try {
-    return { status: 'ok', value: await fn() };
+    const value = timeoutMs === undefined ? await fn() : await runWithDeadline(kind, fn, timeoutMs);
+    return { status: 'ok', value };
   } catch (error) {
+    if (error instanceof WatcherTimeoutError) {
+      // A timed-out step is fatal-by-construction: propagate, never demote
+      // it to a recoverable StepResult error or route it through onError.
+      throw error;
+    }
     return { status: 'error', kind, error };
-  }
-}
-
-async function emitWatcherError(
-  emit: (text: string) => Promise<void>,
-  kind: WatcherErrorKind,
-  error: unknown,
-  eventIds?: readonly string[],
-): Promise<void> {
-  const message = error instanceof Error ? error.message : String(error);
-  const idsSuffix =
-    eventIds !== undefined && eventIds.length > 0 ? ` event_ids=${eventIds.join(',')}` : '';
-  const text = `--- WATCHER ERROR --- kind=${kind} message=${message}${idsSuffix}\n`;
-  try {
-    await emit(text);
-  } catch {
-    // Emit-failure during error reporting is intentionally swallowed —
-    // the watch loop must not die because its own error-reporting failed.
   }
 }
 

@@ -139,7 +139,7 @@ points, keywords) rather than full-text transcript matching.
 
 The semantic search system achieves an MRR (Mean Reciprocal Rank) of 0.983
 across its benchmark suite — it finds the right lesson 98% of the time
-(see [Vision](../foundation/VISION.md) for methodology). This is the result of combining
+(see [Vision](../../VISION.md) for methodology). This is the result of combining
 full-text search with semantic understanding and structured curriculum metadata.
 
 ## Three Ways People Use This Data
@@ -173,7 +173,7 @@ this repository.
 - [Data Variances](./DATA-VARIANCES.md) — detailed technical reference for
   subject/key stage differences, transcript availability, and structural
   patterns
-- [Vision](../foundation/VISION.md) — why this repository exists and how we measure
+- [Vision](../../VISION.md) — why this repository exists and how we measure
   impact
 - [Ontology Data](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts)
   — the domain model in TypeScript (for developers)

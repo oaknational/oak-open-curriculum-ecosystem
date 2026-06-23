@@ -8,6 +8,14 @@
 > [`eef-d6-execution.plan.md`](../plans/sector-engagement/eef/current/eef-d6-execution.plan.md);
 > this report does not duplicate the cycle spec, it records the *analysis, the
 > diagram, and the correct fix*.
+>
+> **Shape supersession (2026-06-11)**: the `content: []` /
+> `structuredContent`-only success shape shown in this report's type-flow
+> diagram was reversed by the owner on 2026-06-11 — `get-eef-evidence` now
+> emits the family dual response shape via `formatToolResponse` (the strict
+> domain result became `{ summary, envelope }` with a dedicated egress
+> membrane). Read the diagram as the 2026-06-07 historical record; the live
+> shape is in `aggregated-eef-evidence.ts` / `eef-evidence-egress.ts`.
 
 ## 1. What the tool is
 

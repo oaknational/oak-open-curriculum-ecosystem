@@ -11,8 +11,7 @@ const APP_UNIT_TEST_FILE =
 // Absolute-path filename — exercises the `(?:^|/)` branch of the scope regex,
 // which is the code path that fires in real ESLint runs (physicalFilename is
 // always absolute outside of RuleTester).
-const APP_FILE_ABSOLUTE =
-  '/Users/example/repo/apps/oak-curriculum-mcp-streamable-http/src/handlers/absolute.ts';
+const APP_FILE_ABSOLUTE = '/repo/apps/oak-curriculum-mcp-streamable-http/src/handlers/absolute.ts';
 
 ruleTester.run('require-observability-emission', requireObservabilityEmissionRule, {
   valid: [

@@ -88,3 +88,8 @@ phenotype implements them through `agent-tools`, `.agent/state/collaboration/`,
 - Consolidation passes should correct any plan, README, or state file
   that treats stack-specific implementation as ownership of the
   agent-work concept.
+- This repo adopts [PDR-112](../../../.agent/practice-core/decision-records/PDR-112-teaching-surface-family-across-a-portability-seam.md)
+  (the teaching-surface family) as phenotype: a portable, host-free agentic-AI
+  literacy primer (a skill body) alongside repo-bound orientation lenses.
+  Placement is recorded in [ADR-125](125-agent-artefact-portability.md); the
+  portable pattern is PDR-112.

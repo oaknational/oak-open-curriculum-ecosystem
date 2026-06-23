@@ -1,15 +1,12 @@
 import type { Express, RequestHandler } from 'express';
-import { clerkMiddleware } from '@clerk/express';
 import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { Logger } from '@oaknational/logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
-import { instrumentMiddleware } from './auth-middleware-instrumentation.js';
 
 import { createMcpHandler } from './handlers.js';
 import { createMcpRouter } from './mcp-router.js';
-import { createMcpAuthClerk } from './auth/mcp-auth/index.js';
+import { createMcpAuthClerk, type CreateMcpAuthClerkDeps } from './auth/mcp-auth/index.js';
 import type { RuntimeConfig } from './runtime-config.js';
-import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { rewriteAuthServerMetadata, type UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import type { HttpObservability } from './observability/http-observability.js';
@@ -144,9 +141,12 @@ function registerAuthenticatedRoutes(
   allowedHosts: readonly string[],
   observability: HttpObservability,
   mcpRateLimiter: RequestHandler,
+  mcpAuthClerkDeps?: CreateMcpAuthClerkDeps,
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'mcp-auth' }) : log;
-  const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(authLog, allowedHosts) });
+  const mcpRouter = createMcpRouter({
+    auth: createMcpAuthClerk(authLog, allowedHosts, mcpAuthClerkDeps),
+  });
   log.debug('Registering POST /mcp route (HTTP-level auth via mcpRouter)');
   app.post('/mcp', mcpRateLimiter, mcpRouter, createMcpHandler(mcpFactory, observability, log));
   log.debug('Registering GET /mcp route (HTTP-level auth via mcpRouter)');
@@ -154,74 +154,39 @@ function registerAuthenticatedRoutes(
 }
 
 /**
- * Installs global Clerk middleware early in the chain. MUST be called before
- * path-specific middleware. Actual auth enforcement happens via createMcpAuthClerk.
+ * Dependencies for {@link setupAuthRoutes}, passed as a single options object.
  *
- * @param clerkMiddlewareFactory - Optional factory for creating the Clerk middleware.
- *   When provided (tests), replaces the hard import from `@clerk/express`.
- *   When absent (production), uses the real `clerkMiddleware` with runtime config keys.
- * @see ADR-078 for the dependency injection rationale
+ * Bundling the dependencies into one object follows the house style for
+ * setup/registration functions with five or more dependencies (cf.
+ * `createMcpRouter`, `createOAuthProxyRoutes`) and keeps the call site
+ * self-documenting.
  */
-export function setupGlobalAuthContext(
-  app: Express,
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  clerkMiddlewareFactory?: () => RequestHandler,
-): void {
-  const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
-
-  authLog.debug(
-    `Auth decision: DANGEROUSLY_DISABLE_AUTH=${String(runtimeConfig.dangerouslyDisableAuth)}`,
-  );
-
-  if (runtimeConfig.dangerouslyDisableAuth) {
-    authLog.warn('⚠️  AUTH DISABLED - clerkMiddleware will not be installed');
-    return;
-  }
-
-  authLog.info('🔒 OAuth enforcement enabled via Clerk');
-  authLog.debug('Creating and installing global clerkMiddleware');
-  const rawClerkMiddleware = measureAuthSetupStep(authLog, 'clerkMiddleware.create', () =>
-    clerkMiddlewareFactory
-      ? clerkMiddlewareFactory()
-      : clerkMiddleware({
-          publishableKey: runtimeConfig.env.CLERK_PUBLISHABLE_KEY,
-          secretKey: runtimeConfig.env.CLERK_SECRET_KEY,
-        }),
-  );
-  const instrumentedClerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
-
-  // Wrap with conditional middleware to skip Clerk for non-MCP paths
-  // (/.well-known/*, /healthz) and public resource reads
-  const conditionalClerkMw = measureAuthSetupStep(
-    authLog,
-    'conditionalClerkMiddleware.create',
-    () => createConditionalClerkMiddleware(instrumentedClerkMw, authLog),
-  );
-
-  measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
-    // Apply conditional clerkMiddleware globally to all routes.
-    // Non-MCP paths (/.well-known/*, /healthz) and public resource
-    // reads skip Clerk. All MCP methods get full Clerk auth context.
-    // Actual enforcement happens via createMcpAuthClerk on /mcp routes.
-    authLog.info('Installing conditional Clerk middleware globally (all routes)');
-    app.use(conditionalClerkMw);
-  });
+export interface SetupAuthRoutesOptions {
+  readonly app: Express;
+  readonly mcpFactory: McpServerFactory;
+  readonly runtimeConfig: RuntimeConfig;
+  readonly log: Logger;
+  readonly allowedHosts: readonly string[];
+  readonly observability: HttpObservability;
+  readonly mcpRateLimiter: RequestHandler;
+  readonly mcpAuthClerkDeps?: CreateMcpAuthClerkDeps;
 }
 
 /**
  * Registers /mcp routes -- protected (auth enabled) or unprotected (bypass mode).
  * Called AFTER OAuth metadata endpoints and clerkMiddleware are installed.
  */
-export function setupAuthRoutes(
-  app: Express,
-  mcpFactory: McpServerFactory,
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  allowedHosts: readonly string[],
-  observability: HttpObservability,
-  mcpRateLimiter: RequestHandler,
-): void {
+export function setupAuthRoutes(options: SetupAuthRoutesOptions): void {
+  const {
+    app,
+    mcpFactory,
+    runtimeConfig,
+    log,
+    allowedHosts,
+    observability,
+    mcpRateLimiter,
+    mcpAuthClerkDeps,
+  } = options;
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
 
   if (runtimeConfig.dangerouslyDisableAuth) {
@@ -243,6 +208,7 @@ export function setupAuthRoutes(
       allowedHosts,
       observability,
       mcpRateLimiter,
+      mcpAuthClerkDeps,
     );
   });
 }

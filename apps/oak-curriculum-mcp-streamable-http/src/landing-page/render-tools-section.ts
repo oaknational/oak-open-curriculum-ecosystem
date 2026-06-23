@@ -17,10 +17,22 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import { escapeHtml } from './escape-html.js';
-import type { UniversalToolListEntry } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import type {
+  UniversalToolListEntry,
+  AGGREGATED_TOOL_DEFS,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
-/** Preferred order for aggregated tools (value-add first, utilities last). */
-const AGGREGATED_TOOL_ORDER: readonly string[] = [
+/** All aggregated tool names, derived from the SDK's definitions map. */
+type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
+
+/**
+ * Preferred order for aggregated tools (value-add first, utilities last).
+ *
+ * Completeness invariant: every aggregated tool has an explicit position
+ * here, enforced by the unit test against `AGGREGATED_TOOL_DEFS` — a new
+ * aggregated tool cannot silently fall to the incidental tail order.
+ */
+export const AGGREGATED_TOOL_ORDER: readonly AggregatedToolName[] = [
   'get-curriculum-model',
   'browse-curriculum',
   'explore-topic',
@@ -28,6 +40,12 @@ const AGGREGATED_TOOL_ORDER: readonly string[] = [
   'fetch',
   'get-thread-progressions',
   'get-prior-knowledge-graph',
+  'get-misconception-graph',
+  'get-keyword-graph',
+  'get-eef-evidence',
+  'user-search',
+  'user-search-query',
+  'download-asset',
 ];
 
 /**
@@ -86,7 +104,7 @@ function renderToolItem(tool: UniversalToolListEntry): string {
  * search, fetch, then others). Tools not in the order list go last.
  */
 function sortAggregatedTools(tools: UniversalToolListEntry[]): UniversalToolListEntry[] {
-  const orderMap = new Map(AGGREGATED_TOOL_ORDER.map((name, i) => [name, i]));
+  const orderMap = new Map<string, number>(AGGREGATED_TOOL_ORDER.map((name, i) => [name, i]));
   return [...tools].sort((a, b) => {
     const aIdx = orderMap.get(a.name) ?? Number.POSITIVE_INFINITY;
     const bIdx = orderMap.get(b.name) ?? Number.POSITIVE_INFINITY;

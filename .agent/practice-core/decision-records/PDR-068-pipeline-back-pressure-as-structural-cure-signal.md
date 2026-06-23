@@ -4,8 +4,13 @@ pdr_kind: governance
 
 # PDR-068: Pipeline Back-Pressure as Structural-Cure Signal
 
-**Status**: Proposed
+**Status**: Accepted
 **Date**: 2026-05-22
+**Accepted**: 2026-06-16 — ratified on enforcement. The decision-debt metric surfaces
+the back-pressure and the fitness report routes it to the four-bottleneck triage
+(decide the items / diagnose the pipeline at producer or consumer), never to raising
+the buffer's limit. The lightweight trigger-scan (WS-OM1) is the consumer-cadence cure
+this PDR prescribes.
 **Related**:
 [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md)
 (capture → distil → graduate → enforce — this PDR formalises how

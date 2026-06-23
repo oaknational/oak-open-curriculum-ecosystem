@@ -56,11 +56,11 @@ todos:
     status: completed
     depends_on: [07-capture-inventory-and-freeze-allowlist]
   - id: 09-pnpm-check-green
-    content: "From a clean tree on feat/eef_exploration HEAD, run `pnpm check` at the repo root. Capture the actual command's output and cross-check the gate set against docs/governance/development-practice.md §Gate Taxonomy (nine layers). All gates must exit 0. Document the result with HEAD SHA and the captured gate set in this plan body. Fix any failure at the source per never-disable-checks; if larger than mechanical, surface to owner with a named highest-priority recovery plan. CLOSED 2026-05-05 (Silvered Hiding Silhouette, `924167`) — `pnpm check` exit 0 at HEAD `5ed92747`; full output captured at `/tmp/pnpm-check-step09.log`; gate-set cross-check below in §Step 09 evidence."
+    content: "From a clean tree on feat/eef_exploration HEAD, run `pnpm check` at the repo root. Capture the actual command's output and cross-check the gate set against docs/governance/development-practice.md §Gate Taxonomy (nine layers). All gates must exit 0. Document the result with HEAD SHA and the captured gate set in this plan body. Fix any failure at the source per never-disable-checks; if larger than mechanical, surface to owner with a named highest-priority recovery plan. CLOSED 2026-05-05 (Silvered Hiding Silhouette, `924167`) — `pnpm check` exit 0 at HEAD `5ed92747`; full output captured at `<scratch>/pnpm-check-step09.log`; gate-set cross-check below in §Step 09 evidence."
     status: completed
     depends_on: [08-verify-rule-active-and-discipline-recorded]
   - id: 10-mcp-server-live-exercise
-    content: "Boot the dev server locally, exercise MCP tools through the protocol, then shut down cleanly. (a) From apps/oak-curriculum-mcp-streamable-http/, run `env -u VERCEL_ENV -u VERCEL_BRANCH_URL -u VERCEL_GIT_COMMIT_SHA -u VERCEL_GIT_COMMIT_REF -u SENTRY_RELEASE_OVERRIDE SENTRY_MODE=sentry pnpm dev` and capture output to /tmp/dev-boot.log. Expect 'Oak Curriculum MCP Server listening on port 3333' within ~10s; if not, SIGTERM and record boot failure as a named finding (Sentry-network unavailability is operational evidence, not strictly merge-blocking). Note: legacy SENTRY_MODE consumer path is the live contract per the paused rename plan. (b) Issue an MCP `tools/list` against http://localhost:3333/mcp; record the count and full list of tool names to /tmp/mcp-tool-exercise.log. (c) Issue an MCP `tools/call` against three representative tools — at least one curriculum-data tool (search or get-key-stages), one MCP-app/UI tool, one prompt or sequence tool. Each response is validated against the tool's registered schema in the tool catalogue (ADR-123) — not just HTTP 200. Capture exchanges to the same log. (d) If any tool's response surface includes UI/widget content per ADR-141, invoke accessibility-expert over the captured response payload. (e) SIGTERM the dev server; confirm port 3333 is free. **Reviewer dispatch ordering**: invoke mcp-expert (protocol probe sufficiency) FIRST; if it returns a P1 blocker, halt step and surface to owner before further dispatch. On clean mcp-expert return: invoke security-expert (auth path coverage), clerk-expert (Clerk middleware), sentry-expert (observability surface) in parallel; accessibility-expert conditional on (d) and runs LAST against captured payloads. Acceptance: 'listening' log line present (or named operational-evidence note); tools/list returns >0 tools; three tools/call exchanges return schema-valid responses; all dispatched reviewers return clean or with absorbed findings."
+    content: "Boot the dev server locally, exercise MCP tools through the protocol, then shut down cleanly. (a) From apps/oak-curriculum-mcp-streamable-http/, run `env -u VERCEL_ENV -u VERCEL_BRANCH_URL -u VERCEL_GIT_COMMIT_SHA -u VERCEL_GIT_COMMIT_REF -u SENTRY_RELEASE_OVERRIDE SENTRY_MODE=sentry pnpm dev` and capture output to <scratch>/dev-boot.log. Expect 'Oak Curriculum MCP Server listening on port 3333' within ~10s; if not, SIGTERM and record boot failure as a named finding (Sentry-network unavailability is operational evidence, not strictly merge-blocking). Note: legacy SENTRY_MODE consumer path is the live contract per the paused rename plan. (b) Issue an MCP `tools/list` against http://localhost:3333/mcp; record the count and full list of tool names to <scratch>/mcp-tool-exercise.log. (c) Issue an MCP `tools/call` against three representative tools — at least one curriculum-data tool (search or get-key-stages), one MCP-app/UI tool, one prompt or sequence tool. Each response is validated against the tool's registered schema in the tool catalogue (ADR-123) — not just HTTP 200. Capture exchanges to the same log. (d) If any tool's response surface includes UI/widget content per ADR-141, invoke accessibility-expert over the captured response payload. (e) SIGTERM the dev server; confirm port 3333 is free. **Reviewer dispatch ordering**: invoke mcp-expert (protocol probe sufficiency) FIRST; if it returns a P1 blocker, halt step and surface to owner before further dispatch. On clean mcp-expert return: invoke security-expert (auth path coverage), clerk-expert (Clerk middleware), sentry-expert (observability surface) in parallel; accessibility-expert conditional on (d) and runs LAST against captured payloads. Acceptance: 'listening' log line present (or named operational-evidence note); tools/list returns >0 tools; three tools/call exchanges return schema-valid responses; all dispatched reviewers return clean or with absorbed findings."
     status: pending
     depends_on: [09-pnpm-check-green]
   - id: 11-pre-merge-divergence-analysis
@@ -416,8 +416,8 @@ allowlist).
 invoked per-workspace with `--format json` against the eight workspaces that
 declare a `lint` script and contain test files; JSON output aggregated and
 deduplicated to 24 violations across 23 unique files; full structured capture
-in `/tmp/eslint-@oaknational_*.json` and human-readable summary in
-`/tmp/no-real-io-lint-full.log`.
+in `<scratch>/eslint-@oaknational_*.json` and human-readable summary in
+`<scratch>/no-real-io-lint-full.log`.
 
 **`e2e-tests/helpers/test-config.ts` cross-reference check:** that file does
 NOT appear in the captured violation set; no cross-reference into the paused
@@ -555,9 +555,9 @@ separate, deliberate post-merge decision once the rule is stable.
 
 **Validation (per step 07 brief):**
 
-- Inventory entry count: 24 (matches `--format json` aggregate count from `/tmp/eslint-@oaknational_*.json`).
+- Inventory entry count: 24 (matches `--format json` aggregate count from `<scratch>/eslint-@oaknational_*.json`).
 - Allowlist entry count: 23 unique path patterns (one fewer than Inventory because `write-json-graph-file.e2e.test.ts` has two distinct violations on different lines/imports — the allowlist exempts the file once; the Inventory records the two violations separately to keep the historical signal honest).
-- Spot-check: 5 random Inventory entries verified line-by-line against `/tmp/no-real-io-lint-full.log` — all match (rule, file, kind).
+- Spot-check: 5 random Inventory entries verified line-by-line against `<scratch>/no-real-io-lint-full.log` — all match (rule, file, kind).
 - `pnpm lint` exits 0 with the allowlist absorbing every captured violation.
 
 ## Backfill Findings (step 04, 2026-05-05 Lacustrine Navigating Rudder)
@@ -822,7 +822,7 @@ consolidation pass.
 | 7 | Capture inventory + freeze allowlist atomically | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — closing commit `483a9e32`; §IO Inventory populated (24 violations across 23 files); allowlist option configured in shared `packages/core/oak-eslint/src/configs/recommended.ts` at `warn` severity (per owner-directed new-eslint-rules-start-warn principle, supersedes original R2-4 `error`-severity finding); architecture-expert-fred + architecture-expert-betty dispatched on wiring-location design — both Option A (shared `recommended.ts`); `test-config.ts` NOT captured (no cross-reference needed); `pnpm lint` exits 0 |
 | 8 | Verify rule active + discipline recorded | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — no separate code commit required; rule active at `warn` severity per step 07's supersession of R2-4 (escalation to `error` is a separate post-merge decision, NOT in scope of this branch); `pnpm lint` exits 0 (owner-confirmed); allowlist-ADD discipline in the comment block above the rule activation in `recommended.ts` (commit `483a9e32`); step 07 reviewer P2 findings absorbed (commit `6dc7a622`) |
 | 9 | `pnpm check` green at HEAD | DONE 2026-05-05 (Silvered Hiding Silhouette, `924167`) — exit 0 at HEAD `5ed92747`; gate-set cross-check in §Step 09 evidence; covers seven of nine §Gate Taxonomy layers (formatting, type, lint, static analysis, testing, build, accessibility); layers 6 (mutation testing, separate `pnpm mutate`) and 8 (specialist review, dispatched per-step) deliberately out of scope of `pnpm check` |
-| 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | DONE 2026-05-06 (Silvered Hiding Silhouette, `924167`, claude-code / sonnet-4-6) — exercise log at `/tmp/mcp-tool-exercise.log`; reviewer dispatch complete: mcp-expert CLEAN (non-blocking follow-ups, 2026-05-05), security-expert CLEAN/LOW RISK, clerk-expert CLEAN, sentry-expert COMPLIANT (all 2026-05-06); step 10 verdict ACCEPTED; three P2 snags added to `pr-93-merge-snagging-2026-05-05.md`; port 3333 shutdown owner-managed |
+| 10 | Dev boot + MCP tool exercise + schema validation + ordered reviewer dispatch + shutdown | DONE 2026-05-06 (Silvered Hiding Silhouette, `924167`, claude-code / sonnet-4-6) — exercise log at `<scratch>/mcp-tool-exercise.log`; reviewer dispatch complete: mcp-expert CLEAN (non-blocking follow-ups, 2026-05-05), security-expert CLEAN/LOW RISK, clerk-expert CLEAN, sentry-expert COMPLIANT (all 2026-05-06); step 10 verdict ACCEPTED; three P2 snags added to `pr-93-merge-snagging-2026-05-05.md`; port 3333 shutdown owner-managed |
 | 11 | Pre-merge baseline check vs `origin/main` | Commit-list diffs; conflict-potential findings |
 | 12 | Owner-gated merge readiness declaration | Evidence bundle; release-readiness-expert call; owner authorisation |
 
@@ -835,7 +835,7 @@ consolidation pass.
 | Branch HEAD | `5ed92747` (`docs(plan): close step 08 as state declaration`) |
 | Command | `pnpm check` |
 | Exit code | 0 |
-| Captured output | `/tmp/pnpm-check-step09.log` (ephemeral, not committed) |
+| Captured output | `<scratch>/pnpm-check-step09.log` (ephemeral, not committed) |
 
 **Script chain executed by `pnpm check`** (composed from `package.json`):
 

@@ -4,14 +4,18 @@ Date: 2026-05-14
 
 Researcher: Shadowed Glimmering Night
 
-Upstream snapshot: `external-skills-repository@e74f0061bb67222181640effa98c675bdb2fdaa7`.
+Source: Matt Pocock's skills repository (`mattpocock/skills`), MIT-licensed,
+snapshot `@e74f0061bb67222181640effa98c675bdb2fdaa7`. Read-only local checkout:
+`.agent/reference-local/repos/mattpocock-skills/` (git-ignored). The
+`upstream-snapshot:` citation tokens in the reference block resolve against that
+snapshot.
 
 Status: research report, not an adoption plan.
 
 ## Purpose
 
-This report studies an `external-skills-repository` snapshot as an external
-agentic-work substrate. The goal is to learn from it without copying its forms
+This report studies a snapshot of Matt Pocock's `mattpocock/skills` repository as
+an external agentic-work substrate. The goal is to learn from it without copying its forms
 uncritically. The lens is our Practice: doctrine made operational through
 skills, rules, workflows, protocols, agent tools, state files, memory, and
 gates. In Oak terms, the Practice is the substrate; the skills are one

@@ -4,7 +4,8 @@ pdr_kind: governance
 
 # PDR-085: Definition of Delivery
 
-**Status**: Accepted
+**Status**: Accepted (amended 2026-06-12 — instrument and discovery
+deliverables named; owner-approved at the 2026-06-11 register walk)
 **Date**: 2026-05-27 (Proposed); 2026-05-27 (Accepted — owner-elevated after
 the first application exercised the doctrine on the EEF gate-1a delivery plan)
 **Related**:
@@ -85,6 +86,19 @@ immediate consumer has not delivered, regardless of what it produced.
 **The not-delivery list (pointed):** merged code, a green gate, an open
 review, a checked plan item, code on a branch, and a registered-but-orphaned
 surface are NOT delivery. They are scaffolding or producer milestones.
+
+**Instrument and discovery deliverables (2026-06-12 amendment).** Work whose
+purpose is to enable exploration or measurement — an evaluation instrument, a
+discovery harness, a metric — delivers to a real beneficiary class: *the team
+enabled to explore*. The six criteria apply unchanged with that beneficiary
+named: the value is **exploration enabled**, and the observable signal of
+receipt is the **first real reading produced and consumed** — an instrument
+that is merged, green, and reviewed but has never produced a reading the team
+acted on has NOT delivered (the founding case study was exactly that: an
+exploration tool counted as delivered on its merge). The honesty mechanism is
+the self-correcting-deliverables structure (PDR-093): sequence the plan so a
+successor deliverable consumes the instrument's first reading, making the
+undelivered-instrument state break a gate instead of hiding behind a merge.
 
 ## Rationale
 

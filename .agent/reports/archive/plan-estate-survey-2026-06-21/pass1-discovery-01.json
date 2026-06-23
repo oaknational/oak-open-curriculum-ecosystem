@@ -1,0 +1,1622 @@
+{
+  "batch_size": 9,
+  "plans_returned": 9,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/discovery/current/agent-readiness-discovery-hub.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All eight todos are status: pending — plan is live and not yet executed",
+          "file_line": "file:11-42"
+        },
+        {
+          "claim": "Non-goals boundary is precisely specified and directly guards against premature MCP/A2A scope expansion",
+          "file_line": "file:103-113"
+        },
+        {
+          "claim": "Acceptance criteria AR-A1 through AR-A9 are concrete and independently verifiable",
+          "file_line": "file:155-176"
+        },
+        {
+          "claim": "Deterministic validation commands provide an executable proof contract anchored to live endpoints",
+          "file_line": "file:182-193"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every task is grounded in specific RFCs or specifications (file:12-13), host ownership is explicit and verified by the promotion-trigger narrative (file:59-62), the non-goals list is precise and principle-backed (file:103-113), acceptance criteria are independently verifiable (file:155-176), and a proof contract maps each criterion to a proof level (file:200-210). No speculative or aspirational inflation detected; commerce metadata and WebMCP are explicitly excluded.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan encodes more than boilerplate conformance: it carries a risk table with mitigations (file:213-222), foundation-alignment citations (file:225-231), a first-principles check gate (file:233-238), reviewer scheduling by surface (file:240-247), and explicit lifecycle triggers (file:249-259). The design principles (file:88-100) are actionable constraints, not platitudes. The deterministic validation block (file:182-193) is executable as written.",
+      "salvage_value": [
+        {
+          "idea": "ar1: Block all implementation on a standards-refresh pass covering RFC 9727, RFC 9264, RFC 8288, Agent Skills Discovery RFC, Content Signals, Web Bot Auth, and public Oak endpoint state before any product edits",
+          "class": "good",
+          "file_line": "file:11-15"
+        },
+        {
+          "idea": "ar2: Prove apex homepage Link header and api-catalog content type stay compliant, add exactly one skills-index relation, validate absolute service anchors, no duplicate service enumeration",
+          "class": "good",
+          "file_line": "file:15-19"
+        },
+        {
+          "idea": "ar3: Author Agent Skills as same-origin static artifacts, generate SHA-256 digests in the same build step that writes index.json, serve with correct content types/cache/CORS, block scripts/archives by default",
+          "class": "good",
+          "file_line": "file:19-23"
+        },
+        {
+          "idea": "ar4: Publish Auth.md on open-api. for static-key auth model only — no OAuth or OpenID placeholder metadata",
+          "class": "good",
+          "file_line": "file:23-27"
+        },
+        {
+          "idea": "ar5: Deterministic markdown representation for human curriculum/lesson pages only; structured-data hosts remain out of scope",
+          "class": "good",
+          "file_line": "file:27-30"
+        },
+        {
+          "idea": "ar6: Make robots.txt and sitemap a general baseline for every official Oak web app; route Content Signals values to owner/legal/editorial before encoding",
+          "class": "good",
+          "file_line": "file:31-35"
+        },
+        {
+          "idea": "ar7: Treat Web Bot Auth as a first-class per-host decision item with security-owned edge evidence required before any enabled claim",
+          "class": "good",
+          "file_line": "file:35-39"
+        },
+        {
+          "idea": "ar8: Integrated estate verification (endpoint checks + pnpm check) before claiming readiness",
+          "class": "good",
+          "file_line": "file:39-42"
+        },
+        {
+          "idea": "Design principle: metadata lives on the host that owns the capability; apex indexes, does not impersonate service hosts",
+          "class": "good",
+          "file_line": "file:89-91"
+        },
+        {
+          "idea": "Design principle: absence is correct where a mechanism does not apply — no fabricated placeholder metadata",
+          "class": "good",
+          "file_line": "file:92-93"
+        },
+        {
+          "idea": "Design principle: integrity at build time — skill digests computed over exact shipped bytes in the same build step",
+          "class": "good",
+          "file_line": "file:93-95"
+        },
+        {
+          "idea": "Design principle: well-known discovery surfaces are crawlable/cacheable and must not publish tenant, user, private, or runtime-only state",
+          "class": "good",
+          "file_line": "file:96-98"
+        },
+        {
+          "idea": "Non-goal: do not publish MCP Server Cards before mcp.thenational.academy exists and the live spec/path is confirmed",
+          "class": "good",
+          "file_line": "file:103-105"
+        },
+        {
+          "idea": "Non-goal: do not publish Aila A2A metadata before Oak decides Aila should answer to third-party agents",
+          "class": "good",
+          "file_line": "file:105-106"
+        },
+        {
+          "idea": "Non-goal: do not publish DNS-AID records before the DNS scope decision",
+          "class": "good",
+          "file_line": "file:106-107"
+        },
+        {
+          "idea": "Non-goal: do not enable or claim Web Bot Auth without security-owned edge evidence",
+          "class": "good",
+          "file_line": "file:109-110"
+        },
+        {
+          "idea": "Non-goal: do not publish commerce metadata (x402, MPP, UCP, ACP) on public curriculum surfaces",
+          "class": "good",
+          "file_line": "file:111-112"
+        },
+        {
+          "idea": "Cross-repo back-link discipline: if implementation lives in another repo, open an equivalent repo-local plan or PR checklist and back-link to this plan as source",
+          "class": "good",
+          "file_line": "file:150-152"
+        },
+        {
+          "idea": "TDD pairing requirement: every product-bearing task lands as failing test + production change + refactor in the same commit",
+          "class": "good",
+          "file_line": "file:148-150"
+        },
+        {
+          "idea": "Proof contract: maps each acceptance criterion to a named proof level (integration, non-code+integration, security evidence)",
+          "class": "good",
+          "file_line": "file:200-210"
+        },
+        {
+          "idea": "Risk: standards churn mitigation — pin schema versions, record source dates, ar1 is blocking",
+          "class": "good",
+          "file_line": "file:214-215"
+        },
+        {
+          "idea": "Risk: skill prompt injection mitigation — same-origin hosting, digest verification, tight write access, no scripts by default",
+          "class": "good",
+          "file_line": "file:218-219"
+        },
+        {
+          "idea": "Risk: legal/editorial misstatement mitigation — route search/ai-input/ai-train to decision owners before encoding",
+          "class": "good",
+          "file_line": "file:219-220"
+        },
+        {
+          "idea": "Plan-body first-principles check gate: before executing any todo, re-ask whether the surface makes Oak's estate more truthful, or merely satisfies a scanner row",
+          "class": "good",
+          "file_line": "file:233-238"
+        },
+        {
+          "idea": "Reviewer scheduling by surface type: assumptions-expert for proportionality, security-expert for trust surfaces, mcp-expert deferred until MCP GA plan is promoted",
+          "class": "good",
+          "file_line": "file:240-247"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field: id (required for all plan nodes, LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:1 (frontmatter, absent)"
+        },
+        {
+          "issue": "Missing required field: node_type (must be literal 'plan', LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:1 (frontmatter, absent)"
+        },
+        {
+          "issue": "Missing required field: name — plan uses dropped key 'title' (line 2) instead; V0 §2.1 migrates title→name (LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:2"
+        },
+        {
+          "issue": "Missing required field: overview (required for all plan nodes, LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:1 (frontmatter, absent)"
+        },
+        {
+          "issue": "Missing required field: kind — plan uses dropped key 'type: executable' (line 5) instead; V0 §2.1/§3.1 replaces type free-label with node_type+kind (LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:5"
+        },
+        {
+          "issue": "Missing required field: last_updated — plan uses dropped housekeeping key 'date: 2026-06-01' (line 7) instead; V0 §2.4 folds date→last_updated (LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:7"
+        },
+        {
+          "issue": "Missing required edge: serves_strategic_choice — required for executable plans (LOCKED shape); no equivalent present",
+          "file_line": "agent-readiness-discovery-hub.plan.md:1 (frontmatter, absent)"
+        },
+        {
+          "issue": "Dropped key present: status: current — V0 §2.5 explicitly drops status; state must be encoded as kind/disposition/gate (LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:3"
+        },
+        {
+          "issue": "Dropped key present: lane: current — V0 §2.5 drops collection/lane; folder location is the projection (LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:4"
+        },
+        {
+          "issue": "Dropped key present: type: executable — V0 §2.5 drops type as free-label; replaced by node_type+kind (LOCKED)",
+          "file_line": "agent-readiness-discovery-hub.plan.md:5"
+        },
+        {
+          "issue": "Todo-level depends_on keys (lines 14, 18, 22, 26, 30, 34, 38, 42) are not part of the V0 todo schema; V0 §2.3 defines depends_on as a plan-level edge only with shape { plan, kind: blocking|beneficial }",
+          "file_line": "agent-readiness-discovery-hub.plan.md:14"
+        }
+      ],
+      "unclassified_keys": [
+        "source_strategic_plan",
+        "source_ticket"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Task ar3 requires SHA-256 digest generation over shipped artifact bytes in the same build step, but the plan does not specify who controls write access to the skills artifact origin or how the build pipeline is authenticated. Without an explicit write-access control statement, the integrity guarantee from digest verification is undermined: a supply-chain compromise could write both the artifact and the digest. The plan should name the CI/CD trust boundary that gates artifact publication.",
+          "file_line": "agent-readiness-discovery-hub.plan.md:20-21"
+        },
+        {
+          "severity": "medium",
+          "claim": "Acceptance criterion AR-A3 (line 163) validates that digest recomputation matches shipped bytes, but no acceptance criterion covers that the digest algorithm (SHA-256) is fixed in the schema for the Agent Skills Discovery RFC version being targeted. If the RFC allows algorithm agility, an attacker controlling the index could substitute a weaker algorithm. The plan should pin the algorithm alongside the RFC version in ar1.",
+          "file_line": "agent-readiness-discovery-hub.plan.md:163-164"
+        },
+        {
+          "severity": "medium",
+          "claim": "The 'Skill prompt injection' risk (line 218) is named but the mitigations listed ('same-origin hosting, digest verification, tight write access, no scripts by default') are all build-time or host-level controls. There is no runtime mitigation: no mention of Content Security Policy headers, subresource integrity on index consumers, or agent-side sandboxing expectations. A compromised skill artifact that passes digest check at publication time would still reach agent context unfiltered.",
+          "file_line": "agent-readiness-discovery-hub.plan.md:218"
+        },
+        {
+          "severity": "low",
+          "claim": "Design principle 4 states 'Public metadata only — well-known discovery surfaces must not publish tenant, user, private, or runtime-only state' (line 97). This principle is asserted but no acceptance criterion or validation command verifies the negative (i.e., that no such data is present in the published artifacts). AR-A9 only checks that pnpm check passes; a scraping or diff check against a known-safe schema would make this principle testable.",
+          "file_line": "agent-readiness-discovery-hub.plan.md:97-98"
+        },
+        {
+          "severity": "low",
+          "claim": "Task ar4 (line 24) publishes Auth.md documenting the static-key auth model including 'how to obtain a key, header shape, rate limits, and support path'. Publishing the header name and shape for the static-key scheme on a public, crawlable endpoint reduces the information-asymmetry that a valid key would otherwise provide. The plan should note that Auth.md is instructional for legitimate integrators, not that it materially reduces security, but the decision to publish key-header shape publicly should be an explicit security-reviewed decision, not implicit.",
+          "file_line": "agent-readiness-discovery-hub.plan.md:24-25"
+        },
+        {
+          "severity": "low",
+          "claim": "CORS is listed as a validation dimension for AR-A1 (line 201, proof table) but no acceptance criterion in the AR-A1 through AR-A9 list actually specifies allowed CORS origins for the well-known endpoints. Without a stated expected value, the endpoint check can pass with a wildcard (*) CORS header, which would allow any origin to fetch the API catalog and skills index with credentials.",
+          "file_line": "agent-readiness-discovery-hub.plan.md:201"
+        },
+        {
+          "severity": "info",
+          "claim": "AR-A8 requires that any Web Bot Auth 'enabled' claim links to security-owned evidence (line 174). This is sound. The plan correctly gates the claim behind security-and-privacy owned enforcement proof, and the non-goal at line 111 explicitly blocks enablement without edge evidence. No gap here; flagged as confirmation that the control is present.",
+          "file_line": "agent-readiness-discovery-hub.plan.md:111,174"
+        },
+        {
+          "severity": "info",
+          "claim": "Content Signals (ar6, line 32) are correctly routed to legal/editorial before encoding; the plan does not pre-decide ai-input or ai-train values. This is appropriate security hygiene for public policy-setting metadata.",
+          "file_line": "agent-readiness-discovery-hub.plan.md:32-34"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/discovery/future/agent-skills-discovery.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly non-executable and future-gated with concrete promotion triggers",
+          "file_line": "agent-skills-discovery.plan.md:16-17"
+        },
+        {
+          "claim": "Self-correcting note acknowledging the real oak-skills library already landed, making the candidate table provisional but the plan still directionally correct",
+          "file_line": "agent-skills-discovery.plan.md:119-128"
+        },
+        {
+          "claim": "Blocking prerequisites are well-enumerated and none are yet met (RFC still draft, catalogue not ratified)",
+          "file_line": "agent-skills-discovery.plan.md:205-215"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is strategically sound: it defers execution correctly pending external RFC stability, separates layer concerns cleanly, requires teacher-value traces before publication, and self-corrects when the real oak-skills library landed. The non-goals and domain boundaries prevent scope creep. No bad ideas detected. The main speculative element is the candidate skill table, which the plan itself flags as provisional (lines 104-128).",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is well-structured with explicit blocking prerequisites, a risk table, a promotion trigger, and a reconciliation note. The required skill constraints section (lines 136-145) is a concrete checklist. The discovery index shape example (lines 166-180) is illustrative without over-committing. The comparison with MCP Server Cards (lines 185-199) cleanly documents layer separation. Content is above V0-conformant boilerplate — it encodes genuine design decisions.",
+      "salvage_value": [
+        {
+          "idea": "Agent Skills as SKILL.md workflow artifacts distinct from MCP tools, server cards, and A2A — a separate discovery layer for repeatable workflows",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:56-65"
+        },
+        {
+          "idea": "Teacher-value trace requirement: no skill is published until its value to teachers is traced end-to-end against available Oak data",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:97-98"
+        },
+        {
+          "idea": "Layer boundary doctrine: Server Cards answer where/how to connect; Skills Discovery answers which workflows to load; MCP runtime answers what tools return",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:193-199"
+        },
+        {
+          "idea": "Installation messaging redundancy: every published capability names at least two independent announcement surfaces",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:148-160"
+        },
+        {
+          "idea": "Mutual announcement between capability tiers: oak-skills announces MCP-grounded tier; MCP server instructions reciprocally announce installable skills",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:157-160"
+        },
+        {
+          "idea": "Required skill constraints checklist: valid frontmatter, no static curriculum payloads, live data routing, teacher agency preservation, digest-verifiable",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:136-145"
+        },
+        {
+          "idea": "RFC-tracking posture: keep in future/ and re-read RFC at promotion rather than committing to a draft index shape",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:257"
+        },
+        {
+          "idea": "Reconciliation instruction: promotion must start from real oaknational/oak-skills library catalogue/tooling/eval harness, not the hypothetical candidate table",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:126-128"
+        },
+        {
+          "idea": "Candidate skill catalogue: oak-curriculum-search, oak-lesson-adaptation, oak-progression-explorer, oak-resource-comparison, oak-evidence-framing",
+          "class": "speculative",
+          "file_line": "agent-skills-discovery.plan.md:107-112"
+        },
+        {
+          "idea": "Prompt injection risk from clients generalising Oak's trusted-origin work to third-party skills",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:259"
+        },
+        {
+          "idea": "Default publication posture: five or fewer skill-md artifacts + one index + no bundled scripts as initial shape",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:302-304"
+        },
+        {
+          "idea": "No default script execution constraint for all published skills",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:94 and 143"
+        },
+        {
+          "idea": "Gap routing: if a needed Oak data surface does not exist, route the gap to the owning product or data plan rather than hiding it in skill prose",
+          "class": "good",
+          "file_line": "agent-skills-discovery.plan.md:115-117"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-tracking",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` with literal value \"plan\" (LOCKED, required for all plans)",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `overview` — one-line scope string (LOCKED, required for all plans)",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` — inferred `strategic` from `status` + folder, but the field itself is absent (LOCKED, required for all plans)",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:1"
+        },
+        {
+          "issue": "Missing `promotion_trigger` frontmatter field — LOCKED required for `kind: strategic` plans; a Promotion Trigger section exists in the body but the field must be in frontmatter",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:264"
+        },
+        {
+          "issue": "Present key `status: strategic-tracking` is explicitly dropped by V0 §2.5; value `strategic-tracking` is not in the §3.5 migration map and does not map cleanly onto any V0 axis",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:5"
+        },
+        {
+          "issue": "Present key `collection: discovery` is explicitly dropped by V0 §2.5 (folder location is the projection; metadata must not duplicate it)",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:3"
+        },
+        {
+          "issue": "Present key `lane: future` is explicitly dropped by V0 §2.5 (folder + `kind` carry it)",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:4"
+        },
+        {
+          "issue": "Blocking prerequisites listed in body prose (lines 204-215) are not modelled as typed `depends_on` frontmatter edges with `kind: blocking | beneficial` as required by V0 §4",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:204"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared — recommended for strategic plans; absent with no `\"pending\"` sentinel",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:1"
+        },
+        {
+          "issue": "No `thread` edge declared — recommended for all plans per V0 §2.3",
+          "file_line": ".agent/plans/discovery/future/agent-skills-discovery.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "collection",
+        "lane",
+        "parent_plan"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the Cloudflare Agent Skills Discovery RFC and agentskills.io specification are stable enough external anchors to plan against. Both are draft-stage standards with no guaranteed stability timeline. The plan partially acknowledges this in the risks table and blocks on RFC stability, but the catalogue, index shape, and constraint list are all written as if the spec semantics (frontmatter fields, `skill-md` type, `/.well-known/` path, digest approach) will survive to execution. If the RFC is significantly revised or abandoned before promotion, the entire proposed structure may need to be re-derived.",
+          "file_line": "agent-skills-discovery.plan.md:27-28,168-179,213"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes `oaknational/oak-skills` (private at 2026-06-03) is the authoritative first-party library and that promotion should start from its catalogue and tooling. This assumption is stated but not verified against the current state of that repo. The plan correctly notes reconciliation is required at promotion (lines 118-128), but the scope overlap analysis (e.g. `oak-lesson-adaptation` ≈ lesson-builder) was written against a snapshot. If the library has changed materially since June 2026, the overlap mapping and the constraint that 'route publication/trust decisions through that repo's owners' may rest on a stale picture.",
+          "file_line": "agent-skills-discovery.plan.md:118-128,38-39"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes that 'mutual announcement' between the skills library and the MCP server `instructions` field satisfies the two-independent-surfaces announcement criterion (lines 158-161). This presupposes that hosts surface MCP server `instructions` text to users in a way that constitutes a meaningful independent announcement channel. If a host does not expose that text prominently, the redundancy guarantee collapses to a single surface.",
+          "file_line": "agent-skills-discovery.plan.md:156-161"
+        },
+        {
+          "severity": "low",
+          "claim": "The proposed skill catalogue (lines 104-112) assumes teacher and partner value has not yet been traced, while the reconciliation note (lines 118-128) reveals that a substantially overlapping real library already exists with 'per-skill trigger/quality evals'. The plan does not surface whether those evals already constitute the required value-trace, or whether a separate Oak-internal trace is still needed. This creates ambiguity about whether the blocking prerequisite 'ratify catalogue by teacher/user value' is partially satisfied or entirely open.",
+          "file_line": "agent-skills-discovery.plan.md:104-128,205-206"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes that 'no default script execution' is a safe and correct publication posture for all skill consumers (line 93, lines 208-210). This is framed as a policy rather than a design decision with considered trade-offs. The open question 'Which clients should be used for compatibility smoke testing?' (line 291) acknowledges client variance, but the assumption that all target hosts respect this constraint is not verified.",
+          "file_line": "agent-skills-discovery.plan.md:93,143,208-210,291"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly defers execution decisions to promotion time and explicitly requires re-reading the live RFC at promotion (line 182). The blocking prerequisites section explicitly names the external-spec-stability assumption as a gate. The assumptions posture for a strategic-tracking plan is appropriately provisional.",
+          "file_line": "agent-skills-discovery.plan.md:14-16,182,213-214"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "This is a functioning strategic parent with a well-formed EGM, explicit domain boundaries, a live child-plan index, and a referenced promoted execution slice — it is doing its job and is not complete or obsolete.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:9-14"
+        },
+        {
+          "claim": "Promotion triggers are defined and not yet fired for the parent itself, confirming it belongs in future and should remain.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:189-206"
+        },
+        {
+          "claim": "The parent explicitly defers execution to the current slice (agent-readiness-discovery-hub.plan.md), confirming the future lane placement is intentional and correct.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:64-65"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is a well-structured governance document. Every section earns its place: the layer map (lines 69-79) provides an actionable reference that prevents layer conflation; the candidate intake rule (lines 116-130) is a concrete seven-step gate; domain boundaries (lines 82-99) are explicit; promotion triggers (lines 189-206) are enumerated and tied to real conditions. No speculative or bad ideas are embedded — the document correctly defers undecided surfaces rather than asserting them.",
+      "content_quality": "strong",
+      "content_quality_note": "The layer map table (lines 69-79) and candidate intake rule (lines 116-130) are the strongest content: they are actionable, not merely descriptive. Non-goals (lines 101-110) and domain boundaries (lines 82-99) are unusually precise for a strategic parent. The child-plan table (lines 45-53) is well-maintained with relationship annotations. Open questions (lines 209-218) are genuine blockers, not padding. The plan meets the bar for a strategic parent at every section.",
+      "salvage_value": [
+        {
+          "idea": "Layer map distinguishing seven discovery mechanisms (workflow guidance, runtime data/tool access, pre-connection server metadata, remote agent delegation, generic service action discovery, DNS discovery accelerator, browser-native page actions, signed-agent verification, partner readiness bundle) with Oak use, standard family, and parent verdict per row",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:69-79"
+        },
+        {
+          "idea": "Candidate intake rule: seven-question gate (audience, object discovered, runtime authority, trust boundary, Oak value, existing overlap, promotion blocker) to evaluate any new discovery mechanism before creating a child plan",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:116-130"
+        },
+        {
+          "idea": "Domain boundary declaration: explicit list of what this parent owns vs does not own, preventing the parent from colonising implementation territory",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:82-99"
+        },
+        {
+          "idea": "Child-plan portfolio as a live index with relationship annotations distinguishing each child's owned surface from sibling surfaces",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:45-53"
+        },
+        {
+          "idea": "Promotion trigger matrix from future to current, with seven enumerated conditions including cross-surface consolidation, A2A becoming relevant, DNS-AID stabilising, WebMCP product decision, Web Bot Auth posture decision",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:189-206"
+        },
+        {
+          "idea": "Non-goal: do not duplicate the same metadata across surfaces without a named source of truth",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:105"
+        },
+        {
+          "idea": "Non-goal: do not treat discovery metadata as authorisation or safety approval",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:107"
+        },
+        {
+          "idea": "Risk: standards churn mitigated by keeping child plans in future and requiring re-read on promotion",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:183"
+        },
+        {
+          "idea": "Recommended default sequencing: MCP Server Cards tracking first, then Agent Skills Library ratification, then Agent Skills Discovery promotion, then partner-facing agent readiness page",
+          "class": "good",
+          "file_line": "agentic-mechanisms-discovery.plan.md:222-230"
+        },
+        {
+          "idea": "Open question: should Oak publish all discovery surfaces from one canonical domain or allow product-specific domains to own their own well-known documents",
+          "class": "speculative",
+          "file_line": "agentic-mechanisms-discovery.plan.md:211"
+        },
+        {
+          "idea": "Open question: which team owns public metadata review for agent-facing discovery surfaces",
+          "class": "speculative",
+          "file_line": "agentic-mechanisms-discovery.plan.md:212"
+        },
+        {
+          "idea": "Open question: what minimum compatibility testing should a discovery surface pass before public publication",
+          "class": "speculative",
+          "file_line": "agentic-mechanisms-discovery.plan.md:216"
+        },
+        {
+          "idea": "Future child lane for A2A Agent Cards if Oak exposes a remote stateful agent",
+          "class": "speculative",
+          "file_line": "agentic-mechanisms-discovery.plan.md:55-56"
+        },
+        {
+          "idea": "Future child lane for MCP Registry publication or downstream aggregator metadata if separate from server-card work",
+          "class": "speculative",
+          "file_line": "agentic-mechanisms-discovery.plan.md:58-59"
+        },
+        {
+          "idea": "Future child lane for agent readiness or partner-discovery bundles linking multiple standards",
+          "class": "speculative",
+          "file_line": "agentic-mechanisms-discovery.plan.md:60-61"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-parent",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:1-7"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plan nodes)",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:1-7"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED, required for all plan nodes)",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:1-7"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plan nodes; body evidence supports `kind: strategic` — has promotion_trigger section at line 189, no todos)",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:1-7"
+        },
+        {
+          "issue": "Field `status: strategic-parent` is explicitly dropped by V0 §2.5 (replaced by `kind`/`disposition`/`gate`); value `strategic-parent` does not appear in the §3.5 migration map and does not map cleanly to any axis",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:5"
+        },
+        {
+          "issue": "Field `collection: discovery` is explicitly dropped by V0 §2.5 (folder location is the projection; metadata must not duplicate it)",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:3"
+        },
+        {
+          "issue": "Field `lane: future` is explicitly dropped by V0 §2.5 (folder + `kind` carry it)",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:4"
+        },
+        {
+          "issue": "No authority edge `serves_strategic_choice` present; for a `kind: strategic` plan this is recommended; for any eventual promotion to executable it becomes required (LOCKED shape)",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:1-7"
+        },
+        {
+          "issue": "Dependencies section (lines 136-152) describes blocking and beneficial prerequisites inline in body prose rather than as typed `depends_on` edges in frontmatter (V0 §2.3 LOCKED shape)",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:136-152"
+        },
+        {
+          "issue": "Missing `promotion_trigger` field; V0 §2.4 (LOCKED) requires it for `kind: strategic` plans; the body contains a promotion-trigger section (line 189) but it is not surfaced as the frontmatter field",
+          "file_line": ".agent/plans/discovery/future/agentic-mechanisms-discovery.plan.md:189"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The Layer Map (lines 69-79) defines eight distinct discovery layers but does not specify whether layers compose additively (an agent traverses multiple layers to reach a resource) or exclusively (one layer per discovery scenario). This leaves the runtime call sequence undefined, which becomes load-bearing when implementing the agent-readiness hub that links all layers.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:69-79"
+        },
+        {
+          "severity": "low",
+          "claim": "Domain Boundaries (lines 83-99) exclude 'implementation of search, graph, or SDK features' but the Layer Map explicitly references 'Oak SDK, MCP, search, graph, and Practice assets' (line 34) as surfaces this parent coordinates consistency across. The boundary statement and the stated coordination scope are in tension — if discovery surfaces reference SDK/graph, this parent needs at minimum a read-coupling relationship with those owners.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:83-99"
+        },
+        {
+          "severity": "low",
+          "claim": "The Candidate Intake Rule (lines 116-130) requires classifying 'runtime authority' (step 3) and 'trust boundary' (step 4) but neither the parent nor any child plan boundary statement names who owns the trust posture decision for public metadata. The Non-Goals (line 108) state 'do not treat discovery metadata as authorisation or safety approval', yet the child plan web-bot-auth-agent-verification.plan.md is explicitly scoped as 'Discovery owns placement; security owns enforcement evidence' (line 53). The handoff point between discovery and security is not architecturally defined.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:116-130"
+        },
+        {
+          "severity": "medium",
+          "claim": "The Open Questions (lines 209-219) include 'Should Oak publish all discovery surfaces from one canonical domain, or allow product-specific domains to own their own well-known documents?' This is not merely a product question — it determines the source-of-truth model for all well-known URI paths (.well-known/mcp.json, .well-known/agent.json, etc.). Until this is resolved, child plans referencing public paths are underspecified because the host binding is unknown. The parent should at minimum record a provisional default to unblock child-plan scoping.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:209-219"
+        },
+        {
+          "severity": "info",
+          "claim": "The Non-Goal 'Do not duplicate the same metadata across surfaces without a named source of truth' (line 107) is architecturally sound but the parent does not define where that source of truth lives or what schema it publishes from. For a strategic parent that owns cross-surface consistency (line 85), this gap is acceptable now but becomes blocking once two or more child plans are promoted to current.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:107"
+        },
+        {
+          "severity": "info",
+          "claim": "ADR-189 is cited for the skills-classification-taxonomy child lane (line 49) but no ADR is cited for the discovery-layer taxonomy itself, the candidate intake rule, or the promotion sequencing. Given the parent owns the decision framework for the full discovery portfolio, an ADR anchoring the layer-map and intake rule would harden the architecture and prevent the parent plan from being the sole durable record of those decisions.",
+          "file_line": "agentic-mechanisms-discovery.plan.md:49"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/discovery/future/aila-a2a-agent-card.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly conditional and future-gated — correct lane",
+          "file_line": "aila-a2a-agent-card.plan.md:12-14"
+        },
+        {
+          "claim": "Promotion trigger defined with concrete criteria",
+          "file_line": "aila-a2a-agent-card.plan.md:101-108"
+        },
+        {
+          "claim": "Blocking prerequisites clearly enumerate the decision gate",
+          "file_line": "aila-a2a-agent-card.plan.md:70-76"
+        },
+        {
+          "claim": "Domain boundary prevents scope creep into MCP, product UX, or generic A2A",
+          "file_line": "aila-a2a-agent-card.plan.md:51-57"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan contains a single, coherent strategic guard-rail with no speculative or bad ideas mixed in. Every section serves the conditional-future framing. The non-goals (lines 61-65) and domain boundaries (lines 51-57) are precise and prevent foreseeable scope errors. Content is appropriately thin for a future/strategic-tracking plan — it does not over-specify execution that cannot be known until the gate fires.",
+      "content_quality": "strong",
+      "content_quality_note": "Frontmatter, problem/EGM, domain boundaries, non-goals, dependencies, acceptance criteria, and promotion trigger are all present and substantive (lines 1-108). The blocking vs beneficial split in dependencies (lines 70-81) is particularly well-formed. External spec URLs are cited (lines 24-26), which is the correct practice for a protocol-tracking plan.",
+      "salvage_value": [
+        {
+          "idea": "Aila Agent Card must live on aila.thenational.academy, not the apex domain",
+          "class": "good",
+          "file_line": "aila-a2a-agent-card.plan.md:36-38"
+        },
+        {
+          "idea": "Auth model selection is a blocking prerequisite, not deferred polish",
+          "class": "good",
+          "file_line": "aila-a2a-agent-card.plan.md:72-73"
+        },
+        {
+          "idea": "Safety review of public capability descriptions is blocking before publication",
+          "class": "good",
+          "file_line": "aila-a2a-agent-card.plan.md:73-75"
+        },
+        {
+          "idea": "Live A2A spec path/schema must be re-checked before implementation (spec churn guard)",
+          "class": "good",
+          "file_line": "aila-a2a-agent-card.plan.md:75-76"
+        },
+        {
+          "idea": "DNS-AID linkage is beneficial but not blocking; HTTP Agent Card alone is sufficient if DNS-AID scope is undecided",
+          "class": "good",
+          "file_line": "aila-a2a-agent-card.plan.md:79-81"
+        },
+        {
+          "idea": "Apex catalog must not link Aila until the public A2A endpoint is live",
+          "class": "good",
+          "file_line": "aila-a2a-agent-card.plan.md:65"
+        },
+        {
+          "idea": "Agent Card must contain no sensitive credentials or internal details",
+          "class": "good",
+          "file_line": "aila-a2a-agent-card.plan.md:96-97"
+        },
+        {
+          "idea": "Partner demand is the beneficial signal that justifies keeping the plan in future vs archiving",
+          "class": "speculative",
+          "file_line": "aila-a2a-agent-card.plan.md:79-80"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-tracking",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (kebab slug, stable) — required for all plans",
+          "file_line": "plan.md:1-8 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` — registry discriminator, required for all plans",
+          "file_line": "plan.md:1-8 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `overview` (one-line scope) — required for all plans",
+          "file_line": "plan.md:1-8 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `kind` — the readiness axis (`strategic | executable`), required for all plans",
+          "file_line": "plan.md:1-8 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `promotion_trigger` — required for `kind: strategic` plans (V0 §2.4, LOCKED)",
+          "file_line": "plan.md:1-8 (absent from frontmatter); promotion trigger exists only in body at line 101"
+        },
+        {
+          "issue": "`status: strategic-tracking` is an explicitly dropped field (V0 §2.5) — must be replaced by `kind` / `disposition` / `gate`",
+          "file_line": "plan.md:5"
+        },
+        {
+          "issue": "`collection: discovery` is an explicitly dropped field (V0 §2.5) — folder location is the projection; metadata must not duplicate it",
+          "file_line": "plan.md:3"
+        },
+        {
+          "issue": "`lane: future` is an explicitly dropped field (V0 §2.5) — folder location is the projection; metadata must not duplicate it",
+          "file_line": "plan.md:4"
+        },
+        {
+          "issue": "`status: strategic-tracking` does not appear in the V0 §3.5 migration map — closest cluster (`strategic-brief`, `strategic`, `future-strategic`) maps to `kind: strategic`, but the value itself is not in the map",
+          "file_line": "plan.md:5"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter — blocking and beneficial prerequisites are encoded as prose in the body (lines 70-81) rather than as `depends_on` edges with `kind: blocking | beneficial`",
+          "file_line": "plan.md:70-81"
+        },
+        {
+          "issue": "`parent_plan: agentic-mechanisms-discovery.plan.md` is a SURVEY-MAY-ADD-EDGES key (V0 §2.5) — not in V0 contract; present in frontmatter",
+          "file_line": "plan.md:8"
+        },
+        {
+          "issue": "Missing recommended field `serves_strategic_choice` — recommended for `kind: strategic` plans (V0 §2.3)",
+          "file_line": "plan.md:1-8 (absent from frontmatter)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan correctly assigns the Agent Card to `aila.thenational.academy` rather than the apex domain. This is architecturally sound: agent-card ownership belongs at the service host that actually serves A2A traffic, not a shared apex, so capability and auth metadata stay co-located with the endpoint.",
+          "file_line": "aila-a2a-agent-card.plan.md:88-89"
+        },
+        {
+          "severity": "low",
+          "claim": "Auth model choice is listed as a blocking prerequisite (line 72) but no constraint is stated on which auth mechanisms are in scope (e.g. OAuth2, mTLS, API-key). Without that constraint the future executor has no architectural guardrails when the exposure decision is made, which risks picking an auth model that does not align with Oak's existing identity infrastructure (Clerk is the canonical user-ID provider).",
+          "file_line": "aila-a2a-agent-card.plan.md:72-73"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references A2A spec URLs at `a2a-protocol.org` (lines 23-26) without pinning a version or SHA. A2A is a rapidly evolving spec; the card schema, well-known path, and auth metadata format may change between now and promotion. The blocking prerequisite on line 75 ('re-check the live A2A Agent Card path/schema') partially compensates but does not substitute for a pinned reference.",
+          "file_line": "aila-a2a-agent-card.plan.md:23-26"
+        },
+        {
+          "severity": "info",
+          "claim": "Domain boundary exclusions are well-drawn: the plan explicitly excludes MCP Server Cards, Agent Skills workflows, and generic A2A adoption outside Aila (lines 53-57). This prevents scope creep from the parallel A2A/MCP discovery work and keeps Aila's exposure surface isolated.",
+          "file_line": "aila-a2a-agent-card.plan.md:53-57"
+        },
+        {
+          "severity": "info",
+          "claim": "DNS-AID coupling is correctly deferred: the beneficial prerequisite on line 82 allows the HTTP Agent Card to be published without DNS-AID if scope is undecided. This is good layering — HTTP well-known discovery is independent of DNS-based discovery and should not block on it.",
+          "file_line": "aila-a2a-agent-card.plan.md:82-84"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/discovery/future/dns-aid-discovery.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is correctly placed in future/ with status strategic-tracking — no promotion trigger has fired",
+          "file_line": "dns-aid-discovery.plan.md:6-7"
+        },
+        {
+          "claim": "Promotion trigger is explicitly conditioned on two unmet events (Oak decides to publish; draft stable enough)",
+          "file_line": "dns-aid-discovery.plan.md:101-104"
+        },
+        {
+          "claim": "Content is well-scoped with precise domain boundaries and non-goals, making it a useful future-executor guide",
+          "file_line": "dns-aid-discovery.plan.md:45-66"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan holds a coherent, well-bounded strategic position on an early-stage external spec. Every design decision is traceable to the anti-drift principle (lines 61, 36-38). Non-goals are specific and actionable (lines 61-66). No padding or speculative scope inflation detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Problem-EGM-Means are each substantive and directly connected (lines 29-41). Domain boundaries and non-goals are precise (lines 45-66). Strategic acceptance criteria distinguish pre-implementation success from post-implementation success signals (lines 87-99). Promotion trigger is crisp and executor-actionable (lines 101-108).",
+      "salvage_value": [
+        {
+          "idea": "Hub-only _index._agents.thenational.academy as the default DNS entry point for agent discovery",
+          "class": "good",
+          "file_line": "dns-aid-discovery.plan.md:36-38"
+        },
+        {
+          "idea": "Per-service DNS records permitted only if generated from the same catalog source, eliminating drift",
+          "class": "good",
+          "file_line": "dns-aid-discovery.plan.md:37-38"
+        },
+        {
+          "idea": "DNS-AID is optional and subordinate to the HTTP discovery hub, not a trust signal by itself",
+          "class": "good",
+          "file_line": "dns-aid-discovery.plan.md:62,93"
+        },
+        {
+          "idea": "Do not advertise inactive hosts (e.g., mcp.thenational.academy) from DNS before they exist",
+          "class": "good",
+          "file_line": "dns-aid-discovery.plan.md:65-66"
+        },
+        {
+          "idea": "Publication is gated on draft stability matching Oak risk posture — do not publish while draft is too volatile",
+          "class": "good",
+          "file_line": "dns-aid-discovery.plan.md:64-65"
+        },
+        {
+          "idea": "DNSSEC/DNS zone ownership must be confirmed before any publication",
+          "class": "good",
+          "file_line": "dns-aid-discovery.plan.md:40,75"
+        },
+        {
+          "idea": "Digest parameters for DNS records must be generated from canonical descriptor bytes",
+          "class": "good",
+          "file_line": "dns-aid-discovery.plan.md:98"
+        },
+        {
+          "idea": "Tracking whether Oak partner agent clients actually consume DNS-AID before investing in per-service records",
+          "class": "speculative",
+          "file_line": "dns-aid-discovery.plan.md:82-83"
+        },
+        {
+          "idea": "Apex API catalog as a shared source for DNS record generation if per-service scope is chosen",
+          "class": "speculative",
+          "file_line": "dns-aid-discovery.plan.md:79-80"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-tracking",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "dns-aid-discovery.plan.md:1-8"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED, required for all plans; must be literal \"plan\")",
+          "file_line": "dns-aid-discovery.plan.md:1-8"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED, required for all plans)",
+          "file_line": "dns-aid-discovery.plan.md:1-8"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans; inferred `strategic` from folder and body content)",
+          "file_line": "dns-aid-discovery.plan.md:1-8"
+        },
+        {
+          "issue": "Missing required field `promotion_trigger` in frontmatter (LOCKED, required for `kind: strategic`); promotion trigger exists only in body at line 101, not as a frontmatter field",
+          "file_line": "dns-aid-discovery.plan.md:101"
+        },
+        {
+          "issue": "`status: strategic-tracking` present (line 5) — V0 §2.5 explicitly drops `status:`; value `strategic-tracking` does not appear in the §3.5 migration map",
+          "file_line": "dns-aid-discovery.plan.md:5"
+        },
+        {
+          "issue": "`collection: discovery` present (line 3) — V0 §2.5 explicitly drops `collection`",
+          "file_line": "dns-aid-discovery.plan.md:3"
+        },
+        {
+          "issue": "`lane: future` present (line 4) — V0 §2.5 explicitly drops `lane`",
+          "file_line": "dns-aid-discovery.plan.md:4"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `depends_on`, `thread` all absent)",
+          "file_line": "dns-aid-discovery.plan.md:1-8"
+        }
+      ],
+      "unclassified_keys": [
+        "parent_plan"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Hub-only DNS entry point (_index._agents.thenational.academy) is the correct architectural default: it avoids a second service inventory and treats DNS as a thin pointer layer rather than a parallel catalog. The non-goal at line 60 ('Do not publish per-service DNS records that can drift from the API catalog') and the mechanism at line 37 are mutually reinforcing and architecturally sound.",
+          "file_line": "dns-aid-discovery.plan.md:37-40"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly partitions domain ownership: it explicitly excludes the HTTP API catalog, Agent Skills artifacts, MCP Server Cards, and A2A Agent Cards from its scope (lines 54-58). This boundary prevents scope bleed into adjacent discovery surfaces.",
+          "file_line": "dns-aid-discovery.plan.md:46-58"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan names the apex API catalog as the source-of-truth for any per-service DNS record generation (line 38: 'generated from the same catalog source') but does not cite where that catalog lives or what its machine-readable format is. If the catalog is not yet machine-readable, the generation pathway has no architectural grounding. The beneficial prerequisite at line 81 notes this gap but leaves it unresolved.",
+          "file_line": "dns-aid-discovery.plan.md:38,81-82"
+        },
+        {
+          "severity": "low",
+          "claim": "DNSSEC posture is listed as a blocking prerequisite (line 77) but the plan carries no fallback position if the DNS zone does not support DNSSEC. The success criterion at line 99 qualifies this ('where Oak's zone supports it'), but no architectural decision records the acceptable non-DNSSEC posture. This is a gap for a security-sensitive discovery surface.",
+          "file_line": "dns-aid-discovery.plan.md:77,99"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly gates itself on draft stability (line 74-75) and does not commit to a record schema. This is appropriate for an IETF Internet-Draft at revision -02; the architecture is appropriately deferred.",
+          "file_line": "dns-aid-discovery.plan.md:74-75"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/discovery/future/mcp-server-cards.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly a spec-tracking brief, not executable work, appropriately placed in future/",
+          "file_line": "mcp-server-cards.plan.md:12-17"
+        },
+        {
+          "claim": "Blocking promotion prerequisites are well-defined and not yet met (spec not accepted, no confirmed Oak public remote MCP server noted)",
+          "file_line": "mcp-server-cards.plan.md:339-345"
+        },
+        {
+          "claim": "Re-verification note dated 2026-06-01 shows active maintenance",
+          "file_line": "mcp-server-cards.plan.md:23-28"
+        },
+        {
+          "claim": "Scope boundaries are explicit and prevent authority drift",
+          "file_line": "mcp-server-cards.plan.md:59-69"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan does exactly what a future/ strategic-tracking brief should do: it records accurate, actively-maintained research into an unstable upstream spec without prematurely committing implementation choices. The scope boundaries (lines 59-69), security posture (lines 228-239), blocking prerequisites (lines 339-345), and example JSON with field-level commentary (lines 169-213) are all substantive and would require significant re-research if discarded. No padding or speculative scope invention detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan contains: a self-correcting spec-state note (lines 23-28); an explicit EGM section (lines 39-58); a well-scoped non-goals section (lines 59-69); a concrete example JSON shape with field commentary (lines 169-213); a security checklist (lines 228-239); classified promotion prerequisites (lines 337-351); and a curated monitoring source list (lines 115-129). Content is unusually precise for a future-lane tracking brief.",
+      "salvage_value": [
+        {
+          "idea": "MCP Server Cards enable pre-connection discovery of Oak public remote MCP servers for external clients, IDEs, crawlers, and registries",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:44-46"
+        },
+        {
+          "idea": "SEP-2127 is the active draft; SEP-1649 is historical context only; canonical .well-known path is /.well-known/mcp-server-card not /.well-known/mcp/server-card.json",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:23-28"
+        },
+        {
+          "idea": "Server Card scope: identity + display metadata + HTTPS remote endpoint + supported protocol versions + optional links/icons; no tools/resources/prompts/auth state/runtime state",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:380-387"
+        },
+        {
+          "idea": "Draft JSON shape with field-level commentary distinguishing likely-stable fields from fields not expected in the static card",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:169-224"
+        },
+        {
+          "idea": "Security and privacy checklist for public card publication (no secrets, no private URLs, no user-specific data, intentional CORS and cache headers)",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:228-239"
+        },
+        {
+          "idea": "Explicit blocking vs. beneficial promotion prerequisites with minimum-shippable-shape fallbacks for beneficial-only items",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:337-351"
+        },
+        {
+          "idea": "4-phase phased implementation: track (Phase 0), draft internally (Phase 1), publish endpoint (Phase 2), schema-validate in CI (Phase 3), document (Phase 4)",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:243-312"
+        },
+        {
+          "idea": "Official monitoring sources list with direct links to PR 2127, Working Group charter, roadmap, and schema host",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:115-129"
+        },
+        {
+          "idea": "Scope boundary: this plan does not own A2A Agent Cards, agent skills discovery, or runtime MCP capability listing",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:82-85"
+        },
+        {
+          "idea": "CI schema validation with pinned schema version and scheduled spec-review task once official JSON Schema is published",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:287-293"
+        },
+        {
+          "idea": "Test cases for the published endpoint: 200 status, JSON parse, schema validity, HTTPS-only remotes, absence of tools/resources/prompts arrays, correct CORS and cache headers",
+          "class": "good",
+          "file_line": "mcp-server-cards.plan.md:294-302"
+        },
+        {
+          "idea": "Multiple cards per host via suffixed path /.well-known/mcp-server-card/{server-name} is in the draft but unconfirmed",
+          "class": "speculative",
+          "file_line": "mcp-server-cards.plan.md:157-160"
+        },
+        {
+          "idea": "Draft $schema URL at static.modelcontextprotocol.io currently 404s pending merge — pin fallback approach",
+          "class": "speculative",
+          "file_line": "mcp-server-cards.plan.md:349"
+        },
+        {
+          "idea": "Open question: whether AI Cards define a broader discovery document that should link to MCP Server Cards",
+          "class": "speculative",
+          "file_line": "mcp-server-cards.plan.md:375"
+        },
+        {
+          "idea": "Open question: publish Server Cards for preview/test environments as well as production",
+          "class": "speculative",
+          "file_line": "mcp-server-cards.plan.md:377"
+        },
+        {
+          "idea": "Open question: whether this repository owns the published JSON or deployed app code does",
+          "class": "speculative",
+          "file_line": "mcp-server-cards.plan.md:378"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-tracking",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": "mcp-server-cards.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED literal `\"plan\"` — V0 §2.1)",
+          "file_line": "mcp-server-cards.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED one-line scope — V0 §2.1)",
+          "file_line": "mcp-server-cards.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED enum `strategic|executable` — V0 §2.2, replaces readiness senses of `status`); inferred `strategic` from folder location and body content but field absent",
+          "file_line": "mcp-server-cards.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "`status: strategic-tracking` is a dropped field (V0 §2.5 drops `status` entirely — 386 census, split into `kind`/`disposition`/`gate`/projected execution); value `strategic-tracking` does not appear in the §3.5 migration map and is therefore unresolvable to axes without interpretation",
+          "file_line": "mcp-server-cards.plan.md:5"
+        },
+        {
+          "issue": "`collection: discovery` is an explicitly dropped field (V0 §2.5: `collection`/`lane` dropped — folder location is the projection, metadata must not duplicate it)",
+          "file_line": "mcp-server-cards.plan.md:3"
+        },
+        {
+          "issue": "`lane: future` is an explicitly dropped field (V0 §2.5: `collection`/`lane` dropped)",
+          "file_line": "mcp-server-cards.plan.md:4"
+        },
+        {
+          "issue": "No V0 edges declared (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on` all absent); `promotion_trigger` belongs in frontmatter for `strategic` plans (V0 §2.4) but is only present as body prose (lines 334-351)",
+          "file_line": "mcp-server-cards.plan.md:1-8 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "collection",
+        "lane",
+        "parent_plan"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan treats SEP-2127 as the active authoritative draft and SEP-1649 as historical, but this determination was made on 2026-06-01 via a one-time snapshot check. The plan acknowledges the endpoint path has already changed once during discussion (line 161). No ongoing verification mechanism exists within this repo to confirm SEP-2127 remains active vs merged, superseded, or abandoned — the 'triggers to update' list (lines 316-333) names external events but contains no scheduled check or ownership assignment.",
+          "file_line": "26-28"
+        },
+        {
+          "severity": "medium",
+          "claim": "The Phase 1 draft card location options (lines 260-268) assume either that .agent/plans/discovery/examples/ is an appropriate home for a production-candidate JSON artifact, or that the MCP server will live under apps/<app-name>/. Neither the specific app name nor the hosting topology is confirmed — Oak operating a 'public remote MCP server' is itself listed as a blocking prerequisite (line 344), so the location choices are speculative placeholders against an undefined deployment.",
+          "file_line": "258-270"
+        },
+        {
+          "severity": "low",
+          "claim": "The example JSON at line 169 includes `supportedProtocolVersions: ['2025-03-12', '2025-06-15']`. The version '2025-06-15' is listed here as a draft estimate (the plan is dated last_updated 2026-06-01). If agents read this example at promotion time without re-verifying against the final spec, a stale protocol version string could be copied into production. The plan's non-goals (line 63) warn against hard-coding draft values, but the example is present in the body without a per-field 'draft only' marker.",
+          "file_line": "169-197"
+        },
+        {
+          "severity": "low",
+          "claim": "The promotion seed checklist (lines 356-367) includes 'Add schema validation in CI' and 'Add tests preventing secrets'. Both steps depend on an official JSON Schema existing and on test infrastructure supporting the deployed endpoint — but the beneficial prerequisites explicitly note the schema URL currently 404s (line 349) and no CI target or test workspace is identified. The checklist assumes this infrastructure materialises naturally at promotion time without specifying where or by whom.",
+          "file_line": "285-301"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly scopes itself to HTTP/remote MCP servers and explicitly excludes local/stdio servers (line 63-64), and the open questions section (lines 369-377) names the genuinely unresolved shape questions. The assumption boundaries are well-declared for a future-lane tracking plan.",
+          "file_line": "59-68"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/discovery/future/skills-classification-taxonomy.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is a strategic brief homed in future/ by owner direction, not yet executable",
+          "file_line": "line 11-16"
+        },
+        {
+          "claim": "Blocking prerequisite met 2026-06-03; promotion trigger defined but not yet fired",
+          "file_line": "lines 135, 185-188"
+        },
+        {
+          "claim": "ADR-189 ratifies the taxonomy as of 2026-06-03 — durable backing decision exists, plan is the execution wrapper",
+          "file_line": "lines 53-54"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan holds a coherent, ADR-backed vocabulary split with concrete noun-discipline rules and a well-reasoned open consideration. No ideas are structurally bad; the oak-skills library section introduces one time-sensitive external assumption (library status) but correctly flags it as verification-on-promotion. Lines 65-93 give actionable future steps, not speculation.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan earns strong because it: names the problem precisely (lines 20-27), defines the taxonomy with explicit axes and noun discipline (lines 28-47, 76-79), pins the durable home artefact and its backing ADR (lines 52-54), enumerates concrete future-execution steps with output artefacts (lines 65-93), flags the live ambiguous case with classification guidance (lines 113-127), surfaces an open consideration with a precise resolution trigger (lines 152-164), and defines clear acceptance criteria (lines 168-183). No padding; every section is load-bearing.",
+      "salvage_value": [
+        {
+          "idea": "Three-category audience split: repo-working skills / Oak developer capabilities / curriculum assistance capabilities",
+          "class": "good",
+          "file_line": "lines 28-38"
+        },
+        {
+          "idea": "Distribution axis (repo-internal / distributable / both) as orthogonal second axis, ratified in ADR-189",
+          "class": "good",
+          "file_line": "lines 40-47"
+        },
+        {
+          "idea": "agent-capability-vocabulary.md as the durable vocabulary home consulted by agents at surface-placement time",
+          "class": "good",
+          "file_line": "lines 52-53"
+        },
+        {
+          "idea": "Noun discipline: unqualified 'skill' only for platform packages and repo-working Practice workflows; 'capability' for durable audience-facing categories; 'plugin'/'bundle' for installable compositions",
+          "class": "good",
+          "file_line": "lines 76-79"
+        },
+        {
+          "idea": "Four-step future execution: audit inventory table → apply vocabulary → cross-reference doctrine → preserve host-integration boundary",
+          "class": "good",
+          "file_line": "lines 65-93"
+        },
+        {
+          "idea": "Teacher-facing copy must never use skill/SKILL.md/adapter/Practice/repo-workflow vocabulary",
+          "class": "good",
+          "file_line": "lines 79-80"
+        },
+        {
+          "idea": "Oak-skills library as named ambiguous case requiring explicit classification in the audit (brand vs rigour distinction)",
+          "class": "good",
+          "file_line": "lines 113-127"
+        },
+        {
+          "idea": "Rigour standards (evidence use, provenance, teacher judgement) are not a branding concern and not a category candidate",
+          "class": "good",
+          "file_line": "lines 122-127"
+        },
+        {
+          "idea": "Rights/licensing open consideration — three options (third axis / per-capability metadata / out of scope) with a concrete trigger for resolution",
+          "class": "speculative",
+          "file_line": "lines 152-164"
+        },
+        {
+          "idea": "Companion report ecosystem claims need re-verification against official platform docs at promotion time",
+          "class": "good",
+          "file_line": "lines 62-63"
+        },
+        {
+          "idea": "Promotion trigger: promote to current/ when a concrete doc/plugin/MCP guidance/agent-facing package needs taxonomy applied across multiple files, or when owner directs a repo-wide pass",
+          "class": "good",
+          "file_line": "lines 185-188"
+        },
+        {
+          "idea": "Host/platform constraints are packaging notes only and must not override category names",
+          "class": "good",
+          "file_line": "lines 141-143"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": "skills-classification-taxonomy.plan.md:1-7 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` with literal value `plan` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": "skills-classification-taxonomy.plan.md:1-7 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": "skills-classification-taxonomy.plan.md:1-7 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans — V0 §3.1); `status: strategic` is present and maps to `kind: strategic` via §3.5 but does not satisfy the field requirement",
+          "file_line": "skills-classification-taxonomy.plan.md:5"
+        },
+        {
+          "issue": "`status: strategic` is an explicitly-dropped key (V0 §2.5: DROPPED — split into `kind`/`disposition`/`gate`)",
+          "file_line": "skills-classification-taxonomy.plan.md:5"
+        },
+        {
+          "issue": "`collection: discovery` is an explicitly-dropped key (V0 §2.5 drops `collection`/`lane`; folder location is the projection, metadata does not duplicate it)",
+          "file_line": "skills-classification-taxonomy.plan.md:3"
+        },
+        {
+          "issue": "`lane: future` is an explicitly-dropped key (V0 §2.5 drops `collection`/`lane`; folder location is the projection, metadata does not duplicate it)",
+          "file_line": "skills-classification-taxonomy.plan.md:4"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` edge — required for executable plans, recommended for strategic; absent entirely from frontmatter (V0 §2.3, §4)",
+          "file_line": "skills-classification-taxonomy.plan.md:1-7 (frontmatter block)"
+        },
+        {
+          "issue": "`promotion_trigger` appears only in the body prose (line 185-188) and not as a frontmatter field — V0 §2.4 requires it as a frontmatter field on `strategic` plans",
+          "file_line": "skills-classification-taxonomy.plan.md:185-188"
+        },
+        {
+          "issue": "Body references blocking and beneficial prerequisites in prose (lines 135-141) but these are not expressed as typed `depends_on` edges in frontmatter (V0 §2.3, §4)",
+          "file_line": "skills-classification-taxonomy.plan.md:135-141"
+        }
+      ],
+      "unclassified_keys": [
+        "collection",
+        "lane"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "low",
+          "claim": "The plan assumes ADR-189 is the final ratification for the two-axis model (audience + distribution locus), but the Open Consideration section at lines 152-165 surfaces a rights/licensing question that may require a third axis. The plan defers resolution to 'first external capability publication or oak-skills integration decision', but no mechanism is in place to block promotion if neither trigger fires before the plan is executed. If the audit step (step 1, lines 67-73) is run before the licensing axis is settled, the inventory schema will be incomplete.",
+          "file_line": "skills-classification-taxonomy.plan.md:152-165"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the companion report's ecosystem claims 'need verification against official platform documentation at promotion time' (lines 62-63), but delegates the verification responsibility to unspecified future executors. No named owner, trigger, or acceptance criterion checks that this verification happened before any distribution recommendation from that report is acted on.",
+          "file_line": "skills-classification-taxonomy.plan.md:62-63"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan treats oak-skills PR #1 as 'under review' at 2026-06-03 (lines 99-100). The plan's last_updated is also 2026-06-03. If PR #1 has merged or changed state since then, the assertion that the library is 'private at the time of writing' and its vocabulary is a named audit case may need revisiting before execution. No freshness check is described.",
+          "file_line": "skills-classification-taxonomy.plan.md:98-100"
+        },
+        {
+          "severity": "info",
+          "claim": "Acceptance criterion at lines 178-179 ('Generated or published platform descriptions are reviewed for audience fit before release') assumes a review step exists in the release pipeline. No existing gate, hook, or checklist is cited that enforces this. The criterion is aspirational unless a concrete gate is wired at promotion time.",
+          "file_line": "skills-classification-taxonomy.plan.md:178-179"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/discovery/future/web-bot-auth-agent-verification.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Promotion trigger is well-defined and has not fired; future/ placement is correct",
+          "file_line": "web-bot-auth-agent-verification.plan.md:119-126"
+        },
+        {
+          "claim": "Domain boundaries are explicitly and correctly split with security lane; no authority overreach",
+          "file_line": "web-bot-auth-agent-verification.plan.md:49-69"
+        },
+        {
+          "claim": "strategic-tracking status matches future/ lane — no lifecycle disagreement requiring rehome",
+          "file_line": "web-bot-auth-agent-verification.plan.md:6-7"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, boundary-correct, and internally consistent. The discovery/security split (lines 49-69) prevents a common failure mode where discovery plans silently assert enforcement claims. The non-goals (lines 73-78) close the obvious misuse vectors. The promotion trigger (lines 119-126) is concrete and not circular. No filler, no orphaned scope.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan goes beyond V0 conformance: it names specific Cloudflare documentation URLs (lines 26-29), defines three distinct blocking prerequisites with degradation notes for the beneficial ones (lines 84-97), and provides post-implementation success signals distinct from the strategic acceptance criteria (lines 109-117). The domain-boundary table is precise enough to resolve real disputes.",
+      "salvage_value": [
+        {
+          "idea": "Web Bot Auth treated as additive over robots/sitemaps/Content Signals, not a replacement — composition model explicitly stated",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:38-40, 73-78"
+        },
+        {
+          "idea": "Discovery/security domain-boundary split: discovery owns posture and placement; security owns enforcement evidence and risk disposition",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:49-69"
+        },
+        {
+          "idea": "Signed-agent verification claims must be gated on security evidence before asserting a control is enabled",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:75, 102-103"
+        },
+        {
+          "idea": "Three blocking prerequisites: (1) Oak posture decision, (2) security identifies owning edge controls, (3) official web apps inventoried for baseline robots/sitemap coverage",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:84-90"
+        },
+        {
+          "idea": "Beneficial (non-blocking) prerequisite: Content Signals policy settled — without it, Web Bot Auth still trackable as identity verification but not usage-policy replacement",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:92-95"
+        },
+        {
+          "idea": "Beneficial (non-blocking) prerequisite: partner or crawler demand for signed-agent handling — absence should trigger a decline/defer decision rather than indefinite parking",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:96-98"
+        },
+        {
+          "idea": "Explicit non-goal: Web Bot Auth must not replace robots.txt, sitemaps, or Content Signals",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:77"
+        },
+        {
+          "idea": "Promotion trigger conditioned on a real decision event (enable, formal decline, or partner requirement) rather than a time or effort threshold",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:119-121"
+        },
+        {
+          "idea": "Per-host rollout scope as a discovery-owned concern (not fleet-wide default)",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:44-46, 54"
+        },
+        {
+          "idea": "Post-implementation success signals separate from strategic acceptance criteria, naming provider control, policy behaviour, and test result as required evidence",
+          "class": "good",
+          "file_line": "web-bot-auth-agent-verification.plan.md:109-117"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-tracking",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED)",
+          "file_line": "web-bot-auth-agent-verification.plan.md:1-9"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (V0 §2.1, LOCKED)",
+          "file_line": "web-bot-auth-agent-verification.plan.md:1-9"
+        },
+        {
+          "issue": "Missing required field `overview` (V0 §2.1, LOCKED)",
+          "file_line": "web-bot-auth-agent-verification.plan.md:1-9"
+        },
+        {
+          "issue": "Missing `promotion_trigger` — required on `kind: strategic` plans (V0 §2.4, LOCKED); body section 'Promotion Trigger To `current`' at line 118 contains the text but it is not a frontmatter field",
+          "file_line": "web-bot-auth-agent-verification.plan.md:118-126"
+        },
+        {
+          "issue": "`status: strategic-tracking` is a dropped emergent key; V0 §2.2/§2.5 replaces `status` with `kind`/`disposition`/`gate`. The value `strategic-tracking` maps to `kind: strategic` per the §3.5 migration map but does not map cleanly without splitting",
+          "file_line": "web-bot-auth-agent-verification.plan.md:5"
+        },
+        {
+          "issue": "`collection: discovery` is an explicitly dropped emergent key (V0 §2.5: `collection`/`lane` dropped — folder location is the projection)",
+          "file_line": "web-bot-auth-agent-verification.plan.md:3"
+        },
+        {
+          "issue": "`lane: future` is an explicitly dropped emergent key (V0 §2.5: `collection`/`lane` dropped)",
+          "file_line": "web-bot-auth-agent-verification.plan.md:4"
+        },
+        {
+          "issue": "`parent_plan` present but is SURVEY-MAY-ADD-EDGES per V0 §2.5 — not a conforming V0 edge field; value is a bare filename string, not a typed `depends_on` or supersession edge",
+          "file_line": "web-bot-auth-agent-verification.plan.md:7"
+        },
+        {
+          "issue": "`security_cross_link` is not classified by V0 — untyped relationship; if authoritative it should be a `derives_from` or `related` edge; as-is it is an unclassified free key",
+          "file_line": "web-bot-auth-agent-verification.plan.md:8"
+        },
+        {
+          "issue": "No `serves_strategic_choice` edge declared; recommended for `kind: strategic` plans (V0 §2.3); absence is a gap though not a hard requirement for strategic kind",
+          "file_line": "web-bot-auth-agent-verification.plan.md:1-9"
+        },
+        {
+          "issue": "Dependencies described in body prose (lines 82-97) as blocking/beneficial prerequisites but none expressed as typed `depends_on` frontmatter edges (V0 §2.3/§4, LOCKED shape)",
+          "file_line": "web-bot-auth-agent-verification.plan.md:82-97"
+        }
+      ],
+      "unclassified_keys": [
+        "collection",
+        "lane",
+        "status",
+        "parent_plan",
+        "security_cross_link"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan correctly gates implementation claims behind security evidence (lines 44-46, 101-104), but the 'blocking' prerequisite at line 88-89 — 'Security identifies the owning edge/provider controls and evidence format' — has no stated fallback disposition. If security cannot identify controls, inbound agent access proceeds unverified without a documented risk-acceptance record. The plan should require a formal decline/defer entry in the security domain when the prerequisite cannot be met.",
+          "file_line": "84-89"
+        },
+        {
+          "severity": "low",
+          "claim": "The non-goal at line 68 ('Do not require Web Bot Auth for hosts that have no agent-facing access-control policy need') implicitly allows some Oak hosts to have no access-control posture for inbound automated agents. The plan does not require those hosts to record a positive 'no policy needed' decision, creating a gap where hosts may simply not be evaluated rather than deliberately excluded.",
+          "file_line": "68-69"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan delegates WAF and Cloudflare enforcement entirely to security-and-privacy (lines 59-64) and cross-links to ../../security-and-privacy/README.md (line 8). The cross-link is a relative path; the plan does not verify the security-and-privacy home exists or is maintained. If that home is absent, the security evidence requirement at line 101-104 has no verifiable anchor.",
+          "file_line": "8"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan explicitly prohibits claiming signed-agent verification is enabled without security evidence (line 74-76). This is a sound control. No bypass path is visible in the plan text.",
+          "file_line": "74-76"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's domain-boundary separation — discovery owns public agent-readiness surface, security owns edge enforcement — is well-formed and reduces the risk of enforcement claims being made prematurely in discovery artefacts.",
+          "file_line": "50-64"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/discovery/future/webmcp-human-site-operability.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Explicit promotion trigger defined: promote only when Oak names at least one page action whose value cannot be better delivered by API, MCP, skills, or markdown.",
+          "file_line": "file:100-104"
+        },
+        {
+          "claim": "Three blocking prerequisites are unmet and there is no evidence of a product decision to expose human-site agent actions.",
+          "file_line": "file:70-76"
+        },
+        {
+          "claim": "Strategic-tracking status with future lane; plan is not complete and not orphaned — it is correctly parked.",
+          "file_line": "file:1-8"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is short and deliberately under-specified (it is a future strategic-tracking placeholder, not an execution plan), but every clause it contains is defensible. The problem framing (file:29-35) correctly identifies that Oak's strongest machine surfaces are already non-WebMCP, making WebMCP additive at best. The non-goals (file:59-66) are specific and prevent common scope-creep failure modes. The promotion trigger (file:100-104) is concrete and testable. No bad ideas are present; all ideas are either good or appropriately speculative given the technology's draft status.",
+      "content_quality": "adequate",
+      "content_quality_note": "Content is fit for its lifecycle stage (future/strategic-tracking). It would be weak for an active execution plan, but as a holding shape that prevents premature work and encodes the correct decision gate it is adequate. The external spec links (file:23-25) are live references to draft standards and may need freshness checks before promotion. There are no implementation details, which is correct for this stage.",
+      "salvage_value": [
+        {
+          "idea": "WebMCP is optional for Oak and must not be treated as a baseline agent-readiness requirement.",
+          "class": "good",
+          "file_line": "file:12-19"
+        },
+        {
+          "idea": "The in-page WebMCP surface is categorically distinct from Oak's remote MCP server at mcp.thenational.academy.",
+          "class": "good",
+          "file_line": "file:17-19"
+        },
+        {
+          "idea": "A value filter (is this action better served by API/MCP/skills/markdown?) must gate any WebMCP candidate before implementation.",
+          "class": "good",
+          "file_line": "file:37-40"
+        },
+        {
+          "idea": "Accessibility and safety are blocking criteria if the plan is ever promoted to current.",
+          "class": "good",
+          "file_line": "file:39-40"
+        },
+        {
+          "idea": "Browser/client support and security posture must be re-checked before promotion (WebMCP spec is still a draft).",
+          "class": "good",
+          "file_line": "file:74-76"
+        },
+        {
+          "idea": "Markdown representation landing first prevents WebMCP evaluation from becoming a substitute for clean content representation.",
+          "class": "good",
+          "file_line": "file:78-80"
+        },
+        {
+          "idea": "Remote MCP GA being live is a beneficial (not blocking) prerequisite — only page-native actions can justify WebMCP in its absence.",
+          "class": "good",
+          "file_line": "file:81-83"
+        },
+        {
+          "idea": "Promotion trigger requires Oak to name at least one concrete page action whose value cannot be better delivered by existing surfaces.",
+          "class": "good",
+          "file_line": "file:100-104"
+        },
+        {
+          "idea": "Private/authenticated teacher workflows are explicitly out of scope without separate product/security approval.",
+          "class": "good",
+          "file_line": "file:62-64"
+        },
+        {
+          "idea": "WebMCP tools, if implemented, must be testable, accessible, and safe under user intent.",
+          "class": "speculative",
+          "file_line": "file:95-97"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "strategic-tracking",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans — §2.1)",
+          "file_line": "webmcp-human-site-operability.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plans — §2.1)",
+          "file_line": "webmcp-human-site-operability.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED, required for all plans — §2.1)",
+          "file_line": "webmcp-human-site-operability.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans — §2.2); inferrable as `strategic` from folder, body heading, and promotion-trigger section but not declared",
+          "file_line": "webmcp-human-site-operability.plan.md:1-8 (frontmatter block)"
+        },
+        {
+          "issue": "`status: strategic-tracking` is a dropped emergent field (§2.5 — replaced by `kind`/`disposition`/`gate`); value `strategic-tracking` is not in the §3.5 migration map and does not map cleanly",
+          "file_line": "webmcp-human-site-operability.plan.md:5"
+        },
+        {
+          "issue": "`collection: discovery` is a dropped emergent field (§2.5 — `collection`/`lane` dropped; folder is the projection)",
+          "file_line": "webmcp-human-site-operability.plan.md:3"
+        },
+        {
+          "issue": "`lane: future` is a dropped emergent field (§2.5 — `collection`/`lane` dropped; folder is the projection)",
+          "file_line": "webmcp-human-site-operability.plan.md:4"
+        },
+        {
+          "issue": "`promotion_trigger` is present as a body section heading (line 100) but is required as a frontmatter field for strategic plans (§2.4, LOCKED)",
+          "file_line": "webmcp-human-site-operability.plan.md:100"
+        },
+        {
+          "issue": "Blocking prerequisites expressed as body prose (lines 70-75) rather than as `depends_on` typed edges in frontmatter (§2.3, §4 — `depends_on` with `kind: blocking|beneficial`)",
+          "file_line": "webmcp-human-site-operability.plan.md:70-75"
+        }
+      ],
+      "unclassified_keys": [
+        "collection",
+        "lane",
+        "status",
+        "parent_plan"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "WebMCP is described as a browser-native API that pages can use to expose tools to agents (lines 37-38, mechanism section), but the spec is still a W3C draft and Chrome's implementation is early-preview. The plan cites both the draft spec and Chrome overview but does not record the stability/maturity level of either. Future executors may inherit a broken or spec-changed API surface without a re-check trigger.",
+          "file_line": "webmcp-human-site-operability.plan.md:23-26"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes browser-agent adoption will follow a trajectory where structured page actions become preferable over DOM guessing ('Browser agents may eventually prefer...', line 29). This is a market/ecosystem trajectory assumption with no cited evidence or re-evaluation trigger; if browser agents instead standardise on remote MCP or computer-use patterns, the entire premise dissolves.",
+          "file_line": "webmcp-human-site-operability.plan.md:29-31"
+        },
+        {
+          "severity": "low",
+          "claim": "The blocking prerequisite 'Candidate actions are safer and more valuable as page tools than as API/MCP/skills/markdown surfaces' (line 72-73) assumes this comparative value judgement can be made without defining a concrete evaluation methodology. The plan provides a filter concept but no rubric for what 'safer' or 'more valuable' means in practice, leaving future executors without actionable criteria.",
+          "file_line": "webmcp-human-site-operability.plan.md:72-73"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan lists 'Browser/client support and security posture are re-checked' as a blocking prerequisite (line 74) but does not specify which browsers, which minimum support threshold, or who owns the security posture check. The assumption that this check is self-evidently scoped may cause it to be skipped or done inconsistently at promotion time.",
+          "file_line": "webmcp-human-site-operability.plan.md:74-75"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan implicitly assumes that Oak's existing non-WebMCP surfaces (API, MCP, search, graph, markdown, skills) will remain the primary and preferred agent surfaces at the time this plan could be promoted. This is a reasonable current-state assumption but is not explicitly stated as a re-evaluation point if those surfaces change significantly.",
+          "file_line": "webmcp-human-site-operability.plan.md:31-32"
+        },
+        {
+          "severity": "info",
+          "claim": "The promotion trigger (lines 100-104) requires Oak to 'explicitly want the human site to be operable by in-browser agents'. This relies on an assumption that a clear, attributable product decision will be surfaced to plan maintainers. No mechanism (e.g. a product decision log, ADR, or comms-event) is named that would surface this trigger reliably.",
+          "file_line": "webmcp-human-site-operability.plan.md:100-104"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    }
+  ]
+}

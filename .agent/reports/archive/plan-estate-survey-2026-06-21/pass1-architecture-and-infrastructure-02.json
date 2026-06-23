@@ -1,0 +1,2299 @@
+{
+  "batch_size": 12,
+  "plans_returned": 12,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly status Current with active pending todos covering substantial unrealised work across multiple tiers",
+          "file_line": "quality-gate-hardening.plan.md:64-65"
+        },
+        {
+          "claim": "Twelve todos remain pending, covering foundational through long-tail work",
+          "file_line": "quality-gate-hardening.plan.md:5-58"
+        },
+        {
+          "claim": "Owner decisions are resolved and recorded, giving clear execution authority",
+          "file_line": "quality-gate-hardening.plan.md:662-696"
+        },
+        {
+          "claim": "Plan self-describes as unifying all pending quality gate work to prevent fragmentation",
+          "file_line": "quality-gate-hardening.plan.md:76-78"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan carries high-density, verified architectural reasoning: the April 2026 Vercel crash root cause (line 629-647) is a concrete first-hand incident, not speculation. The seven ADR-121 errors (lines 142-157) are an enumerated audit. The three resolved owner decisions (lines 662-696) are policy, not intent. The technical hypotheses for flaky tests (lines 459-476) are prioritised and mechanically actionable. The passWithNoTests gap (lines 519-525) is a genuine non-obvious risk. The only speculative content is the effort estimates and assumption list (lines 270-289), which the plan itself labels as assumptions requiring validation. No bad ideas are present; some items are sequencing-gated rather than independently executable.",
+      "content_quality": "strong",
+      "content_quality_note": "Every section is specific: named files, named ADRs, named rules, named counts, named failure modes, named resolution patterns. The sequencing dependency table (lines 390-411) is complete and machine-readable. Completed items are closed in-place with follow-up instructions (lines 414-429, 566-583). Assumptions are enumerated and labelled (lines 235-289). The absorbed-plans section (lines 741-749) acknowledges an outstanding TODO (add superseded-by pointers to absorbed plans) rather than claiming it done. No padding, no vague intent language.",
+      "salvage_value": [
+        {
+          "idea": "Pre-push and CI must run identical check sets so a CI-only failure always diagnoses an environmental issue, never a missed check",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:664-676"
+        },
+        {
+          "idea": "Developer surfaces (pnpm check) use fix-then-verify commands; remote surfaces use verify-only — mutations in CI are invisible and misleading",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:679-687"
+        },
+        {
+          "idea": "Branch-scope secret scanning is sufficient for routine gates; full-history scanning is a bootstrap/audit action only",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:689-696"
+        },
+        {
+          "idea": "E2E tests must boot dist/ artefacts under plain Node, not dev loaders; dev success does not prove production startup",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:638-649"
+        },
+        {
+          "idea": "Coverage thresholds must pair with a minimum test-file-count check because passWithNoTests: true allows zero meaningful tests with misconfigured globs",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:519-525"
+        },
+        {
+          "idea": "Flaky E2E tests: createStubbedHttpApp uses process.cwd() for startDir — under Turbo multi-task cwd semantics this is non-deterministic; pin startDir to a non-repo path as first hypothesis",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:461-466"
+        },
+        {
+          "idea": "ESLint config standardisation must precede all lint rule promotions to ensure gates are trustworthy and mechanically consistent",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:113-117"
+        },
+        {
+          "idea": "Forbidden-comment test infrastructure must not use hook exemptions for test files; construct forbidden patterns via string concatenation or fixtures instead",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:538-547"
+        },
+        {
+          "idea": "pnpm audit gap: dependency vulnerability scanning is absent from all gate surfaces; add at --audit-level=high to balance security with npm ecosystem realities",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:432-449"
+        },
+        {
+          "idea": "Stryker mutation testing is most valuable after a healthy test suite; it depends on the test-suite-audit sibling plan completing first",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:656-659, 753-756"
+        },
+        {
+          "idea": "no-eslint-disable promotion to error is blocked indefinitely because the eslint-disable remediation plan has zero completed todos",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:273-276"
+        },
+        {
+          "idea": "ADR-121 seven-error audit (matrix factual errors, verify-vs-mutate discrepancies, stale prose, falsified principle, inter-ADR contradiction) — now graduated to ADR-121 changelog",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:133-189"
+        },
+        {
+          "idea": "Tiered sequencing model (Tier 0 refresh counts, Tier 1 foundations, Tier 2 gate additions, Tier 3 rule promotions, Tier 4 long-tail) with explicit dependency ordering",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:290-411"
+        },
+        {
+          "idea": "oak-eslint self-linting circular dependency risk is assumed but not investigated — may not be real",
+          "class": "speculative",
+          "file_line": "quality-gate-hardening.plan.md:261-263"
+        },
+        {
+          "idea": "Built-artifact proof scope: assumed only oak-curriculum-mcp-streamable-http needs this, but other tsx-using workspaces may share the gap",
+          "class": "speculative",
+          "file_line": "quality-gate-hardening.plan.md:264-266"
+        },
+        {
+          "idea": "ESLint config standardisation effort estimated 1-2 days but may be 2-3 days given 10+ workspaces needing individual attention",
+          "class": "speculative",
+          "file_line": "quality-gate-hardening.plan.md:286-289"
+        },
+        {
+          "idea": "pnpm audit may surface CVEs requiring upstream fixes or overrides taking weeks in a large monorepo",
+          "class": "speculative",
+          "file_line": "quality-gate-hardening.plan.md:277-280"
+        },
+        {
+          "idea": "Absorbed plans (static-analysis-tool-promotion, mutation-testing-implementation) still need superseded-by pointers added to their frontmatter",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:744-749"
+        },
+        {
+          "idea": "no-child-process-in-tests ESLint rule should ban spawn/exec/fork from child_process in *.test.ts and *.spec.ts; use vitest in-process or standalone scripts instead",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:610-618"
+        },
+        {
+          "idea": "consistent-type-assertions remediation: ~218 warnings across 6 workspaces; mechanical bulk is realistic but structural fakes (shared test helpers, wide integration surfaces) may slip calendar estimates",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:606-610"
+        },
+        {
+          "idea": "vitest.config.base.ts documents widespread process.env mutation and uses isolate: true + pool: forks as mitigation — this conflicts with testing-strategy.md prohibition and worsens flakes and mutation testing noise long-term",
+          "class": "good",
+          "file_line": "quality-gate-hardening.plan.md:733-736"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Current — owner decisions resolved 2026-04-11, ADR-121 reconciled; gate topology implemented except the known pre-push Turbo exit-propagation blocker",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "node_type field absent — V0 §2.1 requires literal \"plan\" (LOCKED)",
+          "file_line": "quality-gate-hardening.plan.md:1-59 (frontmatter block)"
+        },
+        {
+          "issue": "id field absent — V0 §2.1 requires a stable kebab slug (LOCKED)",
+          "file_line": "quality-gate-hardening.plan.md:1-59 (frontmatter block)"
+        },
+        {
+          "issue": "kind field absent — V0 §3.1 requires strategic|executable (LOCKED); plan carries todos so it is implicitly executable but kind is undeclared",
+          "file_line": "quality-gate-hardening.plan.md:1-59 (frontmatter block)"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — V0 §2.4 requires ISO date as a frontmatter field; value appears as body prose only",
+          "file_line": "quality-gate-hardening.plan.md:63"
+        },
+        {
+          "issue": "serves_strategic_choice absent — V0 §4 authority invariant 1: every executable plan requires this field or the explicit \"pending\" sentinel (LOCKED)",
+          "file_line": "quality-gate-hardening.plan.md:1-59 (frontmatter block)"
+        },
+        {
+          "issue": "status field used in body prose instead of V0 axes — V0 §2.5 explicitly drops status; readiness+execution+blocking state fused into a single prose string",
+          "file_line": "quality-gate-hardening.plan.md:64"
+        },
+        {
+          "issue": "supersedes relationship expressed as body prose only — two absorbed plans named in prose but no supersedes typed edge in frontmatter",
+          "file_line": "quality-gate-hardening.plan.md:744-749"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "serves_strategic_choice absent on what is demonstrably an executable plan — V0 §4 invariant 1 is LOCKED: every executable plan resolves serves_strategic_choice to a published registry ID or carries \"pending\". The estate-wide pattern of omitting this field on in-flight executable plans is the primary signal the survey was designed to surface. This is a re-ratification candidate: either the registry IDs (APP-*/TOOLS-*/FRAME-*) must be backfilled, or the \"pending\" sentinel must be used to make the invariant machine-checkable.",
+          "evidence": "Plan carries 18 todos with mixed pending/completed status and body prose stating 'Current — owner decisions resolved 2026-04-11'; no serves_strategic_choice in frontmatter.",
+          "file_line": "quality-gate-hardening.plan.md:1-59 (frontmatter); V0 §4 invariant 1"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan absorbs mutation-testing-implementation.plan.md and static-analysis-tool-promotion.plan.md but the TODO to add superseded-by pointers in those plans' frontmatter is still open. Without those pointers, readers starting from the sibling plans cannot discover this plan and may duplicate or contradict work.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:748"
+        },
+        {
+          "severity": "high",
+          "claim": "The pre-push Turbo exit-propagation bug (todo id: pre-push-turbo-exit-propagation) is listed as pending and is called out as the only remaining known blocker in the Status line, yet the plan does not document any concrete acceptance criteria or test protocol for proving the fix. Without a verifiable done condition, any fix risks being declared complete without actual proof.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:11-13"
+        },
+        {
+          "severity": "high",
+          "claim": "Decision 1 (line 664) mandates pre-push and CI run the same check set, but todo id: promote-widget-a11y-to-ci (line 57) still shows the a11y/widget tests as local-only pending work. The concrete changes listed under Decision 1 say 'when test:a11y and widget tests are promoted (item 0d), add to both surfaces simultaneously' — but item 0d itself is pending with an unresolved N-consecutive-green-run acceptance condition. This means the architecture invariant (pre-push == CI) is not yet satisfied and the gap is indefinitely open with no schedule.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:664-676"
+        },
+        {
+          "severity": "medium",
+          "claim": "Section 9 (built-artifact proof in E2E) correctly identifies that E2E must boot dist/ under plain Node, but the remediation step scopes to a 10-minute grep for tsx in dev scripts without actually resolving which workspaces are affected. The architectural seam (source tests vs E2E against built artefact) is stated but not enforced by any gate or lint rule — nothing prevents a new workspace from repeating the exact tsx-masks-ESM-resolver defect pattern.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:627-651"
+        },
+        {
+          "severity": "medium",
+          "claim": "The passWithNoTests: true flag in vitest.config.base.ts is flagged as a coverage-threshold gap (line 519-524) and separately as a flake/mutation-noise risk via process.env mutation (line 731-735), but both findings are buried in separate plan sections with no single consolidated architectural response. The two issues interact: passWithNoTests lets a misconfigured workspace report green with zero mutations killed and zero tests run — a compound blind spot.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:519-524"
+        },
+        {
+          "severity": "medium",
+          "claim": "ESLint config standardisation (todo id: eslint-config-standardisation) is declared a foundation that must precede all lint-rule promotions, and the effort estimate in the plan body (2-3 days) is flagged by a reviewer assumption as potentially 2-3 days underestimated (10+ workspaces with blurred parser/resolver settings, line 287). The plan does not define any structural target state for 'standardised' — no schema, reference config, or acceptance test — making it unclear when this foundation item is genuinely complete.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:284-289"
+        },
+        {
+          "severity": "medium",
+          "claim": "The CI feedback-loop budget concern is raised both in Domain Boundaries (line 381-383) and Risks (line 727-730) but has no defined threshold values. Every gate addition is acknowledged to increase CI duration, yet no maximum acceptable time budget (for pre-push or CI) is recorded anywhere in the plan. The architectural constraint exists in principle but is not operationalised.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:381-383"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan's Last Updated date is 2026-04-29 (line 63). Several pending todos reference assumptions with stale counts (eslint-disable last counted 2026-03-29, type-assertion count never re-verified). The plan acknowledges this in Tier 0 but has no trigger to force a refresh before work resumes — a reader picking this up now will work from unknown-staleness baselines.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:63"
+        },
+        {
+          "severity": "low",
+          "claim": "Stryker (todo id: enable-stryker-all-workspaces) is listed with initial loose thresholds and a dependency on the test-suite-audit sibling plan, but the sibling plan relationship is described only in the Sibling Plans section and not reflected in the Dependencies and Sequencing table. The sequencing table lists 'Test audit (sibling plan)' but does not link to the sibling plan by path, making the dependency unverifiable without extra search.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:344-345"
+        },
+        {
+          "severity": "info",
+          "claim": "The architectural distinction between verify-only (pre-commit, pre-push, CI) and fix-then-verify (pnpm check) gate surfaces is clearly stated as Decision 2 and matches the pattern documented elsewhere. This is a well-grounded architectural seam; no action required.",
+          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:679-688"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Plan supersedes and absorbs static-analysis-tool-promotion.plan.md and mutation-testing-implementation.plan.md with a TODO to add superseded-by pointers in absorbed plan frontmatter",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "quality-gate-hardening.plan.md:742-749 (\"## Absorbed Plans / This plan supersedes and absorbs: ...static-analysis-tool-promotion.plan.md ...mutation-testing-implementation.plan.md ... **TODO**: add a superseded-by pointer in each absorbed plan's frontmatter.\"); both targets exist at cited paths (static-analysis at architecture-and-infrastructure/, mutation-testing at agentic-engineering-enhancements/current/); neither target's frontmatter contains a superseded_by field (static-analysis frontmatter lines 1-25; mutation-testing frontmatter lines 1-23) — TODO genuinely outstanding"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/current/scripts-validator-family-workspace-migration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is NOT STARTED; all seven todos are pending — no execution has occurred",
+          "file_line": "31:32"
+        },
+        {
+          "claim": "Plan is in current/ lane, matching its active-execution intent",
+          "file_line": "34"
+        },
+        {
+          "claim": "Six-phase structure is complete with deterministic validation scripts per phase",
+          "file_line": "96-124"
+        },
+        {
+          "claim": "Non-goals (Group B, Group C) are explicitly scoped out, preventing scope creep",
+          "file_line": "149-155"
+        },
+        {
+          "claim": "Blocking dependency PR #90 merge is called out explicitly",
+          "file_line": "579"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan diagnoses a real structural problem (scripts/ is invisible to pnpm depcruise, workspace ESLint boundary rules, per-workspace type-check, and turbo graph — file:45-51) with concrete evidence (line counts, file inventory at file:52-62). The migration strategy is ordered by coupling (zero-coupling pilot, then batch, then coupled fix), which is a sound risk-reduction pattern. The Build-vs-Buy framing (file:160-176) names the open question honestly and provides a default plus resolution mechanism rather than deferring it silently. The owner-direction doctrine graduation (file:82-89, 261-285) closes the re-litigation risk. The only honest weaknesses are: (1) the Build-vs-Buy decision is still open (Phase 0 Task 0.1 unresolved, file:237-259) so destination workspace path placeholders `<chosen-workspace>` appear throughout; (2) the source strategic brief at future/ is cited as an architectural anchor (file:34) but this plan \"supersedes it for execution\" — that future/ artefact should be archived once this plan completes, not left as a live reference.",
+      "content_quality": "strong",
+      "content_quality_note": "Every phase has: a foundation check-in, a key principle citation, per-task acceptance criteria, deterministic bash validation scripts, and a phase-complete validation sweep (file:96-124, 248-307, 329-369, 387-395). The quality-gate strategy distinguishes per-task vs per-phase gates (file:95-123). Reviewer scheduling is phase-aligned and names specific sub-agents per phase (file:180-189). The testing-strategy alignment is explicit and correct: refactoring TDD means existing tests are the safety net, no new tests for the move itself (file:521-532). Documentation propagation surfaces are enumerated with named files (file:213-221).",
+      "salvage_value": [
+        {
+          "idea": "scripts/ directory is invisible to pnpm depcruise, workspace ESLint boundary rules, per-workspace type-check, and turbo — a structural tooling blind spot",
+          "class": "good",
+          "file_line": "45-51"
+        },
+        {
+          "idea": "Six validator files with helpers and tests in scripts/ represent structural drift caught by four parallel architecture reviewers; migrate Group A to a declared workspace",
+          "class": "good",
+          "file_line": "41-62"
+        },
+        {
+          "idea": "validate-eslint-boundaries.ts uses a relative ../packages/core/oak-eslint/src/... import that bypasses the @oaknational/eslint-plugin-standards public API; fix via devDependency in chosen workspace",
+          "class": "good",
+          "file_line": "72-77"
+        },
+        {
+          "idea": "Three validators (validate-portability, validate-subagents, validate-no-stale-script-invocations) each implement their own filesystem walker; consolidate into a single shared utility after all are migrated",
+          "class": "good",
+          "file_line": "78-82"
+        },
+        {
+          "idea": "Owner-direction doctrine (anything with tests must be in a workspace) exists only in user-memory and archived napkin; graduate to canonical .agent/rules/no-workspace-evading-scripts.md with adapter mirrors",
+          "class": "good",
+          "file_line": "84-89"
+        },
+        {
+          "idea": "Build-vs-Buy: agent-tools/ (existing, 3-of-4 reviewers) vs new workspace (semantic cohesion, Betty's argument); resolve via assumptions-expert in Phase 0 before moving any code",
+          "class": "good",
+          "file_line": "143-175"
+        },
+        {
+          "idea": "Phase ordering: zero-coupling pilot first, then batch, then coupled validator last — risk-reduction sequencing",
+          "class": "good",
+          "file_line": "140-148"
+        },
+        {
+          "idea": "Refactoring TDD: existing tests are the safety net; no new tests needed for behaviour-preserving file moves",
+          "class": "good",
+          "file_line": "521-532"
+        },
+        {
+          "idea": "Quality gate strategy: per-task gates vs per-phase gates, named bash commands, CI verification via gh pr checks + sonar list issues",
+          "class": "good",
+          "file_line": "95-123"
+        },
+        {
+          "idea": "Reviewer scheduling is phase-aligned, not closure-batched — specific sub-agent roles named per phase",
+          "class": "good",
+          "file_line": "180-189"
+        },
+        {
+          "idea": "Documentation propagation commitment names every surface that references scripts/ paths with explicit no-change rationale required",
+          "class": "good",
+          "file_line": "212-221"
+        },
+        {
+          "idea": "Non-goals explicitly carve out Group B (Claude-hook stdin/stdout scripts) and Group C (CI-only tooling) as separate plans",
+          "class": "good",
+          "file_line": "149-155"
+        },
+        {
+          "idea": "Consolidate filesystem walker into walkRepoFiles({ roots, extensions, excludedFragments }) shared utility inside chosen workspace",
+          "class": "good",
+          "file_line": "436-440"
+        },
+        {
+          "idea": "pnpm test:root-scripts retirement or sharp scoping — either remove and rewire to workspace tasks, or retain with inline comment naming what it covers",
+          "class": "good",
+          "file_line": "448-452"
+        },
+        {
+          "idea": "ADR-168 §Workspace-script-ban covers workspace→root direction only; this plan adds the inverse (root→workspace-evasion); amendment or peer ADR needed",
+          "class": "good",
+          "file_line": "288-295"
+        },
+        {
+          "idea": "Consolidate allowlist patterns across validate-portability and validate-subagents into shared config — explicitly deferred as speculative out-of-scope",
+          "class": "speculative",
+          "file_line": "722-723"
+        },
+        {
+          "idea": "Add new structural validators (e.g. local-vs-CI invocation gap) in the migrated workspace as the obvious future home",
+          "class": "speculative",
+          "file_line": "724-726"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED: required for all plan nodes)",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:1-26 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1, LOCKED: must be literal \"plan\"; replaces emergent open `type:` free-label)",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:1-26 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2/§3.1, LOCKED: enum `strategic | executable`; required for all); inferrable as `executable` from presence of `todos` and body context, but absent from frontmatter",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:1-26 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4, LOCKED: required for all); value exists in body prose as `**Last Updated**: 2026-04-29` (line 31) but is not a frontmatter field",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:31"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (V0 §2.3/§4, LOCKED shape: required for executable plans; must resolve to a strategic-choice registry ID or the `\"pending\"` sentinel)",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:1-26 (frontmatter block)"
+        },
+        {
+          "issue": "Architectural ancestors ADR-041 and ADR-168 referenced in body prose (line 585) but not declared as `derives_from` frontmatter edge (V0 §2.3/§4; LOCKED shape)",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:585"
+        },
+        {
+          "issue": "Predecessor strategic brief `future/scripts-validator-family-workspace-migration.plan.md` referenced in body (lines 34, 582-583) as the plan this supersedes; no `supersedes` frontmatter edge declared (V0 §2.3/§4; LOCKED shape)",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:34"
+        },
+        {
+          "issue": "Blocking dependency on PR #90 merge recorded in body prose (line 579) but not expressed as `depends_on: [{plan: ..., kind: blocking}]` frontmatter edge (V0 §2.3/§4; LOCKED shape). Note: a PR is not a plan node, so this may require a `gate` instead; either way the durable state is missing from frontmatter",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:579"
+        },
+        {
+          "issue": "Emergent `status:` expressed as body prose `🔴 NOT STARTED` (line 31-32) rather than being absent (correct V0 form for a non-terminal, non-gated executable plan). The emoji+prose pattern is the exact form V0 §2.2 and §3.5 replace.",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:31-32"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Build-vs-Buy destination is still an open decision gated on Phase 0 assumptions-expert invocation. The plan body defaults to agent-tools/ (3-of-4 reviewer majority, line 143) but nowhere records the resolution, and the Phase 0 deterministic validation (line 250) uses an unresolved placeholder grep for 'Phase 0 decision:' that will trivially fail if not filled in. The plan is NOT STARTED (line 31), so the default may have already drifted from what an assumptions-expert review would conclude if run today.",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:143-175"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan treats agent-tools/ as the likely destination for repo-invariant governance validators, but provides no architectural rationale for why governance validators (which enforce workspace/boundary rules repo-wide) belong in a workspace whose stated remit is 'operational CLIs for agents' (line 69). Betty's cohesion objection (line 167) is explicitly unresolved, and the reviewer scheduled to arbitrate is assumptions-expert, not an architecture-expert. If the chosen home is agent-tools/, the boundary rule TOOLING_PACKAGE_IMPORTS coverage is accepted as sufficient (line 154) without verifying whether agent-tools/ is in the tier list at the expected granularity.",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:163-175"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 3's target import (line 416-417) converts scripts/validate-eslint-boundaries.ts:8's relative src/ bypass to 'import { ... } from @oaknational/eslint-plugin-standards', but the plan does not verify that the needed symbols (the boundary rule internals from boundary.js) are actually exported on the package's public surface. If the public API does not export those symbols, Phase 3 requires an upstream API change to eslint-plugin-standards before the import can land — an undeclared dependency between this plan and that package.",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:407-425"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 4's shared filesystem-walker consolidation (lines 431-443) defines the utility signature as walkRepoFiles({ roots, extensions, excludedFragments }) but the three consumer validators may have divergent exclusion predicate logic (bespoke exclusion predicates, line 81). The plan asserts consolidation is 'a refactor' and requires no new tests (line 531), but if the exclusion predicates differ in behaviour, collapsing them into a shared utility changes behaviour and the no-new-tests stance is incorrect. No cross-validator exclusion-predicate comparison is scheduled before Phase 4.",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:431-443"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references a source strategic brief at future/scripts-validator-family-workspace-migration.plan.md (lines 34, 230, 583) and instructs executors to re-read it at Phase 0. The future/ brief is retained 'as architectural anchor', but its content is not summarised or cited inline. If the future/ brief was authored at a different level of architectural resolution, there is an implicit risk of executor confusion about which document governs when they conflict. The relationship should be made explicit (e.g. which document wins on divergence).",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:34"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly scopes out Group B (Claude-hook stdin/stdout) and Group C (CI-only tooling) scripts (lines 151-153, 723-726), and the non-goal list at lines 149-155 is architecturally clean. The phase sequencing (zero-coupling first, coupled last, consolidation after all consumers exist) is sound and aligns with the consolidate-at-third-consumer threshold cited at line 65.",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:149-155"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly identifies and cites ADR-041 and ADR-168 as architectural anchors, and the documentation propagation commitment (lines 212-221) is complete for the surfaces it enumerates. Task 0.3's explicit choice between ADR amendment vs peer ADR vs rule-only (lines 290-297) is appropriately deferred to docs-adr-expert, which is the right architectural discipline.",
+          "file_line": "scripts-validator-family-workspace-migration.plan.md:288-297"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Status is NOT STARTED; all todos pending (cited at 31-32)",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "package.json:37,83 (repo-validators:check and portability:check now invoke `pnpm --filter @oaknational/agent-tools validate-*` / `--filter @oaknational/eslint-plugin-standards validate-boundaries`); agent-tools/src/validators/portability/validate-portability.ts, agent-tools/src/practice-fitness/validate-practice-fitness.ts, packages/core/oak-eslint/scripts/validate-boundaries.ts exist; scripts/ directory absent at repo root; test:root-scripts absent from package.json — versus plan self-report at scripts-validator-family-workspace-migration.plan.md:31 (\"Status: NOT STARTED\") and frontmatter todos lines 5-25 all status:pending"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/current/security-dependency-triage.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos remain 'pending' and the frontmatter status is 'queued' — no item has been executed; the work is live and unstarted",
+          "file_line": "security-dependency-triage.plan.md:7-43"
+        },
+        {
+          "claim": "Several fixes are noted as already landed in the pnpm v11 config migration (axios, rollup, qs overrides) so execution state needs a verify pass, but the plan body itself is still authoritative",
+          "file_line": "security-dependency-triage.plan.md:82-84,96-97,144-145"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is methodical, evidence-grounded, and correctly sequences risk. The false-positive dismissal reasoning (lines 159-178) is particularly strong — it names the rule, location, and concrete rationale for each dismissed alert rather than blanket-dismissing. The actual-risk assessments for transitive-only vulnerabilities (lines 69-70, 100-102, 117-119) are accurate and avoid alarm. The two-batch split is sound engineering practice. No bad ideas found; the speculative item is the rate-limiting decision which is correctly flagged as a decision-gate rather than a pre-decided fix.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan contains specific alert numbers, CVE summaries, version targets, workspace scope, and a numbered priority order (lines 234-244). The CodeQL dismissal table (lines 159-178) gives file-level citations for every dismissed alert. The dependency tables (lines 185-220) name exact current vs target versions and which workspaces are affected. This is well above V0-conformant — it is actionable without additional research on most items.",
+      "salvage_value": [
+        {
+          "idea": "Pin GitHub Actions to SHA in ci.yml and release.yml to address supply-chain risk (2 CodeQL alerts)",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:22-24,154-155"
+        },
+        {
+          "idea": "Update @modelcontextprotocol/sdk to 1.27.1 to pull patched hono versions and resolve 5 Dependabot alerts",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:11-13,71-74"
+        },
+        {
+          "idea": "Update markdownlint-cli to 0.48.0 to resolve markdown-it ReDoS alert",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:14-16,130-133"
+        },
+        {
+          "idea": "Add or verify pnpm-workspace.yaml overrides for axios >=1.13.5, rollup >=4.59.0, qs >=6.14.2",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:10-12,82-84,96-97,144-145"
+        },
+        {
+          "idea": "Add pnpm-workspace.yaml overrides for minimatch >=3.1.3 and ajv >=6.14.0 as immediate fix ahead of eslint 10",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:107-110,120-123"
+        },
+        {
+          "idea": "Update patch/minor packages: elasticsearch, turbo, commitlint, stryker, ioredis, minimatch v10, eslint-plugin-tsdoc, zod-to-openapi, openapi-typescript",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:19-21,185-197"
+        },
+        {
+          "idea": "Migrate eslint 9 → 10 on a dedicated branch to permanently resolve 13 Dependabot alerts (minimatch + ajv via eslint chain)",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:31-33,208-211"
+        },
+        {
+          "idea": "Migrate @clerk/backend 2→3 and @clerk/express 1→2 as a paired effort",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:34-36,214-215"
+        },
+        {
+          "idea": "Evaluate remaining major upgrades: types/node 25, openapi-fetch 0.17, vite-tsconfig-paths 6, zod 4 for adapter",
+          "class": "speculative",
+          "file_line": "security-dependency-triage.plan.md:37-39,216-220"
+        },
+        {
+          "idea": "Decide on app-level rate limiting vs documenting Vercel edge + Clerk as the compensating control for js/missing-rate-limiting CodeQL alerts",
+          "class": "speculative",
+          "file_line": "security-dependency-triage.plan.md:40-42,157"
+        },
+        {
+          "idea": "Dismiss CodeQL false positives with per-alert rationale covering js/user-controlled-bypass (Bearer auth middleware), js/regex/missing-regexp-anchor (test assertions), js/incomplete-hostname-regexp (test files), js/bad-tag-filter (test file), js/polynomial-redos (non-backtracking patterns on controlled input), js/double-escaping (correct decode order), js/incomplete-sanitization (controlled input from OpenAPI schema), js/bad-code-sanitization (hardcoded constants)",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:158-178"
+        },
+        {
+          "idea": "Accept/backlog js/log-injection in widget-preview-server.ts (local dev script, not deployed) and js/http-to-file-access in smoke tests and sitemap scanner (dev tooling intentionally writes fetched data)",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:175-178"
+        },
+        {
+          "idea": "Run full quality gate chain after Batch 1 changes before proceeding to Batch 2",
+          "class": "good",
+          "file_line": "security-dependency-triage.plan.md:27-29"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "queued",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (kebab slug, stable) — required for all plan nodes",
+          "file_line": "security-dependency-triage.plan.md:1-44 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` — the registry discriminator required for all plan nodes",
+          "file_line": "security-dependency-triage.plan.md:1-44 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (enum strategic|executable) — required for all plan nodes; inferred as `executable` from `status: queued` via §3.5 migration map but not declared",
+          "file_line": "security-dependency-triage.plan.md:1-44 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (ISO date) — required for all; `created: 2026-03-05` (line 8) is the dropped emergent key V0 folds into `last_updated`",
+          "file_line": "security-dependency-triage.plan.md:8"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` — required for executable plans; no strategic-choice ID or `\"pending\"` sentinel present",
+          "file_line": "security-dependency-triage.plan.md:1-44 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Field `status: \"queued\"` present — explicitly dropped by V0 §2.5 (split into `kind`/`disposition`/`gate`/Linear-projected execution axis)",
+          "file_line": "security-dependency-triage.plan.md:7"
+        },
+        {
+          "issue": "Field `isProject: false` present — explicitly dropped by V0 §2.5 (subsumed by the `projects_to` edge)",
+          "file_line": "security-dependency-triage.plan.md:43"
+        },
+        {
+          "issue": "Field `created: 2026-03-05` present — dropped emergent key; V0 §2.4 folds `created`/`date`/`branch` into `last_updated`",
+          "file_line": "security-dependency-triage.plan.md:8"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter — `serves_strategic_choice`, `thread`, `depends_on`, `derives_from` all absent; `serves_strategic_choice` is required for executable plans",
+          "file_line": "security-dependency-triage.plan.md:1-44 (frontmatter block, edges absent)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Plan status is 'queued' and all todos remain 'pending', meaning 5 HIGH-severity Dependabot alerts (hono auth bypass, arbitrary file access, axios DoS, rollup path traversal, plus 11 minimatch ReDoS) are unresolved as of the plan's last recorded state. The plan is dated 2026-03-05 — now 3.5 months stale with no execution evidence.",
+          "file_line": "security-dependency-triage.plan.md:7-8"
+        },
+        {
+          "severity": "high",
+          "claim": "CodeQL alerts #4–#8 (js/missing-rate-limiting, HIGH) on auth-routes.ts, oauth-proxy-routes.ts, and widget-preview-server.ts are classified as 'evaluate or document as accepted' with Vercel edge + Clerk cited as mitigating controls. No acceptance record, no documented compensating-control rationale, and the rate-limiting-decision todo remains pending. This is an open architectural decision, not a closed one.",
+          "file_line": "security-dependency-triage.plan.md:157"
+        },
+        {
+          "severity": "medium",
+          "claim": "GitHub Actions are not pinned to SHA (todos batch-1-pin-actions, CodeQL #1 and #2 on ci.yml:24 and release.yml:34). Supply-chain risk is the plan's own #1 priority item but remains unexecuted.",
+          "file_line": "security-dependency-triage.plan.md:22-23, 155-156"
+        },
+        {
+          "severity": "medium",
+          "claim": "@clerk/backend 2→3 and @clerk/express 1→2 migration is deferred to Batch 2 with Medium-High risk and no security fix flagged. Clerk major version migrations commonly carry breaking auth-surface changes; the plan contains no analysis of what auth behaviour changes between versions and whether any gap opens during migration.",
+          "file_line": "security-dependency-triage.plan.md:35-36, 213-215"
+        },
+        {
+          "severity": "low",
+          "claim": "CodeQL false-positive dismissals for js/incomplete-sanitization (#13–#28, 14 findings) on code generators and host-header-validation.ts are characterised as 'controlled input from OpenAPI schema or compile-time constants'. This is a reasonable rationale but is stated in the plan body only; if these are not yet dismissed in GitHub with per-finding rationale, the dismissal record does not exist where it needs to.",
+          "file_line": "security-dependency-triage.plan.md:169, 229"
+        },
+        {
+          "severity": "low",
+          "claim": "Log injection alert #55 (js/log-injection, widget-preview-server.ts) is accepted as 'local dev script, not deployed'. If widget-preview-server.ts is ever deployed or its log output is aggregated, this acceptance is silently inherited. No mechanism to re-trigger review on scope change is noted.",
+          "file_line": "security-dependency-triage.plan.md:176"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly prioritises supply-chain pinning (Actions SHA) above dependency overrides, which is the right ordering. The two-batch split is sound: safe overrides first, breaking majors separately. No structural security concerns with the triage methodology itself.",
+          "file_line": "security-dependency-triage.plan.md:234-243"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All Batch 1 todos are pending, implying no remediation has been executed yet",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "pnpm-workspace.yaml:39,45-46,50-51 (axios>=1.15.1, hono>=4.12.25, @hono/node-server>=1.19.10, qs>=6.15.2, rollup>=4.59.0 already present); plan lines 86,97,145 state axios/rollup/qs overrides \"already landed for the pnpm v11 config migration\""
+        },
+        {
+          "claim": "axios, rollup, and qs overrides were already landed in the pnpm v11 migration — contradicts pending status on batch-1-overrides todo",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "Plan body asserts all three landed: security-dependency-triage.plan.md:82-86 (axios \"already landed for the pnpm v11 config migration\"), :96-97 (rollup \">=4.59.0 ... already landed\"), :144-145 (qs \">=6.14.2 ... already landed\"); reinforced at :235-237 (\"axios / rollup / qs floors already present post–pnpm v11 migration\"). Yet the matching todo batch-1-overrides (content \"axios >=1.13.5, rollup >=4.59.0, qs >=6.14.2\") is status: pending at :10-12. Live repo confirms all three present: pnpm-workspace.yaml:39 axios '>=1.15.1', :51 rollup '>=4.59.0', :50 qs '>=6.15.2' — all satisfy required floors. Refutation (pending excused by minimatch/ajv) fails: the todo's content names only the three landed packages; minimatch/ajv are separate Groups 4-5 (:99-123) and absent from overrides (grep: not present)."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are still pending — no phase has been executed",
+          "file_line": "6-23 (todos all status: pending)"
+        },
+        {
+          "claim": "Status explicitly NOT STARTED — plan has not run",
+          "file_line": "29"
+        },
+        {
+          "claim": "Folder lane is current, consistent with a waiting-to-execute plan",
+          "file_line": "path: current/"
+        },
+        {
+          "claim": "The gate-off anti-pattern was already corrected inline, showing the plan is being maintained",
+          "file_line": "627-639"
+        },
+        {
+          "claim": "Phase structure, reviewer scheduling, and gate-out design are intact and actionable",
+          "file_line": "101-117, 176-183"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every phase has deterministic acceptance criteria (lines 228-233, 295-299, 331-339, 368-373, 396-399, 426-432), concrete bash validation commands (lines 236-244, 305-308), risk table with mitigations (lines 530-537), and a reviewer schedule aligned to phase risk profile (lines 176-183). The gate-out design at phase boundaries is a genuine engineering insight, not boilerplate. The build-vs-buy attestation (lines 542-556) and doctrine-alignment note on inactive-vs-disabled (lines 627-639) show reflective authorship. No substance is invented — all counts trace to a specific baseline date and tool call.",
+      "content_quality": "strong",
+      "content_quality_note": "Phase 0 tasks include overlap-matrix requirement (local rule ↔ SonarCloud rule ID mapping) that prevents naive execution divergence (lines 259-265). Phase 3 hotspot triage protocol distinguishes FIXED/ACCEPTED/FALSE_POSITIVE with PDR-026 rationale shape required (lines 361-373) — this is security-discipline content, not filler. The non-goals section (lines 166-171) actively prevents scope creep. Deterministic validation commands are syntax-correct and target-specific (lines 236-244).",
+      "salvage_value": [
+        {
+          "idea": "Fix-first/activate-last sequencing: clear the backlog under the inactive gate, then flip to active in a single commit, to avoid long-lived CI redness",
+          "class": "good",
+          "file_line": "160-164"
+        },
+        {
+          "idea": "Gate-out at phase boundaries: stopping after Phase 2 (bugs) or Phase 3 (security) produces a defensible shippable invariant even without completing the full plan",
+          "class": "good",
+          "file_line": "101-117"
+        },
+        {
+          "idea": "Phase 0 baseline-first discipline: capture per-rule and per-workspace violation counts before any fixing, to prevent blind swings at a large backlog",
+          "class": "good",
+          "file_line": "219-224"
+        },
+        {
+          "idea": "Overlap-matrix requirement: for each local sonarjs rule identify the SonarCloud rule equivalent (e.g. sonarjs/different-types-comparison ↔ javascript:S3403) to close the local/remote delta by design",
+          "class": "good",
+          "file_line": "259-265"
+        },
+        {
+          "idea": "Severity-ordered fix sequence: bugs (Phase 2) before vulnerabilities/hotspots (Phase 3) before smells (Phase 4)",
+          "class": "good",
+          "file_line": "159-163"
+        },
+        {
+          "idea": "Hotspot triage protocol: every hotspot must reach FIXED, ACCEPTED, or FALSE_POSITIVE state; unreviewed hotspots not permitted to remain",
+          "class": "good",
+          "file_line": "349-373"
+        },
+        {
+          "idea": "PDR-026 deferral-honesty shape required for every ACCEPTED/FALSE_POSITIVE hotspot rationale (named constraint + evidence + falsifiability)",
+          "class": "good",
+          "file_line": "369-370"
+        },
+        {
+          "idea": "Per-phase full-gates run (build, type-check, lint:fix, format, markdownlint, test) rather than per-package, because sonarjs violations can surface in consumers of shared code",
+          "class": "good",
+          "file_line": "85-97"
+        },
+        {
+          "idea": "Reviewer scheduling per phase: assumptions-expert at Phase 0 close, test-expert on autofix commits, security-expert on all Phase 3 commits, release-readiness-expert at Phase 5",
+          "class": "good",
+          "file_line": "176-183"
+        },
+        {
+          "idea": "Inline suppression with rationale permitted; bulk file/workspace rule-disable is not",
+          "class": "good",
+          "file_line": "386-392"
+        },
+        {
+          "idea": "Bug fixes in product code during Phase 2 must add regression tests (TDD compliance)",
+          "class": "good",
+          "file_line": "329, 337"
+        },
+        {
+          "idea": "Build-vs-buy attestation: adopt vendor first-party eslint-plugin-sonarjs rather than authoring Oak-custom equivalents",
+          "class": "good",
+          "file_line": "542-556"
+        },
+        {
+          "idea": "Doctrine-alignment note: the inactive-by-inheritance gate (placeholder entry with no rules) is NOT the never-disable-checks anti-pattern; Phase 5 activates a previously-absent gate",
+          "class": "good",
+          "file_line": "627-639"
+        },
+        {
+          "idea": "SonarCloud code_smells target: ≤100 (90%+ reduction from 1,176) rather than zero, acknowledging realistic effort ceiling for smells",
+          "class": "good",
+          "file_line": "397"
+        },
+        {
+          "idea": "Phase 5 activation is a single, reversible commit — all prior phases are the safety argument for making it",
+          "class": "good",
+          "file_line": "409"
+        },
+        {
+          "idea": "SonarCloud metric baseline (67 bugs, 1 vuln, 169 hotspots, 1176 smells, D reliability, E security) as a fixed measurement point — values will have drifted by execution time and Phase 0 must re-measure",
+          "class": "speculative",
+          "file_line": "62-70"
+        },
+        {
+          "idea": "Phase 1 gate trigger: if residual count after autofix > 300 pause for reviewer check-in; if < 100 proceed aggressively",
+          "class": "speculative",
+          "file_line": "311-312"
+        },
+        {
+          "idea": "Future enhancement: custom Oak sonarjs-style rules to bridge the delta between eslint-plugin-sonarjs and SonarCloud-only rules",
+          "class": "speculative",
+          "file_line": "648-649"
+        },
+        {
+          "idea": "Future enhancement: Stryker mutation testing integration with sonarjs signals",
+          "class": "speculative",
+          "file_line": "650"
+        },
+        {
+          "idea": "Future enhancement: sonarjs strict or all configs after recommended is stable",
+          "class": "speculative",
+          "file_line": "651"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🔴 NOT STARTED",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1 LOCKED: the node's graph identity; every plan requires a stable kebab slug)",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1 LOCKED: literal `\"plan\"` discriminator required on all plans)",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2 LOCKED: enum `strategic | executable`; replaces readiness senses of `status`; required on all plans)",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4 LOCKED: ISO date; instead the plan carries `**Last Updated**: 2026-04-24` as body prose at line 28)",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:28"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (V0 §2.3 LOCKED shape: required for executable plans; must be a strategic-choice ID or the sentinel `\"pending\"`)",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Emergent body-level `**Status**: 🔴 NOT STARTED` (line 29) is a V0-dropped pattern: `status` is replaced by `kind` / `disposition` / `gate` / Linear-projected execution (V0 §2.2, §2.5); it does not map cleanly because it conflates execution state and readiness into a single prose field outside frontmatter",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:29"
+        },
+        {
+          "issue": "Related plans are listed in body prose (lines 516-518) rather than as a typed `depends_on` or `related` frontmatter edge (V0 §2.3, §2.4 LOCKED: all authority/traceability/dependency relationships use typed edges, not prose)",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:516-518"
+        },
+        {
+          "issue": "Per-todo `priority: next` key on todo `phase-0-baseline` (line 8) is not part of the V0 per-todo schema (V0 §2.4 LOCKED: `{ id, content, status: pending | completed }`)",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:8"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "V0 §3.4 (LOCKED): the `gate` field is the only valid model for an owner/external block — there is no open-ended paused or not-started holding state. The body text uses `🔴 NOT STARTED` as a status marker outside frontmatter. This is not a structural contradiction of a LOCKED gate model because no `gate` is needed (the plan is unblocked) — but it does confirm the plan pre-dates the V0 state model and that body-level status prose would need to be removed entirely under V0 (execution state is Linear-projected, not stored). No re-ratification candidate: this is ordinary migration debt, not a LOCKED-decision conflict.",
+          "evidence": "`**Status**: 🔴 NOT STARTED` at body line 29; no `gate` field in frontmatter; no `kind` field to carry the readiness axis.",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:29"
+        }
+      ],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Phase 3 targets the single SonarCloud vulnerability (line 16, 63) and 169 security hotspots (line 64), but the plan defers all security work until after bugs and auto-fixes land. During Phases 0-2 the codebase is in an unresolved state with a known Security Rating E (worst) and an unidentified vulnerability. The vulnerability identity, file path, and rule are explicitly not known until Phase 0 Task 0.2. Shipping Phase 2 as a standalone PR ('legitimate gate-out point', line 342) before Phase 3 completes would mean merging to main with the unresolved vulnerability and all 169 unreviewed hotspots still present — this is not highlighted as a security risk of the gate-out path.",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:103-117,340-342"
+        },
+        {
+          "severity": "medium",
+          "claim": "The FALSE_POSITIVE disposition for security hotspots (line 367) relies on a runtime rationale quality check by security-expert, but the acceptance criterion for that check is only 'PDR-026 deferral-honesty shape' (named constraint + evidence + falsifiability), line 371-372. PDR-026 is a general deferral discipline, not a security-specific triage standard. There is no requirement to verify the false-positive claim against the actual code pattern (e.g., confirming the publicly-writable-directory concern is a test fixture, not production code) before the MCP call to change_security_hotspot_status. An incorrect FALSE_POSITIVE suppresses the SonarCloud signal permanently.",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:363-372"
+        },
+        {
+          "severity": "medium",
+          "claim": "The overlap analysis in Task 0.3 (line 260-266) identifies a delta set: SonarCloud security issues with no local ESLint rule equivalent. The acceptance criteria note these are 'fixes that won't be gate-prevented locally going forward' and recommend accepting the delta as intentional or opening a follow-up plan. For security hotspots and vulnerabilities in the delta, this means the local commit gate will never catch them — new instances of the same pattern will be committed and only caught by asynchronous SonarCloud analysis. The plan does not require that the delta set for security-type issues specifically is escalated to a higher standard than the delta for code smells.",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:260-266"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 3 Task 3.1 requires security-expert review before committing the vulnerability fix (line 358-359), but Task 3.2 (169 hotspots) only requires security-expert review of 'triage results' after the fact (line 373). For hotspots that are FIXED (code changed), security-expert reviews the outcome rather than the change before commit. For a 169-item triage where some will be real fixes to trust-boundary code, pre-commit review would be the stronger posture.",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:356-373"
+        },
+        {
+          "severity": "low",
+          "claim": "The risk table (line 528-537) identifies 'Security hotspot triage misses a real risk via over-aggressive FALSE_POSITIVE' at Low likelihood / Very High impact. Given the current Security Rating E and 169 unreviewed hotspots on a codebase of 162,935 NCLOC, Low likelihood may be optimistic. No evidence from Phase 0 data is cited to support this likelihood rating; it is asserted.",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:534"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan references a sibling plan security-dependency-triage.plan.md (line 518) as potentially overlapping on vulnerabilities/hotspots. The current plan does not coordinate hand-off or de-duplication between the two plans for the single identified vulnerability. If both plans touch the same vulnerability, the security-expert review and SonarCloud status change could be duplicated or conflicted.",
+          "file_line": "sonarjs-activation-and-sonarcloud-backlog.plan.md:517-519"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is in current/ folder, frontmatter status is PLANNING — ready to begin WS1, and all todos are pending; folder lane and lifecycle match.",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:45"
+        },
+        {
+          "claim": "Concrete, grounded problem statement (MaxListenersExceededWarning root-cause investigation 2026-04-18) with working ESLint gate already in place; plan is actionable and not superseded.",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:52-62"
+        },
+        {
+          "claim": "Sibling brief is in future/ (test-suite-audit-and-triage.plan.md) and this plan is its narrower current-execution slice — clear non-duplication.",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:126-128"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in a real incident (MaxListeners investigation at file:line 52-62), names pre-existing helpers that reduce scope (file:line 81-86), has concrete acceptance criteria per work-stream, and avoids over-engineering (Non-Goals section at file:line 109-115). The single internal tension (ws5 todo wording implies error-from-day-one vs plan body implying current state is warn) is a wording imprecision, not a substantive flaw.",
+      "content_quality": "strong",
+      "content_quality_note": "Every work-stream has explicit RED/GREEN criteria (e.g. file:line 136-153 for WS1, file:line 207-210 for WS5). Risk table at file:line 244-249 pairs each risk with a mitigation grounded in the plan's own mechanisms. Non-goals are enumerated to prevent scope creep. Foundation alignment section cites specific ADRs by number (file:line 255-260).",
+      "salvage_value": [
+        {
+          "idea": "Pattern-level rather than file-level remediation: extract shared DI-seam patterns from inventory; migrate cohorts at once",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:106-108"
+        },
+        {
+          "idea": "WS1 machine-readable inventory grouped by factory (loadRuntimeConfig, createHttpObservabilityOrThrow, initialiseSentry, Clerk factories, logger factories)",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:20-23"
+        },
+        {
+          "idea": "WS2 vi.mock/vi.stubGlobal/vi.doMock inventory with per-call DI-seam analysis (what product-code design problem forced the mock)",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:24-27"
+        },
+        {
+          "idea": "WS3 pattern taxonomy: app-assembly tests pulling observability/config; unit tests using vi.mock for a missing DI param; integration tests using vi.mock to swap a module-level singleton",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:167-178"
+        },
+        {
+          "idea": "WS4 TDD order for each seam change: add the new test first (injected fake), then refactor product code to accept the seam",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:246"
+        },
+        {
+          "idea": "WS5 severity flip from warn to error in packages/core/oak-eslint/src/index.ts testRules as explicit closure signal",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:207-210"
+        },
+        {
+          "idea": "Per-file allowlist in eslint.config.ts makes the backlog physically visible and each migration deletes one line",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:34-35"
+        },
+        {
+          "idea": "WS6 pattern extraction to .agent/memory/active/patterns/ for reuse across future test authorship",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:216-220"
+        },
+        {
+          "idea": "Named adversarial reviewers: test-expert per migrated cohort, architecture-expert-fred per new DI seam",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:235-239"
+        },
+        {
+          "idea": "Non-goal: no rewriting integration tests into unit tests where the integration boundary is genuinely the subject",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:110-112"
+        },
+        {
+          "idea": "Non-goal: no new test infrastructure beyond fakes and helpers already in place",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:114-115"
+        },
+        {
+          "idea": "Existing createFakeHttpObservability() and createMockRuntimeConfig() helpers pre-inventory reduces migration scope",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:81-86"
+        },
+        {
+          "idea": "Acceptance criteria item 3: every test file in the repo passes .agent/rules/test-immediate-fails.md immediate-fail screen",
+          "class": "good",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:288"
+        },
+        {
+          "idea": "WS5 todo wording 'rules land at error severity from day one' conflicts with plan body showing current state is warn — wording imprecision could mislead executor",
+          "class": "speculative",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:34"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING — ready to begin WS1",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:1-39 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1, LOCKED — required for all plans; must be literal \"plan\")",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:1-39 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §3.1, LOCKED — required for all plans; plan carries todos so kind should be `executable`)",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:1-39 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4, LOCKED — required for all plans; ISO date appears only in body prose, not frontmatter)",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:44 (body only)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (V0 §2.3, LOCKED shape — required for executable plans; must be a strategic-choice ID or \"pending\" sentinel)",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:1-39 (frontmatter block)"
+        },
+        {
+          "issue": "`status:` field is absent from frontmatter — state is expressed only as body prose `🟡 PLANNING` (line 45); V0 requires state axes `kind`/`disposition`/`gate` in frontmatter, not body prose (V0 §2.2, §3.5)",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:45"
+        },
+        {
+          "issue": "`isProject: true` is present; V0 §2.5 explicitly drops this key (subsumed by the `projects_to` edge)",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:39"
+        },
+        {
+          "issue": "`derived_from` (misspelling of canonical `derives_from`) is not a V0 field; value is a single string, not a list of ADR/strategy refs as V0 §2.3 requires for `derives_from`",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:11"
+        },
+        {
+          "issue": "Gate should be present: body prose `🟡 PLANNING` maps to `gate: awaiting: owner-decision` per V0 §3.5 migration map, but no `gate` object with mandatory `expires` appears in frontmatter",
+          "file_line": "test-ceremony-production-factory-audit.plan.md:45"
+        }
+      ],
+      "unclassified_keys": [
+        "derived_from",
+        "sibling_brief",
+        "foundational_docs"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "test",
+      "specialist_kind": "test",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan is fully coherent from a test discipline perspective. The root-cause (incidental production-factory imports causing MaxListenersExceededWarning) is correctly diagnosed, the four design principles at lines 97-106 are sound, and the work-stream sequencing (inventory → pattern extraction → cohort migration → severity flip → report) is the correct order of operations.",
+          "file_line": "line:43-45"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS4 acceptance criterion 4 ('Test-expert audit of a representative sample confirms the tests still prove what they did before') is unverifiable as written. 'Representative sample' has no defined selection method or minimum size, which means the criterion can be declared green without meaningful coverage. A concrete sample rule (e.g. all tests in cohorts with fewer than 5 members, plus 20% random draw from larger cohorts) is needed.",
+          "file_line": "line:193-198"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS5 describes flipping the vi.* family rule from warn to error only in the ESLint plugin (line:205-206), but the WS5 todo entry at line:34 correctly references per-file allowlists as the backlog mechanism. The WS5 section body omits any mention of sweeping and deleting the per-workspace allowlist lines before or alongside the severity flip. If the flip lands before all allowlists are cleared, every allowlisted file will re-enter error state mid-CI and block unrelated PRs.",
+          "file_line": "line:204-210"
+        },
+        {
+          "severity": "low",
+          "claim": "WS3 pattern categories at lines 170-177 are plausible but not exhaustive: the plan does not mention E2E test files that use production factories for bootstrap. ADR-161 (network-free PR-check boundary) makes this category especially risky. WS1 scope at line:136 does cover E2E, but WS3 pattern shapes do not — the omission could cause E2E bootstrap cases to fall into a residual 'misc' bucket without a migration shape.",
+          "file_line": "line:168-178"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan states 'createMockRuntimeConfig() helpers exist in two places' (line:83-85). Two canonical fakes for the same collaborator is itself a test-hygiene violation of the same class being audited. WS6 patterns should explicitly flag deduplication of these helpers as a completion gate, or WS1 should note the duplication as a finding.",
+          "file_line": "line:83-85"
+        },
+        {
+          "severity": "info",
+          "claim": "The TDD note in the Risk Assessment (line:247: 'add the new test first, then refactor product code') is correct but not enforced by any acceptance criterion in WS4. It would be worth a WS4 acceptance sub-criterion or a reviewer gate item to prevent the pattern from being implemented test-after.",
+          "file_line": "line:244-249"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's ESLint violation count of 19 (line:8) has no attached date or commit SHA. If the violation count has drifted since 2026-04-18 (the plan's Last Updated date), WS1 may find a different number and confusion could arise about whether the plan is still current. A WS1 pre-step that re-runs the lint gate and records the current count before proceeding would harden this.",
+          "file_line": "line:8-10"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "WS5 flips the no-restricted-properties rule from warn to error in packages/core/oak-eslint/src/index.ts testRules — this is the plan's definitive closure condition.",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "packages/core/oak-eslint/src/shared.ts:166-167 ('no-restricted-properties': ['error', ...]) and comment shared.ts:158-159 ('Applies repo-wide at `error`'); plan WS5 todo test-ceremony-production-factory-audit.plan.md:34 ('error severity from day one ... WS5 closes when every workspace backlog allowlist is empty')"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/current/workspace-layer-separation-audit.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending and status is 'Queued — not started'; the plan is the correct work-shape artefact for upcoming audit work",
+          "file_line": "workspace-layer-separation-audit.plan.md:24-25"
+        },
+        {
+          "claim": "It is correctly placed in current/ matching its 'not started but queued for execution' lifecycle stage",
+          "file_line": "workspace-layer-separation-audit.plan.md:25"
+        },
+        {
+          "claim": "The plan explicitly defers code moves to child plans and scopes itself to audit and migration-map only — a coherent, bounded scope",
+          "file_line": "workspace-layer-separation-audit.plan.md:81-83"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, non-goals are explicit (lines 99-106), the TDD audit shape is appropriate for architecture classification work (lines 86-96), named violations are concrete (lines 49-56), enforcement design is deferred to Phase 3 rather than premature (lines 219-238), and the risk table anticipates the key collision with the sister SDK-codegen plan (line 270). No speculative scope inflation or bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Each phase has acceptance criteria and deterministic validation commands (e.g. lines 168-171, 184-187, 213-216, 235-237, 255-259). The layer taxonomy is named concretely (lines 73-78). The non-goals actively close escape hatches (lines 101-106). The learning loop commitment at line 273-277 closes the consolidation loop. This is well above V0-conformance minimum.",
+      "salvage_value": [
+        {
+          "idea": "Workspace boundary is the only valid enforcement surface for layer separation; directory/barrel splits inside one workspace are insufficient",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:66-69"
+        },
+        {
+          "idea": "Named mixed-layer violations: sdk-codegen, env, oak-eslint, design-tokens-core, sentry-mcp, search-contracts",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:49-56"
+        },
+        {
+          "idea": "Five-layer taxonomy: many-repo generic foundation, repo-local generic capability, purpose-specific reusable tool, thin Oak-wide wrapper, narrow Oak-domain leaf/configuration",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:73-78"
+        },
+        {
+          "idea": "Audit TDD shape: RED=name violations, GREEN=smallest target split, REFACTOR=consolidate into child plans and ADR updates",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:86-96"
+        },
+        {
+          "idea": "Hard non-goal: no compatibility facades, alias packages, or long-lived dual import paths",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:101-102"
+        },
+        {
+          "idea": "Hard non-goal: no same-workspace directory treated as adequate layer separation",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:104-106"
+        },
+        {
+          "idea": "Phase 2 migration tranches must be small enough to land without compatibility aliases",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:203"
+        },
+        {
+          "idea": "Phase 3 enforcement design must be staged so it does not block before migrations land",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:225-226"
+        },
+        {
+          "idea": "Tranche 4 absorbs sdk-codegen-workspace-decomposition.md rather than competing with it — explicit collision avoidance",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:270-271"
+        },
+        {
+          "idea": "Read-only static analysis phase (pnpm knip, depcruise, lint, type-check, test, check) gates audit before any migration",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:139-148"
+        },
+        {
+          "idea": "Learning loop: stable workspace-layer rules not already in ADR-154 graduate to ADR/docs; transient audit evidence moves to strategic parent or archives",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:273-277"
+        },
+        {
+          "idea": "Parent plan reference: ../future/oak-surface-isolation-and-generic-foundation-programme.plan.md as the source of strategic context",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:30-31"
+        },
+        {
+          "idea": "Risk: workspaces multiplying without real boundaries — mitigation requires every new workspace to own one coherent layer with an enforcement story",
+          "class": "good",
+          "file_line": "workspace-layer-separation-audit.plan.md:268-269"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Queued — not started",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED — all plans)",
+          "file_line": "workspace-layer-separation-audit.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED — all plans; literal \"plan\")",
+          "file_line": "workspace-layer-separation-audit.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED — all plans; plan carries `todos` so kind should be `executable`)",
+          "file_line": "workspace-layer-separation-audit.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED — all plans; date appears only in body prose at line 24, not frontmatter)",
+          "file_line": "workspace-layer-separation-audit.plan.md:24"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (LOCKED shape — required for executable plans; no frontmatter edge present)",
+          "file_line": "workspace-layer-separation-audit.plan.md:1"
+        },
+        {
+          "issue": "`status` carried only as body prose (`**Status**: Queued — not started`, line 25); V0 drops `status` and replaces it with `kind`/`disposition`/`gate` axes in frontmatter — value maps to `kind: executable` + Linear execution `backlog` but is not expressed via any V0 axis",
+          "file_line": "workspace-layer-separation-audit.plan.md:25"
+        },
+        {
+          "issue": "Parent/source relationship expressed only as body prose (`**Parent / Source**: ...`, line 30) rather than a typed `depends_on` or `derives_from` frontmatter edge",
+          "file_line": "workspace-layer-separation-audit.plan.md:30"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan correctly frames workspace boundaries as the enforcement surface for layer separation, not folder/barrel splits — this is architecturally sound and aligns with ADR-154's stated intent.",
+          "file_line": "workspace-layer-separation-audit.plan.md:66-69"
+        },
+        {
+          "severity": "info",
+          "claim": "Layer taxonomy (many-repo generic → repo-local generic → purpose-specific reusable → thin Oak-wide wrapper → narrow Oak-domain leaf) is named but not formally defined or indexed. The audit will need to resolve ambiguity at classification time if no canonical mapping document exists alongside ADR-154.",
+          "file_line": "workspace-layer-separation-audit.plan.md:72-78"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 1 acceptance criterion 4 says findings are stored 'in the strategic parent plan or a referenced evidence artefact, not only in chat' — the plan does not specify a dedicated evidence artefact path. This creates a risk that Phase 1 output lands in the parent plan prose (a moving target) rather than a stable, citable evidence file.",
+          "file_line": "workspace-layer-separation-audit.plan.md:183-187"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 3 enforcement design lists ESLint boundaries, dependency-cruiser rules, manifest checks, and a custom workspace classifier as candidate mechanisms but defers the choice. Architectural excellence requires one canonical mechanism to be selected (not left open) before child implementation plans author enforcement rules, or the enforcement surface will fragment.",
+          "file_line": "workspace-layer-separation-audit.plan.md:223-230"
+        },
+        {
+          "severity": "medium",
+          "claim": "Risk row 5 acknowledges that 'Tranche 4 must absorb sdk-codegen-workspace-decomposition.md, not compete with it' but this absorption is deferred to execution time rather than mandated in Phase 2 acceptance criteria. If the two plans execute in parallel under different agents, the absorb-vs-compete risk is unresolved at the plan level — an owner re-ratification checkpoint should be explicit in Phase 2.",
+          "file_line": "workspace-layer-separation-audit.plan.md:270-271"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 2 acceptance criterion 3 states 'Migration tranches are small enough to land without compatibility aliases' but provides no sizing constraint or definition of 'small enough'. Without a measurable bound (e.g. max changed workspaces per tranche, max import-path changes) the criterion is unverifiable and child plans may drift toward large tranches.",
+          "file_line": "workspace-layer-separation-audit.plan.md:203-204"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan is correctly scoped to audit and migration-preparation only, with no runtime code moves. This is architecturally sound sequencing — the audit artefact remains a planning document, not an implementation plan.",
+          "file_line": "workspace-layer-separation-audit.plan.md:81-84"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/future/architectural-budget-enforcement-layer.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly and correctly located in future/ with stated preconditions preventing premature promotion",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:39-45"
+        },
+        {
+          "claim": "All todos are pending and no preconditions are met yet — plan is live and actionable once parent visibility layer matures",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:6-16"
+        },
+        {
+          "claim": "Parent plan and both cited ADRs verified present — no broken authority chain",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:24-27"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every section encodes a durable constraint or contract rather than aspirational prose. The enforcement-candidate table (lines 54-61) names specific failure modes and required proof per candidate. The package API contract (lines 64-77) resolves the wildcard-export edge case with an explicit owner+expiry+removal-trigger requirement. The non-goals (lines 100-104) are tightly scoped and prevent known anti-patterns. No padding or speculative content detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is precise, internally consistent, and contains no vague commitments. The enforcement-candidate table (lines 54-61) pairs each check with a concrete failure mode and proof requirement. The gate-promotion contract (lines 82-90) names exact co-land artifacts. The review-cadence section (lines 99-106) names specific expert roles per phase. Content is well above V0-conformant — it encodes genuine architectural constraints.",
+      "salvage_value": [
+        {
+          "idea": "Gate promotion is blocked until a reviewed visibility baseline exists — premature blocking is explicitly prevented",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:39-40"
+        },
+        {
+          "idea": "Every proposed check must have a named structural response before promotion",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:41"
+        },
+        {
+          "idea": "Known baseline failures require owner-visible remediation plans with owner, expiry, and tranche id",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:42-43"
+        },
+        {
+          "idea": "Hook and CI surfaces must be proven to fail non-zero before any check can rely on them",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:44"
+        },
+        {
+          "idea": "ADR-121 and build-system docs must co-land with the actual gate promotion change",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:45"
+        },
+        {
+          "idea": "Pre-push Turbo exit-status issue must be resolved in quality-gate hardening before hook promotion evidence is valid",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:49-50"
+        },
+        {
+          "idea": "Six enforcement candidates enumerated with specific failure modes and proof requirements (directory cardinality, package exports, deep imports, nested package markers, proxy packages, workspace layers)",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:54-61"
+        },
+        {
+          "idea": "Package exports enforcement must validate declared exports contract first, then forbid bypasses through src/dist/unexported internals",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:64-67"
+        },
+        {
+          "idea": "Wildcard exports are not automatically banned but each must have owner, documentation, and expiring allowlist when hiding unstable internals",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:69-72"
+        },
+        {
+          "idea": "Allowlist removal trigger must be named; 'future narrowing' is not sufficient",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:72"
+        },
+        {
+          "idea": "Proxy-only workspaces must own a real contract/implementation or be removed/folded into the real owner",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:76-77"
+        },
+        {
+          "idea": "Gate promotion requires simultaneous updates to root scripts, pre-commit/pre-push/CI surfaces, ADR-121, build-system docs, and owning executable plan",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:82-87"
+        },
+        {
+          "idea": "Warnings are not acceptable terminal states — binary: informational with named consumer OR blocking with non-zero failure",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:89-90"
+        },
+        {
+          "idea": "No compatibility aliases, no threshold inflation, no hidden allowlists without owner+expiry, no duplicate graph tool alongside dependency-cruiser",
+          "class": "good",
+          "file_line": "future/architectural-budget-enforcement-layer.plan.md:92-97"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Strategic brief, not executable",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field `id` (kebab slug, stable graph identity)",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:1-17 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `node_type` (must be literal `\"plan\"`)",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:1-17 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `kind` (should be `strategic` per body prose at line 22)",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:1-17 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required LOCKED field `last_updated` in frontmatter; value appears only in body prose",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:21"
+        },
+        {
+          "issue": "`todos` declared in frontmatter (lines 4-16) but V0 §2.4 LOCKED forbids `todos` on `strategic` plans; body at line 22 confirms this is a strategic plan",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:4-16"
+        },
+        {
+          "issue": "Missing LOCKED edge `serves_strategic_choice` (required for executable, recommended for strategic); no strategic-choice ID present anywhere",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:1-17 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED field `promotion_trigger` in frontmatter; body carries promotion preconditions as prose section (lines 39-51) but not as the V0 `promotion_trigger` string",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:39-51"
+        },
+        {
+          "issue": "ADR reference (ADR-166) and parent plan reference appear only in body prose (lines 26-27), not as `derives_from` and (pending survey) `parent_plan` frontmatter edges",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:26-27"
+        },
+        {
+          "issue": "Emergent `status:` value in body prose (line 22) instead of V0 orthogonal frontmatter axes; emergent `lane:` label in body (line 23) which V0 §2.5 drops in favour of folder location",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:22-23"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "`todos` present on a strategic plan — LOCKED violation",
+          "evidence": "V0 §2.4 states `todos` is 'Forbidden on `strategic` plans' (LOCKED). Body line 22 declares 'Status: Strategic brief, not executable'; folder is `future/` confirming `kind: strategic`. Yet frontmatter carries four `todos` entries (lines 4-16). This is a direct LOCKED-field-placement contradiction requiring migration of todo content to body prose or promotion_trigger, not suppression.",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:4-16 vs body line 22"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "ADR-121 is referenced as the quality-gate surface ADR in the gate-promotion contract (line 86), but the parent ADR cited in the header is ADR-166 (line 27). If ADR-121 governs gate surfaces and ADR-166 governs budget-at-scale, the plan should clarify that both must be updated on gate promotion and explain the relationship — currently the dual-ADR dependency is unexplained and a reader cannot know which is authoritative for hook/CI gate surface changes.",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:27,86"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan records a known pre-push Turbo exit-status issue as a precondition blocker (line 49-50) but names no owning plan, issue tracker entry, or ADR. If the issue is not tracked elsewhere it can silently prevent promotion with no observable owner or expiry, violating the same allowlist discipline the plan imposes on enforcement candidates.",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:49-50"
+        },
+        {
+          "severity": "low",
+          "claim": "The enforcement-candidates table (lines 54-61) lists 'workspace layers' with a failure mode of 'fails non-zero once blocking; baseline exceptions need owner, expiry, and tranche id', but the plan does not define what constitutes an architectural layer or how a workspace is determined to host multiple layers. Without a formal definition, the check cannot be implemented deterministically and the gate-promotion proof requirement cannot be satisfied.",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:61"
+        },
+        {
+          "severity": "low",
+          "claim": "Wildcard-export allowlists are required to carry a 'removal trigger' (line 73), but the plan does not specify where these allowlists live (config file, package.json field, separate manifest) or how they are machine-validated at gate time. The contractual requirement is stated but the enforcement surface for the requirement itself is absent.",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:70-74"
+        },
+        {
+          "severity": "info",
+          "claim": "The Non-Goals section (lines 96-99) explicitly forbids a duplicate graph tool while dependency-cruiser owns the graph gate. This is sound and prevents tool proliferation, but the plan does not cross-reference the dependency-cruiser configuration or the check it owns, making it impossible to verify the non-goal is still honoured if the graph gate ownership changes.",
+          "file_line": "architectural-budget-enforcement-layer.plan.md:99"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/future/architectural-budget-system-across-scales.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly a strategic parent, not executable, with todos gating on child-plan readiness — still forward-looking and none of its promotion triggers have fired",
+          "file_line": "lines 4, 7-16"
+        },
+        {
+          "claim": "Domain boundaries out-of-scope list shows intentional restraint — this is a well-scoped coordinator, not an abandoned stub",
+          "file_line": "lines 66-70"
+        },
+        {
+          "claim": "Child-plan routing table has four named children in defined lanes — the coordination value is active",
+          "file_line": "lines 74-79"
+        },
+        {
+          "claim": "Review cadence is detailed and role-specific — investment in future governance, not orphaned content",
+          "file_line": "lines 83-104"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every idea in the plan is principled and internally consistent: the visibility-before-enforcement sequencing (lines 51-53), anti-gaming rules (lines 62-63), child-plan routing with explicit promotion triggers (lines 74-79), and documentation-propagation constraints (lines 119-130) are all coherent architectural hygiene. No speculative or bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan contains: a clear scope split (lines 57-70), a child-plan table with lanes and promotion triggers (lines 74-79), a multi-phase review cadence (lines 83-104), explicit success signals (lines 108-115), documentation-propagation constraints (lines 119-130), and a risk table with mitigations (lines 132-140). This is well above V0-conformant boilerplate — the content is substantive and specific.",
+      "salvage_value": [
+        {
+          "idea": "Cross-scale budget vocabulary: complexity reduced at one scale must not migrate to the next scale up or sideways into a proxy workspace",
+          "class": "good",
+          "file_line": "lines 47-49"
+        },
+        {
+          "idea": "Budgets are architectural bounds, not tolerated debt; existing hard gates stay hard",
+          "class": "good",
+          "file_line": "lines 51-52"
+        },
+        {
+          "idea": "Visibility-before-enforcement doctrine: new diagnostic layers start as reports, promoted only when they have a deterministic failure mode and a proven structural response",
+          "class": "good",
+          "file_line": "lines 52-53"
+        },
+        {
+          "idea": "Anti-gaming rules: artificial splits and proxy APIs are architectural violations, not valid budget compliance",
+          "class": "good",
+          "file_line": "lines 62-63"
+        },
+        {
+          "idea": "Child-plan routing table with one owner per concern and explicit promotion triggers keyed on evidence not calendar",
+          "class": "good",
+          "file_line": "lines 74-79"
+        },
+        {
+          "idea": "Multi-phase review cadence differentiated by planning vs implementation phase and by change type",
+          "class": "good",
+          "file_line": "lines 83-104"
+        },
+        {
+          "idea": "Success-signal checklist anchoring when ADR-166 and ADR-121 may be updated",
+          "class": "good",
+          "file_line": "lines 108-115"
+        },
+        {
+          "idea": "Documentation-propagation constraints: Practice Core and ADRs 119/124 unchanged by this plan; ADR-121 updated only on gate promotion",
+          "class": "good",
+          "file_line": "lines 119-130"
+        },
+        {
+          "idea": "Risk: passive visibility reports decay without named consumers — mitigation requires each report to name a consumer, trigger, and promotion path",
+          "class": "good",
+          "file_line": "lines 136-137"
+        },
+        {
+          "idea": "Risk: enforcement landing before remediation paths are ready — mitigation is enforcement plan stays future until visibility and remediation complete",
+          "class": "good",
+          "file_line": "lines 139-140"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Strategic brief, not executable",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1 LOCKED: required for all plans)",
+          "file_line": "architectural-budget-system-across-scales.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1 LOCKED: must be literal `plan`; required for all)",
+          "file_line": "architectural-budget-system-across-scales.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2 LOCKED: required for all plans; body prose at line 22 encodes the value as prose, not as the frontmatter axis)",
+          "file_line": "architectural-budget-system-across-scales.plan.md:22"
+        },
+        {
+          "issue": "`last_updated` is in the body as prose (`**Last Updated**: 2026-04-29`) not in frontmatter (V0 §2.4 LOCKED: must be a frontmatter field)",
+          "file_line": "architectural-budget-system-across-scales.plan.md:23"
+        },
+        {
+          "issue": "`status:` senses carried as body prose (`**Status**: Strategic brief, not executable`, `**Lane**: future/`) rather than frontmatter axes `kind`/`disposition`/`gate` (V0 §2.2; migration map §3.5 maps this to `kind: strategic` but that axis is absent from frontmatter)",
+          "file_line": "architectural-budget-system-across-scales.plan.md:22"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent; body identifies this as a strategic plan so it is recommended (V0 §2.3 LOCKED shape); no `pending` sentinel present either",
+          "file_line": "architectural-budget-system-across-scales.plan.md:1"
+        },
+        {
+          "issue": "`todos` present on a plan the body identifies as `strategic`; V0 §2.4 LOCKED explicitly forbids `todos` on `strategic` plans",
+          "file_line": "architectural-budget-system-across-scales.plan.md:4"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter (`derives_from`, `depends_on`, `thread`) despite body referencing ADR-166 and multiple child/sibling plans (V0 §2.3)",
+          "file_line": "architectural-budget-system-across-scales.plan.md:25"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "`todos` on a strategic plan",
+          "evidence": "Frontmatter carries `todos` (lines 4-17) while the body at line 22 states `**Status**: Strategic brief, not executable`. V0 §2.4 is LOCKED: `todos` is `Forbidden on strategic plans`. The presence of four pending todos on what is declared a strategic plan directly contradicts the LOCKED discriminated-union invariant (§6 Zod sketch: `strategic` branch carries `promotion_trigger`, not `todos`).",
+          "file_line": "architectural-budget-system-across-scales.plan.md:4"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan is correctly scoped as a strategic parent with no executable thresholds; domain boundaries explicitly exclude numeric threshold selection before baseline evidence exists, which is sound architectural discipline.",
+          "file_line": "architectural-budget-system-across-scales.plan.md:56-70"
+        },
+        {
+          "severity": "low",
+          "claim": "The child plan table at line 78 cross-references directory-complexity-enablement.execution.plan.md as already in lane 'current/', but the promotion trigger column for the visibility-layer child (line 76) remains open-ended ('Workspace audit or owner direction needs budget evidence'). If the workspace-layer-separation-audit advances without triggering visibility-layer promotion, the sequencing dependency silently stalls. No gate or event is wired to drive the transition.",
+          "file_line": "architectural-budget-system-across-scales.plan.md:74-79"
+        },
+        {
+          "severity": "low",
+          "claim": "ADR-166 is cited as the backing decision (line 25) but its content is not verified here. The risk table at line 136 notes 'Budget language implies allowed violations' and mitigates via ADR-166's definition of bounds. If ADR-166 drifts from the plan's intent without the alignment todo (id: doctrine-and-scale-model, line 5-7) being executed, the mitigation becomes hollow. The todo has no assigned trigger or owner.",
+          "file_line": "architectural-budget-system-across-scales.plan.md:5-7,136"
+        },
+        {
+          "severity": "info",
+          "claim": "Anti-gaming rules requiring 'capability boundaries and one-way dependencies' (line 139) are stated in the risk table but not elaborated in-plan. The rules are presumably in ADR-166; if ADR-166 is the only home, losing ADR-166 loses the anti-gaming contract. This is acceptable for a strategic brief but should be noted during visibility-layer promotion.",
+          "file_line": "architectural-budget-system-across-scales.plan.md:139"
+        },
+        {
+          "severity": "info",
+          "claim": "The visibility-before-enforcement doctrine stated in the domain boundaries (line 57) is correctly mirrored in the enforcement-layer promotion trigger (line 15-16: 'only after visibility, remediation paths, and gate failure modes are deterministic'). Sequencing logic is internally consistent.",
+          "file_line": "architectural-budget-system-across-scales.plan.md:57,15-16"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/future/architectural-budget-visibility-layer.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Explicit promotion trigger defined: promote to current/ when workspace layer separation audit needs repo-wide budget evidence or owner asks to begin enforcing a new budget scale",
+          "file_line": "file:90-95"
+        },
+        {
+          "claim": "Lane declared as future/ in frontmatter and body, status is 'Strategic brief, not executable'",
+          "file_line": "file:23-24"
+        },
+        {
+          "claim": "Named consumers table with four concrete downstream plans shows the plan is actively referenced in the broader architecture plan estate",
+          "file_line": "file:38-45"
+        },
+        {
+          "claim": "Parent plan and ADR-166 cited, giving the plan an established authority chain",
+          "file_line": "file:25-27"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every idea in the plan is grounded in a concrete consumer or enforcement concern. The non-goals are precise (file:82-86). The metric list is specific (file:54-65). The promotion discipline is tight (file:89-95). No speculative scope inflation is visible.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is internally consistent, terse, and well-structured. Named consumers are tabulated with trigger and usage (file:38-45). Validation expectations enumerate concrete falsifiable conditions (file:100-109). Non-goals are explicit and appropriately narrow (file:82-86). The review cadence names specific expert reviewers for each lifecycle stage (file:112-117).",
+      "salvage_value": [
+        {
+          "idea": "Named-consumer gate: a metric may not be added without a named consumer plan and trigger",
+          "class": "good",
+          "file_line": "file:47"
+        },
+        {
+          "idea": "Report provenance contract: every report carries command+version, git SHA, timestamp, exclusions version, output path, and owning consumer plan",
+          "class": "good",
+          "file_line": "file:67-72"
+        },
+        {
+          "idea": "Three-tier report separation: enforced failures / visible-only pressure / future enforcement candidates",
+          "class": "good",
+          "file_line": "file:74-78"
+        },
+        {
+          "idea": "Promotion-deferred execution: no execution decisions until a concrete consumer pull exists",
+          "class": "good",
+          "file_line": "file:89-96"
+        },
+        {
+          "idea": "First-slice discipline: the first executable slice serves exactly one named consumer trigger before expansion",
+          "class": "good",
+          "file_line": "file:48-50"
+        },
+        {
+          "idea": "Metric contract: workspace file counts, source lines, crowded directories, export counts and shapes, cross-workspace import candidates, dependency fan-in/fan-out, dependency-cruiser cycles/forbidden-edges/orphans, nested package.json markers",
+          "class": "good",
+          "file_line": "file:54-65"
+        },
+        {
+          "idea": "Explicit exclusions: generated, fixture, cache, declaration, and documentation files excluded from metrics",
+          "class": "good",
+          "file_line": "file:65"
+        },
+        {
+          "idea": "Non-goal: no duplicate layer/workspace matrix outside the workspace audit plan",
+          "class": "good",
+          "file_line": "file:86"
+        },
+        {
+          "idea": "Non-goal: no dashboard or new tool if a simple generated report is sufficient",
+          "class": "good",
+          "file_line": "file:85"
+        },
+        {
+          "idea": "Validation checklist: deterministic+sorted report, explicit+reviewed exclusions, existing gate failures not hidden as informational metrics, every metric in at least one consumer section, every consumer citation names report version, owning consumer plan updated or records no-op rationale, no repo-tracked file rewritten outside explicit generation steps",
+          "class": "good",
+          "file_line": "file:100-109"
+        },
+        {
+          "idea": "Review cadence naming specific expert reviewers at three lifecycle stages (pre-implementation, post-contract design, pre-completion)",
+          "class": "good",
+          "file_line": "file:112-117"
+        },
+        {
+          "idea": "Four named consumer plans in a routing table with trigger and usage columns",
+          "class": "good",
+          "file_line": "file:38-45"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` (kebab slug, stable) — absent from frontmatter",
+          "file_line": "architectural-budget-visibility-layer.plan.md:1-17 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type` (must be literal `plan`) — absent from frontmatter",
+          "file_line": "architectural-budget-visibility-layer.plan.md:1-17 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` (enum `strategic | executable`) — absent from frontmatter; body prose at line 23 says 'Strategic brief, not executable' but is not a frontmatter field",
+          "file_line": "architectural-budget-visibility-layer.plan.md:23"
+        },
+        {
+          "issue": "Missing LOCKED required field `last_updated` (ISO date) — present in body prose at line 22 as `**Last Updated**: 2026-04-29` but absent as a frontmatter field",
+          "file_line": "architectural-budget-visibility-layer.plan.md:22"
+        },
+        {
+          "issue": "`todos` is present in frontmatter (lines 4-16) but the body identifies this as a strategic plan ('Strategic brief, not executable', line 23); V0 §2.4 LOCKED: `todos` forbidden on `strategic` plans",
+          "file_line": "architectural-budget-visibility-layer.plan.md:4-16"
+        },
+        {
+          "issue": "`promotion_trigger` field absent from frontmatter; body has a 'Promotion Trigger' section (line 88) in prose; V0 §2.4 LOCKED: `promotion_trigger` required for `strategic` plans and must be a frontmatter field",
+          "file_line": "architectural-budget-visibility-layer.plan.md:88-96"
+        },
+        {
+          "issue": "No typed edge fields in frontmatter — `serves_strategic_choice`, `derives_from`, `thread`, `depends_on` all absent; body references a parent plan (line 25) and ADR-166 (line 27) as prose only, not as V0 edge fields",
+          "file_line": "architectural-budget-visibility-layer.plan.md:25-27"
+        },
+        {
+          "issue": "Emergent body fields `Status` (line 23), `Lane` (line 24), `Parent` (line 25), `ADR` (line 27) carry state/authority that V0 requires in frontmatter; V0 §2.5 drops `status` and `lifecycle`/`lane`; `Parent` is SURVEY-MAY-ADD-EDGES (`parent_plan`); ADR ref belongs in `derives_from` edge",
+          "file_line": "architectural-budget-visibility-layer.plan.md:22-27"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "`todos` present on a plan the body declares `strategic` contradicts V0 §2.4 LOCKED rule that `todos` is forbidden on `strategic` plans and `promotion_trigger` is required instead. Owner must resolve: either set `kind: executable` (with `serves_strategic_choice`) and remove `promotion_trigger` body section, or remove `todos` and add `promotion_trigger` as a frontmatter field.",
+          "evidence": "Body line 23: '**Status**: Strategic brief, not executable'; frontmatter lines 4-16: `todos` list with four items; V0 §2.4: 'Forbidden on `strategic` plans' for `todos`, and `promotion_trigger` 'Forbidden on `executable` plans'.",
+          "file_line": "architectural-budget-visibility-layer.plan.md:4-16 and :23"
+        },
+        {
+          "item": "Body `Parent:` prose reference to `architectural-budget-system-across-scales.plan.md` (line 25) is an authority/containment relationship that V0 has no frontmatter edge for in V0 (`parent_plan` is SURVEY-MAY-ADD-EDGES per §2.5). This is not a contradiction of a LOCKED decision but surfaces as an estate signal for the survey: genuine containment exists here that V0 does not yet model.",
+          "evidence": "Body line 25: 'Parent: [Architectural Budget System Across Scales](architectural-budget-system-across-scales.plan.md)'; V0 §2.5: '`parent_plan` — SURVEY-MAY-ADD-EDGES — the survey verifies whether genuine containment exists distinct from `depends_on`/`supersedes`.'",
+          "file_line": "architectural-budget-visibility-layer.plan.md:25"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan is correctly scoped as a read-only visibility layer with no blocking checks, no threshold selection before baseline data, and no new tooling unless a generated report is insufficient. The non-goals (lines 83-87) are architecturally sound and reflect good pre-enforcement discipline.",
+          "file_line": "architectural-budget-visibility-layer.plan.md:83-87"
+        },
+        {
+          "severity": "info",
+          "claim": "Consumer-gated metric admission ('if a metric has no named consumer it must not be added', line 47) is a strong architectural constraint that prevents metric sprawl. The four named consumers in the table (lines 39-45) map coherently to distinct concerns: layer separation, directory complexity, enforcement promotion, and gate hardening.",
+          "file_line": "architectural-budget-visibility-layer.plan.md:47"
+        },
+        {
+          "severity": "low",
+          "claim": "The metric contract (lines 54-80) includes 'cross-workspace internal or deep import candidates' and 'dependency-cruiser cycles, forbidden edges, and orphans' but does not name the tooling or schema that produces these. At promotion time, the tool choice (dependency-cruiser version, config path, ruleset) needs to be pinned in the executable plan to ensure the report is deterministic and reproducible across machines and CI. This is deferred intentionally but should be an explicit promotion precondition.",
+          "file_line": "architectural-budget-visibility-layer.plan.md:59-63"
+        },
+        {
+          "severity": "low",
+          "claim": "The report metadata requirements (lines 66-71) mandate 'command and version used', 'git SHA', 'timestamp', 'exclusions version', 'output path', and 'owning consumer plan and phase'. However, there is no specified storage location or retention policy for produced reports. If reports are not repo-tracked, the 'every consumer citation names the report version it used' validation expectation (line 106) cannot be verified by a later agent or reviewer.",
+          "file_line": "architectural-budget-visibility-layer.plan.md:66-71"
+        },
+        {
+          "severity": "medium",
+          "claim": "The validation expectation at line 108 states 'no repo-tracked file is rewritten unless the command is explicitly a report generation step in the executable plan'. This is sound, but the plan does not specify whether generated reports are repo-tracked or gitignored. If reports are gitignored (a common pattern), the consumer-citation traceability requirement at line 106 cannot be met without an alternative storage artefact (e.g., a manifest file). The promotion checklist must resolve this tension before any executable slice begins.",
+          "file_line": "architectural-budget-visibility-layer.plan.md:106-109"
+        },
+        {
+          "severity": "info",
+          "claim": "The promotion trigger (lines 90-95) is event-driven rather than calendar-driven and is dual-conditioned on either a consumer needing evidence or the owner directing enforcement. This is architecturally correct: it avoids premature promotion while providing two concrete entry points. No concern.",
+          "file_line": "architectural-budget-visibility-layer.plan.md:90-95"
+        },
+        {
+          "severity": "info",
+          "claim": "The review cadence (lines 112-116) correctly gates architecture-expert review before implementation and after contract design. The dual architecture-expert pattern (betty pre-implementation, wilma before completion) reflects appropriate check-in points for a cross-cutting visibility layer.",
+          "file_line": "architectural-budget-visibility-layer.plan.md:112-116"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/future/build-pipeline-composition-safeguards.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is STRATEGIC BRIEF (not yet executable); brief explicitly states execution decisions finalise at promotion to current/",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:3"
+        },
+        {
+          "claim": "Explicit promotion triggers are defined (second incident, owner direction, near-violation, upstream saga resolves)",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:186-197"
+        },
+        {
+          "claim": "Folder lane is future/ which matches the not-yet-promotable status",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:1"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The brief is evidence-grounded with a precisely reconstructed 7-step failure chain (lines 8-43), records explicit owner rejections that prevent future rediscovery of bad mitigations (lines 63-75), proposes mechanism candidates that directly address the root cause (lines 90-103), and delineates open questions that gate promotion (lines 112-121). No padding, no speculative scope creep. The investigation methodology section (lines 124-169) adds orthogonal doctrinal value as a Pending-Graduation candidate.",
+      "content_quality": "strong",
+      "content_quality_note": "The 7-layer root-cause chain at lines 8-43 is unusually precise and self-consistent; the explicit rejection decisions at lines 63-75 are rare and valuable (they close off rediscovery paths); the mechanism candidates at lines 90-103 map directly to the principle stated at lines 82-84; the open questions at lines 112-121 are concrete and decision-shaped rather than vague. The Pending-Graduation candidate for investigation methodology (lines 164-169) is correctly scoped as a doctrinal artefact that travels independently.",
+      "salvage_value": [
+        {
+          "idea": "Pin GitHub Action SHAs from maintainer Latest release, not highest tag number",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:82-84"
+        },
+        {
+          "idea": "Local validator script (validate-action-pin-hygiene.ts) queries GH API to compare pinned SHA to Latest SHA and fails on divergence",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:90-97"
+        },
+        {
+          "idea": "Dependabot config constrained to propose bumps only when Latest marker moves, not highest tag",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:97-101"
+        },
+        {
+          "idea": "Pre-commit hook blocking workflow diffs that introduce SHA not matching Latest",
+          "class": "speculative",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:102-103"
+        },
+        {
+          "idea": "Distinguish stale-pin (bump proposal) from diverged-at-write-time pin (block) in validator output",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:118-121"
+        },
+        {
+          "idea": "Allowlist or per-line annotation mechanism for deliberate pre-release pins",
+          "class": "speculative",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:113-116"
+        },
+        {
+          "idea": "Investigation methodology: read build log first before hypothesis lists",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:150-153"
+        },
+        {
+          "idea": "Workspace-first before remote tooling in diagnostics",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:153-155"
+        },
+        {
+          "idea": "Check upstream issue tracker before local theory-spinning on environment-inconsistent tool behaviour",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:155-158"
+        },
+        {
+          "idea": "Version archaeology: identify the precise pin that authored a regression when highest-tag pins are involved",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:158-161"
+        },
+        {
+          "idea": "Graduation of investigation methodology as composition-obscurity-investigation-methodology into PDR-038/039 discipline",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:163-169"
+        },
+        {
+          "idea": "Multi-document pnpm-lock.yaml shape gate — rejected as too brittle because pnpm 11 stable will legitimately produce multi-doc lockfiles",
+          "class": "bad",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:68-75"
+        },
+        {
+          "idea": "Disabling pnpm managePackageManagerVersions — rejected by owner as removing a canonical default feature",
+          "class": "bad",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:63-66"
+        },
+        {
+          "idea": "Validator new-home dependency on scripts-validator-family-workspace-migration plan; do not author in legacy scripts/ location",
+          "class": "good",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:177-180"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🔵 STRATEGIC BRIEF (not yet executable)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block. The file opens with a heading at line 1; the bold **Status** and **Last Updated** fields at lines 3-4 are inline body prose, not structured frontmatter.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:1"
+        },
+        {
+          "issue": "Required field `id` absent — no stable kebab slug identity declared.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:1"
+        },
+        {
+          "issue": "Required field `node_type` absent — discriminator literal `\"plan\"` not present.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:1"
+        },
+        {
+          "issue": "Required field `name` absent (V0 §2.1 LOCKED; ADR-117 §6 mandates it).",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:1"
+        },
+        {
+          "issue": "Required field `overview` absent (V0 §2.1 LOCKED).",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:1"
+        },
+        {
+          "issue": "Required field `kind` absent — inferred as `strategic` from inline status prose at line 3 but not declared as a frontmatter field (V0 §2.2 LOCKED).",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:3"
+        },
+        {
+          "issue": "Required field `last_updated` absent from frontmatter — date `2026-04-30` appears only as inline body prose at line 4 (V0 §2.4 LOCKED).",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:4"
+        },
+        {
+          "issue": "Required field `promotion_trigger` absent from frontmatter — the promotion-trigger substance exists but is spread across body prose sections at lines 184-197 and 218-227 rather than the V0-mandated frontmatter field (V0 §2.4 LOCKED for strategic plans).",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:218"
+        },
+        {
+          "issue": "Typed edges `derives_from` (PDR-038, PDR-039) and `depends_on` (scripts-validator-family-workspace-migration plan) are expressed as body prose references only, not declared in frontmatter (V0 §2.3).",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:167"
+        },
+        {
+          "issue": "Emergent inline `status:` pattern (`**Status**: 🔵 STRATEGIC BRIEF`) is the exact overloaded field V0 §2.2 replaces with `kind`/`disposition`/`gate`; still in use here.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:3"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Both PDR cross-references use a path rooted at `practice-core/decision-records/` (relative: `../../../practice-core/decision-records/PDR-038-...` and `PDR-039-...`), but the actual PDR files live under `.agent/practice-core/decision-records/`. The top-level `practice-core/` directory does not exist. These links are broken and will misdirect any promotion-time reader who follows them.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:167-169"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan states 'currently we don't have [a dependabot.yml]' (Mechanism candidates section), but `.github/dependabot.yml` exists and already covers `github-actions` on a weekly schedule with no Latest-marker constraint. The risk it flags ('Without a config constraint, Dependabot will keep proposing bumps from v5.0.0 to highest-v6.0.x') is live today, not hypothetical. The plan's description of the current state is factually wrong, making the gap more urgent than the brief conveys.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:98-100"
+        },
+        {
+          "severity": "medium",
+          "claim": "The validator is described as `scripts/validate-action-pin-hygiene.ts` following the 'canonical validator family pattern from `validate-portability.ts` etc.'. However, the validator family has already migrated: `validate-portability.ts` lives at `agent-tools/src/validators/portability/validate-portability.ts`, not under `scripts/`. The Dependencies section acknowledges `scripts-validator-family-workspace-migration.plan.md` and says 'should not author in the legacy location once that migration begins', but the migration is already effective — `scripts/validate-*.ts` files are absent from the tree. The plan should reference the current home (`agent-tools/src/validators/`) rather than deferring this to promotion time.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:91-93 and 176-179"
+        },
+        {
+          "severity": "low",
+          "claim": "The open question on 'how are deliberate pre-release pins handled' (allowlist file vs per-line annotation vs strict-mode-with-overrides) is left entirely open for promotion. This is a genuine design fork that affects the validator's contract and the pre-commit hook's blocking behaviour. Leaving it deferred is appropriate for a STRATEGIC BRIEF, but the plan should name the default assumption to avoid a contested decision landing mid-promotion under time pressure.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:114-118"
+        },
+        {
+          "severity": "info",
+          "claim": "The 7-step failure chain reconstruction (lines 13-38) is architecturally precise and accurately distinguishes the multi-doc preamble write (pnpm 11 bookkeeping) from the actual install run (pnpm 10.33.2). The root-cause isolation — fresh-state full-parse path vs populated node_modules fast path — explains the local/CI asymmetry correctly and is well-evidenced.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:13-44"
+        },
+        {
+          "severity": "info",
+          "claim": "The explicit owner rejection of disabling `managePackageManagerVersions` is recorded as a Non-Goal with rationale. This is a correctly captured architectural constraint and needs no further action.",
+          "file_line": "build-pipeline-composition-safeguards.plan.md:63-67"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly a placeholder held in future/ with a well-defined promotion trigger; nothing to archive or rewrite",
+          "file_line": "future/clerk-cli-adoption.plan.md:30-31"
+        },
+        {
+          "claim": "All todos are pending; no execution has started that would make this obsolete",
+          "file_line": "future/clerk-cli-adoption.plan.md:9,12,15,18,21,24"
+        },
+        {
+          "claim": "Depends on a live active/ plan (sentry-otel-integration.execution.plan.md), confirming the sequencing is still valid",
+          "file_line": "future/clerk-cli-adoption.plan.md:5"
+        },
+        {
+          "claim": "Promotion trigger criteria are concrete and owner-verifiable",
+          "file_line": "future/clerk-cli-adoption.plan.md:114-131"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is well-scoped: it has a clear non-goals boundary (line 57-69), a concrete dependency ordering rationale (line 73-83), a risk inventory with named mitigations (line 99-113), and a promotion trigger that prevents premature execution (line 114-131). Every todo maps to a real unknown or decision. No padding or speculative scope-creep detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The six todos are scoped to distinct decision points (surface research, use-case mapping, install-shape, repo-local config, skill update, failure hygiene) rather than vague tasks. The risks section names specific technical unknowns (--prompt stability at line 111-113, auth-token sprawl at line 106-109, repo-local config gap at line 102-106) with actionable mitigations. The promotion trigger is concrete and testable (line 116-126). This is above average quality for a future/ placeholder.",
+      "salvage_value": [
+        {
+          "idea": "Extend CLI-as-infrastructure pattern from Sentry to Clerk CLI using identical pnpm-dep + repo-tracked config + fail-fast approach",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:43-49"
+        },
+        {
+          "idea": "Prefer pnpm devDependency install for Clerk CLI (@clerk/cli if published); fall back to README prereq + fail-fast warning",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:13-15"
+        },
+        {
+          "idea": "Agent skills for Clerk should explicitly reference --mode agent and --prompt output as the agent-facing capability",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:19-22"
+        },
+        {
+          "idea": "Add fail-fast warning patterns to any script calling clerk (matching lsof/bun/jq/gitleaks/sentry pattern)",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:22-24"
+        },
+        {
+          "idea": "CI must not depend on interactive clerk auth login; use scoped API keys via env instead",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:106-109"
+        },
+        {
+          "idea": "Confirm whether Clerk CLI supports repo-local config (analogous to .sentryclirc); if not, mandate --app <id> flag in all scripts",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:17-18"
+        },
+        {
+          "idea": "Document Clerk CLI subcommand surface (init/auth/link/config/env/api/doctor/open) in docs/operations/",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:7-10"
+        },
+        {
+          "idea": "Produce a use-case to workspace matrix mapping Clerk-integrated workspaces to dev-time vs CI-time CLI need",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:11-13"
+        },
+        {
+          "idea": "Cross-reference opportunity: Codex compatibility lane may benefit from clerk config schema and clerk api for OAuth client metadata diagnostics",
+          "class": "speculative",
+          "file_line": "future/clerk-cli-adoption.plan.md:65-69"
+        },
+        {
+          "idea": "Pin Clerk CLI version carefully and monitor upgrade cadence given tool youth",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:100-102"
+        },
+        {
+          "idea": "Verify --prompt output format stability before building agent workflows on top of it",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:111-113"
+        },
+        {
+          "idea": "After completion, reconcile Clerk and Sentry CLI patterns into a single shared CLI-as-infrastructure operating doctrine",
+          "class": "good",
+          "file_line": "future/clerk-cli-adoption.plan.md:166-170"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "depends_on"
+      ],
+      "status_raw": "Strategic brief — not yet executable",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field: `id` — graph node identity; absent from frontmatter",
+          "file_line": "clerk-cli-adoption.plan.md:1-25 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field: `node_type` — registry discriminator literal `\"plan\"` absent",
+          "file_line": "clerk-cli-adoption.plan.md:1-25 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field: `kind` — must be `strategic | executable`; absent; plan self-describes as strategic via body prose and folder location but the axis is not set in frontmatter",
+          "file_line": "clerk-cli-adoption.plan.md:1-25 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field: `last_updated` — present in body prose (line 29) not in frontmatter where V0 requires it",
+          "file_line": "clerk-cli-adoption.plan.md:29"
+        },
+        {
+          "issue": "`depends_on` entry is a bare string path, not the required V0 object shape `{ plan, kind: blocking | beneficial }`; `kind` classification is absent",
+          "file_line": "clerk-cli-adoption.plan.md:5"
+        },
+        {
+          "issue": "`todos` present in frontmatter but plan is self-declared `strategic` (body line 31, folder `future/`); V0 forbids `todos` on `strategic` plans and requires `promotion_trigger` instead",
+          "file_line": "clerk-cli-adoption.plan.md:6-24"
+        },
+        {
+          "issue": "`promotion_trigger` (LOCKED for `strategic` plans) is absent from frontmatter; the promotion-trigger content is in the body (line 114) but not as the frontmatter field V0 requires",
+          "file_line": "clerk-cli-adoption.plan.md:114-131"
+        },
+        {
+          "issue": "`status:` raw value (`Strategic brief — not yet executable`) lives in body prose (line 31), not frontmatter; V0 drops `status:` entirely and replaces it with frontmatter axes — the body-only placement means `kind` and `gate` axes cannot be machine-read",
+          "file_line": "clerk-cli-adoption.plan.md:31"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent from frontmatter; V0 marks this required for `executable` plans and recommended for `strategic`; no strategic-choice ID or `\"pending\"` sentinel present",
+          "file_line": "clerk-cli-adoption.plan.md:1-25 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Skill update todo (agent-skill-update) cites '.claude/skills/clerk/*' and '.agents/skills/clerk-expert/SKILL.md' as the target paths. Neither path exists. The live Clerk expert lives at '.claude/agents/clerk-expert.md'. The plan will misdirect implementation if promoted without updating these paths.",
+          "file_line": "clerk-cli-adoption.plan.md:20-21 and :148"
+        },
+        {
+          "severity": "low",
+          "claim": "Both sequencing prerequisites (parent Sentry plan closure and Follow-up hygiene lane) are confirmed COMPLETE as of 2026-04-17. The plan's stated precondition 'must land first' is already satisfied, meaning the only real gate to promotion is a demand trigger — not a sequencing wait. This changes the promotion logic but is not an error in the plan.",
+          "file_line": "clerk-cli-adoption.plan.md:72-82 (Dependencies section)"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes '@clerk/cli' or a pnpm-installable package shape may exist on npm (line 139: 'Probe for a pnpm-installable shape first'). This is noted as unknown/TBC. The Clerk CLI GitHub repo is cited but its npm publication status is unverified in the plan. Rule 3.5 compliance depends entirely on this assumption resolving positively; if it does not, the installation shape falls back to README prereq — which the plan acknowledges but treats as a fallback rather than a likely outcome.",
+          "file_line": "clerk-cli-adoption.plan.md:13-14 (choose-installation-shape todo) and :139-141"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan acknowledges that '--prompt output format stability' is unknown before building agent workflows on top of it. This is correctly flagged as a risk at line 110-111 but is not reflected in any acceptance criterion in the success signals section — the success signals assume the CLI is stable and agent-discoverable without a verification gate.",
+          "file_line": "clerk-cli-adoption.plan.md:100-111 (Risks) and :85-96 (Success Signals)"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan cross-references 'codex-mcp-server-compatibility.plan.md' for Codex-specific auth compatibility (line 65). That plan exists at the cited path. The cross-reference is read-only (discovery opportunity, not scope), which is correctly bounded.",
+          "file_line": "clerk-cli-adoption.plan.md:63-66"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/architecture-and-infrastructure/future/codex-mcp-server-compatibility.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is correctly scoped as future/ and self-blocks via explicit promotion trigger requiring Sentry lane closure",
+          "file_line": "line 314-323"
+        },
+        {
+          "claim": "All six todos remain pending — no work has started, plan is not stale-complete",
+          "file_line": "lines 7-24"
+        },
+        {
+          "claim": "Live diagnostic evidence captured 2026-04-16 is unique institutional memory not held elsewhere in the estate (Cursor regression, split metadata surface, openid rejection)",
+          "file_line": "lines 44-67"
+        },
+        {
+          "claim": "Decision matrix and hypothesis framework are immediately re-usable when Sentry lane closes",
+          "file_line": "lines 222-228"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan holds genuine diagnostic value: live evidence of a confirmed regression (Cursor broke when shared metadata was broadened, line 51-54), a mechanically sound hypothesis-ranking framework (lines 199-228), and clear criteria that prevent premature promotion (lines 314-323). No speculative scope creep; non-goals explicitly exclude generic rewrites (lines 103-110).",
+      "content_quality": "strong",
+      "content_quality_note": "The evidence capture template (lines 179-193), ranked hypotheses with evidence directions (lines 201-219), decision matrix with reversibility ratings (lines 222-228), multi-client regression checklist (lines 252-262), and explicit risks table (lines 307-312) are all operationally useful and internally consistent. The plan would be executable immediately once the sequencing dependency (Sentry lane) clears, with no gaps requiring re-authoring.",
+      "salvage_value": [
+        {
+          "idea": "PRM and AS metadata advertise different scopes_supported sets — this split is a confirmed real inconsistency that any fix must address",
+          "class": "good",
+          "file_line": "lines 56-59, 78-80"
+        },
+        {
+          "idea": "Broadening shared scopes_supported broke Cursor — this is a hard regression lesson and must inform any future auth metadata change",
+          "class": "good",
+          "file_line": "lines 51-54"
+        },
+        {
+          "idea": "H1: Codex sends openid in authorise scope and Clerk rejects it — highest-evidence hypothesis",
+          "class": "good",
+          "file_line": "lines 201-205"
+        },
+        {
+          "idea": "H2: Codex reads AS metadata scopes_supported rather than PRM — server split metadata surface is a real contributor",
+          "class": "good",
+          "file_line": "lines 206-210"
+        },
+        {
+          "idea": "H3: Clerk DCR scope policy disallows openid for dynamic clients regardless of server advertising",
+          "class": "speculative",
+          "file_line": "lines 211-215"
+        },
+        {
+          "idea": "H4: Callback/redirect handling differs for Codex independent of scope — scoped out as separate follow-up",
+          "class": "speculative",
+          "file_line": "lines 216-220"
+        },
+        {
+          "idea": "Normalise AS metadata scopes_supported to match PRM at the proxy boundary as the thinnest first slice — conditional on H1/H2 confirmed and H3 disproven",
+          "class": "speculative",
+          "file_line": "lines 234-239"
+        },
+        {
+          "idea": "Evidence capture template for differential client comparison (Codex / Cursor / control) covering PRM, AS metadata, DCR, authorise, Clerk redirect, token",
+          "class": "good",
+          "file_line": "lines 179-193"
+        },
+        {
+          "idea": "Multi-client regression checklist covering six full-flow scenarios including negative case",
+          "class": "good",
+          "file_line": "lines 252-262"
+        },
+        {
+          "idea": "Decision matrix mapping hypothesis combinations to remediation classes and reversibility ratings",
+          "class": "good",
+          "file_line": "lines 222-228"
+        },
+        {
+          "idea": "SDK MCP docs list openid, email as required scopes, conflicting with current policy — doc hygiene needed independently of Codex fix",
+          "class": "good",
+          "file_line": "lines 266-268"
+        },
+        {
+          "idea": "mcp-security-policy.ts rationale comment may need updating after evidence capture to accurately reflect whether openid exclusion is a sufficiency or conditional claim",
+          "class": "speculative",
+          "file_line": "lines 269-272"
+        },
+        {
+          "idea": "Promotion trigger requiring Sentry lane closure, live evidence, bounded slice, and owner agreement before creating a current/ child plan",
+          "class": "good",
+          "file_line": "lines 314-323"
+        },
+        {
+          "idea": "Preview-deployment evidence is authoritative for promotion; local tests alone are insufficient for this class of client-specific auth failure",
+          "class": "good",
+          "file_line": "lines 123-126"
+        },
+        {
+          "idea": "Do not combine fixes across multiple hypotheses in one slice — thin reversible slice doctrine",
+          "class": "good",
+          "file_line": "lines 229-230"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "depends_on"
+      ],
+      "status_raw": "Strategic brief — not yet executable",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1 — required for all plans; the graph identity stable slug). No `id` key appears in frontmatter.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:1-25 (entire frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (V0 §2.1 — LOCKED, required for all plans). Absent from frontmatter.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:1-25"
+        },
+        {
+          "issue": "Present field `status` (body line 30: \"Status: Strategic brief — not yet executable\") is an emergent key V0 §2.5 explicitly drops. The V0 migration map (§3.5) maps this value to `kind: strategic` with no `disposition`. The plan carries no `kind` field in frontmatter.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:30"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2 — required for all plans, model LOCKED). The plan's intent is clearly `kind: strategic` per the migration map (§3.5: `future`, `strategic-brief`, `NOT STARTED — strategic brief` → `kind: strategic`), but the field is absent.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:1-25"
+        },
+        {
+          "issue": "`depends_on` edge uses a file-path string (\"../active/sentry-otel-integration.execution.plan.md\") rather than a plan-id reference, and does not carry the required `kind: blocking | beneficial` typed property (V0 §4 — PDR-018 blocking/beneficial classification is mandatory on the edge).",
+          "file_line": "codex-mcp-server-compatibility.plan.md:4-5"
+        },
+        {
+          "issue": "`todos` field present on what is self-declared as a `strategic` plan (body line 30; folder: `future/`). V0 §2.4 (LOCKED) forbids `todos` on `strategic` plans: \"Forbidden on `strategic` plans.\"",
+          "file_line": "codex-mcp-server-compatibility.plan.md:6-24"
+        },
+        {
+          "issue": "Missing `last_updated` frontmatter field (V0 §2.4 — required for all, LOCKED). The ISO date \"2026-04-16\" appears only in the body (line 29), not frontmatter.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:29"
+        },
+        {
+          "issue": "Missing `promotion_trigger` field (V0 §2.4 — required for `strategic` plans, LOCKED). The promotion conditions exist in the body (\"Promotion Trigger Into `current/`\" section, lines 313-323) but are not surfaced as the frontmatter `promotion_trigger` field.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:313-323"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` edge (V0 §2.3 — recommended for strategic plans; required for executable). No strategic-choice ID or `\"pending\"` sentinel present.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:1-25"
+        },
+        {
+          "issue": "Body carries a `Lane: future/` label (line 31) and a `Status:` label (line 30) that duplicate information V0 models as structured fields (`kind`, folder location). These prose-in-body state labels are the exact pattern V0 replaces (§3.5 migration map: whole-paragraph prose values → \"prose moves to the body; axes carry the state\").",
+          "file_line": "codex-mcp-server-compatibility.plan.md:30-31"
+        }
+      ],
+      "unclassified_keys": [
+        "todos"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "V0 §2.4 LOCKED: `todos` is forbidden on `strategic` plans. This plan self-identifies as strategic (`future/` folder, body Status line) yet carries six `todos` items in frontmatter. This is a direct contradiction of a LOCKED rule, not a gap in an emergent key. The pattern may indicate that the estate regularly uses `todos` in future-folder strategic briefs as a light investigation checklist — which would be strong survey evidence that the LOCKED prohibition needs owner re-ratification or that the plan's true kind should be `executable` (conflicting with the Sentry-lane block the body describes).",
+          "evidence": "Frontmatter lines 6-24 carry a `todos` array with 6 entries; body line 30 declares `Status: Strategic brief — not yet executable`; the file lives in `future/` which V0 §3.6 maps to `kind: strategic`.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:6-24 (todos) vs. line 30 (status) vs. V0 §2.4 (LOCKED prohibition)"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan correctly identifies a split metadata surface (PRM vs AS metadata advertising different scopes_supported sets) as a real architectural inconsistency, not a surface-level bug. This is a sound diagnosis: two endpoints owned by the same server expressing contradictory contracts is an architecture defect regardless of the Codex outcome.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:79-88"
+        },
+        {
+          "severity": "medium",
+          "claim": "The proxy transparency design (line 63-66: /oauth/authorize query parameters forwarded without normalisation) means the server has no control plane over scope requests reaching Clerk. If H1 or H2 is confirmed, any fix requires adding scope-normalisation logic at the proxy boundary — a new architectural responsibility the server currently does not own. The plan acknowledges this only as a 'candidate option' (line 17) rather than surfacing it as an architectural expansion requiring explicit owner decision.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:63-66"
+        },
+        {
+          "severity": "medium",
+          "claim": "The depends_on references active/sentry-otel-integration.execution.plan.md (line 5). This creates a cross-lane temporal dependency between an observability execution plan and a client-compatibility investigation plan. The architecture of the dependency is sound (do not widen active work), but the sequencing assumption is underpinned by the Sentry lane being closeable — if that lane stays open indefinitely, this plan has no promotion path. No staleness mechanism or re-evaluation trigger is defined for this dependency.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:5-6"
+        },
+        {
+          "severity": "low",
+          "claim": "The decision matrix at line 221-229 conflates remediation reversibility with remediation ownership. H3 is rated 'Low (external)' reversibility because Clerk configuration is external — but external-party configuration changes are not irreversible by nature; they are owner-coordinated and potentially slow. The matrix would be more useful architecturally if it separated reversibility (can it be undone?) from ownership (who controls the change?) since these have different risk profiles for the server architecture.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:221-229"
+        },
+        {
+          "severity": "low",
+          "claim": "The Known Follow-On Hygiene Items (lines 262-271) identify doc drift in packages/sdks/oak-curriculum-sdk/docs/mcp/README.md and a comment in mcp-security-policy.ts, but these are left as untracked TODOs with no corresponding todo entries in the plan frontmatter. The SDK doc drift specifically — advertising openid, email as required scopes — is an active developer-facing contract surface that could cause new client implementations to repeat the Codex failure pattern. Architectural hygiene argues for a blocking hygiene todo, not a deferred note.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:262-271"
+        },
+        {
+          "severity": "info",
+          "claim": "The First Executable Slice section (lines 233-249) correctly constrains the first implementation to a single compatibility surface and requires a client-differential test fixture and an integration assertion on PRM/AS metadata consistency. These are sound architectural gate conditions that prevent the plan from widening into a generic auth rewrite.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:233-249"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan is correctly placed in future/ and is pre-executable by design. The Promotion Trigger section (lines 314-324) is precise and evidence-anchored. No architecture concerns with lane placement or promotion criteria.",
+          "file_line": "codex-mcp-server-compatibility.plan.md:313-324"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    }
+  ]
+}

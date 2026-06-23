@@ -30,7 +30,7 @@ foundation_alignment:
   - .agent/directives/schema-first-execution.md
 todos:
   - id: phase-0-resume-ground-state
-    content: "Read the predecessor opener, repo-continuity §Current Session Focus (the Deciduous Twining Dew block), and the ephemeral design artefacts at /tmp/phase-{0,1,2}-*.md (if still present on this host) OR reconstruct the substance from this opener's body alone (the opener is self-contained). Register session claim covering the agent-tools source paths, .git/hooks (or .husky/), agent-collaboration.md, and the parent plan."
+    content: "Read the predecessor opener, repo-continuity §Current Session Focus (the Deciduous Twining Dew block), and the ephemeral design artefacts at <scratch>/phase-{0,1,2}-*.md (if still present on this host) OR reconstruct the substance from this opener's body alone (the opener is self-contained). Register session claim covering the agent-tools source paths, .git/hooks (or .husky/), agent-collaboration.md, and the parent plan."
     status: pending
   - id: phase-3a-r1-shape-decision
     content: "Surface the R1 schema-mix fix shape to the owner FIRST. Three architecturally-excellent options: (A) split directories — comms-events/ narrative, comms-messages/ for directed messages; (B) widen parser with discriminator field on each event; (C) deprecate directed-message schema in favour of narrative. No cheap-cure option. Block on owner decision; do not proceed to landing until resolved."
@@ -83,7 +83,7 @@ doctrine landed at `9b619a05`. **This session lands the queued
 execution work and closes the arc.**
 
 The opener carries the load-bearing substance from the predecessor's
-ephemeral design at `/tmp/phase-{0,1,2}-*.md`. If those /tmp files
+ephemeral design at `<scratch>/phase-{0,1,2}-*.md`. If those /tmp files
 still exist on this host, they are richer evidence; this opener is
 intentionally self-contained so the substance is not lost when /tmp
 clears. **The parent plan

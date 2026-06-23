@@ -157,7 +157,7 @@ cure once the third instance has fired is portable Practice governance.
 This PDR's host-repo operational application is ADR-177 (Asymmetric-cure
 enforcement in staging — host structural-enforcement choice for the
 `git commit -- <pathspec>` failure mode). The rule
-[`stage-by-explicit-pathspec`](../../rules/stage-by-explicit-pathspec.md)
+`stage-by-explicit-pathspec`
 already records the asymmetric-cure observation and is the existing
 behavioural cure; ADR-177 names the symmetric cure that closes the
 asymmetry.
@@ -171,7 +171,7 @@ protects only the applier is not really a structural cure"* (captured
 2026-05-04, three instances by 2026-05-05; the entry's "second-context
 manifestation required" gate was the fabricated-gate-as-avoidance shape
 named at the
-[`patterns/fabricated-gate-as-avoidance.md`](../../memory/active/patterns/fabricated-gate-as-avoidance.md)
+`patterns/fabricated-gate-as-avoidance.md`
 pattern; the substance is portable on three same-context instances and
 graduates with explicit "host-evidence base" status). Owner reframe
 2026-05-10 in the `knowledge graduation` session authorises the

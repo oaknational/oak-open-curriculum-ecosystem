@@ -60,9 +60,9 @@ modify/delete conflicts.
 ### 2b. Find files changed on both sides
 
 ```bash
-git diff --name-only $(git merge-base HEAD origin/main)..HEAD > /tmp/branch.txt
-git diff --name-only $(git merge-base HEAD origin/main)..origin/main > /tmp/main.txt
-comm -12 <(sort /tmp/branch.txt) <(sort /tmp/main.txt)
+git diff --name-only $(git merge-base HEAD origin/main)..HEAD > tmp/branch.txt
+git diff --name-only $(git merge-base HEAD origin/main)..origin/main > tmp/main.txt
+comm -12 <(sort tmp/branch.txt) <(sort tmp/main.txt)
 ```
 
 Files in this intersection are the risk zone — even if they auto-merge, they
@@ -83,9 +83,9 @@ auto-merge cleanly but import a deleted module will fail at type-check time
 ### 2d. Find files both branches added (add/add conflicts)
 
 ```bash
-git diff --name-only --diff-filter=A $(git merge-base HEAD origin/main)..HEAD > /tmp/branch-added.txt
-git diff --name-only --diff-filter=A $(git merge-base HEAD origin/main)..origin/main > /tmp/main-added.txt
-comm -12 <(sort /tmp/branch-added.txt) <(sort /tmp/main-added.txt)
+git diff --name-only --diff-filter=A $(git merge-base HEAD origin/main)..HEAD > tmp/branch-added.txt
+git diff --name-only --diff-filter=A $(git merge-base HEAD origin/main)..origin/main > tmp/main-added.txt
+comm -12 <(sort tmp/branch-added.txt) <(sort tmp/main-added.txt)
 ```
 
 Watch for numbering collisions (e.g. both branches creating ADR-141 with

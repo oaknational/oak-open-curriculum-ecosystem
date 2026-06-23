@@ -46,7 +46,12 @@ function findRegisteredConfig(calls: readonly (readonly unknown[])[], toolName: 
  * (module replacement). The McpServer is passed as an argument to
  * registerHandlers(), making this DI-compliant per ADR-078.
  */
-function registerAndCapture(runtimeConfigOverrides: { readonly eefEnabled?: boolean } = {}) {
+function registerAndCapture(
+  runtimeConfigOverrides: {
+    readonly eefEnabled?: boolean;
+    readonly userSearchEnabled?: boolean;
+  } = {},
+) {
   const server = new McpServer({ name: 'test-server', version: '0.0.0' });
   const registerToolSpy = vi.spyOn(server, 'registerTool');
   const registerPromptSpy = vi.spyOn(server, 'registerPrompt');
@@ -64,10 +69,11 @@ function registerAndCapture(runtimeConfigOverrides: { readonly eefEnabled?: bool
 
 describe('Tool Registration (Integration)', () => {
   it('every universal tool is registered with the server', () => {
-    // eefEnabled:true so the full SDK enumeration registers — this test proves the
-    // registration mechanism wires every enumerated tool. Flag posture/resolution
-    // is covered by the feature-flags engine test, not re-asserted per tool here.
-    const { registerToolSpy } = registerAndCapture({ eefEnabled: true });
+    // eefEnabled:true + userSearchEnabled:true so the full SDK enumeration registers —
+    // this test proves the registration mechanism wires every enumerated tool. Flag
+    // posture/resolution is covered by the feature-flags engine test, not re-asserted
+    // per tool here.
+    const { registerToolSpy } = registerAndCapture({ eefEnabled: true, userSearchEnabled: true });
     const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
@@ -77,7 +83,7 @@ describe('Tool Registration (Integration)', () => {
   });
 
   it('non-UI tools are registered with title, description, inputSchema, and annotations', () => {
-    const { registerToolSpy } = registerAndCapture({ eefEnabled: true });
+    const { registerToolSpy } = registerAndCapture({ eefEnabled: true, userSearchEnabled: true });
     const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
@@ -93,7 +99,7 @@ describe('Tool Registration (Integration)', () => {
   });
 
   it('UI tools are registered with title, description, inputSchema, and _meta.ui.resourceUri', () => {
-    const { registerToolSpy } = registerAndCapture();
+    const { registerToolSpy } = registerAndCapture({ userSearchEnabled: true });
     const tools = listUniversalTools(generatedToolRegistry);
     const appTools = tools.filter(isAppToolEntry);
 
@@ -109,7 +115,7 @@ describe('Tool Registration (Integration)', () => {
   });
 
   it('UI tools include ext-apps resource-uri normalisation on the server-facing config', () => {
-    const { registerToolSpy } = registerAndCapture();
+    const { registerToolSpy } = registerAndCapture({ userSearchEnabled: true });
     const appTools = listUniversalTools(generatedToolRegistry).filter(isAppToolEntry);
 
     expect(appTools.length).toBeGreaterThan(0);
@@ -122,7 +128,7 @@ describe('Tool Registration (Integration)', () => {
   });
 
   it('get-curriculum-model keeps an empty input schema on app-tool registration', () => {
-    const { registerToolSpy } = registerAndCapture();
+    const { registerToolSpy } = registerAndCapture({ userSearchEnabled: true });
     const modelTool = listUniversalTools(generatedToolRegistry)
       .filter(isAppToolEntry)
       .find((tool) => tool.name === 'get-curriculum-model');
@@ -133,5 +139,33 @@ describe('Tool Registration (Integration)', () => {
     expect(config).toHaveProperty('inputSchema', modelTool?.inputSchema);
     expect(config).toHaveProperty('inputSchema', {});
     expect(modelTool?.inputSchema).toEqual({});
+  });
+});
+
+/**
+ * Gating proof for the user-search MCP App tools.
+ *
+ * The two user-search tools (`user-search` widget + `user-search-query`
+ * app-only helper) are registered only when `userSearchEnabled` is true. This
+ * proves the gate — the new branch in `registerTools` — with the flag value
+ * injected both ways. It does NOT assert the flag's default posture: that is
+ * the feature-flags engine's concern, tested once in `feature-flags.unit.test.ts`.
+ */
+describe('User-Search Flag Gating (Integration)', () => {
+  const wasRegistered = (calls: readonly (readonly unknown[])[], toolName: string): boolean =>
+    calls.some((call) => call[0] === toolName);
+
+  it('omits user-search and user-search-query when userSearchEnabled is false', () => {
+    const { registerToolSpy } = registerAndCapture({ userSearchEnabled: false });
+
+    expect(wasRegistered(registerToolSpy.mock.calls, 'user-search')).toBe(false);
+    expect(wasRegistered(registerToolSpy.mock.calls, 'user-search-query')).toBe(false);
+  });
+
+  it('registers user-search and user-search-query when userSearchEnabled is true', () => {
+    const { registerToolSpy } = registerAndCapture({ userSearchEnabled: true });
+
+    expect(wasRegistered(registerToolSpy.mock.calls, 'user-search')).toBe(true);
+    expect(wasRegistered(registerToolSpy.mock.calls, 'user-search-query')).toBe(true);
   });
 });

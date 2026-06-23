@@ -25,7 +25,9 @@ import {
   lessonPlanningArgsSchema,
   exploreCurriculumArgsSchema,
   learningProgressionArgsSchema,
+  curriculumMappingArgsSchema,
   adaptLessonArgsSchema,
+  continueProgressionArgsSchema,
 } from './prompt-schemas.js';
 
 const PROMPT_REGISTRATIONS = [
@@ -40,7 +42,7 @@ const PROMPT_REGISTRATIONS = [
     name: 'lesson-planning',
     title: 'Lesson Planning',
     description:
-      'Gather materials for planning a lesson on a topic, including objectives and resources.',
+      "Build a complete, teachable lesson on a topic, grounded in Oak's live curriculum data and six curriculum principles — outcome, key learning points, keywords, misconceptions, quizzes, and resources.",
     argsSchema: lessonPlanningArgsSchema,
   },
   {
@@ -58,11 +60,25 @@ const PROMPT_REGISTRATIONS = [
     argsSchema: learningProgressionArgsSchema,
   },
   {
+    name: 'curriculum-mapping',
+    title: 'Curriculum Mapping',
+    description:
+      "Build or audit a curriculum map — unit order across a year or key stage — grounded in Oak's threads, prerequisites, and national-curriculum coverage.",
+    argsSchema: curriculumMappingArgsSchema,
+  },
+  {
     name: 'adapt-lesson',
     title: 'Adapt Lesson with EEF Evidence',
     description:
       'Adapt an Oak lesson grounded in EEF Teaching and Learning Toolkit evidence, presenting evidence-calibrated options with caveats and attribution intact.',
     argsSchema: adaptLessonArgsSchema,
+  },
+  {
+    name: 'continue-progression',
+    title: 'Continue Progression',
+    description:
+      "Plan the next step from where your class is: state what they just covered and get the next unit from Oak's sequence, a checkable readiness list, and the misconceptions to anticipate.",
+    argsSchema: continueProgressionArgsSchema,
   },
 ] as const;
 

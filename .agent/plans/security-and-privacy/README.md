@@ -17,6 +17,7 @@ reduce unsupported security claims first, then enforce evidence-backed delivery.
 | `future/phase-2-evidence-merge-readiness-rules.md` | Future artefact | Phase 2 evidence merge-readiness rules target |
 | `future/phase-3-baseline-control-cut-list.md` | Future artefact | Phase 3 baseline control cut list target |
 | `future/cloudflare-mcp-public-beta-security-gate.plan.md` | Future strategic brief | Cloudflare MCP security gate, Practice deltas, and product threat-model enhancements before public beta |
+| `future/native-mcp-sdk-auth-build-vs-buy.md` | Future strategic spike | Build-vs-buy: can native MCP SDK / `@clerk/mcp-tools` auth replace the bespoke MCP auth subsystem? Names the decision and evidence; does not migrate |
 | `../discovery/future/web-bot-auth-agent-verification.plan.md` | Cross-linked discovery brief | First-class Web Bot Auth / signed-agent verification posture; security owns enforcement evidence for enabled claims |
 | `documentation-sync-log.md` | Tracking log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `developing-secure-mcp-servers.research.md` | Research | Hardening evidence base and control backlog |

@@ -7,6 +7,8 @@ Accepted (Revised)
 > **Update (2026-03-01):** The original two-tool model (`get-ontology` + `get-help`) has been consolidated into a single `get-curriculum-model` tool. The `curriculum://ontology` resource has been replaced by `curriculum://model`. The core architectural principle — multi-layered context grounding — is unchanged; the implementation is simplified to a single orientation tool.
 >
 > **Update (2026-03-01):** [ADR-123](123-mcp-server-primitives-strategy.md) documents the broader MCP server primitives strategy — how all three primitive types (tools, resources, prompts) work together. This ADR continues to govern the context grounding and dual-exposure pattern specifically.
+>
+> **Update (2026-06-10):** Forward considerations for grounding consuming agents in pedagogical principles and Oak curriculum rigour — the surface **reliability ranking**, the **per-call token budget** on broadcast guidance, and a possible **per-tool guidance-enhancement mechanism** — are recorded in the [Addendum](#addendum-2026-06-10--pedagogical-grounding-forward-considerations) below. No implementation decision is ratified by this note; it records architectural facts and constraints to guide that work when it is scoped. See also the [process record](../../../.agent/reports/mcp-session-instructions-pedagogical-grounding-process-2026-06-10.md).
 
 ## Context
 
@@ -30,6 +32,26 @@ Per the [OpenAI Apps SDK Reference](https://developers.openai.com/apps-sdk/refer
 | `_meta`             | ❌ No      | ✅ Yes      | Widget-only data              |
 
 This means any context guidance placed in `_meta` is invisible to the model—it can only be seen by the widget.
+
+> **Client-variability note (2026-06-11):** the table above is
+> **OpenAI-Apps-SDK-specific**, not a property of MCP clients in general. A
+> live two-client probe (2026-06-11) found Cursor's agent harness delivers
+> ONLY `content` blocks to the model (`structuredContent` never reaches it —
+> a structuredContent-only response renders "(omitted)"), while Claude Code
+> delivers ONLY `structuredContent` (the `content` blocks are dropped).
+> "Model sees `structuredContent`" must not be assumed per-client. The only
+> shape that renders in every observed client is the dual shape
+> (`formatToolResponse`: `content` summary + serialised JSON, plus decorated
+> `structuredContent`) — the MCP spec's backwards-compatibility SHOULD, and
+> the shape every Oak tool emits (the `get-eef-evidence` exception was
+> removed 2026-06-11). Evidence:
+> [`oak-prod-mcp-cursor-visibility-writeup-2026-06-11.md`](../../../.agent/reports/oak-prod-mcp-cursor-visibility-writeup-2026-06-11.md)
+> and the in-repo research
+> [`mcp-client-tool-result-consumption-2026-05-28.md`](../../../.agent/research/mcp-client-tool-result-consumption-2026-05-28.md).
+> This ADR's model-visibility reasoning below (e.g. "reliably model-visible
+> on every response") holds for both-fields clients and for
+> `structuredContent`-rendering clients; guidance that must reach the model
+> in EVERY client belongs in fields the dual shape carries on both channels.
 
 ### MCP Primitive Audiences
 
@@ -182,6 +204,52 @@ This ensures:
 
 - **Utility tools excluded**: `get-rate-limit`, `get-changelog` etc. don't include hints (intentional—they don't need domain context)
 - **Workflows in structuredContent only**: Workflows are for agent reasoning, not widget display
+
+## Addendum (2026-06-10) — Pedagogical Grounding Forward Considerations
+
+As the MCP server approaches production, consuming agents will need grounding in
+**pedagogical principles and Oak curriculum rigour**, not just tool-orientation.
+The multi-layer model in this ADR is the right foundation, but three facts and
+constraints were not previously recorded. They are captured here to guide that
+work; no implementation decision is ratified.
+
+### 1. The grounding surfaces differ in reliability
+
+This ADR's rationale leans on "multiple touchpoints / redundancy" but does not
+state that the touchpoints are **not equally reliable**. Strongest to weakest:
+
+| Rank | Surface                                     | Why                                                                                                                                                  |
+| ---- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | **Tool output data itself**                 | Always consumed by the model; cannot be ignored. Not currently treated as a grounding surface.                                                       |
+| 2    | **`oakContextHint` in `structuredContent`** | Reliably model-visible on every response (§3).                                                                                                       |
+| 3    | **Per-tool `description`**                  | Visible at discovery; may truncate in large tool lists.                                                                                              |
+| 4    | **Server `instructions` field**             | Per the MCP spec the field is `"Optional instructions for the client"` — a client **MAY** fold it into the system prompt but is **not required to**. |
+
+**Implication:** the server `instructions` field is the **weakest** lever and
+shapes tool-selection, not output quality. Rigour that must be honoured belongs
+in higher-reliability surfaces — most durably in the shape of the tool output
+data itself. The `instructions` field is necessary framing, not sufficient
+enforcement.
+
+### 2. Per-call broadcast guidance must stay within token budgets
+
+`oakContextHint` (§3) is **repeated in every tool response**; per-tool
+descriptions are delivered once at discovery (`tools/list`) but **reside in the
+consuming agent's context for the whole session**. Both consume the consuming
+agent's context window — by different mechanisms — and any expansion of either
+(for example richer pedagogical framing) must stay within token budgets.
+Uniformly broadcasting rich guidance on every response does not scale; the
+per-call cost is paid for the whole session.
+
+### 3. A per-tool guidance-enhancement mechanism may be required
+
+Because the per-call budget caps uniform broadcast, the likely shape is **not**
+one larger broadcast string but a mechanism that lets guidance be **enhanced and
+targeted per tool** — tiered or tool-specific framing applied only where it earns
+its tokens — rather than the same prose on every response. This is recorded as a
+consideration to evaluate when the grounding work is scoped; the generator
+extension that would carry it is noted in
+[ADR-060](060-agent-support-metadata-system.md).
 
 ## Related Decisions
 

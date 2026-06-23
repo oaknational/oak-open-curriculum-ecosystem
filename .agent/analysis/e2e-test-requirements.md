@@ -74,7 +74,7 @@ describe('HTTP Server Logging E2E', () => {
 
 ```typescript
 describe('Stdio Server Logging E2E', () => {
-  const testLogFile = '/tmp/stdio-e2e-test.log';
+  const testLogFile = '<scratch>/stdio-e2e-test.log';
   let stdoutCapture: string[] = [];
 
   beforeEach(async () => {

@@ -101,3 +101,18 @@ upstream.
 - Agents and users relying on "most common first" receive potentially misleading prioritisation.
 - Any downstream ranking, curriculum summaries, or keyword-driven guidance may be skewed.
 - Case-sensitive duplicates (`adaptation` / `Adaptation`) inflate the keyword count and may confuse keyword-driven workflows.
+
+## Resolution (2026-06-12)
+
+Resolved at source via Expected Behaviour option 2: the upstream
+description rewrite (oak-openapi PR #269, deployed as
+`0.7.0-69d2b6c9fd28bb7a76f4659225818f179b18e280`) replaced the
+frequency claim — `GET /keywords` now states the keywords are
+"sorted alphabetically". The codegen-time tool-description
+correction that masked the false claim was retired in the same
+change that picked up the new spec (its removal-condition test
+fired as designed). The case-sensitive duplicate observation
+(`adaptation` / `Adaptation`) remains open upstream; this record is
+its only register. The related bounding/ranking feature ask stays
+open in
+[keywords-finer-grained-control.md](../../upstream-feature-requests/oak-open-api/keywords-finer-grained-control.md).

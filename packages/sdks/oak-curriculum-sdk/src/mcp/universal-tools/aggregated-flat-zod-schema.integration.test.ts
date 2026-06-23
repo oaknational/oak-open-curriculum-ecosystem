@@ -22,12 +22,7 @@ describe('aggregated tools inputSchema propagation', () => {
 
     expect(aggregatedTools).toHaveLength(typeSafeKeys(AGGREGATED_TOOL_DEFS).length);
 
-    const toolsWithParams = aggregatedTools.filter(
-      (t) =>
-        t.name !== 'get-curriculum-model' &&
-        t.name !== 'get-thread-progressions' &&
-        t.name !== 'get-prior-knowledge-graph',
-    );
+    const toolsWithParams = aggregatedTools.filter((t) => t.name !== 'get-curriculum-model');
 
     for (const tool of toolsWithParams) {
       expect(tool.inputSchema, `${tool.name} should have inputSchema`).toBeDefined();
@@ -108,6 +103,21 @@ describe('aggregated tools inputSchema propagation', () => {
     expect(jsonSchema).toHaveProperty('properties.scope.examples');
   });
 
+  it('get-prior-knowledge-graph inputSchema produces JSON Schema with the anchored contract', () => {
+    const tools = listUniversalTools(generatedToolRegistry);
+    const priorKnowledge = tools.find((t) => t.name === 'get-prior-knowledge-graph');
+
+    expect(priorKnowledge?.inputSchema).toBeDefined();
+    if (!priorKnowledge?.inputSchema) {
+      throw new Error('get-prior-knowledge-graph inputSchema not found');
+    }
+
+    const jsonSchema = z.toJSONSchema(z.object(priorKnowledge.inputSchema));
+    expect(jsonSchema).toHaveProperty('properties.unitSlugs.description');
+    expect(jsonSchema).toHaveProperty('properties.depth.description');
+    expect(jsonSchema).toHaveProperty('required', ['unitSlugs']);
+  });
+
   it('user-search-query inputSchema produces JSON Schema with examples', () => {
     const tools = listUniversalTools(generatedToolRegistry);
     const userSearchQuery = tools.find((t) => t.name === 'user-search-query');
@@ -141,20 +151,16 @@ describe('no-input tools have empty inputSchema (MCP spec: strict empty object)'
     expect(model).toBeDefined();
     expect(model?.inputSchema).toEqual({});
   });
+});
 
-  it('get-thread-progressions inputSchema is an empty shape', () => {
+describe('anchored tools carry their anchor fields on the wire schema', () => {
+  it('get-thread-progressions inputSchema carries the anchored fields (G3 rewrite)', () => {
     const tools = listUniversalTools(generatedToolRegistry);
     const threadProgressions = tools.find((t) => t.name === 'get-thread-progressions');
 
     expect(threadProgressions).toBeDefined();
-    expect(threadProgressions?.inputSchema).toEqual({});
-  });
-
-  it('get-prior-knowledge-graph inputSchema is an empty shape', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-    const prereqGraph = tools.find((t) => t.name === 'get-prior-knowledge-graph');
-
-    expect(prereqGraph).toBeDefined();
-    expect(prereqGraph?.inputSchema).toEqual({});
+    expect(
+      Object.keys(threadProgressions?.inputSchema ?? {}).sort((a, b) => a.localeCompare(b)),
+    ).toEqual(['keyStage', 'subject', 'threadSlug']);
   });
 });

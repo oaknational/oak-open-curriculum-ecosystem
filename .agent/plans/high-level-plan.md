@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-06-03
+last_updated: 2026-06-18
 related_indices:
   - "README.md"
   - "curriculum-mcp-path-to-ga/roadmap.md"
@@ -24,6 +24,16 @@ start at [README.md](README.md). For the Curriculum MCP release arc, use
 ---
 
 ## Strategic Goal
+
+> **Predates the three-stream vision — being superseded (2026-06-18).** The goal stated
+> below ("primitives and modular building blocks") was written before the vision settled
+> on **three co-equal value streams** (teacher MCP app · ecosystem engineering tools ·
+> agentic-engineering framework) that form a **system** and service Oak's own strategy. It
+> is **not the current source of truth** for strategic goals — see
+> [`VISION.md`](../../VISION.md) and the forthcoming `docs/strategy/` corpus (Body 2 of
+> [`vision-strategy-and-plan-estate.plan.md`](product-development-governance/vision-strategy-and-plan-estate.plan.md)). It
+> will be reconciled to the strategy during the estate restructure (Body 3); do not extend
+> it as current strategy.
 
 Oak's open curriculum should become a set of world-class primitives and modular
 building blocks for education applications. The repo pursues that through:
@@ -63,13 +73,18 @@ Milestones are the release-level story for the Curriculum MCP server. The
 authoritative cross-collection release index is
 [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md).
 
+**The milestone ladder itself is under fresh-eyes re-assessment** (see the
+[2026-06-15 readiness assessment](../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md)):
+treat the M2–M4 definitions below as provisional until the impact-first redraft
+is promoted.
+
 | Milestone | State | Summary | Current Authority |
 |---|---|---|---|
 | M0 - Open Private Alpha | ✅ Complete | Repo made public after secrets/PII and docs remediation; HTTP server remained private alpha. | Archives and [completed-plans.md](completed-plans.md) |
 | M1 - Invite-Only Alpha | ✅ Complete | Dev Clerk allowlist, Oak/invited users, server live at `curriculum-mcp-alpha.oaknational.dev`. | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) |
 | M2 - Open Public Alpha | 🔄 In progress | Public-alpha readiness across search/index health, MCP Apps migration, graph alignment, observability evidence, and user-facing MCP App experience. | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) plus collection active/current plans |
 | M3 - Public Beta | 📋 Planned / gated | Production Clerk, Cloudflare MCP security gate, operational hardening, alerting, compliance/privacy paperwork, and exemplar UI readiness. | [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md), [compliance/roadmap.md](compliance/roadmap.md), and [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) |
-| M4 / GA | ⏳ Undefined | Sustained production GA needs owner-defined gates after M3 evidence accumulates. | Backlog in [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) |
+| M4 / GA | ⏳ Undefined | Sustained production GA needs owner-defined gates after M3 evidence accumulates. | Backlog A4 in [roadmap.md](curriculum-mcp-path-to-ga/roadmap.md); pre-decision scaffold in [launch-readiness-framework.md](curriculum-mcp-path-to-ga/launch-readiness-framework.md) |
 
 ---
 
@@ -81,6 +96,17 @@ The MCP release arc crosses SDK/MCP work, observability, security, compliance,
 architecture, and user experience. It is coordinated by
 [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md),
 which indexes sub-plans without owning their execution.
+
+Where the Programme sequences engineering and compliance work, the
+[Launch-Readiness Framework](curriculum-mcp-path-to-ga/launch-readiness-framework.md)
+defines what "live product" means: readiness dimensions, keystone owner
+decisions (K1–K3 owner-ratified 2026-06-17 as the MCP-app stream's keystones),
+and candidate GA gates grounded in the target React MCP App experience. The
+[2026-06-15 readiness assessment](../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md)
+records the full findings and a fresh-eyes verdict that the prior milestone
+ladder does not stand; the impact-first redraft is held in a
+[future stub](curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md)
+whose promotion trigger is owner direction to schedule it.
 
 Key linked collections:
 

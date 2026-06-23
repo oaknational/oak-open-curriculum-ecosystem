@@ -14,11 +14,12 @@ import { describe, it, expect } from 'vitest';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import { parseSseEnvelope } from './helpers/sse.js';
 import { z } from 'zod';
-import {
-  getMisconceptionGraphJson,
-  getPriorKnowledgeGraphJson,
-  getThreadProgressionsJson,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+
+/** JSON-RPC error shape for removed-URI assertions (code is load-bearing). */
+const JsonRpcErrorWithCodeSchema = z.object({
+  code: z.number(),
+  message: z.string().optional(),
+});
 
 const ResourcesListResultSchema = z.object({
   resources: z.array(
@@ -40,19 +41,6 @@ const ResourcesReadResultSchema = z.object({
     }),
   ),
 });
-
-/** Reads a resource and returns its text content */
-async function readResource(uri: string): Promise<string> {
-  const { app } = await createStubbedHttpApp();
-  const response = await request(app)
-    .post('/mcp')
-    .set('Host', 'localhost')
-    .set('Accept', STUB_ACCEPT_HEADER)
-    .send({ jsonrpc: '2.0', id: '1', method: 'resources/read', params: { uri } });
-  const envelope = parseSseEnvelope(response.text);
-  const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-  return parsed.data?.contents[0]?.text ?? '';
-}
 
 describe('Documentation Resources E2E', () => {
   describe('resources/list - Client can discover documentation', () => {
@@ -82,7 +70,7 @@ describe('Documentation Resources E2E', () => {
       expect(gettingStarted?.mimeType).toBe('text/markdown');
     });
 
-    it('returns tools reference documentation resource', async () => {
+    it('no longer advertises the tools or workflows doc resources (single-sourced via curriculum://model)', async () => {
       const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
@@ -95,37 +83,18 @@ describe('Documentation Resources E2E', () => {
           method: 'resources/list',
         });
 
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesListResultSchema.safeParse(envelope.result);
-
-      const resources = parsed.data?.resources ?? [];
-      const toolsRef = resources.find((r) => r.uri === 'docs://oak/tools.md');
-
-      expect(toolsRef).toBeDefined();
-      expect(toolsRef?.mimeType).toBe('text/markdown');
-    });
-
-    it('returns workflows documentation resource', async () => {
-      const { app } = await createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/list',
-        });
+      expect(response.status).toBe(200);
 
       const envelope = parseSseEnvelope(response.text);
       const parsed = ResourcesListResultSchema.safeParse(envelope.result);
+      expect(parsed.success).toBe(true);
 
-      const resources = parsed.data?.resources ?? [];
-      const workflows = resources.find((r) => r.uri === 'docs://oak/workflows.md');
-
-      expect(workflows).toBeDefined();
-      expect(workflows?.mimeType).toBe('text/markdown');
+      const uris = (parsed.data?.resources ?? []).map((r) => r.uri);
+      // The list is genuinely populated (getting-started present) and the
+      // duplicated doc resources are gone — not a vacuous pass on a parse failure.
+      expect(uris).toContain('docs://oak/getting-started.md');
+      expect(uris).not.toContain('docs://oak/tools.md');
+      expect(uris).not.toContain('docs://oak/workflows.md');
     });
   });
 
@@ -179,84 +148,12 @@ describe('Documentation Resources E2E', () => {
       expect(content).toContain('Quick Start');
       expect(content).toContain('search');
     });
-
-    it('tools reference explains tool categories', async () => {
-      const { app } = await createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'docs://oak/tools.md' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.contents[0]?.text ?? '';
-
-      // Proves: Content helps users understand tool organization
-      expect(content).toContain('Discovery');
-      expect(content).toContain('Fetching');
-    });
-
-    it('tools reference explains when to use each category', async () => {
-      const { app } = await createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'docs://oak/tools.md' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.contents[0]?.text ?? '';
-
-      // Proves: Content helps users choose the right tools
-      expect(content).toContain('When to use');
-    });
-
-    it('workflows provides step-by-step guidance', async () => {
-      const content = await readResource('docs://oak/workflows.md');
-      expect(content).toMatch(/1\./);
-      expect(content).toMatch(/2\./);
-    });
-
-    it('workflows includes common use cases', async () => {
-      const content = await readResource('docs://oak/workflows.md');
-      expect(content).toContain('lesson');
-    });
-
-    it('workflows includes userInteractions workflow with orientation guidance', async () => {
-      const content = await readResource('docs://oak/workflows.md');
-      expect(content).toMatch(/get-curriculum-model/);
-      expect(content).toMatch(/orientation|domain model/i);
-    });
-
-    it('workflows shows what each step returns', async () => {
-      const content = await readResource('docs://oak/workflows.md');
-      expect(content).toContain('Returns:');
-    });
-
-    it('tools reference includes agentSupport category', async () => {
-      const content = await readResource('docs://oak/tools.md');
-      expect(content).toContain('Agent Support');
-    });
   });
 });
 
 describe('Supplementary Data Resources E2E', () => {
   describe('resources/list includes supplementary data resources', () => {
-    it('includes curriculum://prior-knowledge-graph in resource list', async () => {
+    it('does not list curriculum://prior-knowledge-graph (removed — served by the anchored tool)', async () => {
       const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
@@ -269,15 +166,11 @@ describe('Supplementary Data Resources E2E', () => {
       const parsed = ResourcesListResultSchema.safeParse(envelope.result);
       expect(parsed.success).toBe(true);
 
-      const resources = parsed.data?.resources ?? [];
-      const priorKnowledgeGraph = resources.find(
-        (r) => r.uri === 'curriculum://prior-knowledge-graph',
-      );
-      expect(priorKnowledgeGraph).toBeDefined();
-      expect(priorKnowledgeGraph?.mimeType).toBe('application/json');
+      const uris = (parsed.data?.resources ?? []).map((r) => r.uri);
+      expect(uris).not.toContain('curriculum://prior-knowledge-graph');
     });
 
-    it('includes curriculum://thread-progressions in resource list', async () => {
+    it('does not list curriculum://thread-progressions (removed — served by the anchored tool)', async () => {
       const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
@@ -290,15 +183,11 @@ describe('Supplementary Data Resources E2E', () => {
       const parsed = ResourcesListResultSchema.safeParse(envelope.result);
       expect(parsed.success).toBe(true);
 
-      const resources = parsed.data?.resources ?? [];
-      const threadProgressions = resources.find(
-        (r) => r.uri === 'curriculum://thread-progressions',
-      );
-      expect(threadProgressions).toBeDefined();
-      expect(threadProgressions?.mimeType).toBe('application/json');
+      const uris = (parsed.data?.resources ?? []).map((r) => r.uri);
+      expect(uris).not.toContain('curriculum://thread-progressions');
     });
 
-    it('includes curriculum://misconception-graph in resource list', async () => {
+    it('does not list curriculum://misconception-graph (removed — served by the anchored tool)', async () => {
       const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
@@ -311,29 +200,73 @@ describe('Supplementary Data Resources E2E', () => {
       const parsed = ResourcesListResultSchema.safeParse(envelope.result);
       expect(parsed.success).toBe(true);
 
-      const resources = parsed.data?.resources ?? [];
-      const misconceptionGraph = resources.find(
-        (r) => r.uri === 'curriculum://misconception-graph',
-      );
-      expect(misconceptionGraph).toBeDefined();
-      expect(misconceptionGraph?.mimeType).toBe('application/json');
+      const uris = (parsed.data?.resources ?? []).map((r) => r.uri);
+      expect(uris).not.toContain('curriculum://misconception-graph');
     });
   });
 
   describe('resources/read returns valid data', () => {
-    it('prior knowledge graph returns the source data via MCP protocol', async () => {
-      const content = await readResource('curriculum://prior-knowledge-graph');
-      expect(content).toBe(getPriorKnowledgeGraphJson());
+    it('reading the removed prior-knowledge-graph URI is a -32602 JSON-RPC error', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'resources/read',
+          params: { uri: 'curriculum://prior-knowledge-graph' },
+        });
+
+      const envelope = parseSseEnvelope(response.text);
+      // SDK 1.29.0 rejects an unknown resource URI as InvalidParams (-32602);
+      // the spec's -32002 resource-not-found is an unimplemented SHOULD.
+      const error = JsonRpcErrorWithCodeSchema.parse(envelope.error);
+      expect(error.code).toBe(-32602);
     });
 
-    it('thread progressions returns the source data via MCP protocol', async () => {
-      const content = await readResource('curriculum://thread-progressions');
-      expect(content).toBe(getThreadProgressionsJson());
+    it('reading the removed misconception-graph URI is a -32602 JSON-RPC error', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'resources/read',
+          params: { uri: 'curriculum://misconception-graph' },
+        });
+
+      const envelope = parseSseEnvelope(response.text);
+      // SDK 1.29.0 rejects an unknown resource URI as InvalidParams (-32602);
+      // the spec's -32002 resource-not-found is an unimplemented SHOULD.
+      const error = JsonRpcErrorWithCodeSchema.parse(envelope.error);
+      expect(error.code).toBe(-32602);
     });
 
-    it('misconception graph returns the source data via MCP protocol', async () => {
-      const content = await readResource('curriculum://misconception-graph');
-      expect(content).toBe(getMisconceptionGraphJson());
+    it('reading the removed thread-progressions URI is a -32602 JSON-RPC error', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'resources/read',
+          params: { uri: 'curriculum://thread-progressions' },
+        });
+
+      const envelope = parseSseEnvelope(response.text);
+      // SDK 1.29.0 rejects an unknown resource URI as InvalidParams (-32602);
+      // the spec's -32002 resource-not-found is an unimplemented SHOULD.
+      const error = JsonRpcErrorWithCodeSchema.parse(envelope.error);
+      expect(error.code).toBe(-32602);
     });
   });
 });

@@ -52,7 +52,7 @@ export async function makeTempCollaborationRepo(
   ]) {
     await writeText(
       join(collaborationRoot, schema),
-      await readText(join(repoRoot, '.agent/state/collaboration', schema)),
+      await readText(join(repoRoot, 'agent-tools/src/collaboration-state/schemas', schema)),
     );
   }
 

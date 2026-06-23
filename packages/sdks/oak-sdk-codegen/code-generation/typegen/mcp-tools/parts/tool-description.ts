@@ -1,6 +1,19 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
 
 /**
+ * Normalises a raw upstream operation description into the form the tool
+ * description pipeline operates on: "This endpoint" rewritten to "This
+ * tool" (case-preserving), whitespace runs collapsed to single spaces,
+ * leading/trailing whitespace trimmed.
+ */
+export function normaliseUpstreamDescription(rawDescription: string): string {
+  return rawDescription
+    .replace(/\bThis endpoint\b/gi, (match) => (match.startsWith('T') ? 'This tool' : 'this tool'))
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
  * Build tool description in git commit message format:
  * - First paragraph: OpenAPI summary (short title/overview)
  * - Blank line
@@ -13,11 +26,7 @@ export function toToolDescription(operation: OperationObject): string | undefine
   const summary = typeof operation.summary === 'string' ? operation.summary.trim() : '';
   const rawDescription = typeof operation.description === 'string' ? operation.description : '';
 
-  // Transform "This endpoint" to "This tool" in the description
-  const description = rawDescription
-    .replace(/\bThis endpoint\b/gi, (match) => (match.startsWith('T') ? 'This tool' : 'this tool'))
-    .replace(/\s+/g, ' ')
-    .trim();
+  const description = normaliseUpstreamDescription(rawDescription);
 
   // Build git commit message style: summary\n\ndescription
   if (summary && description) {
@@ -99,14 +108,54 @@ const ASSET_DOWNLOAD_NOTE = `
 
 NOTE: The asset \`url\` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. To generate a clickable download link for the user, call the \`download-asset\` tool with the lesson slug and asset type. If \`download-asset\` is not available (e.g. stdio transport), direct users to the lesson page on the Oak website — use the lesson's \`oakUrl\` (e.g. \`https://www.thenational.academy/teachers/lessons/{lessonSlug}\`).`;
 
+/**
+ * Disambiguation guidance appended to the generated get-keywords description.
+ *
+ * Two keywords tools serve different needs (G4b): generated get-keywords is
+ * the live-API pass-through; the hand-written get-keyword-graph aggregated
+ * tool serves a bounded frequency-ranked subset of the curriculum-graph
+ * snapshot. Each tool's description names the other and states when to
+ * prefer it, verified end-to-end via `tools/list`.
+ */
+const GET_KEYWORDS_DISAMBIGUATION_NOTE = `
+
+WHEN TO PREFER WHICH KEYWORDS TOOL: this tool returns the LIVE full keyword set for a key stage + subject — fresh and authoritative (including KS4 during curriculum restructures), alphabetical, unranked, and large at subject scope. For a bounded frequency-ranked subset with lesson connections (token economy + relationship navigation over the curriculum graph), prefer get-keyword-graph, which serves a point-in-time curriculum snapshot.`;
+
+/**
+ * Guidance appended to tools that can return a large payload at broad scope.
+ *
+ * Several tools return everything under a broad anchor (a whole sequence, a
+ * whole key-stage + subject) and can exceed a host's per-result token cap. The
+ * note names the *real* narrowing each tool supports, so an agent scopes the
+ * call up front rather than discovering the limit by truncation mid-task. The
+ * note is one line to avoid bloating the agent context budget.
+ *
+ * @param narrowing - Tool-specific sentence naming that tool's actual narrowing
+ * parameters (e.g. `year`/`type`). Keep it terse and grounded in real params.
+ */
+const largePayloadNote = (narrowing: string): string => `
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host's per-result token limit. ${narrowing}`;
+
 function getToolDescriptionEnhancement(toolName: string): string | undefined {
   switch (toolName) {
     case 'get-rate-limit':
       return GET_RATE_LIMIT_NOTE;
+    case 'get-keywords':
+      return GET_KEYWORDS_DISAMBIGUATION_NOTE;
     case 'get-lessons-assets':
-    case 'get-key-stages-subject-assets':
-    case 'get-sequences-assets':
+      // Bounded: one lesson's assets. Asset-download guidance only.
       return ASSET_DOWNLOAD_NOTE;
+    case 'get-key-stages-subject-assets':
+      // Whole key-stage + subject: compose the large-payload hint onto the asset note.
+      return `${ASSET_DOWNLOAD_NOTE}${largePayloadNote(
+        'Narrow with `unit` and/or `type` (asset type), or use `get-lessons-assets` for one lesson.',
+      )}`;
+    case 'get-sequences-assets':
+      // Whole sequence (all programmes): compose the large-payload hint onto the asset note.
+      return `${ASSET_DOWNLOAD_NOTE}${largePayloadNote(
+        'Narrow with `year` and/or `type` (asset type), or use `get-lessons-assets` for one lesson.',
+      )}`;
     default:
       return undefined;
   }

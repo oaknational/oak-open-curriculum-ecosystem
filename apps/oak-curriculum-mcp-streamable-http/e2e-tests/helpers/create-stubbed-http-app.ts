@@ -15,10 +15,16 @@ export interface StubbedHttpApp {
 
 export async function createStubbedHttpApp(
   envOverrides: Partial<NodeJS.ProcessEnv> = {},
+  options: { readonly userSearchEnabled?: boolean } = {},
 ): Promise<StubbedHttpApp> {
   const runtimeConfig = createMockRuntimeConfig({
     dangerouslyDisableAuth: true,
     useStubTools: true,
+    // Only override the fixture default (OFF) when a test opts in to the
+    // user-search surface; omitting it keeps the production-honest default.
+    ...(options.userSearchEnabled === undefined
+      ? {}
+      : { userSearchEnabled: options.userSearchEnabled }),
     env: {
       OAK_API_KEY: STUB_API_KEY,
       ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',

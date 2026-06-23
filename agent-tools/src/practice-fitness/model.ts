@@ -11,7 +11,7 @@ export const FITNESS_MODE_INFORMATIONAL = 'informational';
  */
 export const CRITICAL_RATIO = 1.5;
 
-const ZONE_RANK = Object.freeze({
+export const ZONE_RANK = Object.freeze({
   healthy: 0,
   soft: 1,
   hard: 2,
@@ -131,22 +131,4 @@ export function worstZone(zones: readonly (FitnessZone | null)[]): FitnessZone {
     }
   }
   return worst;
-}
-
-export function getExitCode(
-  mode: FitnessMode,
-  overallZones: readonly FitnessZone[],
-  hasConfigurationFindings = false,
-): number {
-  if (mode === FITNESS_MODE_INFORMATIONAL) {
-    return 0;
-  }
-
-  if (hasConfigurationFindings) {
-    return 1;
-  }
-
-  const blocking: readonly FitnessZone[] =
-    mode === FITNESS_MODE_STRICT_HARD ? ['hard', 'critical'] : ['critical'];
-  return overallZones.some((zone) => blocking.includes(zone)) ? 1 : 0;
 }

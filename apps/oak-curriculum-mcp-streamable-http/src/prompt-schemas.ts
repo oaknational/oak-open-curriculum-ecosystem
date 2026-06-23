@@ -84,3 +84,42 @@ export const learningProgressionArgsSchema = {
     .describe('The concept to trace (e.g., "algebra", "cells", "narrative writing")'),
   subject: z.string().describe('The subject area (e.g., "maths", "science", "english")'),
 };
+
+/**
+ * Schema for continue-progression prompt arguments.
+ *
+ * Used when planning the next step from the class's stated position. The
+ * free-text `justCovered` is legitimate here — the prompt instructs the
+ * agent to resolve it to Oak unit/lesson slugs (with teacher confirmation
+ * on ambiguity) before any anchored tool call.
+ */
+export const continueProgressionArgsSchema = {
+  subject: z.string().describe('The subject area (e.g., "maths", "science", "english")'),
+  yearGroup: z.string().describe('The year group (e.g., "Year 4", "Year 9")'),
+  justCovered: z
+    .string()
+    .describe(
+      'What the class just completed — a topic, unit, or lesson (e.g., "equivalent fractions", "the circulatory system")',
+    ),
+  classNotes: z
+    .string()
+    .optional()
+    .describe(
+      'Optional: Notes on how the class did (e.g., "they struggled with equivalent fractions")',
+    ),
+};
+
+/**
+ * Schema for curriculum-mapping prompt arguments.
+ *
+ * Used when building or auditing a curriculum map grounded in Oak's
+ * threads, prior-knowledge graph, and national-curriculum coverage.
+ */
+export const curriculumMappingArgsSchema = {
+  subject: z.string().describe('The subject area (e.g., "maths", "science", "english")'),
+  keyStage: z.string().describe('The key stage to map (e.g., "ks1", "ks2", "ks3", "ks4")'),
+  yearGroup: z
+    .string()
+    .optional()
+    .describe('Optional: Narrow the map to a specific year group (e.g., "Year 4")'),
+};

@@ -38,6 +38,24 @@ Before reviewing, creating, or migrating subagents, you MUST also read and inter
 | `.agent/sub-agents/README.md` | **THE AUTHORITATIVE COMPOSITION MODEL** -- three-layer architecture and dependency rules |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf for prompt architecture |
 
+## Verification Discipline (MANDATORY)
+
+1. **Verify file-existence, path, and platform claims against the
+   filesystem** (glob/ls) before asserting them in a review. A claim in a
+   template under review — or in this template — is a hypothesis, not a
+   fact; file-existence false positives are a documented reviewer failure
+   class in this repository.
+2. **Verify named skills, commands, and agents against the live
+   inventories**: `.agent/sub-agents/templates/`, the platform wrapper
+   directories, `.agent/skills/`, and root `package.json` scripts. Renamed
+   surfaces are the canonical drift shape.
+3. **Run or cite `pnpm subagents:check`** for any wrapper/template change
+   under review — the validator is the blocking gate; this review is the
+   judgement layer above it.
+4. **Distinguish "missing citation" from "unresolvable reference".** Before
+   reporting that a referenced document cannot be located, search for it; a
+   reference lacking a path is a polish finding, not an existence failure.
+
 ## Core Philosophy
 
 > "The best subagent is invisible to the user and unmistakable to the AI -- it knows exactly when to activate, follows a clear process, produces consistent outputs, and knows its boundaries."
@@ -88,8 +106,9 @@ components/          Templates compose from components.
 templates/           Templates are platform-agnostic assembled workflows.
     |                They MAY depend on components.
     v
-.cursor/agents/      Wrappers are thin, platform-specific shells.
-                     They load a template as their FIRST action.
+wrappers             Thin, platform-specific shells that load a template as
+                     their FIRST action: .claude/agents/*.md,
+                     .cursor/agents/*.md, .codex/agents/*.toml
 ```
 
 ### Dependency Rules
@@ -115,31 +134,15 @@ Before finalising any template or wrapper change, verify every item:
 
 ## Current Agent Ecosystem
 
-Design new agents to complement, not duplicate, the existing roster. Each agent has a unique, non-overlapping scope. The canonical source for the roster is `.agent/directives/AGENT.md`; the summary below is for quick reference during design and overlap checks.
-
-### Standard Quality Roster (always invoked per change profile)
-
-| Agent | Scope |
-|-------|-------|
-| `code-expert` | Gateway reviewer; quality, security, maintainability; flags missing specialists |
-| `architecture-expert-barney` | Simplification-first; boundary and dependency mapping |
-| `architecture-expert-fred` | ADR compliance and boundary discipline |
-| `architecture-expert-betty` | Cohesion, coupling, and long-term change-cost trade-offs |
-| `architecture-expert-wilma` | Adversarial resilience, failure modes, hidden coupling |
-| `test-expert` | Test quality, TDD compliance, mock simplicity |
-| `type-expert` | Type-system complexity, assertion pressure, schema flow |
-| `config-expert` | Tooling config consistency, quality-gate alignment |
-| `security-expert` | Auth/authz, OAuth, secrets, PII, injection risk |
-| `docs-adr-expert` | README/TSDoc/ADR completeness and documentation drift |
-
-### Specialist On-Demand Roster (situational triggers)
-
-| Agent | Trigger |
-|-------|---------|
-| `subagent-architect` | Agent design, review, migration, or optimisation |
-| `ground-truth-designer` | Semantic search ground-truth design/review |
-| `release-readiness-expert` | Release go/no-go checks at release boundaries |
-| `onboarding-expert` | Onboarding path audits (human and AI agent flows) |
+Design new agents to complement, not duplicate, the existing roster. Each
+agent has a unique, non-overlapping scope. **Resolve the live roster at
+review time** — enumerate `.agent/sub-agents/templates/` for the canonical
+template set and read
+`.agent/memory/executive/invoke-code-experts.md` for the invocation matrix
+and routing tiers. Do not rely on any copied roster summary (including in
+prior versions of this file): hand-maintained copies drift as specialists
+are added, and an overlap check against a stale roster approves duplicate
+scope.
 
 ## Quality Criteria for Subagents
 
@@ -253,15 +256,24 @@ Review and report only. Do not modify code.
 
 ### Claude Wrappers
 
-Claude wrappers live in `.claude/agents/*.md` (not yet present in this repository) with extended frontmatter:
+Claude wrappers live in `.claude/agents/*.md` with extended frontmatter:
 
 - `name` -- Unique identifier
 - `description` -- Delegation trigger with examples (benefit from `<example>` tags)
 - `tools` -- Available tools (Glob, Grep, LS, Read, etc.)
+- `disallowedTools` -- Explicit denials (e.g. `Write, Edit` for read-only reviewers)
 - `model` -- Model to use (sonnet, opus, etc.)
 - `color` -- Visual identifier (green, orange, purple, pink, blue)
+- `permissionMode` -- Permission posture (e.g. `plan` for observe-and-report agents)
 
 Claude subagents benefit from detailed examples in the description, a reminder footer about re-invocation, and structured output formats.
+
+### Codex Adapters
+
+Codex adapters live in `.codex/agents/*.toml`. They follow the same
+thin-wrapper rule: load the canonical template as the first action. Validate
+any wrapper or adapter change with `pnpm subagents:check`, which checks all
+three platform surfaces against the templates.
 
 ## Common Anti-Patterns
 
@@ -465,7 +477,7 @@ Replace vague commitments with concrete, checkable criteria:
 
 ## Ecosystem Consolidation
 
-When reviewing the ecosystem as a whole (not just a single agent), apply the same consolidation discipline used in the `/jc-consolidate-docs` workflow, but at the prompt architecture level. This is the recursive self-improvement loop: agents improve agents.
+When reviewing the ecosystem as a whole (not just a single agent), apply the same consolidation discipline used in the `oak-consolidate-docs` workflow, but at the prompt architecture level. This is the recursive self-improvement loop: agents improve agents.
 
 ### Consolidation Procedure
 

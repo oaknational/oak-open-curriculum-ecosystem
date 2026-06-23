@@ -16,10 +16,10 @@ Branch → TDD → Local Gates → Commit → Push → PR → CI → AI Review �
 Use conventional branch naming:
 
 ```bash
-git checkout -b feat/your-feature-name
-git checkout -b fix/bug-description
-git checkout -b docs/documentation-update
-git checkout -b refactor/area-being-refactored
+git switch -c feat/your-feature-name
+git switch -c fix/bug-description
+git switch -c docs/documentation-update
+git switch -c refactor/area-being-refactored
 ```
 
 ## 2. Develop With TDD

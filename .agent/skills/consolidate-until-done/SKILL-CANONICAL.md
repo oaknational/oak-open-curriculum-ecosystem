@@ -19,7 +19,7 @@ Use this wrapper when the owner starts or resumes a persistent goal like:
 > files are either empty or only contain items flagged explicitly for user
 > decisions.
 
-This is not a lighter version of
+This is a strict superset of
 [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md). It is the
 strict, persistent version of `dedicated-knowledge-curation`: keep working
 until the proof exists, or report the exact remaining owner decisions without
@@ -35,6 +35,16 @@ knowledge item by item, preserve the learning at full weight, move it to the
 right durable home, and let any fitness improvement happen only as the side
 effect of real curation. "No file worse than soft" is a health condition to
 verify at rest, not the work itself.
+
+## Approach
+
+This is deep, thoughtful work. It takes time. It must be done first hand.
+
+Secondhand knowledge is not enough. If you use subagents at all you MUST first-hand critically assess their work, responses, claims, and evidence, verifying sources.
+
+Do not rush. Knowledge curation, conservation of insight, they are all that matters.
+
+Never chase fitness functions, they are a signal, not a goal. Caring for understanding is the only goal.
 
 ## Required Grounding
 
@@ -78,16 +88,17 @@ current session:
    Cursor, Gemini), non-repo plans, entry-point drift, and any explicitly named
    comms-event evidence. Platform file lifecycle may be external, but
    the knowledge disposition is not optional.
-5. Any remaining non-empty buffer item is explicitly `owner-gated`, with the
-   user decision needed, the live holding location, and the evidence a future
-   agent can use to tell whether the gate still applies.
+5. Every decidable item has been decided (graduated, rejected, or duplicate). An
+   item that genuinely cannot be decided this pass remains a live decision-debt
+   entry (status `pending` / `due` / `overdue`) visible in the count, to be
+   graduated or rejected on a later pass.
 6. The closeout reports the **value and impact** — what knowledge reached which
    permanent home, what behaviour it changes — not an accounting of dispositions.
    The commits and the permanent homes ARE the record that the pass happened. Per
    [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md)
    do NOT produce a durable disposition ledger, before/after counts, or
    provenance pointers; completion is verified by the observable end-state
-   (buffers empty or owner-gated, substance live in its permanent home) plus the
+   (buffers drained by deciding, substance live in its permanent home) plus the
    commit, not by an accounting artefact.
 
 Anything else is `pending` or `partial slice landed`, not complete.
@@ -109,8 +120,8 @@ Never do these to satisfy the goal:
   Selection can order the pass; it cannot narrow the completion contract.
 
 Archive moves are allowed only as normal lifecycle cleanup after the item-level
-disposition ledger already proves the source content is graduated, duplicate,
-stale-withdrawn, or owner-gated.
+disposition already proves the source content is graduated, duplicate, or
+rejected.
 
 ## Pre-Archive Verification Gate
 
@@ -138,17 +149,25 @@ Repeat this loop until the completion contract is met:
    record knowledge disposition without taking over file rotation, archival, or
    deletion; if a required platform surface is absent or inaccessible, record
    that as an explicit inventory disposition.
-2. **Choose the next real item.** Prefer critical, then hard, then soft, then
-   ready-empty verification. Within a buffer, work item by item.
+2. **Choose the next real item.** The organising axis is the **knowledge flow**
+   (sources → napkin → distilled → pending-graduations → permanent homes;
+   PDR-046's staircase, walked **bottom-up**), NOT the fitness report's
+   critical → hard → soft grouping. Process the lower layers first; pending
+   graduations and the upper buffers fill *as you climb*, so an empty top buffer
+   read before processing the layers below it is not "done" — it is unprocessed.
+   Letting the fitness signal organise the pass is the signal → goal inversion the
+   Conservation Invariant forbids (owner-corrected 2026-06-21). Fitness severity
+   may order work *within* the bottom-up flow; it is never the organising axis.
+   Within a buffer, work item by item.
 3. **Read before routing.** Understand the source item before editing. Do not
    infer disposition from filename, age, or fitness status.
 4. **Route substance.** Move knowledge to the correct durable home, update the
    existing home, or prove the home already contains it.
 5. **Classify each item's disposition as you process it** — `graduated`,
-   `duplicate`, `owner-gated`, or `stale-withdrawn` (`carried-forward` only for an
+   `duplicate`, or `rejected` (`carried-forward` only for an
    interrupted mid-run handoff, and it does not satisfy the completion contract).
    The classification is reasoning, not a record to persist: home the substance,
-   confirm a duplicate's home, or mark an item owner-gated in its live location.
+   confirm a duplicate's home, or reject it with the reason.
    Do not write the dispositions into a ledger — see the Pre-Archive Verification
    Gate and `permanent-doc-is-the-consolidation-record`.
 6. **Repair structural fitness honestly.** If a file is worse than soft because

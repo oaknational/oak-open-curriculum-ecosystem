@@ -23,9 +23,10 @@ import type { SourceAttribution } from '@oaknational/sdk-codegen/mcp-tools';
 /**
  * Attribution for data derived from the Oak Open Curriculum API.
  *
- * Applies to all unprefixed MCP resources: `prior-knowledge-graph`,
- * `thread-progressions`, `misconception-graph`, and the bulk-data
- * component of `model`.
+ * Applies to all unprefixed MCP resources: `thread-progressions` and the
+ * bulk-data component of `model` — and to the corpus-backed graph tools
+ * (`get-prior-knowledge-graph`, `get-misconception-graph`) that share this
+ * provenance.
  */
 export const OAK_API_ATTRIBUTION: SourceAttribution = {
   source: 'Oak Open Curriculum API',

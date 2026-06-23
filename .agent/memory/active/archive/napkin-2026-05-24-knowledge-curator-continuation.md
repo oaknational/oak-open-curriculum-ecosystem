@@ -42,9 +42,9 @@ analogous role-transfer moments.
 ### Capture C — Rule self-instantiates on landing day
 
 Cycle #1 graduated `important-state-not-in-temp-files` (forbids durable
-references from version-controlled or substrate files into `/tmp/`). The
+references from version-controlled or substrate files into `<scratch>/`). The
 load-bearing handover artefact for this very session sat at
-`/tmp/breezy-deep-curation-survey-2026-05-24.md` — the rule's first enforcement
+`<scratch>/breezy-deep-curation-survey-2026-05-24.md` — the rule's first enforcement
 was on the very artefact that motivated the pass. Vining executed the migration
 cure (copy to
 `.agent/state/collaboration/handoffs/curator-role-handoff-2026-05-24-vining-to-breezy.md`)

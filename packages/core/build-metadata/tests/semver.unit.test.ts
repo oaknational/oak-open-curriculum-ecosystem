@@ -7,6 +7,7 @@ import {
   SEMVER_PATTERN,
   type ParsedSemver,
 } from '../src/semver.js';
+import { ok, err } from '@oaknational/result';
 
 describe('SEMVER_PATTERN', () => {
   it('accepts strict X.Y.Z without prerelease or build metadata', () => {
@@ -118,25 +119,30 @@ describe('parseSemver', () => {
 
 describe('isLessThanOrEqual', () => {
   it('respects semver §11 precedence on plain releases', () => {
-    expect(isLessThanOrEqual('1.0.0', '1.0.1')).toBe(true);
-    expect(isLessThanOrEqual('1.0.1', '1.0.0')).toBe(false);
-    expect(isLessThanOrEqual('1.0.0', '1.0.0')).toBe(true);
-    expect(isLessThanOrEqual('1.2.0', '1.10.0')).toBe(true);
+    expect(isLessThanOrEqual('1.0.0', '1.0.1')).toEqual(ok(true));
+    expect(isLessThanOrEqual('1.0.1', '1.0.0')).toEqual(ok(false));
+    expect(isLessThanOrEqual('1.0.0', '1.0.0')).toEqual(ok(true));
+    expect(isLessThanOrEqual('1.2.0', '1.10.0')).toEqual(ok(true));
   });
 
   it('treats prerelease versions as lower than the same X.Y.Z release', () => {
-    expect(isLessThanOrEqual('1.0.0-alpha', '1.0.0')).toBe(true);
-    expect(isLessThanOrEqual('1.0.0', '1.0.0-alpha')).toBe(false);
+    expect(isLessThanOrEqual('1.0.0-alpha', '1.0.0')).toEqual(ok(true));
+    expect(isLessThanOrEqual('1.0.0', '1.0.0-alpha')).toEqual(ok(false));
   });
 
   it('orders prerelease identifiers per §11.4', () => {
-    expect(isLessThanOrEqual('1.0.0-alpha', '1.0.0-alpha.1')).toBe(true);
-    expect(isLessThanOrEqual('1.0.0-alpha.1', '1.0.0-alpha.beta')).toBe(true);
-    expect(isLessThanOrEqual('1.0.0-beta', '1.0.0-beta.2')).toBe(true);
-    expect(isLessThanOrEqual('1.0.0-rc.1', '1.0.0')).toBe(true);
+    expect(isLessThanOrEqual('1.0.0-alpha', '1.0.0-alpha.1')).toEqual(ok(true));
+    expect(isLessThanOrEqual('1.0.0-alpha.1', '1.0.0-alpha.beta')).toEqual(ok(true));
+    expect(isLessThanOrEqual('1.0.0-beta', '1.0.0-beta.2')).toEqual(ok(true));
+    expect(isLessThanOrEqual('1.0.0-rc.1', '1.0.0')).toEqual(ok(true));
   });
 
-  it('throws or rejects invalid inputs deterministically', () => {
-    expect(() => isLessThanOrEqual('not-a-version', '1.0.0')).toThrow();
+  it('returns err for inputs that are not strict-semver-valid', () => {
+    expect(isLessThanOrEqual('not-a-version', '1.0.0')).toEqual(
+      err({ type: 'invalid-semver', value: 'not-a-version' }),
+    );
+    expect(isLessThanOrEqual('1.0.0', 'nope')).toEqual(
+      err({ type: 'invalid-semver', value: 'nope' }),
+    );
   });
 });

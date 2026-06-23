@@ -10,7 +10,7 @@ canonical extraction is named under Future Work below;
 [ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) —
 surprise pipeline (`capture → distil → graduate → enforce`); this ADR is
 an enforcement-layer landing for a specific surprise captured in
-[`napkin.md` §"2026-04-29 — Misclassified e2e test deletion + coordination-surface skip"](../../../.agent/memory/active/napkin.md);
+`napkin.md` §"2026-04-29 — Misclassified e2e test deletion + coordination-surface skip";
 [ADR-160](160-non-bypassable-redaction-barrier-as-principle.md) —
 non-bypassable defensive layers as principle; this ADR addresses a
 case where a defensive layer (`sonar-secrets` PreToolUse hook) was
@@ -248,6 +248,14 @@ This ADR is honest about what it does and does not cover:
    does not trigger the log. The contract is "non-zero exit is
    visible", not "every form of misbehaviour is visible". Output-shape
    validation belongs in the hook protocol layer, not the wrapper.
+   One complementary exit-0 writer exists by design (recorded
+   2026-06-11): the PreToolUse guard shim
+   (`.claude/hooks/run-pretooluse-guard.mjs`) appends its own loud
+   warning line to `.claude/logs/hook-errors.log` when it fails OPEN
+   on an unbuilt guard artefact — an exit-0 allow this wrapper is
+   structurally blind to. The shim writes a deliberately simpler line
+   format; this ADR's fixed block schema governs the wrapper's
+   entries only.
 
 7. **`mkdir -p` of the log directory runs unconditionally on every
    hook firing.** Idempotent and cheap, but it does mean

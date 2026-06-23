@@ -127,9 +127,9 @@ b. **Owner grants the Vercel MCP token access to `oak-national-academy` /
    benefit. The next agent then runs `mcp__plugin_vercel_vercel__get_deployment_build_logs`
    with `idOrUrl: dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6` and a working teamId.
 
-c. **Owner runs `npx vercel inspect dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6 --logs > /tmp/vercel-build.log`
+c. **Owner runs `npx vercel inspect dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6 --logs > <scratch>/vercel-build.log`
    themselves** (the commit-status's own suggestion) and the next agent reads
-   `/tmp/vercel-build.log`. The repo has a no-Vercel-CLI memory; this is a
+   `<scratch>/vercel-build.log`. The repo has a no-Vercel-CLI memory; this is a
    one-off owner action under explicit owner authorisation, not the agent
    running it.
 

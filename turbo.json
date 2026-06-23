@@ -29,7 +29,7 @@
     "sdk-codegen": {
       "dependsOn": ["^build"],
       "cache": true,
-      "outputs": ["**/generated/**"],
+      "outputs": ["**/generated/**", "**/schema-cache/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "**/code-generation/**/*.ts",
@@ -37,6 +37,7 @@
         "**/scripts/**/*.ts",
         "**/schema-cache/**"
       ],
+      "env": ["SDK_CODEGEN_MODE", "CI", "VERCEL"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "doc-gen": {
@@ -303,8 +304,7 @@
       "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
-      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"],
-      "passThroughEnv": ["LOG_LEVEL", "OAK_API_KEY"]
+      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"]
     },
     "test:ui": {
       "dependsOn": ["build"],

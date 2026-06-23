@@ -50,7 +50,7 @@ boundary is ADR-165.
 
 | Surface | Cursor | Claude Code | Codex (`.agents/` alias) | Gemini / Antigravity CLI |
 |---------|--------|-------------|-------|--------------------------|
-| Skills | (reads `.agents/skills/`) | `.claude/skills/jc-*/SKILL.md` | `.agents/skills/jc-*/SKILL.md` | (reads `.agents/skills/`) |
+| Skills | (reads `.agents/skills/`) | `.claude/skills/oak-*/SKILL.md` | `.agents/skills/oak-*/SKILL.md` | (reads `.agents/skills/`) |
 | Rules | `.cursor/rules/*.mdc` | `.claude/rules/*.md` | `.agents/rules/*.md` | entry-point chain only |
 | Sub-agents | `.cursor/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | `.gemini/commands/review-*.toml`; native agents unwired |
 | Hooks | — | `.claude/settings.json` `PreToolUse` | — | supported upstream; no `.agents/hooks.json` wired |
@@ -73,11 +73,11 @@ Run `pnpm portability:check` after adding to verify parity.
 
 1. **Canonical**: `.agent/skills/<name>/SKILL-CANONICAL.md` (with
    `classification: active | passive` frontmatter)
-2. **Adapters (generated)**: `.agents/skills/jc-<name>/SKILL.md` and
-   `.claude/skills/jc-<name>/SKILL.md` — emitted by
+2. **Adapters (generated)**: `.agents/skills/oak-<name>/SKILL.md` and
+   `.claude/skills/oak-<name>/SKILL.md` — emitted by
    `pnpm agent-tools:skills-adapter-generate`; **manual edits forbidden**
-3. **Claude settings**: add `Skill(jc-<name>)` and
-   `Skill(jc-<name>:*)` to `.claude/settings.json` `permissions.allow`
+3. **Claude settings**: add `Skill(oak-<name>)` and
+   `Skill(oak-<name>:*)` to `.claude/settings.json` `permissions.allow`
 4. **Verification**: `pnpm skills:check` (adapter drift) and
    `pnpm portability:check` (permission + canonical frontmatter)
 

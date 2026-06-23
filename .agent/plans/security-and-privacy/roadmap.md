@@ -30,6 +30,8 @@ Authoritative phase artefacts:
 4. [phase-3-baseline-control-cut-list.md](future/phase-3-baseline-control-cut-list.md)
 5. [cloudflare-mcp-public-beta-security-gate.plan.md](future/cloudflare-mcp-public-beta-security-gate.plan.md)
 6. [deferred-controls-register.md](deferred-controls-register.md)
+7. [native-mcp-sdk-auth-build-vs-buy.md](future/native-mcp-sdk-auth-build-vs-buy.md)
+   — build-vs-buy spike (informs Phase 3 auth governance)
 
 ---
 
@@ -153,6 +155,11 @@ Cloudflare MCP public-beta security gate            ⛔ M3 BLOCKER
     is complete
   - deterministic validation commands are mapped per control class
   - implementation cut list is ready for non-planning execution work
+- Related investigation:
+  [native-mcp-sdk-auth-build-vs-buy.md](future/native-mcp-sdk-auth-build-vs-buy.md)
+  — build-vs-buy on whether native MCP SDK auth (and `@clerk/mcp-tools`) can
+  replace the bespoke MCP auth subsystem; its decision artifact informs this
+  baseline.
 - Dependencies: Phase 2 complete
 
 ### Public-Beta Gate — Cloudflare MCP Security Features

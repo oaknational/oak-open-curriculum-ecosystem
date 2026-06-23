@@ -12,7 +12,7 @@ These guidelines are advisory and do not override repo instructions in `principl
 
 ## Project key resolution
 
-The project key for this repo is `oaknational_oak-open-curriculum-ecosystem` (see `sonar-project.properties` and `.sonarlint/connectedMode.json`). The MCP integration resolves the key automatically; do not pass it explicitly when the integration's default applies.
+The project key for this repo is `oaknational_oak-open-curriculum-ecosystem` (see `.sonarlint/connectedMode.json`). The MCP integration resolves the key automatically; do not pass it explicitly when the integration's default applies.
 
 If a user mentions a project by name and the integration default does not apply, use `search_my_sonarqube_projects` first to find the exact key. Do not guess project keys.
 
@@ -30,7 +30,7 @@ After fixing issues in code, the Sonar server will not reflect the change until 
 
 ## Per-finding investigation discipline
 
-The cardinal anti-pattern with Sonar is the rule-level disable (`sonar.issue.ignore.multicriteria` block in `sonar-project.properties`). Each rule fires at distinct sites with distinct contexts; the disposition right for one site can be wrong for another. Per `principles.md` §Code Quality "NEVER disable any quality gates", per-rule disables are forbidden in this repo.
+The cardinal anti-pattern with Sonar is the rule-level disable (a `sonar.issue.ignore.multicriteria` block — a sonar-scanner-CLI feature this repo does not use, and which SonarCloud automatic analysis ignores). Each rule fires at distinct sites with distinct contexts; the disposition right for one site can be wrong for another. Per `principles.md` §Code Quality "NEVER disable any quality gates", per-rule disables are forbidden in this repo; dispositions are made per-site, server-side. This repo has no `sonar-project.properties`.
 
 Per-issue dismissals via `change_sonar_issue_status` (status `accept` / `falsepositive`) are acceptable when each disposition is grounded in a specific architectural tension at that site, not a labelled category. The full discipline is documented in [`docs/engineering/quality-tooling-mcp-coupling.md`](../../docs/engineering/quality-tooling-mcp-coupling.md) §Per-finding investigation discipline.
 

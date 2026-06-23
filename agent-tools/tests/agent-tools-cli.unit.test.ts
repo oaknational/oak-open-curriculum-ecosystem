@@ -13,7 +13,7 @@ describe('agent-tools unified CLI', () => {
     });
 
     expect(result).toMatchObject({ exitCode: 0, stderr: '' });
-    expect(result.stdout).toMatch(/^[A-Z][a-z]+ [A-Z][a-z]+ [A-Z][a-z]+\n$/u);
+    expect(result.stdout).toMatch(/^[A-Z][a-z]+ [a-z]+ [A-Z][a-z]+\n$/u);
   });
 
   it('dispatches collaboration-state actions through the single entrypoint', async () => {

@@ -38,16 +38,15 @@
     ],
     "historical_roots": [
       ".agent/memory/active/archive/",
-      ".agent/memory/operational/archive/",
-      ".agent/memory/operational/workstreams/"
+      ".agent/memory/operational/archive/"
     ],
     "fixture_roots": [
-      ".agent/state/collaboration/fixtures/"
+      "agent-tools/tests/collaboration-state/fixtures/"
     ],
     "generated_read_models": [
       {
         "output": ".agent/state/collaboration/shared-comms-log.md",
-        "source": ".agent/state/collaboration/comms-events/",
+        "source": ".agent/state/collaboration/comms/",
         "renderer": "pnpm agent-tools:collaboration-state -- comms render",
         "current_checker": "future doctor must regenerate and compare"
       }
@@ -58,8 +57,8 @@
         "reason": "Example fixtures inside the live directory; parse as examples, not live threads."
       },
       {
-        "pattern": ".agent/state/collaboration/fixtures/**",
-        "reason": "Fixture estate for tests; never live state."
+        "pattern": "agent-tools/tests/collaboration-state/fixtures/**",
+        "reason": "Fixture estate for tests; never live state. Relocated out of .agent/state/ in WS7 Phase 1 (6d1e45f35)."
       }
     ],
     "migration_ledgers": []
@@ -182,7 +181,7 @@
     },
     {
       "id": "collaboration-comms-events",
-      "path": ".agent/state/collaboration/comms-events/",
+      "path": ".agent/state/collaboration/comms/",
       "plane": "state",
       "purpose": "Canonical live immutable communication-event fragments that render to the shared communication log.",
       "authority": [
@@ -197,7 +196,7 @@
       "generated_outputs": [
         ".agent/state/collaboration/shared-comms-log.md"
       ],
-      "validator": "pnpm agent-tools:collaboration-state -- check --events-dir .agent/state/collaboration/comms-events; future drift comparison",
+      "validator": "pnpm agent-tools:collaboration-state -- check --comms-dir .agent/state/collaboration/comms; future drift comparison",
       "severity": [
         {
           "invariant": "invalid event JSON",
@@ -289,7 +288,7 @@
       "writer_or_write_api": "pnpm agent-tools:collaboration-state -- claims open|heartbeat|close and commit skill queue helpers",
       "entry_identity": "claim_id for claims; intent_id for commit_queue",
       "merge_class": "index-narrative-tables",
-      "schema_or_parser": ".agent/state/collaboration/active-claims.schema.json",
+      "schema_or_parser": "agent-tools/src/collaboration-state/schemas/active-claims.schema.json",
       "generated_outputs": [],
       "validator": "pnpm agent-tools:collaboration-state -- check --active .agent/state/collaboration/active-claims.json",
       "severity": [
@@ -340,7 +339,7 @@
       "writer_or_write_api": "claim close/archive helper and commit skill closeout",
       "entry_identity": "claim_id",
       "merge_class": "append-only-structured-by-claim_id",
-      "schema_or_parser": ".agent/state/collaboration/closed-claims.schema.json",
+      "schema_or_parser": "agent-tools/src/collaboration-state/schemas/closed-claims.schema.json",
       "generated_outputs": [],
       "validator": "pnpm agent-tools:collaboration-state -- check --closed .agent/state/collaboration/closed-claims.archive.json",
       "severity": [
@@ -387,7 +386,7 @@
       "writer_or_write_api": "human or helper-authored JSON entries following conversation schema",
       "entry_identity": "entry_id inside each conversation record",
       "merge_class": "append-only-structured-by-entry_id",
-      "schema_or_parser": ".agent/state/collaboration/conversation.schema.json",
+      "schema_or_parser": "agent-tools/src/collaboration-state/schemas/conversation.schema.json",
       "generated_outputs": [],
       "validator": "future doctor JSON Schema validation excluding *.example.json",
       "severity": [
@@ -430,7 +429,7 @@
       "writer_or_write_api": "human or helper-authored JSON entries following escalation schema",
       "entry_identity": "escalation_id",
       "merge_class": "append-only-structured-by-escalation_id",
-      "schema_or_parser": ".agent/state/collaboration/escalation.schema.json plus README contract",
+      "schema_or_parser": "agent-tools/src/collaboration-state/schemas/escalation.schema.json plus README contract",
       "generated_outputs": [],
       "validator": "future doctor JSON Schema validation",
       "severity": [
@@ -787,49 +786,6 @@
         },
         {
           "action": "overwrite peer identity rows",
-          "repair_class": "forbidden"
-        }
-      ],
-      "portability_tier": "repo-local-contract",
-      "owner_reviewer_route": "session-handoff + architecture"
-    },
-    {
-      "id": "memory-operational-tracks",
-      "path": ".agent/memory/operational/tracks/",
-      "plane": "memory",
-      "purpose": "Single-writer tactical coordination cards for operational work.",
-      "authority": [
-        "PDR-050-state-memory-substrate-contracts",
-        "PDR-049-memory-and-state-file-merge-semantics"
-      ],
-      "lifecycle": "live single-writer tactical coordination cards",
-      "writer_or_write_api": "human/agent edits by owning track",
-      "entry_identity": "track filename slug",
-      "merge_class": "exclusive-create-fragments",
-      "schema_or_parser": "directory/file markdown conventions; future README contract",
-      "generated_outputs": [],
-      "validator": "future practice:substrate:check",
-      "severity": [
-        {
-          "invariant": "duplicate track slug",
-          "severity": "blocking"
-        },
-        {
-          "invariant": "same track edited by multiple writers",
-          "severity": "review-required"
-        }
-      ],
-      "repair_path": [
-        {
-          "action": "add missing metadata when unambiguous",
-          "repair_class": "deterministic"
-        },
-        {
-          "action": "coordinate same-track concurrent edits",
-          "repair_class": "manual-with-provenance"
-        },
-        {
-          "action": "silently discard stale-looking track cards",
           "repair_class": "forbidden"
         }
       ],

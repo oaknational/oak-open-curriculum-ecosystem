@@ -1,0 +1,3013 @@
+{
+  "batch_size": 16,
+  "plans_returned": 16,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Stub is explicitly designed to stay in future/ until owner-directed promotion; it is not a stale orphan",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:22-25"
+        },
+        {
+          "claim": "Carries owner-ratified keystones from 2026-06-17 that have no other plan-estate home",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:37-49"
+        },
+        {
+          "claim": "Promotion trigger is explicit and named, ensuring deliberate not drift-driven pickup",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:6, 66-67"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every element in the stub is purposeful: the three keystones carry owner-ratified decisions (lines 43-49), the expansion checklist is concrete and unambiguous (lines 55-63), the non-goals boundary prevents premature action (lines 70-75), and the stub-by-design declaration is honest about what it does not carry (lines 22-25). There is no padding and no speculative content.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is deliberately minimal and every sentence earns its place. The keystones at lines 43-49 are decision-grade content with ratification date and owner-attributed source (§14.2). The expansion checklist at lines 55-63 is specific enough to hand off directly. The stub pattern is executed correctly: no execution detail, but no information loss.",
+      "salvage_value": [
+        {
+          "idea": "K1 keystone: GA requires real users (teachers/curriculum leaders) with observed positive impact; value-proof is a GA precondition measured by Oak, not in-repo instrumentation",
+          "class": "good",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:43-44"
+        },
+        {
+          "idea": "K2 keystone: primary audience is teachers and curriculum leaders; audience widening is not planned post-GA",
+          "class": "good",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:45-46"
+        },
+        {
+          "idea": "K3 keystone: scope is MCP app in ChatGPT and Claude; whole-estate GA readiness only holds at portfolio level, each stream reaches its own readiness independently",
+          "class": "good",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:47-49"
+        },
+        {
+          "idea": "Redraft milestone files m2/m3 and add M4/GA definition to the impact-first ladder (Stages 1-4 per assessment §8.3); keep M0/M1 as completed history",
+          "class": "good",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:55-57"
+        },
+        {
+          "idea": "Convert each framework candidate gate into a GA exit criterion routed to its owning collection",
+          "class": "good",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:58-59"
+        },
+        {
+          "idea": "Name missing accountable owners: editorial, safeguarding, DPO, accessibility, product, go/no-go, plus the Stage-3 impact bar",
+          "class": "good",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:60-63"
+        },
+        {
+          "idea": "Stub-by-design pattern: carry no execution detail, hold the promotion trigger, keep inputs reachable — prevents drift-driven premature execution",
+          "class": "good",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:22-25"
+        },
+        {
+          "idea": "Non-goal: product decisions on impact bar and minors handling are named for the owner, not resolved in this plan",
+          "class": "good",
+          "file_line": "future/launch-readiness-and-milestone-redefinition.plan.md:71-73"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Field `id` absent — required for all plan nodes (LOCKED)",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:1 (frontmatter block, no id key present)"
+        },
+        {
+          "issue": "Field `node_type` absent — required for all plan nodes (LOCKED); replaces dropped `type:` free-label",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:1 (frontmatter block, no node_type key present)"
+        },
+        {
+          "issue": "Field `overview` absent — required for all plan nodes (LOCKED)",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:1 (frontmatter block, no overview key present)"
+        },
+        {
+          "issue": "Field `kind` absent — required for all plan nodes; inferred as `strategic` from `status: future` via §3.5 migration map but the V0 axis field itself is missing",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:1 (frontmatter block, no kind key present)"
+        },
+        {
+          "issue": "`type: future-strategic-stub` present — V0 §2.5 explicitly drops `type` as a free-label; replaced by `node_type` + `kind`",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:3"
+        },
+        {
+          "issue": "`status: future` present — V0 §2.5 explicitly drops `status`; correct V0 expression is `kind: strategic`",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:4"
+        }
+      ],
+      "unclassified_keys": [
+        "inputs"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "K1 states value-proof is a GA precondition but 'articulated here and measured by Oak, not instrumented in-repo' (owner §14.2). The plan carries no explicit impact bar — no metric, threshold, or measurement owner is named. When the stub is promoted, there is no baseline to write against, leaving the GA exit criterion undefined for the dimension that the plan itself names as the primary keystone.",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:43-44"
+        },
+        {
+          "severity": "medium",
+          "claim": "The promotion trigger is purely human-initiation ('owner direction to schedule the milestone-redraft pass') with no fallback or timeout. If that direction never comes, the assessment findings at the referenced report path may become stale or the report may be moved/archived, severing the only connection between the current milestone files and the ratified keystones. The stub assumes the report path remains stable indefinitely.",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:6-7"
+        },
+        {
+          "severity": "low",
+          "claim": "K2 names 'teachers and curriculum leaders' as the primary audience with 'no widening planned', but the plan does not record what safeguarding bar was assumed when that commitment was made. If audience scope is challenged post-promotion, there is no recorded assumption to defend or reopen.",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:46-48"
+        },
+        {
+          "severity": "low",
+          "claim": "'What promotion will produce' item 3 names missing accountable owners (editorial, safeguarding, DPO, accessibility, product, go/no-go) as work to be done post-promotion. This assumes those owners exist and are reachable within the organisation at promotion time. Their absence is not flagged as a blocker — if any are unfilled roles, GA is blocked on an unstated organisational dependency.",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:61-63"
+        },
+        {
+          "severity": "info",
+          "claim": "K3 assumes the MCP app's 'real dependency set' can be enumerated at promotion time to determine portfolio-level readiness. The plan defers defining that dependency set to the promoted plan, which is a correct stub discipline, but the assumption that the dependency set is enumerable and stable is load-bearing for the whole GA definition.",
+          "file_line": "launch-readiness-and-milestone-redefinition.plan.md:48-50"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/developer-experience/active/devx-strictness-convergence.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is the single execution source of truth for strictness convergence with superseded plans clearly archived",
+          "file_line": "file:38-46"
+        },
+        {
+          "claim": "Phases 0 and 1 are marked completed with dated execution notes and validation outcomes",
+          "file_line": "file:6-11, 297-328"
+        },
+        {
+          "claim": "Phases 2-6 remain pending with executable acceptance criteria and deterministic validation commands",
+          "file_line": "file:12-25, 445-506, 557-571, 609-626, 655-667, 698-706"
+        },
+        {
+          "claim": "Baseline drift detected and re-lock explicitly required before Phase 2 — plan is actively maintained",
+          "file_line": "file:174-198"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes genuine, recomputed baseline metrics with evidence of drift detection (lines 174-198), a nuanced type-assertion categorisation that prevents a false zero target (lines 758-767), a workspace-ordered DI refactoring strategy grounded in a codebase deep review (lines 534-582), and an exception governance protocol that prevents agent self-approval (lines 92-108). Phases 0 and 1 are verifiably complete with real command output cited (lines 297-328). No speculative or theoretical content dominates.",
+      "content_quality": "strong",
+      "content_quality_note": "Every phase has RED/GREEN/REFACTOR structure, acceptance criteria, and deterministic bash validation commands (representative sample: lines 379-391, 433-438, 489-501, 557-571). The deep review section (lines 744-788) provides a codebase-evidence-backed landscape assessment rather than assumptions. The risks table (lines 713-721) maps each risk to a concrete mitigation. The exception register (lines 734-740) is present and empty — correctly reflecting no approved exceptions yet.",
+      "salvage_value": [
+        {
+          "idea": "Phased sequential execution contract: baseline lock, type/runtime alignment, ESLint architecture, violation burn-down, override removal, promotion, closure — with explicit entry/exit gates",
+          "class": "good",
+          "file_line": "file:338-345"
+        },
+        {
+          "idea": "Exception governance protocol: agents must stop, document, and await explicit owner approval before implementing any rule exception",
+          "class": "good",
+          "file_line": "file:92-108"
+        },
+        {
+          "idea": "Approved exceptions register as a scoped, non-generalising audit trail for rule exceptions",
+          "class": "good",
+          "file_line": "file:734-740"
+        },
+        {
+          "idea": "Deterministic baseline commands with per-metric rg/lint invocations enabling drift detection between phases",
+          "class": "good",
+          "file_line": "file:204-256"
+        },
+        {
+          "idea": "Baseline drift tracking table comparing Phase 0 values against 2026-03-04 deep-review values, with action required flag",
+          "class": "good",
+          "file_line": "file:182-198"
+        },
+        {
+          "idea": "Per-workspace vi.mock DI refactoring inventory with workspace, file count, dominant pattern, and DI approach columns",
+          "class": "good",
+          "file_line": "file:534-540"
+        },
+        {
+          "idea": "Type-assertion landscape categorisation: generated code, architectural bridges, test fakes, error-context narrowing, fixable casts — each with owner-decision flag",
+          "class": "good",
+          "file_line": "file:758-767"
+        },
+        {
+          "idea": "Execution order resequencing: prioritise vi.mock burn-down by impact rather than dependency direction, with rationale",
+          "class": "good",
+          "file_line": "file:573-582"
+        },
+        {
+          "idea": "Deep review finding: product and test code have zero console.* calls; Phase 2 no-console work is codification of existing practice, not new enforcement",
+          "class": "good",
+          "file_line": "file:778-781"
+        },
+        {
+          "idea": "Vitest isolate:true and pool:forks workarounds in vitest.config.base.ts can be removed after vi.mock burn-down, with this plan as the trigger",
+          "class": "good",
+          "file_line": "file:553-555, 773-774"
+        },
+        {
+          "idea": "Canonical DI pattern pointer: RegisterHandlersOptions interface in streamable-http as the template for all vi.mock refactoring",
+          "class": "good",
+          "file_line": "file:540"
+        },
+        {
+          "idea": "Deep review finding: no centralised vi.mock restriction exists in oak-eslint; Phase 2 must create it",
+          "class": "good",
+          "file_line": "file:752"
+        },
+        {
+          "idea": "Deep review finding: no severity promotion lifecycle mechanism exists; rules are error or off with no warn-to-error path",
+          "class": "good",
+          "file_line": "file:753-754"
+        },
+        {
+          "idea": "Reviewer gate matrix mapping phase type to required reviewer roles (code-expert, architecture-expert, test-expert, security-expert)",
+          "class": "good",
+          "file_line": "file:289-295"
+        },
+        {
+          "idea": "Dependency guardrail for execution sequencing: packages/core -> packages/libs/sdks -> apps",
+          "class": "good",
+          "file_line": "file:334"
+        },
+        {
+          "idea": "Phase 2 requires a jc-consolidate-docs workflow run at closeout before phase sign-off",
+          "class": "good",
+          "file_line": "file:470-472, 485-487"
+        },
+        {
+          "idea": "Non-goals explicitly defined: no max-files-per-dir activation, no parallel strictness plans, no unrelated architectural refactors",
+          "class": "good",
+          "file_line": "file:726-730"
+        },
+        {
+          "idea": "Baseline refresh required before Phase 2 with explicit re-lock instruction",
+          "class": "good",
+          "file_line": "file:198"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟢 IN PROGRESS (`active/`)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "id absent — required for all plans; the node's graph identity cannot be established",
+          "file_line": "devx-strictness-convergence.plan.md:1 (frontmatter block, no id field)"
+        },
+        {
+          "issue": "node_type absent — required for all plans; the registry discriminator is missing",
+          "file_line": "devx-strictness-convergence.plan.md:1 (frontmatter block, no node_type field)"
+        },
+        {
+          "issue": "kind absent — required for all plans; without this the executable/strategic discriminator is unresolvable from frontmatter alone",
+          "file_line": "devx-strictness-convergence.plan.md:1 (frontmatter block, no kind field)"
+        },
+        {
+          "issue": "last_updated absent — required for all plans (V0 §2.4 LOCKED)",
+          "file_line": "devx-strictness-convergence.plan.md:1 (frontmatter block, no last_updated field)"
+        },
+        {
+          "issue": "serves_strategic_choice absent — required for executable plans (V0 §2.3 LOCKED); todos confirm executable kind",
+          "file_line": "devx-strictness-convergence.plan.md:1 (frontmatter block, no serves_strategic_choice field)"
+        },
+        {
+          "issue": "status used as body prose field — V0 §2.5 explicitly drops status; it must migrate to kind/disposition/gate axes",
+          "file_line": "devx-strictness-convergence.plan.md:32"
+        },
+        {
+          "issue": "No V0 typed edges (derives_from, thread, depends_on, supersedes, superseded_by, related) declared in frontmatter despite body references to superseded plans and related architectural plans",
+          "file_line": "devx-strictness-convergence.plan.md:1 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "config",
+      "specialist_kind": "config",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Baseline metrics are dated 2026-03-04 (last refresh delta) and the plan notes 'baseline must be refreshed and re-locked before Phase 2 begins' — Phase 2 is still pending as of today (2026-06-21). That is ~3.5 months of potential drift on the console.* count (+105 between 2026-03-03 and 2026-03-04), inline-directive count, and type-assertion counts without a re-lock. The entry gate for Phase 2 is not demonstrably satisfied.",
+          "file_line": "devx-strictness-convergence.plan.md:198"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 2 deterministic validation block references `pnpm --filter @oaknational/eslint-plugin-standards test` and `lint`, but the baseline inventory (line 163) records `eslint-plugin-boundaries` as absent (0 references) and the custom boundary rule package used throughout is `oak-eslint` (`packages/core/oak-eslint`). The filter name `@oaknational/eslint-plugin-standards` does not match the primary target named in Phase 2 (`packages/core/oak-eslint/src/...`). This may be a stale or wrong package filter that will silently pass without exercising the intended config.",
+          "file_line": "devx-strictness-convergence.plan.md:494-495"
+        },
+        {
+          "severity": "medium",
+          "claim": "The `no-console` topology scan command at lines 226-227 hardcodes specific glob depths (`apps/*/eslint.config.ts` and `packages/*/*/eslint.config.ts`). If new workspaces have been added since 2026-03-04 at deeper nesting or different paths, those configs are silently excluded from the scan. The Deep Review Refresh Delta already showed the count dropped from 7 to 6 overrides between 2026-03-03 and 2026-03-04 — a miss in scope would produce a false-clean result at Phase 5 promotion.",
+          "file_line": "devx-strictness-convergence.plan.md:226-227"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 4 deterministic validation uses `! rg` negative-assertion patterns (lines 624-625) that assert specific string literals will not appear in named files. If those files are renamed, moved, or split during Phase 2/3 execution, the assertions continue to pass vacuously. No existence pre-check is paired with the negative assertions to prevent silent vacuous success.",
+          "file_line": "devx-strictness-convergence.plan.md:624-625"
+        },
+        {
+          "severity": "low",
+          "claim": "The related plan cross-reference at line 52 points to `../../agentic-engineering-enhancements/active/phase-3-architectural-enforcement-execution.md` (no `.plan.md` extension). The consistent naming convention in this plan uses `.plan.md` suffixes; this file uses `.md` only, which may indicate a naming inconsistency or a path that has drifted. The Phase 6 validation command at line 704 also references this path and would silently pass if the file has moved.",
+          "file_line": "devx-strictness-convergence.plan.md:52"
+        },
+        {
+          "severity": "low",
+          "claim": "The Approved Exceptions Register (lines 738-740) contains no entries. Given the Deep Review assessment (lines 760-767) that ~10-15 architectural bridge suppressions and ~100-120 test-infrastructure suppressions require owner approval before Phase 3 can close, the register is expected to carry entries before Phase 3 exit. A still-empty register at Phase 3 entry is a risk signal: either those approvals have not been sought, or the plan does not yet reflect pre-approval work needed as a precondition.",
+          "file_line": "devx-strictness-convergence.plan.md:738-740"
+        },
+        {
+          "severity": "info",
+          "claim": "The Phase 2 REFACTOR step references `.agent/commands/consolidate-docs.md` via the command name `jc-consolidate-docs` (lines 475-476). That command namespace prefix (`jc-`) is personal and may not resolve under the canonical agent-tools CLI if the command has been renamed or if portability work from ADR-125 has already migrated it. This is a forward-execution readiness note, not a current blocker.",
+          "file_line": "devx-strictness-convergence.plan.md:475-476"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Phase 0 and Phase 1 are completed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "Front matter at lines 5-10: phase-0-baseline-lock `status: completed` (line 7) and phase-1-type-runtime-alignment `status: completed` (line 10); corroborated by Execution Notes lines 299-300 (\"Phase 0 executed\"; \"Phase 1 executed\") and Remediation Snapshot lines 311-327. Phases 2-6 remain `pending` (lines 11-25)."
+        },
+        {
+          "claim": "Object.assign scan now returns 0 matches (down from baseline 8), post Phase 1",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md:314 claims `rg \"Object\\.assign\\(\" apps packages` returns 0; git grep at the contemporaneous 2026-03-03 HEAD (951ca3ff7, \"chore(release): 1.0.0\") returns 7 matches across 6 files (handlers.integration.test.ts, auth-error-test-helpers.ts, otel-format.ts, response-augmentation.ts, schema-sample-core.ts, retrieval-error.unit.test.ts); live estate today returns 17."
+        },
+        {
+          "claim": "Skills-first architecture and command/rules portability work fully extracted to ADR-125",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "Plan line 54 and lines 69-71 state the skills-first architecture, command unification, and rules consolidation work was extracted to ADR-125; the target ADR exists first-hand at docs/architecture/architectural-decisions/125-agent-artefact-portability.md (Status: Accepted, Date: 2026-03-04) and its Context/Decision sections substantively cover skills, commands, and rules as the named artefact types. Plan line 508 (Phase 2 non-goals) corroborates: \"Skills/commands/rules architecture and migration are handled by the Agent Artefact Portability plan.\" No plan phase (0-6) retains any skills/commands/rules execution scope; all phases are ESLint strictness work."
+        },
+        {
+          "claim": "All 733 console.* calls are in approved scopes — product and test code have zero console.* calls",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "packages/core/oak-eslint/src/configs/recommended.ts:140 ('no-console': 'error'); plan file:778-780; first-hand grep showing all product/test matches are comments/strings, not invocations"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/developer-experience/current/directory-complexity-enablement.execution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All six phases are pending — no work has started, so the plan is not archive-complete",
+          "file_line": "file:5-22"
+        },
+        {
+          "claim": "The plan self-scopes to the directory-cardinality execution slice, not the broader architecture programme — correctly homed in developer-experience/current",
+          "file_line": "file:35-41"
+        },
+        {
+          "claim": "Phase 0 explicitly guards against acting on stale assumptions from March 2026 — the plan is self-aware of its temporal risk",
+          "file_line": "file:115"
+        },
+        {
+          "claim": "Parent architecture plan is in future/ — this child plan is correctly in current/ as it is the concrete executable work",
+          "file_line": "file:33-34"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, evidence-driven (baseline before wiring at file:103-119), and the non-goals section (file:72-83) actively prevents common failure modes. The routing rule at file:43-46 correctly decouples directory complexity from architectural layer concerns. No speculative scope inflation detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Each phase has explicit RED-evidence-first steps, acceptance criteria, and deterministic bash validation commands (e.g. file:125-130, file:165-168, file:190-193). The risks table (file:292-299) maps each risk to a concrete mitigation tied to plan phases. The reviewer gate strategy (file:282-289) assigns specialist reviewers per phase. This is substantively complete as a queued plan.",
+      "salvage_value": [
+        {
+          "idea": "max-files-per-dir rule is implemented but unwired — enabling it requires plugin registration and config path wiring",
+          "class": "good",
+          "file_line": "file:57-64"
+        },
+        {
+          "idea": "A rule that can silently no-op without a configured inventory must be tested for non-empty inventory before rollout",
+          "class": "good",
+          "file_line": "file:62-64"
+        },
+        {
+          "idea": "Phase 0 baseline-first discipline: refresh live truth before writing rule or config code, explicitly guarding against stale March 2026 assumptions",
+          "class": "good",
+          "file_line": "file:101-119"
+        },
+        {
+          "idea": "Deterministic inventory contract — inventory source must be sorted, non-empty, and tested; generated/fixture exclusions must be declared",
+          "class": "good",
+          "file_line": "file:147-152"
+        },
+        {
+          "idea": "SOP that bans threshold bumps and suppressions as primary responses to directory-count breaches",
+          "class": "good",
+          "file_line": "file:158-161"
+        },
+        {
+          "idea": "Five canonical remediation responses for a directory-count breach: extract sub-domains, move to lower layer, split workspace, delete dead code, generate repeated structure",
+          "class": "good",
+          "file_line": "file:148-155"
+        },
+        {
+          "idea": "Routing rule: directory split that hides a layer tension goes to ADR-154 and a workspace separation plan, not a deeper directory tree",
+          "class": "good",
+          "file_line": "file:43-46"
+        },
+        {
+          "idea": "RED-then-GREEN TDD sequencing: write failing tests proving rule wiring before implementation",
+          "class": "good",
+          "file_line": "file:175-185"
+        },
+        {
+          "idea": "Phase 4 pilot calibration: choose real hotspots from Phase 0 baseline data to calibrate threshold and ignore policy from evidence, not assumption",
+          "class": "good",
+          "file_line": "file:227-249"
+        },
+        {
+          "idea": "Enforcement gate promotion is explicitly deferred until non-zero failure-mode proof exists in hook/CI surfaces",
+          "class": "good",
+          "file_line": "file:109-111"
+        },
+        {
+          "idea": "Non-goals list: no repo-wide activation, no threshold before evidence, no new graph tool while depcruise owns graph enforcement",
+          "class": "good",
+          "file_line": "file:72-83"
+        },
+        {
+          "idea": "Foundation alignment checklist — re-read principles, testing-strategy, and schema-first-execution before each phase",
+          "class": "good",
+          "file_line": "file:85-91"
+        },
+        {
+          "idea": "Reviewer gate strategy assigns specialist reviewers (assumptions-expert, config-expert, architecture-expert, test-expert, docs-adr-expert) per phase",
+          "class": "good",
+          "file_line": "file:282-289"
+        },
+        {
+          "idea": "Phase 5 explicitly prevents quality-gate docs from claiming new gate coverage before it exists",
+          "class": "good",
+          "file_line": "file:266-270"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Queued executable child plan in `current/`",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field `id` — every plan requires a stable kebab-slug graph identity (V0 §2.1)",
+          "file_line": "plan frontmatter:1-23"
+        },
+        {
+          "issue": "Missing required LOCKED field `node_type: \"plan\"` — the registry discriminator is required for all plans (V0 §2.1)",
+          "file_line": "plan frontmatter:1-23"
+        },
+        {
+          "issue": "Missing required LOCKED field `kind` — enum `strategic | executable` is required for all plans (V0 §2.2); inferred `executable` from body prose line 29 and `todos` presence",
+          "file_line": "plan frontmatter:1-23"
+        },
+        {
+          "issue": "Missing required LOCKED field `serves_strategic_choice` — required for executable plans; must be a strategic-choice registry ID or `\"pending\"` sentinel (V0 §2.3)",
+          "file_line": "plan frontmatter:1-23"
+        },
+        {
+          "issue": "Missing required LOCKED field `last_updated` — ISO date required for all plans (V0 §2.4); value exists only in body prose at line 28 (`**Last Updated**: 2026-04-29`), not in frontmatter",
+          "file_line": "body line 28"
+        },
+        {
+          "issue": "Emergent `status:` value appears as body prose (line 29: `**Status**: Queued executable child plan in current/`) — V0 §2.5 drops `status:` and replaces it with `kind` / `disposition` / `gate` / the Linear-projected execution axis; prose use perpetuates the dropped pattern",
+          "file_line": "body line 29"
+        },
+        {
+          "issue": "Body `Foundation Alignment` section (lines 83-99) and `Parent doctrine` (lines 31-33) reference ADR-019, ADR-041, ADR-121, ADR-154, ADR-155, ADR-166 and the parent plan as prose; V0 §2.5 reconciles `foundational_adr`-style references to the `derives_from` edge — these are natural `derives_from` candidates not yet declared as frontmatter edges",
+          "file_line": "body lines 31-33, 83-99"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "config",
+      "specialist_kind": "config",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Phase 2 validation commands reference `@oaknational/eslint-plugin-standards` as the filter target, but the implementation file is named in `packages/core/oak-eslint/src/rules/max-files-per-dir.ts`. The plan never verifies that the rule lives inside the `eslint-plugin-standards` package; if the workspace package name differs, both test and lint commands will silently target the wrong package and produce a false green.",
+          "file_line": "directory-complexity-enablement.execution.plan.md:191-192"
+        },
+        {
+          "severity": "medium",
+          "claim": "The rule wiring requires a 'deterministic inventory' but the plan defers definition of the inventory source, format, and generation mechanism to Phase 1 GREEN implementation. No config artefact (file path, schema, generation script) is named. If Phase 3 proceeds without the inventory contract being formally expressed in a tracked config file, the 'fail fast on missing inventory' acceptance criterion (Phase 3 AC1) has no concrete verifiable target.",
+          "file_line": "directory-complexity-enablement.execution.plan.md:145-153 and 208-209"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 0 deterministic validation checks `test -f .dependency-cruiser.mjs` and `test -f knip.config.ts` at repo root, but these are not commands that surface non-zero exits in the way a gate would. They are existence proofs only and will pass even if the files are empty or misconfigured. A config-correctness baseline would need a parse or dry-run invocation of each tool.",
+          "file_line": "directory-complexity-enablement.execution.plan.md:126-131"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan states the rule must be 'registered in the plugin/config path' (Current Truth gap, line 63) but does not specify which shared ESLint config file(s) (e.g. `recommended`, `strict`, a dedicated profile) will carry the rule. Without naming the config entry point, Phase 3 GREEN implementation has an open surface choice that could produce inconsistent activation across consuming packages.",
+          "file_line": "directory-complexity-enablement.execution.plan.md:63-64 and 199-205"
+        },
+        {
+          "severity": "info",
+          "claim": "Phase 5 validation runs `pnpm markdownlint-check:root` scoped to `.agent/plans/developer-experience docs/architecture/architectural-decisions`. This is narrower than the full docs tree and will not catch link-rot in sibling plan references if those paths change. Acceptable given the plan is a child plan, but worth noting the scope is intentionally bounded.",
+          "file_line": "directory-complexity-enablement.execution.plan.md:275-277"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All todos have status: pending — no phase has been executed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "directory-complexity-enablement.execution.plan.md:7,10,12,15,18,22 (all six phase todos read `status: pending`); line 29 Status: \"Queued executable child plan in `current/`\"; corroborated by estate: packages/core/oak-eslint/src/rules/max-files-per-dir.ts exists but is absent from any plugin index/export (only referenced by its own test), matching the plan's \"implemented but unwired\" Current Truth (line 57-58) and the un-started Phase 3 (line 201)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/developer-experience/future/cursor-plugins-practice-and-oak-developer.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "lifecycle: future + status: exploration — not yet promoted, actively referenced by execution note",
+          "file_line": "file:3-10"
+        },
+        {
+          "claim": "Promotion trigger criteria are well-formed and not yet satisfied (no marketplace gap analysis artefact exists in the plan or referenced artefacts)",
+          "file_line": "file:90-97"
+        },
+        {
+          "claim": "Dependencies on sdk-publishing-and-versioning-plan.md confirm plan is part of a live sequenced collection",
+          "file_line": "file:61,113"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The two-plugin decomposition is well-reasoned at file:19-28: the separation between marketplace-generic (Practice) and Oak-specific (data-aware dev) is architecturally sound and avoids contaminating a generic bundle with Oak concerns. The layering preference (B depends on A) at file:68 and the explicit local-first sequencing at file:28 are grounded in real constraints. The promotion trigger criteria at file:90-97 are precise and prevent premature execution.",
+      "content_quality": "strong",
+      "content_quality_note": "All nine sections are populated with specific, actionable content. The dependency table at file:54-61 names real workspace packages and scripts. Risks table at file:80-87 is concrete with mitigations. The metacognition section at file:98-104 surfaces the main layering tension and the conditional adaptation if marketplace policy forces a single plugin. No filler or placeholder sections.",
+      "salvage_value": [
+        {
+          "idea": "Two-plugin decomposition: Plugin A (Practice, marketplace-generic) and Plugin B (Oak-specific, local-first)",
+          "class": "good",
+          "file_line": "file:23-28"
+        },
+        {
+          "idea": "Marketplace bar spike as first exploration step before any content moves",
+          "class": "good",
+          "file_line": "file:65"
+        },
+        {
+          "idea": "Plugin B depends on Plugin A (layering model) rather than monolithic Oak plugin",
+          "class": "good",
+          "file_line": "file:68,103"
+        },
+        {
+          "idea": "Local MCP HTTP story: pnpm targets, env expectations, repeatable Cursor MCP config snippet",
+          "class": "good",
+          "file_line": "file:43-45"
+        },
+        {
+          "idea": "Component inventory tables (rules/skills/agents/commands/hooks) per plugin with explicit non-duplication strategy",
+          "class": "good",
+          "file_line": "file:41,74"
+        },
+        {
+          "idea": "Plugin B 'shared distribution' phase gated explicitly on sdk-publishing-and-versioning-plan npm readiness",
+          "class": "good",
+          "file_line": "file:28,61"
+        },
+        {
+          "idea": "Use installed cursor create-plugin plugin (plugin-architect agent, create-plugin-scaffold skill, review-plugin-submission skill, plugin-quality-gates rule) when promoted to execution",
+          "class": "good",
+          "file_line": "file:114-118"
+        },
+        {
+          "idea": "Success signal: marketplace readiness matrix with pass/fail per requirement and named owner per gap",
+          "class": "good",
+          "file_line": "file:72-73"
+        },
+        {
+          "idea": "Conditional adaptation: if marketplace policy requires single plugin per publisher, one plugin with optional Oak component paths",
+          "class": "speculative",
+          "file_line": "file:103-104"
+        },
+        {
+          "idea": "Documentation sync via /jc-consolidate-docs and documentation-sync-log on workstream completion",
+          "class": "good",
+          "file_line": "file:108"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "exploration",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Field `id` (LOCKED, required for all plans) is absent",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:1-11"
+        },
+        {
+          "issue": "Field `node_type` (LOCKED, required for all plans) is absent",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:1-11"
+        },
+        {
+          "issue": "Field `name` (LOCKED, required for all plans) is absent; plan uses dropped key `title` instead (line 5)",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:5"
+        },
+        {
+          "issue": "Field `overview` (LOCKED, required for all plans) is absent",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:1-11"
+        },
+        {
+          "issue": "Field `kind` (LOCKED, required for all plans) is absent; plan uses unclassified key `plan_kind: strategic` instead (line 2)",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:2"
+        },
+        {
+          "issue": "Field `last_updated` (LOCKED, required for all plans) is absent; plan uses dropped key `created: 2026-04-10` instead (line 6)",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:6"
+        },
+        {
+          "issue": "Field `promotion_trigger` (LOCKED, required for strategic plans) is absent; §6 body contains a promotion trigger but it is not surfaced as the frontmatter field",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:1-11"
+        },
+        {
+          "issue": "Key `status: exploration` is the dropped emergent field (V0 §2.5); its state information is correctly migrated to `kind: strategic` via §3.5 but the field itself must be removed",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:7"
+        },
+        {
+          "issue": "Key `lifecycle: future` is explicitly dropped in V0 §2.5 (folder + `kind` carry it)",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:3"
+        },
+        {
+          "issue": "Key `collection: developer-experience` is explicitly dropped in V0 §2.5 (folder location is the projection)",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:4"
+        },
+        {
+          "issue": "Key `title` is a dropped emergent key; V0 §2.1 mandates migration to `name`",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:5"
+        },
+        {
+          "issue": "Key `created` is a dropped housekeeping key; V0 §2.4 folds it into `last_updated`",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:6"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `thread`, etc.) — V0 §2.3 recommends `thread` and flags `serves_strategic_choice` as required for executable plans; V0 §2.4 notes the body references ADR-117 and other docs that should be `derives_from` edges",
+          "file_line": "cursor-plugins-practice-and-oak-developer.plan.md:1-11"
+        }
+      ],
+      "unclassified_keys": [
+        "plan_kind",
+        "execution_note"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The Plugin B dependency model (B extends A vs monolithic) is deferred as an unresolved architecture decision. This is the load-bearing structural question for the whole plan — all content-split, governance, and distribution work forks on this answer. Deferring it to exploration step 4 (after content inventory in step 2 and local-MCP work in step 3) risks rework if the dependency model invalidates the split already done.",
+          "file_line": "68-69, 43-44"
+        },
+        {
+          "severity": "medium",
+          "claim": "Plugin B's future 'shared distribution' phase is gated on npm publishing from sdk-publishing-and-versioning-plan.md, but there is no coupling verification: if that plan is archived or significantly delayed the gating signal disappears silently. There is no owner-checkpoint or trigger that would surface this latent dependency becoming stale.",
+          "file_line": "61, 28"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references local MCP HTTP server configuration as a 'single source of truth' to be created during exploration, but the authoritative source is stated as the app README and e2e/dev contracts (line 59). Creating a second authoritative reference in the plugin without a clear read-only-link vs copy decision introduces a future drift risk, which the plan acknowledges only as a risk row rather than a binding constraint.",
+          "file_line": "59, 67, 85"
+        },
+        {
+          "severity": "low",
+          "claim": "The Cursor marketplace plugin infrastructure referenced in section 9 (plugin-architect agent, create-plugin-scaffold skill, plugin-quality-gates rule) is described as already installed but no path is verified or cited beyond a cache-hash pattern. If those artefacts are not present when this plan is promoted to current, the execution step that depends on them will stall without early detection.",
+          "file_line": "114-118"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly scopes Plugin A as a marketplace-generic Practice distribution and Plugin B as an Oak-specific local-first overlay, and explicitly forbids duplicating large trees. This layering intent is architecturally sound and consistent with replace-dont-bridge doctrine.",
+          "file_line": "24-29, 57"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/developer-experience/future/tsdoc-generated-docs-overhaul.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is NOT STARTED and folder is future — work is genuinely pending, not complete or abandoned",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:6"
+        },
+        {
+          "claim": "Concrete audit checklist with four phases and success criteria is actionable future work, not speculative intent",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:44-86"
+        },
+        {
+          "claim": "Named dependency on generated-document-pipeline-extraction-plan is unresolved ordering question that blocks Phase 1",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:54-55"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All constituent ideas are grounded in observable technical debt (--skipErrorChecking at line 43, multi-config divergence at line 39-40, annotation variance at line 36-37) and produce concrete, verifiable remediation steps. No speculative product features; no bad ideas introduced.",
+      "content_quality": "adequate",
+      "content_quality_note": "The four-phase structure and success criteria (lines 89-95) are clear, but the plan does not estimate effort, does not name who owns it, and does not resolve the ordering dependency with generated-document-pipeline-extraction-plan (line 54) — leaving the most blocking question open. That gap drops it from strong to adequate.",
+      "salvage_value": [
+        {
+          "idea": "Audit all TypeDoc outputs from pnpm doc-gen before any annotation or config work begins",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:48-53"
+        },
+        {
+          "idea": "Catalogue modules by TSDoc coverage quality to prioritise annotation effort",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:49-50"
+        },
+        {
+          "idea": "Remove --skipErrorChecking and treat surfaced errors as real failures",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:71"
+        },
+        {
+          "idea": "Evaluate whether the three TypeDoc configs (json, ai, mcp) are justified or should be consolidated",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:74-75"
+        },
+        {
+          "idea": "Add @public/@internal markers to control generated-doc surface area",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:64-65"
+        },
+        {
+          "idea": "Ensure pnpm doc-gen is part of the standard quality gate chain",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:83"
+        },
+        {
+          "idea": "Add a Generated API Reference section to the SDK README",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:81"
+        },
+        {
+          "idea": "Resolve ordering dependency with generated-document-pipeline-extraction-plan before starting Phase 1",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:54-55"
+        },
+        {
+          "idea": "Consider publishing generated docs (GitHub Pages, npm package, or local reference)",
+          "class": "speculative",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:84-85"
+        },
+        {
+          "idea": "Ensure generated docs are linked from workspace READMEs",
+          "class": "good",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:80"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block present; all V0 required fields (id, node_type, name, overview, kind, last_updated) are absent",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:1"
+        },
+        {
+          "issue": "`status: NOT STARTED` expressed as prose bold text, not a V0 frontmatter axis field; maps to kind:executable + execution:backlog or kind:strategic under §3.5 but is declared on neither axis",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:4"
+        },
+        {
+          "issue": "`Priority: Medium` is a prose bold field with no V0 classification; it is neither a frontmatter field nor a typed edge in the V0 contract",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:5"
+        },
+        {
+          "issue": "`Created: 2026-02-23` is prose; V0 §2.4 maps creation date into `last_updated` in frontmatter — field is absent from frontmatter",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:3"
+        },
+        {
+          "issue": "`Related` section is a body-level markdown list, not a frontmatter `related:` list as required by V0 §2.4",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:97"
+        },
+        {
+          "issue": "Plan resides in `future/` (implies kind:strategic per V0 §3.6) but body contains phased checkbox todos (executable-style work per V0 §2.4); kind is undeclared so the folder/body tension is unresolved",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:44"
+        },
+        {
+          "issue": "`serves_strategic_choice` edge absent; required for executable plans and recommended for strategic plans per V0 §2.3",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:1"
+        },
+        {
+          "issue": "`promotion_trigger` absent; required for strategic plans per V0 §2.4",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "Created",
+        "Priority"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "docs",
+      "specialist_kind": "docs",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Plan states 'oak-curriculum-sdk' generates docs via 'pnpm doc-gen' (line 23). The SDK workspace has no 'doc-gen' script — it exposes 'docs:api', 'docs:api:html', 'docs:api:json', 'docs:api:json:ai', and 'docs:mcp'. Turbo 'run doc-gen' silently skips the SDK workspace entirely. The Phase 1 audit task 'Run pnpm doc-gen and review all outputs' (line 48) would therefore miss the SDK's docs entirely.",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:23"
+        },
+        {
+          "severity": "low",
+          "claim": "Plan asserts '--skipErrorChecking is used everywhere' (line 43). Verified: the SDK workspace uses it on all five typedoc scripts (packages/sdks/oak-curriculum-sdk/package.json:117-121) but oak-search-cli does not use it at all (apps/oak-search-cli/package.json:43-44). The scope of the Phase 3 remediation task (line 71) is overstated for search-cli and understated for the SDK's five distinct invocations.",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:43"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 1 audit item at line 52 cross-references 'the generated-document-pipeline-extraction-plan' by description only, without a relative path or anchor. The sibling plan exists at generated-document-pipeline-extraction-plan.md in the same directory, so the Related section link at line 99 resolves correctly, but the inline prose reference during the audit phase could mislead an executor who hasn't read the Related section.",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:52"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan has no owner, executor, or timeline fields beyond the created date (2026-02-23) and status NOT STARTED. For a NOT STARTED future plan this is expected, but combined with the script-name inaccuracy it indicates the plan was authored without grounding against the actual workspace scripts.",
+          "file_line": "tsdoc-generated-docs-overhaul.plan.md:1"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/education-skills-mcp-surface.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly FUTURE / not yet executable; all todos pending; no work has begun",
+          "file_line": "40-53"
+        },
+        {
+          "claim": "Architecture is fully specified and non-trivial — workspace structure, Zod schema, sequencing, exit criteria all present; worth preserving for when promoted to active",
+          "file_line": "149-354"
+        },
+        {
+          "claim": "Three-source architecture table provides strategic context not duplicated elsewhere",
+          "file_line": "85-97"
+        },
+        {
+          "claim": "Licence isolation design for CC BY-SA 4.0 is detailed and decision-quality; loss would require full re-derivation",
+          "file_line": "149-191"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every major decision is explained from first principles: the licence isolation rationale (lines 151-170), the subtree choice over submodule/npm (lines 209-219), the prompts-as-MCP-primitives choice (lines 223-228), the EEF composition pattern (lines 256-268). The Zod schema (lines 286-335) is implementation-ready. The three-source architecture (lines 85-97) is the clearest statement of the MCP server's knowledge-layer design in the estate. No padding or hand-waving; every section earns its length.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan goes beyond structural conformance: it contains a fully specified Zod schema (lines 286-335), a worked sequencing diagram with explicit dependency arrows (lines 339-354), a risk table with mitigations (lines 430-437), and a size estimate (lines 396-408). The EEF-to-skill composition example (lines 259-268) is a concrete workflow, not an aspiration. The exit criteria (lines 413-426) are observable and specific. This is implementation-ready design documentation.",
+      "salvage_value": [
+        {
+          "idea": "Three-source architecture: Oak API (what exists) + EEF (what works) + education skills (how to implement) — positions each layer distinctly",
+          "class": "good",
+          "file_line": "85-97"
+        },
+        {
+          "idea": "CC BY-SA 4.0 workspace isolation via packages/data/education-skills/ with vendor/, modifications/, and MIT-elsewhere separation",
+          "class": "good",
+          "file_line": "149-191"
+        },
+        {
+          "idea": "Git subtree over submodule or npm for content vendoring — rationale grounded in CI pain and local-modification merge behaviour",
+          "class": "good",
+          "file_line": "209-219"
+        },
+        {
+          "idea": "edu-skill-* namespace prefix for MCP prompts to signal provenance, following ADR-157 convention",
+          "class": "good",
+          "file_line": "229-241"
+        },
+        {
+          "idea": "Three discovery meta-tools (list-education-skills, find-education-skills, suggest-education-skills) as read-only, idempotent MCP tools",
+          "class": "good",
+          "file_line": "244-253"
+        },
+        {
+          "idea": "EEF recommendation → suggest-education-skills → specific skill prompt as the high-value composition workflow",
+          "class": "good",
+          "file_line": "256-268"
+        },
+        {
+          "idea": "Build-time SKILL.md → typed JSON bundling via gray-matter + Zod, with output gitignored",
+          "class": "good",
+          "file_line": "271-280"
+        },
+        {
+          "idea": "Zod schema for EducationSkillSchema and EducationSkillBundleSchema — fully specified, implementation-ready",
+          "class": "good",
+          "file_line": "286-335"
+        },
+        {
+          "idea": "Prompt-list bloat risk from 108 prompts — pagination or lazy-load mitigation, meta-tools as filtered discovery alternative",
+          "class": "good",
+          "file_line": "431"
+        },
+        {
+          "idea": "Alpha exploration framing: integration is evaluation, not a commitment to ship all 108 skills",
+          "class": "good",
+          "file_line": "55-59"
+        },
+        {
+          "idea": "Licence/attribution documentation should not reference upstream content until it is actually present in the repo",
+          "class": "good",
+          "file_line": "61-65"
+        },
+        {
+          "idea": "Original Oak skills (not derived from upstream) remain under MIT — ShareAlike scope is directory-bounded, not repo-wide",
+          "class": "good",
+          "file_line": "167-170"
+        },
+        {
+          "idea": "ADR-157 as namespace governance authority for MCP prompt prefixes — forward citation, unverified",
+          "class": "speculative",
+          "file_line": "240"
+        },
+        {
+          "idea": "ADR-123 as the target for updated prompt/tool registration docs — forward citation, unverified",
+          "class": "speculative",
+          "file_line": "424"
+        },
+        {
+          "idea": "agentskills.io cited as the Agent Skills 1.0 open standard authority",
+          "class": "speculative",
+          "file_line": "104-105"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (required for all plans, LOCKED — §2.1)",
+          "file_line": "education-skills-mcp-surface.plan.md:1 (frontmatter block, line 1–36)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (required for all plans, LOCKED — §2.1)",
+          "file_line": "education-skills-mcp-surface.plan.md:1 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (required for all plans, LOCKED — §2.2/§3.1); `status: future` carries the readiness value that belongs on `kind: strategic` but the replacement field is absent",
+          "file_line": "education-skills-mcp-surface.plan.md:7"
+        },
+        {
+          "issue": "Dropped field `status` still present (V0 §2.5 drops `status` entirely; replaced by `kind`/`disposition`/`gate`/Linear-projected execution axis)",
+          "file_line": "education-skills-mcp-surface.plan.md:7"
+        },
+        {
+          "issue": "Missing required field `last_updated` (required for all plans, LOCKED — §2.4); body carries `**Last Updated**: 2026-04-15` as prose (line 41) but not in frontmatter",
+          "file_line": "education-skills-mcp-surface.plan.md:41"
+        },
+        {
+          "issue": "`sibling_plans` is not a V0 field; relationships of this kind belong in typed edges (`depends_on`, `related`, `thread`) or are unclassified — §2.3/§2.4",
+          "file_line": "education-skills-mcp-surface.plan.md:4-5"
+        },
+        {
+          "issue": "`serves_strategic_choice` absent; recommended for strategic plans (§2.3)",
+          "file_line": "education-skills-mcp-surface.plan.md:1 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "sibling_plans"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "`todos` present on a plan whose `status: future` maps to `kind: strategic` via §3.5 migration map. V0 §2.4 states `todos` is LOCKED as forbidden on `strategic` plans. The plan body (line 40) also self-declares 'FUTURE — strategic/reference design, not yet executable'. The todos block (lines 8–35) contains 9 pending execution tasks.",
+          "evidence": "V0 §2.4: 'Forbidden on `strategic` plans' (LOCKED). §3.5 migration map maps `future` → `kind: strategic`. Plan body line 40: 'FUTURE — strategic/reference design, not yet executable'. This is either a mis-classification of kind (the plan is actually executable and should move to an executable home) or the todos must be removed/deferred to a promotion-trigger. Owner re-ratification required: decide whether this plan is strategic (remove todos, add promotion_trigger) or executable (set kind: executable, add serves_strategic_choice, move to executable folder).",
+          "file_line": "education-skills-mcp-surface.plan.md:7 (status: future), lines 8–35 (todos block), line 40 (body self-declaration)"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan registers all 108 skills as individual MCP prompts under the edu-skill-* namespace and acknowledges 'prompts/list response bloating' as a medium-likelihood risk (mitigation: paginate or lazy-load). However, no pagination mechanism is designed or cited in the MCP prompt protocol; lazy-loading is not a standard MCP prompts/list behaviour. The risk is noted but the mitigation is unresolved architecture.",
+          "file_line": "229-230, 432"
+        },
+        {
+          "severity": "medium",
+          "claim": "The suggest-education-skills meta-tool does natural-language problem-to-skill recommendation (line 251) but no retrieval or ranking mechanism is specified — no vector index, keyword index, or similarity function. At 108 skills this is tractable with linear scan, but the design leaves this as an open implementation choice that will force a decision at execution time and may not compose cleanly with the existing MCP server patterns.",
+          "file_line": "251"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan locates the generated bundle (education-skills.json) inside src/ of the same workspace (line 186) but marks it gitignored and build-generated. The SDK then consumes it across a workspace boundary (T4, line 279). This cross-workspace generated-artefact dependency is not explicit in the sequencing diagram and may create build-ordering fragility in the monorepo.",
+          "file_line": "186, 279, 344-354"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references ADR-157 for the edu-skill-* namespace prefix convention (line 242) but ADR-157 is not verified to exist in this review. If the ADR is absent, the namespace governance basis is undocumented at execution time.",
+          "file_line": "242"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan notes that {{placeholder}} template syntax may clash with MCP prompt argument syntax (risk table, line 436) but defers resolution to 'build-time validation of template/schema alignment'. No design is given for the transformation — whether templates are rewritten, escaped, or passed through — leaving a protocol surface uncertainty unresolved in the FUTURE state plan.",
+          "file_line": "436"
+        },
+        {
+          "severity": "info",
+          "claim": "The three-source architecture table (lines 85-97) is coherent and the layered composition model (EEF recommends strategy, education skills provide implementation) is well-motivated. The workspace licence boundary design (directory-as-boundary, separate package.json with CC-BY-SA-4.0) is a sound approach for monorepo licence isolation.",
+          "file_line": "85-97, 149-168"
+        },
+        {
+          "severity": "info",
+          "claim": "The git subtree over submodule rationale (lines 209-218) explicitly defers to the sibling ontology-integration-strategy plan for the trade-off analysis rather than re-arguing it, which is appropriate cross-plan referencing for a FUTURE plan.",
+          "file_line": "209-218"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "No content from the upstream repo has been integrated into this repository",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "education-skills-mcp-surface.plan.md:46-49 asserts non-integration; refuted by absence in estate: `ls packages/data/education-skills` returns \"No such file or directory\"; grep for edu-skill / list-education-skills / find-education-skills / suggest-education-skills across non-plan source returns zero hits; `find packages -path \"*education-skills*\"` empty. Only non-plan mention is an investigation note at .agent/memory/active/archive/napkin-2026-04-16.md:357 (\"Investigated GarethManning/claude-education-skills\"), not vendored content."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/exploring-open-education-resources/external-knowledge-sources/future/external-knowledge-graph-data-source-integration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is future/not-yet-executable with a clear promotion trigger; the plan is doing its correct job as a strategic gate",
+          "file_line": "file:13-15,72-76"
+        },
+        {
+          "claim": "No completion or supersession claims; no duplication detected; the intake-model framing is not covered by any implementation plan",
+          "file_line": "file:18-26"
+        },
+        {
+          "claim": "Promotion trigger is well-specified, making eventual graduation to current/ low-friction",
+          "file_line": "file:72-76"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All content serves a real architectural need — preventing per-source improvisation on provenance, licensing, and validation. The non-goals (file:37-43), risk table (file:64-70), and promotion trigger (file:72-76) are precise and actionable. No filler, no speculative scope, no bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Five-gate promotion checklist (file:55-61) is specific and independently verifiable. Risk table (file:64-70) names severity and mitigation for each risk. Domain boundary section (file:29-43) is crisp. The plan is terse, coherent, and fully self-contained for its strategic-brief purpose.",
+      "salvage_value": [
+        {
+          "idea": "A shared intake model must precede any per-source implementation to avoid provenance/licensing debt accumulation",
+          "class": "good",
+          "file_line": "file:24-26"
+        },
+        {
+          "idea": "Five-gate promotion checklist: pinned version, licence+attribution, named application, validation+failure-behaviour, named implementation owner",
+          "class": "good",
+          "file_line": "file:55-61"
+        },
+        {
+          "idea": "External graph semantics must not be treated as Oak-endorsed truth; source attribution and synthesis boundaries must be explicit",
+          "class": "good",
+          "file_line": "file:65-66"
+        },
+        {
+          "idea": "Source-specific validation must meet or exceed Oak's generated schema contracts before any runtime surface",
+          "class": "good",
+          "file_line": "file:67"
+        },
+        {
+          "idea": "A named application (teacher MCP surface, search enrichment, analytics comparison, curriculum mapping, QA, partner support) is a mandatory pre-condition for promotion",
+          "class": "good",
+          "file_line": "file:47-49"
+        },
+        {
+          "idea": "Licence and governance triage is a preflight gate, not a late-stage check",
+          "class": "good",
+          "file_line": "file:68-70"
+        },
+        {
+          "idea": "Deciding which implementation collection owns a promoted source is in-scope for this intake model",
+          "class": "good",
+          "file_line": "file:36"
+        },
+        {
+          "idea": "Treating all structured data with relationships as a graph is explicitly out of scope",
+          "class": "good",
+          "file_line": "file:43"
+        },
+        {
+          "idea": "OEAI MAT analytics schema is a named future candidate (not committed)",
+          "class": "speculative",
+          "file_line": "file:22"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (kebab slug) — LOCKED, required for all plans (§2.1)",
+          "file_line": "file:1-9 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` — LOCKED, required for all plans (§2.1)",
+          "file_line": "file:1-9 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` — LOCKED, required for all plans (§2.2); should be `kind: strategic` per §3.5 migration map row 1",
+          "file_line": "file:1-9 (frontmatter block)"
+        },
+        {
+          "issue": "Field `status: future` is present — V0 §2.5 explicitly drops `status`; the value maps to `kind: strategic` but the field itself must be removed",
+          "file_line": "file:5"
+        },
+        {
+          "issue": "Field `last_updated` absent from frontmatter — LOCKED, required for all plans (§2.4); value exists only in body prose",
+          "file_line": "file:17 (body, not frontmatter)"
+        },
+        {
+          "issue": "Field `promotion_trigger` absent from frontmatter — LOCKED, required on `strategic` plans (§2.4); promotion-trigger content exists only as a body section",
+          "file_line": "file:72-76 (body, not frontmatter)"
+        },
+        {
+          "issue": "Key `related_plans` does not match the V0 canonical name `related` — V0 §2.4 names the untyped see-also field `related`",
+          "file_line": "file:6"
+        },
+        {
+          "issue": "No typed edges declared (serves_strategic_choice, derives_from, thread, depends_on absent) — `serves_strategic_choice` is required (or `\"pending\"`) on executable plans and strongly recommended on strategic plans (§2.3); all edge fields absent",
+          "file_line": "file:1-9 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "related_plans",
+        "specialist_reviewer"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan correctly defers all implementation decisions and commits only to a common intake model (provenance, validation, licensing, update cadence, application-boundary rules). This is sound architectural discipline for a future/strategic brief.",
+          "file_line": "external-knowledge-graph-data-source-integration.plan.md:23-27"
+        },
+        {
+          "severity": "info",
+          "claim": "The explicit non-goal 'treating all structured data as a graph just because it has relationships' (line 44) is a valuable architectural boundary that prevents premature graph modelling of relational or document sources.",
+          "file_line": "external-knowledge-graph-data-source-integration.plan.md:44"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan names 'schema-first validation' as a hard gate (line 51) but does not specify where the schema contract lives or who owns its lifecycle. If each promoted source invents its own schema home, the intake model this plan intends to unify will fragment anyway. A promoted plan should be required to name an owning schema registry or validation layer.",
+          "file_line": "external-knowledge-graph-data-source-integration.plan.md:50-52"
+        },
+        {
+          "severity": "medium",
+          "claim": "Success signal 5 ('an implementation owner outside this strategic sector thread') defers ownership determination to promotion time without specifying which candidate collections are eligible. This leaves the boundary between external-knowledge-sources and the internal Oak KG integration collection undefined until a source is actually promoted, which could cause repeated boundary disputes. The brief would benefit from naming the candidate target collections now.",
+          "file_line": "external-knowledge-graph-data-source-integration.plan.md:62"
+        },
+        {
+          "severity": "low",
+          "claim": "The risk table flags 'Validation is weaker than Oak's generated schema contracts' (line 68) as High severity and mitigates via 'source-specific validation before any runtime surface', but the plan does not specify what 'runtime surface' means structurally (MCP tool, search index, analytics pipeline, etc.). A promoted plan will need to be explicit about the integration point, as validation requirements differ substantially between these surfaces.",
+          "file_line": "external-knowledge-graph-data-source-integration.plan.md:68"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan is scoped to intake of external KG sources as 'application data' (line 4) but does not address whether ingested graph data is persisted (snapshot), streamed, or proxied at runtime. This is an architectural decision that will constrain every promoted source implementation; noting it as an open question in the brief would reduce rework at promotion time.",
+          "file_line": "external-knowledge-graph-data-source-integration.plan.md:4"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/school-data-search/current/school-data-search-poc.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All nine gates are completed (todos) and their decisions are recorded in full — the plan is the live execution record for WS1-WS11 which are all pending",
+          "file_line": "lines 11-41 (todos), lines 294-457 (gate decisions)"
+        },
+        {
+          "claim": "The learnings section encodes concrete, non-recoverable corrective doctrine that guards against known failure modes in the next build",
+          "file_line": "lines 163-212"
+        },
+        {
+          "claim": "Plan-level acceptance criteria map to WS-level proof contracts — the traceability is live and needed for the executing workstreams",
+          "file_line": "lines 733-759"
+        },
+        {
+          "claim": "The build workstreams WS1-WS11 are all status=pending and have not yet executed — the plan is the active execution guide",
+          "file_line": "lines 43-90 (todo statuses)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every gate decision is owner-ratified with explicit report-source citations (e.g. G-1 at lines 299-315, G-6 at lines 386-412). Learnings from the reverted experiment are concrete and each names a specific correctable failure (lines 169-212). Workstream acceptance criteria are outcome-level with stated proof levels (e.g. WS3 lines 586-590, WS7 lines 663-668). The verification ledger distinguishes completed checks (✓) from resolved warnings (⚠ RESOLVED) inline (lines 466-501). The plan avoids vendor-literal call shapes and explicitly defers them to build WSs (lines 815-817).",
+      "content_quality": "strong",
+      "content_quality_note": "The plan demonstrates unusual internal discipline: it records and corrects its own prior failure (lines 113-212), cross-references between its gates and the synthesis report by section (e.g. '§4 D-16' at line 280), names one-way doors explicitly (lines 347-349, 775-777), and distinguishes owner requirements as an override layer (lines 157-160). The gate-decision prose is dense but every sentence is load-bearing. Acceptance criteria at WS level include the specific proof level (unit/integration/E2E) and the named test shape (e.g. 'forbidden-field fixtures', 'stale-serving proof' at lines 587-590, 641-643).",
+      "salvage_value": [
+        {
+          "idea": "Code-first Zod 4 as single canonical source for OpenAPI 3.x via @asteasolutions/zod-to-openapi — CI-proven drift prevention",
+          "class": "good",
+          "file_line": "lines 299-315"
+        },
+        {
+          "idea": "4-workspace bundle topology: contracts / sdk / client / apps/api under school-data-search/; reusable pieces in normal packages/",
+          "class": "good",
+          "file_line": "lines 439-451, 526-536"
+        },
+        {
+          "idea": "Whole-dataset atomic promotion with stale-serving proof (failed import leaves previous dataset serving)",
+          "class": "good",
+          "file_line": "lines 631-643"
+        },
+        {
+          "idea": "Fail-until-mapped posture for canonical enum values grounded against real source vocabularies, not plan-pinned",
+          "class": "good",
+          "file_line": "lines 335-347, 569-577"
+        },
+        {
+          "idea": "Multi-layer claim-verification discipline: brief assertion -> report cross-grading -> primary-source confirmation, with the V-ledger as a required gate",
+          "class": "good",
+          "file_line": "lines 136-155"
+        },
+        {
+          "idea": "Split-token format (id+secret, HMAC-SHA-256+pepper, prefix column for O(1) lookup and per-consumer audit)",
+          "class": "good",
+          "file_line": "lines 372-384"
+        },
+        {
+          "idea": "App-code pure-function multilingual normaliser covering EN/Welsh/Gaelic/Turkish/Hebrew-translit, applied identically at index and query time",
+          "class": "good",
+          "file_line": "lines 417-430"
+        },
+        {
+          "idea": "Deterministic ranking via ordered buckets (exact-original -> exact-normalised -> prefix -> alias -> FTS -> trigram) with stable tie-breaks, fixture-tested",
+          "class": "good",
+          "file_line": "lines 414-417, 647-655"
+        },
+        {
+          "idea": "Postgres-native search (pg_trgm) for POC with a named, clean Elasticsearch Serverless seam for later adoption",
+          "class": "good",
+          "file_line": "lines 428-430"
+        },
+        {
+          "idea": "Privacy by allowlist: redacted-only snapshots, forbidden-field fixtures at every layer (snapshot / canonical / API / log)",
+          "class": "good",
+          "file_line": "lines 357-371, 783"
+        },
+        {
+          "idea": "Per-source pipeline with explicit configurable refresh period and provenance/freshness surfaced per record and on /api/metadata",
+          "class": "good",
+          "file_line": "lines 386-392"
+        },
+        {
+          "idea": "Licensing guardrail as a hard non-goal: only crystal-clear OGL licences; public display blocked until licence confirmed crystal-clear at fetch time",
+          "class": "good",
+          "file_line": "lines 247-259, 596-600"
+        },
+        {
+          "idea": "No coordinates / no OS-derived data dropped entirely (lat/long, easting/northing, geometry, UPRN excluded)",
+          "class": "good",
+          "file_line": "lines 255-259, 499-501"
+        },
+        {
+          "idea": "Scotland via School Contact Details + Independent Schools register (both clean OGL); geospatial layer dropped",
+          "class": "good",
+          "file_line": "lines 393-398, 607-613"
+        },
+        {
+          "idea": "NI via DE annual publications (annual refresh, scraper-free) instead of fragile ASP.NET Institution-Search viewstate scraper",
+          "class": "good",
+          "file_line": "lines 397-402, 613-615"
+        },
+        {
+          "idea": "Per-nation sourceId-stability verification (cardinality 1:1 at school grain) before building canonical IDs on top",
+          "class": "good",
+          "file_line": "lines 617-624"
+        },
+        {
+          "idea": "No stub workspaces — enumerate-as-built: a workspace is scaffolded only when the workstream that gives it behaviour runs",
+          "class": "good",
+          "file_line": "lines 169-177"
+        },
+        {
+          "idea": "Gate-green is not behaviour-bearing — readiness evidence must show observable behaviour per acceptance id, not gate colour",
+          "class": "good",
+          "file_line": "lines 191-194"
+        },
+        {
+          "idea": "Unredacted-quarantine excluded and not a config toggle — enabling PII-bearing persistence is a deliberate reviewed code change",
+          "class": "good",
+          "file_line": "lines 367-371"
+        },
+        {
+          "idea": "Admin-token rotation as operational script only (no HTTP rotation endpoint) — smaller attack surface",
+          "class": "good",
+          "file_line": "lines 372-376"
+        },
+        {
+          "idea": "Opaque cursor pinning datasetVersionId + sort tuple (no HMAC-signing proportionate for authenticated internal API)",
+          "class": "good",
+          "file_line": "lines 376-380"
+        },
+        {
+          "idea": "Rate-limiting explicitly deferred and flagged for security-expert review at WS7 — not silently inherited",
+          "class": "good",
+          "file_line": "lines 380-384"
+        },
+        {
+          "idea": "Open-school completeness non-negotiable and first-class acceptance criterion proven per nation at WS4",
+          "class": "good",
+          "file_line": "lines 407-412, 624-629"
+        },
+        {
+          "idea": "WS11 school-picker page as the value proof: server-side bearer, access-gated, browser never sees the token",
+          "class": "good",
+          "file_line": "lines 707-721"
+        },
+        {
+          "idea": "Go/no-go evidence pack as a formal closeout gate before any extraction decision",
+          "class": "good",
+          "file_line": "lines 724-731"
+        },
+        {
+          "idea": "POC boundary hard-enforced: no npm publish without G-9, no extraction to separate repo during POC",
+          "class": "good",
+          "file_line": "lines 260-262, 454-457"
+        },
+        {
+          "idea": "Boundary rules (depcruise + ESLint tier rules) authored before any new-workspace code lands",
+          "class": "good",
+          "file_line": "lines 443-446, 812-814"
+        },
+        {
+          "idea": "change_events field-level diffing and import-run-inspection detail API deferred post-go (picker-non-essential)",
+          "class": "good",
+          "file_line": "lines 635-641"
+        },
+        {
+          "idea": "Neon preview branching (opt-in, not automatic) + VERCEL_ENV guard on destructive admin routes as preview-safety",
+          "class": "good",
+          "file_line": "lines 492-494"
+        },
+        {
+          "idea": "Observability reuse only: @oaknational/logger stdio sink + @oaknational/observability OTEL; no remote sinks for POC",
+          "class": "good",
+          "file_line": "lines 679-693"
+        },
+        {
+          "idea": "Ingestion maxDuration 800s needs Vercel Pro/Enterprise (Hobby caps 300s) — risk flagged with chunk-ingestion mitigation",
+          "class": "speculative",
+          "file_line": "lines 782-783"
+        },
+        {
+          "idea": "Elasticsearch Serverless as the named later enhancement if project taken forward, with the search-document seam kept clean",
+          "class": "speculative",
+          "file_line": "lines 428-430, 648-649"
+        },
+        {
+          "idea": "6-way workspace split as named upgrade path post-POC (currently rejected as betty's critically-rejected proposal)",
+          "class": "speculative",
+          "file_line": "lines 440, 449-450"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "queued",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Field 'plan_id' used instead of V0-mandated 'id' (LOCKED, §2.1). The node's stable graph identity key is wrong.",
+          "file_line": "school-data-search-poc.plan.md:2"
+        },
+        {
+          "issue": "Field 'node_type' absent. V0 §2.1 mandates node_type: \"plan\" on all plan nodes (LOCKED registry discriminator).",
+          "file_line": "school-data-search-poc.plan.md:1"
+        },
+        {
+          "issue": "Field 'title' used instead of V0-mandated 'name' (LOCKED, §2.1). V0 §2.5 explicitly migrates emergent 'title' → 'name'.",
+          "file_line": "school-data-search-poc.plan.md:3"
+        },
+        {
+          "issue": "Field 'overview' absent. V0 §2.1 mandates 'overview' (one-line scope) on all plan nodes (LOCKED).",
+          "file_line": "school-data-search-poc.plan.md:1"
+        },
+        {
+          "issue": "Field 'type: executable' used instead of V0-mandated 'kind: executable' (LOCKED, §2.2, §3.1). V0 §2.5 drops 'type' as a free-label.",
+          "file_line": "school-data-search-poc.plan.md:4"
+        },
+        {
+          "issue": "Field 'status: queued' is a V0-DROPPED field (§2.2, §2.5). 'queued' maps to kind: executable + Linear execution backlog; it should not appear in durable frontmatter.",
+          "file_line": "school-data-search-poc.plan.md:5"
+        },
+        {
+          "issue": "Field 'lifecycle: current' is a V0-DROPPED field (§2.2, §2.5). Lifecycle is carried by folder location and 'kind'.",
+          "file_line": "school-data-search-poc.plan.md:6"
+        },
+        {
+          "issue": "Field 'serves_strategic_choice' absent. V0 §2.3 requires this edge on all executable plans (LOCKED shape; sentinel 'pending' is acceptable).",
+          "file_line": "school-data-search-poc.plan.md:1"
+        },
+        {
+          "issue": "Field 'evidence_source' is not classified by V0 (§2.1–§2.5, §2.5 dropped/deferred table). It is an unclassified emergent key outside the V0 contract.",
+          "file_line": "school-data-search-poc.plan.md:8"
+        }
+      ],
+      "unclassified_keys": [
+        "plan_id",
+        "title",
+        "type",
+        "status",
+        "lifecycle",
+        "evidence_source"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "low",
+          "claim": "Rate-limiting is explicitly deferred for the POC. The decision at G-5 acknowledges this with 'flagged for WS7 security-expert review', but the deferral means the API ships without rate-limiting even though it is bearer-gated and sits behind Cloudflare. The WS7 todo does not list rate-limiting as a required acceptance criterion, only as a deferred item flagged for review — there is no hard gate that forces the issue to be decided before go/no-go.",
+          "file_line": "24,383-384,663"
+        },
+        {
+          "severity": "low",
+          "claim": "Cursor integrity has no tamper-protection. G-5 explicitly opts out of HMAC-signing cursors on the grounds that 'tampering only affects the caller's own pagination'. For an authenticated internal API this is proportionate, but cursor parameters encoding datasetVersionId + sort tuple could be manipulated by a compromised or rogue internal caller to probe internal version identifiers or force out-of-band pagination states. The plan records the rationale, not a verification.",
+          "file_line": "378-380"
+        },
+        {
+          "severity": "medium",
+          "claim": "The GIAS daily CSV endpoint is described as 'no auth, plain GET' and ingested over a public URL pattern (ea-edubase-api-prod.azurewebsites.net). The plan records the endpoint URL with a date-substitution template. If the date-stamped URL is predictable by a third party, and if the pipeline does not verify checksum/signature of downloaded content, a supply-chain substitution (DNS or MITM) could inject malicious source data that survives the hard-fail-validation layer unless field-level checks cover structure and not just presence. WS3 specifies checksum-based unchanged-source short-circuit but does not mandate TLS certificate pinning or response-body signature verification from the official source.",
+          "file_line": "52-53,472-474,580-586"
+        },
+        {
+          "severity": "low",
+          "claim": "The split-token format embeds the id+secret in a single bearer value ('oak_sds_<id>_<secret>'). The plan specifies HMAC-SHA-256 + pepper hashing at rest and prefix-only logging. There is no mention of whether the pepper is stored separately from the database (e.g. as a separate env secret), which determines whether a database-dump alone is sufficient to mount an offline brute-force against the stored hashes.",
+          "file_line": "375-377,663"
+        },
+        {
+          "severity": "info",
+          "claim": "WS11 picker page holds the bearer token server-side and proxies to the service's own autocomplete/detail routes. The plan mandates access-gating via 'Vercel deployment protection / basic auth'. Vercel deployment protection is preview-environment tooling; if the picker page is the value-proof demo and is served from a production deployment, the protection mechanism needs to be verified as production-capable (not preview-only). V-08 confirmed cron is production-only, but the equivalent check for deployment-protection scope at production is not recorded.",
+          "file_line": "714-716"
+        },
+        {
+          "severity": "info",
+          "claim": "The unredacted-quarantine is explicitly excluded and marked as NOT a config toggle at G-4. This is a strong PII-safety property and is correctly hardened. No finding — recording as a positive security anchor that future reviewers should verify has not been softened.",
+          "file_line": "366-370"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan names the security-expert review points as WS3 (PII/redaction), WS7 (auth, trust boundary), and WS8 (cron secret, preview safety) at the Readiness Reviewers section. Rate-limiting at WS7 is flagged but its disposition is not a hard gate; the go/no-go evidence pack (poc-go-no-go todo) does not list a security-expert sign-off as a required input.",
+          "file_line": "828-831,87-90"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is explicitly scoped as a future strategic brief awaiting promotion trigger (Milestone 3 or Cloudflare access testable)",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:5,125-127"
+        },
+        {
+          "claim": "Contains durable threat-model content (tool poisoning, shadow MCP, supply chain, auth-audience) grounded in primary sources that retains value regardless of promotion timing",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:37-38,79-89"
+        },
+        {
+          "claim": "Promotion trigger and success signals are well-defined, making the plan self-managing in the future lane",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:104-111,125-127"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, grounded in nine named primary sources (lines 21-29), maps six concrete Cloudflare control families (lines 51-58), names five distinct MCP threat categories with mitigation owners (lines 115-122), and provides five Practice-level and five product-level improvement candidates. Every section contains actionable specifics; there is no padding or speculative hand-waving.",
+      "content_quality": "strong",
+      "content_quality_note": "The disposition matrix (lines 51-58) uses a consistent three-state schema (enabled / unavailable / not applicable / declined with evidence) that is directly executable when promoted. The risks table (lines 115-122) names mitigations per risk. The practice enhancements (lines 62-75) are specific enough to inform doc-level changes without ambiguity. The success signals (lines 104-111) are verifiable conditions, not aspirations.",
+      "salvage_value": [
+        {
+          "idea": "Public-beta release gate: no launch without owner-visible Cloudflare control disposition per family",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:8-10"
+        },
+        {
+          "idea": "Candidate control disposition matrix covering WAF, Access portals, shadow-MCP detection, segmentation, AI Gateway, and Code Mode sandbox",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:51-58"
+        },
+        {
+          "idea": "Practice enhancement: vendor-control disposition table pattern (enabled / unavailable / not applicable / declined + evidence)",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:62-64"
+        },
+        {
+          "idea": "Practice enhancement: governed MCP capability platform pattern with central approval, policy templates, default-deny writes, audit logging, secrets rules, CI/CD provenance",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:65-68"
+        },
+        {
+          "idea": "Practice enhancement: shadow MCP threat-model line naming unregistered servers, proxies, and hidden tool surfaces",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:69-72"
+        },
+        {
+          "idea": "Practice enhancement: MCP setup supply-chain rule prohibiting floating npx ...@latest / unpinned proxy flows without explicit risk acceptance",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:73-75"
+        },
+        {
+          "idea": "Practice enhancement: security-facing release claims must cite control evidence, not vendor language",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:76-77"
+        },
+        {
+          "idea": "Product enhancement: structured tool outputs and output schemas treated as security controls",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:81-82"
+        },
+        {
+          "idea": "Product enhancement: auth re-check against MCP best practice (token audience/resource validation, least-privilege scopes, no credential logging, dynamic client registration controls, no trust in Mcp-Session-Id)",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:83-85"
+        },
+        {
+          "idea": "Product enhancement: evaluate MCP server portals as enterprise/partner access mode",
+          "class": "speculative",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:86"
+        },
+        {
+          "idea": "Product enhancement: Code Mode kept behind same sandbox and audit decision as any generated-code execution surface",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:87-88"
+        },
+        {
+          "idea": "Product enhancement: tool-poisoning and supply-chain checks recorded in product threat model, not only Practice docs",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:89-90"
+        },
+        {
+          "idea": "Architectural boundary: Clerk = product identity; Cloudflare = ingress/policy/portal/inspection only",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:98-100"
+        },
+        {
+          "idea": "Promotion trigger: Milestone 3 start or earlier if Cloudflare MCP portal / AI Security / Gateway-DLP access is testable",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:125-127"
+        },
+        {
+          "idea": "Promoted plan must include per-control deterministic validation commands or manual evidence steps",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:131-132"
+        },
+        {
+          "idea": "Risk: Cloudflare vendor feature gaps may leave the public-beta gate unresolved",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:117"
+        },
+        {
+          "idea": "Risk: MCP server portal incompatibility with Oak transport or auth nuances",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:118"
+        },
+        {
+          "idea": "Risk: Code Mode sandbox ambiguity — execute(code) creates a new high-risk execution surface",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:119"
+        },
+        {
+          "idea": "Risk: tool poisoning via descriptions and schemas influencing model behaviour",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:120"
+        },
+        {
+          "idea": "Risk: shadow MCP bypassing the governed server by users or agents",
+          "class": "good",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:121"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Future strategic brief",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block present — all V0 required fields (id, node_type, name, overview, kind, last_updated) are absent. Status and Last Updated appear as inline bold prose in the document body, not structured frontmatter.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:3-4"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter (serves_strategic_choice, derives_from, depends_on, thread). Body prose at lines 93-95 references Phase 2 and Phase 3 dependencies but these are not expressed as V0 depends_on edges.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:93-95"
+        },
+        {
+          "issue": "Promotion trigger content exists in the body (lines 123-128) but is not expressed as the V0 promotion_trigger frontmatter field required for strategic plans.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:123-128"
+        },
+        {
+          "issue": "Body prose references current/ and active/ folder paths (lines 18, 125) using the pre-V0 lane model that V0's LOCKED folder-collapse (§3.6) replaces. These are informational body strings, not frontmatter violations, but will need updating when this plan is migrated.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:18,125"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Code Mode execution (execute(code)-style surface) is identified as a high-risk surface but the plan defers any sandbox/resource-limits/logging/policy decision entirely to a future promotion gate. No interim prohibition or placeholder control is named for the period between now and that gate. If any path to Code Mode exists before the gate closes, it opens an unsandboxed remote code execution surface.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:119"
+        },
+        {
+          "severity": "high",
+          "claim": "Token audience/resource validation and dynamic-client-registration controls are listed as a re-check item (line 82) with no current-state baseline recorded. The plan does not cite whether these checks are absent, partial, or present in the existing MCP auth stack. The gap between 'needs re-check' and the public-beta gate is unquantified.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:82-84"
+        },
+        {
+          "severity": "medium",
+          "claim": "Tool poisoning (descriptor and schema manipulation influencing model behaviour) is acknowledged as a risk and a product-threat-model item, but no owner is assigned and no interim detective control (e.g. generated-descriptor integrity checks) is mandated before promotion. The mitigation is entirely deferred.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:88-89"
+        },
+        {
+          "severity": "medium",
+          "claim": "Shadow MCP detection depends on Cloudflare Gateway/DLP, but Cloudflare account entitlement and feature availability are explicitly unverified (line 97). If those features are unavailable or not entitled, there is no fallback shadow-MCP detection mechanism named.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:97"
+        },
+        {
+          "severity": "medium",
+          "claim": "The supply-chain rule (avoid unpinned npx ...@latest / unpinned proxy flows) is captured as a Practice enhancement (line 74) rather than a hard gate. It does not require remediation of any existing unpinned setup paths before public beta; it only shapes future docs. Existing setup paths may remain unpinned at promotion time.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:74"
+        },
+        {
+          "severity": "low",
+          "claim": "The vendor-control disposition matrix (lines 51-58) lists six control families but does not record current Oak entitlement level for any Cloudflare tier (Free / Pro / Business / Enterprise). Several listed controls (AI Security for Apps, Gateway-DLP, MCP portals) are Enterprise-tier features. If Oak is not on an Enterprise plan, the majority of this gate's mitigations are unavailable and the residual-risk acceptance must happen before promotion, not during it.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:51-58"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly separates Clerk (product identity) from Cloudflare Access (ingress/policy/inspection) at line 98-100. This is sound architecture; any future plan that collapses these two responsibilities into a single layer would need a re-ratification signal here.",
+          "file_line": "cloudflare-mcp-public-beta-security-gate.plan.md:98-100"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/user-experience/educator-end-users/current/app-submission-standards.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is CURRENT (queued, not yet started) — all eight workstream todos are pending",
+          "file_line": "app-submission-standards.plan.md:18-35"
+        },
+        {
+          "claim": "Plan has concrete executable workstreams with TDD phases, typed factory signatures, ADR reference, and acceptance criteria — fully actionable, not vague",
+          "file_line": "app-submission-standards.plan.md:147-870"
+        },
+        {
+          "claim": "No workstream shows any completion signal; all todos are pending",
+          "file_line": "app-submission-standards.plan.md:14-35"
+        },
+        {
+          "claim": "last_updated 2026-06-08 is recent relative to today (2026-06-21), within the current active planning window",
+          "file_line": "app-submission-standards.plan.md:8"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes well-grounded policy compliance work with independently-valuable engineering outputs (generic type-safe factory, principled governance layering, E2E annotation test). The three-layer architecture design (app-submission-standards.plan.md:286-388) and the factory generic extension design (app-submission-standards.plan.md:549-670) are substantive architectural decisions, not process boilerplate. The risk table entries are honest about upstream dependencies and low-probability reviewer scrutiny rather than inflating severity.",
+      "content_quality": "strong",
+      "content_quality_note": "Every workstream specifies target file paths, typed code stubs, Zod schemas, acceptance criteria, and deterministic validation commands. The design principles section (app-submission-standards.plan.md:115-135) constrains optionality. The Foundation Alignment section (app-submission-standards.plan.md:893-911) traces each principle to its instantiation. The fitness accounting for principles.md (app-submission-standards.plan.md:327-331) and the compensating-trim strategy are precisely specified. The non-goals section (app-submission-standards.plan.md:137-144) explicitly bounds scope.",
+      "salvage_value": [
+        {
+          "idea": "Dual-policy gap table mapping Anthropic and OpenAI requirements to existing controls, gaps, and owners",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:70-81"
+        },
+        {
+          "idea": "15 permanent architectural requirements derived from both policies, grounded as independently good engineering (tool annotations, response minimisation, input minimality, privacy surfacing, transport protocol)",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:198-255"
+        },
+        {
+          "idea": "Three-layer governance architecture: universal principles (principles.md) -> MCP rule (mcp-tool-interface-discipline.md) -> domain ADR + safety-and-security.md",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:285-388"
+        },
+        {
+          "idea": "Generic graph-resource-factory extension making GraphSurfaceConfig<T,F> generic over filter args type, with NodeOf<T>/EdgeOf<T> conditional types and no-unknown invariant",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:549-593"
+        },
+        {
+          "idea": "Per-surface filter schemas: subject+keyStage+mode for prior-knowledge/misconception graphs; subject+year+mode for thread progressions (honest to data shape)",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:638-669"
+        },
+        {
+          "idea": "createFilterableGraphToolExecutor with zero-match returns empty structure with summary message, not error and not silent full-graph fallback",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:619-625"
+        },
+        {
+          "idea": "recomputeStats extracted as pure function tested independently to prevent silent stat inconsistencies between summary mode and full mode",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:627-631"
+        },
+        {
+          "idea": "filterSchema and nodeFilter made required on GraphSurfaceConfig to enforce filtering invariant at compile time for all future graph surfaces",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:715-720"
+        },
+        {
+          "idea": "E2E test asserting tools/list JSON-RPC responses include annotations object on every tool, providing verifiable evidence for directory reviewers",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:782-787"
+        },
+        {
+          "idea": "oakContextHint policy rationale: legitimate workaround for absent MCP push notifications, guides model to same-app tools only, does not manipulate app selection; documented in ADR-159 with expiry trigger",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:167-177"
+        },
+        {
+          "idea": "privacy_policy_uri and tos_uri added to /.well-known/oauth-protected-resource endpoints per RFC 8414/RFC 9728",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:421-437"
+        },
+        {
+          "idea": "Directory Submission Checklist added to safety-and-security.md covering all Anthropic and OpenAI pre-submission checks",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:257-284"
+        },
+        {
+          "idea": "limit/offset description swap confirmed as upstream API bug (live spec verified 2026-04-14); tracked in companion upstream-api-requests.md; codegen will pick up fix automatically",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:790-808"
+        },
+        {
+          "idea": "Asset tool description guidance (filter by type/unit to reduce response size) as description-level mitigation pending upstream API pagination",
+          "class": "speculative",
+          "file_line": "app-submission-standards.plan.md:812-826"
+        },
+        {
+          "idea": "subjectsCovered in stats sorted lexicographically for deterministic output",
+          "class": "good",
+          "file_line": "app-submission-standards.plan.md:622-623"
+        },
+        {
+          "idea": "Test account preparation for directory submission (Clerk account with appropriate scopes) — deferred to future plan",
+          "class": "speculative",
+          "file_line": "app-submission-standards.plan.md:140-144"
+        },
+        {
+          "idea": "OpenAI-specific requirements (screenshots at required dimensions, developer verification on OpenAI Platform Dashboard) — process items deferred, no implementation plan here",
+          "class": "speculative",
+          "file_line": "app-submission-standards.plan.md:75-80"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field `id` (kebab slug, stable graph identity)",
+          "file_line": "line 1 (frontmatter open) — field absent"
+        },
+        {
+          "issue": "Missing required LOCKED field `node_type: \"plan\"` (registry discriminator)",
+          "file_line": "line 1 (frontmatter open) — field absent"
+        },
+        {
+          "issue": "Missing required LOCKED field `kind` (replaces readiness senses of `status:`; V0 §2.2, §3.1)",
+          "file_line": "line 1 (frontmatter open) — field absent"
+        },
+        {
+          "issue": "Missing required LOCKED field `serves_strategic_choice` (required for executable plans; V0 §2.3)",
+          "file_line": "line 1 (frontmatter open) — field absent"
+        },
+        {
+          "issue": "`status: current` present — V0 §2.5 explicitly drops `status` (386 census); readiness sense maps to `kind: executable`",
+          "file_line": "line 6"
+        },
+        {
+          "issue": "`type: executable` present — V0 §2.5 explicitly drops `type` as free-label (49 census); replaced by `node_type` + `kind`",
+          "file_line": "line 7"
+        },
+        {
+          "issue": "`collection: user-experience` present — V0 §2.5 explicitly drops `collection`/`lane`; folder location is the projection",
+          "file_line": "line 3"
+        },
+        {
+          "issue": "`lane: current` present — V0 §2.5 explicitly drops `collection`/`lane`",
+          "file_line": "line 5"
+        },
+        {
+          "issue": "`isProject: false` present — V0 §2.5 explicitly drops `isProject` (107/250 census); subsumed by `projects_to` edge",
+          "file_line": "line 35"
+        },
+        {
+          "issue": "Body references plan dependencies (lines 956–961) but no `depends_on` typed edge declared in frontmatter (V0 §2.3, §4)",
+          "file_line": "lines 956–961"
+        },
+        {
+          "issue": "No `thread` edge declared — recommended for executable plans (V0 §2.3)",
+          "file_line": "line 1 (frontmatter open) — field absent"
+        },
+        {
+          "issue": "No `derives_from` edge declared — plan body references ADR-159 and prior plans as authority sources; V0 §2.3 canonicalises `foundational_adr`/`foundation_alignment` → `derives_from`",
+          "file_line": "lines 956–961"
+        }
+      ],
+      "unclassified_keys": [
+        "audience"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "GraphSurfaceConfig generic is proposed as GraphSurfaceConfig<T, F> (§4.1), but the plan defers 'the exact type extraction approach' to WS4 with 'MUST NOT appear' as the only constraint on `unknown`. NodeOf<T> and EdgeOf<T> conditional types are sketched but not defined — a factory that is generic over two type params but leaves extraction undefined at plan time risks an `unknown`-escape at implementation. The plan should commit to a concrete extraction strategy (e.g., T extends { nodes: N[]; edges: E[] }) rather than deferring it.",
+          "file_line": "app-submission-standards.plan.md:556-593"
+        },
+        {
+          "severity": "low",
+          "claim": "WS4.5 states `filterSchema` and `nodeFilter` should become required on `GraphSurfaceConfig` to enforce the factory invariant at compile time, but §4.1 declares them `readonly filterSchema?: ZodSchema<F>` (optional). The plan contains an internal contradiction: the body says 'consider making required' while the code snippet marks them optional. If the architectural invariant is real (every surface must filter), the schema fields must be required; optional is wrong.",
+          "file_line": "app-submission-standards.plan.md:568-569 vs 715-720"
+        },
+        {
+          "severity": "low",
+          "claim": "WS2.2 proposes surfacing `tos_uri` mapped to the cookie policy URL (https://www.thenational.academy/legal/cookie-policy). RFC 8414 §2 defines `tos_uri` as Terms of Service, not a cookie/tracking policy. The cookie policy is not a ToS document. If a directory reviewer or OAuth client inspects this field expecting terms of service, the mismatch could cause compliance friction. The correct value for `tos_uri` would be a terms-of-service document; the cookie policy should be surfaced under a custom field or omitted.",
+          "file_line": "app-submission-standards.plan.md:430-436"
+        },
+        {
+          "severity": "low",
+          "claim": "WS4.2 specifies the `recomputeStats` function as a pure function to be extracted and tested independently (§4.2), but WS3 test list (§3.1) does not include a test for `recomputeStats` in isolation. The test plan and implementation plan are slightly out of sync: the RED phase does not include the test for the pure helper that the GREEN phase declares as a required extraction.",
+          "file_line": "app-submission-standards.plan.md:627-630 vs 469-494"
+        },
+        {
+          "severity": "info",
+          "claim": "Three-layer governance architecture (§1.5) is a well-reasoned design: universal principles in principles.md, MCP-specific rule as a .agent/rules file, domain-specific compliance in ADR-159 and safety-and-security.md. The layering mirrors the existing no-type-shortcuts.md pattern, is additive (no existing rule is dismantled), and each layer references the one below. Fitness mitigation for principles.md (519/525 line budget, with concrete trimming candidate identified at lines 137-155) is explicitly addressed.",
+          "file_line": "app-submission-standards.plan.md:285-389"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly identifies that thread progressions have a structurally different filterable shape (`subjects: string[]`, `firstYear`/`lastYear`) from prior-knowledge and misconception graphs (`subject: string`, `keyStage: string`) and designs per-surface filter schemas accordingly. This prevents the common mistake of forcing a uniform filter schema across heterogeneous graph surfaces and is consistent with the factory's generic design intent.",
+          "file_line": "app-submission-standards.plan.md:128-135 vs 655-669"
+        },
+        {
+          "severity": "info",
+          "claim": "WS5.3 adds an E2E test asserting `tools/list` responses include the `annotations` object on every tool, resolving the external audit finding that annotations were not visible at the wire level. This is an architectural decision to make compliance evidence testable rather than only asserting server-side registration code, which is the correct level to verify.",
+          "file_line": "app-submission-standards.plan.md:779-788"
+        },
+        {
+          "severity": "low",
+          "claim": "Section 5.5 appears twice in WS5: once for asset tool description guidance (line 813) and again for README updates (line 829). The numbering collision means one workstream item has no unique identifier in the plan. This is a minor editorial flaw but could cause confusion during execution when tracking completion by section number.",
+          "file_line": "app-submission-standards.plan.md:813 and 829"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/user-experience/educator-end-users/current/external-facing-capability-distribution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "This plan is the corpus map; sibling plans hold execution work — the hub owns map and open decisions, nothing else",
+          "file_line": "external-facing-capability-distribution.plan.md:38-39"
+        },
+        {
+          "claim": "Three todos (t2, t5, t6) all status: pending — plan is actively in-progress, not completed or orphaned",
+          "file_line": "external-facing-capability-distribution.plan.md:92-116"
+        },
+        {
+          "claim": "lane: current, status: current in frontmatter, consistent with the folder location",
+          "file_line": "external-facing-capability-distribution.plan.md:6-7"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly constrains its own scope (map + open decisions only), carries grounded facts with a dated verification block (line 43), explicitly tracks which decisions are settled vs open (lines 120-138), and avoids duplicating content owned by sibling plans. No speculative or unsupported forward claims detected.",
+      "content_quality": "strong",
+      "content_quality_note": "EGM is well-formed and concise (lines 35-41). Todos are precise with acceptance criteria and validation steps (lines 85-116). Open decisions are clearly demarcated and ownership-attributed (lines 133-138). Risk table is concrete (lines 176-180). Non-goals are explicit (lines 142-149). The plan reads cleanly as a navigational hub without overreaching into sibling plan territory.",
+      "salvage_value": [
+        {
+          "idea": "Hub pattern: a corpus-map plan that owns only the map and named open decisions, pointing to sibling executable plans — the structural pattern is reusable for similar multi-plan domains",
+          "class": "good",
+          "file_line": "external-facing-capability-distribution.plan.md:38-41"
+        },
+        {
+          "idea": "Dual-direction distribution architecture: Direction A (MCP re-surfacing of SKILL.md) and Direction B (public skills-CLI) are complementary, both decided",
+          "class": "good",
+          "file_line": "external-facing-capability-distribution.plan.md:120-124"
+        },
+        {
+          "idea": "Cross-vendor plugin bundle as the packaging layer, targeting Claude and Codex marketplaces via a single source",
+          "class": "good",
+          "file_line": "external-facing-capability-distribution.plan.md:125-128"
+        },
+        {
+          "idea": "EEF c4/c5 surfaces folded into Direction A's t4 — EEF evidence as first-class capability in the distribution",
+          "class": "good",
+          "file_line": "external-facing-capability-distribution.plan.md:53-56"
+        },
+        {
+          "idea": "Legacy workflows surface deprecation via Direction A t5 — clean migration rather than parallel maintenance",
+          "class": "good",
+          "file_line": "external-facing-capability-distribution.plan.md:58-60"
+        },
+        {
+          "idea": "Reciprocal EEF announcement split across repo boundary captured as upstream request in oak-skills",
+          "class": "good",
+          "file_line": "external-facing-capability-distribution.plan.md:61-63"
+        },
+        {
+          "idea": "Verified-facts block discipline: dated snapshot with explicit re-verify-at-use instruction prevents silent drift",
+          "class": "good",
+          "file_line": "external-facing-capability-distribution.plan.md:43-67"
+        },
+        {
+          "idea": "Source-of-truth topology (canonical oak-skills vs curated mirror vs manifest layer) explicitly surfaced as an open owner decision",
+          "class": "speculative",
+          "file_line": "external-facing-capability-distribution.plan.md:133-135"
+        },
+        {
+          "idea": "First-tranche capability scope (lesson adaptation + evidence framing as candidates) explicitly left open for owner",
+          "class": "speculative",
+          "file_line": "external-facing-capability-distribution.plan.md:136-138"
+        },
+        {
+          "idea": "Beneficial prerequisite pattern: flagging a live count reconciliation against oak-skills directory as beneficial-but-not-blocking",
+          "class": "good",
+          "file_line": "external-facing-capability-distribution.plan.md:155-157"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED — required for all plans, V0 §2.1)",
+          "file_line": "plan file:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED — must be literal \"plan\" for all plans, V0 §2.1)",
+          "file_line": "plan file:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED — one-line scope, required for all plans, V0 §2.1)",
+          "file_line": "plan file:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED — replaces readiness sense of `status`, required for all plans, V0 §2.2)",
+          "file_line": "plan file:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED — required for executable plans, V0 §2.3)",
+          "file_line": "plan file:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Dropped field `status: current` still present (V0 §2.5: `status` explicitly dropped, replaced by `kind`/`disposition`/`gate`)",
+          "file_line": "plan file:6"
+        },
+        {
+          "issue": "Dropped field `type: executable` still present (V0 §2.5: `type` dropped as free-label, replaced by `node_type` + `kind`)",
+          "file_line": "plan file:7"
+        },
+        {
+          "issue": "Dropped field `collection: user-experience` still present (V0 §2.5: `collection` explicitly dropped — folder location is the projection)",
+          "file_line": "plan file:3"
+        },
+        {
+          "issue": "Dropped field `lane: current` still present (V0 §2.5: `lane` explicitly dropped — folder location is the projection)",
+          "file_line": "plan file:5"
+        },
+        {
+          "issue": "`todos` placed in plan body (lines 85-116) rather than frontmatter; V0 §2.4 specifies `todos` as a frontmatter field for executable plans (LOCKED)",
+          "file_line": "plan file:85-116"
+        }
+      ],
+      "unclassified_keys": [
+        "audience"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "low",
+          "claim": "The plan asserts 'executable now, with no blocking external dependency' (Prerequisite classification section). However, open decision #4 (source-of-truth topology) is cross-cutting and is a shared prerequisite for both Direction A's t0 and the plugin-creation plan's w0. If that decision is not resolved before execution begins, the sibling plans cannot make forward progress on those specific work items. The map's 'executable now' claim holds for the mapping work itself (t2, t5, t6), but implicitly assumes the open decisions will be resolved in time for the sibling plans to proceed. This dependency is soft-noted in the risks table but not explicitly flagged as a potential sequencing constraint on the hub's own todos.",
+          "file_line": "external-facing-capability-distribution.plan.md:41-42,133-135"
+        },
+        {
+          "severity": "low",
+          "claim": "The verified-facts block (line 43) is dated 2026-06-08 and carries a re-verify caveat for platform facts. The assumption that the EEF surface is 'live on the deployed Oak Curriculum MCP' and that 'get-eef-evidence is a production tool on oak-prod (verified 2026-06-08; API version 0.7.0)' rests on a point-in-time observation that is now 13 days old. The plan correctly names this risk in the risks table (line 180-181), but the assumption that a single-dated verification of a deployed API surface is sufficient for downstream plan execution may not hold if API version increments are frequent or if the oak-prod deployment cadence is high.",
+          "file_line": "external-facing-capability-distribution.plan.md:43-56,180"
+        },
+        {
+          "severity": "info",
+          "claim": "The corpus map assumes that 'oak-skills' (cross-repo, Direction B) is represented by a plan at 'oaknational/oak-skills -> .agent/plans/public-distribution.plan.md' (line 81). This is a cross-repo artefact the current repo cannot edit or verify directly. The plan correctly marks this as 'owned in that repo, not edited here' and provides an upstream-request artefact for the EEF reciprocal announcement. The assumption that this cross-repo plan exists and remains current at execution time is unverifiable from here; the plan does not carry a mechanism to detect if that plan is stale or removed.",
+          "file_line": "external-facing-capability-distribution.plan.md:81"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan references 'assumptions-expert reviewed the prior draft and validated the underlying facts' (Readiness reviewers, line 210-211). This retrospective claim is used as evidence that the verified-facts block is sound. However, the prior-draft review cannot cover facts added or changed after that review, and the re-verify caveat in the verified-facts block is the correct live mechanism. The reference to past review is not load-bearing but could create a false impression of ongoing validation — the only live validity mechanism is the dated block plus re-verify instruction.",
+          "file_line": "external-facing-capability-distribution.plan.md:210-213"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/user-experience/educator-end-users/current/oak-skills-ingest-and-resurfacing.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is correctly placed in current/ as an executable, queued work item with a clear design gate and all todos pending — it is not complete, superseded, or misplaced.",
+          "file_line": "lines 6-8, 13-27"
+        },
+        {
+          "claim": "The seam it addresses (hand-maintained MCP surfaces vs generated oak-skills path) is an active, live gap evidenced by first-hand code verification in the verified-facts block.",
+          "file_line": "lines 63-87"
+        },
+        {
+          "claim": "All five todos are status:pending; no code has landed; the plan is pre-execution and actionable.",
+          "file_line": "lines 130, 138, 148, 158, 167, 186"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in first-hand code verification (lines 63-87), identifies a real and active drift risk (lines 33-39), uses an existing latent extension point rather than inventing new infrastructure (lines 69-72), applies the design-gate pattern correctly to contain five genuine unknowns before build cycles start (lines 89-113), and sequences todos with explicit TDD and proof-level requirements (lines 117-188). No speculative or unsupported claims; no bad ideas identified.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan achieves strong content quality: EGM is fully articulated with precise code-level grounding (lines 49-61); the open design decisions section names exactly what must be resolved and why, with cross-plan topology coherence (lines 89-113); todos carry acceptance criteria and proof levels (lines 117-188); risks table is concrete and maps to mitigations that are already encoded in the todo sequence (lines 232-238); non-goals explicitly guard against the most likely scope-creep vectors (lines 219-229). The verified-facts block is dated and instructs re-verification at use — disciplined epistemic hygiene (lines 63-87).",
+      "salvage_value": [
+        {
+          "idea": "Seam diagnosis: one curriculum-assistance capability maintained in two hand-authored packagings (MCP app + oak-skills) with no shared source of truth and drift waiting to happen.",
+          "class": "good",
+          "file_line": "lines 33-39"
+        },
+        {
+          "idea": "sourceType discriminator in skills-lock.json LockedSkillEntry is a latent, designed-for extension point — no new infrastructure needed to start.",
+          "class": "good",
+          "file_line": "lines 69-72"
+        },
+        {
+          "idea": "Design-gate pattern: t0 non-code spike resolves five open decisions before any build cycle starts, preventing wrong-abstraction wasted work.",
+          "class": "good",
+          "file_line": "lines 89-113, 119-129"
+        },
+        {
+          "idea": "MCP form mapping decision: workflow-spine maps to prompt, references/ maps to resource — candidate from seed review, to be confirmed at t0.",
+          "class": "speculative",
+          "file_line": "lines 91-93"
+        },
+        {
+          "idea": "Source-of-truth topology decision: ingest from canonical oak-skills repo vs Direction B public mirror vs capability-manifest layer — the three options may diverge on licensing/exclusion.",
+          "class": "speculative",
+          "file_line": "lines 98-108"
+        },
+        {
+          "idea": "Extend skills-adapter-generate with closed discriminated-union sourceType resolver and MCP emitter sibling to emitAdapter, keeping generator as source of truth.",
+          "class": "good",
+          "file_line": "lines 53-58, 133-149"
+        },
+        {
+          "idea": "t3 determinism gate: pin ingested source by SHA + computedHash in skills-lock.json; extend pnpm skills:check to cover MCP surface.",
+          "class": "good",
+          "file_line": "lines 152-158"
+        },
+        {
+          "idea": "t4 fold EEF: move hand-authored eef://interpretation resource and adapt-lesson prompt under the generated path so they are emitted by the generator.",
+          "class": "good",
+          "file_line": "lines 159-167"
+        },
+        {
+          "idea": "t5 replace-don't-bridge for legacy workflows surface: migrate the seven toolGuidanceWorkflows recipes into generated skill/prompt surfaces before removing all three static sites.",
+          "class": "good",
+          "file_line": "lines 80-87, 169-187"
+        },
+        {
+          "idea": "Licensing/attribution decision must be resolved at t0 before any ingest emitter ships (OGL v3.0 for Oak material, EEF attribution).",
+          "class": "good",
+          "file_line": "lines 110-113"
+        },
+        {
+          "idea": "Beneficial (non-blocking) input: EEF surface being live in deployed MCP before t4 folds its generation.",
+          "class": "speculative",
+          "file_line": "lines 194-196"
+        },
+        {
+          "idea": "Dispatch assumptions-expert on t0 spike scope, mcp-expert on t0 form mapping draft, type-expert on t1 closed union if non-trivial.",
+          "class": "good",
+          "file_line": "lines 263-265"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "LOCKED required field `id` absent — every plan node requires a stable kebab slug identity",
+          "file_line": "plan:1-9 (frontmatter block)"
+        },
+        {
+          "issue": "LOCKED required field `node_type` absent — discriminator literal \"plan\" missing",
+          "file_line": "plan:1-9 (frontmatter block)"
+        },
+        {
+          "issue": "LOCKED required field `overview` absent — one-line scope summary required for all plans",
+          "file_line": "plan:1-9 (frontmatter block)"
+        },
+        {
+          "issue": "LOCKED required field `kind` absent — `type: executable` uses the dropped free-label form (V0 §2.5 drops `type` entirely; `kind` is its replacement)",
+          "file_line": "plan:7"
+        },
+        {
+          "issue": "LOCKED required edge `serves_strategic_choice` absent — required for executable plans (must resolve to a strategic-choice ID or carry sentinel `\"pending\"`)",
+          "file_line": "plan:1-9 (frontmatter block)"
+        },
+        {
+          "issue": "`todos` present only in the body yaml block, not in frontmatter — V0 §2.4 mandates `todos` as a frontmatter field for executable plans (LOCKED)",
+          "file_line": "plan:117-188"
+        },
+        {
+          "issue": "Dropped key `status: current` present — V0 §2.5 drops `status` entirely; its state is carried by `kind`/`disposition`/`gate`/Linear projection",
+          "file_line": "plan:6"
+        },
+        {
+          "issue": "Dropped key `type: executable` present — V0 §2.5 drops `type` as free-label; replaced by `node_type` + `kind`",
+          "file_line": "plan:7"
+        },
+        {
+          "issue": "Dropped key `collection: user-experience` present — V0 §2.5 drops `collection`/`lane`; folder location is the projection",
+          "file_line": "plan:3"
+        },
+        {
+          "issue": "Dropped key `lane: current` present — V0 §2.5 drops `lane`; folder location is the projection",
+          "file_line": "plan:5"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `depends_on`, `thread` all absent); `depends_on` references appear only inside body todos yaml at lines 139, 149, 158, 167, 187 — edges must be frontmatter fields per V0 §2.3",
+          "file_line": "plan:1-9 (frontmatter block)"
+        }
+      ],
+      "unclassified_keys": [
+        "audience"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan assumes Direction B (the public-distribution plan in oaknational/oak-skills) will produce a curated public mirror that this plan can ingest from, but that plan is in an external repo with no observable status here. The t0 source-of-truth topology decision (open design decision #3) is explicitly gated on Direction B's WS1 resolving first, yet no mechanism for detecting if Direction B stalls, is cancelled, or changes shape is described. If Direction B does not land, the ingest topology decision cannot be closed and t1 onward is blocked indefinitely.",
+          "file_line": "99-107"
+        },
+        {
+          "severity": "high",
+          "claim": "The plan assumes the `oak-skills` SKILL.md anatomy maps cleanly onto MCP resource/prompt/tool forms (workflow spine to prompt; references to resource), but this mapping is listed as an open design decision (#1 at line 91) rather than a verified fact. The entire code sequence (t1-t5) is predicated on this mapping being resoluble in t0. If the SKILL.md anatomy turns out not to map cleanly (e.g. a skill has no clean workflow-spine boundary, or uses sections not in the expected anatomy), the t0 spike may return a partial verdict that cannot gate t1 cleanly.",
+          "file_line": "91-95"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan asserts that the EEF c4/c5 surfaces (eef://interpretation resource and adapt-lesson prompt) can be folded under the generated path (t4) without behaviour change, and that the seven legacy toolGuidanceWorkflows recipes (t5) can be migrated into generated surfaces with guidance preserved. Both assume the generator can faithfully express the existing hand-authored content, but no verified evidence that the SKILL.md source format can represent the EEF attestation metadata or the multi-step tool-orchestration sequences is cited. The 'behaviour is unchanged' acceptance criterion at t4 is unverifiable without a prior baseline test covering the existing hand-authored behaviour.",
+          "file_line": "161-187"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan treats `sourceType` as an extension point 'designed for extension' (line 70-71), but the verified-facts block establishes that the `skills` map is empty and `sourceType` is currently unused. The label 'designed-for extension point' is an inference about authorial intent, not a documented interface contract. If the field was left open by accident or for a different future use, the closed discriminated-union promotion in t1 may conflict with that original design intent.",
+          "file_line": "69-71"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes licensing and attribution (open decision #5) is resolvable at t0 before any ingest emitter ships, and cites OGL v3.0 for Oak material and EEF attribution for evidence. However, whether the EEF corpus material flowing through Direction B's curated mirror will carry sufficient provenance to satisfy those terms at point of resurfacing is not verified — the EEF licensing question is listed as a risk row but the plan treats a favourable resolution as the expected path rather than as a condition that could block the work.",
+          "file_line": "111-113"
+        },
+        {
+          "severity": "low",
+          "claim": "The verified-facts block is dated 2026-06-08 and the plan self-notes 're-verify platform facts at use'. The MCP form vendor specifics (what constitutes a valid resource/prompt/tool in the target MCP app version) are deferred to t0 re-verification, but the plan's acceptance criteria and emitter design in t2 are already written assuming those specifics are stable. If re-verification at t0 reveals a form change, the t2 acceptance criterion ('a fixture skill is reachable through the MCP app via the generated surface') may need to be rewritten before t2 can be assessed.",
+          "file_line": "63-64"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the assumptions-expert review of the t0 spike scope is a pre-build readiness gate (line 263-265), but the plan itself has no mechanism to track whether that dispatch happened or its outcome. If the executor proceeds to t1 without the assumptions-expert having reviewed the t0 spike, the gate is silently bypassed. The plan's own acceptance for t0 includes 'assumptions-expert has reviewed the spike scope' (line 126) but this is an informal prose requirement with no observable artefact or automated check.",
+          "file_line": "126-130"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/user-experience/educator-end-users/current/plugin-package-creation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All five todos are pending; w0 (the design gate) has not started — plan is live work, not complete or superseded",
+          "file_line": "plugin-package-creation.plan.md:125,135,147,158,172"
+        },
+        {
+          "claim": "Frontmatter and folder lane both read current, executable plan correctly placed",
+          "file_line": "plugin-package-creation.plan.md:6-8"
+        },
+        {
+          "claim": "Plan explicitly scopes out Direction A and B construction, correctly delegating and consuming them — no scope overlap",
+          "file_line": "plugin-package-creation.plan.md:220-223"
+        },
+        {
+          "claim": "Cross-reference contract clearly separates strategic rationale (future/ plan) from engineering scope here — no duplication risk",
+          "file_line": "plugin-package-creation.plan.md:14-25"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, avoids re-deciding what is already decided, defers vendor manifest shapes to first-hand re-verification (vendor-literal discipline, lines 80-82), explicitly models its dependency on two sibling plans, provides a coherent gating chain, and includes a realistic prerequisite classification. The only speculative element is the generator-first placement of manifest emitters inside skills-adapter-generate, which w0 decision #3 is correctly designed to resolve (lines 96-98).",
+      "content_quality": "strong",
+      "content_quality_note": "Every todo carries an acceptance criterion and proof level (lines 113-173); open design decisions are enumerated with shared-ownership flagged (lines 84-107); risk table maps mitigations to specific workstreams (lines 234-241); non-goals are explicit and prevent scope creep (lines 218-231); readiness reviewers are dispatched to the right workstream at the right time (lines 264-272). The plan is not merely V0-conformant — the content itself is decision-ready.",
+      "salvage_value": [
+        {
+          "idea": "Cross-vendor plugin bundle (Claude + Codex) as the unit of distribution, not separate channel-by-channel installs",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:32-37"
+        },
+        {
+          "idea": "Generator-first single-source emit: both vendor manifests emitted from one capability source as sibling emitter surfaces (ADR-125 portability)",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:50-57"
+        },
+        {
+          "idea": "w0 design gate blocks all manifest code until vendor manifest shapes are re-verified first-hand — vendor-literal discipline",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:113-125"
+        },
+        {
+          "idea": "Five open design decisions enumerated for w0: Claude manifest shape, Codex manifest shape, emitter placement, skills-source binding (shared), end-user authentication",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:87-107"
+        },
+        {
+          "idea": "Skills-source binding explicitly shared with Direction A t0 and Direction B WS1 — a coordination contract preventing independent re-decision",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:100-103"
+        },
+        {
+          "idea": "Local skills fixture as a w1/w2 blocker mitigation: emit against fixture, re-point once shared decision lands",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:186-191"
+        },
+        {
+          "idea": "Vendor-supported local/dev install accepted as w4 proof if marketplace submission is still in review",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:162-166"
+        },
+        {
+          "idea": "WCAG 2.2 AA floor in produced artefacts (install output) as a gated acceptance criterion in w4",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:167-170"
+        },
+        {
+          "idea": "No-PII constraint in w3 compliance checklist covering produced artefacts",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:155-159"
+        },
+        {
+          "idea": "Readiness reviewer dispatch: assumptions-expert on w0, mcp-expert on manifest shapes, clerk-expert on auth (w0 #5), security-expert on w3",
+          "class": "good",
+          "file_line": "plugin-package-creation.plan.md:264-272"
+        },
+        {
+          "idea": "Codex (not ChatGPT apps) as the OpenAI target — marketplace launched 2026-03-26",
+          "class": "speculative",
+          "file_line": "plugin-package-creation.plan.md:73-74"
+        },
+        {
+          "idea": "Placement of vendor manifest emitters inside skills-adapter-generate as new sourceType surfaces (preferred, but decided at w0)",
+          "class": "speculative",
+          "file_line": "plugin-package-creation.plan.md:96-98"
+        },
+        {
+          "idea": "Clerk-fronted auth path for end-user authentication to the deployed MCP in the plugin manifest (to be confirmed at w0 #5)",
+          "class": "speculative",
+          "file_line": "plugin-package-creation.plan.md:104-106"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field: `id` (kebab slug, stable node identity)",
+          "file_line": "plugin-package-creation.plan.md:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required LOCKED field: `node_type` (must be literal \"plan\")",
+          "file_line": "plugin-package-creation.plan.md:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required LOCKED field: `overview` (one-line scope string)",
+          "file_line": "plugin-package-creation.plan.md:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required LOCKED field: `kind` (enum strategic|executable); `type: executable` at line 7 is the dropped free-label (V0 §2.5)",
+          "file_line": "plugin-package-creation.plan.md:7"
+        },
+        {
+          "issue": "Dropped field `status: current` present — V0 §2.5 drops `status`; splits into `kind`/`disposition`/`gate`/Linear projection",
+          "file_line": "plugin-package-creation.plan.md:6"
+        },
+        {
+          "issue": "Dropped field `collection: user-experience` present — V0 §2.5 drops `collection`/`lane` (folder is the projection)",
+          "file_line": "plugin-package-creation.plan.md:3"
+        },
+        {
+          "issue": "Dropped field `lane: current` present — V0 §2.5 drops `collection`/`lane`",
+          "file_line": "plugin-package-creation.plan.md:5"
+        },
+        {
+          "issue": "Dropped field `type: executable` present — V0 §2.5 drops `type` as free-label; replaced by `node_type` + `kind`",
+          "file_line": "plugin-package-creation.plan.md:7"
+        },
+        {
+          "issue": "Missing required LOCKED edge `serves_strategic_choice` — required for executable plans (V0 §2.3)",
+          "file_line": "plugin-package-creation.plan.md:1-9 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`todos` placed in plan body as fenced YAML block rather than as a frontmatter field — V0 §2.4 defines `todos` as a frontmatter field for executable plans (LOCKED)",
+          "file_line": "plugin-package-creation.plan.md:110-173"
+        }
+      ],
+      "unclassified_keys": [
+        "audience"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "`todos` in plan body, not frontmatter — V0 §2.4 (LOCKED) mandates `todos` as a frontmatter field for executable plans, but this plan (and likely many others in the estate given the body placement is well-formed and ADR-117 cited in V0 §2.4 is the source) places them as a fenced YAML block in the body. If this pattern is widespread across the estate, V0's LOCKED placement decision conflicts with actual practice; owner re-ratification needed to confirm frontmatter vs body placement.",
+          "evidence": "todos block appears at lines 110-173 of the plan body under a `## Todos` heading with a fenced yaml block, not as a frontmatter key. V0 §2.4 line 157 states `todos` LOCKED for executable plans in frontmatter.",
+          "file_line": "plugin-package-creation.plan.md:110-173"
+        }
+      ],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan asserts both vendors converge on the same plugin shape (skills + MCP, SKILL.md portable format, MCP as common runtime) as a verified fact grounded 2026-06-08, then immediately exempts the actual manifest field shapes from that grounding — deferring them to w0. The 'convergence' claim underpins the entire single-source emitter design: if the two vendors' schemas diverge significantly (e.g. different MCP declaration syntax, different skills-bundle packaging requirements, different auth models), the generator-first single-source approach may require two substantially different emitter branches rather than thin per-vendor surfaces. The plan carries this as settled while the evidence is explicitly not held.",
+          "file_line": "plugin-package-creation.plan.md:71-78"
+        },
+        {
+          "severity": "high",
+          "claim": "End-user authentication (w0 decision #5) assumes a Clerk-fronted auth path is viable for both the Claude marketplace and the Codex plugin marketplace. The plan records no evidence that either marketplace's submission policy permits or supports Clerk-as-IdP for marketplace-distributed plugins, or that the deployed MCP's Clerk auth is accessible from a marketplace-installed context (not just direct API calls). If either marketplace mandates its own OAuth/OIDC flow rather than a third-party IdP, the auth model is wrong from the start and would require an architectural change before w1/w2 can produce valid manifests.",
+          "file_line": "plugin-package-creation.plan.md:104-107"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan treats the Codex Plugin Marketplace as an assumed submission target, citing its 2026-03-26 launch date. No evidence is held that the Codex marketplace has open third-party submission at the time of execution, that submission criteria have been published, or that a non-OpenAI entity can list a plugin with an external MCP server. This is a gating assumption for w3 and w4: if third-party listing is closed or constrained, the entire Codex half of the bundle cannot be publicly shipped as planned.",
+          "file_line": "plugin-package-creation.plan.md:74-75"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan classifies Direction B (oaknational/oak-skills publicly installable) as 'beneficial' rather than 'blocking', and permits w1/w2 to emit against a local skills fixture. However, the plan's own acceptance criterion (line 211-216) requires the final proof to show 'the agreed skills' are reachable — not a fixture. If Direction B's WS1 remains unresolved at the time of w4, the install proof cannot satisfy the acceptance criterion. The prerequisite classification underrepresents this dependency for the final proof gate.",
+          "file_line": "plugin-package-creation.plan.md:193-197"
+        },
+        {
+          "severity": "medium",
+          "claim": "The WCAG 2.2 AA accessibility floor is stated as a w4 acceptance criterion on 'produced artefacts' and 'output'. Plugin manifests are JSON/config files, not user-facing UI. The plan does not identify which surfaces are actually in scope for WCAG 2.2 AA — if it means marketplace listing pages or skill descriptions rendered in Claude/Codex UI, that is outside this plan's emitted artefacts. If it means nothing produced here is a UI surface, the criterion is vacuous as stated. The ambiguity leaves the acceptance proof undefined for this dimension.",
+          "file_line": "plugin-package-creation.plan.md:168-172"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan states the skills-source binding decision is 'shared with Direction A t0 / Direction B WS1' and instructs w0 not to re-decide it independently. There is no recorded mechanism by which w0's verdict on this decision is guaranteed to be read by Direction A t0 and Direction B WS1 — or vice versa. The plan assumes a coordination protocol exists without naming it. If Direction A resolves its t0 without the plugin plan's constraints in scope, a post-facto reconciliation step would be needed.",
+          "file_line": "plugin-package-creation.plan.md:99-103"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly flags that exact vendor manifest field shapes are not held and must be re-verified at w0, and names vendor-literal discipline explicitly. This is an appropriate assumption-management posture for a fast-moving vendor surface and should be recognised as a deliberate design choice rather than a gap.",
+          "file_line": "plugin-package-creation.plan.md:62-63"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/user-experience/educator-end-users/current/position-anchored-teaching-continuity.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "W1-c0 and W1-c1 completed, PR #178 merged (continue-progression prompt shipped)",
+          "file_line": "37-43"
+        },
+        {
+          "claim": "W2 completed, PR #181 merged (impact-language alignment done)",
+          "file_line": "67-82"
+        },
+        {
+          "claim": "W3 is 'FUTURE CYCLE (owner-directed fold 2026-06-11)' — pending, not blocking current delivery",
+          "file_line": "84-103"
+        },
+        {
+          "claim": "All four registration surfaces implemented and W2 language pass done; only additive future work remains",
+          "file_line": "155-167"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "W1 and W2 are fully executed and evidenced with merged PRs and SHAs (lines 37-43, 67-82). The problem statement identifies a real curriculum gap (position-anchored vs topic-anchored entry point) with concrete data support verified first-hand (lines 113-116, 208-210). W3 is a genuinely additive future idea with grounded data support — not speculative bloat. The S3 reconciliation rationale at lines 263-265 (why new prompt over extending lesson-planning with optional argument) is a well-reasoned design decision worth preserving.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan carries its own closure evidence inline (PR SHAs, reviewer absorption records, first-hand verification notes). The proof contract table (lines 245-251) pairs each acceptance criterion with a proof level and command. Non-goals are explicit (lines 232-242) and each is grounded in a named ADR or owner decision. The orchestration steps (lines 136-151) name specific tool calls with arguments. Reviewer readiness notes at lines 11-20 record condition-by-condition absorption — unusually complete for a plan of this size.",
+      "salvage_value": [
+        {
+          "idea": "Position-anchored entry point gap: no MCP prompt owned position-to-next resolution before this plan; this framing should persist in any successor",
+          "class": "good",
+          "file_line": "113-116"
+        },
+        {
+          "idea": "Five-step orchestration: search->get-thread-progressions->get-prior-knowledge-graph->get-misconception-graph->chain-into-lesson-planning",
+          "class": "good",
+          "file_line": "136-151"
+        },
+        {
+          "idea": "Stateless-by-design argument: teacher states position each invocation; no persistence needed to deliver value",
+          "class": "good",
+          "file_line": "150-151"
+        },
+        {
+          "idea": "S3 reconciliation rationale: new prompt preferred over extending lesson-planning with optional justCovered because lesson-planning requires topic (the unknown at position-first entry)",
+          "class": "good",
+          "file_line": "261-265"
+        },
+        {
+          "idea": "Four registration surfaces discipline: SDK mcp-prompts.ts (array + switch case), mcp-prompt-messages.ts, apps prompt-schemas.ts, apps register-prompts.ts — a missing switch case silently serves []",
+          "class": "good",
+          "file_line": "46-55"
+        },
+        {
+          "idea": "Exactly-one-anchor-mode contract for misconception-graph: the tool errors on ambiguity; prompts must use explicit slug placeholders",
+          "class": "good",
+          "file_line": "47-52"
+        },
+        {
+          "idea": "NC vocabulary grounding chain: UnitSummaryResponseSchema.nationalCurriculumContent -> get-units-summary -> curriculum-mapping coverage step — cite, do not soften",
+          "class": "good",
+          "file_line": "183-190"
+        },
+        {
+          "idea": "W3 vocabulary bridge: two get-keyword-graph calls narrowed by unitSlugs, set-compare ranked terms, shared=continuity anchors, new=pre-teach list with canonical descriptions",
+          "class": "good",
+          "file_line": "196-216"
+        },
+        {
+          "idea": "W3 data support verified: unitSlugs narrowing, decorated canonical descriptions, firstYear on keyword nodes all confirmed at origin/main 2026-06-11",
+          "class": "good",
+          "file_line": "208-210"
+        },
+        {
+          "idea": "ADR-194 constraint on vocabulary bridge: vocabulary information presented to teacher, never a decision the agent makes",
+          "class": "good",
+          "file_line": "205-207"
+        },
+        {
+          "idea": "Position resolution ambiguity mitigation: prompt instructs candidate presentation + teacher confirmation rather than silent selection; test asserts instruction is present",
+          "class": "good",
+          "file_line": "254-258"
+        },
+        {
+          "idea": "Server-side composition tool rejection: get-class-position-context rejected on ADR-191 and EEF t6a precedent",
+          "class": "good",
+          "file_line": "234-237"
+        },
+        {
+          "idea": "Outward language alignment evidence-pairing discipline: each changed sentence paired with the tool or test that evidences it (P4 proof level)",
+          "class": "good",
+          "file_line": "248"
+        },
+        {
+          "idea": "37 tools = 24+13 count correction in README primitives",
+          "class": "good",
+          "file_line": "69-71"
+        },
+        {
+          "idea": "Public curriculum-alignment benchmark for third-party tools explicitly out of scope — likely a different Oak team",
+          "class": "good",
+          "file_line": "238-241"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "ready-for-execution",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` — the node's stable graph identity is absent entirely",
+          "file_line": "position-anchored-teaching-continuity.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` — V0 discriminator field absent",
+          "file_line": "position-anchored-teaching-continuity.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `name` — V0 §2.1 mandates `name`; `title` is not present either",
+          "file_line": "position-anchored-teaching-continuity.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `overview` — V0 §2.1 mandates a one-line scope field",
+          "file_line": "position-anchored-teaching-continuity.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` — V0 §2.2 replaces readiness senses of `status:` with `kind: strategic | executable`; absent here",
+          "file_line": "position-anchored-teaching-continuity.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` — V0 §2.4 mandates `last_updated` (ISO date) for all plans",
+          "file_line": "position-anchored-teaching-continuity.plan.md:1"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — executable plans (this plan carries `todos`, implying executable) require this field (or the explicit sentinel `pending`)",
+          "file_line": "position-anchored-teaching-continuity.plan.md:1"
+        },
+        {
+          "issue": "Emergent field `status: ready-for-execution` present — V0 §2.5 explicitly drops `status:` (386 census), replacing it with `kind`/`disposition`/`gate`/Linear-projected execution axis",
+          "file_line": "position-anchored-teaching-continuity.plan.md:2"
+        },
+        {
+          "issue": "Emergent field `collection: user-experience/educator-end-users` present — V0 §2.5 explicitly drops `collection` / `lane` (30/34 census); folder location is the projection, metadata does not duplicate it",
+          "file_line": "position-anchored-teaching-continuity.plan.md:4"
+        },
+        {
+          "issue": "Per-todo `depends_on` key inside todo items (e.g. w1-c1, w3-c1) is not part of the V0 per-todo schema: `{ id, content, status: pending | completed }` — V0 §2.4 does not include `depends_on` on individual todos",
+          "file_line": "position-anchored-teaching-continuity.plan.md:64"
+        }
+      ],
+      "unclassified_keys": [
+        "created",
+        "collection",
+        "implementer",
+        "readiness"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "W1 and W2 are fully completed (PRs #178, #181 merged with named SHAs). W3 (vocabulary bridge) is the sole pending item and is explicitly deferred as a future cycle under owner direction. The plan's assumptions about chaining shape, four registration surfaces, and NC vocabulary grounding were all verified during authoring-time review and are not open assumptions.",
+          "file_line": "frontmatter:11-20 (readiness block), todos:w1-c1 line 36-63, todos:w2-c1 line 65-80"
+        },
+        {
+          "severity": "low",
+          "claim": "W3 assumes `get-keyword-graph` supports `unitSlugs` narrowing within a subject+keyStage anchor, with decorated canonical descriptions and `firstYear` on keyword nodes. This was verified against `origin/main` on 2026-06-11 (line 209). That verification is now ~10 days old and the field is on a live API surface; no re-verification gate is specified for the W3 execution start, unlike W2's explicit collision-safety read of `active-claims.json`.",
+          "file_line": "207-216 (W3 data-support paragraph)"
+        },
+        {
+          "severity": "low",
+          "claim": "The orchestration assumes `get-thread-progressions` reliably yields year-ordered next units for all subjects except KS4 science. The KS4 science carve-out (handled via `get-sequences`) is carried as a caveat, but no assumption is recorded about whether `get-thread-progressions` degrades gracefully for subjects/year groups where thread data is sparse or absent. The Risks section does not name this; it only covers free-text ambiguity.",
+          "file_line": "138-143 (Mechanism step 2), 247-251 (Proof contract P3)"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan assumes stateless invocation is sufficient for the position-first teacher user journey and explicitly gates persistence behind Clerk thread identity (Non-goals, line 233-234). This assumption is correctly labelled as revisit-on-observed-demand. No open verification gap.",
+          "file_line": "232-234 (Non-goals: stateful class profiles)"
+        },
+        {
+          "severity": "info",
+          "claim": "The chaining assumption — that `lesson-planning` is the right single planning substance and that `justCovered` does not need to be an optional argument on `lesson-planning` — was explicitly adjudicated at c0 with the owner and the reasoning is recorded (a required-argument inversion would be a worse reconciliation). Assumption is closed and ratified.",
+          "file_line": "258-265 (Risks: prompt-estate sprawl)"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "W1-c1 shipped as PR #178 (201e3eedb) — seventh prompt continue-progression fully landed across all four registration surfaces",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "git: 201e3eedb = \"Merge pull request #178 ... feat/position-anchored-prompt\" and is ancestor of main; at that SHA mcp-prompts.ts:143 (array name 'continue-progression') + :188 (switch case), mcp-prompt-messages.ts, apps/.../prompt-schemas.ts, apps/.../register-prompts.ts all present; MCP_PROMPTS count = 7. plan frontmatter lines 33-63 corroborate."
+        },
+        {
+          "claim": "W2 shipped as PR #181 (6048f337d) — outward claims aligned with delivered estate, 37 tools = 24+13 (cited at 67-82)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "plan L67-72 (W2 todo, status: completed); git: 6048f337d = \"Merge pull request #181 from oaknational/feat/impact-language-alignment\"; apps/oak-curriculum-mcp-streamable-http/README.md:42-43 \"37 curriculum tools: 24 generated from the OpenAPI schema plus 13 aggregated tools\"; feat commit eb29a6ed1 (\"align outward capability claims with the served estate\") is ancestor of #181 merge"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/user-experience/educator-end-users/future/plugin-bundle-distribution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Explicitly self-describes as 'retained strategic brief' that is the benefits-and-rationale source for the promoted creation plan, not a candidate for archival or rewrite",
+          "file_line": "file:21-27"
+        },
+        {
+          "claim": "Owner decisions recorded here (packaging = cross-vendor bundle, both vendors, ecosystem-owned) are durable and not re-opened — they need a live home",
+          "file_line": "file:78-82"
+        },
+        {
+          "claim": "Non-goals section explicitly forbids duplicating its content into the creation plan, requiring this brief to remain as the authoritative benefits home",
+          "file_line": "file:133-137"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan has a clear, single purpose (benefits brief / owner-decision record) and executes it cleanly. Every section is scoped correctly: it states benefits without attempting to own implementation, frames open questions without deciding them, and names its relationship to the creation plan precisely. The high_stakes claim (file:109-112) that this is a retained-not-archived brief is internally consistent and architecturally sound — it acts as a decision audit trail.",
+      "content_quality": "strong",
+      "content_quality_note": "The benefits section (file:46-76) is specific, audience-segmented (teachers / Oak / sector), and tied to concrete product properties (EEF c4/c5, WCAG 2.2 AA, attribution, one-install UX). The open-questions section (file:96-106) names each question precisely and assigns it to the correct gate in the creation plan. The non-goals section (file:133-137) is unusually explicit, preventing scope creep. No padding or placeholder content detected.",
+      "salvage_value": [
+        {
+          "idea": "Cross-vendor plugin bundle as the canonical packaging shape (skills + MCP server behind a vendor manifest)",
+          "class": "good",
+          "file_line": "file:78-80"
+        },
+        {
+          "idea": "Teacher-facing one-install UX as the primary value proposition",
+          "class": "good",
+          "file_line": "file:48-51"
+        },
+        {
+          "idea": "Meeting teachers inside their existing agent workflow rather than a separate site",
+          "class": "good",
+          "file_line": "file:52-55"
+        },
+        {
+          "idea": "EEF evidence surface (c4/c5) bundled with curriculum assistance to give evidence-informed options to teachers",
+          "class": "good",
+          "file_line": "file:56-58"
+        },
+        {
+          "idea": "WCAG 2.2 AA floor as a default output quality commitment for produced artefacts",
+          "class": "good",
+          "file_line": "file:59"
+        },
+        {
+          "idea": "Attribution travels with material produced via the plugin",
+          "class": "good",
+          "file_line": "file:59"
+        },
+        {
+          "idea": "Single source emitting both Claude and Codex vendor manifests to avoid divergent products",
+          "class": "good",
+          "file_line": "file:63-65"
+        },
+        {
+          "idea": "Marketplace listing as a discoverable front door for Oak's open curriculum capability",
+          "class": "good",
+          "file_line": "file:67-69"
+        },
+        {
+          "idea": "SKILL.md + MCP as vendor-neutral portable capability consistent with open-curriculum mission",
+          "class": "good",
+          "file_line": "file:72-75"
+        },
+        {
+          "idea": "Skills source topology question (canonical oak-skills vs curated public mirror vs manifest layer) deferred to creation plan w0 gate",
+          "class": "speculative",
+          "file_line": "file:97-100"
+        },
+        {
+          "idea": "First-tranche capability scope — lesson adaptation and EEF evidence framing as the strongest candidates",
+          "class": "speculative",
+          "file_line": "file:101-103"
+        },
+        {
+          "idea": "Marketplace submission paths and end-user authentication shape deferred to creation plan w0 gate",
+          "class": "speculative",
+          "file_line": "file:104-106"
+        },
+        {
+          "idea": "Retained-brief pattern: keeping a strategic brief in future/ as the benefits-and-rationale source after its executable creation plan is promoted to current/",
+          "class": "good",
+          "file_line": "file:109-112"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "future",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "plugin-bundle-distribution.plan.md:1-9 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all)",
+          "file_line": "plugin-bundle-distribution.plan.md:1-9"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED, required for all)",
+          "file_line": "plugin-bundle-distribution.plan.md:1-9"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all; inferred `strategic` from `type: strategic` + `future/` folder)",
+          "file_line": "plugin-bundle-distribution.plan.md:1-9"
+        },
+        {
+          "issue": "Missing `promotion_trigger` (LOCKED, required for `kind: strategic` plans)",
+          "file_line": "plugin-bundle-distribution.plan.md:1-9"
+        },
+        {
+          "issue": "Dropped key `status: future` present (V0 §2.5 drops `status`; maps to `kind: strategic` via §3.5 migration map)",
+          "file_line": "plugin-bundle-distribution.plan.md:6"
+        },
+        {
+          "issue": "Dropped key `type: strategic` present (V0 §2.5 drops `type` as free-label; replaced by `node_type` + `kind`)",
+          "file_line": "plugin-bundle-distribution.plan.md:7"
+        },
+        {
+          "issue": "Dropped key `collection: user-experience` present (V0 §2.5 drops `collection`/`lane`; folder carries this)",
+          "file_line": "plugin-bundle-distribution.plan.md:3"
+        },
+        {
+          "issue": "Dropped key `lane: future` present (V0 §2.5 drops `lane`; folder carries this)",
+          "file_line": "plugin-bundle-distribution.plan.md:5"
+        },
+        {
+          "issue": "No V0 typed edges declared (`serves_strategic_choice`, `derives_from`, `depends_on`, `thread` all absent; `serves_strategic_choice` is required for executable plans and recommended for strategic)",
+          "file_line": "plugin-bundle-distribution.plan.md:1-9"
+        },
+        {
+          "issue": "Body describes inter-plan dependencies (creation-gate, beneficial prerequisite) but no `depends_on` edge declared in frontmatter (V0 §4: blocking dependency uses a `depends_on` edge with `kind: blocking`)",
+          "file_line": "plugin-bundle-distribution.plan.md:107-121"
+        }
+      ],
+      "unclassified_keys": [
+        "audience"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan states at line 38-39 that 'both Claude and Codex converged on the same shape: a plugin is an installable bundle of {skills + MCP server} distributed via a marketplace' — this is sourced to a seed review report, not first-hand vendor documentation. The note at lines 93 and 105 defers marketplace-specific verification to the creation plan's w0 gate. If the seed review is stale relative to current vendor specs (vendor specs acknowledged as 'fast-moving' at line 93), the foundational shape assumption may not hold at build time.",
+          "file_line": "plugin-bundle-distribution.plan.md:38-39,93,105"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes a single source-of-truth bundle can emit manifests for both Claude and Codex without divergence (lines 89-93, 119). Vendor manifest formats, authentication requirements, and marketplace submission paths for Claude vs Codex are unverified here and deferred entirely to the creation plan's w0 gate. If the two vendors require structurally incompatible manifest shapes or runtime behaviours, the 'one source, both vendors' assumption collapses. The brief explicitly names this risk but does not record a fallback position.",
+          "file_line": "plugin-bundle-distribution.plan.md:89-93,105,119"
+        },
+        {
+          "severity": "low",
+          "claim": "Line 59 asserts that 'produced artefacts meet the WCAG 2.2 AA floor by default'. This is a quality commitment embedded in the benefits section, but no mechanism or validation path is named in this brief or delegated explicitly to the creation plan. It is an underpinned assumption without a stated verification gate.",
+          "file_line": "plugin-bundle-distribution.plan.md:59"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes teachers are willing to discover and install a plugin from a vendor marketplace (lines 49-54). No user-research evidence is cited for teacher adoption likelihood via marketplace install as the discovery path. The 'one install' benefit is real only if the marketplace channel is one teachers actually use.",
+          "file_line": "plugin-bundle-distribution.plan.md:49-54"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly scopes itself as a retained strategic brief post-promotion (lines 109-112, 139-147) and explicitly routes all live assumption-resolution to the creation plan's w0 gate. The deferral is intentional and well-documented; assumptions are named rather than hidden.",
+          "file_line": "plugin-bundle-distribution.plan.md:109-112,139-147"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The plan is explicitly post-promotion and retained (not archived) because it is the benefits-and-rationale source for the creation plan",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "file:109 (\"This is a `future/` strategic brief retained after promotion\"); file:23-27 (\"Promoted (2026-06-08)... This brief remains its benefits-and-rationale source\"); reinforced at file:133 and frontmatter status:future (file:6)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/user-experience/engineering-end-users/current/search-sdk-github-release-asset-distribution.execution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All six workstream todos remain pending — plan has not been started",
+          "file_line": "lines 11-28"
+        },
+        {
+          "claim": "Status READY (current) matches folder lane and signals executable intent, not historical record",
+          "file_line": "line 34"
+        },
+        {
+          "claim": "No superseding plan identified — sdk-publishing-and-versioning-plan.md is explicitly a future promotion path, not a replacement",
+          "file_line": "lines 391-393"
+        },
+        {
+          "claim": "Option appraisal and dual-build-lane design are load-bearing decision records that must not be lost",
+          "file_line": "lines 69-98"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan cleanly solves a real distribution gap (private SDK, no npm path) with a minimal-governance approach that preserves existing release automation. Option appraisal at lines 69-76 is evidence-grounded. Dual-build-lane invariant (line 88) avoids monorepo ergonomics regression. TDD sequencing (WS1 RED before WS2 GREEN) is discipline-appropriate. Non-goals list at lines 93-98 is precise and defensible. No speculative or over-engineered elements found.",
+      "content_quality": "strong",
+      "content_quality_note": "Each workstream carries named files, specific script names, and deterministic validation commands (lines 184-186, 211-214, 234-237, 254-257). Contract test acceptance criteria are concrete and verifiable (lines 120-124, 138-141, 153-156). Risk table at lines 340-346 maps each risk to a specific contract or CI mechanism. Foundation alignment questions at lines 358-363 tie back to repo architectural principles. No padding or template-fill-in detected.",
+      "salvage_value": [
+        {
+          "idea": "Publish SDK as GitHub release asset (Option C) rather than npm or git-vendoring, enabling external consumption before governance is ready",
+          "class": "good",
+          "file_line": "lines 69-76"
+        },
+        {
+          "idea": "Dual tsup build lanes: keep bundle:false for monorepo dev, add bundle:true release-only lane emitting to dist-release/",
+          "class": "good",
+          "file_line": "lines 88, 168-182"
+        },
+        {
+          "idea": "Contract test asserting no @oaknational/* imports survive in bundled dist-release output",
+          "class": "good",
+          "file_line": "lines 117-119, 184-186"
+        },
+        {
+          "idea": "Retrieval-focused ./retrieval subpath export for least-privilege downstream consumers",
+          "class": "good",
+          "file_line": "lines 131-137, 203-207"
+        },
+        {
+          "idea": "Keep admin API in full export surface; enforce access restriction via Elasticsearch API-key scopes, not package mutation",
+          "class": "good",
+          "file_line": "lines 207-208, 343-344"
+        },
+        {
+          "idea": "Semantic-release GitHub assets config with ${nextRelease.gitTag} templated asset names",
+          "class": "good",
+          "file_line": "lines 225-231"
+        },
+        {
+          "idea": "build:release-asset + verify:release-asset scripts as named, deterministic artefacts",
+          "class": "good",
+          "file_line": "lines 176-179, 194-196"
+        },
+        {
+          "idea": "Local smoke proof of tarball install and ESM import without network or release upload",
+          "class": "good",
+          "file_line": "lines 244-250"
+        },
+        {
+          "idea": "Artefact size warning threshold captured in verify script to detect drift",
+          "class": "good",
+          "file_line": "line 342"
+        },
+        {
+          "idea": "sha256 checksum file emitted alongside tarball for supply-chain integrity",
+          "class": "good",
+          "file_line": "lines 202, 228"
+        },
+        {
+          "idea": "Release workflow pre-step: build SDK release artefact before semantic-release runs",
+          "class": "good",
+          "file_line": "lines 222-224"
+        },
+        {
+          "idea": "Unit test asserting .releaserc.mjs GitHub plugin contains correct asset entries (no snapshots)",
+          "class": "good",
+          "file_line": "lines 145-156"
+        },
+        {
+          "idea": "Explicit non-goals list (no npm publish, no behaviour changes, no admin-disabled variant, no extra packaging channels)",
+          "class": "good",
+          "file_line": "lines 93-98"
+        },
+        {
+          "idea": "Foundation alignment per-phase check-in questions tied to repo architectural invariants",
+          "class": "good",
+          "file_line": "lines 355-363"
+        },
+        {
+          "idea": "Follow-up plan reference to sdk-publishing-and-versioning-plan.md as future npm promotion path",
+          "class": "good",
+          "file_line": "lines 391-393"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "📋 READY (current)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — the node's stable graph identity)",
+          "file_line": "line 1–29 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (V0 §2.1, LOCKED — the registry discriminator)",
+          "file_line": "line 1–29 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` — V0 §2.2 requires `kind: executable` for a plan with `todos`; `kind` replaces the readiness-axis sense of `status` (V0 §2.5, LOCKED)",
+          "file_line": "line 1–29 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` in frontmatter — V0 §2.4 requires `last_updated` (ISO date) in frontmatter; the date appears only in the body at line 33 as prose",
+          "file_line": "line 33"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — executable plans require this field (or `pending` sentinel) per V0 §2.3 and authority invariant 1 (§4)",
+          "file_line": "line 1–29 (frontmatter block)"
+        },
+        {
+          "issue": "`status:` field is absent from frontmatter but present in body prose (`📋 READY (current)` at line 34); V0 §2.5 explicitly drops `status` — but the plan body uses it in prose instead of mapping to the V0 axes, which is not equivalent",
+          "file_line": "line 34"
+        },
+        {
+          "issue": "Unclassified key `source_research` present in frontmatter (lines 4–9); not a V0-defined field, edge, or any of the dropped/deferred emergent keys in §2.5 — V0 §2.4 notes `related` is the typed see-also for non-authority refs; authority refs should use `derives_from`",
+          "file_line": "lines 4–9"
+        },
+        {
+          "issue": "The `todos` field items conform to V0 structure (`id`, `content`, `status: pending|completed`) — acceptable — but the presence of `todos` without `kind: executable` makes the discriminated union (V0 §6 Zod sketch) invalid",
+          "file_line": "lines 10–28"
+        }
+      ],
+      "unclassified_keys": [
+        "source_research"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Admin API is fully exported in the bundled release artefact (line 206-208: 'Keep admin API exported in the full surface; read-only access is enforced by API-key privileges, not package mutation'). This is a deliberate design choice but it means any consumer who obtains a privileged Elasticsearch API key can invoke admin operations via the same released tarball. Architectural principle says the surface should express intent; a separate admin subpath or a build-time strip of admin exports would make the privilege model explicit in the package surface, not only in key-scope docs.",
+          "file_line": "search-sdk-github-release-asset-distribution.execution.plan.md:206-208"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan introduces two build lanes (monorepo unbundled vs. release bundled) managed by two separate tsup config files (lines 167-168: 'tsup.release.config.ts (new)'). There is no stated mechanism to keep both configs in sync as the SDK surface evolves. The risk row at line 342 acknowledges divergence risk and proposes test-backing, but no constraint (lint rule, CI diff check, or schema-level lock) is cited to enforce it. Drift between lanes is likely to surface silently until a downstream smoke test catches it.",
+          "file_line": "search-sdk-github-release-asset-distribution.execution.plan.md:167-168,342"
+        },
+        {
+          "severity": "low",
+          "claim": "The downstream consumption proof (WS2.4, line 244-257) is described as 'fully local (no network, no release upload required)'. This is appropriate for CI but it means there is no plan-level assertion that the artefact produced locally matches what gets uploaded by the CI release workflow. A tarball built on a developer machine and one built in CI can differ due to Node version, pnpm lockfile state, or environment variables. A deterministic build hash or reproducible-build check is absent from the plan.",
+          "file_line": "search-sdk-github-release-asset-distribution.execution.plan.md:244-250"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly defers npm publication (lines 93-94) and references the future promotion path via a related plan (lines 392-393). The GitHub release-asset lane is positioned as a temporary stepping stone, not a durable distribution channel. This is architecturally sound for the stated immediate need but the plan does not address what triggers the promotion gate, nor whether the GitHub-asset lane gets retired when npm publishing lands. A sunset or promotion trigger clause would complete the architectural story.",
+          "file_line": "search-sdk-github-release-asset-distribution.execution.plan.md:93-94,392-393"
+        },
+        {
+          "severity": "info",
+          "claim": "The `./retrieval` subpath export is planned at lines 131-135 and 203-204 but the plan does not define which types are excluded from the retrieval surface. Without an explicit type-level contract (e.g. a barrel that re-exports only retrieval types), the boundary is enforced only by documentation and key scopes. A stricter approach would be a separate entry point file that imports only retrieval symbols, making the surface mechanically verifiable.",
+          "file_line": "search-sdk-github-release-asset-distribution.execution.plan.md:131-135,203-204"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All six workstream todos remain pending (no work has started)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".../search-sdk-github-release-asset-distribution.execution.plan.md:13,16,19,22,25,28 (all status: pending); corroborated by absent artefacts (packages/sdks/oak-search-sdk/src/release-asset, tsup.release.config.ts, scripts/, release/, dist-release/ all missing) and unwired .releaserc.mjs:51"
+        },
+        {
+          "claim": "Status READY (current) — plan is actionable as-is",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "Plan line 34 \"Status: READY (current)\" with all 6 todos status: pending (lines 13,16,19,22,25,28). All three current-state premises verified live: packages/sdks/oak-search-sdk/package.json:4 (\"private\": true); tsup.config.ts uses createSdkConfig (no bundle override, no tsup.release.config.ts); .releaserc.mjs:51 @semantic-release/github has no assets block (only @semantic-release/git assets at line 42). None of the planned new files exist (no src/release-asset/, scripts/, release/); release.yml has no search-sdk/release-asset refs. Doc-propagation targets (engineering-end-users/README.md, roadmap.md) exist."
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-011: Continuity Surfaces and the Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25, amended 2026-05-29, amended 2026-06-07, amended 2026-06-08)
+**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25, amended 2026-05-29, amended 2026-06-07, amended 2026-06-08, amended 2026-06-12)
 **Date**: 2026-04-18 (amended 2026-04-20 — contract host abstracted
 from "primary session-continuation prompt" to "canonical repo-local
 surface set"; field set split into portable minimum plus optional
@@ -31,6 +31,31 @@ unit).
 
 ## Amendment Log
 
+- **2026-06-19** (PDR-105 Task 2 — reference-direction burndown): **the
+  `tracks/` and `workstreams/` operational surfaces are retired.** §"The
+  continuity contract" no longer lists single-writer tactical track cards
+  as a compliant split-surface, and the prior per-workstream-brief
+  split-shape variant is dropped; the surviving compliant shape is a
+  canonical file + per-thread next-session records (with a `Lane state`
+  substructure). The runtime-track-card git-tracking requirement (the
+  2026-04-21 Session 5 entry below, kept as a history-record) no longer
+  applies — there is no track-card surface to govern. The terms "track"
+  and "workstream" remain valid as conceptual scope descriptors; only the
+  dedicated artefact surfaces are retired. Rationale: at current scale the
+  surfaces added a coordination layer without structural value the thread
+  next-session record's `Lane state` does not already carry.
+
+- **2026-06-14** (Accepted; owner-confirmed general principle at the comms-research closeout
+  consolidation): **a thread is a multi-lane container, not a single linear pointer.** A thread
+  holds one or more concurrent lanes — independently pickup-able arcs, each with its own state,
+  branch, and pickup trigger, active OR deferred — and several can be "next" at once (parallel
+  pickup by different checkouts, separate agents, or collaborators). The singular "Next safe step"
+  field encodes a single-lane assumption; multi-lane threads use a `## Lanes` section (each lane a
+  first-class pickup point, deferred lanes included with their trigger). Operative format-definer:
+  `threads/README.md` §"Concurrent lanes"; the
+  `session-handoff` step-3 lane-state field and `continuity-practice.md` align to it as next
+  touched (existing records reconcile lazily, never a mass rewrite). Cures the recurring collapse
+  of the concurrent continuity graph (threads × lanes × identities × checkouts) into linear singletons.
 - **2026-04-20**: §"The continuity contract" host language abstracted;
   field set restructured into a portable minimum plus optional
   epistemic fields; §Host-local context updated to reflect the
@@ -158,6 +183,20 @@ unit).
   handoff session whose own banner's "branch unpushed" was false and whose
   inherited peer "all gates green" was knip-red. Realised in host `session-handoff`
   §6e (extended); ADR-150 mirrors. Pipeline and continuity types unchanged.
+- **2026-06-12 — two-clause amendment (owner-approved 2026-06-11 walk).**
+  Clause (a): §"Subjective experience is foundational substrate" reconciled to
+  the owner's strictly-voluntary direction (2026-06-06) — the closing
+  corpus-audit guard, which treated a thinning register as a degraded capture
+  edge, is replaced with the operational surfaces' settled posture: valued when
+  genuine, voluntary always, no volume/thinning monitor; the cross-experience
+  read surfaces emergent insight only. Clause (b): §"A handoff author cannot
+  self-verify its completeness" splits the completeness backstop into claim
+  VERIFICATION (externalisable — author bias is real) and context-loss
+  DETECTION (holder-exclusive — loss is `context − artefacts`, invisible to a
+  context-isolated reader; never delegated). Evidenced by a 2026-06-07 session
+  whose loss-scan was outsourced to a context-isolated sub-agent per the prior
+  "externalise by default" wording, inverting the scan's ownership. The
+  repo-bound twin (ADR-150) mirrors both clauses.
 - **2026-06-08 — disposition of continuity-surface content under fitness pressure named**
   (owner direction 2026-06-08: a continuity surface's fitness pressure is a routing signal,
   never a trim or archive trigger; the only dispositions are leave-live-verbatim or
@@ -331,16 +370,19 @@ event-anchored trigger, not an exemption from a mandate. The cure for
 "optional surplus" is to stop discarding the signal, never to start
 fabricating it.
 
-The honest event-anchored null and the habitual no-shift opt-out are not
-self-distinguishing at the level of a single session: both write nothing.
-The guard against relapse into "optional surplus" under a new name is
-therefore *observable, not normative* — the cross-session experience
-audit in the consolidation workflow reads the corpus as a whole and
-treats a subjective register that thins toward silence while substantive
-work continues as a degraded capture edge, the same class of loop-health
-signal as "ephemeral memory stops capturing surprises". Foundational
-standing is auditable at the corpus level precisely because no single
-session is obligated to produce a record.
+Foundational standing and strict voluntariness compose: the subjective
+register is **valued when genuine; voluntary always** (owner direction
+2026-06-06). The honest event-anchored null and the habitual no-shift
+opt-out are not self-distinguishing at the level of a single session —
+both write nothing — and no corpus-volume guard is erected over that
+ambiguity: the corpus is NOT monitored for volume or thinning, and a
+quiet or thinning register while substantive work continues is a valid,
+ordinary outcome, not a degraded capture edge or a loop-health signal.
+Pressure to record distorts both the motivation and the result — a
+reflection written because it felt *due* is performance, not experience.
+The consolidation-time cross-experience read exists to surface emergent
+insight across the records that genuinely exist; it never measures
+whether enough were written.
 
 ### The split-loop workflow
 
@@ -389,21 +431,10 @@ is host-local: it may be a dedicated state file, a section of a
 primary session-continuation prompt, or any equivalent surface that
 every workflow references first. Hosts that split the contract
 across a canonical file + per-thread next-session records (with a
-`Lane state` substructure for lane-level short-horizon state) +
-single-writer tactical track cards remain compliant, provided the
-authority order between surfaces is explicit, each surface has a
-single documented writer, and the fields below are covered in
-aggregate. **Single-writer tactical track cards MUST be git-tracked**
-in the host's repository — not gitignored — so they are portable
-across machines, branches, and worktrees within their lifetime
-(per the 2026-04-21 Session 5 amendment). Track cards are short-
-lived (single-branch lifetime) but each card spans multiple
-sessions and potentially multiple agents/machines on the same
-branch; git is the portable transport that preserves them. (Per the 2026-04-21 Session 5 amendment, the prior
-split-shape — *canonical file + per-workstream briefs + tactical
-track cards* — is also accepted as a host-local variant if an
-adopter encounters multi-lane threads requiring dedicated
-brief surfaces, but is no longer the recommended default.)
+`Lane state` substructure for lane-level short-horizon state)
+remain compliant, provided the authority order between surfaces is
+explicit, each surface has a single documented writer, and the
+fields below are covered in aggregate.
 
 **Portable minimum fields** (every repo carries these, regardless of
 host shape):
@@ -628,14 +659,24 @@ default; only the *means* scale to meet it, never the bar.
   file, the gate output) as it is written, never from memory. This is
   `verify-dont-trust` turned on the handoff's own banner; it is the cheapest and
   most universal catch.
-- **Run the completeness backstop from a context-less reader's state.** Because the
-  author cannot reliably simulate that state, the reliable form externalises it: a
-  fresh reviewer (or a genuinely context-isolated pass) reads only the durable
-  artefacts the next session will read and reports what it cannot determine, finds
-  ambiguous, or would be misled by — grounding each finding against source.
-  Externalise by default whenever the handoff carries load-bearing facts a fresh
-  agent will act on; a handoff with nothing load-bearing to lose has nothing to
-  review. Fill the gaps; fence stale content a fresh reader would misread.
+- **Run the completeness backstop as two SPLIT operations — they have opposite
+  ownership (2026-06-12 amendment).**
+  - **Claim VERIFICATION** — author bias is real, and a context-isolated reader
+    helps: a fresh reviewer (or a genuinely context-isolated pass) reads only the
+    durable artefacts the next session will read and reports what it cannot
+    determine, finds ambiguous, or would be misled by — grounding each finding
+    against source. Externalise this by default whenever the handoff carries
+    load-bearing facts a fresh agent will act on.
+  - **Context-loss DETECTION** — holder-EXCLUSIVE by definition. Loss is
+    `context − artefacts`: a context-isolated reader sees only the artefacts and
+    cannot enumerate what is absent relative to the holder's knowledge. The
+    loss-scan ("if this context ceased now, what valuable knowledge generated
+    this session would be lost?") must be run by the context holder and is never
+    delegated or conflated with the fresh-reader audit. Delegating it inverts
+    its ownership and produces a vacuous "all captured" from a reader who could
+    not know otherwise.
+
+  Fill the gaps; fence stale content a fresh reader would misread.
 
 This makes the loss-sweep recur-proof rather than recall-dependent — the
 structural cure the surprise-to-enforcement pipeline prefers.

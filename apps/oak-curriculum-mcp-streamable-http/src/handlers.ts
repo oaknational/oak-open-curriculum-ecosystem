@@ -24,6 +24,7 @@ import {
   type UniversalToolName,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
+import { measureCallToolResult } from './observability/tool-result-measurement.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
 import {
   createDefaultRequestExecutor,
@@ -161,6 +162,18 @@ const EEF_FLAG_GATED_TOOL_NAMES: ReadonlySet<UniversalToolName> = new Set<Univer
   'get-eef-evidence',
 ]);
 
+/**
+ * Tool names co-gated behind `OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED`. The two
+ * user-search MCP App tools (`user-search` widget + `user-search-query`
+ * app-only helper) register only when the opt-in flag is ON. While OFF
+ * (default), neither is registered — so neither appears in `tools/list`,
+ * regardless of whether a client honours `_meta.ui.visibility`. The MCP App
+ * user-search experience is not built yet. Typed as `UniversalToolName` so a
+ * tool-name rename is a compile error here, not a silently-stale string.
+ */
+const USER_SEARCH_FLAG_GATED_TOOL_NAMES: ReadonlySet<UniversalToolName> =
+  new Set<UniversalToolName>(['user-search', 'user-search-query']);
+
 /** Iterates over universal tools and registers each with the server. */
 function registerTools(
   server: Pick<McpServer, 'registerTool'>,
@@ -177,9 +190,20 @@ function registerTools(
       continue;
     }
 
+    // User-search tools are gated at registration (OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED →
+    // runtimeConfig.userSearchEnabled, opt-in, default OFF): the unbuilt MCP App tools stay off
+    // the registered set — and out of tools/list — unless an explicit `=true` enables them. The
+    // SDK enumerator stays transport-agnostic; the app owns the flag.
+    if (
+      USER_SEARCH_FLAG_GATED_TOOL_NAMES.has(tool.name) &&
+      !options.runtimeConfig.userSearchEnabled
+    ) {
+      continue;
+    }
+
     const handler = async (params: unknown, extra: Parameters<ToolCallback>[0]) => {
       options.observability.setTag('mcp.tool_name', tool.name);
-      return handleToolWithAuthInterception({
+      const result = await handleToolWithAuthInterception({
         tool,
         params,
         deps,
@@ -189,6 +213,13 @@ function registerTools(
         createAssetDownloadUrl: options.createAssetDownloadUrl,
         authInfo: extra.authInfo,
       });
+      // Outbound token health metric, per-field half: every tool result —
+      // including auth errors — is measured (sizes only, never content).
+      options.logger.info('MCP tool result size', {
+        toolName: tool.name,
+        ...measureCallToolResult(result),
+      });
+      return result;
     };
 
     const config = {

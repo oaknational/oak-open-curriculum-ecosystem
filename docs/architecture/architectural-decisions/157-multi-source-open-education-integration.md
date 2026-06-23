@@ -184,7 +184,6 @@ for the server while clearly identifying data provenance:
 | Resource                  | URI                                      | Source             |
 | ------------------------- | ---------------------------------------- | ------------------ |
 | Curriculum model          | `curriculum://model`                     | Oak API + Ontology |
-| Prior knowledge graph     | `curriculum://prior-knowledge-graph`     | Oak API            |
 | Thread progressions       | `curriculum://thread-progressions`       | Oak API            |
 | Misconception graph       | `curriculum://misconception-graph`       | Oak API            |
 | EEF methodology           | `curriculum://eef-methodology`           | EEF                |

@@ -27,7 +27,7 @@ and says which:
 
 - **Cite.** A claim derived from the corpus names the `EEF_TOOLKIT_DATA` source
   path it comes from. The
-  [source-path table](../plans/sector-engagement/eef/current/eef-d2-source-path-table.md)
+  source-path table
   is the canonical citation surface; a new corpus claim either appears there or
   names its path inline.
 - **Tag.** A concept that is the invoking agent's reasoning rather than corpus

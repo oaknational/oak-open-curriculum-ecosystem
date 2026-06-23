@@ -5,7 +5,7 @@ and [ADR-163 (Sentry release / commits / deploy linkage)](../../docs/architectur
 §6/§7 (entry-point boundary discipline + non-deferrable-warnings amendment).
 
 Pattern reference:
-[`acknowledged-warnings-deferred-to-the-stage-they-explode-in`](../memory/active/napkin.md)
+`acknowledged-warnings-deferred-to-the-stage-they-explode-in`
 (2026-04-23 napkin entry, first hard instance).
 
 ## Rule
@@ -101,8 +101,9 @@ time-shifting it to the stage it explodes in.
 ## Scope discipline
 
 The doctrine binds wherever a gate runs. The gate's scope is whatever
-its configuration declares — for markdown, the set of paths NOT ignored
-by [`.markdownlintignore`](../../.markdownlintignore); for esbuild, the
+its configuration declares — for markdown, the set of paths matched by
+the `globs` and not excluded by the `ignores` in
+[`.markdownlint-cli2.jsonc`](../../.markdownlint-cli2.jsonc); for esbuild, the
 warnings the build emits at the configured strictness; for ESLint, the
 files the configured `--ext`/`--ignore-pattern` cover; and so on.
 
@@ -126,12 +127,17 @@ Two rules follow:
    a doctrine-application act and is reviewed accordingly
    (config-expert during planning, code-expert after fixes land).
 
-Concretely for markdown: `.markdownlintignore` is the canonical record
-of the gate's footprint. `.agent/` is no longer blanket-ignored — the
-file enumerates non-canon sub-folders explicitly so adding a new
-canon-shaped folder lints automatically, while adding a new
-reference-shaped folder requires an explicit ignore line and the
-governance act that implies.
+Concretely for markdown: `.markdownlint-cli2.jsonc` is the canonical
+record of the gate's footprint — its `globs` declare what is linted
+(including `.agent/**/*.md`, since cli2 walks dot-directories) and its
+`ignores` enumerate the non-canon surfaces excluded. `.agent/` is not
+blanket-ignored: a new canon-shaped folder under `.agent/` lints
+automatically (matched by the glob, absent from `ignores`), while a new
+reference-shaped folder requires an explicit `ignores` line and the
+governance act that implies. Note the hard constraint recorded in that
+file: an `ignores` entry must never begin with `!` or `#` — in
+markdownlint-cli2 such an entry silently zeroes the whole run to a
+false-green, so exclusions are expressed positively only.
 
 ## Scope and exceptions
 

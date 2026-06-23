@@ -20,22 +20,12 @@ export type {
 } from './mcp/property-graph-data.js';
 
 export type {
-  MisconceptionGraph,
-  MisconceptionGraphStats,
-  MisconceptionNode,
   NCCoverageGraph,
   NCCoverageGraphStats,
   NCStatementNode,
   MinedSynonym,
   MinedSynonymsData,
   MinedSynonymsStats,
-  PriorKnowledgeEdge,
-  PriorKnowledgeGraph,
-  PriorKnowledgeGraphStats,
-  PriorKnowledgeNode,
-  ThreadNode,
-  ThreadProgressionGraph,
-  ThreadProgressionStats,
   VocabularyGraph,
   VocabularyGraphStats,
   VocabularyNode,

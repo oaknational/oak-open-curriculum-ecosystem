@@ -19,7 +19,7 @@ heterogeneous-node machinery is removed. This retires the handoff name
 type; `related_guidance_reports` (7/30) folds into the member payload
 (`eefEvidenceEnvelopeSubset`). The fundamental heterogeneous node/edge model is
 deferred and homed in
-[`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md);
+[`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md);
 see [`eef-d4-graph-capability-contract.md`](eef-d4-graph-capability-contract.md)
 §"EEF v1 is a homogeneous strand graph".
 
@@ -204,7 +204,11 @@ The input raw shape is the only Zod authored in the EEF graph stack for D6.
 Results are `structuredContent`-only with `content: []` (settled Oak decision);
 the `structuredContent` is the D5 `EefEvidenceEnvelope`, returned directly and
 unvalidated at the MCP layer (uniform with every aggregated graph tool); error
-returns use `isError: true`.
+returns use `isError: true`. *(Superseded 2026-06-11 (owner): the
+`structuredContent`-only / `content: []` shape is reversed — `get-eef-evidence`
+now emits the family dual response shape via `formatToolResponse`; see
+[`eef-graph-tool-completion.plan.md`](eef-graph-tool-completion.plan.md)
+§Ratified Decisions supersession note. Error semantics unchanged.)*
 
 Placement (ADR-179 / ADR-041): the schema-builder value and the Zod live in the
 curriculum MCP consumer layer — never in `graph-corpus-sdk` or `graph-core`. The
@@ -321,7 +325,7 @@ tree.
 | V5 | Surfaces that must change for `outputSchema` to reach registration | `AggregatedToolName` union (new tool name), `AGGREGATED_TOOL_DEFS` / `AggregatedToolDefShape` (new entry; output-schema field), `UniversalToolListEntry` (output-schema field AND `inputSchema` field-type widening — today `z.ZodRawShape` only at `types.ts:135`, while the EEF tool's single-Zod-call schema is a `z.object(...)` value; without the widening the assignment forces an `as` cast, the named stop signal), `listUniversalTools`, and the `handlers.ts` config. **Ownership**: the S0 seam belongs to `output-schemas-for-mcp-tools.plan.md` §Resolved Sequencing; EEF D6 lands the seam's first use, first and alone; the extension is additive and leaves existing generated tools unchanged | the same files; `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` §Resolved Sequencing |
 | V6 | Resources and prompts register on the same path D6 co-gates | `registerHandlers` calls `registerTools`, then `registerAllResources`, then `registerPrompts` — one site for flag co-gating of tool + resource + prompt | `handlers.ts:144-149`; `register-resources.ts`; `register-prompts.ts` |
 | V7 | The flag exists as a dormant seam | `OAK_CURRICULUM_MCP_EEF_ENABLED` is parsed and stored as `runtimeConfig.eefEnabled`; no production code path consumes it yet — D6 wires the co-gating | `apps/oak-curriculum-mcp-streamable-http/src/env.ts:47`; `runtime-config-from-validated-env.ts:39` |
-| V8 | `structuredContent`-carrying results are valid in this stack, and the SDK accepts an empty `content` array | The two live graph universal tools return `structuredContent` with a non-empty `content` array (summary + JSON text blocks via `formatToolResponse`) — they prove `structuredContent` works on this path, not the `content: []` shape. The EEF tool's `content: []` shape is the separately owner-ratified target (plan §Fully Specified End State, not re-opened); the SDK's `validateToolOutput` checks `structuredContent` presence and never requires `content` to be non-empty | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts:220` (`formatToolResponse`); SDK `dist/esm/server/mcp.js` (`validateToolOutput`) |
+| V8 | `structuredContent`-carrying results are valid in this stack, and the SDK accepts an empty `content` array | The two live graph universal tools return `structuredContent` with a non-empty `content` array (summary + JSON text blocks via `formatToolResponse`) — they prove `structuredContent` works on this path, not the `content: []` shape. The EEF tool's `content: []` shape is the separately owner-ratified target (plan §Fully Specified End State, not re-opened) *(superseded 2026-06-11 — the owner reversed the `content: []` target; the tool now emits the family dual shape via `formatToolResponse`, see the supersession note at the schema rule above)*; the SDK's `validateToolOutput` checks `structuredContent` presence and never requires `content` to be non-empty | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts:220` (`formatToolResponse`); SDK `dist/esm/server/mcp.js` (`validateToolOutput`) |
 
 > **Superseded for D6 (2026-06-07):** the output schema was dropped from D6 (see
 > the revised schema rule above). The carrier-widening discussion below is now the

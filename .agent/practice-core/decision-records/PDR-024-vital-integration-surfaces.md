@@ -44,6 +44,12 @@ breaks — a renamed file, a missing link, a bypassed skill — the
 Practice remains on disk but is not in the session. The repo silently
 reverts to whatever ambient habits the platform provides.
 
+**Entry surfaces degrade by default.** Orientation surfaces drift out of truth
+unless actively maintained, so the corollary is that when a tranche of work
+completes, *all* the entry surfaces it touched move together — entry-point
+chain, indexes, the practice-index bridge, READMEs — or the ones left behind
+silently misdirect the next agent.
+
 **Repo → Core (feedback).** The session's learning must reach the
 Practice, or the Practice stagnates. This is the knowledge flow
 (napkin → distilled → graduated to PDRs / patterns / trinity

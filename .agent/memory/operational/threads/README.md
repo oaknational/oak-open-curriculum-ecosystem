@@ -2,7 +2,7 @@
 
 **Proposed 2026-04-21 during the memory-feedback-plan session.**
 Lightweight convention; not yet ratified as Practice doctrine. The
-formal PDR is a candidate for the next `jc-consolidate-docs` pass,
+formal PDR is a candidate for the next `oak-consolidate-docs` pass,
 bundled with the three-plane memory taxonomy portability decision
 (see [`repo-continuity.md § Deep consolidation status`](../repo-continuity.md)
 and the memory-feedback execution plan's Phase 6).
@@ -19,9 +19,24 @@ The live inventory of currently-active threads lives in
 Treat the repo-continuity table as the source of truth; this README is
 the convention document, not the inventory.
 
+## Directory layout (lifecycle → location)
+
+Records are filed by lifecycle state (owner-directed 2026-06-19):
+
+- **Active** threads → this directory root (`threads/<slug>.next-session.md`).
+- **Paused** threads → [`paused/`](paused/) (`threads/paused/<slug>.next-session.md`);
+  reactivation is owner-directed. On reactivation, `git mv` the record back to the root.
+- **Retired / completed** threads → [`retired/`](retired/)
+  (`threads/retired/<slug>.next-session.md`); retained as continuity history, never deleted.
+
+The repo-continuity `§ Active Threads` / `§ Paused Threads` tables and link
+definitions point at the lifecycle-correct path. Retired records are absent from
+both tables by design and carry a retirement banner (see below).
+
 ## What lives in this directory
 
-One `*.next-session.md` file per active thread. Each file contains:
+One `*.next-session.md` file per thread (active at the root; paused and retired in
+their subdirectories per the layout above). Each file contains:
 
 - **Thread identity** — which thread this record belongs to.
 - **Current continuation** — the branch, invocation pointer, controlling plan,
@@ -110,6 +125,12 @@ at the top. Fields:
 > platform/model/agent_name as an existing identity, it updates
 > `last_session` on that identity rather than adding a new one.
 
+In a multi-writer window, grep the identity table for your
+`session_id_prefix` before adding a row — rotation churn has
+produced duplicate rows when two writers each added the same
+identity (observed 2026-06-10); a matching identity UPDATES
+`last_session`, never adds.
+
 This rule becomes a `.agent/rules/*.md` entry once ratified as a
 PDR at the next consolidation pass.
 
@@ -123,7 +144,7 @@ session-specific signal); the checklist handles the rest.
 The preferred opener is a pointer, not a state dump:
 
 ```text
-$jc-start-right-team continue <thread-slug> from
+$oak-start-right-team continue <thread-slug> from
 .agent/memory/operational/threads/<thread-slug>.next-session.md.
 Treat this opener as a hypothesis until live grounding confirms it.
 ```
@@ -159,6 +180,31 @@ by owner direction or live coordination. Avoid `ready to land` wording in
 continuation records unless the work is genuinely uncommitted and pending; once
 landed, cite the commit instead.
 
+### Concurrent lanes — a thread is a multi-lane container
+
+A thread holds one or more **concurrent lanes**: independently pickup-able arcs, each
+with its own state, branch, and pickup trigger, **active OR deferred**. There is no single
+thread-level "next safe step" — several lanes can be "next" at once, picked up in parallel
+by different checkouts, separate agents, or collaborators. When a thread carries more than
+one live arc, record each as a first-class lane rather than collapsing to one pointer:
+
+```markdown
+## Lanes
+
+### Lane: <name> — active | deferred (trigger: <what reactivates it>)
+- Branch:
+- Controlling plan:
+- Next safe step:
+- Acceptance bar:
+```
+
+A deferred lane still belongs here (marked deferred, with its trigger), not only in a
+decision-debt register — a lane entry records *takeable work*. The single-`Next safe step`
+`## Current Continuation` block above stays valid for a genuinely single-lane thread;
+multi-lane threads use `## Lanes`. (Owner-confirmed general principle 2026-06-14; the
+continuity-surface authority is PDR-011. Existing records reconcile to this shape as they
+are next touched — not a mass rewrite.)
+
 ### Read, in order
 
 1. [`../repo-continuity.md`](../repo-continuity.md) end-to-end —
@@ -190,7 +236,7 @@ landed, cite the commit instead.
   component §4 if the plan is multi-session; always a good
   default): *"What did I inherit here? Has it been ratified from
   first principles? Does its shape still fit?"* Invoke
-  `/jc-metacognition` against the plan if uncertain.
+  `/oak-metacognition` against the plan if uncertain.
 
 ### During the session
 

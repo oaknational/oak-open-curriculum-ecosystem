@@ -385,15 +385,15 @@ the file list as a build artefact rather than as plan-body prose.
 ```bash
 # 1. Repo-path escapes from inside practice-core/ — relative paths
 #    that climb above .agent/practice-core/.
-grep -REn '\]\(\.\./\.\./' .agent/practice-core/ | tee /tmp/practice-core-repo-path-escapes.txt
+grep -REn '\]\(\.\./\.\./' .agent/practice-core/ | tee <scratch>/practice-core-repo-path-escapes.txt
 # Expected: non-empty (current state has violations)
 
 # 2. ADR references in any form (link or inline mention).
-grep -REn '(ADR-[0-9]{3}|architectural-decisions/[0-9]{3})' .agent/practice-core/ | tee /tmp/practice-core-adr-mentions.txt
+grep -REn '(ADR-[0-9]{3}|architectural-decisions/[0-9]{3})' .agent/practice-core/ | tee <scratch>/practice-core-adr-mentions.txt
 # Expected: non-empty (current state has violations)
 
 # 3. Commit references — short SHAs in prose.
-grep -REn '\b[0-9a-f]{7,40}\b' .agent/practice-core/ | tee /tmp/practice-core-commit-refs.txt
+grep -REn '\b[0-9a-f]{7,40}\b' .agent/practice-core/ | tee <scratch>/practice-core-commit-refs.txt
 # Expected: review manually; SHA-shaped tokens may include false
 # positives (UUIDs, content hashes); this is signal not specification.
 
@@ -549,9 +549,9 @@ pnpm portability:check
 # violations from the Phase 0 inventory.
 
 # 3. Scanner output stable across reruns (no nondeterministic ordering).
-pnpm portability:check 2>&1 | tee /tmp/run1.txt
-pnpm portability:check 2>&1 | tee /tmp/run2.txt
-diff /tmp/run1.txt /tmp/run2.txt
+pnpm portability:check 2>&1 | tee <scratch>/run1.txt
+pnpm portability:check 2>&1 | tee <scratch>/run2.txt
+diff <scratch>/run1.txt <scratch>/run2.txt
 # Expected: no diff.
 ```
 

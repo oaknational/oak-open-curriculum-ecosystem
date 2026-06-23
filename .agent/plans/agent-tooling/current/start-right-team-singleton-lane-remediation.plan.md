@@ -178,7 +178,7 @@ In scope:
 - `.agent/memory/executive/memory-state-substrate-contracts.manifest.json`
 - `agent-tools/src/collaboration-state/**`
 - focused collaboration-state tests under `agent-tools`
-- memory update notes under `/Users/jim/.codex/memories/extensions/ad_hoc/notes/`
+- memory update notes under `~/.codex/memories/extensions/ad_hoc/notes/`
   only when execution has explicit owner permission to update memory
 
 Out of scope:

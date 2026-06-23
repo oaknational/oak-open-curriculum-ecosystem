@@ -20,10 +20,13 @@ the result and defer their own run.
 
 ## Observable Surface
 
-Until the structural cure lands (rule-scope discussion in
-`pending-graduations.md` 2026-05-22 — likely a new `area-kind: gate-sweep`
-in the active-claims schema), the observable surface is the
-**broadcast convention**:
+Two surfaces compose. The **registry surface**: the check-runner's
+active claim carries `role` (e.g. `--role marshal` on `claims open`),
+the optional claim-schema field landed 2026-06-12 as the structural
+cure for singleton-role visibility — peers and glance surfaces resolve
+who holds the runner role per window from `active-claims.json` alone.
+The **broadcast convention** signals the in-flight run itself (start,
+ETA, result), which a static role field cannot:
 
 1. **Before** invoking `pnpm check` (or equivalent whole-repo gate),
    the agent broadcasts a comms event of the shape
@@ -88,15 +91,18 @@ runs overlap.
 - [ADR-183 Comms-Event Tag Namespace](../../docs/architecture/architectural-decisions/ADR-183-comms-event-tag-namespace.md)
   — broadcast tags (`gate-sweep:in-flight`, `gate-sweep:result`) sit in
   the comms-event tag taxonomy.
-- `pending-graduations.md` 2026-05-22 — structural cure candidate
-  (`area-kind: gate-sweep` in active-claims schema) tracked there; this
-  rule's broadcast convention is the bridge until that cure lands.
+- Active-claims schema `role` field — the structural claim-schema
+  surface for singleton-role visibility; see
+  [`active-claims.schema.json`](../state/collaboration/active-claims.schema.json).
 
-## Structural Cure Pending
+## Structural Cure — Landed
 
-The broadcast convention is the immediate cure (zero schema change;
-relies on existing comms infrastructure). A more rigorous cure — a
-new `area-kind: gate-sweep` claim type that peers observe through
-the active-claims registry — remains a candidate in
-`pending-graduations.md` 2026-05-22. When that cure lands, this rule
-updates to reference the claim type alongside the broadcast.
+The structural claim-schema cure pending since 2026-05-22 landed
+2026-06-12 (owner-directed) as the optional `role` field on active
+claims — an open-vocabulary session-role marker rather than the
+originally predicted `area-kind: gate-sweep`. The check-runner opens
+its claim with `--role marshal` (or another agreed runner label), so
+the singleton holder is observable through the registry. The broadcast
+convention remains the in-flight signal: roles answer *who holds the
+runner seat this window*; broadcasts answer *is a sweep running right
+now and what did it conclude*.

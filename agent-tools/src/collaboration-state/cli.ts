@@ -139,24 +139,30 @@ function topicUsage(topic: string | undefined): string {
   ].join('\n');
 }
 
-function validateKnownOptions(options: Options, spec: CommandSpec): void {
-  for (const key of options.values.keys()) {
-    if (isUnknownValueOption(key, spec)) {
-      throw new Error(
-        commandError(
-          spec,
-          `unknown option for ${options.command ?? ''} ${options.topic ?? ''}: --${key}`,
-        ),
-      );
-    }
-  }
+/**
+ * The option keys present in `options` that the command `spec` does not
+ * declare, in first-seen order (value options before the repeatable
+ * `file` / `area-pattern` keys); empty when every option is accepted.
+ *
+ * Pure: this is the dispatch-time allowlist gate that
+ * {@link validateKnownOptions} enforces, exposed so the gate can be proved
+ * without driving the IO-bearing command handler. A `claims open --role`
+ * invocation once failed here on a spec whose option set omitted `role`
+ * (2026-06-12), so the gate's per-command coverage is load-bearing.
+ */
+export function unknownValueOptions(options: Options, spec: CommandSpec): readonly string[] {
+  const unknownValues = [...options.values.keys()].filter((key) => isUnknownValueOption(key, spec));
+  const unknownRepeatable = firstUnknownRepeatableOption(options, spec);
+  return unknownRepeatable === undefined ? unknownValues : [...unknownValues, unknownRepeatable];
+}
 
-  const unknownRepeatableOption = firstUnknownRepeatableOption(options, spec);
-  if (unknownRepeatableOption !== undefined) {
+function validateKnownOptions(options: Options, spec: CommandSpec): void {
+  const unknown = unknownValueOptions(options, spec);
+  if (unknown.length > 0) {
     throw new Error(
       commandError(
         spec,
-        `unknown option for ${options.command ?? ''} ${options.topic ?? ''}: --${unknownRepeatableOption}`,
+        `unknown option for ${options.command ?? ''} ${options.topic ?? ''}: --${unknown[0]}`,
       ),
     );
   }

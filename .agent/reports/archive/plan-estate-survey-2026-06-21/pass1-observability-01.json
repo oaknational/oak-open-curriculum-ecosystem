@@ -1,0 +1,2284 @@
+{
+  "batch_size": 12,
+  "plans_returned": 12,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/observability/active/gate-recovery-cadence.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "All five todos are status: completed in frontmatter",
+          "file_line": "gate-recovery-cadence.plan.md:9-23"
+        },
+        {
+          "claim": "Body explicitly states 'This plan no longer holds an authority role and is archivable on the next consolidation pass'",
+          "file_line": "gate-recovery-cadence.plan.md:31-34"
+        },
+        {
+          "claim": "Doctrine graduated to dont-break-build-without-fix-plan.md which now owns it directly",
+          "file_line": "gate-recovery-cadence.plan.md:32-33"
+        },
+        {
+          "claim": "Handoff notes direct resumption to sibling plan, not back to this one",
+          "file_line": "gate-recovery-cadence.plan.md:212-224"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly separates intentional TDD RED from gate-breaking missing-symbol failures (lines 57-63), provides a concrete classification ledger with evidence (lines 118-158), and defines ordered command sequences that enforce the invariant (lines 162-199). All execution is complete and the doctrine extracted to a rule. No speculative or bad ideas embedded.",
+      "content_quality": "strong",
+      "content_quality_note": "The failure ledger at lines 118-158 is evidence-grounded with gate-by-gate classification and explicit cross-lane attribution. The cadence guard at lines 162-199 gives runnable bash sequences. The repaired RED shape section (lines 139-158) names specific source files created. The plan self-documents its own archivability at lines 31-34, which is itself a quality signal.",
+      "salvage_value": [
+        {
+          "idea": "Failure ledger pattern: classify each gate failure as intentional-RED, parallel-lane, or unexpected regression before any remediation",
+          "class": "good",
+          "file_line": "gate-recovery-cadence.plan.md:9-10, 118-128"
+        },
+        {
+          "idea": "Typed compile-passing seams as the bridge between missing-symbol RED and buildable production stubs",
+          "class": "good",
+          "file_line": "gate-recovery-cadence.plan.md:74-79, 139-158"
+        },
+        {
+          "idea": "Ordered cadence guard: non-test gates after every RED batch, focused tests plus full non-test set before any GREEN claim",
+          "class": "good",
+          "file_line": "gate-recovery-cadence.plan.md:99-107, 162-199"
+        },
+        {
+          "idea": "Cross-lane isolation rule: WS3 lint failures are classified but not edited without explicit owner direction",
+          "class": "good",
+          "file_line": "gate-recovery-cadence.plan.md:82-86, 170-175"
+        },
+        {
+          "idea": "Freeze-scope-first discipline: no new RED or GREEN until current failures are classified",
+          "class": "good",
+          "file_line": "gate-recovery-cadence.plan.md:67-70"
+        },
+        {
+          "idea": "Production wiring beyond compile-only seams when reviewers find test-only risk",
+          "class": "good",
+          "file_line": "gate-recovery-cadence.plan.md:215-217"
+        },
+        {
+          "idea": "Reviewer routing matrix keyed to gate domain (test/config/architecture/sentry)",
+          "class": "good",
+          "file_line": "gate-recovery-cadence.plan.md:226-234"
+        },
+        {
+          "idea": "Self-archivability declaration embedded in plan body so consolidation pass has explicit signal",
+          "class": "good",
+          "file_line": "gate-recovery-cadence.plan.md:31-34"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED — V0 §2.1)",
+          "file_line": "gate-recovery-cadence.plan.md:1-24 (entire frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED — V0 §2.1)",
+          "file_line": "gate-recovery-cadence.plan.md:1-24"
+        },
+        {
+          "issue": "Missing required field `kind` — inferrable as `executable` from todos presence, but absent from frontmatter (LOCKED — V0 §2.2/3.1)",
+          "file_line": "gate-recovery-cadence.plan.md:1-24"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED — V0 §2.4)",
+          "file_line": "gate-recovery-cadence.plan.md:1-24"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — mandatory for executable plans (LOCKED — V0 §2.3, §4 invariant 1)",
+          "file_line": "gate-recovery-cadence.plan.md:1-24"
+        },
+        {
+          "issue": "Missing `disposition: done` — all todos completed and body prose at line 29-34 declares the plan complete and archivable, but `disposition` is absent from frontmatter (LOCKED model — V0 §2.2/3.3)",
+          "file_line": "gate-recovery-cadence.plan.md:29-34"
+        },
+        {
+          "issue": "Execution status and disposition carried as body prose ('Completed execution plan … archivable on the next consolidation pass') rather than durable frontmatter fields — V0 §3.3 requires `disposition` in frontmatter once a terminal state is reached",
+          "file_line": "gate-recovery-cadence.plan.md:29-34"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "test",
+      "specialist_kind": "test",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "All five frontmatter todos are marked 'completed', and the plan body explicitly self-declares as 'archivable on the next consolidation pass' (line 34). No live test work remains owned here.",
+          "file_line": "gate-recovery-cadence.plan.md:9-23,31-34"
+        },
+        {
+          "severity": "info",
+          "claim": "RED/GREEN discipline is correctly stated: the plan separates intentional behavioural-RED from non-test gate failures (build/type/lint), and the failure ledger confirms all behavioural RED tests resolved to GREEN (lines 132-138).",
+          "file_line": "gate-recovery-cadence.plan.md:6-8,132-138"
+        },
+        {
+          "severity": "info",
+          "claim": "The cadence guard section names a concrete, ordered test command set for focused gates before any GREEN claim (lines 181-194), which is sound test-gate discipline. No ordering defect detected.",
+          "file_line": "gate-recovery-cadence.plan.md:181-194"
+        },
+        {
+          "severity": "low",
+          "claim": "The handoff note at line 220 states 'Do not mark root pnpm check healthy yet' due to staged WS3 lint/markdownlint residuals. This is a stale advisory: the plan is already self-declared completed and archivable (line 34), so the advisory is orphaned — a reader may act on it believing it is live when the owning lane has closed.",
+          "file_line": "gate-recovery-cadence.plan.md:218-221,31-34"
+        },
+        {
+          "severity": "low",
+          "claim": "The cross-reference note at line 209 claims 'bidirectional reference (rule cites plan; plan cites rule)'. PDR-105 reference-direction forbids a rule citing an ephemeral plan as authority. The plan itself calls this out as a violation risk (line 33), but if the rule currently contains a back-reference to this plan, that link will rot once the plan is archived without confirming the rule has been cleaned up.",
+          "file_line": "gate-recovery-cadence.plan.md:203-210,31-34"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "This plan no longer holds an authority role and is archivable on the next consolidation pass",
+          "verdict": "survives",
+          "confidence": "medium",
+          "evidence": ".agent/rules/dont-break-build-without-fix-plan.md:3-14 (rule now owns the green-gate invariant verbatim, \"The invariant is durable doctrine and lives here, in the rule\"); plan status note gate-recovery-cadence.plan.md:28-34 (all 5 todos completed, graduated to rule, PDR-105 inverted reference-direction); rule no longer cites the plan path (grep: NO direct path cite). Caveat: live stale \"authority surface\" citations remain inbound — agent-collaboration.md:156-163 and multi-agent-collaboration-protocol.plan.md:271,439,1348-1350 — that a careless archive would break; the inversion commit e75b1e0fd (2026-06-19) repointed the doctrine but not these citations."
+        },
+        {
+          "claim": "The green-gate invariant has graduated to durable doctrine in dont-break-build-without-fix-plan.md",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/rules/dont-break-build-without-fix-plan.md:3-6 \"Owns the green-gate invariant for the cross-agent context... The invariant is durable doctrine and lives here, in the rule — a plan that executes against it cites this rule, never the reverse (PDR-105 reference-direction).\" The \"## The invariant\" section (lines 8-14) states it verbatim (build/type-check/lint/format/markdown/depcruise/knip stay green during TDD). Plan cite at gate-recovery-cadence.plan.md:29-34 matches exactly."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is actively executing: Wave 1 still active per status header",
+          "file_line": "line 125"
+        },
+        {
+          "claim": "Multiple lanes pending in frontmatter todos (l1, l2, l3, l4b, l8, l5, l6, l10, l11, l15, ws-quality-gates, ws-adversarial-review, ws-doc-propagation, ws-consolidation)",
+          "file_line": "lines 24-114"
+        },
+        {
+          "claim": "L-8 correction work items 1-8 are pending resolution after the fb047f86 landing",
+          "file_line": "lines 2869-2900"
+        },
+        {
+          "claim": "Plan encodes load-bearing design decisions (redaction barrier, delegate seam, version-resolution strategy) not yet landed in permanent ADRs",
+          "file_line": "lines 218-250"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is a rigorous, multi-reviewer-validated execution document with explicit ADR anchors, a full dependency graph, alpha/beta sequencing rationale, three-part lane-close evidence pattern, risk table with mitigations, and inline correction records. The L-8 correction subsection (lines 2684-2971) demonstrates epistemic honesty: it records the probe failure, root-causes both errors, and specifies the corrected design. The reviewer appendix (lines 3166-3551) shows 29 findings resolved with traceability. No substantive ideas are speculative without explicit justification.",
+      "content_quality": "strong",
+      "content_quality_note": "Lane bodies specify RED/GREEN/REFACTOR with concrete acceptance criteria, file paths, and test-boundary declarations (e.g. L-4b two-surface test spec at lines 1372-1386, L-3 deny-list context shape at lines 1284-1292, L-2 structural-intersection test at lines 1263-1272). Phase structure is authoritative and execution-ordered. The Build-vs-Buy attestation table (lines 2220-2231) cites specific Sentry issue numbers (608, 614) and tsup issue 1260 with resolution dates. The three-part lane-close evidence pattern (lines 429-459) is self-referentially demonstrated by L-0b, L-EH-initial, and L-DOC-initial closures.",
+      "salvage_value": [
+        {
+          "idea": "Non-bypassable five-hook redaction barrier with three-part closure-property test (composition-presence satisfies check, ordering invariant via capturing post-hooks, redacted-at-destination per hook)",
+          "class": "good",
+          "file_line": "lines 500-556"
+        },
+        {
+          "idea": "Alpha/beta lane sequencing: split Phase 3 into 3a (schema-independent, alpha-gate) and 3b (schema-dependent, beta-gate) to compress time-to-useful-Sentry",
+          "class": "good",
+          "file_line": "lines 364-393"
+        },
+        {
+          "idea": "Build-vs-buy attestation table as a required plan-phase artefact before ExitPlanMode, with explicit vendor-ruled-out evidence citing issue numbers",
+          "class": "good",
+          "file_line": "lines 2214-2245"
+        },
+        {
+          "idea": "Three-part lane-close evidence pattern: attempt / observed-outcome / proven-result as a system-behaviour invariant, not a self-report of intent",
+          "class": "good",
+          "file_line": "lines 429-459"
+        },
+        {
+          "idea": "Version-resolution single-source-of-truth: production=disk (package.json), preview=branch-slug+short-sha, dev=short-sha — persisted once to dist/build-info.json",
+          "class": "good",
+          "file_line": "lines 2814-2851"
+        },
+        {
+          "idea": "Explicit-superset delegate seam (L-2): method factory returns structural intersection over consumers declared slices; no method in public type unclaimed by a caller",
+          "class": "good",
+          "file_line": "lines 1243-1272"
+        },
+        {
+          "idea": "ADR-state-WHAT-not-HOW principle: ADR-163 §6 rewritten from sentry-cli invocation sequence to UI outcome statement, with mechanism in code not ADR prose",
+          "class": "good",
+          "file_line": "lines 2517-2529"
+        },
+        {
+          "idea": "Warn-vs-throw fail-policy taxonomy: optional vendor config (warn-continue) vs vital identity (throw-with-helpful-error) as a named two-category classification for build-time config failures",
+          "class": "good",
+          "file_line": "lines 2853-2861"
+        },
+        {
+          "idea": "Friction-ratchet counter: if 3+ independent friction signals accumulate against a design during execution, escalate to assumptions-expert rather than tactical-patch",
+          "class": "good",
+          "file_line": "lines 2278-2281"
+        },
+        {
+          "idea": "Fixture-runtime envelope-observability prerequisite for L-1: extend createFixtureRuntime to route envelopes through createSentryHooks before asserting per-integration behaviour",
+          "class": "good",
+          "file_line": "lines 1202-1207"
+        },
+        {
+          "idea": "L-8 bundler switch from tsup to raw esbuild scoped to MCP app only, with two documented runtime-breakage defects (Sentry issues 608/614, tsup issue 1260) justifying the swap",
+          "class": "good",
+          "file_line": "lines 2097-2115"
+        },
+        {
+          "idea": "Docs are definition-of-done on every lane: dissolve L-DOC-final and distribute documentation obligations into each lane REFACTOR phase",
+          "class": "good",
+          "file_line": "lines 93-94 and lines 394-400"
+        },
+        {
+          "idea": "L-12-prereq resolution via primitives-consolidation fold into @oaknational/observability rather than new telemetry-redaction-core workspace — avoids core-to-lib boundary violation",
+          "class": "good",
+          "file_line": "lines 813-826"
+        },
+        {
+          "idea": "MVP classification table with explicit axis-applicability rationale (a/b/c families) for every MVP-deferred lane, making omission explicit and auditable",
+          "class": "good",
+          "file_line": "lines 276-315"
+        },
+        {
+          "idea": "Reviewer scheduling aligned to plan phase: plan-phase reviewers (assumptions-expert) run before ExitPlanMode; mid-cycle reviewers after each workstream; close reviewers (docs-adr-expert, release-readiness-expert) post-execution",
+          "class": "good",
+          "file_line": "lines 2247-2292"
+        },
+        {
+          "idea": "L-4b two-surface test design: pure-function beforeSendMetric redaction unit test (proves policy) separate from fixture-capture integration test (proves wiring)",
+          "class": "good",
+          "file_line": "lines 1372-1386"
+        },
+        {
+          "idea": "L-9 feedback pipeline with closed-set Zod enum input (no free-text) as privacy-first design non-negotiable",
+          "class": "good",
+          "file_line": "lines 1429-1440"
+        },
+        {
+          "idea": "L-IMM operational hardening bundle: flush timeout 2s→5s, maxBreadcrumbs verify, ignoreErrors/denyUrls scaffold, hybrid fingerprinting, sendClientReports verify, Marketplace integration check — identified via gap analysis against Sentry official docs",
+          "class": "good",
+          "file_line": "lines 95-98 and lines 1480-1670"
+        },
+        {
+          "idea": "L-OPS deferred operational maturity bundle preserving cron monitoring, performance issue auto-detection, Spotlight dev-mode, cache instrumentation, webhook routing as named future lanes",
+          "class": "speculative",
+          "file_line": "lines 99-102 and lines 1825-1866"
+        },
+        {
+          "idea": "L-5 dynamic sampling policy: 100% errored transactions, 100% >P95 latency, elevated cold-boot/auth-proxy, sampled happy-path",
+          "class": "speculative",
+          "file_line": "lines 1959-1979"
+        },
+        {
+          "idea": "L-6 profiling with v10 profileSessionSampleRate + profileLifecycle API, opt-in env-gated, with overhead measurement obligation before continuous enablement",
+          "class": "speculative",
+          "file_line": "lines 1983-2004"
+        },
+        {
+          "idea": "L-13 per-loop alert + dashboard + runbook deferred to public beta pending real signal distributions from L-1/L-3/L-4b",
+          "class": "speculative",
+          "file_line": "lines 1748-1755"
+        },
+        {
+          "idea": "L-14 security-gated trace propagation decision per outbound host (Oak API, Clerk, Elastic) deferred to beta pending trust-boundary policy owner",
+          "class": "speculative",
+          "file_line": "lines 1791-1813"
+        },
+        {
+          "idea": "L-12 widget Sentry deferred to public beta pending host-compatibility evidence in agentic clients (ChatGPT, Claude Desktop)",
+          "class": "speculative",
+          "file_line": "lines 1677-1683"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "supersedes",
+        "depends_on"
+      ],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:1-119 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED, required for all plans)",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:1-119 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans; inferred `executable` from todos presence and active/ folder location)",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:1-119 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans; appears only in body prose at line 126 as '**Last Updated**: 2026-04-23', not as a frontmatter field)",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:126"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` for an executable plan — must be a strategic-choice ID or the sentinel 'pending' (LOCKED invariant 1, §2.3 and §4)",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:1-119 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`isProject: true` is present — V0 §2.5 EXPLICITLY DROPS this key ('Dropped — plan ≈ Linear Project is universal; the projection is the projects_to edge, not a boolean')",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:118"
+        },
+        {
+          "issue": "`depends_on` entries are bare string refs, not the required `{ plan, kind: blocking | beneficial }` object shape (LOCKED edge shape, §2.3 and §4)",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:14-15"
+        },
+        {
+          "issue": "Todo `status` values include `deferred` and `dissolved` which are outside the V0 closed enum `pending | completed` (LOCKED, §2.4)",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:55,68,72,76,94,101"
+        },
+        {
+          "issue": "Execution status ('WAVE 1 STILL ACTIVE') expressed as inline body prose (line 125-139) rather than via V0 axes. V0 §3.2 states execution status is Linear-projected and must not be stored as a durable frontmatter or body field; the §3.5 migration map maps this to Linear `in_progress` with no repo-side storage.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:125-139"
+        }
+      ],
+      "unclassified_keys": [
+        "strategic_plan",
+        "branch"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "V0 §2.5 LOCKS the DROP of `isProject` ('Dropped — plan ≈ Linear Project is universal; the projection is the projects_to edge, not a boolean'). The plan carries `isProject: true`.",
+          "evidence": "V0 schema spec §2.5: 'isProject | 107 / 250 census | Dropped — plan ≈ Linear Project is universal; the projection is the projects_to edge, not a boolean.' Plan has `isProject: true`.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:118"
+        },
+        {
+          "item": "V0 §4 LOCKS the `depends_on` edge shape as `{ plan, kind: blocking | beneficial }` (LOCKED shape). The plan's `depends_on` list contains bare string refs with no `kind` property, violating the typed-edge invariant that prevents a beneficial prerequisite from silently gating.",
+          "evidence": "V0 §4 depends_on row: 'Keep (12) and reconcile with PDR-018: the blocking/beneficial classification becomes a typed property on the edge, so a beneficial prerequisite can never silently gate.' Plan line 14-15 uses bare strings.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:14-15"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan's phase ordering — gates before emitters, schemas before schema-consuming emitters, vendor plugin before bespoke orchestrator — is architecturally sound and correctly sequenced. The dependency graph at lines 470-481 is explicit and consistent with the phase structure.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:344-481"
+        },
+        {
+          "severity": "info",
+          "claim": "The L-12-prereq workspace extraction was correctly resolved by folding redaction primitives into @oaknational/observability rather than creating a new telemetry-redaction-core package. The architecture review that surfaced the core->lib boundary violation and the third duplicate of the recursive JSON-safe type is captured and actioned. The fold is the right call.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:811-826"
+        },
+        {
+          "severity": "medium",
+          "claim": "L-8 correction (lines 2684-2932) documents that the Vercel preview build failed with 'missing_app_version' because two independent boundary reads of the release name disagreed. The corrected strategy (canonical resolver, single boundary read, persisted to dist/build-info.json) is well-specified. However, the deferred follow-on at lines 2952-2971 records that oak-search-cli remains on tsup with the old validate-root-application-version.mjs pre-flight, meaning the single-source-of-truth discipline is only partially enforced across the monorepo. The search-cli gap is explicitly noted as unplanned but creates a window where the same class of version-resolution drift can recur on that workspace.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:2952-2971"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan defers the emit-persistence test (vendor-independence conformance — proving a tool invocation produces structural event output via stdout under SENTRY_MODE=off) to Phase 5, acknowledging at line 3064 that 'exploration 8 deliberately left shape open'. This is the behavioural gate for ADR-162 Mechanism #4+#5 vendor-independence. The ESLint structural gate (no-vendor-observability-import) in Phase 2 cannot substitute for the runtime property test. If Phase 5 cannot resolve the test shape, the plan documents this as a launch caveat rather than silently deferring — that posture is correct but the open-shape risk should be resolved before Phase 3 emission work starts.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:3064"
+        },
+        {
+          "severity": "low",
+          "claim": "L-3's enrichMcpRequestContext is correctly scoped to the MCP app (not the shared library) per ADR-154, with two enforcement layers: the boundary ESLint rule and import-x/no-extraneous-dependencies. However, the plan notes at line 1280 that 'a named no MCP-specific symbol pattern is a follow-up lane candidate rather than an existing rule' — this means the negative enforcement (preventing MCP-specific symbols from leaking into sentry-node) is currently indirect. The positive enforcement (correct placement) is adequate; the gap is flagged accurately.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:1280"
+        },
+        {
+          "severity": "low",
+          "claim": "The L-1 fixture-envelope-observability prerequisite (lines 1202-1207) is correctly identified as a blocking dependency for L-1 GREEN: createFixtureRuntime does not currently route non-event envelopes (ANR, streamed spans, runtime metrics) through the beforeSend* hook pipeline. Option A (extend fixture runtime to route through the hook composition) is preferred over Option B (per-envelope capture paths). The risk register at line 3056 acknowledges this adds material scope to L-1. The architecture is right to flag this as a prerequisite rather than discovering it mid-implementation.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:1202-1207"
+        },
+        {
+          "severity": "low",
+          "claim": "L-2's structural-intersection test (line 1272) requires a type-level assertion that the published method factory's inferred return type is a structural intersection over consumers' declared delegate slices, and that no method appears in the public factory type without at least one caller in the repo. This is a sound architecture constraint. However, the plan does not specify where this type-level test lives — in sentry-node alongside the factory, or in each consuming app. Ambiguity here could result in the test being skipped or placed where it does not fail at the right boundary.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:1272"
+        },
+        {
+          "severity": "info",
+          "claim": "The esbuild.config.ts intent-kind discriminated union (SentryBuildPluginIntent: disabled | skipped | configured) correctly separates optional-vendor-config failures (warn-and-continue) from vital-identity failures (throw). This is a structurally enforced policy split. The two-category fail-policy table at lines 2857-2860 is architecturally clean and matches the repo's no-warning doctrine for identity-missing cases while allowing non-blocking dev flows for token-missing cases.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:2857-2860"
+        },
+        {
+          "severity": "info",
+          "claim": "The ADR-160 non-bypassable redaction barrier is machine-enforced via a TypeScript satisfies check over a discriminated-union of fan-out hook names (L-0b). The compile-time gate correctly requires that adding a new hook to NodeOptions without adding it to the union breaks the build. The L-4b beforeSendMetric extension is explicitly gated on this invariant at line 528. This is sound defence-in-depth architecture.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:514-528"
+        },
+        {
+          "severity": "info",
+          "claim": "The userId/setUser follow-up at lines 795-800 correctly flags an open architectural question: whether userId reaching the Sentry user scope is intended (engineering-axis PII) or a defect against ADR-143's observability boundary. The question is unresolved in this plan and is cross-referenced to a 2026-05-26 exploration doc (line 1319). The plan does not suppress or close this question without owner input, which is the correct posture.",
+          "file_line": "sentry-observability-maximisation-mcp.plan.md:795-800"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "L-12-prereq closed via observability-primitives-consolidation (commit e09918a8); packages/core/telemetry-redaction-core/ does not exist",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "Plan lines 813-822 (CLOSED status, fold via e09918a8); commit e09918a87 subject \"refactor(observability): fold redaction primitives; delete telemetry-redaction-core\" and body \"closing the Wave 1 L-12-prereq blocker\"; `ls packages/core/telemetry-redaction-core` -> No such file or directory; `find packages -type d -name telemetry-redaction-core` -> no match; grep miss (exit 1) in pnpm-workspace.yaml; 0 lockfile hits; packages/core/observability/src/redaction.ts + no-node-only-imports.unit.test.ts present"
+        },
+        {
+          "claim": "mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md is archived complete — the repo-owned corrective lane has closed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md:3 (status: completed) and :63-64 (🟢 COMPLETED — the bounded repo-owned corrective lane is closed); cited at sentry-observability-maximisation-mcp.plan.md:2690-2691"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/current/accessibility-observability.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All four todos are pending and the plan is explicitly blocked on exploration 3 — it is active-pending work, not complete or superseded.",
+          "file_line": "accessibility-observability.plan.md:20-44"
+        },
+        {
+          "claim": "release_gate is public-beta and the plan body names the dependency chain that must resolve first; no evidence it has been completed or archived.",
+          "file_line": "accessibility-observability.plan.md:17"
+        },
+        {
+          "claim": "strategic_parent points to a future/ plan, confirming this plan sits in the delivery pipeline and is not orphaned.",
+          "file_line": "accessibility-observability.plan.md:13"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, names what is NOT in scope as first-class content (lines 97-103), applies TDD discipline (WS1 RED before WS2 GREEN), carries an adversarial review gate with three named specialists (lines 214-218), and explicitly defers privacy-sensitive dimensions (line 99). The named-open-question design pattern is novel and worth conserving. Frustration-proxy heuristic labelling (lines 91-92) shows appropriate epistemic caution.",
+      "content_quality": "strong",
+      "content_quality_note": "Each WS section names the exact test file, the mocked inputs, and the acceptance condition (lines 130-153). Risk mitigations are specific and actionable (lines 226-229). Non-goals are precise rather than vague (lines 99-103). The plan body carries the open question as a first-class deliverable (line 265-266), which is rare and valuable.",
+      "salvage_value": [
+        {
+          "idea": "Named-open-question pattern: explicitly listing unobservable dimensions as first-class non-goals rather than omitting them.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:8-10, 97-103"
+        },
+        {
+          "idea": "a11y_preference_tag emission on widget load capturing reduced-motion, high-contrast, font-scaling, prefers-color-scheme via matchMedia.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:4-5, 160-164"
+        },
+        {
+          "idea": "Frustration proxies (rage-click, rapid-retry) as heuristics labelled explicitly as high-signal but low-precision.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:5-6, 91-92, 168-170"
+        },
+        {
+          "idea": "widget_session_outcome emission at session success and at unload/abandonment.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:6, 172-174"
+        },
+        {
+          "idea": "Keyboard-only session boolean derived from absence of pointer events during the session.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:7, 176-178"
+        },
+        {
+          "idea": "One event per session de-duplication in the preference-tag hook to avoid flooding Sentry.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:226"
+        },
+        {
+          "idea": "TDD discipline: four named integration test files with specific mocked inputs required RED before GREEN implementation.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:130-153"
+        },
+        {
+          "idea": "Three-specialist adversarial gate: accessibility-expert (WCAG mapping), react-component-expert (hooks correctness), sentry-expert (emission shape).",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:214-218"
+        },
+        {
+          "idea": "A11y runbook documenting how to read preference distributions and interpret frustration-proxy spikes.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:189-195"
+        },
+        {
+          "idea": "Explicit non-goal: screen-reader session detection excluded on privacy grounds.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:99"
+        },
+        {
+          "idea": "Explicit non-goal: automated WCAG compliance scoring at runtime; axe-core does this at dev-time.",
+          "class": "good",
+          "file_line": "accessibility-observability.plan.md:101-103"
+        },
+        {
+          "idea": "Keyboard-only inference fallback: if no-pointer-events heuristic proves unreliable, narrow to explicit keyboard-first detection only.",
+          "class": "speculative",
+          "file_line": "accessibility-observability.plan.md:229"
+        },
+        {
+          "idea": "False-positive recalibration section in runbook for frustration-proxy thresholds.",
+          "class": "speculative",
+          "file_line": "accessibility-observability.plan.md:227"
+        },
+        {
+          "idea": "Named-open-question pattern as a consolidation candidate if it survives another validation cycle.",
+          "class": "speculative",
+          "file_line": "accessibility-observability.plan.md:256-257"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING — blocks on exploration 3",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "node_type absent — V0 requires node_type: \"plan\" on all plans",
+          "file_line": "accessibility-observability.plan.md:1 (frontmatter block, field missing)"
+        },
+        {
+          "issue": "id absent — V0 requires a stable kebab slug id on all plans",
+          "file_line": "accessibility-observability.plan.md:1 (frontmatter block, field missing)"
+        },
+        {
+          "issue": "kind absent — V0 requires kind: strategic | executable (LOCKED); plan carries todos indicating executable",
+          "file_line": "accessibility-observability.plan.md:1 (frontmatter block, field missing)"
+        },
+        {
+          "issue": "serves_strategic_choice absent — required for executable plans; at minimum the \"pending\" sentinel must be present",
+          "file_line": "accessibility-observability.plan.md:1 (frontmatter block, field missing)"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — V0 requires last_updated (ISO date) in frontmatter; the date appears only in the body as prose",
+          "file_line": "accessibility-observability.plan.md:50"
+        },
+        {
+          "issue": "status present in body as emoji-prose — V0 §2.5 drops status entirely; \"🟡 PLANNING\" maps to gate: { awaiting: owner-decision, clears_when: ..., expires: ... } but no gate field exists in frontmatter",
+          "file_line": "accessibility-observability.plan.md:51"
+        },
+        {
+          "issue": "derived_from (line 11) misspelled — V0 canonical name is derives_from (§2.3)",
+          "file_line": "accessibility-observability.plan.md:11"
+        },
+        {
+          "issue": "foundational_adr present — V0 §2.5 explicitly reconciles this as derives_from targeting an ADR; must be folded in",
+          "file_line": "accessibility-observability.plan.md:12"
+        },
+        {
+          "issue": "strategic_parent present — not a V0 field; parent_plan relationship is SURVEY-MAY-ADD-EDGES and out of contract in V0; blocking dependency should use depends_on with kind: blocking",
+          "file_line": "accessibility-observability.plan.md:13"
+        },
+        {
+          "issue": "blocked_on present — not a V0 field; V0 replaces with depends_on edges typed blocking (§2.3 LOCKED); YAML is also structurally malformed at this block (release_gate value appears fused into list)",
+          "file_line": "accessibility-observability.plan.md:14-18"
+        },
+        {
+          "issue": "release_gate present — not a V0 field; no equivalent in V0 schema; YAML is malformed (value \"public-beta\" on line 17 appears inside blocked_on list)",
+          "file_line": "accessibility-observability.plan.md:17"
+        },
+        {
+          "issue": "isProject: false present — V0 §2.5 explicitly drops isProject",
+          "file_line": "accessibility-observability.plan.md:45"
+        },
+        {
+          "issue": "YAML structure malformed — release_gate: public-beta appears mid-list inside blocked_on, making the frontmatter unparseable as valid YAML",
+          "file_line": "accessibility-observability.plan.md:17-18"
+        }
+      ],
+      "unclassified_keys": [
+        "derived_from",
+        "foundational_adr",
+        "strategic_parent",
+        "blocked_on",
+        "release_gate",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The entire implementation (WS1-WS4) assumes Exploration 3 has already defined the precise capturable set, rage-click thresholds, and keyboard-only inference rules — but the plan's own status is PLANNING and blocked_on that exploration. WS1 test specs reference 'exact thresholds from exploration 3' (line 139) as if they exist, yet the exploration document is listed as a blocker (line 15). If exploration 3 does not exist or its conclusions differ from what the plan implies, every WS1 test contract is invalidated. The plan does not state what happens if exploration 3 concludes that fewer dimensions are capturable than the four currently assumed.",
+          "file_line": "15, 139"
+        },
+        {
+          "severity": "high",
+          "claim": "The plan assumes `sentry-observability-maximisation-mcp.plan.md § L-12` wiring is complete and provides the browser Sentry emission path into which this plan 'composes' (line 77-78, line 119). No status check on L-12 is cited. If L-12 is not yet live, WS2 emission wiring has no parent transport and the plan's composition model collapses silently.",
+          "file_line": "77-78, 119"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes `prefers-font-size` is a valid CSS media query (line 164-165: 'read matchMedia for reduced-motion, high-contrast, forced-colors, prefers-color-scheme, prefers-font-size'). There is no standard `prefers-font-size` media query in the CSS Media Queries spec; this is likely a conflation with the OS text-size/zoom preference, which is not directly observable via matchMedia. If this query silently returns no-match in all browsers, the font-scaling dimension yields zero signal without any error.",
+          "file_line": "164-165"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan's YAML front-matter `release_gate` field is malformed (lines 17-18: 'release_gate: public-beta' followed immediately by a list item '- observability-events-workspace.plan.md (for schemas)'). The list item appears to be a continuation of `blocked_on` that was accidentally placed under `release_gate`. This could cause tooling that parses the front-matter to misread the gate or the blockers.",
+          "file_line": "17-18"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes one `a11y_preference_tag` event per session de-duplicates correctly in a hook (Risk table, line 226). This assumes the widget has a stable session concept and that the hook's de-duplication survives React Strict Mode double-invocation or hot-module reloads in development. Neither condition is mentioned in WS1 tests or WS2 design.",
+          "file_line": "226, 130-134"
+        },
+        {
+          "severity": "medium",
+          "claim": "Keyboard-only detection (WS2.4, line 181-183) assumes 'no pointer events received' is a reliable proxy for keyboard-only usage. The Risk table itself acknowledges this fails during mouse-hover without click (line 228), with the mitigation 'if inference proves unreliable, move to explicit keyboard-first detected only'. The fallback is undefined — 'explicit keyboard-first detected' is not specified anywhere in the plan, making the mitigation an untested escape hatch.",
+          "file_line": "181-183, 228-229"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan cites ADR-160 for the claim that 'preference tags are categorical; no PII redaction complexity expected' (line 237-238). It does not verify whether `prefers-color-scheme` combined with other co-emitted preference tags could constitute a fingerprinting vector under the threat model ADR-160 defines. The assumption that categorical-only data carries no PII risk is stated but not argued.",
+          "file_line": "237-238"
+        },
+        {
+          "severity": "low",
+          "claim": "WS5 adversarial review (line 215-218) lists three expert reviewers. The plan assumes these reviewer roles exist and are available at execution time. The `accessibility-expert` role is referenced but not confirmed as a standing specialist in the repo's agent roster. If it is not wired, WS5 silently reduces to two reviewers, removing the WCAG-alignment gate.",
+          "file_line": "215-218"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan explicitly names screen-reader detection as out of scope for privacy reasons (line 99). This is a correct and grounded assumption, but the plan does not reference the specific ADR or privacy clause that governs this decision. The justification is prose-only, which means a future reader cannot trace it to a binding decision.",
+          "file_line": "99"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Steps 10-12 are pending — plan is mid-execution, not complete",
+          "file_line": "line 64 (step 10 status: pending), line 68 (step 11 status: pending), line 72 (step 12 status: pending)"
+        },
+        {
+          "claim": "Step 10 closed in Sequence Summary but its todo still reads pending — Sequence Summary records verdict ACCEPTED 2026-05-06 while todo body still says pending",
+          "file_line": "line 64 and line 825"
+        },
+        {
+          "claim": "Plan has outstanding acceptance criteria unmet: pre-merge divergence analysis and owner merge authorisation",
+          "file_line": "lines 993-993 (step 12 pending)"
+        },
+        {
+          "claim": "Plan body is current as of 2026-05-06 with active Sequence Summary update",
+          "file_line": "line 825"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan body carries a genuine and high-fidelity record of completed engineering work: two rounds of architecture-led review with findings absorbed or rationale-rejected (lines 195-393), a complete IO Inventory with per-entry metadata and disposition (lines 434-554), gate cross-check evidence (lines 855-868), and named violation closure records with specialist re-review confirmation (lines 738-745). The pending steps (11-12) have clear, non-speculative acceptance criteria. The capture-not-clean shape and the allowlist-vs-inventory canonical split are both original and well-reasoned (lines 407-411). No invented scope; all steps have owner-direction provenance.",
+      "content_quality": "strong",
+      "content_quality_note": "Each completed step cites the closing agent, session ID, commit SHA, and reviewer verdicts (e.g. line 822 for step 7: 'Silvered Hiding Silhouette, 924167; closing commit 483a9e32; architecture-expert-fred + architecture-expert-betty dispatched... both Option A'). Pending steps have detailed acceptance criteria with named failure modes and reviewer dispatch ordering. The IO Inventory entries follow a consistent schema with kind, rationale, and disposition. The Round 1 and Round 2 review findings are enumerated with priority levels, applied/deferred status, and rationale. The plan is substantively stronger than V0-conformant boilerplate.",
+      "salvage_value": [
+        {
+          "idea": "IO Inventory: 24 real-IO violations across 23 files with per-entry kind, rationale, and disposition; the canonical frozen snapshot at merge time",
+          "class": "good",
+          "file_line": "lines 434-554"
+        },
+        {
+          "idea": "Allowlist-vs-inventory canonical split: allowlist is live enforcement surface; IO Inventory is historical snapshot; diverge intentionally as migrations land",
+          "class": "good",
+          "file_line": "lines 407-411, 559"
+        },
+        {
+          "idea": "Capture-not-clean enforcement shape: install the rule to block new violations; freeze existing violations as named inventory rather than fixing them in-branch",
+          "class": "good",
+          "file_line": "lines 7-12, 140-143"
+        },
+        {
+          "idea": "Foreign-stage absorption pattern record: twice peer-staged files were absorbed because git commit ran without -- <pathspec> filter; cure is stage-by-explicit-pathspec",
+          "class": "good",
+          "file_line": "lines 574-578, 791-802"
+        },
+        {
+          "idea": "Strict-linear plan shape: owner direction that coordination cost between two parallel plans was real; removing seams removes friction",
+          "class": "good",
+          "file_line": "lines 98-104, 134-137"
+        },
+        {
+          "idea": "Step 10 ordered reviewer dispatch: mcp-expert first with halt-on-P1 gate; security/clerk/sentry parallel on clean return; accessibility last conditional on UI content",
+          "class": "good",
+          "file_line": "lines 63-65"
+        },
+        {
+          "idea": "Round 1 + Round 2 review findings corpus with applied/deferred dispositions and written rejection rationale",
+          "class": "good",
+          "file_line": "lines 195-393"
+        },
+        {
+          "idea": "Named violation closure table: C1 boundary-crossing import and CR1 conditional-branch test-immediate-fail with specialist re-review confirmation per originating reviewer",
+          "class": "good",
+          "file_line": "lines 738-745"
+        },
+        {
+          "idea": "pnpm check gate cross-check against nine-layer Gate Taxonomy with per-layer coverage and status",
+          "class": "good",
+          "file_line": "lines 855-868"
+        },
+        {
+          "idea": "BF-C1-ESLint follow-up: structural ESLint guard against src/**/*.ts importing into ../e2e-tests/ needed after seven-consumer recurrence; deferred to post-merge",
+          "class": "speculative",
+          "file_line": "lines 777-790"
+        },
+        {
+          "idea": "Foreign-stage absorption structural enforcement: pre-commit hook refusing git commit without explicit pathspec when peer-staged content present; candidate post-merge follow-up",
+          "class": "speculative",
+          "file_line": "lines 795-802"
+        },
+        {
+          "idea": "Allowlist-ADD structural lint gate: a lint or pre-commit gate refusing allowlist path additions without citing an Inventory entry or named follow-up plan; currently PR-review only",
+          "class": "speculative",
+          "file_line": "lines 806-810"
+        },
+        {
+          "idea": "Clerk release-tag integrity exercise under real Clerk credentials in staging; deferred post-merge",
+          "class": "speculative",
+          "file_line": "lines 803-805"
+        },
+        {
+          "idea": "Reviewer-dispatch structural enforcement gate (currently owner-cadence, no lint or pre-commit gate exists)",
+          "class": "speculative",
+          "file_line": "lines 804-806"
+        },
+        {
+          "idea": "R2-15 deferred: archiving Round 1 findings to a sibling file post-step-2 to compress the plan body (deferred to post-merge consolidation)",
+          "class": "speculative",
+          "file_line": "lines 385-389"
+        },
+        {
+          "idea": "Step 12 todo body lists no-op paths for divergence analysis that may make the merge trivial or complex; the analysis has not been run",
+          "class": "speculative",
+          "file_line": "lines 67-69"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "feat-eef-exploration-completion.plan.md:1-74 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plans)",
+          "file_line": "feat-eef-exploration-completion.plan.md:1-74 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans; inferred `executable` from `status: current` via §3.5 migration map but field is absent)",
+          "file_line": "feat-eef-exploration-completion.plan.md:1-74 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans)",
+          "file_line": "feat-eef-exploration-completion.plan.md:1-74 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED, required for executable plans; no `pending` sentinel present either)",
+          "file_line": "feat-eef-exploration-completion.plan.md:1-74 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Dropped key `status: current` present in frontmatter — V0 §2.5 explicitly drops `status:` in favour of `kind`/`disposition`/`gate`/projected execution axis",
+          "file_line": "feat-eef-exploration-completion.plan.md:24"
+        },
+        {
+          "issue": "Dropped key `isProject: true` present in frontmatter — V0 §2.5 explicitly drops `isProject` (subsumed by `projects_to` edge)",
+          "file_line": "feat-eef-exploration-completion.plan.md:25"
+        },
+        {
+          "issue": "Supersession relationships declared only in body prose (lines 106-109), not as frontmatter `supersedes` edge — V0 §2.3 requires typed edge in frontmatter for authority/traceability relationships",
+          "file_line": "feat-eef-exploration-completion.plan.md:106-109"
+        },
+        {
+          "issue": "Per-todo `depends_on` fields present on todo items (e.g. line 33) — V0 §2.4 and §6 Zod sketch specify todo items as `{ id, content, status }` only; per-todo sequencing edges are not in the V0 schema",
+          "file_line": "feat-eef-exploration-completion.plan.md:33 (and multiple todo items in frontmatter)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "Per-todo `depends_on` sequencing edges on 9 of 12 todo items — V0 §6 Zod sketch fixes todo shape as `{ id, content, status }` with no sequencing sub-field. The estate shows this pattern is real and load-bearing (the plan is strictly linear, step-sequencing is the core discipline). The exact endpoints of intra-plan todo ordering are not decided by V0 (§8 defers `realized_by` endpoint detail). If the survey confirms this pattern across multiple executable plans, V0's todo schema is incomplete as a lens — owner re-ratification candidate for adding optional `depends_on` to the todo item shape (SURVEY-MAY-ADD-FIELDS).",
+          "evidence": "12 todos in frontmatter; 9 carry `depends_on: [<prior-todo-id>]` fields (e.g. todo 02 at line 33, todo 03 at line 37, through todo 12 at line 72). V0 §6 Zod snippet: `z.object({ id: z.string(), content: z.string(), status: z.enum([...]) })` — no `depends_on` member.",
+          "file_line": "feat-eef-exploration-completion.plan.md:33,37,41,45,49,53,57,61,65,69,73 (per-todo depends_on fields); plan-node-schema.v0.md:489-494 (Zod todo shape)"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "BF-C1-ESLint (line 678) surfaces a missing structural guard preventing src/**/*.ts from importing relative paths into ../e2e-tests/. Seven consumers crossed the boundary before any ESLint rule existed. The C1 named violation is closed (commit 36102937) but the follow-up guard rule has been deferred to post-merge. The plan explicitly records this at line 778-790 as an out-of-scope follow-up with no named owning plan or scheduled plan creation. Per consolidate-at-third-consumer.md, seven consumers is well past the threshold for structural enforcement; the gap is acknowledged but the follow-up is only a candidate, not a committed plan.",
+          "file_line": "feat-eef-exploration-completion.plan.md:678-683 and 778-790"
+        },
+        {
+          "severity": "medium",
+          "claim": "ADR-171 is cited inside the paused rename plan as if it is an extant ADR, but line 122-124 explicitly states it is a forward reference (no extant ADR yet). The unified plan deliberately avoids depending on it, which is correct. However, the architectural decision that would justify the SENTRY_MODE -> OBSERVABILITY_SINKS rename has no authoritative record, leaving the paused plan's resumption preconditions unanchored to any ADR. This is a documentation integrity gap: a forward ADR reference in a durable paused plan is a moving-target violation per no-moving-targets-in-permanent-docs.",
+          "file_line": "feat-eef-exploration-completion.plan.md:120-124"
+        },
+        {
+          "severity": "medium",
+          "claim": "The no-real-io-in-tests rule is wired at warn severity (lines 415-430 and Acceptance at line 974). This contradicts the standing no-warning-toleration principle. The plan records a bounded development-phase exception (new-eslint-rules-start-warn, line 154-161) and owner direction (line 427-429) as justification, and escalation to error is deferred post-merge (line 975-977). No owning plan or scheduled step commits to making that escalation; it remains an informal post-merge decision. A rule wired at warn with no structural commitment to escalate is architecturally a permanent advisory gate, not an enforcement gate.",
+          "file_line": "feat-eef-exploration-completion.plan.md:154-161 and 974-977"
+        },
+        {
+          "severity": "medium",
+          "claim": "Two instances of foreign-stage absorption are recorded (commits 8fa339f4 and 36102937, lines 793-802). The plan's cure is prose discipline in §Discipline (mandatory -- <pathspec> filter) with no structural pre-commit or queue-layer enforcement. The structural enforcement candidate is named as a future Practice item (lines 797-802) with no owning plan. A recurring architectural process failure with a known structural cure, deferred to an unnamed future item, represents a live risk to commit-integrity across any parallel-agent window.",
+          "file_line": "feat-eef-exploration-completion.plan.md:791-802"
+        },
+        {
+          "severity": "low",
+          "claim": "build-metadata unit test (packages/core/build-metadata/tests/git-sha.unit.test.ts, IO Inventory line 471) is classified structural-ambiguity-to-investigate. The disposition acknowledges that the SUT may need reshaping to take a path-resolver to eliminate real-fs coupling. This is a design boundary question: whether build-metadata extraction should be testable without real filesystem access. The ambiguity is captured but there is no named follow-up plan or owner decision recorded.",
+          "file_line": "feat-eef-exploration-completion.plan.md:470-473"
+        },
+        {
+          "severity": "low",
+          "claim": "packages/core/observability/src/no-node-only-imports.unit.test.ts (IO Inventory line 482) is classified structural-ambiguity-to-investigate with the note that the test may legitimately need real-fs access permanently as a meta-test verifying build artefacts. No architectural decision or ADR is referenced to validate that a unit test verifying build output against the filesystem is acceptable in the unit test tier rather than a build or CI step. The permanent allowlist exception may encode a test-tier violation.",
+          "file_line": "feat-eef-exploration-completion.plan.md:481-484"
+        },
+        {
+          "severity": "info",
+          "claim": "Steps 11 and 12 (pre-merge divergence analysis and owner-gated merge readiness) remain pending as of the plan's last recorded state (Sequence Summary, lines 826-827). The plan is architecturally coherent and complete through step 10. The open steps are process gates, not architectural gaps. The plan's architecture findings from six reviewers (Round 1 and Round 2) are fully absorbed with rationale, and all named violations are closed with specialist re-review evidence recorded.",
+          "file_line": "feat-eef-exploration-completion.plan.md:826-827"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Step 10 todo body status is still pending despite Sequence Summary showing it DONE 2026-05-06 (cited at line 64 vs line 825)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/observability/current/feat-eef-exploration-completion.plan.md:64 (todo id 10-mcp-server-live-exercise, `status: pending`) vs :825 (Sequence Summary row 10: `DONE 2026-05-06 ... step 10 verdict ACCEPTED`)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/current/mcp-outbound-token-health.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "All five milestones marked completed",
+          "file_line": "mcp-outbound-token-health.plan.md:7-19"
+        },
+        {
+          "claim": "On merge: confirm oak.mcp.response.* attributes in Sentry against preview, then this plan archives per ADR-117",
+          "file_line": "mcp-outbound-token-health.plan.md:110-112"
+        },
+        {
+          "claim": "Plan explicitly names the follow-on decision as separate and not designed here",
+          "file_line": "mcp-outbound-token-health.plan.md:88-94"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in real architectural reasoning: two-seam separation is justified by what each seam can observe (lines 49-61); the no-content-in-telemetry invariant is a safety property (line 64); the canary test pattern is correctly wired to the real HTTP path (lines 73-81); threshold deferral is explicitly contingent on baselines existing and EEF shape stabilising (lines 88-94). No speculative or bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan goes beyond V0 conformance: it documents the measurement scopes with a unit-conflict warning (lines 49-61), names the SDK dependency and its fallback (lines 71-81), records a caveat about partial-body counts on client abort (lines 84-86), and anchors the follow-on decision with a precise trigger condition (lines 88-94). These are engineering-grade decisions, not placeholder text.",
+      "salvage_value": [
+        {
+          "idea": "Two-seam measurement model: wire bytes at transport vs per-field chars at handler — must never be conflated or summed",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:49-61"
+        },
+        {
+          "idea": "attachResponseByteCounter wraps res.write/res.end behaviour-preservingly before transport.handleRequest",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:42"
+        },
+        {
+          "idea": "measureCallToolResult per-field split covering contentChars/structuredChars/metaChars/totalChars/tokensEst including auth errors",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:43"
+        },
+        {
+          "idea": "chars/4 token estimate with named swap point if per-model precision is ever needed",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:45-46"
+        },
+        {
+          "idea": "No payload content in telemetry or logs — numbers and names only, as an invariant",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:64"
+        },
+        {
+          "idea": "Measurement must never throw or alter a response; wrapper is total and forwards arguments untouched including backpressure",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:65-67"
+        },
+        {
+          "idea": "Canary-protected SDK dependency: e2e test drives real HTTP pipe and asserts positive byte counts so SDK/Hono upgrade failures surface rather than silently zeroing the metric",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:73-81"
+        },
+        {
+          "idea": "Named fallback seam if byte-counter fires: wrap transport.send and measure per-message serialisation (costlier; loses SSE framing)",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:79-81"
+        },
+        {
+          "idea": "Client-abort yields partial-body byte counts — truthful but baseline reads should use successful requests",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:84-86"
+        },
+        {
+          "idea": "Threshold and alerting decision deferred to named follow-on, triggered by baselines visible in Sentry by tool_name and method AND after EEF dual-shape alignment lands",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:88-94"
+        },
+        {
+          "idea": "tools/list is measured as session-resident description cost (not just tools/call)",
+          "class": "good",
+          "file_line": "mcp-outbound-token-health.plan.md:18"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field `id` (stable kebab slug — graph node identity)",
+          "file_line": "mcp-outbound-token-health.plan.md:1-25 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required LOCKED field `node_type` (must be literal `plan`)",
+          "file_line": "mcp-outbound-token-health.plan.md:1-25 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing LOCKED field `kind` — inferred `executable` from `type: executable` + `status: current`, but the V0 field is absent",
+          "file_line": "mcp-outbound-token-health.plan.md:22 (`type: executable` is the dropped free-label, not the V0 discriminator)"
+        },
+        {
+          "issue": "Missing LOCKED field `last_updated` (ISO date); `date: 2026-06-11` present but `date` is not a V0 field — V0 §2.4 folds emergent `date`/`created`/`branch` into `last_updated`",
+          "file_line": "mcp-outbound-token-health.plan.md:24"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` — required for executable plans per V0 §2.3 (LOCKED shape); neither a registry ID nor the `pending` sentinel is present",
+          "file_line": "mcp-outbound-token-health.plan.md:1-25 (absent from frontmatter)"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly dropped key per V0 §2.5 (107/250 census; subsumed by `projects_to`)",
+          "file_line": "mcp-outbound-token-health.plan.md:20"
+        },
+        {
+          "issue": "`status: current` is an explicitly dropped key per V0 §2.5 (386 census); state is carried by `kind`/`disposition`/`gate`/Linear-projected execution axis",
+          "file_line": "mcp-outbound-token-health.plan.md:21"
+        },
+        {
+          "issue": "`type: executable` is an explicitly dropped free-label per V0 §2.5 (49 census); replaced by `node_type` + `kind`",
+          "file_line": "mcp-outbound-token-health.plan.md:22"
+        },
+        {
+          "issue": "`date` is not a V0 field; the V0 housekeeping field is `last_updated` which folds `date`/`created`/`branch` drift per V0 §2.4",
+          "file_line": "mcp-outbound-token-health.plan.md:24"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject",
+        "status",
+        "type",
+        "date"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "test",
+      "specialist_kind": "test",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan names a concrete e2e test file (e2e-tests/outbound-size-observability.e2e.test.ts) that drives the real HTTP->SDK->SSE path and asserts positive byte counts as a canary for SDK/Hono upgrade regressions. This is a well-scoped integration test with a documented fallback seam. No test-quality issues surfaced.",
+          "file_line": "mcp-outbound-token-health.plan.md:77-81"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan explicitly cites alignment with the testing-strategy directive: co-landed test+code pairs at unit and e2e levels, no conditional tests, numeric edge semantics pinned in unit tests, system behaviour proven through the real protocol path.",
+          "file_line": "mcp-outbound-token-health.plan.md:98-100"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan references ADR-078 (DI: all proofs through injected fakes or the real path, no module mocks), and the e2e test is described as using the real pipe — consistent with that ADR constraint.",
+          "file_line": "mcp-outbound-token-health.plan.md:103-104"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan states v1 permits only existence/sanity assertions with no thresholds, which is a deliberate design choice. However, there is no explicit statement that unit tests cover zero-counter edge cases (absent members -> zero counter), only that M2 specifies this behaviour. Without citing a test name or assertion, this coverage is asserted but not evidenced in-plan.",
+          "file_line": "mcp-outbound-token-health.plan.md:9"
+        },
+        {
+          "severity": "low",
+          "claim": "The caveat about client aborts yielding partial byte counts (line 84-86) is recorded as a known observable edge case but no test for the abort path is mentioned. The plan is explicit that baselines should use successful requests, but if the abort path is observable in telemetry it warrants at least a noted exclusion from test scope rather than silence.",
+          "file_line": "mcp-outbound-token-health.plan.md:84-86"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All five milestones (M1-M5) are status:completed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "mcp-outbound-token-health.plan.md:7 (m1 status: completed), :10 (m2), :13 (m3), :16 (m4), :19 (m5) — five todo entries m1-m5, each carrying status: completed verbatim"
+        },
+        {
+          "claim": "On merge: confirm oak.mcp.response.* attributes in Sentry against preview, then this plan archives per ADR-117",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/observability/current/mcp-outbound-token-health.plan.md:109-112 (verbatim Lifecycle text); ADR-117 archive lifecycle real at docs/architecture/architectural-decisions/117-plan-templates-and-components.md:89-138 and 123 (\"Mine outcomes... then archive on completion\"); cross-ref corroboration .agent/plans/sdk-and-mcp-enhancements/current/oak-prod-mcp-snagging-2026-06-11.plan.md:34,42 (\"PR #190... merge 8f1cc49c0\" + \"Sentry explorer is unconfirmed\")"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/current/multi-sink-vendor-independence-conformance.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending; plan is actively scoped and unstarted — correct folder lane is current/",
+          "file_line": "lines 19-36 (todos block, all status: pending)"
+        },
+        {
+          "claim": "No completion claim or superseded signal present",
+          "file_line": "line 44 (Status: PLANNING)"
+        },
+        {
+          "claim": "Strategic parent and foundational ADR are live references requiring continued execution",
+          "file_line": "lines 12-13 (strategic_parent, foundational_adr frontmatter)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes concrete, implementable enforcement strategy grounded in an existing ESLint plugin and a real runtime env-var (lines 68-73). The dual-surface rationale (static + behavioural) is sound and cites the specific architectural finding that motivated it (P2-1, lines 55-57). Per-sink expansion protocol (lines 108-135) is a well-designed extensibility pattern. The only weakness is the SENTRY_MODE vs OBSERVABILITY_SINKS inconsistency (line 7 vs line 24) which needs resolving before implementation.",
+      "content_quality": "strong",
+      "content_quality_note": "Acceptance criteria are concrete and enumerable (lines 310-318). Risk table is specific with named mitigations (lines 270-275). File paths for implementation artifacts are named (lines 197, 205). RuleTester cases are fully enumerated (lines 178-187). WS structure is complete through WS5 adversarial review. Minor gap: SENTRY_MODE=off vs OBSERVABILITY_SINKS=[] inconsistency (line 7 vs line 24) could cause implementation confusion.",
+      "salvage_value": [
+        {
+          "idea": "Dual-surface enforcement: static ESLint lint catches import leaks; runtime emission-persistence test catches behavioural gaps — neither is sufficient alone",
+          "class": "good",
+          "file_line": "lines 55-57, 87-90"
+        },
+        {
+          "idea": "Allowlist-not-blocklist as the structural default for vendor-boundary enforcement — file-granular, not pattern-based",
+          "class": "good",
+          "file_line": "lines 82-84, 93-96"
+        },
+        {
+          "idea": "Composition-root carve-out encoded file-by-file (not via glob pattern) aligning with ADR-078 DI seam",
+          "class": "good",
+          "file_line": "lines 93-96, 281"
+        },
+        {
+          "idea": "warn-first / error-later severity escalation for the ESLint rule until allowlist is fully populated",
+          "class": "good",
+          "file_line": "lines 213-216"
+        },
+        {
+          "idea": "Per-sink expansion protocol: each future adapter PR must extend both conformance surfaces (allowlist entry + RuleTester cases + emission-persistence assertion)",
+          "class": "good",
+          "file_line": "lines 117-135"
+        },
+        {
+          "idea": "captureStdoutDuring + assertEventEmitted reusable harness in packages/core/observability-events/src/test-harness/",
+          "class": "good",
+          "file_line": "lines 197-201"
+        },
+        {
+          "idea": "Emission-persistence test feasibility for PR-check lane (in-process stdout inspection, no network required)",
+          "class": "good",
+          "file_line": "lines 170-173"
+        },
+        {
+          "idea": "Redaction barrier must hold under SENTRY_MODE=off — emission-persistence test must confirm ADR-160 redaction still active",
+          "class": "good",
+          "file_line": "lines 285-287"
+        },
+        {
+          "idea": "Widget-path lint deferred until @sentry/browser L-12 wiring stabilises — explicit YAGNI boundary",
+          "class": "good",
+          "file_line": "lines 103-106"
+        },
+        {
+          "idea": "Dynamic import bypass (await import(...)) as a named open risk requiring adversarial review",
+          "class": "speculative",
+          "file_line": "lines 258-261, 272-273"
+        },
+        {
+          "idea": "depcruise as complement to ESLint rule for dynamic resolution coverage",
+          "class": "speculative",
+          "file_line": "line 274"
+        },
+        {
+          "idea": "SENTRY_MODE=off vs OBSERVABILITY_SINKS=[] env-var naming inconsistency — one of these is wrong",
+          "class": "bad",
+          "file_line": "line 7 vs line 24"
+        },
+        {
+          "idea": "Runtime swap benchmarking explicitly out of scope (YAGNI)",
+          "class": "good",
+          "file_line": "lines 99-101"
+        },
+        {
+          "idea": "Multi-vendor simultaneous emission delegated to second-backend-evaluation.plan.md",
+          "class": "good",
+          "file_line": "lines 101-103"
+        },
+        {
+          "idea": "Vendor-independence runbook for on-failure triage — distinguishing real regression from intentional vendor-adoption change",
+          "class": "good",
+          "file_line": "lines 236-240"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING — blocks on exploration 8 + events workspace",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "id absent — LOCKED required field for all plan nodes",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:1 (frontmatter block, no id key present)"
+        },
+        {
+          "issue": "node_type absent — LOCKED literal 'plan' required for all plan nodes",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:1 (frontmatter block, no node_type key present)"
+        },
+        {
+          "issue": "kind absent — LOCKED required for all plan nodes; plan carries todos so kind should be 'executable'",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:1 (frontmatter block, no kind key present)"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — LOCKED required field; value appears only in body prose",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:43"
+        },
+        {
+          "issue": "serves_strategic_choice absent — LOCKED required for executable plans (or explicit sentinel 'pending')",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:1 (frontmatter block, no serves_strategic_choice key present)"
+        },
+        {
+          "issue": "isProject: false present — explicitly dropped in V0 §2.5 (LOCKED rationale: projection is the projects_to edge, not a boolean)",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:38"
+        },
+        {
+          "issue": "foundational_adr present — V0 §2.5 reconciles this to derives_from edge; should be migrated",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:12"
+        },
+        {
+          "issue": "blocked_on present — V0 replaces this with depends_on list with kind: blocking",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:14"
+        },
+        {
+          "issue": "status in body prose ('🟡 PLANNING') is not a frontmatter field; V0 §3.5 migration map routes this to gate: owner-decision (+ expires) — gate is absent from frontmatter",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:44"
+        },
+        {
+          "issue": "derived_from present (typo of derives_from) — not a V0 canonical key; value is a template ref, not an ADR ref",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:11"
+        },
+        {
+          "issue": "strategic_parent present — not a V0 key; closest V0 expression is serves_strategic_choice or depends_on",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:13"
+        }
+      ],
+      "unclassified_keys": [
+        "derived_from",
+        "strategic_parent",
+        "blocked_on",
+        "release_gate"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "isProject boolean retained despite V0 LOCKED drop",
+          "evidence": "isProject: false at line 38; V0 §2.5 states isProject is 'Dropped — plan ≈ Linear Project is universal; the projection is the projects_to edge, not a boolean' with a LOCKED rationale. The estate retains the key the schema definitively retired.",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:38"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The ESLint rule (Mechanism #5) catches static imports only. Dynamic imports via `await import(...)` and facade re-export chains are acknowledged as bypass vectors in the Risk Assessment and WS5, but no concrete mitigation is committed to — the plan defers to 'Wilma pressure-test identifies; depcruise complement covers dynamic resolution if needed.' The 'if needed' hedge means the structural conformance property is not fully closed at plan completion. An architecture that claims structural enforcement must commit to the dynamic-import gap or explicitly accept it as a residual risk with a rationale, not a conditional.",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:272-275"
+        },
+        {
+          "severity": "medium",
+          "claim": "The SENTRY_MODE=off environment variable name appears in the plan overview and Context section, but WS1 Cycle 2 TODO switches to OBSERVABILITY_SINKS=[]. These are semantically distinct control paths. If both names coexist in the codebase, the emission-persistence test may prove one path while production uses the other. The plan should resolve to a single canonical env-var name and confirm the foundation already supports it under that name.",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:1-9 vs 24"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS4 Quality Gates notes 'Emission-persistence test may be gated by environment (requires deployed MCP server instance or local stub)' without resolving which. If the test requires a deployed instance it cannot run at PR-check, contradicting the WS1.1 pipeline note that confirms it can run PR-check if fully in-process. This unresolved duality means the pipeline placement — a consequential CI architecture decision — is deferred past plan completion to exploration 8, leaving acceptance criterion 1 ('runs in the chosen pipeline') underspecified.",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:170-172 and 250-251"
+        },
+        {
+          "severity": "low",
+          "claim": "ADR-160 (redaction barrier) is listed as a Foundation Alignment dependency, with a note that the emission-persistence test 'must confirm redaction still holds under SENTRY_MODE=off.' No RuleTester case or harness assertion in WS1 or WS2 covers this. If the test does not exercise redaction, the acceptance summary (criteria 1-5) does not catch a redaction regression introduced when switching sinks, meaning the plan's own stated obligation to ADR-160 is not enforced by any deliverable.",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:286-288"
+        },
+        {
+          "severity": "low",
+          "claim": "Conformance Scope Expansion (line 108) defines a per-sink extension contract: each new adapter PR must extend both the emission-persistence test and the allowlist. This is stated as prose obligation, not as a gate encoded in CI or a reviewer-matrix entry. There is no mechanism that blocks a Sink 2 or Sink 3 adapter PR from landing without the required extension, making this a trust-based contract rather than a structural one — inconsistent with the plan's 'prove, don't assert' doctrine.",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:108-135"
+        },
+        {
+          "severity": "info",
+          "claim": "The allowlist encodes composition-root carve-outs file-by-file (specific index.ts and app/*.ts paths), which is correctly strict. However, the plan acknowledges allowlist drift as a risk and mitigates via 'Reviewer-matrix question ADR-162 Mechanism #2'. No automated detection of allowlist staleness (e.g. a test that fails when an allowlisted path no longer exists in the tree) is planned. This is a maintainability gap, not a correctness gap today.",
+          "file_line": "multi-sink-vendor-independence-conformance.plan.md:271-272"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/current/observability-events-workspace.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is active/queued with well-formed todos, not yet started — no implementation exists, no completion marker",
+          "file_line": "lines 17-53 (all todos status: pending) and line 60 (Status: PLANNING)"
+        },
+        {
+          "claim": "Blocked on a specific gated dependency (exploration 4) with an explicit promotion criterion — plan is correctly staged, not stale",
+          "file_line": "line 15 and lines 159-163 and line 321"
+        },
+        {
+          "claim": "Plan owns a uniquely scoped deliverable (the events workspace) not duplicated elsewhere in the observability estate per its own dependency map",
+          "file_line": "lines 165-175 (Related plans each own distinct emission sites, not the schema workspace itself)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes a principled design: Zod-first over Markdown, zero runtime deps beyond Zod (line 131-132), vendor-neutral shapes (line 133-134), test-proven conformance not review-proven (line 135-136), and values-redacted/categories-preserved per ADR-160 (lines 139-140). The seven-event MVP scope is concrete and the TDD cycle structure (one commit per schema, RED before GREEN) is executable. The multi-sink vendor-neutrality constraint (lines 107-124) is architecturally load-bearing and correctly scoped to this workspace. No speculative padding. The one weakness is that the blocking exploration 4 leaves widget_session_outcome stage vocabulary explicitly TBD (line 199-200), which is noted and flagged appropriately.",
+      "content_quality": "strong",
+      "content_quality_note": "Every WS phase has concrete acceptance criteria and named output files (lines 185-258). Risk table is non-generic with specific mitigations (lines 319-325). Foundation Alignment cites seven ADRs by number and path (lines 329-339). The reviewer matrix names domain-specific reviewers with domain-specific questions (lines 305-313). The conformance helper export signature is specified (lines 254-257). Content is executable, not aspirational.",
+      "salvage_value": [
+        {
+          "idea": "Event schemas as code (Zod) rather than Markdown — schemas are the source of truth, event-catalog.md is derived",
+          "class": "good",
+          "file_line": "lines 129-130, 86-87"
+        },
+        {
+          "idea": "Zero runtime dependencies beyond Zod for the core observability-events workspace",
+          "class": "good",
+          "file_line": "lines 131-132"
+        },
+        {
+          "idea": "Vendor-neutral schema shapes with OTel-compatible attribute names; no vendor-specific fields in schemas",
+          "class": "good",
+          "file_line": "lines 133-134"
+        },
+        {
+          "idea": "Conformance helper as test-time assertion (not runtime wrapper) — consuming workspaces compose it into their test suite",
+          "class": "good",
+          "file_line": "lines 135-136, 212-215, 252-258"
+        },
+        {
+          "idea": "Values-redacted, categories-preserved field discipline per ADR-160 baked into schema design",
+          "class": "good",
+          "file_line": "lines 139-140"
+        },
+        {
+          "idea": "Seven concrete MVP events with per-event test file names and one-commit-per-schema TDD cycle discipline",
+          "class": "good",
+          "file_line": "lines 185-216, 17-53"
+        },
+        {
+          "idea": "Correlation-keys contract (trace_id / session_id / release) embedded in every schema as a cross-cutting invariant",
+          "class": "good",
+          "file_line": "lines 207-210"
+        },
+        {
+          "idea": "Multi-sink vendor-neutrality constraint: Sentry now, warehouse adapter at beta, PostHog post-beta — single schema set serves all three",
+          "class": "good",
+          "file_line": "lines 107-124"
+        },
+        {
+          "idea": "Release-gate posture: blocks public beta not alpha; alpha emitter lanes use Sentry-native shapes and do not block on this workspace",
+          "class": "good",
+          "file_line": "lines 63-75"
+        },
+        {
+          "idea": "Zod 4 .meta({examples}) preservation through toJSONSchema() as an explicit schema authoring requirement",
+          "class": "good",
+          "file_line": "lines 102-104, 192-193"
+        },
+        {
+          "idea": "Avoid z.preprocess() in schemas to prevent .meta() loss — document limitation per-field if unavoidable",
+          "class": "good",
+          "file_line": "lines 322-323"
+        },
+        {
+          "idea": "Reviewer matrix specialised to this domain: docs-adr-expert for contract completeness, type-expert for Zod 4 semantics, sentry-expert for emission fit",
+          "class": "good",
+          "file_line": "lines 305-313"
+        },
+        {
+          "idea": "feedback_submitted uses closed-set category enum for L-9 privacy invariant",
+          "class": "good",
+          "file_line": "line 195"
+        },
+        {
+          "idea": "widget_session_outcome stage vocabulary is TBD pending product-owner input — correctly flagged as an open question rather than silently stubbed",
+          "class": "speculative",
+          "file_line": "lines 199-200"
+        },
+        {
+          "idea": "Schema version suffix /1 on export paths once stable with break-glass migration plan — explicitly deferred as not in MVP scope",
+          "class": "speculative",
+          "file_line": "line 325"
+        },
+        {
+          "idea": "Consolidation candidate: code-enforced schema contracts as first-class alternative to Markdown specs (conditional on second context validation)",
+          "class": "speculative",
+          "file_line": "lines 357-359"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING — queued; exploration 4 blocks MVP schema shape",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required LOCKED field `id` — no stable kebab slug present anywhere in frontmatter",
+          "file_line": "observability-events-workspace.plan.md:1-55 (absent)"
+        },
+        {
+          "issue": "Missing required LOCKED field `node_type` — discriminator literal `\"plan\"` absent",
+          "file_line": "observability-events-workspace.plan.md:1-55 (absent)"
+        },
+        {
+          "issue": "Missing required LOCKED field `kind` — V0 §3.1 requires `strategic | executable`; plan carries `todos` implying `executable` but the field is not declared",
+          "file_line": "observability-events-workspace.plan.md:1-55 (absent)"
+        },
+        {
+          "issue": "Missing required LOCKED field `last_updated` — appears in body prose (line 59) but not in frontmatter as required by V0 §2.4",
+          "file_line": "observability-events-workspace.plan.md:59"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — V0 §2.3 requires this for all executable plans; absent from frontmatter",
+          "file_line": "observability-events-workspace.plan.md:1-55 (absent)"
+        },
+        {
+          "issue": "`foundational_adr` retained (line 12) — V0 §2.5 explicitly drops this key and reconciles it to the `derives_from` edge targeting ADR docs",
+          "file_line": "observability-events-workspace.plan.md:12"
+        },
+        {
+          "issue": "`isProject: false` retained (line 54) — V0 §2.5 explicitly drops this key as subsumed by `projects_to`",
+          "file_line": "observability-events-workspace.plan.md:54"
+        },
+        {
+          "issue": "`derived_from` (line 11) is not a V0 field — closest V0 canonical is `derives_from` (§2.3); appears to be a misspelling or emergent variant of that edge",
+          "file_line": "observability-events-workspace.plan.md:11"
+        },
+        {
+          "issue": "`blocked_on` (lines 14-15) is not a V0 field — V0 §4 models blocking relationships as `depends_on` edges with `kind: blocking`, or as a `gate` object when waiting on an external decision",
+          "file_line": "observability-events-workspace.plan.md:14-15"
+        },
+        {
+          "issue": "`strategic_parent` (line 13) is not a V0 field — closest V0 shape would be `depends_on` (beneficial) or `serves_strategic_choice`; unclassified by V0",
+          "file_line": "observability-events-workspace.plan.md:13"
+        },
+        {
+          "issue": "Overloaded `status:` value carried in body prose (line 60-61) rather than split across V0 orthogonal axes (`kind`, `disposition`, `gate`) — V0 §3 and §2.2 replace this pattern",
+          "file_line": "observability-events-workspace.plan.md:60-61"
+        }
+      ],
+      "unclassified_keys": [
+        "derived_from",
+        "strategic_parent",
+        "blocked_on"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan asserts 'zero runtime dependencies beyond Zod' (Design Principle #2, line 132) but WS2 exports three entry-points (./schemas, ./correlation-keys, ./conformance) without specifying whether conformance.ts carries any runtime assertion library or test-framework import. If conformance.ts imports a test-only assertion helper at runtime, the zero-runtime-dep invariant breaks. This constraint needs explicit verification against the conformance helper's actual import surface at implementation time.",
+          "file_line": "observability-events-workspace.plan.md:132,239,257"
+        },
+        {
+          "severity": "medium",
+          "claim": "Schema version strategy is deferred ('Not in MVP scope', line 325). The plan acknowledges schema churn risk during Phase 2 and proposes a '/1 version suffix on export paths once stable', but no concrete trigger or owner-decision gate is defined for when the versioning mechanism must be added before beta consumers land. Three beta-gate lanes (L-4b metrics, security-observability, accessibility-observability) will be blocked by schema churn without a version-path contract; this needs a decision point, not a deferral note.",
+          "file_line": "observability-events-workspace.plan.md:323-326"
+        },
+        {
+          "severity": "low",
+          "claim": "The conformance helper signature at line 257 uses 'asserts event is z.infer<TSchema>' which is a TypeScript assertion function. Assertion functions do not compose in all call-site patterns (e.g. they cannot be used as callbacks or in expressions). The plan does not address whether consuming workspaces will need a predicate form (returns boolean) alongside the asserting form, which affects the usability contract for emission-site tests.",
+          "file_line": "observability-events-workspace.plan.md:257-258"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan delegates 'categorical axes for tool_invoked.arguments_shape' to Exploration 4 (line 161-163) as a blocker, then also notes widget_session_outcome stage vocabulary as 'TBD via product-owner input' (line 200). Two schema fields remain open at plan-authoring time. The plan allows WS1 to author provisional schemas with placeholder axes (risk row, line 321), but does not record what happens to consuming workspaces if the placeholder shape changes post-landing. A compatibility obligation or a re-test trigger is absent.",
+          "file_line": "observability-events-workspace.plan.md:161-163,199-200,321"
+        },
+        {
+          "severity": "info",
+          "claim": "Foundation Alignment (lines 329-339) references ADR-143 ('coherent structured fan-out for observability') and ADR-154 ('separate framework from consumer') which together cleanly justify the workspace boundary. The three-sink posture (Sentry now, warehouse and PostHog later) is recorded with vendor-neutral schema constraint (lines 107-124). The architectural layering is sound and consistent with the cited ADRs.",
+          "file_line": "observability-events-workspace.plan.md:107-124,329-339"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's non-goal exclusion of a runtime emission wrapper (line 149-151) is architecturally correct: it keeps this workspace as a pure contract layer and leaves emission to the logger+Sentry+schema composition pattern. This boundary is coherent with ADR-154 framework/consumer separation.",
+          "file_line": "observability-events-workspace.plan.md:147-151"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/current/observability-sinks-decoupling.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is current, DECISION-COMPLETE, all todos pending — actively waiting on execution preconditions",
+          "file_line": "line 15, 93, 37/52/62/74/86"
+        },
+        {
+          "claim": "Execution gate is explicit and non-trivially satisfied: feature branches merged + C1 forcing function",
+          "file_line": "lines 372-376"
+        },
+        {
+          "claim": "Plan uniquely encodes the bridge-does-not-exist discovery and standalone-provider architectural decision — not captured in ADR-171 body alone",
+          "file_line": "lines 329-346"
+        },
+        {
+          "claim": "No duplicate plan covers this scope; the damaged predecessor is superseded and correctly referenced",
+          "file_line": "lines 17, 203-220"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in live code evidence (file + line citations throughout), the four tension-causes are named with specific cures (lines 156-174), the architectural forcing function (standalone NodeTracerProvider) is derived from first principles not assumed (lines 338-346), review conditions are fully resolved and folded (lines 309-366), and the proof contract is concrete (lines 256-263). No speculative filler; no bad patterns inherited.",
+      "content_quality": "strong",
+      "content_quality_note": "The grounded current state section (lines 131-154) cites specific file paths and line numbers that can be independently verified. The mechanism section (lines 113-129) derives necessity rather than asserting it. The DECISION-COMPLETE review trail (lines 309-366) names gaps, their evidence, and their resolution — this is substantive review artefact, not pro-forma sign-off. The proof contract table (lines 256-263) is acceptance-criteria level, not vague. Non-goals are specific and each has a rationale (lines 237-244).",
+      "salvage_value": [
+        {
+          "idea": "Decouple resolveTracer from mode === 'sentry' via a standalone OTel NodeTracerProvider with per-sink exporters selected from OBSERVABILITY_SINKS",
+          "class": "good",
+          "file_line": "lines 27-36, 182-188, 338-346"
+        },
+        {
+          "idea": "A conformance test that fails with Sentry off (proving the gap) is the forcing function that drives migration to completion — without it a rename has no gate",
+          "class": "good",
+          "file_line": "lines 120-122, 184-188, 256-260"
+        },
+        {
+          "idea": "Build the SENTRY_MODE->axes transitional bridge in env-resolution (upstream of the hard-reject schema) before migrating any consumer, then delete it at the end",
+          "class": "good",
+          "file_line": "lines 42-52, 122-129, 189-191, 329-337"
+        },
+        {
+          "idea": "Separate cosmetic renames (mode->kind, FixtureSentryStore->FixtureCaptureStore) from structural decoupling into distinct cycles to avoid tangled, hard-to-revert landings",
+          "class": "good",
+          "file_line": "lines 162-163, 193-195"
+        },
+        {
+          "idea": "Migrate consumers incrementally one per green cycle via the bridge rather than in a single atomic cross-package commit",
+          "class": "good",
+          "file_line": "lines 163-169, 192-193"
+        },
+        {
+          "idea": "The .env.example files currently set SENTRY_MODE=off which hard-fails against the new schema — this is a live hazard to fix in C5",
+          "class": "good",
+          "file_line": "lines 352-355"
+        },
+        {
+          "idea": "Reconcile sink-enum drift ('file' in live sink-registry.ts vs 'log-file'/'console' in ADR-171) before C3 consumer migration to avoid mid-migration CI failures",
+          "class": "good",
+          "file_line": "lines 149-151, 319-323, 189-191"
+        },
+        {
+          "idea": "Remove the Sentry-specific fixtureStore type from the vendor-neutral HttpObservability interface — a coupling smell on a sink-independent surface",
+          "class": "good",
+          "file_line": "lines 357-359, 194-195"
+        },
+        {
+          "idea": "C5 grep scope must include test-helper pinned SENTRY_MODE literals (e.g. auth-error-test-helpers.ts:52), not only source+schema files",
+          "class": "good",
+          "file_line": "lines 79-81, 360-361"
+        },
+        {
+          "idea": "Coordinate C1 conformance test shape with multi-sink-vendor-independence-conformance.plan.md to reuse the same DI-injected emission-persistence shape",
+          "class": "good",
+          "file_line": "lines 35-36, 188, 232-234"
+        },
+        {
+          "idea": "Add @opentelemetry/sdk-trace-node as a dependency and amend ADR-171 to sanction the standalone provider as the vendor-independent span path",
+          "class": "good",
+          "file_line": "lines 33-35, 186-188, 342-346"
+        },
+        {
+          "idea": "Verify-and-complete existing 2026-05-10 ADR amendment notes on ADR-143/116/162/163 rather than authoring from blank (they already exist)",
+          "class": "good",
+          "file_line": "lines 82-85, 211-213, 354-355"
+        },
+        {
+          "idea": "EEF validation is decoupled: validates tool behaviour with Sentry off now, validates Sentry telemetry post-release from live data — this plan is not an EEF prerequisite",
+          "class": "good",
+          "file_line": "lines 109-110, 391-404"
+        },
+        {
+          "idea": "Name the four root-cause patterns of a no-functional-gate migration failure as reusable institutional knowledge (no gate, cosmetic+structural mixed, atomic-conflated-with-single-commit, parallel writers)",
+          "class": "good",
+          "file_line": "lines 156-174"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "supersedes"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (required for all plan nodes, LOCKED)",
+          "file_line": "observability-sinks-decoupling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (required for all plan nodes, LOCKED)",
+          "file_line": "observability-sinks-decoupling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (required for all, LOCKED — `status: current` maps to `kind: executable` per §3.5 but the V0 field is absent)",
+          "file_line": "observability-sinks-decoupling.plan.md:15"
+        },
+        {
+          "issue": "Dropped key `status: current` present — V0 §2.5 explicitly drops `status`; its readiness sense must migrate to `kind`",
+          "file_line": "observability-sinks-decoupling.plan.md:15"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` — mandatory for executable plans (LOCKED); no `pending` sentinel present either",
+          "file_line": "observability-sinks-decoupling.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (required for all plan nodes, LOCKED) — value exists only in body prose, not frontmatter",
+          "file_line": "observability-sinks-decoupling.plan.md:93"
+        },
+        {
+          "issue": "Execution gate encoded only as body prose (`🟢 DECISION-COMPLETE (execution gated — see Execution Preconditions)`) — V0 §3.4/§3.5 maps an owner/external-decision block to a `gate` object with `awaiting`, `clears_when`, and mandatory `expires`; whole-paragraph prose status must move to the body with axes carrying the state",
+          "file_line": "observability-sinks-decoupling.plan.md:93"
+        },
+        {
+          "issue": "ADR foundations (ADR-171, ADR-162, ADR-143) cited only in body; V0 §2.3 / §4 requires them as a `derives_from` edge in frontmatter",
+          "file_line": "observability-sinks-decoupling.plan.md:284"
+        }
+      ],
+      "unclassified_keys": [
+        "status"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The standalone NodeTracerProvider design is architecturally sound and necessary. The plan correctly identifies that trace.getTracer() returns a no-op without a registered provider, and that Sentry's init() registration cannot deliver Sentry-off span emission. The resolution (standalone OTel provider with per-sink exporters, provider selected by sink set) is the only architecturally valid path to true vendor-independence. This is not a gap — it is correctly resolved in the plan.",
+          "file_line": "observability-sinks-decoupling.plan.md:27-36 (todo c1-c2), 343-346 (§Review round 2 gap 2)"
+        },
+        {
+          "severity": "medium",
+          "claim": "The sink-registry enum drift between the ADR and live code is a concrete coupling smell that the plan defers reconciliation of until C2b (before C3), but the live code gap is documented as a known hazard now: sink-registry.ts:37 has ['sentry', 'file'] with stdout as an un-listed always-on baseline, while ADR-171 names sentry/console/log-file. Any consumer or test author reading the enum between now and C2b will encounter ambiguity. The plan correctly sequences C2b before C3, but the gap is live today and could silently mislead interim work.",
+          "file_line": "observability-sinks-decoupling.plan.md:149-151 (§Grounded Current State), 49-51 (todo c2b)"
+        },
+        {
+          "severity": "medium",
+          "claim": "HttpObservability interface carries a Sentry-specific type (fixtureStore: FixtureSentryStore) on a vendor-neutral surface. The plan captures this as a C4 item (remove the type from the interface, decompose-at-the-tension). This is a real architectural boundary violation — a vendor-specific capability type on a sink-independent interface inverts the dependency. The plan's cure is correct; the risk is that execution authors treat it as cosmetic rather than structural. The plan does separate it from cosmetics in C4's description, but the coupling is architectural in severity.",
+          "file_line": "observability-sinks-decoupling.plan.md:67-75 (todo c4), 357-359 (§Review foldable condition)"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references refineLegacySentryMode as residing in packages/core/env at line 136-137, but the §Review round-2 gap 1 at line 330-331 notes the plan's own §Mechanism #3 and ADR-171 §Decision 3 both incorrectly located the bridge in @oaknational/env-resolution. The plan acknowledges this location discrepancy ('NOT env-resolution as the plan and ADR-171 §Decision 3 both say'). This is an ADR/plan location inconsistency that survives into the current plan body: C2b's todo still says 'BUILD the bridge in @oaknational/env-resolution' (line 43-44) while the live code is in packages/core/env. The correct target package for the bridge construction needs first-hand verification at execution.",
+          "file_line": "observability-sinks-decoupling.plan.md:42-47 (todo c2b), 329-337 (§Review round 2 gap 1)"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan adds @opentelemetry/sdk-trace-node as a new dependency in C1+C2. The plan notes this as a prerequisite action but does not specify which workspace package receives this dependency. Given the architecture separates packages/core/observability from the app composition roots (http-observability.ts), there is a question of whether the OTel SDK belongs in core/observability (shared) or in the app-level http-observability composition root. The plan defers this to 'execution-time design' (line 272), which is appropriate for a DECISION-COMPLETE plan, but the architectural boundary (core vs app-level) should be resolved at C1+C2 authoring time to avoid cross-package coupling.",
+          "file_line": "observability-sinks-decoupling.plan.md:33-35 (todo c1-c2), 186-188 (§Workstreams C1+C2)"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's linear C1→C2b→C3→C4→C5 sequencing correctly separates structural decoupling (C1+C2), bridge construction (C2b), consumer migration (C3), cosmetic renames (C4), and closure (C5). This separation of structural vs cosmetic changes addresses the root cause of the damaged predecessor plan. The forcing-function-first design (C1 as genuine RED gate) is architecturally sound and addresses the no-functional-gate failure mode explicitly.",
+          "file_line": "observability-sinks-decoupling.plan.md:177-199 (§Workstreams)"
+        },
+        {
+          "severity": "info",
+          "claim": "The non-goals section correctly scopes out new sinks (posthog, warehouse) and the ADR-163 build-time release-identifier work. The enum extension point is implicitly preserved by the typed list design. The plan does not foreclose future extension — this is correct YAGNI discipline for a structural migration plan.",
+          "file_line": "observability-sinks-decoupling.plan.md:236-247 (§Non-Goals)"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Plan is DECISION-COMPLETE 2026-06-06 with all review conditions folded in (cited at lines 327, 365-368)",
+          "verdict": "uncertain",
+          "confidence": "high",
+          "evidence": ".agent/plans/observability/current/observability-sinks-decoupling.plan.md:93 (status \"DECISION-COMPLETE (execution gated)\"), :367 (\"Plan is DECISION-COMPLETE 2026-06-06\") — status clause holds; BUT :151 (\"C5 reconciles.\") and :273 (\"C5 explicitly reconciles ADR-171's enum\") survive and contradict the moved-to-C2b fold (:39, :189, :228) AND the plan's own foldable-condition instruction at :350 (\"todos[4]/§Workstreams still place enum reconciliation at C5 ... Move it in the body\")"
+        },
+        {
+          "claim": "Execution gated on relevant feature branch(es) being merged (no parallel-writer race)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "observability-sinks-decoupling.plan.md:230-231 (\"Relevant feature branch(es) merged (blocking for execution) — so the migration does not race branch closure (tension cause #4)\") and :372-373 (\"Execution starts when the owner schedules it, and when: (1) the relevant feature branch(es) are merged (no parallel-writer race)\"); reinforced at :170-171 (tension cause #4 cure), :367-368, and risk row :274."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/current/post-pr-87-merge-pipeline-triage.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All four todos are pending; no completion signal in the plan body",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:14-24"
+        },
+        {
+          "claim": "The verification section defines concrete success signals not yet met",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:193-207"
+        },
+        {
+          "claim": "Folder lane is 'current' and frontmatter status is 'current' — plan is live",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:9"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's core contribution is epistemically rigorous: it separates 12 verified facts (each with a cited source command or artefact) from 3 explicit unverified assumptions and 4 speculation items, with a named anti-patterns section. This is exactly the right triage structure after a flawed prior session. The action plan is correctly sequenced and gated. No bad ideas embedded. (lines 47-100)",
+      "content_quality": "strong",
+      "content_quality_note": "The verified-facts table at lines 47-60 cites specific commands, SHAs, API run IDs, and MCP tool invocations for each fact. The open-unknowns table (lines 63-73) names what resolves each unknown. The anti-patterns section (lines 103-112) is actionable doctrine, not boilerplate. The five-step sequence respects the log-first discipline throughout.",
+      "salvage_value": [
+        {
+          "idea": "Fact table F1-F12: 12 verified pipeline facts with cited source commands and SHAs for Vercel deployment dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6 and release workflow run 25064635233",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:47-60"
+        },
+        {
+          "idea": "Open-unknown U1: Vercel build failure root cause is unresolved; log for dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6 was never retrieved",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:69"
+        },
+        {
+          "idea": "Open-unknown U2+U3: actions/create-github-app-token v3 app-id→client-id migration requires docs verification; secret value format may differ (numeric App ID vs string Client ID)",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:70-71"
+        },
+        {
+          "idea": "Open-unknown U4: check whether 1.5.0 release commit (f0046db9) Vercel deploy also failed — single API call that halves the diagnosis tree",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:72"
+        },
+        {
+          "idea": "Open-unknown U5: production Vercel env vars may be missing for PR-87 introductions",
+          "class": "speculative",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:73"
+        },
+        {
+          "idea": "Assumption A1: attribution of the cancellation to our vercel-ignore script is an inference, not proven from the commit-status string alone",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:81-83"
+        },
+        {
+          "idea": "Assumption A2: one-line rename of app-id to client-id in release.yml may be insufficient if secret value format changed",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:82-84"
+        },
+        {
+          "idea": "Assumption A3: pre-merge diff size statistic (1680 files / +167k lines) is confusing framing post-merge; do not use for future reasoning",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:85"
+        },
+        {
+          "idea": "Speculation items (Sentry CLI auth, esbuild config, wrong cwd, missing env var) must not be acted on without log evidence",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:89-100"
+        },
+        {
+          "idea": "Anti-pattern doctrine: speculation-as-ranked-diagnosis, conflating mechanism and agent, one-line-fix without docs check",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:103-112"
+        },
+        {
+          "idea": "Step 1 three-path log-retrieval design (owner paste / Vercel MCP scope grant / owner CLI run) with no-Vercel-CLI constraint honoured",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:118-134"
+        },
+        {
+          "idea": "Step 3 single-API-call diagnosis tree bisection via 1.5.0 release commit status",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:149-158"
+        },
+        {
+          "idea": "Explicit out-of-scope boundary: CodeQL alerts → separate plan pr-87-codeql-alerts.plan.md; Sonar gate → separate plan after CodeQL",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:179-189"
+        },
+        {
+          "idea": "Success/failure verification criteria with concrete observable signals",
+          "class": "good",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:193-207"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required-for-all field `id` — no stable kebab slug; node has no graph identity.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:1-25 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required-for-all field `node_type` — discriminator literal `\"plan\"` absent.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:1-25 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required-for-all field `kind` — axis that replaces `status` is absent; plan is unclassifiable against the Zod discriminated union.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:1-25 (frontmatter block)"
+        },
+        {
+          "issue": "`status: current` present — V0 §2.5 explicitly drops this field; it is replaced by the orthogonal axes (`kind`/`disposition`/`gate`). Per §3.5 migration map `current` → `kind: executable` + Linear `backlog`.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:9"
+        },
+        {
+          "issue": "Missing required executable-plan edge `serves_strategic_choice` — no registry ID and no `\"pending\"` sentinel; violates V0 §4 authority invariant 1.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:1-25 (frontmatter block)"
+        },
+        {
+          "issue": "`overview` is a multi-line YAML block scalar (5 lines) — V0 §2.1 specifies one line.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:3-8"
+        }
+      ],
+      "unclassified_keys": [
+        "created_by"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan itself is a meta-triage document that explicitly enumerates its own unverified assumptions (A1-A3) and open unknowns (U1-U5). The assumptions hygiene is unusually strong: each assumption names the evidence gap and why it might be wrong. No assumption is silently load-bearing.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:75-85"
+        },
+        {
+          "severity": "low",
+          "claim": "F11 sources the Vercel cancel attribution partly to 'repo file presence' — the plan records this as a verified fact but the attribution to the specific script is simultaneously flagged as inference A1. The fact table (§Verified facts) and the assumption table (§Explicit assumptions) give contradictory statuses to the same claim. A reader relying only on F11 without reading A1 could treat the script attribution as settled.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:59 (F11) vs 83 (A1)"
+        },
+        {
+          "severity": "low",
+          "claim": "F12 relies on the behavioural claim 'Vercel does not honour [skip ci]' sourced only as 'Vercel doc behaviour' — no URL, no version, no specific doc name. If that assumption is wrong (e.g. Vercel added skip-ci support after the plan was written), Step 1's framing that the release commit triggered a Vercel build attempt could be misleading.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:60 (F12)"
+        },
+        {
+          "severity": "medium",
+          "claim": "The three 'owner picks' paths in Step 1 all assume the deployment ID dpl_9CmqChJi9Y3KA8DmAHSX8XvEyTn6 still exists and its build log is still accessible. Vercel build logs have retention limits (typically 30 days). The plan was created 2026-04-28; if this plan is executed significantly later, the log may be unavailable via all three paths, invalidating the primary resolution route for U1.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:118-134"
+        },
+        {
+          "severity": "medium",
+          "claim": "U3 correctly surfaces the App-ID vs Client-ID distinction, but Steps 2 and 5 assume the secret value (RELEASE_APP_ID) is accessible for comparison — 'Read the GitHub App's settings page on github.com to compare what the current secret stores vs. what client-id expects.' Secret values are write-only in GitHub Actions; a next agent cannot read the stored secret value. The resolution path for U3 is blocked by design, not by permissions, and the plan does not acknowledge this constraint.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:71 (U3) and 139"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the cross-reference plan at '.agent/plans/observability/current/pr-87-codeql-alerts.plan.md' is a live, current file. If that plan has been completed, archived, or renamed, references in §Out of scope and Step 4 point at a stale path without a fallback.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:169-170 and 183-185"
+        },
+        {
+          "severity": "low",
+          "claim": "Step 3 pivots the entire diagnosis tree on a single API call comparing 1.5.0 vs 1.6.0 Vercel deploy status. This assumes the 1.5.0 release commit SHA f0046db9 is correct and that the commit-status endpoint for it reflects only the Vercel deployment outcome. If the endpoint returns multiple statuses (other CI systems, CodeQL, etc.) the 'success or failure' binary may be ambiguous without filtering by context.",
+          "file_line": "post-pr-87-merge-pipeline-triage.plan.md:152-158"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/current/pr-87-codeql-alerts.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are still pending — no alert has been closed yet",
+          "file_line": "pr-87-codeql-alerts.plan.md:12-23"
+        },
+        {
+          "claim": "Plan is explicitly scoped, not superseded by another plan",
+          "file_line": "pr-87-codeql-alerts.plan.md:4-8"
+        },
+        {
+          "claim": "Execution rules and verification criterion are complete and actionable",
+          "file_line": "pr-87-codeql-alerts.plan.md:89-105"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, evidence-grounded (live API fetch at plan-open, file:line precision per alert, concrete cure shape per cluster), and embeds a clear disposition discipline ruling out suppression. No speculative or bad ideas detected. The only risk is execution staleness given all todos remain pending 8 weeks on (lines 12-23, 65-66).",
+      "content_quality": "strong",
+      "content_quality_note": "Every alert row names rule, exact site, one-line cure, and linkage to the cluster cure rationale (lines 69-77). Disposition discipline is explicit and principled (lines 80-87). Execution rules are deliberately minimal and each has a clear trigger (lines 89-99). Verification command is cited verbatim (lines 103-105). The 'Why this exists' section provides the supersession context concisely (lines 29-37).",
+      "salvage_value": [
+        {
+          "idea": "Alert #69 js/missing-rate-limiting at bootstrap-helpers.ts:151 — investigate recogniser shape; brand-narrowing or owner-authorised dismissal with file:line evidence",
+          "class": "good",
+          "file_line": "pr-87-codeql-alerts.plan.md:13-14"
+        },
+        {
+          "idea": "Alerts #70/71/72/81 js/missing-rate-limiting — brand-preservation type narrowing through RateLimitRequestHandler end-to-end (factory return, DI params, registration sites, test fake)",
+          "class": "good",
+          "file_line": "pr-87-codeql-alerts.plan.md:15-17"
+        },
+        {
+          "idea": "Alerts #76/#77 js/http-to-file-access at schema-cache.ts:99,106 — typed SchemaCache capability encoding validated OpenAPIObject, path, size, symlink, tempfile constraints at capability boundary",
+          "class": "good",
+          "file_line": "pr-87-codeql-alerts.plan.md:18-20"
+        },
+        {
+          "idea": "Disposition discipline: structural fix or documented gh api PATCH dismissal only; no suppression, no recogniser disable, no rule downgrade",
+          "class": "good",
+          "file_line": "pr-87-codeql-alerts.plan.md:80-87"
+        },
+        {
+          "idea": "One-alert-per-commit protocol with post-push alert re-fetch and table update before proceeding",
+          "class": "good",
+          "file_line": "pr-87-codeql-alerts.plan.md:91-98"
+        },
+        {
+          "idea": "Phase-2.0.5 keyGenerator hardening is runtime-only and does not satisfy CodeQL recogniser for alerts #70/71/72/81 — brand narrowing still required",
+          "class": "good",
+          "file_line": "pr-87-codeql-alerts.plan.md:46-49"
+        },
+        {
+          "idea": "Sonar clusters H-O and D explicitly deferred to a separate plan after this lands",
+          "class": "good",
+          "file_line": "pr-87-codeql-alerts.plan.md:52-58"
+        },
+        {
+          "idea": "Verification criterion: gh api open-alerts returning empty array or only owner-authorised dismissals",
+          "class": "good",
+          "file_line": "pr-87-codeql-alerts.plan.md:103-105"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "supersedes"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — required for all plans; the node's graph identity)",
+          "file_line": "pr-87-codeql-alerts.plan.md:1-24 (frontmatter block — field absent throughout)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (V0 §2.1, LOCKED — the registry discriminator; required for all plans)",
+          "file_line": "pr-87-codeql-alerts.plan.md:1-24 (frontmatter block — field absent throughout)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §3.1, LOCKED — required for all plans; replaces readiness sense of `status`; plan carries `todos` indicating `kind: executable`)",
+          "file_line": "pr-87-codeql-alerts.plan.md:1-24 (frontmatter block — field absent throughout)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (V0 §2.3, LOCKED — required for executable plans; plan has `todos`, confirming executable kind)",
+          "file_line": "pr-87-codeql-alerts.plan.md:1-24 (frontmatter block — field absent throughout)"
+        },
+        {
+          "issue": "Present field `status: current` is a V0-dropped key (V0 §2.2/§2.5 — `status` dropped; value `current` maps to `kind: executable` + Linear execution `backlog` via migration map §3.5)",
+          "file_line": "pr-87-codeql-alerts.plan.md:7"
+        },
+        {
+          "issue": "Present field `branch` is not a V0 kept field; it is housekeeping drift analogous to the `collection`/`lane` keys dropped in V0 §2.5 (folder-duplicating metadata; not reconciled into any V0 canonical field)",
+          "file_line": "pr-87-codeql-alerts.plan.md:10"
+        }
+      ],
+      "unclassified_keys": [
+        "branch",
+        "pr"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Four open js/missing-rate-limiting alerts (alerts 70, 71, 72, 81) cover Express route registration sites in auth-routes.ts and oauth-proxy-routes.ts. These are authentication and OAuth proxy endpoints — rate-limiting gaps here are high-value attack surfaces for credential-stuffing and token-endpoint abuse. The plan's cure (brand-preservation type narrowing through RateLimitRequestHandler) is mechanistically correct but the plan records zero progress and all four rows remain pending.",
+          "file_line": "pr-87-codeql-alerts.plan.md:73-75"
+        },
+        {
+          "severity": "high",
+          "claim": "Alert 69 (js/missing-rate-limiting at bootstrap-helpers.ts:151) is the top-level app wiring site. The plan notes that app.use(rateLimiter) exists but the CodeQL recogniser does not see it, and the cure is characterised as 'likely brand-recogniser limitation' with escalation as the fallback. If the recogniser is correct rather than a false positive — i.e., the limiter is not actually on the path — this would be a missing global rate limit. The plan does not require a runtime proof step before accepting the false-positive hypothesis.",
+          "file_line": "pr-87-codeql-alerts.plan.md:13,71"
+        },
+        {
+          "severity": "medium",
+          "claim": "Alerts 76 and 77 (js/http-to-file-access at schema-cache.ts:99 and :106) flag paths where HTTP-fetched content flows to file-system operations. The codegen path (packages/sdks/oak-sdk-codegen) is a build-time tool, reducing runtime exposure, but the plan's proposed cure — typed SchemaCache capability encoding path, size, symlink, and tempfile constraints — is entirely pending. Until the capability boundary is in place, symlink traversal and path-injection vectors are open in the codegen toolchain.",
+          "file_line": "pr-87-codeql-alerts.plan.md:19,76-77"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan's disposition discipline (line 83-87) explicitly prohibits suppression, rule disable, and downgrade, and requires either a structural fix or a documented dismissal via the GitHub code-scanning API with a cited rationale. This is a sound security constraint. However, the dismissal path (false_positive or won't_fix) for alert 69 is pre-signalled as the likely outcome without requiring first-hand runtime evidence that the limiter is on the path. Owner authorisation is required but the evidentiary bar is not specified beyond 'file:line evidence' — tightening this to require a runtime trace or middleware-chain proof would be more robust before accepting a false-positive dismissal on an auth endpoint.",
+          "file_line": "pr-87-codeql-alerts.plan.md:83-87,13"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan is correctly scoped to CodeQL only and explicitly defers Sonar findings (including hotspots) to a separate plan. The Sonar hotspot AZ3D3iflrIk5eL0ceU__ was closed by an earlier commit. No security regression from the scope split is apparent, but the separate Sonar plan has not yet been created as of last_updated 2026-04-28.",
+          "file_line": "pr-87-codeql-alerts.plan.md:6,55-58"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "7 open alerts existed at plan-open (2026-04-28T~15:00Z); table was fetched live via gh api",
+          "verdict": "survives",
+          "confidence": "medium",
+          "evidence": "pr-87-codeql-alerts.plan.md:65-67 (state \"7 open alerts\" fetched via `gh api '...code-scanning/alerts?ref=refs/pull/87/head&state=open'`) corroborated by exactly 7 table rows at lines 71-77 (#69,70,71,72,81,76,77) and coherent front-matter last_updated 2026-04-28T15:25Z (line 7); cited SHAs 9b2b2ed7/84571ccf/5d6622d0/a7ce1a39/d3e86fd1 all resolve to real commits on the stated branch feat/otel_sentry_enhancements (line 9)"
+        },
+        {
+          "claim": "Phase-2.0.5 keyGenerator hardening did NOT close alerts #70/71/72/81 — CodeQL recogniser does not read runtime keyGenerator behaviour (cited at pr-87-codeql-alerts.plan.md:46-49)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "pr-87-codeql-alerts.plan.md:45-49 — \"Phase 2.0.5 Vercel-aware `keyGenerator` cure + doc alignment. **HARDENING**, not exploit closure. CodeQL impact: none — the `js/missing-rate-limiting` recogniser doesn't read runtime keyGenerator behaviour. Closure of alerts #70/71/72/81 still depends on brand narrowing in this plan.\" Corroborated by table rows 72-75 (#70/71/72/81 = js/missing-rate-limiting, cured by brand-preservation type narrowing)."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/observability/current/pr-93-sonar-quality-gate-resolution.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "All four phase todos have status: completed",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:10-19"
+        },
+        {
+          "claim": "Status header reads SONAR ISSUE DISPOSITION COMPLETE",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:25"
+        },
+        {
+          "claim": "Full validation evidence with passing commands recorded",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:92-119"
+        },
+        {
+          "claim": "Remote verification at a pinned SHA confirms new_violations=0 and 0 security hotspots",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:109-119"
+        },
+        {
+          "claim": "Duplication explicitly deferred to a future plan rather than left as live work",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:119"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every idea in the plan is well-grounded: the scope split is deliberate (file_line:9), the duplication deferral has an explicit architectural destination (file_line:40), false-positive dispositions are owner-directed with rationale (file_line:44-45), and validation evidence is first-hand with a pinned SHA (file_line:110). No speculative or bad ideas are present.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan records concrete file names, exact test commands with exit-code outcomes, a pinned remote SHA, and explicit non-goals. The validation evidence section (file_line:92-119) is unusually thorough for a plan of this size and provides a complete audit trail for the Sonar disposition decisions.",
+      "salvage_value": [
+        {
+          "idea": "Split oak-eslint Sonar findings to a separate post-unpause plan to respect the active Silvered claim boundary",
+          "class": "good",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:36-37"
+        },
+        {
+          "idea": "Route generated SDK duplication to sdk-codegen-workspace-decomposition plan rather than hand-editing generated files",
+          "class": "good",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:39-41"
+        },
+        {
+          "idea": "Owner direction: three oak-eslint S1135 findings are false positives (documentation/test text, not outstanding work)",
+          "class": "good",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:43-45"
+        },
+        {
+          "idea": "Non-goal: no generated SDK hand-refactor in PR 93",
+          "class": "good",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:136"
+        },
+        {
+          "idea": "Non-goal: no broad Sonar suppression for public-writable-directory hotspots",
+          "class": "good",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:139"
+        },
+        {
+          "idea": "Pinned remote SHA b929a022 as audit anchor for the Sonar state at disposition",
+          "class": "good",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:110"
+        },
+        {
+          "idea": "Validation command set for targeted gates (test:root-scripts, env test, env type-check, markdownlint, git diff --check)",
+          "class": "good",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:95-99"
+        },
+        {
+          "idea": "Sonar quality gate remains ERROR due to new_duplicated_lines_density=16.0 — this unresolved state is a live signal for the codegen plan",
+          "class": "speculative",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:115-117"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "SONAR ISSUE DISPOSITION COMPLETE; DUPLICATION DEFERRED",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "id absent — LOCKED required for all plan nodes (V0 §2.1)",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:1-20 (frontmatter block)"
+        },
+        {
+          "issue": "node_type absent — LOCKED required for all plan nodes, must be literal \"plan\" (V0 §2.1)",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:1-20 (frontmatter block)"
+        },
+        {
+          "issue": "kind absent — LOCKED required for all; inferred executable from presence of todos (V0 §3.1, §2.4)",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:1-20 (frontmatter block)"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — LOCKED required for all; appears only as body prose on line 23 (V0 §2.4)",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:23"
+        },
+        {
+          "issue": "serves_strategic_choice absent — LOCKED required for executable plans or must carry sentinel \"pending\" (V0 §2.3, §4, invariant 1)",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:1-20 (frontmatter block)"
+        },
+        {
+          "issue": "disposition absent — all four todos are completed (lines 10-20), indicating terminal state; V0 §3.3 requires disposition when plan reaches terminal state; migration map §3.5 maps this to disposition: done",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:10-19"
+        },
+        {
+          "issue": "status present only as body prose (line 25), not as a frontmatter key — V0 §2.5 drops status; durable state must use kind/disposition/gate axes; body prose value does not map cleanly to any single axis",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:25"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "none",
+      "specialist_kind": "second-angle",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "All four todos are marked completed and the header declares 'SONAR ISSUE DISPOSITION COMPLETE', but the plan remains in current/ rather than archive/completed/. PR 93 is confirmed merged (commit 00b6e2197). The estate has an archive/completed/ convention used by analogous plans (e.g., sentry-immediate-next-steps.plan.md). This plan is a retirement candidate, not an active one.",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:8-19 (all todos completed); confirmed by git log: 00b6e2197 Merge pull request #93"
+        },
+        {
+          "severity": "low",
+          "claim": "The Sonar quality gate is recorded as remaining ERROR due to new_duplicated_lines_density=16.0 exceeding the 3% threshold (line 116-117). The plan explicitly defers remediation to the codegen future plan. This is a permanently open Sonar gate failure against PR 93's branch — but PR 93 is already merged, so the deferred gate failure is now only relevant as a main-branch concern. The plan does not state whether the gate failure was accepted for merge or resolved post-merge, leaving ambiguity for future readers.",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:115-119"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references a paused claim by 'Silvered Hiding Silhouette' (UUID 588160cf-d8c7-41b7-b7ac-ecaa870acfa6) as still fresh at the time of the Non-Goals section (line 139). With PR 93 merged and all todos completed, the claim's freshness is no longer actionable context — but no note records that the claim expired or was resolved. The linked split plan (future/pr-93-sonar-oak-eslint-claim-overlap.plan.md) should be assessed as the live obligation.",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:32-35, 139"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's Last Updated date is 2026-05-05 and git history shows only two commits (cebbca83f, da4288cdc), both from the same session. The plan is frozen — no ongoing edits — which supports treating it as complete-and-retire rather than active.",
+          "file_line": "pr-93-sonar-quality-gate-resolution.plan.md:24"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/observability/current/search-observability.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending and sequencing is intact; the plan is staged for the next branch after peer MCP plan merges",
+          "file_line": "search-observability.plan.md:18-72,104-134"
+        },
+        {
+          "claim": "MVP-in and MVP-deferred partitioning is explicit and complete, giving promotion criteria",
+          "file_line": "search-observability.plan.md:112-134"
+        },
+        {
+          "claim": "Relationships to parent, peer, and dependent plans are fully mapped with correct directory paths",
+          "file_line": "search-observability.plan.md:139-158"
+        },
+        {
+          "claim": "EXP-C1 absorption is annotated with provenance, preventing re-fragmentation",
+          "file_line": "search-observability.plan.md:38-39,203"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every layer has a concrete gap statement backed by named existing code (assessAliasHealth(), recordZeroHit(), bulk-ingestion-stats.ts, ingest-harness-metrics.ts) at lines 52, 57, 231, 233, 244. MVP classification is ADR-162-grounded. Sequencing dependencies are explicit and non-circular. No speculative scope inflation detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan names existing code symbols, quantifies the remediation scope (15-file refactor, line 23), distinguishes launch-blocking from post-MVP work with clear rationale (lines 112-134), and provides a dependency-ordered sequencing block (lines 312-330). Non-goals are bounded and accurate (lines 333-337). This is a well-authored execution plan, not a skeleton.",
+      "salvage_value": [
+        {
+          "idea": "ADR-078 logger DI remediation: replace 15 direct singleton imports with createSearchLogger(config) factory at composition root",
+          "class": "good",
+          "file_line": "search-observability.plan.md:19-23,163-171"
+        },
+        {
+          "idea": "Standardise CLI command context tags across admin, eval, ingest, utility so every Sentry error is attributable to command family and mode",
+          "class": "good",
+          "file_line": "search-observability.plan.md:25-26,174-178"
+        },
+        {
+          "idea": "Resolve CLI preload strategy (none / selective / wrapper launcher) with documented rationale and rollback path",
+          "class": "good",
+          "file_line": "search-observability.plan.md:28-30,179-184"
+        },
+        {
+          "idea": "Define source-map upload strategy for bundled CLI distributions and CI execution contexts",
+          "class": "speculative",
+          "file_line": "search-observability.plan.md:32-33,185-189"
+        },
+        {
+          "idea": "Enable and verify trace propagation from CLI root span and HTTP request span through to ES dependency spans (ES-PROP)",
+          "class": "good",
+          "file_line": "search-observability.plan.md:35-39,195-203"
+        },
+        {
+          "idea": "Instrument ES client for request latency, HTTP status, timeout detection, and slow-query identification (ES-INST)",
+          "class": "good",
+          "file_line": "search-observability.plan.md:41-44,205-219"
+        },
+        {
+          "idea": "Extend bulk indexing observability: per-batch failure rates, retry tracking, field-level validation audit, batch timing (ES-BULK)",
+          "class": "good",
+          "file_line": "search-observability.plan.md:45-48,222-233"
+        },
+        {
+          "idea": "Surface assessAliasHealth() results, index version, document counts, and lifecycle rollback events as structured telemetry (ES-HEALTH)",
+          "class": "good",
+          "file_line": "search-observability.plan.md:49-52,236-245"
+        },
+        {
+          "idea": "Wire SDK recordZeroHit() into HTTP MCP server search tools to close existing capability gap (RQ-ZERO)",
+          "class": "good",
+          "file_line": "search-observability.plan.md:54-57,251-269"
+        },
+        {
+          "idea": "Capture ES 'took' values and end-to-end retrieval latency as Sentry metric distributions broken down by search scope (RQ-LAT)",
+          "class": "good",
+          "file_line": "search-observability.plan.md:59-61,272-278"
+        },
+        {
+          "idea": "Track hit count distributions, RRF score distributions, result-set size trends, and correlation with zero-hit rates (RQ-QUALITY)",
+          "class": "speculative",
+          "file_line": "search-observability.plan.md:62-63,281-287"
+        },
+        {
+          "idea": "Emit CLI command-start and command-complete counters and ingest phase duration distributions (CLI-MET, gated on L-4b metrics adapter)",
+          "class": "good",
+          "file_line": "search-observability.plan.md:65-69,292-299"
+        },
+        {
+          "idea": "Produce date-stamped evidence checklist and runbook updates for command-failure triage with alert suggestions (CLI-EVID)",
+          "class": "speculative",
+          "file_line": "search-observability.plan.md:70-72,302-305"
+        },
+        {
+          "idea": "search_query event emission conforming to observability-events-workspace schema is the product-axis MVP contribution of the Search estate",
+          "class": "good",
+          "file_line": "search-observability.plan.md:119-122,148-150"
+        },
+        {
+          "idea": "Four-layer sequencing spine with explicit inter-layer dependencies (CLI-0 before composition, ES-PROP before ES-INST, RQ-ZERO after ES-INST)",
+          "class": "good",
+          "file_line": "search-observability.plan.md:312-330"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "supersedes",
+        "depends_on"
+      ],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required `id` field (stable kebab slug, required for all plans per §2.1)",
+          "file_line": "search-observability.plan.md:1"
+        },
+        {
+          "issue": "Missing required `node_type: plan` field (required for all plans per §2.1)",
+          "file_line": "search-observability.plan.md:1"
+        },
+        {
+          "issue": "Missing required `kind` field (`strategic | executable`; required for all per §2.2). Body content implies `executable` but the discriminator is absent.",
+          "file_line": "search-observability.plan.md:1"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` (required for executable plans per §2.3; must resolve to a registry ID or carry `\"pending\"` sentinel)",
+          "file_line": "search-observability.plan.md:1"
+        },
+        {
+          "issue": "Missing required `last_updated` (ISO date, required for all plans per §2.4)",
+          "file_line": "search-observability.plan.md:1"
+        },
+        {
+          "issue": "`depends_on` value is a plain string, not the typed `{ plan, kind: blocking | beneficial }` object required by §2.3. Line 11-12.",
+          "file_line": "search-observability.plan.md:11"
+        },
+        {
+          "issue": "`related_plans` is a drift variant of V0's `related` field (§2.4). V0 defines `related` as untyped see-also; this key is unrecognised.",
+          "file_line": "search-observability.plan.md:14"
+        },
+        {
+          "issue": "`supersedes` value (line 13) is a freeform string with embedded prose rather than a bare plan ref as the LOCKED edge shape requires (§2.3).",
+          "file_line": "search-observability.plan.md:13"
+        },
+        {
+          "issue": "`todos` items carry extra keys `priority` and `note` beyond the V0-specified `{ id, content, status }` shape (§2.4). These are unclassified extension keys.",
+          "file_line": "search-observability.plan.md:19"
+        }
+      ],
+      "unclassified_keys": [
+        "parent_plan",
+        "related_plans"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "ES-INST notes that the HTTP server path gets auto-instrumentation from @sentry/node/preload but the CLI path needs explicit instrumentation. This asymmetry is not reconciled architecturally — it is stated as a fact but no decision is recorded about whether the CLI should be brought to parity via preload or via explicit spans. The sequencing table has CLI-PRELOAD as 'any time' (step 9), after ES-INST (step 4), which means ES-INST work could be designed and partly shipped before the preload decision resolves whether the chosen instrumentation path is correct for the CLI. That creates potential rework.",
+          "file_line": "search-observability.plan.md:214-219 (ES-INST body) and :328 (sequencing step 9)"
+        },
+        {
+          "severity": "low",
+          "claim": "RQ-ZERO is classified as MVP-in and the plan explicitly notes the change 'modifies the HTTP MCP server' (line 264). The plan justifies this cross-boundary ownership on concern grounds (retrieval quality vs MCP protocol behaviour). That justification is reasonable but the architectural boundary between this plan and sentry-observability-maximisation-mcp.plan.md is load-bearing: if the MCP server instrument surface changes in the peer plan, RQ-ZERO's wiring could conflict. No coordination protocol between the two plans for HTTP MCP server modifications is defined.",
+          "file_line": "search-observability.plan.md:264-269 (RQ-ZERO ownership note)"
+        },
+        {
+          "severity": "low",
+          "claim": "CLI-MET references 'EXP-A (metrics foundation)' in the Layer 4 section body (line 295) and also references the dependency by the superseded archive path. The front-matter depends_on list (lines 12-13) and the Relationship section (lines 152-153) correctly name the live plan (sentry-observability-maximisation-mcp.plan.md § L-4b). The body text names a now-archived path. This is a stale cross-reference in the body that could mislead an implementer picking up CLI-MET.",
+          "file_line": "search-observability.plan.md:295 (CLI-MET body references archive path 'EXP-A')"
+        },
+        {
+          "severity": "info",
+          "claim": "The observability stack for the ES client on the CLI path is expected to be 'explicit instrumentation' but neither the SDK surface to be used (Sentry spans, OpenTelemetry spans, or the custom observability service) nor the integration point (client wrapper, interceptor, plugin) is specified at the plan level. This is an open architecture decision within ES-INST. Not a blocker — acceptable for a plan at this stage — but the gap should be filled before implementation begins to avoid two independent approaches diverging.",
+          "file_line": "search-observability.plan.md:206-219 (ES-INST section)"
+        },
+        {
+          "severity": "info",
+          "claim": "The zero-hit in-memory store is capped at 200 events (line 257). The plan does not specify what happens when that cap is reached under sustained CLI or MCP load — whether events are dropped, rotated, or flushed. For a search-quality observability plane this capacity assumption is an architectural choice that should be documented or referenced to an ADR, since it determines whether zero-hit data is representative or lossy under load.",
+          "file_line": "search-observability.plan.md:257 (RQ-ZERO, 'max 200 events')"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    }
+  ]
+}

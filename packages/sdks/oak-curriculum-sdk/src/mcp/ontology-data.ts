@@ -1,16 +1,126 @@
 /**
- * Static curriculum ontology data for the POC.
+ * Curriculum ontology data for the public-API domain model.
  *
- * This module exports the pre-authored curriculum domain model as a constant.
- * It's consumed by the curriculum-model-data module to compose the combined
+ * The drift-prone lists are schema-derived at build time — the subject list,
+ * the key-stage list, and the KS4 examSubject variants come from the generated
+ * SDK/OpenAPI sources and cannot drift from the live API; display names,
+ * key-stage metadata, exam boards, tiers, and pathways are authored. The
+ * composed result is consumed by the curriculum-model-data module to build the
  * orientation response for the get-curriculum-model tool.
  *
  * @remarks This is a simple ontology for the public API data specifically. For the complete, official Oak ontology see https://github.com/oaknational/oak-curriculum-ontology
  */
 
+import { threadProgressionStats } from '@oaknational/graph-corpus-sdk/curriculum';
+import { KEY_STAGES } from '@oaknational/sdk-codegen/api-schema';
+import { KS4_SCIENCE_VARIANTS } from '@oaknational/sdk-codegen/search';
 import { conceptGraph } from '@oaknational/sdk-codegen/vocab';
-import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
+import { rawCurriculumSchemas } from '@oaknational/sdk-codegen/zod';
 import { toolGuidanceData } from './tool-guidance-data.js';
+
+/**
+ * Canonical subject slugs, derived from the OpenAPI-generated
+ * `AllSubjectsResponseSchema` (the live `/subjects` response shape). Deriving
+ * the slug set here — rather than hand-maintaining it — is what stops the
+ * ontology subject list drifting from the API, the drift that motivated this
+ * change (a hand-typed 13-subject list against a live set of 17).
+ */
+const canonicalSubjectSlugs = rawCurriculumSchemas.AllSubjectsResponseSchema.element.options;
+
+type CanonicalSubjectSlug = (typeof canonicalSubjectSlugs)[number];
+
+/**
+ * Authored display metadata for each canonical subject. Slugs are NOT authored
+ * here — they are derived from {@link canonicalSubjectSlugs}; only the
+ * human-readable name and key-stage coverage are authored, because no single
+ * generated source carries those per subject (titles and per-subject key-stage
+ * coverage live only in the live `/subjects/{subject}` response). The values
+ * were confirmed first-hand against the live `/subjects/{subject}` and
+ * `/subjects/{subject}/key-stages` API. Typing the record by the
+ * schema-derived slug union makes a missing or unknown subject a compile error.
+ */
+const subjectDisplayMetadata: Record<
+  CanonicalSubjectSlug,
+  { name: string; keyStages: readonly string[]; hasExamSubjects?: boolean }
+> = {
+  maths: { name: 'Mathematics', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  english: { name: 'English', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  science: { name: 'Science', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'], hasExamSubjects: true },
+  history: { name: 'History', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  geography: { name: 'Geography', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  art: { name: 'Art', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  music: { name: 'Music', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  'physical-education': { name: 'Physical Education', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  computing: { name: 'Computing', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  'religious-education': { name: 'Religious Education', keyStages: ['ks1', 'ks2', 'ks3'] },
+  french: { name: 'French', keyStages: ['ks2', 'ks3', 'ks4'] },
+  spanish: { name: 'Spanish', keyStages: ['ks2', 'ks3', 'ks4'] },
+  german: { name: 'German', keyStages: ['ks3', 'ks4'] },
+  citizenship: { name: 'Citizenship', keyStages: ['ks3', 'ks4'] },
+  'design-technology': { name: 'Design and technology', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  'rshe-pshe': { name: 'RSHE (PSHE)', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
+  'cooking-nutrition': { name: 'Cooking and nutrition', keyStages: ['ks1', 'ks2', 'ks3'] },
+};
+
+/**
+ * The curriculum subjects, derived from the canonical slug set with authored
+ * display metadata attached. The slug set cannot drift from the API; only the
+ * names and key-stage coverage are authored.
+ */
+const curriculumSubjects = canonicalSubjectSlugs.map((slug) => {
+  const meta = subjectDisplayMetadata[slug];
+  return meta.hasExamSubjects
+    ? { slug, name: meta.name, keyStages: meta.keyStages, hasExamSubjects: meta.hasExamSubjects }
+    : { slug, name: meta.name, keyStages: meta.keyStages };
+});
+
+type CanonicalKeyStageSlug = (typeof KEY_STAGES)[number];
+
+/**
+ * Authored display metadata for each canonical key stage. As with subjects, the
+ * slug set is derived from the generated `KEY_STAGES` so it cannot drift; only
+ * the human-readable name, age range, year span, phase, and description are
+ * authored (these are not carried by a single generated source).
+ */
+const keyStageDisplayMetadata: Record<
+  CanonicalKeyStageSlug,
+  { name: string; ageRange: string; years: number[]; phase: string; description: string }
+> = {
+  ks1: {
+    name: 'Key Stage 1',
+    ageRange: '5-7',
+    years: [1, 2],
+    phase: 'primary',
+    description: 'Foundation stage covering basic literacy and numeracy',
+  },
+  ks2: {
+    name: 'Key Stage 2',
+    ageRange: '7-11',
+    years: [3, 4, 5, 6],
+    phase: 'primary',
+    description: 'Primary education building on KS1 foundations',
+  },
+  ks3: {
+    name: 'Key Stage 3',
+    ageRange: '11-14',
+    years: [7, 8, 9],
+    phase: 'secondary',
+    description: 'Lower secondary education',
+  },
+  ks4: {
+    name: 'Key Stage 4',
+    ageRange: '14-16',
+    years: [10, 11],
+    phase: 'secondary',
+    description: 'GCSE preparation years - has additional programme factors (tiers, exam boards)',
+  },
+};
+
+/** Key stages, derived from the canonical `KEY_STAGES` slug set with authored display metadata. */
+const curriculumKeyStages = KEY_STAGES.map((slug) => {
+  const meta = keyStageDisplayMetadata[slug];
+  return { slug, ...meta };
+});
 
 /**
  * Curriculum ontology data describing the Oak curriculum domain model.
@@ -18,56 +128,22 @@ import { toolGuidanceData } from './tool-guidance-data.js';
  * Includes key stages, subjects, entity hierarchy, threads, and tool usage guidance.
  */
 export const ontologyData = {
-  version: '0.1.0-poc',
-  generatedAt: '2025-11-27T00:00:00Z',
+  version: '0.2.0',
+  generatedAt: '2026-06-23T00:00:00Z',
   purpose:
     'This ontology describes the Oak National Academy curriculum domain model. It provides context for AI agents to understand the structure of UK education content, including key stages, subjects, entity hierarchies, threads, and tool usage guidance.',
   notice:
-    'This is a static POC. A future version will generate this data from the OpenAPI schema at compile time.',
+    'Partially schema-derived: the subject list, the key-stage list, and the KS4 examSubject variants are generated from the OpenAPI schema/SDK at build time and cannot drift from the live API. Display names, key-stage metadata, exam boards, tiers, and pathways are authored.',
   officialDocs: 'https://open-api.thenational.academy/docs/about-oaks-data/glossary',
   relatedResources: {
     threadProgressions:
       'Call get-thread-progressions for ordered unit sequences within curriculum threads (instance data)',
     priorKnowledgeGraph:
-      'Call get-prior-knowledge-graph for unit dependencies and prior knowledge requirements',
+      'Call get-prior-knowledge-graph with anchor unit slugs for the bounded prior-knowledge subgraph of those units (dependencies and prior knowledge requirements)',
   },
 
   curriculumStructure: {
-    keyStages: [
-      {
-        slug: 'ks1',
-        name: 'Key Stage 1',
-        ageRange: '5-7',
-        years: [1, 2],
-        phase: 'primary',
-        description: 'Foundation stage covering basic literacy and numeracy',
-      },
-      {
-        slug: 'ks2',
-        name: 'Key Stage 2',
-        ageRange: '7-11',
-        years: [3, 4, 5, 6],
-        phase: 'primary',
-        description: 'Primary education building on KS1 foundations',
-      },
-      {
-        slug: 'ks3',
-        name: 'Key Stage 3',
-        ageRange: '11-14',
-        years: [7, 8, 9],
-        phase: 'secondary',
-        description: 'Lower secondary education',
-      },
-      {
-        slug: 'ks4',
-        name: 'Key Stage 4',
-        ageRange: '14-16',
-        years: [10, 11],
-        phase: 'secondary',
-        description:
-          'GCSE preparation years - has additional programme factors (tiers, exam boards)',
-      },
-    ],
+    keyStages: curriculumKeyStages,
     phases: [
       {
         slug: 'primary',
@@ -82,34 +158,7 @@ export const ontologyData = {
         years: [7, 8, 9, 10, 11],
       },
     ],
-    subjects: [
-      { slug: 'maths', name: 'Mathematics', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      { slug: 'english', name: 'English', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      {
-        slug: 'science',
-        name: 'Science',
-        keyStages: ['ks1', 'ks2', 'ks3', 'ks4'],
-        hasExamSubjects: true,
-      },
-      { slug: 'history', name: 'History', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      { slug: 'geography', name: 'Geography', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      { slug: 'art', name: 'Art', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      { slug: 'music', name: 'Music', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      {
-        slug: 'physical-education',
-        name: 'Physical Education',
-        keyStages: ['ks1', 'ks2', 'ks3', 'ks4'],
-      },
-      { slug: 'computing', name: 'Computing', keyStages: ['ks1', 'ks2', 'ks3', 'ks4'] },
-      {
-        slug: 'religious-education',
-        name: 'Religious Education',
-        keyStages: ['ks1', 'ks2', 'ks3'],
-      },
-      { slug: 'french', name: 'French', keyStages: ['ks2', 'ks3', 'ks4'] },
-      { slug: 'spanish', name: 'Spanish', keyStages: ['ks2', 'ks3', 'ks4'] },
-      { slug: 'german', name: 'German', keyStages: ['ks3', 'ks4'] },
-    ],
+    subjects: curriculumSubjects,
   },
 
   threads: {
@@ -117,10 +166,10 @@ export const ontologyData = {
       'An attribute assigned to units that groups together units across the curriculum building a common body of knowledge. Threads are important for making vertical connections across year groups in each subject.',
     importance:
       "Threads show how ideas BUILD over time — they are the pedagogical backbone of Oak's curriculum. Understanding threads enables powerful queries like 'what comes before this topic?' and 'how does this concept develop from Year 1 to Year 11?'",
-    countSummary: `${String(threadProgressionGraph.stats.threadCount)} threads across ${String(threadProgressionGraph.stats.subjectsCovered.length)} subjects, connecting units into learning progressions`,
+    countSummary: `${String(threadProgressionStats.threadCount)} threads across ${String(threadProgressionStats.subjectsCovered.length)} subjects, connecting units into learning progressions`,
     characteristics: [
       'Programme-agnostic: A single thread spans multiple programmes, key stages, and years',
-      'Ordered: Units within a thread have unitOrder showing conceptual progression',
+      'Year-ordered: A thread’s units progress by teaching year (within one year the order is not curricular)',
       'Cross-key-stage: Threads enable tracking progression from early years to GCSE',
       'Primary navigation: Threads are used as filters on the Oak website',
     ],
@@ -192,11 +241,11 @@ export const ontologyData = {
         description: 'Categorisation based on exam paper difficulty level',
       },
       examBoard: {
-        values: ['aqa', 'ocr', 'edexcel', 'eduqas', 'edexcelb'],
+        values: ['aqa', 'edexcel', 'eduqas', 'ocr', 'wjec', 'edexcelb'],
         description: 'Official body that sets and grades qualifications',
       },
       examSubject: {
-        values: ['biology', 'chemistry', 'physics', 'combined-science'],
+        values: [...KS4_SCIENCE_VARIANTS],
         appliesTo: ['science'],
         description: 'Child subject within KS4 science with associated examination',
       },

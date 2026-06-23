@@ -149,6 +149,20 @@ without that pass: platform constraints are recorded as packaging notes only.
   agents, while this one classifies audience-facing knowledge and workflow
   categories.
 
+## Open Consideration: A Rights/Licensing Axis
+
+ADR-189 ratifies two axes (audience, distribution locus) with packaging as
+mechanism. The oak-skills library's licensing split — MIT scaffolding, © Oak
+brand assets, curriculum content shared in a pedagogical spirit — maps onto
+neither axis cleanly: when Oak distributes capabilities externally, what may be
+copied, what must be attributed, and what stays Oak's are questions the current
+taxonomy cannot record. Whether rights/licensing is a third axis, a
+per-capability metadata field, or out of taxonomy scope (owned by LICENSE
+surfaces) becomes decidable at the first external capability publication or the
+oak-skills integration decision — the same trigger as this plan's promotion.
+Resolve it then via an [ADR-189][adr-189] amendment plus inventory columns in the
+audit step above; until then it is one observation, not a category.
+
 ## Acceptance Criteria
 
 - Existing docs can describe a new agent-readable surface without using

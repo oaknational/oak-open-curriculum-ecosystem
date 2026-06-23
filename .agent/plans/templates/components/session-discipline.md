@@ -81,7 +81,7 @@ testing-strategy, schema-first-execution):
 > *"What did I inherit here, and has anyone ratified it from
 > first principles? Does its shape still fit?"*
 
-Invoke `/jc-metacognition` against the current session's plan
+Invoke `/oak-metacognition` against the current session's plan
 context if the answer is uncertain. See
 [`.agent/directives/metacognition.md`](../../../directives/metacognition.md).
 

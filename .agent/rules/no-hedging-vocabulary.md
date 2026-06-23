@@ -42,6 +42,60 @@ quick fix
 
 The list is not exhaustive. New shapes graduate when observed.
 
+## Indefinite-Deferral Vocabulary (regex family, added 2026-06-10)
+
+Owner-directed graduation: language that puts work into an
+**unagreed holding state** is the same failure shape as hedging —
+it defers a decision to nowhere instead of naming a gate or making
+the removal decision. Work is either a live deliverable with named
+dependencies and an owner-agreed gate, or it is removed by owner
+decision. There is no third state, and an owner ratification of a
+bundle does not ratify a holding-state clause embedded inside it.
+
+The hook group (`concept: indefinite-deferral`) matches with
+word-boundary regex — not literal substrings — so words *containing*
+a family member never false-positive (agent display names such as
+"Sparking …" contain one; literal matching would block every edit
+of the identity tables that carry them):
+
+```text
+\bparked\b
+\bparking\b
+\bpark (?:it|this|that|for now)\b
+\bshelv(?:e|ed|ing)\b
+\bmothball\w*\b
+\bback[- ]?burner\w*\b
+\bon hold\b
+\bput a pin in\b
+\bicebox\w*\b
+\binto the long grass\b
+```
+
+This group's in-scope surfaces are wider than the literal trip-list's
+(the `## In-Scope Surfaces` section below applies to the literal
+group): `.agent/practice-core/`, `.agent/plans/`, `.agent/reports/`,
+`.agent/memory/operational/`, `docs/architecture/`,
+`docs/governance/`, and any `**/*.plan.md` — continuity and thread
+records are where holding-state language hides. Inline code is NOT
+excluded for this group (a backticked family member in a table row
+would otherwise dodge the block); fenced code blocks remain skipped.
+The matcher blocks only newly-added instances, so historical dated
+records remain editable; cure existing instances by descriptive
+substitution on their next legitimate edit (a *sequenced deferral*
+names the plan, gate, or owner decision that resolves the work — see
+§What to Do Instead). Regression coverage:
+`agent-tools/tests/hook-policy/scoped-blocks-indefinite-deferral.unit.test.ts`.
+
+**Rejected patterns (design-time, 2026-06-10) — do not "complete" the
+family with these.** Bare `\bpark\b` is excluded: curriculum content
+legitimately names parks ("Hyde Park", "visiting the park"), and the
+inflected forms cover the deferral usage. `on ice` is excluded:
+skating/science lesson content uses it literally. `defer`/`deferred`
+are excluded deliberately — a *sequenced deferral to a named gate* is
+legitimate repo vocabulary (PDR-026 deferral-honesty); the pathogen is
+deferral-to-nowhere, not deferral itself. Adding any of these would
+trade a known false-positive flood for no real coverage gain.
+
 ## In-Scope Surfaces
 
 - `.agent/practice-core/`
@@ -63,7 +117,7 @@ The list is not exhaustive. New shapes graduate when observed.
 The recursive-exclusion pattern is structural: any structural
 enforcer that names its own pathogen must exclude the documents
 that define the pathogen. The general form lives at
-[`structural-enforcer-recursive-exclusion.md`](../memory/active/patterns/structural-enforcer-recursive-exclusion.md)
+`structural-enforcer-recursive-exclusion.md`
 (agent-tier pattern), which names two further mechanism shapes
 beyond `exclude_paths` (per-line context exclusion;
 self-exclusion by placement) and the structural distinction from

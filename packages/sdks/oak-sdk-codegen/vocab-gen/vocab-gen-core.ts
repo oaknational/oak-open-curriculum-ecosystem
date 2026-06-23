@@ -9,6 +9,7 @@
 import {
   extractKeywords,
   extractLearningPoints,
+  extractLessons,
   extractMisconceptions,
   extractNCStatements,
   extractPriorKnowledge,
@@ -16,6 +17,7 @@ import {
   extractThreads,
   type ExtractedKeyword,
   type ExtractedLearningPoint,
+  type ExtractedLesson,
   type ExtractedMisconception,
   type ExtractedNCStatement,
   type ExtractedPriorKnowledge,
@@ -57,6 +59,8 @@ export interface ExtractionStats {
 export interface ExtractedData {
   /** Unique keywords with definitions, frequency, and subject distribution */
   readonly keywords: readonly ExtractedKeyword[];
+  /** Lesson records with unit placement context (one entry per record) */
+  readonly lessons: readonly ExtractedLesson[];
   /** Misconceptions with responses and lesson context */
   readonly misconceptions: readonly ExtractedMisconception[];
   /** Learning points from lessons */
@@ -116,6 +120,7 @@ function runExtractors(
   units: readonly { unit: Unit; sequenceSlug: string }[],
 ): ExtractionResult {
   const keywords = extractKeywords(lessons);
+  const extractedLessons = extractLessons(lessons);
   const misconceptions = extractMisconceptions(lessons);
   const learningPoints = extractLearningPoints(lessons);
   const teacherTips = extractTeacherTips(lessons);
@@ -135,6 +140,7 @@ function runExtractors(
     },
     data: {
       keywords,
+      lessons: extractedLessons,
       misconceptions,
       learningPoints,
       teacherTips,

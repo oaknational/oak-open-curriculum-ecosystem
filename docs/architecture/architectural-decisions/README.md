@@ -299,6 +299,64 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   code; transport code legitimately speaks the vendor type; strict types serve
   internal DX and cross an external junction only for significant clear value;
   Accepted 2026-06-08)
+- [ADR-194: Teacher-as-Expert Product Boundary](194-teacher-as-expert-product-boundary.md)
+  (the product principle that ADR-191 is the engineering corollary of: Oak's
+  curriculum and evidence surfaces inform teachers with information, resources, and
+  evidence and may present evidenced options and trade-offs, but never make the
+  pedagogical decision that belongs to the teacher; the teacher is the pedagogical
+  expert and the authority on what should happen; Accepted
+  2026-06-09)
+- [ADR-195: Graph Tools Are a First-Class Tool Category](195-graph-tools-first-class-tool-category.md)
+  (graph tools are a distinct MCP tool category: anchored, bounded queries on the
+  one-graph corpus; complete-within-itself subgraphs, contiguous or sparse;
+  navigable links; dual-content responses (`formatToolResponse`: summary +
+  serialised-JSON content blocks plus `structuredContent` — superseding the
+  original structuredContent-only clause, owner 2026-06-11); the corpus is smart
+  and the tool is a thin deterministic formatter; fixed canonical data is
+  authority — durable shapes derive from the corpus; validated by the EEF
+  rebuild and the executed Track-G redesign; Accepted 2026-06-11)
+- [ADR-196: Graph Substrate Migration — One Replacement Unit per Tool](196-graph-substrate-migration-one-unit-per-tool.md)
+  (per migrated tool, the data/type re-emission, the rewrite onto the graph
+  corpus substrate, and the projection-derived schema land together as one
+  replacement unit; a tool's schema arrives when the tool is built or rebuilt,
+  never before; existing tools are untouched before their migration; executed
+  and validated in full via Track-G; Accepted 2026-06-11)
+- [ADR-197: Coordination-Home Checkout Owns Shared Registry State](197-coordination-home-owns-registry-state.md)
+  (exactly one checkout — the Director-owned coordination home — owns all shared
+  collaboration-registry state; implementer worktrees produce pure-diff feature
+  PRs by construction; cross-PR registry conflicts resolve to main's version,
+  never the branch's; trial-validated with five concurrent-window PRs and zero
+  registry conflicts; Accepted 2026-06-11)
+- [ADR-198: Naming-Schema Versioning with a Digest-Pinned Registry](198-naming-schema-versioning-digest-pinned-registry.md)
+  (agent display names derive through registered, versioned schema eras with
+  digest-pinned wordlist material — edits without a version bump fail the
+  tree, so material freezes at activation; old eras stay registered and
+  reproducible; the identity tuple records optional `naming_schema_version`
+  provenance with absence reading as v1; the UUID v5 id and
+  `session_id_prefix` are deliberately untouched; the active v2 era renders
+  noun–verb–noun micro-sentences with a lowercase middle word; Accepted
+  2026-06-11)
+- [ADR-199: Comms-Event Rotation Phenotype — Class-Tiered Archive-Move](199-comms-event-rotation-phenotype.md)
+  (the repo phenotype of PDR-094: comms events rotate by a class-tiered,
+  age-triggered, archive-move curator pass — heartbeats shortest-retention after
+  an aggregate is extracted, research-precious held until graduated; cited-event
+  provenance survives via inline excerpts / a tracked digest enforced by a
+  pre-archive-move check; the watcher-health justification is honestly a
+  hypothesis, the windows hygiene targets; design Accepted 2026-06-13, execution
+  deferred to WS7)
+- [ADR-200: Intent as a living idea knowledge-graph — graph-authoritative, dual embodiment, frontmatter connection](200-intent-as-a-living-idea-graph.md)
+  (ideas are the fundamental unit of intent; the idea knowledge-graph is the authoritative source of truth,
+  the human documents its co-equal embodiment connected by frontmatter typed-edges; built as a domain
+  instance over graph-core; two drift mechanisms; the planning-estate rewrite; Accepted 2026-06-22)
+- [ADR-201: External systems as evidence edges — integrating external state into the idea knowledge-graph](201-external-systems-evidence-integration.md)
+  (external systems are typed evidence edges and the graph stays canonical; direction invariant — intent
+  projects outward, services report back; capability modes + supervision + no-PII-in-VCS; unlocks the full
+  self-measuring-delivery value on top of the substrate; Proposed 2026-06-22, gated on the substrate)
+- [ADR-202: Orientation as one intent-discerning lens](202-orientation-as-one-intent-discerning-lens.md)
+  (the repo-bound orientation surface is one lens, not mode-specific skills; delivery mode — specific answer /
+  area overview / guided tour — is a discerned variable, not a skill boundary; setup is a distinct
+  side-effecting capability, never an information mode; PDR-112 seam and primer unchanged, PDR-112 not
+  amended; Accepted 2026-06-23)
 
 ## Key Architectural Decisions
 
@@ -308,6 +366,7 @@ For understanding our API integration approach:
 - **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
 - **[ADR-141](141-mcp-apps-standard-primary.md)** - MCP Apps standard as the only UI surface (supersedes ChatGPT-specific coupling)
 - **[ADR-157](157-multi-source-open-education-integration.md)** - Proposed multi-source open education knowledge integration across API, ontology, EEF, MCP, and graph surfaces
+- **[ADR-194](194-teacher-as-expert-product-boundary.md)** - Teacher-as-expert product boundary: surfaces inform teachers and may present evidenced options and trade-offs, but never make the pedagogical decision that belongs to the teacher; the teacher is the pedagogical expert and the authority on what should happen; the product principle that ADR-191 is the engineering corollary of
 - **[ADR-066](066-sdk-response-caching.md)** - SDK response caching with Redis
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
@@ -443,6 +502,12 @@ Include migration impact if replacing a prior approach.}
 
 - **Proposed**: under discussion, not yet binding.
 - **Accepted**: binding. Code, rules, and quality gates must comply.
+  _Decided is not the same as validated_: an Accepted ADR may still have
+  deferred implementation or a `Candidate` paired-PDR. Record that maturity gap
+  explicitly (e.g. "acceptance gated on Phase N", a Future Work section) rather
+  than silently reading Accepted as fully shipped — and do not downgrade a
+  decided ADR to Proposed merely because implementation lags. Validation
+  maturity is a separate, explicitly-recorded axis, not a status downgrade.
 - **Superseded**: replaced by a newer ADR. Keep the file; update status
   and link to the successor.
 - **Deprecated**: no longer applicable (e.g. workspace removed).

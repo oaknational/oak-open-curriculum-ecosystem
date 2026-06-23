@@ -124,7 +124,7 @@ export const getLessonsQuiz = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Quiz questions by lesson\n\nThe endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Quiz questions for a lesson\n\nUse when you have a lesson slug and need its starter and exit quiz questions with correct answers marked. Returns two arrays, starterQuiz and exitQuiz; each question includes the prompt, the answers (with correct ones flagged), and which answers are distractors. Not for: quiz questions across a sequence (GET /sequences/{sequence}/questions); quiz questions in one programme (GET /sequences/{sequence}/programmes/{programme}/questions); across a key stage + subject (GET /key-stages/{keyStage}/subject/{subject}/questions); lesson metadata or assets (GET /lessons/{lesson}/summary or GET /lessons/{lesson}/assets).\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

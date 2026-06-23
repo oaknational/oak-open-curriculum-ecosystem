@@ -113,7 +113,7 @@ export const getLessonsTranscript = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Lesson transcript\n\nThis tool returns the video transcript and video captions file for a given lesson.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Lesson video transcript\n\nUse when you have a lesson slug and need the video transcript — for accessibility, captioning, or text analysis. Returns the transcript as an array of sentences plus a raw WebVTT captions file (vtt) suitable for a <track> element. Not for: searching across transcripts (GET /search/transcripts); the video file itself (GET /lessons/{lesson}/assets/{type} with type=video); lesson metadata (GET /lessons/{lesson}/summary).\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

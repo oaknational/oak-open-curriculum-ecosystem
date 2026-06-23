@@ -11,6 +11,8 @@ metacognition prompt ratified in
 PDR-029 and the rush-impulse structural cue adopted in ADR-172.
 The directive itself lives at
 [`../../directives/metacognition.md`](../../directives/metacognition.md).
+The outward pair — structuring a problem, argument, or decision rather than reflecting on the
+thinker — is [`reason`](../reason/SKILL-CANONICAL.md).
 
 ## Workflow
 

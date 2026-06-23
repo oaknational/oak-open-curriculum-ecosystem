@@ -69,9 +69,13 @@ Monitor:
 
 1. Stop the prior Bash background watcher first — two redundant
    streams duplicate notifications and waste cache.
-2. Arm Monitor with the same command, adding
-   `grep --line-buffered <pattern>` for the meaningful lines so the
-   wake notifications are signal rather than every-line noise.
+2. Arm Monitor with the same command. Add a `grep --line-buffered
+   <pattern>` ONLY if the source emits genuine every-line noise — and
+   then anchor the pattern on the source's ACTUAL line format and test it
+   against one real event before relying on it (a wrong anchor silently
+   swallows everything; see §Reference Shape). A source that already
+   emits only meaningful lines (e.g. the comms-watch CLI) needs no
+   filter — pipe-less is correct.
 3. Verify the first new event after arming produces a
    `<task-notification>`; if it does not, the filter is wrong or
    the source is not flushing line-buffered.
@@ -80,13 +84,26 @@ Monitor:
 
 ```bash
 pnpm agent-tools:collaboration-state -- comms watch \
-  --self-prefix "$SESSION_PREFIX" --all-channels 2>&1 \
-  | grep --line-buffered -E '^\[' || true
+  --comms-dir .agent/state/collaboration/comms \
+  --seen-file ".agent/state/collaboration/comms-seen/<agent-name>.json" \
+  --platform <claude|codex|cursor> --model <model-id> 2>&1
 ```
 
-Run via Monitor `persistent: true`. The `grep --line-buffered`
-ensures each matched line emits immediately rather than buffering
-inside the pipe.
+Run via Monitor `persistent: true`, **pipe-less** — the `comms watch`
+CLI already self-excludes and emits only relevant events, so no grep
+filter is needed or wanted. Each emitted event is a multi-line block
+whose **first line is `--- NEW [<CHANNEL>] EVENT ---`**: the channel tag
+sits MID-line, after the `--- NEW` prefix, NOT as a leading `[`. A naive
+`grep -E '^\['` filter therefore matches nothing and **silently swallows
+every event** while the watcher process stays healthy (drain + markSeen
+advance, heartbeat fresh) — a silent blinding (worked instance
+2026-06-21, owner-caught after ~50 min / ~10 missed events). If you must
+filter for noise, anchor on the real emit
+(`grep --line-buffered -E '^--- NEW|WATCHER ERROR|kind=timeout'`) and
+**test it against one real held-back event first** (the
+`comms-all-channels-watcher.md` "test your filter against one event of
+each shape" discipline). The canonical invocation lives in
+[`comms-all-channels-watcher.md`](comms-all-channels-watcher.md).
 
 ## Why This Is a Rule, Not a Preference
 

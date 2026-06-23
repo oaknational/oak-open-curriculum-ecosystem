@@ -100,7 +100,7 @@ export const getThreads = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Threads\n\nThis tool returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "All threads\n\nUse when you want the catalogue of every thread. A thread is an attribute on a unit that groups units across the curriculum to build a common body of knowledge — making vertical connections across year groups. Returns all threads with published units, sorted alphabetically — each with title, slug, and unitCount. Not for: the units inside a thread (GET /threads/{threadSlug}/units).\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

@@ -11,8 +11,8 @@
  * {@link JsonDatasetDescriptor}. This writer owns only the mechanical
  * concern: create the directory and write the three files.
  *
- * @see write-json-graph-file.ts for the prior-knowledge-graph-specific
- * descriptor that proved this pattern.
+ * @see write-json-graph-corpus-file.ts for the graph-corpus descriptor
+ * that uses this pattern.
  */
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';

@@ -32,38 +32,6 @@ Examples:
   pnpm benchmark -i units            # Units only
 `;
 
-async function main(): Promise<void> {
-  const { values } = parseArgs({
-    options: {
-      index: { type: 'string', short: 'i' },
-      help: { type: 'boolean', short: 'h', default: false },
-    },
-    strict: true,
-  });
-
-  if (values.help) {
-    console.log(CLI_HELP);
-    return;
-  }
-
-  const indexFilter = values.index;
-  if (indexFilter !== undefined && !isValidIndex(indexFilter)) {
-    throw new Error(`Invalid index "${indexFilter}". Valid indexes: ${VALID_INDEXES.join(', ')}`);
-  }
-
-  const indexesToRun = indexFilter ? [indexFilter] : [...VALID_INDEXES];
-
-  console.log(`\nBenchmark: ${indexesToRun.join(', ')}`);
-  console.log('='.repeat(72));
-
-  const results: IndexResult[] = [];
-  for (const index of indexesToRun) {
-    results.push(await runIndexBenchmark(index));
-  }
-
-  printResults(results);
-}
-
 async function runIndexBenchmark(index: string): Promise<IndexResult> {
   switch (index) {
     case 'lessons':
@@ -79,7 +47,36 @@ async function runIndexBenchmark(index: string): Promise<IndexResult> {
   }
 }
 
-main().catch((error: unknown) => {
+try {
+  const { values } = parseArgs({
+    options: {
+      index: { type: 'string', short: 'i' },
+      help: { type: 'boolean', short: 'h', default: false },
+    },
+    strict: true,
+  });
+
+  if (values.help) {
+    console.log(CLI_HELP);
+  } else {
+    const indexFilter = values.index;
+    if (indexFilter !== undefined && !isValidIndex(indexFilter)) {
+      throw new Error(`Invalid index "${indexFilter}". Valid indexes: ${VALID_INDEXES.join(', ')}`);
+    }
+
+    const indexesToRun = indexFilter ? [indexFilter] : [...VALID_INDEXES];
+
+    console.log(`\nBenchmark: ${indexesToRun.join(', ')}`);
+    console.log('='.repeat(72));
+
+    const results: IndexResult[] = [];
+    for (const index of indexesToRun) {
+      results.push(await runIndexBenchmark(index));
+    }
+
+    printResults(results);
+  }
+} catch (error: unknown) {
   console.error('Benchmark failed:', error);
   process.exit(1);
-});
+}

@@ -84,7 +84,7 @@ async function buildUnitsWithSummaries(
 ): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: BulkOperations }> {
   const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
   ingestLogger.debug('Building unit documents', { subject, keyStage: ks });
-  const result = await buildUnitDocuments(
+  const result = await buildUnitDocuments({
     client,
     units,
     subject,
@@ -93,7 +93,7 @@ async function buildUnitsWithSummaries(
     unitContextMap,
     dataIntegrityReport,
     lessonsByUnit,
-  );
+  });
   ingestLogger.debug('Built unit docs', {
     subject,
     keyStage: ks,

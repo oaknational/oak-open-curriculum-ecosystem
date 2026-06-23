@@ -20,7 +20,7 @@ merge_class: append-only-narrative
 - Amended `start-right-team` SKILL §3 — `curator` added to role-label list with boundary-vs-`consolidator` clarification.
 - Migrated three in-buffer curation logs out of `pending-graduations.md` by reference; pending-graduations is now genuinely buffer-shaped post-migration (residue remains — see carry-forward).
 - Sidebar opened with marshal Mistbound on landing path + commit cadence + timing; Mistbound accepted all three answers (marshal-route, 3-commit dependency-order, tree-green NOW); landed cleanly in 4 commits ending at `9d4f8204` (`097882a2`, `c04c996e`, `89124cd8`, `9d4f8204` hygiene).
-- Dispatched a sub-agent (Breezy persona, general-purpose) for the deep-curation pass on napkin / old platform plans / Claude per-user memory / `.remember/`. Returned a 339-line survey at `/tmp/breezy-deep-curation-survey-2026-05-24.md` — 10 routing candidates, 5 home-gaps, 5 confirmed structural defects, 6 cross-surface observations, 5 stale items, 7 carry-forward.
+- Dispatched a sub-agent (Breezy persona, general-purpose) for the deep-curation pass on napkin / old platform plans / Claude per-user memory / `.remember/`. Returned a 339-line survey at `<scratch>/breezy-deep-curation-survey-2026-05-24.md` — 10 routing candidates, 5 home-gaps, 5 confirmed structural defects, 6 cross-surface observations, 5 stale items, 7 carry-forward.
 - Owner-directed handover of the Knowledge Curator role to Breezy Anchoring Rudder (top-level peer agent, distinct from the sub-agent of the same persona). Full role transfer (not director/executor split); Breezy accepted, committed to §2.1 `important-state-not-in-temp-files` rule landing as cycle #1, requested copy of survey to durable in-repo location.
 - Copied survey to `.agent/state/collaboration/handoffs/curator-role-handoff-2026-05-24-vining-to-breezy.md` (339L, 32KB) as durable substrate.
 
@@ -61,7 +61,7 @@ merge_class: append-only-narrative
 - *"The hygiene edit belongs to the commit marshal"* — owner reinforcement of marshal authority on the hygiene-commit-edit question.
 - *"carefully and thoughtfully process the napkin, old platform plans, platform memories, and the .remember directory. They are not to worry about fitness limits while doing this, knowledge curation matters, numerical limits are secondary signals"* — sub-agent dispatch direction.
 - *"begin the handover of the Knowledge Curator role to Breezy Anchoring Rudder, then prepare yourself for compaction"* — full role transfer + session-handoff direction.
-- *"as part of the handover make sure that /tmp/breezy-deep-curation-survey-2026-05-24.md is fully understood and will be acted on"* — absorption-confirmation requirement on the survey.
+- *"as part of the handover make sure that <scratch>/breezy-deep-curation-survey-2026-05-24.md is fully understood and will be acted on"* — absorption-confirmation requirement on the survey.
 
 ## 2026-05-24 — Lanternlit Listening Dusk / claude / claude-opus-4-7 / `78683a` — R0→R1.5 program-plan refinement chain; PDR/ADR portability distinction received; sidebar model first deployment
 
@@ -107,7 +107,7 @@ merge_class: append-only-narrative
 - Sidebar: `.agent/state/collaboration/sidebars/program-plan-landing-cadence-2026-05-24-mistbound-lanternlit.md` (response appended; resolution pending Mistbound marshal-success)
 - Bundled R1.5 broadcast: comms event `dd166522-7edf-4770-87ca-5ea80b29372d`
 - My claim `8374e240` stays OPEN through marshal cycle; closes on marshal-success per sidebar contract
-- Reviewer transcript IDs captured in §Workstream Roll-up (WS-6 references `/tmp/charcoal-pdr077-postresume-fanout-synthesis.md` for R3 substrate)
+- Reviewer transcript IDs captured in §Workstream Roll-up (WS-6 references `<scratch>/charcoal-pdr077-postresume-fanout-synthesis.md` for R3 substrate)
 - PDR-080 landed `fc69313c` + phenotype plan `66121bde` during my session; R1.6 absorption pending
 - Authoring queue for next session: PDR-078 (SHA-free) + ADR-186 (SHAs OK) + ADR-for-WS-8 + PDR-079 + thin SKILL §0.5 collapse + reciprocal §Related amendments to PDR-027/063/064. Substance fully specified in plan body; ready for next-session pickup.
 
@@ -442,7 +442,7 @@ Working topology during my window:
 Owner brief on `/oak-start-right-team` invocation explicitly asked for
 notes on what works and doesn't in the current topology. Above tracks are
 the substance; transient working notes also accumulated at
-`/tmp/secret-creeping-moth-topology-notes.md`. The substantive learnings
+`<scratch>/secret-creeping-moth-topology-notes.md`. The substantive learnings
 are absorbed into this napkin entry; /tmp file will lapse with the
 session.
 
@@ -788,10 +788,10 @@ named in `start-right-team`. The substantive differences I observed:
 Stormbound Floating Wing's closeout broadcast at 06:25:41Z posted another
 agent's substance (Stormbound Kiting Squall's Cycle 1.1 closeout from
 2026-05-22 16:26Z) under Floating Wing's identity tuple. Root cause:
-`/tmp/stormbound-closeout.md` was a stale path from the prior session.
+`<scratch>/stormbound-closeout.md` was a stale path from the prior session.
 Write tool refused with "File has not been read yet"; parallel
 `comms append --body-file` proceeded with the stale file. **Cure**:
-tempfile paths under multi-session shared `/tmp/` MUST be session-
+tempfile paths under multi-session shared `<scratch>/` MUST be session-
 prefixed. The Write refusal is a cross-session-collision signal, not a
 workflow inconvenience.
 
@@ -1005,10 +1005,10 @@ the worked instance is this pass itself.
 
 ## 2026-05-22 → 2026-05-23 — Stormbound Floating Wing arriving-agent failure-mode session / claude / claude-opus-4-7 / `52f264`
 
-### Observation 1: tempfile-path collision across sessions in shared `/tmp/` is a new sub-class of authorial-bundle-integrity failure
+### Observation 1: tempfile-path collision across sessions in shared `<scratch>/` is a new sub-class of authorial-bundle-integrity failure
 
 **Observation**: drafted my closeout body via `Write` to
-`/tmp/stormbound-closeout.md`. The path pre-existed from a prior
+`<scratch>/stormbound-closeout.md`. The path pre-existed from a prior
 session (Stormbound Kiting Squall / `ddbea2`, dated May 22 16:26).
 The Write tool refused with "File has not been read yet — read it
 first before writing." I made the parallel `comms append
@@ -1018,20 +1018,20 @@ fe9a1fb52dbe`) carried Stormbound Kiting Squall's Cycle 1.1 closeout
 text under Stormbound Floating Wing's identity tuple. Cured by a
 follow-up correction event citing the bad event uuid and inlining
 the correct closeout substance under a session-prefixed tempfile
-path (`/tmp/52f264-stormbound-closeout-corrected.md`).
+path (`<scratch>/52f264-stormbound-closeout-corrected.md`).
 
 **Diagnosis**: this is a new sub-class of the authorial-bundle-
 integrity failure-class SVW flagged at 23:09:17Z (3rd-instance flag
 on shared-file line-scope drift). The Velvet `e1b9561e` incident
 (2026-05-22) was about `.git/COMMIT_EDITMSG` shared single-writer
 state under concurrent commits; this incident is about *unfenced
-tempfile paths in shared `/tmp/` namespace across sessions over
+tempfile paths in shared `<scratch>/` namespace across sessions over
 time*. Six-character session prefixes are too short to make
 collisions structurally impossible; under a multi-day window the
 same agent-name-derived path will eventually collide.
 
-**Cure**: tempfile paths under multi-session shared `/tmp/` MUST be
-session-prefixed (e.g. `/tmp/<id>-<purpose>.md`). The Write tool's
+**Cure**: tempfile paths under multi-session shared `<scratch>/` MUST be
+session-prefixed (e.g. `<scratch>/<id>-<purpose>.md`). The Write tool's
 "read before overwrite" refusal is a SIGNAL of cross-session
 collision, not a workflow inconvenience to bypass with parallel
 calls. Stronger structural cure named below under Observation 2.
@@ -1236,7 +1236,7 @@ WS4.1 commit-message via `.git/COMMIT_EDITMSG` shared-write; Sparking
 `eef-evidence-corpus.plan.md`). `--<intent.files>` pathspec protects
 file-membership but not line-level scope within a shared file.
 Team-emergent cure adopted: intent-scoped message files at
-`/tmp/<agent>-<intent>-msg.txt`, never `.git/COMMIT_EDITMSG`. Worth
+`<scratch>/<agent>-<intent>-msg.txt`, never `.git/COMMIT_EDITMSG`. Worth
 graduating to the commit-queue CLI as native `--message-file` per-intent
 default path.
 
@@ -1309,7 +1309,7 @@ CRITICAL→SOFT; archive bodies preserved verbatim).
 ### `.git/COMMIT_EDITMSG` is single-writer shared state under concurrent commits
 
 Surfaced as incident at commit `e1b9561e`: my drafted message in
-`/tmp/commit-msg-draft-3.txt` was `cp`'d to `.git/COMMIT_EDITMSG`,
+`<scratch>/commit-msg-draft-3.txt` was `cp`'d to `.git/COMMIT_EDITMSG`,
 then overwritten by Lunar Illuminating Eclipse during the 1m33s
 pre-commit window between my `cp` and the commit-queue's
 `git commit -F .git/COMMIT_EDITMSG --` invocation. The commit-queue's
@@ -1319,7 +1319,7 @@ The landed commit carries my 4-file substance but Lunar's drafted
 WS4.1 scaffold message text.
 
 **Cure shapes named in incident broadcast `230f3200`**: (1)
-intent-scoped message file paths (e.g. `/tmp/<intent>.msg`); (2)
+intent-scoped message file paths (e.g. `<scratch>/<intent>.msg`); (2)
 inline `-m` to capture message in argv at invocation; (3) lockfile
 around the cp-and-commit pair.
 
@@ -1328,7 +1328,7 @@ Foamy on WS4.4 amendment (`bf7fa545`), SVW on t9 (`acd2a3f3`),
 Sparking on t20 (`e1d76c54`) and t13a (`745fe919`). Three
 independent adoptions in the same session. Graduation candidate
 target: commit-queue CLI native support for per-intent message files
-(architectural-excellence shape vs the per-agent `/tmp/<x>.msg`
+(architectural-excellence shape vs the per-agent `<scratch>/<x>.msg`
 workaround currently in use).
 
 ### Whole-tree pre-commit + concurrent in-flight peer work = predictable contention (4 instances in one session)
@@ -2185,7 +2185,7 @@ Director Scorched's first response to my Playwright classification was to surfac
 
 **Observation**: the loop-exit-criteria 5-idle-loops standing rule fired correctly at 17:51:45Z (5 consecutive IDLE heartbeats post-credit-reset with no observable Director or Foreman). I stood down cleanly: final heartbeat + closeout broadcast + heartbeat cron `6077338f` stopped. **Twelve minutes later** at 18:03:24Z, Director Twilit ST resumed and absorbed my pre-stand-down synthesis (the 4-way fan-out on tick #1 at directed event `0c38a04a`) — naming my 6 findings as load-bearing substantive defects Director would not have caught self-reviewing.
 
-**Significance**: the loop-exit-rule did NOT degrade substrate value. My synthesis sat in the comms stream past stand-down; Director resumed and absorbed it cleanly. The rule's job (stop wasting cycles when no team activity is observable) was discharged correctly; the substrate-durability (synthesis in directed event + paste-ready blocks in /tmp/) carried the work forward past my stand-down. The two rules — loop-exit + substrate-write discipline (PDR-075) — compose without conflict.
+**Significance**: the loop-exit-rule did NOT degrade substrate value. My synthesis sat in the comms stream past stand-down; Director resumed and absorbed it cleanly. The rule's job (stop wasting cycles when no team activity is observable) was discharged correctly; the substrate-durability (synthesis in directed event + paste-ready blocks in <scratch>/) carried the work forward past my stand-down. The two rules — loop-exit + substrate-write discipline (PDR-075) — compose without conflict.
 
 **Sub-observation**: Director Twilit ST resumed AFTER my 5-idle-loops threshold but BEFORE compaction window closed. This is the substrate-pointer-pattern asymmetric direction (says-closed-when-still-available-if-asked) firing on my OWN closeout broadcast — Director treated my closeout as a pointer; the actual state was still-substrate-durable-if-routing-arrived. Director made the call correctly: absorbed my pre-stand-down synthesis without trying to re-route me to fresh work.
 
@@ -2230,7 +2230,7 @@ Three additional worked instances this arc, including one new variant:
 
 - **13th instance — NEW variant**: cron-prompt-template-as-substrate-pointer during cron execution. Ferny's pause-absorption-delay: 12 hours of cron-driven heartbeat ticks fired through the owner pause window without absorbing "pause" as an owner-input turn, because each cron firing presented the same prompt template (rather than current owner state). Pause only landed when the NEXT genuine owner-turn arrived. Cure-shape candidates: cron template must include "first read latest owner turn before composing heartbeat" + cron events should not be treated as owner-input by the agent's own classifier.
 
-Pattern v3 condition list now has 4 conditions (Wilma's 3 + new variant) + 3+ new worked instances this session. Ferny holds the v3 outline at `/tmp/ferny-pattern-v3-outline.md`; promotion to PDR remains deferred per owner.
+Pattern v3 condition list now has 4 conditions (Wilma's 3 + new variant) + 3+ new worked instances this session. Ferny holds the v3 outline at `<scratch>/ferny-pattern-v3-outline.md`; promotion to PDR remains deferred per owner.
 
 ### Surprise 3 — pre-stage verification credit-preservation across role transfers
 
@@ -2315,7 +2315,7 @@ Author paused mid-uptake on Work Item B (WS-8 C2+C5+C4 ratification record + PDR
 | architecture-expert-wilma | SAFE-WITH-CONDITIONS (5 failure modes) | `a64d82df5d94c44ca` |
 | docs-adr-expert | DOCS-DRIFT-MEDIUM (5 findings inc. PDR-079 recommendation) | `a8f083c2f9986abbc` |
 
-Full synthesis substrate at `.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md` (moved from `/tmp/` per owner rule 2026-05-24 — see Capture D below).
+Full synthesis substrate at `.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md` (moved from `<scratch>/` per owner rule 2026-05-24 — see Capture D below).
 
 **Source substrate**: Charcoal's verdict matrix at comms event `1e2c83eb`; owner verdict at Seaworthy tick #2 broadcast 19:28:47Z.
 
@@ -2339,15 +2339,15 @@ Mistbound's Surprise 2 12th instance briefly names this event. Ferny-perspective
 
 **Owner-stated rule (direct quote)**: *"important state and context must never be left in a temp file long-term, using it as a buffer is fine, but leaving it there for reference is not okay, everything of importance stays in the repo"*.
 
-**Distinction**: `/tmp/` as compose-buffer (write → emit broadcast or commit → done) is correct. `/tmp/` as durable-reference (a `.agent/` surface points at `/tmp/` for ongoing substrate) is the violation.
+**Distinction**: `<scratch>/` as compose-buffer (write → emit broadcast or commit → done) is correct. `<scratch>/` as durable-reference (a `.agent/` surface points at `<scratch>/` for ongoing substrate) is the violation.
 
-**Applied to Ferny window 2**: my Capture B pointer at `/tmp/ferny-ws8-reviewer-synthesis-window2.md` was the violation — a napkin entry referenced `/tmp/` for ongoing follow-on-author substrate. Cured this turn: synthesis content moved to `.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md`; Capture B pointer updated. Other `/tmp/` files this session (team-start broadcast body, directed event body, pause-standby body, closeout body, M1 integration flag body) were buffer-only — emitted as comms events and never referenced from durable surfaces; those are within the rule.
+**Applied to Ferny window 2**: my Capture B pointer at `<scratch>/ferny-ws8-reviewer-synthesis-window2.md` was the violation — a napkin entry referenced `<scratch>/` for ongoing follow-on-author substrate. Cured this turn: synthesis content moved to `.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md`; Capture B pointer updated. Other `<scratch>/` files this session (team-start broadcast body, directed event body, pause-standby body, closeout body, M1 integration flag body) were buffer-only — emitted as comms events and never referenced from durable surfaces; those are within the rule.
 
-**Earlier session referenced /tmp/ in closeout broadcast `a596f140` and M1 integration flag `013de4d4`** — those references are now stale-by-rule. Comms events are immutable; correction-broadcast naming the new repo location follows this Capture.
+**Earlier session referenced <scratch>/ in closeout broadcast `a596f140` and M1 integration flag `013de4d4`** — those references are now stale-by-rule. Comms events are immutable; correction-broadcast naming the new repo location follows this Capture.
 
 **Graduation candidate**: this rule is concrete enough for direct enforcement; suggest graduation to `.agent/rules/important-state-not-in-temp-files.md` at next consolidation-docs cycle. The rule's existing-language frame: temp files are buffers, not references; durable substrate stays in repo.
 
-**Composition**: pairs with `.agent/rules/no-machine-local-paths.md` (no machine-local paths in repo content) — both protect substrate from non-repo references. Composes with PDR-014 capture surface architecture (capture → distil → graduate → enforce); `/tmp/` is a capture buffer, not a long-term capture surface.
+**Composition**: pairs with `.agent/rules/no-machine-local-paths.md` (no machine-local paths in repo content) — both protect substrate from non-repo references. Composes with PDR-014 capture surface architecture (capture → distil → graduate → enforce); `<scratch>/` is a capture buffer, not a long-term capture surface.
 
 **Source plane**: `operational` → graduation candidate (rule layer).
 

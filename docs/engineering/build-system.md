@@ -260,16 +260,39 @@ sdk-codegen ──┐ (package-specific override on sdk-codegen#build only)
 
 ### Cached tasks (fast on repeat runs)
 
-| Task          | Cached | Notes                                 |
-| ------------- | ------ | ------------------------------------- |
-| `build`       | ✅     | Rebuilds only when inputs change      |
-| `sdk-codegen` | ✅     | Regenerates only when schema changes  |
-| `type-check`  | ✅     | Re-checks only when source changes    |
-| `lint`        | ✅     | Re-lints only when source changes     |
-| `test`        | ✅     | Re-runs only when source/tests change |
-| `test:e2e`    | ✅     | Re-runs only when e2e tests change    |
-| `test:ui`     | ✅     | Re-runs only when UI tests change     |
-| `doc-gen`     | ✅     | Regenerates only when source changes  |
+| Task          | Cached | Notes                                           |
+| ------------- | ------ | ----------------------------------------------- |
+| `build`       | ✅     | Rebuilds only when inputs change                |
+| `sdk-codegen` | ✅     | Regenerates only when _committed_ inputs change |
+| `type-check`  | ✅     | Re-checks only when source changes              |
+| `lint`        | ✅     | Re-lints only when source changes               |
+| `test`        | ✅     | Re-runs only when source/tests change           |
+| `test:e2e`    | ✅     | Re-runs only when e2e tests change              |
+| `test:ui`     | ✅     | Re-runs only when UI tests change               |
+| `doc-gen`     | ✅     | Regenerates only when source changes            |
+
+### A task's declared outputs must cover its full write-set
+
+Turbo restores exactly the declared `outputs` globs on a cache replay. When a
+task script writes a file outside those globs, a replay restores part of the
+task's effect and silently skips the rest, leaving an incoherent tree.
+Observed 2026-06-12: `sdk-codegen` wrote both `src/types/generated/**` and
+`schema-cache/**`, but declared only the former — a replay restored fresh
+generated artefacts beside a stale schema cache. When adding or changing a
+task, enumerate every path its script writes (read the script, not the task
+name) and declare them all.
+
+### `sdk-codegen` is non-hermetic by design
+
+In online mode the `sdk-codegen` task fetches the live upstream OpenAPI spec,
+which is not (and cannot be) a turbo input. A cache hit therefore proves the
+_committed_ inputs are unchanged, not that the generated artefacts match the
+live upstream API. This trade-off is deliberate: `cache: false` would push a
+network fetch into every `build`/`test`/`lint` chain and break offline work.
+When deliberately aligning with an upstream spec change, bypass turbo with
+`pnpm --filter @oaknational/sdk-codegen sdk-codegen` and confirm the schema
+cache's `info.version` moved. The full runbook lives in the
+[oak-sdk-codegen README](../../packages/sdks/oak-sdk-codegen/README.md#responding-to-upstream-spec-changes).
 
 ### Uncached tasks (always run)
 

@@ -89,7 +89,7 @@ Root cause:
 
 Evidence:
 
-- Trace files under `/tmp/oak-onboarding-t5fls0/apps/oak-curriculum-mcp-streamable-http/test-results/widget-rendering-*/trace.zip`
+- Trace files under `<scratch>/oak-onboarding-t5fls0/apps/oak-curriculum-mcp-streamable-http/test-results/widget-rendering-*/trace.zip`
 - Extracted `pageError` events consistently show the same `ReferenceError`.
 
 Impact:

@@ -47,11 +47,11 @@ todos:
     status: completed
     depends_on: [d2-typed-raw-corpus-foundation, d4-graph-capability-contract]
   - id: d6-mcp-composition-eef-surface
-    content: "Build the EEF-specific MCP composition module in the curriculum consumer layer and register the ratified EEF tool/resource/prompt surface behind OAK_CURRICULUM_MCP_EEF_ENABLED with structuredContent-only tool results. Do not extract a generic corpus-tool factory until a real second consumer exists. The tool INPUT schema is a `z.ZodRawShape` (a raw shape like the family's aggregated tools — it fits the existing carrier with no widening), derived from a named subset/schema-builder value typed from the graph-native EEF view (a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; not a direct raw-data transform, hand-maintained parallel shape, or plan-authored vocabulary); use `satisfies` tying it to the input payload type. The EEF tool returns `structuredContent` (the D5 envelope) with NO MCP `outputSchema` (revised 2026-06-07, owner-ratified 2026-06-06; the universal output-schema work — including EEF's eventual output schema — is `output-schemas-for-mcp-tools.plan.md`'s). Error returns use isError:true so the SDK skips output validation. Home the tool's handler SDK-side as an `AGGREGATED_HANDLERS` entry (`oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`) exactly like `get-misconception-graph`/`get-prior-knowledge-graph` — `oak-curriculum-sdk` takes a runtime `graph-corpus-sdk` dependency (acyclic; the SDK is its first consumer) — so the tool registers AND executes through the shared universal-tools path with uniform auth (`securitySchemes`): no bespoke app-side handler, no registration-loop discriminant, no bypass, no special auth status. EEF is the first graph tool on the new substrate; the established `AGGREGATED_HANDLERS` execution surface (not just the registration config) is where the cycle plan ([`eef-d6-execution.plan.md`](eef-d6-execution.plan.md)) locates it. Implement the EEF interpretation resource/template and update the user-facing EEF prompt from the ratified D3-D5 graph surface. Registration is only for real implemented surfaces: every registered tool, resource, and prompt has real graph-derived behaviour and tests, or it is absent. The module must not import MCP types into substrate packages (ADR-179) - an explicit acceptance check. Preserve flag co-gating of tool, resource, and prompt. D6 is not complete until the single-Zod-call graph-subset rule is implemented exactly; failure blocks D6 and requires correction of the D3/D4 contract."
+    content: "Build the EEF-specific MCP composition module in the curriculum consumer layer and register the ratified EEF tool/resource/prompt surface behind OAK_CURRICULUM_MCP_EEF_ENABLED with structuredContent-only tool results. Do not extract a generic corpus-tool factory until a real second consumer exists. The tool INPUT schema is a `z.ZodRawShape` (a raw shape like the family's aggregated tools — it fits the existing carrier with no widening), derived from a named subset/schema-builder value typed from the graph-native EEF view (a deterministic, type-strict projection of graph form, with graph form itself derived from the raw EEF data; not a direct raw-data transform, hand-maintained parallel shape, or plan-authored vocabulary); use `satisfies` tying it to the input payload type. The EEF tool returns `structuredContent` (the D5 envelope) with NO MCP `outputSchema` (revised 2026-06-07, owner-ratified 2026-06-06; the universal output-schema work — including EEF's eventual output schema — is `output-schemas-for-mcp-tools.plan.md`'s). Error returns use isError:true so the SDK skips output validation. Home the tool's handler SDK-side as an `AGGREGATED_HANDLERS` entry (`oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`) exactly like `get-misconception-graph`/`get-prior-knowledge-graph` — `oak-curriculum-sdk` takes a runtime `graph-corpus-sdk` dependency (acyclic; the SDK is its first consumer) — so the tool registers AND executes through the shared universal-tools path with uniform auth (`securitySchemes`): no bespoke app-side handler, no registration-loop discriminant, no bypass, no special auth status. EEF is the first graph tool on the new substrate; the established `AGGREGATED_HANDLERS` execution surface (not just the registration config) is where the cycle plan ([`eef-d6-execution.plan.md`](../../../../plans-old-archive/sector-engagement/eef/archive/eef-d6-execution.plan.md), completed/archived) locates it. Implement the EEF interpretation resource/template and update the user-facing EEF prompt from the ratified D3-D5 graph surface. Registration is only for real implemented surfaces: every registered tool, resource, and prompt has real graph-derived behaviour and tests, or it is absent. The module must not import MCP types into substrate packages (ADR-179) - an explicit acceptance check. Preserve flag co-gating of tool, resource, and prompt. D6 is not complete until the single-Zod-call graph-subset rule is implemented exactly; failure blocks D6 and requires correction of the D3/D4 contract. [Superseded in part 2026-06-11 (owner): the structuredContent-only result shape is reversed — get-eef-evidence now emits the family dual response shape; see the §Ratified Decisions supersession note.]"
     status: completed
     depends_on: [d4-graph-capability-contract, d5-graph-construction-methods]
   - id: d7-teacher-value-round-trip
-    content: "Ship the EEF surface live and prove the Sunday-night cover-lesson value path through MCP end to end. SHIP LIVE (go-live): move the OAK_CURRICULUM_MCP_EEF_ENABLED flag from pre-release (defaults false; only an explicit true enables it) to release-pre-proof (defaults true; only an explicit false disables it — the kill-switch) by changing the resolution in apps/oak-curriculum-mcp-streamable-http (env.ts flag doc + runtime-config-from-validated-env.ts) so an unset env var resolves runtimeConfig.eefEnabled to true, making merging the PR make the feature live in deployed environments with no separate env step. Do NOT remove the flag — removal is the release-post-proof stage, after the delivered-value proof. Prove it: a test asserts the merged default (env var unset) registers the tool/resource/prompt and the tool executes, and the kill-switch (=false) removes all three. VALUE PATH (potentially-valuable proxy, NOT the full delivered-value proof): an agent uses Oak curriculum tools plus the EEF query/fetch tool and interpretation resource/template to assemble evidence-enhanced lesson material with EEF caveats and provenance preserved, the user-facing prompt available as the workflow starter; verify against INDEPENDENT ground truth sourced through the typed raw/graph-native chain (a known strand's exact corpus values — caveat text, evidence strength, cost, impact — appear verbatim in the payload, not merely that the fields are present), exercise more than one Oak signal type and an Insufficient/null-impact strand, and assert no teacher-replacing language. ENGINEERING-COMPLETE: registration, the single-Zod-call input/output schemas, structuredContent-only results, isError handling, and EEF-path telemetry are all green with the surface live; pnpm check green on a settled tree. The full proof that real LLM-mediated output preserves faithfulness across the estate, any human-outcome measurement, and the eventual release-post-proof flag removal are DEFERRED to ../future/eef-outcome-evaluation-infrastructure.plan.md and are not required to close this plan. COMPLETE (owner-marked 2026-06-08): go-live landed (flag at release-pre-proof, kill-switch default-ON), engineering-complete (registration, single-Zod input schema, structuredContent-only, isError, per-tool telemetry), pnpm check green. Potential teacher value was demonstrated live via a real LLM-mediated round trip — multi-signal Oak↔EEF, verbatim corpus values, honest insufficiency, no teacher-replacing language — against the running server and via the MCP Inspector. Owner reshaped the value-proof (2026-06-08): potential value is proven by releasing and observing real use, NOT by a codified value-proxy test; delivered-value measurement remains owned by ../future/eef-outcome-evaluation-infrastructure.plan.md."
+    content: "Ship the EEF surface live and prove the Sunday-night cover-lesson value path through MCP end to end. SHIP LIVE (go-live): move the OAK_CURRICULUM_MCP_EEF_ENABLED flag from pre-release (defaults false; only an explicit true enables it) to release-pre-proof (defaults true; only an explicit false disables it — the kill-switch) by changing the resolution in apps/oak-curriculum-mcp-streamable-http (env.ts flag doc + runtime-config-from-validated-env.ts) so an unset env var resolves runtimeConfig.eefEnabled to true, making merging the PR make the feature live in deployed environments with no separate env step. Do NOT remove the flag — removal is the release-post-proof stage, after the delivered-value proof. Prove it: a test asserts the merged default (env var unset) registers the tool/resource/prompt and the tool executes, and the kill-switch (=false) removes all three. VALUE PATH (potentially-valuable proxy, NOT the full delivered-value proof): an agent uses Oak curriculum tools plus the EEF query/fetch tool and interpretation resource/template to assemble evidence-enhanced lesson material with EEF caveats and provenance preserved, the user-facing prompt available as the workflow starter; verify against INDEPENDENT ground truth sourced through the typed raw/graph-native chain (a known strand's exact corpus values — caveat text, evidence strength, cost, impact — appear verbatim in the payload, not merely that the fields are present), exercise more than one Oak signal type and an Insufficient/null-impact strand, and assert no teacher-replacing language. ENGINEERING-COMPLETE: registration, the single-Zod-call input/output schemas, structuredContent-only results, isError handling, and EEF-path telemetry are all green with the surface live; pnpm check green on a settled tree. The full proof that real LLM-mediated output preserves faithfulness across the estate, any human-outcome measurement, and the eventual release-post-proof flag removal are DEFERRED to ../future/eef-outcome-evaluation-infrastructure.plan.md and are not required to close this plan. COMPLETE (owner-marked 2026-06-08): go-live landed (flag at release-pre-proof, kill-switch default-ON), engineering-complete (registration, single-Zod input schema, structuredContent-only, isError, per-tool telemetry), pnpm check green. Potential teacher value was demonstrated live via a real LLM-mediated round trip — multi-signal Oak↔EEF, verbatim corpus values, honest insufficiency, no teacher-replacing language — against the running server and via the MCP Inspector. Owner reshaped the value-proof (2026-06-08): potential value is proven by releasing and observing real use, NOT by a codified value-proxy test; delivered-value measurement remains owned by ../future/eef-outcome-evaluation-infrastructure.plan.md. [Superseded in part 2026-06-11 (owner): the structuredContent-only result shape is reversed — get-eef-evidence now emits the family dual response shape; see the §Ratified Decisions supersession note.]"
     status: completed
     depends_on: [d6-mcp-composition-eef-surface]
 ---
@@ -185,6 +185,22 @@ projects them as optional. With the inputs realigned to the corpus, D5 and D6
 compose, with nothing to reconcile.
 
 ## Ratified Decisions (decision-complete; do not re-open in execution)
+
+> **Supersession (owner, 2026-06-11): the `structuredContent`-only success
+> shape (`content: []`) is reversed.** `get-eef-evidence` now emits the family
+> dual response shape via `formatToolResponse` — summary + serialised-JSON
+> `content` blocks PLUS decorated `structuredContent` — landing in PR-2 of
+> [`oak-prod-mcp-snagging-2026-06-11.plan.md`](../../../sdk-and-mcp-enhancements/current/oak-prod-mcp-snagging-2026-06-11.plan.md)
+> (branch `feat/eef-dual-shape-alignment`, commit `20ad83326`). Reason: the
+> 2026-06-11 live client matrix — Cursor's agent harness renders ONLY `content`
+> blocks (EEF successes rendered "(omitted)"), Claude Code renders ONLY
+> `structuredContent`, claude.ai/ChatGPT render both — so only the dual shape
+> (the MCP spec SHOULD) renders everywhere. Evidence:
+> [`oak-prod-mcp-cursor-visibility-writeup-2026-06-11.md`](../../../../reports/oak-prod-mcp-cursor-visibility-writeup-2026-06-11.md).
+> Everywhere this plan asserts `structuredContent`-only / `content: []`
+> (D3 verification notes, D6/D7 bodies and todos, end-state, reviewer
+> scope-locks), read those statements as the historical record of the
+> superseded D6/D7 ratification, not the current shape.
 
 These decisions are settled; execution applies them. Genuinely remaining
 exploration is isolated to D3 and D4 and is named there as explicit steps.
@@ -574,7 +590,7 @@ ADR-034), **ADR-153** (the constant-type predicate), and the corrected
 the `.external-data.ts` suffix and the Sonar/ESLint duplication exclusion.
 
 The decontamination dispositions and the clean acceptance sweep are recorded in
-[`eef-d0-decontamination-ledger.md`](eef-d0-decontamination-ledger.md); the dated
+[`eef-d0-decontamination-ledger.md`](../../../../plans-old-archive/sector-engagement/eef/archive/eef-d0-decontamination-ledger.md); the dated
 execution record is in the `eef` thread record.
 
 **Proof:** `pnpm repo-validators:check` green; the decontamination ledger.
@@ -888,7 +904,8 @@ the `AggregatedToolName` union, `AGGREGATED_TOOL_DEFS` / `AggregatedToolDefShape
 handler module, `aggregated-eef-evidence.ts`) — are settled at D3 verification
 together with the in-flight output-schema work; the extension is additive and
 leaves existing generated tools unchanged. The target is structuredContent-only,
-not dual-content output.
+not dual-content output. *(Superseded 2026-06-11 — the landed target is now the
+family dual shape; see §Ratified Decisions supersession note.)*
 
 **Do:**
 
@@ -1114,7 +1131,9 @@ not dual-content output.
 - The D3 verification record checks and cites current MCP SDK/app registration
   shapes, including proof that the configured `outputSchema` reaches the actual
   SDK registration path, resources/templates and prompts register behind the same
-  flag, and structuredContent-only results remain valid.
+  flag, and structuredContent-only results remain valid. *(Historical D3
+  verification statement; the shape itself was superseded 2026-06-11 — see
+  §Ratified Decisions supersession note.)*
 
 **Proof:** `non-code` (owner-ratified decisions, written MCP contract artefact,
 SDK/app verification record, and `mcp-expert` sign-off).
@@ -1208,7 +1227,7 @@ the shared primitives.
   machinery is removed and EEF stays a homogeneous strand graph. The **fundamental
   heterogeneous node/edge model** (multiple node kinds, a cross-kind node-id policy,
   typed inter-kind edges) is deferred and homed in
-  [`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
+  [`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
   — it must not be dropped.
 - **Verify consumer impact first (hard gate):** confirm what consumes graph-core's
   query contract. Verified state: graph-ingest and graph-project consume only the
@@ -1361,6 +1380,11 @@ If D5/D6 co-land, also run
 
 ### D6 - EEF MCP composition module + surface
 
+> **Supersession note (owner, 2026-06-11):** the `content: []` /
+> `structuredContent`-only success shape this deliverable shipped is reversed —
+> see the supersession note under §Ratified Decisions. The D6 body below is the
+> historical record of what was built and why.
+
 **Purpose:** expose the EEF graph as the ratified MCP tool/resource/prompt surface.
 
 > **⚠️ RECONCILIATION (2026-06-08, Evergreen Blossoming Copse) — the body below
@@ -1488,7 +1512,7 @@ Command: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`.
 > the running server and via the MCP Inspector CLI). Delivered-value measurement remains owned by
 > [`../future/eef-outcome-evaluation-infrastructure.plan.md`](../future/eef-outcome-evaluation-infrastructure.plan.md).
 > With D7 complete, this plan's D0–D7 are all delivered, and the
-> [`graph-tools-value-redesign`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
+> [`graph-tools-value-redesign`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
 > promotion trigger ("EEF D6 landed + D7 green") now fires.
 
 **Purpose:** ship the EEF surface live and prove the intended teacher value path.
@@ -1704,6 +1728,10 @@ Artefacts already in the tree, so the next session does not rediscover them:
   purpose.
 - Graph tools return `structuredContent` only with `content: []` (a SETTLED Oak
   decision, not to be reopened); error returns use `isError: true`.
+  *(Superseded by the owner 2026-06-11 — see §Ratified Decisions supersession
+  note: `get-eef-evidence` now emits the family dual response shape via
+  `formatToolResponse`; the established graph tools already emitted dual
+  content.)*
 - The only Zod on the MCP side is the input/output schema declarations.
 - The surface ships enabled by default (the flag at release-pre-proof);
   `OAK_CURRICULUM_MCP_EEF_ENABLED=false` is the explicit kill-switch that removes
@@ -1816,7 +1844,7 @@ The plan is done when D0-D7 are complete and:
   of the live Oak graph tools. This plan's D7 proof runs on the Oak graph tools
   live today (`get-misconception-graph`, `get-prior-knowledge-graph`); when those
   are replaced, the re-validation is owned by a separate follow-on plan,
-  [`../future/eef-revalidate-on-new-graph-tools.plan.md`](../future/eef-revalidate-on-new-graph-tools.plan.md).
+  [`eef-revalidate-on-new-graph-tools.plan.md`](eef-revalidate-on-new-graph-tools.plan.md).
 - Surfacing EEF-only workflows that deliver value in the MCP app without
   intersecting Oak's tools (for example standalone "what does the evidence say
   about this approach" or impact/cost decision-support flows). These are owned by
@@ -1940,6 +1968,9 @@ exist at review time:
   payload ties, the `isError` path, and resources against the live SDK. The
   structuredContent-only result shape with `content: []` is a SETTLED Oak decision
   and is explicitly OUT OF SCOPE for re-review - it is not to be reopened.
+  *(Superseded by the owner 2026-06-11 — see the supersession note under
+  §Ratified Decisions: the tool now emits the family dual response shape; this
+  scope-lock no longer binds reviewers.)*
 - `type-expert` - the constant-derived-types contract, single-Zod-call
   input/output declarations over named graph-native EEF view subsets with
   compile-time payload ties, the key-narrowing predicate, and the new

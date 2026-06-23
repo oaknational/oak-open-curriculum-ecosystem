@@ -16,7 +16,9 @@ import {
   getLessonPlanningMessages,
   getExploreCurriculumMessages,
   getLearningProgressionMessages,
+  getCurriculumMappingMessages,
   getAdaptLessonMessages,
+  getContinueProgressionMessages,
 } from './mcp-prompt-messages.js';
 
 /**
@@ -76,7 +78,7 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
   {
     name: 'lesson-planning',
     description:
-      'Gather materials for planning a lesson on a topic, including objectives, transcript, quiz questions, and resources.',
+      "Build a complete, teachable lesson on a topic the way Oak does — planning grounded in Oak's live curriculum data and six curriculum principles: pupil outcome, key learning points, keywords, misconceptions, quizzes, and resources, with attribution carried.",
     arguments: [
       requiredArgument(
         'topic',
@@ -113,6 +115,19 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
     ],
   },
   {
+    name: 'curriculum-mapping',
+    description:
+      "Build or audit a curriculum map — what is taught and in what order across a year or key stage — grounded in Oak's threads, prior-knowledge graph, and national-curriculum coverage.",
+    arguments: [
+      requiredArgument('subject', 'The subject area (e.g., "maths", "science", "english")'),
+      requiredArgument('keyStage', 'The key stage to map (e.g., "ks1", "ks2", "ks3", "ks4")'),
+      optionalArgument(
+        'yearGroup',
+        'Optional: Narrow the map to a specific year group (e.g., "Year 4")',
+      ),
+    ],
+  },
+  {
     name: 'adapt-lesson',
     description:
       'Adapt an Oak lesson grounded in EEF Teaching and Learning Toolkit evidence: surface the pedagogical signals, retrieve the relevant EEF evidence, and present evidence-calibrated options with caveats and attribution intact.',
@@ -122,6 +137,23 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
         'The topic for the lesson (e.g., "adding fractions", "the water cycle")',
       ),
       requiredArgument('yearGroup', 'The year group (e.g., "Year 4", "Year 9")'),
+    ],
+  },
+  {
+    name: 'continue-progression',
+    description:
+      "State where your class is — what they just covered — and plan the next step from Oak's curriculum sequence: assumed prior knowledge surfaced as a checkable readiness list, upcoming misconceptions anticipated, then a full lesson plan through lesson-planning.",
+    arguments: [
+      requiredArgument('subject', 'The subject area (e.g., "maths", "science", "english")'),
+      requiredArgument('yearGroup', 'The year group (e.g., "Year 4", "Year 9")'),
+      requiredArgument(
+        'justCovered',
+        'What the class just completed — a topic, unit, or lesson (e.g., "equivalent fractions", "the circulatory system")',
+      ),
+      optionalArgument(
+        'classNotes',
+        'Optional: Notes on how the class did (e.g., "they struggled with equivalent fractions")',
+      ),
     ],
   },
 ] as const;
@@ -149,8 +181,12 @@ export function getPromptMessages(
       return getExploreCurriculumMessages(args);
     case 'learning-progression':
       return getLearningProgressionMessages(args);
+    case 'curriculum-mapping':
+      return getCurriculumMappingMessages(args);
     case 'adapt-lesson':
       return getAdaptLessonMessages(args);
+    case 'continue-progression':
+      return getContinueProgressionMessages(args);
     default:
       return [];
   }

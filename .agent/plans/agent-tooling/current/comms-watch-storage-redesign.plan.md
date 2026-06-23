@@ -489,3 +489,24 @@ met) triggers a closeout pass that:
 — Plan promoted from `practice-infrastructure-hardening-program.plan.md
 §P5.W1` strategic substance at 2026-05-25 consolidation archival;
 authored by Hushed Stalking Shade (`bc0a07`, claude-opus-4-7).
+
+---
+
+## Routed evidence from the comms-corpus research (2026-06-13)
+
+From the synthesis
+([`.agent/reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md`](../../../reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md)
+§5) and the ratified rotation phenotype (ADR-199 / PDR-094).
+
+- **Rotation composes with this redesign; it does not pre-empt it.** ADR-199 ships
+  a directory-level class-tiered archive-move today. If this plan lands a
+  watermark/segment store, the curator rotation pass becomes "retire segments older
+  than the window" with the class-tiers and the absorption gate unchanged. Design
+  the segment store so that retirement is a first-class operation a curator pass can
+  invoke, and so an archived (untracked, retained) segment stays off the watcher's
+  drain path.
+- **Honest sizing input.** The corpus did not prove a size→drain-health link (the
+  swap evidence was retracted). A watermark/segment shape is the cleaner structural
+  answer to drain latency regardless; the controlled watcher-RSS × dir-size
+  measurement (open item) would let any size-based threshold here be evidence-sized
+  rather than a round number.

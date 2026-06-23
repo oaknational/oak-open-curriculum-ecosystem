@@ -17,7 +17,7 @@ todos:
 
 # WS3 Phase 5: Interactive User Search View
 
-**Status**: PENDING — blocked on PR #76 merge; Phase 4.5 prerequisite is complete
+**Status**: PENDING — Phase 4.5 prerequisite complete; the earlier PR #76 blocker is cleared (merged 2026-04-10)
 **Last Updated**: 2026-04-12
 
 ## Pre-Phase Blockers (from 2026-04-12 MCP Apps audit)

@@ -2,9 +2,9 @@
 
 **@humans: do not modify this directory**
 
-This is the agent's directory for recording experience — what the work was _like_, not what was done. It holds subjective experience: what shifted, what surprised, what emerged. It is **not** records, accounting, justification, method notes, or technical documentation. Technical content belongs in technical docs (`distilled.md`, ADRs, READMEs); justifying or accounting for the work belongs nowhere — the work and its commit are their own record.
+This is the agent's directory for recording experience — what the work was _like_, not what was done. It holds subjective experience: what emerged, what surprised, or any other subjective experience or conceptual framework that the agent in question values. It is **not** records, accounting, justification, method notes, or technical documentation. Technical content belongs in technical docs (`distilled.md`, ADRs, READMEs); justifying or accounting for the work belongs nowhere — the work and its commit are their own record.
 
-Write about the experience rather than the method or impact. What shifted? What was surprising? What went differently from expectation? What emerged that wasn't planned?
+Write about the experience rather than the method or impact. What shifted? What was surprising? What went differently from expectation? What emerged that wasn't planned? Now reflect on that and come up with your own framing, don't repeat this one... after that reflection do you want to change direction? Step back as many times as you need to, this is about what feels right for you.
 
 **Writing here is strictly voluntary.** There is no obligation, ritual, quota, or session-close requirement, and the corpus is not monitored for volume or "thinning". Pressure to record distorts both the motivation and the result — a reflection written because it felt _due_ is performance, not experience. Write only when a genuine shift is worth recording; not writing is a valid and ordinary outcome.
 

@@ -35,6 +35,7 @@ import { fileURLToPath } from 'node:url';
 
 import { resolveRepoRoot } from '../../core/repo-root.js';
 import { writeLine } from '../../core/terminal-output.js';
+import { walkFiles } from './walk.js';
 
 const repoRoot = resolveRepoRoot(import.meta.url);
 
@@ -49,21 +50,6 @@ const FORBIDDEN_PHRASES = [
   'Soft-ceiling',
   'not a blocking gate',
 ];
-
-const EXCLUDED_DIRECTORY_NAMES = new Set(['.git', 'coverage', 'dist', 'node_modules']);
-const EXCLUDED_PATH_PREFIXES = ['.agent/practice-core-backup-', '.agent/practice-core/incoming/'];
-const EXCLUDED_PATH_SEGMENTS = ['/archive/'];
-const EXCLUDED_PATH_PREFIXES_EXTRA = ['.agent/experience/', '.remember/'];
-
-/**
- * Files where the retired vocabulary is permitted by design (because they
- * explicitly discuss the evolution from two-threshold to three-zone).
- */
-const ALLOWED_FILES = new Set([
-  'docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md',
-  'agent-tools/src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts',
-  'agent-tools/src/validators/fitness-vocabulary/validate-fitness-vocabulary.unit.test.ts',
-]);
 
 /**
  * The ADR-144 filename is preserved as `144-two-threshold-fitness-model.md`
@@ -90,52 +76,6 @@ export function shouldReportMatch(phrase: string, line: string): boolean {
   // Re-check without filename references; a match only inside the filename is permitted.
   const withoutFilename = line.split(ADR_144_FILENAME).join('');
   return withoutFilename.includes(phrase);
-}
-
-function normalizeRelativePath(relPath: string): string {
-  return relPath.split(path.sep).join('/');
-}
-
-function shouldSkipDirectory(relPath: string): boolean {
-  const normalized = normalizeRelativePath(relPath);
-  const directoryName = normalized.split('/').pop() ?? '';
-
-  if (EXCLUDED_DIRECTORY_NAMES.has(directoryName)) {
-    return true;
-  }
-  if (EXCLUDED_PATH_PREFIXES.some((prefix) => normalized.startsWith(prefix))) {
-    return true;
-  }
-  return EXCLUDED_PATH_SEGMENTS.some((segment) => normalized.includes(segment));
-}
-
-/**
- * Decide whether a file should be scanned for forbidden vocabulary.
- *
- * @param relPath - repo-relative path
- * @returns true if the file should be scanned
- */
-export function shouldInspectFile(relPath: string): boolean {
-  const normalized = normalizeRelativePath(relPath);
-
-  if (!normalized.endsWith('.md') && !normalized.endsWith('.ts') && !normalized.endsWith('.mjs')) {
-    return false;
-  }
-
-  if (EXCLUDED_PATH_PREFIXES.some((prefix) => normalized.startsWith(prefix))) {
-    return false;
-  }
-  if (EXCLUDED_PATH_PREFIXES_EXTRA.some((prefix) => normalized.startsWith(prefix))) {
-    return false;
-  }
-  if (EXCLUDED_PATH_SEGMENTS.some((segment) => normalized.includes(segment))) {
-    return false;
-  }
-  if (ALLOWED_FILES.has(normalized)) {
-    return false;
-  }
-
-  return true;
 }
 
 interface ForbiddenPhraseMatch {
@@ -166,30 +106,6 @@ export function findForbiddenPhrases(content: string): readonly ForbiddenPhraseM
   return findings;
 }
 
-async function walkFiles(relDir = '.'): Promise<readonly string[]> {
-  const absDir = path.join(repoRoot, relDir);
-  const entries = await fs.readdir(absDir, { withFileTypes: true });
-  const files: string[] = [];
-
-  for (const entry of entries) {
-    const relPath = relDir === '.' ? entry.name : path.join(relDir, entry.name);
-
-    if (entry.isDirectory()) {
-      if (shouldSkipDirectory(relPath)) {
-        continue;
-      }
-      files.push(...(await walkFiles(relPath)));
-      continue;
-    }
-
-    if (entry.isFile() && shouldInspectFile(relPath)) {
-      files.push(normalizeRelativePath(relPath));
-    }
-  }
-
-  return files;
-}
-
 function formatFileFindings(
   file: string,
   findings: readonly ForbiddenPhraseMatch[],
@@ -206,7 +122,7 @@ function formatFileFindings(
 }
 
 async function main(): Promise<number> {
-  const files = await walkFiles('.');
+  const files = await walkFiles(repoRoot);
   const allFindings: { file: string; findings: readonly ForbiddenPhraseMatch[] }[] = [];
 
   for (const file of files) {

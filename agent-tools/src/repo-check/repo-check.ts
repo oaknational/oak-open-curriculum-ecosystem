@@ -68,7 +68,12 @@ export async function runMarkdownlintStaged(
     writeLine('repo-check markdownlint-staged: no staged Markdown files');
     return 0;
   }
-  return runtime.runInherited('pnpm', ['exec', 'markdownlint', '--dot', ...files]);
+  // `--no-globs` is load-bearing, not redundant: it tells markdownlint-cli2 to
+  // ignore the `globs` array in `.markdownlint-cli2.jsonc` and lint ONLY the
+  // explicit staged paths. Without it cli2 would union the staged files with the
+  // config globs and re-lint the whole repo on every commit. The config's rules
+  // and `ignores` still apply, so an explicitly-staged but excluded file is skipped.
+  return runtime.runInherited('pnpm', ['exec', 'markdownlint-cli2', '--no-globs', ...files]);
 }
 
 export async function runPrettierStaged(

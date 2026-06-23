@@ -74,7 +74,7 @@ framing as "the collaboration protocol":
 
 1. **Protocol-contract genuine gaps** — session-close enforcement,
    generated-log discoverability, coordinator-role formalisation (Gaps
-   E1, E5, E6 in `/tmp/phase-0-ground-state.md`).
+   E1, E5, E6 in `<scratch>/phase-0-ground-state.md`).
 2. **Commit-discipline enforcement** — stage-by-pathspec rule names
    the cure but pathspec-at-commit enforcement is absent; foreign-stage
    absorption is the recurring instance (Gaps E7, E8).

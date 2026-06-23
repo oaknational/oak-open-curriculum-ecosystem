@@ -32,17 +32,17 @@
   "dependencies": {
     "@oaknational/env": "workspace:*",
     "@oaknational/result": "workspace:*",
-    "semver": "^7.8.2"
+    "semver": "^7.8.5"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.9.2",
+    "@types/node": "^24.13.2",
     "@types/semver": "^7.7.1",
-    "eslint": "^10.4.1",
+    "eslint": "^10.5.0",
     "globals": "^17.6.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   },
   "engines": {
     "node": "24.x"

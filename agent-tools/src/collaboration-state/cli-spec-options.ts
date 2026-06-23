@@ -44,8 +44,10 @@ export const commsWatchOptions = [
   'session-prefix',
   'poll-ms',
   'max-events',
+  'step-timeout-ms',
   'heartbeat-file',
   'heartbeat-interval-ms',
+  'no-heartbeat',
   'seed-from-now',
   'no-auto-seed',
 ] as const;
@@ -104,6 +106,7 @@ export const claimsOpenOptions = [
   'claim-id',
   'ttl-seconds',
   'notes',
+  'role',
 ] as const;
 
 export const claimsCloseOptions = [

@@ -1,6 +1,6 @@
 ---
 name: "Sector reusable components adoption contract"
-overview: "Partner-facing contract for external reuse of Oak's reusable sector-component fabric anchored in docs/foundation/VISION.md canonical inventory-playbooks inputs, differentiated from upstream API access and Oak-hosted deployments."
+overview: "Partner-facing contract for external reuse of Oak's reusable sector-component fabric anchored in VISION.md canonical inventory-playbooks inputs, differentiated from upstream API access and Oak-hosted deployments."
 status: current
 specialist_reviewer: "docs-adr-expert, architecture-expert-betty"
 isProject: false
@@ -39,15 +39,15 @@ plan owns the **meaning** external organisations should assign to reuse and the 
 
 ## Authoritative canon
 
-The reusable sector-component inventory and per-line intent live in foundation
-Vision, section **What We Deliver** — repeatable components designed to shorten
+The reusable sector-component inventory and per-line intent live in the README,
+section **Sector reusable components** — repeatable components designed to shorten
 sector innovation loops:
 
-[docs/foundation/VISION.md — What We Deliver](../../../docs/foundation/VISION.md#what-we-deliver)
+[README — Sector reusable components](../../../../README.md#sector-reusable-components)
 
-That section is **normative documentation** until superseded explicitly. README
-summaries must not invent additional official component sets without aligning
-them back here.
+That inventory is the **canonical reusable-component set** until superseded
+explicitly; do not invent additional official component sets without aligning them
+back to it.
 
 Distinct from that inventory:
 
@@ -77,7 +77,7 @@ ontology governance narratives are not duplicated inconsistently.
 
 Until `t3-supported-vs-experimental-matrix` closes:
 
-1. Prefer **enumeration from Vision**: name only what appears under What We Deliver's reusable component list unless this plan is amended.
+1. Prefer **enumeration from the README inventory**: name only what appears under the README's product/component inventory unless this plan is amended (the former VISION component list was removed in the 2026-06-17 restructure).
 2. Separate **capabilities primitives** (the three shipped product lanes in README) from **component reuse** narratives (fabric for other codebases) — downstream marketing MUST mirror that split.
 3. Never imply production support tiers not decided by Oak-owner policy.
 
@@ -102,7 +102,7 @@ Promotion criteria for escalating this contract into executable engineering:
 When this file or Vision inventory cross-links move:
 
 ```bash
-pnpm exec markdownlint README.md docs/foundation/VISION.md \
+pnpm exec markdownlint README.md VISION.md \
   .agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md
 pnpm format:root
 git diff --check

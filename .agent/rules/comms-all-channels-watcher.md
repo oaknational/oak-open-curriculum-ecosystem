@@ -60,6 +60,48 @@ Run the command via the platform's persistent background-task mechanism:
 Claude Code uses the `Monitor` tool with `persistent: true`; Cursor and
 Codex use their equivalent watch primitives.
 
+**After arming the watcher, run ONE foreground comms sweep covering the
+window from BEFORE session open.** An event landing between session-open
+and watcher-arm is otherwise absorbed into the watcher's baseline and
+never notified (two instances in one day, 2026-06-10; owner-approved
+2026-06-11). The same sweep fires after ANY watcher restart, covering
+the restart's gap window. Use an inbox-shaped read, never `ls -t |
+head`.
+
+### Hardened against silent hangs
+
+The watch loop fails loud rather than muting silently. Each `drain`, `emit`,
+and `markSeen` step runs under a per-step deadline (`--step-timeout-ms`,
+default 60 s); a step that exceeds it emits a `kind=timeout` WATCHER ERROR
+line and the watcher exits non-zero, so the supervising Monitor/cron sees the
+death and can restart it. The directory-change wait (the loop's `waitForChange`
+step) carries no deadline — it is poll-bounded by construction: a
+`setTimeout(pollMs)` fallback runs alongside
+the `fs.watch` subscriptions, so a dropped FSEvents subscription delays a wake
+by at most `pollMs` instead of stalling forever. The liveness self-check below
+covers any residual hang path that a deadline cannot reach (a hung process
+cannot exit-non-zero if the hang sits where no deadline is armed).
+
+### Liveness self-check (cycle boundaries)
+
+The watcher writes a liveness heartbeat **on by default** at
+`<seen-file>.heartbeat.json` (every 30 s); `--heartbeat-file` relocates it
+and `--no-heartbeat` disables it. The heartbeat records `last_drain_at`,
+`last_emit_at`, `last_error_at`, `emitted_count`, and `pid`. At cycle
+boundaries, classify the watcher's liveness from this surface rather than
+trusting the supervisor's "running" status: a hung process cannot
+self-report, so an external staleness check is the detection path that the
+fail-loud per-step deadline (which dies on a hung step) cannot cover. Use the
+`collaboration-state` staleness classifier, or stat the heartbeat file and
+treat an mtime older than `3 ×` the interval as stale.
+
+**Mutual cover — the detector cannot detect itself.** In a team window,
+every agent's cycle-boundary sweep ALSO staleness-checks the DIRECTOR'S
+watcher heartbeat-file, because the highest-awareness seat is the one
+nobody else watches: two worked instances in one session saw a frozen
+watcher caught only from outside (a peer's stall diagnostic; owner
+transport). Owner-approved 2026-06-11.
+
 ### Seen-file convention
 
 The `<agent-codename>.json` seen-file lives in
@@ -79,11 +121,11 @@ Use when the `agent-tools` CLI is not yet built locally, or on a platform
 without the CLI:
 
 ```bash
-SEEN=/tmp/<agent>-comms-seen.txt
+SEEN=tmp/<agent>-comms-seen.txt
 ls .agent/state/collaboration/comms | sort > "$SEEN"
 while true; do
-  ls .agent/state/collaboration/comms | sort > /tmp/now.txt
-  for f in $(comm -13 "$SEEN" /tmp/now.txt); do
+  ls .agent/state/collaboration/comms | sort > tmp/now.txt
+  for f in $(comm -13 "$SEEN" tmp/now.txt); do
     jq -r --arg self "$SELF_SESSION_PREFIX" '
       if (.author.session_id_prefix // .from.session_id_prefix // "") == $self
       then empty
@@ -102,7 +144,7 @@ while true; do
            + " :: " + (.title // .subject // "?")
       end' ".agent/state/collaboration/comms/$f"
   done
-  mv /tmp/now.txt "$SEEN"
+  mv tmp/now.txt "$SEEN"
   sleep 5
 done
 ```
@@ -112,6 +154,16 @@ declare the gap in their team-start post and adopt a polling cadence that
 sweeps the full directory at the team-cadence interval, never a
 single-view filter — because the directed-only view misses the broadcast
 and group events that carry the team-bootstrap coordination itself.
+
+**Before arming ANY hand-written watcher, test its exact filter against
+one event of each shape** — directed, untagged narrative, tagged
+heartbeat, self-authored. A render path proven only on heartbeats is
+unproven for the events that matter: a hand-rolled filter once dropped
+every untagged narrative event while rendering heartbeats perfectly,
+and the heartbeat volume masked the gap (worked instance 2026-06-10;
+owner-approved 2026-06-11). Filter `*.tmp-*` names from poll-loop
+listings — the atomic-write rename race produces benign transient
+files.
 
 ## Real-Time Failure-Mode Capture on the Comms Stream
 
@@ -206,6 +258,12 @@ naming the rule; the substance lives here for two reasons:
   `behaviour-note`, `heartbeat`).
 - [`use-built-agent-tools-cli`](use-built-agent-tools-cli.md) — governs
   the CLI surface this rule invokes.
+- [`.agent/reference/arc-rapid-communication.md`](../reference/arc-rapid-communication.md)
+  §Protocol — the ArcAngel rapid-comms dialogue channel. An ArcAngel
+  watcher never substitutes for this canonical all-channels watcher; the
+  two are paired. A session tailing only ArcAngel is blind to the claims,
+  heartbeats, commit intents, owner gates, and team-bootstrap coordination
+  that live on this canonical stream.
 
 ## Enforcement
 

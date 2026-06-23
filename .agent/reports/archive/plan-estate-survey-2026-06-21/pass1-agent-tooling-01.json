@@ -1,0 +1,2226 @@
+{
+  "batch_size": 12,
+  "plans_returned": 12,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "WS7 is pending and the plan is the authoritative execution contract for it",
+          "file_line": "4 (status: WS7 pending) + line 32 (ws7 todo status: pending)"
+        },
+        {
+          "claim": "Non-same-checkout instance can complete WS7 from this plan alone",
+          "file_line": "240-241"
+        },
+        {
+          "claim": "Phases 0+1 done, Phases 2/3/4 remain as concrete actionable steps",
+          "file_line": "286-317"
+        },
+        {
+          "claim": "Open owner decisions carried in the plan, not yet resolved",
+          "file_line": "325-331"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All core ideas — the multi-lens research framing, the blind-cold-read structural protection, the evidence-before-mechanism rotation proposal, the repo/instance boundary doctrine, the atomic-propagation gate, and the archive-not-delete amendment — are grounded in owner direction, adversarial review, and first-hand verification. No speculative or bad ideas found embedded in the load-bearing structure. The execution log entries are factual records, not plans. (lines 2-4, 50-77, 100-145, 304-317)",
+      "content_quality": "strong",
+      "content_quality_note": "The plan goes well beyond V0 conformance: it carries a concrete per-phase execution contract with git-SHA citations (line 249), a schema-resolution decouple rationale that explains WHY module-relative fails (lines 283-284), a per-class retention tier table with falsifier references (line 268-269), lessons-carried from named incidents (lines 335-339), and an acceptance criteria proof contract with per-workstream proof levels (lines 345-356). The WS7 section reads as a deployable specification, not a placeholder.",
+      "salvage_value": [
+        {
+          "idea": "Three-lens research framing: failure modes + what-worked-well + surprising emergent behaviour, with activation-enthalpy tuning as the mechanism for encouraging/discouraging emergent patterns",
+          "class": "good",
+          "file_line": "54-63"
+        },
+        {
+          "idea": "Blind cold read (WS1) runs before the survey and before the seeded theme catalogue is opened — structural anchoring protection",
+          "class": "good",
+          "file_line": "83-91"
+        },
+        {
+          "idea": "Wave-0 statistical index (JSONL per event) produced once and consumed by all later waves, avoiding repeated full-corpus re-scans",
+          "class": "good",
+          "file_line": "109-116"
+        },
+        {
+          "idea": "Catcher-vs-cheap-model delta recorded as a quality signal in its own right",
+          "class": "good",
+          "file_line": "120-122"
+        },
+        {
+          "idea": "Finding provenance taxonomy: blind-arisen / seeded-confirmed / statistically-derived / cross-attested — keeps synthesis trustworthy given recorded contamination",
+          "class": "good",
+          "file_line": "137-142"
+        },
+        {
+          "idea": "Repo/instance content boundary doctrine: versioned shared repo tier vs instance-local comms/claims/heartbeats tier",
+          "class": "good",
+          "file_line": "308-312"
+        },
+        {
+          "idea": "Atomic-propagation hard gate: a protocol change must land simultaneously in PDR, ADR, two skills, and README or it is an invisible broken state",
+          "class": "good",
+          "file_line": "313-317"
+        },
+        {
+          "idea": "Archive-not-delete amendment: while a key research model (Fable) is unavailable, retain the raw corpus on disk off the watcher path to preserve the option of further research",
+          "class": "good",
+          "file_line": "71-77"
+        },
+        {
+          "idea": "Class-tiered retention windows (heartbeat 48h, diagnostic/noise immediate, coordination/directed 7d, research-precious until graduated) with body-read-before-classify falsifier discipline",
+          "class": "good",
+          "file_line": "267-270"
+        },
+        {
+          "idea": "Provenance-check before archive-move: scan ADRs/PDRs/patterns for 8-hex tokens and refuse to move a cited event lacking inline-quote or digest coverage",
+          "class": "good",
+          "file_line": "263-265"
+        },
+        {
+          "idea": "schema dir resolution repo-root-relative (not module-relative) because tsc does not ship JSON to dist — the decouple rationale",
+          "class": "good",
+          "file_line": "283-284"
+        },
+        {
+          "idea": "Out-of-repo platform plans (~/.claude/plans/) classified as instance/individual-tier knowledge requiring curation before instance ends",
+          "class": "good",
+          "file_line": "319-323"
+        },
+        {
+          "idea": "shared-comms-log.md is a derived ephemeral rendering; goes untracked with no relocation and no ledger entry (provenance attaches to events, not the log)",
+          "class": "good",
+          "file_line": "270"
+        },
+        {
+          "idea": "Incremental output-file writes mandatory for all long-running agents — the universal safety net that saved every disk-writing agent during the Fable outage",
+          "class": "good",
+          "file_line": "212-213"
+        },
+        {
+          "idea": "completeness-critic pass in Wave 3: asks what window, method, or claim remains uncovered and feeds results into the next round (loop-until-dry)",
+          "class": "good",
+          "file_line": "132-135"
+        },
+        {
+          "idea": "manifest.jsonl disposition ledger per archived event (event_id, created_at, kind, tags, archived_at, disposition) as Inv-1 operative gate",
+          "class": "good",
+          "file_line": "261-263"
+        },
+        {
+          "idea": "Phase 2 pre-archive provenance check as a TESTED agent-tools module rather than a throwaway script",
+          "class": "good",
+          "file_line": "287-288"
+        },
+        {
+          "idea": "ArcAngel (one-file tail-F append-only zero-ceremony) as activation-enthalpy contrast to the heavy comms-event stream — informing WS5 substrate-choice framing",
+          "class": "good",
+          "file_line": "193-200"
+        },
+        {
+          "idea": "Lessons-carried from Whippoorwill/Clipper: relocation must complete reader-repoint AND rebuild in one window; verify via the actual dist CLI not tsx proxy; opening ArcAngel does not substitute for canonical-surface registration",
+          "class": "good",
+          "file_line": "335-339"
+        },
+        {
+          "idea": "Manifest carryover from Phase 1: memory-state-substrate-contracts.manifest.json still points 4 path constants at old homes — open defect that must be resolved in WS7",
+          "class": "good",
+          "file_line": "249-251"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "WS0–WS6 COMPLETE (2026-06-13, Bluebell mends Mulch / c2ef19, successor to Kayak herds Ballast): research first-hand-verified across all three lenses; the §11 re-verify list closed first-hand (6 anchors promoted to FH, 4 stale figures corrected); WS5 rotation-strategy proposal authored, two-round adversarially reviewed, and put to the owner as a decision; WS6 comprehensive synthesis authored fronting the full artefact set. WS7 (archive-not-delete execution) is OWNER-GATED — fires only on owner ratification of the WS5 proposal. Plan claims complete only at ws0–ws7.",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md:1-35"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (LOCKED discriminator — V0 §2.1)",
+          "file_line": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md:1-35"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, replaces readiness sense of `status` — V0 §2.2, §3.1)",
+          "file_line": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md:1-35"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans — V0 §2.4)",
+          "file_line": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md:1-35"
+        },
+        {
+          "issue": "Present field `status` is DROPPED by V0 (split into `kind`/`disposition`/`gate`/Linear-projected execution — V0 §2.2, §2.5); value is a multi-sentence prose blob that cannot map cleanly to the migration table without interpretation",
+          "file_line": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md:4"
+        },
+        {
+          "issue": "Present field `isProject: false` is explicitly DROPPED by V0 (§2.5: subsumed by the `projects_to` edge; the boolean is universal and carries no information)",
+          "file_line": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md:34"
+        },
+        {
+          "issue": "No V0 typed-edge fields declared at frontmatter level (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on`) — `serves_strategic_choice` is REQUIRED for executable plans (V0 §2.3, §4 authority invariant 1); `depends_on` appears only inside individual todo items, not as a plan-level edge (V0 §2.3)",
+          "file_line": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md:1-35"
+        },
+        {
+          "issue": "No `gate` field despite ws7 being owner-gated and `status` prose declaring 'OWNER-GATED — fires only on owner ratification'; V0 §3.4 requires a `gate: { awaiting: owner-decision, clears_when: ..., expires: ... }` for plans blocked on an owner decision, and expiry is MANDATORY",
+          "file_line": ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md:4"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The atomic-propagation hard gate (Phase 3 untrack is UNSAFE unless obligation lands atomically across PDR-094 + ADR-199 + session-handoff SKILL + consolidate-docs SKILL + Phase-3 README) is correctly identified as a systemic integrity constraint, but WS7 Phase 4 proof is 'code + non-code: gitignore diff, relocation + archive-move commits, disposition ledger, post-archive-move watcher drain health observation' with no explicit verification step that the skill-wiring obligation actually propagated before the untrack commit landed. The proof contract for ws7 does not name the skill-wiring check as a discrete acceptance criterion, only the file-system operations.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:304-318 (hard gate section) vs line 354 (ws7 proof)"
+        },
+        {
+          "severity": "high",
+          "claim": "The manifest carryover from Phase 1 is explicitly flagged as incomplete: 'memory-state-substrate-contracts.manifest.json still points 4x schema_or_parser + fixture_roots[0] at the old .agent/state/collaboration/ homes — repoint (verify gate-loaded vs descriptive first).' This is a load-bearing cross-reference in a schema-resolution chain that spans three distinct mechanisms (live-types.ts constants, collaboration-json-validation.ts self-deriving path, compile-time JSON imports). A stale manifest under an active gate-loaded path is a silent schema-location split — the validator may load the wrong (old) schema path while the manifest claims correctness.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:249-251"
+        },
+        {
+          "severity": "medium",
+          "claim": "Three schema-resolution mechanisms are acknowledged to have been in tension (line 275-284): live-types.ts PATH constants, collaboration-json-validation.ts self-deriving schema dir from data file path, and compile-time JSON imports plus test fixtures. The corrected decouple (repo-root-relative to agent-tools/src/collaboration-state/schemas/) resolves the tsc/dist dead-path problem, but the plan records this as 'Phase-1 work is landed' without a first-hand post-landing gate verification being cited in the accepted proof. The characterisation harness (agent-tools suite) is named as the green-before/after guard, but the acceptance criterion for ws7 (line 354) does not explicitly require a gate-green signal for this specific schema decouple.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:273-284"
+        },
+        {
+          "severity": "medium",
+          "claim": "The repo/instance content-boundary architecture introduced in WS7 (repo tier = versioned/shared vs instance tier = one checkout's live state) is a significant structural reclassification. The plan correctly names the untrack as relying on a 'mandatory standing curation obligation' (lines 309-310), but the architectural enforcement surface for that obligation is exclusively social/doctrinal (skill-wiring). There is no structural gate that prevents an agent from operating on instance-tier comms knowledge without first curating it — the safety net is procedural, not mechanical, which is a known fragility class for a standing obligation.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:308-323"
+        },
+        {
+          "severity": "medium",
+          "claim": "The untrack boundary decision (lines 327-331) includes 'conversations/' and 'escalations/' and lean 'sidebars/' as tracked, while 'comms/' + 'comms-seen/' + claims + shared-comms-log + comms-archive + comms-draft + handoffs go untracked (preserve-on-disk). This boundary is owner-delegated but the plan does not record the architectural rationale for why conversations/escalations/sidebars earn tracked status while handoffs do not — handoffs carry succession-critical continuity state and their untracking is architecturally significant.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:327-331"
+        },
+        {
+          "severity": "low",
+          "claim": "The WS2 survey commands (lines 174-185) use one node process per file over ~5,000 files ('slow but dependency-free') and acknowledge batching as an agent option into /tmp. The plan names /tmp as the batch scratch target, which is the repo-conventional scratchpad for analysis, but the no-unbounded-host-load rule applies; no cap or chunk-size guard is named in the survey command block.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:174-185"
+        },
+        {
+          "severity": "low",
+          "claim": "The 'ArcAngel relocation — owner-directed early WS7 slice' log entry (lines 189-203) states the ArcAngel channel was relocated via 'git mv' to .agent/collaboration/rapid-comms/ but also notes that .agent/collaboration/ is 'the chosen tracked home (parallel to the untracked-bound .agent/state/collaboration/)' with 'WS7/owner may refine the path.' If WS7 Phase 3 later refines this path, a second git mv on a team-live comms channel risks the ENOENT-broke-team-comms failure mode explicitly recorded in the Lessons Carried section (line 335, lesson 1). The plan does not mark this path as frozen or require a prior-to-move coordination window.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:189-203 and line 335"
+        },
+        {
+          "severity": "info",
+          "claim": "The finding-provenance discipline (blind-arisen / seeded-confirmed / statistically-derived / cross-attested, lines 138-141) is architecturally sound for a research corpus where contamination is a declared risk. The four-category taxonomy cleanly separates epistemic source from content, which is the correct decouple for a trust-but-verify synthesis.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:138-141"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly applies the repo-root-relative schema path resolution strategy (lines 281-283) to solve the tsc dist path dead-path problem, which is the correct architectural choice: tsx (source-run) and the built CLI both resolve from repo root, whereas module-relative paths diverge between the two runtimes. This is a sound, verifiable decouple.",
+          "file_line": "comms-corpus-research-and-rotation-strategy.plan.md:281-283"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/agent-artefact-lifecycle-cli.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Decision-complete 2026-05-06; execution can begin at Phase 1.1 without re-opening Phase 0 questions",
+          "file_line": "135-138"
+        },
+        {
+          "claim": "All todos are status: pending with no completed items — plan is approved and unexecuted, not stale or superseded",
+          "file_line": "11-127"
+        },
+        {
+          "claim": "Folder lane 'current' is consistent with an active not-started plan awaiting execution",
+          "file_line": "133"
+        },
+        {
+          "claim": "CLI surface design is decision-complete and detailed enough for immediate Phase 1 execution",
+          "file_line": "284-306"
+        },
+        {
+          "claim": "No competing plan that supersedes this one is referenced anywhere in the document",
+          "file_line": "932-943"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in a verified problem (drift modes at lines 156-168 corroborated by live ADR-125 count delta at line 217-219 and MEMORY.md entries). All major decisions are sealed with rationale (build-ordering at 509-516, wrapping strategy at 377-392, budget rule at 709-714). The TDD cycle structure is concrete and internally consistent. No cargo-culted patterns or speculative scope; non-goals list at lines 911-920 actively constrains scope. Risk register (lines 879-889) is realistic and mitigated. The single weak signal is the 46-day execution lag — the plan is good but has accumulated idle time without a recorded blocker.",
+      "content_quality": "strong",
+      "content_quality_note": "Phase bodies at lines 422-967 go beyond V0 structure conformance: each cycle specifies test shape, product file path, acceptance criterion, and reviewer. The VerifyOptions interface (lines 487-494) is production-ready. The plugin-audit usage-signal enumeration (lines 751-766) is exhaustive and self-documenting. The pattern-graduation destinations (lines 830-843) are pre-decided with specific homes. The risk register cites specific concurrency failure modes and mitigations including an optimistic-concurrency strategy (lines 886-887). This is well above adequate.",
+      "salvage_value": [
+        {
+          "idea": "agent-tools artefacts CLI as single operational surface (list/verify/add/update/remove/plugin-audit subcommands)",
+          "class": "good",
+          "file_line": "139-143 and 284-306"
+        },
+        {
+          "idea": "VerifyOptions interface with explicit repoRoot + suppression sets enabling fixture-injection in tests",
+          "class": "good",
+          "file_line": "487-494"
+        },
+        {
+          "idea": "scripts/validate-portability.ts becomes a 4-line shim importing runVerify from agent-tools/src/ via tsx (Option B)",
+          "class": "good",
+          "file_line": "509-516"
+        },
+        {
+          "idea": "Wrap npx/pnpx skills as a dev-dep programmatic API call rather than shell-out",
+          "class": "good",
+          "file_line": "377-392"
+        },
+        {
+          "idea": "Canonicalisation post-step: move content to .agent/skills/, generate thin wrappers, record in skills-lock.json",
+          "class": "good",
+          "file_line": "383-390"
+        },
+        {
+          "idea": "Skill-load budget default = claude /doctor reported max x 0.85 (15% headroom)",
+          "class": "good",
+          "file_line": "709-714"
+        },
+        {
+          "idea": "inventory --output emits a deterministic markdown page to replace ADR-125 count tables",
+          "class": "good",
+          "file_line": "451-459"
+        },
+        {
+          "idea": "Five contract invariants: single canonical location, DRY, symmetry, measurability, reproducibility",
+          "class": "good",
+          "file_line": "311-320"
+        },
+        {
+          "idea": "Plugin-audit with five documented usage signals and owner gate before any actual removal",
+          "class": "good",
+          "file_line": "751-766"
+        },
+        {
+          "idea": "Phase 0 decision-complete seal removing re-open risk at execution time",
+          "class": "good",
+          "file_line": "135-138"
+        },
+        {
+          "idea": "Reviewer dispatch matrix with domain coverage as the contract (not persona names)",
+          "class": "good",
+          "file_line": "403-419 and 868-870"
+        },
+        {
+          "idea": "Pattern graduation: inventory-as-output to PDR-009 amendment; skill-load budget stays as memory feedback; vendor-plugin redundancy may graduate to ADR-125 if invoked twice more in 90 days",
+          "class": "good",
+          "file_line": "830-843"
+        },
+        {
+          "idea": "3.0 shared adapter-generation helpers cycle as precondition to prevent atomic-landing risk on 3.1-3.5",
+          "class": "good",
+          "file_line": "546-562"
+        },
+        {
+          "idea": "Lock-file concurrency: optimistic-concurrency check on version field; escalate to advisory locking only if real corruption surfaces",
+          "class": "speculative",
+          "file_line": "630-634"
+        },
+        {
+          "idea": "--strict-spec flag making agentskills.io form checks opt-in (not default failure)",
+          "class": "good",
+          "file_line": "521-527"
+        },
+        {
+          "idea": "Description allow-list for implicit-trigger skills (judgement-call cases documented in test fixtures)",
+          "class": "speculative",
+          "file_line": "676-679"
+        },
+        {
+          "idea": "Body length advisory at 5000 tokens warns but does not fail",
+          "class": "good",
+          "file_line": "684-686"
+        },
+        {
+          "idea": "remove subcommand refuses removal if any other artefact references the target and outputs the dependents list",
+          "class": "good",
+          "file_line": "651-654"
+        },
+        {
+          "idea": "ADR-125 amendment: remove count tables, add CLI capability reference, do not cite plan filename",
+          "class": "good",
+          "file_line": "778-791"
+        },
+        {
+          "idea": "Phase 8.2: archive canonical-first-skill-pack-ingestion-tooling.plan.md after supersession by this plan",
+          "class": "good",
+          "file_line": "793-796"
+        },
+        {
+          "idea": "Non-goals list actively constraining scope (no graphical UI, no autonomous plugin removal, no non-agentskills.io ingestion)",
+          "class": "good",
+          "file_line": "911-920"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED (decision-complete 2026-05-06)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1 LOCKED — required for all plans)",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` literal \"plan\" (V0 §2.1 LOCKED — required for all plans)",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` — plan carries `todos` indicating executable intent but no `kind: executable` declared (V0 §2.2 LOCKED)",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4 LOCKED — required for all plans); date exists only in body prose at line 132",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:132"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly dropped key (V0 §2.5 — dropped, subsumed by `projects_to`)",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:127"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — required for executable plans (V0 §2.3 LOCKED); no `\"pending\"` sentinel present either",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:1"
+        },
+        {
+          "issue": "Supersede relationship with `canonical-first-skill-pack-ingestion-tooling.plan.md` declared only in body prose (lines 146, 932), not as a `supersedes` frontmatter edge (V0 §2.3 LOCKED shape)",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:146"
+        },
+        {
+          "issue": "`status:` equivalent (`**Status**: 🔴 NOT STARTED`) appears in body prose, not as V0 axes; V0 §2.2 drops `status` in favour of `kind`/`disposition`/`gate`",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:133"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Phase 2.2 records two contradictory shim shapes. The acceptance code block at line 504 shows the shim importing from 'agent-tools/dist/artefacts/verify.js', but the CI build-ordering decision at line 510 resolves to Option B: importing from 'agent-tools/src/' via tsx, not dist/. The acceptance block is never corrected to match the decided shape. A reader grounding the shim against the plan sees one shape in prose and the opposite in the code block, which is a maintenance-time confusion risk and a spec-vs-implementation divergence.",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:504-517"
+        },
+        {
+          "severity": "medium",
+          "claim": "The skills-lock.json concurrency mitigation is split across two places with different strategies. Section 4.1 (line 633) says 'start with optimistic-concurrency check on version' (read-modify-write with a version field). The risk register (line 887) says 'advisory lock file (e.g. skills-lock.json.lock) acquired before read-modify-write'. These are not the same mechanism: optimistic concurrency detects collisions after the fact; advisory locking prevents concurrent entry. The plan does not reconcile which strategy Phase 4.1 actually implements, leaving the architect of that cycle with an ambiguous contract.",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:630-634 and 887"
+        },
+        {
+          "severity": "low",
+          "claim": "The skill-load budget default (Phase 6.1, line 706) is deferred to execution time via 'claude /doctor', with the value computed as reported-maximum × 0.85. This is correct in principle, but the CLI's verify command must also enforce this threshold in CI where 'claude /doctor' is not available. The plan does not specify how the threshold value is persisted after Phase 6.1 measurement — no config file, no package.json field, no env-var name — so the CI enforcement path is unarchitected. If the value is baked into a config file at measurement time, that mechanism needs to be named; if it is re-measured on each CI run, that is a runtime dependency on claude CLI in CI which conflicts with the headless nature of a lint gate.",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:706-717"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 3.5 (add-hook, line 602) references hooks-portability.plan.md as an adjacent plan that hook content 'derives from', and the Predecessor/Successor section (line 937) says 'reconcile during Phase 3 design'. This reconciliation is not a plan todo item — it is informal prose. If hooks-portability.plan.md has already made architectural decisions about the Layer-1 hook policy entry format, Phase 3.5 implementation may silently diverge from it. A cross-plan reconciliation gate (even a single acceptance criterion) is missing.",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:602-607 and 937-939"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 5.2 (description form check, line 673) introduces a 'heuristic match plus an allow-list' for skills that 'already convey when implicitly'. The allow-list is documented in test fixtures, not in a canonical config location accessible to the CLI at runtime. If the allow-list grows or needs auditing, there is no single CLI-surfaced source of truth — the plan does not specify whether the allow-list is embedded in verify.ts, in a JSON sidecar, or derivable from a flag. This is a minor extensibility gap but creates a maintenance surface outside the CLI contract.",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:673-681"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly identifies that '.claude/settings.json enabled-plugin list is read by plugin-audit but never mutated by the CLI' (line 336). This is sound — settings remain owner-controlled. The architecture also correctly places the single canonical location as '.agent/' with adapters as generated-only. These invariants at lines 311-321 are well-formed and directly enforce the PDR-009 three-layer model.",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:311-321 and 336"
+        },
+        {
+          "severity": "info",
+          "claim": "The linear dependency chain from Phase 3.0 through 7.1 (todos id 3-0 through 7-1) means every phase from 3 onwards blocks on all preceding phases completing. The plan correctly pulled shared helpers into a 3.0 precondition cycle to enable parallel landing of 3.1-3.5. However, Phases 5 and 6 depend on 2-3-strict-spec-flag (line 86, 101) but spec compliance and budget checks are logically independent of the adapter-generation work in Phase 3-4. The strictly linear depends_on chain means Phase 5 cannot start until the full authoring CLI (Phase 3) and update/remove CLI (Phase 4) are complete, which may extend the timeline without providing isolation. This is a scheduling observation, not a correctness defect.",
+          "file_line": "agent-artefact-lifecycle-cli.plan.md:83-109"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md",
+      "classification": "extract-then-archive",
+      "classification_evidence": [
+        {
+          "claim": "Phase 1 fully implemented with recorded outcome including agent identity, validation results, and backup path",
+          "file_line": "lines 439-471"
+        },
+        {
+          "claim": "Phase 2 todos 2-1 and 2-2 remain pending — plan is not complete",
+          "file_line": "lines 33-39"
+        },
+        {
+          "claim": "Plan explicitly states it should not be archived until owner reviews strategic plan kickoff",
+          "file_line": "lines 493-495"
+        },
+        {
+          "claim": "Outcome baseline data is ephemeral per plan convention — not destined for permanent docs",
+          "file_line": "lines 214-215"
+        },
+        {
+          "claim": "Vercel skill classification rationale is the key input the strategic companion needs; extractable to that plan",
+          "file_line": "lines 162-180"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, evidence-grounded, and non-destructive. Issues 1-3 (lines 120-155) are substantiated with zero-reference checks and existing canonical coverage. Issue 4 (lines 157-180) correctly identifies the architectural constraint and defers removal to the strategic plan. Phase 1 outcome (lines 439-471) is among the most concrete, verified execution records in the agent-tooling plan set.",
+      "content_quality": "strong",
+      "content_quality_note": "Every issue section carries specific evidence (file references, grant counts, skill lists). Gate strategy is reproducible (lines 183-199). Risks table (lines 389-394) is graded by likelihood with concrete mitigations. Foundation alignment (lines 398-405) is precise. Only gap: todo 4-1 pending while 4-2 completed (lines 49-55), and Phase 2-3 Baselines columns are correctly dashes given Phase 2 is not done (lines 427-433).",
+      "salvage_value": [
+        {
+          "idea": "Phase 1 outcome record: three plugins removed (mcp-apps, cloudflare, linear), validation passed, backup path and agent identity recorded",
+          "class": "good",
+          "file_line": "lines 439-471"
+        },
+        {
+          "idea": "Pre-prune baseline: portability:check PASS, 12 commands, 37 skills, 52 rules, 22 reviewer adapters, audit ~112 active skills",
+          "class": "good",
+          "file_line": "lines 447-451"
+        },
+        {
+          "idea": "Vercel plugin skill classification: 12 likely-used vs 14 likely-unused skills with per-skill justifications",
+          "class": "good",
+          "file_line": "lines 162-180"
+        },
+        {
+          "idea": "Architectural constraint: Claude Code exposes no per-skill disable in user-facing settings; narrowing requires plugin removal or upstream feature",
+          "class": "good",
+          "file_line": "lines 175-181, 302-313"
+        },
+        {
+          "idea": "/doctor is session-local Claude Code evidence only; terminal invocation from Codex or shell is not an authoritative gate",
+          "class": "good",
+          "file_line": "lines 82-83, 198-200"
+        },
+        {
+          "idea": "Gate strategy for plugin-modification work: portability:check + subagents:check + type-check after each phase",
+          "class": "good",
+          "file_line": "lines 183-199"
+        },
+        {
+          "idea": "ADR-125 amendment 2026-04-24 permits canonicalisation but does not state policy on whether source plugin should remain installed — open policy gap",
+          "class": "speculative",
+          "file_line": "lines 132-135"
+        },
+        {
+          "idea": "Option B: remove Vercel plugin and replace with curated internal vercel-deploy-expert canonical skill plus project Vercel MCP",
+          "class": "speculative",
+          "file_line": "lines 308-311"
+        },
+        {
+          "idea": "Frictions-register entry for Vercel plugin skill catalogue being unbounded (F-XX placeholder not yet written)",
+          "class": "good",
+          "file_line": "lines 312-314"
+        },
+        {
+          "idea": "Lifecycle trigger pattern: register claim on settings.json before edit; light continuity update after; leave for owner review on close",
+          "class": "good",
+          "file_line": "lines 488-495"
+        },
+        {
+          "idea": "Rollback mechanism: out-of-tree settings.json backup with timestamped filename prevents accidental staging",
+          "class": "good",
+          "file_line": "lines 222-226"
+        },
+        {
+          "idea": "Non-goal boundary: no ADR amendment, no canonical skill removal, no validator refactor, no adapter file changes — all deferred to strategic plan",
+          "class": "good",
+          "file_line": "lines 410-417"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PHASE 1 IMPLEMENTED; PHASE 2 VERCEL TRIAGE REMAINS",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "id absent — V0 §2.1 LOCKED required-for-all: every plan node requires a stable kebab-slug id as its graph identity",
+          "file_line": "plan frontmatter (lines 1-57): field not present"
+        },
+        {
+          "issue": "node_type absent — V0 §2.1 LOCKED required-for-all: literal 'plan' discriminator required",
+          "file_line": "plan frontmatter (lines 1-57): field not present"
+        },
+        {
+          "issue": "kind absent — V0 §3.1 LOCKED required-for-all: enum 'strategic | executable' required; plan carries todos so maps to 'executable'",
+          "file_line": "plan frontmatter (lines 1-57): field not present"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — V0 §2.4 LOCKED required-for-all: ISO date field; value exists only in body prose ('**Last Updated**: 2026-05-06', line 61), not as a frontmatter field",
+          "file_line": "line 61 (body prose, not frontmatter)"
+        },
+        {
+          "issue": "serves_strategic_choice absent — V0 §2.3 LOCKED required for executable plans: must resolve to a strategic-choice ID or carry the 'pending' sentinel",
+          "file_line": "plan frontmatter (lines 1-57): field not present"
+        },
+        {
+          "issue": "isProject: false present — V0 §2.5 explicitly drops this key (107/250 census): subsumed by the projects_to edge; must be removed",
+          "file_line": "line 56"
+        },
+        {
+          "issue": "status_raw ('🟡 PHASE 1 IMPLEMENTED; PHASE 2 VERCEL TRIAGE REMAINS') is in body prose, not a frontmatter field — V0 §2.2 drops the emergent status key entirely in favour of orthogonal axes; the body carries execution-state prose that belongs in the Linear-projected axis, not the repo",
+          "file_line": "line 62"
+        },
+        {
+          "issue": "per-todo depends_on carries bare id lists (e.g. [0-1-baseline-capture, 0-2-settings-backup]) — V0 §2.3 defines the plan-level depends_on edge as { plan, kind: blocking | beneficial }; this is a different shape at a different level and does not satisfy the plan-level edge requirement",
+          "file_line": "lines 11, 15, 19-20, 23-24, 27, 31, 35, 39, 43, 47, 51, 55"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the audit proxy of ~112 active skills is a reliable pre-prune baseline, but the source is an estimate ('audit ~112') with no command-line reproducible verification path. The Baselines table (line 428) records this as 'audit ~112; /doctor is session-local only', meaning the actual pre-prune count is unverifiable post-hoc and the ≥12 drop acceptance criterion (line 377) rests on an unverifiable baseline.",
+          "file_line": "428"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan assumes removing mcp-apps@mcp-apps has zero workflow impact because canonical equivalents exist (line 235), but the acceptance test for this (bare-name skills continue to load) is explicitly optional owner-supplied evidence (line 254). If the owner never supplies that evidence, the assumption is never verified and could mask a silent regression.",
+          "file_line": "250-255"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 2 acceptance criterion assumes ≥10 of 25 Vercel skills will be classifiable as 'parked' (line 297), but this is a pre-audit assertion with no supporting evidence cited. If fewer than 10 are parked, the acceptance criterion fails on a number the plan itself invented, not on a measured signal.",
+          "file_line": "297"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes Claude Code exposes no per-skill disable mechanism (line 176), stated as fact with no source cited. This is a vendor platform capability claim that could change; if it changes, the entire Phase 2 strategy (Option A friction entry vs Option B plugin removal) and the deferral to the strategic plan both rest on a stale assumption.",
+          "file_line": "176"
+        },
+        {
+          "severity": "low",
+          "claim": "todo 4-2-continuity-update is marked 'completed' (line 54) despite 4-1-record-outcome being 'pending' (line 50). The depends_on chain (4-2 depends on 4-1) is violated by the status. This assumes the continuity update was done independently of the outcome recording, which contradicts the stated dependency and may mean the continuity surfaces reflect an incomplete outcome.",
+          "file_line": "50-55"
+        },
+        {
+          "severity": "low",
+          "claim": "The backup path uses a scratchpad token '<scratch>/' (line 224) that is machine-local and session-ephemeral. The Outcome section records the resolved backup path (line 443) for rollback, but this assumes the scratchpad directory persists long enough to be useful. If the session scratchpad is cleaned, rollback evidence is gone.",
+          "file_line": "224"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan asserts zero cloudflare/workers/wrangler references in .agent/ as evidence of non-use (line 143), but does not check src/ or other workspace directories. If a workspace depends on Cloudflare tooling but that dependency is not expressed through .agent/ artefacts, the 'unused' verdict could be incorrect.",
+          "file_line": "143-145"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Plan should not be archived until owner reviews strategic plan kickoff (cited at lines 493-495)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/current/agent-artefact-load-pressure-relief.plan.md:494-495 — \"**Plan close**: update Outcome; do not archive — leave for owner review of the strategic plan kickoff.\""
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/agent-commands-retirement.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending; no work has landed; plan is actionable as written",
+          "file_line": "agent-commands-retirement.plan.md:6-20"
+        },
+        {
+          "claim": "Precise file-by-file operations with line numbers make this immediately executable",
+          "file_line": "agent-commands-retirement.plan.md:132-158"
+        },
+        {
+          "claim": "Owner-confirmed decisions are recorded (experiments/ delete, ephemeral-to-permanent-homing classification)",
+          "file_line": "agent-commands-retirement.plan.md:80"
+        },
+        {
+          "claim": "Code-expert plan-time approval with tracked findings is still the active review record",
+          "file_line": "agent-commands-retirement.plan.md:247-255"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent decision in the plan is grounded in existing doctrine (PDR-051, ADR-125), pre-verified by a code-expert plan-time dispatch, and owner-confirmed where required. The plan corrects its own misclassification (chatgpt-report-normalisation, line 249) and imposes strict commit ordering to prevent gate regression (line 129). No speculative or invented scope is present; non-goals are explicitly bounded (lines 277-280).",
+      "content_quality": "strong",
+      "content_quality_note": "Each commit has file-level specificity including line numbers (e.g. lines 136-141 for validate-portability.ts edits), explicit deletion lists with counts (line 184-188), per-commit acceptance criteria with exact CLI commands (lines 159-165, 193-196, 225-227), a risk table with mitigations (lines 286-292), and a reviewer dispatch table with rationale per specialist (lines 235-241). Quality is above V0-conformance — it is execution-ready.",
+      "salvage_value": [
+        {
+          "idea": "Retire .agent/commands/ surface entirely — delete all 12 substantive and thin-pointer command files",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:63-78"
+        },
+        {
+          "idea": "Inline 582-line consolidate-docs.md into SKILL-CANONICAL.md",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:66"
+        },
+        {
+          "idea": "Inline 438-line session-handoff.md into SKILL-CANONICAL.md",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:70"
+        },
+        {
+          "idea": "Inline 154-line plan.md into SKILL-CANONICAL.md",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:68"
+        },
+        {
+          "idea": "Inline 96-line review.md and 64-line gates.md into their respective SKILL-CANONICALs",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:67-69"
+        },
+        {
+          "idea": "Inline chatgpt-report-normalisation PUA character table, positional mapping rule, and output contract — not delete-only",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:72"
+        },
+        {
+          "idea": "Create new ephemeral-to-permanent-homing SKILL-CANONICAL.md (classification: passive) inlining 130 lines",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:74"
+        },
+        {
+          "idea": "Delete .agent/commands/experiments/ (collaborate.md, step-back.md, think.md) as stale — owner-confirmed",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:80"
+        },
+        {
+          "idea": "Remove validate-portability.ts checks 1 and 2 (command adapter enumeration) — retired surface",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:134-135"
+        },
+        {
+          "idea": "Fix validate-portability.ts filename drift: SKILL.md -> SKILL-CANONICAL.md at lines 247, 264",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:136-137"
+        },
+        {
+          "idea": "Remove health-probe-shared.ts exports: COMMANDS_DIR constants and listCanonicalCommandNames / listCommandAdapterNames",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:144-147"
+        },
+        {
+          "idea": "Delete evaluateCommandAdapterParity from health-probe-parity.ts",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:148-150"
+        },
+        {
+          "idea": "Add 30 missing Skill(jc-*) permission entries to .claude/settings.json",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:155-156"
+        },
+        {
+          "idea": "Update validate-fitness-vocabulary fixture path from .agent/commands/consolidate-docs.md to SKILL-CANONICAL.md",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:153-154"
+        },
+        {
+          "idea": "Delete 10 .cursor/commands/ and 10 .gemini/commands/ vendor adapters pointing at retired surface",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:186-187"
+        },
+        {
+          "idea": "Apply historical-vs-normative discipline when editing 5 ADRs — do not rewrite decision-context paragraphs",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:200-206"
+        },
+        {
+          "idea": "Track two-validator contract gap (validate-portability.ts vs pnpm skills:check overlapping responsibilities) as a follow-up rather than in-scope",
+          "class": "speculative",
+          "file_line": "agent-commands-retirement.plan.md:99-103"
+        },
+        {
+          "idea": "Treat ~50 live-plan and memory references to .agent/commands/ as documentation drift, not load-bearing — defer",
+          "class": "speculative",
+          "file_line": "agent-commands-retirement.plan.md:95-97"
+        },
+        {
+          "idea": "Validator-first commit ordering so gate is never red on a committed state",
+          "class": "good",
+          "file_line": "agent-commands-retirement.plan.md:129"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": "agent-commands-retirement.plan.md:1-21 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `node_type` with literal value `\"plan\"` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": "agent-commands-retirement.plan.md:1-21 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `kind` (enum `strategic | executable`, LOCKED, required for all plans — V0 §2.2); plan carries `todos` which structurally implies `kind: executable`",
+          "file_line": "agent-commands-retirement.plan.md:1-21 (absent from frontmatter)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans — V0 §2.4); value appears only as body prose at line 25, not in frontmatter",
+          "file_line": "agent-commands-retirement.plan.md:25"
+        },
+        {
+          "issue": "Field `status: 🟡 PLANNING` present (line 5) — V0 §2.5 explicitly drops `status`; it is replaced by `kind`, `disposition`, and `gate`. Via migration map §3.5 this value maps to `kind: strategic` + `gate: awaiting: owner-decision` (with mandatory `expires`), but none of those fields are present",
+          "file_line": "agent-commands-retirement.plan.md:5"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` edge (LOCKED shape — V0 §2.3); required for executable plans; absent from frontmatter",
+          "file_line": "agent-commands-retirement.plan.md:1-21 (absent from frontmatter)"
+        },
+        {
+          "issue": "Body carries duplicate `**Status**: 🟡 PLANNING` prose field (line 27) in addition to frontmatter `status` — body prose state is the anti-pattern V0 §3.5 explicitly routes to axes",
+          "file_line": "agent-commands-retirement.plan.md:27"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Two-validator split (validate-portability.ts vs pnpm skills:check) is explicitly deferred as a follow-up with 'overlapping responsibilities' acknowledged but unresolved. This is a structural boundary ambiguity in the quality gate surface that will recur every time a new skill or adapter is added. Deferral is scoped correctly for this plan but the follow-up has no owning plan or concrete trigger.",
+          "file_line": "agent-commands-retirement.plan.md:261-262 (Tracked Follow-Ups §1) and :99-103 (Issue 7)"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan removes health-probe-parity.ts command-adapter checks (listCanonicalCommandNames, evaluateCommandAdapterParity) but no corresponding skills-parity runtime probe is specified to replace the coverage. The architectural invariant — that deployed adapters match canonicals — was held by these probes; Commit 1 deletes the probes without wiring equivalent skill-adapter parity coverage into evaluateAgentInfrastructureHealth.",
+          "file_line": "agent-commands-retirement.plan.md:143-150 (Commit 1 health-probe-parity.ts changes) and :41-46 (Issue 1)"
+        },
+        {
+          "severity": "low",
+          "claim": "~50 live-plan and memory references to .agent/commands/ are explicitly deferred as 'documentation drift / not load-bearing' with no plan ownership and no concrete trigger for resolution. Over time these become misleading cross-references that degrade substrate navigability — the pattern exactly described in the context section as the Wave 1 residue problem.",
+          "file_line": "agent-commands-retirement.plan.md:95-97 (Issue 6) and :278-279 (Non-goals)"
+        },
+        {
+          "severity": "info",
+          "claim": "Commit ordering (validator-refactor first, content deletion second, docs third) is architecturally sound: the gate is never red on a committed state, and the deletion batch is fully bounded by the preceding passing gate. The sequencing is well-motivated at lines 127-130.",
+          "file_line": "agent-commands-retirement.plan.md:127-130 (Commit 1 preamble)"
+        },
+        {
+          "severity": "info",
+          "claim": "ADR historical-vs-normative discipline is correctly identified as a constraint and explicitly named in risk mitigation, Commit 3 spec, and the docs-adr-expert dispatch. The architectural concern about permanent-doc integrity is adequately handled within the plan's scope.",
+          "file_line": "agent-commands-retirement.plan.md:91-92 (Issue 5) and :286-287 (Risk table row 2)"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "All seven todos carry status: completed",
+          "file_line": "lines 10-30"
+        },
+        {
+          "claim": "Completion Note (2026-04-24) declares execution complete with live validator stats",
+          "file_line": "lines 36-43"
+        },
+        {
+          "claim": "Plan is in current/ folder lane but all work is done and decisions are resolved",
+          "file_line": "lines 744-789"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All ideas are grounded in real gap analysis (lines 143-305), resolved with concrete decisions (lines 744-789), and closed by a documented completion note (lines 36-43). No speculative or bad ideas remain unresolved. D3 defers tooling explicitly rather than abandoning it, with a clear future trigger (lines 775-779).",
+      "content_quality": "strong",
+      "content_quality_note": "Audit tables at lines 143-305 are specific and countable. Acceptance criteria for every phase are unambiguous (e.g. lines 483-489, 539-547, 605-609). Decision records at lines 744-789 name the decision, the rationale, and the future trigger. The completion note at lines 36-43 closes the loop with live validator stats. The plan is well-structured and self-auditing.",
+      "salvage_value": [
+        {
+          "idea": "Three-layer portability model (.agent/ canonical, platform dirs as thin wrappers, entry points as routers) diverges from agentskills.io convention deliberately and the rationale must survive in ADR-125",
+          "class": "good",
+          "file_line": "lines 94-137"
+        },
+        {
+          "idea": "Post-install canonicalisation workflow (install → move to .agent/ → add classification → thin-wrap platforms → lock → portability:check) is the operational contract for every future vendor skill install",
+          "class": "good",
+          "file_line": "lines 379-391, 699-716"
+        },
+        {
+          "idea": "Silent vendor-skill exclusion pattern in validate-portability.mjs was a systemic gap; the fix (remove exclusions after canonicalisation) is load-bearing for ongoing correctness",
+          "class": "good",
+          "file_line": "lines 307-328"
+        },
+        {
+          "idea": "Pre-remediation audit baseline (24 canonical skills, 19/5 .agents/ gap, 0/23 .claude/ gap, 31 canonical rules with 0 .agents/ adapters) is the documented before-state",
+          "class": "good",
+          "file_line": "lines 143-244"
+        },
+        {
+          "idea": "Sub-agent adapters intentionally absent from .agents/ because invocation is platform-specific; README documents the omission",
+          "class": "good",
+          "file_line": "lines 248-264, 744-757"
+        },
+        {
+          "idea": "CLI canonicalisation tooling (pnpm agent-tools:canonicalise-vendor-skills) deferred to future/canonical-first-skill-pack-ingestion-tooling.plan.md pending a second install event",
+          "class": "speculative",
+          "file_line": "lines 410-414, 775-779"
+        },
+        {
+          "idea": "npx skills update will overwrite thin wrappers in platform dirs; manual re-run of canonicalisation workflow is the current mitigation",
+          "class": "good",
+          "file_line": "lines 396-421"
+        },
+        {
+          "idea": "skills-lock.json as a cross-reference between vendor skill upstream source and canonical .agent/skills/ entry — must be validated by portability:check",
+          "class": "good",
+          "file_line": "lines 583-589"
+        },
+        {
+          "idea": "Fifteen portability validator checks covering reverse links, thin-wrapper form, lock consistency, Claude skill permissions, and .agents/rules adapters",
+          "class": "good",
+          "file_line": "lines 278-305, 559-609"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED — required for all plans)",
+          "file_line": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (LOCKED — required for all plans)",
+          "file_line": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED — required for all plans; inferred `executable` from `todos` presence)",
+          "file_line": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `disposition: done` — plan is terminal (all todos completed, completion note dated 2026-04-24 at body line 36), but `disposition` is absent (LOCKED model, required for terminal plans per V0 §3.3)",
+          "file_line": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` — executable plans require this field or the `pending` sentinel (LOCKED per V0 §2.3)",
+          "file_line": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED — required for all plans per V0 §2.4)",
+          "file_line": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md:1"
+        },
+        {
+          "issue": "Present field `isProject: false` is explicitly dropped by V0 (§2.5: 'Dropped — plan ≈ Linear Project is universal; the projection is the `projects_to` edge, not a boolean')",
+          "file_line": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md:31"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter — zero of the V0 edge family (authority, traceability, dependency, evidence, projection) is present; `thread`, `derives_from`, `depends_on`, `related` all absent",
+          "file_line": ".agent/plans/agent-tooling/current/agent-infrastructure-portability-remediation.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan is fully executed (all seven phases completed) and carries a 2026-04-24 completion note. It functions as an audit+remediation record rather than live work, so its ongoing presence in current/ is a lifecycle placement issue, not an architecture defect.",
+          "file_line": "agent-infrastructure-portability-remediation.plan.md:36-43"
+        },
+        {
+          "severity": "medium",
+          "claim": "The three-layer model (ADR-125 Layer 1 = .agent/, Layer 2 = platform adapters, Layer 3 = entry points) is architecturally sound, but the plan exposes a structural tension it does not resolve: .agents/ simultaneously holds the cross-platform agentskills.io canonical location AND acts as a thin-wrapper adapter layer for the repo's own canonical .agent/ store. These two roles are conflated throughout — the plan treats .agents/ as a peer Layer-2 adapter yet the agentskills.io spec treats it as the primary canonical directory. The distinction should be resolved in ADR-125 rather than left as a prose note.",
+          "file_line": "agent-infrastructure-portability-remediation.plan.md:104-137"
+        },
+        {
+          "severity": "medium",
+          "claim": "The npx skills update overwrite hazard (Section 1.5, D2) is mitigated only by a documented manual workflow plus a validator gate. The validator can only block after a violation is committed to the working tree — it cannot prevent an npx invocation from overwriting thin wrappers. The future-plan promotion trigger ('if a future session performs another vendor skill install/update and the manual workflow proves repetitive or error-prone') defers a known structural fragility indefinitely. For a multi-developer or high-agent-density environment (the stated transition goal), this is a real regression vector.",
+          "file_line": "agent-infrastructure-portability-remediation.plan.md:396-421"
+        },
+        {
+          "severity": "low",
+          "claim": "Commands in .agents/ are expressed as jc-* skill directories rather than a commands/ directory, deliberately following the agentskills.io spec's absence of a separate commands artefact type. The plan notes this is acceptable, but does not document what happens when a future agentskills.io version does define a commands surface — there is no migration path or version-watch reference.",
+          "file_line": "agent-infrastructure-portability-remediation.plan.md:220-226"
+        },
+        {
+          "severity": "low",
+          "claim": "The thin-wrapper form validation (Check 14) uses a 15-line non-frontmatter limit and a content reference check, but the agentskills.io spec states SKILL.md should be under 500 lines / 5,000 tokens (for the canonical form). The plan does not align these two limits or explain why the adapter limit (15 lines) is not codified in ADR-125 as a contract, leaving the number effectively undocumented outside the validator script.",
+          "file_line": "agent-infrastructure-portability-remediation.plan.md:116-117"
+        },
+        {
+          "severity": "info",
+          "claim": "The completion note records live validator stats (12 canonical commands, 36 canonical skills, 35 canonical rules, etc.) as point-in-time counts, which will drift from reality as the repo evolves. These counts are not computed from the validator output — they are hand-written prose. This creates a permanent potential for documentation drift identical to the ADR-125 drift this plan was written to fix.",
+          "file_line": "agent-infrastructure-portability-remediation.plan.md:42-44"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All seven remediation phases completed as of 2026-04-24; pnpm portability:check currently passes with 12 canonical commands, 36 canonical skills, 35 canonical rules, 22 reviewer adapters, 37 Cursor triggers, 35 Claude rules, and 35 .agents/rules wrappers (cited at lines 36-43)",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "Ran `pnpm portability:check` first-hand: \"Portability validation passed: 22 canonical skills, 93 canonical rules, 22 reviewer adapters, 95 Cursor triggers, 93 Claude rules, 93 .agents rules.\" (agent-tools/src/validators/portability/validate-portability.ts output) vs plan lines 41-43."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/agent-naming-schema-v3.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status is DECISION-COMPLETE — QUEUED; execution has not begun",
+          "file_line": "file:58-60"
+        },
+        {
+          "claim": "All todos remain pending — no partial landing invalidates the plan body",
+          "file_line": "file:6-51"
+        },
+        {
+          "claim": "Plan body is fully elaborated with red/green cycle specs, acceptance criteria, risk register, and foundation alignment; content is executor-ready",
+          "file_line": "file:229-570"
+        },
+        {
+          "claim": "Predecessor v2 plan is archived-complete and this plan is its declared successor",
+          "file_line": "file:69-70"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in a first-hand defect trace, a named predecessor, owner-decided shape, or an explicit assumption-flag. The plan contains no speculative futures and no bad ideas; the one uncertain element (540-noun disjointness) is explicitly flagged with a required gate test rather than asserted as fact (file:365-373).",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is executor-ready: each cycle has a red/green/acceptance/validation structure (e.g. file:234-253, file:260-280, file:284-318), a proof contract table maps all nine acceptance criteria to proof levels (file:483-495), risks are enumerated with mitigations (file:500-508), and the first-principles-check clause prevents stale-symbol drift at execution time (file:188-203). This is well above V0-conformant — it is substantively complete planning content.",
+      "salvage_value": [
+        {
+          "idea": "Diagnose and cure the one-seed-two-names P1 split by pinning OAK_AGENT_NAMING_SCHEMA_ID (era) in session hooks instead of caching the rendered name in OAK_AGENT_IDENTITY_OVERRIDE",
+          "class": "good",
+          "file_line": "file:78-115"
+        },
+        {
+          "idea": "Precedence chain: explicit operator override wins, then pinned era, then active schema default; unrecognised pinned era fails soft",
+          "class": "good",
+          "file_line": "file:219-224"
+        },
+        {
+          "idea": "statusline-identity.ts needs no edit because it spawns the CLI as a subprocess and inherits the pinned-era env variable transitively",
+          "class": "good",
+          "file_line": "file:288-314"
+        },
+        {
+          "idea": "Gate the 540-noun disjointness claim with an explicit test asserting subject-set union object-set has cardinality 540 before relying on the 64,800 namespace figure",
+          "class": "good",
+          "file_line": "file:365-373"
+        },
+        {
+          "idea": "v3 shape C: two title-cased columns, flat single group, ~120 agentive second-word pool reusing the existing 540-noun first column verbatim",
+          "class": "good",
+          "file_line": "file:346-353"
+        },
+        {
+          "idea": "Owner taste review of the agentive wordlist is a hard blocking gate before WS3 registration, mirroring the v2 WS4 gate",
+          "class": "good",
+          "file_line": "file:390-397"
+        },
+        {
+          "idea": "Register v3 as an inactive era first (ACTIVE_NAMING_SCHEMA_ID unchanged) and only flip to active in a separate owner-gated cycle",
+          "class": "good",
+          "file_line": "file:421-443"
+        },
+        {
+          "idea": "ADR-198 consequence text is rewritten (not appended) after WS1 because the in-flight-session mechanism changes from name-caching to era-pinning",
+          "class": "good",
+          "file_line": "file:449-457"
+        },
+        {
+          "idea": "9-point acceptance criteria proof contract linking each AC to a proof level (unit/e2e/non-code)",
+          "class": "good",
+          "file_line": "file:483-495"
+        },
+        {
+          "idea": "Risk: activating v3 before era-pinning lands re-splits every live session — mitigated by hard gating WS3 cycle 3.2 on WS1 fully landed and requiring the activation test to assert a true v3 era",
+          "class": "good",
+          "file_line": "file:503-504"
+        },
+        {
+          "idea": "Non-goal: no backfill of historical naming_schema_version values — recorded override rows from pre-cure sessions are immutable events",
+          "class": "good",
+          "file_line": "file:160-162"
+        },
+        {
+          "idea": "Non-goal: no theming of the v3 first word — flat 540-noun first column for distinctiveness (shapes A/B/D decided against)",
+          "class": "good",
+          "file_line": "file:165-168"
+        },
+        {
+          "idea": "Plan-body first-principles check mandating re-derivation from live code (not plan sketches) before each cycle, with explicit re-confirmation of line/symbol anchors",
+          "class": "good",
+          "file_line": "file:188-203"
+        },
+        {
+          "idea": "coordination signal with statusline-session-shape-indicators.plan.md if both run concurrently to avoid conflicting edits to statusline-identity",
+          "class": "good",
+          "file_line": "file:554-557"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 DECISION-COMPLETE — QUEUED (`current/`; not started). Owner decisions are landed (shape, sequence, accepted P1 diagnosis); execution has not begun.",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes — V0 §2.1)",
+          "file_line": "agent-naming-schema-v3.plan.md:1-53 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (LOCKED, required for all — V0 §2.1)",
+          "file_line": "agent-naming-schema-v3.plan.md:1-53 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all; maps to `executable` given todos are present — V0 §2.2, §3.1)",
+          "file_line": "agent-naming-schema-v3.plan.md:1-53 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all — V0 §2.4); date exists in body at line 57 only",
+          "file_line": "agent-naming-schema-v3.plan.md:57 (body only, not frontmatter)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED, required for executable plans — V0 §2.3); no strategic-choice ID or `pending` sentinel declared",
+          "file_line": "agent-naming-schema-v3.plan.md:1-53 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Retained dropped field `isProject: false` — V0 §2.5 explicitly drops this key (replaced by `projects_to` edge)",
+          "file_line": "agent-naming-schema-v3.plan.md:52"
+        },
+        {
+          "issue": "Status signal `🟡 DECISION-COMPLETE — QUEUED` lives in the body rather than mapped to frontmatter axes; it blends readiness (`DECISION-COMPLETE`) and execution (`QUEUED`/`not started`) senses that V0 §3.5 routes to separate orthogonal axes (`kind`, projected execution) — the compound does not map cleanly",
+          "file_line": "agent-naming-schema-v3.plan.md:58-60"
+        },
+        {
+          "issue": "No typed edge fields declared in frontmatter (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on`, `supersedes`/`superseded_by`) — predecessor and thread are prose-only in the body (lines 66-69)",
+          "file_line": "agent-naming-schema-v3.plan.md:66-69 (body prose; not frontmatter edges)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan self-identifies and explicitly flags its primary unverified assumption: the 540-noun union rests on the v2 subject (300) and object (240) lists being fully disjoint across all six themes, not merely within-theme. The plan acknowledges the v2 gates enforce within-theme stem-disjointness only, and mandates an explicit cross-set cardinality test before any namespace figure (64,800) is relied upon. The assumption is flagged with appropriate handling instructions (surface to owner, do not silently de-duplicate).",
+          "file_line": "agent-naming-schema-v3.plan.md:367-373"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes 'statusline-identity.ts' is purely a subprocess consumer of the CLI and therefore requires no code edit. This is stated as authoring-time first-hand verified, but the propagation proof in Cycle 1.3 is described as an open execution decision — whether a focused integration test is added or only CLI unit coverage plus live proof is accepted. If statusline-identity.ts is ever changed by the concurrent 'statusline-session-shape-indicators' plan (cited in Dependencies), the transitive-cure assumption may not hold. The coordination note is present but the assumption remains contingent on that plan not touching the spawn-env path.",
+          "file_line": "agent-naming-schema-v3.plan.md:285-314, 556-557"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the touch-point list of OAK_AGENT_IDENTITY_OVERRIDE direct readers — enumerated at authoring via grep — is exhaustive: cli, cli-environment, collaboration-state/identity (normal path), types, cli-spec-help, both hooks. The plan explicitly mandates a re-grep at execution start to confirm exhaustiveness. The assumption is safely handled but depends on executor discipline to actually re-run the grep before claiming WS1 done.",
+          "file_line": "agent-naming-schema-v3.plan.md:503-504"
+        },
+        {
+          "severity": "low",
+          "claim": "Line/symbol references are anchored to HEAD at 2026-06-13 (session-identity-hook.ts:90, identity.ts:61, identity.ts:103, statusline-identity.ts:94-98). The plan correctly flags this as requiring re-confirmation before editing. However, the plan is queued and not yet started; accumulated upstream churn between authoring and execution could shift these significantly. The plan-body first-principles check clause requires re-reading these files at execution time, which is the correct mitigation — the assumption is managed but real.",
+          "file_line": "agent-naming-schema-v3.plan.md:196-203"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan assumes 'OAK_AGENT_NAMING_SCHEMA_ID' writing into the session env is sufficient for the statusline subprocess to inherit it, based on how both the Claude CLAUDE_ENV_FILE append mechanism and the Cursor sessionStart env map propagate environment variables to child processes. This is a platform-surface assumption. The plan correctly marks the Claude and Cursor hook env contracts as vendor surfaces requiring re-verification against current platform docs before execution (plan-body first-principles check, vendor-literal clause).",
+          "file_line": "agent-naming-schema-v3.plan.md:199-203"
+        },
+        {
+          "severity": "info",
+          "claim": "A prior assumptions-expert review was conducted on 2026-06-13 with verdict READY-WITH-AMENDMENTS, both amendments applied and documented. The two amendments (statusline transitive-cure reframing; identity.ts:103 admin-path citation correction) are already reflected in the plan body. No residual unaddressed amendment from that review is visible.",
+          "file_line": "agent-naming-schema-v3.plan.md:559-570"
+        },
+        {
+          "severity": "info",
+          "claim": "The agentive wordlist target of approximately 120 items is an authoring estimate, not a fixed requirement. The plan correctly treats this as a floor (cardinality gate: 'agentive pool meets the target cardinality floor approx 120') with the gate enforcing it, not a hardcoded constant. The 20 demo agentives in the source decision are explicitly labelled a seed list, not the final pool. This assumption is correctly scoped.",
+          "file_line": "agent-naming-schema-v3.plan.md:348-352, 382-388"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All todos remain pending — the plan has not been partially executed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "All 12 todos carry status: pending (lines 7, 10, 14, 18, 22, 26, 30, 34, 38, 46, 46, 50); no other status value appears in the block. Body Status independently confirms \"DECISION-COMPLETE — QUEUED (current/; not started)... execution has not begun\" (lines 58-60), and the WS3 test note states ACTIVE_NAMING_SCHEMA_ID is still v2 / unchanged (line 423)."
+        },
+        {
+          "claim": "Predecessor plan agent-naming-schema-v2.plan.md merged PR #189 SHA 289b3e036",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "git show -s 289b3e036 => \"Merge pull request #189 from oaknational/feat/better_agent_naming\" (2026-06-12); merge --stat includes agent-naming-schema-v2.plan.md + schema-registry.ts + v2 era schemas; predecessor self-reports identical fact at agent-naming-schema-v2.plan.md:82; cited in v3 plan at agent-naming-schema-v3.plan.md:69-70"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/agent-tools-cli-ergonomics.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending — plan is actionable and not yet started",
+          "file_line": "lines 17-48 (todos block, all status: pending)"
+        },
+        {
+          "claim": "WS0 is a live blocking gate; implementation scope is explicitly not yet ratified",
+          "file_line": "line 5 (status field) and line 204 (Prerequisites)"
+        },
+        {
+          "claim": "WS4 references seeded-but-uncommitted work, indicating active work-in-progress context",
+          "file_line": "lines 147-149"
+        },
+        {
+          "claim": "No completion signal, archival marker, or supersession reference anywhere in the file",
+          "file_line": "lines 1-265 (no such content found)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly diagnoses the root cause as structural inconsistency rather than agent error (lines 65-79), names the correct cure (one convention plus a mechanical guard, lines 82-86), gates scope at WS0 rather than pre-inventing it (lines 90-124), explicitly fences non-goals to prevent scope creep (lines 208-213), and carries the test-the-engine-not-the-config principle in both WS6 and the acceptance criteria (lines 194-197). No ideas in the plan contradict the repo's principles or PDR-055.",
+      "content_quality": "strong",
+      "content_quality_note": "Each work-stream has a concrete acceptance criterion with a proof method (lines 179-200). Risk table names mitigations that map to specific workstream decisions (lines 239-246). The backward-compat non-canonical-value consumer risk is called out explicitly and assigned to WS0 inventory (lines 115-117, 241-242). The plan-body first-principles check section (lines 229-235) self-applies the shape-clause and landing-path clause correctly.",
+      "salvage_value": [
+        {
+          "idea": "Five structural generators of CLI mis-invocation: required args for tool-knowable values, flag names encoding files not intent, skeleton help, non-teaching errors, and cross-command inconsistency",
+          "class": "good",
+          "file_line": "lines 68-79"
+        },
+        {
+          "idea": "One convention applied uniformly across the whole command surface, not N bespoke fixes, as the cure shape",
+          "class": "good",
+          "file_line": "lines 82-86"
+        },
+        {
+          "idea": "WS0 as a bounded design phase producing a convention spec, conformance matrix, consumer inventory, and ratification gate before any implementation begins",
+          "class": "good",
+          "file_line": "lines 90-123"
+        },
+        {
+          "idea": "Default well-known state paths (--active/--closed/--comms-dir) to canonical .agent/state/collaboration/... locations with explicit override preserved",
+          "class": "good",
+          "file_line": "lines 125-129"
+        },
+        {
+          "idea": "Derive --platform/--model/session/--now from hook-set env when omitted, consistent with identity preflight",
+          "class": "good",
+          "file_line": "lines 131-135"
+        },
+        {
+          "idea": "Teaching help: per-flag description + default + canonical value + worked example on every command",
+          "class": "good",
+          "file_line": "lines 137-141"
+        },
+        {
+          "idea": "Actionable boundary errors naming surface and expectation with cause preserved, seeded work committed first then extended",
+          "class": "good",
+          "file_line": "lines 143-149"
+        },
+        {
+          "idea": "Single invocation form: consolidate standalone pnpm-script command-scripts into the unified CLI, retire the -- passthrough footgun",
+          "class": "good",
+          "file_line": "lines 151-161"
+        },
+        {
+          "idea": "WS6 structural conformance guard that fails CI when any command including a future one violates the convention",
+          "class": "good",
+          "file_line": "lines 163-169"
+        },
+        {
+          "idea": "Test the conformance engine against a deliberately non-conforming probe, not a snapshot of today's configuration",
+          "class": "good",
+          "file_line": "lines 194-197"
+        },
+        {
+          "idea": "Backward-compat regression sweep must assert explicit-override-wins for every defaulted flag, not only default-fires",
+          "class": "good",
+          "file_line": "lines 198-200"
+        },
+        {
+          "idea": "WS0 consumer inventory explicitly includes non-canonical-value consumers (test fixtures, per-agent dirs, relative paths)",
+          "class": "good",
+          "file_line": "lines 115-117"
+        },
+        {
+          "idea": "Mine WS-outcomes into use-built-agent-tools-cli rule and start-right reading order so the convention becomes documented doctrine, not just code",
+          "class": "good",
+          "file_line": "lines 260-264"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "READY FOR EXECUTION (Phase 0 first; implementation scope ratified at the Phase-0 gate)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "node_type field absent — required for all plans (LOCKED, V0 §2.1)",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:1-49 (frontmatter block)"
+        },
+        {
+          "issue": "id field absent — required for all plans (LOCKED, V0 §2.1); emergent plan_id present at line 2 but is the dropped key to be replaced by id",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:2"
+        },
+        {
+          "issue": "name field absent — required for all plans (LOCKED, V0 §2.1)",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:1-49 (frontmatter block)"
+        },
+        {
+          "issue": "overview field absent — required for all plans (LOCKED, V0 §2.1)",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:1-49 (frontmatter block)"
+        },
+        {
+          "issue": "kind field absent — required for all plans (LOCKED, V0 §2.2); plan's folder (current/), todos, and READY-FOR-EXECUTION status indicate kind: executable",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:1-49 (frontmatter block)"
+        },
+        {
+          "issue": "last_updated field absent — required for all plans (LOCKED, V0 §2.4); created at line 6 is an explicitly dropped housekeeping key (V0 §2.5)",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:6"
+        },
+        {
+          "issue": "serves_strategic_choice edge absent — required for executable plans (LOCKED shape, V0 §2.3)",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:1-49 (frontmatter block)"
+        },
+        {
+          "issue": "status field present and encodes readiness + gate condition in prose — V0 §2.5 explicitly drops status (386 census); its meaning here maps to kind: executable and gate: owner-decision but is not expressed via those axes",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:5"
+        },
+        {
+          "issue": "collection field present — V0 §2.5 explicitly drops collection/lane",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:3"
+        },
+        {
+          "issue": "lane field present — V0 §2.5 explicitly drops collection/lane",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:4"
+        },
+        {
+          "issue": "created field present — V0 §2.4/§2.5 folds created into last_updated; standalone created is a dropped housekeeping key",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:6"
+        },
+        {
+          "issue": "Gate condition encoded in status prose ('Phase 0 first; implementation scope ratified at the Phase-0 gate') rather than a formal gate: block with awaiting/clears_when/expires (V0 §3.4/§2.2)",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:5"
+        },
+        {
+          "issue": "Per-todo depends_on sub-field (e.g. line 24) is not part of the V0 todo object schema { id, content, status } (V0 §2.4, Zod sketch §6)",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:24"
+        }
+      ],
+      "unclassified_keys": [
+        "plan_id",
+        "collection",
+        "lane",
+        "created",
+        "owner_thread",
+        "problem_origin"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Non-goal at line 209 explicitly fences out unified-entrypoint architecture changes and no-new-bins. This boundary is well-drawn: the plan is a convention-and-conformance overlay on the existing architecture, not a structural rework. Architecture concern is low-risk scope-leak only, which is mitigated by WS0's conformance-matrix gate.",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:209"
+        },
+        {
+          "severity": "low",
+          "claim": "WS2 derives platform/model/now from env at the outermost boundary (the bin). The risk table at line 241 records the mitigation (pure resolver, env as explicit arg). However, the plan does not specify where in the module graph the env-to-arg translation boundary sits — if multiple commands individually read env rather than sharing one boundary resolver, a drift surface is introduced. WS0 should name this boundary module explicitly.",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:133-135"
+        },
+        {
+          "severity": "low",
+          "claim": "WS6 specifies a structural conformance guard (test/repo-validator) at lines 165-169 but does not identify whether this guard runs as a unit test, a CI-only script, or a pre-commit hook. The architectural placement matters: a unit test catches drift post-commit; a hook catches it pre-commit; a CI-only script does not gate local work. WS0 should decide and name the guard's runtime home.",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:165-169"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS5 proposes consolidating standalone command-scripts into the unified CLI as subcommands (lines 153-161) but does not identify the entry-point module or the subcommand-dispatch layer that will host them. The existing pnpm-script-to-bin-to-tsx wiring is the source of the footgun being retired. If WS0 does not capture the target dispatch architecture (how new subcommands register, how the router discovers them), WS5 risks producing an ad-hoc consolidation that later reproduces the same inconsistency in dispatcher shape rather than in flag shape.",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:153-161"
+        },
+        {
+          "severity": "low",
+          "claim": "WS4 first cycle commits seeded-but-uncommitted work (json.ts parseJsonText + state-parsers.ts, lines 147-149). The plan does not explain why this work is seeded-but-not-landed; if it exists in the working tree it should be discoverable. The architecture question is: does the seeded work already conform to the WS0 convention, or might WS0 require it to be rewritten before landing? The plan should note whether the seeded work is pre-convention or post-convention.",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:147-149"
+        },
+        {
+          "severity": "info",
+          "claim": "Practice-Core portability note at lines 227-228 correctly scopes identity/claim resolution as platform-independent. No architecture violation found; aligns with the portability rule.",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:227-228"
+        },
+        {
+          "severity": "info",
+          "claim": "PDR-055 clauses 7-10 are cited as the doctrinal basis at lines 85-86 and 218-220. The plan is an instantiation, not an invention — architecture is anchored to an existing ratified decision record. No foundation gap.",
+          "file_line": "agent-tools-cli-ergonomics.plan.md:85-86"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/agent-tools-test-io-compliance.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Five specific in-scope files are named with IO type and likely fix pattern — actionable inventory ready for execution",
+          "file_line": "agent-tools-test-io-compliance.plan.md:25-31"
+        },
+        {
+          "claim": "Acceptance criteria are fully specified and mechanically verifiable; no ambiguity about done-state",
+          "file_line": "agent-tools-test-io-compliance.plan.md:50-55"
+        },
+        {
+          "claim": "Status is PENDING and work is not marked complete or superseded",
+          "file_line": "agent-tools-test-io-compliance.plan.md:4"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All constituent ideas are well-grounded: the IO ban is policy (testing-strategy.md, ADR-078 at line 12 and 19), the fix patterns are proven-in-session with commit anchors (lines 35-46), the five-file inventory is concrete (lines 25-31), and the acceptance criterion includes a named automated gate (line 52). No speculative or bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is complete at the task-execution level: it names every file, assigns each a likely fix pattern, records the governing rationale with a direct owner quote (line 18-19), anchors proven patterns to commits (lines 43-46), and defines mechanical acceptance criteria including a specific lint rule (line 52). Nothing is hand-wavy or deferred to future discovery.",
+      "salvage_value": [
+        {
+          "idea": "Maintain a concrete per-file inventory of IO-violating test files with their IO mechanism and likely fix pattern",
+          "class": "good",
+          "file_line": "agent-tools-test-io-compliance.plan.md:25-31"
+        },
+        {
+          "idea": "Static-data file reads in tests should become compile-time JSON imports when resolveJsonModule is enabled",
+          "class": "good",
+          "file_line": "agent-tools-test-io-compliance.plan.md:35-38"
+        },
+        {
+          "idea": "Command and product IO without a seam should be fixed by adding a dependency-injection seam rather than leaving IO in the test",
+          "class": "good",
+          "file_line": "agent-tools-test-io-compliance.plan.md:39-42"
+        },
+        {
+          "idea": "When logic is already covered by a pure seam, delete the IO-wiring test rather than migrate it",
+          "class": "good",
+          "file_line": "agent-tools-test-io-compliance.plan.md:43-46"
+        },
+        {
+          "idea": "Untestable-without-IO is treated as a product defect (ADR-078), not a testing limitation",
+          "class": "good",
+          "file_line": "agent-tools-test-io-compliance.plan.md:18-19"
+        },
+        {
+          "idea": "Acceptance criterion includes a named automated lint rule (@oaknational/no-real-io-in-tests) for ongoing enforcement",
+          "class": "good",
+          "file_line": "agent-tools-test-io-compliance.plan.md:52"
+        },
+        {
+          "idea": "Per-cycle verification includes a grep sweep to confirm the IO inventory reaches empty",
+          "class": "good",
+          "file_line": "agent-tools-test-io-compliance.plan.md:59-61"
+        },
+        {
+          "idea": "Each file in scope gets per-file judgment; patterns are not assumed uniform",
+          "class": "good",
+          "file_line": "agent-tools-test-io-compliance.plan.md:31"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "PENDING — opened 2026-06-13 (Skylark wakes Summit) after the collaboration-state schema-fixture + check/preflight IO was cleared (commits a1fb8e9c4, 5c01ee7ee, 221ee4a9f). These remaining files are pre-existing and span unrelated areas (codex, runtime-agent-index, context-cost); owner directed (2026-06-13) that refactoring product code to add testability seams is the correct fix, not deferral.",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field: id — no stable kebab slug present",
+          "file_line": "file:1-6 (entire frontmatter block)"
+        },
+        {
+          "issue": "Missing required field: node_type — discriminator literal \"plan\" absent",
+          "file_line": "file:1-6"
+        },
+        {
+          "issue": "Missing required field: kind — readiness axis absent; plan carries todos in the body so it reads as executable but the field is not declared",
+          "file_line": "file:1-6"
+        },
+        {
+          "issue": "Missing required field: last_updated — ISO date field absent",
+          "file_line": "file:1-6"
+        },
+        {
+          "issue": "Dropped key status present: V0 §2.5 explicitly drops status (386 census); value is a whole-paragraph prose blob conflating execution state, blocking context, and commit provenance — exactly the chaos V0 exists to eliminate",
+          "file_line": "file:4"
+        },
+        {
+          "issue": "Dropped key isProject present: V0 §2.5 explicitly drops isProject; plan≈Linear Project is universal; the projection is the projects_to edge, not a boolean",
+          "file_line": "file:5"
+        },
+        {
+          "issue": "Missing recommended field: serves_strategic_choice — required for executable plans (V0 §2.3); may carry \"pending\" sentinel but must be present",
+          "file_line": "file:1-6"
+        },
+        {
+          "issue": "status value does not map cleanly via §3.5 migration map: \"PENDING\" is not a listed emergent value; the closest match is the blocked-on-owner-decision row which maps to gate: owner-decision, but no gate field is present and the value mixes execution commentary with blocking provenance",
+          "file_line": "file:4"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "test",
+      "specialist_kind": "test",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Acceptance criterion references `@oaknational/no-real-io-in-tests` ESLint rule by name, implying it exists and reports. This is load-bearing: if the rule is not wired or reports under a different name, the zero-findings gate cannot close. First-hand verification of the rule's registration and enabled status is needed before the plan is executed.",
+          "file_line": "agent-tools-test-io-compliance.plan.md:53"
+        },
+        {
+          "severity": "low",
+          "claim": "The verification sweep command (line 60-61) uses a `grep` split across two lines in the plan body. As written the shell invocation is a single logical command, but the line-break formatting risks copy-paste truncation. A runnable one-liner or a repo script reference would be safer.",
+          "file_line": "agent-tools-test-io-compliance.plan.md:60-61"
+        },
+        {
+          "severity": "low",
+          "claim": "Acceptance requires lint AND test green at every commit (line 54-55), but the plan has no explicit per-file cycle structure. Without enumerated sub-tasks or a sequenced checklist, an executor could fix all five files and commit once, leaving intermediate states unverifiable. The proven patterns reference individual commits (a1fb8e9c4, 5c01ee7ee, 221ee4a9f) suggesting per-file commits were intended — that expectation should be stated explicitly.",
+          "file_line": "agent-tools-test-io-compliance.plan.md:54-56"
+        },
+        {
+          "severity": "info",
+          "claim": "Pattern 3 (delete-with-pure-replacement) is listed as proven but its applicability to the five remaining files is unassessed in the plan. Each file is tagged 'investigate', which is correct hygiene, but if any of the five turns out to have unique logic with no pure-seam coverage, the delete path would destroy the safety net rather than replace it. The plan does not require a pre-deletion coverage check before applying pattern 3.",
+          "file_line": "agent-tools-test-io-compliance.plan.md:43-46"
+        },
+        {
+          "severity": "info",
+          "claim": "The two codex integration test files (lines 25-26) are listed with 'investigate: DI seam or static read' but no owner direction exists in the plan distinguishing which pattern applies. If the codex commands have no existing DI seam, adding one is a product-code change; the plan cites owner direction that this is correct (line 19), but does not name the ADR or require an architecture note for the new seam. Low risk given ADR-078 is cited contextually.",
+          "file_line": "agent-tools-test-io-compliance.plan.md:25-26"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/collaboration-doc-fitness-remediation.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Status declared Complete — implemented 2026-04-27",
+          "file_line": "24"
+        },
+        {
+          "claim": "All four todos marked status: completed",
+          "file_line": "13,15,17,19"
+        },
+        {
+          "claim": "Validation passed for pnpm practice:fitness:strict-hard, markdownlint, Prettier, and link discoverability",
+          "file_line": "84-86"
+        },
+        {
+          "claim": "Folder lane is current but implementation is finished",
+          "file_line": "path + 24"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly diagnosed a fitness violation caused by legitimate growth in collaboration state (lines 32-44), scoped the fix narrowly (lines 48-62), and executed a structural split without deleting signal. The out-of-scope carve-outs (lines 59-61) are architecturally sound.",
+      "content_quality": "strong",
+      "content_quality_note": "Trigger is specific with exact line/character counts (lines 36-40). Acceptance criteria are verifiable (lines 65-69). Completion note documents exactly what was created and what was intentionally deferred (lines 72-88). No padding.",
+      "salvage_value": [
+        {
+          "idea": "Hard fitness limits on collaboration directive (260 lines) and conventions file (220 lines / 12,000 chars) are the governing thresholds",
+          "class": "good",
+          "file_line": "36-40"
+        },
+        {
+          "idea": "Correct response to fitness pressure is structural extraction/refinement, not deleting signal",
+          "class": "good",
+          "file_line": "43-44"
+        },
+        {
+          "idea": "agent-collaboration.md is the doctrinal working model; collaboration-state-conventions.md is the operational state index — authority split is fixed",
+          "class": "good",
+          "file_line": "75-80"
+        },
+        {
+          "idea": "collaboration-state-lifecycle.md as the companion for detailed claims/sidebars/escalation/observability recipes",
+          "class": "good",
+          "file_line": "80-83"
+        },
+        {
+          "idea": "Out-of-scope residual: vocabulary finding in shared-comms-log.md under peer claim was not resolved here",
+          "class": "speculative",
+          "file_line": "87-88"
+        },
+        {
+          "idea": "Changing collaboration protocol semantics is explicitly out of scope for fitness remediation",
+          "class": "good",
+          "file_line": "58-59"
+        },
+        {
+          "idea": "Weakening 'knowledge and communication, not mechanical refusals' doctrine is explicitly out of scope",
+          "class": "good",
+          "file_line": "59-60"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "Complete — implemented 2026-04-27 by splitting detailed lifecycle recipes into `collaboration-state-lifecycle.md`.",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED — required for all plans, V0 §2.1)",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:1-20 (frontmatter block has no `id` key)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` (LOCKED — required for all plans, V0 §2.1)",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:1-20 (frontmatter block has no `node_type` key)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED — required for all plans; inferred `executable` from presence of `todos`, V0 §2.2 / §3.1)",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:1-20 (frontmatter block has no `kind` key)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED — required for all plans, V0 §2.4)",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:1-20 (frontmatter block has no `last_updated` key)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` for executable plan (LOCKED — required or `pending` sentinel, V0 §2.3 / §4)",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:1-20 (frontmatter block has no `serves_strategic_choice` key)"
+        },
+        {
+          "issue": "Terminal disposition not in frontmatter: body says 'Status: Complete' but `disposition: done` is absent from frontmatter; V0 §2.2 requires `disposition` once a plan reaches terminal state (V0 §3.3 migration map maps `complete` → `disposition: done`)",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:25 (body prose `**Status**: Complete — implemented 2026-04-27`)"
+        },
+        {
+          "issue": "Status carried as body prose instead of frontmatter axis fields; V0 §2.5 explicitly drops `status:` and replaces it with `kind`/`disposition`/`gate`/projected execution",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:25-26"
+        },
+        {
+          "issue": "`thread` association declared only as body prose ('Thread: agentic-engineering-enhancements', line 29) rather than as frontmatter edge `thread:` (LOCKED shape, V0 §2.3 / §4)",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:29"
+        },
+        {
+          "issue": "Plan is in `current/` folder but all todos are `completed` and body declares completion; V0 §3.6 mandates terminal plans (disposition: done) reside in `archive/`, not `current/`",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md (path: .agent/plans/agent-tooling/current/)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "docs",
+      "specialist_kind": "docs",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "All four todos are marked completed and the Completion Note confirms structural extraction into collaboration-state-lifecycle.md, with validation passing for strict-hard, markdownlint, Prettier, and link discoverability. The plan has fully discharged its stated scope.",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:10-19,72-88"
+        },
+        {
+          "severity": "low",
+          "claim": "The Completion Note records one residual vocabulary finding in shared-comms-log.md that was explicitly left unresolved because the file was under a peer agent's active claim. This out-of-scope exception is described accurately, but no follow-up tracker or owner-decision record is cited. If that claim has since cleared, the vocabulary finding may be a dangling loose end with no owning plan.",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:84-88"
+        },
+        {
+          "severity": "info",
+          "claim": "Status line says 'Complete — implemented 2026-04-27' and the plan is filed under current/. Archiving it to a completed/ or closed/ directory would keep the current/ estate clean and signal to readers that no action remains.",
+          "file_line": "collaboration-doc-fitness-remediation.plan.md:24-25"
+        }
+      ],
+      "load_bearing_claims_count": 3,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Status is Complete — implemented 2026-04-27 by splitting detailed lifecycle recipes into collaboration-state-lifecycle.md (cited at 24-25)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "collaboration-doc-fitness-remediation.plan.md:24-25 (Status: Complete) and :7-19 (all four todos status: completed) and :72-88 (Completion Note); corroborated by existing deliverable .agent/memory/operational/collaboration-state-lifecycle.md (11360 bytes) carrying the named recipes — Claims, Decision Threads, Sidebars, Joint Decisions, Escalations, Protocol Observability (lifecycle file headings at lines 20,164,186,199,212,226)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/collaboration-identity-doctrine-enforcement-remediation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Phase 0 complete with 10 commits and proof contract IDs 0-3 proven; Phases 1-3 authored and pending with explicit owner-gated resumption condition",
+          "file_line": "lines 86-87, 92-117"
+        },
+        {
+          "claim": "Plan holds locked design verdicts (AgentRoutingKey discriminated union, read/write schema split) that future implementation phases must consume",
+          "file_line": "lines 435-470, 536-565"
+        },
+        {
+          "claim": "Sunset criterion for promoting id from optional to required is explicitly defined and not yet triggered",
+          "file_line": "lines 751-763"
+        },
+        {
+          "claim": "Body status says 'owner directs resumption if/when warranted' — not abandoned, not complete",
+          "file_line": "line 86-87"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Phase 0 is well-executed: all design choices (discriminated union routing key at lines 536-565, read/write schema split at lines 435-470, UUID v5 derivation at lines 363-379) are rationale-grounded and locked before implementation. Phases 1-3 are coherently specified with owned surfaces, implementation shapes, and acceptance criteria. No bad ideas detected. One speculative element: the sunset promotion of id from optional to required depends on a 7-day observation window whose check command does not yet exist (Phase 3 pending).",
+      "content_quality": "strong",
+      "content_quality_note": "Each phase has: owned surfaces enumerated by file path (e.g. lines 402-433, 509-531), implementation shape locked with TypeScript code blocks (lines 439-454, 549-553), acceptance criteria as testable statements (lines 493-505, 595-607), and proof contract entries (lines 784-809). The metacognition pass (lines 134-154) and first-principles check (lines 852-859) are substantive, not ceremonial.",
+      "salvage_value": [
+        {
+          "idea": "Discriminated-union AgentRoutingKey (kind: id-keyed | legacy) as the canonical routing boundary type",
+          "class": "good",
+          "file_line": "lines 549-553"
+        },
+        {
+          "idea": "Read-side vs write-side schema split (collaborationAgentIdSchema optional id; collaborationAgentIdWriteSchema required id) to catch missing-id writes at compile time",
+          "class": "good",
+          "file_line": "lines 435-460"
+        },
+        {
+          "idea": "Deterministic UUID v5 from stable session seed as identity id — no sidecar, no persistent allocation",
+          "class": "good",
+          "file_line": "lines 363-379"
+        },
+        {
+          "idea": "Phase 0B+0C atomicity invariant preventing the regression of writes carrying id with no consumer reading it",
+          "class": "good",
+          "file_line": "lines 318-321"
+        },
+        {
+          "idea": "Legacy-fallback diagnostic emission ([routing-legacy-fallback] JSON to stderr) as an observable success signal trending to zero",
+          "class": "good",
+          "file_line": "lines 568-573"
+        },
+        {
+          "idea": "Sunset criterion: promote id from optional to required only after one calendar week with zero new legacy writes and zero legacy-fallback emissions",
+          "class": "good",
+          "file_line": "lines 751-763"
+        },
+        {
+          "idea": "Audit command must filter on write-timestamp, not presence of legacy rows, to distinguish historical from new-write violations",
+          "class": "good",
+          "file_line": "lines 765-773"
+        },
+        {
+          "idea": "Body-file frontmatter shared parser enforcing (agent_name, id, created_at, last_updated_at) minimum before body content is consumed",
+          "class": "good",
+          "file_line": "lines 675-686"
+        },
+        {
+          "idea": "Phase 1 consumer-side enforcement deferred where no consumer code exists yet; write-side authoring obligation already applies",
+          "class": "good",
+          "file_line": "lines 659-671"
+        },
+        {
+          "idea": "PDR-076a §Falsifiability operationalised by two distinct signals: collision regression tests (primary) and legacy-fallback diagnostic count (weaker supporting)",
+          "class": "good",
+          "file_line": "lines 794-809"
+        },
+        {
+          "idea": "comms direct --to-id flag as the canonical recipient addressing affordance",
+          "class": "good",
+          "file_line": "lines 574-576"
+        },
+        {
+          "idea": "legacyStringToAgentId returns CollaborationAgentId (not Write) — correctly avoids inventing a UUID for legacy rows",
+          "class": "good",
+          "file_line": "lines 480-485"
+        },
+        {
+          "idea": "DI-seam test hygiene note: shared restoreWriter slot pattern is a latent trap for a sixth test; refactor to per-test try/finally",
+          "class": "speculative",
+          "file_line": "lines 127-130"
+        },
+        {
+          "idea": "TUI write-side body-file frontmatter emission deferred to the plan that lands TUI write-side work",
+          "class": "speculative",
+          "file_line": "lines 669-671"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "PAUSED — Phase 0 delivered the intent (improve collaboration for the next session). Phase 1+ remain authored but unscheduled; owner directs resumption if/when warranted.",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field: `id` (LOCKED, required for all plans)",
+          "file_line": "frontmatter:1-81 — field absent"
+        },
+        {
+          "issue": "Missing required field: `node_type` literal \"plan\" (LOCKED, required for all plans)",
+          "file_line": "frontmatter:1-81 — field absent"
+        },
+        {
+          "issue": "Missing required field: `kind` enum strategic|executable (LOCKED, required for all plans)",
+          "file_line": "frontmatter:1-81 — field absent"
+        },
+        {
+          "issue": "Missing required field: `last_updated` ISO date (LOCKED, required for all plans) — present only as body prose at line 85, not as frontmatter field",
+          "file_line": "body:85"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (LOCKED, required for executable plans)",
+          "file_line": "frontmatter:1-81 — field absent"
+        },
+        {
+          "issue": "Explicitly dropped key `isProject` present (V0 §2.5 drops it as universal)",
+          "file_line": "frontmatter:80"
+        },
+        {
+          "issue": "Body carries open-ended PAUSED state with no structured `gate` field and no `expires` — violates LOCKED V0 §3.4 prohibition on indefinite holding states",
+          "file_line": "body:86-87"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject",
+        "completed_at (on todo items)",
+        "completed_in (on todo items)",
+        "depends_on (on todo items, not plan-level edge)"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "LOCKED V0 §3.4: no open-ended 'paused' state — a block must be a `gate` object with mandatory `expires` or a `depends_on` blocking edge; indefinite holding states are explicitly prohibited",
+          "evidence": "Body at line 86-87 carries 'Status: PAUSED — Phase 0 delivered the intent (improve collaboration for the next session). Phase 1+ remain authored but unscheduled; owner directs resumption if/when warranted.' — this is an indefinite unscheduled pause with no `gate.expires`, no `clears_when`, and no blocking `depends_on` at the plan level. The plan has been in this state since 2026-05-26 with no expiry forcing re-evaluation.",
+          "file_line": "body:86-87"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Phase 0 is fully delivered (10 commits, 35 new tests, proof contract ID-0..ID-3 all closed). The plan's paused status is clearly stated and owner-gated. No architectural debt introduced by the delivered phases is visible in the plan text.",
+          "file_line": "collaboration-identity-doctrine-enforcement-remediation.plan.md:86-110"
+        },
+        {
+          "severity": "medium",
+          "claim": "The write-side schema split (CollaborationAgentIdWrite requiring id) is applied at the write factory boundary, but the plan defers tightening createDirectedCommsMessage's from/to types to CollaborationAgentIdWrite as a 'queued, not blocking' improvement (lines 121-125). Until that tightening lands, the compile-time guarantee has a gap: messages flowing through createDirectedCommsMessage can carry a read-side (id-optional) identity even though the intent is to enforce id on all new writes.",
+          "file_line": "collaboration-identity-doctrine-enforcement-remediation.plan.md:119-126"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 3's sunset criterion requires write-timestamp-filtered audit counts, but the audit command's data source is described as 'the identity block's containing event timestamp or claim claimed_at field' (line 770). If legacy rows do not reliably carry a machine-comparable timestamp at that path, the sunset gate cannot be evaluated. The plan names the requirement correctly but does not guarantee the timestamp field exists on every legacy record format — a gap that should be verified at Phase 3 grounding before assuming the criterion is computable.",
+          "file_line": "collaboration-identity-doctrine-enforcement-remediation.plan.md:765-773"
+        },
+        {
+          "severity": "low",
+          "claim": "The DI-seam test hygiene issue in active-agent-routing.unit.test.ts (shared restoreWriter slot pattern, latent trap at a sixth test) is documented as a known defect and deferred (lines 127-129). It does not affect production correctness today but is a test-isolation risk as the DI-seam test suite grows.",
+          "file_line": "collaboration-identity-doctrine-enforcement-remediation.plan.md:127-130"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 1's body-file consumer enumeration for handoff, conversation, and sidebar consumers is explicitly left open ('enumerate consumers in Phase 1 grounding', lines 638-643). The in-scope list therefore has an unresolved boundary at plan time. This is architecturally sound (defer enumeration to grounding) but means the Phase 1 acceptance criteria cannot be verified as complete until grounding produces the full consumer list.",
+          "file_line": "collaboration-identity-doctrine-enforcement-remediation.plan.md:638-645"
+        },
+        {
+          "severity": "info",
+          "claim": "The discriminated-union design for AgentRoutingKey (kind: 'id-keyed' | 'legacy') with exhaustive matching enforced by TypeScript is architecturally sound. It makes the legacy-fallback path statically distinguishable and ensures all four branches of the cross-product (id-keyed × id-keyed, id-keyed × legacy, legacy × id-keyed, legacy × legacy) are compiler-checked. The rationale at lines 561-566 is correct.",
+          "file_line": "collaboration-identity-doctrine-enforcement-remediation.plan.md:547-566"
+        },
+        {
+          "severity": "info",
+          "claim": "The UUID v5 deterministic-from-session-seed verdict is architecturally well-justified: same-seed stability eliminates sidecar and persistent-store requirements, and the derivation site is centralised in deriveCollaborationIdentity. The decision is correctly locked at plan time rather than deferred to implementation.",
+          "file_line": "collaboration-identity-doctrine-enforcement-remediation.plan.md:362-380"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "All five phases completed per frontmatter todos",
+          "file_line": "file:5-19"
+        },
+        {
+          "claim": "Status declared IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS",
+          "file_line": "file:25-26"
+        },
+        {
+          "claim": "Closeout evidence commits named: 11f0320f, da21284d, ddcfa19e",
+          "file_line": "file:181-183"
+        },
+        {
+          "claim": "Plan must not leave current/ until archive pass, which is the sole remaining gate",
+          "file_line": "file:262"
+        },
+        {
+          "claim": "All validation gates described as passed in closeout evidence",
+          "file_line": "file:185-199"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All constituent ideas are coherent, grounded in named PDRs/ADRs, and deliver a real safety mechanism. The domain-boundary table (lines 50-62), TTL values (lines 100-108), and CLI contract (lines 75-83) are precise and actionable. No speculative or bad ideas are present; the plan is tightly scoped with explicit non-goals (lines 63-69).",
+      "content_quality": "strong",
+      "content_quality_note": "The plan carries a concrete domain-boundary table (lines 50-62), specific TTL values with semantic labels (lines 100-108), a precise public CLI interface (lines 75-83), a TDD structure with named test cases (lines 115-143), explicit validation gate commands (lines 149-157), closeout evidence with commit SHAs (lines 181-183), and a documentation propagation checklist (lines 248-261). Every section is substantive and evidence-grounded.",
+      "salvage_value": [
+        {
+          "idea": "Domain-boundary table mapping six state families to source-of-truth files and write mechanisms",
+          "class": "good",
+          "file_line": "file:50-62"
+        },
+        {
+          "idea": "TTL values for four claim types (normal 14400s, commit/index 900s, sidebars 1800s, missed-close 600s)",
+          "class": "good",
+          "file_line": "file:100-108"
+        },
+        {
+          "idea": "Public CLI interface contract for collaboration-state subcommands (identity, comms, claims, conversation, escalation, check)",
+          "class": "good",
+          "file_line": "file:75-83"
+        },
+        {
+          "idea": "Identity preflight rule: reject anonymous Codex writes when CODEX_THREAD_ID exists; require (agent_name, platform, model, session_id_prefix)",
+          "class": "good",
+          "file_line": "file:85-87"
+        },
+        {
+          "idea": "Immutable comms events with separate rendered read-model (shared-comms-log.md generated, not mutated)",
+          "class": "good",
+          "file_line": "file:55-56"
+        },
+        {
+          "idea": "One shared JSON transaction helper used by all state families (claims, commit queue, conversations, escalations, closed-claim archive)",
+          "class": "good",
+          "file_line": "file:130-133"
+        },
+        {
+          "idea": "Non-goals: no binary DB as tracked source; no hard authorial refusals or permanent locks; no hook dependency for correctness; no broad domain-model redesign beyond write-safety",
+          "class": "good",
+          "file_line": "file:63-69"
+        },
+        {
+          "idea": "Stale/orphan cleanup moves records to closure history without marking work successful",
+          "class": "good",
+          "file_line": "file:107-108"
+        },
+        {
+          "idea": "Foundation alignment to PDR-027 (identity), PDR-076a/b (identity tuple), PDR-078 (liveness heartbeat)",
+          "class": "good",
+          "file_line": "file:206-218"
+        },
+        {
+          "idea": "Refactor split: CLI parsing, handlers, state IO, parsers, and transaction logic as separate modules",
+          "class": "good",
+          "file_line": "file:139-140"
+        },
+        {
+          "idea": "Documentation propagation checklist for twelve named files requiring update or no-change rationale before closure",
+          "class": "good",
+          "file_line": "file:248-261"
+        },
+        {
+          "idea": "Closeout evidence naming three commit SHAs as implementation provenance",
+          "class": "good",
+          "file_line": "file:181-183"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` (kebab slug, stable graph identity)",
+          "file_line": "collaboration-state-write-safety.plan.md:1-20"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type: \"plan\"` (registry discriminator)",
+          "file_line": "collaboration-state-write-safety.plan.md:1-20"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` (strategic | executable) — plan is inferable as `executable` from presence of `todos`, but the field is absent from frontmatter",
+          "file_line": "collaboration-state-write-safety.plan.md:1-20"
+        },
+        {
+          "issue": "Missing LOCKED required field `last_updated` (ISO date) — value appears in body prose at line 25 (`**Last Updated**: 2026-04-28`) but is not a frontmatter field",
+          "file_line": "collaboration-state-write-safety.plan.md:25"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — mandatory for executable plans (V0 §2.3); no strategic-choice ID or `\"pending\"` sentinel present in frontmatter",
+          "file_line": "collaboration-state-write-safety.plan.md:1-20"
+        },
+        {
+          "issue": "Emergent `status:` pattern present in body as free-text (`🟡 IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS`); V0 §2.5 explicitly drops `status:` and §3.5 migration map requires splitting this into `kind` + `disposition` + `gate` axes — the value conflates execution state with disposition and does not map to any single V0 axis",
+          "file_line": "collaboration-state-write-safety.plan.md:26"
+        },
+        {
+          "issue": "Foundation alignment references (PDR-027, PDR-076a/b, PDR-078, PDR-029, PDR-035, ADR-165) appear as body prose, not as typed frontmatter `derives_from` edge declarations — V0 §2.3 requires authority/traceability relationships to use typed edges, not prose",
+          "file_line": "collaboration-state-write-safety.plan.md:206-218"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The domain boundary table (line 55-62) defines seven distinct state families, each with its own write mechanism. The design intentionally converges them all onto a single transaction helper (line 131-133). This is architecturally coherent: the helper is the single write-path primitive, not a per-domain dispatcher. No layering violation detected.",
+          "file_line": "collaboration-state-write-safety.plan.md:55-62"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan explicitly classifies shared-comms-log.md as a generated read model (line 55, 62) and constrains its write path to atomic render output only. This separation of the mutable event log from the generated read model is a sound CQRS-adjacent split that prevents hot-write races on the markdown surface.",
+          "file_line": "collaboration-state-write-safety.plan.md:55"
+        },
+        {
+          "severity": "low",
+          "claim": "Non-goal at line 67 states 'No binary database as the tracked source of truth.' This is an architectural policy, but no ADR is cited to anchor it. For a shared-state system that other plans and Practice doctrine depend on, a deliberate decision record would prevent future agents from treating the constraint as removable. PDR-029/035/ADR-165 are cited for Practice governance (line 204-205) but not for this specific storage-format constraint.",
+          "file_line": "collaboration-state-write-safety.plan.md:65-70"
+        },
+        {
+          "severity": "low",
+          "claim": "Concurrent JSON file mutation is listed as a RED test target (line 123), but the only portable correctness mechanism specified is TTL cleanup (line 99-108) and advisory coordination (line 67-68). No file-level locking, atomic rename, or optimistic-concurrency mechanism is named for the transaction helper. This is a residual race window: TTL cleans stale claims but does not prevent two agents writing the same JSON file in the same window.",
+          "file_line": "collaboration-state-write-safety.plan.md:99-108"
+        },
+        {
+          "severity": "medium",
+          "claim": "The REFACTOR phase (line 136-143) calls for splitting 'CLI parsing, handlers, state IO, parsers, and transaction logic', and for documenting 'the portable Practice contract separately from this repo's TypeScript phenotype.' All phases show status completed (lines 5-19), but the plan does not cite where the portable contract was recorded or whether the phenotype boundary split was validated against ADR-165. This is an open architectural residual that the closeout evidence (line 179-205) does not explicitly close.",
+          "file_line": "collaboration-state-write-safety.plan.md:136-143"
+        },
+        {
+          "severity": "low",
+          "claim": "The Foundation Alignment section (line 206-219) cites four PDRs and one ADR but does not cite any test-isolation or concurrency-primitive ADR or PDR. Given the plan's core concern is write safety under concurrent agents, the absence of a cited concurrency doctrine reference is a minor traceability gap — future readers cannot follow from this plan to the authoritative concurrency contract without independent search.",
+          "file_line": "collaboration-state-write-safety.plan.md:206-219"
+        },
+        {
+          "severity": "info",
+          "claim": "Status is IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS (line 25-26) and all todos show completed. The plan is in current/ not archive/. The closeout evidence at line 179-198 lists specific commit SHAs (11f0320f, da21284d, ddcfa19e) and passing gate commands. Architecture-layer implementation appears complete; the pending closure is a documentation and archive-pass gate, not an architectural gap.",
+          "file_line": "collaboration-state-write-safety.plan.md:25-26"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All five phases (grounding, RED, GREEN, docs, validation) are completed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md:7,10,13,16,19 (all five phase todos status: completed; labels phase-0-grounding..phase-4-validation at lines 5-18)"
+        },
+        {
+          "claim": "Status is IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS (cited at file:25-26)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "collaboration-state-write-safety.plan.md:25 \"**Status**: 🟡 IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS\"; corroborated by :177 \"do not mark this plan complete until the archive pass records that current evidence\", :262 \"Apply /jc-consolidate-docs before moving this plan out of current/\", and the file still residing in current/ with no archived copy (find returns only the current/ path)"
+        },
+        {
+          "claim": "current pnpm practice:fitness:strict-hard is soft-only after active napkin overflow rotation — do not mark complete until archive pass records current evidence",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md:176-177 (\"Fresh strict-hard evidence is soft-only; do not mark this plan complete until the archive pass records that current evidence.\"); corroborated at :197-198 (\"current `pnpm practice:fitness:strict-hard` is soft-only after the active napkin overflow rotation\") and :25 (Status: IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "All five deliverables marked completed in frontmatter todos",
+          "file_line": "file:22-38 (status: completed on all five)"
+        },
+        {
+          "claim": "Implementation Record documents verified execution with passing test suite, type-check, lint, build, and validate runs",
+          "file_line": "file:189-247"
+        },
+        {
+          "claim": "Status=current but all work is done; archive-complete is the correct next lifecycle state",
+          "file_line": "file:2 (status: current — needs promotion)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every idea in the plan is principled and executed. Root-cause investigation before prevention (D1), comprehensive estate repair (D2), hardened single-writer with atomic publish (D3), loud read-side failure (D4), gate-wired regression guard (D5). The owner-rejected --skip-malformed escape hatch is explicitly closed (file:52-55). No speculative or bad ideas are present.",
+      "content_quality": "strong",
+      "content_quality_note": "Done-when criteria are specific and testable (file:145-155, file:166-169, file:183-186). Proof types are named per deliverable (unit, integration, non-code). Implementation Record at file:189-247 is grounded with exact command invocations and pass/fail evidence. Risk assessment at file:260-268 is concrete (filesystem atomicity, hard-fail substrate blocking, concurrent writers). Foundation Alignment at file:272-282 cites live rules correctly.",
+      "salvage_value": [
+        {
+          "idea": "createJsonFileAtomically pattern: build object, JSON.stringify, parse-back, schema-validate, same-directory temp file, file fsync, exclusive hard-link publish, temp cleanup, directory fsync",
+          "class": "good",
+          "file_line": "file:213-217"
+        },
+        {
+          "idea": "Ratified owner decision: --skip-malformed read-side tolerance is rejected; readers must hard-fail and name the offending file",
+          "class": "good",
+          "file_line": "file:52-55, 82-86"
+        },
+        {
+          "idea": "comms validate command scans all true-JSON collaboration surfaces and exits non-zero with every bad path",
+          "class": "good",
+          "file_line": "file:218-223"
+        },
+        {
+          "idea": "Gate wiring: D4 validator runs at both render-time and gate-time (repo-validators:check) — one validator, two wirings",
+          "class": "good",
+          "file_line": "file:178-180, file:224-227"
+        },
+        {
+          "idea": "comms-seen cursors are newline-delimited UUID lists, not JSON; integrity scope is true-JSON surfaces only; tooling must be format-aware",
+          "class": "good",
+          "file_line": "file:203-206, 88-90"
+        },
+        {
+          "idea": "Validate-then-atomic-write shape generalises beyond comms events to all shared-state JSON — candidate for ADR or shared-state-writer rule",
+          "class": "good",
+          "file_line": "file:315-320"
+        },
+        {
+          "idea": "Missing canonical collaboration directories are errors, not empty scans",
+          "class": "good",
+          "file_line": "file:219-220"
+        },
+        {
+          "idea": "F-05 frictions-register closure against this plan as the learning-loop post-completion step",
+          "class": "good",
+          "file_line": "file:36-37, 315-318"
+        },
+        {
+          "idea": "Atomic rename created in same target directory to guarantee single-filesystem semantics",
+          "class": "good",
+          "file_line": "file:261-262"
+        },
+        {
+          "idea": "Readiness reviewer dispatch by substance (assumptions, architecture, type, test experts) before execution",
+          "class": "good",
+          "file_line": "file:299-309"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "current",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "comms-event-write-integrity.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` with literal value `plan` (LOCKED, required for all plans)",
+          "file_line": "comms-event-write-integrity.plan.md:1"
+        },
+        {
+          "issue": "`title` used instead of canonical `name` field; V0 §2.1 mandates `name` and explicitly marks `title` for migration",
+          "file_line": "comms-event-write-integrity.plan.md:2"
+        },
+        {
+          "issue": "`status: current` is a dropped field; V0 §2.2 and §2.5 replace `status` with orthogonal axes (`kind`, `disposition`, `gate`); the value maps to `kind: executable` via §3.5 migration map but the field itself must not appear",
+          "file_line": "comms-event-write-integrity.plan.md:3"
+        },
+        {
+          "issue": "`lane: current` is a dropped field; V0 §2.5 drops `collection`/`lane` — folder location is the projection, metadata must not duplicate it",
+          "file_line": "comms-event-write-integrity.plan.md:4"
+        },
+        {
+          "issue": "`type: executable` is a dropped free-label field; V0 §2.5 drops `type`, replaced by `node_type` (literal `plan`) and `kind` (enum `strategic|executable`)",
+          "file_line": "comms-event-write-integrity.plan.md:5"
+        },
+        {
+          "issue": "Missing required field `kind` (model LOCKED); inferable as `executable` from `type: executable` but must be declared explicitly",
+          "file_line": "comms-event-write-integrity.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `overview` (LOCKED, required for all plans; one-line scope statement)",
+          "file_line": "comms-event-write-integrity.plan.md:1"
+        },
+        {
+          "issue": "`date` used instead of canonical `last_updated` field; V0 §2.4 folds `created`/`date`/`branch` drift into `last_updated`",
+          "file_line": "comms-event-write-integrity.plan.md:7"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED shape; required for executable plans per V0 §2.3 and authority invariant 1)",
+          "file_line": "comms-event-write-integrity.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "owner_scope"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "test",
+      "specialist_kind": "test",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "TDD scope is well-defined: D3 and D4 each carry explicit 'Proof: unit + integration' labels, and D3's 'Done when' enumerates concrete adversarial cases (control chars, raw newlines, quotes, backticks, $, very-long bodies, unicode, interrupted write leaving no partial file, validation failure leaving no file). The test surface is closed-shape, not open-ended.",
+          "file_line": "comms-event-write-integrity.plan.md:148-155"
+        },
+        {
+          "severity": "info",
+          "claim": "Verification run is cited with filter, suite names, and pass/counts (95 files, 848 tests) giving a traceable baseline. The two failing items (markdownlint, knip) are stated as pre-existing and out of scope, which is honest but not evidenced in-plan.",
+          "file_line": "comms-event-write-integrity.plan.md:231-248"
+        },
+        {
+          "severity": "low",
+          "claim": "D2 proof type is 'integration (audit command exits 0 over the real estate)' with no mention of a unit-level test for the audit/scanner logic itself. If the scanner has a bug (false-negative on a specific malformed shape), only the live estate exercises it — a unit-test corpus of known-malformed inputs for the scanner is absent from the plan's done-criteria.",
+          "file_line": "comms-event-write-integrity.plan.md:134"
+        },
+        {
+          "severity": "low",
+          "claim": "D4's 'Done when' requires planting a malformed event to verify hard-fail. The plan does not specify whether this planted-event test is a unit test (in-process) or an integration test over the real filesystem estate. If it is integration-only, a future refactor of the reader could pass the planted-event check while silently introducing a skip path detectable only at unit level.",
+          "file_line": "comms-event-write-integrity.plan.md:167-170"
+        },
+        {
+          "severity": "low",
+          "claim": "D5 regression guard done-criteria require 'validator fails the gate on a planted bad file'. This planted-file gate test is described in prose but no unit or integration test artefact for the gate wiring itself is specified. If gate wiring is only manually verified at implementation time, a future gate restructure could silently drop the validator without a test failing.",
+          "file_line": "comms-event-write-integrity.plan.md:183-187"
+        },
+        {
+          "severity": "medium",
+          "claim": "D3's atomicity test ('interrupted write never leaves a partial/torn file') is specified as 'proven by test', but no mechanism for simulating an interrupted write at the Node fs level is described. Simulating mid-write interruption (e.g. SIGKILL between temp-write and rename) is non-trivial in a Jest/unit context; without a concrete test strategy the 'proven by test' claim is aspirational and the plan does not name how it will be achieved.",
+          "file_line": "comms-event-write-integrity.plan.md:152-154"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly calls out the test-expert as a required Readiness Reviewer, specifically naming 'atomicity test (no partial file on interruption)' and 'no-file-on-validation-failure test' as the load-bearing test concerns to review before execution. This is consistent with the medium finding above and shows the gap was acknowledged at plan-authoring time.",
+          "file_line": "comms-event-write-integrity.plan.md:306-307"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All five deliverables (D1-D5) are completed — the plan is fully executed (cited at file:22-38, file:189-247)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md:21,25,29,33,37 (all todos completed); agent-tools/src/collaboration-state/transaction.ts:101 + state-io.ts:57 (D3 committed); package.json:37 (D5 gate-wired); live validator: 'collaboration-state validate: OK (353 JSON file(s) checked)'; CAVEAT — frictions-register.md:155 F-05 = 'addressed-in-working-tree-2026-06-01' not formally closed"
+        }
+      ]
+    }
+  ]
+}

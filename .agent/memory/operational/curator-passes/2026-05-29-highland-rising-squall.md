@@ -65,7 +65,7 @@ Every routed finding owner-verified against the live repo before action.
    capture-edge degradation signal. Loop-health, not a null.
 2. **Contamination** in `today-2026-05-24.done.md` + `today-2026-05-27.done.md`
    (LLM compression artefacts leaked into capture) — remember-plugin lifecycle.
-3. **Lost `/tmp` artefact**: `/tmp/ferny-pattern-v3-outline.md` (substrate-pointer
+3. **Lost `/tmp` artefact**: `<scratch>/ferny-pattern-v3-outline.md` (substrate-pointer
    pattern v3, 6 sub-variants) — recover/re-author from `napkin-2026-05-24-shaded-
    silencing-dusk` before the substrate-pointer PDR elevation. important-state-
    not-in-temp-files violation.

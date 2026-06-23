@@ -47,8 +47,11 @@ Current sequence after the owner selected the next-session route:
 
 - **Lifecycle**: keep this as a `future/` strategic plan until a bounded
   executable slice is promoted.
-- **Source handling**: tracked work uses the source-neutral substrate study;
-  exact source inspection remains private through the ignored local snapshot.
+- **Source handling**: tracked work cites the substrate study, which names its
+  source openly — the MIT-licensed `mattpocock/skills` repository, read-only
+  local checkout at `.agent/reference-local/repos/mattpocock-skills/`
+  (git-ignored). Attribution is plain; the value tracked is the substrate
+  pattern, not the source name.
 - **Candidate register home**:
   `.agent/research/agentic-engineering/operating-model-and-platforms/external-skills-substrate-candidate-register.md`.
 - **First executable slice**: create that register and run Practice-fit review
@@ -159,8 +162,9 @@ The strategic means are:
 ### Out Of Scope
 
 - Copying external skills into Oak.
-- Adding source-specific names, URLs, or identity-bearing references to tracked
-  repository files.
+- Copying source-specific implementation wording verbatim into tracked Practice
+  docs (naming an openly-licensed source for attribution is fine; lifting its
+  prose as if it were Oak doctrine is not).
 - Replacing existing Oak TDD, claims, comms, handoff, planning, or
   consolidation doctrine.
 - Creating new agent-tools validators before the behaviour and data model are
@@ -309,14 +313,14 @@ defer/reject decisions disappear into logs and reappear as confusion?
 
 | Prerequisite | Classification | Minimum shippable shape without it |
 | --- | --- | --- |
-| Tracked substrate study exists and remains source-neutral | Blocking | No plan execution; the study is the evidence base |
+| Tracked substrate study exists with its source openly attributed | Blocking | No plan execution; the study is the evidence base |
 | Companion non-plan insights note exists | Beneficial, already satisfied | Candidate register can proceed, but observation-only insights risk being forced into execution language |
 | Candidate register location is explicit | Blocking, already satisfied | No promotion; otherwise the first slice will invent the home during execution |
 | Existing relevant plans are checked before promotion | Blocking | Do not promote; risk of duplicate doctrine and plan authority drift |
 | Assumptions/proportionality review before readiness claims | Blocking for executable promotion | Keep this plan in `future/` |
 | Docs/ADR review for any Practice Core or directive changes | Blocking for doctrine landing | Limit first slice to candidate register and fit review |
 | Tooling owner capacity for validators | Beneficial | Keep validation as design-only until data model and failure mode are proven |
-| Ignored local source snapshot is available for exact wording | Beneficial | Use the tracked study only; do not block on private local state |
+| Local source checkout is available for exact wording | Beneficial | Use the tracked study only; the local checkout at `.agent/reference-local/repos/mattpocock-skills/` is a convenience, not a dependency |
 
 ## Strategic Acceptance Criteria
 
@@ -326,8 +330,9 @@ defer/reject decisions disappear into logs and reappear as confusion?
   Practice home and does not create shadow doctrine.
 - **AC3 Small first landings**: first executable plan contains no more than two
   behaviour-changing Practice slices plus any necessary register/index updates.
-- **AC4 Source-neutral tracking**: tracked artefacts keep source identity out of
-  repo-facing docs and rely on the neutral research report as citation surface.
+- **AC4 Open attribution**: tracked artefacts name the openly-licensed source
+  plainly (`mattpocock/skills`, MIT) and cite the research report as the
+  substrate-pattern surface; the value tracked is the pattern, not the name.
 - **AC5 Operational expression**: every promoted candidate names whether it
   becomes doctrine, rule, skill, workflow, protocol, state, tool, or memory.
 - **AC6 Evidence before completion language**: no slice is called complete until
@@ -353,7 +358,7 @@ The plan has succeeded when:
 | Passive-document drift | The report remains interesting but unused | Candidate register has proof signals and promotion triggers |
 | Duplicate doctrine | New notes restate existing TDD, handoff, or planning rules | Existing-home check is blocking |
 | Over-tooling | Validator work starts before the data model is proven | Keep validator as design-only until drift evidence exists |
-| Privacy regression | Source identity leaks into tracked docs or comms | Use neutral citation surface and private ignored reference only |
+| Verbatim doctrine lift | Source prose imported as if it were Oak doctrine | Cite the source by name for attribution; promote only Practice-native re-expression, never copied wording |
 | Scope sprawl | Eight candidates turn into one oversized execution plan | Promote at most two behaviour-changing slices at a time |
 
 ## Promotion Trigger
@@ -399,8 +404,13 @@ lowest.
   home are chosen; executable task detail belongs in a later `current/` plan.
 - **Landing-path clause**: candidate register and doctrine changes must land
   with their owning files and validation evidence, not as disconnected notes.
-- **Vendor-literal clause**: source-specific wording stays outside tracked
-  Practice docs unless explicitly needed and source-neutralised first.
+- **Vendor-literal clause**: the external skill names cited here (`diagnose`,
+  `prototype`, `handoff`, …) and the source repo (`mattpocock/skills`, MIT) are
+  pinned to the study's snapshot SHA and may drift from the repo's current
+  state — treat them as citations of that snapshot, not live tokens. Naming the
+  openly-licensed source is attribution, not drift; what must not enter tracked
+  Practice docs is its wording lifted verbatim as Oak doctrine — promote
+  Practice-native re-expression instead.
 
 ## Learning Loop
 

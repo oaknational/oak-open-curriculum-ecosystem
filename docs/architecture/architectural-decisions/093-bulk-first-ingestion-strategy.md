@@ -266,9 +266,9 @@ Wait for Oak to complete TPC clearance (Autumn 2025).
 
 ## Related Documents
 
-- [Bulk Download vs API Comparison](../../../.agent/analysis/bulk-download-vs-api-comparison.md)
-- [Transcript Availability Analysis](../../../.agent/analysis/transcript-availability-analysis.md)
-- [Curriculum Structure Analysis](../../../.agent/analysis/curriculum-structure-analysis.md)
+- Bulk Download vs API Comparison
+- Transcript Availability Analysis
+- Curriculum Structure Analysis
 - [ADR-083: Complete Lesson Enumeration](083-complete-lesson-enumeration-strategy.md)
 - [ADR-091: Video Availability Detection](091-video-availability-detection-strategy.md)
 

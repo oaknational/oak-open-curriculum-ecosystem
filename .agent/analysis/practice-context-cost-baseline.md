@@ -152,7 +152,7 @@ integration*). 750 turn records, 34 Read tool calls, 22 unique files.
 
 | Reads | Chars (single-read) | Total tokens (reads × chars / 4) | File |
 | ---: | ---: | ---: | --- |
-| 5 | 171,296 | ~214,120 | `.agent/memory/operational/threads/observability-sentry-otel.next-session.md` |
+| 5 | 171,296 | ~214,120 | `.agent/memory/operational/threads/paused/observability-sentry-otel.next-session.md` |
 | 5 | 57,587 | ~71,980 | `.agent/plans/observability/current/feat-eef-exploration-completion.plan.md` |
 | 1 | 137,442 | ~34,360 | `.agent/memory/operational/repo-continuity.md` |
 | 2 | 15,973 | ~7,986 | `.agent/memory/active/distilled.md` |

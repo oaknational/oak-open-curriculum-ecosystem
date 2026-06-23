@@ -112,6 +112,25 @@ Run these steps **before** formulating the commit message.
    | `body-leading-blank` | Body must be preceded by a blank line |
    | `footer-leading-blank` | Footer must be preceded by a blank line |
 
+   **`footer-leading-blank` trap (bisected 2026-06-11):** a BODY line of
+   the shape `token #ref` (e.g. `PR #170`) parses as a conventional-commits
+   footer missing its leading blank and fires this rule. Write
+   `pull request 170` or move the reference to the real footer. Em-dashes
+   and bullet shapes are innocent.
+
+   **The `commit-msg` hook is the real gate — do not test the checker.** The
+   `.husky/commit-msg` hook runs commitlint on every commit unconditionally; the
+   pre-draft `check-commit-message` script is an optional convenience to catch a
+   format slip ~30s earlier, not a gate. **Never run a per-commit negative
+   control** (a deliberately-bad message to "prove the checker is live") — that
+   tests the tool, not your message, and has no bridge to landing a conforming
+   commit. If you run the checker, trust its exit code; if a given invocation
+   looks void (no echo, usage text), do not escalate to a forensic probe — just
+   commit and let the hook gate the message. (An argless false-green run was
+   observed once on 2026-06-11 and is environment-dependent; a one-off
+   self-check is reasonable only if you genuinely suspect the checker is broken
+   on this machine — it is never a standing per-commit step.)
+
 5. **Surface any repo-specific extra hooks** flagged by `.husky/commit-msg`. In
    this repo at the time of writing, `pnpm agent-tools:prevent-accidental-major-version`
    (`agent-tools/src/version-guard/prevent-accidental-major-version.ts`) runs
@@ -344,26 +363,25 @@ If git reports an index lock, treat it as a commit-window collision: inspect
 the queue, active claims, and the log. Do not delete `.git/index.lock` unless
 the owner authorises it after you have proved no git process is active.
 
-### Physical lock wait
+### Foreign index lock — no autonomous contact, including waits
 
-It is valid to wait for `.git/index.lock` to disappear as a final physical
-guard. Claude Code may use its Monitor tool for this. Codex and Cursor should
-use an equivalent bounded shell wait unless a custom monitor tool is
-configured:
+Any autonomous interaction with `.git/index.lock` is forbidden — deletion
+AND polling/wait loops alike (owner direction 2026-05-03, aligned here at
+the 2026-06-11 owner walk). A wait loop only *observes* today, but it
+conditions the agent to treat lock-clearing as an action it takes, and any
+future evolution of the loop (timeout-then-remove) is a small step from the
+catastrophic shape. A foreign lock means another agent is mid-commit:
 
-```bash
-deadline=$((SECONDS + 300))
-while [ -e .git/index.lock ]; do
-  if [ "$SECONDS" -ge "$deadline" ]; then
-    echo "Timed out waiting for .git/index.lock"
-    exit 124
-  fi
-  sleep 1
-done
-```
+1. Stop the commit attempt cleanly (a failed `git add`/`git commit` on a
+   foreign lock fails safe — nothing is corrupted).
+2. Diagnose without touching the lock: inspect the `commit_queue`, active
+   claims, and `git log` for the live committer.
+3. Surface the foreign lock to the owner with the diagnostics and the
+   wait-vs-handoff options. The owner decides; the agent never loops on the
+   lock file.
 
-The wait is not coordination. It complements, but never replaces, the
-`commit_queue`, `git:index/head` active claim, and shared-log entry.
+The `commit_queue`, `git:index/head` active claim, and shared-log entry are
+the coordination surfaces; the lock file is never one of them.
 
 ## Process
 
@@ -446,13 +464,14 @@ EOF
 `git commit -m "$(cat <<EOF)"` HEREDOC pattern, with one fewer subshell
 layer.)
 
-## Cursor Shell tool — stream truncation workaround
+## Stream truncation at the depcruise → turbo handover — workaround
 
-**Scope**: Cursor Shell tool sessions only. Other platforms (Claude Code,
-Codex CLI, direct terminal) use the plain HEREDOC above without
-modification.
+**Scope**: Cursor Shell tool sessions, AND the `commit-queue -- commit`
+workflow's spawned git-commit in Claude Code (observed 2026-06-17). Both
+stream the pre-commit hook's output live and both hit the same artefact.
+A plain `git commit` typed at a direct terminal is unaffected.
 
-**Observation (active 2026-04-23)**: when `git commit` is invoked from
+**Observation (active 2026-04-23, Cursor)**: when `git commit` is invoked from
 the Cursor Shell tool with stdout/stderr streaming live, the pre-commit
 hook's output is consistently cut off at the `depcruise → turbo`
 handover, the tool reports `Exit 1`, and no commit lands. Running the
@@ -460,12 +479,24 @@ exact same hook directly via `bash .husky/pre-commit` exits 0 with full
 output, and running the same `git commit` invocation with stdout/stderr
 redirected to a file completes cleanly with the commit landing.
 
+**Observation (active 2026-06-17, Claude Code commit-queue)**: the same
+truncation hits the `pnpm agent-tools:commit-queue -- commit` workflow — its
+internally-spawned `git commit` streams the hook live and dies at the
+`depcruise → turbo` handover with `git commit exited with code 1`, output
+truncated mid-hook, no commit landing. It reproduces across retries (it is not
+a cold-cache timeout). The disambiguation is the same: `bash .husky/pre-commit`
+exits 0 standalone, proving the gates are green and the failure is the spawned
+live-stream, not the hook. Cure: fall back to a direct `git commit -F <msgfile>`
+with output redirected to a file (hooks intact, no `--no-verify`); then record
+the queue intent's outcome and close the `git:index/head` claim manually with
+the landed SHA, since the workflow's own `complete` step never ran.
+
 **Workaround**: redirect stdout/stderr to a temporary file and inspect
 the tail after the command completes:
 
 ```bash
 START=$(date +%s)
-git commit -F - >/tmp/commit.log 2>&1 <<'EOF'
+git commit -F - >tmp/commit.log 2>&1 <<'EOF'
 type(scope): short subject starting lowercase
 
 Body paragraph.
@@ -475,7 +506,7 @@ EOF
 RC=$?
 END=$(date +%s)
 ELAPSED=$((END-START))
-tail -5 /tmp/commit.log
+tail -5 tmp/commit.log
 SHA=$(git log -1 --format=%h)
 ```
 

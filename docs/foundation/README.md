@@ -3,24 +3,26 @@ boundary: B0-Foundation
 doc_role: index
 authority: foundation-navigation
 status: active
-last_reviewed: 2026-04-20
+last_reviewed: 2026-06-17
 ---
 
 # Foundation Documentation
 
-This boundary holds the timeless framing for the repository: what it is for,
-and how it is built. Two documents only — anything dated (roadmaps, milestone
-status, baselines) lives elsewhere.
+This boundary holds timeless framing for the repository; anything dated
+(roadmaps, milestone status, baselines) lives elsewhere. The **why** — the
+[Vision](../../VISION.md) — now lives at the **repository root** for
+discoverability (the apex statement: what we're changing, why it matters, and a
+map to the documents that explain how). This boundary holds the timeless **how
+it is built**.
 
 ## Contents
 
-- [VISION.md](./VISION.md) — The **why**: mission, audiences, value, scope
-  boundaries, MCP Apps exploration, sector reuse of Oak's openly licenced
-  curriculum, semantic search, knowledge graphs, three-orders impact,
-  positioning, licensing.
 - [How the Agentic Engineering System Works](./agentic-engineering-system.md) —
-  The **how**: an engineering-lens explanation of the Practice for human
+  the **how**: an engineering-lens explanation of the Practice for human
   readers.
+
+The repository [Vision](../../VISION.md) (the **why**) lives at the repository
+root.
 
 Adjacent surfaces (not part of this boundary):
 
@@ -38,9 +40,10 @@ Adjacent surfaces (not part of this boundary):
 
 ## Usage
 
-1. **Evaluating the project?** Start with [VISION.md](./VISION.md), then read
-   the latest [progress update](../../.agent/reports/oak-ecosystem-progress-update-2026-04-20.md)
-   and the live [high-level plan](../../.agent/plans/high-level-plan.md).
+1. **Evaluating the project?** Start with [VISION.md](../../VISION.md), then read
+   the April 2026 [progress update](../../.agent/reports/oak-ecosystem-progress-update-2026-04-20.md)
+   and the live [high-level plan](../../.agent/plans/high-level-plan.md);
+   newer reports land in [.agent/reports/](../../.agent/reports/README.md).
 2. **Contributing?** Use the root [README.md](../../README.md) for setup and
    the [CONTRIBUTING.md](../../CONTRIBUTING.md) for the development process.
 3. **Understanding the engineering approach?** Read

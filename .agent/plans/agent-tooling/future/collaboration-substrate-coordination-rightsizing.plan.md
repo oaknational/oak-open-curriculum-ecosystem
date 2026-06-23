@@ -193,3 +193,51 @@ are authored — never the reverse.
   model — it is a **landed worked instance** of the replace-vs-migrate
   discipline M3 generalises, and an input to M1's inventory rather than an
   output of M2. M4's cluster supersession list inherits this as settled.
+
+### Routed inputs from the comms-corpus research (2026-06-13)
+
+The comms-corpus research (WS0–WS6,
+[`comms-corpus-research-and-rotation-strategy.plan.md`](../active/comms-corpus-research-and-rotation-strategy.plan.md);
+synthesis at
+[`.agent/reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md`](../../../reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md))
+routes two doctrine-grade findings here for M2's measurement and M4's
+keep/fold/delete verdicts. These are **inputs to the derivation, not pre-made
+verdicts** — M4 weighs them against the minimal-coordination model.
+
+- **M2 — the learning loop does not fire under pressure (corpus-scale evidence
+  for the central active-vs-passive enforcement question).** The research found
+  capture→distil→graduate→enforce did not change behaviour under load — a failure
+  named one morning was re-suffered the same evening. This is direct evidence for
+  the brief's *advisory-not-mechanical* invariant tension: where the model keeps a
+  layer as advisory guidance, M2 must weigh whether passive guidance loses to
+  artefact gravity at that surface. **Reconcile, do not duplicate:** the existing
+  homes are the pattern
+  [`passive-guidance-loses-to-artefact-gravity`](../../../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+  and the design lane
+  [`action-time-structural-interrupt-design-space.plan.md`](../../agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md);
+  the corpus evidence strengthens both rather than seeding a new PDR (a PDR draft
+  is warranted only if M2's reconciliation finds no existing home carries the
+  portable contract).
+- **SC1 — structured linkage/lifecycle fields are dead because they are
+  unreachable from the authoring path (enforce-or-remove).** `in_response_to` /
+  `in_reply_to` / `audience` / `addressed_to` are 0 corpus-wide; the causal root
+  is a tooling gap, not a behaviour choice — the `comms reply` path discards the
+  linkage (proven first-hand by reply event `2ff03ded`: a substantive directed
+  reply whose threading fields are absent from the event entirely). The
+  enforce-or-remove verdict (wire the fields into the authoring path, or delete
+  the dead affordances) is exactly an M4 keep/fold/delete decision for a substrate
+  layer and the doctrine facet is already carried by
+  [`closed-shape-design-optionality`](../../../rules/closed-shape-design-optionality.md)
+  (amend/cite, do not mint). **First-hand routing correction:** the WS6 §5 table
+  also named `comms-event-write-integrity` as a consumer; on reading that plan it
+  is **complete and scope-frozen** ("no schema migration, no event-semantics
+  change"; `comms list/show/watch` an explicit non-goal), so it does **not** own
+  the authoring-affordance surface. SC1's home is M4 here, not that plan.
+- **Cull/fold candidates.** The WS3 failure-mode taxonomy (~46 classes) and the
+  what-worked-well findings are evidence for M4's per-layer verdicts; the ceremony
+  ratchet (heartbeat share climbing era-over-era to ~70–74%) is direct evidence
+  that a low-friction layer's cost accretes until it dominates — a keep/fold
+  signal for the liveness layer.
+- **Rotation is already ratified and homed** (PDR-094 + ADR-199): M4 does not
+  re-derive the comms-event retention verdict — it inherits it as settled, the
+  same way it inherits the routing sunset above.

@@ -8,7 +8,7 @@ of the codebase for multiple MCP servers. That architectural
 forcing function is now obsolete: the ecosystem supports multiple
 MCP servers natively (`oak-curriculum-mcp-stdio`,
 `oak-curriculum-mcp-streamable-http`). See Item #4 in the
-[high-level plan](../../../.agent/plans/high-level-plan.md).
+high-level plan.
 
 ## Historical Context
 

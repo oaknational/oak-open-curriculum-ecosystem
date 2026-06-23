@@ -166,7 +166,7 @@ interpretation. Typical usage:
 
 ```bash
 # Write body to a tmp file (any heredoc / printf / editor-generated file works)
-cat > /tmp/event-body.txt <<'EOF'
+cat > tmp/event-body.txt <<'EOF'
 Body with backticks like `agent-tools` and dollars like $HOME survive intact.
 Multi-line content is fine.
 EOF
@@ -180,7 +180,7 @@ pnpm agent-tools:collaboration-state comms direct \
   --to-session-prefix d4aad7 \
   --kind directed \
   --subject 'A subject' \
-  --body-file /tmp/event-body.txt \
+  --body-file tmp/event-body.txt \
   --platform claude --model claude-opus-4-7 \
   --active .agent/state/collaboration/active-claims.json
 ```

@@ -34,11 +34,3 @@ export const IDENTITY_WORD_GROUPS = [
   AERIAL_IDENTITY_WORD_GROUP,
   NOCTURNAL_IDENTITY_WORD_GROUP,
 ] as const satisfies readonly IdentityWordGroup[];
-
-export type IdentityGroup = (typeof IDENTITY_WORD_GROUPS)[number]['group'];
-
-export type IdentityAdjective = (typeof IDENTITY_WORD_GROUPS)[number]['adjectives'][number];
-
-export type IdentityVerb = (typeof IDENTITY_WORD_GROUPS)[number]['verbs'][number];
-
-export type IdentityNoun = (typeof IDENTITY_WORD_GROUPS)[number]['nouns'][number];

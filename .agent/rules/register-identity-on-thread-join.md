@@ -81,7 +81,7 @@ is load-bearing for multi-agent continuity: it is how the system records
 "who touched what, when" across sessions. Prior to this rule's install, the
 convention lived as passive prose in a README — agent-recall-dependent under
 context pressure, the exact failure mode of
-[`passive-guidance-loses-to-artefact-gravity`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md).
+`passive-guidance-loses-to-artefact-gravity`.
 This rule converts the convention from passive guidance into an active,
 always-applied tripwire at session open.
 
@@ -100,10 +100,11 @@ The complementary layers are, per PDR-029's 2026-04-21 Amendment Log
   on any platform performs the same walkthrough by reading the same
   markdown.
 - **Stale-identity audit** — a six-check documentation walkthrough in
-  [`/oak-consolidate-docs § Thread-register freshness`](../commands/consolidate-docs.md#thread-register-freshness)
+  [`/oak-consolidate-docs § Thread-register freshness`](../skills/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
   that the agent performs at consolidation time: stale `last_session`,
-  orphan threads, missing fields, expired track cards, duplicate
-  identity rows, active-threads ↔ next-session-file correspondence.
+  orphan threads, missing fields, duplicate identity rows,
+  active-threads ↔ next-session-file correspondence, and retired-record
+  banner hygiene.
 
 Together the three layers ensure no single failure mode (forgot to read the
 rule; forgot to walk the session-handoff gate; forgot to run the audit)
@@ -202,7 +203,7 @@ is applicable at install time, not merely documented.
   — deterministic identity derivation CLI and platform wrapper status.
 - [PDR-029 Perturbation-Mechanism Bundle](../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
   — Family-A Class-A.2 design; platform-parity requirement.
-- [Pattern: `passive-guidance-loses-to-artefact-gravity`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+- Pattern: `passive-guidance-loses-to-artefact-gravity`
   — motivating failure mode.
 - [PDR-026 Per-Session Landing Commitment](../practice-core/decision-records/PDR-026-per-session-landing-commitment.md)
   — per-thread-per-session commitment that determines which thread(s) this

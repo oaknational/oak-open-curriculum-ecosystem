@@ -533,7 +533,7 @@ opus-4-7-1m / `a12c90`, collaboration-protocol hardening Phases 0-3
 partial)**: executed the collaboration-protocol-hardening opener
 end-to-end through ground-state, friction audit, remediation design,
 and first doctrine landing. Phase 0 compiled 13 protocol promises + 10
-30-day frictions + 8 gaps at `/tmp/phase-0-ground-state.md`.
+30-day frictions + 8 gaps at `<scratch>/phase-0-ground-state.md`.
 assumptions-expert review found opener spine sound, framing overreached
 on 3 of 5 axes: opener amended on sub-system framing (four sub-systems
 replace monolithic "collaboration protocol"), scaling claim (narrowed
@@ -973,7 +973,7 @@ land the remaining design-resolved items test-first: R1, R2 (B-10),
 R3 (identity cache), R4b + R4-new (commit-skill + native git
 pre-commit hook), R5 Path β migration (depends on R1), R7 (B9 plan
 stub), R8 (pattern capture), then Phase 4 four-probe matrix and Phase
-5 closeout. Ephemeral design docs at `/tmp/phase-{0,1,2}-*.md` must
+5 closeout. Ephemeral design docs at `<scratch>/phase-{0,1,2}-*.md` must
 be homed into the parent plan body or named friction-register entry
 on the follow-on session per ephemeral-to-permanent-homing.
 
@@ -1299,7 +1299,7 @@ captured above. Nothing else qualifies for immediate graduation;
 B-01 corrected diagnosis is implementation-bound and owner-direction-
 needed for the fix shape, not yet doctrine.
 
-Ephemeral-to-permanent homing (step 3): three /tmp/phase-{0,1,2}-*.md
+Ephemeral-to-permanent homing (step 3): three <scratch>/phase-{0,1,2}-*.md
 design artefacts — phase-0-ground-state.md (13 promises / 10
 incidents / 8 gaps), phase-1-friction-audit.md (categorisation +
 owner-direction items), phase-2-remediation-design.md (final design

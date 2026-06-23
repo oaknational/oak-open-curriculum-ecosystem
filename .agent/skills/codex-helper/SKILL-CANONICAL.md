@@ -64,9 +64,9 @@ codex exec \
   --ephemeral \
   --sandbox read-only \
   -C /path/to/repo \
-  --output-last-message /tmp/codex-result.txt \
+  --output-last-message tmp/codex-result.txt \
   "Your brief."
-cat /tmp/codex-result.txt
+cat tmp/codex-result.txt
 ```
 
 **Structured output** (constrain to a JSON Schema):
@@ -147,10 +147,10 @@ For progress visibility while also capturing the last message:
 
 ```bash
 codex exec --json --ephemeral -C /path/to/repo \
-  --output-last-message /tmp/result.txt \
+  --output-last-message tmp/result.txt \
   "Your brief." \
   | jq -r 'if .type=="item.completed" then "\(.type): \(.item.type) \(.item.text // .item.message // "")" else .type end'
-cat /tmp/result.txt
+cat tmp/result.txt
 ```
 
 > **Note:** The `jq` filters above reflect the event shape observed as of

@@ -19,7 +19,7 @@ silently choosing one.
 
 ## What This Directive Installs
 
-This directive is grown by the [`multi-agent-collaboration-protocol`][p]. It
+This directive is grown by the `multi-agent-collaboration-protocol`. It
 installs vocabulary, the shared log, claims, schemas, durable closure history,
 short-lived `git` claims, advisory `commit_queue` order, sidebars, owner
 escalations, joint decisions, and WS5 evidence harvest. Details live in
@@ -154,7 +154,7 @@ Four foundational rules, named here as load-bearing principles:
 ### a. Don't Break the Build Without a Fix Plan
 
 The active
-[`gate-recovery-cadence.plan.md`](../plans/observability/active/gate-recovery-cadence.plan.md)
+`gate-recovery-cadence.plan.md`
 names the non-negotiable invariant verbatim:
 
 > Restore the invariant that build, type-check, lint, format, markdown,
@@ -214,6 +214,19 @@ between scheduled audits is the exception, not the routine. Visibility
 before deletion is the discipline: post a shared-log note naming the
 claim and closure kind before writing the close. Recipe in
 [lifecycle][lifecycle] §Apparently Orphaned Claims.
+
+## Convergence and Delegation Discipline
+
+Two positive complements to the scope-discipline tripwires above (PDR-026/027/029):
+
+- **Scan for convergence, not only collision.** In a shared window or at handoff,
+  actively scan live peer outputs for the dependency, answer, or evidence your
+  lane needs and wire them in — checking only for file conflicts misses the value
+  a peer already created.
+- **Delegate by judgement load, not parallelism.** Mechanical edits parallelise
+  safely; a subtle correctness boundary stays with the agent who understands it
+  unless the brief names that boundary precisely — delegating a judgement-heavy
+  edit on parallelism alone plants a false claim the reviewer must then catch.
 
 ## PR Closeout Discipline
 
@@ -301,8 +314,8 @@ parallel agent sessions inside a 48-hour window (Frodo prettier
 2026-04-24, Pippin auto-staging 2026-04-24, Jazzy knip 2026-04-25)
 motivated this directive. The pattern is captured at
 [`parallel-track-pre-commit-gate-coupling`][founding-pattern]; new
-instances surface in [`napkin.md`][napkin] and feed
-[WS5's seed harvest][p]. Commit-window claims apply the same lesson to the
+instances surface in `napkin.md` and feed
+WS5's seed harvest. Commit-window claims apply the same lesson to the
 narrower git transaction surface: expose intent and queue order before
 staging or commit.
 
@@ -332,14 +345,12 @@ PR closeout names *when* reviewer-comment state must be harvested;
 PDR-015 names *whose* review authority applies on which abstraction
 layer.
 
-[p]: ../plans/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
 [threads-readme]: ../memory/operational/threads/README.md
 [pdr-015]: ../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md
 [stage-by-explicit-pathspec]: ../rules/stage-by-explicit-pathspec.md
 [founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md
 [lifecycle]: ../memory/operational/collaboration-state-lifecycle.md
-[napkin]: ../memory/active/napkin.md
 [active-claims]: ../state/collaboration/active-claims.json
 [closed-claims]: ../state/collaboration/closed-claims.archive.json
 [conversation-schema]: ../state/collaboration/conversation.schema.json

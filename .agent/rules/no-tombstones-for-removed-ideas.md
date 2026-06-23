@@ -43,6 +43,12 @@ read positively on their own terms:
 So: when the present design is what you are writing, state it and stop. When
 the story of a change matters, record it where change is the subject.
 
+**Folding a change into a decision record (ADR/PDR):** rewrite the affected clauses to state
+what is true *now*; do not interleave "previously X, now refines to Y" journey narrative into
+the present-design clauses. Git history is the provenance of the change, and a dated
+amendment-log entry (a history record, above) is where the story of the change belongs — the
+body states current truth.
+
 ## Recognising the failure mode
 
 - Rejection labels: "rejected", "to avoid", "the original X error",

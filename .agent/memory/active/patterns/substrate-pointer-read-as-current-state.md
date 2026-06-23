@@ -3,7 +3,7 @@ name: "Substrate-Pointer Read as Current State"
 polarity: anti-pattern
 use_this_when: "Multi-agent team with rotating roles, multiple substrate surfaces (durable files + comms-event lifecycle fields + identity-tuple fields + roster snapshots) recording state. An agent acts on a value read from one of those surfaces. Check whether the value was current at the moment of the read, or was a pointer whose freshness was last guaranteed at some earlier moment."
 category: agent
-status: emerging
+status: stable
 discovered: 2026-05-23
 proven_in: "2026-05-23 Scorched Director window (13:46Z onwards). Five worked instances of the same anti-pattern firing in ~30 minutes, across three distinct substrate surface types (durable file prose; comms-event lifecycle state; identity-tuple field) and in two structural directions (stale-says-active when reality is closed; stale-says-closed when reality is active)."
 proven_date: 2026-05-23
@@ -161,4 +161,6 @@ This pattern file is itself produced under the substrate-writing discipline it c
 - Migrated-to-sibling: the Ashen 14:02:16Z retraction crossed with Scorched 14:03:50Z ACCEPT is referenced in [recursion-of-doctrine-under-team-cadence-speed.md](recursion-of-doctrine-under-team-cadence-speed.md), not enumerated here, per Wilma's "straddling produces dilution" finding
 - Composition pointers: PDR-075 in-flight (Twilit Weaving Moon's draft); recursion-of-doctrine-under-team-cadence-speed.md (sibling pattern, this session)
 
-The pattern's empirical worked-instance count is sufficient for `status: emerging` per the README's promotion criteria. Future cross-session instances (the pattern firing on a non-2026-05-23 day under a different Director and team composition) would promote `status: emerging → stable`.
+The pattern's empirical worked-instance count is sufficient for `status: emerging` per the README's promotion criteria.
+
+**Promoted `emerging → stable` 2026-06-14.** The promotion trigger named above — the pattern firing on a non-2026-05-23 day under a different cast and team composition — fired repeatedly across the comms-research thread (a different team, weeks later): named-successor-read-as-active (a peer credited a NAMED-but-not-yet-active successor with the active agent's work); local-HEAD-read-as-origin (same-checkout `HEAD` reported as origin/pushed state); owner-direction-snapshot (an early "wait" frozen into a standing gate after the stream had moved — see [[owner-direction-is-a-stream]]); and quiet-canonical-stream-read-as-solo (a ~4h-silent stream read as an absent team when the process table showed a live rotating cast). Same structural cause (a pointer's last-fresh moment lagging the decision), new surfaces (successor naming, git HEAD-vs-origin, owner-direction stream, liveness-by-stream-quietness). The cure family is unchanged.

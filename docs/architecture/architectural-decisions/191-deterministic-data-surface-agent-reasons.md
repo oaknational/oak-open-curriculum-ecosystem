@@ -3,6 +3,11 @@
 **Status**: Accepted
 **Date**: 2026-06-05 (ratified by owner 2026-06-05)
 **Related**:
+[ADR-194](194-teacher-as-expert-product-boundary.md)
+(the product principle this ADR is the server-side engineering corollary of:
+ADR-194 states that Oak's surfaces inform teachers — with information, resources,
+and evidence — and never instruct or do the teacher's job; this ADR enforces that
+line on the server);
 [ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)
 (deterministic SDK / NL-in-MCP boundary — this ADR is the relevance/ranking
 corollary: ADR-107 settles where natural-language interpretation happens, this
@@ -14,9 +19,9 @@ principle constrains);
 (context grounding for AI agents — the interpretation-resource scaffold that lets
 the agent reason well over deterministic facts);
 the EEF plan's **Decision 10** in
-[`eef-graph-tool-completion.plan.md`](../../../.agent/plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md)
+`eef-graph-tool-completion.plan.md`
 (the plan-local statement this ADR promotes to a repo-wide principle);
-[`graph-tools-value-redesign.plan.md`](../../../.agent/plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
+`graph-tools-value-redesign.plan.md`
 (the second plan that independently embodies the same principle: bounded
 retrieval, agent reasons);
 PDR-058 §Surface 2 (earned-generic design optionality).
@@ -30,7 +35,7 @@ the consuming agent?**
 
 The question is not hypothetical. It surfaced explicitly in the EEF evidence
 work, where an originating strategic brief
-([`evidence-integration-strategy.md`](../../../.agent/plans/sector-engagement/eef/future/evidence-integration-strategy.md))
+(`evidence-integration-strategy.md`)
 proposed a server-side "pedagogical recommendation system" with a transparent
 composite-scoring algorithm (Impact 40% / Evidence 30% / Cost 20% / Context
 10%) and a server-side curriculum→evidence crosswalk. The brief's own §10.3

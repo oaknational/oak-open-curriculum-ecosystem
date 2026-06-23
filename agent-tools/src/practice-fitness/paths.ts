@@ -7,6 +7,37 @@ const EXCLUDED_DIRECTORY_NAMES = new Set(['.git', 'coverage', 'dist', 'node_modu
 const EXCLUDED_PATH_PREFIXES = ['.agent/practice-core-backup-', '.agent/practice-core/incoming/'];
 const EXCLUDED_PATH_SEGMENTS = ['/archive/'];
 
+/**
+ * Transient or machine-local roots that are not part of the canonical Practice
+ * estate and are gitignored: the repo-root scratch dir and the local-only
+ * reference dump. Matched at a path boundary (exact dir or its subtree) so the
+ * `tmp` root never greedily swallows `template.md` or `tmp-notes/`.
+ *
+ * Vendor worktrees (`.claude/worktrees/*`, `.cursor/worktrees/*`, …) are
+ * excluded structurally instead — see {@link isForeignWorkingTreeRoot} — so
+ * every vendor's worktrees are skipped without enumerating vendor names, while
+ * other vendor content (e.g. generated skill adapters) is still inspected.
+ */
+const EXCLUDED_PATH_ROOTS = ['tmp', '.agent/reference-local'];
+
+/**
+ * A `.git` entry marks the root of a separate git working tree: a worktree
+ * (where `.git` is a file) or a nested clone (where it is a directory). Such a
+ * tree is never part of the current tree's estate and must not be walked.
+ *
+ * @param entries - the directory's entries
+ * @returns true if the directory is the root of a foreign git working tree
+ */
+function isForeignWorkingTreeRoot(entries: readonly Pick<FitnessPathDirEntry, 'name'>[]): boolean {
+  return entries.some((entry) => entry.name === '.git');
+}
+
+function isUnderExcludedRoot(normalizedPath: string): boolean {
+  return EXCLUDED_PATH_ROOTS.some(
+    (root) => normalizedPath === root || normalizedPath.startsWith(`${root}/`),
+  );
+}
+
 export interface FitnessPathDirEntry {
   readonly name: string;
   isDirectory(): boolean;
@@ -43,6 +74,10 @@ function shouldSkipDirectory(relPath: string): boolean {
     return true;
   }
 
+  if (isUnderExcludedRoot(normalizedPath)) {
+    return true;
+  }
+
   return EXCLUDED_PATH_SEGMENTS.some((segment) => normalizedPath.includes(segment));
 }
 
@@ -57,6 +92,10 @@ export function shouldInspectFitnessPath(relPath: string): boolean {
   }
 
   if (EXCLUDED_PATH_PREFIXES.some((prefix) => normalizedPath.startsWith(prefix))) {
+    return false;
+  }
+
+  if (isUnderExcludedRoot(normalizedPath)) {
     return false;
   }
 
@@ -88,6 +127,14 @@ async function discoverMarkdownFiles(
 ): Promise<string[]> {
   const absDir = path.join(repoRoot, relDir);
   const dirEntries = await fileSystem.readdir(absDir);
+
+  // A non-root directory carrying a `.git` marker is a foreign working tree
+  // (a vendor worktree such as `.claude/worktrees/*`, or a nested clone). Its
+  // contents belong to a different checkout and must not enter the estate.
+  if (relDir !== '.' && isForeignWorkingTreeRoot(dirEntries)) {
+    return [];
+  }
+
   const sortedEntries = dirEntries.toSorted((left, right) => left.name.localeCompare(right.name));
   const markdownFiles: string[] = [];
 

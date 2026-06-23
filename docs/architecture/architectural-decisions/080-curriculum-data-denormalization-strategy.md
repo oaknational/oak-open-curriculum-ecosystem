@@ -4,7 +4,7 @@
 **Date**: 2025-12-15 (Updated 2025-12-28 - comprehensive analysis of all 17 subjects × 4 key stages)  
 **Decision Makers**: AI Platform Team  
 **Related ADRs**: [ADR-066](066-sdk-response-caching.md), [ADR-067](067-sdk-generated-elasticsearch-mappings.md), [ADR-076](076-elser-only-embedding-strategy.md)  
-**Analysis Document**: [Curriculum Structure Analysis](../../../.agent/plans/curriculum-structure-analysis.md)
+**Analysis Document**: Curriculum Structure Analysis
 
 ## Scope
 
@@ -743,7 +743,7 @@ The ES index keeps the parallel-array denormalisation (`tiers[]`, `exam_boards[]
 
 ## Related Documentation
 
-- [Upstream API Wishlist](../../../.agent/plans/sector-engagement/ooc-api-wishlist/index.md) - Request for flat fields
+- Upstream API Wishlist - Request for flat fields
 - [Semantic Search Prompt](../../../.agent/prompts/semantic-search/semantic-search.prompt.md) - Entry point for AI sessions
 - [ADR-066: SDK Response Caching](066-sdk-response-caching.md) - Redis caching strategy
 - [ADR-079: SDK Cache TTL Jitter](079-sdk-cache-ttl-jitter.md) - Cache TTL strategy

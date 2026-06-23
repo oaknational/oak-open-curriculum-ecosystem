@@ -36,7 +36,7 @@
 > **consuming agent the only reasoner** — no server-side ranking, no
 > situation→strand crosswalk. Decision 10 is the ratified resolution (now
 > repo-wide doctrine as
-> [ADR-191](../../../../docs/architecture/architectural-decisions/191-deterministic-data-surface-agent-reasons.md))
+> [ADR-191](../../../../../docs/architecture/architectural-decisions/191-deterministic-data-surface-agent-reasons.md))
 > and answers this brief's own open question §10.3. So where this brief says "recommend /
 > rank / score server-side", read: *the agent ranks; the server returns
 > deterministic facts plus the methodology and caveats the agent needs to reason
@@ -221,6 +221,12 @@ inconsistent, shallow results. The workflows encode pedagogical
 expertise about *how* to use evidence in planning.
 
 ### R7: Professional Judgement Framing
+
+> **Promoted to ADR-194 (2026-06-09).** R7's professional-judgement framing is now
+> crystallised repo-wide as the Teacher-as-Expert Product Boundary
+> ([ADR-194](../../../../../docs/architecture/architectural-decisions/194-teacher-as-expert-product-boundary.md)).
+> R7 stands as the EEF-specific statement; ADR-194 is its durable, cross-surface
+> home, with ADR-191 as the server-side engineering corollary.
 
 Every output MUST explicitly frame results as decision-support, not
 automatic policy:

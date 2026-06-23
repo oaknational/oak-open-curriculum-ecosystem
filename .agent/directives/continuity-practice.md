@@ -29,7 +29,6 @@ and historical explanation collapse into one file.
 | This directive | Strategy, rules, and process for continuity |
 | `.agent/memory/operational/repo-continuity.md` | Compact repo-level active state |
 | `.agent/memory/operational/threads/<slug>.next-session.md` | Per-thread identity, landing target, and lane state |
-| `.agent/memory/operational/tracks/*.md` | Short-lived tactical coordination cards |
 | `.agent/memory/active/napkin.md` | Session observations, surprises, and corrections |
 | `.agent/memory/active/distilled.md` | Refined cross-session lessons conserved between capture and graduation |
 | Permanent docs, ADRs, PDRs, rules | Graduated doctrine and enforcement |
@@ -103,7 +102,7 @@ Its responsibilities are deliberately narrow:
 
 - record landed or unlanded outcome against the landing target;
 - refresh compact active state in `repo-continuity.md`;
-- update touched thread records and tactical track cards;
+- update touched thread records;
 - capture surprises and corrections in the napkin;
 - run the consolidation gate.
 
@@ -142,20 +141,17 @@ The live continuity contract belongs in
 Keep that file compact and operational. Active plans remain
 authoritative for scope, sequencing, acceptance criteria, and
 validation. Thread records carry per-thread identity and lane state.
-Track cards are tactical and must resolve, promote, or delete at
-session close.
 
 Do not create a generic "standing decisions" bucket. Standing
 decisions live in their proper homes: ADRs, PDRs, directives, rules,
 plans, or thread records.
 
-The retired `workstreams/<slug>.md` surface is historical. Lane state
-now folds into `threads/<slug>.next-session.md` per PDR-027.
+Lane state folds into `threads/<slug>.next-session.md` per PDR-027.
 
 ## Continuation Records
 
-Permanent skills and directives carry routing behaviour. Thread records,
-tactical tracks, and handoff records carry volatile facts: branch, controlling
+Permanent skills and directives carry routing behaviour. Thread records
+and handoff records carry volatile facts: branch, controlling
 plan, next safe step, active team expectation, validation state, and commit
 evidence.
 
@@ -164,6 +160,15 @@ After a commit window lands, replace phrases such as "ready to land" with the
 actual commit evidence or an explicit unlanded state. A stale "ready to land"
 phrase after the work has committed is a continuity defect because the next
 session cannot tell whether it should stage work, verify a commit, or move on.
+
+**Supersession refreshes the whole auto-surfaced chain.** A pass that
+supersedes a decision, plan state, or next step MUST update the first
+surfaces a fresh session reads — the thread-record top and the
+`repo-continuity.md` next-safe-step entry — not only the plan body or the
+deep artefact. A superseded fact that survives on an auto-surfaced
+continuity surface outranks the correction in practice, because the next
+session reads the continuity chain first. (Owner-approved fold,
+2026-06-11 walk.)
 
 ## GO
 

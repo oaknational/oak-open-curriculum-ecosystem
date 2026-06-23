@@ -25,18 +25,14 @@ import type { Logger } from '@oaknational/logger';
 import {
   generateAnalysisReport,
   generateMinedSynonyms,
-  generateMisconceptionGraphData,
   generateNCCoverageGraphData,
-  generatePriorKnowledgeGraphData,
-  generateThreadProgressionData,
   generateVocabularyGraphData,
   writeAnalysisReportFile,
   writeMinedSynonymsFile,
-  writeMisconceptionGraphAsJson,
   writeNCCoverageGraphAsJson,
-  writePriorKnowledgeGraphAsJson,
-  writeThreadProgressionFile,
   writeVocabularyGraphAsJson,
+  generateGraphCorpusData,
+  writeGraphCorpusAsJson,
 } from '../src/bulk.js';
 import { readAllBulkFiles } from './lib/index.js';
 import { type BulkDataInput, processBulkData, type ProcessingResult } from './vocab-gen-core.js';
@@ -113,23 +109,20 @@ async function generateOutputFiles(
   const outputFiles: string[] = [];
   const sourceVersion = await readSourceVersion(config.bulkDataPath);
 
-  // Generate thread progression graph
-  const threadGraph = generateThreadProgressionData(result.extractedData.threads, sourceVersion);
-  const threadFilePath = await writeThreadProgressionFile(threadGraph, config.outputPath, logger);
-  outputFiles.push(basename(threadFilePath));
-
-  // Generate prior knowledge graph
-  const priorKnowledgeGraph = generatePriorKnowledgeGraphData(
-    result.extractedData.priorKnowledge,
-    result.extractedData.threads,
+  // Generate the graph corpus (one-graph foundation + G2 chain + G3 sequences
+  // + G4b keywords: unit/thread/lesson/misconception/keyword nodes,
+  // prerequisiteFor + chain edges, year-ordered thread→unit placement
+  // sequences)
+  const graphCorpus = generateGraphCorpusData({
+    priorKnowledge: result.extractedData.priorKnowledge,
+    threads: result.extractedData.threads,
+    lessons: result.extractedData.lessons,
+    misconceptions: result.extractedData.misconceptions,
+    keywords: result.extractedData.keywords,
     sourceVersion,
-  );
-  const priorKnowledgeDirPath = await writePriorKnowledgeGraphAsJson(
-    priorKnowledgeGraph,
-    config.outputPath,
-    logger,
-  );
-  outputFiles.push(basename(priorKnowledgeDirPath));
+  });
+  const graphCorpusDirPath = await writeGraphCorpusAsJson(graphCorpus, config.outputPath, logger);
+  outputFiles.push(basename(graphCorpusDirPath));
 
   // Generate analysis report (written to vocab-gen/reports in the SDK)
   const analysisReport = generateAnalysisReport(result.extractedData);
@@ -141,18 +134,6 @@ async function generateOutputFiles(
   const synonymsDir = join(config.outputPath, 'synonyms');
   const synonymsFilePath = await writeMinedSynonymsFile(minedSynonyms, synonymsDir, logger);
   outputFiles.push(`synonyms/${basename(synonymsFilePath)}`);
-
-  // Generate misconception graph (JSON + typed loader)
-  const misconceptionGraph = generateMisconceptionGraphData(
-    result.extractedData.misconceptions,
-    sourceVersion,
-  );
-  const misconceptionDirPath = await writeMisconceptionGraphAsJson(
-    misconceptionGraph,
-    config.outputPath,
-    logger,
-  );
-  outputFiles.push(basename(misconceptionDirPath));
 
   // Generate vocabulary graph (JSON + typed loader)
   const vocabularyGraph = generateVocabularyGraphData(result.extractedData.keywords, sourceVersion);

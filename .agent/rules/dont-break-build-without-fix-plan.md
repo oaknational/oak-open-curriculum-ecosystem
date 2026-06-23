@@ -1,22 +1,17 @@
 # Don't Break the Build Without a Fix Plan
 
-Operationalises the green-gate invariant from
-[`gate-recovery-cadence.plan.md`](../plans/observability/active/gate-recovery-cadence.plan.md)
-for the cross-agent context introduced by
-[`agent-collaboration.md`](../directives/agent-collaboration.md).
+Owns the green-gate invariant for the cross-agent context introduced by
+[`agent-collaboration.md`](../directives/agent-collaboration.md). The invariant is
+durable doctrine and lives here, in the rule — a plan that executes against it cites
+this rule, never the reverse (PDR-105 reference-direction).
 
-## Authority (verbatim)
+## The invariant
 
-From `gate-recovery-cadence.plan.md` `## Intent`:
-
-> Restore the invariant that build, type-check, lint, format, markdown,
-> depcruise, knip, and static checks stay green even during TDD. RED is
-> allowed only as intentional failing behavioural tests, not as missing
-> imports, broken types, lint warnings, or build failures.
-
-The procedural application lives in `## Recovery Sequence` point 2 of the
-same plan ("Make non-test gates green first"): replace missing-symbol
-failures with typed minimal seams that compile and fail behaviourally.
+Build, type-check, lint, format, markdown, depcruise, knip, and static checks stay
+green even during TDD. RED is allowed only as intentional failing behavioural tests —
+never as missing imports, broken types, lint warnings, or build failures. When a gate is
+red, make the non-test gates green first: replace missing-symbol failures with typed
+minimal seams that compile and fail behaviourally.
 
 ## Rule
 
@@ -47,8 +42,8 @@ on the same gates passing on the same working tree.
 - Highest-priority next work when the issue is too large to repair
   immediately, with an owner-visible plan or escalation before unrelated work
   continues;
-- Aligned with the gate-recovery-cadence plan's recovery sequence: typed
-  seams that compile and fail behaviourally, not missing-symbol REDs.
+- Aligned with the invariant's recovery order above: typed seams that compile
+  and fail behaviourally, not missing-symbol REDs.
 
 ## What is forbidden
 
@@ -65,25 +60,12 @@ on the same gates passing on the same working tree.
 
 ## Cross-references
 
-- Authority surface:
-  [`gate-recovery-cadence.plan.md`](../plans/observability/active/gate-recovery-cadence.plan.md)
-  `## Intent` and `## Recovery Sequence` point 2.
 - Adjacent doctrine:
   [`no-warning-toleration.md`](no-warning-toleration.md) — warnings are
   not deferrable.
 - Containing directive:
   [`agent-collaboration.md`](../directives/agent-collaboration.md) §Scope
   Discipline Across Agent Boundaries.
-- Operational pattern: `parallel-track-pre-commit-gate-coupling` —
-  founding instances recorded in
-  [`.agent/memory/active/napkin.md`](../memory/active/napkin.md)
-  under the 2026-04-24 and 2026-04-25 entries; pattern file pending
-  graduation at WS2 of the multi-agent collaboration protocol.
-
-## Bidirectional reference
-
-The authority plan
-[`gate-recovery-cadence.plan.md`](../plans/observability/active/gate-recovery-cadence.plan.md)
-cites this rule as the cross-agent operationalisation. The bidirectional
-reference is validated at consolidation time per
-[`consolidate-docs.md`](../commands/consolidate-docs.md).
+- Operational pattern: `parallel-track-pre-commit-gate-coupling` — the
+  coupling failure where two parallel agents' pre-commit hooks both fail
+  because of one agent's working-tree breakage.

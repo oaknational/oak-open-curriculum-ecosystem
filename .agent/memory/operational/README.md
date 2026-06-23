@@ -19,29 +19,10 @@ continuity-surface split lives in
 | --- | --- | --- | --- | --- |
 | [`repo-continuity.md`](repo-continuity.md) | Canonical repo-level continuity contract | Current session to a few sessions | `session-handoff` | Canonical for continuity contract; subordinate to active plans for scope |
 | [`threads/<slug>.next-session.md`](threads/README.md) | Continuity-unit next-session record — identity table + landing target + lane state for a named stream of work that persists across sessions | Indefinite; deleted when thread archives | `session-handoff`; each joining session adds/updates its identity row per the additive-identity rule (PDR-027) | Identity + next-session landing + lane state authoritative for the thread; subordinate to plans for scope |
-| [`tracks/<thread>--<agent>--<branch>.md`](tracks/README.md) | Single-writer tactical coordination card | One focused task or blocker-resolution cycle | The owning agent only | Tactical coordination only; never authoritative for scope |
-| [`pending-graduations.md`](pending-graduations.md) | Canonical pending-graduations register for owner-gated items, unresolved capture, and extracted recovery-file dispositions; do not create shard-like sidecar buffers | Until every entry has a durable home, unresolved route, explicit withdrawal, or owner direction | `consolidate-docs` / curator passes | Live pending-graduations queue substance; not archive material |
+| [`pending-graduations.md`](pending-graduations.md) | Canonical pending-graduations register: decision-debt entries (status pending/due/overdue) awaiting graduation or rejection; do not create shard-like sidecar buffers | Until every entry is graduated, rejected, or duplicate — the empty buffer is the target (PDR-100) | `consolidate-docs` / curator passes | Live decision-debt; not archive material |
 | [`open-questions.md`](open-questions.md) | Register of non-urgent unresolved planning, design, or process questions | Until answered in place, surfaced to owner, withdrawn, or left open with deferral-honesty | Any agent appends; `consolidate-docs` drains | Sibling to pending-graduations; subordinate to active plans, ADRs, and PDRs |
 | [`collaboration-state-conventions.md`](collaboration-state-conventions.md) | Operational guide to live state in `.agent/state/collaboration/` (lifecycle, schema-field provenance, trusted-agents threat model) | Indefinite; evolves alongside `.agent/state/` surfaces | `consolidate-docs` and amendments to `agent-collaboration.md` | Subordinate to `agent-collaboration.md` directive for doctrine |
 | [`collaboration-state-lifecycle.md`](collaboration-state-lifecycle.md) | Detailed recipes for opening, refreshing, closing, archiving, and reporting collaboration state | Indefinite; evolves alongside `.agent/state/collaboration/` lifecycle rules | Collaboration protocol implementation and remediation passes | Subordinate to `collaboration-state-conventions.md` for state indexing |
-
-Track cards are git-tracked; multi-agent and multi-location
-collaboration flows through the normal git channel. A collaborative
-track creates multiple single-writer cards disambiguated by the
-filename convention.
-
-**Workstream surface retired (2026-04-21 Session 5 of the
-`memory-feedback` thread, owner-ratified TIER-2 E1)**: the
-`workstreams/<slug>.md` surface was collapsed into thread
-next-session records. At current scale the thread↔workstream
-mapping was 1:1; the separate brief paid a coordination cost
-without delivering structural value. Lane state now folds into
-the thread's next-session record directly. See
-[`workstreams/README.md`](workstreams/README.md) retirement
-notice and [PDR-027 §Amendment Log 2026-04-21 Session 5](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md#amendment-log).
-If a future thread genuinely requires multiple concurrent lanes,
-the workstream surface may be re-introduced via a fresh PDR-027
-amendment.
 
 ## Authority Order
 
@@ -56,14 +37,12 @@ lower-authority surfaces' scope-specific content.
 2. **`repo-continuity.md`** — canonical continuity contract.
 3. **`threads/<slug>.next-session.md`** — thread-level identity +
    next-session landing + lane state.
-4. **`tracks/*.md`** — tactical coordination only; never
-   authoritative for scope.
 
 ## Relationship to Other Memory Modes
 
 - **Active memory** (`../active/`) — learning loop (napkin, distilled,
   patterns). Operational memory is NOT a second memory doctrine;
-  promotable signals in thread records or tracks route into active
+  promotable signals in thread records route into active
   memory via the normal capture/distil pipeline.
 - **Executive memory** (`../executive/`) — organisational contracts.
   Operational memory is short-horizon; executive memory is stable.

@@ -1,29 +1,26 @@
 import { digestSeedForRouting, readUInt32BigEndian } from './hash.js';
 import {
-  IDENTITY_WORD_GROUPS,
-  type IdentityAdjective,
-  type IdentityGroup,
-  type IdentityNoun,
-  type IdentityVerb,
-} from './wordlists.js';
+  ACTIVE_NAMING_SCHEMA_ID,
+  NAMING_SCHEMAS,
+  type NamingSchema,
+  type NamingSchemaId,
+} from './schema-registry.js';
 
 /**
- * Result produced when a seed is routed through the approved wordlists.
+ * Result produced when a seed is routed through a registered naming schema.
  */
 export interface DerivedIdentityResult {
   /** Discriminant for derived identity results. */
   readonly kind: 'derived';
-  /** The selected themed word group. */
-  readonly group: IdentityGroup;
-  /** The selected adjective slot. */
-  readonly adjective: IdentityAdjective;
-  /** The selected verb slot. */
-  readonly verb: IdentityVerb;
-  /** The selected noun slot. */
-  readonly noun: IdentityNoun;
-  /** Human-readable display form, for example "Lunar Orbiting Comet". */
+  /** Naming-schema era that produced this name. */
+  readonly namingSchemaVersion: NamingSchemaId;
+  /** The selected themed word group key. */
+  readonly group: string;
+  /** Selected words in column order, lowercase. */
+  readonly words: readonly string[];
+  /** Human-readable display form rendered per the schema's column casing. */
   readonly displayName: string;
-  /** Lowercase kebab-case slug form, for example "lunar-orbiting-comet". */
+  /** Lowercase kebab-case slug form, for example "harrier-weaves-stratosphere". */
   readonly slug: string;
   /** SHA-256 digest of the normalised seed. */
   readonly seedDigest: string;
@@ -35,6 +32,8 @@ export interface DerivedIdentityResult {
 export interface OverrideIdentityResult {
   /** Discriminant for override identity results. */
   readonly kind: 'override';
+  /** Name provenance marker: overrides bypass every registered schema. */
+  readonly namingSchemaVersion: 'override';
   /** Human-readable override display form after whitespace normalisation. */
   readonly displayName: string;
   /** Lowercase kebab-case slug form derived from the override display name. */
@@ -59,16 +58,24 @@ export interface DeriveIdentityOptions {
    *
    * @remarks
    * Overrides are represented as their own result variant so callers never
-   * receive fake `group`, `adjective`, `verb`, or `noun` values.
+   * receive fake schema-derived word values.
    */
   readonly override?: string;
+  /**
+   * Registered naming schema to derive under.
+   *
+   * @remarks
+   * Defaults to the active schema. Passing a historical schema id lets
+   * callers re-derive the name a seed produced under an earlier era.
+   */
+  readonly schemaId?: NamingSchemaId;
 }
 
 /**
  * Derive a deterministic agent identity from a stable seed.
  *
  * @param seed - Stable seed, usually provided by an agent harness session id.
- * @param options - Optional override controls.
+ * @param options - Optional override and schema-selection controls.
  * @returns Derived or override identity result.
  *
  * @example
@@ -92,35 +99,36 @@ export function deriveIdentity(seed: string, options: DeriveIdentityOptions = {}
   const digest = digestSeedForRouting(normalisedSeed);
 
   if (options.override !== undefined) {
-    return deriveOverrideIdentity(normalisedSeed, digest.hex, options.override);
+    return deriveOverrideIdentity(digest.hex, options.override);
   }
 
-  const group = selectByDigest(IDENTITY_WORD_GROUPS, digest.bytes, 0);
-  const adjective = selectByDigest(group.adjectives, digest.bytes, 4);
-  const verb = selectByDigest(group.verbs, digest.bytes, 8);
-  const noun = selectByDigest(group.nouns, digest.bytes, 12);
-  const displayName = [adjective, verb, noun].map(capitalise).join(' ');
+  const schema = NAMING_SCHEMAS[options.schemaId ?? ACTIVE_NAMING_SCHEMA_ID];
+  const group = selectByDigest(schema.groups, digest.bytes, 0);
+  const selections = schema.columnCasing.map((casing, columnIndex) => {
+    const word = selectColumnWord(group, columnIndex, digest.bytes);
+    return {
+      word,
+      rendered: casing === 'title' ? capitalise(word) : word,
+    };
+  });
+  const words = selections.map((selection) => selection.word);
 
   return {
     kind: 'derived',
+    namingSchemaVersion: schema.id,
     group: group.group,
-    adjective,
-    verb,
-    noun,
-    displayName,
-    slug: [adjective, verb, noun].join('-'),
+    words,
+    displayName: selections.map((selection) => selection.rendered).join(' '),
+    slug: words.join('-'),
     seedDigest: digest.hex,
   };
 }
 
-function deriveOverrideIdentity(
-  _seed: string,
-  seedDigest: string,
-  overrideValue: string,
-): OverrideIdentityResult {
+function deriveOverrideIdentity(seedDigest: string, overrideValue: string): OverrideIdentityResult {
   const override = normaliseOverride(overrideValue);
   return {
     kind: 'override',
+    namingSchemaVersion: 'override',
     displayName: override,
     slug: slugifyDisplayName(override),
     seedDigest,
@@ -145,6 +153,20 @@ function normaliseOverride(overrideValue: string): string {
     throw new Error('override must contain at least one ASCII letter or digit');
   }
   return override;
+}
+
+function selectColumnWord(
+  group: NamingSchema['groups'][number],
+  columnIndex: number,
+  digestBytes: readonly number[],
+): string {
+  const column = group.columns[columnIndex];
+  if (column === undefined) {
+    throw new Error(
+      `naming schema group "${group.group}" has no column at index ${columnIndex.toString()}`,
+    );
+  }
+  return selectByDigest(column, digestBytes, 4 * (columnIndex + 1));
 }
 
 function selectByDigest<TValue>(

@@ -370,19 +370,19 @@ git diff HEAD -- .agent/state/collaboration/closed-claims.archive.json | grep -A
 
 ```bash
 # Capture pre-state fingerprint
-git diff --stat HEAD -- packages/sdks/oak-sdk-codegen/ > /tmp/sdk-pre.txt
+git diff --stat HEAD -- packages/sdks/oak-sdk-codegen/ > <scratch>/sdk-pre.txt
 
 # Re-run codegen
 pnpm sdk-codegen
 
 # Compare
-git diff --stat HEAD -- packages/sdks/oak-sdk-codegen/ > /tmp/sdk-post.txt
-diff /tmp/sdk-pre.txt /tmp/sdk-post.txt
+git diff --stat HEAD -- packages/sdks/oak-sdk-codegen/ > <scratch>/sdk-post.txt
+diff <scratch>/sdk-pre.txt <scratch>/sdk-post.txt
 ```
 
 **Acceptance**:
 
-- ✅ `diff /tmp/sdk-pre.txt /tmp/sdk-post.txt` shows no change.
+- ✅ `diff <scratch>/sdk-pre.txt <scratch>/sdk-post.txt` shows no change.
 
 **If diff shows change**: STOP. The dirty tree was NOT the canonical codegen output. Surface to owner with the post-codegen diff for direction.
 

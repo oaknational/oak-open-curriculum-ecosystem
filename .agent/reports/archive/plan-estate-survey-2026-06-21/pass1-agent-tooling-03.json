@@ -1,0 +1,2361 @@
+{
+  "batch_size": 12,
+  "plans_returned": 12,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/agent-tooling/current/pdr-080-comms-log-care-phenotype.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending; plan is in PLANNING status; no execution has started",
+          "file_line": "file:5-35, file:42"
+        },
+        {
+          "claim": "PDR-080 is landed but the phenotype (CLI + SKILL edit) is explicitly undeployed — the plan holds the only detailed execution contract for this gap",
+          "file_line": "file:49-57"
+        },
+        {
+          "claim": "Folder lane 'current' is correct; no archive or rehome trigger is present",
+          "file_line": "file:1 (path), file:42"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes a concrete, well-bounded implementation contract for a landed PDR. The three-bin abstraction (fresh/informational/critical) directly maps to PDR-080 Invariant 4 shape constraints (file:71). TDD cycle pairs are specified with file scope, edge-case enumeration, and acceptance criteria (file:162-175, file:188-199, file:212-226). The sequential-reviewer-cadence discipline for Practice Core is correctly applied (file:131-136). Non-goals are explicitly bounded and tied to PDR-080 §Notes (file:75-82). No speculative scope is introduced.",
+      "content_quality": "strong",
+      "content_quality_note": "Each cycle specifies file scope, parallel-safety status, Red/Green test content, acceptance criteria, and reviewer dispatch. The parallelisation graph is rendered as an ASCII dependency diagram (file:104-109) and reconciled against the frontmatter depends_on fields (file:5-35). Risk table covers the most likely failure modes with concrete mitigations (file:409-416). Foundation alignment section ties each principle to a specific plan element (file:424-428). Quality gates include both per-cycle filter commands and a full integrated gate (file:371-389).",
+      "salvage_value": [
+        {
+          "idea": "Bin-counter pure function binCounts(events, now, thresholds) returning {fresh, informational, critical} as the core observable for comms absorption timing",
+          "class": "good",
+          "file_line": "file:162-168"
+        },
+        {
+          "idea": "Shape-constraint validator validateThresholds enforcing PDR-080 Invariant 4 (informational < critical, both positive, gap >= absorption cadence)",
+          "class": "good",
+          "file_line": "file:188-199"
+        },
+        {
+          "idea": "Thin CLI wrapper under agent-tools:collaboration-state as a peer subcommand to comms send/watch/direct",
+          "class": "good",
+          "file_line": "file:61-62, file:207-218"
+        },
+        {
+          "idea": "SKILL-CANONICAL.md §3a rewrite replacing 7-day calendar cutoff with bin-signal trigger citing the CLI command by exact name",
+          "class": "good",
+          "file_line": "file:250-275"
+        },
+        {
+          "idea": "Cross-reference sweep with disposition log shape (update-in-this-cycle / historical-keep-as-is / flag-for-separate-cycle) as a bounded mechanical process",
+          "class": "good",
+          "file_line": "file:285-305"
+        },
+        {
+          "idea": "Sequential reviewer cadence (docs-adr-expert then assumptions-expert) for Practice Core surfaces, with reviewer transcript ids recorded in commit body",
+          "class": "good",
+          "file_line": "file:131-136, file:316-323"
+        },
+        {
+          "idea": "PDR-080 landing-health verification as a parallel-safe cycle checking cross-reference resolution and README index row",
+          "class": "good",
+          "file_line": "file:334-344"
+        },
+        {
+          "idea": "Completion broadcast cycle citing commit SHAs and reviewer transcript ids, updating thread record and pending-graduations",
+          "class": "good",
+          "file_line": "file:349-361"
+        },
+        {
+          "idea": "Parallelisation graph rendered as ASCII dependency diagram reconciled against frontmatter depends_on fields",
+          "class": "good",
+          "file_line": "file:101-115"
+        },
+        {
+          "idea": "Archive destination after completion (.agent/plans/agentic-engineering-enhancements/archive/completed/) differs from current folder lane (agent-tooling/current) — possible rehome gap to note",
+          "class": "speculative",
+          "file_line": "file:464"
+        },
+        {
+          "idea": "Plan-mode-vs-repo-plan distinction captured as a graduation candidate for distilled.md",
+          "class": "good",
+          "file_line": "file:463"
+        },
+        {
+          "idea": "README PDR-shape contract update (Created / Last updated metadata) deferred as a separate cycle",
+          "class": "speculative",
+          "file_line": "file:77, file:461"
+        },
+        {
+          "idea": "PDR-067 amendment (raw-event-stream vs rendered-log distinction) deferred as a separate cycle",
+          "class": "speculative",
+          "file_line": "file:78, file:462"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required on all plans — V0 §2.1)",
+          "file_line": "file:1-37 (frontmatter block, key absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED literal `\"plan\"`, required on all plans — V0 §2.1)",
+          "file_line": "file:1-37 (frontmatter block, key absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED enum `strategic | executable`, required on all plans — V0 §2.2); plan carries executable-shaped content (todos present) so inferred kind is `executable`",
+          "file_line": "file:1-37 (frontmatter block, key absent)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED, required on executable plans or carry `\"pending\"` sentinel — V0 §2.3 / §4)",
+          "file_line": "file:1-37 (frontmatter block, key absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED ISO date — V0 §2.4); date exists in body prose but not as a frontmatter field",
+          "file_line": "file:41 (body: `**Last Updated**: 2026-05-24`)"
+        },
+        {
+          "issue": "Dropped key `isProject: false` present (V0 §2.5 explicitly drops `isProject` — subsumed by `projects_to` edge)",
+          "file_line": "file:36"
+        },
+        {
+          "issue": "Body carries hand-edited `Status: 🟡 PLANNING` prose (maps via §3.5 to `kind: strategic` + `gate: owner-decision` + `expires`), but no `gate` object is in frontmatter and `kind` is absent; the status signal is unstructured and orphaned from the V0 axes",
+          "file_line": "file:42 (body status line)"
+        },
+        {
+          "issue": "No V0 typed plan-level edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on`); related plans and doctrine are listed only in body prose (lines 473-483)",
+          "file_line": "file:470-483 (Dependencies section)"
+        },
+        {
+          "issue": "`depends_on` used at todo-item level as a raw ID array (e.g. `depends_on: [ws1-cycle-1]`), not as a V0 plan-level typed edge with `{ plan, kind: blocking | beneficial }` shape (V0 §4)",
+          "file_line": "file:11, 15, 19, 27, 35 (todo items)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "Todo-level `depends_on` arrays use raw ID lists with implicit `blocking` semantics, colliding with V0 §4 LOCKED shape for `depends_on` as a plan-level edge typed `{ plan: string, kind: 'blocking' | 'beneficial' }`. The estate uses `depends_on` at two distinct scopes (plan-to-plan and cycle-to-cycle) with incompatible shapes — strong evidence that V0's single `depends_on` edge definition is incomplete for plans with explicit intra-plan cycle sequencing; V1 may need a separate `sequenced_after` or todo-level predecessor field.",
+          "evidence": "Todo items at lines 11, 15, 19, 27, 35 carry `depends_on: [ws1-cycle-1]` etc. as raw arrays. V0 §4 defines `depends_on` cardinality as `0..n, each tagged blocking | beneficial` at the plan level only.",
+          "file_line": "file:11, 15, 19, 27, 35 (todo `depends_on` arrays) vs lens §4 typed-edge table (plan-node-schema.v0.md:318)"
+        }
+      ],
+      "specialist_signal": "test",
+      "specialist_kind": "test",
+      "specialist_findings": [
+        {
+          "severity": "low",
+          "claim": "Cycle 1.1 boundary case specification for threshold-exact events (\"events at exactly info_threshold go into informational not fresh\") uses the natural English reading of boundary inclusion but does not state whether thresholds are expressed in seconds, milliseconds, or days. The bin-counter function signature is `(events[], now, thresholds)` and events carry `created_at` timestamps, but no unit or numeric type contract is pinned in the test spec. If the implementation author and the test author disagree on units, the boundary tests will silently pass at the wrong domain.",
+          "file_line": "pdr-080-comms-log-care-phenotype.plan.md:164"
+        },
+        {
+          "severity": "medium",
+          "claim": "Cycle 1.3 integration test is specified as running CLI against a fixture comms directory, but the plan does not name where that fixture directory lives, how it is created, or whether it is checked in. Without a deterministic fixture shape, the integration test is environment-sensitive: if `agent-tools/` lacks a test-fixtures convention and the test defaults to the live `.agent/state/collaboration/comms/` surface (which acceptance criterion 2 references directly), the test is non-hermetic. The acceptance check at line 173 explicitly mentions the live path, which could couple CI to local state.",
+          "file_line": "pdr-080-comms-log-care-phenotype.plan.md:212-214"
+        },
+        {
+          "severity": "low",
+          "claim": "Cycle 1.2 validator test cases include `critical - info < absorptionPassCadence` as a rejection case, but the plan does not specify whether `absorptionPassCadence` is a constant, a config parameter the caller supplies, or a module-level default. The test spec (line 188-192) references it as a parameter in the validator signature `validateThresholds({ info, critical, absorptionPassCadence })`, which is good, but there is no coverage case for a missing or undefined `absorptionPassCadence`, leaving a gap in the failure-mode surface.",
+          "file_line": "pdr-080-comms-log-care-phenotype.plan.md:189-192"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly gates `test-expert` review at the RED phase of each WS1 TDD cycle (line 176) before implementation exists. This is the right model for test-quality review. No deviation from the repo's testing-strategy alignment is present in the reviewer scheduling.",
+          "file_line": "pdr-080-comms-log-care-phenotype.plan.md:176"
+        },
+        {
+          "severity": "info",
+          "claim": "WS2 cycles (documentation) are explicitly marked non-TDD per template guidance (line 425). The plan correctly does not specify test coverage for SKILL edits, which is consistent with the testing-strategy.md reference. No gap here.",
+          "file_line": "pdr-080-comms-log-care-phenotype.plan.md:425"
+        },
+        {
+          "severity": "low",
+          "claim": "The Proof Contract table (lines 500-508) lists acceptance id `ws1-cycle-3 done` with proof level `integration` and cites `CLI invocation against fixture dir reports correct counts`, but the deterministic validation block (lines 228-233) only checks `--help` output and does not include an invocation against a fixture that asserts bin counts. The proof contract and the deterministic validation block are inconsistent: the contract promises fixture-based count assertion but the citable command only exercises help output.",
+          "file_line": "pdr-080-comms-log-care-phenotype.plan.md:503"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/pr-102-snagging.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "All eight phases are status: completed in frontmatter",
+          "file_line": "pr-102-snagging.plan.md:8-34"
+        },
+        {
+          "claim": "Status field reads COMPLETE in body",
+          "file_line": "pr-102-snagging.plan.md:40"
+        },
+        {
+          "claim": "Final closeout evidence recorded: Sonar gate OK, zero violations, all GitHub checks passed on head 6e42a588",
+          "file_line": "pr-102-snagging.plan.md:80-86"
+        },
+        {
+          "claim": "Last updated 2026-05-08 — over six weeks ago",
+          "file_line": "pr-102-snagging.plan.md:39"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every phase has concrete acceptance criteria, deterministic validation commands, and recorded evidence of execution. The snag ledger (lines 166-219) correctly roots each issue in a verifiable source. The completion evidence (lines 454-500) names real commands, real output, and real constraint discoveries. No speculative or ungrounded claims found.",
+      "content_quality": "strong",
+      "content_quality_note": "Validation commands are precise and portable (gh GraphQL query with dynamic owner/repo injection at lines 238-270; Sonar MCP call with projectKey read from sonar-project.properties at lines 275-300). The git subprocess security pattern at lines 374-394 gives testable acceptance criteria including DI and no real-process spawning. The completion evidence at lines 477-495 reproduces the exact command list run, which makes the record independently verifiable.",
+      "salvage_value": [
+        {
+          "idea": "gh GraphQL query template for pulling review threads with isResolved, isOutdated, path, line, and databaseId — reusable for any PR snagging plan",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:238-270"
+        },
+        {
+          "idea": "Sonar MCP call sequence (quality gate + open issues + hotspots) with projectKey read from sonar-project.properties rather than memory",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:275-300"
+        },
+        {
+          "idea": "Git subprocess security pattern: eliminate ambient command lookup via an explicit shared helper with DI, tested without spawning real processes",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:374-394"
+        },
+        {
+          "idea": "Constraint: pnpm lint:fix and pnpm check can rewrite out-of-scope files; those rewrites must be reverted to maintain branch narrowness",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:497-500"
+        },
+        {
+          "idea": "Handoff note: graph-slice 1 execution is gated on absorbing ADR-173 topology blockers and resolving the EEF outcome-verification contradiction",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:89-93"
+        },
+        {
+          "idea": "Phase-gate discipline: refresh PR and Sonar state at session open even if starting immediately after the previous session, because bot comments and check states can change",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:225-228"
+        },
+        {
+          "idea": "Non-goal list as an explicit scope fence (no Practice Core edits, no branch expansion, no workaround commits that only mark Sonar items reviewed)",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:599-607"
+        },
+        {
+          "idea": "String.raw fix for Sonar typescript:S7780 in schema-emitter.ts as the canonical resolution pattern for that rule",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:141"
+        },
+        {
+          "idea": "Nested template literal removal for typescript:S4624 in es-mapping-utils.ts across three call sites",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:142-145"
+        },
+        {
+          "idea": "positional branch/ref input conflicting explicitly with --head/--branch rather than silently taking precedence",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:466-470"
+        },
+        {
+          "idea": "--git flag accepting only absolute paths to a git executable and mapping its directory to trusted PATH",
+          "class": "good",
+          "file_line": "pr-102-snagging.plan.md:472-474"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "current",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": "pr-102-snagging.plan.md:1-35 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": "pr-102-snagging.plan.md:1-35 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §3.1, LOCKED — required for all plans; estate evidence forces `kind: executable`)",
+          "file_line": "pr-102-snagging.plan.md:1-35 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` in frontmatter (V0 §2.4, LOCKED); a body-level 'Last Updated' at line 39 is not a frontmatter field",
+          "file_line": "pr-102-snagging.plan.md:39"
+        },
+        {
+          "issue": "`type: quality-fix` is an explicitly dropped free-label key (V0 §2.5: 'Dropped as free-label — replaced by `node_type` + `kind`')",
+          "file_line": "pr-102-snagging.plan.md:4"
+        },
+        {
+          "issue": "`status: current` is an explicitly dropped field (V0 §2.5: 'Dropped — split into `kind` / `disposition` / `gate` / the projected execution axis')",
+          "file_line": "pr-102-snagging.plan.md:5"
+        },
+        {
+          "issue": "No V0 typed edge fields declared (`serves_strategic_choice` required for executable plans; `thread` recommended; V0 §2.3)",
+          "file_line": "pr-102-snagging.plan.md:1-35 (frontmatter block)"
+        },
+        {
+          "issue": "Plan is in `current/` folder but body and all todos confirm terminal completion; V0 §3.6 requires terminal plans in `archive/`",
+          "file_line": "pr-102-snagging.plan.md:39-40"
+        },
+        {
+          "issue": "Missing `disposition: done` — all 9 todos are `completed` and body line 40 asserts 'COMPLETE'; V0 §3.3 requires `disposition` for terminal plans",
+          "file_line": "pr-102-snagging.plan.md:7-35, 39-40"
+        }
+      ],
+      "unclassified_keys": [
+        "source_pr"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "`status: current` in frontmatter contradicts body evidence of terminal completion: body line 39-40 asserts 'Status: COMPLETE' and all 9 todos carry `status: completed`. V0 §3.5 migration map maps `current` to `kind: executable` / Linear execution `backlog`, but the plan's own evidence forces `disposition: done` (V0 §3.3, model LOCKED). The plan is misrepresented as live work. This is a conformance gap, not a V0 model challenge — the LOCKED disposition model already has the right shape; the plan simply has not been migrated to it.",
+          "evidence": "Body line 39: 'Last Updated: 2026-05-08'; line 40: 'Status: COMPLETE (`current/`)'; todos lines 7-35: all 9 todos have `status: completed`; frontmatter line 5: `status: current`.",
+          "file_line": "pr-102-snagging.plan.md:5, 39-40"
+        }
+      ],
+      "specialist_signal": "none",
+      "specialist_kind": "second-angle",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan is fully complete (all eight todos status:completed, completion evidence recorded at line 454), yet it remains in current/ rather than being archived. A completed plan left in current/ creates false signal for the active plan list and violates the convention that current/ holds live work.",
+          "file_line": "pr-102-snagging.plan.md:40-41"
+        },
+        {
+          "severity": "medium",
+          "claim": "Status field says COMPLETE but the frontmatter status value is 'current' (not 'complete' or 'archived'). The mismatch between the human-readable status header and the machine-readable frontmatter field means any automated tooling reading frontmatter.status will classify this plan as live work.",
+          "file_line": "pr-102-snagging.plan.md:5"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 7 validation block (lines 574-586) hard-codes the Sonar project key 'oaknational_oak-open-curriculum-ecosystem' directly, contradicting the Phase 0 instruction at lines 276-279 which says to read the project key from sonar-project.properties and never substitute from memory. Internal consistency violation that could mislead a future executor.",
+          "file_line": "pr-102-snagging.plan.md:575-586"
+        },
+        {
+          "severity": "low",
+          "claim": "The completion evidence references two distinct agent names (Twigged Shedding Fern at line 454, Lush Rustling Bark at line 462) performing sequential work. No handoff record or claim transfer is cited between them. If the plan is used as an execution reference in future, the dual-agent attribution without a handoff chain is an unexplained gap.",
+          "file_line": "pr-102-snagging.plan.md:454-465"
+        },
+        {
+          "severity": "info",
+          "claim": "The graph implementation readiness check at lines 89-93 records a dependency on graph-stack.plan.md, ADR-173, and an owner-unresolved EEF contradiction as preconditions before graph slice 1 execution begins. This is a forward dependency that lives outside this plan's scope; it is correctly noted as residual but no pointer to where those items currently live is given.",
+          "file_line": "pr-102-snagging.plan.md:89-93"
+        },
+        {
+          "severity": "info",
+          "claim": "The 2026-05-08 final closeout records a lint:fix and check run that rewrote out-of-scope files (unicorn/prefer-single-call), which were then manually reverted. This suppression of a recurring lint signal without a resolution is noted in passing but not captured in a snag or follow-up item; it may resurface on the next lint run in another plan.",
+          "file_line": "pr-102-snagging.plan.md:497-500"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All eight phases are marked completed",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "pr-102-snagging.plan.md:7-34 — todos block lists nine entries (phase-0 through phase-8), every one with `status: completed`; header `**Status**: COMPLETE` at line 40"
+        },
+        {
+          "claim": "Sonar PR quality gate is OK, new_violations is 0, open issues for PR #102 are 0 on head 6e42a588",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "pr-102-snagging.plan.md:82-84 records verbatim \"Sonar PR quality gate is `OK`; `new_violations` is `0`; open Sonar issues for PR #102 are `0`.\" and ties it to GitHub checks on head `6e42a588fd2da3852526566543a9a196977f2b70`. The SHA resolves to a real commit \"fix(pr-102): clear closeout review blockers\" on the current branch."
+        },
+        {
+          "claim": "GitHub checks on 6e42a588 all passed (run-quality-gates, CodeQL, SonarCloud, Vercel)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "pr-102-snagging.plan.md:84-86 claims the four checks passed on 6e42a588; GitHub API repos/oaknational/oak-open-curriculum-ecosystem/commits/6e42a588fd2da3852526566543a9a196977f2b70/check-runs returns conclusion=success for run-quality-gates, CodeQL, SonarCloud Code Analysis, and Analyze (javascript-typescript)/(actions); combined-status endpoint returns state=success with Vercel context=success."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/pr-merge-readiness-discipline.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All five workstreams are pending with no completion — the plan is live and unstarted",
+          "file_line": "lines 8, 11, 15, 18, 22 (status: pending on each todo)"
+        },
+        {
+          "claim": "Owner-directed 2026-06-13 with ratified design; explicitly QUEUED for agent execution",
+          "file_line": "line 4 (frontmatter status field)"
+        },
+        {
+          "claim": "The Evidence-base decision table is the decision home for the companion notes doc — it must survive",
+          "file_line": "lines 52-56, 102-120"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every element is grounded in a verified real failure (PR #203, lines 68-87), has a concrete mechanism, and the Evidence-base table at lines 104-120 applies consolidate-at-third-consumer correctly: only two genuine new clauses are authored; everything else is reference-and-consolidate. No speculative or bad ideas found.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan carries: a worked failure narrative with root cause (lines 68-87); a layered cure with rationale for the ordering (lines 128-147); a per-workstream dependency graph (todos depends_on fields); acceptance criteria with proof contracts (lines 158-163); risk mitigations with implementation-specific detail (GraphQL semantics, bot-comment scoping, checker forgettability at lines 175-184); and a disposition decision for every WS3 candidate input (lines 104-120). Depth is well above V0-conformant minimum.",
+      "salvage_value": [
+        {
+          "idea": "Merge-readiness invariant: mergeable AND checks green AND every review comment resolved-or-refuted — green CI alone is never sufficient",
+          "class": "good",
+          "file_line": "lines 40-44"
+        },
+        {
+          "idea": "Four-layer strongest-first cure: GitHub branch protection (server-side) > CLI checker > skill > always-loaded rule",
+          "class": "good",
+          "file_line": "lines 128-139"
+        },
+        {
+          "idea": "WS1 CLI checker using GraphQL reviewThreads (not REST comments) to detect unresolved threads, with MERGEABLE vs UNKNOWN polling distinction",
+          "class": "good",
+          "file_line": "line 10"
+        },
+        {
+          "idea": "WS2 oak-pr skill covering all four PR activities: creation, review, responding to comments, and merging — full lifecycle, not merge-only",
+          "class": "good",
+          "file_line": "lines 49-65"
+        },
+        {
+          "idea": "Evidence-base decision table: EXISTING rules to consolidate-and-reference vs NEW gaps vs routed TOOL-FIX, per consolidate-at-third-consumer",
+          "class": "good",
+          "file_line": "lines 104-120"
+        },
+        {
+          "idea": "COMMIT_EDITMSG isolation: per-intent message file (git commit -F <file>) to prevent a peer overwriting the shared file during the pre-commit window",
+          "class": "good",
+          "file_line": "lines 108, 26"
+        },
+        {
+          "idea": "Whole-tree-gate vs commit-scope alignment clause in the oak-pr skill for shared-tree scenarios",
+          "class": "good",
+          "file_line": "line 26"
+        },
+        {
+          "idea": "WS4: extend portability validator scope to test fixtures (the class that escaped on PR #203), TDD with a negative-control fixture",
+          "class": "good",
+          "file_line": "lines 22-24"
+        },
+        {
+          "idea": "WS5: push-proof clause (transfer line + git ls-remote, never the hook banner) referenced from skill, graduation candidate in distilled.md",
+          "class": "good",
+          "file_line": "line 26"
+        },
+        {
+          "idea": "Risks section: replied-but-unresolved thread semantics (reply != resolve button), bot-comment filtering to review threads only, checker forgettability as a reason WS0 is primary",
+          "class": "good",
+          "file_line": "lines 175-184"
+        },
+        {
+          "idea": "Non-goals: no auto-resolve/auto-reply, no replacement of review with the checker, no change to existing pre-push/pre-commit gate chain",
+          "class": "good",
+          "file_line": "lines 166-170"
+        },
+        {
+          "idea": "Commit-queue wrapper TOOL-FIX routed to agent-tools lane (not built here); interim convention is direct gated commit Path-B",
+          "class": "good",
+          "file_line": "line 26"
+        },
+        {
+          "idea": "WS0 is owner-owned (not an agent task); exact check-context names must be verified against a live PR before configuring branch protection to avoid silent failures",
+          "class": "good",
+          "file_line": "lines 6-8"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "QUEUED — owner-directed 2026-06-13 (design ratified in-session; owner chose 'capture as a plan only'; owner enables branch-protection layer directly)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Field `id` (LOCKED, required for all plans) is absent.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:1-30 (frontmatter block)"
+        },
+        {
+          "issue": "Field `node_type` (LOCKED literal `plan`, required for all) is absent.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:1-30"
+        },
+        {
+          "issue": "Field `kind` (LOCKED enum `strategic|executable`, required for all) is absent. Inferred `executable` from presence of `todos`.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:1-30"
+        },
+        {
+          "issue": "Field `last_updated` (LOCKED ISO date, required for all) is absent.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:1-30"
+        },
+        {
+          "issue": "Field `serves_strategic_choice` (LOCKED shape, required for executable plans) is absent.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:1-30"
+        },
+        {
+          "issue": "Key `status` is present but V0 §2.5 explicitly drops it (split into `kind`/`disposition`/`gate`/the projected execution axis). Value is a whole-paragraph prose string containing execution state, an implicit gate signal, and narrative — none of which map cleanly to V0 axes via the §3.5 migration map.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:4"
+        },
+        {
+          "issue": "Key `isProject` is present but V0 §2.5 explicitly drops it (subsumed by the `projects_to` edge; `plan` ≈ Linear Project is universal).",
+          "file_line": "pr-merge-readiness-discipline.plan.md:29"
+        },
+        {
+          "issue": "No typed edge fields declared (`serves_strategic_choice`, `thread`, `derives_from`, `depends_on`). The `todos[].depends_on` at lines 16, 20, 28 are intra-todo references, not V0 §2.3 typed edge fields.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:16,20,28"
+        },
+        {
+          "issue": "Implicit gate signal buried in `status` prose ('owner chose capture as a plan only') lacks the required V0 `gate: { awaiting, clears_when, expires }` structure; no `expires` date is present, which V0 §3.4 marks as mandatory for any gate.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:4"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The layered defence model (WS0 server-side → WS1 CLI checker → WS2/WS3 skill+rule) is architecturally sound and correctly names primacy: GitHub branch protection is the primary guard, agent-side layers are belt-and-braces. The plan explicitly avoids inverting that dependency (lines 128-139).",
+          "file_line": "pr-merge-readiness-discipline.plan.md:128-139"
+        },
+        {
+          "severity": "info",
+          "claim": "The TDD + pure-core / thin-adapter decomposition for WS1 (verdict function over fetched state, no global state) aligns with the repo's testing-strategy and simplicity-first principles. The plan cites the alignment explicitly (lines 189-192).",
+          "file_line": "pr-merge-readiness-discipline.plan.md:189-192"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS1 threads-vs-replies resolution semantics are called out as a risk (lines 176-179) but the architectural decision — treat 'resolved OR replied' as addressed — is stated in prose only. Nothing in WS1's acceptance criteria (line 159) or the todo content (lines 9-10) mandates that the verdict function's contract is encoded in a typed unit test fixture that covers the replied-but-unresolved case. If the implementation defaults to checking only isResolved, a thread with a refuting reply will false-block, and the test suite won't catch it.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:176-179"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS1's UNKNOWN mergeability polling strategy is described (poll/retry a few times before failing) without specifying a timeout, retry count, or back-off. An unbounded or misconfigured polling loop in agent-tools violates the no-unbounded-host-load rule. The acceptance criteria at line 159 do not include a proof that UNKNOWN is handled with a bounded retry.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:10"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan cross-references three companion artefacts (evidence doc, ws3-deep-dives report, failure-mode taxonomy) by path, noting they are 'not yet resolvable links on main' (lines 93-100). This is honest but means the plan's evidence base is branch-resident and temporarily unverifiable from main. No architectural blocker — the plan correctly scopes decisions here and evidence there — but the gap should close when the comms-research branch lands.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:93-100"
+        },
+        {
+          "severity": "low",
+          "claim": "WS4 (portability-validator scope gap) is marked depends_on:[] and explicitly described as separable (line 22-24). However, the failure that motivated WS4 (machine-local paths in test fixtures reaching a merged PR) is structurally downstream of the same merge-readiness gap WS1 aims to close. If WS4 lands before WS1, the portability gate will catch the class in CI but not via the agent-side checker. The plan does not state a preferred ordering between WS4 and WS1, which could allow WS4 to ship with no corresponding agent-side coverage.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:22-24"
+        },
+        {
+          "severity": "low",
+          "claim": "WS3 (always-loaded rule) depends on WS2 (skill) which depends on WS1 (checker). This sequential chain means that until WS1 ships, no always-loaded rule fires at merge time. The plan acknowledges WS0 as the primary guard for this interim (lines 128-132), but if the owner has not yet enabled branch protection, there is a gap window in which neither server-side nor agent-side protection is active. The plan should state explicitly that WS0 MUST precede any agent merges during this window, or escalate ws0 to a blocking prerequisite.",
+          "file_line": "pr-merge-readiness-discipline.plan.md:128-132"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The plan is QUEUED (not started, not complete, not superseded)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/current/pr-merge-readiness-discipline.plan.md:4 (status: \"QUEUED — owner-directed 2026-06-13 … owner chose 'capture as a plan only'\") and lines 8,11,20,23,27 (all five todos ws0–ws5 status: pending)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Frontmatter names this plan SUPERSEDED 2026-05-11 and directs archive to archive/ after cost-of-collaboration plan's first review pass",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:2-3"
+        },
+        {
+          "claim": "Workstream 1 fully completed (lines 124-125, 136) with no remaining actions",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:124-136"
+        },
+        {
+          "claim": "B-01 marked fixed with two landed SHAs (f7560339, b529fa6e)",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:70"
+        },
+        {
+          "claim": "Plan's own archive instruction — 'archive to archive/ after cost-of-collaboration plan's first review pass' — is unexecuted after 40+ days",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:3"
+        }
+      ],
+      "substance_class": "mixed",
+      "substance_rationale": "Workstream 1 and B-01 content is good — completed, evidenced, and historically valuable. Open bugs B-02/B-03 and the architectural decoupling prescription are good ideas with clear diagnosis. The plan body for Workstreams 2-6 has become speculative given supersession: it is unknown how much was absorbed into cost-of-collaboration.plan.md versus orphaned. The PDR-059 third-direction observation (lines 285-304) is a good concrete signal that needs a permanent home regardless of plan fate.",
+      "content_quality": "strong",
+      "content_quality_note": "Where the plan covers completed or diagnosed work, content quality is high: bug tables carry corrected diagnoses with SHA evidence (line 70), TDD discipline is explicit (lines 63-85), workstream acceptance criteria are concrete (lines 196-206, 248-251, 358-369, 393-401), and validation commands are runnable (lines 421-439). The superseded workstreams 2-6 remain well-structured even though their execution home has moved.",
+      "salvage_value": [
+        {
+          "idea": "B-01 corrected diagnosis: three comms-event schema families (narrative/lifecycle/directed), not two; Shape A-prime resolution with three sibling directories and Ajv-validated schema authority",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:70"
+        },
+        {
+          "idea": "B-02 open bug: commit-queue CLI coupled to agent-tools pnpm build; peer unstaged edits break queue during their editing window",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:71"
+        },
+        {
+          "idea": "B-03 open bug: record-staged/verify-staged divergence under rebuild; false-negative 'missing' on staged files",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:72"
+        },
+        {
+          "idea": "Architectural prescription: decouple commit-queue from build step; queue operates on JSON state and git index only; run against built dist",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:278-283"
+        },
+        {
+          "idea": "Third-direction peer-commit absorption as named PDR-059 third-instance trigger (non-pathspec staging sweeps peer session-lifecycle files)",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:285-304"
+        },
+        {
+          "idea": "B-10 migration-out cycle: one-shot normaliser over comms-events/, delete optionalStringOrLegacyAgentName and optionalNullableString helpers, restore strict optionalString",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:231-243"
+        },
+        {
+          "idea": "B-11 follow-on: comms direct and comms reply commands in new cli-comms-messages.ts with identity auto-fill and reply-subject defaulting",
+          "class": "speculative",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:188-194"
+        },
+        {
+          "idea": "comms watch as optional polling command with explicit non-service constraint; promote to future plan if long-running service assumptions creep in",
+          "class": "speculative",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:184-187"
+        },
+        {
+          "idea": "Workstream 5: split agent-tools scripts into built/no-rebuild and dev/rebuild paths; amend PDR-027 to name (agent_name, session_id_prefix) as routing key",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:386-392"
+        },
+        {
+          "idea": "Degraded comms render contract decision: prefer least-surprising exit-code contract and --strict for gate contexts",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:243-245"
+        },
+        {
+          "idea": "WS4 list/show landed evidence (e298723c 2026-05-11) as historical completion record",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:329-330"
+        },
+        {
+          "idea": "Workstream 1 completion record: F-01, F-02, F-04, F-09, F-12, F-13 closed in working tree via shared CLI discoverability layer",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:136"
+        },
+        {
+          "idea": "Bug-fix discipline clause: test-first, no audit-shaped tests, reviewer dispatch (code-expert + test-expert + type-expert), update table in same commit",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:74-86"
+        },
+        {
+          "idea": "F-16 routing to skills-standardisation-and-adapter-generator.plan.md and non-duplication non-goal",
+          "class": "good",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:45-46"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "superseded",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "SUPERSEDED 2026-05-11 (prose embedded in the `name` field, line 2, and repeated in `overview`, line 3)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED)",
+          "file_line": "plan file:1-24 (frontmatter block — field absent throughout)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED)",
+          "file_line": "plan file:1-24"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED) — plan lives in current/ indicating executable but is undeclared",
+          "file_line": "plan file:1-24"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED)",
+          "file_line": "plan file:1-24"
+        },
+        {
+          "issue": "Terminal disposition `superseded` encoded as prose inside `name` and `overview` instead of the V0 `disposition` field (model LOCKED; §3.3)",
+          "file_line": "plan file:2-3"
+        },
+        {
+          "issue": "Missing required `superseded_by` edge — V0 §4 requires it whenever `disposition: superseded`; successor named only in prose (`cost-of-collaboration.plan.md`)",
+          "file_line": "plan file:3"
+        },
+        {
+          "issue": "Missing required `serves_strategic_choice` edge — required for executable plans (V0 §2.3, §4)",
+          "file_line": "plan file:1-24"
+        },
+        {
+          "issue": "`name` field carries embedded disposition prose ('SUPERSEDED 2026-05-11') — V0 §2.1 requires a plain name string; disposition belongs on the `disposition` axis",
+          "file_line": "plan file:2"
+        },
+        {
+          "issue": "`overview` is a multi-sentence paragraph prose block including routing/history content — V0 §2.1 requires a one-line scope string; prose belongs in the body",
+          "file_line": "plan file:3"
+        },
+        {
+          "issue": "`isProject: false` is an explicitly dropped key per V0 §2.5; must be removed",
+          "file_line": "plan file:23"
+        },
+        {
+          "issue": "Plan is in `current/` folder but carries a terminal disposition (superseded); V0 §3.6 places terminal plans in `archive/`",
+          "file_line": "plan file (path): .agent/plans/agent-tooling/current/primary-agent-tooling-enhancements.plan.md"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan is SUPERSEDED (frontmatter line 2) and self-identifies as a back-pointer only. All remaining workstreams are rehomed in cost-of-collaboration.plan.md. The architecture content is therefore historical, not actionable from this document.",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:2-3"
+        },
+        {
+          "severity": "high",
+          "claim": "B-02 and B-03 (lines 71-72) expose a structural coupling defect: every commit-queue sub-command triggers pnpm build for the entire @oaknational/agent-tools workspace. The queue operates only on JSON state and git index queries, making the build prelude architecturally unjustified. Under parallel-agent conditions this makes the queue unusable whenever any peer agent has in-flight type errors. The prescribed cure (decouple CLI invocation from build, run against pre-built dist) is correct and doctrine-compliant, but the bugs are still marked open — meaning the defect is live in the working tree.",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:71-72"
+        },
+        {
+          "severity": "high",
+          "claim": "Workstream 5 (lines 371-400) plans to split agent-tools scripts into built/no-rebuild and dev/rebuild paths, directly addressing the B-02 root cause. However, B-02 cure (Workstream 4, lines 339-355) and the path split (Workstream 5) are described as separate workstreams with no explicit ordering constraint between them. The risk is that a Workstream 4 fix that 'points invocations at the dist instead' is attempted before Workstream 5 establishes which dist path to target — producing a path-resolution defect at the seam.",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:339-355"
+        },
+        {
+          "severity": "medium",
+          "claim": "B-01 (line 70) was fixed via a three-directory comms schema split (R1.a + R1.b). The plan then describes a migration-out cycle in Workstream 3 (lines 232-238) that rewrites legacy data and then deletes the tolerant parser helpers. The compatibility-slice (tolerant parsers) landed in working tree but is described as unlanded (line 97-100). This creates a temporary dual-parser state that is explicitly in-place but has no owner-timestamped deadline for migration completion — a structural debt that expands if the migration-out cycle is deferred after rehoming to cost-of-collaboration.",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:97-100"
+        },
+        {
+          "severity": "medium",
+          "claim": "The three-directory comms schema design (narrative / lifecycle / directed, delivered via R1.a/R1.b) is a significant schema boundary decision. The plan cites owner direction for Shape A-prime (line 70) but does not cite a PDR number or ADR back-pointer for the canonical three-directory comms event schema. If the cost-of-collaboration successor plan proceeds without this decision recorded in a permanent ADR, the schema boundary is only evidenced via plan prose and commit messages — not the permanent substrate.",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:70"
+        },
+        {
+          "severity": "medium",
+          "claim": "Workstream 4 introduces a third direction of cross-agent commit interference (peer-commit absorption) and flags it as a PDR-059 trigger (lines 285-305). The cure for this third direction is explicitly deferred to a 'classification-gate plan (separate, follow-on)'. At plan-supersession time, it is not clear whether that follow-on plan exists, is referenced, or has been seeded in the successor cost-of-collaboration plan. An open PDR trigger with no plan home is an architectural gap.",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:285-305"
+        },
+        {
+          "severity": "low",
+          "claim": "PDR-027 amendment is part of Workstream 5 acceptance (lines 387-392): name (agent_name, session_id_prefix) as the routing key. This is a permanent-decision-record change invoked from an ephemeral plan. The plan does not indicate whether the PDR amendment has been drafted, reviewed, or is still pending. Since the plan is superseded, this PDR update may be lost in the handoff unless it is explicitly tracked in the successor plan.",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:387-392"
+        },
+        {
+          "severity": "low",
+          "claim": "The validation section (lines 419-439) prescribes pnpm portability:check only conditionally ('if script, adapter, identity, or skills surfaces changed'). Workstream 5 touches identity routing and script invocation paths directly, making portability:check mandatory for that workstream — the conditional framing is weaker than the actual dependency.",
+          "file_line": "primary-agent-tooling-enhancements.plan.md:435-437"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Plan is SUPERSEDED 2026-05-11 by cost-of-collaboration.plan.md; all remaining workstreams re-homed there",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "primary-agent-tooling-enhancements.plan.md:2-3 (front-matter SUPERSEDED 2026-05-11 by cost-of-collaboration.plan.md); cost-of-collaboration.plan.md:3 (\"Subsumes primary-agent-tooling-enhancements.plan.md\"); cost-of-collaboration.plan.md:1511-1540 — explicit \"Subsumed-residual workstreams\" supersession mapping table routing every prior todos: id (collaboration-read-apis→P1, comms-render-resilience→P5, commit-queue-safety→P3, identity-build-isolation→P4, register-closeout→per-slice) plus friction-IDs F-05→P5, F-06/F-07/F-10→P1, F-08/F-13→P4, F-15→landed 70e746a3, F-16→skills plan, and bugs B-02/B-03→P3, with line 1539 \"No verbatim id is dropped without a destination\""
+        },
+        {
+          "claim": "B-02 and B-03 status: open (cited at primary-agent-tooling-enhancements.plan.md:71-72)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "primary-agent-tooling-enhancements.plan.md:71 (B-02 row final cell `| open |`) and :72 (B-03 row final cell `| open |`); Status column header at :68; contrast B-01 at :70 marked `fixed — R1.a f7560339 + R1.b b529fa6e`"
+        },
+        {
+          "claim": "B-10 renderer compatibility work unlanded in working tree; blocked by shared-index commit window, not product uncertainty",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "primary-agent-tooling-enhancements.plan.md:94-100 (the \"unlanded\"/\"shared-index commit window\" prose) is contradicted by HEAD: git log shows commit 0be469a96 \"fix(agent-tools): harden comms render and inbox polling\" landed the B-10 work (the diff includes this very plan file +40 lines, the comms inbox polling command, and render hardening); working tree is clean (empty git status --porcelain agent-tools/); successor plan cost-of-collaboration.plan.md:1525 records \"Read-side landed implicitly in Galactic's B-10 commit\" and :105 \"work that has already landed (B-10 compat...)\"; tolerant helpers later removed by dd5b9e54f (the migration-out cycle at plan lines 231-238)."
+        },
+        {
+          "claim": "Migration-out cycle required after B-10 compatibility slice lands: one-shot normaliser over comms-events/, delete tolerant helpers, restore strict parser (cited at primary-agent-tooling-enhancements.plan.md:231-243)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "primary-agent-tooling-enhancements.plan.md:231-238 (migration-out cycle text verbatim: normaliser over .agent/state/collaboration/comms-events/, delete optionalStringOrLegacyAgentName + optionalNullableString, restore strict optionalString); corroborated by git commit dd5b9e54f \"feat(agent-tools): add strict comms event parsing\" which executed all three steps, and current agent-tools/src/collaboration-state/state-schemas.ts:40-42 now strict"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/session-and-team-state-statusline-icons.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All five workstreams are status=pending — plan is not started",
+          "file_line": "file:6-24"
+        },
+        {
+          "claim": "Lane is current/ (queued; not started) confirmed in body",
+          "file_line": "file:30"
+        },
+        {
+          "claim": "Re-grounding and review dispositions completed 2026-06-15 — plan is current and ready to execute",
+          "file_line": "file:342-362"
+        },
+        {
+          "claim": "No PDR/ADR authored yet by design (discovery phase)",
+          "file_line": "file:52-58"
+        },
+        {
+          "claim": "Active sibling plan referenced (logo-modularisation); both share renderStatusline seam",
+          "file_line": "file:327-330"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in a first-hand confirmed production bug (file:96-107), names a precise architectural cure (session-owns-state, substrate-as-publication-not-source), includes a bounded cost contract with measurable acceptance criteria, and carries ten validated review findings with verdicts. The discovery-phase framing is appropriate and binding. No speculative or bad ideas identified; every constituent is purposeful and owner-shaped.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan holds a confirmed bug report with runtime evidence (file:99-100 — 'four-row acorn renders, icons NONE'), a precise four-pillar re-grounding (file:62-86), a bounded cost contract with named source files and size annotations (file:179-194), a full acceptance matrix with proof modalities (file:222-228), ten review findings with per-finding verdicts (file:342-362), explicit non-goals with rationale, and a risk table with mitigations. The WS dependency graph is well-structured (WS1 → WS2+WS3 independent → WS4 → WS5). Risks table includes the premature-crystallisation risk with a binding mitigation (file:259-260). Content quality is materially above V0-conformant boilerplate.",
+      "salvage_value": [
+        {
+          "idea": "Session-owns-its-own-collaboration-state principle: a session never reads shared substrate to learn its own state",
+          "class": "good",
+          "file_line": "file:62-67"
+        },
+        {
+          "idea": "Solo as floor: a session's resting collaboration state is solo, never unknown; 'unknown' is meaningful only for other sessions",
+          "class": "good",
+          "file_line": "file:68-75"
+        },
+        {
+          "idea": "Production bug: absent active-claims.json causes teamShape='unknown' and no icon rendered — confirmed first-hand 2026-06-15",
+          "class": "good",
+          "file_line": "file:96-108"
+        },
+        {
+          "idea": "Substrate-as-publication-medium pattern: shared substrate (claims, comms, ArcAngel) is where sessions publish their state, not where they read their own state from",
+          "class": "good",
+          "file_line": "file:64-67, 136-141"
+        },
+        {
+          "idea": "Team state is derived, not primary: team state is the composition of visible published session states, never hand-maintained",
+          "class": "good",
+          "file_line": "file:81-86, 245"
+        },
+        {
+          "idea": "Bounded cost contract: heartbeat-only glob (comms-seen/*.heartbeat.json), never full comms-corpus scan, never comms-seen/*.json large snapshots",
+          "class": "good",
+          "file_line": "file:179-194"
+        },
+        {
+          "idea": "Active-agent-set is union of published session states across bounded sources, not claim-holders alone; read-only sessions (no claims) still form genuine pairs",
+          "class": "good",
+          "file_line": "file:200-213"
+        },
+        {
+          "idea": "Four left-packed icon positions with Pos1-never-empty (solo floor made visible); owner-presence icon manifestation intentionally left open for owner shaping",
+          "class": "good",
+          "file_line": "file:144-160"
+        },
+        {
+          "idea": "Owner-presence as first-class session-state field modelled as closed union opinion (not a measured fact) with deferred signal-derivation",
+          "class": "good",
+          "file_line": "file:76-80, 353-354"
+        },
+        {
+          "idea": "IO-free pure core plus thin IO adapter architecture, mirroring existing pure-resolver/adapter split",
+          "class": "good",
+          "file_line": "file:114-116, 195-197"
+        },
+        {
+          "idea": "Discovery-phase non-doctrine framing binding: no PDR/ADR during discovery; shapes stay open; readiness reviewers briefed at discovery altitude",
+          "class": "good",
+          "file_line": "file:52-58, 242-244"
+        },
+        {
+          "idea": "conversations/ and sidebars/ deferred as union sources until those surfaces publish a machine-readable roster contract (not dropped, merely deferred)",
+          "class": "good",
+          "file_line": "file:187-193, 350-353"
+        },
+        {
+          "idea": "Code dedup reconciliation needed: current code dedup on name+session_id_prefix, should reconcile to (agent_name, id) UUID tuple per PDR-076a at WS2",
+          "class": "good",
+          "file_line": "file:10, 350"
+        },
+        {
+          "idea": "ArcAngel wing may go dark during heavy idle collaboration if keying on render-recency rather than membership — open hypothesis to verify at WS2/WS4",
+          "class": "speculative",
+          "file_line": "file:337-341"
+        },
+        {
+          "idea": "IO adapter must distinguish read-failure (other session unknown) from read-success-empty (contributes nothing), own session floor stays solo regardless",
+          "class": "good",
+          "file_line": "file:354-355"
+        },
+        {
+          "idea": "Shared edges modelled as first-class set in WS1 session state, not derived at projection time",
+          "class": "good",
+          "file_line": "file:355-356"
+        },
+        {
+          "idea": "WS4 must update statusline-indicators.ts teamIcon atomically with the teamShape change",
+          "class": "good",
+          "file_line": "file:356-357"
+        },
+        {
+          "idea": "WS4 matrix must include undefined-identity fixture (own agent name undefined should rest at solo, not unknown)",
+          "class": "good",
+          "file_line": "file:358-359"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "plan.md:1-26 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plans)",
+          "file_line": "plan.md:1-26 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all; inferrable as `executable` from `todos` presence but not declared)",
+          "file_line": "plan.md:1-26 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all plans)",
+          "file_line": "plan.md:1-26 (frontmatter block; field absent)"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (LOCKED, required for executable plans; `todos` block establishes this is executable)",
+          "file_line": "plan.md:4-24 (todos block present, establishing executable kind; edge absent from frontmatter)"
+        },
+        {
+          "issue": "`isProject: false` present — explicitly dropped by V0 §2.5 (replaced by `projects_to` edge; a boolean on every plan is not a graph identity)",
+          "file_line": "plan.md:25"
+        },
+        {
+          "issue": "Body prose encodes lane/execution state ('Lane: `current/` (queued; not started)') rather than frontmatter axes; `kind` and execution status are not declared in frontmatter per V0 §3.1/§3.2",
+          "file_line": "plan.md:30"
+        },
+        {
+          "issue": "Body references a `supersedes` relationship to archived plan but no `supersedes` typed edge in frontmatter (V0 §2.3, LOCKED shape)",
+          "file_line": "plan.md:332"
+        },
+        {
+          "issue": "Body references `PDR-095` as an authority/alignment source but no `derives_from` typed edge in frontmatter (V0 §2.3, LOCKED shape)",
+          "file_line": "plan.md:335"
+        },
+        {
+          "issue": "Missing recommended field `thread` — body references the statusline-enhancements thread record but no `thread` edge in frontmatter",
+          "file_line": "plan.md:323-324"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The pure-core / IO-adapter split is architecturally sound and consistent with the existing module boundary (statusline-session-shape.ts pure; statusline-identity.ts adapter). WS1/WS2/WS3 being IO-free with a single thin adapter in WS4 is the right structural choice for a constantly-ticking statusline.",
+          "file_line": "session-and-team-state-statusline-icons.plan.md:113-121"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly identifies session-owned state (solo floor) as the authoritative source and shared substrate as the publication medium only. This reversal from substrate-as-source to session-as-source directly addresses the substrate-pointer failure pattern documented in the comms research.",
+          "file_line": "session-and-team-state-statusline-icons.plan.md:61-67"
+        },
+        {
+          "severity": "low",
+          "claim": "WS2 names a specific dedup reconciliation: current code deduplicates on (name, session_id_prefix) at statusline-session-shape.ts:164-166, but the plan mandates the full (agent_name, id) tuple per PDR-076a. This is a named inconsistency with a fix deferred to WS2 execution. It is the right call to flag and defer, but the adapter boundary between the published-state reader and the dedup logic is not yet specified — the plan should name where the dedup lives (core or adapter) so the IO-free guarantee is not accidentally broken.",
+          "file_line": "session-and-team-state-statusline-icons.plan.md:10"
+        },
+        {
+          "severity": "low",
+          "claim": "The bounded-source set (claims, comms-heartbeats, ArcAngel-rosters) forms a sufficient union for active-agent identity as argued, but the plan defers conversations/ and sidebars/ pending a roster contract. The architecture risk is that a future re-admission of those sources would require schema changes to the IO adapter boundary defined in WS4. A note that the adapter interface should expose a typed source-registry (not a hardcoded glob list) would protect against closed-shape erosion at that seam.",
+          "file_line": "session-and-team-state-statusline-icons.plan.md:186-193"
+        },
+        {
+          "severity": "low",
+          "claim": "WS4 replaces resolveSessionShape but the plan does not specify whether the replacement is an in-place refactor of the same module or a new module that the adapter calls. Given the plan names statusline-session-shape.ts (pure), statusline-identity.ts (adapter), statusline-render.ts, and statusline-indicators.ts as co-updated files, the module graph after WS4 is underspecified. A one-sentence module-graph statement in WS4 (which module owns the session-state model, which owns the team-state derivation) would prevent accidental IO leakage into the pure layer during execution.",
+          "file_line": "session-and-team-state-statusline-icons.plan.md:18"
+        },
+        {
+          "severity": "medium",
+          "claim": "The owner_presence opinion is modelled as a closed union (present-and-engaged / away / unknown-about-the-owner) but WS1 defers the signal derivation to a later discovery question. The architecture risk is that the IO adapter (WS4) will need to produce a value for this field with no specified signal source, which means it will effectively always emit the unknown enum variant. If that variant is treated downstream as semantically different from a missing field, the closed union creates a false precision. The plan should explicitly state that the adapter emits the unknown variant as the default and that the acceptance criteria for WS1 confirm this is not treated as an error state.",
+          "file_line": "session-and-team-state-statusline-icons.plan.md:167-169"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan correctly scopes out new coordination machinery and CLIs/watchers/hooks (Non-goals), but it does not state a boundary on publication: a session publishes its state, but the plan does not specify what write surface is used, who initiates the write, or the write frequency. For the pure-core guarantee to hold through WS4 wiring, the publication path (which module calls the write, when) needs to be named — otherwise the architecture boundary between session-state ownership and substrate publication is implicit.",
+          "file_line": "session-and-team-state-statusline-icons.plan.md:246-253"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "The 2026-06-14 assumptions-expert verdict is superseded by the 2026-06-15 re-grounding and a fresh pass is required at WS5",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "session-and-team-state-statusline-icons.plan.md:298-301 (header \"PRE-RE-GROUNDING, HISTORY ONLY\"; body \"superseded by the 2026-06-15 re-grounding. A fresh pass is required (WS5)\"); corroborated at :22 (WS5 todo \"Re-run the readiness review against the re-grounded design (the 2026-06-14 verdict predates it)\"), :47-48, and :228"
+        },
+        {
+          "claim": "Plan supersedes archived statusline-session-shape-indicators.plan.md",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "Target plan line 331-333: \"**Supersedes** the narrow resolver from the archived [statusline-session-shape-indicators.plan.md](../archive/completed/...) (solo/peer/directed and arcActive).\" Archived plan line 4: status \"COMPLETE ... Archived\"; archived WS2 line 10 defines resolver outputting \"{ ownRole, teamShape: solo|peer|directed, arcActive }\" — the exact shape the target plan's WS4 (line 18, 227) replaces via \"replace resolveSessionShape with the session-state-first model\"."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md",
+      "classification": "rewrite",
+      "classification_evidence": [
+        {
+          "claim": "All todos still read pending despite WS0-WS3 core having landed",
+          "file_line": "line 11-166 (frontmatter todos all status: pending) vs line 194 (Reality Reconciliation acknowledges core landed)"
+        },
+        {
+          "claim": "Plan explicitly holds itself in current/ pending a deferred review that is unscheduled as of the last update",
+          "file_line": "line 239: 'This plan is not complete and not archived. It stays in current/ until the deferred review decides'"
+        },
+        {
+          "claim": "8 PDR-051 gap items recorded but not dispositioned — the critical reconciliation is owner-blocked",
+          "file_line": "line 222: 'these gaps are recorded for a later review and analysis session; no disposition (amend-PDR vs close-as-defects) is taken here'"
+        },
+        {
+          "claim": "Gap #2 (owned flag on 2 of 22 skills) and gap #3 (consistency check not wired) are structurally related — gap #3 is the enforcement mechanism for gap #2, and neither is resolved",
+          "file_line": "line 228-230: gap rows 2 and 3 in the table"
+        },
+        {
+          "claim": "Gap #8 (hand-authored agents/openai.yaml in 3 start-right skills) is an orphan partial adapter surface outside the two-surface contract",
+          "file_line": "line 235: 'Orphan partial adapter surface: either bring OpenAI/Codex interface metadata into the generator for all skills, or retire these three'"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan's design substance is strong — WS0 review with four specialists (line 417-449) produced real remediations that shaped the cycle structure, the build-vs-buy attestation is honest with vendor-by-vendor rulings (lines 308-320), the TDD invariant is enforced at the discipline level (not just stated), and the Reality Reconciliation section (lines 194-248) is an exemplary in-place audit that keeps the gap ledger honest rather than letting it silently drift. The substance rating is good rather than speculative because the generator and drift gate are confirmed built and wired (lines 213-216), the gap ledger is precise (8 enumerated items with severity notes), and the deferred disposition is owner-scoped with an explicit friction reference (F-37, line 225).",
+      "content_quality": "strong",
+      "content_quality_note": "Each WS cycle specifies file scope, test shape (including structural-not-literal assertions post-WS0 remediation), product contract, and acceptance command (e.g. lines 488-494 for cycle 1.1, lines 535-537 for 1.2). The WS0 outcome table (lines 428-441) maps every specialist finding to a concrete remediation with cross-reference. The risk assessment (lines 1043-1051) names failure modes with mitigations rather than generic risk labels. The Reality Reconciliation (lines 194-248) is not a postmortem but a living current-state record. Minor weakness: the todos frontmatter array (lines 11-166) is now misleading because all read pending despite WS0 and significant WS1-WS3 work having landed — this is noted as a rewrite target, not a content-quality demerit on what the body contains.",
+      "salvage_value": [
+        {
+          "idea": "TDD cycle-by-cycle invariant enforced at plan level: each cycle is one commit containing failing test + product code, tree green at end of every commit",
+          "class": "good",
+          "file_line": "line 170-184"
+        },
+        {
+          "idea": "WS0 four-specialist parallel pre-execution review pattern with self-contained per-reviewer briefs and acceptance criteria",
+          "class": "good",
+          "file_line": "line 344-415"
+        },
+        {
+          "idea": "WS0 outcome table: specialist finding mapped to remediation with explicit change record",
+          "class": "good",
+          "file_line": "lines 428-441"
+        },
+        {
+          "idea": "Reality Reconciliation in-place audit section as the authoritative current-state record when implementation deviates from plan structure",
+          "class": "good",
+          "file_line": "lines 194-248"
+        },
+        {
+          "idea": "Gap ledger: 8 itemised PDR-051 required-clause gaps with built-state notes, blocking dependencies, and owner-directed review timing",
+          "class": "good",
+          "file_line": "lines 226-235"
+        },
+        {
+          "idea": "Build-vs-buy attestation with explicit vendor-by-vendor ruling and named reviewer to verify survival post-implementation",
+          "class": "good",
+          "file_line": "lines 308-320"
+        },
+        {
+          "idea": "Reviewer scheduling table with class (plan-direction / work / release), mandatory vs optional designation, and owner-locked decisions enumerated for brief-framing discipline",
+          "class": "good",
+          "file_line": "lines 328-341"
+        },
+        {
+          "idea": "Owner-eyeball gate before destructive migration: spot-check 3+ emitted adapter files and record ids in commit body before WS3.5 destruction",
+          "class": "good",
+          "file_line": "line 928"
+        },
+        {
+          "idea": "No-speed-pressure opening ritual for sessions that feel the impulse to skip WS0 and start coding",
+          "class": "good",
+          "file_line": "lines 253-260"
+        },
+        {
+          "idea": "Validator delegation pattern: validator spawns generator --check as subprocess rather than importing workspace internals or duplicating logic (WS2.3, WS2.4 reshaping)",
+          "class": "good",
+          "file_line": "lines 799-828"
+        },
+        {
+          "idea": "Tolerant-probe migration pattern for validator: read SKILL-CANONICAL.md else SKILL.md during WS2/WS3 to avoid ENOENT cascade before rename is complete",
+          "class": "good",
+          "file_line": "lines 756-778"
+        },
+        {
+          "idea": "Structural-not-literal test assertions post-WS0: assert presence/absence and value equality per property, not byte equality against full document",
+          "class": "good",
+          "file_line": "lines 577-589"
+        },
+        {
+          "idea": "Result<T, E> with kind: ok | error pattern for all boundary parsers (no throws, no as casts at trust boundaries)",
+          "class": "good",
+          "file_line": "lines 481-484"
+        },
+        {
+          "idea": "Owned/ingested consistency check: metadata.owned XOR skills-lock.json membership; orphan detection with remediation message",
+          "class": "good",
+          "file_line": "lines 546-563"
+        },
+        {
+          "idea": "WS5 documentation propagation covering 9 surfaces including executive-memory surfaces that describe platform-support (WS5.6)",
+          "class": "good",
+          "file_line": "lines 980-1031"
+        },
+        {
+          "idea": "Gap #2: metadata.owned: true present on only 2 of ~22 owned skills — enforcement mechanism (gap #3 consistency check) also unbuilt",
+          "class": "speculative",
+          "file_line": "lines 228-230"
+        },
+        {
+          "idea": "Gap #7: top-level classification: active|passive key on every canonical not in spec or PDR-051, silently dropped by generator — either nest under metadata: or account for in PDR-051",
+          "class": "speculative",
+          "file_line": "line 234"
+        },
+        {
+          "idea": "Gap #8: hand-authored agents/openai.yaml in 3 start-right canonicals — orphan partial adapter surface outside two-surface contract needing resolution (retire or generalise in generator)",
+          "class": "speculative",
+          "file_line": "line 235"
+        },
+        {
+          "idea": "Gap #5: claude-* to top-level frontmatter hoisting not implemented — no skill needs platform-specific top-level fields yet (latent gap)",
+          "class": "speculative",
+          "file_line": "line 232"
+        },
+        {
+          "idea": "Gap #6: generator emits only {name, description}, discarding classification, license, compatibility, metadata — acceptable currently but lossy if those fields become load-bearing",
+          "class": "speculative",
+          "file_line": "line 233"
+        },
+        {
+          "idea": "skills-lock.json currently empty — owned/ingested apparatus is unexercised; YAGNI signal that the consistency-check gate may not need to be built in its current full form",
+          "class": "speculative",
+          "file_line": "line 230"
+        },
+        {
+          "idea": "Prefix drift: built state uses oak- prefix, PDR/plan examples say jc- — configurable prefix not wired",
+          "class": "speculative",
+          "file_line": "line 227"
+        },
+        {
+          "idea": "Gap #4: bytewise supporting-file copy not implemented — latent (no skill has references/assets/ yet) but blocks skills-oversized-core-decomposition plan",
+          "class": "speculative",
+          "file_line": "line 231"
+        },
+        {
+          "idea": "WS1.8 bin shim script wires INIT_CWD ?? process.cwd() for cwd resolution — implementation detail worth preserving in any rebuild",
+          "class": "good",
+          "file_line": "lines 726-729"
+        },
+        {
+          "idea": "F-09 full-help-on-invalid-flag rule applied to generator CLI: exit 2 with full help on stderr + specific error appended",
+          "class": "good",
+          "file_line": "lines 684-688"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟠 CORE LANDED IN REDUCED FORM — RECONCILIATION PENDING REVIEW (body line 189, not a frontmatter field)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` (kebab slug, stable graph identity)",
+          "file_line": "plan:1 (frontmatter opens at line 1; field absent entirely)"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type` (must be literal \"plan\")",
+          "file_line": "plan:1 (frontmatter opens at line 1; field absent entirely)"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` (must be `strategic` or `executable`; plan carries todos so kind=executable is deterministic)",
+          "file_line": "plan:1 (frontmatter opens at line 1; field absent entirely)"
+        },
+        {
+          "issue": "Missing LOCKED required field `last_updated` (ISO date); value is present only in body prose, not frontmatter",
+          "file_line": "plan:188 (`**Last Updated**: 2026-06-14` in body, not frontmatter)"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on`, etc.); Foundation Alignment references (PDR-009, PDR-024, PDR-035, PDR-051, ADR-125) exist only in body prose",
+          "file_line": "plan:1055-1068 (body only)"
+        },
+        {
+          "issue": "`isProject: false` present — V0 §2.5 explicitly drops this key (LOCKED decision; universal via `projects_to`)",
+          "file_line": "plan:167"
+        },
+        {
+          "issue": "Raw status value is whole-paragraph prose embedded in body, not a V0 axis (`kind`/`disposition`/`gate`); V0 §3.5 maps this to 'prose moves to the body; axes carry the state'",
+          "file_line": "plan:189"
+        },
+        {
+          "issue": "Todo-level `depends_on` keys (e.g. `depends_on: [ws0-pre-execution-plan-review]`) are intra-todo sequencing, not plan-level V0 dependency edges; V0 §2.3 `depends_on` is a plan-to-plan typed edge at frontmatter root",
+          "file_line": "plan:18 (first occurrence; pattern repeated throughout todos)"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The plan's Reality Reconciliation section (lines 194-249) documents that the core implementation has already landed outside the plan's TDD-cycle structure, yet all todos remain 'pending' and the WS0-WS6 cycle body is retained as 'historical intended shape'. This creates a fundamental assumption conflict: the plan body assumes a clean pre-implementation slate, but the actual state is a partial implementation with a known gap ledger. Any session opening this plan without reading the Reality Reconciliation section first will assume WS0 is the correct next step, when the actual next step is the deferred gap-ledger review (F-37). The plan's 'Next-Session First Action' header (line 252) still directs to WS0 dispatch — which is no longer accurate.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:189-256"
+        },
+        {
+          "severity": "high",
+          "claim": "Gap ledger item #3 (line 230): 'skills-lock.json is empty → no ingested skills exist → the owned/ingested apparatus is currently unexercised'. This was flagged as a 'strong YAGNI signal for the review', but the plan's entire WS1.1-WS1.3 and WS2.3 cycles (lock loader, consistency check, consistency validator) were built around owned/ingested correctness enforcement. The assumption that ingested skills would exist (or would exist imminently) is the plan's load-bearing justification for ~4 of the 28 cycles. If the deferred review decides the ingested-skill apparatus is YAGNI-out, a significant portion of the already-built or planned surface becomes dead weight. This assumption was not validated before implementation began.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:229-231"
+        },
+        {
+          "severity": "medium",
+          "claim": "Gap ledger item #8 (line 235): 'hand-authored agents/openai.yaml present in 3 of ~22 canonical dirs (start-right-* skills only); hand-authored, not generator-emitted, outside the two-surface contract'. The plan's locked decision is exactly two adapter surfaces; the presence of a third hand-authored surface on 3 skills contradicts that contract. The gap ledger defers disposition to the review, but this is not a future-enhancement question — it is a current contract violation. If the two-surface decision is genuinely locked, these three orphan surfaces should have been treated as a BLOCKER rather than a deferred item.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:235"
+        },
+        {
+          "severity": "medium",
+          "claim": "Gap ledger item #2 (line 229): 'metadata.owned: true present on 2 of ~22 owned skills'. The plan assumes that the WS3.2 mass-migration step ('add metadata.owned: true to owned canonicals') would be the point of enforcement. Since the implementation landed outside the TDD cycle structure, this step was skipped. The consistency gate (WS1.3/WS2.3) that would have enforced this is itself unbuilt (gap #3). The assumption that 'build the gate first, migrate second' would preserve correctness has been violated by implementation order.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:229"
+        },
+        {
+          "severity": "medium",
+          "claim": "Gap ledger item #7 (line 234): 'top-level classification: active|passive key present on every canonical; not in the spec or PDR-051; silently dropped by the generator'. The plan's WS1.4 assumed that 'spec-portable top-level fields' were fully enumerated and that the generator would correctly preserve all of them. The generator silently drops a field that exists on every canonical. This is a data-loss assumption that was not caught because the plan did not include a cross-check between PDR-051's field list and the actual canonical frontmatter shape before authoring the generator spec.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:234"
+        },
+        {
+          "severity": "low",
+          "claim": "WS3.1 assumes exactly 37 skills to rename ('git mv .agent/skills/<id>/SKILL.md SKILL-CANONICAL.md × 37'). The Reality Reconciliation section (line 209) states canonicals are now named SKILL-CANONICAL.md across all skills. If WS3.1 has effectively already executed (as part of the unstructured implementation), the count of 37 remaining renames is a stale assumption. Any session reading the WS3.1 todo without cross-referencing the Reality Reconciliation section would attempt a rename pass on files that no longer exist at the old name.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:84"
+        },
+        {
+          "severity": "low",
+          "claim": "WS3.5 assumes .cursor/skills, .gemini/skills, .codex/skills, .windsurf/skills are present to delete (lines 99-102, 933-937). The Reality Reconciliation section (line 218) states these surfaces are already absent. The WS3.5 deletion cycle is therefore a no-op in the current tree. The conditional guards in the bash snippet mitigate runtime failure, but the assumption of presence is wrong and could mislead a session into thinking WS3.4's eyeball gate (which precedes WS3.5) is still required before any deletion.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:99-102"
+        },
+        {
+          "severity": "low",
+          "claim": "Gap ledger item #1 (line 228): 'Configurable owned-skill prefix: oak- (PDR/plan examples say jc-)'. The plan's locked decision names the prefix as 'jc-' throughout (WS1.4, WS3.4, WS3.7, WS4 manual smoke check). The built implementation uses 'oak-'. This is described as 'prefix drift only; benign', but the plan body still references jc-prefixed adapter paths and jc-prefixed skill invocations in the WS4 smoke check (line 976: /jc-go, /jc-plan, etc.). A session executing WS4 verbatim against the actual tree will find no jc-prefixed adapters.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:228"
+        },
+        {
+          "severity": "info",
+          "claim": "The WS2.5 pre-migration direction check brief to assumptions-expert (lines 888-894) asks whether the WS3.6 per-command audit is proportionate and whether any sunk-cost reasoning applies. The Reality Reconciliation section confirms commands are already subsumed (.agent/commands and .claude/commands are absent, line 218). This check point is now moot: the question it was designed to answer was resolved by the unstructured implementation. The brief's sunk-cost framing is appropriate to surface here — the plan did proceed past WS2.5 without the mandated gate.",
+          "file_line": "skills-standardisation-and-adapter-generator.plan.md:79-82"
+        }
+      ],
+      "load_bearing_claims_count": 7,
+      "high_stakes_verdicts": [
+        {
+          "claim": "This plan is not complete and not archived; it stays in current/ until the deferred review decides whether the reduced implementation is accepted or gaps are closed as defects (cited at line 239-241)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md:239-241 (\"This plan is **not complete and not archived**. It stays in `current/` until the deferred review decides whether the reduced implementation is accepted (amend PDR-051 down) or the gaps are closed as defects.\"); corroborated by file location in current/ (ls confirms archive/ holds only the separate failed attempt-1), status header line 189 \"CORE LANDED IN REDUCED FORM — RECONCILIATION PENDING REVIEW\", and all todos status: pending with completed/archive named only as unexecuted WS6 future actions (lines 164, 1038, 1079)."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/start-right-team-singleton-lane-remediation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "WS0 completed, WS1 partial-in-flight, WS2-WS3 pending — active work remains",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:9-25"
+        },
+        {
+          "claim": "DECISION-COMPLETE status with owner ratification recorded on 2026-05-19",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:48-51"
+        },
+        {
+          "claim": "WS3 absorbed scope from deferred comms-watch-liveness-floor plan — live integration point",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:23"
+        },
+        {
+          "claim": "Manifest validator co-change obligation recorded — unresolved until WS3 lands",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:344-351"
+        },
+        {
+          "claim": "Folder lane 'current' and open todos confirm active execution state",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:49"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in specific empirical observations (six source claims within sixteen seconds, named agents, named claim IDs at lines 93-104), applies a principled system-fix lens rather than agent-blame (lines 53-66), scopes structural tooling changes with clear acceptance criteria and proof contracts (lines 482-495), and explicitly rejects harmful patterns (hard locks, permanent role taxonomy, migration path for retired comms roots at lines 186-191). The absorbed comms-watch-liveness-floor scope (line 23) is a legitimate integration that avoids plan fragmentation. The only substantive gap is the unwritten WS1 first-overlap response content (line 16), which is tracked as owed work, not a design flaw.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan carries a complete metacognition section (lines 53-66) that reframes the problem non-trivially, an evidence base with specific SHA-level references (lines 73-105), a proof contract table (lines 482-495), a risk table (lines 512-520), foundation alignment (lines 522-531), first-principles check (lines 533-542), and lifecycle triggers (lines 544-554). Acceptance criteria for each workstream are concrete and include specific bash validation commands. The WS3 manifest co-change note (lines 344-351) is precisely cited to the manifest file and line number. The only content gap is the unwritten WS1 first-overlap response body (line 16), which the plan itself names as owed.",
+      "salvage_value": [
+        {
+          "idea": "System-fix framing: collaboration failures are caused by ambiguous system affordances, not agent misbehaviour — replace passive instruction with structural feedback",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:53-66"
+        },
+        {
+          "idea": "Presence-before-ownership template: replace 'Claimed paths' with 'Intended boundary' and 'Claim status' in team-start to force rendezvous before source claims",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:258-266"
+        },
+        {
+          "idea": "Singleton-lane rendezvous rule: empty active-claims under simultaneous owner launch means 'no team visible yet', not 'safe solo ownership'",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:260-265"
+        },
+        {
+          "idea": "Claim-overlap detection as routing signal (not mechanical lock): team_routing_required flag in claims open output without refusing claim creation",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:282-310"
+        },
+        {
+          "idea": "Remove --comms-dir and comms migrate from normal agent-facing CLI to eliminate retired path selection",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:329-340"
+        },
+        {
+          "idea": "Full PDR-027 tuple identity filter (agent_name, platform, model, session_id_prefix) for comms watch to handle multi-vendor same-name collisions",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:23"
+        },
+        {
+          "idea": "Manifest validator co-change obligation: memory-state-substrate-contracts.manifest.json:200 must be atomically updated with CLI flag removal",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:344-351"
+        },
+        {
+          "idea": "Live coordination writes vs bulk cleanup distinction: bulk cleanup requires hot-window preflight when active claims exist; live comms/napkin/claim writes remain unblocked",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:399-415"
+        },
+        {
+          "idea": "Parser-backed registry checks for cleanup commands to eliminate hand-authored .active_claims jq probes",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:408-411"
+        },
+        {
+          "idea": "Hypothesis routing of N=7 evidence through collaboration hypothesis surfaces without graduating first role labels into permanent doctrine",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:435-452"
+        },
+        {
+          "idea": "Proof contract table mapping acceptance IDs to workstreams and proof levels — completion is computed from the table, not from session closeout prose",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:482-495"
+        },
+        {
+          "idea": "Role labels are examples not doctrine — explicit wording requirement to prevent ontological calcification",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:267"
+        },
+        {
+          "idea": "Stale surface sweep including external memory correction notes (with explicit owner permission gate)",
+          "class": "good",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:369-393"
+        },
+        {
+          "idea": "WS1 first-overlap response content (route proposal, one provisional reconciler, support roles by boundary, silent default, closeout owner) — described but unwritten",
+          "class": "speculative",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:16"
+        },
+        {
+          "idea": "Class B exec-memory line refs partially under-disposed — disposition decision deferred, acceptance criterion partially unsatisfied",
+          "class": "speculative",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:12"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "DECISION-COMPLETE — lean multi-vendor scope (WS0 + WS1 + WS2 + WS3 only). WS4–WS7 deferred to run parallel with graph multi-agent work.",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:1 (frontmatter block, lines 1–43)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1, LOCKED — required for all plans)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §3.1, model LOCKED — required for all plans; cannot determine strategic vs executable)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` in frontmatter; present only as body prose '**Last Updated**: 2026-05-19' (V0 §2.4, LOCKED)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:47"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` edge (V0 §2.3, LOCKED shape — required for executable plans; no `pending` sentinel present either)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:1"
+        },
+        {
+          "issue": "`isProject: false` present; V0 §2.5 explicitly drops this key (replaced by `projects_to` edge)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:42"
+        },
+        {
+          "issue": "todo `status` value `partial-in-flight` not in V0 enum `pending | completed` (V0 §2.4, LOCKED)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:15"
+        },
+        {
+          "issue": "todo `status` value `deferred` not in V0 enum `pending | completed` (V0 §2.4, LOCKED)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:28"
+        },
+        {
+          "issue": "`status:` carried as body prose (line 48) rather than as V0 axes (`kind`/`disposition`/`gate`); V0 §2.2 drops `status:` entirely and the §3.5 migration map requires it to be decomposed",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:48"
+        },
+        {
+          "issue": "`thread` declared only in body prose (line 51) not as a frontmatter edge; V0 §2.3 specifies `thread` as a typed frontmatter edge (recommended)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:51"
+        },
+        {
+          "issue": "No V0 typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on`, etc. all absent from frontmatter)",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject",
+        "todos[].completion_note",
+        "todos[].partial_state",
+        "todos[].depends_on"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "WS3 removes --comms-dir from agent-facing CLI, but the manifest validator command at memory-state-substrate-contracts.manifest.json:200 still references that flag. The plan acknowledges this explicitly and mandates an atomic co-change, but WS3 is still pending. If WS3 ships without the manifest update in the same commit, the ADR-034 boundary-contract is transiently violated for the full WS4 deferral window. The co-change requirement is noted but there is no enforcement mechanism — no acceptance criterion or proof-contract entry verifies the manifest is actually updated atomically.",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:344-353"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS2 adds overlap-detection helpers and extends claims open output with overlapping_claims, team_routing_required, and routing_reason, but the plan explicitly states this must not refuse claim creation. The architecture accepts a soft-signal model where agents can ignore the routing signal. There is no mechanism — structural or contractual — that escalates a routing signal to a hard block if an agent repeatedly claims the same singleton lane after receiving team_routing_required: true. The design relies on skill-level discipline rather than tooling enforcement, which was the root cause of the original WS1 collision (locally compliant behaviour producing global collision).",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:304-311"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS3 absorbs the full-tuple identity-filter tightening from the deferred comms-watch-liveness-floor plan (widening the identity filter from (agent_name, session_id_prefix) to the full PDR-027 tuple). This is a scope absorption from a separate deferred plan. The absorbed scope changes the comms watch identity contract in a way that affects multi-vendor (Claude+Codex) collision avoidance. No proof-contract entry exists for this absorbed sub-scope — COM-1, COM-2, COM-3 only cover canonical path derivation and flag removal, not the identity-filter tightening or the self-echo unit test that WS3 explicitly requires.",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:23-25"
+        },
+        {
+          "severity": "low",
+          "claim": "WS5 mandates parser-backed registry checks for bulk cleanup and removal of hand-authored .active_claims jq probes. However the scope section lists .agent/rules/respect-active-agent-claims.md only conditionally (if shared-state cleanup needs the live-vs-bulk distinction). If the live-vs-bulk distinction is the core architectural change in WS5, the rule that governs shared-state access should be an unconditional in-scope file, not a conditional one. A conditional in-scope entry creates execution ambiguity about whether the structural guarantee lands in a doc that agents actually load.",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:168-170"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan's architectural direction — remove options, derive from repo root, replace retired concepts rather than bridge them — is consistent with principles.md and replace-dont-bridge. The lean four-workstream scope (WS0-WS3 gating, WS4-WS7 deferred) is a sound architectural trade-off that keeps the multi-vendor unblocking path short. No structural contradictions found with stated ADR references.",
+          "file_line": "start-right-team-singleton-lane-remediation.plan.md:48-51"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Manifest validator co-change: memory-state-substrate-contracts.manifest.json:200 MUST be updated in the same commit as CLI flag removal to avoid a transient ADR-034 boundary-contract violation (cited at start-right-team-singleton-lane-remediation.plan.md:344-351)",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "manifest.json:199 validator = \"pnpm agent-tools:collaboration-state -- check --comms-dir .agent/state/collaboration/comms; future drift comparison\" (line 200 is \"severity\": [, NOT a validator); grep for --events-dir in manifest returns EMPTY; plan:347-348 quotes current value as \"check --events-dir .agent/state/collaboration/comms-events\"; git log -S \"--events-dir\" shows that string was already removed from the manifest in commit e203791ad which simultaneously added the --comms-dir/comms value"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/statusline-logo-modularisation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending; no work has executed against the plan; the live swaps are recorded as scope adjustments within the plan, not as completed deliverables",
+          "file_line": "file:4-60 (todos block, all status: pending)"
+        },
+        {
+          "claim": "The plan encodes a frame-aware contract amendment required by live cycling that has not yet been implemented in the neutral home",
+          "file_line": "file:225-244 (Layer B/C reconciliation for cycling)"
+        },
+        {
+          "claim": "The plan holds first-hand grounded executor knowledge that would otherwise be re-derived — refreshInterval warning, dist-rebuild requirement, variant seed rationale",
+          "file_line": "file:251-271"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea traces to a real coupling, a live standards gap, or an explicit owner decision. The three-layer inversion, the soft-fail hardening, the zero-logic shim, and the frame-aware contract are all grounded in current-code problems (file:286-321) or owner-ratified decisions (file:87-169). Review dispositions are resolved and validated first-hand (file:942-966). One minor speculative element: the Style generic retained over YAGNI objection as innovation (file:955), which is owner-ratified and bounded.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan carries TDD cycle pairs with explicit Red/Green/Acceptance per cycle, rg-verifiable acceptance criteria, a proof-contract table, two-track parallelisation map, risk table with mitigations, foundation-alignment section, first-principles check, review dispositions with verdicts, and grounded executor knowledge. File:829-840 (proof contract) and file:849-860 (risk table) are well-evidenced. Content is operationally dense and would enable a fresh executor to begin without re-deriving grounding.",
+      "salvage_value": [
+        {
+          "idea": "Three-layer dependency-inversion architecture: LogoAsset/ResolvedLogo/LogoSelection contract with typed generic and closed union over asset keys",
+          "class": "good",
+          "file_line": "file:346-405"
+        },
+        {
+          "idea": "Frame-aware LogoAsset contract: styles carry a frame list (not a single rows array) so braille-sharp delivers four distinct cycling frames",
+          "class": "good",
+          "file_line": "file:396-405"
+        },
+        {
+          "idea": "Per-render logo-frame cycling keyed on session_id to prevent cross-window race on a shared counter",
+          "class": "good",
+          "file_line": "file:207-210"
+        },
+        {
+          "idea": "WCAG 2.2.2 compliance by construction: event-driven statusline cadence is self-limiting (no autonomous motion); refreshInterval explicitly forbidden as it converts self-limiting to autonomous",
+          "class": "good",
+          "file_line": "file:207-211, 252-261"
+        },
+        {
+          "idea": "Soft-fail as adapter property: catch-all plus top-level uncaughtException/unhandledRejection guard, proven by integration test with forced throw",
+          "class": "good",
+          "file_line": "file:650-665"
+        },
+        {
+          "idea": "Zero-logic shim bootstrap: seven-line dynamic-import with catch→exit 0, no env arithmetic or spawn in the shim",
+          "class": "good",
+          "file_line": "file:679-701"
+        },
+        {
+          "idea": "Enforcement seam for neutral-harness import direction: import/no-restricted-paths rule forbidding statusline/** from importing claude/**, wired at warn",
+          "class": "good",
+          "file_line": "file:789-794"
+        },
+        {
+          "idea": "assertUniformWidth counting code points not UTF-16 units (astral sextant glyph correctness)",
+          "class": "good",
+          "file_line": "file:547-554"
+        },
+        {
+          "idea": "Width-matched logo separator rule (buildLogoSeparator) that tiles to active logo's code-point width across variable-height styles",
+          "class": "good",
+          "file_line": "file:173-188"
+        },
+        {
+          "idea": "New ADR scoped to the three-layer WHAT rather than restating existing inject-don't-import doctrine",
+          "class": "good",
+          "file_line": "file:784-788"
+        },
+        {
+          "idea": "Grounded executor knowledge: refreshInterval danger, dist-rebuild requirement after pull, variant seed selection rationale",
+          "class": "good",
+          "file_line": "file:251-271"
+        },
+        {
+          "idea": "WS3.1 resolveAdapterPath may have no consumer if the shim is zero-logic — disposition #13 flags it as droppable after confirming",
+          "class": "speculative",
+          "file_line": "file:963-964"
+        },
+        {
+          "idea": "Style generic retained as forward design for other brand marks and harnesses beyond the current single Oak acorn instantiation",
+          "class": "speculative",
+          "file_line": "file:955"
+        },
+        {
+          "idea": "Cursor shim adoption of the neutral logo modules as a prospective future consumer — explicitly deferred to a separate not-yet-designed plan",
+          "class": "speculative",
+          "file_line": "file:934-938"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING (queued — `current/`, not started)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": "statusline-logo-modularisation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED, required for all plans — V0 §2.1)",
+          "file_line": "statusline-logo-modularisation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED — V0 §3.1); plan is substantively `executable` (has todos/TDD cycles) but axis is undeclared",
+          "file_line": "statusline-logo-modularisation.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` in frontmatter (LOCKED — V0 §2.4); value appears only in body prose at line 66 (`**Last Updated**: 2026-06-16`), not as a durable frontmatter field",
+          "file_line": "statusline-logo-modularisation.plan.md:66"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (LOCKED shape — V0 §2.3; required for executable plans); no strategic-choice ID or `pending` sentinel present",
+          "file_line": "statusline-logo-modularisation.plan.md:1"
+        },
+        {
+          "issue": "Present field `isProject: false` is explicitly dropped in V0 §2.5 (`Dropped — plan ≈ Linear Project is universal; the projection is the projects_to edge, not a boolean`)",
+          "file_line": "statusline-logo-modularisation.plan.md:61"
+        },
+        {
+          "issue": "`status` information carried in body prose (`🟡 PLANNING (queued …)`) rather than as V0 orthogonal axes (`kind: executable`, execution projected to Linear, `gate:` if blocked); V0 §3.5 migration map routes `🟡 PLANNING` → `gate: owner-decision + expires` and `queued` → `kind: executable` + Linear `backlog`; neither axis is set",
+          "file_line": "statusline-logo-modularisation.plan.md:68"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter (V0 §2.3); `serves_strategic_choice`, `thread`, `derives_from`, `depends_on` are all absent; body Dependencies section lists related plans but as prose, not structured edges",
+          "file_line": "statusline-logo-modularisation.plan.md:916"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Three-layer dependency inversion (A adapter / B mechanism / C asset) is correctly oriented: the renderer receives ResolvedLogo by injection and must not name the asset or the colour, enforced by the planned import/no-restricted-paths ESLint rule (warn). The closed LogoSelection<Style> generic keeps raw strings from leaking past the boundary. Dependency direction is sound.",
+          "file_line": "statusline-logo-modularisation.plan.md:349-390"
+        },
+        {
+          "severity": "info",
+          "claim": "The enforcement seam for the neutral/harness boundary (statusline/** must not import claude/**) is correctly placed in WS1.4 and wired at warn per the new-ESLint-rules-start-at-warn doctrine. It was identified as a gap by fred (finding #3) and accepted; the plan closes it structurally, not just in prose.",
+          "file_line": "statusline-logo-modularisation.plan.md:789-794"
+        },
+        {
+          "severity": "low",
+          "claim": "Disposition #13 acknowledges that resolveAdapterPath (WS3.1) may have no consumer once the shim becomes a zero-logic dynamic import, yet WS3.1 remains in the todo list with status:pending and depends_on:[]. If the zero-logic shim wins, WS3.1 is dead weight; the plan names this but leaves the conditional drop unresolved as a gate that requires re-evaluation at execution time. A pre-execution decision (or explicit conditional annotation in the todo) would prevent a parallel agent from building dead code.",
+          "file_line": "statusline-logo-modularisation.plan.md:963-964"
+        },
+        {
+          "severity": "low",
+          "claim": "The LogoAsset contract sketch (line 364-390) is single-frame-per-style, but the plan also states at line 395-405 that the contract must be frame-aware from the start (styles: Record<Style, readonly (readonly string[])[]>). The two contract shapes appear in the same section without the sketch being updated to reflect the frame-aware version. An executor reading only the contract sketch will implement the wrong shape; the correct shape is described in prose below it, creating an ambiguity risk at WS1.1.",
+          "file_line": "statusline-logo-modularisation.plan.md:358-405"
+        },
+        {
+          "severity": "low",
+          "claim": "Disposition #12 accepted adding ws1-cycle-4 to ws1-cycle-2 depends_on, but the YAML front-matter at lines 9-12 still shows ws1-cycle-2 with depends_on:[ws1-cycle-1] only — ws1-cycle-4 is absent. If a parallel-dispatch agent reads only the YAML graph, it will attempt ws1-cycle-2 before ansi.ts exists and the RESET import will fail.",
+          "file_line": "statusline-logo-modularisation.plan.md:9-12"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan notes a footprint coordination requirement with the sibling session-and-team-state-statusline-icons plan (line 928-933): the sibling assumes a four-row block but the new default is five rows. Disposition #8 mandates this plan's WS4.1 lands first, but there is no acceptance criterion or blocking dependency capturing what happens if the sibling executes concurrently on a parallel branch. The coordination is stated in prose only; an architectural seam (e.g. a shared integration test asserting row-count parity, or an explicit inter-plan gate) is absent, leaving a silent regression path if execution order slips.",
+          "file_line": "statusline-logo-modularisation.plan.md:920-933"
+        },
+        {
+          "severity": "info",
+          "claim": "The in-process dynamic-import shim (WS3.3) replacing the spawn-based shim correctly moves soft-fail responsibility to the adapter (WS3.2 must land first, enforced by depends_on). Disposition #9 (stdin-buffering risk) is downgraded with a grounded rationale (Node stdin paused until listener attaches) and an empirical AC-8 check. The architectural risk of losing spawn isolation (risk table, line 851) is addressed by making soft-fail an adapter property before the shim relies on it. Risk treatment is adequate.",
+          "file_line": "statusline-logo-modularisation.plan.md:670-712"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Frontmatter status is COMPLETE (green circle emoji)",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:11"
+        },
+        {
+          "claim": "Phase 1B integrate-and-delete todo is marked completed",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:15"
+        },
+        {
+          "claim": "Phase 2 cross-repo sweep todo is marked completed",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:22"
+        },
+        {
+          "claim": "Phase 2 reviewer dispatch todo is marked completed",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:27"
+        },
+        {
+          "claim": "Folder lane is current/, not archive/; lane and status disagree — COMPLETE plans in current/ are archive candidates",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:1 (path)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every phase has concrete commit SHA evidence, locked decisions are enumerated, and latent items are forwarded to a named future plan. No speculative or aspirational content remains; the plan is a faithful record of completed work. The one pending todo (phase-1b-expert-dispatch) is a historical dispatch step that was superseded by Phase 2 completing; it does not represent open work. file_line: sub-agent-rename-and-skill-integration.plan.md:16-19.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan carries a complete SHA-anchored audit trail, per-domain edit pattern locked at file:125-143, reviewer dispatch matrix at file:412-418, explicit gate commands at file:353-359, non-goals at file:444-450, and a risk register at file:424-435. The level of operational specificity is high and the locked decisions are clearly distinguished from open questions.",
+      "salvage_value": [
+        {
+          "idea": "Per-domain edit pattern (6-step: template merge, Claude adapter, Cursor adapter, Codex TOML, codex/config.toml sync, subagents:check) is the canonical procedure for future unified expert template additions",
+          "class": "good",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:125-143"
+        },
+        {
+          "idea": "disallowedTools: Write, Edit, NotebookEdit on all expert adapters — sub-agent recommends, main agent executes",
+          "class": "good",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:192-194"
+        },
+        {
+          "idea": ".codex/config.toml description-sync is mandatory per domain; subagents:check will fail if skipped",
+          "class": "good",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:138-142"
+        },
+        {
+          "idea": "codex-reviewer-resolve CLI tool-name is deliberately frozen; only HELP_TEXT examples update",
+          "class": "good",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:197-198"
+        },
+        {
+          "idea": "Architecture-expert personality variants (barney/betty/fred/wilma) are explicitly retained and not subject to further rename",
+          "class": "good",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:196"
+        },
+        {
+          "idea": "Third-party skills use npx skills add, never vendored into the repo",
+          "class": "good",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:195"
+        },
+        {
+          "idea": "jc- prefix generator bug (generator.ts:191-199 applies jc- unconditionally, silently discards classification keys) — latent, not blocking, forwarded to third-party-skill-reimport-targets.plan.md",
+          "class": "speculative",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:244-249"
+        },
+        {
+          "idea": "pending-graduations.md and practice-core/CHANGELOG.md deferred to Sylvan Fruiting Glade drain claim — must verify that claim is live or escalate",
+          "class": "speculative",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:21"
+        },
+        {
+          "idea": "Option C chosen for mcp companion file: inline into merged template rather than orphan or directory extension",
+          "class": "good",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:104-105"
+        },
+        {
+          "idea": "Gate suite for any future sub-agent structural change: subagents:check + skills:check + portability:check + agent-tools test filter + format:root + markdownlint:root",
+          "class": "good",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:353-359"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": "done",
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟢 COMPLETE",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED — required for all plans)",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:1 (frontmatter block has no `id` key)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED — required for all plans; must be literal `\"plan\"`)",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:1 (frontmatter block has no `node_type` key)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED — required for all plans; enum `strategic | executable`)",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:1 (frontmatter block has no `kind` key)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED — required for all plans); value exists in body prose at line 50 but is absent from frontmatter",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:50"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (LOCKED — required for executable plans; must resolve to a strategic-choice ID or carry `\"pending\"` sentinel)",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:1 (frontmatter block has no `serves_strategic_choice` key)"
+        },
+        {
+          "issue": "Field `status` is present with value `🟢 COMPLETE` — V0 §2.5 explicitly drops `status` (386 census), splitting it into `kind` / `disposition` / `gate` / projected execution axis. Terminal sense maps to `disposition: done` per §3.5 migration map.",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:11"
+        },
+        {
+          "issue": "Field `anchored_commits` is not a V0-classified field. It is neither in the canonical field set (§2) nor in the explicitly-dropped/deferred table (§2.5). Candidate for `SURVEY-MAY-ADD-FIELDS` or reconciliation as a `realized_by` edge target.",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:34-45"
+        },
+        {
+          "issue": "Todo `phase-1b-expert-dispatch` carries status `pending` (line 17) while the plan-level `status` asserts `🟢 COMPLETE`. This internal inconsistency is a substance concern; under V0 the correct shape would be `disposition: done` only when all constituent todos are completed or explicitly superseded.",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:17"
+        }
+      ],
+      "unclassified_keys": [
+        "anchored_commits"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan status is COMPLETE with all phases landed. From an architecture lens this is a record document, not an actionable plan. Its role has shifted to post-hoc decision record. Consider rehoming to a closed/completed archive alongside its anchored commits rather than holding it under current/.",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:11"
+        },
+        {
+          "severity": "low",
+          "claim": "One todo item (phase-1b-expert-dispatch) is still marked status: pending despite the plan overall carrying status COMPLETE. This inconsistency is a structural integrity issue — a COMPLETE plan must not contain open todos. If the dispatch was superseded by Phase 2's reviewer dispatch, the todo should be explicitly closed with a resolution note rather than left pending.",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:18"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan collapses two architecturally distinct surfaces — active-workflow skill (loaded into the main agent context) and read-only reviewer sub-agent (spawned via Agent tool) — into a single *-expert template with a mode-aware Workflow split. The plan does not record whether PDR-051 explicitly ratified this dual-mode consolidation or whether architecture-expert-fred's dispatch (listed as pending in phase-1b-expert-dispatch) verified PDR-051 alignment before the plan was marked COMPLETE. If that reviewer dispatch never ran, the PDR-051 alignment finding is outstanding.",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:17-18,31"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan records a latent generator defect at agent-tools/src/skills-adapter-generate/generator.ts:191-199 (jc- prefix applied unconditionally, classification keys silently discarded). This was deferred to a future plan (third-party-skill-reimport-targets.md). From an architecture standpoint, a generator that silently discards classification keys is a structural gap that will resurface on any future skill ingestion. The deferral is correctly captured but the severity in context of the broader agent-tooling architecture is higher than the plan's framing implies.",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:245-249"
+        },
+        {
+          "severity": "info",
+          "claim": "The non-goals section explicitly excludes renaming the codex-reviewer-resolve CLI binary and restructuring the sub-agent component composition. Both are reasonable scope constraints. No architecture concern with the exclusion itself, but the CLI binary retaining *-reviewer in its name while all templates and rules now use *-expert creates a permanent naming seam in the agent toolchain. This is worth a standing note in the future/third-party-skill-reimport-targets plan or a new future plan rather than remaining invisible.",
+          "file_line": "sub-agent-rename-and-skill-integration.plan.md:445-450"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Phase 1B is complete through commit 249600f1",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/agent-tooling/current/sub-agent-rename-and-skill-integration.plan.md:9 (claim, scoped to integration+deletion) corroborated by commit 249600f1 subject \"Phase 1B closeout\" + tree state: all 8 .agent/skills/*-expert dirs deleted, 17 *-expert.md templates present, 0 residual Skill() perms; plan line 15 phase-1b-integrate-and-delete status:completed"
+        },
+        {
+          "claim": "Phase 2 cross-repo sweep is landed at 25a8ee6b (304 files)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "git show --numstat 25a8ee6b → exactly 304 file entries; commit --stat footer \"304 files changed, 2059 insertions(+), 2013 deletions(-)\"; subject \"refactor(sub-agents): propagate *-reviewer → *-expert rename across repo (Phase 2)\"; reachable from current branch docs/planning-and-validation. Plan citation at sub-agent-rename-and-skill-integration.plan.md:10 and :45."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/team-autonomy-primitive-decisions-exploration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Both todos are status:pending with named acceptance gates not yet met",
+          "file_line": "file:28-44"
+        },
+        {
+          "claim": "Exploration status declared in frontmatter; 'current' lane is correct for unresolved active work",
+          "file_line": "file:17"
+        },
+        {
+          "claim": "Lifecycle section confirms archival trigger is future (on decision, acceptance artefact lands)",
+          "file_line": "file:140-144"
+        },
+        {
+          "claim": "Q2 promotion gate explicitly UNMET — one autonomous P6 cure required, zero delivered",
+          "file_line": "file:113-115"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan holds two genuinely unsettled design questions with structured candidate options, real evidence anchors, and named gates. No speculative hand-waving: Q1 has four concrete shapes with noted adjacencies (line 78-93); Q2 has sub-primitive taxonomy with empirical threshold constraints (lines 103-119) and a truthful evidence-state accounting that admits the gate is unmet (lines 113-115). The homing rationale (lines 49-58) is a worked instance of PDR-100 doctrine. No bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Candidate shapes are specific and evaluable (lines 78-87); adjacent primitives are named without being folded in prematurely (lines 89-93); the evidence state section (lines 113-119) cites specific sessions with timestamps and makes the gate condition precise. The plan distinguishes what it decides (homing the questions) from what it does not decide (the answers), and the acceptance criteria for each todo are actionable (lines 33-35, 42-44).",
+      "salvage_value": [
+        {
+          "idea": "Q1 candidate shape 1: broadcast-arrival precedence (first agent to announce intent-to-close holds first-out role, needs tie-break)",
+          "class": "good",
+          "file_line": "file:78-79"
+        },
+        {
+          "idea": "Q1 candidate shape 2: pre-handoff-synthesis precedence (earliest created_at synthesis broadcast self-elects once N members post syntheses)",
+          "class": "good",
+          "file_line": "file:80-81"
+        },
+        {
+          "idea": "Q1 candidate shape 3: coordinator-poll (coordinator named at team-start retains closeout-owner authority, fallback to precedence)",
+          "class": "good",
+          "file_line": "file:82-83"
+        },
+        {
+          "idea": "Q1 candidate shape 4: explicit at-team-start declaration (start-right-team requires tentative closeout owner be named, eliminating implicit-no-owner case)",
+          "class": "good",
+          "file_line": "file:84-87"
+        },
+        {
+          "idea": "Adjacent Q1 primitive: coordinator-discovery for arriving agents (surfaced alongside, not yet scoped in)",
+          "class": "speculative",
+          "file_line": "file:89-93"
+        },
+        {
+          "idea": "Adjacent Q1 primitive: standby-role defaults as first-class boundaries (reviewer-dispatch / consolidation-observer / plan-file-only-follow-on)",
+          "class": "speculative",
+          "file_line": "file:89-93"
+        },
+        {
+          "idea": "Adjacent Q1 primitive: coordinator polling responsibility for unbriefed arriving agents",
+          "class": "speculative",
+          "file_line": "file:89-93"
+        },
+        {
+          "idea": "P6a hoarding-detection: threshold N implementer-class artefacts by Director within window D while M implementers idle triggers surface + self/peer-ratification",
+          "class": "good",
+          "file_line": "file:105-107"
+        },
+        {
+          "idea": "P6b ceremony-over-pragmatism: bundle-ceremony overhead exceeding routing-unblock benefit by ratio R within window W triggers Director-authorised one-action ceremony-bypass",
+          "class": "good",
+          "file_line": "file:108-110"
+        },
+        {
+          "idea": "P6c idle-misclassification: possibly redundant post comms-watch self-exclusion cure — needs explicit confirmation before closing",
+          "class": "speculative",
+          "file_line": "file:111-112"
+        },
+        {
+          "idea": "Q2 empirical threshold derivation: N, D, M, W, R must come from Seaworthy + Velvet sessions, not guessed; Velvet 10:48Z is the counter-example bounding over-eager detection",
+          "class": "good",
+          "file_line": "file:118-119"
+        },
+        {
+          "idea": "Q2 evidence gate: one autonomous P6 cure instance is the promotion gate; it is UNMET as of plan date",
+          "class": "good",
+          "file_line": "file:113-115"
+        },
+        {
+          "idea": "Gitleaks-historical-scan blockage is a distinct substrate gap separate from P6 — do not fold in",
+          "class": "good",
+          "file_line": "file:121-123"
+        },
+        {
+          "idea": "Homing doctrine: a pending-graduations entry that is an open design question (not a settled lesson) routes to an exploration plan, not to graduate/reject/duplicate",
+          "class": "good",
+          "file_line": "file:49-58"
+        },
+        {
+          "idea": "Standing owner steer: team-autonomy substance must not crystallise into a fixed protocol or menu before the evidence exists",
+          "class": "good",
+          "file_line": "file:62-65"
+        },
+        {
+          "idea": "Named-gate decision is a valid outcome: a session may conclude deciding evidence does not yet exist, naming the gate that re-opens it, which is not open-ended deferral",
+          "class": "good",
+          "file_line": "file:14-15"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "exploration",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "team-autonomy-primitive-decisions-exploration.plan.md:1 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED, must be literal \"plan\", required for all)",
+          "file_line": "team-autonomy-primitive-decisions-exploration.plan.md:1 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all); `status: exploration` is the dropped emergent field — V0 §3.5 maps it to `kind: strategic` but the canonical field is absent",
+          "file_line": "team-autonomy-primitive-decisions-exploration.plan.md:17"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all); `date: 2026-06-16` is an unclassified emergent key that V0 replaces with `last_updated`",
+          "file_line": "team-autonomy-primitive-decisions-exploration.plan.md:19"
+        },
+        {
+          "issue": "`todos` present but forbidden on `strategic` plans (LOCKED, V0 §2.4); plan's `status: exploration` maps to `kind: strategic`",
+          "file_line": "team-autonomy-primitive-decisions-exploration.plan.md:27–44"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` (LOCKED shape, V0 §2.3); required for executable plans, recommended for strategic; absent entirely",
+          "file_line": "team-autonomy-primitive-decisions-exploration.plan.md:1 (frontmatter block, field absent)"
+        }
+      ],
+      "unclassified_keys": [
+        "status",
+        "date"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "todos-forbidden-on-strategic LOCKED rule (V0 §2.4) vs estate practice of exploration plans carrying structured decision-action todos",
+          "evidence": "This plan carries two `todos` items (ids: q1-closeout-self-election, q2-director-routing-blockage) that are decision-framing action items, not TDD-cycle tasks. The V0 LOCKED rule forbids todos on strategic plans, but exploration plans in the estate use todos as their primary decision-scheduling artefact. If `status: exploration` consistently maps to `kind: strategic`, this locked rule may require re-ratification to either: (a) recognise `exploration` as a distinct third `kind` value that permits todos, or (b) redefine the todos-forbidden invariant to apply only to pure strategic briefs rather than all non-executable plans.",
+          "file_line": "team-autonomy-primitive-decisions-exploration.plan.md:27–44; V0 §2.4 line 157: \"Forbidden on `strategic` plans\""
+        }
+      ],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the pending-graduations register contains entries that were originally mis-typed there and correctly drained into this plan. The soundness of this homing move is assumed rather than verified against the live register state — if the register was not actually drained, the entries may be live in two places simultaneously, producing a split-home inconsistency the plan's own lifecycle section (line 144) relies on having resolved.",
+          "file_line": "56-58"
+        },
+        {
+          "severity": "medium",
+          "claim": "Q2 accepts the two Seaworthy instances (2026-05-23 11:30Z and 12:36Z) as sufficient empirical evidence to characterise the failure class and to bound threshold derivation (N, D, M, W, R). Both instances were owner-cured, not team-autonomously cured (lines 114-119). The assumption that owner-cure instances carry enough signal about autonomous threshold values is load-bearing and not defended — an owner stepping in may suppress the very escalation pattern a threshold would need to detect.",
+          "file_line": "113-119"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan names the Velvet 10:48Z window as the 'counter-example bounding over-eager detection' (line 117) without stating what was observed there or how it bounds the upper threshold. The counter-example's evidential content is assumed to be known by whoever runs the session, creating a dependency on tacit context that may not survive a session change.",
+          "file_line": "117-118"
+        },
+        {
+          "severity": "low",
+          "claim": "Candidate shape 3 for Q1 (Coordinator-poll, line 83-85) assumes a coordinator is present — it falls back to a precedence rule otherwise. The plan does not state how the fallback is selected or whether the other three shapes already supply it. The incompleteness is implicit rather than flagged as a decision point, which may cause the session to reach a composition that silently leaves the no-coordinator case undefined.",
+          "file_line": "83-85"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan states that P6c (idle-misclassification) is 'likely covered upstream by the comms-watch self-exclusion cure' (line 111) and asks the session to 'confirm whether it is redundant post-cure'. The upstream cure is assumed to exist and to be active, but its status is not referenced with a path or commit. If the cure has not shipped, P6c is not redundant and the session's confirmation task would yield a false verdict.",
+          "file_line": "111-112"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes that one session (or at most two, since the questions share a PDR-074 family) is the right unit for resolving both Q1 and Q2 (line 141). Q2 is explicitly evidence-gated on a first autonomous cure that is admitted as UNMET (line 114). Running both questions in a single session implicitly assumes the Q2 evidence gate will be met before or during that session, which contradicts the plan's own gate framing.",
+          "file_line": "141-144"
+        },
+        {
+          "severity": "info",
+          "claim": "The related-files list at lines 21-26 uses relative paths prefixed with '../../../'. The plan's own lifecycle depends on cross-referencing these documents. The paths are assumed correct but are not verified in the plan body; a path error would silently leave the session without the referenced evidence.",
+          "file_line": "21-26"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/current/team-opener-generalisation-exploration.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All six todos are pending; no work is done; the exploration is live",
+          "file_line": "lines 40,57,63,74,85,93 (status: pending on each todo)"
+        },
+        {
+          "claim": "The x6 gap (docs stranded off main) is owner-named and unfixed",
+          "file_line": "lines 93-116"
+        },
+        {
+          "claim": "The plan explicitly sits in 'current' folder as an active queued exploration",
+          "file_line": "lines 15-16 (status: exploration), folder path"
+        },
+        {
+          "claim": "No execution before owner disposes at x5",
+          "file_line": "lines 91-92"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every todo is grounded in observed friction from the 2026-06-10/11 marathon with named evidence sources (ops report, nine experience registers, opener artefact). The three-altitude decomposition model (lines 28-39) and the four home options with trade-offs (lines 41-57) are analytically sound. The x6 gap (lines 93-116) is the most concrete finding: a structural missing step in the team-closeout workflow with a clearly named cure shape. No speculative or low-evidence ideas are presented as conclusions.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan is well-structured: problem statement with concrete evidence (lines 128-148), explicit rationale for why it is exploration not execution (lines 156-164), named evidence already in hand (lines 168-181), relationship to existing estate without fragmenting it (lines 183-193), and explicit non-goals (lines 195-200). The todo content is analytically dense with layered hypotheses to test rather than assert (line 78). The x6 todo is particularly strong: it quantifies the gap (4 ADRs, 3 PDRs, 4 rules, 2 skills, 12 experience files), names the cure shape, and cites a cross-reference to ADR-197 (line 113).",
+      "salvage_value": [
+        {
+          "idea": "A single per-thread prose opener doing the work of three distinct layers (generic platform, start-right-team overlap, thread-specific instantiation) is an artefact-gravity failure mode",
+          "class": "good",
+          "file_line": "lines 139-148"
+        },
+        {
+          "idea": "Three-altitude decomposition model: L1 generic platform, L2 overlap-with-start-right-team (crosswalk), L3 thread-specific (stays per-thread by construction)",
+          "class": "good",
+          "file_line": "lines 28-39"
+        },
+        {
+          "idea": "Option A: fold L1 generic layer into existing start-right-team SKILL — risks bloating and conflating always-on bootstrap with opt-in worktree-team mechanics",
+          "class": "speculative",
+          "file_line": "lines 44-47"
+        },
+        {
+          "idea": "Option B: new sibling skill (start-right-worktree-team) layering on start-right-team — clean separation but third variant, discoverability cost against skill-load budget",
+          "class": "speculative",
+          "file_line": "lines 47-51"
+        },
+        {
+          "idea": "Option C: skill + per-thread TEMPLATE — generic mechanics graduate to skill, L3 becomes fill-in-the-blanks template with generator or checklist",
+          "class": "speculative",
+          "file_line": "lines 51-55"
+        },
+        {
+          "idea": "Option D: leave as prose, extract only genuinely-new rules (worktree convention, branching strategy) to always-on rule tier, start-right-team points at them",
+          "class": "speculative",
+          "file_line": "lines 53-57"
+        },
+        {
+          "idea": "Opener clauses being quoted at agents mid-session to catch live errors is evidence some opener content is doing rule-enforcement work that belongs in the rule tier",
+          "class": "good",
+          "file_line": "lines 66-71"
+        },
+        {
+          "idea": "PR-monitoring as a hand-rolled per-Director loop with comment-detection-drop recurrence is a tooling primitive candidate",
+          "class": "good",
+          "file_line": "lines 64-66"
+        },
+        {
+          "idea": "Boundary-classification hypothesis: branching strategy + coordination-home convention are rule-shaped; worktree-team bootstrap is skill-shaped; Director-pure-direction + two-moments contracts are PDR-homed",
+          "class": "speculative",
+          "file_line": "lines 75-83"
+        },
+        {
+          "idea": "Team closeout is missing an explicit branch-to-main reconciliation step for coordination-home-authored permanent content (ADRs, PDRs, rules, skills, governance docs)",
+          "class": "good",
+          "file_line": "lines 93-116"
+        },
+        {
+          "idea": "The divergence between coordination-home branch and main is typically conflict-free (disjoint paths) — verify with overlap analysis then merge main-to-branch and PR branch-to-main with full CI",
+          "class": "speculative",
+          "file_line": "lines 108-111"
+        },
+        {
+          "idea": "session-handoff Team-Closeout-Owner-mode needs amendment to include the branch-to-main reconciliation step",
+          "class": "good",
+          "file_line": "lines 111-113"
+        },
+        {
+          "idea": "Cross-ref ADR-197 (coordination home owns registry state) half-describes the boundary the x6 gap sits on",
+          "class": "good",
+          "file_line": "lines 113-115"
+        },
+        {
+          "idea": "No new data gathering needed for x1 analysis — evidence already in hand in ops report, nine experience registers, and the opener itself",
+          "class": "good",
+          "file_line": "lines 179-181"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "strategic",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "thread"
+      ],
+      "status_raw": "exploration",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Field `status: exploration` is present — V0 §2.5 explicitly drops `status`; the readiness sense maps to `kind: strategic` via §3.5 migration map but the `kind` field itself is absent.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:15"
+        },
+        {
+          "issue": "Field `id` is absent — required for all plan nodes per V0 §2.1 (LOCKED).",
+          "file_line": "team-opener-generalisation-exploration.plan.md:1"
+        },
+        {
+          "issue": "Field `node_type` is absent — required literal `\"plan\"` for all plan nodes per V0 §2.1 (LOCKED).",
+          "file_line": "team-opener-generalisation-exploration.plan.md:1"
+        },
+        {
+          "issue": "Field `kind` is absent — required for all plan nodes per V0 §2.2 (LOCKED); inferred value from §3.5 migration map would be `strategic`.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:1"
+        },
+        {
+          "issue": "Field `last_updated` is absent — required for all plan nodes per V0 §2.4 (LOCKED); the emergent `date` key is present instead (line 17), which V0 folds into `last_updated`.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:17"
+        },
+        {
+          "issue": "Field `serves_strategic_choice` is absent — recommended for strategic plans per V0 §2.3; acceptable as `\"pending\"` sentinel when the strategic choice is not yet identified.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:1"
+        }
+      ],
+      "unclassified_keys": [
+        "date"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "assumptions",
+      "specialist_kind": "assumptions",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan assumes the nine experience registers and the ops report are sufficient evidence to begin decomposition (x1) without any first-hand crosswalk of start-right-team SKILL content. The assertion 'No new data-gathering is required to start x1' (line 179) rests on the assumption that the artefacts already in hand fully characterise the overlap. If start-right-team has drifted since 2026-06-10/11, the crosswalk result could differ from what the opener-era agents encountered.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:179"
+        },
+        {
+          "severity": "medium",
+          "claim": "Todo x6 assumes the coordination-home divergence is 'typically conflict-free because the two sides touch disjoint paths' (line 110) and proposes a merge-main-then-PR path on that basis. This is stated as a hypothesis to verify ('verify with the overlap analysis'), but the cure shape is already prescribed before that verification is done. If the paths are not disjoint, the prescribed cure (merge main→branch and PR branch→main) could require conflict-resolution work that the plan has no todo for.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:110-111"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan treats the skill-load budget and the directive-context budget as binding constraints on home-option selection (lines 55-56, 163-164), but does not record their current measured values. The constraints are cited by name without citing current headroom. A reviewer cannot assess whether options B or C are actually foreclosed without knowing the live budget figures.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:55-56"
+        },
+        {
+          "severity": "low",
+          "claim": "Todo x2 option A names 'bloating an already-dense SKILL' as a cost (line 46) without any baseline measure of the SKILL's current density. The characterisation 'already-dense' is an assumption rather than a grounded observation. If the SKILL is not actually near capacity, option A's stated cost diminishes.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:46"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan assumes the three-layer decomposition (L1 generic / L2 overlap / L3 thread-specific) is the correct decomposition frame before the x1 analysis is done (lines 30-39). It is presented as a 'candidate layering to be validated' but is also the structural frame used in x2 home options, x4, and x6. If x1 finds the layering is wrong, x2 through x6 may need to be reframed.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:29-39"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan implicitly assumes the owner's availability to walk x5 is not time-constrained. The exploration has no stated deadline or staleness condition. If the 'next long-running team' (line 150) occurs before x5 disposes, the re-pasting failure mode the plan was created to prevent will recur. No contingency is named.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:150"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan references ADR-197 as 'half-describing the boundary this gap sits on' (line 113) without confirming ADR-197 exists, is locked, and is reachable from this plan's path. If ADR-197 is a draft or has been superseded, the x6 cross-reference is to a non-authoritative source.",
+          "file_line": "team-opener-generalisation-exploration.plan.md:113"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/agent-tooling/future/adapter-generation.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "NOT STARTED status with explicit promotion trigger — plan is future-dated and actionable, not orphaned or complete",
+          "file_line": "adapter-generation.plan.md:3,144-148"
+        },
+        {
+          "claim": "Concrete manifest schema and generation script design are present and not yet implemented anywhere in the estate",
+          "file_line": "adapter-generation.plan.md:34-55,59-71"
+        },
+        {
+          "claim": "Sequencing relationship to taxonomy rename (ADR-135) is a live dependency that preserves ordering intent",
+          "file_line": "adapter-generation.plan.md:119-122"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan correctly identifies adapters as derived artefacts, proposes a manifest-driven build pipeline with Turbo caching, evolves portability:check from existence to freshness, and correctly sequences itself before the taxonomy rename. All major ideas are coherent and non-speculative except the specific Cursor model name. Lines 34-81 show concrete and viable design; lines 119-141 show correct dependency mapping.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan contains a concrete YAML manifest example (lines 34-55), a numbered generation script spec (lines 60-71), a Turbo task JSON definition (lines 73-81), a before/after comparison table (lines 91-96), explicit in/out-of-scope sections (lines 100-115), named dependency relationships (lines 119-141), and quantified promotion triggers (lines 144-148). This is actionable, not merely aspirational.",
+      "salvage_value": [
+        {
+          "idea": "Adapters are derived artefacts — they should be build outputs, not hand-authored source files",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:8-10"
+        },
+        {
+          "idea": "Single specialist-manifest.yaml as the authoritative definition of per-agent platform properties",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:33-55"
+        },
+        {
+          "idea": "generate-adapters script emitting all platform wrappers from manifest + canonical templates",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:59-71"
+        },
+        {
+          "idea": "GENERATED header comment on every emitted file to prevent accidental hand-edits",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:69"
+        },
+        {
+          "idea": "Turbo task with declared inputs/outputs enables cache-based freshness detection",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:73-81"
+        },
+        {
+          "idea": "portability:check evolves from existence-check to freshness-check (manifest+templates vs generated output)",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:85-86"
+        },
+        {
+          "idea": "CI gate: fail if generated files are stale",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:105"
+        },
+        {
+          "idea": "Sequencing: execute adapter generation before taxonomy rename to make WS3 safe",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:119-122"
+        },
+        {
+          "idea": "Complementary split with canonical-first-skill-pack-ingestion-tooling: internal vs external authorship into same Layer-2 directories, shared validator surface",
+          "class": "good",
+          "file_line": "adapter-generation.plan.md:134-141"
+        },
+        {
+          "idea": "Specific Cursor model name 'gpt-5.4-xhigh' in manifest example — placeholder that needs verification at implementation time",
+          "class": "speculative",
+          "file_line": "adapter-generation.plan.md:49"
+        },
+        {
+          "idea": "Codex skills represented in manifest as type:skill with minimal config — assumes Codex platform stability",
+          "class": "speculative",
+          "file_line": "adapter-generation.plan.md:52-53"
+        },
+        {
+          "idea": "Gemini commands represented as type:command TOML — assumes Gemini CLI adapter format is stable",
+          "class": "speculative",
+          "file_line": "adapter-generation.plan.md:54,66"
+        }
+      ],
+      "conformance": "no-frontmatter",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "NOT STARTED",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "No YAML frontmatter block present; the file opens with a Markdown heading and inline bold key-value pairs (`**Status**: NOT STARTED`, `**Domain**: Agentic Engineering Enhancements`) — not a `---`-delimited frontmatter block. All V0 required fields (`id`, `node_type`, `name`, `overview`, `kind`, `last_updated`, `serves_strategic_choice`) are absent.",
+          "file_line": "adapter-generation.plan.md:1-2"
+        },
+        {
+          "issue": "`status` expressed as inline prose `NOT STARTED` (line 2). V0 §2.5 drops `status` entirely and replaces it with `kind`/`disposition`/`gate`/Linear-projected execution. `NOT STARTED` has no entry in the §3.5 migration map; the closest interpretation is `kind: strategic` + Linear `backlog`, but that mapping is inferential, not clean.",
+          "file_line": "adapter-generation.plan.md:2"
+        },
+        {
+          "issue": "`Domain: Agentic Engineering Enhancements` is an inline prose field with no V0 equivalent. V0 §2.5 drops free-label `type` and `collection`/`lane` fields; folder location is the navigation signal. This key is unclassified by V0.",
+          "file_line": "adapter-generation.plan.md:2"
+        },
+        {
+          "issue": "`promotion_trigger` is present in the body as a `## Promotion Trigger` section (lines 143-148) rather than as a frontmatter field. V0 §2.4 requires it as a frontmatter field on `strategic` plans, forbidden in `executable` plans.",
+          "file_line": "adapter-generation.plan.md:143-148"
+        },
+        {
+          "issue": "Relationship-to-other-plans dependencies (lines 119-141) are expressed as prose paragraphs, not as V0 typed `depends_on` edges (with `blocking | beneficial` classification) or `derives_from` edges in frontmatter. ADR-135 is referenced inline but not via a `derives_from` frontmatter edge.",
+          "file_line": "adapter-generation.plan.md:119-141"
+        },
+        {
+          "issue": "`serves_strategic_choice` is absent. The plan is in `future/` (consistent with `kind: strategic`) so the field is recommended but not strictly required; however the schema still expects it or the `\"pending\"` sentinel for executable plans, and its omission even at strategic tier means the authority chain to a strategic choice is unrecorded.",
+          "file_line": "adapter-generation.plan.md:1-148"
+        }
+      ],
+      "unclassified_keys": [
+        "Status (inline bold prose, line 2)",
+        "Domain (inline bold prose, line 2)"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The manifest embeds a concrete model name ('gpt-5.4-xhigh') for Cursor at line 49. Hard-coded model identifiers in a canonical manifest are a maintenance liability: Cursor's model naming is vendor-controlled and will drift independently of the manifest. The plan's own 'Drift between canonical and adapter — Impossible' claim (line 95) is undermined if the manifest itself becomes a drift surface for model names.",
+          "file_line": "adapter-generation.plan.md:49"
+        },
+        {
+          "severity": "medium",
+          "claim": "The Turbo task definition (lines 73–80) lists '.claude/rules/**' as an output. Rules under .claude/rules/ are currently also canonical-authored artefacts (e.g. invoke-*.md). Treating them as build outputs while they may also be hand-edited creates a write-conflict: a developer editing a rule by hand and then running generate:adapters will have their edit silently overwritten. The plan declares rules as generated (line 66) but does not resolve the hand-edit vs generated conflict beyond a header comment.",
+          "file_line": "adapter-generation.plan.md:66-69"
+        },
+        {
+          "severity": "low",
+          "claim": "The generation script is proposed as 'scripts/generate-adapters.mjs (or .ts)' (line 59). The repo rule feedback_no_workspace_to_root_scripts.md requires workspace scripts to be TypeScript with no exceptions; scripts/ is the no-checks zone. Placing a non-trivial manifest-driven generator in scripts/ (no-checks zone) rather than a workspace package means it escapes type checking, lint, and test coverage permanently, contrary to the plan's goal of a correctness guarantee.",
+          "file_line": "adapter-generation.plan.md:59"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan's promotion trigger (lines 143–148) has no concrete metric for 'demonstrably unsustainable' and the plan itself concedes this threshold 'is arguably already the case'. Leaving promotion criteria vague means the plan can sit in future/ indefinitely without a forced decision. A concrete count or a taxonomy-rename date would make this actionable.",
+          "file_line": "adapter-generation.plan.md:143-147"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly identifies sequencing: this plan should precede the taxonomy rename (ADR-135) and should follow the portability remediation plan hardening the three-layer contract (lines 119–130). The dependency graph is explicit and consistent with the estate relationships described.",
+          "file_line": "adapter-generation.plan.md:119-130"
+        },
+        {
+          "severity": "info",
+          "claim": "The complementary lane separation between internally-authored canonical artefacts (this plan) and externally-authored skill pack ingestion (canonical-first-skill-pack-ingestion-tooling.plan.md) is architecturally clean and correctly noted as sharing the same Layer-2 output directories and validator surface (lines 134–140).",
+          "file_line": "adapter-generation.plan.md:134-140"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": []
+    }
+  ]
+}

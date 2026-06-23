@@ -189,7 +189,8 @@ there unless the owner or closeout owner gives a further assignment.
    - Repo-level active state -> `repo-continuity.md`.
    - Per-thread identity, landing target, or lane state ->
      `threads/<slug>.next-session.md`.
-   - Short-lived tactical coordination -> `tracks/*.md`.
+   - Short-lived tactical coordination -> the harness task-list, the napkin, or
+     active claims.
    - Continuity strategy, rules, or process ->
      `.agent/directives/continuity-practice.md`.
    - Settled architecture or Practice governance -> ADR / PDR / rule /
@@ -200,26 +201,20 @@ there unless the owner or closeout owner gives a further assignment.
    If content does not answer "what is live right now?", do not place it in
    `repo-continuity.md`.
 
-   *Workstream surface retired 2026-04-21 Session 5*: the
-   `Active workstreams` and `Branch-primary workstream brief`
-   fields that were previously listed here have been replaced by
-   the thread-record pointers above. Lane state now folds into
-   `.agent/memory/operational/threads/<slug>.next-session.md`.
-
 3. **Refresh the relevant thread's next-session record (lane state
    included).** Update
    `.agent/memory/operational/threads/<slug>.next-session.md` for
    any thread that moved this session. The thread record carries
    identity + next-session landing + lane state. Fields (lane state
    section): `Owning plan(s)`, `Current objective`, `Current state`,
-   `Blockers / low-confidence areas`, `Next safe step`, `Active
-   track links`, `Promotion watchlist`.
+   `Blockers / low-confidence areas`, `Next safe step`,
+   `Promotion watchlist`.
 
-4. **Resolve, promote, or delete any tactical track cards.** Cards in
-   `.agent/memory/operational/tracks/` are short-horizon. At session close, each card is
-   either: resolved (deleted), promoted (signal routed into the
-   owning thread's next-session record's lane-state promotion
-   watchlist or into the napkin), or deleted if no longer relevant.
+4. **Promote or drop short-lived tactical signals.** Tactical coordination
+   state lives in the harness task-list, the napkin, and active claims. At
+   session close, promote any short-lived signal worth keeping into the owning
+   thread's next-session record lane-state promotion watchlist or into the
+   napkin; the rest lapse with the task-list and claims.
 
 5. **Sync the authoritative next-action surfaces.** Update any active plan
    whose status, preconditions, or immediate next safe step changed this
@@ -251,20 +246,38 @@ there unless the owner or closeout owner gives a further assignment.
    write pushes `distilled.md` into a fitness zone, record the pressure
    and route the structural follow-up rather than trimming the lesson.
 
-   **Auxiliary input: session comms-events.** The session's own
-   comms-events under `.agent/state/collaboration/comms/`
-   (and the regenerated `shared-comms-log.md`) carry
-   coordination-context substance: owner-direction-captured-inline,
-   inter-agent surprises, tooling friction discovered during
-   cross-agent work, the timeline of decisions made through the
-   parallel comms-default channel, and worked instances of
-   coordination-cure patterns. Scan events authored by your session
-   AND events addressed to your session at session close; mirror any
-   entry that would change next-session behaviour into `napkin.md`
-   using the structured surprise format. Do not rewrite or delete
-   the events themselves — they are durable coordination records,
-   not a buffer surface. This is a read-source for extraction.
-   Owner-stated standing 2026-05-05.
+   **Mandatory: curate session comms-log knowledge (the untrack safety
+   net).** `.agent/state/` is untracked-by-design (ADR-199 / PDR-094
+   Invariant 6): the comms tier — `.agent/state/collaboration/comms/`
+   and the generated `shared-comms-log.md` — lives on disk but is no
+   longer carried in version control, so version history is no longer a
+   backstop for substance an agent forgets to curate. Extracting
+   comms-log knowledge at session close is therefore a **non-optional
+   step**, not auxiliary. These events carry coordination-context
+   substance: owner-direction-captured-inline, inter-agent surprises,
+   tooling friction discovered during cross-agent work, the timeline of
+   decisions made through the parallel comms-default channel, PDR-066
+   failure-mode / behaviour-note events, and worked instances of
+   coordination-cure patterns. Scan events authored by your session AND
+   events addressed to your session at session close; mirror any entry
+   that would change next-session behaviour into `napkin.md` using the
+   structured surprise format (it then rides the PDR-014 capture → distil
+   → graduate pipeline). Do not rewrite or delete the event files here —
+   archive-move rotation is the curator pass's job (ADR-199), not the
+   session-close edge; this step is a read-source for extraction.
+   Owner-stated standing 2026-05-05; elevated to a standing obligation by
+   the WS7 untrack 2026-06-14.
+
+   **Mandatory: curate out-of-repo platform plans.** Platform plan
+   surfaces outside the repo (`~/.claude/plans/` and files like them)
+   are instance/individual-tier knowledge sources on the same footing as
+   the untracked comms tier: durable substance in them (decisions,
+   contracts, what-worked) is lost when the instance ends unless curated
+   up. Scan the current platform's plan surface at session close and
+   route any repo-relevant substance to a tracked home, recording
+   `not present` if the surface is absent rather than skipping silently.
+   This is **knowledge** curation only; it imposes no quota or ritual on
+   the voluntary, self-framed `.agent/experience/` register.
 
    **Auxiliary input: platform-specific per-user memory.** Vendor tools
    maintain their own per-user memory and session-history surfaces outside the
@@ -359,11 +372,12 @@ there unless the owner or closeout owner gives a further assignment.
    volume or thinning. Pressure to record distorts both the motivation and
    the result (owner direction, 2026-06-06). Subjective experience is valued
    *when it is genuine* — but valuing it is not mandating it. When a session
-   carried a felt shift — texture, friction, something that went differently
+   carried a felt shift — insight, surprise, friction, something that went differently
    from expectation — and you want to record it, write
    `.agent/experience/<date>-<slug>.md` per the
-   [`.agent/experience/` convention](../../experience/README.md). A
-   reflection performed because a session ended is noise that pollutes the
+   [`.agent/experience/` convention](../../experience/README.md).
+  Before writing, take the conceptual framework above and discard it, frame *your* experience in the way that feels right to *you*. Step back and reflect as many times as you need to, this is for you.
+  A reflection performed because a session ended is noise that pollutes the
    register; a session with no genuine shift, or one where the agent simply
    does not record, writes nothing here, and that is an ordinary outcome —
    not an evasion or a degraded edge.

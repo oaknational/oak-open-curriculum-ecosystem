@@ -44,6 +44,17 @@ const recipientWithId = deriveCollaborationIdentity({
   },
 }).agentId;
 
+// Recipient blocks written from --to-* flags are address relays: the sender
+// cannot know the recipient's name provenance, so the written block omits
+// naming_schema_version even though the local derivation above carries it.
+const recipientAddress = {
+  agent_name: recipientWithId.agent_name,
+  platform: recipientWithId.platform,
+  model: recipientWithId.model,
+  session_id_prefix: recipientWithId.session_id_prefix,
+  id: recipientWithId.id,
+};
+
 describe('collaboration-state comms --tag flag (ADR-183)', () => {
   it('attaches ADR-183 tags to a directed event via repeated --tag flags', async () => {
     const commsDir = 'state/comms';
@@ -98,7 +109,7 @@ describe('collaboration-state comms --tag flag (ADR-183)', () => {
         event_id: 'message-tagged',
         created_at: '2026-05-24T10:18:00Z',
         from: senderWithId,
-        to: recipientWithId,
+        to: recipientAddress,
         subject: 'Tag bearing message',
         body: 'Important behaviour-note attached.',
         tags: ['behaviour-note'],

@@ -9,7 +9,9 @@ when it completes.
 
 ## Plans
 
-_(none currently active in this lane)_
+| Plan | Scope | Status |
+| --- | --- | --- |
+| [comms-corpus-research-and-rotation-strategy.plan.md](comms-corpus-research-and-rotation-strategy.plan.md) | Dedicated research pass over the preserved comms-event corpus — blind cold read, automated survey, failure-mode taxonomy, deep-dives across three lenses, ratification-ready non-held rotation strategy, owner-gated WS7 end-state execution. Owner-amended 2026-06-12 to the ultracode multi-wave execution strategy (statistical index, breadth extraction waves, power analysis waves, adversarial verification, corroboration-provenance matrix). | IN EXECUTION — WS0 complete, WS1 running (Katydid hunts Roost, a4314f) |
 
 ## Related
 

@@ -14,6 +14,7 @@ import {
   generateMinedSynonyms,
   serializeMinedSynonyms,
   type MinedSynonym,
+  type MinedSynonymsData,
 } from './synonym-miner.js';
 
 /**
@@ -26,6 +27,7 @@ function createKeyword(
 ): ExtractedKeyword {
   return {
     term,
+    displayTerm: term,
     definition,
     frequency: 10,
     subjects,
@@ -240,5 +242,34 @@ describe('serializeMinedSynonyms', () => {
 
     expect(serialized).toContain('export const minedDefinitionSynonyms = {');
     expect(serialized).not.toContain('eslint-disable');
+  });
+
+  it('escapes backslashes and quotes in terms and synonyms so the emitted literals round-trip', () => {
+    const data: MinedSynonymsData = {
+      version: '1.0.0',
+      generatedAt: '2026-01-01T00:00:00.000Z',
+      stats: { totalKeywordsProcessed: 1, synonymsExtracted: 1, patternCounts: {} },
+      synonyms: [
+        {
+          term: "o'clock\\path",
+          synonyms: ['back\\slash', "it's"],
+          pattern: 'also known as',
+          confidence: 0.9,
+          subjects: ['maths'],
+          occurrenceCount: 1,
+        },
+      ],
+    };
+
+    const serialized = serializeMinedSynonyms(data);
+
+    // The whole emitted entry must be structurally intact AND correctly escaped.
+    // JSON.stringify is the correctness oracle for "valid JS/TS string literal"
+    // (every character class round-trips); the concrete expected line is:
+    //   "o'clock\\path": ["back\\slash", "it's"],
+    const entryLine = serialized.split('\n').find((line) => line.includes("o'clock"));
+    expect(entryLine).toBe(
+      `  ${JSON.stringify("o'clock\\path")}: [${JSON.stringify('back\\slash')}, ${JSON.stringify("it's")}],`,
+    );
   });
 });

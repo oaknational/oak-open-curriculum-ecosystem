@@ -118,7 +118,9 @@ These tools are read-only and idempotent. They complement each other:
 
 ${relationshipLines.join('\n')}
 
-Call these tools first to reduce errors when using search, fetch, and browsing tools.`;
+Call these tools first to reduce errors when using search, fetch, and browsing tools.
+
+Oak's curriculum is fully sequenced: year-ordered progressions, prior-knowledge, misconception, and keyword graphs are served by the anchored graph tools (get-thread-progressions, get-prior-knowledge-graph, get-misconception-graph, get-keyword-graph), so lesson and curriculum plans can build on what a class has already covered.`;
 }
 
 /**

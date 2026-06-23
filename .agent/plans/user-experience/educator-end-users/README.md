@@ -47,7 +47,10 @@ These concepts are preserved from technical research/plans and belong to this
 persona as user outcomes:
 
 1. Misconception-aware guidance journeys ("what mistakes should I watch for?")
-2. Vocabulary and concept-relationship exploration journeys
+2. Vocabulary and concept-relationship exploration journeys — candidate
+   stories grounded against the live `get-keyword-graph` tool in
+   [keyword-graph-teacher-user-stories.report.md](keyword-graph-teacher-user-stories.report.md)
+   (discovery note, captured for owner prioritisation 2026-06-11)
 3. Progression and prerequisite pathway journeys across years/key stages
 4. Coverage journeys ("does this cover the relevant curriculum expectations?")
 

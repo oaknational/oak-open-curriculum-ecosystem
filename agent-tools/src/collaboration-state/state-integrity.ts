@@ -17,6 +17,10 @@ interface JsonSurface {
   readonly path: string;
   readonly schemaId: string;
   readonly parser?: (text: string) => unknown;
+  // Untracked-by-design surfaces (ADR-199 Phase-3 untrack) are absent in a fresh
+  // checkout (e.g. CI) and present-on-disk on a working instance. An absent such
+  // surface is the expected clean state, not an integrity fault.
+  readonly optionalWhenAbsent?: boolean;
 }
 
 interface CollaborationStateIntegrityFinding {
@@ -33,9 +37,7 @@ export async function validateCollaborationStateIntegrity(input: {
   readonly repoRoot: string;
 }): Promise<CollaborationStateIntegrityReport> {
   const surfaces = await jsonSurfaces(input.repoRoot);
-  const validator = await createCollaborationJsonSchemaValidator(
-    join(input.repoRoot, COLLABORATION_ROOT),
-  );
+  const validator = await createCollaborationJsonSchemaValidator();
   const findings = (
     await Promise.all(
       surfaces.map((surface) => validateJsonSurface(input.repoRoot, validator, surface)),
@@ -68,9 +70,11 @@ async function validateJsonSurface(
   validator: CollaborationJsonSchemaValidator,
   surface: JsonSurface,
 ): Promise<readonly CollaborationStateIntegrityFinding[]> {
-  const text = await readFile(join(repoRoot, surface.path), 'utf8').catch((error: unknown) => {
-    throw new Error(`failed to read ${surface.path}`, { cause: error });
-  });
+  const text = await readSurfaceText(repoRoot, surface);
+  if (text === undefined) {
+    // Optional-when-absent surface not present in this checkout — the clean state.
+    return [];
+  }
 
   try {
     JSON.parse(text);
@@ -98,17 +102,23 @@ async function jsonSurfaces(repoRoot: string): Promise<readonly JsonSurface[]> {
       path: `${COLLABORATION_ROOT}/active-claims.json`,
       schemaId: 'active-claims.schema.json',
       parser: parseCollaborationRegistry,
+      optionalWhenAbsent: true,
     },
     {
       path: `${COLLABORATION_ROOT}/closed-claims.archive.json`,
       schemaId: 'closed-claims.schema.json',
       parser: parseClosedClaimsArchive,
+      optionalWhenAbsent: true,
     },
     ...(await directorySurfaces({
       repoRoot,
       directory: `${COLLABORATION_ROOT}/comms`,
       schemaId: 'comms-event.schema.json',
       parser: parseCommsEvent,
+      // comms/ is untracked-by-design (ADR-199 Phase-3 untrack): absent in a
+      // fresh checkout (e.g. CI), present-on-disk on a working instance. An
+      // absent comms/ is the expected clean state, not an integrity fault.
+      optionalWhenAbsent: true,
     })),
     ...(await directorySurfaces({
       repoRoot,
@@ -131,8 +141,12 @@ async function directorySurfaces(input: {
   readonly schemaId: string;
   readonly parser?: (text: string) => unknown;
   readonly excludeExamples?: boolean;
+  readonly optionalWhenAbsent?: boolean;
 }): Promise<readonly JsonSurface[]> {
-  const entries = await readdir(join(input.repoRoot, input.directory));
+  const entries = await readDirOrEmpty(
+    join(input.repoRoot, input.directory),
+    input.optionalWhenAbsent === true,
+  );
   return entries
     .filter((entry) => entry.endsWith('.json'))
     .filter((entry) => input.excludeExamples !== true || !entry.endsWith('.example.json'))
@@ -142,6 +156,38 @@ async function directorySurfaces(input: {
       schemaId: input.schemaId,
       ...(input.parser === undefined ? {} : { parser: input.parser }),
     }));
+}
+
+async function readSurfaceText(
+  repoRoot: string,
+  surface: JsonSurface,
+): Promise<string | undefined> {
+  try {
+    return await readFile(join(repoRoot, surface.path), 'utf8');
+  } catch (error) {
+    if (surface.optionalWhenAbsent === true && isErrnoCode(error, 'ENOENT')) {
+      return undefined;
+    }
+    throw new Error(`failed to read ${surface.path}`, { cause: error });
+  }
+}
+
+async function readDirOrEmpty(
+  directory: string,
+  optionalWhenAbsent: boolean,
+): Promise<readonly string[]> {
+  try {
+    return await readdir(directory);
+  } catch (error) {
+    if (optionalWhenAbsent && isErrnoCode(error, 'ENOENT')) {
+      return [];
+    }
+    throw error;
+  }
+}
+
+function isErrnoCode(error: unknown, code: string): boolean {
+  return typeof error === 'object' && error !== null && 'code' in error && error.code === code;
 }
 
 function finding(path: string, message: string): CollaborationStateIntegrityFinding {

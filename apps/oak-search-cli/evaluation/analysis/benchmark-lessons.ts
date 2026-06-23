@@ -23,9 +23,11 @@ if (!configResult.ok) {
   console.error('Environment validation failed:', configResult.error.message);
   process.exit(1);
 }
-withEvaluationSearchSdk(configResult.value.env, async (retrieval) => {
-  await runBenchmark(retrieval.searchLessons.bind(retrieval));
-}).catch((error: unknown) => {
+try {
+  await withEvaluationSearchSdk(configResult.value.env, async (retrieval) => {
+    await runBenchmark(retrieval.searchLessons.bind(retrieval));
+  });
+} catch (error: unknown) {
   console.error('Benchmark failed:', error);
   process.exit(1);
-});
+}

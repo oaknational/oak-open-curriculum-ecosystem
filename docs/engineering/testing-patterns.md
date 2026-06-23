@@ -158,6 +158,28 @@ under normal churn (any drift looks like baseline error rather than
 proxy error). Reject the framing at plan-author time, not at WS
 execution.
 
+## Test Configuration Gotchas
+
+- `tsconfig.json` `include` patterns `**/*.test.ts` and `**/*.spec.ts` do NOT match
+  test utility files (harness, fixture builder). Add `tests/**/*.ts` to the include
+  array when creating non-test utilities in test directories.
+- ESLint `projectService: true` uses the nearest `tsconfig.json`, not
+  `tsconfig.lint.json`. Files must be included in both for linting to work.
+- Stale vitest include globs are silent because of `passWithNoTests: true` — remove
+  dead globs promptly after file moves.
+- `resolveEnv` integration tests that need `.env` file isolation: use `'/tmp'` as
+  `startDir` to prevent ambient `.env` files from satisfying schema requirements.
+- After refactoring entry points (removing `dotenv`, changing `loadRuntimeConfig`
+  signature), check E2E tests that launch the process directly — they break when the
+  entry-point contract changes.
+
+## Test Isolation
+
+- Replace Express `_router` access with supertest HTTP assertions.
+- Extract repeated setup into scoped helpers inside `describe`.
+- For 30+ file migrations, use subagents.
+- Bulk factories accept `startIndex`; do not mutate readonly `_id`.
+
 ### Related
 
 - [ADR-078 dependency injection decision][adr-078]

@@ -178,6 +178,7 @@ evidence.
 | [PDR-088](practice-core/decision-records/PDR-088-reviewers-carry-doctrine.md) — reviewers carry the doctrine they enforce, not just audit against it (forcing-function read-path as the mechanism; cite-by-section as the closing variant) | No standalone phenotype ADR. Substrate is the host reviewer-role definitions whose mandatory read-paths instantiate the pattern — [`test-expert`](sub-agents/templates/test-expert.md) (read-path plus cite-by-section), [`type-expert`](sub-agents/templates/type-expert.md) and [`architecture-expert`](sub-agents/templates/architecture-expert.md) (the read-path floor) |
 | [PDR-089](practice-core/decision-records/PDR-089-conservation-reflex-external-check.md) — conservation reflex / frame-capture recurs at every stage; external intent checks are the cure | No standalone phenotype ADR. Substrate is the remediation and review workflow habit of routing frame-sensitive work through owner correction, independent adversarial review, or an intent-versus-letter audit, then sweeping every reference when a correction changes the shape |
 | [PDR-091](practice-core/decision-records/PDR-091-precedence-is-not-approval.md) — precedence is not approval: a prior decision, annotation, status label, verdict, convention, or ordering is never authority by itself; locate live approval before acting | The always-applied [`precedence-is-not-approval`](rules/precedence-is-not-approval.md) thin-pointer rule, composed with [`verify-dont-trust`](rules/verify-dont-trust.md) (its authority dual) and [`no-tombstones-for-removed-ideas`](rules/no-tombstones-for-removed-ideas.md) (a graduated/duplicate label is precedence; the home-check is the authority) |
+| [PDR-095](practice-core/decision-records/PDR-095-collaboration-is-multi-dimensional.md) — **Accepted** (2026-06-14): collaboration is multi-dimensional; a coordination/claim registry measures one axis, not the whole — team membership unions coordination AND discourse surfaces (channels, comms, sidebars), deduplicated by identity, never claims alone | Phenotype **deferred** to first instance: the session/team-state register and session-shape projection ([`session-and-team-state-statusline-icons.plan.md`](plans/agent-tooling/current/session-and-team-state-statusline-icons.plan.md), WS2 active-agent-set union). Doctrine graduation (PDR/ADR) deferred while the model is in experimental discovery (owner 2026-06-15) |
 
 ### Rules cited by Practice Core
 
@@ -201,7 +202,7 @@ surfaces of portable doctrine. The canonical rule files live at
 Practice-Core PDRs cite host-local skills as the workflow
 implementations of portable doctrine. Canonical files live under
 [`.agent/skills/`](skills/); adapters are generated at
-`.agents/skills/jc-*/SKILL.md` and `.claude/skills/jc-*/SKILL.md`.
+`.agents/skills/oak-*/SKILL.md` and `.claude/skills/oak-*/SKILL.md`.
 
 | Workflow (canonical) | Cited by Core | Concept implemented |
 | --- | --- | --- |
@@ -331,6 +332,7 @@ example in this repo:
 | [`evidence-before-classification.md`](memory/active/patterns/evidence-before-classification.md) | PDR-013 (host adoption) | Classify only after evidence-gathering, not at first read |
 | [`circular-test-justification.md`](memory/active/patterns/circular-test-justification.md) | PDR-021 (host adoption) | Tests must not be the only justification for the production code they exercise |
 | [`test-claim-assertion-parity.md`](memory/active/patterns/test-claim-assertion-parity.md) | PDR-021 (host adoption) | Test description and assertion must measure the same thing |
+| [`agent-experience-review-lens.md`](rules/agent-experience-review-lens.md) | PDR-111 (host adoption) | Weigh agent-experience impact when designing or reviewing agent-facing substrate (CLIs, watchers, comms/claims/state, gates, hooks); cures prefer structural class-retirement |
 
 ## Artefact Directories
 

@@ -162,8 +162,13 @@ function redactObject(value: JsonObject): JsonObject {
  *
  * @param value - JSON-safe telemetry input
  * @param key - Optional parent key used for key-specific redaction rules
- * @returns Redacted JSON-safe telemetry value
+ * @returns Redacted JSON-safe telemetry value. A `string` input always
+ * yields a `string` (scalar redaction preserves the type), so the `string`
+ * overload lets string-only callers consume the result without a narrowing
+ * guard.
  */
+export function redactTelemetryValue(value: string, key?: string): string;
+export function redactTelemetryValue(value: JsonValue, key?: string): JsonValue;
 export function redactTelemetryValue(value: JsonValue, key?: string): JsonValue {
   if (typeof value === 'string') {
     return redactScalarForKey(key, value);

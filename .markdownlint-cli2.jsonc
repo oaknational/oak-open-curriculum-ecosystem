@@ -1,0 +1,56 @@
+// markdownlint-cli2 configuration — scope/ignore doctrine for the Markdown gate.
+//
+// Rules live in `.markdownlint.json` (auto-read by cli2 as the `config` object);
+// this file owns ONLY the lint footprint (`globs` + `ignores`). Keep this file's
+// `ignores` in lock-step with the gate doctrine in
+// `.agent/rules/no-warning-toleration.md` §Scope discipline: canon surfaces lint
+// by default; reference / synthesis / archive / generated material is excluded.
+// Moving a folder in or out of this list is a deliberate governance act.
+//
+// Footprint model: cli2's `**/*.md` DOES traverse dot-directories (verified —
+// it lints `.cursor/`, `.claude/`, etc. without a `--dot` flag). So non-canon
+// dot-dirs must be excluded EXPLICITLY in `ignores`, exactly as the old
+// `.markdownlintignore` did. The `.agent/**/*.md` glob is retained for clarity
+// even though `**/*.md` already covers it.
+//
+// HARD RULE: never add an `ignores` entry beginning with `!` or `#`. In cli2
+// v0.22.x such an entry silently zeroes the entire run to "0 error(s)" (a
+// false-green gate), not a re-include. Express exclusions positively only.
+{
+  "globs": ["**/*.md", ".agent/**/*.md"],
+  "ignores": [
+    ".agent/analysis/**",
+    ".agent/archive/**",
+    ".agent/evaluations/**",
+    ".agent/experience/**",
+    ".agent/hooks/**",
+    ".agent/milestones/**",
+    ".agent/proposals/**",
+    ".agent/prompts/**",
+    ".agent/reference/**",
+    ".agent/reference-local/**",
+    ".agent/reports/**",
+    ".agent/research/**",
+    ".agent/roles/**",
+    ".cursor/**",
+    ".claude/**",
+    ".agents/**",
+    "tmp/**",
+    "**/CHANGELOG.md",
+    "**/archive/**",
+    "**/reference/**",
+    "**/research/**",
+    "**/temp-secrets/**",
+    "node_modules/**",
+    "**/node_modules/**",
+    "packages/sdks/oak-curriculum-sdk/docs/api-md/**",
+    "packages/sdks/oak-curriculum-sdk/docs/api/**",
+    ".agent/state/collaboration/shared-comms-log.md",
+    ".agent/collaboration/rapid-comms/2026-*.md",
+    ".agent/collaboration/rapid-comms/.starless-notice-body.md",
+    "**/test-results/**",
+    "**/test-artifacts/**",
+    ".stryker-tmp/**",
+  ],
+  "gitignore": false,
+}

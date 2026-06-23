@@ -79,8 +79,6 @@ export {
 export {
   DOCUMENTATION_RESOURCES,
   getGettingStartedMarkdown,
-  getToolsReferenceMarkdown,
-  getWorkflowsMarkdown,
   getDocumentationContent,
   type DocumentationResource,
 } from '../mcp/documentation-resources.js';
@@ -89,21 +87,6 @@ export {
   CURRICULUM_MODEL_RESOURCE,
   getCurriculumModelJson,
 } from '../mcp/curriculum-model-resource.js';
-
-export {
-  PRIOR_KNOWLEDGE_GRAPH_RESOURCE,
-  getPriorKnowledgeGraphJson,
-} from '../mcp/prior-knowledge-graph-resource.js';
-
-export {
-  THREAD_PROGRESSIONS_RESOURCE,
-  getThreadProgressionsJson,
-} from '../mcp/thread-progressions-resource.js';
-
-export {
-  MISCONCEPTION_GRAPH_RESOURCE,
-  getMisconceptionGraphJson,
-} from '../mcp/misconception-graph-resource.js';
 
 export {
   EEF_INTERPRETATION_RESOURCE,

@@ -6,7 +6,8 @@ import {
   showClaim,
   statusClaims,
 } from './cli-claim-query-commands.js';
-import { appendComms, migrateComms, renderComms, sendComms } from './cli-comms-commands.js';
+import { appendComms, migrateComms, renderComms } from './cli-comms-commands.js';
+import { sendComms } from './cli-comms-send.js';
 import { inboxComms } from './cli-comms-inbox.js';
 import { listComms, showComms } from './cli-comms-query.js';
 import { directComms, replyComms } from './cli-comms-messages.js';
@@ -75,7 +76,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'identity:preflight': commandSpec({
     help: identityPreflightHelp,
     options: ['platform', 'model', 'active', 'now'],
-    handler: (options, env) => preflightIdentity(options, env),
+    handler: (options, env, runtime) => preflightIdentity(options, env, runtime),
   }),
   'identity:audit': commandSpec({
     help: identityAuditHelp,
@@ -115,7 +116,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
   'comms:validate': commandSpec({
     help: commsValidateHelp,
     options: ['repo-root'],
-    handler: (options) => validateComms(options),
+    handler: (options) => validateComms(options, process.cwd()),
   }),
   'comms:inbox': commandSpec({
     help: commsInboxHelp,

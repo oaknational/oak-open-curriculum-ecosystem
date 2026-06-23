@@ -381,3 +381,23 @@ canonical with the two refinements above absorbed as inline notes —
 do not pre-author E2-E5 prompts speculatively. If the next session is
 single-agent, drop the bootstrap fast-path note and proceed; the E1
 prompts work at N=1 (degenerate boundary condition).
+
+## Routed evidence from the comms-corpus research (2026-06-13)
+
+The comms corpus now holds complete coordinated-team arcs with known outcomes,
+which lets the experiments' coordination-primitive hypotheses be confirmed/refuted
+**retrospectively at scale** before (or alongside) live runs. From the synthesis
+([`.agent/reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md`](../../../reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md)
+§3.2):
+
+- **PDR-064 two-moments + PDR-063 mid-cycle handoffs ran clean** with
+  exactly-one-holder held across the 2026-06-11/12 handover arc; zero work loss.
+- **`ping-before-escalate` + git-evidence cross-check** repeatedly converted a
+  false retirement-detection into a no-op.
+- **Convention emergence in the open** — the team-start report, `Heartbeat:` /
+  `Heartbeat-end:` title prefixes, and coordinator pre-positioning stabilised
+  without being designed first (lightweight conventions self-organise).
+
+Recommendation: add a retrospective-validation pass to the experiment design that
+scores each primitive against the corpus arc that exercised it, so live experiments
+test what the corpus cannot already settle.

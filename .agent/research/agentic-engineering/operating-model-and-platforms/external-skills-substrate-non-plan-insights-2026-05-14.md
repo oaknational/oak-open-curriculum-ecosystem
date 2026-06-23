@@ -67,11 +67,13 @@ instructions, but also where prompt-only governance stops. In Oak, the more a
 behaviour affects shared state, ownership, or truth claims, the more it should
 move from prose into tools, checks, state, or workflow gates.
 
-### 7. Source Study Findings Should Stay Source-Neutral
+### 7. The Value Is the Pattern, Not the Source Identity
 
 The tracked research value is the substrate pattern, not the identity of the
-source. Future references should prefer the neutral report and the ignored local
-snapshot only when exact wording is required for private analysis.
+source. Name the source plainly where it is openly licensed — this study draws on
+the MIT-licensed `mattpocock/skills` repository — and cite it for traceability,
+but do not mistake naming it for the value. The learning is the substrate move,
+which would hold whatever the source was called.
 
 ### 8. Candidate Count Is Not Progress
 

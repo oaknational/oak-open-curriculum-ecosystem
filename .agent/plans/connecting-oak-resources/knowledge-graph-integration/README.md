@@ -50,14 +50,15 @@ Owner-ratified decisions now governing this estate:
 | [current/graph-estate-consolidation.plan.md](current/graph-estate-consolidation.plan.md) | **Master estate plan**: consolidation, decontamination, and the archival record of retired surfaces |
 | [active/graph-stack.plan.md](active/graph-stack.plan.md) | Substrate plan: the graph workspaces (`graph-core`, `graph-ingest`, `graph-project`, `graph-corpus-sdk`), sequenced by consumer-readiness (ADR-173). WS4.2 builds the Oak Curriculum Ontology Threads adapter — the dependency for `onto-threads`. Graph workspaces are transport-agnostic (ADR-179) |
 | [active/agent-guidance-consolidation.plan.md](active/agent-guidance-consolidation.plan.md) | The scattered, partly-stale tool/resource/prompt guidance for the existing MCP surface becomes one generated catalogue — EEF-independent MCP-DX debt |
+| [current/graph-tools-value-redesign.plan.md](current/graph-tools-value-redesign.plan.md) | Value-driven redesign of the existing bulk-derived graph tools onto `graph-corpus-sdk`; bounded retrieval. **PROMOTED 2026-06-09** (EEF D6 + D7 trigger fired); not yet decision-complete — mechanism-settling + executable cycles remain (see its §Remaining promotion work) |
 
 ## Parked Surfaces
 
 Wider graph work is sequenced behind the EEF tool
 ([`eef-graph-tool-completion.plan.md`](../../sector-engagement/eef/current/eef-graph-tool-completion.plan.md))
 where it depends on the substrate; each parked plan states its own block
-condition. `graph-tools-value-redesign` carries its own promotion trigger
-(EEF D6 + D7).
+condition. (`graph-tools-value-redesign` was promoted to Live Work on 2026-06-09
+when its EEF D6 + D7 trigger fired.)
 
 | File | Description |
 |------|-------------|
@@ -65,7 +66,6 @@ condition. `graph-tools-value-redesign` carries its own promotion trigger
 | [future/nc-knowledge-taxonomy-surface.plan.md](future/nc-knowledge-taxonomy-surface.plan.md) | NC-aligned SKOS knowledge-taxonomy surface (ontology-only; demand-tripwire promotion) |
 | [future/cross-source-journeys.plan.md](future/cross-source-journeys.plan.md) | Feature-layer journey orchestration (playbook-vs-prompt question; two reference journeys) — gated on unbuilt substrate adapters |
 | [future/oak-misconceptions-graph-features.plan.md](future/oak-misconceptions-graph-features.plan.md) | Bulk-derived misconception feature directions (sub-graph extraction, EEF cross-corpus, topic extraction, extended contexts) |
-| [future/graph-tools-value-redesign.plan.md](future/graph-tools-value-redesign.plan.md) | Value-driven redesign of the existing bulk-derived graph tools onto `graph-corpus-sdk`; bounded retrieval; promotion trigger EEF D6 + D7 |
 
 ### Future oak-kg surfaces (backlog)
 

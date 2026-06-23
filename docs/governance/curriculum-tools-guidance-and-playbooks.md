@@ -17,6 +17,13 @@
 - No compatibility layers. No `as`/`any`/`!`/broad `Record<string, unknown>` shortcuts. Prefer literal-preserving data with `as const` only for data literals.
 - Validate external inputs and authored fixtures at runtime with the generated Zod validators. Fail fast with helpful, contextual error messages.
 
+## Teacher-as-Expert Boundary (Presentation)
+
+- These surfaces support teachers with information, resources, and evidence. The teacher is the pedagogical expert and the authority on what should happen; the client and agent inform and offer options, they never make the teacher's pedagogical decision.
+- Present curriculum content, search results, and evidence — and evidenced pedagogical options and trade-offs, proactively or on request — as material for the teacher to weigh, with caveats and attribution. Never make the decision for the teacher: no instruction, no single prescribed course, no ranking collapsed into a verdict.
+- Naming what the data contains and offering evidenced options is informing; deciding what the teacher should do is the teacher's call (and, where delegated in conversation, the agent's transparent runtime reasoning per ADR-191, which still leaves the decision with the teacher) — never baked into guidance content as a decision.
+- See [ADR-194](../architecture/architectural-decisions/194-teacher-as-expert-product-boundary.md) (the product principle) and [ADR-191](../architecture/architectural-decisions/191-deterministic-data-surface-agent-reasons.md) (its server-side engineering corollary).
+
 ## Deterministic Guidance
 
 - Guidance specifications (e.g. `PresentationSpec@v1`) are JSON resources authored in-repo and versioned.

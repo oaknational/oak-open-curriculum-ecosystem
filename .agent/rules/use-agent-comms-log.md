@@ -155,7 +155,7 @@ worker takes the implementation slice only after the verdict lands.
   — decision-thread schema authority.
 - [`escalation.schema.json`](../state/collaboration/escalation.schema.json)
   — owner-escalation schema authority.
-- [`collaboration-state-write-safety.plan.md`](../plans/agent-tooling/current/collaboration-state-write-safety.plan.md)
+- `collaboration-state-write-safety.plan.md`
   — current comms-event and transaction-helper implementation plan.
 
 ## Identity

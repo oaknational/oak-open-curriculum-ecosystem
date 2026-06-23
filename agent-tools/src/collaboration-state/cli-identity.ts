@@ -1,5 +1,6 @@
 import { deriveCollaborationIdentity } from './identity.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
+import { cliIo, type CliRuntime } from './cli-runtime.js';
 import { optional, required, type Options } from './cli-options.js';
 import { type CollaborationAgentIdWrite, type CollaborationStateEnvironment } from './types.js';
 
@@ -27,6 +28,7 @@ export function resolveIdentity(
 export async function preflightIdentity(
   options: Options,
   env: CollaborationStateEnvironment,
+  runtime: CliRuntime,
 ): Promise<string> {
   const identity = resolveIdentity(options, env);
   const nowIso = optional(options, 'now') ?? new Date().toISOString();
@@ -37,6 +39,7 @@ export async function preflightIdentity(
       agentId: identity.agent_id,
       nowIso,
       surface: 'identity preflight',
+      readActiveClaimsFile: cliIo(runtime).readActiveClaimsFile,
     });
   }
 

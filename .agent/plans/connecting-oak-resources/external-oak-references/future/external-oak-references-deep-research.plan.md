@@ -128,7 +128,7 @@ structured QA, prerequisite derivation, and curriculum graph
 construction. Science KS3 pilot."* Concepts-only by visibility.
 
 **Local checkout added 2026-05-01** by owner at
-`/Users/jim/code/oak/aila-atomic-concepts` for reference. Top-level
+`../aila-atomic-concepts` for reference. Top-level
 shape (light look): `README.md`, `atomic_concepts/`, `data/`,
 `examples/`, `research.md`, `research_atomic_concepts_tvp.md`,
 `tvp_atomic_concepts.md`, `tvp_findings_and_next_steps.md`,

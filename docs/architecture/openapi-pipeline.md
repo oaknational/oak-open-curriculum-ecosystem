@@ -122,6 +122,13 @@ type KeyStageData = components['schemas']['KeyStageData'];
 // TypeScript enforces what the API actually returns
 ```
 
+This extends to runtime self-description data, not just types. The
+`get-curriculum-model` orientation ontology derives its drift-prone lists (the
+subject list, the key-stage list, and the KS4 examSubject variants) from the
+generated SDK sources rather than hand-maintaining them, so they cannot drift
+from the live API; only display names and other non-enumerable metadata stay
+authored (ADR-029, ADR-030).
+
 ### 5. Pattern Reusability
 
 This pattern works for **any** OpenAPI-compliant API:

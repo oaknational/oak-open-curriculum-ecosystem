@@ -16,7 +16,7 @@ const rootDirectory = path.resolve(thisDirectory, '..');
 const outPathFromRoot = 'src/types/generated/zod';
 const outDirectory = path.resolve(rootDirectory, outPathFromRoot);
 
-void (async () => {
+try {
   logger.info('Generating Zod schemas from SDK OpenAPI schema...');
 
   const sdkSchemaPath = path.resolve(
@@ -32,8 +32,8 @@ void (async () => {
   logger.info('Endpoint schema generation complete!');
 
   logger.info('All Zod schema generation complete!');
-})().catch((error: unknown) => {
+} catch (error: unknown) {
   const message = error instanceof Error ? error.message : String(error);
   logger.error(`Zod schema generation failed: ${message}`, normalizeError(error));
   process.exit(1);
-});
+}

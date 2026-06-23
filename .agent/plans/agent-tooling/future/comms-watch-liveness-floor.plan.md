@@ -144,3 +144,27 @@ paused its experiment; this repo will run its own.
   `.agent/state/collaboration/liveness/<tuple-key>.json` where
   `<tuple-key>` is a stable hash of the identity tuple. Confirm or
   propose alternative.
+
+## Routed evidence from the comms-corpus research (2026-06-13)
+
+From the synthesis
+([`.agent/reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md`](../../../reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md)
+§5). Routed recommendations for this plan; the PDR-078 liveness-contract
+amendments they imply are doctrine changes that go through the normal PDR
+pipeline, not edited into the Accepted PDR directly.
+
+- **S3 — heartbeat measures scheduling, not health.** Overnight turn-starvation
+  stretched a 4-min cadence to 20–40+ min while sessions stayed healthy;
+  observe-side retirement thresholds misread starved-but-fine sessions.
+  Recommendation: scheduling-aware cadence; cross-check ground truth
+  (git/PR/registry) before any retirement judgement — the corpus shows
+  `ping-before-escalate` + git-evidence repeatedly converting a false
+  retirement-detection into a no-op (protect that).
+- **S7 — heartbeat shutdown-race (3–6 s ACTIVE-beat tail at session end)** and
+  **S8 — host-suspension gap**: loops emit ACTIVE beats with no self-exit. The
+  final heartbeat-end discipline is the cure shape; verify it fires on the close
+  path.
+- **Stale heartbeat typed-args.** Loops armed once at bootstrap keep broadcasting
+  stale claim/cycle state after the lane moves on. Recommendation: **derive
+  heartbeat args from the registry at emit time** rather than baking them into the
+  loop; cheap consistency checks against `active-claims.json`.

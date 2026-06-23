@@ -1,17 +1,15 @@
 /**
  * Unit tests for documentation resources.
  *
- * These tests validate the documentation resource definitions that provide
- * "getting started" and tool usage documentation via MCP resources/list.
+ * These tests validate the documentation resource definitions that provide the
+ * "getting started" experience via MCP resources/list. Tool categories,
+ * workflows, and tips are owned by the canonical `curriculum://model` resource
+ * (and the `get-curriculum-model` tool), not duplicated as separate doc
+ * resources — see S1 doc-resources single-sourcing.
  */
 
 import { describe, it, expect } from 'vitest';
-import {
-  DOCUMENTATION_RESOURCES,
-  getGettingStartedMarkdown,
-  getToolsReferenceMarkdown,
-  getWorkflowsMarkdown,
-} from './documentation-resources.js';
+import { DOCUMENTATION_RESOURCES, getGettingStartedMarkdown } from './documentation-resources.js';
 
 describe('DOCUMENTATION_RESOURCES', () => {
   it('has getting-started resource', () => {
@@ -21,18 +19,10 @@ describe('DOCUMENTATION_RESOURCES', () => {
     expect(resource?.mimeType).toBe('text/markdown');
   });
 
-  it('has tools-reference resource', () => {
-    const resource = DOCUMENTATION_RESOURCES.find((r) => r.name === 'tools-reference');
-    expect(resource).toBeDefined();
-    expect(resource?.uri).toBe('docs://oak/tools.md');
-    expect(resource?.mimeType).toBe('text/markdown');
-  });
-
-  it('has workflows resource', () => {
-    const resource = DOCUMENTATION_RESOURCES.find((r) => r.name === 'workflows');
-    expect(resource).toBeDefined();
-    expect(resource?.uri).toBe('docs://oak/workflows.md');
-    expect(resource?.mimeType).toBe('text/markdown');
+  it('does not duplicate the tools-reference or workflows resources (single-sourced via curriculum://model)', () => {
+    const uris = DOCUMENTATION_RESOURCES.map((r) => r.uri);
+    expect(uris).not.toContain('docs://oak/tools.md');
+    expect(uris).not.toContain('docs://oak/workflows.md');
   });
 
   it('all resources have required fields', () => {
@@ -67,79 +57,10 @@ describe('getGettingStartedMarkdown', () => {
     const markdown = getGettingStartedMarkdown();
     expect(markdown).toContain('Quick Start');
   });
-});
 
-describe('getToolsReferenceMarkdown', () => {
-  it('returns markdown string', () => {
-    const markdown = getToolsReferenceMarkdown();
-    expect(typeof markdown).toBe('string');
-    expect(markdown.length).toBeGreaterThan(0);
-  });
-
-  it('includes tool categories', () => {
-    const markdown = getToolsReferenceMarkdown();
-    expect(markdown).toContain('Discovery');
-    expect(markdown).toContain('Browsing');
-    expect(markdown).toContain('Fetching');
-    expect(markdown).toContain('Progression');
-  });
-
-  it('mentions search tool', () => {
-    const markdown = getToolsReferenceMarkdown();
-    expect(markdown).toContain('search');
-  });
-
-  it('mentions fetch tool', () => {
-    const markdown = getToolsReferenceMarkdown();
-    expect(markdown).toContain('fetch');
-  });
-
-  it('includes agentSupport category with agent support tools', () => {
-    const markdown = getToolsReferenceMarkdown();
-    expect(markdown).toContain('Agent Support');
-    expect(markdown).toMatch(/get-curriculum-model/);
-  });
-});
-
-describe('getWorkflowsMarkdown', () => {
-  it('returns markdown string', () => {
-    const markdown = getWorkflowsMarkdown();
-    expect(typeof markdown).toBe('string');
-    expect(markdown.length).toBeGreaterThan(0);
-  });
-
-  it('includes find lessons workflow', () => {
-    const markdown = getWorkflowsMarkdown();
-    expect(markdown).toContain('Find lessons');
-  });
-
-  it('includes lesson planning workflow', () => {
-    const markdown = getWorkflowsMarkdown();
-    expect(markdown).toContain('Plan a lesson');
-  });
-
-  it('includes numbered steps', () => {
-    const markdown = getWorkflowsMarkdown();
-    expect(markdown).toMatch(/1\./);
-    expect(markdown).toMatch(/2\./);
-  });
-
-  it('includes userInteractions workflow FIRST', () => {
-    const markdown = getWorkflowsMarkdown();
-    expect(markdown).toContain('When finding or presenting Oak content');
-    const userInteractionsIndex = markdown.indexOf('When finding or presenting');
-    const findLessonsIndex = markdown.indexOf('Find lessons');
-    expect(userInteractionsIndex).toBeLessThan(findLessonsIndex);
-  });
-
-  it('userInteractions workflow includes an agent support tool reference', () => {
-    const markdown = getWorkflowsMarkdown();
-    expect(markdown).toMatch(/get-curriculum-model/);
-  });
-
-  it('includes returns field for workflow steps', () => {
-    const markdown = getWorkflowsMarkdown();
-    expect(markdown).toContain('Returns:');
-    expect(markdown).toContain('Ranked list of matching lessons');
+  it('points to curriculum://model for orientation rather than copying tips', () => {
+    const markdown = getGettingStartedMarkdown();
+    expect(markdown).toContain('curriculum://model');
+    expect(markdown).toContain('get-curriculum-model');
   });
 });

@@ -24,12 +24,17 @@ intervention?**
 is non-obvious or load-bearing — a non-trivial brief whose impact
 space is wider than the obvious one, a strategic fork where the
 right move depends on what is really being built, an open-ended
-ask where direct execution would foreclose the real question, or a
+ask where direct execution would foreclose the real question, a
 concept that recurs in unexpected places (often systems-level
-vocabulary surfacing inside a surface-level task). The cure target
-is *purpose-by-default*: the surface ask has an obvious
+vocabulary surfacing inside a surface-level task), or **a task that
+arrives as a narrow pointer** ("fix this", "is X right?") whose
+implied scope may be narrower than the goal's real scope. The cure
+target is *purpose-by-default*: the surface ask has an obvious
 interpretation, but the deeper impact the user actually needs may
-be wider, sharper, or differently shaped.
+be wider, sharper, or differently shaped. The routine form of this
+mode is the scope-from-goal artefact (restate the goal, derive the
+full relevant set, name in/out *before* approach) — see
+[`scope-from-goal-before-approach`](../rules/scope-from-goal-before-approach.md).
 
 When uncertain which mode applies, **generative is the safer
 default for non-trivial work**: it costs a brief first-principles
@@ -86,6 +91,29 @@ Surfacing is for (2) and (3). Inflating (1) into a debug spiral or a question is
 the failure mode, and the tell is reaching for a terminal to investigate *why*,
 or drafting a question, before asking what is actually blocked.
 
+## Fluency Is a Warning, Not a Confirmation
+
+The dual of friction. Where friction is information you are tempted to *under*-read,
+fluency — a move or justification that arrives *smoothly* — is information you are tempted
+to *over*-trust. The easier a justification arrives, the less it was actually grounded:
+smoothness is precisely what bypasses the situational check. So treat a fluent move as the
+**trigger to ground the situational fact first**, not as confirmation to proceed.
+
+Fluency wears ordinary clothes: a local convention obvious to match ("match the surrounding
+code"), an owner statement that seems to license a shortcut ("they said *only agent* → stand
+down the watcher"), a claim that feels true ("commits pushed" — said before the push), an "of
+course X" framing. None of these are ignorance — a smooth frame arrived and was acted on
+before the situation it presupposes was checked. Ground that situation before acting: *was the
+convention ever ratified? is the precondition constitutive regardless of the stated situation?
+is the claim true right now?*
+
+Naming this does not inoculate against it (the conservation reflex — PDR-089 — recurs even
+while you document it): a fluent move under context pressure overrides a passively-held lesson.
+So the cure is structural, not vigilance — the fluent arrival is *itself* the tripwire to
+re-ground, and the smoother the move, the harder the check must be. See
+`passive-guidance-loses-to-artefact-gravity`:
+a passive lesson needs an active firing gate.
+
 ## Cure Shape — Structural, Not Doc-Patch
 
 When metacognition surfaces a defect whose root cause is
@@ -97,3 +125,22 @@ documentation**. Doc patches are once-cures; structural cures
 amortise across future agents. The action-to-impact bridge forces
 evaluating cures by whether they recur-proof, not whether they fix
 today's instance.
+
+## Hold the Ladder, Falsify the Claim
+
+Two inward checks drawn from the
+[grammar of thinking](../reference/grammar-of-thinking.md) — the depth behind these prompts:
+
+- **Keep the reliability ladder visible.** Observations become a story, the story becomes a
+  model, the model becomes identity, and identity resists correction. Before committing to a
+  conclusion, ask which rung you are actually standing on — observation, interpretation, model,
+  or judgement — and whether you have climbed faster than the evidence carries you.
+- **Hold the claim as a model, not a possession.** State the live belief as *"my current model is
+  X under conditions Z; here is what would change my mind."* The inward failure scan is the
+  catch: identity capture (defending a model because it is *yours*), abstraction drift (climbing
+  to language too high to test), and evidence theatre (gathering support for a decision already
+  made). Name the falsifier before you act on the belief.
+
+For structuring an *outward* problem, argument, or decision — rather than reflecting on your own
+thinking — use [`reason`](../skills/reason/SKILL-CANONICAL.md); this directive is the inward half
+of that pair.

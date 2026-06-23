@@ -5,20 +5,12 @@
  * (from OpenAPI schema) and aggregated tools (hand-authored), with a
  * visual split between the two groups.
  */
+import { AGGREGATED_TOOL_DEFS } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { describe, it, expect } from 'vitest';
 
-import { renderToolsSection } from './render-tools-section.js';
+import { AGGREGATED_TOOL_ORDER, renderToolsSection } from './render-tools-section.js';
 
-const AGGREGATED_TOOL_NAMES = [
-  'search',
-  'fetch',
-  'get-curriculum-model',
-  'get-thread-progressions',
-  'get-prior-knowledge-graph',
-  'browse-curriculum',
-  'explore-topic',
-  'download-asset',
-] as const;
+const AGGREGATED_TOOL_NAMES = Object.keys(AGGREGATED_TOOL_DEFS);
 
 const SAMPLE_GENERATED_TOOL_NAMES = [
   'get-key-stages',
@@ -70,5 +62,14 @@ describe('renderToolsSection', () => {
   it('renders separate labelled groups for aggregated and API tools', () => {
     expect(html).toContain('Curriculum tools');
     expect(html).toContain('API pass-through');
+  });
+});
+
+describe('AGGREGATED_TOOL_ORDER', () => {
+  it('assigns every aggregated tool an explicit position, exactly once', () => {
+    const byName = (a: string, b: string): number => a.localeCompare(b);
+    expect([...AGGREGATED_TOOL_ORDER].sort(byName)).toEqual(
+      [...AGGREGATED_TOOL_NAMES].sort(byName),
+    );
   });
 });

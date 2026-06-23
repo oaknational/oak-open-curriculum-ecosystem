@@ -166,7 +166,7 @@ and [PDR-030 Plane-Tag Vocabulary](../../../practice-core/decision-records/PDR-0
   See [`.agent/rules/executive-memory-drift-capture.md`](../../../rules/executive-memory-drift-capture.md)
   for when the tag is required.
 - **`Source plane: operational`** — the observation is about continuity
-  state (thread next-session records, track cards, repo-continuity
+  state (thread next-session records, the repo-continuity
   contract). Routes through `/session-handoff` refresh of the affected
   surface.
 - **`Source plane: active`** — default when the observation is about

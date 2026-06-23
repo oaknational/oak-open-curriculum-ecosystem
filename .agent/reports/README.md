@@ -42,11 +42,49 @@ research notes or investigation logs.
   engineering quality, effectiveness, operational friction, verification
   posture, and agentic-practice substrate; includes blunt ratings, evidence
   snapshot, risk modes, and ordered improvement recommendations
+- [mcp-app-live-product-readiness-assessment-2026-06-15.md](./mcp-app-live-product-readiness-assessment-2026-06-15.md)
+  — first-principles assessment of what it would take to make the Curriculum MCP
+  app a live product: first-hand verification, right/wrong/missing, the
+  launch-concern framework, the owner-decided keystones (audience, definition of
+  "live", whole-estate scope), and a fresh-eyes verdict that the prior milestone
+  ladder does not stand
+- [graph-team-first-worktree-run-analysis-2026-06-10.md](./graph-team-first-worktree-run-analysis-2026-06-10.md)
+  — Director's witness synthesis of the worktree-team shape's first live run:
+  the three structurally-dissolved failure modes validated, the rotation
+  protocol under live fire, the comms-watch stall incident end to end, two
+  evidence-forced de-escalations, adjudication economics across five PRs, and
+  Director-pattern observations for the seat's future holders
+- [mcp-session-instructions-pedagogical-grounding-process-2026-06-10.md](./mcp-session-instructions-pedagogical-grounding-process-2026-06-10.md)
+  — process record for adding session-wide pedagogical / curriculum-rigour
+  grounding to the MCP server `instructions` field: where session instructions
+  live today, the generator gap (tool-orientation only, no general-prose slot),
+  the surface reliability ranking (`instructions` is advisory/client-optional),
+  the future-work process, and the verdict — facts/constraints recorded now as
+  ADR-058/060 addenda; the grounding decision itself stays out until ratified
 - [oak-openapi-bug-report-2026-03-07.md](./oak-openapi-bug-report-2026-03-07.md)
   — existing standalone report
 - [claude-code-compaction-thinking-block-bug-2026-05-28.md](./claude-code-compaction-thinking-block-bug-2026-05-28.md)
   — Claude Code 2.1.153 bug report: `/compact` fails deterministically on Opus
   extended-thinking blocks; evidence, root cause, workaround, paste-ready `/feedback` text
+- [pr-142-eef-evidence-result-union-type-review-2026-06-09.md](./pr-142-eef-evidence-result-union-type-review-2026-06-09.md)
+  — type review of the one Copilot comment on PR #142 (`EefEvidenceResult` root
+  union): empirically-verified `EefStrand <: EefStrandHeadline` subtype collapse,
+  why the nested-union fix is lossy, and the discriminant-vs-transport-shape
+  recommendation for the deferred type review
+- [graph-team-first-worktree-run-analysis-2026-06-10.md](./graph-team-first-worktree-run-analysis-2026-06-10.md)
+  — witness synthesis of the graph implementation team's first per-worktree
+  multi-agent run (2026-06-10)
+- [graph-team-session-operations-and-experience-2026-06-10-11.md](./graph-team-session-operations-and-experience-2026-06-10-11.md)
+  — team operations and experience report for the full contiguous 38-agent /
+  seven-Director session (2026-06-10→11); substrate-under-load findings and
+  tooling considerations
+- [agent-experience-cause-class-analysis-2026-06-21.md](./agent-experience-cause-class-analysis-2026-06-21.md)
+  — cause-class synthesis of the 82-entry agent-tooling friction register: the
+  eight structural classes the frictions collapse into, the three AX layers, the
+  leverage ranking (and the finding that the top cure is already homed), the
+  drain-gap diagnosis, and next steps; evidence companion to
+  [PDR-111](../practice-core/decision-records/PDR-111-agent-experience-is-first-class.md)
+  and [`agent-experience-improvement.plan.md`](../plans/agent-tooling/current/agent-experience-improvement.plan.md)
 
 ## Related Surfaces
 

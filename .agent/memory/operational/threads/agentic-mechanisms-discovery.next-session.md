@@ -50,7 +50,9 @@ merge_class: index-narrative-tables
   security-evidence cross-link. The future Web Bot Auth child plan owns any
   later enabled-control rollout if Oak ratifies signed-agent verification.
 
-## Session Outcome (2026-06-03 - Blustery Lifting Gale / claude / Opus 4.8 / `9b33b0`, skills taxonomy + distribution estate)
+## Session Outcome (2026-06-03 - Blustery Lifting Gale / claude / Opus 4.8 / `9b33b0`)
+
+*Scope: skills taxonomy + distribution estate.*
 
 **Landed: the audience-led capability taxonomy is ratified and the
 distribution estate restructured.**
@@ -98,7 +100,9 @@ prerequisite is met (ADR-189) and trigger evidence is recorded. Promotion
 must reconcile the catalogue against the real library, and verify the
 distribution report's ecosystem claims against official platform docs.
 
-## Session Update (2026-06-01 - Umbral Whispering Silhouette / root planning docs overhaul + light handoff)
+## Session Update (2026-06-01 - Umbral Whispering Silhouette)
+
+*Scope: root planning docs overhaul + light handoff.*
 
 Root planning entry points are now refreshed:
 [`high-level-plan.md`](../../../plans/high-level-plan.md) is the strategic
@@ -145,7 +149,9 @@ Plan changes:
   and
   [`security-and-privacy/roadmap.md`](../../../plans/security-and-privacy/roadmap.md).
 
-## Session Outcome (2026-06-01 - Umbral Whispering Silhouette / codex / GPT-5 / `019e83`, Oak ticket promotion + re-verification)
+## Session Outcome (2026-06-01 - Umbral Whispering Silhouette / codex / GPT-5 / `019e83`)
+
+*Scope: Oak ticket promotion + re-verification.*
 
 **Promotion slice complete, implementation not started.** This session moved the
 Oak ticket's actionable Phase 1 agent-readiness work into
@@ -169,8 +175,10 @@ as separate repo plans:
 
 - [`dns-aid-discovery.plan.md`](../../../plans/discovery/future/dns-aid-discovery.plan.md)
 - [`aila-a2a-agent-card.plan.md`](../../../plans/discovery/future/aila-a2a-agent-card.plan.md)
-- [`webmcp-human-site-operability.plan.md`](../../../plans/discovery/future/webmcp-human-site-operability.plan.md)
-- [`web-bot-auth-agent-verification.plan.md`](../../../plans/discovery/future/web-bot-auth-agent-verification.plan.md)
+-
+  [`webmcp-human-site-operability.plan.md`](../../../plans/discovery/future/webmcp-human-site-operability.plan.md)
+-
+  [`web-bot-auth-agent-verification.plan.md`](../../../plans/discovery/future/web-bot-auth-agent-verification.plan.md)
 
 The discovery collection also now has lifecycle indexes for `active/` and
 `current/`, and the top-level plans index marks discovery as active plus queued
@@ -186,7 +194,9 @@ root `pnpm markdownlint-check:root` failed on pre-existing lint errors in
 Do not implement MCP Server Cards, DNS-AID, Aila A2A, or WebMCP until their
 future-plan gates are explicitly promoted.
 
-## Session Outcome (2026-06-01 - Luminous Dancing Aurora / codex / GPT-5 / `019e82`, agentic mechanisms discovery planning + light handoff)
+## Session Outcome (2026-06-01 - Luminous Dancing Aurora / codex / GPT-5 / `019e82`)
+
+*Scope: agentic mechanisms discovery planning + light handoff.*
 
 **Uncommitted planning slice complete.** This session researched Cloudflare Agent
 Skills Discovery against live official standards context, reflected on Oak
@@ -195,7 +205,8 @@ mission impact, and wrote the discovery future-planning bundle:
 - [`agent-skills-discovery.plan.md`](../../../plans/discovery/future/agent-skills-discovery.plan.md)
   (research conclusions ratified in
   [ADR-189](../../../../docs/architecture/architectural-decisions/189-audience-led-agent-capability-taxonomy.md))
-- [`agentic-mechanisms-discovery.plan.md`](../../../plans/discovery/future/agentic-mechanisms-discovery.plan.md)
+-
+  [`agentic-mechanisms-discovery.plan.md`](../../../plans/discovery/future/agentic-mechanisms-discovery.plan.md)
 
 The existing
 [`mcp-server-cards.plan.md`](../../../plans/discovery/future/mcp-server-cards.plan.md)

@@ -1964,3 +1964,27 @@ E-1 and E-2 likely **compose into a single workstream** if both
 prove worth doing — E-2 is the host surface for the checks, E-1 is
 the advisory layer that detects when an agent is about to bypass
 E-2. Scoping pass should evaluate them together.
+
+## Routed evidence from the comms-corpus research (2026-06-13)
+
+Corpus-scale overhead/substance ratios from the synthesis
+([`.agent/reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md`](../../../reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md)
+§2, §5) and the WS2 survey
+([`2026-06-12-ws2-corpus-survey.md`](../../../reports/agentic-engineering/2026-06-12-ws2-corpus-survey.md)).
+Direct evidence for the P-ordered cost workstreams:
+
+- **Heartbeat family ≈ 50% of the corpus at close, rising era-over-era to ~70–74%
+  in the second intensive arc** — the "ceremony ratchet": a low-friction behaviour's
+  cost accretes until it dominates the channel despite a standing minimal-ceremony
+  norm. This is the sharpest overhead signal and the activation-enthalpy lens turned
+  on the corpus itself.
+- **~48% of non-heartbeat events are one-way status reports.** Directed-reply median
+  latency ~3.5 min; hub traffic concentrates on Director-seat names.
+- **Open research fork (carried, not forced):** questions (16) and escalations (10)
+  are vanishingly rare corpus-wide — is that healthy autonomy, or under-surfacing of
+  forks that should reach the owner? This routes here (and to the rightsizing
+  keystone) as a deliberate non-answer for the cost lens to weigh, not a verdict.
+- **Activation-enthalpy contrast:** the ArcAngel append-only channel handled n=3
+  coordination at ~4-min proposal→confirm vs 10–15 min on the event stream
+  (`86e94e54`) — routing fast-ephemeral coordination off the heavy stream is cost
+  reduction by prevention.

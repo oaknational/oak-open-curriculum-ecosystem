@@ -288,8 +288,12 @@ export function serializeMinedSynonyms(data: MinedSynonymsData): string {
 
     lines.push(`  // ${subject.toUpperCase()}`);
     for (const syn of subjectSynonyms) {
-      const synonymsStr = syn.synonyms.map((s) => `'${s.replace(/'/g, "\\'")}'`).join(', ');
-      lines.push(`  '${syn.term.replace(/'/g, "\\'")}': [${synonymsStr}],`);
+      // JSON.stringify emits a correctly-escaped string literal for every
+      // character class (backslash, quote, newline, control, unicode) — the
+      // reuse-a-builtin fix for CodeQL js/incomplete-sanitization. The output
+      // dir is eslint- and prettier-ignored, so the double-quoted form is fine.
+      const synonymsStr = syn.synonyms.map((s) => JSON.stringify(s)).join(', ');
+      lines.push(`  ${JSON.stringify(syn.term)}: [${synonymsStr}],`);
     }
     lines.push('');
   }

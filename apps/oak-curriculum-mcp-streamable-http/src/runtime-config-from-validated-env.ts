@@ -36,6 +36,10 @@ function resolveSharedRuntimeFields(env: Env): Result<SharedRuntimeFields, Confi
     // Kill-switch posture (release-pre-proof): EEF is live by default; an explicit
     // OAK_CURRICULUM_MCP_EEF_ENABLED=false is the kill-switch.
     eefEnabled: resolveKillSwitchFlag(env.OAK_CURRICULUM_MCP_EEF_ENABLED),
+    // Opt-in posture (pre-release): the user-search MCP App tools are unregistered
+    // by default; an explicit OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED=true enables
+    // them. The MCP App experience is not built yet.
+    userSearchEnabled: resolveOptInFlag(env.OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED),
     version: versionResult.value.value,
     versionSource: versionResult.value.source,
     ...(gitShaResult.value

@@ -10,9 +10,6 @@
  */
 
 export {
-  threadProgressionGraph,
-  priorKnowledgeGraph,
-  misconceptionGraph,
   vocabularyGraph,
   ncCoverageGraph,
   minedDefinitionSynonyms,

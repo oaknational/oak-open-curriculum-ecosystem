@@ -110,6 +110,119 @@ generated artefacts and will not compile. Re-run `pnpm sdk-codegen` from the
 repo root to recover. A future improvement could use atomic
 write-to-temp-then-rename to prevent this intermediate broken state.
 
+## Responding to Upstream Spec Changes
+
+The cardinal rule promises that `pnpm sdk-codegen` followed by `pnpm build`
+realigns every workspace when the upstream OpenAPI spec changes. This section
+is the operational runbook for that moment, grounded in the 2026-06-12
+alignment with the upstream description rewrite (oak-openapi pull request 269).
+
+### Characterise the drift first-hand before regenerating
+
+1. **Fetch and normalise both specs.** The live spec is
+   `https://open-api.thenational.academy/api/v0/swagger.json`; the committed
+   baseline is `schema-cache/api-schema-original.json`. Normalise both through
+   `jq -S .` and diff.
+2. **Separate structural from documentation drift.** Strip prose fields and
+   diff again — when this second diff is empty apart from `info.version`, the
+   change is documentation-only and no type, schema, or runtime behaviour can
+   be affected:
+
+   ```bash
+   jq -S 'walk(if type == "object" then del(.description, .summary) else . end)' <spec>
+   ```
+
+3. **Read the change at source.** `info.version` embeds the upstream deploy's
+   commit SHA (`0.7.0-<sha>`). With an `oak-openapi` checkout available,
+   `git log <cached-sha>..<live-sha>` names the exact upstream commits. The
+   API's own changelog (`GET /changelog/latest`) records _versioned_ changes
+   only — documentation-only deploys move the build hash without a changelog
+   entry, so an empty changelog delta does not mean an unchanged spec.
+4. **Classify structural drift as additive or consumer-breaking.** Separating
+   structural from documentation drift (step 2) is not enough — a structural
+   change still divides into two kinds, and the distinction is what a consumer
+   needs to know:
+   - **Additive** — a new path, a new optional parameter, a widened response.
+     Existing callers keep working.
+   - **Consumer-breaking** — a path or parameter renamed or removed, a parameter
+     made required, a response type narrowed. Existing callers that named the old
+     shape must change. A rename flows through codegen cleanly and type-checks
+     green (the flow below), yet it _is_ a contract change for callers: e.g. the
+     2026-06-18 `/sequences/{slug}` → `/sequences/{sequence}` rename is
+     consumer-breaking at the MCP tool input boundary even though it cost zero
+     hand-edits. For the MCP transport the break is self-healing (agents read the
+     live `inputSchema` each session); for any pinned SDK consumer it is not.
+     Record consumer-breaking changes in the changelog / PR description with a
+     one-line migration note, even when the in-repo blast radius is zero.
+
+### Run the designed alignment path
+
+Run `pnpm sdk-codegen` from the repo root, then the ordinary gate chain. Two
+behaviours to know:
+
+- **Online vs CI mode.** Locally the generator fetches the live spec and
+  refreshes `schema-cache/api-schema-original.json` when content changed; in
+  CI (or `SDK_CODEGEN_MODE=ci`) it reads the committed cache instead. The
+  schema cache is therefore a committed artefact: refreshing and committing it
+  IS the alignment act.
+- **Turbo caching can mask a live-spec change.** The `sdk-codegen` turbo task
+  hashes committed inputs; the live API is not an input, so a cache replay can
+  serve stale generated artefacts after upstream deploys. When aligning
+  deliberately, run the package script directly
+  (`pnpm --filter @oaknational/sdk-codegen sdk-codegen`) and verify
+  `info.version` moved in both the schema cache and
+  `src/types/generated/api-schema/api-schema-original.json`.
+
+### The spec→input-parameter flow is compile-time-enforced, not test-enforced
+
+Every API (path-proxying) tool's input parameters flow automatically from the
+spec, and that flow is guaranteed by three layers — **none of which is a runtime
+test**:
+
+- **Single-source codegen.** A generated tool's input schema comes only from its
+  generated descriptor (`requireGeneratedToolInputShape`); generated files are
+  `DO NOT EDIT` and reproduced by the generator. There is no seam through which a
+  hand-authored API-tool parameter can enter. (The four aggregated tools —
+  `search`, `fetch`, `get-curriculum-model`, `download-asset` — are
+  application-level composites with no single upstream path; their hand-written
+  schemas are a distinct class, not API-endpoint parameters.)
+- **The type checker.** Each tool's nested `ToolPathParams` is
+  `satisfies ToolDescriptor<…>` against the spec-typed `api-paths-types.ts`, and
+  `transformFlatToNestedArgs(flat): ToolArgs` is typed so the flat→nested
+  round-trip will not compile if it drifts. This includes the deliberate
+  `normaliseParamName` simplification (the `Slug` suffix is stripped for the
+  MCP-facing flat name, e.g. `threadSlug` → `thread`, while the spec-faithful
+  name stays in the nested schema). A deliberate `sequence`→`slug` drift in a
+  generated tool fails `tsc` with `error TS2322` — proof the flow is held at
+  compile time.
+- **Codegen idempotency.** Re-running `sdk-codegen` reproduces byte-identical
+  output, so the committed generated files _are_ the current spec.
+
+Do **not** add a Vitest test asserting that tool parameters match the spec. Such
+a test proves configuration and duplicates the type checker — types are the type
+checker's job. If you want to confirm the invariant holds, run `type-check`, not
+a unit test. The path toward fully automating spec-change handling is captured in
+[`upstream-spec-change-automation.plan.md`](../../../.agent/plans/sdk-and-mcp-enhancements/future/upstream-spec-change-automation.plan.md).
+
+### Expect the correction-layer tripwires to fire
+
+Codegen carries correction layers for known-false upstream claims, each
+guarded by a removal-condition test that reads the schema cache
+(`param-description-overrides.ts` is the live exemplar). When upstream fixes
+or rewords a corrected claim, the guard test FAILS on the first post-refresh
+run — by design. The failure message names the cure: delete the correction
+entry (retiring the whole mechanism when its map empties — git history
+preserves it) or re-ground it against the new wording. Treat these failures
+as the lifecycle signal they are, not as regressions.
+
+### Verify the served surface, not just the gates
+
+Generated MCP tool descriptions are the agent-facing product surface.
+After regeneration, read at least one changed descriptor under
+`src/types/generated/api-schema/mcp-tools/tools/` end-to-end and confirm the
+decoration layers (prerequisite guidance, per-tool enhancement notes) still
+compose correctly with the new upstream text.
+
 ## Design Decisions
 
 Evaluated during Phase 6 of [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md).

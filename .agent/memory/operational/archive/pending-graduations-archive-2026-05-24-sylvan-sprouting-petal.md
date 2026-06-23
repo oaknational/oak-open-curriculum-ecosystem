@@ -67,7 +67,7 @@ in this curation slice.
 `[CANDIDATE: commit-queue-per-intent-message-file-native | captured: 2026-05-23 | source: napkin+pattern-emergence+comms-log | target: multi:doc-amend:.agent/skills/commit/SKILL-CANONICAL.md+plan:agent-tooling-commit-queue-cli-per-intent-message-file | trigger: n>=3-validation+owner-implicit | size: M | status: pending]`
 
 The team converged on intent-scoped message file paths
-(`/tmp/<agent>-<cycle>-commit-msg.txt`) passed to `commit-queue commit
+(`<scratch>/<agent>-<cycle>-commit-msg.txt`) passed to `commit-queue commit
 --message-file <path>` as a workaround for the `.git/COMMIT_EDITMSG`
 concurrent-write hazard exposed by the Velvet `e1b9561e` incident. Adopted by
 **Foamy, SVW, Sparking, Stormbound** without coordination — emergent default

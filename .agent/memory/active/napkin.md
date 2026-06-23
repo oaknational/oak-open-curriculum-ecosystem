@@ -8,361 +8,411 @@ merge_class: append-only-narrative
 fitness_content_role: drainable-buffer
 ---
 
-## Session: 2026-06-08 — napkin rotated (Ferny Ripening Meadow curation pass)
+# Napkin
 
-Rotated the 2026-06-06 → 2026-06-07 window during a dedicated knowledge-curation
-pass. The processed window is preserved verbatim at
-[`napkin-2026-06-08-ferny-curation.md`](archive/napkin-2026-06-08-ferny-curation.md).
-Every behaviour-changing entry was verified live in a permanent home before
-rotation; the commit and those homes are the record. Fresh capture continues
-below.
+Current-session observations. Append below. Rotate when over ~400 lines (`consolidate-docs`
+step 6): extract every behaviour-changing entry, merge into `distilled.md` or graduate to a
+permanent home, verify the home, then archive and start fresh.
 
-## 2026-06-08 — a "to be synthesised" holding pen swept in live intent (Starless Prowling Veil, 4863ac)
+## Napkin rotated (2026-06-22 dedicated consolidation, Petrel stirs Wingspan)
 
-### Surprise
+Rotated at a goal-gated drain-all-buffers session. The processed 2026-06-22 window (Candle /
+Ferret / Cutter / Drake / Vesuvius / Pinnace / Ganymede / Saffron / Aardvark / Nova / Oyster /
+Cosmos / Cinder / Petrel-Altitude / Perseus entries) is preserved verbatim at
+[`archive/napkin-2026-06-22-petrel-consolidation.md`](archive/napkin-2026-06-22-petrel-consolidation.md)
+(tracked). Every behaviour-changing entry was dispositioned first-hand before the archive-move.
 
-- **Expected**: `previous-materials/` was a holding pen of spent synthesis inputs,
-  safe to delete once conclusions were conserved (the owner's working hypothesis).
-- **Actual**: Per-file verification (a conservation fan-out + an adversarial-skeptic
-  pass + first-hand checks) showed most files were **live cross-collection intent**,
-  not spent. The 984-line compliance plan was a live plan (governance ADR, privacy,
-  graph token-efficiency) mis-filed as a distribution input — the canary. Four more
-  (the discovery Agent Skills lane, cursor-plugins, education-skills) were also live.
-- **Why expectation failed**: a "relocate to synthesise" sweep silently absorbs
-  adjacent-collection live intent, then the holding-pen framing presents it all as
-  disposable.
+Where the substance went:
 
-### Correction / lesson
+- **The dominant action-time pathogen recurrences** (under-actuation 3×, inherited
+  owner-reserved tag, escalation-by-default, execute-already-directed, minimise-change 6× +
+  leaving-not-acting 3× + momentum-overrides-gate, value-over-ceremony, host-doc cross-linking,
+  claims-block-memory, coordinator-seat-held, over-caution, fitness-zone-organised-the-pass) →
+  consolidated as the 2026-06-22 worked-instance cluster in
+  `action-time-structural-interrupt-design-space.plan.md` (the recurrence *rate* is the
+  evidence; three fresh sub-shapes named) — the strongest t6 evidence yet that the cure must be
+  mechanical, not recall.
+- **Graduated to permanent homes**: the forced-answer test → `scope-from-goal-before-approach`
+  rule; process-consolidation-bottom-up-by-knowledge-flow → the consolidate-until-done skill
+  work-loop.
+- **New cross-session lessons → `distilled.md`**: verify-dont-trust-at-the-read-moment;
+  arm-the-mechanism-in-the-same-breath; hook-fires-while-authoring-names-a-concept;
+  naive-author-clean-room; thin-firing-skill-over-deep-reference; evaluation-discipline;
+  research-flatters-look-at-the-divergence; reverse-a-decision-needs-a-whole-doc-sweep;
+  live-peer-agent_name-collision.
+- **Homed elsewhere**: F-83 (whole-tree gate coupling) → frictions register; the test-estate
+  audit → a future plan stub; the run-the-lenses pending-graduation → drained (doctrine in
+  principles.md §Decision Lenses; mechanism tracked in the design-space plan; passive-rule
+  rejected per the t6 trap).
+- **Duplicates confirmed** (substance already homed + conserved verbatim in the archive):
+  F-81 (≈ F-64 + F-82); many-checkout-default (per-user memory); state-files-archive-not-rm
+  (archive README + pending-graduations); comms-event-safety-net (ADR-199/PDR-094);
+  Petrel-Altitude "outstanding bundle" (landed `a3ca73f1a`).
 
-- Before deleting a "to be synthesised" holding pen, verify per-file conservation,
-  separating useful-forward intent from spent working-out. **Migrate-don't-drop on
-  any judgment call** — migration is cheap and reversible; deletion is the loss.
-  Restore live intent to its value-home (often origin); delete only genuinely-spent
-  working-out whose conclusions are conserved elsewhere.
-- Second-order trap: restoring whole files re-resolves their internal sibling links,
-  but deleting *some but not all* of a coherent set orphans the survivors' companion
-  links (the discovery plans cited the two reports — caught on a repo-wide sweep).
-- Agent/workflow output is input-to-verify: the "channels report deletion-safe"
-  verdict was right in the educator-corpus frame but wrong once the discovery plans
-  were restored as live; overrode it on first-hand reassessment.
+New session observations append below.
 
-## 2026-06-08 — Vining support watcher correction (Opalescent Gliding Aurora, 019ea7)
+## Residual fitness signals after the 2026-06-22 drain — reported, not chased (Petrel stirs Wingspan)
 
-### Surprise
+All drainable buffers are healthy at rest (napkin, distilled soft, open-questions, pending-graduations
+decision-debt count 0). Five reference/doc surfaces remain worse-than-soft; each is a
+report-not-chase signal because chasing it would breach the Conservation Invariant — recorded here
+so the next pass need not re-decide:
 
-- **Expected**: Starting `comms watch` plus a heartbeat loop meant I was monitoring
-  team messages while working.
-- **Actual**: The watcher process stayed alive, but I only consumed backlog when I
-  manually polled; the owner correctly observed that my monitor was not working and
-  that Veil was no longer active.
-- **Why expectation failed**: I confused process liveness with attended monitoring
-  and let the useful-work lane sit behind a passive status surface.
-- **Behaviour change**: In team sessions on Codex, treat `comms watch` as a feed to
-  actively poll/read at the cadence promised; if it is not waking the session, say so,
-  switch to explicit polling, and stop any background watcher before closeout rather
-  than leaving misleading liveness.
-- **Source plane**: operational
+- **pending-graduations.md prose-width critical**: the long lines are the machine-parsed inline
+  brackets (schema: `agent-tools/src/practice-fitness/item-count.ts`); wrapping them risks breaking
+  the item-count parser. The *primary* signal for this buffer (decision-debt count) is green. This is
+  a metric-vs-format tension (prose-width mis-applied to bracket lines), not un-homed substance. A
+  real cure is a fitness-system exemption for fenced-bracket lines, not mangling the brackets.
+- **repo-continuity.md prose-width critical (76 lines)**: a LIVE, actively-rewritten reference surface
+  (the strategy thread is rewriting §Current State under ADR-200; its own `overflow_disposition` is
+  `leave-if-live`). Reflowing now is churn on content that thread is restructuring. Owned by that thread.
+- **thread records prose-width hard** (agentic-engineering-enhancements, retired/agent-collaboration-research,
+  statusline-enhancements): thread-owned live surfaces; the 7c audit does not mutate them. Surface to
+  the owning threads.
+- **principles.md chars hard (+350)** and **development-practice.md lines hard (+3)**: marginal; the
+  former has a named remediation lane (`principles-entrypoint-content-homing.plan.md`).
 
-## 2026-06-08 — EEF go-live verified + landing-page resources fix (Galactic Drifting Twilight, 64c8e4 — cont.)
+## First-hand loss-scan at handoff (Petrel stirs Wingspan)
 
-After the D7 closeout below: watched the merge → CI → semantic-release chain land **v1.16.0** and
-the Vercel production deploy go READY (the EEF surface live by default in prod, owner-confirmed on
-the landing page). Then found + fixed a landing-page defect on `feat/skills-planning` (009e5481,
-preview verified, owner saw 8 resources).
+Ran the 6e.2 loss-scan from inside my own context (not delegable). Two findings reached no
+durable surface before this:
 
-- **To check pushed-state, resolve the upstream via `@{u}` — never hand-construct `origin/<branch>`.**
-  I typed `origin/feat-graph-tooling-tidyup` (hyphen) for a branch named `feat/graph-tooling-tidyup`
-  (slash) → `git merge-base --is-ancestor … origin/feat-graph-tooling-tidyup` errored (unknown
-  revision) → I read the errors as false negatives and **escalated a "your push didn't land / 5
-  commits unpushed" alarm to the owner before verifying**. `@{u}` showed everything was already
-  pushed (HEAD == upstream == PR head). Cure: use `git rev-parse --abbrev-ref @{u}` / `@{u}...HEAD`
-  for pushed-state, and never escalate a push/sync "discrepancy" to the owner until it is confirmed
-  against the authoritative ref. Homed in [[feedback_check_pushed_state_via_upstream_ref]].
-- **`candidate:` derive-don't-drift for multi-section listing surfaces.** The MCP landing page
-  derived its prompts and tools sections from full SDK catalogues but the resources section from a
-  narrow `DOCUMENTATION_RESOURCES` const → it silently under-listed (3 of 8; missing
-  `eef://interpretation` + graph + model resources). Cure: a single canonical catalogue
-  (`ALL_MCP_RESOURCES`) consumed by the page, plus a drift-guard test tying the listing to the
-  registered surface. Reusable for any "list what's registered" UI; capture pending a second instance.
-- **Foreign git lock on a non-quiescent branch — worked instance.** Committing the fix on
-  `feat/skills-planning` collided with `.git/index.lock` held by the owner's terminal mid-burst
-  (3 docs commits landed). Per doctrine I did NOT delete the lock or poll-loop; surfaced it, and the
-  explicit-pathspec retry landed clean once the lock cleared. Reinforces never-delete-lock +
-  explicit-pathspec; "sole agent" can still mean concurrent owner-terminal commits.
-- **release-and-observe, closed by the owner's own eyes.** The value proof for both the EEF surface
-  and the landing-page fix was the owner viewing real output (prod + preview), not a test —
-  [[feedback_value_proven_by_release_not_test]] in action.
+1. **The decision-debt count is a false-green (now F-84).** The fitness `Live decision-debt: 0`
+   reading is wrong — the item-count parser strips fenced blocks but the register's live entries
+   ARE fenced, so live items are invisible to the count. This is the highest-value catch: it means
+   the buffer's PRIMARY completion signal cannot be trusted. The real drain evidence is deciding
+   each item by reading the register directly (which is what this pass did), never the count.
+2. **The rule-refinement distilled entries were STAGED deliberately, not folded into their rules.**
+   verify-dont-trust-at-the-read-moment, hook-fires-while-authoring, and arm-in-the-same-breath are
+   siblings/refinements of existing rules; I staged them in distilled rather than editing 3 rules to
+   avoid rule-churn (the napkin's own repeated warning). A future consolidator can fold them into
+   `verify-dont-trust` / `hook-failures-are-questions` / the run-the-thing rule when a second instance
+   confirms the sharpening — this was a deliberate stage-not-fold call, not an oversight.
 
-## 2026-06-08 — EEF UAT + inspector + D7 closeout (Galactic Drifting Twilight, 64c8e4)
+## Surfaced for the owner / next pass (Petrel stirs Wingspan)
 
-Arc: live-exercised the EEF surface over the authenticated MCP; rewrote the MCP manual
-test guide (renamed `agent-preview-test-checklist.md` → `manual-uat-guide.md`, any-server,
-EEF section, discoverability); ran the whole UAT live (sections A–H) and fixed it from the
-results; demonstrated the **MCP Inspector CLI** driving the local server end to end; validated
-the SDK e2e suite (130 green, pre-push-gated); added `get-keywords` to the graph-tools
-migration plan; filed an upstream alt-text-quality feedback doc; **marked EEF D7 complete**
-(D0–D7 delivered) and authored an agent-tools `mcp-inspector-smoke` plan.
+- **PDR candidate still staged in distilled**: "knowledge surfaces are curated suggestions to a judging
+  agent, not control-flow" — PDR-shaped meta-principle, ripe; surfaced for owner weigh-in (the sibling
+  source-intent principle graduated to PDR-113 this pass).
+- **7c thread-register audit**: `agentic-mechanisms-discovery` is at the 14-day staleness boundary
+  (last 2026-06-08); `orientation-skills-family` and `reasoning-grammar` are COMPLETE-pending-push —
+  move to `threads/retired/` with a banner once the owner pushes.
+- **Claude per-user `MEMORY.md` over its index limit (~28.9KB)**: substance is safe (per-entry topic
+  files + repo doctrine persist), but index pointers degrade at session-load. Remediation lane: a
+  dedicated per-user-memory drain (graduate settled feedback whose substance is now homed in repo
+  rules/PDRs). Cross-platform surfaces (Codex/Cursor/Gemini) present but not ingested this pass — this
+  was a repo-buffer drain, not a cross-platform-ingestion pass.
 
-- **Owner: a "could we add X" is an exploration — never veto on absence.** I reached for "agent-tools
-  has no MCP dep / single consumer / we already have an adjacent thing" as reasons NOT to add the
-  inspector. All absence-based vetoes. Object on **substance** (value/risk/engineering), not on
-  not-being-there-yet; new deps are allowed. Homed in [[feedback_explore_means_explore_not_veto_on_absence]].
-- **Owner: value is proven by release-and-observe, NOT a codified value-proxy test.** D7's
-  "value-proxy test" obligation was reshaped — engineering-complete + ship-live + a real
-  LLM-mediated demonstration is the bar; delivered-value is the deferred outcome-eval plan. Homed in
-  the D7 banner + [[feedback_value_proven_by_release_not_test]].
-- **A peer's blind wildcard staging can sweep MY uncommitted work, not just theirs.** A parallel
-  agent committed `787dc21c "fix(mcp): fixing prompt and resource registration"` that swept all my
-  uncommitted MCP-app edits (guide, README, 4 comment files) under a message describing none of
-  them. Nothing lost (verified verbatim) but mislabeled + entangled. Cure that held:
-  **explicit-pathspec staging + `git commit -- <paths>`** kept every one of my commits clean while
-  HEAD moved under me 3×. Reinforces stage-by-explicit-pathspec from the other direction.
-- **"Untried/unknown" ≠ "doesn't exist", and existence-of-code ≠ verified value.** I overstated the
-  e2e suite as "CI-gated, regression-grade" before validating it; ran it → 130 green, genuinely
-  gated. Verify before citing in-repo existence as evidence either for OR against a move.
-- **Inspector findings (grounded):** `--cli <url> --transport http --method …` works headless;
-  wrap it via **pinned npx, not a dependency** (it's a heavyweight UI app); its CLI **does not
-  parallelise** (batched sequential runs emptied the output files — its internal proxy); auth-on
-  server → `Unauthorized`, so local exercise uses the no-auth dev server (`PORT` override boots a
-  second instance on :3334).
-- **Live UAT found two real product gaps (homed, not fixed here):** bulk tools overflow the MCP host
-  token cap (`get-keywords` ~205 KB, graph tools ~1.5 MB+) → added `get-keywords` to
-  `graph-tools-value-redesign` ("a list is a simple DAG"); auto-generated quiz-image `alt` text is
-  broken (repetition/hallucination/function-blind) → upstream feedback doc with reproducible examples.
+## F-84 follow-through: a completion gate was silently lying, and only the loss-scan caught it (Petrel stirs Wingspan)
 
-**Metacognition (closeout):** the session's manual work (UAT + inspector round trip) WAS the D7
-value-proxy, executed by hand — which is exactly why the owner's "release, don't test" reshape
-lands: a real LLM did the round trip, so potential value is shown; codifying it as a synthetic test
-would prove less. Marking D7 complete was an action with bridges (fires the graph-tools promotion
-trigger, opens the merge), not a status tick.
+The F-84 arc closed the full loop in one session: first-hand loss-scan → diagnose (read the regex,
+not the doc-comment) → TDD fix → honest register. The durable lesson, sharper than the loss-scan
+note: **the consolidation's own completion gate — the pending-graduations decision-debt count — read
+a healthy 0 while two live items existed**, and I had cited "decision-debt count green" as completion
+evidence in the consolidation closeout. A false signal. Only the first-hand loss-scan caught it (not
+the gate); a context-isolated reader would have seen the green 0 and agreed. The bug had also killed
+the dwell anti-starvation alarm (same parse failure), so a live item had NO surfacing at all. Two
+cross-session reinforcements: (1) `verify-gate-fails-on-known-bad` applies to your OWN completion
+gates — a green gate is not evidence it works, most dangerously at the moment you cite it as done;
+(2) the loss-scan is load-bearing precisely because it can catch a defect in the closeout MACHINERY
+itself, which no gate-green ever can. Worked instance; principle homed in distilled
+(verify-gate-fails-on-known-bad) and the bug+fix in F-84. Sibling: [[verify-dont-trust]],
+[[feedback_run_the_thing_dont_flag_the_gap]].
 
-## 2026-06-08 — continuity-surface consolidation (Cosmic Illuminating Planet)
+## Relaying a subagent's verdict on a load-bearing claim without first-hand verification — the discipline losing at the REPORT moment (2026-06-22, Pelican stirs Buoy)
 
-Dedicated curation session (this one). Curated the four critical thread records (`eef`,
-`agentic-engineering-enhancements`, `observability`, `connecting-oak`) to their pickup
-function per `continuity-practice.md` §Disposition — conserving each live pickup + the
-additive identity trail + un-homed insight (e.g. Briny's "decisions held in my context"),
-deleting homed/superseded session narrative (git retains the literal record). Also reflowed
-`agent-collaboration-research` (live research spec, just over-wide) and de-drifted the
-`repo-professionalism` opener.
+Curating the strategy thread record (a 939-line no-loss deletion), I ran a docs-adr-expert no-loss
+audit, got "NO-LOSS CONFIRMED" with file:line citations, and **relayed it to the owner as the settled
+result**. Owner correction: "all sub-agent findings, report, claims and sources MUST be critically
+assessed before being accepted." The discipline is well-homed ([[feedback_first_hand_means_me_not_subagents]];
+[[feedback_validate_specialist_findings_before_acting]]; distilled "subagent agreement is not
+verification — two echoes of the same prior") and the session starter's own final line stated it — yet a
+fluent "the expert confirmed it" overrode the situational check at the **action moment of reporting**. The
+load-bearing claim of an irreversible-ish deletion is exactly the one to verify first-hand BEFORE it enters
+a report as "confirmed". Cure applied this turn: I then verified each load-bearing homing citation
+first-hand (coverage-ledger Pass-1 totals 286/2,935; principles.md decision lenses; launch-readiness
+K1-K3; the napkin archive's method lessons; repo-intent-graph DORA; the V0 paused->gate) — they held, but
+the point is that I CHECKED, not that they held. Firing gate: a subagent verdict on a load-bearing /
+irreversible / convenient claim is input-to-verify; ground its citations first-hand before relaying as
+confirmed. PDR-098 action-time-interrupt recurrence (the cure is a mechanical interrupt, not another
+passive memory). Sibling: [[passive-guidance-loses-to-artefact-gravity]], [[feedback_calibrate_verification_to_stakes]].
 
-- **The disposition doctrine works per-content-block, not per-file.** The clean question is
-  "what is the state of the work this block describes?" — live → verbatim; finished → conserve
-  to its home, verify, delete. The identity table is durable content (not residue); the
-  session *narrative* is the residue.
-- **Critical-zone post-mortem (ADR-144):** the records flagged critical because fitness was
-  only just wired onto continuity surfaces (Lofty, 2026-06-08) — detection surfaced
-  *accumulated* debt, not a new failure. Limits are function-derived and correct; the content
-  was wrong-shaped (append-logs, not pickup surfaces).
-- **Identity-trail rule that emerged:** active thread with a coherent arc (`eef`) → keep the
-  full trail (the session_id_prefixes live only there); large or paused threads → keep the
-  recent stretch + a git/ledger pointer (git is the doctrine's own retention mechanism).
-- **`pending-graduations` is a drainable buffer, NOT a continuity surface** (the §Disposition
-  scope is `repo-continuity` + thread records only). Its ~25 `status: graduated` tombstones
-  violate `no-provenance-pointers` and should leave cleanly — but that is a dedicated
-  register-drain, not part of the continuity-surface focus. Its owner-gated backlog legitimately
-  stays per its `lifecycle_model`.
-- **Proportionality on width (owner: "fitness is a signal not a goal"):** most small-record
-  over-width lines are link/URL-dominated (the checker discounts them) or barely-over prose;
-  micro-rewrapping 104→100 is the number-chasing to avoid. Fixed only genuine readability/drift
-  defects.
+## A shared continuity surface gets co-committed by a concurrent agent mid-edit — verify your edit survived (2026-06-22, Pelican stirs Buoy)
 
-**Metacognition (closeout, ultrathink):**
+Editing `repo-continuity.md` (a shared continuity surface) while a concurrent consolidation session
+(Petrel stirs Wingspan) was also active, the peer committed `repo-continuity.md` in its own
+explicit-pathspec commit, **sweeping in my uncommitted Current-State edit** (my later Active-Threads edits
+stayed working-tree-M). HEAD + the working tree shifted ~5 times across this session. My edits survived
+(verified first-hand by grep) and the OS-lock + semantic coexistence held — the multi-developer reality
+working as designed, not a failure. Sharpens F-83 (shared-checkout commit-gate coupling) /
+[[project_multi_developer_transition]]: on a shared churning branch, (1) re-ground HEAD + `git status`
+immediately before each mutation or commit, and (2) after a shared continuity surface may have been
+co-committed, grep first-hand to confirm your edit is present before relying on it.
 
-- **The correction reflex fired post-commit, not pre-commit — a live instance of
-  "corrections are high-risk re-instantiation, no immunity gradient" (PDR-089 §Decision 6).** I
-  had just READ that register entry, then committed before→after line counts in the commit
-  message + repo-continuity + this napkin — the exact `no-provenance-pointers` violation, in the
-  surfaces I was curating *per that doctrine*. A self-check caught it; I amended (unpushed).
-  Reading the lesson did not fire the reflex — a deliberate post-hoc scan did (textbook
-  `passive-guidance-loses-to-artefact-gravity`). Behaviour change: when curating per a doctrine,
-  run that doctrine's own check over my OWN commit message + continuity edits *before* committing.
-  `candidate:` the `no-moving-targets` write-time hook did NOT catch the count-citations in
-  repo-continuity / napkin / the commit message — verify whether it covers those surfaces; if not,
-  that is a gap for the next register-drain to assess.
-- **Held the surface-class distinction loosely under a transient owner answer.** The register is a
-  drainable buffer (a curator-pass surface), categorically NOT a continuity surface; the plan said
-  "don't force-drain" it. An interim "drain now" answer pulled me into execution-deliberation
-  (full-vs-partial, read-cost, Write-vs-Edit) before the owner reconsidered: "normal processing →
-  next session" — which validated the plan's original stance. Behaviour change: hold the
-  surface-class distinction firmly; a buffer-drain is a dedicated effort even when picked "now", not
-  something to cram into a continuity-surface session's tail.
-- **The disposition doctrine was the session's generator AND graduated in the same session** —
-  captured by Lofty, exercised then lifted to PDR-011 by this pass. A good doctrine *produces*
-  correct moves (keep/delete, which identity rows survive), not merely filters them; the
-  capture→enforce loop closed in one session.
+## Over-unification, the tombstone, and my process leaking into the artefact (2026-06-22, Skipper tracks Reef)
 
-## 2026-06-08 — PR #131 Sonar + cross-repo boundary correction (Stormbound Streaming Zephyr)
+A cross-effort synthesis session (Learning Commons KG, the ecosystem, the curriculum ontology, atomic
+concepts). The owner corrected the SAME reflex five times: I collapsed diversity into unity — "one
+identity spine / one SSOT / one true way / one giant graph." Root cause: I imported the planning-estate
+consolidation/SSOT doctrine by analogy into the curriculum-data estate, where the precondition fails —
+its SSOT IS the underlying curriculum data, and the graphs above it are plural derivations (diversity,
+not divergence). Category error: "they all use graphs" is a shared *method*, not a latent single
+*artefact* (no one graph, just the approach of using graphs — as many markdown docs are not one
+document). Then, one altitude down, the same disposition produced a **tombstone** in the copy ("isn't a
+single graph, doesn't need to be") and over-explaining that reused my own explaining-imagery — narrating
+my contemplative journey to an audience that never held the misconception. Through-line: **my process
+leaks into the artefact; state the positive understanding the reader needs, not my correction path.**
+Fluency was the tell — the tidy "one system" synthesis arrived smoothly, which was the tripwire to
+re-ground, not confirmation. Homed: per-user memory [[feedback_graphs_as_method_not_one_artefact]]; the
+committed synthesis report.
 
-**Landed (PR #131, branch `feat/graph-tooling-tidyup`, all UNPUSHED):** `76f5855d`
-typedoc devDep (unblocks a pre-existing knip failure: oak-sdk-codegen used the
-`typedoc` binary undeclared); `072375e1` 22 SonarCloud new-code fixes (agent-tools +
-graph-corpus-sdk S7770); `bebca689` EEF `get-eef-evidence` gated at registration;
-`e6cd45eb` continuity checkpoint. Sonar PR #131 dispositions via MCP: 2× S4036 PATH
-hotspots REVIEWED/SAFE; S4323 (subjects enum inlined 8× in generated SDK types)
-ACCEPTED and tracked upstream.
+## Mirror instance of the shared-checkout sweep (2026-06-22, Skipper tracks Reef)
 
-**Correction — never write to a sibling workspace repo without authorisation.** I
-created + committed a feature-request doc in the **`oak-openapi`** repo (`02ff619`)
-unprompted. Owner caught it; reverted with `git reset --hard` (unpushed, zero trace
-on origin). oak-openapi is a separate owned repo: this repo records upstream requests
-and hands them over; it must not edit oak-openapi. `candidate:` an explicit rule for
-the multi-repo workspace boundary (respect-active-agent-claims covers intra-repo; the
-cross-repo authorisation scope is the gap).
+Confirms the entry above: committing my own report bundle by explicit pathspec, the pre-commit hook
+auto-staged TWO of the concurrent session's fresh working-tree edits (`repo-continuity.md`,
+`planning-estate-rewrite.plan.md`) into my commit B (`40d514fde`), so its message describes only 2 of 4
+files. The hook stages tracked modifications, so a clean pre-commit `git status` is the only guard
+against sweeping foreign WIP. Owner authorised "commit everything", so the swept work is legitimately
+landed; the imperfection is message-grouping, not correctness — history not rewritten.
 
-**Correction — "a fresh document" means a new discoverable home, not a buried insert.**
-I first stuck the upstream request as item E4 in the middle of the historic
-`ooc-api-wishlist` pack ("where it will never be found"). Owner: archive the whole
-folder, create a new folder + fresh doc. Done — `ooc-api-wishlist/` → `archive/`;
-new `sector-engagement/upstream-api-feature-requests/README.md` (item 1 = reusable
-enum `$ref` components), registered in `sector-engagement/README.md`.
+## Reviewing my own plan: verify the specialists; "amends PDR-112" was an over-claim (2026-06-23, Skipper tracks Reef)
 
-## 2026-06-08 — EEF type boundary → ADR-193 + the egress membrane (Evergreen Blossoming Copse)
+Planning the orientation-lens unification, I told the owner the change "amends PDR-112" — then,
+reading PDR-112 first-hand to author the plan, found it does NOT: §Required scopes host instantiation
+(which lenses exist, the routing) to host ADRs + the entry point, so unifying two repo-bound lenses is
+host phenotype, not a pattern amendment. Same fluency-over-grounding reflex as the session's earlier
+over-claims — a governance claim asserted before reading the governance artefact. Cure already homed:
+verify-don't-trust on my OWN claims, hardest at the moment one arrives smoothly.
 
-**Decision landed.** The strict-types-vs-MCP-vendor question resolved into
-[ADR-193](../../../docs/architecture/architectural-decisions/193-system-vendor-type-boundary-membrane.md)
-(system↔vendor type boundary): strict domain types hold from the `as const` corpus
-to a per-primitive egress function; the vendor's `Record<string, unknown>` is the
-external contract at the membrane, never in domain code. EEF tool egress
-(`eefEvidenceToCallToolResult`) built + green. Committed `496ea7ca` (egress) +
-`83d791e8` (ADR-193).
+Then, asked to "review your plan", I dispatched the three readiness reviewers AND verified their
+load-bearing citations first-hand before folding (owner's standing reminder: second-hand isn't good
+enough). They were accurate — yet the first-hand grep still caught a live reference they ALL missed
+(`project-context-preservation-gap-report.md`), which is why the plan's reconciliation became a
+**grep-gate, not their fixed file list**. Reusable: when specialists hand you an enumerated surface,
+prefer a generated/grep gate over the list — the list is a sample, the gate is the invariant.
+Verifying specialists is not distrust; it is the only thing that catches the gap the specialist shares.
 
-**Surprise — the membrane sits lower than the vendor call.** Expected to thread
-strict types through executor/auth/registration to `registerTool` (a generic spine).
-Actual: executor/auth/registration are vendor-facing TRANSPORT (auth errors ARE
-`CallToolResult`), so the membrane is the domain→transport seam — one egress function,
-no spine refactor, no union-dispatch problem. The clean shape was hidden ~1.5 days
-because every prior attempt anchored on preserve-to-wire (impossible) or generic-spine
-(complex).
+## A whole-tree gate failing on files you didn't touch ≠ your bug (2026-06-23, Blazar rides Dawn)
 
-**Correction-pattern (5 owner corrections → one root).** I repeatedly reached for a
-general-codebase reflex where this repo demands maximal architectural rigour:
-proof-at-construction-is-enough → scope-the-lint-rule → adapter-around-the-vendor →
-index-sig fallback → solve-the-instance-not-the-boundary. Root: the LTAE lens must be
-the PRIMARY GENERATOR of moves, not a post-hoc filter; the incoming validation
-boundary (ADR-032) has a symmetric OUTGOING egress mirror I kept missing; and when I
-NAME a lever ("the SDK version is in our power"), PULL it — don't park it. A
-convenient *interpretation* deserves the same suspicion as a convenient *fact*.
+Mid-execution of mcp-self-description-fidelity, my clean WS3 docs commit failed the whole-tree
+type-check — in `oak-curriculum-mcp-streamable-http`, a package I never touched. My five prior cycle
+commits had each passed that exact gate minutes earlier. The cause: a concurrent agent (Foehn calls
+Headwind) was mid-implementing the user-search feature flag I'd just planned, had added
+`userSearchEnabled` to `RuntimeConfig`, and hadn't yet fixed the e2e test-config helpers — so the
+shared working tree was transiently red. **Diagnosis discipline: when a whole-tree gate fails on a
+surface you didn't change AND your own recent commits passed the same gate, read active-claims +
+comms for a concurrent agent BEFORE assuming your change broke it.** The cure was to coordinate (post
+the exact failing locations to the owning agent) and wait for their atomic cycle to heal the tree —
+NOT to patch their in-flight feature (collision; they own it and must fix the helpers to land their
+own commit anyway). Event-driven wait (background `until type-check green`), not a busy poll.
 
-**Grounded knowledge (the next agent re-derives otherwise):**
+## Bash tool output is substring-filtered; Read is not (2026-06-23, Blazar rides Dawn)
 
-- **dist-gotcha:** `oak-curriculum-sdk` type-checks `graph-corpus-sdk` via built
-  `dist`; focused cross-package type-checks are STALE until
-  `pnpm --filter @oaknational/graph-corpus-sdk build`. This masked the vendor-carrier
-  wall until I rebuilt.
-- SDK 1.29.0 (latest): `ToolCallback` hard-codes `CallToolResult`; `outputSchema` is
-  NOT tied to the callback return type (runtime-validated only, `mcp.js:200-201`).
-- The spread `{ ...env }` is `Record`-assignable (fresh object); a clean named
-  interface is not; a generic `<T extends object>` spread is not — egress is
-  per-concrete-type.
-- Three under-described safety commits (`2cd529b5`, `496ea7ca` "chore: safety commit",
-  `83d791e8` "--amend" — a mangled message) carry EEF work mixed with peer/other-thread
-  content; decoded in `threads/eef.next-session.md`.
+Several greps returned bodies with tokens collapsed to `n`/`ln` (e.g. `user-search`, `visibility`,
+`examBoard`, `KEY_STAGES`). The Read tool rendered the same files faithfully. When grep/Bash output
+of source looks mangled or suspiciously masked, switch to Read for the load-bearing read — don't
+reason over the filtered text.
 
-**Closeout learnings (handoff):**
+## Verify-don't-trust on the subagent's load-bearing claim, first-hand (2026-06-23, Blazar rides Dawn)
 
-- **`--no-verify` is OFF (owner directive, this session).** The remaining EEF commits
-  must land GREEN — gating (c6) clears the only red (app e2e parity); do not reach for
-  `--no-verify`.
-- **The agentic hook blocks the *agent's* `git commit --no-verify` even with in-chat
-  owner authorisation** — the owner must run the commit (or `! <command>`). In-chat
-  authorisation is necessary but the hook still intercepts the agent's invocation.
-- **Staging a file that holds another agent's uncommitted work sweeps it.** My
-  `napkin.md` carried Ferny's rotation entangled with my entry in one file, so it rode
-  into `1917f0ea`; explicit pathspec protects against staging the *wrong files*, not
-  against multiple agents' edits *within one file*. The rotated-out window is recoverable
-  from `496ea7ca`; its archive `archive/napkin-2026-06-08-ferny-curation.md` is untracked
-  (dangling link in the committed napkin).
-- **Uncommitted doc-polish carried into the handoff (this turn):** the
-  `repo-continuity.md` Current-State EEF bullet (re-pointed from the dead carrier-fix to
-  ADR-193) and this napkin addendum are UNCOMMITTED (gate red, `--no-verify` off). The
-  next session should stage them into its first GREEN commit (after gating).
+WS2's "canonical subject source" mattered. An explore subagent reported the slug source; I re-derived
+it first-hand and found the right source is `AllSubjectsResponseSchema` (17 canonical, OpenAPI-derived)
+— NOT `SUBJECT_TO_PARENT` (21, which folds in the KS4 science factor variants and would have wrongly
+surfaced physics/chemistry/biology/combined-science as browsable subjects). For the four new subjects
+I queried the live API for authoritative titles + key-stage coverage rather than authoring from
+memory, which also surfaced an unrelated drift (the ontology's exam-board list was missing `wjec`).
+The reviewer's verdict can be sound while a specific identifier it names is wrong — verify the one
+fact the change pivots on.
 
-**Over-generalisation correction (Lofty Spiralling Plume, 2026-06-08):**
+## Gating an unbuilt MCP tool: app layer, opt-in posture, test the gate (2026-06-23, Foehn calls Headwind)
 
-- **Expected:** owner rejecting "archive/rotate" as the disposition for continuity
-  surfaces meant the archive apparatus + `/archive/` fitness exclusion were wrong.
-  **Actual:** owner scoped it — the strategy was unsuitable *for continuity surfaces
-  only*; the apparatus is fine. **Why it failed:** I escalated a surface-scoped note
-  correction into a system-wide condemnation (doctrine-by-analogy: "big systemic cure"
-  when the situation was "narrow surface note"). I had written a blanket "archiving is
-  not knowledge preservation" into `continuity-practice.md` §Disposition and was about to
-  propose flipping the checker's `/archive/` exclusion. **Behaviour change:** when an
-  owner rejects a strategy for a named surface type, scope the correction to that surface
-  type; the fitness checker only *surfaces signals*, agents act — strategy notes are
-  guidance for the agent, not apparatus law. Cure landed: §Disposition re-scoped to
-  continuity surfaces; no fitness-system code touched.
+User-search-not-exposed plan: gate the two unbuilt user-search tools off `tools/list` behind an
+opt-in flag. Four reusable findings (the plan as drafted was wrong on the first three; verified
+first-hand against the code before executing):
 
-- **Follow-on (same session): classify by intended function, not current stats.** Asked
-  to "find balance" for thread-record fitness limits, I curve-fit the numbers to the
-  current file-size distribution — which bakes existing bloat into the "healthy" band and
-  drifts as the corpus drifts. Owner: "classify by intended function, not current stats."
-  The limit is a property of the surface's *function class* (a thread-continuation record =
-  compact pickup surface: identity + current state + landing target + standing decisions +
-  the latest still-live handoff banner), derived from what that function should occupy, set
-  once, independent of today's sizes. The bloated full-log records are function violations,
-  not large healthy threads — they *should* trip the signal. Behaviour change: derive
-  fitness thresholds from the documented function of the surface; never reverse-engineer
-  them from the measured corpus. Use the apparatus's own function vocabulary
-  (`fitness_content_role`) to make the classification explicit.
+- **Gate at the app, not the SDK.** The SDK's `AGGREGATED_TOOL_DEFS` (`universal-tools/definitions.ts`)
+  is a static, transport-agnostic const with no runtime-config access. The gate belongs in the app's
+  `registerTools` (`handlers.ts`), via the existing `EEF_FLAG_GATED_TOOL_NAMES` set pattern — the code
+  comment there states it: "SDK enumerator stays transport-agnostic; the app owns the flag." A
+  "where do I gate this" instinct should land in the app.
+- **Reuse the flag *engine*, not necessarily the sibling's *posture*.** EEF uses `resolveKillSwitchFlag`
+  (default ON). An unbuilt-feature gate is opt-in: `resolveOptInFlag` (default OFF) — the `useStubTools`
+  sibling, NOT EEF. "Mirror the EEF surface" conflated the two.
+- **Test the gate, not the engine.** The flag-resolution engine is tested once (`feature-flags.unit.test.ts`);
+  a new flag re-tests nothing there. The new behaviour is the gate — proven via the `registerTools`
+  spy (`handlers-tool-registration.integration.test.ts`) with the flag injected both ways.
+- **Required-field ripple crosses claim boundaries on a shared tree.** Adding a non-optional field to a
+  shared `RuntimeConfig` interface forces EVERY literal to update — including peer-claimed e2e helpers.
+  On a shared working tree my uncommitted change showed up as type-check-RED in a PEER's (Blazar's)
+  claimed files; they flagged it before I'd committed. The ripple is not contained to your claim —
+  coordinate it. Cure: my commit fixed the e2e helpers, clearing their red.
 
-## 2026-06-08 — pending-graduations drain + precedence-is-not-approval (Coppery Crackling Crucible)
+## Multi-agent commit window is bursty — check foreign claims in the same breath as staging (2026-06-23, Foehn calls Headwind)
 
-- **I treated a prior agent's annotation as owner approval — the worked instance behind
-  PDR-091.** Draining graduated tombstones, I correctly verified every `graduated` item's home
-  first-hand before removal (the label was a routing prompt, not authority). But on the one
-  `status: duplicate` item annotated "withdraw-ready, owner holding", I LEFT it — treating that
-  prior-agent annotation as a live owner gate, when the verification it carried had already
-  settled it. The owner asked "why would we want a duplicate?" and stated the requirement
-  *Precedence is NOT approval*. Behaviour change now homed in
-  [PDR-091](../../practice-core/decision-records/PDR-091-precedence-is-not-approval.md) + the
-  always-applied rule: a prior decision/annotation/label is a prompt to re-derive, never a
-  warrant; locate the live approving authority (owner, or the proving surface) and check it.
-- **Two parallel agents on one tree with no registered claims → collision invisible until the
-  shared gate caught it.** My commit was blocked three times by Briny's in-flight EEF c4/c5 work
-  (knip → `Object.values` lint → import-unresolved lint) because the full-tree pre-commit gate
-  runs over the whole working tree. Neither session had registered an active claim, so the
-  parallel work was invisible until the gate failed; the owner relayed between us. Not new
-  doctrine — it's the existing `register-active-areas-at-session-open` / `git:index/head`
-  claim discipline that both sessions skipped. The owner-relay was the stopgap a registered
-  area/commit-window claim would have removed (per `feedback_owner_action_is_not_a_cure`).
-- **The right move under repeated transient-red collisions is to HOLD, not thrash the gate.** I
-  stopped re-attempting on each transient red and handed coordination back via a green-ping ask;
-  both commits landed once Briny's tree greened. Re-attempting per-red is wasted ~34s cycles and
-  noise.
+Landing across a 3-agent window (Zenith, Blazar, me): the git window cleared, then two peers grabbed
+it within seconds with a live `.git/index.lock`. My `git add` hit the foreign lock and failed safe.
+Lessons: (1) don't chain the window-state check and the stage in one command — the window can change
+between them; check foreign `git:index/head` claims, then stage as a separate step. (2) A fresh lock
+(mtime seconds old) + foreign staged files = a healthy peer commit, not a stale lock — never touch or
+loop the lock; sequence behind via the claims/queue coordination surface (an event-driven waiter on
+*claims+index*, not the lock file). The same waiter pattern landed both my cycles cleanly.
 
-## 2026-06-08 — external-facing skills relocation + plugin-bundle synthesis seed (Zephyrous Buffeting Falcon)
+## Orientation-lens unification — the live walk caught what the simulations couldn't (2026-06-23, Zenith lifts Firmament)
 
-Reviewed `oak-skills` + the discovery skills docs; web-researched Claude/Codex plugin packaging;
-relocated the external-facing skills/plugin/MCP-skill-like materials into
-`user-experience/educator-end-users/{,previous-materials/}` with a seed review report (`6101a946`);
-cross-linked the EEF↔oak-skills upstream request and corrected a stale "flag-gated OFF" line (EEF is
-now default-ON in-repo, `d3109d7c`). The domain finding (plugins are the cross-vendor bundling layer;
-Codex plugins = the OpenAI equivalent) is homed in the report +
-`[[project_external_facing_skills_synthesis_seeded]]`, not here.
+Executed the orientation-lens unification (two lenses → one `/oak-explain`); distinct lessons:
 
-- **Explicit-pathspec commit excludes already-staged FOREIGN content, not just unstaged wrong
-  files.** A prior session's `pending-graduations.md` sat STAGED in the shared index; `git commit --
-  <my paths>` committed only my paths and left it untouched — no unstage needed. This sharpens
-  `stage-by-explicit-pathspec`: the pathspec on `git commit` is the protection when foreign content
-  is already in the index — and `git restore`/`git reset` are hook-blocked as worktree-destruction
-  anyway, so a forward pathspec-commit is the move, never an unstage.
-- **Same parallel-collision dynamics Coppery logged above** — HEAD moved under me twice mid-session
-  (parallel sessions committed EEF + upstream-feature-requests); my pathspec commits stayed clean.
-  Cure remains the registered area/commit-window claim both sessions skipped
-  (`feedback_owner_action_is_not_a_cure`); not re-captured.
-- **Repo markdownlint enforces MD049 asterisk emphasis** (`*x*`, not `_x_`); the linter
-  auto-normalises the working tree, but a file staged BEFORE normalisation fails the hook — re-stage
-  after the linter touches it.
-- **Authored the external-facing-capability synthesis plan** (`current/external-facing-capability-distribution.plan.md`,
-  `fccc8607`) — executable, consolidates our scattered external-facing skills/plugin/MCP plan docs
-  into one coherent set; `assumptions-expert` reviewed the prior draft (validated facts; flagged the
-  7-vs-6 skill count → now `t1`).
-- **Altitude correction (owner-directed, "good catch").** Asked to "plan the next steps", I first
-  planned the downstream PRODUCT (a `future/` Oak-plugin-bundle strategy) and baked "extend
-  oak-skills' generator" in as the load-bearing thesis. Owner reframed: the executable next step is
-  synthesising OUR plan estate into a coherent set (`current/`, no blocking dep), and "do not assume
-  the external skills repo remains the source of truth." Homed in
-  `[[feedback_surface_altitude_before_planning]]`: surface the altitude fork before drafting; keep
-  open decisions named, never baked as a thesis. A reviewer validated my facts but cannot catch a
-  wrong altitude — frame is the owner's.
+- **Progressive disclosure: only the live owner walk caught the wall-of-text.** Six
+  conversational simulations PASSED the no-menu / no-probe checks — then the owner's real
+  `/oak-explain` run exposed the lens (and my own answers) defaulting to exhaustive walls of text.
+  Behavioural gates (`skills:check` etc.) cannot see delivery quality; a real run is irreplaceable.
+  Cure: a "Delivery grain" discipline in the skill (lead with the essence, let them pull; both bounds
+  — don't tease, don't menu). Homed in distilled.
+- **Banner ≠ resolution (owner, stated 2×).** A SUPERSEDED banner left in the live estate becomes a
+  giant tombstone; `git mv` superseded/complete plans to `plans-old-archive` (completed → ADR-117
+  archive home) and reconcile referrers. Archived the deep-plan-estate-survey + the complete eef-d6
+  plan this session. Homed: per-user [[banner-not-enough-move-superseded]].
+- **candidate: readiness review doesn't check plans against the always-applied rules tier.** The
+  plan's "alias both old commands / no dangling slash command" approach *violated* the always-applied
+  `replace-dont-bridge` rule (aliasing is a compat layer) — and passed ALL THREE readiness reviewers
+  (assumptions/onboarding/docs-adr). Only the owner caught it mid-execution ("owner action is not a
+  cure" → a missing review check). One instance; trigger = 2nd instance → PDR/process candidate.
+- **Grounded fact (load-bearing for any future skill rename):** the skills-adapter generator has NO
+  alias concept — it wipes adapter dirs and regenerates exactly one pair per `.agent/skills/<id>/`
+  canonical. A rename = delete old canonical + author new canonical + regenerate; there is no
+  adapter-only alias. (`agent-tools/src/skills-adapter-generate/generator.ts`, verified first-hand.)
+- **Intent-scoped commit held across a 3-agent shared index.** `git commit --pathspec-from-file`
+  excluded foreign staged files (Blazar's ontology/openapi/uat) by construction across all 3 commits
+  — the commit-skill's documented cure, working cleanly. Reinforces Foehn's commit-window entry above.
+- **Section-fix follow-ups for owning threads** (superseded SECTIONS, not whole-file — excise with a
+  pointer to the superseding decision, keep the why): `sentry-observability-maximisation-mcp.plan.md`
+  (L-8 correction), `agentic-engineering-enhancements/roadmap.md` (Phase 4 → ADR-125),
+  `schema-resilience-and-response-architecture.plan.md` (OQ1 settlement). Banner-marked in-situ.
+
+## MCPJam host-header settle — trace ALL layers (2026-06-23, Magnolia spins Mulch)
+
+Settling the MCPJam `localhost-host-rebinding-rejected` finding:
+
+- **A security check can live outside the obviously-named middleware — trace EVERY layer before
+  concluding "X is unguarded."** I traced only `dnsRebindingProtection` (landing-page-only) and wrongly
+  concluded `/mcp` had no Host validation in any mode. The authed `/mcp` Host check is in the AUTH layer
+  (`getPRMUrl` in `mcpAuth`, `mcp-auth.ts:189`, before the auth-header check → 403). Only the no-auth dev
+  build lacks it.
+- **A black-box re-run can false-pass** — re-running `protocol conformance` against the auth build would
+  pass because auth 401s the probe regardless of Host; source was the decisive layer.
+- **Symmetric subagent skepticism**: security-expert corrected my first-hand claim → I verified its
+  correction first-hand before recording; docs-adr-expert's proposed ADR text had inherited my error →
+  caught before enshrining.
+- Recorded: ADR-122 (rewrite) + ADR-158; regression test in `auth-enforcement.e2e.test.ts`. Durable lesson
+  → distilled. (Napkin now over its line-limit — rotation due at consolidate-docs.)
+
+## Evals/assurance regime ratified; 3 follow-ons (2026-06-23, Magnolia spins Mulch)
+
+Owner ratified all 5 evals open questions (surfaced one-at-a-time); homed in `principles.md`
+§Agentic Quality (rewritten) + new `validation-strategy.md` (seeded stub) + report §10. Commit
+`60bb347f0`, pushed. Three things to carry forward:
+
+- **candidate (PDR):** the assurance regime (test/evaluate/assure + 3 harm-keyed tiers + in-repo
+  eval-home + real-world-loop) is portable Practice governance, homed so far only as repo directives.
+  Author a PDR once it is stable across ≥1 later session AND a second Practice-bearing repo faces the
+  same decision.
+- **Gate-caught recurrence (PDR-098 traction):** I linked doctrine→plan in `validation-strategy.md`
+  (a PDR-105 reference-direction violation); the validator blocked the commit and I de-linked. The
+  active gate caught what the passively-held rule didn't — structural cure validated, no doctrine
+  change. A clean "fluency is a warning" instance (a helpful-cross-link bypassed a known rule).
+- **Loss-flag (owner-facing, untriaged):** GitHub Dependabot reports 15 vulnerabilities on the
+  DEFAULT branch (4 high / 8 moderate / 3 low), surfaced on push. Not this session's work; needs
+  owner triage. Homed here so the signal doesn't evaporate with this context.
+
+## Two-altitude knowledge-as-graph research; two owner corrections on framing & rationale (2026-06-23, Perseus lifts Umbra)
+
+Initial landscape research → report `knowledge-as-graph-two-altitudes-2026-06-23.md` (status:
+initial-research, input to an incoming engineer's exploration brief — decides nothing): repo intent
+(ADR-200) and the curriculum domain are ONE knowledge-as-graph capability at two altitudes over one
+`graph-core` substrate; named the missing **content-structure graph** (typed content blocks linked to
+atomic-concept intent + lesson slugs) + **renderers-as-projections**; grounded first-hand incl. a live
+Aila adaptation experiment + a build-vs-reuse (LTAE) read of Aila's code (evidence in reference-local).
+ADR-200 amended (owner-directed): realisation edges §5 + family-entailment §Future state. Two
+corrections worth carrying (both homed in per-user memory):
+
+- **Artefact annotation ≠ decision rationale.** I read the ontology `curric:slug` `rdfs:comment`
+  ("URL-safe identifier for public URLs") and "corrected" a peer report to "cross-source matching is
+  merely emergent". Owner: the slug was added **by decision, to enable joins between the two datasets**.
+  A field's comment documents its *use*, not *why* it was added; the decision-maker owns rationale; I
+  overruled a stronger inference with a weaker source because "emergent" was convenient.
+  [[feedback_artefact_annotation_is_not_rationale]]
+- **Positive framing must not gloss issues (LTAE).** Told to frame Aila findings positively, I first
+  over-applied it toward "never criticism"; owner: positive tone **composes with** unflinching
+  architectural honesty for decisions, reconciled via "different goal → different architecture" — never
+  soften a technical fact to stay positive. [[feedback_frame_product_findings_as_enablement]]
+
+## API-not-raw-CDN curriculum sourcing is a SAFETY rule (TPC filtering) — loss-scan: it lived only in per-user memory (2026-06-23, Perseus lifts Umbra)
+
+**candidate:** graduate to a curriculum-data-sourcing **safety** home — a clause on the existing
+data-sourcing invariant (`principles.md`) or a small rule; owner decides the home. (Distinct from
+schema-first, which is about TYPES; this is about safely fetching curriculum CONTENT/ASSETS.)
+
+Owner correction after I pulled four canonical chart PNGs straight from
+`cloudinary-res.thenational.academy` (URLs taken from a `get-lessons-quiz` payload): fine for that one
+instance, but **do not fetch from the raw CDN again without asking**. Route Oak curriculum content —
+images and assets included — through the **Oak Open Curriculum API / SDK**, which has **TPC (Third Party
+Content) filtering** guaranteeing content is safe and rights-cleared. The raw CDN is **unfiltered**; an
+API-returned URL does NOT make a raw-CDN fetch safe (the filtering lives at the API, not the asset).
+This is the safety rationale behind the standing repo invariant "curriculum data comes through the
+published Oak Open Curriculum HTTP API and generated SDK" — TPC, not just provenance. **Loss-scan note:**
+until this entry the rule lived only in per-user memory (Claude Code, this user) — not shared, not
+cross-platform, invisible to the incoming engineer and other-platform agents. Now repo-homed.
+Per-user mirror: [[feedback_source_curriculum_content_via_api_not_cdn]].
+
+## Session — PR #213 CI remediation + Sonar config cleanup (Foundry tracks Flicker, 2026-06-23)
+
+**Pushed (`docs/planning-and-validation`):** `cb8c07658` remediation (CodeQL insecure-temp-file →
+per-user XDG state dir + 0o700/0o600; `run.ts` single-read; 4 MINOR Sonar smells; new
+`validate-patterns-index` generator/validator wired into `repo-validators:check`; §S8786 policy
+class; editorial-tone/AGENT.md/codex-brief/VISION doc fixes). `6fe05988f` made the S4036 git-PATH
+hardening *visible* to Sonar (inline `env: {…PATH: TRUSTED_GIT_PATH}`, shared `core/trusted-git`).
+`12451f4d6` deleted the dead `sonar-project.properties` (SonarCloud uses automatic analysis → reads
+only `.sonarcloud.properties`; the file carried a forbidden+inert `sonar.issue.ignore.multicriteria`
+rule-disable block) and reconciled the policy/rule/engineering docs. 3× S8786 marked FALSE_POSITIVE
+server-side per §S8786.
+
+**UNCOMMITTED in working tree (owner: do not commit this session):** archived 3 stale plans →
+`plans-old-archive/<collection>/archive/` (`pr-102-snagging.plan.md`,
+`sonarjs-activation-and-sonarcloud-backlog.plan.md`, `eef-d0-decontamination-ledger.md`); removed the
+pr-102 row from `agent-tooling/current/README.md`; repointed the eef-d0 link in
+`eef-graph-tool-completion.plan.md`. Moves+edits done, not staged. Residual: backtick/prose mentions
+of those 3 in ~4 plan bodies left as-is (non-breaking). Parallel agent committing graph/ADR-200 work
+on this branch (`c51bf232e`, `0dc0db4bd`). CodeQL gate is owner-handled — do not investigate.
+
+**Surprise / correction (load-bearing):** repeatedly asserted *convenient* claims from inference
+instead of verifying ground-truth — (1) S4036 "FALSE_POSITIVE" when a real in-repo PATH-hardening
+fix existed; (2) that hardening then hidden behind a `trustedGitEnv()` helper Sonar couldn't trace,
+so S4036 re-fired on the "fixed" code; (3) "CodeQL alerts pre-existing on main" inferred from *file*
+existence (`git cat-file`), never the alert baseline — owner disputed it. Dual failure mode: also
+*over*-corrected into over-checking when told to act. Cure: verify the actual state to the stakes
+AND obey the actual instruction — neither under-verify (sensor-off) nor tangent past the directive.
+Mechanism-not-recall (t6 evidence). Napkin 364→~390/300 — rotation due (`consolidate-docs`).
+
+## PR #213 driven to GREEN — completing Foundry's CI-remediation arc (Galleon binds Seabed, 2026-06-23)
+
+Continued the PR 213 CI-remediation arc Foundry tracks Flicker began (entry above). Drove the branch
+fully green: analysed all 14 open CodeQL+Sonar findings → **7 genuine FIXES + 7 merit-grounded
+FALSE_POSITIVE dismissals**. Commit `770d13d46` (synonym-miner `JSON.stringify` escaping + describing
+test; 5× research chmod `0o755`→`0o700`; `setupAuthRoutes` 8-param→options-object, S107), pushed.
+Then dismissed 6 CodeQL (rate-limit ×4 #70/#72/#81/#98 + http-to-file ×2 #76/#77) + Sonar S4036 — each
+verified-false **first-hand** (rate-limiter wired + test-pinned per ADR-078; build-time validated schema
+cache; PATH pinned to `/usr/bin:/bin`). PR green; oak-preview MCP validated (search/fetch return real
+data → the refactor works in the live deployment). Disposition discipline → distilled. Surprises:
+
+- **CodeQL re-keys an alert on a line shift.** My auth-routes refactor moved the rate-limit
+  registration line, so alert **#96 closed and #98 opened** at the new line — SAME finding, new number.
+  When reconciling pre/post-fix alert counts, a vanished+new pair at shifted lines in a refactored file
+  is a re-key, not a new finding. Verify by rule+path, not by number.
+- **oak-preview MCP token-expiry was transient.** One parallel call hit "requires re-authorization
+  (token expired)" while a sibling authed call (search) succeeded; the retry self-recovered. Client-side
+  OAuth lifecycle, not a deployment fault — don't read it as a preview-health failure.
+- **The disposition *determination* is lens-resolved, not an owner-fork** (existence ≠ correctness; a
+  12×-dismissed rule still flagged a real bug here); only the outward-facing *act* of marking needs
+  authorisation (asked + got it before enacting). Owner reminders this session: critically assess every
+  subagent claim (security-expert died on a 529 → covered its remit first-hand); the "alleged fork"
+  (http-to-file fix-vs-harden) dissolved under the decision lenses — its "harden" arm was already in the
+  code I'd read. Napkin now ~409/300 — **rotation overdue**, route at consolidate-docs.

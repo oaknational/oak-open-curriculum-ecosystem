@@ -11,7 +11,7 @@ Exports Elasticsearch-compatible synonym set from SDK ontology data.
 **Usage**:
 
 ```bash
-tsx operations/utilities/generate-synonyms.ts > /tmp/synonyms.json
+tsx operations/utilities/generate-synonyms.ts > tmp/synonyms.json
 ```
 
 **Purpose**: Export synonyms for manual inspection or external use.

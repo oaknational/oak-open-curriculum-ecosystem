@@ -5,7 +5,10 @@ import {
   type DerivedIdentityResult,
   type OverrideIdentityResult,
 } from '../../src/core/agent-identity';
-import { IDENTITY_WORD_GROUPS } from '../../src/core/agent-identity/wordlists';
+import {
+  ACTIVE_NAMING_SCHEMA_ID,
+  NAMING_SCHEMAS,
+} from '../../src/core/agent-identity/schema-registry';
 
 const APPROVED_IDENTITY_GROUPS = [
   'celestial',
@@ -29,7 +32,7 @@ describe('deriveIdentity', () => {
     const result = deriveIdentity('format-check-seed');
 
     expect(result.kind).toBe('derived');
-    expect(result.displayName).toMatch(/^[A-Z][a-z]+ [A-Z][a-z]+ [A-Z][a-z]+$/u);
+    expect(result.displayName).toMatch(/^[A-Z][a-z]+ [a-z]+ [A-Z][a-z]+$/u);
     expect(result.slug).toMatch(/^[a-z]+-[a-z]+-[a-z]+$/u);
     expect(result.seedDigest).toBe(createHash('sha256').update('format-check-seed').digest('hex'));
   });
@@ -43,11 +46,29 @@ describe('deriveIdentity', () => {
 
     expect(result).toEqual({
       kind: 'override',
+      namingSchemaVersion: 'override',
       displayName: 'Frolicking Toast',
       slug: 'frolicking-toast',
       seedDigest: createHash('sha256').update('override-seed').digest('hex'),
       override: 'Frolicking Toast',
     });
+  });
+
+  it('stamps derived results with the active naming schema version', () => {
+    const result = expectDerivedIdentity(deriveIdentity('version-seed'));
+
+    expect(result.namingSchemaVersion).toBe('v2-noun-verb-noun');
+  });
+
+  it('derives the pinned ground-truth name whether the active schema is implicit or explicit', () => {
+    const implicit = expectDerivedIdentity(deriveIdentity('version-seed'));
+    const explicit = expectDerivedIdentity(
+      deriveIdentity('version-seed', { schemaId: 'v2-noun-verb-noun' }),
+    );
+
+    expect(implicit.displayName).toBe('Starling weaves Bluff');
+    expect(implicit.slug).toBe('starling-weaves-bluff');
+    expect(explicit).toEqual(implicit);
   });
 
   it('rejects an empty seed before derivation', () => {
@@ -60,8 +81,10 @@ describe('deriveIdentity', () => {
     );
   });
 
-  it('uses the approved neutral identity word group keys', () => {
-    expect(IDENTITY_WORD_GROUPS.map((group) => group.group)).toEqual(APPROVED_IDENTITY_GROUPS);
+  it('uses the approved neutral identity word group keys in every registered schema', () => {
+    for (const schema of Object.values(NAMING_SCHEMAS)) {
+      expect(schema.groups.map((group) => group.group)).toEqual([...APPROVED_IDENTITY_GROUPS]);
+    }
   });
 
   it('routes a fixed seed corpus across every approved word group', () => {
@@ -75,26 +98,25 @@ describe('deriveIdentity', () => {
     expect(groups).toEqual(expectedGroups);
   });
 
-  it('uses lowercase slug-safe words in every approved group slot', () => {
-    const allWords = IDENTITY_WORD_GROUPS.flatMap((group) => [
-      ...group.adjectives,
-      ...group.verbs,
-      ...group.nouns,
-    ]);
+  it('uses lowercase slug-safe words in every registered schema column', () => {
+    const allWords = Object.values(NAMING_SCHEMAS).flatMap((schema) =>
+      schema.groups.flatMap((group) => group.columns.flat()),
+    );
 
     expect(allWords).not.toHaveLength(0);
     expect(allWords.every((word) => /^[a-z]+$/u.test(word))).toBe(true);
   });
 
-  it('emits slot values that belong to the reported word group', () => {
+  it('emits words that belong to the reported word group, in column order', () => {
     const result = expectDerivedIdentity(deriveIdentity('coherence-seed'));
-    const group = expectIdentityWordGroup(
-      IDENTITY_WORD_GROUPS.find((candidate) => candidate.group === result.group),
-    );
+    const activeSchema = NAMING_SCHEMAS[ACTIVE_NAMING_SCHEMA_ID];
+    const group = activeSchema.groups.find((candidate) => candidate.group === result.group);
 
-    expect(group.adjectives).toContain(result.adjective);
-    expect(group.verbs).toContain(result.verb);
-    expect(group.nouns).toContain(result.noun);
+    expect(group).toBeDefined();
+    expect(result.words).toHaveLength(activeSchema.columnCasing.length);
+    result.words.forEach((word, index) => {
+      expect(group?.columns[index]).toContain(word);
+    });
   });
 });
 
@@ -112,14 +134,4 @@ function expectOverrideIdentity(result: ReturnType<typeof deriveIdentity>): Over
   }
 
   return result;
-}
-
-function expectIdentityWordGroup(
-  group: (typeof IDENTITY_WORD_GROUPS)[number] | undefined,
-): (typeof IDENTITY_WORD_GROUPS)[number] {
-  if (group === undefined) {
-    throw new Error('expected identity word group to exist');
-  }
-
-  return group;
 }

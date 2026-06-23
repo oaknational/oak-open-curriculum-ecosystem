@@ -69,7 +69,7 @@ Read in order; stop at whichever answers your next-step question:
 
 1. @.agent/memory/operational/repo-continuity.md — canonical continuity contract
 2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
-3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
+3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state*)
 4. `.agent/state/collaboration/active-claims.json` — active-claims
    registry and ordered advisory `commit_queue`
 5. `.agent/state/collaboration/shared-comms-log.md` — generated recent
@@ -79,7 +79,6 @@ Read in order; stop at whichever answers your next-step question:
    evidence obligations for the touched thread or area
 7. `.agent/state/collaboration/escalations/*.json` — active owner-facing
    escalation cases for the touched thread or area
-8. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
 
 When reading `active-claims.json`, surface any fresh `commit_queue` entries
 alongside active claims: `intent_id`, `agent_id`, `files`, `commit_subject`,
@@ -97,7 +96,12 @@ Apply the
 rule before any edit: enumerate the areas you intend to touch, register
 your own active claim through the collaboration-state helper when available,
 and leave an artefact proving the registry was
-consulted. If no entries other than your own exist, log "no other agents
+consulted. When the session is playing a named coordination role
+(director, peer, marshal, curator, implementer, ...), pass it via
+`--role <role>` on `claims open` so peers and glance surfaces (such as
+the statusline session-shape indicators) can resolve the team shape from
+the registry; the vocabulary is open and honest-by-convention. If no
+entries other than your own exist, log "no other agents
 present" through an immutable comms event and proceed (bootstrap fast-path).
 On overlap, consult the shared communication log and any
 open decision-thread and escalation files before deciding whether to
@@ -148,6 +152,20 @@ validation.
 git status --short
 git log --oneline --decorate -5
 ```
+
+### 7. Host health
+
+```bash
+uptime                                      # load averages…
+sysctl -n hw.ncpu 2>/dev/null || nproc      # …vs this core count
+sysctl vm.swapusage 2>/dev/null || free -m 2>/dev/null || true  # swap
+```
+
+A load average well above the core count, or heavy swap, is a
+stop-and-surface signal before work starts — a starved host corrupts
+gate timings, watcher deadlines, and experiment results, and the cause
+may be leaked processes from an earlier session (see
+[`no-unbounded-host-load`](../../../rules/no-unbounded-host-load.md)).
 
 ## Practice Box
 
@@ -238,6 +256,18 @@ Before diving in, pause and ask:
 2. **What value are we delivering, through what impact, for which users?**
 3. **Could it be simpler without compromising quality?**
 4. **What assumptions am I making? Are they valid?**
+5. **What is the goal, and what is the full set of surfaces relevantly in scope for
+   it — not just what I was pointed at?** Emit a proportionate `Goal · In · Out`
+   artefact before approach, and again before declaring done, per
+   [`scope-from-goal-before-approach`](../../../rules/scope-from-goal-before-approach.md).
+
+These questions are **not** session-open-only: re-ask them at every task/pointer
+arrival and before declaring done, not just here.
+
+For analysis-, planning-, or decision-heavy work, [`reason`](../../reason/SKILL-CANONICAL.md)
+structures the thinking outward (the pair to `metacognition`'s inward reflection), and the
+[grammar of thinking](../../../reference/grammar-of-thinking.md) is the yardstick for complex
+rewrites and high-stakes planning.
 
 ## Commit
 

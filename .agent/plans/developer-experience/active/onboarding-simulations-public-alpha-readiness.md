@@ -81,7 +81,7 @@ mechanism that keeps structure coherent over time.
 1. Broken `institutional-memory.md` link in `README.md`
 2. Missing prerequisites in onboarding path
 3. `pnpm make` docs drift (missing `subagents:check`)
-4. `foundation/VISION.md` buried and under-discoverable
+4. `VISION.md` buried and under-discoverable
 5. No human-facing explanation of the agentic practice
 6. No documented PR/review process in human docs
 7. `.env.example` contradiction on Elasticsearch requirement
@@ -109,23 +109,45 @@ mechanism that keeps structure coherent over time.
 
 ### Track B (Governance): Leadership-Input Items
 
-- **Status**: 📋 Not started
-- These cannot be completed by documentation editing alone.
+- **Status**: 🟢 Owner dispositions recorded 2026-06-12 (surfaced as six
+  questions; every item now has a decided path)
 
 Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 
-- [ ] **B1. Add cost model and sustainability framing to `foundation/VISION.md`**
-  - Requires infrastructure-cost evidence and team-model decisions.
-- [ ] **B2. Create architectural risk register**
-  - Requires organisation-level risk prioritisation.
-- [ ] **B3. Add business-level risks and mitigations to `foundation/VISION.md`**
-  - Requires reputational, operational, financial, and regulatory framing.
-- [ ] **B4. Document agentic-practice transferability**
-  - Requires explicit split of general-purpose vs Oak-specific components.
-- [ ] **B5. Clarify ecosystem/open-source posture for non-technical audiences**
-  - Requires policy decisions for contribution posture.
+- [~] **B1. Add cost model and sustainability framing to `VISION.md`**
+  - **Disposition (2026-06-12)**: agent drafts the skeleton (hosting,
+    search, auth, observability cost lines + sustainability narrative);
+    owner supplies numbers and team-model stance. Draft goes to owner
+    review before landing — no placeholder sections in the live VISION.
+- [~] **B2. Create architectural risk register**
+  - **Disposition (2026-06-12)**: seed from existing findings (CTO
+    conditional-go items, adversarial architecture reviews, ADR risk
+    sections); prioritisation stays with the owner; owner-reviewed
+    before landing.
+- [~] **B3. Add business-level risks and mitigations to `VISION.md`**
+  - **Disposition (2026-06-12)**: folded into the B2 register as a
+    business-risk section, with a short plain-language summary linked
+    from VISION — one risk document, not two.
+- [x] **B4. Document agentic-practice transferability**
+  - **Disposition (2026-06-12)**: substantially resolved by architecture
+    since baseline (practice-core portable by construction with the
+    portability gate enforcing it; ADR-124 propagation; plasmid
+    mechanism). **Landed same day**: owner-approved evidence note in
+    VISION (portable by construction, ADR-124 cited); the VISION evidence note was folded into the 2026-06-17 restructure, and ADR-124 is the durable home.
+- [x] **B5. Clarify ecosystem/open-source posture for non-technical audiences**
+  - **Disposition (2026-06-12)**: a plain-language policy paragraph —
+    why contributions are closed during alpha, what external readers can
+    do, what would trigger opening. **Landed same day**: owner-approved
+    Contribution Posture paragraph in VISION §Open Source And Licensing.
+    Evidence-grounding also woven into VISION the same day as
+    "supporting and building on the innovations of the wider ecosystem"
+    (owner-shaped: no named dataset in the timeless doc).
 - [ ] **B6. Expand `SECURITY.md` for organisational risk assessment**
-  - Requires data governance and security-posture decisions.
+  - **Disposition (2026-06-12)**: deferred to the M2 (open public alpha)
+    exit gate, recorded alongside the existing M2 blockers (R9 Clerk,
+    R10 Sentry, R13 rate limiting). Decision inputs when the gate
+    approaches: data classes handled, governance boundaries, posture
+    summary.
 
 Traceability to baseline report:
 
@@ -170,7 +192,7 @@ Run updated onboarding simulations against current repository state for:
 - [README.md](../../../README.md) (includes Quick Start)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 - [docs/README.md](../../../docs/README.md)
-- [docs/foundation/VISION.md](../../../docs/foundation/VISION.md)
+- [Vision](../../../../VISION.md)
 - [high-level-plan.md](../high-level-plan.md)
 - [user-experience/public-alpha-experience-contract.md](../user-experience/public-alpha-experience-contract.md)
 
@@ -895,7 +917,7 @@ Run onboarding simulations against the current repository state for
 
 - [README.md](../../../README.md) (restructured; Quick Start now lives here)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md) (updated)
-- [docs/foundation/VISION.md](../../../docs/foundation/VISION.md) (updated)
+- [Vision](../../../../VISION.md) (updated)
 - [docs/governance/README.md](../../../docs/governance/README.md) (enhanced)
 - [.agent/README.md](../../README.md) (new)
 - [.agent/experience/HUMAN.md](../../experience/HUMAN.md) (new)
@@ -1273,8 +1295,171 @@ review pending (4 personas: junior dev, lead dev, CTO, CEO).
 
 ---
 
+## Interactive Onboarding Inputs (12 June 2026)
+
+**Status: LANDED same day** — the skill shipped as
+`.agent/skills/onboard-me/SKILL-CANONICAL.md` (published `/oak-onboard-me`)
+via [oak-onboard-me-skill.plan.md](../archive/completed/oak-onboard-me-skill.plan.md), built to
+the design inputs below (router-not-copy; detect-first; go-ahead-gated).
+Owner-directed scope addition at build time (12 June 2026): a Practice
+branch — what the Practice is, how to work with the agents through the
+skills, and how agents accelerate development without compromising quality
+or safety — routing to the live Practice explainers rather than copying
+them. Resumability (owner-decided 2026-06-12, superseding the earlier hold):
+walkthrough state persists in the **untracked** individual-scoped file
+`.agent/state/onboarding/walkthrough.local.md` (path gitignored;
+one checkout = one individual unless the user says otherwise; journey
+state only, never personal details). Machine state remains re-derived by
+probes on every run — the file is a resume hypothesis, never a fact.
+The classification is uniform: individual-scoped state is untracked by
+design; whether repo-scoped collaboration state under `.agent/state/`
+also becomes local-only is a separate decision gated on the comms
+research plan.
+
+**Family update (22 June 2026):** the orientation surfaces are now named as one
+teaching-surface family across a portability seam (PDR-112), with a portable
+agentic-AI-literacy lead-in — `working-with-agentic-ai` — added as the missing
+member for contributors new to working with agents in general. `onboard-me`
+Branch F now suggests it as a grounding prelude; the family routing lives in
+AGENT.md §Orientation Requests. See
+[`orientation-and-agentic-ai-literacy.plan.md`](../../../plans-old-archive/developer-experience/archive/completed/orientation-and-agentic-ai-literacy.plan.md)
+(completed, archived).
+
+**First live run falsified the menu-shaped interaction (12 June 2026,
+owner walkthrough)**: the walker front-loaded prerequisite probes before
+greeting, rendered journey questions as forced-choice menus, and narrated
+its routing in repo jargon — "DOS menus from 1996, not a conversation".
+Root cause: structural instructions (detect-first precept, question-UI
+mandate, displayed forks) defeated the prose warmth contract — the
+passive-guidance-loses-to-artefact-gravity pattern inside a skill body.
+Redesign landed same day: greeting-before-any-tool-call as rule 1, free
+prose questions (menu UI banned for journey questions), the journey graph
+demoted to a private routing model, plain language until depth is opted
+into, detection only inside setup conversations. Standing design lesson
+for every interactive surface: a smoke test proves mechanics, only a real
+newcomer run proves experience — re-validate by live walkthrough after
+interaction-layer changes.
+
+Owner direction (in-session, 12 June 2026): a new interactive onboarding
+skill, `/oak-onboard-me`, will walk new people through onboarding with
+branching by audience and need — engineer vs impact-focused, strategy and
+planning corpus overview, development prerequisites, repository setup. The
+design inputs below were mined from a generated `/team-onboarding`
+walkthrough (30-day single-contributor usage window, 275 sessions). The
+source was agent-generated output: its checklist facts were verified
+first-hand before folding (sanctioned-MCP coverage against
+mcp-servers-for-contributors.md; the `oak-skills` repository, visibility,
+and plugin directory via the GitHub API), and its usage statistics are
+workflow-derived from local usage data, not independently verifiable —
+treat them as one attributed observation window, never as team fact.
+
+### Interaction design (generated prototype shape — untested with a real newcomer)
+
+The generated walkthrough carried a prototype of the interaction design
+worth preserving for the skill:
+
+- Buddy persona: warm, conversational, not lecture-y.
+- Detect state first: check what is already set up, render the checklist
+  with `[x]`/`[ ]` marks, lead with what already works, one sentence per
+  item, all in one message.
+- Guided execution: offer the first unchecked item, get a go-ahead, then
+  work through the rest one at a time.
+- After setup, walk the remaining sections — help where possible, surface
+  the purely informational parts, and never invent sections or summaries
+  that are not in the guide.
+- Never extrapolate one person's usage statistics into a "team workflow"
+  narrative.
+
+### Usage evidence (caveat: one contributor's 30-day window)
+
+- In the generating contributor's window, team-session grounding
+  (`oak-start-right-team`) ran roughly four times as often as solo
+  grounding (`oak-start-right-quick`).
+- `/rename` was that window's single most-used command, consistent with
+  the documented "AgentName - intent" session-naming convention.
+- The only prescribed practices are the session bookends (a start-right
+  skill at open, `oak-session-handoff` at close); everything else is
+  deliberately unprescribed — owner-ratified 2026-06-12 in the generating
+  session ("other than that I don't want to prescribe how they should
+  work", recorded in that session's napkin entry). The interactive walker
+  must preserve that minimalism rather than prescribing workflow.
+- Setup-surface validation: the sanctioned MCP set in
+  [mcp-servers-for-contributors.md](../../../../docs/engineering/mcp-servers-for-contributors.md)
+  already covered every server a real day-one checklist needed; the one
+  gap found was `oak-skills` missing from
+  [sibling-repos.md](../../../../docs/engineering/sibling-repos.md)
+  (added 12 June 2026).
+
+---
+
+## Orientation-Lens Unification — Conversational Simulation (23 June 2026)
+
+The two repo-bound orientation lenses (`explain-repo`, `onboard-me`) were merged
+into one intent-discerning lens, `/oak-explain` (`.agent/skills/explain/`); host
+decision recorded in
+[ADR-202](../../../../docs/architecture/architectural-decisions/202-orientation-as-one-intent-discerning-lens.md).
+Delivery mode (specific answer / area overview / guided tour) is a discerned
+variable; setup stays a distinct go-ahead-gated capability; the
+`working-with-agentic-ai` primer and the PDR-112 seam are unchanged.
+
+Validation method (per the standing lesson recorded below): **conversational
+orientation-request simulation** — the agent receives each trigger phrase and
+conducts the front-door discernment — **not** a README-first doc-path persona walk
+(which never exercises the conversational front door). Each scenario carries an
+explicit **no-probe-before-first-answer** check and a **no-menu-shape** check.
+
+| Trigger | Lens behaviour (first move) | No-probe | No-menu | Verdict |
+| --- | --- | --- | --- | --- |
+| "Tell me about this repo" | Ambiguous on angle + mode → discerns first (warm greeting + one conversational steer inferring nothing forced); **no immediate briefing**, no list | ✓ | ✓ | PASS |
+| "How does the SDK codegen work?" | Crisp specific → mode + What already known → answers directly from live docs at the right level; single widen line | ✓ (reading a doc to answer is delivery, not a setup probe) | ✓ | PASS |
+| "I want to understand the search architecture" | Specific area + overview inferable → area overview scoped to search from live docs; offers depth or the tour | ✓ | ✓ | PASS |
+| "Onboard me" / "where do I start" | Guided-tour intent → greeting + listening question first; setup probes only **after** the person says they want hands-on help | ✓ | ✓ | PASS |
+| External (non-teammate) visitor wanting to contribute | Access-aware fork → asks teammate/external only when it changes the offer; routes past teammate-only surfaces silently; relays the external-contribution posture warmly; access never gated | ✓ | ✓ | PASS |
+| "I'm new to working with AI agents" | AGENT.md routes to the `working-with-agentic-ai` primer (declinable prelude), which forwards into the lens via the single PDR-112 edge | ✓ | ✓ | PASS |
+
+Cross-cutting: no duplicated teaching content (the lens points to live docs; the
+six architectural invariants now live in **README §Architectural invariants**;
+the primer is routed to, not duplicated); the PDR-112 seam is intact (primer body
+untouched, the named edge resolves to the one lens); gates green (`skills:check`,
+`portability:check`, `markdownlint` 0, `format`).
+
+**Standing lesson reaffirmed — only a real run proves the experience.** The
+agent-side simulations above pass; the **live owner walkthrough then ran**
+(2026-06-23, three `/oak-explain` invocations as an engineer, a CEO persona, and a
+meta probe) and proved the point — it surfaced three improvements the simulations
+did **not**:
+
+1. **Progressive disclosure.** The lens defaulted to walls of text; added a
+   cross-cutting "Delivery grain — progressive disclosure, not walls of text (and
+   not menus)" discipline with both bounds (don't tease, don't menu), and fixed the
+   two mode descriptions that invited the dump.
+2. **Scope accuracy.** The lens (and the agent's synthesis) inflated the repo to
+   "how Oak does AI". Added a "Scope, accurately" honesty guard — this repo is one
+   of Oak's AI efforts (it puts Oak's curriculum *into* third-party AI assistants,
+   plus ecosystem tools and the agent-first practice), not the whole of Oak's AI.
+3. **Positioning in VISION.** Added a generic boundary to `VISION.md` (one of Oak's
+   AI efforts; complementary to Oak's other user-facing AI products; no product
+   named — owner decision, durability over a hardcoded name).
+
+Lesson for the register: behavioural gates (`skills:check` etc.) cannot see
+delivery quality or scope-framing accuracy; a real run remains irreplaceable.
+
+---
+
 ## Change Log
 
+- **2026-06-23**: Added §Orientation-Lens Unification — Conversational Simulation.
+  The `explain-repo` + `onboard-me` lenses merged into one intent-discerning lens
+  `/oak-explain` (ADR-202); clean break (old skills deleted, slash commands
+  retired, no aliases — `replace-dont-bridge`); the six invariants relocated to
+  README §Architectural invariants (skill points, no baked facts). Six
+  conversational scenarios PASS with no-probe and no-menu checks; live owner walk
+  outstanding.
+
+- **2026-06-12**: Added §Interactive Onboarding Inputs — owner-directed
+  `/oak-onboard-me` skill intent, interaction-design prototype, and usage
+  evidence mined from a generated `/team-onboarding` walkthrough; `oak-skills`
+  row added to sibling-repos.md from the same source.
 - **2026-02-27**: N10 generator `as` casts resolved. Both casts in
   `emit-index.ts` eliminated: `toStatusDiscriminant` replaced with
   per-tool `STATUS_DISCRIMINANTS` const map; `invoke` return changed

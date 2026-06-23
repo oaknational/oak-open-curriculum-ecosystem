@@ -70,8 +70,8 @@ Two distinct failure modes shaped the contract:
 
 ## Decision
 
-The Liveness-Heartbeat Contract has six named clauses. Clauses 5
-and 6 were added by later amendments; see §Revision history.
+The Liveness-Heartbeat Contract has seven named clauses. Clauses 5,
+6, and 7 were added by later amendments; see §Revision history.
 
 ### 1. Emit-side: cadence
 
@@ -123,8 +123,8 @@ exemption phase (see Exemptions below).
 
 ### 4. Exemptions
 
-Three named exemptions suspend the threshold without suspending
-the cadence rule:
+Three **threshold-suspension** exemptions suspend the threshold
+without suspending the cadence rule:
 
 - **Coordinator-handoff grace window** — between the
   pre-positioning event and the active-acknowledgement event
@@ -143,13 +143,43 @@ the cadence rule:
   returns. The threshold defers until the sub-agent returns or
   the dispatching agent abandons the dispatch.
 
-Exemption windows MUST be observable on the comms-event
-substrate before the threshold fires — the outgoing
+These three exemption windows MUST be observable on the
+comms-event substrate before the threshold fires — the outgoing
 pre-positioning event for the coordinator-grace exemption; the
 marshal-request event for the marshal-cycle exemption; the
 sub-agent dispatch event for the verdict-synthesis exemption.
 Without an observable opening event, the exemption does not
 apply and the threshold fires normally.
+
+A fourth exemption, added 2026-06-15, is **categorically
+different**: it suspends heartbeat **emission itself** (§1), not
+merely the threshold, because it fires on *consumer-absence*
+rather than a quiet work-window.
+
+- **Consumer-absent (no observing peer)** — the heartbeat's sole
+  consumer is *async* retirement-detection by peers (silence
+  drives claim auto-rebalance). When no such consumer exists, the
+  emission has no reader and is suspended. Two observable shapes
+  qualify: a **solo session** (the active-claims registry shows no
+  other participant who would consume the signal), and a
+  **live-conductor session** where retirement is detected directly
+  by an owner or coordinator from ground-truth surfaces (git, the
+  registry, `gh`) rather than from the heartbeat stream. The
+  exemption is self-healing: the moment a consuming peer appears,
+  or the conductor goes async, or the cast rotates, the consumer
+  reappears and emission resumes on cadence. The threshold (§3) is
+  moot under this exemption because there is no peer applying it.
+
+The consumer-absent exemption is observable on the *same*
+substrate-as-canonical-truth basis as the three above: the
+opening fact is the active-claims / comms registry showing no
+consuming peer (solo, or a live conductor with no async peers).
+It must not be claimed to defend a missed heartbeat once a
+consuming peer is present — presence of a consumer re-arms both
+emission and threshold. This exemption generalises the variable
+the n=2 mode (PDR-082) first scoped from *team-size* to
+*consumer-presence*: n=2 owner-visible mode is the special case
+where chat-visibility makes the async-detection consumer absent.
 
 ### 5. Substrate category: heartbeats are liveness infrastructure
 
@@ -206,6 +236,29 @@ The observer move is:
 An owner-reroute broadcast or other narrative event resets this
 diagnostic because it proves main-loop attention and changes the
 peer's interpretation of silence.
+
+### 7. Emit-side: loop hygiene
+
+The scheduling loop that emits heartbeats follows four hygiene rules,
+each graduated from a worked failure:
+
+- **Posture derives from current state at emit time, never baked at
+  arm time.** A loop armed with a fixed lane/branch/intent label
+  misreports for as long as it runs after the underlying state moves;
+  re-derive every posture field per tick, and re-label explicitly at
+  every lane or role transition (worked twice: a lane renamed under a
+  running loop; a coordinator loop emitting a stale branch name for
+  hours after its holder had moved).
+- **One timestamp per tick.** Deriving "now" more than once in a tick
+  races clock boundaries — a substrate correctly rejected an event
+  whose created-at sat in the future of its sibling field. Derive the
+  timestamp once and pass it to every field that needs it.
+- **Stop the loop FIRST, then emit the end-of-heartbeat event.** The
+  reverse order lets a scheduled tick fire after the end event and
+  contradict it.
+- **Capture stderr on the loop's failure path.** A loop that swallows
+  stderr surfaces its own failures as an undiagnosable bare failure
+  line; the failure line must carry the underlying error text.
 
 ## Mechanism
 
@@ -277,11 +330,20 @@ shape diverges, the threshold widens proportionately.
 
 ### Forward-extensible exemption list
 
-The three named exemptions are the observed-class set. New
-exemption classes graduate from worked-instance evidence via the
-host's pending-graduations discipline; the contract is updated
-as exemption classes graduate, not pre-empted with hypothetical
-classes.
+The named exemptions are the observed-class set (three
+threshold-suspension classes; one emit-side consumer-absent
+class). New exemption classes graduate from worked-instance
+evidence via the host's pending-graduations discipline; the
+contract is updated as exemption classes graduate, not pre-empted
+with hypothetical classes. The consumer-absent class graduated
+2026-06-15 on two instances — the PR-115 n=2 owner-visible session
+(PDR-082 §Context) and a Director session whose heartbeat cron ran
+a whole owner-present window with zero observed consumers (every
+stall/retirement judgement used ground-truth reads, not peers'
+heartbeats; both implementer lanes ran heartbeat-cron-free and
+closed clean) — closing the gate the value-contingency rule and
+`liveness-heartbeat-cron` had held open as "a working hypothesis on
+PDR-082's second-instance path."
 
 ## Consequences
 
@@ -337,7 +399,7 @@ classes.
 
 ## Falsifiability
 
-This contract is falsifiable on five axes:
+This contract is falsifiable on six axes:
 
 - A role observed actively working (substantive events firing
   at less than the threshold interval) that is nevertheless
@@ -361,6 +423,12 @@ This contract is falsifiable on five axes:
   original lane as actively owned — direct evidence the
   heartbeat-only stall diagnostic (§6) is missing or not being
   applied.
+- A session that suspends heartbeats under the consumer-absent
+  exemption (§4) while an async peer is in fact consuming them —
+  e.g. a peer's claim auto-rebalance misfires because the suspended
+  role looked retired — direct evidence the consumer-absence opening
+  fact was misread (a consuming peer was present) and the exemption
+  was claimed when emission was still load-bearing.
 
 The contract succeeds when liveness is structurally observable
 without owner intervention, exemption classes apply cleanly to
@@ -408,6 +476,23 @@ rerouted.
 
 ## Revision history
 
+- 2026-06-15 — Added a fourth, emit-side exemption class to §4
+  ("Consumer-absent / no observing peer"), updated the
+  §"Forward-extensible exemption list" note to record its graduation on
+  two instances, and added a sixth falsifiability axis. This graduates the
+  consumer-presence generalisation that `collaboration-is-value-contingent`
+  and `liveness-heartbeat-cron` had held open as "a working hypothesis on
+  PDR-082's second-instance path"; the contract is now the home of the
+  exemption rather than a standalone rule pre-empting it. Owner-approved at
+  the 2026-06-15 dedicated consolidation walk. Cadence (§1), redundancy
+  (§2), threshold (§3), and the substrate-category invariant (§5) unchanged.
+- 2026-06-12 — Added clause §7 ("Emit-side: loop hygiene"), the portable
+  facet of a host rule amendment that graduated 2026-06-11 (relabel at
+  lane transitions, stop-loop-then-emit-end ordering, one timestamp per
+  tick, stderr-captured failure lines), plus a fifth worked rule instance
+  from a coordinator loop emitting a stale branch name (2026-06-12).
+  Owner-approved at the 2026-06-11 register walk. Emit-side cadence (§1),
+  redundancy (§2), and the substrate-category invariant (§5) unchanged.
 - 2026-05-26 — Added clause §6 ("Observe-side:
   heartbeat-only stall diagnostic"), one corresponding entry
   under §Consequences §Forbids, a fifth falsifiability axis, and

@@ -45,8 +45,24 @@ if ! pnpm depcruise; then
 fi
 
 echo "🧪 Running build, type-check, lint, and unit tests..."
-if ! pnpm turbo run --continue --output-logs=errors-only build type-check lint test; then
-  echo "❌ Build, type-check, lint, or unit tests failed!"
+# Gate output is teed to a gitignored log so a one-off failure (e.g. a
+# flake) stays characterisable after a re-run instead of evaporating
+# with the terminal scroll. The status protocol is FAIL-CLOSED and
+# set-e-safe: a pipeline reports only tee's exit, the hook runs under
+# set -e (a bare failing command aborts the group before any capture),
+# and a missing status file must read as failure - so the status is
+# pre-truncated, written via && / || (which set -e tolerates), and an
+# absent or empty read defaults to failure.
+mkdir -p .turbo
+: > .turbo/last-gate.status
+{
+  pnpm turbo run --continue --output-logs=errors-only build type-check lint test \
+    && echo 0 > .turbo/last-gate.status \
+    || echo 1 > .turbo/last-gate.status
+} 2>&1 | tee .turbo/last-gate.log
+gate_status="$(cat .turbo/last-gate.status 2>/dev/null || echo 1)"
+if [ "$gate_status" != "0" ]; then
+  echo "❌ Build, type-check, lint, or unit tests failed! (full output: .turbo/last-gate.log)"
   exit 1
 fi
 

@@ -59,7 +59,10 @@ export { eefStrandGraph, type EefStrandGraph } from './eef-graph.js';
 export {
   inspectStrand,
   evidenceForMove,
+  type EefAnswerType,
   type EefEvidenceEnvelope,
   type EefEvidenceProvenance,
   type EvidenceForMoveSelectors,
 } from './eef-evidence.js';
+
+export { evidenceForMoveHeadlines, type EefStrandHeadline } from './eef-headline-view.js';

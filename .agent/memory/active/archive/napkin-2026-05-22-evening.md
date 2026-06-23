@@ -163,7 +163,7 @@ Source plane: `operational` → `process`.
 
 **Observation**: at session open, `.remember/recent.md` last entry was 2026-05-13 (9 days stale); 24 daily files unrotated; 8 IDENTITY CANDIDATE rows unprocessed. The plugin appeared dormant.
 
-**Diagnosis**: `/Users/jim/.claude/plugins/installed_plugins.json` showed TWO entries for `remember@claude-plugins-official` — old v0.5.0 was scoped to `/Users/jim/code/personal/project-explorer-especially-names` (the dormancy cause; wrong project path), new v0.7.2 was installed today scoped to this project. The plugin wasn't failing; it was just scoped elsewhere.
+**Diagnosis**: `~/.claude/plugins/installed_plugins.json` showed TWO entries for `remember@claude-plugins-official` — old v0.5.0 was scoped to `~/code/personal/project-explorer-especially-names` (the dormancy cause; wrong project path), new v0.7.2 was installed today scoped to this project. The plugin wasn't failing; it was just scoped elsewhere.
 
 **Cure**: owner restarted the plugin pre-session (Claude Code reload). On restart, the v0.7.2 plugin processed Mistbound's session and created `memory-2026-05-22.log` at 13:49Z, confirming the hook flow works on disk. Future sessions auto-bind on SessionStart.
 

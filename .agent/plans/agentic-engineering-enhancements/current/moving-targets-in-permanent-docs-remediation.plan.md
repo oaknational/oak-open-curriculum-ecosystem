@@ -262,13 +262,13 @@ table, not to pre-decide.
 grep -REn '\b[0-9]{1,3}\s+(canonical|stable|active|completed|reviewers?|skills?|commands?|rules?|patterns?|wrappers?|ADRs?|PDRs?)\b' \
   .agent/directives/ .agent/practice-index.md .agent/practice-core/ \
   docs/architecture/ \
-  | tee /tmp/moving-target-counts.txt
+  | tee <scratch>/moving-target-counts.txt
 
 # Baked SHAs: 7+ hex tokens in permanent docs.
 grep -REn '\b[0-9a-f]{7,40}\b' \
   .agent/directives/ .agent/practice-index.md .agent/practice-core/ \
   docs/architecture/ \
-  | tee /tmp/moving-target-shas.txt
+  | tee <scratch>/moving-target-shas.txt
 ```
 
 False-positive review (UUIDs, content hashes, examples) is part of
@@ -355,8 +355,8 @@ pnpm portability:check
 # Expected: red on the live repo's prior-art instances.
 
 # Stability:
-for i in {1..3}; do pnpm portability:check 2>&1 | sort > /tmp/run$i.txt; done
-diff /tmp/run1.txt /tmp/run2.txt && diff /tmp/run2.txt /tmp/run3.txt
+for i in {1..3}; do pnpm portability:check 2>&1 | sort > <scratch>/run$i.txt; done
+diff <scratch>/run1.txt <scratch>/run2.txt && diff <scratch>/run2.txt <scratch>/run3.txt
 # Expected: no diff.
 ```
 

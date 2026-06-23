@@ -43,11 +43,14 @@ current context. No consumer means no value; do not do it.
   auto-rebalance). When a live owner-conductor detects retirement directly,
   that consumer is absent and the periodic heartbeat adds nothing a consumer
   reads; when the conductor goes async or the cast rotates, the consumer
-  reappears. PDR-082 (Proposed) instances this at n=2 (owner-visible
-  liveness); generalising the variable from team-size to consumer-presence
-  is a working hypothesis on PDR-082's second-instance path. The heartbeat
-  contract (PDR-078, Accepted) governs until that graduates — do not
-  pre-empt it with a standalone exemption.
+  reappears. This graduated 2026-06-15 to
+  [PDR-078](../practice-core/decision-records/PDR-078-liveness-heartbeat-contract.md)
+  §4 as the **consumer-absent exemption** (PDR-082, now Adopted, is the n=2
+  special case): apply that exemption directly — suspend the heartbeat when no
+  consuming peer is observable on the registry (solo, or a live conductor with
+  no async peers), and resume the moment one appears. The opening fact is the
+  registry showing no consumer; it must not be claimed once a consuming peer
+  is present.
 - An owner direction to "minimise ceremony" trims the ceremony surface
   (repetitive low-value emission), never the awareness monitors.
 - Re-evaluate when context changes — the classification is contingent and
@@ -76,21 +79,23 @@ collaboration-functionality decision, not at one structural moment. It had
 lived only in auto-memory (`useful-work-over-ceremony`,
 `comms-ceremony-minimal`), which is passive — under context pressure it did
 not fire (the
-[`passive-guidance-loses-to-artefact-gravity`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+`passive-guidance-loses-to-artefact-gravity`
 failure). The rule corpus is the active behavioural-modifier layer; this
 rule is that active layer. The portable *contract* substance already lives
 in PDR-082 / PDR-080 / PDR-066 — what was missing is the always-applied
-operational discipline, which is rule-shaped.
+operational discipline, which is rule-shaped. If a third consumer ever needs
+the portable contract in a form beyond this repo's rule, the home is a PDR
+parenting PDR-082/080/066 — authored at that third instance, not pre-emptively.
 
 ## Related Surfaces
 
 - [PDR-082 (n=2 collaboration mode)](../practice-core/decision-records/PDR-082-n2-collaboration-mode.md)
-  — **Status: Proposed** (first-instance evidence; see its §Falsifiability).
-  The value-contingency principle applied at one scale: drop the heartbeats
-  and message-sweeps the owner sees directly, retain the all-channels
-  watcher. This rule names the general principle; PDR-082's team-size framing
-  is the founding instance, and whether consumer-presence is the deeper
-  variable is a hypothesis on PDR-082's second-instance path.
+  — **Status: Adopted** (2026-06-15). The value-contingency principle applied
+  at one scale: drop the heartbeats and message-sweeps the owner sees directly,
+  retain the all-channels watcher. This rule names the general principle;
+  PDR-082's team-size framing was the founding instance, and the
+  consumer-presence generalisation it hypothesised graduated to PDR-078 §4 (the
+  consumer-absent exemption) on its second instance.
 - [PDR-080 (coordination-event absorption is signal-driven)](../practice-core/decision-records/PDR-080-coordination-event-absorption-is-signal-driven.md)
   — events absorbed by signal, not by calendar.
 - [PDR-066 (comms-events as failure-mode channel)](../practice-core/decision-records/PDR-066-comms-events-as-failure-mode-channel.md)

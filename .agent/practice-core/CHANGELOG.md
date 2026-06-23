@@ -4,6 +4,127 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-06-21 — practice-lineage restored to the evolution record; principles evacuated by intent (owner-directed, Ferret seeks Tunnel)
+
+Owner-directed clarity-of-purpose restoration: "the Practice lineage is supposed to be a
+git-like record of the branching and merging and transplanting and evolution of the Practice
+in different contexts … it is not supposed to encode principles." Authored best-effort
+(PDR-104); docs-adr-expert assessed.
+
+- **Restructured**: `practice-lineage.md` restored to a single purpose — the evolution record,
+  the narrative companion to `provenance.yml`: provenance mechanism, plasmid exchange & merge,
+  genesis/branching scenarios, two-way merge, maturity & adaptation. Removed from it: §Learned
+  Principles (evacuated, below) and the what-it-is / how-to-apply sections (§Principles,
+  §Metacognition, §Testing Philosophy, §Agent Pattern, §Workflow Commands, §Always-Applied Rules,
+  §Knowledge Flow, §Session-Entry Skills, §Validation) — verbatim duplicates of
+  `practice.md` / `practice-bootstrap.md` / `practice-verification.md`, conserved there.
+  855 → 288 lines.
+- **Evacuated by intent** (no tombstones; home-before-remove): the 19 axioms + 28 active
+  principles routed to their homes — ~37 already duplicated in `practice.md`, `principles.md`,
+  bootstrap, or PDR-004/005/015/018/024 (deleted, conservation verified first-hand); the
+  genuinely unhomed authored fresh.
+- **Added**: PDR-108 (generalise where generalisation does not cost utility), PDR-109 (culture is
+  what propagates across instances — the transmission of disposition), PDR-110 (repo-state
+  enforcement is its own proof layer + RED-first). All portable.
+- **Amended**: PDR-002 (the reinforcement-vs-multi-framing boundary); `practice.md` §Structure
+  (agent files are first-class infrastructure) and §Meta-Principles (homes-by-intent; rule-vs-skill;
+  intent-over-mechanics); `practice-bootstrap.md` (engineering-imperative enumeration as the
+  repo-case template; source-pointers repointed off the retired lineage sections). Per the tier
+  model — PDRs are portable, `principles.md` holds repo-specific cases that may be based on PDRs.
+- **Repointed**: trinity + PDR-005 + Core `index.md` role descriptions to the evolution-record
+  framing; 0 broken references.
+
+## [oak-open-curriculum-ecosystem] 2026-06-18 — best-effort doctrine authoring + recurrence-capture at the drain (dedicated consolidation, Wisteria spins Bark)
+
+Authored under the best-effort policy this entry records (no owner pre-ratification;
+reviewers run: assumptions-expert SOUND-WITH-FIXES, docs-adr-expert FIX-NEEDED — both
+absorbed before commit).
+
+- **Added**: PDR-104 (best-effort Practice-doctrine authoring in dedicated
+  consolidation sessions) — the primary agent authors/amends doctrine on best effort
+  without owner pre-ratification of each change; mistakes accepted, the knowledge flow
+  corrects them. Preserves PDR-003 sub-agent protection, the kept action-authority /
+  safety gates, and the PDR-101 quorum (as review, not pre-ratification). Disambiguates
+  the 2026-06-16 "Core-edit" gate (sub-agent-protection sense kept; per-amendment
+  owner-approval sense relaxed). Graduates the `PG-best-effort-consolidation-policy`
+  register item (register drained to decision-debt 0).
+- **Amended**: PDR-003 §Decision — reconciled the stale "with the human's consent in the
+  loop for changes of substance" wording to best-effort-no-pre-ratification (cites
+  PDR-104); sub-agent prohibition unchanged.
+- **Amended**: `consolidate-docs` skill — step 7 `duplicate` disposition gains a
+  recurrence check (a recurring-despite-home concept routes to the doctrine-traction
+  mechanism lane per PDR-098, not silent deletion); step 8 §3-§4 reconciled to
+  best-effort authoring (cites PDR-104).
+
+## [oak-open-curriculum-ecosystem] 2026-06-16 — universal CLI API-surface-design consistency (owner-directed)
+
+- **Amended**: PDR-055 — generalised from the coordination-CLI affordance set to
+  universal CLI API-surface-design consistency. Added clauses 7–10
+  (ask-only-caller-knowledge and default/derive tool-knowable values; teaching-help
+  content; actionable boundary errors; universal consistency with a conformance
+  guard); broadened the Scope split (clauses 1–6 coordination CLIs; 7–10 every CLI in
+  every Practice repo); retitled; Falsifiability axis added. Owner direction:
+  API-surface-design consistency is a universal requirement for all CLIs in all
+  Practice repos.
+
+## [oak-open-curriculum-ecosystem] 2026-06-14 — comms-research closeout consolidation (Marlin weaves Marsh)
+
+The dedicated consolidation closing the comms-corpus research thread graduated its flagship
+findings into Core doctrine (owner-approved at the closeout walk; the measure of impact is
+use and observation triggering refinement through the knowledge flow, not pre-review):
+
+- **Amended**: PDR-089 — the two-reader mutual-first-hand loop named as the external-check
+  *phenotype* for sustained research/verification work (a standing reciprocal reader, not an
+  ad-hoc pass; corpus-scale evidence from the thread). Sharpens Decision 3.
+- **Amended**: PDR-011 — Amendment Log: a thread is a multi-lane container (concurrent,
+  independently-pickup-able lanes, each its own state/branch/trigger; no single "Next safe
+  step"). Operative format-definer: `threads/README.md` §"Concurrent lanes"; the
+  `session-handoff` step-3 field and `continuity-practice.md` align on next touch.
+- **Amended**: PDR-081 (Proposed) — the per-pass log's disposition-pointer surface superseded
+  by `permanent-doc-is-the-consolidation-record` (the commit plus homed substance are the
+  curator's record); the `curator-pass` SKILL §Per-Pass Log aligned.
+- **Related host directive**: `directives/metacognition.md` gained §"Fluency Is a Warning,
+  Not a Confirmation" (dual of the friction section — smoothness is the trigger to ground the
+  situational fact first; passive lessons need a firing gate).
+
+## [oak-open-curriculum-ecosystem] 2026-06-12 — owner-approved amendment queue authored (Thyme wakes Canopy dedicated consolidation)
+
+The amendment queue the owner approved at the 2026-06-11 register walk
+("next dedicated session authors without re-asking") landed in one pass:
+
+- **Authored**: `PDR-092-mechanical-firing-moments-over-vigilance-clauses.md`
+  (knowledge-flow discipline: mechanical firing moments as the durable
+  graduation default, vigilance clauses as interim capture; corollary —
+  an untested mechanism is prose in costume).
+- **Authored**: `PDR-093-self-correcting-measurable-deliverables.md`
+  (`pdr_kind: pattern`; deliverables sequenced by consumption so a
+  successor's gate breaks on predecessor drift; host plan skill amended
+  to carry the drafting discipline).
+- **Amended**: PDR-064 — pre-positioning matured into a shadow-period
+  process; standing-successor authorisation + the citable-gate test
+  (resolves deferred open question 4); Director-session closeout
+  obligations; Status Proposed → Accepted per its own fired trigger.
+- **Amended**: PDR-011 — two clauses: subjective register reconciled to
+  "valued when genuine; voluntary always" (no volume/thinning monitor),
+  and the completeness backstop split into externalisable claim
+  verification vs holder-exclusive context-loss detection. ADR-150
+  host mirror updated.
+- **Amended**: PDR-078 — new §7 emit-side loop hygiene (posture derived
+  at emit time, one timestamp per tick, stop-loop-then-emit-end,
+  stderr-captured failures).
+- **Amended**: PDR-085 — instrument/discovery deliverables (beneficiary
+  = the team enabled to explore; receipt = first real reading produced
+  and consumed; PDR-093 as the honesty mechanism).
+- **Verified already-homed**: the continuity-surface disposition PDR
+  candidate — its full substance landed as PDR-011's 2026-06-08
+  amendment; no duplicate PDR authored.
+- **Three approved folds landed**: PDR-051 gains the
+  skill-listing-budgets-rise-with-adoption note (F1); the commit skill's
+  bounded lock-wait section replaced with the stricter
+  no-autonomous-lock-contact direction (F2); the host continuity
+  directive's §Continuation Records gains the
+  supersession-refreshes-the-auto-surfaced-chain clause (F5).
+
 ## [oak-open-curriculum-ecosystem] 2026-05-11 — PDR-059 regenerator-output-classification graduated (Fronded Flowering Seed session)
 
 Graduated the 2026-05-10 Quiet Lurking Mask pending-graduations entry

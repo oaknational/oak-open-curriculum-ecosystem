@@ -22,8 +22,8 @@ const method = 'GET' as const;
  * Path parameters derived from the OpenAPI schema.
  */
 export interface ToolPathParams {
-  /** Subject slug to filter by */
-  readonly subject: string;
+  /** Subject slug to filter by Allowed values: art, citizenship, computing, cooking-nutrition, design-technology, english, french, geography, german, history, maths, music, physical-education, religious-education, rshe-pshe, science, spanish */
+  readonly subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish';
 }
 export interface ToolParams {
   readonly path: ToolPathParams;
@@ -31,11 +31,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"subject":{"type":"string","description":"Subject slug to filter by","examples":["cooking-nutrition"]}} as const, additionalProperties: false as const, required: ["subject"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ subject: z.string().describe("Subject slug to filter by") }) }) });
-export const toolMcpFlatInputSchema = z.strictObject({ subject: z.string().describe("Subject slug to filter by").meta({ examples: ["cooking-nutrition"] }) });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"subject":{"type":"string","description":"Subject slug to filter by","examples":["cooking-nutrition"],"enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]}} as const, additionalProperties: false as const, required: ["subject"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ subject: z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"] as const).describe("Subject slug to filter by") }) }) });
+export const toolMcpFlatInputSchema = z.strictObject({ subject: z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"] as const).describe("Subject slug to filter by").meta({ examples: ["cooking-nutrition"] }) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"Subject slug to filter by","examples":["cooking-nutrition"]}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"Subject slug to filter by","examples":["cooking-nutrition"],"enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -113,7 +113,7 @@ export const getSubjectsYears = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Year groups for a given subject\n\nThis tool returns an array of years that are currently available for a given subject.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Year groups for a subject\n\nUse when you only need the year groups where this subject is available. Returns an array of year numbers, derived from the subject's key stages. Not for: the subject record (GET /subjects/{subject}); key stages rather than year groups (GET /subjects/{subject}/key-stages). Example: 'subject=english'.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

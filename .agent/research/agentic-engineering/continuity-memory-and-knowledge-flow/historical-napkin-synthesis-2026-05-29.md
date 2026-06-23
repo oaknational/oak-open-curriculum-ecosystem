@@ -384,7 +384,7 @@ critic recovered F4 (claims-open min-field contract) from them.
    remember-plugin lifecycle owner.
 
 4. **Lost `/tmp` artefact (important-state-not-in-temp-files violation).**
-   `/tmp/ferny-pattern-v3-outline.md` — the substrate-pointer pattern v3 outline
+   `<scratch>/ferny-pattern-v3-outline.md` — the substrate-pointer pattern v3 outline
    (6 sub-variants + cure shapes) — was documented as existing but stored in
    `/tmp`. It must be recovered or re-authored from `napkin-2026-05-24-shaded-
    silencing-dusk` before the substrate-pointer PDR elevation (Shaded candidate).

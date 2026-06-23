@@ -133,7 +133,7 @@ export const getSequencesQuestions = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Questions within a sequence\n\nThis tool returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Quiz questions across a sequence\n\nUse when you want every quiz question across a whole sequence — all programmes combined. Returns questions grouped by lesson in unit sequence order. Pass year as an optional filter to return only that year's questions. Supports offset and limit; Link: rel=\"next\" header signals more pages. Not for: questions in a single programme (GET /sequences/{sequence}/programmes/{programme}/questions); a single lesson's quiz (GET /lessons/{lesson}/quiz); questions for a key stage + subject without programme structure (GET /key-stages/{keyStage}/subject/{subject}/questions).\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

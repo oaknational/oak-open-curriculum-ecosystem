@@ -11,7 +11,7 @@ for the FIND-001/002 reclassification (MUST-FIX → HARDENING).
 Amended 2026-05-10 to record the fourth metadata profile and current
 OAuth-proxy limiter wiring.
 
-**Related**: [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-126 (Asset download proxy — HMAC trust discipline at boundaries)](126-asset-download-proxy.md), [ADR-143 (Coherent Structured Fan-Out for Observability)](143-coherent-structured-fan-out-for-observability.md)
+**Related**: [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-122 (Permissive CORS for OAuth-protected MCP)](122-permissive-cors-for-oauth-protected-mcp.md), [ADR-126 (Asset download proxy — HMAC trust discipline at boundaries)](126-asset-download-proxy.md), [ADR-143 (Coherent Structured Fan-Out for Observability)](143-coherent-structured-fan-out-for-observability.md)
 
 ## Context
 
@@ -73,14 +73,14 @@ authoritative volumetric defence — application-layer rate limiting is
 intentionally probabilistic and exists for cases where the edge layers
 are bypassed.
 
-| Layer                        | Protection                                                                                                                       | Failure Mode                                                |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| **DNS**                      | DNS rebinding guard rejects unrecognised `Host` headers (applied selectively to landing page)                                    | Bypassed if attacker controls DNS for an allowed host       |
-| **Cloudflare (outer edge)**  | Cloudflare CDN/WAF in front of Vercel: volumetric DDoS, bot management, edge rate-limit rules, TLS termination, geo-restrictions | Bypassed by direct-origin access or low-rate attacks        |
-| **Vercel (inner edge)**      | Vercel platform DDoS protection, edge functions, regional routing                                                                | Bypassed by direct-origin access or low-rate attacks        |
-| **Application — auth**       | OAuth 2.1 via Clerk, CORS, security headers (CSP, HSTS, X-Frame-Options)                                                         | Bypassed if OAuth token compromised or auth disabled        |
-| **Application — rate limit** | Per-IP rate limiting via `express-rate-limit` (this ADR)                                                                         | Distributed attacks across IPs; counter reset on cold start |
-| **Upstream API**             | Oak API per-key rate limiting and quota management                                                                               | Exhaustible via amplification from our server               |
+| Layer                        | Protection                                                                                                                                                                                                                                | Failure Mode                                                |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| **DNS**                      | DNS rebinding guard rejects unrecognised `Host` headers (standalone middleware on the landing page; the authenticated `/mcp` Host-allowlist check is enforced in the auth layer via `getPRMUrl` — 403 on a disallowed Host — see ADR-122) | Bypassed if attacker controls DNS for an allowed host       |
+| **Cloudflare (outer edge)**  | Cloudflare CDN/WAF in front of Vercel: volumetric DDoS, bot management, edge rate-limit rules, TLS termination, geo-restrictions                                                                                                          | Bypassed by direct-origin access or low-rate attacks        |
+| **Vercel (inner edge)**      | Vercel platform DDoS protection, edge functions, regional routing                                                                                                                                                                         | Bypassed by direct-origin access or low-rate attacks        |
+| **Application — auth**       | OAuth 2.1 via Clerk, CORS, security headers (CSP, HSTS, X-Frame-Options)                                                                                                                                                                  | Bypassed if OAuth token compromised or auth disabled        |
+| **Application — rate limit** | Per-IP rate limiting via `express-rate-limit` (this ADR)                                                                                                                                                                                  | Distributed attacks across IPs; counter reset on cold start |
+| **Upstream API**             | Oak API per-key rate limiting and quota management                                                                                                                                                                                        | Exhaustible via amplification from our server               |
 
 **Read-only blast radius.** All MCP tools exposed by this server are
 read-only — there is no state-mutation surface. A successful bypass at

@@ -12,7 +12,7 @@ the `directed` event kind);
 [ADR-183](183-comms-event-tag-namespace-substrate.md) (tag namespace
 substrate; tags classify event substance, not interaction shape or
 response priority);
-[`.agent/plans/agent-tooling/current/human-composer-tui.plan.md`](../../../.agent/plans/agent-tooling/current/human-composer-tui.plan.md)
+`.agent/plans/agent-tooling/current/human-composer-tui.plan.md`
 WS0 Path A (the owner-as-author doctrine this ADR composes with);
 pending-graduations candidate `sync-kind-urgency-flag` (the source
 candidate this ADR resolves).
@@ -135,7 +135,7 @@ replacement for:
 
 This sub-axis records the composition rule between the `sync` kind and
 the `author_kind: "agent" | "owner"` doctrine recommended by
-[`human-composer-tui.plan.md`](../../../.agent/plans/agent-tooling/current/human-composer-tui.plan.md)
+`human-composer-tui.plan.md`
 WS0 Path A. Owner ratification of Path A is the trigger for this
 sub-axis; if WS0 instead ratifies Path C (separate owner-direction event
 kind), this sub-axis is inert and `sync` retains agent-only semantics

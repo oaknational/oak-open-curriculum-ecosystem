@@ -9,20 +9,15 @@
  * Import only what you need — do not import this entire module unless necessary.
  */
 
-export { threadProgressionGraph } from './thread-progression-data.js';
-export { priorKnowledgeGraph } from './prior-knowledge-graph/index.js';
+export { graphCorpus } from './graph-corpus/index.js';
 export type {
-  PriorKnowledgeEdge,
-  PriorKnowledgeGraph,
-  PriorKnowledgeGraphStats,
-  PriorKnowledgeNode,
-} from './prior-knowledge-graph/index.js';
-export { misconceptionGraph } from './misconception-graph/index.js';
-export type {
-  MisconceptionGraph,
-  MisconceptionGraphStats,
-  MisconceptionNode,
-} from './misconception-graph/index.js';
+  GraphCorpus,
+  GraphCorpusUnitNode,
+  GraphCorpusEdge,
+  GraphCorpusNodeId,
+  GraphCorpusStats,
+  GraphCorpusDroppedEdge,
+} from './graph-corpus/index.js';
 export { vocabularyGraph } from './vocabulary-graph/index.js';
 export type {
   VocabularyGraph,

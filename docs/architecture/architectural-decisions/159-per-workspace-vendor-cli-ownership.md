@@ -16,7 +16,7 @@ canonical CLI usage matrix and `.sentryclirc` composition rules.
 
 Several vendor CLIs participate in Oak build and operations pipelines
 (currently `sentry-cli`; in the near future `clerk` —
-see [`.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`](../../../.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md)).
+see `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`).
 Each one presents the same recurring ownership question:
 
 - **Where is the binary installed?** User-global (brew / curl / Docker),
@@ -271,6 +271,6 @@ true`).
   interactive use only).
 
 The planned Clerk CLI adoption
-([`.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`](../../../.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md))
+(`.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`)
 is expected to apply this same pattern; that plan references this
 ADR as the canonical decision.

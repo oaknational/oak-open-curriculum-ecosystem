@@ -62,7 +62,7 @@ The retrieval-at-need gap as a **class** (i.e., closing it for failure modes bey
 HEAD `86f340b5` landed clean at husky pre-commit (90 turbo tasks). `pnpm check` (108 turbo tasks) failed RED on 4 gates: `test:a11y`, `test:ui`, `test:widget:a11y`, `test:widget:ui`. All 7 failing tests in `apps/oak-curriculum-mcp-streamable-http` shared the identical verbatim error text:
 
 ```text
-Error: browserType.launch: Executable doesn't exist at /Users/jim/Library/Caches/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell
+Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1223/chrome-headless-shell-mac-arm64/chrome-headless-shell
 Looks like Playwright was just installed or updated.
 Please run: pnpm exec playwright install
 ```

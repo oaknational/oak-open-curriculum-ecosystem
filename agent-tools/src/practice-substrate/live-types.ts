@@ -14,17 +14,22 @@ export const LEGACY_COMMS_ROOTS = [
   '.agent/state/collaboration/comms-lifecycle/',
   '.agent/state/collaboration/comms-messages/',
 ] as const;
-export const COMMS_EVENT_SCHEMA_PATH = '.agent/state/collaboration/comms-event.schema.json';
+export const COMMS_EVENT_SCHEMA_PATH =
+  'agent-tools/src/collaboration-state/schemas/comms-event.schema.json';
 export const SHARED_COMMS_LOG = '.agent/state/collaboration/shared-comms-log.md';
 export const OPEN_QUESTIONS_PATH = '.agent/memory/operational/open-questions.md';
 export const ACTIVE_CLAIMS_PATH = '.agent/state/collaboration/active-claims.json';
-export const ACTIVE_CLAIMS_SCHEMA_PATH = '.agent/state/collaboration/active-claims.schema.json';
+export const ACTIVE_CLAIMS_SCHEMA_PATH =
+  'agent-tools/src/collaboration-state/schemas/active-claims.schema.json';
 export const CLOSED_CLAIMS_PATH = '.agent/state/collaboration/closed-claims.archive.json';
-export const CLOSED_CLAIMS_SCHEMA_PATH = '.agent/state/collaboration/closed-claims.schema.json';
+export const CLOSED_CLAIMS_SCHEMA_PATH =
+  'agent-tools/src/collaboration-state/schemas/closed-claims.schema.json';
 export const CONVERSATIONS_ROOT = '.agent/state/collaboration/conversations/';
-export const CONVERSATION_SCHEMA_PATH = '.agent/state/collaboration/conversation.schema.json';
+export const CONVERSATION_SCHEMA_PATH =
+  'agent-tools/src/collaboration-state/schemas/conversation.schema.json';
 export const ESCALATIONS_ROOT = '.agent/state/collaboration/escalations/';
-export const ESCALATION_SCHEMA_PATH = '.agent/state/collaboration/escalation.schema.json';
+export const ESCALATION_SCHEMA_PATH =
+  'agent-tools/src/collaboration-state/schemas/escalation.schema.json';
 
 export interface ManifestReadResult {
   readonly manifest?: ManifestDocument;

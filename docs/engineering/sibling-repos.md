@@ -20,6 +20,7 @@ repos whose contents materially shape work in this ecosystem belong here.
 | [`oak-ai-lesson-assistant`](https://github.com/oaknational/oak-ai-lesson-assistant)             | Aila — Oak's AI lesson assistant; consumer of the Curriculum SDK                                     |
 | [`oak-ai-moderation-service`](https://github.com/oaknational/oak-ai-moderation-service)         | Moderation pipeline for AI-generated content; relevant when changes here affect moderation contracts |
 | [`aila-atomic-concepts`](https://github.com/oaknational/aila-atomic-concepts)                   | Atomic-concept extraction work that feeds curriculum graph thinking                                  |
+| [`oak-skills`](https://github.com/oaknational/oak-skills)                                       | Private — user-facing Agent Skills and the Oak Claude plugin; team skill taxonomy reconciles with it |
 
 ## Why this list
 

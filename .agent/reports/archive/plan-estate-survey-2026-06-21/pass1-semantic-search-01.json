@@ -1,0 +1,1966 @@
+{
+  "batch_size": 11,
+  "plans_returned": 11,
+  "unreadable": [],
+  "null_holistic": [],
+  "results": [
+    {
+      "plan": ".agent/plans/semantic-search/current/bulk-metadata-quick-wins.execution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All five todos are pending — plan is unstarted, not complete or superseded",
+          "file_line": "lines 9-23"
+        },
+        {
+          "claim": "Plan explicitly states it does not replace the M2 blocker and can progress independently",
+          "file_line": "lines 40-47"
+        },
+        {
+          "claim": "Peer plans keyword-definition-assets and thread-sequence-semantic-surfaces are listed as depending on this plan's widened outputs",
+          "file_line": "lines 289-291"
+        },
+        {
+          "claim": "Status ACTIVE in frontmatter, folder is current/",
+          "file_line": "lines 29-31"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is tightly scoped, has an explicit stop-line contract with named peer plans, a clear TDD phase model, an honest candidate field list, and explicit non-goals that prevent scope creep. The only weakness is that Phase 0 scope-lock decisions (lines 142-158) are framed as questions still to be answered rather than already resolved — appropriate for a pre-execution plan but means the actual field-level decisions are deferred to execution time.",
+      "content_quality": "strong",
+      "content_quality_note": "Plan has an operable standalone-session entry with explicit re-ground steps (lines 54-103), concrete acceptance criteria per phase (lines 199-253), named edit surfaces with file paths (lines 179-190), and an explicit non-goal boundary (lines 262-267). The candidate quick-win field list at lines 166-174 is specific enough to act on. The stop-line contract at lines 153-157 is precise and cross-referenced in the related-documents table.",
+      "salvage_value": [
+        {
+          "idea": "Wire orphaned bulk extractors already present in sdk-codegen/bulk/extractors/ into processBulkData() without new extractor logic",
+          "class": "good",
+          "file_line": "lines 113-118 and 230-236"
+        },
+        {
+          "idea": "Preserve keyword definitions as raw structured data in bulk outputs (P1 responsibility, not P2)",
+          "class": "good",
+          "file_line": "lines 166-167 and 207-209"
+        },
+        {
+          "idea": "Preserve misconception responses in bulk outputs",
+          "class": "good",
+          "file_line": "line 168"
+        },
+        {
+          "idea": "Preserve richer content-guidance detail in bulk outputs",
+          "class": "good",
+          "file_line": "line 169"
+        },
+        {
+          "idea": "Preserve pupil outcomes in bulk outputs",
+          "class": "good",
+          "file_line": "line 170"
+        },
+        {
+          "idea": "Preserve transcript-availability / transcript-format metadata in bulk outputs",
+          "class": "good",
+          "file_line": "line 171"
+        },
+        {
+          "idea": "Preserve unit lesson ordering metadata in bulk outputs",
+          "class": "good",
+          "file_line": "line 172"
+        },
+        {
+          "idea": "TDD phase model (RED/GREEN/REFACTOR/GATES) applied to bulk-surface widening",
+          "class": "good",
+          "file_line": "lines 12-23 and 195-253"
+        },
+        {
+          "idea": "Explicit Phase 0 scope-lock gate before any code changes",
+          "class": "good",
+          "file_line": "lines 95-103 and 196-210"
+        },
+        {
+          "idea": "Stop-line contract between P1 (raw preservation), P2 (canonical identity/deduplication), P3 (retrieval consumers)",
+          "class": "good",
+          "file_line": "lines 153-157"
+        },
+        {
+          "idea": "Non-goal boundary: no new glossary indices, no query-routing policy, no LLM transcript mining, no graph databases",
+          "class": "good",
+          "file_line": "lines 262-267"
+        },
+        {
+          "idea": "Standalone session entry with re-ground reading list and verify-current-state commands",
+          "class": "good",
+          "file_line": "lines 52-103"
+        },
+        {
+          "idea": "Candidate quick-win field set is narrower than full research pack — intentional scope discipline",
+          "class": "good",
+          "file_line": "lines 173-174"
+        },
+        {
+          "idea": "Phase 4 specialist reviewer list (docs-adr-expert, architecture-expert-barney, architecture-expert-fred, code-expert)",
+          "class": "speculative",
+          "file_line": "lines 251-256"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1 LOCKED — every plan node requires a stable kebab slug as its graph identity)",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (V0 §2.1 LOCKED — registry discriminator required on all plans)",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2 LOCKED — executable/strategic discriminator required on all plans; body prose '🟢 ACTIVE' at line 29 implies kind: executable but the field is absent from frontmatter)",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (V0 §2.3 LOCKED — required for executable plans; must resolve to a registry ID or carry sentinel 'pending')",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:1-24 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4 LOCKED — required for all plans); date 2026-03-07 appears only as body prose at line 29, not as a frontmatter field",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:29 (body prose, not frontmatter)"
+        },
+        {
+          "issue": "Emergent key `source_research` present in frontmatter (lines 6-8) but not classified by V0 §2 or §2.5; closest candidates are `derives_from` (authority edge to research docs) or `related` (untyped see-also), but neither is a match — this key is outside the V0 contract",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:6-8"
+        },
+        {
+          "issue": "Status expressed only as body prose '**Status**: 🟢 ACTIVE' (line 29), not via V0 orthogonal axes; the dropped `status:` field is correctly absent from frontmatter but its replacement axes (kind, disposition, gate) are not present",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:29"
+        }
+      ],
+      "unclassified_keys": [
+        "source_research"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "The plan defers the 'canonical widened hand-off surface' contract decision to Phase 0 runtime, but names two downstream consumers (keyword-definition-assets and thread-sequence-semantic-surfaces) in the Related Documents table. If Phase 0 produces a shape that either downstream plan has already implicitly assumed, the contract will be retrofit under pressure rather than designed upfront. The plan should require that both downstream plans' assumed input shapes are read and crosswalked before Phase 0 scope-lock is declared complete.",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:140-157 (Scope Lock Decisions), 287-291 (Related Documents)"
+        },
+        {
+          "severity": "medium",
+          "claim": "The stop-line between P1 (this plan) and P2 (keyword-definition-assets) is defined only in prose as 'P1 preserves raw structured keyword definition data; P2 owns canonical identity, deduplication, provenance'. There is no schema boundary articulated — no named type, interface, or contract that enforces where P1 ends and P2 begins. Without a typed boundary, the two plans will couple silently at the raw-data shape level, and a P2 refactor will break P1 consumers without a compiler signal.",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:153-158 (Stop lines), 206-210 (Phase 0 acceptance criterion 4)"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan lists `processBulkData()` as the primary extension surface but does not clarify whether widened outputs flow through a single typed result type or are added as parallel ad hoc fields alongside the existing shape. Phase 1 acceptance criterion 2 says 'structured lesson metadata survives without ad hoc types' (line 222), but there is no Phase 0 criterion requiring the result-type contract to be authored before tests are written. This risks the test phase driving a shape that was never architecturally reviewed.",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:218-224 (Phase 1 minimum coverage)"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan identifies `apps/oak-search-cli` adapters as 'potential downstream verification surfaces' (lines 186-189) but does not establish whether the adapters consume the bulk result type directly or through an intermediary contract. If the adapters couple directly to the internal bulk result type, widening that type is a breaking change to the CLI app boundary — a cross-package coupling risk that should be made explicit in Phase 0.",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:183-189 (Key Files And Likely Edit Surfaces)"
+        },
+        {
+          "severity": "info",
+          "claim": "The phase model is well-structured (RED/GREEN/REFACTOR with an explicit scope-lock gate) and the non-goals list is appropriately tight. The plan correctly defers retrieval policy, query routing, and graph surfaces, which are the highest architectural risk items.",
+          "file_line": "bulk-metadata-quick-wins.execution.plan.md:195-258 (Phase Model, Non-Goals)"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All five todos are pending — no phase has been started (cited at lines 9-23)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/semantic-search/current/bulk-metadata-quick-wins.execution.plan.md:11,14,17,20,23 — five todos each `status: pending`; no body marker of started/complete work (grep only hit line 46 \"Milestone 2 is complete\", an unrelated cross-plan note)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/semantic-search/current/keyword-definition-assets.execution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is READY with zero todos started — it is active backlog, not complete work",
+          "file_line": "file:12-26 (all todos pending)"
+        },
+        {
+          "claim": "Dependency on bulk-metadata-quick-wins is explicitly scoped and still relevant",
+          "file_line": "file:76-85"
+        },
+        {
+          "claim": "No completion marker, no superseding plan referenced anywhere in the document",
+          "file_line": "file:1-185 (no such marker)"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "All constituent ideas are either load-bearing design decisions or disciplined non-goal exclusions. The phase model is lean and TDD-grounded. The boundary separation (B03 owns asset, B04/B05 consume it) is architecturally sound and consistently applied throughout (file:151-154, file:119-123). No speculative or irrelevant material present.",
+      "content_quality": "adequate",
+      "content_quality_note": "The plan is structurally sound and boundary-correct but Phase 0 leaves three open questions unresolved (file:95-99: asset shape, provenance scope, delivery scope). These are intentionally deferred to implementation but make the plan a decision-sketch rather than a fully-specified execution brief. Phase 1-3 are adequately specified for TDD entry.",
+      "salvage_value": [
+        {
+          "idea": "Promote keyword definitions from lesson-local flat metadata to a canonical deduplicated asset with explicit provenance (oak.keyword)",
+          "class": "good",
+          "file_line": "file:2-3, 34-36"
+        },
+        {
+          "idea": "Phase 0 decision-lock pattern: resolve asset shape, provenance scope, and delivery scope before any implementation",
+          "class": "good",
+          "file_line": "file:92-99"
+        },
+        {
+          "idea": "TDD RED/GREEN/REFACTOR cycle applied to asset generation and provenance capture",
+          "class": "good",
+          "file_line": "file:104-133"
+        },
+        {
+          "idea": "Deterministic handling of repeated terms across lessons as a first-class test requirement",
+          "class": "good",
+          "file_line": "file:113"
+        },
+        {
+          "idea": "Boundary separation: B03 owns asset shape and generation; B04 owns retrieval policy; B05 owns consumption",
+          "class": "good",
+          "file_line": "file:148-154"
+        },
+        {
+          "idea": "Non-goal exclusion of ontology-wide canonical concept IDs to avoid scope bleed",
+          "class": "good",
+          "file_line": "file:162-163"
+        },
+        {
+          "idea": "Non-goal exclusion of transcript-mined paraphrase promotion from this plan",
+          "class": "good",
+          "file_line": "file:161"
+        },
+        {
+          "idea": "Minimum-four-reviewer gate (docs-adr-expert, architecture-expert-betty, architecture-expert-fred, code-expert)",
+          "class": "good",
+          "file_line": "file:137-142"
+        },
+        {
+          "idea": "Decision guidance to prefer simplest viable first step — canonical asset surface before Elasticsearch document surface",
+          "class": "good",
+          "file_line": "file:147-150"
+        },
+        {
+          "idea": "Phase 3 acceptance criterion: distinguish asset generation, retrieval policy, and glossary/retrieval consumption in boundary-local docs",
+          "class": "good",
+          "file_line": "file:129-132"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "depends_on"
+      ],
+      "status_raw": "📋 READY (current)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plans)",
+          "file_line": "keyword-definition-assets.execution.plan.md:1-27 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (LOCKED, required for all plans; replaces free-label `type:`)",
+          "file_line": "keyword-definition-assets.execution.plan.md:1-27 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plans; executable inferred from `todos` presence and `current/` folder)",
+          "file_line": "keyword-definition-assets.execution.plan.md:1-27 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED, required for executable plans — must be a strategic-choice ID or `\"pending\"`)",
+          "file_line": "keyword-definition-assets.execution.plan.md:1-27 (frontmatter block — field absent)"
+        },
+        {
+          "issue": "`last_updated` is absent from frontmatter (LOCKED, required for all plans); value exists only as body prose `**Last Updated**: 2026-03-06` not a frontmatter field",
+          "file_line": "keyword-definition-assets.execution.plan.md:31"
+        },
+        {
+          "issue": "`depends_on` entries must be objects `{ plan, kind: blocking | beneficial }` per V0 §4 (LOCKED shape); the plan declares a bare string ref with no `kind` property",
+          "file_line": "keyword-definition-assets.execution.plan.md:9-10"
+        }
+      ],
+      "unclassified_keys": [
+        "source_research"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Phase 0 defers the core architectural decision (asset-generation-only vs. asset-generation plus a dedicated Elasticsearch document surface) to execution time rather than locking it before any code changes. This is the boundary-definition moment for Boundary 03 vs. Boundary 04/05 responsibility split; leaving it open at execution start creates a risk that the implementation will inadvertently bleed retrieval-policy concerns into the asset layer.",
+          "file_line": "keyword-definition-assets.execution.plan.md:96-103"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan names `@oaknational/sdk-codegen/bulk` as the likely change area for the asset-generation path but does not state whether this workspace already exports a typed canonical-asset surface or whether a new export shape must be authored. Without that fact established before Phase 1, the RED tests will have no stable type target to compile against, stalling the TDD loop.",
+          "file_line": "keyword-definition-assets.execution.plan.md:119-123"
+        },
+        {
+          "severity": "medium",
+          "claim": "The provenance model names a single category `oak.keyword` (line 67) but acknowledges 'any future categories if needed' without defining the extension mechanism. If downstream consumers (Boundary 04/05) must distinguish provenance by subject or key-stage as well as by term type, a flat single-category provenance string will require a breaking schema change later. The Phase 0 decision lock should capture the provenance field cardinality and versioning strategy.",
+          "file_line": "keyword-definition-assets.execution.plan.md:67-68"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 3 acceptance criteria require deduplication of definition-shaping logic across downstream consumers, but the plan lists no audit step to locate that logic before implementation begins. Without a pre-implementation search of downstream workspaces, the refactor phase may discover late that extraction required broader scope than the bulk pipeline alone.",
+          "file_line": "keyword-definition-assets.execution.plan.md:126-133"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan declares a dependency on `bulk-metadata-quick-wins.execution.plan.md` but does not state a completion gate: it is unclear whether `bulk-metadata-quick-wins` must be fully merged to main or only a specific output (widened bulk export) must be available. A partial or branch-only state could allow Phase 2 to build on an unstable schema.",
+          "file_line": "keyword-definition-assets.execution.plan.md:10,76-85"
+        },
+        {
+          "severity": "low",
+          "claim": "Non-goals explicitly exclude 'Ontology-wide canonical concept IDs for all curriculum entities' but the plan introduces term identity via deduplication across lessons (Phase 1 test item 4). The boundary between a deduplicated term key and a stable concept ID is not drawn; if the deduplication key becomes load-bearing for graph or suggestion work, it will need to meet concept-ID stability guarantees that are not designed here.",
+          "file_line": "keyword-definition-assets.execution.plan.md:162-166,110"
+        },
+        {
+          "severity": "info",
+          "claim": "Phase 4 names four minimum reviewers including two architecture experts (`architecture-expert-betty`, `architecture-expert-fred`), which is appropriate given the boundary-definition risk, but the plan does not specify what architectural question each reviewer is expected to answer. Without that focus, the review round may produce broad rather than boundary-specific feedback.",
+          "file_line": "keyword-definition-assets.execution.plan.md:138-142"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are still pending — no phase has been started",
+          "file_line": "file:8-22"
+        },
+        {
+          "claim": "Freshness note confirms this remains the canonical tracker for outstanding auth/rate-limit work",
+          "file_line": "file:31-34"
+        },
+        {
+          "claim": "Non-Goals section cleanly scopes the plan, signalling it is still correctly positioned",
+          "file_line": "file:104-107"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan encodes real security-gating criteria (Clerk authorized parties, disposable-email controls, edge rate limiting with observable metrics) grounded in prior research. No padding or speculative scope. The non-goals are crisp. The acceptance criteria at file:53-58, 68-72, 76-80 are concrete and independently verifiable.",
+      "content_quality": "strong",
+      "content_quality_note": "Each phase has explicit acceptance criteria and, where relevant, runnable validation commands (file:61-63, 85-89). Scope is tightly bounded. The freshness note at file:31-34 records historical context without contaminating forward scope. Nothing is vague or aspirational without a check.",
+      "salvage_value": [
+        {
+          "idea": "Clerk tenancy decision (shared vs independent) must be explicitly signed off before implementation begins",
+          "class": "good",
+          "file_line": "file:55"
+        },
+        {
+          "idea": "Social provider rollout order fixed at Phase 1",
+          "class": "good",
+          "file_line": "file:56"
+        },
+        {
+          "idea": "Host/header enforcement preconditions are blocking checks, not advisory",
+          "class": "good",
+          "file_line": "file:57-58"
+        },
+        {
+          "idea": "Runtime configuration must support production Clerk keys and authorized parties (CLERK_AUTHORIZED_PARTIES)",
+          "class": "good",
+          "file_line": "file:69"
+        },
+        {
+          "idea": "Public sign-up controls include a disposable-email policy",
+          "class": "good",
+          "file_line": "file:70"
+        },
+        {
+          "idea": "Auth flows must remain MCP/OAuth compliant after Clerk cutover",
+          "class": "good",
+          "file_line": "file:71"
+        },
+        {
+          "idea": "Edge rate limits enforced on /oauth/register, /oauth/authorize, /oauth/token endpoints",
+          "class": "good",
+          "file_line": "file:77"
+        },
+        {
+          "idea": "Rate limits are observable via metrics/logging and include safe retry semantics",
+          "class": "good",
+          "file_line": "file:78"
+        },
+        {
+          "idea": "Abuse scenarios are tested without degrading normal sign-in flows",
+          "class": "good",
+          "file_line": "file:79"
+        },
+        {
+          "idea": "Validation gates cover type-check, lint, test, and e2e for the MCP streamable-http package",
+          "class": "good",
+          "file_line": "file:85-89"
+        },
+        {
+          "idea": "Completion evidence must be captured before the plan is archived",
+          "class": "good",
+          "file_line": "file:97"
+        },
+        {
+          "idea": "Milestone 2 blocker status must be unambiguous across plan indexes at closure",
+          "class": "good",
+          "file_line": "file:98"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "📋 READY (current)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "id absent — required for all plans (LOCKED, V0 §2.1)",
+          "file_line": "file:1-23 (frontmatter block has no id key)"
+        },
+        {
+          "issue": "node_type absent — required for all plans (LOCKED, V0 §2.1)",
+          "file_line": "file:1-23 (frontmatter block has no node_type key)"
+        },
+        {
+          "issue": "kind absent — required for all plans (LOCKED, V0 §2.2); inferred executable from presence of todos but not declared",
+          "file_line": "file:1-23 (frontmatter block has no kind key)"
+        },
+        {
+          "issue": "last_updated absent from frontmatter — required for all plans (LOCKED, V0 §2.4); present only in body prose at line 28",
+          "file_line": "line:28"
+        },
+        {
+          "issue": "serves_strategic_choice absent — required for executable plans (LOCKED shape, V0 §2.3 / §4 invariant 1); no 'pending' sentinel either",
+          "file_line": "file:1-23 (frontmatter block has no serves_strategic_choice key)"
+        },
+        {
+          "issue": "status: used in body prose (line 29) as a state label; V0 §2.5 drops status entirely — body use is acceptable but the value encodes both kind and execution-axis state that belong in frontmatter fields",
+          "file_line": "line:29"
+        }
+      ],
+      "unclassified_keys": [
+        "source_research"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "security",
+      "specialist_kind": "security",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Phase 2 acceptance criteria require rate limits to be enforced on /oauth/register, /oauth/authorize, and /oauth/token, but no concrete limit values, burst ceilings, or IP-keying strategy are specified. Without these, an implementer may ship limits too loose to block credential-stuffing or token-endpoint abuse against the unauthenticated surface.",
+          "file_line": "m2-public-alpha-auth-rate-limits.execution.plan.md:76-79"
+        },
+        {
+          "severity": "high",
+          "claim": "Phase 1 mentions a disposable-email policy for public sign-up controls but provides no acceptance criterion for how the policy is enforced, what blocklist or heuristic is used, or how bypass (sub-addressing, typosquat domains) is mitigated. A gap here directly enables mass fake-account creation at public alpha open.",
+          "file_line": "m2-public-alpha-auth-rate-limits.execution.plan.md:70-72"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 0 decision-lock requires CLERK_AUTHORIZED_PARTIES to be recorded as a blocking precondition, but neither Phase 0 nor Phase 1 has an explicit acceptance criterion verifying that the production runtime actually sets this env var and that the Clerk SDK rejects requests with unlisted parties. The bash validation command only greps for the string in a research doc, not in the live config or test fixtures.",
+          "file_line": "m2-public-alpha-auth-rate-limits.execution.plan.md:56-63"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 2 requires rate-limit observability (metrics/logging) but does not specify whether rate-limit headers (Retry-After, X-RateLimit-*) are returned to clients. Without standardised headers, clients and security tooling cannot distinguish a rate-limit 429 from other 4xx errors, making abuse-pattern detection harder.",
+          "file_line": "m2-public-alpha-auth-rate-limits.execution.plan.md:76-79"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan references shared-vs-independent Clerk tenancy (Phase 0) as an open decision. From a security standpoint, shared tenancy introduces blast-radius risk: a compromised token or misconfigured authorized-parties setting in one environment affects all tenants. The plan should record this risk explicitly when locking the decision.",
+          "file_line": "m2-public-alpha-auth-rate-limits.execution.plan.md:54-55"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 3 validation gates run type-check, lint, test, and e2e against a single package filter. There is no gate that verifies rate-limiting behaviour end-to-end (e.g., a test that fires N+1 requests and asserts a 429 is returned). This leaves the rate-limit implementation unproven at gate time.",
+          "file_line": "m2-public-alpha-auth-rate-limits.execution.plan.md:84-90"
+        }
+      ],
+      "load_bearing_claims_count": 3,
+      "high_stakes_verdicts": [
+        {
+          "claim": "This plan remains the canonical tracker for the outstanding auth/rate-limit work required before open public alpha",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "m2-public-alpha-auth-rate-limits.execution.plan.md:28-34 (Status READY/current; freshness note: PR #54 shipped invite-only restructuring NOT this hardening); current/README.md:39 (lists this file as owner of \"Clerk migration + OAuth proxy rate limits\", status Ready); roadmap.md:33,82 (Milestone 2 Open Public Alpha = NEXT, not done)"
+        },
+        {
+          "claim": "All five phases remain pending",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/semantic-search/current/m2-public-alpha-auth-rate-limits.execution.plan.md:10,13,16,19,22 — phase-0..phase-4 each carry `status: pending`; freshness note at :31-34 disclaims that PR #54 advanced this auth/rate-limit work, and :28 reads \"READY (current)\"."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/semantic-search/current/search-contract-followup.plan.md",
+      "classification": "rewrite",
+      "classification_evidence": [
+        {
+          "claim": "Status line says EXECUTING via pre-reingest-remediation.execution.plan.md (archived under completed/), which means the parent execution vehicle is closed; this plan's todos remain pending, creating a stranded-spec situation",
+          "file_line": "file:18-19"
+        },
+        {
+          "claim": "Both todos carry status: pending with no recorded progress",
+          "file_line": "file:8-13"
+        },
+        {
+          "claim": "Folder lane is current/ but the executing plan is in archive/completed/, suggesting this should either be promoted to active or closed with outstanding items rehomed",
+          "file_line": "file:18"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Both tasks are specific, implementable, and address real gaps (symmetry in field-integrity coverage; repeatable prod smoke that avoids CI flakiness). The implementation notes cite exact file targets and assert structural constraints. No bad ideas detected; the CI-exclusion discipline for the smoke procedure is architecturally sound.",
+      "content_quality": "strong",
+      "content_quality_note": "Acceptance criteria are enumerated (file:62-65); implementation notes reference exact test file and retriever (file:32-36); query semantics difference (term/keyword vs match_phrase/text) is called out explicitly (file:36); CI exclusion discipline is specified precisely (file:55, file:59). Content exceeds V0-conformance — it encodes non-obvious technical constraints.",
+      "salvage_value": [
+        {
+          "idea": "Add a lessons/threadSlug field-integrity integration test in oak-search-sdk mirroring the sequences/category test pattern",
+          "class": "good",
+          "file_line": "file:8-9"
+        },
+        {
+          "idea": "Assert SEARCH_FIELD_INVENTORY has lessons/thread_slugs entry with mappingType keyword",
+          "class": "good",
+          "file_line": "file:33-35"
+        },
+        {
+          "idea": "Assert filter shape is { term: { thread_slugs: '<slug>' } } or bool-wrapped equivalent from buildFourWayRetriever",
+          "class": "good",
+          "file_line": "file:33-34"
+        },
+        {
+          "idea": "Document optional prod smoke procedure in apps/oak-search-cli/docs/INDEXING.md (not in plans)",
+          "class": "good",
+          "file_line": "file:47-49"
+        },
+        {
+          "idea": "Smoke query matrix should reproduce F1/F2 JSON from findings register (lessons threadSlug, sequences category nonsense -> zero hits)",
+          "class": "good",
+          "file_line": "file:52-53"
+        },
+        {
+          "idea": "Warn in smoke doc that SDK total reflects page length not ES hits.total; prefer result-ID comparison",
+          "class": "good",
+          "file_line": "file:54"
+        },
+        {
+          "idea": "Add optional pnpm smoke:prod:search script that is explicitly absent from required CI jobs",
+          "class": "good",
+          "file_line": "file:57-59"
+        },
+        {
+          "idea": "Link smoke doc from semantic-search active README or F2 plan supporting documents",
+          "class": "good",
+          "file_line": "file:62-63"
+        },
+        {
+          "idea": "Use lessons in term-on-keyword filter vs sequences in match_phrase-on-text — document the semantic difference between test patterns",
+          "class": "good",
+          "file_line": "file:36"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (kebab slug, stable) — required for all plans per V0 §2.1",
+          "file_line": "search-contract-followup.plan.md:1-14 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type: plan` — required for all plans per V0 §2.1",
+          "file_line": "search-contract-followup.plan.md:1-14 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` — required for all plans per V0 §2.2; todos present implies executable but kind is not declared",
+          "file_line": "search-contract-followup.plan.md:1-14 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (ISO date) — required for all plans per V0 §2.4",
+          "file_line": "search-contract-followup.plan.md:1-14 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` — required for executable plans per V0 §2.3; plan carries todos making it executable",
+          "file_line": "search-contract-followup.plan.md:1-14 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Dependency declared as body prose rather than typed `depends_on` frontmatter edge — V0 §4 requires `depends_on` with `kind: blocking|beneficial` in frontmatter",
+          "file_line": "search-contract-followup.plan.md:20"
+        },
+        {
+          "issue": "Execution state expressed as emoji prose in body (`🔴 EXECUTING`) rather than via V0 orthogonal axes in frontmatter (kind + Linear-projected execution status per V0 §3.2)",
+          "file_line": "search-contract-followup.plan.md:18"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "test",
+      "specialist_kind": "test",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Task 1 specifies the test should 'assert the filter includes { term: { thread_slugs: \"<slug>\" } } (or the bool-wrapped form consistent with buildFourWayRetriever)' — the 'or' leaves the assertion shape ambiguous. An integration test with a vague assertion shape may pass a wrong form silently. The plan should commit to one canonical assertion shape and note that the other is also valid only if buildFourWayRetriever wraps it consistently.",
+          "file_line": "search-contract-followup.plan.md:33-35"
+        },
+        {
+          "severity": "low",
+          "claim": "Task 1 says 'either extract a testable helper or assert on captured EsSearchRequest from a thin wrapper'. Two implementation paths are left open; this risks the test landing in a style inconsistent with the existing field-integrity test, weakening the symmetry goal stated in the overview.",
+          "file_line": "search-contract-followup.plan.md:36-37"
+        },
+        {
+          "severity": "low",
+          "claim": "Task 2 acceptance criteria include no assertion that the query matrix JSON in the doc is validated against the real SDK types or a schema. Doc-only smoke procedures with hand-crafted JSON can quietly drift from the actual request shape. The plan should note that the matrix JSON must be derived from, or validated by, the SDK (not manually authored).",
+          "file_line": "search-contract-followup.plan.md:52-54"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly excludes the optional smoke from default CI (line 55, 59) and states the field-integrity test is part of standard CI once merged (line 38). The CI boundary is clearly stated.",
+          "file_line": "search-contract-followup.plan.md:38,55,59"
+        },
+        {
+          "severity": "info",
+          "claim": "Plan status is EXECUTING, delegated to pre-reingest-remediation.execution.plan.md as S4/S5. Both todos remain 'pending'. The plan is live specification, not a candidate for archive.",
+          "file_line": "search-contract-followup.plan.md:18-19"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Status: EXECUTING via pre-reingest-remediation.execution.plan.md (promoted to pre-reingest blocking 2026-03-22)",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": ".agent/plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md:35 (\"**Status**: COMPLETE (2026-03-23)\") with todos phase-1-red-threadslug and prod-smoke-doc both status: done (lines 16,30); Task 1 deliverable present at packages/sdks/oak-search-sdk/src/retrieval/search-field-integrity.integration.test.ts:122-132"
+        },
+        {
+          "claim": "Both todos have status: pending — no task has been completed",
+          "verdict": "refuted",
+          "confidence": "high",
+          "evidence": "packages/sdks/oak-search-sdk/src/retrieval/search-field-integrity.integration.test.ts:122-132 (Task 1 lessons threadSlug field-integrity test exists); apps/oak-search-cli/docs/INDEXING.md:158 \"## Optional production search smoke\" (Task 2 doc exists); plan body line 18-19 marks it EXECUTING/consolidated into the now-completed pre-reingest-remediation.execution.plan.md"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/semantic-search/current/search-sdk-args-extraction.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending — no work has started; plan is live and actionable",
+          "file_line": "search-sdk-args-extraction.plan.md:5-22"
+        },
+        {
+          "claim": "Status is PLANNING and folder lane is current/, in agreement",
+          "file_line": "search-sdk-args-extraction.plan.md:28"
+        },
+        {
+          "claim": "Motivating evidence (exact source file:line references) is cited and still points to active code paths",
+          "file_line": "search-sdk-args-extraction.plan.md:50-54"
+        },
+        {
+          "claim": "No blocking dependencies; prerequisites are confirmed complete",
+          "file_line": "search-sdk-args-extraction.plan.md:390-403"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every constituent idea is grounded in a demonstrated duplication problem with exact source citations (file:line). The design choices (RetrievalScope naming, error variant split, SearchArgs as generic input shape, move-not-wrap principle) are well-reasoned and consistent with the search SDK's existing surface. The YAGNI non-goals list is specific and appropriate. No speculative scope creep detected.",
+      "content_quality": "strong",
+      "content_quality_note": "Plan is execution-ready: each workstream specifies target files, exact changes, and a deterministic validation command. The test specifications (WS1) enumerate concrete test cases, not just test categories. The risk table addresses real cross-package concerns. The naming rationale section (line 122) demonstrates the author understood the existing codebase surface (RetrievalService) and applied it consistently. References to component templates are appropriate for shared ceremony; plan-specific content is fully present inline.",
+      "salvage_value": [
+        {
+          "idea": "SearchArgs as a generic consumer-facing input type decoupling UI/CLI/MCP forms from SDK param types",
+          "class": "good",
+          "file_line": "search-sdk-args-extraction.plan.md:170-178"
+        },
+        {
+          "idea": "RetrievalScope naming (not SearchSdkScope) to avoid redundant prefix and align with RetrievalService",
+          "class": "good",
+          "file_line": "search-sdk-args-extraction.plan.md:122-123"
+        },
+        {
+          "idea": "Error variant split: SDK owns es_error and timeout; MCP layer extends locally for validation_error and unknown",
+          "class": "good",
+          "file_line": "search-sdk-args-extraction.plan.md:232-234"
+        },
+        {
+          "idea": "Move-not-wrap principle for consumer refactor: replace MCP/CLI implementations with SDK imports, no compatibility shims",
+          "class": "good",
+          "file_line": "search-sdk-args-extraction.plan.md:73"
+        },
+        {
+          "idea": "Scope enum divergence diagnosis: sdk-codegen SearchScope lacks threads and suggest while curriculum SDK has all five",
+          "class": "good",
+          "file_line": "search-sdk-args-extraction.plan.md:54"
+        },
+        {
+          "idea": "Demo search UI as a downstream follow-up plan gated on WS1-WS3 completion",
+          "class": "good",
+          "file_line": "search-sdk-args-extraction.plan.md:406-415"
+        },
+        {
+          "idea": "validateSubject and validateKeyStage may stay in CLI because they depend on curriculum SDK types, not search SDK types",
+          "class": "speculative",
+          "file_line": "search-sdk-args-extraction.plan.md:296-298"
+        },
+        {
+          "idea": "ADR for SDK-as-canonical-consumer-surface decision noted as likely warranted but deferred to WS6",
+          "class": "speculative",
+          "file_line": "search-sdk-args-extraction.plan.md:352-353"
+        },
+        {
+          "idea": "SearchArgs scope-specific filters via discriminated union or builder overloads to avoid kitchen-sink Record-like type",
+          "class": "speculative",
+          "file_line": "search-sdk-args-extraction.plan.md:362-363"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1: required for all plans; the node's stable graph identity)",
+          "file_line": "search-sdk-args-extraction.plan.md:1-23 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` with literal value `\"plan\"` (V0 §2.1: required for all; the registry discriminator)",
+          "file_line": "search-sdk-args-extraction.plan.md:1-23 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` — plan carries `todos` (executable indicator) but no `kind: executable` declaration (V0 §2.2: required for all plans)",
+          "file_line": "search-sdk-args-extraction.plan.md:1-23 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` in frontmatter — date exists only as body prose `**Last Updated**: 2026-03-01` (V0 §2.4: required for all; folds in housekeeping drift)",
+          "file_line": "search-sdk-args-extraction.plan.md:27"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` — executable plans require this field or explicit `\"pending\"` sentinel (V0 §2.3, §4, authority invariant 1)",
+          "file_line": "search-sdk-args-extraction.plan.md:1-23 (frontmatter block)"
+        },
+        {
+          "issue": "Body carries `**Status**: 🟡 PLANNING` as prose — V0 §2.5 drops `status` in favour of orthogonal axes (`kind`/`disposition`/`gate`); the state is not expressed in any frontmatter axis",
+          "file_line": "search-sdk-args-extraction.plan.md:28"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter — `depends_on` with blocking/beneficial classification, `thread`, and `derives_from` are all absent; the Dependencies section names related plans only in body prose",
+          "file_line": "search-sdk-args-extraction.plan.md:389-402"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "type",
+      "specialist_kind": "type",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "SearchArgs is designed as a flat record with all optional scope-specific filters (minLessons, phase, category, tier, examBoard, threadSlug) alongside scope discriminator. This means e.g. a 'lessons' scope call can silently carry unitsy fields with no compile-time guard. The plan notes the kitchen-sink risk in the risk table (line 364) but dismisses it with a non-binding mitigation note rather than mandating a discriminated union design. WS2.1 (lines 174-177) says 'plus scope-specific optional filters' with no union constraint. Without a discriminated union on scope, param builders must defensively ignore irrelevant fields, and callers receive no type error for mismatched scope+filter combinations.",
+          "file_line": "search-sdk-args-extraction.plan.md:174-177"
+        },
+        {
+          "severity": "medium",
+          "claim": "RetrievalScope is defined as a const-tuple-derived type (lines 191-194) covering five members including 'suggest', while sdk-codegen's SearchScope covers only three ('lessons', 'units', 'sequences'). The plan documents this divergence (line 54, line 365) but leaves the authoritative relationship informal — it says 'RetrievalScope is authoritative for retrieval operations' in a risk-table note. No type-level relationship (e.g. RetrievalScope extends SearchScope, or a branded subset) is mandated. A consumer relying on static assignability between the two types will discover the mismatch at runtime. The plan should mandate either a compile-time subtype assertion or an explicit type-incompatibility note in TSDoc.",
+          "file_line": "search-sdk-args-extraction.plan.md:54,365"
+        },
+        {
+          "severity": "medium",
+          "claim": "WS1.4 (lines 146-160) specifies a 'SearchArgs type compilation test' that uses satisfies assertions to prove type compatibility, but the plan does not define what the satisfies targets are. 'Satisfies' proves a value satisfies a type, not that a type is assignable to another type. Without concrete target types named, the test spec is underspecified: an implementer could write trivially-passing satisfies assertions that do not actually guard the scope-specific param mapping.",
+          "file_line": "search-sdk-args-extraction.plan.md:153-155"
+        },
+        {
+          "severity": "medium",
+          "claim": "Section 2.4 (lines 232-235) notes that the MCP layer's formatRetrievalError handles validation_error and unknown variants absent from the SDK's RetrievalError type, and says 'only handle the SDK's actual variants'. This implies the MCP-layer extension uses a wider discriminated union than RetrievalError. The plan does not specify whether the MCP layer should define a separate MCP-scoped error type (extending RetrievalError) or cast/override. Without an explicit type design for this extension point, the refactor in WS3.1 (lines 276-279) risks either an unsafe cast or a duplicate local type — both are type discipline failures.",
+          "file_line": "search-sdk-args-extraction.plan.md:232-235,276-279"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan renames SearchSdkScope -> RetrievalScope and isSearchSdkScope -> isRetrievalScope (line 122, lines 277-278). The curriculum SDK's internal types.ts exports SearchSdkScope. WS3.1 replaces these with SDK imports, but there is no mention of whether SearchSdkScope is part of the curriculum SDK's public API surface. If it is exported publicly, the rename is a breaking change for external consumers. The plan should explicitly state whether SearchSdkScope has a public export and whether a deprecation alias or major version bump is required.",
+          "file_line": "search-sdk-args-extraction.plan.md:122,277-278"
+        },
+        {
+          "severity": "low",
+          "claim": "Foundation Alignment section (line 380) asserts 'Types flow from the schema. SearchArgs will be defined in terms of types that already flow from sdk-codegen -> search SDK.' However, WS2.1 (lines 173-176) specifies free-form string fields for subject and keyStage rather than sdk-codegen branded types (SearchSubjectSlug, KeyStage). This is contradicted by line 65 which lists SearchScope, SearchSubjectSlug, KeyStage as schema types the SDK does not yet export. If SearchArgs uses string for these fields, the cardinal rule is violated; if it uses the schema types, they must be re-exported from the SDK first — a prerequisite the plan does not sequence explicitly.",
+          "file_line": "search-sdk-args-extraction.plan.md:65,175-176,380"
+        },
+        {
+          "severity": "info",
+          "claim": "buildThreadsParams is specified to return SearchParamsBase (line 98, line 212), while the other builders return scope-specific subtypes. This asymmetry is intentional (threads has no scope-specific params) but the plan does not verify whether SearchParamsBase is already exported from the SDK index. Section 2.5 adds search-args exports but does not audit which param types are already on the public surface vs internal.",
+          "file_line": "search-sdk-args-extraction.plan.md:98,212,245-252"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": [
+        {
+          "claim": "Blocking dependencies: none — this plan is independent of other active work (search-sdk-args-extraction.plan.md:390)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "search-sdk-args-extraction.plan.md:390 (\"Blocking: None\"); cross-checked against all 3 sibling active plans sharing the oak-search-sdk/src prefix — grep for this plan's actual modify-targets (aggregated-search/execution.ts, aggregated-search/types.ts, cli/shared/validators.ts) across search-contract-followup.plan.md / unified-versioned-ingestion.plan.md / sequence-retrieval-architecture-followup.plan.md returned EMPTY. Siblings touch disjoint SDK subtrees: unified-versioned-ingestion → src/admin/* (lines 1283-1296), sequence-retrieval-architecture-followup → src/retrieval/retrieval-search-helpers.ts & search-sequences.ts (lines 195-196), search-contract-followup → src/retrieval/ integration test (line 30). Cited Related Plan mcp-result-pattern-unification confirmed present in archive/completed and marked complete (line 394)."
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/semantic-search/current/semantic-search-scheduled-refresh.operations.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Plan is the execution authority for scheduled-refresh and has a full TDD phase structure with acceptance criteria; all phases remain pending so the plan is still live and needed.",
+          "file_line": "47, 6-27"
+        },
+        {
+          "claim": "Plan supersedes a prior plan (nightly-full-reingest), meaning it is the current canonical design, not a duplicate.",
+          "file_line": "4, 36"
+        },
+        {
+          "claim": "Execution prerequisites are defined and the plan correctly defers to a completed archive plan for the lock contract, indicating design maturity rather than obsolescence.",
+          "file_line": "74-83, 378-380"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is executable, well-structured, and encodes non-obvious correctness constraints (Update API prohibition, semantic hash vs content hash separation, atomic alias-swap, fingerprint commit boundary). The go/no-go cost gate at Task 0.1b (line 209-219) shows design honesty — the plan is willing to abandon the incremental path if savings are marginal. Failure mode coverage is exhaustive (14 scenarios, line 131-150). The only substance gap is the absence of an explicit freshness SLO target value in the observability phase (Task 4.2 references \"agreed window\" at line 443 without defining it), which is speculative at this stage.",
+      "content_quality": "strong",
+      "content_quality_note": "Acceptance criteria are specific and testable for every task. Deterministic validation commands are provided inline (lines 281-286, 341-346). The failure escalation table (lines 131-150) names both the classification and the action for each scenario. The rollback invariant is stated as a named constraint with consequence (lines 162-172). The plan correctly separates its authority from ADR-136 doctrine and from the lock contract owned by the recovery plan. This is above-average plan quality.",
+      "salvage_value": [
+        {
+          "idea": "Two-path model: incremental update (metadata-only Bulk API update actions, semantic_text fields omitted) as primary path, full re-ingest as mandatory fallback for mapping changes or recovery",
+          "class": "good",
+          "file_line": "110-125"
+        },
+        {
+          "idea": "Per-document fingerprinting with three-level hash: content hash, semantic source hash, aggregate hash — separation allows metadata-only vs semantic-change classification",
+          "class": "good",
+          "file_line": "261-270"
+        },
+        {
+          "idea": "Hard prohibition on Update API (_update endpoint) for semantic_text fields; only Bulk API update action is permitted",
+          "class": "good",
+          "file_line": "120-121, 187"
+        },
+        {
+          "idea": "Lint-time enforcement of Update API prohibition via custom ESLint rule (Task 0.1c)",
+          "class": "good",
+          "file_line": "222-230"
+        },
+        {
+          "idea": "Go/no-go cost benchmark gate before Phase 1: if incremental saves less than 30% inference volume on typical delta, abandon incremental path entirely",
+          "class": "good",
+          "file_line": "209-219"
+        },
+        {
+          "idea": "Atomic six-family alias-swap as a single multi-action Aliases API call; separate per-alias swaps are explicitly prohibited",
+          "class": "good",
+          "file_line": "157-160"
+        },
+        {
+          "idea": "Fingerprint commit-boundary invariant: if live mutation succeeds but fingerprint write fails, classify as active incident and require full re-ingest to re-establish both",
+          "class": "good",
+          "file_line": "165-172"
+        },
+        {
+          "idea": "Stored fingerprint integrity pre-check: recompute aggregate_hash from per-document hashes and compare to stored value before allowing incremental path",
+          "class": "good",
+          "file_line": "193-196"
+        },
+        {
+          "idea": "Bulk download integrity validation: manifest completeness, JSON parse, per-family document count sanity before any mutation",
+          "class": "good",
+          "file_line": "197-200"
+        },
+        {
+          "idea": "Lock renewal must be decoupled from main execution thread so a stalled main thread does not continue renewing",
+          "class": "good",
+          "file_line": "373-375"
+        },
+        {
+          "idea": "Previous-version indexes must not be deleted until the next successful full re-ingest completes — explicit invariant",
+          "class": "good",
+          "file_line": "162-163"
+        },
+        {
+          "idea": "Incremental failure during a multi-family run: alias-swap rollback for ALL families, not just the failing one; do not update fingerprint for any family",
+          "class": "good",
+          "file_line": "142-143"
+        },
+        {
+          "idea": "Periodic mandatory full re-ingest as a scheduled baseline reset to prevent accumulated drift from many incremental runs",
+          "class": "good",
+          "file_line": "554"
+        },
+        {
+          "idea": "Freshness SLO alert: no successful refresh within agreed window (window value not defined — needs owner input)",
+          "class": "speculative",
+          "file_line": "443"
+        },
+        {
+          "idea": "Schema-aware semantic_text field omission must come from SDK-admin canonical utility, not CLI-local hardcoded family maps",
+          "class": "good",
+          "file_line": "312-314"
+        },
+        {
+          "idea": "Deterministic JSON serialisation as the foundation for fingerprint stability across repeated runs on unchanged input",
+          "class": "good",
+          "file_line": "264, 550"
+        },
+        {
+          "idea": "Escalation chain: incremental transient failure -> retry per ADR-096; incremental persistent failure -> one full re-ingest attempt; full re-ingest stage failure -> retry per ADR-096; promote failure -> no automatic retry, human decision",
+          "class": "good",
+          "file_line": "402-413"
+        },
+        {
+          "idea": "Telemetry schema versioned and documented, with per-path payload (incremental counts by classification vs full staged/promoted/previous version)",
+          "class": "good",
+          "file_line": "421-436"
+        },
+        {
+          "idea": "Task 5.2 clause: no new ADRs unless a decision transcends scheduled refresh scope; ADR-136 is the single doctrine record",
+          "class": "good",
+          "file_line": "476-484"
+        },
+        {
+          "idea": "Foundation alignment commitment: re-read three directive files and ask 'could it be simpler' before each phase",
+          "class": "good",
+          "file_line": "88-93"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "supersedes"
+      ],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing LOCKED required field `id` (kebab slug, graph node identity)",
+          "file_line": "plan.md:1-27 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field `node_type` (must be literal \"plan\")",
+          "file_line": "plan.md:1-27 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field `kind` (enum: strategic | executable); plan carries `todos` so kind is inferable as `executable` but is not declared",
+          "file_line": "plan.md:1-27 (frontmatter block)"
+        },
+        {
+          "issue": "Missing LOCKED required field `last_updated`; ISO date appears only in body prose (line 31), not in frontmatter",
+          "file_line": "plan.md:31"
+        },
+        {
+          "issue": "Missing `serves_strategic_choice` — LOCKED, required for executable plans; no `\"pending\"` sentinel either",
+          "file_line": "plan.md:1-27 (frontmatter block)"
+        },
+        {
+          "issue": "`status: PLANNING` recorded in body (line 33) rather than migrated to V0 orthogonal axes; `PLANNING` maps to `kind: executable` + `gate: owner-decision` per §3.5 migration map, but neither is in frontmatter",
+          "file_line": "plan.md:33"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Fingerprint baseline persistence is described as part of the 'operational commit boundary' (line 165-172) but there is no atomic transaction guarantee between the live index mutation and the fingerprint write. The plan acknowledges this as an incident mode (line 141) but delegates recovery entirely to a full re-ingest. There is no design for an idempotent fingerprint-write retry that would avoid the full re-ingest cost in the common case of a transient write failure after a successful bulk update.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:165-172"
+        },
+        {
+          "severity": "high",
+          "claim": "Lock renewal is required to be 'decoupled from the main execution thread' (line 377) so a stalled main thread cannot continue renewing, but the plan delegates the lock contract entirely to the recovery-and-guardrails plan (line 379). This plan adds a new constraint (renewal must be decoupled) that may not be encoded in the upstream lock contract. If the upstream plan does not model thread-decoupled renewal, this constraint is unverified and could silently not be implemented.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:377-379"
+        },
+        {
+          "severity": "medium",
+          "claim": "The six-family atomic alias swap (line 159) requires a single multi-action Aliases API call. The plan states 'do not issue separate per-alias swaps' but no acceptance criterion or test proves the single-call atomicity. The risk table (line 553) lists scheduler overlap as a known risk, but the rollback path itself could produce a partial swap if the multi-action call is interrupted. The plan needs an explicit AC for the rollback path that verifies all-or-nothing alias state after a simulated mid-call failure.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:155-160"
+        },
+        {
+          "severity": "medium",
+          "claim": "Task 0.1b defines a stop/go threshold (30% inference-volume reduction) before Phase 1 begins (lines 207-219), but this gate is not reflected in the top-level todos or in the phase sequencing model. If Phase 1 begins before 0.1b produces a go decision, implementation cost is sunk. The plan architecture should enforce a hard dependency: phase-1-fingerprint is blocked until phase-0-contract is complete AND the go decision is recorded.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:207-219"
+        },
+        {
+          "severity": "medium",
+          "claim": "The semantic_text field omission contract (Task 2.1, line 315) requires the list of semantic_text fields to come from 'SDK-owned metadata, not duplicated in CLI orchestration code'. This is an architectural contract with the SDK-admin workspace, but there is no reference to where that contract is currently defined, no link to the SDK type surface, and no acceptance criterion that verifies the SDK actually exports this metadata. The contract is stated as a requirement but has no verifiable grounding in the current estate.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:313-317"
+        },
+        {
+          "severity": "medium",
+          "claim": "The custom ESLint rule for Update API prohibition (Task 0.1c, lines 221-232) is scoped to 'search CLI and SDK admin codepaths'. This scope boundary is not precise: if other workspace packages call the ES client, the prohibition is not enforced there. The plan should either scope the rule to the entire workspace or document why other callers are exempt.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:221-232"
+        },
+        {
+          "severity": "low",
+          "claim": "Task 3.1 describes the path selection as a 'pure function' (line 354) taking fingerprints, mapping hash, and periodic config as input. However the decision to force a full re-ingest when 'periodic refresh due' is a time-dependent input. The plan does not specify how 'periodic refresh configuration' is provided to the pure function or where it is stored, making the function's purity and testability unclear.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:354-368"
+        },
+        {
+          "severity": "low",
+          "claim": "Alerting in Task 4.2 (line 448) specifies 'Kibana Alerts or external platform alerting; Watcher is out of scope for Serverless'. This is correct for Elasticsearch Serverless, but the plan does not name which external platform will be used nor how alert routing to an owned channel is proven. Without a concrete target, the Task 4.2 AC ('Alerts route to owned channel/on-call') is not verifiable at plan review time.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:448-455"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly separates doctrine (ADR-136) from executable sequencing and references ADR-096 for retry semantics. Document authority section (lines 40-47) is well-structured. The two-path model (incremental and full re-ingest) with deterministic escalation is architecturally sound.",
+          "file_line": "semantic-search-scheduled-refresh.operations.plan.md:40-47"
+        }
+      ],
+      "load_bearing_claims_count": 8,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/semantic-search/current/sequence-retrieval-architecture-followup.plan.md",
+      "classification": "archive-complete",
+      "classification_evidence": [
+        {
+          "claim": "Status declared as EXECUTING via pre-reingest-remediation.execution.plan.md; all phases cancelled or done",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:16-26"
+        },
+        {
+          "claim": "Phases 1–3 are each explicitly SUPERSEDED and cancelled, consolidated into pre-reingest-remediation.execution.plan.md",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:17-26"
+        },
+        {
+          "claim": "Related documents table links to both executing plan AND two archive/completed plans",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:262-269"
+        },
+        {
+          "claim": "Phase 0 (lock end-state) is the only todo with status done; no active work remains in this file",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:12-14"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The ideas encoded are architecturally sound: strict-contract discipline for required fields, deterministic derivation from authoritative sub-content, SDK-as-owner of retrieval semantics, and fail-fast on missing source material. These are good ideas that should be permanently recorded. The plan is not bad; it is complete and misplaced in current/.",
+      "content_quality": "strong",
+      "content_quality_note": "The locked execution recipe (file_line: 114-145) is precise, unambiguous, and cites concrete function names, file paths, and query constants. The guardrails section (file_line: 243-256) is actionable and non-hedging. Phase model test coverage requirements (file_line: 168-188) are specific. Content quality is strong; the filing location is the only problem.",
+      "salvage_value": [
+        {
+          "idea": "sequence_semantic must be a required non-empty field — no dormant optional fields survive",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:77-79"
+        },
+        {
+          "idea": "Deterministic construction: iterate ordered unit slugs, extract SearchUnitSummary per unit, concatenate via generateUnitSemanticSummary",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:119-130"
+        },
+        {
+          "idea": "Prepend one deterministic sequence context line (title, subject, phase, years, key stages) before unit summaries",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:131-134"
+        },
+        {
+          "idea": "Fail-fast policy: zero unit slugs, any missing unit summary, or empty segment after trim all abort the build",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:136-138"
+        },
+        {
+          "idea": "SDK is canonical owner of sequence retrieval semantics; CLI harnesses consume shared logic rather than define a competing contract",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:139-145"
+        },
+        {
+          "idea": "RRF retrieval shape: BM25 over lexical fields + semantic query on sequence_semantic, rank_constant 40, rank_window_size 40",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:140-145"
+        },
+        {
+          "idea": "Ordered concrete unit slugs derived from getSequenceUnits() / SequenceUnitsResponse, unitOptions flattened at source position",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:116-121"
+        },
+        {
+          "idea": "Single shared ingest summary map as the per-unit source contract — no second sequence-only path",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:122-126"
+        },
+        {
+          "idea": "Do not restore semantic retriever unless the same change also ships the produced field and tests",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:243-245"
+        },
+        {
+          "idea": "Thread behaviour kept out of scope unless shared extraction genuinely requires it",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:254-255"
+        },
+        {
+          "idea": "Phase 1 test coverage list including retrieval-shape, builder contract, determinism, fail-fast, CLI/SDK parity, and mapping/schema assertions",
+          "class": "good",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:168-188"
+        },
+        {
+          "idea": "Concrete change-area file list for Phase 2 implementation",
+          "class": "speculative",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:195-208"
+        },
+        {
+          "idea": "Minimum reviewer set: architecture-expert-barney, elasticsearch-expert, test-expert, docs-adr-expert, type-expert conditional",
+          "class": "speculative",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:229-234"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "depends_on"
+      ],
+      "status_raw": "🔴 EXECUTING via pre-reingest-remediation.execution.plan.md (decisions locked 2026-03-21, promoted to pre-reingest blocking 2026-03-22)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1, LOCKED — stable kebab slug, the node's graph identity)",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:1-27 (frontmatter block — key absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1, LOCKED — must be literal `\"plan\"`)",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:1-27 (frontmatter block — key absent)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §2.2, LOCKED — `strategic | executable`; body status maps to `executable`)",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:1-27 (frontmatter block — key absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4, LOCKED); the date appears only in body prose as `**Last Updated**: 2026-03-22` (line 31), not in frontmatter",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:31"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (V0 §2.3 / §4, LOCKED — required for executable plans; `\"pending\"` sentinel acceptable)",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:1-27 (frontmatter block — key absent)"
+        },
+        {
+          "issue": "`depends_on` declared as a plain file-path string, not as the typed `{ plan, kind: blocking | beneficial }` object V0 §4 requires (LOCKED shape)",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:10"
+        },
+        {
+          "issue": "Todo `status` values `done` and `cancelled` are not in the V0 todo status enum (`pending | completed` per §6 Zod sketch); `done` appears at line 14, `cancelled` at lines 17, 20, 23, 26",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:14,17,20,23,26"
+        },
+        {
+          "issue": "Emergent `status:` field replaced by body-prose `**Status**: 🔴 EXECUTING via ...` (line 32) — emoji-plus-prose pattern V0 §2.2 explicitly drops; no `kind`/`disposition`/`gate` frontmatter axes present",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:32"
+        },
+        {
+          "issue": "Plan resides in `current/` folder but work items are described as fully consolidated into an archived remediation plan; V0 §3.3 / §3.6 suggests `disposition: extracted-and-archived` or `superseded` + move to `archive/` is the correct terminal state — no `disposition` present",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:32-35"
+        }
+      ],
+      "unclassified_keys": [
+        "source_research"
+      ],
+      "locked_contradictions": [
+        {
+          "item": "V0 §6 (LOCKED) specifies todo `status` as `z.enum([\"pending\", \"completed\"])`. The estate uses `done` (line 14) and `cancelled` (lines 17, 20, 23, 26) as todo statuses. `done` mirrors the plan-level `disposition: done` enum; `cancelled` mirrors `disposition: cancelled`. This may indicate the todo status enum needs extending at V1 — or that todo cancellation/completion should be expressed differently. Strong estate evidence; owner re-ratification candidate.",
+          "evidence": "Five todos in this plan use status values `done` or `cancelled`, neither of which appears in the V0 Zod sketch enum for todo status (`pending | completed`).",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:14,17,20,23,26"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "Plan sits in current/ but its entire execution vehicle (pre-reingest-remediation.execution.plan.md) is archived as completed. All substantive phases (1-3) are cancelled/consolidated. No closure record confirms the locked recipe was actually executed and all criteria met. The plan has no active work remaining yet is not archived.",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:10-11,32-35,262-264"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phases 1-4 carry full prose bodies (test specs, implementation change areas, acceptance criteria, reviewer set) despite all being either done or cancelled in the frontmatter todos. This creates a misleading read — phases appear to represent live work when they are inert. The cancelled status is only visible in the frontmatter, not in the phase headings.",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:15-26,165-237"
+        },
+        {
+          "severity": "medium",
+          "claim": "The depends_on reference resolves to archive/completed, meaning the dependency constraint is discharged. The status block still reads 'EXECUTING via ...' (present tense) while the execution vehicle is completed. This is a stale status claim that will mislead readers grounding on this plan.",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:10,32-35"
+        },
+        {
+          "severity": "low",
+          "claim": "The locked execution recipe (steps 1-6) specifies concrete file paths (lines 195-208) which may have shifted during the remediation execution. These are plausible change-area paths but are not verified against the current working tree. If this document is retained as a recipe reference, path accuracy should be confirmed.",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:195-208"
+        },
+        {
+          "severity": "info",
+          "claim": "The architectural decisions are well-grounded: SDK ownership boundary via ADR-134 (line 8), ADR-139 as permanent contract source (line 89), deterministic construction from ordered unit sub-content, fail-fast on empty segments, and no dual CLI/SDK ownership without explicit boundary. These are sound constraints and consistent with the repo's strict-contract discipline.",
+          "file_line": "sequence-retrieval-architecture-followup.plan.md:46-52,97-109,113-145"
+        }
+      ],
+      "load_bearing_claims_count": 5,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All Phase 1–3 work items are SUPERSEDED and consolidated into pre-reingest-remediation.execution.plan.md (cited at sequence-retrieval-architecture-followup.plan.md:17-26)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "sequence-retrieval-architecture-followup.plan.md:16-23 (phase-1-red/phase-2-green/phase-3-refactor each status: cancelled, content \"SUPERSEDED: consolidated into pre-reingest-remediation.execution.plan.md Tasks ...\"); target plan exists at .agent/plans/semantic-search/archive/completed/pre-reingest-remediation.execution.plan.md and contains the cited Task 1.1/1.2 (lines 76,101), 2.1/2.2/2.3 (146,176,201), 3.1/3.2/3.3 (246,259,281)"
+        },
+        {
+          "claim": "This work now blocks re-ingest (consolidated into remediation plan 2026-03-22)",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": "sequence-retrieval-architecture-followup.plan.md:256 (verbatim line); corroborated by line 32 \"promoted to pre-reingest blocking 2026-03-22\", line 10 depends_on pre-reingest-remediation.execution.plan.md, and target plan overview \"Resolve all known code issues before re-indexing\" with matching work items (sequence_semantic per ADR-139, SDK 2-way RRF, CLI collapse)"
+        }
+      ]
+    },
+    {
+      "plan": ".agent/plans/semantic-search/current/thread-sequence-semantic-surfaces.execution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Status READY, all todos pending — plan is positioned and ready to execute, not complete or abandoned",
+          "file_line": "line:33,15-27"
+        },
+        {
+          "claim": "Folder lane 'current' matches declared READY status and a live upstream dependency (bulk-metadata-quick-wins) also in current/",
+          "file_line": "line:73"
+        },
+        {
+          "claim": "Problem, desired outcome, phase model, guardrails, and non-goals are all coherently populated — plan is not a stub",
+          "file_line": "lines:41-186"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Problem is evidence-backed (lines 47-53), outcome is concrete and testable (lines 65-68), phase model follows RED/GREEN/REFACTOR discipline (lines 121-154), guardrails correctly scope the work (lines 169-175), and non-goals explicitly prevent scope creep into graph execution and API changes (lines 181-186). No speculative or bad ideas detected.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan provides candidate fields for both threads and sequences (lines 97-108), clear builder change areas (lines 139-143), specific acceptance criteria for Phase 3 (lines 149-153), a named reviewer list for Phase 4 (lines 159-163), and an explicit relationship boundary note distinguishing stored-surface enrichment from later retrieval-time relationship work (lines 113-119). Content is substantive and actionable, not merely V0-conformant.",
+      "salvage_value": [
+        {
+          "idea": "Derive year span and key-stage span for thread documents from existing unit data",
+          "class": "good",
+          "file_line": "lines:97-100"
+        },
+        {
+          "idea": "Add lesson count to thread documents as a lightweight derived signal",
+          "class": "good",
+          "file_line": "line:100"
+        },
+        {
+          "idea": "Build richer semantic summaries for threads from existing unit/lesson text",
+          "class": "good",
+          "file_line": "line:101"
+        },
+        {
+          "idea": "Improve suggestion inputs for threads to align with real curriculum structures",
+          "class": "good",
+          "file_line": "line:102"
+        },
+        {
+          "idea": "Add semantic summary to sequence documents derived from unit/lesson data",
+          "class": "good",
+          "file_line": "line:104"
+        },
+        {
+          "idea": "Add unit count and lesson count to sequence documents",
+          "class": "good",
+          "file_line": "lines:105-106"
+        },
+        {
+          "idea": "Add thread coverage to sequence documents",
+          "class": "good",
+          "file_line": "line:107"
+        },
+        {
+          "idea": "Improve suggestion inputs for sequences to align with real curriculum structures",
+          "class": "good",
+          "file_line": "line:108"
+        },
+        {
+          "idea": "Gate this plan on bulk-metadata-quick-wins completion to ensure wider upstream signals are available",
+          "class": "good",
+          "file_line": "line:73"
+        },
+        {
+          "idea": "Treat keyword-definition-assets as a soft sequencing dependency — consume if available, do not block or invent a competing term surface",
+          "class": "good",
+          "file_line": "lines:83-85"
+        },
+        {
+          "idea": "Explicitly scope enrichment to stored surfaces only, deferring routing/policy/query changes to owning boundaries",
+          "class": "good",
+          "file_line": "lines:169-175"
+        },
+        {
+          "idea": "Position enriched thread/sequence surfaces as future inputs to the document-relationships Level 2 plan, not a replacement for it",
+          "class": "good",
+          "file_line": "lines:113-119"
+        },
+        {
+          "idea": "Follow RED/GREEN/REFACTOR TDD discipline for the enrichment implementation",
+          "class": "good",
+          "file_line": "lines:121-154"
+        },
+        {
+          "idea": "Keep small-index constraints explicit throughout scope lock and implementation",
+          "class": "good",
+          "file_line": "lines:94,170"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [
+        "depends_on",
+        "todos"
+      ],
+      "status_raw": "📋 READY (current)",
+      "status_maps_cleanly": true,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` — V0 §2.1 LOCKED; required for all plan nodes",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:1-28 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` — V0 §2.1 LOCKED literal `\"plan\"`; required for all plan nodes",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:1-28 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` — V0 §2.2 / §3.1 LOCKED; required for all plans; inferred `executable` from presence of `todos` and `current/` folder but not declared",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:1-28 (frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` — V0 §2.4 LOCKED; date exists in body prose (line 32) but absent from frontmatter",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:32"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` — V0 §2.3 / §4 LOCKED; required for executable plans; no strategic choice ID or `\"pending\"` sentinel present",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:1-28 (frontmatter block)"
+        },
+        {
+          "issue": "`depends_on` declared as bare string list, not V0-required `{ plan, kind: blocking | beneficial }` typed objects — V0 §4 LOCKED shape",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:10-11"
+        },
+        {
+          "issue": "`status` carried as body prose (`📋 READY (current)`) rather than encoded in V0 frontmatter axes (`kind` / `disposition` / `gate`) — V0 §2.2; `status` is a dropped emergent field",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:33"
+        }
+      ],
+      "unclassified_keys": [
+        "source_research"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "medium",
+          "claim": "Phase 2 change areas list 'any generated field definitions if the scope adds new document fields' as a likely change area, but the plan nowhere defines or links to the schema governance mechanism for adding fields to thread/sequence index documents. Adding fields without a clear schema contract creates a drift risk between the ingestion/build path and whatever consumers (suggestion routing, retrieval) read those fields at query time.",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:137-144"
+        },
+        {
+          "severity": "medium",
+          "claim": "The dependency on bulk-metadata-quick-wins is explicit at the plan level (line 11 depends_on, line 73-74), but there is no stated gate or handoff mechanism specifying what concrete outputs bulk-metadata-quick-wins must deliver before Phase 2 begins. 'Widened upstream signals' (line 87) is architectural intent without a verifiable readiness criterion, which risks Phase 2 starting on an incomplete upstream.",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:73-87"
+        },
+        {
+          "severity": "low",
+          "claim": "Phase 0 scope-lock calls out the 'thin target' nature of these indices as a constraint (line 111) but provides no explicit size or field-count ceiling to enforce it. Without a measurable guardrail, 'small-index constraints explicit' (line 170) is advisory prose rather than an enforceable architecture boundary.",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:110-112"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan's non-goals explicitly exclude consumer API changes (line 183), but the enriched fields for suggestion inputs (lines 106, 108) will be read by suggestion policy at some later point. The plan does not identify where that contract is defined or who owns the read side, leaving a latent coupling that may surface as an unplanned change in a downstream plan.",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:173-175"
+        },
+        {
+          "severity": "info",
+          "claim": "The guardrails correctly defer query-policy, multi-hop graph, and relationship-graph execution to their owning boundaries (lines 172-175). This boundary discipline is sound and consistent with the dependency on document-relationships.md as a follow-on plan (line 204).",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:169-175"
+        },
+        {
+          "severity": "info",
+          "claim": "Phase 3 acceptance criteria require new fields to be documented as derived rather than upstream API parity (line 152). This is a correct architectural separation, but the plan does not name the documentation artefact or location where this derivation record lives, so the intent may not survive execution without an explicit doc target.",
+          "file_line": "thread-sequence-semantic-surfaces.execution.plan.md:150-153"
+        }
+      ],
+      "load_bearing_claims_count": 3,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/semantic-search/current/unified-versioned-ingestion.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "Phases 0-2 are merged to main; Phase 3 is live-pending (dry run done, stage ready)",
+          "file_line": "30-31"
+        },
+        {
+          "claim": "Frontmatter todos mark phase-0/1/2 completed, phase-3/4 pending",
+          "file_line": "9-23"
+        },
+        {
+          "claim": "Progress log shows active execution up to 2026-03-10 with concrete next step",
+          "file_line": "406-420"
+        },
+        {
+          "claim": "Done When checklist shows 14 of 20 criteria met with commit SHAs",
+          "file_line": "1227-1248"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is grounded in a verified root-cause (lines 47-54, format mismatch confirmed by reviewer finding 16 at lines 395-403), has confirmed all 7 Phase 0 assumptions first-hand (lines 456-467), carries 16 numbered reviewer findings with concrete resolutions (lines 289-404), and records execution progress with commit SHAs (lines 469-530). The non-goals list (lines 190-198) demonstrates appropriate scope discipline. No speculative or bad ideas are present — every item either maps to a completed commit or a concrete pending manual step.",
+      "content_quality": "strong",
+      "content_quality_note": "TDD sequences are written at the RED/GREEN/REFACTOR level with concrete acceptance criteria and deterministic shell validation commands (e.g. lines 720-730). Reviewer findings include root-cause statements, resolutions, and task assignments (lines 289-404). Progress log entries name commits and summarise what changed (lines 469-530). Done-when criteria are binary and measurable (lines 1216-1248). Architecture diagrams use concrete component names, not generic boxes (lines 149-177).",
+      "salvage_value": [
+        {
+          "idea": "IndexResolverFn parameter threaded through collectPhaseResults and prepareBulkIngestion as the single index-name resolution mechanism",
+          "class": "good",
+          "file_line": "127-145"
+        },
+        {
+          "idea": "CLI-layer closure factory (run-versioned-ingest.ts) captures OakClient and injects runVersionedIngest — SDK never knows about bulk file formats",
+          "class": "good",
+          "file_line": "149-177"
+        },
+        {
+          "idea": "Delete SDK ingest.ts (235 lines of unknown[] processing with silent failures) with no compatibility layer",
+          "class": "good",
+          "file_line": "103-107"
+        },
+        {
+          "idea": "buildLifecycleDeps requires explicit runVersionedIngest as a parameter rather than providing a default",
+          "class": "good",
+          "file_line": "116-119"
+        },
+        {
+          "idea": "dispatchBulk returns typed IndexOperationCounts per-index instead of void, enabling partial-ingest detection",
+          "class": "good",
+          "file_line": "860-882"
+        },
+        {
+          "idea": "Cleanup-on-failure: stage flow deletes orphaned versioned indexes when ingest throws after createVersionedIndexes",
+          "class": "good",
+          "file_line": "884-905"
+        },
+        {
+          "idea": "verifyDocCounts accumulates all per-index failures rather than early-exit on first failure",
+          "class": "good",
+          "file_line": "907-928"
+        },
+        {
+          "idea": "createHybridDataSource returns Result<HybridDataSource, AdminError> with data_source_error kind instead of throwing",
+          "class": "good",
+          "file_line": "930-953"
+        },
+        {
+          "idea": "Post-swap alias validation via resolveCurrentAliasTargets() between atomicAliasSwap() and writeIndexMeta()",
+          "class": "good",
+          "file_line": "981-1015"
+        },
+        {
+          "idea": "Eliminate rewriteBulkOperations (post-hoc _index rewriting) in favour of upfront IndexResolverFn for both versioned and bare paths",
+          "class": "good",
+          "file_line": "955-979"
+        },
+        {
+          "idea": "admin count command using ES _count API reporting true parent doc counts (excludes ELSER semantic_text chunk inflation)",
+          "class": "good",
+          "file_line": "413-416"
+        },
+        {
+          "idea": "IngestOptions.dryRun must be rejected or excluded from the lifecycle dep slot — a dry-run ingest produces zero docs which the lifecycle misreads as success",
+          "class": "good",
+          "file_line": "386-395"
+        },
+        {
+          "idea": "Hardcoded index constants should derive defaults from BASE_INDEX_NAMES rather than maintaining parallel strings",
+          "class": "good",
+          "file_line": "366-372"
+        },
+        {
+          "idea": "bulk-retry-cli.e2e.test.ts architectural flaw: CLI reads filesystem before checking dryRun flag, causing e2e test to require ambient bulk-downloads/ directory",
+          "class": "speculative",
+          "file_line": "543-548"
+        },
+        {
+          "idea": "Pre-flight gates (claude-agent-ops preflight) must pass before spawning parallel agents; failing base tree propagates to every worktree",
+          "class": "good",
+          "file_line": "533-540"
+        },
+        {
+          "idea": "Worktree file changes can leak into the main working tree; commit-ready and diff commands in claude-agent-ops track this",
+          "class": "good",
+          "file_line": "549-553"
+        },
+        {
+          "idea": "Phase 3 expected doc counts (lessons 12,746; units 1,671; rollups 1,671; threads 164; sequences 30; facets 57) as validation baseline",
+          "class": "good",
+          "file_line": "1074-1088"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": null,
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (V0 §2.1: required for all plan nodes — the stable kebab slug that is the graph identity)",
+          "file_line": "unified-versioned-ingestion.plan.md:1-25 (entire frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `node_type` (V0 §2.1: must be literal `\"plan\"`; replaces emergent open `type:` free-label)",
+          "file_line": "unified-versioned-ingestion.plan.md:1-25 (entire frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `kind` (V0 §3.1, §2.2: required for all; plan has `todos` so correct value is `executable`)",
+          "file_line": "unified-versioned-ingestion.plan.md:1-25 (entire frontmatter block)"
+        },
+        {
+          "issue": "Missing required field `last_updated` (V0 §2.4: required for all; ISO date appears only in body prose at line 29 as `**Last Updated**: 2026-03-11`, not in frontmatter)",
+          "file_line": "unified-versioned-ingestion.plan.md:29"
+        },
+        {
+          "issue": "Missing required edge `serves_strategic_choice` (V0 §2.3, §4: required for executable plans; must be a strategic-choice ID or the `\"pending\"` sentinel)",
+          "file_line": "unified-versioned-ingestion.plan.md:1-25 (entire frontmatter block)"
+        },
+        {
+          "issue": "Retained explicitly-dropped key `isProject: false` (V0 §2.5: dropped — `plan` ≈ Linear Project is universal; projection is the `projects_to` edge, not a boolean)",
+          "file_line": "unified-versioned-ingestion.plan.md:24"
+        },
+        {
+          "issue": "Execution status expressed as body prose (`**Status**: IN PROGRESS — Phases 0–2 merged...`) rather than projected via Linear through the `projects_to` edge (V0 §3.2: execution status is NOT a durable frontmatter field; it is Linear-projected and must not be stored in the repo)",
+          "file_line": "unified-versioned-ingestion.plan.md:30"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "Plan status is IN PROGRESS with Phases 0–2 complete and merged to main (PR #61). Phase 3 (live operation) is pending but partially done (dry run complete). Phase 4 (adversarial review + documentation) not started. The plan accurately reflects its own state.",
+          "file_line": "unified-versioned-ingestion.plan.md:30"
+        },
+        {
+          "severity": "info",
+          "claim": "The core architectural decision — SDK/CLI boundary split where SDK defines lifecycle interfaces and CLI provides the ingest closure — is sound. DI via IndexLifecycleDeps (ADR-078) is correctly honoured. The SDK no longer contains bulk file reading or transformation logic.",
+          "file_line": "unified-versioned-ingestion.plan.md:148-177"
+        },
+        {
+          "severity": "info",
+          "claim": "All 9 architectural 'Done When' criteria (items 6–14) are marked DONE with commit SHAs. The boundary enforcement, deletion of broken ingest.ts, unified index-name resolution, and resilience tasks are complete and verifiable.",
+          "file_line": "unified-versioned-ingestion.plan.md:1227-1235"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 3 (live staging/promote/verify) is pending and the plan's status header claims 'ingest run in progress' as of 2026-03-10. The last progress log entry is 2026-03-10, over three months before the current date (2026-06-21). No evidence the live operation completed. The 'Done When' functional criteria 1–5 show no DONE markers, meaning blue/green lifecycle has not been operationally validated against the live cluster.",
+          "file_line": "unified-versioned-ingestion.plan.md:30-31"
+        },
+        {
+          "severity": "medium",
+          "claim": "Phase 4 documentation propagation (ADR-130 remove_index clause, ADR-093 versioned-ingestion note, INDEXING.md, TSDoc on changed functions) is entirely not started. This means the architectural decisions documented in ADRs are stale relative to the shipped code. The plan treats this as a required deliverable, not optional.",
+          "file_line": "unified-versioned-ingestion.plan.md:1115-1153"
+        },
+        {
+          "severity": "low",
+          "claim": "The bulk-retry-cli.e2e.test.ts architectural flaw is documented but explicitly scoped out: 'This is pre-existing and outside the scope of this plan.' The flaw is that the ingest CLI reads the filesystem before checking dryRun, violating isolation. No follow-up plan is cited for resolving this. It remains an open architectural debt without a home.",
+          "file_line": "unified-versioned-ingestion.plan.md:541-548"
+        },
+        {
+          "severity": "low",
+          "claim": "The categoryMap optional 4th parameter on buildSequenceBulkOperations was found during Phase 0 but is described only as 'does not affect parameterisation' with no resolution or follow-up. If category supplementation is 'built but unwired' (Non-Goals, line 196), there is no plan addressing when or how it will be wired — a latent architectural gap.",
+          "file_line": "unified-versioned-ingestion.plan.md:194-198"
+        },
+        {
+          "severity": "info",
+          "claim": "The IndexResolverFn threading pattern and elimination of rewriteBulkOperations (Task 2.8) achieves a single index-name resolution mechanism across all ingestion paths. This is a positive architectural consolidation confirmed complete at commit 7a51148a.",
+          "file_line": "unified-versioned-ingestion.plan.md:952-979"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/semantic-search/future/bulk-canonical-merge-api-parity-and-validation.execution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All todos are pending and folder lane is future — the plan has not been started and work is still needed",
+          "file_line": "line 9-44 (todos block) + line 45 (isProject: false)"
+        },
+        {
+          "claim": "The last-write-wins bug is described as a live data-integrity defect requiring TDD fix, not a historical record",
+          "file_line": "line 80"
+        },
+        {
+          "claim": "The completion block explicitly defers archival to after work is done",
+          "file_line": "line 208"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "Every workstream addresses a real, named defect or gap: data loss (merge), policy debt (canonical-bulk ADR), API necessity ambiguity (field matrix + spike), and validation gap (MCP post-promote). The plan is concrete — it has fixture shapes, table-form field matrix design, explicit SQL-equivalent validation queries, and a named CLI gap with date. No speculative scope inflation. The hypothesis about API redundancy (line 91) is correctly framed as unproven pending a spike, not asserted as fact.",
+      "content_quality": "strong",
+      "content_quality_note": "The plan encodes the exact merge semantics required (line 111-117), the API supplementation table with mechanism-level detail (line 88-90), TDD RED/GREEN/REFACTOR structure (lines 109-123), and a validation protocol with concrete MCP queries and CLI commands (lines 154-182). The risk table (lines 188-194) names mitigations rather than just risks. The CLI gap note (line 174) is timestamped and names the exact missing Commander options — actionable at the code level.",
+      "salvage_value": [
+        {
+          "idea": "Canonical-bulk-only policy: subjects absent from bulk are out of scope for ingest; no API-only subject fabrication",
+          "class": "good",
+          "file_line": "line 74-76"
+        },
+        {
+          "idea": "Last-write-wins bug fix: merge duplicate lessonSlug rows before indexing to produce one ES doc per lesson_id with full unit union",
+          "class": "good",
+          "file_line": "line 80"
+        },
+        {
+          "idea": "TDD merge implementation: RED fixture (same slug, multiple unitSlug rows), GREEN pure merge function, REFACTOR semantic summary update",
+          "class": "good",
+          "file_line": "line 109-123"
+        },
+        {
+          "idea": "Field inventory matrix: bulk schema-to-SearchIndexDoc mapping table with mapped/dropped/gap status per field",
+          "class": "good",
+          "file_line": "line 130-131"
+        },
+        {
+          "idea": "KS4 parity spike: compare API-derived vs bulk-derived Ks4DocumentFields for same unit slugs to determine API redundancy",
+          "class": "good",
+          "file_line": "line 132, 91"
+        },
+        {
+          "idea": "API supplementation explicit inventory: KS4 context map and category map are the only two current API paths; table with mechanism and purpose",
+          "class": "good",
+          "file_line": "line 88-90"
+        },
+        {
+          "idea": "Bulk categories may make API category fetch redundant for unit_topics faceting — assess and document",
+          "class": "speculative",
+          "file_line": "line 133"
+        },
+        {
+          "idea": "sequence_ids vs thread_slugs naming debt on unit documents — misleading field name, needs ADR or rename",
+          "class": "good",
+          "file_line": "line 95-96"
+        },
+        {
+          "idea": "sequence_slug field addition if faceting by downloadable sequence line is required (schema-first)",
+          "class": "speculative",
+          "file_line": "line 139"
+        },
+        {
+          "idea": "MCP production validation protocol: use oak-prod MCP search tool against read aliases post-promote to verify F1/F2/subject-filter fixes with recorded evidence",
+          "class": "good",
+          "file_line": "line 154-163"
+        },
+        {
+          "idea": "CLI cross-check: admin validate-aliases, admin count, and search lessons as cross-check against MCP results",
+          "class": "good",
+          "file_line": "line 165-169"
+        },
+        {
+          "idea": "CLI parity gap: oaksearch sequences CLI missing category, keyStage, phaseSlug options; oaksearch threads missing --subject",
+          "class": "good",
+          "file_line": "line 174-182"
+        },
+        {
+          "idea": "Cross-file merge scope: assess whether same unit_id appears across multiple bulk files in a single run and whether merge is required",
+          "class": "speculative",
+          "file_line": "line 19"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": null,
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "🟡 PLANNING (executable — not started)",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` — V0 §2.1 requires a stable kebab-slug identity on all plans.",
+          "file_line": "file:1-46 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `node_type` — V0 §2.1 requires literal `\"plan\"` as the registry discriminator on all plans.",
+          "file_line": "file:1-46 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `kind` — V0 §2.2 requires `kind: strategic | executable` on all plans; absence makes every downstream V0 invariant indeterminate.",
+          "file_line": "file:1-46 (frontmatter block, field absent)"
+        },
+        {
+          "issue": "Missing required field `last_updated` — V0 §2.4 requires an ISO-date frontmatter field; value appears only in body prose (line 51: `**Last Updated**: 2026-03-21`).",
+          "file_line": "file:51 (body prose, not frontmatter)"
+        },
+        {
+          "issue": "Forbidden dropped field `isProject: false` present — V0 §2.5 explicitly drops `isProject` (\"subsumed by `projects_to`\").",
+          "file_line": "file:45"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter — `serves_strategic_choice`, `derives_from`, `depends_on`, `thread` are all absent. For an executable plan `serves_strategic_choice` is required (or explicit `\"pending\"` sentinel); foundation-alignment references appear only as body prose (lines 54-58) rather than `derives_from` edges.",
+          "file_line": "file:1-46 (frontmatter block, edges absent); file:54-58 (body prose)"
+        },
+        {
+          "issue": "Status value `🟡 PLANNING` does not map cleanly via V0 §3.5: it maps to `kind: strategic` + `gate: owner-decision` (+ `expires`), yet the body asserts `executable — not started` (line 52) and the frontmatter carries a full `todos` list. The three signals are mutually contradictory.",
+          "file_line": "file:52 (body status line); file:8-45 (todos in frontmatter)"
+        },
+        {
+          "issue": "Folder placement `future/` contradicts executable substance: V0 §3.6 (LOCKED, owner-signed) places `executable` plans in the single collapsed executable home, not `future/`. The file sits in `future/` but carries `todos` (an executable-only field per V0 §2.4).",
+          "file_line": "file: path semantic-search/future/…; file:8-45 (todos)"
+        }
+      ],
+      "unclassified_keys": [],
+      "locked_contradictions": [
+        {
+          "item": "Executable todos in a `future/` plan — directly contradicts two LOCKED decisions simultaneously: V0 §3.6 (LOCKED, owner-signed) states `future/` holds only `kind: strategic` plans; V0 §2.4 (LOCKED) states `todos` are \"Forbidden on `strategic` plans\". The plan carries 12 todos (lines 8-45) yet resides in `future/`. One of the two must change: either the plan is reclassified as `kind: executable` and moved to the collapsed executable home, or the todos are removed and `promotion_trigger` added. Owner re-ratification is required to resolve which disposition is correct.",
+          "evidence": "12 todos in frontmatter (lines 8-45); file path contains `future/`; body asserts `executable — not started` (line 52)",
+          "file_line": "file:8-45 (todos); file:52 (body assertion); file path `future/`"
+        }
+      ],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "high",
+          "claim": "The merge layer is proposed to sit inside the bulk adapter ('before transformBulkLessonToESDoc', todo merge-lessons-green) and performs a group-by-lessonSlug pass. This is a stateful aggregation injected into what is currently a row-by-row streaming path. The plan does not address whether the bulk adapter reads the full file into memory before merging (required for correctness) or whether it streams rows and accumulates a merge map. At scale, holding all rows for a single ingest run in memory before emitting ES bulk ops is a meaningful architectural commitment — it changes the memory profile of the ingest path. This deserves explicit acknowledgment and a decision (full-load vs two-pass stream) before implementation.",
+          "file_line": "bulk-canonical-merge-api-parity-and-validation.execution.plan.md:116-118"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan identifies that bulk schema fields (tier, examBoard, pathway, examSubjects, categories, ks4Options) already overlap with what the API supplementation path produces via buildKs4SupplementationContext and fetchCategoryMapForSequences, and defers the resolution to a spike (todo ks4-parity-spike). However, there is no architectural decision point defined for *when* and by *whom* the API supplementation path is retired if parity is confirmed. The risk is that the spike completes and its outcome is recorded in a findings register but the dead API call paths persist in hybrid-data-source.ts indefinitely, creating dual-truth maintenance debt.",
+          "file_line": "bulk-canonical-merge-api-parity-and-validation.execution.plan.md:91-93"
+        },
+        {
+          "severity": "medium",
+          "claim": "The sequence_ids vs thread_slugs naming debt (todo sequence-thread-naming) is deferred to after merge correctness under Workstream C. However, if the merge layer (Workstream A) emits documents with the misleading sequence_ids field, and those documents are promoted to production aliases and validated in Workstream D, then any rename becomes a breaking index change requiring a versioned index reset. The architectural sequencing here is risky: fixing naming debt after production promotion is harder than fixing it before. The plan should explicitly gate whether C must precede D or confirm the rename is post-scope for this plan.",
+          "file_line": "bulk-canonical-merge-api-parity-and-validation.execution.plan.md:94-96"
+        },
+        {
+          "severity": "medium",
+          "claim": "The CLI search gap note (lines 174-181) documents that the oaksearch CLI cannot verify F2 category-filter or sequence-filter behaviour because those params are not wired as Commander options. This is listed as a validation gap for Workstream D, but it is also an architectural surface-area gap: the CLI is not a faithful projection of the SDK's SearchSequencesParams. The plan defers the fix to 'a follow-up' without creating a todo item or cross-plan reference, meaning the gap may not be tracked after this plan is archived.",
+          "file_line": "bulk-canonical-merge-api-parity-and-validation.execution.plan.md:174-181"
+        },
+        {
+          "severity": "low",
+          "claim": "The cross-file merge assessment (todo merge-units-cross-file) is marked optional scope. The plan gives no decision criteria for when multi-file single-run is required vs deferred. If the bulk download directory can contain multiple files with overlapping unit_ids (e.g. split by key stage), the same last-write-wins bug exists for unit documents. The plan should document the precondition under which this is safe to defer (e.g., 'files are partitioned by subject and unit_ids do not repeat across subjects') rather than leaving it open.",
+          "file_line": "bulk-canonical-merge-api-parity-and-validation.execution.plan.md:18-20"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan correctly identifies MCP search as querying the same read aliases as production, and gates MCP validation on F2 promote completing first (D.1). This sequencing dependency is sound. The related plan is already in archive/completed which may mean the F2 promote precondition is already satisfied — the plan should confirm this at kickoff rather than treating it as a live upstream dependency.",
+          "file_line": "bulk-canonical-merge-api-parity-and-validation.execution.plan.md:62-63"
+        }
+      ],
+      "load_bearing_claims_count": 4,
+      "high_stakes_verdicts": []
+    },
+    {
+      "plan": ".agent/plans/semantic-search/future/search-ingestion-sdk-extraction.execution.plan.md",
+      "classification": "keep",
+      "classification_evidence": [
+        {
+          "claim": "All five todos are pending — no phase has started; the plan is not complete.",
+          "file_line": "10-25"
+        },
+        {
+          "claim": "The problem it addresses (reusable ingestion runtime trapped in an app) is still described as current state.",
+          "file_line": "66-75"
+        },
+        {
+          "claim": "The sequencing constraint requiring an overlap audit before code moves is still the required first step.",
+          "file_line": "253-258"
+        },
+        {
+          "claim": "The operator command ownership matrix and ES lifecycle invariants are not recorded elsewhere in the cited docs — this plan holds that knowledge uniquely for now.",
+          "file_line": "195-233"
+        }
+      ],
+      "substance_class": "good",
+      "substance_rationale": "The plan is architecturally sound: it correctly identifies the thin-app violation (lines 66-75), correctly reasons why the obvious destination (oak-search-sdk) is forbidden (lines 77-79), and correctly derives a new dedicated workspace. The boundary decision, command ownership matrix, ES safety invariants, and phase sequencing are all well-grounded in cited ADRs. No speculative or bad ideas are embedded — the non-goals section (lines 236-244) actively fences scope creep. The only gap is that it is unstarted and the overlap with active plans (index-lifecycle-management) needs a first-hand check before Phase 0 can be authorised.",
+      "content_quality": "strong",
+      "content_quality_note": "Every phase has explicit acceptance criteria with concrete file anchors (lines 330-329, 438-445). Risk/mitigation table is thorough (lines 546-555). Success criteria are measurable (lines 559-579). Testing strategy distinguishes unit/integration/E2E with specific behavioural targets (lines 522-541). Quality gate sequence is fully specified (lines 264-276). The plan exceeds the bar for an unstarted future plan — it is ready to execute Phase 0 without further elaboration.",
+      "salvage_value": [
+        {
+          "idea": "Create packages/sdks/oak-search-ingestion-sdk as a new dedicated workspace for Oak-specific ingestion runtime.",
+          "class": "good",
+          "file_line": "104-106"
+        },
+        {
+          "idea": "Dependency graph: ingestionSdk depends on sdk-codegen, curriculum-sdk, oak-search-sdk/admin — and nothing else from outside the approved graph.",
+          "class": "good",
+          "file_line": "113-118"
+        },
+        {
+          "idea": "Private-first distribution with future-public-ready stable API design (no deep imports, no opportunistic exports, semver-governed from day one).",
+          "class": "good",
+          "file_line": "123-127"
+        },
+        {
+          "idea": "Phase 0 overlap audit: reconcile all in-flight ingestion work before moving any code, with one explicit new-SDK destination for in-flight fixes.",
+          "class": "good",
+          "file_line": "253-258"
+        },
+        {
+          "idea": "Operator command ownership matrix — explicit per-command split between ingestionSdk and oak-search-sdk/admin for all oaksearch admin and search commands.",
+          "class": "good",
+          "file_line": "195-218"
+        },
+        {
+          "idea": "Elasticsearch/lifecycle safety invariants must be preserved as a contract, not an implementation detail — lease safety, metadata/alias coherence, ELSER/backpressure envelope, blue/green capacity precondition.",
+          "class": "good",
+          "file_line": "224-233"
+        },
+        {
+          "idea": "RED-before-GREEN discipline: write failing boundary and behaviour tests before creating the workspace skeleton.",
+          "class": "good",
+          "file_line": "14-15"
+        },
+        {
+          "idea": "Keep the public SDK surface intentionally minimal: one high-level service/factory, one lifecycle adapter if needed; all phase modules private.",
+          "class": "good",
+          "file_line": "175-189"
+        },
+        {
+          "idea": "Result<...> pattern with error cause chain preservation as the boundary method contract.",
+          "class": "good",
+          "file_line": "179"
+        },
+        {
+          "idea": "Phase 0 same-phase ADR amendments: ADR-134, ADR-139, ADR-093, ADR-133 must all be updated or explicitly recorded as no-change before implementation proceeds.",
+          "class": "good",
+          "file_line": "293-296"
+        },
+        {
+          "idea": "Post-phase full gate sequence across all toolchain steps (build, type-check, lint, format, markdownlint, test, e2e, ui, smoke) after every phase.",
+          "class": "good",
+          "file_line": "264-276"
+        },
+        {
+          "idea": "Non-CLI internal consumers adopt the new SDK through the package-supplied high-level service only — ad hoc composition of raw lifecycle primitives is unsupported.",
+          "class": "good",
+          "file_line": "233"
+        },
+        {
+          "idea": "CLI reduced to: env loading, file path resolution, command parsing, SDK composition, output rendering, exit codes — nothing else.",
+          "class": "good",
+          "file_line": "429-435"
+        },
+        {
+          "idea": "Mermaid target-architecture flowchart as a first-class artefact in the plan.",
+          "class": "good",
+          "file_line": "150-171"
+        }
+      ],
+      "conformance": "major-drift",
+      "v0_kind": "executable",
+      "v0_disposition": null,
+      "v0_gate": "absent",
+      "edges_present": [],
+      "status_raw": "PLANNING",
+      "status_maps_cleanly": false,
+      "nonconforming": [
+        {
+          "issue": "Missing required field `id` (LOCKED, required for all plan nodes)",
+          "file_line": "search-ingestion-sdk-extraction.execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `node_type: \"plan\"` (LOCKED, required for all plan nodes)",
+          "file_line": "search-ingestion-sdk-extraction.execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `kind` (LOCKED, required for all plan nodes; must be `strategic` or `executable`)",
+          "file_line": "search-ingestion-sdk-extraction.execution.plan.md:1"
+        },
+        {
+          "issue": "Missing required field `last_updated` (LOCKED, required for all); value appears only in body prose at line 31 (`Last Updated: 2026-03-24`), not frontmatter",
+          "file_line": "search-ingestion-sdk-extraction.execution.plan.md:31"
+        },
+        {
+          "issue": "Missing required field `serves_strategic_choice` (LOCKED, required for executable plans); plan carries `todos` making it executable-kind but no strategic-choice ID or `\"pending\"` sentinel is present",
+          "file_line": "search-ingestion-sdk-extraction.execution.plan.md:1"
+        },
+        {
+          "issue": "Explicitly-dropped key `isProject: false` present (V0 §2.5 drops `isProject` universally — subsumed by `projects_to` edge)",
+          "file_line": "search-ingestion-sdk-extraction.execution.plan.md:25"
+        },
+        {
+          "issue": "`Status: PLANNING` in body prose (line 32) maps via V0 §3.5 migration map to `kind: strategic` + `gate: owner-decision`, but the frontmatter carries `todos` which V0 §2.4 forbids on `strategic` plans — the kind implied by status and the kind implied by frontmatter structure are contradictory",
+          "file_line": "search-ingestion-sdk-extraction.execution.plan.md:32"
+        },
+        {
+          "issue": "No typed edges declared in frontmatter (`serves_strategic_choice`, `derives_from`, `thread`, `depends_on`) despite a rich Source Strategy section citing multiple ADRs and sibling plans — all authority/traceability relationships are prose-only",
+          "file_line": "search-ingestion-sdk-extraction.execution.plan.md:37"
+        }
+      ],
+      "unclassified_keys": [
+        "isProject"
+      ],
+      "locked_contradictions": [],
+      "specialist_signal": "architecture",
+      "specialist_kind": "architecture",
+      "specialist_findings": [
+        {
+          "severity": "info",
+          "claim": "The plan references a permanent ADR (ADR-140) as its architectural anchor, but the ADR is listed in the source strategy as a future artefact to be created in Phase 0 (Task 0.1). Until ADR-140 exists and is accepted, the plan's boundary decisions rest on the plan itself rather than a superseding permanent record. This is a sequencing reality, not a defect, but reviewers should note the plan currently IS the architectural authority for the new workspace boundary.",
+          "file_line": "34-41"
+        },
+        {
+          "severity": "low",
+          "claim": "The dependency arrow in the Mermaid diagram (line 165) shows `bulkSnapshot --> ingestionSdk` directly into the new SDK. Bulk snapshots are acquired data artefacts; if they arrive as external inputs to the SDK rather than through `@oaknational/curriculum-sdk`, this implies the ingestion SDK has an undeclared input surface (raw bulk data). The plan never explicitly defines whether bulk acquisition (fetching and caching the snapshot) stays in the CLI or moves to the SDK. Task 2.2 lists 'bulk preparation orchestration' for the SDK but leaves 'download' command ownership to the SDK 'via CLI shell' (line 197), creating a latent ambiguity about where acquisition ends and preparation begins.",
+          "file_line": "160-171"
+        },
+        {
+          "severity": "low",
+          "claim": "Task 0.4 locks the post-extraction import matrix and requires ESLint boundary rules, but the plan defers placement of lint fixtures to Phase 0 without specifying the enforcement mechanism (e.g. eslint-plugin-boundaries rules, tsconfig path constraints, or a custom rule). A locked matrix with no named enforcement tool leaves the lint strategy open for re-interpretation at implementation time. The risk row at line 548 notes this threat ('dumping ground') but the plan relies on the ADR rather than a concrete lint artefact for enforcement.",
+          "file_line": "320-331"
+        },
+        {
+          "severity": "low",
+          "claim": "The plan mandates that non-CLI hosts use only the 'package-supplied high-level service/factory for mutating ingest flows' and explicitly marks ad hoc primitive composition as unsupported (lines 232-233). However, the public contract section (lines 175-189) says the lifecycle-compatible adapter is exposed 'if required' to satisfy `IndexLifecycleDeps['runVersionedIngest']`. If that adapter is exported, it is a second stable entry point for lifecycle mutation that bypasses the high-level guard. The plan does not close this ambiguity: an adopter could compose `runVersionedIngest` directly and bypass lease/coherence enforcement.",
+          "file_line": "175-189"
+        },
+        {
+          "severity": "medium",
+          "claim": "The plan's 'Distribution Strategy' commits to treating the private package as 'semver-governed' and 'future-public-ready from day one' (lines 122-127). This imposes a stability contract that affects what can be exported and how breaking changes are handled across the repo's internal consumer(s), yet the plan has no mechanism to enforce semver discipline on a private package. Without a changesets workflow, an explicit policy on breaking changes within the monorepo, or a CI gate, 'treat as semver' is an intent statement, not an architectural constraint. The plan should either name the enforcement mechanism or scope the public-readiness goal to API shape rather than process.",
+          "file_line": "122-127"
+        },
+        {
+          "severity": "info",
+          "claim": "The operator command table (lines 195-218) explicitly marks five commands ('verify', 'sandbox-ingest', 'cache-reset', 'diagnose-elser', 'analyze-elser') as 'CLI orchestration utility for now — explicitly out of ingestion-SDK public-surface scope unless later proven reusable'. These commands require later ADR-backed re-evaluation before SDK promotion, which is appropriate deferral hygiene. No architectural issue; flagged for completeness.",
+          "file_line": "213-217"
+        },
+        {
+          "severity": "info",
+          "claim": "The plan cross-references three overlapping active plans (lines 250-257) and mandates an overlap register in Task 0.3, but neither the overlap register location nor its format is specified. If multiple agents execute concurrently against these plans, the absence of a named artefact means the overlap register could exist in different forms or locations per executor. Naming the register file path and format in Task 0.3 would reduce coordination friction.",
+          "file_line": "250-257"
+        }
+      ],
+      "load_bearing_claims_count": 6,
+      "high_stakes_verdicts": [
+        {
+          "claim": "All five phases are pending; no implementation has started.",
+          "verdict": "survives",
+          "confidence": "high",
+          "evidence": ".agent/plans/.../search-ingestion-sdk-extraction.execution.plan.md:12,15,18,21,24 (all five todos status: pending); packages/sdks/ listing shows oak-search-ingestion-sdk ABSENT; apps/oak-search-cli/src/lib/indexing/bulk-ingestion.ts + run-versioned-ingest.ts + adapters/oak-adapter.ts still present (Phase 2/3 code movement not done)."
+        }
+      ]
+    }
+  ]
+}

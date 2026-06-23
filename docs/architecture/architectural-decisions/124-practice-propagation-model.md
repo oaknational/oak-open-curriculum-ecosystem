@@ -39,16 +39,16 @@ Real-world propagation between repositories revealed three problems:
 
 The Practice travels as a package in `.agent/practice-core/`:
 
-| File                       | Audience | Role                                                                     |
-| -------------------------- | -------- | ------------------------------------------------------------------------ |
-| `practice.md`              | Agents   | Blueprint: artefact map, workflow, three-layer model (the **what**)      |
-| `practice-lineage.md`      | Agents   | Blueprint: principles, evolution rules, exchange mechanism (the **why**) |
-| `practice-bootstrap.md`    | Agents   | Blueprint: annotated templates for every artefact type (the **how**)     |
-| `practice-verification.md` | Agents   | Verification checklist for hydration and operational fitness             |
-| `README.md`                | Humans   | Entry point: context and hydration how-to                                |
-| `index.md`                 | Agents   | Operational orientation and cold-start instructions                      |
-| `CHANGELOG.md`             | Both     | Evolution log for Practice Core changes                                  |
-| `provenance.yml`           | Both     | Per-file provenance chain                                                |
+| File                       | Audience | Role                                                                                        |
+| -------------------------- | -------- | ------------------------------------------------------------------------------------------- |
+| `practice.md`              | Agents   | Blueprint: artefact map, workflow, three-layer model (the **what**)                         |
+| `practice-lineage.md`      | Agents   | Evolution record: provenance, exchange & merge, branching & transplanting (the **lineage**) |
+| `practice-bootstrap.md`    | Agents   | Blueprint: annotated templates for every artefact type (the **how**)                        |
+| `practice-verification.md` | Agents   | Verification checklist for hydration and operational fitness                                |
+| `README.md`                | Humans   | Entry point: context and hydration how-to                                                   |
+| `index.md`                 | Agents   | Operational orientation and cold-start instructions                                         |
+| `CHANGELOG.md`             | Both     | Evolution log for Practice Core changes                                                     |
+| `provenance.yml`           | Both     | Per-file provenance chain                                                                   |
 
 The package also requires `decision-records/`, `patterns/`, and
 `incoming/`. The three trinity files carry YAML provenance frontmatter

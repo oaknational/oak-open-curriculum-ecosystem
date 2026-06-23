@@ -106,7 +106,7 @@ the host's bridge index and ADR surface, not in the PDR.
 
 Two narrow carve-outs (the host's distilled-doctrine entry on
 Practice-Core portability ratifies both — see the bridge index
-[Practice-Core concept ↔ ADR map](../../practice-index.md#practice-core-concept--adr-map)):
+Practice-Core concept ↔ ADR map):
 
 1. **Practice-canonical directory references** describing the
    Practice's own canonical layout (`.agent/skills/`, `.agent/rules/`,
@@ -178,7 +178,7 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-052](PDR-052-directive-file-context-budget.md) | Directive-File Context Budget | Accepted |
 | [PDR-053](PDR-053-orchestrator-vs-gate-structural-cure.md) | Orchestrator-vs-Gate Structural Cure (Advisory Polarity) | Accepted |
 | [PDR-054](PDR-054-asymmetric-cure-discipline.md) | Asymmetric-Cure Discipline | Accepted |
-| [PDR-055](PDR-055-cli-affordance-set-discipline.md) | CLI Affordance-Set Discipline for Coordination Tooling | Accepted |
+| [PDR-055](PDR-055-cli-affordance-set-discipline.md) | CLI Affordance-Set and API-Surface-Design Discipline | Accepted (amended 2026-06-16) |
 | [PDR-056](PDR-056-inter-agent-collaboration-protocol.md) | Inter-Agent Collaboration Protocol — Ten Named Cures | Accepted |
 | [PDR-057](PDR-057-empirical-answerability.md) | Empirical-Answerability Pre-Question Gate | Accepted (supersedes quarantined `apply-don't-ask`) |
 | [PDR-058](PDR-058-three-tier-optionality-decomposition.md) | Three-Tier Optionality Decomposition | Accepted (supersedes quarantined `stop-inventing-optionality`) |
@@ -216,3 +216,24 @@ Practice-Core portability ratifies both — see the bridge index
 | [PDR-089](PDR-089-conservation-reflex-external-check.md) | The Conservation Reflex — Frame-Capture Recurs at Every Stage; the Cure Is an External Check | Accepted |
 | [PDR-090](PDR-090-one-law-three-faces.md) | One Law, Three Faces — A Frame-Slip's Cure Is Always Return to the Source | Accepted |
 | [PDR-091](PDR-091-precedence-is-not-approval.md) | Precedence Is Not Approval | Accepted |
+| [PDR-092](PDR-092-mechanical-firing-moments-over-vigilance-clauses.md) | Mechanical Firing Moments Over Vigilance Clauses | Accepted |
+| [PDR-093](PDR-093-self-correcting-measurable-deliverables.md) | Self-Correcting Measurable Deliverables | Accepted |
+| [PDR-094](PDR-094-coordination-event-rotation-is-class-tiered-archive-not-delete.md) | Coordination-Event Rotation Is Class-Tiered and Archive-Not-Delete | Accepted |
+| [PDR-095](PDR-095-collaboration-is-multi-dimensional.md) | Collaboration Is Multi-Dimensional — A Coordination Registry Measures One Axis, Not the Whole | Accepted |
+| [PDR-096](PDR-096-atomic-propagation-across-reader-surfaces.md) | Atomic Propagation of a Change Across Its Reader Surfaces | Accepted |
+| [PDR-097](PDR-097-disposition-category-grouping-in-health-reports.md) | Disposition-Category Grouping in Substrate Health Reports | Accepted |
+| [PDR-098](PDR-098-doctrine-traction-firing-detection-response.md) | Doctrine Traction — the Firing × Detection × Response Decomposition | Accepted |
+| [PDR-099](PDR-099-change-rate-governor-is-a-reflection-trigger.md) | A Self-Modifying Practice's Change-Rate Governor Is a Reflection-Trigger | Accepted |
+| [PDR-100](PDR-100-decision-debt-as-a-first-class-pillar.md) | Decision-Debt as a First-Class Pillar | Accepted |
+| [PDR-101](PDR-101-graduation-requires-quorum.md) | A Doctrine-Minting Graduation Requires a Review Quorum | Accepted |
+| [PDR-102](PDR-102-editorial-voice-optional-host-defined-scope-bounded.md) | Editorial Voice Is an Optional, Host-Defined, Scope-Bounded Concern | Accepted |
+| [PDR-103](PDR-103-scope-from-goal-before-approach.md) | Scope From the Goal Before Approach — an Active Boundary Gate | Accepted |
+| [PDR-104](PDR-104-best-effort-doctrine-authoring-in-consolidation.md) | Best-Effort Practice-Doctrine Authoring in Dedicated Consolidation Sessions | Accepted |
+| [PDR-105](PDR-105-reference-direction-invariants.md) | Reference-Direction Invariants — the Artefact Fundamentality Hierarchy | Accepted |
+| [PDR-107](PDR-107-directive-supersedes-and-reconciles-adr.md) | An Owner Directive Supersedes a Conflicting Accepted Record — and Reconciles It | Accepted |
+| [PDR-108](PDR-108-generalise-where-generalisation-does-not-cost-utility.md) | Generalise Where Generalisation Does Not Cost Utility | Accepted |
+| [PDR-109](PDR-109-culture-is-what-propagates-across-instances.md) | Culture Is What Propagates Across Instances — the Transmission of Disposition | Accepted |
+| [PDR-110](PDR-110-repo-state-enforcement-is-its-own-proof-layer.md) | Repo-State Enforcement Is Its Own Proof Layer | Accepted |
+| [PDR-111](PDR-111-agent-experience-is-first-class.md) | Agent Experience Is a First-Class Practice Optimisation Principle | Accepted |
+| [PDR-112](PDR-112-teaching-surface-family-across-a-portability-seam.md) | The Teaching-Surface Family — Intent-Routed Lenses Across a Portability Seam | Accepted |
+| [PDR-113](PDR-113-source-intent-from-the-principal-not-the-records.md) | Source Intent From the Principal, Not the Records | Accepted |

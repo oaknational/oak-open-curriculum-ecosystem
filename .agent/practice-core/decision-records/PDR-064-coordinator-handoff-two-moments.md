@@ -4,8 +4,15 @@ pdr_kind: governance
 
 # PDR-064: Coordinator Handoff — Pre-Positioning vs Active-Acknowledgement
 
-**Status**: Proposed
-**Date**: 2026-05-22
+**Status**: Accepted (2026-06-12 — the Proposed→Accepted trigger named in
+§Rationale fired many times over: four further coordinator/Director
+successions inside one 24-hour window of 2026-06-10/11, each running the
+two-moments shape; the refinements those instances produced are absorbed
+in the 2026-06-12 amendment below)
+**Date**: 2026-05-22 (amended 2026-06-12 — pre-positioning matured from a
+single event into a shadow-period process; standing-successor authorisation
+and the citable-gate test added, resolving deferred open question 4;
+Director-session closeout obligations added per owner-standing direction)
 **Related**:
 [PDR-027](PDR-027-threads-sessions-and-agent-identity.md)
 (threads, sessions, identity — coordinator identity travels
@@ -167,6 +174,60 @@ monitor owned by the outgoing coordinator:
   \<deadline\>, the cron continues firing into an empty
   coordinator slot — this is the structural defect; the team
   must surface a new candidate"*).
+
+### Pre-positioning is a process — the shadow period (2026-06-12 amendment)
+
+Moment 1 names a single information-transfer **event**; matured succession
+practice runs pre-positioning as a **process**. A shadow period opens at
+(or before) the Moment 1 broadcast, during which:
+
+- the outgoing holder front-loads transfer continuously rather than in one
+  dump — the candidate successor reads the live surfaces (roster, slice
+  state, routing queue, standing notes) while the outgoing holder still
+  carries authority;
+- the handover criteria are **named and team-visible** — what the successor
+  must have read, acknowledged, or demonstrated before Moment 2 is
+  legitimate;
+- an **abrupt-unavailability recovery path** is named in advance: if the
+  outgoing holder goes silent before Moment 2, the front-loaded transfer
+  plus the named criteria let the team (or the owner) complete the
+  succession rather than rescue it.
+
+Worked deviation instance (2026-06-10): an outgoing holder went silent
+between the moments; because transfer had been front-loaded as a process,
+the owner-directed Moment 2 was a *completion*, not a rescue. Four further
+successions in the following ~24 hours each ran pre-positioning as a
+process.
+
+### Standing-successor authorisation and the citable-gate test (2026-06-12 amendment)
+
+**A standing successor naming IS the authorisation.** When the owner has
+named a successor (directly, or via standing direction that a named class
+of agent succeeds), Moment 2 fires on the successor's
+active-acknowledgement broadcast **without a fresh owner sign-off ask**.
+Asking the owner to re-confirm a naming they have already made is an
+invented gate that burns the owner-attention this role exists to conserve.
+This resolves deferred open question 4 in the collapsed-event direction:
+an explicit owner naming plus the successor's active-acknowledgement
+completes the transfer.
+
+The general form is the **citable-gate test**: before writing "owner
+directs X", "owner must approve X", or any owner-reservation into a
+coordination artefact (pre-positioning events, handoff records, closeout
+summaries, plans), cite where the owner reserved X. **An uncited
+reservation is an invented gate.** The test supersedes a bare
+"fire and let the owner interrupt" framing, which over-corrects at
+genuinely owner-owned moments — the discipline asks for the citation, not
+for boldness.
+
+### Director-session closeout obligations (2026-06-12 amendment)
+
+At every Director/coordinator session closeout, the closing holder runs
+the host's FULL lightweight-handoff workflow AND its deep-consolidation
+workflow BEFORE landing the final coordination change set; the session is
+not closed until that change set lands. (Owner-standing direction,
+2026-06-12; the host's team-session-opener surface is the operational
+home — this clause is the portable contract it realises.)
 
 ### Partial / Slice-Scoped Coordinator Transfer
 
@@ -371,14 +432,13 @@ second instance.
    on routing? This PDR explicitly rejects dual-authority as
    default; the question is whether a controlled exception
    exists.
-4. **Owner-direct designation without pre-positioning.** Owner
-   sometimes names a coordinator directly in the chat without a
-   prior pre-positioning event. Does the named agent's team-
-   start broadcast satisfy Moment 2, or is a distinct active-
-   acknowledgement still required? (Hypothesis: a team-start
-   broadcast that explicitly names *"I am coordinator from
-   session-open per owner direction"* satisfies Moment 2 by
-   collapsing the two events.)
+4. **Owner-direct designation without pre-positioning.** RESOLVED by the
+   2026-06-12 amendment (§Standing-successor authorisation): the owner
+   naming is the authorisation; the named agent's explicit
+   active-acknowledgement broadcast (which a team-start broadcast naming
+   the role per owner direction satisfies) completes Moment 2. No fresh
+   owner sign-off ask is legitimate — an uncited reservation is an
+   invented gate.
 5. **Malformed active-acknowledgement.** What is the audit-trail
    behaviour when the active-acknowledgement broadcast is
    malformed — missing `in_response_to`, missing the prior

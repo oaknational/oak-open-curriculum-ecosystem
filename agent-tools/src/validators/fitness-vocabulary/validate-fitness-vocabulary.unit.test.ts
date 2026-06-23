@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  findForbiddenPhrases,
-  shouldInspectFile,
-  shouldReportMatch,
-} from './validate-fitness-vocabulary.js';
+import { findForbiddenPhrases, shouldReportMatch } from './validate-fitness-vocabulary.js';
 
 describe('shouldReportMatch', () => {
   it('reports non-filename matches of two-threshold', () => {
@@ -35,58 +31,6 @@ describe('shouldReportMatch', () => {
     ).toBe(true);
     expect(shouldReportMatch('soft-ceiling', 'soft-ceiling report')).toBe(true);
     expect(shouldReportMatch('not a blocking gate', 'advisory, not a blocking gate')).toBe(true);
-  });
-});
-
-describe('shouldInspectFile', () => {
-  it('inspects live markdown files', () => {
-    expect(shouldInspectFile('.agent/skills/consolidate-docs/SKILL-CANONICAL.md')).toBe(true);
-    expect(shouldInspectFile('docs/governance/development-practice.md')).toBe(true);
-  });
-
-  it('excludes archived files', () => {
-    expect(shouldInspectFile('.agent/memory/active/archive/napkin-2026-03-21.md')).toBe(false);
-    expect(
-      shouldInspectFile('.agent/plans/agentic-engineering-enhancements/archive/completed/foo.md'),
-    ).toBe(false);
-  });
-
-  it('excludes incoming practice-box files', () => {
-    expect(shouldInspectFile('.agent/practice-core/incoming/practice.md')).toBe(false);
-  });
-
-  it('excludes experience files (reflective, not normative)', () => {
-    expect(shouldInspectFile('.agent/experience/2026-04-05-concepts-as-currency.md')).toBe(false);
-  });
-
-  it('excludes backup directories', () => {
-    expect(shouldInspectFile('.agent/practice-core-backup-2026-03-23/practice.md')).toBe(false);
-  });
-
-  it('excludes non-markdown, non-ts, non-mjs files', () => {
-    expect(shouldInspectFile('scripts/foo.sh')).toBe(false);
-    expect(shouldInspectFile('package.json')).toBe(false);
-  });
-
-  it('excludes the ADR-144 file itself (permitted to discuss retired vocabulary)', () => {
-    expect(
-      shouldInspectFile(
-        'docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md',
-      ),
-    ).toBe(false);
-  });
-
-  it('excludes the vocabulary validator itself and its tests', () => {
-    expect(
-      shouldInspectFile(
-        'agent-tools/src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts',
-      ),
-    ).toBe(false);
-    expect(
-      shouldInspectFile(
-        'agent-tools/src/validators/fitness-vocabulary/validate-fitness-vocabulary.unit.test.ts',
-      ),
-    ).toBe(false);
   });
 });
 

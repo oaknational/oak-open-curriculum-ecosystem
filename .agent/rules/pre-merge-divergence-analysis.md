@@ -23,5 +23,16 @@ Standard text-level conflict resolution misses:
 Always run `pnpm type-check` immediately after resolving text conflicts —
 this catches the silent breaks that Git cannot detect.
 
+## Derive Merge Risk From Content, Not From Raw Name-Status
+
+Merge and divergence **risk** is content-derived, never read off a raw
+`HEAD..origin` (or branch-vs-branch) `--name-status` count. A long
+name-status list can be a zero-risk merge (identical content, pure
+fast-forward, or already-applied changes) and a short one can hide a
+breaking signature change. Prove the risk from the merge algorithm itself
+(a dry-run merge, the conflict set) or from an **empty content diff**, not
+from how many files appear in a name-status listing. The raw list is a
+discovery hint; the verdict comes from the content.
+
 For the full agent-executable workflow, use the
 [complex-merge skill](../skills/complex-merge/SKILL.md).

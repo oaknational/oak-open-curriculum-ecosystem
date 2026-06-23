@@ -43,10 +43,13 @@ function normaliseEntry(entry: RawBlockedPattern): BlockedPatternEntry {
 }
 
 /**
- * Match a blocked pattern against a command by token subsequence.
+ * Match a blocked pattern against a command — by token subsequence by
+ * default, or by case-insensitive substring for entries with
+ * `match: 'substring'`.
  *
- * This catches reordered Git arguments such as `git push origin HEAD --force`
- * for the policy pattern `git push --force`. Each entry may be a bare pattern
+ * Token subsequence catches reordered Git arguments such as
+ * `git push origin HEAD --force` for the policy pattern `git push --force`;
+ * substring mode catches shapes hidden inside one quoted token. Each entry may be a bare pattern
  * string or an object carrying a doctrinal citation; the citation is surfaced
  * in the deny payload so the agent learns *why* the pattern is forbidden, not
  * only *that* it is.
@@ -56,9 +59,23 @@ export function findBlockedPattern(
   blockedPatterns: readonly RawBlockedPattern[],
 ): BlockedPatternEntry | null {
   const commandTokens = tokenizeCommand(command);
+  // Substring probes are whitespace-stripped on BOTH sides so spacing cannot
+  // smuggle a shape past the trip (`for (;;)` vs `for(;;)`).
+  const strippedCommand = command.toLowerCase().replace(/\s+/gu, '');
 
   for (const blockedPattern of blockedPatterns) {
     const entry = normaliseEntry(blockedPattern);
+
+    // Substring mode exists because token equality cannot see inside quoted
+    // arguments: the 2026-06-11 founding DOS command carried its busy-loop as
+    // one quoted token, sailing past a token-sequence trip for the same shape.
+    if (entry.match === 'substring') {
+      if (strippedCommand.includes(entry.pattern.toLowerCase().replace(/\s+/gu, ''))) {
+        return entry;
+      }
+      continue;
+    }
+
     const patternTokens = tokenizeCommand(entry.pattern);
     let patternIndex = 0;
 

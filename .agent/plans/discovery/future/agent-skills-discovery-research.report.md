@@ -36,7 +36,7 @@ Primary external sources reviewed:
 Repo-local sources used only for Oak value interpretation and planning
 placement:
 
-- [Vision](../../../../docs/foundation/VISION.md)
+- [Vision](../../../../VISION.md)
 - [Discovery collection index](../README.md)
 - [MCP Server Cards tracking plan](mcp-server-cards.plan.md)
 

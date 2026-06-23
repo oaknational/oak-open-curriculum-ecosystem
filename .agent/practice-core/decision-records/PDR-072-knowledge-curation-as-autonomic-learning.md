@@ -15,7 +15,7 @@ pdr_kind: governance
 (surface classification for fitness-response routing);
 [PDR-071](PDR-071-coordinator-allocates-without-gating.md)
 (mode separation as a structural property);
-[`practice-index.md`](../../practice-index.md) (host adoption and
+`practice-index.md` (host adoption and
 implementation bridge).
 
 ## Context

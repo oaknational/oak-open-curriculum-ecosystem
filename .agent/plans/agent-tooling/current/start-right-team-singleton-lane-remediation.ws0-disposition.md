@@ -101,7 +101,7 @@ scope. Distribution:
 | `.agent/memory/operational/repo-continuity.md` | Live continuity surface | **update** — sweep for retired-path references at WS4 |
 | `.agent/memory/operational/pending-graduations.md` | Pending-graduations register | **update** — sweep at WS4 |
 | `.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md` | Live thread record | **update** — sweep at WS4 |
-| External: `/Users/jim/.claude/projects/.../memory/MEMORY.md` and per-user files | Personal-memory references to retired CLI shapes (see `feedback_use_built_agent_tools_only.md` entry) | **update via external memory correction note ONLY with explicit owner permission per WS** (mirrors parent plan §Scope line 179); otherwise leave for owner-side curation |
+| External: `~/.claude/projects/.../memory/MEMORY.md` and per-user files | Personal-memory references to retired CLI shapes (see `feedback_use_built_agent_tools_only.md` entry) | **update via external memory correction note ONLY with explicit owner permission per WS** (mirrors parent plan §Scope line 179); otherwise leave for owner-side curation |
 
 **External memory notes scope**: Out of the workspace ledger by definition.
 Listed here only to confirm the WS0 acceptance "distinguish workspace from
@@ -165,7 +165,7 @@ member.
 | --- | --- |
 | Disposition table exists | Classes A–H above. |
 | Every stale comms-root surface has one disposition | Class A (source — update), Class B (doctrine — update; line-by-line dispositions now enumerated for all three previously partial-WS0 surfaces — 2026-05-20 Shaded Creeping Cloak / claude / opus-4-7-1m / 4ef359), Class F (historical-evidence — preserved), Class G (plans — update-at-execution), Class H (test-fixture — keep). Bulk class F covers the 313 collaboration/ matches and 14 archived memory matches by category. |
-| Workspace vs external distinguished | Class E names workspace memory files explicitly and the external `/Users/jim/.claude/projects/...` correction surface separately. |
+| Workspace vs external distinguished | Class E names workspace memory files explicitly and the external `~/.claude/projects/...` correction surface separately. |
 | No implementation change starts before ledger exists | This file is the gate; WS1+ proceeds only after owner review. |
 
 ## Next Safe Step

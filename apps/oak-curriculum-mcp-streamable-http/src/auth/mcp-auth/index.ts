@@ -9,3 +9,4 @@
  */
 
 export { createMcpAuthClerk } from './mcp-auth-clerk.js';
+export type { CreateMcpAuthClerkDeps } from './mcp-auth-clerk.js';

@@ -14,6 +14,8 @@
 
 export { extractKeywords, normaliseKeyword, type ExtractedKeyword } from './keyword-extractor.js';
 
+export { extractLessons, type ExtractedLesson } from './lesson-extractor.js';
+
 export { extractMisconceptions, type ExtractedMisconception } from './misconception-extractor.js';
 
 export { extractLearningPoints, type ExtractedLearningPoint } from './learning-point-extractor.js';

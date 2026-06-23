@@ -43,7 +43,7 @@ existing operational documentation:
 | ----------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Napkin            | Distilled                 | Distillation extracts high-signal content                                                                                           |
 | Distilled         | Permanent docs            | Consolidation graduates settled entries                                                                                             |
-| Distilled         | Practice-core             | Meta-principles graduate to Learned Principles                                                                                      |
+| Distilled         | Practice-core             | Meta-principles graduate to PDRs (or `practice.md` §Meta-Principles)                                                                |
 | Permanent docs    | Rules                     | Principles become enforceable rule extractions                                                                                      |
 | Rules             | Work                      | Governed work generates new learning                                                                                                |
 | Work              | Napkin                    | Mistakes and discoveries are captured continuously                                                                                  |

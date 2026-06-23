@@ -18,6 +18,12 @@ import type { McpServerFactory } from './mcp-request-context.js';
 import { authInfoExtraSchema } from './auth/mcp-auth/auth-info-schema.js';
 import { createChildLogger } from './logging/index.js';
 import type { HttpObservability } from './observability/http-observability.js';
+import { extractMcpMethod, extractMcpToolName } from './observability/mcp-request-metadata.js';
+import {
+  buildMcpSpanAttributes,
+  recordOutboundSize,
+} from './observability/outbound-size-observability.js';
+import { attachResponseByteCounter } from './observability/response-byte-counter.js';
 
 /** Cleanup timeout — prevents indefinite hangs from stalled close operations. */
 const CLEANUP_TIMEOUT_MS = 5000;
@@ -55,24 +61,14 @@ export interface McpHandlerResponse {
   locals: { correlationId?: string; [key: string]: unknown };
   /** Register event listeners (handler uses 'close' for cleanup). */
   on(event: string, listener: (...args: unknown[]) => void): unknown;
-}
-
-/**
- * Type guard for object with method property.
- */
-function hasMethodProperty(value: unknown): value is { method: unknown } {
-  return typeof value === 'object' && value !== null && 'method' in value;
-}
-
-/**
- * Extracts MCP method from JSON-RPC request body for logging.
- * Returns undefined if body is not a valid JSON-RPC request.
- */
-function extractMcpMethod(body: unknown): string | undefined {
-  if (hasMethodProperty(body) && typeof body.method === 'string') {
-    return body.method;
-  }
-  return undefined;
+  /**
+   * Body write seam — present on the live `ServerResponse`; the outbound
+   * byte counter wraps it to record wire size. Optional so plain-object
+   * test fakes without a body stream still satisfy the interface.
+   */
+  write?(...args: unknown[]): unknown;
+  /** Body end seam — see {@link McpHandlerResponse.write}. */
+  end?(...args: unknown[]): unknown;
 }
 
 /**
@@ -192,6 +188,7 @@ export function createMcpHandler(
         ? createChildLogger(logger, correlationId)
         : undefined;
     const mcpMethod = extractMcpMethod(req.body);
+    const mcpToolName = extractMcpToolName(req.body, mcpMethod);
     log?.debug('MCP request received', { method: req.method, path: req.path, mcpMethod });
 
     enrichObservabilityScope(req, observability, mcpMethod);
@@ -201,16 +198,18 @@ export function createMcpHandler(
 
     registerCleanupHandler(res, req, transport, server, log, observability);
 
+    // The SDK serialises JSON-RPC responses internally, so wire size is
+    // only observable at the write seam (outbound token health metric).
+    const byteCounter = attachResponseByteCounter(res);
+
     // Guard withSpan so observability failures never crash the handler.
     try {
       await observability.withSpan({
         name: 'oak.http.request.mcp',
-        attributes: {
-          ...(req.method !== undefined ? { 'http.method': req.method } : {}),
-          'http.route': req.path,
-        },
-        run: async () => {
+        attributes: buildMcpSpanAttributes(req.method, req.path, mcpMethod, mcpToolName),
+        run: async (span) => {
           await transport.handleRequest(req, res, req.body);
+          recordOutboundSize(span, byteCounter, log, mcpMethod, mcpToolName);
         },
       });
     } catch (spanError: unknown) {

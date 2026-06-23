@@ -17,10 +17,34 @@ split_strategy: "This file is the source of truth for all principles. Extract on
 
 All of these principles MUST be followed at all times.
 
+## Decision Lenses — Order of Resolution
+
+When answering a question or making a decision, apply these lenses **in order**;
+the first that decisively resolves the question governs. They are the shared
+decision substrate every agent and the Director apply, so decisions stay coherent
+across the team without escalation — a question reaches the owner only when
+critical analysis through all five genuinely fails to resolve it, or the decision
+is constitutively the owner's (for example product or feature scope):
+
+1. **Choose long-term architectural excellence at every decision point** — see
+   [§Architectural Excellence Over Expediency](#architectural-excellence-over-expediency).
+2. **Strict, everywhere, all the time** — see [§Strict and Complete](#strict-and-complete).
+3. **Could it be simpler without compromising functionality or quality?** — the
+   [§First Question](#first-question).
+4. **Would it be simpler if the system changed?** Ask whether moving the system
+   dissolves the problem, rather than solving it inside the current shape.
+5. **Optimise for user value.**
+
+These resolve *questions*. They sit alongside standing concerns that are never
+traded away — excellent developer experience, excellent **agent experience** (the
+agent-facing substrate is a product whose users are agents; see
+[PDR-111](../practice-core/decision-records/PDR-111-agent-experience-is-first-class.md)),
+and the highest levels of software engineering excellence.
+
 ## First Question
 
-Always apply the first question; **Ask: could it be simpler _without
-compromising quality or value_?**. The answer will often be no, that is fine,
+Always apply the first question; **Ask: could it be simpler *without
+compromising quality or value*?**. The answer will often be no, that is fine,
 but bring real critical thinking to the question each time.
 
 ## Strict and Complete
@@ -191,7 +215,7 @@ this way produces cleaner boundaries and simpler classification.
   command MUST target the canonical surface and fail loudly when that
   surface is absent or invalid; it must not quietly scan an old location,
   skip a missing canonical directory, or keep a migration path alive.
-- **Pure functions first** - Use TDD to design (_test first_, red,
+- **Pure functions first** - Use TDD to design (*test first*, red,
   green, refactor), no side effects, no I/O
 - **Consistent Naming** - Use consistent naming conventions for
   files, modules, functions, data structures, classes, constants,
@@ -412,6 +436,10 @@ paths, setup files) don't apply.
   authority. Companion to "Misleading docs are blocking": that rule
   fires after the misstatement lands; this rule prevents authoring
   the misstatement in the first place.
+
+### Agentic Quality
+
+Every agentic capability — prompts, [skills](https://agentskills.io/skill-creation/evaluating-skills), MCP tools, sub-agents — must carry an assurance case proportionate to the harm of getting it wrong, internal-facing as much as user-facing. Assurance composes deterministic tests, baseline-relative evaluations, conformance, and human review; rigour is risk-tiered (highest where harm is asymmetric and irreversible, light where cheap and self-correcting), never uniform. Evaluation definitions are version-controlled with the artefact they grade. Capabilities that are not eval-shaped take a different instrument, not forced graded-output evals. No internal assurance is complete until it closes against a real-world signal of value — grading only against expectations we authored measures our own assumptions. See [validation-strategy.md](validation-strategy.md) for the test/evaluate/assure frame, the assurance tiers, and the instrument-by-surface mapping.
 
 ### Compiler Time Types and Runtime Validation
 

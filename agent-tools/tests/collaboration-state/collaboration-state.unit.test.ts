@@ -1,7 +1,3 @@
-import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -22,7 +18,7 @@ import {
 import {
   commsSendDefaults,
   formatCommsSendResult,
-} from '../../src/collaboration-state/cli-comms-commands';
+} from '../../src/collaboration-state/cli-comms-send';
 import { claimReport } from '../../src/collaboration-state/claim-reports';
 import { parseOptions, type Options } from '../../src/collaboration-state/cli-options';
 
@@ -58,7 +54,13 @@ describe('deriveCollaborationIdentity', () => {
     });
 
     expect(result.seed_source).toBe('CODEX_THREAD_ID');
-    expect(result.agentId).toMatchObject(woodland);
+    expect(result.agentId).toMatchObject({
+      agent_name: 'Thyme guards Heath',
+      platform: 'codex',
+      model: 'GPT-5',
+      session_id_prefix: '019dd3',
+      naming_schema_version: 'v2-noun-verb-noun',
+    });
     expect(result.agentId.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
     );
@@ -92,78 +94,6 @@ describe('runCollaborationStateCli', () => {
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toContain('"session_id_prefix": "019dd3"');
-  });
-
-  it('fails identity preflight when an id-keyed claim shares the routing id but uses a different model', async () => {
-    // PDR-076a: same (name, id) with different model is a live collision.
-    const envDerived = deriveCollaborationIdentity({
-      platform: 'codex',
-      model: 'GPT-5',
-      env: { CODEX_THREAD_ID: codexThreadId },
-    }).agentId;
-    const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-preflight-'));
-    const activePath = join(tempDir, 'active.json');
-    const registry: CollaborationRegistry = {
-      schema_version: '1.3.0',
-      commit_queue: [],
-      claims: [claim({ agent_id: { ...envDerived, model: 'GPT-5.1' } })],
-    };
-    await writeFile(activePath, `${JSON.stringify(registry)}\n`);
-
-    try {
-      const result = await runCollaborationStateCli({
-        argv: [
-          '--',
-          'identity',
-          'preflight',
-          '--platform',
-          'codex',
-          '--model',
-          'GPT-5',
-          '--active',
-          activePath,
-          '--now',
-          nowIso,
-        ],
-        env: { CODEX_THREAD_ID: codexThreadId },
-      });
-
-      expect(result.exitCode).toBe(2);
-      expect(result.stderr).toContain('collides with live identity');
-      expect(result.stderr).toContain('GPT-5.1');
-    } finally {
-      await rm(tempDir, { recursive: true, force: true });
-    }
-  });
-
-  it('accepts command-only check flags without a topic', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'collaboration-state-check-'));
-    const activePath = join(tempDir, 'active.json');
-    const closedPath = join(tempDir, 'closed.json');
-    const eventsDir = join(tempDir, 'events');
-    await writeFile(activePath, '{"schema_version":"1.3.0","commit_queue":[],"claims":[]}\n');
-    await writeFile(closedPath, '{"schema_version":"1.3.0","claims":[]}\n');
-    await mkdir(eventsDir);
-
-    try {
-      const result = await runCollaborationStateCli({
-        argv: [
-          '--',
-          'check',
-          '--active',
-          activePath,
-          '--closed',
-          closedPath,
-          '--comms-dir',
-          eventsDir,
-        ],
-        env: {},
-      });
-
-      expect(result).toStrictEqual({ exitCode: 0, stdout: 'ok\n', stderr: '' });
-    } finally {
-      await rm(tempDir, { recursive: true, force: true });
-    }
   });
 
   it('parses repeated area-pattern flags as an ordered collection', () => {
@@ -527,16 +457,17 @@ describe('claim CLI reports', () => {
   });
 
   it('builds comms send defaults from the repo root', () => {
-    expect(commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one')).toStrictEqual(
-      {
-        'comms-dir': '/repo/.agent/state/collaboration/comms',
-        active: '/repo/.agent/state/collaboration/active-claims.json',
-        now: nowIso,
-        'created-at': nowIso,
-        'event-id': 'event-one',
-        output: '/repo/.agent/state/collaboration/shared-comms-log.md',
-      },
-    );
+    // `--repo-root` short-circuits cwd resolution, so the cwd arg is unused here.
+    expect(
+      commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one', '/unused-cwd'),
+    ).toStrictEqual({
+      'comms-dir': '/repo/.agent/state/collaboration/comms',
+      active: '/repo/.agent/state/collaboration/active-claims.json',
+      now: nowIso,
+      'created-at': nowIso,
+      'event-id': 'event-one',
+      output: '/repo/.agent/state/collaboration/shared-comms-log.md',
+    });
   });
 
   it('formats comms send output from resolved write paths', () => {

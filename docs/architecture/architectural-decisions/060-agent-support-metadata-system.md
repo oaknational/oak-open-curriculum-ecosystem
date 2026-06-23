@@ -13,6 +13,17 @@ Accepted (Revised)
 > consolidated into `get-curriculum-model` — now the sole agent support tool. The
 > metadata-system pattern (single source of truth driving generated instructions) is
 > unchanged; only the tool set has simplified from three to one.
+>
+> **Update (10 June 2026)**: As the server approaches production, a need has been
+> identified to ground consuming agents in pedagogical principles and Oak
+> curriculum rigour. The generators here (`generateServerInstructions`,
+> `generateContextHint`) currently emit **tool-orientation only** — there is no
+> slot for general or pedagogical prose. The [Addendum](#addendum-10-june-2026--pedagogical-grounding-and-per-call-budget)
+> below records the generator gap, the per-call token-budget constraint on
+> `generateContextHint`, and the per-tool guidance-enhancement direction. No
+> implementation decision is ratified. See also
+> [ADR-058](058-context-grounding-for-ai-agents.md) and the
+> [process record](../../../.agent/reports/mcp-session-instructions-pedagogical-grounding-process-2026-06-10.md).
 
 ## Context
 
@@ -58,9 +69,9 @@ export const AGENT_SUPPORT_TOOL_METADATA = {
     provides: ['domain model', 'tool guidance', 'key stages', 'subjects', 'entity hierarchy'],
     purpose: 'understand the Oak curriculum domain model and how to use available tools',
     callOrder: 0,
-    complementsTools: [],
-    invocationTrigger: 'At session start or when the agent needs curriculum orientation',
-    contextHint: 'Call get-curriculum-model for the complete domain model and tool guidance',
+    complementsTools: ['search', 'fetch'],
+    seeAlso:
+      'search for finding content, fetch for retrieving details, browse-curriculum for browsing',
     callAtStart: true,
   },
 } as const;
@@ -68,14 +79,19 @@ export const AGENT_SUPPORT_TOOL_METADATA = {
 
 ### Field Descriptions
 
-| Field               | Purpose                                                        |
-| ------------------- | -------------------------------------------------------------- |
-| `callOrder`         | Recommended sequence (0-based; reserved for future multi-tool) |
-| `complementsTools`  | Other agent support tools that work alongside this one         |
-| `invocationTrigger` | When an agent should call this tool                            |
-| `contextHint`       | Brief sentence reinforced in every tool response               |
-| `provides`          | Specific data categories the tool returns                      |
-| `purpose`           | Why an agent should call this tool                             |
+| Field              | Purpose                                                        |
+| ------------------ | -------------------------------------------------------------- |
+| `name`             | Tool name as it appears in `tools/list`                        |
+| `shortDescription` | Brief description used in generated server instructions        |
+| `callOrder`        | Recommended sequence (0-based; reserved for future multi-tool) |
+| `complementsTools` | Tools that complement this one (any tool, e.g. `search`)       |
+| `seeAlso`          | Guidance on when to use related tools instead                  |
+| `provides`         | Specific data categories the tool returns                      |
+| `purpose`          | Why an agent should call this tool                             |
+| `callAtStart`      | Whether the tool should be called at conversation start        |
+
+The per-response reinforcement hint is generated from tool names by
+`generateContextHint()`; it is not a metadata field.
 
 ### Generated Outputs
 
@@ -175,8 +191,7 @@ Unit tests verify:
   purpose: 'understand terminology and jargon',
   callOrder: 1,
   complementsTools: ['get-curriculum-model'],
-  invocationTrigger: 'When the agent encounters unfamiliar curriculum terminology',
-  contextHint: 'Call get-glossary for curriculum term definitions',
+  seeAlso: 'get-curriculum-model for the domain model before resolving terminology',
   callAtStart: false,
 }
 ```
@@ -190,6 +205,42 @@ agentSupport: {
 ```
 
 3. Run tests: `pnpm test agent-support-tool-metadata`
+
+## Addendum (10 June 2026) — Pedagogical Grounding and Per-Call Budget
+
+Recorded to guide the future pedagogical / curriculum-rigour grounding work; no
+implementation decision is ratified.
+
+### Generator gap: tool-orientation only
+
+`generateServerInstructions()` and `generateContextHint()` are pure functions of
+`AGENT_SUPPORT_TOOL_METADATA`. Every word they emit is **tool-orientation**
+("call these agent support tools at conversation start", "read-only and
+idempotent"). There is **no slot for general or pedagogical prose**. Adding
+pedagogical grounding is therefore a generator extension, not a one-field
+metadata edit, and any added prose must be **single-sourced** (one named export
+feeding every surface) to preserve this ADR's no-drift guarantee.
+
+### Per-call token budget
+
+`generateContextHint()` output is broadcast in `structuredContent` on **every
+tool response** (per [ADR-058](058-context-grounding-for-ai-agents.md) §3) and so
+consumes the consuming agent's context window on every call. The existing unit
+assertion that the hint stays "reasonably short" is the **budget guard** — any
+pedagogical content added to the per-call hint must respect it.
+`generateServerInstructions()` is sent once per session, but still competes for
+the consuming agent's context and carries the same budget discipline. Uniformly
+broadcasting rich guidance on every response does not scale.
+
+### Direction: per-tool guidance enhancements
+
+Because the per-call budget caps uniform broadcast, the likely shape is a
+mechanism for **per-tool guidance enhancements** — guidance targeted to the tools
+that need it, applied only where it earns its tokens — rather than one larger
+uniform broadcast string. The metadata system is already per-tool (keyed by tool
+name), so this would extend the established pattern rather than replace it. The
+reliability ranking that should drive _which_ surface carries enhanced guidance is
+recorded in [ADR-058 Addendum](058-context-grounding-for-ai-agents.md#addendum-2026-06-10--pedagogical-grounding-forward-considerations).
 
 ## Related Decisions
 

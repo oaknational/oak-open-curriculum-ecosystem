@@ -5,7 +5,7 @@ Expediency](../directives/principles.md#architectural-excellence-over-expediency
 [`principles.md` §Code Design and Architectural Principles](../directives/principles.md#code-design-and-architectural-principles),
 [`principles.md` §Refactoring](../directives/principles.md#refactoring),
 and the active tripwire doctrine in
-[`passive-guidance-loses-to-artefact-gravity.md`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md).
+`passive-guidance-loses-to-artefact-gravity.md`.
 
 This rule exists because "no compatibility layers" is easy to agree
 with abstractly and easy to rationalise away under delivery pressure.
@@ -99,7 +99,7 @@ failure shape.
 - [`principles.md`](../directives/principles.md) — source doctrine
 - [`apply-architectural-principles.md`](apply-architectural-principles.md)
   — broad architectural rule layer
-- [`workaround-debt-compounds-through-rationalisation.md`](../memory/active/patterns/workaround-debt-compounds-through-rationalisation.md)
+- `workaround-debt-compounds-through-rationalisation.md`
   — failure mode this rule counters
-- [`passive-guidance-loses-to-artefact-gravity.md`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+- `passive-guidance-loses-to-artefact-gravity.md`
   — why this had to become an always-applied rule

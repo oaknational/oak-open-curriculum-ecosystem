@@ -13,17 +13,48 @@ import { type CollaborationAgentId, type CollaborationStateEnvironment } from '.
 
 const DEFAULT_POLL_MS = 500;
 const DEFAULT_HEARTBEAT_INTERVAL_MS = 30000;
+/**
+ * Generous per-step deadline (drain/emit/markSeen). 120x the default poll
+ * interval — wide enough that a slow filesystem never false-positives, tight
+ * enough that a genuinely hung step dies loud rather than muting the watcher
+ * silently for minutes (the 2026-06-10 hang-but-run incident).
+ */
+const DEFAULT_STEP_TIMEOUT_MS = 60000;
+/** Suffix appended to the seen-file to derive the default heartbeat path. */
+const DEFAULT_HEARTBEAT_FILE_SUFFIX = '.heartbeat.json';
+
+/**
+ * Resolve the watcher heartbeat path. Liveness is ON BY DEFAULT: with no
+ * `--heartbeat-file`, the path is derived from the seen-file
+ * (`<seen-file>.heartbeat.json`) so the always-armed surface is consumable by
+ * a staleness check; an explicit `--heartbeat-file` overrides the derived
+ * default (but NOT `--no-heartbeat`, which opts out entirely and takes
+ * precedence over both).
+ */
+function resolveHeartbeatFile(input: {
+  readonly explicit: string | undefined;
+  readonly seenFile: string;
+  readonly noHeartbeat: boolean;
+}): string | undefined {
+  if (input.noHeartbeat) {
+    return undefined;
+  }
+  return input.explicit ?? `${input.seenFile}${DEFAULT_HEARTBEAT_FILE_SUFFIX}`;
+}
 
 /**
  * Watch the comms stream. Emits every non-self event under the current
  * view-token set: broadcast, group, directed, observed, and lifecycle.
  *
- * Liveness surface (FM-2 cure, 2026-05-23): when `--heartbeat-file <path>`
- * is provided, the watcher writes a substrate-typed heartbeat JSON every
- * `--heartbeat-interval-ms` milliseconds (default 30000) with
- * `last_drain_at`, `last_emit_at`, `last_error_at`, `emitted_count`, and the
- * `pid`. Absence of mtime updates beyond 3x the interval is the stale
- * signal external liveness checks should use.
+ * Liveness surface (FM-2 cure, 2026-05-23; default-on 2026-06-10): the watcher
+ * writes a substrate-typed heartbeat JSON every `--heartbeat-interval-ms`
+ * milliseconds (default 30000) with `last_drain_at`, `last_emit_at`,
+ * `last_error_at`, `emitted_count`, and the `pid`. The path is the seen-file's
+ * derived default (`<seen-file>.heartbeat.json`) unless `--heartbeat-file`
+ * overrides it; `--no-heartbeat` disables the surface. Absence of mtime
+ * updates beyond 3x the interval is the stale signal external liveness checks
+ * (e.g. `detectStaleWatcher`) should use — a hung process cannot self-report,
+ * so this consumer check is the detection path c1's loud death cannot cover.
  */
 export async function watchComms(
   options: Options,
@@ -36,7 +67,13 @@ export async function watchComms(
   const self = resolveSelfIdentity(options, env);
   const pollMs = optionalPositiveInteger(options, 'poll-ms') ?? DEFAULT_POLL_MS;
   const maxEvents = optionalPositiveInteger(options, 'max-events');
-  const heartbeatFile = optional(options, 'heartbeat-file');
+  const stepTimeoutMs =
+    optionalPositiveInteger(options, 'step-timeout-ms') ?? DEFAULT_STEP_TIMEOUT_MS;
+  const heartbeatFile = resolveHeartbeatFile({
+    explicit: optional(options, 'heartbeat-file'),
+    seenFile,
+    noHeartbeat: optional(options, 'no-heartbeat') !== undefined,
+  });
   const heartbeatIntervalMs =
     optionalPositiveInteger(options, 'heartbeat-interval-ms') ?? DEFAULT_HEARTBEAT_INTERVAL_MS;
   const seedFromNow = optional(options, 'seed-from-now') !== undefined;
@@ -54,6 +91,7 @@ export async function watchComms(
 
   const output = await watchCommsLoop({
     maxEvents,
+    stepTimeoutMs,
     drain: (remainingEvents) => drainComms({ commsDir, seenFile, self, remainingEvents, io }),
     waitForChange: () => waitForCommsChange(runtime, { directory: commsDir, pollMs }),
     emit: async (text) => {

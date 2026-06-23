@@ -118,7 +118,7 @@ entries in `pending-graduations.md`.
   (mid-flight at handoff), Wooded ONBOARDING.md (later disavowed), Twilit
   open-questions memory system (landed via separate marshal cycle),
   Hushed marshal-cycle on Option B (`26f8e7cb`).
-- Authored closeout plan `/Users/jim/.claude/plans/vast-chasing-iverson.md`
+- Authored closeout plan `~/.claude/plans/vast-chasing-iverson.md`
   after owner critique on heartbeat-vs-delivery imbalance; approved by owner.
 - Surfaced 10 distinct failure-modes and graduation candidates listed above.
 - Director seat dissolved at 07:03Z per owner direction; peer-coordination

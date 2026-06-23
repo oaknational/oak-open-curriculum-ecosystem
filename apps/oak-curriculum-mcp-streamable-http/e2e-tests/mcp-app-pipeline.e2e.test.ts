@@ -46,6 +46,7 @@ const ToolMetaSchema = z
 const ToolEntrySchema = z
   .object({
     name: z.string(),
+    description: z.string().optional(),
     inputSchema: z.object({}).loose().optional(),
     _meta: ToolMetaSchema.optional(),
   })
@@ -127,12 +128,34 @@ describe('MCP App Pipeline E2E', () => {
   });
 
   it('user-search-query has visibility ["app"]', async () => {
-    const { app } = await createStubbedHttpApp();
+    // Opt in to the user-search surface: the tools are gated OFF by default.
+    const { app } = await createStubbedHttpApp({}, { userSearchEnabled: true });
     const tools = await fetchToolsList(app);
 
     const tool = findToolOrFail(tools, 'user-search-query');
 
     expect(tool._meta?.ui?.visibility).toEqual(['app']);
+  });
+
+  it('tools/list omits user-search and user-search-query at the default (flag OFF)', async () => {
+    // Default fixture mirrors the production opt-in default (OFF): the unbuilt
+    // user-search MCP App tools must not appear in the model-visible tools/list,
+    // regardless of whether a client honours _meta.ui.visibility.
+    const { app } = await createStubbedHttpApp();
+    const tools = await fetchToolsList(app);
+
+    const names = tools.map((tool) => tool.name);
+    expect(names).not.toContain('user-search');
+    expect(names).not.toContain('user-search-query');
+  });
+
+  it('tools/list includes both user-search tools when the flag is ON', async () => {
+    const { app } = await createStubbedHttpApp({}, { userSearchEnabled: true });
+    const tools = await fetchToolsList(app);
+
+    const names = tools.map((tool) => tool.name);
+    expect(names).toContain('user-search');
+    expect(names).toContain('user-search-query');
   });
 
   it('tools/list inputSchema preserves generated keyStage property including examples', async () => {
@@ -150,6 +173,23 @@ describe('MCP App Pipeline E2E', () => {
     // compare at the value level using vitest's deep equality.
     const wireInputSchema = tool.inputSchema;
     expect(wireInputSchema).toHaveProperty('properties.keyStage', expectedKeyStage);
+  });
+
+  it('large-payload tools carry the scope/page hint in their tools/list description', async () => {
+    const { app } = await createStubbedHttpApp();
+    const tools = await fetchToolsList(app);
+
+    const HINT = 'large payload at broad scope';
+
+    // Generated asset tool — hint baked at codegen time (WS1 cycle 1.1),
+    // composed onto the existing asset-download note.
+    const sequencesAssets = findToolOrFail(tools, 'get-sequences-assets');
+    expect(sequencesAssets.description).toContain(HINT);
+    expect(sequencesAssets.description).toContain('oakUrl'); // existing note survives (compose, not replace)
+
+    // Hand-authored aggregated tool — hint added to the description (WS1 cycle 1.2).
+    const browse = findToolOrFail(tools, 'browse-curriculum');
+    expect(browse.description).toContain(HINT);
   });
 
   it('resources/read for widget URI returns HTML with text/html;profile=mcp-app', async () => {

@@ -24,6 +24,7 @@ describe('agent identity session cache', () => {
 
     expect(JSON.parse(result.stdout)).toEqual({
       kind: 'override',
+      namingSchemaVersion: 'override',
       displayName,
       slug: deriveIdentity(sessionId, { override: displayName }).slug,
       seedDigest: createHash('sha256').update(sessionId).digest('hex'),

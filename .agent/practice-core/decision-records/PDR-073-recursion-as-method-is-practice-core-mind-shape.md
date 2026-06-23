@@ -21,7 +21,7 @@ PDR names as recursion-at-the-team-scale);
 between broad and focused awareness);
 [PDR-072](PDR-072-knowledge-curation-as-autonomic-learning.md)
 (sibling cluster member: curation as substrate learning about itself);
-[`practice-index.md`](../../practice-index.md) (host adoption and
+`practice-index.md` (host adoption and
 implementation bridge).
 
 ## Context

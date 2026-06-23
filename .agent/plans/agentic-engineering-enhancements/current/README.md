@@ -28,6 +28,7 @@ tooling substrate, it belongs under `agent-tooling/`.
 | [hallucination-and-evidence-guard-adoption.plan.md](hallucination-and-evidence-guard-adoption.plan.md) | Phases 1 & 2 (hallucination guarding + evidence-based claims) | REFERENCE |
 | [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md) | Phase 3 (architectural enforcement) | REFERENCE |
 | [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md) | Phase 5 (mutation testing) | REFERENCE |
+| [skill-evals-pilot-start-right-quick.plan.md](skill-evals-pilot-start-right-quick.plan.md) | Skill-evals pilot on the high-traffic `start-right-quick` grounding skill: in-repo `evals/`, behaviour-on-transcript with/without delta; answers "can a grounding skill be evaluated, and does it earn its context" | QUEUED — runnable now; feeds the [evals position report](../../../reports/evals-and-assurance-position-2026-06-23.md) |
 | [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md) | Adjacent: ES specialist (✅ complete) | REFERENCE |
 | [sentry-specialist-capability.plan.md](sentry-specialist-capability.plan.md) | Adjacent: Sentry specialist (foundation active) | REFERENCE |
 | [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | REFERENCE |

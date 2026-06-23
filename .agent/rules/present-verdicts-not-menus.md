@@ -89,6 +89,26 @@ anti-shapes offered as owner work.
    over the agent's own findings is not.
 4. **Reserve `AskUserQuestion`** for the three legitimate cases above.
 
+## Proportionate Exploration and the Optionality-Invention Costumes
+
+Raising a question or exploring an alternative is always legitimate; the
+failure is **disproportionate expenditure** — the time, tokens, and
+distraction spent holding a settled question open. When a concern arises that
+analysis can settle, flag it with a default and move on; do not spend a session
+defending an option the evidence has already closed. The trap wears reasonable
+costumes — *"holding it open"*, *"robustness"*, *"due diligence"* — that smuggle
+invented optionality past the don't-invent-optionality discipline (PDR-058).
+Name the costume and apply the proportionality check: would this expenditure be
+justified if the verdict were already as clear to me as it is to the evidence?
+
+The sharpest costume is **precedent- or source-framing used as cover**: hunting
+for a precedent, or framing a recommendation as merely "one source's view", to
+manufacture a fork where none exists. A unanimous reviewer recommendation plus
+clear owner intent makes a decision gate a **confirmation, not a fork** — do not
+re-open it as a menu. And when a correction lands, generalise the **root** on the
+*first* correction and re-audit in-flight work for siblings, rather than patching
+the single instance and waiting to be corrected again.
+
 ## Doctrinal Anchors
 
 - `feedback_no_responsibility_passback` (origin 2026-05-09): "it is

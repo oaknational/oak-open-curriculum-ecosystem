@@ -2,7 +2,32 @@
 
 ## Status
 
-Accepted
+Accepted (amended 2026-06-11)
+
+> **Amendment (2026-06-10 — graph-tools-value-redesign, deliverable G1b).**
+> The `curriculum://prior-knowledge-graph` resource was removed from the
+> resource catalogue; the anchored, bounded `get-prior-knowledge-graph` tool
+> is the prior-knowledge value surface. See the Resources section below for
+> the post-removal table and rationale.
+>
+> **Amendment (2026-06-10 — graph-tools-value-redesign, deliverable G2).**
+> The `curriculum://misconception-graph` resource was removed on the same
+> grounds; the anchored, bounded `get-misconception-graph` tool (lesson,
+> unit, and windowed thread anchors) is the misconception value surface.
+>
+> **Amendment (2026-06-11 — graph-tools-value-redesign, deliverable G3).**
+> The `curriculum://thread-progressions` resource was removed on the same
+> grounds; the anchored, bounded `get-thread-progressions` tool (threadSlug
+> detail, or subject + keyStage discovery) is the thread-progression value
+> surface, ordered by teaching year.
+>
+> **Amendment (2026-06-11 — position-anchored-teaching-continuity, w1-c1).**
+> The Prompts section below was reconciled with the shipped estate, which
+> had drifted: the served set is seven prompts (the table previously listed
+> five, one under a pre-ship name). `continue-progression` was added as the
+> position-anchored entry point — it resolves position→next and chains into
+> `lesson-planning`, never duplicating planning substance (the S3
+> extend/merge reconciliation discipline, PR #162 precedent).
 
 ## Context
 
@@ -22,13 +47,13 @@ This ADR fills that gap: it documents which curriculum capabilities are exposed 
 
 ### Tools (model-controlled)
 
-36 tools: 24 generated from the OpenAPI schema plus 12 aggregated
+37 tools: 24 generated from the OpenAPI schema plus 13 aggregated
 tools. The model decides when to call them based on the user's question and
 the tool visibility metadata exposed through the MCP contract.
 
 - **Generated tools** (24) are produced at SDK compile time from the OpenAPI schema. When the upstream API changes, `pnpm sdk-codegen` updates the tool definitions automatically.
-- **Aggregated tools** (12) are hand-authored compositions that orchestrate API calls, search, reference data, and MCP App entry points. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prior-knowledge-graph`, `get-misconception-graph`, `get-curriculum-model` (domain ontology and tool usage guidance), `download-asset`, `user-search`, and `user-search-query`.
-- One aggregated tool draws on an external evidence corpus rather than the Oak curriculum API: `eef-explore-evidence-for-context` returns a typed subgraph of EEF Teaching and Learning Toolkit strands (with structural citations and caveats) for a lesson context. It composes the `GraphView` substrate per [ADR-179](179-transport-agnostic-graph-substrate.md) and carries `eef-*` namespacing + source attribution per [ADR-157](157-multi-source-open-education-integration.md).
+- **Aggregated tools** (13) are hand-authored compositions that orchestrate API calls, search, reference data, and MCP App entry points. The full set: `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prior-knowledge-graph`, `get-misconception-graph`, `get-keyword-graph`, `get-eef-evidence`, `get-curriculum-model` (domain ontology and tool usage guidance), `download-asset`, `user-search`, and `user-search-query`.
+- One aggregated tool draws on an external evidence corpus rather than the Oak curriculum API: `get-eef-evidence` returns a typed subgraph of EEF Teaching and Learning Toolkit strands (with structural citations and caveats) for a lesson context. It composes the `GraphView` substrate per [ADR-179](179-transport-agnostic-graph-substrate.md) and carries `eef-*` namespacing + source attribution per [ADR-157](157-multi-source-open-education-integration.md).
 
 > **Maintenance note**: the tool counts and the aggregated-tool list above are
 > hand-maintained and drift from the code as tools are added (this entry is the
@@ -42,18 +67,23 @@ the tool visibility metadata exposed through the MCP contract.
 
 ### Resources (application-controlled)
 
-Four resources for clients that support resource injection:
+One curriculum resource for clients that support resource injection:
 
-| Resource URI                         | Content                    | Priority | Audience        |
-| ------------------------------------ | -------------------------- | -------- | --------------- |
-| `curriculum://model`                 | Domain ontology + guidance | 1.0      | `["assistant"]` |
-| `curriculum://prior-knowledge-graph` | Unit dependency data       | 0.5      | `["assistant"]` |
-| `curriculum://thread-progressions`   | Learning progression data  | 0.5      | `["assistant"]` |
-| `curriculum://misconception-graph`   | Misconception data         | 0.5      | `["assistant"]` |
+| Resource URI         | Content                    | Priority | Audience        |
+| -------------------- | -------------------------- | -------- | --------------- |
+| `curriculum://model` | Domain ontology + guidance | 1.0      | `["assistant"]` |
 
-The host application decides whether and how to inject these into the model's context. Only `curriculum://model` (priority 1.0) should be loaded at conversation start — the other graph resources are supplementary and should be loaded only when the conversation needs them.
+The host application decides whether and how to inject it into the model's context; `curriculum://model` (priority 1.0) should be loaded at conversation start.
 
-A fourth resource serves the interactive MCP App widget:
+The graph corpora are deliberately tool-only: the whole-corpus
+`curriculum://prior-knowledge-graph` (2026-06-10, G1b),
+`curriculum://misconception-graph` (2026-06-10, G2), and
+`curriculum://thread-progressions` (2026-06-11, G3) resources were removed
+when the anchored, bounded `get-prior-knowledge-graph`,
+`get-misconception-graph`, and `get-thread-progressions` tools became their
+value surfaces — a whole-corpus dump has no bounded resource form.
+
+A further resource serves the interactive MCP App widget:
 
 | Resource URI                    | Content              | Priority | Audience  |
 | ------------------------------- | -------------------- | -------- | --------- |
@@ -69,21 +99,23 @@ See [ADR-058](058-context-grounding-for-ai-agents.md) for the dual-exposure rati
 
 ### Prompts (user-controlled)
 
-Five parameterised workflow templates that the user explicitly invokes (slash commands, UI buttons):
+Seven parameterised workflow templates that the user explicitly invokes (slash commands, UI buttons):
 
-| Prompt                              | Arguments                        | Workflow                                                            |
-| ----------------------------------- | -------------------------------- | ------------------------------------------------------------------- |
-| `find-lessons`                      | topic, keyStage?                 | Search lessons, summarise top results                               |
-| `lesson-planning`                   | topic, yearGroup                 | Search, get summary/transcript/quiz/assets                          |
-| `explore-curriculum`                | topic, subject?                  | Broad parallel search across lessons/units/threads                  |
-| `learning-progression`              | concept, subject                 | Search threads, map progression, identify gaps                      |
-| `eef-evidence-grounded-lesson-plan` | subject, keyStage, topic, focus? | Explore EEF evidence (subgraph), select strands by fit, plan lesson |
+| Prompt                 | Arguments                                    | Workflow                                                                                                                     |
+| ---------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `find-lessons`         | topic, keyStage?                             | Search lessons, summarise top results                                                                                        |
+| `lesson-planning`      | topic, yearGroup                             | Full lesson build: place the lesson, specify knowledge, misconceptions, sequence, assess, resources                          |
+| `explore-curriculum`   | topic, subject?                              | Broad parallel search across lessons/units/threads                                                                           |
+| `learning-progression` | concept, subject                             | Search threads, map progression, identify gaps                                                                               |
+| `curriculum-mapping`   | subject, keyStage, yearGroup?                | Order units from the thread backbone and prerequisites, check national-curriculum coverage                                   |
+| `adapt-lesson`         | topic, yearGroup                             | Surface pedagogical signals from Oak's graphs, retrieve EEF evidence, present calibrated options                             |
+| `continue-progression` | subject, yearGroup, justCovered, classNotes? | Resolve the class's position, derive the next step from the thread, readiness + misconceptions, chain into `lesson-planning` |
 
-The four curriculum prompts open by calling `get-curriculum-model` for orientation; `eef-evidence-grounded-lesson-plan` instead opens by calling `eef-explore-evidence-for-context`, since its orientation is the EEF evidence base rather than the Oak curriculum domain model.
+Every prompt opens by calling `get-curriculum-model` for orientation in the Oak curriculum domain model before its workflow steps.
 
 **Intent**: Structure common teacher workflows so the model follows a proven multi-step recipe instead of improvising.
 
-**Impact**: Consistent, high-quality responses for the four most common curriculum queries.
+**Impact**: Consistent, high-quality responses for the most common curriculum queries — including the position-anchored entry point ("my class just finished X — what next?"), which `continue-progression` owns by resolving position→next and chaining into `lesson-planning` rather than duplicating it.
 
 ### Prompt selection criteria
 
@@ -112,7 +144,7 @@ A prompt earns its place when it:
 
 ### Neutral
 
-- **Prompt count is intentionally small** (4). More prompts may be added post-alpha as real usage patterns emerge.
+- **Prompt count is intentionally small** (7). More prompts may be added post-alpha as real usage patterns emerge.
 
 ## Related Decisions
 

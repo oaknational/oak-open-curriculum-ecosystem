@@ -14,8 +14,8 @@ todos:
     content: "Update @modelcontextprotocol/sdk to 1.27.1 across all workspaces"
     status: pending
   - id: batch-1-markdownlint
-    content: "Update markdownlint-cli to 0.48.0"
-    status: pending
+    content: "Update markdownlint-cli to 0.48.0 — SUPERSEDED 2026-06-22 by the markdownlint-cli -> markdownlint-cli2 migration; cli2@0.22.1 pins markdown-it@14.1.1, resolving alert #41, and markdownlint-cli is no longer a dependency"
+    status: done
   - id: batch-1-patch-minor
     content: "Update remaining patch/minor packages (elasticsearch, turbo, commitlint, stryker, ioredis, minimatch v10, eslint-plugin-tsdoc, zod-to-openapi, openapi-typescript)"
     status: pending
@@ -131,6 +131,10 @@ Transitive via eslint → `@eslint/eslintrc`. Dev-only.
 Transitive via `markdownlint-cli@0.47.0`.
 
 **Fix**: Update `markdownlint-cli` to 0.48.0 (ships `markdown-it@~14.1.1`).
+
+> **Superseded 2026-06-22**: the `markdownlint-cli` -> `markdownlint-cli2` migration
+> replaced the package entirely. `markdownlint-cli2@0.22.1` pins `markdown-it@14.1.1`
+> (>= the patched 14.1.1), so alert #41 is resolved without this bump.
 
 ### Group 7: qs (1 alert, LOW)
 

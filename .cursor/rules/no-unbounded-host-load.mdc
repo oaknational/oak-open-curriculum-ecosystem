@@ -1,0 +1,6 @@
+---
+description: The host is a shared substrate — no unbounded background load, ever. Spawns are bounded, owned, and reaped with a verified census; host-level load needs proportionality and announcement; check host health at bootstrap.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-unbounded-host-load.md`.

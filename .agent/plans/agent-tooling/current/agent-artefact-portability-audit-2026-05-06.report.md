@@ -144,7 +144,7 @@ Cross-referencing `~/.claude/plugins/installed_plugins.json`,
 | `cloudflare@claude-plugins-official` | **REMOVE** | No `cloudflare`/`workers`/`wrangler` references in `.agent/`, no MCP grants, no Workers/Pages workspaces in monorepo |
 | `linear@claude-plugins-official` | **REMOVE** | No Linear references in `.agent/`, no MCP grants in either settings file |
 | `typescript-lsp@claude-plugins-official` (user-scope) | KEEP | User choice; not project's concern |
-| `playwright@claude-plugins-official` | N/A | `projectPath` is `/Users/jim/code/oak/oak-mcp-ecosystem` — different project |
+| `playwright@claude-plugins-official` | N/A | `projectPath` is `../oak-mcp-ecosystem` — different project |
 
 ### 4.4 Skill-load pressure — Claude is dropping skills (P0)
 

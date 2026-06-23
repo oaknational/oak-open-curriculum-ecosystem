@@ -275,13 +275,13 @@ no-change rationale.
 # Files currently carrying fitness frontmatter:
 grep -REln 'fitness_line_target' .agent/ \
   | grep -v 'archive/' \
-  | tee /tmp/fitness-current.txt
+  | tee <scratch>/fitness-current.txt
 
 # Candidate accrual surfaces (heuristic only — owner judgement
 # required):
 grep -REln '## [0-9]{4}-[0-9]{2}-[0-9]{2}' .agent/ \
   | grep -v 'archive/' \
-  | tee /tmp/fitness-candidates-by-date-headings.txt
+  | tee <scratch>/fitness-candidates-by-date-headings.txt
 ```
 
 #### Task 0.2: Owner decision gate — inclusion criterion

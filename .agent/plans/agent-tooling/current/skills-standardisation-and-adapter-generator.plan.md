@@ -185,9 +185,67 @@ isProject: false
 
 # Skills Standardisation and Adapter Generator
 
-**Last Updated**: 2026-05-09
-**Status**: 🟡 PLANNING (attempt 2)
+**Last Updated**: 2026-06-14
+**Status**: 🟠 CORE LANDED IN REDUCED FORM — RECONCILIATION PENDING REVIEW (see §Reality Reconciliation)
 **Scope**: Implement [PDR-051](../../../practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md) in this repo: one canonical body per skill (`SKILL-CANONICAL.md`), exactly two adapter surfaces (`.agents/skills/` + `.claude/skills/`), generator-mandatory, custom commands retired.
+
+---
+
+## Reality Reconciliation (2026-06-14)
+
+**This plan's todos all read `pending` and its status read `PLANNING`, but the
+core of PDR-051 has in fact landed in the working tree** — in a *reduced* form,
+and outside this plan's authored TDD-cycle structure. This section is the
+authoritative current-state record; the WS0–WS6 cycle structure below is
+retained as the historical intended shape (knowledge preservation), not as an
+accurate todo list.
+
+### What landed
+
+Via commits `a5d7fb12` (WS1.1 `skills-lock.json` Ajv loader), `41831d5c`
+(skills adapter generator), `a8351b33` (`--check` drift gate), `17176e29`
+(sealed `parseFrontmatter`, dropped the legacy `SKILL.md` fallback):
+
+- Canonical bodies are named `SKILL-CANONICAL.md` (non-discoverable) across all
+  skills.
+- Exactly two adapter surfaces are generated: `.claude/skills/oak-<id>/SKILL.md`
+  and `.agents/skills/oak-<id>/SKILL.md`. Bodies are redirect stubs to the
+  canonical (PDR-051's Option E shape for co-located internal skills).
+- The generator (`agent-tools/src/skills-adapter-generate/`) + drift checker are
+  built, and `pnpm skills:check` is wired into the aggregate `check` gate.
+- Retired surfaces are gone: `.cursor/skills`, `.gemini/skills`, `.codex/skills`,
+  `.windsurf/skills`, `.agent/commands`, `.claude/commands` all absent. Custom
+  commands are subsumed.
+
+### Gap ledger vs PDR-051 §Required (recorded, not yet dispositioned)
+
+Per owner direction 2026-06-14, these gaps are **recorded for a later review and
+analysis session**; no disposition (amend-PDR vs close-as-defects) is taken here.
+Cross-referenced as friction **F-37**.
+
+| # | PDR-051 §Required clause | Built state | Note |
+|---|---|---|---|
+| 1 | Configurable owned-skill prefix | `oak-` (PDR/plan examples say `jc-`) | Prefix drift only; benign. |
+| 2 | Every owned skill carries `metadata.owned: true` | Present on **2 of ~22** | The consistency-check gate that would enforce this is itself unbuilt (#3). |
+| 3 | Owned/ingested consistency check in generator + validator | **Not wired** (`lock.ts` exists; generator does not call it) | `skills-lock.json` is **empty** → no ingested skills exist → the owned/ingested apparatus is currently unexercised (strong YAGNI signal for the review). |
+| 4 | Bytewise supporting-file copy to both adapter dirs | **Not implemented** | Latent: no skill has `references/`/`assets/` yet, so invisible until one does. **Blocks** [`../future/skills-oversized-core-decomposition.plan.md`](../future/skills-oversized-core-decomposition.plan.md). |
+| 5 | `claude-*` → top-level frontmatter hoisting | **Not implemented** | No skill needs platform-specific top-level fields yet. |
+| 6 | Adapter frontmatter = spec-portable fields | Generator emits only `{name, description}`; discards `classification`, `license`, `compatibility`, `metadata` | Acceptable for current canonicals; lossy if those fields become load-bearing. |
+| 7 | (Spec/PDR coherence) top-level `classification: active\|passive` key | Present on every canonical; **not in the spec or PDR-051**; silently dropped by the generator | Either nest under `metadata:` or account for it in PDR-051 — for the review. |
+| 8 | (Surface coherence) hand-authored `agents/openai.yaml` | Present in **3 of ~22** canonical dirs (the `start-right-*` skills only); hand-authored, **not generator-emitted**, outside the two-surface contract | Orphan partial adapter surface: either bring OpenAI/Codex interface metadata into the generator for all skills, or retire these three — for the review. |
+
+### Disposition
+
+- This plan is **not complete and not archived**. It stays in `current/` until the
+  deferred review decides whether the reduced implementation is accepted (amend
+  PDR-051 down) or the gaps are closed as defects.
+- Two genuinely-new enhancements (uncovered by PDR-051) were authored as strategic
+  briefs on 2026-06-14:
+  [`../future/skills-oversized-core-decomposition.plan.md`](../future/skills-oversized-core-decomposition.plan.md)
+  and [`../future/skills-eval-harness.plan.md`](../future/skills-eval-harness.plan.md).
+- The redirect-vs-inline adapter-body question is **settled** by PDR-051 (Option E
+  for co-located internal skills); the self-contained model in the external
+  `oak-skills` repo is the separate, correct regime for distributed skills.
 
 ---
 

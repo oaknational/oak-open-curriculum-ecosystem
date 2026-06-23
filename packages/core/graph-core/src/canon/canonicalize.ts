@@ -16,7 +16,7 @@ import { createDataset, type DatasetCore } from '../dataset/index.js';
 import type { Quad } from '../term/index.js';
 
 import { canonizeRuntime, type CanonizeRuntime, type ParsedQuad } from './runtime.js';
-import { reconstructQuad, TermReconstructionError } from './term-reconstruction.js';
+import { reconstructQuad } from './term-reconstruction.js';
 
 export type CanonicalizationErrorKind =
   | 'canonize_failed'
@@ -103,23 +103,24 @@ function runParse(runtime: CanonizeRuntime, nquads: string): StepResult<readonly
 }
 
 function runReconstruct(parsedQuads: readonly ParsedQuad[]): StepResult<DatasetCore> {
-  try {
-    return { ok: true, value: createDataset(parsedQuads.map(reconstructQuad)) };
-  } catch (cause) {
-    const message =
-      cause instanceof TermReconstructionError
-        ? `Failed to reconstruct graph-core DatasetCore: ${cause.position} term (termType=${cause.termType})`
-        : 'Failed to reconstruct graph-core DatasetCore from canonical N-Quads';
-    return {
-      ok: false,
-      error: {
-        kind: 'reconstruction_failed',
-        step: 'reconstruct_dataset',
-        message,
-        cause: toError(cause),
-      },
-    };
+  const quads: Quad[] = [];
+  for (const parsed of parsedQuads) {
+    const reconstructed = reconstructQuad(parsed);
+    if (!reconstructed.ok) {
+      const cause = reconstructed.error;
+      return {
+        ok: false,
+        error: {
+          kind: 'reconstruction_failed',
+          step: 'reconstruct_dataset',
+          message: `Failed to reconstruct graph-core DatasetCore: ${cause.position} term (termType=${cause.termType})`,
+          cause: toError(cause),
+        },
+      };
+    }
+    quads.push(reconstructed.value);
   }
+  return { ok: true, value: createDataset(quads) };
 }
 
 export async function canonicalize(

@@ -1,5 +1,7 @@
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { basename, dirname, join } from 'node:path';
+import { basename, dirname, join, parse } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import type { AnySchema } from 'ajv';
 import Ajv from 'ajv/dist/2020.js';
@@ -13,7 +15,33 @@ const SCHEMA_FILENAMES = [
   'escalation.schema.json',
 ] as const;
 
-const schemaValidators = new Map<string, Promise<CollaborationJsonSchemaValidator>>();
+/**
+ * Absolute path to the collaboration schemas
+ * (`agent-tools/src/collaboration-state/schemas/`), resolved by walking from
+ * this module up to the agent-tools package root. Works from both the `tsx`
+ * source path and the compiled `dist/` path — both resolve to the source
+ * `schemas/` directory, which always exists (`tsc` ships no JSON to `dist/`).
+ *
+ * Decoupled from the validated data file's location (WS7): the schemas no
+ * longer live beside the `.agent/state/collaboration/` data they validate, so
+ * the schema root is fixed at this module's package, not derived from the data
+ * path.
+ */
+function resolveSchemasDir(): string {
+  let dir = dirname(fileURLToPath(import.meta.url));
+  const filesystemRoot = parse(dir).root;
+  while (dir !== filesystemRoot) {
+    if (existsSync(join(dir, 'package.json'))) {
+      return join(dir, 'src', 'collaboration-state', 'schemas');
+    }
+    dir = dirname(dir);
+  }
+  throw new Error('collaboration schema resolution: agent-tools package root not found');
+}
+
+const SCHEMAS_DIR = resolveSchemasDir();
+
+let cachedValidator: Promise<CollaborationJsonSchemaValidator> | undefined;
 
 export interface CollaborationJsonSchemaValidator {
   readonly validateText: (schemaId: string, text: string) => void;
@@ -23,18 +51,17 @@ export async function validateCollaborationJsonFileText(
   filePath: string,
   text: string,
 ): Promise<void> {
-  const surface = collaborationJsonSurface(filePath);
-  const validator = await cachedSchemaValidator(surface.schemaRoot);
-  validator.validateText(surface.schemaId, text);
+  const validator = await cachedSchemaValidator();
+  validator.validateText(collaborationJsonSchemaId(filePath), text);
 }
 
 export async function createCollaborationJsonSchemaValidator(
-  schemaRoot: string,
+  schemaDir: string = SCHEMAS_DIR,
 ): Promise<CollaborationJsonSchemaValidator> {
   const ajv = new Ajv({ allErrors: true, strict: false, validateFormats: true });
   addCollaborationFormats(ajv);
   for (const schemaPath of SCHEMA_FILENAMES) {
-    const schema: unknown = JSON.parse(await readFile(join(schemaRoot, schemaPath), 'utf8'));
+    const schema: unknown = JSON.parse(await readFile(join(schemaDir, schemaPath), 'utf8'));
     if (isAnySchema(schema)) {
       ajv.addSchema(schema);
     }
@@ -62,39 +89,29 @@ function ajvError(errors: Ajv['errors']): string {
   return `schema validation failed at ${first.instancePath || '/'}: ${first.message ?? 'invalid'}`;
 }
 
-async function cachedSchemaValidator(
-  schemaRoot: string,
-): Promise<CollaborationJsonSchemaValidator> {
-  const cached = schemaValidators.get(schemaRoot);
-  if (cached !== undefined) {
-    return cached;
-  }
-  const created = createCollaborationJsonSchemaValidator(schemaRoot);
-  schemaValidators.set(schemaRoot, created);
-  return created;
+async function cachedSchemaValidator(): Promise<CollaborationJsonSchemaValidator> {
+  cachedValidator ??= createCollaborationJsonSchemaValidator();
+  return cachedValidator;
 }
 
-function collaborationJsonSurface(filePath: string): {
-  readonly schemaRoot: string;
-  readonly schemaId: string;
-} {
+function collaborationJsonSchemaId(filePath: string): string {
   const file = basename(filePath);
   if (file === 'active-claims.json') {
-    return { schemaRoot: dirname(filePath), schemaId: 'active-claims.schema.json' };
+    return 'active-claims.schema.json';
   }
   if (file === 'closed-claims.archive.json') {
-    return { schemaRoot: dirname(filePath), schemaId: 'closed-claims.schema.json' };
+    return 'closed-claims.schema.json';
   }
 
   const directory = basename(dirname(filePath));
   if (directory === 'comms') {
-    return { schemaRoot: dirname(dirname(filePath)), schemaId: 'comms-event.schema.json' };
+    return 'comms-event.schema.json';
   }
   if (directory === 'conversations') {
-    return { schemaRoot: dirname(dirname(filePath)), schemaId: 'conversation.schema.json' };
+    return 'conversation.schema.json';
   }
   if (directory === 'escalations') {
-    return { schemaRoot: dirname(dirname(filePath)), schemaId: 'escalation.schema.json' };
+    return 'escalation.schema.json';
   }
 
   throw new Error(`unsupported collaboration JSON state path ${filePath}`);

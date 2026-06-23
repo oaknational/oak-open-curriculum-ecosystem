@@ -124,7 +124,7 @@ export const getSequencesUnits = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Units within a sequence\n\nThis tool returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Units in a curriculum sequence\n\nUse when you want every unit across a whole sequence — all programmes combined, in unit sequence order. Returns units grouped by programme (year group) in unit sequence order. If the sequence slug includes an exam board (e.g. science-secondary-aqa), units are scoped to that exam board. Secondary sequences also expose tiers, pathways, and exam subjects where applicable. Pass year as an optional filter to return only that year's units (across all KS4 factor combinations). Not for: units in a single programme (GET /sequences/{sequence}/programmes/{programme}/units); a flat list of units for a key stage + subject without programme structure or unit sequence order (GET /key-stages/{keyStage}/subject/{subject}/units); the programmes within this sequence (GET /sequences/{sequence}/programmes); a single unit (GET /units/{unit}/summary); units in a thread (GET /threads/{threadSlug}/units). Example: sequence=science-secondary-aqa or maths-primary.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

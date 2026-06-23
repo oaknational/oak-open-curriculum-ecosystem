@@ -39,17 +39,20 @@ Start with the [ADR index](../../docs/architecture/architectural-decisions/), th
 
 This server exposes Oak's curriculum through the three MCP primitive types, each with a distinct control model defined by the [MCP specification](https://modelcontextprotocol.io/).
 
-**Tools** (model-controlled) — currently 34 curriculum tools: 24 generated
-from the OpenAPI schema plus 10 aggregated tools. The aggregated set covers
-search/browse/fetch flows, orientation and graph tools, `download-asset`, and
+**Tools** (model-controlled) — currently 37 curriculum tools: 24 generated
+from the OpenAPI schema plus 13 aggregated tools. The aggregated set covers
+search/browse/fetch flows, orientation, the curriculum graph tools
+(`get-thread-progressions` for year-ordered sequences,
+`get-prior-knowledge-graph`, `get-misconception-graph`,
+`get-keyword-graph`), EEF evidence, `download-asset`, and
 the MCP App user-search pair (`user-search`, `user-search-query`). The AI
 model decides when to call them, subject to per-tool visibility metadata.
 Generated tool definitions are updated automatically when the upstream API
 changes via `pnpm sdk-codegen`.
 
-**Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), `curriculum://prior-knowledge-graph` (unit dependency data, `priority: 0.5`), and `curriculum://thread-progressions` (learning progression data, `priority: 0.5`). All annotated with `audience: ["assistant"]`. The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call.
+**Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), a getting-started documentation resource, and `eef://interpretation` (EEF evidence interpretation guide, flag-gated, on by default). The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call. The curriculum graphs have no whole-corpus resource form — thread progressions, prior knowledge, misconceptions, and keywords are served by the anchored `get-thread-progressions`, `get-prior-knowledge-graph`, `get-misconception-graph`, and `get-keyword-graph` tools.
 
-**Prompts** (user-controlled) — `find-lessons`, `lesson-planning`, `explore-curriculum`, and `learning-progression`. Parameterised workflow templates the user explicitly invokes as slash commands or UI actions. Each orchestrates multiple tools in a proven sequence for a common teacher task.
+**Prompts** (user-controlled) — `find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`, `curriculum-mapping`, `adapt-lesson`, and `continue-progression`. Parameterised workflow templates the user explicitly invokes as slash commands or UI actions. Each orchestrates multiple tools in a proven sequence for a common teacher task — `continue-progression` is the position-anchored entry point: state what your class just covered and plan the next step from Oak's sequence, building on what came before.
 
 Together, tools give the AI autonomous access to curriculum data, resources
 give capable clients pre-loaded context, and prompts give users structured
@@ -159,7 +162,7 @@ serverless cold path filesystem-free.
 
 `dev:widget-in-host` clones `@modelcontextprotocol/ext-apps` to
 `$TMPDIR/mcp-ext-apps` on first run and reuses it subsequently. Delete
-that directory to refresh: `rm -rf /tmp/mcp-ext-apps`. Requires `bun`.
+that directory to refresh: `rm -rf tmp/mcp-ext-apps`. Requires `bun`.
 
 ### Design tokens
 
@@ -191,8 +194,8 @@ mapping them to Oak design tokens where equivalents exist.
 [MCPJam](https://www.mcpjam.com/) is an MCP Apps-compatible host useful
 for visual design review and acceptance testing. Connect it to the local
 server at `http://localhost:3333/mcp` (requires `dev:observe:noauth` running).
-For a tool-by-tool manual walkthrough against any server, see the
-[manual UAT guide](./docs/manual-uat-guide.md).
+For a repeatable whole-server validation pass against any server, see the
+[UAT validation runbook](./docs/manual-uat-guide.md).
 
 ## Observability
 
@@ -265,15 +268,18 @@ Vercel production builds have an additional repo-owned gate:
 
 ### Manual test guide (any server)
 
-A rough manual UAT walkthrough — run by an engineer or an AI agent
-against any running server (local dev or a deployed preview/production)
-to gain end-to-end confidence before trusting it. Replaces the retired
-`pnpm smoke:remote` harness (ADR-121).
+A repeatable, whole-server UAT validation runbook — run by an engineer or
+an AI agent against any running server (local dev or a deployed
+preview/production) to gain end-to-end confidence before trusting it or
+signing off a release. Replaces the retired `pnpm smoke:remote` harness
+(ADR-121).
 
-- [Manual UAT guide](./docs/manual-uat-guide.md) — what to test, how to
-  run each check, and expected results (host or curl). Covers the
-  curriculum tools, the graph tools, and the EEF evidence surface, plus
-  the deployed-server infrastructure checks.
+- [UAT validation runbook](./docs/manual-uat-guide.md) — when to run, what
+  to test, how to run each check, and expected results (host or curl).
+  Covers the full surface: transport/auth, all 37 tools, the 4 resources,
+  and the 7 prompts, the dual response-shape contract, an inventory
+  self-check, and a copy-paste run-record template tied to the release
+  severity model.
 
 ### OAuth discovery
 

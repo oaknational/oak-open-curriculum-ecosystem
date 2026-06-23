@@ -100,7 +100,7 @@ export const getChangelogLatest = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Get the latest version and latest change note for the API",
+  description: "Latest API version\n\nUse when you only need the current API version — e.g. a version banner or deployment check. Returns the most recent changelog entry. Not for: full version history (GET /changelog).",
   path,
   method,
   documentedStatuses,

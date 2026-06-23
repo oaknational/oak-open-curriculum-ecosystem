@@ -1,13 +1,8 @@
-import { readFile } from 'node:fs/promises';
-
 import { getJsonValue, isJsonObject } from './json.js';
 import { validateCollaborationJsonFileText } from './collaboration-json-validation.js';
+import { cliIo, type CliRuntime } from './cli-runtime.js';
 import { optional, required, type Options } from './cli-options.js';
-import {
-  parseClosedClaimsArchive,
-  parseCollaborationRegistry,
-  readCommsEvents,
-} from './state-io.js';
+import { type CollaborationStateEnvironment } from './types.js';
 import { updateJsonFileWithRetry, writeJsonFileAtomically } from './transaction.js';
 
 interface EntriesFile {
@@ -15,7 +10,7 @@ interface EntriesFile {
 }
 
 export async function appendJsonEntry(options: Options): Promise<string> {
-  const filePath = required(options, 'file');
+  const filePath = singleFileOption(options);
   await updateJsonFileWithRetry({
     filePath,
     parseText: parseEntriesFile,
@@ -27,29 +22,52 @@ export async function appendJsonEntry(options: Options): Promise<string> {
     maxAttempts: 5,
   });
 
-  return '';
+  return `appended entry to ${filePath}\n`;
 }
 
 export async function writeJsonBody(options: Options): Promise<string> {
-  const filePath = required(options, 'file');
+  const filePath = singleFileOption(options);
   await writeJsonFileAtomically({
     filePath,
     value: JSON.parse(required(options, 'body-json')),
     validateText: (text) => validateCollaborationJsonFileText(filePath, text),
   });
 
-  return '';
+  return `wrote ${filePath}\n`;
 }
 
-export async function checkState(options: Options): Promise<string> {
+/**
+ * Resolve the single `--file` target for conversation/escalation writes. The
+ * argv parser collects every `--file` into the repeatable `files` array (the
+ * shape `claims open` consumes), so value-map lookups never see it; these
+ * single-target commands require exactly one.
+ */
+function singleFileOption(options: Options): string {
+  const [filePath, ...extra] = options.files;
+  if (filePath === undefined) {
+    throw new Error('missing required option --file');
+  }
+  if (extra.length > 0) {
+    throw new Error('expected exactly one --file');
+  }
+
+  return filePath;
+}
+
+export async function checkState(
+  options: Options,
+  _env: CollaborationStateEnvironment,
+  runtime: CliRuntime,
+): Promise<string> {
+  const io = cliIo(runtime);
   if (optional(options, 'active') !== undefined) {
-    parseCollaborationRegistry(await readFile(required(options, 'active'), 'utf8'));
+    await io.readActiveClaimsFile(required(options, 'active'));
   }
   if (optional(options, 'closed') !== undefined) {
-    parseClosedClaimsArchive(await readFile(required(options, 'closed'), 'utf8'));
+    await io.readClosedClaimsFile(required(options, 'closed'));
   }
   if (optional(options, 'comms-dir') !== undefined) {
-    await readCommsEvents(required(options, 'comms-dir'));
+    await io.readCommsEvents(required(options, 'comms-dir'));
   }
 
   return 'ok\n';

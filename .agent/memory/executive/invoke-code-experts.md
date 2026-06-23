@@ -95,6 +95,20 @@ This keeps reintegration cheaper and reduces clarification loops. Mailbox
 delivery alone is not reintegration; the parent lane must absorb the outcome
 back into the authoritative plan or dialogue.
 
+Two brief-construction disciplines (per PDR-015 reviewer authority):
+
+- **Mandate the full gate set, not one gate.** A verification brief's *Required
+  evidence* is the whole gate set, never a single gate — `lintClean` is not
+  `gate-clean`: compact code can pass ESLint and fail Prettier, which then
+  un-compacts it over `max-lines`. Cure an over-cap finding by
+  responsibility-based splitting, never by compaction.
+- **A scope-protection list enumerates the owner's numbered ratified decisions.**
+  When a brief protects already-decided scope so reviewers don't re-litigate it,
+  the protection list names the owner's *numbered* ratified decisions (and
+  explicitly owner-settled artefact sections) — plan-authored elaborations
+  remain refutable. Protecting a whole sweep wholesale suppresses the legitimate
+  findings the owner's own settlement would surface.
+
 ## Reviewer Dispatch vs Peer Collaboration
 
 Reviewer dispatch is a fork-blocking-rejoin channel inside one agent's
@@ -240,3 +254,23 @@ before relying on the review.
   disposition; triage is not silent deferral (`owner-triaged` means resolved,
   explicitly rejected with rationale, or deliberately deferred with
   owner-visible evidence).
+
+## Finding Adjudication Is Dual-Use
+
+These clauses apply to ALL other-agent review input — specialist sub-agents,
+PR bots (Copilot, cursor[bot], Sonar), and peer reviewers alike (owner
+standing requirement, 2026-06-10):
+
+- **Adjudicate every finding first-hand, in both directions.** Refute false
+  claims with source grounding (encode refutations as regression tests where
+  the claim is testable); apply true ones. Reply with the verdicts on the PR
+  so the adjudication is visible.
+- **A finding names one location of a defect CLASS — sweep the whole corpus.**
+  When a comment reveals a stale cross-reference, wrong number, or mislabel,
+  grep the pattern repo-wide rather than patching the flagged line. Twice in
+  one window (2026-06-10) a bot found a second instance after a first
+  single-line fix.
+- **Thread-resolution gotcha**: cursor[bot] auto-resolves threads on
+  re-review; Copilot threads need manual GraphQL `resolveReviewThread`.
+  Verify zero-unresolved via GraphQL (REST does not expose resolved state)
+  before merge.

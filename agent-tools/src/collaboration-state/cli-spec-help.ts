@@ -78,11 +78,15 @@ export const commsWatchHelp =
   'comms watch --comms-dir <dir> --seen-file <path> ' +
   '--platform <platform> --model <model> ' +
   '[--session-prefix <prefix>] ' +
-  '[--poll-ms <n>] [--max-events <n>] ' +
-  '[--heartbeat-file <path>] [--heartbeat-interval-ms <n>] ' +
+  '[--poll-ms <n>] [--max-events <n>] [--step-timeout-ms <n>] ' +
+  '[--heartbeat-file <path>] [--heartbeat-interval-ms <n>] [--no-heartbeat] ' +
   '[--seed-from-now] [--no-auto-seed] ' +
   '(emits every relevant event — broadcast, group, directed, observed, lifecycle — ' +
-  'with self-exclusion only; heartbeat-file is the FM-2 cure liveness surface, default interval 30000ms; ' +
+  'with self-exclusion only; step-timeout-ms (default 60000) is the per-step deadline on ' +
+  'drain/emit/markSeen — a step that hangs past it makes the watcher exit non-zero (fail-loud) ' +
+  'instead of silently muting; the liveness heartbeat is ON BY DEFAULT at <seen-file>.heartbeat.json ' +
+  '(default interval 30000ms) so a staleness consumer can classify a frozen watcher — ' +
+  'pass --heartbeat-file to relocate it or --no-heartbeat to disable it; ' +
   'auto-seed-on-empty default seeds the seen-file with current events so a fresh ' +
   'watcher starts forward from now rather than replaying full history; ' +
   'pass --no-auto-seed to replay the full event history on an empty seen-file; ' +
@@ -110,7 +114,8 @@ export const claimsOpenHelp =
   '--area-kind <files|workspace|plan|adr|git> ' +
   '--intent <text> --now <iso> --platform <platform> --model <model> ' +
   '[--file <path>...] [--area-pattern <pattern>...] [--claim-id <id>] ' +
-  '[--ttl-seconds <n>] (use either repeatable --file or repeatable --area-pattern, not both)';
+  '[--ttl-seconds <n>] [--role <role>] ' +
+  '(use either repeatable --file or repeatable --area-pattern, not both)';
 
 export const claimsHeartbeatHelp = 'claims heartbeat --active <path> --claim-id <id> --now <iso>';
 

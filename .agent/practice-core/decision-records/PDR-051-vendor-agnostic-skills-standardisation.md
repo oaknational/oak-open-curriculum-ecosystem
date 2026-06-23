@@ -335,6 +335,18 @@ fail on drift between canonical and adapters.
 
 ## Notes
 
+### Skill-listing budgets rise with Practice adoption (2026-06-12 note)
+
+Repos adopting the Practice exhibit a structurally higher skill count
+than platform defaults assume, because the Practice deliberately uses
+platform skill surfaces as the canonical integration point (this PDR;
+PDR-009). Per-platform skill-listing context budgets may therefore need
+raising at adoption time — the current reference instance is Claude
+Code's `skillListingBudgetFraction` raised from the 1% default to 3%.
+This names the budget *floor implied by the architecture*; the
+companion ceiling discipline (skill-load context budgets are real and
+measurable) is unchanged. Owner-approved fold, 2026-06-11 walk.
+
 ### Relationship to PDR-009
 
 PDR-009 establishes canonical-first cross-platform architecture for

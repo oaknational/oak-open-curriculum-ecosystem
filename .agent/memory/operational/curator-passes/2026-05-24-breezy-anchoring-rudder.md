@@ -69,7 +69,7 @@ table is the navigation index.
 - Vining QM finding: marginal `a596f140` / `013de4d4` in cycle #1 rule worked example — Vining ruled out of QM cure scope (broadcast 10:53:20Z)
 - Files in cure scope:
   - `.agents/rules/important-state-not-in-temp-files.md` (NEW; completes 4-adapter coverage)
-  - `.agent/rules/important-state-not-in-temp-files.md` (tightening: header, PDR-014 phrasing, grep comms-exclusion, `/tmp/`-class prose)
+  - `.agent/rules/important-state-not-in-temp-files.md` (tightening: header, PDR-014 phrasing, grep comms-exclusion, `<scratch>/`-class prose)
   - `.agent/memory/operational/curator-passes/2026-05-24-breezy-anchoring-rudder.md` (PDR-081 contract hygiene: surfaces-table, owner-direction-as-pointer, self-instantiation-as-pointer)
 - Status: substrate authored; awaiting Mistbound resume + marshal-cycle.
 
@@ -119,7 +119,7 @@ marshal-cycle was queued behind Mistbound's compaction-3 resume
 and was overtaken by the owner-pause + push event.
 
 Substrate-care signal: knowledge curation produced one durable
-graduation this session (rule landing on the very `/tmp/`-as-
+graduation this session (rule landing on the very `<scratch>/`-as-
 durable-reference failure mode that the load-bearing handover
 artefact itself exemplified).
 

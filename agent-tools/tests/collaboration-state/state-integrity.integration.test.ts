@@ -1,3 +1,4 @@
+import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -91,9 +92,31 @@ describe('collaboration state integrity validator', () => {
     }
   });
 
-  it('hard-fails when a canonical collaboration directory is missing', async () => {
+  it('treats absent untracked-by-design surfaces as clean (fresh checkout / CI)', async () => {
     const repoRoot = await makeTempCollaborationRepo();
     try {
+      // ADR-199 Phase-3 untracked the instance tier, so a fresh checkout (e.g.
+      // CI) has NONE of these on disk: the comms/ directory, active-claims.json,
+      // or closed-claims.archive.json. That absence is the clean state, not an
+      // integrity fault — the validator must not crash on any of them.
+      await removeDirectory(join(repoRoot, '.agent/state/collaboration/comms'));
+      await rm(join(repoRoot, '.agent/state/collaboration/active-claims.json'));
+      await rm(join(repoRoot, '.agent/state/collaboration/closed-claims.archive.json'));
+
+      const report = await validateCollaborationStateIntegrity({ repoRoot });
+
+      expect(report.findings).toStrictEqual([]);
+      expect(formatCollaborationStateIntegrityReport(report)).toContain('OK');
+    } finally {
+      await removeDirectory(repoRoot);
+    }
+  });
+
+  it('hard-fails when a tracked collaboration directory is missing', async () => {
+    const repoRoot = await makeTempCollaborationRepo();
+    try {
+      // conversations/ stays tracked (repo-tier decision provenance), so its
+      // absence is a genuine integrity fault, not the untracked-by-design case.
       await removeDirectory(join(repoRoot, '.agent/state/collaboration/conversations'));
 
       await expect(validateCollaborationStateIntegrity({ repoRoot })).rejects.toThrow(

@@ -112,6 +112,15 @@ adapters, then run `pnpm portability:check`. Every canonical rule must cite
 the ADR(s) it operationalises with a leading "Operationalises ADR-NNN" line
 (ADR-131 §Self-Referential Property).
 
+**Landing a new skill is a two-gate operation, and the second gate may be
+owner-keyed.** Gate one: the canonical file plus its generated platform adapters
+(the steps above). Gate two: a `Skill(<name>)` + `Skill(<name>:*)` permissions
+pair in `.claude/settings.json` (and the equivalent on other platforms) — until
+that pair exists the harness will not surface the skill for invocation. The
+harness may **block the agent's own edit** to `.claude/settings.json` as
+self-modification by design; that block is an explicit owner-authorisation
+moment, not a defect — surface it to the owner rather than working around it.
+
 **Relevant ADRs**:
 [ADR-114](../architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)
 (layered sub-agent prompt composition),

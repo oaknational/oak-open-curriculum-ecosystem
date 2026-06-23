@@ -19,7 +19,10 @@ For the strategic overview, use [high-level-plan.md](high-level-plan.md).
 | Entry | Purpose |
 |---|---|
 | [high-level-plan.md](high-level-plan.md) | Strategic cross-collection overview |
+| [vision-strategy-and-plan-estate.plan.md](product-development-governance/vision-strategy-and-plan-estate.plan.md) | Controlling plan for the experiment→product arc: three co-equal bodies (vision · strategy · plan-estate) on a four-layer informational model (homed in the product-development-governance collection; imported analysis suggestions sit subordinate under that collection's `suggestions/`) |
 | [curriculum-mcp-path-to-ga/roadmap.md](curriculum-mcp-path-to-ga/roadmap.md) | MCP HTTP server M1 → M2 → M3 → GA coordination |
+| [curriculum-mcp-path-to-ga/launch-readiness-framework.md](curriculum-mcp-path-to-ga/launch-readiness-framework.md) | What "live product" means for the MCP app: readiness dimensions, keystone owner decisions, candidate M4/GA gates |
+| [curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md](curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md) | Future stub: redraft the milestone ladder impact-first and drive launch-readiness to GA (owner-promotion gated) |
 | [discovery/README.md](discovery/README.md) | Agent/web discoverability of Oak machine surfaces |
 | [milestones/](../milestones/) | Per-milestone summaries: audience, value, gates |
 | [completed-plans.md](completed-plans.md) | Completed plan index |
@@ -36,6 +39,21 @@ that deserve explicit triage before any practical plan is cut from them.
 | Assessment | Planning question | Likely owning surfaces |
 |---|---|---|
 | [Oak Repository Professionalism and Engineering Quality Report — 2026-06-03](../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md) | Can its improvement roadmap become one or more practical plans without weakening the repo's existing engineering discipline? | [architecture-and-infrastructure/current](architecture-and-infrastructure/current/README.md), [developer-experience/current](developer-experience/current/README.md), [agentic-engineering-enhancements/current](agentic-engineering-enhancements/current/README.md), [agent-tooling](agent-tooling/README.md) |
+| [MCP App Live-Product Readiness — 2026-06-15](../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md) | What must be true (product, safety, compliance, experience, operations, whole-estate) before the MCP app is a live product, and does the milestone ladder still stand? | [curriculum-mcp-path-to-ga/](curriculum-mcp-path-to-ga/roadmap.md), [milestones/](../milestones/), [security-and-privacy/](security-and-privacy/README.md), [observability/](observability/README.md) |
+
+---
+
+## Proposal Records
+
+Imported analysis (suggestions, explorations, conversation-starters) from a parallel
+project context now lives in the
+[`product-development-governance/`](product-development-governance/README.md) collection,
+under [`suggestions/`](product-development-governance/suggestions/) — subordinate to that
+collection's agreed, active controlling plan, not authority in their own right. They are
+held until accepted, rejected, merged into existing models, promoted into
+directives/templates/ADRs, or decomposed into practical plans. See the
+[collection README](product-development-governance/README.md) for the full set and its
+disposition.
 
 ---
 
@@ -98,7 +116,12 @@ Every plan file must be reachable from this root README through an index chain:
 
 The strategic cross-collection index `high-level-plan.md` is linked directly
 from this root; every other plan is reached through its owning collection's
-index. Graph work is reached through its collections —
+index. One **temporary** second root exception is sanctioned:
+`vision-strategy-and-plan-estate.plan.md`, the controlling plan for the
+experiment→product arc, linked directly from root until its estate-restructure body
+decides its permanent home (it governs the restructure that places it). No other
+root-level plan exception is permitted without amending this invariant. Graph
+work is reached through its collections —
 `connecting-oak-resources/knowledge-graph-integration/` for graph substrate and
 Oak graph surfaces, and `sector-engagement/eef/` for the EEF evidence tool — not
 through standalone root-level spine files.
@@ -167,6 +190,7 @@ When adding, promoting, or retiring plan work:
 | Status | Meaning |
 |---|---|
 | 📋 Planned | Not started or queued but not executing |
+| 📝 Proposal | Recorded proposal awaiting triage, acceptance, rejection, merge, or decomposition |
 | 🔬 In Progress | Actively being worked on |
 | 🔄 Active | Active collection or mixed active surface |
 | ⏸ Blocked/Deferred | Waiting on dependency or deprioritised |

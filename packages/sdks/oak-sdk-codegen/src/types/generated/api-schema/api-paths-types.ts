@@ -1,5 +1,5 @@
 export interface paths {
-    "/sequences/{slug}": {
+    "/sequences/{sequence}": {
         parameters: {
             query?: never;
             header?: never;
@@ -8,7 +8,11 @@ export interface paths {
         };
         /**
          * Sequencing information for a given sequence slug
-         * This endpoint returns the sequence object for the provided sequence slug. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.
+         * Use when you have a sequence slug and need the sequence-level summary. A sequence is a subject's curriculum across a phase (e.g. maths-primary, science-secondary-aqa); it spans one or more National Curriculum schemes and contains one programme per year group. Get sequence slugs from GET /subjects or GET /subjects/\{subject\} (the sequenceSlugs field). Returns slug, phase, key stages, years, and any KS4 programme factors (exam board, tier, child subject, pathway) needed to interpret the programmes within it.
+         *
+         *     Not for: the programmes within this sequence (GET /sequences/\{sequence\}/programmes); the unit sequence for one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/units); all units across the sequence (GET /sequences/\{sequence\}/units); subject-level catalogue data (GET /subjects or GET /subjects/\{subject\}).
+         *
+         *     Example: sequence=maths-primary or science-secondary-aqa.
          */
         get: operations["getSequences-getSubjectSequence"];
         put?: never;
@@ -27,8 +31,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Units within a sequence
-         * This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.
+         * Units in a curriculum sequence
+         * Use when you want every unit across a whole sequence — all programmes combined, in unit sequence order. Returns units grouped by programme (year group) in unit sequence order. If the sequence slug includes an exam board (e.g. science-secondary-aqa), units are scoped to that exam board. Secondary sequences also expose tiers, pathways, and exam subjects where applicable. Pass year as an optional filter to return only that year's units (across all KS4 factor combinations).
+         *
+         *     Not for: units in a single programme (GET /sequences/\{sequence\}/programmes/\{programme\}/units); a flat list of units for a key stage + subject without programme structure or unit sequence order (GET /key-stages/\{keyStage\}/subject/\{subject\}/units); the programmes within this sequence (GET /sequences/\{sequence\}/programmes); a single unit (GET /units/\{unit\}/summary); units in a thread (GET /threads/\{threadSlug\}/units).
+         *
+         *     Example: sequence=science-secondary-aqa or maths-primary.
          */
         get: operations["getSequences-getSequenceUnits"];
         put?: never;
@@ -47,8 +55,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Lesson transcript
-         * This endpoint returns the video transcript and video captions file for a given lesson.
+         * Lesson video transcript
+         * Use when you have a lesson slug and need the video transcript — for accessibility, captioning, or text analysis. Returns the transcript as an array of sentences plus a raw WebVTT captions file (vtt) suitable for a \<track\> element.
+         *
+         *     Not for: searching across transcripts (GET /search/transcripts); the video file itself (GET /lessons/\{lesson\}/assets/\{type\} with type=video); lesson metadata (GET /lessons/\{lesson\}/summary).
          */
         get: operations["getLessonTranscript-getLessonTranscript"];
         put?: never;
@@ -67,8 +77,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Lesson search using lesson video transcripts
-         * Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.
+         * Lesson search by video transcript
+         * Use when you want to search the spoken content of lesson videos. Returns up to 5 lessons whose transcripts contain similar text, each with a transcript snippet showing the match. No filters; searches every published transcript.
+         *
+         *     Not for: terms in the lesson title (GET /search/lessons); metadata for a known lesson (GET /lessons/\{lesson\}/summary); a transcript by slug (GET /lessons/\{lesson\}/transcript).
+         *
+         *     Example queries: the mitochondria are the powerhouse, to be or not to be, carry the one.
          */
         get: operations["searchTranscripts-searchTranscripts"];
         put?: never;
@@ -87,9 +101,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Assets within a sequence
-         * This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.
-         *     This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+         * Downloadable assets in a sequence
+         * Use when you need every downloadable asset across a whole sequence — all programmes combined. Returns assets grouped by lesson in unit sequence order, with signed download URLs, asset type, lesson title and slug, and attribution. Pass year as an optional filter. Narrow further with type (one of: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video). Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms.
+         *
+         *     Not for: assets in a single programme (GET /sequences/\{sequence\}/programmes/\{programme\}/assets); a single lesson's downloads (GET /lessons/\{lesson\}/assets); streaming one file (GET /lessons/\{lesson\}/assets/\{type\}); assets for a key stage + subject without programme structure (GET /key-stages/\{keyStage\}/subject/\{subject\}/assets).
          */
         get: operations["getAssets-getSequenceAssets"];
         put?: never;
@@ -108,8 +123,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Assets
-         * This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.
+         * Downloadable assets by key stage and subject
+         * Use when you want every downloadable asset for a key stage + subject, without programme structure or unit sequence order, optionally scoped to a unit or asset type. Returns assets grouped by lesson, each with signed download URLs, asset type, lesson title and slug, and attribution. Pass unit to restrict to one unit and type to restrict to one asset type (one of: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video). Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms.
+         *
+         *     Not for: assets across a sequence (GET /sequences/\{sequence\}/assets); assets in one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/assets); a single lesson's downloads (GET /lessons/\{lesson\}/assets); streaming one file (GET /lessons/\{lesson\}/assets/\{type\}).
          */
         get: operations["getAssets-getSubjectAssets"];
         put?: never;
@@ -128,9 +145,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Downloadable lesson assets
-         * This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
-         *             This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+         * Downloadable assets for a lesson
+         * Use when you have a lesson slug and need the list of what's downloadable. Returns every available asset type with a signed download URL per asset and attribution. The 9 type values are: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video. Pass type to return only one. Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms.
+         *
+         *     Not for: streaming the file itself (GET /lessons/\{lesson\}/assets/\{type\}); bulk asset retrieval across a key stage + subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/assets), a sequence (GET /sequences/\{sequence\}/assets), or one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/assets); lesson metadata (GET /lessons/\{lesson\}/summary).
          */
         get: operations["getAssets-getLessonAssets"];
         put?: never;
@@ -149,9 +167,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Lesson asset by type
-         * This endpoint will stream the downloadable asset for the given lesson and type.
-         *     There is no response returned for this endpoint as it returns a content attachment.
+         * Stream a lesson asset file
+         * Use when you want to download one specific asset for a lesson — slide deck, worksheet, etc. Returns the file directly. Call GET /lessons/\{lesson\}/assets first to see which type values are available. Valid type values: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video. Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms.
+         *
+         *     Not for: listing which asset types a lesson has (GET /lessons/\{lesson\}/assets); fetching the transcript (GET /lessons/\{lesson\}/transcript).
          */
         get: operations["getAssets-getLessonAsset"];
         put?: never;
@@ -170,8 +189,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Subjects
-         * This endpoint returns an array of available subject slugs.
+         * All subjects
+         * Use when you need every subject in one call — the entry point for a subject picker or for crawling the whole curriculum. Returns subjects alphabetically, each with subjectTitle, subjectSlug, sequenceSlugs, keyStages, and years. sequenceSlugs lists the sequences available for that subject; each sequence contains one programme per year group — call GET /sequences/\{sequence\}/programmes to enumerate them.
+         *
+         *     Not for: a single subject (GET /subjects/\{subject\}); the key stages or year groups for a subject (GET /subjects/\{subject\}/key-stages or GET /subjects/\{subject\}/years); lessons or units inside a subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons or GET /key-stages/\{keyStage\}/subject/\{subject\}/units); the detail of one sequence (GET /sequences/\{sequence\}).
          */
         get: operations["getSubjects-getAllSubjects"];
         put?: never;
@@ -190,8 +211,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Subject
-         * This endpoint returns the sequences, key stages and years that are currently available for a given subject.
+         * Single subject with sequences, key stages, and years
+         * Use when you have a subject slug. Returns subjectTitle, subjectSlug, sequenceSlugs, keyStages, and years. sequenceSlugs lists the sequences available for this subject; each sequence contains one programme per year group — call GET /sequences/\{sequence\}/programmes to enumerate them.
+         *
+         *     Not for: every subject in one call (GET /subjects); the key stages or year groups for a subject (GET /subjects/\{subject\}/key-stages or GET /subjects/\{subject\}/years); subject-scoped lessons or units (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons or GET /key-stages/\{keyStage\}/subject/\{subject\}/units); the detail of one sequence (GET /sequences/\{sequence\}).
+         *
+         *     Example: subject=maths.
          */
         get: operations["getSubjects-getSubject"];
         put?: never;
@@ -210,8 +235,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Key stages within a subject
-         * This endpoint returns a list of key stages that are currently available for a given subject.
+         * Key stages for a subject
+         * Use when you only need the key stages where this subject is available. Returns key-stage titles and slugs.
+         *
+         *     Not for: every key stage (GET /key-stages); the subject record (GET /subjects/\{subject\}).
+         *
+         *     Example: 'subject=history'.
          */
         get: operations["getSubjects-getSubjectKeyStages"];
         put?: never;
@@ -230,8 +259,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Year groups for a given subject
-         * This endpoint returns an array of years that are currently available for a given subject.
+         * Year groups for a subject
+         * Use when you only need the year groups where this subject is available. Returns an array of year numbers, derived from the subject's key stages.
+         *
+         *     Not for: the subject record (GET /subjects/\{subject\}); key stages rather than year groups (GET /subjects/\{subject\}/key-stages).
+         *
+         *     Example: 'subject=english'.
          */
         get: operations["getSubjects-getSubjectYears"];
         put?: never;
@@ -250,8 +283,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Key stages
-         * This endpoint returns all the key stages (titles and slugs) that are currently available on Oak
+         * All key stages
+         * Use when you need the master list of key stages. Returns every key stage with its title and slug.
+         *
+         *     Not for: key stages restricted to a subject (GET /subjects/\{subject\}/key-stages).
          */
         get: operations["getKeyStages-getKeyStages"];
         put?: never;
@@ -270,8 +305,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Lessons
-         * This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.
+         * List lessons in a key stage and subject
+         * Use when you want every published lesson in a key stage + subject, grouped by unit, without programme structure or unit sequence order. Returns an array of units, each with slug, title, and the lessons inside. Pass unit to restrict to one. Supports offset/limit pagination; Link: rel="next" header signals more pages.
+         *
+         *     Not for: finding a lesson from a search term (GET /search/lessons); a single lesson's metadata (GET /lessons/\{lesson\}/summary); all units across a sequence (GET /sequences/\{sequence\}/units); units in one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/units).
+         *
+         *     Example: keyStage=ks3, subject=maths, unit=perimeter-and-area.
          */
         get: operations["getKeyStageSubjectLessons-getKeyStageSubjectLessons"];
         put?: never;
@@ -290,8 +329,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Units
-         * This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.
+         * Units in a key stage and subject
+         * Use when you want a flat list of every unit with published lessons in a key stage + subject, without programme structure or unit sequence order. Returns units grouped by year slug; units without published lessons are omitted. Pass examBoard to restrict KS4 to one board (one of: aqa, edexcel (Edexcel A), eduqas, ocr, wjec, edexcelb (Edexcel B)); otherwise each unit lists the boards it appears in.
+         *
+         *     Not for: all units across a sequence (GET /sequences/\{sequence\}/units); units in one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/units); a single unit (GET /units/\{unit\}/summary); lessons rather than units (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons); units in a thread (GET /threads/\{threadSlug\}/units).
          */
         get: operations["getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits"];
         put?: never;
@@ -310,8 +351,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Keywords
-         * This endpoint returns a list of keywords for a given key stage and subject, based on the keywords associated with the lessons that are available for that key stage and subject. The keywords are returned in order of frequency, with the most common keywords appearing first.
+         * Keywords by subject and key stage
+         * Use when you want the vocabulary for a key stage, subject, unit, lesson, or phase — e.g. to build a glossary or attach definitions to content. Returns keywords with definition, the subject + key stage they appear in, and the lessons that use them, sorted alphabetically. All filters are optional, but pass at least one of keyStage, subject, unit, lesson, or phase.
          */
         get: operations["getKeywords-getKeywords"];
         put?: never;
@@ -330,8 +371,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Quiz questions by lesson
-         * The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.
+         * Quiz questions for a lesson
+         * Use when you have a lesson slug and need its starter and exit quiz questions with correct answers marked. Returns two arrays, starterQuiz and exitQuiz; each question includes the prompt, the answers (with correct ones flagged), and which answers are distractors.
+         *
+         *     Not for: quiz questions across a sequence (GET /sequences/\{sequence\}/questions); quiz questions in one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/questions); across a key stage + subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/questions); lesson metadata or assets (GET /lessons/\{lesson\}/summary or GET /lessons/\{lesson\}/assets).
          */
         get: operations["getQuestions-getQuestionsForLessons"];
         put?: never;
@@ -350,8 +393,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Questions within a sequence
-         * This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.
+         * Quiz questions across a sequence
+         * Use when you want every quiz question across a whole sequence — all programmes combined. Returns questions grouped by lesson in unit sequence order. Pass year as an optional filter to return only that year's questions. Supports offset and limit; Link: rel="next" header signals more pages.
+         *
+         *     Not for: questions in a single programme (GET /sequences/\{sequence\}/programmes/\{programme\}/questions); a single lesson's quiz (GET /lessons/\{lesson\}/quiz); questions for a key stage + subject without programme structure (GET /key-stages/\{keyStage\}/subject/\{subject\}/questions).
          */
         get: operations["getQuestions-getQuestionsForSequence"];
         put?: never;
@@ -370,8 +415,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Quiz questions by subject and key stage
-         * This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.
+         * Quiz questions by key stage and subject
+         * Use when you want every quiz question for a key stage + subject, without programme structure or unit sequence order. Returns lessons each with starter and exit quiz questions and answers. Supports offset/limit pagination; Link: rel="next" header signals more pages.
+         *
+         *     Not for: a single lesson's quiz (GET /lessons/\{lesson\}/quiz); questions across a sequence (GET /sequences/\{sequence\}/questions); questions in one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/questions).
          */
         get: operations["getQuestions-getQuestionsForKeyStageAndSubject"];
         put?: never;
@@ -390,8 +437,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Lesson summary
-         * This endpoint returns a summary for a given lesson
+         * Lesson summary by slug
+         * Use when you have a lesson slug and need its full metadata: title, key stage, subject, unit, keywords, key learning points, misconceptions, pupil lesson outcome, teacher tips, content guidance, supervision level, and downloadsAvailable. Returns the lesson summary record.
+         *
+         *     Not for: finding a lesson from a search term (GET /search/lessons); searching what's said in lesson videos (GET /search/transcripts); listing every lesson in a unit or subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons); the transcript or assets (GET /lessons/\{lesson\}/transcript or GET /lessons/\{lesson\}/assets).
+         *
+         *     Example slug: imagining-you-are-the-characters-the-three-billy-goats-gruff.
          */
         get: operations["getLessons-getLesson"];
         put?: never;
@@ -410,8 +461,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Lesson search using lesson title
-         * Search for a term and find the 20 most similar lessons with titles that contain similar text.
+         * Lesson search by title
+         * Use when you want to find lessons whose titles match a search term. Returns up to 20 lessons ranked by title similarity — each with slug, title, URL, similarity score, and the unit(s) the lesson appears in. Optional keyStage, subject, and unit narrow the search.
+         *
+         *     Not for: searching what's said in lesson videos (GET /search/transcripts); metadata for a known lesson (GET /lessons/\{lesson\}/summary); listing every lesson in a key stage + subject without ranking (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons).
+         *
+         *     Example queries: KS3 science photosynthesis, fractions year 5, Macbeth soliloquy.
          */
         get: operations["getLessons-searchByTextSimilarity"];
         put?: never;
@@ -430,8 +485,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Unit summary
-         * This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit. Optional programme-factor filters can narrow the returned variant. The childSubject filter is only available for science units and accepts biology, chemistry, combined-science, or physics.
+         * Unit summary by slug
+         * Use when you have a unit slug and need the unit summary: title, description, key stage, subject, year, threads, prior-knowledge requirements, national-curriculum statements, and the lessons inside. Unit variant slugs (ending in -1, -2, etc.) resolve to that specific variant.
+         *
+         *     Not for: listing every unit in a key stage + subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/units); all units across a sequence (GET /sequences/\{sequence\}/units); units in one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/units); units in a thread (GET /threads/\{threadSlug\}/units); lessons inside the unit (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons with unit=\{unit\}).
          */
         get: operations["getUnits-getUnit"];
         put?: never;
@@ -450,8 +507,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Threads
-         * This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.
+         * All threads
+         * Use when you want the catalogue of every thread. A thread is an attribute on a unit that groups units across the curriculum to build a common body of knowledge — making vertical connections across year groups. Returns all threads with published units, sorted alphabetically — each with title, slug, and unitCount.
+         *
+         *     Not for: the units inside a thread (GET /threads/\{threadSlug\}/units).
          */
         get: operations["getThreads-getAllThreads"];
         put?: never;
@@ -470,8 +529,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Units belonging to a given thread
-         * This endpoint returns all of the units that belong to a given thread.
+         * Units in a thread
+         * Use when you want every unit in a thread. A thread is an attribute on a unit that groups units across the curriculum to build a common body of knowledge — for example, number and place value or scientific method. Units in a thread span multiple programmes and key stages; thread order is independent of unit sequence order within any individual programme. Returns units in thread order with unitTitle, unitSlug, and unitOrder.
+         *
+         *     Not for: the catalogue of threads (GET /threads); all units across a sequence (GET /sequences/\{sequence\}/units); units in one programme (GET /sequences/\{sequence\}/programmes/\{programme\}/units); a single unit (GET /units/\{unit\}/summary).
+         *
+         *     Example: 'threadSlug=number-and-place-value'.
          */
         get: operations["getThreads-getThreadUnits"];
         put?: never;
@@ -489,7 +552,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** History of significant changes to the API with associated dates and versions */
+        /**
+         * API changelog
+         * Use when you need the full history of API changes — for surfacing release notes or checking which version introduced a field. Returns every changelog entry with version and date.
+         *
+         *     Not for: the current version (GET /changelog/latest).
+         */
         get: operations["changelog-changelog"];
         put?: never;
         post?: never;
@@ -506,7 +574,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get the latest version and latest change note for the API */
+        /**
+         * Latest API version
+         * Use when you only need the current API version — e.g. a version banner or deployment check. Returns the most recent changelog entry.
+         *
+         *     Not for: full version history (GET /changelog).
+         */
         get: operations["changelog-latest"];
         put?: never;
         post?: never;
@@ -524,9 +597,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Check your current rate limit status (note that your rate limit is also included in the headers of every response).
-         *
-         *     This specific endpoint does not cost any requests.
+         * Current rate-limit status
+         * Use when you need rate-limit status as a JSON body — e.g. for a quota indicator. Returns limit, remaining, and reset. The same data sits on the 'X-RateLimit-*' headers of every response, so this endpoint is rarely needed directly. Does not count against your quota.
          */
         get: operations["getRateLimit-getRateLimit"];
         put?: never;
@@ -3279,7 +3351,7 @@ export interface operations {
             header?: never;
             path: {
                 /** The sequence slug identifier */
-                slug: string;
+                sequence: string;
             };
             cookie?: never;
         };
@@ -3710,7 +3782,7 @@ export interface operations {
             header?: never;
             path: {
                 /** The subject slug identifier */
-                subject: string;
+                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
             };
             cookie?: never;
         };
@@ -3752,7 +3824,7 @@ export interface operations {
             header?: never;
             path: {
                 /** Subject slug to filter by */
-                subject: string;
+                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
             };
             cookie?: never;
         };

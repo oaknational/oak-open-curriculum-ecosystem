@@ -22,6 +22,20 @@ exactly the kind that discipline forbids).
 
 ## Amendment Log
 
+- **2026-06-14** (Accepted; owner-approved at the comms-research closeout consolidation):
+  **The two-reader mutual-first-hand loop is the external-check phenotype for sustained
+  research and verification work** (sharpens Decision 3; graduates the comms-research thread's
+  most load-bearing methodological finding). When work is a long arc of claims over a corpus
+  (research, verification, audit), the reliable external check is not an ad-hoc pass but a
+  **standing reciprocal reader**: two agents each ground the other's load-bearing claims against
+  the primary source first-hand, and each runs the adversarial shape over its OWN output before
+  the other sees it. Corpus-scale evidence (comms-research thread, 2026-06-13): the loop caught,
+  in BOTH directions, errors a single pass would have ratified — a phantom "93.7% dangling-citation"
+  metric (a measurement artefact), an over-accepted count (5→4), a reboot-confounded swap finding
+  (retracted), and several of the researchers' own convenient claims. The mechanism is Decision 3's
+  external check made symmetric and standing; treating corpus events (and any source) as
+  input-to-verify, never truth, is its companion discipline. Sibling: the auto-memory
+  `first-hand-means-me-not-subagents` (the reader must be the agent itself, not a relayed report).
 - **2026-06-04** (Accepted; owner-directed, Arboreal curation pass): **Decision 6
   — compiled evidence bases are frames; tier their claims by verification
   status.** Graduates the synthesis-tier-claims doctrine (pending-graduations
@@ -33,6 +47,17 @@ exactly the kind that discipline forbids).
   inherited frame; the cure is the external check), so per
   `new-rule-vs-pdr-clause` the correct home is a clause here. A falsifiability
   axis is added for Decision 6.
+- **2026-06-11** (Accepted; owner-approved at the dedicated consolidation
+  walk): **Decision 8 — verifier verdicts carry per-check positive
+  attestations, and irreversible-disposition verdicts get a refutation-shaped
+  external check before execution.** Graduates the attestation-mechanism facet
+  (the operational mechanism Decisions 6–7 left open) and synthesises the
+  verification-artefacts-are-claims candidate into it. Confirmed the same day
+  it was approved: a fresh bulk-withdrawal triage reproduced the founding
+  failure rate (fourteen of eighteen withdrawal claims refuted by an
+  adversarial pass) at a different agent, a fortnight after the founding
+  instance — read-doctrine alone did not fire; the mechanical refutation
+  stage did.
 - **2026-06-05** (Accepted; owner-directed, Lanternlit curation pass): **Decision 7
   — no derived-authority surface self-certifies; felt-authority inversely
   correlates with grounding effort.** Graduates and *unifies* the felt-authority
@@ -171,6 +196,39 @@ to a governance decision:
    the 2026-06-04 EEF D5 review, where three convergent reviewers — one stamped
    "confirmed in package.json" — agreed on a package filter (`@oaknational/oak-curriculum-sdk`)
    that matched no project; only an empirical `pnpm --filter` run found it.
+
+8. **Verifier verdicts carry per-check positive attestations, and
+   irreversible-disposition verdicts get a refutation-shaped external check
+   before execution.** This is the operational mechanism for Decisions 6 and 7
+   — two enforcement shapes:
+
+   (a) **Attestation, not a bare verdict.** A verifier's CLEAN / covered /
+   safe verdict is consumable only with its per-check positive attestations —
+   for each thing checked, the named surface (file, section, command) and what
+   was positively found there. A bare verdict is a derived-authority surface
+   (Decision 7); the felt character of care — review counts, exact figures,
+   polish — appears precisely in the failure cases, so thoroughness-texture is
+   never evidence. A green verifier with no enumeration of what it checked
+   proves nothing.
+
+   (b) **Adversarial check before irreversible dispositions.** Verification
+   artefacts — disposition ledgers, coverage claims, "substance is homed"
+   assertions — are claims to test, and they fail in the highest-harm
+   direction on exactly the dispositions that delete, withdraw, or archive.
+   Before executing any batch of irreversible dispositions, run an external
+   check whose brief is to REFUTE each claim (locate the named coverage home;
+   confirm it carries the substance; hunt for the recurrence the claim denies)
+   — never a same-frame confirmation pass.
+
+   **Falsifiability (Decision 8).** Shown wrong if bare unattested verdicts
+   prove as reliable as attested ones over a meaningful run of high-stakes
+   dispositions, or if refutation-shaped pre-execution checks on withdrawal
+   batches stop finding errors (consistently uphold ≈ 100%, pure cost).
+   Confirmed twice: the founding 2026-05-29 re-verification (15 of 18
+   withdrawal verdicts wrong, named coverage homes empty) and its 2026-06-11
+   reproduction (14 of 18 refuted at a different agent — who had read the
+   founding lesson that morning; the refutation pass, not the reading, caught
+   it).
 
 ## Consequences
 

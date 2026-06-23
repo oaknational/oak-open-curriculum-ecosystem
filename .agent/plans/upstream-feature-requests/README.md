@@ -29,6 +29,10 @@ as local workarounds.
   — quiz image `alt` text is auto-generated and frequently broken (repetition
   loops, hallucination, function-blind); a WCAG 1.1.1 accessibility fix with
   reproducible examples.
+- [`oak-open-api/keywords-finer-grained-control.md`](oak-open-api/keywords-finer-grained-control.md)
+  — `GET /keywords` has no bounding/ranking parameters and sorts alphabetically
+  despite a description promising frequency order; request optional
+  `limit`/`offset` + `orderBy` + an exposed frequency field.
 
 ### `oak-skills` — the Oak Agent Skills library (`oak-skills`)
 

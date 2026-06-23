@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { existsSync } from 'node:fs';
-import { dirname, join, parse } from 'node:path';
+import { join } from 'node:path';
 
 import { renderCommsLog, writeCommsEventWithReadback } from './comms-use-cases.js';
 import { resolveIdentity } from './cli-identity.js';
@@ -11,9 +10,6 @@ import { validateCommsEventTags } from './comms-tag-namespace.js';
 import { assertIdentityCanWrite } from './identity-write-guard.js';
 import { validateSharedStateAgentId } from './identity.js';
 import { type CollaborationStateEnvironment, type NarrativeCommsEvent } from './types.js';
-
-const DEFAULT_COMMS_DIR = '.agent/state/collaboration/comms';
-const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
 
 /**
  * Maximum length of an inline `--body` argv for comms events (B2 / plan §B2).
@@ -114,7 +110,8 @@ export async function appendComms(
     event: tags.length > 0 ? { ...baseEvent, tags } : baseEvent,
   });
 
-  return '';
+  const eventPath = join(commsDir, `${baseEvent.event_id}.json`);
+  return `wrote comms event ${baseEvent.event_id} to ${eventPath}\n`;
 }
 
 export async function renderComms(
@@ -124,14 +121,15 @@ export async function renderComms(
 ): Promise<string> {
   const io = cliIo(runtime);
   const commsDir = required(options, 'comms-dir');
+  const outputPath = required(options, 'output');
   await renderCommsLog({
     store: { read: () => io.readCommsEvents(commsDir) },
     output: {
-      writeText: (text) => io.writeTextFile({ filePath: required(options, 'output'), text }),
+      writeText: (text) => io.writeTextFile({ filePath: outputPath, text }),
     },
   });
 
-  return '';
+  return `wrote shared comms log to ${outputPath}\n`;
 }
 
 export async function migrateComms(
@@ -147,88 +145,6 @@ export async function migrateComms(
   });
 
   return `migrated ${migrated} comms events\n`;
-}
-
-export async function sendComms(
-  options: Options,
-  env: CollaborationStateEnvironment,
-  runtime: CliRuntime,
-): Promise<string> {
-  const nowIso = optional(options, 'now') ?? new Date().toISOString();
-  const eventId = valueOrDefault(options, 'event-id', randomUUID());
-  const defaults = commsSendDefaults(options, nowIso, eventId);
-  const resolvedOptions = withDefaults(options, defaults);
-  await appendComms(resolvedOptions, env, runtime);
-  await renderComms(resolvedOptions, env, runtime);
-
-  return formatCommsSendResult(resolvedOptions, eventId);
-}
-
-// `withDefaults` merges only the `values` Map; `tags`, `files`, and
-// `areaPatterns` arrays pass through unchanged on the spread.
-
-export function commsSendDefaults(
-  options: Options,
-  nowIso: string,
-  eventId: string,
-): Readonly<Record<string, string>> {
-  const repoRoot = collaborationRepoRoot(options);
-  return {
-    'comms-dir': join(repoRoot, DEFAULT_COMMS_DIR),
-    now: nowIso,
-    'created-at': nowIso,
-    'event-id': eventId,
-    output: join(repoRoot, DEFAULT_SHARED_LOG),
-    active: join(repoRoot, '.agent/state/collaboration/active-claims.json'),
-  };
-}
-
-function collaborationRepoRoot(options: Options): string {
-  return optional(options, 'repo-root') ?? findCollaborationRepoRoot(process.cwd());
-}
-
-export function formatCommsSendResult(options: Options, eventId: string): string {
-  return `${JSON.stringify(commsSendResult(options, eventId), null, 2)}\n`;
-}
-
-function commsSendResult(
-  options: Options,
-  eventId: string,
-): Readonly<{
-  readonly event_id: string;
-  readonly event_path: string;
-  readonly shared_log_path: string;
-}> {
-  return {
-    event_id: eventId,
-    event_path: join(required(options, 'comms-dir'), `${eventId}.json`),
-    shared_log_path: required(options, 'output'),
-  };
-}
-
-function findCollaborationRepoRoot(start: string): string {
-  let current = start;
-  const root = parse(start).root;
-  while (true) {
-    if (existsSync(join(current, '.agent', 'state', 'collaboration'))) {
-      return current;
-    }
-    if (current === root) {
-      return start;
-    }
-    current = dirname(current);
-  }
-}
-
-function withDefaults(options: Options, defaults: Readonly<Record<string, string>>): Options {
-  const values = new Map(options.values);
-  for (const key in defaults) {
-    if (!values.has(key)) {
-      values.set(key, defaults[key] ?? '');
-    }
-  }
-
-  return { ...options, values };
 }
 
 /**

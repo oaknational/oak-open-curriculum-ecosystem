@@ -48,11 +48,11 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.9.2",
-    "eslint": "^10.4.1",
+    "@types/node": "^24.13.2",
+    "eslint": "^10.5.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   },
   "repository": {
     "type": "git",

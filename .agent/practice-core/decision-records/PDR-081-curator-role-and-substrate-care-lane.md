@@ -19,6 +19,21 @@ pdr_kind: governance
 (knowledge curation as autonomic learning; the principle this PDR
 operationalises).
 
+## Amendment Log
+
+- **2026-06-14** (comms-research closeout consolidation; PDR still Proposed):
+  **The per-pass log's disposition-pointer surface is superseded by**
+  `permanent-doc-is-the-consolidation-record`.
+  The curator's record is the commit plus the homed substance — git history is the
+  pass-navigation index — NOT a per-pass file of "surfaces surveyed → disposition" and
+  "concept → home" pointers, which are exactly the disposition/provenance ledger that rule
+  forbids. Recent curator passes already followed the rule (no log written). The
+  §"Per-pass log contract" below is retained as historical proposal context but is **not
+  operative**; the `curator-pass` SKILL's §Per-Pass Log is superseded in step (its step-prose
+  references the superseded surface and aligns to a commit-plus-broadcast record on next
+  use). If pass-coverage tracking ever
+  proves needed in use, it is a substrate state/fitness concern, not a disposition ledger.
+
 ## Context
 
 PDR-072 names knowledge curation as one of two real output-accounting
@@ -81,7 +96,8 @@ A curator pass:
 5. Drains graduation buffers; routes graduated substance to permanent
    homes; does not allow the buffer to accumulate records of what
    graduated or records of curation work (the buffer is buffer only).
-6. Logs the pass in the per-pass curation log (metadata only).
+6. Records the pass via its commit plus the close-of-pass comms broadcast (the
+   per-pass log surface is superseded — see §Amendment Log).
 
 ### Authority
 
@@ -92,8 +108,8 @@ The curator MAY:
   pattern / directive / skill / canon surface) — through the normal
   owner-decision gates that govern principle-class changes; the
   curator does not bypass those gates.
-- Maintain the per-pass curation log (metadata-only contract; see
-  below).
+- Record the pass via its commit and the close-of-pass comms broadcast
+  (the per-pass log surface is superseded — see §Amendment Log).
 - Surface home-gaps and structural defects as routing events.
 
 The curator MUST NOT:
@@ -139,10 +155,18 @@ A curator engages when any of:
    sessions, multi-cycle pushes) where the active memory surfaces
    have absorbed substance worth routing.
 
-### Per-pass log contract (metadata only)
+### Per-pass log contract (SUPERSEDED — see §Amendment Log)
 
-Each curator pass writes one log file. The log file is **metadata
-only**. It records the structural facts of the pass:
+> **Superseded 2026-06-14** by
+> `permanent-doc-is-the-consolidation-record`:
+> do **not** author a per-pass log file. The commit plus the homed substance are the
+> curator's record; git history is the pass-navigation index; the pass's observable claim
+> is a normal active claim. The contract below is retained as historical proposal context
+> only — it is not operative.
+
+The superseded contract specified one metadata-only log file per pass,
+recording the structural facts of the pass (retained here as historical
+proposal detail only — not an instruction to author one):
 
 - pass identity (date, agent, platform, model, session id prefix)
 - pass kind (e.g. due-drain, second-instance graduation,

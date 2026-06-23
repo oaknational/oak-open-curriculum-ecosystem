@@ -330,7 +330,7 @@ Worth surfacing as a candidate amendment to the session-handoff SKILL: name
 - Director Window 2 turn substance captured in 4 napkin entries above
 - Post-M1 cleanups collection created at `.agent/plans/post-m1-cleanups/`
 - Pre-compaction substrate bridge at
-  `/tmp/seaworthy-pre-compaction-substrate-d2-tick-4.md` (updated with
+  `<scratch>/seaworthy-pre-compaction-substrate-d2-tick-4.md` (updated with
   metacognition outcome)
 - Pre-compaction-4 broadcast emitted to team (event ID at HEAD `0f9d7859`)
 - Director seat retained across compaction

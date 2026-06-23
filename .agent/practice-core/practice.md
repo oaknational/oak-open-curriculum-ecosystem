@@ -26,7 +26,7 @@ work can inspect it.
 
 **See also**: For the Practice Core files and their roles, see [index.md](index.md). For navigable
 links to the host repo's directives, ADRs, and tools,
-see [practice-index.md](../practice-index.md) — the bridge between the portable Core and the
+see practice-index.md — the bridge between the portable Core and the
 host repo.
 
 ## Three Layers
@@ -125,7 +125,12 @@ Practice-level and their implementation details are host-level.
 The organisational patterns. Directives (`.agent/directives/`), plans
 (`.agent/plans/`), ADRs, sub-agent prompt architecture, quality gates,
 institutional memory (`.agent/memory/`), and collaboration state
-(`.agent/state/`). **Cross-agent standardisation**
+(`.agent/state/`). **Agent files are first-class infrastructure** — these
+directives, rules, skills, sub-agent prompts, and memory/continuity surfaces
+are executable agent code in markdown, not informal notes, and carry the same
+DRY, SOLID, and production-code rigour as any other source; drift, duplication,
+and dead references degrade behaviour exactly as they would in compiled code.
+**Cross-agent standardisation**
 (AGENTS.md, Agent Skills, MCP, A2A) is an evolving implementation direction to
 keep the Practice portable and platform-agnostic. This layer defines _what_ the
 Practice consists of.
@@ -237,6 +242,36 @@ a receiving repo inherits not just current rules but the mechanism that produced
 repo's learning loop runs locally, producing learnings shaped by local context. When the Practice
 returns to its origin via the Practice Box, it may carry patterns that the origin's own loop
 hadn't surfaced — different work, different mistakes, different discoveries.
+
+### Content Tiers and the Placement Rule
+
+Knowledge in a Practice-bearing repo sits at one of three tiers, ordered by
+generality:
+
+- **Instance tier** — one running checkout's ephemeral coordination state (comms
+  events, claims, heartbeats, session channels). Local to a single clone, and
+  untracked-by-design where a host adopts that boundary (PDR-094 Invariant 6).
+  Its durable substance must be curated UP before the instance ends, or it is lost.
+- **Repo tier** — knowledge shared by every clone of _this_ repo: host
+  architectural decisions, repo-grounded pattern instances, plans, governance
+  docs, READMEs, code and TSDoc. Specific to this repo's product and context; its
+  adopter is the next contributor in this repo (PDR-019).
+- **Practice tier** — `.agent/practice-core/` (PDRs, the trinity, lineage).
+  General principles about how work is done. Portable: it _may_ be shared with
+  sibling repos across the ecosystem via [plasmid exchange](#plasmid-exchange),
+  and is by construction more generally applicable than repo knowledge; its
+  adopter is the next Practice-bearing repo that hydrates the Core (PDR-019).
+
+**The placement rule.** A general principle is recorded at the Practice tier; an
+application of that principle, with its repo-specific detail, is recorded at the
+repo tier — cross-linked, never flattened into one. This is why a portable
+governance decision is a PDR while its concrete repo realisation is a host
+decision record or a pattern instance (`related_pdr:`), and why one insight can
+legitimately span tiers (PDR-007, PDR-019). Mis-tiering cuts both ways: a general
+principle recorded only at the repo tier cannot propagate to sibling repos (the
+Practice is starved); a repo-specific detail recorded at the Practice tier does
+not travel (the Practice is polluted). Screen a graduation's generality first,
+then choose the home.
 
 ### Artefact Locations
 
@@ -362,7 +397,7 @@ graph LR
 | Host exploration tier (see practice-index bridge)                           | Design-space explorations — option-weighing documents that inform ADRs and plans                                                                                |
 | `.agent/reference/` (or equivalent)                                        | Curated library tier — owner-vetted, evergreen, deliberately-promoted read-to-learn material. Promotion-gated per [PDR-032](decision-records/PDR-032-reference-tier-as-curated-library.md) (substantiate / justify / owner-vet). |
 | `.cursor/`, `.claude/`, `.gemini/`, `.github/`, `.agents/`, `.codex/`      | Platform adapters: thin wrappers and project config referencing canonical content                                                                                |
-| Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see [`practice-index`](../practice-index.md))                                                    |
+| Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see `practice-index`)                                                    |
 
 ### Minimum Operational Estate
 
@@ -422,8 +457,8 @@ The trinity files carry YAML frontmatter with a `provenance` pointer
 and the four fitness thresholds described in §Fitness Functions above.
 The provenance file always travels with the Core package.
 
-The mechanism is documented in [practice-lineage.md](practice-lineage.md), which serves as both
-the reference for how exchange works and the source template for outbound propagation. Portable
+The mechanism is documented in [practice-lineage.md](practice-lineage.md), the evolution record:
+how exchange, branching, and transplantation move the lineage forward across repos. Portable
 governance decisions and universal patterns travel as **Core content** in
 `practice-core/decision-records/` (the latter as PDRs with `pdr_kind: pattern`).
 The previous `practice-context/` ephemeral exchange surface was retired
@@ -453,11 +488,15 @@ is normally empty. When files arrive:
 
 ### Meta-Principles
 
-Principles about the Practice itself — how it evolves, travels, and stays coherent — are maintained
-as Learned Principles in
-[practice-lineage.md §Learned Principles](practice-lineage.md#learned-principles). They include
-self-containment, provenance chain design, separation of universal from domain-specific, and the
-distinction between rules and skills.
+Principles about the Practice itself — how it evolves, travels, and stays coherent — are recorded in
+their homes by intent: portable Practice-governance as PDRs in
+[`decision-records/`](decision-records/); concepts intrinsic to the Practice's structure here in
+`practice.md` (self-containment, the concept-level unit of exchange, the universal/domain-specific
+split); and, at the repo tier, the host's own engineering principles in `principles.md` as
+repo-specific cases that may be based on a portable PDR. Two carry directly. **If a behaviour must
+be automatic, it needs a rule, not just a skill**: a skill is invoked, a rule fires unprompted, so
+anything that must always happen is a rule. **Intent over mechanics**: a rule must convey what
+matters and what failure looks like, not just the verb — a vague rule is an escape hatch.
 
 ## The Self-Teaching Property
 

@@ -529,3 +529,22 @@ This plan stays in `PLANNING` until owner review approves:
 - the decision to make marshal handoff a first-class queue concept rather than
   documenting manual source-intent to marshal-intent translation as the final
   practice.
+
+## Routed evidence from the comms-corpus research (2026-06-13)
+
+From the synthesis
+([`.agent/reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md`](../../../reports/agentic-engineering/2026-06-13-ws6-comms-corpus-synthesis.md)
+§3.1, §5). The commit/shared-tree concurrency (CC) family surfaced almost entirely
+from untagged events and is a coherent hazard family this plan owns:
+
+- **T7 — commit-queue wrapper false-FAIL.** The wrapper reported FAIL on a
+  green-underneath commit (FH count corrected 5→4 enumerable). Flame owns the T7
+  fix; a PR #207 post-merge follow-up on `main` corrects "commit-queue ×5" →
+  "4 enumerable" — fold that into this lane.
+- **CC1 — scope leak (`0ba2c822`)** and **CC2 — message-identity race
+  (`230f3200`)**: recommendation — `record-staged` scopes to `intent.files`; use
+  inline `-m` / per-intent message files so a concurrent writer cannot bind the
+  wrong message to a staged bundle.
+- Sibling CC classes for the design's awareness (not necessarily this tranche):
+  foreign-staged pollution (CC3), whole-tree-gate × mid-authoring-peer (CC4),
+  inherited-dirty cascade (CC5), stale-claim-blocks-peer (CC6).

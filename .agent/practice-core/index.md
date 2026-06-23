@@ -22,7 +22,7 @@ The Practice Core is a **bounded package of files plus required directories** th
 | Surface                                              | Role                                                                     |
 | ---------------------------------------------------- | ------------------------------------------------------------------------ |
 | [practice.md](practice.md)                           | Blueprint: artefact map, workflow, three-layer model (the **what**)      |
-| [practice-lineage.md](practice-lineage.md)           | Blueprint: principles, evolution rules, exchange mechanism (the **why**) |
+| [practice-lineage.md](practice-lineage.md)           | Evolution record: provenance, exchange & merge mechanism, branching & transplanting (the **lineage**) |
 | [practice-bootstrap.md](practice-bootstrap.md)       | Blueprint: annotated templates for every artefact type (the **how**)     |
 | [practice-verification.md](practice-verification.md) | Verification: checklist, health check, operational estate                |
 | [README.md](README.md)                               | Entry point for humans: context and hydration how-to                     |
@@ -81,7 +81,7 @@ If `.agent/directives/AGENT.md` does not yet exist, you are hydrating the Practi
 
 If the Practice Core files have been placed somewhere other than `.agent/practice-core/` (e.g. the repo root, a random directory), move them to `.agent/practice-core/` first -- create the directory and an `incoming/.gitkeep` within it if needed.
 
-Then follow the Growing a Practice section in [practice-lineage.md](practice-lineage.md). The templates in [practice-bootstrap.md](practice-bootstrap.md) provide artefact specifications -- adapt ALL templates to local tooling and conventions. The templates use TypeScript/Node.js as concrete examples; substitute your ecosystem's equivalents. As part of hydration, create `.agent/practice-index.md` -- the bridge file that carries navigable links to the local repo's artefacts (see the template in [practice-bootstrap.md](practice-bootstrap.md)). See the Bootstrap Checklist in [practice-bootstrap.md](practice-bootstrap.md) for validation.
+Then follow the genesis scenarios in [practice-lineage.md](practice-lineage.md) § How the Practice Arrives in a New Repo. The templates in [practice-bootstrap.md](practice-bootstrap.md) provide artefact specifications -- adapt ALL templates to local tooling and conventions. The templates use TypeScript/Node.js as concrete examples; substitute your ecosystem's equivalents. As part of hydration, create `.agent/practice-index.md` -- the bridge file that carries navigable links to the local repo's artefacts (see the template in [practice-bootstrap.md](practice-bootstrap.md)). See the Bootstrap Checklist in [practice-bootstrap.md](practice-bootstrap.md) for validation.
 
 Read every PDR in `decision-records/` before adapting the Practice. PDRs
 carry portable governance decisions that constrain how the Practice

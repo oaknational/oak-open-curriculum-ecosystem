@@ -1,3 +1,307 @@
+## [1.34.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.34.0...v1.34.1) (2026-06-14)
+
+
+### Bug Fixes
+
+* **lint:** exclude untracked-by-design handoff records from markdownlint ([c98f19a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c98f19ab76b9cd7ebe8e75c1f27e8ba843fa2f72))
+
+# [1.34.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.33.0...v1.34.0) (2026-06-14)
+
+
+### Bug Fixes
+
+* **agent-tools:** extend absent-surface guard to untracked claim files ([7da12a8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7da12a82fac65a00ebf4dee2169eba64eb057948))
+* **agent-tools:** tolerate absent untracked comms dir in state validator ([356e76f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/356e76f59f9cfa222b9574350c5f786fcae490c4)), closes [#208](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/208)
+
+
+### Features
+
+* **agent-tools:** add cited-event provenance pure core for WS7 rotation check ([9175acf](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9175acfeb036353fc97ca2ec2b3548add092f571))
+* **agent-tools:** add Oak acorn logo column to the Claude Code statusline ([4be070c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4be070c27aa96daf56724b6c1ba95b6846dd0b0e))
+* **agent-tools:** add WS7 archive-move execute mechanism (dry-run default) ([3b02ae3](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3b02ae3ef2b9808c334f0902587b4f72577dbd5c))
+* **agent-tools:** add WS7 cited-event provenance check, runner, and digest ([3a55b62](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3a55b62e0458c2a54ff6c3eb7e956179975aaadf))
+* **agent-tools:** add WS7 class-tiered archive-move planner + cadence aggregate ([815fc2f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/815fc2f486ee4da5df94be3921e3b6e033ea40a4))
+* **agent-tools:** distinguish unknown from solo session shape; replace tofu'd peer glyph ([c456cda](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c456cda0db030b0478fd217f2c5b7004cd24b23f))
+* **agent-tools:** re-fit session-shape statusline indicators onto the 4-row layout ([89c8983](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/89c8983c78ad7d76dbe31a014912569214453a57))
+* **agent-tools:** session-relative statusline team shape + observing state ([da8cbd7](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/da8cbd7d678a11eeb6bfd29de5391b8861a5a144))
+* **agent-tools:** tune the statusline Oak mark to a 4-row braille acorn ([40ef58a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/40ef58a06ede0f17ecfa88e00ea9829c86f60f9d))
+* **oak-eslint:** add no-throw-statement rule at warn to front-load Result enforcement ([e36af1d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e36af1db093a3f9c568d7cdb65109f9668bee868))
+
+# [1.33.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.32.1...v1.33.0) (2026-06-13)
+
+
+### Features
+
+* **agent-tools:** render the statusline over two lines ([ae2744d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ae2744d3ef4a781123e8778b6360938dc7930f63))
+
+## [1.32.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.32.0...v1.32.1) (2026-06-13)
+
+
+### Bug Fixes
+
+* **agent-tools:** make worktree porcelain fixture repo-relative (no-machine-local-paths) ([8128f35](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8128f3570497065a556564c0ecb0019f51dda360))
+* **agent-tools:** resolve PR [#203](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/203) review comments (machine-local paths + ARC future mtime) ([bcf71e6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/bcf71e6d1fd2f26755441e3b96bef75e0484dce9))
+
+# [1.32.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.31.1...v1.32.0) (2026-06-13)
+
+
+### Features
+
+* **agent-tools:** add optional role field to active claims ([ac2901f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ac2901fe1cceca05e1adba50eee1f26cbc5aa015))
+* **agent-tools:** pure session-shape resolver for the statusline ([1ac4303](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/1ac430378525a1d0397a276444d4ce65fbfb882b))
+* **agent-tools:** render session-shape indicators in the statusline ([4270ea4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4270ea49d2a758d4a0e329c7148586a2ccd87eed))
+
+## [1.31.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.31.0...v1.31.1) (2026-06-12)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** align with upstream openapi description rewrite ([2ff259b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2ff259bca40e823297d20352ef62b32ff9d193fe))
+
+# [1.31.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.30.0...v1.31.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* **skills:** make the onboarding walker conversation-first after live falsification ([f83eed5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f83eed525332c57688dd7b4feb67e9139e7a9880))
+
+
+### Features
+
+* **skills:** add the oak-onboard-me interactive onboarding walker ([50403a5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/50403a538834742177a456c868750fca9d336e1f))
+* **skills:** persist individual onboarding state untracked and record track-b dispositions ([0fef8cf](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0fef8cf6f55df5805d943f1c7df7ff73ca293510))
+
+# [1.30.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.29.0...v1.30.0) (2026-06-12)
+
+
+### Features
+
+* **agent-tools:** redesign the statusline for glance value under narrow terminals ([e84d6bc](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e84d6bc3d1cee047aa0e6307321f0179be990ab7))
+* **agent-tools:** tune statusline context colours to green/yellow/red at 50/70 ([1f55957](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/1f55957201340de3e6b964d5f944d29c56f18df0))
+
+# [1.29.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.28.1...v1.29.0) (2026-06-12)
+
+
+### Features
+
+* **agent-tools:** activate the v2 noun-verb-noun naming schema ([0fe5da9](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0fe5da946bc641fc7aa1eef12242bf287a23c6eb))
+* **agent-tools:** add v2 curation gates and the shared verb pool ([634b3e5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/634b3e5395f2ba7c06970c91f36b61cba3b1eed0))
+* **agent-tools:** assemble and digest-pin the v2 noun-verb-noun schema ([92f12d1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/92f12d19bed8e21dc81b66d700cf47d681805207))
+* **agent-tools:** curate the six themed v2 noun columns ([dd82028](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dd820286e081d90872ca36c7ebc73061b189ab83))
+* **agent-tools:** record naming_schema_version on the identity tuple ([386f9e5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/386f9e561ca3a8bb5235c80e551eee15d9899aac))
+* **agent-tools:** register the v1 naming-schema era with a pinned digest ([4fbc7d8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4fbc7d839cba791e1a9d037c6ec078c9a5fe611c))
+* **agent-tools:** route identity derivation through the naming-schema registry ([3de15f0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3de15f01a9577234f7a14ee1e933a1b9668900d3))
+
+## [1.28.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.28.0...v1.28.1) (2026-06-12)
+
+
+### Bug Fixes
+
+* **mcp:** declare the keyword-graph limit bounds in the served input schema ([401ea78](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/401ea7895d4b3924986f4e40d44c007be297d2e1))
+
+# [1.28.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.27.0...v1.28.0) (2026-06-11)
+
+
+### Features
+
+* **mcp:** emit the dual response shape from get-eef-evidence ([20ad833](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/20ad83326ff47d484be3d4fbba9a58dada126b85))
+
+# [1.27.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.26.1...v1.27.0) (2026-06-11)
+
+
+### Features
+
+* **mcp:** outbound token health metric v1 — wire bytes and per-field tool-result sizes ([95cc631](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/95cc6319fa88e2596cc40c1e2b8bd5c631629fdb))
+
+## [1.26.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.26.0...v1.26.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **agent-tools:** substring-mode blocked patterns — quoted busy-loops now trip the guard ([f6dfef6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f6dfef6b2221dbe7295c7a5cbe5b465542a38d19))
+* **agent-tools:** whitespace-tolerant substring trips, non-empty pattern schema ([3da6d40](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3da6d40cf15a2d6c808f93c4fcd5b296c66c9b2b))
+
+# [1.26.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.25.1...v1.26.0) (2026-06-11)
+
+
+### Features
+
+* **mcp:** align outward capability claims with the served estate ([eb29a6e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/eb29a6ed18d31c53761c35987f610844626e679c))
+
+## [1.25.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.25.0...v1.25.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** deduplicate prerequisiteFor edges at graph-corpus emission ([5b541e2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5b541e204f57ce3e66ed455b66e73ecbcc25663b))
+
+# [1.25.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.24.1...v1.25.0) (2026-06-11)
+
+
+### Bug Fixes
+
+* **mcp:** chain lesson-planning on the next unit's teaching year ([5eab2c3](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5eab2c32235a56392feb0496dc8638277c07718d))
+* **mcp:** ground the continue-teaching fallback search and attribution ([b864f22](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b864f2279e3c591115a151f0d74280c02335a901))
+
+
+### Features
+
+* **mcp:** add continue-teaching position-anchored prompt ([32ba1ce](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/32ba1ceebd4b8ef4d5720b69a6fd243be8f68eda))
+* **mcp:** rename the position-anchored prompt to continue-progression ([5505a04](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5505a048d4c982e9ae887fdc741757f409450553))
+
+## [1.24.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.24.0...v1.24.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **mcp-streamable-http:** complete the aggregated tool landing-page order ([a09eccb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a09eccb238c4e92c53337da04d7851be4fff9d3d))
+
+# [1.24.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.23.2...v1.24.0) (2026-06-11)
+
+
+### Bug Fixes
+
+* **graph-corpus-sdk:** absorb PR [#173](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/173) review wave — shared adjacency helper, honest summaries ([0c79385](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0c7938579e9176eb9a5ce923575a06c0dfae6ea2))
+
+
+### Features
+
+* **curriculum-sdk:** anchored get-keyword-graph tool + keywords disambiguation (G4b-c3) ([46799ca](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/46799ca7df0fdc419e35dd47faa1024606b8aa99))
+* **graph-corpus-sdk:** keyword view — bounded anchored frequency-ranked retrieval (G4b-c2) ([451a9a6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/451a9a658bc2a09f5f0b2e35d6839e9ebdb7ef40))
+* **sdk-codegen:** emit keyword nodes and containsKeyword edges into the graph corpus (G4b-c1) ([73aaedc](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/73aaedca023e0698fe0c3e59d88addac5194ff22))
+
+## [1.23.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.23.1...v1.23.2) (2026-06-11)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** use type-preserving some() in emitted edge-type predicate ([d7f5d0d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d7f5d0de3fa078ab4a0cc6f9ca29d5b26c70fa46))
+
+## [1.23.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.23.0...v1.23.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **agent-tools:** make every collaboration-state write loud ([5b9295e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5b9295ed6dd822d512ab28740bbc6ef515f33a96))
+
+# [1.23.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.22.1...v1.23.0) (2026-06-11)
+
+
+### Bug Fixes
+
+* **curriculum-sdk:** name get-lessons-transcript in the lesson-planning workflow ([37f69b0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/37f69b0c8290cfdf4440843a5b8376681521412a)), closes [#162](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/162)
+
+
+### Features
+
+* **curriculum-sdk:** add curriculum-mapping prompt derived from oak-curriculum-mapper ([c14e812](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c14e812150a563f081a5c8fc516c12a3e95344de))
+* **curriculum-sdk:** extend lesson-planning prompt into the full lesson-builder workflow ([3cb8766](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3cb8766d8eecbe725cc3f9eae6d0778cda5fa694))
+
+## [1.22.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.22.0...v1.22.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** re-derive prerequisiteFor chains on the year axis ([c5dcf6c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c5dcf6ca95afa6e44a7b784f537874d8d5536847))
+
+# [1.22.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.21.0...v1.22.0) (2026-06-11)
+
+
+### Bug Fixes
+
+* **graph-corpus-sdk:** derive thread stats from the sequences themselves ([15444c4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/15444c416e44a67dbe8a738b9e9507ea25070556)), closes [#164](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/164)
+
+
+### Features
+
+* **curriculum-sdk:** anchored get-thread-progressions + legacy retirement ([f1ae2fd](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f1ae2fdc7e2ba679be131e004bb88da3558b818c))
+* **sdk-codegen:** emit year-ordered thread sequences + G3 progression view ([d6ae0d1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d6ae0d1438689105d9918d02da284b48b4236edc))
+
+# [1.21.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.20.0...v1.21.0) (2026-06-10)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** sort per-unit prior knowledge for order-independent emission (PR [#163](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/163) review) ([b72c07f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b72c07fc9a507a2357c6472bb7bb04c685fa41b5))
+
+
+### Features
+
+* **curriculum-sdk:** remove the curriculum misconception-graph resource (G2 c3) ([b51c474](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b51c4742017a56b014de190b03ea7e96645033c7))
+* **curriculum-sdk:** rewrite get-misconception-graph as anchored bounded retrieval (G2 c3) ([0e65743](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0e657437a5cb1d819437e4b0380fc3b041ca8b99))
+* **graph-corpus-sdk:** add the bounded anchored misconception view (G2 c2) ([78a7912](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/78a7912225dea97edaeaa17132bcb051e3c41939))
+* **sdk-codegen:** emit the misconception chain into the graph corpus (G2 c1) ([a0b3210](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a0b32100e10c080b7fb140f93ec8e522e54afe4e))
+* **sdk-codegen:** retire the orphaned misconception-graph dataset and its emission path (G2 c3) ([ceda4a7](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ceda4a706c108fc8abd1228626bc2fa53c77641d))
+
+# [1.20.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.19.2...v1.20.0) (2026-06-10)
+
+
+### Bug Fixes
+
+* **graph-corpus-sdk:** validate depth regardless of anchor resolution (PR [#161](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/161) review) ([47ad98d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/47ad98dfdd0ad2afbc1c8fc4186a671dca0b9ac6))
+
+
+### Features
+
+* **curriculum-sdk:** remove the curriculum prior-knowledge-graph resource (G1b c2) ([83196e2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/83196e2091180a3f6807ac6d38cd292d1399cab0))
+* **curriculum-sdk:** rewrite get-prior-knowledge-graph as anchored bounded tool (G1b c2) ([29e3ecc](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/29e3eccb2f54b6045daf6aeaff7dec09a22f7bc7))
+* **graph-corpus-sdk:** add bounded prior-knowledge predecessor view (G1b c1) ([a79b227](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a79b22713319f560590f06220208804529b3a8e4))
+* **sdk-codegen:** retire the orphaned prior-knowledge-graph dataset and its emission path (G1b c2) ([036b459](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/036b459ec48555267687ba9906874d17959db0c4))
+
+## [1.19.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.19.1...v1.19.2) (2026-06-10)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** correct false frequency-order claim in get-keywords tool description ([4b7f17d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4b7f17d21ae2aa94ce01c911cc37f3130fe909bb))
+
+## [1.19.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.19.0...v1.19.1) (2026-06-10)
+
+
+### Bug Fixes
+
+* **agent-tools:** adjudicate PR review — robust sync-callback wait, tighter error-kind union ([a60aa1d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a60aa1d7546c7ca6ae060a40efb97aafc511bc98))
+* **agent-tools:** default the comms-watch liveness heartbeat on ([0a1e07d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0a1e07d716b09f1b5dc9a5d7f02af98fa66eba9e))
+* **agent-tools:** per-step deadlines make comms-watch fail loud on hang ([6710712](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6710712f437d8d92c174b3d2c23f6892d34e9da4))
+
+# [1.19.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.18.1...v1.19.0) (2026-06-10)
+
+
+### Bug Fixes
+
+* **graph-corpus:** ship ./curriculum runtime + drop aggregate eager-load ([8ac240b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8ac240be3b9feb14928bc6a72cdf02aec7b1c356)), closes [#153](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/153)
+
+
+### Features
+
+* **graph-corpus:** emit one-graph corpus foundation (G1a) ([177df9b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/177df9b6fc95172a1b433d6358f3d807ee2771a6))
+
+## [1.18.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.18.0...v1.18.1) (2026-06-10)
+
+
+### Bug Fixes
+
+* **mcp:** use the search year filter in adapt-lesson and lesson-planning prompts ([b057ce8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b057ce89e2975f3f93a233460ed4c49f1e125a37))
+
+# [1.18.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.17.0...v1.18.0) (2026-06-10)
+
+
+### Bug Fixes
+
+* **hooks:** apply PR 146 review — close inline-code dodge, fix doc scope, add regression test ([8009b28](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8009b28d7f531f4b847964d8bfb44bd2a9e80616))
+
+
+### Features
+
+* **hooks:** add the indefinite-deferral vocabulary family to the trip-list ([fe4b102](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/fe4b102b063826e4bda4b8629615efb2eb57e3e2))
+
+# [1.17.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.16.1...v1.17.0) (2026-06-09)
+
+
+### Features
+
+* **eef:** self-describing answerType and bounded headline view for get-eef-evidence ([80dd642](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/80dd642d4ad209390b2225cac1fc061f5da58f02))
+
 ## [1.16.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.16.0...v1.16.1) (2026-06-08)
 
 

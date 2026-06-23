@@ -26,6 +26,21 @@ Cross-collection coordination for the Curriculum MCP release arc
 (M1 → M2 → M3 → GA) is indexed by the
 [Curriculum MCP Path-to-GA Programme](../plans/curriculum-mcp-path-to-ga/roadmap.md).
 
+The [Launch-Readiness Framework](../plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md)
+is the scaffold for the **M4 / GA** gates: it maps each launch-readiness
+dimension (purpose, audience, safety/safeguarding, trust, compliance, the
+graphical experience, quality, operations, governance) to a candidate gate and
+owner, grounded in the target React MCP App experience.
+
+**Ladder under re-assessment (2026-06-15).** With the keystone decisions taken
+(audience, definition of "live", whole-estate scope), the M0 → M3 → GA ladder is
+being re-assessed from first principles. The
+[readiness assessment](../reports/mcp-app-live-product-readiness-assessment-2026-06-15.md)
+finds the prior definitions do not stand and proposes an impact-first ladder;
+treat the M2/M3 definitions below as provisional until the
+[redraft](../plans/curriculum-mcp-path-to-ga/future/launch-readiness-and-milestone-redefinition.plan.md)
+is promoted.
+
 ---
 
 ## State Progression

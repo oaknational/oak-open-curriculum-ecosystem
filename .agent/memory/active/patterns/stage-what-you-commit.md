@@ -91,11 +91,23 @@ was legitimate parallel research, but the commit message described
 only the reorder. Not destructive; the mismatch between commit message
 and commit content is the real defect.
 
-Both instances share the same underlying principle: **the index is
+**2026-06-16 — `git mv` then Write-edit leaves the content change unstaged**.
+A test file was `git mv`d and then ~half its body rewritten with the Write
+tool (two tests and ~150 helper lines deleted). At commit time
+`git diff --cached --name-status` reported **R100** — a 100%-similar pure
+rename — because the staged blob was the *original* content; the Write edit
+lived only in the working tree. Committing as-staged would have silently
+discarded the entire cleanup. The **R100 similarity score is the tripwire**:
+a rename that is "100% similar" after you have edited the renamed file is a
+contradiction. The cure is a staged-content probe before commit —
+`git show :<path> | grep <a-known-deleted-line>` must return nothing, or
+the edit was never staged; then `git add` the real content.
+
+All three instances share the same underlying principle: **the index is
 durable state between edits; `git status` shows both index and
 working tree; a commit lands only the index**. The ergonomic default
 of `git add <file> && git commit` trusts the index is empty, which it
-often is not.
+often is not. `verify-dont-trust` applies to your own index.
 
 ## When to Apply
 

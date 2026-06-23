@@ -13,14 +13,6 @@ describe('isPublicResourceUri', () => {
     it('returns true for getting-started documentation', () => {
       expect(isPublicResourceUri('docs://oak/getting-started.md')).toBe(true);
     });
-
-    it('returns true for tools documentation', () => {
-      expect(isPublicResourceUri('docs://oak/tools.md')).toBe(true);
-    });
-
-    it('returns true for workflows documentation', () => {
-      expect(isPublicResourceUri('docs://oak/workflows.md')).toBe(true);
-    });
   });
 
   describe('returns true for widget resource (static HTML, no user data)', () => {
@@ -36,6 +28,11 @@ describe('isPublicResourceUri', () => {
 
     it('returns false for unknown documentation URIs', () => {
       expect(isPublicResourceUri('docs://other/file.md')).toBe(false);
+    });
+
+    it('returns false for the removed tools and workflows doc resources (single-sourced via curriculum://model)', () => {
+      expect(isPublicResourceUri('docs://oak/tools.md')).toBe(false);
+      expect(isPublicResourceUri('docs://oak/workflows.md')).toBe(false);
     });
 
     it('returns false for empty string', () => {

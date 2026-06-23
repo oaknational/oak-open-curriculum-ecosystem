@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import { deriveCollaborationIdentity } from '../../src/collaboration-state';
 import { deriveOverrideCollaborationIdentity } from '../../src/collaboration-state/identity.js';
-import { type CollaborationAgentIdWrite } from '../../src/collaboration-state/types.js';
+import {
+  collaborationAgentIdSchema,
+  namingSchemaVersionOf,
+  type CollaborationAgentIdWrite,
+} from '../../src/collaboration-state/types.js';
 
 const uuidV5Pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 
@@ -106,6 +110,63 @@ describe('deriveCollaborationIdentity', () => {
     // compile time (id is required on Write, optional on read-side).
     const write: CollaborationAgentIdWrite = result.agentId;
     expect(write.id).toBeDefined();
+  });
+});
+
+describe('naming schema version on the identity tuple', () => {
+  it('stamps derived identities with the active naming schema version', () => {
+    const result = deriveCollaborationIdentity({
+      platform: 'codex',
+      model: 'GPT-5',
+      env: { CODEX_THREAD_ID: codexThreadId },
+    });
+
+    expect(result.agentId.naming_schema_version).toBe('v2-noun-verb-noun');
+  });
+
+  it('stamps env-override identities with the override provenance marker', () => {
+    const result = deriveCollaborationIdentity({
+      platform: 'codex',
+      model: 'GPT-5',
+      env: { CODEX_THREAD_ID: codexThreadId, OAK_AGENT_IDENTITY_OVERRIDE: 'Frolicking Toast' },
+    });
+
+    expect(result.agentId.naming_schema_version).toBe('override');
+  });
+
+  it('stamps admin-override identities with the override provenance marker', () => {
+    const result = deriveOverrideCollaborationIdentity({
+      agent_name: 'Override Test',
+      platform: 'claude',
+      model: 'opus-4-7',
+      session_id_prefix: 'override-prefix',
+    });
+
+    expect(result.naming_schema_version).toBe('override');
+  });
+
+  it('reads legacy rows without the field as the v1 era, without injecting the field', () => {
+    const parsed = collaborationAgentIdSchema.parse({
+      agent_name: 'Legacy Agent',
+      platform: 'claude',
+      model: 'opus-4-5',
+      session_id_prefix: 'abc123',
+    });
+
+    expect(parsed.naming_schema_version).toBeUndefined();
+    expect(namingSchemaVersionOf(parsed)).toBe('v1-adjective-verb-noun');
+  });
+
+  it('rejects rows carrying an unregistered naming schema version', () => {
+    expect(() =>
+      collaborationAgentIdSchema.parse({
+        agent_name: 'Future Agent',
+        platform: 'claude',
+        model: 'opus-4-5',
+        session_id_prefix: 'abc123',
+        naming_schema_version: 'v9-not-registered',
+      }),
+    ).toThrow();
   });
 });
 

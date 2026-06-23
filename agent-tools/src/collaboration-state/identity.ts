@@ -68,6 +68,7 @@ export function deriveCollaborationIdentity(input: {
     model: input.model,
     session_id_prefix: seed.value.slice(0, 6),
     id: deriveIdFromSeed(seed.value),
+    naming_schema_version: identity.namingSchemaVersion,
   };
 
   return {
@@ -99,6 +100,7 @@ export function deriveOverrideCollaborationIdentity(input: {
     model: input.model,
     session_id_prefix: input.session_id_prefix,
     id: deriveIdFromSeed(`${input.agent_name}|${input.session_id_prefix}`),
+    naming_schema_version: 'override',
   };
 }
 

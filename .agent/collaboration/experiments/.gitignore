@@ -1,0 +1,4 @@
+# Experiment workspaces are preserved in full (owner direction 2026-06-12:
+# everything under experiments/ is conserved, never purged). Only transient
+# scratch files are ignored.
+_tmp-*

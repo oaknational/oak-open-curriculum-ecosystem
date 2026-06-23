@@ -212,6 +212,7 @@ describe('agent identity CLI planning', () => {
     expect(result.exitCode).toBe(0);
     expect(JSON.parse(result.stdout)).toEqual({
       kind: 'override',
+      namingSchemaVersion: 'override',
       displayName: 'Frolicking Toast',
       slug: 'frolicking-toast',
       seedDigest: createHash('sha256').update('any').digest('hex'),
@@ -230,6 +231,7 @@ describe('agent identity CLI planning', () => {
 
     expect(JSON.parse(result.stdout)).toEqual({
       kind: 'override',
+      namingSchemaVersion: 'override',
       displayName: 'Cached Session Name',
       slug: 'cached-session-name',
       seedDigest: createHash('sha256').update('cursor-session-seed').digest('hex'),

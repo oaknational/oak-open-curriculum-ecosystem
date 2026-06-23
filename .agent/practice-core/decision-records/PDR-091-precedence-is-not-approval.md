@@ -56,6 +56,7 @@ The faces of the one error:
 | "it has always been done this way" / an inherited shape | the shape re-derived from first principles (existence is not correctness) |
 | who acted, broadcast, or arrived first | an ordering convention; never authority over the decision itself |
 | the shape of a prior owner intervention | classified as evidence, not copied as a standing cure |
+| my interpretation of an owner or org directive, applied to a case the directive does not name | the owner's live answer for the interpreted case — an interpretation is a question owed, never an authority held (2026-06-11 amendment) |
 
 The diagnostic: **whenever "it was already decided / done / marked" is the reason
 for an action, that is precedence talking — stop and locate the live approval.**
@@ -145,4 +146,24 @@ such an entry leaves only after its home is confirmed to carry the substance.
 
 ## Amendment Log
 
-None yet.
+- **2026-06-11** (Accepted; owner-approved at the dedicated consolidation
+  walk): **the forced-by-my-interpretation clause.** A verdict that feels
+  "forced" only because of the agent's *reading* of an owner or org
+  directive is not forced — it is a question owed to the owner first. This
+  is the directive-interpretation face of the one error: the directive is
+  live authority for the cases it names; the agent's interpretation of it
+  for an unnamed case is precedence-shaped (an act of the agent's own,
+  standing in for approval). The boundary with the
+  no-question-when-the-answer-is-forced discipline is exactly here: a
+  verdict is genuinely forced only when excellence plus surface-function
+  determine it *without interpretive input from the agent*; when the force
+  rests on the agent's reading of a directive, the right move is the
+  question, not the verdict. Worked instance: an org "no PII" instruction
+  was read as requiring author names to be omitted from attribution
+  surfaces; the owner reversed the omission (2026-06-08) — the
+  interpretation had silently decided a case the directive never named.
+  - **Falsifiability**: this clause would be shown wrong if routing such
+    interpreted cases to the owner consistently produced rubber-stamp
+    confirmations of the agent's reading (the question adding no
+    information), or if it degraded into re-asking cases the directive
+    plainly names.

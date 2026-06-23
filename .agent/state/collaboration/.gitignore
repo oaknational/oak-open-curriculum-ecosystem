@@ -1,1 +1,23 @@
+# Instance-tier coordination state — untracked-by-design (ADR-199 / PDR-094).
+# Preserved on disk, not carried in git. The durable decision-provenance
+# surfaces (conversations/, escalations/, sidebars/) and the README stay tracked.
 _tmp-*
+*.seen
+comms/*
+comms-seen/*
+# A watcher seen-file / heartbeat mis-placed at the collaboration root (it belongs in
+# comms-seen/) must still never be committed — F-69, the 2026-06-18 Bluebell instance.
+*-seen.json
+*.heartbeat.json
+comms-draft/*
+handoffs/*
+!handoffs/README.md
+active-claims.json
+closed-claims.archive.json
+shared-comms-log.md
+comms-archive/*
+!comms-archive/.gitkeep
+# Processed (knowledge-extracted) conversations/sidebars/handoffs are archive-moved
+# here, untracked-by-design (see archive/README.md). Only the README is tracked.
+archive/*
+!archive/README.md

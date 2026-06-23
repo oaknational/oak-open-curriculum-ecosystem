@@ -62,9 +62,26 @@ the [ADR index][adr-index].
 
 ## First Question
 
-Always ask: **could it be simpler without compromising quality?**
+**Could it be simpler without compromising quality?**
 
-## Cardinal Rule
+## First Principle
+
+**Strict, everywhere, all the time.**
+
+## Second Question
+
+**Would this be simpler if the system changed?**
+
+## Decision Lenses
+
+The First Principle and the two questions above are lenses #2–#4 of the canonical
+[Decision Lenses — Order of Resolution](./principles.md#decision-lenses--order-of-resolution)
+in `principles.md`. Lens #1 — **choose long-term architectural excellence at
+every decision point** — governs them all, and lens #5 is **optimise for user
+value**. Apply them in that order; the first that decisively resolves the
+question wins. `principles.md` is canonical for the full ordering.
+
+## Oak Open Curriculum Cardinal Rule
 
 ALL static data structures, types, type guards, Zod schemas, Zod validators,
 and other type-related information MUST flow from the Open Curriculum OpenAPI
@@ -74,6 +91,43 @@ sufficient to bring all workspaces into alignment.
 
 Use [schema-first-execution.md](./schema-first-execution.md) for the
 non-negotiable runtime and generator contract.
+
+## Orientation Requests
+
+When someone asks you to **explain, introduce, or get started with this
+repository** — "tell me about this repo", "what is this", "give me an overview",
+"how does X work", "I want to understand the search architecture", "onboard me",
+"where do I start", "set me up", "help me contribute" — route to the orientation
+lens rather than improvising. The human-facing teaching surface is a family
+across a portability seam (PDR-112; this host's instantiation is recorded in
+ADR-202): a portable lead-in primer plus **one** repo-bound lens that reads the
+live docs at answer time.
+
+- *"I'm new to working with AI agents", "teach me to work with agentic AI",
+  "what does working with an agent even mean"* → the
+  **`working-with-agentic-ai`** primer: a portable, host-free footing primer
+  that ends at a single hand-off edge into this repo's own guidance. From its
+  edge, continue into the orientation lens. Offer it only as a
+  one-step-declinable prelude — an experienced agentic-AI user skips straight to
+  the lens.
+- *Every other orientation intent* — "explain this repo", "give me an overview",
+  "how does X work", "I want to understand area Y", "onboard me", "where do I
+  start", "set me up", "help me contribute" → the **`explain`** lens: it
+  discerns interest, angle, and delivery mode — a pinpoint specific answer, a
+  synthesised area overview, or a paced guided tour that can lead into
+  go-ahead-gated machine setup — through at most a few conversational questions,
+  never a menu, then delivers. Delivery mode is a discerned variable, not a
+  separate skill: discern it internally, never guess it from phrasing and route
+  to a fixed behaviour.
+
+A fresh *"I'm new to agentic AI"* enters the primer first, then forwards into the
+lens via the named edge; every other orientation intent lands on the lens
+directly, with no primer detour.
+
+On a loader platform invoke the skill (`/oak-working-with-agentic-ai`,
+`/oak-explain`); on a non-loader platform read and follow the canonical
+`.agent/skills/working-with-agentic-ai/SKILL-CANONICAL.md` or
+`.agent/skills/explain/SKILL-CANONICAL.md`.
 
 ## Project Context
 
@@ -120,9 +174,9 @@ message via `pnpm agent-tools:check-commit-message` before `git commit`.
 
 Institutional memory lives in `.agent/memory/`:
 
-- [distilled.md](../memory/active/distilled.md) — refined cross-session
+- distilled.md — refined cross-session
   lessons conserved between capture and graduation
-- [napkin.md](../memory/active/napkin.md) — current session observations
+- napkin.md — current session observations
 - [patterns/](../memory/active/patterns/README.md) — reusable solutions and
   failure modes
 - [threads/](../memory/operational/threads/README.md) — thread convention,
@@ -145,6 +199,7 @@ Use these links by trigger:
   [User Collaboration Practice](./user-collaboration.md),
   [Agent Collaboration Practice](./agent-collaboration.md),
   [Testing Strategy](testing-strategy.md),
+  [Validation Strategy](validation-strategy.md),
   [Definition of Delivery](./definition-of-delivery.md),
   [TypeScript Practice][typescript], [Safety and Security][security]
 - Architecture and schema: [Architecture][architecture], [ADR index][adr-index],
@@ -157,6 +212,9 @@ Use these links by trigger:
   [Troubleshooting][troubleshooting]
 - Vision and domain: [Vision][vision], [Curriculum Guidance][curriculum],
   [Experience Recording](../experience/README.md)
+- Authoring outward copy: [Editorial Tone](./editorial-tone.md) — apply when
+  writing the vision, strategy, or the public-facing parts of the README; never
+  to plans or developer-facing docs
 
 [development]: ../../docs/governance/development-practice.md
 [typescript]: ../../docs/governance/typescript-practice.md
@@ -171,7 +229,7 @@ Use these links by trigger:
 [mcp-app-styling]: ../../docs/governance/mcp-app-styling.md
 [build-system]: ../../docs/engineering/build-system.md
 [troubleshooting]: ../../docs/operations/troubleshooting.md
-[vision]: ../../docs/foundation/VISION.md
+[vision]: ../../VISION.md
 [curriculum]: ../../docs/governance/curriculum-tools-guidance-and-playbooks.md
 
 ## Commands

@@ -59,7 +59,7 @@ edges + frontier remain; only the report-node complication is removed.
 heterogeneous node/edge model** (multiple node kinds, a node-id policy across
 kinds, typed inter-kind edges) is therefore **not** defined by EEF D4. It is
 deferred to, and explicitly owned by, the graph-tools substrate migration —
-[`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md)
+[`graph-tools-value-redesign.plan.md`](../../../connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
 §"Heterogeneous node/edge model (scoped deliverable; core now, reconciliation at promotion)" (todo `define-heterogeneous-node-edge-model`, which carries the must-not-drop obligation).
 That plan is the first point a multi-entity / value-driven graph is built; the
 model MUST be defined there and MUST NOT be assumed-inherited from EEF (which

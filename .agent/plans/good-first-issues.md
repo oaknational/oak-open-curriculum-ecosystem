@@ -3,10 +3,12 @@ plan_id: good-first-issues
 title: "Good First Issues"
 type: strategic-index
 status: active
-last_updated: 2026-05-10
+last_updated: 2026-06-12
 related_indices:
   - "high-level-plan.md"
 ---
+
+Deprecated: to be removed - scan for useful content and move to permanent docs
 
 # Good First Issues
 
@@ -80,11 +82,27 @@ contribution you want to make first.
 ### E. MCP tool snagging on the canonical HTTP MCP server
 
 - **Area**: [`apps/oak-curriculum-mcp-streamable-http/`](../../apps/oak-curriculum-mcp-streamable-http/)
-- **Why this is a good first issue**: The canonical MCP server exposes 34
-  curriculum tools; any one of them can be exercised end-to-end against the
+- **Why this is a good first issue**: The canonical MCP server exposes dozens
+  of curriculum tools; any one of them can be exercised end-to-end against the
   live invite-only alpha and surface a small, well-bounded snag.
 - **Definition of done**: A reproducible snag captured (issue, with curl /
   client repro) — or, if scoped to fix, a TDD cycle that closes it.
+
+### F. Practice-shaped first tasks (learn the framework by doing)
+
+- **Area**: the agentic engineering Practice itself —
+  [`.agent/practice-core/`](../practice-core/index.md), the skills under
+  [`.agent/skills/`](../skills/), and the onboarding register
+  ([onboarding-simulations-public-alpha-readiness.md](developer-experience/active/onboarding-simulations-public-alpha-readiness.md))
+- **Why this is a good first issue**: This repo's second value stream is the
+  Practice; the fastest way to understand it is to operate one of its loops.
+  Three bounded shapes: walk `/oak-explain` and file any friction you hit
+  on the onboarding register; dispatch the `onboarding-expert` sub-agent for
+  a persona simulation and verify one of its findings first-hand; or run a
+  scoped curation pass with `/oak-curator-pass` under owner direction.
+- **Definition of done**: One loop operated end-to-end with its findings
+  recorded in the loop's own surface (register entry, verified review
+  finding, or curation commit) — no parallel notes files.
 
 ## How to choose
 
@@ -94,9 +112,11 @@ If you are not sure which area to start in:
    first. A live, well-shaped issue beats a self-defined onramp.
 2. If nothing live appeals, pick the area onramp that most overlaps the
    workspace you expect to spend most time in.
-3. Run [`/start-right-quick`](../skills/start-right-quick/SKILL-CANONICAL.md)
+3. Run [`/oak-start-right-quick`](../skills/start-right-quick/SKILL-CANONICAL.md)
    before the first edit. For ambiguous scope, follow with
-   [`/metacognition`](../skills/metacognition/SKILL-CANONICAL.md).
+   [`/oak-metacognition`](../skills/metacognition/SKILL-CANONICAL.md). If you
+   are brand new, [`/oak-explain`](../skills/explain/SKILL-CANONICAL.md)
+   guides you here, in whatever depth you want.
 
 ## Maintenance
 

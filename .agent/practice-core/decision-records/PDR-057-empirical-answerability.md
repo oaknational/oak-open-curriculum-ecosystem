@@ -17,9 +17,8 @@ PDR-026 disciplines what the agent defers);
 (three-tier optionality decomposition — decision optionality is the
 surface this PDR governs, alongside two sibling surfaces).
 
-**Supersedes**: the quarantined `apply-don't-ask` doctrine candidate
-([`.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md`](../../memory/operational/quarantine/apply-dont-ask-doctrine.md))
-under the 2026-05-01 owner-named reformulation.
+**Supersedes**: the quarantined `apply-don't-ask` doctrine candidate, under
+the 2026-05-01 owner-named reformulation.
 
 ## Context
 
@@ -202,10 +201,8 @@ The gate has two named failure modes when it is misapplied:
    gate did not fire on the action; the gate fired on the
    *question*. Destructive operations remain owner-authorised
    regardless of empirical-answerability. The destructive-action
-   discipline family
-   ([`never-use-git-to-remove-work`](../../rules/never-use-git-to-remove-work.md),
-   [`never-disable-checks`](../../rules/never-disable-checks.md),
-   [`no-verify-requires-fresh-authorisation`](../../rules/no-verify-requires-fresh-authorisation.md),
+   discipline family (`never-use-git-to-remove-work`,
+   `never-disable-checks`, `no-verify-requires-fresh-authorisation`,
    the commit-skill safety rules) is fully load-bearing under this
    PDR. Empirical-answerability never discharges destructive-action
    authorisation; the two gates compose.
@@ -217,11 +214,11 @@ The gate has two named failure modes when it is misapplied:
 
 ## Implementation
 
-The gate is presently agent-side discipline. The
-[`read-before-asking`](../../rules/read-before-asking.md) rule is its
-operational expression for the Claude / Codex / Cursor surfaces.
-That rule's substance subsumes part of this PDR; this PDR provides
-the doctrinal frame the rule implements.
+The gate is presently agent-side discipline. The host repo's
+`read-before-asking` rule is its operational expression for the
+Claude / Codex / Cursor surfaces. That rule's substance subsumes
+part of this PDR; this PDR provides the doctrinal frame the rule
+implements.
 
 Future hardening MAY add a pre-question-checklist surface (a tooling
 prompt that asks *"which empirical surfaces did you read?"* before
@@ -230,10 +227,7 @@ not its automation.
 
 ## Source
 
-This PDR graduates the QUAR-1 entry of
-[`pending-graduations.md`](../../memory/operational/pending-graduations.md)
-under the 2026-05-01 owner-named reformulation. The original
-candidate (`apply-don't-ask`) is preserved in
-[`.agent/memory/operational/quarantine/apply-dont-ask-doctrine.md`](../../memory/operational/quarantine/apply-dont-ask-doctrine.md)
-as historical evidence; that file is updated to mark the
-quarantine cleared by this PDR.
+This PDR graduates the QUAR-1 graduation candidate under the
+2026-05-01 owner-named reformulation. The original candidate
+(`apply-don't-ask`) is preserved in the host repo's quarantine as
+historical evidence, marked cleared by this PDR.

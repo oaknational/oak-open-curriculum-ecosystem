@@ -55,9 +55,9 @@ pattern's Heath-brothers tripwire framing.
 
 ## Related surfaces
 
-- Pattern: [`.agent/memory/active/patterns/inherited-framing-without-first-principles-check.md`](../memory/active/patterns/inherited-framing-without-first-principles-check.md)
+- Pattern: `.agent/memory/active/patterns/inherited-framing-without-first-principles-check.md`
   — definitions, six instances, clause-by-clause attribution.
-- Pattern: [`.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+- Pattern: `.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`
   — why this must be a rule, not a watchlist entry.
 - **Governing PDR**: [PDR-029 Perturbation-Mechanism Bundle](../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
   (ratified 2026-04-21, amended twice 2026-04-21). This rule is the

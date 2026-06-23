@@ -79,7 +79,7 @@ session's PRACTICE_AGENT_SESSION_ID rename drift), and `84571ccf`
 `refactor(vercel-ignore): use absolute git binary; drop path inheritance
 from scrubbed env` (Phase 1.1 finish: `GIT_BINARY = '/usr/bin/git'`,
 scrubbedGitEnv no longer reads PATH, eager check unwound, S3776 cognitive
-complexity refactor via helper extraction, `/tmp/evil` S5443 fixtures
+complexity refactor via helper extraction, `<scratch>/evil` S5443 fixtures
 removed). Sonar QG outcome on PR-87: `new_security_hotspots_reviewed`
 flipped 90.9% → **100% OK**; `new_violations` back to baseline 27;
 `new_duplicated_lines_density` 5.6% → 5.7% (residual `.d.mts` boilerplate;
@@ -104,7 +104,7 @@ Owner re-framed remaining 7 CodeQL alerts as two architectural problems
 the analysis"). Owner elevated **Cluster B (`runGitCommand` lockdown)** to
 top priority; adversarial security review surfaced a **MUST-FIX argv-injection**
 class via `VERCEL_GIT_PREVIOUS_SHA`. Owner-approved 12-phase execution plan
-landed at `/Users/jim/.claude/plans/composed-petting-hejlsberg.md` after
+landed at `~/.claude/plans/composed-petting-hejlsberg.md` after
 metacognition + assumptions-reviewer pass that closed three drift channels
 ("if recognition does not propagate" fallback in Phase 2; "Resolve in Sonar
 MCP" hotspot status flip; "keep finding shapes until it does" open-ended
@@ -272,7 +272,7 @@ working tree (not committed); see thread record for full state.
 **Status (2026-04-28 Tidal Rolling Lighthouse — earlier in same session,
 PR-87 quality remediation re-planning)**: not due — light planning
 session, no commits, no thread movement beyond plan-file authorship at
-`/Users/jim/.claude/plans/composed-petting-hejlsberg.md`. The
+`~/.claude/plans/composed-petting-hejlsberg.md`. The
 existing-pattern "investigation-mode drifts into disposition-mode under
 context pressure" entry below saw a third instance this session (the
 agent drafted three "fall back to" channels in the planning artefact

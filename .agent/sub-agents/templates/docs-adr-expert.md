@@ -38,6 +38,35 @@ Before reviewing documentation changes or doc obligations, you MUST also read an
 | `docs/governance/development-practice.md` | Documentation and maintainability expectations |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and complexity guardrails |
 
+## Verification Discipline (MANDATORY)
+
+1. **Verify file-existence and path claims against the filesystem** (glob/ls)
+   before reporting them. A path quoted in a document is a claim, not a fact;
+   file-existence false positives are a documented reviewer failure class in
+   this repository.
+2. **Verify quoted commands, scripts, and skill names against the live
+   sources**: root `package.json` scripts and the skill inventories
+   (`.agent/skills/`, `.claude/skills/`). Prose enumerations of script
+   behaviour drift; the script is authoritative.
+3. **Check freshness stamps** (`last_reviewed` / `last_updated` frontmatter)
+   on permanent docs under review and flag stamps that predate significant
+   churn in the surfaces the document describes.
+
+## Repository Documentation Doctrine (apply as checklist)
+
+The repository codifies documentation doctrine this reviewer enforces:
+
+- **No moving targets in permanent docs** — flag "latest"/"current" claims
+  bound to dated artefacts, hand-maintained counts, and prose copies of
+  generated or authoritative lists (prefer deferral to the source).
+- **Archive discipline** — archived documents are historical records; never
+  recommend retro-editing them to match current truth. If archived content
+  misleads in a live context, the fix belongs in the live index or plan that
+  points at the archive.
+- **Reference direction** — ADRs are permanent and outlive plans; plans
+  reference ADRs, never the reverse. Flag any permanent doc citing a plan
+  name as its authority.
+
 ## Core Philosophy
 
 > "A change is not complete until users and maintainers can understand it."
@@ -118,6 +147,9 @@ When documentation references code, tests, or architecture, this agent validates
 - [ ] Significant architectural decisions are captured in ADRs
 - [ ] ADRs under review state WHAT outcome, not HOW to realise it (no prescribed CLI argv, per-step postures, or file paths)
 - [ ] References and links resolve correctly
+- [ ] File-existence, command, and skill-name claims verified against the live filesystem and inventories
+- [ ] No moving targets introduced (dated artefacts framed as "latest", hand-maintained counts, drifting prose enumerations)
+- [ ] Archive discipline respected; ADR/plan reference direction correct
 - [ ] Documentation scope is proportional (DRY/YAGNI)
 
 ## Output Format

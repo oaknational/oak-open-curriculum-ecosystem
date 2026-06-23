@@ -2,7 +2,7 @@
  * Bulk data manifest with generation metadata.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-05-21T13:45:19.892Z
+ * Generated at: 2026-06-10T17:29:14.394Z
  */
 
 /**

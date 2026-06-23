@@ -1,22 +1,38 @@
 ---
 name: "MCP Output Schemas and Response Validation"
-overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on EVERY MCP tool, authored in ONE place so no tool is a special case — composed at codegen time for the generated tools, hand-authored (reusing generated sub-schemas) for ALL aggregated tools including the EEF tool (`get-eef-evidence`) and the three existing graph tools — and thread it through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool` (the carrier seam, including the SDK-`registerTool` vs ext-apps-`registerAppTool` divergence, solved ONCE here at the infra layer), so MCP clients receive a machine-checkable contract for the `structuredContent` they get back. Serial delivery (owner-ratified 2026-06-08): (1) EEF D6/D7 first — the EEF tool ships `structuredContent` with NO output schema; (2) the graph tools migrate onto the substrate (`graph-tools-value-redesign`), shipping bounded retrieval only with NO MCP output schema (they work as today); (3) THEN this plan runs, at the point where every tool already exists on its final substrate: introduce the carrier field, author the output schema for every tool uniformly (generated + all aggregated + EEF + the three graph tools), and land the REQUIRED ratchet LAST — proven by a registry-driven conformance test that counts the schema-less surface down to zero. Authoring all schemas at the point where all tools exist is what avoids the special case. Discovery of unschema'd tools is that conformance test, not a red type-check; the required field is the anti-regression ratchet. Single-branch temporary red is permitted (green before merge); no optional `outputSchema` is ever merged."
+overview: "Declare a truthful, REQUIRED, object-rooted `outputSchema` on EVERY MCP tool by COMPOSING it from one mechanism — never hand-authoring per-tool shapes (schema-first / generator-first doctrine, ADR-029/030/031/035/036/038). Every tool's output schema is `envelope(payloadSchema)`: the `envelope` is the single known `formatToolResponse` transform, encoded ONCE as a `composeEnvelopeSchema` utility; the `payloadSchema` is a runtime Zod schema emitted at the tool's AUTHORITATIVE SOURCE — never restated by hand. Sources are provenance-distinct: the live HTTP API (OpenAPI codegen; already emits `zodOutputSchema`), the bulk-download-derived vocab graphs (vocab-gen writer), the fixed EEF corpus (`as const`), and the search index (Elasticsearch over bulk). The same derive-from-source doctrine also single-sources the search tool's input schema (today duplicated). Thread the composed schema through the canonical universal-tools descriptor surface to `registerTool`/`registerAppTool` (the carrier seam, SDK-`registerTool` vs ext-apps-`registerAppTool` divergence solved ONCE at the infra layer), so MCP clients receive a machine-checkable contract for the `structuredContent` they get back. Work placement is HYBRID BY READINESS (owner 2026-06-09): this plan owns the composition mechanism (a `composeEnvelopeSchema` utility in `oak-sdk-codegen`) plus the source-Zod authorable now (search output derived from the generated source-of-truth schemas; EEF output Zod from corpus enums with a type-level tie); the graph-tool source-Zod stays gated on `graph-tools-value-redesign` (its post-migration shape does not exist yet). Serial delivery: (1) EEF D6/D7 first — the EEF tool ships `structuredContent` with NO output schema; (2) the graph tools migrate onto the substrate (`graph-tools-value-redesign`), shipping bounded retrieval only with NO MCP output schema (they work as today); (3) THEN this plan: emit any missing source payload Zod (W0), compose the envelope uniformly for every tool (W1 generated at codegen, W2 aggregated), wire the carrier (S0), and land the REQUIRED ratchet LAST — proven by a registry-driven conformance test that counts the schema-less surface down to zero. Discovery of unschema'd tools is that conformance test, not a red type-check; the required field is the anti-regression ratchet. Single-branch temporary red is permitted (green before merge); no optional OR hand-authored `outputSchema` is ever merged."
 source_research:
   - "../../../reports/output-schema-mcp-plan-audit-2026-06-02.md"
   - "../roadmap.md"
 todos:
-  - id: w1-cycle-1
-    content: "W1 cycle 1 (codegen, ATOMIC): add the required MCP output-envelope field to the ToolDescriptor contract + emitter (contract template, generate-tool-descriptor-file.ts, emit-index.ts); compose the envelope (status, data, summary, conditional oakContextHint) as an object-rooted Zod raw shape from each tool's response descriptor; regenerate all 24 tool files; emitter unit tests for single-status, multi-status (union nested under `data`, object root), and the requiresDomainContext oakContextHint conditional (predicate: include unless requiresDomainContext === false). One commit. Tree green."
+  - id: w0-cycle-1
+    content: "W0 cycle 1 (envelope utility, ATOMIC): define the single `composeEnvelopeSchema(payloadShape) -> z.ZodRawShape` in `oak-sdk-codegen` (re-exported on an approved subpath; NOT in `oak-curriculum-sdk` — that package depends on sdk-codegen, so a curriculum-sdk home would invert the SDK dependency direction). It encodes the real `formatToolResponse` envelope ONCE — object-rooted; `summary` always; `oakContextHint` present iff `includeContextHint !== false`; `status` when provided. It accepts ONLY an object-rooted payload and FAILS FAST on a non-object payload (it must NOT silently return `undefined` like a bare `extractZodShape`); a multi-status union payload is wrapped under `data` by the caller before composition. Unit tests cover each predicate, object-root, and the non-object fail-fast. Consumed by W1 (codegen) and W2 (aggregated) so the envelope contract is defined once, not restated per tool. One commit. Tree green."
     status: pending
     depends_on: []
+  - id: w0-cycle-2
+    content: "W0 cycle 2 (search output payload derives from the ONE source of truth): the search/fetch/user-search OUTPUT payload schema derives from the single generated source of truth — the codegen-emitted search response schemas (`generated/search/`: `SearchLessonsResponseSchema`/`…Units…`/`…Sequences…`/`…Multi…`/`…Suggestion…`, ADR-067/105), which already exist and are already consumed by `validation/types.ts`. The tools emit a transformed shape (`SearchDispatchResult`); under the Cardinal Rule that transform is itself generated/derived from the one source — so collapse any hand-maintained `search-retrieval-types` parallel to derive from the generated source, never maintain a second truth. composeEnvelopeSchema then wraps the source-derived payload. Conformance unit test against a real response fixture. One commit. Tree green."
+    status: pending
+    depends_on: []
+  - id: w0-cycle-3
+    content: "W0 cycle 3 (EEF output Zod at source): emit the `EefEvidenceEnvelope` output Zod from the corpus-derived enums (`EEF_STRAND_IDS`, `OBSERVED_*` in graph-corpus-sdk). NOTE the envelope shape landed 2026-06-09 (A-i + C): it now carries `answerType` (`z.enum(['strand-lookup','context-subset'])`) AND a full-vs-headline member union — the tool returns `EefEvidenceEnvelope<EefStrand>` by default and `EefEvidenceEnvelope<EefStrandHeadline>` when called with `detail: 'headline'` (the `evidenceForMoveHeadlines` projection in `graph-corpus-sdk/src/eef-strands/eef-headline-view.ts`). So the object-rooted output Zod models `answerType` + `members: z.array(z.union([<full-strand Zod>, <headline Zod>]))` (the union is a NESTED property value, never a root union — Principle 6) + `edges`/`frontier`/`provenance`, tied type-level to `z.infer<typeof EefEvidenceEnvelopeZod> extends EefEvidenceEnvelope<EefStrand | EefStrandHeadline>` (a `satisfies EefEvidenceEnvelope` on the Zod *value* is invalid TS — a `ZodObject` value is not an `EefEvidenceEnvelope`; the tie is type-level). A runtime `as const` corpus cannot be codegen'd, so emitting the Zod at the corpus source with this type-tie is the proportionate generator-first form. GUARDRAIL: do NOT annotate the raw shape `: z.ZodRawShape` — that widens the per-field `ZodEnum`s (the documented anti-pattern in `aggregated-eef-evidence.ts`'s input-schema comment); rely on the `definitions.ts` `satisfies` carrier guard. Unit test: the Zod accepts a real `inspect-strand`, `evidence-for-move` (full), AND `evidence-for-move` `detail:'headline'` envelope, and the type-level tie compiles (drift is a type error). One commit. Tree green."
+    status: pending
+    depends_on: []
+  - id: w0-cycle-4
+    content: "W0 cycle 4 (search input single-sourcing): collapse the search input duplication — `SEARCH_INPUT_SCHEMA` (`aggregated-search/flat-zod-schema.ts`) and `SearchSdkObjectSchema` (`validation.ts`) are two hand-written Zod surfaces for one tool. Derive both from one source (the runtime-narrowing schema tied to the SDK input contract) so the input schema is single-sourced, mirroring the output-side doctrine. Conformance unit test. One commit. Tree green."
+    status: pending
+    depends_on: []
+  - id: w1-cycle-1
+    content: "W1 cycle 1 (generated, ATOMIC): add the required MCP output-envelope field to the ToolDescriptor contract + emitter (contract template, generate-tool-descriptor-file.ts, emit-index.ts); COMPOSE the envelope via `composeEnvelopeSchema` (W0) over each tool's existing `zodOutputSchema` response descriptor — no per-tool authoring; regenerate all 24 tool files; emitter unit tests for single-status, multi-status (union nested under `data`, object root), and the `oakContextHint` conditional (predicate: include unless `requiresDomainContext === false`). Serialise at the emitter with `upstream-api-reference-metadata.plan.md` (same emitter seam). One commit. Tree green."
+    status: pending
+    depends_on: [w0-cycle-1]
   - id: w1-cycle-2
     content: "W1 cycle 2 (codegen): integration test asserts every generated descriptor carries an object-rooted outputSchema whose Zod raw shape accepts that tool's real formatToolResponse structuredContent and rejects a payload missing a declared field. One commit. Tree green."
     status: pending
     depends_on: [w1-cycle-1]
   - id: w2-cycle-1
-    content: "W2 cycle 1 (aggregated, ATOMIC): author EVERY aggregated tool's output shape matching its real structuredContent (reusing generated sub-schemas where the payload embeds generated types; search modelled as a single object with mode-specific fields optional, NOT a root union); per-tool conformance unit tests. Scope is ALL aggregated tools — the 8 non-graph tools, the EEF tool (`get-eef-evidence`), AND the three existing graph tools (`get-misconception-graph`, `get-prior-knowledge-graph`, `get-thread-progressions`) — authored uniformly here so no tool is a special case. The three graph tools are authored against their POST-migration structuredContent, so the graph-tool portion is gated on `graph-tools-value-redesign` having landed (the tools must exist on the substrate first); the EEF portion is gated on EEF D6 having landed. One commit. Tree green."
+    content: "W2 cycle 1 (aggregated, ATOMIC): COMPOSE every aggregated tool's output schema via `composeEnvelopeSchema` (W0) over its SOURCE-derived payload Zod — search/fetch/user-search over W0-cycle-2 generated search Zod; EEF over W0-cycle-3 corpus Zod; live-API-aggregated (`get-curriculum-model`, `browse-curriculum`, `explore-topic`, `download-asset`) over reused generated API Zod sub-schemas. No hand-authored shapes; per-tool truths (e.g. `fetch` exposes `oakUrl`; `download-asset` has no `status`; `search` is one object with mode-optional fields, never a root union) are properties of the source payload Zod. Per-tool conformance unit tests. The four migrated graph tools (`get-misconception-graph`, `get-prior-knowledge-graph`, `get-thread-progressions`, and `get-keywords` — which migrates from generated to aggregated under that plan) compose over their post-migration vocab-writer Zod and are GATED on `graph-tools-value-redesign` landing (source-Zod emitted there); the EEF portion is gated on EEF D6. One commit. Tree green."
     status: pending
-    depends_on: []
+    depends_on: [w0-cycle-1, w0-cycle-2, w0-cycle-3]
   - id: s0-cycle-1
     content: "S0 cycle 1 (seam + closing ratchet): add REQUIRED outputSchema (z.ZodRawShape) to ToolRegistryDescriptor and UniversalToolListEntry + a requireGeneratedToolOutputShape helper; forward outputSchema in listUniversalTools() from both the aggregated defs and generated descriptors; add `outputSchema: tool.outputSchema` to the single registerTool/registerAppTool config in handlers.ts (reconciling the SDK-registerTool vs ext-apps-registerAppTool carrier divergence once, here). The required field lands LAST as the closing ratchet, after W1 + W2 have populated every producer; it is the anti-regression lock, not the discovery instrument. Integration test: the registration config carries outputSchema for every registered tool (spy-observation pattern). One commit. Tree green."
     status: pending
@@ -26,7 +42,7 @@ todos:
     status: pending
     depends_on: [s0-cycle-1]
   - id: ws-docs
-    content: "Docs: remove the stale 'download-asset on stdio' TSDoc (list-tools.ts:25-26) and update the list-tools @example to include outputSchema; TSDoc on the new fields and the requireGeneratedToolOutputShape helper; update any README enumerating the tool surface to 36 (24 generated + 12 aggregated incl. EEF). Land alongside the cycles whose behaviour they document."
+    content: "Docs: remove the stale 'download-asset on stdio' TSDoc (list-tools.ts:25-26) and update the list-tools @example to include outputSchema; TSDoc on the new fields and the requireGeneratedToolOutputShape helper; update any README enumerating the tool surface to 36 (24 generated + 12 aggregated incl. EEF; `get-keywords` shifts generated→aggregated when the graph migration lands — net 36). Land alongside the cycles whose behaviour they document."
     status: pending
     depends_on: [s0-cycle-2]
   - id: ws-gates
@@ -46,17 +62,9 @@ isProject: false
 
 # MCP Output Schemas and Response Validation
 
-**Last Updated**: 2026-06-08
-**Status**: 🟢 DECISION-COMPLETE — the serial delivery order and the uniform "every tool schema'd in one place" shape are owner-resolved (2026-06-08, see [§Resolved Sequencing](#resolved-sequencing-owner-2026-06-08)). This plan authors the `outputSchema` for **every** tool, including the three existing graph tools, so there is no special case; the graph migration ships substrate + bounded retrieval only (no MCP output schema). The required field is the closing ratchet; discovery of unschema'd tools is the registry-driven conformance test, not a red type-check.
-**Scope**: Give every MCP tool a truthful, required, object-rooted `outputSchema` and expose it through the live registration path.
-
-> **Provenance**: this plan was fully re-grounded on 2026-06-02 against live
-> code, then revised against five specialist reviews (mcp / assumptions / type /
-> code / docs-adr) whose findings were verified against the installed SDK and
-> the real seam. The claim-by-claim audit lives in
-> [`output-schema-mcp-plan-audit-2026-06-02.md`](../../../reports/output-schema-mcp-plan-audit-2026-06-02.md).
-> That report is the authoritative source for *why* the facts changed; this plan
-> is the authoritative source for *what to build*.
+**Last Updated**: 2026-06-09 (EEF output-Zod clauses reconciled to the landed A-i/C envelope shape — `answerType` + full/headline member union)
+**Status**: 🟢 DECISION-COMPLETE — owner-ratified 2026-06-09; serial delivery order owner-resolved 2026-06-08 (§Resolved Sequencing). The required field is the closing ratchet; discovery of unschema'd tools is the registry-driven conformance test, not a red type-check.
+**Scope**: Give every MCP tool a truthful, required, object-rooted `outputSchema` — composed by one mechanism over source-derived payload Zod — and expose it through the live registration path.
 
 ---
 
@@ -71,17 +79,13 @@ installed SDK runtime-validates a tool's `structuredContent` against it when
 declared. We declare nothing, so we get neither the client-facing contract nor
 the runtime guarantee.
 
-A prior version of this plan had rotted against the code (stdio transport that
-no longer exists, wrong tool counts, a sequencing gate pointing at deleted
-files, an inverted "must generate output schemas" framing). The audit corrected
-all of it; the facts below are verified against live code.
-
 ### Verified Current State (2026-06-02)
 
 - **One transport.** `StreamableHTTPServerTransport`, instantiated per-request
   (`apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts:101`).
   **There is no stdio transport** — zero `StdioServerTransport` occurrences.
-- **35 tools total today (pre-EEF; rises to 36 once the EEF tool lands)**, all
+- **36 tools total** (35 at this 2026-06-02 snapshot, pre-EEF; the EEF tool
+  `get-eef-evidence` shipped to production 2026-06-09, making 36 — 24 generated + 12 aggregated), all
   registered through one loop
   (`handlers.ts:158`): **24 generated** (`MCP_TOOL_ENTRIES`,
   `oak-sdk-codegen/.../mcp-tools/definitions.ts:41-66`) + **11 aggregated**
@@ -89,8 +93,10 @@ all of it; the facts below are verified against live code.
   `get-curriculum-model`, `get-thread-progressions`, `get-prior-knowledge-graph`,
   `get-misconception-graph`, `browse-curriculum`, `explore-topic`,
   `download-asset`, `user-search`, `user-search-query`. The EEF tool
-  (`get-eef-evidence`) becomes the 12th aggregated tool at D6, so the surface this
-  plan schemas in full is **36** (24 generated + 12 aggregated).
+  (`get-eef-evidence`) became the 12th aggregated tool at D6 (shipped 2026-06-09), so the surface this
+  plan schemas in full is **36** (24 generated + 12 aggregated). When
+  `graph-tools-value-redesign` lands, `get-keywords` moves generated→aggregated
+  (23 generated + 13 aggregated; net **36** unchanged).
 - **`outputSchema` is absent from the entire wire path** — not on
   `ToolRegistryDescriptor` (`types.ts:31-40`), `UniversalToolListEntry`
   (`types.ts:120-142`), `AggregatedToolDefShape` (`definitions.ts:58-70`),
@@ -139,6 +145,33 @@ all of it; the facts below are verified against live code.
   the precedent — and the exact pattern — the output side mirrors.
 
 ---
+
+## Verified Provenance Taxonomy
+
+Every tool's `payloadSchema` is emitted at its authoritative source. Sources are provenance-distinct
+(verified first-hand against source code 2026-06-09):
+
+| Provenance | Tools | Runtime Zod for the response today | Source authority / generator |
+|---|---|---|---|
+| **Live HTTP API** (OpenAPI → `oak-sdk-codegen`) | the 24 generated tools | **Yes** — `zodOutputSchema` via `response-map.ts` `{ zod, json }` per operation | codegen `response-map` (already done — W1 composes over it) |
+| **Bulk-download-derived** (`vocab-gen` writer) | `get-misconception-graph`, `get-prior-knowledge-graph`, `get-thread-progressions` | **No** — generated TS interfaces only (`generated/vocab/*/types.ts`) | vocab-gen writer; **source-Zod gated on `graph-tools-value-redesign`** |
+| **Fixed EEF corpus** (`as const`, ADR-173) | `get-eef-evidence` | input **yes** (corpus enums); output **no** (`EefEvidenceEnvelope` TS interface) | `graph-corpus-sdk` corpus → W0-cycle-3 (`satisfies` tie) |
+| **Search index** (Elasticsearch over bulk) | `search`, `fetch`, `user-search`, `user-search-query` | **Yes** — generated `Search*ResponseSchema` (`generated/search/`, ADR-067/105) are the source of truth | derive tool-output from the generated source; collapse any hand-maintained parallel (W0-cycle-2) |
+| **Aggregated over live API** | `get-curriculum-model`, `browse-curriculum`, `explore-topic`, `download-asset` | reuse generated API Zod sub-schemas | `oak-sdk-codegen` API Zod (reuse in W2) |
+
+The cure — emit a runtime Zod schema at each tool's source — differs per provenance, which is why W0
+is phased by readiness.
+
+**Landed-shape note (2026-06-11, owner decision via the
+[2026-06-11 snagging plan](oak-prod-mcp-snagging-2026-06-11.plan.md) S1/PR-2,
+commit `20ad83326`):** `get-eef-evidence` no longer returns the bare
+`EefEvidenceEnvelope` as `structuredContent` with `content: []`. It now emits
+through `formatToolResponse` like every aggregated tool — dual `content`
+blocks plus the decorated `structuredContent`
+(`{...envelope, summary, oakContextHint, status}`). This removes the latent
+EEF special case in this plan: `composeEnvelopeSchema` applies uniformly to
+EEF in W2 (envelope over the W0-cycle-3 corpus payload Zod), with no
+EEF-specific bare-envelope variant needed.
 
 ## The Two Contracts (the load-bearing distinction)
 
@@ -196,18 +229,22 @@ it, so the schema must match what is **actually emitted** or the tool errors.
    is in authoring truthful schemas — and a globally-red type-check would mask
    real errors; so requiredness lands at the convergence, and discovery of
    unpopulated tools is the registry conformance test (S0.2), not the red tree.
-   *(Inverts the audit's "S0 first", which assumed an optional additive field.)*
 
-3. **Generator-first for generated tools (Cardinal Rule).** The generated
-   envelope schema is **composed at `sdk-codegen` time** from the existing
-   response schema. No hand-authored per-generated-tool overrides; fix the
-   emitter if composition is wrong. *(principles.md §Cardinal Rule; ADR-029/030/031.)*
+3. **One composition mechanism, generator-first (Cardinal Rule).** Every output
+   schema is `composeEnvelopeSchema(payloadSchema)` — the envelope contract is
+   encoded ONCE (W0-cycle-1) and applied to all tools. The generated envelope is
+   composed at `sdk-codegen` time over the existing `zodOutputSchema`; no
+   per-generated-tool overrides; fix the utility or emitter if composition is
+   wrong. *(principles.md §Cardinal Rule; ADR-029/030/031/035/036/038.)*
 
-4. **Generator-reuse for aggregated payloads.** Where an aggregated tool's
-   `structuredContent` embeds a generated payload type, its output schema
-   **references the generated Zod schema** for that portion (as a property value
-   in the raw shape). Only the aggregation envelope is hand-authored.
-   *(principles.md §Context Specificity Gradient — "generated state beats authored state".)*
+4. **Payload schema derived at the source, never hand-authored.** Each tool's
+   `payloadSchema` is a runtime Zod schema emitted at its authoritative source
+   (live-API codegen; search Zod generator; EEF corpus with a `satisfies` tie;
+   vocab writer for graphs). The aggregation envelope is **composed** by the same
+   `composeEnvelopeSchema` utility — it is not hand-authored per tool. Where a
+   payload embeds a generated type, the composed schema references that generated
+   Zod schema directly. *(principles.md §Context Specificity Gradient — "generated
+   state beats authored state"; §schema-first; ADR-067/105 for search.)*
 
 5. **Truthful or absent.** A declared schema must match the real emitted
    `structuredContent`. The proof is the runtime-conformance test (S0.2), not the
@@ -260,24 +297,29 @@ no tool is a special case (revised 2026-06-08).
 1. **EEF D6/D7 (priority, first).** The EEF tool ships `structuredContent` with
    **no** `outputSchema`, uniform with every other aggregated tool, and does not
    touch the carrier. EEF gains its output schema in this plan (phase 3), not at
-   D6.
+   D6. *(Landed 2026-06-09; then revised 2026-06-11: the D6 `content: []`
+   success shape was reversed by the owner — EEF now emits the
+   `formatToolResponse` dual shape, PR-2 of the 2026-06-11 snagging plan. See
+   the landed-shape note under §Provenance.)*
 2. **The graph tools migrate (`graph-tools-value-redesign`).** Each graph tool is
    rebuilt onto the `graph-corpus-sdk` substrate with bounded retrieval, shipping
    **no MCP `outputSchema`** — they work exactly as they do today (an MCP tool
    without an `outputSchema` is valid). The migration owns substrate + retrieval;
    it does **not** touch the output-schema carrier.
 3. **This plan runs last, at the point where every tool exists on its final
-   substrate, and schemas them all uniformly.** Generated tools at codegen (W1);
-   every aggregated tool — the 8 non-graph tools, the EEF tool, and the three
-   migrated graph tools — hand-authored (W2); then the carrier field is promoted
-   to **required** and proven by the registry-driven conformance test (S0). The
-   three graph tools are authored against their post-migration `structuredContent`,
-   which is why this plan runs after the migration; the EEF tool against its D6
-   `structuredContent`.
+   substrate, and schemas them all uniformly via one composition mechanism.**
+   First emit any missing source payload Zod (W0); then compose the envelope for
+   generated tools at codegen (W1) and for every aggregated tool — the 8 non-graph
+   tools, the EEF tool, and the three migrated graph tools — over its source-derived
+   payload Zod (W2); then the carrier field is promoted to **required** and proven
+   by the registry-driven conformance test (S0). The three graph tools compose over
+   their post-migration vocab-writer Zod (emitted under `graph-tools-value-redesign`),
+   which is why this plan runs after the migration; the EEF tool over its D6/W0-cycle-3
+   corpus Zod.
 
-**Why this avoids the special case:** authoring every tool's `outputSchema` in
-one place, at one time, means there is no tool whose schema lives in a different
-plan or arrives on a different schedule. The migration's job is the tool's data
+**Why this avoids the special case:** composing every tool's `outputSchema` in
+one place, by one mechanism, at one time, means there is no tool whose schema lives
+in a different plan or arrives on a different schedule. The migration's job is the tool's data
 and retrieval shape; this plan's job is the MCP output contract for all tools at
 once.
 
@@ -311,7 +353,15 @@ state where the field is optional.
   **built** by the EEF plan (D3/D4/D6) and ships `structuredContent` with no
   output schema at D6; **its `outputSchema` is authored HERE, in W2**. The tool's
   single-Zod-call graph-native-view derivation stays with the EEF plan; only the
-  MCP output contract is this plan's.
+  MCP output contract is this plan's. **Update 2026-06-09:** the landed D6 envelope
+  carries `answerType` and a full-vs-headline member union (the A-i/C increment —
+  `evidenceForMoveHeadlines` + the `detail` input); W0-cycle-3 and W2 compose the
+  output Zod over that real shape (a nested member union, never a root union).
+  **Update 2026-06-11:** the D6 `content: []` / bare-envelope `structuredContent`
+  shape is reversed (owner decision, PR-2 of the 2026-06-11 snagging plan,
+  commit `20ad83326`) — EEF now emits the `formatToolResponse` dual shape, so
+  W2's `composeEnvelopeSchema` applies to EEF exactly as to every other
+  aggregated tool, over the same W0-cycle-3 corpus payload Zod.
 - **One seam, one schema owner.** This plan owns the carrier seam AND every
   tool's `outputSchema`; the EEF and graph-migration plans own their tools'
   construction. Coordinate on the seam; ownership does not transfer.
@@ -338,6 +388,10 @@ Acceptance ids are the todo ids. Each names its proof level and proving command.
 
 | Acceptance id | Proof level | Proven by |
 |---------------|-------------|-----------|
+| `w0-cycle-1` | unit | `composeEnvelopeSchema` unit tests (summary-always, oakContextHint `!== false` predicate, status-when-present, object-root, non-object fail-fast); `pnpm test --filter @oaknational/sdk-codegen` |
+| `w0-cycle-2` | unit | search/fetch/user-search output payload derives from the generated source-of-truth schemas; conformance against a real response fixture; `pnpm type-check && pnpm test` |
+| `w0-cycle-3` | unit | EEF output Zod accepts real `inspect-strand`/`evidence-for-move` envelopes; the type-level `z.infer … extends EefEvidenceEnvelope<EefStrand \| EefStrandHeadline>` tie compiles; `pnpm type-check && pnpm test` |
+| `w0-cycle-4` | unit | single-sourced search input: registration shape and runtime-narrowing schema share one derived base; `pnpm type-check && pnpm test` |
 | `w1-cycle-1` | unit | emitter unit tests (single/multi-status, oakContextHint predicate); `pnpm test --filter @oaknational/sdk-codegen` + `pnpm sdk-codegen && pnpm build` |
 | `w1-cycle-2` | integration | conformance test over all 24 generated descriptors; `pnpm test` |
 | `w2-cycle-1` | unit | per-tool conformance unit tests for every aggregated tool (8 non-graph + EEF + the 3 migrated graph tools) + `satisfies` guard holds; `pnpm type-check && pnpm test` |
@@ -354,7 +408,12 @@ slice is not completion.
 
 > See [TDD Cycles component](../../templates/components/tdd-phases.md)
 
-- **W1 ∥ W2** — independent (codegen package vs aggregated SDK modules).
+- **W0 first (mostly parallel)** — W0-cycle-1 (envelope utility) gates W1 and W2;
+  W0-cycle-2/3/4 (search Zod, EEF Zod, search input dedup) are independent and
+  parallel-safe (separate file scopes). The graph-tool source-Zod is emitted under
+  `graph-tools-value-redesign`, not here.
+- **W1 ∥ W2** — independent (codegen package vs aggregated SDK modules); both depend
+  on W0-cycle-1.
 - **W1 cycle 1.1 is atomic** — adding the required envelope field to the
   `ToolDescriptor` contract makes all 24 generated files fail `type-check` until
   regenerated, so the contract change + emitter + `pnpm sdk-codegen` regeneration
@@ -373,10 +432,111 @@ slice is not completion.
 
 ---
 
+## W0 — Source-Zod-emission prerequisites + the composition utility
+
+> W0 makes every tool's payload available as a runtime Zod schema at its
+> authoritative source, and defines the single envelope-composition utility W1
+> and W2 both consume. Phased hybrid by readiness (owner 2026-06-09): the envelope
+> utility, search response Zod, EEF output Zod, and the search input dedup are
+> authorable now; the graph-tool source-Zod is emitted under
+> `graph-tools-value-redesign` and consumed by W2 when it lands.
+
+### Cycle 0.1 — `composeEnvelopeSchema` utility (ATOMIC)
+
+**File scope**: new helper in `oak-sdk-codegen` (re-exported on an approved subpath
+for the W2 aggregated modules in `oak-curriculum-sdk` to consume — NOT in
+`oak-curriculum-sdk`, which depends on `sdk-codegen`); `*.unit.test.ts`.
+
+**Test (Red)**: `composeEnvelopeSchema(payloadShape)` returns an object-rooted
+`z.ZodRawShape` with `summary` always present, `oakContextHint` present iff
+`includeContextHint !== false`, `status` present when provided, and the payload
+spread at the top level — matching `formatToolResponse` (`universal-tool-shared.ts:208-221`)
+exactly. A **non-object payload fails fast** (it is not silently dropped); multi-status
+union payloads are wrapped under `data` by the caller before composition.
+
+**Product code (Green)**: the utility — it accepts an object-rooted payload and fails
+fast on a non-object one (never silently returns `undefined` like a bare
+`extractZodShape`). **Reviewer**: `type-expert`, `mcp-expert`.
+
+### Cycle 0.2 — Search output payload from the ONE source of truth (authorable now)
+
+**File scope**: `oak-curriculum-sdk/src/mcp/aggregated-search/` + `search-retrieval-types.ts`;
+the generated search schemas in `oak-sdk-codegen` (`generated/search/`) are the source of
+truth and are reused, not regenerated; `*.unit.test.ts`.
+
+**Test (Red)**: the search/fetch/user-search OUTPUT payload schema derives from the single
+generated source of truth — the codegen search response schemas (`SearchLessonsResponseSchema`,
+`…Units…`, `…Sequences…`, `…Multi…`, `…Suggestion…`, ADR-067/105), which ALREADY exist and
+are already consumed by `validation/types.ts`. The tools emit a transformed `SearchDispatchResult`;
+under the Cardinal Rule that transform is itself derived from the one source — so any
+hand-maintained `search-retrieval-types` parallel is collapsed to derive from the generated
+source, never a second truth.
+
+**Product code (Green)**: derive the tool-output payload schema from the generated source;
+`composeEnvelopeSchema` wraps it. **Acceptance**: `pnpm type-check && pnpm test` green.
+**Reviewer**: `type-expert`, `elasticsearch-expert` (response-shape fidelity).
+
+### Cycle 0.3 — EEF output Zod at source (authorable now)
+
+**File scope**: `graph-corpus-sdk` (corpus-enum exports) + the EEF output Zod home
+(`aggregated-eef-evidence.ts` or a corpus-side module); `*.unit.test.ts`.
+
+**Landed-shape note (2026-06-09, A-i + C):** the `EefEvidenceEnvelope` now carries
+`answerType` (`'strand-lookup' | 'context-subset'`) and a full-vs-headline member
+union — `evidence-for-move` returns full `EefStrand` members by default and
+`EefStrandHeadline` members when `detail: 'headline'` is passed (the
+`evidenceForMoveHeadlines` projection, `eef-headline-view.ts`). The output Zod is
+therefore one object-rooted schema with `answerType`, `members:
+z.array(z.union([<full> , <headline>]))` (nested union, not a root union — Principle 6),
+`edges`, `frontier`, `provenance`. The member union is deliberately WIDER than any
+single call's output — each call returns homogeneous members (all-full OR all-headline,
+the generic `EefEvidenceEnvelope<TMember>`) — because one object-rooted schema must
+accept both shapes and a per-shape split would need a root union the SDK silently
+drops; at execution, order the union full-before-headline so the richer schema is
+tried first (a real headline envelope still falls through, as the full-strand schema
+requires deep fields a headline lacks).
+
+**Test (Red)**: the `EefEvidenceEnvelope` output Zod, built from `EEF_STRAND_IDS` /
+`OBSERVED_*`, accepts a real `inspect-strand`, `evidence-for-move` (full), AND
+`evidence-for-move` `detail:'headline'` envelope; the TYPE-LEVEL tie
+`z.infer<typeof EefEvidenceEnvelopeZod> extends EefEvidenceEnvelope<EefStrand | EefStrandHeadline>`
+compiles (drift is a type error). *(A `satisfies EefEvidenceEnvelope` on the Zod value is
+invalid TS — a `ZodObject` is not an `EefEvidenceEnvelope`; the tie is type-level.)*
+
+**Product code (Green)**: emit the Zod at the corpus source with the type-level tie.
+GUARDRAIL: do NOT annotate the raw shape `: z.ZodRawShape` — that widens the per-field
+`ZodEnum`s (documented anti-pattern in `aggregated-eef-evidence.ts`'s input-schema
+comment); rely on the `definitions.ts` `satisfies` carrier guard. *(A runtime `as const`
+corpus cannot be codegen'd; emitted-at-source + type-tie is the proportionate generator-first form.
+Considered alternative — make the corpus a data-driven codegen input (ADR-031/036) —
+deferred to the EEF plan, which owns the corpus type model per ADR-173.)* **Reviewer**:
+`type-expert`, `mcp-expert`.
+
+### Cycle 0.4 — Search input single-sourcing (authorable now)
+
+**File scope**: `aggregated-search/flat-zod-schema.ts`, `aggregated-search/validation.ts`; `*.unit.test.ts`.
+
+**Test (Red)**: one source of input-schema truth drives both MCP registration and
+runtime narrowing; the registration shape and the narrowing schema cannot diverge
+(a conformance test asserts they share the derived base).
+
+**Product code (Green)**: derive both from one source tied to the SDK input contract.
+**Reviewer**: `type-expert`.
+
+### Graph-tool source-Zod (gated)
+
+Emitted at the vocab writer under `graph-tools-value-redesign` against the
+post-migration `structuredContent`; **not** authorable now (the shape does not yet
+exist). W2 composes over it once that plan lands. This preserves the plan's existing
+graph gating.
+
+---
+
 ## W1 — Generated-tool output schemas (24 tools, codegen)
 
-Compose the MCP output-envelope schema at `sdk-codegen` time, wrapping the
-existing response schema in the real `formatToolResponse` envelope.
+Compose the MCP output-envelope schema at `sdk-codegen` time via
+`composeEnvelopeSchema` (W0), wrapping the existing `zodOutputSchema` response
+schema in the real `formatToolResponse` envelope.
 
 ### Cycle 1.1 — Emitter composition + regeneration (ATOMIC)
 
@@ -426,22 +586,24 @@ missing a declared field.
 ## W2 — Aggregated-tool output schemas (ATOMIC; every aggregated tool)
 
 > W2 covers EVERY aggregated tool — the 8 non-graph tools, the EEF tool
-> (`get-eef-evidence`), and the three migrated graph tools — authored uniformly
-> here so no tool is a special case (§Resolved Sequencing). The graph-tool
-> portion is gated on `graph-tools-value-redesign` having landed and the EEF
-> portion on EEF D6, because each schema is authored against that tool's REAL
-> post-migration / post-D6 `structuredContent`. Authoring the schemas is
-> parallelisable preparation; the landing is atomic (one commit). The required
-> field is promoted in S0 (the closing ratchet), not here.
+> (`get-eef-evidence`), and the four migrated graph tools (incl. `get-keywords`,
+> which migrates generated→aggregated under `graph-tools-value-redesign`) — **composed** uniformly
+> here via `composeEnvelopeSchema` (W0) over each tool's source-derived payload Zod,
+> so no tool is a special case (§Resolved Sequencing). The graph-tool portion is
+> gated on `graph-tools-value-redesign` having landed and the EEF portion on EEF D6,
+> because each schema composes over that tool's REAL post-migration / post-D6
+> `structuredContent`. Composing the schemas is parallelisable preparation; the
+> landing is atomic (one commit). The required field is promoted in S0 (the closing
+> ratchet), not here.
 
 **File scope** (permitted to touch):
 
 - `universal-tools/definitions.ts` — add `outputSchema: z.ZodRawShape` to `AggregatedToolDefShape` (`:58-70`); wire every aggregated entry.
 - Each aggregated module (`aggregated-search/`, `aggregated-fetch/`,
   `aggregated-curriculum-model/`, `aggregated-browse/`, `aggregated-explore/`,
-  `aggregated-asset-download/`, `aggregated-user-search/`), the three migrated
+  `aggregated-asset-download/`, `aggregated-user-search/`), the four migrated
   graph-tool modules (`get-misconception-graph`, `get-prior-knowledge-graph`,
-  `get-thread-progressions`), and the EEF tool module (`get-eef-evidence`) —
+  `get-thread-progressions`, `get-keywords`), and the EEF tool module (`get-eef-evidence`) —
   export an object-rooted output raw shape. Exact module paths confirmed at
   execution against the post-migration / post-D6 tree.
 - `*.unit.test.ts` beside each module.
@@ -464,12 +626,14 @@ truths:
 | `download-asset` | `{ downloadUrl, lesson, type, summary, oakContextHint }` — **no `status`**; consume post-`download-asset-user-only-url` shape if landed |
 | `user-search` | `summary` + user-search payload; widget tool |
 | `user-search-query` | `summary` + query payload; app-only (`_meta.ui.visibility:['app']`) |
-| `get-misconception-graph`, `get-prior-knowledge-graph`, `get-thread-progressions` | the post-migration bounded-retrieval `structuredContent` defined by `graph-tools-value-redesign`; author against the real emitted output, never a speculative shape |
-| `get-eef-evidence` | the D6 `structuredContent` envelope (the `EefEvidenceEnvelope` projection); author against the real emitted output |
+| `get-misconception-graph`, `get-prior-knowledge-graph`, `get-thread-progressions` | the post-migration bounded-retrieval `structuredContent` defined by `graph-tools-value-redesign`; compose over the vocab-writer Zod emitted there, never a speculative shape |
+| `get-keywords` | migrates generated→aggregated under `graph-tools-value-redesign`; compose over its post-migration bounded `structuredContent` / vocab-writer Zod emitted there |
+| `get-eef-evidence` | the `EefEvidenceEnvelope` envelope — `answerType` + `members` (full `EefStrand`, or `EefStrandHeadline` when `detail:'headline'`; a NESTED union) + `edges`/`frontier`/`provenance` (A-i + C, landed 2026-06-09); compose over the W0-cycle-3 corpus Zod |
 
-**Product code (Green)**: `outputSchema` on `AggregatedToolDefShape`; author each
-aggregated module's object-rooted shape (reusing generated Zod sub-schemas as
-property values where the payload embeds generated types); wire every entry.
+**Product code (Green)**: `outputSchema` on `AggregatedToolDefShape`; compose each
+aggregated module's object-rooted shape via `composeEnvelopeSchema` (W0) over its
+source-derived payload Zod (W0-cycle-2 search Zod; W0-cycle-3 EEF Zod; reused
+generated API Zod sub-schemas for the live-API-aggregated tools); wire every entry.
 
 **Acceptance**: all aggregated conformance tests pass; the
 `as const satisfies Record<AggregatedToolName, …>` guard (`:149`) holds;
@@ -542,7 +706,7 @@ or W2 author), never loosen the test.
 - Remove the stale `download-asset on stdio` reference (`list-tools.ts:25-26`)
   and update its `@example` to include `outputSchema` (`:53-58`).
 - TSDoc on the new `outputSchema` fields and `requireGeneratedToolOutputShape`.
-- Update any README enumerating the tool surface to **36** (24 generated + 12 aggregated incl. EEF).
+- Update any README enumerating the tool surface to **36** (24 generated + 12 aggregated incl. EEF; `get-keywords` shifts generated→aggregated when the graph migration lands — net 36).
 
 ---
 
@@ -602,16 +766,21 @@ against the real code before acting; relay a synthesised verified verdict.
 
 > See [Foundation Alignment component](../../templates/components/foundation-alignment.md)
 
-- **principles.md** — §Cardinal Rule (W1 composes at codegen); §Strict and
-  Complete + "WE DON'T HEDGE" (required, object-rooted, no optionality);
-  §Context Specificity Gradient (W2 reuses generated sub-schemas); §"Misleading
-  docs are blocking" (stdio TSDoc cleanup); §Fail FAST (truthful-or-error).
+- **principles.md** — §Cardinal Rule (one composition mechanism; W1 composes at
+  codegen); §Strict and Complete + "WE DON'T HEDGE" (required, object-rooted, no
+  optionality); §Context Specificity Gradient (W2 composes over source-derived Zod,
+  generated state beats authored state); §"Misleading docs are blocking" (stdio
+  TSDoc cleanup); §Fail FAST (truthful-or-error).
 - **testing-strategy.md** — TDD cycle-pairs as landing units at unit /
   integration / E2E; conformance proven through public interfaces (real
   `structuredContent`); no global state in tests.
-- **schema-first-execution.md** — generated type/schema flow stays codegen-driven;
-  the output envelope is composed at generation time from the OpenAPI-derived
-  response schemas.
+- **schema-first-execution.md + ADRs** — every tool's payload Zod is emitted at its
+  authoritative source and the envelope is composed from it, never hand-authored:
+  **ADR-029** (no manual API data), **ADR-030** (SDK single source of truth),
+  **ADR-031** (generation-time extraction), **ADR-035/036** (unified + data-driven
+  codegen), **ADR-038** (compilation-time revolution), **ADR-067/105** (SDK-generated
+  search mappings / constants). The EEF corpus stays the type authority (ADR-173);
+  its output Zod is emitted at the corpus source with a `satisfies` tie.
 
 ### Plan-body first-principles check
 
@@ -674,7 +843,7 @@ them and can be prepared earlier.
   the new EEF graph tool. EEF D6 ships no output schema and does not touch the
   carrier, so it no longer shares the S0 seam; this plan owns the seam outright
   and authors the EEF tool's output schema as an ordinary aggregated tool.
-- `../../connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md`
+- `../../connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md`
   — rebuilds the three existing graph tools onto the substrate (substrate +
   bounded retrieval only, **no** MCP output schema); this plan authors their
   `outputSchema` in W2 against their post-migration `structuredContent`. Blocking
@@ -683,7 +852,3 @@ them and can be prepared earlier.
   change; serialise with W1 at the emitter, never concurrent.
 - `../aggregated-tool-result-type-remediation.plan.md` (collection root) — if it
   lands first, W2 schemas match the post-migration `structuredContent`.
-- Superseded reference only:
-  `../archive/completed/mcp-runtime-boundary-simplification.plan.md` (its
-  `projections.ts` deliverable was deleted in PR #76; the live seam is
-  `UniversalToolListEntry` + `list-tools.ts` + `handlers.ts:173-184`).

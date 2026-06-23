@@ -857,7 +857,7 @@ scoring, relevant to plans producing LLM prose, none of Increment 1).
 Adjacent finding flagged for owner: `oaknational/aila-atomic-concepts`
 is private but directly conceptually relevant to PrerequisiteGraph
 ("Decomposing Oak's curriculum into its smallest teachable units").
-Owner added local checkout at `/Users/jim/code/oak/aila-atomic-concepts`
+Owner added local checkout at `../aila-atomic-concepts`
 mid-session. Research order chosen: Aila → curriculum-ontology →
 moderation service.
 
@@ -1423,7 +1423,7 @@ Implemented the urgent reversible `.claude/settings.json` prune from
 `mcp-apps@mcp-apps`, `cloudflare@claude-plugins-official`, and
 `linear@claude-plugins-official` activations while retaining Sentry,
 remember, mcp-server-dev, SonarQube, and Vercel. Backup captured at
-`/tmp/oak-claude-settings.pre-prune-20260506T121741Z.json`; active
+`<scratch>/oak-claude-settings.pre-prune-20260506T121741Z.json`; active
 implementation claim closed; validation green for `pnpm portability:check`,
 `pnpm subagents:check`, `pnpm type-check`, markdownlint on the touched
 plan/thread surfaces, `git diff --check`, and collaboration-state check.
@@ -1477,7 +1477,7 @@ Continued from prior context-compacted session. Three parallel reviewers
 (security-reviewer, clerk-reviewer, sentry-reviewer) had been quota-stopped.
 Recovered security and clerk reviewer reports from subagent jsonl transcripts;
 restarted sentry-reviewer which completed on quota reset. All four reviewer
-verdicts appended to `/tmp/mcp-tool-exercise.log`. Step 10 verdict ACCEPTED —
+verdicts appended to `<scratch>/mcp-tool-exercise.log`. Step 10 verdict ACCEPTED —
 no P1 blockers. Three P2 snags added to `pr-93-merge-snagging-2026-05-05.md`.
 Plan step 10 row marked DONE. **Next safe step**: step 11 — pre-merge
 divergence analysis vs `origin/main`.

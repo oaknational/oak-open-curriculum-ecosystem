@@ -12,7 +12,7 @@ import type { RequestHandler } from 'express';
 
 import type { Logger, PhasedTimer } from '@oaknational/logger';
 
-import { setupGlobalAuthContext } from '../auth-routes.js';
+import { setupGlobalAuthContext } from '../global-auth-context.js';
 import type { HttpObservability } from '../observability/http-observability.js';
 import type { RuntimeConfig } from '../runtime-config-support.js';
 import type { UpstreamAuthServerMetadata } from '../oauth-proxy/index.js';

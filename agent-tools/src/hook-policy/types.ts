@@ -148,8 +148,10 @@ export interface RunPreToolUseContentGuardOptions {
 
 /**
  * Zod schema for the object arm of a blocked Bash-command policy entry: a
- * token-sequence `pattern` plus optional doctrine metadata surfaced in the deny
- * payload —
+ * `pattern` (matched as a token subsequence by default, or as a
+ * case-insensitive substring when `match: 'substring'` — needed for shapes
+ * that hide inside one quoted token, e.g. inline busy-loops) plus optional
+ * doctrine metadata surfaced in the deny payload —
  * - `citation` — the doctrinal anchor (the rule, principle, ADR, or PDR);
  * - `concept` — the pattern family the command is a fingerprint of (e.g.
  *   `history-destruction`), so the deny message frames a concept to reappraise;
@@ -169,10 +171,13 @@ export interface RunPreToolUseContentGuardOptions {
  */
 const BlockedPatternEntrySchema = z
   .object({
-    pattern: z.string(),
+    // min(1): an empty pattern would match every command (substring mode
+    // matches everything via includes('')), bricking the worktree.
+    pattern: z.string().min(1),
     citation: z.string().optional(),
     concept: z.string().optional(),
     reappraisal: z.string().optional(),
+    match: z.enum(['token-subsequence', 'substring']).optional(),
   })
   .readonly();
 

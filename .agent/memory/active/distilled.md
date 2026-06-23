@@ -14,169 +14,209 @@ fitness_rationale: >-
   envelope by substance rather than trimming the lesson.
 ---
 
-## Ready-Empty State (2026-06-05 baseline — Lanternlit Passing Mask curation)
+# Distilled Cross-Session Lessons
 
-Processed in the 2026-06-05 dedicated curation pass: the napkin's 2026-06-04/05
-window rotated through the
-[ledger](../operational/curator-passes/2026-06-05-lanternlit-passing-mask-curation.md);
-the felt-authority cluster below was consolidated from five verbose entries to one
-pointer (substance homed in pending-graduations + PDR-089 + rules); three new
-terse lessons merged. Future high-signal lessons may be added here when they need
-the distilled staging surface; fitness is a routing signal, not a reason to avoid
-capture.
+Refined cross-session lessons, conserved between napkin rotation and graduation to
+a permanent home. Each entry earns its place by being specific, actionable,
+non-obvious, and terse.
 
-## Deleting a "to be synthesised" holding pen — migrate-don't-drop (2026-06-08, Starless Prowling Veil)
+Entries below are staged cross-session lessons whose substance is conserved but
+whose final home is not yet fixed (a graduation candidate surfaced to the owner, or
+a single-instance technique awaiting a second instance). New napkin rotations append
+below.
 
-A "relocate to synthesise/supersede" holding pen silently absorbs adjacent-collection
-**live** intent, then its framing presents everything as disposable. Before deleting such
-a directory: verify per-file conservation, separating useful-forward intent from spent
-working-out whose conclusions are already homed elsewhere. **Migrate-don't-drop on any
-judgment call** — migration is cheap and reversible, deletion is the loss; restore live
-intent to its value-home (often origin), delete only the genuinely-spent. Second-order:
-deleting *part* of a coherent set orphans survivors' companion links — run a repo-wide ref
-sweep, not just the deleted paths. Agent/workflow verdicts are input-to-verify: a
-"deletion-safe" verdict correct in one frame can be wrong once the surrounding disposition
-changes (a restored plan's cited evidence must not be the file you delete). Routing:
-pattern-candidate in the harvest/disposition family; full instance in napkin 2026-06-08.
+## Parsing interleaved/parallel tool output: key by a stable prefix, cross-check sums
 
-## Felt-authority cluster — no derived-authority surface self-certifies
+When parsing stateful logs from a parallel/interleaved runner (e.g. `turbo` running
+tasks concurrently, with CR line-endings), "nearest-header" file attribution is unsafe:
+interleaving and CR endings can misattribute lines, producing phantom aggregates (a
+"307 warnings in one file" that was really a misparse — the workspace's true total was
+77). Cure: key the stateful parse by the **stable workspace/task prefix** the runner
+emits, and **cross-check** per-file sums against the gate's authoritative per-workspace
+totals as an independent checksum. Single-instance debugging tactic (2026-06-19, Siren
+mends Rudder); staged for a second instance to confirm the general shape before
+graduating to a pattern.
+Sibling: [`tool-output-framing-bias`](patterns/tool-output-framing-bias.md).
 
-The dominant recurring meta-theme (≥6 instances; owner reinforced ~4× in one
-session; strong subjective corroboration across the experience corpus). Authority
-comes only from grounding against the **primary source**; the stronger the
-felt-authority of a surface, the more the grounding reflex must resist being skipped.
+## An indiscriminate-rule warning count is a set of cause-classes, not N independent problems
 
-- **No derived-authority surface self-certifies**: a validated schema, a green
-  gate, a clean review, a polished synthesis, a co-equal peer's verdict, a
-  "confirmed in X" pre-stamp, or N convergent reviewers — none transfers
-  verification. Convergence is not proof; an empirical check beats agreement.
-- **Discrepancy/contradiction claims are the highest-risk relay class** — they
-  assert a defect, so ground both sides against the primary source before relaying.
-- **Critically assess a finding's inference, not just its facts** — correct facts
-  can support the opposite of the recommendation (most of all when the facts check
-  out and the proposal is the more elaborate shape).
-- **Calibration guard (against over-applying):** scale grounding effort to **what
-  the output drives** (a test assertion / schema field demands first-hand; a report
-  tolerates relayed-with-disclosed-tier), not a blanket re-verify-everything reflex.
-- **Convenience is a warning sign** — a claim that makes the hard thing easy or the
-  boundary tidy correlates with motivated construction; specificity is not
-  verification; constraint-strictness is not data volume.
+When a broad/indiscriminate lint or analysis rule reports a large count (e.g. ~1000
+no-throw warnings), the count is NOT N independent problems — it is a handful of
+cause-classes (code-type × cause × meta-cause). Lead with the holistic landscape, not
+piecemeal per-site next-steps; distrust per-site classifications (they proved unreliable —
+mislabels happen). The remediation reshape that follows is investigation-first (survey the
+cause-classes) rather than convert-all. Single-instance lesson (2026-06-19, Siren mends
+Rudder, no-throw remediation; the owner had to drag the landscape out before the reshape);
+staged for a second instance before graduating to a pattern. Sibling:
+[`tool-output-framing-bias`](patterns/tool-output-framing-bias.md) and the parsing-interleaved
+entry above (both: the shape of the aggregate misleads).
 
-Worked instances live in the 2026-06-05 napkin archive. Homed: pending-graduations
-top entry (`pdr:felt-authority-grounding-discipline`, owner-gated unification);
-PDR-089 §Decision 6 (corrections-have-no-immunity-gradient + review-count-is-not-coverage);
-rules `verify-dont-trust`; auto-memory `validate-specialist-findings-before-acting`,
-`ground-convenient-claims`. **Unified 2026-06-05 → PDR-089 §Decision 7** (the
-governance home for the whole family; this entry is the terse staging pointer to it).
+## Decision locus: product strategy is the owner's; engineering/architecture is collaborative
 
-## A status/pointer surface is not ground truth — recompute against the live source
+Calibrated by the owner across the strategy sessions (2026-06-20). Two loci, distinct:
+**product-level** strategy (diagnosis / how-we-win / measures / feature shaping) is the
+owner's — input and questions stay valuable, but I do not decide; **engineering strategy /
+architecture / technical approach** is **collaborative, case-by-case** — propose, reason,
+push for long-term excellence, never go passive. The failure mode **oscillates**:
+over-claim (deciding product strategy from partial grounding) ↔ over-suppress (marking
+owner-owned substance "deferred" and doing zero analysis — abdication, not deference). The
+stable point is neither pole: it is the **read-gate** (gate every substantive claim on
+"have I read the source this rests on?") plus **locus-awareness**, never silence. Source:
+2026-06-20 (Kayak seeks Coral, owner re-calibration). Refines `user-collaboration.md`
+§Risk-and-Decisions; sibling: [[passive-guidance-loses-to-artefact-gravity]],
+[[feedback_ground_convenient_claims]].
 
-Thread records, frictions registers, plan statuses, register markers: each is a
-pointer, not the fact. Before acting on a status, recompute against the current
-code/data/state. (Frictions register stamped "addressed-in-working-tree" with a
-never-completed "replace with SHA" trigger would read "fixed" for things that may
-never have committed; the live `comms append --help` / option sets decided what was
-real.) Sibling of validate-specialist-findings on a state-surface.
+## Knowledge surfaces are curated suggestions to a judging agent, not control-flow
 
-## Reviewer-brief scope protection cites NUMBERED ratified decisions only
+A skill, register, or routing pointer is read by a judging agent that decides what serves the
+moment — it is guidance, not a branch the system must execute. So a skill suggesting another
+skill carries no loop/cycle risk, and a reviewer's *lens* (the frame it judges from) matters
+as much as its facts. Applied 2026-06-22 framing onboard-me Branch F's primer hand-off as
+"a suggestion to your judgement, not a gate". Graduation candidate: PDR clause or pattern.
+Source: prior-session owner correction, promoted from the per-user buffer.
 
-"Decided scope protected" in a reviewer brief cites the numbered ratified
-decisions only — plan elaborations stay refutable. Sweeping §Do elaborations into
-"protected" suppressed a legitimate PDR-058 no-consumer finding the owner then
-surfaced. Routing: pending-graduations (clause in `invoke-code-experts` /
-brief-authoring rule); trigger-gated on a second instance or the next brief pass.
+## Preserve the value-rationale (why-it-matters) at handoff, not only the what and how
 
-## Split a candidate category before naming when it lumps a standard with a presentation concern
+A plan's user stories carry *why it matters* — the most easily lost and most valuable layer.
+At completion and handoff, analyse each served story's disposition and conserve its *why*
+into the permanent home (skill description/body, ADR/PDR Context, README purpose lines), not
+only the *what* (acceptance met) and *how* (mechanism). Partially homed in PDR-011 (grounded
+execution knowledge) and the consolidate/handoff value-rationale step; this is the sharper
+standalone formulation. Source: prior-session owner correction, promoted from the per-user
+buffer.
 
-Classifying `oak-brand` + `oak-tone-of-voice` as one "org-voice" category would
-have swept Oak's pedagogical/factual-rigour standards (evidence, provenance,
-caveats) into branding. Rigour standards travel INSIDE capabilities; branding is a
-capability in its own right. Routing: fold into the taxonomy plan's audit step at
-promotion, then delete here.
+## verify-dont-trust fires at the moment of READING, not only the moment of asserting
 
-## Curation enforcement and verifier lessons
+Three sibling read-moment failures, one window: (a) a windowed (offset+limit) read is not
+knowledge of a file's whole state — never assert a whole-file property (size, line count, "all
+captured") from a partial read; run the cheap probe (`wc -l`, the fitness report) first. (b)
+Before running any generator/codegen/build script to DIAGNOSE, read the script — a `clean`/
+`rm -rf` prelude on a command that may crash deletes tracked artefacts (a diagnostic
+`sdk-codegen` deleted ~100 tracked files this way). (c) A subagent AGREEING with your prior is
+not verification — you likely share training priors, so concord is two echoes; only the primary
+source, read first-hand, breaks the loop. Source 2026-06-22 (Orbit, Candle, Petrel). Siblings:
+[[verify-dont-trust]], [[feedback_first_hand_means_me_not_subagents]].
 
-- **During live parallel curation, verify named surfaces immediately before quoting
-  or editing them.** Between-turn drift is normal; cheap proof is `git status` plus
-  targeted greps/reads before citing state.
-- **A green verifier with no extraction count proves nothing.** Shell loops
-  (especially zsh over multiline variables) false-green by checking no inputs;
-  verifiers that enumerate files/links must report the count before their result is
-  trusted.
-- **Literal private-use characters in scripts are unsafe capture material.** When a
-  script needs PUA sentinels, write them as escape sequences (a backslash, the
-  letter u, then the four hex digits), never literal bytes; literal PUA text was
-  stripped once by an editing tool and made a regex match everywhere.
+## A committed/stated mechanism is not a running mechanism — actuate in the same breath
 
-## Value-first; existing artefacts are malleable design surface
+"I'll watch X" / "I'll run the gate" / "the loop will close" arms nothing; a documented intent is
+inert until actuated. When you commit to running a mechanism, arm the actual mechanism in the
+same action — never let the STATEMENT stand in for the running process, never defer actuation to
+a future turn. Source 2026-06-21 (Cutter). Siblings:
+[[feedback_run_the_thing_dont_flag_the_gap]], [[feedback_proof_vs_delivery_trace_bridge]].
 
-When we control the stack, the fixed points are the value constraints + our design
-agency — NOT existing code, current/generated data shape, consumer count, or even
-owner-ratified decisions. Start each decision from "what value must this deliver,
-and what do we control?"; reshape on frame-overturn, never bolt-on. Homed: auto-memory
-`feedback_value_first_existing_is_malleable`; PDR/rule candidate if it recurs
-cross-platform. Connects to LTAE, premature-crystallization, existence-is-not-correctness.
+## A policy/content hook firing while you author a design artefact names a concept, not a token
 
-## Commit-window discipline under live parallel agents
+When a content/policy hook fires while authoring a schema, contract, or doctrine, the matched
+token is a coordinate — before judging it an over-match, ask whether the artefact embodies the
+policed concept ANYWHERE, not only at the firing point; the cure is often structural, not a
+lexical patch. Relatedly, a gate that blocks a commit may be telling you the blocked thing is
+itself the defect — understand the block before bypassing; the clean fix can be removing what is
+blocked, not skipping the gate. Source 2026-06-21/22 (Cutter, Petrel). Sibling:
+[[feedback_hook_failures_are_questions]].
 
-- **The commit window is a moving target; re-derive the staged set per chunk, not
-  per pass.** Each chunk's pathspec comes from a FRESH `git status`; explicit-pathspec
-  staging + per-chunk re-derivation carried 6+ agents on one branch with zero
-  collisions. Corollaries: (1) say "*I* haven't committed," never "*nothing* is
-  committed" — scope the claim to your own actions; (2) `git commit -F msg -- <files>`
-  commits exactly your bundle; (3) the `cannot lock ref 'HEAD'` ref-lock is the final
-  collision backstop — re-derive and re-commit, never delete the lock.
-- **Verify content conservation by set-membership, not by edit-base.** On a shared
-  on-disk tree a peer may commit your working files mid-session; the question is not
-  "was my base stale?" but "was any content LOST?" — answered by checking every
-  source line is present across working-tree ∪ archives, not by diffing bases.
-- Rule/PDR graduation stays owner-gated (pending-grad commit-window items 15/40);
-  this is the interim cross-session home.
+## To author a host-free portable artefact, choose an author that has never seen the host
 
-## A fired trigger is not "graduate standalone now"
+The strongest guard for an artefact whose value depends on containing NO host concepts is not
+reviewing the output for leak — it is a Practice-naive author that CANNOT leak what it has never
+seen (the defect is dissolved at source). Caveat: a sub-agent launched from inside the repo
+auto-loads CLAUDE.md → all Practice rules and is contaminated before it writes — the clean room
+needs no repo context (a separate chat/checkout). Candidate pattern, one instance (2026-06-22
+Orbit, the working-with-agentic-ai primer). Sibling:
+[[feedback_ask_would_this_be_simpler_if_the_system_changed]].
 
-When a pending-graduation's trigger fires, the next check is WHERE its permanent home
-lives. If that home (an ADR, contract, doc section) is owned by an active mid-flight
-thread, authoring a standalone artefact collides/duplicates — defer to the owning
-thread. Pairs with the full-doctrine-estate non-duplication check (survey the plan
-estate, not just the register, before authoring). Sibling of `respect-active-agent-claims`.
+## Actuate a large valuable document with a thin firing skill, not by making the doc a skill
 
-## markdown wrapped-line list-marker trap
+To make a big reference (a ~1,400-line grammar of thinking) fire for agents, do NOT ship the
+document as a skill — that is passive guidance with a slash command, which artefact-gravity
+predicts will not fire. Cure: a thin, task-triggered skill carrying a small killer subset of
+firing QUESTIONS plus an impact test (the pass must change a framing/decision), pointing to the
+full document as a deep reference. Same canonical-body/thin-adapter seam as the orientation
+primer and oak-reason — firing surface small, depth behind it. Candidate pattern, 2+ instances
+(2026-06-22 Orbit). Sibling: [[passive-guidance-loses-to-artefact-gravity]].
 
-A wrapped prose line that begins with a list marker (`+`, `-`, `*` then a space)
-trips MD004/MD032 — markdownlint reads it as a nested list item. Never let a marker
-char start a wrapped line; reword, rewrap, or use commas.
+## Evaluation discipline: judge a capability by its KIND's criterion; doubt is a possession too
 
-## An IDE diagnostic flood is not automatically a repo warning
+When evaluating a capability, first NAME ITS KIND (tool you invoke / tripwire that must auto-fire
+/ rule / reference) and apply that kind's success criterion — judging an invocable tool by "does
+it fire unprompted" (a tripwire's bar) is a category error. And identity-capture cuts both ways:
+guard against over-defending a position because it is YOURS — equally when you built the thing
+and when you are its loudest critic, name the falsifier out loud either way. Source 2026-06-22
+(Orbit, evaluating oak-reason). Sibling: [[feedback_ground_convenient_claims]].
 
-Before treating an editor diagnostic flood as a no-warning-toleration obligation,
-verify the tool is a repo-influenced gate. ~30 cSpell diagnostics on legitimate
-domain terms came from the editor extension's default dictionary (no repo cspell
-config, none in the gate scripts) — local noise, not a repo warning.
-never-ignore-signals means investigate the signal; no-warning-toleration scopes to
-systems the repo influences.
+## When external research flatters the repo, the value is in the divergence
 
-## Crosswalk two drifted docs before reconciling — semantics vs intent
+When authoritative external research agrees with what you built, the agreement is the LEAST
+informative output — it is convenient-claim comfort. Spend the effort on the divergence: where
+the Practice is genuinely ahead, and (more important) the gaps the research names that the repo
+has not closed. State the gaps as plainly as the wins. Source 2026-06-21 (Cutter, DORA-2025
+comparison). Sibling: [[feedback_ground_convenient_claims]].
 
-When two documents appear to conflict (older brief vs ratified plan), crosswalk
-clause-by-clause first: separate shared-intent-in-different-words, genuine
-divergence, and orthogonal-only-looks-like-conflict. Reconcile surgically (banner +
-targeted supersession notes); never bulk-rewrite — that deletes still-valid and
-orthogonal content. 2026-06-05 EEF: R1/R4/R5/R7/R8 shared, R2/R3 superseded, §5
-ontology-crosswalk orthogonal. Sibling of validate-specialist-findings.
+## Reversing a decision recorded in several places needs a whole-document sweep
 
-## A piped command's reported exit is the pipe's, not the command's
+When you drop or reverse a decision a document records in multiple places, editing only the
+primary section leaves stale references elsewhere that now contradict the update — a
+self-contradicting artefact. After reversing a recorded decision, grep the WHOLE document for the
+old framing/term before treating the reversal as landed (an under-actuation facet — an edit that
+stops short of completeness). Source 2026-06-22 (Orbit).
+Sibling: [[no-tombstones-for-removed-ideas]].
 
-`cmd 2>&1 | tail` (and background-task wrappers over it) report the LAST pipeline
-stage's exit, masking a non-zero `cmd`. A full `pnpm check` once reported "exit 0"
-while it had actually failed. Read the captured output for the real gate verdict, or
-use `PIPESTATUS`/avoid the pipe, before trusting green.
+## A live peer's agent_name assigned to your fresh session is a collision to surface, not adopt
 
-## An uncapped workflow `findings[]` array runs a StructuredOutput agent away
+Identity is name+UUID, but the team's coordination surfaces (comms-seen file, claims registry,
+statusline wing-detection) key on agent_name, NOT the UUID — so two live sessions sharing a name
+corrupt the seen-cursor, claim attribution, and wing-detection. When an owner-assigned name
+matches a LIVE registry/comms identity, STOP and surface before registering; take a distinct
+identity. Candidate rotating-cast name-collision doctrine, one instance (2026-06-21 Aardvark).
+Sibling: [[feedback_agent_identity_name_plus_uuid]].
 
-A workflow `agent({schema})` whose array field is unbounded can exceed the
-tool-call size limit on emit, so the subagent fails schema validation and retries
-many times (one observed run made 45 attempts), succeeding only by collapsing to a
-single item and silently dropping the rest. Cap the array (top-N), keep per-finding
-fields terse, or paginate. Same family as the piped-exit gotcha above: a captured or
-emitted result is trustworthy only when its shape was bounded by construction.
+## Operational gotchas: conflict resolution, merge headers, harness shell, new validators
+
+- Resolve a take-ours merge conflict by a FORWARD write (`git show HEAD:<path> > <path>` or
+  Write), never `git checkout --ours` (blocked by the worktree-destruction guard, correctly); a
+  custom `Merge origin/...` header fails commitlint (only `Merge branch …` / `… into …` are
+  auto-ignored) — use a conventional `chore:` header. Verify a conflict's content subsumption
+  before resolving — "take ours" may lose nothing if local already migrated the other side.
+- Harness shell: cwd persists between Bash calls (stay at repo root); zsh does not expand a glob
+  held in a variable (inline it); long `--body` strings with em-dashes hit exit 2 (use
+  `--body-file`).
+- A new `agent-tools/src/validators/<x>.ts` MUST be registered as a knip entry point in
+  `knip.config.ts` (and avoid unused exported types) or full-tree knip goes RED and blocks
+  repo-wide commits. Source 2026-06-21/22 (Oyster, Cosmos, Cutter). Siblings:
+  [[hook-policy-substring-discipline]], the oak-complex-merge skill.
+- **Lead with the essence; let the reader pull depth — progressive disclosure, not a wall of text
+  (and not a menu).** Open with the headline / the one-to-three things that matter, offer the next
+  layer in one natural sentence, expand only what they pull. Both failure bounds are real: don't tease
+  (the first beat must actually answer them), and don't turn disclosure into a menu (no numbered
+  branches, no per-paragraph "want more?"). Behavioural gates cannot see delivery quality — only a real
+  run (the owner walk) caught the orientation lens (and the agent's own answers) defaulting to walls of
+  text. Source 2026-06-23 (Zenith, orientation-lens); encoded in the `explain` skill §Delivery grain.
+  Siblings: [[present-verdicts-not-menus]].
+
+## A scanner finding's disposition is decided by the lenses, not precedent; fix-vs-dismiss is rarely an owner-fork
+
+When a static-analysis finding (CodeQL / Sonar) arrives, its disposition resolves to FIX (defect
+genuinely present) or FALSE_POSITIVE/SAFE (defect genuinely absent, verified first-hand) per
+`sonar-disposition-policy.md`. Two traps caught in one session: (a) **precedent is not correctness** —
+N prior dismissals of a rule do NOT make THIS site a false-positive (a 12×-dismissed
+`incomplete-sanitization` rule still flagged a real backslash-escaping bug here; the fix was genuine).
+(b) **A lens-resolvable disposition is not an owner-decision** — framing "fix vs harden vs dismiss" as an
+owner-fork when the decision lenses (LTAE first) decisively resolve it is analysis-passback; the lenses'
+own gate escalates to the owner only when all five fail or it is product/feature scope. The "harden"
+arm of one alleged fork was already implemented in the code I'd read. The outward-facing ACT of marking
+a dismissal still needs owner authorisation; the disposition *determination* does not. Source 2026-06-23
+(Galleon binds Seabed, PR 213 — 14 findings → 7 genuine fixes + 7 merit-grounded false-positives).
+Siblings: [[feedback_existence_is_not_correctness_default_replace]], [[feedback_no_responsibility_passback]],
+[[feedback_forced_verdict_resting_on_my_interpretation_is_a_question]].
+
+## To verify "is X guarded," trace EVERY layer; a black-box re-run can false-pass
+
+When verifying whether a behaviour (esp. a security check) is enforced, trace EVERY layer — the check
+may not live in the obviously-named middleware. Oak's authed `/mcp` Host validation is in the auth layer
+(`getPRMUrl`), NOT the `dnsRebindingProtection` middleware (landing-page-only); tracing only the named
+middleware wrongly concluded `/mcp` was unguarded. And re-running conformance against the auth build would
+have false-passed (auth 401s the probe regardless of Host) — source was the decisive layer. Symmetric
+skepticism: verify a subagent's *correction of your own finding* first-hand too, and check downstream
+subagents haven't inherited your error (a docs-adr draft had). Refines the evidence-discipline /
+verify-dont-trust line. Source 2026-06-23 (Magnolia, MCPJam host-header settle; ADR-122/158).
+Siblings: [[verify-dont-trust]].

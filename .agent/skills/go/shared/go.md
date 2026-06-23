@@ -30,13 +30,12 @@ Then read the live state surfaces in authority order:
    status).
 2. `.agent/memory/operational/threads/<thread>.next-session.md` — the relevant thread
    next-session record (identity + landing target + lane state — read its `Lane state`
-   section for current state, blockers, promotion watchlist; workstream surface retired
-   2026-04-21 Session 5).
-3. `.agent/memory/operational/tracks/<thread>--<agent>--<branch>.md` — the current
-   tactical track card, if one exists.
+   section for current state, blockers, promotion watchlist).
 
-See [`.agent/memory/operational/README.md`](../../../memory/operational/README.md) and
-[`.agent/memory/operational/tracks/README.md`](../../../memory/operational/tracks/README.md) for the authority
+Tactical coordination state lives in the harness task-list, the napkin, and
+active claims/comms.
+
+See [`.agent/memory/operational/README.md`](../../../memory/operational/README.md) for the authority
 order and contracts. Operational memory is the sole continuity-state host;
 general session entry is `start-right-quick`, not a prompt.
 

@@ -7,8 +7,8 @@ import { z } from 'zod';
 import type { ApiHttpMethod, ValidPath } from '../path-parameters.js';
 
 export const REQUEST_PARAMETER_SCHEMAS = {
-  "GET:/sequences/:slug": z.object({
-    "slug": z.string(),
+  "GET:/sequences/:sequence": z.object({
+    "sequence": z.string(),
   }),
   "GET:/sequences/:sequence/units": z.object({
     "sequence": z.string(),
@@ -44,10 +44,10 @@ export const REQUEST_PARAMETER_SCHEMAS = {
     "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]),
   }),
   "GET:/subjects/:subject/key-stages": z.object({
-    "subject": z.string(),
+    "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]),
   }),
   "GET:/subjects/:subject/years": z.object({
-    "subject": z.string(),
+    "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]),
   }),
   "GET:/key-stages": z.object({}),
   "GET:/key-stages/:keyStage/subject/:subject/lessons": z.object({

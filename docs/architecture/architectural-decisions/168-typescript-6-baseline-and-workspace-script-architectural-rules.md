@@ -11,10 +11,10 @@ amended 2026-05-31 to record the dissolution of `agent-tools/scripts/` — the
 [ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) —
 surprise pipeline; this ADR is the enforcement-layer landing for two
 surprises captured in
-[`napkin.md` §"2026-04-29 — TS6 migration myopia"](../../../.agent/memory/active/napkin.md):
+`napkin.md` §"2026-04-29 — TS6 migration myopia":
 the workspace-to-root-script architectural smell and the cwd-trap that
 would have applied to any vendor `ignoreCommand` shape;
-[`.agent/plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md`](../../../.agent/plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md) —
+`.agent/plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md` —
 the executable plan whose closure this ADR records;
 [`apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/`](../../../apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/) —
 canonical reference instance of the dedicated no-compile-no-deps
@@ -285,7 +285,7 @@ non-trivial.
   shape as the workspace-to-root-script ban but for **configs**,
   not **scripts**. Whether configs are subject to the same ban is
   an open question; this ADR does not resolve it. A separate plan
-  ([`config-architecture-standardisation-plan.md`](../../../.agent/plans/architecture-and-infrastructure/current/config-architecture-standardisation-plan.md))
+  (`config-architecture-standardisation-plan.md`)
   carries it.
 - **`oak-eslint` build pattern**: this commit aligned `oak-eslint`
   to the repo-wide `tsup && tsc --emitDeclarationOnly --project
@@ -347,12 +347,10 @@ tsconfig.build.json` pattern. The choice of `tsup` for JS emit
 
   This ADR is the closing commit of the arc (the six-commit shape).
   The executable plan
-  [`archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md`][ts6-plan]
+  `archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md`
   has been archived to `archive/completed/` alongside this ADR's
   authoring (see ADR-117's plan-lifecycle convention) — the work is
   complete and durable doctrine now lives in this ADR.
-
-[ts6-plan]: ../../../.agent/plans/architecture-and-infrastructure/archive/completed/typescript-6-migration-and-workspace-script-rules.plan.md
 
 - **2026-05-29** — added Rule 5 (the test/unit-check-surface boundary). Two
   agents in one team session independently misread the deliberate exclusion of

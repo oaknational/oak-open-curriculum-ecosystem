@@ -24,6 +24,7 @@
 
 import { describe, expect, it } from 'vitest';
 
+import { ok } from '@oaknational/result';
 import { isLessThanOrEqual, isValidSemver } from '../src/semver.js';
 
 // --- Inline copies of vercel-ignore-production-non-release-build.mjs helpers ---
@@ -203,7 +204,7 @@ describe('semver parity (canonical npm-backed vs inline regex copies)', () => {
 
   describe('isLessThanOrEqual', () => {
     it.each(COMPARISON_FIXTURE)('agrees on "$a" ≤ "$b"', ({ a, b, aLeqB }) => {
-      expect(isLessThanOrEqual(a, b)).toBe(aLeqB);
+      expect(isLessThanOrEqual(a, b)).toEqual(ok(aLeqB));
       expect(inlineIsLessThanOrEqual(a, b)).toBe(aLeqB);
     });
   });

@@ -4,6 +4,7 @@ import {
   toToolDescription,
   appendPrerequisiteGuidance,
   appendToolEnhancements,
+  normaliseUpstreamDescription,
 } from './tool-description.js';
 
 /**
@@ -155,9 +156,12 @@ describe('toToolDescription', () => {
           "This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. This endpoint contains licence information for any third-party content contained in the lesson's downloadable resources.",
       };
       const result = toToolDescription(operation);
-      expect(result).toContain('Downloadable lesson assets\n\n');
-      expect(result).toContain('This tool returns the types');
-      expect(result).toContain('This tool contains licence information');
+      expect(result).toBe(
+        'Downloadable lesson assets\n\n' +
+          'This tool returns the types of available assets for a given lesson, and the ' +
+          'download endpoints for each. This tool contains licence information for any ' +
+          "third-party content contained in the lesson's downloadable resources.",
+      );
     });
   });
 });
@@ -250,5 +254,66 @@ describe('appendToolEnhancements', () => {
 
       expect(result).toBe('Base description');
     });
+  });
+
+  describe('keywords tool disambiguation (G4b)', () => {
+    it('appends the when-to-prefer note for get-keywords, naming the graph sibling', () => {
+      const result = appendToolEnhancements('Base description', 'get-keywords');
+
+      expect(result).toContain('Base description');
+      expect(result).toContain('get-keyword-graph');
+      expect(result).toContain('LIVE');
+      expect(result).toContain('snapshot');
+    });
+  });
+
+  describe('large-payload scoping hints', () => {
+    it('composes a large-payload narrowing hint onto the asset note for get-sequences-assets', () => {
+      const result = appendToolEnhancements('Base description', 'get-sequences-assets');
+
+      // Compose, do not replace: the existing asset-download guidance survives.
+      expect(result).toContain('oakUrl');
+      // ...and the large-payload hint names this tool's real narrowing (year / type).
+      expect(result).toContain('large payload at broad scope');
+      expect(result).toContain('`year`');
+      expect(result).toContain('`type`');
+    });
+
+    it('composes a large-payload narrowing hint onto the asset note for get-key-stages-subject-assets', () => {
+      const result = appendToolEnhancements('Base description', 'get-key-stages-subject-assets');
+
+      expect(result).toContain('oakUrl');
+      expect(result).toContain('large payload at broad scope');
+      // This tool narrows by unit and/or type, not year.
+      expect(result).toContain('`unit`');
+      expect(result).toContain('`type`');
+    });
+
+    it('does not add a large-payload hint to the bounded single-lesson asset tool', () => {
+      const result = appendToolEnhancements('Base description', 'get-lessons-assets');
+
+      // get-lessons-assets returns one lesson's assets — bounded; keeps only the asset note.
+      expect(result).toContain('oakUrl');
+      expect(result).not.toContain('large payload at broad scope');
+    });
+  });
+});
+
+/**
+ * Unit tests for normaliseUpstreamDescription pure function.
+ *
+ * Proves: the transform the tool-description pipeline applies to raw
+ * upstream descriptions — "This endpoint" rewritten to "This tool"
+ * (case-preserving) and whitespace runs collapsed to single spaces.
+ */
+describe('normaliseUpstreamDescription', () => {
+  it('rewrites "This endpoint" to "This tool" preserving case', () => {
+    expect(normaliseUpstreamDescription('This endpoint returns data. Use this endpoint.')).toBe(
+      'This tool returns data. Use this tool.',
+    );
+  });
+
+  it('collapses whitespace runs and trims', () => {
+    expect(normaliseUpstreamDescription('  Multi   space\n\ttext  ')).toBe('Multi space text');
   });
 });

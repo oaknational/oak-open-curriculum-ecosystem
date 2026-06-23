@@ -18,6 +18,7 @@
  */
 
 import { lte as semverLte, parse as semverParse } from 'semver';
+import { ok, err, type Result } from '@oaknational/result';
 
 /**
  * Strict semver §2 / §9 / §10 pattern.
@@ -103,24 +104,34 @@ export function parseSemver(version: string): ParsedSemver | null {
 }
 
 /**
+ * Error returned by {@link isLessThanOrEqual} when an input string is not
+ * strict-semver-valid. Carries the offending value for diagnostics.
+ */
+export interface InvalidSemverError {
+  readonly type: 'invalid-semver';
+  readonly value: string;
+}
+
+/**
  * Compare two semver strings per §11 precedence.
  *
- * @returns `true` if `a` ≤ `b` in semver order, `false` otherwise.
- * @throws If either input is not strict-semver-valid.
+ * @returns `ok(true)` if `a` ≤ `b` in semver order, `ok(false)` otherwise; or
+ * `err(InvalidSemverError)` if either input is not strict-semver-valid. Errors
+ * flow through the Result type (ADR-088 / use-result-pattern), keeping the
+ * failure mode in the type signature rather than as an invisible throw.
  *
  * @example
- * isLessThanOrEqual('1.0.0', '1.0.1');         // true
- * isLessThanOrEqual('1.2.0', '1.10.0');        // true
- * isLessThanOrEqual('1.0.0-alpha', '1.0.0');   // true (prerelease lower than release)
- * isLessThanOrEqual('1.0.0-alpha.1', '1.0.0-alpha.beta'); // true (numeric lower than alphanumeric)
+ * isLessThanOrEqual('1.0.0', '1.0.1'); // ok(true)
+ * isLessThanOrEqual('1.0.1', '1.0.0'); // ok(false)
+ * isLessThanOrEqual('bad', '1.0.0');   // err(\{ type: 'invalid-semver', value: 'bad' \})
  */
-export function isLessThanOrEqual(a: string, b: string): boolean {
+export function isLessThanOrEqual(a: string, b: string): Result<boolean, InvalidSemverError> {
   if (!isValidSemver(a)) {
-    throw new Error(`Invalid semver: ${a}`);
+    return err({ type: 'invalid-semver', value: a });
   }
   if (!isValidSemver(b)) {
-    throw new Error(`Invalid semver: ${b}`);
+    return err({ type: 'invalid-semver', value: b });
   }
 
-  return semverLte(a, b);
+  return ok(semverLte(a, b));
 }

@@ -23,14 +23,40 @@ prompts below are domain-specific handover briefs for focused work.
 
 | Prompt | Type | Purpose | Primary plan/reference |
 |---|---|---|---|
+| [agentic-engineering/comms-corpus-research-session.prompt.md](agentic-engineering/comms-corpus-research-session.prompt.md) | handover | **Comms-corpus research session entry point** (owner-prioritised 2026-06-12): blind-pass reading order, three research lenses (failures / what worked / steerable emergent behaviour), solo entry ritual, not-rushed conduct contract | [comms-corpus-research-and-rotation-strategy.plan.md](../plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md) |
+| [agentic-engineering/team-session-opener.prompt.md](agentic-engineering/team-session-opener.prompt.md) | template | **Generalised team-session opener** — instantiate per team (`<team>-<date>.prompt.md`): entry ritual with single-identity check and PDR-063 pickup contract, per-seat worktrees + coordination-home convention, branching strategy, seat briefs, cadence, Director-serialised merges. Generalised 2026-06-12 from the graph-implementation-team opener (first worked instance) | Instances below; convention source [start-right-team](../skills/start-right-team/SKILL-CANONICAL.md) |
+| [agentic-engineering/naming-and-snagging-team-2026-06-11.prompt.md](agentic-engineering/naming-and-snagging-team-2026-06-11.prompt.md) | handover | Instance of the template for the 2026-06-11/12 handover team (naming + snagging successor seats under one Director); arc completed 2026-06-12 — retained as the template's first instantiation record | [oak-prod-mcp-snagging-2026-06-11.plan.md](../plans/sdk-and-mcp-enhancements/current/oak-prod-mcp-snagging-2026-06-11.plan.md) |
+| [connecting-oak-resources/graph-implementation-team.prompt.md](connecting-oak-resources/graph-implementation-team.prompt.md) | handover | Team session opener for the graph-tools implementation phase: Director (Fable 5) + Opus implementers in per-session git worktrees, coordination-home convention, seat briefs, merge choreography. Structure generalised into the team-session-opener template above | [graph-tools-value-redesign.plan.md](../plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md) |
 | [agentic-engineering/governance-planes-research-and-reporting.prompt.md](agentic-engineering/governance-planes-research-and-reporting.prompt.md) | handover | Session-entry prompt for turning the governance-planes seed note into deeper research, sharper local analysis, and promoted reporting | [governance-planes-and-supervision/README.md](../research/agentic-engineering/governance-planes-and-supervision/README.md), [governance-concepts-and-agentic-mechanism-integration.plan.md](../plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md), [governance-concepts-and-integration-report.md](../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md) |
 | [gt-review.md](gt-review.md) | handover | Ground-truth evaluation session prompt for exhaustive review against both MCP tools and bulk data | [ground-truth-review-checklist.md](../plans/semantic-search/archive/completed/ground-truth-review-checklist.md), [ground-truth-session-template.md](../plans/semantic-search/templates/ground-truth-session-template.md) |
 | [semantic-search/semantic-search.prompt.md](semantic-search/semantic-search.prompt.md) | handover | Primary semantic-search session entry point — dormant, all plans archived | [active/README.md](../plans/semantic-search/active/README.md) |
 | [semantic-search/approaches-to-knowledge.prompt.md](semantic-search/approaches-to-knowledge.prompt.md) | handover | Research prompt exploring MCP, hybrid search, knowledge graphs, and atomic concepts as a unified quality system | Research-phase exploration; no single canonical execution plan |
 | [architecture-and-infrastructure/sentry-otel-foundation.prompt.md](architecture-and-infrastructure/sentry-otel-foundation.prompt.md) | handover | Sentry + OTel observability foundation session entry point | [sentry-otel-integration.execution.plan.md](../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) |
+| [strategy-and-plan-estate/strategy-and-vision-refinement.prompt.md](strategy-and-plan-estate/strategy-and-vision-refinement.prompt.md) | handover | **Strategy & vision refinement session**: refactor the strategy corpus to README-index + detail files, settle the deferred decisions (diagnosis + granularity first), per-stream substance + editorial-voice pass, and re-review the vision per its tripwires (flag major upstream needs, never suppress). Supersedes `define-strategy-content.prompt.md` | [vision-strategy-and-plan-estate.plan.md](../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md) |
 
 Complementary execution cadence: use the [`go` skill](../skills/go/SKILL-CANONICAL.md)
 and its [shared GO workflow](../skills/go/shared/go.md).
+
+## Generalising the team opener as a template
+
+The
+[graph-implementation-team opener](connecting-oak-resources/graph-implementation-team.prompt.md)
+is the worked model for future team-session openers (owner-directed 2026-06-11). The portable
+elements any derived opener must carry:
+
+- **Topology**: one Director (coordination home = the primary checkout on a long-lived
+  `docs/<team>-<date>` branch; sole writer of `.agent/state` + `.agent/memory`) + implementers
+  in per-seat git worktrees shipping pure-diff PRs off `origin/main`.
+- **Branching strategy**: the opener's §Branching strategy section verbatim — three branch
+  classes (feature / coordination home / home⇇main merges), forward-only merges into the home
+  on the two named triggers, main-authoritative conflict resolution for source and generated
+  files, drift baselines against `origin/main`.
+- **Entry ritual**: per-seat start-right skill, PDR-027 identity registration on the owning
+  thread, seat-brief reading, handoff-record reading for seat continuations.
+- **Choreography**: PDR-063 mid-cycle handoffs, PDR-064 two-moments coordinator transfers,
+  two-condition rotation triggers, Director-serialised merges with both evidence loops.
+- **Per-team content** (rewritten each time): plan authority, seat briefs and owned surfaces,
+  sequencing gates, known costs.
 
 ## Retained Completed Prompts
 

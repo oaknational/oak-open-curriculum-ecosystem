@@ -4,7 +4,11 @@ import { createApp } from '../src/application.js';
 import type { RuntimeConfig } from '../src/runtime-config.js';
 import { createFakeHttpObservability } from '../src/test-helpers/observability-fakes.js';
 import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
-import { createNoOpClerkMiddleware, createNoOpRateLimiterFactory } from './helpers/test-config.js';
+import {
+  createNoOpClerkMiddleware,
+  createNoOpRateLimiterFactory,
+  createUnauthenticatedMcpAuthClerkDeps,
+} from './helpers/test-config.js';
 
 const mockRuntimeConfig: RuntimeConfig = {
   env: {
@@ -21,6 +25,7 @@ const mockRuntimeConfig: RuntimeConfig = {
   dangerouslyDisableAuth: false,
   useStubTools: false,
   eefEnabled: false,
+  userSearchEnabled: false,
   version: '0.0.0-test',
   versionSource: 'APP_VERSION_OVERRIDE',
   vercelHostnames: [],
@@ -34,6 +39,7 @@ async function createTestApp() {
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
+    mcpAuthClerkDeps: createUnauthenticatedMcpAuthClerkDeps(),
     rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 }

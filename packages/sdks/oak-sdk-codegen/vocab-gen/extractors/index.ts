@@ -7,7 +7,14 @@
  * and return extracted vocabulary with metadata.
  */
 
-export { extractKeywords, normaliseKeyword, type ExtractedKeyword } from './keyword-extractor.js';
+// Keyword extraction is consolidated to the canonical src/bulk copy (G4b-c1):
+// the vocab-gen pipeline and the src/bulk generators share ONE extractor.
+export {
+  extractKeywords,
+  normaliseKeyword,
+  type ExtractedKeyword,
+} from '../../src/bulk/extractors/keyword-extractor.js';
+export { extractLessons, type ExtractedLesson } from './lesson-extractor.js';
 export { extractMisconceptions, type ExtractedMisconception } from './misconception-extractor.js';
 export {
   extractPriorKnowledge,

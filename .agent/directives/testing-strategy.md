@@ -24,12 +24,9 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/e
 Mutation testing (Stryker) is **meta-quality** — it audits the test surface,
 not the product, and is the constraint that makes coverage meaningful (a test
 that executes code without checking behaviour scores the same as one that
-describes it). Rollout sequencing: [mutation-testing plan][mutation-plan].
-Formal home: forthcoming `validation-strategy.md` per [doctrine restructure
-plan][doctrine-plan].
-
-[mutation-plan]: ../plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md
-[doctrine-plan]: ../plans/agentic-engineering-enhancements/current/validation-and-tdd-doctrine-restructure.plan.md
+describes it). Rollout sequencing: mutation-testing plan.
+Formal home: [`validation-strategy.md`](validation-strategy.md) (seeded
+2026-06-23) per doctrine restructure plan.
 
 ## Philosophy
 
@@ -74,6 +71,14 @@ plan][doctrine-plan].
 - **Assert effects, not constants** - Test observable product
   behaviour through the interface, not the value of internal
   constants or configuration collections.
+- **Test the feature-flag engine, not the configuration** - Test
+  the flag resolution mechanism (opt-in, kill-switch, precedence)
+  once, generically, as a named unit. Never test a specific flag's
+  default, posture, or gated surfaces — those are configuration
+  that flexes by release stage, and per-flag on/off tests re-prove
+  the engine while pinning config. Wire posture at the call site.
+  (Owner doctrine 2026-06-08; the specialisation of "assert
+  effects, not constants" for flags.)
 - **No useless tests** - Each test must prove something useful
   about the product code. If a test is only testing the test or
   mocks, delete it.
@@ -130,6 +135,17 @@ plan][doctrine-plan].
   violates the principle of using the right tool for the job. Use
   the right tool: ESLint for boundary enforcement, Playwright for
   browser testing, vitest for runtime logic.
+
+- **No reading the `.agent/` knowledge substrate in tests** - Tests MUST
+  NOT read from `.agent/**/*` for any reason (owner doctrine 2026-06-22,
+  absolute). That tree is shared, mutable, relocatable knowledge, not test
+  fixtures, so a test that reads it is asserting configuration rather than
+  proving behaviour (see "Assert effects, not constants") and goes stale
+  when the substrate moves. Worked instance: a gap-ledger test
+  `readFileSync`-ed a plan JSON, asserted its `statuses` and finding
+  tuples, and silently broke when a plan-estate relocation moved the file.
+  If product code resolves `.agent/` paths, exercise it against a
+  `mkdtemp` fixture repo, never the live tree.
 
 ## Definitions
 
@@ -405,23 +421,9 @@ measure, reject the framing at plan-author time. Worked recipe:
 
 ## Test Configuration Gotchas
 
-- `tsconfig.json` `include` patterns `**/*.test.ts` and
-  `**/*.spec.ts` do NOT match test utility files (harness, fixture
-  builder). Add `tests/**/*.ts` to the include array when creating
-  non-test utilities in test directories.
-- ESLint `projectService: true` uses the nearest
-  `tsconfig.json`, not `tsconfig.lint.json`. Files must be
-  included in both for linting to work.
-- Stale vitest include globs are silent because of
-  `passWithNoTests: true` — remove dead globs promptly after file
-  moves.
-- `resolveEnv` integration tests that need `.env` file isolation:
-  use `'/tmp'` as `startDir` to prevent ambient `.env` files from
-  satisfying schema requirements.
-- After refactoring entry points (removing `dotenv`, changing
-  `loadRuntimeConfig` signature), check E2E tests that launch the
-  process directly — they break when the entry point contract
-  changes.
+Tooling-mechanics recipes (tsconfig include patterns, ESLint `projectService`,
+vitest glob staleness, `.env` isolation, entry-point refactors) live in
+[`testing-patterns.md` §Test Configuration Gotchas](../../docs/engineering/testing-patterns.md#test-configuration-gotchas).
 
 ## Test Data Anchoring
 
@@ -429,13 +431,6 @@ Tests that agree with code on the wrong contract are worse than no tests.
 Anchor fixtures to schemas or captured API responses, not code assumptions
 (e.g. `keyStageSlugs` instead of API `keyStages`). Use
 `as const satisfies SDKType` to couple test data to SDK type evolution.
-
-## Test Isolation
-
-- Replace Express `_router` access with supertest HTTP assertions.
-- Extract repeated setup into scoped helpers inside `describe`.
-- For 30+ file migrations, use subagents.
-- Bulk factories accept `startIndex`; do not mutate readonly `_id`.
 
 ## Browser Proof Surfaces
 

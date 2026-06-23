@@ -77,16 +77,21 @@ interface UnitSummaryBatch {
   skippedCount: number;
 }
 
+interface ProcessUnitSummariesParams {
+  readonly client: OakClient;
+  readonly units: readonly { unitSlug: string; unitTitle: string }[];
+  readonly subject: SearchSubjectSlug;
+  readonly ks: KeyStage;
+  readonly subjectProgrammesUrl: string;
+  readonly unitContextMap: UnitContextMap;
+  readonly lessonsByUnit: ReadonlyMap<string, readonly string[]> | undefined;
+  readonly dataIntegrityReport: DataIntegrityReport;
+}
+
 async function processUnitSummaries(
-  client: OakClient,
-  units: readonly { unitSlug: string; unitTitle: string }[],
-  subject: SearchSubjectSlug,
-  ks: KeyStage,
-  subjectProgrammesUrl: string,
-  unitContextMap: UnitContextMap,
-  lessonsByUnit: ReadonlyMap<string, readonly string[]> | undefined,
-  dataIntegrityReport: DataIntegrityReport,
+  params: ProcessUnitSummariesParams,
 ): Promise<UnitSummaryBatch> {
+  const { client, units, subject, ks, subjectProgrammesUrl, unitContextMap, lessonsByUnit, dataIntegrityReport } = params;
   const unitSummaries = new Map<string, SearchUnitSummary>();
   const unitOps: BulkOperations = [];
   let skippedCount = 0,
@@ -125,19 +130,24 @@ async function processUnitSummaries(
   return { unitSummaries, unitOps, skippedCount };
 }
 
+export interface BuildUnitDocumentsParams {
+  readonly client: OakClient;
+  readonly units: readonly { unitSlug: string; unitTitle: string }[];
+  readonly subject: SearchSubjectSlug;
+  readonly ks: KeyStage;
+  readonly subjectProgrammesUrl: string;
+  readonly unitContextMap: UnitContextMap;
+  readonly dataIntegrityReport: DataIntegrityReport;
+  readonly lessonsByUnit?: ReadonlyMap<string, readonly string[]>;
+}
+
 export async function buildUnitDocuments(
-  client: OakClient,
-  units: readonly { unitSlug: string; unitTitle: string }[],
-  subject: SearchSubjectSlug,
-  ks: KeyStage,
-  subjectProgrammesUrl: string,
-  unitContextMap: UnitContextMap,
-  dataIntegrityReport: DataIntegrityReport,
-  lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
+  params: BuildUnitDocumentsParams,
 ): Promise<{
   unitSummaries: Map<string, SearchUnitSummary>;
   unitOps: BulkOperations;
 }> {
+  const { subject, ks, units } = params;
   const startTime = Date.now();
   ingestLogger.info(
     formatIngestionEvent(
@@ -145,16 +155,16 @@ export async function buildUnitDocuments(
     ),
   );
 
-  const { unitSummaries, unitOps, skippedCount } = await processUnitSummaries(
-    client,
+  const { unitSummaries, unitOps, skippedCount } = await processUnitSummaries({
+    client: params.client,
     units,
     subject,
     ks,
-    subjectProgrammesUrl,
-    unitContextMap,
-    lessonsByUnit,
-    dataIntegrityReport,
-  );
+    subjectProgrammesUrl: params.subjectProgrammesUrl,
+    unitContextMap: params.unitContextMap,
+    lessonsByUnit: params.lessonsByUnit,
+    dataIntegrityReport: params.dataIntegrityReport,
+  });
 
   ingestLogger.info(
     formatIngestionEvent(

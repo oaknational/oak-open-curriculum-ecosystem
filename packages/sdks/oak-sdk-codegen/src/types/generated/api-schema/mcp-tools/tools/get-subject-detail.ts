@@ -113,7 +113,7 @@ export const getSubjectDetail = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Subject\n\nThis tool returns the sequences, key stages and years that are currently available for a given subject.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
+  description: "Single subject with sequences, key stages, and years\n\nUse when you have a subject slug. Returns subjectTitle, subjectSlug, sequenceSlugs, keyStages, and years. sequenceSlugs lists the sequences available for this subject; each sequence contains one programme per year group — call GET /sequences/{sequence}/programmes to enumerate them. Not for: every subject in one call (GET /subjects); the key stages or year groups for a subject (GET /subjects/{subject}/key-stages or GET /subjects/{subject}/years); subject-scoped lessons or units (GET /key-stages/{keyStage}/subject/{subject}/lessons or GET /key-stages/{keyStage}/subject/{subject}/units); the detail of one sequence (GET /sequences/{sequence}). Example: subject=maths.\n\nPREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.",
   path,
   method,
   documentedStatuses,

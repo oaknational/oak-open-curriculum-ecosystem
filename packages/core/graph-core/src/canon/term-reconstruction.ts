@@ -6,9 +6,11 @@
  * literals per RDF 1.2). Each helper routes its parsed term through the
  * graph-core `data-factory` so the reconstructed `DatasetCore` carries
  * canonical Term shapes throughout. Invalid term-position shapes (e.g. a
- * Literal in subject position) throw `TermReconstructionError`, which the
- * caller in `canonicalize.ts` surfaces in the outer `CanonicalizationError.message`.
+ * Literal in subject position) return `err(TermReconstructionError)`, which the
+ * caller in `canonicalize.ts` surfaces in the outer `CanonicalizationError`.
  */
+
+import { assertNeverResult, err, ok, type Result } from '@oaknational/result';
 
 import { blankNode, defaultGraph, literal, namedNode, quad } from '../data-factory/index.js';
 import type { GraphTerm, ObjectTerm, PredicateTerm, Quad, SubjectTerm } from '../term/index.js';
@@ -37,78 +39,88 @@ export class TermReconstructionError extends Error {
  * Branches on the datatype IRI: the rdf:langString datatype requires a
  * language tag and produces a language-tagged literal; every other
  * datatype produces a datatyped literal. Missing required metadata
- * (no datatype, or rdf:langString without a tag) throws
- * `TermReconstructionError` so the outer Result envelope surfaces the
+ * (no datatype, or rdf:langString without a tag) returns
+ * `err(TermReconstructionError)` so the outer Result envelope surfaces the
  * shape mismatch precisely.
  */
-function literalFromParsed(term: ParsedQuadTerm): ObjectTerm {
+function literalFromParsed(term: ParsedQuadTerm): Result<ObjectTerm, TermReconstructionError> {
   const datatypeIri = term.datatype?.value;
   if (datatypeIri === undefined) {
-    throw new TermReconstructionError('object', 'Literal', 'literal is missing a datatype IRI');
+    return err(
+      new TermReconstructionError('object', 'Literal', 'literal is missing a datatype IRI'),
+    );
   }
   if (datatypeIri === RDF_LANG_STRING_IRI) {
     const tag = term.language;
     if (tag === undefined) {
-      throw new TermReconstructionError(
-        'object',
-        'Literal',
-        'rdf:langString literal is missing a language tag',
+      return err(
+        new TermReconstructionError(
+          'object',
+          'Literal',
+          'rdf:langString literal is missing a language tag',
+        ),
       );
     }
-    return literal(term.value, tag);
+    return ok(literal(term.value, tag));
   }
-  return literal(term.value, namedNode(datatypeIri));
+  return ok(literal(term.value, namedNode(datatypeIri)));
 }
 
 /**
  * Reconstruct a subject term. The RDF data model permits only NamedNode
  * and BlankNode in subject position; any other termType is a reconstruction
- * failure and throws `TermReconstructionError`. The `default` arm is an
+ * failure and returns `err(TermReconstructionError)`. The `default` arm is an
  * exhaustiveness proof: if `ParsedQuadTerm.termType` grows a new variant,
- * the `const exhaustive: never` assignment fails to compile.
+ * `assertNeverResult`'s `never` parameter fails to compile.
  */
-function toSubject(term: ParsedQuadTerm): SubjectTerm {
+function toSubject(term: ParsedQuadTerm): Result<SubjectTerm, TermReconstructionError> {
   switch (term.termType) {
     case 'NamedNode':
-      return namedNode(term.value);
+      return ok(namedNode(term.value));
     case 'BlankNode':
-      return blankNode(term.value);
+      return ok(blankNode(term.value));
     case 'Literal':
     case 'DefaultGraph':
-      throw new TermReconstructionError(
-        'subject',
-        term.termType,
-        'only NamedNode or BlankNode are valid in subject position',
+      return err(
+        new TermReconstructionError(
+          'subject',
+          term.termType,
+          'only NamedNode or BlankNode are valid in subject position',
+        ),
       );
-    default: {
-      const exhaustive: never = term.termType;
-      throw new TermReconstructionError('subject', String(exhaustive), 'unknown termType');
-    }
+    default:
+      return assertNeverResult(
+        term.termType,
+        (got) => new TermReconstructionError('subject', got, 'unknown termType'),
+      );
   }
 }
 
 /**
  * Reconstruct a predicate term. The RDF data model permits only NamedNode
  * in predicate position; BlankNode, Literal, and DefaultGraph in predicate
- * position are reconstruction failures and throw `TermReconstructionError`.
+ * position are reconstruction failures and return `err(TermReconstructionError)`.
  * The `default` arm asserts `never` for compile-time exhaustiveness.
  */
-function toPredicate(term: ParsedQuadTerm): PredicateTerm {
+function toPredicate(term: ParsedQuadTerm): Result<PredicateTerm, TermReconstructionError> {
   switch (term.termType) {
     case 'NamedNode':
-      return namedNode(term.value);
+      return ok(namedNode(term.value));
     case 'BlankNode':
     case 'Literal':
     case 'DefaultGraph':
-      throw new TermReconstructionError(
-        'predicate',
-        term.termType,
-        'only NamedNode is valid in predicate position',
+      return err(
+        new TermReconstructionError(
+          'predicate',
+          term.termType,
+          'only NamedNode is valid in predicate position',
+        ),
       );
-    default: {
-      const exhaustive: never = term.termType;
-      throw new TermReconstructionError('predicate', String(exhaustive), 'unknown termType');
-    }
+    default:
+      return assertNeverResult(
+        term.termType,
+        (got) => new TermReconstructionError('predicate', got, 'unknown termType'),
+      );
   }
 }
 
@@ -120,24 +132,27 @@ function toPredicate(term: ParsedQuadTerm): PredicateTerm {
  * under the lint limit. The `default` arm asserts `never` for
  * compile-time exhaustiveness.
  */
-function toObject(term: ParsedQuadTerm): ObjectTerm {
+function toObject(term: ParsedQuadTerm): Result<ObjectTerm, TermReconstructionError> {
   switch (term.termType) {
     case 'NamedNode':
-      return namedNode(term.value);
+      return ok(namedNode(term.value));
     case 'BlankNode':
-      return blankNode(term.value);
+      return ok(blankNode(term.value));
     case 'Literal':
       return literalFromParsed(term);
     case 'DefaultGraph':
-      throw new TermReconstructionError(
-        'object',
-        term.termType,
-        'DefaultGraph is not a valid object term',
+      return err(
+        new TermReconstructionError(
+          'object',
+          term.termType,
+          'DefaultGraph is not a valid object term',
+        ),
       );
-    default: {
-      const exhaustive: never = term.termType;
-      throw new TermReconstructionError('object', String(exhaustive), 'unknown termType');
-    }
+    default:
+      return assertNeverResult(
+        term.termType,
+        (got) => new TermReconstructionError('object', got, 'unknown termType'),
+      );
   }
 }
 
@@ -147,38 +162,49 @@ function toObject(term: ParsedQuadTerm): ObjectTerm {
  * reconstruction failure. The `default` arm asserts `never` for
  * compile-time exhaustiveness.
  */
-function toGraph(term: ParsedQuadTerm): GraphTerm {
+function toGraph(term: ParsedQuadTerm): Result<GraphTerm, TermReconstructionError> {
   switch (term.termType) {
     case 'DefaultGraph':
-      return defaultGraph();
+      return ok(defaultGraph());
     case 'NamedNode':
-      return namedNode(term.value);
+      return ok(namedNode(term.value));
     case 'BlankNode':
-      return blankNode(term.value);
+      return ok(blankNode(term.value));
     case 'Literal':
-      throw new TermReconstructionError(
-        'graph',
-        term.termType,
-        'Literal is not a valid graph term',
+      return err(
+        new TermReconstructionError('graph', term.termType, 'Literal is not a valid graph term'),
       );
-    default: {
-      const exhaustive: never = term.termType;
-      throw new TermReconstructionError('graph', String(exhaustive), 'unknown termType');
-    }
+    default:
+      return assertNeverResult(
+        term.termType,
+        (got) => new TermReconstructionError('graph', got, 'unknown termType'),
+      );
   }
 }
 
 /**
  * Reconstruct a canonical `Quad` from an rdf-canonize parsed quad. Each
  * term position routes through its position-specific reconstruction
- * helper so position-illegal term shapes (e.g. a Literal in the subject
- * slot) throw `TermReconstructionError` with the failing position named.
+ * helper; the first position-illegal term shape (e.g. a Literal in the
+ * subject slot) short-circuits to `err(TermReconstructionError)` with the
+ * failing position named.
  */
-export function reconstructQuad(parsed: ParsedQuad): Quad {
-  return quad(
-    toSubject(parsed.subject),
-    toPredicate(parsed.predicate),
-    toObject(parsed.object),
-    toGraph(parsed.graph),
-  );
+export function reconstructQuad(parsed: ParsedQuad): Result<Quad, TermReconstructionError> {
+  const subject = toSubject(parsed.subject);
+  if (!subject.ok) {
+    return subject;
+  }
+  const predicate = toPredicate(parsed.predicate);
+  if (!predicate.ok) {
+    return predicate;
+  }
+  const object = toObject(parsed.object);
+  if (!object.ok) {
+    return object;
+  }
+  const graph = toGraph(parsed.graph);
+  if (!graph.ok) {
+    return graph;
+  }
+  return ok(quad(subject.value, predicate.value, object.value, graph.value));
 }

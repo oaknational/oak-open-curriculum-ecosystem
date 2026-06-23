@@ -149,6 +149,16 @@ export default {
         path: '^packages/sdks/oak-curriculum-sdk/',
       },
     },
+    {
+      name: 'no-import-from-agent-substrate',
+      severity: 'error',
+      comment:
+        'No code may import from the `.agent/` knowledge substrate. `.agent/` is the agent operating substrate (plans, memory, rules, sub-agents, state, docs) — shared, mutable, relocatable knowledge, NOT a code module surface, and outside every workspace dependency boundary. agent-tools may READ it as data via fs (the sanctioned operator), but no code anywhere takes a module dependency on it. Owner doctrine 2026-06-22, absolute (no exemption). The companion runtime-read boundary is the ESLint rule @oaknational/no-agent-substrate-access.',
+      from: {},
+      to: {
+        path: '(^|/)\\.agent/',
+      },
+    },
     /* Cross-package src/ imports are already enforced by the ESLint
        boundary rules in @oaknational/eslint-plugin-standards. Depcruise
        regex does not support backreferences needed for same-package
@@ -156,7 +166,10 @@ export default {
   ],
   options: {
     doNotFollow: {
-      path: ['node_modules', 'dist', '.turbo'],
+      // `.agent/` is kept visible (not excluded) so the
+      // `no-import-from-agent-substrate` forbidden rule can see an import edge
+      // into the substrate, but its internals are never followed/analysed.
+      path: ['node_modules', 'dist', '.turbo', '\\.agent/'],
     },
     exclude: {
       path: [
@@ -164,7 +177,6 @@ export default {
         'dist',
         '\\.turbo',
         'src/types/generated/',
-        '\\.agent/',
         '\\.cursor/',
         '\\.claude/',
         // TypeDoc-generated JS assets (not source code)

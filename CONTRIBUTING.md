@@ -56,6 +56,19 @@ Gemini CLI, Copilot, Windsurf) start with two additional surfaces:
 - [Sibling repositories](docs/engineering/sibling-repos.md) — related Oak
   repos a teammate may need to clone
 
+**New to the repository?** Open your first agent session with
+`/oak-explain` — the orientation lens discerns whether you want a specific
+answer, an overview, or a guided walk that can set up your machine, and meets
+you where you are.
+
+**New to working with AI agents at all?** There is a short, portable
+`working-with-agentic-ai` primer that gives footing before any of this
+repository's specifics — read it first, then come back. Working here does not
+require the fullest agentic delegation: the Practice _enables_ directing a team
+of agents through a structured process, but human-led work with an assistant
+close to every change is equally supported. You choose the way of working by
+context.
+
 The team's skill and command vocabulary lives under
 [`.agent/skills/`](.agent/skills/) (canonical) with platform adapters under
 [`.claude/skills/`](.claude/skills/) and equivalents for other agents. Open
@@ -289,9 +302,9 @@ gates, CI, AI review, human review, merge, and release — see the
 ### 1. Create a Feature Branch
 
 ```bash
-git checkout -b feat/your-feature-name
+git switch -c feat/your-feature-name
 # or
-git checkout -b fix/bug-description
+git switch -c fix/bug-description
 ```
 
 ### 2. Follow TDD Approach
@@ -310,7 +323,8 @@ git checkout -b fix/bug-description
 Before committing, run the comprehensive quality gate:
 
 ```bash
-pnpm check    # Full suite: clean, codegen, build, type-check, lint, test, e2e, smoke, knip, format
+pnpm check    # Canonical full verification gate — every check in order; the root
+              # package.json `check` script is the authoritative step list
 ```
 
 This single command runs every quality gate in the correct order. If it

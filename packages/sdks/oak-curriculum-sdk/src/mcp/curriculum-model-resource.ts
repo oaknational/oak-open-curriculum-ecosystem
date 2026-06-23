@@ -13,19 +13,17 @@
  * @remarks
  * **This is the ONLY resource that agents must always load first.** It
  * provides the domain orientation that enables all other tools and resources.
- * All other graph surfaces (prerequisite, thread progressions, misconception)
- * are strictly optional and should be loaded only when the conversation needs
- * them — they are supplementary context at priority 0.5, not prerequisites.
+ * The graph corpora (prerequisite, thread progressions, misconception) have
+ * no whole-corpus resource form — they are served by their anchored tools
+ * and loaded only when the conversation needs them.
  *
- * This resource is intentionally NOT produced by the graph resource factory
- * (graph-resource-factory.ts). It composes two distinct data sources
- * (ontology domain model + tool guidance) via `composeCurriculumModelData()`,
- * and serves as the priority 1.0 orientation resource. This is a
- * fundamentally different responsibility from the supplementary graph
- * surfaces which each expose a single generated data source.
+ * This resource composes two distinct data sources (ontology domain model +
+ * tool guidance) via `composeCurriculumModelData()` and serves as the
+ * priority 1.0 orientation resource — a fundamentally different
+ * responsibility from the bounded graph tools, which each expose an anchored
+ * subset of a single generated corpus.
  *
  * @see ./curriculum-model-data.ts for the composition function
- * @see ./graph-resource-factory.ts for the factory that produces other graph surfaces
  * @see ADR-058 for the context grounding strategy
  */
 

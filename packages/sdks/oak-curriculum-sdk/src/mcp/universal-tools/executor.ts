@@ -20,7 +20,9 @@ import { runCurriculumModelTool } from '../aggregated-curriculum-model/index.js'
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
 import { runPriorKnowledgeGraphTool } from '../aggregated-prior-knowledge-graph.js';
 import { runMisconceptionGraphTool } from '../aggregated-misconception-graph.js';
-import { runEefEvidenceTool, eefEvidenceToCallToolResult } from '../aggregated-eef-evidence.js';
+import { runKeywordGraphTool } from '../aggregated-keyword-graph.js';
+import { runEefEvidenceTool } from '../aggregated-eef-evidence.js';
+import { eefEvidenceToCallToolResult } from '../eef-evidence-egress.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
 import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
@@ -165,9 +167,10 @@ type AggregatedHandler = (
 const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler>> = {
   search: handleSearchTool,
   'get-curriculum-model': () => Promise.resolve(handleCurriculumModelTool()),
-  'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
-  'get-prior-knowledge-graph': () => Promise.resolve(runPriorKnowledgeGraphTool()),
-  'get-misconception-graph': () => Promise.resolve(runMisconceptionGraphTool()),
+  'get-thread-progressions': (input) => Promise.resolve(runThreadProgressionsTool(input)),
+  'get-prior-knowledge-graph': (input) => Promise.resolve(runPriorKnowledgeGraphTool(input)),
+  'get-misconception-graph': (input) => Promise.resolve(runMisconceptionGraphTool(input)),
+  'get-keyword-graph': (input) => Promise.resolve(runKeywordGraphTool(input)),
   'get-eef-evidence': (input) =>
     Promise.resolve(eefEvidenceToCallToolResult(runEefEvidenceTool(input))),
   fetch: handleFetchTool,

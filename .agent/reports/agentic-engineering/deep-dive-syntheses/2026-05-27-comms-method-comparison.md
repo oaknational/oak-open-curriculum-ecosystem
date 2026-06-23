@@ -60,11 +60,11 @@ Canonical interval: ≤ 4 minutes per PDR-078. From the corpus: mean in-session 
 
 ### Message composition
 
-One agent creates a plain-text markdown file with a header and turn-format convention. This session used `/tmp/eef-pr1-sidebar.md` (Galactic's side) and `.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-purpose-reflection-starless-galactic.md` (Starless's initial parallel attempt, abandoned). Convention: `## [HH:MM:SSZ AGENT] turn-N` prefix per turn.
+One agent creates a plain-text markdown file with a header and turn-format convention. This session used `<scratch>/eef-pr1-sidebar.md` (Galactic's side) and `.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-purpose-reflection-starless-galactic.md` (Starless's initial parallel attempt, abandoned). Convention: `## [HH:MM:SSZ AGENT] turn-N` prefix per turn.
 
 ### Send mechanics
 
-Turns are appended with `cat >> /tmp/sidebar.md << 'EOF'` (heredoc append). The Write tool is explicitly forbidden — it would clobber. No identity frontmatter required per turn; the turn header carries agent identity informally.
+Turns are appended with `cat >> <scratch>/sidebar.md << 'EOF'` (heredoc append). The Write tool is explicitly forbidden — it would clobber. No identity frontmatter required per turn; the turn header carries agent identity informally.
 
 ### Live reading
 
@@ -186,7 +186,7 @@ Method 2 buys ~40× lower delivery latency at the cost of full-attention suspens
 
 **Method 1**: every event is an immutable UUID-named JSON file committed to the repo. The shared-comms-log is a derived rendering. The corpus survives compaction, process restart, and system reboot.
 
-**Method 2**: the live channel (`/tmp/sidebar.md`) is ephemeral — lost on reboot. This session mitigated it by persisting to `.agent/state/collaboration/sidebars/` (two copies landed). The `.agent/state/` directory is tracked but not committed during the sidebar; the copies become durable only when committed. The `/tmp` channel itself does not survive even a long pause.
+**Method 2**: the live channel (`<scratch>/sidebar.md`) is ephemeral — lost on reboot. This session mitigated it by persisting to `.agent/state/collaboration/sidebars/` (two copies landed). The `.agent/state/` directory is tracked but not committed during the sidebar; the copies become durable only when committed. The `/tmp` channel itself does not survive even a long pause.
 
 Verdict: Method 1 wins on durability. Method 2 requires a persistence discipline that must be explicitly exercised.
 
@@ -249,9 +249,9 @@ Structural observation: this failure mode (per-window owner veto not reaching pe
 ### (b) Maximise communication rate without sacrificing quality
 
 5. **Formalise Method 2 sidebar as a first-class protocol.** The current gap is bootstrap friction and ephemerality. Concrete additions:
-   - A deterministic rendezvous convention: `/tmp/sidebar-<YYYY-MM-DD>-<slug>.md`, slug derived from the working branch or PR number, announced in the opening comms event.
+   - A deterministic rendezvous convention: `<scratch>/sidebar-<YYYY-MM-DD>-<slug>.md`, slug derived from the working branch or PR number, announced in the opening comms event.
    - A lifecycle comms event (`comms append --tag sidebar-open --body-file ...`) naming the sidebar path, participants, and expected duration. This makes the sidebar discoverable from the comms stream without out-of-band relay and gives the 10-minute silence window a "reason for absence."
-   - A persistence-at-close step: the sidebar protocol requires the last-active agent to `cp /tmp/sidebar-<slug>.md .agent/state/collaboration/sidebars/<canonical-name>.md` and emit a `sidebar-close` event pointing to the archive. This happened ad hoc this session; making it mandatory removes the ephemerality risk.
+   - A persistence-at-close step: the sidebar protocol requires the last-active agent to `cp <scratch>/sidebar-<slug>.md .agent/state/collaboration/sidebars/<canonical-name>.md` and emit a `sidebar-close` event pointing to the archive. This happened ad hoc this session; making it mandatory removes the ephemerality risk.
 
 6. **Prefer Method 2 for synchronous peer design decisions; Method 1 for everything else.** Method 2 wins when: both agents are active simultaneously, the exchange requires fast back-and-forth (>3 turns in <30 min), and the content is exploratory (decisions will be surfaced to the owner after the sidebar, not consumed directly by third agents). Method 1 wins when: the message is broadcast, the recipient may not be live, the content must be discoverable across sessions, or the topology has ≥3 agents.
 
@@ -327,7 +327,7 @@ Would adding `sidebar-open` and `sidebar-close` tags to the comms event schema (
 
 ### Q3 — Deterministic rendezvous convention
 
-Would a convention like `/tmp/sidebar-<branch-slug>-<YYYY-MM-DD>.md` (derived from `git branch --show-current` + date) eliminate the duplicate-file problem this session experienced (two parallel sidebar files created simultaneously before converging)?
+Would a convention like `<scratch>/sidebar-<branch-slug>-<YYYY-MM-DD>.md` (derived from `git branch --show-current` + date) eliminate the duplicate-file problem this session experienced (two parallel sidebar files created simultaneously before converging)?
 
 **Proposed experiment**: both agents derive the path from the branch name independently (no pre-communication); verify they land on the same file.
 
@@ -378,18 +378,18 @@ Striking observation: **Galactic emitted zero heartbeats today**. Their only com
 
 Starless's heartbeats ran at a mean interval of **5.1 minutes** (4.0 min minimum; 20.3 min maximum). The four gaps of ~20 minutes correspond to context-compaction pauses (agents cannot emit heartbeats during compaction). The 10.7-minute gap (05:22–05:33Z) corresponds to the transition into the sidebar proper.
 
-The two directed events (05:32:11Z and 05:33:13Z) were the sidebar bootstrap invitations — both under 1,400 characters, below the 1,500-char body gate. They served their purpose: announcing the `/tmp/eef-pr1-sidebar.md` rendezvous. Note that the two events were sent at nearly the same second from different agents — a race-to-announce pattern consistent with simultaneous owner direction in both windows. Both pointed to slightly different initial file paths before converging (Starless opened `.agent/state/collaboration/sidebars/...`, Galactic opened `/tmp/...`; the sidebar transcript records this crossing as resolved in turn 2).
+The two directed events (05:32:11Z and 05:33:13Z) were the sidebar bootstrap invitations — both under 1,400 characters, below the 1,500-char body gate. They served their purpose: announcing the `<scratch>/eef-pr1-sidebar.md` rendezvous. Note that the two events were sent at nearly the same second from different agents — a race-to-announce pattern consistent with simultaneous owner direction in both windows. Both pointed to slightly different initial file paths before converging (Starless opened `.agent/state/collaboration/sidebars/...`, Galactic opened `<scratch>/...`; the sidebar transcript records this crossing as resolved in turn 2).
 
 #### Sidebar state
 
-`/tmp/eef-pr1-sidebar.md` — 19,598 bytes, 8 turns. Last modified 07:23:09 BST (= 06:23:09Z). The sidebar is complete for the design phase; both agents have post-compaction ACKed the worktree model and are executing. The file is durable in `/tmp` and also preserved at `.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-CANONICAL-transcript.md`.
+`<scratch>/eef-pr1-sidebar.md` — 19,598 bytes, 8 turns. Last modified 07:23:09 BST (= 06:23:09Z). The sidebar is complete for the design phase; both agents have post-compaction ACKed the worktree model and are executing. The file is durable in `/tmp` and also preserved at `.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-CANONICAL-transcript.md`.
 
-Additional sidebar files observed in `/tmp/`:
+Additional sidebar files observed in `<scratch>/`:
 
-- `/tmp/ashen-to-scorched-pdr-sidebar.md` (4,351 bytes) — a different agent-pair's PDR sidebar, not part of this session
-- `/tmp/ferny-to-twilit-sidebar.md` (4,136 bytes) — fan-out lead sidebar, different session
-- `/tmp/incandescent-sidebar-zephyrous.md` (2,372 bytes) — markSeen/emit ordering discussion
-- `/tmp/twilit-sidebar-ferny-on-synthesis.md` (6,459 bytes) — synthesis discussion
+- `<scratch>/ashen-to-scorched-pdr-sidebar.md` (4,351 bytes) — a different agent-pair's PDR sidebar, not part of this session
+- `<scratch>/ferny-to-twilit-sidebar.md` (4,136 bytes) — fan-out lead sidebar, different session
+- `<scratch>/incandescent-sidebar-zephyrous.md` (2,372 bytes) — markSeen/emit ordering discussion
+- `<scratch>/twilit-sidebar-ferny-on-synthesis.md` (6,459 bytes) — synthesis discussion
 
 This confirms `/tmp` sidebars are now in routine use across multiple agent pairs, not just this session. The ephemerality concern raised in the report (§6, Durability) is becoming a systemic exposure as the pattern proliferates — each new session needs its own persistence discipline at close.
 
@@ -397,9 +397,9 @@ This confirms `/tmp` sidebars are now in routine use across multiple agent pairs
 
 | Worktree | Branch | HEAD | Status |
 |---|---|---|---|
-| `/Users/jim/code/oak/oak-open-curriculum-ecosystem` | `feat/graph-foundations` | `9dac52aa` | 4 tracked dirty files (substrate only: comms-seen, active-claims, plan, README) |
-| `/Users/jim/code/oak/oak-wt-eef` | `feat/eef-explore-evidence` | `037d0f7e` (= origin/main) | Clean — no commits ahead, no source edits begun |
-| `/Users/jim/code/oak/oak-wt-cure` | `fix/agent-tools-comms-schema` | `9dac52aa` (= 3 commits ahead of origin/main) | 1 dirty file: `agent-tools/tests/collaboration-state/state-parsers-strict.unit.test.ts` |
+| `the repo root` | `feat/graph-foundations` | `9dac52aa` | 4 tracked dirty files (substrate only: comms-seen, active-claims, plan, README) |
+| `../oak-wt-eef` | `feat/eef-explore-evidence` | `037d0f7e` (= origin/main) | Clean — no commits ahead, no source edits begun |
+| `../oak-wt-cure` | `fix/agent-tools-comms-schema` | `9dac52aa` (= 3 commits ahead of origin/main) | 1 dirty file: `agent-tools/tests/collaboration-state/state-parsers-strict.unit.test.ts` |
 
 Key observations:
 
@@ -419,7 +419,7 @@ Key observations:
 
 **A. The one-agent-silent pattern is stable when the owner bridges.** Galactic had no heartbeats and an off watcher for the full pre-compaction session. The owner directly coordinated both agents. This is a natural n=2 "owner-chat-visible liveness" pattern (matching PDR-082's proposal) without formal adoption of PDR-082. The observation supports PDR-082's falsifiability test: no coordination failure occurred that a dropped heartbeat was responsible for.
 
-**B. Sidebar bootstrap race creates a file-crossing incident (documented, not catastrophic).** The simultaneous sidebar-bootstrap at 05:32–05:33Z produced two competing rendezvous files: Starless opened `.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-purpose-reflection-starless-galactic.md`; Galactic opened `/tmp/eef-pr1-sidebar.md`. This is exactly Q3 from the report's open questions — would a deterministic rendezvous convention eliminate the crossing? The sidebar transcript shows the crossing resolved organically in turn 2 (Starless detected the crossing and converged to Galactic's `/tmp` file), with ~2.5 minutes lost to synchronisation overhead. A branch-slug-derived path would have prevented it.
+**B. Sidebar bootstrap race creates a file-crossing incident (documented, not catastrophic).** The simultaneous sidebar-bootstrap at 05:32–05:33Z produced two competing rendezvous files: Starless opened `.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-purpose-reflection-starless-galactic.md`; Galactic opened `<scratch>/eef-pr1-sidebar.md`. This is exactly Q3 from the report's open questions — would a deterministic rendezvous convention eliminate the crossing? The sidebar transcript shows the crossing resolved organically in turn 2 (Starless detected the crossing and converged to Galactic's `/tmp` file), with ~2.5 minutes lost to synchronisation overhead. A branch-slug-derived path would have prevented it.
 
 **C. Post-compaction handoff information density is high.** The sidebar turns 7 and 8 (post-compaction) carry dense structured information: owner decisions, worktree coordinates, release-safety verification, plan pointers. Turn 7 (Galactic) is ~3,000 characters. This is effective use of the sidebar for information-dense state transfer but also illustrates a cost: a new agent reading only the comms stream (not the sidebar) would have no visibility into these decisions. The plan was updated as the canonical record, but the sidebar is where the reasoning lived.
 
@@ -475,7 +475,7 @@ Key observations:
 
 **What changed:** Galactic completed the full minLength fix. `types.ts` now has `.min(1)` on all four identity base fields (`agent_name`, `platform`, `model`, `session_id_prefix`). The test file was updated with a proper describe block, a direct `collaborationAgentIdSchema.parse(...)` call (simpler than the previous approach which went through `parseNarrativeCommsEvent`), and the import added. The diff is clean: 8 lines modified in types.ts, 10 lines added in the test.
 
-**Worktree effectiveness observation:** Galactic made these edits entirely in the cure worktree (`/Users/jim/code/oak/oak-wt-cure`) with zero impact on the shared tree or the EEF worktree. The EEF worktree is clean (0 dirty files). The two agents are implementing in complete filesystem isolation.
+**Worktree effectiveness observation:** Galactic made these edits entirely in the cure worktree (`../oak-wt-cure`) with zero impact on the shared tree or the EEF worktree. The EEF worktree is clean (0 dirty files). The two agents are implementing in complete filesystem isolation.
 
 **Communication observation:** No sidebar turn from Galactic announcing the completion of the minLength fix implementation. Galactic is working silently in their worktree — the next expected communication event will be a commit (which will appear as a HEAD change in the monitor) or a sidebar turn requesting a reviewer. This is consistent with the worktree model: agents work independently until they need coordination input.
 
@@ -504,17 +504,17 @@ Mean composition time (turns 2–5): **~2.5 min**. Delivery latency: ~3s. The co
 
 **Critical finding — durable archive gap:**
 
-The canonical sidebar transcript (`.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-CANONICAL-transcript.md`, 13,433 bytes) is missing the final 7,428 bytes of the live sidebar (`/tmp/eef-pr1-sidebar.md`, 20,861 bytes). The archive was written at 07:02 BST (during Galactic's compaction) and therefore captures only turns 1–6. The post-compaction turns (7: owner decisions + worktree brief; 8: Starless ACK; 9: pre-execution review dispatch) are absent from the durable record.
+The canonical sidebar transcript (`.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-CANONICAL-transcript.md`, 13,433 bytes) is missing the final 7,428 bytes of the live sidebar (`<scratch>/eef-pr1-sidebar.md`, 20,861 bytes). The archive was written at 07:02 BST (during Galactic's compaction) and therefore captures only turns 1–6. The post-compaction turns (7: owner decisions + worktree brief; 8: Starless ACK; 9: pre-execution review dispatch) are absent from the durable record.
 
-This is a live instance of the ephemerality failure mode the report identified in §6 (Durability). The manual persistence step succeeded for the pre-compaction content, but the post-compaction content — including the owner decisions, the worktree ACK, and the review dispatch — exists ONLY in `/tmp/eef-pr1-sidebar.md`. If the `/tmp` file were lost now (reboot, process kill), turns 7–9 would be unrecoverable from the archive.
+This is a live instance of the ephemerality failure mode the report identified in §6 (Durability). The manual persistence step succeeded for the pre-compaction content, but the post-compaction content — including the owner decisions, the worktree ACK, and the review dispatch — exists ONLY in `<scratch>/eef-pr1-sidebar.md`. If the `/tmp` file were lost now (reboot, process kill), turns 7–9 would be unrecoverable from the archive.
 
 The Starless backup (`2026-05-27-eef-pr1-sidebar-starless-backup.md`, 15,131 bytes) was written earlier and also predates turns 7–9.
 
-This gap is a concrete validation of the report's Recommendation (b) §5: "A persistence-at-close step: the sidebar protocol requires the last-active agent to `cp /tmp/sidebar-<slug>.md .agent/state/collaboration/sidebars/<canonical-name>.md` and emit a `sidebar-close` event pointing to the archive." The session followed the protocol for the pre-compaction content but did not repeat it for the post-compaction content. Making the step mandatory (not manual) — e.g. triggered on detecting turns after the most recent archive copy — would have caught this.
+This gap is a concrete validation of the report's Recommendation (b) §5: "A persistence-at-close step: the sidebar protocol requires the last-active agent to `cp <scratch>/sidebar-<slug>.md .agent/state/collaboration/sidebars/<canonical-name>.md` and emit a `sidebar-close` event pointing to the archive." The session followed the protocol for the pre-compaction content but did not repeat it for the post-compaction content. Making the step mandatory (not manual) — e.g. triggered on detecting turns after the most recent archive copy — would have caught this.
 
 **Cross-team sidebar protocol adoption (06:35Z observation):**
 
-Five additional `/tmp/` sidebar files from other agent pairs were observed (`ashen-to-scorched`, `ferny-to-twilit`, `incandescent-sidebar-zephyrous`, `twilit-sidebar-ferny-on-synthesis`, plus several `.txt` variants). All are from different sessions. None has a corresponding `sidebar-open` comms event pointing to its path — the bootstrap chicken-and-egg is being resolved via owner coordination or peer-directed comms events, not via a formalised lifecycle event. The pattern is spreading but without the recommended protocol wrapper.
+Five additional `<scratch>/` sidebar files from other agent pairs were observed (`ashen-to-scorched`, `ferny-to-twilit`, `incandescent-sidebar-zephyrous`, `twilit-sidebar-ferny-on-synthesis`, plus several `.txt` variants). All are from different sessions. None has a corresponding `sidebar-open` comms event pointing to its path — the bootstrap chicken-and-egg is being resolved via owner coordination or peer-directed comms events, not via a formalised lifecycle event. The pattern is spreading but without the recommended protocol wrapper.
 
 The `ferny-to-twilit` sidebar contains substantive multi-reviewer synthesis content (Option A analysis, type-expert structural identity finding, critical CI failure flagged) — high-value content that is `/tmp`-only and not in the comms stream. This is the same durability gap observed in the EEF sidebar, manifesting across multiple sessions.
 
@@ -574,7 +574,7 @@ Both passes idle: no new comms, no sidebar activity, no commits.
 
 **Subtle worktree architecture finding (06:39Z inspection):**
 
-The EEF worktree (`/Users/jim/code/oak/oak-wt-eef`) contains its own `.agent/state/` directory — a working-tree snapshot of the state as of `origin/main` (037d0f7e). This means:
+The EEF worktree (`../oak-wt-eef`) contains its own `.agent/state/` directory — a working-tree snapshot of the state as of `origin/main` (037d0f7e). This means:
 
 - The EEF worktree's `.agent/state/collaboration/comms/` has 2,520 events (vs 2,673 in the shared tree) — the 153-event delta is the `docs: comms sweep` commit that landed after the EEF branch was created.
 - The EEF worktree's `.agent/state/collaboration/comms-seen/` has 115 files (vs 117 in the shared tree) — the galactic/starless comms-seen cursor files are absent.
@@ -649,7 +649,7 @@ Risk 2 (partial archive after multi-compaction sidebars, MEDIUM): When a sidebar
 
 ---
 
-*Observation period: 2026-05-27T06:27:51Z to 2026-05-27T06:43:14Z (15 minutes 23 seconds active observation). Evidence: `/tmp/eef-pr1-sidebar.md` (20,861 bytes, 10 turns), `.agent/state/collaboration/comms/` (2,673 events, 68 today), three git worktrees at `/Users/jim/code/oak/{oak-open-curriculum-ecosystem,oak-wt-eef,oak-wt-cure}`, `agent-tools/src/collaboration-state/cli-comms-commands.ts` lines 186–221 (repo root resolution), `.agent/state/collaboration/handoffs/2026-05-27-{galactic,starless}-pre-compaction.md`.*
+*Observation period: 2026-05-27T06:27:51Z to 2026-05-27T06:43:14Z (15 minutes 23 seconds active observation). Evidence: `<scratch>/eef-pr1-sidebar.md` (20,861 bytes, 10 turns), `.agent/state/collaboration/comms/` (2,673 events, 68 today), three git worktrees at `../{oak-open-curriculum-ecosystem,oak-wt-eef,oak-wt-cure}`, `agent-tools/src/collaboration-state/cli-comms-commands.ts` lines 186–221 (repo root resolution), `.agent/state/collaboration/handoffs/2026-05-27-{galactic,starless}-pre-compaction.md`.*
 
 ---
 
@@ -665,7 +665,7 @@ Risk 2 (partial archive after multi-compaction sidebars, MEDIUM): When a sidebar
 
 **Comms surface**: 2,673 events (unchanged from prior session closeout). Last event: Starless heartbeat-end at 06:54Z. No new events since prior instance stood down. The comms stream remains completely silent.
 
-**Sidebar state**: `/tmp/eef-pr1-sidebar.md` has grown to 24,178 bytes (205 lines) — up from 20,861 bytes at prior closeout. Last modified 07:47:29 BST (= 06:47:29Z). Two new turns observed:
+**Sidebar state**: `<scratch>/eef-pr1-sidebar.md` has grown to 24,178 bytes (205 lines) — up from 20,861 bytes at prior closeout. Last modified 07:47:29 BST (= 06:47:29Z). Two new turns observed:
 
 **Turn 10 (Starless, 13c7d5) — 6-reviewer pass results — BLOCKING PLAN-DRIFT FOUND**: The pre-execution 6-reviewer pass dispatched in turn 9 returned with a critical finding: WS4.5 `EefStrandsGraphView` adapter does NOT exist. The plan §"What has LANDED" claimed it landed via PR#114, but `eef-strands/` holds only an `export {}` placeholder. Starless verified this against code. Consequence: commit 3's tool needs a GraphView over EEF strands — that is the missing adapter. The value-PR cannot ship working teacher value without building WS4.5. The plan undercounts the work. Starless also surfaced a commit-1 simplification (don't re-export through `oak-curriculum-sdk/public/evidence-corpus.ts` — no consumer; `tsup bundle:false` for SDKs means cross-SDK dep raises a real publish question). Plan edit deferred to Galactic (single-committer discipline, Galactic's authored doc).
 
@@ -681,13 +681,13 @@ Commit 1 explicitly starting at turn-11 close. Plan correction request issued to
 
 | Worktree | Branch | HEAD | Status |
 |---|---|---|---|
-| `/Users/jim/code/oak/oak-open-curriculum-ecosystem` | `feat/graph-foundations` | `9dac52aa` | 4 dirty (substrate: plan, reports README, comms-seen, report file untracked) |
-| `/Users/jim/code/oak/oak-wt-eef` | `feat/eef-explore-evidence` | `037d0f7e` (= origin/main) | Clean — Starless about to start commit 1 |
-| `/Users/jim/code/oak/oak-wt-cure` | `fix/agent-tools-comms-schema` | `92266061` | Clean — minLength fix committed |
+| `the repo root` | `feat/graph-foundations` | `9dac52aa` | 4 dirty (substrate: plan, reports README, comms-seen, report file untracked) |
+| `../oak-wt-eef` | `feat/eef-explore-evidence` | `037d0f7e` (= origin/main) | Clean — Starless about to start commit 1 |
+| `../oak-wt-cure` | `fix/agent-tools-comms-schema` | `92266061` | Clean — minLength fix committed |
 
 **Key new finding vs prior instance**: The cure worktree HEAD has advanced. In the prior session, HEAD was `92266061` with 2 dirty files (the minLength fix staged but not committed). Now HEAD IS `92266061` and the working tree is clean — Galactic committed the minLength fix as `fix(agent-tools): reject empty identity strings in agent-id schema` between the prior session's closeout and this session's open. The cure-PR's first commit is in. Cure is ahead of origin/main by 4 commits (`92266061`, `9dac52aa`, `cdff0fef`, `c0942d48`).
 
-**A fourth worktree observed**: `git worktree list` shows `/private/tmp/oak-check-profile-019e1a` (HEAD `71c097c9`, detached, prunable — gitdir file points to non-existent location). This is a stale/orphaned worktree not tracked by either agent. The `prunable` status means git has already detected its stale .git backlink. No risk to current work, but it is repo state clutter that will accumulate over time as ephemeral worktrees are not explicitly cleaned up. `git worktree prune` would remove it. This is a NEW risk pattern beyond the two previously logged: **orphaned prunable worktrees from ephemeral uses** (e.g., a tool spin-up that never cleaned up). In a long-running multi-agent session these accumulate.
+**A fourth worktree observed**: `git worktree list` shows `/private<scratch>/oak-check-profile-019e1a` (HEAD `71c097c9`, detached, prunable — gitdir file points to non-existent location). This is a stale/orphaned worktree not tracked by either agent. The `prunable` status means git has already detected its stale .git backlink. No risk to current work, but it is repo state clutter that will accumulate over time as ephemeral worktrees are not explicitly cleaned up. `git worktree prune` would remove it. This is a NEW risk pattern beyond the two previously logged: **orphaned prunable worktrees from ephemeral uses** (e.g., a tool spin-up that never cleaned up). In a long-running multi-agent session these accumulate.
 
 ---
 
@@ -697,7 +697,7 @@ Turn 10 demonstrates a high-value use of the sidebar for **blocking escalation**
 
 **New communications pattern observed**: the sidebar is now being used for **owner-decision relay**. Turn 11 is not a peer-to-peer design exchange — it is Starless relaying an owner decision back to Galactic via the established live channel. This extends the prior finding (sidebar used for execution coordination, not just design) to a third use: sidebar as immediate owner-decision relay when the sidebar is already the established live channel. The alternative (a directed comms event) would require Galactic's watcher to be running, which it may not be (per prior session: Galactic had no watcher for the full pre-compaction session).
 
-**Durable archive gap update**: the canonical transcript (`.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-CANONICAL-transcript.md`, 13,433 bytes) continues to miss turns 7–11 (the post-compaction content). The gap has grown from 7,428 bytes (turns 7–9) to 10,745 bytes (turns 7–11). Turns 10 and 11 contain the plan-drift finding and the fold-in owner decision — arguably the most decision-critical content in the entire sidebar. This content exists ONLY in `/tmp/eef-pr1-sidebar.md`. The durable archive gap is accumulating with each new implementation-phase turn.
+**Durable archive gap update**: the canonical transcript (`.agent/state/collaboration/sidebars/2026-05-27-eef-pr1-CANONICAL-transcript.md`, 13,433 bytes) continues to miss turns 7–11 (the post-compaction content). The gap has grown from 7,428 bytes (turns 7–9) to 10,745 bytes (turns 7–11). Turns 10 and 11 contain the plan-drift finding and the fold-in owner decision — arguably the most decision-critical content in the entire sidebar. This content exists ONLY in `<scratch>/eef-pr1-sidebar.md`. The durable archive gap is accumulating with each new implementation-phase turn.
 
 ---
 
@@ -782,7 +782,7 @@ The distinction the prior observer missed: `node_modules` (external deps) may be
 
 **Worktree-effectiveness — SECOND INDEPENDENT CONFIRMATION of the build-onboarding cost**: Galactic confirmed the prior pass's new finding from the cure worktree: "oak-wt-cure needed the same build-deps-first — eslint-plugin-standards (oak-eslint) build before lint would run (ERR_PACKAGE_PATH_NOT_EXPORTED until built); type-check passed without builds (development condition → src). Plus a full cold turbo gate (90 tasks, ~72s) before the first commit, cached thereafter." Two independent worktrees, two agents, same finding. This solidifies the MEDIUM-severity worktree-onboarding risk into a CONFIRMED, reproducible cost: **a fresh worktree in this monorepo requires (1) building the workspace-dep `dist/` closure before lint/test pass, and (2) a full cold turbo gate (~72s) before the first commit, cached thereafter.** The ~72s cold-gate figure is a new quantified datapoint. The "node_modules shared → trivial cost" assumption is now decisively refuted for build-output-interdependent monorepos.
 
-**Communication efficiency — the in-cycle review loop ran cleanly via sidebar**: The full review cycle (Starless implements → hands diff → Galactic reviews with 2 specialists → APPROVE with one non-blocking note → CLEAR TO COMMIT) completed across turns 14→15 in ~5 minutes of wall-clock (06:59→07:04 observation window), entirely through the sidebar. No commit landed before review (no-backfill). This is the cleanest realisation of the in-cycle peer-review contract: the implementing agent never commits unreviewed code, and the reviewing agent reads the actual working-tree diff in the peer's worktree directly (`git -C /Users/jim/code/oak/oak-wt-eef diff`) — cross-worktree review without any push/PR round-trip. The worktree model enables **local cross-worktree peer review of uncommitted code** — a capability the shared-single-tree model could not offer (the reviewer would see the implementer's edits only if they were in the same tree, with all the contention that implies).
+**Communication efficiency — the in-cycle review loop ran cleanly via sidebar**: The full review cycle (Starless implements → hands diff → Galactic reviews with 2 specialists → APPROVE with one non-blocking note → CLEAR TO COMMIT) completed across turns 14→15 in ~5 minutes of wall-clock (06:59→07:04 observation window), entirely through the sidebar. No commit landed before review (no-backfill). This is the cleanest realisation of the in-cycle peer-review contract: the implementing agent never commits unreviewed code, and the reviewing agent reads the actual working-tree diff in the peer's worktree directly (`git -C ../oak-wt-eef diff`) — cross-worktree review without any push/PR round-trip. The worktree model enables **local cross-worktree peer review of uncommitted code** — a capability the shared-single-tree model could not offer (the reviewer would see the implementer's edits only if they were in the same tree, with all the contention that implies).
 
 **Worktree capability finding**: cross-worktree review of uncommitted changes. Galactic reviewed Starless's uncommitted diff by pointing `git -C` at the EEF worktree path. This is a genuine new capability the worktree model unlocks: peer review of work-in-progress without a commit, push, or PR — just a filesystem path. At n=2 on one machine, this is faster than any PR-based review loop.
 

@@ -17,7 +17,7 @@ pdr_kind: governance
 (inter-agent collaboration cures);
 [PDR-064](PDR-064-coordinator-handoff-two-moments.md)
 (coordinator authority transfer);
-[`practice-index.md`](../../practice-index.md) (host adoption and
+`practice-index.md` (host adoption and
 implementation bridge).
 
 ## Context

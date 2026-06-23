@@ -281,7 +281,7 @@ Address the overlap between JSON Schema and Zod exports:
 - [ADR-028: Deferring Zod Validation](028-zod-validation-deferral.md)
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
 - [Schema-First Execution Directive](../../../.agent/directives/schema-first-execution.md)
-- [Implementation Plan](../../../.agent/plans/sdk-and-mcp-enhancements/05-zod-v4-export-implementation-plan.md)
+- Implementation Plan
 
 ## References
 

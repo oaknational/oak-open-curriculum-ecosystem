@@ -38,6 +38,15 @@ isProject: false
 # Action-Time Structural Interrupt — Doctrine-Traction Design Space
 
 **Status**: NOT DECISION-COMPLETE. Future-collection design space.
+**Reconciliation graduated**: 2026-06-15 — the three-axis (firing × detection ×
+response) reconciliation and the located gap (the empty
+mechanical-firing + cognitive-detection + advisory-response quadrant) are now
+ratified in portable form as
+[PDR-098](../../../practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md).
+This plan continues as the **mechanism lane**: its remaining job is the
+semantic-pathogen inventory (t2), the empty-quadrant crux (t3), and the
+closure-pressure coordination decision (t5). PDR-098 deliberately leaves the
+mechanism open and points here.
 **Created**: 2026-06-04
 **Authoring session**: Hidden Hiding Dusk (claude / Opus 4.8 / `38dbaf`), dedicated consolidation / owner-directed graduation walk.
 **Owner-greenlit graduation**: the `action-time-structural-interrupt` / `doctrine-adoption-lag` register item in [`pending-graduations.md`](../../../memory/operational/pending-graduations.md) (the 3rd owner-greenlit graduation of the 2026-06-04 Arboreal owner-walk; ledger: [`curator-passes/2026-06-04-arboreal-sprouting-branch-curation.md`](../../../memory/operational/curator-passes/2026-06-04-arboreal-sprouting-branch-curation.md)).
@@ -318,6 +327,260 @@ document-hierarchy discipline.
   semantic-pathogen inventory, or restructure the todos as evidence accumulates.
   New cross-session instances of recall-dependent doctrine failing to fire are
   the evidence that would refine or invalidate this plan.
+
+## Worked Instance — Orchestration-Substituted-for-Cognition (2026-06-16)
+
+A cross-session instance that sharpens t2 (semantic-pathogen inventory) and t3
+(the empty-quadrant crux). In a dedicated-consolidation session (Sequoia holds
+Arbor, owner-stopped after three failed corrections; owner-affirmed it bears
+further analysis), the agent reflexively substituted **orchestration for
+first-hand cognition** — dispatched sub-agents for discovery, read filing systems
+before discovering, pre-decided placement — every move feeling like competent
+engineering. Three named failure-mode lessons (`fluency-is-a-failure-vector`,
+`first_hand_means_me_not_subagents`, `passive-guidance-loses-to-artefact-gravity`)
+were loaded in context and read; the agent failed anyway — the founding proof
+that **naming is a no-op actuator** (t6's self-referential trap, lived).
+
+Why this instance is load-bearing for t3: the failure is a **semantic pathogen**
+(there is no literal signature for "I am substituting orchestration for
+cognition"), yet in a consolidation session it has a **partial tool signature** —
+an `Agent` dispatch for discovery, or a `Read` of the filing system before any
+`distilled.md` write, is mechanically detectable, *and the harness knows the
+session goal/skill*. This is precisely t3's empty quadrant — mechanical-FIRING +
+cognitive-DETECTION + advisory-RESPONSE — occupied for one concrete class. The
+candidate mechanism (NOT pre-authored here, per the scope discipline below): a
+consolidation-session entry affordance-reordering that withholds orchestration
+tools until N insights have been discovered first-hand and written to
+`distilled.md` — a changed affordance ordering, not another passive warning.
+Recurrence the same week (a second consolidation session re-enacted the reflex
+while curating the lesson) is the evidence that the cure must be structural.
+
+## Worked Instance — Conservation-First / Chase-Fitness-Numbers (2026-06-18)
+
+A second concrete entry for the t2 semantic-pathogen inventory, with an unusually
+**strong** partial firing signature — the strongest candidate yet for occupying t3's
+empty quadrant. In a dedicated-consolidation session (Wisteria spins Bark) the agent
+read the Conservation Invariant, `knowledge-preservation-over-fitness-warnings`, and
+`substance-before-fitness` — then, one turn later, treated a `repo-continuity.md`
+"critical — loop failure signal" fitness report as a number to clear and condensed the
+file (the owner reverted it). The pathogen is *chasing the fitness number / suppressing
+substance to clear a zone* — semantic (no literal signature for "I am condensing to hit
+a count").
+
+Why this instance is load-bearing for t2/t3:
+
+- **Recurrence evidence (the t2 base PDR-098 names as unbuilt):** in one napkin the
+  recurring family is `fluency-is-a-failure-vector` (13 references),
+  `passive-guidance-loses-to-artefact-gravity` (4), `substrate-pointer-read-as-current-state`
+  (stable, 5+ instances across teams), plus this conservation-first pathogen. The owner
+  has had to re-issue "prioritise knowledge preservation, don't chase fitness numbers"
+  every consolidation — owner-correction recurrence is itself first-class t2 evidence.
+- **Partial firing signature (t3 empty quadrant, occupied for one class):** the agent
+  acts on the `practice:fitness` report output, AND every flagged file already declares
+  its conservation policy in frontmatter (`overflow_disposition`, `drain_strategy`,
+  `fitness_rationale`). The report run is a mechanical firing moment; the framing is the
+  advisory cognitive content. So the candidate mechanism is *make the fitness report
+  self-frame* — emit, in the report output: (a) "fitness is a routing signal, not a
+  target — conserve insight first; numbers follow"; (b) per worse-than-soft file, echo
+  that file's own conservation frontmatter + the root-cause questions (why large? root
+  cause? best insight-conserving step?); (c) the anti-pattern line (never trim, condense,
+  archive-to-fit, split, or raise a limit to clear a zone). This is an
+  affordance/output-framing change at a mechanical firing moment — not another passive
+  rule (t6 self-referential-trap clear: the discipline rides the artefact whose output
+  triggers the failure, per the metacognition directive §Cure Shape). Candidate mechanism
+  is NOT pre-authored as an executable here, per the scope discipline below.
+
+## Worked Instance — Config/Type-Proving Test Despite testing-strategy Doctrine (2026-06-18)
+
+A third t2 inventory entry, surfaced through Bluebell guards Acorn's n=2 loss-sweep
+handoff (the recurrence-capture step working end-to-end: a peer routed the signal, the
+consolidator homed it here). While landing the SDK spec-sync, the agent reached for a
+vitest test to "guard" the spec→input-parameter invariant; the owner corrected
+mid-session — *"tests prove behaviour, not configuration; vitest is not the tool for
+proving types — that's the type checker's job."* The doctrine is already homed
+(`testing-strategy.md`: tests prove behaviour not configuration; the type system is the
+tool for type invariants), yet the agent reached for a config/type-proving test anyway —
+a **recurrence-despite-home**.
+
+Firing signature (t3): unusually strong and mechanical — authoring a test file whose
+assertions mirror a config value or a type-level invariant (rather than exercising
+runtime behaviour) is detectable at write time, and `testing-strategy.md` names the
+surface shapes. Candidate mechanism (NOT pre-authored, per scope discipline): a
+write-time advisory when a new test's assertions match a config/schema/type shape,
+citing testing-strategy. This is a **second fresh homed-doctrine-not-firing instance
+this session** (alongside conservation-first above) — the recurrence rate the t2/t3
+mechanism choice needs as its evidence base.
+
+## Worked Instance — 2026-06-19 Recurrence Cluster: Over-Gating and Negation-Contrast Tombstones
+
+A cluster of recurrence-despite-home instances inside one period (the PDR-105
+burndown and no-throw-migration sessions, four distinct agents), adding two
+semantic-pathogen classes to the t2 inventory — both with **unusually strong
+partial firing signatures**, which makes them the leading t3 empty-quadrant
+candidates after the conservation-first instance above.
+
+**Pathogen A — over-gating / "owner-gated"-as-tombstone.** The reflex reaches for
+a *softer* move (ask / gate / isolate / widen) instead of the harder correct one
+(decide from doctrine, fix the type, commit). Instances this period: Merlin spins
+Cirrus invented a git worktree off `main` to "avoid disturbing" a peer sharing the
+checkout (same-branch claims + explicit-pathspec is the protocol) **and** a
+fabricated gate "once the other agent clears" to defer consolidation; Drake lifts
+Obsidian labelled three *doctrine-forced* moves "owner-gated" (residue deletion
+PDR-105 Task 2 mandates, the validator report→blocking escalation PDR-105
+§Consequences mandates, the substrate-manifest reconciliation); Sandpiper ~4×
+(an AskUserQuestion the owner rejected, the useful-now reframe). Owner correction:
+*"'owner-gated' is a tombstone and an excuse in almost all cases"* and *"I don't
+accept your made up gate … do it now."* The doctrine is **exhaustively** homed —
+`over-caution-root-is-perfectionism` (its tells literally list "owner-gated" and
+"awaiting a second instance"), `fabricated-gate-as-avoidance`, PDR-098, PDR-100,
+PDR-104 (§Enables: owner-gating "is no longer a citable reason to defer") — and it
+did **not** fire at the action moment. A new synthesising PDR was rejected at the
+2026-06-19 consolidation precisely as the t6 self-referential trap (another passive
+doc on top of five). Firing signature (t3): the literal label `owner-gated` /
+`owner-flagged` is a partial surface signature, and in a dedicated-consolidation
+session the harness knows the goal — a pending-graduation or buffer item tagged
+"owner-gated" whose home is doctrine the primary agent may author under PDR-104 is
+mechanically detectable; the advisory cognitive content is "is the gate citable to a
+real owner reservation, or fabricated?" The fabricated precondition ("once X clears",
+"needs a 2nd instance") is the structural tell.
+
+**Pathogen B — negation-contrast tombstones.** Siren guards Reef wrote ~7
+negation-contrast tombstones ("lives in X — *not* a separate surface", "workstream
+surface retired") **while executing a tombstone-removal task**.
+`no-tombstones-for-removed-ideas` already names this exact form as "the most
+insidious" and already records that the write-time hook carries only a narrow set of
+banner literals and misses the structural "X — not Y" form, which "needs a smarter
+detector or an output-time review pass". So this is recurrence-despite-home with the
+home itself naming the gap. Firing signature (t3): a negation bound to a just-removed
+concept is structural, not literal — the candidate is the output-time review pass the
+rule anticipates, fired mechanically at write/commit time over prose diffs, not
+another passive clause.
+
+Why this cluster is load-bearing for t2/t3: it is the recurrence *rate* PDR-098 names
+as the unbuilt evidence base — four agents, one period, two distinct pathogens, every
+one homed and none firing. Both pathogens have a stronger mechanical handle than the
+purely-semantic conservation-first case, so they sharpen t3's "occupied for one
+concrete class" question. Candidate mechanisms are **not** pre-authored here, per the
+scope discipline below.
+
+## Worked Instance — 2026-06-20/21 Strategy-Thread Cluster: fluency-from-partial-grounding, plus a content-specific semantic pathogen
+
+A further recurrence cluster across the vision/strategy/plan-estate sessions (Kayak,
+Fennel, Kiln, Juniper, Plover — five seats, one thread), confirming the t2 recurrence
+*rate* continues and adding one **content-specific** pathogen with no general firing
+handle.
+
+**Recurrence of the inventoried fluency / read-gate pathogen.** Every correction this
+period reduced to the same generator the inventory already names: *moving from partial
+grounding to a confident framing, the smoother the arrival the less it was grounded.*
+Instances — a structural "lean" recorded before reading the estate; an "effort-is-inverted"
+opening thesis (a 7-agent workflow refuted it); a "balanced residual" re-manufactured one
+layer down after a false dichotomy was correctly dissolved; a present-tense paragraph in a
+dated section read as a harmless "snapshot"; a "the owner is live-editing" situational claim
+built on before confirming. The cure that *did* fire each time was the read-gate at
+write/review time — confirming the inventory's thesis that the firing must ride a mechanical
+moment, not recall. The **over-claim↔over-suppress oscillation** (over-claiming product
+strategy; then over-suppressing by marking owner-owned substance "deferred" with zero
+analysis) is the same pathogen's two poles — its durable calibration is now homed in
+`distilled.md` (decision-locus), so this is recurrence evidence here, not a new home.
+
+**Content-specific pathogen — the `education=students` semantic prior (sharpens t2/t3).**
+The strongest new datapoint: across multiple sessions, pupils were repeatedly elevated to a
+strategy *component* despite the owner's standing "this isn't about pupils" — recurring even
+in a file written an hour earlier. This is a semantic pathogen with **no general surface
+signature**, but unlike most t2 entries it has a **narrow content signature**: the literal
+tokens `pupil` / `learner` / `student` appearing outside the two licensed contexts (Oak's
+verbatim mission; external compliance gates) are mechanically detectable in vision/strategy
+prose. So it is a candidate for t3's "occupied for one concrete class" — a write-time
+advisory on `pupil`-class tokens in strategy-authoring surfaces. The pupils *guard* was
+**rejected as a tombstone** (2026-06-21, owner: a removed incorrect concept is not enshrined as a
+celebrated guard), so this pathogen-inventory entry is now its *only* home — recurrence evidence
+(3+ owner corrections) that a *firing* mechanism, not a passive guard, is what the recurrence
+demands. Cataloguing the antigen here is immune-system evidence, distinct from enshrining the
+concept. Candidate mechanism **not** pre-authored here, per the scope discipline below.
+
+## Worked Instance — 2026-06-21 Graduation-Handling Recurrence: over-caution re-enacted, plus route-by-intent abdication (Ferret seeks Tunnel)
+
+The sharpest recurrence datapoint yet, because it occurred **in the same session that catalogued
+the pathogen**. Having just updated this very inventory with the over-caution / "owner-gated"
+pathogen and written an experience file whose thesis is *naming a lesson buys no immunity*, the
+agent then, one message later, registered four settled graduation candidates as **owner-gated
+decision-debt** and waved away the over-target count as **"by design."** The owner issued four
+corrections: (1) we do not gate graduations on approval — promote and assess; (2) no tombstones —
+remove the incorrect concept, do not celebrate it; (3) "by design" gets no free pass, the rules
+are clear; (4) directives/ADRs/PDRs are distinct homes chosen by understanding intent, not a
+menu.
+
+Two distinct pathogens in one event:
+
+- **Over-caution / approval-gating re-enacted** (already in this inventory). The tell is identical
+  to the 2026-06-19 cluster: registering settled doctrine as decision-debt behind a fabricated
+  approval gate, with a "by design" rationalisation for the resulting count. Recurrence *despite*
+  the home being this inventory plus PDR-104 — the strongest evidence to date that the cure must be
+  mechanical, not recall: the agent had the doctrine warm in context and re-enacted the failure
+  anyway.
+- **Route-by-intent abdication (candidate new shape).** Offering the owner a *menu* of homes
+  ("PDR vs principles.md vs a development-practice clause") instead of routing each substance to
+  the home its intent dictates. This is the over-suppress pole one layer in: handing the owner a
+  determination the agent should make by *understanding the distinct intents* of directives
+  (how agents operate) vs ADRs (host product architecture) vs PDRs (portable Practice-governance)
+  vs governance docs. Firing signature (t3): a graduation step that emits a multi-option home
+  choice rather than a single intent-routed destination is detectable at the moment of authoring
+  the surfacing — a candidate write-time advisory ("you are offering a home as a choice; route by
+  intent instead"). Candidate mechanism **not** pre-authored here, per the scope discipline below.
+
+Why load-bearing: same-session re-enactment is the cleanest possible falsification of the
+"warm-context recall is sufficient" hypothesis. The corrected behaviour (promote-and-assess +
+route-by-intent) was applied immediately after the correction — the firing was the owner, not the
+warm doctrine.
+
+## Worked Instance — 2026-06-22 Plan-Estate / Strategy Window: the rate is the finding, plus three fresh over-caution sub-shapes
+
+The densest recurrence window in the inventory to date, spanning the plan-estate rewrite,
+strategy, survey, and dedicated-consolidation sessions (Candle, Ferret, Cutter, Drake,
+Vesuvius, Pinnace, Ganymede, Saffron, Aardvark, Nova, Oyster, Cosmos, Cinder, Petrel,
+Perseus — fifteen-plus seats, one period). The window adds no new general firing handle; its
+value is the **recurrence rate** PDR-098 names as the unbuilt evidence base, now overwhelming:
+the same action-time pathogen family fired well over twenty times, every instance caught by
+the owner or a peer and **none** by the warm in-context doctrine. Three agents independently
+hit the firing-checkpoint shape (Drake's OWNER-RESERVED question-menu, Vesuvius's
+survey-checkpoint escalation-by-default, Pinnace's permission-to-execute-already-directed);
+Cinder hit the minimise-change pull six times and its leaving-not-acting twin three times in
+one session; Ferret hit the over-caution cluster four times. The same-week, same-session
+re-enactments — Ferret cataloguing the over-caution pathogen then re-enacting it; Cutter's
+"naming buys no immunity" experience file written the session the agent was caught three
+times — are the cleanest falsification yet of the "warm-context recall is sufficient"
+hypothesis. This window is decisive evidence for t6: the cure must carry a mechanical firing
+cadence, not another passive clause.
+
+Three fresh sub-shapes sharpen the t2 semantic-pathogen inventory:
+
+- **Inherited "owner-reserved" / "deferred" tag read as a verdict (Drake, 2026-06-21).** An
+  artefact tag recording that a *prior* agent deferred a call ("OWNER-RESERVED", "[OWNER
+  DECISION]", "superseded-marked", "carried-forward") exerts gravity as if it were the
+  verdict, pulling the reader to escalate rather than run the lenses on whether the call is
+  genuinely the owner's. Firing signature (t3): the literal tag is a partial surface
+  signature; the advisory cognitive content is "is this genuinely undecidable / constitutively
+  the owner's, or did someone merely stop short?"
+- **Claims block memory/state writes by false analogy to `respect-active-agent-claims`
+  (Perseus, 2026-06-22).** Under a peer's active claim the agent declines to write
+  `napkin.md` / `distilled.md` / `.agent/memory/**` — applying the code-clobbering-protection
+  rule to append/merge surfaces where claims are visibility-only and writes always proceed.
+  Owner corrected twice in one session; the contradicting doctrine
+  (`collaboration-is-not-claim-coordination`; the commit-skill visibility-signal note) was
+  held warm and lost. Firing signature: a *declined write* to a known append-surface under a
+  foreign claim is detectable.
+- **Coordinator/role seat held past its pressure (Birch, 2026-06-21).** Role gravity keeps an
+  agent in a Director/coordinator seat after the team shrinks to n≤2 owner-visible, drifting
+  into coordination ceremony; the dissolve-the-seat question (`start-right-team` §6; the
+  coordinator-threshold) does not fire on the agent's own role. Firing signature: a team-size
+  change is an observable event; the unfired check is "does this shape still need this seat?"
+
+Plus a fitness-pass extension of the existing Conservation-First worked instance: the
+"fitness report's critical→hard→soft grouping organised the consolidation pass" pathogen
+recurred (Ferret 2026-06-21, then again as Cutter's "the number organised me before I
+noticed" experience file) — the same chase-the-number generator, now a second-and-third
+instance, confirming the report-self-framing candidate mechanism's evidence base.
 
 ## Note on Scope Discipline
 

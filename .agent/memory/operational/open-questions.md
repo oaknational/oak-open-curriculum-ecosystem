@@ -10,220 +10,242 @@ merge_class: mostly-append-register
 fitness_content_role: drainable-buffer
 ---
 
-## Q-001 — gate-1a EEF tool: whole-graph selection vs data-supported narrowing
+# Open Questions
 
-- **Captured**: 2026-05-27 (Galactic Dancing Constellation / `claude` / `7efeec`)
-- **Question**: At gate-1a, `eef-explore-evidence-for-context` returns the whole
-  connected EEF graph (all 30 strands + 37 edges) and lets the model select
-  contextual fit. Is whole-graph the right teacher experience, or should a
-  later stage add narrowing — and if so, on what signal?
-- **Why it shapes future work**: determines the scope and trigger of the gate-1b
-  t5 ranking/scoring engine (relevance selection is explicitly deferred there).
-- **Why not answerable cheaply now**: needs real teacher-usage signal; the
-  corpus tag vocabulary does not support reliable server-side narrowing today
-  (verified: focus-enum→tag mapping mostly empty; only 16/30 strands carry a
-  phase tag, so phase-narrowing would suppress ~14 phase-general strands).
-- **Owning artefact / discussion home**: PR #121 top section (Starless flagged
-  for owner discussion). Does not block the current cycle — PR #121 is
-  mergeable as whole-graph.
-- **Status**: withdrawn 2026-05-28 (Sylvan Whispering Fern) — framing superseded.
-- **Disposition (2026-05-28)**: the gate-1a/1b split and the
-  `eef-explore-evidence-for-context` whole-graph tool this question assumes were
-  diagnosed as the wrong foundation and discarded; the EEF work was rebuilt from
-  foundations. The underlying substance — the selection / scoping strategy for a
-  graph-shaped tool — is preserved and was carried into the live EEF plan
-  (`plans/sector-engagement/eef/current/eef-graph-tool-completion.plan.md`); the
-  2026-05-28 design docs that first explored it were quarantined to `archive/`
-  (2026-05-30). No substance lost; this entry is retired to avoid a stale second
-  home in dead gate-1a/1b vocabulary.
+Drainable register of architectural / design questions that are not yet decidable
+and are not blocking a current cycle. Each entry names the question, why it shapes
+future work, why it is not cheaply answerable now, its owning artefact, and a
+status with a resolution trigger.
 
-## Q-002 — which `.agent/rules/*` rules are actually impactful
+Drained empty at the 2026-06-15 dedicated consolidation; new questions are appended
+as they arise.
 
-- **Captured**: 2026-06-01 (Sunlit Gliding Twilight / `claude` / `2a4252`)
-- **Question**: Of the ~70 rules injected into context via `CLAUDE.md`, which
-  ones measurably change agent behaviour and earn their context cost, and which
-  are inert? Prose rules have no "firing" event to count; hook-backed rules
-  (e.g. write-time `no-moving-targets`, secrets-scan on Read, PreToolUse gates)
-  do execute and could be instrumented.
-- **Why it shapes future work**: directly informs the ~80k reliably-loaded
-  context budget (`[[project_80k_reliably_loaded_context_budget]]`) — knowing
-  which rules are inert is the evidence needed to move them on-demand or retire
-  them, rather than carrying all ~70 always-on.
-- **Why not answerable cheaply now**: prose rules are not measurable by design
-  (continuously in effect, never discretely triggered); the only well-defined
-  signal is hook-fire counts, which requires (a) instrumenting hook scripts to
-  log invocations and (b) for behaviour-change attribution, auditing transcripts
-  for evidence a rule altered a move. No built-in per-rule analytics exist.
-- **Owning artefact / discussion home**: none yet; relates to context-budget
-  governance. Does not block any current cycle.
-- **Status**: owner-gated — needs owner direction to open a rule-impact
-  instrumentation / transcript-audit lane, or an owner decision to retire the
-  question. Future check: look for a current context-budget or rule-analytics
-  plan before asking again; none is recorded here.
+## Q-001 — Cadence anchor for report-only fitness
 
-## Q-003 — input/output schema strategy for MCP tools (+ the EEF coupling)
+**Question:** Now that fitness is report-only (ADR-144, 2026-06-16 — the validator never
+fails a build), what structural anchor ensures the signal is actually *run and read* at
+the right cadence (consolidation / session handoff)?
 
-- **Captured**: 2026-06-02 (Flamebright Charring Ember / `claude` / Opus 4.8 / `30dd5d`)
-- **Question**: how are MCP tool **input and output** schemas carried to the SDK
-  registration path, and what is the canonical mechanism? (Owner: "additional
-  information about input/output schemas is coming soon.")
-- **Owning artefact**:
-  [`sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`][q3-general]
-  (general) and — the precise owner of the EEF-coupling sub-question —
-  [`sdk-and-mcp-enhancements/current/graph-tool-output-schemas.plan.md`][q3-graph]
-  ("Graph-tool output schemas via the EEF projection pattern", DESIGN), both
-  authored/refreshed 2026-06-02 by the Abyssal Flowing Beacon workstream (audit:
-  `.agent/reports/output-schema-mcp-plan-audit-2026-06-02.md`). Owner resolved the
-  S0 universal-tools seam there: apply the required `outputSchema` per tool type,
-  **graph first**, promoting to root `UniversalToolListEntry` last. This entry does
-  **not** duplicate those plans; it records the EEF coupling so it is not lost.
-- **EEF coupling (this session's finding to hand to the owning plan)**: the EEF
-  MCP tool is a *graph universal tool* (same family as `get-misconception-graph`/
-  `get-prior-knowledge-graph`, which return `structuredContent` but carry **no**
-  `outputSchema` today). Carrying `outputSchema` through the universal-tools path
-  is net-new and touches a specific surface set — `AggregatedToolName`,
-  `AGGREGATED_TOOL_DEFS`/`AggregatedToolDefShape`, `UniversalToolListEntry`,
-  `listUniversalTools`, and the `handlers.ts` config (all carry `inputSchema`
-  only). A four-architecture-reviewer pass flagged a **three-step asymmetric-drop**
-  failure mode (a silent `outputSchema` drop leaves graph tools unvalidated while
-  existing no-outputSchema tools pass, uncaught by current tests). The EEF plan
-  (D3/D6) defers these mechanics to this question's resolution.
-- **Update (2026-06-02, Abyssal Flowing Beacon / `762085`)**: the output-schemas
-  plan was audited + rewritten decision-complete, and the owner **resolved S0
-  ownership** (that plan owns the seam) and the **sourcing doctrine**: schemas are
-  a deterministic type-strict **projection** of the static data fed to a **single
-  Zod call** (`satisfies`-tied), never hand-constructed — same pattern as EEF,
-  emitted at codegen for the graph tools. The graph slice and its five sub-questions
-  (the `as const` precondition + scale, the output-only structural simplification,
-  where the one shared mechanism lives, 2-vs-3 graph scope, codegen emission shape)
-  are owned by the new
-  [`graph-tool-output-schemas.plan.md`][q3-graph]
-  (status DESIGN; co-design with EEF D4–D6). EEF D5/D6's single-Zod-call mechanism
-  is pending, so the two are co-defining ONE mechanism.
-- **Update (2026-06-02, Silvered Lurking Mask / `bbb696`)**: the owner ratified
-  the **delivery order** (now recorded in the owning plans, committed
-  `e8fe16e0`): the EEF tool's `outputSchema` lands **first and alone via EEF
-  D6** — the mechanism's first instance; the 3 existing graph tools receive
-  theirs **with their substrate migration** (one replacement unit per tool) and
-  are untouched before it; remaining types follow; required/root promotion
-  last. Of the five sub-questions, **Q2 is resolved** (verified in code: the
-  graph tools take no input; the projection is structural) and **Q4 is
-  resolved** (thread-progressions excluded — sequence-shaped, not
-  graph-forced). Q1/Q3/Q5 (as-const scope, mechanism home, codegen emission
-  shape) resolve in the EEF D4–D6 co-design and the unified substrate-migration
-  plan.
-- **Update (2026-06-02, Galactic Glowing Prism / `cd7389`)**: the unified
-  substrate-migration plan is authored —
-  [`graph-tools-value-redesign.plan.md`][q3-migration]. The graph
-  projection plan's design content is absorbed there (Q1/Q3/Q5 are its
-  Decisions A/B/D; the projection doctrine and resolved Q2/Q4 are its
-  Ratified decisions 7–9) and the file is archived. Q1/Q3/Q5 now resolve in
-  the EEF D4–D6 co-design and at that plan's promotion (trigger: EEF D6
-  landed + D7 green).
-- **Status**: owner-gated — narrowed to Q1/Q3/Q5, the shared-mechanism design.
-  Owner-facing decision point is the EEF D4–D6 co-design and unified
-  substrate-migration promotion. Future check: verify whether EEF D6 has landed,
-  D7 is green, and the substrate-migration promotion resolved Decisions A/B/D;
-  otherwise keep this question live.
-- **Progress (2026-06-04, Arboreal curation drain)**: EEF D4 is now
-  owner-ratified and the migration plan is the renamed value-redesign; the D6/D7
-  gate (and that plan's promotion) remains unfired, so this question stays live.
-- **Progress (2026-06-05, Lanternlit curation pass)**: EEF D5 landed green
-  (`2e9021ff`) — the graph-native view + single-Zod-call mechanism's substrate;
-  D6 (the EEF MCP composition surface, where the `outputSchema` mechanism's first
-  instance lands) is the next safe step but is **not yet built**. The D6/D7 gate
-  and the substrate-migration promotion remain unfired; this question stays live.
-- **Progress (2026-06-06, Starlit Scattering Twilight curation pass)**: the D6
-  execution plan is authored + dual-reviewed (`eef-d6-execution.plan.md`, Dusky
-  Dimming Candle), with D6 re-grounding refinements folded (`93ee593f`); D6 **code
-  is still not written** (next safe step = EXECUTE D6). The `outputSchema`
-  mechanism's first instance therefore still has not landed; the gate stays unfired
-  and this question stays live.
+**Why it shapes future work:** report-only is only as live as its invocation. ADR-144 was
+originally created to stop fitness drifting into "advisory and ignored"; the report-only
+amendment answers that with "prominence + discipline," but a passive discipline with no
+firing surface is exactly the failure mode this repo has repeatedly found decays under
+pressure. A cadence anchor (a skill step that *runs* `practice:fitness`, a handoff checklist
+item, or a non-gating hook that emits the report) would make the signal reliably seen.
 
-[q3-general]: ../../plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md
-[q3-graph]: ../../plans/sdk-and-mcp-enhancements/archive/completed/graph-tool-output-schemas.plan.md
-[q3-migration]: ../../plans/connecting-oak-resources/knowledge-graph-integration/future/graph-tools-value-redesign.plan.md
+**Why not cheaply answerable now:** needs design — which surface owns the cadence, and how to
+emit a prominent signal without re-introducing a gate. Out of scope for the decision-debt drain.
 
-## Q-004 — does the capability taxonomy need a rights/licensing axis?
+**Owning artefact:** ADR-144 (§Exit code semantics); relates to `consolidate-docs` /
+`session-handoff` cadence.
 
-- **Captured**: 2026-06-03 (Blustery Lifting Gale / claude / Opus 4.8 / `9b33b0`).
-- **Question**: ADR-189 ratifies two axes (audience, distribution locus) with
-  packaging as mechanism. The first-party skills library's licensing split —
-  MIT scaffolding, © Oak brand assets, curriculum content shared in a
-  pedagogical spirit — maps onto neither axis. When Oak distributes
-  capabilities externally, what may be copied, what must be attributed, and
-  what stays Oak's are questions the current taxonomy cannot record. Is
-  rights/licensing a third axis, a per-capability metadata field, or out of
-  taxonomy scope (owned by LICENSE surfaces)?
-- **Why not now**: one observation only; the repo's own discipline says one
-  instance is an observation, not a category. Becomes decidable when a
-  capability pack or skills-index publication forces a licensing declaration
-  per artefact.
-- **Owning artefact when it fires**: ADR-189 amendment +
-  [`skills-classification-taxonomy.plan.md`][q4-taxonomy] inventory columns.
-- **Status**: open — trigger is the first external capability publication or
-  the oak-skills integration decision.
+**Status:** open. **Resolution path (named 2026-06-21):** the consolidation skills already *run*
+`practice:fitness:informational` (cadence anchor exists); the open half — ensuring the signal is
+*read and acted on* — now has a concrete candidate home in the action-time design plan's
+"make the fitness report self-frame" worked instance (the conservation-first / chase-numbers
+pathogen). **Resolution trigger:** the next fitness/cadence design pass adopts (or rejects) that
+self-framing mechanism, or a second instance of a report-only fitness signal going unread.
+Deferral-honesty: the design (which surface owns the read-discipline, and the report-self-framing
+shape) is not yet decided; falsifiable by a second unread-report instance. Surfaced by
+assumptions-expert during the 2026-06-16 report-only review. (Q-001 is a member of the Q-006
+action-time-interrupt family — its read-discipline cure is the same firing mechanism.)
 
-[q4-taxonomy]: ../../plans/discovery/future/skills-classification-taxonomy.plan.md
+## Q-002 — The nature of the strategy layer and the vision→strategy→planning flow
 
-## Q-005 — can the repo professionalism assessment be cut into practical plans?
+**Question:** What *is* the strategy layer (its shape, content, and granularity), and how exactly
+does vision derive strategy, and strategy derive planning? The controlling plan assumes a
+2A (align-on-impact) → 2B (gap analysis) → 2C (execution spine) structure, but the owner wants the
+nature of the strategy layer and the derivation flow settled before more strategy work proceeds.
 
-- **Captured**: 2026-06-03 (Airy Whirling Wing / codex / GPT-5 / `019e8e`).
-- **Question**: The
-  [`Oak Repository Professionalism and Engineering Quality Report — 2026-06-03`][q5-report]
-  gives a blunt assessment and a friction-reduction roadmap. Can that roadmap
-  become practical plan work, and if yes should it be one cross-cutting plan or
-  separate plans under architecture/quality gates, developer experience,
-  agentic-engineering, and agent-tooling?
-- **Why it shapes future work**: the report names high-leverage improvements
-  (repo-check failure classification, Playwright preflight, contributor fast
-  path, generated authority map, collaboration CLI UX, active-surface reduction)
-  but those recommendations should not become another passive doctrine layer.
-  A planability pass decides whether the next move is executable work, routing
-  into existing plans, or no new plan.
-- **Why not answerable cheaply now**: requires cross-checking existing current
-  and future plans across at least four collections to avoid duplicate plans or
-  wrong ownership. The report was authored and indexed in this session; the
-  owner explicitly asked that it receive assessment for practical planning.
-- **Owning artefact / discussion home**: the
-  [assessment thread record](threads/repo-professionalism-assessment.next-session.md).
-- **Status**: open — trigger is the next owner-directed planning/triage
-  session, or a dedicated follow-up asking whether to turn the assessment into
-  plan work.
+**Why it shapes future work:** it governs the whole Phase 2 (and the Phase 3 estate restructure
+that serves the strategy). If "the strategy layer" means something different from the current
+2A/2B/2C breakdown, that breakdown is provisional and may be reshaped — so authoring more strategy
+documents now risks building on an unsettled frame.
 
-[q5-report]: ../../reports/oak-repo-professionalism-engineering-quality-report-2026-06-03.md
+**Why not cheaply answerable now:** it's a design discussion the owner wants to hold directly in a
+fresh session; it isn't an artefact an agent should settle unilaterally.
 
-## Q-006 — should the in-process mock runtime-config mirror the production EEF default?
+**Owning artefact:** [`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
+(Phase 2 — carries the owner-directed gate); thread `strategy-and-plan-estate-holistic-review`.
 
-- **Captured**: 2026-06-08 (Briny Charting Lagoon / claude / Opus 4.8 / `4dae1b`).
-- **Question**: EEF is now default-ON in production resolution (kill-switch posture). The e2e
-  fixture (`e2e-tests/helpers/test-config.ts`) was flipped to `eefEnabled: true` to mirror that,
-  but the in-process `createMockRuntimeConfig` (`src/test-helpers/auth-error-test-helpers.ts`)
-  still defaults `eefEnabled: false`. Should the in-process mock default also mirror production
-  (true), or stay false as an explicit minimal fixture?
-- **Why it shapes future work**: a mock default that diverges from production can let a real
-  default-on regression pass in-process tests; aligning it is more faithful but has a blast
-  radius across integration tests that build the server via the mock without setting the flag.
-- **Why not answerable cheaply now**: requires assessing every in-process test that uses the mock
-  default and asserts tool/resource counts, to size the change safely.
-- **Owning artefact / discussion home**: the [`eef` thread record](threads/eef.next-session.md);
-  decide alongside D7 work.
-- **Status**: open — trigger is the next EEF/test-harness session touching these fixtures.
+**Status:** RESOLVED (2026-06-18). The discussion happened. Outcome: the strategy layer is a
+**cohesive system-strategy** (choices + measures; portfolio tier + per-stream sections, cohesive
+across and within), homed at `docs/strategy/`. The vision→strategy→planning relationship is
+**informational dependence, not execution order**, sitting under a fourth top layer — **Oak's own
+strategy**, which our vision services (align, not fulfil). The 2A/2B/2C phase breakdown is
+superseded by three co-equal, first-class bodies of work (vision / strategy / plan estate). Full
+outcome recorded in the controlling plan
+[`vision-strategy-and-plan-estate.plan.md`](../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md)
+(reconceived 2026-06-18). Surfaced by owner direction; resolved with the owner.
 
-## Q-007 — should the e2e list-parity test derive its expected tool set from the SDK enumeration?
+## Q-003 — Is the app's data-availability gate a missing materialised view, or TPC-filter assurance?
 
-- **Captured**: 2026-06-08 (Briny Charting Lagoon / claude / Opus 4.8 / `4dae1b`).
-- **Question**: `server.e2e.test.ts`'s `list_tools parity` asserts against a hardcoded
-  `aggregatedTools` array (I added `get-eef-evidence` to it). Should it instead derive the
-  expected set from `listUniversalTools(...)` so it proves "no projection drift" config-agnostically
-  and stops needing a manual edit per new tool?
-- **Why it shapes future work**: the hardcoded list re-breaks on every tool add/rename and
-  couples the parity test to the live flag configuration; deriving it would make the test prove
-  the mechanism (app registers exactly what the SDK enumerates) rather than a frozen inventory.
-- **Why not answerable cheaply now**: needs care around flag-gated tools (the app skips gated
-  entries when off; the derivation must account for the e2e fixture's flag state) and a check that
-  the derived assertion still catches real projection drift.
-- **Owning artefact / discussion home**: the
-  [`unified-mcp-server-test-harness.plan.md`](../../plans/sdk-and-mcp-enhancements/current/unified-mcp-server-test-harness.plan.md)
-  (WS0 smoke/parity) or the `eef` thread record.
-- **Status**: open — trigger is the next test-harness (WS0/WS3) session.
+**Question:** The MCP-app launch-readiness names a "lesson-level data-availability" gate as "the
+missing materialised view the API needs" (stream-mcp-app.md release-readiness hand-offs; controlling
+plan Body 2). The owner (2026-06-21) framed the same area as the **third-party-content (TPC) filter
+not yet proven** for public release — the open-data subset (TPC removed) the Open Curriculum API
+serves. Are these the same gate (the MV *is* the proven-open filter), two facets of one gate, or two
+distinct gates?
+
+**Why it shapes future work:** it is a production-release blocker for the app stream and the
+marketing gate (TPC-risk mitigation). Whether the work is "build a missing MV", "prove the existing
+filter", or both changes the hand-off owner and the acceptance criteria.
+
+**Why not cheaply answerable now:** needs the data/API team's first-hand knowledge of the actual
+data infrastructure; an agent must not assert the data shape from docs.
+
+**Owning artefact:** [`stream-mcp-app.md`](../../../docs/strategy/stream-mcp-app.md)
+§release-readiness hand-offs; controlling plan §Body 2; the launch-readiness framework.
+
+**Status:** RESOLVED (2026-06-21, owner). Same conceptual area — surfacing the lesson-level TPC data
+in the database (upstream, **not our scope**) and an appropriate materialised view are the
+*mechanisms* that enable access to the safely-filtered (TPC-removed) data via the upstream Oak Open
+Curriculum API. The "missing materialised view" and the "TPC filter not yet proven" describe one
+gate: the safely-filtered open-data availability the app depends on. Surfaced by Plover wakes
+Sundog's first-hand context-loss scan; resolved by owner direction.
+
+## Q-004 — A general convention for naming openly-licensed external sources?
+
+**Question:** The external-skills substrate study was source-neutralised by design (its AGENTS-side
+"vendor-literal clause" kept the source anonymous). The owner determined (2026-06-22) that for an
+openly-licensed public repo (`mattpocock/skills`, MIT) the anonymity "never had a real purpose" and
+directed dropping it. That decision was scoped to this source. Should the Practice carry a *general*
+convention — name openly-licensed external sources plainly with attribution; keep genuinely
+proprietary/unlicensed sources private — and if so, where does it live? (Not the general
+`plan-body-first-principles-check` vendor-literal clause, which governs token-drift, not source
+attribution.)
+
+**Why it shapes future work:** future external-substrate studies (ponytail is already the second)
+will each face the same naming decision; a settled convention prevents re-litigating it per source.
+
+**Why not cheaply answerable now:** it is an owner doctrine call about Practice-wide
+source-handling, not a fact to look up; low-urgency (does not block any current cycle).
+
+**Owning artefact:** [`external-skills-substrate-learning.plan.md`](../../plans/agentic-engineering-enhancements/future/external-skills-substrate-learning.plan.md)
+§Decisions; the two substrate studies in
+`research/agentic-engineering/operating-model-and-platforms/`.
+
+**Status:** open (2026-06-22, Perseus turns Horizon). **Lens-resolved direction (2026-06-22, L1 + L3):**
+name openly-licensed sources plainly with attribution; keep genuinely proprietary/unlicensed sources
+private — a PDR clause the owner ratifies. **Resolution trigger:** the next external-substrate study, or
+owner ratification of the convention.
+
+## Q-005 — When does the worktree-per-agent transition land?
+
+**Question:** The repo runs one-dev-many-agents now, moving to many-checkouts / variable-agent-density.
+Concurrent agents on one shared checkout couple through the whole-tree pre-commit gate and the shared
+working tree (F-83); this session repeatedly hit it (a peer co-committed a file mid-edit, HEAD shifted ~5
+times). When does worktree-per-agent (one git worktree per concurrent agent) land?
+
+**Why it shapes future work:** L4 ("would it be simpler if the system changed?") decisively resolves the
+*direction* — worktrees dissolve the shared-checkout coupling rather than coordinating around it. Only the
+*timing* is open, and every future multi-agent window pays the coupling cost until it lands.
+
+**Why not cheaply answerable now:** infra work with its own design (worktree lifecycle; the shared
+coordination-home resolution, part-built via `resolveCoordinationHome` in WS-3 F-41); sequencing against
+the WS2/rewrite lane is the owner's prioritisation.
+
+**Owning artefact:** F-83 in [`frictions-register.md`](../../plans/agent-tooling/frictions-register.md);
+the multi-developer-transition direction (per-user memory; the WS-3 F-41 `resolveCoordinationHome` work).
+
+**Status:** open — direction lens-resolved (adopt worktrees). **Trigger (owner, 2026-06-22 — automatic,
+out of owner ownership):** fires at the next n≥2 concurrent-agent window on a shared checkout, or a second
+recorded shared-checkout commit-coupling incident (F-83), whichever comes first.
+
+## Q-006 — The action-time-interrupt mechanism (PDR-098 empty quadrant)
+
+**Question:** "Passive guidance loses at the action moment" recurs across agents (~9+ worked instances,
+plus a fresh one this session — relaying a subagent verdict without first-hand verification). The cure must
+be a *mechanical* interrupt that fires at the action moment, not another passive memory (doctrine:
+`passive-guidance-loses-to-artefact-gravity`). What is the mechanism, and what surface owns it?
+
+**Why it shapes future work:** it is the highest-frequency meta-failure; every agent keeps re-paying it. L1
+plus the doctrine resolve the *direction* (a firing mechanism); the *design* (which surface, what trip
+conditions) is open.
+
+**Why not cheaply answerable now:** the mechanism is non-obvious (that is why it is the PDR-098 empty
+quadrant); prioritisation is the owner's.
+
+**Owning artefact:** [`action-time-structural-interrupt-design-space.plan.md`](../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md).
+
+**Status:** open — direction lens-resolved. **Trigger (owner, 2026-06-22 — automatic, out of owner
+ownership):** the sequencing is off the owner; the firing surface is the consolidation pass, which walks
+this register first-hand. **Agent assessment (not owner-attributed):** the PDR-098 recurrence threshold is
+already met (~9+ instances plus a fresh one this session), so this is due at the next consolidation that
+has design capacity — not on an owner cue.
+
+## Q-007 — Per-user `MEMORY.md` is over its index limit
+
+**Question:** The Claude per-user `MEMORY.md` index is over its size limit (~28.9KB); substance is safe
+(per-entry topic files + repo doctrine persist) but index pointers degrade at session-load. When does a
+dedicated per-user-memory drain run (graduate settled feedback whose substance is now homed in repo
+rules/PDRs, then trim the index)?
+
+**Why it shapes future work:** degraded index pointers mean session-open recall silently drops late-listed
+entries — the skill-load-budget failure mode applied to memory.
+
+**Why not cheaply answerable now:** a bounded maintenance pass (per-platform per-user memory), not a fact;
+low-urgency, owner-prioritised.
+
+**Owning artefact:** Claude per-user memory `MEMORY.md`; the `consolidate-docs` cross-platform memory step.
+
+**Status:** open — lens-resolved as maintenance. **Trigger (owner, 2026-06-22 — automatic, out of owner
+ownership):** fires when the per-user `MEMORY.md` index exceeds its limit (it does), at the next
+consolidation pass (the `consolidate-docs` cross-platform-memory step owns it).
+
+## Q-008 — The human-authoring workflow for the co-equal documents
+
+**Question:** ADR-200 makes the human-navigable documents a **co-equal** embodiment (§Non-goals forbids
+mechanically-derived stubs) and §7 says "the tools reconcile every edit back into the graph", with the §8
+prose↔frontmatter agent-gate catching drift at handoff. But the *proactive human* side is under-specified:
+when a human edits a document's prose, is there a human-facing tool that keeps its frontmatter↔graph edges
+consistent as they write, or does the human always pair with an agent and rely on the after-the-fact gate?
+
+**Why it shapes future work:** co-equal-human-embodiment is a first-class ADR-200 constraint. If the only
+path for graph-consistent human edits is agent-pairing, that is an acceptable answer — but it should be a
+*decided* one, because it shapes the authoring tooling WS5/WS7 build and the human's actual experience of
+the corpus.
+
+**Why not cheaply answerable (when open):** it had a product/UX dimension (the human authoring experience)
+that edged toward the owner. (Answered by owner direction — see Status. The WS5 / dedup dependency it noted
+applies to the *build*, not the now-decided *approach*.)
+
+**Owning artefact:** [ADR-200](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)
+§2/§7/§8; the rewrite plan WS5 (projection-type schemas) and WS7 (co-authoring).
+
+**Status:** RESOLVED (owner, 2026-06-22) — the **approach** is decided: the owner chose the
+**agent-workflow-at-handoff** horn over a live as-you-type human tool. The mechanism is a **prose→graph
+reconciliation workflow**: a human edits prose freely; an agent workflow (triggered by a skill such as
+`session-handoff` or `plan`) semantically analyses the edited prose, extracts ideas, matches them against
+the idea-graph, decides per §7's history-preserving ops (edit / supersede / mint-new), updates the
+idea-graph and the document frontmatter to match the prose, after which the graph resumes as the source of
+truth. Homed in
+[ADR-200 §8](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md). The
+**build** is not yet detailed: its match step reuses the still-open de-duplication / same-idea mechanism
+(WS5) and it is wired at WS4's thin-slice proof — so the *approach* is resolved, the *build* is gated on WS5.
+
+## Q-009 — The content-structure graph + renderers-as-projections (curriculum domain)
+
+**Question:** Oak's curriculum estate has the pedagogical **meaning** (atomic concepts), the
+**macrostructure** (ontology + bulk graphs), and the **evidence** (EEF), but no graph of the **content
+structure** — the typed forms that convey meaning (questions, data-tables, charts, datasets, images, KLPs,
+flashcards) — nor a medium-agnostic renderer/projection layer (worksheet / web / print / ODP / slides).
+What is its node/edge schema, its identity scheme, its references out to atomic `entity_id`s and lesson
+slugs, where it lives, and what is reused vs built fresh from Aila's content/renderer code?
+
+**Why it shapes future work:** it is the largest missing member of the curriculum graph-of-graphs and the
+most cross-repo-entangled (oak-openapi content, Aila content + renderers, moderation input). It is the layer
+that would make adaptation-integrity *checkable* (a preservation predicate over content↔intent edges) and
+turn renderers into projections of one content graph.
+
+**Why not cheaply answerable now:** this is **initial-research stage**. An engineer is joining the project
+and will bring an exploration brief for these features; the design is theirs and the owner's to shape, not
+to pre-decide here. It also depends on the open single-team question (repo-continuity §Open Owner-Decision
+Items #7).
+
+**Owning artefact:** [`knowledge-as-graph-two-altitudes-2026-06-23.md`](../../reports/knowledge-as-graph-two-altitudes-2026-06-23.md)
+(names the decisions, the LTAE build-vs-reuse reading of Aila's code, and the thin-slice identity-join
+proof); the curriculum-graph-estate synthesis (2026-06-22); paused threads `connecting-oak-resources`,
+`oak-kg-ontology-planning-review`.
+
+**Status:** open — initial landscape research recorded; owned by the incoming engineer's brief and owner.

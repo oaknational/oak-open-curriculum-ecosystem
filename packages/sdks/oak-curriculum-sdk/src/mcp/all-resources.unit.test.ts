@@ -16,14 +16,21 @@ describe('ALL_MCP_RESOURCES', () => {
   it('contains every MCP resource URI the server exposes, in listing order', () => {
     expect(uris).toStrictEqual([
       'docs://oak/getting-started.md',
-      'docs://oak/tools.md',
-      'docs://oak/workflows.md',
       'curriculum://model',
-      'curriculum://prior-knowledge-graph',
-      'curriculum://thread-progressions',
-      'curriculum://misconception-graph',
       'eef://interpretation',
     ]);
+  });
+
+  it('does not list the removed prior-knowledge-graph resource (served by the anchored tool, G1b)', () => {
+    expect(uris).not.toContain('curriculum://prior-knowledge-graph');
+  });
+
+  it('does not list the removed misconception-graph resource (served by the anchored tool, G2)', () => {
+    expect(uris).not.toContain('curriculum://misconception-graph');
+  });
+
+  it('does not list the removed thread-progressions resource (served by the anchored tool, G3)', () => {
+    expect(uris).not.toContain('curriculum://thread-progressions');
   });
 
   it('excludes the ui:// widget, which is not a resources/read data resource', () => {

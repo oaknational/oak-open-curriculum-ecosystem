@@ -30,17 +30,12 @@ import type { JsonObject } from './types.js';
  * {@link redactUnknownValue} instead.
  * @param key - Optional key name used to apply key-sensitive redaction
  * rules (e.g. header keys, query-parameter names).
- * @throws If the underlying policy returns a non-string — indicates a
- * violated invariant inside the recursive redaction implementation.
+ * @returns The redacted string. `redactTelemetryValue`'s `string` overload
+ * guarantees a string result for string input, so this function is total —
+ * the former runtime narrowing guard is now enforced by the type system.
  */
 export function redactText(value: string, key?: string): string {
-  const redacted = redactTelemetryValue(value, key);
-
-  if (typeof redacted !== 'string') {
-    throw new TypeError('Expected telemetry redaction to preserve string values');
-  }
-
-  return redacted;
+  return redactTelemetryValue(value, key);
 }
 
 /**

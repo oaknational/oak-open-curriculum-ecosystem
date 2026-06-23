@@ -35,6 +35,15 @@ type safety.
   Use a distributive mapped type for the union of all keys:
   `type KeysOf<T> = T extends unknown ? keyof T : never`
 
+## Union Subtype Collapse
+
+- A union `A | B` where one member is a structural subtype
+  of the other **collapses** to the supertype and carries no
+  extra static information. `EefEvidenceEnvelope | EefEvidenceEnvelope<EefStrandHeadline>`
+  collapses because the headline `Pick` is assignable from the
+  full strand. Flag it in type review — and note a nested-union
+  "fix" collapses identically, so it is not the cure.
+
 ## Generic Constraints
 
 - `{}` as a generic constraint (`T extends {}`) is an
@@ -94,6 +103,20 @@ type safety.
   the test, don't suppress the types. (PDR-020 covers the
   RED-phase counterpart: never suppress to hide a RED-phase
   type-check failure.)
+- **`expectTypeOf<Field>().toEqualTypeOf<Declared>()` mirrors
+  the declaration** — it is configuration, not behaviour, and
+  `tsc` is the correct tool for type correctness. Vitest proves
+  runtime behaviour; never mirror a type declaration in a test
+  framework. Delete type-only assertion blocks and rely on
+  `type-check`.
+
+## Package Export Contracts
+
+- **Green gates do not prove a package's export contract.** The
+  `development` export condition resolves to `src/`, so a subpath
+  whose `default` points at a never-built `dist/` file passes
+  build+test+e2e while broken for real consumers. tsup entry
+  globs are per-subtree; verify subpaths at the `default` level.
 
 ## Test Double Typing
 

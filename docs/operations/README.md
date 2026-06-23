@@ -21,6 +21,10 @@ debugging the system.
   fixes
 - [Elasticsearch Ingest Lifecycle](./elasticsearch-ingest-lifecycle.md) -
   Blue/green index lifecycle validation and ingest procedure
+- [MCP Server UAT Validation Runbook](../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md) -
+  Repeatable, whole-server black-box validation of the Curriculum MCP server
+  (all tools, resources, prompts; response-shape contract; run-record
+  template) — run before a release and after any deploy
 - [MCP Server Observability Wiring](../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md) -
   Per-app authoritative guide: auto-instrumentation, per-request span, scope
   enrichment, Express error handler DI wiring, redaction barrier entry points,

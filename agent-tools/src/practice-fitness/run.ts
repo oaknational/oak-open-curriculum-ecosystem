@@ -6,17 +6,22 @@ import {
   FITNESS_MODE_INFORMATIONAL,
   FITNESS_MODE_STRICT,
   FITNESS_MODE_STRICT_HARD,
-  getExitCode,
   type FitnessMode,
 } from './model.js';
 import {
   formatFitnessResponseDiscipline,
   formatFitnessInventory,
-  formatFitnessResult,
   formatSummary,
   summariseResults,
 } from './format.js';
+import { formatFitnessResultsByCategory } from './categories.js';
 import { discoverFitnessFiles } from './paths.js';
+import {
+  decisionDebtConfigurationFinding,
+  evaluateDecisionDebt,
+  isConceptCounted,
+} from './decision-debt.js';
+import { formatDecisionDebtSection, type DecisionDebtReading } from './decision-debt-report.js';
 
 interface PracticeFitnessIo {
   readonly log: (message?: string) => void;
@@ -32,22 +37,67 @@ export function getMode(args: readonly string[]): FitnessMode {
   return FITNESS_MODE_STRICT;
 }
 
-async function readFitnessResults(
+/** A fitness file's repo-relative path paired with its content, read once. */
+interface FitnessFileContent {
+  readonly relPath: string;
+  readonly content: string;
+}
+
+/** Reads a UTF-8 file by absolute path. Injected in tests to prove single-read. */
+type FileReader = (absPath: string) => Promise<string>;
+
+const defaultReadFile: FileReader = (absPath) => fs.readFile(absPath, 'utf8');
+
+/**
+ * Read every fitness file from disk **exactly once**. Both the fitness report and
+ * the decision-debt reading derive from this single pass (see
+ * {@link deriveFitnessResults} and {@link deriveDecisionDebtReadings}), so a large
+ * estate is never read twice.
+ */
+export async function readFitnessFiles(
   repoRoot: string,
   fitnessFiles: readonly string[],
-): Promise<FitnessResult[]> {
+  readFile: FileReader = defaultReadFile,
+): Promise<FitnessFileContent[]> {
   return Promise.all(
-    fitnessFiles.map(async (relPath) =>
-      evaluateFitnessFile(relPath, await fs.readFile(path.join(repoRoot, relPath), 'utf8')),
-    ),
+    fitnessFiles.map(async (relPath) => ({
+      relPath,
+      content: await readFile(path.join(repoRoot, relPath)),
+    })),
   );
 }
 
-function writeFileResults(io: PracticeFitnessIo, results: readonly FitnessResult[]): void {
-  for (const result of results) {
-    io.log(formatFitnessResult(result));
-    io.log();
+function deriveFitnessResults(files: readonly FitnessFileContent[]): FitnessResult[] {
+  return files.map(({ relPath, content }) => evaluateFitnessFile(relPath, content));
+}
+
+function deriveDecisionDebtReadings(
+  files: readonly FitnessFileContent[],
+  now: Date,
+): DecisionDebtReading[] {
+  return files
+    .filter(({ content }) => isConceptCounted(content))
+    .map(({ relPath, content }) => ({
+      filename: relPath,
+      result: evaluateDecisionDebt(content, now),
+      configFinding: decisionDebtConfigurationFinding(content),
+    }));
+}
+
+function writeDecisionDebtSection(
+  io: PracticeFitnessIo,
+  readings: readonly DecisionDebtReading[],
+): void {
+  const section = formatDecisionDebtSection(readings);
+  if (section === '') {
+    return;
   }
+  io.log(`\n${section}`);
+  io.log();
+}
+
+function writeFileResults(io: PracticeFitnessIo, results: readonly FitnessResult[]): void {
+  io.log(formatFitnessResultsByCategory(results));
 }
 
 function writeSummary(
@@ -123,20 +173,20 @@ export async function runPracticeFitnessCheck(
   args: readonly string[] = process.argv.slice(2),
   repoRoot = process.cwd(),
   io: PracticeFitnessIo = console,
+  now: Date = new Date(),
 ): Promise<number> {
   const mode = getMode(args);
   const fitnessFiles = await discoverFitnessFiles(repoRoot);
-  const results = await readFitnessResults(repoRoot, fitnessFiles);
+  const files = await readFitnessFiles(repoRoot, fitnessFiles);
+  const results = deriveFitnessResults(files);
+  const debtReadings = deriveDecisionDebtReadings(files, now);
 
   writePracticeFitnessReport(io, mode, results);
+  writeDecisionDebtSection(io, debtReadings);
 
-  return getExitCode(
-    mode,
-    results.map((result) => result.overallZone),
-    anyConfigurationFindings(results),
-  );
-}
-
-function anyConfigurationFindings(results: readonly FitnessResult[]): boolean {
-  return results.some((result) => result.configurationFindings.length > 0);
+  // Fitness is a report-only prioritisation signal (ADR-144): every zone — size,
+  // count, dwell — and every configuration finding is surfaced to be acted on with
+  // full weight, but fitness never fails a build. The exit code is always 0; the
+  // mode governs report framing only.
+  return 0;
 }

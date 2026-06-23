@@ -11,7 +11,7 @@ surface landed before this session and worked for the cheap graph capture:
 The full profile needed isolation because the main checkout was already busy
 with shared coordination, generated SDK schema drift, and another agent's
 fresh skill-documentation claim. The full run was therefore executed in a
-detached temporary worktree at `/private/tmp/oak-check-profile-019e1a` and the
+detached temporary worktree at `/private<scratch>/oak-check-profile-019e1a` and the
 profile artifacts were copied back to `.logs/check-profiles/`.
 
 The final escalated profile reached the real check workload: Playwright UI and
@@ -39,7 +39,7 @@ Commands run:
 
 ```bash
 pnpm agent-tools:repo-check profile --dry-run
-git worktree add --detach /private/tmp/oak-check-profile-019e1a HEAD
+git worktree add --detach /private<scratch>/oak-check-profile-019e1a HEAD
 pnpm install --frozen-lockfile --offline
 pnpm install --frozen-lockfile
 pnpm check:profile

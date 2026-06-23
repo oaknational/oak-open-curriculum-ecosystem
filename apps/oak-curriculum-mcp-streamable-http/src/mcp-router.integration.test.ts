@@ -91,19 +91,6 @@ describe('createMcpRouter (Integration)', () => {
       expect(mockNext).toHaveBeenCalled();
     });
 
-    it('skips auth for tools documentation resources/read', () => {
-      const router = createMcpRouter({ auth: mockAuthMw });
-      const req = createMockRequest({
-        method: 'resources/read',
-        params: { uri: 'docs://oak/tools.md' },
-      });
-
-      router(req, mockRes, mockNext);
-
-      expect(mockAuthMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
-    });
-
     it('requires auth for unknown resource URIs', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({

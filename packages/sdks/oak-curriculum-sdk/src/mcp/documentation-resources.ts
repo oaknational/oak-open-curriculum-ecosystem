@@ -36,8 +36,11 @@ export interface DocumentationResource {
 /**
  * Documentation resources available for MCP registration.
  *
- * These resources provide "getting started" and tool usage documentation.
- * MCP clients can list these via resources/list and read via resources/read.
+ * Provides the "getting started" guide. Tool categories, workflows, tips, and
+ * `fetch` ID formats are single-sourced through the canonical
+ * `curriculum://model` resource (and the `get-curriculum-model` tool), not
+ * duplicated here. MCP clients can list these via resources/list and read via
+ * resources/read.
  */
 export const DOCUMENTATION_RESOURCES: readonly DocumentationResource[] = [
   {
@@ -51,35 +54,7 @@ export const DOCUMENTATION_RESOURCES: readonly DocumentationResource[] = [
       audience: ['user', 'assistant'] satisfies ('user' | 'assistant')[],
     },
   },
-  {
-    name: 'tools-reference',
-    uri: 'docs://oak/tools.md',
-    title: 'Tool Reference',
-    description:
-      'Complete reference of all available tools organised by category with usage guidance.',
-    mimeType: 'text/markdown',
-    annotations: {
-      priority: 0.6,
-      audience: ['assistant'] satisfies ('user' | 'assistant')[],
-    },
-  },
-  {
-    name: 'workflows',
-    uri: 'docs://oak/workflows.md',
-    title: 'Common Workflows',
-    description: 'Step-by-step guides for common tasks like finding lessons and planning.',
-    mimeType: 'text/markdown',
-    annotations: {
-      priority: 0.5,
-      audience: ['user', 'assistant'] satisfies ('user' | 'assistant')[],
-    },
-  },
 ];
 
 // Re-export content generation from the split module
-export {
-  getDocumentationContent,
-  getGettingStartedMarkdown,
-  getToolsReferenceMarkdown,
-  getWorkflowsMarkdown,
-} from './documentation-content.js';
+export { getDocumentationContent, getGettingStartedMarkdown } from './documentation-content.js';

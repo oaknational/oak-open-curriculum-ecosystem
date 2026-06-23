@@ -43,7 +43,17 @@ export function archiveStaleClaims(input: {
   };
 }
 
-function isClaimStale(claim: CollaborationClaim, nowIso: string): boolean {
+/**
+ * Whether a claim has outlived its freshness window at `nowIso`.
+ *
+ * The single staleness predicate for the registry: freshness counts from
+ * `heartbeat_at` when present (long-session refresh), otherwise from
+ * `claimed_at`, over the claim's own `freshness_seconds` (default 4 hours).
+ * Consumers that filter for "live" claims (stale archival here, the
+ * statusline session-shape resolver) share this definition rather than
+ * re-deriving it.
+ */
+export function isClaimStale(claim: CollaborationClaim, nowIso: string): boolean {
   return isExpired({
     startedAtIso: claim.heartbeat_at ?? claim.claimed_at,
     freshnessSeconds: claim.freshness_seconds ?? DEFAULT_CLAIM_TTL_SECONDS,

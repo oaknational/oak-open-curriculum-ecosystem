@@ -18,8 +18,10 @@ export interface Options {
  * `--seed-from-now` would either be required to take a value or, if absent
  * from KNOWN_OPTION_KEYS, would silently consume the next non-`--` token.
  */
-const BOOLEAN_OPTION_KEYS = new Set(['seed-from-now', 'no-auto-seed']);
+const BOOLEAN_OPTION_KEYS = new Set(['seed-from-now', 'no-auto-seed', 'no-heartbeat']);
 
+// Value-taking flags only. Bare boolean flags are registered in
+// BOOLEAN_OPTION_KEYS instead (they must not consume the next token).
 const KNOWN_OPTION_KEYS = new Set([
   'active',
   'agent-name',
@@ -53,8 +55,10 @@ const KNOWN_OPTION_KEYS = new Set([
   'platform',
   'poll-ms',
   'repo-root',
+  'role',
   'shared-log',
   'seen-file',
+  'step-timeout-ms',
   'subject',
   'summary',
   'tag',

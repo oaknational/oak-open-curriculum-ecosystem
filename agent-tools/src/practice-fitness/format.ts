@@ -11,7 +11,7 @@ export interface FitnessSummaryCounts {
 
 type FitnessInventoryZone = 'ready' | FitnessZone;
 
-function zoneGlyph(zone: FitnessZone | null): string {
+export function zoneGlyph(zone: FitnessZone | null): string {
   switch (zone) {
     case 'healthy':
       return '\x1b[32m✓\x1b[0m';

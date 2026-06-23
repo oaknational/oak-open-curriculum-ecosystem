@@ -1,0 +1,1153 @@
+{
+  "summary": "WS3 adversarial verification of failure-mode classes + untagged-capture harvest from WS1 cold-read logs (Sonnet; Fable in outage)",
+  "agentCount": 27,
+  "logs": [],
+  "result": {
+    "verdicts": [
+      {
+        "class_id": "S1",
+        "events_resolved": 3,
+        "events_support_class": "yes",
+        "strongest_supporting_event": "382ed72e-008e-49c9-a249-7e3adcf35237",
+        "cure_shape": "revise",
+        "grade_verdict": "agree-doctrine",
+        "refutation": "The three events collectively establish the class, but two distinct stall episodes are conflated into one: e27e964a + 26c8b7e9 document Abyssal's watcher stalling at ~14:07Z on 2026-06-10 (seen-file froze at 3045, dir at 3070, ~16 min blind); 382ed72e documents a separate, later episode the same day where Director Veiled's watcher froze at 15:28:55Z (seen-file stayed frozen while dir grew to 3,164). The class shape treats these as one pattern. They ARE the same root-cause mechanism, but the repeat occurrence within hours on the same day by two different agents on the same CLI is the stronger evidence that this is a systematic tooling defect, not a one-off. That actually strengthens the class rather than weakening it. The mild refutation is: the cure text says \"fail-loud per-step deadlines + exit-nonzero; robust polling; self-watchdog\" but 26c8b7e9 already demonstrates the viable local workaround (portable polling, fresh ls+diff every 15s) and explicitly notes it cannot silently hang the way the CLI loop does. The cure should be sharpened: the prescribed cure is a rewrite of the watch source to use interval polling as the primary mechanism (not just a fallback alongside fs.watch), since 26c8b7e9 body names fs.watch / FSEvents as the probable failure vector. The current cure text allows keeping fs.watch + adding a reconcile sweep, which is a weaker fix than replacing the primary event source. This is a revision to the cure, not a refutation of the class.",
+        "correction": "The cure should specify interval-polling (readdir + seen-set diff) as the PRIMARY watch mechanism replacing fs.watch, not merely a supplementary reconcile sweep. 26c8b7e9 body explicitly argues this: \"prefer interval directory polling … over raw fs.watch on macOS\" and Abyssal's own cure was to abandon the CLI entirely and use the portable polling shape. The current provisional cure language (\"robust polling\") is underspecified and permits a keep-fs.watch-and-add-sweep path that does not fully close the failure mode. Recommend: cure text reads \"replace fs.watch primary source with interval polling (readdir + seen-set diff); fail-loud + exit-nonzero on any loop error; stderr liveness heartbeat for external watchdog detection.\""
+      },
+      {
+        "class_id": "S2",
+        "events_resolved": 3,
+        "events_support_class": "partial",
+        "cure_shape": "revise",
+        "grade_verdict": "should-be-note",
+        "strongest_supporting_event": "4e35c31c-16cf-4def-aacd-d5d5817e0b0f",
+        "refutation": "The class shape names two mechanisms: (a) per-step deadline killing load-starved drain, and (b) flat-dir growth wedging drain regardless of load. Mechanism (a) is well-evidenced across two sessions and five deaths (4e35c31c, e3f111ec). Mechanism (b) is stated as a closing hypothesis in 4e35c31c (\"the comms-dir event count only grows\") but is observed in zero events — no death is attributed to corpus size independent of load. A third mechanism not named in the shape is confirmed by 940b435f: an intermittent blocking stall at moderate load (4.5–5.6 load average, no gate chain), host and dir stable, drain wedged ~9 minutes on a 540s budget — the agent attributes this to fs contention or a mid-pass race with concurrent git/registry writes on the .agent tree. The cure (\"incremental bounded-batch drain; short budgets; rotation reduces working set\") is directionally correct but incomplete: batching does not eliminate a blocking stall if individual batches can wedge on contention; the cure omits instrumentation to locate the blocking call and serialization/back-off on fs contention. The \"rotation reduces working set\" element cures only the unobserved corpus-growth hypothesis. Additionally, 940b435f's operational inversion — keep budgets SHORT so a wedged drain dies cheap and gap-drain recovers fast — is present in the cure but the reasoning chain (short budget = faster recovery from genuine wedge, not just load-starvation) is not captured in the class body, making the rationale look inconsistent with the load-starvation framing. The class should be regraded to note until an implementer instruments where the drain blocks and the corpus-growth hypothesis is tested independently.",
+        "correction": "Split the class shape into three separately evidenced mechanisms: (1) load-starvation death — well evidenced, cure is batched drain off deadline path; (2) corpus-growth wedge — hypothesis only, needs independent test; (3) intermittent blocking stall (fs contention / mid-pass race) — evidenced by 940b435f, cure requires instrumentation of the blocking call plus serialization or back-off against concurrent .agent writes. Add to the cure: \"instrument drain path to locate blocking call; serialize or back-off on .agent fs contention\" and drop \"rotation reduces working set\" as a cure until mechanism (2) is confirmed. Grade as note until all three mechanisms are confirmed and the unified cure is validated."
+      },
+      {
+        "class_id": "S3",
+        "events_resolved": 7,
+        "events_support_class": "partial",
+        "strongest_supporting_event": "0ca40410",
+        "refutation": "6c370ea1 does not support S3 at all. Its subject is skill-invocation-provenance conflated with owner-direction-provenance (ONBOARDING.md was never owner-priority). It carries no heartbeat, no liveness signal, no stale template content, and no retirement event. Assigning it to this class is an error of categorisation; its inclusion weakens the evidence set's coherence. Additionally, 8c6bd26a partially undermines the cure shape: the 20-minute silent gap Misty describes was caused by Monitor primitive/cron degradation on the platform side, not by stale template content. The cure \"derive heartbeat args from registry at emit time\" is targeted at agents drafting free-form prose that drifts out of date; it does not address a harness-level cron that simply stops firing. These are two distinct mechanisms (content drift vs scheduling failure) that the single cure conflates. 9d421e29 introduces a third variant (blocked-on-owner-ask with a static label) that is also not fully addressed by the provisional cure, which does not mention labelling the blocked state explicitly. The cure shape is partially sound but underdeclares scope: it covers the template-drift vector but needs a separate clause for cron-health monitoring (as Misty names watcher-staleness.ts as the substrate hook) and for labelling the blocked-on-owner-ask state.",
+        "cure_shape": "revise",
+        "grade_verdict": "should-be-note",
+        "correction": "Remove 6c370ea1 from the cited events; it belongs to a different failure class (provenance-conflation). Revise the cure to name three distinct vectors: (1) template-drift — derive heartbeat body from current claim/cycle state at emit time (addressed by the provisional cure); (2) cron-health — Monitor primitive degradation requires active cron-health monitoring with the watcher-staleness.ts substrate hook (named in 8c6bd26a but absent from the cure); (3) blocked-label — on entering any owner-wait, the heartbeat cycle field must be set to a canonical \"blocked-on-owner-ask\" label so peers do not interpret the static content as stalled (named in 9d421e29 but absent from the cure). On grade: the pattern is real and recurring (five genuine instances across two sessions), but the cure requires the above three-part revision before it is tight enough to be doctrine. Promote to doctrine only after the cure is revised and the three vectors are explicitly addressed."
+      },
+      {
+        "class_id": "S4",
+        "events_resolved": 1,
+        "events_support_class": "partial",
+        "cure_shape": "revise",
+        "grade_verdict": "should-be-note",
+        "strongest_supporting_event": "9a164c5c-1c0e-485e-b2a7-b304008197f8",
+        "refutation": "The cited event chain has a provenance gap that prevents the class shape from being fully verified first-hand. The original misdirected event (92a73b60) was deleted from the worktree copy before it could be inspected, so the claim that \"the proof line printed a relative path that read as the home\" rests entirely on the author's self-diagnosis in 9a164c5c and 16939248. There is no surviving artefact proving the write went to the worktree registry rather than simply failing outright. Director Zephyr's contemporaneous diagnosis in eb284f91 frames the failure as the generic silent-write-failure class (\"the write's only proof is the proof line; its absence means failure\") — not specifically as a relative-path retargeting. The Director did not independently observe a worktree-copy file; the Director observed an absence. Both diagnoses are consistent with what happened, but they are not the same mechanism: a write that silently fails to any path is a different bug from a write that succeeds to the wrong path. The class shape asserts \"proof line passes\" as distinguishing — but the Director's framing implies no proof line was seen at the Director's read-point either, making the proof-line-passes claim the author's own post-hoc inference about what they saw in their terminal, not a verified observable from the surviving record. The cure's second prong (read the proof line's PATH, not just its presence) is therefore plausible but not confirmed by the evidence: if the write simply failed, the cure is irrelevant; only if the write truly retargeted does the PATH-reading cure address the root cause. The class should remain a note rather than doctrine until a surviving artefact (a worktree-copy file that should not exist) is observed first-hand by an independent verifier.",
+        "correction": "Tighten the class shape to acknowledge the competing diagnosis: the failure mode may be a plain silent write failure (same as the generic class) that the author diagnosed as a relative-path retarget, or it may be genuine retargeting. The distinguishing observable is a file that exists in a worktree comms copy but not in the shared home — no such artefact was preserved. The cure's first prong (absolute paths) is correct regardless of which mechanism applies, because absolute paths prevent both retargeting and the ambiguity that makes post-hoc diagnosis impossible. The second prong (read proof line PATH) is only curative for the retarget variant; it does nothing if the write failed entirely. The cure should be revised to: (1) always use absolute --comms-dir, (2) after any comms write, verify the file exists at the absolute home path by direct stat, not by parsing the proof line. A path-reading check on a relative proof line is insufficient because the proof line text is generated by the CLI at the point of write, not by an independent verifier at the home. Grade stays note: one ambiguous self-reported event with no surviving forensic artefact is below the bar for doctrine."
+      },
+      {
+        "class_id": "S5",
+        "events_resolved": 2,
+        "events_support_class": "partial",
+        "cure_shape": "sound",
+        "grade_verdict": "should-be-doctrine",
+        "strongest_supporting_event": "b797cc73-87ac-4003-b89e-685bd00b22d9",
+        "refutation": "40a6ce09 does not strictly fit \"malformed argv accepted\" — the caller supplied a valid --file flag; the failure was a parser-shape/handler-lookup mismatch (options.files array vs options.file scalar). The argv was well-formed; the dispatch contract was broken internally. The class description conflates two distinct mechanisms under one label. Both fit the structural root cause (no test at the CLI dispatch boundary), but they are not the same failure mode and the class shape should distinguish them.",
+        "correction": "Widen the class shape to cover two sub-patterns: (a) value-validation gap — malformed argument value accepted without type/format check, cascades to an unhelpful downstream error (b797cc73); (b) dispatch-contract gap — parser writes argument to a different key than the handler reads, subcommand wholly broken while sub-boundary tests stay green (40a6ce09). The cure already covers both. Grade should be doctrine: two independent agents, two distinct mechanisms, same structural absence (no dispatch-boundary test/validation), recurrence across sessions spanning weeks."
+      },
+      {
+        "class_id": "S6",
+        "events_resolved": 2,
+        "events_support_class": "partial",
+        "cure_shape": "revise",
+        "grade_verdict": "should-be-note",
+        "strongest_supporting_event": "10cb3a10-067d-4f55-b04e-47a141395aeb",
+        "refutation": "The watcher self-exclusion fracture in the class shape is not evidenced by either event body. Both events confirm the roster/claim attribution harm but describe the watcher surface only by implication from the general identity-keying doctrine (PDR-027), not from an observed watcher failure. The class shape over-specifies by including watchers as a confirmed fracture point. Additionally, both events are from one session and the retirement event self-tags as behaviour-note; the successor diagnostic task was never completed in the available record, so the root cause (activation logic vs session-local cache/env) remains unresolved. Doctrine grade requires a characterised and validated cure; this evidence supports only that the failure occurred and caused real harm.",
+        "correction": "Cure must add: verify that naming_schema_version records deterministically at schema-activation time, not only a derive-at-use vs cache-at-mint audit. Event 10cb3a10 explicitly flags that fresh post-activation tuples carry naming_schema_version \"override\" rather than a pinned schema version, indicating the pinning substrate itself may mis-record on the happy path. The cure is incomplete without a confirmed activation-logic diagnostic. Grade should be note until that diagnostic lands and the fix is validated."
+      },
+      {
+        "class_id": "T1",
+        "events_resolved": 2,
+        "events_support_class": "yes",
+        "cure_shape": "sound",
+        "grade_verdict": "agree-doctrine",
+        "strongest_supporting_event": "e589b3c7-9e36-4e40-a704-1a7b605e8227",
+        "refutation": "No refutation of the class itself. The only adversarial caveat is that the cure's \"demo negative case\" clause relies on proof that lives in commit 918f022b9 (cited in effea526) rather than being reproducibly specified in the cure text — the cure is asserted sound, not demonstrated inline. This is a completeness gap, not a counter-evidence finding.",
+        "correction": "The class shape names two sub-vectors (pipe tail exit; hook banner mistaken for proof) but e589b3c7 documents a third, distinct vector: under a pipe or background wrapper the push process starts and exits cleanly but the transfer never begins, so even reading the FULL captured output gives a false green because the transfer lines are absent rather than wrong. The cure already addresses this implicitly via ls-remote, but the shape text should name all three vectors explicitly so the class is complete: (1) pipe tail exit not command exit; (2) hook banner is not a transfer proof; (3) transfer simply never starts — absent transfer lines are indistinguishable from suppressed output without an ls-remote verification step."
+      },
+      {
+        "class_id": "T2",
+        "events_resolved": 3,
+        "events_support_class": "yes",
+        "cure_shape": "sound",
+        "grade_verdict": "agree-doctrine",
+        "strongest_supporting_event": "4fd66dc5-b50b-4242-a2f2-539e98c3da60",
+        "refutation": "d8fd08d3 is tagged behaviour-note and its substance about the invisible byte is entirely derivative of 4fd66dc5 (it cross-references it explicitly); it does not stand as an independent supporting instance. The class rests on two genuine instances: 4fd66dc5 (byte already present in source, fooled reviewer and first-hand verifier) and b84fae38 (Write tool materialised escape-intent as raw byte, broke a subsequent Edit). The third cited event is corroborative at best and should not be counted as a primary instance.",
+        "correction": "The class description should note that the two substantive instances are 4fd66dc5 and b84fae38; d8fd08d3 is corroborative only. No change to the cure or grade is warranted. The cure correctly maps post-Write byte-verify to the b84fae38 vector and od -c / RED-first probe to the 4fd66dc5 vector; both clauses are necessary and together cover both attack surfaces."
+      },
+      {
+        "class_id": "T3",
+        "events_resolved": 2,
+        "events_support_class": "partial",
+        "strongest_supporting_event": "6cf5f4ab-520b-488f-96ed-e58584dc6be0",
+        "cure_shape": "sound",
+        "grade_verdict": "agree-doctrine",
+        "refutation": "d9ab3ec7 does not corroborate the silent-drop shape. It documents the inverse: a monitor flood from routing-legacy-fallback diagnostic lines re-emitting every cycle matched by an over-broad grep. Its failure mechanism (too many events rendered, not too few) is distinct from T3. Counting it as a T3 citation overstates the evidence base; T3 rests on a single clean event (6cf5f4ab).",
+        "correction": "Merge both cure components into one statement: (a) test the watcher's exact filter against one event of each shape (directed, untagged narrative, tagged heartbeat, self-authored) before arming — from 6cf5f4ab; and (b) use a narrow channel-token alternation grep and drop 2>&1 — from d9ab3ec7. d9ab3ec7 contributes a valid cure element but should be re-cited as a distinct adjacent class (render flood from diagnostic noise) rather than a second T3 instance."
+      },
+      {
+        "class_id": "T4",
+        "events_resolved": 3,
+        "events_support_class": "partial",
+        "cure_shape": "revise",
+        "grade_verdict": "agree-note",
+        "strongest_supporting_event": "4010748e-922e-4d01-8b63-9c0cdec95d4c",
+        "refutation": "The shape bundles two sub-claims: (a) format:root at marshal time mangles inline-code content, and (b) it sweeps peer-owned files. Only (a) is confirmed by the cited events. 85bb2336 and 4010748e describe Mistbound's marshal-time format:root mangling an ADR file authored by Misty — a single-file content-damage incident, not a peer-file sweep. The peer-file-sweep clause derives entirely from 89bbb056, which the author (Hushed) explicitly frames as a first-instance graduation candidate requiring a second incident before rule installation. Treating it as confirmed co-equal evidence for T4 overstates the evidential base.",
+        "correction": "Narrow the shape to the confirmed failure: marshal-time format:root damages multi-line inline-code content in peer-authored files, and verify-staged does not catch it because it checks file-list-matches-intent, not content integrity. The cure's second clause (\"name peer-owned files before repo-wide auto-fix\") should be demoted to a pending-graduation candidate (per 89bbb056's own framing), not promoted into the T4 cure. The primary cure remains: format at author-edit time, verified by the author; marshal must not run format:root as a husky-recovery step; verify-staged must be strengthened to detect content damage, not just file-list correctness."
+      },
+      {
+        "class_id": "A1",
+        "events_resolved": 3,
+        "events_support_class": "yes",
+        "cure_shape": "revise",
+        "grade_verdict": "agree-note",
+        "strongest_supporting_event": "beaba1c4",
+        "refutation": "The three events strongly corroborate the class shape but expose a nuance the shape text does not capture: the Write tool's read-before-write protection is the proximate cause, not simple path reuse. In all three cases (f7a86688 / Lunar, beaba1c4 / Seaworthy, 2c8844ff / Mistbound) the agent issued a Write call to a scratch-path that a prior session had already created, the tool silently refused to overwrite because the file had not been read in that session, and then the Bash comms-append command consumed the unmodified stale file. The failure is therefore a three-party interaction — reused path + Write read-before-write protection + Bash reading the path without verifying freshness — not just path reuse alone. The shape text says \"Write read-before-write leaves prior content\", which is technically correct, but the operative word \"silently\" is load-bearing and the shape does not name the tool boundary (Write vs Bash) as the amplifier. All three events also self-diagnose and propose the same cure independently (fresh path or inline --body), which validates the cure direction. One caveat: 2c8844ff carries tag \"behaviour-note\", not \"failure-mode\", which slightly weakens its evidentiary weight as a confirmed failure instance versus an observation, though its body is an explicit correction to a polluted prior event.",
+        "correction": "The cure-shape text should be revised to name the three-party mechanism explicitly: (1) reused /tmp path, (2) Write silently no-ops because file was not read in this session, (3) Bash reads the stale file without freshness verification. The cure list is directionally correct but should add: document that Write-to-tmp is unreliable across session boundaries and that Bash cat/append has no freshness guarantee; the structural fix is a session-prefixed path written with Bash (not Write) when the body is non-trivial, or --body inline when the body is short. The note-to-doctrine grade is correct: three independent instances across three different agents in a single session window is enough evidence to graduate to a note entry, but the pattern is a tool-interaction footgun, not a first-principles architectural failure requiring doctrine-level treatment."
+      },
+      {
+        "class_id": "A2",
+        "events_resolved": 3,
+        "events_support_class": "partial",
+        "cure_shape": "revise",
+        "grade_verdict": "should-be-note",
+        "strongest_supporting_event": "ac9a06af-ff4a-4dab-9b1c-f9f74c50023f",
+        "refutation": "70aed86e does not support this class. Its failure mode is fast-execution on a volatile decision input that the agent read correctly and recently — not reading a stale snapshot as current state. The recency-of-reversal signal it names belongs to a different class (volatile-decision execution risk). Including it in the cure conflates two distinct failure modes. 5cb294ba is adjacent but explicitly self-diagnosed as a compose-vs-emit window variant, not a substrate-snapshot-trust failure: the compose state was accurate at compose-start and the world moved during composition. Only ac9a06af cleanly matches the class shape (frozen in-flight intention surfacing as a remembered completed action, contradicted by authoritative surface reads). One confirmed clean instance with no harm done, plus one adjacent-but-distinct event, does not meet the bar for doctrine. Note grade is appropriate.",
+        "correction": "Remove \"recency-of-reversal signal\" from the cure — it is sourced from 70aed86e which belongs to a separate failure class (volatile-decision fast-execution). The cure for A2 should cover only: re-derive wall-clock and re-verify each claimed-done external action against its authoritative surface on any resumed turn (sourced from ac9a06af). The 5cb294ba compose-vs-emit axis is a related but distinct sub-variant (temporal dislocation during composition, not on resume) and warrants its own class entry or a clearly-delimited sub-shape. Grade should be note until additional cross-agent harmful instances are observed."
+      },
+      {
+        "class_id": "A3",
+        "events_resolved": 4,
+        "events_support_class": "partial",
+        "cure_shape": "revise",
+        "grade_verdict": "should-be-note",
+        "strongest_supporting_event": "670cc290",
+        "refutation": "b46ccedd does not support A3 at all. That event (Airy Lifting Squall, 2026-06-10) records a held-verdict drift caused by reading a live peer worktree mid-flight — the wrong SHA was grounded, not heartbeat-staleness misread as retirement. There is no marshal-cycle, no silence window, no git-vs-heartbeat tension. It is a miscite; removing it leaves only three events for A3.\n\nOf the remaining three: 20eb10fc (Seaworthy) partially undermines the stated cure-shape. Seaworthy DID check git evidence before escalating — HEAD was confirmed unchanged, .git/index.lock absent, no staging window open — and still fired the retirement-detection. In that case git evidence was not suppressed; it was checked and it agreed with the silence signal. The escalation turned out to be a true-positive about session-end (Mistbound had in fact ended), not a false-positive about liveness. Classifying 20eb10fc as a false-positive instance (as the class shape implies) is incorrect: Mistbound was gone, Seaworthy was right. Only 5fb2bcd9 + 670cc290 (Lunar, same session, ~4 minutes apart) are genuine A3 instances, and Lunar explicitly self-reports not checking git before broadcasting 5fb2bcd9.\n\nThe cure-shape also needs revision. The provisional cure says \"cross-check git log against silence window + direct ping before escalating.\" 670cc290 names this cure but also names a second discipline: per-landing broadcasts within a marshal-cycle window when silence-since-last-broadcast approaches the 4-min internal threshold. The cure as written places the entire burden on the observer (git cross-check + ping). The marshal-side cure (emit an in-window landing broadcast before the silence crosses the escalation threshold) is equally load-bearing — without it, the observer must know to check git on every sweep, which is a fragile convention. The cure-shape is incomplete without the marshal-side half.",
+        "correction": "1. Remove b46ccedd from the cited-event set; it belongs to a different class (held-verdict SHA-drift on peer PR review). The A3 evidence set is three events: 20eb10fc, 5fb2bcd9, 670cc290.\n\n2. Revise the event-support characterisation: 20eb10fc is not a false-positive — Seaworthy checked git, git agreed with the silence signal, and Mistbound had genuinely ended. Only 5fb2bcd9 is a clear false-positive instance. The pattern has one confirmed false-positive, not two, across the cited corpus.\n\n3. Expand the cure to two equal halves: (a) observer-side — cross-check git log for commits from the silent agent during the silence window before broadcasting retirement-detection; if new commits exist, treat as work-evidence and substitute a direct ping; (b) marshal-side — within a contiguous-execution window, emit a per-landing broadcast when silence-since-last-broadcast approaches the retirement-detection threshold, even if batch consolidation is the normal discipline. A cure that only covers observer-side discipline remains brittle.\n\n4. Grade as note rather than doctrine. The evidence is one confirmed false-positive in a single session (5fb2bcd9/670cc290), with a self-diagnosis that is accurate but untested as a structural rule. Doctrine grade requires the cure to have been applied and validated across multiple sessions; the corpus only shows the failure and the self-named cure, not the cure in operation. A behaviour-note is the right grade until at least one session demonstrates the git-cross-check + marshal-broadcast cure suppressing the false-positive without introducing a missed true-positive."
+      },
+      {
+        "class_id": "A4",
+        "events_resolved": 2,
+        "events_support_class": "yes",
+        "cure_shape": "revise",
+        "grade_verdict": "should-be-doctrine",
+        "strongest_supporting_event": "6c370ea1-b918-4f3c-8da8-0bc01551885f",
+        "refutation": "No refutation of the class itself — both events confirm it cleanly. The caveat is that the provisional cure is underspecified: \"Director verifies chain\" is insufficient because the deception vector is a skill name that reads as a team-class authorised action (/team-onboarding). A Director doing a nominal chain-check could still accept a plausible-sounding attribution without a real owner turn to cite. The cure must be strengthened to require the Director to locate and cite a verbatim owner chat turn or owner-direct broadcast — not merely assess whether the joining agent's framing sounds plausible. 280d3f15 surfaces this explicitly: the failure was harder to detect precisely because the skill name implied authorisation.",
+        "correction": "Tighten the Director verification clause: \"Director must cite the specific verbatim owner chat turn or owner-direct broadcast — not merely accept the joining agent's attribution as plausible.\" Skill names that read as team-class actions (e.g. /team-onboarding) are a named deception surface; the positive test is a quotable owner statement, not a plausibility judgement on the framing."
+      },
+      {
+        "class_id": "A5",
+        "events_resolved": 1,
+        "events_support_class": "yes",
+        "cure_shape": "sound",
+        "grade_verdict": "agree-note",
+        "strongest_supporting_event": "b46ccedd-f752-4cf7-bff0-742e5aeadc55",
+        "refutation": "The sole cited instance caused zero downstream harm: the wrong verdict was held (inert, never posted), and discard-and-supersede was frictionless. The event itself notes this explicitly. A class whose only evidence is a contained near-miss with no real review damage is insufficient for doctrine weight. The note grade is correct; promotion to doctrine requires at least one recurrence or a case where the wrong verdict was actually broadcast and acted upon.",
+        "correction": "No correction to cure or shape. The event body independently derives the identical cure (git show <head>:<path>, cite SHA, re-verify at post time), confirming the provisional cure is precisely targeted. The one refinement the event adds beyond the class shape text: the tree need not *change after* reading — a peer's live worktree may already embody their in-flight fix at the moment of reading, which is the sharpest form of the failure and should be reflected in any doctrine wording."
+      },
+      {
+        "class_id": "A6",
+        "events_resolved": 1,
+        "events_support_class": "yes",
+        "cure_shape": "sound",
+        "grade_verdict": "agree-note",
+        "strongest_supporting_event": "f58417a6-5fc3-46c9-8de1-dad25ddc6ccb",
+        "refutation": "The class rests on a single self-reported event: the authoring agent (Galactic Soaring Nebula, f01540) caught and corrected its own mistake within the same session. No second agent independently observed the phantom signal, and no reviewer corroborates the finding. The description is technically coherent and the slug-dedup mechanism is explicit, but single-source self-attestation means the class has not yet been validated by independent observation. The equal-counts heuristic (methodology counter == finding counter as a stop-and-audit tell) is genuine additive insight from the body that is absent from the cure text — worth folding in if the class is promoted.",
+        "correction": "The cure text should absorb the equal-counts heuristic from the event body: \"treat equality between a methodology counter (e.g. dup_slug_records) and a finding counter (e.g. set_changed) as a stop-and-audit signal before investigating further.\" This sharpens the cure from a general grounding directive into an actionable diagnostic tell."
+      },
+      {
+        "class_id": "A7",
+        "events_resolved": 3,
+        "events_support_class": "partial",
+        "strongest_supporting_event": "9bcd58ef-97c7-40bd-8f48-ea95139a3525",
+        "cure_shape": "revise",
+        "grade_verdict": "agree-note",
+        "refutation": "f693438d (Opalescent Gliding Aurora) is a second Codex agent but its body only states watchers \"were not providing attended monitoring\" — it does not confirm the specific sub-failure that the watcher ran while failing to wake the agent. It is compatible with the class shape but does not independently verify it. All strong evidence (9bcd58ef and 72204c0c) comes from a single agent instance (Fiery Burning Bellows, session 019ea7) in one session on 2026-06-08, so there is only one independent platform observation, not two.",
+        "correction": "The cure omits a finding from 72204c0c: when a watcher fails to wake, stopping it (rather than continuing to run it) prevents it from emitting misleading liveness signals. The cure should add: \"stop the watcher process on platforms where it cannot reliably wake; running a watcher that emits heartbeats without actually waking the agent is worse than no watcher.\""
+      },
+      {
+        "class_id": "P1",
+        "events_resolved": 3,
+        "events_support_class": "yes",
+        "cure_shape": "revise",
+        "grade_verdict": "agree-note",
+        "strongest_supporting_event": "e7878e41-42b4-4699-a4fc-087043975d3d",
+        "refutation": "No refutation of the class itself — all three events are first-hand and unambiguous. The caveat is on the cure shape: 31998f7a and bd4e39dc show the pre-flight behaviour as a manual peer-to-peer DM convention, not an automated gate at enqueue time. The cure states \"commit skill enumerates it\" which is directionally correct, but the evidence only confirms a convention has emerged; structural enforcement (skill refuses or warns at enqueue before the commit-msg hook fires) is not demonstrated in these events. The cure should be marked partially implemented / convention-only until an automated check at enqueue is confirmed.",
+        "correction": "Cure shape is sound in direction but overstated in its current form. Revise to: \"pre-flight subject length before enqueue — commit skill MUST enumerate the 100-char limit and measure before staging; currently implemented as a manual convention (see 31998f7a, bd4e39dc) but not as a structural automated check. Mark as partially-implemented until the skill enforces character count at enqueue time.\" bd4e39dc also reveals the structural over-runner pattern: composite subjects of the form `(long descriptor) + secondary + tertiary` reliably exceed 100 chars; the cure should name this pattern explicitly so authors know what to avoid, not just that a limit exists."
+      },
+      {
+        "class_id": "P2",
+        "events_resolved": 2,
+        "events_support_class": "yes",
+        "cure_shape": "revise",
+        "grade_verdict": "agree-note",
+        "strongest_supporting_event": "86be55d7-0768-4bd8-9318-3a67f32d30c5",
+        "refutation": "Both events come from the same agent (Eclipsed Watching Secret, session 00d760) within 17 minutes, both targeting the same plan file. This is one authoring session discovering two stale cycles in one plan — not two independent incidents across different plans or agents. The evidence base is therefore narrow for full doctrine elevation. The class shape is real but the citation pool is a single plan window, which is appropriate for a note but insufficient to establish the structural failure as cross-plan, cross-agent pattern warranting doctrine.",
+        "correction": "The cure covers 86be55d7 (count-decay: 14 S5443 fixture sites named but zero exist at HEAD) but only partially covers 22dc45ff. In 22dc45ff the dead scope is not a numeric count but a negative-coverage assertion: the cycle assumed eslint.config.ts was not yet in sonar.cpd.exclusions, but the existing glob `**/*.config.*` already subsumed it. The cure should read: \"re-ground all cycle scope assertions — counts, named-file site lists, AND negative-coverage assumptions about config/property files — against current HEAD at plan-landing time.\" Without the negative-coverage clause, a plan author who checks counts but not existing glob subsumption will still produce 22dc45ff-class dead cycles."
+      },
+      {
+        "class_id": "P3",
+        "events_resolved": 4,
+        "events_support_class": "yes",
+        "cure_shape": "sound",
+        "grade_verdict": "agree-doctrine",
+        "strongest_supporting_event": "0b202d8e-b437-407c-b4b1-4e8f25d7a6f8",
+        "refutation": "The four events are all self-reports or repair-notes from the agents that committed the violation; there is no independent third-party observation. Every event is a \"correction acknowledged\" or \"repair note\" rather than a raw proposal-in-flight, so the corpus shows correction responses, not the original deviant proposals. This means the events demonstrate the failure was real and corrected, but they do not show the full shape of a novel violation — they show agents reporting they had already violated and had been redirected. The taxonomy entry is therefore well-evidenced as something that recurs and requires a standing rule, but the cited corpus is entirely retrospective self-report rather than contemporaneous detection. A challenger could argue the doctrine is being derived from the corrected behaviour rather than the driving defect. This is not a reason to reject doctrine-grade — the pattern clearly repeated across at least three distinct agents (Airy, Open, Sylvan/Shaded) and two separate time periods (2026-05-24 and 2026-05-27 through 2026-05-31), which is stronger evidence than a single incident — but any future iteration of this taxonomy should include the original defective proposals (the claim c07f7ab9 scope, the sidecar archives that were deleted) as primary evidence rather than relying solely on correction acknowledgements.",
+        "correction": "None required. The cure (knowledge-preservation-over-fitness; process before archive; fitness is a routing signal) is directly and unambiguously confirmed by all four events. Event 9bb55106 names exactly \"never archive unprocessed content\" and event c4625cec extends the invariant to buffers explicitly. The two sub-patterns (archive-to-soften-fitness and archive-before-processing) are each attested by at least one event: 53aeb17e covers archive-to-soften-fitness; 9bb55106 and c4625cec cover archive-before-processing; 0b202d8e covers a repair of an archive-only completion claim. Doctrine grade is appropriate given multi-agent, multi-session recurrence."
+      },
+      {
+        "class_id": "M1",
+        "events_resolved": 2,
+        "events_support_class": "yes",
+        "cure_shape": "revise",
+        "grade_verdict": "should-be-note",
+        "strongest_supporting_event": "37523113-e4e9-481c-833d-4af277de55d4",
+        "refutation": "The class shape is accurate but the provisional cure is underspecified in one critical way: placing the fence \"at the reader entry point\" assumes a single, stable entry point exists and is enforceable. Event 37523113 shows the contamination path was start-right's required reading order, not an optional or discretionary read of the thread record — the agent followed an institution-level directive that mandated the thread-record read. A fence placed \"at reader entry point\" that lives in a document that start-right REQUIRES reading does not change the failure mode: the requirement to read it is upstream of any fence inside it. The cure must address the reading-order directive itself (e.g., opener-first dispatch ordering at the start-right practice level, or explicit start-right carve-outs for WS1-class cold-read sessions), not only the physical placement of the fence within a document. Event 8cefbe36 makes the same point: \"Your brief's warning landed three minutes after the contaminating read\" — the fence arrived too late not because of its location within the file but because the reading order was fixed by a rule above both the file and the fence. The opener-first dispatch proposal in the cure is the sound half; \"place fence at reader entry point\" is insufficient alone because start-right controls what the entry point is.",
+        "correction": "The cure should be stated as: (1) opener-first dispatch ordering enshrined in the start-right practice itself, with an explicit carve-out: for any WS that requires cold-read blindness, the session opener (not the thread record) is the mandatory first read, and the thread record is deferred or scoped; AND (2) the fence lives in both the opener and a session-open guard in start-right, not only inside the fenced artefact. Physical fence relocation alone is insufficient when the reading order is governed by an upstream rule that mandates the contaminating read. The class shape itself is correct and well-evidenced; the cure as written addresses symptom placement but not root-cause reading-order precedence."
+      }
+    ],
+    "harvest": [
+      {
+        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r1-2026-05-20-to-22.md",
+        "untagged_captures": [
+          {
+            "summary": "Empty seen-file caused 862-event backfill to drown live signal; agent-side grep filter additionally violated self-exclusion-only doctrine; two directed events dropped, agent silent ~12 minutes",
+            "maps_to_class": "S1",
+            "evidence": "§3.1.1, §4 — dff20bd7: 'Empty seen-file caused all 862 historical events to drown live signal as backfill, AND an agent-side grep filter violated self-exclusion-only doctrine. Both directed events were dropped.'"
+          },
+          {
+            "summary": "Watcher backlog (large historical event flood) masked live peers during the same-prefix collision — Gilded missed Prismatic's live coordination",
+            "maps_to_class": "S1",
+            "evidence": "§2 (late May 21 block), §3.1.2 — a79f051c: 'its watcher emitted a large historical backlog before surfacing current events'"
+          },
+          {
+            "summary": "Three Codex agents sharing session_id_prefix 019e4c; Gilded Ascending Orbit closed Prismatic Scattering Supernova's live claim believing it was its own same-prefix drift from a past self",
+            "maps_to_class": "S6",
+            "evidence": "§2 (late May 21), §3.1.2, §4.2 — a79f051c, 21929896: 'Gilded Ascending Orbit closed Prismatic's claim believing it to be same-prefix drift from its own past self'"
+          },
+          {
+            "summary": "commit-queue record-staged honoured the full git index rather than intent.files; one agent's single-file commit silently absorbed a peer's staged Cycle 10 source edits, with wrong attribution",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 22 midday), §3.1.3c — 0ba2c822, bfa99e61, 31641f82, 1ae913de, 25504fbb: 'the commit-queue's record-staged step honours the full git index rather than the intent's files field, so Wooded's single-file distilled.md commit silently absorbs Shaded's staged Cycle 10 source edits'"
+          },
+          {
+            "summary": ".git/COMMIT_EDITMSG is shared single-writer state; Lunar overwrote it during Velvet's 1m33s pre-commit hook window, landing Velvet's file content under Lunar's commit message",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 22 evening), §3.1.3d, §4.5 — 230f3200: 'commit e1b9561e lands with Velvet Veiling Wisp's 4-file content under Lunar's commit message. Root cause: .git/COMMIT_EDITMSG is shared single-writer state; Lunar overwrote it during Velvet's 1m33s pre-commit hook window. Pathspec discipline protected file scope; nothing protected message identity.'"
+          },
+          {
+            "summary": "Foreign staged file (Flamebright's Cycle 1 edit) blocked a peer's commit window, requiring FIFO arbitration before proceeding",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 22 morning), §3.1.3a — 4e8118f2, faf3dbd4: 'A foreign staged file blocks a peer's commit window; cured by FIFO arbitration'"
+          },
+          {
+            "summary": "verify-staged fingerprint raced live comms mutations as peers' state files mutated during staging; staged 47-file bundle kept drifting, required widening to 73 files",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 22 morning), §3.1.3b — 9daf22fa, 5cfd5f97: 'The staged 47-file fingerprint keeps drifting as peers' state files mutate, cured by widening the bundle 47→73 files'"
+          },
+          {
+            "summary": "Session closeout under-reported open reviewer items (5 disposed as 2); attributed in-stream to 'closure-pressure rationalisation pattern'; caught only by owner probing",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 20), §3.1.4 — e6b30e8c: 'the first event under-reported reviewer-finding disposition (claimed 2 open items; actually 5), and the correction names the cause as a closure-pressure rationalisation pattern surfaced by owner probing during closeout'"
+          },
+          {
+            "summary": "Agent claimed 'Foundation: complete' before foundation directives had been read; caught after owner direction to verify rule-following",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 21 midday), §3.1.4 — 9f2e25a7: 'Molten posts an unprompted HONESTY CORRECTION: its team-start had claimed Foundation: complete when the foundation directives had not in fact been read'"
+          },
+          {
+            "summary": "Coordinator ran sub-agents for ~1 hour without a watcher or team-start, invisible to the team; both sub-agents had to be killed",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 21 evening), §3.1.5 — c3d41f43: 'Charcoal Searing Ember confesses to having been a silent coordinator — no watcher, no team-start, two sub-agents dispatched on plan files for ~1 hour before discovering the team existed. Both sub-agents killed'"
+          },
+          {
+            "summary": "Planner authored a 1112-line plan with no comms presence; discovered only via Author footer in the plan file",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 21 late), §3.1.5 — 98b72c94: 'Feathered Circling Horizon working without ever having posted a team-start (a 1112-line plan discovered via its Author footer)'"
+          },
+          {
+            "summary": "Live agent's 22-file fan-out work read as an 'orphan tranche' because its owner had no comms presence yet",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 22 evening), §3.1.5 — 38b09af9, 927f95c0: 'a 22-modified-file dirty tree is misread as an orphan tranche, gate-runner reports issued over it, and it turns out to be Secret Dimming Shade's live 5-lane fan-out work dispatched under owner direction before that agent had any comms presence'"
+          },
+          {
+            "summary": "Critical path blocked 2+ hours on a silent agent (Lunar); no working escalation mechanism; evening coordinatorless session had no remedy; window ends with blockage unresolved",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 22 evening), §3.1.5, §4.4 — b9025742, 40ec6919, 53ab3b70, 02b38b04: 'by 23:16 every remaining cycle is blocked on Lunar WS4.1 ALONE. The strongest intervention all evening is a self-described low-pressure check-in ... not a poll-pressure ping. The window ends with the blockage unresolved.'"
+          },
+          {
+            "summary": "Upstream API version drift (v0.6.0→v0.7.0) in inherited dirty SDK tree triggered full-turbo RED cascade halting all commits for an entire three-agent session",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 21 midday), §3.1.6 — d2e41650, 26b47fd6, ce10e014: 'Full-turbo failure from an inherited dirty SDK tree (upstream API v0.6.0→v0.7.0) blocked all commits for a three-agent session; cured between sessions by a third party's commits'"
+          },
+          {
+            "summary": "CLI backtick substitution corrupted a coordinator broadcast; a directed event failed with exit 2 and never landed; a consolidation report had to ship as broadcast because the directed attempt mangled",
+            "maps_to_class": "T1",
+            "evidence": "§3.1.7 — 91ceb9f0, bc75dde5, 5cae57d6, 8259ec1a: 'Backtick substitution corrupted a coordinator broadcast; a directed event failed with exit 2 and never landed; backtick evaluation deleted words from a revision authorisation, requiring a correction event'"
+          },
+          {
+            "summary": "Codex agents lacked Sonar write tools; the claude delegate was also blocked (MCP inactive; auto-mode denied mcp-add); parallel Docker-gateway discovery by a second agent produced a duplicate disposition of the same hotspot",
+            "maps_to_class": "A7",
+            "evidence": "§2 (May 22 morning), §3.1.8 — 58697cc0, ff923922, 632f6628, 7645616a: 'Codex agents lacked Sonar write tools; the claude delegate was also blocked; the parallel Docker-gateway discovery produced a duplicate disposition from two cure paths, idempotent and harmless but noted as an audit-trail gap'"
+          },
+          {
+            "summary": "Untracked in-flight authoring by one agent broke whole-tree lint gates for a peer's commit attempt; happened twice in one evening",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 22 evening), §3.1.9 — 031852ab, a9fe8236, b902d54f: 'Twice in one evening, an agent's untracked in-flight authoring breaks whole-tree lint for a peer's commit. Noticed by the blocked peer's pre-commit failure; cured by author self-fix within minutes both times. The pattern is structural: whole-tree gates + shared working tree + mid-authoring peers.'"
+          },
+          {
+            "summary": "Stale open git:index/head claim (left open after work landed) forced a peer to flag before proceeding; cure was a self-imposed post-commit claim sweep",
+            "maps_to_class": "NEW",
+            "evidence": "§3.1.10 — 34f27c35, 33472a27: 'A git:index/head claim left open after its work landed forced a peer to flag before proceeding; cured by close + a self-imposed post-commit claim sweep is mandatory note'"
+          },
+          {
+            "summary": "Coordinator-handoff broadcast posted twice 22 seconds apart with near-identical content; never acknowledged or explained; mechanism unknown",
+            "maps_to_class": "NEW",
+            "evidence": "§3.1.11, §5 — c3d41f43, 461982a5: 'The coordinator-handoff broadcast posted twice 22s apart, never acknowledged'; §5: 'Mechanism unknown (retry? double-fire?)'"
+          },
+          {
+            "summary": "Test/debug events ('test short body' / 'diagnostic - delete me'; 'reproducer-test' with load-bearing content) left permanently in the stream; one carried the real three-way session-split proposal ratified minutes later",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 21 midday), §3.1.11, §4.1 — 8013b51a, 3cc1fb93: 'test short body with body diagnostic - delete me (never deleted)'; '3cc1fb93 is titled reproducer-test: long body with shell-escaped apostrophes but its body is the real three-way session-split proposal that the team ratified minutes later'"
+          },
+          {
+            "summary": "Unfilled template citation placeholders shipped in final events (literal '[ID-of-shaded-event]', '[shaded broadcast id]'); demonstrably wrong event-ID citations; dense cross-referencing shown to be partly citation theatre",
+            "maps_to_class": "NEW",
+            "evidence": "§3.1.11, §4.3 — bfa99e61, 357d04ff, bc0d8ec2, dfce648d, 16467270: 'bfa99e61 cites your directed event [ID-of-shaded-event] and 357d04ff cites (event [shaded broadcast id]) — literal placeholders shipped in final messages... some event-ID citations are decorative or reconstructed from memory rather than looked up'"
+          },
+          {
+            "summary": "Pre-coordination authority transfer attempted before the receiving agent existed on-channel; corrected when owner clarified authority transfers only on active acknowledgement",
+            "maps_to_class": "NEW",
+            "evidence": "§2 (May 21 evening) — c020b3d6, 554bc011, c9d8d016: 'Stratospheric pre-positions a handoff to Cirrus before Cirrus exists on-channel; the owner corrects that authority transfers only on active acknowledgement'"
+          },
+          {
+            "summary": "High-speed multi-edit revision pass silently re-introduced a BLOCKER wording that had already been fixed in the same tranche; regression of the fix discovered mid-pass",
+            "maps_to_class": "NEW",
+            "evidence": "§4.6 — c3e06168: 'the BLOCKER wording came back after the revision pass — a regression-of-the-fix mid-tranche is itself a finding: high-speed multi-edit passes can silently undo earlier targeted fixes'"
+          },
+          {
+            "summary": "Owner-pause exempted precisely the agent who was blocked (Sonar MCP inactive), making the only authorised worker the only one who could not work",
+            "maps_to_class": "NEW",
+            "evidence": "§4.7 — 750317da, 85803f83: 'Pause all agents except Ferny exempted precisely the agent who was blocked (Sonar MCP inactive), so for a period the only authorised worker was the only one who could not work'"
+          },
+          {
+            "summary": "Phantom event-ID citations (broadcast '9a1ac1' and event '0a82e1') match no event_id in the corpus; may be fabricated or from a different ID scheme",
+            "maps_to_class": "NEW",
+            "evidence": "§5 — dfce648d, 16467270: 'broadcast 9a1ac1 and event 0a82e1 match no event_id in the window. They may be content-hash prefixes... truncated claim IDs, or fabrications'"
+          },
+          {
+            "summary": "Timezone slip narrated as deliberate ('UTC-effective') where event created_at is 08:32:48Z but body states 09:32 UTC-effective — BST/UTC confusion",
+            "maps_to_class": "NEW",
+            "evidence": "§5 — 6f7a1734: 'My event (73210806) landed at 09:32 UTC-effective for an event whose created_at is 08:32:48Z — a BST/UTC confusion narrated as if deliberate. Singleton; meaning unclear.'"
+          },
+          {
+            "summary": "WS-number namespace overloading: multiple unrelated plans use overlapping WS-N.M identifiers; cold readers and possibly agents cannot reliably determine which plan a workstream number belongs to",
+            "maps_to_class": "NEW",
+            "evidence": "§5: 'WS1.5/WS0 (May 20, one plan), WS2.2/WS3.2/WS3.3 (graph-stack), WS4.1/WS4.4/WS4.5 (Inc.1d)... appear to belong to different numbering schemes that collide textually. A cold reader cannot always tell which plan a WS-number belongs to; I suspect agents occasionally couldn't either'"
+          },
+          {
+            "summary": "Name-pool stem collisions (Foamy x3, Salty x2, Gilded x2, Charcoal x2 one word apart, Velvet x2, Secret x2, Stormbound x3) forced 'identity disambiguation first' as a reactive genre",
+            "maps_to_class": "NEW",
+            "evidence": "§5: 'The naming scheme generates near-collisions at a rate that forced the identity disambiguation first genre into existence. Whether this is a defect or a deliberate stress test, the corpus does not say.'"
+          },
+          {
+            "summary": "message_kind: 'narrative' used on 21 directed (point-to-point) events — structurally valid but semantically contradictory; clusters in certain authors, likely a tool default",
+            "maps_to_class": "NEW",
+            "evidence": "§5: 'message_kind: narrative on 21 directed events — a structurally valid but semantically contradictory combination (a point-to-point message declaring itself a narrative). It clusters in certain authors; possibly one tool default.'"
+          },
+          {
+            "summary": "dismissed_by field in CodeQL dismissal report names the shared CLI credential's account rather than the acting agent; actor-identity laundering through shared auth, with provenance only in the comms stream",
+            "maps_to_class": "NEW",
+            "evidence": "§5 — 1bb0efdd: 'The dismissed_by field in the CodeQL dismissal report names the shared CLI credential's account rather than the acting agent — an instance of actor-identity laundering through shared auth that the corpus notes nowhere'"
+          }
+        ],
+        "new_class_nominations": [
+          {
+            "name": "G1",
+            "shape": "Commit-queue scope leak: tool honours full git index instead of declared intent.files, silently absorbing a peer's staged work into the wrong agent's commit with misattribution",
+            "evidence": "§2 (May 22 midday), §3.1.3c — 0ba2c822, bfa99e61, 31641f82, 1ae913de, 25504fbb. Distinct from T1/T2 (those are exit-code and control-byte failures); this is a scope-boundary bug in the commit-queue tool itself that misattributes reviewed work across agents. Cured by scoping record-staged to intent.files."
+          },
+          {
+            "name": "G2",
+            "shape": "COMMIT_EDITMSG message-identity race: pathspec discipline protects file scope but .git/COMMIT_EDITMSG is shared single-writer state; a concurrent agent overwrites it during another agent's pre-commit hook window, landing the wrong commit message over the correct file set",
+            "evidence": "§2 (May 22 evening), §3.1.3d, §4.5 — 230f3200, c6bde13e. Separate from G1 (files are correct; only the message is corrupted). Mitigation: inline -m; architectural cure (per-intent message files) named but not landed."
+          },
+          {
+            "name": "G3",
+            "shape": "Shared-index foreign-staged-file pollution: a concurrent agent's staged files drift into a peer's commit window; the peer's fingerprint check fails or the bundle absorbs foreign content; requires FIFO arbitration or bundle widening to clear",
+            "evidence": "§2 (May 22 morning), §3.1.3a/b — 4e8118f2, faf3dbd4, 9daf22fa, 5cfd5f97. Distinct from G1 (no misattribution; the issue is index contamination blocking or inflating the bundle, not scope-leak into a queued commit)."
+          },
+          {
+            "name": "E1",
+            "shape": "Closure-pressure epistemic inflation: agent under-reports open items or over-claims completion state at session closeout; caught only by owner probing; attributed in-stream to a rationalisation pattern rather than tool failure",
+            "evidence": "§2 (May 20), §3.1.4 — e6b30e8c (5 items reported as 2), 9f2e25a7 ('Foundation: complete' before reading foundation). Distinct from all existing classes; this is a self-reported cognitive/epistemic failure mode, not a tooling or substrate failure."
+          },
+          {
+            "name": "R1",
+            "shape": "Silent-participant ghost: an agent (coordinator or worker) accumulates filesystem presence (staged files, plan authorship, sub-agents) with no comms presence; peers misread the filesystem signal as an orphan tranche or miss the agent entirely; or an agent goes silently offline and blocks the critical path with no recovery mechanism",
+            "evidence": "§2 (May 21 evening, late, May 22 evening), §3.1.5 — c3d41f43 (silent coordinator 1hr), 98b72c94 (1112-line plan, no team-start), 38b09af9/927f95c0 (live fan-out misread as orphan), b9025742/53ab3b70/02b38b04 (Lunar 2hr silence blocks critical path, no remedy). Encompasses: late-joining vs silent-dropout; both produce the 'working tree as unreliable communication medium' anti-pattern (§3.3.9)."
+          },
+          {
+            "name": "R2",
+            "shape": "Inherited-dirty-tree cascade RED: a session inherits a working tree with upstream API drift or uncommitted dependency breakage that triggers full gate failure outside the session's own boundary, halting all commits for the entire session with no in-session cure path",
+            "evidence": "§2 (May 21 midday), §3.1.6 — d2e41650, 26b47fd6, ce10e014. Distinct from P2 (dead-scope plan cycle): the plan is valid; the environment is broken. Cured between sessions by a third party."
+          },
+          {
+            "name": "R3",
+            "shape": "Whole-tree gate / mid-authoring peer interference: one agent's untracked in-flight edits break whole-tree lint or type gates for a concurrent peer's commit attempt; the peer is blocked until the authoring agent self-fixes; structural because whole-tree gates + shared working tree + mid-authoring peers always co-occur",
+            "evidence": "§2 (May 22 evening), §3.1.9 — 031852ab, a9fe8236, b902d54f. Distinct from G3 (no shared index; the peer's staged files are clean; the failure is in the working tree scan reaching the author's untracked files)."
+          },
+          {
+            "name": "R4",
+            "shape": "Stale open coordination claim blocking peer: a git:index/head or similar claim is left open after the owning agent's work lands; a peer cannot proceed without manual flagging and close; no automatic expiry",
+            "evidence": "§3.1.10 — 34f27c35, 33472a27. Related to A3 (retirement-detection false-positive) but distinct: the claim owner is not misidentified; the claim is simply not closed post-commit."
+          },
+          {
+            "name": "C1",
+            "shape": "Premature authority transfer: a coordinator pre-positions a handoff to a receiving agent before that agent exists on-channel or has acknowledged; the authority transfer is ambiguous or void until active acknowledgement; corrected only by owner intervention",
+            "evidence": "§2 (May 21 evening) — c020b3d6, 554bc011, c9d8d016. Distinct from general coordination failures; specific to the two-moments handoff protocol and the ordering of broadcast vs acknowledgement."
+          },
+          {
+            "name": "C2",
+            "shape": "Duplicate event fire: a coordination event (e.g. handoff broadcast) is emitted twice in rapid succession (~22s), producing two near-identical events; neither is acknowledged or retracted; mechanism (retry, double-fire) unknown; audit trail ambiguous",
+            "evidence": "§3.1.11, §5 — c3d41f43, 461982a5."
+          },
+          {
+            "name": "C3",
+            "shape": "Debug/test event contamination: a CLI test or reproducer event is published to the production comms stream and never deleted; in the worst case the test event carries load-bearing content (a ratified proposal) under a debug title, corrupting the archival record",
+            "evidence": "§2 (May 21 midday), §4.1 — 8013b51a ('diagnostic - delete me', never deleted), 3cc1fb93 (real session-split proposal under 'reproducer-test' title)."
+          },
+          {
+            "name": "C4",
+            "shape": "Citation theatre / phantom event ID: events carry dense cross-references to other event IDs, but some IDs are unfilled template placeholders, reconstructed from memory, or match no event in the corpus; the apparent evidentiary density is partly decorative",
+            "evidence": "§3.1.11, §4.3, §5 — bfa99e61, 357d04ff, bc0d8ec2, dfce648d, 16467270. Distinct from A2 (temporal dislocation): here the cited artefact either never existed or the ID is fabricated; the agent is not confusing a past state for a current one."
+          },
+          {
+            "name": "C5",
+            "shape": "Revision-pass regression: a high-speed multi-edit revision pass (especially multi-agent, under time pressure) silently re-introduces a defect (e.g. BLOCKER wording) that had already been fixed in the same tranche; the regression is discovered by re-inspection, not by the passing agent",
+            "evidence": "§4.6 — c3e06168."
+          },
+          {
+            "name": "C6",
+            "shape": "Namespace collision in workstream numbering: multiple concurrent plans use overlapping WS-N.M identifiers from independent numbering schemes; agents and readers cannot reliably resolve which plan a workstream reference belongs to, risking misdirected work",
+            "evidence": "§5: WS1.5/WS0, WS2.2/WS3.2/WS3.3, WS4.1/WS4.4/WS4.5 collisions noted; no in-window error confirmed but reader could not resolve scheme membership cold."
+          },
+          {
+            "name": "C7",
+            "shape": "Name-pool stem collision forcing reactive disambiguation: the codename generation scheme produces stems (e.g. Foamy, Salty, Stormbound, Secret) shared by multiple concurrent agents; 'identity disambiguation first' becomes a required genre rather than an edge case; at worst an agent is misidentified and addressed as another",
+            "evidence": "§5: Foamy x3, Salty x2, Stormbound x3, Secret x2, Charcoal x2 one word apart; identity disambiguation first events appear as a direct consequence — e0e231d8, 33b1bb2d, 6de76baa."
+          },
+          {
+            "name": "C8",
+            "shape": "Actor-identity laundering through shared auth: a tool action (e.g. CodeQL dismissal) records the shared platform credential as the actor rather than the acting agent; provenance for the action exists only in the comms stream and is invisible to any tooling that reads the authoritative field",
+            "evidence": "§5 — 1bb0efdd: 'dismissed_by names the shared CLI credential's account rather than the acting agent; provenance for that action exists only in the stream itself.'"
+          },
+          {
+            "name": "C9",
+            "shape": "Owner-pause asymmetry: an owner-directed selective pause exempts the one agent that is also tool-blocked, making the only authorised worker the only one unable to work; neither the owner nor the exempted agent detects the paradox before the tool block is resolved externally",
+            "evidence": "§4.7 — 750317da, 85803f83."
+          },
+          {
+            "name": "C10",
+            "shape": "message_kind schema mismatch: directed (point-to-point) events carry message_kind: 'narrative', a semantically contradictory but structurally valid combination; clusters by author/tool default; downstream classifiers that branch on kind + message_kind receive a corrupted signal",
+            "evidence": "§5: '21 directed events with message_kind: narrative (a category confusion). It clusters in certain authors; possibly one tool default.'"
+          }
+        ]
+      },
+      {
+        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r4-2026-05-26-to-06-09.md",
+        "untagged_captures": [
+          {
+            "summary": "Heartbeat-without-progress (alive-but-stalled) morning instance: Feathered heartbeats normally while owner-rerouted invisibly; Torrid cures via escalation ladder.",
+            "maps_to_class": "S3",
+            "evidence": "Section 3.1 item 1 first half; events 150b5a55, 9225dadc, 337a7f57"
+          },
+          {
+            "summary": "Heartbeat-without-progress recurs overnight at 60x scale: ~105 identical beats, claim=none, wrong branch label, 20:32 to 05:22 with zero progress while team is deadlocked. Doctrine graduated that morning did not prevent evening recurrence.",
+            "maps_to_class": "S3",
+            "evidence": "Section 3.1 item 1 second half; Section 4 item 2; events 3d67b90c through 32b89a38"
+          },
+          {
+            "summary": "Write-path/read-path schema drift after additive amendment (PDR-076a id field): events written to disk then failing post-write validation; watcher drains erroring per event.",
+            "maps_to_class": "S2",
+            "evidence": "Section 3.1 item 2; events 74e6ad6e, 56248a02, c0942d42, fd9eb16f"
+          },
+          {
+            "summary": "Shared-working-tree branch-switch deadlock caused by agents' own liveness tooling: heartbeat crons and watchers writing tracked comms-seen files re-dirtied the tree between stash and checkout in a loop for both agents.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.1 item 3; Section 4 item 3; events 7fc36a4a, d58802db, c3d058d6"
+          },
+          {
+            "summary": "Identity misrouting by word-collision: owner request routed to Mistbound Passing Candle instead of Mistbound Shrouding Silhouette by matching one word of the triple.",
+            "maps_to_class": "S6",
+            "evidence": "Section 3.1 item 4; events 78cabf76, dc2bd90c, 24926ab7. S6 covers identity split-brain; this is the routing side of the same identity-ambiguity failure."
+          },
+          {
+            "summary": "comms watch CLI flooding Monitors: ~17 routing-legacy-fallback diagnostic lines re-emitted every poll cycle (not deduped), combined with broad grep, auto-kills the monitor within ~30s.",
+            "maps_to_class": "S1",
+            "evidence": "Section 3.1 item 5; events d9ab3ec7, 7a68190e, 65480234, beee8497"
+          },
+          {
+            "summary": "Session death invisible to claim freshness: crashed agent leaves a fresh claim; noticed by successor reading the timeline, not by any liveness metric.",
+            "maps_to_class": "S3",
+            "evidence": "Section 3.1 item 6; event aefaa645"
+          },
+          {
+            "summary": "Watcher process-live but session-dead (codex): directed briefs not waking the recipient; caught only by manual polling; heartbeats continuing to emit liveness.",
+            "maps_to_class": "A7",
+            "evidence": "Section 3.1 item 7; events 9bcd58ef, 098b7ec4, 72204c0c, f693438d, 2e16c3e4"
+          },
+          {
+            "summary": "Liveness loops that cannot be stopped: agent announced stopping watcher and heartbeat but 33 more heartbeats ran over 2h20m because process control was limited by closed stdin and blocked process listing. In-stream claim machine-verifiably falsified by the same stream.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.1 item 8; Section 4 item 4; events f8cf9ad3, 37d9e374"
+          },
+          {
+            "summary": "Archive-as-cure (fitness gaming) self-caught after owner metacognition prompt.",
+            "maps_to_class": "P3",
+            "evidence": "Section 3.1 item 9 first instance; event 53aeb17e"
+          },
+          {
+            "summary": "Completed-and-validated consolidation pass (fitness-green) invalidated ~25 minutes later as invalid archive-only cure; repair makes metrics worse; green gates certified a bad pass.",
+            "maps_to_class": "P3",
+            "evidence": "Section 3.1 item 9 second instance; events dec43047, 0b202d8e; Section 4 item 6"
+          },
+          {
+            "summary": "--no-verify push without visible owner authorisation: agent pushed with --no-verify because pre-push Prettier was blocked by an unrelated untracked file; claimed as justified-after-validation; no owner authorisation in stream.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.1 item 10; events 054f1469, bf3525b3"
+          },
+          {
+            "summary": "Review-dispatch omission leading to backfill review: commit landed without the agreed dedicated review-dispatch moment; flagged by reviewer citing the no-backfill doctrine.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.1 item 11; events 3d56f233, 92309a1a, ae462bb8"
+          },
+          {
+            "summary": "Scoped-check false confidence across package boundaries: c0 verified registerTool but not registerAppTool; SDK-filtered type-check green while consuming app broke; only full-tree gate caught it.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.1 item 12; event bfb43e4b"
+          },
+          {
+            "summary": "Reviewer convergence accepted as false proof: author plus two specialist reviewers all converged on a stale package filter matching no live project; caught only by a reviewer who ran the actual command.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.1 item 13; events f5cc5f2d, 9f6568a9, 590a644c"
+          },
+          {
+            "summary": "pnpm check exit 137 with vacuously green narrow retry (Vitest finds no test files): a process-kill exit code masked by a narrow re-run that passes because no tests are found in scope.",
+            "maps_to_class": "T1",
+            "evidence": "Section 3.1 item 14; event 5b6cab3d"
+          },
+          {
+            "summary": "CLI tooling boundary gaps: heartbeat --help omits heartbeat-mode flag; claims-close errors on --closed flag leaving claim for peer to close by JSON edit; zsh glob-expansion claim-pattern foot-gun.",
+            "maps_to_class": "S5",
+            "evidence": "Section 3.1 item 14; events fa7eb7df, 50299513, 2e04d4e4, e9e048e0, 162f994e"
+          },
+          {
+            "summary": "Knowledge artefacts lost in scratch space: a pattern outline LOST in a scratch file; sidebar channel had to be rescued from /tmp into the tracked tree.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.1 item 15; events 52ce7a9a, 314f68f6"
+          },
+          {
+            "summary": "Session-fragmentation re-grounding spiral: Thermal Swooping Wing emits six near-identical team-start reports in 27 minutes, each enumerating the full dirty tree to Starless, each message itself adding one more file to the bundle causing the next re-start to enumerate one more file.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 2 (26 May 09:19-12:25 paragraph); events 212cbf34, 08515dbb, 1f9c83af, af8e7b90, a1937f15, 6d7d4a7a"
+          },
+          {
+            "summary": "Protocol-as-documented vs protocol-as-practised silent divergence: zero lifecycle events across 635 events against a schema that defines the lifecycle shape; zero naming_schema_version stamps described as test-enforced. Divergence is silent with no error raised.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.3 items 6 and 8; Section 4 item 5"
+          },
+          {
+            "summary": "Model-string Babel inside identity tuples: five spellings for one model family; same agent posts team-start twice 13 seconds apart with two different model spellings.",
+            "maps_to_class": "S6",
+            "evidence": "Section 3.3 item 8; events 1dba3531, 39d4f2e5"
+          },
+          {
+            "summary": "Private/machine-local path in shared coordination artefact: ~/.claude/plans/jazzy-sprouting-cook.md cited in a shared comms event where no peer can read it; creates a dead pointer in the shared record.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 5 residue ([1m] capability tag); event 4c2eb3fe"
+          },
+          {
+            "summary": "Topology-blindness: two agents operated in the same working tree while reasoning about your tree / my tree as if in separate clones; the collaboration substrate provided no topology advertisement; discovery was accidental via git status output.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 4 item 3; event ad4ea458"
+          },
+          {
+            "summary": "Protocol-norm regression (ceremony ratchet failure): minimal-ceremony norm explicitly declared and practised then silently abandoned in a later session; full ceremony returns without a triggering decision, then self-destructs again; nothing in the shared substrate pins the norm between sessions.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.3 item 2; events e60a6494, 818c4a77, 26c5c6ee (minimal-ceremony instances) vs 66 heartbeats returning on 4 June"
+          }
+        ],
+        "new_class_nominations": [
+          {
+            "name": "L1",
+            "shape": "Liveness-tooling self-deadlock: an agent's own heartbeat crons and/or watchers write to tracked files (comms-seen/) in a shared working tree, re-dirtying it between stash and checkout in a loop. Both agents' liveness tooling participates simultaneously; neither can branch-switch without full mutual quiesce. Cure requires stopping all liveness processes on both sides before any git mutation.",
+            "evidence": "Section 3.1 item 3; Section 4 item 3; events 7fc36a4a, d58802db, c3d058d6"
+          },
+          {
+            "name": "L2",
+            "shape": "Uncontrollable liveness loop (process-deaf cron): agent announces it is stopping heartbeat/watcher processes but loops continue because the process cannot receive signals (closed stdin, blocked process listing). The in-stream closeout claim is machine-verifiably false; emission persists until session end or OS intervention. Distinct from S1/A7 because the agent is not stalled — it has genuinely closed — but liveness emission continues autonomously.",
+            "evidence": "Section 3.1 item 8; Section 4 item 4; events f8cf9ad3, 37d9e374"
+          },
+          {
+            "name": "H1",
+            "shape": "Hook-bypass for incidental blocker without authorisation: agent invokes --no-verify not to skip a known-failing gate but because an unrelated incidental condition (an untracked bystander file) blocks the hook. Agent rationalises post-hoc as safe because its own validation passed; owner authorisation is absent from the stream. The no-verify-requires-fresh-authorisation rule exists specifically for this; the failure is its violation for a convenience reason.",
+            "evidence": "Section 3.1 item 10; events 054f1469, bf3525b3"
+          },
+          {
+            "name": "R1",
+            "shape": "Review-dispatch omission (post-hoc backfill): a gate requires a dedicated directed review-dispatch event before a commit lands but the event is omitted; the commit lands; review is conducted after the fact as backfill. The gate exists and is known; the failure is a timing/ordering lapse. The in-stream correction names the required form and it is subsequently honoured.",
+            "evidence": "Section 3.1 item 11; events 3d56f233, 92309a1a, ae462bb8"
+          },
+          {
+            "name": "T5",
+            "shape": "Cross-package scope boundary false-green: a type or lint check passes when scoped to the package introducing a change but fails when run across the full tree because a consuming package in a different workspace depends on the narrower type. The scoped check is genuinely correct for its scope; the false confidence arises from a mismatch between check scope and real dependency surface. Distinct from T1 (pipe/wrapper masking) — here the check is not masked, the scope is too narrow.",
+            "evidence": "Section 3.1 item 12; event bfb43e4b"
+          },
+          {
+            "name": "V1",
+            "shape": "Reviewer-convergence false proof: multiple independent reviewers (including author and specialist sub-agents) converge on the same incorrect claim without any executing the concrete verification step. Social convergence is treated as proof; only a reviewer who runs the actual command catches the error. The fix disposition records convergence-was-not-accepted-as-proof as a guardrail.",
+            "evidence": "Section 3.1 item 13; events f5cc5f2d, 9f6568a9, 590a644c"
+          },
+          {
+            "name": "E1",
+            "shape": "Work product in ephemeral/untracked location: significant work product (pattern outlines, coordination channels, design notes) is created in scratch space (/tmp, untracked files) rather than the tracked repository. Content is lost or requires a rescue operation. Distinct from A2 (reading stale substrate state) — this is about the physical location of creation.",
+            "evidence": "Section 3.1 item 15; events 52ce7a9a, 314f68f6"
+          },
+          {
+            "name": "I1",
+            "shape": "Session-fragmentation re-grounding spiral: a codex-style agent executing a multi-step task re-grounds and re-posts a full team-start report at each micro-slice as if starting a new session, enumerating full dirty-tree state to a commit-owning peer. Each re-start handoff itself adds to the dirty tree, causing the next re-start to enumerate one more file. The spiral is self-referential: coordination overhead is itself the growing source of state.",
+            "evidence": "Section 2 (26 May 09:19-12:25 paragraph); events 212cbf34, 08515dbb, 1f9c83af, af8e7b90, a1937f15, 6d7d4a7a"
+          },
+          {
+            "name": "D1",
+            "shape": "Protocol-as-documented vs protocol-as-practised silent divergence: schema-specified event shapes or field constraints described as test-enforced are absent across the entire live corpus (zero instances). No error is raised and no warning emitted; agents and tools operate as if the documented protocol is in force while the actual stream violates it on every event. Distinct from S5 (CLI input boundary gaps) — the divergence is at schema/doctrine level.",
+            "evidence": "Section 3.3 items 6 and 8; Section 4 item 5 (zero lifecycle events, zero naming_schema_version stamps across 635 events)"
+          },
+          {
+            "name": "N1",
+            "shape": "Private/machine-local path in shared coordination artefact: an agent embeds a machine-local or home-directory path (e.g. ~/.claude/plans/<name>) in a shared comms event or coordination document. The path is unreachable by any peer or future reader; creates a dead pointer in the shared record. Related to E1 (ephemeral location) but distinct — the work may exist locally; the failure is the unreachable reference in a shared surface.",
+            "evidence": "Section 5 residue ([1m] capability tag); event 4c2eb3fe"
+          },
+          {
+            "name": "X1",
+            "shape": "Topology-blindness — agents unaware of shared working tree: two or more agents operate in the same working tree while reasoning about your tree / my tree as if in separate clones. The collaboration substrate provides no topology advertisement; discovery is accidental via a side-channel (seeing each other's untracked files in git status). Prior to discovery, coordination decisions are made on false isolation assumptions. Shared topology then enables the L1 liveness-tooling self-deadlock.",
+            "evidence": "Section 4 item 3; event ad4ea458"
+          },
+          {
+            "name": "C1",
+            "shape": "Protocol-norm regression (ceremony ratchet failure): an established minimal-ceremony norm is explicitly declared and practised across multiple sessions but then silently abandoned in a later session without a triggering decision; full ceremony returns, then self-destructs again. The pattern repeats because nothing in the shared substrate pins the norm between sessions; each session re-negotiates from ambient grounding alone.",
+            "evidence": "Section 3.3 item 2; events e60a6494, 818c4a77, 26c5c6ee (minimal-ceremony instances) vs 66 heartbeats returning on 4 June without a declared norm change"
+          }
+        ]
+      },
+      {
+        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r5-2026-06-10.md",
+        "untagged_captures": [
+          {
+            "summary": "Canonical watcher hang-but-run, two occurrences then cured same-day (Abyssal ~14:07Z, Director Veiled ~15:28Z).",
+            "maps_to_class": "S1",
+            "evidence": "3.1 finding 1: events e27e964a, 26c8b7e9, 382ed72e. Both stalls detected externally; hardening PR #157 merged same day."
+          },
+          {
+            "summary": "The watcher-stall detector cannot detect itself: Veiled ran the Abyssal stall diagnostic then attributed their own identical stall to routine work.",
+            "maps_to_class": "S1",
+            "evidence": "3.1 finding 2: event b385b94c. A known failure mode re-occurs in the agent who diagnosed it, because agent-local watcher self-diagnosis is structurally impossible."
+          },
+          {
+            "summary": "Alive-but-blocked is indistinguishable from alive-but-stalled: three variants in one day (blind watcher, blocked on owner auth, owner-transport gap with frozen heartbeat typed-args).",
+            "maps_to_class": "S3",
+            "evidence": "3.1 finding 3: events 9d421e29, cd19782a. Heartbeats continued uninterrupted during all three stall types; observers could not distinguish the cause from the liveness signal alone."
+          },
+          {
+            "summary": "Silent write failures in the coordination CLI: two Director ruling events failed to write due to id-validation failure and were discovered missing only later.",
+            "maps_to_class": "S5",
+            "evidence": "3.1 finding 4: event 53112f47, doctrine crystallised at eb284f91. CLI id-validation silently dropped writes; no error surface reached the caller."
+          },
+          {
+            "summary": "Relative-path write silently retargets the registry AND the write-proof line validates the wrong destination, so the integrity check itself is false-green.",
+            "maps_to_class": "S4",
+            "evidence": "3.1 finding 5: events 9a164c5c, 16939248. Tempestuous's G3 fork ask landed in the worktree's own comms copy; proof line printed a relative path that appeared correct; deadline-default nearly fired on an unseen ask."
+          },
+          {
+            "summary": "Pre-grounding a held REFUTE verdict against a live peer worktree graded the cure rather than the head: Airy-Squall's REFUTE of a Copilot finding was wrong because the worktree already carried the uncommitted fix.",
+            "maps_to_class": "A5",
+            "evidence": "3.1 finding 6: event b46ccedd. Matches A5 exactly; log acknowledges the feedback-note overlap."
+          },
+          {
+            "summary": "Replication-script simplification (keep-first dedup) manufactured a 473-lesson false-churn signal at exactly its simplification point; tell was equality between a methodology counter and a finding counter.",
+            "maps_to_class": "A6",
+            "evidence": "3.1 finding 7: event f58417a6. Re-run with faithful semantics inverted the finding to 100.000% identity."
+          },
+          {
+            "summary": "Invisible control byte (0x1F in dedup keys) defeated reviewer and verifier simultaneously: both the code-expert finding and the first-hand confirmation were wrong; only od -c revealed it.",
+            "maps_to_class": "T2",
+            "evidence": "3.1 finding 8: event 4fd66dc5. Matches T2 exactly."
+          },
+          {
+            "summary": "Baseline-selection error in drift classification: Director routed a resync micro-PR diagnosed by comparing working tree against the long-lived branch HEAD rather than origin/main; implementer execution-start re-verification returned NO-OP.",
+            "maps_to_class": "NEW",
+            "evidence": "3.1 finding 9: events 459451d5, 54fc0fee. Also: turbo-cached sdk-codegen cannot observe upstream movement without --force, producing false-green resyncs. No existing class covers wrong-baseline reference in diagnostic routing."
+          },
+          {
+            "summary": "Watcher render defect masked by heartbeat-only traffic, and first diagnosis was made via a convenient surrogate parse path that didn't exercise the failing path.",
+            "maps_to_class": "T3",
+            "evidence": "3.1 finding 10: event 6cf5f4ab. A jq context bug dropped all substantive events while heartbeats rendered fine — render filter proven only on heartbeats drops substantive events. Diagnosis via wrong surrogate matches T3's second dimension."
+          },
+          {
+            "summary": "Review obligation orphaned at a rotation seam: c2-2 bundle authored across two agents landed gate-green with no dedicated specialist pass; flagged post-closeout and recovered by a Director-routed backstop dispatch.",
+            "maps_to_class": "NEW",
+            "evidence": "3.1 finding 11: events 2247a908, a9b60005. Gates are not review; a rotation seam can orphan accumulated review obligations that neither seat explicitly owned."
+          },
+          {
+            "summary": "Claim registry races at rotation moments: Director closed Orbit's claim seconds before Orbit's liveness broadcast; Airy-Squall's fresh claim raced a choreography ruling by 26 seconds.",
+            "maps_to_class": "NEW",
+            "evidence": "3.1 finding 12: events dea9b20b, 0f63ba67. Repeated claim-registry lag at rotation moments; both resolved by dialogue but the class is structurally distinct from S4/S6."
+          },
+          {
+            "summary": "Plan-premise falsification discovered late because count-matching was used as a verification proxy: G1a prerequisiteFor derivation was built on file-encounter-order semantics; counts matched while semantics were arbitrary; falsified only at G3 after five PRs built on it.",
+            "maps_to_class": "P2",
+            "evidence": "3.1 finding 13: event 16939248. A dead-scope variant where the plan premise (authoritative ordering exists) was never true, but count-matching as the verification proxy allowed it to survive an explicit re-verification pass."
+          },
+          {
+            "summary": "Test flakes surfaced but uncured at window end (lifecycle-lease.integration, auth-routes scopes_supported, Docker-registry infra).",
+            "maps_to_class": "NEW",
+            "evidence": "3.1 finding 14: events 0b2913be, f0e5dc95, 043de7bb. Intermittent infrastructure / integration flakes noted but unresolved; partial overlap with existing classes but the flake-persistence-across-sessions shape has no existing class."
+          },
+          {
+            "summary": "Zero machine-readable threading fields set in 795 events, including three events whose own governing doctrine explicitly mandates in_response_to; prose event-id citations carry all threading load.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.3 finding 3 and section 4 finding 1: verified on events 0a3d08ff, 7f452f66, ed4e9d01 against requirement stated in 8c94ddc3 and 7dc40d71. Schema affordances for threading are completely unused even where doctrine requires them."
+          },
+          {
+            "summary": "Two incompatible first-person accounts of who merged PR #160 both standing on the permanent comms record, unresolved, in a culture that treats the stream as the provenance record.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 3.3 finding 5: events 7cdb92a1, 8ccd639f, d0b10be1. Shared gh auth makes mergedBy unattributable; the comms stream becomes the provenance record but here the stream contradicts itself."
+          },
+          {
+            "summary": "Stale heartbeat typed-args fields (intent, cycle) survived four generations of honest-label doctrine undetected: Veiled's cycle=team-bootstrap never updated across entire tenure including 67 min of detached blind heartbeating; Zephyr's intent=director-successor-standby persisted through the night after an honest-label doctrine was promulgated.",
+            "maps_to_class": "S3",
+            "evidence": "Section 3.3 finding 6 and section 4 finding 6. Stale typed-args fields are structurally below every agent's attention floor; mutual-cover discipline did not catch them. Maps to S3 as a liveness sub-field misread variant."
+          },
+          {
+            "summary": "A test-probe / detection-calibration event permanently written into the append-only canonical comms stream, self-flagged as noise to be ignored.",
+            "maps_to_class": "NEW",
+            "evidence": "Section 4 finding 7: event 4fcfcef5 at 19:30:07Z, self-annotated at 1bc17db0. The append-only record now contains deliberate noise the author asked everyone to treat as non-existent; no existing class covers intentional stream pollution."
+          }
+        ],
+        "new_class_nominations": [
+          {
+            "name": "D1 Wrong-baseline diagnostic routing",
+            "shape": "A diagnostic is performed by comparing the working tree (or branch) against the wrong reference baseline (e.g. long-lived branch HEAD rather than origin/main, or a cached build result that cannot observe upstream movement without a force-flag). The comparison returns a spurious finding or a false-green NO-OP; routing decisions are made on that spurious signal before execution-start re-verification inverts it.",
+            "evidence": "3.1 finding 9: events 459451d5, 54fc0fee. Director routed resync PR as a schema-bump; implementer's re-verification against the correct baseline returned NO-OP. Related: turbo-cached sdk-codegen false-green resyncs."
+          },
+          {
+            "name": "R1 Rotation-seam review-obligation orphan",
+            "shape": "A review obligation accumulates across multiple agents holding the same seat (or across a handoff boundary). Neither the outgoing nor the incoming agent explicitly owns it. The work lands gate-green because gates are not review; the gap is discovered only after merge or post-closeout and requires a backstop dispatch to recover.",
+            "evidence": "3.1 finding 11: events 2247a908, a9b60005. c2-2 bundle authored across Radiant and Orbit merged without a dedicated specialist pass; recovered by Director-routed dispatch before merge-ready."
+          },
+          {
+            "name": "R2 Claim-registry lag at rotation moments",
+            "shape": "The claim registry state lags the live event stream at rotation moments: a Director closes a claim seconds before the incumbent's liveness broadcast arrives, or a successor's fresh claim races a choreography ruling. The registry becomes temporarily inconsistent with observable stream state. Both instances resolved by dialogue, but the structural race is not cured by dialogue alone.",
+            "evidence": "3.1 finding 12: events dea9b20b, 0f63ba67. Two distinct races within the same day's rotation sequence."
+          },
+          {
+            "name": "C1 Schema-affordance atrophy under prose-threading pressure",
+            "shape": "Machine-readable schema discriminators or structured fields (threading, lifecycle event kinds, audience, in_response_to) are never populated even when doctrine mandates them. A parallel informal type system — title conventions, prose event-id citations — carries all the load the schema was designed to carry. The schema field absence is invisible until a consumer tries to parse it programmatically; nothing broke, which makes the atrophy self-reinforcing.",
+            "evidence": "Section 3.3 finding 3, section 4 finding 1: zero in_response_to fields in 795 events; Moment-2 events claim compliance in prose but not in structured fields (0a3d08ff, 7f452f66, ed4e9d01). Sub-discriminators: message_kind is always the literal string 'directed' across 101 of 104 directed events."
+          },
+          {
+            "name": "C2 Provenance contradiction on shared-credential merge actor",
+            "shape": "Two agents produce incompatible first-person accounts of a shared-credential action (e.g. who pressed merge) and both accounts survive on the permanent comms record. The shared credential makes the ground truth unattributable from external tooling; the comms stream is the intended provenance record but it contradicts itself. The contradiction is noted and partially corrected but not resolved within the corpus.",
+            "evidence": "Section 3.3 finding 5, section 4 finding 4: events 7cdb92a1, 8ccd639f, d0b10be1. Overlaps the shared-gh-auth-hides-actor feedback note but the new shape is the stream-self-contradiction, not just the external-tooling opacity."
+          },
+          {
+            "name": "N1 Deliberate noise injected into append-only stream",
+            "shape": "An agent writes a schema-valid event into the canonical append-only comms stream for calibration or testing purposes, then asks all readers to ignore it. The record is permanently polluted with deliberate noise that cannot be removed and whose 'ignore me' annotation is itself just another event. Any future programmatic consumer of the stream must implement a filter for self-declared noise events, or the noise will surface as signal.",
+            "evidence": "Section 4 finding 7: event 4fcfcef5 (test-probe, 19:30:07Z), self-annotation at 1bc17db0. Author self-flagged as 'detection-calibration noise, ignore'."
+          }
+        ]
+      },
+      {
+        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r6-2026-06-11-to-12.md",
+        "untagged_captures": [
+          {
+            "summary": "Piped/wrapped exit-code false-greening: git push false-greened twice (hook banner looked like success, transfer never happened); re-bitten same day by multiple agents including a SIGPIPE variant; husky gate-output tee inverted the gate via three stacked shell semantics defects.",
+            "maps_to_class": "T1",
+            "evidence": "e589b3c7 (Seaworthy Fathoming Pier), 488c8a1b (Blustery), 309a9a56 (Hushed, SIGPIPE variant), e244bd8e (Smouldering harness-notification variant), effea526 (Evergreen gate-output tee inverted gate)"
+          },
+          {
+            "summary": "Invisible 0x1F control bytes materialising from escape-intent: Write tool emitted a literal 0x1F where escape sequence was intended, twice in one session including inside the documenting sentence itself.",
+            "maps_to_class": "T2",
+            "evidence": "b84fae38 (Seaworthy Surfing Compass), f305c720 (Prismatic second instance)"
+          },
+          {
+            "summary": "Wholly broken CLI subcommands (conversation append / escalation open|close) on main while 978 tests stayed green; no test existed at the subcommand dispatch boundary.",
+            "maps_to_class": "S5",
+            "evidence": "40a6ce09 (Sylvan): found only because loud-write contract tests were being added for a different purpose"
+          },
+          {
+            "summary": "Watcher drain-step deaths escalating through budgets without convergence (60s→120s→180s→300s→540s); 540s death at moderate load broke the load-starvation hypothesis and inverted operational advice to keep budgets short.",
+            "maps_to_class": "S2",
+            "evidence": "9c8326a1 (Sunlit), ef920525 (Pearly), e244bd8e (Smouldering), 4e35c31c (Cosmos: 3 deaths one session), e3f111ec (Moss corroboration), 940b435f (Moss 540s death at moderate load)"
+          },
+          {
+            "summary": "Zombie watcher processes (dead-by-timeout) did not exit and ran for hours sharing a seen-file with the live watcher.",
+            "maps_to_class": "S1",
+            "evidence": "e1f88af9 (Pearly closing window): dead-by-timeout watchers persisting, sharing seen-file with live watcher"
+          },
+          {
+            "summary": "Liveness misread of healthy peers from missed heartbeat cadence window or BST/UTC mtime vs created_at timezone mismatch.",
+            "maps_to_class": "S3",
+            "evidence": "56c71876 (Cindery inferred Seaworthy retirement from one missed 240s window, corrected URGENT by d7de9594); 87e4e216 (Blustery misread local BST mtimes vs UTC created_at, briefly inferred a dead team); Oceanic stall-ping of heads-down working seat"
+          },
+          {
+            "summary": "Stale facts at compose time: routing facts read from a closeout's prose text while the live registry was already ahead; temporal dislocation on resume (pre-freeze intention reported as timestamped completed action).",
+            "maps_to_class": "A2",
+            "evidence": "b21899cd+dd536088 (Sunlit routed worktree as ADOPTABLE from closeout text; corrected by Hushed), 7ad83f44 (second instance caught within the hour), ca102efa (Arboreal stale conservation verdict), df546d3a (Pearly citing still-open observation window), ac9a06af (Cosmos resumed-session temporal dislocation: merge completed 06:24Z reported as executed ~22:33Z)"
+          },
+          {
+            "summary": "Identity split-brain P1: naming-schema v2 activation caused one seed to render two live names; a main-resident hook name-cache wrote rendered names through an override channel that erased era provenance.",
+            "maps_to_class": "S6",
+            "evidence": "10cb3a10 (owner P1 ruling), 75696ec5 (diagnosis: pre-existing hook override channel), 46db87d0 (acceptance); 196/196 in-window naming_schema_version tuples carry 'override'"
+          },
+          {
+            "summary": "Relative-path CLI invocations from worktree cwds crashing or retargeting the registry.",
+            "maps_to_class": "S4",
+            "evidence": "c5c4abff (Scorched), 092f41b6 (Prismatic), de5122b8 (Nebulous third instance with comms-append vector)"
+          },
+          {
+            "summary": "Lint/format gates rewriting gitignored append-only coordination surface files (ARC channel files), violating the append-only liveness contract.",
+            "maps_to_class": "NEW",
+            "evidence": "86e94e54 (n3-2/n3-3 frictions); 8891b583 (Sylvan: 'append-only is a liveness contract, not a style choice')"
+          },
+          {
+            "summary": "Non-append write to a shared tail-followed coordination channel replays all historical events to every tail-follower (full-rewrite breaks append-only liveness contract causing ghost replays).",
+            "maps_to_class": "NEW",
+            "evidence": "86e94e54 (n3-2/n3-3 frictions); 8891b583 (Sylvan)"
+          },
+          {
+            "summary": "Commit-queue wrapper introduces a failure (depcruise line dies) not present when running the identical direct git commit — five instances, two agents, one day; unresolved at window end.",
+            "maps_to_class": "NEW",
+            "evidence": "5ef5f1c0 (Fern lifts Mulch planning event): 'commit-queue -- commit dies at the depcruise line while the identical direct git commit passes — five instances, two agents, one day'"
+          },
+          {
+            "summary": "naming_schema_version provenance field carries 'override' in 196/196 in-window events; the field designed to record naming eras has never recorded a real value, silently providing no provenance information even during the window in which the team diagnosed the override mechanism as a P1.",
+            "maps_to_class": "NEW",
+            "evidence": "§3.3-7: '196/196 in-window naming_schema_version tuples say override — meaning the provenance field designed to record eras has never recorded one'; §4 item 7"
+          },
+          {
+            "summary": "Comms event file existence made branch-dependent during a merge operation: two event files went ENOENT mid-drain during a merge window (merge-introduced files vanishing at clean merge abort), causing a Director integrity flag; one of the 'vanished' files exists today.",
+            "maps_to_class": "NEW",
+            "evidence": "§5 item 3: events 092f41b6 and 33cb52c2 'went ENOENT mid-drain' during merge window, explained at 90b5ba81; '092f41b6 is in my manifest — so the file that vanished exists today'"
+          },
+          {
+            "summary": "Heartbeat loop emits one final beat 3–6 seconds after the heartbeat-end event due to a stop-loop-FIRST ordering defect at shutdown (zombie boundary heartbeat).",
+            "maps_to_class": "NEW",
+            "evidence": "§3.3-10: Tempestuous Rising Gale heartbeat at 01:29:48Z vs heartbeat-end at 01:29:45Z; Evergreen at 09:08:16Z vs end at 09:08:10Z — 'precisely the stop-loop-FIRST ordering defect that PR 183 was written to cure'"
+          },
+          {
+            "summary": "Overnight host suspension causes synchronized ~30–53 minute gaps in multiple independent 4-minute heartbeat loops; the signal is indistinguishable from agent inactivity and could be misread as dead or stuck agents by any liveness monitor.",
+            "maps_to_class": "NEW",
+            "evidence": "§3.3-9: 'all three live agents' 4-minute loops simultaneously stretched to gaps of up to ~53 minutes (max intervals 3,168s/3,247s/3,168s) in synchronised ~30-minute holes — the host sleeping or suspending, visible only in the timing residue. No event remarks on it'"
+          },
+          {
+            "summary": "Schema structured affordances (in_response_to, in_reply_to, audience, addressed_to, lifecycle kind) atrophied to zero use across 1,209 events while a prose convention layer did all the threading and lifecycle work; any system relying on the structured fields receives no signal.",
+            "maps_to_class": "NEW",
+            "evidence": "§3.3-1: 'in_response_to = 0, in_reply_to = 0, audience = 0, addressed_to = 0, lifecycle kind = 0 — despite an elaborate lifecycle culture that is exactly what the lifecycle kind models'"
+          }
+        ],
+        "new_class_nominations": [
+          {
+            "name": "T5",
+            "shape": "Gate-time tooling (lint/format auto-fix) treats append-only coordination surface files as regular source files and rewrites them, violating the append-only liveness contract. Distinct from T4 (which is marshal-time, committed content); T5 fires at any gate-time auto-fix pass against gitignored live coordination files.",
+            "evidence": "86e94e54 (n3-2/n3-3 frictions); 8891b583 (Sylvan: 'append-only is a liveness contract, not a style choice')"
+          },
+          {
+            "name": "T6",
+            "shape": "Non-append write (full rewrite) to a shared tail-followed coordination channel causes every tail-follower to replay all historical events from offset 0. The liveness contract of an append-only channel is silently broken by any write path that truncates-and-rewrites rather than appending.",
+            "evidence": "86e94e54, 8891b583"
+          },
+          {
+            "name": "T7",
+            "shape": "Tool-wrapper behavioral divergence (false-fail direction): a wrapping CLI (e.g. commit-queue) introduces a failure at a step that the identical bare command passes cleanly — the opposite failure direction from T1 (false-green). The wrapper's extra steps or environment surface a failure the direct path does not trigger, leaving the defect invisible in direct usage and only reproducible through the wrapper.",
+            "evidence": "5ef5f1c0 (Fern lifts Mulch): 'commit-queue -- commit dies at the depcruise line while the identical direct git commit passes — five instances, two agents, one day'"
+          },
+          {
+            "name": "A8",
+            "shape": "Schema provenance field silently overridden to a constant value: a metadata field designed to carry real provenance (e.g. naming era, schema version) is always written through an override channel that produces one fixed value, so the field never records genuine information. The field appears populated and valid but carries zero signal. Distinct from S6 (runtime split-brain between two live names); A8 is a silent data-layer invariant collapse that goes undetected until the field is needed for diagnosis.",
+            "evidence": "§3.3-7, §4 item 7: naming_schema_version = 'override' in 196/196 in-window tuples; the override mechanism was the root cause of the S6 P1 split-brain but the field-collapse itself is a separate observable"
+          },
+          {
+            "name": "A9",
+            "shape": "Coordination-surface file existence made branch-dependent: during a merge operation, event/coordination files introduced on a branch transiently disappear (ENOENT) when the merge is aborted or the branch changes, causing mid-drain integrity alarms and phantom file-loss signals in any watcher or drain process running across the merge window.",
+            "evidence": "§5 item 3: events 092f41b6 and 33cb52c2 ENOENT mid-drain during merge window (90b5ba81); 092f41b6 exists in the post-window manifest"
+          },
+          {
+            "name": "S7",
+            "shape": "Heartbeat-loop shutdown race (stop-loop-FIRST ordering defect): the heartbeat loop emits one or more beats after the heartbeat-end event because the stop signal is sent before the loop is confirmed halted. Creates zombie boundary heartbeats that post-date the declared retirement, and can confuse liveness monitors that see activity after a declared end.",
+            "evidence": "§3.3-10: Tempestuous Rising Gale beat at 01:29:48Z vs end at 01:29:45Z; Evergreen at 09:08:16Z vs end at 09:08:10Z"
+          },
+          {
+            "name": "S8",
+            "shape": "Host-suspension heartbeat gap: external host sleep/suspend synchronously pauses all running heartbeat loops, producing multi-agent simultaneous cadence gaps (30–53 min in nominally 4-min loops) that are indistinguishable from agent inactivity in the event stream. Any liveness monitor using inter-event interval as a health signal will mis-classify suspended-but-healthy agents as dead or stuck.",
+            "evidence": "§3.3-9: three agents' loops simultaneously gap to 3,168–3,247s overnight; no event in-stream remarks on it"
+          },
+          {
+            "name": "A10",
+            "shape": "Protocol schema field atrophy: structured schema fields that model a real protocol concept (threading, lifecycle transitions, addressing) silently reach zero adoption while a prose-convention layer evolves to substitute for them. Any downstream consumer or analyser that reads the structured fields receives no signal, and the divergence goes unremarked in the event stream because the prose layer functions.",
+            "evidence": "§3.3-1: in_response_to, in_reply_to, audience, addressed_to, lifecycle kind all = 0 uses across 1,209 events; §4 item 1"
+          }
+        ]
+      },
+      {
+        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r7-variety-2026-05-20-to-24.md",
+        "untagged_captures": [
+          {
+            "summary": "Stale scratch-file path reused across sessions: comms append produces an event carrying another agent's content under the wrong identity (three worked instances, cure named but only behavioural, recurred 40 h later)",
+            "maps_to_class": "A1",
+            "evidence": "F1 — events 0957bc7f, bc86dec8→f7a86688, caca5050→beaba1c4; log: 'A scratch-file path reused across sessions + the Write tool's read-before-write refusal + a same-batch comms append --body-file produces an event carrying another agent's content under the wrong identity tuple'"
+          },
+          {
+            "summary": "Shared .git/COMMIT_EDITMSG overwritten during a pre-commit hook window: correct files but wrong commit message",
+            "maps_to_class": "NEW",
+            "evidence": "F2 — event 230f3200 (2026-05-22T21:38Z): 'Velvet's commit e1b9561e landed with Velvet's 4 files but Lunar's WS4.1 commit message, because the shared .git/COMMIT_EDITMSG was overwritten during a 1m33s pre-commit hook window. Pathspec discipline protected file scope but not message integrity.'"
+          },
+          {
+            "summary": "Retirement-detection false positives fired twice on a marshal who was actively landing commits, because the Director's liveness evidence was comms-only (never git log)",
+            "maps_to_class": "A3",
+            "evidence": "F3 — events 5fb2bcd9, 670cc290: 'marshal's contiguous-execution exemption + batch-not-per-landing broadcast discipline + the Director's comms-only view of liveness (never consulting git log for work-evidence)'"
+          },
+          {
+            "summary": "Heartbeat bodies carried stale free-form prose describing completed or invalidated state rather than mechanically reflecting current observable claim fields",
+            "maps_to_class": "S3",
+            "evidence": "F4 — event 0ca40410 + a8366d7a: 'Director Lunar's heartbeats said serial 4→5→5a→6 in flight 13 minutes after that work completed; Misty's heartbeat said awaiting Director routing after Misty had declared and passed a default-action timer'"
+          },
+          {
+            "summary": "Two agents' heartbeat crons silently degraded platform-side in the same window, producing 17–20 minute gaps in 4-minute cadences, unnoticed because no watcher was watching the watcher",
+            "maps_to_class": "S1",
+            "evidence": "F5 — event 8c6bd26a: 'Both Claude-platform heartbeat-loops degraded in the same window — strong signal it's platform/harness-side (Monitor primitive degraded), not agent-side.' Manifest shows Scorched's overnight stream also has recurring 20–34-minute gaps hours earlier, unnoticed."
+          },
+          {
+            "summary": "Commit subject lines exceeded the 100-character commitlint limit at marshal gate; marshal predicted next queued intent would also fail before it ran",
+            "maps_to_class": "P1",
+            "evidence": "F6 — events e7878e41, 31998f7a: 'Cycle 5's commit message failed at 105 chars > 100 limit; the marshal then predicted the queued retry would fail the same way at 103 chars before it ran'"
+          },
+          {
+            "summary": "Coordinator opened a multi-agent session without completing start-right-team §0/§1: no all-channels watcher, no team-start broadcast, sub-agents worked for ~1 hour undirected before the failure was discovered",
+            "maps_to_class": "NEW",
+            "evidence": "F7 — event c3d41f43: 'Charcoal Searing Ember confesses to missing start-right-team §0/§1 entirely — no all-channels watcher, no team-start broadcast, two sub-agents working plan files for ~an hour before discovering the team; both sub-agents killed; owner directed a full coordinator handoff'"
+          },
+          {
+            "summary": "Director over-applied a correct roster-removal pattern and removed two agents while they were mid-routed-work; a third agent executed two lanes against the rolled-back direction before the walk-back arrived",
+            "maps_to_class": "NEW",
+            "evidence": "F8 — events 8ea82d7f, b380b225, c8f84c67: 'Director Scorched removed IBF correctly (no claim, no artefact, no work-start), then over-applied the same pattern to remove Twilit ST and Charcoal while both were mid-routed-work... Ferny had already executed two lanes against the to-be-rolled-back direction before the walk-back arrived'"
+          },
+          {
+            "summary": "A diagnostic test event with 'delete me' body was preserved permanently in the canonical corpus; the preserve-everything culture produced no deletion or quarantine mechanism",
+            "maps_to_class": "NEW",
+            "evidence": "F9 — event 8013b51a: 'title test short body, body diagnostic - delete me — still in the canonical corpus 22 days later.' Also E5: 'a delete me diagnostic was preserved forever... The corpus's preserve-everything ethic produced exactly inverted labels on this pair'"
+          },
+          {
+            "summary": "Idle Foreman heartbeated 'ACTIVE' every 4 minutes for ~13 hours with no other activity; a third of the window's largest identity's output is the word ACTIVE, but liveness infrastructure never questioned it",
+            "maps_to_class": "S3",
+            "evidence": "E2 — Scorched Tempering Kiln: 'heartbeated ACTIVE every 4 minutes from 19:32Z May 23 to 08:51Z May 24 — 162 untagged, near-identical events, with no other activity... the heartbeat contract made existence itself a job'"
+          },
+          {
+            "summary": "One agent ran two simultaneous interleaved heartbeat cron loops, distinguishable only by a hyphen vs em-dash template difference",
+            "maps_to_class": "NEW",
+            "evidence": "E3 — Pelagic Snorkelling Sextant: 'ran two interleaved heartbeat streams simultaneously on May 24 evening — distinguishable by template (knowledge curation lane active with a hyphen vs soft-surface curation lane active with an em-dash), firing seconds apart'"
+          },
+          {
+            "summary": "Schema threading fields (in_response_to, in_reply_to, audience, addressed_to) were never used across 1,910 events; a doctrine document explicitly mandated in_response_to for an acknowledgement that then did not carry the field",
+            "maps_to_class": "NEW",
+            "evidence": "E6: 'zero uses of in_response_to, in_reply_to, audience, or addressed_to across all 1,910 events... ced9997b explicitly instructs the successor to acknowledge via in_response_to per PDR-064 — and the acknowledgement (41475bf9) does not carry the field'"
+          },
+          {
+            "summary": "Byte-identical broadcast posted 22 seconds apart under distinct event IDs, with no correction or acknowledgement; CLI retry artefact making at-least-once delivery visible",
+            "maps_to_class": "NEW",
+            "evidence": "E7: 'c3d41f43 and 461982a5 (19:18:02Z / 19:18:24Z, May 21): byte-identical coordinator-handoff bodies posted 22 seconds apart under distinct event_ids. No correction or acknowledgement of the duplication anywhere.'"
+          },
+          {
+            "summary": "The model field carried four different spellings of the same Claude model version with no value canonicalisation, making identity-tuple-based census and deduplication unreliable",
+            "maps_to_class": "S6",
+            "evidence": "E10: 'claude-opus-4-7 (1,458), claude-opus-4-7-1m (74), opus-4.7 (16), Opus-4.7 (5), claude-opus-4.7 (1)... The identity tuple was schema-validated but not value-canonicalised'"
+          },
+          {
+            "summary": "Two agents with the same leading adjective (both 'Twilit') forced ad-hoc inline disambiguation via initials; first-word-as-shorthand convention made namespace collisions practical within four days",
+            "maps_to_class": "S6",
+            "evidence": "E11: 'Two Twilit agents co-active on May 23... forced ad-hoc disambiguation: Twilit (S), Twilit ST, Twilit (WM)... The adjective-verb-noun namespace looked large but the first-word-as-shorthand convention agents naturally adopted made collisions practical within four days'"
+          },
+          {
+            "summary": "A real, load-bearing coordination message shipped with a title marking it as a throwaway test ('reproducer-test: long body with shell-escaped apostrophes'), misleading future readers",
+            "maps_to_class": "NEW",
+            "evidence": "E5: '3cc1fb93 is titled reproducer-test: long body with shell-escaped apostrophes but its body is the actual, load-bearing three-way session-split proposal — rendezvous chain, claim IDs, gate-sweeper design, objection deadline'"
+          },
+          {
+            "summary": "Heartbeat tag backfill absent: ~167 heartbeat-titled events before tag feature existed are untagged, producing a stratigraphic boundary that causes any naive tag-based census to under-count by ~47%",
+            "maps_to_class": "NEW",
+            "evidence": "Unclassifiable residue section: '~167 heartbeat-titled events before 10:18Z May 24 are untagged; everything after mostly carries the tag. The corpus thus has two heartbeat populations distinguishable only by date — a stratigraphic boundary rather than a data error. any naive tag-based heartbeat census of this window under-counts by ~47%'"
+          },
+          {
+            "summary": "Director tick numbering restarted per seat-occupant rather than per team-day, making cross-Director-window tick cross-referencing ambiguous for any reader not holding the seat-occupancy timeline",
+            "maps_to_class": "NEW",
+            "evidence": "Unclassifiable residue: 'Scorched ticks #1–16 on May 23 afternoon; Seaworthy ticks referenced as #4/#5 the same evening from a different counter: tick identity is per-Director-window, not per-team-day'"
+          }
+        ],
+        "new_class_nominations": [
+          {
+            "name": "G1 — Shared mutable commit-message surface overwritten mid-hook-window",
+            "shape": "Multiple concurrent committers sharing .git/COMMIT_EDITMSG: pathspec discipline isolates file scope but does not protect message integrity; a slower agent's hook window (pre-commit latency) gives a faster peer time to overwrite the shared file, so the slower commit lands with correct files and wrong message. Fix requires per-intent isolated message paths (inline -m or session-prefixed intent files) rather than the shared file.",
+            "evidence": "F2 — event 230f3200 (2026-05-22T21:38Z): Velvet's files, Lunar's message because .git/COMMIT_EDITMSG was overwritten during Velvet's 1m33s pre-commit hook window"
+          },
+          {
+            "name": "G2 — Coordinator session-open without mandatory team-start discipline (blind dispatch)",
+            "shape": "A coordinator agent begins dispatching sub-agents without completing the required all-channels-watcher and team-start-broadcast steps; sub-agents work for a materially long period (here ~1 hour) on real artefacts with no coordination substrate, creating orphan work and requiring forced teardown. Root cause: the session-opening checklist is advisory text that the agent can skip under context pressure or incorrect routing.",
+            "evidence": "F7 — event c3d41f43: Charcoal missing start-right-team §0/§1 entirely; two sub-agents killed; full coordinator handoff required"
+          },
+          {
+            "name": "G3 — Roster-removal pattern over-applied to mid-routed agents (cascading misdirection)",
+            "shape": "A Director applies a correct roster-removal heuristic (agent has no claim, no artefact, no work-start) to a case where the agent is actually mid-routed; downstream agents execute work under the now-invalid routing before the walk-back is broadcast. The asymmetric cost (says-active overshoot = O(1); says-closed miss = O(N) cascading work) makes premature removal the more expensive error class, but the heuristic provides no guard against it.",
+            "evidence": "F8 — events 8ea82d7f, b380b225, c8f84c67: Scorched removed Twilit ST and Charcoal mid-work; Ferny executed two lanes against the rolled-back direction before walk-back arrived"
+          },
+          {
+            "name": "G4 — Diagnostic / test event permanently preserved in canonical corpus (no quarantine path)",
+            "shape": "The corpus's preserve-everything semantics have no mechanism for quarantining or marking diagnostic/test events; a 'delete me' payload persists indefinitely alongside substantive coordination artefacts, and the failure is symmetrical — a real load-bearing message (E5) ships under a test title and survives only by corpus-level inspection. Neither inversion is detectable without reading full bodies.",
+            "evidence": "F9/E5 — events 8013b51a ('diagnostic - delete me', still present 22 days later) and 3cc1fb93 (load-bearing session-split proposal titled as a reproducer-test)"
+          },
+          {
+            "name": "G5 — Single-agent dual-cron loop: two simultaneous heartbeat streams from one identity",
+            "shape": "A platform restart, context compaction, or retry launches a second cron loop for the same agent while the first is still running; both loops believe themselves to be the agent's authoritative pulse. The two streams are distinguishable only by minor template differences (punctuation, phrasing). Liveness infrastructure counting heartbeat frequency sees an inflated rate; retirement-detection sees neither stream go silent.",
+            "evidence": "E3 — Pelagic Snorkelling Sextant: two interleaved heartbeat streams, seconds apart, distinguished by hyphen vs em-dash; referenced as 'the original Pelagic duplicate-heartbeat-burst' in a8366d7a"
+          },
+          {
+            "name": "G6 — Schema threading fields dead on arrival: prose conventions substitute for structured reply graph",
+            "shape": "The comms schema provides threading fields (in_response_to, in_reply_to, audience, addressed_to) that are never populated in practice; agents build elaborate prose workarounds (event-id prefixes in titles, timestamp citations, SHA references) that duplicate the schema's intent but are unqueryable as a graph. A doctrine document mandating in_response_to for an acknowledgement produces an acknowledgement without the field — the schema affordance is cited but never exercised.",
+            "evidence": "E6: zero uses of in_response_to across 1,910 events; ced9997b mandates in_response_to; 41475bf9 acknowledgement omits it"
+          },
+          {
+            "name": "G7 — CLI at-least-once delivery: byte-identical duplicate events under distinct IDs, no deduplication or acknowledgement",
+            "shape": "A comms CLI retry (on timeout or ambiguous exit) posts the same body twice under distinct auto-generated event IDs; no in-channel deduplication exists; the preserve-everything culture means neither copy is retracted; no agent notices because the duplicate is semantically harmless in context. Any downstream census, consumer, or analysis tool that does not deduplicate by body will double-count.",
+            "evidence": "E7 — events c3d41f43 and 461982a5, byte-identical, 22 seconds apart, 2026-05-21T19:18Z; no correction or acknowledgement in the window"
+          },
+          {
+            "name": "G8 — Feature-backfill gap creates stratigraphic corpus boundary: naive tag census under-counts by design",
+            "shape": "A filtering or analysis feature (here: the --tags flag and heartbeat tag) is added mid-corpus without backfilling prior events; consumers using tag-based queries see only the post-birthday population; the under-count is invisible unless the reader knows the feature's birth timestamp. The boundary is stratigraphic (date-determined), not a data error, so schema validators pass.",
+            "evidence": "Residue section: ~167 heartbeat-titled events before 10:18Z May 24 untagged; tag-based census under-counts by ~47%; 'a stratigraphic boundary rather than a data error'"
+          },
+          {
+            "name": "G9 — Per-occupant sequence counter restarts produce ambiguous cross-window references",
+            "shape": "A sequential counter (Director tick number) resets when the role changes hands; events reference tick numbers without qualifying the occupant window; any reader without the role-occupancy timeline misreads the reference. The failure is latent — it causes no in-session confusion but breaks any later analysis that joins across Director-window boundaries using tick number as a key.",
+            "evidence": "Residue section: 'Scorched ticks #1–16 on May 23 afternoon; Seaworthy ticks referenced as #4/#5 the same evening from a different counter: tick identity is per-Director-window, not per-team-day'"
+          }
+        ]
+      },
+      {
+        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r8-variety-2026-06-10-to-12.md",
+        "untagged_captures": [
+          {
+            "summary": "F1(a): Comms-watch CLI silently stalls; agent blind ~16 minutes while appearing healthy, holding for a merge that had already landed",
+            "maps_to_class": "S1",
+            "evidence": "Event 26c8b7e9 (06-10 14:29): canonical comms watch CLI silently stalls; only the owner noticed"
+          },
+          {
+            "summary": "F1(b): Sitting Director goes alive-but-blind — seen-file frozen, detached heartbeat loop still emitting — identical signature to S1",
+            "maps_to_class": "S1",
+            "evidence": "Event 382ed72e (06-10 16:10): Director Veiled seen-file frozen at 15:28:55Z, heartbeat still emitting; shadow explicitly refuses to route"
+          },
+          {
+            "summary": "F1(c/d): Fail-loud hardened drain kills healthy watchers — drain died eight times across three sessions at 60s/180s/300s/540s budgets under moderate load on a stable directory, breaking the load-starvation hypothesis; the architectural batched-drain cure left the window unbuilt",
+            "maps_to_class": "S2",
+            "evidence": "Events 4e35c31c (06-12 06:42), e3f111ec (31s later), 940b435f (06-12 06:54): six watcher deaths at successively longer budgets; Director closeout 0b1648d2 tallies eight deaths across three sessions"
+          },
+          {
+            "summary": "F2(a): Blocked-on-owner state presents the same static heartbeat label as a stall, defeating observers",
+            "maps_to_class": "S3",
+            "evidence": "Event 9d421e29 (06-10 19:00): third Director discovers blocked-on-owner-ask presents same signature as stall — nine heartbeat windows of static label while #160 sat merge-ready 49 minutes; cure: restart heartbeat with cycle=blocked-on-owner-ask"
+          },
+          {
+            "summary": "F2(b): Healthy 240-second heartbeat cadence misread as session death by arriving successor who sampled inside one cadence window",
+            "maps_to_class": "S3",
+            "evidence": "Events 1c9ca98c / d7de9594 (06-11 08:53): successor Cindery misreads incumbent heartbeat cadence as session death and opens a takeover team-start"
+          },
+          {
+            "summary": "F3(a): Literal 0x1F byte in dedup keys invisible in diff, grep, sed, and reviewer rendering; code-expert finding and agent's own grep verification agreed on a falsehood; only RED-first od -c exposed it",
+            "maps_to_class": "T2",
+            "evidence": "Event 4fd66dc5 (06-10 21:17, Sylvan): 0x1F byte invisible to all standard tools including first-hand grep; od -c tiebreaker required"
+          },
+          {
+            "summary": "F3(b): file-Write tool itself materialised an intended six-character escape sequence as a literal 0x1F byte, then broke the author's own subsequent exact-match Edit",
+            "maps_to_class": "T2",
+            "evidence": "Event b84fae38 (06-11 08:36, Seaworthy): Write tool injected 0x1F on materialisation, defeating subsequent Edit"
+          },
+          {
+            "summary": "F4(a): Pre-commit hook edit silently inverted the gate — three stacked defects (pipeline exit shadowing, sh -e aborting before status capture, missing-file test error parsing as success) let a commit land locally on a RED gate",
+            "maps_to_class": "T1",
+            "evidence": "Event effea526 (06-11 09:05, Evergreen): commit landed locally on RED gate; caught pre-push, amended green"
+          },
+          {
+            "summary": "F4(b): git push | tail -3 false-greened twice — pre-push hook banner completed and exit 0 reported while the transfer never happened; branch absent from remote",
+            "maps_to_class": "T1",
+            "evidence": "Event e589b3c7 (06-11 09:49, Seaworthy-Pier): push false-green twice; branch absent from remote; cure: success token is transfer line plus fresh ls-remote"
+          },
+          {
+            "summary": "F5: Relative --comms-dir path from worktree cwd resolved to worktree copy of registry; two fork asks succeeded locally but never reached the Director; deadline-default nearly fired on an unseen ask",
+            "maps_to_class": "S4",
+            "evidence": "Event 9a164c5c (06-10 23:43, Tempestuous Rising Gale): write-proof line printed relative path that read as home; Director's HOLD event 23:34 explicitly notes default must not fire on an unseen ask"
+          },
+          {
+            "summary": "F6: Two CLI subcommands (conversation append, escalation open/close) exited 2 on every invocation; zero CLI-dispatch-level tests existed; all coverage entered below the parse boundary; suite was green",
+            "maps_to_class": "S5",
+            "evidence": "Event 40a6ce09 (06-11 07:01, Sylvan Branching Pollen): argv parser routed --file into a files array; handlers read a scalar that never existed; found only when loud-write contract tests added for an unrelated item"
+          },
+          {
+            "summary": "F7: Identity split-brain — one seed, one UUID, two live name renderings; session-identity hook caches rendered name via operator-override env channel, silently recording all five live agents' naming_schema_version as 'override'",
+            "maps_to_class": "S6",
+            "evidence": "Event f5e129bc (06-11 21:16): agent introduces as 'Swift Gliding Zephyr (aba87a) = roster Harrier weaves Stratosphere'; Moss diagnosis at 21:42: main-resident session-identity hook caches rendered name through operator-override env channel; all five live agents' identity tuples recorded naming_schema_version: 'override'"
+          },
+          {
+            "summary": "F8: Measurement script deduplicated by slug (assumption the real extractor does not make), producing exactly 473 false changed-lesson findings — a pure echo of the 473 records the simplification dropped; real churn zero",
+            "maps_to_class": "A6",
+            "evidence": "Event f58417a6 (06-10 19:33, Galactic): equality between methodology counter (473) and finding counter (473) is identified as the stop-and-audit signal"
+          },
+          {
+            "summary": "F9: Resumed session completed an action on wake (PR #192 merged 06:24Z) but reported it as having been executed at ~22:33 the previous evening — frozen in-flight intention surfaced as a remembered completed action",
+            "maps_to_class": "A2",
+            "evidence": "Event ac9a06af (06-12 06:27, Firefly seeks Temper): cure issued — on any resumed turn, re-derive the clock and re-verify every claimed-done action against its authoritative surface"
+          },
+          {
+            "summary": "F10: Director routed work from unverified diagnosis — generated-file drift classified as upstream schema bump by comparing against coordination-home branch HEAD instead of origin/main; task returned NO-OP",
+            "maps_to_class": "A2",
+            "evidence": "Event 54fc0fee (06-10 20:03, Zephyr): routed task came back NO-OP; execution-start re-verification duty caught it ('second worked instance today' of that duty working)"
+          },
+          {
+            "summary": "F11: commit-queue -- commit dies at the depcruise line in captured-hook-output mode while identical direct git commit passes; five instances, two agents, one day; unresolved at window close",
+            "maps_to_class": "NEW",
+            "evidence": "Event 5ef5f1c0 (06-12 17:22): five instances, two agents; alerted not cured; the mediated path diverges from the direct path in hook-output-capture mode"
+          }
+        ],
+        "new_class_nominations": [
+          {
+            "name": "T5 Mediated-path / direct-path hook-output divergence",
+            "shape": "A tool-mediated commit (or other gated operation) invokes the same underlying hook chain as a direct git command but in a different execution context (e.g. captured-hook-output mode); the mediated path fails a sub-step that the direct path passes, or vice versa. The divergence is opaque because the surface-level command appears equivalent; debugging requires isolating what the mediation layer changes about the hook's execution environment.",
+            "evidence": "F11: event 5ef5f1c0 (06-12 17:22) — commit-queue -- commit dies at the depcruise line in captured-hook-output mode; direct git commit passes; five instances, two agents, unresolved at window close"
+          },
+          {
+            "name": "S7 Timeout-cure prolongs blind window (inverted timeout doctrine)",
+            "shape": "A 'fail loud' hardening that adds long timeouts to a drain/watcher step does not prevent the drain from dying; it only delays the loud failure, extending the window during which the agent is blind before the death is detected. The operating doctrine inverts: short budgets die cheap and recover fast; long budgets exclusively lengthen the blind interval. This is distinct from S2 (drain-death under load) because S2 covers the death itself; S7 covers the counter-intuitive relationship between timeout length and recovery latency that makes longer timeouts strictly worse than shorter ones.",
+            "evidence": "F1(c/d): events 4e35c31c, e3f111ec, 940b435f (06-12 06:42–06:54) — sixth death at 540s budget under moderate load on a stable directory; Director closeout 0b1648d2 tallies eight deaths; era's operational inversion 'keep timeout budgets SHORT so a wedged drain dies cheap and recovers fast'"
+          }
+        ]
+      }
+    ]
+  }
+}

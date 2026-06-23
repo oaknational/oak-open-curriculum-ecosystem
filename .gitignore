@@ -270,3 +270,7 @@ vite.config.ts.timestamp-*
 
 # Documentation helpers
 packages/sdks/oak-sdk-codegen/code-generation/utils/ingest-pipeline.md
+
+# Personal onboarding walkthrough state (individual-scoped, never shared;
+# one checkout = one individual — see .agent/skills/explain/SKILL-CANONICAL.md)
+.agent/state/onboarding/

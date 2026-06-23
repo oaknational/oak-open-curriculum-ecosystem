@@ -32,7 +32,7 @@ contract);
 [PDR-073](PDR-073-recursion-as-method-is-practice-core-mind-shape.md)
 (recursion as method — silent body-file-attribution failures
 corrupt attribution on the recursive substrate);
-[`practice-index.md`](../../practice-index.md) (host adoption and
+`practice-index.md` (host adoption and
 implementation bridge).
 
 ## Context

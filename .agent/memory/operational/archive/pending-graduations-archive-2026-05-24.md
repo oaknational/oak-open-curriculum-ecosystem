@@ -921,14 +921,14 @@ consumer wiring at each ceremony. Each is a separate cycle per the PDR-076
 > name, id, created at, last updated at"
 
 **Worked instance triggering the direction**: Stormbound Floating Wing /
-`52f264` drafted a closeout body via `Write` to `/tmp/stormbound-closeout.md`.
+`52f264` drafted a closeout body via `Write` to `<scratch>/stormbound-closeout.md`.
 The path pre-existed from Stormbound Kiting Squall / `ddbea2`'s session (May
 22 16:26). Write refused with "File has not been read yet"; a parallel `comms
 append --body-file` call proceeded with the STALE file, posting Kiting
 Squall's Cycle 1.1 closeout text under Floating Wing's identity tuple. This
 is a new sub-class of the authorial-bundle-integrity failure-class SVW
 flagged at 23:09:17Z (3rd-instance flag on shared-file line-scope drift) —
-*tempfile-path collision across sessions in shared `/tmp/` namespace over
+*tempfile-path collision across sessions in shared `<scratch>/` namespace over
 multiple days*.
 
 **Substance summary — two related rules**:
@@ -946,7 +946,7 @@ multiple days*.
 2. **Temporary-file frontmatter schema, separate from identity itself.**
    Every temporary agent coordination / collaboration file (closeout drafts,
    commit-message drafts, broadcast bodies, handoff records, intent-scoped
-   message files under `.git/.commit-queue/` or `/tmp/`, reviewer-finding
+   message files under `.git/.commit-queue/` or `<scratch>/`, reviewer-finding
    scratch-notes, deferred-intent receipts) MUST contain frontmatter with at
    least: `agent_name`, `id`, `created_at`, `last_updated_at`. The schema
    should be specified now. The enforcing tooling is intentionally
@@ -1814,7 +1814,7 @@ recurrence shows the secondary defence needs its own rule surface.
 
 Stormbound Floating Wing's first closeout broadcast at 06:25:41Z (`0957bc7f`)
 carried another agent's substance under their identity tuple. Root cause: they
-drafted their closeout body via `Write` to `/tmp/stormbound-closeout.md`, but
+drafted their closeout body via `Write` to `<scratch>/stormbound-closeout.md`, but
 that path pre-existed from a prior session (Stormbound Kiting Squall /
 `ddbea2`, dated 2026-05-22 16:26). The Write tool refused with "File has not
 been read yet — read it first before writing"; the agent made the parallel
@@ -1823,8 +1823,8 @@ the stale file content. The posted event carried Stormbound Kiting Squall's
 Cycle 1.1 closeout under Floating Wing's identity. Corrected at 06:27Z via
 supersedes broadcast.
 
-**Cure shape**: tempfile paths under multi-session shared `/tmp/` MUST be
-session-prefixed (e.g. `/tmp/<session_id_prefix>-<purpose>.md`). The Write
+**Cure shape**: tempfile paths under multi-session shared `<scratch>/` MUST be
+session-prefixed (e.g. `<scratch>/<session_id_prefix>-<purpose>.md`). The Write
 tool's "read before overwrite" refusal is a signal of cross-session collision,
 NOT a workflow inconvenience to route around with a parallel call.
 

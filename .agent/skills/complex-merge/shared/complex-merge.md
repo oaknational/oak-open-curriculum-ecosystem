@@ -48,9 +48,9 @@ git merge --abort
 
 ```bash
 FORK=$(git merge-base HEAD origin/main)
-git diff --name-only "$FORK"..HEAD > /tmp/branch.txt
-git diff --name-only "$FORK"..origin/main > /tmp/main.txt
-comm -12 <(sort /tmp/branch.txt) <(sort /tmp/main.txt)
+git diff --name-only "$FORK"..HEAD > tmp/branch.txt
+git diff --name-only "$FORK"..origin/main > tmp/main.txt
+comm -12 <(sort tmp/branch.txt) <(sort tmp/main.txt)
 ```
 
 Files in the intersection are the risk zone.

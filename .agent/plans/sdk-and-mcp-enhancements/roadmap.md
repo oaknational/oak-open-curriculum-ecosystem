@@ -178,11 +178,13 @@ proceed independently on any branch.
 ### Output schema follow-up
 
 [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
-remains valid follow-on work. Serial order (owner-resolved 2026-06-08, see the
-plan's §Resolved Sequencing): it runs AFTER EEF D6/D7 and the graph-tools
-migration, then authors every tool's `outputSchema` uniformly in one place (no
-special case), with the required field as the closing ratchet. Its W1 (codegen)
-preparation and test design are not gated and can advance earlier.
+remains valid follow-on work. Every tool's `outputSchema` is composed by one
+mechanism over its source-derived payload Zod. Serial order (owner-resolved
+2026-06-08): it runs AFTER EEF D6/D7 and the graph-tools migration; a W0 source-Zod
+phase emits any missing payload Zod (search/EEF now, graph-tool Zod gated on
+`graph-tools-value-redesign`), then W1/W2 compose and S0 lands the required field as
+the closing ratchet. W1 (codegen) preparation and test design are not gated and can
+advance earlier.
 
 ### Tool token economy and progressive discovery
 

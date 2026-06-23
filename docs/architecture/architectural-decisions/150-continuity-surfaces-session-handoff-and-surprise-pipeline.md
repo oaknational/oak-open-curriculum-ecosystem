@@ -24,7 +24,7 @@ doctrine carried forward in the parallel PDR-011 amendment)
   Rationale and Consequences language aligned. Doctrine unchanged (three
   continuity types, split-loop model, contract field set, surprise
   pipeline all preserved). See
-  [operational-awareness-and-continuity-surface-separation.plan.md](../../../.agent/plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md).
+  operational-awareness-and-continuity-surface-separation.plan.md.
 - **2026-04-21 Session 5** (memory-feedback thread; Pippin / cursor-opus;
   owner-ratified TIER-2 simplification): the host-local surface set
   realising this ADR has been re-shaped. The per-workstream brief
@@ -98,6 +98,19 @@ doctrine carried forward in the parallel PDR-011 amendment)
   host `session-handoff` §6e (extended). Evidenced by an EEF D6 handoff whose own
   "branch unpushed" claim was false and whose inherited peer "all gates green" was
   knip-red. Doctrine otherwise unchanged.
+- **2026-06-12 — two-clause mirror of the PDR-011 2026-06-12 amendment**
+  ([PDR-011 §Amendment Log 2026-06-12](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log)):
+  (a) the subjective register is **valued when genuine, voluntary always** —
+  the corpus is not monitored for volume or thinning, and a quiet register
+  while substantive work continues is a valid ordinary outcome, never a
+  degraded capture edge (reconciles the 2026-05-29 foundational-substrate
+  framing with the owner's strictly-voluntary direction of 2026-06-06).
+  (b) The completeness backstop SPLITS into claim VERIFICATION
+  (externalisable to a context-isolated reader — author bias is real) and
+  context-loss DETECTION (holder-EXCLUSIVE: loss is `context − artefacts`,
+  invisible to a context-isolated reader; never delegated). Realised in the
+  host `session-handoff` §6e (already corrected 2026-06-07) and the
+  experience README's voluntariness contract. Doctrine otherwise unchanged.
 - **2026-06-08 — disposition of continuity-surface content under fitness pressure.**
   Mirrors the portable PDR-011 amendment
   ([PDR-011 §Amendment Log 2026-06-08](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log)):
@@ -109,6 +122,19 @@ doctrine carried forward in the parallel PDR-011 amendment)
   (the section each continuity surface's `overflow_disposition` frontmatter points at) plus the
   practice-fitness apparatus that surfaces the signal. First exercised in the 2026-06-08
   dedicated continuity-curation session. Doctrine otherwise unchanged.
+- **2026-06-19 — `tracks/`/`workstreams/` operational surfaces retired** (PDR-105 Task 2
+  reference-direction burndown). Mirrors the portable PDR-011 amendment
+  ([PDR-011 §Amendment Log 2026-06-19](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log)):
+  the single-writer tactical track-card surface and the per-workstream-brief split-shape
+  variant are retired; per-lane short-horizon state lives in the relevant thread's
+  next-session record under its `Lane state` substructure. The §3 body field list and the
+  §Rationale "Why a canonical repo-local surface" prose are unchanged — they remain the
+  original historical decision record per ADR convention, with this Amendment Log carrying
+  the change. The realising
+  `.agent/memory/operational/tracks/` and `.agent/memory/operational/workstreams/`
+  directories are removed in the burndown's deletion commit. The terms "track" and
+  "workstream" remain valid as conceptual scope descriptors; only the dedicated artefact
+  homes are retired.
 
 ## Context
 
@@ -190,9 +216,8 @@ Per-lane short-horizon state (current objective, blockers, promotion
 watchlist) is carried in a per-workstream brief surface, and tactical
 coordination in single-writer track cards. The exact file paths are a
 host-local implementation detail. _(Illustrative only, non-normative:_
-_this repository implements the surface set under `.agent/memory/operational/` and_
-_`.agent/memory/operational/tracks/`; see the state scaffolding docs for the_
-_realising paths.)_
+_this repository implements the surface set under `.agent/memory/operational/`;_
+_see the state scaffolding docs for the realising paths.)_
 
 The continuity surface set is operational only. Active plans remain
 authoritative for scope, sequencing, acceptance criteria, and validation.

@@ -1,0 +1,799 @@
+{
+  "summary": "Redundant 2x dual-lens survey of the full Oak plan/strategy/milestone/delivery estate, then cross-cutting strategic synthesis",
+  "agentCount": 10,
+  "logs": [
+    "Estate survey: 0 collections, 0 docs, 0 bundle-agents (2x dual-lens, B=8)",
+    "Surveyed 0 docs; 0 with >=2 readers; 0 disagreements; 0 non-plan-in-executable-lane; 0 stale-executable; 0 duplication flags"
+  ],
+  "result": {
+    "scope": {
+      "collections": 0,
+      "documents": 0,
+      "bundleAgents": 0,
+      "coverage2x": 0,
+      "B": 8
+    },
+    "globalRollup": {
+      "totalDocs": 0,
+      "relevanceDistribution": {},
+      "visionDistribution": {},
+      "pollution": [],
+      "staleExecutable": [],
+      "duplicationCandidates": [],
+      "speculativeCount": 0,
+      "perCollectionCounts": {},
+      "disagreementCount": 0
+    },
+    "disagreements": [],
+    "pollution": [],
+    "staleExecutable": [],
+    "duplicationCandidates": [],
+    "lowConfidence": [],
+    "perPath": {},
+    "collectionSyntheses": [],
+    "metaFindings": [
+      {
+        "question_id": "M1-vision-currency",
+        "headline": "VISION is current and well-bounded; the plan estate collectively serves it, but two gaps stand out: the \"reusable sector components\" pillar has documentation-only plan support (no extraction/packaging execution), and the school-data-search service cluster has no vision link at all. The Practice/tooling collections dominate ~48% of active plans — vision-linked but inverse to the vision's product-first emphasis.",
+        "findings": [
+          {
+            "claim": "VISION.md is current and does not need substantive updating. It deliberately holds dated state out (defers milestone/metric currency to the roadmap and reports surface) and its 'live today' framing of graph capabilities matches the roadmap's 'KG audit done' state. The vision/plan boundary is correctly designed: timeless vision, dated roadmap.",
+            "severity": "low",
+            "evidence_paths": [
+              "docs/foundation/VISION.md",
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "VISION.md: 'Knowledge-graph-aligned capabilities are live today — anchored graph tools serve year-ordered progressions, prior-knowledge, misconception, and keyword relationships' — matches roadmap.md M2 row 'KG audit ✅'."
+          },
+          {
+            "claim": "The plans collectively DO move the repo toward the vision. Every named live-product deliverable has a dedicated, populated plan collection: SDK + MCP servers/Apps (sdk-and-mcp-enhancements, 21 plans), hybrid semantic search (semantic-search, 9), graph-aligned surfaces (connecting-oak-resources/knowledge-graph-integration, 4), EEF/sector evidence (sector-engagement/eef), the Practice (agentic-engineering-enhancements, 43), and agent-readiness discovery (discovery). The MCP HTTP server release arc is sequenced end-to-end by the path-to-GA roadmap.",
+            "severity": "low",
+            "evidence_paths": [
+              ".agent/plans/high-level-plan.md",
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "high-level-plan.md Collection Status table maps every collection to a strategic role; roadmap.md §5 sub-plan inventory ties observability, security, sdk-and-mcp, compliance, architecture plans to the M2→GA arc."
+          },
+          {
+            "claim": "VISION ELEMENT WITH THIN/NO EXECUTION PLAN SUPPORT: the 'reusable components for the sector' pillar — one of the vision's two top-level goals and given a canonical six-item inventory (OpenAPI-to-MCP pipeline, SDK generation flow, hybrid-search config, MCP App scaffolds, graph projection patterns, the Practice) — has only ONE planning-authority artefact, the sector-reusable-components-adoption plan, which is a partner-facing documentation contract (isProject:false, todos are 'define matrix', 'name first adopter'), not execution. No plan extracts, packages, or independently publishes the non-Practice components for external reuse.",
+            "severity": "medium",
+            "evidence_paths": [
+              "docs/foundation/VISION.md",
+              ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md"
+            ],
+            "quote": "VISION.md: 'Reusability is treated as a first-class delivery concern, not a side effect.' Yet the only linked plan's overview reads: 'Partner-facing contract for external reuse ... anchored in docs/foundation/VISION.md canonical inventory' — a contract, with todos t2 'Name first external adoption profile' and t3 'Define supported, experimental, and reference-only classifications', i.e. still defining the offer, not building it."
+          },
+          {
+            "claim": "SIZEABLE PLAN CLUSTER WITH vision_link=none: the school-data-search collection (UK school-register dataset service POC — a whole new authenticated REST API + typed client for GIAS/school data). VISION.md contains zero mention of school-register/GIAS/school-data, and the Non-Goals section does not address it. The collection README never cites the vision. This is a new product surface with no anchor in the timeless vision; the high-level-plan flags it as 'in-repo until go/no-go' but the vision is silent on whether a school-data service belongs to 'compositional curriculum intelligence' at all.",
+            "severity": "medium",
+            "evidence_paths": [
+              ".agent/plans/school-data-search/README.md",
+              ".agent/plans/school-data-search/current/school-data-search-poc.plan.md",
+              "docs/foundation/VISION.md"
+            ],
+            "quote": "school-data-search/README.md: 'a privacy-conservative, provenance-carrying canonical dataset of UK schools ... served through an authenticated REST API with a typed client — built IN THIS repository as a POC MVP'. grep for 'school data|school register|gias' in VISION.md returns '(none in VISION.md)'."
+          },
+          {
+            "claim": "STRUCTURAL CURRENCY SIGNAL (balance, not absence): the Practice/tooling collections dominate the active plan estate — agentic-engineering-enhancements (43) + agent-tooling (31) = 74 of ~154 active/current plans, ~48%. The Practice IS a named vision deliverable so this is NOT vision_link=none, but it is the INVERSE of the vision's emphasis: the vision frames the Practice as the first-order delivery operating system serving the product, with the product (SDK/MCP/search/graph) as the primary asset. The plan estate's centre of mass is on how-we-build, not what-we-ship. This is a real currency observation: either the vision under-states how central Practice R&D has become to the repo's identity, or the plan estate has over-weighted internal tooling relative to product delivery.",
+            "severity": "medium",
+            "evidence_paths": [
+              ".agent/plans/high-level-plan.md",
+              "docs/foundation/VISION.md"
+            ],
+            "quote": "Active/current plan counts by collection: agentic-engineering-enhancements 43, agent-tooling 31, sdk-and-mcp-enhancements 21, architecture-and-infrastructure 16, observability 15, semantic-search 9. VISION.md positions the Practice as 'the operating system for delivery itself' (first order) beneath 'a primary Oak product surface' (Positioning)."
+          },
+          {
+            "claim": "Minor vision element with no plan: pedagogical-rigour-assessment APIs. VISION 'Strategic Integrations Ahead' lists 'APIs for AI-assisted assessment of generated curriculum resources against high standards of pedagogical rigour' as a slated capability, but no plan collection or plan addresses it (it is explicitly future/upstream-fed, so this is expected, not a defect). Flagging for completeness.",
+            "severity": "low",
+            "evidence_paths": [
+              "docs/foundation/VISION.md",
+              ".agent/plans/high-level-plan.md"
+            ],
+            "quote": "VISION.md: 'APIs for AI-assisted assessment of generated curriculum resources against high standards of pedagogical rigour' — listed under 'Further Oak capabilities slated to feed this same trajectory', i.e. upstream-dependent, no in-repo plan expected yet."
+          },
+          {
+            "claim": "ADR-008 is correctly deprecated and not a currency liability. It is explicitly marked Deprecated/historical, superseded by VISION.md + ADR-119, and VISION.md's Historical Positioning section confirms the supersession. No action needed; reading it confirms it carries no live obligations.",
+            "severity": "low",
+            "evidence_paths": [
+              "docs/architecture/architectural-decisions/008-ecosystem-architecture-vision.md",
+              "docs/foundation/VISION.md"
+            ],
+            "quote": "ADR-008: 'Deprecated (Historical context only) ... Current conceptual vision is defined in: docs/foundation/VISION.md'. VISION.md: 'ADR-008 ... is retained for historical context but is conceptually deprecated.'"
+          }
+        ],
+        "recommendation": "Keep VISION.md as-is on the product/timeless framing — it is current and its deferral of dated state is correct. Take three concrete actions. (1) Resolve the school-data-search vision gap: the owner should decide at the next go/no-go whether a UK school-register data service belongs inside 'compositional curriculum intelligence'; if yes, add one sentence to VISION.md 'What We Deliver' or 'Strategic Integrations Ahead' anchoring it; if it is a separate product, the cluster should not live under this repo's vision and the README should say so. Until decided, label the cluster explicitly as vision-unanchored POC in high-level-plan.md (it is already 'in-repo until go/no-go', which is the right holding state). (2) Close the reusable-components execution gap: the 'reusable components' pillar currently has a contract but no build/packaging plans for the five non-Practice inventory items — either promote execution plans (extract/version/publish the pipeline, SDK-gen flow, search config, scaffolds, projection patterns) or downgrade the vision's 'first-class delivery concern' language to match the actual posture (documented-but-not-yet-packaged). Do not let the vision assert a delivery commitment the plan estate does not back. (3) Surface the Practice/product balance to the owner as a deliberate question, not a silent drift: ~48% of active plans are internal Practice/tooling. Either the vision should elevate the Practice's centrality (it is arguably now a co-equal product, given ADR-119 and propagation across Oak repos), or the plan estate should rebalance toward the product surfaces the vision names as primary. This is a strategic-emphasis decision for the owner, grounded in the count.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M1-vision-currency",
+        "headline": "VISION is current and well-maintained; plans cover most elements; two structural gaps and one out-of-vision plan cluster require attention",
+        "findings": [
+          {
+            "claim": "VISION.md is current. Content accurately reflects delivered state (M1 complete, M2 ~95%, MCP server live, graph surfaces operational, EEF evidence, MCP Apps). The document was reviewed 2026-06-12 and correctly delegates milestone detail to the high-level plan.",
+            "evidence_paths": [
+              "docs/foundation/VISION.md"
+            ],
+            "quote": "last_reviewed: 2026-06-12 ... MCP servers and MCP Apps form the interoperability layer that AI assistants and engineering toolchains consume ... Knowledge-graph-aligned capabilities are live today — anchored graph tools serve year-ordered progressions, prior-knowledge, misconception, and keyword relationships",
+            "severity": "low"
+          },
+          {
+            "claim": "ADR-008 is correctly deprecated. It is self-marked 'Deprecated (Historical context only)' and superseded by VISION.md + ADR-119. No plans reference it as an authoritative source.",
+            "evidence_paths": [
+              "docs/architecture/architectural-decisions/008-ecosystem-architecture-vision.md"
+            ],
+            "quote": "This ADR is retained as historical context only. Current conceptual vision is defined in: docs/foundation/VISION.md",
+            "severity": "low"
+          },
+          {
+            "claim": "Plans collectively advance the vision across all primary delivery pillars: SDK/MCP (sdk-and-mcp-enhancements active), semantic search (semantic-search current queue), graph/KG (knowledge-graph-integration active), EEF evidence (sector-engagement/eef active), observability (observability active), security/compliance, discovery, and Practice (agentic-engineering-enhancements active). No primary pillar is entirely unplanned.",
+            "evidence_paths": [
+              ".agent/plans/high-level-plan.md",
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "public SDK, OpenAPI, MCP, search, and graph surfaces for curriculum access; MCP Apps and remote MCP server work for AI assistant hosts; knowledge-graph and evidence-corpus work ... agent-readiness discovery ... practice, tooling, security, observability, compliance, and documentation infrastructure",
+            "severity": "low"
+          },
+          {
+            "claim": "The vision's third-order outcome (reusable sector components reaching external adopters) has no active plan support. Sector-engagement Phases 2-4 (API/KG convergence decision briefs, external data-source demonstrations, organisation-specific support playbooks) are all status 'Future' with no promotion signals. The adoption contract's four todos are all pending. The user-experience collection is tagged 'Legacy/reference' in the high-level plan.",
+            "evidence_paths": [
+              ".agent/plans/sector-engagement/roadmap.md",
+              ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
+              ".agent/plans/high-level-plan.md"
+            ],
+            "quote": "Phase 2: API/KG Convergence Decision Briefs ... Future | Phase 3: External Data-Source Demonstrations ... Future | Phase 4: Organisation-Specific Support Playbooks ... Future",
+            "severity": "medium"
+          },
+          {
+            "claim": "The performance axis (cold-start, fan-out cost, retry budget within Vercel runtime envelope) has no dedicated active plan. The curriculum-mcp-path-to-ga roadmap lists it as a launch criterion but explicitly records 'No dedicated active plan' against it.",
+            "evidence_paths": [
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "Performance | Cold-start, fan-out cost, retry budget within Vercel runtime envelope | architecture-and-infrastructure/ | No dedicated active plan",
+            "severity": "medium"
+          },
+          {
+            "claim": "The school-data-search POC (a UK school-register dataset service covering GIAS, England/Wales/Scotland/Northern Ireland records via authenticated REST API + typed client) is a queued plan collection with an 11-workstream executable plan and a synthesis report, but it appears nowhere in VISION.md — not in 'What We Deliver', Non-Goals, or Strategic Integrations. This is the only sizeable plan cluster with vision_link=none.",
+            "evidence_paths": [
+              ".agent/plans/school-data-search/README.md",
+              "docs/foundation/VISION.md"
+            ],
+            "quote": "Plan collection for the Oak School Data Search service: a privacy-conservative, provenance-carrying canonical dataset of UK schools ... built IN THIS repository as a POC MVP, with extraction deferred until POC completion and an owner go/no-go decision.",
+            "severity": "high"
+          },
+          {
+            "claim": "The MCP spec upgrade (MCP 2026-07-28) is an open paperwork backlog item (A3) in the programme roadmap — execution is gated on spec GA (target 2026-07-28) and owner direction. It is not a gap in vision alignment, but it is a concrete unresolved sequencing dependency for M3 with no owning collection yet decided.",
+            "evidence_paths": [
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "A3 | MCP 2026-07-28 GA upgrade plan (collection TBD — likely sdk-and-mcp-enhancements/) | SDK + transport migration ... | Spec GA (target 2026-07-28) + owner",
+            "severity": "low"
+          }
+        ],
+        "recommendation": "Three actions in priority order. First: the school-data-search POC needs a vision-linkage decision — either add a brief scoping clause to VISION.md (if the school-register service is genuinely within the repo's remit) or move the POC to icebox pending an explicit in/out scoping decision by the owner. The current state (substantive executable plan with no vision anchor) creates drift between the portfolio and the stated mission. Second: promote at least one sector-engagement execution plan from Future to Current to give the vision's third-order outcome (reusable components reaching external adopters) a near-term plan bridge; the adoption contract has four pending todos that would do this work, but they need a promotion signal. Third: create a performance plan stub under architecture-and-infrastructure to give the curriculum-mcp-path-to-ga roadmap's performance axis a home before M3 planning begins — even a thin plan naming the Vercel envelope acceptance criteria is preferable to the current explicit 'no dedicated active plan' gap against a stated launch criterion.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M2-planning-skill-efficacy",
+        "headline": "Planning architecture (ADR-117/PDR-018) is sound and well-specified, but the discipline is failing in practice: the reachability invariant is broken for ~28% of live plans (73/259 unlinked from their own lane README; 6/6 sampled reachable from ZERO index), and the strict active/ lane holds months-stale, zero-progress plans. Drift is behavioural (sessions not threading or promoting), not structural — and the one structural fix (a CI reachability validator) was scoped on 2026-05-19 but parked decision-incomplete while the gap grew ~15x.",
+        "findings": [
+          {
+            "claim": "The global survey aggregate is empty/all-zero (totalDocs:0, empty pollution + staleExecutable lists) but the estate is large and live: 25 active, 168 current, 162 future, 361 archived plan files. The survey did not run against this estate; the empty aggregate is a non-run, not evidence of a clean estate. All hygiene findings below are first-hand from the filesystem and git history.",
+            "evidence_paths": [
+              ".agent/plans/"
+            ],
+            "quote": "active: 25 / current: 168 / future: 162 / archive-completed: 361 plan files (excl README)",
+            "severity": "medium"
+          },
+          {
+            "claim": "Reachability invariant is broken at scale. A direct substring check of every plan file in active/current/future lanes against its sibling lane README found 73 of 259 (28%) unlinked. A stricter cross-check of 6 sampled 'unlinked' files found each referenced by ZERO README anywhere under .agent/plans/ — they are genuinely orphaned, not reachable via an alternate path. The README itself states this is 'structural, not cosmetic: unindexed plans are invisible to handoff, review, consolidation, and priority-setting.' The worst-hit collection is the Practice's own agentic-engineering-enhancements/current, whose README mentions only 23 of 54 physical plan files (43%).",
+            "evidence_paths": [
+              ".agent/plans/README.md",
+              ".agent/plans/agentic-engineering-enhancements/current/README.md"
+            ],
+            "quote": "checked=259  unlinked_from_own_lane_readme=73 ... no-type-widening-enforcement.plan.md -> referenced by 0 README(s) anywhere under .agent/plans",
+            "severity": "high"
+          },
+          {
+            "claim": "A reachability remediation plan was authored on 2026-05-19 documenting only '3 unindexed collections, 5 orphan plans, 2 collections missing lifecycle READMEs' — and includes a Phase 4 CI validator that would convert the invariant from aspiration to enforcement. It sits status: decision-incomplete, 'awaiting owner review and slot,' all todos pending. The audit it records counted 5 orphans; the live count is now ~73 unlinked. The drift grew roughly 15x while the structural fix that would have caught it was parked unexecuted. This is the load-bearing evidence that the failure is behavioural (the fix exists and was not run), not structural (the fix design is correct).",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/current/plan-index-reachability-remediation.plan.md"
+            ],
+            "quote": "Audit performed 2026-05-19 found 3 unindexed collections, 5 orphan plans below lifecycle layer, and 2 collections missing lifecycle READMEs. ... status: decision-incomplete ... Phase 4: Add a repo-validators check that fails CI when a plan file ... is not referenced by its sibling README.md",
+            "severity": "high"
+          },
+          {
+            "claim": "The active/ lane is not a strict execution lane in practice. ADR-117 says 'active/ must contain only in-progress work' and 'A plan moves into active/ only when work has started.' Yet multiple active plans have ZERO completed frontmatter todos and have not been touched in months: security-and-privacy/active/phase-0,2,3 (0 done, last commit 2026-03-25); agentic-engineering-enhancements/active/phase-0-baseline-metrics (0/5, last commit 2026-03-02); architecture-and-infrastructure/active/eslint-disable-remediation (0/8, last commit 2026-04-12) and build-tools-workspace-extraction (0/7, last commit 2026-04-29). These are either not-started (belong in current/) or abandoned (belong in archive). Lane hygiene is drifting because lane membership is not maintained as work stalls.",
+            "evidence_paths": [
+              ".agent/plans/security-and-privacy/active/phase-0-foundation-and-baseline.md",
+              ".agent/plans/agentic-engineering-enhancements/active/phase-0-baseline-metrics.plan.md",
+              ".agent/plans/architecture-and-infrastructure/active/eslint-disable-remediation.plan.md",
+              "docs/architecture/architectural-decisions/117-plan-templates-and-components.md"
+            ],
+            "quote": "`active/` is a strict execution lane. A plan moves into `active/` only when work has started.",
+            "severity": "high"
+          },
+          {
+            "claim": "Frontmatter-todo usage is mostly adopted but not universal in the active lane. ADR-117 §6 mandates YAML frontmatter todos for all executable (current/active) plans. developer-experience/active/onboarding-simulations-public-alpha-readiness.md has NO YAML frontmatter at all — it tracks status in prose ('**Status**: Active', '**Last Updated**: 2026-03-03'), which is exactly the ambiguous inline form ADR-117 chose frontmatter to replace. Its own prose 'Last Updated: 2026-03-03' confirms it is a stale active-lane resident despite a 2026-06-12 touch.",
+            "evidence_paths": [
+              ".agent/plans/developer-experience/active/onboarding-simulations-public-alpha-readiness.md",
+              "docs/architecture/architectural-decisions/117-plan-templates-and-components.md"
+            ],
+            "quote": "# Onboarding Simulations and Public-Alpha Readiness  **Status**: Active (post-remediation rerun complete; ...)  **Last Updated**: 2026-03-03",
+            "severity": "medium"
+          },
+          {
+            "claim": "Document-hierarchy and archival promptness are the two parts working. The completed-plans index is current (entries through 2026-06-13, file modified 2026-06-14) and 361 plans are archived, so mining-then-archival of recently completed work is happening. The document-hierarchy rules in ADR-117 (four doc types, one-way fact flow) and PDR-018 (end-goal/mechanism/means, unambiguous verbs, DECISION-COMPLETE gate) are detailed and internally coherent; I found no contradiction in the doctrine itself. The failure is adherence to the reachability/lane-membership invariants, not the hierarchy design.",
+            "evidence_paths": [
+              ".agent/plans/completed-plans.md",
+              ".agent/practice-core/decision-records/PDR-018-planning-discipline.md"
+            ],
+            "quote": "completed-plans.md ... last 3 dated entries: 2026-06-02 / 2026-06-12 / 2026-06-13",
+            "severity": "low"
+          },
+          {
+            "claim": "Minor structural-hygiene concern, not duplication: two collections independently use the same phase filenames (phase-1-hallucination-guarding-execution.md, phase-2-evidence-based-claims-execution.md) in both agentic-engineering-enhancements/active and security-and-privacy/active. They are NOT identical files (different shas and line counts: 160 vs 98, 230 vs 98 lines), so this is parallel phase-numbering collision across lanes, not content duplication. PDR-018's 2026-04-25 amendment (placement by ownership, not density) is the relevant doctrine; the collision suggests phase-numbering crosses collection boundaries without a disambiguating prefix.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/active/phase-1-hallucination-guarding-execution.md",
+              ".agent/plans/security-and-privacy/active/phase-1-hallucination-guarding-execution.md"
+            ],
+            "quote": "agentic: 160 lines, sha 2e1d3801b35e / security: 98 lines, sha d081041becde",
+            "severity": "low"
+          }
+        ],
+        "recommendation": "Diagnosis: the planning DISCIPLINE is partially working — archival and the document-hierarchy design are healthy — but lane hygiene and the reachability invariant are failing, and the failure is BEHAVIOURAL (sessions land plans without threading them into indexes and let active/ plans go stale), not STRUCTURAL (ADR-117/PDR-018 are well-specified and a correct fix was already designed). The single highest-leverage move is to STOP relying on session discipline for reachability and SHIP the structural enforcement that already exists on paper: execute Phase 4 of plan-index-reachability-remediation.plan.md — the repo-validators check that fails CI when any plan under .agent/plans/**/{active,current,future}/ is not referenced by its sibling README, and when a collection is absent from the root README. This converts a 28%-broken invariant from an aspiration sessions forget into a gate, and prevents future regrowth. Sequence: (1) promote and execute that remediation plan now (it is parked decision-incomplete with the owner; flag for a slot); (2) as Phase 0 of it, re-run the orphan audit against the current 73-file gap, not the stale 5-file 2026-05-19 list; (3) add an active-lane staleness rule to the same validator family — any active/ plan with zero completed frontmatter todos OR no frontmatter at all is flagged for relane (to current/) or archive; this directly catches the security-and-privacy/phase-0,2,3, eslint-disable-remediation, build-tools-workspace-extraction, and onboarding-simulations residents. Until the validator lands, lane membership and indexing will keep drifting because nothing makes the invariant observable at action-time, exactly as the README warns ('unindexed plans are invisible to handoff, review, consolidation, and priority-setting'). Note for the parent: the empty global survey aggregate did not run — do not read it as a clean estate; the real numbers are 25/168/162 active/current/future with 73 unreachable.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M2-planning-skill-efficacy-p2",
+        "headline": "Planning discipline has strong structural bones but shows sustained reachability and archival-promptness drift that is behavioural, not architectural",
+        "findings": [
+          {
+            "claim": "Reachability invariant is breached at material scale: 31 of 54 files in agentic-engineering-enhancements/current/ are not linked from that lane's README, including all 13 dated session-opener files and two time-boxed plan files from April and May 2026. The invariant ('every plan file must be reachable from this root README through an index chain') is correctly specified in .agent/plans/README.md but not consistently maintained at session boundaries.",
+            "evidence_paths": [
+              ".agent/plans/README.md",
+              ".agent/plans/agentic-engineering-enhancements/current/README.md"
+            ],
+            "quote": "The invariant is structural, not cosmetic: unindexed plans are invisible to handoff, review, consolidation, and priority-setting.",
+            "severity": "high"
+          },
+          {
+            "claim": "Three active/ lanes and four current/ lanes are missing their lifecycle README index files entirely: observability/active/, connecting-oak-resources/knowledge-graph-integration/active/, exploring-open-education-resources/external-knowledge-sources/active/, and the matching current/ counterparts for observability, knowledge-graph-integration, sector-engagement/eef, and exploring-open-education-resources. Plans in these directories are unreachable by the root-to-leaf chain required by ADR-117. A remediation plan (plan-index-reachability-remediation.plan.md) exists in DECISION-INCOMPLETE state since 2026-05-19 — the gap was identified but the fix was not executed.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/current/plan-index-reachability-remediation.plan.md",
+              ".agent/plans/observability/active/",
+              ".agent/plans/connecting-oak-resources/knowledge-graph-integration/active/"
+            ],
+            "quote": "Phase 2: Add lifecycle README.md files to observability/{active,current,future}/ and security-and-privacy/future/, each listing every plan in that directory per the existing lifecycle-README convention. status: pending",
+            "severity": "high"
+          },
+          {
+            "claim": "Two execution plans are stranded in semantic-search/future/ in clear violation of ADR-117's rule that future/ is a strategic lane only and that executable plans must live in current/ or active/. Both files carry the .execution.plan.md suffix, have full YAML frontmatter todos with pending items, and have been there since 1 May and 24 May 2026 respectively. This is the sharpest document-hierarchy violation in the estate.",
+            "evidence_paths": [
+              ".agent/plans/semantic-search/future/bulk-canonical-merge-api-parity-and-validation.execution.plan.md",
+              ".agent/plans/semantic-search/future/search-ingestion-sdk-extraction.execution.plan.md"
+            ],
+            "quote": "future/ is a strict strategic lane. Plans in this directory are not required to be executable and should not be used as in-progress implementation trackers.",
+            "severity": "high"
+          },
+          {
+            "claim": "Archival promptness is lagging for plans whose frontmatter todos are fully completed but which remain in active/. gate-recovery-cadence.plan.md in observability/active/ has all todos marked completed; its body explicitly states 'Do NOT archive this plan based on todo-completion alone — its authority role is standing doctrine,' which is a legitimate and documented exception. However, mcp-app-extension-migration.plan.md and devx-strictness-convergence.plan.md in active/ also show completed patterns and no pending todos, with no equivalent authority-role annotation; these are likely archival candidates that have not been processed. The comms-corpus plan in agent-tooling/active/ is WS0–WS6 COMPLETE but WS7 is owner-gated, which is a valid hold — but its active/README.md still reports it as 'IN EXECUTION — WS0 complete, WS1 running' (a stale status).",
+            "evidence_paths": [
+              ".agent/plans/observability/active/gate-recovery-cadence.plan.md",
+              ".agent/plans/agent-tooling/active/README.md",
+              ".agent/plans/agent-tooling/active/comms-corpus-research-and-rotation-strategy.plan.md"
+            ],
+            "quote": "Status: Operational reference plan, NOT a closing execution plan. All execution todos are completed (per the frontmatter), but this plan's Intent and Recovery Sequence are cited verbatim as the authority surface.",
+            "severity": "medium"
+          },
+          {
+            "claim": "32 plans in current/ and 1 plan in active/ lack the required YAML frontmatter todos. The majority are session-opener files, EEF contract documents, feature-request files, and reports — document types that were co-located in plan lifecycle directories but are not themselves plans. ADR-117 requires frontmatter todos only on executable plans (current/ and active/); however, placing non-plan documents in plan lifecycle lanes without annotation pollutes the lane and undermines automated tooling. The single active/ violation (developer-experience/active/onboarding-simulations-public-alpha-readiness.md) is the cleaner concern: this is a status document, not an executable plan, and belongs in a reference location rather than active/.",
+            "evidence_paths": [
+              ".agent/plans/developer-experience/active/onboarding-simulations-public-alpha-readiness.md",
+              ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-docs-consolidation-opener.md"
+            ],
+            "quote": "All executable plans (current/, active/) use YAML frontmatter with machine-readable todos. This enables tooling to track progress across executable plans and sessions without parsing markdown.",
+            "severity": "medium"
+          },
+          {
+            "claim": "The current/ lane in agentic-engineering-enhancements has accumulated 13 dated session-opener files from May and April 2026 that are not indexed in the lane README. Session openers are a legitimate document type (they carry session state, landed-commit records, and resumption context), but they are not plans and should not accumulate unbounded in a plan lane. The plan-index-reachability-remediation.plan.md names some of these files explicitly as orphans to be threaded in but has been DECISION-INCOMPLETE since 2026-05-19 — nearly four weeks — without execution.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/current/",
+              ".agent/plans/agentic-engineering-enhancements/current/plan-index-reachability-remediation.plan.md"
+            ],
+            "quote": "Phase 3: Thread the 5 orphan plans into their lifecycle READMEs — ... semantic-search/future/search-ingestion-sdk-extraction.execution.plan.md. status: pending",
+            "severity": "medium"
+          },
+          {
+            "claim": "The planning architecture itself (ADR-117, PDR-018, README lifecycle taxonomy, templates) is well-specified and internally consistent. The document hierarchy rules, lane semantics, frontmatter-todo requirement, promotion process, archival steps, and reachability invariant are all crisply defined. There is a self-aware remediation plan tracking the reachability gap. The agent-tooling/current/ README is a high-quality example of the architecture working: all 24 plans are indexed with status, supersession notes, and cross-references. The drift observed is uniformly behavioural — sessions completing work without running the maintenance checklist step that updates lane READMEs and archives completed plans.",
+            "evidence_paths": [
+              "docs/architecture/architectural-decisions/117-plan-templates-and-components.md",
+              ".agent/practice-core/decision-records/PDR-018-planning-discipline.md",
+              ".agent/plans/agent-tooling/current/README.md"
+            ],
+            "quote": "When adding, promoting, or retiring plan work: 1. Add or update the collection README. 2. Add or update the relevant lifecycle index: active/README.md, current/README.md, or future/README.md. 3. Update this root README if a collection, top-level spine, or strategic routing rule changes.",
+            "severity": "low"
+          }
+        ],
+        "recommendation": "The drift is behavioural, not structural. Three concrete interventions will close it:\n\n1. Execute plan-index-reachability-remediation.plan.md (currently DECISION-INCOMPLETE in agentic-engineering-enhancements/current/ since 2026-05-19). Its phase-0 audit, phase-2 lifecycle README creation, and phase-3 orphan threading address the most severe reachability failures. Phase-4 (CI validator) is the structural cure that prevents recurrence: a validator that fails the check gate when any plan file under a lifecycle directory is not listed in that directory's README removes the behavioural dependency entirely.\n\n2. Promote the two semantic-search execution plans out of future/ to current/: bulk-canonical-merge-api-parity-and-validation.execution.plan.md and search-ingestion-sdk-extraction.execution.plan.md. Both have pending todos, both have been misrouted for five or more weeks. This is a one-step move requiring a lane README update.\n\n3. Add a session-close maintenance step that sweeps the active/ lanes for completed-todo plans and either archives them (after mining outcomes per ADR-117 step 1) or annotates them with an authority-role exception like gate-recovery-cadence.plan.md exemplifies. The stale status in agent-tooling/active/README.md (still reading 'IN EXECUTION — WS1 running' for a plan that is WS0–WS6 COMPLETE) is the clearest evidence this step is being skipped.\n\nThe architecture earns no changes. The discipline and document hierarchy are correctly specified. The gap is enforcement at session boundaries, and a CI validator (phase-4 of the existing remediation plan) is the right structural cure.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M3-organisation-and-duplication",
+        "headline": "The practice estate's ~44% weight is real but substantially inflated by un-archived closeout residue and template-clone fragmentation, not by genuine forward enabler scope; the collection boundary itself is well-drawn — the fix is hygiene plus three consolidations, not a re-org of the boundary.",
+        "findings": [
+          {
+            "claim": "The 38% figure understates it: of 279 live+future plan/roadmap files outside archive, agentic-engineering-enhancements (70) + agent-tooling (52) = 122 = 43.7% — more than the entire product critical path. The six product-arc collections (sdk-and-mcp-enhancements, observability, security-and-privacy, semantic-search, discovery, compliance) sum to 82 (29%). The enabler out-weighs the thing it enables, but the gap shrinks dramatically once residue is removed (see following findings).",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/",
+              ".agent/plans/agent-tooling/",
+              ".agent/plans/sdk-and-mcp-enhancements/",
+              ".agent/plans/observability/"
+            ],
+            "quote": "Total live+future plan files (excl archive): ... Practice (aee+at): 122 ... Practice share %: 43.7",
+            "severity": "high"
+          },
+          {
+            "claim": "The current/ lane (the lifecycle's 'NEXT executable, queued and ready' contract) is polluted with 26 dated session-handoff/closeout artefacts in the practice collections versus ZERO in any product collection's live lanes. 14 of these are 'opener' files (status: opener/superseded/ready-for-pickup) that are chat-paste-able session starters, not executable plans, and reference only each other — none is referenced by a durable plan. This single category is the largest source of the practice estate's apparent over-weight.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-docs-consolidation-opener.md",
+              ".agent/plans/agentic-engineering-enhancements/current/2026-05-06-five-layer-restart-opener.md",
+              ".agent/plans/agent-tooling/current/2026-05-11-collaboration-protocol-hardening-final-opener.md",
+              ".agent/plans/README.md"
+            ],
+            "quote": "status: opener ... # Next session opener — docs consolidation continuation ... This file is the chat-paste-able opener for that next session.",
+            "severity": "high"
+          },
+          {
+            "claim": "The 11 *-specialist-capability plans (3 current, 8 future: elasticsearch, planning, sentry, tdd, express, cyber-security, web-api-security, privacy, web-api-gdpr, devx, ooce) are one-file-per-specialist clones of a single ADR-129 'Domain Specialist Capability Pattern' (reviewer + skill + situational-rule triplet). Each repeats the same Problem/Scope/triplet structure. This is a consolidate-at-third-consumer case: a single parameterised specialist-capability plan with a per-domain table would replace 11 files and make the pattern's evolution single-sourced.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/future/tdd-specialist-capability.plan.md",
+              ".agent/plans/agentic-engineering-enhancements/README.md",
+              "docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md"
+            ],
+            "quote": "**Pattern**: [ADR-129 (Domain Specialist Capability Pattern)] ... The existing `test-expert` checks test quality after the fact. What's missing is a **TDD expert**",
+            "severity": "medium"
+          },
+          {
+            "claim": "Several agent-tooling collaboration-cluster plans are done but un-archived in current/: multi-agent-collaboration-protocol-concept-home-refinement (IMPLEMENTED 2026-04-26), multi-agent-collaboration-sidebar-and-escalation (DECISION-COMPLETE / E1 CLOSED), collaboration-state-write-safety (IMPLEMENTED / CLOSURE PENDING FINAL ARCHIVE PASS). cost-of-collaboration.plan.md already declares itself the single source of truth that 'Subsumes primary-agent-tooling-enhancements.plan.md', yet the subsumed/closed siblings still occupy the executable lane.",
+            "evidence_paths": [
+              ".agent/plans/agent-tooling/current/cost-of-collaboration.plan.md",
+              ".agent/plans/agent-tooling/current/multi-agent-collaboration-sidebar-and-escalation.plan.md",
+              ".agent/plans/agent-tooling/current/collaboration-state-write-safety.plan.md",
+              ".agent/plans/agent-tooling/README.md"
+            ],
+            "quote": "**Status**: IMPLEMENTED 2026-04-26 ... **Status**: 🟢 DECISION-COMPLETE / **E1 CLOSED 2026-05-03** ... Unified single-source-of-truth plan ... Subsumes primary-agent-tooling-enhancements.plan.md",
+            "severity": "high"
+          },
+          {
+            "claim": "The aee/agent-tooling collection boundary is genuinely well-bounded — not the problem. Both READMEs state a crisp, identical-axis test (practice/doctrine vs the agent-tools/ workspace substrate) with a falsifiable disambiguator ('could this plan exist if agent-tools/ did not?'), and the boundary is actively maintained (multiple ↪️ MOVED entries relocating plans across it on 2026-05-05). A merge of the two collections is NOT warranted; the change-cost profiles (docs vs code-through-gates) legitimately differ.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/README.md",
+              ".agent/plans/agent-tooling/README.md"
+            ],
+            "quote": "When in doubt, ask: \"could this plan exist if `agent-tools/` did not?\" If yes, it is broader than the workspace and belongs here. ... Tooling changes are code — they move through TDD cycles ... Doctrine and governance changes are documentation.",
+            "severity": "low"
+          },
+          {
+            "claim": "The product critical path is comparatively thin where M2/M3 risk concentrates: security-and-privacy (the M3 Cloudflare MCP gate owner) has 2 live plans and compliance has 1, against 70 in aee. This is not necessarily wrong (security/compliance plans can be few-but-heavy), but the inversion — most planning energy on the enabler, least on the named beta gates — is worth surfacing to the owner as a deliberate allocation check rather than an accident.",
+            "evidence_paths": [
+              ".agent/plans/security-and-privacy/",
+              ".agent/plans/compliance/",
+              ".agent/plans/high-level-plan.md"
+            ],
+            "quote": "2  security-and-privacy ... 1  compliance ... | M3 - Public Beta | ... Production Clerk, Cloudflare MCP security gate, operational hardening, alerting, compliance/privacy paperwork",
+            "severity": "low"
+          }
+        ],
+        "recommendation": "Do NOT merge or re-draw the aee/agent-tooling boundary — it is well-defined and actively maintained. Instead run three concrete hygiene/consolidation moves, all within the practice estate, that will likely cut its live-plan share from ~44% toward ~30% without losing any forward scope:\n\n1) MOVE the 14 opener files + ~12 other dated closeout artefacts (disposition/snags/report/flaky-tests/inventory/.next-session) OUT of current/ and active/. Openers and handoff records belong in a continuity surface (.agent/memory or an archive/openers/ sub-lane), not in the executable NEXT lane. Superseded ones (collaboration-protocol-hardening-final-opener, collaboration-state-lifecycle-deep-exploration-opener) archive immediately. This alone removes ~26 files from the live practice count and stops the lane-contract violation that no product collection commits.\n\n2) ARCHIVE the completed/subsumed collaboration-cluster plans in agent-tooling/current that already declare IMPLEMENTED / DECISION-COMPLETE / CLOSURE PENDING (sidebar-and-escalation, concept-home-refinement, write-safety, primary-agent-tooling-enhancements), extracting durable outcomes to ADRs/PDRs first per the README maintenance checklist. cost-of-collaboration.plan.md is the rightful single SoT and should be the only collaboration plan left in the live lane besides genuinely-open follow-ons.\n\n3) MERGE the 11 *-specialist-capability files into one parameterised specialist-capability.plan.md (current/) carrying a per-domain table (status, ADR-129 triplet readiness, refines-which-directive) — the per-specialist bodies are clones of one ADR-129 pattern. Keep one fully-worked exemplar inline; the rest become rows. This single-sources the pattern and removes 10 near-duplicate files.\n\nFinally, surface to the owner as a deliberate-allocation question (not a defect): with the beta gates (security-and-privacy=2, compliance=1) being the thinnest live lanes while the enabler holds 70+52, is the planning energy where the M2→M3 risk actually is? After moves 1-3 the residual practice estate is forward, well-bounded work and the over-weight critique largely dissolves.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M3-organisation-and-duplication",
+        "headline": "Practice estate (agentic-engineering-enhancements + agent-tooling) holds 46% of all live plans and 60% of the current (next-up) queue — disproportionate relative to M2/M3 product-critical path pressure, and structurally inflated by active-lane drift and comms-substrate over-proliferation.",
+        "findings": [
+          {
+            "claim": "Practice estate plan count (146 live) nearly matches the entire product estate (172 live across 9 collections), but product collections have 2.3x more genuinely-active plans (16 vs 7). The 38% figure from the question is an undercount: first-hand file enumeration yields agentic-engineering-enhancements (98 files excluding archives) + agent-tooling (61) = 159 total doc files, or 146 live-lane plans (active+current+future), compared to 172 across the 9 product collections.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/README.md",
+              ".agent/plans/agent-tooling/README.md",
+              ".agent/plans/README.md"
+            ],
+            "quote": "agentic-engineering-enhancements: active:6 current:54 future:27; agent-tooling: active:1 current:35 future:23 (first-hand file counts)",
+            "severity": "medium"
+          },
+          {
+            "claim": "The AEE active lane contains 6 plan files but none are genuinely executing: 5 are marked '📋 Planned' with all tasks 'status: pending', and the one file listed as '🔄 ACTIVE' (operational-awareness-and-continuity-surface-separation) is actually in the archive/completed directory. The active lane is functioning as a holding area for parked work, not a signal of in-flight execution.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/active/README.md",
+              ".agent/plans/agentic-engineering-enhancements/active/phase-1-hallucination-guarding-execution.md"
+            ],
+            "quote": "| OAC | [operational-awareness-and-continuity-surface-separation.plan.md](...) | ... | 🔄 ACTIVE (promoted 2026-04-20) | — but the file resolves to archive/completed/",
+            "severity": "high"
+          },
+          {
+            "claim": "The agent-tooling future lane contains a documented 'comms / coordination cluster' of 10+ plans all acting on one substrate (identity, claims, comms, watcher, liveness). The future/README.md names the overlap explicitly and points to a keystone plan (collaboration-substrate-coordination-rightsizing) that will produce a concrete cull list at M4 — but M4 is currently 'undefined'. Until that keystone's M4 runs, 7-9 overlapping plans remain as live plan files inflating the queue and making routing decisions ambiguous.",
+            "evidence_paths": [
+              ".agent/plans/agent-tooling/future/README.md"
+            ],
+            "quote": "These plans all act on one substrate — agent identity, claims, comms, watcher, liveness, and coordination roles — and were each spawned by a separate incident, so they overlap. They are grouped here for discoverability and to record that overlap. The authoritative overlap + supersession analysis is not duplicated here — it lives in the keystone brief's M1 inventory ... whose M4 produces the concrete cull/fold/supersede list.",
+            "severity": "high"
+          },
+          {
+            "claim": "The AEE current lane holds 54 plans, of which a significant cluster are specialist-capability plans (Elasticsearch done, Sentry in current, Planning in current, then 8 future: Express, cyber-security, web-api-security, privacy, web-api-GDPR, OOCE, TDD, DevX). These each follow the ADR-129 reviewer+skill+rule triplet pattern but are sequenced loosely ('after the current queue'). No product milestone explicitly gates their promotion, so they accumulate as indefinite backlog.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/future/README.md",
+              ".agent/plans/agentic-engineering-enhancements/README.md"
+            ],
+            "quote": "Future expert plans below should not create bespoke adapter or taxonomy patterns that conflict with those current coordination plans.",
+            "severity": "medium"
+          },
+          {
+            "claim": "The collection boundary between agentic-engineering-enhancements (doctrine/practice) and agent-tooling (implementation) is correctly articulated and the 2026-05-05 relocation pass moved hooks-portability, cross-vendor-session-sidecars, collaboration-state-domain-model, adapter-generation, agent-classification-taxonomy, and canonical-first-skill-pack-ingestion-tooling to agent-tooling. The boundary is healthy in principle. The remaining tension is not a wrong boundary but that both sides of it have long queues without explicit priority triage against M2/M3 gates.",
+            "evidence_paths": [
+              ".agent/plans/agentic-engineering-enhancements/README.md",
+              ".agent/plans/agent-tooling/README.md"
+            ],
+            "quote": "The two collections operate at different abstraction levels: agent-tooling: 'Does the CLI / schema / state surface work correctly and ergonomically?' agentic-engineering-enhancements: 'How should agents collaborate, plan, communicate, learn, review, and shape this repo?'",
+            "severity": "low"
+          },
+          {
+            "claim": "The product estate has its own inflation signal: semantic-search has 0 active and 12 current plans — none moving to active — while sdk-and-mcp-enhancements has 5 active and 16 current plans aligned to M2. The semantic-search collection is the largest single product collection (53 total live docs) and all 36 future plans have no milestone tie-in documented. This is a parallel over-accumulation pattern on the product side.",
+            "evidence_paths": [
+              ".agent/plans/semantic-search/current/README.md",
+              ".agent/plans/README.md"
+            ],
+            "quote": "semantic-search: 🔄 Current queue; no active plan in collection README (high-level-plan.md collection status table)",
+            "severity": "medium"
+          },
+          {
+            "claim": "The high-level-plan.md and README.md collection tables are well-maintained and mutually consistent. The cross-collection boundary rules are explicit and observed. There is no evidence of structural duplication between collections — the issue is queue depth and lifecycle drift (plans parked in active/ that are not executing), not mis-routing or duplicate scope.",
+            "evidence_paths": [
+              ".agent/plans/high-level-plan.md",
+              ".agent/plans/README.md"
+            ],
+            "quote": "Agent practice and agent tooling are separate. agentic-engineering-enhancements/ owns doctrine and practice; agent-tooling/ owns the agent-tools/ workspace, collaboration-state substrate, hooks, CLI behaviour, schemas, and implementation-level tooling.",
+            "severity": "low"
+          }
+        ],
+        "recommendation": "Three concrete moves, in priority order:\n\n1. Repair the AEE active lane immediately. Five of six plan files in agentic-engineering-enhancements/active/ are marked '📋 Planned' with all tasks pending. The lane contract says active/ means NOW — in-progress execution. Move all five (phase-1, phase-2, phase-3, phase-5, phase-0-baseline-metrics, plan-collection-structural-consistency) back to current/, clearing them from the active lane until a session actually begins executing one. The OAC reference in the README.md index row should be corrected to reflect its archived status. This is a one-session housekeeping pass, not a plan. Severity: high — a misleading active lane corrupts handoff, priority reads, and session-start orientation.\n\n2. Trigger the comms-substrate keystone (collaboration-substrate-coordination-rightsizing) M4 cull now, not at an undefined M4 product milestone. The agent-tooling future/README.md already documents the cluster and names M4 as the cull trigger, but M4 is 'undefined'. The keystone's M1 is complete (verdict: keep but re-polarise). Run M4 as a dedicated curation session to produce the concrete supersede/fold list for the 7-9 overlapping comms-coordination plans. Expected result: 4-6 plans folded or superseded, reducing agent-tooling future by ~30-40%. This is a documentation-only pass (no code) and can run independently of any product milestone.\n\n3. Attach each practice-estate current/ plan to an explicit milestone gate (M2, M3, or post-GA) or move it to future/. The 54 AEE current plans and 35 agent-tooling current plans are queued with no milestone alignment documented. Cross-reference the product milestone requirements in curriculum-mcp-path-to-ga/roadmap.md and mark each plan: (a) blocks or enables M2/M3 — keep in current/; (b) post-GA practice improvement — move to future/; (c) no identified milestone tie — icebox with a named promotion trigger. Estimated reduction in current/ queue: 30-50% moved to future/ or icebox. This directly addresses the 60% current-queue dominance by practice plans.\n\nNo collection merges or splits are warranted. The agentic-engineering-enhancements / agent-tooling boundary is correctly drawn and the 2026-05-05 relocation pass enforced it. The issue is queue depth and lane discipline, not structural mis-organisation. The semantic-search over-accumulation (36 future plans, 0 active) is a parallel symptom that warrants the same milestone-gating pass but is lower priority than the active-lane repair above.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M4-critical-path-to-live-product",
+        "headline": "The critical path is short and knowable (M2 widget UI + obs evidence → M3 prod-Clerk + Cloudflare gate → undefined GA), but it is obscured: the two authoritative milestone docs disagree on what M2 requires, the one literal critical-path execution plan is stale (blocked on a PR that merged two months ago), M3's hardest gate (production Clerk) has no execution plan, and the active estate is dominated 5:1 by practice/tooling work that is off the product critical path.",
+        "findings": [
+          {
+            "claim": "The genuine critical path to a live, growing product is short and identifiable: M2 closes on two remaining items — the user-facing MCP App widget search UI (WS3/WS4) and the Sentry+OTel observability evidence bundle — then M3 gates on production Clerk + the Cloudflare MCP security gate + alerting, then GA is undefined. Only a handful of plans are actually on it: mcp-app-extension-migration.plan.md (+ its WS3/WS4 children), sentry-observability-maximisation-mcp.plan.md, sentry-otel-integration.execution.plan.md, cloudflare-mcp-public-beta-security-gate.plan.md, and the (not-yet-written) production-Clerk plan.",
+            "severity": "medium",
+            "evidence_paths": [
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+              ".agent/milestones/m3-tech-debt-and-hardening.md"
+            ],
+            "quote": "M2 ... | Sentry+OTel observability IN PROGRESS; user-facing widget search UI NOT STARTED | ... Blocker: Deployment evidence bundle + widget WS3/WS4 ... M3 ... Blocker: Cloudflare MCP security gate"
+          },
+          {
+            "claim": "The two authoritative M2 documents disagree on what M2 even requires, which directly obscures the critical path. The path-to-GA roadmap names 'user-facing widget search UI' / 'widget WS3/WS4' as an M2 blocker (and the vision brief agrees), but the milestone file's 10 progression-gate checkboxes contain NO widget/UI gate at all — the string 'widget' does not appear in m2-extension-surfaces.md. A reader cannot tell whether the widget UI is an M2 exit gate or M3 work.",
+            "severity": "high",
+            "evidence_paths": [
+              ".agent/milestones/m2-extension-surfaces.md",
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "m2 progression gates: [ ] OpenAI app replaced with MCP Apps infrastructure / [ ] Basic branding applied to MCP App ... (no widget/UI gate present) — vs roadmap: 'user-facing widget search UI NOT STARTED'"
+          },
+          {
+            "claim": "The single execution plan on the literal M2 critical path (the widget UI) is stale and misleading. ws3-phase-5-interactive-user-search-view.plan.md sits in active/, still reads 'Status: PENDING — blocked on PR #76 merge', and was last edited 2026-04-12 — but PR #76 MERGED on 2026-04-10. Its stated blocker has been resolved for over two months with no plan update. Its cited parent (ws3-widget-clean-break-rebuild.plan.md) now lives in archive/completed/, while this child's three todos are all 'pending'. This is exactly the stale-executable-on-the-critical-path failure that hides whether the widget work is alive or abandoned.",
+            "severity": "high",
+            "evidence_paths": [
+              ".agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md",
+              ".agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-widget-clean-break-rebuild.plan.md"
+            ],
+            "quote": "**Status**: PENDING — blocked on PR #76 merge; Phase 4.5 prerequisite is complete ... **Last Updated**: 2026-04-12   [gh: PR #76 mergedAt 2026-04-10T17:39:36Z]"
+          },
+          {
+            "claim": "M3's hardest gate — production Clerk migration with public sign-up — has NO execution plan and the roadmap does not flag the gap. The only artefact is research/auth/clerk-production-migration.md (dated 2026-02-22, status RESEARCH-Complete), which still opens with an unresolved 'Decision Prerequisite: Shared vs Independent Instance' that 'must be resolved before any other migration work.' No active/ or current/ plan owns production Clerk; the roadmap §6 backlog (A1–A5) tracks analytics, privacy, MCP-spec and the M4 definition but does not list the missing production-Clerk execution plan. M3 cannot start the moment M2 closes because its gating work is un-promoted research with an open prerequisite decision.",
+            "severity": "high",
+            "evidence_paths": [
+              ".agent/research/auth/clerk-production-migration.md",
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+              ".agent/milestones/m3-tech-debt-and-hardening.md"
+            ],
+            "quote": "## 0. Decision Prerequisite: Shared vs Independent Instance — **This question must be resolved before any other migration work.**"
+          },
+          {
+            "claim": "Sprawl materially obscures the path: the estate is 1092 plan files. The active/current plans that are genuinely on the MCP-server product critical path number roughly five, but the active+current estate is dominated by practice/tooling work that is off it — agentic-engineering-enhancements (62) and agent-tooling (38) hold 100 active/current plans between them, versus the handful of product-path plans. semantic-search alone has 142 files and 14 active/current. The roadmap §5 'sub-plan inventory' lists plans across six collections and explicitly says it is 'Not exhaustive', so the index does not isolate the true critical path from the noise.",
+            "severity": "medium",
+            "evidence_paths": [
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+              ".agent/plans/high-level-plan.md"
+            ],
+            "quote": "Sub-plan inventory ... **Not exhaustive** — each collection's roadmap.md / README.md is the authoritative inventory.  [counts: 1092 total plan files; agentic-engineering-enhancements active+current=62; agent-tooling=38]"
+          },
+          {
+            "claim": "M2 is reported at ~95% but every one of its 10 progression-gate checkboxes is still unticked, and the milestone file is itself two months stale (last edited 2026-04-10), even though owning plans report several gates done (ES re-index / gate-recovery-cadence todos 'completed'; roadmap marks 'ES re-index ✅, MCP Apps infra ✅, KG audit ✅'). The exit-readiness signal lives in the roadmap matrix, not in the milestone gate document that is supposed to define 'done'. Whether M2 can actually be declared closed is unverifiable from the milestone file alone.",
+            "severity": "medium",
+            "evidence_paths": [
+              ".agent/milestones/m2-extension-surfaces.md",
+              ".agent/plans/observability/active/gate-recovery-cadence.plan.md",
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "All must be true before M2 exit: [ ] Elasticsearch re-indexed with current bulk data [ ] ... [ ] Canonical aggregate gate green (`pnpm check`)  (all unticked)  — roadmap: 'M2 ... ~95% ... ES re-index ✅; MCP Apps infra ✅; KG audit ✅'"
+          },
+          {
+            "claim": "M4/GA is genuinely undefined, which is honestly surfaced rather than hidden — but it means 'growing product' has no measurable exit. The roadmap and high-level-plan both mark M4 as TBD/undefined, gated on owner direction (backlog A4 to author m4-general-availability.md). This is a deliberate, acknowledged gap, not sprawl; flagged at lower severity because the docs are clear about it.",
+            "severity": "low",
+            "evidence_paths": [
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+              ".agent/plans/high-level-plan.md"
+            ],
+            "quote": "**M4 / GA** | ⏳ TBD | **Undefined** — see §6 backlog item A4 | None yet | Owner direction to define"
+          }
+        ],
+        "recommendation": "Treat the path-to-GA roadmap as the single source of critical-path truth and make it self-consistent and current, then unblock the two real near-term obstructions. Concretely: (1) Reconcile the M2 definition — either add the user-facing widget UI as an explicit M2 progression gate in m2-extension-surfaces.md or move it to M3, so the milestone file and the roadmap matrix agree; refresh the milestone file (stale since 2026-04-10) and tick the gates the owning plans report complete. (2) Fix the stale critical-path plan now — ws3-phase-5 has been falsely 'blocked on PR #76' since that PR merged 2026-04-10; either re-activate it with a real current status and a live parent reference, or archive it if the widget rebuild is being carried elsewhere. Do not let the literal product-launch gate sit on a two-month-dead blocker. (3) Promote production Clerk from research to an owned execution plan — resolve the open 'shared vs independent instance' prerequisite decision (an owner question) and add the missing plan, then list it in roadmap §6 as the M3 hard gate it actually is; right now M3's headline requirement has no execution home. (4) Cut the noise from the critical-path view: the roadmap §5 inventory should explicitly partition the ~5 product-path plans from the 100+ practice/tooling active plans (agentic-engineering-enhancements, agent-tooling) that do not gate the live product, so a reader can see the path without wading through 1092 files. The path itself is sound and short; the obstruction is documentation drift and one un-promoted gate, not missing strategy.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M4-critical-path-to-live-product",
+        "headline": "Two long-lived feature branches are the concrete M2 blocker; the plan estate identifies the path clearly but the branch age signals execution risk.",
+        "findings": [
+          {
+            "claim": "M2 is blocked by two open feature branches, not by planning gaps. feat/otel_sentry_enhancements (361 commits ahead of main) carries the Sentry+OTel foundation and the Sentry maximisation lanes. feat/mcp_app_ui (54 commits ahead of main) carries WS3 widget rebuild and the user-search UI (Phase 5 is still pending post-PR #76 merge). The roadmap correctly names these as the only two M2 gate-holders.",
+            "evidence_paths": [
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+              ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md",
+              ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+              ".agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md"
+            ],
+            "quote": "M2 blocker: Deployment evidence bundle + widget WS3/WS4",
+            "severity": "critical"
+          },
+          {
+            "claim": "The otel_sentry_enhancements branch is merge-blocked by an unresolved esbuild/bundler plugin migration (L-8) that itself replaced a bespoke orchestrator (L-7) which was torn out mid-branch. The maximisation plan shows L-1, L-2, L-3, L-4b, L-8, L-15 and quality/review/doc todos all still pending. The branch cannot open a PR until L-8 (canonical deploy shape) lands. As of 2026-04-23, the stated remaining gap is a realistic production-build gate plus disposition of lingering non-fatal diagnostics.",
+            "evidence_paths": [
+              ".agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md"
+            ],
+            "quote": "The remaining repo-owned gap before any owner-directed preview work is the dedicated realistic production-build gate for the env path that loads the Sentry esbuild plugin, plus honest disposition of the lingering non-fatal diagnostics.",
+            "severity": "critical"
+          },
+          {
+            "claim": "The user-facing widget search UI (WS3 Phase 5, plus Phase 6 closeout) is the second concrete M2 blocker. The phase-5 plan is entirely pending and itself blocked on PR #76 merge. PR #76 (feat/mcp_app_ui) is 54 commits ahead of main and was described as needing a push/preview recheck before merge as of 2026-04-12.",
+            "evidence_paths": [
+              ".agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md",
+              ".agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md"
+            ],
+            "quote": "Status: PENDING — blocked on PR #76 merge; Phase 4.5 prerequisite is complete",
+            "severity": "critical"
+          },
+          {
+            "claim": "M3 has one hard, concrete blocker: the Cloudflare MCP security gate. As of 2026-04-28, it remains a strategic brief only, sitting in future/ — no execution plan exists, no Cloudflare account access has been validated, and the promotion trigger is 'when M3 planning begins or earlier if Cloudflare MCP access can be tested'. Production Clerk (auth research exists but no active execution plan) is a second M3 gate without an active execution plan.",
+            "evidence_paths": [
+              ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "Cloudflare MCP gate satisfied; auth + rate limiting at trust boundary ... Cloudflare gate is M3 hard blocker ... No execution plan yet",
+            "severity": "high"
+          },
+          {
+            "claim": "The plan estate correctly identifies the critical path and is not obscured by sprawl at the index level. The roadmap.md (strategic index) correctly names the two M2 blockers, lists the M3 hard blockers (Cloudflare gate, production Clerk), and explicitly tracks five paperwork-backlog items (A1-A5) as owner-direction-gated future work. The high-level-plan.md and milestone files are consistent with the roadmap. The critical-path plans are clearly segregated into active/ vs future/ folders.",
+            "evidence_paths": [
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md",
+              ".agent/plans/high-level-plan.md",
+              ".agent/milestones/m2-extension-surfaces.md",
+              ".agent/milestones/m3-tech-debt-and-hardening.md"
+            ],
+            "quote": "A programme is needed because the MCP app's path crosses every plan collection ... This document does that sequencing and nothing else.",
+            "severity": "low"
+          },
+          {
+            "claim": "There is no active execution plan for the MCP 2026-07-28 spec upgrade (backlog A3), the analytics execution plan (A1), the DPIA/privacy gate (A2), or the M4/GA milestone definition (A4). All are explicitly owner-direction-gated. The MCP spec GA date (2026-07-28) is close: if M3 is not complete before that date, the spec migration would need to happen post-M3, adding a post-beta migration obligation.",
+            "evidence_paths": [
+              ".agent/plans/curriculum-mcp-path-to-ga/roadmap.md"
+            ],
+            "quote": "A3: MCP 2026-07-28 GA upgrade plan ... Spec GA (target 2026-07-28) + owner ... A4: Define M4/GA milestone gates ... Owner direction",
+            "severity": "medium"
+          },
+          {
+            "claim": "Several current/ plans in architecture-and-infrastructure (eslint-disable-remediation, build-tools-workspace-extraction, sonarjs-activation, workspace-layer-separation-audit, quality-gate-hardening, test-ceremony-production-factory-audit, no-io-test-boundary-and-di-recovery) are infrastructure hygiene work that is not on the M2/M3 critical path. Their presence in current/ (rather than future/ or icebox) adds visual weight to the plan estate without blocking the live product milestones. The roadmap correctly excludes them from its sub-plan inventory.",
+            "evidence_paths": [
+              ".agent/plans/architecture-and-infrastructure/active/build-tools-workspace-extraction.plan.md",
+              ".agent/plans/architecture-and-infrastructure/active/eslint-disable-remediation.plan.md",
+              ".agent/plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md"
+            ],
+            "quote": "Status: PAUSED - corrective handoff; fresh session must first remove the broken local generator/runtime experiment",
+            "severity": "low"
+          }
+        ],
+        "recommendation": "The critical-path plan estate is structurally sound and not obscured by sprawl at the index level. The roadmap.md correctly names the two M2 execution blockers. The actual risk is execution, not planning: (1) Merge feat/otel_sentry_enhancements — the L-8 esbuild plugin migration and the remaining maximisation lanes (L-1, L-2, L-3, L-4b) must land and open a PR; (2) Merge feat/mcp_app_ui (PR #76) and then execute WS3 Phase 5 (user-search UI). Until both branches land, M2 cannot close and M3 cannot begin. For M3, the Cloudflare security gate brief needs promotion from future/ to current/ with a concrete promotion trigger (Cloudflare access confirmed or M2 close, whichever comes first) and a paired promotion of the production Clerk migration from research to an active execution plan. The MCP spec 2026-07-28 GA date should be tracked against M3 completion to avoid a post-beta forced migration. The handful of paused infrastructure hygiene plans (eslint-disable, build-tools-workspace-extraction, Sonar rebuild) should be triaged: either actively scheduled or moved to icebox to reduce ambient noise in the current/ folder.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M5-knowledge-preservation",
+        "headline": "Speculative inventory is large (~13 icebox + ~180 future + ~60 research files) and mostly well-conserved; the critical-path obscurement is concentrated in the icebox, which lacks an index README, mixes a misfiled live ADR and stale/duplicative stubs in with genuine speculation, and is not held to the byte-parity preservation discipline that semantic-search/future already proves is achievable. The survey-aggregate all-zeros is a tooling artefact, not a census — treat it as null evidence.",
+        "findings": [
+          {
+            "claim": "The survey-aggregate JSON reports totalDocs=0 and empty distributions, but the estate actually holds 13 icebox files, ~180 files across 18 future/ directories, and ~60 research files. The aggregate is a tooling artefact and must not be used as the preservation census; acting on it would silently 'lose' the entire speculative inventory.",
+            "evidence_paths": [
+              ".agent/plans/icebox/",
+              ".agent/research/",
+              ".agent/plans/semantic-search/future/"
+            ],
+            "quote": "totalDocs\":0,\"relevanceDistribution\":{},...\"speculativeCount\":0 — contradicted by `ls` showing 13 icebox .md files and `find ... -name future` returning 18 directories totalling ~180 .md files.",
+            "severity": "high"
+          },
+          {
+            "claim": "The icebox violates the repo's own reachability invariant: the root README mandates an index chain collection/README -> lifecycle/README -> plan-file, but .agent/plans/icebox/ has NO README. The 13 files are reachable only as an opaque directory link from the root, so handoff/review/consolidation cannot see what is inside or why it is deferred. This is the single largest preservation-integrity gap.",
+            "evidence_paths": [
+              ".agent/plans/README.md",
+              ".agent/plans/icebox/"
+            ],
+            "quote": "README.md (root): 'unindexed plans are invisible to handoff, review, consolidation, and priority-setting.' — yet `ls .agent/plans/icebox/README.md` returns 'No such file or directory'.",
+            "severity": "high"
+          },
+          {
+            "claim": "redoc-accessibility-remediation.md is misfiled in the icebox: it is not speculation but a live accessibility DECISION RECORD (with a Decision Log dated 2025-12-02 and a documented Axe-exclusion mitigation). Its mitigation pointer is also STALE — it cites apps/oak-search-cli/tests/visual/responsive-baseline.spec.ts, which no longer exists. This couples accessibility evidence (an org-mandated WCAG concern) to a dead path while hiding it in a deferred bin.",
+            "evidence_paths": [
+              ".agent/plans/icebox/redoc-accessibility-remediation.md",
+              "apps/oak-search-cli/"
+            ],
+            "quote": "redoc file: 'See: apps/oak-search-cli/tests/visual/responsive-baseline.spec.ts' — but `ls` of that path returns 'No such file or directory'. The file carries a '## Decision Log | 2025-12-02 | Exclude Redoc from Axe analysis', i.e. it is an ADR-shaped artefact, not speculation.",
+            "severity": "high"
+          },
+          {
+            "claim": "icebox/subagent-ideas.md (orchestrator/worker-swarm pattern) substantially duplicates the LIVE future plan agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md, and pair-programming-coach-agent.md / cross-agent-standardisation overlap the live specialist-capability backlog. These are consolidation candidates: their distinct insight must be merged into the live plans BEFORE the icebox stubs are retired, never dropped.",
+            "evidence_paths": [
+              ".agent/plans/icebox/subagent-ideas.md",
+              ".agent/plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md",
+              ".agent/plans/agentic-engineering-enhancements/future/"
+            ],
+            "quote": "subagent-ideas.md: 'A high-power coordinating orchestrator subagent that decomposes a plan into discrete work items and dispatches a swarm of low-power worker subagents in parallel' — the live future/ already owns multi-agent-delegation-orchestration.plan.md plus eight *-specialist-capability.plan.md files.",
+            "severity": "medium"
+          },
+          {
+            "claim": "serverless-hosting-plan.md is stale against the current vision and lacks a promotion trigger, but its insight is NOW relevant: M3 names a 'Cloudflare MCP security gate' and security-and-privacy/future/phase-3-baseline-control-cut-list.md references Cloudflare. The plan presumes a packages/runtime-adapters/ workspace that does not exist. It should be re-grounded and routed to the security/SDK collections, not left as a triggerless icebox orphan.",
+            "evidence_paths": [
+              ".agent/plans/icebox/serverless-hosting-plan.md",
+              ".agent/plans/security-and-privacy/future/phase-3-baseline-control-cut-list.md",
+              "packages/"
+            ],
+            "quote": "serverless-hosting-plan.md: 'Create @oaknational/mcp-runtime-adapter-workers under packages/runtime-adapters/' — `ls packages/runtime-adapters` returns 'No such file or directory'; meanwhile M3 (vision) names a 'Cloudflare MCP security gate'.",
+            "severity": "medium"
+          },
+          {
+            "claim": "Three icebox files (openapi-pipeline-framework.md, redoc-accessibility-remediation.md, serverless-hosting-plan.md) carry no promotion trigger, breaking the root README's contract that icebox holds 'Deferred/low-priority ideas WITH promotion triggers'. Without a trigger an iceboxed idea can never be re-surfaced by the process, so its insight decays silently — a slow-motion preservation failure.",
+            "evidence_paths": [
+              ".agent/plans/README.md",
+              ".agent/plans/icebox/openapi-pipeline-framework.md",
+              ".agent/plans/icebox/redoc-accessibility-remediation.md",
+              ".agent/plans/icebox/serverless-hosting-plan.md"
+            ],
+            "quote": "root README: 'icebox/ | Deferred/low-priority ideas with promotion triggers' — grep for trigger/promot/revisit found no match in those three files.",
+            "severity": "medium"
+          },
+          {
+            "claim": "icebox/watcher-liveness-self-heal.md (raised 2026-06-14, the only fresh icebox file) is a well-formed pending idea but sits in the wrong collection: it is an enhancement to the live comms-watch CLI governed by .agent/rules/comms-all-channels-watcher.md and belongs in agentic-engineering-enhancements/ or agent-tooling/, not the cross-collection icebox. It demonstrates the icebox is being used as a generic inbox rather than its stated purpose.",
+            "evidence_paths": [
+              ".agent/plans/icebox/watcher-liveness-self-heal.md",
+              ".agent/rules/comms-all-channels-watcher.md"
+            ],
+            "quote": "watcher-liveness file: 'The canonical comms-watch CLI is already hardened (.agent/rules/comms-all-channels-watcher.md)... this is an ENHANCEMENT that composes existing pieces.'",
+            "severity": "low"
+          },
+          {
+            "claim": "The preservation discipline already exists and is excellent where applied — semantic-search/future ships a TRANSFER-MANIFEST.md and an INFORMATION-RETENTION-CHECK.md proving byte/heading parity before originals were removed, and research/README.md states the durable principle plainly. The fix is to extend this same discipline (index + retention-check before any drop) to the icebox and to the un-indexed research subdirs, not to invent new machinery.",
+            "evidence_paths": [
+              ".agent/plans/semantic-search/future/INFORMATION-RETENTION-CHECK.md",
+              ".agent/plans/semantic-search/future/README.md",
+              ".agent/research/README.md"
+            ],
+            "quote": "research/README.md: 'When a plan discovers something valuable, that discovery should be recorded in research. Plans can be archived; research persists.' INFORMATION-RETENTION-CHECK.md: 'Result: PASS — no missing files and heading structure retained.'",
+            "severity": "low"
+          },
+          {
+            "claim": "10 research subdirectories lack a README index (kg-neo4j-stardog-product-creation, eslint-enhancements, aila-modular-extraction, auth, complex-systems-dynamics, solid-distributed-filesystem, openapi-app-sdk, error_handling, sentry-and-posthog, archive). research/ is a permanent corpus, so these are reachability gaps in the durable knowledge layer, not the critical path — lower urgency than the icebox but the same class of obscurement.",
+            "evidence_paths": [
+              ".agent/research/",
+              ".agent/research/README.md"
+            ],
+            "quote": "Reachability check found 'NO README' for 10 first-level research subdirectories including kg-neo4j-stardog-product-creation, auth, sentry-and-posthog.",
+            "severity": "low"
+          }
+        ],
+        "recommendation": "Run a single icebox curation pass first (highest leverage; ~13 files), then a lighter research-index sweep. Concretely: (1) Author .agent/plans/icebox/README.md as the missing index — one row per file with a one-line concept, an explicit promotion trigger, and a route-to-collection, restoring the root README's index-chain invariant. (2) RECLASSIFY rather than keep-in-icebox: move redoc-accessibility-remediation.md out to a permanent accessibility decision home (docs/architecture/architectural-decisions/ or the observability accessibility axis) AND fix its stale pointer — the cited responsive-baseline.spec.ts no longer exists, so locate the current Axe-exclusion and re-cite it or record that the exclusion lapsed; move watcher-liveness-self-heal.md to agentic-engineering-enhancements/ (it enhances the live comms-watch CLI). (3) CONSOLIDATE before retiring: merge the distinct insight of subagent-ideas.md and pair-programming-coach-agent.md into the live agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md and the specialist-capability backlog, then leave only a one-line index entry — never a tombstone. (4) RE-GROUND serverless-hosting-plan.md against current reality (no packages/runtime-adapters/ exists; Cloudflare is now an M3 security gate) and route it to security-and-privacy/ or sdk-and-mcp-enhancements/ with a trigger. (5) Add promotion triggers to the three triggerless files as the bar for remaining in icebox. (6) Apply the semantic-search/future preservation pattern as the standing rule: nothing leaves the icebox or research/ without a retention check confirming its insight has a permanent home — reuse INFORMATION-RETENTION-CHECK.md as the template. (7) Separately, backfill README indexes for the 10 un-indexed research subdirs (lower urgency). Do NOT trust the survey JSON's zeros; the census must be re-run against the real file tree. Nothing in this pass is genuinely droppable without conservation — every drop is a merge-then-index, per the knowledge-preservation-over-fitness principle.",
+        "confidence": "high"
+      },
+      {
+        "question_id": "M5-knowledge-preservation",
+        "headline": "The speculative estate is structurally sound but contains three distinct tiers requiring different treatment: icebox items that are correctly parked but whose insights are not yet conserved in durable homes; future plans that are correctly shaped but may be obscuring the critical path through sheer volume; and research documents that range from actively useful to genuinely disconnected from the product vision.",
+        "findings": [
+          {
+            "claim": "The icebox is well-managed overall: most items carry explicit reactivation triggers and self-contained rationale. However, one icebox file is already superseded (cross-agent-standardisation.md) and serves only as a stale pointer, adding noise without adding knowledge.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/cross-agent-standardisation.md"
+            ],
+            "quote": "Status: Superseded — promoted from icebox to an active plan. See: [cross-agent-standardisation.plan.md](../agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md)",
+            "severity": "low"
+          },
+          {
+            "claim": "The pair-programming-coach-agent.md icebox item is an elaborately detailed VSCode extension plan (840+ lines, five phases, cost modelling) that is entirely out of scope for this product's vision. It is a standalone developer-tooling product, not curriculum infrastructure or agentic practice. Its insight — event-driven real-time pattern detection in an IDE — is not conserved anywhere in the practice or ADR layer. This is the clearest candidate for insight-conservation then retirement.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/pair-programming-coach-agent.md"
+            ],
+            "quote": "Create an event-driven AI agent that actively monitors developer coding activity in real-time and provides proactive, context-aware suggestions, acting as a senior engineer pair programming partner who observes rather than types. ... Phase 5: Production Hardening (2 weeks) ... Total: ~560 hours (~3-4 months for one developer)",
+            "severity": "medium"
+          },
+          {
+            "claim": "The complex-systems-dynamics research cluster (three files: complex-system-dynamics-multi-field-review.md, dynamic-stability-in-complex-systems.md, emergent-stability-summary.md) is a high-quality academic literature review covering ecological tipping points, bifurcation theory, and multi-field critical transitions. It has no clear linkage to any plan, ADR, or product feature. There is no evidence it was ever cited as grounding for a concrete decision in this repo. This is the strongest candidate for honest assessment as genuinely droppable background reading whose key insight (early warning signals as generic statistical fingerprints) should be conserved in a single sentence in the agentic engineering practice if relevant, then the three files retired.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/complex-systems-dynamics/complex-system-dynamics-multi-field-review.md",
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/complex-systems-dynamics/emergent-stability-summary.md"
+            ],
+            "quote": "Many complex systems across disciplines can undergo critical transitions or tipping points, where a small change in conditions triggers a sudden shift to a contrasting state. Such phenomena have been observed in ecology, medicine, global finance, and climate systems.",
+            "severity": "medium"
+          },
+          {
+            "claim": "The Solid distributed filesystem research (solid-distributed-filesystem/) is a detailed, rigorous evaluation of Solid Pods as a teacher-controlled data layer. It is correctly anchored: a live future plan (teacher-memory-store-solid-vs-user-keyed-private-store.plan.md) cites it directly and holds the decision pending an owner-directed comparison. This is correct placement — research informs a gated future decision. No action needed here except confirming the link is live.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/solid-distributed-filesystem/Solid as a Teacher-Controlled Data Layer for Oak MCP Interaction Records-clean.md",
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/future/teacher-memory-store-solid-vs-user-keyed-private-store.plan.md"
+            ],
+            "quote": "A cleaned research artefact is now available at: .agent/research/solid-distributed-filesystem/... That report indicates Solid is promising for teacher-controlled data but also surfaces known constraints.",
+            "severity": "low"
+          },
+          {
+            "claim": "The advanced-mcp-server-ideas.md icebox item contains a valuable architectural insight (fan-out-fan-in task decomposition, single-purpose review agents, cross-server pipelines) that is partially reflected in the subagent-ideas.md and already partially implemented via the review ensemble. The cross-server pipeline concept is the only portion not yet conserved in any ADR or plan. The AI lesson content grading concept is explicitly out-of-scope. The key risk: as the agentic practice matures these concepts will be rediscovered without attribution. A single ADR or practice note should conserve the fan-out contract shape.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/advanced-mcp-server-ideas.md",
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/subagent-ideas.md"
+            ],
+            "quote": "The review ensemble already implements a simpler version of this pattern: it dispatches four model-specific code reviewers and then synthesises their findings. The orchestrator generalises that pattern beyond reviews to arbitrary parallelisable work.",
+            "severity": "medium"
+          },
+          {
+            "claim": "The semantic-search future lane (nine boundary folders) is correctly structured — the README confirms a transfer-manifest, information-retention check, and boundary separation. The curriculum-nlp-processing-workspace.md cross-boundary plan is the one item that sits outside the nine boundaries and could obscure what is genuinely next. This is a known structural decision (it subsumes vocabulary-mining Phases 4-5) and is correctly labelled. No action needed except ensuring it appears in the future/README as a cross-boundary item.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/semantic-search/future/README.md",
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/semantic-search/future/TRANSFER-MANIFEST.md"
+            ],
+            "quote": "Boundary reorganisation complete; originals removed after verification. Cross-Boundary Plans: curriculum-nlp-processing-workspace.md — Python NLP workspace for ML-based entity extraction, semantic compression, and relationship mining from bulk curriculum data.",
+            "severity": "low"
+          },
+          {
+            "claim": "The discovery/future lane contains the aila-a2a-agent-card.plan.md which is correctly gated on a product decision (whether Aila becomes a third-party A2A endpoint). However several other discovery/future items (agent-skills-discovery.plan.md, agentic-mechanisms-discovery.plan.md, dns-aid-discovery.plan.md, webmcp-human-site-operability.plan.md) are all valid M3/post-beta concerns and are correctly placed. The discovery future lane is not overcrowded relative to the M2 critical path.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/discovery/future/aila-a2a-agent-card.plan.md"
+            ],
+            "quote": "This plan exists only for the conditional case where Oak chooses to expose Aila as a real A2A server for third-party agents. Until then, Aila stays off the public discovery map.",
+            "severity": "low"
+          },
+          {
+            "claim": "The agentic-engineering-enhancements/future lane is the heaviest future collection (26 files). Several items — memetic-immune-system, closure-pressure-remediation, governance-concepts — are well-anchored to PDRs and companion current/active plans. The multi-agent-delegation-orchestration plan is a strategic brief with six open architectural questions explicitly listed as promotion blockers; this is correct. The most speculative items (graphify-and-graph-memory-exploration, external-pointer-surface-integration, recurrence-prevention-after-vercel-branch-url-bug) have promotion criteria defined. The collection does not obscure the critical path because all items are in future/ not current/ or active/.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md",
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md"
+            ],
+            "quote": "These are not gaps to resolve in this plan, but architectural decisions that belong to the promotion phase when concrete consumers appear. Promotion to current/ requires owner review of contracts and open-questions section.",
+            "severity": "low"
+          },
+          {
+            "claim": "The watcher-liveness-self-heal.md icebox item is a 2026-06-14 addition (yesterday, relative to today). It is correctly self-aware about what already exists, names the gap clearly, and carries an explicit 'do NOT build yet' directive. It conserves an insight from a live session. This is exactly the right use of the icebox. No action needed.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/watcher-liveness-self-heal.md"
+            ],
+            "quote": "A small enhancement so an agent holding or waiting across idle gaps never goes silently blind when an awareness monitor dies. ... Do NOT build yet. ... What already exists (check before building).",
+            "severity": "low"
+          },
+          {
+            "claim": "The aila-modular-extraction research cluster contains 14 files on lesson generation, quiz design, prompt architecture, and safety patterns for an AI lesson-creation product. Four files are already archived. The remaining 10 active files (prompt-architecture.md, quiz-design-principles.md, safety-patterns.md, etc.) constitute a significant volume of content about a system (Aila) that this repo does not own or operate. The research README records them as permanent. Their value to the MCP server vision is indirect at best: they could inform EEF surface design or curriculum-aligned tool descriptions, but no current plan cites them for that purpose. These are candidates for explicit acknowledgement of the 'research informs but does not drive' status, with insight-conservation into the connecting-oak-resources or sector-engagement lanes.",
+            "evidence_paths": [
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/aila-modular-extraction/prompt-architecture.md",
+              "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/README.md"
+            ],
+            "quote": "aila-modular-extraction/ — AILA prompt engineering — Lesson generation, quiz design, safety patterns (partially archived)",
+            "severity": "medium"
+          }
+        ],
+        "recommendation": "Three concrete actions, in priority order, each conserving insight before any retirement:\n\n1. Conserve and retire the three items whose insights are not conserved and whose connection to the product vision is weakest. (a) For the complex-systems-dynamics cluster: distil the one load-bearing idea — that generic statistical fingerprints (rising autocorrelation, variance, slowing recovery) can provide early warning of regime shifts — into a single paragraph in the napkin or distilled.md under 'signal ecology'. Then remove the three files. (b) For pair-programming-coach-agent.md: extract the event-driven IDE pattern detection architecture (debounce, local-first, AI-fallback) into a single paragraph in a future plan under agentic-engineering-enhancements/future/ or in an existing specialist-capability plan. Mark the icebox file as conserved and remove it. (c) For cross-agent-standardisation.md: it is already a stale pointer to a completed plan — remove it outright, no new conservation needed.\n\n2. Anchor the fan-out orchestration insight from advanced-mcp-server-ideas.md. The work item contract shape in subagent-ideas.md is the consolidation home; the grading-service concept in advanced-mcp-server-ideas.md is explicitly out-of-scope and droppable. Add a single cross-reference from subagent-ideas.md to the multi-agent-delegation-orchestration future plan, then retire the redundant portions of advanced-mcp-server-ideas.md. The pipeline concept deserves a one-sentence note in the sdk-and-mcp-enhancements future lane.\n\n3. Apply a fitness signal to the aila-modular-extraction research cluster. The 10 remaining active files are large and disconnected from any live plan citation. Run a citation check: for each file, determine whether any current or active plan links to it. Files with no live citation should be given a twelve-week sunset with a note: 'If no plan cites this by M3, retire to archive.' This is not deletion — it is a timed conservation gate that prevents indefinite accumulation without removing any knowledge prematurely.\n\nWhat must NOT move: the Solid research (anchored to a live future decision plan), the semantic-search future boundaries (correctly structured with transfer manifests), the EEF outcome evaluation future plan (has a flag-removal trigger tied to a live feature flag), and the watcher-liveness-self-heal icebox entry (correctly fresh, correctly parked). These are all correctly placed and should not be touched.",
+        "confidence": "medium"
+      }
+    ]
+  }
+}

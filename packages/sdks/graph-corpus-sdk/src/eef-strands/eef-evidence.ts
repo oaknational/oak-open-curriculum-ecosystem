@@ -44,22 +44,47 @@ export interface EefEvidenceProvenance {
 }
 
 /**
- * The uniform EEF evidence envelope: the complete member strands, the
- * member-induced `related_strand` edges (edges whose BOTH endpoints are
- * members — so a single-member envelope, e.g. `inspectStrand`, carries an
- * empty `edges` list and surfaces the related strands only via `frontier`;
- * `edges` is non-empty only when an axis query co-selects related strands as
- * members), the binding-derived frontier (related strands outside the member
- * set), and the once-per-envelope provenance.
+ * What KIND of answer an envelope is, so the consuming agent can tell a result
+ * that is complete for the request from a non-exhaustive corpus-curated subset.
+ * This is information ABOUT the result, never a recommendation (ADR-194):
+ *
+ * - `'strand-lookup'` — exactly the strand(s) the query named by id (an
+ *   `inspectStrand`, or an `evidenceForMove` with `strandIds` and no axis
+ *   selector). The envelope is complete for that request.
+ * - `'context-subset'` — the strands the corpus tags for the requested axis
+ *   (`phase` / `keyStage` / `priority`). This is a **non-exhaustive** subset:
+ *   axis tags are partial curation, so a missing tag is not evidence of
+ *   inapplicability. Use the strand index in `eef://interpretation` for the full
+ *   corpus, and `frontier` for adjacent strands.
+ */
+export type EefAnswerType = 'strand-lookup' | 'context-subset';
+
+/**
+ * The uniform EEF evidence envelope: a self-describing {@link EefAnswerType},
+ * the member strands (full {@link EefStrand} by default, or the headline
+ * projection — `EefStrandHeadline`, see `eef-headline-view.ts` — for the bounded
+ * headline view), the member-induced
+ * `related_strand` edges (edges whose BOTH endpoints are members — so a
+ * single-member envelope, e.g. `inspectStrand`, carries an empty `edges` list
+ * and surfaces the related strands only via `frontier`; `edges` is non-empty
+ * only when an axis query co-selects related strands as members), the
+ * binding-derived frontier (related strands outside the member set), and the
+ * once-per-envelope provenance.
+ *
+ * `TMember` defaults to {@link EefStrand} (the full strand); the headline view
+ * binds it to {@link EefStrandHeadline}. `answerType`, `edges`, `frontier`, and
+ * `provenance` are identical across the two depths — only the member shape
+ * differs.
  *
  * Declared as a strict `interface` — every field exact, NO index signature and
  * NO `unknown`/`Record` fallback. (The MCP SDK's structured-content carrier is
- * `Record<string, unknown>`; reconciling this strict envelope with that vendor
- * carrier WITHOUT any allow-anything type, cast, or disabled check is an open
- * boundary question — see the EEF strict-type-flow plan.)
+ * `Record<string, unknown>`; the strict envelope crosses into that vendor carrier
+ * at a single egress membrane in the MCP consumer — a fresh-object spread, with no
+ * cast, no index signature, and no disabled check — per ADR-193.)
  */
-export interface EefEvidenceEnvelope {
-  readonly members: readonly EefStrand[];
+export interface EefEvidenceEnvelope<TMember = EefStrand> {
+  readonly answerType: EefAnswerType;
+  readonly members: readonly TMember[];
   readonly edges: readonly GraphEdge<EefStrandId, 'related_strand'>[];
   readonly frontier: readonly EefStrandId[];
   readonly provenance: EefEvidenceProvenance;
@@ -99,13 +124,15 @@ function computeFrontier(memberIds: ReadonlySet<EefStrandId>): readonly EefStran
   return [...frontier];
 }
 
-/** Wrap a subgraph result's nodes + edges in the evidence envelope. */
+/** Wrap a subgraph result's nodes + edges in the evidence envelope, tagged with its answer type. */
 function buildEnvelope(
+  answerType: EefAnswerType,
   nodes: readonly EefStrand[],
   edges: readonly GraphEdge<EefStrandId, 'related_strand'>[],
 ): EefEvidenceEnvelope {
   const memberIds = new Set<EefStrandId>(nodes.map((strand) => strand.id));
   return {
+    answerType,
     members: nodes,
     edges,
     frontier: computeFrontier(memberIds),
@@ -114,20 +141,24 @@ function buildEnvelope(
 }
 
 /**
- * Run a depth-0 subgraph over a root set and wrap it in the envelope. An empty
+ * Run a depth-0 subgraph over a root set and wrap it in the envelope, tagged
+ * with the {@link EefAnswerType} the caller's query shape determines. An empty
  * root set yields an empty envelope (honest insufficiency). A subgraph failure
  * is unreachable here — every {@link EefStrandId} is a graph node and depth 0 is
  * within `maxDepth` — so it throws as a broken invariant rather than a Result
  * (the unknown-key failure is handled at the request boundary, D6).
  */
-function subgraphEnvelope(rootIds: readonly EefStrandId[]): EefEvidenceEnvelope {
+function subgraphEnvelope(
+  answerType: EefAnswerType,
+  rootIds: readonly EefStrandId[],
+): EefEvidenceEnvelope {
   const result = eefStrandGraph.subgraph({ rootIds, depth: 0 });
   if (!result.ok) {
     throw new Error(
       `subgraphEnvelope: unexpected subgraph failure (${result.error.kind}); every EefStrandId is a graph node and depth 0 is within bounds`,
     );
   }
-  return buildEnvelope(result.value.nodes, result.value.edges);
+  return buildEnvelope(answerType, result.value.nodes, result.value.edges);
 }
 
 /**
@@ -136,7 +167,7 @@ function subgraphEnvelope(rootIds: readonly EefStrandId[]): EefEvidenceEnvelope 
  * `evidenceForMove({ strandIds: [strandId] })`.
  */
 export function inspectStrand(strandId: EefStrandId): EefEvidenceEnvelope {
-  return subgraphEnvelope([strandId]);
+  return subgraphEnvelope('strand-lookup', [strandId]);
 }
 
 /** A strand matches iff at least one axis selector is given and every given axis selector is one of its values. */
@@ -166,11 +197,29 @@ function resolveRoots(selectors: EvidenceForMoveSelectors): readonly EefStrandId
 }
 
 /**
+ * An axis selector (`phase` / `keyStage` / `priority`) makes the result a
+ * non-exhaustive corpus-curated `'context-subset'`; a query that names only
+ * explicit `strandIds` (or none at all — `{}` or an empty `strandIds: []`) is a
+ * `'strand-lookup'` complete for the request. So an empty selector set yields an
+ * empty `'strand-lookup'` envelope (complete for nothing requested, not a curated
+ * subset), and `evidenceForMove({ strandIds: [id] })` stays identical to
+ * `inspectStrand(id)` (D4 structural overlap).
+ */
+function answerTypeFor(selectors: EvidenceForMoveSelectors): EefAnswerType {
+  const hasAxis =
+    selectors.phase !== undefined ||
+    selectors.keyStage !== undefined ||
+    selectors.priority !== undefined;
+  return hasAxis ? 'context-subset' : 'strand-lookup';
+}
+
+/**
  * Axis/explicit-selector evidence query: resolve the selectors to a root set
- * (via `school_context_relevance` for the axes), then return the envelope. No
- * server-side move→strand mapping exists (Decision 10); the agent chooses the
- * selectors. An empty selector set returns an empty envelope.
+ * (via `school_context_relevance` for the axes), then return the envelope tagged
+ * with its {@link EefAnswerType}. No server-side move→strand mapping exists
+ * (Decision 10); the agent chooses the selectors. An empty selector set returns
+ * an empty envelope.
  */
 export function evidenceForMove(selectors: EvidenceForMoveSelectors): EefEvidenceEnvelope {
-  return subgraphEnvelope(resolveRoots(selectors));
+  return subgraphEnvelope(answerTypeFor(selectors), resolveRoots(selectors));
 }

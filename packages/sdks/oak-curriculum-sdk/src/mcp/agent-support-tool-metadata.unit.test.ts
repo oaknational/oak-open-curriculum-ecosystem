@@ -118,6 +118,18 @@ describe('generateServerInstructions', () => {
     expect(instructions).toContain('idempotent');
   });
 
+  it('states the sequenced-curriculum grounding the graph tools deliver', () => {
+    const instructions = generateServerInstructions();
+
+    // The served guidance names the curriculum-connected value the graph
+    // tools deliver (year-ordered progressions, prior-knowledge,
+    // misconception, and keyword graphs), so connecting agents know plans
+    // can build on what a class has already covered.
+    expect(instructions).toContain('fully sequenced');
+    expect(instructions).toContain('get-thread-progressions');
+    expect(instructions).toContain('build on what a class has already covered');
+  });
+
   it('lists tools in call order', () => {
     const instructions = generateServerInstructions();
     const toolPositions = AGENT_SUPPORT_TOOL_NAMES.map((name) => instructions.indexOf(name));

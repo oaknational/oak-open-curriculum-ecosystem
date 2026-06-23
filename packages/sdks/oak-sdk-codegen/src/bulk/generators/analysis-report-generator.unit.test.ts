@@ -20,6 +20,7 @@ function createTestExtractedData(overrides: Partial<ExtractedData> = {}): Extrac
     keywords: [
       {
         term: 'photosynthesis',
+        displayTerm: 'photosynthesis',
         definition: 'The process by which plants convert light into energy',
         frequency: 15,
         subjects: ['science'],
@@ -28,6 +29,7 @@ function createTestExtractedData(overrides: Partial<ExtractedData> = {}): Extrac
       },
       {
         term: 'fraction',
+        displayTerm: 'fraction',
         definition: 'A part of a whole, also known as a rational number',
         frequency: 42,
         subjects: ['maths', 'science'],
@@ -36,6 +38,7 @@ function createTestExtractedData(overrides: Partial<ExtractedData> = {}): Extrac
       },
       {
         term: 'equation',
+        displayTerm: 'equation',
         definition: 'A mathematical statement showing equality',
         frequency: 30,
         subjects: ['maths'],

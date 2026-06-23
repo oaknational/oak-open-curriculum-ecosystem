@@ -10,7 +10,7 @@ todos:
     status: completed
     depends_on: []
   - id: 0-2-settings-backup
-    content: "0.2 Backup .claude/settings.json out-of-tree (e.g. /tmp/) for safe rollback."
+    content: "0.2 Backup .claude/settings.json out-of-tree (e.g. <scratch>/) for safe rollback."
     status: completed
     depends_on: []
   - id: 1-1-remove-mcp-apps
@@ -219,7 +219,7 @@ command-line or Codex gate.
 ### 0.2 Backup settings
 
 + **Action**: copy `.claude/settings.json` to an **out-of-tree** location
-  (e.g. `/tmp/oak-claude-settings.pre-prune-2026-05-06.json`) for
+  (e.g. `<scratch>/oak-claude-settings.pre-prune-2026-05-06.json`) for
   rollback. Do NOT place the backup in the repo working tree — the
   `.gitignore` does not currently cover `*.pre-prune-*` suffixes and an
   in-tree backup risks accidental staging.
@@ -441,7 +441,7 @@ not yet remove the plugin.
 + **Agent**: Ashen Burning Anvil / codex / GPT-5 / `019dfd`.
 + **Claim**: `b78e00ac-6bdd-40ec-8a11-6ccd6f42bf5c`.
 + **Backup**:
-  `/tmp/oak-claude-settings.pre-prune-20260506T121741Z.json`.
+  `<scratch>/oak-claude-settings.pre-prune-20260506T121741Z.json`.
 + **Baseline**: `pnpm portability:check` passed before pruning with
   12 commands, 37 skills, 52 rules, 22 reviewer adapters, 54 Cursor
   triggers, 52 Claude rules, 52 `.agents` rules, and 40 command

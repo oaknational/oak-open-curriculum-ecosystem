@@ -1,7 +1,7 @@
 ---
 captured_date: 2026-05-14
 source_exercise: project-explorer-especially-names Practice transplant
-target_repo: /Users/jim/code/personal/project-explorer-especially-names
+target_repo: ~/code/personal/project-explorer-especially-names
 target_commit: d985c67
 target_closeout_commit: 82a219b
 status: captured
@@ -11,7 +11,7 @@ status: captured
 
 This report captures process feedback from transplanting the Practice,
 agentic-engineering infrastructure, and quality gates into
-`/Users/jim/code/personal/project-explorer-especially-names`.
+`~/code/personal/project-explorer-especially-names`.
 
 The target repo reached an operational state and landed as commit `d985c67`,
 with collaboration-state closeout in `82a219b` and `pnpm check` passing. The

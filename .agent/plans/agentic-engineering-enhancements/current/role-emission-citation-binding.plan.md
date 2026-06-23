@@ -82,7 +82,7 @@ todos:
 > authored, so the renumber is a reference-only change.
 **Scope**: Convert PDR-074 S1 from self-discipline to substrate-enforced citation-binding via PDR-086 (portable contract; Director + Heartbeat-emitter required scope v1) + paired ADR-188 (repo-bound phenotype; Proposed status).
 **Authoring session**: Briny Fathoming Dock (`95a27b`) / claude / claude-opus-4-7
-**Source reflection**: `/Users/jim/.claude/plans/your-role-is-fundamentally-playful-russell.md` (session-local plan; the reflection that triggered this repo-plan promotion).
+**Source reflection**: `~/.claude/plans/your-role-is-fundamentally-playful-russell.md` (session-local plan; the reflection that triggered this repo-plan promotion).
 **Pre-execution reviewer pass**: 6 reviewers (assumptions, docs-adr, betty, barney, fred, wilma) — all PASS-WITH-CONDITIONS; consensus absorbed into plan body per §"Reviewer Absorption Log" below.
 
 ---
@@ -1439,7 +1439,7 @@ PDR-074 §S1):
 
 ## References
 
-- Source reflection: `/Users/jim/.claude/plans/your-role-is-fundamentally-playful-russell.md`
+- Source reflection: `~/.claude/plans/your-role-is-fundamentally-playful-russell.md`
 - Doctrine landscape:
   - PDR-074 (Director value): `.agent/practice-core/decision-records/PDR-074-director-value-is-mind-coherence-per-owner-attention.md`
   - PDR-075 (Director substrate-writing): `.agent/practice-core/decision-records/PDR-075-director-substrate-writing-discipline.md`

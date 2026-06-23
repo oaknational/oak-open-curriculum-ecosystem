@@ -24,15 +24,6 @@ export {
 } from './analysis-report-generator.js';
 
 export {
-  generateMisconceptionGraphData,
-  serializeMisconceptionGraph,
-  writeMisconceptionGraphAsJson,
-  type MisconceptionGraph,
-  type MisconceptionGraphStats,
-  type MisconceptionNode,
-} from './misconception-graph-generator.js';
-
-export {
   generateNCCoverageGraphData,
   serializeNCCoverageGraph,
   writeNCCoverageGraphAsJson,
@@ -52,19 +43,14 @@ export {
 } from './synonym-miner.js';
 
 export {
-  generatePriorKnowledgeGraphData,
-  type PriorKnowledgeEdge,
-  type PriorKnowledgeGraph,
-  type PriorKnowledgeGraphStats,
-  type PriorKnowledgeNode,
-} from './prior-knowledge-graph-generator.js';
-
-export {
-  generateThreadProgressionData,
-  type ThreadNode,
-  type ThreadProgressionGraph,
-  type ThreadProgressionStats,
-} from './thread-progression-generator.js';
+  generateGraphCorpusData,
+  type GraphCorpus,
+  type GraphCorpusUnitNode,
+  type GraphCorpusEdge,
+  type GraphCorpusNodeId,
+  type GraphCorpusStats,
+  type GraphCorpusDroppedEdge,
+} from './graph-corpus-generator.js';
 
 export {
   generateVocabularyGraphData,
@@ -75,14 +61,7 @@ export {
   type VocabularyNode,
 } from './vocabulary-graph-generator.js';
 
-export {
-  serializePriorKnowledgeGraph,
-  serializeThreadProgressionGraph,
-  writePriorKnowledgeGraphFile,
-  writeThreadProgressionFile,
-} from './write-graph-file.js';
-
-export { writePriorKnowledgeGraphAsJson } from './write-json-graph-file.js';
+export { writeGraphCorpusAsJson, graphCorpusDescriptor } from './write-json-graph-corpus-file.js';
 
 export {
   serializeDatasetToJson,

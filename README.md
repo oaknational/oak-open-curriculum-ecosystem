@@ -3,53 +3,76 @@
 
 # Oak Open Curriculum Ecosystem
 
-Tools for building AI applications on the [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), using a generated, type-safe TypeScript SDK and [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) servers, MCP Apps, and semantic search over the curriculum data powered by Elasticsearch Serverless.
+The [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), delivered three ways: a [Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro) (MCP) [app](https://modelcontextprotocol.io/extensions/apps/overview) that puts [Oak inside ChatGPT, Claude, and Gemini](docs/strategy/stream-mcp-app.md) — the AI assistants teachers already use; [engineering tools](docs/strategy/stream-engineering-tools.md) for the wider ecosystem to build with — a generated, type-safe TypeScript SDK, a semantic search service, graph tools generated from Oak data, and evidence surfaces grounded in the wider education sector; and an [openly documented framework for agentic engineering](docs/strategy/stream-agentic-framework.md) that delivers AI-amplified innovation without trading away rigour or excellence.
 
-**Vision and direction**: For the strategic overview of what this repository is for, see [VISION.md](docs/foundation/VISION.md). For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
+> **We're turning Oak's open curriculum into AI-native infrastructure — for teachers and the wider ecosystem — and transforming how we build and curate digital products, agent-first, to do it well.**
+
+Everything here serves the same ends: helping teachers find, adapt, and use
+high-quality curriculum resources; helping the organisations that serve
+schools build better tools, faster; and giving the wider world of education —
+sector bodies, edtech, and the AI platforms now working in classrooms — open
+components, open data access, and an openly documented engineering practice
+to build on. Public goods, built in the open.
+
+**Building capabilities.** Representing knowledge as graphs is a strength we apply
+across domains — Oak's curriculum, the EEF evidence surface, AI-enhanced
+development, and how we run our own work.
+
+**Vision and strategy**: Start with [VISION.md](VISION.md) — the two-part vision (Oak's curriculum made AI-native for teachers and the ecosystem; and how we build and curate it, agent-first). Then the [strategy](docs/strategy/README.md) — the diagnosis, the three value streams, and how we'll know it's working. For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
 
 ---
 
-> **Current status: Invite-Only Alpha (M1 complete)** — The server is live at `curriculum-mcp-alpha.oaknational.dev`. Open public alpha (M2) is next. See the [high-level plan](.agent/plans/high-level-plan.md) for milestone detail.
+---
+
+**Current status: Invite-Only Alpha** — The alpha MCP app server is live at `curriculum-mcp-alpha.oaknational.dev`.
+
+---
 
 ---
 
 [![MIT Licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENCE)
 [![OGL Data Licence](https://img.shields.io/badge/data_licence-OGL-green.svg)](LICENCE-DATA.md)
 
-This repository is how Oak makes its openly licenced, fully sequenced, and
-fully resourced curriculum easier for the wider education and technology
-sectors to use. It provides the Oak Curriculum SDK, the canonical MCP server
-as both an end-user-facing app surface and a developer tool, the
-OpenAPI-to-MCP server pipeline, hybrid semantic search, and knowledge graph
-surfaces as modular building blocks for education applications.
+This is how we make Oak's openly licensed, fully sequenced, fully resourced
+curriculum easier to build on. We provide the Oak Curriculum SDK; the canonical
+MCP server, both an end-user app surface and a developer tool; the OpenAPI-to-MCP
+server pipeline; hybrid semantic search; and knowledge-graph surfaces — modular
+building blocks for education applications.
 
-The repository also explores what can be done with MCP Apps in AI platforms
-such as [Claude Cowork](https://www.anthropic.com/product/claude-cowork) and
-ChatGPT. AI assistants can search Oak's curriculum, explore lessons, units,
-threads, sequences, and other structured educational content — helping
-teachers find, adapt, and use high-quality curriculum resources.
+We also explore what's possible with MCP Apps in AI platforms such as
+[Claude Cowork](https://www.anthropic.com/product/claude-cowork) and ChatGPT. AI
+assistants can search Oak's curriculum and explore lessons, units, threads,
+sequences, and other structured content — helping teachers find, adapt, and use
+high-quality curriculum resources.
 
-Underneath the product surfaces, the repo develops a reusable,
-self-improving Practice for agentic-first engineering: a plain-text framework
-that lets agents from major vendors collaborate, learn, and keep operational
-knowledge in the repository where it remains useful.
+We also develop a reusable, self-improving Practice for agentic-first
+engineering: a plain-text framework that lets agents from major vendors
+collaborate, keep learning, and keep operational knowledge in the repository
+where it stays useful.
 
-**Beyond Oak-hosted products**, this repository publishes a deliberate set of
-reusable sector components—the OpenAPI-to-MCP pipeline, SDK-generation
-patterns, hybrid-search tooling, MCP/MCP App scaffolds, graph projection
-conventions, and the openly documented Practice—so other organisations can lower
-the cost of building curriculum-aware applications without starting from scratch.
-The canonical inventory and scope for each asset live in [_What We
-Deliver_](docs/foundation/VISION.md#what-we-deliver) in the Vision.
+Putting Oak inside the AI assistants teachers already use, giving the wider
+ecosystem the tools to build with Oak curriculum content, and the openly
+documented Practice that delivers AI-enhanced innovation are three co-equal value
+streams — none secondary. **Beyond Oak-hosted products**, we publish a
+deliberate set of reusable sector components — the OpenAPI-to-MCP pipeline,
+SDK-generation patterns, hybrid-search tooling, MCP and MCP App scaffolds, graph
+projection conventions, and the openly documented Practice — so other
+organisations can lower the cost of building curriculum-aware applications
+without starting from scratch. The canonical inventory and scope for each asset
+are set out in [What This Repo Provides](#what-this-repo-provides) below.
 
-**Product owners, school leaders, non-technical evaluators** — you do not need to read the technical content below. Start with:
+**Product owners, school leaders, non-technical evaluators** — you don't need to read the technical content below. Start with:
 
-- [VISION.md](docs/foundation/VISION.md) — what this project delivers, hosted vs reusable sector components, why it matters, and the investment case
+- [VISION.md](VISION.md) — the two-part vision: what this project delivers (for teachers and the wider ecosystem), and how we build and curate it agent-first; why it matters and the investment case
+- [Strategy](docs/strategy/README.md) — the diagnosis, the three value streams (app, tools, framework), the alignment to Oak's goals, and how we'll measure success
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
-- [Latest progress update](.agent/reports/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters
+- [Progress update (April 2026)](.agent/reports/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters; newer reports land in [.agent/reports/](.agent/reports/README.md)
 
 ## Developers and AI agents
 
+- **New here?** — open an agent session and run `/oak-explain`; the orientation
+  lens works out whether you want a quick answer, an overview, or a guided
+  hands-on walk that can set up your machine, and meets you there
 - **Developers** — continue to [Quick Start](#quick-start) below
 - **Oak teammates joining via Claude Code (or another AI coding agent)** — Quick Start as above, then [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) for the sanctioned MCP set, and [good first issues](.agent/plans/good-first-issues.md) for what to pick up first
 - **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
@@ -123,35 +146,36 @@ Three capabilities, powered by three open education data sources:
 | **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                    | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)      |
 
 Together, shipped products and reusable sector-facing components are the pillars
-of _compositional curriculum intelligence_, framed in depth in [VISION.md](docs/foundation/VISION.md)—including hosted surfaces versus reusable components under [_What We Deliver_](docs/foundation/VISION.md#what-we-deliver).
+of _compositional curriculum intelligence_, framed in depth in [VISION.md](VISION.md); hosted surfaces versus reusable components are distinguished in [Sector reusable components](#sector-reusable-components) below.
 
 ### Sector reusable components
 
-Partners and external builders should anchor adoption claims on the enumerated
-inventory in [_What We Deliver_](docs/foundation/VISION.md#what-we-deliver): what
-counts as reusable fabric (pipeline, SDK generation patterns, hybrid-search
-tooling, MCP/MCP App scaffolds, graph projection conventions, Practice) versus
-Oak-hosted APIs and deployments. Supporting playbooks and partner obligations
+Partners and external builders should anchor adoption claims on the reusable
+fabric enumerated here — the OpenAPI-to-MCP pipeline, SDK generation patterns,
+hybrid-search tooling, MCP/MCP App scaffolds, graph projection conventions, and
+the Practice — versus Oak-hosted APIs and deployments. Supporting playbooks and partner obligations
 grow from [.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md](.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md).
 
 ### Data Sources
 
 This repository integrates three open education data sources, each answering a different question that teachers ask:
 
-| Source                                                                                                                        | What It Provides                                                                                                                                             | Licence                                                                                |
-| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| [Oak Open Curriculum API](https://open-api.thenational.academy/)                                                              | Lessons, units, threads, sequences, quizzes, and transcripts — openly licenced, fully sequenced, fully resourced curriculum content                          | [OGL v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
-| [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)                                             | Oak's formal semantic representation of curriculum structure aligned to the National Curriculum for England (2014), using W3C standards (RDF/OWL/SKOS/SHACL) | OGL v3.0 (data) + MIT (code)                                                           |
-| [EEF Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) | 30 research-synthesised teaching approaches with quantified impact, cost, and evidence strength ratings                                                      | Attribution required                                                                   |
+| Source                                                                                                                                                         | What It Provides                                                                                                                                             | Licence                                                                                |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| [Oak Open Curriculum API](https://open-api.thenational.academy/)                                                                                               | Lessons, units, threads, sequences, quizzes, and transcripts — openly licenced, fully sequenced, fully resourced curriculum content                          | [OGL v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
+| [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)                                                                              | Oak's formal semantic representation of curriculum structure aligned to the National Curriculum for England (2014), using W3C standards (RDF/OWL/SKOS/SHACL) | OGL v3.0 (data) + MIT (code)                                                           |
+| [Education Endowment Foundation (EEF) Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) | 30 research-synthesised teaching approaches with quantified impact, cost, and evidence strength ratings                                                      | Attribution required                                                                   |
 
 Together these sources enable **evidence-grounded curriculum discovery**: AI
 agents can search for content (Oak API), understand where it fits in the
 curriculum structure (ontology), and recommend evidence-backed teaching
-approaches (EEF). They also equip internal Oak teams and external builders with
+approaches (the EEF Toolkit — openly licensed material from an independent,
+external organisation, brought together with Oak's own). They also equip internal
+Oak teams and external builders with
 high-quality integration primitives spanning curriculum API access, MCP, search,
 ontology alignment, and evidence surfaces. Organisational reuse of Oak's delivery
-patterns—not merely calling the upstream REST API—is grounded in Vision,
-[_What We Deliver_](docs/foundation/VISION.md#what-we-deliver). See
+patterns—not merely calling the upstream REST API—is set out above in
+[Sector reusable components](#sector-reusable-components). See
 [ADR-157](docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md)
 for the integration architecture and [LICENCE-DATA.md](LICENCE-DATA.md) for
 full licence terms.
@@ -160,9 +184,9 @@ full licence terms.
 
 The MCP servers expose curriculum data through the three [MCP primitive types](https://modelcontextprotocol.io/docs/learn/server-concepts):
 
-- **Tools** (model-controlled): 34 curriculum tools (24 generated from the OpenAPI schema, 8 aggregated, plus a user-search pair) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them. See [`apps/oak-curriculum-mcp-streamable-http/README.md`](apps/oak-curriculum-mcp-streamable-http/README.md) as the canonical count.
-- **Resources** (application-controlled): Curriculum model, prior knowledge graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
-- **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
+- **Tools** (model-controlled): 37 curriculum tools (24 generated from the OpenAPI schema plus 13 aggregated compositions) covering search/browse/fetch flows, orientation via `get-curriculum-model`, the curriculum graph tools (`get-thread-progressions` for year-ordered sequences, `get-prior-knowledge-graph`, `get-misconception-graph`, `get-keyword-graph`), EEF evidence, `download-asset`, and the user-search pair. The AI decides when to use them. See [`apps/oak-curriculum-mcp-streamable-http/README.md`](apps/oak-curriculum-mcp-streamable-http/README.md) as the canonical count.
+- **Resources** (application-controlled): The curriculum model, a getting-started guide, and the EEF evidence-interpretation guide as pre-loadable context for MCP clients that support resource injection. The curriculum graphs are deliberately tool-only — served anchored and bounded by the graph tools rather than as whole-corpus dumps.
+- **Prompts** (user-controlled): Seven workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`, `curriculum-mapping`, `adapt-lesson`, `continue-progression`) that guide users through common curriculum tasks — including the position-anchored entry point: state what your class just covered and plan the next step from Oak's sequence, building on what came before.
 
 The standalone stdio workspace has been retired and removed. The
 canonical MCP server workspace is now
@@ -187,6 +211,14 @@ and
   and Sentry Seer) — install only when you need local Sentry operator tooling;
   see [Sentry CLI usage](docs/operations/sentry-cli-usage.md) for the
   `sentry-cli` vs dev-`sentry` split and workspace invocation details.
+- **MCPJam** (optional, for MCP server development and validation only) —
+  inspects, runs conformance checks, and authors/runs evals against the MCP
+  server; backs the optional `mcpjam` entry in [`.mcp.json`](.mcp.json). No repo
+  dependency — run on demand with `pnpm dlx @mcpjam/cli@latest <command>`, or the
+  inspector GUI with `pnpm dlx @mcpjam/inspector@latest`. For the hosted eval and
+  project features, authenticate once with `pnpm dlx @mcpjam/cli@latest login`.
+  The companion `mcp-inspector` skill installs at the machine level via
+  `pnpm dlx skills add mcpjam/inspector --skill mcp-inspector`.
 
 ### Install and verify
 
@@ -288,7 +320,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Workspace                                                                        | Purpose                                                                                                                                                                                                      |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 34 curriculum tools, resources, prompts, and MCP App widget                                                                             |
+| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, the full curriculum tool set (the workspace README is the authoritative inventory), resources, prompts, and MCP App widget              |
 | [`oak-search-cli`](apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking |
 
 **SDKs:**
@@ -335,6 +367,17 @@ Architectural Decision Records (ADRs) are the architectural source of truth. The
 - [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
 
 See the [full ADR index](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) for all decisions (start with the "5 ADRs in 15 Minutes" block).
+
+### Architectural invariants
+
+Six stable, ADR-backed properties make this repository what it is. Each links to its authoritative doc, which always carries the detail:
+
+1. **The SDK updates itself from the API spec** — when the upstream OpenAPI schema changes, regeneration brings every workspace into alignment with zero manual type work (the Cardinal Rule above; [OpenAPI pipeline](docs/architecture/openapi-pipeline.md)).
+2. **Two data feeds, both deliberate** — the live API powers the SDK and MCP tools ([OpenAPI pipeline](docs/architecture/openapi-pipeline.md)), while bulk-downloaded curriculum data is the source of truth for search ingestion and graph derivation ([semantic search architecture](docs/agent-guidance/semantic-search-architecture.md)).
+3. **The curriculum graphs are derived from the bulk data** — prior knowledge, misconceptions, keywords, and progressions served as anchored graph tools ([graph-stack topology, ADR-173](docs/architecture/architectural-decisions/173-graph-stack-topology.md)).
+4. **EEF evidence grounds the pedagogy** — the Teaching and Learning Toolkit is integrated for evidence-based support ([Data Sources](#data-sources)).
+5. **The bulk data populates the semantic search** — ingestion builds the search indices from it ([ingestion guide](apps/oak-search-cli/docs/INGESTION-GUIDE.md)).
+6. **The Search SDK serves both sides** — creating and operating search instances as well as querying them ([Search SDK](packages/sdks/oak-search-sdk/README.md)).
 
 ## Engineering Practice
 

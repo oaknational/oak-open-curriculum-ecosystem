@@ -116,6 +116,8 @@ Before diving in, pause and ask:
 
 Step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you.
 
+Thorough grounding is for high-risk, architectural, cross-workspace, or planning-heavy work — precisely where structured reasoning earns its place. Read the [grammar of thinking](../../../reference/grammar-of-thinking.md) as the yardstick for this work, and use [`reason`](../../reason/SKILL-CANONICAL.md) to structure the analysis or plan before committing to an approach.
+
 ## Work Shape and Simple Plan
 
 Before the first non-planning edit, leave an observable work-shape

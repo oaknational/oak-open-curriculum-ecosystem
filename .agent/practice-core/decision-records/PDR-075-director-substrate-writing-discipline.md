@@ -21,10 +21,10 @@ extends the same substrate to broader Director-role observations);
 (Director value model — broad-awareness-as-substrate-cognition; this
 PDR names the discipline by which that cognition emits substrate in
 real-time);
-[ADR-183](../../../docs/architecture/architectural-decisions/183-comms-event-tag-namespace-substrate.md)
+ADR-183
 (tag namespace substrate — `failure-mode` + `behaviour-note` are the
 namespaces this discipline writes into);
-[ADR-185](../../../docs/architecture/architectural-decisions/185-comms-event-auto-acceptance-metadata.md)
+ADR-185
 (auto-acceptance metadata, when landed — complementary axis: PDR-075
 specifies when the Director emits substrate events, ADR-185 specifies
 how downstream consumers triage them).

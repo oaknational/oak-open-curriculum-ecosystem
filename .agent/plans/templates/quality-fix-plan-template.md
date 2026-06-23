@@ -194,7 +194,7 @@ Before marking a phase complete:
 2. Update ADR-124 if impacted.
 3. Update `.agent/practice-core/practice.md` if impacted.
 4. Update any additionally impacted ADRs, `/docs/` pages, or README files.
-5. Apply `/jc-consolidate-docs` so settled documentation is not trapped in plans.
+5. Apply `/oak-consolidate-docs` so settled documentation is not trapped in plans.
 
 If no update is needed for a required surface, record an explicit no-change rationale.
 
@@ -690,7 +690,7 @@ Run these checks to confirm architectural compliance:
 
 ## Consolidation
 
-After all work is complete and quality gates pass, run `/jc-consolidate-docs`
+After all work is complete and quality gates pass, run `/oak-consolidate-docs`
 to graduate settled content, extract reusable patterns, rotate the napkin,
 manage fitness, and update the practice exchange.
 

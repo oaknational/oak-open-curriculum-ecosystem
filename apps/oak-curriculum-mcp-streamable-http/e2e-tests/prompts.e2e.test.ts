@@ -60,16 +60,21 @@ async function listPrompts() {
 
 describe('MCP Prompts E2E', () => {
   describe('prompts/list - Client can discover workflow prompts', () => {
-    it.each(['find-lessons', 'lesson-planning', 'explore-curriculum', 'learning-progression'])(
-      'returns %s prompt',
-      async (promptName) => {
-        const { response, parsed, prompts } = await listPrompts();
+    it.each([
+      'find-lessons',
+      'lesson-planning',
+      'explore-curriculum',
+      'learning-progression',
+      'curriculum-mapping',
+      'adapt-lesson',
+      'continue-progression',
+    ])('returns %s prompt', async (promptName) => {
+      const { response, parsed, prompts } = await listPrompts();
 
-        expect(response.status).toBe(200);
-        expect(parsed.success).toBe(true);
-        expect(prompts.find((p) => p.name === promptName)).toBeDefined();
-      },
-    );
+      expect(response.status).toBe(200);
+      expect(parsed.success).toBe(true);
+      expect(prompts.find((p) => p.name === promptName)).toBeDefined();
+    });
 
     it('prompts include helpful descriptions', async () => {
       const { prompts } = await listPrompts();
@@ -167,6 +172,35 @@ describe('MCP Prompts E2E', () => {
       expect(allText).toContain('decimals');
     });
 
+    it('lesson-planning prompt carries Oak attribution under the Open Government Licence', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'prompts/get',
+          params: {
+            name: 'lesson-planning',
+            arguments: { topic: 'decimals', yearGroup: 'Year 5' },
+          },
+        });
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = PromptsGetResultSchema.safeParse(envelope.result);
+
+      const messages = parsed.data?.messages ?? [];
+      const allText = messages.map((m) => m.content.text ?? '').join(' ');
+
+      // Proves: the served prompt carries its source skill's attribution
+      // (Oak data under OGL v3.0) through the wire surface.
+      expect(allText).toContain('Oak National Academy');
+      expect(allText).toContain('Open Government Licence');
+    });
+
     it('explore-curriculum prompt includes topic and references explore-topic', async () => {
       const { app } = await createStubbedHttpApp();
 
@@ -192,6 +226,76 @@ describe('MCP Prompts E2E', () => {
 
       expect(allText).toContain('volcanos');
       expect(allText).toContain('explore-topic');
+    });
+
+    it('curriculum-mapping prompt grounds the map in threads and prerequisites', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'prompts/get',
+          params: {
+            name: 'curriculum-mapping',
+            arguments: { subject: 'maths', keyStage: 'ks2' },
+          },
+        });
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = PromptsGetResultSchema.safeParse(envelope.result);
+
+      const messages = parsed.data?.messages ?? [];
+      const allText = messages.map((m) => m.content.text ?? '').join(' ');
+
+      expect(allText).toContain('maths');
+      expect(allText).toContain('ks2');
+      // Proves: the served prompt grounds ordering in Oak's thread backbone.
+      expect(allText).toContain('get-thread-progressions');
+    });
+
+    it('continue-progression prompt resolves position to next step via Oak sequence tools', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'prompts/get',
+          params: {
+            name: 'continue-progression',
+            arguments: {
+              subject: 'maths',
+              yearGroup: 'Year 4',
+              justCovered: 'equivalent fractions',
+            },
+          },
+        });
+
+      expect(response.status).toBe(200);
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = PromptsGetResultSchema.safeParse(envelope.result);
+      expect(parsed.success).toBe(true);
+
+      const messages = parsed.data?.messages ?? [];
+      const allText = messages.map((m) => m.content.text ?? '').join(' ');
+
+      // Proves: the served prompt anchors on the stated position and derives
+      // the next step from Oak's sequence, readiness, and misconception tools.
+      expect(allText).toContain('equivalent fractions');
+      expect(allText).toContain('get-thread-progressions');
+      expect(allText).toContain('get-prior-knowledge-graph');
+      expect(allText).toContain('get-misconception-graph');
+      // Proves: planning substance stays single-sourced — the prompt chains
+      // into lesson-planning rather than restating it.
+      expect(allText).toContain('lesson-planning');
     });
 
     it('learning-progression prompt includes concept and subject', async () => {

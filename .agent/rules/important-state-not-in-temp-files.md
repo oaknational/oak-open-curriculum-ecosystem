@@ -142,7 +142,7 @@ at the moment it was a compose-buffer is honest historical capture.
 The rule applies to *current* references in version-controlled
 durable substrate, not to historical event records. Equivalent
 platform temp roots (`/var/folders/`, `${TMPDIR}` expansions on
-macOS, `/private/tmp/`) are not in this grep's literal scope; in
+macOS, `<scratch>/private-tmp/`) are not in this grep's literal scope; in
 practice every worked instance to date has used `/tmp/` directly,
 so the narrow grep matches the observed failure mode. Extend the
 regex if a non-`/tmp/` instance surfaces.

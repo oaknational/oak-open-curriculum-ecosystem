@@ -20,7 +20,7 @@ in many disguises:
   `error` when done."
 - "Add `eslint-disable` here so we can land the bigger refactor;
   we'll remove it in a follow-up."
-- "Add this path to `.markdownlintignore` for now."
+- "Add this path to `.markdownlint-cli2.jsonc` `ignores` for now."
 - "Skip this test until we figure out why it's flaky."
 - "`@ts-expect-error` until the type-flow upstream is fixed."
 - "Use `--no-verify` once to land this; the hook can pick it up
@@ -49,8 +49,8 @@ state.
   type error. Fix the type flow upstream — see
   [type-expert](../sub-agents/type-expert.md) and the schema-first
   doctrine.
-- **Adding a path to `.markdownlintignore`, `.eslintignore`, or any
-  ignore list** to dodge a finding. Per
+- **Adding a path to `.markdownlint-cli2.jsonc` `ignores`, `.eslintignore`,
+  or any ignore list** to dodge a finding. Per
   [`no-warning-toleration.md`](no-warning-toleration.md) §Scope
   discipline: narrowing the gate to dodge a warning is a doctrine
   violation. Expanding the gate is the normal way doctrine spreads.
@@ -179,8 +179,8 @@ during the window — which they will not.
   — gate skipping requires fresh per-invocation owner authorisation.
 - Sibling rule: [`dont-break-build-without-fix-plan.md`](dont-break-build-without-fix-plan.md)
   — broken builds are first-priority work, not deferrable.
-- Adjacent pattern: [`tool-error-as-question.md`](../memory/active/patterns/tool-error-as-question.md)
+- Adjacent pattern: `tool-error-as-question.md`
   — the meta-pattern. A failing gate is a question being asked; the
   forbidden response is to silence the question.
-- Adjacent pattern: [`hook-as-question-not-obstacle.md`](../memory/active/patterns/hook-as-question-not-obstacle.md)
+- Adjacent pattern: `hook-as-question-not-obstacle.md`
   — instance pattern at the pre-commit-hook surface.

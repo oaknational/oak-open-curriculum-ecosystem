@@ -54,7 +54,6 @@ The shared-state surfaces this absolutism covers include:
 - `.agent/memory/operational/repo-continuity.md`
 - `.agent/memory/operational/threads/*.next-session.md` and
   `.agent/memory/operational/threads/README.md`
-- `.agent/memory/operational/tracks/*.md`
 - `.agent/state/collaboration/active-claims.json` and
   `closed-claims.archive.json`
 - `.agent/state/collaboration/shared-comms-log.md` and the

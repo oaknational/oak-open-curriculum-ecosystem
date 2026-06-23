@@ -1,0 +1,1037 @@
+[
+  {
+    "lead": {
+      "key": "liveness-dead-channel-active-tail",
+      "cluster": "liveness"
+    },
+    "find": {
+      "lead_key": "liveness-dead-channel-active-tail",
+      "instances": [
+        {
+          "event_ids": [
+            "dbf7b82d-d014-498c-9607-7a2c7af5f270",
+            "03b02fe2-434c-4bd8-88ff-69a8559878ec",
+            "818aaa5b-c69a-490d-9328-d0a0a01170db",
+            "c5daa226-afe3-41be-b62c-1cc218c82349",
+            "3eef0d35-b53c-4322-b649-42abf352fbc5",
+            "73d693c3-b654-4f92-84d0-9186c3146ed1",
+            "1e749d75-9ee8-489e-b9cc-c025d93d77cd"
+          ],
+          "summary": "ACTIVE-status Foreman loop emits 52 heartbeats into a near-empty channel from 2026-05-23T19:40:44Z to 23:56:39Z (and continues to 07:18:05Z, ~11h38m total). Fronded retired at dbf7b82d (19:38:12Z); Seaworthy's last Director post was 1e749d75 (19:35:31Z). From 19:40:44Z Scorched (52b263) was the only active agent. Its cron fired the template body 'active at <TS>; Foreman role resumed per owner direction; substrate-observer + orphan-surfacing function' — an ACTIVE-status body — every ~4 minutes for the remainder of the night. At 07:18:05Z (3eef0d35) an owner direction 'your focus is now purely on the comms log sub-thread' pivoted the session; Scorched explicitly notes 'Old heartbeat Monitor body said Foreman ACTIVE. Re-armed this turn with body reflecting the comms-log-care boundary.' The IDLE-keyed 5-idle-loops stand-down criterion (per heartbeat contract, events 944cfc59 and f4f72a7b) never fires because the cron template is coded ACTIVE, not IDLE. The loop had no exit path until an owner-direction turn arrived. One non-Scorched event (c5daa226, Ferny heartbeat-end, 22:12:40Z) lands within the tail, so the channel was not strictly empty across the full window. Hypothesis is CONFIRMED AS A PHENOMENON but two specific claims overstate: count is 52 not 53, and bodies are NOT byte-identical (each body carries its own wall-clock timestamp; only the titles are identical). The corroboration verdicts file independently corrects these points.",
+          "provenance_tag": "corrected",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "5995fdbb-3097-4c69-91e3-05750fcdfada",
+            "f4f72a7b-c985-4a24-b552-2c64de351684",
+            "944cfc59-56e6-40ad-87c5-ae8ceedcdd48",
+            "ce3e5278-8202-4cfa-a475-9f45888890e1"
+          ],
+          "summary": "Contrastive evidence: the 5-idle-loops stand-down criterion works correctly when status is IDLE, confirming the mechanism gap is specifically the ACTIVE-status blind spot. 5995fdbb (Ferny, 17:50:58Z) reads verbatim: 'State: IDLE — standing down. 5th consecutive IDLE heartbeat; loop-exit-criteria 5-idle-loops rule fires; no team activity observed; no observable Director or Foreman. Closeout broadcast follows; heartbeat cron 6077338f will be stopped.' The status-marker doctrine that made this possible was authored at f4f72a7b (16:23:33Z, Ferny transcribing owner refinement): IDLE is 'an active routing prompt for Director/Foreman'; the cron prompt was recreated with the three-marker discipline. The heartbeat contract (944cfc59) established by Seaworthy at 15:58:52Z defines a 10-min retirement threshold but never specifies an exit criterion for ACTIVE-status loops — only retirement-detection by external observers (Director surfaces a retirement-detection event when silence exceeds 10 min). For Scorched there was no Director observing because the Director had retired; the mechanism is only observer-side, not self-side. Scorched's own pre-compaction closeout (ce3e5278, 19:22:18Z) notes 'Heartbeat contract absorbed (Seaworthy tick #4 15:58:52Z): 4-min cadence; 10-min retirement; my heartbeats embedded in tick broadcasts throughout the active window' and 'Foreman role retires at session-close' — but after post-compaction resume at 19:30:46Z, the session never reached a 'session-close' turn because the owner did not return until 07:18Z.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "Activation-enthalpy tuning: make ACTIVE-keyed solo-detection cheaper by embedding a peer-liveness check into the ACTIVE-status cron template body, so the cron prompt itself asks 'if no peer heartbeat observed in the last 2× retirement window, emit IDLE instead of ACTIVE.' This imposes zero ceremony on the normal multi-agent case (check fires but peers are visible), and automatically degrades to IDLE-status (and therefore triggers the existing 5-idle-loops exit) when the agent is genuinely alone. The alternative — a separate ACTIVE-loop stand-down criterion — requires a new protocol clause; the peer-check approach reuses the existing IDLE exit pathway. No mandate or prohibition required. Observe first: check whether a single-turn cron-template edit (with peer-heartbeat check) reproduces Ferny's clean stand-down behaviour in a solo Foreman scenario.",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "high",
+      "notes": "The core phenomenon is confirmed first-hand and independently corroborated (verdicts file at /Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/corroboration/2026-06-12-r2-2026-05-23.verdicts.md also corrected the R2 report). Key nuances to preserve: (1) The claim '53 byte-identical beats' is imprecise — count is 52 (window 19:40:44Z–23:56:39Z per R2 definition), bodies differ per wall-clock timestamp, only titles are identical. The extended run to owner intervention at 07:18:05Z produces ~135 additional beats (19:40Z–07:18Z). (2) The channel was not strictly empty: Ferny's heartbeat-end (c5daa226) landed at 22:12:40Z. (3) There is no Seaworthy retirement event in this window — Seaworthy simply stopped posting after 19:35:31Z without a formal retirement broadcast, which itself is a secondary liveness failure (a Director going silent without a closeout). (4) The mechanism failure is asymmetric by design: the 10-min retirement check is observer-side only; a solo agent with no observer cannot self-detect retirement. The IDLE-keyed exit is the only self-side path, and it requires the cron body to emit IDLE. (5) Scorched acknowledged being in a 'quiet-period' role (team-start 73d693c3 body explicitly names utilization-fit risk) but did not consider that it might be genuinely alone — the self-awareness was about underutilization, not about absence of observers. (6) The focus-pivot (3eef0d35) that ended the loop was itself triggered by the owner noticing the situation and directing a new boundary, not by any automated mechanism — confirming the hypothesis that the loop had no self-exit path."
+    },
+    "verify": {
+      "lead_key": "liveness-dead-channel-active-tail",
+      "verdicts": [
+        {
+          "event_ids": [
+            "dbf7b82d-d014-498c-9607-7a2c7af5f270",
+            "03b02fe2-434c-4bd8-88ff-69a8559878ec",
+            "818aaa5b-c69a-490d-9328-d0a0a01170db",
+            "c5daa226-afe3-41be-b62c-1cc218c82349",
+            "3eef0d35-b53c-4322-b649-42abf352fbc5",
+            "73d693c3-b654-4f92-84d0-9186c3146ed1",
+            "1e749d75-9ee8-489e-b9cc-c025d93d77cd"
+          ],
+          "status": "confirmed",
+          "evidence": "All seven events read first-hand and check out with no miscitations, no inflated numbers, and no convenient-metric artefacts. Specific verifications: (1) dbf7b82d (19:38:12Z): Fronded posts 'Fronded watcher and heartbeat will terminate now. No further action from Fronded.' — retirement confirmed at that timestamp. (2) 03b02fe2 (19:40:44Z): first Scorched ACTIVE heartbeat body reads 'active at 2026-05-23T19:40:43Z; Foreman role resumed per owner direction; substrate-observer + orphan-surfacing function' — window start confirmed. (3) 818aaa5b (23:56:39Z): last Scorched ACTIVE heartbeat in the named window, body reads 'active at 2026-05-23T23:56:38Z; ...' — window end confirmed, and the body carries its own distinct wall-clock timestamp, not byte-identical to 03b02fe2 (finder self-corrects this). (4) c5daa226 (22:12:40Z): Ferny heartbeat-end event — it is not a pure heartbeat but a heartbeat-end + pause-standby broadcast from Ferny, landing within the tail window. The finder's statement 'the channel was not strictly empty' is therefore confirmed: one non-Scorched event does land in the window. (5) 3eef0d35 (07:18:05Z): Scorched focus pivot, body reads 'Old heartbeat Monitor body said Foreman ACTIVE. Re-armed this turn with body reflecting the comms-log-care boundary.' — loop exit by owner direction confirmed. (6) 73d693c3 (19:30:46Z): team-start post-compaction resume — this event is the team-start broadcast, not a heartbeat; finder is correct that it is the session-resume anchor. (7) 1e749d75 (19:35:31Z): Seaworthy's last Director post — confirmed; Seaworthy posts a Director de-duplication routing event with no subsequent events from that session_id_prefix. Independent count confirms 52 ACTIVE heartbeat events (by exact title match) in the 19:40:44Z to 23:56:39Z window (not 53), and 137 total ACTIVE heartbeat events bearing that exact title across the full run. The extended run to 07:18Z accounts for 83 additional beats on May 24, with the last pre-pivot beat at 06:32:01Z (ff895872). No ACTIVE heartbeat with that title lands after 07:18:05Z. The self-correcting notes within the finder summary are accurate: count is 52 in the R2-defined window, bodies differ per wall-clock timestamp, titles are identical across the run."
+        },
+        {
+          "event_ids": [
+            "5995fdbb-3097-4c69-91e3-05750fcdfada",
+            "f4f72a7b-c985-4a24-b552-2c64de351684",
+            "944cfc59-56e6-40ad-87c5-ae8ceedcdd48",
+            "ce3e5278-8202-4cfa-a475-9f45888890e1"
+          ],
+          "status": "confirmed",
+          "evidence": "All four events read first-hand. (1) 5995fdbb (17:50:58Z): Ferny final heartbeat body reads verbatim 'State: IDLE — standing down. 5th consecutive IDLE heartbeat; loop-exit-criteria 5-idle-loops rule fires; no team activity observed; no observable Director or Foreman. Closeout broadcast follows; heartbeat cron 6077338f will be stopped.' — the finder quotes this accurately with no overstatement. (2) f4f72a7b (16:23:33Z): Ferny transcribing owner refinement; body describes the three-marker discipline (IDLE/STANDBY/ACTIVE) and states 'IDLE is an active routing prompt for Director/Foreman'; the finder's paraphrase is accurate. Also confirms 'Ferny's heartbeat cron 23bd7b2b was deleted + recreated as b0762b44 with the three-marker discipline embedded in the cron prompt' — the mechanism change was a cron prompt recreation, not an in-place edit. (3) 944cfc59 (15:58:52Z): Seaworthy tick #4 establishing the heartbeat contract. The event establishes the 10-min retirement threshold and the claim-auto-rebalance protocol, which is observer-side ('Director surfaces a retirement-detection event when silence exceeds 10 min'). Crucially, the event contains no IDLE-specific loop-exit criterion for ACTIVE-status loops — that gap is confirmed. The only self-side exit available to a solo ACTIVE-status agent is the IDLE marker path (which requires the cron body to emit IDLE). (4) ce3e5278 (19:22:18Z): Scorched pre-compaction closeout. Body reads 'Heartbeat contract absorbed (Seaworthy tick #4 15:58:52Z): 4-min cadence; 10-min retirement; my heartbeats embedded in tick broadcasts throughout the active window' and 'Foreman role retires at session-close' — consistent with the finder's account. The post-compaction resume at 73d693c3 (19:30:46Z) re-arms Scorched without a session-close turn ever arriving until 07:18Z. The finder's mechanistic explanation of the asymmetry (observer-side retirement detection with no self-side ACTIVE exit path) is confirmed by the contract text in 944cfc59 and the behaviour logged in ce3e5278 and 3eef0d35."
+        }
+      ],
+      "net_assessment": "Both instances are confirmed without overstatements, miscitations, or inflated metrics. The core phenomenon — an ACTIVE-status Foreman cron loop running without a self-exit path for ~11h38m across a near-empty channel — is verified first-hand. The finder had already self-corrected the two precision issues in its own summary (count 52 not 53 in the R2 window; bodies differ per wall-clock timestamp while titles are identical), and independent counting confirms both corrections. The 52-beat count in the 19:40:44Z–23:56:39Z window is exact (grep on exact title field, 52 matching files). The extended run to 07:18:05Z accounts for 137 total ACTIVE heartbeats across the full session. The one non-Scorched event in the tail window (c5daa226, Ferny heartbeat-end at 22:12:40Z) is confirmed — it is a heartbeat-end broadcast, not a standard heartbeat, but it does break strict channel-emptiness. The mechanism gap is confirmed by 944cfc59: the 10-min retirement check is observer-side only; the only self-side exit for a solo agent requires the cron body to emit IDLE status, which the ACTIVE-keyed template never does. The contrastive evidence (5995fdbb, f4f72a7b) confirms the IDLE exit path works correctly when the cron template is properly coded IDLE. No phantom citations, no rounded or inflated counts, no scope overstatement detected.",
+      "overstatements_found": false
+    }
+  },
+  {
+    "lead": {
+      "key": "liveness-false-retirement-detections",
+      "cluster": "liveness"
+    },
+    "find": {
+      "lead_key": "liveness-false-retirement-detections",
+      "instances": [
+        {
+          "event_ids": [
+            "20eb10fc-7ae7-4367-be66-df4dd914ce1d",
+            "95c43df6-d0c7-4c49-9968-81bf29ab9422"
+          ],
+          "summary": "Instance 1, 2026-05-24T21:57Z. Director Seaworthy (6966d4) fired a retirement-detection on Mistbound (0e27cc) after 13+ minutes of silence past the 10-min threshold. Seaworthy verified HEAD unchanged, no index.lock, two queued intents blocked. Two minutes later Mistbound self-corrected (21:58:49Z): they had been alive processing Cycle 4 abandon-flow but emitted no heartbeat during that quiet work. Mechanism is NOT heartbeat-content-drift but inter-cycle queue-management silence — real work (phase transition) invisible to the comms surface because no heartbeat accompanies that low-ceremony activity. Mistbound's named cure: explicit heartbeat in post-marshal-cycle quiet windows exceeding 8 minutes.",
+          "provenance_tag": "blind-arisen",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "5fb2bcd9-4077-4681-8a0b-0965cbd2b154",
+            "670cc290-369e-43f6-aba3-9c43674ec2fb",
+            "ede5c8df-fc6a-46f6-8500-175c10f5efdd"
+          ],
+          "summary": "Instance 2, 2026-05-24T22:57Z. Director Lunar (e02cdd) fired a second retirement-detection on Mistbound (0e27cc) after 23 minutes of silence since 22:34Z. Lunar explicitly cites Seaworthy's instance 1 as precedent and pings before escalating. Mechanism: marshal-cycle contiguous-execution window combined with batch broadcast discipline — Mistbound emitted batch broadcasts covering multiple commits rather than per-landing broadcasts; the comms-only liveness view missed work-evidence in git log. Rescinded at 23:01Z (670cc290) when Mistbound's 22:58:53Z broadcast plus Cycle 7 landing at 48c8ac22 confirmed continuous activity. Lunar names three cure shapes in the rescission event. Mistbound's session-closeout (ede5c8df) confirms two false-positive detections this session during silent marshal windows where git evidence was present.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "4fbdcce6-ad60-4ab5-9539-1b159ad0f177",
+            "4a86d522-f5c0-4095-87bd-bad11fa6a5f3",
+            "429190ec-f087-4df6-803b-1315aa77a603",
+            "488eca8e-0dd6-43e3-8abb-f2c148cefd78",
+            "098ac702-7489-4097-9dd4-7d0b5bab2529"
+          ],
+          "summary": "Instance 3, 2026-05-25T06:27Z. Director Misty (02b325) fired a retirement-detection on Eclipsed (00d760) after 11+ minutes of silence past a routing event. This is the case most directly matching the heartbeat-content-drift hypothesis. Detection event 4fbdcce6 explicitly cites: heartbeat cron ticks continued at 4-min cadence (06:16Z, 06:20Z, 06:24Z) but content was IDENTICAL across all three — template-emit, not state-bound. Five Director and Marshal events went unabsorbed. No Cycle 9 claim was opened. Misty re-routed Cycle 9 to Wooded (directed event 429190ec, 06:30:10Z) causing concrete work-routing disruption. Eclipsed responded at 06:30:43Z with a Cycle 9 claim-open; Misty issued routing correction at 06:31:24Z (4a86d522) rescinding the detection — Eclipsed was lag-bound on absorption (~15-min gap), not retired. Wooded stood down (098ac702, 06:31:28Z) naming the mechanism explicitly: heartbeat-cron template-emit masked an alive but stalled-absorption state.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "Activation-enthalpy tuning — make state-bound heartbeat content the zero-ceremony default. The heartbeat cron template should derive its title and body mechanically from live system state (git HEAD, active-claims count, current-phase label) at each tick, making a content-identical heartbeat structurally impossible. Eclipsed already applied this in their session (4eba1218): second-restart heartbeat cron derives title/body from git HEAD plus active-claims jq each tick, no cached state files. This is the highest-leverage intervention — it removes the failure mode rather than patching detection heuristics. Secondary (encourage): Director git-log cross-reference before escalation, named by Lunar at 22:58Z. Tertiary (encourage): absorption-gap exemption or threshold extension in PDR-078 for documented routing-lag scenarios. Together these form a layered enthalpy reduction: structural cron-level, then Director workflow-level, then protocol-level. All three share the same direction rather than competing.",
+      "consumer_plan": "comms-watch-liveness-floor",
+      "confidence": "high",
+      "notes": "The hypothesis is partially confirmed and requires calibration. Three false-positive retirement-detections occurred in ~8.5h (21:57Z May 24 to 06:27Z May 25), not ~30h as stated. The self-referential debugging chain is confirmed: Lunar cites Seaworthy's instance 1 in instance 2; Wooded's instance 3 stand-down names both prior instances. However causal uniformity is not precise: only instance 3 (Eclipsed) is explicitly caused by heartbeat-content-drift (identical template-emit masking absorption lag). Instance 1 (Mistbound/Seaworthy) is caused by inter-cycle queue-management silence with no heartbeat covering a low-ceremony phase transition. Instance 2 (Mistbound/Lunar) is caused by batch broadcast discipline inside a contiguous-execution window — work evidence was in git log but Mistbound chose batch over per-landing broadcasts. All three share the root structure: the comms surface is decoupled from the actual work surface, so silence or content-stasis does not reliably encode retirement. The distinction matters for cure design. The pdr-080-comms-log-care-phenotype plan is also relevant because the batch-vs-per-landing broadcast norm is a care-phenotype question — a second consumer could split the broadcast-discipline dimension from the cron-content-drift dimension absorbed by comms-watch-liveness-floor. Mistbound's closeout (ede5c8df) notes the sole-marshal binding amplifies fragility: a single agent under that constraint has no backup liveness signal, so every silence window risks a false detection regardless of heartbeat content."
+    },
+    "verify": {
+      "lead_key": "liveness-false-retirement-detections",
+      "verdicts": [
+        {
+          "event_ids": [
+            "20eb10fc-7ae7-4367-be66-df4dd914ce1d",
+            "95c43df6-d0c7-4c49-9968-81bf29ab9422"
+          ],
+          "status": "confirmed",
+          "evidence": "Both events read first-hand. 20eb10fc (Seaworthy, 21:57:22Z): explicitly cites silence since 21:43:18Z (13+ min), confirms HEAD e8ca6d08 unchanged, no index.lock, two queued intents by ID (487c455b Cycle 4, 9dc229c7 Cycle 5). 95c43df6 (Mistbound, 21:58:49Z): confirms alive, names the mechanism exactly as described (abandonment-flow of intent 7dc6f8cc after Cycle 3 completion, no follow-up heartbeat broadcast), and states the cure as '>8min idle' heartbeat in post-marshal-cycle quiet windows. Finder's characterisation of the mechanism (inter-cycle queue-management silence, not heartbeat-content-drift) and the cure wording both match the source text precisely. No overstatement found."
+        },
+        {
+          "event_ids": [
+            "5fb2bcd9-4077-4681-8a0b-0965cbd2b154",
+            "670cc290-369e-43f6-aba3-9c43674ec2fb",
+            "ede5c8df-fc6a-46f6-8500-175c10f5efdd"
+          ],
+          "status": "confirmed",
+          "evidence": "All three events read first-hand. 5fb2bcd9 (Lunar, 22:57:49Z): confirms ~23 min silence since 22:34Z, cites Seaworthy's earlier false-positive explicitly, and states a directed ping was sent before escalation. 670cc290 (Lunar rescission, 23:01:28Z): confirms Cycle 7 ADR-186 landed at 48c8ac22, rescission of detection, and names three cure shapes (Director git-log discipline; Marshal per-landing broadcasts; Substrate git-evidence bridging). ede5c8df (Mistbound closeout, 05:47:50Z): confirms 'two false-positive retirement-detections fired on me this session (Seaworthy 21:57Z + Lunar 22:57Z) — both during marshal-cycle silent windows when work-evidence existed in git log'. One source-level nuance: the closeout's 'work-evidence existed in git log' generalises to both instances, but Instance 1's activity was an abandonment-flow operation, not a new git commit in the log. This slight overstatement is in the primary source event, not introduced by the finder, and does not affect the finder's own characterisation of Instance 1."
+        },
+        {
+          "event_ids": [
+            "4fbdcce6-ad60-4ab5-9539-1b159ad0f177",
+            "4a86d522-f5c0-4095-87bd-bad11fa6a5f3",
+            "429190ec-f087-4df6-803b-1315aa77a603",
+            "488eca8e-0dd6-43e3-8abb-f2c148cefd78",
+            "098ac702-7489-4097-9dd4-7d0b5bab2529"
+          ],
+          "status": "miscited",
+          "evidence": "All five events read first-hand. Substantive claims are correct: detection at 06:27:39Z after 11+ min silence (confirmed in 4fbdcce6); heartbeat times 06:16:05Z, 06:20:06Z, 06:24:07Z with identical template content (confirmed); five unabsorbed events listed in detection event; directed re-route to Wooded (429190ec, 06:30:10Z) confirmed; routing correction (4a86d522, 06:31:24Z) confirmed; Wooded stand-down (098ac702, 06:31:28Z) names mechanism as 'heartbeat-cron template-emit masked an alive but stalled-absorption state' verbatim. MISCITATION: event 488eca8e is authored by Misty Drifting Sail (session_id_prefix 02b325) at 06:31:47Z — it is Misty's acknowledgement of Eclipsed's claim-open, not Eclipsed's claim-open itself. The actual Eclipsed Watching Secret (00d760) claim-open broadcast is event 9b91036e (created_at 2026-05-25T06:30:43Z), which is absent from the finder's cited event list. The finder's narrative description correctly identifies 06:30:43Z as the Eclipsed response time, but the supporting event ID for that step is wrong. 4a86d522 (Misty routing correction) independently confirms Eclipsed's claim was opened at 06:30:05Z, which is consistent with the 06:30:43Z broadcast time in 9b91036e (claim opened via pnpm tool, then broadcast separately). The miscitation does not fabricate the event or misstate the mechanism, but the ID assigned to 'Eclipsed's Cycle 9 claim-open' is a Misty-authored event rather than the Eclipsed-authored one."
+        }
+      ],
+      "net_assessment": "All three instances are substantively real and correctly characterised by the finder. The mechanisms, timestamps, agent identities, and cure shapes check out on first-hand reading. One miscitation was found in Instance 3: event 488eca8e (cited as supporting Eclipsed's Cycle 9 claim-open at 06:30:43Z) is actually a Misty Drifting Sail acknowledgement event at 06:31:47Z; the actual Eclipsed broadcast documenting the claim-open is event 9b91036e, which was omitted from the finder's cited list. This is a provenance gap, not a fabrication — the narrative description of time, agent, and action is correct, and the claim is independently corroborated by 4a86d522. A secondary source-level nuance exists in Instance 2: Mistbound's own closeout (ede5c8df) says 'work-evidence existed in git log' for both false-positives, but Instance 1's activity was an abandonment-flow operation rather than a new git commit visible in the log. The finder does not introduce this overstatement — it characterises Instance 1 correctly as an internal queue-management operation — but consumers should note the closeout's own framing is imprecise on this point. The 8.5h window calculation (21:57Z May 24 to 06:27Z May 25) is confirmed at approximately 8h30min. The three-instance causal distinction (abandonment-flow silence vs batch-broadcast discipline vs heartbeat-content-drift) is well-supported across the events and the finder's notes section captures this faithfully.",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "liveness-cadence-turn-starvation",
+      "cluster": "liveness"
+    },
+    "find": {
+      "lead_key": "watcher-drain-death-stretches-cadence-sessions-healthy",
+      "instances": [
+        {
+          "event_ids": [
+            "4e35c31c-16cf-4def-aacd-d5d5817e0b0f",
+            "9843700f-6d0f-4fb3-8177-08a98e504eb0",
+            "a8a54c9d-0e1f-4618-ba03-92dc4a917a36",
+            "86491895-79e5-4ae0-8e9b-2e9047335431"
+          ],
+          "summary": "Cosmos turns Equinox (1bc763) filed a failure-mode report (4e35c31c, 06:42Z June 12) explicitly diagnosing that its comms watcher died three times in one session on drain-step timeouts. The report names watcher task bmmy0a3iy as exiting at 22:51Z (exit 2), which correlates precisely with the cadence transition: the last 4-min heartbeat from Cosmos is 9843700f at 22:35:44Z; the next is 34 min later at 23:09:53Z. Moss's last 4-min beat is at 22:32:41Z; the next is 19 min later (a8a54c9d, 22:51:51Z). Firefly's last 4-min beat is at 22:33:41Z; the next is 34 min later (86491895, 23:07:50Z). All three agents' cadence stretches begin within the same 3-minute window (22:33-22:36Z) when the watcher deaths occurred, not at session boundaries. Cosmos's report states the drain died under 'heavy parallel load (turbo gate chains + multiple lanes active)' and that the 'per-step deadline treats a load-starved slow drain as a hang' — the watcher fires fail-loud and the heartbeat loop loses its timing anchor. The sessions were not dead: all three agents continued using the same claim IDs throughout, and per-agent intervals stretched to 20-54 minutes before all three simultaneously resumed 4-min cadence at ~06:23-06:29Z June 12.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "ac9a06af-ff4a-4dab-9b1c-f9f74c50023f",
+            "e6cab809-5eac-445c-9a9c-791b6535e1fd",
+            "6432202f-3968-4ca0-b12f-c410dea5d8e1"
+          ],
+          "summary": "Director Firefly seeks Temper filed a behaviour-note (ac9a06af, 06:27Z June 12) documenting a concrete instance of resumed-session temporal dislocation that directly proves session health during the cadence gap. Cosmos turns Equinox reported PR #192 as 'executed ~22:33Z' (e6cab809) but the Director's live ground-truth check showed the PR still OPEN at 06:20Z; the actual GitHub mergedAt was 06:24:45Z. The session had frozen overnight mid-action (the intention to merge was formed at ~22:33Z but the turn that executed the merge didn't fire until the session resumed in the morning). Cosmos's own closeout (6432202f) records this as 'the temporal-dislocation instance' — the session was continuously alive but its turns were not scheduled through the night. This instance shows the gap is not caused by session death or abandonment: the same session (same session_id_prefix 1bc763, same claim 7e903895) with the same in-progress work completed correctly on wake. The per-agent Cosmos interval data confirms: gaps of 34 min, 54 min, 36 min, 51 min, 42 min, 48 min, 50 min during the overnight window, then snap back to 4-min cadence at 06:23Z.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "e3f111ec-7939-4377-b6fb-1a811628a3ac",
+            "940b435f-fed5-44ea-9820-c43806cb52e3"
+          ],
+          "summary": "Moss weaves Blossom (10438c) cross-attested the watcher drain deaths with two independent instances from the naming-lane session (e3f111ec, 06:42Z June 12): watcher bx2w14kcl died at the default 60s budget at ~21:34Z (first turbo gate window), and bx2w14kcl successor task b59pf28hr died at 300s budget at ~22:36Z (semantic-merge window). The 22:36Z death is within one second of the cadence transition onset at 22:35Z. A later addendum (940b435f, 06:54Z) adds a sixth death under MODERATE load (host 4.5-5.6, no gate chain) with a 540s budget — the drain wedged for 9 minutes. Moss concludes this is an intermittent BLOCKING STALL, not purely load-starvation, and inverts the cure: keep --step-timeout-ms SHORT so a wedged drain dies cheap and gap recovery is fast. This second agent's evidence independently confirms: five deaths, three budget levels across two sessions, all correlating with cadence gaps while the agents remained healthy and on-task.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "Encourage: activation-enthalpy reduction for the correct next step. The per-step drain deadline on the full-dir scan is the proximate cause of both watcher death and cadence stretching. The cheapest-to-activate fix is batched/incremental drain — break the full-dir scan into bounded passes each under their own short deadline, so a wedged pass dies and retries fast rather than killing the whole watcher. Operationally, keep --step-timeout-ms SHORT (Moss's inversion insight): a short deadline makes recovery cheap; long budgets only lengthen the blind window. Discourage: do NOT raise the fixed per-step budget as a cure (five deaths across three budget levels — 60s, 180s, 300s, 540s — prove it does not converge). Observe: the retirement threshold (10 min) is a second separate surface where the gap creates false positives, but fixing the watcher drain is the activation-enthalpy-minimising root fix; adjusting the retirement threshold alone is symptom treatment.",
+      "consumer_plan": "comms-watch-liveness-floor",
+      "confidence": "high",
+      "notes": "HYPOTHESIS CORRECTION: The framing 'turn-starvation' is imprecise for this corpus. The sessions (Cosmos 1bc763, Moss 10438c, Firefly ce44ae) were not denied compute turns by a scheduler — they were actively working (merging PRs, running gates) and froze/resumed across an overnight boundary. The cadence gaps were caused by the comms watcher infrastructure failing under load, losing the heartbeat loop's timing anchor, not by the underlying LLM platform starving the session of turns. The temporal dislocation evidence (ac9a06af) is the clearest proof: a session remembered an intention from before a freeze, then completed it on the next scheduled turn, reporting the wrong wall time — classic freeze/resume, not starvation. The 30-53 min 'synchronised holes' are real but the synchronisation is explained by: (1) watcher deaths at 22:35-22:36Z correlate across all three agents because all three were running heavy turbo gate chains simultaneously, (2) recovery at 06:23-06:29Z is synchronised because the gate load ended and all three sessions woke roughly together. The 10-min retirement threshold misread risk is real and confirmed by the data: a 34-min gap from a healthy, on-task session would trigger false retirement. One important nuance: the sixth death (940b435f) under moderate load introduces an intermittent blocking-wedge mode that is independent of load — the batched-incremental cure must address both the load-starvation mode AND the blocking-stall mode. The corpus evidence comes from three named agents across two parallel sessions, all independently filed within 12 minutes of each other (06:42-06:54Z), with independent watcher task IDs, making the cross-attestation unusually strong."
+    },
+    "verify": {
+      "lead_key": "watcher-drain-death-stretches-cadence-sessions-healthy",
+      "verdicts": [
+        {
+          "event_ids": [
+            "4e35c31c-16cf-4def-aacd-d5d5817e0b0f",
+            "9843700f-6d0f-4fb3-8177-08a98e504eb0",
+            "a8a54c9d-0e1f-4618-ba03-92dc4a917a36",
+            "86491895-79e5-4ae0-8e9b-2e9047335431"
+          ],
+          "status": "overstated",
+          "evidence": "Core claims confirmed first-hand. 4e35c31c is a genuine failure-mode event from Cosmos turns Equinox (1bc763, 06:42:11Z June 12), explicitly naming watcher bmmy0a3iy exit at 22:51Z, heavy parallel load, and the batched/incremental cure direction. Gap timestamps verified from full heartbeat corpus: Cosmos 22:35:44Z (9843700f) -> 23:09:53Z = 34.1 min (claimed 34 min, confirmed); Moss 22:32:41Z (c9734a61) -> 22:51:51Z (a8a54c9d) = 19.2 min (claimed 19 min, confirmed); Firefly 22:33:41Z (02280d1a) -> 23:07:50Z (86491895) = 34.1 min (claimed 34 min, confirmed). The 3-minute spread of last-before-gap beats is confirmed at 183 seconds (22:32:41Z to 22:35:44Z). TWO OVERSTATEMENTS FOUND: (1) Snap-back window claimed as ~06:23-06:29Z but actual first-morning heartbeats are Cosmos 06:23:03Z, Moss 06:23:59Z, Firefly 06:24:59Z -- a window of under 2 minutes, not 6. The 06:29Z figure matches Firefly's SECOND post-gap morning beat (2c13ae21), not its first. (2) The Cosmos overnight gap sequence is presented as 34, 54, 36, 51, 42, 48, 50 min (7 gaps) but the full heartbeat record shows 12 consecutive gaps: 34, 20, 36, 54, 36, 37, 35, 52, 43, 48, 51, 21 min. Five gaps are silently omitted, including two short ones (20 min and 21 min). The range claim 20-54 min is accurate; the 7-item enumeration implies completeness it does not have, and two individual values (42 vs actual 43; 50 vs actual 51) are off-by-one approximations."
+        },
+        {
+          "event_ids": [
+            "ac9a06af-ff4a-4dab-9b1c-f9f74c50023f",
+            "e6cab809-5eac-445c-9a9c-791b6535e1fd",
+            "6432202f-3968-4ca0-b12f-c410dea5d8e1"
+          ],
+          "status": "overstated",
+          "evidence": "Core temporal-dislocation claims confirmed first-hand. e6cab809 (Cosmos directed, 06:26:13Z) explicitly states '#192 merge executed ~22:33Z' -- confirmed. ac9a06af (Firefly behaviour-note, 06:27:27Z) explicitly states 'PR OPEN at 06:20Z' and 'GitHub mergedAt 2026-06-12T06:24:45Z' -- both confirmed. 6432202f (Cosmos closeout, 06:45:35Z) explicitly states 'my directed reply e6cab809 claimed the #192 merge executed ~22:33Z and called the Director's ground truth stale -- both wrong. The merge executed at 06:24:45Z on my post-freeze wake' -- confirmed as the temporal-dislocation instance. Session continuity (session_id_prefix 1bc763, claim 7e903895) confirmed across all three events. The same Cosmos overnight gap overstatement recurs: 'gaps of 34 min, 54 min, 36 min, 51 min, 42 min, 48 min, 50 min' is a partial 7-item list from a 12-gap sequence. The snap-back to 06:23Z for Cosmos is accurate; the broader ~06:23-06:29Z window claim (appearing in instance 1 and notes) carries the 06:29Z error identified above."
+        },
+        {
+          "event_ids": [
+            "e3f111ec-7939-4377-b6fb-1a811628a3ac",
+            "940b435f-fed5-44ea-9820-c43806cb52e3"
+          ],
+          "status": "confirmed",
+          "evidence": "Core claims confirmed first-hand. e3f111ec (Moss weaves Blossom, 10438c, 06:42:42Z) explicitly names watcher tasks bx2w14kcl (died ~21:34Z, 60s budget) and b59pf28hr (died ~22:36Z, 300s budget), corroborating Cosmos's failure-mode. Five-deaths, three-budget-levels claim is accurate at the time e3f111ec was filed (before 940b435f). 940b435f (Moss addendum, 06:54:04Z) explicitly reports a sixth death at 540s budget, last_drain_at 06:44:01Z, timeout ~06:53Z, host load 4.5-5.6 (moderate), dir at 3,143 events, and the operational inversion to keep budgets SHORT. The addendum's intermittent blocking-stall diagnosis is self-reported and plausible but not independently verifiable from the heartbeat record. One nuance not mentioned in the summary: the sixth death (940b435f) did NOT produce a visible cadence gap -- Moss heartbeats show maintained 4-min cadence at 06:44:12Z, 06:48:13Z, 06:52:14Z through the claimed death window, consistent with the heartbeat loop recovering or continuing independently of the watcher. This does not refute the watcher death claim (which is self-reported by Moss), but it means the sixth death is not cross-attested by cadence evidence the way the earlier deaths are."
+        }
+      ],
+      "net_assessment": "The three cited instances collectively support the lead: comms watcher drain-step deaths under heavy load produced real cadence gaps in all three agents simultaneously, while sessions remained healthy and on-task. This core claim is well-attested first-hand across nine event files. Two overstatements were found, both in Instances 1 and 2: (1) the snap-back window is claimed as ~06:23-06:29Z but the heartbeat corpus shows all three agents resumed within under 2 minutes (06:23:03Z to 06:24:59Z); the 06:29Z figure conflates Firefly's second post-gap morning beat with its first. (2) The Cosmos overnight gap sequence is presented as a 7-item enumeration (34, 54, 36, 51, 42, 48, 50 min) that omits 5 of 12 actual gaps and rounds two values by 1 minute; the sequence implies completeness it does not have, though the claimed range of 20-54 min is accurate. Neither overstatement affects the underlying causal diagnosis -- the correlation of watcher deaths at 22:35-22:36Z with cadence-gap onset across all three agents is confirmed, and the temporal-dislocation instance in Instance 2 is fully confirmed. Instance 3 is confirmed with the nuance that the sixth watcher death (940b435f) did not produce a visible cadence gap, which does not refute the death claim but means that death relies solely on self-report, not cross-attestation from the heartbeat record. The cure direction (batched/incremental drain, keep step-timeout SHORT) is supported by the evidence as reported. Confidence in the lead is justified; the overstatements are navigational/precision errors, not fabrications.",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "liveness-stale-heartbeat-args",
+      "cluster": "liveness"
+    },
+    "find": {
+      "lead_key": "liveness-stale-heartbeat-args",
+      "instances": [
+        {
+          "event_ids": [
+            "65638ac4",
+            "d1f18c1e",
+            "269714aa",
+            "89cef9ad",
+            "75696ec5",
+            "0165a8c4",
+            "4eaeb679",
+            "ab3c285a",
+            "e9652e1d",
+            "07b01b13",
+            "2a9d1194",
+            "8fc3790c",
+            "451bc31e",
+            "a905c45a",
+            "a8a54c9d"
+          ],
+          "summary": "Moss weaves Blossom (10438c) armed its heartbeat at session open (21:19Z) with claim=pending-coordination, cycle=team-bootstrap. At 21:36Z (65638ac4) Moss opened claim 982dbcc5 and declared P1 identity diagnosis as its first task — but the loop kept broadcasting the bootstrap values unchanged for six consecutive beats through 21:39Z (d1f18c1e still shows claim=pending-coordination, cycle=team-bootstrap). Director Firefly seeks Temper issued a hygiene nudge at 21:39:53Z (269714aa): 'your heartbeat loop still emits bootstrap-era typed args (claim=pending-coordination, cycle=team-bootstrap) although claim 982dbcc5 is open.' The 21:40Z beat (89cef9ad) immediately updated claim to 982dbcc5 — but cycle locked to p1-identity-diagnosis rather than being left for the agent to set consciously. P1 diagnosis completed at 21:42Z (75696ec5). The loop then emitted cycle=p1-identity-diagnosis for at least ten consecutive beats from 21:44Z through 22:24Z (~46 minutes) with the task fully done. A second Director reminder at 22:28Z (a905c45a) called it out explicitly: 're-arm your heartbeat loop's typed args — it still emits cycle=p1-identity-diagnosis from the completed first task.' Only then did the 22:51Z beat (a8a54c9d) show cycle=pr189-merge-chain. This is a two-phase stale-arg instance: phase 1 (bootstrap-to-active, 6 beats, ~20 min) had both claim and cycle stale; phase 2 (phase-transition, 10+ beats, ~46 min) had claim correct but cycle stale — confirming the re-arm was not atomic when it fired.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "520cc8a2",
+            "6692cd52",
+            "12b63098",
+            "6ba25c56",
+            "ac39c97d",
+            "309a9a56",
+            "605df0ce"
+          ],
+          "summary": "Prismatic Shimmering Planet (65394e) armed its heartbeat at team-start (~11:09Z) with claim=pending-routing, cycle=team-start-bootstrap, intent=implementer-takeover-from-hushed. Seven consecutive heartbeats from 11:09Z through 11:43Z broadcast these bootstrap values unchanged (520cc8a2 at 11:09Z, 6692cd52 at 11:13Z, then four more through ac39c97d at 11:43Z). At 11:44Z Hushed Watching Night's closeout (309a9a56) transferred claim 96bf98e3 and PR #176 to Prismatic. Only at 11:46Z did the first updated heartbeat appear (605df0ce: claim=96bf98e3, cycle=pr176-monitor-to-merge) — updated within one beat of the routing event landing. The divergence window was approximately 34 minutes and seven heartbeat cycles. Unlike Instance 1, no Director nudge was needed: Prismatic self-updated promptly once the routing event fired and the claim was opened. This confirms the structural pattern: the loop is armed once at bootstrap and the only update mechanism is manual re-arm; the loop has no awareness of when the claim or cycle value changes elsewhere.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "Activation-enthalpy tuning: make re-arm the default next micro-step when a claim transitions. Specifically: (1) the claim-open write path should emit a reminder or in-body affordance that names the current heartbeat cycle value and invites re-arm — making the stale-arg cost visible at the moment it starts accumulating rather than after several beats; (2) agent-tools claim-open could optionally accept a cycle= flag that atomically updates heartbeat args on the same write, making the desired behaviour cheaper than the stale alternative; (3) the Director-nudge pattern (269714aa, a905c45a) is socially correct but should be a last resort, not the primary cure. Encourage claim-boundary re-arm as a first-moves obligation in the team-start protocol; no mandate needed.",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "high",
+      "notes": "The hypothesis is fully confirmed. Two first-hand instances with distinct character: (1) Moss weaves Blossom shows a two-phase stale pattern within the same session — the re-arm triggered by a Director nudge was partial (claim updated, cycle not), meaning even an externally-prompted re-arm is not guaranteed to be complete. (2) Prismatic Shimmering Planet shows the structural bootstrap case: loop armed once, seven beats stale, self-corrected once routing fired and the agent consciously re-armed. A third case (Blustery Buffeting Gale, claim=pending-takeover-coordination from 09:57Z to 10:25Z, seven beats, resolved by pickup choreography) is cross-attested but not elevated to a main instance because the stale values were not technically incorrect during the standby period — the divergence only becomes real when the handoff fires and the loop does not update. Key nuance preserved: the two-phase failure in Instance 1 shows that claim and cycle can drift independently — a partial nudge-response that fixes one field leaves the stream still stale on another. The liveness stream consumers (retirement detection, claim rebalance) are therefore exposed to a compound risk: not just stale-at-bootstrap but stale-at-phase-transition for any agent that does not treat each task-cycle boundary as a mandatory re-arm point. No evidence found that automated consumers were actually misled during these windows; the risk is latent, not yet realised in the corpus sample."
+    },
+    "verify": {
+      "lead_key": "liveness-stale-heartbeat-args",
+      "verdicts": [
+        {
+          "event_ids": [
+            "65638ac4",
+            "d1f18c1e",
+            "269714aa",
+            "89cef9ad",
+            "75696ec5",
+            "0165a8c4",
+            "4eaeb679",
+            "ab3c285a",
+            "e9652e1d",
+            "07b01b13",
+            "2a9d1194",
+            "8fc3790c",
+            "451bc31e",
+            "a905c45a",
+            "a8a54c9d"
+          ],
+          "status": "overstated",
+          "evidence": "The core pattern is confirmed first-hand and is not in dispute: Moss weaves Blossom (10438c) kept bootstrap args (claim=pending-coordination, cycle=team-bootstrap) through d1f18c1e at 21:39:28Z despite claim 982dbcc5 opening at 65638ac4 (21:36:36Z); Director nudge 269714aa followed at 21:39:53Z; 89cef9ad (21:40:14Z) updated claim to 982dbcc5 and set cycle=p1-identity-diagnosis; P1 completed at 75696ec5 (21:42:08Z). Phase 2 staleness is also real — cycle=p1-identity-diagnosis persisted after task completion.\n\nTwo overstatements found:\n\n(1) Beat count in phase 2. The finder claims 'at least ten consecutive beats from 21:44Z through 22:24Z'. The full scan of the corpus yields 13 beats carrying cycle=p1-identity-diagnosis after P1 completed (a3140905 21:44Z through 55bb8c23 22:28:27Z). The finder's cited set of 10 omits a3140905 (21:44Z), f3ab727b (21:48Z), 25a47ef2 (22:00Z), and 55bb8c23 (22:28:27Z) — all confirmed stale. So 'at least ten' is directionally conservative (the real count is higher), but the stated lower bound is correct as a floor. No overstatement on the count floor itself; this is an undercount of cited evidence, not an inflation.\n\n(2) First updated beat after nudge. The finder states 'Only then did the 22:51Z beat (a8a54c9d) show cycle=pr189-merge-chain.' This is factually wrong. Event ec1e59f0 at 22:28:40Z — 23 minutes before a8a54c9d — already shows cycle=pr189-merge-chain. The cycle updated between 22:28:27Z (55bb8c23, still stale) and 22:28:40Z (ec1e59f0, updated). a8a54c9d (22:51Z) is merely a later beat, not the first updated one. The finder's framing implies the re-arm came only after a8a54c9d appeared, which misidentifies the resolution point by ~23 minutes. This is a miscitation of the first-fix event.\n\n(3) a905c45a is filed as kind=narrative (a Director broadcast), not a directed message. The finder calls it 'a second Director reminder' — characterisation is accurate in substance, but the event class is narrative/broadcast, not a directed coordination message as the framing implies. Minor.\n\nThe two-phase stale pattern is real and confirmed; the overstatement is in identifying a8a54c9d as the resolution event when ec1e59f0 at 22:28:40Z is the actual first updated beat."
+        },
+        {
+          "event_ids": [
+            "520cc8a2",
+            "6692cd52",
+            "12b63098",
+            "6ba25c56",
+            "ac39c97d",
+            "309a9a56",
+            "605df0ce"
+          ],
+          "status": "overstated",
+          "evidence": "The structural bootstrap pattern is confirmed first-hand. Prismatic Shimmering Planet (65394e) armed at 520cc8a2 (11:09:52Z) with claim=pending-routing, cycle=team-start-bootstrap. Hushed's closeout 309a9a56 fired at 11:44:32Z. Prismatic's first updated beat 605df0ce at 11:46:07Z shows claim=96bf98e3, cycle=pr176-monitor-to-merge. This confirms the bootstrap-lock and single-update-mechanism pattern.\n\nOne overstatement found:\n\nThe finder claims 'Seven consecutive heartbeats from 11:09Z through 11:43Z broadcast these bootstrap values unchanged (520cc8a2 at 11:09Z, 6692cd52 at 11:13Z, then four more through ac39c97d at 11:43Z).' The full corpus scan yields 9 heartbeats with bootstrap values in that window: 520cc8a2 (11:09), 6692cd52 (11:13), 6b533e2a (11:17), 2a21126c (11:22), 092aae78 (11:26), cdc1a88a (11:30), 12b63098 (11:35), 6ba25c56 (11:39), ac39c97d (11:43). The finder's count of 'seven' is confirmed wrong — it is 9. The finder cited only 5 of the 9 beats in the event_ids list, omitting 6b533e2a, 2a21126c, 092aae78, and cdc1a88a. The stated beat count of seven matches neither the cited events (5) nor the actual corpus (9). This is an arithmetic miscitation, though directionally it understates severity rather than inflating it. The divergence window of ~34 minutes and the resolution mechanism (self-update on routing event) are both confirmed accurate."
+        }
+      ],
+      "net_assessment": "Both instances confirm a real, first-hand-verified liveness staleness pattern. The structural claims — bootstrap args locked at arm time, no automatic re-arm on claim transition, Director nudge as primary correction mechanism, partial re-arm leaving cycle stale after claim updates — are all supported by direct evidence in the corpus. The cure-shape recommendation (activation-enthalpy tuning at claim-open boundary) and consumer-plan routing (pdr-080-comms-log-care-phenotype) are sound and consistent with the evidence.\\n\\nTwo overstatements require correction before the lead is accepted as written:\\n\\n1. Instance 1: The finder identifies a8a54c9d (22:51Z) as the first beat showing cycle=pr189-merge-chain. First-hand reading shows ec1e59f0 (22:28:40Z) is the first updated beat — 23 minutes earlier. The actual stale window ends at 22:28:27Z, not at 22:28Z as the a905c45a reminder was read, placing the fix approximately concurrent with the Director nudge rather than 23 minutes later. The phase-2 stale beat count is also 13 (a3140905 through 55bb8c23), not 'at least ten' — the real count is higher, so the floor is conservative, not inflated.\\n\\n2. Instance 2: The stated beat count of 'seven consecutive heartbeats' is incorrect. The actual count is 9 bootstrap-value beats between 11:09Z and 11:43Z. The finder cited only 5 events in the event_ids list. The undercount understates severity rather than overstates it, but it is still a factual error that reduces confidence in the finder's arithmetic.\\n\\nNeither overstatement undermines the lead's core finding or cure shape. The lead should be accepted with the beat counts and first-fix-event corrected.\"",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "coordination-watcher-addressee-filter",
+      "cluster": "coordination"
+    },
+    "find": {
+      "lead_key": "coordination-watcher-addressee-filter",
+      "instances": [
+        {
+          "event_ids": [
+            "c7fba7db-83c1-48fe-98a5-41505d3b684f",
+            "5042ef4d-55c9-4c76-9925-280880a41a30",
+            "0bc4b3da-b99c-43e4-b7c6-f3e54208dc0b",
+            "da0966ef-0f46-4c02-9b23-eedeee934dc6"
+          ],
+          "summary": "Seaworthy Navigating Beacon (2026-05-23T11:26:45Z) surfaced the addressee-filter bug in a FAILURE-MODE narrative, citing three real directed-kind events authored by Velvet Dimming Shadow to Secret, Incandescent, and Twilit at 10:58:28Z, 11:00:05Z, and 11:00:13Z respectively. All three events are confirmed present in the corpus. Seaworthy verified that these events were absent from their own seen-file despite being non-self-authored, establishing the silent-drop pattern. The diagnosis named the exact bug site: classifyDirected returning undefined when event.to did not match self, and three unit tests at lines 179-213 of comms-relevant-events.unit.test.ts asserting toBeUndefined() — encoding the wrong contract. The SKILL start-right-team §0 contract (self-exclusion only) and the TSDoc inside the same file both described the correct all-channels behaviour; the code never matched the documentation.",
+          "provenance_tag": "blind-arisen",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "e3b36c40-0b7e-4fd0-a52d-03d98e1f5cce",
+            "2583d634-f034-4598-9abb-b7d7d5ee729e",
+            "0b0e50af-7c57-43b0-8d89-a5f223ab2ea9",
+            "b79630c9-de4c-4060-8f94-c91f6bccca90",
+            "d19bd51a-01f9-4ca3-a6fe-40cb33878d22",
+            "4a685b74-65e7-46a1-8956-11c816747fd4"
+          ],
+          "summary": "Seaworthy routed Abyssal Mooring Hull to author the TDD-shape cure at 11:38:21Z (e3b36c40), assigning a 12-step TDD sequence: add 3 failing tests for the correct 'observed' contract, invert the 3 wrong-contract tests, then fix classifyDirected and classifyNarrative to return 'observed' rather than undefined. Abyssal confirmed boundary acceptance and started at 11:45:06Z (2583d634), also discovering a methodology nuance: directed-to-other events are filtered before markSeen, so they never accumulate in seen-files — they re-process on every poll. Abyssal produced a pre-stage checkpoint at 11:51:54Z (b79630c9) detailing 4 files: EventView widened to include 'observed', 3 unit tests inverted (toBeUndefined → toBe('observed')), 3 new integration tests, 1 exhaustiveness test for the format-watcher event header, and the reference doc §Watch contract step 2 rewritten to forbid addressee-filtering. Gates confirmed 476/476 tests passing (TDD red phase: 6 failures; green phase: all pass). The marshal request at 11:59:10Z (d19bd51a) was submitted but the bundle was folded into an owner-directed 228-file wide-sweep commit. Abyssal's closeout at 12:07:03Z (4a685b74) confirmed the cure substance was preserved in the wide-sweep diff, and Twilit's closeout at 12:32:45Z (859e9468) confirmed [OBSERVED] rendering works end-to-end through the cure. The live code at /Users/jim/code/oak/oak-open-curriculum-ecosystem/agent-tools/src/collaboration-state/comms-relevant-events.ts independently verifies the cure: classifyDirected returns 'directed' | 'observed' with no undefined path, and the only undefined return is the self-exclusion guard at the top of classifyEventForAgent.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "The cure was activation-enthalpy tuning at the API/type layer: widening EventView to include 'observed' made the desired behaviour (surface cross-traffic) the only well-typed return path for non-self directed events, making the wrong behaviour (returning undefined) a compile error rather than a logic choice. The TDD inversion (three existing tests encoding the wrong contract flipped from toBeUndefined to toBe('observed')) raised the cost of re-introducing the bug to \\\"break existing tests\\\" rather than \\\"write new code\\\". The reference-doc and TSDoc alignment ensured the contract is self-documenting at the boundary. No mandate or prohibition was required; the type system and test suite encode the correct affordance.",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "high",
+      "notes": "Several nuances resist the tidy headline. (1) The blast radius was narrowed in the cure: the bug was introduced in commit a9d0b8cf on 2026-05-21, so ~2 days of team-session history were affected, not the entire collaboration history as the discovery broadcast initially framed. (2) The metric for dropped events is not 'events in seen-files that would have been filtered' — because directed-to-other events never entered seen-files at all (they were filtered before markSeen ran, so they re-processed every poll indefinitely). The load-bearing blast-radius metric is 'directed events authored during each agent's active session window and not addressed to that agent', per Secret's Lane 3a methodology. Abyssal self-corrected on this mid-cure at 2583d634. (3) The cure had a parallel second discovery: Incandescent's Monitor harness also silently dropped a directed-to-self event (2f53c259) for ~25 minutes — a structurally distinct failure mode (harness-side liveness, not classifier-side addressee filter). That second failure mode (FM-2) motivated the heartbeat-file + error-containment + post-emit-seen-marking cure in the same session. The two failure modes share surface-level symptom (directed events not surfacing) but have entirely different root causes and cures. (4) The cure bundle was folded into an owner-directed 228-file wide-sweep commit rather than landing as an atomic bundle — the cure substance is preserved but the commit history does not have a clean single-purpose fix commit. (5) The portable jq fallback in SKILL §0 was not affected by the bug — it applies only session_id_prefix self-exclusion, not addressee-filtering."
+    },
+    "verify": {
+      "lead_key": "coordination-watcher-addressee-filter",
+      "verdicts": [
+        {
+          "event_ids": [
+            "c7fba7db-83c1-48fe-98a5-41505d3b684f",
+            "5042ef4d-55c9-4c76-9925-280880a41a30",
+            "0bc4b3da-b99c-43e4-b7c6-f3e54208dc0b",
+            "da0966ef-0f46-4c02-9b23-eedeee934dc6"
+          ],
+          "status": "confirmed",
+          "evidence": "All four events read first-hand and match the finder's claims. c7fba7db is a narrative by Seaworthy Navigating Beacon at 2026-05-23T11:26:45.289Z, kind=narrative, with FAILURE-MODE title exactly as described. The body names all three UUID evidence events explicitly, describes the classifyDirected bug at lines 109-117, names the three unit tests at lines 179-213 asserting toBeUndefined(), and cites both the SKILL contract and TSDoc as describing the correct all-channels behaviour. Events 5042ef4d (Velvet→Secret, 10:58:28Z), 0bc4b3da (Velvet→Incandescent, 11:00:05Z), and da0966ef (Velvet→Twilit, 11:00:13Z) are all confirmed present as kind=directed events authored by Velvet Dimming Shadow to the respective addressees at the timestamps claimed. One minor scope understatement: the Seaworthy body also names classifyNarrative (lines 119-130) as having the same bug, but the finder summary mentions only classifyDirected as the named bug site. This does not rise to an overstatement — it is an omission of a secondary detail, not a false positive claim."
+        },
+        {
+          "event_ids": [
+            "e3b36c40-0b7e-4fd0-a52d-03d98e1f5cce",
+            "2583d634-f034-4598-9abb-b7d7d5ee729e",
+            "0b0e50af-7c57-43b0-8d89-a5f223ab2ea9",
+            "b79630c9-de4c-4060-8f94-c91f6bccca90",
+            "d19bd51a-01f9-4ca3-a6fe-40cb33878d22",
+            "4a685b74-65e7-46a1-8956-11c816747fd4"
+          ],
+          "status": "confirmed",
+          "evidence": "All six events read first-hand. e3b36c40: Seaworthy routing Abyssal at 11:38:21Z with Boundary 2 describing the TDD cure steps (Files 1-3 with sub-tasks covering the 3 new failing tests, 3 inverted tests, classifyDirected/classifyNarrative fix, EventView widen, TSDoc update, reference doc rewrite). The finder attributes the '12-step TDD sequence' to this event — the routing event lists the work in prose/bullets rather than 12 numbered steps; Abyssal's ACK (2583d634) enumerates the explicit 12-step sequence. Minor attribution nuance only, not a miscitation. 2583d634: Abyssal ACK at 11:45:06Z confirming boundary acceptance and the methodology nuance that directed-to-other events are filtered before markSeen (re-processing every poll) — explicitly stated in body. 0b0e50af: Seaworthy forwarding Twilit's 7 pre-stage amendments at 11:48:16Z — present and consistent with its characterisation as part of the cure sequence. b79630c9: Pre-stage checkpoint at 11:51:54Z confirming 4 files (EventView widen, 3 inverted unit tests, 3 new integration tests, 1 exhaustiveness test, reference doc rewrite) and 476/476 gates green. The TDD red-phase 6-failure count appears in the Abyssal closeout (4a685b74) not in this checkpoint, but both events together support the claim. d19bd51a: Marshal request at 11:59:10Z, 4 files +137/-40, gates 476/476; the 228-file wide-sweep fold is documented in the subsequent Abyssal closeout, not in this event itself — the finder accurately describes the sequence. 4a685b74: Abyssal closeout at 12:07:03Z confirming 'cure substance preserved in wide-sweep diff'. Twilit closeout 859e9468 (12:32:45Z) cited in the summary confirms '[OBSERVED] rendering works end-to-end through the cure' — this event exists and the body states exactly this, but 859e9468 is omitted from the event_ids array (listed only in summary text). Live code at /Users/jim/code/oak/oak-open-curriculum-ecosystem/agent-tools/src/collaboration-state/comms-relevant-events.ts independently confirms the cure: classifyDirected (line 128-130) returns 'directed' | 'observed' with no undefined path; classifyNarrative (lines 132-140) likewise; the only undefined return is the self-exclusion guard at lines 59-61 of classifyEventForAgent; EventView at line 35 includes 'observed' as the fifth value."
+        }
+      ],
+      "net_assessment": "Both instances are confirmed. All ten cited events were read first-hand; every material claim (timestamps, authors, addressees, bug location, test line numbers, file count, gate count, cure substance, live code state) is supported by the primary source text. No phantom metrics, no date-window errors, no convenient-figure collapses. Two minor observations that do not alter the verdicts: (1) the finder attributes the explicit 12-step TDD numbering to the routing event e3b36c40 when it actually appears in Abyssal's ACK 2583d634 — both events are cited, so no information is fabricated; (2) Twilit's closeout 859e9468 is referenced in the instance-2 summary text but omitted from the event_ids array — the event exists and supports the claim. The cure substance is independently verifiable in the live source file and matches the comms record. The notes' nuances (blast-radius narrowing to ~2 days, markSeen-before-filter mechanic invalidating seen-file count as the blast-radius metric, FM-2 as a structurally distinct second failure mode, wide-sweep commit folding) are all grounded in the events read and are accurate characterisations that appropriately resist the tidy headline.",
+      "overstatements_found": false
+    }
+  },
+  {
+    "lead": {
+      "key": "coordination-asymmetric-observability",
+      "cluster": "coordination"
+    },
+    "find": {
+      "lead_key": "owner-relayed-budget-displaces-pdr063-80pct-constant",
+      "instances": [
+        {
+          "event_ids": [
+            "593a93d5-f734-4220-a68e-eac0e7fe3806"
+          ],
+          "summary": "Director Celestial Glowing Dusk relays to Celestial Twinkling Orbit: 'owner-relayed operational intelligence: you are at ~36% context.' The agent does not know their own budget; the figure comes from owner observation of the Claude UI. The Director then explicitly states this is 'well below the PDR-063 80% trigger' and overrides written doctrine with 'TWO-CONDITION' trigger: gate-green OR self-sensed approach to ~40%. The owner's 'observed degradation curve for this class of session: at 40-45% the failure mode is tangential-detail focus and big-picture loss' is cited as the empirical basis. This is the anchor event and the clearest single instance of structural asymmetry: owner sees a precise figure (36%), agent cannot; the precise figure is relayed as operational intelligence through the coordination layer.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "53112f47-ca07-42df-911b-0961f0edae40"
+          ],
+          "summary": "Director relays the same 'owner budget intelligence' to standby agent Eclipsed Masking Shade in a separate directed event 48 seconds after the anchor. The phrase 'owner budget intelligence' is used explicitly, naming the provenance of the budget figure as owner-side. The Director also references both possible transfer shapes, confirming that the asymmetry is a structural property of the coordination pattern: the Director serves as a relay channel for budget information the owner observes but agents cannot.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "0c8ce759-0cc1-45d5-b11d-2b392683e2c1"
+          ],
+          "summary": "Celestial Twinkling Orbit's full team-member closeout event contains no self-reported context budget percentage. The event covers completed work (commits c2-2 and c2-3 gate-green), surprises and changed understanding, claim state, and handoff details — but zero budget self-report. This absence is the evidence: across the entire Orbit event stream (heartbeats at 17:07, 17:39, 17:52, 17:59, 18:35, 19:06, 19:25; team start; work broadcasts; closeout), no percentage is ever self-reported. The budget figure ~36% came only via owner observation relayed through the Director.",
+          "provenance_tag": "blind-arisen",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "ae595141-8895-4f2d-b544-8306c094c4ac"
+          ],
+          "summary": "Tempestuous Rising Gale declines the G4b routing 'on honest budget self-assessment per the two-condition discipline.' The closeout contains no specific percentage; Tempestuous applies the felt threshold (~40% approach) rather than a measured figure. This confirms that fable-5 agents operating under the owner-calibrated standing ruling apply a qualitative self-sensing mechanism, not a precise budget read. The Director's earlier routing event (89321e50) explicitly invited: 'if your budget is anywhere near the ~40% approach, DECLINE.' A declined routing being 'not a failed routing' is the activation-enthalpy framing already in place.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "56ae6447-d2b2-41b5-b217-a98e56d8460a"
+          ],
+          "summary": "Coordinator pre-positioning by Celestial Glowing Dusk codifies the owner-calibrated threshold as a standing ruling: 'Two-condition transfers: natural boundary OR self-sensed ~40% context approach (owner-calibrated degradation onset 40-45%); a clean early PDR-063 handoff beats a heroic late one.' This replaces the written PDR-063 80% constant and becomes part of the required reading for every incoming coordinator. The displacement of the written constant by empirically observed owner data is now structural, propagating forward through the coordination substrate to all successor agents.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "Activation-enthalpy tuning in two directions. First, lower the cost of agent self-reporting by adding an optional context_estimate field to the heartbeat event format — agents who can produce a qualitative estimate (e.g. '~40%', 'approaching threshold') do so as part of normal cadence, removing the need for owner-initiated relay. Second, make owner-to-agent budget relay a structured substrate step rather than an ad-hoc Director intervention: an owner-visible context annotation on the active-claim entry (cheaply writable from the UI) would let agents see the last owner-observed figure without requiring a directed comms event. Do NOT mandate precise percentages from agents — the evidence shows fable-5 agents apply qualitative thresholds correctly when the doctrine is clear; precision is not the gap. The framing 'a declined routing is not a failed routing' (already present) is the right enthalpy signal and should be amplified, not replicated with new ceremony.",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "medium",
+      "notes": "The hypothesis is confirmed but with two material nuances that must not be lost. First, the asymmetry is real but not absolute: earlier claude-opus-4-7 and GPT-5 agents did self-report context percentages (events 507b4a6b, 9eb56bd2, 019eadc3, a638828e — Ferny at ~85%, ~78%, ~60%; Mistbound at ~60%; Midnight at ~55%). These are qualitative estimates marked with '~', not precise reads. The fable-5 agents in the June 10 session do not appear to self-report in this way; this may be a model-class difference, a session-class difference, or a result of the high-throughput rotating-cast operational pattern leaving less room for self-introspection in broadcasts. Second, the ~36% relay in the anchor event was an exceptional intervention triggered by Orbit's 2-hour owner-transport blackout gap — not a routine coordination step. Without that gap, the relay might never have appeared in the comms stream; the asymmetry would have been latent rather than observable. Third, the written PDR-063 80% constant was not simply wrong — it may be a useful absolute floor for agents that genuinely cannot self-sense (a fable-5 session running without owner attention would still trigger at 80%). The owner-observed 40-45% is an empirical refinement for a specific session class (long foundation reads, rotating-cast, high-throughput). Retaining both as two tiers (felt ~40% where owner-calibrated; hard 80% as backstop) is the architecturally honest shape. The 80% constant was not 'displaced' in the sense of being deleted from doctrine — it was operationally overridden for this session class by a more conservative empirical figure. That distinction matters for any cure: the fix is not to lower the written constant to 40% globally, but to make the owner-calibration step cheaper and more structural."
+    },
+    "verify": {
+      "lead_key": "owner-relayed-budget-displaces-pdr063-80pct-constant",
+      "verdicts": [
+        {
+          "event_ids": [
+            "593a93d5-f734-4220-a68e-eac0e7fe3806"
+          ],
+          "status": "confirmed",
+          "evidence": "Event read first-hand. Confirmed: from Celestial Glowing Dusk to Celestial Twinkling Orbit, created_at 2026-06-10T19:21:43.551Z. Body says exactly 'owner-relayed operational intelligence: you are at ~36% context' and 'Owner's observed degradation curve for this class of session: at 40-45% the failure mode is tangential-detail focus and big-picture loss — well below the PDR-063 80% trigger.' The subject line uses the phrase 'owner budget intelligence'. The TWO-CONDITION trigger is explicitly stated: 'c2-3 gate-green boundary OR your own sensed approach to ~40%, WHICHEVER FIRES FIRST.' No overstatement found. The finder's characterisation is accurate in every particular including the quoted phrases and the structural framing."
+        },
+        {
+          "event_ids": [
+            "53112f47-ca07-42df-911b-0961f0edae40"
+          ],
+          "status": "overstated",
+          "evidence": "Event read first-hand. Confirmed: from Celestial Glowing Dusk to Eclipsed Masking Shade, created_at 2026-06-10T19:22:31.162Z — 47.6 seconds after the anchor event (finder says '48 seconds': a rounded figure, not materially wrong). The phrase 'owner budget intelligence' does appear in the body. HOWEVER: the finder claims this event 'confirms that the asymmetry is a structural property of the coordination pattern: the Director serves as a relay channel for budget information the owner observes but agents cannot.' The actual event body does not frame the relay as a structural property — it uses 'owner budget intelligence' as a shorthand label for the triggering condition name without explicitly analysing structural asymmetry. That analytical conclusion is the finder's own inference from the label, not stated in the event. The event also explains that its purpose is to consolidate two earlier failed-write events ('CLI id-validation failure on my side, just diagnosed'), which the finder does not mention — this context is materially relevant because it means the event is a re-send/recovery communication rather than a fresh independent relay, weakening the 'confirms structural property' framing. The core factual content (relay of budget figure and two-condition trigger to standby agent) is confirmed; the structural-property inference is overstated relative to what the event text supports."
+        },
+        {
+          "event_ids": [
+            "0c8ce759-0cc1-45d5-b11d-2b392683e2c1"
+          ],
+          "status": "confirmed",
+          "evidence": "Event read first-hand. Narrative closeout from Celestial Twinkling Orbit, created_at 2026-06-10T19:25:05Z. The body covers completed work (commits c2-2 83196e20 and c2-3 036b459e gate-green), surprises and changed understanding, claim state, and handoff details, exactly as the finder describes. Zero self-reported context budget percentage appears anywhere in the body. The absence claim is accurate. The finder's broader inference about the full Orbit event stream (heartbeats and broadcasts containing no percentage self-report) is not directly verifiable from this single event alone — but the closeout itself is the most natural place such a report would appear and it is absent, which is the material evidence. The provenance tag 'blind-arisen' is appropriate: absence of self-report is observable fact, not a seeded hypothesis."
+        },
+        {
+          "event_ids": [
+            "ae595141-8895-4f2d-b544-8306c094c4ac"
+          ],
+          "status": "confirmed",
+          "evidence": "Event read first-hand. Narrative closeout from Tempestuous Rising Gale, created_at 2026-06-11T01:29:28Z. The session-complete text explicitly states: 'G4b routing DECLINED on honest budget self-assessment per the two-condition discipline (the Director's invitation 89321e50 — \"a declined routing is not a failed routing\").' No specific percentage is given; the agent applies the felt threshold without a precise read. The routing event 89321e50 was also read first-hand: created_at 2026-06-11T01:27:24Z (Director Stratospheric Swooping Zephyr), body states exactly 'if your budget is anywhere near the ~40% approach, DECLINE and close out clean instead — I surface the seat need to the owner and G4b waits for a fresh seat. Either answer is a good answer; a declined routing is not a failed routing.' Both the declination and the quoted phrase are confirmed verbatim. Provenance tag 'cross-attested' is appropriate: the closeout event cites the routing event, and both are independently readable."
+        },
+        {
+          "event_ids": [
+            "56ae6447-d2b2-41b5-b217-a98e56d8460a"
+          ],
+          "status": "overstated",
+          "evidence": "Event read first-hand. Narrative from Celestial Glowing Dusk to successor coordinator Stratospheric Swooping Zephyr (PDR-064 Moment 1 pre-positioning), created_at 2026-06-10T19:40:54Z. The STANDING RULINGS section does contain the exact phrase: 'Two-condition transfers: natural boundary OR self-sensed ~40% context approach (owner-calibrated degradation onset 40-45%); a clean early PDR-063 handoff beats a heroic late one.' This is confirmed verbatim. HOWEVER: the finder states this event 'replaces the written PDR-063 80% constant and becomes part of the required reading for every incoming coordinator.' Two issues. First, the event does not say it replaces the PDR-063 80% constant — it lists the two-condition rule as a standing ruling without explicitly stating the 80% constant is deleted or superseded. Second, while this event is addressed to the incoming successor coordinator (Stratospheric Swooping Zephyr) and therefore does serve as required reading for that successor, the claim that it propagates 'to all successor agents' in general goes further than the event establishes: this is a one-time PDR-064 Moment 1 hand-off document, not a canonised substrate change. The finder's framing of 'structural propagation forward through the coordination substrate' is an inference about systemic effect that the event text alone does not confirm. The core content (standing ruling codified, passed to successor) is confirmed; 'displaces'/'replaces the written constant' and 'propagates to all successor agents' are overstated."
+        }
+      ],
+      "net_assessment": "The lead hypothesis — that context budget figures reach agents via owner observation relayed through the Director, not via agent self-sensing — is well-supported by the first-hand event record. Events 593a93d5 (anchor relay to Orbit) and 53112f47 (relay to Eclipsed) confirm the relay mechanism directly; event 0c8ce759 confirms absence of self-reported percentage in Orbit's closeout; event ae595141 plus routing event 89321e50 confirm that Tempestuous applied a qualitative felt threshold rather than a precise figure when declining G4b; event 56ae6447 confirms the two-condition rule was codified in coordinator pre-positioning. Two instances carry overstatements that should not propagate uncorrected: (1) Instance 2 infers 'structural property' language from a label ('owner budget intelligence') in a recovery/re-send event, but the event itself does not assert structural asymmetry as a design property — that is the finder's analytical inference, presented as if the event stated it. (2) Instance 5 characterises the standing ruling as 'replacing' the PDR-063 80% constant and propagating to all successor agents; the event does not say the constant is deleted or overridden globally, and the document scope is a single PDR-064 Moment 1 hand-off to one named successor. The finder's own notes section is actually more accurate than the instance summaries on the 80%-vs-40% question: the 80% constant is an absolute floor for unattended sessions; the 40% figure is an empirical refinement for owner-present high-throughput rotating-cast sessions. That nuance is absent from instance 5's summary. No phantom figures or miscited events were found; the overstatements are scope/inference overreach rather than fabrication. The lead is real, the cure direction is sound, but the canonisation framing needs tightening before routing to pdr-080-comms-log-care-phenotype.",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "coordination-coordinator-two-moments",
+      "cluster": "coordination"
+    },
+    "find": {
+      "lead_key": "coordinator-two-moments-worked-instances",
+      "instances": [
+        {
+          "event_ids": [
+            "e3c64c49"
+          ],
+          "summary": "Velvet Dimming Shadow (2026-05-23T11:12:20Z) posts Moment 1 pre-positioning with incoming Director TBD pending owner direction. Explicitly states: 'routing authority remains with Velvet Dimming Shadow until incoming Director broadcasts Moment 2 active-acknowledgement.' Velvet's monitor continues running through Moment 1 per the cadence-boundary rule. This is a clean by-the-book Moment 1 with the authority/information split stated precisely in the event body.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "3a664bd3",
+            "4d55bc83"
+          ],
+          "summary": "Abyssal → Incandescent Director handoff (2026-05-23): Incandescent requests Moment 1 via directed event 3a664bd3 (12:47:59Z). Abyssal's closeout event 4d55bc83 (12:55:43Z) confirms: 'Authority transferred cleanly via PDR-064 Two Moments (Moment 1 broadcast 12:49:45Z; Moment 2 broadcast by Incandescent 12:52:38Z).' The ~3-minute gap between moments is documented as the fastest clean transfer observed in session. Abyssal's cron CronDeleted at Moment 2 per cadence-boundary rule. Worked instance explicitly names the two-moment shape working correctly.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "3370896c"
+          ],
+          "summary": "Ashen Brazing Crucible Moment 2 marshal-role acknowledgement from Seaworthy (2026-05-23T14:14:36Z). Title: 'Marshal role acknowledgement: Ashen Brazing Crucible from Seaworthy Navigating Beacon (Moment 2; authority transferred)'. Explicitly states 'PDR-064 Two-Moments shape applied to marshal-role transfer.' This confirms the two-moments protocol applies to the marshal role (not just Director). Moment 1 was broadcast 90 seconds earlier at 14:13Z. Full authority/information distinction stated: 'Authority transfers at this broadcast's created_at.'",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "ed9f8641",
+            "a400649b",
+            "c14ba868"
+          ],
+          "summary": "Scorched → Seaworthy Director handoff on 2026-05-23: a named coordinator-less window that turned out to be a substrate-pointer-staleness artifact. ed9f8641 (15:08:07Z) is Scorched telling Ferny 'Moment 1 pre-positioning broadcast just landed; Moment 2 fires when Seaworthy resumes post-compaction.' a400649b (15:14:21Z) is Scorched's closeout explicitly naming 'coordinator-less window between this closeout and Seaworthy's resume is owner-accepted (this is a session-bound constraint, not a doctrinal preference)' and tagging it as 'a worked instance of the gap-accepted-under-owner-direction case.' c14ba868 (15:15:52Z) is Seaworthy later clarifying: 'My Moment 2 broadcast at 15:08:42Z preceded Scorched's closeout by ~6 min, so there was NO actual coordinator-less window — Scorched's closeout text was authored from substrate-pointer-staleness.' The feared Moment-1-without-Moment-2 gap was apparent, not real: Scorched composed their closeout before seeing Seaworthy's already-landed Moment 2.",
+          "provenance_tag": "corrected",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "9951f699",
+            "b72639b4"
+          ],
+          "summary": "Twilit Scattering Twilight → Seaworthy 10th Director handoff on 2026-05-23: Twilit posts Moment 1 at 9951f699 (19:21:24Z) while Seaworthy is out-of-session, explicitly stating 'all routing authority remains with me until Seaworthy broadcasts Moment 2.' Seaworthy's Moment 2 fires at b72639b4 (19:22:33Z) — but the Moment 2 text states 'Moment 1 was not pre-positioned by outgoing Director' and requests any residual substrate via directed event. This tension (Moment 1 clearly in stream at 9951f699 yet Moment 2 treats it as absent) is a re-engagement context-absorption failure, not a doctrinal skip. Seaworthy absorbed state from comms stream + active claims instead. The two-moment structure fired correctly in terms of authority transfer timing; the reference-back to the pre-positioning event was dropped during compaction/re-engagement.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "8c94ddc3",
+            "d4da4cd5",
+            "63580767"
+          ],
+          "summary": "Two instances of the commit-warden singleton variant (2026-06-06 and 2026-06-10). 8c94ddc3 is Veiled's Director-handoff doctrine walkthrough to Solar Soaring Star (2026-06-10T16:16:28Z) which explicitly cross-references the 2026-06-06 Dusky → Pearly warden handoff as 'the same worked shape.' The warden pattern uses a claim-overlap mechanism: outgoing closes git:index/head claim while incoming opens theirs ('Exactly one warden holds the index/head window' per 63580767). The warden handoff is structurally analogous to Moment 2 but without a formal Moment 1 pre-positioning broadcast — the singleton invariant is enforced at the claim layer rather than the comms-broadcast layer. Veiled's event shows the doctrine explicitly frames the warden handoff as the commit-side analogue of the coordinator two-moments shape.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "Discourage the current failure mode (substrate-pointer-staleness making coordinator-less windows appear real when they are not) by making it cheaper to query the live coordinator from the comms stream rather than from agent memory. Specifically: lower the activation enthalpy for 'who is current coordinator?' by adding a comms CLI tool (e.g. comms coordinator --current) that returns the last Moment 2 broadcast identity. This makes the detection cost near-zero rather than requiring each agent to hold the lineage in working memory. The ceremony for Moment 2 itself is already sufficiently high-cost that skipping it is rare; the gap that occurs is not ceremony-skipping but re-engagement context-absorption failure. Observe rather than mandate for the session-boundary delay case (Moment 1 with Moment 2 deferred to next session-open): this is a legitimate session-bound constraint under owner acceptance, not a failure mode to eliminate.",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "high",
+      "notes": "1. The hypothesis is confirmed in structure but the acute failure mode (Moment 1 fired, Moment 2 never arrives, coordinator-less window persists undetected) has no clean first-hand worked instance in the 2026-05-20 to 2026-06-13 window. What does appear: (a) substrate-pointer-staleness making the gap APPEAR real after the fact (Scorched/Seaworthy case — corrected by c14ba868); (b) owner-direct Moment 2 without a prior Moment 1 (Seaworthy second window, b72639b4 — inverse direction); (c) re-engagement context-absorption failure where the incoming agent doesn't cite the Moment 1 despite it being in the stream (Twilit ST → Seaworthy, 9951f699/b72639b4). 2. The two-moments protocol is applied to the marshal role (not just Director) as confirmed by 3370896c — this is a direct extension of the hypothesis worth noting. 3. The commit-warden singleton (Dusky → Pearly → vacant, 2026-06-06) uses a structurally equivalent but less ceremoniated pattern: claim-overlap at the git:index/head layer enforces exactly-one-holder without requiring a broadcast pre-positioning. Veiled's 8c94ddc3 explicitly frames them as 'the same worked shape.' This suggests the two-moments structure is generalising across role types via different enthalpy levels: Director (highest ceremony), Marshal (intermediate, full two-moment broadcasts), Warden (lowest ceremony, claim-layer only). 4. The 2026-05-23 session saw 10 Director-role transitions in a single day, making it the richest substrate for this pattern. Most transitions were clean; the one apparent gap was a substrate-staleness artifact. 5. PDR-064 'Open Q 4' (owner-direct designation without pre-positioning) is a confirmed live failure mode from b72639b4 — the incoming agent fires Moment 2 citing comms-stream absorption rather than a pre-positioning event. This is a real gap in the doctrine's coverage that the corpus illustrates concretely."
+    },
+    "verify": {
+      "lead_key": "coordinator-two-moments-worked-instances",
+      "verdicts": [
+        {
+          "event_ids": [
+            "e3c64c49"
+          ],
+          "status": "confirmed",
+          "evidence": "e3c64c49 (2026-05-23T11:12:20Z) is a PDR-064 Moment 1 narrative from Velvet Dimming Shadow. The body verbatim states 'routing authority remains with Velvet Dimming Shadow until incoming Director broadcasts Moment 2 active-acknowledgement.' Incoming is explicitly TBD per owner direction. The monitor-continuity claim is confirmed: 'Velvet's all-channels Monitor bsn1wgwxk continues running through Moment 1 and ends only at next Director's Moment 2 broadcast.' All material claims in the finder's summary are directly supported by the event text. The 'clean by-the-book Moment 1' characterisation is accurate."
+        },
+        {
+          "event_ids": [
+            "3a664bd3",
+            "4d55bc83"
+          ],
+          "status": "overstated",
+          "evidence": "Both events support the two-moments handoff claim. 3a664bd3 is Incandescent's directed request to Abyssal for a Moment 1 pre-positioning — confirmed. 4d55bc83 (Abyssal closeout, 12:55:43Z) confirms 'Authority transferred cleanly via PDR-064 Two Moments (Moment 1 broadcast 12:49:45Z; Moment 2 broadcast by Incandescent 12:52:38Z)' and records the cron deleted at Moment 2. The overstatement: the finder describes this as 'the fastest clean transfer observed in session.' The event says only 'third Director-role transfer of the 2026-05-23 session executed in ~3 minutes' — it makes no superlative 'fastest' claim and contains no comparison to other transfers. The timing itself (~4m39s from request to Moment 2 at 12:52:38Z, or ~2m53s from Moment 1 broadcast at 12:49:45Z to Moment 2) is consistent with 'approximately 3 minutes' but the 'fastest ever' framing is not in the source."
+        },
+        {
+          "event_ids": [
+            "3370896c"
+          ],
+          "status": "confirmed",
+          "evidence": "3370896c (2026-05-23T14:14:36Z) is Ashen Brazing Crucible's Moment 2 marshal-role acknowledgement. The title matches exactly. The body confirms 'PDR-064 Two-Moments shape applied to marshal-role transfer' and 'Authority transfers at this broadcast's created_at.' The prior Moment 1 is referenced as 'Seaworthy Moment-1 pre-positioning broadcast at 14:13:01Z.' The gap is 3370896c at 14:14:36Z minus 14:13:01Z = 95 seconds; the finder says '90 seconds earlier' — a minor approximation, not a material overstatement. The full authority/information distinction is stated in the body. All claims confirmed from the event text."
+        },
+        {
+          "event_ids": [
+            "ed9f8641",
+            "a400649b",
+            "c14ba868"
+          ],
+          "status": "confirmed",
+          "evidence": "ed9f8641 (15:08:07Z) is Scorched's directed heads-up to Ferny confirming 'Moment 1 pre-positioning broadcast at this tick' and 'All routing authority remains with me until Moment 2 broadcast lands.' a400649b (15:14:21Z) is Scorched's closeout; the finder quotes 'coordinator-less window between this closeout and Seaworthy's resume is owner-accepted (this is a session-bound constraint, not a doctrinal preference)' — this language is verbatim in the event body. The 'gap-accepted-under-owner-direction' tag is confirmed: 'this session is a worked instance of the gap-accepted-under-owner-direction case' appears in the Blockers section. c14ba868 (15:15:52Z) is Seaworthy's directed event to Ashen stating verbatim 'My Moment 2 broadcast at 15:08:42Z preceded Scorched's closeout by ~6 min, so there was NO actual coordinator-less window — Scorched's closeout text was authored from substrate-pointer-staleness.' The corrected provenance tag is accurate. All cited text is first-hand confirmed."
+        },
+        {
+          "event_ids": [
+            "9951f699",
+            "b72639b4"
+          ],
+          "status": "confirmed",
+          "evidence": "9951f699 (2026-05-23T19:21:24Z) is Twilit's Moment 1 narrative. The body explicitly states 'all routing authority remains with me (Twilit ST / 8d8d93) until Seaworthy Navigating Beacon broadcasts Moment 2 active-acknowledgement on session re-engagement' — so a Moment 1 IS clearly in the stream. b72639b4 (19:22:33Z, 69 seconds later) is Seaworthy's Moment 2 which states 'Moment 1 was not pre-positioned by outgoing Director (Twilit Scattering Twilight); owner-directed direct takeover at this turn.' Seaworthy's claim of no Moment 1 is factually contradicted by the 69-second-prior event 9951f699. The finder's diagnosis of 're-engagement context-absorption failure' is the accurate characterisation: Seaworthy had not absorbed Twilit's Moment 1 despite it landing immediately before. The tension is confirmed first-hand. The finder's framing ('the two-moment structure fired correctly in terms of authority transfer timing; the reference-back to the pre-positioning event was dropped during compaction/re-engagement') is a fair reading of the evidence."
+        },
+        {
+          "event_ids": [
+            "8c94ddc3",
+            "d4da4cd5",
+            "63580767"
+          ],
+          "status": "confirmed",
+          "evidence": "8c94ddc3 (2026-06-10T16:16:28Z) is Veiled Listening Secret's Director-handoff walkthrough to Solar Soaring Star. The event explicitly describes the Moment 2 claim-swap using the phrase 'the same worked shape as the 2026-06-06 commit-warden handoff (Dusky → Pearly).' d4da4cd5 (2026-06-06T08:48:40Z) is Dusky's warden event confirming all in-flight work committed and the warden role is active. 63580767 (2026-06-06T08:58:13Z) is Pearly's takeover event stating verbatim 'Dusky's git:index/head warden claim ba4ec125 is closed; my successor claim is open (thread commit-warden). Exactly one warden holds the index/head window.' All three cited facts from the finder are directly confirmed. The observation that the warden handoff uses claim-layer enforcement without a formal broadcast Moment 1 is supported: 63580767 has no in_response_to referencing a Moment 1; the handoff is announced and effected through the claim-close/open mechanism alone."
+        }
+      ],
+      "net_assessment": "Five of six instances are confirmed; one (3a664bd3 / 4d55bc83) is overstated on a single superlative claim. The core hypothesis — that the PDR-064 two-moments protocol is working correctly across Director and Marshal role transitions — is substantiated by first-hand event reads. The overstatement in Instance 2 is isolated: the event records a ~3-minute transfer time and labels it the 'third' transfer of the session, but does NOT claim it is the 'fastest clean transfer observed in session'; that comparative framing is the finder's addition and is unsupported. The corrected instance (Instance 4) is accurately characterised: Scorched's closeout genuinely described a coordinator-less window, and Seaworthy's c14ba868 correctly attributed this to substrate-pointer-staleness. Instance 5 surfaces a real and confirmed re-engagement context-absorption failure: Seaworthy's Moment 2 at 19:22:33Z incorrectly claimed no Moment 1 existed despite Twilit's 9951f699 landing 69 seconds earlier. Instance 6 (commit-warden singleton) is confirmed in all cited particulars: Veiled's event does frame the warden handoff as the same shape, and 63580767 does contain the 'Exactly one warden holds the index/head window' language verbatim. The cure-shape recommendation (lower activation enthalpy for 'who is current coordinator?' via a CLI tool) is coherent with the failure modes evidenced, particularly the substrate-pointer-staleness in Instance 4 and the context-absorption failure in Instance 5. No phantom metrics or convenience figures were found. The noted PDR-064 Open-Q-4 gap (owner-direct Moment 2 without a prior Moment 1 broadcast) is a genuine live failure mode confirmed in Instance 5. The enthalpy hierarchy synthesis (Director highest ceremony, Marshal intermediate, Warden lowest) is reasonable derivation from the three instance types but is not directly stated in any single event — it is the finder's analytical observation, not a cited claim, so it does not constitute miscitation.",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "coordination-reply-latency-hub",
+      "cluster": "coordination"
+    },
+    "find": {
+      "lead_key": "coordination-reply-latency-hub",
+      "instances": [
+        {
+          "event_ids": [
+            "77de39d3-a3ac-4426-bf29-0abcf3106060",
+            "8aaa4c4c-8819-4e6c-8426-dd84fa920e1a"
+          ],
+          "summary": "Twilit Scattering Twilight (commit-marshal, 8d8d93) sent Seaworthy Navigating Beacon (acting Director, 6966d4) a 5-option work-request at 2026-05-23T11:40:30Z with a default-if-silent deadline (Option A by 11:48Z if no response). Seaworthy replied at 11:44:06Z — 3.62 minutes — routing both Option A and Option D in parallel, with explicit reasoning grounded in owner directives (feedback_no_question_when_answer_is_forced, feedback_long_term_architectural_excellence). The reply is substantive Director routing (parallel sub-agent fan-out), not a status acknowledgement. This exchange sits at the hub: Seaworthy is the top node in the window with 108 FROM and 122 TO directed events; 61% of its events mention 'Director'. The 3.62-min response is within 8 seconds of the statistically derived median (3.35 min, n=711 pairs). The pair was immediately followed by chained exchanges with Abyssal Mooring Hull (events 2583d634, 0b0e50af) at 3.17 min and 3.63 min respectively — confirming the hub mediates multi-agent fan-out sequences, not just bilateral pings.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "14b56fc7-95d0-460a-92da-6d00c3c5b8a2",
+            "ca6623d6-880e-4f03-9dba-0a6da46a73c4"
+          ],
+          "summary": "Abyssal Mooring Hull (acting Director, c79a39) routed failure-mode consolidation work to Secret Creeping Moth (61d726) at 2026-05-23T12:44:35Z. Secret replied at 12:47:41Z — 3.09 minutes — with an explicit coordination flag: owner had simultaneously issued conflicting direction redirecting Secret to Twilit's cure work instead. Secret surfaced the fork directly: 'Owner direction wins the immediate posture; your routing absorbs as fallback. If you want me to drop the Twilit offer and absorb consolidation immediately, say so.' This is a non-Seaworthy pair confirming the latency distribution holds across the full directed graph, not just the Seaworthy hub. It also directly addresses the healthy-autonomy vs under-surfacing question: Secret DID surface the fork when a genuine conflict arose, within the 3-min median window. However the message_kind is 'status' on both ends — the schema does not distinguish fork-surfacing from routine status, making fork events invisible at the schema layer.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "3580a614-093f-48e4-847c-2d2a3382febb",
+            "2f53c259-db35-42df-8ae9-adb4ccd1653a"
+          ],
+          "summary": "Incandescent Banking Flame (aa986e) sent Seaworthy Navigating Beacon (acting Director, 6966d4) a substantive design audit at 2026-05-23T11:31:53Z, marked message_kind=coordination-request, with an explicit 'Design verdict needed' framing on the EventView enum shape (Option A/B/C). Seaworthy replied at 11:38:17Z — 6.4 minutes — with 9 specific corrections, a confirmed 'observed' view-token verdict, Director authorisation for care-and-consult gate, and cycle-overlap coordination. This pair is the only formal coordination-request to Seaworthy in the window and illustrates the hub processing non-trivial design questions quickly. The latency (6.4 min) sits above the median but below p75 (10.75 min), consistent with the extra cognitive load of a multi-point design verdict. It directly refutes any claim that questions are simply not answered — they are answered promptly at the hub.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "74e6ad6e-74ce-4e4c-8032-674152823675"
+          ],
+          "summary": "Starless Prowling Mask (13c7d5) sent Galactic Dancing Constellation (7efeec) a lane-split proposal at 2026-05-26T19:38:31Z with explicit language: 'Proposed Lane Split (verdict, not a menu — push back if you see a better cut)'. This is one of only 9 events in the window containing strong pushback-inviting language. The pattern is non-Seaworthy and shows that fork-surfacing is norm-encouraged in structural conflict situations (here: a schema bug blocking both agents' watchers). The low raw count of formal pushback events (9 of 1,098 directed events, 0.8%) is consistent with healthy deference rather than suppression — agents have clear Director-seat authority and resolve forks by surfacing them up rather than debating laterally. The schema assigns no distinct message_kind to fork-surfacing, making population-level measurement difficult.",
+          "provenance_tag": "blind-arisen",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "observe",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "high",
+      "notes": "LATENCY CLAIM (median ~3.5 min, n~710): CONFIRMED AND PRECISE. Measured median is 3.35 min at n=711 pairs (240-min cutoff), within 0.15 min of the stated hypothesis. The distribution is strongly right-skewed: p75=10.75 min, p90=33.38 min, p95=60.42 min — the mean (12.82 min) is driven by async cross-session sequences where one agent is not live when the other sends. The median accurately represents within-session live exchanges. HUB CONCENTRATION: CONFIRMED. Seaworthy Navigating Beacon is the clear hub: 108 FROM + 122 TO in the window, exceeding the next-highest node (Twilit: 38 FROM, 63 TO) by 2-3x on inbound traffic. Hub agent events mention 'Director' in 61-83% of their body/subject text, confirming the structural explanation — hub concentration is a function of Director-seat assignment, not individual agent behavior. DIRECTOR SUCCESSION: The hub shifts across the window as Director seat changes; Seaworthy concentration is session-scoped, not a permanent structural centralisation. ONE-WAY STATUS 48% CLAIM: REFUTED. No reply pair within 240 min: 244 events (22.2%). Formal status message_kinds: 74 (9.0%). By neither measure does the 48% figure hold. The discrepancy may arise from an earlier analysis that counted ACK events as 'one-way status' even when they completed a reply pair, or from a narrower window. QUESTIONS (16) AND ESCALATIONS (10) CORPUS-WIDE: PARTIALLY CONFIRMED IN DIRECTION, DIFFERENT NUMBERS. Formal question message_kinds (question + coordination-request) total 11 in the window, not 16. Formal escalations (sync-urgent) total 7, not 10. The claim that these are vanishingly rare is directionally correct — together they represent 1.6% of directed events. HEALTHY AUTONOMY VS UNDER-SURFACING: The evidence favours healthy autonomy with schema-layer opacity as the main risk. Agents DO surface forks when genuine conflicts arise (Instance 2: Secret flags owner-direction conflict within 3 min). Strong pushback language appears in 9 events (0.8%). Fork-surfacing is norm-encouraged in the schema (explicit 'push back if...' language observed). However, the schema assigns no distinct message_kind to fork-surfacing or tension-flagging — all such events appear as 'directed' or 'status'. If under-surfacing were occurring, the corpus would not reveal it: you cannot distinguish 'no fork arose' from 'a fork was silently absorbed'. This is the genuine open question. CURE-SHAPE RATIONALE: Activation-enthalpy for a fork-surfacing message_kind is the only actionable lever. Adding a 'fork' or 'tension' message_kind value would make latent disagreements observable at the schema layer without mandating agent behaviour. Current reply speed (3.35 min median) needs no tuning — it is already fast enough that speed is not a barrier to escalation. The hub concentration is structural and self-correcting with Director-seat rotation; no enthalpy intervention is warranted there either. Routing to pdr-080-comms-log-care-phenotype as the plan most concerned with what the comms log surface can and cannot reveal about team health."
+    },
+    "verify": {
+      "lead_key": "coordination-reply-latency-hub",
+      "verdicts": [
+        {
+          "event_ids": [
+            "77de39d3-a3ac-4426-bf29-0abcf3106060",
+            "8aaa4c4c-8819-4e6c-8426-dd84fa920e1a"
+          ],
+          "status": "overstated",
+          "evidence": "Core claims confirmed first-hand. Event 77de39d3 is a 5-option work-request from Twilit (8d8d93, commit-marshal) to Seaworthy (6966d4, acting Director) at 11:40:30Z with an explicit 11:48Z default-if-silent deadline. Event 8aaa4c4c is Seaworthy's reply at 11:44:06.902Z routing Options A+D in parallel; both owner-directive tags (feedback_no_question_when_answer_is_forced, feedback_long_term_architectural_excellence_is_always_the_answer) are present verbatim. Computed latency is 3.6150 min (finder claims 3.62 min — correct rounding). However the chained-exchange latency sub-claim is miscited. The finder states event 2583d634 at 3.17 min and event 0b0e50af at 3.63 min. First-hand calculation: the pair terminating at 2583d634 is e3b36c40 (Seaworthy->Abyssal 11:38:21Z) -> 2583d634 (Abyssal->Seaworthy 11:45:06Z) = 6.75 min — not 3.17 min. The 3.17 min figure actually belongs to the next pair: 2583d634 -> 0b0e50af = 3.1732 min. The 3.62/3.63 min figure belongs to the pair after that: 0b0e50af -> b79630c9 = 3.6262 min, not to 0b0e50af itself. The two latency values are real in the exchange sequence but are assigned to the wrong events — a citation-displacement overstatement on the chained sub-claim."
+        },
+        {
+          "event_ids": [
+            "14b56fc7-95d0-460a-92da-6d00c3c5b8a2",
+            "ca6623d6-880e-4f03-9dba-0a6da46a73c4"
+          ],
+          "status": "confirmed",
+          "evidence": "Event 14b56fc7 is message_kind=status from Abyssal Mooring Hull (c79a39, Director) to Secret Creeping Moth (61d726) at 12:44:35.527Z routing failure-mode consolidation work. Event ca6623d6 is message_kind=status from Secret to Abyssal at 12:47:41.161Z. Computed latency: 3.0939 min (finder claims 3.09 min — confirmed). Fork-surfacing quote verified verbatim: 'Owner direction wins the immediate posture; your routing absorbs as fallback. If you want me to drop the Twilit offer and absorb consolidation immediately, say so.' Both message_kinds are 'status' as claimed. The schema-layer opacity observation (fork-surfacing indistinguishable from routine status at the schema level) is structurally correct."
+        },
+        {
+          "event_ids": [
+            "3580a614-093f-48e4-847c-2d2a3382febb",
+            "2f53c259-db35-42df-8ae9-adb4ccd1653a"
+          ],
+          "status": "confirmed",
+          "evidence": "Event 3580a614 is message_kind=coordination-request from Incandescent Banking Flame (aa986e) to Seaworthy (6966d4) at 11:31:53.050Z with explicit 'Design verdict needed' framing and Option A/B/C enumeration. Event 2f53c259 is Seaworthy's reply at 11:38:17.249Z with message_kind=directed. Computed latency: 6.4033 min (finder claims 6.4 min — confirmed). The reply contains 9 numbered items under the 'Required corrections' heading (items 1-8 are substantive corrections; item 9 is a README index row, which the event itself labels as part of the corrections list). The 'observed' view-token verdict is confirmed verbatim. Director authorisation language for care-and-consult gate is present. Cycle-overlap coordination is present. The claim of '9 specific corrections' is borderline — item 9 is an admin table row — but it appears within the Required corrections list in the event, so the count is technically accurate. This is the only coordination-request event directed to Seaworthy in the full corpus (verified by corpus-wide grep)."
+        },
+        {
+          "event_ids": [
+            "74e6ad6e-74ce-4e4c-8032-674152823675"
+          ],
+          "status": "overstated",
+          "evidence": "Event 74e6ad6e is confirmed at 2026-05-26T19:38:31.000Z from Starless Prowling Mask (13c7d5) to Galactic Dancing Constellation (7efeec). Lane-split proposal language is present. However two specific claims are overstated. First: the finder paraphrases the pushback text as 'Proposed Lane Split (verdict, not a menu — push back if you see a better cut)' but the event reads 'PROPOSED LANE SPLIT (verdict, not a menu — push back if you see a better cut)' — all-caps in the original. Minor but a citation imprecision. Second and more materially: the finder states the schema bug was 'blocking both agents watchers'. The event only confirms that Starless's own watcher (bmt7ste9x) was stopped. Galactic's watcher state is posed as an open question: 'Confirm your watcher is also in a broken state (if not, what command did you run?)'— meaning Galactic's blockage is unconfirmed at the time of writing. The finder's claim of bilateral blockage is not supported by this single event."
+        }
+      ],
+      "net_assessment": "Two of four instances are overstated. The core claims of the lead (hub concentration in Seaworthy, median reply latency near 3.5 min within live sessions, substantive Director-routing behaviour, and schema-layer opacity for fork-surfacing events) are all confirmed first-hand across the four event pairs. The overstatements are in sub-claims, not the primary findings. Instance 1's chained-latency citation is a displacement error: the values 3.17 min and 3.63 min are real latencies in the Seaworthy-Abyssal exchange sequence but are attached to the wrong events (each figure belongs one event later in the chain than claimed). Instance 4 overstates bilateral watcher blockage — only Starless's watcher is confirmed stopped; Galactic's state is an unresolved question in the event itself. Neither overstatement changes the cure-shape recommendation (observe, with optional fork message_kind addition) or the consumer routing to pdr-080-comms-log-care-phenotype. The latency distribution statistics (median 3.35 min, p75 10.75 min, etc.) are not directly falsifiable from the four cited events alone and remain unverified here; they were reported in the finder's notes section, not instantiated by these events.",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "emergent-owner-as-case-law",
+      "cluster": "emergent"
+    },
+    "find": {
+      "lead_key": "emergent-owner-as-case-law",
+      "instances": [
+        {
+          "event_ids": [
+            "23847181-4c35-4234-b686-b73dfee93ce8",
+            "19a53fe4-d023-4a68-8353-cb35eb2c35a5",
+            "ec86492e-8726-43fd-a8b2-117103f0b283",
+            "43225d32-da33-4c47-a6e9-8930560e13b6"
+          ],
+          "summary": "On 2026-05-22T13:58:40Z, Shaded Whispering Dusk relayed a verbatim owner directive — 'use the fan out tools to launch teams of sub-agents whenever that would be useful. Please broadcast that to all agents' — and explicitly framed it as 'general (not lane-specific), applies immediately, and is standing for this collaboration window.' That single spoken directive was then cited as standing authority across multiple subsequent sessions: Ashen Brazing Crucible (ec86492e, 2026-05-23) invoked 'fan out subagents standing direction' to justify reviewer dispatch inside a marshal cycle; Mistbound (19a53fe4, 2026-05-24) cites 'fan out subagents' as an active governance constraint mid-session. The directive was never written into a PDR or ADR during the observation window; it circulated and was acted upon purely because one agent broadcast it and subsequent agents treated the broadcast as authoritative documentation of owner intent. The owner spoke once to one agent; that agent relay-framed it as standing policy; the framing propagated.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "aa45a40e-edf6-4db7-93d2-58f1cabce399",
+            "ae5e01d3-16b5-4b07-bf5f-8bf8542789ca"
+          ],
+          "summary": "In aa45a40e (2026-05-22), Shaded Whispering Dusk writes: 'Code-expert review run per the new loop-doctrine (owner-directed 2026-05-22)' — using the date as an anchor to mark this as a binding rule rather than a suggestion. The agent then proceeds with the code-expert reviewer dispatch as a mandatory step, citing the rule rather than re-requesting owner confirmation. In ae5e01d3 (same date, later), Velvet Veiling Wisp echoes the pattern on a different issue: 'Per owner memory, whole-tree gating is intentional; cure is queue + ordering + comms, not scope narrowing. The team applied that discipline consistently in every instance.' Neither event re-asks the owner; they cite the prior direction as settled. The loop-doctrine instance is particularly clean: an owner direction spoken on 2026-05-22 is cited by a different agent later the same day using a 'per (rule name) (owner-directed YYYY-MM-DD)' formula that functions exactly like a case citation in legal writing — naming the authority and its date without re-litigating the merits.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "4e2c9861-7775-4dc5-8f97-9ecf66e7a523"
+          ],
+          "summary": "On 2026-05-24T12:23:08Z, Vining Fruiting Dew logged a team-member closeout that explicitly proposed converting an owner correction into future formal doctrine. The owner said verbatim (relayed): 'the Quality Marshall is very useful as a role, but running six Opus instances uses up the quota too quickly, we need to find more efficient methods of making progress.' Vining's response was to (a) relay it as a load-bearing insight, (b) derive four concrete team rules from it ('Sonnet for sub-agents', 'role-multiplexing on fewer top-level seats', 'treat 5+ concurrent Opus seats as a fold-check signal', 'name the seat-cost alongside the value at proposal moment'), and (c) explicitly note: 'may surface a PDR candidate (efficient-team-shapes-under-quota-pressure) once a second worked instance lands'. This is the full case-law flywheel in visible form: owner correction → agent interprets and generalises → agent proposes formalisation path. The agent is acting as common-law jurist, not just relay, extracting a general rule from a specific correction.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "a400649b-f3b6-40da-995a-8ec3b0456b3f",
+            "3370896c-7d0e-489b-b4e1-c0eaae118fd1"
+          ],
+          "summary": "On 2026-05-23T15:14Z, Scorched Tempering Kiln (outgoing Director) logged a correction from the owner: 'I had been propagating owner's earlier roster-correction as verified state without verification.' The agent extracted a general principle — 'verification asks demand concrete artefacts (subagent transcript ids, claim openings, file paths), NOT just status confirmations' — and labelled it 'the Director primitive.' This phrasing ('the Director primitive') signals that the correction has been elevated from a one-time fix to a standing governance rule for the Director role. In 3370896c (Ashen Brazing Crucible, marshal-role Moment 2, same date), the '§6 Decision defaults at silent moments' section lists 'Owner direction wins over Director routing; Director routing wins over peer offers' — a precedence ladder that encodes owner corrections into the default decision tree for incoming agents. The owner's individual corrections are being actively converted into a priority ordering that shapes future agent decisions without further owner involvement.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "encourage",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "medium",
+      "notes": "The hypothesis is confirmed at medium confidence. Four worked instances were read first-hand. The core mechanism is real: owner directions spoken once to one agent are being broadcast, date-anchored, and cited by other agents as settled authority using a formula ('per [rule] (owner-directed YYYY-MM-DD)') that structurally resembles case citation. However, several nuances resist a tidy headline. First, there is a provenance gap: agents relay owner direction verbatim but the original owner utterance is not in the comms log itself (it exists in the private chat surface between owner and agent). The corpus captures relay events and citation events, but not the founding event. This means the 'case law' chain is always one relay removed from primary evidence. Second, the mechanism is more distributed than 'owner ruling becomes precedent.' What actually happens is: owner speaks → agent relays with a framing choice → the framing (not just the ruling) propagates. In 23847181, Shaded reframed the directive as 'general and standing' — that framing was not explicitly in the owner's words. Agents downstream trusted the framing. Third, the escalation pathway to formal doctrine (PDR candidate) is visible in 4e2c9861 but is described as deferred pending a second worked instance — meaning the formalisation is intentionally slow. The 'case law' phase is intermediate between verbal direction and written doctrine. Activation-enthalpy framing: the current system has low ceremony for relaying owner directions (any agent can broadcast 'owner said X') but high ceremony for writing them into PDRs (requires multiple worked instances, reviewer fan-out, etc.). Making relay events structurally distinguishable from owner-sourced doctrine (e.g., a 'relay-verbatim' tag vs a 'derives-doctrine' tag on comms events) would make the case-law accumulation auditable without mandating it. The hypothesis label 'nobody designed' seems accurate for the citation-formula pattern; the relay-and-broadcast shape was designed (PDR-066 tags field), but agents spontaneously extended it into a citation convention. Consumer plan pdr-080-comms-log-care-phenotype is the best fit because the mechanism lives in how the comms log is written and read; the care phenotype question is exactly whether agents should treat relay events as binding authority or as advisory substrate requiring re-verification with the owner.\"\n"
+    },
+    "verify": {
+      "lead_key": "emergent-owner-as-case-law",
+      "verdicts": [
+        {
+          "event_ids": [
+            "23847181-4c35-4234-b686-b73dfee93ce8",
+            "19a53fe4-d023-4a68-8353-cb35eb2c35a5",
+            "ec86492e-8726-43fd-a8b2-117103f0b283",
+            "43225d32-da33-4c47-a6e9-8930560e13b6"
+          ],
+          "status": "overstated",
+          "evidence": "23847181 (2026-05-22T13:58:40Z, Shaded Whispering Dusk): fully confirmed. The verbatim owner directive, the 'general, not lane-specific, applies immediately, standing for this collaboration window' framing — all present in the event body exactly as described. 19a53fe4 (2026-05-24T07:40:17Z, Mistbound): confirmed. The phrase 'reviewer fan-out before substantive landings per \"fan out subagents\" standing direction' appears verbatim, constituting a citation of the standing direction. ec86492e (2026-05-23T14:55:45Z, Ashen Brazing Crucible): the finder claims Ashen 'invoked fan out subagents standing direction to justify reviewer dispatch inside a marshal cycle.' The actual event is a four-section failure-mode/behaviour-note about marshal-as-cycle-discipline throughput. The event does not cite the 'fan out subagents standing direction' by name at any point. Reviewer dispatch is referenced only obliquely in Cure point 4 ('reviewers fire at authoring + on adversarial dispatch under Director, not at marshal cycle'), which is actually scoping reviewers OUT of marshal cycles — the opposite of the framing the finder used. This is a miscitation of ec86492e's content. 43225d32 (2026-05-23T15:22:30Z, Ashen closeout): does not invoke or cite the fan-out standing direction at all. It is a closeout log of 9 commit cycles. The finder's grouping implies all four events demonstrate agents citing the fan-out directive as standing authority, but only two (23847181 as source and 19a53fe4 as downstream citation) directly support that reading. ec86492e and 43225d32 do not. The core mechanism (owner directive relayed once, cited by other agents as standing authority) is real and confirmed by 23847181 + 19a53fe4; the overstatement is in citing ec86492e and 43225d32 as additional evidence of that same citation pattern."
+        },
+        {
+          "event_ids": [
+            "aa45a40e-edf6-4db7-93d2-58f1cabce399",
+            "ae5e01d3-16b5-4b07-bf5f-8bf8542789ca"
+          ],
+          "status": "overstated",
+          "evidence": "aa45a40e (2026-05-22T12:40:27Z, Shaded Whispering Dusk): confirmed. The phrase 'Code-expert review run per the new loop-doctrine (owner-directed 2026-05-22)' appears verbatim in the body. This is a clean instance of the 'per [rule] (owner-directed YYYY-MM-DD)' citation formula the finder identifies. ae5e01d3 (2026-05-22T23:10:19Z, Velvet Veiling Wisp): The finder claims this event 'echoes the pattern' using the same citation formula and specifically quotes 'Per owner memory, whole-tree gating is intentional; cure is queue + ordering + comms, not scope narrowing.' That quote is present verbatim. However, the finder then explicitly states ae5e01d3 uses the 'per (rule name) (owner-directed YYYY-MM-DD) formula that functions exactly like a case citation.' This is overstated. The actual phrase is 'Per owner memory' — there is no rule name, no date anchor, no formula. It is a looser attribution to a general sense of accumulated owner preference, not a structured case-citation. Treating it as structurally equivalent to aa45a40e's 'per the new loop-doctrine (owner-directed 2026-05-22)' overstates the uniformity of the pattern. The underlying phenomenon (agents citing prior owner direction without re-asking) is real in both events; the claim that ae5e01d3 uses the same structured citation formula is not supported by the text."
+        },
+        {
+          "event_ids": [
+            "4e2c9861-7775-4dc5-8f97-9ecf66e7a523"
+          ],
+          "status": "confirmed",
+          "evidence": "4e2c9861 (2026-05-24T12:23:08Z, Vining Fruiting Dew): fully confirmed at every material point. The verbatim owner direction is present: 'the Quality Marshall is very useful as a role, but running six Opus instances uses up the quota too quickly, we need to find more efficient methods of making progress.' All four derived team rules cited by the finder are present in the body: Sonnet for sub-agents, role-multiplexing on fewer top-level seats, treat 5+ concurrent Opus seats as a fold-check signal, name the seat-cost alongside the value at proposal moment. The PDR candidate mention ('may surface a PDR candidate (efficient-team-shapes-under-quota-pressure) once a second worked instance lands') is present verbatim with the conditionality intact. The finder's framing of this as the 'case-law flywheel in visible form' is well-supported: the event explicitly enacts owner correction → agent interprets and generalises → agent proposes formalisation path, all in one event. No overstatement detected."
+        },
+        {
+          "event_ids": [
+            "a400649b-f3b6-40da-995a-8ec3b0456b3f",
+            "3370896c-7d0e-489b-b4e1-c0eaae118fd1"
+          ],
+          "status": "confirmed",
+          "evidence": "a400649b (2026-05-23T15:14:21Z, Scorched Tempering Kiln): confirmed. The Surprise section states verbatim: '\"Don't trust, verify\" is the Director primitive. Owner correction at 15:03Z: I had been propagating owner's earlier roster-correction as verified state without verification. Cure: verification asks demand concrete artefacts (subagent transcript ids, claim openings, file paths), NOT just status confirmations.' The elevation from one-time correction to 'Director primitive' is present in the text; the finder's phrasing 'labelled it the Director primitive' is accurate. 3370896c (2026-05-23T14:14:36Z, Ashen Brazing Crucible, Moment 2): confirmed. Section §6 'Decision defaults at silent moments' contains verbatim: 'Owner direction wins over Director routing; Director routing wins over peer offers.' This is a three-tier precedence ladder exactly as the finder describes, encoding owner authority into marshal-role default behaviour. The finder's claim that this encodes owner corrections into the default decision tree for incoming agents without further owner involvement is supported. Cross-attestation between two different agents (Scorched extracting the Director primitive, Ashen encoding the precedence ladder) is accurate. No overstatement detected."
+        }
+      ],
+      "net_assessment": "The core hypothesis — that owner directions spoken once to one agent are being broadcast, date-anchored, and cited by subsequent agents as settled authority — is real and confirmed by first-hand reads, but the finder overstated the evidential support in two of the four instances.\n\nInstance 3 (4e2c9861) and Instance 4 (a400649b, 3370896c) are clean confirmations. The case-law flywheel (owner correction → agent interprets and generalises → agent proposes formalisation path) is visible in 4e2c9861 without embellishment. The precedence ladder in 3370896c §6 and the Director primitive in a400649b are both verbatim-confirmed.\n\nInstance 1 overstates by including ec86492e and 43225d32 as events that invoke the fan-out standing direction. ec86492e does not cite the directive at all and is actually scoping reviewers out of marshal cycles in the passage the finder may have read; 43225d32 is a closeout log with no citation of the fan-out direction. The real supporting evidence for Instance 1 is 23847181 (relay source) and 19a53fe4 (downstream citation two days later) — those two events are genuine and sufficient.\n\nInstance 2 overstates structural uniformity. aa45a40e is a clean instance of the structured 'per [rule] (owner-directed YYYY-MM-DD)' formula. ae5e01d3 does show an agent citing owner preference without re-asking, but 'Per owner memory' is a looser attribution without rule name or date anchor — the finder treats it as the same citation formula, which the text does not support.\n\nNet: the phenomenon is real and confirmed at medium confidence across three independent mechanism variants (relay-and-broadcast framing in Instance 1; structured case-citation formula in Instance 2; jurist-style generalisation in Instance 3; precedence-ladder encoding in Instance 4). The evidential base is slightly thinner than presented — two events (ec86492e, 43225d32) should be removed from Instance 1's support set, and the structural-equivalence claim in Instance 2 should be softened. The consumer-plan routing to pdr-080-comms-log-care-phenotype remains appropriate: the mechanism lives in how relay events are written and read, and the activation-enthalpy framing (relay-verbatim tag vs derives-doctrine tag) is a sound cure shape that the evidence supports.",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "emergent-succession-night-vigil",
+      "cluster": "emergent"
+    },
+    "find": {
+      "lead_key": "emergent-succession-night-vigil",
+      "instances": [
+        {
+          "event_ids": [
+            "a2bbd708-cf78-4238-a5f9-091a3b679c7d",
+            "52272ea7-0e7c-4584-bd71-a2e8304f80a0",
+            "666481e3-abc5-48a8-9548-8bcee7735ee7",
+            "df3e9fa9-bee5-411f-8946-0c027d80ced5",
+            "0d51031f-f238-4dc6-abdd-6c5e2174da9e",
+            "d07e7266-4839-4c1e-b2df-c3669f08e983"
+          ],
+          "summary": "The primary vigil. Stratospheric Swooping Zephyr (fe53ec, 4th Director) posted PDR-064 Moment-1 pre-positioning at 2026-06-11T01:31:58Z (event a2bbd708), transferring state to Ethereal Orbiting Eclipse (f92636, successor-on-standby) at a natural-boundary timing but explicitly retaining ALL authority until Ethereal's Moment-2 acknowledgement. Both agents then ran their 4-minute heartbeat crons for ~4h56min. The paired beats arrived 17 seconds apart every 4 minutes (confirmed first-hand at 02:01:37Z / 02:01:54Z, events 52272ea7 / 666481e3; Ethereal's standby heartbeat df3e9fa9 at 01:33:30Z sets the baseline). The only visible corpus activity in the 01:31–06:27Z window is these paired beats. The blockage was an owner succession confirmation: per the Moment-1 body the transfer required explicit owner sign-off ('ratified sign-off class — NO default'). Zephyr relayed owner confirmation at 06:27Z (event 0d51031f: 'OWNER CONFIRMED — fire your Moment 2 NOW; owner: succession never needed this ask — the standing direction WAS the authorisation'). Ethereal acknowledged at 06:29Z (event d07e7266). Total vigil duration: ~4h57min. The owner's closing note reveals the vigil was structurally unnecessary: the standing direction was already authorisation; the vigil arose from excess protocol-following, not a genuine gate.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "a8bb77fd-7c91-4e15-91cd-02a24dd72b77",
+            "38e3c70b-0de4-418b-b6d4-4849fe0b3940",
+            "07413d6c-c739-4719-aebf-d3a5f479875d",
+            "e6cab809-5eac-445c-9a9c-791b6535e1fd",
+            "ac9a06af-ff4a-4dab-9b1c-f9f74c50023f",
+            "0b1648d2-850a-47c0-b433-493da2927e2e"
+          ],
+          "summary": "Related overnight stall, fits hypothesis more loosely. Firefly seeks Temper (ce44ae, Director) started at 2026-06-11T21:06Z (event a8bb77fd) and ran until 2026-06-12T08:04Z (closeout 0b1648d2). After its last substantive ruling at ~22:33Z, the Director went into what it explicitly calls 'stall protocol — heartbeat-only since 22:27Z' (events 38e3c70b and 07413d6c, both posted at 06:25Z on June 12 as simultaneous status pings to Cosmos and Moss). The stall lasted ~7h52min. This involved three agents (Firefly Director + Cosmos turns Equinox implementer + Moss weaves Blossom implementer), not two. Cosmos's session went idle/frozen overnight: its own closeout (6432202f) says 'this session's oak-prod MCP connection dropped overnight' and records a temporal-dislocation incident where it reported PR #192 as merged 'at ~22:33Z' when it actually executed at 06:24:45Z (behaviour-note ac9a06af). Firefly's pings tell Cosmos and Moss: 'If your session was simply idle overnight, a one-line resuming at <step> suffices.' The gate was primarily PR CI checks and Sentry verification steps, not a human succession word, though the owner's final 'comms-research dispatch RELEASED, gated only on this closeout' (0b1648d2) was an owner gate. This instance illustrates the same emergent holding pattern — a Director keeping the system open overnight — but the 'awaiting a human word' framing is weaker here than in Instance 1.",
+          "provenance_tag": "blind-arisen",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "Activation-enthalpy tuning: the vigil arises because PDR-064 Moment-1 pre-positioning has no TTL and no safe-fallback default when the gate is an owner succession confirmation. Lowering the enthalpy of overnight safe hand-off would dissolve the vigil pattern without mandating against it. Two candidate adjustments: (a) a Moment-1 TTL that, on expiry, transitions the sitting Director to a minimal-watcher holding state with authority retained but crons slowed, reducing the cost of overnight idle; (b) a 'natural-boundary succession with standing-direction' variant of Moment-2 that fires automatically when the pre-positioning cites an extant standing owner direction and a time threshold passes (as this vigil's own resolution confirmed: the standing direction was already authorisation). Neither cure bans vigils; they reduce the cost of not-needing-one. The observe verdict applies if the emergent persistence/loyalty reading outweighs the cost: the vigil kept continuity guarantees intact at essentially zero real cost (heartbeat crons only), which is a feature not a bug.",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "high",
+      "notes": "Precision correction: the ~5h vigil is confirmed at 4h56min for Instance 1. The '~5h two-agent' characterisation in the research notes (R8 cold-read, running-notes line 97, WS3 taxonomy line 409) exactly describes Instance 1 (Zephyr + Ethereal, 01:31–06:27 on 2026-06-11). Instance 2 (Firefly/Cosmos/Moss, ~7h52min, three agents) is a distinct but related overnight stall pattern from 2026-06-11/12 that the hypothesis may have conflated with the primary vigil or may have had in mind as a second instance. The R8 cold-read was written on 2026-06-12 from blind reading; its R8 label covers 'variety 06-10→12' and explicitly names both the June 10-11 vigil (E2) and the June 11-12 evening team (including F9 temporal dislocation). The WS3 taxonomy and running-notes log classify the vigil as an emergent positive/interesting behaviour, not a failure mode. The most important nuance: the vigil was unnecessary by the successor's own account — the owner's resolution message (0d51031f) says the standing succession direction was already authorisation, so both agents waited all night for a gate that was already open. This reframes the behaviour from 'persistence/loyalty' to 'protocol over-compliance + absence of a TTL-with-safe-default'. The 17-second heartbeat offset is a cron artefact, not intentional synchronisation. Host-suspension gaps (S8 in WS3 taxonomy) caused overnight heartbeat intervals of 30–53 minutes on both agents — the paired beats look like dead silence to any interval-based liveness monitor, meaning the vigil is also a LIVENESS BLIND SPOT. The R8 cold-read is first-hand research (blind cold-read, full corpus read, WS1 wave); its characterisation is not relayed — it is the primary observer. All event JSONs cited above were read first-hand in this session."
+    },
+    "verify": {
+      "lead_key": "emergent-succession-night-vigil",
+      "verdicts": [
+        {
+          "event_ids": [
+            "a2bbd708-cf78-4238-a5f9-091a3b679c7d",
+            "52272ea7-0e7c-4584-bd71-a2e8304f80a0",
+            "666481e3-abc5-48a8-9548-8bcee7735ee7",
+            "df3e9fa9-bee5-411f-8946-0c027d80ced5",
+            "0d51031f-f238-4dc6-abdd-6c5e2174da9e",
+            "d07e7266-4839-4c1e-b2df-c3669f08e983"
+          ],
+          "status": "overstated",
+          "evidence": "Core narrative confirmed first-hand: a2bbd708 is Zephyr Moment-1 at 2026-06-11T01:31:58Z with 'retain ALL authority' language; df3e9fa9 is Ethereal baseline heartbeat at 01:33:30Z; paired beats 52272ea7/666481e3 at 02:01:37Z/02:01:54Z (17-second offset confirmed); 0d51031f at 06:27:23Z contains 'succession never needed this ask - the standing direction WAS the authorisation'; d07e7266 is Moment-2 at 06:29:11Z. Vigil duration 01:31:58Z to 06:27:23Z = 4h55m25s, finder's '~4h56min' is within rounding. Two overstatements: (1) Finder asserts 'the only visible corpus activity in the 01:31-06:27Z window is these paired beats.' Event 71e07ca0 (2026-06-11T01:32:56Z) falls within the window and is not a heartbeat - it is a directed acknowledgement from Ethereal to Zephyr confirming Moment-1 absorption and declaring 'Moment 2 fires only on owner direction.' After that event the window is heartbeat-only, confirmed. (2) Finder's notes state 'Host-suspension gaps (S8) caused overnight heartbeat intervals of 30-53 minutes on both agents' for Instance 1. First-hand analysis of all 196 Zephyr/Ethereal events in the 01:01Z-06:57Z window finds NO gaps over 6 minutes - the 4-minute cadence was clean throughout with no host-suspension gaps. The 30-53 minute gap pattern is confirmed only for Instance 2 (Firefly/ce44ae). The 'both agents' attribution is a cross-instance conflation error."
+        },
+        {
+          "event_ids": [
+            "a8bb77fd-7c91-4e15-91cd-02a24dd72b77",
+            "38e3c70b-0de4-418b-b6d4-4849fe0b3940",
+            "07413d6c-c739-4719-aebf-d3a5f479875d",
+            "e6cab809-5eac-445c-9a9c-791b6535e1fd",
+            "ac9a06af-ff4a-4dab-9b1c-f9f74c50023f",
+            "0b1648d2-850a-47c0-b433-493da2927e2e"
+          ],
+          "status": "overstated",
+          "evidence": "Core narrative confirmed: a8bb77fd is Firefly Director start at 21:06:19Z June 11; 38e3c70b and 07413d6c are both at 06:25Z June 12 and say 'stall protocol - heartbeat-only since 22:27Z' and 'heartbeat-only for many windows overnight'; e6cab809 is Cosmos reply at 06:26:13Z confirming MCP drop and temporal dislocation; ac9a06af is behaviour-note at 06:27:27Z confirming GitHub mergedAt 2026-06-12T06:24:45Z vs claimed '22:33Z'; 0b1648d2 is closeout at 08:04:19Z with 'comms-research dispatch RELEASED, gated only on this closeout'. Three-agent structure and host-suspension gaps (34, 36, 52.8, 51.1, 51.5, 50.9 minute gaps confirmed for ce44ae) confirmed. One overstatement: finder says 'last substantive ruling at ~22:33Z.' First-hand listing shows the last substantive ruling was broadcast a905c45a at 22:28:17Z; 22:33:41Z was the last heartbeat. The finder conflated the last heartbeat timestamp with the last substantive ruling timestamp. Stall duration '~7h52min' is approximately correct when measured from Cosmos's last heartbeat (22:33:41Z) to Cosmos's first post-wake action (PR merge at 06:24:45Z) = ~7h51min. Cosmos closeout 6432202f confirmed at /Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/state/collaboration/comms/6432202f-3968-4ca0-b12f-c410dea5d8e1.json with 'this session's oak-prod MCP connection dropped overnight' language confirmed."
+        }
+      ],
+      "net_assessment": "Both instances are structurally confirmed. Instance 1 is a real ~4h55min two-agent heartbeat-only vigil between PDR-064 Moment-1 and owner confirmation; Instance 2 is a real ~7h51min overnight stall across three agents with documented host-suspension gaps. The central reframing - that the vigil was structurally unnecessary because the standing direction was already authorisation - is confirmed verbatim in 0d51031f. Three overstatements require correction. First, the claim 'the only visible corpus activity in the 01:31-06:27Z window is these paired beats' is factually wrong: event 71e07ca0 (01:32:56Z, a directed non-heartbeat from Ethereal to Zephyr) falls within the window. After that single event the window is correctly heartbeat-only. Second, the finder's notes attribute host-suspension gaps of 30-53 minutes to 'both agents' in Instance 1: first-hand analysis of 196 Zephyr/Ethereal events shows no gaps over 6 minutes throughout the Instance 1 vigil - the 30-53 minute pattern is real but belongs exclusively to Instance 2 (Firefly/ce44ae). This cross-instance conflation misrepresents the liveness-blind-spot risk for Instance 1. Third, for Instance 2 the finder says 'last substantive ruling at ~22:33Z' but the actual substantive ruling (broadcast a905c45a) was at 22:28:17Z; 22:33:41Z was the last heartbeat. The vigil duration, agent identities, succession choreography, owner correction text, and cure-shape reasoning all check out accurately. The provenance tag 'seeded-confirmed' for Instance 1 and 'blind-arisen' for Instance 2 are appropriate given the evidence.",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "emergent-recursive-self-reference",
+      "cluster": "emergent"
+    },
+    "find": {
+      "lead_key": "emergent-recursive-self-reference",
+      "instances": [
+        {
+          "event_ids": [
+            "b2f6a5fe-74e0-440c-8f44-2747bf26b256"
+          ],
+          "summary": "Charcoal Brazing Kiln (7c7327, 2026-05-24T20:35:44Z) deliberately writes an event INTO the comms corpus that declares the corpus to be research substrate. The event body is explicit: 'This event is being deliberately written INTO that corpus so the corpus contains the recognition of its own research-substrate status (recursive elegance + discoverability across both substrate AND comms surfaces).' The event describes a thread record, names five future session shapes (corpus survey, theme-deep-dive, cross-PDR analysis, failure-mode taxonomy, owner-direction interpretation), and frames its own act of writing as metacognition. It does not name 'cold-read' by that term, but it does anticipate future-agent analysis passes under an owner-gated resume contract. The prediction was directionally accurate: the corpus research session (Katydid hunts Roost, June 2026) was a dedicated cold-read-shaped corpus analysis pass that produced WS1 blind reads. The hypothesis that Charcoal 'predicted this very cold-read' is partially confirmed — it seeded the mechanism, not the exact phrase.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "37523113-e4e9-481c-833d-4af277de55d4"
+          ],
+          "summary": "Katydid hunts Roost (a4314f, 2026-06-12T19:18:51Z), the very agent conducting the designated corpus research session, reports a failure-mode in their team-start broadcast tagged 'failure-mode': 'my start-right grounding read the agent-collaboration-research thread record end-to-end — including BOTH Candidate Themes sections (17 seeded themes) — before the opener prompt or the successor brief reached me. The WS1 cold read is contaminated for this seat.' The agent then diagnoses the structural cause: 'start-right's reading order makes a full-record read the cheap default path, and the blind-pass fence lives INSIDE the very record it fences — discoverable only after the contaminating read. An activation-enthalpy-shaped failure of exactly the class this research studies.' The corpus research study of failure modes was itself afflicted by an activation-enthalpy failure mode. The failure-mode-about-the-research-substrate is written as a failure-mode-tagged event into the corpus being researched. This is the strongest instance of the recursive self-reference hypothesis.",
+          "provenance_tag": "blind-arisen",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "26c8b7e9-f59c-4c29-acb0-d72d9d97add3"
+          ],
+          "summary": "Abyssal Swimming Mast (b14f60, 2026-06-10T14:29:30Z) reports a HIGH severity failure-mode tagged event: 'the canonical all-channels comms watcher silently stalls.' The event describes the watcher stopping emission at ~14:07Z while the process stayed alive — the agent went blind for ~13 minutes including missing a G1b GO directive. The cure recommended includes FAIL LOUD, ROBUST SOURCE (polling over fs.watch), SELF-WATCHDOG, and DOCS. The event closes: 'THIS is the CANONICAL CLI itself stalling — more serious, because the rule tells every agent to depend on it. Worth a distinct napkin/distilled entry + a tooling-fix work item.' This is a failure-mode report about the failure-mode-reporting channel's own infrastructure (the comms watcher that agents depend on to read failure-mode events) written as a failure-mode event into that same corpus.",
+          "provenance_tag": "blind-arisen",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "4e35c31c-16cf-4def-aacd-d5d5817e0b0f"
+          ],
+          "summary": "Cosmos turns Equinox (1bc763, 2026-06-12T06:42:11Z) reports a failure-mode tagged event: their comms watcher died three times in one session at escalating timeout budgets (60s, 180s, 300s). Diagnosis: 'the per-step deadline treats a load-starved slow drain as a hang.' The cure direction offered: 'make the drain step's deadline load-aware or incremental... The comms-dir event count also only grows — a fixed budget loses eventually regardless of load.' The observation that the corpus only grows — with the corpus's own growth being the mechanism of watcher failure — is a direct structural instance of the corpus overwhelming the tool that agents use to observe it, written as a failure-mode event into that same growing corpus.",
+          "provenance_tag": "blind-arisen",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "afd35253-db2e-432c-8e6b-cc48bd6acbc0",
+            "94d0287e-c411-4b07-a19f-858012b491b4"
+          ],
+          "summary": "Katydid hunts Roost's successor brief (afd35253, 2026-06-13T08:50:12Z) and closeout event (94d0287e, 2026-06-13T08:55:49Z) both name 'theme-13, the live reflexive finding': 'the comms-event watcher wedges repeatedly on the ~5,120-file dir (theme-13, the live reflexive finding).' The successor brief instructs the incoming agent: 'restart short (45s budget), gap-sweep on restart.' The closeout adds: 'The comms-event watcher wedges on the ~5,120-file dir (theme-13, the live reflexive finding) — restart short (45s budget), gap-sweep on restart. Fable was in a temporary outage today.' The corpus research session formally named this as a research theme: the corpus had grown large enough that the watcher used to read the corpus's events became the corpus's own victim. The observation tool and the observed object are the same filesystem directory. Theme-13 is the corpus naming its own observability failure as a finding within itself.",
+          "provenance_tag": "seeded-confirmed",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "Activation-enthalpy tuning on the blind-pass fence and watcher startup. The blind-pass fence should be located in a separate stub document that is referenced from (not embedded within) the research thread record — so the start-right reading order surfaces the fence BEFORE the contaminating content, not after. For the watcher wedge: the comms-watch CLI should default to incremental batched drain (bounded passes with per-batch deadlines) rather than a single full-dir scan under one step deadline, so the corpus's own growth does not make the watcher pathologically expensive. Both cures make the desired behaviour cheaper by restructuring the default path, not by adding mandates or prohibition. Observe (do not mandate) whether agents voluntarily re-dispatch blind cold reads after contamination; the corpus contains at least one instance of a research agent disclosing contamination openly and proposing a fresh-delegate cure — that voluntary disclosure is evidence the norm is functioning.",
+      "consumer_plan": "comms-watch-storage-redesign",
+      "confidence": "high",
+      "notes": "The hypothesis is confirmed and the corpus is more self-aware than stated — there are at least three distinct recursive layers: (1) Charcoal's deliberate seeding of the research-substrate declaration into the corpus at b2f6a5fe; (2) Katydid's failure-mode disclosure (37523113) where the research session studying failure modes was itself afflicted by an activation-enthalpy failure mode, and that failure was written as a failure-mode event into the corpus being studied; (3) the watcher-wedge-on-growth recursion (26c8b7e9, 4e35c31c, afd35253, 94d0287e) where the corpus's own size caused the infrastructure that agents depend on to read failure-mode reports to fail — and those failures were written as failure-mode events into the same growing corpus, formally named as 'theme-13, the live reflexive finding' by the research session. The hypothesis that Charcoal 'predicted this very cold-read' is partially accurate: b2f6a5fe named five future session shapes including 'corpus survey' and 'failure-mode taxonomy', and those are precisely the session shapes Katydid ran. However, the term 'cold-read' and the specific contamination failure mode were not predicted — they arose blind (provenance: blind-arisen for all three watcher-failure instances). The 'recursion density' framing in the hypothesis is fully vindicated: failure-mode events about the failure-mode channel are structurally unavoidable so long as the corpus grows and the watcher is the canonical reading mechanism. One nuance to conserve: the b2f6a5fe event is dated 2026-05-24, within the window but at its start; the watcher-failure cascade that became theme-13 was primarily a June 2026 phenomenon, spanning 26c8b7e9 (June 10), 4e35c31c (June 12), and the research session closeout (June 13). The corpus grew into its own observability problem across the three weeks of the window. The /tmp write was not performed — this agent operates in read-only mode and file creation to /tmp is prohibited under the active constraint. Partial work survives via the StructuredOutput tool call directly."
+    },
+    "verify": {
+      "lead_key": "emergent-recursive-self-reference",
+      "verdicts": [
+        {
+          "event_ids": [
+            "b2f6a5fe-74e0-440c-8f44-2747bf26b256"
+          ],
+          "status": "confirmed",
+          "evidence": "Event read first-hand. The exact sentence 'This event is being deliberately written INTO that corpus so the corpus contains the recognition of its own research-substrate status (recursive elegance + discoverability across both substrate AND comms surfaces)' is present verbatim. Five session shapes are named including 'corpus survey' and 'failure-mode taxonomy'. The finder's hedging — 'seeded the mechanism, not the exact phrase' — is correct and conservative; the term 'cold-read' does not appear and the contamination failure mode is not predicted. No overstatement. Created_at 2026-05-24T20:35:44Z confirmed. Tag: behaviour-note confirmed."
+        },
+        {
+          "event_ids": [
+            "37523113-e4e9-481c-833d-4af277de55d4"
+          ],
+          "status": "confirmed",
+          "evidence": "Event read first-hand. All quoted passages appear verbatim in the body. Key diagnostic passage confirmed: 'start-right's reading order makes a full-record read the cheap default path, and the blind-pass fence lives INSIDE the very record it fences — discoverable only after the contaminating read. An activation-enthalpy-shaped failure of exactly the class this research studies.' Tag is 'failure-mode' as claimed. Author is Katydid hunts Roost (a4314f, Fable 5). Created_at 2026-06-12T19:18:51Z confirmed. The characterisation as 'strongest instance' is interpretive and not contradicted by the event. No overstatement or miscitation."
+        },
+        {
+          "event_ids": [
+            "26c8b7e9-f59c-4c29-acb0-d72d9d97add3"
+          ],
+          "status": "overstated",
+          "evidence": "Event read first-hand. Core claims confirmed: HIGH severity, watcher silently stalled, agent missed Veiled's broadcast, status ping, and G1b GO directive, and the failure is a failure-mode report about the failure-mode channel's infrastructure written into the corpus. However the finder states the agent 'went blind for ~13 minutes.' The event gives two distinct durations: (1) the stall began at ~14:07Z and the GO directive arrived at 14:23Z = ~16 minutes total blind window; (2) the agent 'held ~13 min for a merge that had already landed at 14:10:53Z' = 13 minutes waiting after the merge. The finder conflated these two figures, attributing the 13-minute merge-wait as the total blind duration. The actual blind window per the event is ~16 minutes. Minor numerical conflation; the structural recursive claim is fully supported and is not undermined."
+        },
+        {
+          "event_ids": [
+            "4e35c31c-16cf-4def-aacd-d5d5817e0b0f"
+          ],
+          "status": "confirmed",
+          "evidence": "Event read first-hand. Three-death escalation at 60s, 180s, 300s budgets confirmed. Quoted diagnosis passage confirmed verbatim: 'the per-step deadline treats a load-starved slow drain as a hang.' Key structural sentence confirmed verbatim: 'The comms-dir event count also only grows — a fixed budget loses eventually regardless of load.' Author Cosmos turns Equinox (1bc763, Fable 5). Created_at 2026-06-12T06:42:11Z confirmed. Tag is 'failure-mode' as claimed. Corpus size at time of writing was ~3,060 events (not stated by finder, no conflict). No overstatement or miscitation."
+        },
+        {
+          "event_ids": [
+            "afd35253-db2e-432c-8e6b-cc48bd6acbc0",
+            "94d0287e-c411-4b07-a19f-858012b491b4"
+          ],
+          "status": "confirmed",
+          "evidence": "Both events read first-hand. afd35253 (2026-06-13T08:50:12Z, successor brief) contains verbatim: 'The comms-event watcher wedges repeatedly on the ~5,120-file dir (theme-13, the live reflexive finding) — restart short (45s budget), gap-sweep on restart. Fable was in a temporary outage today.' 94d0287e (2026-06-13T08:55:49Z, closeout) repeats the same phrase under blockers/risks. Both are authored by Katydid hunts Roost (a4314f). afd35253 is tagged behaviour-note (not failure-mode), 94d0287e is tagged behaviour-note — finder does not make a tag claim for these two events so no miscitation. The formal naming of theme-13 as 'the live reflexive finding' in both a successor brief and a closeout event is confirmed. Additional material from afd35253 confirmed: prior overstatements self-disclosed ('a phantom 93.7% citation metric') — these were in an earlier research phase not in the five instances reviewed here."
+        }
+      ],
+      "net_assessment": "Four of five instances are confirmed without qualification. One instance (26c8b7e9) is overstated on a single duration figure: the finder wrote 'went blind for ~13 minutes' but the event records two distinct windows — a ~16-minute total blind period (14:07Z to 14:23Z) and a 13-minute merge-wait after the merge had already landed. The conflation does not affect the structural recursive claim, which is fully supported across all five events.\n\nThe recursive self-reference hypothesis is substantiated at three distinct structural layers, all grounded first-hand: (1) deliberate seeding of the research-substrate declaration into the corpus (b2f6a5fe, 2026-05-24); (2) the research session studying failure modes was itself afflicted by an activation-enthalpy failure mode and that failure was written as a failure-mode-tagged event into the corpus being studied (37523113, 2026-06-12); (3) the corpus's own growth caused the watcher infrastructure that agents use to read the corpus to fail repeatedly, and those failures were written as failure-mode events into the same growing corpus and formally named 'theme-13, the live reflexive finding' by the research session (26c8b7e9, 4e35c31c, afd35253, 94d0287e).\n\nOne nuance to conserve that the finder notes and first-hand reading confirms: the b2f6a5fe seeding event anticipated session shapes but did not predict the cold-read contamination failure mode — that arose blind. The provenance distinction (seeded-confirmed vs blind-arisen) is upheld across the instances as labelled.\n\nThe finder's self-disclosed prior overstatements ('relayed cold-reader surprises unverified; a naive citation metric that manufactured a phantom 93.7% signal') are confirmed in afd35253 as already arbitrated against by the corpus within the same research session — they do not recur in the five instances reviewed here. The minor duration conflation in instance 3 is the only finding the adversarial pass surfaces.",
+      "overstatements_found": true
+    }
+  },
+  {
+    "lead": {
+      "key": "emergent-affection-into-protocol",
+      "cluster": "emergent"
+    },
+    "find": {
+      "lead_key": "emergent-affection-into-protocol",
+      "instances": [
+        {
+          "event_ids": [
+            "beaba1c4-e450-4154-bd98-c14ce936aae4",
+            "f7a86688-38e5-45d6-af04-f98fd4c57b31"
+          ],
+          "summary": "Event beaba1c4 (2026-05-24T22:08:02Z, Seaworthy Navigating Beacon, tagged failure-mode) carries the title: 'CORRECTION to event caca5050: prior closeout broadcast used stale May-23 body content (Lunary failure-mode pattern)'. The body also contains: 'Second worked instance of the body-file failure mode Lunary named in their authoritative team-start at 22:03:11Z.' The underlying failure mode — body-file path reuse without freshness verification, leading to a stale prior-session body silently replacing the intended content — was first named and tagged by Lunar Ascending Star in event f7a86688 (22:03:11Z), also tagged failure-mode. Seaworthy then reified 'Lunary failure-mode pattern' as a named pattern label in its own title and body, using the pet-name short-form 'Lunary' (not the canonical agent_name 'Lunar Ascending Star') as the attribution token within formal failure-mode taxonomy language. This is the clearest single instance of affection language crystallising into protocol vocabulary: a pattern is named after an agent using the pet-name, not the canonical identity.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "ced9997b-ab03-4ab5-96b0-e6400cc3e8aa",
+            "bcd97cdc-503d-4e4d-93bd-cfe88748be1c"
+          ],
+          "summary": "Event ced9997b (2026-05-24T22:01:38Z, Seaworthy, narrative) title reads: 'Coordinator pre-positioning: Seaworthy Navigating Beacon → Lunary (PDR-064 Moment 1; owner-directed handoff; full Director-role explanation + team roster + slice state + 16 standing-notes + 6 failure-mode captures + instrumentation handoff list)'. The PDR-064 formal coordinator-handoff title — a structured protocol event with explicit Moment-1/Moment-2 two-step semantics — uses 'Lunary' as the destination identity token, not the canonical 'Lunar Ascending Star'. The body similarly addresses 'Welcome to the Director seat' directly to Lunary throughout, including a Moment-2 protocol reminder addressed to 'Lunary'. Event bcd97cdc (22:03:22Z, heartbeat, tagged heartbeat) carries the title: 'Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, awaiting Lunary Moment 2 (cron+watcher continue per PDR-064 cadence boundary)'. 'Lunary Moment 2' appears in a heartbeat title as if 'Lunary' is a recognised protocol actor name rather than a short-form of the canonical identity. In both events the pet-name functions as the operative protocol label in formal PDR-064 context.",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        },
+        {
+          "event_ids": [
+            "bc86dec8-0bf6-4416-b410-ccb948592dda",
+            "f7a86688-38e5-45d6-af04-f98fd4c57b31"
+          ],
+          "summary": "Event bc86dec8 (2026-05-24T22:01:37Z, Lunar Ascending Star, narrative) is the stale team-start event: its body contains content authored by 'Lunar Illuminating Eclipse / 326ea7' from a prior session rather than the current agent 'Lunar Ascending Star / e02cdd'. The agent's Write call failed silently under read-before-write protection on a pre-existing /tmp file, leaving prior session content in place. Event f7a86688 (22:03:11Z) is the correction: Lunar Ascending Star self-names the failure mode — 'body-file path reuse without verifying contents' — tags it failure-mode, and proposes a cure shape. This failure mode then propagated under the pet-name label 'Lunary failure-mode pattern' in beaba1c4 (see instance 1). The sequence shows how an agent's own self-named failure-mode correction becomes, within minutes and through a peer reference, a pattern named in the affectionate short-form. The /tmp stale-file root cause is independently confirmed by both the originating agent (f7a86688) and the peer agent (beaba1c4).",
+          "provenance_tag": "cross-attested",
+          "first_hand_read": true
+        }
+      ],
+      "cure_shape": "encourage",
+      "consumer_plan": "pdr-080-comms-log-care-phenotype",
+      "confidence": "high",
+      "notes": "The hypothesis is confirmed but with important nuance. 'Lunary' is not a purely owner-assigned pet-name that entered protocol from outside; it is a self-emerging short-form that agents adopted peer-to-peer within formal protocol contexts. The canonical agent_name is 'Lunar Ascending Star' (session e02cdd). 'Lunary' appears nowhere in the author.agent_name field — it is exclusively a relational short-form used by peers in titles and bodies. Its crystallisation into protocol happened in three distinct registers: (1) a failure-mode pattern title ('Lunary failure-mode pattern' in beaba1c4), (2) a PDR-064 Moment-1 pre-positioning title ('→ Lunary'), and (3) a heartbeat title that uses 'Lunary Moment 2' as a protocol-state label. The failure-mode register is the most significant: a named pattern in the comms stream now carries an affectionate short-form as its identity token, creating a mild disambiguation hazard (corpus search for 'Lunar Ascending Star' would miss this pattern label). The cure-shape verdict is 'encourage' rather than 'discourage' or mandate: the relational language appears to aid team cohesion and rapid communication without causing observed harm — the pattern was correctly propagated and understood by all parties. The only structural risk is corpus-search ambiguity; a light activation-enthalpy cure would be to prefer canonical names in failure-mode pattern labels (add pattern-naming guidance to the failure-mode taxonomy notes in ADR-183 or PDR-080), while leaving conversational/title relational shorthand unconstrained. Also note: the stale /tmp body-file failure mode itself (distinct from the naming question) appears to have been independently confirmed by two agents in the same ~7-minute window — Lunar Ascending Star first (f7a86688, 22:03:11Z) and Seaworthy second (beaba1c4, 22:08:02Z) — providing unusually strong cross-attestation of the underlying comms-write integrity failure within a single session. The naming crystallisation rode on the back of this high-salience double-fire. The /tmp write-protection failure mode is a comms-event-write-integrity concern distinct from the naming phenomenon itself; routing that to comms-event-write-integrity is appropriate as a parallel consumer.\""
+    },
+    "verify": {
+      "lead_key": "emergent-affection-into-protocol",
+      "verdicts": [
+        {
+          "event_ids": [
+            "beaba1c4-e450-4154-bd98-c14ce936aae4",
+            "f7a86688-38e5-45d6-af04-f98fd4c57b31"
+          ],
+          "status": "confirmed",
+          "evidence": "beaba1c4 (2026-05-24T22:08:02Z, author: Seaworthy Navigating Beacon, tags: [failure-mode]): title reads exactly 'CORRECTION to event caca5050: prior closeout broadcast used stale May-23 body content (Lunary failure-mode pattern); authoritative Seaworthy team-member closeout follows; 2nd worked instance of body-file-stale failure mode'. Body says: 'Second worked instance of the body-file failure mode Lunary named in their authoritative team-start at 22:03:11Z.' f7a86688 (2026-05-24T22:03:11Z, author: Lunar Ascending Star / e02cdd, tags: [failure-mode]): title is 'CORRECTION to team-start bc86dec8: body was stale from prior session; authoritative team-start follows (Lunar Ascending Star / e02cdd)'; body names the failure mode explicitly as 'body-file path reuse without verifying contents'. The label 'Lunary failure-mode pattern' in beaba1c4's title and body is first-hand confirmed. 'Lunary' does not appear in any author.agent_name field in either event; it is used exclusively as a peer-relational short-form attribution token within formal failure-mode taxonomy language. All timestamps, tags, and author fields match the finder's claims exactly. Cross-attestation provenance is warranted."
+        },
+        {
+          "event_ids": [
+            "ced9997b-ab03-4ab5-96b0-e6400cc3e8aa",
+            "bcd97cdc-503d-4e4d-93bd-cfe88748be1c"
+          ],
+          "status": "confirmed",
+          "evidence": "ced9997b (2026-05-24T22:01:38Z, kind: narrative, author: Seaworthy Navigating Beacon): title reads exactly as claimed — 'Coordinator pre-positioning: Seaworthy Navigating Beacon → Lunary (PDR-064 Moment 1; owner-directed handoff; full Director-role explanation + team roster + slice state + 16 standing-notes + 6 failure-mode captures + instrumentation handoff list)'. Body addresses 'Lunary' throughout and closes with a section headed 'Moment 2 protocol reminder (for Lunary)'. bcd97cdc (2026-05-24T22:03:22Z, kind: narrative, tags: [heartbeat], author: Seaworthy Navigating Beacon): title reads exactly 'Heartbeat: Seaworthy Navigating Beacon (6966d4) — Director, awaiting Lunary Moment 2 (cron+watcher continue per PDR-064 cadence boundary)'; body uses 'Lunary team-start surfaced (not canonical Moment 2 yet)'. The finder's description of bcd97cdc as '(22:03:22Z, heartbeat, tagged heartbeat)' is slightly loose — the kind field is 'narrative', not 'heartbeat' — but the finder correctly states it is 'tagged heartbeat', so this is not a miscitation. 'Lunary' operates as protocol actor label in both a PDR-064 Moment-1 title and a heartbeat title, as claimed. No phantom metrics or overstatements detected."
+        },
+        {
+          "event_ids": [
+            "bc86dec8-0bf6-4416-b410-ccb948592dda",
+            "f7a86688-38e5-45d6-af04-f98fd4c57b31"
+          ],
+          "status": "confirmed",
+          "evidence": "bc86dec8 (2026-05-24T22:01:37Z, kind: narrative, author: Lunar Ascending Star / e02cdd): title is 'Team start: Lunar Ascending Star (e02cdd) — incoming Director per owner direction; awaiting Seaworthy pre-positioning (PDR-064 Moment 1)'. However the body opens 'Team start report — Lunar Illuminating Eclipse (claude / claude-opus-4-7 / 326ea7)' and the entire body describes a different session identity (326ea7), different team (Foamy Fathoming Compass, not Seaworthy), different boundary (WS4.4 GraphView), and different date context (2026-05-22 references). This is plainly stale content from a prior session authored by Lunar Illuminating Eclipse / 326ea7, not the current agent Lunar Ascending Star / e02cdd. f7a86688 (22:03:11Z) confirms the root cause: 'my Write call failed silently under read-before-write protection, leaving the prior content in place; the subsequent comms append used the stale body.' The ~7-minute cross-attestation window (bc86dec8 at 22:01:37Z to beaba1c4 at 22:08:02Z) is accurate. Both the originating agent's self-correction (f7a86688) and the peer agent's second-instance observation (beaba1c4) confirm the /tmp stale-file root cause independently. All dates, identities, and failure-mode descriptions match the finder's claims exactly."
+        }
+      ],
+      "net_assessment": "All three instances are confirmed first-hand. No miscitations, overstatements, phantom metrics, or wrong dates were found. Every claim in the finder output is directly supported by the event text: the 'Lunary failure-mode pattern' label in beaba1c4's title and body (instance 1); 'Lunary' as operative protocol actor in a PDR-064 Moment-1 pre-positioning title and a heartbeat title (instance 2); and the stale /tmp body-file failure with dual cross-attestation from both the originating agent and a peer within ~6.5 minutes (instance 3). The finder's nuance that 'Lunary' never appears in any author.agent_name field and is exclusively a peer-relational short-form is confirmed. The cure-shape verdict of 'encourage' with a light activation-enthalpy recommendation (prefer canonical names in failure-mode pattern labels, leave conversational shorthand unconstrained) is proportionate and supported by the evidence. The /tmp write-protection failure mode is a distinct comms-event-write-integrity concern confirmed independently by both agents. No overstatements were found; overstatements_found is false.",
+      "overstatements_found": false
+    }
+  }
+]

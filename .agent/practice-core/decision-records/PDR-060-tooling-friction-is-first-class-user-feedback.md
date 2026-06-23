@@ -16,7 +16,7 @@ durable doctrine);
 [PDR-035](PDR-035-agent-work-capabilities-belong-to-the-practice.md)
 (Practice-owned agent capabilities — the doctrine that makes
 agent-tooling a Practice concern in the first place);
-[ADR-131](../../../docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)
+ADR-131
 (self-reinforcing improvement loop — the architectural realisation
 this PDR's substance feeds).
 
@@ -92,7 +92,7 @@ behavioural cure that operationalises doctrine. The substance here
 is the doctrine itself: the claim that the user/author distinction
 collapses for agents. The behavioural cure ("route into plan / docs
 / napkin / tooling-backlog, not chat-only") is downstream;
-[`capture-practice-tool-feedback.md`](../../rules/capture-practice-tool-feedback.md)
+`capture-practice-tool-feedback.md`
 already operationalises a slice of the cure for Practice-tool
 feedback specifically. A sibling rule or rule amendment may
 operationalise the wider agent-tooling slice — that is rule-level
@@ -127,7 +127,7 @@ work *downstream* of this PDR, not a substitute for it.
 
 ## Notes
 
-The existing rule [`capture-practice-tool-feedback.md`](../../rules/capture-practice-tool-feedback.md)
+The existing rule `capture-practice-tool-feedback.md`
 operationalises this PDR for the Practice-tool slice (the Practice
 itself plus host-local Practice-capability implementations). A
 sibling rule or an amendment broadening that rule's scope may land

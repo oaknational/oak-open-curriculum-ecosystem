@@ -100,7 +100,7 @@ export const getChangelog = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "History of significant changes to the API with associated dates and versions",
+  description: "API changelog\n\nUse when you need the full history of API changes — for surfacing release notes or checking which version introduced a field. Returns every changelog entry with version and date. Not for: the current version (GET /changelog/latest).",
   path,
   method,
   documentedStatuses,

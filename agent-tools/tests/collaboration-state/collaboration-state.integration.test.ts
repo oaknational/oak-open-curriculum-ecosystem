@@ -56,6 +56,17 @@ const recipientWithId = deriveCollaborationIdentity({
   },
 }).agentId;
 
+// Recipient blocks written from --to-* flags are address relays: the sender
+// cannot know the recipient's name provenance, so the written block omits
+// naming_schema_version even though the local derivation above carries it.
+const recipientAddress = {
+  agent_name: recipientWithId.agent_name,
+  platform: recipientWithId.platform,
+  model: recipientWithId.model,
+  session_id_prefix: recipientWithId.session_id_prefix,
+  id: recipientWithId.id,
+};
+
 describe('collaboration-state comms integration', () => {
   it('writes a directed message from the current identity', async () => {
     const commsDir = 'state/comms';
@@ -109,7 +120,7 @@ describe('collaboration-state comms integration', () => {
         event_id: 'message-one',
         created_at: '2026-05-11T19:45:35Z',
         from: senderWithId,
-        to: recipientWithId,
+        to: recipientAddress,
         subject: 'Please check this',
         body: 'There is useful coordination here.',
       }),
@@ -171,7 +182,7 @@ describe('collaboration-state comms integration', () => {
         event_id: 'message-bf',
         created_at: '2026-05-22T10:00:00Z',
         from: senderWithId,
-        to: recipientWithId,
+        to: recipientAddress,
         subject: 'Body file path',
         body: bodyText,
       }),

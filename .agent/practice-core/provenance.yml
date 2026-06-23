@@ -7,6 +7,14 @@
 attribution: 'created by Jim Cresswell (https://www.jimcresswell.net/), evolved by many people and agents in many repos'
 
 practice.md:
+  - id: 9bc58220-1b8b-47c2-9696-0218abc2ad38
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-06-21
+    purpose: >-
+      Clarity-of-purpose restoration: §Meta-Principles repointed to
+      homes-by-intent; agent-files-first-class, rule-vs-skill, and
+      intent-over-mechanics homed as portable doctrine; lineage role
+      references updated to the evolution-record framing
   - id: f8d9f57f-9604-4326-b430-fd9adf89bc78
     repo: oak-open-curriculum-ecosystem
     date: 2026-04-28
@@ -108,6 +116,15 @@ practice.md:
       incoming from agent-collaboration
 
 practice-lineage.md:
+  - id: dbface3d-e4a8-4a6d-bb1b-5028c2e3b830
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-06-21
+    purpose: >-
+      Restored to the evolution record (owner-directed): provenance, exchange
+      & merge, branching/transplant genesis, maturity & adaptation. §Learned
+      Principles evacuated by intent and the what-it-is/how-to-apply duplicate
+      sections removed (855 → 288 lines); the two provenance principles folded
+      into §Provenance
   - id: 08161792-4a38-4b89-add3-d8d56ca96d83
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-26
@@ -202,6 +219,14 @@ practice-lineage.md:
       incoming from agent-collaboration
 
 practice-bootstrap.md:
+  - id: 5545cfe5-d745-4cf5-988f-97913bcc6df8
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-06-21
+    purpose: >-
+      Trinity role reframed (lineage = evolution record, not "the why");
+      §principles.md and §testing-strategy.md source-pointers repointed off the
+      retired lineage sections; universal engineering imperatives enumerated as
+      the repo-case template
   - id: 2ce9d09e-99c8-4823-9a04-0ef2a0943351
     repo: oak-open-curriculum-ecosystem
     date: 2026-04-28
@@ -303,6 +328,12 @@ practice-bootstrap.md:
       incoming from agent-collaboration
 
 practice-verification.md:
+  - id: f8e5c909-d3a7-4f45-a141-294026a2bff7
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-06-21
+    purpose: >-
+      §See-also repointed — this file owns validation/verification; lineage
+      records how the Practice evolved to its current state
   - id: 3147edc7-8b7d-4b44-8f61-1f51e063d751
     repo: oak-open-curriculum-ecosystem
     date: 2026-04-03

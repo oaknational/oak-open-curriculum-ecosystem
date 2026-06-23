@@ -23,9 +23,6 @@
 import { CURRICULUM_MODEL_RESOURCE } from './curriculum-model-resource.js';
 import { DOCUMENTATION_RESOURCES } from './documentation-resources.js';
 import { EEF_INTERPRETATION_RESOURCE } from './eef-interpretation-resource.js';
-import { MISCONCEPTION_GRAPH_RESOURCE } from './misconception-graph-resource.js';
-import { PRIOR_KNOWLEDGE_GRAPH_RESOURCE } from './prior-knowledge-graph-resource.js';
-import { THREAD_PROGRESSIONS_RESOURCE } from './thread-progressions-resource.js';
 
 /**
  * The common shape every MCP resource definition shares. Concrete resources may
@@ -52,16 +49,18 @@ export interface McpResource {
 
 /**
  * Every MCP resource the server exposes, in listing order: the documentation
- * resources first, then the curriculum model, the three curriculum graphs, and
- * the EEF interpretation guide. The EEF resource is registered behind
+ * resources first, then the curriculum model and the EEF interpretation
+ * guide. The EEF resource is registered behind
  * `OAK_CURRICULUM_MCP_EEF_ENABLED` (default ON); like the tool and prompt
  * catalogues, this listing catalogue is the full static set, not flag-filtered.
+ *
+ * Prior knowledge, misconceptions, and thread progressions have no
+ * whole-corpus resource form: they are served by the anchored
+ * `get-prior-knowledge-graph` (G1b), `get-misconception-graph` (G2), and
+ * `get-thread-progressions` (G3) tools.
  */
 export const ALL_MCP_RESOURCES: readonly McpResource[] = [
   ...DOCUMENTATION_RESOURCES,
   CURRICULUM_MODEL_RESOURCE,
-  PRIOR_KNOWLEDGE_GRAPH_RESOURCE,
-  THREAD_PROGRESSIONS_RESOURCE,
-  MISCONCEPTION_GRAPH_RESOURCE,
   EEF_INTERPRETATION_RESOURCE,
 ];

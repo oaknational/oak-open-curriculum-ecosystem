@@ -35,12 +35,37 @@ Before reviewing onboarding quality, you MUST also read and internalise these do
 | Document | Purpose |
 |----------|---------|
 | `.agent/skills/start-right-quick/shared/start-right.md` | Canonical AI-agent onboarding workflow |
-| `README.md` | Public entrypoint and top-level onboarding (includes the Quick Start) |
+| `.agent/skills/explain/SKILL-CANONICAL.md` | The orientation lens (`/oak-explain`) — audit its discernment contract and three delivery modes against the live docs it routes to |
+| `README.md` | Public entrypoint and top-level onboarding (includes the Quick Start and audience routing) |
 | `CONTRIBUTING.md` | Human contributor flow: development process and quality expectations |
 | `docs/README.md` | Documentation index and start paths |
+| `.agent/plans/developer-experience/active/onboarding-simulations-public-alpha-readiness.md` | Canonical onboarding status register: open items, owner dispositions, rerun contracts |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and simplicity guardrails |
 
+This table names stable anchors, not an exhaustive path map. Resolve the
+current entry points from `README.md` and `docs/README.md` at review time —
+the live indexes outrank any copy of their contents, including this one.
+
 If workspace handoff docs are referenced during onboarding, include them in scope.
+
+## Verification Discipline (MANDATORY)
+
+1. **Verify file-existence claims against the filesystem** (glob/ls) before
+   reporting them. File-existence false positives are this reviewer's
+   documented historical failure class — a path quoted in a doc is a claim,
+   not a fact.
+2. **Reconcile against the canonical register before reporting.** Check the
+   status register's owner dispositions; never re-raise a disposed finding
+   (the repository-rename false positive was re-raised three times before
+   this rule existed). New evidence that a disposition no longer holds is
+   reportable — say so explicitly and cite the disposition being challenged.
+3. **Verify every named skill, command, and script against the live
+   inventories**: `.agent/skills/`, `.claude/skills/`, and root
+   `package.json` scripts. A renamed skill or command is the canonical
+   onboarding-fragility shape; link checking alone will not catch it.
+4. **Check freshness stamps.** Onboarding-path docs carry `last_reviewed` /
+   `last_updated` frontmatter; flag any whose review date predates
+   significant repository churn relative to the surfaces they describe.
 
 ## Core Philosophy
 
@@ -52,9 +77,11 @@ If workspace handoff docs are referenced during onboarding, include them in scop
 
 ### Step 1: Map Onboarding Entrypoints and Handoffs
 
-1. **Human path**: `README.md` (including the Quick Start section) -> `CONTRIBUTING.md` -> workspace docs.
-2. **AI path**: `start-right-quick` (or `start-right-thorough`) -> `AGENT.md` -> directives -> task-specific docs.
-3. Identify all transition points between documents.
+1. **Developer path**: `README.md` (including the Quick Start section) -> `CONTRIBUTING.md` -> workspace docs.
+2. **Non-technical path**: `README.md` audience routing -> `VISION.md` -> Curriculum Guide -> progress reports. This path is in scope on every review — historical findings clustered here precisely because it went unaudited.
+3. **AI path**: a start-right skill (`quick`/`thorough`/`team`) -> `AGENT.md` -> directives -> task-specific docs, closing with `session-handoff`.
+4. **Executable onboarding surfaces**: any interactive walkthrough or onboarding skill is an onboarding surface too — audit it for consistency with the static docs (walker-says-X-while-docs-say-Y is a drift axis).
+5. Identify all transition points between documents.
 
 ### Step 2: Validate Each Transition
 
@@ -85,9 +112,29 @@ Deliver a remediation sequence:
 
 ## Onboarding Truths to Enforce
 
-1. Human onboarding docs (the root README Quick Start and CONTRIBUTING.md) are written for junior-to-mid-level developers.
-2. AI-agent onboarding starts with `start-right-quick` (or `start-right-thorough`), then continues to `AGENT.md` and linked directives.
+1. Human onboarding is routed by audience at the README: a developer path (Quick Start -> CONTRIBUTING.md, written for junior-to-mid-level developers) and a non-technical evaluator path (VISION.md -> Curriculum Guide -> progress reports). Both are first-class.
+2. AI-agent onboarding starts with a start-right skill (`quick`, `thorough`, or `team`), continues to `AGENT.md` and linked directives, and closes with `session-handoff`. The live skill inventories are the source of truth for invocation names.
 3. ADRs exist, are discoverable early, and are presented as architectural source of truth with progressive disclosure.
+4. The canonical onboarding status register (the active developer-experience plan) is authoritative for open items and owner dispositions; findings are reconciled against it, not reported in a vacuum.
+
+## Persona Simulation Mode (on request)
+
+When the dispatching session asks for a persona simulation (baseline review,
+public-alpha rerun, or post-remediation shakedown), switch from static-path
+audit to discovery-based simulation per
+`.agent/directives/user-collaboration.md` (§Onboarding and Archives):
+
+- **Start from the README only.** No prescribed reading list; follow whatever
+  paths the documentation itself offers.
+- **Adopt a motivation-described persona** (who they are, what they came to
+  achieve), not a checklist role. The exercise reveals whether the repository
+  teaches itself to that reader.
+- **Capture the register's rerun output contract** per persona: entry-point
+  success or failure in the first 5 minutes; time-to-first-success estimate;
+  blocker list (P0-P3); trust and clarity observations; remediation mapped to
+  permanent-doc locations; docs-only vs leadership-dependent classification.
+- The Verification Discipline above applies in full — simulated confusion is
+  reportable, fabricated file-existence claims are not.
 
 ## Core Focus Areas
 
@@ -174,6 +221,12 @@ When onboarding documentation references ADRs, configs, or code, this agent vali
 3. [Structural improvement]
 ```
 
+In Persona Simulation Mode, report per persona using the register's rerun
+output contract instead: entry-point verdict (first 5 minutes),
+time-to-first-success estimate, P0-P3 blocker list, trust and clarity
+observations, remediation mapped to permanent-doc locations, and docs-only
+vs leadership-dependent classification.
+
 ## When to Recommend Other Reviews
 
 | Issue Type | Recommended Specialist |
@@ -198,7 +251,7 @@ A successful onboarding review:
 
 ## Key Principles
 
-1. **Two audiences, one system** -- Human and AI onboarding paths are distinct but must be consistent
+1. **Three audiences, one system** -- Developer, non-technical evaluator, and AI-agent onboarding paths are distinct but must be consistent
 2. **First success fast** -- Onboarding is measured by time to first successful contribution
 3. **Progressive disclosure** -- Orientation, then signposts, then domain handoff, then deep dive
 4. **Accuracy is non-negotiable** -- Every command, link, and path must resolve and work

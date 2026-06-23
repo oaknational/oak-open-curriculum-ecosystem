@@ -158,35 +158,77 @@ function waitForCollaborationStateChangeFromFiles(input: {
   });
 }
 
-function waitForAnyDirectoryChange(input: {
-  readonly directories: readonly string[];
-  readonly pollMs: number;
-}): Promise<void> {
-  return new Promise((resolve) => {
-    let settled = false;
-    const timer = setTimeout(done, input.pollMs);
-    const watchers = input.directories.map((directory) => tryWatchDirectory(directory, done));
+/**
+ * Subscribes `onChange` to a directory's change events, returning a closable
+ * handle or `null` when the platform cannot watch the path. Injectable so the
+ * poll-bound invariant below is unit-testable without real FS events — which
+ * are non-deterministic, especially the dropped-subscription case this guards.
+ *
+ * The real `node:fs` watch callback always fires asynchronously. A factory
+ * that fires `onChange` synchronously during subscription is tolerated (the
+ * wait settles immediately and no further directories are subscribed), but a
+ * handle returned by such a factory cannot be closed — it has not been
+ * registered yet — so asynchronous firing remains the supported contract.
+ */
+export type DirectoryWatchFactory = (
+  directory: string,
+  onChange: () => void,
+) => { readonly close: () => void } | null;
 
-    function done(): void {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      clearTimeout(timer);
-      for (const watcher of watchers) {
-        watcher?.close();
-      }
-      resolve();
-    }
-  });
-}
-
-function tryWatchDirectory(directory: string, done: () => void): ReturnType<typeof watch> | null {
+const fsDirectoryWatchFactory: DirectoryWatchFactory = (directory, onChange) => {
   try {
-    const watcher = watch(directory, { persistent: false }, done);
-    watcher.on('error', done);
+    const watcher = watch(directory, { persistent: false }, onChange);
+    watcher.on('error', onChange);
     return watcher;
   } catch {
     return null;
   }
+};
+
+/**
+ * Resolve when ANY watched directory changes — OR after `pollMs`, whichever
+ * comes first. The `setTimeout(pollMs)` fallback is armed ALONGSIDE the watch
+ * subscriptions, so a dropped FSEvents subscription (the macOS hang suspect)
+ * delays a wake by at most `pollMs` instead of stalling the watcher forever.
+ * This poll-bound is the invariant pinned by `cli-runtime.unit.test.ts`.
+ */
+export function waitForAnyDirectoryChange(input: {
+  readonly directories: readonly string[];
+  readonly pollMs: number;
+  readonly watchFactory?: DirectoryWatchFactory;
+}): Promise<void> {
+  const watchFactory = input.watchFactory ?? fsDirectoryWatchFactory;
+  return new Promise((resolve) => {
+    let settled = false;
+    const watchers: ({ readonly close: () => void } | null)[] = [];
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const done = (): void => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      if (timer !== undefined) {
+        clearTimeout(timer);
+      }
+      for (const watcher of watchers) {
+        watcher?.close();
+      }
+      resolve();
+    };
+
+    // `watchers` and `done` are initialised before any factory call, so a
+    // synchronous callback settles cleanly instead of hitting a temporal dead
+    // zone. A sync-settle also stops subscribing further directories.
+    for (const directory of input.directories) {
+      if (settled) {
+        break;
+      }
+      watchers.push(watchFactory(directory, done));
+    }
+    // Arm the poll fallback alongside the still-open subscriptions.
+    if (!settled) {
+      timer = setTimeout(done, input.pollMs);
+    }
+  });
 }
