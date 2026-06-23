@@ -718,9 +718,12 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 - **Evals lane (queued, owner-directed 2026-06-23)**:
   [`current/skill-evals-pilot-start-right-quick.plan.md`](../../../plans/agentic-engineering-enhancements/current/skill-evals-pilot-start-right-quick.plan.md)
   — pilot the in-repo skill `evals/` convention on the high-traffic `start-right-quick` grounding skill;
-  grounded by the position report `.agent/reports/evals-and-assurance-position-2026-06-23.md` (whose 5 open
+  grounded by the position report `.agent/reports/evals-and-assurance-position-2026-06-23.md`, whose 5 open
   questions — proportionality tiers, in-repo vs hosted eval home, the real-world signal, the Agentic-Quality
-  principle wording, the `validation-strategy.md` home — await owner ratification).
+  principle wording, the `validation-strategy.md` home — were **ratified by the owner 2026-06-23** and homed
+  in the rewritten [`principles.md` §Agentic Quality](../../../directives/principles.md) + the seeded
+  [`validation-strategy.md`](../../../directives/validation-strategy.md) (3 harm-keyed tiers; eval
+  definitions always in-repo, MCPJam = runner for the MCP-server surface only; telemetry-now loop).
 - **Skills arc** (2026-06-14 audit, agent-tooling collection): owning plan
   [`agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`](../../../plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md)
   (§Reality Reconciliation gap ledger); enhancement briefs

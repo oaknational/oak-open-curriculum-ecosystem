@@ -439,7 +439,7 @@ paths, setup files) don't apply.
 
 ### Agentic Quality
 
-All agentic capabilities must include evaluation definitions, prompts, [skills](https://agentskills.io/skill-creation/evaluating-skills), mcp tools, sub-agents, and any other agentic artifacts. This applies to internal facing agentic capabilities as well as to those we serve to external users.
+Every agentic capability — prompts, [skills](https://agentskills.io/skill-creation/evaluating-skills), MCP tools, sub-agents — must carry an assurance case proportionate to the harm of getting it wrong, internal-facing as much as user-facing. Assurance composes deterministic tests, baseline-relative evaluations, conformance, and human review; rigour is risk-tiered (highest where harm is asymmetric and irreversible, light where cheap and self-correcting), never uniform. Evaluation definitions are version-controlled with the artefact they grade. Capabilities that are not eval-shaped take a different instrument, not forced graded-output evals. No internal assurance is complete until it closes against a real-world signal of value — grading only against expectations we authored measures our own assumptions. See [validation-strategy.md](validation-strategy.md) for the test/evaluate/assure frame, the assurance tiers, and the instrument-by-surface mapping.
 
 ### Compiler Time Types and Runtime Validation
 

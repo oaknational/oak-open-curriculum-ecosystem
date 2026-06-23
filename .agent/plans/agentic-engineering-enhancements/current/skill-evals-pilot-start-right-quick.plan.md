@@ -212,8 +212,13 @@ ground truth (baseline vs skill), satisfying the value-proxy independence requir
 
 **Blocking**: none — runnable now (in-repo evals, subagent runs).
 
-**Beneficial**: ratification of the report's open questions (proportionality tiers; the
-broader evals regime) would situate this pilot, but it can proceed and *inform* them.
+**Beneficial → now satisfied**: the report's open questions were **ratified by the owner
+2026-06-23** (homed in [`validation-strategy.md`](../../../directives/validation-strategy.md)
+and [`principles.md` §Agentic Quality](../../../directives/principles.md)). This pilot is
+now situated: `start-right-quick` is a **Light-tier** capability (internal/agent-facing,
+self-correcting) piloted with extra rigour for its high-traffic leverage; its evals are
+**in-repo** per the ratified eval-home decision; and WS4's generalisation feeds the seeded
+`validation-strategy.md`.
 Minimum shippable shape: WS1–WS3 alone (a graded delta for one skill) is already
 evidence; WS4's generalisation recommendation is the bonus.
 

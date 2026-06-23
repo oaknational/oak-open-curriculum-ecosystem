@@ -77,8 +77,12 @@ surface.
   (rewritten) + ADR-158**: authed `/mcp` Host is validated in the auth layer (`getPRMUrl`→403), Origin is
   deliberately permissive (Bearer is the boundary), the no-auth dev variant is an accepted dev-only residual;
   a regression test pins the authed-`/mcp` Host→403 invariant. **Evals strand:** position report
-  `.agent/reports/evals-and-assurance-position-2026-06-23.md` (test/evaluate/assure; open questions for
-  ratification) + a **QUEUED, owner-directed** next-session pickup —
+  `.agent/reports/evals-and-assurance-position-2026-06-23.md` (test/evaluate/assure); its **5 open
+  questions are RATIFIED (owner, 2026-06-23)** — 3 harm-keyed assurance tiers, eval definitions always
+  in-repo (MCPJam = runner for the MCP-server surface only), telemetry-now/teacher-feedback-next loop —
+  homed in the rewritten [`principles.md` §Agentic Quality](../../directives/principles.md) + the seeded
+  [`validation-strategy.md`](../../directives/validation-strategy.md). Plus a **QUEUED, owner-directed**
+  next-session pickup, now situated by the ratification —
   [`skill-evals-pilot-start-right-quick.plan.md`](../../plans/agentic-engineering-enhancements/current/skill-evals-pilot-start-right-quick.plan.md).
   Landed across this session's commits; owner controls push (nothing pushed). Thread:
   `agentic-engineering-enhancements` (evals).

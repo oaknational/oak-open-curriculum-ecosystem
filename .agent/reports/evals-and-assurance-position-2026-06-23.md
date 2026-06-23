@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-23
 **Type:** Report — names decisions, recommendations, and considerations. Ratification into a principle/directive and execution via a plan are separate, later steps.
-**Anchor:** the placeholder principle at [`principles.md` §"Agentic Quality"](../directives/principles.md) (line ~440): *every agentic capability — skills, prompts, MCP tools, sub-agents — must include evaluation definitions, internal-facing as well as those served to external users.* This report is the reasoning behind that principle and the proportionate path to honouring it.
+**Anchor:** [`principles.md` §"Agentic Quality"](../directives/principles.md) (line ~440), rewritten and ratified 2026-06-23 (see §10). This report is the reasoning behind that principle and the proportionate path to honouring it; the doctrine home is [`validation-strategy.md`](../directives/validation-strategy.md).
 
 ## 1. Purpose
 
@@ -85,8 +85,9 @@ Sequenced cheapest-and-highest-leverage first:
 - **Full eval coverage of every surface** — the principle says "all"; stakes are not uniform. Coverage follows risk-tiering (§9), not a flag day.
 - **Evals for sub-agents and the diffuse Practice** — much of it is not eval-shaped (§5); the right instrument is undecided. Deferred, not declined.
 - **CI eval-gating** — MCPJam supports scheduled/CI runs, but gating PRs on probabilistic evals before we have stable suites and a flake story would block delivery on noise. After suites prove stable.
-- **The in-repo-vs-hosted eval-home decision** — skill evals are in-repo (versioned, reviewed); MCPJam evals are hosted (richer, cross-LLM, scheduled) with a version-controllable local definition. Both likely have roles; the boundary is an open question (§10), not yet decided.
-- **Closing the real-world outcome loop** (usage telemetry / teacher signal) — named in §2 as the thing that ultimately grounds the whole triad. Deferred, but explicitly *not forgotten*: without it, everything here measures itself.
+- **Closing the real-world outcome loop** (usage telemetry / teacher signal) — named in §2 as the thing that ultimately grounds the whole triad. The signal and posture are now ratified (§10 #3); *building* the loop is deferred, but explicitly *not forgotten*: without it, everything here measures itself.
+
+(The in-repo-vs-hosted eval-home question that formerly sat here is now decided — see §10 #2.)
 
 ## 9. What we are NOT doing (declined, with reasoning)
 
@@ -95,13 +96,30 @@ Sequenced cheapest-and-highest-leverage first:
 - **Treating eval-coverage as the goal** — evals are a means; good capabilities are the goal. We will not optimise the proxy (coverage) over the thing.
 - **Building bespoke eval infrastructure** where MCPJam (MCP server), the skill `evals/` convention (skills), and the ground-truth system (search) already serve.
 
-## 10. Open questions for ratification (owner / future plan)
+## 10. Open questions — now ratified (owner, 2026-06-23)
 
-1. **Proportionality tiers** — what are the assurance tiers, and which surfaces sit in each?
-2. **In-repo vs hosted eval home** — version-controlled `evals/` vs MCPJam-hosted suites; likely both, with a clear boundary.
-3. **The real-world signal** — what is it, and is the assurance practice built *around* that loop rather than bolting it on?
-4. **The placeholder principle's wording** — tighten the grammar and encode proportionality and the eval-shaped/not-eval-shaped distinction.
-5. **Doctrine home** — `testing-strategy.md:28` already names a forthcoming `validation-strategy.md`. Does it widen to a test/evaluate/assure trichotomy, or is the cut deterministic↔distributional × code↔system↔journey? (Resist crystallising prematurely.)
+All five were surfaced to and decided by the owner on 2026-06-23. The decisions are
+homed in [`principles.md` §Agentic Quality](../directives/principles.md) and
+[`validation-strategy.md`](../directives/validation-strategy.md); this section is the
+decision record.
+
+1. **Proportionality tiers** — **3 tiers keyed on harm asymmetry** (not surface type):
+   Critical (asymmetric/irreversible harm — EEF evidence, pedagogy advice; mandatory
+   evals + a faithfulness assertion), Standard (visible, correctable — search, browse,
+   the MCP tool surface; conformance + behavioural evals), Light (cheap, self-correcting
+   — internal/agent-facing tooling; tests + spot checks).
+2. **In-repo vs hosted eval home** — **both; definitions always version-controlled
+   in-repo.** In-repo `evals/` runner for skills/prompts/sub-agents; MCPJam is the
+   *runner* for the MCP-server surface only, with its suite-definition JSON in-repo.
+   Hosted is execution, never the source of truth.
+3. **The real-world signal** — **usage telemetry now** (via the existing Sentry/OTel
+   observability foundation), **teacher feedback next**; the loop is built *around*
+   structurally (eval corpora seeded from real usage distributions), not bolted on.
+4. **The placeholder principle's wording** — **full self-carrying rewrite** applied to
+   [`principles.md` §Agentic Quality](../directives/principles.md).
+5. **Doctrine home** — **`validation-strategy.md` = test/evaluate/assure spine, seeded
+   as a stub now**; the finer internal cut (determinism × altitude) is deferred to the
+   pilot rather than crystallised up front.
 
 ## 11. Worked example — an MCPJam eval suite for the curriculum MCP
 

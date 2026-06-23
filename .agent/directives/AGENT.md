@@ -190,6 +190,7 @@ Use these links by trigger:
   [User Collaboration Practice](./user-collaboration.md),
   [Agent Collaboration Practice](./agent-collaboration.md),
   [Testing Strategy](testing-strategy.md),
+  [Validation Strategy](validation-strategy.md),
   [Definition of Delivery](./definition-of-delivery.md),
   [TypeScript Practice][typescript], [Safety and Security][security]
 - Architecture and schema: [Architecture][architecture], [ADR index][adr-index],

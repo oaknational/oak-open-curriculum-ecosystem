@@ -25,8 +25,8 @@ Mutation testing (Stryker) is **meta-quality** — it audits the test surface,
 not the product, and is the constraint that makes coverage meaningful (a test
 that executes code without checking behaviour scores the same as one that
 describes it). Rollout sequencing: mutation-testing plan.
-Formal home: forthcoming `validation-strategy.md` per doctrine restructure
-plan.
+Formal home: [`validation-strategy.md`](validation-strategy.md) (seeded
+2026-06-23) per doctrine restructure plan.
 
 ## Philosophy
 
