@@ -266,6 +266,37 @@ describe('appendToolEnhancements', () => {
       expect(result).toContain('snapshot');
     });
   });
+
+  describe('large-payload scoping hints', () => {
+    it('composes a large-payload narrowing hint onto the asset note for get-sequences-assets', () => {
+      const result = appendToolEnhancements('Base description', 'get-sequences-assets');
+
+      // Compose, do not replace: the existing asset-download guidance survives.
+      expect(result).toContain('oakUrl');
+      // ...and the large-payload hint names this tool's real narrowing (year / type).
+      expect(result).toContain('large payload at broad scope');
+      expect(result).toContain('`year`');
+      expect(result).toContain('`type`');
+    });
+
+    it('composes a large-payload narrowing hint onto the asset note for get-key-stages-subject-assets', () => {
+      const result = appendToolEnhancements('Base description', 'get-key-stages-subject-assets');
+
+      expect(result).toContain('oakUrl');
+      expect(result).toContain('large payload at broad scope');
+      // This tool narrows by unit and/or type, not year.
+      expect(result).toContain('`unit`');
+      expect(result).toContain('`type`');
+    });
+
+    it('does not add a large-payload hint to the bounded single-lesson asset tool', () => {
+      const result = appendToolEnhancements('Base description', 'get-lessons-assets');
+
+      // get-lessons-assets returns one lesson's assets — bounded; keeps only the asset note.
+      expect(result).toContain('oakUrl');
+      expect(result).not.toContain('large payload at broad scope');
+    });
+  });
 });
 
 /**

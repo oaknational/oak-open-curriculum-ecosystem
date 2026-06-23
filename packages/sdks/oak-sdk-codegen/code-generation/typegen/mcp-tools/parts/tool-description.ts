@@ -121,6 +121,22 @@ const GET_KEYWORDS_DISAMBIGUATION_NOTE = `
 
 WHEN TO PREFER WHICH KEYWORDS TOOL: this tool returns the LIVE full keyword set for a key stage + subject — fresh and authoritative (including KS4 during curriculum restructures), alphabetical, unranked, and large at subject scope. For a bounded frequency-ranked subset with lesson connections (token economy + relationship navigation over the curriculum graph), prefer get-keyword-graph, which serves a point-in-time curriculum snapshot.`;
 
+/**
+ * Guidance appended to tools that can return a large payload at broad scope.
+ *
+ * Several tools return everything under a broad anchor (a whole sequence, a
+ * whole key-stage + subject) and can exceed a host's per-result token cap. The
+ * note names the *real* narrowing each tool supports, so an agent scopes the
+ * call up front rather than discovering the limit by truncation mid-task. The
+ * note is one line to avoid bloating the agent context budget.
+ *
+ * @param narrowing - Tool-specific sentence naming that tool's actual narrowing
+ * parameters (e.g. `year`/`type`). Keep it terse and grounded in real params.
+ */
+const largePayloadNote = (narrowing: string): string => `
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host's per-result token limit. ${narrowing}`;
+
 function getToolDescriptionEnhancement(toolName: string): string | undefined {
   switch (toolName) {
     case 'get-rate-limit':
@@ -128,9 +144,18 @@ function getToolDescriptionEnhancement(toolName: string): string | undefined {
     case 'get-keywords':
       return GET_KEYWORDS_DISAMBIGUATION_NOTE;
     case 'get-lessons-assets':
-    case 'get-key-stages-subject-assets':
-    case 'get-sequences-assets':
+      // Bounded: one lesson's assets. Asset-download guidance only.
       return ASSET_DOWNLOAD_NOTE;
+    case 'get-key-stages-subject-assets':
+      // Whole key-stage + subject: compose the large-payload hint onto the asset note.
+      return `${ASSET_DOWNLOAD_NOTE}${largePayloadNote(
+        'Narrow with `unit` and/or `type` (asset type), or use `get-lessons-assets` for one lesson.',
+      )}`;
+    case 'get-sequences-assets':
+      // Whole sequence (all programmes): compose the large-payload hint onto the asset note.
+      return `${ASSET_DOWNLOAD_NOTE}${largePayloadNote(
+        'Narrow with `year` and/or `type` (asset type), or use `get-lessons-assets` for one lesson.',
+      )}`;
     default:
       return undefined;
   }
