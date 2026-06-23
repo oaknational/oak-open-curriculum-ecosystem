@@ -39,3 +39,6 @@ or a follow-up change:
 ## Index
 
 - [2026-06-15 — production](./2026-06-15-prod.md) — first full-matrix run; GO.
+- [2026-06-23 — local](./2026-06-23-local.md) — full matrix via the MCP-tool channel
+  (auth-enabled local dev, app 1.34.1, upstream 0.7.0); GO. §11 prompts / §13 widget render
+  N-A on this channel.

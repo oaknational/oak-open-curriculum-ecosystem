@@ -437,6 +437,10 @@ paths, setup files) don't apply.
   fires after the misstatement lands; this rule prevents authoring
   the misstatement in the first place.
 
+### Agentic Quality
+
+All agentic capabilities must include evaluation definitions, prompts, [skills](https://agentskills.io/skill-creation/evaluating-skills), mcp tools, sub-agents, and any other agentic artifacts. This applies to internal facing agentic capabilities as well as to those we serve to external users.
+
 ### Compiler Time Types and Runtime Validation
 
 Type precision is one expression of strict, complete, schema-driven practice.

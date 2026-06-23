@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "oak-local-dev": {
+      "type": "http",
+      "url": "http://localhost:3333/mcp"
+    }
+  },
+  "mcpjam": {
+    "type": "stdio",
+    "command": "pnpm",
+    "args": ["dlx", "@mcpjam/cli@latest", "mcp"],
+    "env": {}
+  }
+}
