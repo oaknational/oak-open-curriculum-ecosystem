@@ -1,0 +1,6 @@
+---
+description: Fetch Oak curriculum content and assets only through the Oak Open Curriculum API/SDK (TPC-filtered = safe); never fetch the raw CDN directly without fresh owner authorisation.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/source-curriculum-content-via-api-not-cdn.md`.

@@ -2,9 +2,9 @@
 
 Before authoring a plan, acceptance criterion, outcome, or status — or
 authoring the tests, implementations, or doctrine a plan body prescribes — run
-the four-clause first-principles check (clauses 1–3 screen a prescribed shape
-you are about to execute; clause 4 screens a plan/acceptance/outcome/status you
-are about to author). If any clause fails, surface the mismatch to the owner
+the five-clause first-principles check (clauses 1–3 screen a prescribed shape
+you are about to execute; clauses 4–5 screen a plan/acceptance/outcome/status
+you are about to author). If any clause fails, surface the mismatch to the owner
 before writing code or doctrine.
 
 1. **Shape clause.** Is the test-shape (or implementation-shape, or doctrine-
@@ -33,6 +33,16 @@ before writing code or doctrine.
    sequence the work to a named gate or a falsifiable tripwire ("when the
    schema migration lands"), or admit not-doing, never a bare `deferred`
    status ("when we get to it").
+5. **Rules-tier clause.** Does the plan presuppose a pattern that an
+   always-applied rule forbids? Screen the plan against the always-applied rules
+   tier ([`RULES_INDEX.md`](../../RULES_INDEX.md)), not only principles — a plan
+   can be principle-aligned yet violate a specific rule. This clause is applied
+   by the plan author AND by readiness/assumptions review: a plan is screened
+   against the rules tier before it is marked decision-complete. Worked miss
+   (2026-06-23): an aliasing plan (a compatibility layer) violated
+   [`replace-dont-bridge`](replace-dont-bridge.md) and passed all three
+   readiness reviewers; only the owner caught it — the review checked
+   assumptions and proportionality but never the rules tier.
 
 This rule is the first installed Family-A tripwire in the perturbation-
 mechanism bundle. It is front-loaded in Session 1 Task 1.4 of the staged

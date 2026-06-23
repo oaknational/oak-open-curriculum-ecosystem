@@ -165,6 +165,28 @@ limiter protects quota and compute budget, not data integrity.
   iframe; CSP `csp.connectDomains` and `csp.resourceDomains` control
   outbound requests (declared via `_meta.ui.csp` on resource content items)
 
+### Curriculum content sourcing — TPC filtering is the safety boundary
+
+Oak curriculum **content and assets** (lesson images, charts, datasets,
+downloadable files) must be obtained through the **Oak Open Curriculum API /
+generated SDK**, never fetched directly from the raw CDN
+(`cloudinary-res.thenational.academy` or any image origin). The API applies
+**Third-Party-Content (TPC) filtering** — it is the surface that guarantees
+content is safe and rights-cleared. The raw CDN is **unfiltered**, so a direct
+fetch bypasses the safety boundary **even when the API itself returned the CDN
+URL** (as on a lesson-quiz payload's image `url` field): the filtering lives at
+the API, not on the asset. An API-returned URL does not make a raw-CDN fetch
+safe.
+
+To obtain a curriculum image or asset, use the API/SDK asset path (e.g.
+`get-lessons-assets` then `download-asset`, or the documented asset endpoints).
+If only a raw CDN URL is available and no API path exists, **stop and ask the
+owner** before fetching it. This is the safety rationale behind the standing
+data-sourcing invariant — TPC filtering, not merely provenance. The agent-time
+form is the always-applied
+[`source-curriculum-content-via-api-not-cdn`](../../.agent/rules/source-curriculum-content-via-api-not-cdn.md)
+rule.
+
 ### Amplification Vectors
 
 Two patterns allow a single inbound request to produce upstream load:

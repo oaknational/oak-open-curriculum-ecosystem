@@ -51,15 +51,6 @@ staged for a second instance before graduating to a pattern. Sibling:
 [`tool-output-framing-bias`](patterns/tool-output-framing-bias.md) and the parsing-interleaved
 entry above (both: the shape of the aggregate misleads).
 
-## Knowledge surfaces are curated suggestions to a judging agent, not control-flow
-
-A skill, register, or routing pointer is read by a judging agent that decides what serves the
-moment — it is guidance, not a branch the system must execute. So a skill suggesting another
-skill carries no loop/cycle risk, and a reviewer's *lens* (the frame it judges from) matters
-as much as its facts. Applied 2026-06-22 framing onboard-me Branch F's primer hand-off as
-"a suggestion to your judgement, not a gate". Graduation candidate: PDR clause or pattern.
-Source: prior-session owner correction, promoted from the per-user buffer.
-
 ## Preserve the value-rationale (why-it-matters) at handoff, not only the what and how
 
 A plan's user stories carry *why it matters* — the most easily lost and most valuable layer.
@@ -181,16 +172,6 @@ Sibling: [[feedback_agent_identity_name_plus_uuid]].
   bodies with tokens collapsed (e.g. `user-search`→`n`, `examBoard`); the Read tool rendered the same
   files faithfully. When grep/Bash output of source looks mangled or suspiciously masked, switch to Read
   for the load-bearing read — do not reason over the filtered text. Source 2026-06-23 (Blazar).
-
-## Prefer a generated/grep gate over an enumerated list a specialist hands you
-
-When a reviewer, plan, or specialist hands you an enumerated surface (a fixed file list, a set of
-references to reconcile), prefer a generated or grep-derived gate over the list itself: the list is a
-*sample*, the gate is the *invariant*. A first-hand grep caught a live reference that all three readiness
-reviewers missed, so the reconciliation became a grep-gate, not their fixed file list. Verifying
-specialists is not distrust; it is the only thing that catches the gap the specialist shares. Source
-2026-06-23 (Skipper). Sibling of the staged falsifiable-judgment-gate candidate (replace a sampled/holistic
-judgment with a source-anchored mechanical check). Sibling: [[verify-dont-trust]].
 
 ## A whole-tree gate failing on files you didn't touch (and your own recent commits passed) ≠ your bug
 

@@ -71,10 +71,12 @@ source-handling, not a fact to look up; low-urgency (does not block any current 
 §Decisions; the two substrate studies in
 `research/agentic-engineering/operating-model-and-platforms/`.
 
-**Status:** open (2026-06-22, Perseus turns Horizon). **Lens-resolved direction (2026-06-22, L1 + L3):**
-name openly-licensed sources plainly with attribution; keep genuinely proprietary/unlicensed sources
-private — a PDR clause the owner ratifies. **Resolution trigger:** the next external-substrate study, or
-owner ratification of the convention.
+**Status:** RESOLVED (owner-ratified, 2026-06-23). Graduated to
+[PDR-115](../../practice-core/decision-records/PDR-115-naming-openly-licensed-external-sources.md):
+name openly-licensed external sources plainly with attribution; keep genuinely
+proprietary/unlicensed sources private; when licence status is unclear, treat as proprietary until
+confirmed. Distinct from the `plan-body-first-principles-check` vendor-literal clause (token-drift,
+not source attribution).
 
 ## Q-005 — When does the worktree-per-agent transition land?
 
@@ -94,9 +96,11 @@ the WS2/rewrite lane is the owner's prioritisation.
 **Owning artefact:** F-83 in [`frictions-register.md`](../../plans/agent-tooling/frictions-register.md);
 the multi-developer-transition direction (per-user memory; the WS-3 F-41 `resolveCoordinationHome` work).
 
-**Status:** open — direction lens-resolved (adopt worktrees). **Trigger (owner, 2026-06-22 — automatic,
-out of owner ownership):** fires at the next n≥2 concurrent-agent window on a shared checkout, or a second
-recorded shared-checkout commit-coupling incident (F-83), whichever comes first.
+**Status:** RESOLVED — direction and priority set (owner, 2026-06-23): adopt worktrees, and
+**prioritise it as infra work soon** (no longer waiting on a forcing incident). The question
+("when does it land?") is answered: soon, owner-prioritised. Implementation routes to the
+worktree-per-agent infra lane (F-83 / the `resolveCoordinationHome` work); the build is future
+work, not register decision-debt.
 
 ## Q-006 — The action-time-interrupt mechanism (PDR-098 empty quadrant)
 
@@ -114,11 +118,11 @@ quadrant); prioritisation is the owner's.
 
 **Owning artefact:** [`action-time-structural-interrupt-design-space.plan.md`](../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md).
 
-**Status:** open — direction lens-resolved. **Trigger (owner, 2026-06-22 — automatic, out of owner
-ownership):** the sequencing is off the owner; the firing surface is the consolidation pass, which walks
-this register first-hand. **Agent assessment (not owner-attributed):** the PDR-098 recurrence threshold is
-already met (~9+ instances plus a fresh one this session), so this is due at the next consolidation that
-has design capacity — not on an owner cue.
+**Status:** open (design) — owner **scheduled a dedicated design session** (2026-06-23). The
+direction is resolved (a mechanical firing interrupt); the mechanism and its owning surface are
+still to be designed in that session, with the design-space plan as its input. The question stays
+open until the session produces the mechanism; what changed is that it now has an allocated session
+rather than waiting on a forcing instance.
 
 ## Q-007 — Per-user `MEMORY.md` is over its index limit
 
@@ -135,9 +139,9 @@ low-urgency, owner-prioritised.
 
 **Owning artefact:** Claude per-user memory `MEMORY.md`; the `consolidate-docs` cross-platform memory step.
 
-**Status:** open — lens-resolved as maintenance. **Trigger (owner, 2026-06-22 — automatic, out of owner
-ownership):** fires when the per-user `MEMORY.md` index exceeds its limit (it does), at the next
-consolidation pass (the `consolidate-docs` cross-platform-memory step owns it).
+**Status:** RESOLVED (owner-authorised, 2026-06-23) — the per-user `MEMORY.md` drain runs this
+consolidation pass: graduate settled feedback whose substance is now homed in repo rules/PDRs, then
+trim the index. Per-entry topic files persist; only the loaded index shrinks.
 
 ## Q-009 — The content-structure graph + renderers-as-projections (curriculum domain)
 
