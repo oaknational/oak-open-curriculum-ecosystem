@@ -64,7 +64,9 @@ describe('MCP App UI Composition (Client SDK)', () => {
   let serverPort: number;
 
   beforeAll(async () => {
-    const { app } = await createStubbedHttpApp();
+    // WIDGET_TOOL_NAMES includes the user-search widget tool, which is gated
+    // OFF by default; opt in so this composition test sees the full widget set.
+    const { app } = await createStubbedHttpApp({}, { userSearchEnabled: true });
     server = app.listen(0);
     await once(server, 'listening');
 

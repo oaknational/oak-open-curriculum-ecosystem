@@ -50,7 +50,9 @@ function readTextContentAtIndex(content: readonly unknown[], index: number): str
 }
 
 async function callTool(name: string, args: Record<string, unknown>) {
-  const { app } = await createStubbedHttpApp();
+  // Enable the user-search surface: these fallback-proof calls include
+  // `user-search`, which is gated OFF by default.
+  const { app } = await createStubbedHttpApp({}, { userSearchEnabled: true });
   const response = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')

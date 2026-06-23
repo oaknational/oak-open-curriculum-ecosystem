@@ -19,6 +19,9 @@ const SHARED_ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
 async function createBypassedApp() {
   const runtimeConfig = createMockRuntimeConfig({
     dangerouslyDisableAuth: true,
+    // Full-surface fixture: opt in to the user-search tools (gated OFF by
+    // default) so the list_tools parity assertion sees the complete set.
+    userSearchEnabled: true,
     env: { ALLOWED_HOSTS: SHARED_ALLOWED_HOSTS },
   });
   const observability = createMockObservability(runtimeConfig);

@@ -128,12 +128,34 @@ describe('MCP App Pipeline E2E', () => {
   });
 
   it('user-search-query has visibility ["app"]', async () => {
-    const { app } = await createStubbedHttpApp();
+    // Opt in to the user-search surface: the tools are gated OFF by default.
+    const { app } = await createStubbedHttpApp({}, { userSearchEnabled: true });
     const tools = await fetchToolsList(app);
 
     const tool = findToolOrFail(tools, 'user-search-query');
 
     expect(tool._meta?.ui?.visibility).toEqual(['app']);
+  });
+
+  it('tools/list omits user-search and user-search-query at the default (flag OFF)', async () => {
+    // Default fixture mirrors the production opt-in default (OFF): the unbuilt
+    // user-search MCP App tools must not appear in the model-visible tools/list,
+    // regardless of whether a client honours _meta.ui.visibility.
+    const { app } = await createStubbedHttpApp();
+    const tools = await fetchToolsList(app);
+
+    const names = tools.map((tool) => tool.name);
+    expect(names).not.toContain('user-search');
+    expect(names).not.toContain('user-search-query');
+  });
+
+  it('tools/list includes both user-search tools when the flag is ON', async () => {
+    const { app } = await createStubbedHttpApp({}, { userSearchEnabled: true });
+    const tools = await fetchToolsList(app);
+
+    const names = tools.map((tool) => tool.name);
+    expect(names).toContain('user-search');
+    expect(names).toContain('user-search-query');
   });
 
   it('tools/list inputSchema preserves generated keyStage property including examples', async () => {
