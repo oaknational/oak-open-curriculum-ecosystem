@@ -1,8 +1,11 @@
 /**
- * Static curriculum ontology data for the POC.
+ * Curriculum ontology data for the public-API domain model.
  *
- * This module exports the pre-authored curriculum domain model as a constant.
- * It's consumed by the curriculum-model-data module to compose the combined
+ * The drift-prone lists are schema-derived at build time — the subject list,
+ * the key-stage list, and the KS4 examSubject variants come from the generated
+ * SDK/OpenAPI sources and cannot drift from the live API; display names,
+ * key-stage metadata, exam boards, tiers, and pathways are authored. The
+ * composed result is consumed by the curriculum-model-data module to build the
  * orientation response for the get-curriculum-model tool.
  *
  * @remarks This is a simple ontology for the public API data specifically. For the complete, official Oak ontology see https://github.com/oaknational/oak-curriculum-ontology

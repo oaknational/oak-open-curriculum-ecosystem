@@ -1,5 +1,5 @@
 /**
- * Unit tests for the static curriculum ontology data.
+ * Unit tests for the curriculum ontology data.
  *
  * The ontology's subject list is the domain model the get-curriculum-model
  * orientation tool serves. It must stay in lockstep with the canonical
