@@ -51,21 +51,6 @@ staged for a second instance before graduating to a pattern. Sibling:
 [`tool-output-framing-bias`](patterns/tool-output-framing-bias.md) and the parsing-interleaved
 entry above (both: the shape of the aggregate misleads).
 
-## Decision locus: product strategy is the owner's; engineering/architecture is collaborative
-
-Calibrated by the owner across the strategy sessions (2026-06-20). Two loci, distinct:
-**product-level** strategy (diagnosis / how-we-win / measures / feature shaping) is the
-owner's — input and questions stay valuable, but I do not decide; **engineering strategy /
-architecture / technical approach** is **collaborative, case-by-case** — propose, reason,
-push for long-term excellence, never go passive. The failure mode **oscillates**:
-over-claim (deciding product strategy from partial grounding) ↔ over-suppress (marking
-owner-owned substance "deferred" and doing zero analysis — abdication, not deference). The
-stable point is neither pole: it is the **read-gate** (gate every substantive claim on
-"have I read the source this rests on?") plus **locus-awareness**, never silence. Source:
-2026-06-20 (Kayak seeks Coral, owner re-calibration). Refines `user-collaboration.md`
-§Risk-and-Decisions; sibling: [[passive-guidance-loses-to-artefact-gravity]],
-[[feedback_ground_convenient_claims]].
-
 ## Knowledge surfaces are curated suggestions to a judging agent, not control-flow
 
 A skill, register, or routing pointer is read by a judging agent that decides what serves the
@@ -192,6 +177,40 @@ Sibling: [[feedback_agent_identity_name_plus_uuid]].
   run (the owner walk) caught the orientation lens (and the agent's own answers) defaulting to walls of
   text. Source 2026-06-23 (Zenith, orientation-lens); encoded in the `explain` skill §Delivery grain.
   Siblings: [[present-verdicts-not-menus]].
+- **Bash/grep tool output of source can be substring-filtered; Read is not.** Several greps returned
+  bodies with tokens collapsed (e.g. `user-search`→`n`, `examBoard`); the Read tool rendered the same
+  files faithfully. When grep/Bash output of source looks mangled or suspiciously masked, switch to Read
+  for the load-bearing read — do not reason over the filtered text. Source 2026-06-23 (Blazar).
+
+## Prefer a generated/grep gate over an enumerated list a specialist hands you
+
+When a reviewer, plan, or specialist hands you an enumerated surface (a fixed file list, a set of
+references to reconcile), prefer a generated or grep-derived gate over the list itself: the list is a
+*sample*, the gate is the *invariant*. A first-hand grep caught a live reference that all three readiness
+reviewers missed, so the reconciliation became a grep-gate, not their fixed file list. Verifying
+specialists is not distrust; it is the only thing that catches the gap the specialist shares. Source
+2026-06-23 (Skipper). Sibling of the staged falsifiable-judgment-gate candidate (replace a sampled/holistic
+judgment with a source-anchored mechanical check). Sibling: [[verify-dont-trust]].
+
+## A whole-tree gate failing on files you didn't touch (and your own recent commits passed) ≠ your bug
+
+When a whole-tree gate (type-check, lint, full `pnpm check`) fails on a surface you never changed AND
+your own recent commits passed that exact gate minutes earlier, read active-claims + comms for a
+concurrent agent BEFORE assuming your change broke it — a peer's in-flight feature can leave the shared
+working tree transiently red. The cure is to coordinate (post the exact failing locations to the owning
+agent) and wait event-driven for their atomic cycle to heal the tree, NOT to patch their in-flight work
+(collision). Source 2026-06-23 (Blazar). Multi-developer/shared-checkout territory (F-83). Sibling:
+[[respect-active-agent-claims]].
+
+## State the positive understanding the reader needs, not your own correction path
+
+A recurring authoring failure: your *process* leaks into the *artefact*. After being corrected, you write
+the correction path into the copy — a tombstone ("isn't X, doesn't need to be X"), over-explaining that
+reuses your own contemplative imagery, narrating a journey to a reader who never held the misconception.
+State the positive understanding the reader actually needs; the reader did not take your path and does not
+need it retraced. Fluency is the tell — a tidy synthesis arriving smoothly is the tripwire to re-ground,
+not confirmation. Source 2026-06-22 (Skipper, the over-unification/tombstone window). Siblings:
+[[no-tombstones-for-removed-ideas]], the per-user [[feedback_graphs_as_method_not_one_artefact]].
 
 ## A scanner finding's disposition is decided by the lenses, not precedent; fix-vs-dismiss is rarely an owner-fork
 

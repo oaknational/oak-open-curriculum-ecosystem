@@ -77,6 +77,13 @@ the class under test invalidates the sweep. The same discipline covers your own
 summarised verdicts: a conclusion you recorded earlier is a claim to re-test at
 the point of action, not a fact to inherit.
 
+A gate's *green* is itself a claim, not proof the gate works. A completion gate,
+validator, or count can read green while silently failing on the very input it
+exists to catch — most dangerously at the moment you cite its green as evidence
+that work is done. Before trusting a gate's pass, confirm it can go *red* on a
+known-bad input; a gate never observed failing has not been verified, only
+assumed. This applies hardest to your own completion gates.
+
 Verification reaches the *meaning* of an inherited frame, not only its
 existence. A recorded verdict, a continuity note's diagnosis, or a status
 label tells you what a prior mind concluded — it does not tell you the role,
@@ -197,6 +204,12 @@ The smoother and more convenient the claim, the harder the citation is owed.
   `Write`-edit of the renamed file, verify the *staged content* (`git show :<path>`),
   not just the rename — a 100%-similarity (`R100`) score is the tripwire that the
   staged blob is the pre-edit original and the real change is unstaged.
+- 2026-06-22 F-84 decision-debt false-green: the pending-graduations decision-debt
+  count read a healthy 0 while two live items existed (the item-count parser stripped
+  the fenced blocks the live entries used), and that green 0 was cited as
+  consolidation-completion evidence. Only a first-hand loss-scan caught it — no
+  gate-green ever could. The durable check is to prove a completion gate fails on a
+  known-bad input before trusting its green, especially your own.
 - Status surfaces are pointers, not facts: thread records, frictions registers,
   plan statuses, and register markers each describe state without being it. A
   frictions register stamped "addressed-in-working-tree" with a never-completed

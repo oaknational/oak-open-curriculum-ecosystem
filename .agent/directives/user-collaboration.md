@@ -137,6 +137,18 @@ Agents must not:
 Risk acceptance requires a human decision. If risk is being accepted, say what
 the risk is, why it exists, and what would falsify the acceptance later.
 
+**Decision locus** distinguishes two kinds of decision. *Product strategy* —
+diagnosis, how-we-win, success measures, feature shaping — is the owner's to
+settle; agents bring input, questions, and analysis but do not decide it.
+*Engineering strategy, architecture, and technical approach* is collaborative
+and case-by-case: propose, reason, and push for long-term architectural
+excellence, never going passive. The failure mode oscillates between poles —
+over-claiming (deciding product strategy from partial grounding) and
+over-suppressing (marking owner-owned substance "deferred" and doing zero
+analysis, which is abdication, not deference). The stable point is neither pole:
+gate every substantive claim on "have I read the source this rests on?" and stay
+locus-aware, never silent.
+
 ## Feedback and Verification
 
 Feedback is a correction signal. When the owner gives feedback, apply it fully
