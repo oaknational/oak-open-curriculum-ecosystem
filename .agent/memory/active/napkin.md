@@ -362,3 +362,32 @@ published Oak Open Curriculum HTTP API and generated SDK" — TPC, not just prov
 until this entry the rule lived only in per-user memory (Claude Code, this user) — not shared, not
 cross-platform, invisible to the incoming engineer and other-platform agents. Now repo-homed.
 Per-user mirror: [[feedback_source_curriculum_content_via_api_not_cdn]].
+
+## Session — PR #213 CI remediation + Sonar config cleanup (Foundry tracks Flicker, 2026-06-23)
+
+**Pushed (`docs/planning-and-validation`):** `cb8c07658` remediation (CodeQL insecure-temp-file →
+per-user XDG state dir + 0o700/0o600; `run.ts` single-read; 4 MINOR Sonar smells; new
+`validate-patterns-index` generator/validator wired into `repo-validators:check`; §S8786 policy
+class; editorial-tone/AGENT.md/codex-brief/VISION doc fixes). `6fe05988f` made the S4036 git-PATH
+hardening *visible* to Sonar (inline `env: {…PATH: TRUSTED_GIT_PATH}`, shared `core/trusted-git`).
+`12451f4d6` deleted the dead `sonar-project.properties` (SonarCloud uses automatic analysis → reads
+only `.sonarcloud.properties`; the file carried a forbidden+inert `sonar.issue.ignore.multicriteria`
+rule-disable block) and reconciled the policy/rule/engineering docs. 3× S8786 marked FALSE_POSITIVE
+server-side per §S8786.
+
+**UNCOMMITTED in working tree (owner: do not commit this session):** archived 3 stale plans →
+`plans-old-archive/<collection>/archive/` (`pr-102-snagging.plan.md`,
+`sonarjs-activation-and-sonarcloud-backlog.plan.md`, `eef-d0-decontamination-ledger.md`); removed the
+pr-102 row from `agent-tooling/current/README.md`; repointed the eef-d0 link in
+`eef-graph-tool-completion.plan.md`. Moves+edits done, not staged. Residual: backtick/prose mentions
+of those 3 in ~4 plan bodies left as-is (non-breaking). Parallel agent committing graph/ADR-200 work
+on this branch (`c51bf232e`, `0dc0db4bd`). CodeQL gate is owner-handled — do not investigate.
+
+**Surprise / correction (load-bearing):** repeatedly asserted *convenient* claims from inference
+instead of verifying ground-truth — (1) S4036 "FALSE_POSITIVE" when a real in-repo PATH-hardening
+fix existed; (2) that hardening then hidden behind a `trustedGitEnv()` helper Sonar couldn't trace,
+so S4036 re-fired on the "fixed" code; (3) "CodeQL alerts pre-existing on main" inferred from *file*
+existence (`git cat-file`), never the alert baseline — owner disputed it. Dual failure mode: also
+*over*-corrected into over-checking when told to act. Cure: verify the actual state to the stakes
+AND obey the actual instruction — neither under-verify (sensor-off) nor tangent past the directive.
+Mechanism-not-recall (t6 evidence). Napkin 364→~390/300 — rotation due (`consolidate-docs`).
