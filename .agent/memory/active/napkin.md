@@ -54,3 +54,42 @@ Where the substance went:
   threads (`orientation-skills-family`, `reasoning-grammar`) to retire once pushed.
 
 New session observations append below.
+
+## 2026-06-23 — open-PR triage + #128 disposition (Magnetar calls Gloom, 9e276e; n=2 with Narwhal)
+
+**Surprise — stale-artefact supersession blind spot (the session's main lesson).**
+
+- Observation: my *first* #128 verdict ("merge-but-trim") was reached on the proposal's internal
+  merits without checking what the repo decided AFTER the PR was written. #128 `last_reviewed`
+  2026-05-29; ADR-200 (which supersedes its scope) ratified 2026-06-22. A sub-agent reviewer
+  caught it; I'd have missed it solo.
+- Diagnosis: doctrine-by-analogy — I treated a ~4-week-old open PR like a fresh proposal to
+  evaluate, when its age made supersession the first-order question.
+- Cure: for ANY artefact open weeks+, "what has been decided since this was written?" is the
+  first-order question, before internal merits. Conserved to distilled + per-user memory.
+- Pointer: `.agent/reports/pr-128-formal-substrate-analysis-2026-06-23.md`; ADR-200.
+
+**Reconciliation — the "15 Dependabot vulns" flag does NOT verify.**
+
+- The committed napkin (Narwhal's 854553511 consolidation) carries "Dependabot reports 15
+  vulnerabilities on default branch (4H/8M/3L)" as an owner-facing flag. First-hand check
+  2026-06-23 ~19:15Z: `gh api repos/.../dependabot/alerts --paginate` returns **0 open** (130
+  total, all state `fixed`). Reconciled with Narwhal: the "15" is the LOCAL `pnpm audit`
+  surface (Narwhal's separate owner directive: `pnpm -r outdated` + `pnpm audit` → workspace
+  overrides), NOT GitHub Dependabot alerts. Different surfaces, both valid — not a
+  discrepancy. Worked instance of [[feedback_peer_status_claims_are_input_to_verify]]: I
+  relayed the count as a default-branch GitHub figure before checking; the lesson holds (name
+  the surface a relayed metric came from), even though both numbers turned out correct for
+  their own surface.
+
+**Finding — `main` CI is red, but NOT from this session's merges.**
+
+- `run-quality-gates` fails on the schema-drift check: cached OpenAPI spec `0.7.0-f7c18ea…` vs
+  live `0.7.0-804d3af…`. Upstream spec moved; the post-merge push surfaced it. My 5 merges
+  (#215/#216/#149/#171 + owner's #214) don't touch the schema cache. Remediation: `pnpm
+  sdk-codegen` with `OAK_API_KEY` (maintainer action). Surfaced to owner; not bundled over.
+
+**Behaviour note — forward-pointer before landing.** My #128 close comment (public on GitHub)
+says the analysis is "conserved at `.agent/reports/…`" while the file is still uncommitted/
+unpushed. The "commits pushed"-before-push pattern. Lesson: don't publish a pointer to an
+artefact that isn't durably landed.
