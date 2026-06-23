@@ -216,7 +216,8 @@ visualisations; the meta-schema. Those are later stages and compose onto the rat
 ### Stage 2 — survey (consumes Stage 1)
 
 The fresh deep conformance-and-traceability inventory over the estate — its decision-complete
-method is the [deep-plan-estate-survey brief](./deep-plan-estate-survey.plan.md): a multi-angle
+method is the [deep-plan-estate-survey brief](../../../plans-old-archive/product-development-governance/future/deep-plan-estate-survey.plan.md)
+(archived — superseded by ADR-200): a multi-angle
 read (≥3 agents per plan, holistic + specialist), cross-cutting relational passes, and an
 adversarial verification gate before any finding is accepted. The observe-mode extractor's output
 plus that reviewed multi-agent pass both produce the restructure work-list and **additively refine

@@ -16,8 +16,8 @@ historical context, not the active method.
 > **Status: V0 — decision-complete as V0, explicitly pre-survey.** Every
 > decision below is stated definitely (no "TBD", no "decide at execution
 > time"). V0 is not a draft to be filled in later; it is a **falsifiable
-> hypothesis** the [deep plan-estate survey](./future/deep-plan-estate-survey.plan.md)
-> tests against the real estate. The survey grounds **V1** by _additively
+> hypothesis** the [deep plan-estate survey](../../plans-old-archive/product-development-governance/future/deep-plan-estate-survey.plan.md)
+> (archived — superseded by ADR-200) tests against the real estate. The survey grounds **V1** by _additively
 > refining_ this contract where the estate proves it incomplete. See
 > [§0](#0-the-v0--survey--v1-contract).
 >
@@ -563,8 +563,9 @@ V0 succeeds as a lens, not as a finished standard. It is accepted when:
    without retrofit — node-schema #1 is one entry in the registry, its edges one
    slice of the vocabulary.
 4. **The survey can consume it.** The
-   [deep-survey brief](./future/deep-plan-estate-survey.plan.md) can read the
-   estate against V0 and emit additive refinements → V1.
+   [deep-survey brief](../../plans-old-archive/product-development-governance/future/deep-plan-estate-survey.plan.md)
+   (archived — superseded by ADR-200) can read the estate against V0 and emit
+   additive refinements → V1.
 
 **Conformance is necessary, not sufficient.** This schema scores a plan's _shape_, not its
 _substance_: a fully-conformant plan can still be substantively poor or strategically
