@@ -304,3 +304,21 @@ Settling the MCPJam `localhost-host-rebinding-rejected` finding:
   caught before enshrining.
 - Recorded: ADR-122 (rewrite) + ADR-158; regression test in `auth-enforcement.e2e.test.ts`. Durable lesson
   → distilled. (Napkin now over its line-limit — rotation due at consolidate-docs.)
+
+## Evals/assurance regime ratified; 3 follow-ons (2026-06-23, Magnolia spins Mulch)
+
+Owner ratified all 5 evals open questions (surfaced one-at-a-time); homed in `principles.md`
+§Agentic Quality (rewritten) + new `validation-strategy.md` (seeded stub) + report §10. Commit
+`60bb347f0`, pushed. Three things to carry forward:
+
+- **candidate (PDR):** the assurance regime (test/evaluate/assure + 3 harm-keyed tiers + in-repo
+  eval-home + real-world-loop) is portable Practice governance, homed so far only as repo directives.
+  Author a PDR once it is stable across ≥1 later session AND a second Practice-bearing repo faces the
+  same decision.
+- **Gate-caught recurrence (PDR-098 traction):** I linked doctrine→plan in `validation-strategy.md`
+  (a PDR-105 reference-direction violation); the validator blocked the commit and I de-linked. The
+  active gate caught what the passively-held rule didn't — structural cure validated, no doctrine
+  change. A clean "fluency is a warning" instance (a helpful-cross-link bypassed a known rule).
+- **Loss-flag (owner-facing, untriaged):** GitHub Dependabot reports 15 vulnerabilities on the
+  DEFAULT branch (4 high / 8 moderate / 3 low), surfaced on push. Not this session's work; needs
+  owner triage. Homed here so the signal doesn't evaporate with this context.
