@@ -349,6 +349,18 @@ content**:
 Each is the same signal: a typed content node — `data-table` / `chart` / `dataset`, plus
 resolvable metadata nodes — is the missing input the existing renderer would consume.
 
+**Concrete illustration (pulled this session).** The canonical `calculating-the-mean` lesson already
+carries exactly these structured assets as real rendered content. Its quiz uses a goals **frequency
+table** (goals 0–4 against frequencies 6 / 7 / 6 / 12 / 14 — the weighted-mean question
+`(0×6 + 1×7 + 2×6 + 3×12 + 4×14) / (6+7+6+12+14)`), a **bar chart** of goals, a **line graph**, and a
+**dot plot**. These were pulled first-hand from the public CDN to
+`reference-local/canonical-calculating-the-mean-charts/` (source URLs are in the lesson's
+`get-lessons-quiz` payload; assets are Oak content under OGL v3.0). They are precisely the typed
+`data-table` / `chart` nodes a content-structure graph would carry — and exactly what would fill the
+deck's "Insert your image here" slot and the worksheet's "provided dataset" with real, football-relevant
+data. The gap is not the renderer and not the source data; it is the typed content node that would join
+them.
+
 ### Build-vs-reuse — an LTAE reading of Aila's code
 
 The Aila code is available, and this repo chooses long-term architectural excellence at every
