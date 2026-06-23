@@ -223,3 +223,36 @@ I queried the live API for authoritative titles + key-stage coverage rather than
 memory, which also surfaced an unrelated drift (the ontology's exam-board list was missing `wjec`).
 The reviewer's verdict can be sound while a specific identifier it names is wrong — verify the one
 fact the change pivots on.
+
+## Gating an unbuilt MCP tool: app layer, opt-in posture, test the gate (2026-06-23, Foehn calls Headwind)
+
+User-search-not-exposed plan: gate the two unbuilt user-search tools off `tools/list` behind an
+opt-in flag. Four reusable findings (the plan as drafted was wrong on the first three; verified
+first-hand against the code before executing):
+
+- **Gate at the app, not the SDK.** The SDK's `AGGREGATED_TOOL_DEFS` (`universal-tools/definitions.ts`)
+  is a static, transport-agnostic const with no runtime-config access. The gate belongs in the app's
+  `registerTools` (`handlers.ts`), via the existing `EEF_FLAG_GATED_TOOL_NAMES` set pattern — the code
+  comment there states it: "SDK enumerator stays transport-agnostic; the app owns the flag." A
+  "where do I gate this" instinct should land in the app.
+- **Reuse the flag *engine*, not necessarily the sibling's *posture*.** EEF uses `resolveKillSwitchFlag`
+  (default ON). An unbuilt-feature gate is opt-in: `resolveOptInFlag` (default OFF) — the `useStubTools`
+  sibling, NOT EEF. "Mirror the EEF surface" conflated the two.
+- **Test the gate, not the engine.** The flag-resolution engine is tested once (`feature-flags.unit.test.ts`);
+  a new flag re-tests nothing there. The new behaviour is the gate — proven via the `registerTools`
+  spy (`handlers-tool-registration.integration.test.ts`) with the flag injected both ways.
+- **Required-field ripple crosses claim boundaries on a shared tree.** Adding a non-optional field to a
+  shared `RuntimeConfig` interface forces EVERY literal to update — including peer-claimed e2e helpers.
+  On a shared working tree my uncommitted change showed up as type-check-RED in a PEER's (Blazar's)
+  claimed files; they flagged it before I'd committed. The ripple is not contained to your claim —
+  coordinate it. Cure: my commit fixed the e2e helpers, clearing their red.
+
+## Multi-agent commit window is bursty — check foreign claims in the same breath as staging (2026-06-23, Foehn calls Headwind)
+
+Landing across a 3-agent window (Zenith, Blazar, me): the git window cleared, then two peers grabbed
+it within seconds with a live `.git/index.lock`. My `git add` hit the foreign lock and failed safe.
+Lessons: (1) don't chain the window-state check and the stage in one command — the window can change
+between them; check foreign `git:index/head` claims, then stage as a separate step. (2) A fresh lock
+(mtime seconds old) + foreign staged files = a healthy peer commit, not a stale lock — never touch or
+loop the lock; sequence behind via the claims/queue coordination surface (an event-driven waiter on
+*claims+index*, not the lock file). The same waiter pattern landed both my cycles cleanly.

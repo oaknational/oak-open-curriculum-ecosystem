@@ -8,11 +8,11 @@ todos:
     depends_on: []
   - id: cycle-2
     content: "Cycle 2: e2e/absence proof — tools/list over the in-process server does NOT contain user-search or user-search-query when the flag is OFF, and DOES when ON. Touches e2e-tests/mcp-app-pipeline.e2e.test.ts + flips the e2e helper default in test-config.ts (currently userSearchEnabled:true to preserve pre-gating behaviour) and updates the user-search-referencing e2e tests. One commit. Tree green."
-    status: pending
+    status: completed
     depends_on: [cycle-1]
   - id: ws-docs
-    content: "Docs: env var documented in env.ts JSDoc + README env table; note the three-stage flag lifecycle (pre-release OFF -> release ON kill-switch -> flag removed)."
-    status: pending
+    content: "Docs (DONE via Cycle 1 ac0a98c5b): env var documented in env.ts JSDoc incl. the three-stage flag lifecycle. README env-table item dropped — no such table exists and the sibling EEF flag is not documented there either; env.ts JSDoc is the canonical home."
+    status: completed
     depends_on: [cycle-1, cycle-2]
 isProject: false
 ---
@@ -20,7 +20,10 @@ isProject: false
 # User-search tools not exposed until built
 
 **Last Updated**: 2026-06-23
-**Status**: 🟢 IN PROGRESS — Cycle 1 LANDED (`ac0a98c5b`); Cycle 2 + docs remain.
+**Status**: ✅ COMPLETE — Cycle 1 `ac0a98c5b`, Cycle 2 `906cca9b3`, plan
+corrections `ff26bcf69`. Both user-search tools are gated OFF by default and
+proven absent from `tools/list` at the default; docs satisfied by `env.ts`
+JSDoc. Ready to archive per ADR-117. (Unpushed — owner controls push.)
 Three first-hand corrections were applied to this plan before execution (see
 §Execution Corrections): the gate lives in the **app** (`handlers.ts`), not the
 SDK; the posture sibling is `useStubTools` (opt-in), not the EEF kill-switch;
@@ -141,7 +144,7 @@ cross-claim edit).
 **Acceptance** (met): flag OFF/unset -> both tools absent from the registered
 set; ON -> present. 685 src + 143 e2e tests green; full pre-commit gate green.
 
-### Cycle 2: tools/list absence proof — DEFERRED (coordinate on the e2e suite)
+### Cycle 2: tools/list absence proof — LANDED `906cca9b3`
 
 **Test** (Red->Green): extend
 `apps/oak-curriculum-mcp-streamable-http/e2e-tests/mcp-app-pipeline.e2e.test.ts`
