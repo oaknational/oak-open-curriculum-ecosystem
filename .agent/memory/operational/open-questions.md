@@ -223,3 +223,29 @@ truth. Homed in
 [ADR-200 §8](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md). The
 **build** is not yet detailed: its match step reuses the still-open de-duplication / same-idea mechanism
 (WS5) and it is wired at WS4's thin-slice proof — so the *approach* is resolved, the *build* is gated on WS5.
+
+## Q-009 — The content-structure graph + renderers-as-projections (curriculum domain)
+
+**Question:** Oak's curriculum estate has the pedagogical **meaning** (atomic concepts), the
+**macrostructure** (ontology + bulk graphs), and the **evidence** (EEF), but no graph of the **content
+structure** — the typed forms that convey meaning (questions, data-tables, charts, datasets, images, KLPs,
+flashcards) — nor a medium-agnostic renderer/projection layer (worksheet / web / print / ODP / slides).
+What is its node/edge schema, its identity scheme, its references out to atomic `entity_id`s and lesson
+slugs, where it lives, and what is reused vs built fresh from Aila's content/renderer code?
+
+**Why it shapes future work:** it is the largest missing member of the curriculum graph-of-graphs and the
+most cross-repo-entangled (oak-openapi content, Aila content + renderers, moderation input). It is the layer
+that would make adaptation-integrity *checkable* (a preservation predicate over content↔intent edges) and
+turn renderers into projections of one content graph.
+
+**Why not cheaply answerable now:** this is **initial-research stage**. An engineer is joining the project
+and will bring an exploration brief for these features; the design is theirs and the owner's to shape, not
+to pre-decide here. It also depends on the open single-team question (repo-continuity §Open Owner-Decision
+Items #7).
+
+**Owning artefact:** [`knowledge-as-graph-two-altitudes-2026-06-23.md`](../../reports/knowledge-as-graph-two-altitudes-2026-06-23.md)
+(names the decisions, the LTAE build-vs-reuse reading of Aila's code, and the thin-slice identity-join
+proof); the curriculum-graph-estate synthesis (2026-06-22); paused threads `connecting-oak-resources`,
+`oak-kg-ontology-planning-review`.
+
+**Status:** open — initial landscape research recorded; owned by the incoming engineer's brief and owner.

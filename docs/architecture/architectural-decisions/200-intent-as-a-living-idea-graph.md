@@ -94,11 +94,25 @@ Locked structure (first cut; the JSON Schema is authored after the discovery pas
   not self-congratulation). The facet _vocabulary_ is discovered, not templated.
 - **Relationships (edges):** `part_of` / `composed_of` (composition) · `refines` · `depends_on` ·
   `tension_with` (locked-contradictions are a sub-case) · `duplicates` · `supersedes` · `serves` (→ a
-  strategic choice / higher-altitude idea).
+  strategic choice / higher-altitude idea) · `realised_by` / `embodied_in` (→ the substrate where the
+  idea became real — the realisation edges; see the amendment below).
 - **Provenance & lifecycle:** `provenance` (source doc + `file:line` + harvest pass) · `status`
   (harvested → analysed → homed → superseded/discarded) · `home` (the document that expresses it).
   _Every good/speculative idea must reach a `home`. This home-computation is the **re-expression check**
   only (graph → new corpus); it is **not** the whole no-loss guarantee._
+
+**Amendment — the realisation edges (owner-directed, 2026-06-23).** The edge set above is
+**intra-intent** (idea → idea, idea → strategic choice). A completed plan's ideas do not vanish; they
+**persist by being realised** — in the codebase, in the Practice (ADRs/PDRs/doctrine), and in the
+product. The graph must therefore carry **realisation edges** that leave the idea-graph and point at the
+substrate where an idea became real: `realised_by` / `embodied_in` (idea → the code module, ADR/PDR,
+doctrine surface, doc, or product capability that realises it). These are **distinct from `home`**:
+`home` is the _document that expresses_ the idea; `realised_by` is _where the idea became real_. They are
+the internal counterpart to ADR-201's external evidence edges (`evidence` / `validated_by` /
+`realized_by`) — repo intent projects outward, the realisation reports back — and they are what makes
+"where did this idea end up, and did it deliver?" answerable structurally. The edge _targets_ are the
+future knowledge-graph family members (§Future state); until those exist, `realised_by` is recorded
+against a stable identifier for the realising artefact and resolves fully once the target graph lands.
 
 **No-loss is two directional checks plus a bad-pile re-screen (owner-ratified, 2026-06-22),** because the
 preserved graph is the harvest's own output and cannot, alone, prove the harvest captured everything:
@@ -303,6 +317,17 @@ recorded as the owner's desired future state and the direction this architecture
 **out of scope for the current planning-estate rewrite and must not expand it.** The payoff is structural:
 building the idea knowledge-graph well on the generic substrate makes the family-of-graphs future a set of
 instances rather than a rebuild.
+
+**The family is entailed, not merely aspired to (owner-directed, 2026-06-23).** The realisation edges
+(§5 amendment) need _resolvable targets_. Those targets — the ADRs, the documentation, the code, **all
+knowledge _about the repo_** — are themselves repo self-knowledge. So the ADRs and documentation will
+**necessarily** become part of the idea knowledge-graph, either absorbed into it or as **connected
+idea-graph instances**, because an edge needs a node at its end: a live, validated `idea —realised_by→
+ADR-200` requires ADR-200 to be (or to project to) a node a validator can resolve. The
+family-of-graphs is therefore not optional polish layered on later — it is _entailed_ by taking the
+realisation edges seriously. This does not change the current rewrite's scope (still the plan corpus
+under the standing vision/strategy); it records _why_ the family follows of necessity and is the
+direction this architecture is chosen to enable.
 
 ## Open
 

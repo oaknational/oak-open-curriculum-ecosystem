@@ -322,3 +322,25 @@ Owner ratified all 5 evals open questions (surfaced one-at-a-time); homed in `pr
 - **Loss-flag (owner-facing, untriaged):** GitHub Dependabot reports 15 vulnerabilities on the
   DEFAULT branch (4 high / 8 moderate / 3 low), surfaced on push. Not this session's work; needs
   owner triage. Homed here so the signal doesn't evaporate with this context.
+
+## Two-altitude knowledge-as-graph research; two owner corrections on framing & rationale (2026-06-23, Perseus lifts Umbra)
+
+Initial landscape research → report `knowledge-as-graph-two-altitudes-2026-06-23.md` (status:
+initial-research, input to an incoming engineer's exploration brief — decides nothing): repo intent
+(ADR-200) and the curriculum domain are ONE knowledge-as-graph capability at two altitudes over one
+`graph-core` substrate; named the missing **content-structure graph** (typed content blocks linked to
+atomic-concept intent + lesson slugs) + **renderers-as-projections**; grounded first-hand incl. a live
+Aila adaptation experiment + a build-vs-reuse (LTAE) read of Aila's code (evidence in reference-local).
+ADR-200 amended (owner-directed): realisation edges §5 + family-entailment §Future state. Two
+corrections worth carrying (both homed in per-user memory):
+
+- **Artefact annotation ≠ decision rationale.** I read the ontology `curric:slug` `rdfs:comment`
+  ("URL-safe identifier for public URLs") and "corrected" a peer report to "cross-source matching is
+  merely emergent". Owner: the slug was added **by decision, to enable joins between the two datasets**.
+  A field's comment documents its *use*, not *why* it was added; the decision-maker owns rationale; I
+  overruled a stronger inference with a weaker source because "emergent" was convenient.
+  [[feedback_artefact_annotation_is_not_rationale]]
+- **Positive framing must not gloss issues (LTAE).** Told to frame Aila findings positively, I first
+  over-applied it toward "never criticism"; owner: positive tone **composes with** unflinching
+  architectural honesty for decisions, reconciled via "different goal → different architecture" — never
+  soften a technical fact to stay positive. [[feedback_frame_product_findings_as_enablement]]
