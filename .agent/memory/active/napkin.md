@@ -256,3 +256,34 @@ between them; check foreign `git:index/head` claims, then stage as a separate st
 (mtime seconds old) + foreign staged files = a healthy peer commit, not a stale lock — never touch or
 loop the lock; sequence behind via the claims/queue coordination surface (an event-driven waiter on
 *claims+index*, not the lock file). The same waiter pattern landed both my cycles cleanly.
+
+## Orientation-lens unification — the live walk caught what the simulations couldn't (2026-06-23, Zenith lifts Firmament)
+
+Executed the orientation-lens unification (two lenses → one `/oak-explain`); distinct lessons:
+
+- **Progressive disclosure: only the live owner walk caught the wall-of-text.** Six
+  conversational simulations PASSED the no-menu / no-probe checks — then the owner's real
+  `/oak-explain` run exposed the lens (and my own answers) defaulting to exhaustive walls of text.
+  Behavioural gates (`skills:check` etc.) cannot see delivery quality; a real run is irreplaceable.
+  Cure: a "Delivery grain" discipline in the skill (lead with the essence, let them pull; both bounds
+  — don't tease, don't menu). Homed in distilled.
+- **Banner ≠ resolution (owner, stated 2×).** A SUPERSEDED banner left in the live estate becomes a
+  giant tombstone; `git mv` superseded/complete plans to `plans-old-archive` (completed → ADR-117
+  archive home) and reconcile referrers. Archived the deep-plan-estate-survey + the complete eef-d6
+  plan this session. Homed: per-user [[banner-not-enough-move-superseded]].
+- **candidate: readiness review doesn't check plans against the always-applied rules tier.** The
+  plan's "alias both old commands / no dangling slash command" approach *violated* the always-applied
+  `replace-dont-bridge` rule (aliasing is a compat layer) — and passed ALL THREE readiness reviewers
+  (assumptions/onboarding/docs-adr). Only the owner caught it mid-execution ("owner action is not a
+  cure" → a missing review check). One instance; trigger = 2nd instance → PDR/process candidate.
+- **Grounded fact (load-bearing for any future skill rename):** the skills-adapter generator has NO
+  alias concept — it wipes adapter dirs and regenerates exactly one pair per `.agent/skills/<id>/`
+  canonical. A rename = delete old canonical + author new canonical + regenerate; there is no
+  adapter-only alias. (`agent-tools/src/skills-adapter-generate/generator.ts`, verified first-hand.)
+- **Intent-scoped commit held across a 3-agent shared index.** `git commit --pathspec-from-file`
+  excluded foreign staged files (Blazar's ontology/openapi/uat) by construction across all 3 commits
+  — the commit-skill's documented cure, working cleanly. Reinforces Foehn's commit-window entry above.
+- **Section-fix follow-ups for owning threads** (superseded SECTIONS, not whole-file — excise with a
+  pointer to the superseding decision, keep the why): `sentry-observability-maximisation-mcp.plan.md`
+  (L-8 correction), `agentic-engineering-enhancements/roadmap.md` (Phase 4 → ADR-125),
+  `schema-resilience-and-response-architecture.plan.md` (OQ1 settlement). Banner-marked in-situ.

@@ -184,3 +184,11 @@ Sibling: [[feedback_agent_identity_name_plus_uuid]].
   `knip.config.ts` (and avoid unused exported types) or full-tree knip goes RED and blocks
   repo-wide commits. Source 2026-06-21/22 (Oyster, Cosmos, Cutter). Siblings:
   [[hook-policy-substring-discipline]], the oak-complex-merge skill.
+- **Lead with the essence; let the reader pull depth — progressive disclosure, not a wall of text
+  (and not a menu).** Open with the headline / the one-to-three things that matter, offer the next
+  layer in one natural sentence, expand only what they pull. Both failure bounds are real: don't tease
+  (the first beat must actually answer them), and don't turn disclosure into a menu (no numbered
+  branches, no per-paragraph "want more?"). Behavioural gates cannot see delivery quality — only a real
+  run (the owner walk) caught the orientation lens (and the agent's own answers) defaulting to walls of
+  text. Source 2026-06-23 (Zenith, orientation-lens); encoded in the `explain` skill §Delivery grain.
+  Siblings: [[present-verdicts-not-menus]].
