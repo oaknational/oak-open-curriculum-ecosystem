@@ -1392,7 +1392,69 @@ worth preserving for the skill:
 
 ---
 
+## Orientation-Lens Unification — Conversational Simulation (23 June 2026)
+
+The two repo-bound orientation lenses (`explain-repo`, `onboard-me`) were merged
+into one intent-discerning lens, `/oak-explain` (`.agent/skills/explain/`); host
+decision recorded in
+[ADR-202](../../../../docs/architecture/architectural-decisions/202-orientation-as-one-intent-discerning-lens.md).
+Delivery mode (specific answer / area overview / guided tour) is a discerned
+variable; setup stays a distinct go-ahead-gated capability; the
+`working-with-agentic-ai` primer and the PDR-112 seam are unchanged.
+
+Validation method (per the standing lesson recorded below): **conversational
+orientation-request simulation** — the agent receives each trigger phrase and
+conducts the front-door discernment — **not** a README-first doc-path persona walk
+(which never exercises the conversational front door). Each scenario carries an
+explicit **no-probe-before-first-answer** check and a **no-menu-shape** check.
+
+| Trigger | Lens behaviour (first move) | No-probe | No-menu | Verdict |
+| --- | --- | --- | --- | --- |
+| "Tell me about this repo" | Ambiguous on angle + mode → discerns first (warm greeting + one conversational steer inferring nothing forced); **no immediate briefing**, no list | ✓ | ✓ | PASS |
+| "How does the SDK codegen work?" | Crisp specific → mode + What already known → answers directly from live docs at the right level; single widen line | ✓ (reading a doc to answer is delivery, not a setup probe) | ✓ | PASS |
+| "I want to understand the search architecture" | Specific area + overview inferable → area overview scoped to search from live docs; offers depth or the tour | ✓ | ✓ | PASS |
+| "Onboard me" / "where do I start" | Guided-tour intent → greeting + listening question first; setup probes only **after** the person says they want hands-on help | ✓ | ✓ | PASS |
+| External (non-teammate) visitor wanting to contribute | Access-aware fork → asks teammate/external only when it changes the offer; routes past teammate-only surfaces silently; relays the external-contribution posture warmly; access never gated | ✓ | ✓ | PASS |
+| "I'm new to working with AI agents" | AGENT.md routes to the `working-with-agentic-ai` primer (declinable prelude), which forwards into the lens via the single PDR-112 edge | ✓ | ✓ | PASS |
+
+Cross-cutting: no duplicated teaching content (the lens points to live docs; the
+six architectural invariants now live in **README §Architectural invariants**;
+the primer is routed to, not duplicated); the PDR-112 seam is intact (primer body
+untouched, the named edge resolves to the one lens); gates green (`skills:check`,
+`portability:check`, `markdownlint` 0, `format`).
+
+**Standing lesson reaffirmed — only a real run proves the experience.** The
+agent-side simulations above pass; the **live owner walkthrough then ran**
+(2026-06-23, three `/oak-explain` invocations as an engineer, a CEO persona, and a
+meta probe) and proved the point — it surfaced three improvements the simulations
+did **not**:
+
+1. **Progressive disclosure.** The lens defaulted to walls of text; added a
+   cross-cutting "Delivery grain — progressive disclosure, not walls of text (and
+   not menus)" discipline with both bounds (don't tease, don't menu), and fixed the
+   two mode descriptions that invited the dump.
+2. **Scope accuracy.** The lens (and the agent's synthesis) inflated the repo to
+   "how Oak does AI". Added a "Scope, accurately" honesty guard — this repo is one
+   of Oak's AI efforts (it puts Oak's curriculum *into* third-party AI assistants,
+   plus ecosystem tools and the agent-first practice), not the whole of Oak's AI.
+3. **Positioning in VISION.** Added a generic boundary to `VISION.md` (one of Oak's
+   AI efforts; complementary to Oak's other user-facing AI products; no product
+   named — owner decision, durability over a hardcoded name).
+
+Lesson for the register: behavioural gates (`skills:check` etc.) cannot see
+delivery quality or scope-framing accuracy; a real run remains irreplaceable.
+
+---
+
 ## Change Log
+
+- **2026-06-23**: Added §Orientation-Lens Unification — Conversational Simulation.
+  The `explain-repo` + `onboard-me` lenses merged into one intent-discerning lens
+  `/oak-explain` (ADR-202); clean break (old skills deleted, slash commands
+  retired, no aliases — `replace-dont-bridge`); the six invariants relocated to
+  README §Architectural invariants (skill points, no baked facts). Six
+  conversational scenarios PASS with no-probe and no-menu checks; live owner walk
+  outstanding.
 
 - **2026-06-12**: Added §Interactive Onboarding Inputs — owner-directed
   `/oak-onboard-me` skill intent, interaction-design prototype, and usage

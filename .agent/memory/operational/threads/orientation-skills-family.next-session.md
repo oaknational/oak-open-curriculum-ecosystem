@@ -12,6 +12,7 @@ defined by PDR-112.
 | Bora lifts Downdraft | claude | claude-opus-4-8 | 5120ef | planner → implementer | 2026-06-22 | 2026-06-22 |
 | Orbit rides Horizon | claude | claude-opus-4-8 | ef8284 | implementer | 2026-06-22 | 2026-06-22 |
 | Skipper tracks Reef | claude-code | claude-opus-4-8[1m] | 87a7bb | planner — authored the orientation-lens unification plan (owner-directed); did not implement | 2026-06-23 | 2026-06-23 |
+| Zenith lifts Firmament | claude-code | claude-opus-4-8[1m] | 5c2f1b | implementer — executed the orientation-lens unification (WS0–WS6); folded two mid-execution owner directions | 2026-06-23 | 2026-06-23 |
 
 ## Lane state
 
@@ -82,12 +83,35 @@ repo (PDR-112 §Graduation intent) — single-instance now, so not graduated.
   variable; setup stays distinct and go-ahead-gated; the `working-with-agentic-ai`
   primer is unchanged; **PDR-112 is NOT amended** (host instantiation is phenotype,
   recorded in a host ADR + AGENT.md). Design owner-confirmed.
-- **Next safe step**: execute
-  [`orientation-lens-unification.plan.md`](../../../plans/developer-experience/current/orientation-lens-unification.plan.md)
-  from **WS0** (re-ground only — the readiness reviewers ran and were folded 2026-06-23;
-  the plan is **READY FOR EXECUTION**). WS0 confirms sub-decision 1 (lens name) with the
-  owner or takes its default (keep `onboard-me` canonical + alias `explain-repo`). The
-  prior session's primer/seam commit (`5b3453d41`) remains push-pending (owner-gated).
+- **UNIFICATION IMPLEMENTED (Zenith lifts Firmament, 2026-06-23) — push-pending (owner-gated).**
+  WS0–WS6 executed against
+  [`orientation-lens-unification.plan.md`](../../../plans/developer-experience/current/orientation-lens-unification.plan.md).
+  Outcome: ONE intent-discerning lens `/oak-explain` (`.agent/skills/explain/`); delivery mode
+  (specific answer / area overview / guided tour) is a discerned variable; setup distinct +
+  go-ahead-gated; `working-with-agentic-ai` primer + PDR-112 seam unchanged (PDR-112 NOT amended).
+  Host decision recorded in
+  [`ADR-202`](../../../../docs/architecture/architectural-decisions/202-orientation-as-one-intent-discerning-lens.md).
+  AGENT.md §Orientation Requests rewritten to route every intent to the one lens (primer leads in via
+  the edge → lens). Real-time onboarding-expert review (READY-WITH-FIXES) verified first-hand and folded.
+  Gates green: `skills:check`, `portability:check`, `markdownlint` 0, `format`.
+  - **Two owner directions mid-execution superseded the plan's letter** (owner direction is a stream):
+    1. **Lens name = `/oak-explain`** (owner chose this over the plan default `onboard-me` and the
+       `orient` option).
+    2. **Clean break, no compatibility layers** (`replace-dont-bridge`) — the plan's aliasing /
+       "no dangling slash command" approach is RETIRED; old skills (`onboard-me`, `explain-repo`)
+       deleted, slash commands removed not aliased, every live reference migrated.
+    3. **Minimise unique info in the skill** — the six architectural invariants moved to a new
+       **README §Architectural invariants** block; the skill points to it (no baked repo facts).
+  - **Live owner walkthrough DONE (2026-06-23)** — three `/oak-explain` runs
+    (engineer, CEO persona, meta probe). Drove three refinements the simulations
+    missed: (1) progressive disclosure — added a "Delivery grain" discipline and
+    fixed two mode descriptions that invited walls of text; (2) scope accuracy —
+    added a "Scope, accurately" guard (this repo is ONE of Oak's AI efforts, puts
+    Oak *into* third-party AI assistants; not "how Oak does AI"); (3) positioning —
+    a generic boundary added to `VISION.md` (no product named; owner decision).
+  - **Remaining**: commit (one coherent docs-and-skills commit); push (owner-gated);
+    consolidation/handoff + memory at close.
+  - The prior session's primer/seam commit (`5b3453d41`) also remains push-pending (owner-gated).
 - **Promotion watchlist**: DONE — value-conveyance, knowledge-surfaces-are-curated,
   and decision-records-record-current-state were promoted from the per-user buffer
   to `distilled.md` this session (2026-06-22), each flagged with its graduation

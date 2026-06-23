@@ -352,6 +352,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (external systems are typed evidence edges and the graph stays canonical; direction invariant — intent
   projects outward, services report back; capability modes + supervision + no-PII-in-VCS; unlocks the full
   self-measuring-delivery value on top of the substrate; Proposed 2026-06-22, gated on the substrate)
+- [ADR-202: Orientation as one intent-discerning lens](202-orientation-as-one-intent-discerning-lens.md)
+  (the repo-bound orientation surface is one lens, not mode-specific skills; delivery mode — specific answer /
+  area overview / guided tour — is a discerned variable, not a skill boundary; setup is a distinct
+  side-effecting capability, never an information mode; PDR-112 seam and primer unchanged, PDR-112 not
+  amended; Accepted 2026-06-23)
 
 ## Key Architectural Decisions
 

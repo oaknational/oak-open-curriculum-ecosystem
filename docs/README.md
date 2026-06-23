@@ -13,10 +13,10 @@ last_reviewed: 2026-06-12
 
 ## Getting Started
 
-- **New to everything?** → run `/oak-onboard-me` in an agent session
-  (`$oak-onboard-me` in Codex) — an interactive onboarding walker that
-  branches by audience and need, detects your setup state, and reads the
-  live docs as it guides you
+- **New to everything?** → run `/oak-explain` in an agent session
+  (`$oak-explain` in Codex) — the orientation lens; it works out whether you
+  want a specific answer, an area overview, or a guided walk that can set up
+  your machine, reads the live docs, and meets you there
 - **Evaluating the project?** → [VISION.md](../VISION.md) for the
   timeless framing: Oak's open curriculum as AI-native infrastructure across
   **three co-equal value streams** — the teacher-facing MCP app, engineering

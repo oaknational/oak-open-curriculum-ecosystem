@@ -373,7 +373,7 @@ Recommended treatment:
    - Stable area onramps → onboarding skill, contributor docs, or a dedicated
      `docs/engineering/onramps.md`-style surface.
    - Practice-shaped first tasks → Practice onboarding surface or
-     `.agent/skills/onboard-me/`.
+     `.agent/skills/explain/`.
 3. Delete or archive this file with disposition once re-homed.
 
 Preferred final state: no `good-first-issues.md` in `.agent/plans/` unless it is

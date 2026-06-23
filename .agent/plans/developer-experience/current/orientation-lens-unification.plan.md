@@ -39,6 +39,31 @@ todos:
 
 # Orientation lens unification — one intent-discerning surface
 
+## Execution note (2026-06-23, Zenith lifts Firmament) — three points supersede the plan's letter
+
+Executed WS0–WS6 this session. Three owner directions taken mid-execution override
+parts of this plan as written (owner direction is a stream; the latest turn wins).
+Read these before trusting the older clauses below:
+
+1. **Lens name = `/oak-explain`** — the owner chose this at WS0, over both the
+   sub-decision-1 default (`onboard-me`) and the `orient` option. Canonical skill:
+   `.agent/skills/explain/`.
+2. **Clean break, no compatibility layers** (`replace-dont-bridge`, owner-directed) —
+   the aliasing approach in **sub-decisions 1 & 3, WS2, and the risk table** ("alias
+   both old commands", "no dangling slash command") is **RETIRED**. The old skills
+   (`onboard-me`, `explain-repo`) were deleted, their slash commands removed (not
+   aliased), and every live reference migrated to `/oak-explain` in the same change.
+3. **Minimise unique info in the skill** (owner-directed) — the six Headline
+   Invariants are **not** "authored once in the lens" (WS1/§Governance); they now live
+   in a new **README §Architectural invariants** block and the skill points to it. No
+   repo facts are baked into the skill body.
+
+The host decision is recorded in
+[`ADR-202`](../../../../docs/architecture/architectural-decisions/202-orientation-as-one-intent-discerning-lens.md).
+Everything else in the plan (the design intent, the discernment contract, the three
+modes, the setup-distinct boundary, the PDR-112-not-amended governance, the
+behavioural acceptance scenarios) was implemented as written.
+
 ## End goal
 
 When a contributor asks to be told about this repository, about agentic

@@ -45,8 +45,18 @@ surface.
   take; forward genuinely-new V0-bridge work is **unblocked** (the existing-estate rewrite WS6–WS7 is gated).
   Read ADR-200 + the thread record first. Owner controls push. Detail: thread record (top section).
 - **Onboarding-improvement arc — PR #199 OPEN, merge-once-green (`feat/onboarding-improvement`).**
-  **Next:** owner re-walks `/oak-onboard-me` off-branch; B2/B3 risk-register seeding; the
+  **Next:** owner re-walks `/oak-explain` off-branch; B2/B3 risk-register seeding; the
   ask-the-repo search decision. (B1 awaits owner cost bands; B6 at the M2 gate.)
+- **Orientation-lens unification — IMPLEMENTED this session (2026-06-23), push-pending.** The two
+  repo-bound orientation lenses (`explain-repo`, `onboard-me`) are merged into ONE intent-discerning
+  lens `/oak-explain` (`.agent/skills/explain/`); delivery mode (specific answer / area overview /
+  guided tour) is a discerned variable; setup stays distinct + go-ahead-gated; the
+  `working-with-agentic-ai` primer + PDR-112 seam unchanged (PDR-112 NOT amended). Clean break — old
+  skills deleted, slash commands retired, no aliases (owner-directed, `replace-dont-bridge`). Host
+  decision in [`ADR-202`](../../../docs/architecture/architectural-decisions/202-orientation-as-one-intent-discerning-lens.md);
+  the six architectural invariants now live in README §Architectural invariants (skill points, no baked
+  facts — owner-directed minimise-unique-info). Thread
+  [`orientation-skills-family`](threads/orientation-skills-family.next-session.md). Owner controls push.
 - **OWNER ROADMAP (owner direction 2026-06-12, sequenced "not all at once") — the forward agenda:**
   (1) organise the comms-research follow-ons; (2) naming v3 — DECISION-COMPLETE plan
   [`agent-naming-schema-v3.plan.md`](../../plans/agent-tooling/current/agent-naming-schema-v3.plan.md)

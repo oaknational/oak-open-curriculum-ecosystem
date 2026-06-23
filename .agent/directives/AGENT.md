@@ -86,32 +86,39 @@ non-negotiable runtime and generator contract.
 ## Orientation Requests
 
 When someone asks you to **explain, introduce, or get started with this
-repository**, route to the orientation skills rather than improvising. They are
-one teaching-surface family across a portability seam (PDR-112): a portable
-lead-in primer plus two repo-bound lenses that read the live docs at answer
-time. Each owns a reader-intent and routes onward without re-teaching the
-others:
+repository** — "tell me about this repo", "what is this", "give me an overview",
+"how does X work", "I want to understand the search architecture", "onboard me",
+"where do I start", "set me up", "help me contribute" — route to the orientation
+lens rather than improvising. The human-facing teaching surface is a family
+across a portability seam (PDR-112; this host's instantiation is recorded in
+ADR-202): a portable lead-in primer plus **one** repo-bound lens that reads the
+live docs at answer time.
 
 - *"I'm new to working with AI agents", "teach me to work with agentic AI",
   "what does working with an agent even mean"* → the
   **`working-with-agentic-ai`** primer: a portable, host-free footing primer
-  that ends at a single hand-off edge into this repo's own walk. From its edge,
-  continue into `onboard-me`. Offer it only as a one-step-declinable prelude —
-  an experienced agentic-AI user skips straight to the lenses below.
-- *"Explain this repo", "tell me about this repo", "what is this", "give me an
-  overview", "executive summary"* → the **`explain-repo`** skill: a direct,
-  synthesised executive briefing, no setup and no interaction.
-- *"Onboard me", "where do I start", "give me a tour", "set me up", "help me
-  contribute"* → the **`onboard-me`** skill: an interactive, paced
-  walkthrough that detects machine state and guides hands-on setup.
+  that ends at a single hand-off edge into this repo's own guidance. From its
+  edge, continue into the orientation lens. Offer it only as a
+  one-step-declinable prelude — an experienced agentic-AI user skips straight to
+  the lens.
+- *Every other orientation intent* — "explain this repo", "give me an overview",
+  "how does X work", "I want to understand area Y", "onboard me", "where do I
+  start", "set me up", "help me contribute" → the **`explain`** lens: it
+  discerns interest, angle, and delivery mode — a pinpoint specific answer, a
+  synthesised area overview, or a paced guided tour that can lead into
+  go-ahead-gated machine setup — through at most a few conversational questions,
+  never a menu, then delivers. Delivery mode is a discerned variable, not a
+  separate skill: discern it internally, never guess it from phrasing and route
+  to a fixed behaviour.
 
-A fresh *"I'm new to agentic AI"* enters the primer first, then forwards into
-`onboard-me`; *"onboard me"* and *"explain this repo"* land on their lenses
+A fresh *"I'm new to agentic AI"* enters the primer first, then forwards into the
+lens via the named edge; every other orientation intent lands on the lens
 directly, with no primer detour.
 
 On a loader platform invoke the skill (`/oak-working-with-agentic-ai`,
-`/oak-explain-repo`, `/oak-onboard-me`); on a non-loader platform read and
-follow the canonical `.agent/skills/<name>/SKILL-CANONICAL.md`.
+`/oak-explain`); on a non-loader platform read and follow the canonical
+`.agent/skills/working-with-agentic-ai/SKILL-CANONICAL.md` or
+`.agent/skills/explain/SKILL-CANONICAL.md`.
 
 ## Project Context
 

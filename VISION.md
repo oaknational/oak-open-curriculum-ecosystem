@@ -35,6 +35,12 @@ mission: for teachers, and for the wider ecosystem. (Serving schools directly is
 Oak's work elsewhere, not this repository's.) Oak owns the curriculum; we're a way
 to reach it and build with it.
 
+This is **one of Oak's AI efforts, not the whole of how Oak does AI** — Oak builds
+other user-facing AI products too. What is distinctive here is that we put Oak's
+curriculum _into_ the third-party AI assistants teachers already use, and give the
+wider ecosystem open tools to build with. That is complementary to Oak's other AI
+work, not a replacement for it.
+
 ### For teachers — Oak inside the AI assistants they already use
 
 The web and AI assistants are two co-equal, complementary ways teachers reach Oak.

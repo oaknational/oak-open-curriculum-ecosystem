@@ -70,9 +70,9 @@ are set out in [What This Repo Provides](#what-this-repo-provides) below.
 
 ## Developers and AI agents
 
-- **New here?** — open an agent session and run `/oak-onboard-me` for an
-  interactive walkthrough that branches by audience, detects your setup state,
-  and guides one step at a time
+- **New here?** — open an agent session and run `/oak-explain`; the orientation
+  lens works out whether you want a quick answer, an overview, or a guided
+  hands-on walk that can set up your machine, and meets you there
 - **Developers** — continue to [Quick Start](#quick-start) below
 - **Oak teammates joining via Claude Code (or another AI coding agent)** — Quick Start as above, then [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md) for the sanctioned MCP set, and [good first issues](.agent/plans/good-first-issues.md) for what to pick up first
 - **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
@@ -211,6 +211,14 @@ and
   and Sentry Seer) — install only when you need local Sentry operator tooling;
   see [Sentry CLI usage](docs/operations/sentry-cli-usage.md) for the
   `sentry-cli` vs dev-`sentry` split and workspace invocation details.
+- **MCPJam** (optional, for MCP server development and validation only) —
+  inspects, runs conformance checks, and authors/runs evals against the MCP
+  server; backs the optional `mcpjam` entry in [`.mcp.json`](.mcp.json). No repo
+  dependency — run on demand with `pnpm dlx @mcpjam/cli@latest <command>`, or the
+  inspector GUI with `pnpm dlx @mcpjam/inspector@latest`. For the hosted eval and
+  project features, authenticate once with `pnpm dlx @mcpjam/cli@latest login`.
+  The companion `mcp-inspector` skill installs at the machine level via
+  `pnpm dlx skills add mcpjam/inspector --skill mcp-inspector`.
 
 ### Install and verify
 
@@ -359,6 +367,17 @@ Architectural Decision Records (ADRs) are the architectural source of truth. The
 - [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
 
 See the [full ADR index](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) for all decisions (start with the "5 ADRs in 15 Minutes" block).
+
+### Architectural invariants
+
+Six stable, ADR-backed properties make this repository what it is. Each links to its authoritative doc, which always carries the detail:
+
+1. **The SDK updates itself from the API spec** — when the upstream OpenAPI schema changes, regeneration brings every workspace into alignment with zero manual type work (the Cardinal Rule above; [OpenAPI pipeline](docs/architecture/openapi-pipeline.md)).
+2. **Two data feeds, both deliberate** — the live API powers the SDK and MCP tools ([OpenAPI pipeline](docs/architecture/openapi-pipeline.md)), while bulk-downloaded curriculum data is the source of truth for search ingestion and graph derivation ([semantic search architecture](docs/agent-guidance/semantic-search-architecture.md)).
+3. **The curriculum graphs are derived from the bulk data** — prior knowledge, misconceptions, keywords, and progressions served as anchored graph tools ([graph-stack topology, ADR-173](docs/architecture/architectural-decisions/173-graph-stack-topology.md)).
+4. **EEF evidence grounds the pedagogy** — the Teaching and Learning Toolkit is integrated for evidence-based support ([Data Sources](#data-sources)).
+5. **The bulk data populates the semantic search** — ingestion builds the search indices from it ([ingestion guide](apps/oak-search-cli/docs/INGESTION-GUIDE.md)).
+6. **The Search SDK serves both sides** — creating and operating search instances as well as querying them ([Search SDK](packages/sdks/oak-search-sdk/README.md)).
 
 ## Engineering Practice
 
