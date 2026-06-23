@@ -162,6 +162,18 @@ const EEF_FLAG_GATED_TOOL_NAMES: ReadonlySet<UniversalToolName> = new Set<Univer
   'get-eef-evidence',
 ]);
 
+/**
+ * Tool names co-gated behind `OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED`. The two
+ * user-search MCP App tools (`user-search` widget + `user-search-query`
+ * app-only helper) register only when the opt-in flag is ON. While OFF
+ * (default), neither is registered — so neither appears in `tools/list`,
+ * regardless of whether a client honours `_meta.ui.visibility`. The MCP App
+ * user-search experience is not built yet. Typed as `UniversalToolName` so a
+ * tool-name rename is a compile error here, not a silently-stale string.
+ */
+const USER_SEARCH_FLAG_GATED_TOOL_NAMES: ReadonlySet<UniversalToolName> =
+  new Set<UniversalToolName>(['user-search', 'user-search-query']);
+
 /** Iterates over universal tools and registers each with the server. */
 function registerTools(
   server: Pick<McpServer, 'registerTool'>,
@@ -175,6 +187,17 @@ function registerTools(
     // name here to co-gate it under the same flag (the typed constant fails compilation on a
     // tool-name rename).
     if (EEF_FLAG_GATED_TOOL_NAMES.has(tool.name) && !options.runtimeConfig.eefEnabled) {
+      continue;
+    }
+
+    // User-search tools are gated at registration (OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED →
+    // runtimeConfig.userSearchEnabled, opt-in, default OFF): the unbuilt MCP App tools stay off
+    // the registered set — and out of tools/list — unless an explicit `=true` enables them. The
+    // SDK enumerator stays transport-agnostic; the app owns the flag.
+    if (
+      USER_SEARCH_FLAG_GATED_TOOL_NAMES.has(tool.name) &&
+      !options.runtimeConfig.userSearchEnabled
+    ) {
       continue;
     }
 

@@ -34,6 +34,7 @@ function createRuntimeConfig(
     dangerouslyDisableAuth: true,
     useStubTools: false,
     eefEnabled: false,
+    userSearchEnabled: false,
     version: '1.2.3-test',
     versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
