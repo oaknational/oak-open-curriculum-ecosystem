@@ -3,11 +3,11 @@ name: "User-search tools not exposed in tools/list until the MCP App experience 
 overview: "The user-search MCP App tools (user-search + user-search-query) are registered unconditionally, so they appear in tools/list for an app experience that is not built yet. Gate both behind an opt-in feature flag (default OFF, EEF pattern) so neither is exposed until the feature ships."
 todos:
   - id: cycle-1
-    content: "Cycle 1: opt-in feature flag (default OFF) gating user-search tool registration. Flag-engine resolution unit test (test the engine, not the default posture) + gated registration so neither user-search tool registers when OFF. One commit. Tree green."
-    status: pending
+    content: "Cycle 1 (LANDED ac0a98c5b): opt-in flag OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED (default OFF) gating user-search tool registration in the APP layer (handlers.ts, mirroring EEF), not the SDK. Gate proven both ways via the registerTools spy integration test (test the gate, not the engine — the engine is already tested once in feature-flags.unit.test.ts). One commit. Tree green."
+    status: completed
     depends_on: []
   - id: cycle-2
-    content: "Cycle 2: e2e/absence proof — tools/list over the in-process server does NOT contain user-search or user-search-query when the flag is OFF (default), and DOES when ON. One commit. Tree green."
+    content: "Cycle 2: e2e/absence proof — tools/list over the in-process server does NOT contain user-search or user-search-query when the flag is OFF, and DOES when ON. Touches e2e-tests/mcp-app-pipeline.e2e.test.ts + flips the e2e helper default in test-config.ts (currently userSearchEnabled:true to preserve pre-gating behaviour) and updates the user-search-referencing e2e tests. One commit. Tree green."
     status: pending
     depends_on: [cycle-1]
   - id: ws-docs
@@ -20,7 +20,11 @@ isProject: false
 # User-search tools not exposed until built
 
 **Last Updated**: 2026-06-23
-**Status**: 🟡 PLANNING (current/ — queued, not started)
+**Status**: 🟢 IN PROGRESS — Cycle 1 LANDED (`ac0a98c5b`); Cycle 2 + docs remain.
+Three first-hand corrections were applied to this plan before execution (see
+§Execution Corrections): the gate lives in the **app** (`handlers.ts`), not the
+SDK; the posture sibling is `useStubTools` (opt-in), not the EEF kill-switch;
+and the new behaviour is tested at the **gate**, not the already-tested engine.
 **Scope**: Stop the unbuilt user-search MCP App tools appearing in the
 model-visible `tools/list`, by gating their registration behind an opt-in
 feature flag (default OFF) until the MCP App user-search experience is built.
@@ -41,10 +45,15 @@ Surfaced by the owner during the `mcp-self-description-fidelity` session
   (Claude Code; the oak-prod `tools/list` observed this session) does not honour
   it, so **both** tools appear in the model-visible tool list — hence "two
   user-search tools".
-- Neither registration is gated by a feature flag — they are registered
-  **unconditionally** (`universal-tools/definitions.ts`). So in the public alpha,
-  agents see user-search tools for an MCP App experience that **is not built
-  yet**.
+- The SDK *assembles* every tool definition into a static `AGGREGATED_TOOL_DEFS`
+  const (`universal-tools/definitions.ts`) — including both user-search entries.
+  The **app** then enumerates that list and *registers* each tool in
+  `registerTools` (`apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`).
+  Registration was **unconditional** for user-search — no flag — so in the
+  public alpha agents see user-search tools for an MCP App experience that **is
+  not built yet**. The gate therefore belongs in the **app's** `registerTools`
+  (where `EEF_FLAG_GATED_TOOL_NAMES` already gates EEF), not the SDK: the SDK
+  enumerator stays transport-agnostic and the app owns the flag.
 
 ### Problem Statement
 
@@ -63,11 +72,33 @@ degrading the public-alpha tool surface.
 
 ---
 
+## Execution Corrections (first-hand, 2026-06-23)
+
+Verified against the code before executing; this plan as originally drafted was
+wrong on three specifics (intent unchanged):
+
+1. **Gate location** — the gate is the **app's** `registerTools`
+   (`handlers.ts`), mirroring `EEF_FLAG_GATED_TOOL_NAMES`, **not** the SDK's
+   `universal-tools/definitions.ts` (a static const with no runtime-config
+   access; gating there would break the transport-agnostic-SDK invariant).
+2. **Posture sibling** — EEF uses `resolveKillSwitchFlag` (default ON). The
+   correct opt-in (default OFF) sibling is `useStubTools` (`resolveOptInFlag`).
+   The flag *engine* is shared; the posture copied is `useStubTools`'s.
+3. **Test shape** — the flag engine is already tested once
+   (`feature-flags.unit.test.ts`); do not re-test it. The new behaviour is the
+   gate, tested via the `registerTools` spy harness in
+   `handlers-tool-registration.integration.test.ts` with the flag injected both
+   ways. A **required-field ripple**: adding `userSearchEnabled` to the three
+   runtime-config interfaces forces a one-line addition in every `RuntimeConfig`
+   literal (several `src/` tests + two `e2e-tests/` helpers).
+
 ## Design Principles
 
-1. **Reuse the flag engine** — add one opt-in flag (default OFF), e.g.
-   `OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED`, mirroring the EEF surface. No new
-   mechanism.
+1. **Reuse the flag engine** — add one opt-in flag (default OFF),
+   `OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED`, resolved with `resolveOptInFlag`
+   (the `useStubTools` posture). No new mechanism. (EEF is the structural
+   sibling for the gated-tool-name-set pattern, but its kill-switch posture is
+   the opposite — see §Execution Corrections.)
 2. **Gate registration, not just visibility** — while OFF, the tools must not be
    registered at all, so a generic client cannot see them regardless of whether
    it honours `_meta.ui.visibility`.
@@ -90,30 +121,42 @@ degrading the public-alpha tool surface.
 
 ## Cycles
 
-### Cycle 1: opt-in flag gates user-search registration
+### Cycle 1: opt-in flag gates user-search registration — LANDED `ac0a98c5b`
 
-**Test** (Red): a flag-engine resolution unit test asserting the gating function
-includes the user-search tool definitions only when the resolved flag is ON, and
-excludes them when OFF/unset — exercising the resolution engine, not the default
-value. (If the registration list is assembled purely, test that assembler with
-the flag value injected.)
+**Test** (Red): the `registerTools` spy integration test
+(`handlers-tool-registration.integration.test.ts`, `registerAndCapture`
+harness) asserts `user-search` + `user-search-query` are absent from the
+captured registrations when `userSearchEnabled` is false and present when true —
+the flag value injected both ways. The flag engine is NOT re-tested here.
 
-**Product code** (Green): add the opt-in flag to `env.ts` + the runtime-config
-resolver (opt-in posture, default OFF), and gate the user-search tool
-registrations in `universal-tools/definitions.ts` (or wherever the registered
-list is assembled) on the resolved flag.
+**Product code** (Green): `OAK_CURRICULUM_MCP_USER_SEARCH_ENABLED` added to
+`env.ts`; `userSearchEnabled` added to the three runtime-config interfaces
+(`runtime-config-support.ts`) and resolved with `resolveOptInFlag` in
+`runtime-config-from-validated-env.ts`; gated in the **app's** `registerTools`
+(`handlers.ts`) via `USER_SEARCH_FLAG_GATED_TOOL_NAMES`, mirroring the EEF guard.
+Required-field ripple applied to the `src/` runtime-config literals and the mock
+helper; the two `e2e-tests/` helper literals patched additively (owner-authorised
+cross-claim edit).
 
-**Acceptance**: flag OFF/unset -> user-search tools absent from the registered
-set; flag ON -> present. Whole tree green; commit names cycle 1.
+**Acceptance** (met): flag OFF/unset -> both tools absent from the registered
+set; ON -> present. 685 src + 143 e2e tests green; full pre-commit gate green.
 
-### Cycle 2: tools/list absence proof
+### Cycle 2: tools/list absence proof — DEFERRED (coordinate on the e2e suite)
 
-**Test** (Red->Green): extend the in-process e2e suite
-(`apps/oak-curriculum-mcp-streamable-http/e2e-tests/mcp-app-pipeline.e2e.test.ts`)
-to assert `tools/list` does NOT contain `user-search` or `user-search-query` with
-the flag at its default (OFF), and DOES when the flag is enabled.
+**Test** (Red->Green): extend
+`apps/oak-curriculum-mcp-streamable-http/e2e-tests/mcp-app-pipeline.e2e.test.ts`
+to assert `tools/list` does NOT contain `user-search` or `user-search-query` at
+the flag's default (OFF), and DOES when enabled. Cycle 1 set the e2e helper
+default `userSearchEnabled: true` to preserve pre-gating behaviour; Cycle 2 must
+flip the default to false (production-honest), drive both postures explicitly,
+and update the existing user-search-referencing e2e tests
+(`mcp-app-pipeline`, `server`, `ws3-fallback-proof`).
 
 **Acceptance**: e2e assertions pass; `pnpm test:e2e` exits 0; whole tree green.
+
+**Coordination note**: `e2e-tests/**` is under an active claim by another
+session (`Blazar rides Dawn`) as of 2026-06-23. Coordinate or take the claim
+before starting Cycle 2.
 
 ---
 
@@ -121,7 +164,7 @@ the flag at its default (OFF), and DOES when the flag is enabled.
 
 | Acceptance id | Proof level | Proof |
 |---|---|---|
-| cycle-1 | unit | flag-engine gating test; `pnpm --filter @oaknational/curriculum-sdk test` (and the app env/runtime-config tests) |
+| cycle-1 | integration | `registerTools` gating test; `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test` (the change is in the app, not the SDK) |
 | cycle-2 | e2e | `tools/list` omits user-search tools at default; `pnpm test:e2e` |
 | ws-docs | non-code | env var documented; lifecycle note recorded |
 
