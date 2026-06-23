@@ -55,13 +55,12 @@ Companion follow-on plan outside this collection:
   with full upstream API URL, parameters, and statuses. For users who
   discover tools via MCP then call the API directly.
 - [mcp-self-description-fidelity.plan.md](mcp-self-description-fidelity.plan.md) —
-  **ACTIVE** (started 2026-06-23). Two schema-first snags from the
-  2026-06-23 local UAT: large-payload tools carry accurate scope/page
-  hints in their descriptions (WS1 — both the generated `tool-description.ts`
-  switch and the hand-authored `aggregated-*` definitions); the
-  curriculum-model ontology's subjects (13→17) and other drift-prone lists
-  are derived from the schema instead of hand-maintained (WS2). WS1 and WS2
-  parallel-safe; min shippable shape is WS2 cycle 1 alone.
+  **✅ COMPLETE (2026-06-23), awaiting archive.** WS1 (large-payload scope
+  hints on the generated asset tools + hand-authored `browse`/`search`) and
+  WS2 (curriculum-model ontology subjects 13→17, key stages, and KS4
+  examSubject schema-derived; `wjec` fix; version 0.2.0) landed; docs homed;
+  gates green; adversarial review done. Knowledge fully homed — safe to move
+  to `archive/completed/` in the next curation pass.
 
 ## Exploration
 

@@ -4,39 +4,39 @@ overview: "Two schema-first fixes from the 2026-06-23 local UAT: large-payload t
 todos:
   - id: ws1-cycle-1
     content: "WS1 cycle 1: generated-tool large-payload note — unit test in tool-description.unit.test.ts asserting getToolDescriptionEnhancement returns a scope/page note for the asset tools + Green via constant and switch cases. One commit. Tree green at end."
-    status: pending
+    status: completed
     depends_on: []
   - id: ws1-cycle-2
     content: "WS1 cycle 2: aggregated-tool scoping hints — unit test asserting the aggregated browse/explore/keyword-graph tool-definition descriptions carry a scoping hint + Green via the aggregated-* tool-definition edits. One commit. Tree green at end."
-    status: pending
+    status: completed
     depends_on: []
   - id: ws1-cycle-3
     content: "WS1 cycle 3: e2e proof — tools/list over the live server shows the scope/page hint for a known overflow tool (get-sequences-assets and browse-curriculum). One commit. Tree green at end."
-    status: pending
+    status: completed
     depends_on: [ws1-cycle-1, ws1-cycle-2]
   - id: ws2-cycle-1
     content: "WS2 cycle 1: subjects fidelity — unit test asserting ontologyData subjects' slugs equal the canonical generated subject-slug set (fails now: 13 vs 17) + Green by deriving the ontology subject slugs from the generated source. One commit. Tree green at end."
-    status: pending
+    status: completed
     depends_on: []
   - id: ws2-cycle-2
     content: "WS2 cycle 2: extend derivation to key stages + KS4 factor enums where schema-sourced; update ontology version/notice to state which fields are generated. One commit. Tree green at end."
-    status: pending
+    status: completed
     depends_on: [ws2-cycle-1]
   - id: ws3-doc-propagation
     content: "WS3: TSDoc/README/ADR-or-directive prose for the landed behaviour (schema-first ontology derivation; large-payload hint convention)."
-    status: pending
+    status: completed
     depends_on: [ws1-cycle-3, ws2-cycle-2]
   - id: ws4-quality-gates-final
     content: "WS4: full quality gate chain (sdk-codegen through test:e2e) on the integrated delivery."
-    status: pending
+    status: completed
     depends_on: [ws3-doc-propagation]
   - id: ws5-adversarial-review
     content: "WS5: adversarial specialist reviews (mcp-expert, type-expert, docs-adr-expert). Document findings."
-    status: pending
+    status: completed
     depends_on: [ws4-quality-gates-final]
   - id: ws6-consolidation
     content: "WS6: run /oak-consolidate-docs; propagate settled outcomes; archive."
-    status: pending
+    status: completed
     depends_on: [ws5-adversarial-review]
 isProject: false
 ---
@@ -44,7 +44,7 @@ isProject: false
 # MCP Self-Description Fidelity
 
 **Last Updated**: 2026-06-23
-**Status**: 🟢 ACTIVE (execution started 2026-06-23; readiness-reviewed by assumptions-expert; WS1 seam and WS2 canonical source resolved first-hand)
+**Status**: ✅ COMPLETE (2026-06-23) — WS1 (cycles 1.1–1.3) and WS2 (cycles 2.1–2.2) landed; WS3 docs homed; WS4 gates green (sdk-codegen idempotent, e2e 143 passing); WS5 adversarial review done (mcp-expert COMPLIANT, type-expert SAFE, docs-adr-expert BLOCKER fixed). Commits: 8237eb2a7, 5ed1855cb, e7071f541, 92de5cf8b, c47f2b6f3, 74270f759. Knowledge homed; safe to archive.
 **Scope**: Make the Oak Curriculum MCP server's *self-description* accurate and robust, schema-first: tool descriptions tell agents how to avoid payload overflow (WS1), and the curriculum-model orientation cannot drift from the live subject/key-stage truth (WS2).
 
 ---

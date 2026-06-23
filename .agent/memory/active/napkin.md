@@ -191,3 +191,35 @@ enough). They were accurate — yet the first-hand grep still caught a live refe
 **grep-gate, not their fixed file list**. Reusable: when specialists hand you an enumerated surface,
 prefer a generated/grep gate over the list — the list is a sample, the gate is the invariant.
 Verifying specialists is not distrust; it is the only thing that catches the gap the specialist shares.
+
+## A whole-tree gate failing on files you didn't touch ≠ your bug (2026-06-23, Blazar rides Dawn)
+
+Mid-execution of mcp-self-description-fidelity, my clean WS3 docs commit failed the whole-tree
+type-check — in `oak-curriculum-mcp-streamable-http`, a package I never touched. My five prior cycle
+commits had each passed that exact gate minutes earlier. The cause: a concurrent agent (Foehn calls
+Headwind) was mid-implementing the user-search feature flag I'd just planned, had added
+`userSearchEnabled` to `RuntimeConfig`, and hadn't yet fixed the e2e test-config helpers — so the
+shared working tree was transiently red. **Diagnosis discipline: when a whole-tree gate fails on a
+surface you didn't change AND your own recent commits passed the same gate, read active-claims +
+comms for a concurrent agent BEFORE assuming your change broke it.** The cure was to coordinate (post
+the exact failing locations to the owning agent) and wait for their atomic cycle to heal the tree —
+NOT to patch their in-flight feature (collision; they own it and must fix the helpers to land their
+own commit anyway). Event-driven wait (background `until type-check green`), not a busy poll.
+
+## Bash tool output is substring-filtered; Read is not (2026-06-23, Blazar rides Dawn)
+
+Several greps returned bodies with tokens collapsed to `n`/`ln` (e.g. `user-search`, `visibility`,
+`examBoard`, `KEY_STAGES`). The Read tool rendered the same files faithfully. When grep/Bash output
+of source looks mangled or suspiciously masked, switch to Read for the load-bearing read — don't
+reason over the filtered text.
+
+## Verify-don't-trust on the subagent's load-bearing claim, first-hand (2026-06-23, Blazar rides Dawn)
+
+WS2's "canonical subject source" mattered. An explore subagent reported the slug source; I re-derived
+it first-hand and found the right source is `AllSubjectsResponseSchema` (17 canonical, OpenAPI-derived)
+— NOT `SUBJECT_TO_PARENT` (21, which folds in the KS4 science factor variants and would have wrongly
+surfaced physics/chemistry/biology/combined-science as browsable subjects). For the four new subjects
+I queried the live API for authoritative titles + key-stage coverage rather than authoring from
+memory, which also surfaced an unrelated drift (the ontology's exam-board list was missing `wjec`).
+The reviewer's verdict can be sound while a specific identifier it names is wrong — verify the one
+fact the change pivots on.
