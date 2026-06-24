@@ -88,3 +88,19 @@ link is folded into PDR-104 itself. New capture appends below.*
 candidates were decided this pass per owner direction: the falsifiable-judgment-gate candidate
 graduated to PDR-116; the state-tier process-and-archive-move convention graduated to ADR-203.
 New capture appends below.*
+
+- **Assurance-regime portable PDR (test / evaluate / assure + 3 harm-keyed tiers)**
+
+  `[captured: 2026-06-24 | source: napkin (Magnolia spins Mulch), archived in
+  napkin-2026-06-23-narwhal-consolidation.md | target: Core PDR (pdr_kind governance) so the
+  assurance regime travels with Practice Core | trigger: a SECOND Practice-bearing repo faces the
+  assurance-regime decision (plasmid exchange) AND the regime is stable across >=1 later session |
+  size: small | status: pending]`
+
+  The assurance regime (test/evaluate/assure; three harm-keyed tiers; in-repo eval home; closing
+  against a real-world value signal) is already homed as host directives (principles.md §Agentic
+  Quality + validation-strategy.md). Only the PORTABLE generalisation — authoring it as a Core PDR
+  so it travels to other repos — awaits a second Practice-bearing repo facing the same decision;
+  genuinely external-gated, not agent-drivable now. Owner kept-gated 2026-06-24. Homed here (from
+  the archived napkin) so a future consolidation pass that walks this register sees the candidate
+  when the trigger fires.
