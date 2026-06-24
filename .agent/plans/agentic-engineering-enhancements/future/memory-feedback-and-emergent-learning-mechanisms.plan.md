@@ -91,6 +91,19 @@ memory.
   perturbation-mechanism bundle (three candidates: non-goal
   re-ratification, standing-decision register, first-principles
   metacognition prompt).
+- **Per-user memory recall scaling** (distinct from the feedback loops above —
+  the *recall* mechanism, not the *learning* loop). The per-user `MEMORY.md`
+  index is a flat single file loaded each session and truncated at a hard
+  load-cap (~24.4KB); with 160+ legitimate entries even perfectly terse hooks
+  exceed it, so the most recent (often most relevant) entries silently drop at
+  load — the skill-load-budget failure mode applied to memory. The 2026-06-23
+  drain reached ~28.8KB only, and could not get under the cap without deleting
+  non-redundant calibration (the conservation→numbers inversion). Direction
+  (agent assessment, not owner-decided): the flat-index shape is the constraint;
+  the LTAE answer is relevance-based or tiered (hot/cold) recall, not deletion.
+  It recurs across platforms (Codex/Cursor/Gemini face the same wall) and edges
+  into how the auto-memory harness loads (may be platform-controlled). Graduated
+  from open-questions Q-010 (2026-06-24).
 
 ### Non-goals
 

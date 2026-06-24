@@ -124,6 +124,19 @@ Every non-trivial plan, strategic or executable, MUST define:
    `blocking` or `beneficial`. For each `beneficial` prerequisite, state
    the minimum shippable shape without it.
 6. **Non-goals** — what the plan explicitly will not do.
+7. **Lineage** — name the **thread** the plan serves (and, where they exist, the
+   **stream** and **strategic choice** above it). A plan that cannot name the
+   thread/stream it serves is a homing smell: the work may belong as an
+   open-question, a pattern, or nowhere — re-triage before authoring. Record it
+   as a `lineage:` frontmatter block (`serves_thread`, `serves_stream`,
+   `strategic_choice`, `derives_from`). This is the **lightweight interim**
+   homing discipline: the full vision -> strategy -> stream -> thread -> plan ->
+   implementation chain is being built as machine-traversable edges by
+   [ADR-200](../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)'s
+   living-idea-graph rewrite; until those edges land, the `lineage:` block keeps
+   the derivation explicit so work is homed where it is driven, not parked on a
+   register. (Open-questions are for the genuinely not-yet-decidable, never a
+   scheduling or holding surface for work that has a home.)
 
 ### Disposition Ledger For "Apply All Of X" Inputs
 

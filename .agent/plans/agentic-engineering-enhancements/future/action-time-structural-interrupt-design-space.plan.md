@@ -327,6 +327,13 @@ document-hierarchy discipline.
   semantic-pathogen inventory, or restructure the todos as evidence accumulates.
   New cross-session instances of recall-dependent doctrine failing to fire are
   the evidence that would refine or invalidate this plan.
+- **Owner-scheduled design session (2026-06-24)**: the owner allocated a
+  dedicated session to do this plan's design work (t1–t5) — it is now
+  owner-prioritised, not waiting on a forcing instance. The fitness-cadence
+  read-discipline (ensuring the report-only fitness signal is *read and acted
+  on*, formerly open-question Q-001) is folded in here: it is the same
+  action-time firing mechanism, and its worked instance is the §Worked Instance
+  — Conservation-First / Chase-Fitness-Numbers below.
 
 ## Worked Instance — Orchestration-Substituted-for-Cognition (2026-06-16)
 
