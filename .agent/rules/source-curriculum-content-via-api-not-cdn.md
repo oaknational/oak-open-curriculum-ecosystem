@@ -29,9 +29,12 @@ field). This is a content-safety boundary, not merely a provenance preference.
 ## Doctrinal Anchor
 
 [`safety-and-security.md` §Curriculum content sourcing — TPC filtering is the
-safety boundary](../../docs/governance/safety-and-security.md). Owner-directed
-2026-06-23 after a raw-CDN fetch of canonical chart PNGs taken from a
-`get-lessons-quiz` payload.
+safety boundary](../../docs/governance/safety-and-security.md). The TPC-filtering
+model is documented at
+[`docs/domain/DATA-VARIANCES.md` §TPC License Filtering](../../docs/domain/DATA-VARIANCES.md)
+("The API applies Third Party Content (TPC) license filtering to assets and
+transcripts"). Owner-directed 2026-06-23 after a raw-CDN fetch of canonical
+chart PNGs taken from a `get-lessons-quiz` payload.
 
 ## Enforcement
 

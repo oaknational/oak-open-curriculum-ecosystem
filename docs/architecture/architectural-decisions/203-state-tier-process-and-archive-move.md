@@ -40,9 +40,11 @@ phenotype:
    ADR/PDR/rule/pattern), classified routine, or recorded as having no durable
    substance. This is ADR-199's absorption gate, applied tier-wide.
 2. **Archive-move, never delete.** The archive home is untracked (gitignored
-   contents) with a **tracked `README.md` anchor**, mirroring the comms
-   `comms-archive/` shape. No `git rm`; conversation/escalation/handoff IDs may
-   be cited permanently by napkin entries, claims, and the shared comms log.
+   contents) with a **tracked anchor** keeping the directory in version control,
+   as the existing `.agent/state/collaboration/archive/` already does (a tracked
+   `README.md`; the comms tier uses a `.gitkeep`). No `git rm`;
+   conversation/escalation/handoff IDs may be cited permanently by napkin
+   entries, claims, and the shared comms log.
 3. **The curator pass owns it.** Disposition runs in the curator/consolidation
    pass (PDR-081), not as a hook.
 

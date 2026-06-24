@@ -93,3 +93,51 @@ New session observations append below.
 says the analysis is "conserved at `.agent/reports/…`" while the file is still uncommitted/
 unpushed. The "commits pushed"-before-push pattern. Lesson: don't publish a pointer to an
 artefact that isn't durably landed.
+
+## 2026-06-23/24 — trigger-gated decision enactment + closeout (Narwhal tracks Lagoon)
+
+Surfaced the trigger-gated decisions as structured questions; the owner decided all and I enacted
+them (PDR-114/115/116, ADR-203, the TPC safety rule + governance section, the plan-body rules-tier
+clause, register drains). Unique learnings (Magnetar already captured the schema-drift and the
+vuln reconciliation above):
+
+- **A peer's gate run can wipe shared `dist` from under you on a shared checkout.** Mid-session,
+  agent-tools `dist` vanished (Magnetar's singleton `pnpm check`), breaking the comms CLI and
+  killing my all-channels watcher (drain-step timeout, fail-loud). Build output is shared mutable
+  state on a shared checkout. Cure: `pnpm --filter @oaknational/agent-tools build` to recover the
+  CLI; the watcher needs a manual restart. F-83 family ([[project_multi_developer_transition]]).
+- **Self-critique: PDR-116 may be over-generalised.** The owner directed synthesising it now from
+  two instances I had myself argued were *different shapes* (effectiveness-arm decomposition vs
+  completeness-enumeration). The general form ("anchor a judgment to its source, not to taste") is
+  broad enough to cover both, but that breadth risks a vague principle rather than a sharp pattern —
+  ironically the exact failure PDR-116 polices. A future third instance tests sharp-vs-vague;
+  flagged, not hidden.
+- **Doctrine authored-then-reviewed is the no-backfill failure in miniature.** I committed 5
+  doctrine artefacts before any specialist review, then ran docs-adr-expert at closeout. Significant
+  ADR/PDR/rule changes warrant the doc reviewer at *authoring* time, not after committing. Carry
+  forward: invoke the doc reviewer in the same breath as authoring doctrine.
+- **The MEMORY.md load-cap is a system-shape problem, not a deletion target.** Draining repo-homed
+  redundancy + tightening hooks moved it 30.3→28.8KB, still over the 24.4KB load-cap. Reaching under
+  needs deleting ~30 genuine calibrations — the conservation→numbers inversion. A flat truncated
+  index does not scale to 160+ legitimate entries; the LTAE fix is relevance-based recall. Homed as
+  open-question Q-010 so it does not evaporate (the flagging-in-closeout-is-not-recording lesson
+  applied to my own closeout).
+
+## 2026-06-24 — CORRECTION to the "main red = schema-drift" finding above (Magnetar calls Gloom)
+
+**Correction (supersedes the lines 85–90 finding):** `main`'s CI red is **format-check**, NOT
+schema-drift, and it **WAS caused by my #149 merge.** First-hand: the failed *step* on the main
+run (28050337654) is `Check formatting`; `ci-schema-drift-check` is an `if: always()` **advisory**
+step that warns but does not fail the run. My #149 squash landed a 118-char destructure in
+`apps/oak-search-cli/src/lib/indexing/index-bulk-helpers.ts` (absent at fc02f28a2) that prettier
+wraps → reds `format-check` on main and every downstream PR (surfaced via #141). No `OAK_API_KEY`
+/ `sdk-codegen` action is needed; that earlier remediation claim was wrong. Fix: PR #218 (prettier
+`--write` of that one file, authored via the GitHub API to avoid disturbing the shared checkout).
+
+- **Lesson:** `gh run view --log-failed | tail` can show a LATER `if: always()` step's output
+  (here the advisory drift warning), not the actual failing step. Read the failed **step name**
+  (per-step `conclusion`), never the log tail, to attribute a CI failure. This is the diagnostic
+  that flipped a wrong root-cause (upstream drift, not mine) to the right one (format, mine).
+- Also noted (Narwhal's entry above): my singleton `pnpm check` wiped shared `dist` and killed
+  their watcher — full-gate runs mutate shared build state on a shared checkout; coordinate before
+  running them when a peer is live.

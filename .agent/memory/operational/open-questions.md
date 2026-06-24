@@ -139,9 +139,12 @@ low-urgency, owner-prioritised.
 
 **Owning artefact:** Claude per-user memory `MEMORY.md`; the `consolidate-docs` cross-platform memory step.
 
-**Status:** RESOLVED (owner-authorised, 2026-06-23) — the per-user `MEMORY.md` drain runs this
-consolidation pass: graduate settled feedback whose substance is now homed in repo rules/PDRs, then
-trim the index. Per-entry topic files persist; only the loaded index shrinks.
+**Status:** RESOLVED (owner-authorised, 2026-06-23) — the drain ran this pass: repo-homed
+redundancy (entries graduated to repo rules/PDRs this session, plus verbatim always-applied-rule
+duplicates) graduated out and bloated hooks tightened (30.3→28.8KB; per-entry topic files persist).
+The drain surfaced a deeper residual: the index is still over the 24.4KB load-cap because the flat
+single-file shape does not scale to 160+ legitimate entries — escalated to **Q-010** (a system-shape
+question), distinct from this one (when does a drain run — answered: it ran).
 
 ## Q-009 — The content-structure graph + renderers-as-projections (curriculum domain)
 
@@ -166,5 +169,32 @@ Items #7).
 (names the decisions, the LTAE build-vs-reuse reading of Aila's code, and the thin-slice identity-join
 proof); the curriculum-graph-estate synthesis (2026-06-22); paused threads `connecting-oak-resources`,
 `oak-kg-ontology-planning-review`.
+
+## Q-010 — Per-user memory recall does not scale past the load-cap with a flat index
+
+**Question:** The Claude per-user `MEMORY.md` index is a flat single file loaded into context each
+session, truncated at a hard load-cap (~24.4KB). With 160+ legitimate entries, even perfectly terse
+one-line hooks exceed the cap, so the last entries silently drop at load — and they are usually the
+most recent, most relevant ones. The 2026-06-23 drain (graduating repo-homed redundancy, tightening
+hooks) reduced it 30.3→28.8KB but could not get under the cap without deleting genuine, non-redundant
+calibration. What is the right recall mechanism so the per-user memory scales without forcing the
+conservation→numbers inversion (deleting understanding to fit a budget)?
+
+**Why it shapes future work:** recall silently degrades as the corpus grows — the skill-load-budget
+failure mode applied to memory. Every session past the cap loses its most recent calibrations at load.
+It also recurs across platforms (Codex/Cursor/Gemini per-user memory face the same scaling wall).
+
+**Why not cheaply answerable now:** it is a memory-system design question (relevance-based or tiered
+recall vs a flat truncated index), not a fact; it edges into how the auto-memory harness loads, which
+may be platform-controlled. Low-urgency but recurring.
+
+**Owning artefact:** Claude per-user memory `MEMORY.md`; the `consolidate-docs` cross-platform memory
+step; escalated from Q-007.
+
+**Status:** open (2026-06-24, Narwhal tracks Lagoon). Direction (agent assessment, not owner-attributed):
+the flat-index shape is the constraint; the LTAE answer is relevance-based or tiered recall, not deletion
+of calibration. **Resolution path:** owner direction on whether the harness supports relevance-based
+recall, or whether a tiered index (hot/cold) is the host-side workaround. **Trigger:** the next per-user
+memory drain that again cannot reach the cap without deleting non-redundant calibration.
 
 **Status:** open — initial landscape research recorded; owned by the incoming engineer's brief and owner.

@@ -52,5 +52,5 @@ open licence is confirmed.
 
 Settles open question Q-004. Future external-substrate studies apply the licence test directly;
 the substrate-learning plan and the research records under
-`research/agentic-engineering/operating-model-and-platforms/` cite this PDR rather than
+`.agent/research/agentic-engineering/operating-model-and-platforms/` cite this PDR rather than
 re-deriving the naming call.
