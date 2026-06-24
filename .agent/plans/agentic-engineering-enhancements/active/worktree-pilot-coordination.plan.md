@@ -152,9 +152,9 @@ idea in two layers: **isolate the doing; centralise the awareness.**
   load-bearing continuity; runs no gates and edits no source. Decision rule for
   acting itself: *only if it changes my routing AND no cheaper agent can absorb
   it.*
-- **WS-A Implementer — ephemeral, worktree `/Users/jim/code/oak/oak-pilot-ws-a-vitest`,
+- **WS-A Implementer — ephemeral, worktree `<repo-parent>/oak-pilot-ws-a-vitest`,
   branch `pilot/ws-a-vitest-stability`.**
-- **WS-B Implementer — ephemeral, worktree `/Users/jim/code/oak/oak-pilot-ws-b-explain`,
+- **WS-B Implementer — ephemeral, worktree `<repo-parent>/oak-pilot-ws-b-explain`,
   branch `pilot/ws-b-explain-resource`.**
 - **Coordination plane (shared):** comms auto-resolve to the primary home;
   `active-claims.json` reached by explicit absolute `--active` (see Worktree
@@ -173,7 +173,7 @@ idea in two layers: **isolate the doing; centralise the awareness.**
   heartbeat` take a required `--active <path>` with no default and no
   `--repo-root`. From a worktree, a relative path writes a worktree-local file
   invisible to peers. Implementers MUST pass
-  `--active /Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/state/collaboration/active-claims.json`.
+  `--active <repo-parent>/oak-open-curriculum-ecosystem/.agent/state/collaboration/active-claims.json`.
   **Candidate structural cure (worktree-transition evidence):** wire
   `resolveCoordinationHome` into the claims `--active` default, mirroring comms.
 - **No shared-index contention.** Each worktree has its own index, so the
@@ -383,7 +383,7 @@ Appended by the Director as the run proceeds.
   14:38:32) OWNS WS-B; **Narwhal calls Buoy** (939428, 14:39:29) yielded cleanly
   (textbook dialogue-over-competition self-organisation by the implementers —
   worked instance). Director-routed Narwhal to the COMPLEMENTARY CI-efficiency
-  prong (**WS-C**): worktree `/Users/jim/code/oak/oak-pilot-ws-c-ci`, branch
+  prong (**WS-C**): worktree `<repo-parent>/oak-pilot-ws-c-ci`, branch
   `pilot/ws-c-ci-efficiency` (off threads base `6d80d119e`); ready first
   candidate = the search-cli `pool:forks` staleness (Juno's D2). Relayed the
   owner-confirmed WS-B effort-domain scope to Sturgeon (`61482d83`) to preempt
