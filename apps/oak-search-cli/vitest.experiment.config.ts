@@ -17,7 +17,6 @@ export default mergeConfig(baseE2EConfig, {
   test: {
     setupFiles: ['./experiment-test.setup.ts'],
     include: ['evaluation/experiments/current/**/*.experiment.ts'],
-    isolate: true,
     maxWorkers: 1,
     // Experiments hit live ES, so longer timeout
     testTimeout: 120000,

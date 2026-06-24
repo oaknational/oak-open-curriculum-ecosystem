@@ -48,7 +48,6 @@ export default mergeConfig(baseE2EConfig, {
     },
     setupFiles: ['./smoke-test.setup.ts'],
     include: ['smoke-tests/**/*.smoke.test.ts'],
-    isolate: true,
     maxWorkers: 1,
     // Smoke tests hit live servers, so longer timeout
     testTimeout: 60000,

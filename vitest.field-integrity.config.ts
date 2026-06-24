@@ -26,8 +26,6 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     passWithNoTests: false,
-    isolate: true,
-    pool: 'forks',
     include: [
       'packages/libs/search-contracts/src/field-inventory.integration.test.ts',
       'apps/oak-search-cli/src/lib/indexing/task-0.0-gap-ledger.integration.test.ts',

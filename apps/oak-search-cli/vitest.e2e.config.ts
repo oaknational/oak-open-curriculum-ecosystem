@@ -12,7 +12,6 @@ import { baseE2EConfig } from '../../vitest.e2e.config.base';
 export default mergeConfig(baseE2EConfig, {
   test: {
     include: ['**/*.e2e.test.ts'],
-    isolate: true,
     maxWorkers: 1,
     // E2E tests spawn real processes; allow a bit more headroom.
     testTimeout: 60000,
