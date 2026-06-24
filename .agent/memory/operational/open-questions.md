@@ -67,8 +67,10 @@ low-urgency, owner-prioritised.
 redundancy (entries graduated to repo rules/PDRs this session, plus verbatim always-applied-rule
 duplicates) graduated out and bloated hooks tightened (30.3→28.8KB; per-entry topic files persist).
 The drain surfaced a deeper residual: the index is still over the 24.4KB load-cap because the flat
-single-file shape does not scale to 160+ legitimate entries — escalated to **Q-010** (a system-shape
-question), distinct from this one (when does a drain run — answered: it ran).
+single-file shape does not scale to 160+ legitimate entries — escalated as a system-shape question
+(the LTAE answer is relevance-based or tiered recall, not deletion), since graduated into
+[`memory-feedback-and-emergent-learning-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md),
+distinct from this one (when does a drain run — answered: it ran).
 
 ## Q-009 — The content-structure graph + renderers-as-projections (curriculum domain)
 
