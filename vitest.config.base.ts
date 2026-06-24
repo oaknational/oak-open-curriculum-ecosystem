@@ -9,11 +9,13 @@ export const baseTestConfig = defineConfig({
     globals: true,
     environment: 'node',
     passWithNoTests: true,
-    // Force process isolation to prevent global state pollution between tests
-    // Many tests mutate process.env which causes race conditions in parallel execution
-    // TODO: Refactor tests to use dependency injection instead of process.env mutation
+    // Run each test file isolated in a worker thread. The no-global-state testing
+    // rule (testing-strategy.md / principles.md, ESLint-enforced) removed the
+    // process.env race that previously forced the slower per-file process fork
+    // (`pool: 'forks'`); `isolate: true` keeps per-file module isolation within the
+    // thread pool. Verified race-free: full suite green across repeated threaded runs.
     isolate: true,
-    pool: 'forks',
+    pool: 'threads',
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
