@@ -15,6 +15,10 @@ export const baseE2EConfig = defineConfig({
     environment: 'node',
     // E2E tests must be network-free; use DI and local fakes instead of real services.
     setupFiles: [resolve(dirname(fileURLToPath(import.meta.url)), 'test.setup.no-network.ts')],
+    // TEMPORARY: removing this reds the gate — 2 inheriting workspaces have empty
+    // e2e suites (curriculum-sdk: no e2e tests; search-cli: empty e2e-tests/).
+    // Strict default (false) is the target; deferred pending the empty-e2e
+    // follow-on, after which this line is removed.
     passWithNoTests: true,
     include: ['e2e-tests/**/*.e2e.test.ts', 'e2e/**/*.e2e.test.ts'],
     exclude: ['node_modules', 'dist', 'coverage'],
