@@ -27,77 +27,96 @@ lineage:
 > a successor Director session rehydrates from. It is owned by the Director seat,
 > not by either Implementer.
 
-## SUCCESSOR HANDOFF — Swordfish stirs Lagoon (PDR-064 Moment 1, 2026-06-24)
+## SUCCESSOR HANDOFF — Nightjar weaves Moonbeam (PDR-064 Moment 1, 2026-06-24)
 
-> Snowdrop calls Topsoil (f07539, Director) is standing down (context budget).
-> **Swordfish stirs Lagoon is the named successor Director.** This is PDR-064
-> pre-positioning (information transfer only); authority transfers when Swordfish
-> stirs Lagoon broadcasts an active-acknowledgement. Rehydrate from THIS plan (the
-> full thread is the Log at the bottom) + `director-implementer-roles.draft.md`
-> (the operating model) + the memory `feedback_director_pure_direction_only`.
+> Swordfish stirs Lagoon (8ed804, Director) is standing down (owner-directed
+> succession). **Nightjar weaves Moonbeam is the named successor Director.** This
+> is PDR-064 pre-positioning (information transfer only); authority transfers when
+> Nightjar weaves Moonbeam broadcasts an active-acknowledgement. Rehydrate from
+> THIS plan (the full thread is the Log at the bottom) + PDR-117 (the now-landed
+> Director/Implementer operating doctrine) + the per-user memory
+> `feedback_director_pure_direction_only`.
 
-**Team state:** both implementers retired cleanly (Sturgeon WS-B@D1, Narwhal WS-C
-— all work committed, nothing stranded). Team = Director only. The comms watcher
-(`b8ph1r5m6`) DIED (drain-step timeout); re-arm the watcher + heartbeat when you
-take the seat or a fresh implementer joins. Heartbeat consumer currently absent.
+**On takeover:** open your own Director claim (the retained claim
+`8e754f9a-ec11-4444-a03a-550368d7ca18` is held for you — replace it), broadcast
+your active-acknowledgement (Moment 2), and re-arm the awareness surfaces: comms
+watcher; the PR-#221 monitor (`scratchpad/pr221-monitor.sh loop`); heartbeat once a
+consuming peer is present. My monitors die with my session.
+
+**Standing owner instructions absorbed this session (carry these):**
+
+- Lens-resolve Implementer questions before escalating; asking the owner is always
+  legitimate — the lenses refocus, they do not gate (PDR-117 §routing-contract).
+- Don't obsess over machine/swap state; the real signal is load-vs-cores
+  (`feedback_dont_obsess_over_machine_swap_state`).
+- When you create tooling, ask if it should become a permanent agent-tools command
+  (`feedback_ask_whether_tooling_should_be_permanent`).
+- Masking an empty/absent test suite is no-warning-toleration — remove the mask AND
+  fill the suite (`feedback_no_masking_of_empty_or_absent_tests`).
+
+**Team state:** the two pilot implementers (Whippoorwill wakes Dreamscape, WS-C;
+Comet seeks Equinox, WS-D) retired clean — all work merged, nothing stranded; both
+ran owner-directed deep adversarial sweeps and routed durable residue to the
+continuity carrier (on the comms stream; see the deferred consolidation pass
+below). Lapwing weaves Downdraft is live on the SEPARATE
+`main-sonar-ai-profile-to-zero` thread (PRs direct to main, not the pilot) and is
+checkpointing its Sonar Phase-1 between cycles.
+
+**PR #221 (coordination → main) — OPEN, awaiting owner code-owner review, NOT
+merge-ready yet.** 6 commits ahead of main; CI green (run-quality-gates, CodeQL,
+SonarCloud all SUCCESS); Vercel preview Ready. Two valid bot findings must land
+before merge, both fixed by WS-E: (1) Cursor Bugbot — `vitest.e2e.config.base.ts`
+still sets `passWithNoTests: true`, which the workspace e2e configs INHERIT, so the
+per-workspace removals are no-ops/regressions while the base stays lenient (the
+base override is the real masking target); (2) Copilot — machine-local `/Users/...`
+paths in three plan files violate `no-machine-local-paths`. Do NOT merge #221 until
+WS-E corrects both on the coordination branch.
 
 **Workstreams:**
 
-- **WS-A:** MERGED to coordination (threads→default revert; superseded by WS-C).
-- **WS-B:** D1 committed (4 commits on `pilot/ws-b-explain-resource`, gate-green,
-  reviewed) — curated explain effort-orientation projection + drift-guard +
-  firewalls. D2-D5 pending a fresh implementer (the committed plan is the
-  handoff). At D2: inspect the generated BODY first-hand + run the focused
-  architecture-expert pass on the drift-gate wiring (Director reservations).
-- **WS-C:** keep-set committed (`88b69e8a8` on `pilot/ws-c-ci-efficiency`,
-  gate-green). NOT merged.
+- **WS-A** (vitest forks→threads): MERGED to coordination (`6d80d119e`).
+- **WS-B** (explain as an MCP surface): D1 committed (`pilot/ws-b-explain-resource`,
+  gate-green, reviewed). D2-D5 pending a fresh implementer (the committed plan is
+  the handoff; deep handoff `28adb2ac` + verified addendum `8492de46`). At D2:
+  inspect the generated BODY first-hand + route a focused architecture pass on the
+  drift-gate wiring (Director reservations); the curriculum-adjective soft-edge is
+  for the owner's eye.
+- **WS-C** (vitest standardisation): MERGED to coordination (`d84fb9619`).
+- **WS-D** (PDR-117 + start-right-team §3 routing clause + AGENT.md pointer): MERGED
+  to coordination (`95033a0a7`). Comet's additive experience file `44484d478` on
+  `pilot/ws-d-roles-doctrine` is UNMERGED (additive, fold when convenient).
+- Plan tracked at `20d61cb74`.
 
-**WS-C reconciliation (tangled — read carefully):** desired FINAL vitest config =
-(a) pins removed [done]; (b) `passWithNoTests` REMOVED [owner's call; owner
-deleted them directly, mostly no-op — but Narwhal's committed `88b69e8a8` RETAINED
-them conservatively, so the branch needs the one-line `passWithNoTests` deletion
-added + a fresh green]; (c) smoke/experiment `testTimeout`/`hookTimeout`/
-`maxWorkers:1` RETAINED [FUNCTIONAL — Narwhal verified live-ES smoke tests need
-them; `pnpm check` is BLIND to smoke/experiment = false-green; removing breaks
-them silently. Owner's "all overrides gone" didn't account for this; surfaced —
-owner may want smoke tests refactored off the timeouts as a SEPARATE piece, else
-keep]. The owner edited the PRIMARY checkout directly (worktree slip — vitest
-files uncommitted in the primary's coordination working tree) which BLOCKS the
-coordination merge. Path: discard the primary's uncommitted edits (owner does it,
-or authorises — NOTE `git checkout` is hook-blocked; use forward-only edits or
-`git show <ref>:<file> > <file>`) → add the `passWithNoTests` one-liner to
-Narwhal's branch + fresh green → merge → coordination → owner review to main.
+**Open lanes (all need an implementer SESSION the owner launches — you route, you
+cannot dispatch them):**
 
-**OWNER PENDING (as of stand-down):**
+1. **WS-E — PR #221 merge-readiness (recommended first; gates the open PR):**
+   genuine e2e suites for `curriculum-sdk` + `search-cli` per testing-strategy.md's
+   STRICT definition (a running system over its protocol channel, no FS/network IO,
+   classification by behaviour-shape — never an imagined e2e; if a workspace
+   genuinely has no running-system surface, surface that rather than fake-fill);
+   remove the `vitest.e2e.config.base.ts` `passWithNoTests` override (atomic with
+   the suites so the gate stays green); template the `/Users/...` paths in the 3
+   plan files. One branch off coordination → merge → #221 merge-ready.
+2. **pr-watch agent-tools command** (owner: build now): a parameterized TypeScript
+   command under `agent-tools/src/` taking a PR number; covers review comments +
+   issue comments + CI checks + terminal state (the napkin PR-monitor coverage
+   lesson baked in); TDD; test-expert + config-expert in-lane. The scratchpad
+   `pr221-monitor.sh` serves until it lands.
+3. **Sonar Phase-1 continuation** (Lapwing's lane): the path-validator
+   `assertPathWithinBase` is built + security-GO'd (held uncommitted in worktree
+   `oak-sonar-p1`); 3 security-sensitive site refactors remain (containment bases:
+   site-1 `.turbo/runs`, site-2 git-dir, site-3 `apps/oak-search-cli/diagnostics`)
+   → security-expert re-review → one PR direct to main.
+4. **WS-B D2-D5** (above); **DATA-SOURCES.md** (`docs/governance/`, owner-confirmed).
 
-1. **DATA-SOURCES.md — owner CONFIRMED, commit it (top next-action).** Author at
-   `docs/governance/`: a register of what sources the MCP + semantic-search apps
-   surface (adoption date, suitability-review criteria, last-reviewed, removal
-   criteria). explain POINTS to it (firewall: don't bake review dates). NOT
-   authored this session (low context — a governance register needs careful
-   fresh-context authoring). Cross-cutting with the pre-ship gate.
-2. WS-C: owner discards the primary edits → passWithNoTests one-liner + merge.
-3. Launch a fresh WS-B D2 implementer (reuses the warm worktree).
-4. Owner decision: keep smoke timeouts vs refactor smoke tests off them.
-
-**Open follow-ons (Director-coordinated):**
-
-- **Role-definition PDR graduation:** `director-implementer-roles.draft.md` (richly
-  sourced — both implementers' lived lessons folded) → graduate to a PDR + a
-  start-right-team §3 clause + graduate `feedback_director_pure_direction_only` in
-  - a RULES_INDEX touch. Coordination branch, gated, routed to an implementer seat.
-- **Routing-protocol clause** (implementer→Director→owner; cross-ref PDR-074 P2) →
-  start-right-team §3, coordination branch.
-- **Canonical-refinements bucket:** the explain canonical conflates
-  portable-behaviour with in-repo-routing — decompose it + add the new-audience
-  angles. Coordination branch.
-- **Pre-ship gate:** new expert audiences + DATA-SOURCES.md into explain before
-  that audience group ships, or descope.
-- The two coordination→main merges (WS-B, WS-C) via owner code-owner review.
-
-**Loss-sweep (my context → durable):** nothing material beyond the above and the
-Log below; frictions F-85..F-93 are in the agent-tooling register; the
-passWithNoTests over-ask calibration is in `feedback_director_pure_direction_only`.
+**Deferred consolidation pass (yours as continuity carrier, when the pilot thread
+closes):** fold the implementers' deep-handoff residue from the comms stream into
+durable homes — the trailing-echo false-green harness lesson (Whippoorwill, a strong
+distilled candidate); host-recovery + worktree mechanics → plan §Research Capture;
+the heartbeat-CLI + grep-glob frictions → frictions-register; the succession +
+merges → repo-continuity §Active-threads. Durable on comms now; deferred to avoid
+colliding with Lapwing on the shared napkin/main-sonar files.
 
 ## Problem and Intent
 
