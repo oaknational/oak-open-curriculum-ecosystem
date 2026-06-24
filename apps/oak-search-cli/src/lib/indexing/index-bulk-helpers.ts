@@ -88,10 +88,17 @@ interface ProcessUnitSummariesParams {
   readonly dataIntegrityReport: DataIntegrityReport;
 }
 
-async function processUnitSummaries(
-  params: ProcessUnitSummariesParams,
-): Promise<UnitSummaryBatch> {
-  const { client, units, subject, ks, subjectProgrammesUrl, unitContextMap, lessonsByUnit, dataIntegrityReport } = params;
+async function processUnitSummaries(params: ProcessUnitSummariesParams): Promise<UnitSummaryBatch> {
+  const {
+    client,
+    units,
+    subject,
+    ks,
+    subjectProgrammesUrl,
+    unitContextMap,
+    lessonsByUnit,
+    dataIntegrityReport,
+  } = params;
   const unitSummaries = new Map<string, SearchUnitSummary>();
   const unitOps: BulkOperations = [];
   let skippedCount = 0,
@@ -141,9 +148,7 @@ export interface BuildUnitDocumentsParams {
   readonly lessonsByUnit?: ReadonlyMap<string, readonly string[]>;
 }
 
-export async function buildUnitDocuments(
-  params: BuildUnitDocumentsParams,
-): Promise<{
+export async function buildUnitDocuments(params: BuildUnitDocumentsParams): Promise<{
   unitSummaries: Map<string, SearchUnitSummary>;
   unitOps: BulkOperations;
 }> {
