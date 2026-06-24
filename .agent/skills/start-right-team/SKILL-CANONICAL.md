@@ -546,6 +546,41 @@ as the failure mode the role exists to prevent. The cost of
 delegating is one routing event; the cost of self-dispatching is a
 coordination gap that peers cannot detect from comms alone.
 
+**Director and Implementer are first-class roles.** By the "recurring
+singleton or critical role earns a definition" test above, the two
+load-bearing seats of the one-dev-many-agents / many-worktree model are
+defined in full by
+[PDR-117](../../practice-core/decision-records/PDR-117-director-and-implementer-roles.md):
+the **Director** (long-lived, minimum-action, the single owner-interface
+and cross-session awareness carrier — routes, does not execute) and the
+**Implementer** (ephemeral, owns one bounded lane in its own worktree,
+runs its own gates, reports compressed verdicts, retires with a handoff).
+One idea in two layers: **isolate the doing (Implementers); centralise the
+awareness (Director).** Every other label in this section stays a
+session-local example; these two are doctrine.
+
+**Implementers route questions to the Director** (owner-ratified
+2026-06-24 as a general Implementer-role instruction; the complement to
+coordinator-delegates-sub-agent-launches above). The **upward flow** is
+Implementer → Director → owner: the Implementer surfaces questions and
+decisions to the Director, who answers what it can, lens-resolves the
+ambiguous (`principles.md` §Decision Lenses), and escalates to the owner
+only when the lenses genuinely fail or the decision is constitutively the
+owner's (PDR-074 P2). Three points keep this honest:
+
+- **Asking the owner is legitimate.** The lenses _refocus_ attention
+  before an escalation; they do not gate questions. An Implementer is
+  never wrong to raise something — the routing is about _whom_ to raise it
+  to, not _whether_.
+- **Upward/downward asymmetry.** The norm disciplines the _upward_ flow
+  only. The owner may direct any agent _directly_ downward
+  (owner-direction-beats-plan); a directly-directed Implementer follows it
+  AND informs the Director so the map stays current.
+- **Multiply-directed coordination.** When the owner issues the _same_
+  directive to more than one Implementer, "who executes" is itself an
+  upward coordination question that routes to the Director; an Implementer
+  must not self-execute a multiply-directed single-owner-surface lane.
+
 ### 4. Work With Traceability
 
 For every meaningful decision, verification, or coordination-visible action,

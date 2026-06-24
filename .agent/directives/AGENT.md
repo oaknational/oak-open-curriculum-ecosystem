@@ -23,7 +23,10 @@ onboarding, and archive discipline. For agent-to-agent collaboration, also
 apply the [agent-collaboration directive](./agent-collaboration.md):
 knowledge and communication (not mechanical refusals), peer dialogue,
 five communication channels, identity vs liveness, and the bootstrap
-fast-path.
+fast-path. In a coordinated multi-agent session the two first-class seats —
+**Director** (minimum-action awareness carrier and single owner-interface)
+and **Implementer** (ephemeral, owns one bounded lane) — are defined by
+[PDR-117](../practice-core/decision-records/PDR-117-director-and-implementer-roles.md).
 
 For planning work, read [metacognition.md](./metacognition.md) and follow its
 reflection discipline before finalising a plan.
