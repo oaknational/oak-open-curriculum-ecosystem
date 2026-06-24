@@ -204,10 +204,15 @@ N prior dismissals of a rule do NOT make THIS site a false-positive (a 12×-dism
 owner-fork when the decision lenses (LTAE first) decisively resolve it is analysis-passback; the lenses'
 own gate escalates to the owner only when all five fail or it is product/feature scope. The "harden"
 arm of one alleged fork was already implemented in the code I'd read. The outward-facing ACT of marking
-a dismissal still needs owner authorisation; the disposition *determination* does not. Source 2026-06-23
-(Galleon binds Seabed, PR 213 — 14 findings → 7 genuine fixes + 7 merit-grounded false-positives).
-Siblings: [[feedback_existence_is_not_correctness_default_replace]], [[feedback_no_responsibility_passback]],
-[[feedback_forced_verdict_resting_on_my_interpretation_is_a_question]].
+a dismissal still needs owner authorisation; the disposition *determination* does not. (c) **A
+deliberately-adopted profile's findings are a worklist, not noise** — when an owner activates a new
+profile on purpose (e.g. the Sonar AI profile), target zero; do NOT frame the resulting backlog as an
+activation-wave to "wait out" via push-and-reanalyse (that lesson is for STALE/zombie analysis only);
+every finding is fix-or-genuine-FP. Triage by cause-class, but a class splits by disposition-route
+(generated→generator, generator-source→in-place, hand-written→consolidate, vendored→import/FP). Source
+2026-06-23 (Galleon binds Seabed, PR 213 — 14 findings → 7 fixes + 7 FPs); refined 2026-06-24 (Aspen
+tracks Root, main AI-profile-to-zero plan). Siblings: [[feedback_existence_is_not_correctness_default_replace]],
+[[feedback_no_responsibility_passback]], [[feedback_forced_verdict_resting_on_my_interpretation_is_a_question]].
 
 ## To verify "is X guarded," trace EVERY layer; a black-box re-run can false-pass
 

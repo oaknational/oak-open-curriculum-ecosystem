@@ -237,6 +237,7 @@ each thread record; this table is the repo-level index.
 | `orientation-skills-family` | Teaching-surface family: a portable agentic-AI primer (lead-in) plus the **one** repo-bound orientation lens (`/oak-explain`) across the PDR-112 portability seam | [record][orientation] | claude-code / Opus 4.8 (1M) / Zenith lifts Firmament / **UNIFICATION IMPLEMENTED 2026-06-23** — WS0–WS6; two lenses → one `/oak-explain` (mode discerned; setup distinct; primer + PDR-112 seam unchanged; PDR-112 NOT amended); 3 mid-flight owner directions folded (clean break / minimise-unique-info / the name); ADR-202; live owner walk done; committed `ca40d98ce` (+ plan-estate archives `689fb9133`/`7ceb1382d`); push-pending / 2026-06-23 (prior: Skipper tracks Reef (plan author), Orbit rides Horizon, Bora lifts Downdraft) |
 | `reasoning-grammar` | Structured-reasoning capability: the portable grammar-of-thinking reference + the thin `oak-reason` skill (outward pair to `oak-metacognition`), wired into the metacognition directive, `oak-plan`, and start-right | [record](threads/reasoning-grammar.next-session.md) | claude / Opus 4.8 (1M) / Orbit rides Horizon / **COMPLETE** — landed `3b9836d89`; push pending (owner) / 2026-06-22 |
 | `user-search-not-exposed-until-built` | Gate the unbuilt user-search MCP App tools off `tools/list` behind an opt-in flag (default OFF) until the experience ships | [record](threads/user-search-not-exposed-until-built.next-session.md) | claude-code / Opus 4.8 (1M) / Foehn calls Headwind / **COMPLETE** — Cycle 1 `ac0a98c5b`, Cycle 2 `906cca9b3`, plan fixes `ff26bcf69`; push pending (owner) / 2026-06-23 |
+| `main-sonar-ai-profile-to-zero` | Drive `main`'s Sonar AI quality-profile backlog (398 issues, 48 rule classes) to **zero** — fix or genuine-FP only, no suppression. Owner-directed: deliberately-adopted profile. High-priority lanes: `tssecurity:S8707` agent-CLI path-injection, regex-safety (`S8786`/`S5843`/`S6035`) via per-workspace regex consolidation, test-integrity (`S2699`/`S5914`). Supersedes the retired `main-critical-sonar-remediation` lane | [record][main-sonar-zero] | claude-code / Opus 4.8 (1M) / Aspen tracks Root / thread-open + first-hand triage / 2026-06-24 |
 
 ## Paused Threads
 
@@ -253,7 +254,6 @@ not the current session-priority lane. Reactivation is owner-directed.
 | `branch-fitness-and-push-cadence` | Small-PR, push-often, branch-fitness, PR/Sonar protocol substrate | [record][branch-fitness] | Pelagic Snorkelling Sextant / codex / GPT-5 / Cycle 1 substrate capture / 2026-05-24 |
 | `mcp-product-analytics` | MCP product analytics design and Path-to-GA Programme | [record][mcp-analytics] | Stellar Glowing Satellite / claude / claude-opus-4-7 / Programme landed + amendments / 2026-05-26 |
 | `observability-sentry-otel` | Sentry/OTel integration | [record][observability] | Umbral Creeping Night / claude-code / opus-4.7 / 2026-05-10 |
-| `main-critical-sonar-remediation` | Sonar remediation | [record][main-critical] | Stormy / claude-code / 2026-05-06 |
 | `exploring-open-education-resources` | Third-party OER | [record][oer] | Gnarled / claude-code / 2026-05-01 |
 | `sector-engagement` | External adoption | [record][sector] | claude-code / Fable 5 / Forge turns Basalt / dfe-data-sdk-seed-authoring / 2026-06-12 (prior: Squally / cursor / 2026-04-30) |
 | `architectural-budget-system` | Architectural budget | [record][budget] | Nebulous / codex / 2026-04-29 |
@@ -406,7 +406,7 @@ authority.
 - Knowledge preservation is absolute; fitness warnings route work, not deletion.
 - Shared memory/state files are always writable and commit-includable when dirty.
 
-[main-critical]: threads/paused/main-critical-sonar-remediation.next-session.md
+[main-sonar-zero]: threads/main-sonar-ai-profile-to-zero.next-session.md
 [mcp-analytics]: threads/paused/mcp-product-analytics.next-session.md
 [observability]: threads/paused/observability-sentry-otel.next-session.md
 [agentic]: threads/agentic-engineering-enhancements.next-session.md

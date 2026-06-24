@@ -116,6 +116,46 @@ vuln reconciliation above):
   doctrine artefacts before any specialist review, then ran docs-adr-expert at closeout. Significant
   ADR/PDR/rule changes warrant the doc reviewer at *authoring* time, not after committing. Carry
   forward: invoke the doc reviewer in the same breath as authoring doctrine.
+
+## Session 2026-06-24 (Aspen tracks Root) — main Sonar AI-profile-to-zero planning
+
+- **Surprise (correction): a deliberately-adopted analyser profile's findings are a
+  worklist, not noise.** I framed main's 398-issue Sonar backlog as an
+  activation-wave to "wait out" (push + re-analyse — borrowing the zombie-findings
+  lesson from the retired remediation thread). Owner corrected: the Sonar AI quality
+  profile was activated **on purpose**; target is **zero**; every finding is
+  fix-or-genuine-FP, never noise. The "static-analyser-against-a-moving-target →
+  push+reanalyse" lesson applies to STALE/zombie analysis, NOT a fresh deliberate
+  profile. Behaviour change: never frame deliberately-adopted-profile findings as
+  noise; triage all to zero. Distilled-worthy. Sibling: the distilled
+  scanner-disposition entry, [[feedback_existence_is_not_correctness_default_replace]].
+- **A subagent's "X cannot be done" disposition conclusion is the convenient claim to
+  verify first-hand.** An Explore agent concluded the generated `paths`/`operations`
+  interfaces (S101) "cannot be renamed." I verified first-hand (`codegen-core.ts:201` —
+  `openapiTS(new URL(...))` called with no options) before recording the FALSE_POSITIVE.
+  The conclusion held — but the *act* of verifying, not the agreement, made it usable.
+  Sibling: [[feedback_validate_specialist_findings_before_acting]], distilled
+  "a subagent agreeing with your prior is not verification."
+- **A subagent's autofix-coverage estimate is a hypothesis, not a fact** (different
+  engines). "~159 of ~250 autofixable via `lint:fix`" assumes `eslint-plugin-unicorn`
+  fires at the exact Sonar-flagged sites; unicorn ≠ Sonar. The plan records it as a
+  hypothesis to prove by a dry-run at execution, never an inherited number.
+- **Consolidate at the third WORKSPACE, not the third call-site.** For a shared
+  utility (path-containment validator) needed at 3 sites across 2 workspaces that
+  cannot import each other, the `consolidate-at-third-consumer` trigger fires at the
+  3rd *workspace*, not the 3rd call. Resisted a subagent's "create a new shared package
+  now" (heaviest option) for 2-workspace/3-site scope; verdict = local helpers, extract
+  on the 3rd workspace. Candidate refinement of [[consolidate-at-third-consumer]].
+- **A scanner rule-class splits by disposition-route, not uniformly.** The regex
+  backlog (S8786 etc.) splits five ways — generated-output (fix at generator),
+  generator-source (fix in place + regen), hand-written (consolidate to regex home),
+  vendored/standard (refactor-to-import or FP), runtime-only `.mjs` (fix in place). An
+  owner's "pull all regexes into one file" applies cleanly only to the hand-written
+  class; the fluency-check caught me before rubber-stamping it whole.
+- **Foreign dirty files appeared mid-session** (`oak-sdk-codegen` generated +
+  schema-cache, 4 files) between turn 1 (clean) and a later turn — parallel process /
+  multi-dev on the shared checkout. Did not stage; flagged; commit by explicit pathspec.
+  Worked instance of F-83 / [[project_multi_developer_transition]].
 - **The MEMORY.md load-cap is a system-shape problem, not a deletion target.** Draining repo-homed
   redundancy + tightening hooks moved it 30.3→28.8KB, still over the 24.4KB load-cap. Reaching under
   needs deleting ~30 genuine calibrations — the conservation→numbers inversion. A flat truncated

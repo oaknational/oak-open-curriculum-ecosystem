@@ -8,14 +8,23 @@ overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never
 merge_class: index-narrative-tables
 ---
 
+> **RETIRED — thread superseded 2026-06-24.**
+> Superseded by the `main-sonar-ai-profile-to-zero` thread and plan
+> (`.agent/plans/architecture-and-infrastructure/current/main-sonar-ai-profile-to-zero.plan.md`).
+> This lane was baselined against `main@4864cbb4` and a backlog that no longer
+> exists (1091 code smells / 143 TO_REVIEW hotspots / 133 HIGH issues); current
+> main carries 398 issues and 0 outstanding hotspots under the
+> deliberately-adopted Sonar AI quality profile. Retained as continuity history;
+> not a live lane. Not listed in `repo-continuity.md` Active or Paused threads.
+
 # main-critical-sonar-remediation Next Session
 
 ## Thread Identity
 
 Thread: `main-critical-sonar-remediation`  
 Branch: `fix/sonar-fixes-20260506`  
-Primary plan:
-[`main-critical-sonar-rebuild-from-updated-main.plan.md`](../../../plans/architecture-and-infrastructure/current/main-critical-sonar-rebuild-from-updated-main.plan.md)
+Primary plan (archived on retirement):
+[`main-critical-sonar-rebuild-from-updated-main.plan…`](../../../../plans-old-archive/architecture-and-infrastructure/archive/superseded/main-critical-sonar-rebuild-from-updated-main.plan.superseded-by-ai-profile-to-zero-2026-06-24.md)
 
 ## Participating Agent Identities
 
@@ -72,7 +81,7 @@ working tree clean for the vendor switch. The merge auto-resolves
 most files; **5 files conflict** and require manual resolution per
 [PDR-049 (Memory and State File Merge Semantics)][pdr-049]:
 
-[pdr-049]: ../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md
+[pdr-049]: ../../../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md
 
 | File | `merge_class` per PDR-049 | Diagnosed | Action |
 |---|---|---|---|
