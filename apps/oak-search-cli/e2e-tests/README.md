@@ -1,23 +1,32 @@
 # E2E Tests
 
-End-to-end tests for the Oak Open Curriculum Semantic Search application.
+End-to-end tests for the `oaksearch` CLI. An E2E test here boots the built CLI
+as a running system and drives it over its stdio protocol channel (argv ->
+stdout/stderr/exit code), asserting on transport invariants. Per
+`.agent/directives/testing-strategy.md`, these tests are **network-free**: they
+must not reach Elasticsearch or any network service.
 
 ## Test Types
 
-- **Search Quality Benchmarks** (`search-quality.e2e.test.ts`) - Measures MRR, NDCG@10, and other IR metrics against ground truth relevance judgements
+- **CLI contract** (`cli-contract.e2e.test.ts`) — boots the built CLI
+  (`dist/bin/oaksearch.js`) and asserts its command-line contract: `--version`
+  reports a semantic version, `--help` lists the top-level commands, and an
+  unknown command exits non-zero with a stderr diagnostic. No Elasticsearch, no
+  network.
 
-## Running Tests
-
-Ensure the development server is running before executing E2E tests:
+## Running
 
 ```bash
-# Terminal 1: Start the dev server
-pnpm dev
-
-# Terminal 2: Run E2E tests
 pnpm test:e2e
 ```
 
-## Environment
+The build is a precondition (turbo `test:e2e` dependsOn `build`); `pnpm test:e2e`
+runs the suite against the compiled `dist/`.
 
-Tests expect the server at `http://localhost:3333` (or the value of `TEST_BASE_URL` environment variable).
+## Where live-Elasticsearch validation lives (not here)
+
+Search-quality measurement (MRR, NDCG@10, and other IR metrics against ground
+truth) requires a live Elasticsearch index and is therefore **smoke/experiment**
+territory, not E2E — see `vitest.smoke.config.ts` and the `eval benchmark`
+command surface (`pnpm benchmark`, `pnpm ground-truth:validate`). Keeping that
+network-bound work out of E2E is what lets the E2E suite run safely in CI/CD.

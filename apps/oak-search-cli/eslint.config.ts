@@ -169,6 +169,19 @@ const eslintConfig = defineConfigArray(
     },
   },
 
+  // E2E tests boot the real running system and drive it over its protocol
+  // channel — for a CLI, that means spawning the built binary and asserting on
+  // its stdio. Process/stdio IO is the defining behaviour of an E2E test, not a
+  // hermetic-test violation (testing-strategy.md §E2E; ADR-078). The runner
+  // harness booting the system under test is exactly what `no-real-io-in-tests`
+  // must not block here. Mirrors the e2e-tests exemption in the MCP app config.
+  {
+    files: ['e2e-tests/**/*.e2e.test.ts'],
+    rules: {
+      '@oaknational/no-real-io-in-tests': 'off',
+    },
+  },
+
   // Test-ceremony migration backlog — see
   // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`.
   // Each entry is a known violation; delete as files migrate.
