@@ -92,6 +92,7 @@ describe('agent-tools unified CLI', () => {
         '  branch-touched-files',
         '  context-cost',
         '  codex-exec',
+        '  pr-watch',
         '',
         'Error: unknown topic: unknown-topic',
         '',
