@@ -1,16 +1,16 @@
+---
+lineage:
+  serves_thread: ci-and-test-efficiency
+  serves_stream: developer-experience
+  derives_from: "2026-06-24 CI-efficiency scan; #219 (per-edge expect antipattern fix)"
+---
+
 # CI: harden corpus-scale tests against the 5s timeout flake
 
 **Status**: FUTURE (strategic brief — not executable until promoted)
 **Priority**: Low (the acute instance was fixed in #219; this prevents the class)
 **Created**: 2026-06-24
 **Owner**: Engineering
-
-```yaml
-lineage:
-  serves_thread: ci-and-test-efficiency
-  serves_stream: developer-experience
-  derives_from: "2026-06-24 CI-efficiency scan; #219 (per-edge expect antipattern fix)"
-```
 
 ## Problem and intent
 

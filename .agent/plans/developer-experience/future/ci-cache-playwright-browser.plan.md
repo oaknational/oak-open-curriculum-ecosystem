@@ -1,16 +1,16 @@
+---
+lineage:
+  serves_thread: ci-and-test-efficiency
+  serves_stream: developer-experience
+  derives_from: "2026-06-24 CI-efficiency scan; ci.yml 'Install Playwright browsers' step"
+---
+
 # CI: cache the Playwright browser install
 
 **Status**: FUTURE (strategic brief — not executable until promoted)
 **Priority**: High (cheap, certain win)
 **Created**: 2026-06-24
 **Owner**: Engineering
-
-```yaml
-lineage:
-  serves_thread: ci-and-test-efficiency
-  serves_stream: developer-experience
-  derives_from: "2026-06-24 CI-efficiency scan; ci.yml 'Install Playwright browsers' step"
-```
 
 ## Problem and intent
 

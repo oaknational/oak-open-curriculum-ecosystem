@@ -1,16 +1,16 @@
+---
+lineage:
+  serves_thread: ci-and-test-efficiency # nascent — opened by the 2026-06-24 CI-efficiency scan
+  serves_stream: developer-experience
+  derives_from: "2026-06-24 CI-efficiency scan (after #218/#219); base vitest config TODO"
+---
+
 # CI: migrate vitest pool from `forks` to `threads`
 
 **Status**: FUTURE (strategic brief — not executable until promoted)
 **Priority**: High (largest CI wall-clock lever found in the 2026-06-24 scan)
 **Created**: 2026-06-24
 **Owner**: Engineering
-
-```yaml
-lineage:
-  serves_thread: ci-and-test-efficiency   # nascent — opened by the 2026-06-24 CI-efficiency scan
-  serves_stream: developer-experience
-  derives_from: "2026-06-24 CI-efficiency scan (after #218/#219); base vitest config TODO"
-```
 
 ## Problem and intent
 

@@ -1,16 +1,16 @@
+---
+lineage:
+  serves_thread: ci-and-test-efficiency
+  serves_stream: developer-experience
+  derives_from: "2026-06-24 CI-efficiency scan; ci.yml single-job structure"
+---
+
 # CI: parallelise the static checks alongside build+test
 
 **Status**: FUTURE (strategic brief — not executable until promoted)
 **Priority**: Medium (bounded win; measure after the vitest-pool change)
 **Created**: 2026-06-24
 **Owner**: Engineering
-
-```yaml
-lineage:
-  serves_thread: ci-and-test-efficiency
-  serves_stream: developer-experience
-  derives_from: "2026-06-24 CI-efficiency scan; ci.yml single-job structure"
-```
 
 ## Problem and intent
 

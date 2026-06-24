@@ -1,16 +1,16 @@
+---
+lineage:
+  serves_thread: ci-and-test-efficiency
+  serves_stream: developer-experience
+  derives_from: "2026-06-24 CI-efficiency scan; eslint-plugin-standards test import ~23s"
+---
+
 # CI: audit RuleTester type-aware parsing in oak-eslint
 
 **Status**: FUTURE (strategic brief — not executable until promoted)
 **Priority**: Medium (targeted test-setup cost)
 **Created**: 2026-06-24
 **Owner**: Engineering
-
-```yaml
-lineage:
-  serves_thread: ci-and-test-efficiency
-  serves_stream: developer-experience
-  derives_from: "2026-06-24 CI-efficiency scan; eslint-plugin-standards test import ~23s"
-```
 
 ## Problem and intent
 
