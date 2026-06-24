@@ -87,9 +87,9 @@ describe('committed graph corpus (G2 + G4b real-corpus count guards)', () => {
 
   it('resolves every edge endpoint to an emitted node (zero dangling, all kinds)', () => {
     const ids = new Set(graphCorpus.nodes.map((node) => node.id));
-    for (const edge of graphCorpus.edges) {
-      expect(ids.has(edge.source)).toBe(true);
-      expect(ids.has(edge.target)).toBe(true);
-    }
+    const dangling = graphCorpus.edges.filter(
+      (edge) => !ids.has(edge.source) || !ids.has(edge.target),
+    );
+    expect(dangling).toEqual([]);
   });
 });
