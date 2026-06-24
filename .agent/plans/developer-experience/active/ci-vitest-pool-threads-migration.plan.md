@@ -33,7 +33,7 @@ todos:
 
 # WS-A — Vitest pool forks→threads (executable)
 
-> Worktree-pilot WS-A. Worktree `/Users/jim/code/oak/oak-pilot-ws-a-vitest`,
+> Worktree-pilot WS-A. Worktree `<repo-parent>/oak-pilot-ws-a-vitest` (a sibling of the repo root),
 > branch `pilot/ws-a-vitest-stability`. Executable promotion of the strategic
 > brief at [`../future/ci-vitest-pool-threads-migration.plan.md`](../future/ci-vitest-pool-threads-migration.plan.md),
 > which stays the source of strategic intent. Delegated by the Director's

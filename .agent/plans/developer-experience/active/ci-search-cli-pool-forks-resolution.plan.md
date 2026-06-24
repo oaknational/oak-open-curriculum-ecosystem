@@ -14,7 +14,7 @@ lineage:
 
 # WS-C — standardise Vitest config on defaults (remove non-default pool/isolate pins)
 
-> Worktree-pilot WS-C. Worktree `/Users/jim/code/oak/oak-pilot-ws-c-ci`, branch
+> Worktree-pilot WS-C. Worktree `<repo-parent>/oak-pilot-ws-c-ci` (a sibling of the repo root), branch
 > `pilot/ws-c-ci-efficiency` (off `coordination/worktree-pilot` @ `6d80d119e`).
 > Merge order: WS-C → `coordination/worktree-pilot`; Director verdict review;
 > owner code-owner review to `main` (never `--admin`, never `--no-verify`).
