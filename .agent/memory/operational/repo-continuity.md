@@ -24,6 +24,28 @@ todo list — is [`director-handoff.md`](director-handoff.md).
 
 ## Current State
 
+- **PRs #223/#224 driven to land + no-machine-local-paths enforcement built (2026-06-25, Junk tracks
+  Moorings / claude-opus-4-8 / 3b1f1c; solo after Kiln guards Vapor handed off the statusline/agent-tooling lane).**
+  On `coordination/worktree-pilot` (HEAD `716066e57`; 30 ahead / 1 behind `origin/main`; pushed; tree clean).
+  - **PR #223 MERGED to main** (`9d2e33bb1`, automerge) — S4036 fixed as a **replace**: `resolveTrustedGit()`
+    (absolute git path, fail-loud), `TRUSTED_GIT_PATH` deleted, `sonar-disposition-policy §S4036` retired to
+    FIX-only. All review comments triaged (cursor HIGH fixed; security-expert's `OAK_TRUSTED_GIT` override
+    **declined** as speculative — verified, not auto-accepted).
+  - **PR #224 finalized — un-drafted, MERGEABLE, Sonar QG GREEN** (`new_vulnerabilities_severity` 10→0): merged
+    `main` in (resolved PDR-117 + pilot-plan add/add conflicts; replaced the stale Borealis successor-handoff
+    with a CLOSED-OUT note), fixed the statusline S4036 (`resolveTrustedGit`, graceful), addressed all 8 review
+    comments (record posted on the PR). `mergeStateStatus: BLOCKED` = pending **@jimCresswell code-owner merge**
+    (the standing main-merge gate) + CI on the last push. **Next safe step: owner merges #224.**
+  - **No-machine-local-paths enforced mechanically** (owner-directed invariant — the repo MUST NOT contain
+    machine-local paths, ever; PII concern): new `validate-no-machine-local-paths` repo-validator (wired into
+    `repo-validators:check` → pre-commit + CI) + the `machine-local-path` `policy.json` `preToolUseContent` block
+    (the write-hook), single-sourced patterns. Catches user-home/machine-temp slash forms AND the flattened
+    `-Users-<user>-` project-id form; portable system paths (`/usr/bin`) + placeholder forms exempt by
+    construction. **All username PII scrubbed** (test fixtures → fake values per testing-strategy DI; flattened
+    ids across ~14 archived/report/analysis files → placeholders; an lsof username → generic). Validator clean
+    across 6568 tracked files.
+  - **S8707 site-3 remains** (`apps/oak-search-cli` analyze-elser-failures) on `main-sonar-ai-profile-to-zero`
+    (Thyme lifts Compost's paused claim); #223 landed sites 1-2 + S4036.
 - **Worktree-pilot — CLOSED OUT 2026-06-25; team DISSOLVED.** PRs #221 (vitest
   standardisation + Director/Implementer doctrine PDR-117) and #222 (pr-watch +
   proto-dispatch fix) **MERGED to main** (release 1.35.0, HEAD `1020001fd`). The pilot
@@ -275,7 +297,7 @@ each thread record; this table is the repo-level index.
 | `orientation-skills-family` | Teaching-surface family: a portable agentic-AI primer (lead-in) plus the **one** repo-bound orientation lens (`/oak-explain`) across the PDR-112 portability seam | [record][orientation] | claude-code / Opus 4.8 (1M) / Zenith lifts Firmament / **UNIFICATION IMPLEMENTED 2026-06-23** — WS0–WS6; two lenses → one `/oak-explain` (mode discerned; setup distinct; primer + PDR-112 seam unchanged; PDR-112 NOT amended); 3 mid-flight owner directions folded (clean break / minimise-unique-info / the name); ADR-202; live owner walk done; committed `ca40d98ce` (+ plan-estate archives `689fb9133`/`7ceb1382d`); push-pending / 2026-06-23 (prior: Skipper tracks Reef (plan author), Orbit rides Horizon, Bora lifts Downdraft) |
 | `reasoning-grammar` | Structured-reasoning capability: the portable grammar-of-thinking reference + the thin `oak-reason` skill (outward pair to `oak-metacognition`), wired into the metacognition directive, `oak-plan`, and start-right | [record](threads/reasoning-grammar.next-session.md) | claude / Opus 4.8 (1M) / Orbit rides Horizon / **COMPLETE** — landed `3b9836d89`; push pending (owner) / 2026-06-22 |
 | `user-search-not-exposed-until-built` | Gate the unbuilt user-search MCP App tools off `tools/list` behind an opt-in flag (default OFF) until the experience ships | [record](threads/user-search-not-exposed-until-built.next-session.md) | claude-code / Opus 4.8 (1M) / Foehn calls Headwind / **COMPLETE** — Cycle 1 `ac0a98c5b`, Cycle 2 `906cca9b3`, plan fixes `ff26bcf69`; push pending (owner) / 2026-06-23 |
-| `main-sonar-ai-profile-to-zero` | Drive `main`'s Sonar AI quality-profile backlog (398 issues, 48 rule classes) to **zero** — fix or genuine-FP only, no suppression. Owner-directed: deliberately-adopted profile. High-priority lanes: `tssecurity:S8707` agent-CLI path-injection, regex-safety (`S8786`/`S5843`/`S6035`) via per-workspace regex consolidation, test-integrity (`S2699`/`S5914`). Supersedes the retired `main-critical-sonar-remediation` lane | [record][main-sonar-zero] | claude / claude-opus-4-8[1m] / Thyme lifts Compost / S8707 site-2 committed (`4c9cfbfc9`) + branch pushed; PAUSED, site-3 → next team session / 2026-06-25 ← claude-code / Opus 4.8 (1M) / Aspen tracks Root / thread-open + first-hand triage / 2026-06-24 |
+| `main-sonar-ai-profile-to-zero` | Drive `main`'s Sonar AI quality-profile backlog (398 issues, 48 rule classes) to **zero** — fix or genuine-FP only, no suppression. Owner-directed: deliberately-adopted profile. High-priority lanes: `tssecurity:S8707` agent-CLI path-injection, regex-safety (`S8786`/`S5843`/`S6035`) via per-workspace regex consolidation, test-integrity (`S2699`/`S5914`). Supersedes the retired `main-critical-sonar-remediation` lane | [record][main-sonar-zero] | claude / claude-opus-4-8 / Junk tracks Moorings / implementer — S8707 sites 1-2 + S4036 MERGED to main via PR #223 (`9d2e33bb1`); site-3 only remains (Thyme's paused claim `ff3da671`) / 2026-06-25 ← claude / claude-opus-4-8[1m] / Thyme lifts Compost / S8707 site-2 committed (`4c9cfbfc9`) + branch pushed; PAUSED / 2026-06-25 ← claude-code / Opus 4.8 (1M) / Aspen tracks Root / thread-open + first-hand triage / 2026-06-24 |
 
 ## Paused Threads
 

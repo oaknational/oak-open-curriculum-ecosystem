@@ -24,13 +24,17 @@ Supersedes the retired `main-critical-sonar-remediation` lane.
 | claude-code | claude-opus-4-8-1m | 4b038c | Aspen tracks Root | analyst/plan-author | 2026-06-24 | 2026-06-24 |
 | claude-code | claude-opus-4-8-1m | c57e0b | Lapwing weaves Downdraft | implementer | 2026-06-24 | 2026-06-25 |
 | claude | claude-opus-4-8[1m] | c2b721 | Thyme lifts Compost | team-session-closer | 2026-06-25 | 2026-06-25 |
+| claude | claude-opus-4-8 | 3b1f1c | Junk tracks Moorings | implementer | 2026-06-25 | 2026-06-25 |
 
 ## Landing Target For Next Session
 
 **Plan status: MERGED to `main` via PR #220 (`9e9844015`, 2026-06-24).**
-**Execution STARTED 2026-06-24/25 (Lapwing weaves Downdraft, owner-directed); PAUSED
-2026-06-25 (Thyme lifts Compost, worktree-pilot team closer) — site-3 → next team session.**
-Phase 1 (S8707) on branch `fix/sonar-s8707-cli-path-injection` (off `9e9844015`):
+**Sites 1-2 + the S4036 fix MERGED to `main` via PR #223 (`9d2e33bb1`, 2026-06-25, Junk tracks Moorings)
+— S8707 sites 1-2 contained, plus S4036 cleared as a replace (`resolveTrustedGit` absolute git path,
+fail-loud; `TRUSTED_GIT_PATH` deleted; §S4036 retired to FIX-only). NEXT: site-3 only.**
+**Site-3 PAUSED (Thyme lifts Compost's claim `ff3da671`) — `apps/oak-search-cli` analyze-elser-failures
+local safe-path helper, then the integrated security-expert re-review, then one PR direct to main.**
+Phase 1 (S8707) on branch `fix/sonar-s8707-cli-path-injection` (off `9e9844015`; sites 1-2 now on main via #223):
 
 - **Site 1/3 DONE + green — COMMITTED `1329d787a`** — `assertPathWithinBase`
   validator (`agent-tools/src/core/safe-path.ts`, security-expert GO) wired into
