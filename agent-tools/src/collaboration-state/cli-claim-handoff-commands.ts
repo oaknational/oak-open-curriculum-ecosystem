@@ -47,6 +47,12 @@ export function assertHandoffPathShape(path: string): void {
   if (!path.startsWith(HANDOFFS_DIR_PREFIX)) {
     throw new Error(`handoff record path must be under ${HANDOFFS_DIR_PREFIX}: ${path}`);
   }
+  const basename = path.slice(HANDOFFS_DIR_PREFIX.length);
+  if (basename.length === 0 || basename.includes('/')) {
+    throw new Error(
+      `handoff record path must name a file directly under ${HANDOFFS_DIR_PREFIX}: ${path}`,
+    );
+  }
 }
 
 /**

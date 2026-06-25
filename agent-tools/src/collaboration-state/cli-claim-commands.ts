@@ -2,11 +2,14 @@ import { randomUUID } from 'node:crypto';
 
 import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 import { archiveStaleClaims } from './claims.js';
-import { assertWatcherPresentForClaimOpen } from './claims-open-watcher-gate.js';
+import {
+  assertNotBlindWithOtherAgents,
+  resolveWatcherVerdict,
+} from './claims-open-watcher-gate.js';
 import { areaFromOptions } from './cli-claim-areas.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
-import { readActiveClaimsFile, updateActiveClaimsFile, updateClaimStateFiles } from './state-io.js';
+import { updateActiveClaimsFile, updateClaimStateFiles } from './state-io.js';
 import {
   type CollaborationAgentId,
   type CollaborationClaim,
@@ -24,15 +27,13 @@ export async function openClaim(
   const activePath = required(options, 'active');
   const nowIso = required(options, 'now');
 
-  // F-95 precondition: refuse to stake a claim into a populated registry while
-  // blind to comms. Read-only, BEFORE the locked transactional write (no IO
-  // under the registry lock); solo/bootstrap sessions pass untouched.
-  await assertWatcherPresentForClaimOpen({
-    registry: await readActiveClaimsFile(activePath),
-    nowIso,
-    nowMs: Date.parse(nowIso),
+  // F-95: classify the watcher OUTSIDE the lock (one IO), then decide
+  // populated-vs-solo INSIDE the locked transform so the solo-then-peer race
+  // cannot slip a blind claim into a registry that became populated mid-open.
+  const watcherVerdict = await resolveWatcherVerdict({
     selfIdentity: identity,
     commsSeenDir: optional(options, 'comms-seen-dir') ?? DEFAULT_COMMS_SEEN_DIR,
+    nowMs: Date.parse(nowIso),
     io: productionWatcherStalenessIo,
   });
 
@@ -45,6 +46,7 @@ export async function openClaim(
         agentId: identity,
         surface: 'claims open',
       });
+      assertNotBlindWithOtherAgents({ registry, nowIso, selfIdentity: identity, watcherVerdict });
 
       return {
         ...registry,

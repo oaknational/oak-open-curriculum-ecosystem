@@ -45,4 +45,16 @@ describe('productionWatcherStalenessIo', () => {
 
     expect(await productionWatcherStalenessIo.readTextFile(file)).toBe('hello watcher');
   });
+
+  it('rethrows a non-ENOENT stat error rather than reporting it as missing', async () => {
+    // Statting THROUGH a regular file yields ENOTDIR (not ENOENT): the file
+    // exists but the path is unusable, so the adapter must fail loud, not
+    // masquerade as a watcher that was never started.
+    const file = join(dir, 'not-a-dir');
+    await writeFile(file, 'x', 'utf8');
+
+    await expect(
+      productionWatcherStalenessIo.statMtimeMs(join(file, 'child.json')),
+    ).rejects.toThrow();
+  });
 });

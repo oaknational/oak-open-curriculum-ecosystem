@@ -1,5 +1,6 @@
 /**
- * Covers the F-95 claims-open precondition (`assertWatcherPresentForClaimOpen`)
+ * Covers the F-95 claims-open gate (`resolveWatcherVerdict` +
+ * `assertNotBlindWithOtherAgents`, composed as `claims open` composes them)
  * with an injected staleness IO, no filesystem:
  *
  * - a solo registry (no OTHER live agent) passes even with no watcher — the
@@ -13,7 +14,10 @@
 import { describe, expect, it } from 'vitest';
 
 import { deriveCollaborationIdentity } from '../../src/collaboration-state';
-import { assertWatcherPresentForClaimOpen } from '../../src/collaboration-state/claims-open-watcher-gate';
+import {
+  assertNotBlindWithOtherAgents,
+  resolveWatcherVerdict,
+} from '../../src/collaboration-state/claims-open-watcher-gate';
 import {
   type CollaborationAgentId,
   type CollaborationClaim,
@@ -89,21 +93,27 @@ function io(mtime: number | 'missing', text = heartbeatText(nowIso)): WatcherSta
   };
 }
 
+// Compose both gate steps as `claims open` does: classify the watcher (IO,
+// outside the lock) then assert against the locked registry snapshot.
 async function run(input: {
   readonly registry: CollaborationRegistry;
   readonly io: WatcherStalenessIo;
 }): Promise<void> {
-  await assertWatcherPresentForClaimOpen({
-    registry: input.registry,
-    nowIso,
-    nowMs,
+  const watcherVerdict = await resolveWatcherVerdict({
     selfIdentity: self,
     commsSeenDir,
+    nowMs,
     io: input.io,
+  });
+  assertNotBlindWithOtherAgents({
+    registry: input.registry,
+    nowIso,
+    selfIdentity: self,
+    watcherVerdict,
   });
 }
 
-describe('assertWatcherPresentForClaimOpen', () => {
+describe('claims-open watcher gate (resolve + assert)', () => {
   it('passes a solo registry even with no watcher (bootstrap fast-path)', async () => {
     await expect(run({ registry: registry({}), io: io('missing') })).resolves.toBeUndefined();
   });

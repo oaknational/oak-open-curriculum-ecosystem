@@ -34,10 +34,8 @@ describe('classifyWatcherPresence', () => {
       kind: 'absent',
       heartbeatFile: 'seen.json.heartbeat.json',
     });
-    expect(verdict.kind).toBe('blind');
-    if (verdict.kind === 'blind') {
-      expect(verdict.reason).toContain('seen.json.heartbeat.json');
-    }
+    expect(verdict).toMatchObject({ kind: 'blind' });
+    expect(JSON.stringify(verdict)).toContain('seen.json.heartbeat.json');
   });
 
   it('treats an aged heartbeat as blind', () => {

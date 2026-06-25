@@ -30,9 +30,10 @@ export interface WatcherStalenessIo {
  * - `stale-aged`: heartbeat present, emitted at least once, but written more
  *   than `3 * heartbeat_interval_ms` ago. The watcher is presumed dead.
  * - `stale-no-emit`: heartbeat present but `last_emit_at` is null. The
- *   watcher started but has not yet processed any events — caller decides
- *   whether to treat this as live (just started) or stale (long since
- *   started but inert) based on `emittedCount` and the surrounding context.
+ *   watcher started but has not yet processed any events. The variant carries
+ *   `agedMs`/`thresholdMs` (the same mtime aging as the emitted branches) so a
+ *   caller can tell a just-armed watcher (fresh mtime) from a started-then-
+ *   frozen one (aged mtime); `emittedCount` is carried for diagnostics.
  * - `absent`: heartbeat file does not exist. Either the watcher never
  *   started OR the heartbeat file was cleaned up post-shutdown.
  * - `malformed`: heartbeat file exists but read failed OR contents failed

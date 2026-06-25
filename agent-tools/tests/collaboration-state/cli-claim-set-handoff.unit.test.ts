@@ -81,4 +81,9 @@ describe('assertHandoffPathShape', () => {
     ).toThrow();
     expect(() => assertHandoffPathShape('.agent/state/collaboration/comms/x.json')).toThrow();
   });
+
+  it('rejects the bare handoffs directory and nested paths (must name a file directly)', () => {
+    expect(() => assertHandoffPathShape('.agent/state/collaboration/handoffs/')).toThrow();
+    expect(() => assertHandoffPathShape('.agent/state/collaboration/handoffs/sub/x.md')).toThrow();
+  });
 });

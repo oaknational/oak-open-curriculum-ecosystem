@@ -47,34 +47,38 @@ export function heartbeatFileForSeen(seenFile: string): string {
  *   confirm it is watching the stream.
  */
 export function classifyWatcherPresence(result: WatcherStalenessResult): WatcherPresenceVerdict {
-  if (result.kind === 'live') {
-    return { kind: 'present' };
+  switch (result.kind) {
+    case 'live':
+      return { kind: 'present' };
+    case 'stale-no-emit':
+      return result.agedMs <= result.thresholdMs
+        ? { kind: 'present' }
+        : {
+            kind: 'blind',
+            reason:
+              'comms watcher started but has emitted nothing and its heartbeat is stale — presumed dead',
+          };
+    case 'stale-aged':
+      return {
+        kind: 'blind',
+        reason:
+          'comms watcher heartbeat aged out (no update within 3x its interval) — presumed dead',
+      };
+    case 'absent':
+      return {
+        kind: 'blind',
+        reason: `no comms watcher heartbeat at ${result.heartbeatFile} — watcher not running`,
+      };
+    case 'malformed':
+      return {
+        kind: 'blind',
+        reason: `comms watcher heartbeat unreadable (${result.reason}) — cannot confirm liveness`,
+      };
+    default: {
+      // Exhaustiveness: any new WatcherStalenessResult member fails to compile
+      // here regardless of its field shape (stronger than a `.reason` access).
+      const exhaustive: never = result;
+      throw new Error(`Unhandled WatcherStalenessResult kind: ${JSON.stringify(exhaustive)}`);
+    }
   }
-  if (result.kind === 'stale-no-emit') {
-    return result.agedMs <= result.thresholdMs
-      ? { kind: 'present' }
-      : {
-          kind: 'blind',
-          reason:
-            'comms watcher started but has emitted nothing and its heartbeat is stale — presumed dead',
-        };
-  }
-  if (result.kind === 'stale-aged') {
-    return {
-      kind: 'blind',
-      reason: 'comms watcher heartbeat aged out (no update within 3x its interval) — presumed dead',
-    };
-  }
-  if (result.kind === 'absent') {
-    return {
-      kind: 'blind',
-      reason: `no comms watcher heartbeat at ${result.heartbeatFile} — watcher not running`,
-    };
-  }
-  // The only remaining variant is `malformed`; accessing `result.reason` keeps
-  // this exhaustive — a new union member would fail to type-check here.
-  return {
-    kind: 'blind',
-    reason: `comms watcher heartbeat unreadable (${result.reason}) — cannot confirm liveness`,
-  };
 }
