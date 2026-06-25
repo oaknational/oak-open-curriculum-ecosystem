@@ -187,52 +187,52 @@
         {
           "severity": "high",
           "claim": "The plan absorbs mutation-testing-implementation.plan.md and static-analysis-tool-promotion.plan.md but the TODO to add superseded-by pointers in those plans' frontmatter is still open. Without those pointers, readers starting from the sibling plans cannot discover this plan and may duplicate or contradict work.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:748"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:748"
         },
         {
           "severity": "high",
           "claim": "The pre-push Turbo exit-propagation bug (todo id: pre-push-turbo-exit-propagation) is listed as pending and is called out as the only remaining known blocker in the Status line, yet the plan does not document any concrete acceptance criteria or test protocol for proving the fix. Without a verifiable done condition, any fix risks being declared complete without actual proof.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:11-13"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:11-13"
         },
         {
           "severity": "high",
           "claim": "Decision 1 (line 664) mandates pre-push and CI run the same check set, but todo id: promote-widget-a11y-to-ci (line 57) still shows the a11y/widget tests as local-only pending work. The concrete changes listed under Decision 1 say 'when test:a11y and widget tests are promoted (item 0d), add to both surfaces simultaneously' — but item 0d itself is pending with an unresolved N-consecutive-green-run acceptance condition. This means the architecture invariant (pre-push == CI) is not yet satisfied and the gap is indefinitely open with no schedule.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:664-676"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:664-676"
         },
         {
           "severity": "medium",
           "claim": "Section 9 (built-artifact proof in E2E) correctly identifies that E2E must boot dist/ under plain Node, but the remediation step scopes to a 10-minute grep for tsx in dev scripts without actually resolving which workspaces are affected. The architectural seam (source tests vs E2E against built artefact) is stated but not enforced by any gate or lint rule — nothing prevents a new workspace from repeating the exact tsx-masks-ESM-resolver defect pattern.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:627-651"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:627-651"
         },
         {
           "severity": "medium",
           "claim": "The passWithNoTests: true flag in vitest.config.base.ts is flagged as a coverage-threshold gap (line 519-524) and separately as a flake/mutation-noise risk via process.env mutation (line 731-735), but both findings are buried in separate plan sections with no single consolidated architectural response. The two issues interact: passWithNoTests lets a misconfigured workspace report green with zero mutations killed and zero tests run — a compound blind spot.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:519-524"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:519-524"
         },
         {
           "severity": "medium",
           "claim": "ESLint config standardisation (todo id: eslint-config-standardisation) is declared a foundation that must precede all lint-rule promotions, and the effort estimate in the plan body (2-3 days) is flagged by a reviewer assumption as potentially 2-3 days underestimated (10+ workspaces with blurred parser/resolver settings, line 287). The plan does not define any structural target state for 'standardised' — no schema, reference config, or acceptance test — making it unclear when this foundation item is genuinely complete.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:284-289"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:284-289"
         },
         {
           "severity": "medium",
           "claim": "The CI feedback-loop budget concern is raised both in Domain Boundaries (line 381-383) and Risks (line 727-730) but has no defined threshold values. Every gate addition is acknowledged to increase CI duration, yet no maximum acceptable time budget (for pre-push or CI) is recorded anywhere in the plan. The architectural constraint exists in principle but is not operationalised.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:381-383"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:381-383"
         },
         {
           "severity": "low",
           "claim": "The plan's Last Updated date is 2026-04-29 (line 63). Several pending todos reference assumptions with stale counts (eslint-disable last counted 2026-03-29, type-assertion count never re-verified). The plan acknowledges this in Tier 0 but has no trigger to force a refresh before work resumes — a reader picking this up now will work from unknown-staleness baselines.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:63"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:63"
         },
         {
           "severity": "low",
           "claim": "Stryker (todo id: enable-stryker-all-workspaces) is listed with initial loose thresholds and a dependency on the test-suite-audit sibling plan, but the sibling plan relationship is described only in the Sibling Plans section and not reflected in the Dependencies and Sequencing table. The sequencing table lists 'Test audit (sibling plan)' but does not link to the sibling plan by path, making the dependency unverifiable without extra search.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:344-345"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:344-345"
         },
         {
           "severity": "info",
           "claim": "The architectural distinction between verify-only (pre-commit, pre-push, CI) and fix-then-verify (pnpm check) gate surfaces is clearly stated as Decision 2 and matches the pattern documented elsewhere. This is a well-grounded architectural seam; no action required.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:679-688"
+          "file_line": ".agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md:679-688"
         }
       ],
       "load_bearing_claims_count": 8,

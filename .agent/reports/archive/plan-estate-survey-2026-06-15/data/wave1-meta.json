@@ -674,7 +674,7 @@
    {
     "claim": "The icebox is well-managed overall: most items carry explicit reactivation triggers and self-contained rationale. However, one icebox file is already superseded (cross-agent-standardisation.md) and serves only as a stale pointer, adding noise without adding knowledge.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/cross-agent-standardisation.md"
+     ".agent/plans/icebox/cross-agent-standardisation.md"
     ],
     "quote": "Status: Superseded — promoted from icebox to an active plan. See: [cross-agent-standardisation.plan.md](../agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md)",
     "severity": "low"
@@ -682,7 +682,7 @@
    {
     "claim": "The pair-programming-coach-agent.md icebox item is an elaborately detailed VSCode extension plan (840+ lines, five phases, cost modelling) that is entirely out of scope for this product's vision. It is a standalone developer-tooling product, not curriculum infrastructure or agentic practice. Its insight — event-driven real-time pattern detection in an IDE — is not conserved anywhere in the practice or ADR layer. This is the clearest candidate for insight-conservation then retirement.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/pair-programming-coach-agent.md"
+     ".agent/plans/icebox/pair-programming-coach-agent.md"
     ],
     "quote": "Create an event-driven AI agent that actively monitors developer coding activity in real-time and provides proactive, context-aware suggestions, acting as a senior engineer pair programming partner who observes rather than types. ... Phase 5: Production Hardening (2 weeks) ... Total: ~560 hours (~3-4 months for one developer)",
     "severity": "medium"
@@ -690,8 +690,8 @@
    {
     "claim": "The complex-systems-dynamics research cluster (three files: complex-system-dynamics-multi-field-review.md, dynamic-stability-in-complex-systems.md, emergent-stability-summary.md) is a high-quality academic literature review covering ecological tipping points, bifurcation theory, and multi-field critical transitions. It has no clear linkage to any plan, ADR, or product feature. There is no evidence it was ever cited as grounding for a concrete decision in this repo. This is the strongest candidate for honest assessment as genuinely droppable background reading whose key insight (early warning signals as generic statistical fingerprints) should be conserved in a single sentence in the agentic engineering practice if relevant, then the three files retired.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/complex-systems-dynamics/complex-system-dynamics-multi-field-review.md",
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/complex-systems-dynamics/emergent-stability-summary.md"
+     ".agent/research/complex-systems-dynamics/complex-system-dynamics-multi-field-review.md",
+     ".agent/research/complex-systems-dynamics/emergent-stability-summary.md"
     ],
     "quote": "Many complex systems across disciplines can undergo critical transitions or tipping points, where a small change in conditions triggers a sudden shift to a contrasting state. Such phenomena have been observed in ecology, medicine, global finance, and climate systems.",
     "severity": "medium"
@@ -699,8 +699,8 @@
    {
     "claim": "The Solid distributed filesystem research (solid-distributed-filesystem/) is a detailed, rigorous evaluation of Solid Pods as a teacher-controlled data layer. It is correctly anchored: a live future plan (teacher-memory-store-solid-vs-user-keyed-private-store.plan.md) cites it directly and holds the decision pending an owner-directed comparison. This is correct placement — research informs a gated future decision. No action needed here except confirming the link is live.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/solid-distributed-filesystem/Solid as a Teacher-Controlled Data Layer for Oak MCP Interaction Records-clean.md",
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/future/teacher-memory-store-solid-vs-user-keyed-private-store.plan.md"
+     ".agent/research/solid-distributed-filesystem/Solid as a Teacher-Controlled Data Layer for Oak MCP Interaction Records-clean.md",
+     ".agent/plans/architecture-and-infrastructure/future/teacher-memory-store-solid-vs-user-keyed-private-store.plan.md"
     ],
     "quote": "A cleaned research artefact is now available at: .agent/research/solid-distributed-filesystem/... That report indicates Solid is promising for teacher-controlled data but also surfaces known constraints.",
     "severity": "low"
@@ -708,8 +708,8 @@
    {
     "claim": "The advanced-mcp-server-ideas.md icebox item contains a valuable architectural insight (fan-out-fan-in task decomposition, single-purpose review agents, cross-server pipelines) that is partially reflected in the subagent-ideas.md and already partially implemented via the review ensemble. The cross-server pipeline concept is the only portion not yet conserved in any ADR or plan. The AI lesson content grading concept is explicitly out-of-scope. The key risk: as the agentic practice matures these concepts will be rediscovered without attribution. A single ADR or practice note should conserve the fan-out contract shape.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/advanced-mcp-server-ideas.md",
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/subagent-ideas.md"
+     ".agent/plans/icebox/advanced-mcp-server-ideas.md",
+     ".agent/plans/icebox/subagent-ideas.md"
     ],
     "quote": "The review ensemble already implements a simpler version of this pattern: it dispatches four model-specific code reviewers and then synthesises their findings. The orchestrator generalises that pattern beyond reviews to arbitrary parallelisable work.",
     "severity": "medium"
@@ -717,8 +717,8 @@
    {
     "claim": "The semantic-search future lane (nine boundary folders) is correctly structured — the README confirms a transfer-manifest, information-retention check, and boundary separation. The curriculum-nlp-processing-workspace.md cross-boundary plan is the one item that sits outside the nine boundaries and could obscure what is genuinely next. This is a known structural decision (it subsumes vocabulary-mining Phases 4-5) and is correctly labelled. No action needed except ensuring it appears in the future/README as a cross-boundary item.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/semantic-search/future/README.md",
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/semantic-search/future/TRANSFER-MANIFEST.md"
+     ".agent/plans/semantic-search/future/README.md",
+     ".agent/plans/semantic-search/future/TRANSFER-MANIFEST.md"
     ],
     "quote": "Boundary reorganisation complete; originals removed after verification. Cross-Boundary Plans: curriculum-nlp-processing-workspace.md — Python NLP workspace for ML-based entity extraction, semantic compression, and relationship mining from bulk curriculum data.",
     "severity": "low"
@@ -726,7 +726,7 @@
    {
     "claim": "The discovery/future lane contains the aila-a2a-agent-card.plan.md which is correctly gated on a product decision (whether Aila becomes a third-party A2A endpoint). However several other discovery/future items (agent-skills-discovery.plan.md, agentic-mechanisms-discovery.plan.md, dns-aid-discovery.plan.md, webmcp-human-site-operability.plan.md) are all valid M3/post-beta concerns and are correctly placed. The discovery future lane is not overcrowded relative to the M2 critical path.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/discovery/future/aila-a2a-agent-card.plan.md"
+     ".agent/plans/discovery/future/aila-a2a-agent-card.plan.md"
     ],
     "quote": "This plan exists only for the conditional case where Oak chooses to expose Aila as a real A2A server for third-party agents. Until then, Aila stays off the public discovery map.",
     "severity": "low"
@@ -734,8 +734,8 @@
    {
     "claim": "The agentic-engineering-enhancements/future lane is the heaviest future collection (26 files). Several items — memetic-immune-system, closure-pressure-remediation, governance-concepts — are well-anchored to PDRs and companion current/active plans. The multi-agent-delegation-orchestration plan is a strategic brief with six open architectural questions explicitly listed as promotion blockers; this is correct. The most speculative items (graphify-and-graph-memory-exploration, external-pointer-surface-integration, recurrence-prevention-after-vercel-branch-url-bug) have promotion criteria defined. The collection does not obscure the critical path because all items are in future/ not current/ or active/.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md",
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md"
+     ".agent/plans/agentic-engineering-enhancements/future/multi-agent-delegation-orchestration.plan.md",
+     ".agent/plans/agentic-engineering-enhancements/future/memetic-immune-system-and-progressive-disclosure.plan.md"
     ],
     "quote": "These are not gaps to resolve in this plan, but architectural decisions that belong to the promotion phase when concrete consumers appear. Promotion to current/ requires owner review of contracts and open-questions section.",
     "severity": "low"
@@ -743,7 +743,7 @@
    {
     "claim": "The watcher-liveness-self-heal.md icebox item is a 2026-06-14 addition (yesterday, relative to today). It is correctly self-aware about what already exists, names the gap clearly, and carries an explicit 'do NOT build yet' directive. It conserves an insight from a live session. This is exactly the right use of the icebox. No action needed.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/icebox/watcher-liveness-self-heal.md"
+     ".agent/plans/icebox/watcher-liveness-self-heal.md"
     ],
     "quote": "A small enhancement so an agent holding or waiting across idle gaps never goes silently blind when an awareness monitor dies. ... Do NOT build yet. ... What already exists (check before building).",
     "severity": "low"
@@ -751,8 +751,8 @@
    {
     "claim": "The aila-modular-extraction research cluster contains 14 files on lesson generation, quiz design, prompt architecture, and safety patterns for an AI lesson-creation product. Four files are already archived. The remaining 10 active files (prompt-architecture.md, quiz-design-principles.md, safety-patterns.md, etc.) constitute a significant volume of content about a system (Aila) that this repo does not own or operate. The research README records them as permanent. Their value to the MCP server vision is indirect at best: they could inform EEF surface design or curriculum-aligned tool descriptions, but no current plan cites them for that purpose. These are candidates for explicit acknowledgement of the 'research informs but does not drive' status, with insight-conservation into the connecting-oak-resources or sector-engagement lanes.",
     "evidence_paths": [
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/aila-modular-extraction/prompt-architecture.md",
-     "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/research/README.md"
+     ".agent/research/aila-modular-extraction/prompt-architecture.md",
+     ".agent/research/README.md"
     ],
     "quote": "aila-modular-extraction/ — AILA prompt engineering — Lesson generation, quiz design, safety patterns (partially archived)",
     "severity": "medium"

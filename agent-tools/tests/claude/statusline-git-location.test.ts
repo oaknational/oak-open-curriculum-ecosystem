@@ -143,19 +143,17 @@ describe('coordinationToParts', () => {
 describe('parsePrimaryWorktreeRoot', () => {
   it('returns the first worktree path from porcelain output', () => {
     const porcelain = [
-      'worktree /Users/jim/code/oak/oak-open-curriculum-ecosystem',
+      'worktree /pretend-absolute/path',
       'HEAD 5bbda2fa900000000000000000000000000000000',
       'branch refs/heads/main',
       '',
-      'worktree /Users/jim/code/oak/oak-sonar-p1',
+      'worktree /pretend/absolute/pathoak-sonar-p1',
       'HEAD ac2901fe100000000000000000000000000000000',
       'branch refs/heads/fix/sonar-s8707-cli-path-injection',
       '',
     ].join('\n');
 
-    expect(parsePrimaryWorktreeRoot(porcelain)).toBe(
-      '/Users/jim/code/oak/oak-open-curriculum-ecosystem',
-    );
+    expect(parsePrimaryWorktreeRoot(porcelain)).toBe('/pretend-absolute/path');
   });
 
   it('returns undefined for unrecognised output', () => {

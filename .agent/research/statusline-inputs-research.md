@@ -405,7 +405,7 @@ printf '[%s] 📁 %s%s | ctx %s%% | 💰 $%.2f\n' \
 Test any script with mock input without launching a session:
 
 ```bash
-echo '{"model":{"display_name":"Opus"},"workspace":{"current_dir":"/home/user/project"},"context_window":{"used_percentage":25},"session_id":"test-session-abc"}' | ./statusline.sh
+echo '{"model":{"display_name":"Opus"},"workspace":{"current_dir":"/workspace/project"},"context_window":{"used_percentage":25},"session_id":"test-session-abc"}' | ./statusline.sh
 ```
 
 ## Subagent status lines

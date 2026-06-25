@@ -253,8 +253,8 @@ copy and reconciliation is needed.
 Resolve every reviewer with
 `pnpm agent-tools:codex-reviewer-resolve <name>` before
 trusting a Codex review. The underlying `tsx` call may need
-escalation because it opens a local IPC pipe under
-`/var/folders/...`.
+escalation because it opens a local IPC pipe under the
+platform temp directory.
 
 ### `git merge --abort` Wipes Staged Changes
 

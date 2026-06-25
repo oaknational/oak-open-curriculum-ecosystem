@@ -6,7 +6,7 @@ import {
 
 describe('resolveFrameStateDir', () => {
   it('uses XDG_STATE_HOME when set', () => {
-    expect(resolveFrameStateDir({ XDG_STATE_HOME: '/x/state' }, '/home/u')).toBe(
+    expect(resolveFrameStateDir({ XDG_STATE_HOME: '/x/state' }, '/workspace/u')).toBe(
       '/x/state/oak-statusline-frames',
     );
   });
@@ -14,7 +14,9 @@ describe('resolveFrameStateDir', () => {
   it('falls back to ~/.local/state when XDG_STATE_HOME is unset — never the OS temp dir', () => {
     // The security property of the insecure-temporary-file fix: the per-session
     // state resolves under the user's private state home, not the shared temp dir.
-    expect(resolveFrameStateDir({}, '/home/u')).toBe('/home/u/.local/state/oak-statusline-frames');
+    expect(resolveFrameStateDir({}, '/workspace/u')).toBe(
+      '/workspace/u/.local/state/oak-statusline-frames',
+    );
   });
 });
 

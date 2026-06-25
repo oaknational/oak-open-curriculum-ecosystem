@@ -217,7 +217,7 @@
     ],
     "harvest": [
       {
-        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r1-2026-05-20-to-22.md",
+        "source": ".agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r1-2026-05-20-to-22.md",
         "untagged_captures": [
           {
             "summary": "Empty seen-file caused 862-event backfill to drown live signal; agent-side grep filter additionally violated self-exclusion-only doctrine; two directed events dropped, agent silent ~12 minutes",
@@ -464,7 +464,7 @@
         ]
       },
       {
-        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r4-2026-05-26-to-06-09.md",
+        "source": ".agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r4-2026-05-26-to-06-09.md",
         "untagged_captures": [
           {
             "summary": "Heartbeat-without-progress (alive-but-stalled) morning instance: Feathered heartbeats normally while owner-rerouted invisibly; Torrid cures via escalation ladder.",
@@ -651,7 +651,7 @@
         ]
       },
       {
-        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r5-2026-06-10.md",
+        "source": ".agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r5-2026-06-10.md",
         "untagged_captures": [
           {
             "summary": "Canonical watcher hang-but-run, two occurrences then cured same-day (Abyssal ~14:07Z, Director Veiled ~15:28Z).",
@@ -778,7 +778,7 @@
         ]
       },
       {
-        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r6-2026-06-11-to-12.md",
+        "source": ".agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r6-2026-06-11-to-12.md",
         "untagged_captures": [
           {
             "summary": "Piped/wrapped exit-code false-greening: git push false-greened twice (hook banner looked like success, transfer never happened); re-bitten same day by multiple agents including a SIGPIPE variant; husky gate-output tee inverted the gate via three stacked shell semantics defects.",
@@ -910,7 +910,7 @@
         ]
       },
       {
-        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r7-variety-2026-05-20-to-24.md",
+        "source": ".agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r7-variety-2026-05-20-to-24.md",
         "untagged_captures": [
           {
             "summary": "Stale scratch-file path reused across sessions: comms append produces an event carrying another agent's content under the wrong identity (three worked instances, cure named but only behavioural, recurred 40 h later)",
@@ -1052,7 +1052,7 @@
         ]
       },
       {
-        "source": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r8-variety-2026-06-10-to-12.md",
+        "source": ".agent/reports/agentic-engineering/ws1-cold-reads/2026-06-12-r8-variety-2026-06-10-to-12.md",
         "untagged_captures": [
           {
             "summary": "F1(a): Comms-watch CLI silently stalls; agent blind ~16 minutes while appearing healthy, holding for a merge that had already landed",

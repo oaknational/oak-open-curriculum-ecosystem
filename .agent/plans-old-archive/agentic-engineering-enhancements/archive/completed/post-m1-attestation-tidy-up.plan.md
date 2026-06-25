@@ -1514,8 +1514,8 @@ Tests pass literal env objects, NEVER read `process.env`.
      missing-file.
   8. **DI env edge** (R1 finding #31): `resolveCommsWatchStatePath`
      with `env: { XDG_CACHE_HOME: '', HOME: '' }` throws; with
-     `env: { XDG_CACHE_HOME: '', HOME: '/home/user' }` falls through
-     to `/home/user/.cache/...`.
+     `env: { XDG_CACHE_HOME: '', HOME: '<home>' }` falls through
+     to `<home>/.cache/...`.
   9. **Renderer regression** (R1 finding #13): if cycle 7 wired
      `[HEARTBEAT]` token rendering, this cycle's watcher invocation
      must still render `[HEARTBEAT]` events with the token. Skip if

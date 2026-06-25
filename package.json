@@ -34,7 +34,7 @@
     "dev": "turbo run --continue dev",
     "test": "turbo run --continue test",
     "test:widget": "turbo run --continue test:widget",
-    "repo-validators:check": "pnpm --filter @oaknational/eslint-plugin-standards validate-boundaries && pnpm --filter @oaknational/agent-tools validate-no-stale-script-invocations && pnpm --filter @oaknational/agent-tools validate-collaboration-state && pnpm --filter @oaknational/agent-tools validate-lifecycle-scripts && pnpm --filter @oaknational/agent-tools validate-pretooluse-guard-routing && pnpm --filter @oaknational/agent-tools validate-policy-reappraisal && pnpm --filter @oaknational/agent-tools validate-reference-direction && pnpm --filter @oaknational/agent-tools validate-markdown-links && pnpm --filter @oaknational/agent-tools validate-patterns-index",
+    "repo-validators:check": "pnpm --filter @oaknational/eslint-plugin-standards validate-boundaries && pnpm --filter @oaknational/agent-tools validate-no-stale-script-invocations && pnpm --filter @oaknational/agent-tools validate-collaboration-state && pnpm --filter @oaknational/agent-tools validate-lifecycle-scripts && pnpm --filter @oaknational/agent-tools validate-pretooluse-guard-routing && pnpm --filter @oaknational/agent-tools validate-policy-reappraisal && pnpm --filter @oaknational/agent-tools validate-reference-direction && pnpm --filter @oaknational/agent-tools validate-no-machine-local-paths && pnpm --filter @oaknational/agent-tools validate-markdown-links && pnpm --filter @oaknational/agent-tools validate-patterns-index",
     "test:field-integrity": "vitest run --config vitest.field-integrity.config.ts",
     "mutate": "turbo run --continue mutate",
     "test:e2e": "turbo run --continue test:e2e",

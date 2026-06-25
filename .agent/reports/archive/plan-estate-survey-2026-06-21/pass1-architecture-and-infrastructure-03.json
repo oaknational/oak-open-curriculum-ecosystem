@@ -122,27 +122,27 @@
         {
           "severity": "medium",
           "claim": "The plan records a significant capability regression (120 queries → ~33) and defers the decision about whether QueryCategory-based benchmarking is retired or rebuilt into the new model (step 2 of Implementation Approach). This is an architectural decision that must be resolved before migration begins — the new model's shape is either sufficient or it is not, and the plan leaves that open while scheduling deletion.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:62-66"
+          "file_line": ".agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:62-66"
         },
         {
           "severity": "medium",
           "claim": "The Risks section acknowledges that experiment runners may need redesign if they depend on the 120-query corpus volume for statistical significance, but no validation criterion or threshold is defined. Retiring the archive without a minimum-corpus guarantee for statistical validity is an architectural integrity risk for the evaluation pipeline.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:95-98"
+          "file_line": ".agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:95-98"
         },
         {
           "severity": "low",
           "claim": "benchmark-adapters.ts is described as bridging new model data into old model types. The plan migrates consumers but does not explicitly schedule the deletion or replacement of this bridge file itself. If left in place post-migration it becomes dead or misleading code.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:53-54"
+          "file_line": ".agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:53-54"
         },
         {
           "severity": "low",
           "claim": "ADR-085 and ADR-098 are listed as references requiring documentation updates but the plan does not state whether these ADRs will be amended in-place, superseded, or closed. ADR lifecycle is underspecified relative to the archive deletion event.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:19"
+          "file_line": ".agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:19"
         },
         {
           "severity": "info",
           "claim": "The plan is well-scoped: origin is cited, dependencies declared as none-blocking, migration scope is quantified (18 files, 39 barrels), and the plan correctly frames the query-count reduction as design intent not regression. Architecture is coherent for execution once the capability-gap decision (finding 1) is resolved.",
-          "file_line": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:29-35"
+          "file_line": ".agent/plans/architecture-and-infrastructure/future/ground-truth-archive-retirement.plan.md:29-35"
         }
       ],
       "load_bearing_claims_count": 5,

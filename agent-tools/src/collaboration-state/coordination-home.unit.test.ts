@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { type GitRunner, resolveCoordinationHome } from './coordination-home.js';
 
-const PRIMARY = '/Users/dev/oak';
-const LINKED = '/Users/dev/oak-worktrees/feature';
+const PRIMARY = '/workspace/oak';
+const LINKED = '/workspace/oak-worktrees/feature';
 
 // `git worktree list --porcelain` lists the main worktree FIRST, then each
 // linked worktree, regardless of which worktree the command runs from.

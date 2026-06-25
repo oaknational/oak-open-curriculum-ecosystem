@@ -1811,7 +1811,7 @@
           "claim": "comms-event-write-integrity plan is complete and scope-frozen — no schema migration, no event-semantics change — so it does not own the authoring-affordance surface (cited at lines 232-235)",
           "verdict": "survives",
           "confidence": "high",
-          "evidence": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md:76 (\"No schema migration, no event-semantics change\"), :253 (Non-Goals: migrating schema / changing event semantics), :256 (comms list/show/watch non-goal, F-07); todos completed at :21,:25,:29,:33,:37"
+          "evidence": ".agent/plans/agent-tooling/current/comms-event-write-integrity.plan.md:76 (\"No schema migration, no event-semantics change\"), :253 (Non-Goals: migrating schema / changing event semantics), :256 (comms list/show/watch non-goal, F-07); todos completed at :21,:25,:29,:33,:37"
         }
       ]
     },

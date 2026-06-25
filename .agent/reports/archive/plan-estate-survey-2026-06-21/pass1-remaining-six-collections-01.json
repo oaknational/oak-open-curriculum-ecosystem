@@ -343,7 +343,7 @@
           "claim": "Object.assign scan now returns 0 matches (down from baseline 8), post Phase 1",
           "verdict": "refuted",
           "confidence": "high",
-          "evidence": "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md:314 claims `rg \"Object\\.assign\\(\" apps packages` returns 0; git grep at the contemporaneous 2026-03-03 HEAD (951ca3ff7, \"chore(release): 1.0.0\") returns 7 matches across 6 files (handlers.integration.test.ts, auth-error-test-helpers.ts, otel-format.ts, response-augmentation.ts, schema-sample-core.ts, retrieval-error.unit.test.ts); live estate today returns 17."
+          "evidence": ".agent/plans/developer-experience/active/devx-strictness-convergence.plan.md:314 claims `rg \"Object\\.assign\\(\" apps packages` returns 0; git grep at the contemporaneous 2026-03-03 HEAD (951ca3ff7, \"chore(release): 1.0.0\") returns 7 matches across 6 files (handlers.integration.test.ts, auth-error-test-helpers.ts, otel-format.ts, response-augmentation.ts, schema-sample-core.ts, retrieval-error.unit.test.ts); live estate today returns 17."
         },
         {
           "claim": "Skills-first architecture and command/rules portability work fully extracted to ADR-125",

@@ -36,8 +36,8 @@
      "stance": "overstated",
      "why": "VISION.md is genuinely active (last_reviewed 2026-06-12), internally coherent, and the clearest layer — that part stands. But 'does NOT need rewriting' is overstated. The same-day 2026-06-15 readiness assessment (§5.7) found 'two products conflated' (end-user vs developer surface), and K1 redefined 'live' as an observed-impact evidence state — neither is yet reflected in VISION's framing. VISION's 'How We Measure Impact' section names leading/outcome indicators but defers all operationalisation to the reports surface, and its three-orders model presents the second order (reusable components) as a delivered 'What We Deliver' inventory when the estate shows it is documentation-only (sector-engagement Phases 2-4 all 'Future'). The vision is sound and current; the claim that it needs no revision after K1-K3 is too strong.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/docs/foundation/VISION.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
+      "docs/foundation/VISION.md",
+      ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
      ]
     },
     {
@@ -45,9 +45,9 @@
      "stance": "overstated",
      "why": "The architecture's excellence is corroborated first-hand by the in-repo readiness report §3 ('Schema-first codegen... Strongest part of the system') and the privacy/security ADRs (160/158). So the core claim stands. But 'genuinely excellent / strongest part of the system' is overstated when applied to the whole substrate as shipped: the app README itself admits 13 of 37 tools (the aggregated set) bypass ToolExecutionResult — 'architectural debt' missing error handling, logging and type safety, which also undercuts the five-axis observability claim; graph tools return full dumps (token-inefficiency, trips host directory policy); and the privacy *legal* artefacts (DPIA/DSAR/notice) are named-but-unwritten. The design is excellent; the runtime implementation carries acknowledged debt. Excellent-in-architecture, debt-in-implementation.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/apps/oak-curriculum-mcp-streamable-http/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md"
+      "apps/oak-curriculum-mcp-streamable-http/README.md",
+      ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md",
+      ".agent/plans/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md"
      ]
     },
     {
@@ -55,9 +55,9 @@
      "stance": "stands",
      "why": "Directionally well-grounded. Second order: the reusable-components inventory lives ONLY in VISION.md 'What We Deliver'; the sole sector plan (sector-reusable-components-adoption.plan.md) is an explicit documentation 'contract' with four pending todos and no implementation — its own words: 'Execution of implementation work remains owned by engineering collections'. The sector roadmap puts external-data-source demos and partner playbooks (Phases 2-4) all in 'Future'. So 'documentation-only with no execution plan' is exact. Third order (teacher experience) is the not-yet-built React MCP App rebuild, mostly current/future. The inward weighting is real (agentic-engineering-enhancements 136 + agent-tooling 73 md files are the two largest plan collections). Caveat: the precise '~39%' is method-dependent — by all plan .md files inward is ~19%, by the survey's doc-weighting it is ~39%; the ratio shifts with denominator but the skew itself is robust. The substantive claim holds.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/sector-engagement/roadmap.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/docs/foundation/VISION.md"
+      ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
+      ".agent/plans/sector-engagement/roadmap.md",
+      "docs/foundation/VISION.md"
      ]
     },
     {
@@ -65,9 +65,9 @@
      "stance": "overstated",
      "why": "The deepest-gap framing is right in spirit and the readiness report's K1 makes value-proof a GA precondition — but 'no plan or instrumentation measures whether ANY pillar is creating that value' is factually overstated. The observability collection IS a five-axis plan that explicitly includes a Product axis (tool_invoked + search_query emission) and a Usability axis (feedback capture, widget_session_outcome), with the Product-axis MVP plans (observability-events-workspace, search-observability) live in current/. The launch-readiness framework A1 names value-proof, release-and-observe, and a qualitative+quantitative impact bar. So instrumentation *infrastructure* exists and is partly live. The TRUE residual gap is narrower and should be stated as such: the outcome indicators (teacher-workload reduction, pedagogical-quality maintenance, sector reuse) have no operationalised measurement — the impact bar is an explicit 'open decision', usability feedback capture (L-9/L-12) is deferred to public beta, and curriculum-content-observability is a future strategic brief. 'Is it working' is under-instrumented for outcomes, not un-instrumented across the board.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/observability/high-level-observability-plan.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/observability/future/curriculum-content-observability.plan.md"
+      ".agent/plans/observability/high-level-observability-plan.md",
+      ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+      ".agent/plans/observability/future/curriculum-content-observability.plan.md"
      ]
     },
     {
@@ -75,10 +75,10 @@
      "stance": "stands",
      "why": "Corroborated first-hand. The front-door contradiction is live and verifiable today: root README says 'Current status: Invite-Only Alpha', the app README header says 'Status: private alpha / Next status: public alpha' and '#Authentication: External access is not available', and the milestone tracker says M2 in progress — three authoritative surfaces, three answers (the readiness report §2 flagged exactly this). Planning discipline genuinely IS sound: plans/README.md documents an explicit reachability invariant (root -> collection -> lifecycle -> plan), a four-lane lifecycle taxonomy, and update rules. So the drift is behavioural (estate grew faster than curation), not a design flaw. The 1095 plan .md files (435 .plan.md, 248 archived) make the curation-vs-growth tension concrete. Claim holds.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/apps/oak-curriculum-mcp-streamable-http/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/high-level-plan.md"
+      "README.md",
+      "apps/oak-curriculum-mcp-streamable-http/README.md",
+      ".agent/plans/README.md",
+      ".agent/plans/high-level-plan.md"
      ]
     },
     {
@@ -86,9 +86,9 @@
      "stance": "misframed",
      "why": "Two distinct sub-claims with different fates. (a) 'External long-poles have no owned timelines' is TRUE but the upstream-Oak-API case is misframed as a defect: upstream-feature-requests/README.md states by design 'this repository must not edit those upstream repos... Each upstream team's canonical intake owns implementation' — requests are recorded with Status/Priority and handed over. No owned timeline is the correct posture for another team's repo, not allocation-by-gravity; the genuine gap is the absence of a *risk/contingency register* for those dependencies, not a missing timeline this repo could own. (b) 'Inward/outward allocation happened by gravity, not a conscious owner decision' is partly contradicted by the evidence: the owner has an explicit priority sequence (comms research first, then roadmap) and took ratified keystone decisions K1-K3 on 2026-06-15. Determination/under-resourcing of outward pillars is real, but framing the whole allocation as unconscious overlooks the conscious decisions on record.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/upstream-feature-requests/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/high-level-plan.md"
+      ".agent/plans/upstream-feature-requests/README.md",
+      ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md",
+      ".agent/plans/high-level-plan.md"
      ]
     }
    ],
@@ -102,9 +102,9 @@
      "stance": "overstated",
      "why": "VISION.md is current (last_reviewed 2026-06-12, confirmed first-hand) and structurally sound, so 'no rewrite needed' largely holds. But 'clearest layer / cannot dent it' is overstated: the vision carries internal tensions the survey itself names and I confirmed. (1) school-data-search has ZERO vision anchor (grep returns nothing) yet is a live queued collection — the vision does not account for a real workstream. (2) The 'How We Measure Impact' section is aspirational ('impact SHOULD be tracked'; values 'live in the reports surface and high-level plan') but those surfaces carry no actual measurement (see C4) — the vision asserts a measurement posture the estate does not honour, which is a vision-to-reality gap, not pure clarity. (3) VISION §191 claims graph capabilities are 'live today' while HLP §123 calls the EEF tool 'the live first proper graph tool' and a 2026-06-09 readiness report treated graph tools as in-progress — reconcilable (anchored relationship tools are live, confirmed via MCP) but the 'live today' framing sits at the optimistic edge. 'Soundest layer' is fair; 'clearest and undentable' is not.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/docs/foundation/VISION.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/high-level-plan.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/graph-tools-readiness-seam-analysis-2026-06-09.md"
+      "docs/foundation/VISION.md",
+      ".agent/plans/high-level-plan.md",
+      ".agent/reports/graph-tools-readiness-seam-analysis-2026-06-09.md"
      ]
     },
     {
@@ -112,9 +112,9 @@
      "stance": "overstated",
      "why": "The substrate IS real and strong: schema-first codegen packages exist (oak-sdk-codegen, oak-curriculum-sdk, oak-search-sdk, graph-corpus-sdk), 489 test files give high density, the production MCP responds 200 first-hand, and the readiness assessment independently rates provenance/codegen/privacy(ADR-160)/security(ADR-158) sound. But 'genuinely excellent — strongest part' is dented at the most load-bearing point: I code-confirmed that the 13 aggregated tools bypass ToolExecutionResult (return Promise<CallToolResult> directly), and these 13 are NOT peripheral — they are the FLAGSHIP surface (search, fetch, get-curriculum-model, all four graph tools, get-eef-evidence, browse-curriculum). The README itself labels this 'architectural debt' missing error handling, logging, and type safety, and it directly undercuts the 'full five-axis observability' claim because the most-used tools do not route through the instrumented path. Also confirmed first-hand: the shared upstream key is unlimited (limit:0/remaining:0/reset:0) so there is no cost ceiling, and Cloudflare (the volumetric defence) is unpromoted in future/. 'Excellent engine' is true for the generated/typed core; the claim overstates by treating the flagship tool path and the security/cost envelope as already excellent.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/apps/oak-curriculum-mcp-streamable-http/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
+      "apps/oak-curriculum-mcp-streamable-http/README.md",
+      "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts",
+      ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
      ]
     },
     {
@@ -122,9 +122,9 @@
      "stance": "stands",
      "why": "Confirmed first-hand. Practice weight: aee + agent-tooling are the two largest collections and the survey's 159/409 (~39%) is corroborated by the reachability spot-check showing aee/current alone holds 54 plan docs dominated by Practice openers and specialist-capability clones. Second order: the sector-reusable-components plan explicitly states 'Execution of implementation work remains owned by engineering collections' and its own todos are all documentation/contract work (cross-links, adopter profile, supported-vs-experimental matrix, playbook scaffold) — there is NO packaging/publish execution plan; a literal search for packaging/publish-component plans returns only the adoption contract plus unrelated engineering plans. Third order: the only outcome-facing plan is eef-outcome-evaluation-infrastructure, which is future-status and narrowly scoped to whether EEF caveats survive LLM mediation — not teacher-experience build nor workload/adoption proof. So 'engine superbly, orders-closest-to-mission under-invested' stands. Minor nuance (not enough to downgrade): the inward 39% is partly defensible because the first-order Practice IS a named vision pillar and a shipped reusable component, so 'under-invest' should be read as relative skew, which is exactly how C3 frames it.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agentic-engineering-enhancements/current"
+      ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
+      ".agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
+      ".agent/plans/agentic-engineering-enhancements/current"
      ]
     },
     {
@@ -132,9 +132,9 @@
      "stance": "stands",
      "why": "This is the most robust claim. VISION 'How We Measure Impact' names leading indicators (adoption/downloads/active integrations, delivery throughput) and outcome indicators (teacher-workload reduction, pedagogical quality maintained, ecosystem reuse), and says values 'live in the reports surface and the high-level plan' — but no plan or instrumentation actually populates them. A search for value-proof/impact-instrumentation execution plans returns only a readiness FRAMEWORK (type: readiness-framework, not executable), a future STUB (launch-readiness-and-milestone-redefinition), and the future EEF evaluation harness — none is a live instrumentation plan, and all are MCP-app- or EEF-scoped, not ecosystem-wide. The survey's own gap-analysis and the readiness assessment §5 independently agree value-proof has no estate home. The readiness K1 even inverts 'live' to require proven impact, making the absence of instrumentation a precondition gap, not a post-launch nicety. 'Is it working?' is genuinely assumed, not evidenced, across all pillars.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/docs/foundation/VISION.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
+      "docs/foundation/VISION.md",
+      ".agent/plans/curriculum-mcp-path-to-ga/launch-readiness-framework.md",
+      ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
      ]
     },
     {
@@ -142,9 +142,9 @@
      "stance": "stands",
      "why": "Verified first-hand. Reachability: I reproduced aee/current at EXACTLY 23 linked / 31 unlinked (literal-filename presence test), matching the survey's 31/54 precisely after I caught and corrected my own initial miscount — the substring method is sound, not inflated. The 31 unlinked are dominated by session *-opener.md files and *-specialist-capability clones, directly confirming 'the drift is behavioural / hygiene, not architectural' and 'estate grew faster than curated.' Strategic indexes: the high-level-plan was refreshed to 2026-06-15 (now carries the fresh-eyes readiness pointer), so the 'indexes do not carry live intent' point was true at survey time but is being actively cured — a slight time-sensitivity, not a refutation. Planning discipline (ADR-117/PDR-018) sound while product lanes stay clean: corroborated — the unreachable residue concentrates in high-churn practice lanes, not the product collections. Claim stands.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/agentic-engineering-enhancements/current/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/high-level-plan.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/plan-estate-survey-2026-06-15/README.md"
+      ".agent/plans/agentic-engineering-enhancements/current/README.md",
+      ".agent/plans/high-level-plan.md",
+      ".agent/reports/plan-estate-survey-2026-06-15/README.md"
      ]
     },
     {
@@ -152,9 +152,9 @@
      "stance": "misframed",
      "why": "Two of three sub-claims stand: (a) the outward pillars ARE under-resourced relative to mission centrality (confirmed via C3/C4); (b) external long-poles have no owned timelines — confirmed first-hand: the Cloudflare gate is unpromoted in future/, dated 2026-04-28, explicitly 'strategic context only,' with no execution dates or owner, and production Clerk is research-only with the 'shared vs independent instance' question open. The upstream-Oak-API dependency is real (the upstream-feature-requests collection exists; 51 plan docs reference the upstream API), though '24-plan' is the survey's external-gate bucket, not independently re-counted by me. BUT the framing 'allocation happened by gravity, not a conscious owner decision' is wrong on the evidence: the owner holds an explicit, dated, recently-revised priority sequence (set 2026-06-12, superseding 2026-04-22) whose live queue is (1) comms-research follow-ons, (2) naming v3, (3-5) Sentry/PostHog observability, (6) integrate the oak-api repo — a CONSCIOUS, inward-weighted sequence. The inward tilt is therefore at least partly a deliberate owner choice, not drift-by-gravity. C6 mistakes a deliberate (if arguably mission-suboptimal) sequencing decision for an unconscious one. 'Determination is the missing verb' is rhetorically overstated where an owner sequence demonstrably exists; the sharper true claim is that the sequence prioritises inward work over the mission-closest outward pillars — a contestable priority, not an absence of decision.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
-      "/Users/jim/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/project_priority_sequence.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/upstream-feature-requests"
+      ".agent/plans/security-and-privacy/future/cloudflare-mcp-public-beta-security-gate.plan.md",
+      "~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/project_priority_sequence.md",
+      ".agent/plans/upstream-feature-requests"
      ]
     }
    ],
@@ -170,7 +170,7 @@
      "evidence_paths": [
       "docs/foundation/VISION.md",
       "docs/foundation/VISION.md#L276-L301",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
+      ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
      ]
     },
     {
@@ -178,9 +178,9 @@
      "stance": "overstated",
      "why": "The substrate genuinely exists and is built, not aspirational: packages/sdks/oak-sdk-codegen (with vocab-gen), packages/core/graph-core (with dist), apps/oak-curriculum-mcp-streamable-http, apps/oak-search-cli. ADR-160 redaction barrier and ADR-158 security architecture are real, and the 2026-06-15 assessment independently calls schema-first codegen 'the strongest part of the system.' So the core of C2 stands. But 'genuinely excellent / strongest part' is overstated as a blanket: the app's OWN README (apps/oak-curriculum-mcp-streamable-http/README.md L354-362) admits 13 of 37 tools bypass ToolExecutionResult — missing error handling, logging, and type safety — and labels it 'architectural debt'; the assessment notes this directly undercuts the five-axis observability claim (you cannot observe what does not route through the instrumented path). The substrate is strong AND carries a known third-of-surface integrity hole; 'excellent' should be qualified, not absolute.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/packages/sdks/oak-sdk-codegen",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/packages/core/graph-core",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/apps/oak-curriculum-mcp-streamable-http/README.md"
+      "packages/sdks/oak-sdk-codegen",
+      "packages/core/graph-core",
+      "apps/oak-curriculum-mcp-streamable-http/README.md"
      ]
     },
     {
@@ -188,9 +188,9 @@
      "stance": "stands",
      "why": "Verified quantitatively and qualitatively. The inward weight is if anything understated: by .plan.md files, agentic-engineering-enhancements (69) + agent-tooling (52) = 121 of 270 = 45% (survey said ~39% on a whole-file denominator of 209/539, which is the conservative read). The second-order reusable-components claim is confirmed documentation-only: .agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md is explicitly 'planning and documentation authority', its four TODOs are all doc tasks (define maturity matrix, draft playbook scaffold, name adopter profile), and it states 'Execution of implementation work remains owned by engineering collections' WITHOUT citing any such packaging/build execution plan — and none was found. Third-order thinness confirmed: M2 milestone (.agent/milestones/m2-extension-surfaces.md) progression gates are entirely engineering/infra with no teacher-facing or value gate. Only 8 of ~444 non-README plans reference VISION.md at all.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/milestones/m2-extension-surfaces.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans"
+      ".agent/plans/sector-engagement/current/sector-reusable-components-adoption.plan.md",
+      ".agent/milestones/m2-extension-surfaces.md",
+      ".agent/plans"
      ]
     },
     {
@@ -198,9 +198,9 @@
      "stance": "overstated",
      "why": "The substance stands: no current/active plan or live instrumentation measures whether any pillar creates value. M2's gates are pure engineering hygiene; the observability 'product' axis grep returned no teacher-workload/adoption/reuse-signal measurement; the only genuine value-measurement plan (sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md) sits in future/ and defers even the DECISION of whether teacher-trust/workload measurement belongs there. But 'assumed, not evidenced' overstates the unawareness: the gap is now NAMED and owner-ratified, not invisible. The 2026-06-15 assessment K1 elevates value-proof to a GA precondition ('Live = real users demonstrating positive impact'), §8.2 calls 'no value-proof gate, anywhere' the ladder's most load-bearing missing gate, and §10.3 makes 'define the Stage-3 impact bar' an explicit next step. C4 is correct that the gap is the deepest, but the claim that it is merely 'assumed' is behind the repo's own 3-day-old recognition that it is the central unbuilt gate.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/observability/future",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
+      ".agent/plans/sector-engagement/eef/future/eef-outcome-evaluation-infrastructure.plan.md",
+      ".agent/plans/observability/future",
+      ".agent/reports/mcp-app-live-product-readiness-assessment-2026-06-15.md"
      ]
     },
     {
@@ -208,9 +208,9 @@
      "stance": "stands",
      "why": "Both halves verified. Drift: ~539 non-archive plan files (1095 with archive); 181 future/ + 180 current/ + only 35 active/, i.e. the estate is overwhelmingly queued/deferred relative to in-flight work; many dated 2026-02 to 2026-04 snagging/evidence files still sit in current/ lanes (e.g. oak-preview-mcp-snagging-2026-04-23, trinity-...-2026-04-29). Strategic-intent carriage is weak: only 8 plans link VISION.md. Discipline is genuinely sound and not the cause: ADR-117 (plan-templates-and-components) and PDR-018-planning-discipline.md both exist and define the reachability invariant and lifecycle taxonomy (.agent/plans/README.md). So C5's framing — good rules, behavioural drift because the estate grew faster than curation — is accurate. The 42% precise figure I could not exactly reproduce (it depends on the survey's denominator/linker), but the directional claim of large-scale unreachability/burial is well-supported by the lifecycle skew and the vision-link sparsity.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/practice-core/decision-records/PDR-018-planning-discipline.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/docs/architecture/architectural-decisions/117-plan-templates-and-components.md"
+      ".agent/plans/README.md",
+      ".agent/practice-core/decision-records/PDR-018-planning-discipline.md",
+      "docs/architecture/architectural-decisions/117-plan-templates-and-components.md"
      ]
     },
     {
@@ -218,9 +218,9 @@
      "stance": "stands",
      "why": "The structural facts hold. The 24-plan upstream-Oak-API dependency is real and owned by another team with no owned timeline: .agent/plans/upstream-feature-requests/ is classified 'Reference + coordination' and the plans/README states requests are 'recorded here and handed over' — i.e. raised and passed to the Oak Open Curriculum API team, with no return ETA. External long-poles (elastic, cloudflare, mcp-spec-ga, ontology-repo, clerk) likewise appear as gates without owned dates. The under-resourcing of outward pillars is corroborated by C3's verified inward skew and the documentation-only second order. 'Determination is the missing verb' and 'allocation by gravity not conscious decision' are the one genuinely interpretive (rhetorical) part — they are a reasonable reading of the evidence rather than a stated fact, but the underlying allocation imbalance and the absence of owned outward timelines are factual and verified.",
      "evidence_paths": [
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/upstream-feature-requests/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/README.md",
-      "/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/plans/high-level-plan.md"
+      ".agent/plans/upstream-feature-requests/README.md",
+      ".agent/plans/README.md",
+      ".agent/plans/high-level-plan.md"
      ]
     }
    ],

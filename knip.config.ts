@@ -75,6 +75,7 @@ const config: KnipConfig = {
         'src/validators/pretooluse-guard-routing/validate-pretooluse-guard-routing.ts',
         'src/validators/policy-reappraisal/validate-policy-reappraisal.ts',
         'src/validators/reference-direction/validate-reference-direction.ts',
+        'src/validators/machine-local-paths/validate-no-machine-local-paths.ts',
         'src/validators/patterns-index/validate-patterns-index.ts',
         'src/validators/portability/validate-portability.ts',
         'src/validators/subagents/validate-subagents.ts',

@@ -136,33 +136,23 @@ variable is available.
 
 ## Detection
 
-### Local
+Mechanically enforced. The `validate-no-machine-local-paths` repo-validator
+scans every tracked file and fails the gate on any machine-local user-home or
+machine-temp absolute path (`/Users/<seg>`, `/home/<seg>`, `C:\Users\<seg>`,
+`/private/tmp`, `/var/folders`). It is wired into `repo-validators:check`, which
+runs in the pre-commit hook AND in CI via `pnpm check` — so a machine-local path
+cannot be committed or merged.
 
-Run before commit:
+The same pattern set lives in `.agent/hooks/policy.json`
+(`preToolUseContent` → `machine-local-path`), which blocks such paths at
+Edit/Write time through the PreToolUse content hook. The pattern set is the
+single source of truth; the validator loads it from the policy.
 
-```bash
-# Forbidden absolute home segments
-grep -rn -E "/Users/[a-z0-9_-]+/|/home/[a-z0-9_-]+/|C:\\\\Users\\\\" \
-  --include="*.md" --include="*.ts" --include="*.json" --include="*.yml" \
-  --include="*.toml" --include="*.cjs" --include="*.mjs" \
-  .agent/ docs/ scripts/ apps/ packages/ \
-  2>/dev/null | grep -v "/archive/"
-
-# Claude Code flattened-project-id segments
-grep -rn -E "Users-[a-z0-9_-]+-[a-z0-9_-]+|/\\.claude/projects/-[A-Za-z]" \
-  --include="*.md" --include="*.json" \
-  .agent/ docs/ scripts/ apps/ packages/ \
-  2>/dev/null | grep -v "/archive/"
-```
-
-Both must produce zero matches outside `archive/` directories.
-
-### CI
-
-A future repo-invariant validator (per the
-`scripts-validator-family-workspace-migration` plan) should encode
-these greps as a structural test in the validator workspace. Until
-then, the discipline is review-time and pre-commit-grep.
+Two exemptions, by construction, not by allowlist sprawl: **portable system
+paths** (`/usr/bin`, `/opt/homebrew/bin`, generic `/tmp`) resolve to the same
+target on every machine and are not machine-local, so they are not flagged; and
+**placeholder forms** (`/Users/<user>/`, `/Users/<name>/`) used to teach the
+pattern are not flagged because the detector requires a concrete segment.
 
 ## Forbidden
 
