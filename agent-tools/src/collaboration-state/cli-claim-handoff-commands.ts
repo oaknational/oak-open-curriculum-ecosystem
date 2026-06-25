@@ -13,7 +13,7 @@
  * without the filesystem; the CLI handlers compose them with
  * `assertClaimMatches` inside `updateActiveClaimsFile`.
  */
-import { type CollaborationClaim } from './types.js';
+import { type CollaborationAgentId, type CollaborationClaim } from './types.js';
 
 /**
  * Canonical repo-root-relative prefix for handoff records (ADR-182). The
@@ -52,5 +52,23 @@ export function setHandoffPathOnClaims(
 ): readonly CollaborationClaim[] {
   return claims.map((claim) =>
     claim.claim_id === input.claimId ? { ...claim, handoff_record_path: input.path } : claim,
+  );
+}
+
+/**
+ * Rewrite `agent_id` to `identity` on the claim(s) matching `claimId`, leaving
+ * every other field and the row count unchanged — the in-place takeover the
+ * duplicate-row workaround failed to do. `handoff_record_path` and `role` are
+ * deliberately preserved: PDR-063 pickup item 4 clears the pointer only as a
+ * separate act once the cycle resumes on a natural footing. Maps over ALL
+ * matches so a registry left with historical duplicate rows is rewritten
+ * honestly rather than partially.
+ */
+export function adoptClaims(
+  claims: readonly CollaborationClaim[],
+  input: { readonly claimId: string; readonly identity: CollaborationAgentId },
+): readonly CollaborationClaim[] {
+  return claims.map((claim) =>
+    claim.claim_id === input.claimId ? { ...claim, agent_id: input.identity } : claim,
   );
 }
