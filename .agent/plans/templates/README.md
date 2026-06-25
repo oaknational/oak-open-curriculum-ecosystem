@@ -50,6 +50,7 @@ placeholders, and begin.
 |----------|----------|
 | [`quality-fix-plan-template.md`](quality-fix-plan-template.md) | Quality improvement, refactoring, technical debt |
 | [`feature-workstream-template.md`](feature-workstream-template.md) | New feature delivery with TDD cycles (Red → Green → Refactor) |
+| [`team-session-plan-template.md`](team-session-plan-template.md) | A multi-agent (Director + implementers) team session — the strategic cohesion anchor: team-level impact/outcome goals, lanes traced to them, per-lane execution plans referenced. Pair with the team-session-opener prompt (operational). |
 | [`adoption-rollout-plan-template.md`](adoption-rollout-plan-template.md) | Policy/process/tooling adoption across existing workflows |
 | [`collection-roadmap-template.md`](collection-roadmap-template.md) | Strategic roadmap for a plan collection with phase mapping |
 | [`collection-readme-template.md`](collection-readme-template.md) | Collection navigation hub with explicit document-role boundaries |

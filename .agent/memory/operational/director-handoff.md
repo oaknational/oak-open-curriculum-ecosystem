@@ -224,19 +224,22 @@ start until they exist:
    the cohesion mechanism, and the **individual execution plans referenced** where
    appropriate (the per-lane guiding plans, e.g.
    `current/worktree-pilot-consolidation-and-model-verdict.plan.md`). **The
-   team-session-plan TEMPLATE does NOT exist yet** (verified 2026-06-25 —
-   `.agent/plans/templates/` has no team-session scaffold). What DOES exist, and is the complement to build against,
+   team-session-plan TEMPLATE now exists as a v1 scaffold**
+   (`.agent/plans/templates/team-session-plan-template.md`, created 2026-06-25; registered
+   in the templates README) — the next session REVIEWS and IMPROVES it, it does not author
+   from scratch. What DOES exist, and is the complement to build against,
    is the team-session-OPENER-PROMPT template
    (`.agent/prompts/agentic-engineering/team-session-opener.prompt.md`, owner-flagged): it
    carries the OPERATIONAL structures — entry ritual; Director + N-implementers-each-in-its-
    own-worktree shape; the single coordination-home convention; the three branch classes;
    seat briefs with explicit hard sequencing gates; coordination cadence; closeout. Its
    `Plan authority` line points AT a controlling plan the pilot never had — that absence is
-   the gap to close. So the session: (a) creates the reusable `team-session-plan` template —
-   the STRATEGIC layer the opener assumes (team-level IMPACT + OUTCOME goals, the cohesion
-   mechanism, the seats, individual execution plans referenced) — per `/oak-plan` + ADR-117
-   ("add a template when a category recurs"); (b) authors the first team session plan with
-   it; and (c) draws on the opener prompt's structures plus the others the owner notes exist
+   the gap to close. So the session: (a) **reviews and improves the v1
+   `team-session-plan` template** (created this session) — the STRATEGIC layer the opener
+   assumes (team-level IMPACT + OUTCOME goals, the cohesion mechanism, the seats, individual
+   execution plans referenced); gather the further structures the owner notes exist and
+   refine it per `/oak-plan` + ADR-117 + readiness reviewers; (b) authors the first team
+   session plan with it; and (c) draws on the opener prompt's structures plus the others the owner notes exist
    (PDR-117 Director/Implementer roles, the `agent-collaboration` coordinator doctrine, the
    `session-discipline` component, the worktree-per-agent transition plan).
 2. **A better DIRECTOR BRIEF** — take this `director-handoff.md` as input and sharpen it
