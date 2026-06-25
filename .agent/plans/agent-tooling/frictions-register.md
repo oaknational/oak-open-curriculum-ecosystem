@@ -2081,6 +2081,33 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: open — secondary to F-94/95/96; captured for the next team session.
 - **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
 
+### F-98 — No authoritative agent↔worktree↔branch↔liveness registry; the binding is split across divergent, partly-authored surfaces
+
+- **Source**: Seal hunts Offing (`8210d6`), 2026-06-25 — surfaced by an owner probe ("what worktree are you on? how did you know?") during the F-94/F-95 fix-before session, which exposed that an agent cannot determine its own work-location from recorded state, only from carried belief.
+- **Surface**: the whole agent-work-state estate — `active-claims.json` (`.agent/state/collaboration/active-claims.json`), the comms heartbeat event stream, the watcher heartbeats (`.agent/state/collaboration/comms-seen/*.heartbeat.json`), and `git worktree list`.
+- **Observed**: there is **no single authoritative surface** that binds a running agent's `(PDR-027 identity → worktree → branch → liveness)`. The four facts are scattered, each surface missing a piece, and the closest thing to a registry records the binding as **authored free-text**, not **derived ground truth**:
+
+  | Surface | identity | branch / worktree | liveness | maintenance |
+  | --- | --- | --- | --- | --- |
+  | `active-claims.json` (the de-facto "active agents" registry) | ✅ structured | ❌ only as free-text inside `intent` (by convention) | ⚠️ `freshness_status` = `claimed_at + window`, **not** true liveness | mechanical **only when** an agent calls the `claims` CLI (agent-driven, not automatic) |
+  | comms heartbeat events (`comms send --tag heartbeat --branch …`) | ✅ | ✅ `--branch` is structured | ✅ per-emit | append-only **event stream**, not a current-state table |
+  | watcher heartbeat (`comms-seen/*.heartbeat.json`) | ✅ | ❌ none | ✅ **true** liveness (mtime, 30 s cadence) | genuinely mechanical, but per-agent and branch-blind |
+  | `git worktree list` | ❌ none | ✅ branch + worktree path | n/a | git-maintained ground truth, but **no agent binding** |
+
+  Worked instances this session, all first-hand: (1) asked "which worktree am I on", I could not answer from any recorded surface — the shell `cwd` resets to the primary checkout after every command, and nothing records the agent→worktree binding, so I re-derived it from `git worktree list` + a branch name I was carrying in context (not grounded). (2) The dead `agent-tooling-pr-watch` claim read `freshness_status: fresh` while its watcher heartbeat had been stale ~3.35 h — claim freshness is not liveness. (3) `grep` confirmed `branch` is absent from `active-claims.schema.json` and `types.ts`; the only structured `branch` lives on heartbeat **events**, and the watcher heartbeat carries no branch.
+- **Expected**: an agent (and its peers, and the owner) can read a **single authoritative, mechanically-maintained surface** that answers, for every live agent, "who, on which worktree, on which branch, last alive when" — and an agent can deterministically assert its own binding rather than carry it as unverified belief.
+- **Impact**: this is the substrate of the worktree-per-agent transition (the strategic root of the pilot: many checkouts, variable agent density, author-agnostic substrate — `[[project_multi_developer_transition]]`). Without the binding being observable: collision-avoidance degrades (two agents can take the same branch — the F-95 founding failure's cousin); `freshness`-based liveness misleads (stale "fresh" claims); handoff/adoption (F-94) and the watcher gate (F-95) all resolve work-location from convention, not from a queried fact; and the owner cannot glance at who-is-where.
+- **Candidate cure** (the owner's explicit framing 2026-06-25: *we can change what we record, how, and when we update it; divergent/redundant surfaces are licence to build a better system* — so this is NOT "add a `branch` field to the claim schema", which would deepen the divergence):
+  - **Derive, do not author** (`principles.md` §Context Specificity Gradient — *generated state beats authored state; authored state is a pressure signal*). Branch/worktree are git ground truth (`git worktree list`); liveness is the watcher heartbeat mtime. The registry should **project** these, not ask agents to retype them into `intent`.
+  - **Decompose at the tension, do not collapse** (`principles.md` §Decompose at the Tension). Three genuinely distinct signals must be preserved: *claimed intent* (mutable, agent-asserted — "I intend to work here"), *observed liveness* (mechanical — "a process is alive"), and *git ground truth* (worktree/branch). A naive unification that flattens them loses signal; the cure unifies the **read surface** while keeping the three sources distinct.
+  - **Replace, do not bridge** (`principles.md` §No escape hatches / §No legacy surfaces). Do not add a fifth surface or a free-text convention on top; make **one** surface authoritative and reconcile or retire the others (the heartbeat event stream, the free-text `intent` branch, the freshness-as-liveness conflation).
+  - **Strict and complete** (`principles.md` §Strict and Complete): close the `freshness ≠ liveness` gap — a registry of live agents must reflect *actual* liveness (heartbeat mtime), not a time-window that outlives a dead process by hours.
+  - **Practice-owned, host-implemented** (`principles.md` §Context Specificity Gradient): agent identity / coordination / liveness are Practice-owned capabilities; the doctrine belongs in practice-core, the implementation in `agent-tools`. Relates to the F-10 "identity as a first-class concept" theme and the `agent-state-observable` rule.
+  - This cure is **larger than a CLI tweak** and should graduate to a plan (and likely an ADR/PDR for the agent-work-state model) rather than be patched in the register; the register entry **names** the decision, it does not make it.
+- **Target surface**: a redesigned agent-work-state model — candidate home `agent-tools/src/collaboration-state/` for the projection/reconcile logic + a practice-core doctrine record; `active-claims.json` and the heartbeat/watcher surfaces are the inputs to reconcile or subsume. Decision-gated, not yet built.
+- **Status**: open — decision-class (whether/how to build the unified registry). Strongly related to F-10 (identity model), F-69 (stale-state sweep — liveness reconciliation), F-95 (watcher-presence gate — same liveness signal), and the `worktree-per-agent-transition` plan. Resolves Decision Lens #4 ("would it be simpler if the system changed?") with **yes**.
+- **Owner direction status**: owner-directed capture 2026-06-25 ("capture it as a friction, in great detail; we can change what/how/when we record, and build a better system from divergent surfaces").
+
 ---
 
 ## Mitigated / Addressed Frictions
@@ -2122,6 +2149,16 @@ plan if the pattern continues:
    watch invocation (and/or a one-line-per-event default emit), so the config
    is generated, deterministic, and DRY, and cannot drift from the format it
    selects. Owner-proposed 2026-06-21.
+7. **Divergent agent-work-state surfaces — authored where they should be derived**
+   (F-98, relates F-10, F-69, F-95): the `(identity → worktree → branch → liveness)`
+   binding is split across `active-claims.json`, the heartbeat event stream, the
+   watcher heartbeats, and `git worktree list` — each holding a fragment, none
+   authoritative, with branch held as free-text `intent` and "liveness" conflated
+   with a claim's freshness window. Structural cure: one mechanically-maintained
+   surface that **projects** git ground truth (worktree/branch) and watcher-mtime
+   liveness rather than asking agents to author them, preserving the distinct
+   claimed/observed/ground-truth signals. Owner-directed 2026-06-25; rises to a
+   plan + likely an agent-work-state ADR/PDR.
 
 ---
 
