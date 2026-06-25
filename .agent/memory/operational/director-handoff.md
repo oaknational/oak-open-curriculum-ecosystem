@@ -179,15 +179,16 @@ first-hand as of 2026-06-25.
   `claims set-handoff --claim-id <id> --path <path>`. Hand-editing the registry is
   unsafe in a busy window, and reusing `--claim-id` created a duplicate row. Work
   around it out-of-band; do not treat the friction as a brief or plan defect.
-  **Not yet in the register** — needs an F-entry.
+  **F-94 in the register; FIXED in PR #225 (`e95fb9594`)** — `claims adopt` +
+  `claims set-handoff` now exist.
 - **No start-right watcher-presence fail-fast gate** — the "arm the watcher as
   move 1" rule is prose; it was skipped once under ceremony-aversion, going blind
   to a simultaneous identical-branch claim. The structural cure is a
   session-open / `start-right-team` check that fails fast when invoked without a
   live comms watcher, so the prose rule is backed by a mechanical gate rather than
-  agent diligence. **Not yet in the register** as its own entry — F-69 (stale
-  collaboration-state sweep) names an adjacent session-open hook but not the
-  watcher-presence gate; needs an F-entry.
+  agent diligence. **F-95 in the register; FIXED in PR #225 (`e95fb9594`)** — the
+  gate now exists (move-1 `comms assert-watcher-live` check + `claims open`
+  blind-write backstop, solo-exempt), backing the prose rule mechanically.
 - **Continuity-buffer handoff commit blocked by markdownlint** — a mid-arc handoff
   commit can hit a markdownlint wall on shared multi-agent buffers; the interim
   cure is the dedicated consolidation pass (rotate + lint, then commit), but a
@@ -253,13 +254,15 @@ for the F-94..F-97 backlog and any new friction.
 owner request — none HARD-blocks, since the dedicated seat fixes during and the pilot ran
 with workarounds, but these touch bootstrap / handoff integrity from the start):
 
-- **F-95 (watcher-presence fail-fast gate) — strongest fix-before.** It guards the exact
-  founding failure of this pilot (an implementer skipped the move-1 comms watcher and went
-  blind to a simultaneous identical-branch claim). A gate in place before bootstrap stops
-  the next session repeating it.
-- **F-94 (`claims` adopt/set-handoff) — strong fix-before.** Rotating-seat PDR-063 handoffs
-  happen from early in a team session; without the primitive every handoff hits the
-  duplicate-row workaround in a busy multi-writer window.
+- **F-95 (watcher-presence fail-fast gate) — DONE before the team session (PR #225,
+  `e95fb9594`).** It guarded the exact founding failure of this pilot (an implementer
+  skipped the move-1 comms watcher and went blind to a simultaneous identical-branch claim).
+  The gate now stops the next session repeating it: a move-1 `comms assert-watcher-live`
+  check plus a `claims open` blind-write backstop, solo-exempt.
+- **F-94 (`claims` adopt/set-handoff) — DONE before the team session (PR #225,
+  `e95fb9594`).** Rotating-seat PDR-063 handoffs happen from early in a team session;
+  the `claims adopt` + `claims set-handoff` primitives now replace the duplicate-row
+  workaround in a busy multi-writer window.
 - F-96 (continuity-buffer lint hostage) and F-97 (PR inline-comment monitor) — fix-during
   by the dedicated seat is fine.
 

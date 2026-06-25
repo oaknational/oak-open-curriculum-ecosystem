@@ -2045,7 +2045,7 @@ below is a cross-reference index, not a second source of truth.
 - **Expected**: an outgoing role-holder can hand a claim to a successor and set its handoff-record path through the CLI, without duplicate rows or hand-edits.
 - **Candidate cure**: add `claims adopt --claim-id <id>` (rewrites the holding agent identity on an existing row, no new row) and `claims set-handoff --claim-id <id> --path <path>` subcommands; the PDR-063 substrate is the sibling design (ADR-182).
 - **Target surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts`, `cli-specs.ts`; PDR-063 / ADR-182.
-- **Status**: open — captured for the next team session ("fix the tooling once and for all"); worked around out-of-band this session (close-all + open-fresh).
+- **Status**: fixed-2026-06-25-commit-e95fb9594 — `claims adopt` + `claims set-handoff` landed (PR #225); no duplicate-row workaround.
 - **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
 
 ### F-95 — No start-right watcher-presence fail-fast gate
@@ -2056,7 +2056,7 @@ below is a cross-reference index, not a second source of truth.
 - **Expected**: starting team work without a live comms watcher fails fast at session-open, so the constitutive team-visibility rule is enforced mechanically rather than relied on as diligence.
 - **Candidate cure**: a session-open / `start-right-team` check that detects no live comms watcher (no fresh `*.heartbeat.json` for this session's watcher under `.agent/state/collaboration/comms-seen/`) and fails fast / refuses to proceed until one is armed. Distinct from F-69's session-open stale-state *sweep* — this is a watcher-presence *gate*.
 - **Target surface**: `oak-start-right-team` skill / a session-open check; `.agent/rules/comms-all-channels-watcher.md` (prose → backed by a gate). Relates to F-69 (adjacent session-open hook).
-- **Status**: open — captured for the next team session.
+- **Status**: fixed-2026-06-25-commit-e95fb9594 — watcher-presence gate landed (PR #225): `comms assert-watcher-live` move-1 check (A) + `claims open` blind-write backstop (B), solo-exempt. Broader than the original candidate cure (move-1 check only).
 - **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
 
 ### F-96 — Continuity-buffer handoff commit blocked by markdownlint
