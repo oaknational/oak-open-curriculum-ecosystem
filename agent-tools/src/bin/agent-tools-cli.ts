@@ -142,12 +142,18 @@ async function dispatchTopic(input: {
     });
   }
 
-  const handler = UNIFORM_TOPIC_HANDLERS[topic ?? ''];
+  // Look up by OWN key only: a plain-object map resolves prototype keys
+  // (`constructor`, `toString`, …) to inherited functions, which would be
+  // mis-dispatched as handlers instead of reaching the unknown-topic path.
+  const topicKey = topic ?? '';
+  const handler = Object.hasOwn(UNIFORM_TOPIC_HANDLERS, topicKey)
+    ? UNIFORM_TOPIC_HANDLERS[topicKey]
+    : undefined;
   if (handler !== undefined) {
     return handler(input.input, input.parsed.topicArgs);
   }
 
-  throw new Error(`unknown topic: ${topic ?? ''}`);
+  throw new Error(`unknown topic: ${topicKey}`);
 }
 
 function completeWithLog(input: {
