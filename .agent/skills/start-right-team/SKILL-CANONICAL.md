@@ -118,7 +118,13 @@ the special case. Run both unless that exemption applies.
    tailing only ArcAngel is blind to the coordination that matters. The
    two watchers are paired, always (see
    [`.agent/reference/arc-rapid-communication.md`](../../reference/arc-rapid-communication.md)
-   §Protocol).
+   §Protocol). After arming the watcher, confirm it mechanically:
+   `pnpm agent-tools:collaboration-state -- comms assert-watcher-live
+   --platform <p> --model <m>` exits non-zero with a fix instruction if no
+   live heartbeat is found (F-95). This is a check, not just a pause — and
+   `claims open` (move 7) independently refuses to stake a claim into a
+   populated registry while blind to comms, so the visibility guarantee holds
+   even if this check is skipped.
 2. **Start the liveness heartbeat cron** (see
    [`.agent/rules/liveness-heartbeat-cron.md`](../../rules/liveness-heartbeat-cron.md)
    — required precondition for outgoing visibility; the team sees every
