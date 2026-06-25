@@ -11,6 +11,14 @@ import { collaborationAgentIdSchema } from './types.js';
  */
 const WATCHER_HEARTBEAT_SCHEMA_VERSION = '0.1.0';
 
+/**
+ * Suffix appended to a watcher's seen-file to derive its heartbeat path
+ * (`<seen-file>.heartbeat.json`). The single home for this convention so the
+ * watcher writer (`cli-comms-watch.ts`) and the liveness/presence consumers
+ * agree on where a watcher's heartbeat lives.
+ */
+export const HEARTBEAT_FILE_SUFFIX = '.heartbeat.json';
+
 const watcherHeartbeatSchema = z
   .object({
     schema_version: z.literal(WATCHER_HEARTBEAT_SCHEMA_VERSION),

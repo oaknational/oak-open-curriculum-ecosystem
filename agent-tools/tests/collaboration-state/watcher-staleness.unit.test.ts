@@ -118,6 +118,10 @@ describe('detectStaleWatcher — discriminated-union liveness result', () => {
     if (result.kind === 'stale-no-emit') {
       expect(result.identity).toStrictEqual(identity);
       expect(result.emittedCount).toBe(0);
+      // The variant carries mtime aging so a presence consumer can tell a
+      // just-armed watcher (fresh) from a started-then-frozen one (aged).
+      expect(result.agedMs).toBe(100);
+      expect(result.thresholdMs).toBeGreaterThan(0);
     }
   });
 

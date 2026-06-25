@@ -62,6 +62,8 @@ export type WatcherStalenessResult =
       readonly kind: 'stale-no-emit';
       readonly identity: CollaborationAgentId;
       readonly emittedCount: number;
+      readonly agedMs: number;
+      readonly thresholdMs: number;
     }
   | {
       readonly kind: 'absent';
@@ -110,16 +112,19 @@ function classifyLiveness(
   mtimeMs: number,
   nowMs: number,
 ): WatcherStalenessResult {
+  const thresholdMs = heartbeat.heartbeat_interval_ms * STALENESS_THRESHOLD_INTERVAL_MULTIPLIER;
+  const agedMs = nowMs - mtimeMs;
+
   if (heartbeat.last_emit_at === null) {
     return {
       kind: 'stale-no-emit',
       identity: heartbeat.watcher_identity,
       emittedCount: heartbeat.emitted_count,
+      agedMs,
+      thresholdMs,
     };
   }
 
-  const thresholdMs = heartbeat.heartbeat_interval_ms * STALENESS_THRESHOLD_INTERVAL_MULTIPLIER;
-  const agedMs = nowMs - mtimeMs;
   const lastEmitAt = heartbeat.last_emit_at;
 
   if (agedMs > thresholdMs) {
