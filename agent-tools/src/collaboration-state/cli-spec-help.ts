@@ -92,6 +92,14 @@ export const commsWatchHelp =
   'pass --no-auto-seed to replay the full event history on an empty seen-file; ' +
   'pass --seed-from-now to force a seed regardless of existing seen-file content)';
 
+export const commsAssertWatcherLiveHelp =
+  'comms assert-watcher-live --platform <platform> --model <model> ' +
+  '[--comms-seen-dir <dir>] [--heartbeat-file <path>] ' +
+  '[--agent-name <name>] [--session-prefix <prefix>] [--now <iso>] ' +
+  "(F-95 move-1 check: exits non-zero with a fix instruction unless this session's " +
+  'comms watcher heartbeat is live; resolves the heartbeat from the session codename ' +
+  'unless --heartbeat-file overrides it)';
+
 export const commsDirectHelp =
   'comms direct --comms-dir <dir> --to-agent-name <name> --to-id <uuid-v5> ' +
   '--to-platform <platform> --to-model <model> --to-session-prefix <prefix> --kind <kind> ' +

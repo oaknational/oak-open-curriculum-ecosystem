@@ -1,5 +1,6 @@
 import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-claim-commands.js';
 import { adoptClaim, setHandoffClaim } from './cli-claim-handoff-commands.js';
+import { assertWatcherLive } from './cli-comms-assert-watcher-live.js';
 import {
   activeAgents,
   listClaims,
@@ -26,6 +27,7 @@ import {
   claimsOpenOptions,
   claimsSetHandoffOptions,
   commsAppendOptions,
+  commsAssertWatcherLiveOptions,
   commsDirectOptions,
   commsInboxOptions,
   commsReplyOptions,
@@ -46,6 +48,7 @@ import {
   claimsShowHelp,
   claimsStatusHelp,
   commsAppendHelp,
+  commsAssertWatcherLiveHelp,
   commsDirectHelp,
   commsInboxHelp,
   commsListHelp,
@@ -132,6 +135,11 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help: commsWatchHelp,
     options: commsWatchOptions,
     handler: watchComms,
+  }),
+  'comms:assert-watcher-live': commandSpec({
+    help: commsAssertWatcherLiveHelp,
+    options: commsAssertWatcherLiveOptions,
+    handler: assertWatcherLive,
   }),
   'comms:direct': commandSpec({
     help: commsDirectHelp,

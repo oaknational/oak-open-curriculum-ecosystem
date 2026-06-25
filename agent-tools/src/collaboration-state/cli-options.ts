@@ -34,6 +34,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'claim-id',
   'closed',
   'comms-dir',
+  'comms-seen-dir',
   'created-at',
   'closure-summary',
   'current-cycle-label',
