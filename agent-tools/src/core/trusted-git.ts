@@ -6,32 +6,36 @@
  * ("OS commands should not rely on PATH resolution"): a user-writable `PATH`
  * entry can shadow `git` with a malicious binary. The rule's documented
  * compliant fix is to execute git by its ABSOLUTE path. {@link resolveTrustedGit}
- * returns that absolute path from a fixed allowlist of non-user-writable system
+ * returns that absolute path from a fixed allowlist of well-known system
  * directories — this is the FIX in code, not a Sonar disposition, and the only
- * pattern agent tooling uses to locate `git`. (Pinning `PATH` to a trusted
- * directory does NOT clear S4036: the analyser flags the by-name call regardless
- * of any `env.PATH` override, so that approach was replaced outright.)
+ * pattern agent tooling uses to locate `git`. The security property is the
+ * *fixed absolute path* (resolution never consults `PATH`), not any guarantee
+ * that the listed directories are non-writable — some (e.g. Homebrew's
+ * `/opt/homebrew/bin` or `/usr/local/bin`) are commonly user-owned. (Pinning
+ * `PATH` to a trusted directory does NOT clear S4036: the analyser flags the
+ * by-name call regardless of any `env.PATH` override, so that approach was
+ * replaced outright.)
  *
- * A user-writable / non-standard git location (asdf/mise shims, the Nix store, a
- * custom prefix) is deliberately NOT searched — doing so would re-open the
- * S4036 hijack surface this fix closes. When git lives only in such a location,
- * {@link resolveTrustedGit} fails loud with the remedy rather than silently
- * returning an unverified path.
+ * Only this fixed allowlist is searched; an arbitrary or non-standard git
+ * location (asdf/mise shims, the Nix store, a custom prefix) is not — accepting
+ * a caller-influenced path is the S4036 hole itself. When git lives only in such
+ * a location, {@link resolveTrustedGit} fails loud with the remedy rather than
+ * silently returning an unverified path.
  *
  * @packageDocumentation
  */
 
 import { existsSync } from 'node:fs';
 
-/** Fixed, non-user-writable directories that may hold the system `git`. */
+/** Fixed, well-known directories that may hold the `git` binary (searched by absolute path, never via `PATH`). */
 const TRUSTED_GIT_DIRS = ['/usr/bin', '/bin', '/opt/homebrew/bin', '/usr/local/bin'] as const;
 
 /** Existence-probe seam — injectable so {@link resolveTrustedGit} is testable without a real filesystem. */
 export type PathExists = (candidate: string) => boolean;
 
 /**
- * Resolve the absolute path to `git` from a fixed allowlist of non-user-writable
- * system directories ({@link TRUSTED_GIT_DIRS}).
+ * Resolve the absolute path to `git` from a fixed allowlist of well-known system
+ * directories ({@link TRUSTED_GIT_DIRS}).
  *
  * @remarks
  * Executing git by absolute path — not by name via `PATH` — defeats
@@ -56,8 +60,8 @@ export function resolveTrustedGit(exists: PathExists = existsSync): string {
   }
   throw new Error(
     `No trusted git binary found. Searched: ${TRUSTED_GIT_DIRS.join(', ')}. ` +
-      `git is executed by absolute path from these non-user-writable directories to defeat ` +
-      `PATH hijacking (SonarCloud S4036); user-writable locations are deliberately not searched. ` +
+      `git is resolved by a fixed absolute path from these well-known directories (never via PATH) ` +
+      `to defeat PATH-search hijacking (SonarCloud S4036). ` +
       `If git is installed elsewhere (asdf/mise, Nix, a custom prefix), symlink it into one of ` +
       `those directories.`,
   );

@@ -283,18 +283,15 @@ with workarounds, but these touch bootstrap / handoff integrity from the start):
   `agent-tooling-pr-watch` likewise remain in `active-claims.json` from the
   dissolved team and are not live. (Clearing these is a curator pass — owner-gated
   alongside the orphan-prevention actions below.)
-- **Sonar S8707 sites 2-3 — PAUSED.** On branch
-  `fix/sonar-s8707-cli-path-injection` (off `main`), **site-1 committed**
-  (`1329d787a` — canonical-path validator `safe-path.ts` + turbo-report
-  containment) and **site-2 committed** (`4c9cfbfc9` — commit-msg path contained
-  within the git dir). **Neither is pushed or merged.** Remaining: **site-3**
-  (`apps/oak-search-cli` analyze-elser-failures local safe-path helper, TDD,
-  `__dirname`-relative `diagnostics` containment — own local helper, do not
-  cross-import agent-tools), an **integrated security-expert re-review** over all
-  three sites, then **one PR direct to `main`** via `@jimCresswell` code-owner
-  review. Warm worktree `oak-sonar-p1`. The Sonar gate is ERROR with
-  `tssecurity:S8707 ×3` OPEN; clearing all three clears
-  `new_vulnerabilities_severity`.
+- **Sonar S8707 site-3 — PAUSED.** Sites 1-2 **MERGED to `main`** via PR #223
+  (squash `9d2e33bb1`) — `safe-path.ts` canonical-path validator + turbo-report
+  containment (`1329d787a`), commit-msg path containment (`4c9cfbfc9`), plus the
+  S4036 absolute-git fix (`resolveTrustedGit`, fail-loud) and the S4782 union.
+  Remaining: **site-3** (`apps/oak-search-cli` analyze-elser-failures local
+  safe-path helper, TDD, `__dirname`-relative `diagnostics` containment — own
+  local helper, do not cross-import agent-tools), an **integrated
+  security-expert re-review**, then **one PR direct to `main`** via
+  `@jimCresswell` code-owner review. Warm worktree `oak-sonar-p1`.
 - **DATA-SOURCES.md — UNSTARTED.** The file does not exist in the doc tree. ADR-157
   deliberately lacks review/removal criteria; a governance home was owner-floated
   but not decided. Authoring it means surfacing

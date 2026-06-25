@@ -78,7 +78,7 @@ the governance gap the register fills — ADR-157/ADR-152 lack review+removal). 
 
 ## Next Safe Step
 
-A WARM worktree already exists: `/Users/jim/code/oak/oak-data-sources` (branch
+A WARM sibling worktree already exists — `oak-data-sources` (branch
 `docs/data-sources-governance` off `main`, deps installed — no file authored
 yet). The next seat reuses it (or creates fresh), authors
 `docs/governance/DATA-SOURCES.md` from the grounding above, dispatches

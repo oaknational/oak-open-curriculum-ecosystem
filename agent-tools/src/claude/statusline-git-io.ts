@@ -20,6 +20,8 @@
 import { spawnSync } from 'node:child_process';
 import { basename } from 'node:path';
 
+import { resolveTrustedGit } from '../core/trusted-git.js';
+
 import {
   classifyGitOutcome,
   coordinationToParts,
@@ -184,6 +186,20 @@ function runGit(cwd: string, args: readonly string[]): string | undefined {
  * stream was not captured, so both are coerced to a string for the classifier.
  */
 function spawnGit(cwd: string, args: readonly string[]): GitExit {
-  const result = spawnSync('git', ['-C', cwd, ...args], { encoding: 'utf8' });
+  // Execute git by its absolute path (resolveTrustedGit) so a writable PATH entry
+  // cannot shadow it (SonarCloud S4036). resolveTrustedGit throws when no trusted
+  // git exists; the statusline is a best-effort cosmetic read, so a missing git is
+  // a non-value outcome (status null, like a spawn failure), never a render crash.
+  let gitBinary: string;
+  try {
+    gitBinary = resolveTrustedGit();
+  } catch (error) {
+    return {
+      status: null,
+      stdout: '',
+      stderr: error instanceof Error ? error.message : String(error),
+    };
+  }
+  const result = spawnSync(gitBinary, ['-C', cwd, ...args], { encoding: 'utf8' });
   return { status: result.status, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
 }

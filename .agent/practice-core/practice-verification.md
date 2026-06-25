@@ -25,8 +25,8 @@ evolved to reach its current state.
 After creating all files, validate:
 
 1. `.agent/practice-core/` contains the full Practice Core package:
-   the eight files (trinity + verification + entry points + changelog
-   - provenance), plus the two required directories —
+   the eight files (trinity, verification, entry points, changelog, and
+   provenance), plus the two required directories —
    `decision-records/` (with its README and any PDRs) and
    `incoming/.gitkeep`. The contract is the **set of surfaces
    and their roles**, not a file count; growth by explicit decision
