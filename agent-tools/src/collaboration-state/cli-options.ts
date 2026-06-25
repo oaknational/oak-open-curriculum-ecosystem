@@ -128,21 +128,6 @@ export function optionalPositiveInteger(options: Options, key: string): number |
   return value;
 }
 
-/**
- * Parse an ISO-8601 timestamp string to epoch milliseconds, failing loud on a
- * malformed value. A silent `NaN` here would weaken time-based gates — e.g.
- * `NaN > thresholdMs` is `false`, so an aged watcher heartbeat would
- * misclassify as live and the F-95 gate would pass when it must refuse.
- */
-export function parseIsoTimestampMs(value: string, key: string): number {
-  const ms = Date.parse(value);
-  if (Number.isNaN(ms)) {
-    throw new TypeError(`--${key} must be a valid ISO-8601 timestamp: ${value}`);
-  }
-
-  return ms;
-}
-
 function requireFlagValue(flag: string, value: string | undefined): string {
   if (value === undefined || value.startsWith('--')) {
     throw new Error(`flag '${flag}' requires a value`);

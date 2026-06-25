@@ -5,7 +5,7 @@
  * with a move-1 fix instruction); a `--now` far in the future makes a present
  * heartbeat read as stale (exit 2); and `--heartbeat-file` relocates the check.
  */
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, utimes, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -105,8 +105,13 @@ describe('comms assert-watcher-live', () => {
     expect(result.stderr).toContain('start-right-team move 1');
   });
 
-  it('exits non-zero when the heartbeat has aged out (a future --now)', async () => {
+  it('exits non-zero when the heartbeat file mtime has aged out (real wall clock)', async () => {
     await writeHeartbeat('2026-06-25T08:00:00.000Z');
+    // Age the file far past 3x the interval against the real clock — no --now to
+    // fake: freshness is judged on the wall clock, so a genuinely old mtime is
+    // the only way to be stale.
+    const longAgo = new Date('2020-01-01T00:00:00.000Z');
+    await utimes(join(dir, `${codename}.json.heartbeat.json`), longAgo, longAgo);
 
     const result = await runCollaborationStateCli({
       argv: [
@@ -119,8 +124,6 @@ describe('comms assert-watcher-live', () => {
         sessionPrefix,
         '--comms-seen-dir',
         dir,
-        '--now',
-        '2099-01-01T00:00:00.000Z',
       ],
       env: {},
     });
@@ -149,29 +152,5 @@ describe('comms assert-watcher-live', () => {
     });
 
     expect(result.exitCode).toBe(0);
-  });
-
-  it('fails loud on a malformed --now rather than silently weakening the check', async () => {
-    await writeHeartbeat('2026-06-25T08:00:00.000Z');
-
-    const result = await runCollaborationStateCli({
-      argv: [
-        '--',
-        'comms',
-        'assert-watcher-live',
-        '--agent-name',
-        codename,
-        '--session-prefix',
-        sessionPrefix,
-        '--comms-seen-dir',
-        dir,
-        '--now',
-        'not-a-date',
-      ],
-      env: {},
-    });
-
-    expect(result.exitCode).not.toBe(0);
-    expect(result.stderr).toContain('valid ISO-8601');
   });
 });

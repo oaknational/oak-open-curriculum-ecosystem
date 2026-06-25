@@ -11,7 +11,7 @@
  * and the unskippable backstop is the `claims open` precondition (Option B),
  * which exempts the bootstrap fast-path.
  */
-import { optional, parseIsoTimestampMs, type Options } from './cli-options.js';
+import { optional, type Options } from './cli-options.js';
 import { resolveSelfIdentity } from './cli-self-identity.js';
 import { type CollaborationStateEnvironment } from './types.js';
 import {
@@ -34,12 +34,11 @@ export async function assertWatcherLive(
   const heartbeatFile =
     explicitHeartbeat ?? heartbeatFileForSeen(commsSeenFileForCodename(codename, commsSeenDir));
 
-  const nowOpt = optional(options, 'now');
-  const nowMs = nowOpt === undefined ? Date.now() : parseIsoTimestampMs(nowOpt, 'now');
-
+  // Liveness freshness uses the REAL wall clock only — never a caller-supplied
+  // `--now`, which could lag real time and let a dead watcher read as live.
   const result = await detectStaleWatcher({
     heartbeatFile,
-    nowMs,
+    nowMs: Date.now(),
     io: productionWatcherStalenessIo,
   });
   const verdict = classifyWatcherPresence(result, self);

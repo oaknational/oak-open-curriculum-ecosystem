@@ -128,7 +128,6 @@ export const commsAssertWatcherLiveOptions = [
   'session-prefix',
   'platform',
   'model',
-  'now',
 ] as const;
 
 export const claimsAdoptOptions = ['active', 'claim-id', 'platform', 'model'] as const;

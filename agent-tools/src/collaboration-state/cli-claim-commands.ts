@@ -8,13 +8,7 @@ import {
 } from './claims-open-watcher-gate.js';
 import { areaFromOptions } from './cli-claim-areas.js';
 import { resolveIdentity } from './cli-identity.js';
-import {
-  optional,
-  parseIsoTimestampMs,
-  required,
-  valueOrDefault,
-  type Options,
-} from './cli-options.js';
+import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { updateActiveClaimsFile, updateClaimStateFiles } from './state-io.js';
 import {
   type CollaborationAgentId,
@@ -36,10 +30,15 @@ export async function openClaim(
   // F-95: classify the watcher OUTSIDE the lock (one IO), then decide
   // populated-vs-solo INSIDE the locked transform so the solo-then-peer race
   // cannot slip a blind claim into a registry that became populated mid-open.
+  // The freshness comparison uses the REAL wall clock (Date.now()), never the
+  // claim's `--now`: a caller-supplied `--now` can lag real time (captured once,
+  // replayed, or clock-skewed), which would understate the heartbeat's age and
+  // let a dead watcher read as live. `--now` remains the claim's logical time
+  // (claimed_at + collision freshness) only.
   const watcherVerdict = await resolveWatcherVerdict({
     selfIdentity: identity,
     commsSeenDir: optional(options, 'comms-seen-dir') ?? DEFAULT_COMMS_SEEN_DIR,
-    nowMs: parseIsoTimestampMs(nowIso, 'now'),
+    nowMs: Date.now(),
     io: productionWatcherStalenessIo,
   });
 
