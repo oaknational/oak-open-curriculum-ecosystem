@@ -248,7 +248,8 @@ start until they exist:
 
 **The team session itself** (after the consolidation session) will run **one implementer
 seat dedicated to fixing agent-tooling issues AS THE SESSION RUNS** — the default home
-for the F-94..F-97 backlog and any new friction.
+for the remaining F-96/F-97 backlog (F-94 and F-95 were fixed before the team session,
+PR #225 `e95fb9594`) and any new friction.
 
 **Agent-tooling to consider fixing BEFORE the team session** (owner-decision; flagged per
 owner request — none HARD-blocks, since the dedicated seat fixes during and the pilot ran

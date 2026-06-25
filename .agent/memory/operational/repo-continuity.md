@@ -38,7 +38,8 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   three never-pushed branches (`pilot/ws-b-explain-resource`,
   `fix/sonar-s8707-cli-path-injection`, `pilot/ws-d-roles-doctrine`) **pushed to origin**.
   Tooling backlog **F-94–97** captured (claims adopt/set-handoff; watcher-presence
-  fail-fast gate; continuity-buffer lint hostage; PR inline-comment monitor). **Sonar
+  fail-fast gate; continuity-buffer lint hostage; PR inline-comment monitor); **F-94
+  and F-95 since FIXED** (PR #225, `e95fb9594`), F-96/F-97 remain. **Sonar
   S8707 sites 2-3 PAUSED** (site-1+2 committed + pushed; site-3 → next team session).
   **One owner-gated action remaining: the consolidation commit of the lint-blocked
   continuity buffers** (the orphan-prevention close-out). Also open: whether to

@@ -32,8 +32,9 @@ direction). Landed, with evidence:
 - **Orphan mitigation DONE**: the three never-pushed at-risk branches
   (`pilot/ws-b-explain-resource`, `fix/sonar-s8707-cli-path-injection`, `pilot/ws-d-roles-doctrine`)
   pushed to origin — all at-risk work preserved.
-- **Friction backlog captured**: F-94 (claims adopt/set-handoff), F-95 (watcher-presence gate),
-  F-96 (continuity-buffer lint hostage), F-97 (PR inline-comment monitor).
+- **Friction backlog**: F-94 (claims adopt/set-handoff) and F-95 (watcher-presence gate)
+  **FIXED before the team session** (PR #225, `e95fb9594`); F-96 (continuity-buffer lint
+  hostage) and F-97 (PR inline-comment monitor) remain.
 - **Sonar S8707 sites 2-3 PAUSED** (site-1 + site-2 committed + pushed; site-3 → next team session).
 
 **Push-vs-merge orphan rationale** (the WHY behind pushed-not-merged): the three at-risk branches
