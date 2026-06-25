@@ -14,12 +14,13 @@
  * @packageDocumentation
  */
 
-import fsPromises from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { resolveRepoRoot } from '../core/repo-root.js';
+import { assertPathWithinBase } from '../core/safe-path.js';
 
+import { nodeCiFileSystem } from './ci-turbo-report-fs.js';
 import type {
   CiFileSystem,
   RunCiTurboReportOptions,
@@ -55,27 +56,6 @@ export { formatSummaryTable, formatAnnotations } from './ci-turbo-report-formatt
  * is stable regardless of the working directory from which the CLI is invoked.
  */
 const DEFAULT_RUNS_DIR = path.resolve(resolveRepoRoot(import.meta.url), '.turbo/runs');
-
-// ---------------------------------------------------------------------------
-// Production filesystem implementation
-// ---------------------------------------------------------------------------
-
-/**
- * The default {@link CiFileSystem} backed by the real Node.js `fs/promises`
- * module.
- *
- * @remarks
- * `readdir` filters to plain files only so that subdirectories are never
- * mistaken for JSON summary candidates.
- */
-const nodeCiFileSystem: CiFileSystem = {
-  readdir: (dir) =>
-    fsPromises
-      .readdir(dir, { withFileTypes: true })
-      .then((entries) => entries.filter((e) => e.isFile()).map((e) => e.name)),
-  stat: (filePath) => fsPromises.stat(filePath),
-  readFile: (filePath, encoding) => fsPromises.readFile(filePath, encoding),
-};
 
 // ---------------------------------------------------------------------------
 // File discovery
@@ -148,7 +128,11 @@ async function resolveSummaryPath(
   fileSystem: CiFileSystem,
 ): Promise<string> {
   if (typeof filePath === 'string' && filePath.length > 0) {
-    return filePath;
+    // The explicit path is caller-influenced (e.g. `process.argv[2]`). Contain
+    // it within the runs directory before it is read, defeating path-injection
+    // (`../` traversal or a symlink escape). The discovery branch below is not
+    // tainted — it only reads names enumerated from `runsDir` itself.
+    return assertPathWithinBase(filePath, runsDir, { realpath: fileSystem.realpath });
   }
   return findLatestSummaryFile(runsDir, fileSystem);
 }

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatAnnotations, formatSummaryTable, parseTurboSummary } from './ci-turbo-report.js';
+import {
+  formatAnnotations,
+  formatSummaryTable,
+  parseTurboSummary,
+  runCiTurboReport,
+} from './ci-turbo-report.js';
+import type { CiFileSystem } from './ci-turbo-report.js';
 
 function createValidTurboSummaryJson() {
   return {
@@ -312,5 +318,90 @@ describe('formatAnnotations', () => {
     });
 
     expect(annotations).toBe('::error::@oak/pkg-a#smoke:dev:stub failed');
+  });
+});
+
+function stringWriter() {
+  const chunks: string[] = [];
+  return {
+    write: (text: string) => {
+      chunks.push(text);
+    },
+    text: () => chunks.join(''),
+  };
+}
+
+// A CiFileSystem fake for the explicit-summary-path branch: discovery
+// (readdir/stat) must never be reached, so those throw; `realpath` maps each
+// input to its canonical form to stand in for symlink/`..` resolution.
+function fakeExplicitPathFs(options: {
+  realpathMap: Record<string, string>;
+  fileContents?: Record<string, string>;
+  onReadFile?: (filePath: string) => void;
+}): CiFileSystem {
+  return {
+    readdir: () => Promise.reject(new Error('readdir must not run for an explicit summary path')),
+    stat: () => Promise.reject(new Error('stat must not run for an explicit summary path')),
+    readFile: (filePath: string) => {
+      options.onReadFile?.(filePath);
+      const contents = options.fileContents?.[filePath];
+      return contents === undefined
+        ? Promise.reject(new Error(`unexpected readFile: ${filePath}`))
+        : Promise.resolve(contents);
+    },
+    realpath: (inputPath: string) => {
+      const resolved = options.realpathMap[inputPath];
+      if (resolved === undefined) {
+        throw new Error(`ENOENT: no such file or directory, realpath '${inputPath}'`);
+      }
+      return resolved;
+    },
+  };
+}
+
+describe('runCiTurboReport explicit-path containment (S8707)', () => {
+  it('refuses an explicit summary path that escapes the runs directory — never reads it', async () => {
+    const reads: string[] = [];
+    const stdout = stringWriter();
+    const stderr = stringWriter();
+    const escaping = '/repo/.turbo/runs/../../../etc/passwd';
+
+    const { exitCode } = await runCiTurboReport({
+      summaryFilePath: escaping,
+      runsDir: '/repo/.turbo/runs',
+      stdout,
+      stderr,
+      fs: fakeExplicitPathFs({
+        realpathMap: { '/repo/.turbo/runs': '/repo/.turbo/runs', [escaping]: '/etc/passwd' },
+        onReadFile: (filePath) => reads.push(filePath),
+      }),
+    });
+
+    expect(reads).toEqual([]);
+    expect(stderr.text()).toContain('::warning::');
+    expect(exitCode).toBe(0);
+  });
+
+  it('reads an explicit summary path contained within the runs directory', async () => {
+    const reads: string[] = [];
+    const stdout = stringWriter();
+    const stderr = stringWriter();
+    const contained = '/repo/.turbo/runs/run.json';
+
+    const { exitCode } = await runCiTurboReport({
+      summaryFilePath: contained,
+      runsDir: '/repo/.turbo/runs',
+      stdout,
+      stderr,
+      fs: fakeExplicitPathFs({
+        realpathMap: { '/repo/.turbo/runs': '/repo/.turbo/runs', [contained]: contained },
+        fileContents: { [contained]: JSON.stringify(createValidTurboSummaryJson()) },
+        onReadFile: (filePath) => reads.push(filePath),
+      }),
+    });
+
+    expect(reads).toEqual([contained]);
+    expect(stdout.text()).toContain('## Turbo Task Summary');
+    expect(exitCode).toBe(0);
   });
 });
