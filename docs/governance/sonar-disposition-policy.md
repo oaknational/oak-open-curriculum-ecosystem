@@ -63,6 +63,32 @@ rationale cites this policy and adds the site path + line.
 5. If the rule is not yet documented: do per-site review and add the class
    to this document at the next consolidation pass.
 
+## General Disposition Principles
+
+These govern _how_ a finding is dispositioned, beneath the per-class catalogue:
+
+- **Precedent is not correctness.** N prior dismissals of a rule do not make
+  _this_ site a false-positive — verify the defect's presence or absence
+  first-hand at each site. (A 12×-dismissed `incomplete-sanitization` rule still
+  flagged a real backslash-escaping bug; the fix was genuine.)
+- **A lens-resolvable disposition is not an owner decision.** When the
+  [decision lenses][principles] (LTAE first) decisively resolve fix-vs-dismiss,
+  decide it — framing a lens-resolved call as an owner-fork is analysis-passback.
+  Escalate only when all lenses genuinely fail or the scope is product/feature.
+  (The outward _act_ of marking a SAFE/FALSE*POSITIVE in the UI still needs owner
+  authorisation — the disposition \_determination* does not.)
+- **A deliberately-adopted profile's findings are a worklist, not noise.** When
+  the owner activates an analyser profile on purpose, the target is zero
+  (fix-or-genuine-FP). Do NOT frame the resulting backlog as an activation-wave
+  to "wait out" via push-and-reanalyse — that lesson is for STALE / zombie
+  analysis against a moving target, never a fresh deliberate profile.
+- **Triage by cause-class, but a class splits by disposition-route.** A rule
+  class (e.g. a regex backlog) does not resolve uniformly: generated output →
+  fix at the generator; generator source → fix in place + regen; hand-written →
+  consolidate to the rule's home; vendored/standard → refactor-to-import or FP;
+  runtime-only → fix in place. An owner's "do X to all of them" applies cleanly
+  only to the class it actually fits.
+
 ## Remediation Branch Source of Truth
 
 When a branch is opened to remediate existing main/project Sonar debt, the

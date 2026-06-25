@@ -19,11 +19,17 @@ barrier:
 ## The shape
 
 - **Monitor to merge.** Opening a PR creates a monitoring obligation
-  that ends at merge: watch checks AND review comments; adjudicate
-  every bot/reviewer finding first-hand — both halves matter (refute
-  false claims with source grounding; apply true ones — review bots
-  have caught real second instances of defect classes the author had
-  only patched once); reply with the verdicts on the PR.
+  that ends at merge: watch checks, **inline review comments** (`gh api
+  repos/.../pulls/N/comments` — invisible to `gh pr view --json
+  comments`, which returns only issue/timeline comments), AND the PR's
+  **own terminal state** (`state`/`reviewDecision`/`mergedAt` — a
+  check-bucket-only monitor is blind both to the merge itself and to
+  inline reviews); emit and exit on `MERGED`/`CLOSED`. Adjudicate every
+  bot/reviewer finding first-hand — both halves matter (refute false
+  claims with source grounding; apply true ones — review bots have
+  caught real second instances of defect classes the author had only
+  patched once); reply with the verdicts on the PR. Each push re-triggers
+  the bots, so batch fixes into one push to converge the re-review loop.
 - **Flat stacks.** Base PRs directly on main rather than serial stacks
   (stacks make fixing earlier PRs hard — owner, 2026-06-10);
   retarget/flatten as bases merge.

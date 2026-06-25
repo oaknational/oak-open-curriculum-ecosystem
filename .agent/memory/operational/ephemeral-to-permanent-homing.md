@@ -50,6 +50,12 @@ of these:
 | Technical reference (data shapes, APIs, edge cases)            | TSDoc in source files or workspace READMEs                                      |
 | Operator runbooks, deployment context, on-call material        | `docs/operations/*.md` (host-local operations docs)                             |
 | Cross-session refined rules not yet at permanent stature       | `.agent/memory/active/distilled.md` (staging only; graduates further later)     |
+| **Learned doctrine** awaiting its permanent home (settled; home not yet written) | `.agent/memory/operational/pending-graduations.md` (flow-control register — graduate into the rule/PDR/ADR/pattern/doc, then remove the entry; never a home for future work, proposals, or questions) |
+| **Strategic, genuinely-open** architectural / design question (lenses do not resolve it; not blocking) | `.agent/memory/operational/open-questions.md` (flow-control register — answered/withdrawn entries are removed, the answer lives in its home) |
+| **Future work** / a build to do later (including trigger-gated "do X when Y") | a `.agent/plans/` entry (`future/` with a promotion trigger) — NOT pending-graduations |
+| **Operational "what next" / where-are-we / an owner decision** | `.agent/memory/operational/repo-continuity.md` (Next Safe Steps / Open Owner-Decision Items) or the owning thread record — NOT open-questions |
+| **Proposal / feasibility finding** (a design awaiting owner GO) | `.agent/reports/` or `.agent/research/`, promoted to a `plans/` entry on owner GO |
+| **Tooling / ergonomics gap** | the frictions register (`.agent/plans/agent-tooling/frictions-register.md`)     |
 | Repo-wide canonical rules / principles                         | `.agent/directives/principles.md` or rule files at `.agent/rules/`              |
 | Always-applied agent operational rules                         | `.agent/rules/*.md` with platform adapters at `.cursor/rules/`, `.claude/rules/` |
 | Subjective experience (texture, what work was like)            | `.agent/experience/<date>-<slug>.md`                                            |

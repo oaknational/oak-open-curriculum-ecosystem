@@ -48,8 +48,20 @@ of anything wrapping it:
   a commit SHA) — its absence means the write failed; and READ the
   token's destination path, not just its presence. Invoke
   collaboration CLIs with absolute paths from any non-root cwd.
-- **Gate run**: full output captured to a file first (`> log 2>&1`),
-  triage from the file; use `PIPESTATUS` or avoid the pipe. Never
-  triage through a `tail`.
+- **Gate run**: capture the complete output AND the real exit in one
+  invocation (`cmd > log 2>&1; echo "EXIT:$?"`), then triage from the
+  file; use `PIPESTATUS` or avoid the pipe. Never triage an expensive
+  gate through a `tail`/`head` (it discards the verdict), and **never
+  re-run a multi-minute gate merely to recover output or an exit code
+  you failed to capture** (owner-flagged, costs real money). The harness
+  auto-persists oversized tool output to `tool-results/<id>.txt` — read
+  that before re-running.
+- **Trailing `echo` / advisory step masks the verdict**: a
+  `cmd > log 2>&1; echo "EXIT=$?"` (especially backgrounded) can surface
+  the *echo's* exit (0), masking a RED gate; and
+  `gh run view --log-failed | tail` can show a later `if: always()`
+  advisory step's output, not the failing step. Read the gate's own
+  summary — the turbo `Failed:` line, the per-step `conclusion` / step
+  name — never the wrapper exit or the log tail.
 - Grep patterns beginning with `-` (e.g. `->`) need `-e <pattern>` or
   `--` — the pattern is otherwise consumed as an option.

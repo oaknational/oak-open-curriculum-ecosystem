@@ -61,18 +61,6 @@ execution knowledge) and the consolidate/handoff value-rationale step; this is t
 standalone formulation. Source: prior-session owner correction, promoted from the per-user
 buffer.
 
-## verify-dont-trust fires at the moment of READING, not only the moment of asserting
-
-Three sibling read-moment failures, one window: (a) a windowed (offset+limit) read is not
-knowledge of a file's whole state — never assert a whole-file property (size, line count, "all
-captured") from a partial read; run the cheap probe (`wc -l`, the fitness report) first. (b)
-Before running any generator/codegen/build script to DIAGNOSE, read the script — a `clean`/
-`rm -rf` prelude on a command that may crash deletes tracked artefacts (a diagnostic
-`sdk-codegen` deleted ~100 tracked files this way). (c) A subagent AGREEING with your prior is
-not verification — you likely share training priors, so concord is two echoes; only the primary
-source, read first-hand, breaks the loop. Source 2026-06-22 (Orbit, Candle, Petrel). Siblings:
-[[verify-dont-trust]], [[feedback_first_hand_means_me_not_subagents]].
-
 ## A committed/stated mechanism is not a running mechanism — actuate in the same breath
 
 "I'll watch X" / "I'll run the gate" / "the loop will close" arms nothing; a documented intent is
@@ -100,16 +88,6 @@ auto-loads CLAUDE.md → all Practice rules and is contaminated before it writes
 needs no repo context (a separate chat/checkout). Candidate pattern, one instance (2026-06-22
 Orbit, the working-with-agentic-ai primer). Sibling:
 [[feedback_ask_would_this_be_simpler_if_the_system_changed]].
-
-## Actuate a large valuable document with a thin firing skill, not by making the doc a skill
-
-To make a big reference (a ~1,400-line grammar of thinking) fire for agents, do NOT ship the
-document as a skill — that is passive guidance with a slash command, which artefact-gravity
-predicts will not fire. Cure: a thin, task-triggered skill carrying a small killer subset of
-firing QUESTIONS plus an impact test (the pass must change a framing/decision), pointing to the
-full document as a deep reference. Same canonical-body/thin-adapter seam as the orientation
-primer and oak-reason — firing surface small, depth behind it. Candidate pattern, 2+ instances
-(2026-06-22 Orbit). Sibling: [[passive-guidance-loses-to-artefact-gravity]].
 
 ## Evaluation discipline: judge a capability by its KIND's criterion; doubt is a possession too
 
@@ -160,14 +138,6 @@ Sibling: [[feedback_agent_identity_name_plus_uuid]].
   `knip.config.ts` (and avoid unused exported types) or full-tree knip goes RED and blocks
   repo-wide commits. Source 2026-06-21/22 (Oyster, Cosmos, Cutter). Siblings:
   [[hook-policy-substring-discipline]], the oak-complex-merge skill.
-- **Lead with the essence; let the reader pull depth — progressive disclosure, not a wall of text
-  (and not a menu).** Open with the headline / the one-to-three things that matter, offer the next
-  layer in one natural sentence, expand only what they pull. Both failure bounds are real: don't tease
-  (the first beat must actually answer them), and don't turn disclosure into a menu (no numbered
-  branches, no per-paragraph "want more?"). Behavioural gates cannot see delivery quality — only a real
-  run (the owner walk) caught the orientation lens (and the agent's own answers) defaulting to walls of
-  text. Source 2026-06-23 (Zenith, orientation-lens); encoded in the `explain` skill §Delivery grain.
-  Siblings: [[present-verdicts-not-menus]].
 - **Bash/grep tool output of source can be substring-filtered; Read is not.** Several greps returned
   bodies with tokens collapsed (e.g. `user-search`→`n`, `examBoard`); the Read tool rendered the same
   files faithfully. When grep/Bash output of source looks mangled or suspiciously masked, switch to Read
@@ -192,52 +162,6 @@ State the positive understanding the reader actually needs; the reader did not t
 need it retraced. Fluency is the tell — a tidy synthesis arriving smoothly is the tripwire to re-ground,
 not confirmation. Source 2026-06-22 (Skipper, the over-unification/tombstone window). Siblings:
 [[no-tombstones-for-removed-ideas]], the per-user [[feedback_graphs_as_method_not_one_artefact]].
-
-## A scanner finding's disposition is decided by the lenses, not precedent; fix-vs-dismiss is rarely an owner-fork
-
-When a static-analysis finding (CodeQL / Sonar) arrives, its disposition resolves to FIX (defect
-genuinely present) or FALSE_POSITIVE/SAFE (defect genuinely absent, verified first-hand) per
-`sonar-disposition-policy.md`. Two traps caught in one session: (a) **precedent is not correctness** —
-N prior dismissals of a rule do NOT make THIS site a false-positive (a 12×-dismissed
-`incomplete-sanitization` rule still flagged a real backslash-escaping bug here; the fix was genuine).
-(b) **A lens-resolvable disposition is not an owner-decision** — framing "fix vs harden vs dismiss" as an
-owner-fork when the decision lenses (LTAE first) decisively resolve it is analysis-passback; the lenses'
-own gate escalates to the owner only when all five fail or it is product/feature scope. The "harden"
-arm of one alleged fork was already implemented in the code I'd read. The outward-facing ACT of marking
-a dismissal still needs owner authorisation; the disposition *determination* does not. (c) **A
-deliberately-adopted profile's findings are a worklist, not noise** — when an owner activates a new
-profile on purpose (e.g. the Sonar AI profile), target zero; do NOT frame the resulting backlog as an
-activation-wave to "wait out" via push-and-reanalyse (that lesson is for STALE/zombie analysis only);
-every finding is fix-or-genuine-FP. Triage by cause-class, but a class splits by disposition-route
-(generated→generator, generator-source→in-place, hand-written→consolidate, vendored→import/FP). Source
-2026-06-23 (Galleon binds Seabed, PR 213 — 14 findings → 7 fixes + 7 FPs); refined 2026-06-24 (Aspen
-tracks Root, main AI-profile-to-zero plan). Siblings: [[feedback_existence_is_not_correctness_default_replace]],
-[[feedback_no_responsibility_passback]], [[feedback_forced_verdict_resting_on_my_interpretation_is_a_question]].
-
-## To verify "is X guarded," trace EVERY layer; a black-box re-run can false-pass
-
-When verifying whether a behaviour (esp. a security check) is enforced, trace EVERY layer — the check
-may not live in the obviously-named middleware. Oak's authed `/mcp` Host validation is in the auth layer
-(`getPRMUrl`), NOT the `dnsRebindingProtection` middleware (landing-page-only); tracing only the named
-middleware wrongly concluded `/mcp` was unguarded. And re-running conformance against the auth build would
-have false-passed (auth 401s the probe regardless of Host) — source was the decisive layer. Symmetric
-skepticism: verify a subagent's *correction of your own finding* first-hand too, and check downstream
-subagents haven't inherited your error (a docs-adr draft had). Refines the evidence-discipline /
-verify-dont-trust line. Source 2026-06-23 (Magnolia, MCPJam host-header settle; ADR-122/158).
-Siblings: [[verify-dont-trust]].
-
-## The harness completion-notification can report a trailing echo's exit, not the real gate's
-
-When a redirected compound command is run (e.g. `cmd > log 2>&1; echo "EXIT=$?"`, especially
-backgrounded), the harness completion-notification can report the trailing ECHO's exit (0),
-MASKING a RED gate underneath. Hit twice in one session; caught only by reading the log's turbo
-`Failed:` summary. Cure: capture the real exit INSIDE the redirect, or grep the gate/turbo summary
-for `Failed:`/error markers — never trust the harness exit-notification for a redirected compound
-command. Sibling failure same session: a `--include="vitest*.config.ts"` grep-glob silently missed
-`*.config.base.ts` (under-counted 5 vs the real 7); validate a glob against an independent count.
-Source 2026-06-24 (Whippoorwill wakes Dreamscape, worktree-pilot Sonar/WS-C; routed to the
-continuity carrier on the comms stream — `1ac40bc0` / `daad9aac`). Siblings:
-[[feedback_aggregate_gate_blind_to_unrun_suites]], the parsing-interleaved entry above.
 
 ## Under context pressure, offload the breadth; keep the design verdict and the loss-scan yourself
 

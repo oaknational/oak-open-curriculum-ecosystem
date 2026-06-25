@@ -34,6 +34,14 @@ Before acting on any sweep, test the filter against the **actual referent**:
   (`my-branch`) against the real referent (`my_branch`) never fires silently;
   verify the filter against the live name, or match separator-insensitively
   (`[-_]`).
+- **Default exclusions are silent:** `rg`/`fd` skip dot-directories and
+  `.gitignore`d paths by default — a whole-repo estate measurement (a
+  blast-radius count, a "zero hits" absence claim) run as a bare `rg -g '*.md'`
+  never descends into `.agent/` and reports a false zero. For estate-wide claims
+  use `--hidden --no-ignore` (or the linter's own footprint), never a bare grep.
+  A blast-radius number is a convenient claim — ground it against the tool that
+  owns the footprint (three 2026-06-25 instances: a "blast radius = zero" plan
+  approval that missed 469 real violations under `.agent/`).
 - **Positive control:** prove the filter matches at least one known instance
   before trusting a zero result.
 

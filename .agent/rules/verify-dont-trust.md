@@ -151,6 +151,13 @@ The smoother and more convenient the claim, the harder the citation is owed.
   that removed the very class it was meant to inspect.
 - Reading a commit's success or failure from the streamed terminal display
   rather than from `git log -1` / `git status`.
+- Asserting a whole-file property (size, line count, "all captured") from a
+  windowed (offset+limit) read — run the cheap probe (`wc -l`, the fitness
+  report) before any whole-file claim.
+- Running a generator / codegen / build script to *diagnose* without reading it
+  first — a `clean` / `rm -rf` prelude on a command that may crash deletes
+  tracked artefacts (a diagnostic `sdk-codegen` once deleted ~100 tracked files
+  this way).
 
 ## Composition
 
@@ -210,6 +217,13 @@ The smoother and more convenient the claim, the harder the citation is owed.
   consolidation-completion evidence. Only a first-hand loss-scan caught it — no
   gate-green ever could. The durable check is to prove a completion gate fails on a
   known-bad input before trusting its green, especially your own.
+- 2026-06-23 MCPJam host-header: an enforced check may not live in the
+  obviously-named middleware (authed `/mcp` Host validation is in the auth layer
+  `getPRMUrl`, not `dnsRebindingProtection`, which is landing-page-only), so
+  tracing only the named middleware wrongly concluded `/mcp` was unguarded; and a
+  black-box re-run false-passes when an unrelated layer short-circuits (auth 401s
+  the probe regardless of Host). Trace every layer to the decisive source, and
+  verify a sub-agent's *correction of your own finding* first-hand too.
 - Status surfaces are pointers, not facts: thread records, frictions registers,
   plan statuses, and register markers each describe state without being it. A
   frictions register stamped "addressed-in-working-tree" with a never-completed
