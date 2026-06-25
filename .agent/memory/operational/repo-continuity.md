@@ -24,6 +24,19 @@ todo list — is [`director-handoff.md`](director-handoff.md).
 
 ## Current State
 
+- **Knowledge-substrate consolidation — PR #226 (2026-06-25, Zephyr mends Bluff).** Register
+  intents sharpened (pending-graduations = learned-doctrine-awaiting-a-home; open-questions =
+  strategic open questions) with belongs/does-not-belong examples; the homing destinations table
+  now names every surface; ripe distilled lessons graduated to patterns / rules /
+  `sonar-disposition-policy`; napkin rotated. **Owner-decision captured:** continuity surfaces are
+  branch-specific *state*, not shared *memory* — the memory→state migration (repo-continuity,
+  threads, director-handoff → untracked) is a future plan
+  [`continuity-surfaces-are-state-not-memory.plan.md`][continuity-state-plan], a ~430-reference
+  refactor + an ADR amending ADR-199/PDR-094, owner-gated. **Next safe step: owner code-owner
+  review + merge of PR #226** (green; all bot findings addressed). Residual signals (reported, not
+  chased): `distilled` prose-width and `principles.md` char-limit are owner-limit tensions;
+  `repo-continuity` / `director-handoff` remain HARD only as the misclassified-memory artefact the
+  migration resolves.
 - **Operating model: SOLO, no Director seat** (owner direction 2026-06-25). Worktree-pilot CLOSED OUT,
   team DISSOLVED — PRs #221–#225 all MERGED to main (release 1.35.2); S8707 sites 1-2 + S4036 landed via
   #223; F-94/F-95 via #225. The Director-model *verdict* (did the pilot's model work) is owned by the
@@ -370,3 +383,4 @@ authority.
 [statusline]: threads/statusline-enhancements.next-session.md
 [agent-naming]: threads/agent-naming.next-session.md
 [orientation]: threads/orientation-skills-family.next-session.md
+[continuity-state-plan]: ../../plans/agentic-engineering-enhancements/future/continuity-surfaces-are-state-not-memory.plan.md
