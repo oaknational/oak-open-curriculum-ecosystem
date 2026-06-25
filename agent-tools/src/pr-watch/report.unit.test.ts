@@ -58,10 +58,10 @@ describe('diffSnapshots', () => {
     const next = makeSnapshot({
       issueComments: [
         { id: 'IC_kwDO1', author: 'vercel' },
-        { id: 'IC_2', author: 'jim' },
+        { id: 'IC_2', author: 'octocat' },
       ],
     });
-    expect(diffSnapshots(makeSnapshot(), next)).toStrictEqual(['new issue comment from jim']);
+    expect(diffSnapshots(makeSnapshot(), next)).toStrictEqual(['new issue comment from octocat']);
   });
 });
 

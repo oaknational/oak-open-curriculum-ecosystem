@@ -21,10 +21,10 @@ async function loadBlock(): Promise<ScopedContentBlockGroup> {
 
 describe('findMachineLocalPathHits', () => {
   it('reports the line and column of a hit', () => {
-    const hits = findMachineLocalPathHits('f.md', 'ok\nsee /Users/jim/x here\nok', [
+    const hits = findMachineLocalPathHits('f.md', 'ok\nsee /Users/alice/x here\nok', [
       '/Users/[A-Za-z0-9_-]+',
     ]);
-    expect(hits).toStrictEqual([{ file: 'f.md', line: 2, column: 5, text: '/Users/jim' }]);
+    expect(hits).toStrictEqual([{ file: 'f.md', line: 2, column: 5, text: '/Users/alice' }]);
   });
 
   it('records at most one hit per line', () => {
@@ -39,9 +39,11 @@ describe('machine-local-path patterns (live policy.json set)', () => {
   it('flags user-home and machine-temp absolute paths (positive controls)', async () => {
     const block = await loadBlock();
     const positives = [
-      '/Users/jim/code/oak',
+      '/Users/alice/code/oak',
       '/home/user/project',
       'C:\\Users\\dev\\repo',
+      '~/.claude/projects/-Users-alice-code-oak/memory', // flattened Claude project id
+      '.cursor/projects/Users-alice-code-oak/transcripts', // flattened Cursor project id
       '/private/tmp/scratch',
       '/var/folders/ab/cd',
     ];
@@ -59,6 +61,7 @@ describe('machine-local-path patterns (live policy.json set)', () => {
       '/tmp/scratch',
       '/Users/<user>/code', // teaching placeholder
       '/Users/<name>/x',
+      '~/.claude/projects/<project>/memory', // flattened-id placeholder
       '~/.cache/oak',
       'agent-tools/src/foo.ts',
     ];
@@ -72,8 +75,8 @@ describe('scanForMachineLocalPaths', () => {
   it('flags an in-scope file but skips a file matched by exclude_paths', async () => {
     const block = await loadBlock();
     const files: ScanFile[] = [
-      { path: 'docs/example.md', content: 'path: /Users/jim/x' },
-      { path: '.agent/rules/no-machine-local-paths.md', content: 'forbidden: /Users/jim/x' },
+      { path: 'docs/example.md', content: 'path: /Users/alice/x' },
+      { path: '.agent/rules/no-machine-local-paths.md', content: 'forbidden: /Users/alice/x' },
     ];
     const hits = scanForMachineLocalPaths(files, block);
     expect(hits.map((hit) => hit.file)).toStrictEqual(['docs/example.md']);

@@ -121,7 +121,7 @@ enough to catch the wait loop, and the wait loop had a verbal cue
 The owner-stated cure is now captured to platform memory:
 
 ```text
-~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/
+~/.claude/projects/<project>/
   memory/feedback_no_lock_wait_loops.md
 ```
 

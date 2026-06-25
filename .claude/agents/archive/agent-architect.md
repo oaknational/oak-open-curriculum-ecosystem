@@ -182,7 +182,7 @@ Grep with pattern="<search term>" path=".claude/agent-memory/agent-architect/" g
 2. Session transcript logs (last resort — large files, slow):
 
 ```
-Grep with pattern="<search term>" path=".claude/projects/-Users-jim-code-oak-oak-mcp-ecosystem/" glob="*.jsonl"
+Grep with pattern="<search term>" path=".claude/projects/<project>/" glob="*.jsonl"
 ```
 
 Use narrow search terms (error messages, file paths, function names) rather than broad keywords.

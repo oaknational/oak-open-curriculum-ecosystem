@@ -436,7 +436,7 @@ and crossed worktree boundaries by writing to the main repo's
 `scripts/check-blocked-patterns.{ts,unit.test.ts,integration.test.ts}`
 (restored from the clean worktree at the start of the salvage
 pass). Durable lesson captured at
-`~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_worktree_isolation_unreliable.md`
+`~/.claude/projects/<project>/memory/feedback_worktree_isolation_unreliable.md`
 and indexed in MEMORY.md. **Prior**:
 Verdant Sprouting Leaf / `claude-code` / `claude-opus-4-7-1m` /
 `63a0e0` session-handoff: one commit landed — `192b6965`

@@ -161,7 +161,7 @@ The port conflict error message has been significantly improved:
 Smoke test server could not bind to 127.0.0.1:3333 because the port is already in use.
 Existing listeners:
 COMMAND  PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
-node    3712  jim   22u  IPv6 0x8bdd81da2174b352      0t0  TCP *:3333 (LISTEN)
+node    3712  someuser   22u  IPv6 0x8bdd81da2174b352      0t0  TCP *:3333 (LISTEN)
 Stop the other process or run the smoke suite with a different --port.
 ```
 
@@ -173,12 +173,12 @@ PORT CONFLICT: Port 3333 is already in use
 Process using port 3333:
   PID:     3712
   Command: node
-  User:    jim
+  User:    someuser
   Details: .nvm/versions/node/v24.11.1/bin/node --require ai_experiments/oak-notion-mcp/node_modu...
 
 Full lsof output:
 COMMAND  PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
-node    3712  jim   22u  IPv6 0x8bdd81da2174b352      0t0  TCP *:3333 (LISTEN)
+node    3712  someuser   22u  IPv6 0x8bdd81da2174b352      0t0  TCP *:3333 (LISTEN)
 
 To resolve:
   1. Stop the process: kill 3712

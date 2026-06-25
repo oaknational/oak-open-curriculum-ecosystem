@@ -320,7 +320,7 @@ _:article schema:author "Jim" .
 Mapping it to an identified person is stronger:
 
 ```text
-_:article schema:author <https://example.org/people/jim> .
+_:article schema:author <https://example.org/people/alice> .
 ```
 
 The second transformation should be represented as an enhancement with provenance and confidence.
@@ -451,7 +451,7 @@ const enhanced = doc
 const nodes = enhanced.nodes();
 const edges = enhanced.edges();
 
-const neighbours = enhanced.neighbours("https://example.org/people/jim");
+const neighbours = enhanced.neighbours("https://example.org/people/alice");
 
 const aboutJsonLd = await enhanced.toJsonLd({
   context,

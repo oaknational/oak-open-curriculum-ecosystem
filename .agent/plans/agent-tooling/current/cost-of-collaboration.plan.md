@@ -360,7 +360,7 @@ pre-commit's broken-code guard.
 **Evidence**: three serial deadlock iterations on 2026-05-11 — knip on
 peer-unstaged code, prettier on peer-unstaged code, markdownlint on
 coordinator-authored file written after the gatekeeper sweep. See
-[`feedback_pre_commit_hook_must_gate_staged_only`](../../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_pre_commit_hook_must_gate_staged_only.md)
+[`feedback_pre_commit_hook_must_gate_staged_only`](../../../../.claude/projects/<project>/memory/feedback_pre_commit_hook_must_gate_staged_only.md)
 (claude-code agent-local memory; cross-platform mirror under owner
 direction if required).
 
@@ -1888,7 +1888,7 @@ Each workstream defines its own acceptance. The plan-level validation:
 - "the intense partner sidebar is going a lot better than the
   coordinator and helpers topology" — **standing observation**;
   reflected in the structural insights and in the
-  [`peer-sidebar-beats-coordinator-helpers`](../../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_peer_sidebar_beats_coordinator_helpers.md)
+  [`peer-sidebar-beats-coordinator-helpers`](../../../../.claude/projects/<project>/memory/feedback_peer_sidebar_beats_coordinator_helpers.md)
   feedback memory.
 - "any genuinely useful improvements to the agent tools CLI should be
   noted for implementation" — **standing**; comms-event `37ea0341`

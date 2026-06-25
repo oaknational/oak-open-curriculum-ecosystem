@@ -163,7 +163,7 @@ owner reviewing the diff. No new rule files created in this batch.
 | "Agent-tool CLIs must print full help on invalid flags" (`feedback_agent_tool_help_on_invalid_flags`) | [`agent-tools/README.md`](../../../../agent-tools/README.md) §"CLI Norms" — `agent-support-tools-specification.md` is scoped to MCP agent-support tools, not local agent-tools CLIs |
 
 For each: the cited memory file in
-`~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/`
+`~/.claude/projects/<project>/memory/`
 provides the substance verbatim; the amendment is one paragraph plus
 back-cite to the originating feedback memory.
 
@@ -412,7 +412,7 @@ End-to-end verification at next-session close:
    ```
 
    Then read the memory file in
-   `~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/`
+   `~/.claude/projects/<project>/memory/`
    and confirm the body references the rule.
 
 3. **Batch C verification**:
@@ -451,7 +451,7 @@ End-to-end verification at next-session close:
 - [`.agent/memory/operational/pending-graduations.md`](../../../memory/operational/pending-graduations.md)
 - [`.agent/state/collaboration/shared-comms-log.md`](../../../state/collaboration/shared-comms-log.md)
 - [`.remember/`](../../../../.remember/)
-- `~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/MEMORY.md`
+- `~/.claude/projects/<project>/memory/MEMORY.md`
   and per-entry files
 - `~/.cursor/chats/`, `prompt_history.json`, `~/.cursor/plans/`
 - `~/.codex/memories/` + `extensions/ad_hoc/notes/`

@@ -20,7 +20,7 @@ stage** (cross-platform extension is named in §Refinement Targets):
 ### 1. Passive harvest of session JSONLs
 
 Existing Claude Code session JSONL files at
-`~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/`
+`~/.claude/projects/<project>/`
 record every turn. Lines where
 `.message.content[].type == "tool_use"` and `.name == "Read"` carry a
 `.input.file_path` recording the file the agent loaded. Per-file token
@@ -37,7 +37,7 @@ manual shell pipeline.
 A worked extraction command:
 
 ```bash
-SESSION=~/.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/<session-id>.jsonl
+SESSION=~/.claude/projects/<project>/<session-id>.jsonl
 jq -r 'select(.type == "assistant") | .message.content[]?
   | select(.type == "tool_use" and .name == "Read") | .input.file_path' \
   < "$SESSION" | sort | uniq -c | sort -rn

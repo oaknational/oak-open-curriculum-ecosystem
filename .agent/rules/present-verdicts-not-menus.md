@@ -1,9 +1,9 @@
 # Present Verdicts, Not Menus
 
 Operationalises the standing feedback memories
-[`feedback_no_responsibility_passback`](../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_no_responsibility_passback.md)
+[`feedback_no_responsibility_passback`](../../../.claude/projects/<project>/memory/feedback_no_responsibility_passback.md)
 (origin 2026-05-09) and
-[`feedback_answer_verification_questions_directly`](../../../.claude/projects/-Users-jim-code-oak-oak-open-curriculum-ecosystem/memory/feedback_answer_verification_questions_directly.md)
+[`feedback_answer_verification_questions_directly`](../../../.claude/projects/<project>/memory/feedback_answer_verification_questions_directly.md)
 (origin 2026-04-24), together with
 [PDR-057](../practice-core/decision-records/PDR-057-empirical-answerability-pre-question-gate.md)
 (apply-don't-ask doctrine) and
