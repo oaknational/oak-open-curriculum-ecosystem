@@ -45,8 +45,9 @@ export function commsSeenFileForCodename(codename: string, commsSeenDir: string)
   const trimmedDir = commsSeenDir.endsWith('/') ? commsSeenDir.slice(0, -1) : commsSeenDir;
   if (trimmedDir.length === 0) {
     throw new Error(
-      `comms-seen dir must be a non-empty relative path, not ${JSON.stringify(commsSeenDir)} ` +
-        `(an empty or root dir would derive a root-absolute heartbeat path)`,
+      `comms-seen dir must be a non-empty path that is not the filesystem root, not ` +
+        `${JSON.stringify(commsSeenDir)} (an empty or root dir would derive a root-absolute ` +
+        `heartbeat path); absolute paths under a real directory are accepted`,
     );
   }
   return `${trimmedDir}/${codename}.json`;

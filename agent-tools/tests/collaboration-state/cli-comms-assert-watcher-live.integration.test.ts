@@ -2,8 +2,10 @@
  * Integration coverage for `comms assert-watcher-live` (F-95 Option A) through
  * the real CLI dispatcher and real filesystem: a fresh heartbeat at the
  * session-derived path passes (exit 0); an absent heartbeat fails loud (exit 2
- * with a move-1 fix instruction); a `--now` far in the future makes a present
- * heartbeat read as stale (exit 2); and `--heartbeat-file` relocates the check.
+ * with a move-1 fix instruction); a heartbeat whose file mtime has aged past
+ * the threshold (forced with `utimes`, judged against the real wall clock)
+ * fails (exit 2); and `--heartbeat-file` relocates the check. Freshness is never
+ * controlled by a `--now` flag — the command has none.
  */
 import { mkdtemp, rm, utimes, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';

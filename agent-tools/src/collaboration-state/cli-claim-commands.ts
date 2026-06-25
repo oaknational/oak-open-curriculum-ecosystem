@@ -4,7 +4,7 @@ import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 import { archiveStaleClaims } from './claims.js';
 import {
   assertNotBlindWithOtherAgents,
-  resolveWatcherVerdict,
+  resolveOpenClaimWatcherVerdict,
 } from './claims-open-watcher-gate.js';
 import { areaFromOptions } from './cli-claim-areas.js';
 import { resolveIdentity } from './cli-identity.js';
@@ -15,8 +15,6 @@ import {
   type CollaborationClaim,
   type CollaborationStateEnvironment,
 } from './types.js';
-import { DEFAULT_COMMS_SEEN_DIR } from './watcher-presence.js';
-import { productionWatcherStalenessIo } from './watcher-staleness-io.js';
 
 export async function openClaim(
   options: Options,
@@ -26,21 +24,18 @@ export async function openClaim(
   const openedClaim = createClaimFromOptions(options, identity);
   const activePath = required(options, 'active');
   const nowIso = required(options, 'now');
+  // Validate the claim's `--now` at entry: a malformed value parses to NaN and
+  // would mark every peer claim stale (claimReport / liveAgentIdentities), so
+  // `hasOtherLiveAgents` returns false and the solo fast-path skips the watcher
+  // check even when other agents are live. Fail loud instead.
+  if (Number.isNaN(Date.parse(nowIso))) {
+    throw new Error(`claims open: --now must be a valid ISO-8601 timestamp: ${nowIso}`);
+  }
 
   // F-95: classify the watcher OUTSIDE the lock (one IO), then decide
   // populated-vs-solo INSIDE the locked transform so the solo-then-peer race
   // cannot slip a blind claim into a registry that became populated mid-open.
-  // The freshness comparison uses the REAL wall clock (Date.now()), never the
-  // claim's `--now`: a caller-supplied `--now` can lag real time (captured once,
-  // replayed, or clock-skewed), which would understate the heartbeat's age and
-  // let a dead watcher read as live. `--now` remains the claim's logical time
-  // (claimed_at + collision freshness) only.
-  const watcherVerdict = await resolveWatcherVerdict({
-    selfIdentity: identity,
-    commsSeenDir: optional(options, 'comms-seen-dir') ?? DEFAULT_COMMS_SEEN_DIR,
-    nowMs: Date.now(),
-    io: productionWatcherStalenessIo,
-  });
+  const watcherVerdict = await resolveOpenClaimWatcherVerdict(identity);
 
   await updateActiveClaimsFile({
     activePath,

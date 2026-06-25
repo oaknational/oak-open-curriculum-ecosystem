@@ -123,10 +123,11 @@ export const claimsOpenHelp =
   '--area-kind <files|workspace|plan|adr|git> ' +
   '--intent <text> --now <iso> --platform <platform> --model <model> ' +
   '[--file <path>...] [--area-pattern <pattern>...] [--claim-id <id>] ' +
-  '[--ttl-seconds <n>] [--role <role>] [--comms-seen-dir <dir>] ' +
+  '[--ttl-seconds <n>] [--role <role>] ' +
   '(use either repeatable --file or repeatable --area-pattern, not both; ' +
   'refuses to open into a populated registry while blind to comms — F-95 — ' +
-  'unless this session has a live comms watcher; solo sessions are exempt)';
+  'unless this session has a live comms watcher at the canonical comms-seen ' +
+  'location; solo sessions are exempt; no path override, by design)';
 
 export const claimsHeartbeatHelp = 'claims heartbeat --active <path> --claim-id <id> --now <iso>';
 

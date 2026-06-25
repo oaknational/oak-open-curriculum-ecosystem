@@ -26,10 +26,12 @@ import { type CollaborationAgentId, type CollaborationRegistry } from './types.j
 import {
   classifyWatcherPresence,
   commsSeenFileForCodename,
+  DEFAULT_COMMS_SEEN_DIR,
   heartbeatFileForSeen,
   type WatcherPresenceVerdict,
 } from './watcher-presence.js';
 import { detectStaleWatcher, type WatcherStalenessIo } from './watcher-staleness.js';
+import { productionWatcherStalenessIo } from './watcher-staleness-io.js';
 
 /**
  * Whether any live agent (a fresh claim or an active commit-queue entry) other
@@ -66,6 +68,26 @@ export async function resolveWatcherVerdict(input: {
   );
   const result = await detectStaleWatcher({ heartbeatFile, nowMs: input.nowMs, io: input.io });
   return classifyWatcherPresence(result, input.selfIdentity);
+}
+
+/**
+ * Resolve the watcher verdict for a `claims open` with the production policy
+ * baked in: the canonical comms-seen dir ONLY (no path override — a planted
+ * heartbeat must not satisfy this load-bearing backstop), the real wall clock
+ * (`Date.now()`, never the claim's `--now`, which can lag real time and
+ * understate the heartbeat's age), and the production filesystem adapter. The
+ * thin wrapper keeps `openClaim` free of that wiring and gives the open gate's
+ * policy a single home.
+ */
+export async function resolveOpenClaimWatcherVerdict(
+  identity: CollaborationAgentId,
+): Promise<WatcherPresenceVerdict> {
+  return resolveWatcherVerdict({
+    selfIdentity: identity,
+    commsSeenDir: DEFAULT_COMMS_SEEN_DIR,
+    nowMs: Date.now(),
+    io: productionWatcherStalenessIo,
+  });
 }
 
 /**
