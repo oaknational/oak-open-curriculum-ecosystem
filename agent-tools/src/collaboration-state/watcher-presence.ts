@@ -10,6 +10,8 @@
  * `claims open` precondition. Path derivation lives here too so the two surfaces
  * resolve a session's heartbeat path identically.
  */
+import { sameAgentRoutingKey } from './active-agent-routing.js';
+import { type CollaborationAgentId } from './types.js';
 import { HEARTBEAT_FILE_SUFFIX } from './watcher-heartbeat.js';
 import { type WatcherStalenessResult } from './watcher-staleness.js';
 
@@ -41,6 +43,12 @@ export function commsSeenFileForCodename(codename: string, commsSeenDir: string)
     throw new Error(`agent codename is not a safe path segment: ${JSON.stringify(codename)}`);
   }
   const trimmedDir = commsSeenDir.endsWith('/') ? commsSeenDir.slice(0, -1) : commsSeenDir;
+  if (trimmedDir.length === 0) {
+    throw new Error(
+      `comms-seen dir must be a non-empty relative path, not ${JSON.stringify(commsSeenDir)} ` +
+        `(an empty or root dir would derive a root-absolute heartbeat path)`,
+    );
+  }
   return `${trimmedDir}/${codename}.json`;
 }
 
@@ -50,28 +58,55 @@ export function heartbeatFileForSeen(seenFile: string): string {
 }
 
 /**
- * Map a staleness result to a presence verdict.
+ * A heartbeat that is otherwise present counts only when its identity matches
+ * this session (same routing key); a foreign or copied heartbeat does not.
+ */
+function presentIfThisSession(
+  heartbeatIdentity: CollaborationAgentId,
+  expectedIdentity: CollaborationAgentId,
+): WatcherPresenceVerdict {
+  if (sameAgentRoutingKey(heartbeatIdentity, expectedIdentity)) {
+    return { kind: 'present' };
+  }
+  return {
+    kind: 'blind',
+    reason:
+      `a live comms watcher heartbeat exists, but its identity ` +
+      `(${heartbeatIdentity.agent_name} / ${heartbeatIdentity.session_id_prefix}) is not this ` +
+      `session's — this session is not running the watcher (a foreign or copied heartbeat does ` +
+      `not count)`,
+  };
+}
+
+/**
+ * Map a staleness result to a presence verdict for `expectedIdentity`'s session.
  *
- * - `live` is present.
- * - `stale-no-emit` is present ONLY while its heartbeat mtime is fresh: a watcher
- *   armed seconds ago (e.g. at start-right-team move 1) has emitted nothing yet
- *   and must not be falsely blocked, whereas a started-then-frozen watcher whose
- *   mtime has aged out is dead and blinds the session.
+ * - `live` / fresh `stale-no-emit` are present ONLY when the heartbeat's
+ *   `watcher_identity` matches this session (same routing key). The heartbeat
+ *   path is codename-derived, but codenames can collide across sessions and a
+ *   file can be copied, so a live heartbeat with a different identity is NOT
+ *   this session's watcher — binding to identity closes that hole in the
+ *   load-bearing `claims open` backstop.
+ * - `stale-no-emit` with an aged mtime is a started-then-frozen watcher (dead).
  * - `stale-aged`, `absent`, and `malformed` are all blind — the session cannot
  *   confirm it is watching the stream.
  */
-export function classifyWatcherPresence(result: WatcherStalenessResult): WatcherPresenceVerdict {
+export function classifyWatcherPresence(
+  result: WatcherStalenessResult,
+  expectedIdentity: CollaborationAgentId,
+): WatcherPresenceVerdict {
   switch (result.kind) {
     case 'live':
-      return { kind: 'present' };
+      return presentIfThisSession(result.identity, expectedIdentity);
     case 'stale-no-emit':
-      return result.agedMs <= result.thresholdMs
-        ? { kind: 'present' }
-        : {
-            kind: 'blind',
-            reason:
-              'comms watcher started but has emitted nothing and its heartbeat is stale — presumed dead',
-          };
+      if (result.agedMs > result.thresholdMs) {
+        return {
+          kind: 'blind',
+          reason:
+            'comms watcher started but has emitted nothing and its heartbeat is stale — presumed dead',
+        };
+      }
+      return presentIfThisSession(result.identity, expectedIdentity);
     case 'stale-aged':
       return {
         kind: 'blind',

@@ -27,7 +27,8 @@ export async function assertWatcherLive(
   options: Options,
   env: CollaborationStateEnvironment,
 ): Promise<string> {
-  const codename = resolveSelfIdentity(options, env).agent_name;
+  const self = resolveSelfIdentity(options, env);
+  const codename = self.agent_name;
   const explicitHeartbeat = optional(options, 'heartbeat-file');
   const commsSeenDir = optional(options, 'comms-seen-dir') ?? DEFAULT_COMMS_SEEN_DIR;
   const heartbeatFile =
@@ -41,7 +42,7 @@ export async function assertWatcherLive(
     nowMs,
     io: productionWatcherStalenessIo,
   });
-  const verdict = classifyWatcherPresence(result);
+  const verdict = classifyWatcherPresence(result, self);
 
   if (verdict.kind === 'blind') {
     throw new Error(

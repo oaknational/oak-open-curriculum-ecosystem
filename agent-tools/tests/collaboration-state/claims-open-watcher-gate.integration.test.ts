@@ -42,6 +42,15 @@ const other = deriveCollaborationIdentity({
   },
 }).agentId;
 
+// The claimer's identity as openClaim resolves it. The heartbeat's
+// watcher_identity must equal it or the identity-bound F-95 gate treats a fresh
+// heartbeat as a foreign watcher and refuses the open.
+const claimerWithId = deriveCollaborationIdentity({
+  platform: claimer.platform,
+  model: claimer.model,
+  env: claimerEnv,
+}).agentId;
+
 const nowIso = '2026-06-25T08:00:00.000Z';
 
 function heartbeatText(): string {
@@ -54,11 +63,7 @@ function heartbeatText(): string {
     last_error_at: null,
     emitted_count: 2,
     heartbeat_interval_ms: 30000,
-    watcher_identity: {
-      ...claimer,
-      id: '8210d600-0000-5000-8000-000000000000',
-      naming_schema_version: 'override',
-    },
+    watcher_identity: claimerWithId,
   });
 }
 

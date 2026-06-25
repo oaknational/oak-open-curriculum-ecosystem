@@ -93,12 +93,12 @@ export const commsWatchHelp =
   'pass --seed-from-now to force a seed regardless of existing seen-file content)';
 
 export const commsAssertWatcherLiveHelp =
-  'comms assert-watcher-live --platform <platform> --model <model> ' +
-  '[--comms-seen-dir <dir>] [--heartbeat-file <path>] ' +
-  '[--agent-name <name>] [--session-prefix <prefix>] [--now <iso>] ' +
-  "(F-95 move-1 check: exits non-zero with a fix instruction unless this session's " +
-  'comms watcher heartbeat is live; resolves the heartbeat from the session codename ' +
-  'unless --heartbeat-file overrides it)';
+  'comms assert-watcher-live (--platform <platform> --model <model> | --agent-name <name>) ' +
+  '[--session-prefix <prefix>] [--comms-seen-dir <dir>] [--heartbeat-file <path>] [--now <iso>] ' +
+  "(F-95 move-1 check: exits non-zero with a fix instruction unless this session's comms watcher " +
+  'heartbeat is live AND its identity matches this session. Identity is derived from ' +
+  '--platform/--model (plus the env session seed), or overridden with --agent-name; the heartbeat ' +
+  'resolves from the session codename unless --heartbeat-file overrides it)';
 
 export const commsDirectHelp =
   'comms direct --comms-dir <dir> --to-agent-name <name> --to-id <uuid-v5> ' +

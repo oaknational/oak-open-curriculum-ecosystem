@@ -65,7 +65,7 @@ export async function resolveWatcherVerdict(input: {
     commsSeenFileForCodename(input.selfIdentity.agent_name, input.commsSeenDir),
   );
   const result = await detectStaleWatcher({ heartbeatFile, nowMs: input.nowMs, io: input.io });
-  return classifyWatcherPresence(result);
+  return classifyWatcherPresence(result, input.selfIdentity);
 }
 
 /**

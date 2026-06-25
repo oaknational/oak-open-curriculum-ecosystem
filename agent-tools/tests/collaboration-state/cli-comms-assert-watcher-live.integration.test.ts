@@ -12,8 +12,22 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { runCollaborationStateCli } from '../../src/collaboration-state';
+import { deriveOverrideCollaborationIdentity } from '../../src/collaboration-state/identity';
 
 const codename = 'Seal hunts Offing';
+const sessionPrefix = '8210d6';
+
+// The session is invoked with `--agent-name <codename> --session-prefix <p>`, so
+// the handler resolves THIS identity. The heartbeat's watcher_identity must equal
+// it or the F-95 gate (now identity-bound) treats a fresh heartbeat as a foreign
+// watcher and blinds. A non-empty prefix is required — the heartbeat schema
+// rejects an empty session_id_prefix.
+const sessionIdentity = deriveOverrideCollaborationIdentity({
+  agent_name: codename,
+  platform: 'override',
+  model: 'override',
+  session_id_prefix: sessionPrefix,
+});
 
 function heartbeatJson(lastEmitAt: string | null): string {
   return JSON.stringify({
@@ -25,14 +39,7 @@ function heartbeatJson(lastEmitAt: string | null): string {
     last_error_at: null,
     emitted_count: lastEmitAt === null ? 0 : 3,
     heartbeat_interval_ms: 30000,
-    watcher_identity: {
-      agent_name: codename,
-      platform: 'claude',
-      model: 'Opus 4.8',
-      session_id_prefix: '8210d6',
-      id: 'd9d4eec5-06e9-5088-83de-5b129874810a',
-      naming_schema_version: 'override',
-    },
+    watcher_identity: sessionIdentity,
   });
 }
 
@@ -65,6 +72,8 @@ describe('comms assert-watcher-live', () => {
         'assert-watcher-live',
         '--agent-name',
         codename,
+        '--session-prefix',
+        sessionPrefix,
         '--comms-seen-dir',
         dir,
       ],
@@ -83,6 +92,8 @@ describe('comms assert-watcher-live', () => {
         'assert-watcher-live',
         '--agent-name',
         codename,
+        '--session-prefix',
+        sessionPrefix,
         '--comms-seen-dir',
         dir,
       ],
@@ -104,6 +115,8 @@ describe('comms assert-watcher-live', () => {
         'assert-watcher-live',
         '--agent-name',
         codename,
+        '--session-prefix',
+        sessionPrefix,
         '--comms-seen-dir',
         dir,
         '--now',
@@ -127,6 +140,8 @@ describe('comms assert-watcher-live', () => {
         'assert-watcher-live',
         '--agent-name',
         codename,
+        '--session-prefix',
+        sessionPrefix,
         '--heartbeat-file',
         explicit,
       ],
@@ -146,6 +161,8 @@ describe('comms assert-watcher-live', () => {
         'assert-watcher-live',
         '--agent-name',
         codename,
+        '--session-prefix',
+        sessionPrefix,
         '--comms-seen-dir',
         dir,
         '--now',
