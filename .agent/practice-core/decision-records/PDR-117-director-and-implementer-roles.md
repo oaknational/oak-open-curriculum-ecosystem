@@ -207,6 +207,13 @@ instruction for the Implementer role.** Its operational home is the
   **deliberately not touched**: it enumerates the always-applied
   `.agent/rules/*.md` rule tier, and neither a governance PDR nor a §3 SKILL
   clause has the on-disk rule form that index contracts to enumerate.)
+- Each hosting repo SHOULD maintain an operational **Director handoff entry
+  point**: a single, committed, discoverable file the next Director rehydrates
+  from — the role-pickup procedure, the **readiness self-check before a Moment-2
+  acknowledgement** (the gate whose absence let a successor ack prematurely then
+  retract), the current handoff state, and the live todo list — pointing back to
+  this PDR for the role doctrine. In this repo it is
+  `.agent/memory/operational/director-handoff.md`.
 - `feedback_director_pure_direction_only` (per-user memory) has its **portable
   content absorbed here**; the per-user file is disposed separately (retired or
   slimmed to a pointer) by the Director, since it lives outside the repo.

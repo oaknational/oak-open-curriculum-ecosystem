@@ -18,8 +18,32 @@ Detailed lane histories live in thread records, curator reports, completed
 plans, and prior continuity archives; this file should stay a compact pickup
 surface.
 
+**Director handoff:** the next Director's single pick-up point — role procedure,
+the readiness self-check before claiming authority, current state, and the live
+todo list — is [`director-handoff.md`](director-handoff.md).
+
 ## Current State
 
+- **Worktree-pilot — CLOSED OUT 2026-06-25; team DISSOLVED.** PRs #221 (vitest
+  standardisation + Director/Implementer doctrine PDR-117) and #222 (pr-watch +
+  proto-dispatch fix) **MERGED to main** (release 1.35.0, HEAD `1020001fd`). The pilot
+  team stood down; one agent (Thyme lifts Compost) is the only active session, operating
+  solo under owner direction. **Director seat VACANT** — stale dissolved-team claims
+  (Nightjar director `c6b76ae3`; orientation + pr-watch implementer claims) remain in
+  `active-claims.json` pending a curator pass. **Foundational artefacts placed**
+  (canonical, lint-clean): the forward guiding plan
+  [`worktree-pilot-consolidation-and-model-verdict.plan.md`](../../plans/agentic-engineering-enhancements/current/worktree-pilot-consolidation-and-model-verdict.plan.md) +
+  the restructured [`director-handoff.md`](director-handoff.md) (Director Brief +
+  volatile state + worktree orphan map). **All at-risk worktree work PRESERVED** — the
+  three never-pushed branches (`pilot/ws-b-explain-resource`,
+  `fix/sonar-s8707-cli-path-injection`, `pilot/ws-d-roles-doctrine`) **pushed to origin**.
+  Tooling backlog **F-94–97** captured (claims adopt/set-handoff; watcher-presence
+  fail-fast gate; continuity-buffer lint hostage; PR inline-comment monitor). **Sonar
+  S8707 sites 2-3 PAUSED** (site-1+2 committed + pushed; site-3 → next team session).
+  **One owner-gated action remaining: the consolidation commit of the lint-blocked
+  continuity buffers** (the orphan-prevention close-out). Also open: whether to
+  re-establish the Director seat; the DATA-SOURCES governance criteria. Full pickup:
+  [`director-handoff.md`](director-handoff.md).
 - **Strategy / vision / plan-estate rework — LIVE primary lane** (thread
   [`strategy-and-plan-estate-holistic-review`](threads/strategy-and-plan-estate-holistic-review.next-session.md)).
   Controlling plan:
@@ -229,7 +253,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `agentic-mechanisms-discovery` | Web-based agent discovery mechanisms for Oak data and tools | [record][agentic-mechanisms-discovery] | claude / Opus 4.8 / Zephyrous Buffeting Falcon / skills-lane-relocated-to-educator-end-users / 2026-06-08 (prior identities: thread record) |
-| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude-code / Opus 4.8 / Magnolia spins Mulch / 2026-06-23 — MCPJam integration + curriculum-MCP validation + evals doctrine (position report + QUEUED skill-evals-pilot); host-rebinding settled → ADR-122/158 + Host→403 test (thread next step UNCHANGED = WS-1) ← claude / Opus 4.8 (1M) / Petrel stirs Wingspan / 2026-06-22 dedicated consolidation (napkin rotated, 667-line content archived; PDR-113; forced-answer + bottom-up + decision-records graduations; F-83) + the F-84 fix landed (decision-debt false-green: detector `f056285fb` + register reformat `ea633117a`); thread next step UNCHANGED = WS-1 / 2026-06-22 (prior seats: Perseus turns Horizon (substrate de-anon `9abcd7679`), Oyster weaves Surf (WS-3 F-41), Nova wakes Genesis, Ferret seeks Tunnel (PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
+| `agentic-engineering-enhancements` | Practice continuity and temporary curation | [record][agentic] | claude / claude-opus-4-8[1m] / Thyme lifts Compost / team-session-closer — worktree-pilot closed out, team dissolved; guiding plan + director-handoff restructured; orphan branches pushed; F-94–97 captured / 2026-06-25 ← claude-code / Opus 4.8 / Magnolia spins Mulch / 2026-06-23 — MCPJam integration + curriculum-MCP validation + evals doctrine (position report + QUEUED skill-evals-pilot); host-rebinding settled → ADR-122/158 + Host→403 test (thread next step UNCHANGED = WS-1) ← claude / Opus 4.8 (1M) / Petrel stirs Wingspan / 2026-06-22 dedicated consolidation (napkin rotated, 667-line content archived; PDR-113; forced-answer + bottom-up + decision-records graduations; F-83) + the F-84 fix landed (decision-debt false-green: detector `f056285fb` + register reformat `ea633117a`); thread next step UNCHANGED = WS-1 / 2026-06-22 (prior seats: Perseus turns Horizon (substrate de-anon `9abcd7679`), Oyster weaves Surf (WS-3 F-41), Nova wakes Genesis, Ferret seeks Tunnel (PDR-107/108/109/110), Finch binds Halo, Drake lifts Obsidian, Siren guards Reef, Tulip spins Xylem; full history in thread record) |
 | `eslint-no-throw-result-migration` | Migrate every throw to Result (ADR-088); drive the ~1000 warnings to zero; promote the rule. In execution on `docs/planning-and-validation`; cheap WS2 done, residue is design-laden (tier map in record) | [record](threads/eslint-no-throw-result-migration.next-session.md) | claude / Opus 4.8 (1M) / Siren mends Rudder / execution — observability+graph-core+logger landed (`93beffcfe`,`304b68f8d`,`61bdbc3e4`) / 2026-06-19 (prior: Merlin spins Cirrus `1556b9191`; Vanilla weaves Undergrowth, plan-author) |
 | `statusline-enhancements` | Claude Code statusline: Oak-mark, session-shape indicators, logo swap; lane in two `current/` plans (session-state, logo-modularisation). Live detail + the `feat/comms-research` divergence to reconcile: thread record | [record][statusline] | claude-code / Opus 4.8 / Vole calls Hollow / live-logo-swap-and-plan-harden / 2026-06-16 (prior identities: thread record) |
 | `agent-naming` | PDR-027 display-name derivation: versioned schema registry, session-hook identity surfaces, wordlist eras (v2 landed; v3 + era-pinning cure queued) | [record][agent-naming] | claude / Opus 4.8 / Squall hunts Troposphere / thread-open + v3-plan-author / 2026-06-13 (prior identities: thread record) |
@@ -237,7 +261,7 @@ each thread record; this table is the repo-level index.
 | `orientation-skills-family` | Teaching-surface family: a portable agentic-AI primer (lead-in) plus the **one** repo-bound orientation lens (`/oak-explain`) across the PDR-112 portability seam | [record][orientation] | claude-code / Opus 4.8 (1M) / Zenith lifts Firmament / **UNIFICATION IMPLEMENTED 2026-06-23** — WS0–WS6; two lenses → one `/oak-explain` (mode discerned; setup distinct; primer + PDR-112 seam unchanged; PDR-112 NOT amended); 3 mid-flight owner directions folded (clean break / minimise-unique-info / the name); ADR-202; live owner walk done; committed `ca40d98ce` (+ plan-estate archives `689fb9133`/`7ceb1382d`); push-pending / 2026-06-23 (prior: Skipper tracks Reef (plan author), Orbit rides Horizon, Bora lifts Downdraft) |
 | `reasoning-grammar` | Structured-reasoning capability: the portable grammar-of-thinking reference + the thin `oak-reason` skill (outward pair to `oak-metacognition`), wired into the metacognition directive, `oak-plan`, and start-right | [record](threads/reasoning-grammar.next-session.md) | claude / Opus 4.8 (1M) / Orbit rides Horizon / **COMPLETE** — landed `3b9836d89`; push pending (owner) / 2026-06-22 |
 | `user-search-not-exposed-until-built` | Gate the unbuilt user-search MCP App tools off `tools/list` behind an opt-in flag (default OFF) until the experience ships | [record](threads/user-search-not-exposed-until-built.next-session.md) | claude-code / Opus 4.8 (1M) / Foehn calls Headwind / **COMPLETE** — Cycle 1 `ac0a98c5b`, Cycle 2 `906cca9b3`, plan fixes `ff26bcf69`; push pending (owner) / 2026-06-23 |
-| `main-sonar-ai-profile-to-zero` | Drive `main`'s Sonar AI quality-profile backlog (398 issues, 48 rule classes) to **zero** — fix or genuine-FP only, no suppression. Owner-directed: deliberately-adopted profile. High-priority lanes: `tssecurity:S8707` agent-CLI path-injection, regex-safety (`S8786`/`S5843`/`S6035`) via per-workspace regex consolidation, test-integrity (`S2699`/`S5914`). Supersedes the retired `main-critical-sonar-remediation` lane | [record][main-sonar-zero] | claude-code / Opus 4.8 (1M) / Aspen tracks Root / thread-open + first-hand triage / 2026-06-24 |
+| `main-sonar-ai-profile-to-zero` | Drive `main`'s Sonar AI quality-profile backlog (398 issues, 48 rule classes) to **zero** — fix or genuine-FP only, no suppression. Owner-directed: deliberately-adopted profile. High-priority lanes: `tssecurity:S8707` agent-CLI path-injection, regex-safety (`S8786`/`S5843`/`S6035`) via per-workspace regex consolidation, test-integrity (`S2699`/`S5914`). Supersedes the retired `main-critical-sonar-remediation` lane | [record][main-sonar-zero] | claude / claude-opus-4-8[1m] / Thyme lifts Compost / S8707 site-2 committed (`4c9cfbfc9`) + branch pushed; PAUSED, site-3 → next team session / 2026-06-25 ← claude-code / Opus 4.8 (1M) / Aspen tracks Root / thread-open + first-hand triage / 2026-06-24 |
 
 ## Paused Threads
 

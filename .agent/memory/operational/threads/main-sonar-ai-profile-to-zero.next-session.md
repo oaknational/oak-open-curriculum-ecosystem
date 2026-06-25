@@ -22,12 +22,41 @@ Supersedes the retired `main-critical-sonar-remediation` lane.
 | platform | model | session_id_prefix | agent_name | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | claude-code | claude-opus-4-8-1m | 4b038c | Aspen tracks Root | analyst/plan-author | 2026-06-24 | 2026-06-24 |
+| claude-code | claude-opus-4-8-1m | c57e0b | Lapwing weaves Downdraft | implementer | 2026-06-24 | 2026-06-25 |
+| claude | claude-opus-4-8[1m] | c2b721 | Thyme lifts Compost | team-session-closer | 2026-06-25 | 2026-06-25 |
 
 ## Landing Target For Next Session
 
-Target: **owner-authorised execution start** — open a dedicated branch (not
-`chore/paperwork`), then ship Phase 1 (S8707 CLI canonical-path validation) as
-the first small PR. Then Phase 2 regex strategy.
+**Plan status: MERGED to `main` via PR #220 (`9e9844015`, 2026-06-24).**
+**Execution STARTED 2026-06-24/25 (Lapwing weaves Downdraft, owner-directed); PAUSED
+2026-06-25 (Thyme lifts Compost, worktree-pilot team closer) — site-3 → next team session.**
+Phase 1 (S8707) on branch `fix/sonar-s8707-cli-path-injection` (off `9e9844015`):
+
+- **Site 1/3 DONE + green — COMMITTED `1329d787a`** — `assertPathWithinBase`
+  validator (`agent-tools/src/core/safe-path.ts`, security-expert GO) wired into
+  `ci-turbo-report.ts`; type-check clean, 24/24 tests; full pre-commit gate
+  green. A `max-lines` fix extracted the production fs seam to
+  `ci-turbo-report-fs.ts`. Phase 1 still lands as one PR direct to main.
+- **Site 2/3 DONE — COMMITTED `4c9cfbfc9`** — git-dir containment base
+  (`git rev-parse --absolute-git-dir`; repo-root would block every worktree
+  commit), gate-green.
+- **Branch PUSHED to origin** (orphan mitigation, 2026-06-25). PUSHED-not-merged
+  deliberately: coordination is already squash-merged to `main`, the primary tree
+  is dirty, and Sonar is a separate thread; push is the zero-risk reversible
+  preservation that homes the at-risk work on origin without entangling it in a
+  dirty tree or a closed coordination branch.
+- **Site 3/3 PENDING** → next team session. Containment base
+  `apps/oak-search-cli/diagnostics`.
+- **Sites 2-3 handoff record (PDR-063)**:
+  [`../../../state/collaboration/handoffs/f2a17e85-55e1-4081-bf9e-a6c4cd69e48b.md`](../../../state/collaboration/handoffs/f2a17e85-55e1-4081-bf9e-a6c4cd69e48b.md).
+- **Plan correction (verified first-hand + security-reviewed):** per-site
+  containment bases, NOT blanket repo-root — site-1 `.turbo/runs`, site-2
+  **git dir** (`git rev-parse --absolute-git-dir`; repo-root would block every
+  worktree commit), site-3 `apps/oak-search-cli/diagnostics`. All FIX.
+
+Target (next team session): successor wires site 3 (TDD; sites 1 + 2 already
+committed) → security-expert RE-review of integrated sites → workspace gates →
+one PR direct to `main` via code-owner review. Then Phase 2 regex strategy.
 
 ## Lane State
 
@@ -69,7 +98,17 @@ design-MAJOR representative; mechanical-MINOR dispositioned at class level
 (per-site confirmation collapses into the fix act). Full per-site first-hand of
 every MINOR site is available on request.
 
-**Next safe step**: owner authorises execution → branch → Phase 1.
+**Current state (2026-06-25, Thyme lifts Compost)**: sites 1 + 2 committed
+(`1329d787a`, `4c9cfbfc9`) on `fix/sonar-s8707-cli-path-injection`, branch PUSHED
+to origin (preserved). Lane PAUSED at the worktree-pilot team closer; site-3 → next
+team session.
+
+**Next safe step**: next-team-session successor reads the handoff record
+(`handoffs/f2a17e85-…md`) before any edit → checks out the pushed
+`fix/sonar-s8707-cli-path-injection` branch → wires site 3 (`apps/oak-search-cli/diagnostics`
+base, TDD) → continues security-expert thread `abed0b58a0b03bcb2` for the integrated
+re-review of all three sites → workspace gates → one PR direct to `main` via code-owner
+review. Then Phase 2 regex strategy.
 
 ## Watch (not mine; flagged)
 

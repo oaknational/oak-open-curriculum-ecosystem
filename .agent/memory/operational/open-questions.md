@@ -97,3 +97,49 @@ proof); the curriculum-graph-estate synthesis (2026-06-22); paused threads `conn
 `oak-kg-ontology-planning-review`.
 
 **Status:** open — initial landscape research recorded; owned by the incoming engineer's brief and owner.
+
+## Q-010 — Re-establish the Director seat at all, now the team is dissolved and one agent operates solo?
+
+**Question:** The worktree-pilot team is dissolved; a single agent now operates solo under direct owner
+direction, while the guiding plan and the director brief still assume a future Director-led team. Should
+the Director seat be re-established at all for the next session, or does a solo operator under owner
+direction make the seat a routing tax with no team to route? The plan gathers the model verdict; this is
+the prior operational decision of whether to stand the seat back up before that verdict lands.
+
+**Why it shapes future work:** the next session opens either by rehydrating the Director seat from the
+brief or by operating seatless; the choice sets the whole session shape and feeds the very
+Director-model verdict the plan exists to render.
+
+**Why not cheaply answerable now:** it is an owner-shaped operating-model call (coordinator-threshold
+doctrine says peer/solo is default at or below three agents), not a fact to look up; low-urgency, does
+not block a current cycle.
+
+**Owning artefact:** [`worktree-pilot-consolidation-and-model-verdict.plan.md`](../../plans/agentic-engineering-enhancements/current/worktree-pilot-consolidation-and-model-verdict.plan.md)
+(the Director-+-worktree model is on trial there; that plan renders the verdict, this question is the
+immediate stand-up-the-seat-or-not decision that precedes it); the
+[director brief](director-handoff.md) seat-takeover protocol; [PDR-117](../../practice-core/decision-records/PDR-117-director-and-implementer-roles.md).
+
+**Status:** open — owner-shaped; not-yet-decided.
+
+## Q-011 — Liveness during a model-availability outage (external staleness-reaper / dead-man's-switch)?
+
+**Question:** "Stop your heartbeat at stand-down" cures only the *graceful* case. In a
+model-availability outage a session's Monitors die with it, so it cannot re-arm or stop its own
+heartbeat — leaving a stale-but-"active" liveness signal (~8h false "active" observed when the
+worktree-pilot team went down in exactly such an outage). What external liveness primitive — a
+staleness-reaper / dead-man's-switch that reaps from *outside* the session rather than relying on
+self-stop — should the operating model carry?
+
+**Why it shapes future work:** a successor reading a false "active" claim defers or mis-coordinates;
+every multi-agent and solo-with-heartbeat session depends on the liveness signal being trustworthy
+after an ungraceful death.
+
+**Why not cheaply answerable now:** it is a structural primitive needing an owner architectural
+decision (external reaping is not a fact to look up); the graceful-case cure is in place, so it is
+unresolved but not blocking.
+
+**Owning artefact:** [`worktree-pilot-consolidation-and-model-verdict.plan.md`](../../plans/agentic-engineering-enhancements/current/worktree-pilot-consolidation-and-model-verdict.plan.md)
+§Risk Assessment names this as an open architectural question for the owner; tracked as a PDR
+candidate in [`pending-graduations.md`](pending-graduations.md).
+
+**Status:** open — architectural; owner-decision PDR candidate (see pending-graduations).

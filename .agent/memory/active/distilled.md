@@ -225,3 +225,32 @@ skepticism: verify a subagent's *correction of your own finding* first-hand too,
 subagents haven't inherited your error (a docs-adr draft had). Refines the evidence-discipline /
 verify-dont-trust line. Source 2026-06-23 (Magnolia, MCPJam host-header settle; ADR-122/158).
 Siblings: [[verify-dont-trust]].
+
+## The harness completion-notification can report a trailing echo's exit, not the real gate's
+
+When a redirected compound command is run (e.g. `cmd > log 2>&1; echo "EXIT=$?"`, especially
+backgrounded), the harness completion-notification can report the trailing ECHO's exit (0),
+MASKING a RED gate underneath. Hit twice in one session; caught only by reading the log's turbo
+`Failed:` summary. Cure: capture the real exit INSIDE the redirect, or grep the gate/turbo summary
+for `Failed:`/error markers — never trust the harness exit-notification for a redirected compound
+command. Sibling failure same session: a `--include="vitest*.config.ts"` grep-glob silently missed
+`*.config.base.ts` (under-counted 5 vs the real 7); validate a glob against an independent count.
+Source 2026-06-24 (Whippoorwill wakes Dreamscape, worktree-pilot Sonar/WS-C; routed to the
+continuity carrier on the comms stream — `1ac40bc0` / `daad9aac`). Siblings:
+[[feedback_aggregate_gate_blind_to_unrun_suites]], the parsing-interleaved entry above.
+
+## Under context pressure, offload the breadth; keep the design verdict and the loss-scan yourself
+
+A deep-context session can keep landing high-value work by routing the heavy reading and drafting to
+fresh-context workflows and parallel sub-agents, while holding only the two non-offloadable possessions:
+the **design verdict** and the **first-hand loss-scan** (only the context holder can detect what durable
+substance is not yet homed — a fresh reader can verify a claim but cannot detect loss). Everything else —
+reading source, drafting prose, mechanical edits, gate runs — offloads cleanly to a fresh seat at full
+fidelity, *provided every returned output is critically assessed first-hand* (this session that screen
+caught a false "it's already tracked" claim, a "fix the YAML" false alarm, a cross-artefact pointer
+mismatch between two parallel agents that could not share mid-run state, and a readiness gate that needed
+RUNNING not believing). Caveat: a deep lane needing security-sensitive refactors still needs a genuinely
+fresh seat — re-spinning a spent session does NOT reset its budget; only breadth-work parallelises.
+Candidate pattern, one strong instance (2026-06-25, Thyme lifts Compost, worktree-pilot team closeout).
+Siblings: [[feedback_context_loss_probe_is_first_hand_only]], [[feedback_first_hand_means_me_not_subagents]],
+[[feedback_opus_team_quota_ceiling]], [[verify-dont-trust]].

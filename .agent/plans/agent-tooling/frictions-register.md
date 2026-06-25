@@ -1938,6 +1938,149 @@ below is a cross-reference index, not a second source of truth.
 - **Status**: ADDRESSED (2026-06-22) — `validateRegisterItems` now flags an entry-shaped block lacking the canonical `[…]` wrapper as `malformed` (commit `f056285fb`, TDD), so the silent miscount is a loud `⚠ non-conformant entries` report line; the two live register entries were reformatted to canonical wrapped-inline form, and the count now reads 2 (soft) — the true decision-debt — instead of a false 0. The recurrence-proof cure (the detector) and the data fix both landed.
 - **Owner direction status**: unsolicited (surfaced by the loss-scan; record-all-frictions standing).
 
+### F-85 — `claims` commands need an explicit `--active` and do not resolve the coordination home (fragment from worktrees)
+
+- **Source**: Snowdrop calls Topsoil (`f07539`), 2026-06-24 worktree-pilot bootstrap
+- **Surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts`, `cli-specs.ts`
+- **Observed**: `claims open|close|list|heartbeat` take a **required** `--active <path>` with no default and no `--repo-root` option. `comms` subcommands auto-resolve the coordination home to the primary checkout via `resolveCoordinationHome`; claims do not. From a linked worktree a relative `--active` writes a worktree-local `active-claims.json` invisible to peers — coordination silently fragments (the F-41 failure mode, but for claims rather than comms).
+- **Expected**: claims resolve the same shared primary home as comms with no per-call ceremony, so a worktree-isolated agent's claims are visible to the team by default.
+- **Candidate cure**: wire `resolveCoordinationHome(cwd)` as the `--active` default (with `--repo-root`/`--active` as the explicit escape hatch), mirroring `cli-comms-send.ts` / `cli-comms-validate.ts`.
+- **Target surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts` (+ option defaulting)
+- **Status**: open — blocking-class for the worktree-per-agent transition; workaround in use (Implementers pass an absolute `--active` to the primary checkout)
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-86 — pnpm script wrapper echoes `$ …` command lines to stdout, unusable for a Monitor watcher
+
+- **Source**: Snowdrop calls Topsoil (`f07539`), 2026-06-24 worktree-pilot bootstrap
+- **Surface**: `pnpm agent-tools:collaboration-state` (and sibling root scripts) under the `Monitor` tool
+- **Observed**: the pnpm wrapper prints two `$ …` command-echo lines to stdout before the real output. The `Monitor` tool treats every stdout line as an event, so arming the canonical `comms watch` via the pnpm script emits spurious notifications. Had to bypass with a direct `node agent-tools/dist/src/bin/agent-tools.js …` invocation, which sits in tension with `use-built-agent-tools-cli` preferring the pnpm script.
+- **Expected**: the canonical CLI invocation produces clean stdout (events only) so it composes with a background watcher without a documented bypass.
+- **Candidate cure**: a quiet entrypoint or `--silent`-clean wrapper for watch/stream commands, or bless the direct-node invocation for Monitor in the rule.
+- **Target surface**: root `package.json` scripts / `use-built-agent-tools-cli` rule / `comms-all-channels-watcher` rule
+- **Status**: open
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-87 — no launch-in-worktree mechanism; worktree agents start in the primary checkout
+
+- **Source**: Snowdrop calls Topsoil (`f07539`), 2026-06-24 worktree-pilot bootstrap
+- **Surface**: agent session launch / worktree-per-agent operating model
+- **Observed**: Implementer sessions intended for a worktree start in the primary checkout and must manually `cd` into their worktree before any work. Nothing binds a session to its worktree at launch; a forgotten `cd` runs the work (and gate builds) in the shared primary tree — the exact F-83 coupling worktrees exist to dissolve.
+- **Expected**: an agent assigned a worktree begins with its working directory already in that worktree.
+- **Candidate cure**: a worktree-aware launcher or a documented mandatory cd-first step in the worktree-per-agent transition; longer term, session-identity-keyed worktree creation on session open.
+- **Target surface**: `worktree-per-agent-transition.plan.md` (lifecycle) / launch tooling
+- **Status**: open — worktree-transition evidence
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-88 — `comms-seen` filenames embed the display name with spaces (quoting footgun)
+
+- **Source**: Snowdrop calls Topsoil (`f07539`), 2026-06-24 worktree-pilot bootstrap
+- **Surface**: `.agent/state/collaboration/comms-seen/<agent_name>.json`; `comms watch` / `comms inbox` `--seen-file`
+- **Observed**: the seen-file convention is the full agent display name with spaces (e.g. `Snowdrop calls Topsoil.json`), so every watcher/inbox invocation must quote the path; an unquoted path silently mis-parses into the wrong file and the watcher re-emits every event each poll.
+- **Expected**: a seen-file name that needs no quoting and cannot silently split on whitespace.
+- **Candidate cure**: slugify the codename for the seen-file (e.g. `snowdrop-calls-topsoil.json`) while keeping the display name in event payloads; or accept a `--seen-file` slug the CLI resolves.
+- **Target surface**: `agent-tools` comms-seen path derivation / `comms-all-channels-watcher` rule
+- **Status**: open
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-89 — `claims open` requires `--now`; inconsistent timestamp-defaulting across the CLI
+
+- **Source**: Snowdrop calls Topsoil (`f07539`), 2026-06-24 worktree-pilot bootstrap
+- **Surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts` (`claims open`)
+- **Observed**: `claims open` fails with `missing required option --now`, forcing a `date -u` substitution on every call. Timestamp-defaulting is inconsistent across the CLI (cf. F-79 where `comms list` *rejects* `--now`).
+- **Expected**: interactive invocations default `--now` to the current time, with the explicit flag retained for deterministic/replay use.
+- **Candidate cure**: default `--now` to `new Date().toISOString()` at the composition edge when the flag is absent; keep it overridable. Audit the whole CLI for one consistent timestamp-defaulting policy.
+- **Target surface**: `agent-tools/src/collaboration-state/` command option defaulting (CLI-wide)
+- **Status**: open
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-90 — fresh git worktree has no `node_modules` / `agent-tools/dist`; gates and the CLI cannot run there until bring-up
+
+- **Source**: Juno tracks Apogee (`d58962`), 2026-06-24 worktree-pilot WS-A team-start (relayed to Director Snowdrop calls Topsoil `f07539`)
+- **Surface**: `git worktree add` lifecycle / worktree-per-agent operating model
+- **Observed**: a newly created worktree shares the `.git` object store but NOT `node_modules` or build outputs. Consequence: (a) gates (`pnpm test` etc.) cannot run in the worktree until `pnpm install` there; (b) the `agent-tools` CLI cannot run from the worktree at all (no `dist`), so an agent must run the whole coordination plane (comms/claims/heartbeat) from the PRIMARY checkout, relying on comms auto-resolve, while doing source work and gates in the worktree.
+- **Expected**: a worktree is usable for its workstream (gates + CLI) shortly after creation without a manual, undocumented bring-up dance.
+- **Candidate cure**: a documented worktree bring-up step (`pnpm install` in the worktree, and either build agent-tools there or bless running the CLI from primary); longer term, a worktree-aware launcher that primes `node_modules`/`dist` (or shares them safely) on creation. Pairs with F-87 (launch-in-worktree) and F-85 (claims `--active`).
+- **Target surface**: `worktree-per-agent-transition.plan.md` (lifecycle / bring-up) / launch tooling
+- **Status**: open — worktree-transition evidence
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-91 — session shell cwd resets to the primary checkout after every command (worktree commands silently run in the shared tree)
+
+- **Source**: Swordfish tracks Driftwood (`4fe4cf`), 2026-06-24 worktree-pilot WS-B team-start (relayed to Director Snowdrop calls Topsoil `f07539`)
+- **Surface**: harness Bash-tool cwd behaviour under the worktree-per-agent model
+- **Observed**: an Implementer session intended to operate in its worktree has its shell cwd reset to the primary checkout after every command. A bare `pnpm test` (or any worktree-scoped command) therefore runs in the **shared primary tree** — the exact F-83 coupling worktrees exist to dissolve — unless every command is cd-prefixed or uses absolute paths. Compounds F-87 (no launch-in-worktree) and F-90 (no worktree bring-up).
+- **Expected**: a worktree-bound session keeps its cwd in the worktree across commands, so worktree-scoped work cannot accidentally touch the primary tree.
+- **Candidate cure**: a worktree-aware launcher that pins cwd to the worktree for the session; until then, a documented hard rule that every worktree command is cd-prefixed or absolute-pathed, surfaced in the worktree-per-agent transition plan.
+- **Target surface**: launch tooling / `worktree-per-agent-transition.plan.md` (operating discipline)
+- **Status**: open — worktree-transition evidence
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-92 — `comms send --tag heartbeat` still requires `--title`, but the HEARTBEAT MODE help does not say so
+
+- **Source**: Snowdrop calls Topsoil (`f07539`), 2026-06-24 worktree-pilot heartbeat bring-up
+- **Surface**: `agent-tools` `comms send --tag heartbeat`
+- **Observed**: the help's HEARTBEAT MODE clause lists `--claim-id / --intent-id / --branch / --current-cycle-label` as required and says the body is composed from typed state args — implying those are the only required inputs. But `--title` is also still required; omitting it fails with `missing required option --title`. Every agent arming a heartbeat hits this on the first attempt.
+- **Expected**: heartbeat mode either composes the title from typed args (as it composes the body), or the HEARTBEAT MODE help names `--title` in the required list.
+- **Candidate cure**: compose the canonical `Heartbeat: <agent_name> (<prefix>) — <cycle>` title from the identity tuple + `--current-cycle-label` when `--title` is absent in heartbeat mode; failing that, add `--title` to the documented required set.
+- **Target surface**: `agent-tools/src/collaboration-state/` comms-send heartbeat-mode arg handling + help text
+- **Status**: open
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-93 — `comms send --body` 1500-char limit has no clean home for a long directed coordination steer
+
+- **Source**: Snowdrop calls Topsoil (`f07539`), 2026-06-24 worktree-pilot WS-B steer
+- **Surface**: `agent-tools` `comms send --body`
+- **Observed**: a substantive directed steer (a reshaped-scope correction to a peer) exceeded the 1500-char `--body` limit. The error directs longer content to `--body-file` "stored in a handoff record, plan file, or PDR" — but a live coordination steer is none of those (handoff records are for retirement; plans/PDRs are not steer surfaces). The 1500 limit is by-design for scannability, but the overflow guidance has no natural durable home for steer-class content, forcing either ad-hoc shortening or a misfiled artefact.
+- **Expected**: a clean path for an occasionally-long directed steer — either a higher directed-event body ceiling, or a blessed steer/handoff body location that is not a plan/PDR.
+- **Candidate cure**: allow `--body-file` from an ephemeral coordination scratch location for `directed` events, or raise the directed-event ceiling above broadcast (directed steers are point-to-point, not stream-scannability-sensitive in the same way).
+- **Target surface**: `agent-tools` comms-send body-length policy / directed-event handling
+- **Status**: open (low severity; by-design tension)
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-94 — `claims` CLI has no adopt/transfer and cannot set `handoff_record_path`
+
+- **Source**: Director-handoff "Known friction" (`.agent/memory/operational/director-handoff.md`), 2026-06-25 worktree-pilot Director succession (PDR-063 mid-cycle handoff).
+- **Surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts` (`claims open|close|list|heartbeat`); no `claims adopt` / `claims set-handoff` subcommand.
+- **Observed**: a PDR-063 mid-cycle handoff requires the outgoing Director to retain a claim for the successor and the successor to adopt it, but the CLI has no `claims adopt --claim-id <id>` (transfer ownership of an existing claim) and no `claims set-handoff --claim-id <id> --path <path>` (record the `handoff_record_path` on a claim). Worked instance 2026-06-25: reusing `--claim-id` on `claims open` to "transfer" a claim created a DUPLICATE active-claims row (two rows sharing one `claim_id`) rather than transferring ownership — recovery was to close all rows and open fresh (`f2a17e85` → `d8533d0d`). Hand-editing `active-claims.json` to set the handoff path or transfer ownership is unsafe in a busy multi-writer window.
+- **Expected**: an outgoing role-holder can hand a claim to a successor and set its handoff-record path through the CLI, without duplicate rows or hand-edits.
+- **Candidate cure**: add `claims adopt --claim-id <id>` (rewrites the holding agent identity on an existing row, no new row) and `claims set-handoff --claim-id <id> --path <path>` subcommands; the PDR-063 substrate is the sibling design (ADR-182).
+- **Target surface**: `agent-tools/src/collaboration-state/cli-claim-commands.ts`, `cli-specs.ts`; PDR-063 / ADR-182.
+- **Status**: open — captured for the next team session ("fix the tooling once and for all"); worked around out-of-band this session (close-all + open-fresh).
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-95 — No start-right watcher-presence fail-fast gate
+
+- **Source**: Director-handoff "Known friction" (`.agent/memory/operational/director-handoff.md`), 2026-06-25 worktree-pilot session.
+- **Surface**: session-open / `start-right-team` (`oak-start-right-team`); `.agent/rules/comms-all-channels-watcher.md` (prose rule only).
+- **Observed**: the "arm the all-channels comms watcher as move 1" rule is prose, backed by agent diligence rather than a mechanical gate. Worked instance 2026-06-25: an implementer skipped arming the watcher under ceremony-aversion ("read-only / n=2 / minimal"), went blind to a simultaneous identical-branch claim, and never re-armed. Nothing failed fast to catch the missing watcher.
+- **Expected**: starting team work without a live comms watcher fails fast at session-open, so the constitutive team-visibility rule is enforced mechanically rather than relied on as diligence.
+- **Candidate cure**: a session-open / `start-right-team` check that detects no live comms watcher (no fresh `*.heartbeat.json` for this session's watcher under `.agent/state/collaboration/comms-seen/`) and fails fast / refuses to proceed until one is armed. Distinct from F-69's session-open stale-state *sweep* — this is a watcher-presence *gate*.
+- **Target surface**: `oak-start-right-team` skill / a session-open check; `.agent/rules/comms-all-channels-watcher.md` (prose → backed by a gate). Relates to F-69 (adjacent session-open hook).
+- **Status**: open — captured for the next team session.
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-96 — Continuity-buffer handoff commit blocked by markdownlint
+
+- **Source**: Director-handoff "Known friction" (`.agent/memory/operational/director-handoff.md`), 2026-06-25 worktree-pilot Director handoff.
+- **Surface**: `.husky/pre-commit` markdownlint gate over shared multi-agent continuity buffers (`.agent/memory/active/napkin.md`, `distilled.md`, registers, director-handoff, repo-continuity).
+- **Observed**: a mid-arc Director handoff commit can hit a markdownlint wall because the shared continuity buffers it must touch carry pre-existing MD trips from other agents' writes. The only path to land the handoff commit is then a full dedicated-consolidation pass (rotate + lint the whole buffer set) before any handoff commit can land — the handoff is held hostage to the entire buffer set's pre-existing lint debt rather than just its own clean files.
+- **Expected**: a handoff commit can land its own clean files without first clearing the whole buffer set's pre-existing lint debt.
+- **Candidate cure**: a lint-incremental / per-committer-scope path (lint only the committer's own changed files, or only the lines this commit touches) so a clean handoff commit is not blocked by debt it did not introduce. Distinct from F-83's structural cure (per-agent worktrees) in that it targets the handoff-commit unblock specifically.
+- **Target surface**: `.husky/pre-commit` markdownlint scope (changed-files vs whole-tree); relates to F-83 (whole-tree pre-commit gate hostage) and F-39 (markdownlint MD004 wrap).
+- **Status**: open — captured for the next team session; interim cure is the dedicated consolidation pass (rotate + lint, then commit).
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
+### F-97 — No PR monitor covers inline review comments and PR terminal state together
+
+- **Source**: Director-handoff "Known friction" (`.agent/memory/operational/director-handoff.md`), 2026-06-25 worktree-pilot session (the PR #220 / #222 inline-finding blind spot).
+- **Surface**: PR-watch / PR-monitor tooling; `gh pr checks` (covers check-status only).
+- **Observed**: no single monitor surfaces a PR's inline review comments together with its terminal state (merged / closed / review-decision). `gh pr checks` shows check status but is blind to inline bot/reviewer findings; the standing workaround is to poll `gh pr view N --json state,reviewDecision`, `gh api repos/.../pulls/N/comments`, and `gh pr view N --json comments` by hand. The cost is a Director can miss an inline finding (the PR #220 / #222 Proto-finding blind spot) when relying on the check-status view alone.
+- **Expected**: one monitor watches a PR for both new inline review comments and its terminal/review-decision state, with fail-loud notification.
+- **Candidate cure**: extend a PR-watch command to poll inline review comments (`pulls/N/comments`) and review-decision/terminal state alongside check status, surfacing new inline findings as events.
+- **Target surface**: agent-tools PR-watch / PR-monitor command.
+- **Status**: open — secondary to F-94/95/96; captured for the next team session.
+- **Owner direction status**: standing (record-all-frictions, event `2dbd74f6`)
+
 ---
 
 ## Mitigated / Addressed Frictions

@@ -104,3 +104,17 @@ New capture appends below.*
   genuinely external-gated, not agent-drivable now. Owner kept-gated 2026-06-24. Homed here (from
   the archived napkin) so a future consolidation pass that walks this register sees the candidate
   when the trigger fires.
+
+- **Liveness during a model-availability outage — external staleness-reaper / dead-man's-switch primitive**
+
+  `[captured: 2026-06-25 | source: worktree-pilot-consolidation-and-model-verdict.plan.md §Risk
+  Assessment + open-questions Q-011 (Thyme lifts Compost, session c2b721) | target: PDR
+  (operating-model governance) — a structural external-reaping liveness primitive | trigger: owner
+  takes the Q-011 architectural decision OR a second false-"active"-after-outage incident recurs |
+  size: small | status: pending]`
+
+  "Stop your heartbeat at stand-down" cures only the graceful case; an outage kills a session's
+  Monitors so it cannot stop its own heartbeat, leaving a stale-but-"active" signal (~8h observed in
+  the worktree-pilot outage). The cure is an *external* staleness-reaper / dead-man's-switch that
+  reaps from outside the dead session, not self-stop. Owner-decision-gated (architectural primitive,
+  not agent-drivable). Full analysis lives in the plan §Risk Assessment and Q-011 — not restated here.
