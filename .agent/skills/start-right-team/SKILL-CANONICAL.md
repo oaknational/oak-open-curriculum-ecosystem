@@ -163,7 +163,11 @@ the special case. Run both unless that exemption applies.
    edit or comms post — this is a mid-cycle pickup per PDR-063 and the
    record's four named sections (current edit state, in-flight
    reasoning, decisions made, decisions deferred) carry the substance
-   the prior agent froze at retirement (ADR-182 §Skill amendments).
+   the prior agent froze at retirement (ADR-182 §Skill amendments). Take
+   over the row with `claims adopt --claim-id <id> --platform <p> --model
+   <m>` — it rewrites the claim's `agent_id` to your identity in place
+   (never a duplicate row, never a hand-edit); the retiring agent records
+   the pointer with `claims set-handoff --claim-id <id> --path <record>`.
    **If a coordinator pre-positioning event is already in the comms
    stream naming this agent as the incoming coordinator** (PDR-064
    Moment 1), the team-start broadcast in move 3 may declare
