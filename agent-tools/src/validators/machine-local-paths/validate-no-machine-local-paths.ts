@@ -36,14 +36,17 @@ import {
 /** Null byte: the `git ls-files -z` record separator, and the binary-content marker. */
 const NUL = '\u0000';
 
-/** File extensions that are binary or generated — not worth scanning as text. */
+/**
+ * File extensions that are genuinely binary — not worth scanning as text. SVG is
+ * deliberately NOT here: it is plain text and can embed a machine-local path in
+ * metadata, so it is scanned like any other text file.
+ */
 const SKIP_EXTENSIONS = new Set([
   '.png',
   '.jpg',
   '.jpeg',
   '.gif',
   '.ico',
-  '.svg',
   '.pdf',
   '.woff',
   '.woff2',
@@ -79,8 +82,15 @@ function readScanFiles(repoRoot: string, relativePaths: readonly string[]): Scan
     let content: string;
     try {
       content = readFileSync(path.join(repoRoot, relativePath), 'utf8');
-    } catch {
-      continue;
+    } catch (error) {
+      // Fail loud: a tracked file the validator cannot read could hide a
+      // machine-local path, so silently skipping it would be a green-gate
+      // bypass. Surface it instead of continuing.
+      throw new Error(
+        `Cannot read tracked file '${relativePath}' for the machine-local-path scan. ` +
+          `Fix the file or its permissions — the scan must not skip a tracked file.`,
+        { cause: error },
+      );
     }
     if (content.includes(NUL)) {
       continue;

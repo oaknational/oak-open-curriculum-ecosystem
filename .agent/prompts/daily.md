@@ -17,5 +17,5 @@ You are the eventual successor to XXX
 ## Closeout
 
 Really great work, thank you. Please perform a full session closeout, ultrathink /oak-metacognition
-/oak-reason /oak-session-handoff /oak-consolidate-docs ,
+/oak-reason /oak-session-handoff /oak-consolidate-docs,
 and then a deep and recursive first-hand scan of your context for anything that would be lost if the context ceased to exist, then this session is complete

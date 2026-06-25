@@ -43,9 +43,10 @@ const LOGO_SEPARATOR_GLYPH = '_';
 export interface StatuslineRenderOptions {
   /**
    * Glyph family for the Oak mark. `none` is this option's default (the original
-   * single-line layout); the deployed statusline defaults to `braille-sharp` (set
-   * by the adapter from `OAK_STATUSLINE_LOGO`). Any non-`none` style renders the
-   * multi-row logo-column layout.
+   * layout without the logo column — still one or more rows depending on the
+   * error and coordination-branch lines); the deployed statusline defaults to
+   * `braille-sharp` (set by the adapter from `OAK_STATUSLINE_LOGO`). Any
+   * non-`none` style renders the multi-row logo-column layout.
    */
   readonly logo?: OakLogoStyle;
   /** Per-session counter selecting the `braille-sharp` cycle frame (other styles ignore it); defaults to 0. */
