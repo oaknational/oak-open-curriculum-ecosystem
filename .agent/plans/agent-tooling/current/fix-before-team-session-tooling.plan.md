@@ -4,52 +4,52 @@ overview: "Two bootstrap/handoff-integrity tooling fixes the next team session n
 todos:
   - id: wsa-a0-type-export
     content: "WS-A A0: add handoff_record_path to CollaborationClaim type + export assertClaimMatches. One commit."
-    status: pending
+    status: completed
   - id: wsa-a1-set-handoff-happy
     content: "WS-A A1: setHandoffPathOnClaims sets the field on the matching row, length unchanged. One commit."
-    status: pending
+    status: completed
     depends_on: [wsa-a0-type-export]
   - id: wsa-a3-set-handoff-shape
     content: "WS-A A3: assertHandoffPathShape rejects traversal/absolute/wrong-dir, accepts .md and .json under handoffs/. One commit."
-    status: pending
+    status: completed
     depends_on: [wsa-a1-set-handoff-happy]
   - id: wsa-a5-adopt-rewrite
     content: "WS-A A5: adoptClaims rewrites agent_id in place, no new row; preserves handoff_record_path/role/claimed_at. One commit."
-    status: pending
+    status: completed
     depends_on: [wsa-a0-type-export]
   - id: wsa-wire
     content: "WS-A wire: register claims:adopt + claims:set-handoff (specs/help/options/usage); add 'path' to KNOWN_OPTION_KEYS. One commit."
-    status: pending
+    status: completed
     depends_on: [wsa-a1-set-handoff-happy, wsa-a5-adopt-rewrite]
   - id: wsa-integration
     content: "WS-A integration: fail-loud on unknown/closed claim (A2/A6/A9); duplicate-row rewrite (A7); adopter-identity-not-retiree (A8); set-handoff idempotency (A4). Via runCollaborationStateCli. One or more commits, each green."
-    status: pending
+    status: completed
     depends_on: [wsa-wire]
   - id: wsa-skill-docsync
     content: "WS-A doc-sync: start-right-team move-7 references claims adopt for handoff-carrying pickups (PDR-063/ADR-182). One commit."
-    status: pending
+    status: completed
     depends_on: [wsa-integration]
   - id: wsb-b1-classifier
     content: "WS-B B1: pure classifyWatcherPresence + path derivers; exhaustive over the 5 staleness kinds + the stale-no-emit mtime-grace boundary. One commit."
-    status: pending
+    status: completed
   - id: wsb-b2-stat-io
     content: "WS-B B2: production WatcherStalenessIo adapter (fs.stat -> mtimeMs / 'missing' on ENOENT, rethrow else; readFile). One commit."
-    status: pending
+    status: completed
   - id: wsb-b3-assert-subcommand
     content: "WS-B B3: comms assert-watcher-live subcommand + wiring + integration. One or more commits, each green."
-    status: pending
+    status: completed
     depends_on: [wsb-b1-classifier, wsb-b2-stat-io]
   - id: wsb-b4-claims-open-gate
     content: "WS-B B4: hasOtherLiveAgents extraction + claims-open watcher precondition (solo-safe). One or more commits, each green."
-    status: pending
+    status: completed
     depends_on: [wsb-b1-classifier, wsb-b2-stat-io]
   - id: wsb-b5-docsync
     content: "WS-B B5: rule §Enforcement present-truth; start-right-team move-1 mechanical step; reconcile stale comms-watch-hang-hardening c2. One commit."
-    status: pending
+    status: completed
     depends_on: [wsb-b3-assert-subcommand, wsb-b4-claims-open-gate]
   - id: reviews-gates
     content: "Adversarial reviews (code/type/test/security/architecture); full gates one at a time; release-readiness."
-    status: pending
+    status: completed
     depends_on: [wsa-skill-docsync, wsb-b5-docsync]
 isProject: false
 ---
@@ -57,8 +57,17 @@ isProject: false
 # Fix-Before-Team-Session Tooling (F-94 + F-95)
 
 **Last Updated**: 2026-06-25
-**Status**: 🟡 EXECUTING
+**Status**: 🟢 LANDED (branch `fix/fix-before-team-session-tooling`, off `origin/main`; owner controls push/PR)
 **Scope**: Two agent-tooling fixes that guard bootstrap/handoff integrity from a team session's first moves — landed before the next team session.
+
+> **Landed 2026-06-25.** WS-A `9fe9a3741`/`d6e468801`/`a009917e8`/`40cfec00b`;
+> WS-B `d27453500`/`157cf3f6d`/`aee0c5271`/`a3486fe08`/`f3e45eef1`; review
+> hardening (TOCTOU/exhaustiveness/path-guard, all findings verified first-hand)
+> `e5c42da07`. All gates green; both features smoke-verified end-to-end through
+> the built binary. **Open follow-up:** retire F-94/F-95 in `frictions-register.md`
+> — those entries live on the pilot continuity branch, not `origin/main`, so the
+> retirement is a consolidation-session task on the branch that owns the register
+> (doing it here would conflict).
 
 ---
 
