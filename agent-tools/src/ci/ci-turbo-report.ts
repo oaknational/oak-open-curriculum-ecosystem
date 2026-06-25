@@ -114,8 +114,10 @@ export async function findLatestSummaryFile(
 /**
  * Resolve the path to the Turbo summary file that will be parsed.
  *
- * When an explicit `filePath` is supplied it is used as-is. Otherwise the
- * newest file in `runsDir` is discovered via {@link findLatestSummaryFile}.
+ * When an explicit `filePath` is supplied it is canonicalised and contained
+ * within `runsDir` (defeating `..` traversal or a symlink escape) before use.
+ * Otherwise the newest file in `runsDir` is discovered via
+ * {@link findLatestSummaryFile}.
  *
  * @param filePath - Caller-supplied explicit path, or `undefined`.
  * @param runsDir - Directory to search when `filePath` is absent.

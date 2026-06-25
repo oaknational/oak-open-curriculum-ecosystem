@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
 /**
- * Pre-commit hook to prevent accidental major version bumps.
- * Checks commit messages for breaking change indicators.
+ * `commit-msg` hook (wired in `.husky/commit-msg`) to prevent accidental major
+ * version bumps. Checks the commit message for breaking-change indicators.
  */
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync, realpathSync } from 'node:fs';
-import { argv, env, exit } from 'node:process';
+import { argv, exit } from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { assertPathWithinBase } from '../core/safe-path.js';
 import { writeErrorLine } from '../core/terminal-output.js';
-import { TRUSTED_GIT_PATH } from '../core/trusted-git.js';
+import { resolveTrustedGit } from '../core/trusted-git.js';
 
 const BREAKING_CHANGE_INDICATORS = [
   'BREAKING CHANGE:',
@@ -35,12 +35,19 @@ export interface PreventAccidentalMajorVersionOptions {
    * `process.argv[2]`; tests pass it explicitly (and omit it to exercise the
    * missing-path branch) so the function never depends on global `argv`.
    */
-  readonly commitMsgFile?: string | undefined;
+  readonly commitMsgFile?: string;
   /**
    * Containment base the commit-message path must resolve within; defaults to
    * the absolute git directory (`git rev-parse --absolute-git-dir`).
    */
   readonly gitDir?: string;
+  /**
+   * Resolves the absolute git directory when {@link gitDir} is not supplied.
+   * Defaults to a hardened `git rev-parse --absolute-git-dir`; injectable so a
+   * test can exercise the failure path (git missing / not a worktree) and prove
+   * it returns `{ exitCode: 1 }` rather than throwing.
+   */
+  readonly resolveGitDir?: () => string;
   /** Reads the (already-contained) file; defaults to `node:fs` `readFileSync` utf8. */
   readonly readFile?: (path: string) => string;
   /** Canonicalises paths for containment; defaults to `node:fs` `realpathSync`. */
@@ -54,6 +61,7 @@ interface ResolvedSeams {
   readonly readFile: (path: string) => string;
   readonly realpath: (path: string) => string;
   readonly writeError: (line: string) => void;
+  readonly resolveGitDir: () => string;
 }
 
 function resolveSeams(options: PreventAccidentalMajorVersionOptions): ResolvedSeams {
@@ -62,21 +70,24 @@ function resolveSeams(options: PreventAccidentalMajorVersionOptions): ResolvedSe
     readFile: options.readFile ?? ((path: string) => readFileSync(path, 'utf8')),
     realpath: options.realpath ?? ((path: string) => realpathSync(path)),
     writeError: options.writeError ?? writeErrorLine,
+    resolveGitDir: options.resolveGitDir ?? resolveAbsoluteGitDir,
   };
 }
 
 /**
- * Resolve the absolute git directory with a hardened `PATH`.
+ * Resolve the absolute git directory, executing git by its absolute path.
  *
  * @remarks
- * `PATH` is pinned to {@link TRUSTED_GIT_PATH} so a shadowing `git` on a
- * user-writable `PATH` entry cannot be executed (SonarCloud S4036).
+ * git is invoked via {@link resolveTrustedGit} (an absolute path from a fixed
+ * allowlist), not by name through `PATH`, so a shadowing `git` on a
+ * user-writable `PATH` entry cannot be executed (SonarCloud S4036, the compliant
+ * fix). `execFileSync` may throw if git is genuinely absent; the caller resolves
+ * this inside its try/catch.
  *
  * @returns The absolute git directory, used as the containment base.
  */
 function resolveAbsoluteGitDir(): string {
-  return execFileSync('git', ['rev-parse', '--absolute-git-dir'], {
-    env: { ...env, PATH: TRUSTED_GIT_PATH },
+  return execFileSync(resolveTrustedGit(), ['rev-parse', '--absolute-git-dir'], {
     encoding: 'utf8',
   }).trim();
 }
@@ -201,22 +212,25 @@ function evaluateCommitMessage(
 export function runPreventAccidentalMajorVersion(
   options: PreventAccidentalMajorVersionOptions = {},
 ): { exitCode: number } {
-  const { commitMsgFile, readFile, realpath, writeError } = resolveSeams(options);
+  const { commitMsgFile, readFile, realpath, writeError, resolveGitDir } = resolveSeams(options);
 
   if (commitMsgFile === undefined || commitMsgFile === '') {
     writeError('Error: No commit message file provided');
     return { exitCode: 1 };
   }
 
-  const gitDir = options.gitDir ?? resolveAbsoluteGitDir();
-
   let commitMessage: string;
   try {
+    // Resolve the containment base inside the try: a hardened `git rev-parse`
+    // can throw (git missing / not a worktree), and that must return
+    // `{ exitCode: 1 }` with a helpful line, not crash the hook with an
+    // unhandled exception.
+    const gitDir = options.gitDir ?? resolveGitDir();
     const safePath = assertPathWithinBase(commitMsgFile, gitDir, { realpath });
     commitMessage = readFile(safePath);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    writeError(`Error reading commit message file: ${message}`);
+    writeError(`Error resolving or reading commit message file: ${message}`);
     return { exitCode: 1 };
   }
 

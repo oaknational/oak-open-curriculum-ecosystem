@@ -121,4 +121,24 @@ describe('runPreventAccidentalMajorVersion', () => {
 
     expect(result).toEqual({ exitCode: 0 });
   });
+
+  it('returns exit code 1 — never an unhandled crash — when resolving the git dir throws', () => {
+    const readFile = vi.fn<(path: string) => string>();
+    const writeError = vi.fn<(line: string) => void>();
+
+    // No `gitDir`, so the resolver runs; a missing / non-worktree git throws.
+    const result = runPreventAccidentalMajorVersion({
+      commitMsgFile: '/repo/.git/COMMIT_EDITMSG',
+      resolveGitDir: () => {
+        throw new Error('fatal: not a git repository');
+      },
+      realpath,
+      readFile,
+      writeError,
+    });
+
+    expect(result).toEqual({ exitCode: 1 });
+    expect(readFile).not.toHaveBeenCalled();
+    expect(writeError).toHaveBeenCalledWith(expect.stringContaining('not a git repository'));
+  });
 });

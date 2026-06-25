@@ -1,17 +1,19 @@
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { readBranchTouchedFileReport, readGitStdout } from '../src/branch-touched-files/git';
 import type { GitCommandExecutor } from '../src/branch-touched-files/git';
 
 describe('branch touched files git boundary', () => {
-  it('runs git through a trusted PATH boundary', () => {
+  it('executes git by its absolute trusted path, not by name via PATH', () => {
     const calls: {
       readonly file: string;
       readonly args: readonly string[];
-      readonly path: string | undefined;
+      readonly env: NodeJS.ProcessEnv | undefined;
     }[] = [];
     const execFileSync: GitCommandExecutor = (file, args, options) => {
-      calls.push({ file, args, path: options.env?.PATH });
+      calls.push({ file, args, env: options.env });
       return 'abc123\n';
     };
 
@@ -22,22 +24,21 @@ describe('branch touched files git boundary', () => {
         execFileSync,
       }),
     ).toBe('abc123');
-    expect(calls).toStrictEqual([
-      {
-        file: 'git',
-        args: ['rev-parse', '--show-toplevel'],
-        path: '/usr/bin:/bin',
-      },
-    ]);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]?.args).toStrictEqual(['rev-parse', '--show-toplevel']);
+    // The hardening is the absolute binary path itself — not a PATH override.
+    expect(path.isAbsolute(calls[0]?.file ?? '')).toBe(true);
+    expect(path.basename(calls[0]?.file ?? '')).toBe('git');
+    expect(calls[0]?.env).toBeUndefined();
   });
 
-  it('routes an explicit absolute git path through a single-entry trusted PATH', () => {
+  it('executes an explicit absolute --git override verbatim', () => {
     const calls: {
       readonly file: string;
-      readonly path: string | undefined;
+      readonly env: NodeJS.ProcessEnv | undefined;
     }[] = [];
     const execFileSync: GitCommandExecutor = (file, _args, options) => {
-      calls.push({ file, path: options.env?.PATH });
+      calls.push({ file, env: options.env });
       return 'abc123\n';
     };
 
@@ -51,10 +52,23 @@ describe('branch touched files git boundary', () => {
     ).toBe('abc123');
     expect(calls).toStrictEqual([
       {
-        file: 'git',
-        path: '/nix/store/git/bin',
+        file: '/nix/store/git/bin/git',
+        env: undefined,
       },
     ]);
+  });
+
+  it('rejects a --git override that is not named git', () => {
+    const execFileSync: GitCommandExecutor = () => 'abc123\n';
+
+    expect(() =>
+      readGitStdout({
+        repoRoot: 'repo-root',
+        args: ['rev-parse', '--show-toplevel'],
+        execFileSync,
+        gitPath: '/usr/bin/not-git',
+      }),
+    ).toThrow('--git must point to an executable named git');
   });
 
   it('rejects relative git path overrides', () => {

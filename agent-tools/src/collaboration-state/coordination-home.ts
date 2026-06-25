@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 
-import { TRUSTED_GIT_PATH } from '../core/trusted-git.js';
+import { resolveTrustedGit } from '../core/trusted-git.js';
 
 /** Runs a git subcommand from `cwd` and returns stdout; throws on non-zero exit. */
 export type GitRunner = (args: readonly string[], cwd: string) => string;
@@ -15,13 +15,13 @@ export interface ResolveCoordinationHomeOptions {
 }
 
 const defaultRunGit: GitRunner = (args, cwd) =>
-  // Pin PATH to trusted system dirs so `git` cannot be shadowed via a writable
-  // PATH entry (the S4036 FIX). The `PATH` key is set inline (not via a helper)
-  // so the hardening is visible to static analysis, matching branch-touched-files.
-  execFileSync('git', [...args], {
+  // Execute git by its ABSOLUTE path (resolveTrustedGit) so a writable PATH
+  // entry cannot shadow it (the S4036 FIX). Once the binary is addressed
+  // absolutely no `env.PATH` override is needed — the absolute path is the
+  // hardening, and it is the pattern the analyser actually accepts.
+  execFileSync(resolveTrustedGit(), [...args], {
     cwd,
     encoding: 'utf8',
-    env: { ...process.env, PATH: TRUSTED_GIT_PATH },
   });
 
 /**

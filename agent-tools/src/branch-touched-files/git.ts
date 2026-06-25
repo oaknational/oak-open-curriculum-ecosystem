@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import type { ExecFileSyncOptionsWithStringEncoding } from 'node:child_process';
 import path from 'node:path';
 
-import { TRUSTED_GIT_PATH } from '../core/trusted-git.js';
+import { resolveTrustedGit } from '../core/trusted-git.js';
 
 import { createBranchTouchedFileReport, type BranchTouchedFileReport } from './index.js';
 
@@ -56,22 +56,28 @@ export function readBranchTouchedFileReport(
 
 export function readGitStdout(options: ReadGitStdoutOptions): string {
   const run = options.execFileSync ?? execFileSync;
-  const trustedPath = trustedGitPath(options.gitPath);
+  const gitBinary = resolveGitBinary(options.gitPath);
 
-  return run('git', options.args, {
+  return run(gitBinary, options.args, {
     cwd: options.repoRoot,
     encoding: 'utf8',
-    env: {
-      ...process.env,
-      PATH: trustedPath,
-    },
     stdio: ['ignore', 'pipe', 'pipe'],
   }).trim();
 }
 
-function trustedGitPath(gitPath: string | undefined): string {
+/**
+ * Resolve the absolute path to the `git` binary to execute.
+ *
+ * @remarks
+ * Executing git by its absolute path — not by name via `PATH` — defeats
+ * PATH-hijacking (SonarCloud S4036, the compliant fix). With no `--git` override
+ * the path comes from {@link resolveTrustedGit} (a fixed allowlist of system
+ * directories); an explicit override must itself be an absolute path to an
+ * executable named `git`, and is then used verbatim.
+ */
+function resolveGitBinary(gitPath: string | undefined): string {
   if (gitPath === undefined) {
-    return TRUSTED_GIT_PATH;
+    return resolveTrustedGit();
   }
   if (!path.isAbsolute(gitPath)) {
     throw new Error('--git requires an absolute path to a git executable');
@@ -79,5 +85,5 @@ function trustedGitPath(gitPath: string | undefined): string {
   if (path.basename(gitPath) !== 'git') {
     throw new Error('--git must point to an executable named git');
   }
-  return path.dirname(gitPath);
+  return gitPath;
 }
