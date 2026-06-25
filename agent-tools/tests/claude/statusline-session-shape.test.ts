@@ -10,7 +10,6 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  parsePrimaryWorktreeRoot,
   resolveSessionShape,
   type ExperimentsEntry,
 } from '../../src/claude/statusline-session-shape';
@@ -428,30 +427,5 @@ describe('resolveSessionShape — soft degradation', () => {
     });
 
     expect(shape).toStrictEqual({ ownRole: undefined, teamShape: 'observing', arcActive: false });
-  });
-});
-
-describe('parsePrimaryWorktreeRoot', () => {
-  it('returns the first worktree path from porcelain output', () => {
-    const porcelain = [
-      'worktree /Users/jim/code/oak/oak-open-curriculum-ecosystem',
-      'HEAD 5bbda2fa900000000000000000000000000000000',
-      'branch refs/heads/main',
-      '',
-      'worktree /Users/jim/code/oak/oak-open-curriculum-ecosystem/.claude/worktrees/statusline-enhancements',
-      'HEAD ac2901fe100000000000000000000000000000000',
-      'branch refs/heads/feat/statusline-enhancements',
-      '',
-    ].join('\n');
-
-    expect(parsePrimaryWorktreeRoot(porcelain)).toBe(
-      '/Users/jim/code/oak/oak-open-curriculum-ecosystem',
-    );
-  });
-
-  it('returns undefined for unrecognised output', () => {
-    expect(parsePrimaryWorktreeRoot('')).toBeUndefined();
-    expect(parsePrimaryWorktreeRoot('fatal: not a git repository')).toBeUndefined();
-    expect(parsePrimaryWorktreeRoot('worktree ')).toBeUndefined();
   });
 });

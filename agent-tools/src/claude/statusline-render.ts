@@ -1,121 +1,71 @@
 /**
- * Pure renderer for the Claude Code statusline.
+ * Pure layout for the Claude Code statusline.
  *
  * @remarks
- * Assembles the Claude Code statusline from already-gathered values. Holds no
- * I/O: the imperative adapter (`statusline-identity.ts`) derives the agent
- * identity, gathers git state, and resolves the session-shape indicators, then
- * delegates formatting here so the layout is unit-testable. The colour palette
- * lives in `statusline-ansi.ts` and the coordination-indicator glyphs in
- * `statusline-indicators.ts`, so this file holds the layout concern alone.
+ * Assembles the statusline from already-gathered values. Holds no I/O: the
+ * adapter (`statusline-identity.ts`) gathers the git facts and session shape and
+ * delegates here. Segment colouring lives in `statusline-segments.ts`; this file
+ * owns only the line/row layout.
  *
- * Segment order puts the short, fixed-width segments (identity, session-shape
- * indicators, model, context %) first and the long, variable-width git segments
- * last, so a narrow terminal truncates the least important information first.
+ * Segment order puts the short, fixed-width segments (identity, indicators,
+ * model, context %) first and the long, variable-width git segments last, so a
+ * narrow terminal truncates the least important information first. A loud error
+ * token, when present, leads the output in any layout so it cannot be missed.
  *
- * The session-shape indicators are glanceable coordination glyphs (a Director
- * demark on the identity, a team-shape icon, an ArcAngel wing) that sit with the
- * identity: the no-logo layout keeps them on the coordination line, the
- * logo layout trails them on the identity row. With a logo style the statusline
- * renders as a logo-column block (the Oak mark on the left, segments to its
- * right — five rows for the default `braille-sharp`, four for the other styles);
- * without one it renders over two lines — the coordination segments first, then
- * the git location.
+ * Without a logo it renders over lines (a loud error first; then the
+ * coordination summary; then the working location; then the coordination branch
+ * on its own line). With a logo it renders the logo-column rows (five for the
+ * default `braille-sharp`, four otherwise) with the segments to the mark's right;
+ * a segment row beyond the logo rows renders as a bare line so the coordination
+ * branch is never dropped.
  *
  * @packageDocumentation
  */
 
 import { resolveLogoRows, type OakLogoStyle } from './oak-logo.js';
+import { DIM, GREEN, RESET } from './statusline-ansi.js';
 import {
-  BOLD,
-  BLUE,
-  CYAN,
-  DIM,
-  GREEN,
-  RED,
-  RESET,
-  HORIZONTAL_SEPARATOR,
-  YELLOW,
-} from './statusline-ansi.js';
-import { formatIdentity, formatSessionIndicators } from './statusline-indicators.js';
-import { type SessionShape } from './statusline-session-shape.js';
+  buildSegments,
+  joinPresent,
+  type Segments,
+  type StatuslineParts,
+} from './statusline-segments.js';
+
+export type { StatuslineParts } from './statusline-segments.js';
 
 const LOGO_COLOUR = GREEN;
-
-/**
- * Segment values for a single statusline render. Each visible segment is
- * optional; absent segments are dropped and the rest joined with a separator.
- */
-export interface StatuslineParts {
-  /** Deterministic agent-identity display name (PDR-027). */
-  readonly identity: string | undefined;
-  /** Current workspace directory basename. */
-  readonly dir: string;
-  /** Current git branch (or short SHA), if inside a repository. */
-  readonly branch: string | undefined;
-  /** Whether the working tree has tracked or untracked changes. */
-  readonly dirty: boolean;
-  /** Linked-worktree name; absent in the main working tree. */
-  readonly worktree: string | undefined;
-  /** Claude Code context-window usage percentage. */
-  readonly usedPercentage: number | undefined;
-  /** Claude Code model display name. */
-  readonly model: string | undefined;
-  /**
-   * Resolved session coordination shape (own role, team shape, ArcAngel
-   * liveness); undefined when no shape was resolved for the tick, which renders
-   * identically to a soloist with no live rapid channel — no indicators.
-   */
-  readonly sessionShape: SessionShape | undefined;
-}
-
-/** Optional presentation controls for {@link renderStatusline}. */
-export interface StatuslineRenderOptions {
-  /**
-   * Glyph family for the Oak mark. `none` (the default) renders the original
-   * single line; any other style renders the multi-row logo-column layout (five
-   * rows for `braille-sharp`, four for the other styles).
-   */
-  readonly logo?: OakLogoStyle;
-  /** Per-session counter selecting the `braille-sharp` cycle frame (other styles ignore it); defaults to 0, advanced by the adapter. */
-  readonly logoFrame?: number;
-  /**
-   * Rule glyph for the horizontal separator beneath the logo block, which
-   * divides it from the prompt Claude Code renders below. **On by default**
-   * (omit it for the default glyph). Whatever glyph is used is tiled and trimmed
-   * to the **active logo's display width** so the rule spans exactly the logo
-   * column, whichever style is active. Pass an empty string to suppress the rule
-   * entirely. Only the logo layout carries it; the no-logo layout ignores it.
-   * The glyph must be visible content — Claude Code drops a purely-empty
-   * trailing line, so a bare space would render no gap.
-   */
-  readonly logoSeparator?: string;
-}
-
-const DIRTY_MARK = '*';
 /** Gap between the logo column and the segment text, in the multi-row layout. */
 const LOGO_GAP = '  ';
 /** Default rule glyph for the logo separator row, tiled to the logo width. */
 const LOGO_SEPARATOR_GLYPH = '_';
 
-/** Context usage below this percentage renders in green; from it, yellow. */
-const CONTEXT_ELEVATED_PERCENT = 50;
-/** Context usage from this percentage upwards renders in red. */
-const CONTEXT_HIGH_PERCENT = 70;
+/** Optional presentation controls for {@link renderStatusline}. */
+export interface StatuslineRenderOptions {
+  /**
+   * Glyph family for the Oak mark. `none` is this option's default (the original
+   * single-line layout); the deployed statusline defaults to `braille-sharp` (set
+   * by the adapter from `OAK_STATUSLINE_LOGO`). Any non-`none` style renders the
+   * multi-row logo-column layout.
+   */
+  readonly logo?: OakLogoStyle;
+  /** Per-session counter selecting the `braille-sharp` cycle frame (other styles ignore it); defaults to 0. */
+  readonly logoFrame?: number;
+  /**
+   * Rule glyph for the horizontal separator beneath the logo block. **On by
+   * default** (omit for the default glyph); tiled and trimmed to the active
+   * logo's display width. Pass an empty string to suppress the rule. Only the
+   * logo layout carries it.
+   */
+  readonly logoSeparator?: string;
+}
 
 /**
  * Assemble the statusline from gathered segment values.
  *
  * @param parts - The resolved segment values.
  * @param options - Optional presentation controls (e.g. the Oak logo style).
- * @returns The ANSI-coloured statusline. Without a logo it renders over two
- *   lines (coordination: identity, indicators, model, context; then git: branch,
- *   place — absent segments dropped, an empty line omitted). With a logo it is
- *   the logo-column rows (five for the default `braille-sharp`, four for the
- *   other styles) — the Oak mark column with the segments to its right, the
- *   indicators trailing the identity on row 0 — followed by a separator rule row
- *   spanning the logo width (on by default; pass an empty `logoSeparator` to
- *   suppress it).
+ * @returns The ANSI-coloured statusline (multi-line without a logo; the
+ *   logo-column rows with a trailing separator with one).
  *
  * @example
  * ```ts
@@ -128,8 +78,9 @@ const CONTEXT_HIGH_PERCENT = 70;
  *   usedPercentage: 12,
  *   model: 'Opus 4.7',
  *   sessionShape: undefined,
+ *   coordinationBranch: 'coordination/worktree-pilot',
+ *   error: undefined,
  * });
- * // -> "<magenta>Fragrant... · Opus 4.7 · ctx:12%\nfeat/...* · wt:oak-wt-eef"
  * ```
  */
 export function renderStatusline(
@@ -138,80 +89,69 @@ export function renderStatusline(
 ): string {
   const seg = buildSegments(parts);
   const logo = options.logo ?? 'none';
-  if (logo === 'none') {
-    // No logo: two lines — coordination segments first, then the git location;
-    // an empty line (all its segments absent) is dropped so no blank row renders.
-    const coordinationLine = joinPresent([seg.identity, seg.indicators, seg.model, seg.context]);
-    const locationLine = joinPresent([seg.branch, seg.place]);
-    return [coordinationLine, locationLine].filter((line) => line.length > 0).join('\n');
-  }
+  return logo === 'none' ? renderNoLogo(seg) : renderWithLogo(seg, logo, options);
+}
 
-  // One rowText entry per segment-bearing row; composeWithLogo drives off the
-  // logo rows (five for the default braille-sharp, four otherwise), so any logo
-  // row beyond these renders as a bare mark — the acorn's base sits below the
-  // segments. Indicators trail the identity on row 0. A separator rule row (on
-  // by default, spanning the logo width; see logoSeparator) divides the block
-  // from the prompt Claude Code renders beneath it.
+/**
+ * No-logo layout: a loud error first, the coordination summary, the working
+ * location, then the coordination branch on its own line. Empty lines (all their
+ * segments absent) are dropped so no blank row renders.
+ */
+function renderNoLogo(seg: Segments): string {
+  const summaryLine = joinPresent([seg.identity, seg.indicators, seg.model, seg.context]);
+  const locationLine = joinPresent([seg.branch, seg.place]);
+  return [seg.error, summaryLine, locationLine, seg.coordinationBranch]
+    .filter((line): line is string => line !== undefined && line.length > 0)
+    .join('\n');
+}
+
+/**
+ * Logo layout: one rowText per segment-bearing row, zipped with the logo rows by
+ * {@link composeWithLogo}. A loud error leads the block in any layout.
+ */
+function renderWithLogo(
+  seg: Segments,
+  logo: Exclude<OakLogoStyle, 'none'>,
+  options: StatuslineRenderOptions,
+): string {
   const rowTexts = [
     joinPresent([seg.identity, seg.indicators]),
     seg.model ?? '',
     joinPresent([seg.context, seg.branch]),
     seg.place,
+    seg.coordinationBranch ?? '',
   ];
   const logoRows = resolveLogoRows(logo, options.logoFrame ?? 0);
-  const statuslineContent = composeWithLogo(logoRows, rowTexts);
+  const content = composeWithLogo(logoRows, rowTexts);
   const separatorRow = buildLogoSeparator(options.logoSeparator, logoRows);
-  return separatorRow === undefined ? statuslineContent : `${statuslineContent}\n${separatorRow}`;
-}
-
-/** The ANSI-coloured statusline segments, each absent when its value is. */
-interface Segments {
-  readonly identity: string | undefined;
-  readonly indicators: string | undefined;
-  readonly model: string | undefined;
-  readonly context: string | undefined;
-  readonly branch: string | undefined;
-  readonly place: string;
-}
-
-/** Format each {@link StatuslineParts} value into its coloured segment. */
-function buildSegments(parts: StatuslineParts): Segments {
-  const dirty = parts.dirty ? `${YELLOW}${DIRTY_MARK}${RESET}` : '';
-  const place = parts.worktree === undefined ? parts.dir : `wt:${parts.worktree}`;
-  return {
-    identity: formatIdentity(parts.identity, parts.sessionShape?.ownRole),
-    indicators: formatSessionIndicators(parts.sessionShape),
-    model: parts.model === undefined ? undefined : `${DIM}${parts.model}${RESET}`,
-    context: parts.usedPercentage === undefined ? undefined : formatContext(parts.usedPercentage),
-    // Branch is bold blue. Apply the colour before BOLD: BLUE carries a leading
-    // reset (`0;`) that would otherwise clear a preceding bold. The trailing
-    // RESET ends both attributes before the dirty mark.
-    branch:
-      parts.branch === undefined ? undefined : `${BLUE}${BOLD}${parts.branch}${RESET}${dirty}`,
-    place: `${CYAN}${place}${RESET}`,
-  };
-}
-
-/** Join the present segments with the separator, dropping `undefined` ones. */
-function joinPresent(segments: readonly (string | undefined)[]): string {
-  return segments
-    .filter((segment): segment is string => segment !== undefined)
-    .join(HORIZONTAL_SEPARATOR);
+  const block = separatorRow === undefined ? content : `${content}\n${separatorRow}`;
+  return seg.error === undefined ? block : `${seg.error}\n${block}`;
 }
 
 /**
  * Compose the logo rows with the per-row segment text. Each logo row always
  * renders (the mark stays whole); the gap and text are appended only when that
- * row has segment text.
+ * row has segment text. A segment row beyond the logo block — e.g. the
+ * coordination branch on a four-row logo, where the five-row `braille-sharp`
+ * default carries it on its last row — renders as a bare text line below the mark
+ * so the fact is never dropped.
  */
 function composeWithLogo(logoRows: readonly string[], rowTexts: readonly string[]): string {
-  return logoRows
-    .map((logoRow, index) => {
-      const mark = `${LOGO_COLOUR}${logoRow}${RESET}`;
-      const text = rowTexts[index] ?? '';
-      return text.length > 0 ? `${mark}${LOGO_GAP}${text}` : mark;
-    })
-    .join('\n');
+  const rowCount = Math.max(logoRows.length, rowTexts.length);
+  const lines: string[] = [];
+  for (let index = 0; index < rowCount; index += 1) {
+    const logoRow = logoRows[index];
+    const text = rowTexts[index] ?? '';
+    if (logoRow === undefined) {
+      if (text.length > 0) {
+        lines.push(text);
+      }
+      continue;
+    }
+    const mark = `${LOGO_COLOUR}${logoRow}${RESET}`;
+    lines.push(text.length > 0 ? `${mark}${LOGO_GAP}${text}` : mark);
+  }
+  return lines.join('\n');
 }
 
 /**
@@ -220,31 +160,19 @@ function composeWithLogo(logoRows: readonly string[], rowTexts: readonly string[
  *
  * @param separator - Rule glyph; defaults to {@link LOGO_SEPARATOR_GLYPH} when
  *   `undefined`. An empty string suppresses the rule.
- * @param logoRows - The active logo's rows; row width sets the rule width.
- * @returns The coloured separator row, or `undefined` when suppressed.
+ * @param logoRows - The active logo's rows; the first row's width sets the rule width.
+ * @returns The coloured separator row, or `undefined` when suppressed or no rows.
  */
 function buildLogoSeparator(
   separator: string | undefined,
   logoRows: readonly string[],
 ): string | undefined {
   const glyph = separator ?? LOGO_SEPARATOR_GLYPH;
-  if (glyph.length === 0) {
+  const firstRow = logoRows[0];
+  if (glyph.length === 0 || firstRow === undefined) {
     return undefined;
   }
-  const width = [...logoRows[0]].length;
+  const width = [...firstRow].length;
   const rule = [...glyph.repeat(width)].slice(0, width).join('');
   return `${DIM}${rule}${RESET}`;
-}
-
-/** Format context usage, colour-coded as a glance-warning once it climbs. */
-function formatContext(usedPercentage: number): string {
-  const pct = Math.round(usedPercentage);
-  const text = `ctx:${pct}%`;
-  if (pct >= CONTEXT_HIGH_PERCENT) {
-    return `${RED}${text}${RESET}`;
-  }
-  if (pct >= CONTEXT_ELEVATED_PERCENT) {
-    return `${YELLOW}${text}${RESET}`;
-  }
-  return `${GREEN}${text}${RESET}`;
 }

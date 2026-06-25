@@ -200,20 +200,3 @@ function resolveArcActive(
 function normaliseForFilenameMatch(value: string): string {
   return value.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-');
 }
-
-/**
- * Resolve the PRIMARY checkout root from `git worktree list --porcelain`
- * output: the first `worktree <path>` line. Git documents list order as the
- * main working tree first; the statusline relies on that contract so a
- * worktree seat reads the primary checkout's live coordination registry
- * rather than its own stale copy. Returns undefined on unrecognised output
- * (soft-fail: the adapter then skips the coordination reads for the tick).
- */
-export function parsePrimaryWorktreeRoot(porcelainOutput: string): string | undefined {
-  const firstLine = porcelainOutput.split('\n', 1)[0] ?? '';
-  if (!firstLine.startsWith('worktree ')) {
-    return undefined;
-  }
-  const path = firstLine.slice('worktree '.length).trim();
-  return path.length === 0 ? undefined : path;
-}

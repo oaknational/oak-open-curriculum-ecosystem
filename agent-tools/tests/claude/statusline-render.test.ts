@@ -17,6 +17,8 @@ const base: StatuslineParts = {
   usedPercentage: undefined,
   model: undefined,
   sessionShape: undefined,
+  coordinationBranch: undefined,
+  error: undefined,
 };
 
 describe('renderStatusline', () => {
@@ -30,6 +32,8 @@ describe('renderStatusline', () => {
       usedPercentage: 12,
       model: 'Opus 4.7',
       sessionShape: undefined,
+      coordinationBranch: undefined,
+      error: undefined,
     }).split('\n');
 
     expect(lines).toHaveLength(2);
@@ -79,6 +83,35 @@ describe('renderStatusline', () => {
     expect(renderStatusline({ ...base, branch: undefined, dirty: true })).not.toContain('*');
   });
 
+  it('shows the coordination branch on its own line, separate from the working branch', () => {
+    const lines = renderStatusline({
+      ...base,
+      branch: 'fix/sonar-s8707',
+      worktree: 'oak-sonar-p1',
+      coordinationBranch: 'coordination/worktree-pilot',
+    }).split('\n');
+    const workingLine = lines.find((line) => line.includes('fix/sonar-s8707'));
+    const coordinationLine = lines.find((line) => line.includes('coordination/worktree-pilot'));
+    expect(workingLine).toBeDefined();
+    expect(coordinationLine).toBeDefined();
+    expect(coordinationLine).toContain('coord:');
+    expect(coordinationLine).not.toBe(workingLine);
+  });
+
+  it('omits the coordination line when there is no coordination branch', () => {
+    expect(renderStatusline({ ...base, branch: 'main' })).not.toContain('coord:');
+  });
+
+  it('renders a loud error token as the leading line and never swallows it', () => {
+    const lines = renderStatusline({
+      ...base,
+      branch: undefined,
+      error: 'branch unresolved: fatal: bad object HEAD',
+    }).split('\n');
+    expect(lines[0]).toContain('⚠');
+    expect(lines[0]).toContain('branch unresolved: fatal: bad object HEAD');
+  });
+
   it('renders low context usage in green, rounded to a whole number', () => {
     const line = renderStatusline({ ...base, usedPercentage: 12.6 });
     expect(line).toContain(`${GREEN}ctx:13%${RESET}`);
@@ -117,6 +150,8 @@ describe('renderStatusline with an Oak logo column', () => {
         usedPercentage: 38,
         model: 'Opus 4.8',
         sessionShape: undefined,
+        coordinationBranch: undefined,
+        error: undefined,
       },
       { logo: 'sextant' },
     ).split('\n');
@@ -206,5 +241,22 @@ describe('renderStatusline with an Oak logo column', () => {
     expect(firstRow(1)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[1][0]}${RESET}`);
     expect(firstRow(3)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[3][0]}${RESET}`);
     expect(firstRow(4)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[0][0]}${RESET}`);
+  });
+
+  it('keeps the coordination branch on a four-row logo, as a bare line below the mark', () => {
+    // sextant is a four-row logo; the coordination branch is the fifth row text,
+    // so it must render as a bare trailing line rather than being dropped.
+    const lines = renderStatusline(
+      {
+        ...base,
+        dir: 'oak-sonar-p1',
+        branch: 'fix/sonar',
+        coordinationBranch: 'coordination/pilot',
+      },
+      { logo: 'sextant' },
+    ).split('\n');
+    const coordinationLine = lines.find((line) => line.includes('coordination/pilot'));
+    expect(coordinationLine).toBeDefined();
+    expect(coordinationLine).toContain('coord:');
   });
 });

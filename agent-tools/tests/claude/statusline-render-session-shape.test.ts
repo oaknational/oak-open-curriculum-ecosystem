@@ -37,6 +37,8 @@ function parts(sessionShape: SessionShape | undefined): StatuslineParts {
     usedPercentage: undefined,
     model: undefined,
     sessionShape,
+    coordinationBranch: undefined,
+    error: undefined,
   };
 }
 
