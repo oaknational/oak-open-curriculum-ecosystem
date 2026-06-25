@@ -44,6 +44,19 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   continuity buffers** (the orphan-prevention close-out). Also open: whether to
   re-establish the Director seat; the DATA-SOURCES governance criteria. Full pickup:
   [`director-handoff.md`](director-handoff.md).
+- **Practice↔IDE integration-plane feasibility report — LANDED this session (2026-06-25, Panther
+  hunts Reverie, cursor 7e4510; report-only, no code/commit).**
+  [`practice-ide-integration-plane-feasibility-2026-06-25.md`](../../reports/practice-ide-integration-plane-feasibility-2026-06-25.md):
+  proposes a Practice-owned, local-install-only IDE plugin (`practice-ide-plugin`) + new `agent-tools
+  practice-ide` commands giving the Practice a governed way to cause effects in any VS Code-family IDE;
+  first committed capability = spawn a visible interactive terminal running ONE strictly-vetted,
+  template-built command. Security spine: blast radius bounded **by construction** to a closed,
+  adversarially-vetted template registry (no URI surface — workspace file-drop transport; no command
+  strings; no shell injection); inverts the vendored `vscode-commands-executor` anti-pattern.
+  **Owner decisions pending (report §11)** + a HARD prerequisite (deeply read the linked official VS
+  Code + Cursor extension docs before any build). PDR/ADR candidate captured in pending-graduations
+  (concept PDR-shaped, host realisation ADR-shaped; PDR-035/ADR-165). No active thread/claim — promote
+  to a thread on owner GO.
 - **Strategy / vision / plan-estate rework — LIVE primary lane** (thread
   [`strategy-and-plan-estate-holistic-review`](threads/strategy-and-plan-estate-holistic-review.next-session.md)).
   Controlling plan:

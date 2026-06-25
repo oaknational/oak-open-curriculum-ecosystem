@@ -86,6 +86,21 @@ research notes or investigation logs.
   [PDR-111](../practice-core/decision-records/PDR-111-agent-experience-is-first-class.md)
   and [`agent-experience-improvement.plan.md`](../plans/agent-tooling/current/agent-experience-improvement.plan.md)
 
+- [practice-ide-integration-plane-feasibility-2026-06-25.md](./practice-ide-integration-plane-feasibility-2026-06-25.md)
+  — feasibility and safe-design report for a Practice-owned, local-install-only
+  IDE plugin (`practice-ide-plugin`) that gives the Practice a governed way to
+  cause effects in any VS Code-family IDE, driven by new `agent-tools practice-ide`
+  commands. First committed capability: spawn a visible interactive terminal and
+  run one strictly-vetted, template-built command. Core security argument: blast
+  radius bounded by construction to a closed, adversarially-vetted template
+  registry (templates are the delivery mechanism, not the safety property); no
+  URI surface (workspace file-drop transport), no command strings, no shell
+  injection (argv assembly / no-shell launch); three-layer defence-in-depth;
+  per-template injection-corpus admission gate; PDR-035/ADR-165 Practice
+  positioning; vision-vs-committed-scope split; reasoning/metacognition trace.
+  Inverts the vendored `vscode-commands-executor` anti-pattern (generic,
+  unauthenticated, globally-reachable command execution)
+
 ## Related Surfaces
 
 - [analysis evidence lane](../analysis/README.md)
