@@ -223,7 +223,7 @@ function queueStatusFor(
   return Date.parse(entry.expires_at) < Date.parse(nowIso) ? 'expired' : 'active';
 }
 
-function liveAgentIdentities(
+export function liveAgentIdentities(
   registry: CollaborationRegistry,
   nowIso: string,
 ): readonly CollaborationAgentId[] {

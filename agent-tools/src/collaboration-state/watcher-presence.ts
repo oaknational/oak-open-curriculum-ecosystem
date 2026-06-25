@@ -21,6 +21,9 @@ export type WatcherPresenceVerdict =
   | { readonly kind: 'present' }
   | { readonly kind: 'blind'; readonly reason: string };
 
+/** Canonical location of per-agent comms seen-files (and their heartbeats). */
+export const DEFAULT_COMMS_SEEN_DIR = '.agent/state/collaboration/comms-seen';
+
 /** Conventional seen-file path for an agent codename under a comms-seen dir. */
 export function commsSeenFileForCodename(codename: string, commsSeenDir: string): string {
   const trimmedDir = commsSeenDir.endsWith('/') ? commsSeenDir.slice(0, -1) : commsSeenDir;

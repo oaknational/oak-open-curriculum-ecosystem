@@ -17,13 +17,11 @@ import { type CollaborationStateEnvironment } from './types.js';
 import {
   classifyWatcherPresence,
   commsSeenFileForCodename,
+  DEFAULT_COMMS_SEEN_DIR,
   heartbeatFileForSeen,
 } from './watcher-presence.js';
 import { detectStaleWatcher } from './watcher-staleness.js';
 import { productionWatcherStalenessIo } from './watcher-staleness-io.js';
-
-/** Canonical location of per-agent comms seen-files (and their heartbeats). */
-const DEFAULT_COMMS_SEEN_DIR = '.agent/state/collaboration/comms-seen';
 
 export async function assertWatcherLive(
   options: Options,

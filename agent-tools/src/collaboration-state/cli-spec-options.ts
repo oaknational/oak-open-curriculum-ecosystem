@@ -107,6 +107,7 @@ export const claimsOpenOptions = [
   'ttl-seconds',
   'notes',
   'role',
+  'comms-seen-dir',
 ] as const;
 
 export const claimsCloseOptions = [

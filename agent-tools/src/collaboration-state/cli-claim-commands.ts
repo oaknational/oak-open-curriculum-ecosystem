@@ -2,15 +2,18 @@ import { randomUUID } from 'node:crypto';
 
 import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 import { archiveStaleClaims } from './claims.js';
+import { assertWatcherPresentForClaimOpen } from './claims-open-watcher-gate.js';
 import { areaFromOptions } from './cli-claim-areas.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
-import { updateActiveClaimsFile, updateClaimStateFiles } from './state-io.js';
+import { readActiveClaimsFile, updateActiveClaimsFile, updateClaimStateFiles } from './state-io.js';
 import {
   type CollaborationAgentId,
   type CollaborationClaim,
   type CollaborationStateEnvironment,
 } from './types.js';
+import { DEFAULT_COMMS_SEEN_DIR } from './watcher-presence.js';
+import { productionWatcherStalenessIo } from './watcher-staleness-io.js';
 
 export async function openClaim(
   options: Options,
@@ -18,13 +21,27 @@ export async function openClaim(
 ): Promise<string> {
   const identity = resolveIdentity(options, env).agent_id;
   const openedClaim = createClaimFromOptions(options, identity);
+  const activePath = required(options, 'active');
+  const nowIso = required(options, 'now');
+
+  // F-95 precondition: refuse to stake a claim into a populated registry while
+  // blind to comms. Read-only, BEFORE the locked transactional write (no IO
+  // under the registry lock); solo/bootstrap sessions pass untouched.
+  await assertWatcherPresentForClaimOpen({
+    registry: await readActiveClaimsFile(activePath),
+    nowIso,
+    nowMs: Date.parse(nowIso),
+    selfIdentity: identity,
+    commsSeenDir: optional(options, 'comms-seen-dir') ?? DEFAULT_COMMS_SEEN_DIR,
+    io: productionWatcherStalenessIo,
+  });
 
   await updateActiveClaimsFile({
-    activePath: required(options, 'active'),
+    activePath,
     transform: (registry) => {
       assertNoLiveIdentityRoutingCollision({
         registry,
-        nowIso: required(options, 'now'),
+        nowIso,
         agentId: identity,
         surface: 'claims open',
       });
