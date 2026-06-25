@@ -1,4 +1,5 @@
 import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-claim-commands.js';
+import { adoptClaim, setHandoffClaim } from './cli-claim-handoff-commands.js';
 import {
   activeAgents,
   listClaims,
@@ -20,8 +21,10 @@ import { type CliRuntime } from './cli-runtime.js';
 import { appendJsonEntry, checkState, writeJsonBody } from './cli-json-commands.js';
 import { collaborationTui } from './tui/cli.js';
 import {
+  claimsAdoptOptions,
   claimsCloseOptions,
   claimsOpenOptions,
+  claimsSetHandoffOptions,
   commsAppendOptions,
   commsDirectOptions,
   commsInboxOptions,
@@ -32,12 +35,14 @@ import {
 import {
   checkHelp,
   claimsActiveAgentsHelp,
+  claimsAdoptHelp,
   claimsArchiveStaleHelp,
   claimsCloseHelp,
   claimsHeartbeatHelp,
   claimsListHelp,
   claimsMineHelp,
   claimsOpenHelp,
+  claimsSetHandoffHelp,
   claimsShowHelp,
   claimsStatusHelp,
   commsAppendHelp,
@@ -148,6 +153,16 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help: claimsHeartbeatHelp,
     options: ['active', 'claim-id', 'now'],
     handler: heartbeatClaim,
+  }),
+  'claims:adopt': commandSpec({
+    help: claimsAdoptHelp,
+    options: claimsAdoptOptions,
+    handler: adoptClaim,
+  }),
+  'claims:set-handoff': commandSpec({
+    help: claimsSetHandoffHelp,
+    options: claimsSetHandoffOptions,
+    handler: setHandoffClaim,
   }),
   'claims:close': commandSpec({
     help: claimsCloseHelp,

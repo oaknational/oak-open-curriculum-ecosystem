@@ -234,7 +234,7 @@ describe('runCollaborationStateCli', () => {
   it('returns help for top-level, topic, and action requests', async () => {
     const topLevel = await runCollaborationStateCli({ argv: ['--', 'help'], env: {} });
     expect(topLevel.exitCode).toBe(0);
-    expect(topLevel.stdout).toContain('claims         open, heartbeat, close');
+    expect(topLevel.stdout).toContain('claims         open, heartbeat, adopt, set-handoff, close');
 
     const topic = await runCollaborationStateCli({ argv: ['--', 'claims', 'help'], env: {} });
     expect(topic.exitCode).toBe(0);

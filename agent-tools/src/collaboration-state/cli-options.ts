@@ -52,6 +52,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'notes',
   'now',
   'output',
+  'path',
   'platform',
   'poll-ms',
   'repo-root',

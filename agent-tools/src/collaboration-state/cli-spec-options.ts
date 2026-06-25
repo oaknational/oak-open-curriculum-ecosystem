@@ -119,3 +119,7 @@ export const claimsCloseOptions = [
   'platform',
   'model',
 ] as const;
+
+export const claimsAdoptOptions = ['active', 'claim-id', 'platform', 'model'] as const;
+
+export const claimsSetHandoffOptions = ['active', 'claim-id', 'path'] as const;

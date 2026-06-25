@@ -119,6 +119,14 @@ export const claimsOpenHelp =
 
 export const claimsHeartbeatHelp = 'claims heartbeat --active <path> --claim-id <id> --now <iso>';
 
+export const claimsAdoptHelp =
+  'claims adopt --active <path> --claim-id <id> --platform <platform> --model <model> ' +
+  '(rewrites the claim agent_id to the adopting identity in place; PDR-063 pickup)';
+
+export const claimsSetHandoffHelp =
+  'claims set-handoff --active <path> --claim-id <id> --path <path> ' +
+  '(records a handoff-record pointer under .agent/state/collaboration/handoffs/; PDR-063 step 3)';
+
 export const claimsCloseHelp =
   'claims close --active <path> --closed <path> --claim-id <id> ' +
   '--summary <text> --now <iso> --platform <platform> --model <model> ' +

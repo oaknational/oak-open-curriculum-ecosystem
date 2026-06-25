@@ -13,7 +13,15 @@
  * without the filesystem; the CLI handlers compose them with
  * `assertClaimMatches` inside `updateActiveClaimsFile`.
  */
-import { type CollaborationAgentId, type CollaborationClaim } from './types.js';
+import { assertClaimMatches } from './cli-claim-commands.js';
+import { resolveIdentity } from './cli-identity.js';
+import { required, type Options } from './cli-options.js';
+import { updateActiveClaimsFile } from './state-io.js';
+import {
+  type CollaborationAgentId,
+  type CollaborationClaim,
+  type CollaborationStateEnvironment,
+} from './types.js';
 
 /**
  * Canonical repo-root-relative prefix for handoff records (ADR-182). The
@@ -71,4 +79,54 @@ export function adoptClaims(
   return claims.map((claim) =>
     claim.claim_id === input.claimId ? { ...claim, agent_id: input.identity } : claim,
   );
+}
+
+/**
+ * `claims set-handoff` handler — the retiring agent records a handoff-record
+ * pointer on its own claim (PDR-063 step 3). Validates the path shape, fails
+ * loud through `assertClaimMatches`, and writes through the locked
+ * transactional `updateActiveClaimsFile`.
+ */
+export async function setHandoffClaim(options: Options): Promise<string> {
+  const claimId = required(options, 'claim-id');
+  const path = required(options, 'path');
+  assertHandoffPathShape(path);
+  await updateActiveClaimsFile({
+    activePath: required(options, 'active'),
+    transform: (registry) => {
+      assertClaimMatches(registry.claims, claimId);
+
+      return { ...registry, claims: setHandoffPathOnClaims(registry.claims, { claimId, path }) };
+    },
+  });
+
+  return `set handoff record on claim ${claimId} to ${path}\n`;
+}
+
+/**
+ * `claims adopt` handler — the successor takes over a retiring agent's claim
+ * by rewriting `agent_id` to its own identity (PDR-063 pickup item 4).
+ *
+ * Deliberately does NOT run `assertNoLiveIdentityRoutingCollision`: that guard
+ * prevents two distinct identities going live on one routing key, but adoption
+ * is exactly a takeover that replaces the row's identity, so the guard would
+ * misfire. Adoption mutates only `agent_id`; the successor refreshes liveness
+ * with `claims heartbeat` afterwards.
+ */
+export async function adoptClaim(
+  options: Options,
+  env: CollaborationStateEnvironment,
+): Promise<string> {
+  const claimId = required(options, 'claim-id');
+  const identity = resolveIdentity(options, env).agent_id;
+  await updateActiveClaimsFile({
+    activePath: required(options, 'active'),
+    transform: (registry) => {
+      assertClaimMatches(registry.claims, claimId);
+
+      return { ...registry, claims: adoptClaims(registry.claims, { claimId, identity }) };
+    },
+  });
+
+  return `adopted claim ${claimId} as ${identity.agent_name}\n`;
 }

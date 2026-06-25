@@ -161,7 +161,7 @@ export function closeSummaryFromOptions(options: Options): string {
  * no-match failure, which is the honest report of the registry's state at
  * write time.
  */
-function assertClaimMatches(claims: readonly CollaborationClaim[], claimId: string): void {
+export function assertClaimMatches(claims: readonly CollaborationClaim[], claimId: string): void {
   if (!claims.some((claim) => claim.claim_id === claimId)) {
     throw new Error(`no active claim matches ${claimId}`);
   }
