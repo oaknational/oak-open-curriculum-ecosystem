@@ -89,14 +89,14 @@ the strategy plan is what turns observation into a promotion decision.
 **Means** (the work, as four lanes — three parallel-safe producers and one
 consumer):
 
-+ **L-Sonar** — Sonar S8707 sites 2-3 plus the integrated security re-review;
+- **L-Sonar** — Sonar S8707 sites 2-3 plus the integrated security re-review;
   one PR direct to `main`.
-+ **L-WS-B** — WS-B D2-D5, the explain effort-orientation surface; branches off
+- **L-WS-B** — WS-B D2-D5, the explain effort-orientation surface; branches off
   `main`, PR to `main`.
-+ **L-DATA-SOURCES** — author `docs/governance/DATA-SOURCES.md`; owner-gated on
+- **L-DATA-SOURCES** — author `docs/governance/DATA-SOURCES.md`; owner-gated on
   the suitability / last-reviewed / removal criteria (a new governance policy
   ADR-157 omits).
-+ **L-Verdict** — fold the lanes' coordination-cost evidence into the future
+- **L-Verdict** — fold the lanes' coordination-cost evidence into the future
   `worktree-per-agent-transition.plan.md`, write the model verdict, archive the
   pilot. This is the only lane that depends on the others, because it consumes
   their evidence.
@@ -135,12 +135,12 @@ sessions, not from the pilot's optimistic self-report.
 
 The honest null hypotheses the verdict must be able to defend or reject:
 
-+ **Worktree isolation null:** worktrees added setup/disk cost and bring-up
+- **Worktree isolation null:** worktrees added setup/disk cost and bring-up
   friction (F-85..F-93) that outweighed the F-83 collisions they prevented.
-+ **Director model null:** the Director seat was a routing tax and a succession
+- **Director model null:** the Director seat was a routing tax and a succession
   hazard (the false-liveness heartbeat; the premature-takeover collision) that a
   flat peer arrangement would not have paid.
-+ **Prose-cure null:** the model's safeguards were doctrine-only (prose rules,
+- **Prose-cure null:** the model's safeguards were doctrine-only (prose rules,
   not mechanical gates). Director diligence already failed once on a prose-only
   rule, so the verdict must judge whether the prose cures held *under load*, not
   merely whether the rules were written down.
@@ -164,16 +164,16 @@ this arc, not only the pilot's prior run.
 
 **Non-Goals** (YAGNI):
 
-+ Re-authoring PDR-117 or the director brief — both exist; this plan references
+- Re-authoring PDR-117 or the director brief — both exist; this plan references
   them.
-+ Building the `claims adopt/transfer`/`set-handoff` CLI primitive. The `claims`
+- Building the `claims adopt/transfer`/`set-handoff` CLI primitive. The `claims`
   CLI has no native way to adopt a retained claim or set `handoff_record_path`
   on an existing claim (PDR-063 step 3); this arc *encounters* that friction at
   every Implementer handoff but its cure is a tooling-backlog item (see
   Dependencies → Beneficial), not a deliverable here.
-+ Promoting the future worktree-per-agent plan — this arc *feeds* its promotion
+- Promoting the future worktree-per-agent plan — this arc *feeds* its promotion
   with evidence; the promotion decision is the owner's and is separate.
-+ The explain canonical-refinements decomposition — a separate follow-on in its
+- The explain canonical-refinements decomposition — a separate follow-on in its
   own family, not bundled into this consolidation. (DATA-SOURCES.md is in scope
   as L-DATA-SOURCES, owner-gated on its governance criteria.)
 
@@ -209,23 +209,23 @@ The four disciplines apply to every session in this plan.
 
 See [`../../templates/components/lifecycle-triggers.md`](../../templates/components/lifecycle-triggers.md).
 
-+ **Session entry:** the Director rehydrates from the director brief (seat
+- **Session entry:** the Director rehydrates from the director brief (seat
   procedure + `CURRENT HANDOFF STATE`) and runs its readiness self-check before
   claiming authority. An Implementer runs `start-right-quick` and reads its lane's
   handoff record first-hand.
-+ **Work-shape declaration:** each session names its landing target (one PR or one
+- **Work-shape declaration:** each session names its landing target (one PR or one
   clean handoff). The Director routes durable lanes, not real-time pickups.
-+ **Pre-edit coordination:** register touched areas in `active-claims.json` via
+- **Pre-edit coordination:** register touched areas in `active-claims.json` via
   explicit `--active`; arm the all-channels comms watcher as the first move, before
   any coordination — it is constitutive of team membership, not optional ceremony.
-+ **During work:** verify a target agent's current state right before routing it;
+- **During work:** verify a target agent's current state right before routing it;
   route nothing to an agent told to close out — route to its successor. Verify a
   PR's inline review comments first-hand, not just `gh pr checks`.
-+ **Session handoff:** close own claims; refresh the director brief's
+- **Session handoff:** close own claims; refresh the director brief's
   `CURRENT HANDOFF STATE`; stop the Director heartbeat at stand-down (false-liveness
   risk — but see the outage caveat under Risk Assessment). A retiring Implementer
   freezes at a clean boundary with a durable record.
-+ **Consolidation:** run `/oak-consolidate-docs` after each landing session; the
+- **Consolidation:** run `/oak-consolidate-docs` after each landing session; the
   full evidence fold is L-Verdict itself.
 
 ---
@@ -385,42 +385,42 @@ to prove green.
 
 **Blocking:**
 
-+ Owner decision on the DATA-SOURCES suitability / last-reviewed / removal
+- Owner decision on the DATA-SOURCES suitability / last-reviewed / removal
   criteria before L-DATA-SOURCES can author the policy (new governance, ADR-157
   omits it).
-+ Owner signal to launch the WS-B D2-D5 Implementer (L-WS-B).
-+ @jimCresswell code-owner review on every PR to `main` (the standing merge gate;
+- Owner signal to launch the WS-B D2-D5 Implementer (L-WS-B).
+- @jimCresswell code-owner review on every PR to `main` (the standing merge gate;
   no `--admin`, no clean agent self-merge).
 
 **Beneficial (smooths, not required for minimum shippable shape):**
 
-+ The `claims adopt` / `claims set-handoff` CLI primitive (`claims adopt
+- The `claims adopt` / `claims set-handoff` CLI primitive (`claims adopt
   --claim-id`, `claims set-handoff --claim-id --path`) — would remove the handoff
   friction this arc works around at every Implementer handoff; absent it, durable
   handoff records + fresh seats suffice. **Not yet in the agent-tooling frictions
   register** (`.agent/plans/agent-tooling/frictions-register.md`, verified
   first-hand 2026-06-25 — no F-NN entry covers it); recording it there is itself a
   beneficial next step.
-+ A start-right **watcher-presence fail-fast gate** — fail session-open if no live
+- A start-right **watcher-presence fail-fast gate** — fail session-open if no live
   comms watcher is armed. The prose rule ("arm the watcher as the first move") was
   skipped once in this pilot; a mechanical gate makes the omission structurally
   impossible rather than relying on diligence. **Not yet in the register**
   (verified first-hand 2026-06-25).
-+ A **lint-incremental / handoff-commit** cure for the markdownlint-blocked
+- A **lint-incremental / handoff-commit** cure for the markdownlint-blocked
   continuity-buffer commit wall — the consolidation commit stalls when ambient
   markdown lint failures block the buffer commit. **Not yet in the register**
   (verified first-hand 2026-06-25).
-+ A comprehensive PR monitor covering state + reviewDecision + inline review
+- A comprehensive PR monitor covering state + reviewDecision + inline review
   comments — would catch the inline-comment blind spot automatically; absent it,
   the standing "verify inline comments first-hand" lesson covers it.
 
 **Related plans:**
 
-+ [worktree-per-agent-transition.plan.md](../future/worktree-per-agent-transition.plan.md)
+- [worktree-per-agent-transition.plan.md](../future/worktree-per-agent-transition.plan.md)
   (future) — the strategy this arc feeds; its promotion evidence consumes this
   arc's verdict (its §Strategic Acceptance Criteria / Success Signals and
   §Promotion Trigger).
-+ [worktree-pilot-coordination.plan.md](./worktree-pilot-coordination.plan.md)
+- [worktree-pilot-coordination.plan.md](./worktree-pilot-coordination.plan.md)
   (active) — the pilot this arc lands and archives.
 
 ---
@@ -444,12 +444,12 @@ At the start of each session:
 
 ## Lifecycle Triggers (this plan's own)
 
-+ **Refinement:** a producer lane that splits, reorders, or reveals new scope
+- **Refinement:** a producer lane that splits, reorders, or reveals new scope
   records the change here; the lane shape, not a session count, is load-bearing.
-+ **Archival:** when L-Verdict lands — the verdict is written into the future plan
+- **Archival:** when L-Verdict lands — the verdict is written into the future plan
   and the pilot is archived. This plan then archives alongside, its evidence
   having graduated into the strategy plan.
-+ **Escalation to a new plan:** if the verdict is "the model added net cost," the
+- **Escalation to a new plan:** if the verdict is "the model added net cost," the
   follow-on is an owner decision about whether to abandon or reshape the model —
   a new strategic artefact, not a continuation of this one.
 

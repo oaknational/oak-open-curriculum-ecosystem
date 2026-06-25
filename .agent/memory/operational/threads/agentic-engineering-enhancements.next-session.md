@@ -21,20 +21,20 @@ work brief and the recent identity stretch, per
 Foundational / team-closer session (opened on "Sonar S8707 sites 2-3", pivoted under owner
 direction). Landed, with evidence:
 
-+ **PR #222 proto-dispatch fix MERGED to `main`** (`8bebfd0a5`, release 1.35.0) — `Object.hasOwn`
+- **PR #222 proto-dispatch fix MERGED to `main`** (`8bebfd0a5`, release 1.35.0) — `Object.hasOwn`
   dispatch guard + 5-key proto test, prove-fail-first, full gates green. This closes the
   **pr-watch lane COMPLETE** (no dedicated `agent-tooling-pr-watch` thread record exists; the
   pr-watch lane is tracked here and in the plan estate).
-+ **Two foundational artefacts placed** (canonical, lint-clean, uncommitted — the consolidation
+- **Two foundational artefacts placed** (canonical, lint-clean, uncommitted — the consolidation
   commit is the one owner-gated orphan-prevention action remaining): the guiding plan
   [`current/worktree-pilot-consolidation-and-model-verdict.plan.md`](../../../plans/agentic-engineering-enhancements/current/worktree-pilot-consolidation-and-model-verdict.plan.md)
   and the restructured `director-handoff.md` (Director Brief + volatile state + worktree orphan map).
-+ **Orphan mitigation DONE**: the three never-pushed at-risk branches
+- **Orphan mitigation DONE**: the three never-pushed at-risk branches
   (`pilot/ws-b-explain-resource`, `fix/sonar-s8707-cli-path-injection`, `pilot/ws-d-roles-doctrine`)
   pushed to origin — all at-risk work preserved.
-+ **Friction backlog captured**: F-94 (claims adopt/set-handoff), F-95 (watcher-presence gate),
+- **Friction backlog captured**: F-94 (claims adopt/set-handoff), F-95 (watcher-presence gate),
   F-96 (continuity-buffer lint hostage), F-97 (PR inline-comment monitor).
-+ **Sonar S8707 sites 2-3 PAUSED** (site-1 + site-2 committed + pushed; site-3 → next team session).
+- **Sonar S8707 sites 2-3 PAUSED** (site-1 + site-2 committed + pushed; site-3 → next team session).
 
 **Push-vs-merge orphan rationale** (the WHY behind pushed-not-merged): the three at-risk branches
 were PUSHED to origin, NOT merged into coordination, deliberately — coordination is already
@@ -56,18 +56,18 @@ team session (see `main-sonar-ai-profile-to-zero`).
 
 Executed umbrella **WS-3 (F-41 path-safety)**. Landed (gate-green; unpushed — owner controls push):
 
-+ **b5408291d** — B1 consolidation: deleted TWO duplicate silent `findCollaborationRepoRoot` finders
+- **b5408291d** — B1 consolidation: deleted TWO duplicate silent `findCollaborationRepoRoot` finders
   (`cli-comms-send`, `tui/config`) plus the bare `process.cwd()` fallback (`cli-comms-validate`) into one
   `resolveCoordinationHome`; reviewed by code-expert, architecture-expert-fred, test-expert.
-+ **c90150ffa** — the CORE fix. The coordination home is the **primary checkout**, resolved via
+- **c90150ffa** — the CORE fix. The coordination home is the **primary checkout**, resolved via
   `git worktree list --porcelain` (first entry), so an agent in ANY linked worktree resolves the ONE shared
   home — the real F-41 fix (a worktree seat was writing to / locked out of its own local registry), proven
   end-to-end from a real linked worktree. Reverted the needless `resolveRootFromDir` extraction.
-+ **4fd640089** — a closeout adversarial scan (architecture-expert-wilma) caught the commit-queue TOPIC still
+- **4fd640089** — a closeout adversarial scan (architecture-expert-wilma) caught the commit-queue TOPIC still
   defaulting via `git rev-parse --show-toplevel` (linked worktree, not primary) — the exact commit-queue case
   the F-41 register names; routed through `resolveCoordinationHome`. **F-41 now closed across comms AND
   commit-queue defaults.**
-+ Docs: `5326dc02f`, `01275ed31`.
+- Docs: `5326dc02f`, `01275ed31`.
 
 **B2 DEFERRED** (owner) → [`future/coordination-home-explicit-targeting-migration.plan.md`](../../../plans/agent-tooling/future/coordination-home-explicit-targeting-migration.plan.md):
 the explicit-path write commands (claims/comms-inbox/watch/commit-queue) still `required(...)` their path
@@ -108,21 +108,21 @@ recorded in-chat), then — owner-directed — analysed the 82-entry
 experience (AX) and made AX a first-class repo concept. **Landed (gate-green, committed —
 see SHA below):**
 
-+ **Report** — [`agent-experience-cause-class-analysis-2026-06-21.md`](../../../reports/agent-experience-cause-class-analysis-2026-06-21.md):
+- **Report** — [`agent-experience-cause-class-analysis-2026-06-21.md`](../../../reports/agent-experience-cause-class-analysis-2026-06-21.md):
   the 82 frictions collapse to 8 cause-classes; 3 AX layers; leverage ranking; the
   **drain-gap** (61/82 `open`, cures dispersed, no mechanical detector); and the
   load-bearing finding that the #1 cure (CLI conformance guard) is **already doctrine
   (PDR-055 cl.7–10) + already homed** (`agent-tools-cli-ergonomics.plan.md` WS6).
-+ **PDR-111** — *Agent Experience Is a First-Class Practice Optimisation Principle*
+- **PDR-111** — *Agent Experience Is a First-Class Practice Optimisation Principle*
   (generalises PDR-060 + PDR-035). Indexed.
-+ **Always-on rule** `agent-experience-review-lens` (4 forms + RULES_INDEX; portability green).
-+ **principles.md** standing-concern line names AX.
-+ **Umbrella plan** [`agent-experience-improvement.plan.md`](../../../plans/agent-tooling/current/agent-experience-improvement.plan.md)
+- **Always-on rule** `agent-experience-review-lens` (4 forms + RULES_INDEX; portability green).
+- **principles.md** standing-concern line names AX.
+- **Umbrella plan** [`agent-experience-improvement.plan.md`](../../../plans/agent-tooling/current/agent-experience-improvement.plan.md)
   (one umbrella, owner-chosen): DRIVES the homed cli-ergonomics + watcher plans; OWNS the
   net-new — the **structural drain-fix** (a `frictions-register` validator that recomputes
   integrity against fs/git + a generated routing index), **F-41 path-safety**, gate-coverage
   (F-54/F-57), and a disposition ledger routing all 82 frictions.
-+ Two `future/` briefs: `agent-frustration-corpus-survey` (deeper-survey next-step) and
+- Two `future/` briefs: `agent-frustration-corpus-survey` (deeper-survey next-step) and
   `peer-heartbeat-silence-alerting` (F-75, deferred).
 
 **Gates**: markdownlint-check + portability + cross-link resolution all green; verified
@@ -269,7 +269,7 @@ is the single stable index resolving slug → path (commit `44406e502`).
    doctrine surface (leave historical analysis/research/curator-passes/experience untouched), with
    `docs-adr-expert` review on the PDR/ADR amendments, THEN remove the directories (refs-first, then
    delete — the order this session got backwards). Both are not-useful-now (harness task-list + napkin
-   + claims/comms cover tracks; thread-record `## Lanes` cover workstreams) — judged by present need,
+   - claims/comms cover tracks; thread-record `## Lanes` cover workstreams) — judged by present need,
    not usage/provenance.
 3. **Wire the operationalising rules to cite PDR-105** (`no-moving-targets-in-permanent-docs` = the
    durability-axis hook; `practice-core-portability` = the portability axis) and **retire the
@@ -280,9 +280,9 @@ is the single stable index resolving slug → path (commit `44406e502`).
 
 Four reviewed commits on `docs/planning-and-validation` (NOT pushed — owner controls push):
 
-+ **Task 0** (`6eddad013`): PDR-105 §Context wording corrected — the two axes are SDP (depend in
+- **Task 0** (`6eddad013`): PDR-105 §Context wording corrected — the two axes are SDP (depend in
   the direction of stability), only the stable-index corollary is DIP proper. docs-adr APPROVED.
-+ **Task 1a/1b** (`01561d374`, `8601c3d4e`): owner-approved bucket-B cure. The validator now exempts
+- **Task 1a/1b** (`01561d374`, `8601c3d4e`): owner-approved bucket-B cure. The validator now exempts
   **stable-addressed surfaces** (fixed address, churning content) on the durability axis only —
   registries (`active-claims.json`, `closed-claims.archive.json`, `shared-comms-log.md`), index
   READMEs (`patterns/`, `threads/`, `state/`), permanent collaboration dirs (`conversations/`,
@@ -290,7 +290,7 @@ Four reviewed commits on `docs/planning-and-validation` (NOT pushed — owner co
   *specific item inside* such a surface still flags. Allowlists live in a new sibling module; PDR-105
   body+§Notes amended; a built `--verbose` flag lists `axis source:line -> target` (replaces
   throwaway triage scripts — ESM/agent-tools). TDD; type/test/code-expert reviewed. **197 → 149 → 145.**
-+ **Task 3** (`e75b1e0fd`): `no-moving-targets` + `practice-core-portability` wired to PDR-105 axes;
+- **Task 3** (`e75b1e0fd`): `no-moving-targets` + `practice-core-portability` wired to PDR-105 axes;
   consolidate-docs **step 7d retired** (7e→7d); `dont-break-build-without-fix-plan` **inverted** to OWN
   the green-gate invariant (was quoting `gate-recovery-cadence.plan.md` as "Authority"); that plan's
   banner corrected. docs-adr APPROVED. This is the exemplar bucket-A inversion cure.
@@ -299,10 +299,10 @@ Four reviewed commits on `docs/planning-and-validation` (NOT pushed — owner co
 
 Two reviewed commits on `docs/planning-and-validation` (NOT pushed — owner controls push):
 
-+ **Portability axis** (`7ac5fe657`): all 55 portability refs cured across 28 Practice-Core files
+- **Portability axis** (`7ac5fe657`): all 55 portability refs cured across 28 Practice-Core files
   (PDRs/practice.md/README). docs-adr-expert APPROVED (two passes: PDR-057/056/058 priority, then
   the remainder).
-+ **Durability axis** (`6893962c2`): all 90 durability refs cured across 52 files (62 ADR, 19 rule,
+- **Durability axis** (`6893962c2`): all 90 durability refs cured across 52 files (62 ADR, 19 rule,
   9 directive). docs-adr-expert APPROVED-WITH-FIXES (5 MD012 footer-def double-blanks fixed).
 
 **Cure convention (reviewer-ratified, applies to any future ref):** pure **de-link** —
@@ -351,7 +351,7 @@ live dir-refs (no change); PDR-030 + practice.md:358 are retained-sense (no chan
 Successor to Siren guards Reef. The deliverables above are RESOLVED across three reviewed,
 gate-green commits on `docs/planning-and-validation` (unpushed — owner controls push):
 
-+ **Tranche A — doctrine cures** (`d8ec8867c`, docs-adr-expert: all sound): de-linked the
+- **Tranche A — doctrine cures** (`d8ec8867c`, docs-adr-expert: all sound): de-linked the
   validator-missed refs (ADR-026 backticked archived-plan path; ADR-093 three `.agent/analysis/`
   links); retired the live track-card/workstream treatment in PDR-011 + ADR-150 (amendment-log
   entries; ADR-150 body kept verbatim as the historical decision record per ADR convention);
@@ -360,13 +360,13 @@ gate-green commits on `docs/planning-and-validation` (unpushed — owner control
   very ADR→ephemeral refs the burndown removes (PDR-105 §Consequences retires
   wrong-direction-affirming clauses). `register-identity:103` was already done (verified
   first-hand — the prior `../commands/` link is gone).
-+ **Tranche B — residue removal** (`774a49e5e`, owner-authorised "git is the provenance"):
+- **Tranche B — residue removal** (`774a49e5e`, owner-authorised "git is the provenance"):
   deleted `tracks/` + `workstreams/`; reconciled the PDR-049/050 substrate-contracts manifest
   (dropped the stale `memory-operational-tracks` `"lifecycle": "live"` contract entry + the
   `workstreams/` historical_root); flipped PDR-105 §Notes to past-tense. repo-validators:check
   green. (The "COMMIT STATE: ALL UNCOMMITTED" note that previously sat here was superseded — Siren
   guards Reef committed the Task-2 work as `631bc5851`/`1fb700017` before standing down.)
-+ **Tranche C — enforcement capstone** (`563487f79`, code-expert + test-expert APPROVE; their
+- **Tranche C — enforcement capstone** (`563487f79`, code-expert + test-expert APPROVE; their
   claims verified first-hand, blocking path proven by a probe): corrected `.agent/analysis/`'s
   layer (it is ephemeral, was mis-typed `other`); escalated `validate-reference-direction`
   report-only → **blocking** (exit 1 on any wrong-direction ref; fails repo-validators:check in
@@ -501,10 +501,10 @@ linear next-step: the lanes below are independent and can be picked up **in para
 different checkouts, by separate agents, or collaboratively. Each carries its own state and
 pickup trigger; neither blocks the other.
 
-+ **Lane A — feedback-mechanism follow-ons (active).** Branch `feat/graph-tooling-tidyup`;
+- **Lane A — feedback-mechanism follow-ons (active).** Branch `feat/graph-tooling-tidyup`;
   next is **WS1 → 2b → 2c → WS2** (full detail in the bullets and the Briny Plumbing Beacon
   banner below).
-+ **Lane B — skills standardisation review (deferred).** Next is the
+- **Lane B — skills standardisation review (deferred).** Next is the
   **PDR-051 reduced-implementation reconciliation review**. Pickup trigger: the owner review
   session, OR the first ingested external skill, OR promotion of the oversized-core
   decomposition brief. Inputs ready — owning plan §Reality Reconciliation gap ledger
@@ -513,7 +513,7 @@ pickup trigger; neither blocks the other.
   ([decomposition](../../../plans/agent-tooling/future/skills-oversized-core-decomposition.plan.md),
   [eval harness](../../../plans/agent-tooling/future/skills-eval-harness.plan.md)). On a
   separate branch (committed `cbf01ae0`); not blocking and not blocked by Lane A.
-+ **Lane C — memory/state semantic merge strategy (decided 2026-06-15; ADR
+- **Lane C — memory/state semantic merge strategy (decided 2026-06-15; ADR
   pending).** git merges lines, but `.agent/memory` and `.agent/state` files carry
   semantic invariants git cannot see (a JSON set keyed by `claim_id`; a markdown
   file with exactly one Current State block; an append-only narrative buffer; an
@@ -530,7 +530,7 @@ pickup trigger; neither blocks the other.
   but assumed git's textual merge) plus the per-file-class merge-semantics audit and
   the merge-driver-vs-out-of-band-tooling decision. Pickup trigger: a fresh
   agentic-engineering session, or the next multi-writer state convergence needing it.
-+ **Lane D — rule-impact instrumentation (lane opened 2026-06-11).** Of the ~70
+- **Lane D — rule-impact instrumentation (lane opened 2026-06-11).** Of the ~70
   rules injected via `CLAUDE.md`, which measurably change agent behaviour and earn
   their context cost? Prose rules have no firing event; hook-backed rules (write-time
   guards, secrets-scan on Read, PreToolUse gates) do execute and can be instrumented.
@@ -541,20 +541,20 @@ pickup trigger; neither blocks the other.
   on-demand or retire them. Lane A's 2b reappraisal-cartography pass remains the
   prose-rule rationalisation vehicle.
 
-+ **Branch**: `feat/graph-tooling-tidyup` — **clean and pushed** at HEAD `934d5c21`
+- **Branch**: `feat/graph-tooling-tidyup` — **clean and pushed** at HEAD `934d5c21`
   (re-derive git first-hand).
-+ **Live work (next non-curation session)**: the feedback-mechanism follow-ons, in sequence
+- **Live work (next non-curation session)**: the feedback-mechanism follow-ons, in sequence
   **WS1 → 2b → 2c → WS2**. The full brief and the un-homed design decisions are in the **Briny
   Plumbing Beacon banner** below — preserve it. **Its GATE-STATE / EEF-lint-precondition
   paragraphs were VOID** even before this session (ADR-193 made `EefEvidenceEnvelope` a strict
   `interface` + egress membrane, so the `consistent-type-definitions` lint is green-resolved;
   the branch is clean and pushed). Read Briny for the work; this block for the current gate.
-  + **WS1** (`no-type-widening` ESLint rule) plan is at
+  - **WS1** (`no-type-widening` ESLint rule) plan is at
     [`current/no-type-widening-enforcement.plan.md`](../../../plans/agentic-engineering-enhancements/current/no-type-widening-enforcement.plan.md).
     **Fixture caveat**: the EEF `new Set<string>(OBSERVED_PHASES)` widening that motivated the
     rule was since made zero-widening (`Set<DeclaredPhase>` / `Set<EefStrandId>`) — confirm
     against `graph-corpus-sdk/src/eef-strands/` first-hand; author a dedicated fixture if gone.
-  + **2b** = the owner-approved 89-file `.agent/rules/*.md` reappraisal-cartography pass
+  - **2b** = the owner-approved 89-file `.agent/rules/*.md` reappraisal-cartography pass
     (discover cure per rule → cluster → discriminate collapse-candidate vs sharpen vs keep;
     do NOT auto-collapse — owner decides). **2c** = per-surface PDR-044 widening (ESLint
     now-eligible; rules-prose after 2b). **WS2** = tripwire wiring; coordinate with
@@ -572,7 +572,7 @@ pickup trigger; neither blocks the other.
 >
 > **What landed — item 2a (ESLint custom-rule reappraisal enforcement):**
 >
-> + **Mechanism = compile-time-by-construction (NOT a validator, NOT a factory).**
+> - **Mechanism = compile-time-by-construction (NOT a validator, NOT a factory).**
 >   `packages/core/oak-eslint/src/reappraising-message.ts`: a zod-branded `ReappraisingMessage`
 >   type, minted only by `createMessage({prohibition, reappraisal})` via
 > `z.string().brand().parse()`,
@@ -580,7 +580,7 @@ pickup trigger; neither blocks the other.
 > `meta.messages`
 >   to the brand. A **plain prohibition-only string now fails `tsc`** in any rule typed this way —
 >   non-bypassable, no separate validator to drift, no bypass-guard needed.
-> + **Why zod, not a hand-rolled brand:** the shared config bans assertions outright
+> - **Why zod, not a hand-rolled brand:** the shared config bans assertions outright
 >   (`@typescript-eslint/consistent-type-assertions: { assertionStyle: 'never' }`,
 >   `packages/core/oak-eslint/src/configs/recommended.ts`), and the repo had **no existing branded
 >   types**. A hand-rolled `as` brand is illegal; zod's `.parse()` is the only assertion-free mint
@@ -589,13 +589,13 @@ pickup trigger; neither blocks the other.
 > in
 >   the repo**. Added `zod@^4.4.3` to `oak-eslint` deps + `tsup.config.ts` `external` (zod is NOT
 >   inlined — verified `from 'zod'` in dist, 0 inlined source).
-> + **All 6 `meta.messages` rules migrated** (`no-dynamic-import`, `no-eslint-disable`,
+> - **All 6 `meta.messages` rules migrated** (`no-dynamic-import`, `no-eslint-disable`,
 >   `no-export-trivial-type-aliases`, `require-observability-emission`, `max-files-per-dir`,
 >   `no-real-io-in-tests`). Composed messages are behaviourally identical to the originals EXCEPT
 >   `max-files-per-dir`, which **gained a cure it never had** ("Group related files into a cohesive
 >   subdirectory…") — the owner's whole thesis, confirmed in the smallest case. `boundary.ts` uses
 >   `no-restricted-imports` config `message:` strings (not `meta.messages`) and is **out of scope**.
-> + **Green:** oak-eslint type-check, lint, 202 tests, build. TDD test-first
+> - **Green:** oak-eslint type-check, lint, 202 tests, build. TDD test-first
 >   (`reappraising-message.unit.test.ts`, red→green). Reviewed at the unit boundary (not backfill):
 >   **type-expert SAFE**, **code-expert APPROVED**, **test-expert PASS**. Applied: test assertions
 >   pinned to product-owned substrings; zod externalised. **Caught one false positive** —
@@ -604,12 +604,12 @@ pickup trigger; neither blocks the other.
 >
 > **Decisions held in my context (loss-scan — reached no other durable surface):**
 >
-> + **Option C beat the factory** (assumptions-expert + architecture-expert-betty converged): a
+> - **Option C beat the factory** (assumptions-expert + architecture-expert-betty converged): a
 >   rule-wrapping factory over-reached the M-sized approved capture and needed a fragile no-bypass
 >   guard; compile-time brand is lighter AND stronger. Then zod-brand beat a hand-rolled brand
 > because
 >   of the `as` ban (above). Do not "simplify" this back to a hand-rolled brand — it will not lint.
-> + **2b is RESHAPED and OWNER-EXPANDED.** The capture sized it "M"; it is actually an **89-file
+> - **2b is RESHAPED and OWNER-EXPANDED.** The capture sized it "M"; it is actually an **89-file
 >   corpus change** (`.agent/rules/*.md`), many flat-prose with no positive-direction section, so
 >   "states a positive move" is **not mechanically checkable** without first imposing a structured
 > slot
@@ -627,14 +627,14 @@ pickup trigger; neither blocks the other.
 >   is lower-dimensional than the detection-space. Let collision density decide 2b's structure
 > (dense →
 >   shared concept→cure registry; sparse → per-rule section).
-> + **Collision signal already found (feeds 2b):** within the ESLint surface,
+> - **Collision signal already found (feeds 2b):** within the ESLint surface,
 > `no-real-io-in-tests`'s
 >   three `bannedModule*` messages share one cure ("inject a fake instead"); `eslintDisableBanned` +
 >   `tsDirectiveBanned` both cure to "fix the root cause".
-> + **2c (PDR-044 widening) is PER-SURFACE**, not all-or-nothing: ESLint widening lands once 2a
+> - **2c (PDR-044 widening) is PER-SURFACE**, not all-or-nothing: ESLint widening lands once 2a
 >   enforces; rules-prose widening waits for 2b. Never state doctrine wider than enforcement reaches
 >   (the amendment's own §Scope / PDR-038).
-> + **The interlock binds the no-type-widening rule to the 2a enforcer existing** (now true), so
+> - **The interlock binds the no-type-widening rule to the 2a enforcer existing** (now true), so
 >   **WS1's message is authored via `createMessage` and is born teaching by construction** — costs
 >   nothing extra.
 >
@@ -749,10 +749,10 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 
 ## Cross-Plan and Cross-Thread Links
 
-+ **Live-work plans**:
+- **Live-work plans**:
   [`current/no-type-widening-enforcement.plan.md`](../../../plans/agentic-engineering-enhancements/current/no-type-widening-enforcement.plan.md),
   [`future/action-time-structural-interrupt-design-space.plan.md`](../../../plans/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md).
-+ **Evals lane (queued, owner-directed 2026-06-23)**:
+- **Evals lane (queued, owner-directed 2026-06-23)**:
   [`current/skill-evals-pilot-start-right-quick.plan.md`](../../../plans/agentic-engineering-enhancements/current/skill-evals-pilot-start-right-quick.plan.md)
   — pilot the in-repo skill `evals/` convention on the high-traffic `start-right-quick` grounding skill;
   grounded by the position report `.agent/reports/evals-and-assurance-position-2026-06-23.md`, whose 5 open
@@ -761,14 +761,14 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
   in the rewritten [`principles.md` §Agentic Quality](../../../directives/principles.md) + the seeded
   [`validation-strategy.md`](../../../directives/validation-strategy.md) (3 harm-keyed tiers; eval
   definitions always in-repo, MCPJam = runner for the MCP-server surface only; telemetry-now loop).
-+ **Skills arc** (2026-06-14 audit, agent-tooling collection): owning plan
+- **Skills arc** (2026-06-14 audit, agent-tooling collection): owning plan
   [`agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md`](../../../plans/agent-tooling/current/skills-standardisation-and-adapter-generator.plan.md)
   (§Reality Reconciliation gap ledger); enhancement briefs
   [`agent-tooling/future/skills-oversized-core-decomposition.plan.md`](../../../plans/agent-tooling/future/skills-oversized-core-decomposition.plan.md)
   and [`agent-tooling/future/skills-eval-harness.plan.md`](../../../plans/agent-tooling/future/skills-eval-harness.plan.md);
   friction F-37; pending-graduations entry "PDR-051 reduced-implementation reconciliation review".
-+ **Graduation register**: [`pending-graduations.md`](../pending-graduations.md) (decision-debt
+- **Graduation register**: [`pending-graduations.md`](../pending-graduations.md) (decision-debt
   candidates — pending/due/overdue — and fired-trigger candidates from this thread's curation passes).
-+ **Curation ledgers**: [`curator-passes/`](../curator-passes/) (per-pass disposition evidence).
-+ **Repo state**: [`repo-continuity.md`](../repo-continuity.md) § Current State (authoritative
+- **Curation ledgers**: [`curator-passes/`](../curator-passes/) (per-pass disposition evidence).
+- **Repo state**: [`repo-continuity.md`](../repo-continuity.md) § Current State (authoritative
   live state across threads).

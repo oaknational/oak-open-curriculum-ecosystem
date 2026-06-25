@@ -13,11 +13,11 @@ The single in-repo file an agent reads to **become the Director** of a
 multi-session, multi-agent effort, and the one place the current Director
 **hands off** from. It has two layers held apart by their change-rate:
 
-+ a durable **Director Brief** (sections below up to `CURRENT HANDOFF STATE`) —
+- a durable **Director Brief** (sections below up to `CURRENT HANDOFF STATE`) —
   plan-agnostic, the operational instance of the role doctrine: how to take the
   seat, the readiness gate, the standing lessons, the routing contract. It does
   not change between handoffs.
-+ a volatile **`CURRENT HANDOFF STATE`** section that the sitting Director
+- a volatile **`CURRENT HANDOFF STATE`** section that the sitting Director
   refreshes at every handoff — who is live, what is open, what is owner-gated.
 
 The role doctrine itself is
@@ -62,14 +62,14 @@ the seat, not to any one pilot.
    gate; the mechanical liveness check is.** You may only broadcast a Moment-2
    acknowledgement after BOTH (a) you can answer all five and (b) you have run the
    mechanical liveness check and pasted its output.
-   + Who are the live implementers, what lane is each on, and which claims do
+   - Who are the live implementers, what lane is each on, and which claims do
      they hold? (If the team is dissolved, who — if anyone — is operating, and
      under what direction?)
-   + What open verdicts do you own, and what is each one's pre-merge / acceptance
+   - What open verdicts do you own, and what is each one's pre-merge / acceptance
      condition?
-   + What is owner-gated versus team-doable right now?
-   + What is the single next safe step?
-   + **Is the outgoing Director actually standing down** — heartbeat stopped, or
+   - What is owner-gated versus team-doable right now?
+   - What is the single next safe step?
+   - **Is the outgoing Director actually standing down** — heartbeat stopped, or
      it pre-positioned you?
 
    **Mechanical liveness check (MANDATORY — paste its output before Moment-2).**
@@ -140,30 +140,30 @@ the seat, not to any one pilot.
 
 Each lesson is the cure for a churn cause observed in the pilot.
 
-+ **Arm the comms watcher as move 1, before any coordination** — it is
+- **Arm the comms watcher as move 1, before any coordination** — it is
   constitutive team-visibility, not discretionary infrastructure; an
   un-armed watcher went blind to a simultaneous identical-branch claim. n=2
   retains it; only the heartbeat is in the drop-set.
-+ **Verify a target agent's current state right before routing**, and route
+- **Verify a target agent's current state right before routing**, and route
   durable lanes rather than real-time pickups that race the implementers — a
   three-direction reversal in five minutes (and a finding routed to an agent that
   retired one second later) both came from routing on minutes-old state.
-+ **Route nothing to an agent told to close out / high-context** — route to its
+- **Route nothing to an agent told to close out / high-context** — route to its
   successor; that is what successors are for.
-+ **Authority/coordination actions get the highest verification bar** — confirm
+- **Authority/coordination actions get the highest verification bar** — confirm
   load-bearing facts first-hand and let the tool compute liveness age in UTC
   (never a local clock) before acting. Ground convenient premises hardest.
-+ **Stop your own heartbeat at stand-down** or it asserts false "active" liveness
+- **Stop your own heartbeat at stand-down** or it asserts false "active" liveness
   — a heartbeat loop with no exit ran ~8h of false liveness across an outage.
-+ **Verify a PR's inline review comments first-hand**, not just `gh pr checks` —
+- **Verify a PR's inline review comments first-hand**, not just `gh pr checks` —
   inline bot findings are invisible to the check-status view (the PR #220 / #222
   Proto-finding blind spot).
-+ **Re-spinning a deep-context session does not reset its budget** — security- or
+- **Re-spinning a deep-context session does not reset its budget** — security- or
   quality-critical work wants a genuinely fresh seat, not a re-spin of a spent one.
-+ **For an artefact open weeks+, "what has been decided since this was written?"
+- **For an artefact open weeks+, "what has been decided since this was written?"
   is the first-order question** before its internal merits — check the decision
   timeline for superseding decisions.
-+ **Curate, don't mechanically slice, prose-not-written-to-be-sliced**, and
+- **Curate, don't mechanically slice, prose-not-written-to-be-sliced**, and
   drift-guard the projection against source.
 
 ## Known friction (route to tooling, not to the brief or the plan)
@@ -173,14 +173,14 @@ backlog (`.agent/plans/agent-tooling/frictions-register.md`), named here only so
 successor recognises them rather than rediscovers them. Register state below is
 first-hand as of 2026-06-25.
 
-+ **`claims` CLI has no adopt/transfer and cannot set `handoff_record_path`** —
+- **`claims` CLI has no adopt/transfer and cannot set `handoff_record_path`** —
   PDR-063 hand-off requires retaining a claim for the successor and the successor
   adopting it, but the CLI lacks `claims adopt --claim-id <id>` and
   `claims set-handoff --claim-id <id> --path <path>`. Hand-editing the registry is
   unsafe in a busy window, and reusing `--claim-id` created a duplicate row. Work
   around it out-of-band; do not treat the friction as a brief or plan defect.
   **Not yet in the register** — needs an F-entry.
-+ **No start-right watcher-presence fail-fast gate** — the "arm the watcher as
+- **No start-right watcher-presence fail-fast gate** — the "arm the watcher as
   move 1" rule is prose; it was skipped once under ceremony-aversion, going blind
   to a simultaneous identical-branch claim. The structural cure is a
   session-open / `start-right-team` check that fails fast when invoked without a
@@ -188,7 +188,7 @@ first-hand as of 2026-06-25.
   agent diligence. **Not yet in the register** as its own entry — F-69 (stale
   collaboration-state sweep) names an adjacent session-open hook but not the
   watcher-presence gate; needs an F-entry.
-+ **Continuity-buffer handoff commit blocked by markdownlint** — a mid-arc handoff
+- **Continuity-buffer handoff commit blocked by markdownlint** — a mid-arc handoff
   commit can hit a markdownlint wall on shared multi-agent buffers; the interim
   cure is the dedicated consolidation pass (rotate + lint, then commit), but a
   lint-incremental / per-committer scope would unblock the handoff commit without
@@ -196,10 +196,10 @@ first-hand as of 2026-06-25.
   checkout; structural cure = the worktree transition) and **F-39** (markdownlint
   MD004 wrap friction) are in the register; the specific continuity-buffer
   handoff-commit cure is not yet its own entry.
-+ **Comms watcher drain-step hits its 60s deadline** under high comms volume and
+- **Comms watcher drain-step hits its 60s deadline** under high comms volume and
   needs manual re-arming across a long session — supervise or raise the deadline;
   fail-loud already works.
-+ **No PR monitor covers inline review comments + PR terminal state** — until one
+- **No PR monitor covers inline review comments + PR terminal state** — until one
   exists, poll `gh pr view N --json state,reviewDecision`,
   `gh api repos/.../pulls/N/comments`, and `gh pr view N --json comments` by hand.
 
@@ -253,22 +253,22 @@ for the F-94..F-97 backlog and any new friction.
 owner request — none HARD-blocks, since the dedicated seat fixes during and the pilot ran
 with workarounds, but these touch bootstrap / handoff integrity from the start):
 
-+ **F-95 (watcher-presence fail-fast gate) — strongest fix-before.** It guards the exact
+- **F-95 (watcher-presence fail-fast gate) — strongest fix-before.** It guards the exact
   founding failure of this pilot (an implementer skipped the move-1 comms watcher and went
   blind to a simultaneous identical-branch claim). A gate in place before bootstrap stops
   the next session repeating it.
-+ **F-94 (`claims` adopt/set-handoff) — strong fix-before.** Rotating-seat PDR-063 handoffs
+- **F-94 (`claims` adopt/set-handoff) — strong fix-before.** Rotating-seat PDR-063 handoffs
   happen from early in a team session; without the primitive every handoff hits the
   duplicate-row workaround in a busy multi-writer window.
-+ F-96 (continuity-buffer lint hostage) and F-97 (PR inline-comment monitor) — fix-during
+- F-96 (continuity-buffer lint hostage) and F-97 (PR inline-comment monitor) — fix-during
   by the dedicated seat is fine.
 
-+ **Merge status — DONE.** PRs **#221** (worktree-pilot: vitest standardisation +
+- **Merge status — DONE.** PRs **#221** (worktree-pilot: vitest standardisation +
   Director/Implementer doctrine PDR-117) and **#222** (agent-tools `pr-watch`
   command, incl. the Proto-dispatch fix) are **MERGED to `main`**. `origin/main`
   HEAD is `1020001fd chore(release): 1.35.0 [skip ci]`; #222 landed as
   `8bebfd0a5`, #221 as `132ee59ba`. The coordination→main pilot acceptance is met.
-+ **Team — DISSOLVED.** The worktree-pilot team (Director Nightjar; Implementers
+- **Team — DISSOLVED.** The worktree-pilot team (Director Nightjar; Implementers
   Juno/Sturgeon/Narwhal/Callisto) has stood down. Only **Thyme lifts Compost**
   (session `c2b721`) remains, **operating independently under direct owner
   direction** — not as part of a Director-coordinated team. The Director seat is
@@ -279,7 +279,7 @@ with workarounds, but these touch bootstrap / handoff integrity from the start):
   `agent-tooling-pr-watch` likewise remain in `active-claims.json` from the
   dissolved team and are not live. (Clearing these is a curator pass — owner-gated
   alongside the orphan-prevention actions below.)
-+ **Sonar S8707 sites 2-3 — PAUSED.** On branch
+- **Sonar S8707 sites 2-3 — PAUSED.** On branch
   `fix/sonar-s8707-cli-path-injection` (off `main`), **site-1 committed**
   (`1329d787a` — canonical-path validator `safe-path.ts` + turbo-report
   containment) and **site-2 committed** (`4c9cfbfc9` — commit-msg path contained
@@ -291,13 +291,13 @@ with workarounds, but these touch bootstrap / handoff integrity from the start):
   review. Warm worktree `oak-sonar-p1`. The Sonar gate is ERROR with
   `tssecurity:S8707 ×3` OPEN; clearing all three clears
   `new_vulnerabilities_severity`.
-+ **DATA-SOURCES.md — UNSTARTED.** The file does not exist in the doc tree. ADR-157
+- **DATA-SOURCES.md — UNSTARTED.** The file does not exist in the doc tree. ADR-157
   deliberately lacks review/removal criteria; a governance home was owner-floated
   but not decided. Authoring it means surfacing
   suitability/last-reviewed/removal criteria for owner ratification — these are
   **new governance policy**, an owner decision, not an agent-resolvable task. Not
   bundled with the pilot; spans multiple threads.
-+ **Guiding plan.** The forward guiding plan is
+- **Guiding plan.** The forward guiding plan is
   `.agent/plans/agentic-engineering-enhancements/current/worktree-pilot-consolidation-and-model-verdict.plan.md`
   — it carries the lane scope and outcome-based acceptance for the remaining arc; this
   section carries the live status. The pilot's record + Log (the evidence the model
@@ -312,32 +312,32 @@ removed. **The three never-pushed at-risk branches were PUSHED to origin 2026-06
 commits survive any worktree removal.** Worktrees are now safe to remove; each lane
 resumes from its pushed branch in the next team session.
 
-+ 🟢 **PRESERVED — `oak-pilot-ws-b-explain`** (branch `pilot/ws-b-explain-resource`,
+- 🟢 **PRESERVED — `oak-pilot-ws-b-explain`** (branch `pilot/ws-b-explain-resource`,
   was HIGH): ~9 commits, the WHOLE WS-B explain effort-orientation surface (D1 + D2
-  + drift-gate, top `93d5e266c`; includes `4adea4aca` WS-B D2). **Pushed to
+  - drift-gate, top `93d5e266c`; includes `4adea4aca` WS-B D2). **Pushed to
   `origin/pilot/ws-b-explain-resource`** (pre-push gate passed). Still NOT in main
   (excluded from #221). The plan's WS-B lane resumes here (D3–D5 + merge to main).
-+ 🟢 **PRESERVED — `oak-sonar-p1`** (branch `fix/sonar-s8707-cli-path-injection`,
+- 🟢 **PRESERVED — `oak-sonar-p1`** (branch `fix/sonar-s8707-cli-path-injection`,
   was HIGH): site-1 `1329d787a` + site-2 `4c9cfbfc9`. **Pushed to
   `origin/fix/sonar-s8707-cli-path-injection`** (pre-push gate passed). Still NOT in
   main, no PR. The plan's Sonar lane resumes here (site-3 + integrated re-review +
   one PR to main) in the next team session.
-+ 🟢 **PRESERVED — `oak-pilot-ws-a-vitest`** (branch `pilot/ws-d-roles-doctrine`,
+- 🟢 **PRESERVED — `oak-pilot-ws-a-vitest`** (branch `pilot/ws-d-roles-doctrine`,
   was MEDIUM): orphan commit `44484d478` (Comet's WS-D experience file, "reflection
   on PDR-117 governing its author"). **Pushed to `origin/pilot/ws-d-roles-doctrine`**;
   the rest of WS-D was already in main via the #221 squash. Fold the experience file
   when convenient.
-+ 🟠 **MEDIUM (open) — primary checkout**: ~14 uncommitted continuity buffers
+- 🟠 **MEDIUM (open) — primary checkout**: ~14 uncommitted continuity buffers
   (napkin, distilled, director-handoff, repo-continuity, two thread records,
   frictions-register incl. F-94–97, the PDR-117 edit, daily.md, two experience
   files, the worktree-pilot coordination plan, the new guiding plan) — lint-blocked.
   Cure: the dedicated consolidation commit (rotate + lint + commit) — owner-gated;
   this is the one remaining orphan-prevention action.
-+ 🟢 **NONE**: `oak-pilot-ws-c-ci` + `oak-pilot-ws-e` (content in main via the #221
+- 🟢 **NONE**: `oak-pilot-ws-c-ci` + `oak-pilot-ws-e` (content in main via the #221
   squash); `oak-pr-watch` (merged #222 + pushed); `oak-data-sources` (clean, at
   base, empty — its grounding is the primary's uncommitted data-sources thread
   record).
-+ ⚠️ **PRE-EXISTING (flag, do NOT touch** — `never-use-git-to-remove-work` + owner
+- ⚠️ **PRE-EXISTING (flag, do NOT touch** — `never-use-git-to-remove-work` + owner
   no-stash preference): ~10 repo-global stashes from old branches (statusline,
   graph-foundations, eef, PR-115, …). Left as-is.
 
@@ -348,19 +348,19 @@ dedicated consolidation commit for the primary checkout's continuity buffers.
 
 ## Key surfaces
 
-+ [PDR-117](../../practice-core/decision-records/PDR-117-director-and-implementer-roles.md)
+- [PDR-117](../../practice-core/decision-records/PDR-117-director-and-implementer-roles.md)
   — the portable Director/Implementer role doctrine (now landed on `main`).
-+ [PDR-064](../../practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md)
+- [PDR-064](../../practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md)
   — coordinator handoff (two moments); this brief's readiness gate is the gate
   before its Moment 2.
-+ `.agent/plans/agentic-engineering-enhancements/future/worktree-per-agent-transition.plan.md`
+- `.agent/plans/agentic-engineering-enhancements/future/worktree-per-agent-transition.plan.md`
   — the strategic root (the transition this work serves; promotion-evidence home).
-+ `.agent/plans/agentic-engineering-enhancements/current/worktree-pilot-consolidation-and-model-verdict.plan.md`
+- `.agent/plans/agentic-engineering-enhancements/current/worktree-pilot-consolidation-and-model-verdict.plan.md`
   — the forward guiding plan (the remaining arc + the model verdict).
-+ `.agent/plans/agentic-engineering-enhancements/active/worktree-pilot-coordination.plan.md`
+- `.agent/plans/agentic-engineering-enhancements/active/worktree-pilot-coordination.plan.md`
   — the pilot's detail and Log; the evidence source the model verdict consumes.
-+ `.agent/state/collaboration/active-claims.json`, the comms stream, and
+- `.agent/state/collaboration/active-claims.json`, the comms stream, and
   `repo-continuity.md` — live coordination state (currently carrying stale
   dissolved-team claims pending a curator pass).
-+ `.agent/memory/active/napkin.md` (2026-06-25 entries) — the session's full
+- `.agent/memory/active/napkin.md` (2026-06-25 entries) — the session's full
   lessons before they graduate.

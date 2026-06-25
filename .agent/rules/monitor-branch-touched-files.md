@@ -14,19 +14,19 @@ pnpm agent-tools:branch-touched-files -- --base origin/main --head HEAD
 
 Check at these moments:
 
-+ session start on a feature branch;
-+ after merging or rebasing main;
-+ before broadening scope beyond the active plan;
-+ before committing a large chunk or refreshing a PR handoff.
+- session start on a feature branch;
+- after merging or rebasing main;
+- before broadening scope beyond the active plan;
+- before committing a large chunk or refreshing a PR handoff.
 
 ## Thresholds
 
-+ **< 50 files** — no warning. Continue normally.
-+ **50-99 files: soft warning** — inspect the touched-file list and confirm
+- **< 50 files** — no warning. Continue normally.
+- **50-99 files: soft warning** — inspect the touched-file list and confirm
   the branch still has one coherent outcome.
-+ **100-149 files: hard warning** — pause scope expansion until you have
+- **100-149 files: hard warning** — pause scope expansion until you have
   refreshed the plan direction and named what remains to land.
-+ **150+ files: critical warning** — stop broadening the branch. Produce an
+- **150+ files: critical warning** — stop broadening the branch. Produce an
   owner-visible split plan before adding more scope unless the owner explicitly
   authorises continuing as one PR.
 
@@ -34,13 +34,13 @@ Check at these moments:
 
 At soft or higher, write down the answers before continuing:
 
-+ Where are we now?
-+ Where do we need to get to?
-+ What impact and value is the branch meant to deliver?
-+ What is the shortest route from the current state to that target?
-+ Which file, package, product, documentation, or practice boundaries could
+- Where are we now?
+- Where do we need to get to?
+- What impact and value is the branch meant to deliver?
+- What is the shortest route from the current state to that target?
+- Which file, package, product, documentation, or practice boundaries could
   become self-contained PRs that still land working value?
-+ Which work should be deferred, split, or explicitly declared out of scope so
+- Which work should be deferred, split, or explicitly declared out of scope so
   the branch stays reviewable?
 
 At hard or critical, the next action should be planning and split analysis, not

@@ -45,8 +45,8 @@ State, in one or two sentences, the user or system IMPACT this team session exis
 move — the WHY that every seat's work must trace back to. This is the cohesion source:
 if a lane cannot be traced to this impact, it does not belong in this session.
 
-+ **Impact**: [who is better off, and how, when this session succeeds — not an activity]
-+ **Why now**: [the trigger / evidence that makes this the team's focus]
+- **Impact**: [who is better off, and how, when this session succeeds — not an activity]
+- **Why now**: [the trigger / evidence that makes this the team's focus]
 
 ## Team-Level Outcome Goals (what this session delivers)
 
@@ -54,8 +54,8 @@ The concrete, measurable OUTCOMES that realise the impact. Outcomes, not activit
 "X is true / shipped / proven", never "we worked on X". These are the acceptance
 spine; every lane delivers toward one or more of them.
 
-+ **O1** — [outcome]; measured by [observable proof].
-+ **O2** — [outcome]; measured by [observable proof].
+- **O1** — [outcome]; measured by [observable proof].
+- **O2** — [outcome]; measured by [observable proof].
 
 ## Cohesion Mechanism (what the worktree-pilot lacked)
 
@@ -63,16 +63,16 @@ This is the load-bearing section — the absence of it is what let the pilot los
 cohesion. Name explicitly HOW the lanes stay aligned to the impact/outcome as the
 session runs and seats rotate:
 
-+ **Lane-to-outcome trace**: every lane below names the outcome (O1/O2/…) it serves;
+- **Lane-to-outcome trace**: every lane below names the outcome (O1/O2/…) it serves;
   a lane serving no outcome is cut or re-scoped, not run.
-+ **The Director holds the whole**: the Director's standing job is to keep every live
+- **The Director holds the whole**: the Director's standing job is to keep every live
   lane traceable to an outcome and to re-route or stop drift (PDR-117 minimum-action;
   the Director directs, does not execute). The director brief
   (`.agent/memory/operational/director-handoff.md`) is its operational instance.
-+ **Cohesion checkpoints**: [when the team re-checks lanes against the outcomes — e.g.
+- **Cohesion checkpoints**: [when the team re-checks lanes against the outcomes — e.g.
   at each merge waypoint, each seat rotation, and a mid-arc checkpoint per the
   session-discipline component]. A checkpoint that finds a drifted lane re-routes it.
-+ **Owner-interface discipline**: the Director is the single owner-interface; lanes
+- **Owner-interface discipline**: the Director is the single owner-interface; lanes
   surface decisions up to the Director, who lens-resolves or escalates (PDR-117
   routing contract). This prevents the request-driven drift that seeded the pilot.
 
@@ -102,8 +102,8 @@ Each lane's controlling plan is authoritative for its scope, sequencing, accepta
 and validation. The team-session-opener prompt instance's `Plan authority` line lists
 the same set.
 
-+ [`path/to/lane-1.plan.md`] — serves O1.
-+ [`path/to/lane-2.plan.md`] — serves O2.
+- [`path/to/lane-1.plan.md`] — serves O1.
+- [`path/to/lane-2.plan.md`] — serves O2.
 
 ## Acceptance Criteria (team-level, outcome-based)
 
@@ -118,19 +118,19 @@ The session succeeds when the outcomes are proven — not when activity occurred
 
 ## Non-Goals (YAGNI)
 
-+ [What this team session explicitly will NOT pursue, and why — the boundary that
+- [What this team session explicitly will NOT pursue, and why — the boundary that
   keeps it cohesive.]
 
 ## Operating Model and Cadence (referenced, not restated)
 
-+ **Operational setup**: the team-session-opener prompt template
+- **Operational setup**: the team-session-opener prompt template
   (`.agent/prompts/agentic-engineering/team-session-opener.prompt.md`) — entry ritual,
   worktrees + single coordination-home, branch classes, seat briefs, coordination
   cadence, closeout. Instantiate it for this session alongside this plan.
-+ **Roles**: [PDR-117](../../practice-core/decision-records/PDR-117-director-and-implementer-roles.md)
+- **Roles**: [PDR-117](../../practice-core/decision-records/PDR-117-director-and-implementer-roles.md)
   (Director + Implementer); the coordinator doctrine in
   [`agent-collaboration.md`](../../directives/agent-collaboration.md).
-+ **Session discipline**: see
+- **Session discipline**: see
   [`components/session-discipline.md`](components/session-discipline.md) — the four
   tripwires (count-is-a-template, mid-arc checkpoints, context-budget thresholds,
   metacognition at open) apply to every seat's sessions.
@@ -144,11 +144,11 @@ The session succeeds when the outcomes are proven — not when activity occurred
 
 ## Lifecycle and Consolidation
 
-+ **Lifecycle triggers**: see [`components/lifecycle-triggers.md`](components/lifecycle-triggers.md).
-+ **Closeout**: the Director is the team closeout owner; runs the full
+- **Lifecycle triggers**: see [`components/lifecycle-triggers.md`](components/lifecycle-triggers.md).
+- **Closeout**: the Director is the team closeout owner; runs the full
   `session-handoff` + `consolidate-docs` before the final coordination-branch PR
   merges (team-session-opener prompt §Coordination cadence).
-+ **Completion**: outcomes proven (acceptance above); the per-lane plans archived per
+- **Completion**: outcomes proven (acceptance above); the per-lane plans archived per
   ADR-117; the operating-model evidence folded into its home if this session was a
   model exercise.
 

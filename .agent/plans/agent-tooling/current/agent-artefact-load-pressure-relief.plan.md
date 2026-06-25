@@ -207,23 +207,23 @@ command-line or Codex gate.
 
 ### 0.1 Capture pre-pruning state
 
-+ **Action**: Record the live `pnpm portability:check` output and, if
+- **Action**: Record the live `pnpm portability:check` output and, if
   owner-supplied from an interactive Claude Code session, the
   active-skill list (system-reminder block) at session open.
-+ **Output**: Append the baseline counts to this plan's "Baselines"
+- **Output**: Append the baseline counts to this plan's "Baselines"
   section below. Do NOT embed in any permanent doc.
-+ **Acceptance**: validator green; baseline counts captured here.
+- **Acceptance**: validator green; baseline counts captured here.
   Session-local `/doctor` evidence is optional and cannot be produced
   authoritatively by terminal invocation.
 
 ### 0.2 Backup settings
 
-+ **Action**: copy `.claude/settings.json` to an **out-of-tree** location
+- **Action**: copy `.claude/settings.json` to an **out-of-tree** location
   (e.g. `<scratch>/oak-claude-settings.pre-prune-2026-05-06.json`) for
   rollback. Do NOT place the backup in the repo working tree — the
   `.gitignore` does not currently cover `*.pre-prune-*` suffixes and an
   in-tree backup risks accidental staging.
-+ **Acceptance**: backup file exists at the out-of-tree path; the path
+- **Acceptance**: backup file exists at the out-of-tree path; the path
   is recorded in the Outcome section for retention.
 
 ---
@@ -239,43 +239,43 @@ The three removals here are **non-destructive**:
 
 ### 1.1 Remove `mcp-apps@mcp-apps` plugin
 
-+ **Action**: Edit `.claude/settings.json` `enabledPlugins`; remove the
+- **Action**: Edit `.claude/settings.json` `enabledPlugins`; remove the
   `mcp-apps@mcp-apps` entry.
-+ **Action**: Optionally `claude plugin uninstall mcp-apps@mcp-apps`
+- **Action**: Optionally `claude plugin uninstall mcp-apps@mcp-apps`
   (project scope) to drop the cache directory.
-+ **Owner-confirmation gate**: this is reversible and authorised by
+- **Owner-confirmation gate**: this is reversible and authorised by
   this plan; proceed without further prompt.
-+ **Acceptance**:
-  + `pnpm portability:check` passes (canonical skills are unaffected).
-  + If owner captures Claude Code session-local evidence, the four
+- **Acceptance**:
+  - `pnpm portability:check` passes (canonical skills are unaffected).
+  - If owner captures Claude Code session-local evidence, the four
     `mcp-apps:*` skills no longer appear in the system reminder.
-  + Bare-name skills `add-app-to-server`, `convert-web-app`,
+  - Bare-name skills `add-app-to-server`, `convert-web-app`,
     `create-mcp-app`, `migrate-oai-app` continue to load (they are
     canonical).
 
 ### 1.2 Remove `cloudflare@claude-plugins-official` plugin
 
-+ **Action**: Same shape as 1.1.
-+ **Acceptance**: settings no longer enable the plugin; if owner
+- **Action**: Same shape as 1.1.
+- **Acceptance**: settings no longer enable the plugin; if owner
   captures Claude Code session-local evidence, 8 `cloudflare:*` skills
   no longer appear in the reminder; no failed MCP tool grants.
 
 ### 1.3 Remove `linear@claude-plugins-official` plugin
 
-+ **Action**: Same shape as 1.1.
-+ **Acceptance**: settings no longer enable the plugin; if owner
+- **Action**: Same shape as 1.1.
+- **Acceptance**: settings no longer enable the plugin; if owner
   captures Claude Code session-local evidence, no `linear` plugin
   presence appears in the reminder; GitHub plugin (user-scope) is
   unaffected.
 
 ### 1.4 Phase-1 gate
 
-+ Run quality gates (above).
-+ Document that `/doctor` evidence is session-local and owner-supplied;
+- Run quality gates (above).
+- Document that `/doctor` evidence is session-local and owner-supplied;
   it is not a command-line gate.
-+ Expected settings-derived drop: ~12 skills (4 mcp-apps +
+- Expected settings-derived drop: ~12 skills (4 mcp-apps +
   8 cloudflare).
-+ If owner supplies post-Phase-1 in-session counts, record them in the
+- If owner supplies post-Phase-1 in-session counts, record them in the
   "Baselines" section.
 
 ---
@@ -287,24 +287,24 @@ narrow subset of skills.
 
 ### 2.1 Inventory active Vercel usage
 
-+ **Action**: Read every `vercel:*` skill description from the active
+- **Action**: Read every `vercel:*` skill description from the active
   surface (already shown in the system reminder); classify into:
-  + `keep` — directly relevant to this monorepo's Vercel usage.
-  + `parked` — unused in current scope; remove or document.
-+ **Output**: Add a table to this plan listing each skill's verdict
+  - `keep` — directly relevant to this monorepo's Vercel usage.
+  - `parked` — unused in current scope; remove or document.
+- **Output**: Add a table to this plan listing each skill's verdict
   with one-line justification. (Plans are ephemeral; counts and per-skill
   verdicts are appropriate here, not in permanent docs.)
-+ **Acceptance**: 25 skills classified; ≥10 marked `parked`.
+- **Acceptance**: 25 skills classified; ≥10 marked `parked`.
 
 ### 2.2 Resolve `parked` Vercel skills
 
 Claude Code does not expose a per-skill disable in user-visible
 settings. Two options:
 
-+ **Option A (preferred)**: open an upstream issue or local override
+- **Option A (preferred)**: open an upstream issue or local override
   asking the Vercel plugin to expose its skill catalogue as
   user-selectable. Track in `.agent/plans/agent-tooling/frictions-register.md`.
-+ **Option B**: remove the Vercel plugin and replace with a curated
+- **Option B**: remove the Vercel plugin and replace with a curated
   internal `vercel-deploy-expert` canonical skill plus the project's
   existing Vercel MCP. Out-of-scope for this urgent plan; deferred to
   the strategic plan.
@@ -312,9 +312,9 @@ settings. Two options:
 This phase **records** the gap and the proposed remediation; it does
 not yet remove the plugin.
 
-+ **Action**: Append a friction entry (`F-XX: Vercel plugin skill catalogue
+- **Action**: Append a friction entry (`F-XX: Vercel plugin skill catalogue
   unbounded`) to `frictions-register.md`.
-+ **Acceptance**: friction recorded; strategic plan references it as
+- **Acceptance**: friction recorded; strategic plan references it as
   input.
 
 ---
@@ -323,23 +323,23 @@ not yet remove the plugin.
 
 ### 3.1 Validator and gates
 
-+ **Action**: `pnpm portability:check` — must pass.
-+ **Action**: `pnpm subagents:check` — must pass.
-+ **Action**: If owner supplies interactive Claude Code evidence,
+- **Action**: `pnpm portability:check` — must pass.
+- **Action**: `pnpm subagents:check` — must pass.
+- **Action**: If owner supplies interactive Claude Code evidence,
   capture the active-skill list from `/doctor` or the system reminder.
-+ **Acceptance**: settings-derived post-prune expectation is at least
+- **Acceptance**: settings-derived post-prune expectation is at least
   12 below baseline; owner-supplied Claude Code evidence can confirm
   no skill discovery truncation is visible.
 
 ### 3.2 Functional spot-check
 
-+ **Action**: If owner supplies interactive Claude Code evidence,
+- **Action**: If owner supplies interactive Claude Code evidence,
   verify the four canonical mcp-apps skills still surface by bare name
   in that session's reminder.
-+ **Action**: Verify the project's MCP grants for sentry, sonarqube,
+- **Action**: Verify the project's MCP grants for sentry, sonarqube,
   github, oak, vercel still resolve (no broken `mcp__*` references in
   `.claude/settings.local.json`).
-+ **Acceptance**: zero functional regression; canonical skills behave
+- **Acceptance**: zero functional regression; canonical skills behave
   identically; the only change is the removal of duplicate / unused
   plugin surfaces.
 
@@ -349,25 +349,25 @@ not yet remove the plugin.
 
 ### 4.1 Record outcome
 
-+ **Action**: Update the urgent plan's "Outcome" section below with
+- **Action**: Update the urgent plan's "Outcome" section below with
   pre/post counts and any anomalies.
-+ **Action**: Note the remaining Vercel-plugin pressure in the strategic
+- **Action**: Note the remaining Vercel-plugin pressure in the strategic
   plan's input list.
 
 ### 4.2 Update continuity surfaces
 
-+ **Action**: Light continuity-update on close (`mid-session-light-update`
+- **Action**: Light continuity-update on close (`mid-session-light-update`
   pattern): comms-log entry; thread record refresh.
-+ **Acceptance**: the next session reads the outcome via the standard
+- **Acceptance**: the next session reads the outcome via the standard
   continuity surfaces.
 
 ### 4.3 Promote strategic CLI plan if owner agrees
 
-+ The strategic plan
+- The strategic plan
   [`agent-artefact-lifecycle-cli.plan.md`](agent-artefact-lifecycle-cli.plan.md)
   is the durable answer to the underlying drift. This urgent plan is
   the immediate relief; the strategic plan is the structural fix.
-+ No promotion needed unless owner directs.
+- No promotion needed unless owner directs.
 
 ---
 
@@ -397,23 +397,23 @@ not yet remove the plugin.
 
 ## Foundation alignment
 
-+ **PDR-009**: canonical-first three-layer model preserved (Layer 1
+- **PDR-009**: canonical-first three-layer model preserved (Layer 1
   unchanged; Layer 2 wrappers unchanged; Layer 3 entry-points unchanged).
-+ **ADR-125**: thin-wrapper contract preserved; this plan operates on
+- **ADR-125**: thin-wrapper contract preserved; this plan operates on
   enabled-plugin set only.
-+ **agentskills.io spec**: surface description format unchanged.
-+ **No-moving-targets-in-permanent-docs**: counts are recorded in this
+- **agentskills.io spec**: surface description format unchanged.
+- **No-moving-targets-in-permanent-docs**: counts are recorded in this
   plan body (ephemeral) and not in any permanent doc.
 
 ---
 
 ## Non-goals (YAGNI)
 
-+ Building any new agent-tools CLI command (strategic plan).
-+ Amending ADR-125 (strategic plan).
-+ Removing canonical skills (strategic plan, after audit).
-+ Refactoring the validator (strategic plan).
-+ Touching `.cursor/`, `.gemini/`, `.codex/`, `.agents/` adapter files
+- Building any new agent-tools CLI command (strategic plan).
+- Amending ADR-125 (strategic plan).
+- Removing canonical skills (strategic plan, after audit).
+- Refactoring the validator (strategic plan).
+- Touching `.cursor/`, `.gemini/`, `.codex/`, `.agents/` adapter files
   (no changes needed).
 
 ---
@@ -438,11 +438,11 @@ not yet remove the plugin.
 
 ### 2026-05-06 Phase 1 implementation
 
-+ **Agent**: Ashen Burning Anvil / codex / GPT-5 / `019dfd`.
-+ **Claim**: `b78e00ac-6bdd-40ec-8a11-6ccd6f42bf5c`.
-+ **Backup**:
+- **Agent**: Ashen Burning Anvil / codex / GPT-5 / `019dfd`.
+- **Claim**: `b78e00ac-6bdd-40ec-8a11-6ccd6f42bf5c`.
+- **Backup**:
   `<scratch>/oak-claude-settings.pre-prune-20260506T121741Z.json`.
-+ **Baseline**: `pnpm portability:check` passed before pruning with
+- **Baseline**: `pnpm portability:check` passed before pruning with
   12 commands, 37 skills, 52 rules, 22 reviewer adapters, 54 Cursor
   triggers, 52 Claude rules, 52 `.agents` rules, and 40 command
   adapters. `/doctor` is session-local Claude Code evidence: it reports
@@ -450,11 +450,11 @@ not yet remove the plugin.
   `claude doctor` invocation from Codex is not an authoritative evidence
   path. Use the audit's ~112 active-skill estimate as the pre-prune
   proxy unless the owner supplies an in-session Claude Code count.
-+ **Change**: `.claude/settings.json` no longer enables
+- **Change**: `.claude/settings.json` no longer enables
   `mcp-apps@mcp-apps`, `cloudflare@claude-plugins-official`, or
   `linear@claude-plugins-official`. Retained plugins are Sentry,
   remember, MCP server dev, SonarQube, and Vercel.
-+ **Validation**: `jq '.enabledPlugins' .claude/settings.json`,
+- **Validation**: `jq '.enabledPlugins' .claude/settings.json`,
   `pnpm portability:check`, `pnpm subagents:check`, and
   `pnpm type-check` all passed. `pnpm type-check` reported
   36 successful Turbo tasks. Session handoff validation also passed:
@@ -463,11 +463,11 @@ not yet remove the plugin.
   `pnpm practice:fitness:informational` (pre-existing HARD signals
   remain in `principles.md`, `distilled.md`, and
   `pending-graduations.md`; napkin stayed green).
-+ **Optional owner-supplied evidence**: in-session Claude Code
+- **Optional owner-supplied evidence**: in-session Claude Code
   `/doctor`/system-reminder count, confirmation that bare canonical MCP
   Apps skills still surface, and confirmation that the removed plugin
   namespaces no longer appear in that session's reminder.
-+ **Deliberately not done**: no `claude plugin uninstall`, no Vercel
+- **Deliberately not done**: no `claude plugin uninstall`, no Vercel
   pruning, and no strategic `agent-tools artefacts` CLI work.
 
 ---
@@ -476,9 +476,9 @@ not yet remove the plugin.
 
 After Phase 3.1 passes:
 
-+ If unexpected behaviour appeared, append it to the napkin
+- If unexpected behaviour appeared, append it to the napkin
   (`.agent/memory/active/napkin.md`) per the standard capture flow.
-+ If a pattern emerged worth graduating, surface it in
+- If a pattern emerged worth graduating, surface it in
   `.remember/now.md` for the next consolidation pass.
 
 ---
@@ -487,9 +487,9 @@ After Phase 3.1 passes:
 
 Per `.agent/plans/templates/components/lifecycle-triggers.md`:
 
-+ **Pre-edit**: register active claim on `.claude/settings.json` via
+- **Pre-edit**: register active claim on `.claude/settings.json` via
   the collaboration-state helper.
-+ **Post-edit**: light continuity update; refresh thread record (per
+- **Post-edit**: light continuity update; refresh thread record (per
   the mid-session light update memory rule).
-+ **Plan close**: update Outcome; do not archive — leave for owner
+- **Plan close**: update Outcome; do not archive — leave for owner
   review of the strategic plan kickoff.
