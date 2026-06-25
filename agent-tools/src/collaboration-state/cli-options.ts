@@ -137,7 +137,7 @@ export function optionalPositiveInteger(options: Options, key: string): number |
 export function parseIsoTimestampMs(value: string, key: string): number {
   const ms = Date.parse(value);
   if (Number.isNaN(ms)) {
-    throw new Error(`--${key} must be a valid ISO-8601 timestamp: ${value}`);
+    throw new TypeError(`--${key} must be a valid ISO-8601 timestamp: ${value}`);
   }
 
   return ms;
