@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 
 /**
- * Pre-commit hook to prevent accidental major version bumps
- * Checks commit messages for breaking change indicators
+ * `commit-msg` hook (wired in `.husky/commit-msg`) to prevent accidental major
+ * version bumps. Checks the commit message for breaking-change indicators.
  */
 
-import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { readFileSync, realpathSync } from 'node:fs';
 import { argv, exit } from 'node:process';
+import { fileURLToPath } from 'node:url';
+
+import { assertPathWithinBase } from '../core/safe-path.js';
 import { writeErrorLine } from '../core/terminal-output.js';
+import { resolveTrustedGit } from '../core/trusted-git.js';
 
 const BREAKING_CHANGE_INDICATORS = [
   'BREAKING CHANGE:',
@@ -23,24 +28,68 @@ const RED = '\x1b[31m';
 const YELLOW = '\x1b[33m';
 const RESET = '\x1b[0m';
 
-function getCommitMessage(): string {
-  // Get the commit message file from command line argument
-  const commitMsgFile = argv[2];
+/** Injectable seams for {@link runPreventAccidentalMajorVersion} (testing + composition). */
+export interface PreventAccidentalMajorVersionOptions {
+  /**
+   * Caller-supplied commit-message file path. The CLI entry passes
+   * `process.argv[2]`; tests pass it explicitly (and omit it to exercise the
+   * missing-path branch) so the function never depends on global `argv`.
+   */
+  readonly commitMsgFile?: string;
+  /**
+   * Containment base the commit-message path must resolve within; defaults to
+   * the absolute git directory (`git rev-parse --absolute-git-dir`).
+   */
+  readonly gitDir?: string;
+  /**
+   * Resolves the absolute git directory when {@link gitDir} is not supplied.
+   * Defaults to a hardened `git rev-parse --absolute-git-dir`; injectable so a
+   * test can exercise the failure path (git missing / not a worktree) and prove
+   * it returns `{ exitCode: 1 }` rather than throwing.
+   */
+  readonly resolveGitDir?: () => string;
+  /** Reads the (already-contained) file; defaults to `node:fs` `readFileSync` utf8. */
+  readonly readFile?: (path: string) => string;
+  /** Canonicalises paths for containment; defaults to `node:fs` `realpathSync`. */
+  readonly realpath?: (path: string) => string;
+  /** Error sink; defaults to {@link writeErrorLine}. */
+  readonly writeError?: (line: string) => void;
+}
 
-  if (!commitMsgFile) {
-    writeErrorLine('Error: No commit message file provided');
-    exit(1);
-    return '';
-  }
+interface ResolvedSeams {
+  readonly commitMsgFile: string | undefined;
+  readonly readFile: (path: string) => string;
+  readonly realpath: (path: string) => string;
+  readonly writeError: (line: string) => void;
+  readonly resolveGitDir: () => string;
+}
 
-  try {
-    return readFileSync(commitMsgFile, 'utf8');
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    writeErrorLine(`Error reading commit message file: ${message}`);
-    exit(1);
-    return '';
-  }
+function resolveSeams(options: PreventAccidentalMajorVersionOptions): ResolvedSeams {
+  return {
+    commitMsgFile: options.commitMsgFile,
+    readFile: options.readFile ?? ((path: string) => readFileSync(path, 'utf8')),
+    realpath: options.realpath ?? ((path: string) => realpathSync(path)),
+    writeError: options.writeError ?? writeErrorLine,
+    resolveGitDir: options.resolveGitDir ?? resolveAbsoluteGitDir,
+  };
+}
+
+/**
+ * Resolve the absolute git directory, executing git by its absolute path.
+ *
+ * @remarks
+ * git is invoked via {@link resolveTrustedGit} (an absolute path from a fixed
+ * allowlist), not by name through `PATH`, so a shadowing `git` on a
+ * user-writable `PATH` entry cannot be executed (SonarCloud S4036, the compliant
+ * fix). `execFileSync` may throw if git is genuinely absent; the caller resolves
+ * this inside its try/catch.
+ *
+ * @returns The absolute git directory, used as the containment base.
+ */
+function resolveAbsoluteGitDir(): string {
+  return execFileSync(resolveTrustedGit(), ['rev-parse', '--absolute-git-dir'], {
+    encoding: 'utf8',
+  }).trim();
 }
 
 function checkForBreakingChanges(message: string): boolean {
@@ -60,69 +109,138 @@ function checkForBangCommit(message: string): boolean {
   return /^(feat|fix|refactor|perf|test|build|ci|chore|docs|style|revert)!:/m.test(message);
 }
 
-function printErrorHeader(line: string): void {
-  writeErrorLine(line);
-  writeErrorLine(`${RED}⚠️  MAJOR VERSION BUMP DETECTED!${RESET}`);
-  writeErrorLine(line);
-  writeErrorLine('');
+function printErrorHeader(line: string, writeError: (line: string) => void): void {
+  writeError(line);
+  writeError(`${RED}⚠️  MAJOR VERSION BUMP DETECTED!${RESET}`);
+  writeError(line);
+  writeError('');
 }
 
-function printErrorCause(hasBreakingChange: boolean, hasBangCommit: boolean): void {
+function printErrorCause(
+  hasBreakingChange: boolean,
+  hasBangCommit: boolean,
+  writeError: (line: string) => void,
+): void {
   if (hasBreakingChange) {
-    writeErrorLine(`Your commit message contains a BREAKING CHANGE indicator.`);
+    writeError(`Your commit message contains a BREAKING CHANGE indicator.`);
   }
 
   if (hasBangCommit) {
-    writeErrorLine(`Your commit uses the '!' syntax (e.g., feat!, fix!).`);
+    writeError(`Your commit uses the '!' syntax (e.g., feat!, fix!).`);
   }
 
-  writeErrorLine(`This would trigger a major version bump (to 1.0.0 or higher).`);
-  writeErrorLine('');
+  writeError(`This would trigger a major version bump (to 1.0.0 or higher).`);
+  writeError('');
 }
 
-function printErrorAdvice(): void {
-  writeErrorLine(`${YELLOW}Since this package is still in pre-1.0 development:${RESET}`);
-  writeErrorLine(`• Remove "BREAKING CHANGE" from your commit message`);
-  writeErrorLine(`• Don't use ! in your commit type (feat!, fix!, etc.)`);
-  writeErrorLine(`• Use regular feat: or fix: commits instead`);
-  writeErrorLine(`• Breaking changes in 0.x.x should bump minor version, not major`);
-  writeErrorLine('');
-  writeErrorLine(`${YELLOW}If you really need to indicate breaking changes:${RESET}`);
-  writeErrorLine(`1. Use a regular commit type without !`);
-  writeErrorLine(
+function printErrorAdvice(writeError: (line: string) => void): void {
+  writeError(`${YELLOW}Since this package is still in pre-1.0 development:${RESET}`);
+  writeError(`• Remove "BREAKING CHANGE" from your commit message`);
+  writeError(`• Don't use ! in your commit type (feat!, fix!, etc.)`);
+  writeError(`• Use regular feat: or fix: commits instead`);
+  writeError(`• Breaking changes in 0.x.x should bump minor version, not major`);
+  writeError('');
+  writeError(`${YELLOW}If you really need to indicate breaking changes:${RESET}`);
+  writeError(`1. Use a regular commit type without !`);
+  writeError(
     `2. Document breaking changes in the commit body (without the BREAKING CHANGE footer)`,
   );
-  writeErrorLine(`3. Update CHANGELOG.md manually if needed`);
-  writeErrorLine('');
+  writeError(`3. Update CHANGELOG.md manually if needed`);
+  writeError('');
 }
 
-function printError(hasBreakingChange: boolean, hasBangCommit: boolean): void {
+function printError(
+  hasBreakingChange: boolean,
+  hasBangCommit: boolean,
+  writeError: (line: string) => void,
+): void {
   const line = `${RED}${'━'.repeat(75)}${RESET}`;
 
-  printErrorHeader(line);
-  printErrorCause(hasBreakingChange, hasBangCommit);
-  printErrorAdvice();
-  writeErrorLine(`${RED}Commit blocked. Please modify your commit message and try again.${RESET}`);
-  writeErrorLine(line);
+  printErrorHeader(line, writeError);
+  printErrorCause(hasBreakingChange, hasBangCommit, writeError);
+  printErrorAdvice(writeError);
+  writeError(`${RED}Commit blocked. Please modify your commit message and try again.${RESET}`);
+  writeError(line);
 }
 
-function main(): void {
-  const commitMessage = getCommitMessage();
-
-  if (!commitMessage) {
-    // No commit message yet, this is fine
-    exit(0);
+/**
+ * Classify an already-read commit message and return the process exit code.
+ *
+ * @param commitMessage - The commit message text (empty when not yet written).
+ * @param writeError - Error sink for the block advice.
+ * @returns `{ exitCode: 1 }` when a breaking-change or `!` indicator is present;
+ *   `{ exitCode: 0 }` otherwise (including an empty, not-yet-written message).
+ */
+function evaluateCommitMessage(
+  commitMessage: string,
+  writeError: (line: string) => void,
+): { exitCode: number } {
+  if (commitMessage === '') {
+    // No commit message yet, this is fine.
+    return { exitCode: 0 };
   }
 
   const hasBreakingChange = checkForBreakingChanges(commitMessage);
   const hasBangCommit = checkForBangCommit(commitMessage);
 
   if (hasBreakingChange || hasBangCommit) {
-    printError(hasBreakingChange, hasBangCommit);
-    exit(1);
+    printError(hasBreakingChange, hasBangCommit, writeError);
+    return { exitCode: 1 };
   }
 
-  exit(0);
+  return { exitCode: 0 };
 }
 
-main();
+/**
+ * Read and validate a commit message for accidental major-version-bump
+ * indicators, returning the process exit code.
+ *
+ * @remarks
+ * The commit-message file path is caller-influenced — `process.argv[2]`, set by
+ * the husky `commit-msg` hook. It is contained within the git directory via
+ * {@link assertPathWithinBase} before being read, defeating path-injection
+ * (`..` traversal or a symlink escape). The git directory — not the repo root —
+ * is the correct base: the hook's `COMMIT_EDITMSG` lives under the git dir,
+ * which for a linked worktree sits OUTSIDE the working-tree root, so a repo-root
+ * base would wrongly reject every legitimate worktree commit.
+ *
+ * @param options - Injectable seams (path, base, read, canonicalise, error sink).
+ * @returns `{ exitCode: 0 }` when the commit may proceed; `{ exitCode: 1 }` when
+ *   it is blocked, or the message file is missing, unreadable, or resolves
+ *   outside the permitted base.
+ */
+export function runPreventAccidentalMajorVersion(
+  options: PreventAccidentalMajorVersionOptions = {},
+): { exitCode: number } {
+  const { commitMsgFile, readFile, realpath, writeError, resolveGitDir } = resolveSeams(options);
+
+  if (commitMsgFile === undefined || commitMsgFile === '') {
+    writeError('Error: No commit message file provided');
+    return { exitCode: 1 };
+  }
+
+  let commitMessage: string;
+  try {
+    // Resolve the containment base inside the try: a hardened `git rev-parse`
+    // can throw (git missing / not a worktree), and that must return
+    // `{ exitCode: 1 }` with a helpful line, not crash the hook with an
+    // unhandled exception.
+    const gitDir = options.gitDir ?? resolveGitDir();
+    const safePath = assertPathWithinBase(commitMsgFile, gitDir, { realpath });
+    commitMessage = readFile(safePath);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    writeError(`Error resolving or reading commit message file: ${message}`);
+    return { exitCode: 1 };
+  }
+
+  return evaluateCommitMessage(commitMessage, writeError);
+}
+
+// Self-exec tail: run only when invoked directly (not when imported by tests).
+// The caller-supplied path comes from argv here, so the function itself stays
+// free of any global-argv dependency.
+const currentFilePath = fileURLToPath(import.meta.url);
+if (argv[1] === currentFilePath) {
+  exit(runPreventAccidentalMajorVersion({ commitMsgFile: argv[2] }).exitCode);
+}

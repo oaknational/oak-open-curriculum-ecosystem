@@ -2,6 +2,10 @@ import { randomUUID } from 'node:crypto';
 
 import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 import { archiveStaleClaims } from './claims.js';
+import {
+  assertNotBlindWithOtherAgents,
+  resolveOpenClaimWatcherVerdict,
+} from './claims-open-watcher-gate.js';
 import { areaFromOptions } from './cli-claim-areas.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
@@ -18,16 +22,31 @@ export async function openClaim(
 ): Promise<string> {
   const identity = resolveIdentity(options, env).agent_id;
   const openedClaim = createClaimFromOptions(options, identity);
+  const activePath = required(options, 'active');
+  const nowIso = required(options, 'now');
+  // Validate the claim's `--now` at entry: a malformed value parses to NaN and
+  // would mark every peer claim stale (claimReport / liveAgentIdentities), so
+  // `hasOtherLiveAgents` returns false and the solo fast-path skips the watcher
+  // check even when other agents are live. Fail loud instead.
+  if (Number.isNaN(Date.parse(nowIso))) {
+    throw new Error(`claims open: --now must be a valid ISO-8601 timestamp: ${nowIso}`);
+  }
+
+  // F-95: classify the watcher OUTSIDE the lock (one IO), then decide
+  // populated-vs-solo INSIDE the locked transform so the solo-then-peer race
+  // cannot slip a blind claim into a registry that became populated mid-open.
+  const watcherVerdict = await resolveOpenClaimWatcherVerdict(identity);
 
   await updateActiveClaimsFile({
-    activePath: required(options, 'active'),
+    activePath,
     transform: (registry) => {
       assertNoLiveIdentityRoutingCollision({
         registry,
-        nowIso: required(options, 'now'),
+        nowIso,
         agentId: identity,
         surface: 'claims open',
       });
+      assertNotBlindWithOtherAgents({ registry, nowIso, selfIdentity: identity, watcherVerdict });
 
       return {
         ...registry,
@@ -161,7 +180,7 @@ export function closeSummaryFromOptions(options: Options): string {
  * no-match failure, which is the honest report of the registry's state at
  * write time.
  */
-function assertClaimMatches(claims: readonly CollaborationClaim[], claimId: string): void {
+export function assertClaimMatches(claims: readonly CollaborationClaim[], claimId: string): void {
   if (!claims.some((claim) => claim.claim_id === claimId)) {
     throw new Error(`no active claim matches ${claimId}`);
   }

@@ -67,6 +67,19 @@ function makeMemoryFs(files: Record<string, MemoryEntry>): CiFileSystem {
       }
       return Promise.resolve(entry.content);
     },
+    realpath: (inputPath) => {
+      // In-memory paths are already canonical (no symlinks, no `..`), so
+      // realpath is identity for a known file or a directory that is a
+      // prefix of one; unknown paths throw, as the real `realpathSync` does.
+      if (files[inputPath] !== undefined) {
+        return inputPath;
+      }
+      const prefix = inputPath.endsWith(sep) ? inputPath : `${inputPath}${sep}`;
+      if (Object.keys(files).some((knownPath) => knownPath.startsWith(prefix))) {
+        return inputPath;
+      }
+      throw new Error(`ENOENT: no such file or directory, realpath '${inputPath}'`);
+    },
   };
 }
 
@@ -127,6 +140,7 @@ describe('runCiTurboReport', () => {
     });
 
     const result = await runCiTurboReport({
+      runsDir: FAKE_DIR,
       summaryFilePath: summaryPath,
       stdout: {
         write: (text) => {
@@ -245,6 +259,7 @@ describe('runCiTurboReport', () => {
     });
 
     const result = await runCiTurboReport({
+      runsDir: FAKE_DIR,
       summaryFilePath: summaryPath,
       stdout: {
         write: (text) => {

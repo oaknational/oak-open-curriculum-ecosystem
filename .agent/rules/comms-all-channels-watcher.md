@@ -267,8 +267,22 @@ naming the rule; the substance lives here for two reasons:
 
 ## Enforcement
 
-Behavioural at session open. The watcher's presence is observable as a
-running background task (Monitor task id, Cron job, or platform
-equivalent); the team-start broadcast names the watcher status. Future
-hardening could add a session-open check that fails fast if no watcher
-is observable, but the discipline is the named first-move pause.
+Mechanical, not diligence. The watcher's presence is observable as a running
+background task (Monitor task id, Cron job, or platform equivalent), and the
+team-start broadcast names the watcher status, but the rule is backed by two
+mechanical gates so it cannot be skipped by forgetting it (F-95):
+
+- **Move-1 check** — `pnpm agent-tools:collaboration-state -- comms
+  assert-watcher-live --platform <p> --model <m>` exits non-zero with a fix
+  instruction unless this session has a live watcher heartbeat. Run it as part
+  of move 1, right after arming the watcher.
+- **Claims-open backstop** — `claims open` refuses to stake a claim into a
+  registry that holds another live agent while this session is blind to comms
+  (no live watcher heartbeat). This sits on the exact action whose blindness
+  caused the founding pilot failure, so the guarantee holds without relying on
+  the agent running the move-1 check. Solo / n=1 bootstrap sessions (no other
+  live agent) are exempt.
+
+Both gates classify liveness from the watcher's `<seen-file>.heartbeat.json`
+(stale past 3× its interval). Mid-session watcher death is a separate concern
+(the cycle-boundary staleness check), not this session-open gate.

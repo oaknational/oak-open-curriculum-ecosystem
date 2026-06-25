@@ -92,12 +92,44 @@ describe('agent-tools unified CLI', () => {
         '  branch-touched-files',
         '  context-cost',
         '  codex-exec',
+        '  pr-watch',
         '',
         'Error: unknown topic: unknown-topic',
         '',
       ].join('\n')}`,
     });
   });
+
+  it.each(['constructor', 'toString', 'valueOf', 'hasOwnProperty', '__proto__'])(
+    'treats the prototype-chain key %p as an unknown topic, not an inherited handler',
+    async (protoKey) => {
+      const result = await runAgentToolsCli({
+        argv: [protoKey],
+        env: {},
+        cwd: '/repo',
+      });
+
+      expect(result).toEqual({
+        exitCode: 2,
+        stdout: '',
+        stderr: `${[
+          'Usage: agent-tools <topic> [action] [options]',
+          '',
+          'Topics:',
+          '  agent-identity',
+          '  collaboration-state',
+          '  commit-queue',
+          '  branch-touched-files',
+          '  context-cost',
+          '  codex-exec',
+          '  pr-watch',
+          '',
+          `Error: unknown topic: ${protoKey}`,
+          '',
+        ].join('\n')}`,
+      });
+    },
+  );
 
   it('can emit structured lifecycle logs from the shared entrypoint', async () => {
     const result = await runAgentToolsCli({

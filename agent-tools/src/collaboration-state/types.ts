@@ -79,6 +79,15 @@ export interface CollaborationClaim {
   readonly intent: string;
   readonly notes?: string;
   readonly intent_to_commit?: string;
+  /**
+   * Optional repo-root-relative pointer to a mid-cycle handoff record under
+   * `.agent/state/collaboration/handoffs/` (PDR-063 step 3 + ADR-182). Presence
+   * signals the claim is mid-cycle and carries a handoff record; absence is
+   * normal active-claim semantics. Set via `claims set-handoff`; preserved
+   * across `claims adopt` (the successor clears it only when the cycle resumes
+   * on a natural footing — PDR-063 pickup item 4).
+   */
+  readonly handoff_record_path?: string;
   readonly archived_at?: string;
   readonly closure?: CollaborationClosure;
 }

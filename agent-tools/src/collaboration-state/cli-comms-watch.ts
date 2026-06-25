@@ -1,6 +1,10 @@
 import { seedSeenStateIfNeeded } from './comms-watch-auto-seed.js';
 import { drainRelevantEvents, watchCommsLoop, type WatcherTickStatus } from './comms-use-cases.js';
-import { writeWatcherHeartbeat, WATCHER_HEARTBEAT_SCHEMA_VERSION } from './watcher-heartbeat.js';
+import {
+  HEARTBEAT_FILE_SUFFIX,
+  writeWatcherHeartbeat,
+  WATCHER_HEARTBEAT_SCHEMA_VERSION,
+} from './watcher-heartbeat.js';
 import { optional, optionalPositiveInteger, required, type Options } from './cli-options.js';
 import {
   cliIo,
@@ -20,8 +24,6 @@ const DEFAULT_HEARTBEAT_INTERVAL_MS = 30000;
  * silently for minutes (the 2026-06-10 hang-but-run incident).
  */
 const DEFAULT_STEP_TIMEOUT_MS = 60000;
-/** Suffix appended to the seen-file to derive the default heartbeat path. */
-const DEFAULT_HEARTBEAT_FILE_SUFFIX = '.heartbeat.json';
 
 /**
  * Resolve the watcher heartbeat path. Liveness is ON BY DEFAULT: with no
@@ -39,7 +41,7 @@ function resolveHeartbeatFile(input: {
   if (input.noHeartbeat) {
     return undefined;
   }
-  return input.explicit ?? `${input.seenFile}${DEFAULT_HEARTBEAT_FILE_SUFFIX}`;
+  return input.explicit ?? `${input.seenFile}${HEARTBEAT_FILE_SUFFIX}`;
 }
 
 /**

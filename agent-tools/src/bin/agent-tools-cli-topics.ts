@@ -3,6 +3,7 @@ import { runCodexExecCli } from '../codex-exec/cli.js';
 import { resolveCoordinationHome } from '../collaboration-state/coordination-home.js';
 import { parseCommitQueueArgs, runCommitQueueCli } from '../commit-queue/index.js';
 import { runContextCostCli } from '../context-cost/cli.js';
+import { runPrWatchCli } from '../pr-watch/cli.js';
 import type { AgentToolsCliInput, AgentToolsCliResult } from './agent-tools-cli-types.js';
 
 export class OutputBuffer {
@@ -88,5 +89,15 @@ export async function runCodexExecTopic(
     stdout,
     stderr,
   });
+  return { exitCode, stdout: stdout.text(), stderr: stderr.text() };
+}
+
+export async function runPrWatchTopic(
+  _input: AgentToolsCliInput,
+  args: readonly string[],
+): Promise<AgentToolsCliResult> {
+  const stdout = new OutputBuffer();
+  const stderr = new OutputBuffer();
+  const exitCode = await runPrWatchCli({ args, stdout, stderr });
   return { exitCode, stdout: stdout.text(), stderr: stderr.text() };
 }

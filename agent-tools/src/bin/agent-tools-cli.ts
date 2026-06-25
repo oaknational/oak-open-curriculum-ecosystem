@@ -6,6 +6,7 @@ import {
   runCodexExecTopic,
   runCommitQueueTopic,
   runContextCostTopic,
+  runPrWatchTopic,
 } from './agent-tools-cli-topics.js';
 import type {
   AgentToolsCliInput,
@@ -100,18 +101,36 @@ function isLogJsonRequest(globalFlags: ReadonlySet<string>): boolean {
   return globalFlags.has('--log-json');
 }
 
+// Topics with the uniform `(input, args) => result` shape are dispatched by
+// table lookup; `agent-identity` and `collaboration-state` need bespoke wiring
+// and stay as explicit cases.
+type UniformTopicHandler = (
+  input: AgentToolsCliInput,
+  args: readonly string[],
+) => AgentToolsCliResult | Promise<AgentToolsCliResult>;
+
+const UNIFORM_TOPIC_HANDLERS: Readonly<Record<string, UniformTopicHandler>> = {
+  'commit-queue': runCommitQueueTopic,
+  'branch-touched-files': runBranchTouchedFilesTopic,
+  'context-cost': runContextCostTopic,
+  'codex-exec': runCodexExecTopic,
+  'pr-watch': runPrWatchTopic,
+};
+
 async function dispatchTopic(input: {
   readonly input: AgentToolsCliInput;
   readonly parsed: ParsedAgentToolsArgs;
 }): Promise<AgentToolsCliResult> {
-  if (input.parsed.topic === 'agent-identity') {
+  const { topic } = input.parsed;
+
+  if (topic === 'agent-identity') {
     return runAgentIdentityCli({
       argv: input.parsed.topicArgs,
       env: input.input.env,
     });
   }
 
-  if (input.parsed.topic === 'collaboration-state') {
+  if (topic === 'collaboration-state') {
     const runtime = productionCollaborationStateRuntime({ stdout: input.input.stdout });
     return runCollaborationStateCli({
       argv: input.parsed.topicArgs,
@@ -123,23 +142,18 @@ async function dispatchTopic(input: {
     });
   }
 
-  if (input.parsed.topic === 'commit-queue') {
-    return runCommitQueueTopic(input.input, input.parsed.topicArgs);
+  // Look up by OWN key only: a plain-object map resolves prototype keys
+  // (`constructor`, `toString`, …) to inherited functions, which would be
+  // mis-dispatched as handlers instead of reaching the unknown-topic path.
+  const topicKey = topic ?? '';
+  const handler = Object.hasOwn(UNIFORM_TOPIC_HANDLERS, topicKey)
+    ? UNIFORM_TOPIC_HANDLERS[topicKey]
+    : undefined;
+  if (handler !== undefined) {
+    return handler(input.input, input.parsed.topicArgs);
   }
 
-  if (input.parsed.topic === 'branch-touched-files') {
-    return runBranchTouchedFilesTopic(input.input, input.parsed.topicArgs);
-  }
-
-  if (input.parsed.topic === 'context-cost') {
-    return runContextCostTopic(input.input, input.parsed.topicArgs);
-  }
-
-  if (input.parsed.topic === 'codex-exec') {
-    return runCodexExecTopic(input.input, input.parsed.topicArgs);
-  }
-
-  throw new Error(`unknown topic: ${input.parsed.topic ?? ''}`);
+  throw new Error(`unknown topic: ${topicKey}`);
 }
 
 function completeWithLog(input: {
@@ -187,5 +201,6 @@ function usage(): string {
     '  branch-touched-files',
     '  context-cost',
     '  codex-exec',
+    '  pr-watch',
   ].join('\n');
 }

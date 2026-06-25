@@ -26,6 +26,13 @@ export interface CiFileSystem {
 
   /** Read a UTF-8 file and return its contents as a string. */
   readFile(filePath: string, encoding: 'utf8'): Promise<string>;
+
+  /**
+   * Canonicalise a path to its real, symlink-resolved absolute form.
+   * Used to contain a caller-supplied summary path within the runs
+   * directory before it is read (path-injection guard).
+   */
+  realpath(path: string): string;
 }
 
 /**

@@ -92,6 +92,15 @@ export const commsWatchHelp =
   'pass --no-auto-seed to replay the full event history on an empty seen-file; ' +
   'pass --seed-from-now to force a seed regardless of existing seen-file content)';
 
+export const commsAssertWatcherLiveHelp =
+  'comms assert-watcher-live (--platform <platform> --model <model> | --agent-name <name>) ' +
+  '[--session-prefix <prefix>] [--comms-seen-dir <dir>] [--heartbeat-file <path>] ' +
+  "(F-95 move-1 check: exits non-zero with a fix instruction unless this session's comms watcher " +
+  'heartbeat is live AND its identity matches this session. Freshness is judged against the real ' +
+  'wall clock. Identity is derived from --platform/--model (plus the env session seed), or ' +
+  'overridden with --agent-name; the heartbeat resolves from the session codename unless ' +
+  '--heartbeat-file overrides it)';
+
 export const commsDirectHelp =
   'comms direct --comms-dir <dir> --to-agent-name <name> --to-id <uuid-v5> ' +
   '--to-platform <platform> --to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
@@ -115,9 +124,20 @@ export const claimsOpenHelp =
   '--intent <text> --now <iso> --platform <platform> --model <model> ' +
   '[--file <path>...] [--area-pattern <pattern>...] [--claim-id <id>] ' +
   '[--ttl-seconds <n>] [--role <role>] ' +
-  '(use either repeatable --file or repeatable --area-pattern, not both)';
+  '(use either repeatable --file or repeatable --area-pattern, not both; ' +
+  'refuses to open into a populated registry while blind to comms — F-95 — ' +
+  'unless this session has a live comms watcher at the canonical comms-seen ' +
+  'location; solo sessions are exempt; no path override, by design)';
 
 export const claimsHeartbeatHelp = 'claims heartbeat --active <path> --claim-id <id> --now <iso>';
+
+export const claimsAdoptHelp =
+  'claims adopt --active <path> --claim-id <id> --platform <platform> --model <model> ' +
+  '(rewrites the claim agent_id to the adopting identity in place; PDR-063 pickup)';
+
+export const claimsSetHandoffHelp =
+  'claims set-handoff --active <path> --claim-id <id> --path <path> ' +
+  '(records a handoff-record pointer under .agent/state/collaboration/handoffs/; PDR-063 step 3)';
 
 export const claimsCloseHelp =
   'claims close --active <path> --closed <path> --claim-id <id> ' +

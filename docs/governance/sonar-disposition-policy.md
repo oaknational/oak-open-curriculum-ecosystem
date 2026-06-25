@@ -155,26 +155,24 @@ handler path".
 linear constructs (negated character classes, anchored alternations,
 bounded quantifiers) per the rule's documented strategies.
 
-### S4036 — OS commands resolved via PATH
+### S4036 — OS commands resolved via PATH (FIX-only — no SAFE disposition)
 
 **Pattern**: `spawnSync`, `spawn`, `exec`, `execSync`, `execFileSync` etc.
 resolving a command name (`pnpm`, `git`, `typedoc`) via PATH rather than
 absolute path.
 
-**Decision criteria**: SAFE if and only if all hold:
+**Disposition**: there is none — S4036 is always **FIXED**, never disposed
+`SAFE`. Execute the binary by its absolute path so a user-writable PATH entry
+cannot shadow it. For `git`, the canonical fix is `resolveTrustedGit()` in
+`agent-tools/src/core/trusted-git.ts` (an absolute path from a fixed allowlist
+of system directories); other binaries follow the same absolute-path shape.
 
-- Site is in agent-tooling, build/CI scripts, dev-server config, codegen,
-  or admin/operator CLIs — never in a production server runtime that
-  handles end-user requests.
-- The command is the project-required toolchain (`pnpm`, `git`, `typedoc`,
-  `tsx`) declared via `packageManager`, devDependencies, or repo
-  conventions.
-- Execution context (developer workstation, CI runner, build container)
-  is the trust boundary; this code is not responsible for hardening PATH.
-
-**Canonical rationale**: "dev/CI tooling; standard developer toolchain
-binary; host environment owns PATH integrity; not a production-server
-runtime".
+**Why no SAFE class**: PATH-pinning (overriding `env.PATH` to trusted
+directories) does **not** clear S4036 — the analyser flags the by-name call
+regardless — so a SAFE disposition would document a non-fix as acceptable. The
+genuine fix is cheap and available, so per `never-disable-checks` and the
+Two-Outcome Rule above, S4036 resolves to FIXED. A prior allowance for this
+class is reviewed and migrated, never extended.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 

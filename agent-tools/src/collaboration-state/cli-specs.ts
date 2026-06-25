@@ -1,4 +1,6 @@
 import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-claim-commands.js';
+import { adoptClaim, setHandoffClaim } from './cli-claim-handoff-commands.js';
+import { assertWatcherLive } from './cli-comms-assert-watcher-live.js';
 import {
   activeAgents,
   listClaims,
@@ -20,9 +22,12 @@ import { type CliRuntime } from './cli-runtime.js';
 import { appendJsonEntry, checkState, writeJsonBody } from './cli-json-commands.js';
 import { collaborationTui } from './tui/cli.js';
 import {
+  claimsAdoptOptions,
   claimsCloseOptions,
   claimsOpenOptions,
+  claimsSetHandoffOptions,
   commsAppendOptions,
+  commsAssertWatcherLiveOptions,
   commsDirectOptions,
   commsInboxOptions,
   commsReplyOptions,
@@ -32,15 +37,18 @@ import {
 import {
   checkHelp,
   claimsActiveAgentsHelp,
+  claimsAdoptHelp,
   claimsArchiveStaleHelp,
   claimsCloseHelp,
   claimsHeartbeatHelp,
   claimsListHelp,
   claimsMineHelp,
   claimsOpenHelp,
+  claimsSetHandoffHelp,
   claimsShowHelp,
   claimsStatusHelp,
   commsAppendHelp,
+  commsAssertWatcherLiveHelp,
   commsDirectHelp,
   commsInboxHelp,
   commsListHelp,
@@ -128,6 +136,11 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     options: commsWatchOptions,
     handler: watchComms,
   }),
+  'comms:assert-watcher-live': commandSpec({
+    help: commsAssertWatcherLiveHelp,
+    options: commsAssertWatcherLiveOptions,
+    handler: assertWatcherLive,
+  }),
   'comms:direct': commandSpec({
     help: commsDirectHelp,
     options: commsDirectOptions,
@@ -148,6 +161,16 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help: claimsHeartbeatHelp,
     options: ['active', 'claim-id', 'now'],
     handler: heartbeatClaim,
+  }),
+  'claims:adopt': commandSpec({
+    help: claimsAdoptHelp,
+    options: claimsAdoptOptions,
+    handler: adoptClaim,
+  }),
+  'claims:set-handoff': commandSpec({
+    help: claimsSetHandoffHelp,
+    options: claimsSetHandoffOptions,
+    handler: setHandoffClaim,
   }),
   'claims:close': commandSpec({
     help: claimsCloseHelp,

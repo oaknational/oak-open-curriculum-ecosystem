@@ -119,3 +119,16 @@ export const claimsCloseOptions = [
   'platform',
   'model',
 ] as const;
+
+export const commsAssertWatcherLiveOptions = [
+  'comms-seen-dir',
+  'heartbeat-file',
+  'agent-name',
+  'session-prefix',
+  'platform',
+  'model',
+] as const;
+
+export const claimsAdoptOptions = ['active', 'claim-id', 'platform', 'model'] as const;
+
+export const claimsSetHandoffOptions = ['active', 'claim-id', 'path'] as const;

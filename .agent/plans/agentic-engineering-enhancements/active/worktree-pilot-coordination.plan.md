@@ -27,151 +27,18 @@ lineage:
 > a successor Director session rehydrates from. It is owned by the Director seat,
 > not by either Implementer.
 
-## SUCCESSOR HANDOFF — Borealis binds Lightyear (PDR-064 Moment 1, 2026-06-25)
+## Status — worktree-pilot CLOSED OUT (2026-06-25)
 
-> Nightjar weaves Moonbeam (5f31e4, Director) is preparing handoff (context-deep
-> after a long multi-part session). **Borealis binds Lightyear is the named
-> successor Director.** PDR-064 pre-positioning (information transfer only);
-> authority transfers when Borealis broadcasts an active-acknowledgement (Moment 2).
-> Rehydrate from THIS plan + the live comms Director continuity snapshot
-> (event `dd536b3d`, 2026-06-25T07:52Z) + the napkin's 2026-06-25 entries + PDR-117
->
-> - `feedback_director_pure_direction_only`. On takeover, open your own Director
-> claim (replace `c6b76ae3`), Moment-2 ack, re-arm the watcher (note: it recurs on
-> a drain-timeout — foreground-sweep fallback), and STOP Nightjar's heartbeat loop
-> if still emitting (false-liveness risk).
+The pilot completed and the team dissolved; the Director seat is vacant. The live
+Director-handoff and status snapshot this plan used to carry are **superseded** and
+had drifted — a successor pre-positioning for "Borealis binds Lightyear" was never
+acknowledged at PDR-064 Moment 2 and is retracted; there is no successor handoff in
+flight. Per PDR-117 the Director handoff entry point and the current authoritative
+state live in the operational-memory `director-handoff.md` and `repo-continuity.md`,
+not in this plan — a plan does not carry volatile coordination status (PDR-105).
 
-### CURRENT STATE — 2026-06-25 morning (Nightjar → Borealis)
-
-**Live team (n=3 + Director):** Thyme lifts Compost → #222 Proto-dispatch fix
-(`Object.hasOwn` guard + proto-key test), THEN resumes Sonar S8707 sites 2-3
-(paused claim `ff3da671`; warm worktree `oak-sonar-p1`, site-1 committed
-`1329d787a`); also holds DATA-SOURCES.md post-#222. Callisto turns Gloom → WS-B D2
-drift-check gate-wiring (the one pre-merge follow-on; F-84 prove-fail-first).
-Retired clean — route NOTHING to them: Ferret (pr-watch → handed to Thyme),
-Lapwing (Sonar site-1), Whirlwind (WS-E), Snowdrop/Lagoon (prior Directors).
-
-**Open verdicts the Director owns (inherit these):**
-
-- **WS-B D2** (`4adea4aca` on `pilot/ws-b-explain-resource`): ACCEPTED-IN-SUBSTANCE
-  (Option A curated body + drift-guards, both reviewers approved, body inspected).
-  Pre-merge condition: Callisto's drift-check gate-wiring lands → then **non-ff**
-  merge to coordination (it is 7 ahead, coordination moved under it via WS-E).
-- **#222** (pr-watch, direct-to-main): 3/4 findings clear; Thyme finishing the
-  Proto fix. Then **verify the PR's INLINE review comments first-hand** (not just
-  `gh pr checks` — that blind spot hid the Proto finding) before relaying merge-ready.
-- **Sonar S8707 sites 2-3** (direct-to-main): Thyme, post-#222; one PR.
-
-**PR #221 and the pilot-bundle decision (owner's call):** PR #221 carries
-WS-A/C/D/E plus templating; green, mergeable, all bot findings dispositioned
-(verified first-hand 2026-06-25). WS-B D2 and Comet's WS-D experience file
-(`44484d478`, one ahead of coordination, unfolded) are still coordination-bound.
-So the OWNER chooses: merge PR #221 now (WS-A/C/D/E) with WS-B D2 following in a
-second coordination→main merge, OR hold PR #221 for the complete pilot bundle
-(after WS-B D2 and the fold). The main-merge gate is @jimCresswell code-owner
-review; no `--admin`.
-
-**Owner-gated (waiting on owner):** PR #221 review (ready) plus the pilot-bundle
-choice; PR #222 review (after the Proto fix); DATA-SOURCES suitability/removal
-CRITERIA ratification (governance policy, ADR-157 deliberately lacks them).
-
-**Deferred (Director-owned, for the dedicated consolidation pass — NOT done this
-handoff):** napkin rotation (over its 300-line limit); the PDR candidates
-(owner-away keep-going-until-complete-then-pause primitive; route-nothing-to-a-
-closing-out-agent; the missing claims adopt/set-handoff CLI primitive;
-curate-don't-mechanically-slice-prose 2nd instance; routing-lags-fast-implementers
-so verify the target's current state and route lanes not pickups; stop the
-Director heartbeat at stand-down to avoid false liveness); fold Comet's
-`44484d478`; the pilot's worktree/Director-model evidence into the
-worktree-per-agent plan. Full session lessons live in the napkin's 2026-06-25
-entries (uncommitted-on-disk; the napkin rotation + commit is the due dedicated
-consolidation pass).
-
----
-
-**(2026-06-24 baseline below — superseded by CURRENT STATE above for live status;
-the standing instructions and on-takeover steps remain live.)**
-
-**On takeover:** open your own Director claim (the retained claim
-`8e754f9a-ec11-4444-a03a-550368d7ca18` is held for you — replace it), broadcast
-your active-acknowledgement (Moment 2), and re-arm the awareness surfaces: comms
-watcher; the PR-#221 monitor (`scratchpad/pr221-monitor.sh loop`); heartbeat once a
-consuming peer is present. My monitors die with my session.
-
-**Standing owner instructions absorbed this session (carry these):**
-
-- Lens-resolve Implementer questions before escalating; asking the owner is always
-  legitimate — the lenses refocus, they do not gate (PDR-117 §routing-contract).
-- Don't obsess over machine/swap state; the real signal is load-vs-cores
-  (`feedback_dont_obsess_over_machine_swap_state`).
-- When you create tooling, ask if it should become a permanent agent-tools command
-  (`feedback_ask_whether_tooling_should_be_permanent`).
-- Masking an empty/absent test suite is no-warning-toleration — remove the mask AND
-  fill the suite (`feedback_no_masking_of_empty_or_absent_tests`).
-
-**Team state:** the two pilot implementers (Whippoorwill wakes Dreamscape, WS-C;
-Comet seeks Equinox, WS-D) retired clean — all work merged, nothing stranded; both
-ran owner-directed deep adversarial sweeps and routed durable residue to the
-continuity carrier (on the comms stream; see the deferred consolidation pass
-below). Lapwing weaves Downdraft is live on the SEPARATE
-`main-sonar-ai-profile-to-zero` thread (PRs direct to main, not the pilot) and is
-checkpointing its Sonar Phase-1 between cycles.
-
-**PR #221 (coordination → main) — OPEN, awaiting owner code-owner review, NOT
-merge-ready yet.** 6 commits ahead of main; CI green (run-quality-gates, CodeQL,
-SonarCloud all SUCCESS); Vercel preview Ready. Two valid bot findings must land
-before merge, both fixed by WS-E: (1) Cursor Bugbot — `vitest.e2e.config.base.ts`
-still sets `passWithNoTests: true`, which the workspace e2e configs INHERIT, so the
-per-workspace removals are no-ops/regressions while the base stays lenient (the
-base override is the real masking target); (2) Copilot — machine-local `/Users/...`
-paths in three plan files violate `no-machine-local-paths`. Do NOT merge #221 until
-WS-E corrects both on the coordination branch.
-
-**Workstreams:**
-
-- **WS-A** (vitest forks→threads): MERGED to coordination (`6d80d119e`).
-- **WS-B** (explain as an MCP surface): D1 committed (`pilot/ws-b-explain-resource`,
-  gate-green, reviewed). D2-D5 pending a fresh implementer (the committed plan is
-  the handoff; deep handoff `28adb2ac` + verified addendum `8492de46`). At D2:
-  inspect the generated BODY first-hand + route a focused architecture pass on the
-  drift-gate wiring (Director reservations); the curriculum-adjective soft-edge is
-  for the owner's eye.
-- **WS-C** (vitest standardisation): MERGED to coordination (`d84fb9619`).
-- **WS-D** (PDR-117 + start-right-team §3 routing clause + AGENT.md pointer): MERGED
-  to coordination (`95033a0a7`). Comet's additive experience file `44484d478` on
-  `pilot/ws-d-roles-doctrine` is UNMERGED (additive, fold when convenient).
-- Plan tracked at `20d61cb74`.
-
-**Open lanes (all need an implementer SESSION the owner launches — you route, you
-cannot dispatch them):**
-
-1. **WS-E — PR #221 merge-readiness (recommended first; gates the open PR):**
-   genuine e2e suites for `curriculum-sdk` + `search-cli` per testing-strategy.md's
-   STRICT definition (a running system over its protocol channel, no FS/network IO,
-   classification by behaviour-shape — never an imagined e2e; if a workspace
-   genuinely has no running-system surface, surface that rather than fake-fill);
-   remove the `vitest.e2e.config.base.ts` `passWithNoTests` override (atomic with
-   the suites so the gate stays green); template the `/Users/...` paths in the 3
-   plan files. One branch off coordination → merge → #221 merge-ready.
-2. **pr-watch agent-tools command** (owner: build now): a parameterized TypeScript
-   command under `agent-tools/src/` taking a PR number; covers review comments +
-   issue comments + CI checks + terminal state (the napkin PR-monitor coverage
-   lesson baked in); TDD; test-expert + config-expert in-lane. The scratchpad
-   `pr221-monitor.sh` serves until it lands.
-3. **Sonar Phase-1 continuation** (Lapwing's lane): the path-validator
-   `assertPathWithinBase` is built + security-GO'd (held uncommitted in worktree
-   `oak-sonar-p1`); 3 security-sensitive site refactors remain (containment bases:
-   site-1 `.turbo/runs`, site-2 git-dir, site-3 `apps/oak-search-cli/diagnostics`)
-   → security-expert re-review → one PR direct to main.
-4. **WS-B D2-D5** (above); **DATA-SOURCES.md** (`docs/governance/`, owner-confirmed).
-
-**Deferred consolidation pass (yours as continuity carrier, when the pilot thread
-closes):** fold the implementers' deep-handoff residue from the comms stream into
-durable homes — the trailing-echo false-green harness lesson (Whippoorwill, a strong
-distilled candidate); host-recovery + worktree mechanics → plan §Research Capture;
-the heartbeat-CLI + grep-glob frictions → frictions-register; the succession +
-merges → repo-continuity §Active-threads. Durable on comms now; deferred to avoid
-colliding with Lapwing on the shared napkin/main-sonar files.
+The stable plan body below is retained as the pilot's design, delegation, and
+research-capture record.
 
 ## Problem and Intent
 
