@@ -210,6 +210,56 @@ first-hand as of 2026-06-25.
 > This section records the settled state; there is no sitting Director to hand off
 > from — a future effort re-establishes the seat against the Brief above.
 
+### ▶ NEXT SESSION MANDATE (owner-directed 2026-06-25) — read before anything else
+
+The very next session is a **dedicated consolidation session**, and it runs BEFORE
+any team session restarts. It MUST deliver two artefacts; the team session does not
+start until they exist:
+
+1. **A TEAM SESSION PLAN — the cohesion anchor this pilot lacked.** The experiment ran
+   on the owner's initial request plus a Director, with NO overarching team plan in the
+   repo; it held for a while, then **lost cohesion** because nothing anchored the
+   fanning-out lanes and rotating seats to a shared goal. The team session plan fixes
+   exactly that: **absolute clarity on team-level IMPACT and OUTCOME goals**, the seats,
+   the cohesion mechanism, and the **individual execution plans referenced** where
+   appropriate (the per-lane guiding plans, e.g.
+   `current/worktree-pilot-consolidation-and-model-verdict.plan.md`). **The
+   team-session-plan TEMPLATE does NOT exist yet** (verified 2026-06-25 —
+   `.agent/plans/templates/` has no team-session scaffold). What DOES exist, and is the complement to build against,
+   is the team-session-OPENER-PROMPT template
+   (`.agent/prompts/agentic-engineering/team-session-opener.prompt.md`, owner-flagged): it
+   carries the OPERATIONAL structures — entry ritual; Director + N-implementers-each-in-its-
+   own-worktree shape; the single coordination-home convention; the three branch classes;
+   seat briefs with explicit hard sequencing gates; coordination cadence; closeout. Its
+   `Plan authority` line points AT a controlling plan the pilot never had — that absence is
+   the gap to close. So the session: (a) creates the reusable `team-session-plan` template —
+   the STRATEGIC layer the opener assumes (team-level IMPACT + OUTCOME goals, the cohesion
+   mechanism, the seats, individual execution plans referenced) — per `/oak-plan` + ADR-117
+   ("add a template when a category recurs"); (b) authors the first team session plan with
+   it; and (c) draws on the opener prompt's structures plus the others the owner notes exist
+   (PDR-117 Director/Implementer roles, the `agent-collaboration` coordinator doctrine, the
+   `session-discipline` component, the worktree-per-agent transition plan).
+2. **A better DIRECTOR BRIEF** — take this `director-handoff.md` as input and sharpen it
+   with what the pilot learned (it is the operational PDR-117 instance).
+
+**The team session itself** (after the consolidation session) will run **one implementer
+seat dedicated to fixing agent-tooling issues AS THE SESSION RUNS** — the default home
+for the F-94..F-97 backlog and any new friction.
+
+**Agent-tooling to consider fixing BEFORE the team session** (owner-decision; flagged per
+owner request — none HARD-blocks, since the dedicated seat fixes during and the pilot ran
+with workarounds, but these touch bootstrap / handoff integrity from the start):
+
++ **F-95 (watcher-presence fail-fast gate) — strongest fix-before.** It guards the exact
+  founding failure of this pilot (an implementer skipped the move-1 comms watcher and went
+  blind to a simultaneous identical-branch claim). A gate in place before bootstrap stops
+  the next session repeating it.
++ **F-94 (`claims` adopt/set-handoff) — strong fix-before.** Rotating-seat PDR-063 handoffs
+  happen from early in a team session; without the primitive every handoff hits the
+  duplicate-row workaround in a busy multi-writer window.
++ F-96 (continuity-buffer lint hostage) and F-97 (PR inline-comment monitor) — fix-during
+  by the dedicated seat is fine.
+
 + **Merge status — DONE.** PRs **#221** (worktree-pilot: vitest standardisation +
   Director/Implementer doctrine PDR-117) and **#222** (agent-tools `pr-watch`
   command, incl. the Proto-dispatch fix) are **MERGED to `main`**. `origin/main`
