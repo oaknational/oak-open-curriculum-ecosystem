@@ -443,3 +443,25 @@ Owner asked why closeouts keep reporting `+`/`-` markdown fixes in BOTH directio
   3. **Never** pipe an expensive command straight through `tail`/`head` — that throws away the verdict before you can read it. **Never** re-run an expensive command merely to recover output or an exit code you failed to capture the first time.
   4. The harness also auto-persists oversized tool output to a `tool-results/<id>.txt` file — prefer reading that persisted file over re-running.
 - Applies to cheap commands too in spirit, but the cost of violating it scales with command expense; for the heavy gates it is mandatory.
+
+## 2026-06-25 — statusline / S4036 / F-98 session → handoff to Junk tracks Moorings (Kiln guards Vapor, b58b53)
+
+Long session, several arcs. Landed (committed on `coordination/worktree-pilot`, **branch is 7 ahead of origin / UNPUSHED** at handoff — owner controls push; #224 does not yet reflect these): `c93f01868` MD004 pinned to dash (fixes the bidirectional `+`/`-` closeout churn — root cause was MD004 unset → `consistent` mode); `c8324e183` statusline coordination-branch line + fail-loud git resolution; `5ee4b4f2e` F-98 strategic plan (`agent-work-state-registry.plan.md`).
+
+**IN-FLIGHT, highest loss-risk — PR #223 fix, UNCOMMITTED in the `oak-sonar-p1` worktree** (branch `fix/sonar-s8707-cli-path-injection`, HEAD `4c9cfbfc9`; 4 files modified, NOT committed/pushed; #223 MERGEABLE but red on the old tip). Incomplete **by design**: it must be finished as a *replace-old-with-new*, NOT a deprecate-and-keep (owner correction this session). Findings + state:
+
+- **S4036 (MINOR vuln, the gate blocker)**: `execFileSync('git', …)` resolves git by name → PATH-hijack rule. **PATH-pinning (`TRUSTED_GIT_PATH`) does NOT satisfy the analyser** — the compliant fix is an ABSOLUTE binary path. New `resolveTrustedGit()` in `trusted-git.ts` returns an absolute git path from a fixed allowlist; `prevent-accidental-major-version.ts` now uses it. **REMAINING (the replace, do not skip):** migrate the two other `TRUSTED_GIT_PATH` consumers — `coordination-home.ts` (trivial swap) and `branch-touched-files/git.ts` (has a `--git` flag + `trustedGitPath()` PATH-builder; real rework) — then **DELETE `TRUSTED_GIT_PATH`** and `trustedGitPath()`, and **retire the `sonar-disposition-policy.md §S4036` class** (owner-governance; it documents the now-removed antipattern as SAFE). Do NOT mark S4036 FALSE_POSITIVE/SAFE — owner: "we don't disable checks; prior 'we'll allow it' cases need review, never extend them."
+- **S4782** (redundant `| undefined` on optional `commitMsgFile`) — fixed.
+- **Unhandled-throw (Copilot)**: `resolveAbsoluteGitDir()` was called OUTSIDE the try/catch → crashed the commit-msg hook. Fixed via an injectable `resolveGitDir` seam moved inside the try; test added proving `{exitCode:1}`.
+- **Misleading "Pre-commit hook" header** (runs from commit-msg) + stale "used as-is" JSDoc in `ci-turbo-report.ts` — fixed.
+- After the replace: commit (worktree pre-commit gate is heavy; `lint` = `eslint .`, warnings tolerated — 226 pre-existing `no-throw`; `no-deprecated` is ERROR-tier, which is why `@deprecated` on `TRUSTED_GIT_PATH` broke the build), push, then **verify on CI that the Sonar QG clears** (S4036 + S4782) — the falsifier; do not assume.
+
+**Behaviour-changing lessons (own mistakes this session):**
+
+- **"Complete" claimed on green tests, not observed behaviour.** Declared the statusline complete on tsc+vitest while the live statusline was absent (dist unbuilt). For any rendered/runtime surface the proof is observing it run, not the absence of red.
+- **Check-chasing + deprecate-and-keep.** When the gate pushed back (knip → prettier → `no-deprecated`), I patched each symptom and slid toward keeping `TRUSTED_GIT_PATH` behind an `@deprecated` docstring + "flag for later" — a legacy surface preserved behind prose, violating *replace old with new*. A proven-wrong pattern is replaced and deleted, not deprecated. Tell: reacting to gate output instead of designing.
+- **`rg`/`fd` skip dot-directories by default** (no `--hidden`) — a blast-radius scan that skips `.agent/` is a false "zero" (also in `4e0236947`).
+
+**Statusline → F-98 (rationale, lest it be lost):** the statusline shows the coordination branch for ALL primary-launched agents because Claude reports `workspace.current_dir` = the **primary checkout** even when the agent works in a worktree (proven via Seal's screenshot in `oak-fix-before-tooling`). Working-location CANNOT come from cwd; it needs the F-98 derived `(identity→worktree→branch→liveness)` registry (`5ee4b4f2e`), of which the statusline is the first consumer. The committed statusline is honest (shows the true cwd) + fail-loud; four reviewers (architecture×2, code, assumptions) reviewed it, findings folded into `c8324e183`.
+
+**Other open state:** PR #224 (coordination draft, CONFLICTING) carries untouched doc-drift (stale Director-handoff, a machine-local path in `data-sources-governance.next-session.md:83`, daily.md nits). The redundant `feat/pr-watch-agent-tools-command` remote branch I created (content already in main via #222 squash) can be deleted.
