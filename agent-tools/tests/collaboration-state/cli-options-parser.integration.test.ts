@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseOptions } from '../../src/collaboration-state/cli-options';
+import { parseIsoTimestampMs, parseOptions } from '../../src/collaboration-state/cli-options';
 
 describe('parseOptions — bare-boolean flags', () => {
   it('parses --seed-from-now as a bare-boolean flag without consuming the next token', () => {
@@ -51,5 +51,17 @@ describe('parseOptions — bare-boolean flags', () => {
     const parsed = parseOptions(['--', 'comms', 'watch', '--seed-from-now']);
 
     expect(parsed.values.get('seed-from-now')).toBe('true');
+  });
+});
+
+describe('parseIsoTimestampMs', () => {
+  it('parses a valid ISO-8601 timestamp to epoch milliseconds', () => {
+    expect(parseIsoTimestampMs('2026-06-25T08:00:00.000Z', 'now')).toBe(
+      Date.parse('2026-06-25T08:00:00.000Z'),
+    );
+  });
+
+  it('fails loud on a malformed timestamp instead of returning NaN (would weaken time gates)', () => {
+    expect(() => parseIsoTimestampMs('not-a-date', 'now')).toThrow(/valid ISO-8601/);
   });
 });

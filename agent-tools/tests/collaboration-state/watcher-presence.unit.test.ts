@@ -104,6 +104,14 @@ describe('watcher path derivers', () => {
     ).toBe('.agent/state/collaboration/comms-seen/Seal hunts Offing.json');
   });
 
+  it('rejects a codename that is not a safe path segment (separators / traversal / empty)', () => {
+    const dir = '.agent/state/collaboration/comms-seen';
+    expect(() => commsSeenFileForCodename('../escape', dir)).toThrow();
+    expect(() => commsSeenFileForCodename('a/b', dir)).toThrow();
+    expect(() => commsSeenFileForCodename('a\\b', dir)).toThrow();
+    expect(() => commsSeenFileForCodename('', dir)).toThrow();
+  });
+
   it('appends a single .heartbeat.json suffix to a seen-file', () => {
     expect(
       heartbeatFileForSeen('.agent/state/collaboration/comms-seen/Seal hunts Offing.json'),

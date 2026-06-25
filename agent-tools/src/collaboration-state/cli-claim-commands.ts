@@ -8,7 +8,13 @@ import {
 } from './claims-open-watcher-gate.js';
 import { areaFromOptions } from './cli-claim-areas.js';
 import { resolveIdentity } from './cli-identity.js';
-import { optional, required, valueOrDefault, type Options } from './cli-options.js';
+import {
+  optional,
+  parseIsoTimestampMs,
+  required,
+  valueOrDefault,
+  type Options,
+} from './cli-options.js';
 import { updateActiveClaimsFile, updateClaimStateFiles } from './state-io.js';
 import {
   type CollaborationAgentId,
@@ -33,7 +39,7 @@ export async function openClaim(
   const watcherVerdict = await resolveWatcherVerdict({
     selfIdentity: identity,
     commsSeenDir: optional(options, 'comms-seen-dir') ?? DEFAULT_COMMS_SEEN_DIR,
-    nowMs: Date.parse(nowIso),
+    nowMs: parseIsoTimestampMs(nowIso, 'now'),
     io: productionWatcherStalenessIo,
   });
 

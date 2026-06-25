@@ -24,8 +24,22 @@ export type WatcherPresenceVerdict =
 /** Canonical location of per-agent comms seen-files (and their heartbeats). */
 export const DEFAULT_COMMS_SEEN_DIR = '.agent/state/collaboration/comms-seen';
 
-/** Conventional seen-file path for an agent codename under a comms-seen dir. */
+/**
+ * Conventional seen-file path for an agent codename under a comms-seen dir.
+ * The codename is interpolated into a path, so reject path separators and
+ * parent-traversal (codenames are otherwise unconstrained, and `--agent-name`
+ * is caller-supplied) — a `/` or `..` would let the derived heartbeat path
+ * escape the comms-seen directory.
+ */
 export function commsSeenFileForCodename(codename: string, commsSeenDir: string): string {
+  if (
+    codename.length === 0 ||
+    codename.includes('/') ||
+    codename.includes('\\') ||
+    codename.includes('..')
+  ) {
+    throw new Error(`agent codename is not a safe path segment: ${JSON.stringify(codename)}`);
+  }
   const trimmedDir = commsSeenDir.endsWith('/') ? commsSeenDir.slice(0, -1) : commsSeenDir;
   return `${trimmedDir}/${codename}.json`;
 }

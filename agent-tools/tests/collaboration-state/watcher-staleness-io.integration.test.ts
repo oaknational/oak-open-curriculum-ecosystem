@@ -4,13 +4,14 @@
  * and the literal `'missing'` for an absent one (never throwing on ENOENT), and
  * `readTextFile` returns the file contents.
  */
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { productionWatcherStalenessIo } from '../../src/collaboration-state/watcher-staleness-io';
+import { removeDirectory } from '../test-helpers/temp-collaboration-state';
 
 describe('productionWatcherStalenessIo', () => {
   let dir = '';
@@ -20,7 +21,7 @@ describe('productionWatcherStalenessIo', () => {
   });
 
   afterEach(async () => {
-    await rm(dir, { recursive: true, force: true });
+    await removeDirectory(dir);
   });
 
   it('returns a numeric mtime for a present file', async () => {

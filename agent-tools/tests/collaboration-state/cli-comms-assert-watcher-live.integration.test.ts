@@ -135,4 +135,26 @@ describe('comms assert-watcher-live', () => {
 
     expect(result.exitCode).toBe(0);
   });
+
+  it('fails loud on a malformed --now rather than silently weakening the check', async () => {
+    await writeHeartbeat('2026-06-25T08:00:00.000Z');
+
+    const result = await runCollaborationStateCli({
+      argv: [
+        '--',
+        'comms',
+        'assert-watcher-live',
+        '--agent-name',
+        codename,
+        '--comms-seen-dir',
+        dir,
+        '--now',
+        'not-a-date',
+      ],
+      env: {},
+    });
+
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain('valid ISO-8601');
+  });
 });
