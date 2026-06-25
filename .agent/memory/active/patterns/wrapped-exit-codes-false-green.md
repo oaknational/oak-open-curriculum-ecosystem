@@ -48,9 +48,11 @@ of anything wrapping it:
   a commit SHA) — its absence means the write failed; and READ the
   token's destination path, not just its presence. Invoke
   collaboration CLIs with absolute paths from any non-root cwd.
-- **Gate run**: capture the complete output AND the real exit in one
-  invocation (`cmd > log 2>&1; echo "EXIT:$?"`), then triage from the
-  file; use `PIPESTATUS` or avoid the pipe. Never triage an expensive
+- **Gate run**: capture the complete output AND the real exit into a
+  variable (`cmd > log 2>&1; rc=$?`), then read `$rc` and triage from the
+  log — never the compound command's own exit, which is the trailing
+  statement's, not the gate's (the masking bullet below). Use `PIPESTATUS`
+  or avoid the pipe. Never triage an expensive
   gate through a `tail`/`head` (it discards the verdict), and **never
   re-run a multi-minute gate merely to recover output or an exit code
   you failed to capture** (owner-flagged, costs real money). The harness

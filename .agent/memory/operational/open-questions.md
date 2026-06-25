@@ -72,11 +72,12 @@ project and will bring an exploration brief for these features; the design is th
 to shape, not to pre-decide here. It also depends on the open single-team question (repo-continuity
 §Open Owner-Decision Items #7).
 
-**Owning artefact:**
-[`knowledge-as-graph-two-altitudes-2026-06-23.md`](../../reports/knowledge-as-graph-two-altitudes-2026-06-23.md)
+**Owning artefact:** [`knowledge-as-graph-two-altitudes-2026-06-23.md`][kg-two-altitudes]
 (names the decisions, the LTAE build-vs-reuse reading of Aila's code, and the thin-slice
 identity-join proof); the curriculum-graph-estate synthesis (2026-06-22); paused threads
 `connecting-oak-resources`, `oak-kg-ontology-planning-review`.
 
 **Status:** open — initial landscape research recorded; owned by the incoming engineer's brief and
 owner.
+
+[kg-two-altitudes]: ../../reports/knowledge-as-graph-two-altitudes-2026-06-23.md

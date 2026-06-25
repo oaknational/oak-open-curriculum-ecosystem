@@ -75,8 +75,8 @@ These govern _how_ a finding is dispositioned, beneath the per-class catalogue:
   [decision lenses][principles] (LTAE first) decisively resolve fix-vs-dismiss,
   decide it — framing a lens-resolved call as an owner-fork is analysis-passback.
   Escalate only when all lenses genuinely fail or the scope is product/feature.
-  (The outward _act_ of marking a SAFE/FALSE*POSITIVE in the UI still needs owner
-  authorisation — the disposition \_determination* does not.)
+  (The outward _act_ of marking a `SAFE` / `FALSE_POSITIVE` in the UI still needs owner
+  authorisation — the disposition _determination_ does not.)
 - **A deliberately-adopted profile's findings are a worklist, not noise.** When
   the owner activates an analyser profile on purpose, the target is zero
   (fix-or-genuine-FP). Do NOT frame the resulting backlog as an activation-wave
