@@ -80,4 +80,29 @@ identity-join proof); the curriculum-graph-estate synthesis (2026-06-22); paused
 **Status:** open — initial landscape research recorded; owned by the incoming engineer's brief and
 owner.
 
+## Q-011 — Liveness after an ungraceful death (external staleness-reaper / dead-man's-switch)?
+
+**Question:** "Stop your heartbeat at stand-down" cures only the *graceful* case. In a
+model-availability outage a session's Monitors die with it, so it cannot re-arm or stop its own
+heartbeat — leaving a stale-but-"active" liveness signal (~8h false "active" observed when the
+worktree-pilot team went down in such an outage). What external liveness primitive — a
+staleness-reaper / dead-man's-switch that reaps from *outside* the session rather than relying on
+self-stop — should the operating model carry?
+
+**Why it shapes future work:** a successor (or the owner) reading a false "active" claim defers or
+mis-coordinates; every multi-agent and solo-with-heartbeat session depends on the liveness signal
+being trustworthy after an ungraceful death. It remains live under solo operation.
+
+**Why not cheaply answerable now:** it is a structural primitive needing an owner architectural
+decision (external reaping is not a fact to look up); the graceful-case cure is in place, so it is
+unresolved but not blocking.
+
+**Owning artefact:** [`worktree-pilot-consolidation-and-model-verdict.plan.md`][worktree-pilot-plan]
+§Risk Assessment names this as an open architectural question for the owner. (The earlier
+pending-graduation entry was removed — a question is not learned doctrine; its home is here, and
+the plan must re-home it here, not lose it, when it archives.)
+
+**Status:** open — architectural; owner-decision.
+
 [kg-two-altitudes]: ../../reports/knowledge-as-graph-two-altitudes-2026-06-23.md
+[worktree-pilot-plan]: ../../plans/agentic-engineering-enhancements/current/worktree-pilot-consolidation-and-model-verdict.plan.md
