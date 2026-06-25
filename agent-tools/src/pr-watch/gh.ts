@@ -65,13 +65,13 @@ export interface PrTarget {
   readonly repo?: string;
 }
 
-const PR_NUMBER_PATTERN = /^[1-9][0-9]*$/u;
+const PR_NUMBER_PATTERN = /^[1-9]\d*$/u;
 // A GitHub owner/repo segment cannot start or end with a separator, so a bare
 // `..` segment or a leading `-` (flag-shaped) is rejected at the boundary.
 const SEGMENT = '[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?';
 const REPO_PATTERN = new RegExp(`^${SEGMENT}/${SEGMENT}$`, 'u');
 const PR_URL_PATTERN = new RegExp(
-  `^https://github\\.com/(${SEGMENT}/${SEGMENT})/pull/([1-9][0-9]*)$`,
+  String.raw`^https://github\.com/(${SEGMENT}/${SEGMENT})/pull/([1-9]\d*)$`,
   'u',
 );
 
@@ -87,7 +87,15 @@ export function parsePrTarget(prArg: string, repoArg?: string): PrTarget {
   }
   const urlMatch = PR_URL_PATTERN.exec(prArg);
   if (urlMatch) {
-    return { number: Number(urlMatch[2]), repo: repoArg ?? urlMatch[1] };
+    const urlRepo = urlMatch[1];
+    // Both a URL (which names an owner/repo) and an explicit --repo were given:
+    // a mismatch is a caller error, not silently resolved (would watch the wrong PR).
+    if (repoArg !== undefined && repoArg !== urlRepo) {
+      throw new Error(
+        `--repo '${repoArg}' conflicts with the repo in the URL ('${urlRepo}'); pass only one`,
+      );
+    }
+    return { number: Number(urlMatch[2]), repo: urlRepo };
   }
   if (!PR_NUMBER_PATTERN.test(prArg)) {
     throw new Error(
@@ -104,9 +112,14 @@ export interface ReadPrSnapshotOptions {
   readonly exists?: PathExistsCheck;
 }
 
+// gh JSON for a busy PR (many checks/comments, `gh api --paginate`) can exceed
+// execFileSync's ~1 MiB default maxBuffer and hard-fail; allow generous room.
+const MAX_GH_OUTPUT_BYTES = 64 * 1024 * 1024;
+
 const EXEC_OPTIONS: ExecFileSyncOptionsWithStringEncoding = {
   encoding: 'utf8',
   stdio: ['ignore', 'pipe', 'pipe'],
+  maxBuffer: MAX_GH_OUTPUT_BYTES,
 };
 
 /** Fetch the two `gh` surfaces for a PR and build a {@link PrSnapshot}. */

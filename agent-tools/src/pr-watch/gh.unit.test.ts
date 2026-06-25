@@ -61,4 +61,17 @@ describe('parsePrTarget', () => {
   it('accepts single-character owner/repo segments', () => {
     expect(parsePrTarget('221', 'a/b')).toStrictEqual({ number: 221, repo: 'a/b' });
   });
+
+  it('throws when a URL repo and an explicit --repo conflict (never silently pick one)', () => {
+    expect(() => parsePrTarget('https://github.com/o/r/pull/7', 'other/repo')).toThrow(
+      /conflicts/u,
+    );
+  });
+
+  it('accepts a URL plus a --repo that matches it', () => {
+    expect(parsePrTarget('https://github.com/o/r/pull/7', 'o/r')).toStrictEqual({
+      number: 7,
+      repo: 'o/r',
+    });
+  });
 });

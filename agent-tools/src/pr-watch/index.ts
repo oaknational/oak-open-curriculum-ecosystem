@@ -141,14 +141,13 @@ function classifyCheckRun(
   status: string | undefined,
   conclusion: string | null | undefined,
 ): CheckBucket {
-  if (status !== 'COMPLETED') {
+  if (status !== 'COMPLETED' || conclusion === null || conclusion === undefined) {
     return 'pending';
   }
-  const value = conclusion ?? '';
-  if (PASSED_CONCLUSIONS.has(value)) {
+  if (PASSED_CONCLUSIONS.has(conclusion)) {
     return 'passed';
   }
-  return FAILED_CONCLUSIONS.has(value) ? 'failed' : 'pending';
+  return FAILED_CONCLUSIONS.has(conclusion) ? 'failed' : 'pending';
 }
 
 function classifyStatusContext(state: string | undefined): CheckBucket {

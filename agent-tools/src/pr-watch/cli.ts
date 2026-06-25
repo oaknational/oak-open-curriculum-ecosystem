@@ -81,7 +81,7 @@ const VALUE_HANDLERS: Readonly<Record<string, (state: MutableArgs, value: string
 };
 
 function requirePositiveInt(value: string, option: string): number {
-  if (!/^[1-9][0-9]*$/u.test(value)) {
+  if (!/^[1-9]\d*$/u.test(value)) {
     throw new Error(`${option} requires a positive integer`);
   }
   return Number(value);
