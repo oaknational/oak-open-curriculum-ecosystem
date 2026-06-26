@@ -40,8 +40,10 @@ Canonical form — a trailer at the end of the artefact:
 
 ```text
 ---
-🤖 Agent-authored by **<agent-name>** (<platform> agentic session) via
-@<account>'s shared credentials.
+Agent-authored on behalf of `<account>` by <agent-name> (<platform>, <model>)
+
+Example:
+Agent-authored on behalf of `jimCresswell` by Inferno holds Tongs (Claude Code, Opus 4.8 1M)
 ```
 
 A clearly-visible leading blockquote carrying the same three facts is an

@@ -42,14 +42,28 @@ per class:
   re-apply any single-line edit one side made that the other did not (e.g. a "DONE"
   mark on a prior next-safe-step). Combine the same session's multiple landings into one
   coherent entry rather than scattering them.
-- If a file declares no `merge_class`, treat a narrative as append-only-union and verify
-  by hand.
+- **Other declared classes** carry the same union rule; the class only names the structure
+  to preserve, never a licence to discard. As of writing the live classes are:
+  `mostly-append-register` (e.g. `pending-graduations.md`) and `curated-learning-register`
+  (e.g. `distilled.md`) — union entries, keep register grouping/curation order, never drop
+  an item; `active-register-shard` — union within each shard, keep shard boundaries;
+  `curation-ledger` — union rows, keep ledger columns intact; `index-narrative` — as
+  `index-narrative-tables` without the tables. Re-run this grep before relying on the list:
+  `grep -rhE '^merge_class:' .agent/memory .agent/state | sort -u`.
+- If a file declares no `merge_class`, treat it as an append-only union and verify by hand.
+
+The invariant across every class: **the merge is a union of concepts; no entry from either
+side is ever dropped to fit a structure or a limit.**
 
 ## Procedure
 
-1. **Preserve first.** Back up both working-tree versions to scratchpad and capture each
-   side's diff against the merge base (`git diff <base> -- <file>`). Once backed up,
-   nothing can be lost — reason freely.
+1. **Preserve each side's CLEAN version first.** Before resolving, save the clean content
+   of both sides — the working-tree file from each branch *before* the merge, or
+   `git show <ref>:<file>` per ref, or the conflict stages once merging
+   (`git show :2:<file>` = ours, `:3:<file>` = theirs, `:1:<file>` = base). Do NOT rely on
+   `git diff <base> -- <file>` once the file is conflicted: it diffs the base against the
+   marker-filled working tree, so "what each side added" computed from it can be wrong and
+   silently lose one side's entry. Once both clean sides are saved, nothing can be lost.
 2. **Identify what each side ADDED** vs the common base (entries, lessons, rows,
    single-line edits). Memory merges are almost always additive on both sides — the
    merge is a union, not a reconciliation of competing values.
@@ -63,8 +77,13 @@ per class:
 5. **Respect fitness limits.** These files carry line/char limits in frontmatter. If the
    union overflows, the cure is conserve-insight-and-drain per the file's
    `overflow_disposition` (run `consolidate-docs`) — NEVER drop a concept to fit.
-6. **Verify**: no conflict markers remain; both sessions' concepts are present;
-   `markdownlint` is clean.
+6. **Land it as a real 2-parent merge commit** (the `git merge` in §Mechanics produces
+   one), not a single-parent squash or cherry-pick of one side. The merge commit records in
+   history that the two divergent lines were reconciled, so git's future merge-base
+   calculations know it; a single-parent commit leaves them unaware and the same divergence
+   can resurface or be mis-resolved later.
+7. **Verify**: no conflict markers remain; both sides' concepts are present; the commit has
+   both parents; `markdownlint` is clean.
 
 ## Mechanics that respect the repo rules
 

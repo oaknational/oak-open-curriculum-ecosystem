@@ -53,7 +53,7 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   downstream — **declined** (graceful registry fallback beats fail-closed on a transient cache miss;
   stampede-avoidance holds in the warm case). **Attribution format (owner direction 2026-06-26):**
   `Agent-authored on behalf of \`jimCresswell\` by <Name> (<platform>, <model>)` — simpler, no emoji /
-  no "Generated with" line; apply to PR and comment bodies; update the `identify-as-agent` rule example.
+  no "Generated with" line; apply to PR and comment bodies; the `identify-as-agent` rule canonical form is updated to match.
 - **Statusline two-set display (merged) + canonical MCP-app target platforms (2026-06-26, Bonfire guards Temper).**
   Statusline coord-branch work **merged** (PR #235, `589d6518c`): the statusline now renders two git-derived
   location sets (working tree + primary checkout) with **divergence-only dedup** — a coordination token shows
