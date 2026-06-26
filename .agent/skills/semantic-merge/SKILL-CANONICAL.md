@@ -87,8 +87,11 @@ side is ever dropped to fit a structure or a limit.**
 
 ## Mechanics that respect the repo rules
 
-`git stash`, `git reset`, and `git checkout -- <file>` are forbidden. To advance past
-uncommitted memory edits onto a moved base without them: create a branch that carries the
+Do not reach for `git stash`, `git reset`, or `git checkout -- <file>` to clear the working
+tree here: `git checkout -- <file>` discards uncommitted work (forbidden by
+`never-use-git-to-remove-work`), `git stash` is owner-disfavoured, and `git reset` needs
+owner consent. To advance past
+uncommitted memory edits onto a moved base instead: create a branch that carries the
 uncommitted edits (`git switch -c`), commit them, then `git merge origin/main`. The
 conflict markers land exactly on the divergent entries — resolve them as a concept union,
 then review the whole file. This is the path that surfaces the divergence for hand-merge
