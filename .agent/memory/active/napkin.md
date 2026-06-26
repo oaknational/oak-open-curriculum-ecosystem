@@ -59,3 +59,39 @@ New session observations append below.
   strategic forks belong there (and the plan that now held it archives). Assessed first-hand,
   agreed, restored. A worked instance of [[feedback_validate_specialist_findings_before_acting]]
   in the *agree* direction.
+
+## 2026-06-26 — Read the full merge-gate memory + trust CLEAN before reaching for --admin (Wombat wakes Eventide)
+
+- **Mistake: under-read a `MERGEABLE/CLEAN` mergeState and asked an unnecessary `--admin`
+  question.** On PR #227 (owner-authored, sole code owner = author) I reasoned "self-approval is
+  blocked → code-owner gate unmeetable → need OrganizationAdmin bypass" and surfaced it as an owner
+  decision. But `project_main_merge_gate_codeowner` already records (verified 2026-06-24) that
+  owner-authored PRs **auto-satisfy** the code-owner requirement and merge **CLEAN with a plain
+  `gh pr merge`, no `--admin`**. The `CLEAN` I observed *was* the answer; `BLOCKED` would have meant
+  blocked. I acted on the MEMORY.md index *summary* ("--admin forbidden; clean agent merge
+  prohibited") without opening the full memory, whose nuance contradicted my framing. The merge
+  still landed correctly (--admin was redundant, not harmful), but I cost the owner an unnecessary
+  decision. **Cure:** before any merge-gate decision, open the full merge-gate memory (not the index
+  line) and read the live `mergeStateStatus` — `CLEAN` ≠ blocked. Siblings: [[verify-dont-trust]],
+  [[feedback_check_pushed_state_via_upstream_ref]], the metacognition "fluency is a warning" note
+  (a smooth "of course self-approval is blocked" frame bypassed the situational check).
+
+## 2026-06-26 — A CI/merge control must be verified against THIS repo's integration wiring before adoption (Wombat wakes Eventide)
+
+- **Pattern candidate: a generically-good gate can be incompatible with the repo's specific
+  integration architecture; verify event-support against your actual wiring, and prefer the
+  simplest control that meets the goal.** The owner enabled a GitHub **merge queue** (a sound
+  Tier-2 control from the assessment) to stop merge-skew. But a merge queue requires every required
+  gate to report on the `merge_group` ref, and this repo's three gates each fail that as wired:
+  CodeQL is **default setup** (can't run on `merge_group` — codeql-action#1537, open 3+ yrs, verified
+  first-hand), SonarCloud is the **app automatic-analysis** (no `merge_group` status; the CI-scanner
+  fix would violate ADR-161's network-free-CI boundary), and Vercel is the **Git integration**
+  (doesn't deploy `merge_group` refs, so `required_deployments` can't satisfy in-queue). The cure was
+  not to force the queue (advanced-CodeQL + ADR-161-violating Sonar + custom Vercel = heavy +
+  self-contradicting) but to choose **require-branches-up-to-date** — same merged-state protection,
+  compatible with all current integrations, ADR-161-clean, no new infra, no bypass (ADR-204). Lesson:
+  before adopting a CI/merge control, ask "does this work with our *specific* integration setup
+  (default-vs-advanced, app-vs-CI-scanner, Git-integration-vs-custom)?" — not "is this control good
+  in general?" Empirical proof (a real PR through the gate) settles it. Sibling:
+  [[feedback_check_doctrine_preconditions_before_applying]], [[verify-dont-trust]]; candidate for a
+  `patterns/` entry if a second instance appears.
