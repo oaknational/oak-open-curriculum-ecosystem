@@ -2,7 +2,11 @@
 
 **Status**: Accepted (2026-04-17). Amended 2026-05-10 to clarify that live
 schema drift checks and dependency audits that reach the network are covered by
-the same PR-check boundary.
+the same PR-check boundary. Amended 2026-06-26 to state the boundary's scope
+precisely — it concerns **third-party-vendor** networks — so a call to GitHub's
+own dependency-graph API via the run's own `GITHUB_TOKEN`, on the same instance
+the workflow already depends on, is permitted (see §Third-party-vendor scope:
+GitHub's own APIs).
 **Date**: 2026-04-17
 **Related**: [ADR-078](078-dependency-injection-for-testability.md) — the DI
 discipline that makes in-process tests deterministic;
@@ -11,6 +15,13 @@ coherent structured fan-out for observability, including the redaction
 barrier that vendor-network CLIs would bypass if invoked in PR checks;
 [ADR-159](159-per-workspace-vendor-cli-ownership.md) — per-workspace
 vendor CLI ownership and repo-tracked configuration;
+[ADR-121](121-quality-gate-surfaces.md) — quality-gate surfaces, amended in
+lockstep with the 2026-06-26 third-party-vendor scope refinement;
+[ADR-174](174-dependency-vulnerability-scanning-quality-gate.md) — the
+dependency-vulnerability policy whose Implementation Notes anticipated this
+amendment;
+[ADR-204](204-merge-gate-strategy-require-up-to-date-not-merge-queue.md) — the
+merge-gate strategy whose third-party-vendor reasoning this amendment preserves;
 [`.agent/directives/testing-strategy.md`](../../../.agent/directives/testing-strategy.md) — the testing taxonomy this
 ADR operationalises at the pipeline level.
 
@@ -91,6 +102,46 @@ Consequences:
    They may run in local operator context, deploy/scheduled workflows, or a
    pre-fetched/offline mode; they must not make live network calls from the
    PR/push check path without an explicit amendment to ADR-121 and this ADR.
+
+### Third-party-vendor scope: GitHub's own APIs (amended 2026-06-26)
+
+This ADR's rationale is the decoupling of CI reliability from **third-party
+vendor uptime** — a Sentry, Clerk, SonarCloud, or Elasticsearch outage must not
+break PR gating. Read precisely, the boundary therefore concerns _third-party_
+networks. A call to GitHub's own API, made via the run's own `GITHUB_TOKEN` on
+the same instance the workflow already executes on, is not a third-party-vendor
+call: if GitHub is unavailable the Actions run cannot start at all, so the call
+introduces no additional availability dependency, no new secret, and no new
+rate-limit surface beyond the one CI inherently has. The cost this ADR exists to
+prevent is not paid.
+
+On that basis, one PR-check network call is permitted: the **GitHub
+dependency-graph comparison API** (e.g. the dependency-graph `compare`
+endpoint), as invoked by `actions/dependency-review-action` on `pull_request`.
+This is the explicit
+amendment that both consequence #5 above and
+[ADR-174](174-dependency-vulnerability-scanning-quality-gate.md) §Implementation
+Notes require before such a call may run in the PR-check path.
+
+The permission is bounded precisely:
+
+1. **GitHub-first-party only.** It reaches GitHub's own APIs via the run's
+   `GITHUB_TOKEN`, and nothing else. Third-party-vendor calls from the PR-check
+   path — a CI SonarCloud scanner, a `sentry-cli` release call, a Clerk or
+   Elasticsearch management call — remain forbidden. This is why
+   [ADR-204](204-merge-gate-strategy-require-up-to-date-not-merge-queue.md) still
+   correctly rules out the merge-queue-compatible CI SonarCloud scanner: that
+   route uploads to a third-party vendor and is not within this scope.
+2. **Advisory, not required.** The implementing workflow
+   (`.github/workflows/dependency-review.yml`) is not a required status check in
+   the `main` ruleset (ADR-204), so its availability cannot block a merge. The
+   reasoning above does not rest on this — the call is sound because it adds no
+   vendor dependency — but it removes the question entirely.
+3. **PR-event-scoped.** The action runs only on `pull_request` (it compares the
+   PR base to its head); it adds no call to the `push` or `merge_group` paths.
+
+ADR-121's coverage matrix and §Network-free PR-check boundary are amended in
+lockstep, as consequence #5 requires.
 
 ## Consequences
 

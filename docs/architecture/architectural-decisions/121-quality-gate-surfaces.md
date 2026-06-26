@@ -2,8 +2,8 @@
 
 **Status**: Accepted
 **Date**: 2026-02-25
-**Updated**: 2026-05-10
-**Related**: [ADR-013 (Husky and lint-staged)](013-husky-and-lint-staged.md), [ADR-043 (Type Generation in Build and CI)](043-codegen-in-build-and-ci.md), [ADR-111 (Secret Scanning Quality Gate)](111-secret-scanning-quality-gate.md), [ADR-147 (Browser Accessibility)](147-browser-accessibility-as-blocking-quality-gate.md), [ADR-161 (Network-Free PR Checks)](161-network-free-pr-check-ci-boundary.md), [ADR-174 (Dependency Vulnerability Scanning)](174-dependency-vulnerability-scanning-quality-gate.md)
+**Updated**: 2026-06-26
+**Related**: [ADR-013 (Husky and lint-staged)](013-husky-and-lint-staged.md), [ADR-043 (Type Generation in Build and CI)](043-codegen-in-build-and-ci.md), [ADR-111 (Secret Scanning Quality Gate)](111-secret-scanning-quality-gate.md), [ADR-147 (Browser Accessibility)](147-browser-accessibility-as-blocking-quality-gate.md), [ADR-161 (Network-Free PR Checks)](161-network-free-pr-check-ci-boundary.md), [ADR-174 (Dependency Vulnerability Scanning)](174-dependency-vulnerability-scanning-quality-gate.md), [ADR-204 (Merge-Gate Strategy)](204-merge-gate-strategy-require-up-to-date-not-merge-queue.md)
 
 ## Context
 
@@ -64,6 +64,7 @@ or configuration issue, never a missing check.
 | test:a11y         | --         | --       | --          | Yes                     |
 | doc-gen           | --         | --       | --          | Yes                     |
 | SonarCloud        | --         | --       | PR analysis | --                      |
+| dependency-review | --         | --       | PR advisory | --                      |
 
 ### Rationale for exclusions
 
@@ -127,8 +128,11 @@ adds no enforcement value. It is not part of any routine gate surface.
 
 1. **Pre-push === CI is the target invariant** — pre-push and CI should run the same check set wherever the check is locally reproducible. A
    CI-only failure indicates an environmental or configuration issue,
-   not a missing check. Current exceptions (SonarCloud and any networked
-   external analysis) must stay visible in this ADR until reconciled.
+   not a missing check. Current exceptions are SonarCloud and the
+   dependency-review gate — both CI-only networked external analyses that
+   cannot run locally (dependency-review needs the PR base/head diff and
+   GitHub's dependency-graph API) — and must stay visible in this ADR until
+   reconciled.
    (`lint:shell` was a former exception; it is now at pre-push === CI parity —
    `.husky/pre-push` and `.github/workflows/ci.yml` both run it — and is no
    longer an open exception.)
@@ -143,26 +147,47 @@ adds no enforcement value. It is not part of any routine gate surface.
 4. **`pnpm check` is exhaustive** — the only surface that runs every
    check including clean rebuild, doc-gen, widget tests, a11y tests,
    and fix-mode commands.
-5. **No CI-only checks** — every CI check is reproducible locally via
-   pre-push. A developer who passes pre-push knows CI will pass
-   (assuming equivalent environment).
+5. **No CI-only checks except the networked external analyses named in
+   principle #1** — every other CI check is reproducible locally via pre-push,
+   so a developer who passes pre-push knows CI will pass (assuming equivalent
+   environment). The sole exceptions are SonarCloud and the dependency-review
+   gate, which cannot run locally (see principle #1).
 6. **Developer surfaces fix; hook and remote surfaces verify** — see
    §Verify vs Mutate above.
 
 ### Dependency vulnerability gate status
 
-ADR-174 defines the dependency vulnerability policy, but this ADR does not yet
-claim a dependency-audit gate in pre-push, CI, or `pnpm check`. Add that row
-only after the gate is implemented. Until then, references to dependency
-vulnerability scanning in governance docs are policy references, not evidence
-that CI already runs a dependency audit.
+ADR-174 defines the dependency vulnerability policy. As of 2026-06-26 one
+advisory slice of it is wired: the **dependency-review** gate
+(`.github/workflows/dependency-review.yml`, `actions/dependency-review-action`),
+which scans the **dependency diff a PR introduces** against the GitHub Advisory
+Database and fails on `high`+ severity. ADR-161's third-party-vendor scope
+permits it in the PR-check path (it calls GitHub's own dependency-graph API via
+the run's `GITHUB_TOKEN`). It is **advisory** — not a required status check in
+the `main` ruleset (ADR-204) — so it surfaces findings, and a PR comment on
+failure, without blocking merge.
+
+What remains future work: a **full dependency-tree audit** (the whole installed
+graph, not only the PR diff) and any **blocking** disposition of high/critical
+production-reachable findings per ADR-174. Until those land, do not claim a
+blocking dependency-audit gate; the wired gate is the advisory PR-diff review
+only. References to a full dependency audit in governance docs are policy
+references, not evidence that CI runs one.
 
 ### Network-free PR-check boundary
 
-ADR-161 remains binding: PR and push checks must not depend on live vendor or
-schema network calls. Any schema drift check, dependency audit, or vendor CLI
-that reaches the network belongs outside PR/push checks unless this ADR and
-ADR-161 are amended together.
+ADR-161 remains binding: PR and push checks must not depend on live
+**third-party-vendor** or schema network calls. Any schema drift check, full
+dependency audit, or vendor CLI that reaches a third-party network belongs
+outside PR/push checks unless this ADR and ADR-161 are amended together.
+
+One such amendment is in force (2026-06-26, this ADR and ADR-161 amended in
+lockstep): ADR-161's scope is stated as third-party-vendor networks, so the
+dependency-review gate's call to GitHub's own dependency-graph API via the run's
+`GITHUB_TOKEN` is permitted — it couples PR gating to no vendor beyond GitHub
+itself, on which the Actions run already wholly depends. This is GitHub-first-party
+only; a CI SonarCloud scanner or any other third-party call from the PR-check
+path stays forbidden. See ADR-161 §Third-party-vendor scope: GitHub's own APIs.
 
 ## Consequences
 
@@ -216,3 +241,4 @@ type-check lint test test:e2e test:ui`.
 | 2026-05-04 | Removed `smoke:dev:stub` row from coverage matrix and pre-push/CI Turbo invocations. The smoke-tests directory, `smoke:*` scripts, and `vitest.smoke.config.ts` were retired. Coverage previously held by the dev-server-boot smoke check is now provided by the in-process invariant test (`apps/oak-curriculum-mcp-streamable-http/src/dev-boot-without-observability.integration.test.ts`); broader real-IO coverage moves to a frozen IO Inventory plus a `no-real-io-in-tests` ESLint rule.                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | 2026-05-10 | Added visible rows/notes for `lint:shell`, SonarCloud, dependency vulnerability policy, and ADR-161 network-free PR-check interaction. This records current drift without over-claiming local gate parity.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | 2026-06-05 | Owner-directed fresh speed/safety re-decision of the pre-commit surface (Lanternlit curation pass). Found the live `.husky/pre-commit` hook had drifted from this ADR: it omitted knip + depcruise (mandated here) while adding build + repo-validators + lint:shell. Added knip + depcruise to the hook (the omission let unused-code and dependency-direction defects slip to pre-push, as when tsx-spawned validator entries reached `main` unregistered in `knip.config.ts`). Corrected the matrix pre-commit cells for `build`/`repo-validators`/`lint:shell` (`--` to `Yes`) and `sdk-codegen` (to `via build`) to match the hook. Retired the "no builds at pre-commit" rule: Turbo caching makes build sub-second when warm (~0.75s cached for build+type-check+lint+test) and type-check requires `^build`; knip ~1.7s, depcruise ~1.9s. Updated design principle #2, the exclusion rationale, and the Implementation pre-commit list. |
+| 2026-06-26 | Added the `dependency-review` row to the coverage matrix (CI-only, PR-advisory). Recorded the now-wired advisory dependency-review gate in §Dependency vulnerability gate status, and ADR-161's third-party-vendor scope refinement in §Network-free PR-check boundary (this ADR and ADR-161 amended in lockstep, as both require). Named dependency-review as a standing CI-only parity exception in design principle #1 alongside SonarCloud. The gate is advisory — not a required status check in the `main` ruleset (ADR-204). A full dependency-tree audit and blocking disposition per ADR-174 remain future work.                                                                                                                                                                                                                                                                                                                       |
