@@ -33,6 +33,8 @@
       "Skill(oak-consolidate-until-done:*)",
       "Skill(oak-session-handoff)",
       "Skill(oak-session-handoff:*)",
+      "Skill(oak-semantic-merge)",
+      "Skill(oak-semantic-merge:*)",
       "Skill(oak-go)",
       "Skill(oak-go:*)",
       "Skill(oak-metacognition)",
