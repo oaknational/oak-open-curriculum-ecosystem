@@ -22,6 +22,17 @@ packages:
   - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk
 
+# Supply-chain hardening: refuse to install any package version younger than 24h
+# (1440 min), so a freshly-published compromised release ages — giving the
+# ecosystem time to detect and yank it — before it can enter the tree. pnpm's
+# default is 0 (no floor); this line introduces the floor. Setting the key
+# explicitly also auto-enables minimumReleaseAgeStrict, so a too-young version is
+# refused (or prompts on an interactive TTY), not silently downgraded. Applies to
+# all (incl. transitive) deps at resolution time; frozen-lockfile installs (CI)
+# are unaffected. Allow-list a genuinely-needed young package via
+# minimumReleaseAgeExclude.
+minimumReleaseAge: 1440
+
 allowBuilds:
   '@clerk/shared': true
   '@sentry/cli': true
