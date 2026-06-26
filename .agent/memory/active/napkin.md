@@ -95,3 +95,38 @@ New session observations append below.
   in general?" Empirical proof (a real PR through the gate) settles it. Sibling:
   [[feedback_check_doctrine_preconditions_before_applying]], [[verify-dont-trust]]; candidate for a
   `patterns/` entry if a second instance appears.
+
+## 2026-06-26 — An inherited handoff term can smuggle a hedge-frame the design doesn't actually have (Inferno holds Tongs)
+
+- **Surprise: the PDR-044 write-hook blocked "carve-out" mid-edit, and it was right.** The
+  owner-approved handoff (and ADR-174's anticipatory wording) framed the dependency-review work as
+  "a narrow carve-out to ADR-161." I typed that verbatim into the ADR-161 Status line and the hook
+  blocked it as a write-time fingerprint of expediency-hedging. Per
+  [[hook-policy-substring-discipline]] I did NOT synonym-swap; I reappraised the *concept*. The
+  reappraisal yielded a strictly better framing: it is not an *exception hedged into* the rule, it
+  is a **positive scope refinement** — ADR-161's rationale was always third-party-vendor uptime, and
+  GitHub's own same-instance API was never a third-party call, so the dependency-review gate is
+  *within* the boundary correctly understood, not carved out of it. The handoff's vocabulary carried
+  a hedge-frame the actual design did not have. **Lesson:** an inherited term (from a handoff, a
+  prior ADR, an owner phrasing) can import a frame you wouldn't choose from first principles; the
+  hook firing on it is a design signal, not a lint to route around — reframe positively and the ADR
+  comes out stronger. This is [[feedback_existence_is_not_correctness_default_replace]] applied to
+  vocabulary, and the metacognition "fluency is a warning" note (a fluent inherited word bypassed
+  the situational check). Sibling: [[verify-dont-trust]].
+
+## 2026-06-26 — A CI gate passing on its first run is a vacuous green, not proof it gates (Inferno holds Tongs)
+
+- **Owner correction: "a completely useless unit test can pass on the first go, that's why TDD
+  requires RED, green, refactor."** I watched the new advisory `dependency-review` gate pass on PR
+  #236 and wrote "the gate works end-to-end." Wrong. #236 introduces **no dependency changes**, so a
+  green there proves only that the workflow *executes without erroring* — it would pass identically
+  whether `fail-on-severity: high` is wired correctly OR the action is a complete no-op. I never saw
+  RED, so the green was uninformative about whether the gate *gates*. **Cure (did it):** I proved RED
+  on a throwaway branch adding `[email protected]` (critical CVE-2021-44906) — the `dependency-review`
+  check went FAILURE, and the job log cited the exact advisory (`GHSA-xvch-5gv4-984h`), confirming it
+  failed *for the right reason*, not incidentally. Then #236's green is the real green (clean input →
+  pass). **Lesson:** for any gate/guard/validator, a green is meaningful only once you have seen the
+  matching RED for the right reason; "it ran and passed" is not "it works." This is the same shape as
+  [[feedback_test_the_flag_engine_not_the_configuration]], [[feedback_run_the_thing_dont_flag_the_gap]]
+  (run the gate against an input that *should* trip it), and the test-expert's describe-vs-audit
+  screen. Applies to CI gates, hooks, and assertions alike. Sibling: [[verify-dont-trust]].

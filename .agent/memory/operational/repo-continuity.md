@@ -24,6 +24,21 @@ todo list — is [`director-handoff.md`](director-handoff.md).
 
 ## Current State
 
+- **Dependency-review PR-gate LANDED (2026-06-26, Inferno holds Tongs).** PR #236 merged to main
+  (`570750939`): advisory `.github/workflows/dependency-review.yml`
+  (`actions/dependency-review-action` v5.0.0 SHA-pinned, `pull_request`-only, `fail-on-severity:
+  high`, `comment-summary-in-pr: on-failure`, perms `contents:read` + `pull-requests:write`).
+  ADR-161 + ADR-121 amended in lockstep: the network-free PR-check boundary is now stated as
+  **third-party-vendor** scope, so the gate's GitHub-first-party dependency-graph call via the run's
+  `GITHUB_TOKEN` is permitted (no vendor dependency beyond GitHub, on which the run already wholly
+  depends); ADR-204's third-party reasoning preserved. **Advisory — NOT a required ruleset check**
+  (verified first-hand: required checks remain CodeQL/SonarCloud/run-quality-gates; the gate runs
+  PR-only and never gated this PR). **RED-green proven**: a throwaway PR (#237, closed) adding
+  `[email protected]` (critical) drove `dependency-review` to FAIL citing GHSA-xvch-5gv4-984h; the clean
+  #236 passed. docs-adr-expert + security-expert reviews folded; the hook-blocked "carve-out"
+  framing was reappraised to a positive scope-refinement (napkin 2026-06-26). Closes report #229 §7
+  Tier-1. **No forced next pickup** — report #229 Tier-2 (a11y DONE #230; merge-gate DONE ADR-204)
+  and Tier-3 (unattended auto-merge: NOT YET) remain the security-roadmap horizon.
 - **Dependency, security & merge-gate session (2026-06-26, Wombat wakes Eventide).** Merged to
   main: #227 dep update (`@types/node` held on Node 24 — direct decls + a tree-wide pnpm override;
   Dependabot `@types/node` major-ignore); #228 `identify-as-agent-under-shared-credentials` rule
@@ -41,16 +56,8 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   set instead; same merge-skew protection, no queue, no bypass (ADR-204). A session-scoped
   merge-queue bypass used during the broken-queue window is **provably unneeded** (#233 merged with
   no `--admin`); the authorisation lapses with the session.
-  **Next safe step — dependency-review PR-gate.** Owner-approved 2026-06-26; deferred to the next
-  session under one named constraint — this session's context budget is exhausted and the owner
-  directed a handoff (falsifiable: the next session resumes it directly, with no re-decision). The
-  work: (a) amend ADR-161 + ADR-121 with a narrow carve-out permitting GitHub's OWN dependency-graph
-  (dependency-review) API as a same-instance PR-check call — distinct from third-party-vendor
-  network calls, so ADR-161's vendor-uptime rationale is not incurred; (b) add
-  `.github/workflows/dependency-review.yml` running `actions/dependency-review-action` (latest is
-  v5.0.0; SHA-pin at author time) on `pull_request: [main]`, `fail-on-severity: high`,
-  `comment-summary-in-pr: on-failure`, perms `contents: read` + `pull-requests: write`,
-  advisory-not-required initially. Full rationale: report #229 §7 Tier-1.
+  **Next safe step — dependency-review PR-gate: DONE 2026-06-26 (Inferno holds Tongs), see the top
+  entry.**
 - **Knowledge-substrate consolidation — PR #226 (2026-06-25, Zephyr mends Bluff).** Register
   intents sharpened (pending-graduations = learned-doctrine-awaiting-a-home; open-questions =
   strategic open questions) with belongs/does-not-belong examples; the homing destinations table
