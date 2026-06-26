@@ -82,6 +82,7 @@ without proportional value.
 | `.agent/rules/generator-first-mindset.md`                                  | always-on      | —                                                                                                |
 | `.agent/rules/handoff-messages-self-contained.md`                          | always-on      | —                                                                                                |
 | `.agent/rules/hook-policy-substring-discipline.md`                         | always-on      | —                                                                                                |
+| `.agent/rules/identify-as-agent-under-shared-credentials.md`               | always-on      | —                                                                                                |
 | `.agent/rules/important-state-not-in-temp-files.md`                        | always-on      | —                                                                                                |
 | `.agent/rules/invoke-accessibility-expert.md`                              | trigger-loaded | Accessibility-touching change (WCAG / keyboard / focus / contrast / ARIA)                        |
 | `.agent/rules/invoke-assumptions-expert.md`                                | trigger-loaded | Plan authoring, decision-complete marking, blocking-relationship assertion, or 3+ agent dispatch |
