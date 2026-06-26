@@ -3,9 +3,9 @@ name: CI
 # Quality-gate pipeline for PRs and pushes to main. The work is split into
 # parallel jobs so each gate reports as its own check and superseded PR runs
 # cancel. A final `run-quality-gates` fan-in job is the single required status
-# check: it fails if ANY gate failed or was cancelled, so the branch ruleset and
-# the Release workflow's `workflow_run: [CI]` trigger need no change while every
-# split job is effectively blocking.
+# check: it fails unless EVERY gate succeeded (so a failed, cancelled, or skipped
+# gate all block), so the branch ruleset and the Release workflow's
+# `workflow_run: [CI]` trigger need no change while every split job is blocking.
 #
 # Caching strategy (avoids a cold-cache network stampede): the `install` job
 # performs the one network install on a changed lockfile and populates the pnpm
@@ -13,7 +13,7 @@ name: CI
 # offline. The `build` job warms the Turbo remote cache once; build-dependent
 # jobs hit it instead of rebuilding. Playwright browsers and the gitleaks binary
 # are version-pinned. Job dependency tiers:
-#   secret-scan        — no pnpm; runs from t=0 in parallel
+#   secret-scan        — no pnpm install (gitleaks binary); runs from t=0 in parallel
 #   install            — warms the pnpm store cache
 #     static-checks    — needs install (no build): format, markdown, shell, validators
 #     build            — needs install: warms the Turbo remote cache
@@ -215,9 +215,11 @@ jobs:
         if: always()
         run: pnpm --filter @oaknational/agent-tools ci-turbo-report >> "$GITHUB_STEP_SUMMARY"
 
-  # Single required status check: fans in every gate above and fails if any one
-  # failed or was cancelled. Reusing the existing `run-quality-gates` context
-  # means the branch ruleset is unchanged while each split job blocks merge.
+  # Single required status check: fans in every gate above and fails unless every
+  # one succeeded — failed, cancelled, AND skipped results all block (fail-closed,
+  # so adding an `if:` guard to a gate later cannot silently bypass it). Reusing
+  # the existing `run-quality-gates` context keeps the branch ruleset unchanged
+  # while each split job blocks merge.
   run-quality-gates:
     name: run-quality-gates
     permissions: {}
@@ -233,14 +235,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      # Require EVERY gate result to be `success`. This is fail-closed: failure,
+      # cancelled, and skipped all block, and any future GitHub result value is
+      # treated as non-passing without another edit. The expression is read via an
+      # env var so no `${{ }}` value is interpolated into the shell.
       - name: Verify every quality gate passed
+        env:
+          RESULTS: ${{ join(needs.*.result, ',') }}
         run: |
-          results='${{ join(needs.*.result, ',') }}'
-          echo "Gate results: $results"
-          case ",$results," in
-            *,failure,* | *,cancelled,*)
-              echo "::error::One or more quality gates failed or were cancelled."
+          echo "Gate results: $RESULTS"
+          IFS=',' read -ra results <<< "$RESULTS"
+          for result in "${results[@]}"; do
+            if [ "$result" != "success" ]; then
+              echo "::error::Quality gate result '$result' is not 'success' — blocking merge."
               exit 1
-              ;;
-          esac
+            fi
+          done
           echo "All quality gates passed."

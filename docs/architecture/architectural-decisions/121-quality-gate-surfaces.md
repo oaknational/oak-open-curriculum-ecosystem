@@ -218,8 +218,9 @@ markdownlint-staged`, `repo-validators:check`, `lint:shell`, `knip`,
   `knip`, `depcruise`, `repo-validators:check`, `lint:shell`, then Turbo:
   `sdk-codegen build type-check lint test test:e2e test:ui`.
 - CI runs as parallel jobs gated by a `run-quality-gates` fan-in (the single
-  required status check; it fails if any job failed or was cancelled, so each
-  job blocks merge without a ruleset change): `secret-scan` (pinned, checksummed
+  required status check; it fails unless every job succeeded — failed, cancelled,
+  and skipped results all block — so each job blocks merge without a ruleset
+  change): `secret-scan` (pinned, checksummed
   gitleaks binary — no Docker fallback), `install` (warms the pnpm store cache so
   downstream jobs install offline), `static-checks` (`format-check:root`,
   `markdownlint-check:root`, `lint:shell`, `subagents:check`, `portability:check`,
