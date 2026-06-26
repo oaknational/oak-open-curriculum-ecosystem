@@ -242,9 +242,9 @@ refined on owner input and read against incoming materials.
 - **Editorial-voice pass — done on the index summary** (unmistakably leadership-editorial,
   per acceptance); the proposed per-stream prose carries the voice too.
 - **Assistant-list principle vs K3 — preserved and explicit** in `stream-mcp-app.md`: no
-  favourites (ChatGPT, Claude, Gemini and others; the teacher's choice) is kept distinct from
-  K3's ratified *initial release surface* (ChatGPT, Claude, and Gemini — owner-updated
-  2026-06-20).
+  favourites (ChatGPT, Claude, Copilot, Gemini and others; the teacher's choice) is kept distinct from
+  K3's ratified *initial release surface* (ChatGPT, Claude, Copilot, and Gemini — owner-updated
+  2026-06-20; Copilot added 2026-06-26).
 
 **Still genuinely open (owner decides / Oak grounds):** the measure *targets* (Oak
 analytics/research). The search/graph question (a false dichotomy), the
@@ -357,13 +357,13 @@ stream's strategy:
 
 - **The release channel is not unilateral.** We can make the **MCP server** available
   ourselves, but proper **app-like packaging and promotion** (connectors and apps across
-  ChatGPT, Claude, and Gemini, even-handedly — never favouring one provider) **require
+  ChatGPT, Claude, Copilot, and Gemini, even-handedly — never favouring one provider) **require
   collaboration with the AI vendors**. The vendors are **aware and have
   agreed** to support that packaging and to support us reaching the appropriate audience. So
   the **release channel and some promotion channels are an external-collaboration
   dependency** — de-risked by the vendors' agreement, but not something we can do alone. A
   vital product / digital-service constraint; the GTM/distribution hand-off carries it
-  (launch-readiness K3 names the ChatGPT, Claude, and Gemini surfaces).
+  (launch-readiness K3 names the ChatGPT, Claude, Copilot, and Gemini surfaces).
 - **Marketing is gated on TPC-risk mitigation.** The app **cannot be marketed** until the
   **TPC risk** is sufficiently mitigated (TPC — the owner's term; relates to lesson-level
   content served by the API, the same area as the data-availability / missing-MV gate). The
