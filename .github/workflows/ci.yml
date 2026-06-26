@@ -38,9 +38,8 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-permissions:
-  contents: read
-
+# Permissions are declared per job (least privilege; Sonar githubactions:S8264):
+# the checkout jobs get `contents: read`, the aggregator needs none.
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -54,6 +53,8 @@ jobs:
   # intentionally omitted because the scan needs no node_modules.
   secret-scan:
     name: secret-scan
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -93,6 +94,8 @@ jobs:
   # install offline.
   install:
     name: install
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -103,6 +106,8 @@ jobs:
   # with `build`.
   static-checks:
     name: static-checks
+    permissions:
+      contents: read
     needs: install
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -126,6 +131,8 @@ jobs:
   # jobs below get a FULL TURBO cache hit instead of rebuilding.
   build:
     name: build
+    permissions:
+      contents: read
     needs: install
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -145,6 +152,8 @@ jobs:
   # the remote cache warmed by `build`.
   unit-tests:
     name: unit-tests
+    permissions:
+      contents: read
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -161,6 +170,8 @@ jobs:
   # through built dist/ outputs, so restore the build from the Turbo cache first.
   knip-depcruise:
     name: knip-depcruise
+    permissions:
+      contents: read
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -179,6 +190,8 @@ jobs:
   # `playwright install` only ensures OS deps, skipping the browser download.
   browser-tests:
     name: browser-tests
+    permissions:
+      contents: read
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -207,6 +220,7 @@ jobs:
   # means the branch ruleset is unchanged while each split job blocks merge.
   run-quality-gates:
     name: run-quality-gates
+    permissions: {}
     needs:
       - secret-scan
       - install
