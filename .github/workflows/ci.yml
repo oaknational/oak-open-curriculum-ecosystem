@@ -186,8 +186,9 @@ jobs:
         run: pnpm depcruise
 
   # Browser-based suites (chromium only, network-free per ADR-161). The
-  # Playwright browser download is cached on the lockfile hash; a cache hit means
-  # `playwright install` only ensures OS deps, skipping the browser download.
+  # Playwright browser download is cached, keyed on the Playwright version; a
+  # cache hit means `playwright install` only ensures OS deps, skipping the
+  # browser download.
   browser-tests:
     name: browser-tests
     permissions:
@@ -198,13 +199,20 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: ./.github/actions/setup
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
       - name: Cache Playwright browsers
         uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
+          # Key on the Playwright version, not the lockfile hash: the browser cache
+          # only needs to rotate when the browser version changes. No restore-keys,
+          # so a version bump misses cleanly and downloads only the new browser. A
+          # restore-keys fallback would carry old chromium builds forward (Playwright
+          # install never prunes them) and bloat the cache, eventually evicting the
+          # pnpm/Turbo caches under GitHub's per-repo quota.
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
       - name: Install Playwright (browser + OS deps)
         run: pnpm exec playwright install --with-deps chromium
       - name: Browser suites (e2e, ui, a11y, widget)

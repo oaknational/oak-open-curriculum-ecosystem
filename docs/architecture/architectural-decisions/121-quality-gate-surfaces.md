@@ -226,8 +226,8 @@ markdownlint-staged`, `repo-validators:check`, `lint:shell`, `knip`,
   `markdownlint-check:root`, `lint:shell`, `subagents:check`, `portability:check`,
   `repo-validators:check`), `build` (`sdk-codegen` + `build`, warms the Turbo
   remote cache), `unit-tests` (`type-check`, `lint`, `test`), `knip-depcruise`,
-  and `browser-tests` (the Playwright suites, with the browser download cached on
-  the lockfile hash). The check set is unchanged from the prior single-job
+  and `browser-tests` (the Playwright suites, with the browser download cached and
+  keyed on the Playwright version). The check set is unchanged from the prior single-job
   workflow — only the structure, caching, and gitleaks provisioning changed.
 - `pnpm check` runs the broadest set with fix-mode and clean rebuild.
 - Coverage matrix maintained in this ADR and referenced from
