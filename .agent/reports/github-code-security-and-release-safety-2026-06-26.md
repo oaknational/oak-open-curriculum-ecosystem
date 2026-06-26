@@ -4,7 +4,7 @@
 release automation are owner decisions). Recommendations are tiered; the
 auto-merge tier is explicitly gated on the CI-adequacy verdict in §6.
 **Date**: 2026-06-26
-**Author**: Wombat wakes Eventide (claude-opus-4-8[1m])
+**Author**: Wombat wakes Eventide (Claude Opus 4.8, 1M context)
 **Trigger**: Owner directive (2026-06-26) — investigate Dependabot and related
 GitHub code-security features to maximise safety, security, and quality; and if
 any move toward automatic merges implies automatic release of the MCP app to
@@ -67,9 +67,10 @@ approving review because CODEOWNERS owns the whole tree.
 GitHub code-security feature in §5 is **free** here. Authoritative live state
 (`gh api repos/…/security_and_analysis`): secret scanning **enabled**,
 Dependabot security updates **enabled**, Dependabot alerts **enabled**;
-**push protection DISABLED**; non-provider patterns, validity checks, and AI
-detection disabled. So the obvious free wins are push protection (§7 Tier-1)
-and the not-yet-present dependency-review action.
+push protection was **DISABLED at assessment time and has since been enabled
+(2026-06-26, acting on this assessment)**; non-provider patterns, validity
+checks, and AI detection remain disabled. The remaining obvious free win is the
+not-yet-present dependency-review action.
 
 ---
 
@@ -135,7 +136,8 @@ merge is automatic. This is the load-bearing fact for the auto-merge question.
 
 **Live state (authoritative, `gh api repos/…`):** `secret_scanning` enabled;
 `dependabot_security_updates` enabled; Dependabot alerts enabled;
-**`secret_scanning_push_protection` DISABLED**; `non_provider_patterns`,
+**`secret_scanning_push_protection`** — DISABLED at assessment, **enabled
+2026-06-26** (actioned from this report); `non_provider_patterns`,
 `validity_checks`, `ai_detection` disabled.
 
 | Feature | Mechanics (verified) | Relevance here |
@@ -170,8 +172,12 @@ first-hand against `ci.yml` and the ruleset.
   unit + integration tests, E2E (`test:e2e`), visual/UI (`test:ui`), knip,
   depcruise, secret scan, format, markdownlint, repo-validators, portability,
   sub-agent validation. CodeQL + SonarCloud gate security/quality.
-- Reproducible and network-free (ADR-161), so a green local `pnpm check`
-  implies green CI.
+- Reproducible and network-free (ADR-161). A green local run of the *same*
+  gates is a strong signal for CI — but **not an absolute implication**: CI runs
+  a **curated subset** of `pnpm check` (gap 1 below — the a11y suites are
+  omitted), and shared infra can flake (a `tsup`/`eslint .` temp-file race
+  red-flagged a green-local change on 2026-06-26). Treat a green local run as
+  necessary, not sufficient.
 
 **Concrete gaps (each is a release-safety risk if CI becomes the sole gate):**
 
@@ -213,9 +219,9 @@ separate small PR, not part of #227.
 
 **Tier 1 — pure-win, adopt now:**
 
-1. **Enable secret-scanning push protection** (currently OFF). Blocks secrets
-   before they enter history; gitleaks already runs *after the fact*, this
-   stops them at the push. Settings → Code security → Push protection.
+1. **Enable secret-scanning push protection** — **DONE (2026-06-26)**, enabled
+   while actioning this assessment. Blocks secrets before they enter history;
+   gitleaks already runs *after the fact*, this stops them at the push.
 2. **Add the dependency-review action** to the PR workflow
    (`actions/dependency-review-action@v4`, `fail-on-severity`, optional
    `deny-licenses`). Gates *newly-introduced* vulnerable/licence-bad deps at PR
@@ -272,7 +278,7 @@ separate small PR, not part of #227.
 
 | # | Decision | My recommendation | Reversible? |
 | --- | --- | --- | --- |
-| A | Enable secret-scanning push protection now? | **Yes** — free, pure-win | Yes |
+| A | Enable secret-scanning push protection now? | **Yes — DONE 2026-06-26** | Yes |
 | B | Add dependency-review action + Dependabot `cooldown`? | **Yes** — closes a PR-time supply-chain gap | Yes |
 | C | Close the CI a11y/widget gap as a standalone PR? | **Yes, P1** — WCAG mandate is currently un-gated | Yes |
 | D | Adopt a merge queue (or require-up-to-date)? | **Yes** before any auto-merge; merge queue preferred | Yes |
