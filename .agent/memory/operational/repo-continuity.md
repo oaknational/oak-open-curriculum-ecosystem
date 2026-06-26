@@ -40,8 +40,20 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   moved docker→SHA-pinned-binary; per-ref concurrency cancels superseded PR runs. Reviews folded:
   Sonar S8264 (per-job permissions), the fail-closed aggregator, the Playwright version cache key.
   **Next safe step:** report #229 Tier-2/3 security-roadmap items; reconcile the pre-existing
-  widget/a11y pre-push≠CI parity gap (ADR-121 matrix, from #230). Codex review of #239 may surface
-  follow-ups (owner-requested, post-merge — check #239 comments).
+  widget/a11y pre-push≠CI parity gap (ADR-121 matrix, from #230).
+  **Session closeout (this branch `docs/session-closeout-continuity`):** the two sessions' memory was
+  **semantically merged** (this Inferno entry + Bonfire's #238 entry both kept) — git line-merge would
+  have corrupted it; new **`/oak-semantic-merge` skill** records that concept-preserving method
+  (per `merge_class` frontmatter). **Codex #239 follow-ups — INVESTIGATE against the merge-result code
+  (owner: some may be stale; NO code changed this session):** (P2) `ci.yml` main-run concurrency — rapid
+  main pushes share `ci-refs/heads/main`; a queued run can cancel the *pending* one, dropping an
+  intermediate main CI run + its Release `workflow_run`; consider a per-SHA group for non-PR runs.
+  (P3) ADR-121 changelog row says the Playwright cache keys on the lockfile hash, but the impl keys on
+  the Playwright version — align. (P3) the `setup` composite uses `--frozen-lockfile` not `--offline`
+  downstream — **declined** (graceful registry fallback beats fail-closed on a transient cache miss;
+  stampede-avoidance holds in the warm case). **Attribution format (owner direction 2026-06-26):**
+  `Agent-authored on behalf of \`jimCresswell\` by <Name> (<platform>, <model>)` — simpler, no emoji /
+  no "Generated with" line; apply to PR and comment bodies; update the `identify-as-agent` rule example.
 - **Statusline two-set display (merged) + canonical MCP-app target platforms (2026-06-26, Bonfire guards Temper).**
   Statusline coord-branch work **merged** (PR #235, `589d6518c`): the statusline now renders two git-derived
   location sets (working tree + primary checkout) with **divergence-only dedup** — a coordination token shows
