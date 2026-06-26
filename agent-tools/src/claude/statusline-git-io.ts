@@ -42,6 +42,8 @@ export interface GitFacts {
   readonly worktree: string | undefined;
   /** The team's shared coordination branch, when linked worktrees exist. */
   readonly coordinationBranch: string | undefined;
+  /** The primary checkout's display name, shown beside the coordination branch. */
+  readonly coordinationPlace: string | undefined;
   /** A loud location-fact failure to surface, or `undefined`. */
   readonly error: string | undefined;
   /** The primary checkout root, for the coordination-shape reads. */
@@ -61,12 +63,13 @@ export function gatherGitFacts(cwd: string): GitFacts {
   const listing = classifyGitOutcome(spawnGit(cwd, ['worktree', 'list', '--porcelain']));
   const primaryRoot =
     listing.kind === 'value' ? parsePrimaryWorktreeRoot(listing.value) : undefined;
-  const coordination = resolveCoordination(listing, primaryRoot);
+  const coordination = resolveCoordination(listing, primaryRoot, working.branch, working.worktree);
   return {
     branch: working.branch,
     dirty: working.dirty,
     worktree: working.worktree,
     coordinationBranch: coordination.coordinationBranch,
+    coordinationPlace: coordination.coordinationPlace,
     error: combineErrors(working.error, coordination.error),
     primaryRoot,
   };
@@ -137,31 +140,59 @@ function resolveBranch(cwd: string): { branch: string | undefined; error: string
  * Resolve the coordination branch to display from the worktree listing, failing
  * loud. A worktree-list error, an unresolvable primary checkout root in a team,
  * or an unresolvable primary branch each surface an error rather than silently
- * omitting the coordination line.
+ * omitting the coordination line. Each coordination token is suppressed when it
+ * would merely repeat its working-side counterpart: the whole line when the
+ * coordination branch equals the working branch, and the primary name alone when
+ * it equals the working worktree name — see {@link selectCoordinationBranch}.
+ *
+ * @param listing - The classified `git worktree list --porcelain` outcome.
+ * @param primaryRoot - The primary checkout root, or `undefined` if unresolved.
+ * @param workingBranch - This session's working branch, used to suppress a
+ *   coordination line that would merely repeat it; `undefined` if unresolved.
+ * @param workingWorktreeName - This session's current worktree name, used to drop
+ *   a primary name that would merely repeat it; `undefined` in the primary
+ *   checkout or if unresolved.
  */
 function resolveCoordination(
   listing: GitOutcome,
   primaryRoot: string | undefined,
-): { coordinationBranch: string | undefined; error: string | undefined } {
+  workingBranch: string | undefined,
+  workingWorktreeName: string | undefined,
+): {
+  coordinationBranch: string | undefined;
+  coordinationPlace: string | undefined;
+  error: string | undefined;
+} {
   if (listing.kind === 'outside-repo' || listing.kind === 'empty') {
-    return { coordinationBranch: undefined, error: undefined };
+    return { coordinationBranch: undefined, coordinationPlace: undefined, error: undefined };
   }
   if (listing.kind === 'error') {
-    return { coordinationBranch: undefined, error: `worktree list unresolved: ${listing.detail}` };
+    return {
+      coordinationBranch: undefined,
+      coordinationPlace: undefined,
+      error: `worktree list unresolved: ${listing.detail}`,
+    };
   }
   const hasLinkedWorktrees = countWorktrees(listing.value) > 1;
   if (primaryRoot === undefined) {
     return {
       coordinationBranch: undefined,
+      coordinationPlace: undefined,
       error: hasLinkedWorktrees ? 'primary checkout root unresolved' : undefined,
     };
   }
   const primary = resolveBranch(primaryRoot);
   if (primary.error !== undefined) {
-    return { coordinationBranch: undefined, error: primary.error };
+    return { coordinationBranch: undefined, coordinationPlace: undefined, error: primary.error };
   }
   return coordinationToParts(
-    selectCoordinationBranch({ hasLinkedWorktrees, primaryBranch: primary.branch }),
+    selectCoordinationBranch({
+      hasLinkedWorktrees,
+      primaryBranch: primary.branch,
+      primaryName: basename(primaryRoot),
+      workingBranch,
+      workingWorktreeName,
+    }),
   );
 }
 

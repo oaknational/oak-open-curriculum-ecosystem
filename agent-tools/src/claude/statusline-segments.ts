@@ -57,6 +57,15 @@ export interface StatuslineParts {
    */
   readonly coordinationBranch: string | undefined;
   /**
+   * The primary checkout's display name (its directory basename), shown beside
+   * the coordination branch so the line reads as "the primary checkout and its
+   * branch". `undefined` when there is no coordination branch, **or** when the
+   * name would merely repeat the working worktree name and was deduped away (see
+   * the `branch` variant of `CoordinationBranch`) — so a present coordination
+   * branch does not imply a present place.
+   */
+  readonly coordinationPlace: string | undefined;
+  /**
    * A loud, specific failure to surface in place of a silent fallback — e.g. an
    * unexpected git error. Rendered as a glaring leading token, never swallowed.
    */
@@ -72,6 +81,7 @@ export interface Segments {
   readonly branch: string | undefined;
   readonly place: string;
   readonly coordinationBranch: string | undefined;
+  readonly coordinationPlace: string | undefined;
   readonly error: string | undefined;
 }
 
@@ -96,6 +106,7 @@ export function buildSegments(parts: StatuslineParts): Segments {
     branch: formatBranch(parts.branch, parts.dirty),
     place: `${CYAN}${place}${RESET}`,
     coordinationBranch: formatCoordination(parts.coordinationBranch),
+    coordinationPlace: formatCoordinationPlace(parts.coordinationPlace),
     error: formatError(parts.error),
   };
 }
@@ -121,6 +132,15 @@ function formatCoordination(coordinationBranch: string | undefined): string | un
   return coordinationBranch === undefined
     ? undefined
     : `${DIM}${COORDINATION_LABEL}${RESET}${BLUE}${coordinationBranch}${RESET}`;
+}
+
+/**
+ * The primary checkout's name, in the same cyan as the working {@link Segments.place}
+ * so the coordination line reads as a location-and-branch pair mirroring the
+ * working line.
+ */
+function formatCoordinationPlace(coordinationPlace: string | undefined): string | undefined {
+  return coordinationPlace === undefined ? undefined : `${CYAN}${coordinationPlace}${RESET}`;
 }
 
 /** A failure is glaring (bold red, marked) and never blank: it must be seen and fixed. */

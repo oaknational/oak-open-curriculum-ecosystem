@@ -38,6 +38,7 @@ function parts(sessionShape: SessionShape | undefined): StatuslineParts {
     model: undefined,
     sessionShape,
     coordinationBranch: undefined,
+    coordinationPlace: undefined,
     error: undefined,
   };
 }
