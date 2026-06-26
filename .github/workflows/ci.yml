@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Merge queue: GitHub dispatches required checks against a temporary
+  # merge_group ref. Without this trigger, run-quality-gates never reports in
+  # the queue and the ALLGREEN merge times out (60-min check window) and fails.
+  # Keep in lockstep with the main ruleset's merge_queue rule + required checks.
+  merge_group:
 
 permissions:
   contents: read
