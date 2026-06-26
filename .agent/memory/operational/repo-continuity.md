@@ -28,12 +28,12 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   Statusline coord-branch work **merged** (PR #235, `589d6518c`): the statusline now renders two git-derived
   location sets (working tree + primary checkout) with **divergence-only dedup** — a coordination token shows
   only when it diverges from its working-side counterpart (its own lane, not the `statusline-enhancements`
-  logo/indicator thread). **Live:** canonical MCP-app target platforms on `feat/mcp-canonical-target-platforms`
-  — SSOT in [`stream-mcp-app.md`](../../../docs/strategy/stream-mcp-app.md): the four are **ChatGPT, Claude,
+  logo/indicator thread). **Canonical MCP-app target platforms defined** (delivered via PR #238) — SSOT in
+  [`stream-mcp-app.md`](../../../docs/strategy/stream-mcp-app.md): the four are **ChatGPT, Claude,
   Copilot, Gemini** (alphabetical, required-minimum, non-exhaustive; *Copilot* = Microsoft's assistant, not
-  GitHub Copilot); K3 initial-release surface re-ratified to add Copilot (owner direction, Option B);
-  README + VISION mentions conformed. **Next safe step: review + merge that PR** (this session's closeout
-  consolidation rides in it).
+  GitHub Copilot); K3 initial-release surface re-ratified to add Copilot (owner direction, Option B); root
+  README, VISION, app README, launch-readiness framework, governance plan, and plan-hub READMEs conformed.
+  Forward: extend support to additional popular assistants over time per the support-all principle.
 - **Dependency, security & merge-gate session (2026-06-26, Wombat wakes Eventide).** Merged to
   main: #227 dep update (`@types/node` held on Node 24 — direct decls + a tree-wide pnpm override;
   Dependabot `@types/node` major-ignore); #228 `identify-as-agent-under-shared-credentials` rule

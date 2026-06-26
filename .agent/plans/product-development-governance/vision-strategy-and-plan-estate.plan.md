@@ -243,8 +243,8 @@ refined on owner input and read against incoming materials.
   per acceptance); the proposed per-stream prose carries the voice too.
 - **Assistant-list principle vs K3 — preserved and explicit** in `stream-mcp-app.md`: no
   favourites (ChatGPT, Claude, Copilot, Gemini and others; the teacher's choice) is kept distinct from
-  K3's ratified *initial release surface* (ChatGPT, Claude, Copilot, and Gemini — owner-updated
-  2026-06-20; Copilot added 2026-06-26).
+  K3's ratified *initial release surface* (ChatGPT, Claude, Copilot, and Gemini — owner-ratified
+  2026-06-17; Copilot added 2026-06-26).
 
 **Still genuinely open (owner decides / Oak grounds):** the measure *targets* (Oak
 analytics/research). The search/graph question (a false dichotomy), the

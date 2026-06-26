@@ -111,13 +111,15 @@ governance doc); if it names a plan or report, the item belongs elsewhere.
 
 - **Disambiguate an overloaded term's distinct concepts before canonicalising or sweeping**
   `[captured: 2026-06-26 | source: napkin + distilled 2026-06-26 (Bonfire guards Temper),
-  MCP-app target-platforms canonicalisation | target: patterns/ (ecosystem-grounded instance)
-  | trigger: a second instance of a canonicalise-or-sweep where one term denoted multiple
+  MCP-app target-platforms canonicalisation |
+  target: patterns/disambiguate-overloaded-term-before-canonicalising.md (new) |
+  trigger: a second instance of a canonicalise-or-sweep where one term denoted multiple
   distinct concepts | size: S | status: pending]`
 - **Glanceable surfaces: show a token only when it diverges from its working-side counterpart**
   `[captured: 2026-06-26 | source: distilled 2026-06-26, statusline PR 235 divergence-only
-  dedup | target: patterns/ (communication-design / DX) | trigger: a second instance of
-  suppressing a redundant glanceable token for human-glance clarity | size: S | status: pending]`
+  dedup | target: patterns/glanceable-surface-divergence-only-display.md (new) |
+  trigger: a second instance of suppressing a redundant glanceable token for human-glance
+  clarity | size: S | status: pending]`
 - **Extend pr-monitor-to-merge with head-SHA-keyed dedup and emit-on-all-terminal-buckets**
   `[captured: 2026-06-26 | source: napkin 2026-06-26, PR 235 CI monitor | target:
   patterns/pr-monitor-to-merge.md (refinement) | trigger: next PR-CI monitor authoring |
