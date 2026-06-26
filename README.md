@@ -39,8 +39,9 @@ MCP server, both an end-user app surface and a developer tool; the OpenAPI-to-MC
 server pipeline; hybrid semantic search; and knowledge-graph surfaces — modular
 building blocks for education applications.
 
-We also explore what's possible with MCP Apps in AI platforms such as
-[Claude Cowork](https://www.anthropic.com/product/claude-cowork) and ChatGPT. AI
+We also explore what's possible with MCP Apps in the AI assistants teachers already use —
+the [canonical target platforms](docs/strategy/stream-mcp-app.md): ChatGPT, Claude, Copilot,
+and Gemini, and others. AI
 assistants can search Oak's curriculum and explore lessons, units, threads,
 sequences, and other structured content — helping teachers find, adapt, and use
 high-quality curriculum resources.
