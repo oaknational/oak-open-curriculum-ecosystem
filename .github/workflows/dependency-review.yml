@@ -1,0 +1,37 @@
+name: Dependency Review
+
+# Advisory PR-time supply-chain gate: scans the dependency diff a PR introduces
+# against the GitHub Advisory Database and fails on high+ severity. Today such
+# vulnerabilities are only caught post-merge by Dependabot alerts.
+#
+# ADVISORY by design — NOT a required status check in the main ruleset (ADR-204),
+# so it surfaces findings (and a PR comment on failure) without blocking merge.
+#
+# It calls GitHub's OWN dependency-graph API via the run's GITHUB_TOKEN on the
+# same instance; ADR-161's third-party-vendor scope permits this (it adds no
+# vendor dependency beyond GitHub itself, on which the run already wholly
+# depends). The scope is GitHub-first-party only — it does not extend to any
+# third-party vendor call. See ADR-161 §Third-party-vendor scope: GitHub's own
+# APIs, and ADR-121 §Dependency vulnerability gate status.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write # required for comment-summary-in-pr: on-failure
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Dependency review
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: on-failure
