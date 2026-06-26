@@ -18,6 +18,14 @@ on:
   pull_request:
     branches: [main]
 
+# Cancel superseded runs for the same PR ref. A per-workflow group (not shared
+# with CI) so this advisory gate runs in parallel with the CI workflow rather
+# than serialising behind it; cancelling an in-flight advisory run on a new push
+# loses nothing.
+concurrency:
+  group: dependency-review-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pull-requests: write # required for comment-summary-in-pr: on-failure

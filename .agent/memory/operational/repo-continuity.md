@@ -24,21 +24,34 @@ todo list — is [`director-handoff.md`](director-handoff.md).
 
 ## Current State
 
-- **Dependency-review PR-gate LANDED (2026-06-26, Inferno holds Tongs).** PR #236 merged to main
-  (`570750939`): advisory `.github/workflows/dependency-review.yml`
-  (`actions/dependency-review-action` v5.0.0 SHA-pinned, `pull_request`-only, `fail-on-severity:
-  high`, `comment-summary-in-pr: on-failure`, perms `contents:read` + `pull-requests:write`).
-  ADR-161 + ADR-121 amended in lockstep: the network-free PR-check boundary is now stated as
-  **third-party-vendor** scope, so the gate's GitHub-first-party dependency-graph call via the run's
-  `GITHUB_TOKEN` is permitted (no vendor dependency beyond GitHub, on which the run already wholly
-  depends); ADR-204's third-party reasoning preserved. **Advisory — NOT a required ruleset check**
-  (verified first-hand: required checks remain CodeQL/SonarCloud/run-quality-gates; the gate runs
-  PR-only and never gated this PR). **RED-green proven**: a throwaway PR (#237, closed) adding
-  `[email protected]` (critical) drove `dependency-review` to FAIL citing GHSA-xvch-5gv4-984h; the clean
-  #236 passed. docs-adr-expert + security-expert reviews folded; the hook-blocked "carve-out"
-  framing was reappraised to a positive scope-refinement (napkin 2026-06-26). Closes report #229 §7
-  Tier-1. **No forced next pickup** — report #229 Tier-2 (a11y DONE #230; merge-gate DONE ADR-204)
-  and Tier-3 (unattended auto-merge: NOT YET) remain the security-roadmap horizon.
+- **CI hardening session (2026-06-26, Inferno holds Tongs).** Two gates landed to `main`:
+  **(1) advisory dependency-review PR-gate** (#236, `570750939`): `actions/dependency-review-action`
+  v5.0.0 SHA-pinned, `pull_request`-only, `fail-on-severity: high`. ADR-161 + ADR-121 amended in
+  lockstep — the network-free PR-check boundary is stated as **third-party-vendor** scope, permitting
+  the gate's GitHub-first-party dependency-graph call via the run's `GITHUB_TOKEN` (ADR-204's
+  third-party reasoning preserved); advisory, NOT ruleset-required; RED-green proven (throwaway #237
+  with a critical dep drove the gate FAIL).
+  **(2) CI parallelisation** (#239, `67077cff9`): the serial `run-quality-gates` job split into
+  parallel cacheable jobs (`secret-scan`, `install`, `static-checks`, `build`, `unit-tests`,
+  `knip-depcruise`, `browser-tests`) behind a **fail-closed `run-quality-gates` fan-in** (requires
+  every result `success`; reuses the required-check context, so no ruleset change and `release.yml`'s
+  `workflow_run: [CI]` is untouched). Caching: `install` warms the pnpm store once (no cold stampede),
+  `build` warms the Turbo remote cache, Playwright browsers keyed on the Playwright version, gitleaks
+  moved docker→SHA-pinned-binary; per-ref concurrency cancels superseded PR runs. Reviews folded:
+  Sonar S8264 (per-job permissions), the fail-closed aggregator, the Playwright version cache key.
+  **Next safe step:** report #229 Tier-2/3 security-roadmap items; reconcile the pre-existing
+  widget/a11y pre-push≠CI parity gap (ADR-121 matrix, from #230). Codex review of #239 may surface
+  follow-ups (owner-requested, post-merge — check #239 comments).
+- **Statusline two-set display (merged) + canonical MCP-app target platforms (2026-06-26, Bonfire guards Temper).**
+  Statusline coord-branch work **merged** (PR #235, `589d6518c`): the statusline now renders two git-derived
+  location sets (working tree + primary checkout) with **divergence-only dedup** — a coordination token shows
+  only when it diverges from its working-side counterpart (its own lane, not the `statusline-enhancements`
+  logo/indicator thread). **Canonical MCP-app target platforms defined** (delivered via PR #238) — SSOT in
+  [`stream-mcp-app.md`](../../../docs/strategy/stream-mcp-app.md): the four are **ChatGPT, Claude,
+  Copilot, Gemini** (alphabetical, required-minimum, non-exhaustive; *Copilot* = Microsoft's assistant, not
+  GitHub Copilot); K3 initial-release surface re-ratified to add Copilot (owner direction, Option B); root
+  README, VISION, app README, launch-readiness framework, governance plan, and plan-hub READMEs conformed.
+  Forward: extend support to additional popular assistants over time per the support-all principle.
 - **Dependency, security & merge-gate session (2026-06-26, Wombat wakes Eventide).** Merged to
   main: #227 dep update (`@types/node` held on Node 24 — direct decls + a tree-wide pnpm override;
   Dependabot `@types/node` major-ignore); #228 `identify-as-agent-under-shared-credentials` rule

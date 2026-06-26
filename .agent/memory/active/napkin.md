@@ -130,3 +130,74 @@ New session observations append below.
   [[feedback_test_the_flag_engine_not_the_configuration]], [[feedback_run_the_thing_dont_flag_the_gap]]
   (run the gate against an input that *should* trip it), and the test-expert's describe-vs-audit
   screen. Applies to CI gates, hooks, and assertions alike. Sibling: [[verify-dont-trust]].
+
+## 2026-06-26 — Disambiguate overloaded terms before canonicalising; verify your OWN explanations against the full source (Bonfire guards Temper)
+
+- **Disambiguate an overloaded term's distinct concepts BEFORE canonicalising or sweeping for it.**
+  Canonicalising "target platforms" for the MCP app, "platform" denoted three different things —
+  dev-agent platforms (Cursor/Claude Code/Gemini-CLI/Codex), illustrative MCP-client examples in
+  technical contexts, and the MCP-app's target end-user assistants — and WITHIN the last, two more:
+  the support *principle* (open-ended, even-handed) vs **K3 the owner-ratified initial release
+  surface**. A naïve "replace every platform mention with the canonical four" would have conflated dev
+  tooling with end-user assistants and flattened a ratified strategic distinction. Cure: before a
+  canonicalise/sweep, enumerate the distinct concepts the term denotes and scope each — a per-concept
+  find-and-conform pass, never a global string-replace. NEW (one instance); candidate pattern.
+  Siblings: [[inherited-framing-without-first-principles-check]], the 2026-06-25 "don't over-collapse a
+  multi-position axis into two" entry.
+- **Plausible-but-wrong explanations come from reading a SUBSET of the source; verify your OWN
+  explanation against the FULL source before presenting it.** Twice this session I gave a fluent,
+  plausible diagnosis that was wrong: (1) "the PR's preview-deployment block is illusory gate-flux" —
+  actually a real `required_deployments: ["Preview"]` ruleset rule I'd missed by reading only
+  `required_status_checks`; (2) a guessed provenance for a statusline behaviour. Each dissolved once I
+  read ALL the source (every ruleset rule type; the actual git history), not a subset. **Same-day
+  recurrence with Wombat's "acted on the MEMORY.md index summary, not the full memory" entry above** —
+  two agents, one day, same failure family → PDR-098 recurrence signal that the fluency/verify-own home
+  is not firing at the action moment. Owner reinforced it as a daily.md rule ("critically assess ALL
+  findings, claims, sources, context"). Siblings: [[fluency-is-a-failure-vector]],
+  [[adversarially-verify-own-synthesis]], [[verify-dont-trust]].
+- **GitHub merge-readiness (consumer side): `required_deployments` ≠ `required_status_checks`, and
+  all-checks-green + `MERGEABLE`/`BEHIND` ≠ merge-ready under require-up-to-date (ADR-204).** PR #235
+  showed 8/8 checks pass yet "Merging is blocked — Missing successful active Preview deployment": the
+  ruleset required a `Preview` *deployment* (a separate rule type from status checks), and the branch
+  was behind the just-landed gate. The fix was not a bypass but the gate's own remedy — update the
+  branch → fresh `Preview` deployment for the up-to-date head → block cleared. Consumer-side worked
+  instance of Wombat's merge-gate entry above (ADR-204). Sibling: [[verify-dont-trust]].
+- **Statusline (any glanceable surface): show a coordination token only when it diverges from its
+  working-side counterpart.** The two-set statusline (PR #235) suppresses the whole coordination line
+  when its branch == the working branch, and drops the primary checkout's name when it == the worktree
+  name — two near-identical tokens on adjacent lines force a human out of glance-mode into careful
+  reading. The cure for "two things communicating the same information" is REMOVAL of the redundant
+  token, not adding disambiguation (which adds visual load). NEW (one instance); candidate
+  communication-design pattern.
+- **PR-CI monitor: key the dedup on the head SHA and emit on EVERY terminal bucket.** A name-keyed
+  monitor won't re-report a re-run's checks after a branch update (they match the prior run's strings);
+  keying on head SHA fixes per-push tracking. Emitting only on `pass` makes a failure indistinguishable
+  from "still running" — emit on pass AND fail/skip/cancel so silence ≠ success. Extends
+  [[pr-monitor-to-merge]].
+
+## 2026-06-26 — CI parallelisation: fail-closed gates, findings-vs-live-source, semantic memory merge (Inferno holds Tongs)
+
+- **A fan-in / aggregate gate must be fail-CLOSED — require every result to be `success`, not just
+  block on known-bad values.** The split-CI `run-quality-gates` aggregator first matched only
+  `failure`/`cancelled`; a bot caught that a standalone `skipped` (e.g. a future `if:`-guarded job)
+  would slip through as a pass. Fix: require all `needs.*.result == success` (failure, cancelled,
+  skipped, and any future GitHub value all block). Generalises the vacuous-green entry above: a gate's
+  safe default is fail-closed. Sibling: [[verify-dont-trust]].
+- **Validate a reviewer's finding against the live artefact it describes, not the doc it cites.** A
+  code-expert flagged "widget/a11y tiers newly promoted to CI" as blocking — but it compared to a
+  stale ADR-121 matrix; the actual `main` ci.yml had run them since #230, so the split merely preserved
+  them. Acting on the "fix" would have DELETED real coverage. Check current source, not the stale doc a
+  reviewer reasoned from. Sibling: [[feedback_validate_specialist_findings_before_acting]].
+- **`gh pr merge --delete-branch` while carrying uncommitted cross-cutting changes makes a mess.** It
+  switches the local checkout to the base branch (reverting committed working files) and aborts the
+  fast-forward on the uncommitted changes — the remote merge still succeeds, the local tree is the
+  casualty. Land or commit unrelated working-tree changes first, or merge without `--delete-branch`.
+- **Merge agent memory/state files SEMANTICALLY, never by git line-merge (owner standing principle,
+  2026-06-26).** When napkin/continuity diverge (your edits + another session's), git's line-merge
+  corrupts the concepts. Resolve as a CONCEPT UNION: identify what each side ADDED, author a merged
+  file where all entries coexist (recency-ordered, session-grouped where the file is index-shaped),
+  and review the WHOLE file, not just conflict hunks. The `merge_class:` frontmatter declares each
+  file's merge shape. Being written down as doctrine + a skill (owner-directed).
+- **Sonar `githubactions:S8264`: declare workflow permissions per JOB, not workflow-level.** A full
+  workflow rewrite makes the permissions block "new code" and Sonar flags the over-grant; checkout
+  jobs get `contents: read`, a fan-in job that uses no token gets `{}`.

@@ -178,3 +178,23 @@ fresh seat — re-spinning a spent session does NOT reset its budget; only bread
 Candidate pattern, one strong instance (2026-06-25, Thyme lifts Compost, worktree-pilot team closeout).
 Siblings: [[feedback_context_loss_probe_is_first_hand_only]], [[feedback_first_hand_means_me_not_subagents]],
 [[feedback_opus_team_quota_ceiling]], [[verify-dont-trust]].
+
+## Disambiguate an overloaded term's distinct concepts before canonicalising or sweeping for it
+
+A word that reads as one thing in prose can denote several distinct concepts across a repo. Before
+defining a canonical list or running a find-and-replace sweep, enumerate the concepts the term denotes
+and scope each separately — a global string-replace conflates them and can flatten a deliberate (even
+owner-ratified) distinction. Worked instance (2026-06-26, Bonfire guards Temper): "platform" for the MCP
+app meant dev-agent platforms, illustrative MCP-client examples, AND the target end-user assistants — and
+within the last, the support *principle* vs the ratified *release surface* (K3). The sweep became a
+per-concept find-and-conform, not a global replace. One instance; candidate pattern. Sibling:
+[[inherited-framing-without-first-principles-check]].
+
+## Glanceable surfaces: show a token only when it diverges from its working-side counterpart
+
+When a status surface (statusline, dashboard) shows two related facts side by side, suppress the second
+when it merely repeats the first — two near-identical tokens force a human out of glance-mode into
+careful reading. The cure for "two things communicating the same information" is REMOVAL of the redundant
+token, not adding disambiguation (which adds visual load). Worked instance (2026-06-26, PR #235): the
+two-set statusline suppresses the coordination line when its branch == the working branch, and drops the
+primary checkout name when it == the worktree name. One instance; candidate communication-design pattern.

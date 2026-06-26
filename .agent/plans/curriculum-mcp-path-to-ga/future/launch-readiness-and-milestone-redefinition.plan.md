@@ -44,7 +44,7 @@ These are the **MCP-app stream's** keystones (the ecosystem and framework stream
   here and measured by Oak, not instrumented in-repo** (owner §14.2).
 - **K2** — Primary audience: teachers and curriculum leaders. "For now" is a
   post-GA non-commitment (sets the current safeguarding bar; no widening planned).
-- **K3** — Scope: the MCP app in ChatGPT and Claude, which requires the app's
+- **K3** — Scope: the MCP app in ChatGPT, Claude, Copilot, and Gemini, which requires the app's
   **real dependency set** to be GA-ready (whole-estate readiness holds only at the
   portfolio level — each stream reaches its own readiness).
 

@@ -1,17 +1,27 @@
 name: Release
 
+# semantic-release runs after the CI workflow finishes on main. It is chained
+# via `workflow_run` (not `push`) so a release only happens once CI has reported
+# a conclusion, and the `if:` guard below restricts it to CI *successes*. If CI
+# is ever renamed or split into multiple workflows, keep a workflow named "CI"
+# (or update `workflows:` here) or releases will stop triggering.
 on:
   workflow_run:
     workflows: [CI]
     types: [completed]
     branches: [main]
 
+# Global, single-slot group: serialises all releases and never cancels one
+# mid-flight (a half-published release is worse than a delayed one). This is the
+# one place a cross-cutting concurrency group is appropriate — PR-check
+# workflows instead use per-ref groups so they run in parallel.
 concurrency:
   group: release
   cancel-in-progress: false
 
 jobs:
   release:
+    # Only release when the upstream CI run succeeded.
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
@@ -24,6 +34,10 @@ jobs:
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
     steps:
+      # A GitHub App token (not the default GITHUB_TOKEN) so the version-bump
+      # commit and tag semantic-release pushes can trigger downstream workflows
+      # and carry the write scope releases need. checkout uses this token with
+      # persist-credentials: false so it is not written to the runner's git config.
       - name: Generate release token
         id: app-token
         uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1

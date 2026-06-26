@@ -1,7 +1,7 @@
 # Educator End Users
 
 Teachers and curriculum practitioners using Oak through AI clients (for example:
-ChatGPT, Claude, Gemini).
+ChatGPT, Claude, Copilot, and Gemini).
 
 ---
 
