@@ -29,16 +29,21 @@ New session observations append below.
 
 ## 2026-06-25 — Re-derive a surface's nature before curating it (Zephyr mends Bluff)
 
-- **Re-derive a surface's NATURE from first principles before curating it; do not inherit
-  its placement.** This pass mis-treated repo-continuity twice: as a buffer to *drain* (it is
-  a continuity surface — `continuity-practice.md §Disposition`: live content stays verbatim,
-  only finished-work residue is curated) and as tracked *memory* (it is branch-specific
-  *state* — the same content would be wrong on another checkout). Both are
-  [[inherited-framing-without-first-principles-check]]: I acted on the directory/placement,
-  not the derived nature. Cure: before curating any surface, read its `overflow_disposition`
-  / role and classify it — memory vs state, buffer vs continuity, learned doctrine vs open
-  question — then apply that disposition. The owner caught this four times in one session;
-  the `overflow_disposition` pointed to the right doctrine each time.
+- **Re-derive a surface's NATURE before curating it; classify on each axis and don't
+  over-collapse a multi-position axis into two.** This pass mis-treated repo-continuity twice:
+  as a buffer to *drain* (it is a continuity surface — `continuity-practice.md §Disposition`:
+  live content stays verbatim, only finished-work residue is curated), then it over-collapsed
+  "not memory" into "untracked" and proposed migrating it to git-ignored state. The owner's
+  correction: the tracking axis has **three** positions — **memory** (portable knowledge,
+  tracked), **repo state** (repo-specific but *checkout-portable*, tracked: thread records and
+  repo-continuity apply on any clone), **local state** (per-checkout, git-ignored: claims,
+  comms) — and **only local state is git-ignored**. Continuity surfaces are **repo state**,
+  correctly tracked all along. Both errors are
+  [[inherited-framing-without-first-principles-check]] plus premature crystallisation (a
+  two-way cut where there were three). Cure: read a surface's `overflow_disposition`/role and
+  classify it on each axis — memory / repo-state / local-state, buffer / continuity, doctrine /
+  question — before curating; never collapse an axis to two positions. The owner corrected the
+  substrate taxonomy across several turns this session.
 - **read-before-route's falsifier is the highest-value consolidation check.** Most napkin
   "new lessons" this rotation were worked instances of already-homed patterns
   (pr-monitor-to-merge, prove-the-checker, wrapped-exit-codes, never-disable-checks). Checking
