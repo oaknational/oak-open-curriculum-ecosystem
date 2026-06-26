@@ -93,24 +93,103 @@ describe('countWorktrees', () => {
 });
 
 describe('selectCoordinationBranch', () => {
-  it('resolves the primary branch when linked worktrees exist', () => {
+  it('resolves the primary branch and name when both diverge from the working side', () => {
     expect(
       selectCoordinationBranch({
         hasLinkedWorktrees: true,
         primaryBranch: 'coordination/worktree-pilot',
+        primaryName: 'oak-open-curriculum-ecosystem',
+        workingBranch: 'feat/seat-work',
+        workingWorktreeName: 'oak-wt-seat',
       }),
-    ).toEqual({ kind: 'branch', branch: 'coordination/worktree-pilot' });
+    ).toEqual({
+      kind: 'branch',
+      branch: 'coordination/worktree-pilot',
+      primaryName: 'oak-open-curriculum-ecosystem',
+    });
+  });
+
+  it('drops the primary name when it equals the working worktree name (no redundant name)', () => {
+    expect(
+      selectCoordinationBranch({
+        hasLinkedWorktrees: true,
+        primaryBranch: 'main',
+        primaryName: 'oak-open-curriculum-ecosyste-2',
+        workingBranch: 'fix/statusline',
+        workingWorktreeName: 'oak-open-curriculum-ecosyste-2',
+      }),
+    ).toEqual({ kind: 'branch', branch: 'main', primaryName: undefined });
+  });
+
+  it('keeps the primary name when the working worktree name is unresolved (cannot prove redundancy)', () => {
+    expect(
+      selectCoordinationBranch({
+        hasLinkedWorktrees: true,
+        primaryBranch: 'main',
+        primaryName: 'oak-open-curriculum-ecosystem',
+        workingBranch: 'feat/seat-work',
+        workingWorktreeName: undefined,
+      }),
+    ).toEqual({ kind: 'branch', branch: 'main', primaryName: 'oak-open-curriculum-ecosystem' });
+  });
+
+  it('suppresses the coordination branch when it equals the working branch (no redundant line)', () => {
+    expect(
+      selectCoordinationBranch({
+        hasLinkedWorktrees: true,
+        primaryBranch: 'main',
+        primaryName: 'oak-open-curriculum-ecosystem',
+        workingBranch: 'main',
+        workingWorktreeName: 'oak-wt-seat',
+      }),
+    ).toEqual({ kind: 'matches-working' });
+  });
+
+  it('still resolves the branch when the working branch is unresolved (cannot prove redundancy)', () => {
+    expect(
+      selectCoordinationBranch({
+        hasLinkedWorktrees: true,
+        primaryBranch: 'main',
+        primaryName: 'oak-open-curriculum-ecosystem',
+        workingBranch: undefined,
+        workingWorktreeName: 'oak-wt-seat',
+      }),
+    ).toEqual({ kind: 'branch', branch: 'main', primaryName: 'oak-open-curriculum-ecosystem' });
+  });
+
+  it("shows the coordination branch for a detached-HEAD seat (a short SHA won't match a descriptive branch name like 'main')", () => {
+    expect(
+      selectCoordinationBranch({
+        hasLinkedWorktrees: true,
+        primaryBranch: 'main',
+        primaryName: 'oak-open-curriculum-ecosystem',
+        workingBranch: 'e2796757c',
+        workingWorktreeName: 'oak-wt-seat',
+      }),
+    ).toEqual({ kind: 'branch', branch: 'main', primaryName: 'oak-open-curriculum-ecosystem' });
   });
 
   it('resolves to none — a valid empty state — in a solo checkout', () => {
-    expect(selectCoordinationBranch({ hasLinkedWorktrees: false, primaryBranch: 'main' })).toEqual({
-      kind: 'none',
-    });
+    expect(
+      selectCoordinationBranch({
+        hasLinkedWorktrees: false,
+        primaryBranch: 'main',
+        primaryName: 'oak-open-curriculum-ecosystem',
+        workingBranch: 'main',
+        workingWorktreeName: undefined,
+      }),
+    ).toEqual({ kind: 'none' });
   });
 
   it('fails loud when a team has linked worktrees but no resolvable coordination branch', () => {
     expect(
-      selectCoordinationBranch({ hasLinkedWorktrees: true, primaryBranch: undefined }),
+      selectCoordinationBranch({
+        hasLinkedWorktrees: true,
+        primaryBranch: undefined,
+        primaryName: 'oak-open-curriculum-ecosystem',
+        workingBranch: 'feat/seat-work',
+        workingWorktreeName: 'oak-wt-seat',
+      }),
     ).toEqual({
       kind: 'error',
       detail: 'linked worktrees exist but the primary checkout branch is unresolved',
@@ -119,22 +198,52 @@ describe('selectCoordinationBranch', () => {
 });
 
 describe('coordinationToParts', () => {
-  it('projects a resolved branch onto the coordination-branch field', () => {
-    expect(coordinationToParts({ kind: 'branch', branch: 'coordination/worktree-pilot' })).toEqual({
+  it('projects a resolved branch onto the coordination branch and place fields', () => {
+    expect(
+      coordinationToParts({
+        kind: 'branch',
+        branch: 'coordination/worktree-pilot',
+        primaryName: 'oak-open-curriculum-ecosystem',
+      }),
+    ).toEqual({
       coordinationBranch: 'coordination/worktree-pilot',
+      coordinationPlace: 'oak-open-curriculum-ecosystem',
       error: undefined,
     });
   });
 
-  it('projects an error onto the loud error field, with no coordination branch', () => {
-    expect(
-      coordinationToParts({ kind: 'error', detail: 'primary checkout root unresolved' }),
-    ).toEqual({ coordinationBranch: undefined, error: 'primary checkout root unresolved' });
+  it('projects a branch with a deduped name onto the branch alone, no place', () => {
+    expect(coordinationToParts({ kind: 'branch', branch: 'main', primaryName: undefined })).toEqual(
+      {
+        coordinationBranch: 'main',
+        coordinationPlace: undefined,
+        error: undefined,
+      },
+    );
   });
 
-  it('projects none onto both-absent — a valid empty state', () => {
+  it('projects an error onto the loud error field, with no coordination branch or place', () => {
+    expect(
+      coordinationToParts({ kind: 'error', detail: 'primary checkout root unresolved' }),
+    ).toEqual({
+      coordinationBranch: undefined,
+      coordinationPlace: undefined,
+      error: 'primary checkout root unresolved',
+    });
+  });
+
+  it('projects none onto all-absent — a valid empty state', () => {
     expect(coordinationToParts({ kind: 'none' })).toEqual({
       coordinationBranch: undefined,
+      coordinationPlace: undefined,
+      error: undefined,
+    });
+  });
+
+  it('projects matches-working onto all-absent — the coordination branch is redundant, not faulty', () => {
+    expect(coordinationToParts({ kind: 'matches-working' })).toEqual({
+      coordinationBranch: undefined,
+      coordinationPlace: undefined,
       error: undefined,
     });
   });

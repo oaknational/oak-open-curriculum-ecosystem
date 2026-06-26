@@ -13,11 +13,11 @@
  * token, when present, leads the output in any layout so it cannot be missed.
  *
  * Without a logo it renders over lines (a loud error first; then the
- * coordination summary; then the working location; then the coordination branch
- * on its own line). With a logo it renders the logo-column rows (five for the
- * default `braille-sharp`, four otherwise) with the segments to the mark's right;
- * a segment row beyond the logo rows renders as a bare line so the coordination
- * branch is never dropped.
+ * coordination summary; then the working location; then the coordination set —
+ * the primary checkout's branch and name — on its own line). With a logo it
+ * renders the logo-column rows (five for the default `braille-sharp`, four
+ * otherwise) with the segments to the mark's right; a segment row beyond the logo
+ * rows renders as a bare line so the coordination set is never dropped.
  *
  * @packageDocumentation
  */
@@ -80,6 +80,7 @@ export interface StatuslineRenderOptions {
  *   model: 'Opus 4.7',
  *   sessionShape: undefined,
  *   coordinationBranch: 'coordination/worktree-pilot',
+ *   coordinationPlace: 'oak-open-curriculum-ecosystem',
  *   error: undefined,
  * });
  * ```
@@ -101,7 +102,8 @@ export function renderStatusline(
 function renderNoLogo(seg: Segments): string {
   const summaryLine = joinPresent([seg.identity, seg.indicators, seg.model, seg.context]);
   const locationLine = joinPresent([seg.branch, seg.place]);
-  return [seg.error, summaryLine, locationLine, seg.coordinationBranch]
+  const coordinationLine = joinPresent([seg.coordinationBranch, seg.coordinationPlace]);
+  return [seg.error, summaryLine, locationLine, coordinationLine]
     .filter((line): line is string => line !== undefined && line.length > 0)
     .join('\n');
 }
@@ -120,7 +122,7 @@ function renderWithLogo(
     seg.model ?? '',
     joinPresent([seg.context, seg.branch]),
     seg.place,
-    seg.coordinationBranch ?? '',
+    joinPresent([seg.coordinationBranch, seg.coordinationPlace]),
   ];
   const logoRows = resolveLogoRows(logo, options.logoFrame ?? 0);
   const content = composeWithLogo(logoRows, rowTexts);

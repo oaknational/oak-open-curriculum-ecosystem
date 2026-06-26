@@ -1,3 +1,10 @@
+# [1.36.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.35.2...v1.36.0) (2026-06-26)
+
+
+### Features
+
+* **agent-tools:** statusline shows primary and working checkout sets, deduped ([#235](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/235)) ([589d651](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/589d6518c6aa38ab8bbaa7cb7a6c7b1d1e76053a))
+
 ## [1.35.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.35.1...v1.35.2) (2026-06-25)
 
 

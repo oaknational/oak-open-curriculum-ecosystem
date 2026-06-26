@@ -18,6 +18,7 @@ const base: StatuslineParts = {
   model: undefined,
   sessionShape: undefined,
   coordinationBranch: undefined,
+  coordinationPlace: undefined,
   error: undefined,
 };
 
@@ -33,6 +34,7 @@ describe('renderStatusline', () => {
       model: 'Opus 4.7',
       sessionShape: undefined,
       coordinationBranch: undefined,
+      coordinationPlace: undefined,
       error: undefined,
     }).split('\n');
 
@@ -83,23 +85,43 @@ describe('renderStatusline', () => {
     expect(renderStatusline({ ...base, branch: undefined, dirty: true })).not.toContain('*');
   });
 
-  it('shows the coordination branch on its own line, separate from the working branch', () => {
+  it('shows the coordination branch and primary checkout name on their own line, separate from the working branch', () => {
     const lines = renderStatusline({
       ...base,
       branch: 'fix/sonar-s8707',
       worktree: 'oak-sonar-p1',
       coordinationBranch: 'coordination/worktree-pilot',
+      coordinationPlace: 'oak-open-curriculum-ecosystem',
     }).split('\n');
     const workingLine = lines.find((line) => line.includes('fix/sonar-s8707'));
     const coordinationLine = lines.find((line) => line.includes('coordination/worktree-pilot'));
     expect(workingLine).toBeDefined();
     expect(coordinationLine).toBeDefined();
     expect(coordinationLine).toContain('coord:');
+    // The primary name renders in the same cyan as the working place, so the
+    // coordination line reads as a location-and-branch pair like the working line.
+    expect(coordinationLine).toContain(`${CYAN}oak-open-curriculum-ecosystem${RESET}`);
     expect(coordinationLine).not.toBe(workingLine);
   });
 
   it('omits the coordination line when there is no coordination branch', () => {
     expect(renderStatusline({ ...base, branch: 'main' })).not.toContain('coord:');
+  });
+
+  it('shows the coordination branch alone when the primary name is deduped away', () => {
+    const lines = renderStatusline({
+      ...base,
+      branch: 'fix/statusline',
+      worktree: 'oak-open-curriculum-ecosyste-2',
+      coordinationBranch: 'main',
+      coordinationPlace: undefined,
+    }).split('\n');
+    const coordinationLine = lines.find((line) => line.includes('coord:'));
+    expect(coordinationLine).toBeDefined();
+    expect(coordinationLine).toContain('main');
+    // The redundant primary name is gone: the worktree name appears only on the
+    // working line, never repeated on the coordination line.
+    expect(coordinationLine).not.toContain('oak-open-curriculum-ecosyste-2');
   });
 
   it('renders a loud error token as the leading line and never swallows it', () => {
@@ -151,6 +173,7 @@ describe('renderStatusline with an Oak logo column', () => {
         model: 'Opus 4.8',
         sessionShape: undefined,
         coordinationBranch: undefined,
+        coordinationPlace: undefined,
         error: undefined,
       },
       { logo: 'sextant' },
@@ -252,11 +275,13 @@ describe('renderStatusline with an Oak logo column', () => {
         dir: 'oak-sonar-p1',
         branch: 'fix/sonar',
         coordinationBranch: 'coordination/pilot',
+        coordinationPlace: 'oak-open-curriculum-ecosystem',
       },
       { logo: 'sextant' },
     ).split('\n');
     const coordinationLine = lines.find((line) => line.includes('coordination/pilot'));
     expect(coordinationLine).toBeDefined();
     expect(coordinationLine).toContain('coord:');
+    expect(coordinationLine).toContain('oak-open-curriculum-ecosystem');
   });
 });

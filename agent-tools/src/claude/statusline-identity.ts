@@ -86,6 +86,7 @@ function renderFromInputs(inputs: Extract<StatuslinePlan, { kind: 'render' }>['i
       dirty: git.dirty,
       worktree: git.worktree,
       coordinationBranch: git.coordinationBranch,
+      coordinationPlace: git.coordinationPlace,
       error: git.error,
       usedPercentage: inputs.usedPercentage,
       model: inputs.model,

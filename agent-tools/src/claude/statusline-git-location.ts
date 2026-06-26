@@ -87,7 +87,19 @@ export function countWorktrees(porcelain: string): number {
  *
  * - `none` — a solo checkout with no linked worktrees. There is genuinely no
  *   coordination branch, so nothing is shown: a valid empty state.
- * - `branch` — the resolved shared coordination branch.
+ * - `matches-working` — linked worktrees exist and a coordination branch exists,
+ *   but it equals this session's working branch, so showing it would only repeat
+ *   the working location. Nothing is shown: a valid empty state, distinct from
+ *   `none` (this is a team checkout, not a solo one) so the suppression reason
+ *   stays legible.
+ * - `branch` — the resolved shared coordination branch, which diverges from the
+ *   working branch and is therefore worth showing. It carries the primary
+ *   checkout's display name (its directory basename) so the rendered set reads as
+ *   "the primary checkout and its branch" — but `primaryName` is `undefined` when
+ *   that name would merely repeat the working tree's own name. Showing the same
+ *   name on both lines communicates nothing and slows a human glance, so the
+ *   redundant copy is dropped (a communication-design dedup, the name-dimension
+ *   sibling of `matches-working` on the branch dimension).
  * - `error` — linked worktrees exist, so a coordination branch MUST exist, but
  *   the primary checkout's branch could not be resolved. Surfaced loudly rather
  *   than silently omitted: a team with no resolvable coordination branch is a
@@ -95,20 +107,39 @@ export function countWorktrees(porcelain: string): number {
  */
 export type CoordinationBranch =
   | { readonly kind: 'none' }
-  | { readonly kind: 'branch'; readonly branch: string }
+  | { readonly kind: 'matches-working' }
+  | { readonly kind: 'branch'; readonly branch: string; readonly primaryName: string | undefined }
   | { readonly kind: 'error'; readonly detail: string };
 
 /**
- * Resolve the coordination branch to render from the team shape and the primary
- * checkout's branch.
+ * Resolve the coordination branch to render from the team shape, the primary
+ * checkout's branch and name, and this session's working branch and worktree name.
  *
- * @param input - Whether linked worktrees exist, and the primary checkout's
- *   branch (already resolved by the caller, `undefined` if its read failed).
+ * Each coordination token is shown only when it diverges from its working-side
+ * counterpart — repeating where the session already is communicates nothing to a
+ * human glance:
+ *
+ * - The **branch**: shown only when the primary branch diverges from the working
+ *   branch. When they are equal the whole line is suppressed (`matches-working`).
+ *   A working branch that could not be resolved (`undefined`) cannot prove
+ *   redundancy, so the branch is still shown.
+ * - The **name**: carried with a shown branch, but dropped (`primaryName`
+ *   `undefined`) when it equals the working tree's name — the same name on both
+ *   lines is visual noise. An unresolved working worktree name (`undefined`)
+ *   cannot prove redundancy, so the name is kept.
+ *
+ * @param input - Whether linked worktrees exist; the primary checkout's branch
+ *   (`undefined` if its read failed) and display name; this session's working
+ *   branch and current worktree name (each `undefined` if unresolved or in the
+ *   primary checkout).
  * @returns The coordination-branch resolution; see {@link CoordinationBranch}.
  */
 export function selectCoordinationBranch(input: {
   readonly hasLinkedWorktrees: boolean;
   readonly primaryBranch: string | undefined;
+  readonly primaryName: string;
+  readonly workingBranch: string | undefined;
+  readonly workingWorktreeName: string | undefined;
 }): CoordinationBranch {
   if (!input.hasLinkedWorktrees) {
     return { kind: 'none' };
@@ -119,31 +150,51 @@ export function selectCoordinationBranch(input: {
       detail: 'linked worktrees exist but the primary checkout branch is unresolved',
     };
   }
-  return { kind: 'branch', branch: input.primaryBranch };
+  if (input.workingBranch !== undefined && input.primaryBranch === input.workingBranch) {
+    return { kind: 'matches-working' };
+  }
+  const nameIsRedundant =
+    input.workingWorktreeName !== undefined && input.primaryName === input.workingWorktreeName;
+  return {
+    kind: 'branch',
+    branch: input.primaryBranch,
+    primaryName: nameIsRedundant ? undefined : input.primaryName,
+  };
 }
 
 /** The render-facing fields a {@link CoordinationBranch} maps to. */
 export interface CoordinationParts {
   readonly coordinationBranch: string | undefined;
+  /** The primary checkout's display name, shown beside the coordination branch. */
+  readonly coordinationPlace: string | undefined;
   readonly error: string | undefined;
 }
 
 /**
  * Project a {@link CoordinationBranch} onto the render fields: a resolved branch
- * becomes the displayed coordination branch, an error becomes a loud token, and
- * `none` becomes both-absent (a valid empty state).
+ * becomes the displayed coordination branch paired with the primary checkout's
+ * name, an error becomes a loud token, and both empty states (`none` and
+ * `matches-working`) become all-absent — nothing to show, and no fault to surface.
  *
  * @param coordination - The coordination-branch resolution.
  * @returns The render-facing coordination fields.
  */
 export function coordinationToParts(coordination: CoordinationBranch): CoordinationParts {
   if (coordination.kind === 'branch') {
-    return { coordinationBranch: coordination.branch, error: undefined };
+    return {
+      coordinationBranch: coordination.branch,
+      coordinationPlace: coordination.primaryName,
+      error: undefined,
+    };
   }
   if (coordination.kind === 'error') {
-    return { coordinationBranch: undefined, error: coordination.detail };
+    return {
+      coordinationBranch: undefined,
+      coordinationPlace: undefined,
+      error: coordination.detail,
+    };
   }
-  return { coordinationBranch: undefined, error: undefined };
+  return { coordinationBranch: undefined, coordinationPlace: undefined, error: undefined };
 }
 
 /**
