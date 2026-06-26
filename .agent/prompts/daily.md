@@ -2,7 +2,7 @@
 
 ## Subagents
 
-All subagent responses, work, claims and sources MUST be critically assessed before being accepted. This is always true.
+All subagent responses, work, claims, sources, and general context MUST be critically assessed before being accepted. This is always true.
 
 ## Team start
 

@@ -12,10 +12,10 @@ Next status: public alpha
 This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It uses **stateless session management** (no server-side state) and is designed for Vercel's serverless Node runtime. Responses are streamed using Server-Sent Events (SSE) as per the MCP specification.
 
 It is also the repo's primary MCP Apps exploration surface: one server for
-end-user AI experiences in platforms such as
-[Claude Cowork](https://www.anthropic.com/product/claude-cowork) and ChatGPT,
-and one developer tool surface for teams building on Oak's openly licenced,
-fully sequenced and resourced curriculum.
+end-user AI experiences in the assistants teachers already use — the
+[canonical target platforms](../../docs/strategy/stream-mcp-app.md): ChatGPT, Claude,
+Copilot, and Gemini, and others — and one developer tool surface for teams building on
+Oak's openly licenced, fully sequenced and resourced curriculum.
 
 > **Canonical MCP server workspace**. This is the sole MCP server workspace.
 > The legacy stdio workspace was removed per
