@@ -68,15 +68,19 @@ jobs:
       - name: Lint shell scripts
         run: pnpm lint:shell
 
-      - name: Install Playwright browsers for test:ui
+      - name: Install Playwright browsers (test:ui, test:a11y, widget suites)
         run: pnpm exec playwright install --with-deps chromium
 
-      # Single Turbo invocation for all Turbo-managed gates
+      # Single Turbo invocation for all Turbo-managed gates. Includes the widget
+      # and accessibility (WCAG 2.2 AA) suites so a11y regressions are gated in
+      # CI, not only locally. All are chromium-only and network-free (ADR-161);
+      # Turbo resolves the dependsOn ordering (e.g. test:a11y after test:ui).
       - name: Build, type-check, lint, test
         id: turbo-run
         run: >-
-          pnpm exec turbo run sdk-codegen build type-check lint test test:e2e
-          test:ui --summarize --log-order=grouped --continue
+          pnpm exec turbo run sdk-codegen build type-check lint test test:widget
+          test:e2e test:ui test:widget:ui test:a11y test:widget:a11y
+          --summarize --log-order=grouped --continue
 
       # Run after build (knip + depcruise both resolve through built dist/ outputs)
       - name: Run knip (unused code detection)
