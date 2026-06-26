@@ -36,6 +36,12 @@ peerDependencyRules:
     eslint-plugin-react>eslint: '10'
     eslint-plugin-react-hooks>eslint: '10'
 overrides:
+  # Pin @types/node to the Node 24 LTS line across the whole tree, including
+  # transitive peers (vite/vitest pull @types/node@26 as an optional peer).
+  # Matches engines.node 24.x and keeps every workspace — including those that
+  # do not declare @types/node directly — compiling against Node 24 types.
+  # Lift together with the dependabot ignore when the project moves Node majors.
+  '@types/node': '^24.13.2'
   axios: '>=1.15.1'
   brace-expansion: '>=5.0.5'
   csstype: '>=3.2.3'
