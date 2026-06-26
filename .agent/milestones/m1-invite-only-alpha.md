@@ -19,7 +19,7 @@ while maintaining a manageable scope for support and iteration.
 ## What value it delivers
 
 - Oak staff can access the curriculum through any MCP-capable AI tool
-  (ChatGPT, Claude, Gemini) using the existing development Clerk instance.
+  (ChatGPT, Claude, Copilot, Gemini) using the existing development Clerk instance.
 - The allowlist model (Oak email domain + explicit invitations) provides
   real-world validation without the operational burden of public access.
 - Adding invited users is straightforward via the Clerk Dashboard UI.
