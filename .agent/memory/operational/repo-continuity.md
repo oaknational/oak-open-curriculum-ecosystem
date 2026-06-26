@@ -24,6 +24,33 @@ todo list — is [`director-handoff.md`](director-handoff.md).
 
 ## Current State
 
+- **Dependency, security & merge-gate session (2026-06-26, Wombat wakes Eventide).** Merged to
+  main: #227 dep update (`@types/node` held on Node 24 — direct decls + a tree-wide pnpm override;
+  Dependabot `@types/node` major-ignore); #228 `identify-as-agent-under-shared-credentials` rule
+  (agents posting via shared creds must self-identify); #229
+  [code-security & release-safety assessment](../../reports/github-code-security-and-release-safety-2026-06-26.md)
+  (names decisions, doesn't make them); #230 CI a11y/widget suites now gated (WCAG); #231 pnpm
+  `minimumReleaseAge: 1440` (24h supply-chain floor, strict — pnpm default is 0); #232 ci.yml
+  `merge_group` trigger; #233
+  [ADR-204](../../../docs/architecture/architectural-decisions/204-merge-gate-strategy-require-up-to-date-not-merge-queue.md)
+  (merge-gate strategy). Settings (owner + agent): secret-scanning push-protection +
+  non-provider-patterns + validity-checks ON. **Ruleset corrected (owner-authorised):** the
+  owner-enabled `merge_queue` was incompatible with this repo's gates — CodeQL default-setup,
+  SonarCloud app, and Vercel's Git integration do not report on `merge_group`, and the fixes break
+  ADR-161 — so it was removed and `strict_required_status_checks_policy: true` (require-up-to-date)
+  set instead; same merge-skew protection, no queue, no bypass (ADR-204). A session-scoped
+  merge-queue bypass used during the broken-queue window is **provably unneeded** (#233 merged with
+  no `--admin`); the authorisation lapses with the session.
+  **Next safe step — dependency-review PR-gate.** Owner-approved 2026-06-26; deferred to the next
+  session under one named constraint — this session's context budget is exhausted and the owner
+  directed a handoff (falsifiable: the next session resumes it directly, with no re-decision). The
+  work: (a) amend ADR-161 + ADR-121 with a narrow carve-out permitting GitHub's OWN dependency-graph
+  (dependency-review) API as a same-instance PR-check call — distinct from third-party-vendor
+  network calls, so ADR-161's vendor-uptime rationale is not incurred; (b) add
+  `.github/workflows/dependency-review.yml` running `actions/dependency-review-action` (latest is
+  v5.0.0; SHA-pin at author time) on `pull_request: [main]`, `fail-on-severity: high`,
+  `comment-summary-in-pr: on-failure`, perms `contents: read` + `pull-requests: write`,
+  advisory-not-required initially. Full rationale: report #229 §7 Tier-1.
 - **Knowledge-substrate consolidation — PR #226 (2026-06-25, Zephyr mends Bluff).** Register
   intents sharpened (pending-graduations = learned-doctrine-awaiting-a-home; open-questions =
   strategic open questions) with belongs/does-not-belong examples; the homing destinations table
