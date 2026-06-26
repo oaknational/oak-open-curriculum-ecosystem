@@ -9,6 +9,14 @@ updates:
         patterns:
           - '*'
     open-pull-requests-limit: 5
+    ignore:
+      # @types/node is deliberately held on the Node 24 LTS major to match the
+      # repo's `engines.node: 24.x`. Allow minor/patch within 24.x; suppress the
+      # major bump (26.x) so the weekly grouped PR stops re-proposing it. Lift
+      # this when the project moves to a newer Node major.
+      - dependency-name: '@types/node'
+        update-types:
+          - version-update:semver-major
   - package-ecosystem: github-actions
     directory: /
     schedule:
