@@ -2,7 +2,7 @@
 title: 'Strategy — Stream: the MCP app (teachers)'
 type: strategy
 status: active
-last_updated: 2026-06-20
+last_updated: 2026-06-26
 derives_from:
   - VISION.md
 governed_by:
@@ -17,10 +17,14 @@ Serves Oak's **teachers** goal._
 **Two co-equal, complementary channels.** Teachers reach Oak through the web and through
 AI assistants; the channels reinforce rather than compete, and AI has a place in both.
 This repository delivers the AI-assistant channel — a [Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro) (MCP) [app](https://modelcontextprotocol.io/extensions/apps/overview)
-putting Oak inside the assistants teachers already choose, ChatGPT, Claude, Gemini and others — bringing Oak's standards into the
+putting Oak inside the assistants teachers already choose — **ChatGPT, Claude, Copilot, and
+Gemini** (the canonical target platforms, in alphabetical order; _Copilot_ here is
+Microsoft's assistant, not GitHub Copilot), and others — bringing Oak's standards into the
 planning and preparation teachers already do there. Which assistant is the teacher's
 choice, not ours — as a public body we serve the public good, not any one provider, so we
-support the major assistants even-handedly and never partner with one over another.
+support the major assistants even-handedly and never partner with one over another. These
+four are the **required minimum** we support, not the limit: accessibility includes the
+teacher's choice of platform, so support extends to any popular assistant, even-handedly.
 
 ## How we win
 
@@ -59,10 +63,11 @@ they sit inside this stream's strategy as its production-readiness keystones.
 - **K2 — Primary audience: teachers and curriculum leaders** (for now). Nothing in the app
   is aimed at students. This is load-bearing for the ICO Children's Code question below and
   must be read with it.
-- **K3 — Surface scope: the app in ChatGPT and Claude and Gemini**, which means the app's real
-  dependency set must be GA-ready. (This is the ratified _initial release surface_ —
-  distinct from the no-favourites principle above, which names ChatGPT, Claude, Gemini and
-  others as the teacher's open choice.) The release channel isn't unilateral — app-like
+- **K3 — Surface scope: the app in ChatGPT, Claude, Copilot, and Gemini**, which means the app's real
+  dependency set must be GA-ready. (This is the ratified _initial release surface_ — owner-ratified
+  2026-06-17 as ChatGPT/Claude/Gemini, extended to include Copilot per owner direction 2026-06-26;
+  it is the four canonical target platforms, distinct from the no-favourites principle above, which
+  names the same four **and others** as the teacher's open choice.) The release channel isn't unilateral — app-like
   packaging and promotion need the AI vendors' collaboration (the live status is in the
   release-readiness hand-offs below). Marketing is gated on sufficient mitigation of the third-party-content (TPC) risk:
   Oak's curriculum includes material licensed for the website but not for reuse beyond it, so
@@ -88,7 +93,7 @@ plan drives it; "external/tracked" = executed outside the repo and tracked in th
 | Independent AI-output evals     | Stress-test outputs against Oak's quality and safety benchmarks                                                                                                                                | External (Oak AI Platform) — **production blocker**                                        |
 | Lesson-level data availability  | Safely-filtered (TPC-removed) lesson data via the upstream API — DB surfacing is upstream (not our scope) plus a materialised view (the same gate as the TPC filter; see open-questions Q-003) | Discussion — no owner yet                                                                  |
 | Go-to-market / school support   | Discoverability and enablement; teachers won't auto-discover or self-install                                                                                                                   | Discussion — no owner yet                                                                  |
-| Release channel                 | App-like packaging + promotion across the assistants (ChatGPT / Claude / Gemini, even-handedly)                                                                                                | External-collaboration dependency (vendors aware + agreed)                                 |
+| Release channel                 | App-like packaging + promotion across the assistants (ChatGPT / Claude / Copilot / Gemini, even-handedly)                                                                                      | External-collaboration dependency (vendors aware + agreed)                                 |
 
 The **ICO Children's Code** question is cross-linked to the K2 target-audience decision
 (teachers and curriculum leaders; nothing aimed at students) — that link is load-bearing

@@ -292,7 +292,7 @@ Both must hold in every mode:
 - **Scope, accurately — this repo is one of Oak's AI efforts, not the whole of
   how Oak does AI.** Lead with its actual distinctive role: putting Oak's
   curriculum *into* the third-party AI assistants teachers already use (ChatGPT,
-  Claude, Gemini), plus open tools for the wider ecosystem and the agent-first
+  Claude, Copilot, Gemini), plus open tools for the wider ecosystem and the agent-first
   build practice. The README banner and `VISION.md` carry the precise framing —
   follow them, and never inflate the repo to "this is how Oak does AI". Oak builds
   other user-facing AI products; this is complementary to them.

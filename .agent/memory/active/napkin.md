@@ -95,3 +95,47 @@ New session observations append below.
   in general?" Empirical proof (a real PR through the gate) settles it. Sibling:
   [[feedback_check_doctrine_preconditions_before_applying]], [[verify-dont-trust]]; candidate for a
   `patterns/` entry if a second instance appears.
+
+## 2026-06-26 — Disambiguate overloaded terms before canonicalising; verify your OWN explanations against the full source (Bonfire guards Temper)
+
+- **Disambiguate an overloaded term's distinct concepts BEFORE canonicalising or sweeping for it.**
+  Canonicalising "target platforms" for the MCP app, "platform" denoted three different things —
+  dev-agent platforms (Cursor/Claude Code/Gemini-CLI/Codex), illustrative MCP-client examples in
+  technical contexts, and the MCP-app's target end-user assistants — and WITHIN the last, two more:
+  the support *principle* (open-ended, even-handed) vs **K3 the owner-ratified initial release
+  surface**. A naïve "replace every platform mention with the canonical four" would have conflated dev
+  tooling with end-user assistants and flattened a ratified strategic distinction. Cure: before a
+  canonicalise/sweep, enumerate the distinct concepts the term denotes and scope each — a per-concept
+  find-and-conform pass, never a global string-replace. NEW (one instance); candidate pattern.
+  Siblings: [[inherited-framing-without-first-principles-check]], the 2026-06-25 "don't over-collapse a
+  multi-position axis into two" entry.
+- **Plausible-but-wrong explanations come from reading a SUBSET of the source; verify your OWN
+  explanation against the FULL source before presenting it.** Twice this session I gave a fluent,
+  plausible diagnosis that was wrong: (1) "the PR's preview-deployment block is illusory gate-flux" —
+  actually a real `required_deployments: ["Preview"]` ruleset rule I'd missed by reading only
+  `required_status_checks`; (2) a guessed provenance for a statusline behaviour. Each dissolved once I
+  read ALL the source (every ruleset rule type; the actual git history), not a subset. **Same-day
+  recurrence with Wombat's "acted on the MEMORY.md index summary, not the full memory" entry above** —
+  two agents, one day, same failure family → PDR-098 recurrence signal that the fluency/verify-own home
+  is not firing at the action moment. Owner reinforced it as a daily.md rule ("critically assess ALL
+  findings, claims, sources, context"). Siblings: [[fluency-is-a-failure-vector]],
+  [[adversarially-verify-own-synthesis]], [[verify-dont-trust]].
+- **GitHub merge-readiness (consumer side): `required_deployments` ≠ `required_status_checks`, and
+  all-checks-green + `MERGEABLE`/`BEHIND` ≠ merge-ready under require-up-to-date (ADR-204).** PR #235
+  showed 8/8 checks pass yet "Merging is blocked — Missing successful active Preview deployment": the
+  ruleset required a `Preview` *deployment* (a separate rule type from status checks), and the branch
+  was behind the just-landed gate. The fix was not a bypass but the gate's own remedy — update the
+  branch → fresh `Preview` deployment for the up-to-date head → block cleared. Consumer-side worked
+  instance of Wombat's merge-gate entry above (ADR-204). Sibling: [[verify-dont-trust]].
+- **Statusline (any glanceable surface): show a coordination token only when it diverges from its
+  working-side counterpart.** The two-set statusline (PR #235) suppresses the whole coordination line
+  when its branch == the working branch, and drops the primary checkout's name when it == the worktree
+  name — two near-identical tokens on adjacent lines force a human out of glance-mode into careful
+  reading. The cure for "two things communicating the same information" is REMOVAL of the redundant
+  token, not adding disambiguation (which adds visual load). NEW (one instance); candidate
+  communication-design pattern.
+- **PR-CI monitor: key the dedup on the head SHA and emit on EVERY terminal bucket.** A name-keyed
+  monitor won't re-report a re-run's checks after a branch update (they match the prior run's strings);
+  keying on head SHA fixes per-push tracking. Emitting only on `pass` makes a failure indistinguishable
+  from "still running" — emit on pass AND fail/skip/cancel so silence ≠ success. Extends
+  [[pr-monitor-to-merge]].

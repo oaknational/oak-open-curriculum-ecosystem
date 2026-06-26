@@ -46,7 +46,7 @@ work, not a replacement for it.
 The web and AI assistants are two co-equal, complementary ways teachers reach Oak.
 They don't compete — they reinforce each other, and AI has a place in both. This
 repository delivers [the AI-assistant side](docs/strategy/stream-mcp-app.md): a [Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro) (MCP) [app](https://modelcontextprotocol.io/extensions/apps/overview) that puts Oak inside the AI
-assistants teachers already choose — ChatGPT, Claude, Gemini and others — bringing
+assistants teachers already choose — ChatGPT, Claude, Copilot, and Gemini, and others — bringing
 Oak's standards into the tools they already use to plan lessons and prepare. Which
 assistant is the teacher's choice, not ours.
 

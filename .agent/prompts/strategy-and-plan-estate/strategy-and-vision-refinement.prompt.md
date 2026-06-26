@@ -63,7 +63,7 @@ owner's to shape.
 
 - Two-part vision; three value streams as the strategy's first organising principle (same system, two zooms).
 - Two co-equal complementary channels (web + AI assistants); **no favourites** in the assistant list —
-  ChatGPT, Claude, Gemini and others; the choice is the teacher's, not ours.
+  ChatGPT, Claude, Copilot, Gemini and others; the choice is the teacher's, not ours.
 - Amplifier-not-replacement ethic at three levels (pupil ← teacher ← our teams).
 - Curation = the full product lifecycle; curriculum ownership is external; "open educational data beyond
   Oak's" is aligned with Oak's ecosystem goal.
