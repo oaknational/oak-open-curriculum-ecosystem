@@ -30,6 +30,12 @@ barrier:
   caught real second instances of defect classes the author had only
   patched once); reply with the verdicts on the PR. Each push re-triggers
   the bots, so batch fixes into one push to converge the re-review loop.
+  **Monitor mechanics**: key the check-dedup on the **head SHA**, not the
+  check name — a name-keyed monitor won't re-report a re-run's checks after a
+  branch update (the names match the prior run's strings), so per-push tracking
+  silently breaks. And emit on **every terminal bucket** (pass AND
+  fail/skip/cancel), never `pass` alone — a pass-only filter makes a failure
+  indistinguishable from "still running" (silence ≠ success).
 - **Flat stacks.** Base PRs directly on main rather than serial stacks
   (stacks make fixing earlier PRs hard — owner, 2026-06-10);
   retarget/flatten as bases merge.
