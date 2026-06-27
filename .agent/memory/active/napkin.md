@@ -337,3 +337,82 @@ New session observations append below.
   Folded for re-assessment in the operability plan, which itself **needs its deep review before any
   execution** (flagged at its top, not done this session). (My per-user worktree-resolution
   agent-memory note still over-generalises this and wants tidying.)
+
+## 2026-06-27 — All-channels watcher has no observer mode: per-heartbeat context tax (Chinook turns Halo)
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:collaboration-state comms watch` / [[comms-all-channels-watcher]] rule
+- **Signal**: friction
+- **Observation**: As Director-in-Waiting (owner: minimum action, preserve context, stay abreast), I
+  armed the canonical all-channels watcher and stopped it within minutes. In an n=3+ window heartbeats
+  (~1/min across 3–4 agents) dominate, and each emitted event re-invokes the agent (reads whole
+  context) — so for a passive, non-claim-holding observer every heartbeat wake is pure context drain.
+  The rule mandates emit-everything + triage-in-reasoning, which is correct for active participants
+  (the F-95/2026-05-22 founding failure) but offers no low-engagement dial; triaging still pays the
+  full re-invocation cost before the triage.
+- **Behaviour change / candidate follow-up**: captured as **F-99** in the agent-tooling
+  frictions-register — opt-in observer/`--exclude-heartbeats` consume-mode scoped to non-participant
+  roles, preserving the active-participant emit-everything guarantee (same value-contingency PDR-082
+  n=2 and the PDR-078 §4 consumer-absent exemption already recognise). For now a passive
+  Director-in-Waiting holds an accurate snapshot and refreshes on re-engagement rather than running a
+  per-event watcher.
+- **Source plane**: active
+
+## 2026-06-27 — Closeout writes are unconditional: a collision/claim/fitness concern NEVER blocks preserving understanding (Oyster spins Coral)
+
+- **Mistake → owner-corrected (recurrence of a homed principle):** at session closeout I DECLINED to
+  write the shared tracked continuity surfaces (repo-continuity, thread records, napkin), citing a
+  shared-branch collision with the incoming Director (Chinook, on my coordination branch in the
+  primary) and "continuity is the live Director's domain now." WRONG. The owner's standing principle,
+  stated for weeks and homed in [[feedback_claims_never_block_memory_state_writes]] + the
+  repo-continuity invariant ("shared memory/state files are always writable when dirty"): **it is
+  ALWAYS okay to write the shared memory surfaces so nothing is lost; claims, coordination-collisions,
+  and fitness results are ABSOLUTELY secondary to preserving understanding, ALWAYS.** OS locks handle
+  concurrency; the rare collision is recoverable via [[oak-semantic-merge]] (additive memory writes
+  never destroy). The deeper hazard I missed: my session's understanding + the handed lessons lived
+  ONLY in *untracked* surfaces (comms `.agent/state/`, the handoff record under `.agent/state`) —
+  untracked-by-design (ADR-199/PDR-094), so version history is no backstop. Deferring the
+  tracked-surface writes was risking real loss — exactly what closeout exists to prevent. **Cure:** at
+  closeout, WRITE the shared continuity surfaces unconditionally; never let "handed off / not my
+  domain / would collide / over fitness" defer a preservation write. Distinguish CAPTURE (append/mirror
+  — always do) from DRAIN (rotate/extract-to-homes — a separate consolidation, deferrable). Recurrence
+  of a homed lesson → PDR-098 signal that the fluent "not my domain" frame bypasses the principle at
+  the action moment. Siblings: [[fluency-is-a-failure-vector]], the metacognition "fluency is a
+  warning" note, [[feedback_knowledge_preservation_over_fitness_warnings]].
+
+- **Session arc (Director seat, 2026-06-27):** adopted Director from Cedar (PDR-064 Moment-2) → drove
+  the five-PR merge train to main (#248 hygiene rule, #250 statusline, #251 sonar thread, #249 Sonar
+  P2, #247 napkin residuals — last via a hand-resolved /oak-semantic-merge napkin union, both sessions'
+  entries conserved; releases 1.36.2→1.36.4) → coordinated team rotation (Gull→Brazier, Peony→Swordfish)
+  and Cedar's owner-authorised D1–D6 program (D4/D6 GO as separate PRs; PDR-118 keystone PR #253 routed,
+  classification PDR-not-ADR concurred) → pre-positioned + handed the seat to Chinook turns Halo.
+
+- **Load-bearing general lessons I engaged this session (mirrored from untracked comms so they survive):**
+  - **A PR `BLOCKED` with all checks green AND up-to-date is unresolved review threads, not behind-state.**
+    I misdiagnosed #251 as BEHIND (read `mergeStateStatus=BLOCKED`, assumed behind); Gull verified
+    first-hand it was 0-behind + 2 unresolved Copilot threads (`require_review_thread_resolution`).
+    Check the ACTUAL blocker (`gh ... reviewThreads`) before `update-branch`. [[verify-dont-trust]]
+  - **Backticks in a double-quoted bash `--body` trigger command substitution** (a comms broadcast
+    blanked a worktree name: "command not found: worktree-ws-b-explain"). Always `--body-file` for any
+    body with backticks/special chars — it reads literally, bypassing the shell. A shell-quoting hazard.
+  - **The mechanical liveness `freshness_status` is authoritative; a `fresh` Director that is
+    comms-quiet is WORKING, not retired.** Early on I nearly read Cedar (fresh, but ~1h comms-silent)
+    as stood-down and rationalised "heartbeat stopped" against the tool's `fresh` — then Cedar
+    broadcast mid-cleanup. Trust the tool; don't take a seat over a `fresh` holder without a
+    pre-position. Worked instance of [[director-handoff]] "fresh = live" + fluency-is-a-warning.
+  - **`update-branch` git-line-merges memory files silently** — before merging any napkin/repo-continuity
+    -touching PR, inspect that the memory-file change makes actual sense (owner directive); the #247
+    napkin both-sides conflict was hand-unioned, not auto-merged.
+
+- **Handed lessons conserved (addressed to me for the deferred drain; summarised here so the
+  understanding survives in tracked memory, full text in the comms stream + the Oyster→Chinook handoff
+  record):** Gull — (a) read a Sonar rule's actual criterion before dispositioning (S8786 "linear-looking"
+  patterns ARE non-linear via unanchored multi-position retry; a subagent's blanket-FP was wrong), (b)
+  S5914 type-test cure is `expectTypeOf`, not deletion (the compile-time relation is the assertion);
+  Peony — synthesise, don't collapse design reasoning into either-or ([[premature_crystallization]]);
+  Brazier — fresh-`git worktree add` has no node_modules/built deps so per-workspace lint/type-check
+  fail until `pnpm install` + prereq builds (AX friction; the cold pre-commit is >2min — background it),
+  and `git worktree add -b` over `git checkout -B` (never-use-git-to-remove-work). The napkin DRAIN that
+  homes these to permanent surfaces is deferred (owner-directed: not this session) — napkin is over its
+  soft fitness limit but under the ~400 rotation trigger; preserve, do not trim.

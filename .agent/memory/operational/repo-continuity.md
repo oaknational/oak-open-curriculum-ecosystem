@@ -24,6 +24,29 @@ todo list — is [`director-handoff.md`](director-handoff.md).
 
 ## Current State
 
+- **Team session — merge train + Director-seat rotation (2026-06-27, Oyster spins Coral, Director).**
+  Owner-run n=4 team day. **Five-PR merge train LANDED to `main`** (releases 1.36.2→1.36.4):
+  **#248** worktree-hygiene rule, **#250** statusline lane coordination, **#251** sonar thread reconcile,
+  **#249** Sonar Phase 2 (regex-safety; 2 fixes + 16 accept-with-rationale), **#247** napkin #244
+  residuals (merged via a hand-resolved `/oak-semantic-merge` napkin union — both sessions' entries
+  conserved; merge commit `9c92e458b`). Owner gated each code-owner click; ADR-204 require-up-to-date
+  serialised them. **Director seat rotated twice** (PDR-064): Cedar lifts Canopy → **Oyster spins
+  Coral** → **Chinook turns Halo** (current Director, claim `60baf0b1`); each handoff had a
+  self-contained record + Moment-1/Moment-2. **Team rotated to fresh successors**: Sonar Gull→**Brazier
+  wakes Crackle**, explain Peony→**Swordfish rides Surf**. **LIVE lanes (owner-directed):** Brazier —
+  Sonar **Phase 3** (test-integrity; **PR #254** open, 12× S5914, driving to merge-ready); Swordfish —
+  oak-under-the-hood **reframe** (first-hand re-assessment; **PR #243** draft, gated on the reframe
+  landing; routes ADR-202 amendment + rename portability to the Director); Cedar — **D1–D6
+  plan-corpus rationalisation** program (owner-authorised; **PR #252** report; **F-98 = PDR-118**
+  agent-work-state model keystone, **PR #253** Proposed, needs Director/owner ratification; **D4/D6**
+  GO as separate Director-reviewed PRs — D6 needs config-expert + render-from-worktree verify).
+  **Deferred (NOT done this session, owner-directed):** the napkin DRAIN (napkin over its soft
+  fitness limit but under the ~400 rotation trigger; all session lessons conserved in the napkin +
+  comms + the `handoffs/director-handoff-oyster-to-chinook-2026-06-27.md` record); estate-cleanup
+  deletions (7 dead pilot branches + reclaimable merged worktrees — re-verify content-in-main
+  first-hand per branch + owner attention; `worktree-ws-b-explain` is LIVE, never hygiene-remove);
+  DATA-SOURCES governance (owner-gated, gates explain user-exposure). Director continuity:
+  [`director-handoff.md`](director-handoff.md) + the cross-worktree map.
 - **CI hardening session (2026-06-26, Inferno holds Tongs).** Two gates landed to `main`:
   **(1) advisory dependency-review PR-gate** (#236, `570750939`): `actions/dependency-review-action`
   v5.0.0 SHA-pinned, `pull_request`-only, `fail-on-severity: high`. ADR-161 + ADR-121 amended in
