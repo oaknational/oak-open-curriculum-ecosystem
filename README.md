@@ -208,6 +208,7 @@ and
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
 - **bun** (optional, for `pnpm dev:widget-in-host`) — install via [bun.sh](https://bun.sh/docs/installation)
 - **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — pre-installed on macOS; on Debian/Ubuntu use `sudo apt install lsof`; source/build instructions at [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
+- **GNU `timeout`** (optional, for the agent-collaboration comms watcher's self-termination guard) — the canonical watcher is wrapped in `timeout`/`gtimeout` so a watcher whose agent has gone away cannot linger as an orphan process. macOS: `brew install coreutils` (GNU coreutils; the binary installs as `gtimeout`); Debian/Ubuntu and most Linux ship it with GNU coreutils as `timeout` (`sudo apt install coreutils` if missing). The watcher runs un-guarded if neither binary is on `PATH`, so it is needed only to enforce the dead-watcher cleanup (see [`comms-all-channels-watcher`](.agent/rules/comms-all-channels-watcher.md) and friction F-101).
 - **sentry** (optional, for dev-time Sentry issue triage, event inspection,
   and Sentry Seer) — install only when you need local Sentry operator tooling;
   see [Sentry CLI usage](docs/operations/sentry-cli-usage.md) for the
