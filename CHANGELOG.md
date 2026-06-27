@@ -1,3 +1,20 @@
+# [1.37.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.36.4...v1.37.0) (2026-06-27)
+
+
+### Bug Fixes
+
+* **mcp-streamable-http:** close explain curriculum-table firewall leak + fold D1 review (WS-B) ([fe19851](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/fe19851d96d59602099de521151c0e28aae4c5c9)), closes [#1](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1)
+
+
+### Features
+
+* **explain:** reconcile audience model and add compliance firewall (D0) ([1dfee4e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/1dfee4e9667927cafb88fd0ea4b80175868e0aa6))
+* **mcp-app:** classify the Oak: Under the Hood resource public (ADR-205) ([b18c965](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b18c9653f85cf3a0e392bb2adae47bea6f35b5f5))
+* **mcp-streamable-http:** add explain effort-orientation tool (WS-B D3) ([2ef673f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2ef673f4bcf141e714df4527f2b303eea0779e48))
+* **mcp-streamable-http:** explain curated behaviour projection + drift-guard (WS-B D1) ([35a4103](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/35a41037808d454ea9d2cc71cc66c5acc98fd2f5))
+* **mcp-streamable-http:** explain effort-orientation resource (WS-B D2) ([e6377e1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e6377e1aff42a3b404d2f70c2154452b29245b96))
+* **mcp-streamable-http:** explain effort-orientation transformer (WS-B D1.1) ([045daa3](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/045daa359081a2c039c6dd0e54736c4d80472b65))
+
 ## [1.36.4](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.36.3...v1.36.4) (2026-06-27)
 
 
