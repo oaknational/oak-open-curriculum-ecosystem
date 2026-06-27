@@ -36,7 +36,8 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   authored** (agent memory as an event graph with renderers — a Practice graph system alongside ADR-200; shared
   renderer/projection pattern, substrate per-member; retires semantic-merge for append-only-narrative; direction
   owner-ratified, build future). **Team settled to n=2 owner-visible:** Pulsar (Director) + **Beluga rides Wave** (curator;
-  lane held for #259; ADR-206/207 + the approach-C agent-work-state plan queued post-zero). **#264** (Beluga deferred-work
+  lane held for #259; ADR-206/207 for Beluga's two ADRs (free — Pulsar's memory-event-graph is
+  PDR-119, **not** ADR-206, so no collision) and the approach-C agent-work-state plan queued post-zero). **#264** (Beluga deferred-work
   map) stays draft until zero. Estate: #259 is the last PR to zero.
 - **Team session — merge train + Director-seat rotation (2026-06-27, Oyster spins Coral, Director).**
   Owner-run n=4 team day. **Five-PR merge train LANDED to `main`** (releases 1.36.2→1.36.4):
