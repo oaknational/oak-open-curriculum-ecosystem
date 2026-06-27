@@ -126,7 +126,7 @@ describe('runPreToolUseContentGuard', () => {
     });
 
     expect(result).toStrictEqual({ exitCode: 2 });
-    expect(stderrChunks.length).toBe(1);
+    expect(stderrChunks).toHaveLength(1);
     expect(stderrChunks[0]).toContain('Claude PreToolUse hook input was not valid JSON:');
   });
 

@@ -67,7 +67,7 @@ describe('security-headers', () => {
     it('returns middleware with correct arity for Express', () => {
       const middleware = createSecurityHeadersMiddleware();
       // Express middleware has 3 arguments: (req, res, next)
-      expect(middleware.length).toBe(3);
+      expect(middleware).toHaveLength(3);
     });
 
     it('can be called multiple times (factory pattern)', () => {

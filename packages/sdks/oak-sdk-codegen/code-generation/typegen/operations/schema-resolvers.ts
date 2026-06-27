@@ -11,7 +11,7 @@ export function isReferenceObject(value: unknown): value is ReferenceObject {
 
 function extractRefName(ref: string): string | undefined {
   const parts = ref.split('/');
-  const name = parts[parts.length - 1];
+  const name = parts.at(-1);
   return name && name.length > 0 ? name : undefined;
 }
 

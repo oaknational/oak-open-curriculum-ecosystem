@@ -92,7 +92,7 @@ function validateSingleQuery(
   let slugCount = 0;
 
   for (const key in query.expectedRelevance) {
-    if (!Object.prototype.hasOwnProperty.call(query.expectedRelevance, key)) {
+    if (!Object.hasOwn(query.expectedRelevance, key)) {
       continue;
     }
     slugCount++;

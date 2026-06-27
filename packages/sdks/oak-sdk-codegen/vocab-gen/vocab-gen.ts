@@ -17,9 +17,9 @@
  *
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for the pipeline specification
  */
-import { readFile } from 'fs/promises';
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { readFile } from 'node:fs/promises';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import type { Logger } from '@oaknational/logger';
 import {

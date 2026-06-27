@@ -138,7 +138,7 @@ describe('createAuthErrorResponse', () => {
 
       expect(response._meta).toHaveProperty('mcp/www_authenticate');
       expect(Array.isArray(response._meta['mcp/www_authenticate'])).toBe(true);
-      expect(response._meta['mcp/www_authenticate'].length).toBe(1);
+      expect(response._meta['mcp/www_authenticate']).toHaveLength(1);
     });
 
     it('_meta array contains single WWW-Authenticate string', () => {

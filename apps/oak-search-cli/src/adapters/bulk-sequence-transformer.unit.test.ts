@@ -425,7 +425,7 @@ describe('bulk-sequence-transformer', () => {
       // - 1 sequence doc (2 ops: action + doc)
       // - 2 facet docs (4 ops: 2 actions + 2 docs)
       // Total: 6 ops
-      expect(operations.length).toBe(6);
+      expect(operations).toHaveLength(6);
     });
 
     it('builds sequence operations with correct index', () => {
@@ -460,7 +460,7 @@ describe('bulk-sequence-transformer', () => {
         (op) => 'index' in op && op.index._index === 'oak_sequence_facets',
       );
 
-      expect(facetActions.length).toBe(2); // ks1 and ks2
+      expect(facetActions).toHaveLength(2); // ks1 and ks2
 
       // Check composite ID format: subject-sequence-keystage
       const ks1Action = facetActions.find(
@@ -519,7 +519,7 @@ describe('bulk-sequence-transformer', () => {
       // File 1: 1 sequence + 2 facets = 6 ops
       // File 2: 1 sequence + 1 facet = 4 ops
       // Total: 10 ops
-      expect(operations.length).toBe(10);
+      expect(operations).toHaveLength(10);
     });
 
     it('returns empty array when no bulk files provided', () => {

@@ -124,7 +124,7 @@ export async function generateZodSchemas(
     '  schemas: CurriculumSchemaCollection,',
     '  options?: { readonly rename?: (original: string) => string },',
     '): CurriculumSchemaCollection {',
-    '  const rename = options?.rename ?? ((value: string) => value.replace(/[^A-Za-z0-9_]/g, "_"));',
+    '  const rename = options?.rename ?? ((value: string) => value.replaceAll(/[^A-Za-z0-9_]/g, "_"));',
     '  const result: Record<string, z.ZodType> = {};',
     '  for (const [key, value] of Object.entries(schemas)) {',
     '    const sanitized = rename(key);',
@@ -201,8 +201,8 @@ export async function generateZodSchemas(
   // The adapter has already converted code to Zod v4 compatible and removed makeApi
   logger.info('Modifying file to export the endpoints');
   // The adapter converts "const endpoints = makeApi([" to "const endpoints = (["
-  const withExportedEndpoints = output.replace(
-    /const endpoints = \(/g,
+  const withExportedEndpoints = output.replaceAll(
+    'const endpoints = (',
     'export const endpoints: readonly Endpoint[] = (',
   );
 
@@ -211,7 +211,7 @@ export async function generateZodSchemas(
     const body = substring.replace('export const schemas = ', '').replace(';', '');
     return [
       'export type CurriculumSchemaCollection = Record<string, z.ZodType>;',
-      'const renameInlineSchema = (original: string) => {\n  if (original === "changelog_changelog_200") {\n    return "ChangelogResponseSchema";\n  }\n  if (original === "changelog_latest_200") {\n    return "ChangelogLatestResponseSchema";\n  }\n  return original.replace(/[^A-Za-z0-9_]/g, "_");\n};',
+      'const renameInlineSchema = (original: string) => {\n  if (original === "changelog_changelog_200") {\n    return "ChangelogResponseSchema";\n  }\n  if (original === "changelog_latest_200") {\n    return "ChangelogLatestResponseSchema";\n  }\n  return original.replaceAll(/[^A-Za-z0-9_]/g, "_");\n};',
       'export const rawCurriculumSchemas = ' +
         body +
         ' as const satisfies CurriculumSchemaCollection;',

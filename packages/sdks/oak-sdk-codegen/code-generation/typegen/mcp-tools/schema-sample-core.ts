@@ -36,7 +36,7 @@ function isPlainObject(value: unknown): value is SampleObject {
   }
 
   for (const key in value) {
-    if (!Object.prototype.hasOwnProperty.call(value, key)) {
+    if (!Object.hasOwn(value, key)) {
       continue;
     }
     const propValue: unknown = Object.getOwnPropertyDescriptor(value, key)?.value;
@@ -218,7 +218,7 @@ function materializeSamples(samples: SampleValue[]): SampleValue | undefined {
   for (const sample of samples) {
     if (isPlainObject(sample)) {
       for (const key in sample) {
-        if (Object.prototype.hasOwnProperty.call(sample, key)) {
+        if (Object.hasOwn(sample, key)) {
           merged[key] = sample[key];
         }
       }
@@ -228,7 +228,7 @@ function materializeSamples(samples: SampleValue[]): SampleValue | undefined {
   if (mergedAny) {
     return merged;
   }
-  return samples[samples.length - 1];
+  return samples.at(-1);
 }
 
 function buildSampleObject(entries: [string, SampleValue][]): SampleObject {

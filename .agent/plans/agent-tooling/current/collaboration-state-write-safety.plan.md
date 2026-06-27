@@ -26,6 +26,12 @@ todos:
 **Scope**: Make the hot shared inter-agent state write paths safe without
 waiting for hook polish.
 
+> **D3 DISPOSITION (2026-06-27) — DEFERRED, stays in `current/`.** This plan is
+> not archived: its closure gate (§Validation Gates / Acceptance) requires fresh
+> strict-hard fitness evidence to be recorded, which is a deep-consolidation pass
+> out of the agent-operability rationalisation lane's scope. Archive it when a
+> deep-consolidation pass records the strict-hard evidence the closure gate names.
+
 ---
 
 ## Context

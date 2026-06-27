@@ -80,7 +80,7 @@ describe('resolveCommsBody — body-length gate (B2 / plan §B2)', () => {
   it('rejects 1500 printable chars + 1 trailing space (gate fires on raw pre-trim body)', async () => {
     const fake = createFakeCollaborationRuntime();
     const body = `${'a'.repeat(1500)} `;
-    expect(body.length).toBe(1501);
+    expect(body).toHaveLength(1501);
 
     await expect(resolveCommsBody(makeOptions({ body }), cliIo(fake.runtime))).rejects.toThrow(
       /1501/,
@@ -91,7 +91,7 @@ describe('resolveCommsBody — body-length gate (B2 / plan §B2)', () => {
     const fake = createFakeCollaborationRuntime();
     // 750 two-code-unit characters (each '🌳' is a surrogate pair) = 1500 .length, accepted.
     const acceptedBody = '🌳'.repeat(750);
-    expect(acceptedBody.length).toBe(1500);
+    expect(acceptedBody).toHaveLength(1500);
 
     const resolved = await resolveCommsBody(
       makeOptions({ body: acceptedBody }),
@@ -101,7 +101,7 @@ describe('resolveCommsBody — body-length gate (B2 / plan §B2)', () => {
 
     // 751 of the same surrogate-pair chars = 1502 .length, rejected.
     const rejectedBody = '🌳'.repeat(751);
-    expect(rejectedBody.length).toBe(1502);
+    expect(rejectedBody).toHaveLength(1502);
 
     await expect(
       resolveCommsBody(makeOptions({ body: rejectedBody }), cliIo(fake.runtime)),

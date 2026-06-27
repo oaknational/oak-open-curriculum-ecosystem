@@ -44,7 +44,7 @@ function iterateExpectedRelevance(
   const result: [string, number][] = [];
   // Using for-in which is allowed for string-keyed records
   for (const key in relevance) {
-    if (Object.prototype.hasOwnProperty.call(relevance, key)) {
+    if (Object.hasOwn(relevance, key)) {
       const value = relevance[key];
       if (value !== undefined) {
         result.push([key, value]);

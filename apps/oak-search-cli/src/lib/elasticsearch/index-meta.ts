@@ -26,7 +26,7 @@ export const INDEX_VERSION_DOC_ID = 'index_version';
 export function generateVersionFromTimestamp(): string {
   const now = new Date();
   const date = now.toISOString().slice(0, 10);
-  const time = now.toISOString().slice(11, 19).replace(/:/g, '');
+  const time = now.toISOString().slice(11, 19).replaceAll(':', '');
   return `v${date}-${time}`;
 }
 

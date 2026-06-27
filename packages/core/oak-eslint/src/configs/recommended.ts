@@ -73,6 +73,28 @@ const recommendedBase: TSESLint.FlatConfig.ConfigArray = defineConfig(
       'sonarjs/void-use': 'error',
       'unicorn/prefer-single-call': 'error',
 
+      // Phase 5 (main-sonar-ai-profile-to-zero): matching unicorn rules for the
+      // recently-activated SonarJS idiom classes, enabled at `error`. The autofix
+      // pass in THIS SAME commit clears every existing violation, so no warn-debt
+      // is introduced (principles.md §"No warning toleration": fix the root cause
+      // in the same work-item; do not defer). The new-rules-start-warn carve-out
+      // applies only to a violation surface that needs a separate migration lane
+      // (e.g. no-throw-statement); this is not that. Each maps to a Sonar rule.
+      // Two related classes are deliberately NOT locked here and are handled
+      // per-site in a later tranche: S6594 (prefer-regexp-exec is a
+      // @typescript-eslint rule overlapping generated output, not a clean
+      // autofix) and S7765 (prefer-includes force-converts the ADR-153
+      // `value is X` type-guard `.some((id) => id === value)` idiom to a
+      // type-unsound `.includes(value)` where the argument is wider than the
+      // element type — incompatible with the house type-guard pattern).
+      'unicorn/prefer-string-replace-all': 'error', // S7781
+      'unicorn/prefer-string-raw': 'error', // S7780
+      'unicorn/prefer-number-properties': 'error', // S7773
+      'unicorn/prefer-at': 'error', // S7755
+      'prefer-object-has-own': 'error', // S6653 (ESLint core rule, not unicorn)
+      'unicorn/prefer-node-protocol': 'error', // S7772
+      'unicorn/prefer-global-this': 'error', // S7764
+
       // Potentials
       'unicorn/no-abusive-eslint-disable': 'error',
       // 'unicorn/error-message': 'warn',

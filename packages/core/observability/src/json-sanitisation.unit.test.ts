@@ -27,11 +27,11 @@ describe('sanitiseForJson', () => {
   });
 
   it('should pass through null unchanged', () => {
-    expect(sanitiseForJson(null)).toBe(null);
+    expect(sanitiseForJson(null)).toBeNull();
   });
 
   it('should convert undefined to null', () => {
-    expect(sanitiseForJson(undefined)).toBe(null);
+    expect(sanitiseForJson(undefined)).toBeNull();
   });
 
   it('should convert Date to ISO string', () => {
@@ -47,7 +47,7 @@ describe('sanitiseForJson', () => {
       name: 'Error',
     });
     const stackValue = output.stack;
-    expect(typeof stackValue === 'string').toBe(true);
+    expect(typeof stackValue).toBe('string');
   });
 
   it('should convert bigint values to strings', () => {

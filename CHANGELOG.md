@@ -1,3 +1,11 @@
+## [1.36.4](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.36.3...v1.36.4) (2026-06-27)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** harden path-conversion regexes against polynomial ReDoS ([19b07f5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/19b07f54be427a723861bb0d75bc843242a64ec1))
+* **sonar:** lock type-safe idiom rules and autofix (Phase 5A) ([ce57d48](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ce57d48514211088d2e6bbd5abc8d91b495c29e2))
+
 ## [1.36.3](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.36.2...v1.36.3) (2026-06-27)
 
 

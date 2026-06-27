@@ -49,7 +49,7 @@ async function listLegacyRootEntries(
   const entries = await readdir(absolutePath(repoRoot, root), { withFileTypes: true });
   const snapshots = await Promise.all(
     entries.map(async (entry) => {
-      const entryPath = join(root, entry.name).split('\\').join('/');
+      const entryPath = join(root, entry.name).replaceAll('\\', '/');
       if (entry.isDirectory()) {
         const childRoot = entryPath.endsWith('/') ? entryPath : `${entryPath}/`;
         return listLegacyRootEntries(repoRoot, childRoot);

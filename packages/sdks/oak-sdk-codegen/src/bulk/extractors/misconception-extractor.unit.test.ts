@@ -3,7 +3,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { Lesson } from '../lib/index.js';
+import type { Lesson } from '../../types/generated/bulk/index.js';
 
 import { extractMisconceptions } from './misconception-extractor.js';
 

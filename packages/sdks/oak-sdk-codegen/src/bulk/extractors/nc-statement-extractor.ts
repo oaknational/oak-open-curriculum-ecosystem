@@ -31,7 +31,7 @@ export interface ExtractedNCStatement {
 function extractSubject(sequenceSlug: string): string {
   const parts = sequenceSlug.split('-');
   if (parts.length >= 2) {
-    const phase = parts[parts.length - 1];
+    const phase = parts.at(-1);
     if (phase === 'primary' || phase === 'secondary') {
       return parts.slice(0, -1).join('-');
     }

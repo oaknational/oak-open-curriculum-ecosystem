@@ -98,7 +98,7 @@ describe('checkCategoryCoverage', () => {
       checkCategoryCoverage('test/entry', queries, issues);
 
       // Should have errors for all 4 required categories
-      expect(issues.length).toBe(4);
+      expect(issues).toHaveLength(4);
 
       const messages = issues.map((i) => i.message);
       expect(messages.some((m) => m.includes('precise-topic'))).toBe(true);

@@ -131,7 +131,7 @@ describe('watcher path derivers', () => {
     const dir = '.agent/state/collaboration/comms-seen';
     expect(() => commsSeenFileForCodename('../escape', dir)).toThrow();
     expect(() => commsSeenFileForCodename('a/b', dir)).toThrow();
-    expect(() => commsSeenFileForCodename('a\\b', dir)).toThrow();
+    expect(() => commsSeenFileForCodename(String.raw`a\b`, dir)).toThrow();
     expect(() => commsSeenFileForCodename('', dir)).toThrow();
   });
 

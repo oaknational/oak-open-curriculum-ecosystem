@@ -90,7 +90,7 @@ export function extractMarkdownLinks(_sourcePath: string, content: string): Extr
       continue;
     }
     // Strip inline code spans so backticked paths are not treated as links.
-    const lineText = lines[i].replace(/`[^`]*`/g, '');
+    const lineText = lines[i].replaceAll(/`[^`]*`/g, '');
     let match: RegExpExecArray | null;
     const pattern = new RegExp(linkPatternSource, 'g');
     while ((match = pattern.exec(lineText)) !== null) {

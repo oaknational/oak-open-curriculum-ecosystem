@@ -9,7 +9,10 @@ function buildRequiredList(schema: JsonSchemaObject): string {
 }
 
 function escapeForSingleQuotedJsString(text: string): string {
-  return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+  return text
+    .replaceAll('\\', '\\\\')
+    .replaceAll("'", String.raw`\'`)
+    .replaceAll('\n', String.raw`\n`);
 }
 
 export function emitErrorDescription(

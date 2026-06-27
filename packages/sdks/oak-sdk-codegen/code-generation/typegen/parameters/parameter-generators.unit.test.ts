@@ -115,7 +115,7 @@ describe('Parameter Generators', () => {
       for (const config of PARAMETER_GENERATION_CONFIG) {
         // Constant should be uppercase version of plural
         const expectedConstant = config.plural
-          .replace(/([A-Z])/g, '_$1')
+          .replaceAll(/([A-Z])/g, '_$1')
           .toUpperCase()
           .replace(/^_/, '');
         expect(config.constant).toBe(expectedConstant);

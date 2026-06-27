@@ -9,16 +9,16 @@ export function isResponseObject(value: unknown): value is ResponseObject {
 
 export function extractComponentNameFromRef(ref: string): string | undefined {
   const parts = ref.split('/');
-  const name = parts[parts.length - 1];
+  const name = parts.at(-1);
   return name && name.length > 0 ? name : undefined;
 }
 
 export function sanitizeIdentifier(value: string): string {
-  return value.replace(/[^A-Za-z0-9_]/g, '_');
+  return value.replaceAll(/[^A-Za-z0-9_]/g, '_');
 }
 
 export function toColonPath(path: string): string {
-  return path.replace(/\{([^}]+)\}/g, ':$1');
+  return path.replaceAll(/\{([^{}]+)\}/g, ':$1');
 }
 
 export interface ResponseInfo {

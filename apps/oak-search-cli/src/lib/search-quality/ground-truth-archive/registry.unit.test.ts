@@ -46,7 +46,7 @@ describe('GROUND_TRUTH_ENTRIES', () => {
 describe('getAllGroundTruthEntries', () => {
   it('returns all entries from the registry', () => {
     const entries = getAllGroundTruthEntries();
-    expect(entries.length).toBe(GROUND_TRUTH_ENTRIES.length);
+    expect(entries).toHaveLength(GROUND_TRUTH_ENTRIES.length);
     expect(entries).toEqual(GROUND_TRUTH_ENTRIES);
   });
 
@@ -154,6 +154,6 @@ describe('Phase type', () => {
     const phases: Phase[] = ['primary', 'secondary'];
     expect(phases).toContain('primary');
     expect(phases).toContain('secondary');
-    expect(phases.length).toBe(2);
+    expect(phases).toHaveLength(2);
   });
 });

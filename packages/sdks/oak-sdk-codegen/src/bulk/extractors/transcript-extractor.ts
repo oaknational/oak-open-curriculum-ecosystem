@@ -123,7 +123,7 @@ export function extractTranscriptVocabulary(
   for (const transcript of transcripts) {
     const words = transcript.fullText
       .toLowerCase()
-      .replace(/[^a-z\s'-]/g, ' ')
+      .replaceAll(/[^a-z\s'-]/g, ' ')
       .split(/\s+/)
       .filter((w) => w.length >= minLength);
 

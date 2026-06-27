@@ -20,7 +20,7 @@ import type { SitemapCategorisation } from './sitemap-scanner-types.js';
 import { compareCodeUnits } from './code-unit-order.js';
 
 /** Optional sub-page suffix shared across lesson route patterns */
-const SUB_PAGE = '(?:\\/(?:downloads|media|share))?\\/??$';
+const SUB_PAGE = String.raw`(?:\/(?:downloads|media|share))?\/??$`;
 
 /** Secondary regex to extract a lesson slug from deep specialist/beta paths */
 const LESSON_IN_PATH = /\/lessons\/([^/]+)(?:\/(?:downloads|media|share))?\/?$/;
@@ -46,7 +46,7 @@ interface RouteRule {
 const TEACHER_ROUTES: readonly RouteRule[] = [
   // /teachers/lessons/{slug}[/downloads|media|share]
   {
-    pattern: new RegExp(`^\\/teachers\\/lessons\\/([^/]+)${SUB_PAGE}`),
+    pattern: new RegExp(String.raw`^\/teachers\/lessons\/([^/]+)${SUB_PAGE}`),
     handle: (m, acc) => {
       acc.lessonSlugs.add(m[1]);
     },
@@ -54,7 +54,7 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
   // /teachers/programmes/{p}/units/{u}/lessons/{l}[/sub-page]
   {
     pattern: new RegExp(
-      `^\\/teachers\\/programmes\\/([^/]+)\\/units\\/([^/]+)\\/lessons\\/([^/]+)${SUB_PAGE}`,
+      String.raw`^\/teachers\/programmes\/([^/]+)\/units\/([^/]+)\/lessons\/([^/]+)${SUB_PAGE}`,
     ),
     handle: (m, acc) => {
       const [, prog, unit, lesson] = m;

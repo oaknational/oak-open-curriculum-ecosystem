@@ -31,7 +31,7 @@ export function generateMcpToolName(path: string, method: string): string {
   // Filter out parameter segments and clean remaining segments
   const nameSegments = segments
     .filter((seg) => !paramPattern.test(seg))
-    .map((s) => s.replace(/[^a-zA-Z0-9]+/g, '-'))
+    .map((s) => s.replaceAll(/[^a-zA-Z0-9]+/g, '-'))
     .filter(Boolean);
 
   // Generate deterministic name: oak-{method}-{segments}

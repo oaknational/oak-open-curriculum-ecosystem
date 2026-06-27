@@ -153,40 +153,40 @@ const PLACEHOLDER_SUFFIX = '___';
 function escapeTsDocUnsafeChars(docBody: string): string {
   // Protect complete valid TSDoc inline tags with placeholders before escaping
   const placeholders: string[] = [];
-  let withPlaceholders = docBody.replace(/\{@(?:link|inheritDoc)\s[^}]*\}/g, (match) => {
+  let withPlaceholders = docBody.replaceAll(/\{@(?:link|inheritDoc)\s[^}]*\}/g, (match) => {
     placeholders.push(match);
     return `${PLACEHOLDER_PREFIX}${String(placeholders.length - 1)}${PLACEHOLDER_SUFFIX}`;
   });
 
   withPlaceholders = withPlaceholders
     // Escape remaining braces
-    .replace(/\{/g, '\\{')
-    .replace(/\}/g, '\\}')
+    .replaceAll('{', String.raw`\{`)
+    .replaceAll('}', String.raw`\}`)
     // Escape angle brackets (HTML-like syntax)
-    .replace(/</g, '\\<')
-    .replace(/>/g, '\\>')
+    .replaceAll('<', String.raw`\<`)
+    .replaceAll('>', String.raw`\>`)
     // Escape literal \n sequences (not real newlines) that appear in VTT examples
-    .replace(/\\n/g, '\\\\n');
+    .replaceAll(String.raw`\n`, String.raw`\\n`);
 
   // Restore valid inline tags
-  const pattern = new RegExp(`${PLACEHOLDER_PREFIX}(\\d+)${PLACEHOLDER_SUFFIX}`, 'g');
-  return withPlaceholders.replace(pattern, (_, idx) => placeholders[Number(idx)] ?? '');
+  const pattern = new RegExp(String.raw`${PLACEHOLDER_PREFIX}(\d+)${PLACEHOLDER_SUFFIX}`, 'g');
+  return withPlaceholders.replaceAll(pattern, (_, idx) => placeholders[Number(idx)] ?? '');
 }
 
 export function postProcessTypesSource(source: string): string {
   return (
     source
-      .replace(/\u00A0/g, ' ')
-      .replace(/headers: \{\n\s*\[name: string\]: unknown;\n\s*\};/g, 'headers?: never;')
+      .replaceAll('\u00A0', ' ')
+      .replaceAll(/headers: \{\n\s*\[name: string\]: unknown;\n\s*\};/g, 'headers?: never;')
       // Strip non-standard JSDoc tags emitted by openapiTS
-      .replace(/\/\*\*\s*@description\s+/g, '/** ')
-      .replace(/^(\s*\*)\s*@description\s+/gm, '$1 ')
-      .replace(/^(\s*\*)\s*@constant\s*$/gm, '')
-      .replace(/^\s*\/\*\*\s*@constant\s*\*\/\s*$/gm, '')
-      .replace(/^(\s*\*)\s*@enum\s+\{[^}]*\}\s*$/gm, '')
-      .replace(/^\s*\/\*\*\s*@enum\s+\{[^}]*\}\s*\*\/\s*$/gm, '')
+      .replaceAll(/\/\*\*\s*@description\s+/g, '/** ')
+      .replaceAll(/^(\s*\*)\s*@description\s+/gm, '$1 ')
+      .replaceAll(/^(\s*\*)\s*@constant\s*$/gm, '')
+      .replaceAll(/^\s*\/\*\*\s*@constant\s*\*\/\s*$/gm, '')
+      .replaceAll(/^(\s*\*)\s*@enum\s+\{[^}]*\}\s*$/gm, '')
+      .replaceAll(/^\s*\/\*\*\s*@enum\s+\{[^}]*\}\s*\*\/\s*$/gm, '')
       // Escape TSDoc-unsafe characters within doc comments only
-      .replace(/\/\*\*[\s\S]*?\*\//g, (match) => escapeTsDocUnsafeChars(match))
+      .replaceAll(/\/\*\*[\s\S]*?\*\//g, (match) => escapeTsDocUnsafeChars(match))
   );
 }
 

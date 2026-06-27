@@ -123,7 +123,7 @@ describe('createHybridDataSource', () => {
     const ops = opsResult.value;
 
     // 1 lesson + 1 unit + 1 rollup, each with index action + doc = 6 operations
-    expect(ops.length).toBe(6);
+    expect(ops).toHaveLength(6);
 
     const targetIndexes = ops.flatMap((entry): readonly string[] => {
       if (typeof entry !== 'object' || entry === null || !('index' in entry)) {

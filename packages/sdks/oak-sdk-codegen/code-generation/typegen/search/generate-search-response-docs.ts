@@ -7,7 +7,7 @@ const DOC_HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Documentation-f
 function createResponseDocsModule(): string {
   return (
     DOC_HEADER +
-    String.raw`import { curriculumSchemas } from '../../../src/types/generated/zod/curriculumZodSchemas.js';
+    `import { curriculumSchemas } from '../../../src/types/generated/zod/curriculumZodSchemas.js';
 import {
   LessonResultSchema as GeneratedLessonResultSchema,
   SearchLessonsResponseSchema as GeneratedSearchLessonsResponseSchema,

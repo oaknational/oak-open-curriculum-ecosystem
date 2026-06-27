@@ -145,7 +145,7 @@ function normaliseSeed(seed: string): string {
 }
 
 function normaliseOverride(overrideValue: string): string {
-  const override = overrideValue.trim().replace(/\s+/gu, ' ');
+  const override = overrideValue.trim().replaceAll(/\s+/gu, ' ');
   if (override.length === 0) {
     throw new Error('override must be a non-empty string');
   }
@@ -193,6 +193,6 @@ function capitalise(value: string): string {
 function slugifyDisplayName(displayName: string): string {
   return displayName
     .toLowerCase()
-    .replace(/[^a-z0-9]+/gu, '-')
-    .replace(/^-+|-+$/gu, '');
+    .replaceAll(/[^a-z0-9]+/gu, '-')
+    .replaceAll(/^-+|-+$/gu, '');
 }

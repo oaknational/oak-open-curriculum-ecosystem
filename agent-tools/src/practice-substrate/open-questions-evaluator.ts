@@ -156,5 +156,5 @@ function readField(entryBody: string, field: (typeof REQUIRED_FIELDS)[number]): 
 }
 
 function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+  return value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }

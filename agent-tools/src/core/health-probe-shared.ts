@@ -77,9 +77,9 @@ export function readFrontmatterValue(content: string, key: string): string | nul
     return null;
   }
 
-  const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
-  const valueMatch = match[1].match(new RegExp(`^${escapedKey}:\\s*(.+)$`, 'mu'));
-  return valueMatch?.[1]?.trim().replace(/^['"]|['"]$/gu, '') ?? null;
+  const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/gu, String.raw`\$&`);
+  const valueMatch = match[1].match(new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'mu'));
+  return valueMatch?.[1]?.trim().replaceAll(/^['"]|['"]$/gu, '') ?? null;
 }
 
 export function calculateAgeDays(isoDate: string, now: Date): number | null {

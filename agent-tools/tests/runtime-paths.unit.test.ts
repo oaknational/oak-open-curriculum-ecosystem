@@ -10,7 +10,7 @@ describe('runtime paths', () => {
   });
 
   it('escapes windows-style repo paths', () => {
-    expect(escapedRepoPath('C:\\workspace\\dev\\repo')).toBe('C:-workspace-dev-repo');
+    expect(escapedRepoPath(String.raw`C:\workspace\dev\repo`)).toBe('C:-workspace-dev-repo');
   });
 
   it('validates claude session id format', () => {

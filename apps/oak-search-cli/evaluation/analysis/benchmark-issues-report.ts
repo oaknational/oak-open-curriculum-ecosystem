@@ -214,7 +214,7 @@ export function generateIssuesReport(augmentedReviews: readonly AugmentedReview[
   const summary = calculateSummary(augmentedReviews, problematicQueries, thresholds);
   const report = formatMarkdownReport(problematicQueries, summary, thresholds);
 
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0] ?? '';
+  const timestamp = new Date().toISOString().replaceAll(/[:.]/g, '-').split('T')[0] ?? '';
   const filename = `issues-report-${timestamp}.md`;
   const outputPath = resolve(thisDir, '../../', filename);
   writeFileSync(outputPath, report, 'utf-8');

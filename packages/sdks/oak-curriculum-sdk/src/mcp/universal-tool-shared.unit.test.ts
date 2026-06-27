@@ -138,7 +138,7 @@ describe('serialiseArg', () => {
     expect(serialiseArg('hello')).toBe('hello');
     expect(serialiseArg(42)).toBe(42);
     expect(serialiseArg(true)).toBe(true);
-    expect(serialiseArg(null)).toBe(null);
+    expect(serialiseArg(null)).toBeNull();
   });
 });
 

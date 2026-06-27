@@ -7,7 +7,7 @@ const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Admin stream fixtur
 function createAdminFixturesModule(): string {
   return (
     HEADER +
-    String.raw`import { z } from 'zod';
+    `import { z } from 'zod';
 
 export const ADMIN_STREAM_ACTIONS = ['elastic-setup', 'index-oak', 'rebuild-rollup'] as const;
 export const AdminStreamActionSchema = z.enum(ADMIN_STREAM_ACTIONS);
@@ -131,7 +131,7 @@ export function createAdminStreamFixtureMap(): AdminStreamFixtureMap {
 function createAdminIndexModule(): string {
   return (
     HEADER +
-    String.raw`export {
+    `export {
   ADMIN_STREAM_ACTIONS,
   AdminStreamActionSchema,
   AdminStreamSuccessSchema,

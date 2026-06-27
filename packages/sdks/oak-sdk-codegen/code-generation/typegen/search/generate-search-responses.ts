@@ -10,7 +10,7 @@ const KEY_STAGE_TUPLE = 'KEY_STAGES';
 function createLessonsModule(): string {
   return (
     HEADER +
-    String.raw`import { z } from 'zod';
+    `import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS } from '../api-schema/path-parameters.js';
 import { SearchFacetsSchema } from '../zod/search/output/sequence-facets.js';
 import type { SearchSuggestionItem, SearchSuggestionResponse } from './suggestions.js';
@@ -67,7 +67,7 @@ export type SearchLessonsSuggestionCache = SearchSuggestionResponse['cache'];
 function createUnitsModule(): string {
   return (
     HEADER +
-    String.raw`import { z } from 'zod';
+    `import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS } from '../api-schema/path-parameters.js';
 import { SearchFacetsSchema } from '../zod/search/output/sequence-facets.js';
 import { SearchSuggestionItemSchema, SearchSuggestionResponseSchema, DEFAULT_SUGGESTION_CACHE } from './suggestions.js';
@@ -119,7 +119,7 @@ export type SearchUnitsResponse = z.infer<typeof SearchUnitsResponseSchema>;
 function createSequencesModule(): string {
   return (
     HEADER +
-    String.raw`import { z } from 'zod';
+    `import { z } from 'zod';
 import { SearchFacetsSchema } from '../zod/search/output/sequence-facets.js';
 import { SearchSuggestionItemSchema, SearchSuggestionResponseSchema, DEFAULT_SUGGESTION_CACHE } from './suggestions.js';
 
@@ -170,7 +170,7 @@ export type SearchSequencesResponse = z.infer<typeof SearchSequencesResponseSche
 function createMultiModule(): string {
   return (
     HEADER +
-    String.raw`import { z } from 'zod';
+    `import { z } from 'zod';
 import { SEARCH_SCOPES } from './scopes.js';
 import { SearchLessonsResponseSchema } from './responses.lessons.js';
 import { SearchUnitsResponseSchema } from './responses.units.js';

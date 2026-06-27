@@ -19,7 +19,7 @@ interface OperationToToolEntry {
 }
 
 function toolNameToIdentifier(toolName: string): string {
-  return toolName.replace(/-([a-z])/g, (_: string, letter: string) => letter.toUpperCase());
+  return toolName.replaceAll(/-([a-z])/g, (_: string, letter: string) => letter.toUpperCase());
 }
 
 function emitToolImports(names: readonly string[]): string {

@@ -23,7 +23,7 @@ interface SharedLogIdentityRow {
  * @returns Identity rows from `Last refreshed` and `Prior refresh` entries.
  */
 export function findThreadRecordIdentityRows(text: string): readonly ThreadRecordIdentityRow[] {
-  const normalised = text.replace(/\s+/gu, ' ');
+  const normalised = text.replaceAll(/\s+/gu, ' ');
   const pattern =
     /\*\*(Last refreshed|Prior refresh)\*\*:[^(]*\(([^/()]+) \/ ([^/()]+) \/ ([^/()]+) \/ ([A-Za-z0-9_-]{1,24})(?=\s*[—)])/gu;
 

@@ -60,8 +60,8 @@ export function validateIndex(value: string): SearchIndexKind {
  * Validate positive integer.
  */
 export function validatePositiveInt(value: string, name: string): number {
-  const parsed = parseInt(value, 10);
-  if (isNaN(parsed) || parsed < 0) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed) || parsed < 0) {
     throw new InvalidArgumentError(`${name} must be a non-negative integer`);
   }
   return parsed;

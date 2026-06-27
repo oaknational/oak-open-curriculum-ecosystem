@@ -91,7 +91,7 @@ const PATTERNS = {
  * Cleans and normalises an extracted synonym.
  */
 function normaliseSynonym(raw: string): string {
-  return raw.trim().toLowerCase().replace(/['"]/g, '');
+  return raw.trim().toLowerCase().replaceAll(/['"]/g, '');
 }
 
 /**

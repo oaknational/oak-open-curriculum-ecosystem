@@ -198,22 +198,11 @@ describe('cross-validate', () => {
         source: 'component',
       },
     ] as const;
-    try {
-      crossValidateResponseMap(base, extra);
-      expect(false).toBe(true); // should not reach
-    } catch (e) {
-      const msg = String(e);
-      expect(msg.includes('Response map cross‑validation failed.')).toBe(true);
-      expect(msg.includes('Extra')).toBe(true);
-      // Now trigger missing by providing empty entries where base expects one
-      try {
-        crossValidateResponseMap(base, missing);
-        expect(false).toBe(true);
-      } catch (e2) {
-        const msg2 = String(e2);
-        expect(msg2.includes('Missing')).toBe(true);
-      }
-    }
+    expect(() => crossValidateResponseMap(base, extra)).toThrow(
+      /Response map cross.validation failed\./u,
+    );
+    expect(() => crossValidateResponseMap(base, extra)).toThrow(/Extra/u);
+    expect(() => crossValidateResponseMap(base, missing)).toThrow(/Missing/u);
   });
 
   it('accepts wildcard entries when all operations share the same component for a status', () => {

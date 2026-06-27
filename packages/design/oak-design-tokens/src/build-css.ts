@@ -44,7 +44,7 @@ function inlinePaletteReferences(
 
   return tokens.map((token) => ({
     ...token,
-    cssValue: token.cssValue.replace(PALETTE_VARIABLE_PATTERN, (_match, cssVariable: string) => {
+    cssValue: token.cssValue.replaceAll(PALETTE_VARIABLE_PATTERN, (_match, cssVariable: string) => {
       return paletteValues.get(cssVariable) ?? `var(${cssVariable})`;
     }),
   }));

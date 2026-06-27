@@ -281,7 +281,6 @@ describe('content-only token measurement', () => {
     const contentText = extractFitnessContentText(raw);
     const result = evaluateFitnessFile('plain.md', raw);
 
-    expect(raw).toBe('abcd\nefgh');
     expect(contentText).toBe('abcd\nefgh');
     expect(result.contentText).toBe('abcd\nefgh');
     expect(result.totalChars).toBe(9);
@@ -524,7 +523,7 @@ describe('content-only token measurement', () => {
     const result = evaluateFitnessFile('frontmatter.md', raw);
 
     expect(raw).toBe('---\nfitness_line_target: 10\nfitness_line_limit: 20\n---\n\nabcde');
-    expect(raw.length).toBe(61);
+    expect(raw).toHaveLength(61);
     expect(contentText).toBe('\nabcde');
     expect(result.contentText).toBe('\nabcde');
     expect(result.totalChars).toBe(6);

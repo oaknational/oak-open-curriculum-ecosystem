@@ -151,7 +151,7 @@ describe('codegen-core', () => {
       );
 
       const result = postProcessTypesSource(input);
-      expect(result).toContain('\\{ "transcript": "Hello" \\}');
+      expect(result).toContain(String.raw`\{ "transcript": "Hello" \}`);
     });
 
     it('should preserve valid TSDoc inline tags like {@link} and {@inheritDoc}', () => {
@@ -171,8 +171,8 @@ describe('codegen-core', () => {
       );
 
       const result = postProcessTypesSource(input);
-      expect(result).toContain('\\<');
-      expect(result).toContain('\\>');
+      expect(result).toContain(String.raw`\<`);
+      expect(result).toContain(String.raw`\>`);
     });
 
     it('should not escape braces outside doc comments', () => {

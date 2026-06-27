@@ -358,9 +358,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   side-effecting capability, never an information mode; PDR-112 seam and primer unchanged, PDR-112 not
   amended; Accepted 2026-06-23)
 - [ADR-203: State-Tier Process-and-Archive-Move](203-state-tier-process-and-archive-move.md)
-  (generalises ADR-199's class-tiered process-then-archive-move discipline to all untracked
+  (generalises ADR-199's class-tiered process-then-archive-move discipline to the other
   collaboration-state tiers — conversations, sidebars, escalations, handoffs; conserve substance into
-  canonical homes before archive-moving, never `git rm` untracked state; Accepted 2026-06-23)
+  canonical homes before archive-moving, never `git rm` untracked state; Accepted 2026-06-23, amended
+  2026-06-27 for tier-classification accuracy — instance tier vs tracked repo tier)
 - [ADR-204: Merge-Gate Strategy — Require Branches Up To Date, Not a Merge Queue](204-merge-gate-strategy-require-up-to-date-not-merge-queue.md)
   (prevent semantic merge-skew with require-branches-up-to-date rather than a merge queue; the queue is
   incompatible with default-setup CodeQL (codeql-action#1537), app-based SonarCloud, and Vercel's Git

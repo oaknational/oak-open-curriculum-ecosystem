@@ -48,5 +48,5 @@ export function removeNoisePhrases(query: string): string {
     }
   }
 
-  return cleaned.replace(/\s+/g, ' ').trim();
+  return cleaned.replaceAll(/\s+/g, ' ').trim();
 }

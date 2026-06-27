@@ -75,7 +75,7 @@ function getOwnValue(value: unknown, key: string): unknown {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     return undefined;
   }
-  if (!Object.prototype.hasOwnProperty.call(value, key)) {
+  if (!Object.hasOwn(value, key)) {
     return undefined;
   }
   const descriptor = Object.getOwnPropertyDescriptor(value, key);

@@ -94,7 +94,7 @@ export function parseFrameCounter(raw: string | undefined): number {
  * @returns The counter file path.
  */
 export function frameCounterPath(baseDir: string, sessionId: string): string {
-  const safe = sessionId.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 128);
+  const safe = sessionId.replaceAll(/[^A-Za-z0-9_-]/g, '_').slice(0, 128);
   return join(baseDir, safe.length > 0 ? safe : 'default');
 }
 

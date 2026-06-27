@@ -8,8 +8,10 @@ import type { OperationObject } from 'openapi3-ts/oas31';
  */
 export function normaliseUpstreamDescription(rawDescription: string): string {
   return rawDescription
-    .replace(/\bThis endpoint\b/gi, (match) => (match.startsWith('T') ? 'This tool' : 'this tool'))
-    .replace(/\s+/g, ' ')
+    .replaceAll(/\bThis endpoint\b/gi, (match) =>
+      match.startsWith('T') ? 'This tool' : 'this tool',
+    )
+    .replaceAll(/\s+/g, ' ')
     .trim();
 }
 

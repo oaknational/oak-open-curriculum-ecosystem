@@ -160,7 +160,7 @@ export function recordStagedBundle(input: {
 }
 
 function normalizeGitOutput(text: string): string {
-  return text.replace(/\r\n/gu, '\n').replace(/\r/gu, '\n');
+  return text.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
 }
 
 function stagedFileMismatch(stagedNameOnly: string, files: readonly string[]): string | undefined {

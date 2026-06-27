@@ -94,11 +94,7 @@ describe('naming schema registry', () => {
     // NAMING_SCHEMA_VERSION_VALUES does not enumerate, this assignment fails
     // to compile and downstream parse boundaries cannot silently reject the
     // new era.
-    const everyIdEnumerated: NamingSchemaId extends (typeof NAMING_SCHEMA_VERSION_VALUES)[number]
-      ? true
-      : never = true;
-
-    expect(everyIdEnumerated).toBe(true);
+    expectTypeOf<NamingSchemaId>().toExtend<(typeof NAMING_SCHEMA_VERSION_VALUES)[number]>();
   });
 
   it('pins the v2 wordlist digest so wordlist edits cannot land without a version bump', () => {

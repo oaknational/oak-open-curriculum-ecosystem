@@ -161,7 +161,7 @@ describe('generateMinedSynonyms', () => {
 
     const result = generateMinedSynonyms(keywords);
 
-    expect(result.synonyms.length).toBe(2);
+    expect(result.synonyms).toHaveLength(2);
   });
 
   it('includes confidence score based on pattern clarity', () => {
@@ -251,8 +251,8 @@ describe('serializeMinedSynonyms', () => {
       stats: { totalKeywordsProcessed: 1, synonymsExtracted: 1, patternCounts: {} },
       synonyms: [
         {
-          term: "o'clock\\path",
-          synonyms: ['back\\slash', "it's"],
+          term: String.raw`o'clock\path`,
+          synonyms: [String.raw`back\slash`, "it's"],
           pattern: 'also known as',
           confidence: 0.9,
           subjects: ['maths'],
@@ -269,7 +269,7 @@ describe('serializeMinedSynonyms', () => {
     //   "o'clock\\path": ["back\\slash", "it's"],
     const entryLine = serialized.split('\n').find((line) => line.includes("o'clock"));
     expect(entryLine).toBe(
-      `  ${JSON.stringify("o'clock\\path")}: [${JSON.stringify('back\\slash')}, ${JSON.stringify("it's")}],`,
+      `  ${JSON.stringify(String.raw`o'clock\path`)}: [${JSON.stringify(String.raw`back\slash`)}, ${JSON.stringify("it's")}],`,
     );
   });
 });
