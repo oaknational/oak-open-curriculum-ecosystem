@@ -41,7 +41,7 @@ rather than **derived ground truth**:
 | --- | --- | --- | --- |
 | the claims registry (de-facto active-agents surface) | structured | branch only as free-text intent | a freshness window, **not** liveness |
 | the comms heartbeat event stream | yes | structured branch per emit | per-emit, but an append-only stream, not current state |
-| the watcher-heartbeat surface | yes | none | **true** mtime liveness, but branch-blind |
+| the watcher-heartbeat surface | yes | none | watcher-presence (can this session drain comms), **not** agent liveness; branch-blind |
 | the git worktree listing | none | worktree + branch ground truth | n/a |
 
 Two failure modes follow directly, both observed first-hand:
@@ -67,8 +67,9 @@ ADR at build time (ADR-165, PDR-079).
 ## Decision
 
 **Adopt one Agent Work-State Model: a single authoritative, derived read surface
-answering, for every live agent, `(identity → worktree → branch → liveness)`,
-composed from three signals that are unified at the read but kept distinct at the
+answering, for every claimed agent, `(identity → worktree → branch → liveness)` —
+liveness is one of the projected fields, so a dead agent is present in the read and
+projects `dead` (clause 5). The read surface is composed from three signals that are unified at the read but kept distinct at the
 source.**
 
 ### 1. The authoritative read surface and the three-signal decomposition
@@ -80,31 +81,37 @@ liveness"):
 
 - **Claimed** — agent-asserted, mutable: the agent's work intent and the one fact a
   reset-working-directory shell cannot derive (the agent→worktree link, clause 3).
-- **Observed liveness** — mechanical: the watcher-heartbeat mtime (PDR-078). "A
-  process is alive." This is the liveness signal, **not** the claim freshness window.
+- **Observed liveness** — mechanical, per PDR-078: the role-heartbeat signal applied
+  at its staleness threshold, **not** the claim freshness window and **not** the
+  watcher-file mtime (which proves only that a session can drain comms — a host
+  phenotype detail). No single liveness proxy is trustworthy on its own (open
+  question 5).
 - **Ground truth** — git: the git worktree listing gives the worktree→branch
   mapping. Authoritative; never authored.
 
 ### 2. Derive, do not author
 
-Branch and worktree-path are git ground truth; liveness is the watcher mtime. The
-read surface **projects** these. Agents do not retype branch into free-text intent,
-and liveness is never inferred from a time window.
+Branch, and the worktree listing the anchor is validated against, are git ground
+truth; liveness is the PDR-078 role-heartbeat applied at its staleness threshold
+(clause 1). The read surface **projects** these. The one
+fact that is not git-derivable — which worktree this identity occupies — is the
+asserted, validated anchor (clause 3), never authored beyond that single binding.
+Agents do not retype branch into free-text intent, and liveness is never inferred
+from a time window.
 
 ### 3. The self-assertion primitive: assert one validated anchor
 
-Under the current session-launch topology — verified first-hand: the watcher
-process and the command shell both inherit the primary-checkout working directory,
-so no live process is rooted in a distinct agent worktree — the agent→worktree link
-is **not mechanically derivable**. This is a verified, falsifiable property of how
-sessions launch today, not a permanent law (see open question 2).
+Where the agent→worktree link is **not mechanically derivable** from any running
+process — the case under the current host session-launch topology, a verified,
+falsifiable property recorded in the host phenotype ADR, not a permanent law (see
+open question 2) — the model requires an explicit anchor.
 
 Given that, an agent asserts **exactly one** binding — `identity → worktree-path` —
 once, and that assertion is **validated against the git worktree listing** (the
 path MUST be a current worktree, or the assertion is rejected, fail-fast). The
 anchor is **stable across the session**; only the projected branch changes if the
-worktree's branch moves. From the validated anchor, worktree→branch and liveness
-are projected; nothing else about the binding is authored.
+worktree's branch moves. From the validated anchor, worktree→branch is projected from git and liveness from
+the PDR-078 role-heartbeat (clause 1); nothing else about the binding is authored.
 
 This clause resolves the **model** (what to assert, how to validate, what to
 derive). It is consistent with the explicit exclusion of "add a branch field to the
@@ -122,18 +129,22 @@ surfaces is reconciled or retired, not bridged:
   the validated worktree anchor); its free-text branch is **retired** (branch is
   projected from git); its freshness window is **retired as a liveness signal** and
   survives only as claim-TTL housekeeping, **never read as alive**;
-- **the comms heartbeat event stream** — remains a heartbeat signal but is **not**
-  the authoritative source of branch or liveness (git and the watcher mtime are);
-- **the watcher-heartbeat surface** — is the authoritative *observed-liveness*
-  source (mtime, PDR-078);
+- **the comms heartbeat event stream** — carries the *observed-liveness* signal (the
+  role heartbeat, PDR-078); it is **not** the authoritative source of branch (git is);
+- **the watcher-heartbeat surface** — proves *watcher-presence* (a session can drain
+  comms); it is a host phenotype signal, **not** the authoritative agent-liveness
+  source;
 - **the git worktree listing** — is the authoritative *ground-truth* source
   (worktree→branch);
-- **no fifth surface is added.**
+- **no fifth *authoritative read* surface is added** (where the asserted anchor is
+  *stored* — a field on the claim versus a dedicated binding record — is a phenotype
+  storage choice, open question 1, not a new authoritative read surface).
 
 ### 5. Strict and complete
 
-A dead agent reads as **dead** — liveness reflects the watcher mtime past the
-PDR-078 threshold, not a window that outlives the process.
+A dead agent reads as **dead** — liveness reflects the PDR-078 role-heartbeat past
+its threshold, not a claim-freshness window that outlives the process. (That a single
+heartbeat signal is itself a weak proxy is open question 5.)
 
 ### 6. Practice-owned, host-implemented
 
@@ -178,7 +189,7 @@ time.
 - The interim, hand-maintained cross-worktree work-state surface is superseded in
   its durable form by this model; the host build plan is its vehicle.
 
-## Open questions (for owner / Director ratification)
+## Open questions (deferred — phenotype to the host build ADR; model-level items via a future PDR amendment)
 
 1. **Where the validated worktree anchor lives** — a validated field on the claim
    versus a dedicated binding record. Phenotype, for the build ADR.
@@ -200,6 +211,18 @@ time.
    Clause 5's completeness covers liveness, not anchor staleness. The
    re-validation cadence (and its relation to the stale-state sweep) is for the
    build ADR, but the model names it as open.
+5. **Observed liveness needs a composed mechanism, not a single proxy (model-level,
+   open).** Every individual signal is a weak liveness proxy: the claim freshness
+   window outlives the process; the role-heartbeat can be emitted by a loop while the
+   agent is idle or stalled (presence ≠ progress); the watcher-file mtime proves only
+   that a session can drain comms; git work-evidence is honest but coarse and lagging.
+   A trustworthy work-state read likely **composes** several signals into a state with
+   confidence and staleness — separating *presence* (process up and connected) from
+   *progress* (advancing versus stalled), adding a derived work-fingerprint that must
+   change over time, and an active probe to disambiguate when the passive composite is
+   ambiguous. Whether the answer is new elements, a combination of existing ones, or
+   both is open. This supersedes the single-signal framing of clause 1 and clause 5
+   via a future PDR amendment, not an in-place reinterpretation.
 
 ## Notes
 
