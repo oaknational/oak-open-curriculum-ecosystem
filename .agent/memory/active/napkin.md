@@ -27,9 +27,12 @@ semantic-merge of memory files, `wrapped-exit-codes-false-green` for background-
 masking). The genuinely-new facets graduated to the agent-tooling frictions register
 (F-88 the comms-seen filename structural cure, F-92 the heartbeat-CLI/rule `--created-at`
 drift, F-100 the workspace-creation skill + per-category config canon). The candidate-pattern
-single-instances (disambiguate-overloaded-term, glanceable-divergence-display, the
-pr-monitor head-SHA refinement) remain captured in the pending-graduations register awaiting
-their second instance. The commits and the homes are the record of where each piece went.
+single-instances were promoted to their pattern homes **on the first instance** (owner
+direction 2026-06-27: promote and trust the Practice to invalidate a wrong promotion through
+experience, never hold for a second sighting) — `disambiguate-overloaded-term-before-canonicalising`
+and `glanceable-surface-divergence-only-display` as new files, the pr-monitor head-SHA
+refinement folded into `pr-monitor-to-merge`. `distilled` and `pending-graduations` are now
+empty. The commits and the homes are the record of where each piece went.
 
 New session observations append below.
 
