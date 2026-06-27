@@ -256,7 +256,7 @@ docs. See the Oak-org rows in the table.
 | `docs/engineering/sibling-repos.md` | Repos a teammate may clone alongside (teammates) |
 | `.agent/plans/good-first-issues.md` | Curated starter tasks (teammates) |
 | `docs/architecture/README.md`, the SDK READMEs (`packages/sdks/oak-curriculum-sdk`, `packages/sdks/oak-search-sdk`) and the graph packages (`packages/core/graph-core`, `packages/sdks/graph-corpus-sdk`) | The data and technical architecture — SDK, graph stack, semantic search — for engineers, integrators, and data analysts/scientists |
-| `VISION.md`, `ATTRIBUTION.md`, `LICENCE-DATA.md`, ADR-157, and `docs/governance/DATA-SOURCES.md` (once published) | Intended impact and data-source provenance/governance, for education and product experts — name the sources and their licences; never describe curriculum content |
+| `VISION.md`, `ATTRIBUTION.md`, `LICENCE-DATA.md`, ADR-157, and `docs/governance/DATA-SOURCES.md` | Intended impact and data-source provenance/governance, for education and product experts — name the sources and their licences; never describe curriculum content |
 | **Oak-org (public site only, always fetched):** `https://www.thenational.academy/about-us/who-we-are` | Oak's official positioning and pillars — **framing context** for why this repo matters; relay what Oak officially says, never this repo's own derivation |
 | **Oak-org (public site only):** `https://www.thenational.academy/about-us/meet-the-team#documents` and the documents it links (Oak's strategy, the annual plan, the impact evaluations) | Oak's official strategy, impact, and measurement — **on-interest depth**; cite and relay the official wording. **Text only — never a person's name** (`meet-the-team` is a navigational URL, not a source to quote people from) |
 
