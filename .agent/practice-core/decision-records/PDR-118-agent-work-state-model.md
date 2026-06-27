@@ -20,7 +20,9 @@ threshold);
 projection lives in a separate ADR, named in the practice-index bridge rather than
 linked from this body);
 [PDR-094](PDR-094-coordination-event-rotation-is-class-tiered-archive-not-delete.md)
-(collaboration state is untracked-by-design local state).
+(coordination-event rotation is class-tiered and archive-not-delete — the
+lifecycle discipline for the comms-event stream that carries the heartbeat
+liveness signal).
 The host's collaboration-state projection — the repo phenotype boundary, the
 single coordination-home checkout that owns shared registry state, and the
 untracked-state archive tiers — is recorded on the host ADR surface and resolved
@@ -204,7 +206,9 @@ time.
    question, not a phenotype detail.
 3. **Statusline data source** — this model's read surface versus the host editor's
    workspace fields on stdin. Both honour derive-not-author; the build ADR picks the
-   cleaner seam. Phenotype.
+   cleaner seam, but editor stdin is an **input to the projection**, never a competing
+   authoritative surface — clause 4's one-authoritative-read invariant holds for every
+   consumer, the statusline included. Phenotype.
 4. **Stale-anchor reconciliation (mid-session).** Clause 3 validates the anchor at
    assertion time only; a worktree removed mid-session leaves a stale anchor.
    Clause 5's completeness covers liveness, not anchor staleness. The
@@ -220,8 +224,16 @@ time.
    *progress* (advancing versus stalled), adding a derived work-fingerprint that must
    change over time, and an active probe to disambiguate when the passive composite is
    ambiguous. Whether the answer is new elements, a combination of existing ones, or
-   both is open. This supersedes the single-signal framing of clause 1 and clause 5
-   via a future PDR amendment, not an in-place reinterpretation.
+   both is open. Three concrete gaps the single-heartbeat framing leaves open, which
+   the composed mechanism must close: a **consumer-absent fallback** — when PDR-078 §4
+   suspends heartbeat emission (solo / n=2 / live-conductor sessions) there is no
+   heartbeat sample to age, so an actively-claimed agent must not read `dead`; liveness
+   then falls to claim presence plus direct observation. **Per-role/per-claim
+   granularity** — PDR-078 heartbeats are per role, so a one-liveness-per-agent key
+   hides a stalled role behind a live one; the read keys liveness per claim/role, not
+   per agent. And the **single authoritative surface holds for every consumer**, the
+   statusline included (open question 3). This supersedes the single-signal framing of
+   clause 1 and clause 5 via a future PDR amendment, not an in-place reinterpretation.
 
 ## Notes
 
