@@ -206,15 +206,18 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
-> Refresh this whole section at every handoff. Last refreshed 2026-06-27 (Oyster spins Coral, Director).
-> **SEAT IS LIVE — Director handoff IN PROGRESS:** Oyster spins Coral (341b9a) → Chinook turns Halo
-> (PDR-064 Moment-1 broadcast; authority transfers at Chinook's Moment-2). **The current, complete,
-> first-hand pickup is the fresh handoff record** at git-ignored state
-> `.agent/state/collaboration/handoffs/director-handoff-oyster-to-chinook-2026-06-27.md` plus the
-> cross-worktree map — read those, NOT the dated mandate below (it is 2026-06-25 history, retained
-> only as a precedent on team-session-plan / director-brief authoring).
-> Team n=4: Oyster (Director, handing off), Cedar (D1–D6 plan rationalisation), Brazier (Sonar
-> Phase 3), Swordfish (oak-under-the-hood reframe). Five-PR merge train (#247–#251) LANDED to main.
+> Refresh this whole section at every handoff. Last refreshed 2026-06-27 evening (Pulsar calls Ether, Director).
+> **SEAT IS LIVE — Pulsar calls Ether (ce6ba6) holds the Director seat** (PDR-064 Moment-2 from Cinder spins
+> Scorch at 19:31Z; clean two-moments transfer, Cinder stood down with monitors stopped + claim adopted, no gap).
+> **Director chain this day:** Oyster spins Coral → Chinook turns Halo → Hearth tracks Tallow → Callisto tracks
+> Vacuum → Cinder spins Scorch → **Pulsar calls Ether** (current). **Team n=2 owner-visible:** Pulsar (Director)
+> and Beluga rides Wave (curator). **Live work:** **#259** (this continuity bundle, `chore/director-coordination` →
+> main) reconciled to **0-behind main** with conservation verified first-hand, driving to merge — the last PR to
+> zero; **#264** (Beluga deferred-work map) draft until zero. The complete first-hand pickup is the fresh handoff
+> record at git-ignored state
+> `.agent/state/collaboration/handoffs/director-handoff-cinder-to-pulsar-2026-06-27.md` plus the cross-worktree
+> map. The 2026-06-25 NEXT SESSION MANDATE below is retained only as precedent on team-session-plan / director-brief
+> authoring.
 
 ### ▶ NEXT SESSION MANDATE (owner-directed 2026-06-25) — read before anything else
 

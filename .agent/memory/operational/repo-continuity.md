@@ -24,6 +24,20 @@ todo list — is [`director-handoff.md`](director-handoff.md).
 
 ## Current State
 
+- **Team session continued — Director rotation to Pulsar + #259 continuity reconcile (2026-06-27 evening, Pulsar calls Ether, Director).**
+  The merge-train day continued past the Oyster entry below. **#253 PDR-118 (agent work-state model keystone) LANDED to
+  main** (`bc87c650d`; owner Option A — land honestly, composed-liveness mechanism deferred to OQ5). **Director seat rotated
+  (PDR-064 two-moments each, all clean, no gap):** Chinook turns Halo → **Hearth tracks Tallow → Callisto tracks Vacuum →
+  Cinder spins Scorch → Pulsar calls Ether** (current). **#259** (`chore/director-coordination` → main) is the day's
+  continuity bundle: the Hawthorn 166-line napkin union (CONTENT ∪ archive conservation **verified first-hand** — every
+  main and coord napkin entry conserved, zero silent loss), distilled/pending-graduations drained to **169 pattern homes**
+  (conserved; `merge-base→main` distilled diff empty, so #260 drained exactly main's set), the session experience records,
+  and the day's PR-drain — reconciled to **0-behind `main`** via `/oak-semantic-merge` (never git-line-merge). **PDR-119
+  authored** (agent memory as an event graph with renderers — a Practice graph system alongside ADR-200; shared
+  renderer/projection pattern, substrate per-member; retires semantic-merge for append-only-narrative; direction
+  owner-ratified, build future). **Team settled to n=2 owner-visible:** Pulsar (Director) + **Beluga rides Wave** (curator;
+  lane held for #259; ADR-206/207 + the approach-C agent-work-state plan queued post-zero). **#264** (Beluga deferred-work
+  map) stays draft until zero. Estate: #259 is the last PR to zero.
 - **Team session — merge train + Director-seat rotation (2026-06-27, Oyster spins Coral, Director).**
   Owner-run n=4 team day. **Five-PR merge train LANDED to `main`** (releases 1.36.2→1.36.4):
   **#248** worktree-hygiene rule, **#250** statusline lane coordination, **#251** sonar thread reconcile,
@@ -31,8 +45,8 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   residuals (merged via a hand-resolved `/oak-semantic-merge` napkin union — both sessions' entries
   conserved; merge commit `9c92e458b`). Owner gated each code-owner click; ADR-204 require-up-to-date
   serialised them. **Director seat rotated twice** (PDR-064): Cedar lifts Canopy → **Oyster spins
-  Coral** → **Chinook turns Halo** (current Director, claim `60baf0b1`); each handoff had a
-  self-contained record + Moment-1/Moment-2. **Team rotated to fresh successors**: Sonar Gull→**Brazier
+  Coral** → **Chinook turns Halo** (then-current Director; the chain continued — see the top entry);
+  each handoff had a self-contained record + Moment-1/Moment-2. **Team rotated to fresh successors**: Sonar Gull→**Brazier
   wakes Crackle**, explain Peony→**Swordfish rides Surf**. **LIVE lanes (owner-directed):** Brazier —
   Sonar **Phase 3** (test-integrity; **PR #254** open, 12× S5914, driving to merge-ready); Swordfish —
   oak-under-the-hood **reframe** (first-hand re-assessment; **PR #243** draft, gated on the reframe
