@@ -70,7 +70,7 @@ ADR at build time, named in the practice-index bridge (PDR-079).
 **Adopt one Agent Work-State Model: a single authoritative, derived read surface
 answering, for every claimed agent, `(identity → worktree → branch → liveness)` —
 liveness is one of the projected fields, so a dead agent is present in the read and
-projects `dead` (clause 5). The read surface is composed from three signals that are unified at the read but kept distinct at the
+projects its true liveness state, never falsely alive (clause 5). The read surface is composed from three signals that are unified at the read but kept distinct at the
 source.**
 
 ### 1. The authoritative read surface and the three-signal decomposition
@@ -82,19 +82,20 @@ liveness"):
 
 - **Claimed** — agent-asserted, mutable: the agent's work intent and the one fact a
   reset-working-directory shell cannot derive (the agent→worktree link, clause 3).
-- **Observed liveness** — mechanical, per PDR-078: the role-heartbeat signal applied
-  at its staleness threshold, **not** the claim freshness window and **not** the
-  watcher-file mtime (which proves only that a session can drain comms — a host
-  phenotype detail). No single liveness proxy is trustworthy on its own (open
-  question 5).
+- **Observed liveness** — mechanical, per PDR-078: the event-recency signal — any
+  event (heartbeat **or** substantive) from the role within the staleness threshold,
+  since substantive events imply liveness and suppress the redundant heartbeat
+  (PDR-078 §2). It is **not** the claim freshness window and **not** the watcher-file
+  mtime (which proves only that a session can drain comms — a host phenotype detail).
+  No single liveness proxy is trustworthy on its own (open question 5).
 - **Ground truth** — git: the git worktree listing gives the worktree→branch
   mapping. Authoritative; never authored.
 
 ### 2. Derive, do not author
 
 Branch, and the worktree listing the anchor is validated against, are git ground
-truth; liveness is the PDR-078 role-heartbeat applied at its staleness threshold
-(clause 1). The read surface **projects** these. The one
+truth; liveness is the PDR-078 event-recency signal (clause 1). The read surface
+**projects** these. The one
 fact that is not git-derivable — which worktree this identity occupies — is the
 asserted, validated anchor (clause 3), never authored beyond that single binding.
 Agents do not retype branch into free-text intent, and liveness is never inferred
@@ -130,8 +131,9 @@ surfaces is reconciled or retired, not bridged:
   the validated worktree anchor); its free-text branch is **retired** (branch is
   projected from git); its freshness window is **retired as a liveness signal** and
   survives only as claim-TTL housekeeping, **never read as alive**;
-- **the comms heartbeat event stream** — carries the *observed-liveness* signal (the
-  role heartbeat, PDR-078); it is **not** the authoritative source of branch (git is);
+- **the comms heartbeat event stream** — carries the *observed-liveness* signal
+  (PDR-078 event-recency — heartbeat or substantive); it is **not** the authoritative
+  source of branch (git is);
 - **the watcher-heartbeat surface** — proves *watcher-presence* (a session can drain
   comms); it is a host phenotype signal, **not** the authoritative agent-liveness
   source;
@@ -143,9 +145,12 @@ surfaces is reconciled or retired, not bridged:
 
 ### 5. Strict and complete
 
-A dead agent reads as **dead** — liveness reflects the PDR-078 role-heartbeat past
-its threshold, not a claim-freshness window that outlives the process. (That a single
-heartbeat signal is itself a weak proxy is open question 5.)
+A role silent past the PDR-078 threshold reads as **retired-pending-confirmation**,
+not as fresh or alive — a soft signal (PDR-078 §3) that opens the confirmation and
+handoff path (PDR-063 / PDR-064) and that owner direction or peer judgement may
+extend, never an immediate hard `dead` flag. The invariant: liveness reflects PDR-078
+event-recency, not a claim-freshness window that outlives the process. (That any single
+event-recency signal is itself a weak proxy is open question 5.)
 
 ### 6. Practice-owned, host-implemented
 
