@@ -241,4 +241,4 @@ Practice-Core concept ↔ ADR map):
 | [PDR-115](PDR-115-naming-openly-licensed-external-sources.md) | Name Openly-Licensed External Sources Plainly; Keep Proprietary Sources Private | Accepted |
 | [PDR-116](PDR-116-falsifiable-judgment-gate.md) | Falsifiable-Judgment Gate — Anchor a Judgment to Its Source, Not to Taste | Accepted |
 | [PDR-117](PDR-117-director-and-implementer-roles.md) | Director and Implementer Roles (the Two First-Class Seats of the Many-Agent Model) | Proposed |
-| [PDR-118](PDR-118-agent-work-state-model.md) | Agent Work-State Model | Proposed |
+| [PDR-118](PDR-118-agent-work-state-model.md) | Agent Work-State Model | Accepted |
