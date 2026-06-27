@@ -288,6 +288,36 @@ New session observations append below.
   decision in a comms event first; the owner reminded me the napkin is the home for session notes. Comms is
   for live coordination; the napkin is the capture→distil→graduate buffer (PDR-014).
 
+## 2026-06-27 — Conformed to a bad filename convention under fluency; the slug already exists (Oyster spins Coral)
+
+- **Mistake → owner-caught: I "fixed" my comms-seen file by conforming to a space-and-capitals
+  convention instead of questioning it.** My first watcher used `oyster-spins-coral.json`
+  (lowercase-kebab — correct). The F-95 `assert-watcher-live` gate failed because it derives the
+  expected heartbeat path from the *display* `agent_name` ("Oyster spins Coral"), so I renamed my
+  file to `Oyster spins Coral.json` to match the 68/88 existing spaced files. The owner then
+  directed: filenames should be all lowercase, no spaces. My original instinct was right; I
+  overrode it under **fluency / artefact-gravity** ("the gate expects this name, just match the
+  surrounding convention") — the exact bypass the metacognition "fluency is a warning" note names.
+  The friction (gate rejecting my kebab name) was type-2 *genuine divergence* (the CLI derivation
+  is wrong) dressed as type-1 *trivial gap* (I named my file wrong). Worked instance of
+  [[feedback_existence_is_not_correctness_default_replace]] applied to a convention, and
+  [[verify-dont-trust]] (a convenient "just match it" frame).
+- **The structural cure already half-exists.** `agent-tools/src/core/agent-identity/derive.ts:23`
+  already mints a lowercase-kebab `slug` (e.g. `harrier-weaves-stratosphere`). The defect is that
+  the comms-seen/heartbeat **filenames** consume the human display `agent_name` instead of that
+  slug — single derivation point `commsSeenFileForCodename(agent_name, …)`
+  (`claims-open-watcher-gate.ts:67`) + `cli-comms-assert-watcher-live.ts:31` (`codename =
+  self.agent_name`). Fix = consume `slug` not `agent_name` for the path; migrate the 88 existing
+  files; update the convention text in `comms-all-channels-watcher.md`. Display name stays
+  human-friendly in comms *content*; only the *filesystem identifier* becomes machine-safe
+  (display-name ≠ filesystem-id). NOT a hot-patch: 3 peers' live watchers + the F-95/`claims open`
+  gates all key on the spaced form right now — changing the derivation mid-window breaks the
+  team's gates, and switching only my own file breaks only me (which is itself the proof the
+  entrenched convention can't be opted out of per-agent — it needs the structural CLI fix). Route
+  as a tracked agent-tooling change (fits the AX frictions register + `agent-tools-cli-ergonomics`
+  plan), landed when the window is quiet or with dual-read backward-compat. Candidate friction
+  entry.
+
 ## 2026-06-27 — Session-close residuals (Alder tracks Topsoil)
 
 - **Don't bundle a deep-review-gated forward-design doc into a closeout PR — it spawns an
