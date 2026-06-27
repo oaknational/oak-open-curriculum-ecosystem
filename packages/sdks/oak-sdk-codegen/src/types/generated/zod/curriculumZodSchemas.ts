@@ -97,7 +97,7 @@ function sanitizeSchemaKeys(
   schemas: CurriculumSchemaCollection,
   options?: { readonly rename?: (original: string) => string },
 ): CurriculumSchemaCollection {
-  const rename = options?.rename ?? ((value: string) => value.replace(/[^A-Za-z0-9_]/g, "_"));
+  const rename = options?.rename ?? ((value: string) => value.replaceAll(/[^A-Za-z0-9_]/g, "_"));
   const result: Record<string, z.ZodType> = {};
   for (const [key, value] of Object.entries(schemas)) {
     const sanitized = rename(key);
@@ -1701,7 +1701,7 @@ const renameInlineSchema = (original: string) => {
   if (original === "changelog_latest_200") {
     return "ChangelogLatestResponseSchema";
   }
-  return original.replace(/[^A-Za-z0-9_]/g, "_");
+  return original.replaceAll(/[^A-Za-z0-9_]/g, "_");
 };
 
 export const rawCurriculumSchemas = {

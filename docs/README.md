@@ -13,8 +13,8 @@ last_reviewed: 2026-06-12
 
 ## Getting Started
 
-- **New to everything?** → run `/oak-explain` in an agent session
-  (`$oak-explain` in Codex) — the orientation lens; it works out whether you
+- **New to everything?** → run `/oak-under-the-hood` in an agent session
+  (`$oak-under-the-hood` in Codex) — the orientation lens; it works out whether you
   want a specific answer, an area overview, or a guided walk that can set up
   your machine, reads the live docs, and meets you there
 - **Evaluating the project?** → [VISION.md](../VISION.md) for the

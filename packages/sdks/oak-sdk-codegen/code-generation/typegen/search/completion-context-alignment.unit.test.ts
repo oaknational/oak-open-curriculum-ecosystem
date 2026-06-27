@@ -7,7 +7,7 @@
  * 2. Generated Zod completion context schemas match ES mapping contexts
  * 3. Per-index context sets are intentionally different (not just copy-paste errors)
  */
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, expectTypeOf } from 'vitest';
 
 import type { EsFieldMapping } from './es-field-config.js';
 import {
@@ -191,9 +191,7 @@ describe('Completion Context Alignment: Regression guard for original bug', () =
 
   it('type-level contract excludes sequence from lessons contexts', () => {
     type LessonsContext = (typeof LESSONS_COMPLETION_CONTEXTS)[number];
-    type LessonsRejectsSequence = Extract<LessonsContext, 'sequence'> extends never ? true : false;
-
-    const lessonsRejectsSequence: LessonsRejectsSequence = true;
-    expect(lessonsRejectsSequence).toBe(true);
+    // If 'sequence' ever becomes a member of LessonsContext, this fails to compile.
+    expectTypeOf<Extract<LessonsContext, 'sequence'>>().toEqualTypeOf<never>();
   });
 });

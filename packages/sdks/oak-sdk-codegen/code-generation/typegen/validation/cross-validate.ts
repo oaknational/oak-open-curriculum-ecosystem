@@ -16,11 +16,11 @@ import {
 const ALLOWED_METHODS = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] as const;
 
 function toColon(path: string): string {
-  return path.replace(/{([^}]+)}/g, ':$1');
+  return path.replaceAll(/{([^{}]+)}/g, ':$1');
 }
 
 function toCurly(path: string): string {
-  return path.replace(/:([A-Za-z0-9_]+)/g, '{$1}');
+  return path.replaceAll(/:([A-Za-z0-9_]+)/g, '{$1}');
 }
 
 function validatePathTransform(p: string): void {
@@ -231,7 +231,7 @@ function addWildcardKeysForSharedComponents(
       continue;
     }
     const [componentName] = componentSet;
-    if (componentName && Object.prototype.hasOwnProperty.call(componentSchemas, componentName)) {
+    if (componentName && Object.hasOwn(componentSchemas, componentName)) {
       out.add(`*:${status}`);
     }
   }

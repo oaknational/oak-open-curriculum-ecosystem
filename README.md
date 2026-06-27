@@ -71,7 +71,7 @@ are set out in [What This Repo Provides](#what-this-repo-provides) below.
 
 ## Developers and AI agents
 
-- **New here?** — open an agent session and run `/oak-explain`; the orientation
+- **New here?** — open an agent session and run `/oak-under-the-hood`; the orientation
   lens works out whether you want a quick answer, an overview, or a guided
   hands-on walk that can set up your machine, and meets you there
 - **Developers** — continue to [Quick Start](#quick-start) below

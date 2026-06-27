@@ -13,7 +13,7 @@ import { parseTurtle } from './index.js';
 // taxonomic relation) means the count is a domain fact, not a test-
 // author choice; that satisfies the audit-shape avoidance per
 // `test-immediate-fails.md` item 16.
-const SKOS_TURTLE_FIXTURE = String.raw`
+const SKOS_TURTLE_FIXTURE = `
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix ex: <https://example.test/concepts/> .
 

@@ -203,7 +203,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
 
   for (const { path, method, operation } of iterOperations(schema)) {
     const toolName = generateMcpToolName(path, method);
-    const operationId = operation.operationId ?? `${method}-${path.replace(/[{}]/g, '')}`;
+    const operationId = operation.operationId ?? `${method}-${path.replaceAll(/[{}]/g, '')}`;
     operationToToolEntries.push({ operationId, toolName });
     toolNamesSet.add(toolName);
 

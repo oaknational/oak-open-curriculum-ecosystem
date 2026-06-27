@@ -79,7 +79,7 @@ export function toPascalCase(str: string): string {
  * @returns SCREAMING_SNAKE_CASE string (e.g., "MATHS_PRIMARY")
  */
 function toScreamingSnakeCase(str: string): string {
-  return str.toUpperCase().replace(/-/g, '_');
+  return str.toUpperCase().replaceAll('-', '_');
 }
 
 /**
@@ -89,7 +89,7 @@ function toScreamingSnakeCase(str: string): string {
  * @returns Escaped string safe for single quotes
  */
 function escapeForSingleQuote(str: string): string {
-  return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  return str.replaceAll('\\', '\\\\').replaceAll("'", String.raw`\'`);
 }
 
 function getLessonSlugConstantNames(sequenceSlug: string): {

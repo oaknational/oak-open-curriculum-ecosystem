@@ -96,7 +96,7 @@ contribution you want to make first.
   ([onboarding-simulations-public-alpha-readiness.md](developer-experience/active/onboarding-simulations-public-alpha-readiness.md))
 - **Why this is a good first issue**: This repo's second value stream is the
   Practice; the fastest way to understand it is to operate one of its loops.
-  Three bounded shapes: walk `/oak-explain` and file any friction you hit
+  Three bounded shapes: walk `/oak-under-the-hood` and file any friction you hit
   on the onboarding register; dispatch the `onboarding-expert` sub-agent for
   a persona simulation and verify one of its findings first-hand; or run a
   scoped curation pass with `/oak-curator-pass` under owner direction.
@@ -115,7 +115,7 @@ If you are not sure which area to start in:
 3. Run [`/oak-start-right-quick`](../skills/start-right-quick/SKILL-CANONICAL.md)
    before the first edit. For ambiguous scope, follow with
    [`/oak-metacognition`](../skills/metacognition/SKILL-CANONICAL.md). If you
-   are brand new, [`/oak-explain`](../skills/explain/SKILL-CANONICAL.md)
+   are brand new, [`/oak-under-the-hood`](../skills/under-the-hood/SKILL-CANONICAL.md)
    guides you here, in whatever depth you want.
 
 ## Maintenance

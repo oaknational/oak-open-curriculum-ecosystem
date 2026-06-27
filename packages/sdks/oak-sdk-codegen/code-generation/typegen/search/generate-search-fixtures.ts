@@ -7,7 +7,7 @@ const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Search fixture help
 function createFixturesModule(): string {
   return (
     HEADER +
-    String.raw`import type { SearchSuggestionItem, SearchSuggestionResponse } from './suggestions.js';
+    `import type { SearchSuggestionItem, SearchSuggestionResponse } from './suggestions.js';
 import {
   DEFAULT_SUGGESTION_CACHE,
   SearchSuggestionItemSchema,

@@ -25,7 +25,7 @@ describe('emitHeader TSDoc safety', () => {
     const code = generateToolFile(toolName, path, method, 'op-id', op(), pathMeta, {});
 
     // The doc comment Path line should have escaped braces
-    expect(code).toContain('Path: /lessons/\\{lesson\\}/transcript');
+    expect(code).toContain(String.raw`Path: /lessons/\{lesson\}/transcript`);
     // The const assignment should still have unescaped braces
     expect(code).toContain("const path = '/lessons/{lesson}/transcript'");
   });

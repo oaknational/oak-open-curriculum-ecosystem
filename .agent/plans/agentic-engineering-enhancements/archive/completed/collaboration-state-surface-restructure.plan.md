@@ -40,6 +40,15 @@ todos:
 
 # Collaboration-State Surface Restructure
 
+> **ARCHIVED — RATIFIED COMPLETE (D3, 2026-06-27).** Phase-4 acceptance was met;
+> the §6 empirical-validation clause ("the contract has prevented at least one
+> wrong-file landing in a subsequent graduation") is **WAIVED, not met** — it is
+> an unobservable future-prediction, not a quality or CI gate, and the contract
+> has been in active use since 2026-05. This waive is **specific to this
+> unobservable-prediction shape and is NOT a general licence** to waive empirical
+> self-gates. The placement contract itself lives at
+> `.agent/memory/executive/collaboration-state-placement-contract.md`.
+
 ## 1. Intent
 
 The collaboration-state surface family

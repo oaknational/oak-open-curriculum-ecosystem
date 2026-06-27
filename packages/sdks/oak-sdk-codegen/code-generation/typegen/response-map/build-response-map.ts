@@ -70,7 +70,7 @@ export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMa
   const emptyBodyStatuses = new Set(['204', '304']);
 
   for (const pathKey in paths) {
-    if (!Object.prototype.hasOwnProperty.call(paths, pathKey)) {
+    if (!Object.hasOwn(paths, pathKey)) {
       continue;
     }
     const pathItem = paths[pathKey];

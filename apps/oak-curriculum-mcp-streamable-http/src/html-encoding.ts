@@ -27,11 +27,11 @@ export function encodeHtmlText(text: string): string {
   }
 
   return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
 }
 
 /**
@@ -47,13 +47,13 @@ export function encodeHtmlAttribute(text: string): string {
   }
 
   return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .replace(/\n/g, '&#10;')
-    .replace(/\r/g, '&#13;');
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+    .replaceAll('\n', '&#10;')
+    .replaceAll('\r', '&#13;');
 }
 
 /**
@@ -85,7 +85,7 @@ export function encodeScriptContent(jsCode: string): string {
 
   // Replace </ with <\/ to prevent script tag closure
   // This is safe because \/ in JavaScript is the same as /
-  return jsCode.replace(/<\//g, '<\\/');
+  return jsCode.replaceAll('</', String.raw`<\/`);
 }
 
 /**
@@ -101,11 +101,11 @@ export function decodeHtml(html: string): string {
   }
 
   return html
-    .replace(/&#39;/g, "'")
-    .replace(/&quot;/g, '"')
-    .replace(/&gt;/g, '>')
-    .replace(/&lt;/g, '<')
-    .replace(/&amp;/g, '&')
-    .replace(/&#10;/g, '\n')
-    .replace(/&#13;/g, '\r');
+    .replaceAll('&#39;', "'")
+    .replaceAll('&quot;', '"')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&lt;', '<')
+    .replaceAll('&amp;', '&')
+    .replaceAll('&#10;', '\n')
+    .replaceAll('&#13;', '\r');
 }

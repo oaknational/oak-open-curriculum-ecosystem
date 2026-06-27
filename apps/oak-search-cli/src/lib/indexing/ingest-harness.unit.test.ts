@@ -73,7 +73,7 @@ describe('ingest harness', () => {
     expect(params.path).toBe('/_bulk');
     expect(typeof params.body).toBe('string');
     const lines = String(params.body).trim().split('\n');
-    expect(lines.length).toBe(result.operations.length);
+    expect(lines).toHaveLength(result.operations.length);
   });
 
   it('skips network calls when run in dry-run mode', async () => {

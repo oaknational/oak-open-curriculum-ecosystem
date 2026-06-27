@@ -118,13 +118,11 @@ describe('generateZodSchemas (integration)', () => {
     if (typeof lastWrittenContent !== 'string') {
       throw new Error('Expected writeFileSync to capture string content');
     }
-    expect(lastWrittenContent.includes('curriculumSchemas')).toBe(true);
-    expect(lastWrittenContent.includes('OPERATION_ID_BY_METHOD_AND_PATH')).toBe(true);
-    expect(lastWrittenContent.includes('PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID')).toBe(true);
-    expect(lastWrittenContent.includes('const statusSchemas')).toBe(true);
-    expect(lastWrittenContent.includes('statusSchemas[primaryKey] = endpoint.response;')).toBe(
-      true,
-    );
-    expect(lastWrittenContent.includes('statusSchemas[errorKey] = error.schema;')).toBe(true);
+    expect(lastWrittenContent).toContain('curriculumSchemas');
+    expect(lastWrittenContent).toContain('OPERATION_ID_BY_METHOD_AND_PATH');
+    expect(lastWrittenContent).toContain('PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID');
+    expect(lastWrittenContent).toContain('const statusSchemas');
+    expect(lastWrittenContent).toContain('statusSchemas[primaryKey] = endpoint.response;');
+    expect(lastWrittenContent).toContain('statusSchemas[errorKey] = error.schema;');
   });
 });

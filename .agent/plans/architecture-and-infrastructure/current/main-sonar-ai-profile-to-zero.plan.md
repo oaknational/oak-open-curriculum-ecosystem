@@ -15,8 +15,8 @@ todos:
     content: "Phase 1: agent-CLI path-injection (S8707). assertPathWithinBase + the 2 agent-tools sites LANDED (PR #223). Site-3 (oak-search-cli analyze-elser-failures.ts) done in PR #242, which also extracted the validator to the shared @oaknational/safe-path package (SSOT for all 3 sites). Merged 2026-06-27 (merge commit 3895b3f45)."
     status: completed
   - id: phase-2-regex-strategy
-    content: "Phase 2: regex safety (S8786/S5843/S6035) — generator fixes, per-workspace regex home, semver import, per-site FP."
-    status: pending
+    content: "Phase 2: regex safety (S8786/S5843/S6035) — re-triaged first-hand 2026-06-27: 2 genuine fixes (sitemap O(n^2) on network XML; S6035 char-class) + 16 ACCEPT-with-rationale (internal/build-time/generated inputs; canonical parity-locked semver). PR #249 merge-ready."
+    status: in-progress
     depends_on: []
   - id: phase-3-test-integrity
     content: "Phase 3: test integrity (S2699 BLOCKER, S5914 x12, S5906 x34, S6551)."
@@ -93,15 +93,17 @@ Live `main`: **392** open issues across **49 distinct rule keys** (the "48 rule 
    `eslint-plugin-unicorn` rules in `oak-eslint`, run `lint:fix`, then escalate
    those rules to `error` once violations are clean. Folds in the
    `sonarjs-activation-and-sonarcloud-backlog` intent.
-3. Earlier-agreed: regex home = per-workspace `src/lib/regex/`; `semver.ts`
-   refactors to import from the `semver` package; tier ordering as below.
+3. Earlier-agreed: regex home = per-workspace `src/lib/regex/`. (The `semver.ts`
+   "refactor-to-import from `semver`" was **superseded 2026-06-27 → ACCEPT**: `isValidSemver`
+   deliberately uses the regex for strict semver §2, which the `semver` package's `valid()`
+   does not enforce — see the §Verified Findings disposition.) Tier ordering as below.
 
 ## Verified Findings (first-hand, 2026-06-24)
 
 | Claim | Verification | Disposition |
 |---|---|---|
 | S8707 ×3 genuine `argv`→`fs` path-injection | Read all 3 sites; `ci-turbo-report.ts` `argv[2]`→`resolveSummaryPath` returns as-is (L150); `prevent-accidental-major-version.ts:37`; `analyze-elser-failures.ts` `validateInputs` checks existence only | **FIX — 2 of 3 done** (PR #223 via `agent-tools/src/core/safe-path.ts`); `analyze-elser-failures.ts:166` remains |
-| S101 ×3 `paths`/`operations` not renamable | `codegen-core.ts:201` calls `openapiTS(new URL(...))` with **no options**; names are openapi-typescript's fixed output, consumed by internal imports | **FALSE_POSITIVE** (authorised) |
+| S101 ×3 `paths`/`operations` not renamable | `codegen-core.ts:201` calls `openapiTS(new URL(...))` with **no options**; names are openapi-typescript's fixed output, consumed by internal imports | **ACCEPT** (corrected 2026-06-27 from FALSE_POSITIVE: the generator's `postProcessTypesSource` hook *could* rename, so not a tool error; but they are the public SDK API + ecosystem convention → accept-with-rationale, applied server-side) |
 | `path-utils.ts` regexes are generated | Emitter is `typegen/paths/generate-path-utils.ts`; patterns like `/{([^}]+)}/g` are **linear-safe** | **FP candidate — confirm per-site** |
 | No existing path-containment validator | grep + agent; closest `agent-tools/src/core/repo-root.ts` is an upward sentinel walk | **New local helper** |
 | Only 4 sonarjs + 2 unicorn rules enabled | `oak-eslint/src/configs/recommended.ts:67-90` — only `prefer-includes` sits in the commented "Potentials" block; the other matching idiom rules must be **added** | **Enable matching rules (Phase 5)** |
@@ -196,7 +198,7 @@ Per verified sub-class:
   different rule): move patterns into a per-workspace `src/lib/regex/` module — each
   named, documented, anchored/bounded, unit-tested for linear behaviour, reused at
   call sites. (S6035 is counted under its own row, not the S8786 ×15.)
-- **Vendored** (`semver.ts:33`): refactor to import the pattern from `semver`.
+- **Vendored** (`semver.ts:33`): **ACCEPT** (corrected 2026-06-27 from refactor-to-import — `isValidSemver` uses the regex for strict semver §2, which `semver.valid()` does not enforce; S5843 is complexity, not ReDoS).
 - **Runtime-only** (`vercel-ignore-production-non-release-build.mjs:21`): simplify in
   place (consolidation N/A).
 - **Acceptance**: every regex site fixed or FP'd with rationale; regex-home modules
@@ -338,7 +340,7 @@ checks existence only).
 | Rule | n | Sev | Disposition |
 |---|--:|---|---|
 | `typescript:S8786` | 15 | MAJOR | per-site: FP if linear-safe, else FIX/FIX-GEN |
-| `typescript:S5843` | 1 | MAJOR | refactor → import from `semver` (`semver.ts:33`) |
+| `typescript:S5843` | 1 | MAJOR | ACCEPT (`semver.ts:33` — canonical strict-§2 pattern; corrected 2026-06-27 from refactor) |
 | `javascript:S5843` | 1 | MAJOR | FIX in place (`vercel-ignore-…build.mjs:21`) |
 | `typescript:S6035` | 1 | MAJOR | FIX (`identity-audit-markdown.ts:28`) |
 
@@ -404,5 +406,5 @@ S8786 sites: `codegen-core.ts` 183-187 (gen source), `path-utils.ts` 9,24
 |---|--:|---|
 | `typescript:S101` | 3 | openapi-typescript's fixed `paths`/`components`/`operations` interface names (generated `api-paths-types.ts` L1/L614/L3347); `openapiTS` called with no options (`codegen-core.ts:201`); renaming breaks the external idiom + all consumers |
 
-Class-count total (2026-06-26 re-derive): **392** = P1 1 + P2 18 + P3 48 + P4 49 + P5 273 + FP 3 (S101). (2026-06-24 origin: 398 = 3 + 18 + 48 + 54 + 272 + 3.)
+Class-count total (2026-06-26 re-derive): **392** = P1 1 + P2 18 + P3 48 + P4 49 + P5 273 + ACCEPT 3 (S101, corrected 2026-06-27 from FALSE_POSITIVE). (2026-06-24 origin: 398 = 3 + 18 + 48 + 54 + 272 + 3.)
 Re-derive to confirm before execution; counts drift with main.

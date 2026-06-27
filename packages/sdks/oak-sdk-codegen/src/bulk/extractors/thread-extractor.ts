@@ -64,7 +64,7 @@ function extractYear(unit: Unit): number | undefined {
  */
 function extractSubject(sequenceSlug: string): string {
   const parts = sequenceSlug.split('-');
-  const phase = parts[parts.length - 1];
+  const phase = parts.at(-1);
   if (parts.length >= 2 && (phase === 'primary' || phase === 'secondary')) {
     return parts.slice(0, -1).join('-');
   }

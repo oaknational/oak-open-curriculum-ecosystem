@@ -53,7 +53,7 @@ function typeFor(meta: ParamMetadata): string {
  * single-line doc comments generated from OpenAPI descriptions.
  */
 function escapeTsDocChars(text: string): string {
-  return text.replace(/\{/g, '\\{').replace(/\}/g, '\\}');
+  return text.replaceAll('{', String.raw`\{`).replaceAll('}', String.raw`\}`);
 }
 
 function describeParam(meta: ParamMetadata): string | undefined {

@@ -7,6 +7,7 @@
 import { describe, it, expect } from 'vitest';
 import { isPublicResourceUri } from './public-resources.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { OAK_UNDER_THE_HOOD_RESOURCE_URI } from '../register-resources.js';
 
 describe('isPublicResourceUri', () => {
   describe('returns true for public resources', () => {
@@ -18,6 +19,15 @@ describe('isPublicResourceUri', () => {
   describe('returns true for widget resource (static HTML, no user data)', () => {
     it('returns true for widget URI', () => {
       expect(isPublicResourceUri(WIDGET_URI)).toBe(true);
+    });
+  });
+
+  describe('returns true for the app-local orientation pointer (ADR-205)', () => {
+    // Imports the URI the resource is actually registered under, so a future rename of
+    // the registered resource fails this test until the allowlist is updated in step
+    // (drift guard for the first app-local public resource).
+    it('returns true for the Oak: Under the Hood resource URI as registered', () => {
+      expect(isPublicResourceUri(OAK_UNDER_THE_HOOD_RESOURCE_URI)).toBe(true);
     });
   });
 

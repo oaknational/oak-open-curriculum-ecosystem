@@ -142,7 +142,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       'user-search',
       'user-search-query',
     ];
-    const expectedToolNames = [...baseToolNames, ...aggregatedTools];
+    // App-local tools registered outside the SDK universal/aggregated registry
+    // (a separate, additive server.registerTool call). The oak-under-the-hood
+    // orientation tool is the first of these.
+    const appLocalTools = ['oak-under-the-hood'];
+    const expectedToolNames = [...baseToolNames, ...aggregatedTools, ...appLocalTools];
     expect(names.toSorted((a, b) => a.localeCompare(b))).toEqual(
       expectedToolNames.toSorted((a, b) => a.localeCompare(b)),
     );

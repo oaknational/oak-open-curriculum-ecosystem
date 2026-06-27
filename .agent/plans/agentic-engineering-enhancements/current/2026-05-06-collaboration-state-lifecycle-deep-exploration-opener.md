@@ -12,7 +12,7 @@ context_budget_for_directives: <30% (standing rule — directives may be touched
 ---
 
 > **Superseded** by
-> [`collaboration-state-surface-restructure.plan.md`](collaboration-state-surface-restructure.plan.md).
+> [`collaboration-state-surface-restructure.plan.md`](../archive/completed/collaboration-state-surface-restructure.plan.md).
 > The deep-exploration step ran in the Briny Plumbing Fjord session
 > 2026-05-06; the reflection produced a contract-shaped finding (the
 > file's substance had drifted by graduation-flow inertia rather than

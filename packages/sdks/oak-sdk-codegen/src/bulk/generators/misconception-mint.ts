@@ -47,7 +47,7 @@ const HASH_PREFIX_LENGTH = 16;
  * @returns The normalised hash input (never used for display)
  */
 export function normaliseMisconceptionText(text: string): string {
-  return text.trim().replace(/\s+/g, ' ').toLowerCase();
+  return text.trim().replaceAll(/\s+/g, ' ').toLowerCase();
 }
 
 /**

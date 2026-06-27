@@ -352,7 +352,7 @@ describe('runCommitWorkflow — unknown intent id', () => {
       stage: 'load-intent',
       reason: 'unknown intent_id: ffffffff-ffff-4fff-8fff-ffffffffffff',
     });
-    expect(holder.current.commit_queue.length).toBe(1);
+    expect(holder.current.commit_queue).toHaveLength(1);
     expect(calls.transformationCalls.current).toBe(0);
     expect(calls.gitCommitCalls.current).toBe(0);
   });

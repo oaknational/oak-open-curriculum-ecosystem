@@ -25,7 +25,7 @@ import { parseJsonLdCompatible } from './jsonld-compatible/index.js';
 import { parseTurtle } from './turtle/index.js';
 import { quadKey, type SourceMap } from './source-path/index.js';
 
-const TURTLE_FIXTURE = String.raw`
+const TURTLE_FIXTURE = `
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix ex: <https://example.test/concepts/> .
 ex:scheme a skos:ConceptScheme ;

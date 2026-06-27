@@ -62,7 +62,7 @@ export type CategoryMap = ReadonlyMap<string, readonly CategoryInfo[]>;
 function toCategory(category: SequenceUnitCategory): CategoryInfo {
   return {
     title: category.categoryTitle,
-    slug: category.categorySlug ?? category.categoryTitle.toLowerCase().replace(/\s+/g, '-'),
+    slug: category.categorySlug ?? category.categoryTitle.toLowerCase().replaceAll(/\s+/g, '-'),
   };
 }
 

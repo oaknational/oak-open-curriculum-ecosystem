@@ -38,17 +38,17 @@
 function removeZodiosDependency(input: string): string {
   let result = input;
   // Remove full Zodios import
-  result = result.replace(
+  result = result.replaceAll(
     /import\s*\{\s*makeApi\s*,\s*Zodios\s*,\s*type\s+ZodiosOptions\s*\}\s*from\s*["']@zodios\/core["'];?\n?/g,
     '',
   );
   // Remove makeApi-only import
-  result = result.replace(/import\s*\{\s*makeApi\s*\}\s*from\s*["']@zodios\/core["'];?\n?/g, '');
+  result = result.replaceAll(/import\s*\{\s*makeApi\s*\}\s*from\s*["']@zodios\/core["'];?\n?/g, '');
   // Replace makeApi([...]) with plain array
-  result = result.replace(/\bmakeApi\s*\(/g, '(');
+  result = result.replaceAll(/\bmakeApi\s*\(/g, '(');
   // Remove dead exports
-  result = result.replace(/export const api = new Zodios\(endpoints\);?\n?/g, '');
-  result = result.replace(
+  result = result.replaceAll(/export const api = new Zodios\(endpoints\);?\n?/g, '');
+  result = result.replaceAll(
     /export function createApiClient\(baseUrl: string, options\?: ZodiosOptions\) \{[\s\S]*?return new Zodios\(baseUrl, endpoints, options\);\s*\}\n?/g,
     '',
   );
@@ -59,23 +59,23 @@ export function transformZodV3ToV4(zodV3Output: string): string {
   let result = zodV3Output;
 
   // 1. Transform deprecated ZodSchema type in imports (import path stays as "zod")
-  result = result.replace(
+  result = result.replaceAll(
     /import\s*\{\s*z\s*,\s*type\s+ZodSchema\s*\}\s*from\s*['"]zod['"]/g,
     'import { z, type ZodType } from "zod"',
   );
 
   // 2. Transform standalone ZodSchema usage to ZodType (not in imports)
-  result = result.replace(/\bZodSchema\b/g, 'ZodType');
+  result = result.replaceAll(/\bZodSchema\b/g, 'ZodType');
 
   // 3. Transform deprecated z.string().url() → z.url() (Zod 4 standalone type)
-  result = result.replace(/z\.string\(\)\.url\(\)/g, 'z.url()');
+  result = result.replaceAll('z.string().url()', 'z.url()');
 
   // 4. Remove .passthrough() — strict validation only, not loose parsing
-  result = result.replace(/\.passthrough\(\)/g, '');
+  result = result.replaceAll('.passthrough()', '');
 
   // 5. Fix allOf/intersection strict conflict: remove .strict() from .and() sides
-  result = result.replace(/\.strict\(\)(\s*\.and\()/g, '$1');
-  result = result.replace(/\.and\(([\s\S]*?)\.strict\(\)(\s*)\)/g, '.and($1$2)');
+  result = result.replaceAll(/\.strict\(\)(\s*\.and\()/g, '$1');
+  result = result.replaceAll(/\.and\(([\s\S]*?)\.strict\(\)(\s*)\)/g, '.and($1$2)');
 
   // 6. Remove Zodios dependency (imports, wrappers, dead exports)
   result = removeZodiosDependency(result);

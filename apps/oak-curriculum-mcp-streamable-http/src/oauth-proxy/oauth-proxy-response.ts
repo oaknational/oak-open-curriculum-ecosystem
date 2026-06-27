@@ -181,7 +181,7 @@ function sanitiseErrorDescription(raw: string): string {
       return ch;
     })
     .join('')
-    .replace(/\s+/g, ' ')
+    .replaceAll(/\s+/g, ' ')
     .trim();
   if (stripped.length <= MAX_DESCRIPTION_LENGTH) {
     return stripped;

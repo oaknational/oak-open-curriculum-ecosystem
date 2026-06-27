@@ -115,7 +115,7 @@ live docs at answer time.
   the lens.
 - *Every other orientation intent* — "explain this repo", "give me an overview",
   "how does X work", "I want to understand area Y", "onboard me", "where do I
-  start", "set me up", "help me contribute" → the **`explain`** lens: it
+  start", "set me up", "help me contribute" → the **Oak: Under the Hood** lens: it
   discerns interest, angle, and delivery mode — a pinpoint specific answer, a
   synthesised area overview, or a paced guided tour that can lead into
   go-ahead-gated machine setup — through at most a few conversational questions,
@@ -128,9 +128,9 @@ lens via the named edge; every other orientation intent lands on the lens
 directly, with no primer detour.
 
 On a loader platform invoke the skill (`/oak-working-with-agentic-ai`,
-`/oak-explain`); on a non-loader platform read and follow the canonical
+`/oak-under-the-hood`); on a non-loader platform read and follow the canonical
 `.agent/skills/working-with-agentic-ai/SKILL-CANONICAL.md` or
-`.agent/skills/explain/SKILL-CANONICAL.md`.
+`.agent/skills/under-the-hood/SKILL-CANONICAL.md`.
 
 ## Project Context
 

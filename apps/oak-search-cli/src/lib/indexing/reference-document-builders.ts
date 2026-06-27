@@ -173,9 +173,9 @@ export interface CreateGlossaryDocumentParams {
 function toTermSlug(term: string): string {
   return term
     .toLowerCase()
-    .replace(/['\u2018\u2019`]/g, '') // Remove apostrophes
-    .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
-    .replace(/^-+|-+$/g, ''); // Trim leading/trailing hyphens
+    .replaceAll(/['\u2018\u2019`]/g, '') // Remove apostrophes
+    .replaceAll(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
+    .replaceAll(/^-+|-+$/g, ''); // Trim leading/trailing hyphens
 }
 
 /**

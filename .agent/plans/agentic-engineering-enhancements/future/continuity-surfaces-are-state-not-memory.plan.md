@@ -1,10 +1,19 @@
 ---
-status: future
+status: ratified
 kind: architecture
-owner_decision_required: true
+owner_decision_required: false
 ---
 
 # Three-tier substrate taxonomy: memory / repo state / local state
+
+> **RATIFIED & ABSORBED INTO DOCTRINE (2026-06-27, D1).** The owner ratified this model
+> (2026-06-25/26); it now lives in doctrine — `.agent/memory/README.md` §Tracking Tiers and
+> `.agent/directives/continuity-practice.md` §Surface Roles (tracking tiers), citing ADR-203 +
+> PDR-094 for the untracked-by-design invariant. This file is retained as the ratification
+> record. Its *taxonomy* substance is conserved in doctrine; the **§Open sub-question** (whether
+> `operational/` knowledge registers should be re-homed as memory) is an unresolved follow-on and
+> must be promoted to the `open-questions` register before this file is archived. Archival is gated
+> on that promotion, not on this note.
 
 ## The model (owner, 2026-06-25/26)
 
@@ -41,7 +50,16 @@ explicit and future agents classify correctly:
   state are tracked.
 - Confirm `.agent/state/` contains exactly local state (claims, comms) and nothing repo-state.
 - Decide whether this warrants an ADR (it touches the `.agent/state/` untracked-by-design decision,
-  ADR-199 / PDR-094 — likely a small clarifying amendment, not a reversal).
+  ADR-203 / PDR-094 — likely a small clarifying amendment, not a reversal). **Verdict (D1): no new
+  ADR — ADR-203 ("State-Tier Process-and-Archive-Move") already owns the state-tier concept; the
+  README + directive cite it for the invariant. (Earlier drafts cited ADR-199, the comms-event
+  rotation phenotype — that was the wrong reference.) ADR-203 itself was amended 2026-06-27 for
+  tier-classification accuracy: it had described `conversations/`, `escalations/`, `sidebars/` as
+  untracked-by-design when the live `.gitignore` deliberately tracks those three (matching ADR-199's
+  own repo/instance boundary), so its Context/Decision/Consequences prose now distinguishes the
+  untracked instance tier from the tracked repo tier. The ratified disposition decision
+  (process-then-archive-move, never `git rm`) is unchanged — this is drift-correction, not a
+  reversal.**
 
 ## Open sub-question
 

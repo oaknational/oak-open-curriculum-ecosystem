@@ -16,7 +16,7 @@ export function normaliseYears(year: unknown, yearSlug: unknown): string[] | und
 
 /** Extracts a passage from text. */
 export function extractPassage(text: string): string {
-  const cleaned = text.replace(/\s+/g, ' ').trim();
+  const cleaned = text.replaceAll(/\s+/g, ' ').trim();
   const sentences = cleaned.split(/(?<=[.!?])\s+/u);
   return sentences.slice(0, 2).join(' ').slice(0, 300);
 }

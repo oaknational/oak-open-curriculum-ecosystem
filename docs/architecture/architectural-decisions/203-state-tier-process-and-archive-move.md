@@ -1,6 +1,8 @@
 # ADR-203: State-Tier Process-and-Archive-Move — Generalising Rotation to All Untracked Collaboration State
 
-**Status**: Accepted (owner-ratified, 2026-06-23)
+**Status**: Accepted (owner-ratified, 2026-06-23); amended 2026-06-27
+(tier-classification accuracy — instance tier vs tracked repo tier; no change to
+the ratified disposition decision)
 **Date**: 2026-06-23
 **Decision Makers**: Owner + consolidation lane (Narwhal tracks Lagoon)
 **Related**:
@@ -17,9 +19,14 @@ disposition shape to the other collaboration-state tiers);
 ADR-199 established a class-tiered, process-then-archive-move discipline for
 comms events: a stale event is **processed** (its durable substance conserved
 into canonical homes) and only then **archive-moved** into an untracked archive
-— never `git rm`'d. Because `.agent/state/collaboration/` is untracked-by-design
-(PDR-094 Invariant 6), version history is no longer a backstop, so
-absorption-before-move is non-optional.
+— never `git rm`'d. Because the live coordination surfaces under
+`.agent/state/collaboration/` — `comms/`, `handoffs/`, the `active-claims.json`
+registry, and the generated `shared-comms-log.md` — are untracked-by-design
+(PDR-094 Invariant 6; ADR-199's repo/instance content boundary), version history
+is no longer a backstop for them, so absorption-before-disposition is
+non-optional there. The decision-provenance surfaces — `conversations/`,
+`escalations/`, and `sidebars/` — stay git-tracked (ADR-199), so version history
+remains a backstop for them up to the point a processed record is archive-moved.
 
 The same disposition applies to the _other_ collaboration-state tiers that
 accumulate under `.agent/state/collaboration/` — conversations, sidebars,
@@ -30,10 +37,16 @@ untracked state with un-conserved substance is irrecoverable.
 
 ## Decision
 
-**For every untracked-by-design collaboration-state tier under
-`.agent/state/collaboration/`, stale entries are disposed by
+**Stale comms events, conversations, sidebars, escalations, and mid-cycle
+handoff records under `.agent/state/collaboration/` are disposed by
 process-then-archive-move, never by deletion**, mirroring ADR-199's comms-event
-phenotype:
+phenotype. This holds regardless of a surface's git-tracking tier: the untracked
+instance surfaces (`comms/`, `handoffs/`) and the tracked decision-provenance
+surfaces (`conversations/`, `escalations/`, `sidebars/`) both archive-move once
+their substance is conserved. The live `active-claims.json` registry and the
+regenerated `shared-comms-log.md` are **not** archive-moved — they carry their
+own disposition (stale claims close into `closed-claims.archive.json`; the
+rendered log is rebuilt from the event stream, never relocated). The phenotype:
 
 1. **Process first.** An entry is archive-moved only once its durable substance
    is verified-conserved into a canonical home (napkin → `distilled.md` →
@@ -53,8 +66,12 @@ phenotype:
 - Disposition is uniform across collaboration-state tiers: comms events
   (ADR-199), conversations, sidebars, escalations, and handoff records all
   follow process-then-archive-move.
-- No silent deletion of untracked state; the absorption gate prevents losing
-  un-conserved substance now that version history is not the backstop.
+- No silent deletion; the absorption gate prevents losing un-conserved
+  substance before any archive-move. For the untracked archive-moved surfaces
+  (`comms/`, `handoffs/`) version history is no longer the backstop, so the gate
+  is the only net; the tracked decision-provenance surfaces (`conversations/`,
+  `escalations/`, `sidebars/`) keep git history as a backstop up to the move but
+  still pass the gate first.
 - The convention is currently one-instance per tier; if a tier develops
   class-specific retention windows (as comms events did), those are recorded as
   a tier-specific amendment, not a new ADR.

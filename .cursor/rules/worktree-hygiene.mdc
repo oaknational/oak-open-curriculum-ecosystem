@@ -1,0 +1,6 @@
+---
+description: Every worktree carries an open (at least draft) PR; main is the only durable home — a surviving branch is not preservation; retire by content-check, not commit-check.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/worktree-hygiene.md`.

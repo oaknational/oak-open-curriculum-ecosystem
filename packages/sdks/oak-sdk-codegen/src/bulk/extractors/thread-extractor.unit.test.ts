@@ -3,7 +3,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { Unit } from '../lib/index.js';
+import type { Unit } from '../../types/generated/bulk/index.js';
 
 import { extractThreads } from './thread-extractor.js';
 

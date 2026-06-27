@@ -191,7 +191,7 @@ Wider substrate cost and shape (the open problems above):
 - [cost-of-collaboration.plan.md](../current/cost-of-collaboration.plan.md)
 - [multi-agent-collaboration-protocol.plan.md](../current/multi-agent-collaboration-protocol.plan.md)
 - [n-agent-collaboration-experiments.plan.md](../current/n-agent-collaboration-experiments.plan.md)
-- [collaboration-state-surface-restructure.plan.md](../../agentic-engineering-enhancements/current/collaboration-state-surface-restructure.plan.md)
+- [collaboration-state-surface-restructure.plan.md](../../agentic-engineering-enhancements/archive/completed/collaboration-state-surface-restructure.plan.md)
 
 ## Dependencies and sequencing
 

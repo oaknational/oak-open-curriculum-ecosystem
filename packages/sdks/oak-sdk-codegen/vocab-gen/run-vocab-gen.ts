@@ -16,8 +16,8 @@
  * pnpm vocab-gen --verbose
  * ```
  */
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { createPipelineConfig, formatPipelineResult, runPipeline } from './vocab-gen.js';
 import {

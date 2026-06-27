@@ -50,7 +50,7 @@ describe('EnvResolveOk shape', () => {
     expect(ok.ok).toBe(true);
     expect(ok.value.FOO).toBe('present');
     expect(Array.isArray(ok.warnings)).toBe(true);
-    expect(ok.warnings.length).toBe(0);
+    expect(ok.warnings).toHaveLength(0);
   });
 
   it('accepts a populated warnings array (forward-compatible with WS3 wiring)', () => {
@@ -63,7 +63,7 @@ describe('EnvResolveOk shape', () => {
       value: { FOO: 'value' },
       warnings: [warning],
     };
-    expect(ok.warnings.length).toBe(1);
+    expect(ok.warnings).toHaveLength(1);
     expect(ok.warnings[0]?.kind).toBe('observability_sinks_empty_in_preview');
   });
 });

@@ -1389,7 +1389,7 @@ const RESPONSE_DESCRIPTOR_JSON: Record<string, unknown | undefined> = Object.fro
 
 export function getResponseDescriptorSchema(operationId: OperationId, statusCode: ValidResponseCode | ValidNumericResponseCode): unknown {
   const key = operationId + ':' + String(statusCode);
-  if (!Object.prototype.hasOwnProperty.call(RESPONSE_DESCRIPTOR_JSON, key)) {
+  if (!Object.hasOwn(RESPONSE_DESCRIPTOR_JSON, key)) {
     return undefined;
   }
   return RESPONSE_DESCRIPTOR_JSON[key];

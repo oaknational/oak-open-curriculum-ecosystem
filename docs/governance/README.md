@@ -32,6 +32,7 @@ If this is your first time here, the 5-minute reading path is:
 - [Design Token Practice](./design-token-practice.md) — DTCG JSON source format, three-tier model, CSS custom properties output
 - [MCP App Styling](./mcp-app-styling.md) — CSS custom properties, SDK variable bridges, font loading, CSP declarations
 - [Sonar Disposition Policy](./sonar-disposition-policy.md) — class-level disposition policies for SonarCloud security hotspots and HIGH issues
+- [Data Sources](./DATA-SOURCES.md) — register of the external data sources the MCP and semantic-search apps surface, with adoption dates, licence/attribution, and the review/removal governance policy (policy half owner-ratification-pending)
 
 ## Key Principles
 

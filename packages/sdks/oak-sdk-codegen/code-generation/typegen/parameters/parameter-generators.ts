@@ -45,7 +45,7 @@ export function generateParameterConstant(
   // Convert to appropriate cases
   // Convert camelCase to SNAKE_CASE for constant name
   const constantName = pluralName
-    .replace(/([A-Z])/g, '_$1')
+    .replaceAll(/([A-Z])/g, '_$1')
     .toUpperCase()
     .replace(/^_/, ''); // KEY_STAGES
   const collectionTypeName = pluralName.charAt(0).toUpperCase() + pluralName.slice(1); // KeyStages

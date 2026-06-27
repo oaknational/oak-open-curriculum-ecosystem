@@ -179,7 +179,7 @@ function slashTerminated(path: string): string {
 }
 
 function normalisePath(path: string): string {
-  return path.split('\\').join('/');
+  return path.replaceAll('\\', '/');
 }
 
 function orEmpty(values: readonly string[] | undefined): readonly string[] {

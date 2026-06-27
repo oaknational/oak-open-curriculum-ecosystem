@@ -47,7 +47,7 @@ describe('buildContrastReports', () => {
 
     for (const report of reports) {
       expect(report.summary.total).toBeGreaterThan(0);
-      expect(report.results.length).toBe(report.summary.total);
+      expect(report.results).toHaveLength(report.summary.total);
     }
   });
 

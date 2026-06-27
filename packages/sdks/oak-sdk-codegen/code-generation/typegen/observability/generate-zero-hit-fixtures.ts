@@ -7,7 +7,7 @@ const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Zero-hit telemetry 
 function createZeroHitFixturesModule(): string {
   return (
     HEADER +
-    String.raw`import { z } from 'zod';
+    `import { z } from 'zod';
 
 export const ZERO_HIT_SCOPES = ['lessons', 'units', 'sequences'] as const;
 export const ZeroHitScopeSchema = z.enum(ZERO_HIT_SCOPES);
@@ -166,7 +166,7 @@ export function createZeroHitTelemetry(overrides: Partial<ZeroHitTelemetry> = {}
 function createZeroHitIndexModule(): string {
   return (
     HEADER +
-    String.raw`export {
+    `export {
   ZERO_HIT_SCOPES,
   ZeroHitScopeSchema,
   ZeroHitScopeBreakdownSchema,

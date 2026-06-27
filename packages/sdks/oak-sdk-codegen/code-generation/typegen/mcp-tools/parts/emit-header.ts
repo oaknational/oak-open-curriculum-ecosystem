@@ -5,7 +5,7 @@ export function emitHeader(
   operationId: string,
 ): string {
   // Escape braces in the doc comment so path templates like {keyStage} are TSDoc-safe
-  const escapedPath = path.replace(/\{/g, '\\{').replace(/\}/g, '\\}');
+  const escapedPath = path.replaceAll('{', String.raw`\{`).replaceAll('}', String.raw`\}`);
   const lines: string[] = [];
   lines.push(`/**
  * GENERATED FILE - DO NOT EDIT

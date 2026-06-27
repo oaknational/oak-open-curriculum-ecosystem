@@ -41,7 +41,7 @@ describe('machine-local-path patterns (live policy.json set)', () => {
     const positives = [
       '/Users/alice/code/oak',
       '/home/user/project',
-      'C:\\Users\\dev\\repo',
+      String.raw`C:\Users\dev\repo`,
       '~/.claude/projects/-Users-alice-code-oak/memory', // flattened Claude project id
       '.cursor/projects/Users-alice-code-oak/transcripts', // flattened Cursor project id
       '/private/tmp/scratch',

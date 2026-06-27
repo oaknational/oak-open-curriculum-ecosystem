@@ -205,7 +205,7 @@ describe('renderStatusline with an Oak logo column', () => {
     // styles whose widths differ (sextant is seven columns, braille six).
     for (const style of ['sextant', 'braille'] as const) {
       const lines = renderStatusline({ ...base, dir: 'repo' }, { logo: style }).split('\n');
-      const ruleRow = lines[lines.length - 1].replaceAll(DIM, '').replaceAll(RESET, '');
+      const ruleRow = (lines.at(-1) ?? '').replaceAll(DIM, '').replaceAll(RESET, '');
       expect([...ruleRow]).toHaveLength([...OAK_LOGO_ROWS[style][0]].length);
     }
   });
@@ -218,7 +218,7 @@ describe('renderStatusline with an Oak logo column', () => {
       { ...base, dir: 'repo' },
       { logo: 'sextant', logoSeparator: probe },
     ).split('\n');
-    const ruleRow = lines[lines.length - 1].replaceAll(DIM, '').replaceAll(RESET, '');
+    const ruleRow = (lines.at(-1) ?? '').replaceAll(DIM, '').replaceAll(RESET, '');
     const logoWidth = [...OAK_LOGO_ROWS.sextant[0]].length;
     expect([...ruleRow]).toEqual(Array.from({ length: logoWidth }, () => probe));
   });
@@ -230,7 +230,7 @@ describe('renderStatusline with an Oak logo column', () => {
       { logo: 'sextant', logoSeparator: '' },
     ).split('\n');
     expect(lines).toHaveLength(OAK_LOGO_ROWS.sextant.length);
-    expect(lines[lines.length - 1]).toContain('repo');
+    expect(lines.at(-1)).toContain('repo');
   });
 
   it('omits the separator row in the no-logo layout', () => {

@@ -3,7 +3,8 @@
  * Supports simple `*` wildcards.
  */
 function hostPatternToRegex(pattern: string): RegExp {
-  const regexPattern = '^' + pattern.replace(/\./g, '\\.').replace(/\*/g, '[a-z0-9.-]*') + '$';
+  const regexPattern =
+    '^' + pattern.replaceAll('.', String.raw`\.`).replaceAll('*', '[a-z0-9.-]*') + '$';
   return new RegExp(regexPattern);
 }
 

@@ -47,7 +47,7 @@ describe('relatedStrandEdges', () => {
         'related_strands' in strand ? total + strand.related_strands.length : total,
       0,
     );
-    expect(relatedStrandEdges.length).toBe(referenceCount);
+    expect(relatedStrandEdges).toHaveLength(referenceCount);
     expect(relatedStrandEdges.length).toBeGreaterThan(0);
   });
 

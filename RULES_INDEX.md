@@ -156,3 +156,4 @@ without proportional value.
 | `.agent/rules/verify-data-supports-shape-before-building.md`               | always-on      | —                                                                                                |
 | `.agent/rules/verify-dont-trust.md`                                        | always-on      | —                                                                                                |
 | `.agent/rules/verify-vendor-call-shapes-at-plan-author-time.md`            | always-on      | —                                                                                                |
+| `.agent/rules/worktree-hygiene.md`                                         | always-on      | —                                                                                                |

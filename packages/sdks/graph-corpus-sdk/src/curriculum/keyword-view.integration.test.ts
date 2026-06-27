@@ -162,7 +162,7 @@ describe('keyword view — bounded anchored frequency-ranked retrieval', () => {
     const { keywords, totalMatchingKeywords, hasMore, limit } = unwrapOk(result);
     expect(limit).toBe(DEFAULT_KEYWORD_LIMIT);
     expect(totalMatchingKeywords).toBe(richCounts.size);
-    expect(keywords.length).toBe(Math.min(DEFAULT_KEYWORD_LIMIT, richCounts.size));
+    expect(keywords).toHaveLength(Math.min(DEFAULT_KEYWORD_LIMIT, richCounts.size));
     expect(hasMore).toBe(richCounts.size > DEFAULT_KEYWORD_LIMIT);
     for (const entry of keywords) {
       expect(entry.scopedLessonCount).toBe(richCounts.get(entry.keyword.id));
@@ -183,7 +183,7 @@ describe('keyword view — bounded anchored frequency-ranked retrieval', () => {
     const result = keywordsForSubjectKeyStage(richAnchor.subject, richAnchor.keyStage);
 
     const top = required(unwrapOk(result).keywords[0], 'rich anchor returned no keywords');
-    expect(top.lessons.length).toBe(
+    expect(top.lessons).toHaveLength(
       Math.min(top.scopedLessonCount, KEYWORD_LESSON_DECORATION_LIMIT),
     );
     expect(top.hasMoreLessons).toBe(top.scopedLessonCount > KEYWORD_LESSON_DECORATION_LIMIT);
@@ -245,7 +245,7 @@ describe('keyword view — bounded anchored frequency-ranked retrieval', () => {
       // in-unit) lessons — an out-of-unit lesson inflating the count would
       // break this without needing a recomputed reference.
       expect(entry.scopedLessonCount).toBeLessThanOrEqual(unitLessonIds.size);
-      expect(entry.lessons.length).toBe(
+      expect(entry.lessons).toHaveLength(
         Math.min(entry.scopedLessonCount, KEYWORD_LESSON_DECORATION_LIMIT),
       );
       for (const lesson of entry.lessons) {

@@ -13,7 +13,9 @@ describe('generatePathUtilsFile', () => {
 
   it('includes correct regex replacements for conversions', () => {
     const code = generatePathUtilsFile();
-    expect(code).toContain("path.replace(/{([^}]+)}/g, ':$1')");
-    expect(code).toContain("path.replace(/:([A-Za-z0-9_]+)/g, '{$1}')");
+    // Inner class excludes `{` as well as `}` to keep the scan linear:
+    // `{([^}]+)}` is polynomial (js/polynomial-redos) on `{`-flooded input.
+    expect(code).toContain("path.replaceAll(/{([^{}]+)}/g, ':$1')");
+    expect(code).toContain("path.replaceAll(/:([A-Za-z0-9_]+)/g, '{$1}')");
   });
 });

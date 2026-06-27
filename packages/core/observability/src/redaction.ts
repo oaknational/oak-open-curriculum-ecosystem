@@ -102,8 +102,8 @@ function partiallyRedactValue(value: string): string {
 
 function redactEmbeddedCredentials(value: string): string {
   return value
-    .replace(/\b(Bearer|Basic)\s+[^\s,]+/giu, '$1 [REDACTED]')
-    .replace(
+    .replaceAll(/\b(Bearer|Basic)\s+[^\s,]+/giu, '$1 [REDACTED]')
+    .replaceAll(
       /(^|\s)(--?(?:access-token|api-key|api_key|client-secret|client_secret|password|token)|(?:access_token|api_key|client_secret|password|token))=([^\s&]+)/giu,
       '$1$2=[REDACTED]',
     );

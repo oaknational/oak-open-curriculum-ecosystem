@@ -67,7 +67,7 @@ export function generateValidCombinations(validCombinations: ValidCombinations):
         ? entries
             .map((entryKey) => {
               const value = group[entryKey];
-              return `    "${entryKey}": ${JSON.stringify(value, undefined, 4).replace(/\n/g, '\n    ')}`;
+              return `    "${entryKey}": ${JSON.stringify(value, undefined, 4).replaceAll('\n', '\n    ')}`;
             })
             .join(',\n')
         : '';

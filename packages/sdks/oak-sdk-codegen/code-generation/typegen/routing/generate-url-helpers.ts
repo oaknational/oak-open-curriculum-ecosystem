@@ -51,14 +51,14 @@ export function extractSlug(id: string): string {
 }
 
 function helpersSection(): string {
-  return `function urlForLesson(slug: string): string {
+  return String.raw`function urlForLesson(slug: string): string {
   return 'https://www.thenational.academy/teachers/lessons/' + slug;
 }
 
 /**
  * Generates the Oak URL for a sequence (curriculum view).
  *
- * Pattern: /teachers/curriculum/\\{sequenceSlug\\}/units
+ * Pattern: /teachers/curriculum/\{sequenceSlug\}/units
  * Example: art-secondary → https://www.thenational.academy/teachers/curriculum/art-secondary/units
  */
 function urlForSequence(slug: string): string {
@@ -68,7 +68,7 @@ function urlForSequence(slug: string): string {
 /**
  * Generates the Oak URL for a unit within its curriculum context.
  *
- * Pattern: /teachers/curriculum/\\{sequenceSlug\\}/units/\\{unitSlug\\}
+ * Pattern: /teachers/curriculum/\{sequenceSlug\}/units/\{unitSlug\}
  * Requires sequenceSlug in context. The sequenceSlug is derived from the unit's
  * subject and phase (e.g. 'maths-primary') by the response augmentation layer.
  */

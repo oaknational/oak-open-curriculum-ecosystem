@@ -148,6 +148,13 @@ regardless of the session's worktree.
 - Graceful degradation preserved: any resolution failure still exits 0 with no output
   (the statusline must never disrupt a session).
 
+**Lane coordination (2026-06-27):** §B1/B2 are the INFRASTRUCTURE member of the statusline
+lane — coordinate via the
+[`statusline-enhancements` thread record](../../../memory/operational/threads/statusline-enhancements.next-session.md)
+(the lane SSOT). Both §B2 and the logo-modularisation plan's WS4.2 edit
+`statusline-identity.ts`; sequence with it, do not land in parallel. This work stays behind
+the §Review gate below.
+
 ## Open questions / verify-before-building (the deep-review surface)
 
 - **Claude Code semantics (verify, do not trust):** does project `.claude/settings.json`

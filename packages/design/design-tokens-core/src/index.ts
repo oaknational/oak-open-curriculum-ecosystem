@@ -46,7 +46,7 @@ function getTokenTier(path: readonly string[]): 'palette' | 'semantic' | 'compon
 function normalizePathSegment(segment: string): string {
   return segment
     .trim()
-    .replace(/[^a-z0-9-]+/giu, '-')
+    .replaceAll(/[^a-z0-9-]+/giu, '-')
     .toLowerCase();
 }
 
@@ -67,7 +67,7 @@ function resolveCssValue(value: boolean | number | string): string {
     return String(value);
   }
 
-  return value.replace(
+  return value.replaceAll(
     TOKEN_REFERENCE_PATTERN,
     (_match, tokenPath: string) => `var(${toCssVariable(tokenPath.split('.'))})`,
   );

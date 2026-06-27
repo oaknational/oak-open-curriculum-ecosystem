@@ -24,7 +24,7 @@ describe('zero-hit store', () => {
     const recent = getZeroHitRecent(250);
     expect(recent).toHaveLength(200);
     expect(recent[0].query).toBe('query-204');
-    expect(recent[recent.length - 1]?.query).toBe('query-5');
+    expect(recent.at(-1)?.query).toBe('query-5');
   });
 
   it('returns summary grouped by scope', () => {

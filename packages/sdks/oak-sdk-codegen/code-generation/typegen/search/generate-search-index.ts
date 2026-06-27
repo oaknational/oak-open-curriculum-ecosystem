@@ -7,7 +7,7 @@ const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Aggregated search e
 function createIndexModule(): string {
   return (
     HEADER +
-    String.raw`export {
+    `export {
   DEFAULT_INCLUDE_FACETS,
   SearchStructuredRequestSchema,
   isSearchStructuredRequest,

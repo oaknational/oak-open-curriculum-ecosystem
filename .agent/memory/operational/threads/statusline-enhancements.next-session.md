@@ -64,6 +64,12 @@ one thread spans:
   [`statusline-logos/terminal-animation-without-redraw/`](../../../research/developer-experience/statusline-logos/terminal-animation-without-redraw/)
   — a future lane of this same thread (animate the Oak mark / indicators), not a
   separate thread.
+- **Statusline resolution / operability** (infrastructure, NEW member 2026-06-27): the
+  [`comms-and-worktree-operability.plan.md`](../../../plans/agent-tooling/current/comms-and-worktree-operability.plan.md)
+  §B1/B2 — pin the statusline *binary* to the primary checkout (so it renders from any
+  worktree) and DRY the primary-resolver. WHERE the statusline resolves from, distinct from
+  the icons/logo (WHAT it shows); intersects them at `statusline-identity.ts`. See the
+  coordination section below.
 
 **Cross-thread note:** statusline lane state is also referenced from the
 [`agentic-engineering-enhancements`](agentic-engineering-enhancements.next-session.md)
@@ -71,6 +77,28 @@ thread record (§Statusline lane) and from `repo-continuity.md`. This record is
 the canonical home for the thread; the agentic-engineering reference is a
 historical pointer, not a second owner. Consolidate any future statusline lane
 state here.
+
+## Coordinating the three lane members (2026-06-27, Cedar lifts Canopy, Director)
+
+The lane has THREE members through the shared `renderStatusline` / `statusline-identity.ts`
+seam: two CONTENT members — session-shape icons and the Oak-logo column — and one
+INFRASTRUCTURE member, statusline resolution/operability (the operability plan's §B1/B2; see
+Thread scope). They are coordinated, not independent:
+
+- **Sequencing:** the logo plan's WS4.1 lands the `renderStatusline` / `ResolvedLogo`
+  signature FIRST (its disposition #8); the session-state plan rebases onto that settled
+  signature; the operability §B1/B2 (shim + resolver + composition root) sequences WITH — not
+  against — the logo plan's WS4.2 adapter change, because both edit `statusline-identity.ts`.
+  Do not land §B2 and WS4.2 in parallel on that file.
+- **Gate:** the operability plan is PROPOSED / deep-review-gated and self-flags its Claude Code
+  statusline claims as "verify, do not trust" (its claude-code-guide pass erred on
+  `--show-toplevel`; the primary is `git worktree list --porcelain | first`). §B1/B2 must
+  clear that deep review (architecture-expert + config-expert + a critically-assessed
+  claude-code-guide re-pass + an end-to-end test FROM a linked worktree) before it touches
+  statusline code the content plans also edit.
+- **Scope:** the operability plan as a whole is broader than this lane (it also covers
+  comms/claims path anchoring); only §B1/B2 join the statusline lane. This hub is the
+  coordination SSOT — record cross-member statusline state here.
 
 ## Current continuation
 

@@ -7,7 +7,7 @@
  * @see ./generate-subject-hierarchy.ts - The generator that produces the tested code
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 
 // These imports will fail until the generator runs (TDD RED phase)
 import {
@@ -196,29 +196,22 @@ describe('Subject Hierarchy Generated Exports', () => {
 
   describe('Type compatibility', () => {
     it('AllSubjectSlug includes all 21 subjects', () => {
-      // Type-level test: these should compile without errors
-      const physics: AllSubjectSlug = 'physics';
-      const maths: AllSubjectSlug = 'maths';
-      const science: AllSubjectSlug = 'science';
-      expect(physics).toBe('physics');
-      expect(maths).toBe('maths');
-      expect(science).toBe('science');
+      // Type-level membership: each literal must be assignable to AllSubjectSlug,
+      // or this fails to compile. The relation IS the assertion — a runtime
+      // expect on a frozen literal would always succeed regardless of behaviour.
+      expectTypeOf<'physics'>().toExtend<AllSubjectSlug>();
+      expectTypeOf<'maths'>().toExtend<AllSubjectSlug>();
+      expectTypeOf<'science'>().toExtend<AllSubjectSlug>();
     });
 
     it('ParentSubjectSlug includes only the 17 canonical subjects', () => {
-      // Type-level test: these should compile without errors
-      const science: ParentSubjectSlug = 'science';
-      const maths: ParentSubjectSlug = 'maths';
-      expect(science).toBe('science');
-      expect(maths).toBe('maths');
+      expectTypeOf<'science'>().toExtend<ParentSubjectSlug>();
+      expectTypeOf<'maths'>().toExtend<ParentSubjectSlug>();
     });
 
     it('Ks4ScienceVariant includes only the 4 variants', () => {
-      // Type-level test: these should compile without errors
-      const physics: Ks4ScienceVariant = 'physics';
-      const chemistry: Ks4ScienceVariant = 'chemistry';
-      expect(physics).toBe('physics');
-      expect(chemistry).toBe('chemistry');
+      expectTypeOf<'physics'>().toExtend<Ks4ScienceVariant>();
+      expectTypeOf<'chemistry'>().toExtend<Ks4ScienceVariant>();
     });
   });
 });

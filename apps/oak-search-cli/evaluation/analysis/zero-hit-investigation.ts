@@ -100,8 +100,8 @@ async function processEntry(
 function generateTableRows(queries: readonly ZeroHitQuery[]): string {
   return queries
     .map((q) => {
-      const escaped = q.query.replace(/\|/g, '\\|');
-      const notes = q.notes.replace(/\|/g, '\\|');
+      const escaped = q.query.replaceAll('|', String.raw`\|`);
+      const notes = q.notes.replaceAll('|', String.raw`\|`);
       return `| "${escaped}" | ${q.subject} | ${q.phase} | ${q.category} | ${q.diagnosis} | ${notes} |`;
     })
     .join('\n');

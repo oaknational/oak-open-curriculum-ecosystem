@@ -48,14 +48,14 @@ describe('HTML Encoding - Unit Tests', () => {
       const js = 'const html = "</script>";';
       const encoded = encodeScriptContent(js);
 
-      expect(encoded).toBe('const html = "<\\/script>";');
+      expect(encoded).toBe(String.raw`const html = "<\/script>";`);
     });
 
     it('should handle multiple occurrences', () => {
       const js = 'const a = "</script>"; const b = "</SCRIPT>";';
       const encoded = encodeScriptContent(js);
 
-      expect(encoded).toBe('const a = "<\\/script>"; const b = "<\\/SCRIPT>";');
+      expect(encoded).toBe(String.raw`const a = "<\/script>"; const b = "<\/SCRIPT>";`);
     });
 
     it('should not break valid JavaScript', () => {
@@ -63,7 +63,7 @@ describe('HTML Encoding - Unit Tests', () => {
       const encoded = encodeScriptContent(js);
 
       // Should encode </ even in division context
-      expect(encoded).toContain('<\\/');
+      expect(encoded).toContain(String.raw`<\/`);
     });
 
     it('should handle renderer HTML generation', () => {
@@ -76,7 +76,7 @@ function renderHelp() {
 }`;
       const encoded = encodeScriptContent(js);
 
-      expect(encoded).toContain('<\\/script>');
+      expect(encoded).toContain(String.raw`<\/script>`);
       expect(encoded).not.toContain('</script>');
     });
 

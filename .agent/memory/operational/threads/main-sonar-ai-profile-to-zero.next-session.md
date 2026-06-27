@@ -29,13 +29,13 @@ Supersedes the retired `main-critical-sonar-remediation` lane.
 
 ## Landing Target For Next Session
 
-**Phase 1 (S8707) COMPLETE — all three sites MERGED to `main`.** Sites 1-2 + S4036 via
-PR #223 (`9d2e33bb1`); **site-3 + the `@oaknational/safe-path` SSOT + the `--passWithNoTests`
-de-masks via PR #242 (merge commit `3895b3f45`, 2026-06-27)**; the plan itself via PR #220.
-**NEXT: Phase 2 (regex-safety).** The authoritative fresh-agent pickup is the §"Phase 1
-MERGED" and §"Next safe step — PHASE 2" blocks in the Lane State section below. The earlier
-site-by-site pickup text and the `fix/sonar-s8707-cli-path-injection` / `ff3da671`
-paused-claim references are **superseded and removed** — Phase 1 is done.
+**Phases 1 and 2 COMPLETE; the BLOCKER and all HIGH/regex classes are dispositioned.**
+Phase 1 (S8707 ×3 + S4036) merged via PR #223 + #242 (`3895b3f45`); the S2699 test-assertion
+BLOCKER + the S101 ×3 ACCEPT via **PR #246** (`5054cd9a0`); **Phase 2 (18 regex findings) via
+PR #249** (`fix/sonar-phase2-regex-safety`, merge-ready 2026-06-27). **NEXT: Phase 3
+(test-integrity).** Authoritative pickup is the §"2026-06-27 (Gull tracks Eyrie)" block and the
+§"Next safe step — PHASE 3" block in the Lane State section below. Re-fetch live Sonar at start —
+counts here drift.
 
 ## Lane State
 
@@ -63,10 +63,20 @@ fix or genuine-FP only, no suppression, generated files fixed at generator.
 
 - Regex home: **`src/lib/regex/`** per workspace, hand-written sites only (not
   generated / generator-source / vendored). [owner: "agree to all"]
-- `semver.ts:33`: **refactor-to-import from `semver`** (not a dismissal). [agreed]
-- `S101 ×3`: **FALSE_POSITIVE** — openapi-ts fixed `paths`/`operations` names,
-  not renamable; dismissal **authorised on first-hand proof** [AskUserQuestion].
-- FP dismissals generally: **authorised on first-hand proof** with site rationale.
+- `semver.ts:33`: the earlier "refactor-to-import from `semver`" was **superseded
+  2026-06-27** — first-hand review found `isValidSemver` deliberately uses the regex for strict
+  semver §2 (the `semver` package's `valid()` accepts a `v` prefix, which §2 rejects). Dispositioned
+  **ACCEPT** (canonical vendored pattern; S5843 is complexity, not ReDoS).
+- `S101 ×3`: **superseded 2026-06-27 — corrected FALSE_POSITIVE → ACCEPT.** The file IS generated,
+  but the generator's `postProcessTypesSource` hook *could* rename the roots, so it is NOT a tool
+  error (FP would be suppression). They are the public API of `@oaknational/sdk-codegen` + the
+  universal openapi-typescript convention, so a rename is a breaking change for a MINOR cosmetic
+  rule → **ACCEPT-with-rationale**. (A subagent second-opinion + first-hand verification drove the
+  correction; see napkin 2026-06-27.)
+- **Disposition bar (owner-ratified 2026-06-27, AskUserQuestion):** genuine code fix is the
+  default; a site-specific architectural tension is a legitimate **ACCEPT-with-rationale**;
+  **FALSE_POSITIVE is reserved for true tool errors only.** This supersedes the earlier
+  "fix or genuine-FP only" framing in §Objective.
 - Idiom rules: **enable → autofix → lock at error**.
 
 Residual (non-blocking, resolved first-hand during execution): which exact S8786
@@ -118,15 +128,36 @@ author-dependent gate behaviour, NOT because "these paths aren't code-owner-gate
 is `* @jimCresswell`; every path is gated. An earlier note here claimed path-scoping — that was
 a misdiagnosis (see [[project_main_merge_gate_codeowner]]).
 
-**Next safe step — PHASE 2, for a FRESH agent (Phase 1 is done):** open a fresh branch off
-`main` and execute the **regex-safety** lane — `S8786 ×15`, `S5843 ×2`, `S6035 ×1`. Decided
-strategy (owner-ratified; see the plan + the §Owner decisions block above): hand-written sites
-consolidate into a per-workspace **`src/lib/regex/`** home; `path-utils.ts` is GENERATED (fix at
-the generator, never the output); `semver.ts:33` is refactor-to-import-from-`semver` (not a
-dismissal). **Re-triage first-hand** which exact S8786 sites are linear-safe FPs vs real fixes
-before fixing — the per-site labels proved unreliable (3 mislabels in one earlier session). Read
-the plan and this record first; re-fetch live Sonar (issue counts in archived prose are stale). No
-blockers, no claim held. Then the remaining MAJOR/MINOR classes per the plan's triage table.
+**2026-06-27 (Gull tracks Eyrie, 483d97) — BLOCKER + S101 + Phase 2 landed:**
+
+- **PR #246** (`5054cd9a0`, merged): S2699 BLOCKER fixed (`with-es-client.integration.test.ts`
+  — explicit `.resolves.toBeUndefined()` assertion) + S101 ×3 dispositioned ACCEPT (see corrected
+  decision above).
+- **PR #249** (`fix/sonar-phase2-regex-safety`, merge-ready): Phase 2, 18 regex findings
+  re-triaged **first-hand**. **2 genuine fixes** — `sitemap-scanner-core` `extractLocs` (real
+  O(n²) triple-overlap on network XML; dropped redundant flanking `\s*`) and S6035
+  `(?:—|\))`→`[—)]`. **16 ACCEPT-with-rationale** (server-side): 14 S8786 on
+  internal/build-time/generated inputs (path strings, generated JSDoc, slugs, repo markdown — JS
+  has no possessive quantifiers, so an atomic-emulation fix renumbers capture groups + forces
+  consumer changes, disproportionate for non-adversarial input) + 2 S5843 canonical semver
+  (complexity; the Vercel `ignoreCommand` `.mjs` copy is irreducible — runs before `pnpm install`,
+  no node_modules/dist, parity-test-locked). **Key lesson** (napkin 2026-06-27): a ReDoS subagent's
+  blanket "all 18 are false-positives" was WRONG — Sonar S8786's criterion is unanchored
+  multi-position retry (O(n²) on non-match); these are genuine, not tool errors. Read the rule's
+  own criterion before dispositioning.
+- Backlog: 391 → ~370 open after Phase 2.
+
+**Next safe step — PHASE 3 (test-integrity), for a fresh agent:** open a fresh branch off `main`
+and re-fetch live Sonar. The lane: **S5914 ×12** (assertion always succeeds/fails — genuine test
+defects, clear fixes; cluster in
+`oak-sdk-codegen/code-generation/typegen/search/generate-subject-hierarchy.unit.test.ts` ×7 and
+`.../typegen/validation/cross-validate.unit.test.ts` ×2, plus 3 singletons), **S5906 ×34**
+(prefer-specific-assertion — improvements, spread across ~22 files), **S6551 ×1** (generated
+`sdk-error-types.ts` — fix at generator or accept). Apply the **test-expert describe-vs-audit
+lens** per site under the disposition bar above. A warm worktree `oak-sonar-zero` exists; the
+empty branch `fix/sonar-phase3a-s5914-test-assertions` (off `main`) is already cut for the S5914
+tranche. Then Phase 4 (design-MAJOR ~27) and Phase 5 (idiom-MINOR ~250 bulk, mostly ESLint
+autofix) per the plan's triage table.
 
 ## Watch (not mine; flagged)
 

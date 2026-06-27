@@ -74,7 +74,9 @@ describe('buildZodType', () => {
         required: true,
         description: 'Key stage slug, e.g. "ks2"',
       };
-      expect(buildZodType(meta)).toBe('z.string().describe("Key stage slug, e.g. \\"ks2\\"")');
+      expect(buildZodType(meta)).toBe(
+        String.raw`z.string().describe("Key stage slug, e.g. \"ks2\"")`,
+      );
     });
   });
 

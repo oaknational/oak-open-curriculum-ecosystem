@@ -1,6 +1,8 @@
 # ADR-202: Orientation as one intent-discerning lens
 
 - **Status:** Accepted (2026-06-23). Owner-confirmed design (2026-06-22 / 2026-06-23 conversation).
+  Amended (2026-06-27): the lens is named **Oak: Under the Hood** (`/oak-under-the-hood`) and projects
+  into the Oak MCP server as a behaviour-only pointer — see §Amendment.
 - **Thread:** `orientation-skills-family`.
 - **Builds on:**
   [PDR-112](../../../.agent/practice-core/decision-records/PDR-112-teaching-surface-family-across-a-portability-seam.md)
@@ -83,6 +85,31 @@ setup distinct; seam unchanged); the skill is the source of truth for how that s
   surface, and it routes rather than restates.
 - The host now carries one repo-bound orientation lens behind the PDR-112 edge instead of two. The portable
   pattern's three-context generality is unaffected; this is a host-count change, recorded as phenotype.
-- The decision is operationalised in the skill canonical (`.agent/skills/explain/`), its generated adapters
-  (ADR-125), and the AGENT.md §Orientation Requests routing block. Validation is behavioural: simulated
-  orientation conversations plus a live owner walkthrough, recorded on the onboarding-simulations register.
+- The decision is operationalised in the skill canonical (`.agent/skills/under-the-hood/`), its generated
+  adapters (ADR-125), and the AGENT.md §Orientation Requests routing block. Validation is behavioural:
+  simulated orientation conversations plus a live owner walkthrough, recorded on the onboarding-simulations
+  register.
+
+## Amendment (2026-06-27): name = Oak: Under the Hood; MCP pointer projection
+
+Two changes land together (PR #243), both consistent with the original Decision:
+
+1. **Name.** The lens's interim name (`explain` / `/oak-explain`) is superseded by **Oak: Under the
+   Hood** (command `/oak-under-the-hood`; canonical dir `.agent/skills/under-the-hood/` — the bare
+   concept name, since the `oak-` prefix is adapter-only). The earlier name was a placeholder; "Oak:
+   Under the Hood" names the behaviour the lens performs — exploring THIS repository through the facet
+   that fits the visitor (its impact, intent, mechanisms, or value), framed by Oak's public mission. The
+   rename is a clean break (Decision §6, `replace-dont-bridge`): every live reference is migrated in the
+   same change, and git history carries the evolution.
+
+2. **Second channel — the MCP pointer projection.** The one orientation behaviour now runs in a second
+   channel, the Oak MCP server, from the **same** behaviour source (the skill canonical). The MCP tool
+   (`oak-under-the-hood`) and resource (`docs://oak/under-the-hood.md`) carry **no baked content**: they
+   hand the connected assistant a `resource_link`/URL to the public canonical skill plus Oak's public
+   framing sources, and the assistant fetches the canonical and orients. The canonical sources are always
+   reachable (the skill on public GitHub; Oak's mission and strategy on the public Oak site), so the
+   capability is the behaviour plus pointers — never a generated or hand-maintained duplicate (the bake
+   apparatus an earlier instantiation carried is deleted). This preserves PDR-009 (canonical-first, no
+   duplication): one behaviour source, two channels. The firewall keeping the effort lens clear of
+   curriculum content is held structurally in the MCP projection (no import of the curriculum-coupled
+   context hint, ADR-041), never by test.

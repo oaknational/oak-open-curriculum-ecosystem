@@ -138,7 +138,7 @@ function getLastSearchParams(client: Client): estypes.SearchRequest {
   if (calls.length === 0) {
     throw new Error('Expected client.search to have been called');
   }
-  const params = calls[calls.length - 1]?.[0];
+  const params = calls.at(-1)?.[0];
   if (typeof params !== 'object' || params === null) {
     throw new Error('Expected search params to be an object');
   }
