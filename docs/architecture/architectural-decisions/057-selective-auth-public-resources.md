@@ -43,7 +43,9 @@ is valid only when all of the following are true:
 
 Any future public resource must be deliberately classified into this allowlist.
 Tool calls, prompts, discovery methods, and non-public resources remain covered
-by ADR-113's HTTP-level authentication rule.
+by ADR-113's HTTP-level authentication rule. **The classification rule, its
+basis in MCP's server-level authorization model, and the extension to app-local
+resources are recorded in [ADR-205](./205-public-resource-classification-pattern.md).**
 
 ### Implementation Details
 

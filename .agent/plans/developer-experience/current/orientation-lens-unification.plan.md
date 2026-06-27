@@ -3,7 +3,7 @@ title: 'Orientation lens unification — one intent-discerning surface'
 type: plan
 collection: developer-experience
 lane: current
-status: 'READY FOR EXECUTION — readiness review run + folded 2026-06-23 (assumptions-expert, onboarding-expert, docs-adr-expert; all load-bearing findings verified first-hand before folding)'
+status: 'SUPERSEDED 2026-06-27 — WS0–WS6 EXECUTED 2026-06-23 (unification landed `ca40d98ce` as `/oak-explain`); the lens is renamed to Oak: Under the Hood (`/oak-under-the-hood`) and gains an MCP pointer projection by the oak-under-the-hood reframe (`../../sdk-and-mcp-enhancements/active/oak-under-the-hood.plan.md`, ADR-202 §Amendment). Only the name is superseded; the design stands. Retained as the unification record — physical archive-move + completed-plans.md row pending (coordinated with the archive lane).'
 owning_thread: orientation-skills-family
 design_confirmed_by: owner (2026-06-22 / 2026-06-23 conversation)
 supersedes_reference: ../../../plans-old-archive/developer-experience/archive/completed/orientation-and-agentic-ai-literacy.plan.md
@@ -38,6 +38,20 @@ todos:
 ---
 
 # Orientation lens unification — one intent-discerning surface
+
+> **SUPERSEDED (2026-06-27).** This plan's WS0–WS6 were **executed** on 2026-06-23
+> — the unification landed as `ca40d98ce` under the interim name `/oak-explain` (see
+> the Execution note below). The lens is now renamed to **Oak: Under the Hood**
+> (`/oak-under-the-hood`) and projects into the Oak MCP server as a behaviour-only
+> pointer, by the **oak-under-the-hood reframe**
+> ([reframe plan](../../sdk-and-mcp-enhancements/active/oak-under-the-hood.plan.md),
+> [ADR-202 §Amendment](../../../../docs/architecture/architectural-decisions/202-orientation-as-one-intent-discerning-lens.md)).
+> **Only the lens name is superseded** — the design (one intent-discerning lens,
+> mode-as-a-discerned-variable, setup-distinct, PDR-112 seam unchanged) stands. The
+> new-behaviour conversational-simulation validation is carried into the reframe
+> plan's §Verification. This document is retained as the unification record; the
+> `/oak-explain` and `explain-repo` references below are the historical record of
+> that landing, not live pointers.
 
 ## Execution note (2026-06-23, Zenith lifts Firmament) — three points supersede the plan's letter
 

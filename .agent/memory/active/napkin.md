@@ -312,3 +312,66 @@ New session observations append below.
 
 - **A specialist subagent's blanket "all 18 regex findings are false-positives, dismiss all" was WRONG, and so was my own first analysis — both fixed by reading Sonar S8786's rule definition.** We both reasoned "delimited negated class (`{[^}]+}`) ⇒ linear." But S8786's documented criterion is *unanchored multi-position retry ⇒ O(n²) on non-match* (its noncompliant example is `/a+b/`; compliant `/^a+b/`). So those patterns ARE non-linear — NOT false positives; mass-dismissing 18 genuine findings would have been the error. Lesson: for a tool-rule disposition, read the RULE's criterion + examples first; a plausibility argument (yours OR a subagent's) is not proof. [[verify-dont-trust]], fluency-is-a-warning, owner's "critically assess subagent results" standing directive.
 - **Phase-2 disposition (accept-with-rationale bar): 2 fixes + 16 accepts.** FIX = sitemap-scanner `\s*([^<]+)\s*` (real O(n²), network XML) and S6035 `(?:—|\))`→`[—)]`. ACCEPT = 14 S8786 (internal/build-time/generated inputs; JS has no possessive quantifiers so an atomic "fix" renumbers capture groups + forces consumer changes) + 2 S5843 canonical-semver (complexity, parity-locked). The Vercel `ignoreCommand` `.mjs` semver shim is irreducible: it runs before `pnpm install` (no node_modules, dist gitignored) so it can only use Node built-ins + committed source; parity-test-locked inline copy is correct. **Napkin near fitness limit — drain due (Cedar flagged).**
+
+<!-- Merged from worktree-ws-b-explain (oak-under-the-hood reframe, 2026-06-27): the three entries below predate main's tail; reorder/drain at the next rotation. -->
+
+## 2026-06-26 — Tests prove behaviour, never config or content; hashing a source to detect change is a config-pin (Skipper tracks Kelp)
+
+- **Owner sharpening (absolute): a test/check must prove BEHAVIOUR without constraining
+  implementation. The disqualifying screens: does it test configuration? assert content that can
+  change (all content)? test test-code? test a third-party lib/service? use a complex mock instead
+  of a trivial DI'd fake? Any "yes" → it is the wrong shape.** Hashing a source file and pinning the
+  hash to detect change ("single-sourcing as a tested relationship") is the ANTITHESIS of
+  prove-behaviour — it pins config, constrains the source's bytes, proves nothing about behaviour,
+  and fails loud on a byte change that broke nothing. Content-grep tests
+  (`expect(body).toContain('agent-first')` / `.not.toContain('Invite-Only Alpha')`) assert content
+  that legitimately changes — brittle and circumventable. The cure for a content-quality invariant
+  (a firewall: "no curriculum / no volatile status in the prose") is NOT a grep test — it is
+  **construction + human review** (a PR-review checklist item). Worked instance: ripped the WS-B
+  explain projection's two fingerprint drift-guards + two content-grep test files out (`03c279ca2`,
+  +114/−605); kept only MCP-observable behaviour (resource registered with its metadata contract;
+  read serves the wired body) + a DI'd assembler tested with trivial fakes. Sharpens
+  [[feedback_test_the_flag_engine_not_the_configuration]] and
+  [[feedback_never_pin_owner_tunable_values_in_tests]] (assert effects, not constants) into the
+  6-screen checklist + the firewall-is-review rule. Candidate distilled/testing-strategy graduation.
+- **A fresh git worktree needs `pnpm install` AND `pnpm build` before gates run.** type-check +
+  vitest pass on install alone, but ESLint's flat config imports the internal
+  `@oaknational/eslint-plugin-standards`, which must be BUILT (its package `exports` resolve to
+  `dist/`) — so bare `eslint` exits 2 ("No exports main defined") in an install-only worktree. The
+  main checkout is already built, masking this. Operational gotcha for any worktree-based lane.
+  (Harness `EnterWorktree` places the worktree under `.claude/worktrees/` — gitignored, nested,
+  sandbox-reachable — not as a sibling dir like the repo's `git worktree add` convention.)
+
+## 2026-06-26 — Don't claim observable session state you haven't observed; build worktrees before session start (Cedar lifts Canopy)
+
+- **Mistake: I told the owner "this session has its statusline" after `pnpm build` exited 0 — inferred,
+  not observed. The owner's screenshot showed no statusline.** Two compounding errors: (1) I treated a
+  build exit code as proof of a downstream observable (the statusline) — a convenient/fluent claim, the
+  exact shape [[verify-dont-trust]] and the metacognition "fluency is a warning" note target; (2) I built
+  the worktree MID-session, but the statusline initialises at session START (known primary-checkout
+  statusline-resolution bug), so a mid-session build cannot restore the current session's statusline
+  regardless. **Cure:** build every worktree BEFORE opening the session; never assert observable session
+  state I have not actually seen. The owner's same-session directive — "all results from all subagents
+  must be critically assessed, including claims and sources" — applies to my OWN claims too. Homed in
+  [[feedback_worktree_needs_install_and_build]] + start-right §8.
+
+## 2026-06-27 — Cross-worktree fragmentation; a state `.md` is still glob-linted (Cedar lifts Canopy)
+
+- **Tracked `.agent/` files are PER-BRANCH, so they are invisible across worktrees — the F-41
+  coordination home (`.agent/state/collaboration/`, the primary checkout) is the ONLY
+  cross-worktree-visible surface.** A lane's state (thread record, plan, continuity) lives on its
+  branch; from any other worktree it cannot be seen — so work on an unpushed feature branch is
+  orphan-risk and a fresh session in another worktree can't find it. Worked instances: WS-B's D0
+  state lived only on the unpushed `worktree-ws-b-explain` branch; the `data-sources-governance`
+  branch is 38 behind main and lacks its OWN thread record (the grounding is on main). Cure: a
+  cross-worktree work-state map at the coordination home
+  (`.agent/state/collaboration/cross-worktree-work-state.md`) — the interim manual form of **F-98**
+  (`agent-work-state-registry.plan.md`), which is the durable fix. Owner standing concern: never let
+  work get forgotten/orphaned. Sibling: [[feedback_worktree_needs_install_and_build]].
+- **A markdown file under `.agent/state/` IS linted by `markdownlint-root` — the glob does NOT
+  respect `.gitignore`.** My new (git-ignored) cross-worktree map had an MD049 slip and blocked a
+  PEER's tree-wide pre-push (markdownlint-root lints the whole working tree). Gitignoring the file
+  did NOT exclude it from the lint (the glob `!`-excludes `shared-comms-log.md` by NAME, proving it
+  ignores `.gitignore`). Cures: keep any state `.md` markdownlint-clean, AND the durable config fix
+  is a glob exclude (e.g. `!.agent/state/**`) in the markdownlint-cli2 config (surfaced to the
+  owner). A local-state file is not lint-exempt. Sibling: [[verify-dont-trust]].

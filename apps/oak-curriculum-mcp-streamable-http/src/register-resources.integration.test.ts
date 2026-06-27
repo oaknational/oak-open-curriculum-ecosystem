@@ -494,6 +494,49 @@ describe('registerAllResources registers the widget resource', () => {
   });
 });
 
+describe('registerAllResources registers the Oak: Under the Hood orientation resource (docs://oak/under-the-hood.md)', () => {
+  let server: Pick<McpServer, 'registerResource'>;
+  let registeredResources: RegisteredResourceMap;
+  let readResource: (uri: string) => Promise<ReadResourceCapture>;
+  let flush: () => Promise<void>;
+  let options: ResourceRegistrationOptions;
+
+  beforeEach(() => {
+    const mock = createMockServer();
+    server = mock.server;
+    registeredResources = mock.registeredResources;
+    readResource = mock.readResource;
+    flush = mock.flush;
+    options = createTestOptions();
+  });
+
+  it('registers docs://oak/under-the-hood.md with low-salience nested annotations', async () => {
+    registerAllResources(server, options);
+    await flush();
+
+    const resource = registeredResources.get('docs://oak/under-the-hood.md');
+    expect(resource).toBeDefined();
+    expect(resource?.metadata.mimeType).toBe('text/markdown');
+    expect(resource?.metadata.annotations?.priority).toBe(0.2);
+    expect(resource?.metadata.annotations?.audience).toContain('assistant');
+    // No lastModified: the resource serves a pointer, not a server-owned body.
+    expect(resource?.metadata.annotations?.lastModified).toBeUndefined();
+  });
+
+  it('wires the read to serve a non-empty pointer (not a baked body)', async () => {
+    registerAllResources(server, options);
+    await flush();
+
+    // Behaviour under test: the read is wired and returns a non-empty markdown pointer.
+    // The resource carries NO baked orientation body; what the pointer SAYS is a content
+    // property of the source, held by authoring and review — never pinned here.
+    const resource = await readResource('docs://oak/under-the-hood.md');
+    const text = getTextContent(resource.contents[0]);
+    expect(typeof text).toBe('string');
+    expect(text.length).toBeGreaterThan(0);
+  });
+});
+
 describe('registerAllResources matches the canonical resource catalogue (drift guard)', () => {
   let server: Pick<McpServer, 'registerResource'>;
   let registeredResources: RegisteredResourceMap;
@@ -506,12 +549,15 @@ describe('registerAllResources matches the canonical resource catalogue (drift g
     flush = mock.flush;
   });
 
-  it('registers exactly the ALL_MCP_RESOURCES URIs (widget aside) when the EEF flag is on', async () => {
+  it('registers exactly the ALL_MCP_RESOURCES URIs (app-local resources aside) when the EEF flag is on', async () => {
     registerAllResources(server, createTestOptions(undefined, true));
     await flush();
 
+    // The widget and the Oak: Under the Hood orientation resource are APP-LOCAL (not in the SDK
+    // catalogue, by design — ADR-041); the catalogue drift-guard covers the SDK resources.
+    const appLocalUris = [WIDGET_URI, 'docs://oak/under-the-hood.md'];
     const registeredUris = Array.from(registeredResources.keys())
-      .filter((uri) => uri !== WIDGET_URI)
+      .filter((uri) => !appLocalUris.includes(uri))
       .sort((a, b) => a.localeCompare(b));
     const catalogueUris = ALL_MCP_RESOURCES.map((resource) => resource.uri).sort((a, b) =>
       a.localeCompare(b),

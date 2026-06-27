@@ -35,7 +35,7 @@ Before reviewing onboarding quality, you MUST also read and internalise these do
 | Document | Purpose |
 |----------|---------|
 | `.agent/skills/start-right-quick/shared/start-right.md` | Canonical AI-agent onboarding workflow |
-| `.agent/skills/explain/SKILL-CANONICAL.md` | The orientation lens (`/oak-explain`) — audit its discernment contract and three delivery modes against the live docs it routes to |
+| `.agent/skills/under-the-hood/SKILL-CANONICAL.md` | The orientation lens (`/oak-under-the-hood`) — audit its discernment contract and three delivery modes against the live docs it routes to |
 | `README.md` | Public entrypoint and top-level onboarding (includes the Quick Start and audience routing) |
 | `CONTRIBUTING.md` | Human contributor flow: development process and quality expectations |
 | `docs/README.md` | Documentation index and start paths |

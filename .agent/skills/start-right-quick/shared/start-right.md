@@ -167,6 +167,29 @@ gate timings, watcher deadlines, and experiment results, and the cause
 may be leaked processes from an earlier session (see
 [`no-unbounded-host-load`](../../../rules/no-unbounded-host-load.md)).
 
+### 8. Worktree / fresh-checkout build
+
+Every fresh git worktree or clone must install **and build** before any gate or
+substantial work — not only the primary checkout:
+
+```bash
+pnpm install
+pnpm build
+```
+
+`type-check` and `vitest` pass on install alone, so the gap stays silent until
+`lint` runs: ESLint's flat config imports the internal
+`@oaknational/eslint-plugin-standards`, whose package `exports` resolve to
+`dist/`. Unbuilt, bare `eslint` exits 2 (`No exports main defined`). The primary
+checkout is usually already built, which masks this in the main tree only — so a
+worktree-based lane must run the build itself before trusting any gate.
+
+It also matters beyond gates: a worktree session shows **no statusline** unless the
+worktree was built **before the session started** (a known primary-checkout
+statusline-resolution bug). Building mid-session does not restore the current
+session's statusline. So build every new worktree **before** opening the session,
+not after.
+
 ## Practice Box
 
 Check `.agent/practice-core/incoming/` for practice-core files. If

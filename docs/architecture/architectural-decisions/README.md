@@ -366,6 +366,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (prevent semantic merge-skew with require-branches-up-to-date rather than a merge queue; the queue is
   incompatible with default-setup CodeQL (codeql-action#1537), app-based SonarCloud, and Vercel's Git
   integration, and the fixes conflict with ADR-161; Accepted 2026-06-26)
+- [ADR-205: Classifying MCP resources as public — the per-resource allowlist pattern](205-public-resource-classification-pattern.md)
+  (MCP authorization is server/transport-level, so per-resource public-vs-protected is an Oak
+  application-level classification, not an MCP mechanism; the rule — static/public-reference content with
+  no user or sensitive data is public, else authenticated — plus an app-local-resource extension
+  generalise ADR-057; classifies the Oak: Under the Hood orientation pointer public; Accepted 2026-06-27)
 
 ## Key Architectural Decisions
 

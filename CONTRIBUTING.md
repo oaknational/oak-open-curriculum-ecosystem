@@ -57,7 +57,7 @@ Gemini CLI, Copilot, Windsurf) start with two additional surfaces:
   repos a teammate may need to clone
 
 **New to the repository?** Open your first agent session with
-`/oak-explain` — the orientation lens discerns whether you want a specific
+`/oak-under-the-hood` — the orientation lens discerns whether you want a specific
 answer, an overview, or a guided walk that can set up your machine, and meets
 you where you are.
 
