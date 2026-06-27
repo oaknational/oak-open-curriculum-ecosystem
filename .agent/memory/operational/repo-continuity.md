@@ -53,7 +53,8 @@ todo list — is [`director-handoff.md`](director-handoff.md).
   oak-under-the-hood **reframe** (first-hand re-assessment; **PR #243** draft, gated on the reframe
   landing; routes ADR-202 amendment + rename portability to the Director); Cedar — **D1–D6
   plan-corpus rationalisation** program (owner-authorised; **PR #252** report; **F-98 = PDR-118**
-  agent-work-state model keystone, **PR #253** Proposed, needs Director/owner ratification; **D4/D6**
+  agent-work-state model keystone, **PR #253** (then Proposed; since owner-ratified and LANDED to main
+  `bc87c650d` — see the top entry); **D4/D6**
   GO as separate Director-reviewed PRs — D6 needs config-expert + render-from-worktree verify).
   **Deferred (NOT done this session, owner-directed):** the napkin DRAIN (napkin over its soft
   fitness limit but under the ~400 rotation trigger; all session lessons conserved in the napkin +
