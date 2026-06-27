@@ -36,18 +36,21 @@ in agent reasoning, not at the watcher boundary.
 ### Canonical invocation — the `agent-tools` CLI
 
 ```bash
-# Replace <agent-codename> with the codename emitted by identity preflight.
-# Self-terminating guard (F-101): wrap the watcher in GNU `timeout`/`gtimeout` so a
-# watcher whose agent has gone away dies after a fixed period instead of accumulating
-# as an orphan (and writing a false F-95 heartbeat). A live agent re-arms it on the
-# Monitor exit-notification; a dead agent does not. Runs un-guarded if neither binary
-# is installed (README prerequisites: `brew install coreutils` on macOS).
-TIMEOUT_BIN="$(command -v timeout || command -v gtimeout || true)"
-${TIMEOUT_BIN:+$TIMEOUT_BIN 3600} pnpm agent-tools:collaboration-state -- comms watch \
+# Replace <agent-codename>/<platform>/<model> below.
+# Self-terminating guard (F-101): prepend GNU `timeout`/`gtimeout` (default 3600s) so a
+# watcher whose agent has gone away self-exits instead of accumulating as an orphan (and
+# writing a false F-95 heartbeat). A live agent re-arms it on the Monitor exit-notification;
+# a dead one does not. Build the argv first, then prepend the timeout only if present — this
+# is zsh-safe, portable, and graceful (runs un-guarded if coreutils is absent). Do NOT use
+# `${VAR:+$VAR 3600} cmd`: zsh does not word-split it, so it tries to exec "timeout 3600".
+set -- pnpm agent-tools:collaboration-state -- comms watch \
   --comms-dir .agent/state/collaboration/comms \
   --seen-file .agent/state/collaboration/comms-seen/<agent-codename>.json \
   --platform <claude|codex|cursor> \
   --model <model-id>
+TIMEOUT_BIN="$(command -v timeout || command -v gtimeout || true)"
+[ -n "$TIMEOUT_BIN" ] && set -- "$TIMEOUT_BIN" 3600 "$@"
+exec "$@"
 ```
 
 The `timeout`/`gtimeout` prefix (default 3600 s, tunable) bounds every watcher's
