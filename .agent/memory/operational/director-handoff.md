@@ -206,10 +206,15 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
-> Refresh this whole section at every handoff. Last refreshed 2026-06-25 (post-merge).
-> **POST-MERGE TRUTH: the pilot bundle has landed and the team is dissolved.**
-> This section records the settled state; there is no sitting Director to hand off
-> from — a future effort re-establishes the seat against the Brief above.
+> Refresh this whole section at every handoff. Last refreshed 2026-06-27 (Oyster spins Coral, Director).
+> **SEAT IS LIVE — Director handoff IN PROGRESS:** Oyster spins Coral (341b9a) → Chinook turns Halo
+> (PDR-064 Moment-1 broadcast; authority transfers at Chinook's Moment-2). **The current, complete,
+> first-hand pickup is the fresh handoff record** at git-ignored state
+> `.agent/state/collaboration/handoffs/director-handoff-oyster-to-chinook-2026-06-27.md` plus the
+> cross-worktree map — read those, NOT the dated mandate below (it is 2026-06-25 history, retained
+> only as a precedent on team-session-plan / director-brief authoring).
+> Team n=4: Oyster (Director, handing off), Cedar (D1–D6 plan rationalisation), Brazier (Sonar
+> Phase 3), Swordfish (oak-under-the-hood reframe). Five-PR merge train (#247–#251) LANDED to main.
 
 ### ▶ NEXT SESSION MANDATE (owner-directed 2026-06-25) — read before anything else
 
