@@ -4,6 +4,10 @@
 
 All subagent responses, work, claims, sources, and general context MUST be critically assessed before being accepted. This is always true.
 
+## Team handoff
+
+I would like you to prepare for handoff to a successor please, I will name them later. Ultrathink /oak-metacognition /oak-reason /oak-consolidate-docs /oak-session-handoff  and a deep review of the context and what would be lost
+
 ## Team start
 
 ultrathink /oak-start-right-team /oak-metacognition /oak-reason XXX is the Director, you are an Implementer
