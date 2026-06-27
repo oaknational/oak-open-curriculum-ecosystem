@@ -21,12 +21,10 @@ projection lives in a separate ADR, named in the practice-index bridge rather th
 linked from this body);
 [PDR-094](PDR-094-coordination-event-rotation-is-class-tiered-archive-not-delete.md)
 (collaboration state is untracked-by-design local state).
-ADR-165 (the repo phenotype boundary — the host's collaboration-state projection
-is the phenotype ADR, not this PDR); ADR-197 (one coordination-home checkout owns
-shared registry state — where the binding is read and written); ADR-203 (untracked
-collaboration-state tiers are process-then-archive-moved). Host ADRs are named by
-identifier and resolved through the practice-index bridge, not linked from this
-body (PDR-079).
+The host's collaboration-state projection — the repo phenotype boundary, the
+single coordination-home checkout that owns shared registry state, and the
+untracked-state archive tiers — is recorded on the host ADR surface and resolved
+through the practice-index bridge, not named in this portable body (PDR-079).
 
 ## Context
 
@@ -47,7 +45,8 @@ rather than **derived ground truth**:
 Two failure modes follow directly, both observed first-hand:
 
 1. **An agent cannot answer "which worktree am I on?" from recorded state.** The
-   shell working directory resets to the primary checkout after every command, and
+   shell working directory resets to a fixed location, not the agent's worktree,
+   after every command, and
    nothing records the agent→worktree binding, so the answer is carried, unverified
    belief.
 2. **Freshness is not liveness.** A dead agent's claim read as `fresh` while its
@@ -62,7 +61,7 @@ this PDR fixes its model.
 Agent identity, coordination, state, and lifecycle are Practice-owned (PDR-035), so
 the **model** is recorded here as a PDR. The host implementation — the projection
 logic, the read API, and any schema change — is phenotype and is recorded in a host
-ADR at build time (ADR-165, PDR-079).
+ADR at build time, named in the practice-index bridge (PDR-079).
 
 ## Decision
 
@@ -152,7 +151,7 @@ This PDR owns the portable model: the binding, the three-signal decomposition,
 derive-not-author, the assert-one-validated-anchor primitive, and the
 reconcile/retire set. The host phenotype — where the anchor is stored, the
 projection implementation, the read API, the schema change, and the coordination
-home that owns the read/write surface (ADR-197) — is a host ADR authored at build
+home that owns the read/write surface — is a host ADR authored at build
 time.
 
 ## Rationale
