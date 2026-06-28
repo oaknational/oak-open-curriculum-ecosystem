@@ -80,6 +80,72 @@ const TYPE_PATTERN = /^[a-z]+$/u;
 
 const defaultRunGit: SpawnGitRunner = (args, cwd) => realGitRunner(args, cwd);
 
+/** Whether a worktree at the target path already exists, and if so on which branch. */
+type ExistingWorktree =
+  | { readonly kind: 'absent' }
+  | { readonly kind: 'resumable' }
+  | { readonly kind: 'collision'; readonly actualBranch: string };
+
+/**
+ * Detect whether a worktree already occupies {@link worktreePath} (the
+ * idempotent-retry pre-check), reading `git worktree list --porcelain` — never
+ * mutating, so never-use-git-to-remove-work is respected. A list failure is
+ * treated as `absent` so the subsequent `worktree add` still runs and fails loud
+ * on a genuine collision; the pre-check is an optimisation, not a gate.
+ */
+function detectExistingWorktree(
+  runGit: SpawnGitRunner,
+  coordinationHome: string,
+  worktreePath: string,
+  branch: string,
+): ExistingWorktree {
+  const listed = runGit(['worktree', 'list', '--porcelain'], coordinationHome);
+  if (isErr(listed)) {
+    return { kind: 'absent' };
+  }
+  for (const block of listed.value.split('\n\n')) {
+    const lines = block.split('\n');
+    const pathLine = lines.find((line) => line.startsWith('worktree '));
+    if (pathLine === undefined || pathLine.slice('worktree '.length).trim() !== worktreePath) {
+      continue;
+    }
+    const branchLine = lines.find((line) => line.startsWith('branch '));
+    const ref = branchLine?.slice('branch '.length).trim();
+    if (ref === `refs/heads/${branch}`) {
+      return { kind: 'resumable' };
+    }
+    return { kind: 'collision', actualBranch: ref ?? '(detached)' };
+  }
+  return { kind: 'absent' };
+}
+
+/**
+ * Run `git worktree add` for a freshly-derived worktree, wrapping a git failure in
+ * a Result (ADR-088) that names the branch, base, and path. Extracted from
+ * {@link createSpawnWorktree} so the latter stays within the per-function line
+ * budget while reading as validate → derive → detect → add.
+ */
+function addSpawnWorktree(
+  runGit: SpawnGitRunner,
+  coordinationHome: string,
+  worktree: SpawnedWorktree,
+): Result<SpawnedWorktree, Error> {
+  const added = runGit(
+    ['worktree', 'add', worktree.worktreePath, '-b', worktree.branch, worktree.base],
+    coordinationHome,
+  );
+  if (isErr(added)) {
+    return err(
+      new Error(
+        `spawn: failed to create worktree '${worktree.worktreePath}' on branch ` +
+          `'${worktree.branch}' from '${worktree.base}'. ${added.error.message}`,
+        { cause: added.error },
+      ),
+    );
+  }
+  return ok(worktree);
+}
+
 /** The slug/type/base after trimming and strict validation. */
 interface ValidatedSpawnInputs {
   readonly slug: string;
@@ -156,20 +222,24 @@ export function createSpawnWorktree(
     agentName: deriveIdentity(seed).displayName,
     sessionIdPrefix: seed.slice(0, 6),
   };
+  const worktree: SpawnedWorktree = { worktreePath, branch, base, session };
 
-  const added = runGit(
-    ['worktree', 'add', worktreePath, '-b', branch, base],
-    options.coordinationHome,
-  );
-  if (isErr(added)) {
+  const existing = detectExistingWorktree(runGit, options.coordinationHome, worktreePath, branch);
+  if (existing.kind === 'resumable') {
+    // Idempotent retry: a prior spawn created this worktree+branch but its build
+    // failed. Resume (the caller re-runs build) — no git mutation, nothing removed.
+    // The worktree was never launched, so a fresh session seed is correct.
+    return ok(worktree);
+  }
+  if (existing.kind === 'collision') {
     return err(
       new Error(
-        `spawn: failed to create worktree '${worktreePath}' on branch '${branch}' from '${base}'. ` +
-          `${added.error.message}`,
-        { cause: added.error },
+        `spawn: '${worktreePath}' already exists on a different branch ` +
+          `('${existing.actualBranch}', not '${branch}'). Resolve the collision before ` +
+          `spawning this slug.`,
       ),
     );
   }
 
-  return ok({ worktreePath, branch, base, session });
+  return addSpawnWorktree(runGit, options.coordinationHome, worktree);
 }
