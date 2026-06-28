@@ -37,6 +37,7 @@ const STUB_WORKTREE: SpawnedWorktree = {
   branch: 'feat/spawn-flow',
   base: 'origin/main',
   session: { seed: 'seed-value', agentName: 'Test Agent Name', sessionIdPrefix: 'seed-v' },
+  resumed: false,
 };
 
 function baseInput(overrides: Partial<SpawnCliInput> = {}): SpawnCliInput {
@@ -100,6 +101,25 @@ describe('runSpawnCli', () => {
     expect(text).toContain('origin/main');
     expect(text).toContain('Test Agent Name');
     expect(text).toContain('seed-v');
+  });
+
+  it('reports a resumed worktree honestly — no "Created" and no fresh "(from <base>)" claim', () => {
+    const cap = capture();
+    const exitCode = runSpawnCli({
+      ...baseInput(),
+      // A retry after a prior build failure: the creator resumed the existing worktree.
+      createWorktree: () => ok({ ...STUB_WORKTREE, resumed: true }),
+      stdout: cap.out,
+      stderr: cap.err,
+    });
+
+    expect(exitCode).toBe(0);
+    const text = cap.text();
+    expect(text).toContain('Resumed existing worktree');
+    expect(text).toContain('feat/spawn-flow');
+    // The dishonest fresh-creation claim must NOT appear on a resume.
+    expect(text).not.toContain('Created worktree');
+    expect(text).not.toContain('(from ');
   });
 
   it('exits non-zero with the error on stderr when --slug is missing', () => {

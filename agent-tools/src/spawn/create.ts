@@ -66,10 +66,12 @@ export interface SpawnedWorktree {
   readonly worktreePath: string;
   /** The branch the worktree checks out (`<type>/<slug>`). */
   readonly branch: string;
-  /** The base ref the branch was cut from. */
+  /** The requested base ref — the branch is cut from it on creation; not re-applied on a resume. */
   readonly base: string;
   /** The session seed and derived display label for the session that will occupy the worktree. */
   readonly session: SpawnSeed;
+  /** True when an existing matching worktree was resumed rather than newly created. */
+  readonly resumed: boolean;
 }
 
 /** Lowercase alphanumeric words joined by single hyphens — path- and branch-safe. */
@@ -222,14 +224,16 @@ export function createSpawnWorktree(
     agentName: deriveIdentity(seed).displayName,
     sessionIdPrefix: seed.slice(0, 6),
   };
-  const worktree: SpawnedWorktree = { worktreePath, branch, base, session };
+  const worktree: SpawnedWorktree = { worktreePath, branch, base, session, resumed: false };
 
   const existing = detectExistingWorktree(runGit, options.coordinationHome, worktreePath, branch);
   if (existing.kind === 'resumable') {
     // Idempotent retry: a prior spawn created this worktree+branch but its build
     // failed. Resume (the caller re-runs build) — no git mutation, nothing removed.
-    // The worktree was never launched, so a fresh session seed is correct.
-    return ok(worktree);
+    // The worktree was never launched, so a fresh session seed is correct. `base` is
+    // NOT re-applied (the branch already exists), so the result is flagged `resumed`
+    // and must not be reported as a fresh creation from `base`.
+    return ok({ ...worktree, resumed: true });
   }
   if (existing.kind === 'collision') {
     return err(

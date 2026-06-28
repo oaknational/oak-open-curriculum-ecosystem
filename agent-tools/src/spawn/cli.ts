@@ -126,9 +126,17 @@ function defaultResolveHome(cwd: string): Result<string, Error> {
 }
 
 function formatResult(result: SpawnedWorktree): string {
+  // A resume re-runs build against an existing worktree, so it does not assert a
+  // fresh creation from `base` (the branch was cut from its original base earlier,
+  // not from the requested `base` on this invocation).
+  const header = result.resumed
+    ? [`Resumed existing worktree ${result.worktreePath}`, `  branch:   ${result.branch}`]
+    : [
+        `Created worktree ${result.worktreePath}`,
+        `  branch:   ${result.branch} (from ${result.base})`,
+      ];
   return [
-    `Created worktree ${result.worktreePath}`,
-    `  branch:   ${result.branch} (from ${result.base})`,
+    ...header,
     `  identity: ${result.session.agentName} (${result.session.sessionIdPrefix})`,
     '',
   ].join('\n');

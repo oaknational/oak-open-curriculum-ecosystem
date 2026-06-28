@@ -57,6 +57,7 @@ describe('createSpawnWorktree', () => {
     expect(worktree.branch).toBe('feat/spawn-flow');
     expect(worktree.worktreePath).toBe('/workspace/oak-spawn-flow');
     expect(worktree.base).toBe('origin/main');
+    expect(worktree.resumed).toBe(false);
     // It checks for an existing worktree first (idempotent-retry support), then adds.
     expect(calls).toEqual([
       { args: ['worktree', 'list', '--porcelain'], cwd: HOME },
@@ -95,6 +96,9 @@ describe('createSpawnWorktree', () => {
     const worktree = unwrap(result);
     expect(worktree.worktreePath).toBe('/workspace/oak-spawn-flow');
     expect(worktree.branch).toBe('feat/spawn-flow');
+    // Flagged as a resume so callers do not report it as a fresh creation from `base`
+    // (the branch was cut from its original base earlier, not from this invocation's base).
+    expect(worktree.resumed).toBe(true);
     // It detected the existing worktree and did NOT attempt to add (nor remove) it.
     expect(calls).toEqual([{ args: ['worktree', 'list', '--porcelain'], cwd: HOME }]);
   });
