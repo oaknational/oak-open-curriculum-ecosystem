@@ -138,6 +138,19 @@ describe('generateServerInstructions', () => {
     const sortedPositions = [...toolPositions].sort((a, b) => a - b);
     expect(toolPositions).toEqual(sortedPositions);
   });
+
+  it('routes non-curriculum / mechanism / MCP-app / repo questions to the oak-under-the-hood tool', () => {
+    const instructions = generateServerInstructions();
+
+    // A connecting agent reads these instructions at conversation start, so this
+    // discovery surface is where the orientation capability must be findable. For
+    // questions that are NOT about curriculum content — the mechanisms delivering
+    // the content, this MCP app and its services, or the repository itself — the
+    // surface points at oak-under-the-hood. Without this the tool is invisible to a
+    // first-session prior (the curriculum↔orientation separation taken too far).
+    expect(instructions).toContain('oak-under-the-hood');
+    expect(instructions).toContain('not about curriculum content');
+  });
 });
 
 describe('generateContextHint', () => {

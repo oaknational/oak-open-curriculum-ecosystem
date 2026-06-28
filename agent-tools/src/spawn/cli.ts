@@ -2,6 +2,7 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 
 import { resolveCoordinationHome } from '../collaboration-state/coordination-home.js';
 
+import { buildWorktree, type BuildWorktreeOptions } from './build.js';
 import {
   createSpawnWorktree,
   type CreateSpawnWorktreeOptions,
@@ -22,6 +23,8 @@ export interface SpawnCliInput {
   readonly resolveHome?: (cwd: string) => Result<string, Error>;
   /** Worktree-creation seam (defaults to {@link createSpawnWorktree}). */
   readonly createWorktree?: (options: CreateSpawnWorktreeOptions) => Result<SpawnedWorktree, Error>;
+  /** Worktree-build seam (defaults to {@link buildWorktree}). */
+  readonly build?: (options: BuildWorktreeOptions) => Result<void, Error>;
 }
 
 const DEFAULT_TYPE = 'feat';
@@ -123,9 +126,17 @@ function defaultResolveHome(cwd: string): Result<string, Error> {
 }
 
 function formatResult(result: SpawnedWorktree): string {
+  // A resume re-runs build against an existing worktree, so it does not assert a
+  // fresh creation from `base` (the branch was cut from its original base earlier,
+  // not from the requested `base` on this invocation).
+  const header = result.resumed
+    ? [`Resumed existing worktree ${result.worktreePath}`, `  branch:   ${result.branch}`]
+    : [
+        `Created worktree ${result.worktreePath}`,
+        `  branch:   ${result.branch} (from ${result.base})`,
+      ];
   return [
-    `Created worktree ${result.worktreePath}`,
-    `  branch:   ${result.branch} (from ${result.base})`,
+    ...header,
     `  identity: ${result.session.agentName} (${result.session.sessionIdPrefix})`,
     '',
   ].join('\n');
@@ -166,6 +177,13 @@ function executeSpawn(
   });
   if (isErr(created)) {
     stderr.write(`${created.error.message}\n`);
+    return 2;
+  }
+
+  const build = input.build ?? buildWorktree;
+  const built = build({ worktreePath: created.value.worktreePath });
+  if (isErr(built)) {
+    stderr.write(`${built.error.message}\n`);
     return 2;
   }
 

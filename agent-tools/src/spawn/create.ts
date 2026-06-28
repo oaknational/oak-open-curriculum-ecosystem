@@ -5,23 +5,10 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 
 import { deriveIdentity } from '../core/agent-identity/index.js';
 
+import { detectExistingWorktree, type SpawnGitRunner } from './existing-worktree.js';
 import { realGitRunner } from './git.js';
 
-/**
- * Runs a git subcommand from `cwd`, returning its stdout on success or the
- * underlying error on a non-zero exit — the Result pattern (ADR-088), never a
- * throw, so the failure is visible to the type system at every call site.
- *
- * @remarks
- * Mirrors the established `GitRunner` seam shape (the injectable git seam named
- * in the spawn-flow plan), lifted into `Result`. It is redeclared here rather
- * than imported from `collaboration-state/coordination-home.ts` so the spawn
- * lane stays decoupled from another lane's surface — the shape is the contract,
- * and a one-line type is cheaper to own than a cross-lane import. This is the
- * second declaration of the seam shape; a third independent consumer is the
- * trigger to hoist one shared seam type into `core/` (consolidate-at-third-consumer).
- */
-export type SpawnGitRunner = (args: readonly string[], cwd: string) => Result<string, Error>;
+export type { SpawnGitRunner };
 
 /**
  * The session seed minted for a spawned worktree, plus the display name and
@@ -66,10 +53,12 @@ export interface SpawnedWorktree {
   readonly worktreePath: string;
   /** The branch the worktree checks out (`<type>/<slug>`). */
   readonly branch: string;
-  /** The base ref the branch was cut from. */
+  /** The requested base ref — the branch is cut from it on creation; not re-applied on a resume. */
   readonly base: string;
   /** The session seed and derived display label for the session that will occupy the worktree. */
   readonly session: SpawnSeed;
+  /** True when an existing matching worktree was resumed rather than newly created. */
+  readonly resumed: boolean;
 }
 
 /** Lowercase alphanumeric words joined by single hyphens — path- and branch-safe. */
@@ -79,6 +68,33 @@ const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const TYPE_PATTERN = /^[a-z]+$/u;
 
 const defaultRunGit: SpawnGitRunner = (args, cwd) => realGitRunner(args, cwd);
+
+/**
+ * Run `git worktree add` for a freshly-derived worktree, wrapping a git failure in
+ * a Result (ADR-088) that names the branch, base, and path. Extracted from
+ * {@link createSpawnWorktree} so the latter stays within the per-function line
+ * budget while reading as validate → derive → detect → add.
+ */
+function addSpawnWorktree(
+  runGit: SpawnGitRunner,
+  coordinationHome: string,
+  worktree: SpawnedWorktree,
+): Result<SpawnedWorktree, Error> {
+  const added = runGit(
+    ['worktree', 'add', worktree.worktreePath, '-b', worktree.branch, worktree.base],
+    coordinationHome,
+  );
+  if (isErr(added)) {
+    return err(
+      new Error(
+        `spawn: failed to create worktree '${worktree.worktreePath}' on branch ` +
+          `'${worktree.branch}' from '${worktree.base}'. ${added.error.message}`,
+        { cause: added.error },
+      ),
+    );
+  }
+  return ok(worktree);
+}
 
 /** The slug/type/base after trimming and strict validation. */
 interface ValidatedSpawnInputs {
@@ -126,6 +142,44 @@ function validateSpawnInputs(
   return ok({ slug, type, base });
 }
 
+/** The branch and sibling worktree path derived from validated inputs. */
+interface SpawnTarget {
+  readonly branch: string;
+  readonly worktreePath: string;
+}
+
+/**
+ * Derive the `<type>/<slug>` branch and the sibling `oak-<slug>` worktree path,
+ * refusing to target the coordination home itself.
+ *
+ * @remarks
+ * `oak-<slug>` is a sibling of the coordination home, but a slug whose basename
+ * coincides with the coordination home's own (e.g. `open-curriculum-ecosystem`
+ * beside `oak-open-curriculum-ecosystem`) makes the two paths equal. Were that to
+ * reach {@link detectExistingWorktree}, the primary checkout's own
+ * `git worktree list` entry would match and be treated as resumable — spawn would
+ * then run install/build on the main checkout and exit without creating any
+ * sibling. The guard fails fast and loud here, before any git probe, so the
+ * primary checkout is never touched.
+ */
+function deriveSpawnTarget(
+  validated: ValidatedSpawnInputs,
+  coordinationHome: string,
+): Result<SpawnTarget, Error> {
+  const branch = `${validated.type}/${validated.slug}`;
+  const worktreePath = join(dirname(coordinationHome), `oak-${validated.slug}`);
+  if (worktreePath === coordinationHome) {
+    return err(
+      new Error(
+        `spawn: computed worktree path '${worktreePath}' is the coordination home itself — ` +
+          `refusing to spawn onto the primary checkout (slug '${validated.slug}' collides ` +
+          `with it). Choose a different lane slug.`,
+      ),
+    );
+  }
+  return ok({ branch, worktreePath });
+}
+
 /**
  * Create a fresh sibling worktree on a new lane branch and mint the session seed
  * for the session that will occupy it (spawn-flow Phase 1A).
@@ -143,33 +197,42 @@ export function createSpawnWorktree(
   if (isErr(validated)) {
     return validated;
   }
-  const { slug, type, base } = validated.value;
+  const target = deriveSpawnTarget(validated.value, options.coordinationHome);
+  if (isErr(target)) {
+    return target;
+  }
+  const { branch, worktreePath } = target.value;
+  const { base } = validated.value;
 
   const runGit = options.runGit ?? defaultRunGit;
   const generateSeed = options.generateSeed ?? randomUUID;
 
-  const branch = `${type}/${slug}`;
-  const worktreePath = join(dirname(options.coordinationHome), `oak-${slug}`);
   const seed = generateSeed();
   const session: SpawnSeed = {
     seed,
     agentName: deriveIdentity(seed).displayName,
     sessionIdPrefix: seed.slice(0, 6),
   };
+  const worktree: SpawnedWorktree = { worktreePath, branch, base, session, resumed: false };
 
-  const added = runGit(
-    ['worktree', 'add', worktreePath, '-b', branch, base],
-    options.coordinationHome,
-  );
-  if (isErr(added)) {
+  const existing = detectExistingWorktree(runGit, options.coordinationHome, worktreePath, branch);
+  if (existing.kind === 'resumable') {
+    // Idempotent retry: a prior spawn created this worktree+branch but its build
+    // failed. Resume (the caller re-runs build) — no git mutation, nothing removed.
+    // The worktree was never launched, so a fresh session seed is correct. `base` is
+    // NOT re-applied (the branch already exists), so the result is flagged `resumed`
+    // and must not be reported as a fresh creation from `base`.
+    return ok({ ...worktree, resumed: true });
+  }
+  if (existing.kind === 'collision') {
     return err(
       new Error(
-        `spawn: failed to create worktree '${worktreePath}' on branch '${branch}' from '${base}'. ` +
-          `${added.error.message}`,
-        { cause: added.error },
+        `spawn: '${worktreePath}' already exists on a different branch ` +
+          `('${existing.actualBranch}', not '${branch}'). Resolve the collision before ` +
+          `spawning this slug.`,
       ),
     );
   }
 
-  return ok({ worktreePath, branch, base, session });
+  return addSpawnWorktree(runGit, options.coordinationHome, worktree);
 }
