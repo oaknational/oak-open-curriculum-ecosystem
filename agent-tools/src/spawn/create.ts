@@ -142,6 +142,44 @@ function validateSpawnInputs(
   return ok({ slug, type, base });
 }
 
+/** The branch and sibling worktree path derived from validated inputs. */
+interface SpawnTarget {
+  readonly branch: string;
+  readonly worktreePath: string;
+}
+
+/**
+ * Derive the `<type>/<slug>` branch and the sibling `oak-<slug>` worktree path,
+ * refusing to target the coordination home itself.
+ *
+ * @remarks
+ * `oak-<slug>` is a sibling of the coordination home, but a slug whose basename
+ * coincides with the coordination home's own (e.g. `open-curriculum-ecosystem`
+ * beside `oak-open-curriculum-ecosystem`) makes the two paths equal. Were that to
+ * reach {@link detectExistingWorktree}, the primary checkout's own
+ * `git worktree list` entry would match and be treated as resumable — spawn would
+ * then run install/build on the main checkout and exit without creating any
+ * sibling. The guard fails fast and loud here, before any git probe, so the
+ * primary checkout is never touched.
+ */
+function deriveSpawnTarget(
+  validated: ValidatedSpawnInputs,
+  coordinationHome: string,
+): Result<SpawnTarget, Error> {
+  const branch = `${validated.type}/${validated.slug}`;
+  const worktreePath = join(dirname(coordinationHome), `oak-${validated.slug}`);
+  if (worktreePath === coordinationHome) {
+    return err(
+      new Error(
+        `spawn: computed worktree path '${worktreePath}' is the coordination home itself — ` +
+          `refusing to spawn onto the primary checkout (slug '${validated.slug}' collides ` +
+          `with it). Choose a different lane slug.`,
+      ),
+    );
+  }
+  return ok({ branch, worktreePath });
+}
+
 /**
  * Create a fresh sibling worktree on a new lane branch and mint the session seed
  * for the session that will occupy it (spawn-flow Phase 1A).
@@ -159,13 +197,16 @@ export function createSpawnWorktree(
   if (isErr(validated)) {
     return validated;
   }
-  const { slug, type, base } = validated.value;
+  const target = deriveSpawnTarget(validated.value, options.coordinationHome);
+  if (isErr(target)) {
+    return target;
+  }
+  const { branch, worktreePath } = target.value;
+  const { base } = validated.value;
 
   const runGit = options.runGit ?? defaultRunGit;
   const generateSeed = options.generateSeed ?? randomUUID;
 
-  const branch = `${type}/${slug}`;
-  const worktreePath = join(dirname(options.coordinationHome), `oak-${slug}`);
   const seed = generateSeed();
   const session: SpawnSeed = {
     seed,

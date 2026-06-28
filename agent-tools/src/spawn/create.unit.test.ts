@@ -129,6 +129,36 @@ describe('createSpawnWorktree', () => {
     expect(calls).toEqual([{ args: ['worktree', 'list', '--porcelain'], cwd: HOME }]);
   });
 
+  it('returns err when the computed oak-<slug> path equals the coordination home (never resume or build on the primary checkout)', () => {
+    // Cursor Bugbot f4bf53df: if `oak-<slug>` resolves to the coordination home
+    // itself, detectExistingWorktree would match the primary checkout's own
+    // worktree-list entry and treat it as resumable — spawn would then run
+    // install/build on the main checkout and exit "successfully" without ever
+    // creating the intended sibling. The guard fails fast and loud BEFORE any git
+    // probe, so the primary checkout is never touched. HOME basename is
+    // `oak-open-curriculum-ecosystem`, so slug `open-curriculum-ecosystem` collides.
+    const { runGit, calls } = recordingGit(
+      // Even with the primary checkout listed on the matching branch, no resume.
+      porcelainBlock(HOME, 'feat/open-curriculum-ecosystem'),
+    );
+
+    const result = createSpawnWorktree({
+      slug: 'open-curriculum-ecosystem',
+      type: 'feat',
+      base: 'origin/main',
+      coordinationHome: HOME,
+      runGit,
+      generateSeed: () => SEED,
+    });
+
+    expect(isErr(result)).toBe(true);
+    if (isErr(result)) {
+      expect(result.error.message).toMatch(/coordination home|primary checkout/u);
+    }
+    // Fails fast: no git probe, no add — the primary checkout is never touched.
+    expect(calls).toEqual([]);
+  });
+
   it('mints the session seed and derives the display name and prefix from it', () => {
     const { runGit } = recordingGit();
 
