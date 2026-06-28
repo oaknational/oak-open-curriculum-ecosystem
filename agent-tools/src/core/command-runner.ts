@@ -15,8 +15,8 @@ import { type Result } from '@oaknational/result';
  * runners. It was hoisted to `core/` once a third independent consumer appeared
  * (git + pnpm + gh), per the consolidate-at-third-consumer discipline — replacing
  * three separate `(args, cwd) => Result<T, Error>` declarations with one
- * parametrised type. Each domain seam (`SpawnGitRunner`, `PnpmRunner`,
- * `GhRunner`) is a thin alias that keeps its semantic name while sharing this
- * shape.
+ * parametrised type. The git and pnpm seams keep a named alias for their semantic
+ * name (`SpawnGitRunner = CommandRunner<string>`, `PnpmRunner = CommandRunner<void>`);
+ * the gh seam (`realGhRunner`) is typed as `CommandRunner<string>` directly.
  */
 export type CommandRunner<T = string> = (args: readonly string[], cwd: string) => Result<T, Error>;

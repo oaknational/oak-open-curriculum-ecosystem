@@ -97,6 +97,38 @@ describe('openDraftPr', () => {
     }
   });
 
+  it('fails fast if the push fails — surfaces the push-specific message, no PR attempted', () => {
+    const gitCalls: Call[] = [];
+    const ghCalls: Call[] = [];
+    const runGit: CommandRunner<string> = (args, cwd) => {
+      gitCalls.push({ args, cwd });
+      return args[0] === 'push' ? err(new Error('git push rejected')) : ok('');
+    };
+    const runGh: CommandRunner<string> = (args, cwd) => {
+      ghCalls.push({ args, cwd });
+      return ok(PR_URL);
+    };
+
+    const result = openDraftPr({
+      worktreePath: WORKTREE,
+      branch: BRANCH,
+      base: 'origin/main',
+      slug: SLUG,
+      runGit,
+      runGh,
+    });
+
+    expect(isErr(result)).toBe(true);
+    if (isErr(result)) {
+      expect(result.error.message).toMatch(/failed to push/u);
+      expect(result.error.message).toContain(BRANCH);
+      expect(result.error.cause).toBeInstanceOf(Error);
+    }
+    // The commit ran and the push failed → the PR was never attempted.
+    expect(gitCalls.map((call) => call.args[0])).toEqual(['commit', 'push']);
+    expect(ghCalls).toEqual([]);
+  });
+
   it('fails fast if the empty marker commit fails — no push, no PR attempted', () => {
     const gitCalls: Call[] = [];
     const ghCalls: Call[] = [];

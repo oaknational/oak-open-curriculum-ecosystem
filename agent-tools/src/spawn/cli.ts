@@ -3,6 +3,7 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 import { resolveCoordinationHome } from '../collaboration-state/coordination-home.js';
 
 import { buildWorktree, type BuildWorktreeOptions } from './build.js';
+import { formatSpawnResult } from './cli-output.js';
 import {
   createSpawnWorktree,
   type CreateSpawnWorktreeOptions,
@@ -112,7 +113,17 @@ function parseSpawnArgs(args: readonly string[]): Result<ParsedSpawnArgs, Error>
   if (state.slug === undefined) {
     return err(new Error(`spawn: --slug is required\n\n${usage()}`));
   }
-  return ok({ slug: state.slug, type: state.type, base: state.base, help: false });
+  // Normalise the option values once at the parse boundary so every downstream
+  // consumer sees the same trimmed value. createSpawnWorktree trims again for its
+  // own validation, but openDraftPr consumes the parsed base/slug directly — without
+  // this, trailing whitespace on --base reached `gh pr create --base` (and the slug
+  // reached the marker commit / PR title) untrimmed.
+  return ok({
+    slug: state.slug.trim(),
+    type: state.type.trim(),
+    base: state.base.trim(),
+    help: false,
+  });
 }
 
 /**
@@ -126,25 +137,6 @@ function defaultResolveHome(cwd: string): Result<string, Error> {
   } catch (cause) {
     return err(cause instanceof Error ? cause : new Error(String(cause)));
   }
-}
-
-function formatResult(result: SpawnedWorktree, prUrl: string | undefined): string {
-  // A resume re-runs build against an existing worktree, so it does not assert a
-  // fresh creation from `base` (the branch was cut from its original base earlier,
-  // not from the requested `base` on this invocation) and does not re-open a PR.
-  const header = result.resumed
-    ? [`Resumed existing worktree ${result.worktreePath}`, `  branch:   ${result.branch}`]
-    : [
-        `Created worktree ${result.worktreePath}`,
-        `  branch:   ${result.branch} (from ${result.base})`,
-      ];
-  const prLine = prUrl === undefined ? [] : [`  draft PR: ${prUrl}`];
-  return [
-    ...header,
-    `  identity: ${result.session.agentName} (${result.session.sessionIdPrefix})`,
-    ...prLine,
-    '',
-  ].join('\n');
 }
 
 function usage(): string {
@@ -191,7 +183,7 @@ function executeSpawn(
     return 2;
   }
 
-  stdout.write(formatResult(created.value, prepared.value));
+  stdout.write(formatSpawnResult(created.value, prepared.value));
   return 0;
 }
 

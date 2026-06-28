@@ -134,6 +134,28 @@ describe('runSpawnCli', () => {
     expect(cap.text()).toContain(PR_URL);
   });
 
+  it('normalises --base and --slug at the parse boundary so openDraftPr never receives untrimmed whitespace', () => {
+    // Bugbot finding: createSpawnWorktree trims --base for `git worktree add`, but the
+    // raw parsed base reached openDraftPr, so baseBranchOf / `gh pr create --base` could
+    // see a trailing space and fail or target the wrong base. Trimming once at the parse
+    // boundary keeps the value consistent across both consumers (create + open-pr).
+    let received: { worktreePath: string; branch: string; base: string; slug: string } | undefined;
+    const cap = capture();
+    const exitCode = runSpawnCli({
+      ...baseInput({ args: ['--slug', 'spawn-flow ', '--base', 'origin/main '] }),
+      openPr: (opts) => {
+        received = opts;
+        return ok(PR_URL);
+      },
+      stdout: cap.out,
+      stderr: cap.err,
+    });
+
+    expect(exitCode).toBe(0);
+    expect(received?.base).toBe('origin/main');
+    expect(received?.slug).toBe('spawn-flow');
+  });
+
   it('exits non-zero with the error on stderr when opening the draft PR fails', () => {
     const cap = capture();
     const exitCode = runSpawnCli({
