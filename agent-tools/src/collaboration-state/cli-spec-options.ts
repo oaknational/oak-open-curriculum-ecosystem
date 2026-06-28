@@ -50,6 +50,7 @@ export const commsWatchOptions = [
   'no-heartbeat',
   'seed-from-now',
   'no-auto-seed',
+  'supervisor-pid',
 ] as const;
 
 export const commsInboxOptions = [

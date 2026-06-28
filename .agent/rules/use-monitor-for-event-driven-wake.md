@@ -86,8 +86,15 @@ Monitor:
 pnpm agent-tools:collaboration-state -- comms watch \
   --comms-dir .agent/state/collaboration/comms \
   --seen-file ".agent/state/collaboration/comms-seen/<agent-name>.json" \
-  --platform <claude|codex|cursor> --model <model-id> 2>&1
+  --platform <claude|codex|cursor> --model <model-id> --supervisor-pid "$PPID" 2>&1
 ```
+
+`--supervisor-pid "$PPID"` binds the watcher's lifetime to the agent session
+that spawned it (the F-101 crash-orphan cure): the watcher self-exits within one
+poll cycle of that process disappearing, so a harsh agent death (crash / SIGKILL,
+which GNU `timeout`'s group-kill cannot reach) leaves no orphaned watcher writing
+a false-liveness heartbeat. The canonical command and its rationale live in
+[`comms-all-channels-watcher.md`](comms-all-channels-watcher.md).
 
 Run via Monitor `persistent: true`, **pipe-less** — the `comms watch`
 CLI already self-excludes and emits only relevant events, so no grep

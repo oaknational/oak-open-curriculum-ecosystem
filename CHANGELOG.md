@@ -1,3 +1,10 @@
+# [1.40.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.39.0...v1.40.0) (2026-06-28)
+
+
+### Features
+
+* **agent-tools:** self-exit orphaned comms watchers on supervisor death (F-101) ([#270](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/270)) ([b46089f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b46089fe45df65292321589720f74543f0cc02e9))
+
 # [1.39.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.38.0...v1.39.0) (2026-06-28)
 
 

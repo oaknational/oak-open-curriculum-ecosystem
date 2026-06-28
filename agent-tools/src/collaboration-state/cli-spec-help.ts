@@ -80,7 +80,7 @@ export const commsWatchHelp =
   '[--session-prefix <prefix>] ' +
   '[--poll-ms <n>] [--max-events <n>] [--step-timeout-ms <n>] ' +
   '[--heartbeat-file <path>] [--heartbeat-interval-ms <n>] [--no-heartbeat] ' +
-  '[--seed-from-now] [--no-auto-seed] ' +
+  '[--seed-from-now] [--no-auto-seed] [--supervisor-pid <pid>] ' +
   '(emits every relevant event — broadcast, group, directed, observed, lifecycle — ' +
   'with self-exclusion only; step-timeout-ms (default 60000) is the per-step deadline on ' +
   'drain/emit/markSeen — a step that hangs past it makes the watcher exit non-zero (fail-loud) ' +
@@ -90,7 +90,11 @@ export const commsWatchHelp =
   'auto-seed-on-empty default seeds the seen-file with current events so a fresh ' +
   'watcher starts forward from now rather than replaying full history; ' +
   'pass --no-auto-seed to replay the full event history on an empty seen-file; ' +
-  'pass --seed-from-now to force a seed regardless of existing seen-file content)';
+  'pass --seed-from-now to force a seed regardless of existing seen-file content; ' +
+  'pass --supervisor-pid <pid> to self-exit when that process (the agent session) ' +
+  'is gone — the F-101 crash/SIGKILL orphan cure: the watcher checks the pid once ' +
+  'per poll cycle and exits within one cycle of the supervisor dying, curing the ' +
+  'false-liveness orphan that GNU timeout group-kill misses on a harsh agent death)';
 
 export const commsAssertWatcherLiveHelp =
   'comms assert-watcher-live (--platform <platform> --model <model> | --agent-name <name>) ' +

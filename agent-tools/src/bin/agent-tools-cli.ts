@@ -141,6 +141,7 @@ async function dispatchTopic(input: {
       io: runtime.io,
       waitForCommsChange: runtime.waitForCommsChange,
       waitForCollaborationStateChange: runtime.waitForCollaborationStateChange,
+      processIsAlive: runtime.processIsAlive,
     });
   }
 

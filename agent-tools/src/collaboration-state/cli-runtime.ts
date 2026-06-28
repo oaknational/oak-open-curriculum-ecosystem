@@ -17,6 +17,7 @@ import {
   type CommsEvent,
   type DirectedCommsMessage,
 } from './types.js';
+import { processIsAliveBySignalZero } from './watcher-supervisor.js';
 
 export interface CliRuntime {
   readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
@@ -31,6 +32,14 @@ export interface CliRuntime {
     readonly commsDir: string;
     readonly pollMs: number;
   }) => Promise<void>;
+  /**
+   * Probe whether a process is alive by pid (F-101 supervisor-death detection).
+   * Production uses a signal-0 `process.kill` probe; tests inject a fake so the
+   * watcher's self-exit-when-supervisor-gone behaviour is exercised without a
+   * real process. Provided by the composition layer when `--supervisor-pid` is
+   * in play.
+   */
+  readonly processIsAlive?: (pid: number) => boolean;
 }
 
 export interface CollaborationStateCliIo {
@@ -124,6 +133,7 @@ export function productionCollaborationStateRuntime(
     io: productionIo,
     waitForCommsChange: waitForDirectoryChange,
     waitForCollaborationStateChange: waitForCollaborationStateChangeFromFiles,
+    processIsAlive: processIsAliveBySignalZero,
   };
 }
 
