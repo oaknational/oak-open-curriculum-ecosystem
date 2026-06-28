@@ -1,3 +1,10 @@
+# [1.41.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.40.0...v1.41.0) (2026-06-28)
+
+
+### Features
+
+* **curriculum-sdk:** surface oak-under-the-hood on the MCP discovery instructions ([#271](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/271)) ([5fe76db](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5fe76db8c27524828a83f425adca07e6360f8a24))
+
 # [1.40.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.39.0...v1.40.0) (2026-06-28)
 
 
