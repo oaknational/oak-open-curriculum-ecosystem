@@ -1,3 +1,10 @@
+# [1.45.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.44.0...v1.45.0) (2026-06-28)
+
+
+### Features
+
+* **agent-tools:** open a draft PR at spawn (spawn-flow 1C) ([#275](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/275)) ([40e654d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/40e654d697d5596c082be44a2a02d1bfd9c4ecff)), closes [#seam](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/seam) [#failure](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/failure)
+
 # [1.44.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.43.0...v1.44.0) (2026-06-28)
 
 
