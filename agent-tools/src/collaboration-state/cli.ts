@@ -1,6 +1,7 @@
 import { parseOptions, type Options } from './cli-options.js';
 import { type CliRuntime } from './cli-runtime.js';
-import { specs, type CommandSpec } from './cli-specs.js';
+import { type CommandSpec } from './cli-spec-factory.js';
+import { specs } from './cli-specs.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 interface CollaborationStateCliInput {

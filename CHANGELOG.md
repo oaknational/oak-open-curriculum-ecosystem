@@ -1,3 +1,24 @@
+# [1.44.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.43.0...v1.44.0) (2026-06-28)
+
+
+### Features
+
+* **agent-tools:** claims active-path defaults to coordination home ([#274](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/274)) ([c4d2b69](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c4d2b6902ae90d65061aa073ed6c499e50cafa45))
+
+# [1.43.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.42.0...v1.43.0) (2026-06-28)
+
+
+### Features
+
+* **agent-tools:** comms peer-liveness for heartbeat-silence detection (F-75) ([#273](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/273)) ([0be09bf](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0be09bf05b6dc1ad68e299ba08120efd4202c392)), closes [#270](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/270) [#270](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/270)
+
+# [1.42.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.41.0...v1.42.0) (2026-06-28)
+
+
+### Features
+
+* **agent-tools:** build spawned worktrees at creation (spawn-flow 1B) ([#272](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/272)) ([4b84ea7](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4b84ea702450943aa12262364468d2ebb63a24db))
+
 # [1.41.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.40.0...v1.41.0) (2026-06-28)
 
 

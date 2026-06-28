@@ -167,6 +167,51 @@ comms-silent yet substantively active on a PR; a takeover fired on
 comms-evidence alone reads an active seat as stalled (two worked
 instances, 2026-06-10/11; owner-approved 2026-06-11).
 
+### Surfacing peer heartbeat-silence (F-75)
+
+The stall diagnostic above is *pull*: an agent must remember to look. The
+`comms peer-liveness` command makes the look mechanical, and a Monitor/poll
+recipe turns it into a *push* alert — the F-75 cure for "no standard surface
+fires when a PEER's heartbeat goes silent."
+
+`comms peer-liveness` reads the PDR-078 heartbeat **comms-event** stream (not
+claim freshness — that is a deliberately coarse 4-hour window that cannot see a
+silently-retired peer, and not the watcher's own `<seen>.heartbeat.json`),
+groups by author identity, takes each peer's latest heartbeat, and classifies
+its age: `active` (<4 min) / `offline` (4–10 min) / `retired` (≥10 min),
+most-stale-first. It is read-only and needs no identity seed:
+
+```bash
+pnpm agent-tools:collaboration-state -- comms peer-liveness \
+  --comms-dir .agent/state/collaboration/comms
+```
+
+The alert recipe — poll on the team cadence and emit only when a peer is
+`retired`, so the line IS the heartbeat-silence alert. Run it as a `Monitor`
+(or platform background-task); pair every alert with
+[`ping-before-escalate`](ping-before-escalate.md) and the remote work-evidence
+cross-check above before any retirement-detection broadcast — the classifier is
+**input-to-verify, never an automatic retirement verdict** (the F-44 residual:
+liveness still cannot tell "working" from "wedged" until OQ5):
+
+```bash
+# Emits each retired peer per poll; de-dupe in reasoning and verify before acting.
+# Exit criteria (loop-exit-criteria-required): stands down at session close and
+# after MAX_IDLE consecutive polls with no retired peer — never an unbounded loop.
+idle=0; MAX_IDLE=30
+while [ "$idle" -lt "$MAX_IDLE" ]; do
+  retired=$(pnpm agent-tools:collaboration-state -- comms peer-liveness \
+    --comms-dir .agent/state/collaboration/comms 2>&1 | grep '^retired' || true)
+  if [ -n "$retired" ]; then echo "$retired"; idle=0; else idle=$((idle + 1)); fi
+  sleep 120
+done
+```
+
+The standalone command is the read-model; the poll-recipe is the alert. Wiring
+the same classifier into `comms watch` as an `--alert-stale-peers` mode is a
+recorded follow-on (it would couple an absence/timer concern into the
+event-driven watcher, so it is kept a separate thin consumer).
+
 ### Claim auto-rebalance protocol on retirement
 
 When an agent crosses the 10-minute threshold without heartbeat:
