@@ -6,6 +6,7 @@ import {
   type WatcherErrorKind,
 } from './comms-watch-errors.js';
 import { type DrainResult } from './types.js';
+import { supervisorIsGone } from './watcher-supervisor.js';
 
 export { WatcherTimeoutError, type WatcherErrorKind } from './comms-watch-errors.js';
 
@@ -38,6 +39,9 @@ export async function watchCommsLoop(input: WatchCommsLoopInput): Promise<string
 
   try {
     while (needsMoreEvents(state.emitted, input.maxEvents)) {
+      if (await supervisorIsGone(input.supervisorAlive)) {
+        return state.output;
+      }
       const continued = await runOneIteration(input, state);
       if (!continued) {
         return state.output;
@@ -75,6 +79,8 @@ export interface WatchCommsLoopInput {
    * deadline is applied (a hung step is awaited forever — the legacy shape).
    */
   readonly stepTimeoutMs?: number;
+  /** Optional supervisor-liveness probe (F-101 kill-tree); see `watcher-supervisor.ts`. */
+  readonly supervisorAlive?: () => boolean | Promise<boolean>;
 }
 
 export interface WatcherTickStatus {

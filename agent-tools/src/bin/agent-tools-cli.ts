@@ -7,6 +7,7 @@ import {
   runCommitQueueTopic,
   runContextCostTopic,
   runPrWatchTopic,
+  runSpawnTopic,
 } from './agent-tools-cli-topics.js';
 import type {
   AgentToolsCliInput,
@@ -115,6 +116,7 @@ const UNIFORM_TOPIC_HANDLERS: Readonly<Record<string, UniformTopicHandler>> = {
   'context-cost': runContextCostTopic,
   'codex-exec': runCodexExecTopic,
   'pr-watch': runPrWatchTopic,
+  spawn: runSpawnTopic,
 };
 
 async function dispatchTopic(input: {
@@ -139,6 +141,7 @@ async function dispatchTopic(input: {
       io: runtime.io,
       waitForCommsChange: runtime.waitForCommsChange,
       waitForCollaborationStateChange: runtime.waitForCollaborationStateChange,
+      processIsAlive: runtime.processIsAlive,
     });
   }
 
@@ -202,5 +205,6 @@ function usage(): string {
     '  context-cost',
     '  codex-exec',
     '  pr-watch',
+    '  spawn',
   ].join('\n');
 }

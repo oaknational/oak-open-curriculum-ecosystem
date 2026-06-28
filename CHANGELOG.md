@@ -1,3 +1,22 @@
+# [1.40.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.39.0...v1.40.0) (2026-06-28)
+
+
+### Features
+
+* **agent-tools:** self-exit orphaned comms watchers on supervisor death (F-101) ([#270](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/270)) ([b46089f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b46089fe45df65292321589720f74543f0cc02e9))
+
+# [1.39.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.38.0...v1.39.0) (2026-06-28)
+
+
+### Bug Fixes
+
+* **agent-tools:** guard spawn base ref and prove the home-resolution failure path ([ec72e3a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ec72e3a2d3eeb1d0b4460359c52d8b16847c1753)), closes [#269](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/269)
+
+
+### Features
+
+* **agent-tools:** add agent spawn worktree-nucleation CLI (spawn-flow 1A) ([25a8ffb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/25a8ffb9900857f41ee17ddc4a2dbc03d5f6d68d))
+
 # [1.38.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.37.0...v1.38.0) (2026-06-28)
 
 

@@ -12,6 +12,7 @@ import {
   type CliRuntime,
   waitForCommsChange,
 } from './cli-runtime.js';
+import { resolveSupervisorAlive, supervisorIsGone } from './watcher-supervisor.js';
 import { resolveSelfIdentity } from './cli-self-identity.js';
 import { type CollaborationAgentId, type CollaborationStateEnvironment } from './types.js';
 
@@ -80,6 +81,7 @@ export async function watchComms(
     optionalPositiveInteger(options, 'heartbeat-interval-ms') ?? DEFAULT_HEARTBEAT_INTERVAL_MS;
   const seedFromNow = optional(options, 'seed-from-now') !== undefined;
   const noAutoSeed = optional(options, 'no-auto-seed') !== undefined;
+  const supervisorAlive = resolveSupervisorAlive(options, runtime);
 
   await io.ensureDirectory(commsDir);
   await seedSeenStateIfNeeded({ io, commsDir, seenFile, seedFromNow, noAutoSeed });
@@ -89,6 +91,7 @@ export async function watchComms(
     heartbeatIntervalMs,
     self,
     io,
+    supervisorAlive,
   });
 
   const output = await watchCommsLoop({
@@ -101,6 +104,7 @@ export async function watchComms(
     },
     markSeen: (eventIds) => io.appendSeenMessageIds(seenFile, eventIds),
     tick,
+    supervisorAlive,
   });
 
   return runtime.stdout === undefined ? output : '';
@@ -111,6 +115,7 @@ function composeHeartbeatTick(input: {
   readonly heartbeatIntervalMs: number;
   readonly self: CollaborationAgentId;
   readonly io: CollaborationStateCliIo;
+  readonly supervisorAlive: (() => boolean | Promise<boolean>) | undefined;
 }): ((status: WatcherTickStatus) => Promise<void>) | undefined {
   const heartbeatFile = input.heartbeatFile;
   if (heartbeatFile === undefined) {
@@ -119,6 +124,14 @@ function composeHeartbeatTick(input: {
   const startedAt = new Date().toISOString();
   let lastHeartbeatAtMs = 0;
   return async (status): Promise<void> => {
+    // F-101: never refresh the liveness heartbeat once the supervising agent is
+    // gone — a post-death heartbeat is the exact false-liveness signal the cure
+    // prevents. The loop's top-of-iteration check exits within one poll cycle;
+    // this guards the tick that can otherwise fire mid-iteration, after a step
+    // during which the supervisor died.
+    if (await supervisorIsGone(input.supervisorAlive)) {
+      return;
+    }
     const nowMs = Date.now();
     if (nowMs - lastHeartbeatAtMs < input.heartbeatIntervalMs) {
       return;
