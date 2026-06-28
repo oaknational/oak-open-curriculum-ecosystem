@@ -95,8 +95,11 @@ and [`current/statusline-logo-modularisation.plan.md`](../current/statusline-log
 findings are **inputs to rightsizing M4**, not separate work items.
 
 The operability plan's **§B2** (pin the statusline binary to the primary checkout) is **not a separate
-item — it is dissolved by D6·light**: the binary-pin bug is the same path-arithmetic fall-through that
-reading `workspace.git_worktree` from stdin removes, so fixing D6·light eliminates it.
+item — it is absorbed into D6·light's shim consolidation**: pinning the adapter binary to the primary
+checkout is the same work that retires the two `.mjs` shims. (It is a *distinct* concern from
+D6·light's `workspace.git_worktree` read — the binary-resolution path-arithmetic belongs to the
+bootstrap, the `git_worktree` read to the working-location render-input — but both land in the one
+shim-consolidation pass.)
 
 ## Impact triage (by the test above)
 
@@ -123,8 +126,8 @@ D5: F-98 agent-work-state ADR  (KEYSTONE)     D2: rightsizing scope  (KEYSTONE)
    |- freshness != liveness (F-95) fix                   |- D3.write-safety closure
                                                          |- D3.protocol archive (concept-home-refinement)
 F-98-INDEPENDENT (do anytime):                           |- D4 operability B -> F-41-tail (after deep-review)
-   * D6.light (stdin git_worktree;                       |- D-1..D-9 / M-1..M-4 cite-back culls
-       dissolves operability B2)
+   * D6.light (stdin git_worktree +                      |- D-1..D-9 / M-1..M-4 cite-back culls
+       shim-consolidation, which dissolves B2)
    * under-the-hood caveat-drop (done)         operational-registers placement -> ties into D2
 ```
 
