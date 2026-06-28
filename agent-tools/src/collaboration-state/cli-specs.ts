@@ -1,4 +1,5 @@
 import { withResolvedActive } from './claim-active-path.js';
+import { withResolvedNow } from './claim-now-default.js';
 import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-claim-commands.js';
 import { adoptClaim, setHandoffClaim } from './cli-claim-handoff-commands.js';
 import { assertWatcherLive } from './cli-comms-assert-watcher-live.js';
@@ -147,7 +148,7 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help: claimsOpenHelp,
     options: claimsOpenOptions,
     allowsFiles: true,
-    handler: withResolvedActive(openClaim),
+    handler: withResolvedActive(withResolvedNow(openClaim)),
   }),
   'claims:heartbeat': commandSpec({
     help: claimsHeartbeatHelp,

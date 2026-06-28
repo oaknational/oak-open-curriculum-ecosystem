@@ -134,9 +134,10 @@ export const commsReplyHelp =
 export const claimsOpenHelp =
   'claims open --active <path> --thread <thread> ' +
   '--area-kind <files|workspace|plan|adr|git> ' +
-  '--intent <text> --now <iso> --platform <platform> --model <model> ' +
+  '--intent <text> --platform <platform> --model <model> ' +
   '[--file <path>...] [--area-pattern <pattern>...] [--claim-id <id>] ' +
-  '[--ttl-seconds <n>] [--role <role>] ' +
+  '[--ttl-seconds <n>] [--role <role>] [--now <iso>] ' +
+  '(--now defaults to the current time when omitted — F-89) ' +
   '(use either repeatable --file or repeatable --area-pattern, not both; ' +
   'refuses to open into a populated registry while blind to comms — F-95 — ' +
   'unless this session has a live comms watcher at the canonical comms-seen ' +
