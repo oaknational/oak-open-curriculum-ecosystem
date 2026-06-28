@@ -119,9 +119,11 @@ describe('createSpawnWorktree', () => {
 
     expect(isErr(result)).toBe(true);
     if (isErr(result)) {
-      expect(result.error.message).toMatch(
-        /already exists.*different branch|feat\/something-else/u,
-      );
+      expect(result.error.message).toContain('already exists');
+      // The actual branch is reported in short form, symmetric with the requested name —
+      // not the raw `refs/heads/...` ref from porcelain.
+      expect(result.error.message).toContain('feat/something-else');
+      expect(result.error.message).not.toContain('refs/heads/');
     }
     // No add attempted — the collision is reported, not worked around.
     expect(calls).toEqual([{ args: ['worktree', 'list', '--porcelain'], cwd: HOME }]);
