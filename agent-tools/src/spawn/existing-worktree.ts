@@ -1,21 +1,20 @@
-import { isErr, type Result } from '@oaknational/result';
+import { isErr } from '@oaknational/result';
+
+import { type CommandRunner } from '../core/command-runner.js';
 
 /**
- * Runs a git subcommand from `cwd`, returning its stdout on success or the
- * underlying error on a non-zero exit — the Result pattern (ADR-088), never a
- * throw, so the failure is visible to the type system at every call site.
+ * The spawn lane's git runner seam — a {@link CommandRunner}<string> (it captures
+ * git's stdout). Returns the underlying error on a non-zero exit (ADR-088), never
+ * a throw, so the failure is visible to the type system at every call site.
  *
  * @remarks
- * Mirrors the established `GitRunner` seam shape (the injectable git seam named
- * in the spawn-flow plan), lifted into `Result`. It is declared in the spawn lane
- * rather than imported from `collaboration-state/coordination-home.ts` so the lane
- * stays decoupled from another lane's surface — the shape is the contract, and a
- * one-line type is cheaper to own than a cross-lane import. This is the spawn
- * lane's single declaration of the seam shape (shared by `create.ts`); a third
- * independent consumer is the trigger to hoist one shared seam type into `core/`
- * (consolidate-at-third-consumer).
+ * Aliased to the shared `core/` seam shape, which was hoisted once the gh runner
+ * became the third independent consumer of the `(args, cwd) => Result<T, Error>`
+ * shape (git + pnpm + gh), per consolidate-at-third-consumer. The alias keeps the
+ * semantic `SpawnGitRunner` name at its call sites (`create.ts`, `git.ts`) while
+ * sharing one declaration of the seam shape rather than redeclaring it.
  */
-export type SpawnGitRunner = (args: readonly string[], cwd: string) => Result<string, Error>;
+export type SpawnGitRunner = CommandRunner<string>;
 
 /** Whether a worktree at the target path already exists, and if so on which branch. */
 export type ExistingWorktree =

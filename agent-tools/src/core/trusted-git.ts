@@ -27,11 +27,10 @@
 
 import { existsSync } from 'node:fs';
 
+import { type PathExists } from './path-exists.js';
+
 /** Fixed, well-known directories that may hold the `git` binary (searched by absolute path, never via `PATH`). */
 const TRUSTED_GIT_DIRS = ['/usr/bin', '/bin', '/opt/homebrew/bin', '/usr/local/bin'] as const;
-
-/** Existence-probe seam — injectable so {@link resolveTrustedGit} is testable without a real filesystem. */
-export type PathExists = (candidate: string) => boolean;
 
 /**
  * Resolve the absolute path to `git` from a fixed allowlist of well-known system
@@ -45,7 +44,9 @@ export type PathExists = (candidate: string) => boolean;
  * failure that would surface downstream as an opaque `ENOENT` from the caller's
  * `execFileSync`, in the commit-msg hook blocking every commit). Callers run
  * inside their own error handling, so the loud throw replaces a cryptic
- * downstream crash with a diagnosable one.
+ * downstream crash with a diagnosable one. (Its `gh` sibling
+ * {@link resolveTrustedGh} returns a `Result`; this throwing resolver has six
+ * call sites and migrates to `Result` with the no-throw backlog, not piecemeal.)
  *
  * @param exists - Existence probe; defaults to `node:fs` `existsSync`.
  * @returns The absolute path to a trusted `git` binary.

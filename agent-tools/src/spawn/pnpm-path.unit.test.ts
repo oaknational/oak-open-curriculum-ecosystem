@@ -1,7 +1,9 @@
 import { isErr, isOk, unwrap } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
-import { resolvePnpm, type PathExists } from './pnpm-path.js';
+import { type PathExists } from '../core/path-exists.js';
+
+import { resolvePnpm } from './pnpm-path.js';
 
 const FAKE_HOME = '/Users/<user>';
 

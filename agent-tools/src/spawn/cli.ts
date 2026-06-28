@@ -3,11 +3,13 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 import { resolveCoordinationHome } from '../collaboration-state/coordination-home.js';
 
 import { buildWorktree, type BuildWorktreeOptions } from './build.js';
+import { formatSpawnResult } from './cli-output.js';
 import {
   createSpawnWorktree,
   type CreateSpawnWorktreeOptions,
   type SpawnedWorktree,
 } from './create.js';
+import { openDraftPr, type OpenDraftPrOptions } from './open-pr.js';
 
 /**
  * CLI for `agent-tools spawn` (spawn-flow Phase 1A). Parses the lane slug, branch
@@ -25,6 +27,8 @@ export interface SpawnCliInput {
   readonly createWorktree?: (options: CreateSpawnWorktreeOptions) => Result<SpawnedWorktree, Error>;
   /** Worktree-build seam (defaults to {@link buildWorktree}). */
   readonly build?: (options: BuildWorktreeOptions) => Result<void, Error>;
+  /** Draft-PR-open seam (defaults to {@link openDraftPr}). */
+  readonly openPr?: (options: OpenDraftPrOptions) => Result<string, Error>;
 }
 
 const DEFAULT_TYPE = 'feat';
@@ -109,7 +113,17 @@ function parseSpawnArgs(args: readonly string[]): Result<ParsedSpawnArgs, Error>
   if (state.slug === undefined) {
     return err(new Error(`spawn: --slug is required\n\n${usage()}`));
   }
-  return ok({ slug: state.slug, type: state.type, base: state.base, help: false });
+  // Normalise the option values once at the parse boundary so every downstream
+  // consumer sees the same trimmed value. createSpawnWorktree trims again for its
+  // own validation, but openDraftPr consumes the parsed base/slug directly — without
+  // this, trailing whitespace on --base reached `gh pr create --base` (and the slug
+  // reached the marker commit / PR title) untrimmed.
+  return ok({
+    slug: state.slug.trim(),
+    type: state.type.trim(),
+    base: state.base.trim(),
+    help: false,
+  });
 }
 
 /**
@@ -123,23 +137,6 @@ function defaultResolveHome(cwd: string): Result<string, Error> {
   } catch (cause) {
     return err(cause instanceof Error ? cause : new Error(String(cause)));
   }
-}
-
-function formatResult(result: SpawnedWorktree): string {
-  // A resume re-runs build against an existing worktree, so it does not assert a
-  // fresh creation from `base` (the branch was cut from its original base earlier,
-  // not from the requested `base` on this invocation).
-  const header = result.resumed
-    ? [`Resumed existing worktree ${result.worktreePath}`, `  branch:   ${result.branch}`]
-    : [
-        `Created worktree ${result.worktreePath}`,
-        `  branch:   ${result.branch} (from ${result.base})`,
-      ];
-  return [
-    ...header,
-    `  identity: ${result.session.agentName} (${result.session.sessionIdPrefix})`,
-    '',
-  ].join('\n');
 }
 
 function usage(): string {
@@ -180,15 +177,49 @@ function executeSpawn(
     return 2;
   }
 
-  const build = input.build ?? buildWorktree;
-  const built = build({ worktreePath: created.value.worktreePath });
-  if (isErr(built)) {
-    stderr.write(`${built.error.message}\n`);
+  const prepared = prepareWorktree(input, created.value, parsed);
+  if (isErr(prepared)) {
+    stderr.write(`${prepared.error.message}\n`);
     return 2;
   }
 
-  stdout.write(formatResult(created.value));
+  stdout.write(formatSpawnResult(created.value, prepared.value));
   return 0;
+}
+
+/**
+ * Build the spawned worktree (1B) and, on a fresh spawn, open its draft PR (1C).
+ * Returns the draft PR URL, or `undefined` on a resume — a resume is a build-retry
+ * against an existing worktree, so it does not re-open the PR (which would double
+ * the marker commit or collide with the existing PR).
+ *
+ * @remarks
+ * Known limitation (spawn-flow follow-up): build runs before the PR opens, so a
+ * fresh spawn whose BUILD fails returns before opening any PR, and the subsequent
+ * resume skips PR-opening too — leaving that lane without a draft PR until it is
+ * opened by hand or the worktree is removed and re-spawned. A later slice makes the
+ * PR step resume-aware (open only when absent) to close this.
+ */
+function prepareWorktree(
+  input: SpawnCliInput,
+  created: SpawnedWorktree,
+  parsed: ParsedSpawnArgs,
+): Result<string | undefined, Error> {
+  const build = input.build ?? buildWorktree;
+  const built = build({ worktreePath: created.worktreePath });
+  if (isErr(built)) {
+    return built;
+  }
+  if (created.resumed) {
+    return ok(undefined);
+  }
+  const openPr = input.openPr ?? openDraftPr;
+  return openPr({
+    worktreePath: created.worktreePath,
+    branch: created.branch,
+    base: parsed.base,
+    slug: parsed.slug,
+  });
 }
 
 /** Execute the spawn CLI. Returns the process exit code (0 success, 2 on error). */
