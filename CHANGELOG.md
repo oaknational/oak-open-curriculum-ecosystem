@@ -1,3 +1,10 @@
+# [1.43.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.42.0...v1.43.0) (2026-06-28)
+
+
+### Features
+
+* **agent-tools:** comms peer-liveness for heartbeat-silence detection (F-75) ([#273](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/273)) ([0be09bf](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0be09bf05b6dc1ad68e299ba08120efd4202c392)), closes [#270](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/270) [#270](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/270)
+
 # [1.42.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.41.0...v1.42.0) (2026-06-28)
 
 
