@@ -10,7 +10,7 @@ interface CollaborationStateCliInput {
   readonly io?: CliRuntime['io'];
   readonly waitForCommsChange?: CliRuntime['waitForCommsChange'];
   readonly waitForCollaborationStateChange?: CliRuntime['waitForCollaborationStateChange'];
-  readonly processIsAlive?: CliRuntime['processIsAlive'];
+  readonly processIsAlive?: NonNullable<CliRuntime['processIsAlive']>;
 }
 
 interface CollaborationStateCliResult {

@@ -141,4 +141,39 @@ describe('watchComms — supervisor-death detection (F-101 refined-(i) kill-tree
     const heartbeat = parseWatcherHeartbeat(heartbeatText ?? '');
     expect(heartbeat.watcher_identity.agent_name).toBe('Watcher Self');
   });
+
+  it('does NOT write a heartbeat once the supervisor dies mid-pass (no false-liveness heartbeat after death)', async () => {
+    let aliveChecks = 0;
+    const fake = createFakeCollaborationRuntime({
+      comms: { [COMMS_DIR]: [otherAgentEvent('evt-1')] },
+      // Alive at the loop's top-of-iteration check, dead at the heartbeat tick's
+      // own check — models the supervisor dying during the drain/emit step.
+      processIsAlive: () => {
+        aliveChecks += 1;
+        return aliveChecks < 2;
+      },
+    });
+
+    await watchComms(
+      watchOptions({
+        'comms-dir': COMMS_DIR,
+        'seen-file': SEEN_FILE,
+        'agent-name': 'Watcher Self',
+        platform: 'claude',
+        model: 'test',
+        'session-prefix': 'self99',
+        'max-events': '1',
+        'no-auto-seed': 'true',
+        'supervisor-pid': '999999',
+      }),
+      EMPTY_ENV,
+      fake.runtime,
+    );
+
+    // The top-check passes (alive) so the event is processed, but the tick's
+    // own supervisor check then sees it gone and SKIPS the write — the F-101
+    // guard against refreshing the heartbeat after the agent session died.
+    expect(aliveChecks).toBe(2);
+    expect(fake.readTextFile(DERIVED_HEARTBEAT)).toBeUndefined();
+  });
 });
