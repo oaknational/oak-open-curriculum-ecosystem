@@ -61,6 +61,15 @@ export const commsShowHelp =
   '(prints the full canonical JSON event resolved by id, including its body; ' +
   'read-only; fails non-zero when no event carries the id)';
 
+export const commsPeerLivenessHelp =
+  'comms peer-liveness --comms-dir <dir> [--now <iso>] ' +
+  '(F-75: classifies each peer from the PDR-078 heartbeat event stream — ' +
+  'active <4m / offline 4-10m / retired >=10m, most-stale-first; read-only, ' +
+  'no identity seed; --now defaults to the real wall clock and is accepted ' +
+  'only for deterministic tests/replay. Pull side of peer heartbeat-silence ' +
+  'detection — see liveness-heartbeat-cron.md for the Monitor/poll alert ' +
+  'recipe; treat output as input-to-verify, never an auto-retirement verdict)';
+
 export const commsMigrateHelp =
   'comms migrate --events-dir <dir> --lifecycle-dir <dir> ' +
   '--messages-dir <dir> --comms-dir <dir>';
