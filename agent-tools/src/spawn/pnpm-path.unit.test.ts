@@ -44,6 +44,25 @@ describe('resolvePnpm', () => {
     }
   });
 
+  it('skips a non-absolute PNPM_HOME so a relative candidate never passes resolution', () => {
+    const probed: string[] = [];
+    const result = resolvePnpm(
+      { PNPM_HOME: 'relative/pnpm-home', HOME: FAKE_HOME },
+      (candidate) => {
+        probed.push(candidate);
+        // The relative candidate "would" exist when probed against the process cwd...
+        return candidate === 'relative/pnpm-home/pnpm';
+      },
+    );
+
+    // ...but execFileSync resolves a relative executable against the worktree cwd, so a
+    // relative PNPM_HOME that passes existsSync would run the wrong binary (or none). It
+    // must never become a candidate — only absolute paths are probed, so it never resolves.
+    expect(probed).not.toContain('relative/pnpm-home/pnpm');
+    expect(probed.every((candidate) => candidate.startsWith('/'))).toBe(true);
+    expect(isErr(result)).toBe(true);
+  });
+
   it('never consults PATH — every probed candidate is an absolute path, never bare "pnpm"', () => {
     const probed: string[] = [];
     resolvePnpm({ PNPM_HOME: '/pnpm-home', HOME: FAKE_HOME }, (candidate) => {

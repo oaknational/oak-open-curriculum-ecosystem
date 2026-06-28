@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs';
+import { isAbsolute } from 'node:path';
 
 import { err, ok, type Result } from '@oaknational/result';
 
@@ -22,7 +23,10 @@ function pnpmCandidates(env: NodeJS.ProcessEnv): readonly string[] {
     candidates.push(`${home}/Library/pnpm/pnpm`, `${home}/.local/share/pnpm/pnpm`);
   }
   candidates.push('/opt/homebrew/bin/pnpm', '/usr/local/bin/pnpm', '/usr/bin/pnpm');
-  return candidates;
+  // Enforce the absolute-only invariant: a relative PNPM_HOME (or HOME) would pass an
+  // existsSync probe against the process cwd yet resolve against the worktree cwd under
+  // execFileSync — running the wrong binary or none. Only absolute candidates are trusted.
+  return candidates.filter((candidate) => isAbsolute(candidate));
 }
 
 /**
