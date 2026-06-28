@@ -285,6 +285,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
 
     expect(initResult.instructions.length).toBeGreaterThan(0);
     expect(initResult.instructions).toMatch(/orientation|domain model/i);
+    // A connecting client must be able to discover the orientation capability
+    // from the very first response: the discovery surface points non-curriculum
+    // / mechanism / MCP-app / repo questions at oak-under-the-hood (O5).
+    expect(initResult.instructions).toContain('oak-under-the-hood');
+    expect(initResult.instructions).toContain('not about curriculum content');
   });
 
   it('initialize response includes Oak branding in serverInfo', async () => {
