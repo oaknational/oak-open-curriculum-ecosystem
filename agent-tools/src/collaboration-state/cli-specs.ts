@@ -1,3 +1,4 @@
+import { withResolvedActive } from './claim-active-path.js';
 import { archiveClaims, closeClaim, heartbeatClaim, openClaim } from './cli-claim-commands.js';
 import { adoptClaim, setHandoffClaim } from './cli-claim-handoff-commands.js';
 import { assertWatcherLive } from './cli-comms-assert-watcher-live.js';
@@ -146,57 +147,57 @@ export const specs: Readonly<Record<string, CommandSpec>> = {
     help: claimsOpenHelp,
     options: claimsOpenOptions,
     allowsFiles: true,
-    handler: openClaim,
+    handler: withResolvedActive(openClaim),
   }),
   'claims:heartbeat': commandSpec({
     help: claimsHeartbeatHelp,
-    options: ['active', 'claim-id', 'now'],
-    handler: heartbeatClaim,
+    options: ['active', 'claim-id', 'now', 'repo-root'],
+    handler: withResolvedActive(heartbeatClaim),
   }),
   'claims:adopt': commandSpec({
     help: claimsAdoptHelp,
     options: claimsAdoptOptions,
-    handler: adoptClaim,
+    handler: withResolvedActive(adoptClaim),
   }),
   'claims:set-handoff': commandSpec({
     help: claimsSetHandoffHelp,
     options: claimsSetHandoffOptions,
-    handler: setHandoffClaim,
+    handler: withResolvedActive(setHandoffClaim),
   }),
   'claims:close': commandSpec({
     help: claimsCloseHelp,
     options: claimsCloseOptions,
-    handler: closeClaim,
+    handler: withResolvedActive(closeClaim),
   }),
   'claims:archive-stale': commandSpec({
     help: claimsArchiveStaleHelp,
-    options: ['active', 'closed', 'now', 'platform', 'model'],
-    handler: archiveClaims,
+    options: ['active', 'closed', 'now', 'platform', 'model', 'repo-root'],
+    handler: withResolvedActive(archiveClaims),
   }),
   'claims:list': commandSpec({
     help: claimsListHelp,
-    options: ['active', 'now'],
-    handler: listClaims,
+    options: ['active', 'now', 'repo-root'],
+    handler: withResolvedActive(listClaims),
   }),
   'claims:mine': commandSpec({
     help: claimsMineHelp,
-    options: ['active', 'platform', 'model', 'now'],
-    handler: mineClaims,
+    options: ['active', 'platform', 'model', 'now', 'repo-root'],
+    handler: withResolvedActive(mineClaims),
   }),
   'claims:show': commandSpec({
     help: claimsShowHelp,
-    options: ['active', 'claim-id', 'now'],
-    handler: showClaim,
+    options: ['active', 'claim-id', 'now', 'repo-root'],
+    handler: withResolvedActive(showClaim),
   }),
   'claims:status': commandSpec({
     help: claimsStatusHelp,
-    options: ['active', 'now'],
-    handler: statusClaims,
+    options: ['active', 'now', 'repo-root'],
+    handler: withResolvedActive(statusClaims),
   }),
   'claims:active-agents': commandSpec({
     help: claimsActiveAgentsHelp,
-    options: ['active', 'closed', 'now'],
-    handler: activeAgents,
+    options: ['active', 'closed', 'now', 'repo-root'],
+    handler: withResolvedActive(activeAgents),
   }),
   'tui:': commandSpec({
     help: tuiHelp,

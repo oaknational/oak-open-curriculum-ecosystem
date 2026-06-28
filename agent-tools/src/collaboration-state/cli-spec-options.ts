@@ -97,6 +97,7 @@ export const commsReplyOptions = [
 
 export const claimsOpenOptions = [
   'active',
+  'repo-root',
   'thread',
   'area-kind',
   'area-pattern',
@@ -112,6 +113,7 @@ export const claimsOpenOptions = [
 
 export const claimsCloseOptions = [
   'active',
+  'repo-root',
   'closed',
   'claim-id',
   'summary',
@@ -130,6 +132,6 @@ export const commsAssertWatcherLiveOptions = [
   'model',
 ] as const;
 
-export const claimsAdoptOptions = ['active', 'claim-id', 'platform', 'model'] as const;
+export const claimsAdoptOptions = ['active', 'repo-root', 'claim-id', 'platform', 'model'] as const;
 
-export const claimsSetHandoffOptions = ['active', 'claim-id', 'path'] as const;
+export const claimsSetHandoffOptions = ['active', 'repo-root', 'claim-id', 'path'] as const;
