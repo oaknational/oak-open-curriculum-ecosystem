@@ -206,10 +206,36 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
-> Refresh this whole section at every handoff. Last refreshed 2026-06-25 (post-merge).
-> **POST-MERGE TRUTH: the pilot bundle has landed and the team is dissolved.**
-> This section records the settled state; there is no sitting Director to hand off
-> from — a future effort re-establishes the seat against the Brief above.
+> Refresh this whole section at every handoff. Last refreshed 2026-06-27 night (Pulsar calls Ether, Director — session closeout).
+> **SEAT DISSOLVED at session end (owner-directed).** No live Director. **#259 MERGED to `main`** (squash
+> `e30108fe3`, 20:46Z) — the last PR to zero; **estate at zero**. Pulsar calls Ether (ce6ba6) stood down cleanly
+> (monitors stopped, Director claim `60baf0b1` closed, final heartbeat-end). **Director chain this day (all clean
+> PDR-064 two-moments):** Oyster spins Coral → Chinook turns Halo → Hearth tracks Tallow → Callisto tracks Vacuum →
+> Cinder spins Scorch → **Pulsar calls Ether** (session closed). The next session re-establishes the seat only on
+> owner direction.
+>
+> **Next-session pickup (post-zero follow-ups; substance backstopped in committed comms/handoffs + on `main`):**
+>
+> - **Post-#259 cleanup:** the 3 hawthorn transients (`hawthorn-259-napkin-union-CONTENT.md` + 2 handoffs) were
+>   committed to `main` per owner directive ("commit them all") despite the untracked-by-design model (copilot
+>   flagged, owner accepted for this bundle) — relocate/remove to the untracked `handoffs/` tier when convenient.
+> - **Deferred #259 thread-folds:** Seal's Phase F (orientation-skills thread STATUS = reframe MERGED via #243
+>   `a0a85f60c`; archive-move `orientation-lens-unification.plan.md` → `developer-experience/archive/completed/` +
+>   a `completed-plans.md` row + link repoints; comms `021e1dea`); Starling's main-sonar thread fold (3a/3b
+>   #254/#255 + Phase-5 #257/#261 MERGED + Starling/Brazier identity rows).
+> - **`/oak-under-the-hood` verify** (Seal's retained claim `bb9073cd`): RUN on updated `main` (do not review
+>   files) — prove it resolves + orients an engineer + orients a leader + declines a curriculum query.
+> - **#264** (Beluga deferred-work map): after zero is called, surface the agentic-framework value-stream framing
+>   to the owner, then flip ready + merge (Beluga drives bot-settle; Director holds the click).
+> - **napkin DRAIN is now DUE** (over soft fitness limit; consolidate-docs trigger) — a dedicated consolidation.
+> - **Beluga's post-zero lane:** ADR-206/207 (work-state projection + statusline) + the approach-C agent-work-state
+>   plan; the graph-family substrate sidebar (open Q: is `graph-core` right for operational/memory state, or a
+>   category mismatch? — PDR-119 §Sequencing). PDR-119 also joins the queued PDR-079 portability sweep.
+>
+> The complete first-hand Director pickup remains the git-ignored handoff record
+> `.agent/state/collaboration/handoffs/director-handoff-cinder-to-pulsar-2026-06-27.md` plus the cross-worktree
+> map. The 2026-06-25 NEXT SESSION MANDATE below is retained only as precedent on team-session-plan / director-brief
+> authoring.
 
 ### ▶ NEXT SESSION MANDATE (owner-directed 2026-06-25) — read before anything else
 

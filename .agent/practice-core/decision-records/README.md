@@ -237,3 +237,8 @@ Practice-Core concept ↔ ADR map):
 | [PDR-111](PDR-111-agent-experience-is-first-class.md) | Agent Experience Is a First-Class Practice Optimisation Principle | Accepted |
 | [PDR-112](PDR-112-teaching-surface-family-across-a-portability-seam.md) | The Teaching-Surface Family — Intent-Routed Lenses Across a Portability Seam | Accepted |
 | [PDR-113](PDR-113-source-intent-from-the-principal-not-the-records.md) | Source Intent From the Principal, Not the Records | Accepted |
+| [PDR-114](PDR-114-knowledge-surfaces-are-curated-suggestions-not-control-flow.md) | Knowledge Surfaces Are Curated Suggestions to a Judging Agent, Not Control-Flow | Accepted |
+| [PDR-115](PDR-115-naming-openly-licensed-external-sources.md) | Name Openly-Licensed External Sources Plainly; Keep Proprietary Sources Private | Accepted |
+| [PDR-116](PDR-116-falsifiable-judgment-gate.md) | Falsifiable-Judgment Gate — Anchor a Judgment to Its Source, Not to Taste | Accepted |
+| [PDR-117](PDR-117-director-and-implementer-roles.md) | Director and Implementer Roles (the Two First-Class Seats of the Many-Agent Model) | Proposed |
+| [PDR-118](PDR-118-agent-work-state-model.md) | Agent Work-State Model | Accepted |

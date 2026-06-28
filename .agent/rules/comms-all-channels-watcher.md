@@ -36,13 +36,30 @@ in agent reasoning, not at the watcher boundary.
 ### Canonical invocation — the `agent-tools` CLI
 
 ```bash
-# Replace <agent-codename> with the codename emitted by identity preflight.
-pnpm agent-tools:collaboration-state -- comms watch \
+# Replace <agent-codename>/<platform>/<model> below.
+# Self-terminating guard (F-101): prepend GNU `timeout`/`gtimeout` (default 3600s) so a
+# watcher whose agent has gone away self-exits instead of accumulating as an orphan (and
+# writing a false F-95 heartbeat). A live agent re-arms it on the Monitor exit-notification;
+# a dead one does not. Build the argv first, then prepend the timeout only if present — this
+# is zsh-safe, portable, and graceful (runs un-guarded if coreutils is absent). Do NOT use
+# `${VAR:+$VAR 3600} cmd`: zsh does not word-split it, so it tries to exec "timeout 3600".
+set -- pnpm agent-tools:collaboration-state -- comms watch \
   --comms-dir .agent/state/collaboration/comms \
   --seen-file .agent/state/collaboration/comms-seen/<agent-codename>.json \
   --platform <claude|codex|cursor> \
   --model <model-id>
+TIMEOUT_BIN="$(command -v timeout || command -v gtimeout || true)"
+[ -n "$TIMEOUT_BIN" ] && set -- "$TIMEOUT_BIN" 3600 "$@"
+exec "$@"
 ```
+
+The `timeout`/`gtimeout` prefix (default 3600 s, tunable) bounds every watcher's
+lifetime: an orphaned or agent-less watcher self-terminates rather than lingering.
+The supervising Monitor/cron re-arms a fresh watcher on exit — the `--seen-file`
+cursor means the restart misses no events, only delays them by the re-arm. This is
+the **basic** dead-watcher guard; the robust follow-up (F-101) is an agent-renewed
+**lease** keyed on a `Stop` hook, where the agent's turn-completion is the
+stay-alive signal and a stale lease (no renewal within a TTL) triggers self-exit.
 
 The CLI emits every relevant event with self-exclusion only against the
 identity tuple it derives from the platform-specific session-id env var
