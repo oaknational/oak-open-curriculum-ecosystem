@@ -3,8 +3,7 @@ import { isAbsolute } from 'node:path';
 
 import { err, ok, type Result } from '@oaknational/result';
 
-/** Existence probe seam (defaults to `node:fs` `existsSync`; injected in tests). */
-export type PathExists = (candidate: string) => boolean;
+import { type PathExists } from '../core/path-exists.js';
 
 /**
  * Ordered candidate absolute paths for the pnpm binary, derived from the

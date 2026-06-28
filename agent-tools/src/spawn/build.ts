@@ -1,14 +1,21 @@
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
+import { type CommandRunner } from '../core/command-runner.js';
+
 import { realPnpmRunner } from './build-runner.js';
 
 /**
- * Runs pnpm with `args` from `cwd`, returning `ok` on a zero exit or the
- * underlying error on a non-zero exit — the Result pattern (ADR-088), never a
- * throw. The binary is always pnpm (resolved to an absolute path by the real
- * runner), so the seam takes only the args and the working directory.
+ * The pnpm runner seam — a {@link CommandRunner}<void>. pnpm inherits stdio so the
+ * caller sees install/build progress directly and there is no stdout to capture;
+ * the seam only signals success (`ok`) or the underlying error on a non-zero exit
+ * (ADR-088), never a throw.
+ *
+ * @remarks
+ * Aliased to the shared `core/` seam shape, which was hoisted once the gh runner
+ * became the third independent consumer (git + pnpm + gh), per
+ * consolidate-at-third-consumer.
  */
-export type PnpmRunner = (args: readonly string[], cwd: string) => Result<void, Error>;
+export type PnpmRunner = CommandRunner<void>;
 
 /** Inputs to {@link buildWorktree}. */
 export interface BuildWorktreeOptions {
