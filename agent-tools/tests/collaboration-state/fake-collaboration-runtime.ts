@@ -29,6 +29,8 @@ interface FakeCollaborationRuntimeInput {
   readonly legacyComms?: Readonly<Record<string, readonly unknown[]>>;
   readonly onWaitForCommsChange?: () => void;
   readonly onWaitForCollaborationStateChange?: () => void;
+  /** Fake supervisor-liveness probe (F-101). Defaults to always-alive. */
+  readonly processIsAlive?: (pid: number) => boolean;
 }
 
 interface FakeCollaborationRuntime {
@@ -71,6 +73,7 @@ export function createFakeCollaborationRuntime(
       waitForCollaborationStateChange: async () => {
         input.onWaitForCollaborationStateChange?.();
       },
+      processIsAlive: input.processIsAlive ?? ((): boolean => true),
     },
     readCommsEvents: (commsDir) => readCommsEvents(state, commsDir),
     readSeenIds: (seenFile) => state.seenByFile.get(seenFile) ?? [],

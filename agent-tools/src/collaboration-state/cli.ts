@@ -10,6 +10,7 @@ interface CollaborationStateCliInput {
   readonly io?: CliRuntime['io'];
   readonly waitForCommsChange?: CliRuntime['waitForCommsChange'];
   readonly waitForCollaborationStateChange?: CliRuntime['waitForCollaborationStateChange'];
+  readonly processIsAlive?: CliRuntime['processIsAlive'];
 }
 
 interface CollaborationStateCliResult {
@@ -31,6 +32,7 @@ export async function runCollaborationStateCli(
         io: input.io,
         waitForCommsChange: input.waitForCommsChange,
         waitForCollaborationStateChange: input.waitForCollaborationStateChange,
+        processIsAlive: input.processIsAlive,
       }),
     );
   } catch (error) {

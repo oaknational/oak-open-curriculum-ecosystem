@@ -102,3 +102,43 @@ describe('watchComms — liveness default-on (Luminous c2)', () => {
     expect(heartbeatAt(DERIVED_HEARTBEAT)).toBeUndefined();
   });
 });
+
+describe('watchComms — supervisor-death detection (F-101 refined-(i) kill-tree)', () => {
+  it('self-exits without draining or writing a heartbeat when --supervisor-pid is already dead', async () => {
+    const fake = createFakeCollaborationRuntime({
+      comms: { [COMMS_DIR]: [otherAgentEvent('evt-1')] },
+      processIsAlive: () => false,
+    });
+
+    const output = await watchComms(
+      watchOptions({
+        'comms-dir': COMMS_DIR,
+        'seen-file': SEEN_FILE,
+        'agent-name': 'Watcher Self',
+        platform: 'claude',
+        model: 'test',
+        'session-prefix': 'self99',
+        'no-auto-seed': 'true',
+        'supervisor-pid': '999999',
+      }),
+      EMPTY_ENV,
+      fake.runtime,
+    );
+
+    // Supervisor dead at the first top-of-iteration check → the loop returns
+    // BEFORE draining the available event or firing the heartbeat tick.
+    expect(output).toBe('');
+    expect(fake.readTextFile(DERIVED_HEARTBEAT)).toBeUndefined();
+  });
+
+  it('processes normally and writes a heartbeat when --supervisor-pid is alive (no live-path regression)', async () => {
+    const { heartbeatAt } = await runOneWatchPass({
+      'supervisor-pid': '999999',
+    });
+
+    const heartbeatText = heartbeatAt(DERIVED_HEARTBEAT);
+    expect(heartbeatText).toBeDefined();
+    const heartbeat = parseWatcherHeartbeat(heartbeatText ?? '');
+    expect(heartbeat.watcher_identity.agent_name).toBe('Watcher Self');
+  });
+});

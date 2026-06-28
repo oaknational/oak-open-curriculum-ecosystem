@@ -451,3 +451,77 @@ describe('watchCommsLoop — per-step deadlines fail loud (Luminous c1, hang-but
     expect(onErrorKinds).toHaveLength(0);
   });
 });
+
+describe('watchCommsLoop — supervisor-death detection (F-101 refined-(i) kill-tree)', () => {
+  it('self-exits cleanly the iteration after supervisorAlive reports the supervisor dead, with no further drain or wait', async () => {
+    let aliveChecks = 0;
+    let drainCalls = 0;
+    let waits = 0;
+
+    const output = await watchCommsLoop({
+      // No maxEvents: the loop is unbounded, exactly as the live watcher runs.
+      // Supervisor death is the ONLY exit — proving the cure terminates an
+      // otherwise-immortal watcher when its agent is gone.
+      drain: async () => {
+        drainCalls += 1;
+        return emptyDrain();
+      },
+      waitForChange: async () => {
+        waits += 1;
+      },
+      emit: async () => undefined,
+      markSeen: async () => undefined,
+      // Alive on the first check, dead on the second.
+      supervisorAlive: async () => {
+        aliveChecks += 1;
+        return aliveChecks < 2;
+      },
+    });
+
+    expect(output).toBe('');
+    // The check sits at the TOP of each iteration: iteration 1 sees alive →
+    // one drain + one wait; iteration 2 sees dead → returns BEFORE draining or
+    // waiting again. So exactly one drain, one wait, two checks.
+    expect(aliveChecks).toBe(2);
+    expect(drainCalls).toBe(1);
+    expect(waits).toBe(1);
+  });
+
+  it('exits immediately without draining when the supervisor is already dead at start', async () => {
+    let drainCalls = 0;
+
+    const output = await watchCommsLoop({
+      drain: async () => {
+        drainCalls += 1;
+        return emptyDrain();
+      },
+      waitForChange: async () => undefined,
+      emit: async () => undefined,
+      markSeen: async () => undefined,
+      supervisorAlive: async () => false,
+    });
+
+    expect(output).toBe('');
+    expect(drainCalls).toBe(0);
+  });
+
+  it('keeps running while supervisorAlive reports alive (no behaviour change on the live path)', async () => {
+    let aliveChecks = 0;
+    const stream = describeStream({ output: 'a\n', eventCount: 1, eventIds: ['a'] });
+
+    const output = await watchCommsLoop({
+      maxEvents: 1,
+      drain: stream.drain,
+      waitForChange: async () => undefined,
+      emit: async () => undefined,
+      markSeen: async () => undefined,
+      supervisorAlive: async () => {
+        aliveChecks += 1;
+        return true;
+      },
+    });
+
+    expect(output).toBe('a\n');
+    expect(aliveChecks).toBeGreaterThanOrEqual(1);
+  });
+});

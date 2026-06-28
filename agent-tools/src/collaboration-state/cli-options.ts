@@ -67,6 +67,7 @@ const KNOWN_OPTION_KEYS = new Set([
   'step-timeout-ms',
   'subject',
   'summary',
+  'supervisor-pid',
   'tag',
   'thread',
   'thread-record',

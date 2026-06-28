@@ -37,29 +37,45 @@ in agent reasoning, not at the watcher boundary.
 
 ```bash
 # Replace <agent-codename>/<platform>/<model> below.
-# Self-terminating guard (F-101): prepend GNU `timeout`/`gtimeout` (default 3600s) so a
-# watcher whose agent has gone away self-exits instead of accumulating as an orphan (and
-# writing a false F-95 heartbeat). A live agent re-arms it on the Monitor exit-notification;
-# a dead one does not. Build the argv first, then prepend the timeout only if present — this
-# is zsh-safe, portable, and graceful (runs un-guarded if coreutils is absent). Do NOT use
-# `${VAR:+$VAR 3600} cmd`: zsh does not word-split it, so it tries to exec "timeout 3600".
+# Two F-101 guards stop a gone-away watcher orphaning (and writing a false F-95
+# heartbeat): (1) `--supervisor-pid "$PPID"` — the watcher self-exits when the agent
+# process dies, the PRIMARY cure incl. the crash/SIGKILL path; (2) the GNU
+# `timeout`/`gtimeout` prefix (default 3600s) — the backstop. A live agent re-arms on the
+# Monitor exit-notification; a dead one does not. Build the argv first, then prepend the
+# timeout only if present — zsh-safe, portable, graceful (runs un-guarded if coreutils is
+# absent). Do NOT use `${VAR:+$VAR 3600} cmd`: zsh does not word-split it, so it tries to
+# exec "timeout 3600".
 set -- pnpm agent-tools:collaboration-state -- comms watch \
   --comms-dir .agent/state/collaboration/comms \
   --seen-file .agent/state/collaboration/comms-seen/<agent-codename>.json \
   --platform <claude|codex|cursor> \
-  --model <model-id>
+  --model <model-id> \
+  --supervisor-pid "$PPID"
 TIMEOUT_BIN="$(command -v timeout || command -v gtimeout || true)"
 [ -n "$TIMEOUT_BIN" ] && set -- "$TIMEOUT_BIN" 3600 "$@"
 exec "$@"
 ```
 
-The `timeout`/`gtimeout` prefix (default 3600 s, tunable) bounds every watcher's
-lifetime: an orphaned or agent-less watcher self-terminates rather than lingering.
+Two composing guards bound every watcher's lifetime so an orphaned or agent-less
+watcher self-terminates rather than lingering and writing a false-liveness
+heartbeat:
+
+- **`--supervisor-pid "$PPID"`** (the F-101 cure) — the watcher checks the
+  supervising process (the agent session that spawned it; `$PPID` at the
+  invocation) once per poll cycle and self-exits within one cycle of that pid
+  disappearing. This closes the crash / SIGKILL orphan path that a process-group
+  kill-tree misses: GNU `timeout` isolates the watcher in its own process group,
+  so on a harsh agent death no signal reaches the watcher — but the pid probe
+  sees the supervisor gone and terminates the otherwise-immortal watcher. This
+  **supersedes** the previously-deferred Stay-alive-`Stop`-hook lease follow-up,
+  which is no longer needed for the orphan problem.
+- **The `timeout`/`gtimeout` prefix** (default 3600 s, tunable) — the backstop:
+  on a clean teardown (Monitor `TaskStop`, SIGTERM, or expiry) `timeout`
+  group-kills the whole tree, and on any path the supervisor-pid probe missed
+  the watcher cannot outlive the timeout.
+
 The supervising Monitor/cron re-arms a fresh watcher on exit — the `--seen-file`
-cursor means the restart misses no events, only delays them by the re-arm. This is
-the **basic** dead-watcher guard; the robust follow-up (F-101) is an agent-renewed
-**lease** keyed on a `Stop` hook, where the agent's turn-completion is the
-stay-alive signal and a stale lease (no renewal within a TTL) triggers self-exit.
+cursor means the restart misses no events, only delays them by the re-arm.
 
 The CLI emits every relevant event with self-exclusion only against the
 identity tuple it derives from the platform-specific session-id env var

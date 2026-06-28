@@ -12,6 +12,7 @@ import {
   type CliRuntime,
   waitForCommsChange,
 } from './cli-runtime.js';
+import { resolveSupervisorAlive } from './watcher-supervisor.js';
 import { resolveSelfIdentity } from './cli-self-identity.js';
 import { type CollaborationAgentId, type CollaborationStateEnvironment } from './types.js';
 
@@ -80,6 +81,8 @@ export async function watchComms(
     optionalPositiveInteger(options, 'heartbeat-interval-ms') ?? DEFAULT_HEARTBEAT_INTERVAL_MS;
   const seedFromNow = optional(options, 'seed-from-now') !== undefined;
   const noAutoSeed = optional(options, 'no-auto-seed') !== undefined;
+  // F-101 supervisor-death detection (optional; see watcher-supervisor.ts).
+  const supervisorAlive = resolveSupervisorAlive(options, runtime);
 
   await io.ensureDirectory(commsDir);
   await seedSeenStateIfNeeded({ io, commsDir, seenFile, seedFromNow, noAutoSeed });
@@ -101,6 +104,7 @@ export async function watchComms(
     },
     markSeen: (eventIds) => io.appendSeenMessageIds(seenFile, eventIds),
     tick,
+    supervisorAlive,
   });
 
   return runtime.stdout === undefined ? output : '';
