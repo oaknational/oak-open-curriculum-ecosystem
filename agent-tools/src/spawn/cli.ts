@@ -2,6 +2,7 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 
 import { resolveCoordinationHome } from '../collaboration-state/coordination-home.js';
 
+import { buildWorktree, type BuildWorktreeOptions } from './build.js';
 import {
   createSpawnWorktree,
   type CreateSpawnWorktreeOptions,
@@ -22,6 +23,8 @@ export interface SpawnCliInput {
   readonly resolveHome?: (cwd: string) => Result<string, Error>;
   /** Worktree-creation seam (defaults to {@link createSpawnWorktree}). */
   readonly createWorktree?: (options: CreateSpawnWorktreeOptions) => Result<SpawnedWorktree, Error>;
+  /** Worktree-build seam (defaults to {@link buildWorktree}). */
+  readonly build?: (options: BuildWorktreeOptions) => Result<void, Error>;
 }
 
 const DEFAULT_TYPE = 'feat';
@@ -166,6 +169,13 @@ function executeSpawn(
   });
   if (isErr(created)) {
     stderr.write(`${created.error.message}\n`);
+    return 2;
+  }
+
+  const build = input.build ?? buildWorktree;
+  const built = build({ worktreePath: created.value.worktreePath });
+  if (isErr(built)) {
+    stderr.write(`${built.error.message}\n`);
     return 2;
   }
 

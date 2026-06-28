@@ -45,6 +45,7 @@ function baseInput(overrides: Partial<SpawnCliInput> = {}): SpawnCliInput {
     cwd: '/workspace/oak-spawn-flow',
     resolveHome: () => ok(HOME),
     createWorktree: () => ok(STUB_WORKTREE),
+    build: () => ok(undefined),
     ...overrides,
   };
 }
@@ -131,6 +132,37 @@ describe('runSpawnCli', () => {
     expect(cap.errText()).toMatch(/git working tree/u);
     // home-resolution failure short-circuits before any worktree is created.
     expect(created).toBe(false);
+  });
+
+  it('builds the created worktree (build-at-spawn) at the created path', () => {
+    let builtPath: string | undefined;
+    const cap = capture();
+    const exitCode = runSpawnCli({
+      ...baseInput(),
+      build: (opts) => {
+        builtPath = opts.worktreePath;
+        return ok(undefined);
+      },
+      stdout: cap.out,
+      stderr: cap.err,
+    });
+
+    expect(exitCode).toBe(0);
+    expect(builtPath).toBe('/workspace/oak-spawn-flow');
+  });
+
+  it('exits non-zero with the error on stderr when the build fails', () => {
+    const cap = capture();
+    const exitCode = runSpawnCli({
+      ...baseInput(),
+      build: () =>
+        err(new Error("spawn: 'pnpm install' failed in '/workspace/oak-spawn-flow'. boom")),
+      stdout: cap.out,
+      stderr: cap.err,
+    });
+
+    expect(exitCode).toBe(2);
+    expect(cap.errText()).toMatch(/pnpm install.*failed/u);
   });
 
   it('exits non-zero with the error on stderr when the creator returns err', () => {
