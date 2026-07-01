@@ -173,14 +173,12 @@ export async function runFieldReadbackAuditCommand(
   }
 }
 
-async function main(): Promise<void> {
-  await runFieldReadbackAuditCommand(process.argv.slice(2), process.env, import.meta.url);
-}
-
 if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch((error: unknown) => {
+  try {
+    await runFieldReadbackAuditCommand(process.argv.slice(2), process.env, import.meta.url);
+  } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     process.stderr.write(`${message}\n`);
     process.exitCode = 1;
-  });
+  }
 }
