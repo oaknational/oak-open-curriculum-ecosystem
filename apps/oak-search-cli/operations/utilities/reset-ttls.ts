@@ -74,8 +74,10 @@ async function main(): Promise<void> {
   await resetCacheTtls(config.SDK_CACHE_REDIS_URL, config.SDK_CACHE_TTL_DAYS);
 }
 
-main().catch((err: unknown) => {
+try {
+  await main();
+} catch (err: unknown) {
   const message = err instanceof Error ? err.message : String(err);
   process.stderr.write(`Failed to reset cache TTLs: ${message}\n`);
   process.exitCode = 1;
-});
+}

@@ -100,7 +100,9 @@ async function main(): Promise<void> {
   });
 }
 
-main().catch((error) => {
+try {
+  await main();
+} catch (error) {
   ingestLogger.error('ingest.fixture.error', error);
   process.exitCode = 1;
-});
+}
