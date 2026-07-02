@@ -29,6 +29,12 @@ isProject: false
 
 # Coordination-Home Git Resolution — the F-41 CLI tail
 
+> **PROMOTED 2026-07-01** → [`../current/coordination-home-cli-path-defaulting.plan.md`](../current/coordination-home-cli-path-defaulting.plan.md)
+> (executable). A live worktree-launch hit the hazard this brief describes; the executable
+> plan carries the TDD cycles plus a new guard-integrity finding (the decoy comms dir +
+> false watcher heartbeat defeat the F-95 guards). This brief remains the lineage/strategic
+> source; execute from the `current/` plan.
+
 **Status**: 🔵 FUTURE — strategic brief, queued. (Filename predates the
 git-resolution reframe below; kept to avoid reference churn.) The proper question —
 *"from any worktree on a machine, what one shared location do all worktrees

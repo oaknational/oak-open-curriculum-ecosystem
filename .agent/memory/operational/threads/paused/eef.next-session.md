@@ -92,7 +92,7 @@ merge_class: index-narrative-tables
   Director-queue agent-tools lanes (register-recorded); w3-c1 + next product tranche shaped
   by observed alpha use, not design momentum (owner doctrine, 2026-06-11). PR #187 merged
   the coordination home back to main — the end-of-arc step the forward-only model never
-  specified (gap captured in the generalisation plan todo x6 + open-question Q-009).
+  specified (gap captured in the generalisation plan todo x6, which is the live carrier).
 - **PRIOR SESSION (2026-06-09, Fragrant Spreading Sapling / claude Fable 5, branches
   `feat/graph-migration-part-1` → `feat/graph-migration-part-2`) — graph-tools readiness →
   🟢 DECISION-COMPLETE.** The review-and-readiness session the entry below queued. Owner overturned

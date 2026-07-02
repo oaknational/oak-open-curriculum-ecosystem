@@ -50,8 +50,24 @@ const CLAUDE_PERMISSION_MODES = [
 const CLAUDE_MEMORY_SCOPES = ['user', 'project', 'local'] as const;
 const CLAUDE_EFFORT_LEVELS = ['low', 'medium', 'high', 'xhigh', 'max'] as const;
 
-/** A comma-separated string (the common form) or an explicit YAML array. */
-const toolList = z.union([z.string().min(1), z.array(z.string().min(1))]);
+/**
+ * A comma-separated string (the common form) or a non-empty explicit YAML
+ * array. An empty array is rejected: on Claude, `tools: []` falls back to
+ * inherit-all (probed 2026-07-02), so it reads as a restriction while
+ * granting everything — a misleading shape with no valid use.
+ */
+const toolList = z.union([z.string().min(1), z.array(z.string().min(1)).min(1)]);
+
+/**
+ * Claude `tools`: a tool list, or NULL — the probe-verified zero-tools shape
+ * (2026-07-02): the field present with an empty YAML value grants no tools,
+ * while `[]` and omitting the field both fall back to inherit-all. Null is
+ * therefore the only zero-tools spelling and must validate; see the
+ * corpus-voter / corpus-reducer wrappers and their canonical templates for
+ * the probe record. Null has no meaning on `disallowedTools` (zero granted
+ * leaves nothing to subtract), so this shape is `tools`-only.
+ */
+const claudeTools = toolList.nullable();
 
 /** Claude model: an alias / `inherit`, or a full `claude-…` model id. */
 const claudeModel = z.union([
@@ -69,7 +85,7 @@ const claudeModel = z.union([
 const claudeFrontmatterSchema = z.strictObject({
   name: z.string().min(1),
   description: z.string().min(1),
-  tools: toolList.optional(),
+  tools: claudeTools.optional(),
   disallowedTools: toolList.optional(),
   model: claudeModel.optional(),
   permissionMode: z.enum(CLAUDE_PERMISSION_MODES).optional(),

@@ -245,3 +245,5 @@ Practice-Core concept ↔ ADR map):
 | [PDR-119](PDR-119-agent-memory-as-an-event-graph-with-renderers.md) | Agent Memory as an Event Graph with Renderers | Proposed |
 | [PDR-120](PDR-120-runbooks-are-a-content-kind-not-a-surface.md) | Runbooks Are a Content Kind, Delivered Through Existing Surfaces | Accepted |
 | [PDR-121](PDR-121-planning-vocabulary.md) | Planning Vocabulary | Accepted |
+| [PDR-122](PDR-122-agentic-judgment-pipelines.md) | Agentic Judgment Pipelines — Atomic Judgment, Deterministic Aggregation, Conserve-by-Default Routing | Accepted |
+| [PDR-123](PDR-123-agentic-design-panel-protocol.md) | Agentic Design Panels — Independent Generators, a Diverse-Lens Critic Ensemble, Orchestrator Synthesis | Accepted |

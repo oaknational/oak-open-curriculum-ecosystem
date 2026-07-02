@@ -2,6 +2,8 @@
 # Re-download every few weeks to get fresh data
 
 *.json
-manifest.json
+!manifest.json
+!README.md
+!schema.json
 !.gitkeep
 

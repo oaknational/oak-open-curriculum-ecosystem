@@ -1,0 +1,6 @@
+---
+description: No irreversible discard in an agentic judgment pipeline rests on a single voter; LLMs emit per-item judgments only, deterministic code computes every aggregate and disposition; conserve by default (PDR-122).
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/agentic-judgment-conserve-by-default.md`.

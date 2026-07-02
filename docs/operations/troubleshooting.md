@@ -111,10 +111,35 @@ operations guide:
 
 ## Known Gate Caveats
 
-No standing `pnpm check` caveats are currently recorded here.
-
 If `pnpm check` fails, run the affected suite directly and check the latest
 issues, ADRs, and active plans before assuming local setup problems.
+
+### Static-analyser gotchas
+
+Static analysers want **shape and data-flow changes, not runtime guards or
+relocations**, and several report stale or silently-green results:
+
+- CodeQL ReDoS findings need a statically-safe regex shape — a runtime guard
+  around the same regex does not clear them.
+- SonarCloud findings can be stale snapshots of an older analysis — re-check
+  against the current branch state before fixing "live" issues.
+- dependency-cruiser fires on orphan empty barrels (an `index.ts` left behind
+  by a refactor) — delete the barrel, don't exempt it.
+- markdownlint silently passes zero files when the glob misses dotdirs — pass
+  `--dot` (and note `--fix` can corrupt literal `+` / `#` / `-` characters in
+  prose; review its diff before committing).
+- knip ignores root-level entries unless `workspaces['.']` is configured.
+- `rg` / `fd` skip dotdirs by default — pass `--hidden` when sweeping
+  `.agent/` or other dot-directories, and mind `rg -r` (replace) vs `-n`.
+
+### Cache false-greens
+
+Turbo and pre-commit caching can mask failures: a cached result replays green
+while the underlying task would now fail, remote-cache poisoning replays stale
+errors, and a cached `format:root` reports clean while the hook finds drift.
+When diagnosing a gate discrepancy, **never trust a cached result** — re-run
+the task with `--force` (or via the authoritative hook) before concluding
+anything. See also `docs/engineering/build-system.md` on cache inputs.
 
 ## Quick Fixes
 

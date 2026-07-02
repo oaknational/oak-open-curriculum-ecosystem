@@ -4,6 +4,40 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-07-02 — PDR-118 gains open question 6: the external staleness-reaper (dedicated consolidation, Rosemary stirs Bracken)
+
+The ungraceful-death liveness question (self-emitted signals cannot be stopped by a dead
+session; a dead-man's-switch primitive that reaps from outside is likely needed; owner
+architectural decision) re-homed from the host open-questions register into PDR-118's
+model-level open questions, beside the composed-liveness question it extends.
+
+## [oak-open-curriculum-ecosystem] 2026-07-02 — PDR-123 authored: agentic design panels (dedicated consolidation, Rosemary stirs Bracken)
+
+New `pdr_kind: pattern` PDR graduating the design-panel protocol from its founding worked
+instance (the corpus-analysis v2 design panel, report 2026-06-29): independent
+restraint-by-default generators, a MECE facet cut, a diverse-lens critic **ensemble** (the
+marginal critic beats the marginal designer), orchestrator-held synthesis, proportionality,
+and the self-improvement loop (each application refines the PDR). Promoted on first instance
+per owner direction; PDR-122 cross-referenced as the adjudicative sibling. The
+decision-records index also gained the missing PDR-122 row.
+
+## [oak-open-curriculum-ecosystem] 2026-07-02 — PDR-122 extended with checkpointing, calibration-first, and fleet economics (dedicated consolidation, Rosemary stirs Bracken)
+
+Amended PDR-122 (Agentic Judgment Pipelines) from the 2026-07-01/02 discovery-run worked
+instances, authored best-effort per PDR-104:
+
+- **Invariant 5 (new)**: independently-failing stages are split and checkpointed; recovery is
+  seeded continuation from committed checkpoints with a stage discriminant, never blind resume.
+- **Invariant 6 (new)**: calibrate judgment before scaling spend — known-answer canaries first
+  behind a deterministic abort breaker, ~1/10th pilot before a full run; a judgment-regime change
+  is a design change requiring recalibration (measured 47% vs 10.6% keep across regimes).
+- **Invariant 4 (extended)**: turns × context dominates fleet cost (least-privilege single-turn
+  voters are 7–17× cheaper); budgets declared pre-run in every billing denomination; a cost
+  backstop firing is a fork, not a failure; ceiling re-authorisation is owner-scope.
+
+The companion always-on firing rule `agentic-judgment-conserve-by-default` (named by PDR-122
+§Consequences) was authored in the host rule tier in the same pass.
+
 ## [oak-open-curriculum-ecosystem] 2026-06-21 — practice-lineage restored to the evolution record; principles evacuated by intent (owner-directed, Ferret seeks Tunnel)
 
 Owner-directed clarity-of-purpose restoration: "the Practice lineage is supposed to be a

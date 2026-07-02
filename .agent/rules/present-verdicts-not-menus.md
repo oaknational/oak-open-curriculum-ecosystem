@@ -54,6 +54,13 @@ alternatives non-viable.
 - "Do these look fine?" after analysing them oneself.
 - Quizzing the owner to ratify a verdict already evidenced in context.
 - Asking what to prioritise when the brief already names the priority.
+- Writing a durable artefact's STATUS line as a deferral ("for owner
+  ratification", "awaiting owner review") when the verdict exists. A
+  reviewed, execution-ready plan's status is "READY FOR EXECUTION"; a
+  genuine owner gate (e.g. a spend authorisation) is a specific
+  todo-level gate inside the artefact, never the artefact's status.
+  This rule applies to durable-artefact status lines, not only
+  user-facing questions.
 
 ## Diagnostic
 

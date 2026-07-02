@@ -45,6 +45,16 @@ through and verifying each lands on the new model.
    on the archived artefact's supersession mapping, never as a tombstone in the
    live doc.
 
+## Mid-execution reshape is the same walk
+
+A plan or decision reshaped **mid-execution** is not done when the new shape is
+built once: the correction propagates to every reference — markdown AND
+`.ts` / `.mjs` / `.json` code mirrors, sibling plans, parent plans, and indexes.
+Any surface the sweep misses silently re-asserts the old shape (corpus-validated
+across 15 windows: incomplete cross-file-type sweeps were a top recurring
+failure class). The trigger is the reshape itself, not delivery — start the
+consumer-walk the moment the shape changes.
+
 ## Anti-pattern
 
 Declaring a reframing delivered after grepping its known phrases. Residue survives

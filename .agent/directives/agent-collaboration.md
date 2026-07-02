@@ -82,6 +82,18 @@ sidebar for a short focused exchange, a joint decision when agents need a
 shared commitment with recorder or actor follow-through, and an owner
 escalation when peer agreement cannot resolve the block.
 
+**Liveness needs injected asymmetry.** Two peers both defaulting to
+"HOLD if no reply" is a mutual-politeness deadlock — no designated
+mover, so the shared resource never clears (worked instance
+2026-06-28, a commit window). Break symmetry with a deterministic
+tiebreaker: first-to-commit commits the whole file and the other
+re-edits (the owner's standing cure), lowest `session_id_prefix`,
+oldest claim, or a gatekeeper seat. Where none fits, randomised
+backoff (wait a random interval, re-sense the shared state, retry)
+breaks symmetry probabilistically — an owner-directed design
+direction for claim adoption, buffer-drain ownership, and any
+"after you / no, after you" peer default.
+
 ### Coordinator Role
 
 Peer collaboration is the default. A **coordinator role** is an opt-in

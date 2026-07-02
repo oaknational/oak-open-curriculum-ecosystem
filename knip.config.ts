@@ -87,6 +87,10 @@ const config: KnipConfig = {
         'src/practice-fitness/validate-practice-fitness.ts',
         'src/ci/ci-schema-drift-check.ts',
         'src/ci/ci-turbo-report.ts',
+        // Corpus-analysis workflow stage entries: consumed by esbuild as string
+        // entry points in workflows/build/workflow-builder.ts (bundled into
+        // self-contained harness artefacts), which knip cannot trace as imports.
+        'src/corpus-analysis/workflows/*.workflow.ts',
       ],
       project: ['src/**/*.{ts,tsx}'],
     },

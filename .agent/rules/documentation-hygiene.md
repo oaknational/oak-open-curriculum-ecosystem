@@ -16,6 +16,13 @@ docs prompt verification; misleading docs are trusted and acted on).
 Composes with PDR-026 §Landing target definition (the symmetric
 landing-time pair).
 
+Help and usage text is documentation, and it MUST track real behaviour. Never
+document an affordance that is a tolerated no-op (a `--flag` the command accepts
+but ignores, an option listed in `--help` that does nothing): a documented no-op
+reads as a real feature and invites a future reader to depend on — or wire — the
+behaviour it lacks. Either make the affordance real or remove it from the help
+text; a no-op kept "for completeness" is a misleading doc.
+
 ## 2. Attribution on adoption
 
 When external concepts, patterns, vocabulary, or implementation

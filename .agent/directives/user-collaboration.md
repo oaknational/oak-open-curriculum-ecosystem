@@ -115,6 +115,17 @@ When a plan is blocking a merge, simplify ruthlessly to the minimum correct
 change that unblocks the merge, and route the rest to a named future or current
 lane with a real trigger.
 
+**Match the instrument to the goal; keep simple requests simple.** A one-line
+goal takes a one-line-sized tool: a rename touches the rule file, adapters,
+index, and genuinely-live references — never a blanket sweep across archives,
+quoted records, and ordinals, which manufactures defects. For a simple request,
+do the simple thing: no deliberation essays, no menus, no "step back" unless
+asked; read the evidence in hand before narrating a cause; stop exactly where
+asked (no commit/push/merge beyond the instruction). Process, ceremony, and
+theory expanding to fill the work is the named failure (owner-corrected
+2026-06-29, after simple asks began taking minutes and producing confusing
+changes).
+
 ## Risk and Decisions
 
 Agents classify risk; humans accept risk.
@@ -136,6 +147,16 @@ Agents must not:
 
 Risk acceptance requires a human decision. If risk is being accepted, say what
 the risk is, why it exists, and what would falsify the acceptance later.
+
+**Owner-granted sequencing exceptions.** The owner may explicitly grant a
+scoped "working now, architectural excellence later" exception when a small
+task risks derailing a session — excellence is *sequenced, not abandoned*. The
+grant is owner-only (never self-granted to dodge work); honour its bounds (a
+working, consistent, hack-free state — then stop); the unwaived guardrails
+still hold: green is earned (no suppression, no `--no-verify`) and the deferred
+excellence is conserved durably (a plan or report with a real trigger), never
+dropped. Record the exception in the work's own report; it is never a standing
+override of strict. (Owner direction 2026-06-29, the `check-encoding` tool.)
 
 **Decision locus** distinguishes two kinds of decision. *Product strategy* —
 diagnosis, how-we-win, success measures, feature shaping — is the owner's to
@@ -165,6 +186,9 @@ Verification questions need direct answers:
 - cite concrete evidence after the answer
 - do not invent adjacent scope to make the answer feel safer
 - use tables only when comparison is the point
+- present anything meant for copy-paste (commands, prompts, re-entry text) as a
+  fenced code block, never quoted prose — blockquotes pick up `>` markers and
+  reflow on paste
 
 The owner should not have to infer the answer from a broad evidence dump.
 

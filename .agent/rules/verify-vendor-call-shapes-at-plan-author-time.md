@@ -29,6 +29,15 @@ function signature.
   WS becomes drift-detection rather than decision-making.
 - Re-verify on each major dependency upgrade if the call shape is
   named in any active plan body.
+- The same discipline covers **the agent's mental model of vendor and
+  platform behaviour**, not only literal call shapes: training-time
+  knowledge ≠ live docs. MCP client capability support, vendor CLI
+  modes and version gaps, and SDK semantics are repeatedly wrong in
+  the model's priors and must be checked against the latest published
+  documentation — never against installed source alone or a
+  remembered capability matrix (corpus-validated recurring class,
+  2026-06-30; see also the per-user memory
+  "Platform feature support — check official docs").
 
 ## Related Surfaces
 

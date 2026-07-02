@@ -1,6 +1,6 @@
 # Pull Request Lifecycle Skill — Strategic Plan
 
-**Status**: NOT STARTED
+**Status**: FIRST SLICE EXECUTED (2026-07-02) — the documentation skill is live at .agent/skills/pr-lifecycle/SKILL-CANONICAL.md with generated adapters; the promotion trigger fired on PR #296 (owner-requested shepherding + the repeated comment/CI/Sonar feedback pattern in one session). Remaining scope: the optional command wrapper and surface cross-links, promotion-gated on repeated manual steps.
 **Domain**: Agentic Engineering Enhancements
 **Pattern**: Practice-owned agent-work capability
 

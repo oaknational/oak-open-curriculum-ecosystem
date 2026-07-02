@@ -40,7 +40,13 @@ combined push over earlier visibility.
 ## Action
 
 1. Identify which items are independently shippable and which items genuinely
-   depend on coordination.
+   depend on coordination. Apply a concrete dependence test, not just a
+   topic-level glance: flat PRs branched off the same `origin/main` are **not**
+   independent when they edit the **same command's options array, the same
+   `describe()` block, or otherwise the same lines** — they will conflict at
+   merge even though their *intents* are unrelated. Same-line / same-array edits
+   are coordination-dependent: sequence them, or flag a keep-both merge
+   resolution up front.
 2. Ship the independent item as its own commit or queue intent, with normal
    explicit-pathspec and gate discipline.
 3. Keep the coordination-dependent item in its own claim, queue intent, or

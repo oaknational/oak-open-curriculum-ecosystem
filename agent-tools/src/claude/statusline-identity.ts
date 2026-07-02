@@ -89,11 +89,27 @@ function renderFromInputs(inputs: Extract<StatuslinePlan, { kind: 'render' }>['i
       coordinationPlace: git.coordinationPlace,
       error: git.error,
       usedPercentage: inputs.usedPercentage,
+      fiveHourPercentage: inputs.fiveHourPercentage,
+      fiveHourResetSeconds: secondsUntil(inputs.fiveHourResetsAt),
+      sevenDayPercentage: inputs.sevenDayPercentage,
+      sevenDayResetSeconds: secondsUntil(inputs.sevenDayResetsAt),
       model: inputs.model,
       sessionShape: gatherSessionShape(git.primaryRoot, identity),
     },
     { logo, logoFrame: resolveLogoFrame(logo, inputs.seed) },
   );
+}
+
+/**
+ * Seconds from now until a Unix-epoch-seconds reset instant, or `undefined` when
+ * the instant is absent. The clock read lives here, in the impure adapter, so the
+ * downstream countdown formatting stays pure; a past instant yields a negative
+ * value that the formatter clamps to zero.
+ */
+function secondsUntil(resetsAtEpochSeconds: number | undefined): number | undefined {
+  return resetsAtEpochSeconds === undefined
+    ? undefined
+    : resetsAtEpochSeconds - Math.floor(Date.now() / 1000);
 }
 
 /**

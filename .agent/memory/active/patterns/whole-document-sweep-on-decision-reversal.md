@@ -30,3 +30,11 @@ After reversing a recorded decision, sweep the entire artefact (and its
 near neighbours) for the old term/framing and reconcile every instance.
 This is an under-actuation facet — an edit that stops short of
 completeness. Sibling: [`no-tombstones-for-removed-ideas`](../../../rules/no-tombstones-for-removed-ideas.md) (as a `.agent/rules` entry), and the distilled "state the positive understanding" authoring discipline.
+
+The sweep reaches the **`derives_from` source, in both directions**: when the
+reversed decision has an upstream artefact (a design report a plan derives
+from), include the source in the sweep AND check *which side actually
+drifted* — reconciling only the leaf would have missed that the design report
+held the truer framing all along while the plan layer inverted it
+(2026-06-30, the discovery-first re-rooting). Propagating the leaf's new
+shape without verifying the source ratifies the wrong layer.

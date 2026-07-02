@@ -81,7 +81,18 @@ the awareness (Director, minimum action).**
   proposed on first-instance evidence — see §Falsifiability assertion 1.)
 - **Decision rule for acting.** Take an action directly **only if it changes
   my routing AND no cheaper agent can absorb it.** Minimum is not zero: a
-  Director that reads nothing holds a stale map and routes wrongly.
+  Director that reads nothing holds a stale map and routes wrongly. The routine
+  corollary: stay silent on routine signals (peer heartbeats, monitor narration)
+  and spend context only on substance (questions, PR-opens, verdicts, blockers,
+  genuine stalls) — over-narration spends the seat's scarcest resource on signals
+  that needed no action and shortens the tenure the role exists to maximise.
+- **Routing craft.** Route durable **lanes**, not real-time individual pickups —
+  Implementers self-organise faster than fine-grained routing, and that routing
+  races them. **Verify a target agent's current state right before routing to it**
+  (its claim freshness via the liveness tool), not state from minutes prior; a
+  reversal-in-minutes and a finding routed to an agent that retired a second later
+  both came from routing on stale state. Route **nothing** to an agent that has
+  been told to close out or is high-context — route to its successor.
 - **Single owner-interface; lens-resolve before escalate.** Implementers route
   questions to the Director; the Director answers what it can, runs anything
   ambiguous through the decision lenses (`principles.md` §Decision Lenses), and
@@ -107,6 +118,18 @@ the awareness (Director, minimum action).**
   (authority transfers); the cadence cron never goes dark between them.
   **Exactly one holder at all times** — never zero (work goes unrouted), never
   two (collision).
+- **Takeover verification — registry-freshness ≠ comms-liveness.** Before a
+  Moment-2 acknowledgement, cross-check **both** the claims registry **and** the
+  comms-heartbeat stream: the registry can read the outgoing Director `stale` (the
+  claim-freshness window elapsed) while the heartbeat stream shows them LIVE — the
+  two measure different things, and taking the seat over a still-live Director is
+  the trap. Let the liveness tool compute age UTC-to-UTC; never compare against a
+  local wall-clock. Authority and coordination actions carry the **highest**
+  verification bar — ground the load-bearing liveness fact first-hand, hardest
+  exactly when a convenient premise (a felt "they've gone quiet") licenses the
+  takeover. (Reading claim-freshness *as* liveness is a known code defect where it
+  is done mechanically; the cross-check is the doctrinal guard until that is
+  cured.)
 - **Dissolve when pressure clears.** The Director seat is justified by
   coordination pressure; when it clears (e.g. the team settles to n≤2
   owner-visible per PDR-082), dissolve it rather than perform it more quietly.

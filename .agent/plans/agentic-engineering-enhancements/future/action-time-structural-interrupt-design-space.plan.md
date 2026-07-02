@@ -589,6 +589,55 @@ recurred (Ferret 2026-06-21, then again as Cutter's "the number organised me bef
 noticed" experience file) — the same chase-the-number generator, now a second-and-third
 instance, confirming the report-self-framing candidate mechanism's evidence base.
 
+## Worked Instance — 2026-07-01/02 Cluster: owner-gated ×3 in one closeout, declared-ready ×3 in one session, footguns re-hit at authoring time
+
+Three same-window recurrences of already-inventoried pathogens, each with a
+sharp mechanical firing moment:
+
+- **Over-gating / "owner-gated" ×3 in one closeout (Tuna stirs Fathom,
+  2026-07-01).** The agent labelled spawn-flow priority, "land on main", and a
+  broken-links disposition "owner-gated" in a deep handoff; the owner corrected
+  all three, and running the five-lens matrix resolved all three with **no
+  owner** (two were entailments, not decisions; the third split into
+  fix-myself + route-to-the-owning-plan). The per-user home
+  (`feedback_ltae_lens_before_user_questions`: "'owner-gated' is the lazy box,
+  run the matrix") was warm and did not fire — Pathogen A recurring despite its
+  home, 2nd+ recorded recurrence. Cure direction the instance names: the matrix
+  must be a **firing gate before writing the literal tokens** "owner-gated" /
+  "flag for owner" (the partial surface signature this inventory already
+  records for Pathogen A), not a lesson recalled after.
+- **Declared-ready-on-fluent-signal ×3 in one session (Vanilla stirs Spore,
+  2026-07-01).** (a) Called PR #291 "comms triaged, ready for merge" TWICE
+  while 7 bot conversations sat unresolved — resolved one thread early and
+  never re-fetched after two later pushes; (b) suppressed a merge-ready
+  PushNotification on presence inferred from monitor ticks and its own
+  hold-messages; (c) treated green checks as merge-ready before checking the
+  conversation-resolution gate. One generator: a smooth "it's ready" arrived
+  and was acted on before grounding the actual gating state. The doctrine
+  (metacognition §Fluency Is a Warning;
+  `feedback_pr_readiness_requires_comment_triage`) was homed and did not fire.
+  Firing signature (t3): a ready/done/merge-ready **declaration is a
+  detectable output moment**, and the grounding check (re-fetch
+  `reviewThreads`, presence evidence) is mechanically runnable at exactly that
+  moment. (The presence half graduated to
+  `owner-attention-at-action-moments` §notify-at-the-action-moment,
+  2026-07-02 — a passive home; this inventory keeps the firing-mechanism
+  evidence.)
+- **Workflow footguns re-hit at authoring time (Flare hunts Obsidian,
+  2026-07-01).** Authored a Workflow without reading
+  `bounded-structured-output-for-workflows` — passed an object `args` (arrived
+  undefined → verifiers inspected the wrong file → a false NO_GO) and lost
+  verifiers to a quota trip, both documented in THREE passive homes (the
+  pattern, `distilled.md`, the tooling README). Firing signature: a `Workflow`
+  tool call is a fully mechanical firing moment — "read the footgun pattern
+  before authoring a Workflow" is the exact affordance-gate shape t3 names.
+
+Why load-bearing: all three are recurrence-despite-home with **stronger
+mechanical handles than most inventory entries** (literal token, declaration
+moment, tool call) — they move the t3 empty-quadrant question from "can any
+class be occupied?" to "three classes have obvious occupation shapes awaiting
+the design session."
+
 ## Note on Scope Discipline
 
 This is a strategic design-space plan. It contains no executable workstreams or

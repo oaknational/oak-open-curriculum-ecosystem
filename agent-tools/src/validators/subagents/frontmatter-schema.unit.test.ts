@@ -89,6 +89,44 @@ describe('validateFrontmatter — Claude wrappers', () => {
       }),
     ).toStrictEqual([]);
   });
+
+  it('accepts a null tools value (the probe-verified zero-tools shape)', () => {
+    expect(
+      validateFrontmatter('claude', '.claude/agents/x.md', {
+        name: 'corpus-voter',
+        description: 'Single-turn no-tools adversary voter.',
+        tools: null,
+        maxTurns: 4,
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('rejects an empty tools array (it falls back to inherit-all, not zero tools)', () => {
+    const issues = validateFrontmatter('claude', '.claude/agents/x.md', {
+      ...validClaude,
+      tools: [],
+    });
+    expect(issues.length).toBeGreaterThan(0);
+    expect(issues.join('\n')).toContain('tools');
+  });
+
+  it('rejects an empty disallowedTools array (a meaningless deny list)', () => {
+    const issues = validateFrontmatter('claude', '.claude/agents/x.md', {
+      ...validClaude,
+      disallowedTools: [],
+    });
+    expect(issues.length).toBeGreaterThan(0);
+    expect(issues.join('\n')).toContain('disallowedTools');
+  });
+
+  it('rejects a null disallowedTools value (null is a tools-only spelling)', () => {
+    const issues = validateFrontmatter('claude', '.claude/agents/x.md', {
+      ...validClaude,
+      disallowedTools: null,
+    });
+    expect(issues.length).toBeGreaterThan(0);
+    expect(issues.join('\n')).toContain('disallowedTools');
+  });
 });
 
 describe('validateFrontmatter — Cursor wrappers', () => {

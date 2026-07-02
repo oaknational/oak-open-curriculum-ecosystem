@@ -82,6 +82,50 @@ This plan does not execute until a **fresh session** has critically reviewed it.
 - Ratify or revise D1–D7 and answer Q1–Q4.
 - Re-run the discoverable-unknown check at execution time (a third context-measurement surface may have landed since).
 
+### ws0 input — quota-vs-occupancy scope finding (Perseus wakes Oblivion, 2026-07-02)
+
+Live use this session exposed a second consumer and a scope gap, both
+input-to-verify at ws0:
+
+- **The drafted sensor answers "how full is my context?" (latest-turn
+  occupancy); the question that actually recurred was "how much 5h QUOTA has
+  this session consumed?"** — which needs usage SUMMED over a time window
+  across the session's transcript AND all its subagent/workflow transcripts
+  (`<session>/subagents/**/agent-*.jsonl`), not the latest turn of one file.
+  The ad-hoc harvest ran twice this session (voter forensics + quota
+  verification); the method and calibration (~1M raw tokens/meter point;
+  which counters exclude cache reads) are recorded in
+  `reports/agentic-engineering/large-corpus-analysis-tooling/burn-analysis-2026-07-02.md`,
+  and the redesign plan's ws3 wants the same summing as a permanent
+  accounting command — ws0 should decide whether occupancy and window-summed
+  quota are one command with two modes or siblings.
+- **The account-level meter is unreachable from records**: the harness
+  delivers `rate_limits.five_hour/seven_day` only to the statusline stdin,
+  per-render, unpersisted — so no agent can self-serve the authoritative
+  percentage and the owner hand-relays it. A small statusline tee of the
+  last `rate_limits` frame to a per-session state file would close this;
+  candidate scope for this plan or a sibling.
+
+### ws0 input — superseding findings (Sirius ws0 recon, 2026-06-29)
+
+These findings are **input-to-verify** that materially supersede the PROPOSED
+decisions; ws0 must reconcile them first-hand (re-confirm against a real
+transcript and the live statusline stdin) before ratifying D1 or the non-goals:
+
+- **The harness already delivers `context_window.used_percentage` on the
+  statusline stdin.** The "if the harness exposes context% directly… that
+  supersedes this" line under §Non-goals is therefore not hypothetical — that
+  surface exists now. ws0 must decide whether the sensor reads the statusline
+  stdin rather than (or before) parsing the transcript.
+- **The genuinely-missing primitive is session-keyed PERSISTENCE of that
+  percentage** (the statusline value is transient per-render). The build's centre
+  of gravity may be persistence, not the transcript read.
+- **`message.model` never records the `[1m]` variant marker.** D1's variant
+  resolution keys off the transcript's `message.model`; if that field cannot
+  carry `[1m]`, D1's primary source is broken and the `session-env` fallback
+  becomes the *only* variant source — which changes the D1/Q1 design, not just a
+  fallback note.
+
 ## PROPOSED decisions (ratify at ws0 — NOT yet settled)
 
 - **D1 — model→window registry + variant resolution (THE critical correctness case).** `claude-opus-4-8` runs at **200k or 1M** by variant; the wrong denominator makes every percentage meaningless (the exact 200k-vs-1M error this tool exists to prevent). The registry keys on the **full** model id incl. variant marker (`[1m]`). The adapter must source the variant robustly: the transcript's recorded `message.model`, falling back to the per-user `session-env` surface under the platform config home (carries the env model id incl. `[1m]`). If neither disambiguates → return `window_source: "ambiguous"` with both candidates and **refuse to emit a single percentage**. A confident wrong denominator is worse than an honest refusal.

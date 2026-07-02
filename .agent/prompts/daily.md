@@ -27,3 +27,12 @@ You are the eventual successor to XXX
 Really great work, thank you. Please perform a full session closeout, ultrathink /oak-metacognition
 /oak-reason /oak-session-handoff /oak-consolidate-docs,
 and then a deep and recursive first-hand scan of your context for anything that would be lost if the context ceased to exist, then this session is complete
+
+## Deep closeout
+
+run a full and deep session handoff, ultrathink ultracode /oak-metacognition /oak-reason
+  /oak-session-handoff /oak-consolidate-docs , and include a deep scan of the context for what would be
+  lost if the context ceased to exist, followed by a second, deeper, recursive exploration of the
+  metaloss. All subagent results must be critically assessed, only you can validate what is or is not in
+  your context, subagents can compare the artefacts to the repo and each other and you can compare the
+  subagent results to your context

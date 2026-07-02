@@ -30,33 +30,3 @@ point. Apply judgment about *which* home, not about *whether* the lesson has
 earned promotion.
 
 New napkin rotations append below; the next consolidation promotes them out.
-
-## From the 2026-06-29 team-tooling rotation (Falcon) — carry-forward, homes mapped
-
-These lessons are settled and their homes are identified (verify-homed recon); they await an
-authoring pass (deferred under one-context budget — graduate next consolidation):
-
-- **Reviewer consensus is not truth; a concurring reviewer can inherit your wrong premise.**
-  When you brief a reviewer with a wrong premise, its approval is poisoned; verify load-bearing
-  facts first-hand in both directions, and when reviewers conflict check whether a concurrer just
-  echoed your brief. → amend `patterns/different-lens-reviewer-divergence.md` /
-  `validate-specialist-findings`.
-- **Flat independent PRs off `origin/main` conflict when sequential items edit the same command's
-  options array / same `describe()` block** — items on one line are coordination-dependent, not
-  independent; sequence them or flag a keep-both merge resolution. → amend
-  `ship-independent-coordinate-dependent` / `patterns/pr-monitor-to-merge.md` with the worked instance.
-- **Help/usage docs track real behaviour — document a real affordance, never a tolerated no-op**
-  (a documented no-op invites a future reader to wire behaviour it lacks). → amend
-  `documentation-hygiene`.
-- **Light-scan-before-deep applies to BUILD goals too** — given a concrete build goal, build the
-  simplest working thing first; don't over-invest in architecture review before shipping. → amend
-  `scope-from-goal-before-approach` / sibling of `premature_crystallization`.
-- **An Implementer's source build belongs in its OWN worktree from the FIRST edit** (not the shared
-  primary/coordination checkout) — claim AND open the worktree before the first source edit. →
-  strengthen PDR-117 / `start-right-team` Implementer expectation (home exists; sharpen the language).
-- **Sirius ws0 architecture findings** (the harness already delivers `context_window.used_percentage`
-  on the statusline stdin; the missing primitive is session-keyed PERSISTENCE of it; `message.model`
-  never records `[1m]`) — design findings for the context-usage / observability follow-on, not doctrine.
-  → these findings **supersede** the current draft in `session-context-usage-cli.plan.md` (which still
-  keys variant resolution off `message.model` and treats harness-`%` as a future note); updating that
-  plan is a synthesis-phase task. Conserved here + in the archived napkin.

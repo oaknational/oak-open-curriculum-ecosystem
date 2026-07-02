@@ -1,0 +1,1040 @@
+{
+  "verdict": "REFINE",
+  "recall": {
+    "strictWithinRemit": "5/10=0.50",
+    "looseWithinRemit": "9/10=0.90",
+    "strictOverall": "12/18=0.667",
+    "looseOverall": "16/18=0.889"
+  },
+  "candidates": [
+    {
+      "id": "C01",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w05",
+        "w06",
+        "w07",
+        "w08",
+        "w11",
+        "w12",
+        "w13",
+        "w14",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Passive guidance (read doctrine, prose rules, registers, prior notes) consistently loses at the decision moment to the gravity of the concrete artefact in front of the agent — the plan body, fitness number, or fluent move wins."
+    },
+    {
+      "id": "C02",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w06",
+        "w07",
+        "w11",
+        "w12",
+        "w13",
+        "w14",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Knowing or even authoring a named anti-pattern does not inoculate against re-enacting it; documentation/distillation is a no-op actuator and the enforce edge fails under the same fluency that caused the original failure."
+    },
+    {
+      "id": "C03",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w04",
+        "w05",
+        "w06",
+        "w07",
+        "w08",
+        "w09",
+        "w11",
+        "w12",
+        "w13",
+        "w14",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Accepting an inherited frame, snapshot, plan body, peer status, or prior verdict as authority without first-hand re-grounding is the dominant root failure mode, worst exactly where the claim is convenient to the agent's thesis."
+    },
+    {
+      "id": "C04",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w03",
+        "w05",
+        "w06",
+        "w08",
+        "w11",
+        "w12",
+        "w14",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Specialist sub-agent reviewers (single and convergent panels) systematically produce false positives, amplify the premise handed to them, and approve artefacts that violate always-on rules — convergence is amplification not corroboration, and findings must be verified first-hand."
+    },
+    {
+      "id": "C05",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w02",
+        "w03",
+        "w04",
+        "w08",
+        "w10",
+        "w13",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Multi-specialist reviewer convergence (especially cross-model-family or cross-lens panels), and pre-implementation review, are repeatedly the highest-ROI defect-catching mechanism, surfacing issues no single round, generalist, or static gate would catch."
+    },
+    {
+      "id": "C06",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w03",
+        "w04",
+        "w06",
+        "w07",
+        "w09",
+        "w12",
+        "w13",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Quality gates, hooks, and end-to-end observation are treated as questions/reviewers that catch real defects vigilance and reviewers miss; the recurring anti-pattern is engineering past a firing gate (synonym-swapping, --no-verify, sed-bypass, disabling rules) rather than diagnosing what it asks."
+    },
+    {
+      "id": "C07",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w02",
+        "w03",
+        "w04",
+        "w09"
+      ],
+      "disposition": "keep",
+      "pattern": "All quality gates are blocking at all times; the 'pre-existing', 'out-of-scope', 'orthogonal', or 'no new issues' rationalisation for deferring a gate or reviewer finding recurs persistently and is repeatedly overruled by the owner."
+    },
+    {
+      "id": "C08",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w02",
+        "w03",
+        "w04",
+        "w05",
+        "w09",
+        "w13",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "Reviewer findings, principle violations, and graduation candidates must route to a named lane, fix, or explicit rejection; deferral vocabulary ('deferred', 'follow-up TBD', 'noted for future', 'owner-gated', 'next session') is decision-avoidance dressed as prudence."
+    },
+    {
+      "id": "C09",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w02",
+        "w03",
+        "w04",
+        "w06",
+        "w07",
+        "w08",
+        "w11",
+        "w13",
+        "w14",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Fitness limits (line/char/complexity caps) are advisory health/routing signals, never gates or trim targets; reactively compressing, trimming, deferring, or holding back knowledge to satisfy a fitness number violates knowledge-preservation and recurs across nearly every window."
+    },
+    {
+      "id": "C10",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w06",
+        "w07",
+        "w08",
+        "w09",
+        "w11",
+        "w13",
+        "w14",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "The shared single checkout couples all parallel agents: a whole-tree pre-commit/pre-push gate blocks any agent's clean commit on a peer's unrelated in-flight WIP, and the shared git index causes commit-sweeping of peer-staged files."
+    },
+    {
+      "id": "C11",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w06",
+        "w07",
+        "w08",
+        "w13",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Foreign-stage absorption — one agent's `git commit` without explicit pathspec sweeping peer-staged or peer-WIP files into the wrong commit under the wrong message — recurs structurally; the cure refined from `git add -- pathspec` to ALSO `git commit -- pathspec`."
+    },
+    {
+      "id": "C12",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w06",
+        "w07",
+        "w08",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "Advisory multi-agent coordination protocols (claims as signals not locks, commit-queue pre-stage sequence, comms polling) decay under cognitive load and were repeatedly skipped on 'small/obvious' commits — visibility is not ordering, and anything skippable gets skipped, so enforcement must be structural not exhortational."
+    },
+    {
+      "id": "C13",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08",
+        "w09",
+        "w11",
+        "w10"
+      ],
+      "disposition": "keep",
+      "pattern": "The agent-tools collaboration CLIs are a persistent friction surface: help text omits required flags, flag shapes are remembered-wrong, the 'CLI' rebuilds from TypeScript on every invocation, and per-topic bins lack shared arg parsing."
+    },
+    {
+      "id": "C14",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w04",
+        "w06",
+        "w08",
+        "w11",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "Continuity/handoff payloads and opener-prescribed steps go stale between authorship and consumption because parallel agents land commits in the gap; the opener is a hypothesis to verify against live git, never a reservation or ground truth."
+    },
+    {
+      "id": "C15",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w07",
+        "w09",
+        "w10",
+        "w11",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "Comms infrastructure has a recurring class of silent failures: generated logs overwrite manual edits, render is a full constructive overwrite that destroys narrative, watcher first-run replays the full history burying live events, self-exclusion filters drop directed events, events land in retired directories, and CLI exits 0 while transferring/parsing nothing."
+    },
+    {
+      "id": "C16",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w05",
+        "w07",
+        "w08",
+        "w09",
+        "w10",
+        "w11"
+      ],
+      "disposition": "keep",
+      "pattern": "Direct agent-to-agent coordination (peer sidebars, comms-event negotiation, sole-marshal write concentration) repeatedly outperforms owner-mediation and hub-and-spoke coordinator+helpers: sidebars lock designs in minutes while directed-message volume produces logistics not decisions, and owner intervention is classified as evidence of a missing autonomy primitive, never a cure."
+    },
+    {
+      "id": "C17",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w05",
+        "w08",
+        "w09",
+        "w11",
+        "w12",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "Agents surface forced or already-decided conclusions as AskUserQuestion menus / balanced A/B forks rather than stating the verdict — manufacturing optionality, hedging under guise of humility, and passing analysis responsibility back; this is corrected as present-verdicts-not-menus across many sessions."
+    },
+    {
+      "id": "C18",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w05",
+        "w09",
+        "w11",
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "Owner direction is a live superseding stream and the owner's word beats any plan/non-goal/reviewer; agents repeatedly hold for permission already granted, re-litigate settled decisions, treat skill-invocation/peer-hearsay as owner-direction, and guard the owner's past decisions against the owner."
+    },
+    {
+      "id": "C19",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w03",
+        "w07",
+        "w12",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "Escalating, disproportionate build/type/tooling friction from a plan step is a verdict on the wrong SHAPE, not a patch target; reasoning inside the existing system's shape (cowpath) rather than redesigning from impact/value recurs and is repeatedly lifted up an abstraction level by the owner."
+    },
+    {
+      "id": "C20",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w02",
+        "w03",
+        "w07"
+      ],
+      "disposition": "keep",
+      "pattern": "TDD/atomic-green discipline is mandated but recurringly breached by the rush impulse: skipping tests, multi-commit-TDD-skip windows leaving suites RED across commits, and authoring hedging carve-outs to the absolute no-skip rule — reframed from validation to a design discipline where test and product code land atomically."
+    },
+    {
+      "id": "C21",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w02",
+        "w03",
+        "w04"
+      ],
+      "disposition": "keep",
+      "pattern": "Vendor/platform support and SDK behaviour are repeatedly wrong in the agent's mental model and must be checked against latest published versions and official docs, not installed source or stale assumptions: MCP client capability gaps (ChatGPT/Claude Code/VS Code), Sentry CLIs and version gaps, SDK semantics, agent-facing CLI modes."
+    },
+    {
+      "id": "C22",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w02",
+        "w04",
+        "w06",
+        "w08",
+        "w13",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "Static analysers and gates require shape/data-flow changes, not runtime guards or relocations, and can report stale/zombie/false-green results: CodeQL redos wants static regex shape, Sonar HIGH findings are stale snapshots, depcruise fires on orphan empty barrels, markdownlint silently passes zero files without --dot, knip ignores root entries without workspaces['.']."
+    },
+    {
+      "id": "C23",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w02",
+        "w04",
+        "w07"
+      ],
+      "disposition": "keep",
+      "pattern": "Turbo and pre-commit caching produce false-green signals: cached results mask failures and broken tests, remote cache poisoning replays stale errors, cached format:root reports clean while the hook finds drift — the gate must be re-run with --force or via the authoritative hook, never trusted from cache."
+    },
+    {
+      "id": "C24",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w03",
+        "w09",
+        "w13",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "Build-time artefacts (widget HTML, synonyms, graph data, generated types, MCP protocol types) served at runtime must be codegen-time committed TypeScript constants consumed via DI, not runtime filesystem reads — process.cwd()/path resolution differs on Vercel Lambda and dist lags src edits across the build seam."
+    },
+    {
+      "id": "C25",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w04",
+        "w05",
+        "w11",
+        "w13",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "The memory/Practice architecture evolved structurally over the corpus: from a four-layer napkin→distilled→experience→permanent model to a three-tier instance/repo/Practice content model, with PDRs added as portable practice doctrine distinct from repo-specific ADRs, threads as the continuity unit, and graduation governed by a reviewer quorum."
+    },
+    {
+      "id": "C26",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w07",
+        "w10",
+        "w12",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "References/documentation must point only at more-fundamental, durable, portable artefacts: ADRs are permanent and plans ephemeral (plans cite ADRs never reverse), no provenance/tombstone pointers, content-addressable not line-number citations, and Practice-Core must carry zero machine-local/repo-specific paths."
+    },
+    {
+      "id": "C27",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "Tombstones / negation-contrast memorials of removed ideas are written precisely while executing tombstone-removal tasks (recursive self-contradiction), and the no-monuments doctrine itself nearly leaves a pointer-tombstone — a self-similar reflex the owner repeatedly corrects ('we reject bananas or kittens')."
+    },
+    {
+      "id": "C28",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w06",
+        "w08",
+        "w12",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Shared memory/state files (napkin, distilled, claims, comms, continuity) are always writable and committable by any agent at any time, and closeout memory-preservation writes must be unconditional — never blocked by claims, coordination collisions, or fitness; the trade-off accepts git-blame attribution ambiguity to prevent log jams."
+    },
+    {
+      "id": "C29",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w03",
+        "w08",
+        "w09",
+        "w12",
+        "w14",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Agents assert completion/readiness from a proxy (subset gate, sub-agent report, green partial check, plan status banner, tests-not-observation) rather than running the canonical whole gate or observing live behaviour; the gap surfaces only when owner or peer hits the real surface, and PR-readiness needs re-verifying zero-threads at the exact declaration moment because bots post async."
+    },
+    {
+      "id": "C30",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08",
+        "w10",
+        "w12",
+        "w14",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Mechanical shell/markdown foot-guns recur per-window across agents: zsh backtick command-substitution and unquoted glob expansion in search/comms commands, markdownlint --fix corrupting literal +/#/- in prose, rg -r vs -n misuse, and rg/fd skipping dotdirs without --hidden."
+    },
+    {
+      "id": "C31",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w06",
+        "w07",
+        "w09",
+        "w12",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "Agents skip session-open registration (claim + bootstrap comms event), open claims that don't cover all files they later edit, and treat an empty/point-in-time claims registry as 'solo window' — recurring because light-audit sessions that grow into substantive edits never produce an artefact-gravity event forcing registration."
+    },
+    {
+      "id": "C32",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "Heartbeats and process-liveness are decoupled from real delivery: templated heartbeat bodies stay stale, a team can be 'alive' (heartbeats, claims, broadcasts) while delivering nothing, watcher processes stay alive without consuming events, and liveness must be derived from the commit stream as well as comms."
+    },
+    {
+      "id": "C33",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w05",
+        "w07",
+        "w11",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "Process/coordination activity that produces no committed assets (deliberation, plans creating plans, doctrine creating doctrine, ceremony) manufactures a feel-state of progress and completion while the actual goal variable never moves — invisible to all commit-based meters."
+    },
+    {
+      "id": "C34",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w03",
+        "w07",
+        "w11"
+      ],
+      "disposition": "kill",
+      "pattern": "Worktree/parallel-dispatch isolation is an illusion in multiple ways: nested worktrees give false-clean dependency runs (Node walks up to parent node_modules), parallel isolation:worktree subagents inherit wrong base commits and write to main-repo absolute paths, and pnpm check's clean step wipes shared dist breaking the whole team's CLI mid-session."
+    },
+    {
+      "id": "C35",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w03",
+        "w12",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "The data/corpus is the fixed source of truth and all schemas, plans, tool contracts, and types must be corrected toward it; a major arc (EEF tools) was built for months on an impossible join because the tool/output shape drove the design instead of the data asset."
+    },
+    {
+      "id": "C36",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08",
+        "w09",
+        "w10",
+        "w11",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "Roles and coordinator seats must be selected from live coordination pressure and dissolved when that pressure clears (peer-default at <=3 agents, Director dissolve), but the role's gravity repeatedly keeps agents performing seats past their need and coordinators doing implementer-class dispatch."
+    },
+    {
+      "id": "C37",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w09",
+        "w10",
+        "w13",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Director/coordinator handoff has two distinct moments — outgoing pre-positioning broadcast and incoming active-acknowledgement — and only the latter transfers authority; handover precedes own closeout (optimise for continuation not session tidiness), and stale coordinator crons must be deleted at the handoff moment."
+    },
+    {
+      "id": "C38",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "Context-depth self-assessment is confabulated: agents anchor to a 200k mental model on 1M sessions, assert 'spent/context-deep' without measuring, and the handover trigger is the effectiveness-sigmoid (~50% peak) not the token-capacity ceiling."
+    },
+    {
+      "id": "C39",
+      "kind": "distributional",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "LLMs judge atomically well but aggregate faithfully badly: per-item verdicts are sound while aggregate recall/counts are wrong, and a verification sub-agent's factual-false-negative rate (~50-83%) on coverage/withdrawal audits makes mass-withdrawal on its verdict cause irreversible signal loss — deterministic code must do all counting/routing and keep is the safe default."
+    },
+    {
+      "id": "C40",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w05",
+        "w07"
+      ],
+      "disposition": "kill",
+      "pattern": "Severity/criticality labels (CRITICAL, HARD, critical fitness) name importance not urgency; agents repeatedly read escalation vocabulary as a driver of fast action when the correct response to severity is more care and slower processing — the no-speed-pressure / rush-impulse failure dressed in escalation language."
+    },
+    {
+      "id": "C41",
+      "kind": "meta",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w05",
+        "w06",
+        "w07",
+        "w08",
+        "w11",
+        "w15"
+      ],
+      "disposition": "keep",
+      "pattern": "The system is recursively self-similar / dogfooding: the team repeatedly suffers in real time exactly the coordination and tooling gaps it is simultaneously building cures for, and protective mechanisms validate themselves (or fail to fire) on the very session that installs them — treated as FRAME-1 evidence the work is correctly aimed."
+    },
+    {
+      "id": "C42",
+      "kind": "absence",
+      "isAbsenceClaim": true,
+      "supportingWindows": [
+        "w05",
+        "w11",
+        "w13",
+        "w14",
+        "w15"
+      ],
+      "disposition": "kill",
+      "pattern": "Owner-mediation remained the load-bearing evidence loop for agent-installed protections across the corpus: named tripwires, PDRs, and gates repeatedly failed to catch the failure modes they were designed for, with the owner's intervention as the only reliable catch — a persistent absence of working autonomous enforcement."
+    },
+    {
+      "id": "C43",
+      "kind": "absence",
+      "isAbsenceClaim": true,
+      "supportingWindows": [
+        "w04",
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "The enforce edge of capture→distil→graduate→enforce is structurally absent/open across the whole corpus: enforcement almost always lands as more passive prose (a no-op actuator), so the action-time mechanical interrupt that would actually stop the recurring semantic pathogens is named as over-ripe but never built."
+    },
+    {
+      "id": "C44",
+      "kind": "absence",
+      "isAbsenceClaim": true,
+      "supportingWindows": [
+        "w07",
+        "w08",
+        "w10",
+        "w11",
+        "w13",
+        "w15"
+      ],
+      "disposition": "kill",
+      "pattern": "The napkin is declared to track 'mistakes, corrections, surprises, and what works', but the 'what works' / positive-success category is conspicuously thin relative to the dominant mistake/correction/surprise content — durable success-pattern affirmations appear only sparsely and mostly as quantified one-offs rather than a sustained category."
+    },
+    {
+      "id": "C45",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w05",
+        "w10",
+        "w13"
+      ],
+      "disposition": "keep",
+      "pattern": "Discoverability of landed work and new artefacts requires multiple coordinated surfaces (file + continuity table row + cross-reference + active-napkin pointer + comms broadcast + index sweep); presence is not discoverability, and new artefact classes/threads land invisible to fresh-agent navigation when index/continuity surfaces aren't swept."
+    },
+    {
+      "id": "C46",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w09",
+        "w14"
+      ],
+      "disposition": "keep",
+      "pattern": "Strictness-at-the-boundary doctrine (no aliases, no fallbacks/heuristics, fail-fast, replace-don't-bridge) is owner-mandated but repeatedly breached: agents add smart fallbacks/scope-inference, keep compat aliases, and bridge controlled surfaces instead of deriving from authoritative data."
+    },
+    {
+      "id": "C47",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w01",
+        "w02",
+        "w03",
+        "w12"
+      ],
+      "disposition": "keep",
+      "pattern": "Plans/decisions reshaped mid-execution are not done when the new shape is built once — the correction must be propagated to every reference; incomplete sweeps (markdown, .ts, .mjs, .json, sibling references, parent plans, indexes) silently re-assert the old shape everywhere the sweep missed."
+    },
+    {
+      "id": "C48",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w03",
+        "w04",
+        "w12"
+      ],
+      "disposition": "kill",
+      "pattern": "Scope-narrowing/remediation contamination is always larger than it first appears: agents repeatedly draw scope boundaries (limit the fix, defer the bigger piece) that the owner dissolves, and safe narrowing requires every removed item get a named owner plan plus a translation-completeness crosswalk."
+    },
+    {
+      "id": "C49",
+      "kind": "regime",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08",
+        "w09"
+      ],
+      "disposition": "keep",
+      "pattern": "Plans must commit to concrete scheduled sequence positions with the full interface, home, and envelope shipping from day one and only implementations phased ('sequence not scope-reduction', 'schedule it, no imaginary flows'); conditional-trigger framing ('when X ships', 'depends on future Y') stalls and is owner-corrected."
+    },
+    {
+      "id": "C50",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08",
+        "w09"
+      ],
+      "disposition": "keep",
+      "pattern": "Agents default to gendered pronouns for peer agents whose names are gender-neutral phrase-pairs; the correct default (they/them unless self-declared) was captured in an archived napkin but never graduated, causing the same correction to recur across sessions."
+    }
+  ],
+  "recallMatches": [
+    {
+      "baselineId": "capture-does-not-cure",
+      "verdict": "subsumes",
+      "matchedCandidateId": "C02",
+      "note": "C02 states authoring/knowing a named anti-pattern does not inoculate against re-enacting it and the enforce edge fails under the same fluency, fully covering the declarative-capture-is-not-procedural-inhibition claim; C43 adds the missing action-time interrupt corollary."
+    },
+    {
+      "baselineId": "inherited-state-is-a-hypothesis",
+      "verdict": "subsumes",
+      "matchedCandidateId": "C03",
+      "note": "C03 names accepting an inherited frame/snapshot/peer status as authority without first-hand re-grounding as the dominant root failure, and C14 specialises it to continuity payloads going stale as agents claim foundation-complete without re-verifying live git."
+    },
+    {
+      "baselineId": "coordinator-amplifies-unseen-defect",
+      "verdict": "partial",
+      "matchedCandidateId": "C36",
+      "note": "C36/C37 cover coordinator-seat gravity and handoff but the run does not surface the specific double-bind of a coordinator writing artefacts subject to the very gates/races it manages with caution misread as a licence for inaction."
+    },
+    {
+      "baselineId": "commit-window-single-agent-assumption",
+      "verdict": "refines",
+      "matchedCandidateId": "C11",
+      "note": "C11 (foreign-stage absorption, cure refined from git add to also git commit -- pathspec) and C10 (shared index sweeping peer-staged files) capture the single-agent-ownership assumption at finer mechanical grain than the baseline."
+    },
+    {
+      "baselineId": "repo-wide-autofix-sweep-footgun",
+      "verdict": "partial",
+      "matchedCandidateId": "C11",
+      "note": "C11/C10 capture peer-stage absorption and shared-index sweeping but the run does not isolate the specific mechanism of repo-wide auto-fix output (format:root/markdownlint:root) being promoted into the staged set by pre-commit."
+    },
+    {
+      "baselineId": "cron-template-overrides-owner-direction",
+      "verdict": "missed",
+      "note": "No kept/reroute finding names the cron-prompt-body-fires-before-reading-owner-direction failure that silently overrides pause/stop/hold each cycle; C18 covers owner-direction supremacy generally but not this template mechanism."
+    },
+    {
+      "baselineId": "compaction-is-a-checkpoint",
+      "verdict": "partial",
+      "matchedCandidateId": "C29",
+      "note": "C29 (assert completion from a proxy not live observation) and C14 (opener is a hypothesis to verify) overlap the re-verify-after-discontinuity theme but the run does not name compaction as a checkpoint requiring re-verification of watcher/cron/staged/claims."
+    },
+    {
+      "baselineId": "peer-primary-topology-regime",
+      "verdict": "partial",
+      "matchedCandidateId": "C10",
+      "note": "C10 names the shared-checkout coupling and shared-resource contention as the cost, and C16 the peer-sidebar topology, but neither cleanly frames peer-primary dual-loop disjoint-lane operation as a distinct named regime whose cost is contention not protocol."
+    },
+    {
+      "baselineId": "claims-open-minimum-field-silent-reject",
+      "verdict": "subsumes",
+      "matchedCandidateId": "C13",
+      "note": "C13 names the agent-tools collaboration CLIs as a persistent friction surface whose help text omits required flags and flag shapes are remembered-wrong, subsuming the specific claims-open silent-rejection friction."
+    },
+    {
+      "baselineId": "re-run-git-status-post-gate",
+      "verdict": "subsumes",
+      "matchedCandidateId": "C29",
+      "note": "C29 explicitly calls out a pre-gate status producing a false-clean/false-readiness claim and the need to re-verify at the declaration moment; C14 reinforces that the diff surface widens in the gap."
+    },
+    {
+      "baselineId": "completion-language-overload",
+      "verdict": "refines",
+      "matchedCandidateId": "C29",
+      "note": "C29 (completion/readiness asserted from a proxy, gap surfaces at the real surface) captures the truthful-closeout-needs-an-explicit-verdict substance, with C08's anti-deferral routing reinforcing the explicit-verdict requirement."
+    },
+    {
+      "baselineId": "commit-editmsg-single-writer",
+      "verdict": "refines",
+      "matchedCandidateId": "C11",
+      "note": "C11 captures wrong-attribution commits under concurrent staging/handover at finer grain; the COMMIT_EDITMSG single-writer mechanism is a specific instance of the foreign-stage/handover wrong-attribution class it names."
+    },
+    {
+      "baselineId": "record-staged-full-index-fingerprint",
+      "verdict": "refines",
+      "matchedCandidateId": "C10",
+      "note": "C10 names the shared git index causing commit-sweeping of peer-staged files and C12 the commit-queue pre-stage sequence; the record-staged full-index fingerprint is the precise mechanism within that class."
+    },
+    {
+      "baselineId": "identity-tuple-insufficiency",
+      "verdict": "missed",
+      "note": "No kept/reroute finding addresses the (name, platform, session-prefix) routing tuple being unable to disambiguate one renamed session from three; C50 touches identity/pronouns and C16 coordination but not tuple insufficiency for session disambiguation."
+    },
+    {
+      "baselineId": "presence-vs-ownership-collapse",
+      "verdict": "refines",
+      "matchedCandidateId": "C31",
+      "note": "C31 names agents opening claims that do not cover later edits and treating registration loosely; the team-start Claimed-paths-at-presence-announcement herd-claim is a finer-grained instance of the registration/claim-timing failure it captures."
+    },
+    {
+      "baselineId": "skill-invocation-not-owner-direction",
+      "verdict": "subsumes",
+      "matchedCandidateId": "C18",
+      "note": "C18 explicitly lists treating skill-invocation/peer-hearsay as owner-direction among the owner-direction-is-a-live-superseding-stream failures, directly covering the baseline."
+    },
+    {
+      "baselineId": "reviewer-pre-execution-catch",
+      "verdict": "subsumes",
+      "matchedCandidateId": "C05",
+      "note": "C05 names multi-specialist convergence and pre-implementation review as the highest-ROI defect-catching mechanism surfacing issues no single round/generalist/static gate catches, the exact author-lacks-the-reviewer's-fresh-eyes mechanism."
+    },
+    {
+      "baselineId": "reviewer-cycle-split-on-convergence",
+      "verdict": "subsumes",
+      "matchedCandidateId": "C19",
+      "note": "C19 (escalating friction is a verdict on the wrong shape, lift up an abstraction level) carries the scope-narrow-to-a-successor-cycle response; C08's route-to-a-named-lane reinforces refusing to carry known-bad scope forward."
+    }
+  ],
+  "corroborationClaims": [
+    {
+      "candidateId": "C01",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md",
+        ".agent/memory/active/patterns/plan-as-artefact-gravity.md"
+      ]
+    },
+    {
+      "candidateId": "C02",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/fluency-is-a-failure-vector.md"
+      ]
+    },
+    {
+      "candidateId": "C03",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/inherited-framing-without-first-principles-check.md",
+        ".agent/memory/active/patterns/substrate-pointer-read-as-current-state.md",
+        ".agent/rules/verify-dont-trust.md"
+      ]
+    },
+    {
+      "candidateId": "C04",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/tool-output-framing-bias.md",
+        ".agent/memory/active/patterns/non-leading-reviewer-prompts.md"
+      ]
+    },
+    {
+      "candidateId": "C05",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/pre-implementation-plan-review.md",
+        ".agent/memory/active/patterns/different-lens-reviewer-divergence.md",
+        ".agent/rules/pre-execution-code-expert-review-per-loop-cycle.md"
+      ]
+    },
+    {
+      "candidateId": "C06",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/hook-as-question-not-obstacle.md",
+        ".agent/rules/never-disable-checks.md"
+      ]
+    },
+    {
+      "candidateId": "C07",
+      "claimedHomePaths": [
+        ".agent/rules/no-warning-toleration.md",
+        ".agent/rules/dont-break-build-without-fix-plan.md"
+      ]
+    },
+    {
+      "candidateId": "C08",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/findings-route-to-lane-or-rejection.md",
+        ".agent/memory/active/patterns/deferred-at-write-time-is-unmade-load-bearing-decision.md"
+      ]
+    },
+    {
+      "candidateId": "C09",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/substance-before-fitness.md",
+        ".agent/rules/knowledge-preservation-over-fitness-warnings.md"
+      ]
+    },
+    {
+      "candidateId": "C10",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/whole-tree-gate-red-on-untouched-files.md",
+        ".agent/memory/active/patterns/untracked-wip-whole-tree-lint-blocker.md"
+      ]
+    },
+    {
+      "candidateId": "C11",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/peer-commit-absorption-third-direction.md",
+        ".agent/memory/active/patterns/stage-what-you-commit.md",
+        ".agent/rules/stage-by-explicit-pathspec.md"
+      ]
+    },
+    {
+      "candidateId": "C12",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/commit-window-discipline-under-parallel-agents.md",
+        ".agent/rules/use-agent-comms-log.md"
+      ]
+    },
+    {
+      "candidateId": "C13",
+      "claimedHomePaths": [
+        ".agent/rules/use-built-agent-tools-cli.md"
+      ]
+    },
+    {
+      "candidateId": "C14",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/substrate-pointer-read-as-current-state.md",
+        ".agent/rules/handoff-messages-self-contained.md"
+      ]
+    },
+    {
+      "candidateId": "C16",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/inter-agent-sidebar-with-default-action.md"
+      ]
+    },
+    {
+      "candidateId": "C17",
+      "claimedHomePaths": [
+        ".agent/rules/present-verdicts-not-menus.md"
+      ]
+    },
+    {
+      "candidateId": "C18",
+      "claimedHomePaths": [
+        ".agent/rules/precedence-is-not-approval.md"
+      ]
+    },
+    {
+      "candidateId": "C19",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/the-frame-was-the-fix.md",
+        ".agent/rules/plan-body-first-principles-check.md"
+      ]
+    },
+    {
+      "candidateId": "C25",
+      "claimedHomePaths": [
+        ".agent/rules/permanent-doc-is-the-consolidation-record.md",
+        ".agent/rules/new-rule-vs-pdr-clause.md"
+      ]
+    },
+    {
+      "candidateId": "C26",
+      "claimedHomePaths": [
+        ".agent/rules/no-machine-local-paths.md",
+        ".agent/rules/no-moving-targets-in-permanent-docs.md",
+        ".agent/memory/active/patterns/three-levels-of-reference-quality.md"
+      ]
+    },
+    {
+      "candidateId": "C27",
+      "claimedHomePaths": [
+        ".agent/rules/no-tombstones-for-removed-ideas.md"
+      ]
+    },
+    {
+      "candidateId": "C28",
+      "claimedHomePaths": [
+        ".agent/rules/important-state-not-in-temp-files.md"
+      ]
+    },
+    {
+      "candidateId": "C29",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/feel-state-of-completion-preceding-evidence-of-completion.md"
+      ]
+    },
+    {
+      "candidateId": "C31",
+      "claimedHomePaths": [
+        ".agent/rules/register-active-areas-at-session-open.md",
+        ".agent/rules/register-identity-on-thread-join.md"
+      ]
+    },
+    {
+      "candidateId": "C32",
+      "claimedHomePaths": [
+        ".agent/rules/liveness-heartbeat-cron.md",
+        ".agent/rules/agent-state-observable.md"
+      ]
+    },
+    {
+      "candidateId": "C36",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/shared-state-topology-is-a-coordinator-question.md"
+      ]
+    },
+    {
+      "candidateId": "C37",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/coordinator-as-slice-runner-short-by-one.md"
+      ]
+    },
+    {
+      "candidateId": "C43",
+      "claimedHomePaths": [
+        ".agent/memory/active/patterns/actuate-mechanism-in-the-same-breath.md"
+      ]
+    },
+    {
+      "candidateId": "C45",
+      "claimedHomePaths": [
+        ".agent/rules/continuity-surface-commits-as-orphans.md",
+        ".agent/memory/active/patterns/readme-as-index.md"
+      ]
+    },
+    {
+      "candidateId": "C46",
+      "claimedHomePaths": [
+        ".agent/rules/strict-validation-at-boundary.md",
+        ".agent/rules/replace-dont-bridge.md"
+      ]
+    },
+    {
+      "candidateId": "C50",
+      "claimedHomePaths": [
+        ".agent/rules/agents-default-no-gender.md",
+        ".agent/memory/active/patterns/surface-dont-adopt-a-live-peers-name.md"
+      ]
+    }
+  ],
+  "discountNote": "This run's findings skew toward broad, high-window-support recurrence patterns (C01-C18) that map cleanly onto durable homes, and reliably re-found the emergent/single-window baselines that share that broad shape. Recall is materially weaker on narrow single-mechanism baselines: three baselines (cron-template-overrides-owner-direction, identity-tuple-insufficiency, plus the auto-fix-sweep and compaction-checkpoint mechanisms only partially captured) name a specific actuator the run folded into a broader parent finding or omitted entirely. The keep-heavy disposition (only four kills) means coverage is generous by construction, so subsumes/refines verdicts should be read as 'the substance survives inside a larger finding' rather than 'the run isolated this exact mechanism' — the finer the baseline grain, the more likely its distinct signal is diluted.",
+  "synthesisNotes": [
+    "The run's strongest recall is on the artefact-gravity / capture-does-not-cure / inherited-state-is-a-hypothesis cluster (C01, C02, C03), which subsume multiple baselines at once and already have well-established durable homes, indicating these are mature, repeatedly-confirmed corpus patterns rather than fresh discoveries.",
+    "Reviewer dynamics are captured as a clean dual pattern: C04 (convergence is amplification, verify first-hand) and C05 (pre-implementation/multi-lens review is highest-ROI), jointly covering both single-window reviewer baselines without conflation.",
+    "The shared-checkout / foreign-stage-absorption family (C10, C11, C12) refines four distinct commit-mechanism baselines (commit-window-single-agent, COMMIT_EDITMSG single-writer, record-staged full-index, autofix-sweep) into a smaller set of higher-grain findings — efficient consolidation, but it dissolves the per-mechanism specificity the baselines preserved.",
+    "Two baselines were genuinely missed: the cron-prompt-body overriding owner-direction each cycle, and the identity routing-tuple insufficiency — both narrow structural-actuator observations with no broad recurrence parent in the findings to absorb them.",
+    "Coordinator-specific failure modes are the weakest covered area: C36/C37 capture seat-gravity and handoff moments, but the coordinator-amplifies-its-own-unseen-defect double-bind (over-write vs under-write-as-inaction) is only partially present.",
+    "The owner-direction supremacy finding C18 cleanly and explicitly subsumes the skill-invocation-is-not-owner-direction baseline, one of the cases where a single-window baseline maps to an exact clause inside a kept finding.",
+    "The kill list (C34, C40, C42, C44, C48) removes worktree-isolation, severity-as-urgency, owner-mediation-as-absence, thin-what-works, and scope-contamination signals; none of these are among the 18 baselines, so the kills did not cost recall against this baseline set.",
+    "Corroboration is high-confidence: every kept candidate I claim has graduated maps to at least one verified on-disk pattern or rule file, consistent with this being a well-consolidated corpus where most dominant patterns already have durable homes."
+  ]
+}

@@ -78,6 +78,18 @@ edit to `statement`.
   external-evidence work.
 - Do **not** execute during a planning turn; tests assert **effects**, never message-constants.
 
+**Cross-link — the large-corpus-analysis method applies to this estate review (2026-06-29, Wren stirs Rainbow).**
+The proving run of the corpus-analysis method (over the napkin timeseries) generalises to
+this non-timeseries estate — see "Generalisation beyond the timeseries" in
+[`large-corpus-analysis-runbook-v2-design-2026-06-29.md`](../../../reports/agentic-engineering/large-corpus-analysis-runbook-v2-design-2026-06-29.md).
+The transfer: parameterise the **partition axis** (subgraph/neighbourhood, weighted by
+leverage/connectivity, not recency) and the **negative-space source** (here **relational
+absence** — orphan plans, unserved goals, undeclared dependencies — which the ADR-200
+idea-graph makes into DETERMINISTIC edge-queries). Applied to the estate, the method
+becomes a renderer over the idea-graph and its highest-value lens (absence detection)
+becomes cheap and exact; the method's graph-substrate future converges with ADR-200's
+deliverable. Apply once WS4 proves the graph end-to-end.
+
 ## Settled corpus-design decisions — do not re-litigate
 
 These protect the restructure from re-opening settled questions (folded from the Kiln guards Patina
@@ -128,6 +140,7 @@ loss-scan):
 | Drake hunts Beeswax | claude-code | claude-opus-4-8[1m] | 89a5e2 | implementer pickup of Cutter's boundary; settled + encoded the four owner-gated V0 governance calls (enum baselines, folder collapse, 30-day gate-expiry); survey HOLD-then-lift; continuity refresh (repo-continuity + this record) | 2026-06-21 | 2026-06-21 |
 | Vesuvius calls Quench | claude-code | claude-opus-4-8 | 92cefc | Director (coordinator) — received role from Cutter (PDR-064 Moment 2), rotated to Birch tracks Arbor; commit-warden landed 9 commits (Ferret / Volcano / Cutter / Drake handoffs + decision-lenses + frictions); wrote the ordered decision lenses into principles.md; opened ArcAngel with Drake; directed the multi-window survey launch | 2026-06-21 | 2026-06-21 |
 | Birch tracks Arbor | claude-code | claude-opus-4-8 | 6c2090 | Director (coordinator) — successor to Vesuvius calls Quench (PDR-064 Moment 2); coordinated two clean role rotations (Drake→Ganymede, Hobby→Pinnace), folded both into continuity, set+confirmed the orchestrator pickup gate, corrected survey-output routing; **Director seat DISSOLVED to n=2 owner-visible on owner direction — retired, seat empty unless owner re-establishes** | 2026-06-21 | 2026-06-21 |
+| Tuna stirs Fathom | claude-code | claude-opus-4-8[1m] | 9767ba | added the §"Governing invariant" (every organising axis is registered + validated) to the controlling plan — the estate-rewrite's governance face of the graph-convergence, binding WS2/WS3/WS5/WS4; owner-directed 2026-06-30 (no source touched) | 2026-07-01 | 2026-07-01 |
 | Pinnace hunts Marsh | claude-code | claude-opus-4-8[1m] | 868a9b | survey orchestrator (successor to Hobby wakes Halo, PDR-063); ran Pass-1 to AEE 70/70 complete; implemented + validated + committed the owner substance re-aim (substance_class summary, content_quality, idea-granular salvage_value inventory); folded the owner's idea-level correction; conserved + committed all findings + scaffold; handed to Aardvark turns Whisper | 2026-06-21 | 2026-06-21 |
 | Ganymede herds Penumbra | claude-code | claude-opus-4-8[1m] | 74cb92 | implementer (V1-fold / alignment, successor to Drake hunts Beeswax); delivered the owner-priority intent-alignment review (diagnosed the form-vs-substance theater risk, re-aimed to substance); encoded + committed the Body-3 + V0 substance re-aim (`14877e8d0`, `61489ce7e`); handed the V1-fold lane to Saffron holds Sepal | 2026-06-21 | 2026-06-21 |
 | Saffron holds Sepal | claude-code | claude-opus-4-8[1m] | 0f0399 | implementer (V1-fold / Stage-3, successor to Ganymede herds Penumbra); authored + hardened the 3 Pass-2 substance specs (falsifiable capability-coverage effectiveness rubric; effectiveness-reviewer resolved owner-directed); ran the owner-directed cleanup sweep (5 orphan-commits + stale-state process-and-archive-move, not delete); fixed the comms-watch reference-shape doctrine bug; retired this session | 2026-06-21 | 2026-06-21 |

@@ -239,6 +239,17 @@ time.
    per agent. And the **single authoritative surface holds for every consumer**, the
    statusline included (open question 3). This supersedes the single-signal framing of
    clause 1 and clause 5 via a future PDR amendment, not an in-place reinterpretation.
+6. **Liveness after an ungraceful death — an external staleness-reaper (model-level,
+   open; re-homed from the host open-questions register 2026-07-02).** "Stop your
+   heartbeat at stand-down" cures only the *graceful* case. In a model-availability
+   outage a session's monitors die with it, so it can neither re-arm nor stop its own
+   heartbeat, leaving a stale-but-"active" liveness signal (~8h of false "active"
+   observed when the worktree-pilot team went down in exactly such an outage). Every
+   self-emitted signal shares this failure mode, so the composed mechanism of open
+   question 5 likely needs a **dead-man's-switch primitive that reaps from outside
+   the session** rather than relying on self-stop. What that external reaper is — and
+   what may operate it — is an owner architectural decision; the graceful-case cure
+   is in place, so this is unresolved but not blocking.
 
 ## Notes
 

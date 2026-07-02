@@ -1,0 +1,130 @@
+{
+  "downloadedAt": "2026-06-10T16:43:00.027Z",
+  "source": "https://open-api.thenational.academy/api/bulk",
+  "files": [
+    {
+      "file": "art-primary.json",
+      "sizeBytes": 10506869
+    },
+    {
+      "file": "art-secondary.json",
+      "sizeBytes": 10884758
+    },
+    {
+      "file": "citizenship-secondary.json",
+      "sizeBytes": 22435429
+    },
+    {
+      "file": "computing-primary.json",
+      "sizeBytes": 7646992
+    },
+    {
+      "file": "computing-secondary.json",
+      "sizeBytes": 16341025
+    },
+    {
+      "file": "cooking-nutrition-primary.json",
+      "sizeBytes": 3657561
+    },
+    {
+      "file": "cooking-nutrition-secondary.json",
+      "sizeBytes": 2328986
+    },
+    {
+      "file": "design-technology-primary.json",
+      "sizeBytes": 7718837
+    },
+    {
+      "file": "design-technology-secondary.json",
+      "sizeBytes": 11504708
+    },
+    {
+      "file": "english-primary.json",
+      "sizeBytes": 95233168
+    },
+    {
+      "file": "english-secondary.json",
+      "sizeBytes": 76454552
+    },
+    {
+      "file": "french-primary.json",
+      "sizeBytes": 257419
+    },
+    {
+      "file": "french-secondary.json",
+      "sizeBytes": 1121389
+    },
+    {
+      "file": "geography-primary.json",
+      "sizeBytes": 12784437
+    },
+    {
+      "file": "geography-secondary.json",
+      "sizeBytes": 35288662
+    },
+    {
+      "file": "german-secondary.json",
+      "sizeBytes": 1193322
+    },
+    {
+      "file": "history-primary.json",
+      "sizeBytes": 10265298
+    },
+    {
+      "file": "history-secondary.json",
+      "sizeBytes": 30842139
+    },
+    {
+      "file": "maths-primary.json",
+      "sizeBytes": 64936070
+    },
+    {
+      "file": "maths-secondary.json",
+      "sizeBytes": 82330371
+    },
+    {
+      "file": "music-primary.json",
+      "sizeBytes": 13039748
+    },
+    {
+      "file": "music-secondary.json",
+      "sizeBytes": 13273529
+    },
+    {
+      "file": "physical-education-primary.json",
+      "sizeBytes": 1233427
+    },
+    {
+      "file": "physical-education-secondary.json",
+      "sizeBytes": 13435592
+    },
+    {
+      "file": "religious-education-primary.json",
+      "sizeBytes": 10384082
+    },
+    {
+      "file": "religious-education-secondary.json",
+      "sizeBytes": 26702388
+    },
+    {
+      "file": "schema.json",
+      "sizeBytes": 10857
+    },
+    {
+      "file": "science-primary.json",
+      "sizeBytes": 20213050
+    },
+    {
+      "file": "science-secondary.json",
+      "sizeBytes": 62249932
+    },
+    {
+      "file": "spanish-primary.json",
+      "sizeBytes": 317046
+    },
+    {
+      "file": "spanish-secondary.json",
+      "sizeBytes": 1077674
+    }
+  ]
+}

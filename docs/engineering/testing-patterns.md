@@ -130,6 +130,27 @@ full-fidelity E2E tests alongside supertest.
 `toStrictEqual` not `toBe` for structural equality checks
 on spread-derived objects.
 
+## Rendered-Output Assertions
+
+Test a function that returns rendered or string output (a statusline
+renderer, a formatter, a layout assembler) by **observable relationships
+through the interface** — "the line containing X also contains Y",
+relative order, presence/absence — never geometry or exact content.
+
+- Forbid: pinned row indices (`rows[2]`), `toHaveLength` line counts,
+  exact ANSI-escape literals, whole-object `.toEqual` on the parsed
+  result. A harmless layout reflow or an added field must not break a
+  test that proves nothing about behaviour.
+- Strip ANSI before asserting visible text; prefer `toMatchObject` over
+  `.toEqual` so additive fields don't break unrelated tests.
+- Write helpers (line-containing-needle, relative-index, strip-ANSI) and
+  assert relationships. Treat any `rows[N]` / line-count / exact-escape
+  assertion on rendered output as a coupling smell to remove.
+
+This is the rendered-output specialisation of testing-strategy's "test
+behaviour through public interfaces; assert effects, not internal
+constants". (Owner-corrected twice in one session, 2026-06-29.)
+
 ## Acceptance Value-Proxies
 
 Acceptance value-proxies must compare against independent ground-truth
@@ -172,6 +193,9 @@ execution.
 - After refactoring entry points (removing `dotenv`, changing `loadRuntimeConfig`
   signature), check E2E tests that launch the process directly — they break when the
   entry-point contract changes.
+- Removing a test (e.g. deleting an audit-shaped constant assertion) can orphan the
+  export it referenced — knip then blocks the commit. Un-export or delete the orphan
+  in the same change.
 
 ## Discriminating Fixtures
 

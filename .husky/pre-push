@@ -87,4 +87,10 @@ if ! pnpm turbo run --continue sdk-codegen build type-check lint test test:e2e t
   exit 1
 fi
 
+echo "🔤 Scanning file encoding (builds agent-tools, then runs the built scanner)..."
+if ! pnpm encoding:check; then
+  echo "❌ Encoding scan found a critical finding (invalid UTF-8, BOM, bidi/control byte, or U+FFFD)!"
+  exit 1
+fi
+
 echo "✅ Pre-push checks completed!"

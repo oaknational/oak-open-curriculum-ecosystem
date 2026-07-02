@@ -27,6 +27,14 @@ export interface StatuslineInputs {
   readonly model: string | undefined;
   /** `context_window.used_percentage`. */
   readonly usedPercentage: number | undefined;
+  /** `rate_limits.five_hour.used_percentage` — Claude.ai Pro/Max only, after the first response. */
+  readonly fiveHourPercentage: number | undefined;
+  /** `rate_limits.five_hour.resets_at` — Unix epoch seconds when the 5-hour window resets. */
+  readonly fiveHourResetsAt: number | undefined;
+  /** `rate_limits.seven_day.used_percentage` — Claude.ai Pro/Max only, after the first response. */
+  readonly sevenDayPercentage: number | undefined;
+  /** `rate_limits.seven_day.resets_at` — Unix epoch seconds when the 7-day window resets. */
+  readonly sevenDayResetsAt: number | undefined;
 }
 
 /**
@@ -43,13 +51,21 @@ interface StatuslinePayload {
   readonly workspace?: unknown;
   readonly model?: unknown;
   readonly context_window?: unknown;
+  readonly rate_limits?: unknown;
 }
 
-/** Expected shape of a nested object field (`workspace`, `model`, `context_window`). */
+/** Expected shape of a nested object field (`workspace`, `model`, `context_window`, a rate-limit window). */
 interface NestedField {
   readonly current_dir?: unknown;
   readonly display_name?: unknown;
   readonly used_percentage?: unknown;
+  readonly resets_at?: unknown;
+}
+
+/** Expected shape of the `rate_limits` object: one nested field per window. */
+interface RateLimitsField {
+  readonly five_hour?: unknown;
+  readonly seven_day?: unknown;
 }
 
 /**
@@ -86,6 +102,10 @@ export function planStatuslineExecution(rawJson: string): StatuslinePlan {
       cwd: workspaceDir(payload.workspace) ?? nonBlankString(payload.cwd),
       model: modelName(payload.model),
       usedPercentage: contextUsage(payload.context_window),
+      fiveHourPercentage: rateLimitNumber(payload.rate_limits, 'five_hour', 'used_percentage'),
+      fiveHourResetsAt: rateLimitNumber(payload.rate_limits, 'five_hour', 'resets_at'),
+      sevenDayPercentage: rateLimitNumber(payload.rate_limits, 'seven_day', 'used_percentage'),
+      sevenDayResetsAt: rateLimitNumber(payload.rate_limits, 'seven_day', 'resets_at'),
     },
   };
 }
@@ -115,11 +135,33 @@ function contextUsage(value: unknown): number | undefined {
   return isNestedField(value) ? finiteNumber(value.used_percentage) : undefined;
 }
 
+/**
+ * Extract one numeric field of one rate-limit window from the `rate_limits` object.
+ * Each window and field is independently optional (absent for non-Claude.ai
+ * sessions and before the first response), so a missing object, window, or value
+ * is `undefined`.
+ */
+function rateLimitNumber(
+  value: unknown,
+  window: keyof RateLimitsField,
+  field: 'used_percentage' | 'resets_at',
+): number | undefined {
+  if (!isRateLimitsField(value)) {
+    return undefined;
+  }
+  const windowField = value[window];
+  return isNestedField(windowField) ? finiteNumber(windowField[field]) : undefined;
+}
+
 function isStatuslinePayload(value: unknown): value is StatuslinePayload {
   return isPlainObject(value);
 }
 
 function isNestedField(value: unknown): value is NestedField {
+  return isPlainObject(value);
+}
+
+function isRateLimitsField(value: unknown): value is RateLimitsField {
   return isPlainObject(value);
 }
 

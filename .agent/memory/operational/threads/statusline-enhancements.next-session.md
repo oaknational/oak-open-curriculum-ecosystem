@@ -22,6 +22,19 @@ the theme's own contract (default foreground, optionally `DIM`), never a guessed
 or background-matched colour. Linked in the two current plans; carry the link
 into any future statusline plan.
 
+**RESPONSIVE LAYOUT IS POSSIBLE — terminal width and height ARE knowable
+(owner direction 2026-06-29).** The official page
+(`https://code.claude.com/docs/en/statusline`) specifies that Claude Code sets
+the **`COLUMNS` and `LINES` environment variables** to the current terminal
+dimensions before running the statusline command (Claude Code **v2.1.153+**).
+This is the supported way to read terminal size: stdout is captured, so
+`tput cols` and language-level width detection do NOT work — `COLUMNS`/`LINES`
+are the channel. This **enables responsive statusline layouts**: adapt segment
+inclusion, truncation, reflow, and the logo column to the live terminal width
+(e.g. drop or shorten low-priority segments on a narrow terminal, widen on a wide
+one). A strong candidate for a future enhancement lane. Distinct from the theme
+constraint above: the theme is NOT knowable, but the **dimensions ARE**.
+
 The unified Claude Code statusline lane: the Oak-mark logo column plus the
 session-shape indicators. Both render through the same `renderStatusline`, so
 they are one lane, not two. The original lane (Oak mark + the narrow
@@ -37,8 +50,8 @@ the agent holds an opinion on owner presence/engagement; **TEAM state** is the
 non-trivial derivation of the collective published session states; the statusline
 projects this session's slice. **Experimental discovery phase — NOT crystallised
 to a PDR/ADR yet.** Its active-agent set unions the published session states
-across claims ∪ comms ∪ ArcAngel ∪ sidebars, deduplicated by the (agent_name, id) identity tuple (PDR-076a, which PDR-095 delegates to),
-so read-only collaborators count. An interim
+across claims ∪ comms ∪ ArcAngel ∪ sidebars, deduplicated by the (agent_name, id) identity tuple
+(PDR-076a, which PDR-095 delegates to), so read-only collaborators count. An interim
 improvement landed 2026-06-14 (Orbit stirs Spectrum) ahead of the register:
 the resolver is now **session-relative** (team shape gated on a fresh own claim),
 a new **`observing`** shape (dim eyes) covers non-member-with-others-active, and
@@ -100,6 +113,55 @@ Thread scope). They are coordinated, not independent:
   comms/claims path anchoring); only §B1/B2 join the statusline lane. This hub is the
   coordination SSOT — record cross-member statusline state here.
 
+## DELIVERED 2026-06-29 (Wyvern mends Draught) — location rows, rate-limit gauges, countdowns
+
+Landed on `docs/consolidations`, commit `708cd57fc` (gate green: 1846 tests, type-check,
+lint 0 errors; `dist` rebuilt; rendered live). Plan:
+[`statusline-primary-worktree-rows.plan.md`](../../../plans/agent-tooling/current/statusline-primary-worktree-rows.plan.md)
+(DELIVERED — ready to archive; recreated the lost `πρ`/`ἔργ` plan). Shipped:
+
+- **Model + context share one row** (logo layout; already co-located in no-logo).
+- **Labelled location rows.** Primary checkout: name above branch, no label. Linked
+  worktree: primary name, its `coord:`-prefixed branch, then the worktree name and
+  branch. Keyed on `coordinationBranch` presence (git's no-same-branch-in-two-worktrees
+  rule makes that reliable) — no git-facts gatherer refactor. The `πρ:` label of the
+  first design was dropped on owner iteration.
+- **Rate-limit gauges + reset countdowns** on the top row after the collaboration icons:
+  `s:NN%(2h)` (session/five-hour) and `w:NN%(3d)` (week/seven-day). Consumed-% colour
+  ramp; DIM countdown (`formatCountdown`: coarsest of d/h/m, nearest, rollover-promoting,
+  past→`0m`). New `statusline-countdown.ts` + `statusline-usage.ts` (the latter split out
+  to keep `statusline-segments.ts` ≤250 lines). Parser reads `resets_at` (epoch seconds);
+  adapter does the one clock read + `resets_at − now`, keeping formatting pure.
+
+**Future enhancement lanes (owner: more enhancements to come):**
+
+- **Responsive layout** via `COLUMNS`/`LINES` (see the prominent grounding note above) —
+  strong candidate.
+- **`statusLine.refreshInterval`** set to 10s by the owner (2026-06-29) — the countdown now
+  ticks while idle as well as on render events. DONE.
+- **Refresh `statusline-inputs-research.md`** with the current-page deltas
+  (`footerLinksRegexes`, Windows config, "notifications share the status-line row", the
+  `// empty` rate-limit absence idiom) and bump its verified-against version.
+- **Statusline trace log (observability — deprioritized below spawn-flow).** Owner observed
+  (2026-06-30) the rate-limit/usage percentages "not recalculating on every re-render". Diagnosed
+  first-hand: the adapter is a **fresh process per render** with no cross-render cache (bar the
+  on-disk logo-frame counter), and `statusline-identity-input.ts` re-parses
+  `rate_limits.*.used_percentage` from the stdin payload every render — so the staleness is
+  **upstream**: Claude Code refreshes its rate-limit snapshot on its own cadence, identical numbers
+  arrive across renders, and the statusline faithfully reflects them (the gauge vanishes when
+  `rate_limits` is absent; the reset countdown ticks every render via the clock read, which reads as
+  the % being stuck). Because the root cause is upstream, **not a current priority**
+  (spawn-flow is).
+  The item: an **env-gated disk trace log** (off by default) capturing the raw `rate_limits` subtree
+  plus the parsed values and a timestamp per render — to (a) confirm the source value is static
+  across renders
+  and (b) give this deliberately-silent soft surface the observability it structurally lacks
+  (every
+  soft-fallback — git-io, the registry read, the experiments listing, each field parse — swallows to
+  absent with no trace; only real *throws* render the loud `⚠ statusline:` token today). Build
+  test-first when prioritised. (Moved here from the now-ready-to-archive
+  `statusline-primary-worktree-rows.plan.md` Follow-ons, 2026-06-30.)
+
 ## Current continuation
 
 - **Controlling plan (narrow lane, now ARCHIVED)**:
@@ -135,10 +197,13 @@ Thread scope). They are coordinated, not independent:
   (+ tests); `dist` rebuilt; 1232 agent-tools tests green; rendered live via the
   shim. Owner-directed live swap *ahead of* the modularisation plan, which is
   reframed to **harden** it on execution (relocate data to neutral `oak-acorn.ts`,
-  invert the renderer onto the `ResolvedLogo` contract). **Branch divergence to
-  reconcile:** this landed on `docs/planning-and-validation`, while the statusline
-  code lineage lives on `feat/comms-research`; a next session must
-  cherry-pick/reconcile so the swap is not stranded.
+  invert the renderer onto the `ResolvedLogo` contract). **Reconciliation
+  COMPLETE (verified 2026-06-29):** the 5×7 default, width-matched separator, and
+  per-render cycling all landed on `main` (under SHAs distinct from
+  `b45a6aedf`/`cb1c6e256`); statusline source is byte-identical across `main` and
+  the now-deleted `docs/planning-and-validation` / `feat/comms-research` local
+  branches. Nothing is stranded; those two branches were deleted 2026-06-29 as
+  fully-absorbed (their unique commits were practice/docs landed via PR).
 - **Landed (per-render logo cycling + blink experiment, 2026-06-16, Andromeda holds
   Radiance) — on `docs/planning-and-validation`**: `braille-sharp` now cycles **four
   seeded frames**, one per render, kept per session (`session_id`-keyed counter through an
@@ -171,17 +236,16 @@ Thread scope). They are coordinated, not independent:
 
 ## Next safe step (the fresh session's first move)
 
-**Owner direction (2026-06-16): the next session on this thread takes
-[`statusline-logo-modularisation.plan.md`](../../../plans/agent-tooling/current/statusline-logo-modularisation.plan.md).**
-Execute the three-layer separation (WS1 neutral logo mechanism → WS2 `OAK_ACORN`
-asset → WS3 soft-fail hardening → WS4 wiring), folding in the cycling
-reconciliation recorded there: the `LogoAsset` contract gains a frame dimension
-(settle the shape at WS1.1/WS2.1) and the renderer's interim `logoFrame` is
-removed at WS4.1 (the adapter resolves the frame, injects `ResolvedLogo.rows`).
-Read that plan's own grounded-execution-knowledge block first (the
-`refreshInterval`/WCAG caveat, the `dist`-rebuild note, the variant seeds). The
-session-state plan and the readiness pass below remain the parallel track, not
-the directed focus.
+**Owner direction (2026-06-29): the logo work is PAUSED.** The
+[`statusline-logo-modularisation.plan.md`](../../../plans/agent-tooling/current/statusline-logo-modularisation.plan.md)
+three-layer separation (and the cycling→frame-dimension reconciliation recorded
+there) is not the directed focus for now. The live mark on `main` stands as-is.
+When the logo work resumes, that plan's grounded-execution-knowledge block (the
+`refreshInterval`/WCAG caveat, the `dist`-rebuild note, the variant seeds) is the
+entry point. The directed focus is the session-state plan track (below).
+
+The superseded prior direction (2026-06-16) had the next session take the
+logo-modularisation plan; that is now paused.
 
 The **narrow** lane is COMPLETE on `feat/comms-research` (all workstreams landed,
 five glyphs verified, 1081 agent-tools tests green; commits this arc `a1fb8e9c4`
@@ -215,6 +279,8 @@ cadence. Also a research-relevant collaboration-visibility failure mode.
 
 | Platform | Model | Agent name | Role on this thread | last_session |
 | --- | --- | --- | --- | --- |
+| claude-code | Opus 4.8 (1M) | Tuna stirs Fathom | Moved the trace-log observability follow-on from the ready-to-archive plan into this record (§Future enhancement lanes) + the repo-continuity index; diagnosed the "% not recalculating" as **upstream** (fresh-process-per-render, no cross-render cache — the recompute is correct); no statusline code touched | 2026-07-01 |
+| claude-code | Opus 4.8 (1M) | Wyvern mends Draught | Delivered primary/worktree location rows (name-above-branch; `coord:`+`wt:`), model+context on one row, and Claude.ai rate-limit gauges with reset countdowns (`s:`/`w:`, `formatCountdown`, `statusline-usage.ts`); recreated the lost `πρ`/`ἔργ` plan; deleted stale local branches (all on main); added the COLUMNS/LINES responsive-layout grounding note. Commit `708cd57fc` on `docs/consolidations`; gate green (1846 tests) | 2026-06-29 |
 | claude-code | Opus 4.8 | Andromeda holds Radiance | Per-render `braille-sharp` frame cycling (four seeded frames, `session_id`-keyed counter via an injected store, `OAK_STATUSLINE_MOTION` off-switch); recorded the blink-survival experiment result (statusline strips `SGR 5` — animation NO-GO, truecolor survives); deduped the terminal-animation toolkit docs + fixed the stale §1 multi-line claim; updated the modularisation plan with the cycle→three-layer reconciliation. agent-tools green (1256 tests, build); verified live. On `docs/planning-and-validation` | 2026-06-17 |
 | claude-code | Opus 4.8 | Vole calls Hollow | Owner-directed live logo swap ahead of the modularisation plan: 5×7 sharpened `braille-sharp` default, 4×6 retained as `braille-sharp-compact`, width-matched logo separator rule on by default; reframed the modularisation plan to harden the live swap on execution; updated the plan + this record. On `docs/planning-and-validation` (branch divergence flagged). Green (build, type-check, lint, 1232 tests) | 2026-06-16 |
 | claude-code | Opus 4.8 | Hearth hunts Obsidian | Trailing separator row beneath the four-row logo block as a `logoSeparator?` option (`DEFAULT_LOGO_SEPARATOR`), tests decoupled from the glyph (inject-a-probe); separator now `${DIM}` (theme-robust default-fg — terminal theme is not knowable, design verdict). Fixed two ANSI bugs in the branch styling (a `0;`-prefixed `BLUE` cancelled `BOLD` → render colour-before-bold; removed dead/wrong `RESET_BOLD`+`BLACK`); branch tests made behavioural (content+placement, not bytes); `statusline-ansi.ts`+render test converted off literal-ESC to `\x1b` escapes. Linked the inputs research doc in both current statusline plans. Green (my slice); uncommitted — another agent commits/pushes (see napkin) | 2026-06-15 |
@@ -241,14 +307,12 @@ validated dispositions in both plans. A sibling
 
 **Next safe step:** a fresh readiness pass on the re-grounded plan (the 2026-06-14
 verdict predates the re-grounding), then execute WS1 (the session-state model).
-Both plans are `current/`, unassigned. **Plus (2026-06-16):** reconcile the live
-logo-swap commits on `docs/planning-and-validation` onto the statusline code
-lineage (`feat/comms-research`) so the 5×7 default + width-matched separator **and
-the per-render cycling commits (`b45a6aedf`, `cb1c6e256`)** are not stranded; then
-the modularisation plan hardens the swap. After reconciling, **rebuild `dist`**
-(`pnpm --filter ./agent-tools build`) so the live statusline reflects the cycling —
-`dist/` is gitignored, so the source commit alone does not update the running mark.
-**Do NOT archive
+Both plans are `current/`, unassigned. **The logo lane is paused (owner
+2026-06-29)** — the modularisation plan and any logo hardening are not the
+directed focus for now. The earlier reconcile/`dist`-rebuild step is **DONE**: the
+5×7 default, width-matched separator, and per-render cycling are all on `main`,
+and the `docs/planning-and-validation` / `feat/comms-research` local branches were
+deleted 2026-06-29 as fully-absorbed. **Do NOT archive
 this record** — the thread is live. Unrelated follow-on: the pre-existing agent-tools test-IO
 compliance tracked in
 [`agent-tools-test-io-compliance.plan.md`](../../../plans/agent-tooling/current/agent-tools-test-io-compliance.plan.md).

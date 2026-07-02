@@ -2370,6 +2370,30 @@ below is a cross-reference index, not a second source of truth.
   tool that collates requests from multiple agents and uses shared resource pools and limits; the
   'shared' part needs to live in the primary checkout").
 
+### F-111 — Claude Bash-tool execution environment: sandbox silently blanks `.agent/memory/` content reads; the shell is zsh, not bash
+
+- **Source**: Flare hunts Obsidian, 2026-06-30 (WS1 corpus run) — burned ~3 false-empty grep rounds;
+  the two causes compounded and masked each other. Re-confirmed 2026-07-02 (this pass reads
+  platform-memory files with the sandbox disabled).
+- **Surface**: any Bash-tool content read (`cat`, `grep`, `sed -n`) over `.agent/memory/**` (and
+  per-user `~/.claude/projects/**/memory/**`) in a sandboxed Claude Code session; any shell snippet
+  written assuming bash semantics.
+- **Observed**: (a) sandboxed `cat`/`grep` on those paths return **0 lines with exit 0 — no error**;
+  `ls` (metadata) and the Read tool are unaffected, so the failure looks like empty files.
+  (b) The shell is **zsh**: unquoted `$var` does NOT word-split (`cat $files` passes one joined
+  string → "No such file"), and `local -n` namerefs are unsupported; cures are zsh arrays and
+  `${(P)name}`.
+- **Expected**: content reads either succeed or fail loudly; shell snippets behave per POSIX/bash
+  assumptions or the dialect is surfaced.
+- **Workaround (verified)**: use the Read tool for those paths, or pass
+  `dangerouslyDisableSandbox: true` for corpus greps; write zsh-safe constructs (quote expansions,
+  arrays over namerefs).
+- **Candidate cure**: a documented "harness execution environment" note wherever corpus/memory
+  tooling is described (the corpus-analysis tooling README carries a copy for its own recipes);
+  candidate detector: a wrapper that stats the file first and fails loud on a 0-line read of a
+  non-empty file.
+- **Status**: open (documentation-level; behaviour is the platform's).
+
 ---
 
 ## Mitigated / Addressed Frictions

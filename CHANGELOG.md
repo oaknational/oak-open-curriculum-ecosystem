@@ -1,3 +1,40 @@
+# [1.57.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.56.0...v1.57.0) (2026-07-02)
+
+
+### Bug Fixes
+
+* **agent-tools:** clear the Sonar quality gate and the Copilot review findings ([b606fc8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b606fc86fece14e6c93a7656f1da2d1f26377d40)), closes [String#match](https://github.com/String/issues/match) [RegExp#exec](https://github.com/RegExp/issues/exec)
+* **agent-tools:** harden the triage leg per the code-expert and test-expert review ([27294f0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/27294f02b8cb17422505ca6942c9adcb44f02d0d))
+* **agent-tools:** make the meta-binding guard regex linear (the remaining S8786) ([d0693ac](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d0693acd255d5d149af105c5fc82013144e96de0))
+* **agent-tools:** pin the probe-verified lockdown shape after testing the disallowedTools wildcard ([d746260](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d746260ee17a504be49533be2f49b451704b2364))
+* **agent-tools:** tell each pipeline agent truthfully what tools it holds and why ([ad82b67](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ad82b67104f695fede756831a1d6f185938f8f67))
+* **agentic-engineering:** harden corpus reduce stage, split map/reduce checkpoint (probe iter 1) ([91ee284](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/91ee284748b4bcfc111c0ea489d27f1c8d9a9119))
+* **deps:** reconcile the lockfile with the esbuild security-floor override ([9a71735](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9a71735bd95704da9a09d1969a67daa4cb99fc5c))
+
+
+### Features
+
+* **agent-tools:** add check-encoding scanner and gate critical findings ([5848cad](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5848cad51d95e55db41e01f0d79d35695d519e87))
+* **agent-tools:** add corpus-analysis v2 deterministic-aggregation core ([5c34af7](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5c34af7bc7c87e69b25a7da9041f58789b3245d4))
+* **agent-tools:** add corpus-analysis v2 recall fixture, cost model, real-world signal ([e92cf93](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e92cf931d7483719ed3639b001f5672319feed04))
+* **agent-tools:** add least-privilege corpus-mapper and corpus-reducer agent types ([e89782b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e89782bca2ec5f96926f06d103ad1d8da9cc8118))
+* **agent-tools:** add the deterministic strength-of-evidence triage leg to the post-run driver ([cf58ffa](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/cf58ffa24db67d5a54aa4d690fef606d831d8326))
+* **agent-tools:** adopt the owner-found null-tools shape for the zero-tool voter and reducer ([042cdec](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/042cdecec4c610495864d654356238b560067f6c))
+* **agent-tools:** apply owner-confirmed Choice B dual graduate gate ([601ab37](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/601ab377ff06918559a28df60999344f4e3a16ff))
+* **agent-tools:** burn accounting, concurrency 8, and the salvage-and-topology-redesign plan ([ebaf064](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ebaf06491c2c80533ed62cd4d6bea7d150c6741c))
+* **agent-tools:** commit the meta checkpoint - recall calibration over the merged dispositions ([420081c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/420081c9cfcc98e5d3a509607ed8e513292072e9))
+* **agent-tools:** commit the validate checkpoint - 246 of 246 resolved, 26 keep and 220 kill ([820d03a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/820d03a25801d90728f141f0a54b194c46612d0f))
+* **agent-tools:** corpus-analysis quorum-kill adjudication and post-reduce cost gate ([7e87fbf](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7e87fbf2b3a2e090e9f214b67a2c65a98d5f0098))
+* **agent-tools:** dispatch validate voters as the no-tools corpus-voter agent type ([d3d21ff](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d3d21ffdaee7eafb96e6e546411ce29fccebdae8))
+* **agent-tools:** full adapter set for the corpus subagents and the zero-tools schema shape ([49389bf](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/49389bf0c5588fdb919d26c653daf41632def82b))
+* **agent-tools:** land the reduce checkpoint (246 candidates) and the deterministic post-run driver ([8f67294](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8f67294919abd5bedc367e931675a6e2fe38338d))
+* **agent-tools:** lock every pipeline agent to least privilege per the sub-agents docs ([3057afb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3057afbef0ed88a8d6ef24514a6bed244b73f209))
+* **agent-tools:** raise validate candidate concurrency to 10 for single-turn voters ([6526872](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/652687267ed4ae266737f06fb8acc831116fbfca))
+* **agent-tools:** statusline primary/worktree rows and rate-limit gauges ([708cd57](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/708cd57fc79bf68624702e68bb6eb751d2c071e7))
+* **agent-tools:** switch validate voters to Sonnet 5 (owner-decided quota economics) ([2580720](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2580720114aeebb1443d5b271bca73418b4bcadf))
+* **agentic-engineering:** harden discovery-run orchestration and grain prompts (WS1) ([974c8fa](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/974c8fa04b30943be1c12eac02976eaa84835d00))
+* **skills:** pr-lifecycle skill - open a PR and shepherd it to merge-ready ([d0281f2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d0281f2bc33fe1f8d4f888b7af2fb82dd5f56434)), closes [#296](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/296)
+
 # [1.56.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.55.0...v1.56.0) (2026-07-01)
 
 

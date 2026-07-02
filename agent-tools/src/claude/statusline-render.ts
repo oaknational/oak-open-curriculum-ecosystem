@@ -7,17 +7,19 @@
  * delegates here. Segment colouring lives in `statusline-segments.ts`; this file
  * owns only the line/row layout.
  *
- * Segment order puts the short, fixed-width segments (identity, indicators,
- * model, context %) first and the long, variable-width git segments last, so a
- * narrow terminal truncates the least important information first. A loud error
- * token, when present, leads the output in any layout so it cannot be missed.
+ * Row order puts the short, fixed-width segments first — identity (with
+ * indicators) on one row, then model and context % together on the next — and the
+ * labelled git-location rows last. A loud error token, when present, leads the
+ * output in any layout so it cannot be missed.
  *
- * Without a logo it renders over lines (a loud error first; then the
- * coordination summary; then the working location; then the coordination set —
- * the primary checkout's branch and name — on its own line). With a logo it
- * renders the logo-column rows (five for the default `braille-sharp`, four
- * otherwise) with the segments to the mark's right; a segment row beyond the logo
- * rows renders as a bare line so the coordination set is never dropped.
+ * The git-location rows come pre-composed from `statusline-segments.ts`: the
+ * checkout name then its branch when the session's checkout is the only relevant
+ * location, or the primary checkout's name, its `coord:`-prefixed branch, and a
+ * worktree row (name and branch) when the session sits in a linked worktree.
+ * Without a logo these render as plain lines after the summary; with a logo they
+ * sit to the right of the logo-column rows (five for the default `braille-sharp`,
+ * four otherwise), and a location row beyond the logo rows renders as a bare line
+ * so it is never dropped.
  *
  * @packageDocumentation
  */
@@ -83,6 +85,8 @@ export interface StatuslineRenderOptions {
  *   coordinationPlace: 'oak-open-curriculum-ecosystem',
  *   error: undefined,
  * });
+ * // → identity row, "Opus 4.7 · ctx:12%" row, then the primary name, its
+ * //   "coord:" branch, and the worktree's name-and-branch row.
  * ```
  */
 export function renderStatusline(
@@ -95,15 +99,19 @@ export function renderStatusline(
 }
 
 /**
- * No-logo layout: a loud error first, the coordination summary, the working
- * location, then the coordination branch on its own line. Empty lines (all their
- * segments absent) are dropped so no blank row renders.
+ * No-logo layout: a loud error first, the identity-and-context summary, then the
+ * pre-composed labelled location rows. Empty lines (all their segments absent) are
+ * dropped so no blank row renders.
  */
 function renderNoLogo(seg: Segments): string {
-  const summaryLine = joinPresent([seg.identity, seg.indicators, seg.model, seg.context]);
-  const locationLine = joinPresent([seg.branch, seg.place]);
-  const coordinationLine = joinPresent([seg.coordinationBranch, seg.coordinationPlace]);
-  return [seg.error, summaryLine, locationLine, coordinationLine]
+  const summaryLine = joinPresent([
+    seg.identity,
+    seg.indicators,
+    seg.rateLimits,
+    seg.model,
+    seg.context,
+  ]);
+  return [seg.error, summaryLine, ...seg.locationRows]
     .filter((line): line is string => line !== undefined && line.length > 0)
     .join('\n');
 }
@@ -118,11 +126,9 @@ function renderWithLogo(
   options: StatuslineRenderOptions,
 ): string {
   const rowTexts = [
-    joinPresent([seg.identity, seg.indicators]),
-    seg.model ?? '',
-    joinPresent([seg.context, seg.branch]),
-    seg.place,
-    joinPresent([seg.coordinationBranch, seg.coordinationPlace]),
+    joinPresent([seg.identity, seg.indicators, seg.rateLimits]),
+    joinPresent([seg.model, seg.context]),
+    ...seg.locationRows,
   ];
   const logoRows = resolveLogoRows(logo, options.logoFrame ?? 0);
   const content = composeWithLogo(logoRows, rowTexts);
@@ -134,10 +140,9 @@ function renderWithLogo(
 /**
  * Compose the logo rows with the per-row segment text. Each logo row always
  * renders (the mark stays whole); the gap and text are appended only when that
- * row has segment text. A segment row beyond the logo block — e.g. the
- * coordination branch on a four-row logo, where the five-row `braille-sharp`
- * default carries it on its last row — renders as a bare text line below the mark
- * so the fact is never dropped.
+ * row has segment text. A segment row beyond the logo block — e.g. the worktree
+ * row on a four-row logo, where the five-row `braille-sharp` default carries it on
+ * its last row — renders as a bare text line below the mark so it is never dropped.
  */
 function composeWithLogo(logoRows: readonly string[], rowTexts: readonly string[]): string {
   const rowCount = Math.max(logoRows.length, rowTexts.length);

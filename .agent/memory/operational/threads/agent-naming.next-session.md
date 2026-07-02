@@ -52,6 +52,19 @@ substrate ADR:
    registration (the BLOCKING WS2 checkpoint), exactly as v2's did.
 4. **The UUID v5 id and its namespace constant are untouched** (PDR-076a). Only
    the display-name projection and its provenance change.
+5. **The era-pin is the v3-activation safety prerequisite, reconciled with the
+   substrate direction.** `OAK_AGENT_NAMING_SCHEMA_ID` adds a second identity
+   env var; it is justified at t=0 (the statusline derives before any session
+   record exists) and aligns with how the spawn flow sets
+   `PRACTICE_AGENT_SESSION_ID`. Known reconciliation-debt against the 2026-06-28
+   [`knowledge-distribution-substrate`](../../../plans/agent-tooling/future/knowledge-distribution-substrate.plan.md)
+   direction: the substrate-native cure stamps identity once in an append-only
+   session-identity event and *renders* the name (the substrate's `render`
+   verb) rather than re-deriving from a pinned env era — v3's derive-don't-cache
+   is a local instance of that verb, and agent-identity is the identity row in
+   the substrate's "Flows that re-home" table. Ship the env cure now (the
+   substrate is not build-authorised); the plan's §"Connection to the
+   Knowledge-Distribution Substrate" carries the full reasoning.
 
 ## Session shape and grounding order for this thread
 
@@ -63,10 +76,7 @@ substrate ADR:
    `schema-registry.ts`, `derive.ts`, the two hook planners,
    `agent-identity-cli.ts`, `collaboration-state/identity.ts`,
    `statusline-identity.ts`.
-5. The merged-but-historical
-   [naming-lane handoff](../../../state/collaboration/handoffs/2a080642-naming-lane-handoff.md)
-   — context only; its §4 merge-blockers are all resolved (PR #189 merged).
-6. Foundation directives: `principles.md`, `testing-strategy.md`,
+5. Foundation directives: `principles.md`, `testing-strategy.md`,
    `schema-first-execution.md`, `metacognition.md`, `orientation.md`.
 
 ## Participating Agent Identities
@@ -81,3 +91,4 @@ history); captured here so the lineage is discoverable.
 | `Squall hunts Troposphere` | `claude` | `Opus 4.8` | `6bbbd2` | thread-open + v3 plan author (decision-complete) | 2026-06-13 | 2026-06-13 |
 | `Moss weaves Blossom` | `claude` | `Fable 5` | `10438c` | v2 landing + close (PR #189); P1 diagnosis | 2026-06-12 | 2026-06-12 |
 | `Swift Gliding Zephyr` | `claude` | `Fable 5` | `aba87a` | v2 registry/derivation build; mid-cycle handoff author | 2026-06-11 | 2026-06-11 |
+| `Tuna stirs Fathom` | `claude` | `Opus 4.8 (1M)` | `9767ba` | plan deep-dive + substrate-connection cross-link (no source touched) | 2026-06-30 | 2026-06-30 |

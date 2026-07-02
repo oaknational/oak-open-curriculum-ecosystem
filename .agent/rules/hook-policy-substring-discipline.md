@@ -95,6 +95,33 @@ instructive context:
    canonical home of the rule itself — confirm via the rule's path
    and proceed.
 
+## Known Git-Command Over-Blocks and Safe Forms
+
+The parse-don't-substring gap has a recurring git-command face — the
+guard hooks substring-match a command family and block its safe members.
+Known instances (hit by five-plus agents, 2026-06-28/29), with the safe
+form to use rather than a bypass:
+
+- `git restore --staged <path>` (index-only unstage, non-destructive) is
+  blocked by the `git restore` substring; only `git restore <path>` /
+  `--worktree` overwrite the working tree. Same split: `git reset --
+  <paths>` (unstage, safe) vs `--hard`/`--keep`/`--merge` (destructive).
+  Refinement candidate: parse the flags — allow `--staged` without
+  `--worktree`.
+- `git checkout -b <new> <start>` is blocked by the `git checkout`
+  substring even on a clean tree; the safe non-destructive primitive is
+  **`git switch -c <new> <start>`** (git split branch-switching from
+  file-restoring precisely so they are distinguishable).
+- `git rebase` in compound commands is permission-fenced; the working
+  form is standalone **`git -C <dir> -c core.editor=true rebase …`**.
+  `git push --force-with-lease` is blocked by the `--force` substring —
+  to update an already-pushed branch, **merge `origin/main` into it**
+  instead of rebase-and-force-push (clean when the change is disjoint;
+  the repo merges PRs anyway).
+
+These are refinement candidates for the hook (flag-parsing over
+substring), never bypass justifications — use the safe form.
+
 ## Doctrinal Anchors
 
 - the hook policy file enumerating the trip-list (the canonical

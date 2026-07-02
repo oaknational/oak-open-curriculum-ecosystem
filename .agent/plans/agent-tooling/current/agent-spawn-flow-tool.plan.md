@@ -165,6 +165,14 @@ The owner had to correct each of these. They are the real reason this was handed
 10. **Always clean up stale worktrees/branches** on completion (owner standing directive); destructive
     ops (`git branch -D`, `git worktree remove --force`) need an owner permission grant. (Rule:
     `worktree-hygiene`.)
+11. **Do not re-derive the identity-injection fork — it was decided (2026-06-28, §4.A).** Spawn does
+    NOT pre-determine the launched session's identity. The Claude `SessionStart` hook unconditionally
+    derives identity from the harness `session_id` and writes `PRACTICE_AGENT_SESSION_ID_CLAUDE` to
+    `$CLAUDE_ENV_FILE`, so a launch-injected seed is overridden (verified by run-the-thing; the
+    minted-identity prediction was removed in #284). The alternative — changing the hook to honour an
+    existing env value so spawn could pre-determine identity — was **considered and REJECTED**: it is
+    a shared PDR-027 identity-contract change (portability + every platform hook), it fights
+    derive-don't-author, and no concrete need exists. Do not reopen without one.
 
 ## Reuse layer (build on these, cited)
 

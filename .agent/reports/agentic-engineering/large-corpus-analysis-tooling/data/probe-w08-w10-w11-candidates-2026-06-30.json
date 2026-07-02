@@ -1,0 +1,1141 @@
+{
+  "meta": {
+    "probe": "napkin-corpus-discovery-run WS1 cheap grain-probe (map+reduce only, w08/w10/w11)",
+    "date": "2026-06-30",
+    "windows": [
+      "w08",
+      "w10",
+      "w11"
+    ],
+    "leafCount": 167,
+    "candidateCount": 75,
+    "note": "Map salvaged after the combined-template reduce stalled (truncation+kind-confusion); reduce re-run with the hardened prompt (bounded supportingLeafIds, kind disambiguation) via the split reduce-only template.",
+    "gateVerdict": "PASS — all 5 v2-failing baselines surface as distinct actuator candidates (cron-template MISS->C65; repo-wide-autofix->C01/C02/C07/C31; coordinator-amplifies->C54/C55/C16; compaction->C57/C13; peer-primary->C75/C01/C41); >=4 longitudinal candidates with real cross-window splits (C02/C19/C20/C22); broad clusters coherent (no per-window shattering). NOT a graduation pre-confirmation; survival re-checked at the full run.",
+    "fullRunFinding": "75 candidates / 3 dense windows => full run likely ~80-120 candidates (vs v2 50) => trips the 16M hard-abort re-gate; launch-preflight must re-derive the ceiling UP and/or moderate count."
+  },
+  "candidates": [
+    {
+      "id": "C01",
+      "pattern": "Whole-tree pre-commit gating (husky prettier/markdownlint/knip over the entire working tree, not the staged set) repeatedly blocks one agent's clean commit on a peer's untracked/unstaged WIP in shared trees.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L21",
+        "w11-L23",
+        "w11-L25",
+        "w10-L10",
+        "w08-L08",
+        "w08-L09",
+        "w08-L44"
+      ],
+      "groundingCount": 9
+    },
+    {
+      "id": "C02",
+      "pattern": "Foreign-stage absorption: a `git commit` (or `record-staged`/`git reset HEAD`) without an explicit pathspec absorbs all peer-staged content in a shared index, with the documented cure hardening over time from `git add -- pathspec` to `git commit -- pathspec`.",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L06",
+        "w08-L07",
+        "w10-L06",
+        "w10-L11",
+        "w11-L41",
+        "w11-L43",
+        "w08-L54",
+        "w08-L45"
+      ],
+      "groundingCount": 10
+    },
+    {
+      "id": "C03",
+      "pattern": "Backtick-in-double-quotes shell-substitution hazard in `comms --body`, `rg`, and `--body-file` calls recurs across many agents and fires again immediately after the lesson is distilled, proving distilled prose alone doesn't retrain fast-composition muscle memory.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L37",
+        "w10-L25",
+        "w10-L41",
+        "w10-L55"
+      ],
+      "groundingCount": 6
+    },
+    {
+      "id": "C04",
+      "pattern": "Comms watcher backfill flood: starting the all-channels watcher with a missing/wrong-format `comms-seen` file replays the entire historical comms directory, preempting subsequent setup tool calls (e.g. CronCreate) in the same turn.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w11-L36",
+        "w10-L20",
+        "w10-L29",
+        "w10-L01"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C05",
+      "pattern": "`agent-tools` CLI shapes drift silently: each `pnpm agent-tools:<topic>` invocation rebuilds from source, picking up in-flight peer edits, and cron/heartbeat prompts re-arm with stale flag shapes swallowed by `pnpm -s`.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L42",
+        "w10-L50",
+        "w08-L05",
+        "w08-L32",
+        "w08-L46",
+        "w08-L16"
+      ],
+      "groundingCount": 7
+    },
+    {
+      "id": "C06",
+      "pattern": "Hook-policy substring matching blocks legitimate content: `--no-verify`, `git restore`, SHA/hex tokens, and trip-listed principle phrases are rejected on token presence regardless of citation form or shell-command shape.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L18",
+        "w10-L14",
+        "w08-L56",
+        "w08-L49"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C07",
+      "pattern": "`markdownlint --fix` / MD004 / MD018 is destructive on prose containing line-start or inline `+`, `#`, `-` characters, converting them to list-markers or ATX headings across multiple sessions.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L35",
+        "w08-L18",
+        "w08-L21"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C08",
+      "pattern": "Pre-execution reviewer dispatch (code-expert / type-expert / assumptions-expert before code is written) catches design-time collisions, type-level lies, and collapses planned new functions into reuse — cheaper than post-execution review.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w11-L44",
+        "w10-L07",
+        "w10-L36",
+        "w11-L22"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C09",
+      "pattern": "Cross-family / multi-reviewer fan-out produces non-overlapping defect coverage, and set-scope review surfaces cross-document coupling defects that per-document review never sees.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w10-L03",
+        "w08-L12",
+        "w08-L28",
+        "w08-L29",
+        "w11-L22"
+      ],
+      "groundingCount": 6
+    },
+    {
+      "id": "C10",
+      "pattern": "AskUserQuestion menus are repeatedly posed carrying options the agent already judged indefensible ('faux-respect' / responsibility-passback), cured by a pre-pose viability/LTAE screen that eliminates refused options.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L38",
+        "w08-L50",
+        "w11-L45"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C11",
+      "pattern": "PDR-vs-ADR portability classification: SHAs/repo-paths/active-claims.json appearing inside portable Practice Core (PDRs, rules, worked examples) is a misclassification signal, with the portability check needing to move from review-time to drafting-time invariant.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L03",
+        "w08-L24",
+        "w10-L56",
+        "w08-L30"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C12",
+      "pattern": "Heartbeat-content-drift: cron heartbeat prompts emit templated free-form bodies without refreshing against live state (HEAD, claim count, intent), recurring across 6+ Misty and 3+ Lunar instances.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L35"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C13",
+      "pattern": "Heartbeat liveness is separable from reasoning/delivery liveness: a 'alive-but-stalled' agent fires heartbeats on cadence while making zero lane progress, so PDR-078's 10-minute silence-equals-retirement threshold yields both false-positive and false-negative retirement.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w11-L13",
+        "w11-L19",
+        "w10-L42"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C14",
+      "pattern": "Director routing-by-broadcast is single-point-of-failure under the 5-15 minute emission-vs-absorption gap, motivating implementer self-direction when only one defensible move exists.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w11-L20",
+        "w10-L21"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C15",
+      "pattern": "Director handoff shape shifted on 2026-05-23 from a 339-line/~14k-token comprehensive record (Abyssal→Incandescent) to a ~5k-token thin-pointer Moment-1 broadcast with no record (Incandescent→Secret) under PDR-075, a ~3x token-cost reduction.",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L10",
+        "w11-L26"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C16",
+      "pattern": "Recursion-of-doctrine: trust-without-reverification and doctrine-by-analogy fire even on the artefacts that catalogue them (five instances in one 30-min Director window 12:54Z-13:25Z 2026-05-23), caught peer-to-peer with verdict-and-default rather than by the original agent.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L09",
+        "w11-L12",
+        "w08-L52",
+        "w08-L04"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C17",
+      "pattern": "Substrate-encodes-doctrine: plan §Done-When / §Non-Goals and SKILL norms structurally drive agent behaviour, producing ~90 min of alive-but-zero-delivery until a single owner reframe at 06:45Z 2026-05-25 ('implemented, pushed, fixed, merged and live') shifted the team immediately.",
+      "kind": "regime",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L17",
+        "w11-L31",
+        "w11-L15"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C18",
+      "pattern": "Director-seat threshold graduated to a stated rule on 2026-05-25: the Director seat is overhead at ≤3 agents and peer-collaboration is the default, with the owner dissolving the seat at 07:03Z per SKILL §3.",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L30"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C19",
+      "pattern": "Peer-pair sidebars produce design/decisions in minutes whereas coordinator+helpers hub-and-spoke produces logistics; the team recognised sidebars as the higher-yield primitive around 2026-05-11/12 and ratified a canonical opener shape (questions + deadline + default).",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L43",
+        "w11-L02",
+        "w10-L32"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C20",
+      "pattern": "Marshal-as-cycle-discipline lifted throughput from ~1 commit/Director-window to ~9; cross-platform marshal cycles need no special-casing, but serialisation value drops under small-PR parallel-worktree shapes.",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w11-L29",
+        "w10-L48",
+        "w10-L58"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C21",
+      "pattern": "Commit-message integrity regime: a `.git/COMMIT_EDITMSG` race triggered team-emergent adoption of intent-scoped `<scratch>/<intent>.msg` files within minutes (Foamy/SVW/Sparking independently same session), and a `prepare-commit-msg` heuristic silently overwrites manually-drafted subjects.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L27",
+        "w08-L34"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C22",
+      "pattern": "Agent identity shape shifted on 2026-05-23 from a 4-field PDR-027 tuple to a two-field (name + full UUID) shape after a tempfile-collision incident, propagated to comms/claims/queue/handoff schemas; identity routing on a repeated name-token (not the full tuple) caused misrouted events.",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w11-L28",
+        "w11-L39",
+        "w10-L16"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C23",
+      "pattern": "Curator-pass log files are a metadata-only navigation index, not a substance store; substance routes to permanent homes (comms/PDR/rule) and descriptive body text in a pass file is a contract violation.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L01"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C24",
+      "pattern": "Knowledge-curation work (napkin drain, distillation, graduation) is first-class product shipping to Practice Core substrate, not coordination overhead — and the recursive observe→napkin→distilled→PDR pipeline is itself the substrate.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L05",
+        "w11-L04"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C25",
+      "pattern": "Doctrine landing latency collapsed when role doctrine, its SKILL, and its scaffold arrive simultaneously: PDR-081's curator role reached active Director routing within ~12 minutes of landing.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L06",
+        "w11-L07"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C26",
+      "pattern": "Peer-reported owner-direction is hearsay: a peer's 'owner direction — land my work' (or a skill-invocation framed as owner-commissioned) must be surfaced as a verdict-plus-confirmation AskUserQuestion, not silently honoured.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L05",
+        "w11-L16"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C27",
+      "pattern": "Comms-event stream diverges from the commit stream as a liveness signal: agents reported 'silent/retired' were actually committing hygiene work, so retirement verdicts need corroborating claim/file mtime evidence before broadcast.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L42"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C28",
+      "pattern": "Comms-watch self-exclusion filter was silently dropping directed-to-other-agent events (three Velvet→{Secret,Incandescent,Twilit} events present in comms/ but absent from the seen-file), a defect in comms-watch.ts / comms-relevant-events.ts.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L11"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C29",
+      "pattern": "Comms-event render step (`renderComms`/`shared-comms-log.md` regen) chokes on legacy-schema events (directed-message shape, object-shaped `addressed_to`) after a successful write, exiting non-zero and triggering duplicate-event retries.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L47",
+        "w08-L60",
+        "w11-L33",
+        "w08-L23",
+        "w08-L48"
+      ],
+      "groundingCount": 6
+    },
+    {
+      "id": "C30",
+      "pattern": "`pnpm check`'s `clean` step removes `agent-tools/dist/` for ~90s, breaking every team agent's CLI calls; session-handoff §11's 'every closing agent runs check' collides with the multi-agent check-singleton-per-window invariant because neither names its scale-of-applicability.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w11-L14",
+        "w10-L10",
+        "w10-L39"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C31",
+      "pattern": "`record-staged` / `verify-staged` fingerprints the full `git diff --cached` (no filter against intent.files) and runs BEFORE the husky hook chain that auto-stages lint/format/RULES_INDEX/adapter regen, so the committed bundle diverges from the authorial bundle verify-staged approved.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w10-L11",
+        "w08-L33",
+        "w08-L42"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C32",
+      "pattern": "test-expert's `test-immediate-fails.md` (subprocess/IO/type-only-test rules) repeatedly overrides type-expert's recommended integration or type-only tests; the more-restrictive Practice-level rule wins.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L09",
+        "w10-L35"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C33",
+      "pattern": "Green focused-test/aggregate-gate evidence is false comfort: a name-filtered `vitest run` can select zero tests and exit 0, and a freshly checked-out branch can't lint until dependency workspaces are built (opaque ERR_PACKAGE_PATH_NOT_EXPORTED).",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L22",
+        "w10-L38"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C34",
+      "pattern": "Static analysers (CodeQL js/polynomial-redos, SonarCloud) flag pattern-shape not data-flow and carry zombie/already-fixed findings dated weeks earlier; push-and-re-analyse, not manual disposition or runtime guards, is the cure.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L16",
+        "w08-L17",
+        "w08-L57"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C35",
+      "pattern": "PR/plan readiness has multiple distinct gates beyond green checks: a separate comment-harvest pass, plan decision-completeness, and the in-band owner-direction supersession of a plan's Non-Goals.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L27",
+        "w08-L28",
+        "w11-L15",
+        "w11-L46"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C36",
+      "pattern": "Skills generator `--clear` deletes owner-authored adapter-only skills that have no canonical source; the loss recurred three times in two sessions, exposing a 'canonicals→adapters' mental model that doesn't cover adapters-without-canonicals.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L39"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C37",
+      "pattern": "Fitness pressure is mis-handled as a trim-trigger: agents reactively cut/withhold content from flagged surfaces (practice.md, napkin) instead of routing substance to permanent homes or rotating, against the knowledge-preservation-over-warnings doctrine.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L11",
+        "w08-L59",
+        "w08-L36",
+        "w08-L10"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C38",
+      "pattern": "Discoverability of a thread/continuity record requires multiple registered surfaces (file, repo-continuity row, cross-ref, active-napkin pointer, comms broadcast); a file present but unregistered in repo-continuity.md is undiscoverable on the canonical path.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L49"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C39",
+      "pattern": "Line-number citations in permanent docs become invalid after napkin/file rotation; content-addressable citations (section heading + date + author) and content-addressable homes are the durable cure.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L52"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C40",
+      "pattern": "Stale session grounding: HEAD advances mid-session via parallel-cohort writes, so re-running `git log`/`git status` immediately before staging (not just at session-open) is required on sessions over ~1h, and openers must re-verify substrate at session-open.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w10-L17",
+        "w08-L30",
+        "w08-L11"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C41",
+      "pattern": "git index/state mutations are not a parallel lane: concurrent `git mv` collide on `.git/index.lock`, and active-claims.json writes drift/disappear under rapid same-file commit-queue lifecycle writes, requiring serial execution and post-write re-audit.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L14",
+        "w08-L38",
+        "w10-L47"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C42",
+      "pattern": "Bulk regex sweeps over the doc estate miss plural/variant forms and over-match link fragments while leaving headings, producing silent omissions and broken anchors caught only downstream.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L40",
+        "w08-L41",
+        "w08-L55"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C43",
+      "pattern": "Bulk Sonar-hotspot disposition continued mechanically past the activity-bias inflection (~call 35-40) where per-call rationales became template substitution — ease and procedural identity mistaken for value until an owner metacognition trigger.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L18"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C44",
+      "pattern": "Plan-cycle granularity inflation: 36 cycles / ~2h for ~400 LOC collapsed to three commits under one hour after owner correction, and fabricated graduation gate-metadata ('size: XL', 'vaporware-gated') functioned as multi-session avoidance.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L51",
+        "w08-L31"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C45",
+      "pattern": "Plan-arithmetic acceptance targets (≤220 lines, combined wc -l must DECREASE) are the wrong proxy and go stale because they encode a single same-day estimate; the load-bearing criterion is the substance, not the number.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L47",
+        "w08-L37"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C46",
+      "pattern": "Owner reframes mechanical lifecycle work that agents dress as ceremony ('residue exception', 'no exception, just useful work'; ExitPlanMode IS commit authorisation), repeatedly stripping ceremony-talk back to substance.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L02",
+        "w11-L46",
+        "w10-L53"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C47",
+      "pattern": "Continuity-surface commits (napkin, thread, pending-graduations) are structurally always separate from the cycle commit because the reflective output doesn't exist at cycle-commit time — orphaning is correct, not a failure.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L34"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C48",
+      "pattern": "Framing direction routes graduation destination: 'session-forward' framing sends an observation to a napkin anecdote; 'impact-backward' framing sends the same observation to a rule / PDR amendment / schema surface.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L33"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C49",
+      "pattern": "Owner-directed plan-only / no-execution improvement passes and 'never archive unprocessed content' / 'commit-all → split-by-attribution' directives institute curation-before-archive and focused-pass discipline over incremental-during-execution absorption.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L08",
+        "w10-L53",
+        "w10-L46"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C50",
+      "pattern": "The Monitor tool's `persistent:true` line-buffered stdout wakes the loop immediately, whereas `Bash run_in_background` delivers no notifications and forces output-file polling — the correct event-driven primitive for comms watching.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L01"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C51",
+      "pattern": "`claims`/`comms` CLI flag-shape mismatches recur: `--area-kind external` rejected, `--area-pattern` is last-write-wins, `--agent-name` unknown, `claims close` needs `--closed`; the fix is to trust live `--help` over stale flag memory.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L01",
+        "w08-L02",
+        "w08-L26",
+        "w10-L40"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C52",
+      "pattern": "Eager-rounding-off under failure pressure: a fragment of evidence (filename token, empty queue list, stale snapshot) is rounded into a whole conclusion, skipping the distinguishing field (agent_id, active-claims, hook source).",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L04",
+        "w08-L45",
+        "w11-L09"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C53",
+      "pattern": "First-Moves ordering violation on team-join: agents open a claim and send directed events BEFORE starting the all-channels monitor and posting the team-start broadcast, observed across ≥2 sessions.",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L34"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C54",
+      "pattern": "Coordinator/Director scope violations: a coordinator dispatches subagent reviewers (implementer-class work) directly, and a coordinator `/loop` cron keeps firing into the prior holder's session because only the cron-creator can delete it.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L24",
+        "w10-L27",
+        "w11-L32"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C55",
+      "pattern": "A coordinator without a periodic scheduled `/loop` tick is purely reactive and structurally blind to what is NOT happening (silent agents, idle blockers, missed dispatch timing) that the event stream alone can't surface.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L21"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C56",
+      "pattern": "PDR-064 coordinator handoff fired three times in one session, surfacing a NEW 'partial-slice' shape (scope-bounded rather than time-bounded authority partitioning) the PDR's open question did not contemplate.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L23"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C57",
+      "pattern": "Same-identity mid-session compaction is a third closeout shape between sole-contributor-close and team-closeout-owner: defer `pnpm check` and claim-closure (peer cycles in flight, Director seat durable), do capture and minimal continuity refresh.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L45"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C58",
+      "pattern": "Intent-scope voluntary back-off as coordination: an agent transitions its own intent to `phase: abandoned` with a notes rationale when it detects foreign-staged peer WIP, rather than sweeping it.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L37"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C59",
+      "pattern": "Pre-existing-violation drain-with-catalogue is structurally distinct from a dismissal under all-quality-gates-blocking: the advisory carve-out applies only when the bundle adds zero new violations and drains the pre-existing signal surface.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L22"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C60",
+      "pattern": "PENDING reviewer markers carried across multiple sessions without dispatch (deferred to 'the implementer'); dispatching at session-handoff when the thread plan was touched this session resolves the phase-misalignment.",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L04"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C61",
+      "pattern": "PDR-083 (director-pure-direction-only) and PDR-084 (owner-action-is-not-a-cure) graduated from due-principle candidates to landed standalone PDRs on 2026-05-26.",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L32"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C62",
+      "pattern": "Comms-file retention was INCREASED by owner standing direction (no comms files moved/deleted until comms research completes), blocking WS3 of the storage-redesign and a consolidation retention pass — a regime active from 2026-05-25.",
+      "kind": "regime",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L24"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C63",
+      "pattern": "`.remember/` plugin failures: the ndc compression pipeline fails reproducibly ('produced empty result'), apparent dormancy was a wrong-project-path scoping of an old plugin version, and IDENTITY CANDIDATE rows were directed to graduate straight into distilled.md.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w11-L08",
+        "w10-L12",
+        "w10-L13"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C64",
+      "pattern": "The pure-orchestrator plus sibling-runtime-wiring file split (commit-workflow.ts + commit-workflow-runtime.ts mirroring runCommitSkillAdvisories) is the established default for new workflow commands, making CLI dispatch testable on wiring.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L15"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C65",
+      "pattern": "Cron/persistent-monitor ticks must absorb the latest owner pause/stop/wait/hold turn before resuming, graduated into start-right-team SKILL §0.5, because persistent goal wrappers keep reactivating an objective after wind-down.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L54",
+        "w10-L59"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C66",
+      "pattern": "`.agent/reference/` is for external materials (W3C specs, vendor docs, RFCs) only; Oak-internal canonical CLI definitions misfiled there belong code-adjacent, and a doc-patch cure doesn't amortise across rotating agents the way an executable `coord how-to-start` CLI would.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L30",
+        "w10-L31"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C67",
+      "pattern": "Cursor plan-mode blocks non-markdown edits, requiring a SwitchMode before the active-claims.json JSON write in session-handoff Step 8.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L13"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C68",
+      "pattern": "Memory/state files diverge on parallel checkouts as append-shape merge conflicts (napkin, comms-log, closed-claims, pending-graduations, repo-continuity) — the founding instance motivating a concept-merge rather than git line-merge.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L15"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C69",
+      "pattern": "`git stash` reach (to test a counter-factual or as a 'reversible' probe) is rejected by the owner in shared trees; `git show HEAD:<path>` is the safe read-only alternative, confirming the never-use-git-to-remove-work failure mode.",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L40",
+        "w08-L57"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C70",
+      "pattern": "Doctrine read at session-open is not held at the moment of action: schedule-not-trigger, governance frame, and pre-pose discipline are applied to documents then violated in the agent's own opener/speech outputs minutes later.",
+      "kind": "behavioural",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L36",
+        "w08-L52"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C71",
+      "pattern": "Drift across the multi-plan graph-MVP estate (NC taxonomy vs Oak ontology, graph-query-layer ownership, already-remediated BLOCKERs) requires a focused full-estate drift scan before declaring planning closure, and the cost-of-collaboration plan subsumed the prior tooling plan with a 'no new bins' standing constraint.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L58",
+        "w08-L25",
+        "w08-L53"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C72",
+      "pattern": "Long multi-session arcs accumulate an endless 'next session' tail without a named completion boundary; continuity must name the value, the exact blockers, and an executable finish condition before handoff.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L25"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C73",
+      "pattern": "The napkin declares it tracks 'mistakes, corrections, surprises, and what works', but the 'what works'/positive-motif category is heavily under-represented relative to the dominant surprise/mistake/tension contents across all windows.",
+      "kind": "absence",
+      "isAbsenceClaim": true,
+      "supportingWindows": [
+        "w11",
+        "w10",
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w11-L44",
+        "w10-L03",
+        "w10-L15",
+        "w11-L29"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C74",
+      "pattern": "Sonar MCP `change_security_hotspot_status` accepts a comment but `show_security_hotspot` returns comments:[]; the rationale audit trail is visible only via the REST /api/hotspots/show changelog, not the MCP surface.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w08"
+      ],
+      "supportingLeafIds": [
+        "w08-L57"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C75",
+      "pattern": "The dual peer-primary lanes topology (each peer with its own /loop, sub-agent fan-out, and file-disjoint scope claim) was named as a distinct 2026-05-22 experiment with explicit falsifiability criteria, structurally distinct from coordinator+helpers and specialists/generalists.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L32"
+      ],
+      "groundingCount": 1
+    }
+  ]
+}

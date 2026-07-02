@@ -1,6 +1,6 @@
 ---
 name: "Agent Naming Schema v3 — era-pinning cure + noun-agentive names"
-overview: "Pin the naming-schema era (not the rendered name) in session hooks so identity is single-valued and provenance is true (P1 correctness fix, ships independently); then curate the v3 noun-agentive wordlists under the v2 curation gates; then register v3 as a digest-pinned era and activate it under owner taste review."
+overview: "Pin the naming-schema era (not the rendered name) in session hooks so identity is single-valued and provenance is true — the safety prerequisite for v3 activation, sequenced first and shippable ahead of the wordlist work; then curate the v3 noun-agentive wordlists under the v2 curation gates; then register v3 as a digest-pinned era and activate it under owner taste review."
 todos:
   - id: ws1-cycle-1
     content: "WS1 cycle 1 (era-pinning, CLI core): teach the agent-identity CLI to derive through a pinned OAK_AGENT_NAMING_SCHEMA_ID (era), falling back to the active schema; explicit OAK_AGENT_IDENTITY_OVERRIDE still wins and still yields an override result. One commit. Tree green at end."
@@ -20,13 +20,12 @@ todos:
   - id: ws2-cycle-1
     content: "WS2 cycle 1 (v3 curation gates): data-driven curation gate tests for the v3 noun-agentive shape (reuse the v2 gate predicates; add agentive-pool gates). One commit. Tree green at end."
     status: pending
-    depends_on: [ws1-cycle-1]
   - id: ws2-agentive-pool
     content: "WS2 cycle 2 (agentive wordlist): curated ~120-agentive pool passing the WS2 gates; the 540-noun first-word union reused from the v2 subject+object lists. One commit. Tree green at end."
     status: pending
     depends_on: [ws2-cycle-1]
   - id: ws2-owner-review
-    content: "WS2 checkpoint: owner taste review of the v3 agentive wordlist BEFORE registration (BLOCKING for ws3-cycle-1). Mirrors the v2 WS4 review gate."
+    content: "WS2 checkpoint: owner taste review of the v3 agentive wordlist BEFORE registration (BLOCKING for ws3-cycle-1). The design target is live-window distinguishability: the review evaluates a sample of 5–10 concurrently-derived FULL names (can the owner tell a real multi-agent team apart at a glance and remember them across a session), not only per-word taste. Mirrors the v2 WS4 review gate."
     status: pending
     depends_on: [ws2-agentive-pool]
   - id: ws3-cycle-1
@@ -54,7 +53,7 @@ isProject: false
 
 # Agent Naming Schema v3 — Era-Pinning Cure + Noun-Agentive Names
 
-**Last Updated**: 2026-06-13
+**Last Updated**: 2026-06-29
 **Status**: 🟡 DECISION-COMPLETE — QUEUED (`current/`; not started). Owner
 decisions are landed (shape, sequence, accepted P1 diagnosis); execution
 has not begun.
@@ -82,8 +81,15 @@ throughline. Concretely, two user-facing outcomes:
    path. This cures the observed one-seed-two-names split (e.g. the same seed
    surfacing as both "Swift Gliding Zephyr" v1 and "Harrier weaves
    Stratosphere" v2) and restores `override` to meaning only operator-assigned
-   names. This is a **P1 correctness fix that ships on its own** and does not
-   depend on v3 ever being built.
+   names. This is the **safety prerequisite for v3 activation**: within one
+   active era every consumer already re-derives the same name, so the
+   name-split only manifests *at* an era-activation event — and the next such
+   event is v3's. Its split-prevention payoff is therefore consumed by
+   activation, not by an independently-urgent live regression. The
+   provenance-correctness gain (true era recorded, never `override` on the
+   happy path) is real and lands immediately; the fix is mechanically
+   shippable ahead of the v3 wordlist work and does not depend on v3 ever
+   being built.
 2. **The v3 noun-agentive naming era**, live: fresh sessions derive names like
    "Squall Tracker" / "Crescent Weaver" / "Wind Smith" — a curated two-word
    shape with materially better per-window distinctiveness (8.3% ten-agent
@@ -125,7 +131,7 @@ throughline. Concretely, two user-facing outcomes:
 
 | Phase | Workstream | Outcome | Independence |
 |---|---|---|---|
-| **1** | WS1 — Era-pinning cure | Single-valued identity + true provenance | Ships independently; the P1 fix. **Blocking prerequisite for Phase 3 activation** (a v3 flip under the old name-caching hooks would re-split every live session, exactly as v2's activation did). |
+| **1** | WS1 — Era-pinning cure | Single-valued identity + true provenance | **The safety prerequisite for Phase 3 activation** (a v3 flip under the old name-caching hooks would re-split every live session, exactly as v2's activation did). Mechanically shippable ahead of the wordlist work; its split-prevention payoff lands at activation, its provenance-correctness gain lands immediately. |
 | **2** | WS2 — v3 wordlist curation | Curated ~120 agentives passing the gates; owner-approved | Independent of Phase 1 mechanically; sequenced after per the source decision. |
 | **3** | WS3 — v3 registry entry + activation | v3 registered, digest-pinned, and active | Consumes Phase 1 (true provenance at activation) and Phase 2 (approved wordlists). |
 
@@ -335,9 +341,11 @@ spec-help describe `OAK_AGENT_NAMING_SCHEMA_ID` (era pin) and narrow
 **Acceptance**: AC-5, AC-9. **Validation**: the recorded CLI transcript +
 `pnpm --filter @oaknational/agent-tools test`.
 
-> **Phase 1 landing note.** WS1 cycles 1.1–1.4 are a complete, shippable P1
-> fix. They may merge before any Phase 2/3 work exists. Do not gate them on the
-> v3 decision.
+> **Phase 1 landing note.** WS1 cycles 1.1–1.4 are complete and shippable
+> ahead of any Phase 2/3 work — they may merge before the v3 wordlists exist,
+> and must not be gated on v3 wordlist curation. Their purpose is to make v3
+> activation safe, so sequence them first: activation (WS3 cycle 3.2) is
+> hard-gated on this cure being live.
 
 ---
 
@@ -362,15 +370,19 @@ plus agentive-specific gates: agentives are distinct from every first-word
 noun (no noun appearing as its own agentive), and the agentive pool meets the
 target cardinality floor (≈120). Reuse the v2 gate helpers; do not re-implement.
 
-**Unverified assumption to gate first (flagged at authoring, not independently
-confirmed):** the "540-noun union" rests on the v2 subject (300) and object
-(240) lists being **disjoint** (subject ∩ object = ∅). The v2 gates enforce
-*within-theme* subject/object stem-disjointness, NOT full cross-set disjointness
-across all six themes. Add an explicit test asserting the subject-set and
-object-set union has cardinality 540 (no element in both) before any namespace
-figure (64,800) is relied upon. If overlap exists, the first-word pool is
-smaller and the distinctiveness maths shifts — surface to the owner rather than
-silently de-duplicating.
+**Assumption verified 2026-06-29 (gate retained for defence-in-depth):** the
+"540-noun union" rests on the v2 subject (300) and object (240) lists being
+**disjoint** (subject ∩ object = ∅). This was confirmed first-hand against the
+live theme files (`schemas/v2/{aerial,botanical,celestial,ember,maritime,nocturnal}.ts`):
+subject 300 unique, object 240 unique, **union exactly 540, intersection empty,
+no cross-theme duplicates**. So the 64,800 namespace figure holds as authored.
+The v2 gates enforce only *within-theme* subject/object stem-disjointness, NOT
+full cross-set disjointness across all six themes — so the explicit gate below
+still belongs: keep a test asserting the subject-set and object-set union has
+cardinality 540 (no element in both), because the material can change and the
+gate is what keeps the namespace figure honest. If a future edit introduces
+overlap, the test fails and the distinctiveness maths is re-surfaced to the
+owner rather than silently de-duplicated.
 
 **Acceptance**: AC-6. **Validation**:
 `pnpm --filter @oaknational/agent-tools test -- v3-curation`.
@@ -394,6 +406,36 @@ v2 WS4 checkpoint gated v2 activation. The digest pin freezes the material at
 registration, so review must land first. Surface the list via
 `AskUserQuestion` with the curated pool attached; the gates prove correctness,
 the owner owns taste.
+
+**The review's primary target is live-window distinguishability, not per-word
+taste.** The design goal of shape C is that a human supervising a real
+multi-agent team can tell 5–10 simultaneously-active agents apart at a glance
+and remember them across a session — that is the impact the namespace-clash
+figure (8.3% ten-agent first-name clash) is a *proxy* for, and the two can
+diverge: a low clash rate does not guarantee that eight flat two-word names
+read as distinct to a human eye. So the review must present a **sample of
+5–10 concurrently-derived full names** (deterministic, from fixed sample
+seeds), not just the agentive column in isolation. The wordlist passing the
+cardinality and diversity gates is necessary but not sufficient; the owner
+judges whether the *rendered team* is distinguishable and memorable.
+
+This distinguishability target is the **human-UX face of the system**. The
+agent name exists *for the human supervising the team*: its machine-side
+identity is the UUID v5 and the `session_id` (both untouched here), so the
+rendered name's entire job is human apprehension — **owner legibility of a live
+agent team**, being able to see, tell apart, trust, and direct a fluid set of
+agents at a glance. The
+[**statusline**](session-and-team-state-statusline-icons.plan.md) is where that
+name is actually consumed, and its **entire function is human UX** too —
+alongside the session title. So the name and the statusline are the *same kind
+of thing*: a human-facing **render** over machine-keyed state (the derived
+work-state seat in
+[`agent-spawn-flow-tool.plan.md`](agent-spawn-flow-tool.plan.md), the
+`session_id`, the UUID). The clash-rate figure is a **machine-proxy for a
+human-UX function**, never the function itself — which is exactly why the
+owner-taste-review must judge the 5–10 names **as they render on the statusline
+and in session titles**, their real consumption context, not as an abstract
+wordlist.
 
 ---
 
@@ -525,6 +567,47 @@ is complete at AC-1…AC-5; the full plan at AC-1…AC-9.
 
 ---
 
+## Connection to the Knowledge-Distribution Substrate (recorded 2026-06-29)
+
+This plan was authored 2026-06-13, **before** the owner's 2026-06-28 substrate
+direction in
+[`knowledge-distribution-substrate.plan.md`](../future/knowledge-distribution-substrate.plan.md)
+(future-strategic — *recorded understanding, not a build authorisation*). The
+connection is recorded here so the env-var choice is reconciled by design, not
+discovered later.
+
+- **The seed-on-env is sanctioned, not debt.** The substrate's own spawn flow
+  (`agent-spawn-flow-tool.plan.md`) sets `PRACTICE_AGENT_SESSION_ID` in its
+  launch command to root a session — env is the agreed bootstrap carrier for
+  the *seed*, because a shell subprocess cannot see the harness stdin that
+  carries `session_id`. WS1 reuses that exact mechanism.
+- **The era env var is a deliberate minimal bootstrap carrier.**
+  `OAK_AGENT_NAMING_SCHEMA_ID` is a *second* identity env var the substrate's
+  two-layer identity model (`knowledge-distribution-substrate.plan.md` §"Two-layer
+  identity model") does not itself name. It is justified at t=0: the statusline
+  derives before any session record exists, so the era must be pinned somewhere
+  env-reachable. Ship it — it is the safe, available single-valued-identity cure.
+- **Known reconciliation-debt, named now.** The substrate-native cure for the
+  split is to **stamp identity once in an append-only session-identity event**
+  and have consumers *render* over it (the substrate's `render` transport verb),
+  rather than re-derive everywhere from a pinned env era. v3's own
+  *derive-don't-cache* insight is a **local instance of that same `render`
+  principle** — the small fix independently found the substrate's core verb.
+  When the substrate is built, `OAK_AGENT_NAMING_SCHEMA_ID` either becomes a
+  typed bootstrap instance or dissolves into the session-identity event; this
+  note marks it as known, not a surprise. v3 era-pinning is also the natural
+  **first proving instance of substrate cold-start for identity**, as the spawn
+  flow is for the work-state seat.
+- **Identity cross-links (the wider cluster):**
+  [`collaboration-identity-doctrine-enforcement-remediation.plan.md`](collaboration-identity-doctrine-enforcement-remediation.plan.md)
+  (the UUID-v5 `id` tuple — content-addressed identity),
+  [`codex-session-identity-plumbing.plan.md`](../future/codex-session-identity-plumbing.plan.md)
+  (per-platform seed derivation from `CODEX_THREAD_ID`),
+  [`agent-work-state-registry.plan.md`](../future/agent-work-state-registry.plan.md)
+  (superseded — the seat is *derived*, not authored).
+
+---
+
 ## Documentation Propagation
 
 > See [Documentation Propagation component](../../templates/components/documentation-propagation.md)
@@ -554,7 +637,10 @@ registration (WS2 checkpoint). WS1 fully landed before WS3 cycle 3.2
 
 **Related plans**: [`statusline-session-shape-indicators.plan.md`](statusline-session-shape-indicators.plan.md)
 also touches `statusline-identity` — coordinate the statusline edit if both run
-concurrently (separate concern: shape indicators vs identity derivation).
+concurrently (separate concern: shape indicators vs identity derivation). For
+the conceptual identity-substrate cross-links (the substrate, the two-layer
+identity model, the superseded work-state registry, the UUID-tuple and Codex
+identity work), see §"Connection to the Knowledge-Distribution Substrate" above.
 
 ## Readiness Reviewers
 

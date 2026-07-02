@@ -43,3 +43,21 @@ flags, custom metrics, profiling evaluation, and trace
 propagation. Only 3 items (context enrichment, source maps,
 clean shutdown) were actually needed for "working Sentry." The
 rest were enhancements on top of a system that wasn't useful yet.
+
+## The golden-set variant (means-vs-ends screen)
+
+Run this screen on any *"prove X against a golden/reference set"*
+framing: the golden set / recall gate **tunes the instrument**; the
+end is what the work actually produces (the discovery, the shipped
+behaviour). It is easy to harden the tuning dial into the milestone —
+the corpus-analysis arc PASS/FAILed its plan on a recall gate until
+the owner corrected: "tuning against the golden dataset was not the
+ends, just a means to getting to the ends more effectively"
+(2026-06-30). The tell: **the success criterion measures the
+instrument's fidelity, not the work's value.** A criterion like that
+can declare false success (high recall, trivial yield) or false
+failure (rich new insight but a missed narrow baseline → an expensive
+re-run for a tuning point after the value was already delivered). Cure:
+the deliverable is the conserved output; the reference-set score is a
+credibility dial, and a miss triggers "did it cost real value?", never
+an automatic re-run.

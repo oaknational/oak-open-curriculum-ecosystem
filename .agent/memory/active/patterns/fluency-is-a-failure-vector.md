@@ -63,6 +63,9 @@ general anti-pattern.
 
 ## Related
 
+- [`legitimate-principle-as-avoidance-cover`](legitimate-principle-as-avoidance-cover.md) — the
+  sibling failure where the over-trusted justification is *true* (a real principle bent to license
+  an omission it does not actually cover), not merely fluent.
 - The **escape-hatch generative screen** and the **no-cheap-cure** discipline (metacognition
   directive + per-user memory) — the screen this instance applies: never make a valid signal
   vanish without the complete fix.

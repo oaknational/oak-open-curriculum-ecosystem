@@ -1,0 +1,18 @@
+name = "corpus-meta"
+description = "Read-only recall-calibration synthesist for the corpus-analysis meta workflow stage; judges per-baseline matches and verifies corroboration paths, emitting per-item judgments only."
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/corpus-meta.md`.
+
+This file is a thin Codex adapter. The canonical role definition lives in the
+template referenced above; the dispatch supplies the complete judgment inputs
+(dispositioned candidates + frozen recall baselines).
+
+Mode: read-only search solely to verify on-disk corroboration home paths;
+emit per-item judgments and prose only — never aggregate numbers — and
+answer with the single required structured output call. Do not modify
+anything.
+"""

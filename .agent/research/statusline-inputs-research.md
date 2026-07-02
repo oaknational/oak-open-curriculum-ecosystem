@@ -318,11 +318,18 @@ Node use optional chaining `?.` with `|| 0`.
 This is the part the earlier verbal answer got wrong. There **are** relevant
 environment variables — they are just not named `CLAUDE_*`:
 
-- **`COLUMNS` and `LINES`** — Claude Code captures the script's output rather than
+- **`COLUMNS` and `LINES` — terminal dimensions ARE knowable; this is the
+  responsive-layout enabler.** Claude Code captures the script's output rather than
   attaching it to the terminal, so `tput cols` and language-level width detection
   **cannot** read the terminal size from inside the script. Claude Code sets
   `COLUMNS` and `LINES` to the current terminal dimensions before running the
   command. **Read these to size your output.** Requires **v2.1.153 or later**.
+  **Design consequence:** statusline layouts can be **responsive** — adapt segment
+  inclusion, truncation, reflow, and the logo column to the live terminal width
+  (drop or shorten low-priority segments when narrow, widen when wide). Contrast
+  with the terminal **theme**, which is NOT knowable (see the colour section): the
+  *dimensions* are a supported input, the *theme* is not. A strong candidate for a
+  future statusline enhancement lane (owner direction 2026-06-29).
 - **`FORCE_HYPERLINK`** — set this in the environment *before launching* Claude Code
   (`FORCE_HYPERLINK=1 claude`) to force OSC 8 clickable-link support on terminals
   Claude Code does not auto-detect (e.g. Windows Terminal). This is an input to

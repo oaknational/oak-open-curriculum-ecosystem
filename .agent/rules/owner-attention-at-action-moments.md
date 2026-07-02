@@ -68,6 +68,18 @@ When the agent IS at an action-moment, make it observable:
 - **`AskUserQuestion` shape**: when used at an action-moment, the options
   are action choices with stated trade-offs; the default option is named
   if the agent has a verdict.
+- **Notify at the action moment; presence is evidenced, never inferred.**
+  At a genuine owner-action moment (a PR fully green and merge-ready
+  awaiting the code-owner, a blocker needing a decision, a long task
+  finished), send the notification. Treat the owner as present only when
+  a *recent actual owner message* exists — monitor ticks, CI events, task
+  notifications, and the agent's own output are never presence evidence.
+  When in doubt at a real action moment, err toward notifying: a needed
+  notification that lands beats one suppressed on a guessed presence
+  signal. (Worked failure 2026-07-01: a merge-ready push for PR #291 was
+  suppressed on "they're clearly watching" inferred from monitor ticks
+  and the agent's own hold-messages; the owner was away, and the one
+  notification that would have pulled them back never fired.)
 
 ### Evidence that refutes an owner-approved premise is an action-moment
 

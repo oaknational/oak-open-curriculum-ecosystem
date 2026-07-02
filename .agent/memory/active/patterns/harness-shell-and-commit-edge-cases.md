@@ -20,6 +20,14 @@ barrier:
 - **zsh does not expand a glob held in a variable** — inline the glob
   literally rather than storing the pattern in a variable and expecting
   expansion.
+- **zsh backtick command-substitution inside quoted search/comms strings
+  mangles** — prefer `$(...)`, and pass bodies containing backticks or `$`
+  via `--body-file`, never inline.
+- **zsh does not word-split an unquoted `$var`** (`cat $files` passes one
+  joined string → "No such file") and lacks `local -n` namerefs — use zsh
+  arrays and `${(P)name}`.
+- **`rg -r` is replace, not line numbers** — `-n` is line numbers; the two
+  are one typo apart and `-r` silently rewrites the match in the output.
 - **A custom `Merge origin/...` header fails commitlint** — only
   `Merge branch …` / `… into …` are auto-ignored. Resolve a merge with a
   conventional `chore:` header instead, or the default `Merge branch` form.

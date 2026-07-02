@@ -109,4 +109,4 @@ backtick-wrapped inline `[…]` block (may wrap across lines) with pipe-separate
 finding). `target` must name a doctrine surface (rule / PDR / ADR / pattern /
 governance doc); if it names a plan or report, the item belongs elsewhere.
 
-<!-- No live items. New pending-graduation capture appends below as inline-bracket entries. -->
+<!-- New pending-graduation capture appends below as inline-bracket entries. -->

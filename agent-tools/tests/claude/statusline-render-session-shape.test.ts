@@ -10,13 +10,9 @@
 import { describe, expect, it } from 'vitest';
 
 import { OAK_LOGO_ROWS } from '../../src/claude/oak-logo';
+import { CYAN, DIM, GREEN, MAGENTA, RESET } from '../../src/claude/statusline-ansi';
 import { renderStatusline, type StatuslineParts } from '../../src/claude/statusline-render';
 import { type SessionShape } from '../../src/claude/statusline-session-shape';
-
-const RESET = '[0m';
-const DIM = '[2m';
-const MAGENTA = '[0;35m';
-const CYAN = '[0;36m';
 
 const SEP = `${DIM} · ${RESET}`;
 
@@ -35,6 +31,10 @@ function parts(sessionShape: SessionShape | undefined): StatuslineParts {
     dirty: false,
     worktree: undefined,
     usedPercentage: undefined,
+    fiveHourPercentage: undefined,
+    fiveHourResetSeconds: undefined,
+    sevenDayPercentage: undefined,
+    sevenDayResetSeconds: undefined,
     model: undefined,
     sessionShape,
     coordinationBranch: undefined,
@@ -167,9 +167,6 @@ describe('renderStatusline — session-shape indicators', () => {
 });
 
 describe('renderStatusline — session-shape indicators in the four-row layout', () => {
-  // Raw ESC matches the renderer's GREEN byte-for-byte (same convention as the
-  // RESET/DIM/MAGENTA/CYAN constants above).
-  const GREEN = '[0;32m';
   const SEXTANT = OAK_LOGO_ROWS.sextant;
   const mark = (row: string): string => `${GREEN}${row}${RESET}`;
   const GAP = '  ';
@@ -179,11 +176,13 @@ describe('renderStatusline — session-shape indicators in the four-row layout',
       parts(shape({ teamShape: 'directed', ownRole: 'director', arcActive: true })),
       { logo: 'sextant' },
     );
+    // model and context now share row 1, so the bare-dir πρ location lands on
+    // row 2 (identity, empty model+context row, location) rather than row 3.
     expect(out.split('\n').slice(0, 4)).toEqual([
       `${mark(SEXTANT[0])}${GAP}${IDENTITY} ${COMPASS}${SEP}${FAMILY} ${FEATHER}`,
       mark(SEXTANT[1]),
-      mark(SEXTANT[2]),
-      `${mark(SEXTANT[3])}${GAP}${PLACE}`,
+      `${mark(SEXTANT[2])}${GAP}${PLACE}`,
+      mark(SEXTANT[3]),
     ]);
   });
 

@@ -73,6 +73,26 @@ A worktree's branch belongs to the agent driving its lane. Do not commit, stage,
 rebase another agent's worktree branch, nor mutate the working tree of a shared checkout
 you do not own; coordinate through comms and let the lane owner act. Reading is fine.
 
+**Branch operations in a shared checkout are owner-gated.** Never switch or create a
+branch (`git checkout`, `git switch`, `checkout -b`) in a checkout you do not exclusively
+own without explicit approval — announcing the intent is not approval. Switching moves
+HEAD under everyone sharing the checkout, so their next commits land on the wrong branch
+(worked failure 2026-06-29: an unauthorised `checkout -b` put the owner's next two
+commits on an agent's feature branch). The mirror discipline: in a shared checkout,
+verify `git branch --show-current` before **each** commit — a peer can move the branch
+under you mid-session. When commits do land on the wrong branch, recover without loss
+and without destructive ops: `git branch -f <intended> <tip>` (fast-forward the intended
+branch to the commits), `git switch <intended>` (content-identical, so uncommitted work
+carries over), then `git branch -f <other> <its-clean-base>` to re-point the polluted
+branch. No reset, no rebase, no force-push.
+
+**A peer's untracked file is not evidence of abandonment.** Before committing another
+session's untracked file "to conserve in-flight work", check it is not being actively
+written (mtime vs now; peer liveness) — a file being edited *now* is live WIP to leave
+alone, not orphaned work to snapshot (worked instance 2026-06-29: a peer's report was
+conservation-committed mid-write; the peer's later edits stayed uncommitted for them —
+additive, but the snapshot was premature).
+
 ### 6. Retirement requires a CONTENT check, not a commit check
 
 Squash-merges make commit counts (`origin/main..HEAD`) meaningless — a branch's content

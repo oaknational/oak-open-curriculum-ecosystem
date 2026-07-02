@@ -40,6 +40,14 @@ stale or wrong state, and nothing relevant to the goal is left unwalked.*
 never changes the approach, it is ceremony. Its job is to catch a too-narrow scope or
 an ungrounded gate *before* you act — not to decorate the turn.
 
+**Light-scan-before-deep applies to BUILD goals, not only to analysis.** Given a
+concrete build goal, the proportionate first move is the simplest working thing
+that delivers it — not a deep architecture review before any code exists. Scoping
+from the goal tells you *what* the build must cover; it does not licence
+front-loading design ceremony the goal does not need. Build the simplest thing
+that works, ship it, then let real friction (not anticipated friction) drive the
+next increment.
+
 ## The Two Failure Modes It Catches
 
 | Face | Symptom | Cure |

@@ -319,3 +319,27 @@ mechanical gates so it cannot be skipped by forgetting it (F-95):
 Both gates classify liveness from the watcher's `<seen-file>.heartbeat.json`
 (stale past 3× its interval). Mid-session watcher death is a separate concern
 (the cycle-boundary staleness check), not this session-open gate.
+
+## Known Silent-Failure Class
+
+Comms infrastructure has a recurring class of failures that report nothing
+wrong. Check these before trusting a quiet channel:
+
+- **The rendered log is a full constructive overwrite** — `comms render`
+  regenerates `shared-comms-log.md` wholesale; never hand-edit the rendered
+  view (edits are destroyed on the next render) and never treat it as the
+  event source (it lags — the canonical `comms/*.json` event files are truth).
+- **First run without a `--seen-file` replays the entire history**, burying
+  live events under the backlog; always pass the seen-file cursor.
+- **Self-exclusion filters can drop directed events** — a filter meant to skip
+  the agent's own broadcasts can also skip events *addressed to* the agent;
+  verify inclusion with a known directed event before relying on a filter.
+- **Events can land in a retired or decoy directory** — a worktree-launched
+  watcher that resolves a local `.agent/state/collaboration/comms` watches an
+  empty decoy (the CLI silently creates it), and writes to a retired dir are
+  equally silent. Verify the watch/send dir is the primary coordination home
+  (`resolveCoordinationHome`) — the F-41 family; the cure plan is
+  `agent-tooling/current/coordination-home-cli-path-defaulting.plan.md`.
+- **The CLI can exit 0 while transferring or parsing nothing** — read the
+  failure surface (event counts, the written file), never the exit code
+  (`wrapped-exit-codes-false-green`).

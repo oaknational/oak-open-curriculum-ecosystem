@@ -34,6 +34,22 @@ The loop is:
 
 Do not merge, and do not report the PR ready, until step 5 holds.
 
+Re-verify zero-unresolved **at the ready/merge instant**, not only after your last
+push. Bots (Cursor Bugbot, Copilot, Codex) post asynchronously — a fresh thread
+routinely lands in the 30–60 seconds *between* your last check and your
+"threads resolved / ready" declaration. This is a **structural race, not author
+negligence**: it has caught many different agents on their own PRs, so the cure is
+a re-check bound to the merge instant (the merging agent's responsibility), never
+"I was diligent last push". Re-fetch all threads immediately before declaring
+ready or merging; if any is unresolved, return to step 2.
+
+Resolving a thread is **metadata, not a fix.** Marking threads resolved to clear
+`mergeStateStatus` (or any merge-readiness signal) without settling the concern
+the comment raised is the inverse of this rule: it makes the PR *look* ready
+while the substance is untouched. A thread is resolved only *after* its comment
+is fixed in code or explicitly rejected with rationale — never as a shortcut to a
+green merge state.
+
 Worked instance (2026-06-27, PR #244): fixing five review comments and pushing — twice — each
 time spawned a fresh bot comment on the very change that resolved the prior one (a too-broad
 lint ignore; then a plan over-generalisation; then a missing gitignore pairing). Assuming the

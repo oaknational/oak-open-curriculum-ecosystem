@@ -1,0 +1,17 @@
+name = "corpus-reducer"
+description = "Clustering synthesist for the corpus-analysis reduce workflow stage; clusters inlined leaf signals into mechanism-grained candidates via the schema-forced structured output."
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/corpus-reducer.md`.
+
+This file is a thin Codex adapter. The canonical role definition lives in the
+template referenced above; the dispatch inlines the complete leaf-signal set.
+
+Mode: cluster only from the supplied leaves — no other reads are part of the
+task (on Claude this role runs zero-tools by frontmatter; honour that
+envelope behaviourally here) — and answer with the single required
+structured output call. Do not modify anything.
+"""

@@ -89,6 +89,11 @@ work-state-seat / role / claim are **distinct facets**, not one (decompose-at-th
 primitive is needed; the seat is the derived work-state binding + the role from the brief; the claim is
 an optional coordination flow layered on only when there's mutable-area coordination. The session-name
 is a human-friendly label on the current occupant; the stable handle is the **seat (work-state + role)**.
+The session-name's *provenance* is itself an identity-flow concern (the identity row in §"Flows that
+re-home"): the substrate-native cure **renders** the name from a once-stamped `session_id`+era rather than
+caching it in env, which [`agent-naming-schema-v3`](../current/agent-naming-schema-v3.plan.md) takes its
+first step toward via era-pinning (its §"Connection to the Knowledge-Distribution Substrate" records the
+reconciliation).
 
 ## The spawn flow — the first proving instance
 
@@ -146,6 +151,7 @@ checkout** (it has the built tooling *and* the context for the new agent), that:
 | Commit queue | bespoke paths | ordered-register flow |
 | Spawn brief | (new) | directed-payload flow |
 | Cross-worktree roster | hand-authored | derived view flow |
+| Agent identity / name | env-cached name or era (`OAK_AGENT_IDENTITY_OVERRIDE` / `OAK_AGENT_NAMING_SCHEMA_ID`) | identity-event flow: stamp `session_id`+era once, **render** the name (no re-derive, no env era-pin); [`agent-naming-schema-v3`](../current/agent-naming-schema-v3.plan.md) era-pinning is the first proving step |
 
 ## The path (recorded plan)
 

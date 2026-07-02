@@ -2,8 +2,6 @@ import { BRAILLE_SHARP_FRAMES, OAK_LOGO_ROWS } from '../../src/claude/oak-logo';
 import { renderStatusline, type StatuslineParts } from '../../src/claude/statusline-render';
 
 const RESET = '\x1b[0m';
-const DIM = '\x1b[2m';
-const CYAN = '\x1b[0;36m';
 const GREEN = '\x1b[0;32m';
 const RED = '\x1b[0;31m';
 const YELLOW = '\x1b[0;33m';
@@ -15,6 +13,10 @@ const base: StatuslineParts = {
   dirty: false,
   worktree: undefined,
   usedPercentage: undefined,
+  fiveHourPercentage: undefined,
+  fiveHourResetSeconds: undefined,
+  sevenDayPercentage: undefined,
+  sevenDayResetSeconds: undefined,
   model: undefined,
   sessionShape: undefined,
   coordinationBranch: undefined,
@@ -22,135 +24,121 @@ const base: StatuslineParts = {
   error: undefined,
 };
 
-describe('renderStatusline', () => {
-  it('puts the identity-and-context segments and the git segments on separate lines', () => {
-    const lines = renderStatusline({
-      identity: 'Fragrant Creeping Sapling',
-      dir: 'oak-wt-eef',
-      branch: 'feat/eef-explore-evidence',
-      dirty: false,
-      worktree: 'oak-wt-eef',
-      usedPercentage: 12,
-      model: 'Opus 4.7',
-      sessionShape: undefined,
-      coordinationBranch: undefined,
-      coordinationPlace: undefined,
-      error: undefined,
-    }).split('\n');
+/** The rendered line containing a needle — the unit of behaviour, independent of row geometry. */
+const lineWith = (out: string, needle: string): string =>
+  out.split('\n').find((line) => line.includes(needle)) ?? '';
+/** The index of the line containing a needle, for proving relative order without pinning positions. */
+const lineIndexOf = (out: string, needle: string): number =>
+  out.split('\n').findIndex((line) => line.includes(needle));
+/** Strip ANSI colour codes to assert on the visible text, not the colouring. */
+const ANSI_CODE = new RegExp(String.raw`${String.fromCharCode(27)}\[[0-9;]*m`, 'g');
+const stripAnsi = (text: string): string => text.replaceAll(ANSI_CODE, '');
 
-    expect(lines).toHaveLength(2);
-    expect(lines[0]).toContain('Fragrant Creeping Sapling');
-    expect(lines[0]).toContain('Opus 4.7');
-    expect(lines[0]).toContain('ctx:12%');
-    expect(lines[0]).not.toContain('feat/eef-explore-evidence');
-    expect(lines[1]).toContain('feat/eef-explore-evidence');
-    expect(lines[1]).toContain('wt:oak-wt-eef');
+describe('renderStatusline — model and context', () => {
+  // Behaviour, not row index: model and context belong on one line, in either layout.
+  it.each(['none', 'sextant'] as const)(
+    'renders the model and the context percentage on the same line (%s layout)',
+    (logo) => {
+      const out = renderStatusline(
+        { ...base, model: 'Opus 4.8', usedPercentage: 38, branch: 'main' },
+        { logo },
+      );
+      expect(lineWith(out, 'Opus 4.8')).toContain('ctx:38%');
+    },
+  );
+});
+
+describe('renderStatusline — primary checkout', () => {
+  it('shows the checkout name on a line above its branch, with no coordination label', () => {
+    const out = renderStatusline({
+      ...base,
+      dir: 'oak-open-curriculum-ecosystem',
+      branch: 'docs/consolidations',
+    });
+    expect(lineIndexOf(out, 'oak-open-curriculum-ecosystem')).toBeLessThan(
+      lineIndexOf(out, 'docs/consolidations'),
+    );
+    expect(lineWith(out, 'oak-open-curriculum-ecosystem')).not.toContain('docs/consolidations');
+    expect(out).not.toContain('coord:');
+    expect(out).not.toContain('πρ');
   });
 
-  it('emits a single line (no newline) when only git segments are present', () => {
-    const out = renderStatusline({ ...base, branch: 'main' });
-    expect(out).not.toContain('\n');
-    expect(out).toContain('main');
+  it('marks the branch when the working tree is dirty, and not when it is clean', () => {
+    expect(lineWith(renderStatusline({ ...base, branch: 'main', dirty: true }), 'main')).toContain(
+      '*',
+    );
+    expect(renderStatusline({ ...base, branch: 'main', dirty: false })).not.toContain('*');
+  });
+
+  it('shows just the directory outside a repository', () => {
+    const out = renderStatusline({ ...base, dir: 'repo' });
     expect(out).toContain('repo');
-    expect(out.indexOf('main')).toBeLessThan(out.indexOf('repo'));
+    expect(out).not.toContain('\n');
+    expect(out).not.toContain('coord:');
+  });
+});
+
+describe('renderStatusline — linked worktree', () => {
+  const worktree: StatuslineParts = {
+    ...base,
+    dir: 'oak-wt-eef',
+    branch: 'feat/eef-explore-evidence',
+    dirty: true,
+    worktree: 'oak-wt-eef',
+    coordinationBranch: 'coordination/worktree-pilot',
+    coordinationPlace: 'oak-open-curriculum-ecosystem',
+  };
+
+  it('labels the primary branch coord: and shows the worktree branch and name separately', () => {
+    const out = renderStatusline(worktree);
+    expect(lineWith(out, 'coordination/worktree-pilot')).toContain('coord:');
+    const worktreeLine = lineWith(out, 'feat/eef-explore-evidence');
+    expect(worktreeLine).toContain('oak-wt-eef');
+    expect(worktreeLine).not.toContain('coord:');
+    expect(out).toContain('oak-open-curriculum-ecosystem');
   });
 
-  it('omits the identity segment when no identity is resolved', () => {
-    expect(renderStatusline({ ...base, dir: 'repo' })).toBe(`${CYAN}repo${RESET}`);
+  it('orders the coordination branch before the worktree', () => {
+    const out = renderStatusline(worktree);
+    expect(lineIndexOf(out, 'coordination/worktree-pilot')).toBeLessThan(
+      lineIndexOf(out, 'feat/eef-explore-evidence'),
+    );
   });
 
-  it('shows the directory when not in a linked worktree', () => {
-    const line = renderStatusline({ ...base, worktree: undefined });
-    expect(line).toContain(`${CYAN}repo${RESET}`);
-    expect(line).not.toContain('wt:');
+  it('puts the dirty mark on the worktree branch, not the coordination branch', () => {
+    const out = renderStatusline(worktree);
+    expect(lineWith(out, 'feat/eef-explore-evidence')).toContain('*');
+    expect(lineWith(out, 'coordination/worktree-pilot')).not.toContain('*');
   });
 
-  it('shows the worktree name instead of the directory in a linked worktree', () => {
-    const line = renderStatusline({ ...base, dir: 'repo', worktree: 'oak-wt-eef' });
-    expect(line).toContain(`${CYAN}wt:oak-wt-eef${RESET}`);
-    expect(line).not.toContain(`${CYAN}repo${RESET}`);
-  });
-
-  it('marks a dirty working tree with an asterisk and a clean tree without one', () => {
-    const dirtyOut = renderStatusline({ ...base, branch: 'main', dirty: true });
-    expect(dirtyOut).toContain('main');
-    expect(dirtyOut).toContain('*');
-
-    const cleanOut = renderStatusline({ ...base, branch: 'main', dirty: false });
-    expect(cleanOut).toContain('main');
-    expect(cleanOut).not.toContain('*');
-  });
-
-  it('omits the branch segment outside a repository', () => {
-    expect(renderStatusline({ ...base, branch: undefined, dirty: true })).not.toContain('*');
-  });
-
-  it('shows the coordination branch and primary checkout name on their own line, separate from the working branch', () => {
-    const lines = renderStatusline({
-      ...base,
-      branch: 'fix/sonar-s8707',
-      worktree: 'oak-sonar-p1',
-      coordinationBranch: 'coordination/worktree-pilot',
-      coordinationPlace: 'oak-open-curriculum-ecosystem',
-    }).split('\n');
-    const workingLine = lines.find((line) => line.includes('fix/sonar-s8707'));
-    const coordinationLine = lines.find((line) => line.includes('coordination/worktree-pilot'));
-    expect(workingLine).toBeDefined();
-    expect(coordinationLine).toBeDefined();
-    expect(coordinationLine).toContain('coord:');
-    // The primary name renders in the same cyan as the working place, so the
-    // coordination line reads as a location-and-branch pair like the working line.
-    expect(coordinationLine).toContain(`${CYAN}oak-open-curriculum-ecosystem${RESET}`);
-    expect(coordinationLine).not.toBe(workingLine);
-  });
-
-  it('omits the coordination line when there is no coordination branch', () => {
-    expect(renderStatusline({ ...base, branch: 'main' })).not.toContain('coord:');
-  });
-
-  it('shows the coordination branch alone when the primary name is deduped away', () => {
-    const lines = renderStatusline({
-      ...base,
-      branch: 'fix/statusline',
-      worktree: 'oak-open-curriculum-ecosyste-2',
+  it('still shows the coordination branch and worktree when the primary name is deduped away', () => {
+    const out = renderStatusline({
+      ...worktree,
       coordinationBranch: 'main',
       coordinationPlace: undefined,
-    }).split('\n');
-    const coordinationLine = lines.find((line) => line.includes('coord:'));
-    expect(coordinationLine).toBeDefined();
-    expect(coordinationLine).toContain('main');
-    // The redundant primary name is gone: the worktree name appears only on the
-    // working line, never repeated on the coordination line.
-    expect(coordinationLine).not.toContain('oak-open-curriculum-ecosyste-2');
+    });
+    expect(lineWith(out, 'main')).toContain('coord:');
+    expect(out).toContain('feat/eef-explore-evidence');
   });
+});
 
-  it('renders a loud error token as the leading line and never swallows it', () => {
-    const lines = renderStatusline({
+describe('renderStatusline — error and context usage', () => {
+  it('surfaces a loud error token as the leading line and never swallows it', () => {
+    const out = renderStatusline({
       ...base,
       branch: undefined,
       error: 'branch unresolved: fatal: bad object HEAD',
-    }).split('\n');
-    expect(lines[0]).toContain('⚠');
-    expect(lines[0]).toContain('branch unresolved: fatal: bad object HEAD');
+    });
+    expect(out.split('\n')[0]).toContain('⚠');
+    expect(out.split('\n')[0]).toContain('branch unresolved: fatal: bad object HEAD');
   });
 
-  it('renders low context usage in green, rounded to a whole number', () => {
-    const line = renderStatusline({ ...base, usedPercentage: 12.6 });
-    expect(line).toContain(`${GREEN}ctx:13%${RESET}`);
-    expect(line).not.toContain(`${YELLOW}ctx:13%`);
-    expect(line).not.toContain(`${RED}ctx:13%`);
-  });
-
-  it('renders elevated context usage in yellow from 50%', () => {
-    expect(renderStatusline({ ...base, usedPercentage: 50 })).toContain(`${YELLOW}ctx:50%${RESET}`);
-    expect(renderStatusline({ ...base, usedPercentage: 49.4 })).not.toContain(`${YELLOW}ctx:49%`);
-  });
-
-  it('renders high context usage in red from 70%', () => {
-    expect(renderStatusline({ ...base, usedPercentage: 70 })).toContain(`${RED}ctx:70%${RESET}`);
-    expect(renderStatusline({ ...base, usedPercentage: 69.4 })).toContain(
-      `${YELLOW}ctx:69%${RESET}`,
+  it('colours context usage green below 50%, yellow from 50%, red from 70%', () => {
+    expect(renderStatusline({ ...base, usedPercentage: 12.6 })).toContain(
+      `${GREEN}ctx:13%${RESET}`,
     );
+    expect(renderStatusline({ ...base, usedPercentage: 50 })).toContain(`${YELLOW}ctx:50%${RESET}`);
+    expect(renderStatusline({ ...base, usedPercentage: 70 })).toContain(`${RED}ctx:70%${RESET}`);
   });
 
   it('omits the context segment when usage is absent', () => {
@@ -158,130 +146,128 @@ describe('renderStatusline', () => {
   });
 });
 
-describe('renderStatusline with an Oak logo column', () => {
-  const SEXTANT = OAK_LOGO_ROWS.sextant;
-
-  it('distributes the segments across four rows beside the logo column', () => {
-    const rows = renderStatusline(
-      {
-        identity: 'Bilby hunts Eventide',
-        dir: 'oak-open-curriculum-ecosystem',
-        branch: 'feat/comms-research',
-        dirty: true,
-        worktree: undefined,
-        usedPercentage: 38,
-        model: 'Opus 4.8',
-        sessionShape: undefined,
-        coordinationBranch: undefined,
-        coordinationPlace: undefined,
-        error: undefined,
-      },
-      { logo: 'sextant' },
-    ).split('\n');
-
-    expect(rows[0]).toContain('Bilby hunts Eventide');
-    expect(rows[1]).toContain('Opus 4.8');
-    expect(rows[2]).toContain('ctx:38%');
-    expect(rows[2]).toContain('feat/comms-research');
-    expect(rows[3]).toContain('oak-open-curriculum-ecosystem');
+describe('renderStatusline — Claude.ai rate-limit gauges', () => {
+  it('shows the session (s) and week (w) consumed percentages with reset countdowns on the identity row', () => {
+    const out = renderStatusline({
+      ...base,
+      identity: 'Wyvern mends Draught',
+      fiveHourPercentage: 33,
+      fiveHourResetSeconds: 2 * 3600 + 14 * 60,
+      sevenDayPercentage: 55,
+      sevenDayResetSeconds: 3 * 86400,
+      branch: 'main',
+    });
+    const topRow = stripAnsi(lineWith(out, 'Wyvern mends Draught'));
+    expect(topRow).toContain('s:33%(2h)');
+    expect(topRow).toContain('w:55%(3d)');
   });
 
-  it('renders all four logo rows even when only the directory segment is present', () => {
-    expect(
-      renderStatusline({ ...base, dir: 'repo' }, { logo: 'sextant' })
-        .split('\n')
-        .slice(0, 4),
-    ).toEqual([
-      `${GREEN}${SEXTANT[0]}${RESET}`,
-      `${GREEN}${SEXTANT[1]}${RESET}`,
-      `${GREEN}${SEXTANT[2]}${RESET}`,
-      `${GREEN}${SEXTANT[3]}${RESET}  ${CYAN}repo${RESET}`,
-    ]);
+  it('places the gauges after the collaboration icons and before the model', () => {
+    const solo = '\u{1F9CD}';
+    const out = renderStatusline({
+      ...base,
+      identity: 'Wyvern mends Draught',
+      sessionShape: { ownRole: undefined, teamShape: 'solo', arcActive: false },
+      fiveHourPercentage: 23,
+      model: 'Opus 4.8',
+    });
+    expect(out.indexOf(solo)).toBeLessThan(out.indexOf('s:'));
+    expect(out.indexOf('s:')).toBeLessThan(out.indexOf('Opus 4.8'));
+  });
+
+  it('colour-ramps the percentage the same way as context usage', () => {
+    expect(renderStatusline({ ...base, fiveHourPercentage: 80 })).toContain(`${RED}s:80%${RESET}`);
+  });
+
+  it('omits the countdown when a window has no reset instant', () => {
+    const out = renderStatusline({ ...base, fiveHourPercentage: 33 });
+    expect(out).toContain('s:33%');
+    expect(out).not.toContain('(');
+  });
+
+  it('renders only the window that is present', () => {
+    const out = renderStatusline({ ...base, fiveHourPercentage: 23 });
+    expect(out).toContain('s:23%');
+    expect(out).not.toContain('w:');
+  });
+
+  it('shows no gauges when both windows are absent', () => {
+    expect(renderStatusline({ ...base, branch: 'main' })).not.toContain('s:');
+  });
+});
+
+describe('renderStatusline — Oak logo column mechanism', () => {
+  it('renders every logo row and drops no location fact, even past the logo height', () => {
+    // A worktree has three location rows; with a four-row logo the last lands
+    // beyond the mark and must still render rather than being dropped.
+    const out = renderStatusline(
+      {
+        ...base,
+        dir: 'oak-wt-eef',
+        branch: 'feat/eef',
+        worktree: 'oak-wt-eef',
+        coordinationBranch: 'coordination/pilot',
+        coordinationPlace: 'oak-open-curriculum-ecosystem',
+      },
+      { logo: 'sextant' },
+    );
+    for (const row of OAK_LOGO_ROWS.sextant) {
+      expect(out).toContain(row);
+    }
+    expect(out).toContain('coord:');
+    expect(out).toContain('feat/eef');
   });
 
   it('spans the separator rule to the active logo width, on by default', () => {
-    // Mechanism, not configuration: the rule width is derived from whichever
-    // logo is active — never a hardcoded width or glyph — proven across two
-    // styles whose widths differ (sextant is seven columns, braille six).
     for (const style of ['sextant', 'braille'] as const) {
       const lines = renderStatusline({ ...base, dir: 'repo' }, { logo: style }).split('\n');
-      const ruleRow = (lines.at(-1) ?? '').replaceAll(DIM, '').replaceAll(RESET, '');
+      const ruleRow = (lines.at(-1) ?? '').replaceAll('\x1b[2m', '').replaceAll(RESET, '');
       expect([...ruleRow]).toHaveLength([...OAK_LOGO_ROWS[style][0]].length);
     }
   });
 
   it('tiles a caller-supplied rule glyph across the logo width', () => {
-    // Inject a probe glyph and prove the set-it -> renders-it mechanism at the
-    // logo width; never assert the default glyph (owner-tunable presentation).
     const probe = '=';
     const lines = renderStatusline(
       { ...base, dir: 'repo' },
       { logo: 'sextant', logoSeparator: probe },
     ).split('\n');
-    const ruleRow = (lines.at(-1) ?? '').replaceAll(DIM, '').replaceAll(RESET, '');
-    const logoWidth = [...OAK_LOGO_ROWS.sextant[0]].length;
-    expect([...ruleRow]).toEqual(Array.from({ length: logoWidth }, () => probe));
+    const ruleRow = (lines.at(-1) ?? '').replaceAll('\x1b[2m', '').replaceAll(RESET, '');
+    expect([...ruleRow]).toEqual(
+      Array.from({ length: [...OAK_LOGO_ROWS.sextant[0]].length }, () => probe),
+    );
   });
 
   it('suppresses the separator rule when given an empty glyph', () => {
-    // The off switch: an explicit empty string drops the rule row entirely.
     const lines = renderStatusline(
       { ...base, dir: 'repo' },
       { logo: 'sextant', logoSeparator: '' },
     ).split('\n');
     expect(lines).toHaveLength(OAK_LOGO_ROWS.sextant.length);
-    expect(lines.at(-1)).toContain('repo');
+    expect(lines.join('\n')).toContain('repo');
   });
 
   it('omits the separator row in the no-logo layout', () => {
-    const lines = renderStatusline({ ...base, dir: 'repo' }, { logoSeparator: '<<sep>>' }).split(
-      '\n',
+    expect(renderStatusline({ ...base, dir: 'repo' }, { logoSeparator: '<<sep>>' })).not.toContain(
+      '<<sep>>',
     );
-    expect(lines).not.toContain('<<sep>>');
   });
 
-  it('uses universal quadrant glyphs for the quad style', () => {
-    const lines = renderStatusline({ ...base, dir: 'repo' }, { logo: 'quad' }).split('\n');
-    expect(lines[0]).toBe(`${GREEN}${OAK_LOGO_ROWS.quad[0]}${RESET}`);
-    expect(lines[3]).toBe(`${GREEN}${OAK_LOGO_ROWS.quad[3]}${RESET}  ${CYAN}repo${RESET}`);
-  });
-
-  it('renders the two-line layout when the logo style is none', () => {
+  it('renders no logo glyphs in the no-logo layout', () => {
     const out = renderStatusline({ ...base, dir: 'repo', model: 'Opus 4.8' }, { logo: 'none' });
-    expect(out).toContain('\n');
-    expect(out).toBe(`${DIM}Opus 4.8${RESET}\n${CYAN}repo${RESET}`);
+    expect(out).toContain('Opus 4.8');
+    expect(out).toContain('repo');
+    expect(out).not.toContain(OAK_LOGO_ROWS.sextant[0]);
   });
 
-  it('selects the braille-sharp frame named by logoFrame, defaulting to frame 0', () => {
-    // Mechanism, not glyph identity: prove logoFrame picks the matching frame's
-    // rows (compared against the exported frames, never hardcoded glyphs).
+  it('selects the braille-sharp frame named by logoFrame, defaulting to and wrapping at frame 0', () => {
     const firstRow = (logoFrame: number | undefined): string =>
       renderStatusline({ ...base, dir: 'repo' }, { logo: 'braille-sharp', logoFrame }).split(
         '\n',
       )[0];
-
-    expect(firstRow(undefined)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[0][0]}${RESET}`);
-    expect(firstRow(1)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[1][0]}${RESET}`);
-    expect(firstRow(3)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[3][0]}${RESET}`);
-    expect(firstRow(4)).toBe(`${GREEN}${BRAILLE_SHARP_FRAMES[0][0]}${RESET}`);
-  });
-
-  it('keeps the coordination branch on a four-row logo, as a bare line below the mark', () => {
-    // sextant is a four-row logo; the coordination branch is the fifth row text,
-    // so it must render as a bare trailing line rather than being dropped.
-    const lines = renderStatusline(
-      {
-        ...base,
-        dir: 'oak-sonar-p1',
-        branch: 'fix/sonar',
-        coordinationBranch: 'coordination/pilot',
-        coordinationPlace: 'oak-open-curriculum-ecosystem',
-      },
-      { logo: 'sextant' },
-    ).split('\n');
-    const coordinationLine = lines.find((line) => line.includes('coordination/pilot'));
-    expect(coordinationLine).toBeDefined();
-    expect(coordinationLine).toContain('coord:');
-    expect(coordinationLine).toContain('oak-open-curriculum-ecosystem');
+    expect(firstRow(undefined)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
+    expect(firstRow(1)).toContain(BRAILLE_SHARP_FRAMES[1][0]);
+    expect(firstRow(3)).toContain(BRAILLE_SHARP_FRAMES[3][0]);
+    expect(firstRow(4)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
   });
 });

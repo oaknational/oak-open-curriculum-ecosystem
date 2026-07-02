@@ -18,7 +18,20 @@ Whenever a prior act is invoked as the reason for an action:
 - a recorded verdict or continuity prose inherited as the frame;
 - "it has always been done this way" or an inherited shape;
 - who acted, broadcast, or arrived first;
-- the shape of a prior owner intervention.
+- the shape of a prior owner intervention;
+- an agreed plan or next step ("we agreed to run the discovery pass") invoked as
+  authority to *execute* it. Agreeing *what* to do is a design decision; doing it
+  is an action that a standing session constraint (read-only, no-commit) still
+  gates. The smooth "but we agreed to do X" is the `fluency-is-a-failure-vector`
+  tripwire — confirm live execution authority separately from agreeing the plan;
+- a recorded owner-grant note ("keep-open granted by user, <date>") treated as
+  standing authority in a later pass. The note records that a prior session
+  *claimed* a grant; the owner's approval is live and per-pass (worked failure
+  2026-07-02: two recorded keep-open grants were found not to carry the owner's
+  agreement — "grants made in my name, and I do not agree to them"). An older
+  owner directive also yields to a later one: owner direction is a stream, and
+  invoking an earlier trigger against today's explicit instruction is precedence
+  dressed as deference.
 
 ## The Cure
 
@@ -27,6 +40,14 @@ Remove or retain on a status label only after confirming the underlying
 authority — the named home read and confirmed to carry the substance, or the
 owner's live decision. Approval must be present and locatable, never inferred
 from the existence of a prior act.
+
+The constructive face: run the Decision Lenses over an
+already-committed, already-reviewed design when a correction signal arrives —
+"committed and four-lens-reviewed" is precedence, not immunity. Worked
+instance (2026-06-30, the kill-terminal-on-one adjudication): Lens 1 *mandated*
+overturning the committed design, lenses 3/4 *refined* the fix from a minimal
+patch to the cleaner quorum-floor, and the matrix *retracted* a cost/rigour
+"knob" about to be offered (a cheap-cure option caught by the matrix itself).
 
 ## Composition
 

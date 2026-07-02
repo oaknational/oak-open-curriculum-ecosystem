@@ -5,7 +5,7 @@ kind: executable
 serves_strategic_choice: pending
 derives_from:
   - ../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md
-last_updated: 2026-06-22
+last_updated: 2026-06-30
 todos:
   - id: ws1-verify-graph-core-api
     content: "RESEARCH — DONE 2026-06-22 (first-hand graph-stack survey; result recorded in ADR-200 §Open). WORKING substrate: graph-core (term/quad, DatasetCore, DataFactory, JSON-LD 1.1 processor, RDFC-1.0 canon, 7-vocab registry, GraphView interface); graph-ingest/jsonld-compatible + turtle + source-path; graph-project (RDF<->property-graph projection + adjacency); graph-corpus-sdk as the domain-instance model. JSON-LD bridge LANDED (jsonld-compatible). UN-built — the idea-graph's genuine new work: idea-node JSON Schema + id-minting + store layout; a new idea-graph domain SDK (sibling to graph-corpus-sdk); evolution tooling (supersede/split/merge/redirect with reference-rewrite + history — graph-core has only dataset CRUD); frontmatter<->store validator; harvest pipeline."
@@ -74,6 +74,47 @@ every strategic choice served by adequate plans, gaps closed by authored plans);
 person can traverse vision → strategy → stream → thread → plan and understand the intent). Plus: the
 deterministic frontmatter↔store validator is green and the prose↔frontmatter reconciliation workflow
 (ADR-200 §8) is wired.
+
+## Governing invariant — every organising axis is registered and validated (owner-stated, 2026-06-30)
+
+**No explicit organising layer or axis may be free-text.** Streams, threads, domains, lifecycle
+states, value facets, and edge-types each require (a) a **registry** — a controlled, enumerable
+source of truth — and (b) **validation** — a hard gate enforcing membership *and*
+reference-integrity. This is `schema-first-execution` / `strict-validation-at-boundary` / closed-union
+design applied to the estate's organising axes; the in-repo exemplar is the naming-schema registry
+(ADR-198: a closed `NamingSchemaId` union plus a digest gate that fails the tree on un-versioned
+edits).
+
+This is the **governance face of the graph-convergence** (the graph-approach convergence target;
+ADR-200). The [`knowledge-distribution-substrate`](../../agent-tooling/future/knowledge-distribution-substrate.plan.md)
+is the *operational-state* face of the same lever — the planning estate and the agent operating
+model are two consumers of one schema-governed graph, not two systems. The invariant is **already
+structural here** (WS2 = the node registry; WS3 = the facet/domain/edge-type registries; WS5 = the
+stream/thread/lifecycle projection-type schemas; WS4 = the deterministic validator gate) — it is
+stated as an explicit invariant so no successor leaves a vocabulary open as free-text, a
+projection-type unvalidated, or a reference unchecked.
+
+**The defect it cures (worked evidence, 2026-06-30):** in the current pre-graph estate `serves_stream`
+is ungoverned free-text — four different labels for one five-plan cluster, plus a template placeholder
+(`"[the stream above it]"`) leaking into real frontmatter — and `serves_thread: agent-operability` is
+an orphan reference to a thread with no record (there is no plan→thread reference-integrity gate). The
+rewrite must not reproduce ungoverned axes.
+
+**Pending naming decision this invariant owns (re-homed from the open-questions register,
+2026-07-02):** the five-plan agent-team-operations cluster (`agent-naming-schema-v3`,
+`knowledge-distribution-substrate`, `agent-spawn-flow-tool`,
+`session-and-team-state-statusline-icons`, `collaboration-substrate-coordination-rightsizing`)
+gets its name — and its tier (sub-stream vs thread) — **minted as a registered axis value at
+WS2/WS3 and owner-ratified there**, in one act. The owner leaned "agent teams / agent-team
+operations" (2026-06-30); "substrate" is avoided in the group name to prevent part/whole
+confusion with the member `knowledge-distribution-substrate` plan. Do not mint a free-text
+`serves_stream` value ahead of the registry.
+
+**Binds:** WS2 (close the node schema's axis vocabularies; do not leave them free-text), WS3 (the
+closed vocabularies *are* the registries), WS5 (projection-type schemas validate stream / thread /
+lifecycle membership), WS4 (the validator enforces membership **and** reference-integrity — a
+deliberately-orphaned `serves_thread`-class edge must fail the gate, the way the WS4 dangling-inbound
+case already does).
 
 ## Prerequisites
 

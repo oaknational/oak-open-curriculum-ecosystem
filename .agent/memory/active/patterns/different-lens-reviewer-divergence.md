@@ -41,7 +41,14 @@ validation. Three observations make the pattern operational:
    on the same finding is a separate signal (depth-of-concern
    indicator: ≥2 lenses seeing the same thing means the concern is
    load-bearing, not lens-specific), but divergence is the default
-   expectation, not a failure of dispatch.
+   expectation, not a failure of dispatch. **Convergence is only a
+   depth-of-concern signal when the reviewers were independently and
+   neutrally briefed.** A wrong premise in the brief poisons every
+   reviewer's approval into *false* convergence — a concurring reviewer
+   can simply have inherited your error. So reviewer consensus is never
+   truth by itself: verify the load-bearing facts first-hand in both
+   directions, and when reviewers agree, check whether a concurrer
+   merely echoed the brief rather than re-deriving the finding.
 3. **Substance-ripeness is measured per lens.** A two-reviewer
    dispatch where one returns GO and one returns GO WITH CONDITIONS
    is not "ambiguous"; it is the two-lens reading. The conditions

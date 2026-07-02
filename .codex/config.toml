@@ -107,5 +107,21 @@ config_file = "agents/design-system-expert.toml"
 description = "React component specialist for both read-only review and active-workflow planning around hooks, render performance, prop API design, and composition patterns in UI-shipping workspaces."
 config_file = "agents/react-component-expert.toml"
 
+[agents."corpus-mapper"]
+description = "Read-only leaf-signal extractor for the corpus-analysis map workflow stage; one agent per corpus window, answering only via the schema-forced structured output."
+config_file = "agents/corpus-mapper.toml"
+
+[agents."corpus-reducer"]
+description = "Clustering synthesist for the corpus-analysis reduce workflow stage; clusters inlined leaf signals into mechanism-grained candidates via the schema-forced structured output."
+config_file = "agents/corpus-reducer.toml"
+
+[agents."corpus-voter"]
+description = "Single-turn adversary voter for the corpus-analysis validate workflow; judges one candidate against the four conjunctive apophenia tests from supplied grounding only."
+config_file = "agents/corpus-voter.toml"
+
+[agents."corpus-meta"]
+description = "Read-only recall-calibration synthesist for the corpus-analysis meta workflow stage; judges per-baseline matches and verifies corroboration paths, emitting per-item judgments only."
+config_file = "agents/corpus-meta.toml"
+
 [sandbox_workspace_write]
 network_access = true

@@ -65,13 +65,18 @@ extraction, napkin rotation, fitness management, and practice exchange.
 
 ### Conservation Invariant
 
-The value of every mode is conserving and correctly homing insight. Fitness
-results, line counts, and buffer sizes are diagnostic signals, not goals. Do not
-chase lower numbers, trim understanding, or suppress capture to make a report
-look better. Process the knowledge, preserve the learning at full weight, move
-it to the right durable home, and let any fitness improvement happen only as the
-side effect of real curation. Completion evidence is item-level disposition and
-truthful closeout, not a softer fitness report.
+The goal of every mode is that knowledge and understanding **exist where they do
+the most good — read at the moment they change a decision.** "Correctly homing
+insight" is placing each piece where it has the most impact: the rule that fires at
+the action moment, the portable PDR that travels, the top of the surface the next
+worker opens. **Thresholds are never what we care about.** Fitness results, line and
+character counts, and buffer sizes are at most a crude, partial noticer that some
+knowledge may be mislocated — blind to the cases that matter most (buried-but-correct
+knowledge, a high-traffic surface diluted by low-impact text, a lesson homed where
+it never fires). Never chase a number, trim understanding, or suppress capture to
+make a report look better. Place the knowledge where it has impact; let any fitness
+change fall out as a side effect. Completion evidence is knowledge-in-its-
+highest-impact-home plus truthful closeout, never a softer fitness report.
 
 Start every invocation by declaring one mode. The mode fixes the default scope,
 completion criteria, and closeout evidence for the pass.
@@ -83,17 +88,19 @@ completion criteria, and closeout evidence for the pass.
   next actions. A truthful `partial slice landed` verdict is valid here.
 - **`dedicated-knowledge-curation`** - proper curation pass. This is the
   default when the owner sets a curation goal, mentions buffers, asks for a
-  curation pass, or names fitness pressure as work to process. Route
-  documentation/reference surfaces toward healthy-to-soft by preserving and
-  homing substance; process drainable buffers item by item toward empty, deciding each (graduate,
-  reject, or confirm duplicate); what cannot be decided yet is visible
-  decision-debt in the count, decided in a later pass.
+  curation pass, or names fitness pressure as work to process. Place each piece of
+  knowledge in its **highest-impact home** — read the content and ask "where does
+  this do the most good?"; process drainable buffers item by item toward empty,
+  deciding each (graduate, reject, or confirm duplicate); what cannot be decided
+  yet is visible decision-debt in the count, decided in a later pass.
 
-Fitness output is routing evidence in both modes. It is never completion
-evidence by itself. `session-completion` must not imply that all curation
+Fitness output is routing evidence in both modes — never completion evidence and
+never a completion gate. `session-completion` must not imply that all curation
 buffers were drained. `dedicated-knowledge-curation` may claim `complete` only
-when the closeout proof shows both documentation fitness at the agreed
-healthy-to-soft target and every drainable buffer item dispositioned.
+when the knowledge the pass touched lives in its highest-impact home (verified by
+reading the content) and every drainable buffer item is dispositioned — never
+because a fitness number reached a target. A residual signal at rest is reported,
+not chased.
 
 ## Cardinal Rule: Plans, Memory, Logs, Events, and Entry Points Are Not Documentation
 
@@ -508,6 +515,8 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
     them.
 7. **Graduate settled content.** This is the "enforce" edge of the knowledge flow (ADR-131 §Interaction Points, ADR-150 §Decision §5 — capture → distil → **graduate → enforce**). Treat it as a structural step, not a pass-through.
 
+   **Graduating a learned lesson into its doctrine home is non-deferrable — it is the point of the pass.** Learning from a captured note (a Director brief's standing lessons, a session's distilled entry, a curator-pass finding) and writing it into its permanent home (rule / PDR / ADR / pattern / governance doc) IS consolidation; "owner-routed", "owner-gated", or "deferred to a future/synthesis session" is valid *only* for a genuinely owner-constitutive **decision** (a verdict, a product-scope call) — never for the **homing** of an already-settled lesson. Do not let an adjacent owner-gated decision's gating bleed onto a graduation: the model *verdict* may be owner-routed while the *craft lessons* graduate now. The one legitimate graduation-time deferral is **collision avoidance** — when the home is owned by an *active mid-flight thread* (see 7b), defer to that thread rather than author a colliding standalone artefact; a stable doctrine surface (a PDR, a governance doc) is never "mid-flight", so that exemption does not license parking a homing there. Deferring a homing as "owner-routed" when the home is a stable surface is the deferral-dressed-as-deference failure (`patterns/legitimate-principle-as-avoidance-cover.md`).
+
    **Inputs to the graduation scan**:
 
    - `.agent/memory/active/distilled.md` — refined cross-session entries from prior napkin rotations.
@@ -580,11 +589,18 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    **In a DEDICATED consolidation, drive this register to zero exactly as
    pending-graduations is driven** (owner directive 2026-06-28). Every entry must be
-   *decided* this pass — answered, withdrawn, or **explicitly kept open by the user**.
-   `open` as an agent default ("deferral-honesty") does NOT satisfy a dedicated pass:
-   keep-open is a USER-ONLY grant, surfaced via `AskUserQuestion`, and the entry records
-   a `keep-open granted by user, <date>` note as the proof. (Outside a dedicated pass,
-   the lighter answer/withdraw/leave-open disposition above applies.)
+   *decided* this pass — answered, withdrawn, re-homed into its owning artefact, or
+   **explicitly kept open by the user, LIVE, in this pass**. `open` as an agent default
+   ("deferral-honesty") does NOT satisfy a dedicated pass, and neither does a recorded
+   `keep-open granted by user, <date>` note from a prior session — a recorded grant is
+   a claim to re-verify with the owner, never standing authority
+   (`precedence-is-not-approval`; owner correction 2026-07-02 after two recorded grants
+   were found not to carry the owner's agreement). Keep-open is a USER-ONLY grant,
+   surfaced via `AskUserQuestion`, consumed by the pass it is given in. For genuinely
+   long-lived questions, prefer re-homing into the owning artefact (a plan, a PDR's
+   open-questions section, a thread record) over holding them here under a grant.
+   (Outside a dedicated pass, the lighter answer/withdraw/leave-open disposition above
+   applies.)
 
    Do not convert open questions into pending-graduations entries unless the
    question has become a candidate doctrine, pattern, ADR, or PDR. When both
@@ -771,7 +787,20 @@ Rule; the standalone crosswalk plan was archived in the same pass.)
 
    For any file in `soft`, `hard`, or `critical`:
 
-   a. **Analyse** — is the content appropriately dense, or has it accumulated low-value entries?
+   a. **Analyse by reading the content and asking the impact question — never from
+   metadata.** The question is *"does this knowledge belong here, or where would it
+   have more impact?"*, asked of the content itself — for every surface the pass
+   touches, not only the ones a limit flags (the most important mislocations trip no
+   limit: buried-but-correct knowledge, a diluted high-traffic surface, a lesson
+   homed where it never fires). Fitness is one weak, partial noticer, never the
+   trigger or the answer. Read the surface and state what the read found — knowledge
+   to relocate to where it fires; completed or already-homed narrative diluting a
+   live surface (drain it to free the surface for the next reader, judged against
+   the file's `overflow_disposition` / `continuity-practice` §Disposition:
+   leave-if-live, else conserve-insight-and-delete); or genuinely dense live content
+   earning its place. A verdict resting only on size, role, or a limit ("legit
+   growth", "big continuity file", "over/under the limit", "owner-routed") is
+   forbidden — it answers the proxy, not the impact question.
    b. **Refine** — compress, deduplicate, remove entries covered elsewhere.
    c. **Restructure reference surfaces** — follow `split_strategy` only for
       reference or documentation surfaces where the change is the right
@@ -826,7 +855,8 @@ For `session-completion`, `partial slice landed` is acceptable when fresh
 learning was captured and obvious substance was routed while larger curation
 buffers remain live. Name those live buffers and next actions honestly.
 
-For `dedicated-knowledge-curation`, `complete` requires two evidence classes:
-documentation/reference surfaces are at the agreed healthy-to-soft target, and
-drainable buffers selected for the pass are empty by ledger evidence. A softer
-fitness report without item-level dispositions is not completion evidence.
+For `dedicated-knowledge-curation`, `complete` requires that the knowledge the pass
+touched lives in its **highest-impact home** (verified by reading the content, not
+by a fitness number) and that every drainable buffer item is dispositioned. A
+softer fitness report is never completion evidence; a residual signal at rest is
+reported, not chased.

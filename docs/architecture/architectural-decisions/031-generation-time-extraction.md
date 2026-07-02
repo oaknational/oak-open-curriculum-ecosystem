@@ -44,6 +44,15 @@ The `as const` schema is clearly for type definitions. The pre-generated constan
 
 The generation code can use loose types (OpenAPI3). The runtime code uses strict types (generated).
 
+### 5. Deployment Safety
+
+The same decision protects every build-time artefact served at runtime (widget
+HTML, synonyms, graph data, generated types): a runtime filesystem read of a
+build artefact breaks where the deploy target's path resolution differs
+(`process.cwd()` is not the package root on Vercel Lambda), and `dist` lags
+`src` edits across the build seam. Committed generated constants consumed via
+dependency injection (ADR-078) avoid the whole class.
+
 ## Implementation Example
 
 ### Generation Time (codegen-core.ts)

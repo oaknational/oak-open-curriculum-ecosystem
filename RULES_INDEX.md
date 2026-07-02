@@ -11,7 +11,7 @@ for the session. If a rule points to a directive, ADR, PDR, skill,
 command, or other canonical file, follow that pointer before acting in
 the affected area.
 
-Each rule has three on-disk forms:
+Each rule has four on-disk forms:
 
 - canonical content lives under `.agent/rules/` (the source of truth).
 - Claude Code platform forwarder lives under `.claude/rules/` (one-line
@@ -26,10 +26,10 @@ Platforms that auto-load their adapter tier (Claude, Cursor) pick up
 the canonical content via the forwarder. Platforms that do not
 auto-load (Codex, Gemini, and any other non-loader runtime) MUST read
 the canonical files in `.agent/rules/` directly. This index enumerates
-those canonical files; keeping the three on-disk forms aligned is part
+those canonical files; keeping the four on-disk forms aligned is part
 of the rule-authoring contract.
 
-When adding a new rule, land all three forms plus an entry in this
+When adding a new rule, land all four forms plus an entry in this
 index in the same commit.
 
 ## Classification
@@ -61,6 +61,7 @@ without proportional value.
 | Rule                                                                       | Classification | Trigger / Loading Signal                                                                         |
 | -------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------ |
 | `.agent/rules/agent-experience-review-lens.md`                             | always-on      | —                                                                                                |
+| `.agent/rules/agentic-judgment-conserve-by-default.md`                     | always-on      | —                                                                                                |
 | `.agent/rules/agent-state-observable.md`                                   | always-on      | —                                                                                                |
 | `.agent/rules/agents-default-no-gender.md`                                 | always-on      | —                                                                                                |
 | `.agent/rules/apply-architectural-principles.md`                           | always-on      | —                                                                                                |
