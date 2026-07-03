@@ -168,13 +168,7 @@ export function getSequenceGroundTruthEntries(): readonly GroundTruthEntry[] {
  * @returns Ground truth query for the benchmark entry runner
  */
 function crossSubjectToQuery(gt: CrossSubjectLessonGroundTruth): GroundTruthQuery {
-  return {
-    query: gt.query,
-    expectedRelevance: gt.expectedRelevance,
-    category: 'basic',
-    description: gt.description,
-    keyStage: gt.keyStage,
-  };
+  return toGroundTruthQuery(gt);
 }
 
 /**

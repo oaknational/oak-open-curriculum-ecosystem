@@ -53,11 +53,13 @@ export async function runOAuthAndAuthContextPhases(
     deps.log,
     deps.bootstrapTimer,
     deps.appId,
-    deps.allowedHosts,
     deps.observability,
-    deps.upstreamMetadata,
-    deps.oauthRateLimiter,
-    deps.metadataRateLimiter,
+    {
+      allowedHosts: deps.allowedHosts,
+      injectedMetadata: deps.upstreamMetadata,
+      oauthRateLimiter: deps.oauthRateLimiter,
+      metadataRateLimiter: deps.metadataRateLimiter,
+    },
   );
 
   runBootstrapPhase(

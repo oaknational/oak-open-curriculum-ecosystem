@@ -129,17 +129,22 @@ function registerOAuthRoutes(
  */
 // observability-emission-exempt: orchestration wrapper; concrete emissions live
 // in runBootstrapPhase/runAsyncBootstrapPhase and the nested route setup.
+
+export interface SetupOAuthAndCachingOpts {
+  readonly allowedHosts: readonly string[];
+  readonly injectedMetadata: UpstreamAuthServerMetadata | undefined;
+  readonly oauthRateLimiter: RequestHandler;
+  readonly metadataRateLimiter: RequestHandler;
+}
+
 export async function setupOAuthAndCaching(
   app: Express,
   runtimeConfig: RuntimeConfig,
   log: Logger,
   bootstrapTimer: PhasedTimer,
   appCounter: number,
-  allowedHosts: readonly string[],
   observability: HttpObservability,
-  injectedMetadata: UpstreamAuthServerMetadata | undefined,
-  oauthRateLimiter: RequestHandler,
-  metadataRateLimiter: RequestHandler,
+  opts: SetupOAuthAndCachingOpts,
 ): Promise<void> {
   if (!runtimeConfig.dangerouslyDisableAuth) {
     const { upstreamBaseUrl, upstreamMetadata } = await resolveUpstreamMetadata(
@@ -148,7 +153,7 @@ export async function setupOAuthAndCaching(
       bootstrapTimer,
       appCounter,
       observability,
-      injectedMetadata,
+      opts.injectedMetadata,
     );
     registerOAuthRoutes(
       app,
@@ -156,12 +161,12 @@ export async function setupOAuthAndCaching(
       log,
       bootstrapTimer,
       appCounter,
-      allowedHosts,
+      opts.allowedHosts,
       observability,
       upstreamBaseUrl,
       upstreamMetadata,
-      oauthRateLimiter,
-      metadataRateLimiter,
+      opts.oauthRateLimiter,
+      opts.metadataRateLimiter,
     );
   }
 

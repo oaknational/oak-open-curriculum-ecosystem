@@ -71,6 +71,23 @@ export async function buildSubjectContext(
 }
 
 /**
+ * Unwrap a Result from the sequence-units endpoint, logging and throwing on failure.
+ */
+async function unwrapSequenceUnits(client: OakClient, slug: string): Promise<unknown> {
+  const result = await client.getSequenceUnits(slug);
+  if (!result.ok) {
+    const error = result.error;
+    const message = formatSdkError(error);
+    ingestLogger.error('Failed to fetch sequence units', { slug, error: message });
+    if (error.kind === 'network_error') {
+      throw error.cause;
+    }
+    throw new Error(message);
+  }
+  return result.value;
+}
+
+/**
  * Build KS4 context map for a subject from its sequences.
  */
 async function buildSubjectKs4ContextMap(
@@ -80,20 +97,7 @@ async function buildSubjectKs4ContextMap(
 ): Promise<UnitContextMap> {
   ingestLogger.debug('Building KS4 context map', { subject });
 
-  // Create a wrapper that unwraps Results for the sequence units fetcher
-  const fetchSequenceUnits = async (slug: string): Promise<unknown> => {
-    const result = await client.getSequenceUnits(slug);
-    if (!result.ok) {
-      const error = result.error;
-      const message = formatSdkError(error);
-      ingestLogger.error('Failed to fetch sequence units', { slug, error: message });
-      if (error.kind === 'network_error') {
-        throw error.cause;
-      }
-      throw new Error(message);
-    }
-    return result.value;
-  };
+  const fetchSequenceUnits = (slug: string) => unwrapSequenceUnits(client, slug);
 
   const unitContextMap = await buildKs4ContextMap(
     fetchSequenceUnits,
@@ -125,20 +129,7 @@ async function buildSequenceSourcesWithEvents(
   const events: SequenceFacetProcessingMetrics[] = [];
   ingestLogger.debug('Building sequence facet sources');
 
-  // Create a wrapper that unwraps Results for the sequence units fetcher
-  const fetchSequenceUnits = async (slug: string): Promise<unknown> => {
-    const result = await client.getSequenceUnits(slug);
-    if (!result.ok) {
-      const error = result.error;
-      const message = formatSdkError(error);
-      ingestLogger.error('Failed to fetch sequence units', { slug, error: message });
-      if (error.kind === 'network_error') {
-        throw error.cause;
-      }
-      throw new Error(message);
-    }
-    return result.value;
-  };
+  const fetchSequenceUnits = (slug: string) => unwrapSequenceUnits(client, slug);
 
   const sequenceSources = await buildSequenceFacetSources(
     fetchSequenceUnits,

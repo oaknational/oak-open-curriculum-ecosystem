@@ -112,19 +112,33 @@ async function prepareBulkOperations(
   return { ops, oakClient };
 }
 
+interface BuildReportParams {
+  runId: string;
+  startTime: Date;
+  endTime: Date;
+  limit: number | undefined;
+  subject: string | undefined;
+  totalDocs: number;
+  chunks: number;
+  failures: DocumentFailure[];
+  successes: DocumentSuccess[];
+  chunkStats: ChunkStats[];
+}
+
 /** Build the diagnostic report. */
-function buildReport(
-  runId: string,
-  startTime: Date,
-  endTime: Date,
-  limit: number | undefined,
-  subject: string | undefined,
-  totalDocs: number,
-  chunks: number,
-  failures: DocumentFailure[],
-  successes: DocumentSuccess[],
-  chunkStats: ChunkStats[],
-): DiagnosticReport {
+function buildReport(params: BuildReportParams): DiagnosticReport {
+  const {
+    runId,
+    startTime,
+    endTime,
+    limit,
+    subject,
+    totalDocs,
+    chunks,
+    failures,
+    successes,
+    chunkStats,
+  } = params;
   return {
     runId,
     startTime: startTime.toISOString(),
@@ -222,18 +236,18 @@ async function main(): Promise<void> {
 
   try {
     const { allFailures, allSuccesses, allChunkStats } = await processAllChunks(esClient, chunks);
-    const report = buildReport(
+    const report = buildReport({
       runId,
       startTime,
-      new Date(),
+      endTime: new Date(),
       limit,
       subject,
-      totalDocuments,
-      chunks.length,
-      allFailures,
-      allSuccesses,
-      allChunkStats,
-    );
+      totalDocs: totalDocuments,
+      chunks: chunks.length,
+      failures: allFailures,
+      successes: allSuccesses,
+      chunkStats: allChunkStats,
+    });
     printAndSaveReport(report, join(__dirname, '..', 'diagnostics'));
   } finally {
     await oakClient.disconnect();

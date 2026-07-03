@@ -135,9 +135,10 @@ function parseCliArg(
 export function parseCliArgs(args: readonly string[]): FieldReadbackCliArgs {
   let parseState = createDefaultCliParseState();
 
-  for (let index = 0; index < args.length; index += 1) {
+  let index = 0;
+  while (index < args.length) {
     const parseResult = parseCliArg(args, index, parseState);
-    index = parseResult.lastConsumedIndex;
+    index = parseResult.lastConsumedIndex + 1;
     parseState = parseResult.parseState;
   }
 
