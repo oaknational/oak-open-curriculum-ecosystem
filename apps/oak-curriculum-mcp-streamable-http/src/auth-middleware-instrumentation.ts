@@ -117,6 +117,13 @@ function logEarlyResponseClose(
   });
 }
 
+interface ExecuteMiddlewareContext {
+  readonly log: Logger;
+  readonly name: string;
+  readonly startedAt: number;
+  readonly timer: NodeJS.Timeout | undefined;
+}
+
 /**
  * Executes middleware with error handling.
  */
@@ -125,25 +132,22 @@ function executeMiddleware(
   req: Request,
   res: AuthInstrumentationResponse,
   next: NextFunction,
-  log: Logger,
-  name: string,
-  startedAt: number,
-  timer: NodeJS.Timeout | undefined,
+  ctx: ExecuteMiddlewareContext,
 ): void {
   try {
     middleware(req, res, next);
   } catch (error) {
-    clearPendingTimer(timer);
-    const durationMs = Date.now() - startedAt;
+    clearPendingTimer(ctx.timer);
+    const durationMs = Date.now() - ctx.startedAt;
 
     if (error instanceof Error) {
-      log.debug(`${name} threw`, {
+      ctx.log.debug(`${ctx.name} threw`, {
         durationMs,
         errorMessage: error.message,
         errorName: error.name,
       });
     } else {
-      log.debug(`${name} threw (non-error)`, {
+      ctx.log.debug(`${ctx.name} threw (non-error)`, {
         durationMs,
         errorType: typeof error,
       });
@@ -182,6 +186,11 @@ export function instrumentMiddleware(
     const wrappedNext = createWrappedNext(next, log, name, startedAt, pendingTimer);
 
     logEarlyResponseClose(res, log, name, startedAt, pendingTimer);
-    executeMiddleware(middleware, req, res, wrappedNext, log, name, startedAt, pendingTimer);
+    executeMiddleware(middleware, req, res, wrappedNext, {
+      log,
+      name,
+      startedAt,
+      timer: pendingTimer,
+    });
   };
 }

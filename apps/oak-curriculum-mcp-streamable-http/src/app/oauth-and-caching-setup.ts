@@ -68,6 +68,20 @@ async function resolveUpstreamMetadata(
   return { upstreamBaseUrl, upstreamMetadata: metadataResult.value };
 }
 
+interface RegisterOAuthRoutesParams {
+  app: Express;
+  runtimeConfig: RuntimeConfig;
+  log: Logger;
+  bootstrapTimer: PhasedTimer;
+  appCounter: number;
+  allowedHosts: readonly string[];
+  observability: HttpObservability;
+  upstreamBaseUrl: string;
+  upstreamMetadata: UpstreamAuthServerMetadata;
+  oauthRateLimiter: RequestHandler;
+  metadataRateLimiter: RequestHandler;
+}
+
 /**
  * Sets up OAuth metadata endpoints, proxy routes, and error caching prevention.
  *
@@ -75,19 +89,21 @@ async function resolveUpstreamMetadata(
  *   BEFORE clerkMiddleware.
  * Phase 2.6: Adds no-cache headers to error responses (4xx/5xx only).
  */
-function registerOAuthRoutes(
-  app: Express,
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  bootstrapTimer: PhasedTimer,
-  appCounter: number,
-  allowedHosts: readonly string[],
-  observability: HttpObservability,
-  upstreamBaseUrl: string,
-  upstreamMetadata: UpstreamAuthServerMetadata,
-  oauthRateLimiter: RequestHandler,
-  metadataRateLimiter: RequestHandler,
-): void {
+function registerOAuthRoutes(params: RegisterOAuthRoutesParams): void {
+  const {
+    app,
+    runtimeConfig,
+    log,
+    bootstrapTimer,
+    appCounter,
+    allowedHosts,
+    observability,
+    upstreamBaseUrl,
+    upstreamMetadata,
+    oauthRateLimiter,
+    metadataRateLimiter,
+  } = params;
+
   runBootstrapPhase(
     log,
     bootstrapTimer,
@@ -150,7 +166,7 @@ export async function setupOAuthAndCaching(
       observability,
       injectedMetadata,
     );
-    registerOAuthRoutes(
+    registerOAuthRoutes({
       app,
       runtimeConfig,
       log,
@@ -162,7 +178,7 @@ export async function setupOAuthAndCaching(
       upstreamMetadata,
       oauthRateLimiter,
       metadataRateLimiter,
-    );
+    });
   }
 
   runBootstrapPhase(
