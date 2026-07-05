@@ -175,7 +175,9 @@ async function main(): Promise<void> {
   await executePurge(target, indexName, olderThanDays, request);
 }
 
-main().catch((error: unknown) => {
+try {
+  await main();
+} catch (error: unknown) {
   searchLogger.error('zero-hit.purge.unhandled', normalizeError(error));
   process.exitCode = 1;
-});
+}

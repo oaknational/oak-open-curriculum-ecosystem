@@ -243,7 +243,9 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((error: unknown) => {
+try {
+  await main();
+} catch (error: unknown) {
   logger.error('Sitemap scan failed', normalizeError(error));
   process.exit(1);
-});
+}

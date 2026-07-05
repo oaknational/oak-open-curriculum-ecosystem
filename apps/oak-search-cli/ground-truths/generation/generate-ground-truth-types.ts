@@ -428,7 +428,9 @@ async function main(): Promise<void> {
 }
 
 // Run if executed directly
-main().catch((e) => {
+try {
+  await main();
+} catch (e) {
   console.error('Unexpected error:', e);
   process.exit(1);
-});
+}
