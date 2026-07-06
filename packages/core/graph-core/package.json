@@ -73,7 +73,7 @@
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/jsonld": "^1.5.15",
     "@types/node": "^24.13.2",
-    "eslint": "^10.5.0",
+    "eslint": "^10.6.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
