@@ -1,0 +1,417 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/itf-graph/schema.json",
+  "title": "Inclusive Teaching Framework knowledge graph",
+  "description": "Root validates the corpus envelope (data.json). Validate each data.jsonl line against #/$defs/jsonlRecord.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "generatedAt", "source", "stats", "nodes", "edges", "seeAlso"],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "stats": {
+      "$ref": "#/$defs/stats"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    },
+    "seeAlso": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "publisher", "published", "file"],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "published": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalNodes", "totalEdges", "nodeKindCounts", "edgeTypeCounts"],
+      "properties": {
+        "totalNodes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalEdges": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "nodeKindCounts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "edgeTypeCounts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "nodeId": {
+      "type": "string",
+      "pattern": "^(framework|area|idea|insight|concept|reference|organisation|principle|externalSource):[a-z0-9-]+$"
+    },
+    "edgeType": {
+      "enum": [
+        "containsArea",
+        "containsIdea",
+        "containsInsight",
+        "citesReference",
+        "involvesConcept",
+        "overlapsWith",
+        "inPartnershipWith",
+        "authoredBy",
+        "guidedBy",
+        "reliesOn",
+        "partOf",
+        "precedes",
+        "supports",
+        "relatedTo",
+        "availableAt"
+      ]
+    },
+    "node": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "title", "publisher", "published", "audience", "purpose"],
+          "properties": {
+            "kind": {
+              "const": "framework"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^framework:[a-z0-9-]+$"
+            },
+            "title": {
+              "type": "string"
+            },
+            "publisher": {
+              "type": "string"
+            },
+            "published": {
+              "type": "string"
+            },
+            "audience": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "areaSlug", "title", "summary", "order"],
+          "properties": {
+            "kind": {
+              "const": "area"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^area:[a-z0-9-]+$"
+            },
+            "areaSlug": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "order": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "title", "description", "areaSlug"],
+          "properties": {
+            "kind": {
+              "const": "idea"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^idea:[a-z0-9-]+$"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "areaSlug": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "title", "explanation", "areaSlug", "order"],
+          "properties": {
+            "kind": {
+              "const": "insight"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^insight:[a-z0-9-]+$"
+            },
+            "title": {
+              "type": "string"
+            },
+            "explanation": {
+              "type": "string"
+            },
+            "areaSlug": {
+              "type": "string"
+            },
+            "order": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "term", "description", "category"],
+          "properties": {
+            "kind": {
+              "const": "concept"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^concept:[a-z0-9-]+$"
+            },
+            "term": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "category": {
+              "enum": ["construct", "practice", "approach", "policy", "diagnosis"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "citation", "year"],
+          "properties": {
+            "kind": {
+              "const": "reference"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^reference:[a-z0-9-]+$"
+            },
+            "citation": {
+              "type": "string"
+            },
+            "year": {
+              "type": "integer",
+              "minimum": 1900,
+              "maximum": 2100
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "name", "role", "description"],
+          "properties": {
+            "kind": {
+              "const": "organisation"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^organisation:[a-z0-9-]+$"
+            },
+            "name": {
+              "type": "string"
+            },
+            "role": {
+              "enum": ["author-publisher", "partner"]
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "title", "description", "order"],
+          "properties": {
+            "kind": {
+              "const": "principle"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^principle:[a-z0-9-]+$"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "order": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "id", "url", "label", "resolution"],
+          "properties": {
+            "kind": {
+              "const": "externalSource"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^externalSource:[a-z0-9-]+$"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "label": {
+              "type": "string"
+            },
+            "resolution": {
+              "enum": ["doi", "publisher", "search"]
+            },
+            "doi": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "type", "target"],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/nodeId"
+        },
+        "type": {
+          "$ref": "#/$defs/edgeType"
+        },
+        "target": {
+          "$ref": "#/$defs/nodeId"
+        }
+      }
+    },
+    "jsonlRecord": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["record", "meta"],
+          "properties": {
+            "record": {
+              "const": "meta"
+            },
+            "meta": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["version", "generatedAt", "source", "stats"],
+              "properties": {
+                "version": {
+                  "type": "string"
+                },
+                "generatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "source": {
+                  "$ref": "#/$defs/source"
+                },
+                "stats": {
+                  "$ref": "#/$defs/stats"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["record", "node"],
+          "properties": {
+            "record": {
+              "const": "node"
+            },
+            "node": {
+              "$ref": "#/$defs/node"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["record", "edge"],
+          "properties": {
+            "record": {
+              "const": "edge"
+            },
+            "edge": {
+              "$ref": "#/$defs/edge"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
