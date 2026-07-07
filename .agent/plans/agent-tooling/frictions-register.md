@@ -2889,3 +2889,32 @@ commit SHA and the closing plan reference.
   spawn path (`runInheritedProcess`).
 - **Status**: open.
 - **Owner direction status**: captured at session closeout under record-all-frictions.
+
+### F-132 — commit-queue record-staged/verify-staged read the primary checkout's index, blind to worktree-staged bundles
+
+- **Source**: Fern spins Taproot 2026-07-07 (ITF knowledge-graph spike, worktree
+  nifty-ramanujan-7b1623); worked instance: a five-file bundle staged in the worktree
+  fingerprinted as empty (`staged_name_status: ""`) and `verify-staged` reported every intended
+  file as `missing`, while `git diff --staged --name-only` in the worktree showed the exact
+  bundle.
+- **Surface**: `pnpm agent-tools:commit-queue -- record-staged|verify-staged|commit` invoked
+  from a PDR-117 worktree seat; the queue registry itself resolves correctly to the primary
+  coordination home (F-41 cure), but the git reads resolve there too.
+- **Observed**: the queue's staged-bundle reads target the primary checkout's index, so a
+  worktree commit window cannot complete the enqueue → record-staged → verify-staged → commit
+  ceremony; the workflow's inner `git commit` would also act on the wrong tree.
+- **Expected**: the commit-queue's git surface binds to the invoking session's working tree
+  (the same cwd-derived binding the claims doctrine uses for `git:index/head@<worktree>`),
+  while the registry stays at the shared coordination home.
+- **Candidate cure**: split the two path resolutions in the commit-queue workflow — registry
+  path via `resolveCoordinationHome` (primary), git operations via the invoking cwd's tree —
+  and add a worktree-seat integration test. Session workaround (worked, documented in the
+  commit skill's Path-B terms): abandon the intent with stage-named notes and land via the
+  explicit-pathspec direct path under the worktree-scoped commit-window claim with first-hand
+  staged-set verification.
+- **Target surface**: `agent-tools/src/` commit-queue workflow (staged-read + spawn-cwd path
+  resolution).
+- **Status**: open.
+- **Owner direction status**: captured at session closeout; the worked instance and full
+  detail are in `docs/spikes/inclusive-teaching-framework-knowledge-graph/NOTES.md` §Session
+  observations.

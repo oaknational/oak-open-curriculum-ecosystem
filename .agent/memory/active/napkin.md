@@ -125,3 +125,36 @@ New session observations append below.
   owner-visible declared. The explicit gated-stage list let the successor ground fully and
   draft the G1 packet + R0c ledger during the predecessor's heavy-chain window with zero
   collision risk. candidate: pattern if a second runway handoff recurs.
+
+## 2026-07-07 — Fern spins Taproot (ITF knowledge-graph spike, worktree nifty-ramanujan-7b1623)
+
+- **Tool friction → F-132 (registered this session): commit-queue is blind to worktree
+  indices.** `record-staged`/`verify-staged` read the primary checkout's index, so a
+  worktree-staged bundle fingerprints as empty and verify fails with "missing: <every intended
+  file>" even though `git diff --staged` in the worktree shows the exact bundle. The skill
+  already contemplates worktree windows (`git:index/head@<worktree>` claims) — the queue's git
+  surface doesn't. Disposition: intent 86c5c642 → abandoned with stage-named notes; landed
+  6edcb025a via the documented explicit-pathspec path under claim 0307be08, full hook chain
+  green. Details + candidate cure: frictions-register F-132.
+- **Identity-seed discipline**: two hand-typed `PRACTICE_AGENT_SESSION_ID_CLAUDE` values
+  drifted between CLI calls, so a comms title said "Zenith tracks Vacuum" while registry rows
+  say "Fern spins Taproot" (corrected in closeout event 95a479c9). Export the seed once per
+  session, never retype it.
+- **Owner rulings (both homed):** (1) n=1 session ⇒ no team ceremony — watcher/claims/comms/
+  commit-queue exist for concurrent agents, not as a rite; keep commits, gates, memory capture
+  (also in Claude per-user memory `n1-sessions-skip-team-ceremony`). (2) UK spelling only,
+  everywhere (per-user memory `uk-spelling-always`; licence/license noun/verb is the classic
+  trap). (3) All official repo code must be TypeScript; spike-only `.mjs` preservation copies
+  sanctioned 2026-07-07 pending the integration pass (homed: spike README + NOTES + PR #319).
+  (4) Licensing for the ITF-derived data: academic reuse with full acknowledgement, baked into
+  the data envelope (`source.attribution`/`source.licenceNote`).
+- **F-125 recurrence (cwd drift):** my own sweep broke on a relative path because an earlier
+  `cd` into the spike dir persisted — third-party evidence the cure is structural
+  (location-independent invocations), not vigilance.
+- **PDF→graph craft (homed in the spike's NOTES.md, pointers only):** regular per-area document
+  structure transcribes almost 1:1 to the corpus containment grammar; relational prose is the
+  highest-value graph content; some knowledge lives only in images (partner logos) — audit page
+  *types* after text extraction; grey literature defeats Crossref bibliographic matching
+  (books/working papers/DfE/EEF reports) — hand-verified publisher URLs with a `resolution`
+  provenance marker; deterministic layered SVG + barycentre beats force-direction for
+  near-multipartite graphs and stays git-diffable.

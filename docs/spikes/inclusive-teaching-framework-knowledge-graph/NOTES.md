@@ -160,6 +160,55 @@ and _what we now know_.
 - Cheap arithmetic checks earn their keep: 1 meta + 184 nodes + 282 edges =
   467 JSONL lines, `wc -l` confirms.
 
+### Exact validation invocations
+
+The line-validation trick is worth preserving precisely: ajv cannot target a
+`$defs` pointer directly, so wrap the JSONL lines as one array and validate
+against a tiny wrapper schema that `$ref`s the pointer, passing the main
+schema with `-r` so the `$id` resolves.
+
+```bash
+npm install ajv-cli@5 ajv-formats@2   # in any scratch directory
+
+# Envelope
+npx ajv validate --spec=draft2020 -c ajv-formats -s schema.json -d data.json
+
+# JSONL lines
+jq -s '.' data.jsonl > jsonl-as-array.json
+cat > jsonl-lines.schema.json <<'JSON'
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/itf-graph/jsonl-lines.schema.json",
+  "type": "array",
+  "items": { "$ref": "https://example.org/itf-graph/schema.json#/$defs/jsonlRecord" }
+}
+JSON
+npx ajv validate --spec=draft2020 -c ajv-formats \
+  -r schema.json -s jsonl-lines.schema.json -d jsonl-as-array.json
+```
+
+## What is deliberately not modelled (completeness bound)
+
+An honest inventory so a future consumer does not read the graph as the whole
+document:
+
+- **"Ideas for using this framework"** (inclusion lead / senior leader /
+  professional development lead / provider use cases) — usage suggestions, not
+  subject knowledge.
+- **The 2026 Schools White Paper reform list** in "Link with government
+  policy" — only Experts at Hand was modelled (as a `policy` concept); the
+  other reform bullets are context about government policy, not framework
+  knowledge.
+- **Workforce statistics** (the footnote on professional development
+  programme reach) and the feedback/contact and About Ambition Institute
+  back-matter.
+- **Author biographies and acknowledgement individuals** (deliberate — see
+  Approach decisions).
+- **Exact wording bound**: `insight` node `explanation` fields are faithful
+  condensations of the PDF's insight bodies, not verbatim transcriptions
+  (citations ARE verbatim; idea descriptions are near-verbatim). The linked
+  PDF is authoritative for exact wording.
+
 ## Session observations (process and tooling)
 
 - **`commit-queue` is blind to worktree indices** (candidate
