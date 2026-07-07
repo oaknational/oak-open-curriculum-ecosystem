@@ -40,9 +40,21 @@
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["title", "publisher", "published", "file"],
+      "required": [
+        "title",
+        "authors",
+        "publisher",
+        "published",
+        "file",
+        "url",
+        "attribution",
+        "licenceNote"
+      ],
       "properties": {
         "title": {
+          "type": "string"
+        },
+        "authors": {
           "type": "string"
         },
         "publisher": {
@@ -52,6 +64,16 @@
           "type": "string"
         },
         "file": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "attribution": {
+          "type": "string"
+        },
+        "licenceNote": {
           "type": "string"
         }
       }

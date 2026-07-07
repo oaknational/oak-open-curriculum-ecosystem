@@ -1,11 +1,15 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-07-07T15:59:28.894Z",
+  "generatedAt": "2026-07-07T16:28:21.728Z",
   "source": {
     "title": "Inclusive Teaching Framework",
+    "authors": "Gilbride, N., & Jackson, J.",
     "publisher": "Ambition Institute",
     "published": "2026-03",
-    "file": "InclusiveTeachingFramework_2026_final_release_2.pdf"
+    "file": "InclusiveTeachingFramework_2026_final_release_2.pdf",
+    "url": "https://www.ambition.org.uk/inclusive-teaching-framework/",
+    "attribution": "Gilbride, N., & Jackson, J. (2026). Inclusive Teaching Framework. Ambition Institute, in partnership with the National Association of Principal Educational Psychologists, the Royal College of Occupational Therapists, Speech and Language UK, and The Difference. © Ambition Institute 2026, registered charity 1146924.",
+    "licenceNote": "Derived data reused on an academic basis for research and learning, with full acknowledgement of the authors and Ambition Institute. The source document is freely distributed but not openly licensed; this dataset is excluded from the host repository’s data-licence grant."
   },
   "stats": {
     "totalNodes": 184,

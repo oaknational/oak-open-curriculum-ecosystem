@@ -4,7 +4,7 @@
 <style>text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#111}.lbl{font-size:11px}.hdr{font-size:15px;font-weight:700}.sub{font-size:11px;fill:#444}a:hover .pill{stroke-width:2.5}a:focus .pill{stroke:#000;stroke-width:3}</style>
 <rect width="1560" height="1746" fill="#ffffff"/>
 <text x="16" y="34" class="hdr" style="font-size:20px">Inclusive Teaching Framework — knowledge graph</text>
-<text x="16" y="56" class="sub">Source: Ambition Institute, March 2026 · 184 nodes, 282 edges · generated deterministically from itf-graph/data.json</text>
+<text x="16" y="56" class="sub">Source: Gilbride, N., &amp; Jackson, J. (2026), Ambition Institute · 184 nodes, 282 edges · generated deterministically from data.json</text>
 <text x="16" y="82" class="hdr">Framework</text>
 <text x="274" y="82" class="hdr">Areas of need</text>
 <text x="540" y="82" class="hdr">Underpinning ideas &amp; key insights</text>

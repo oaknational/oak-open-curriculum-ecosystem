@@ -1,11 +1,17 @@
 # Spike: PDF → knowledge graph — the Inclusive Teaching Framework
 
-**Status**: draft spike — candidate data source, pending owner review (see
-[Open questions](#open-questions))
+**Status**: draft spike — candidate data source. **Do not merge yet**: the
+proper integration happens in a dedicated Claude Code CLI pass (see
+[NOTES.md](./NOTES.md) §Integration checklist).
 **Date**: 2026-07-07
 **Source document**: [Inclusive Teaching Framework](https://www.ambition.org.uk/inclusive-teaching-framework/)
-(Ambition Institute, March 2026). The PDF itself is deliberately **not**
-committed to this repository.
+(Gilbride, N., & Jackson, J., Ambition Institute, March 2026). The PDF itself
+is deliberately **not** committed to this repository.
+
+> **TypeScript ruling (owner, 2026-07-07)**: all official repository code
+> must be TypeScript, not JavaScript. The `.mjs` files here are a sanctioned
+> knowledge-preservation exception for this spike only; the integration pass
+> promotes them to typed, tested workspace modules.
 
 ## What this is
 
@@ -24,12 +30,17 @@ development.
 
 ## Files
 
-| File                           | Contents                                                                                                                                                                |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`data.json`](./data.json)     | Corpus envelope: `version`, `generatedAt`, `source`, recomputed `stats`, `nodes[]`, `edges[]` — the shape analogue of the generated graph corpus `data.json`            |
-| [`data.jsonl`](./data.jsonl)   | Line-oriented rendering: one meta line, then one record per node and per edge (`{"record": "meta" \| "node" \| "edge", …}`), payloads identical to the envelope entries |
-| [`schema.json`](./schema.json) | JSON Schema (draft 2020-12). The root validates `data.json`; `#/$defs/jsonlRecord` validates each `data.jsonl` line                                                     |
-| [`graph.svg`](./graph.svg)     | Proof-of-concept visualisation: deterministic layered layout, accessible labels, reference pills hyperlink to their external sources                                    |
+| File                                               | Contents                                                                                                                                                                |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`data.json`](./data.json)                         | Corpus envelope: `version`, `generatedAt`, `source`, recomputed `stats`, `nodes[]`, `edges[]` — the shape analogue of the generated graph corpus `data.json`            |
+| [`data.jsonl`](./data.jsonl)                       | Line-oriented rendering: one meta line, then one record per node and per edge (`{"record": "meta" \| "node" \| "edge", …}`), payloads identical to the envelope entries |
+| [`schema.json`](./schema.json)                     | JSON Schema (draft 2020-12). The root validates `data.json`; `#/$defs/jsonlRecord` validates each `data.jsonl` line                                                     |
+| [`graph.svg`](./graph.svg)                         | Proof-of-concept visualisation: deterministic layered layout, accessible labels, reference pills hyperlink to their external sources                                    |
+| [`build-itf-graph.mjs`](./build-itf-graph.mjs)     | Generator: extracted content as typed literals; recomputes stats; fails on integrity violations; emits the three data files                                             |
+| [`render-itf-svg.mjs`](./render-itf-svg.mjs)       | SVG renderer: five-column layered layout with barycentre ordering                                                                                                       |
+| [`crossref-lookup.mjs`](./crossref-lookup.mjs)     | One-off provenance tooling: resolves citations to DOIs via the Crossref API (evidence, not build input)                                                                 |
+| [`crossref-results.json`](./crossref-results.json) | Raw Crossref lookup evidence behind the curated external-source table                                                                                                   |
+| [`NOTES.md`](./NOTES.md)                           | Working notes: observations, insights, approaches, rejected alternatives, tooling frictions, integration checklist                                                      |
 
 ## Graph shape
 
@@ -100,9 +111,11 @@ nodes make the references explorable without expanding the corpus boundary.
    layered layout (framework → areas → ideas/insights → concepts →
    references) using barycentre ordering to reduce edge crossings.
 
-The generator and renderer currently live in a local experiment workspace
-outside this repository, pending the promotion decision below; this document
-plus `schema.json` fully specify the format they emit.
+The generator, renderer, and Crossref lookup script live alongside this
+document (preservation copies — see the TypeScript ruling above), together
+with the raw Crossref review evidence. From this directory,
+`node build-itf-graph.mjs` then `node render-itf-svg.mjs` reproduces every
+artefact deterministically (only `generatedAt` varies).
 
 ### Modelling decisions
 
@@ -130,19 +143,39 @@ schema plays the role `graph-corpus-types.ts` plays for the corpus). If the
 data source graduates, the natural consumption pattern is the anchored,
 bounded view approach in `graph-corpus-sdk` (ADR-173, ADR-195).
 
+## Licensing and acknowledgement
+
+Owner ruling (2026-07-07): **assume academic rules for now** — the purpose of
+the data is reuse — with proper acknowledgement of the authors and Ambition
+Institute. Accordingly:
+
+- The acknowledgement is carried **in the data itself**: `source.attribution`
+  and `source.licenceNote` in `data.json` (and the `data.jsonl` meta line)
+  credit the authors, Ambition Institute, and the four specialist partner
+  organisations.
+- The graph embeds condensed and verbatim text derived from the Inclusive
+  Teaching Framework, © Ambition Institute 2026 (registered charity 1146924),
+  which is freely distributed but not openly licensed. This spike claims no
+  licence over the derived content, and the dataset is **excluded** from this
+  repository's data-licence grant.
+
+### Acknowledgements
+
+The Inclusive Teaching Framework was authored by Dr Neil Gilbride and John
+Jackson and published by Ambition Institute in March 2026, developed in
+partnership with the National Association of Principal Educational
+Psychologists, the Royal College of Occupational Therapists, Speech and
+Language UK, and The Difference. This spike is a derived, structured
+re-expression of that work for research and learning; all substantive
+knowledge in the graph is theirs.
+
 ## Open questions
 
-1. **Licensing and redistribution.** The graph embeds condensed and verbatim
-   text derived from the Inclusive Teaching Framework, © Ambition Institute
-   2026 (registered charity 1146924), which is freely distributed but not
-   openly licensed. This spike attributes the source and claims no licence
-   over the derived content, and the data is **not** covered by this
-   repository's data licence grant. Owner review needed before this leaves
-   draft.
-2. **Generator promotion.** If the data source graduates, the generator
-   should be promoted to a typed, tested TypeScript module in a workspace
-   (per ADR-168 and the TypeScript-only rule) rather than committed as a
-   hand-authored script.
-3. **Insight-level citations.** The document cites references per area;
+1. **Generator promotion.** The `.mjs` preservation copies must be promoted
+   to a typed, tested TypeScript workspace module at the integration pass
+   (per ADR-168 and the TypeScript-only rule); the copies here are then
+   deleted in the same change.
+2. **Insight-level citations.** The document cites references per area;
    attaching them to individual insights would need inference beyond the
-   text, so it was deliberately not done here.
+   text, so it was deliberately not done here. If wanted later, mark it as
+   inference explicitly (see [NOTES.md](./NOTES.md)).
