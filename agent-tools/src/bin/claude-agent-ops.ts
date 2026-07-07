@@ -230,7 +230,9 @@ function exitWithError(message: string): never {
   writeErrorLine(`Error: ${message}`);
   process.exit(1);
 }
-run().catch((error: unknown) => {
+try {
+  await run();
+} catch (error: unknown) {
   writeErrorLine(`Error: ${error instanceof Error ? error.message : String(error)}`);
   process.exit(1);
-});
+}

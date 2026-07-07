@@ -49,7 +49,7 @@ export { buildResourceAttributes, getDeploymentEnvironment } from './resource-at
 function adaptWriteStream(stream: NodeWriteStream): SimpleWriteStream {
   return {
     write: (chunk: string, encoding?: string, cb?: (error?: Error | null) => void): boolean => {
-      const bufferEncoding = encoding === 'utf8' || encoding === 'utf-8' ? 'utf8' : 'utf8';
+      const bufferEncoding = 'utf8';
       if (cb) {
         return stream.write(chunk, bufferEncoding, cb);
       }

@@ -63,7 +63,7 @@ function createFixtureClient(data: FixtureData): OakClient {
     getSubjectAssets: makeFixtureSubjectAssetsFn(data),
     // Cache methods (no-op for fixture client)
     getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
-    disconnect: async () => Promise.resolve(),
+    disconnect: async () => {},
   };
 }
 

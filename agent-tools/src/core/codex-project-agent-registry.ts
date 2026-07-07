@@ -64,7 +64,7 @@ export function readRequiredTomlValue(content: string, key: string, adapterPath:
   for (const rawLine of content.split(/\r?\n/u)) {
     const line = rawLine.trim();
     const assignment = parseTomlStringAssignment(line);
-    if (!assignment || assignment.key !== key) {
+    if (assignment?.key !== key) {
       continue;
     }
 
