@@ -8,9 +8,9 @@ interface CollaborationStateCliInput {
   readonly argv: readonly string[];
   readonly env: CollaborationStateEnvironment;
   readonly stdout?: Pick<NodeJS.WritableStream, 'write'>;
-  readonly io?: CliRuntime['io'];
-  readonly waitForCommsChange?: CliRuntime['waitForCommsChange'];
-  readonly waitForCollaborationStateChange?: CliRuntime['waitForCollaborationStateChange'];
+  readonly io: CliRuntime['io'];
+  readonly waitForCommsChange: CliRuntime['waitForCommsChange'];
+  readonly waitForCollaborationStateChange: CliRuntime['waitForCollaborationStateChange'];
   readonly processIsAlive?: NonNullable<CliRuntime['processIsAlive']>;
 }
 

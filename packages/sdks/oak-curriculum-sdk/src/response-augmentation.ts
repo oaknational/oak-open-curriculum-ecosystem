@@ -169,8 +169,6 @@ function extractIdFromPath(path: string): string | undefined {
  *
  * Returns `unknown` because the result flows to `JSON.stringify` at
  * the middleware boundary — there is no typed downstream consumer.
- * Uses `Object.assign` to avoid the TypeScript 20-member union
- * spread limit (TS2698).
  */
 export function augmentArrayResponseWithOakUrl(
   response: readonly unknown[],
@@ -185,7 +183,7 @@ export function augmentArrayResponseWithOakUrl(
     return response;
   }
   return response.map((item) => {
-    return Object.assign({}, item, extractOakUrlFields(item, path, contentType));
+    return { ...(item as Record<string, unknown>), ...extractOakUrlFields(item, path, contentType) };
   });
 }
 
@@ -194,8 +192,6 @@ export function augmentArrayResponseWithOakUrl(
  *
  * Returns `unknown` because the result flows to `JSON.stringify` at
  * the middleware boundary — there is no typed downstream consumer.
- * Uses `Object.assign` to avoid the TypeScript 20-member union
- * spread limit (TS2698).
  */
 export function augmentResponseWithOakUrl(
   response: unknown,
@@ -209,7 +205,7 @@ export function augmentResponseWithOakUrl(
   if (!contentType) {
     return response;
   }
-  return Object.assign({}, response, extractOakUrlFields(response, path, contentType));
+  return { ...(response as object), ...extractOakUrlFields(response, path, contentType) };
 }
 
 /**
