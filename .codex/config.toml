@@ -125,3 +125,13 @@ config_file = "agents/corpus-meta.toml"
 
 [sandbox_workspace_write]
 network_access = true
+
+[mcp_servers.codex-sentry-ooc-mcp]
+url = "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-mcp"
+auth = "oauth"
+default_tools_approval_mode = "writes"
+
+[mcp_servers.codex-sentry-ooc-search-cli]
+url = "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-search-cli"
+auth = "oauth"
+default_tools_approval_mode = "writes"
