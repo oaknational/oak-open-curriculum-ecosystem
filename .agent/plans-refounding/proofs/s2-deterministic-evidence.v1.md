@@ -160,7 +160,9 @@ tile GREEN; census 6,922 records; plan-state
 `green — no recomputation performed (1960 row(s); UNMAPPED 224, no-evidence 1736, attested 0)`.
 
 `refound-default-ledger` refuses over ANY pre-existing target ledger: remove
-(or set aside) the `ledger/` directory before a repeat run. Repeat the
+(or set aside) the `ledger/` directory before a repeat run — the machine
+twin's set-aside target `ledger.previous-run/` is in the recomputable-ignored
+set, so following that contract leaves no untracked working-tree content. Repeat the
 sequence a second time. The second run must report the same verdicts and the
 verification below must pass after both runs.
 
