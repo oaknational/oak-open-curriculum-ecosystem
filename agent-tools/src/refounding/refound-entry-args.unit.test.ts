@@ -1,4 +1,4 @@
-import { err, ok, unwrap } from '@oaknational/result';
+import { err, ok, unwrap, unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -9,7 +9,6 @@ import {
   prepareOutDirEntry,
 } from './refound-entry-args.js';
 import { DEFAULT_OUT_DIR } from './refound-freeze-helpers.js';
-import { unwrapErr } from './test-helpers.js';
 
 interface ProbeState {
   outDir: string;
@@ -162,13 +161,13 @@ describe('prepareEntryRun — the shared parse → help → resolve preflight', 
     expect(error.message).toBe('outside the repository');
   });
 
-  it('spreads the resolved fields with help false on a non-help parse', () => {
+  it('returns the resolution payload under `resolved` with help false on a non-help parse', () => {
     const prepared = unwrap(
       prepareEntryRun(ok({ help: false, args: { out: 'dir' } }), (parsed) =>
-        ok({ resolved: `${parsed.args.out}/abs` }),
+        ok({ outAbs: `${parsed.args.out}/abs` }),
       ),
     );
-    expect(prepared).toEqual({ help: false, resolved: 'dir/abs' });
+    expect(prepared).toEqual({ help: false, resolved: { outAbs: 'dir/abs' } });
   });
 });
 

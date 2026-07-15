@@ -1,8 +1,7 @@
-import { unwrap } from '@oaknational/result';
+import { unwrap, unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { parseCanaryArgs } from './refound-plant-challenge-canary.js';
-import { unwrapErr } from './test-helpers.js';
 
 /**
  * Unit proofs for the canary entry's arg contract: the shared run-nothing

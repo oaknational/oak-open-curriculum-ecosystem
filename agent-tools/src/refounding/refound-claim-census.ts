@@ -103,7 +103,14 @@ function prepareCensusRun(
   { help: true } | { help: false; outDirAbs: string; mappingAbsPath: string | null },
   Error
 > {
-  return prepareEntryRun(parseCensusArgs(argv), (parsed) => resolvePaths(parsed.args));
+  const prepared = prepareEntryRun(parseCensusArgs(argv), (parsed) => resolvePaths(parsed.args));
+  if (isErr(prepared)) {
+    return prepared;
+  }
+  if (prepared.value.help) {
+    return ok({ help: true } as const);
+  }
+  return ok({ help: false as const, ...prepared.value.resolved });
 }
 
 async function main(): Promise<void> {

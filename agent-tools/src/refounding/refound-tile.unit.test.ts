@@ -1,10 +1,9 @@
-import { unwrap } from '@oaknational/result';
+import { unwrap, unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { decideTileVerdict, parseTileArgs } from './refound-tile.js';
 import { type TileReport } from './refound-tile-helpers.js';
 import { type TilingViolation } from './refound-tile-violations.js';
-import { unwrapErr } from './test-helpers.js';
 
 /**
  * Unit proofs for `refound-tile`'s two pure decision points (test-I3, F1 §5):

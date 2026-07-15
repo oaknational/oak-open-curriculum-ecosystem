@@ -119,23 +119,34 @@ export function parseOutDirArgs(
 }
 
 /**
+ * A decided entry preflight: the run-nothing help verdict, or the tool's
+ * resolution payload under `resolved`.
+ */
+export type EntryRun<TResolved> =
+  | { readonly help: true }
+  | { readonly help: false; readonly resolved: TResolved };
+
+/**
  * The shared entry preflight: given a parsed entry verdict, short-circuit
  * the run-nothing `help` contract BEFORE any resolution, then run the
  * tool's own resolution step. This is the canonical owner of the
  * parse → help → resolve ordering (`consolidate-at-second-consumer`): the
  * `--out`-only entries and the census preflight both compose it, so the
- * safety-critical ordering cannot drift per tool.
+ * safety-critical ordering cannot drift per tool. The resolution payload
+ * comes back nested under `resolved` rather than spread — spreading an
+ * unconstrained generic would promise a shape a primitive or array
+ * resolution could not honour.
  *
  * @param parsed - The tool's parsed argv verdict (any shape carrying the
  * shared `help` flag).
  * @param resolve - The tool's resolution step; runs ONLY on a non-help
  * parse, receiving the parsed value.
- * @returns The help verdict, or the resolved fields with `help: false`.
+ * @returns The help verdict, or the resolution payload with `help: false`.
  */
 export function prepareEntryRun<TParsed extends { readonly help: boolean }, TResolved>(
   parsed: Result<TParsed, Error>,
   resolve: (parsed: TParsed) => Result<TResolved, Error>,
-): Result<{ readonly help: true } | ({ readonly help: false } & TResolved), Error> {
+): Result<EntryRun<TResolved>, Error> {
   if (isErr(parsed)) {
     return parsed;
   }
@@ -146,7 +157,7 @@ export function prepareEntryRun<TParsed extends { readonly help: boolean }, TRes
   if (isErr(resolved)) {
     return resolved;
   }
-  return ok({ ...resolved.value, help: false as const });
+  return ok({ help: false as const, resolved: resolved.value });
 }
 
 /**
@@ -170,11 +181,18 @@ export function prepareOutDirEntry(
   argv: readonly string[],
   toolName: string,
 ): Result<OutDirEntry, Error> {
-  return prepareEntryRun(parseOutDirArgs(argv, toolName), (args) => {
+  const prepared = prepareEntryRun(parseOutDirArgs(argv, toolName), (args) => {
     const outDirAbs = resolveReadPathWithinRepo(repoRoot, args.outDir);
     if (isErr(outDirAbs)) {
       return outDirAbs;
     }
     return ok({ outDir: args.outDir, outDirAbs: outDirAbs.value });
   });
+  if (isErr(prepared)) {
+    return prepared;
+  }
+  if (prepared.value.help) {
+    return ok({ help: true } as const);
+  }
+  return ok({ help: false as const, ...prepared.value.resolved });
 }
