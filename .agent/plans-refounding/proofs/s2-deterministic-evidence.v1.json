@@ -65,7 +65,7 @@
     "pnpm build"
   ],
   "repeatRunPreparation": {
-    "note": "refound-default-ledger refuses — nothing written — over ANY pre-existing target ledger, so a repeat run fails unless the previous run's ledger directory is removed or set aside first; run the preparation command below between runs (not before the first run, when no ledger directory exists yet)",
+    "note": "refound-default-ledger refuses — nothing written — over ANY pre-existing target ledger, so a repeat run fails unless the previous run's ledger directory is removed or set aside first; run the preparation command below between runs (not before the first run, when no ledger directory exists yet); the set-aside target .agent/plans-refounding/ledger.previous-run/ is in the recomputable-ignored set, so following this contract leaves no untracked working-tree content",
     "commands": [
       "mv .agent/plans-refounding/ledger .agent/plans-refounding/ledger.previous-run"
     ]

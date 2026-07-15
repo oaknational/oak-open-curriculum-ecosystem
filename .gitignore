@@ -264,6 +264,7 @@ dist
 .agent/plans-refounding/claim-census.v1.jsonl
 .agent/plans-refounding/claim-census.v1.report.json
 .agent/plans-refounding/ledger/
+.agent/plans-refounding/ledger.previous-run/
 
 # yarn v3
 .pnp.*
