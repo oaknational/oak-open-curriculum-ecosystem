@@ -267,6 +267,13 @@ first-hand as of 2026-06-25.
 > **SESSION SHAPE:** Mussel rides Coral (`6f8857`) holds the seat — claim `0f4be777`
 > adopted, dual heartbeat live (transfer from Schooner guards Whirlpool `82a9df`, Moment-1
 > ~14:22Z, Moment-2 14:26:36Z after the readiness gate + pasted mechanical UTC check).
+> **Successor pre-named by the owner (2026-07-15 ~16:07Z): Tuna holds Buoy (`9ac658`)** —
+> PDR-064 two-moments + this brief's readiness gate govern the transfer when a PDR-063
+> trigger fires or the owner calls it. Standing owner ruling in force: ALL owner direction
+> routes through the sitting Director (event `cb140075`); no direct owner requests to any
+> agent. Team at pre-naming: Hedgehog tracks Eventide (S1 reader batch; own pre-named
+> successor Ceres guards Corona `0f6b60`, owner-verification pending), Acacia rides Bark
+> (tooling runway), Aurora guards Penumbra (S2 divergence lane) — three ARC channels live.
 > Hedgehog tracks Eventide (`82b36c`) is Fleet Captain, warm, running the signed
 > `s1-reader-sample-b1` batch (claim `45befb32`). Zodiac turns Solstice (`019f65`) was
 > owner-shut-down after their S1 closeout; forensic verdict: contained, nothing rogue
