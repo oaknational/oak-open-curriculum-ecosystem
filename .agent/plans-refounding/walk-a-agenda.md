@@ -35,8 +35,8 @@ denominator and the census/divergence report are presented as sitting inputs
    full collection coverage check, six measurable falsifiers, five open decisions
    routed to this sitting) — and the pilot-area evidence-pass design —
    [`r2-pilot-evidence-pass-design.v1.md`](r2-pilot-evidence-pass-design.v1.md)
-   (pilot area `connecting-oak-resources`; stratified ~130-file sample with
-   expected-reach denominators; sealed lane-assignment canaries via
+   (pilot area `connecting-oak-resources`; stratified 137-file sample of
+   record with expected-reach denominators; sealed lane-assignment canaries via
    `plant-challenge-canary` SEAL mode, key seat-authored with owner ratification
    riding OG-3; 2-lens + escalation-only third; draft P12 declaration).
 
@@ -68,6 +68,12 @@ denominator and the census/divergence report are presented as sitting inputs
   instance was ruled PROCEED-over-intact-denominator on 2026-07-15 and is recorded in the
   S2 attestation. Proposal: a standing G3 row so each recurrence stops needing a fresh
   ruling.
+- **Gate-language convention at ratification**: any gate-shaped phrase the sitting
+  ratifies into a durable artefact (e.g. the priors' "the unit of owner sanction") carries
+  its forcing fact inline, so expiry is checkable at read time. Source: the 2026-07-15
+  invented-gate sweep — its full-estate classification (168 assertions: 118 REAL /
+  37 STALE / 13 INVENTED) located the cure-worthy mass in bootstrap-read continuity
+  surfaces, and uncited gate language at ratification is that mass's generator.
 
 ## Prerequisites before convening
 
