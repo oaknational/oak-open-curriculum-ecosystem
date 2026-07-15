@@ -35,13 +35,14 @@ export function freezeUsageText(toolName: string): string {
 
 /**
  * Parse `--rule <path>` / `--out <dir>` / `--help` from argv via the shared
- * {@link scanArgs} scanner. Unknown or dangling flags are errors, never
- * ignored, and the `--` terminator is refused outright: these tools take no
- * positional arguments, and scanArgs' stop-at-`--` semantics would otherwise
- * silently swallow every following token — the exact footgun that ran a full
- * freeze on an attempted `-- --help` interface probe (2026-07-14). A `help`
- * verdict is a run-nothing contract: entries MUST short-circuit before any
- * preparation or write. `toolName` labels the usage line.
+ * {@link parseEntryArgs} contract. Unknown or dangling flags are errors,
+ * never ignored, and the `--` terminator is refused outright: these tools
+ * take no positional arguments, and the underlying scanner's stop-at-`--`
+ * semantics would otherwise silently swallow every following token — the
+ * exact footgun that ran a full freeze on an attempted `-- --help` interface
+ * probe (2026-07-14). A `help` verdict is a run-nothing contract: entries
+ * MUST short-circuit before any preparation or write. `toolName` labels the
+ * usage line.
  */
 export function parseFreezeArgs(
   argv: readonly string[],

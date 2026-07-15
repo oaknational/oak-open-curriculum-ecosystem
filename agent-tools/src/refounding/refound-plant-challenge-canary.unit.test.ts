@@ -1,6 +1,8 @@
+import { unwrap } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { parseCanaryArgs } from './refound-plant-challenge-canary.js';
+import { unwrapErr } from './test-helpers.js';
 
 /**
  * Unit proofs for the canary entry's arg contract: the shared run-nothing
@@ -12,19 +14,12 @@ import { parseCanaryArgs } from './refound-plant-challenge-canary.js';
 
 describe('parseCanaryArgs — shared entry contract', () => {
   it.each(['--help', '-h'])('lets %s win over mode validation (run-nothing verdict)', (flag) => {
-    const parsed = parseCanaryArgs([flag]);
-    expect(parsed.ok).toBe(true);
-    if (parsed.ok) {
-      expect(parsed.value.help).toBe(true);
-    }
+    expect(unwrap(parseCanaryArgs([flag])).help).toBe(true);
   });
 
   it('refuses a missing mode on a non-help run', () => {
-    const parsed = parseCanaryArgs([]);
-    expect(parsed.ok).toBe(false);
-    if (!parsed.ok) {
-      expect(parsed.error.message).toContain('--mode must be plant, seal, or score');
-    }
+    const error = unwrapErr(parseCanaryArgs([]));
+    expect(error.message).toContain('--mode must be plant, seal, or score');
   });
 
   it('refuses an unknown mode on a non-help run', () => {
@@ -32,23 +27,16 @@ describe('parseCanaryArgs — shared entry contract', () => {
   });
 
   it('accepts a valid mode with help false', () => {
-    const parsed = parseCanaryArgs(['--mode', 'seal', '--keys', 'k.jsonl']);
-    expect(parsed.ok).toBe(true);
-    if (parsed.ok) {
-      expect(parsed.value.help).toBe(false);
-      expect(parsed.value.args.mode).toBe('seal');
-      expect(parsed.value.args.keysPath).toBe('k.jsonl');
-    }
+    const value = unwrap(parseCanaryArgs(['--mode', 'seal', '--keys', 'k.jsonl']));
+    expect(value.help).toBe(false);
+    expect(value.args.mode).toBe('seal');
+    expect(value.args.keysPath).toBe('k.jsonl');
   });
 
   it.each([[['--']], [['--', '--help']]])(
     'refuses the -- terminator instead of silently swallowing what follows it (argv %j)',
     (argv) => {
-      const parsed = parseCanaryArgs(argv);
-      expect(parsed.ok).toBe(false);
-      if (!parsed.ok) {
-        expect(parsed.error.message).toContain('takes no positional arguments');
-      }
+      expect(unwrapErr(parseCanaryArgs(argv)).message).toContain('takes no positional arguments');
     },
   );
 
