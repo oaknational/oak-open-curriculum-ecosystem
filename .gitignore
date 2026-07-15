@@ -251,12 +251,19 @@ dist
 
 # Recomputable plan-corpus refounding bulk outputs. Their compact hashes,
 # counts, calibration result, and regeneration contract are tracked under
-# .agent/plans-refounding/proofs/s1-deterministic-evidence.v1.{md,json}.
+# .agent/plans-refounding/proofs/s1-deterministic-evidence.v1.{md,json} and
+# .agent/plans-refounding/proofs/s2-deterministic-evidence.v1.{md,json}.
+# The committed exception: plan-state.v1.report.json (the claim-vs-derived
+# divergence report, the Walk-A input) is a first-class tracked report.
 .agent/plans-refounding/inventory.v1.jsonl
 .agent/plans-refounding/net-diff.v1.report.json
 .agent/plans-refounding/residue.v1.report.json
 .agent/plans-refounding/proofs/orphan-discrimination.v1.md
 .agent/plans-refounding/sweep/sweep-hits.v1.jsonl
+.agent/plans-refounding/arrivals.v1.report.json
+.agent/plans-refounding/claim-census.v1.jsonl
+.agent/plans-refounding/claim-census.v1.report.json
+.agent/plans-refounding/ledger/
 
 # yarn v3
 .pnp.*

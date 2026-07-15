@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "runBaseSha": "1259530547de987fb37a160fa0cc577fb00aa1d8",
+  "requiresExactRunBase": true,
+  "exactBaseNote": "arrivals.v1.report.json is live-tree-dependent and reproduces only at the exact base; the frozen-tree-derived outputs are expected stable at later bases ONLY while refound-verify-freeze stays green over an unchanged frozen tree, zero amendments, AND the generating toolchain is unchanged (the refound-* generators and their dependencies, the ratified status-mapping table v1, the completion-keyword list v1) — verify-freeze pins the frozen inputs only, so a generator or table change alters these bytes with the freeze still green; the byte contract binds to the recorded base per requiresExactRunBase, and the later-base expectation is a conditional convenience, never part of the contract",
+  "repeatRuns": 2,
+  "byteIdenticalAcrossRuns": true,
+  "freezeVerification": {
+    "expectedFiles": 681,
+    "verifiedFiles": 681,
+    "missing": 0,
+    "unreadable": 0,
+    "changed": 0,
+    "extra": 0
+  },
+  "verdicts": {
+    "verifyFreeze": "OK — 681 frozen file(s) re-hashed and recounted byte-identical",
+    "mergeRecheck": "RED — 1 modified unsanctioned arrival (known A1, ruled PROCEED; see knownArrivals)",
+    "inventory": "643 md files, 169258 lines, 69623 anchors, ratio 41.13% (band 20%-70%)",
+    "defaultLedger": "69661 default-block sentinel rows across 30 area ledgers",
+    "tile": "GREEN — exact cover proven for the whole denominator: 69661 rows over 681 files in 30 areas",
+    "claimCensus": "6922 records (1960 status lines, 5421 completion-keyword lines) across 643 frozen files",
+    "planState": "green — no recomputation performed (1960 rows; UNMAPPED 224, no-evidence 1736, attested 0)"
+  },
+  "censusSummary": {
+    "records": 6922,
+    "recordModel": "one record per unique captured line; a line can be both a status capture and a keyword capture",
+    "statusLines": 1960,
+    "keywordLines": 5421,
+    "statusAndKeywordOverlapLines": 459,
+    "identity": "1960 + 5421 - 459 = 6922 (totals overlap; they are not additive)",
+    "linesMatchingMultipleKeywords": 1383,
+    "perKeywordCountsOverlap": true,
+    "perKeywordSum": 7063
+  },
+  "auditSummary": {
+    "rows": 1960,
+    "byClass": {
+      "consistent": 0,
+      "recorded-done-but-red": 0,
+      "recorded-pending-but-green": 0,
+      "unmapped-status": 224,
+      "no-evidence": 1736,
+      "attested": 0
+    },
+    "unmappedPercent": 11.43,
+    "unmappedDistinctValues": 81,
+    "haltBandPercent": 20,
+    "haltFired": false,
+    "evidenceInjected": false
+  },
+  "knownArrivals": [
+    {
+      "class": "A1",
+      "ruling": "PROCEED over the intact v1 denominator (Director, S2 ARC channel, 2026-07-15T16:15Z); frozen-v2 amendment authoring routed to the tooling lane",
+      "source": ".agent/plans/product-development-governance/active/plan-corpus-refounding.plan.md",
+      "frozenSha256": "32aed457602edead48e0d5103909890d8bc6a34ba9f00d3f53f3f520f03f0c4c",
+      "liveSha256": "ac13e00800efb011d246e44b46ea7a5764936ec388064b942ac03974369835a3",
+      "substance": "last_updated 2026-07-08 -> 2026-07-15 plus a 16-line R1-execution-progress section recording the S1 merge",
+      "provenance": "deep-handoff fold authored by Zodiac turns Solstice, commit 01e0e1ebe, cherry-picked onto PR #384 branch, merged to main at 5ce08c259"
+    }
+  ],
+  "setupCommands": [
+    "pnpm install",
+    "pnpm build"
+  ],
+  "repeatRunPreparation": {
+    "note": "refound-default-ledger refuses — nothing written — over ANY pre-existing target ledger, so a repeat run fails unless the previous run's ledger directory is removed or set aside first; run the preparation command below between runs (not before the first run, when no ledger directory exists yet)",
+    "commands": [
+      "mv .agent/plans-refounding/ledger .agent/plans-refounding/ledger.previous-run"
+    ]
+  },
+  "repeatedRunCommands": [
+    "pnpm --filter @oaknational/agent-tools refound-verify-freeze",
+    "pnpm --filter @oaknational/agent-tools refound-merge-recheck",
+    "pnpm --filter @oaknational/agent-tools refound-inventory",
+    "pnpm --filter @oaknational/agent-tools refound-default-ledger",
+    "pnpm --filter @oaknational/agent-tools refound-tile",
+    "pnpm --filter @oaknational/agent-tools refound-claim-census",
+    "pnpm exec tsx agent-tools/src/plan-state/plan-state.ts --census .agent/plans-refounding/claim-census.v1.jsonl --report .agent/plans-refounding/plan-state.v1.report.json"
+  ],
+  "verificationCommands": [
+    "shasum -a 256 -c <<'EOF'\n249d80cb841aef84a0f025406d04fcc88f1d83f4dca08bad46666504d7ed7d56  .agent/plans-refounding/arrivals.v1.report.json\ndb14136a2517909a398befbf7982d72397d37a2271a75e2337f8499a1af6a76d  .agent/plans-refounding/claim-census.v1.jsonl\nb8bf1513f87c4f8f6cc8e75422986b138e0a3e8d87e644bcd113cbb735fa839b  .agent/plans-refounding/claim-census.v1.report.json\n8c212300a2e256ea24e67925456fe79cbc36b7612b122d5183f70d7df8125b37  .agent/plans-refounding/inventory.v1.jsonl\n0f6ccad8aea50030686ff608ebfca54b7278ec5acedf0b6f5c131168b207ad4e  .agent/plans-refounding/ledger/milestones.ledger.jsonl\ne1e14f9da414e741e8d55344c7199cdd044fb0b5f92d1814983d3cd85617385b  .agent/plans-refounding/ledger/plans--agent-tooling.ledger.jsonl\n0b1c53aa0a010df01ec404785ca73a79bdedd4f0f1acd1e9245fa0922a69eacc  .agent/plans-refounding/ledger/plans--agentic-engineering-enhancements.ledger.jsonl\n350a3a5102f3696eb9b75f920fba0280bfbdbfb2db896ff04d4232d765378592  .agent/plans-refounding/ledger/plans--architecture-and-infrastructure.ledger.jsonl\na6e56e825b1dcd95bbdb87390df111f60fdf1287ef1fc8ee49f1ea8eda5c52ce  .agent/plans-refounding/ledger/plans--compliance.ledger.jsonl\nad1836a4e6faed6a54636c1a2077dc0bdce8ca839f6cffa88d41caac5a653246  .agent/plans-refounding/ledger/plans--connecting-oak-resources.ledger.jsonl\n949529e390cb41d6941c68fefc6c71428353c2874eba650acaae41e887b25124  .agent/plans-refounding/ledger/plans--curriculum-hub-demo.ledger.jsonl\n1db39501cc55e1903167dd8c3119962b1273441723e4c5431a0e5ccca18a4134  .agent/plans-refounding/ledger/plans--curriculum-mcp-path-to-ga.ledger.jsonl\nab91d0ee08da5f9e84349a9d1c97f5d289be2a8942bf77c5ac5da213e54bc8f5  .agent/plans-refounding/ledger/plans--developer-experience.ledger.jsonl\n38773f44636b4a3154c4fc696a5191eeed76cf5e8b4fe390bf1a695a1aa1d719  .agent/plans-refounding/ledger/plans--discovery.ledger.jsonl\n4cca21edee6eca9a852fdad76670ca0eccce2944ce83bf64e002cf3b45e29174  .agent/plans-refounding/ledger/plans--effectiveness-and-impact.ledger.jsonl\n27f31880a6a65cffa992716fedd7a9790ee66d01e426b86494f1894a77f7a909  .agent/plans-refounding/ledger/plans--exploring-open-education-resources.ledger.jsonl\nf2a15300716de05918aa32b2636d3af9f7354877ca3d88f3b7e792fadb3e8d1f  .agent/plans-refounding/ledger/plans--notes.ledger.jsonl\nb66ad160bdab7c0b016e39d9ed4ce04e3c69458bb28e10f4607e2e8f6c9f6343  .agent/plans-refounding/ledger/plans--observability.ledger.jsonl\na2f01b65ec7fa9a26e61b9e15c78b81b568e249af1d2c49cf03cd0a61f8c9fd5  .agent/plans-refounding/ledger/plans--product-development-governance.ledger.jsonl\n8f42facb6feb49fd12c293ac0682efe2d0e52a772858e0ebc5e835ab04f5b53b  .agent/plans-refounding/ledger/plans--school-data-search.ledger.jsonl\n0fc9936402afab9b017f85c25df6684211894d49598dda27a1d05ddd0a5986f7  .agent/plans-refounding/ledger/plans--sdk-and-mcp-enhancements.ledger.jsonl\nf5b460d377a9ab3d159ece9457ad5eb7f4708b4f2d9a2c225823316f72f2f366  .agent/plans-refounding/ledger/plans--sector-engagement.ledger.jsonl\n800b4ebe3d8a5f9920ef6a2c48aceb3424602125df1310d9916d1efc1b892fac  .agent/plans-refounding/ledger/plans--security-and-privacy.ledger.jsonl\n1a2afcd75d1aad4feef8ece7e46cb75709e3ec8cacaecc6d9cce39a046afdc99  .agent/plans-refounding/ledger/plans--semantic-search.ledger.jsonl\n9644ab9f160494978ce5125ae65d7beda7cdb8f3c095adb54d66cdf40a717cfa  .agent/plans-refounding/ledger/plans--slack-assistants.ledger.jsonl\nb1182d7bddd8d8ddf9e7de7360b35c85537d1d6b354a6ee869653d743057ef95  .agent/plans-refounding/ledger/plans--speculative.ledger.jsonl\nc03379e5d5e49b93bc4fb82371144c49fca914a7da4d3a5051570ca28241b77c  .agent/plans-refounding/ledger/plans--telemetry-and-understanding.ledger.jsonl\n06bc58dc1998fb1b317f1bd9e7ef1d7e0636f9c8bc4e51509e667708ebe8c716  .agent/plans-refounding/ledger/plans--templates.ledger.jsonl\n93a2d3469fa772d7739b8c5cc88e8e2de5f208e4184f26b263240f391d63afd7  .agent/plans-refounding/ledger/plans--upstream-feature-requests.ledger.jsonl\nbfd0640b1f71586cf8c534dcd198c62f41759d8bfa5c12c9f81ad30f91ce19c4  .agent/plans-refounding/ledger/plans--user-experience.ledger.jsonl\n774a4ad448d4240cf81f8f1e1d3246ca75f682f729d19f33246ba79ef10cf083  .agent/plans-refounding/ledger/plans.ledger.jsonl\n3e5805bb20ba7e9ac1ec6c8b97fb61b12bce3727be958c4b38a00f12e6ca420e  .agent/plans-refounding/ledger/proposals--kg-ont-mcp-strat.ledger.jsonl\n3b55ff599bd7fcf1564f5aa4f7d3e9e6f69825622c81913e253dc3bb594c347a  .agent/plans-refounding/ledger/proposals--upstream-api-endpoint-additions.ledger.jsonl\n95c386ab3389a42def8526df879ad1e641b3967f8b549ef0f6a2e4e17f18d299  .agent/plans-refounding/ledger/proposals.ledger.jsonl\n108428ac876e3f718a3e57abfa5003a2d0b6684fa8f7c2aa36374abfc3ac3fb4  .agent/plans-refounding/net-diff.v1.report.json\n428cd0aa7bc2309823a2443c2b6349181716b59e149261f631490f8fe4d4c91b  .agent/plans-refounding/plan-state.v1.report.json\nEOF"
+  ],
+  "artifacts": [
+    {
+      "path": ".agent/plans-refounding/arrivals.v1.report.json",
+      "bytes": 618,
+      "physicalLines": 22,
+      "sha256": "249d80cb841aef84a0f025406d04fcc88f1d83f4dca08bad46666504d7ed7d56"
+    },
+    {
+      "path": ".agent/plans-refounding/claim-census.v1.jsonl",
+      "bytes": 2366524,
+      "physicalLines": 6922,
+      "sha256": "db14136a2517909a398befbf7982d72397d37a2271a75e2337f8499a1af6a76d"
+    },
+    {
+      "path": ".agent/plans-refounding/claim-census.v1.report.json",
+      "bytes": 1014,
+      "physicalLines": 66,
+      "sha256": "b8bf1513f87c4f8f6cc8e75422986b138e0a3e8d87e644bcd113cbb735fa839b"
+    },
+    {
+      "path": ".agent/plans-refounding/inventory.v1.jsonl",
+      "bytes": 18958318,
+      "physicalLines": 69623,
+      "sha256": "8c212300a2e256ea24e67925456fe79cbc36b7612b122d5183f70d7df8125b37"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/milestones.ledger.jsonl",
+      "bytes": 28924,
+      "physicalLines": 160,
+      "sha256": "0f6ccad8aea50030686ff608ebfca54b7278ec5acedf0b6f5c131168b207ad4e"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--agent-tooling.ledger.jsonl",
+      "bytes": 3218142,
+      "physicalLines": 12482,
+      "sha256": "e1e14f9da414e741e8d55344c7199cdd044fb0b5f92d1814983d3cd85617385b"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--agentic-engineering-enhancements.ledger.jsonl",
+      "bytes": 4554916,
+      "physicalLines": 15276,
+      "sha256": "0b1c53aa0a010df01ec404785ca73a79bdedd4f0f1acd1e9245fa0922a69eacc"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--architecture-and-infrastructure.ledger.jsonl",
+      "bytes": 2024460,
+      "physicalLines": 6954,
+      "sha256": "350a3a5102f3696eb9b75f920fba0280bfbdbfb2db896ff04d4232d765378592"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--compliance.ledger.jsonl",
+      "bytes": 26531,
+      "physicalLines": 149,
+      "sha256": "a6e56e825b1dcd95bbdb87390df111f60fdf1287ef1fc8ee49f1ea8eda5c52ce"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--connecting-oak-resources.ledger.jsonl",
+      "bytes": 665131,
+      "physicalLines": 2099,
+      "sha256": "ad1836a4e6faed6a54636c1a2077dc0bdce8ca839f6cffa88d41caac5a653246"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--curriculum-hub-demo.ledger.jsonl",
+      "bytes": 131554,
+      "physicalLines": 530,
+      "sha256": "949529e390cb41d6941c68fefc6c71428353c2874eba650acaae41e887b25124"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--curriculum-mcp-path-to-ga.ledger.jsonl",
+      "bytes": 66903,
+      "physicalLines": 291,
+      "sha256": "1db39501cc55e1903167dd8c3119962b1273441723e4c5431a0e5ccca18a4134"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--developer-experience.ledger.jsonl",
+      "bytes": 704392,
+      "physicalLines": 2594,
+      "sha256": "ab91d0ee08da5f9e84349a9d1c97f5d289be2a8942bf77c5ac5da213e54bc8f5"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--discovery.ledger.jsonl",
+      "bytes": 341340,
+      "physicalLines": 1432,
+      "sha256": "38773f44636b4a3154c4fc696a5191eeed76cf5e8b4fe390bf1a695a1aa1d719"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--effectiveness-and-impact.ledger.jsonl",
+      "bytes": 59188,
+      "physicalLines": 210,
+      "sha256": "4cca21edee6eca9a852fdad76670ca0eccce2944ce83bf64e002cf3b45e29174"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--exploring-open-education-resources.ledger.jsonl",
+      "bytes": 80972,
+      "physicalLines": 246,
+      "sha256": "27f31880a6a65cffa992716fedd7a9790ee66d01e426b86494f1894a77f7a909"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--notes.ledger.jsonl",
+      "bytes": 8837,
+      "physicalLines": 43,
+      "sha256": "f2a15300716de05918aa32b2636d3af9f7354877ca3d88f3b7e792fadb3e8d1f"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--observability.ledger.jsonl",
+      "bytes": 1369003,
+      "physicalLines": 5325,
+      "sha256": "b66ad160bdab7c0b016e39d9ed4ce04e3c69458bb28e10f4607e2e8f6c9f6343"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--product-development-governance.ledger.jsonl",
+      "bytes": 654156,
+      "physicalLines": 2294,
+      "sha256": "a2f01b65ec7fa9a26e61b9e15c78b81b568e249af1d2c49cf03cd0a61f8c9fd5"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--school-data-search.ledger.jsonl",
+      "bytes": 91674,
+      "physicalLines": 382,
+      "sha256": "8f42facb6feb49fd12c293ac0682efe2d0e52a772858e0ebc5e835ab04f5b53b"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--sdk-and-mcp-enhancements.ledger.jsonl",
+      "bytes": 1159984,
+      "physicalLines": 4346,
+      "sha256": "0fc9936402afab9b017f85c25df6684211894d49598dda27a1d05ddd0a5986f7"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--sector-engagement.ledger.jsonl",
+      "bytes": 647198,
+      "physicalLines": 2686,
+      "sha256": "f5b460d377a9ab3d159ece9457ad5eb7f4708b4f2d9a2c225823316f72f2f366"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--security-and-privacy.ledger.jsonl",
+      "bytes": 270159,
+      "physicalLines": 1083,
+      "sha256": "800b4ebe3d8a5f9920ef6a2c48aceb3424602125df1310d9916d1efc1b892fac"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--semantic-search.ledger.jsonl",
+      "bytes": 1485600,
+      "physicalLines": 5472,
+      "sha256": "1a2afcd75d1aad4feef8ece7e46cb75709e3ec8cacaecc6d9cce39a046afdc99"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--slack-assistants.ledger.jsonl",
+      "bytes": 72799,
+      "physicalLines": 347,
+      "sha256": "9644ab9f160494978ce5125ae65d7beda7cdb8f3c095adb54d66cdf40a717cfa"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--speculative.ledger.jsonl",
+      "bytes": 220573,
+      "physicalLines": 1053,
+      "sha256": "b1182d7bddd8d8ddf9e7de7360b35c85537d1d6b354a6ee869653d743057ef95"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--telemetry-and-understanding.ledger.jsonl",
+      "bytes": 221410,
+      "physicalLines": 956,
+      "sha256": "c03379e5d5e49b93bc4fb82371144c49fca914a7da4d3a5051570ca28241b77c"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--templates.ledger.jsonl",
+      "bytes": 212214,
+      "physicalLines": 1022,
+      "sha256": "06bc58dc1998fb1b317f1bd9e7ef1d7e0636f9c8bc4e51509e667708ebe8c716"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--upstream-feature-requests.ledger.jsonl",
+      "bytes": 22580,
+      "physicalLines": 88,
+      "sha256": "93a2d3469fa772d7739b8c5cc88e8e2de5f208e4184f26b263240f391d63afd7"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans--user-experience.ledger.jsonl",
+      "bytes": 395888,
+      "physicalLines": 1420,
+      "sha256": "bfd0640b1f71586cf8c534dcd198c62f41759d8bfa5c12c9f81ad30f91ce19c4"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/plans.ledger.jsonl",
+      "bytes": 32878,
+      "physicalLines": 210,
+      "sha256": "774a4ad448d4240cf81f8f1e1d3246ca75f682f729d19f33246ba79ef10cf083"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/proposals--kg-ont-mcp-strat.ledger.jsonl",
+      "bytes": 19954,
+      "physicalLines": 82,
+      "sha256": "3e5805bb20ba7e9ac1ec6c8b97fb61b12bce3727be958c4b38a00f12e6ca420e"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/proposals--upstream-api-endpoint-additions.ledger.jsonl",
+      "bytes": 63724,
+      "physicalLines": 268,
+      "sha256": "3b55ff599bd7fcf1564f5aa4f7d3e9e6f69825622c81913e253dc3bb594c347a"
+    },
+    {
+      "path": ".agent/plans-refounding/ledger/proposals.ledger.jsonl",
+      "bytes": 35813,
+      "physicalLines": 161,
+      "sha256": "95c386ab3389a42def8526df879ad1e641b3967f8b549ef0f6a2e4e17f18d299"
+    },
+    {
+      "path": ".agent/plans-refounding/net-diff.v1.report.json",
+      "bytes": 19244678,
+      "physicalLines": 497993,
+      "sha256": "108428ac876e3f718a3e57abfa5003a2d0b6684fa8f7c2aa36374abfc3ac3fb4"
+    },
+    {
+      "path": ".agent/plans-refounding/plan-state.v1.report.json",
+      "bytes": 485642,
+      "physicalLines": 13842,
+      "sha256": "428cd0aa7bc2309823a2443c2b6349181716b59e149261f631490f8fe4d4c91b"
+    }
+  ]
+}

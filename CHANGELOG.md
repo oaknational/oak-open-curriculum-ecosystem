@@ -1,3 +1,10 @@
+# [1.70.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.69.4...v1.70.0) (2026-07-15)
+
+
+### Features
+
+* **refounding:** land the S2 tiling baseline + audit-mode divergence report ([620e5e2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/620e5e2cf740413fd50dfbfce1ed9df21b203384))
+
 ## [1.69.4](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.69.3...v1.69.4) (2026-07-15)
 
 ## [1.69.3](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.69.2...v1.69.3) (2026-07-15)
