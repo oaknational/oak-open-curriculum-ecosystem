@@ -3,6 +3,7 @@ import path from 'node:path';
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
 import { runChallengePlant } from './refound-challenge-helpers.js';
+import { entryUsageText } from './refound-entry-args.js';
 import {
   CHALLENGE_COMMITMENT_SEGMENT,
   CHALLENGE_STREAM_SEGMENT,
@@ -39,10 +40,12 @@ export interface CanaryArgs {
 }
 
 /** The shared usage line, appended to every mode's flag error. */
-export const CANARY_USAGE =
-  'usage: refound-plant-challenge-canary --mode <plant|seal|score> ' +
-  '[--ledger <path>] [--rate <percent>] [--salt <value>] [--keys-out <path>] ' +
-  '[--findings <path>] [--keys <path>] [--commitment <path>] [--out <dir>]';
+export const CANARY_USAGE = entryUsageText(
+  'refound-plant-challenge-canary',
+  '--mode <plant|seal|score> ' +
+    '[--ledger <path>] [--rate <percent>] [--salt <value>] [--keys-out <path>] ' +
+    '[--findings <path>] [--keys <path>] [--commitment <path>] [--out <dir>]',
+);
 
 /**
  * Resolve a mode file path: explicit flag override, else the out-dir

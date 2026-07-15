@@ -77,3 +77,44 @@ describe('parseTileArgs — empty --area refusal', () => {
     }
   });
 });
+
+describe('parseTileArgs — shared entry contract', () => {
+  it.each(['--help', '-h'])('recognises %s as a run-nothing short-circuit request', (flag) => {
+    const parsed = parseTileArgs([flag]);
+    expect(parsed.ok).toBe(true);
+    if (parsed.ok) {
+      expect(parsed.value.help).toBe(true);
+    }
+  });
+
+  it('reports help false on an ordinary run', () => {
+    const parsed = parseTileArgs(['--area', 'plans--alpha']);
+    expect(parsed.ok).toBe(true);
+    if (parsed.ok) {
+      expect(parsed.value.help).toBe(false);
+    }
+  });
+
+  it('lets the --help verdict win over the empty --area refusal (run-nothing beats validation)', () => {
+    const parsed = parseTileArgs(['--help', '--area', '']);
+    expect(parsed.ok).toBe(true);
+    if (parsed.ok) {
+      expect(parsed.value.help).toBe(true);
+    }
+  });
+
+  it.each([[['--']], [['--', '--help']]])(
+    'refuses the -- terminator instead of silently swallowing what follows it (argv %j)',
+    (argv) => {
+      const parsed = parseTileArgs(argv);
+      expect(parsed.ok).toBe(false);
+      if (!parsed.ok) {
+        expect(parsed.error.message).toContain('takes no positional arguments');
+      }
+    },
+  );
+
+  it('rejects an unknown flag rather than silently ignoring it', () => {
+    expect(parseTileArgs(['--rule', 'r.json']).ok).toBe(false);
+  });
+});
