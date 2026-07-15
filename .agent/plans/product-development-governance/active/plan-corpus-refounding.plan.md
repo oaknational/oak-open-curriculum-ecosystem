@@ -17,7 +17,7 @@ lineage:
   serves_thread: strategy-and-plan-estate-holistic-review
   serves_stream: agentic-framework
   strategic_choice: FRAME-1
-last_updated: 2026-07-08
+last_updated: 2026-07-15
 todos:
   - id: r0a-mechanical-instrument
     content: >-
@@ -169,6 +169,22 @@ The donor-side method evidence re-sources from
 [`resonance-practice-knowledge.md`](../../../reference/resonance-practice-knowledge.md) and the
 incoming box synthesis
 ([`resonance-plan-estate-refounding-synthesis-2026-07-06.md`](../../../practice-core/incoming/resonance-plan-estate-refounding-synthesis-2026-07-06.md)).
+
+## R1 execution progress (2026-07-15)
+
+S0 is closed and merged. The S1 deterministic script layer is also merged through PR #382
+(`de3cc54c1`, evidence tip `766f3d5eb`): freeze verification, inventory, residue, sweep, and
+P4 detector-calibration were run twice from the exact recorded base with byte-identical output.
+The compact evidence contract records the regeneration commands, measurements, checksums, and
+the honest calibration boundary: the marker-free plant was invisible while the control hit.
+
+The `r1-freeze-inventory-baseline` todo remains **pending** because this is a partial stable
+point, not full S1 completion. The declared-rate reader sample and any resulting narrow
+reader/locator or judgement residual remain Director-owned, calibration-gated work; S2 tiling
+and the claim-vs-derived divergence report have not run. The five large generated outputs are
+deliberately absent from the merged PR and preserved in local-only conservation commit
+`42b27e3eb` pending Director disposition. Do not treat PR #382, the ignored output paths, or
+the local conservation copy as evidence that the whole r1 todo is complete.
 
 ## End goal · mechanism · means
 

@@ -35,6 +35,21 @@ Compact live state only. Finished-session narrative is conserved in its homes
 from here per `continuity-practice.md` §Disposition; only live lanes and live
 forward-asks remain.
 
+- **PLAN-CORPUS REFOUNDING r1 — S0 CLOSED; S1 DETERMINISTIC SLICE MERGED; FULL S1 OPEN
+  (2026-07-15).** PR #382 (`de3cc54c1`, evidence tip `766f3d5eb`) preserves the compact,
+  exact-base regeneration contract for the twice-run freeze/inventory/residue/sweep/P4
+  calibration evidence. All 18 checks passed and all three review threads are resolved. This
+  is a partial stable point only: the marker-free plant remained invisible while its control
+  hit, so the declared-rate reader sample and any narrow fleet/judgement residual remain
+  Director-owned before S2 tiling and the divergence report. Schooner guards Whirlpool
+  (`82a9df`) retains Director custody; Hedgehog tracks Eventide (`82b36c`) is Fleet
+  Captain-in-waiting under owner-directed cold pause. The five ignored bulk outputs remain
+  conserved only by local, unpushed commit `42b27e3eb` on
+  `feat/plan-corpus-refounding-s1-zodiac`; this is safe from accidental PR inclusion but not a
+  remote backup. Next: Director verifies current base/evidence, rules the conservation-copy
+  disposition, then resumes the declared reader/fleet residual. Full pickup detail is in the
+  [thread record](threads/strategy-and-plan-estate-holistic-review.next-session.md).
+
 - **ARCHITECTURAL FITNESS + MUTATION TESTING — decision-ready concept
   exploration written 2026-07-15; no implementation.** The architectural-
   budget child now records a proposal to replace the unwired, externally

@@ -19,32 +19,35 @@ clearly; never delete ideas. **Scope authority is the controlling plan**
 [`vision-strategy-and-plan-estate.plan.md`](../../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md),
 reconceived to this model 2026-06-18. This record is the **pickup surface**, not scope authority.
 
-## Where We Are (2026-07-15 midday, Schooner guards Whirlpool 82a9df Director — S0 CLOSED AND MERGED, S1 UNSTARTED, seat held at Moment-2)
+## Where We Are (2026-07-15 afternoon — S1 deterministic slice MERGED; full S1 OPEN)
 
 **S0 is CLOSED and merged**: PR #379 (`SHA:68d6d232`, release 1.69.1) landed the 681-file
-frozen conservation commit; window CLOSE broadcast 10:28Z. **Orphan-recovery PR #380
-MERGED** (`SHA:55a69ceca`, 11:20:45Z) — the recovered compaction-prep entry verified in the
-dated napkin archive with SHA provenance; both proof-gated worktrees (`register-rehoming`,
-`orphan-recovery`) removed at pickup. **S1 is UNSTARTED**: the first Fleet Captain seat
-(Stoat holds Warren) was retired by owner instruction before any script ran (the
-tool-contract mistake is in their 2026-07-15 napkin entry — read it before the successor
-seat starts). **The S1 remit stands verbatim and is the durable P3 lane guidance**
-(Director remit event 2026-07-15T11:35:42Z): the deterministic `refound-*` scripts run
-FIRST at zero LLM cost (`refound-verify-freeze` re-hash → `refound-inventory` →
-`refound-residue` → `refound-sweep`, then `refound-plant-orphan` for P4
-detector-calibration BEFORE trusting any zero/green result); the
-`refound-reader`/`refound-locator` fleet layer is a narrow, zero-judgement,
-calibration-gated residual only where scripts prove reading unavoidable, pre-declared
-against the cost ledger (P12) before any dispatch — this scripts-first discipline applies
-to the WHOLE refounding arc (S2/S3/S4 too). **The Director seat is with Schooner guards
-Whirlpool** (`82a9df`; PDR-064 Moment-2 2026-07-15T12:04:35Z, event `35076b29`, claim
-`0f4be777` adopted; Barnacle calls Spray retired clean on owner instruction). **Owner
-rulings 2026-07-15**: no more handover branches/PRs (handover artefacts land batched —
-`director-handoff.md` step 7); a residue disposition sweep (primary's 4 stashes + ~50 local
-branches, per-item proof ledger → one batch ruling) is commissioned. The stray sweep
-artefact from Stoat's misfire was absent repo-wide at 12:10Z (assumed owner-disposed,
-confirmation pending). Next safe step = successor fleet seat for S1 (owner launches;
-Director re-routes the remit) → S2 → divergence report as Walk-A input.
+frozen conservation commit; orphan-recovery PR #380 merged at `SHA:55a69ceca`. **The S1
+deterministic script layer has now landed**: Zodiac turns Solstice ran the freeze check,
+inventory, residue, sweep, and P4 detector-calibration twice from the exact recorded base;
+the compact, recomputable evidence contract merged through PR #382 (`de3cc54c1`, tip
+`766f3d5eb`). The merged evidence records 681/681 frozen files, 77 residue candidates,
+3,514 sweep hits across 523 files, byte-identical repeated outputs, and the required honest
+disclosure that the marker-free plant was invisible while the control hit. All 18 checks
+passed; all three review threads are resolved. Review repairs made the exact-base requirement,
+setup/repeated/verification phases, and fail-loud checksum manifest machine-readable.
+
+**Full S1 remains OPEN.** PR #382 proves and preserves only the deterministic layer; it does
+not discharge the declared-rate reader sample or any judgement/fleet residual. Hedgehog tracks
+Eventide is the owner-assigned Fleet Captain-in-waiting, currently in an owner-directed cold
+pause; exit requires owner resume plus Director go. The `refound-reader`/`refound-locator`
+layer remains narrow, zero-judgement, calibration-gated, pre-declared against the P12 cost
+ledger, and justified only where the scripts prove reading unavoidable. The calibration
+disclosure is evidence that this residual is necessary, not permission for blanket dispatch.
+
+**Custody and conservation.** Schooner guards Whirlpool retains Director authority under claim
+`0f4be777`. The five large generated outputs are ignored and intentionally absent from PR #382;
+their clean 49 MB conservation commit `42b27e3eb` remains on the local-only branch
+`feat/plan-corpus-refounding-s1-zodiac`, unpushed and untouched pending Director disposition.
+That state is safe from accidental PR inclusion but is not a remote backup; do not delete,
+reset, or reinterpret it as ordinary untracked residue. Next safe step = Director re-verifies
+the compact evidence/current base, resolves the conservation-copy disposition, then resumes the
+declared-rate reader sample/fleet residual before S2 tiling and the divergence report.
 
 ## Where We Were (2026-07-14 evening, Quasar mends Umbra 52b4de outgoing Director — RULE RATIFIED, S0 WINDOW OPEN, seat → Barnacle calls Spray)
 
