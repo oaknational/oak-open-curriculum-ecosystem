@@ -9,7 +9,7 @@ import { resolveRepoRoot } from '../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
 import { decideCensusVerdict } from './refound-claim-census-report.js';
 import { runClaimCensus } from './refound-claim-census-helpers.js';
-import { entryUsageText, parseEntryArgs } from './refound-entry-args.js';
+import { entryUsageText, parseEntryArgs, prepareEntryRun } from './refound-entry-args.js';
 import { DEFAULT_OUT_DIR } from './refound-freeze-helpers.js';
 import { resolveReadPathWithinRepo } from './refound-path-resolve.js';
 
@@ -92,25 +92,18 @@ function resolvePaths(
   return ok({ outDirAbs: outDirAbs.value, mappingAbsPath: mappingAbsPath.value });
 }
 
-/** The census preflight: parse, help short-circuit BEFORE resolution, resolve. */
+/**
+ * The census preflight, composed over the shared {@link prepareEntryRun}
+ * primitive — the canonical owner of the parse → help-short-circuit →
+ * resolve ordering.
+ */
 function prepareCensusRun(
   argv: readonly string[],
 ): Result<
   { help: true } | { help: false; outDirAbs: string; mappingAbsPath: string | null },
   Error
 > {
-  const args = parseCensusArgs(argv);
-  if (isErr(args)) {
-    return args;
-  }
-  if (args.value.help) {
-    return ok({ help: true });
-  }
-  const paths = resolvePaths(args.value.args);
-  if (isErr(paths)) {
-    return paths;
-  }
-  return ok({ help: false, ...paths.value });
+  return prepareEntryRun(parseCensusArgs(argv), (parsed) => resolvePaths(parsed.args));
 }
 
 async function main(): Promise<void> {

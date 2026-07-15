@@ -119,6 +119,37 @@ export function parseOutDirArgs(
 }
 
 /**
+ * The shared entry preflight: given a parsed entry verdict, short-circuit
+ * the run-nothing `help` contract BEFORE any resolution, then run the
+ * tool's own resolution step. This is the canonical owner of the
+ * parse → help → resolve ordering (`consolidate-at-second-consumer`): the
+ * `--out`-only entries and the census preflight both compose it, so the
+ * safety-critical ordering cannot drift per tool.
+ *
+ * @param parsed - The tool's parsed argv verdict (any shape carrying the
+ * shared `help` flag).
+ * @param resolve - The tool's resolution step; runs ONLY on a non-help
+ * parse, receiving the parsed value.
+ * @returns The help verdict, or the resolved fields with `help: false`.
+ */
+export function prepareEntryRun<TParsed extends { readonly help: boolean }, TResolved>(
+  parsed: Result<TParsed, Error>,
+  resolve: (parsed: TParsed) => Result<TResolved, Error>,
+): Result<{ readonly help: true } | ({ readonly help: false } & TResolved), Error> {
+  if (isErr(parsed)) {
+    return parsed;
+  }
+  if (parsed.value.help) {
+    return ok({ help: true } as const);
+  }
+  const resolved = resolve(parsed.value);
+  if (isErr(resolved)) {
+    return resolved;
+  }
+  return ok({ ...resolved.value, help: false as const });
+}
+
+/**
  * A `--out`-only entry's decided preflight: the run-nothing help verdict, or
  * the raw flag plus its repo-constrained resolution, ready to run.
  */
@@ -127,27 +158,23 @@ export type OutDirEntry =
   | { readonly help: false; readonly outDir: string; readonly outDirAbs: string };
 
 /**
- * The whole pre-run sequence of a `--out`-only entry in one call: parse
- * under the shared contract, short-circuit on the help verdict BEFORE any
- * path resolution, then constrain the artefact home (a READ target — it
- * must exist) to the repository. Keeps every such entry's `main` down to
- * verdict handling plus its own run.
+ * The whole pre-run sequence of a `--out`-only entry in one call, composed
+ * over {@link prepareEntryRun}: parse under the shared contract,
+ * short-circuit on the help verdict BEFORE any path resolution, then
+ * constrain the artefact home (a READ target — it must exist) to the
+ * repository. Keeps every such entry's `main` down to verdict handling plus
+ * its own run.
  */
 export function prepareOutDirEntry(
   repoRoot: string,
   argv: readonly string[],
   toolName: string,
 ): Result<OutDirEntry, Error> {
-  const args = parseOutDirArgs(argv, toolName);
-  if (isErr(args)) {
-    return args;
-  }
-  if (args.value.help) {
-    return ok({ help: true });
-  }
-  const outDirAbs = resolveReadPathWithinRepo(repoRoot, args.value.outDir);
-  if (isErr(outDirAbs)) {
-    return outDirAbs;
-  }
-  return ok({ help: false, outDir: args.value.outDir, outDirAbs: outDirAbs.value });
+  return prepareEntryRun(parseOutDirArgs(argv, toolName), (args) => {
+    const outDirAbs = resolveReadPathWithinRepo(repoRoot, args.outDir);
+    if (isErr(outDirAbs)) {
+      return outDirAbs;
+    }
+    return ok({ outDir: args.outDir, outDirAbs: outDirAbs.value });
+  });
 }

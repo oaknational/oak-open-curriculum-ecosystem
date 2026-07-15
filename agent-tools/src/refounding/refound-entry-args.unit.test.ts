@@ -1,10 +1,11 @@
-import { unwrap } from '@oaknational/result';
+import { err, ok, unwrap } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import {
   entryUsageText,
   parseEntryArgs,
   parseOutDirArgs,
+  prepareEntryRun,
   prepareOutDirEntry,
 } from './refound-entry-args.js';
 import { DEFAULT_OUT_DIR } from './refound-freeze-helpers.js';
@@ -126,6 +127,48 @@ describe('parseOutDirArgs (the shared --out-only entry surface)', () => {
 
   it('rejects an unknown flag', () => {
     expect(parseOutDirArgs(['--rule', 'r.json'], 'refound-inventory').ok).toBe(false);
+  });
+});
+
+describe('prepareEntryRun — the shared parse → help → resolve preflight', () => {
+  it('propagates a parse error without running the resolution step', () => {
+    let resolveRan = false;
+    const error = unwrapErr(
+      prepareEntryRun<{ help: boolean }, { x: number }>(err(new Error('bad argv')), () => {
+        resolveRan = true;
+        return ok({ x: 1 });
+      }),
+    );
+    expect(error.message).toBe('bad argv');
+    expect(resolveRan).toBe(false);
+  });
+
+  it('short-circuits the help verdict BEFORE the resolution step runs', () => {
+    let resolveRan = false;
+    const prepared = unwrap(
+      prepareEntryRun(ok({ help: true }), () => {
+        resolveRan = true;
+        return ok({ x: 1 });
+      }),
+    );
+    expect(prepared).toEqual({ help: true });
+    expect(resolveRan).toBe(false);
+  });
+
+  it('propagates a resolution error on a non-help parse', () => {
+    const error = unwrapErr(
+      prepareEntryRun(ok({ help: false }), () => err(new Error('outside the repository'))),
+    );
+    expect(error.message).toBe('outside the repository');
+  });
+
+  it('spreads the resolved fields with help false on a non-help parse', () => {
+    const prepared = unwrap(
+      prepareEntryRun(ok({ help: false, args: { out: 'dir' } }), (parsed) =>
+        ok({ resolved: `${parsed.args.out}/abs` }),
+      ),
+    );
+    expect(prepared).toEqual({ help: false, resolved: 'dir/abs' });
   });
 });
 
