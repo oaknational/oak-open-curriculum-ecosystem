@@ -262,7 +262,18 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
-> ### ▶ ACTIVE EFFORT: PLAN-CORPUS REFOUNDING — Director: Mussel rides Coral (Moment-2 2026-07-15T14:26:36Z, event `0f7e4907`)
+> ### ▶ ACTIVE EFFORT: PLAN-CORPUS REFOUNDING — seat in transfer: Mussel rides Coral → Tuna holds Buoy (Moment-1 2026-07-15 ~16:33Z, owner compaction-prep protocol)
+>
+> **The live pickup surface is the handoff record**
+> `.agent/state/collaboration/handoffs/2026-07-15-director-mussel-to-tuna-0f4be777.md`
+> (claim `0f4be777` carries `handoff_record_path`; read end-to-end before anything).
+> Team: 4 active + 4 standby on the owner's CIRCULAR-COMPRESSION ring (map broadcast
+> `cd375f72`; protocol amendments `c57698dc` — standby dormancy, Director-only handovers,
+> the compaction-prep template). First rotation proven (Hedgehog→Ceres, 16:28Z).
+>
+> <details><summary>Superseded: Mussel seat state at Moment-2 (conserved)</summary>
+>
+> ### ▶ Director: Mussel rides Coral (Moment-2 2026-07-15T14:26:36Z, event `0f7e4907`)
 >
 > **SESSION SHAPE:** Mussel rides Coral (`6f8857`) holds the seat — claim `0f4be777`
 > adopted, dual heartbeat live (transfer from Schooner guards Whirlpool `82a9df`, Moment-1
@@ -278,6 +289,8 @@ first-hand as of 2026-06-25.
 > `s1-reader-sample-b1` batch (claim `45befb32`). Zodiac turns Solstice (`019f65`) was
 > owner-shut-down after their S1 closeout; forensic verdict: contained, nothing rogue
 > reached origin, their deep-handoff fold rides PR #384.
+>
+> </details>
 >
 > <details><summary>Superseded: seat-in-transfer state as frozen by Schooner (conserved)</summary>
 >
