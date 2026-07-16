@@ -23,27 +23,9 @@
  * ```
  */
 
-/**
- * Result type representing either success (Ok) or failure (Err).
- * Forces explicit handling of both cases.
- */
-export type Result<T, E> = Ok<T> | Err<E>;
+import type { Err, Ok, Result } from './result-type.js';
 
-/**
- * Successful result containing a value.
- */
-export interface Ok<T> {
-  readonly ok: true;
-  readonly value: T;
-}
-
-/**
- * Error result containing an error value.
- */
-export interface Err<E> {
-  readonly ok: false;
-  readonly error: E;
-}
+export type { Err, Ok, Result } from './result-type.js';
 
 /**
  * Creates a successful Result.
@@ -111,25 +93,7 @@ export function isErr<T, E>(result: Result<T, E>): result is Err<E> {
   return !result.ok;
 }
 
-/**
- * Unwraps an Ok value or throws an error.
- * Use with caution - prefer explicit error handling with isOk/isErr.
- *
- * @param result - The Result to unwrap
- * @returns The Ok value
- * @throws Error if the result is Err
- *
- * @example
- * ```typescript
- * const value = unwrap(result); // Throws if result is Err
- * ```
- */
-export function unwrap<T, E>(result: Result<T, E>): T {
-  if (result.ok) {
-    return result.value;
-  }
-  throw new Error(`Called unwrap on Err: ${String(result.error)}`);
-}
+export { unwrap, unwrapErr, unwrapOr, unwrapOrElse } from './unwrapping.js';
 
 /**
  * Maps an Ok value to a new value. Err values pass through unchanged.
@@ -184,38 +148,6 @@ export function flatMap<T, U, E>(
  */
 export function mapErr<T, E, F>(result: Result<T, E>, fn: (error: E) => F): Result<T, F> {
   return result.ok ? result : err(fn(result.error));
-}
-
-/**
- * Returns the Ok value or a default value if Err.
- *
- * @param result - The Result to unwrap
- * @param defaultValue - Value to return if result is Err
- * @returns The Ok value or the default
- *
- * @example
- * ```typescript
- * const value = unwrapOr(result, 0); // Returns 0 if result is Err
- * ```
- */
-export function unwrapOr<T, E>(result: Result<T, E>, defaultValue: T): T {
-  return result.ok ? result.value : defaultValue;
-}
-
-/**
- * Returns the Ok value or computes a default from the error.
- *
- * @param result - The Result to unwrap
- * @param fn - Function to compute default from error
- * @returns The Ok value or the computed default
- *
- * @example
- * ```typescript
- * const value = unwrapOrElse(result, err => err.length);
- * ```
- */
-export function unwrapOrElse<T, E>(result: Result<T, E>, fn: (error: E) => T): T {
-  return result.ok ? result.value : fn(result.error);
 }
 
 /**

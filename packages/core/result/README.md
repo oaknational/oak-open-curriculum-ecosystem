@@ -96,6 +96,7 @@ const value = unwrapOr(result, 0);
 ### Unwrapping
 
 - `unwrap<T, E>(result)` - Get value or throw (use sparingly)
+- `unwrapErr<T, E>(result)` - Get error or throw (unwrap's inverse, for expected failures)
 - `unwrapOr<T, E>(result, defaultValue)` - Get value or default
 - `unwrapOrElse<T, E>(result, fn)` - Get value or compute default
 

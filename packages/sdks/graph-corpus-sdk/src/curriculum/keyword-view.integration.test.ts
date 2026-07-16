@@ -19,6 +19,7 @@
  * boundedness invariants — the invariants, not the reference counts, are the
  * assertions that survive an equivalent reimplementation.
  */
+import { unwrapErr } from '@oaknational/result';
 import { graphCorpus, type GraphCorpusNode } from '@oaknational/sdk-codegen/graph-corpus';
 import { describe, expect, it } from 'vitest';
 
@@ -28,7 +29,7 @@ import {
   MAX_KEYWORD_LIMIT,
   keywordsForSubjectKeyStage,
 } from './keyword-view.js';
-import { bareSlug, required, unwrapErr, unwrapOk } from './test-helpers.js';
+import { bareSlug, required, unwrapOk } from './test-helpers.js';
 
 /** Lesson nodes by id (reference index; string-keyed so reference adjacency ids look up directly). */
 const lessonNodesById: ReadonlyMap<string, GraphCorpusNode> = new Map(

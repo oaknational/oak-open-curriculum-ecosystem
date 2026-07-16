@@ -3,12 +3,13 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { err, isErr, ok, type Result } from '@oaknational/result';
-import { scanArgs, type ValueHandler } from '../core/cli-arg-parser.js';
+import { isErr, ok, type Result } from '@oaknational/result';
+import { type ValueHandler } from '../core/cli-arg-parser.js';
 import { resolveRepoRoot } from '../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
 import { decideCensusVerdict } from './refound-claim-census-report.js';
 import { runClaimCensus } from './refound-claim-census-helpers.js';
+import { entryUsageText, parseEntryArgs, prepareEntryRun } from './refound-entry-args.js';
 import { DEFAULT_OUT_DIR } from './refound-freeze-helpers.js';
 import { resolveReadPathWithinRepo } from './refound-path-resolve.js';
 
@@ -35,7 +36,7 @@ import { resolveReadPathWithinRepo } from './refound-path-resolve.js';
 const TOOL = 'refound-claim-census';
 const repoRoot = resolveRepoRoot(import.meta.url);
 
-const CENSUS_USAGE = 'usage: refound-claim-census [--out <dir>] [--status-mapping <path>]';
+const CENSUS_USAGE = entryUsageText(TOOL, '[--out <dir>] [--status-mapping <path>]');
 
 /** The parsed census CLI flags (empty string = flag not supplied). */
 interface CensusArgs {
@@ -52,17 +53,20 @@ const CENSUS_VALUE_OPTIONS: Readonly<Record<string, ValueHandler<CensusArgs>>> =
   },
 };
 
-/** Parse the census flags via the shared {@link scanArgs} scanner. */
-function parseCensusArgs(argv: readonly string[]): Result<CensusArgs, Error> {
-  const scanned = scanArgs<CensusArgs>(
+/** Parse the census flags under the shared entry contract. */
+function parseCensusArgs(
+  argv: readonly string[],
+): Result<{ args: CensusArgs; help: boolean }, Error> {
+  const parsed = parseEntryArgs<CensusArgs>(
     argv,
+    CENSUS_USAGE,
     { outDir: DEFAULT_OUT_DIR, statusMappingPath: '' },
-    { flags: {}, valueOptions: CENSUS_VALUE_OPTIONS, helpText: CENSUS_USAGE },
+    CENSUS_VALUE_OPTIONS,
   );
-  if (!scanned.ok) {
-    return err(new Error(scanned.error));
+  if (isErr(parsed)) {
+    return parsed;
   }
-  return ok(scanned.state);
+  return ok({ args: parsed.value.state, help: parsed.value.help });
 }
 
 /** Constrain a flag-supplied path (which must exist) to the repository. */
@@ -88,20 +92,39 @@ function resolvePaths(
   return ok({ outDirAbs: outDirAbs.value, mappingAbsPath: mappingAbsPath.value });
 }
 
+/**
+ * The census preflight, composed over the shared {@link prepareEntryRun}
+ * primitive — the canonical owner of the parse → help-short-circuit →
+ * resolve ordering.
+ */
+function prepareCensusRun(
+  argv: readonly string[],
+): Result<
+  { help: true } | { help: false; outDirAbs: string; mappingAbsPath: string | null },
+  Error
+> {
+  const prepared = prepareEntryRun(parseCensusArgs(argv), (parsed) => resolvePaths(parsed.args));
+  if (isErr(prepared)) {
+    return prepared;
+  }
+  if (prepared.value.help) {
+    return ok({ help: true } as const);
+  }
+  return ok({ help: false as const, ...prepared.value.resolved });
+}
+
 async function main(): Promise<void> {
-  const args = parseCensusArgs(process.argv.slice(2));
-  if (isErr(args)) {
-    writeErrorLine(`${TOOL}: ${args.error.message}`);
+  const prepared = prepareCensusRun(process.argv.slice(2));
+  if (isErr(prepared)) {
+    writeErrorLine(`${TOOL}: ${prepared.error.message}`);
     process.exitCode = 1;
     return;
   }
-  const paths = resolvePaths(args.value);
-  if (isErr(paths)) {
-    writeErrorLine(`${TOOL}: ${paths.error.message}`);
-    process.exitCode = 1;
+  if (prepared.value.help) {
+    writeLine(CENSUS_USAGE);
     return;
   }
-  const summary = await runClaimCensus(paths.value);
+  const summary = await runClaimCensus(prepared.value);
   if (isErr(summary)) {
     writeErrorLine(`${TOOL}: ${summary.error.message}`);
     process.exitCode = 1;

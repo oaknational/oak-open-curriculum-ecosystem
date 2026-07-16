@@ -1,3 +1,4 @@
+import { unwrap, unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { decideTileVerdict, parseTileArgs } from './refound-tile.js';
@@ -54,26 +55,40 @@ describe('decideTileVerdict — exit code and truncation contract', () => {
 
 describe('parseTileArgs — empty --area refusal', () => {
   it('refuses an explicitly-supplied empty --area', () => {
-    const parsed = parseTileArgs(['--area', '']);
-    expect(parsed.ok).toBe(false);
-    if (!parsed.ok) {
-      expect(parsed.error.message).toContain('--area was supplied empty');
-    }
+    const error = unwrapErr(parseTileArgs(['--area', '']));
+    expect(error.message).toContain('--area was supplied empty');
   });
 
   it('treats an absent --area as the whole denominator (empty string sentinel)', () => {
-    const parsed = parseTileArgs([]);
-    expect(parsed.ok).toBe(true);
-    if (parsed.ok) {
-      expect(parsed.value.area).toBe('');
-    }
+    expect(unwrap(parseTileArgs([])).area).toBe('');
   });
 
   it('accepts a named --area', () => {
-    const parsed = parseTileArgs(['--area', 'plans--alpha']);
-    expect(parsed.ok).toBe(true);
-    if (parsed.ok) {
-      expect(parsed.value.area).toBe('plans--alpha');
-    }
+    expect(unwrap(parseTileArgs(['--area', 'plans--alpha'])).area).toBe('plans--alpha');
+  });
+});
+
+describe('parseTileArgs — shared entry contract', () => {
+  it.each(['--help', '-h'])('recognises %s as a run-nothing short-circuit request', (flag) => {
+    expect(unwrap(parseTileArgs([flag])).help).toBe(true);
+  });
+
+  it('reports help false on an ordinary run', () => {
+    expect(unwrap(parseTileArgs(['--area', 'plans--alpha'])).help).toBe(false);
+  });
+
+  it('lets the --help verdict win over the empty --area refusal (run-nothing beats validation)', () => {
+    expect(unwrap(parseTileArgs(['--help', '--area', ''])).help).toBe(true);
+  });
+
+  it.each([[['--']], [['--', '--help']]])(
+    'refuses the -- terminator instead of silently swallowing what follows it (argv %j)',
+    (argv) => {
+      expect(unwrapErr(parseTileArgs(argv)).message).toContain('takes no positional arguments');
+    },
+  );
+
+  it('rejects an unknown flag rather than silently ignoring it', () => {
+    expect(parseTileArgs(['--rule', 'r.json']).ok).toBe(false);
   });
 });

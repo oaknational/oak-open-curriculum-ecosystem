@@ -3,14 +3,12 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { err, isErr, ok, type Result } from '@oaknational/result';
+import { isErr } from '@oaknational/result';
 
-import { scanArgs } from '../core/cli-arg-parser.js';
 import { resolveRepoRoot } from '../core/repo-root.js';
 
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
-import { resolveReadPathWithinRepo } from './refound-path-resolve.js';
-import { DEFAULT_OUT_DIR } from './refound-freeze-helpers.js';
+import { outDirUsageText, prepareOutDirEntry } from './refound-entry-args.js';
 import { verifyFreeze, type VerifyReport } from './refound-verify-freeze-helpers.js';
 import { formatViolation } from './refound-verify-freeze-model.js';
 
@@ -34,32 +32,6 @@ import { formatViolation } from './refound-verify-freeze-model.js';
 const TOOL = 'refound-verify-freeze';
 const repoRoot = resolveRepoRoot(import.meta.url);
 
-/** Parse `--out <dir>` via the shared {@link scanArgs} scanner. */
-function parseVerifyArgs(argv: readonly string[]): Result<{ outDir: string }, Error> {
-  const scanned = scanArgs(
-    argv,
-    { outDir: DEFAULT_OUT_DIR },
-    {
-      flags: {},
-      valueOptions: {
-        '--out': (state, value) => {
-          state.outDir = value;
-        },
-      },
-      helpText: 'usage: refound-verify-freeze [--out <dir>]',
-    },
-  );
-  if (!scanned.ok) {
-    return err(new Error(scanned.error));
-  }
-  return ok({ outDir: scanned.state.outDir });
-}
-
-/** Constrain the artefact home (which must exist to be verifiable) to the repo. */
-function resolveOutDir(outDirFlag: string): Result<string, Error> {
-  return resolveReadPathWithinRepo(repoRoot, outDirFlag);
-}
-
 /** Print the recomputed verdict; RED lists every violation and exits 1. */
 function printReport(report: VerifyReport): void {
   if (report.violations.length > 0) {
@@ -80,19 +52,17 @@ function printReport(report: VerifyReport): void {
 }
 
 async function main(): Promise<void> {
-  const args = parseVerifyArgs(process.argv.slice(2));
-  if (isErr(args)) {
-    writeErrorLine(`${TOOL}: ${args.error.message}`);
+  const entry = prepareOutDirEntry(repoRoot, process.argv.slice(2), TOOL);
+  if (isErr(entry)) {
+    writeErrorLine(`${TOOL}: ${entry.error.message}`);
     process.exitCode = 1;
     return;
   }
-  const outDirAbs = resolveOutDir(args.value.outDir);
-  if (isErr(outDirAbs)) {
-    writeErrorLine(`${TOOL}: ${outDirAbs.error.message}`);
-    process.exitCode = 1;
+  if (entry.value.help) {
+    writeLine(outDirUsageText(TOOL));
     return;
   }
-  const report = await verifyFreeze({ outDirAbs: outDirAbs.value });
+  const report = await verifyFreeze({ outDirAbs: entry.value.outDirAbs });
   if (isErr(report)) {
     writeErrorLine(`${TOOL}: ${report.error.message}`);
     process.exitCode = 1;
