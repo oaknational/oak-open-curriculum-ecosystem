@@ -1,4 +1,4 @@
-# r2 — Pilot-area evidence pass: design (v1, DRAFT for Director review)
+# r2 — Pilot-area evidence pass: design (v1 — Director-approved 2026-07-15; declaration owner-approved, merge-anchored)
 
 Authored 2026-07-15 by Aurora guards Penumbra (2226bf), team Mango, S2 seat,
 under the Director r2 remit (wake event `72687e20`; claim `a1e8fa1a`).
@@ -244,9 +244,12 @@ is trusted:
 
 ## Routing
 
-This design + the seed doc route to the sitting Director (Mussel rides
-Coral, 6f8857) for review. After Director review: canary key authoring +
-seal (seat-side), then the dispatch decision (Director routing + owner
-declared go). Landing of these two artefacts to the tracked tree rides the
-normal branch/PR path once the Director's review verdict is in — nothing
-lands to main from this seat without that review.
+Routing is COMPLETE as of 2026-07-16: the Director reviewed and approved
+both artefacts (2026-07-15, two evidence-honesty conditions folded); the
+canary key was authored and SEALED seat-side (the commitment rides this
+landing); the final declaration was owner-approved via a Director-session
+decision card, anchored to this document's merge-to-main. The one
+remaining step is the dispatch itself: at the merge anchor, the DESIGNATED
+fresh-session executor (the owner's 2026-07-15 staffing ruling; dispatcher
+brief on disk) runs the pass under the declaration — no other session, and
+no earlier moment.

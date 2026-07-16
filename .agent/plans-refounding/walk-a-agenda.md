@@ -38,7 +38,7 @@ denominator and the census/divergence report are presented as sitting inputs
    (pilot area `connecting-oak-resources`; stratified 137-file sample of
    record with expected-reach denominators; sealed lane-assignment canaries via
    `plant-challenge-canary` SEAL mode, key seat-authored with owner ratification
-   riding OG-3; 2-lens + escalation-only third; draft P12 declaration).
+   riding OG-3; 2-lens + escalation-only third; FINAL P12 declaration, owner-approved 2026-07-15 and anchored to the landing PR's merge-to-main).
 
 ## Decisions the sitting makes (from the plan's r2 acceptance)
 

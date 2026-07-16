@@ -1,4 +1,4 @@
-# r2 — Top-down lane seed (v1, DRAFT for Director review)
+# r2 — Top-down lane seed (v1 — Director-approved 2026-07-15; a Walk-A sitting input, binding nothing until Walk A rules)
 
 Authored 2026-07-15 by Aurora guards Penumbra (2226bf), team Mango, S2 seat,
 under the Director r2 remit (wake event `72687e20`; claim `a1e8fa1a`; plan
@@ -111,12 +111,12 @@ Every current collection has a receiving lane; ambiguity is named honestly
 rather than force-fit. Collections marked † split at CONCEPT level (the
 priors' judgement unit) rather than mapping whole:
 
-| Receiving lane | Collections (26 + proposals) |
+| Receiving lane | Collections (27 + proposals) |
 | --- | --- |
 | `mcp-app` | curriculum-mcp-path-to-ga, sdk-and-mcp-enhancements†, slack-assistants, user-experience† |
 | `engineering-tools` | semantic-search, connecting-oak-resources, exploring-open-education-resources, school-data-search, sdk-and-mcp-enhancements†, upstream-feature-requests†, proposals/upstream-api-endpoint-additions, proposals/kg-ont-mcp-strat† |
-| `agentic-framework` | sector-engagement, parts of agentic-engineering-enhancements† (outward-facing docs/exemplar) |
-| `practice-and-governance` | agent-tooling, agentic-engineering-enhancements†, product-development-governance, telemetry-and-understanding†, observability†, developer-experience, templates |
+| `agentic-framework` | sector-engagement† (outward adoption face; its EEF-convening content splits to `engineering-tools` per TOOLS-3 and this document's own convening assignment), parts of agentic-engineering-enhancements† (outward-facing docs/exemplar) |
+| `practice-and-governance` | agent-tooling, agentic-engineering-enhancements†, architecture-and-infrastructure† (cross-cutting architecture/system-quality plans; product-scoped items split to their product lanes), product-development-governance, telemetry-and-understanding†, observability†, developer-experience, templates |
 | `capabilities` | curriculum-hub-demo, discovery†, proposals/kg-ont-mcp-strat† |
 | `compliance-and-readiness` | compliance, security-and-privacy† |
 | `conservatory` | notes, speculative, discovery† residue, effectiveness-and-impact (placement trigger: measures grounding), anything the pilot cannot place |
@@ -137,20 +137,18 @@ the estate roadmap, not to any lane.
 Measured by the pilot evidence pass (companion design doc); thresholds are
 proposals for Walk A to set or adjust:
 
-1. **Empty lane**: a lane receiving <2% of sampled assignment rows while
-   the estate is fully sampled at collection level → the lane is
-   speculative; demote or merge at Walk A. (Prime candidate this could
-   fire on: `capabilities`.) **Judged against expected reach, never raw
-   share** (Director review condition 1, 2026-07-15): the evidence report
+1. **Empty lane** — ONE test, deterministic: the falsifier fires for a
+   lane when `assigned_files / expected_reach_files < 0.25`; a firing
+   lane is speculative — demote or merge at Walk A. (Prime candidate this
+   could fire on: `capabilities`.) **Judged against expected reach, never
+   raw share** (Director review condition 1, 2026-07-15; the earlier <2%
+   raw-share form is superseded by this ratio): the evidence report
    carries, per lane, the rows the sample draw could have reached —
    computed from the coverage-check table below and the S-B draw
    parameters — because small collections feeding a lane contribute few
    files under the ceil-10%/min-2/cap-8 draw, and a <2% raw share can mean
    the SAMPLE under-reached the lane, not that the lane is speculative.
-   Falsifier 1 fires only when received-share is low RELATIVE to the
-   lane's expected reach — exactly: it fires for a lane when
-   `assigned_files / expected_reach_files < 0.25`, where
-   `expected_reach_files` is that lane's value in the manifest's
+   `expected_reach_files` is the lane's value in the manifest's
    `expectedReach` block (every seed lane's floor is ≥5 by the S-B draw
    parameters plus the compliance floor), so two implementations compute
    the same verdict from the same manifest.
