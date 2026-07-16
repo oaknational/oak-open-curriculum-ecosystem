@@ -1,6 +1,6 @@
 ---
 name: 'Context-bounded Codex hook reviewer evaluation'
-status: 'FOUNDATION AND PROBE IMPLEMENTED — TOURNAMENT AUDIT-BLOCKED; NOT ENABLED'
+status: 'FOUNDATION IMPLEMENTED — SEQUENCE SUPERSEDED; TOURNAMENT AUDIT-BLOCKED; NOT ENABLED'
 created: 2026-07-15
 updated: 2026-07-16
 owner: 'Practice owner'
@@ -24,6 +24,12 @@ state. No candidate has qualified and the hook is not enabled. Implementation is
 activation: an unqualified or stale result must leave local Claude settings unchanged. The earlier
 1.99-second, 1,900-input-token Spark result was one disposable probe, not a latency baseline,
 context ceiling, or selection result.
+
+**Owner-directed sequence correction (2026-07-16):** the next experiment is now the isolated
+[Codex-to-Codex synchronous hook review](../current/codex-to-codex-synchronous-hook-review-experiment.plan.md),
+not this plan's standalone Claude-shaped probe. That correction supersedes ordering statements
+below that call `probe` the next owner action. It does not enable this hook, lift the corpus-label
+audit stop, or weaken any privacy, protocol, qualification, or activation prerequisite here.
 
 ## Problem and corrected goal
 
@@ -289,7 +295,8 @@ The operator surface is:
 - `pnpm agent-tools:codex-hook-review status`
 - `pnpm agent-tools:codex-hook-review disable`
 
-`probe` and `benchmark` are explicitly opt-in and live. `probe` is the current owner next step. It runs only the six non-qualifying
+`probe` and `benchmark` are explicitly opt-in and live. `probe` remains available but is no longer
+the current owner next step. It runs only the six non-qualifying
 inline calls, emits content-free JSON evidence to stdout, and cannot qualify or enable a lane. Its
 result is not persisted or reused. It clears only previously owned hook and manifest state before
 its first live call. After version and authentication preflight, `benchmark` clears any previous
@@ -343,8 +350,9 @@ contain paths, source, prompts, responses, credentials, or scanner output.
 - **Beneficial:** request-level inspection of unavailable base/tool-schema detail. Without it,
   v1 makes only measured context/capability claims and treats emitted dynamic events as fatal.
 
-Sequence: finish the bounded implementation and gates; run only the standalone six-call probe as
-the next owner evidence step; stop and inspect its report. Do not run the live tournament until
+Original sequence: finish the bounded implementation and gates; run only the standalone six-call
+probe; stop and inspect its report. The 2026-07-16 owner direction supersedes that immediate step
+with the linked Codex-to-Codex experiment. Do not run this plan's live tournament until
 independent corpus-label agreement has landed as a reviewed code status change. Only then may a
 fresh benchmark repeat the six-call gate, run the tournament, and produce qualification evidence.
 Enable only a qualifying current winner, then perform a manual Claude UAT. Profile the full

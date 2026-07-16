@@ -287,9 +287,9 @@ Stop if every lane is unavailable, slower than four seconds, emits a dynamic cap
 fails the protocol. A viable lane establishes basic feasibility only. Every benchmark invocation
 enforces this gate after authentication/deactivation, but production then stops with exit 2 while
 independent agreement on the frozen corpus labels is pending. It makes no tournament call and
-writes no probe or qualification state. The standalone probe is the only current owner evidence
-step. The implemented 279-call tournament remains dormant activation machinery, not the
-prerequisite for learning whether the basic idea works.
+writes no probe or qualification state. At that checkpoint, the standalone probe was the only
+owner evidence step. The implemented 279-call tournament remains dormant activation machinery,
+not the prerequisite for learning whether the basic idea works.
 
 ### Warrants and falsifiers
 
@@ -360,8 +360,9 @@ qualifies, the benchmark reports that result and local activation remains absent
 ## Local activation and observability
 
 The explicit operator commands are `probe`, `benchmark`, `enable`, `status`, and `disable` under
-`pnpm agent-tools:codex-hook-review`. Live calls never run in normal tests or CI. `probe` is the
-current owner next step. After version and authentication preflight, `benchmark` clears the prior
+`pnpm agent-tools:codex-hook-review`. Live calls never run in normal tests or CI. At this
+checkpoint, `probe` was the current owner next step; the later Codex-first correction below
+supersedes that ordering. After version and authentication preflight, `benchmark` clears the prior
 activation manifest and removes only the marker-owned hook group before its six-call gate, then
 stops while corpus label agreement is pending. It cannot call the tournament or write
 qualification state in that condition, and unrelated local settings remain intact.
@@ -572,7 +573,8 @@ symmetry—the promotion trigger for shared code.
   uncertainty and increases sunk-cost pressure to activate.
 - **Run the full tournament now:** rejected. Its labels have not been independently agreed, and
   279 calls are disproportionate before six calls establish basic feasibility.
-- **Run only the six-call Claude-origin probe:** selected as the next evidence step. It is the
+- **Run only the six-call Claude-origin probe:** selected at this checkpoint as the next evidence
+  step. It is the
   smallest reversible test of availability, protocol closure, and the three required speed
   surfaces.
 - **Build a narrow Codex-origin adapter after a viable lane appears:** retained as the next useful
@@ -583,7 +585,8 @@ symmetry—the promotion trigger for shared code.
 
 ### Movement 4 — synthesis, warrants, and falsifiers
 
-The foundation is complete; feasibility is unknown. The warranted sequence is:
+The foundation is complete; feasibility is unknown. The sequence warranted at this checkpoint
+was:
 
 1. provision the isolated reviewer account and run the standalone six-call probe only;
 2. if a lane is viable, inspect scanner-plus-reviewer and Codex-process latency, token, event, and
@@ -604,6 +607,48 @@ latency, the released Codex `apply_patch` success/failure response values, synch
 experience, and—only for reciprocal pairing—a controlled Claude reviewer transport. None is a
 reason to add more MVP code before the first probe.
 
+## Owner-directed Codex-first sequence correction — 16 July 2026
+
+The owner subsequently selected a Codex-to-Codex pair as the first integration experiment. This
+supersedes the ordering in the preceding checkpoint, not its evidence limits or safety boundaries.
+The rationale is stronger experimental isolation: removing Claude attributes event, feedback, and
+latency behavior to one released Codex lifecycle plus one nested Codex reviewer. The synchronous
+penalty becomes an intentional early falsifier.
+
+The corrected problem is:
+
+> Can either of two synthetic successful `apply_patch` events traverse a strict Codex origin
+> adapter, exact-payload Gitleaks, and the existing isolated Codex reviewer, then return fixed
+> advisory context before the origin continues, within a predeclared fast-feedback budget?
+
+The smallest honest version first captures the two exact successful wire values plus one failure,
+then supports only those two fixture-locked one-file, one-header, one-hunk patch commands. It
+preserves the patch in a dedicated versioned payload rather than asserting that arbitrary patch
+commands have Claude Edit/Write semantics. Unknown responses, changed patch bytes,
+Add/Delete/Move, multiple paths or hunks, sensitive paths, and oversized payloads skip. A general
+one-file/one-hunk grammar is deferred until the synchronous mechanism earns further investment.
+
+The comparison is fixed to Spark low/standard, Luna low/standard, and Luna low/Fast with one clean
+and one obvious-concern synthetic case per lane. It records every sample and makes no percentile,
+reliability, qualification, activation, or production-winner claim. The context goal remains
+measured control: input/cached/output tokens, reasoning items, capability events, and latency are
+outcomes; disabled mechanisms are configuration evidence only.
+
+Delivery is proven without treating the unstable transcript as an API: a run nonce exists only in
+the hook's fixed `additionalContext`, must appear exactly once in the next origin `agent_message`,
+and must not trigger another tool call. Timestamp ordering alone cannot qualify origin JSONL as a
+causal hook bound. A speed verdict requires either an explicit released-runtime accepted-output and
+handler-completion boundary or a controlled post-output-hold canary proving tool completion waits
+for handler exit, plus the ordinary-cell bracket. An internal handler duration remains a lower
+bound and cannot earn a fast verdict by itself. Missing qualification or bracketing evidence is
+INCONCLUSIVE, not silently repaired by subtracting a single baseline.
+
+No vendor-neutral framework code is promoted. The second adapter is evidence from which a future
+origin-trigger / reviewer-transport / feedback-delivery seam may later be assessed. The executable
+[Codex-to-Codex synchronous hook review plan](../../plans/agent-tooling/current/codex-to-codex-synchronous-hook-review-experiment.plan.md)
+owns the strict subset, TDD cycles, CLI-process-session ceiling, latency decision table, stop
+conditions, and review sequence.
+
 ## Implementation status and remaining evidence
 
 The foundation code boundary is implemented in the dedicated worktree: hook input/path/payload
@@ -611,8 +656,9 @@ policy, Gitleaks adapter, lease, content-free metrics, Codex runner, corpus, dor
 private deployment, settings merge, activation CLI, fail-soft hook composition, and the six-call
 feasibility-probe command. The benchmark command enforces that same non-persisted gate and then a
 code-owned corpus-audit stop. Current hermetic gates and reviewer settlement remain the immediate
-implementation evidence. The live six-call probe is the next owner action; the tournament and any
-explicit local enablement remain blocked pending independent label agreement.
+implementation evidence. The Codex-to-Codex plan is the next owner-directed experiment; this
+plan's standalone probe remains available but is no longer the immediate next action. The
+tournament and any explicit local enablement remain blocked pending independent label agreement.
 
 The feasibility probe is deliberately pending, and the live tournament is additionally
 audit-blocked. Until live evidence exists, no claim about Spark versus Luna is warranted; until

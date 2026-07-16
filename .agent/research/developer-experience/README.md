@@ -31,8 +31,9 @@ meaningful homes is deferred.
   Concept exploration, official Claude/Codex mechanics, the Gitleaks privacy compromise,
   the implemented standalone and benchmark-embedded six-call Spark/Luna feasibility gate with its
   later tournament blocked pending independent corpus-label agreement, and the explicitly non-MVP
-  `ReviewSubject`/three-adapter seam for reciprocal vendor review. Includes the narrow Codex
-  `PostToolUse` adapter delta and its synchronous-latency constraint.
+  `ReviewSubject`/three-adapter seam for reciprocal vendor review. Includes the owner-directed,
+  fixture-locked Codex `PostToolUse` experiment, its fixed process-session ledger, and its
+  synchronous-latency decision boundary.
 
 ## Local external research lane
 
