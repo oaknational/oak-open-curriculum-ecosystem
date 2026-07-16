@@ -1,8 +1,8 @@
 # Walk A — sitting agenda
 
-DRAFT — assembled by the sitting Director (Mussel rides Coral, team Mango) 2026-07-15.
-Becomes final when the r2 staged evidence (lane seed + pilot design, in flight) attaches.
-Walk A convenes at the owner's call.
+FINAL as of 2026-07-16 — assembled by the sitting Director (Mussel rides Coral, team
+Mango) 2026-07-15; its finalisation condition (the r2 staged evidence attached and
+Director-reviewed) is met. Walk A convenes at the owner's call.
 
 ## What this sitting is
 

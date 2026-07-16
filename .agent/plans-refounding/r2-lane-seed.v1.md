@@ -148,7 +148,12 @@ proposals for Walk A to set or adjust:
    files under the ceil-10%/min-2/cap-8 draw, and a <2% raw share can mean
    the SAMPLE under-reached the lane, not that the lane is speculative.
    Falsifier 1 fires only when received-share is low RELATIVE to the
-   lane's expected reach.
+   lane's expected reach — exactly: it fires for a lane when
+   `assigned_files / expected_reach_files < 0.25`, where
+   `expected_reach_files` is that lane's value in the manifest's
+   `expectedReach` block (every seed lane's floor is ≥5 by the S-B draw
+   parameters plus the compliance floor), so two implementations compute
+   the same verdict from the same manifest.
 2. **Indistinct pair**: two lanes whose assignments co-occur inside the
    same source plan in >40% of the files touching either → grain too fine;
    merge candidate. (Prime candidate: `agentic-framework` vs

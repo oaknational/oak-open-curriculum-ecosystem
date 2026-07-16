@@ -73,7 +73,7 @@ evidence, not work items.
 | --- | --- | --- |
 | S-A pilot area | ALL md plan files in `plans/connecting-oak-resources/` | 16 files |
 | S-B estate spread | Per collection: ceil(10% of files), min 2, cap 8; indices floor(j·n/k) over code-unit-sorted paths — recomputable, no RNG | 86 files |
-| S-C residue hosts | The 224 unmapped-status rows live in 160 distinct host files (measured at manifest generation — the drafted "≤40" estimate was wrong by 4×). Sampling every host would breach the declared invocation ceiling, so S-C applies the SAME per-collection k-rule draw over the residue hosts not already drawn — bounded, evenly spread, recomputable | 35 files |
+| S-C residue hosts | The report's raw distinct unmapped-status hosts number 191 (the manifest's `inputs.unmappedHostFiles`); intersecting with the 643-file inventory denominator leaves 160 ELIGIBLE hosts (measured at manifest generation — the drafted "≤40" estimate was wrong by 4×). Sampling every eligible host would breach the declared invocation ceiling, so S-C applies the SAME per-collection k-rule draw over the eligible hosts not already drawn by S-A/S-B — bounded, evenly spread, recomputable | 35 files |
 | Total | | 137 files ≈ 21% of the 643-file denominator |
 
 The generated manifest (`r2-evidence/sample-manifest.v1.json`) is the
@@ -109,13 +109,20 @@ Both lenses return schema-forced structured output:
 ```json
 {
   "file": "plans/<collection>/<lane>/<name>.md",
-  "lane": "one-of-7-seed-ids",
+  "lane": "one of the 8 closed values: the 7 seed ids | re-home-by-function",
   "confidence": "high | medium | low",
   "warrant": "<=40-word quote-anchored justification",
   "splitFlag": false,
-  "splitSpans": []
+  "splitLane": "the SECOND lane pulling, one of the 8 closed values — null unless splitFlag is true; feeds falsifier 2's lane-pair co-occurrence matrix",
+  "splitSpans": [],
+  "subLaneQualifier": "free-text sub-lane qualifier, recorded ONLY when lane = engineering-tools and the assignment needed one to be usable — null otherwise; feeds falsifier 5"
 }
 ```
+
+The two structured fields exist because two falsifiers need deterministic
+inputs a flag and quoted spans cannot encode: falsifier 2 computes lane-pair
+co-occurrence from `splitLane`, and falsifier 5 counts `subLaneQualifier`
+usage; the evidence report's contract (below) consumes both.
 
 - **Agreement** (same lane) → an assignment-evidence row.
 - **Disagreement** → the escalation-only-third lens (a senior-tier agent
@@ -205,9 +212,14 @@ is trusted:
 - Estimated tokens: ~15k per lens invocation (file bytes + brief + output)
   → ~4.8M ceiling; wall-clock one session; batch-sequential with the
   deterministic breaker per P12. Declared in full before dispatch per the
-  pre-declaration discipline (P12) — this section IS the draft
-  declaration; the FINAL declaration (post-seal, measured manifest) routes
-  to the Director for the single owner-go ask.
+  pre-declaration discipline (P12). AUTHORISATION STATE (resolved
+  2026-07-15/16): the FINAL declaration (post-seal, measured manifest)
+  was routed to the Director and OWNER-APPROVED via a Director-session
+  decision card, ANCHORED TO MERGE-TO-MAIN of this document's landing PR —
+  the merge satisfies the anchor but dispatch additionally requires the
+  designated executor (a fresh dispatcher session per the owner's
+  2026-07-15 staffing ruling); merging this PR is NOT itself permission
+  for any session to spend the declared 320 invocations.
 
 ## Acceptance criteria (the pass, not the taxonomy)
 

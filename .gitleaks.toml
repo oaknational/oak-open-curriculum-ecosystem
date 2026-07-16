@@ -73,10 +73,10 @@ commits = ["1ea4e2e15e1abc4ac2790d3e01632e6622f8ed8a"]
 # seat (handoff record 2026-07-15-s2-r2-aurora-a1e8fa1a.md §3).
 [[allowlists]]
 description = "Refounding challenge commitments publish sha256 digests by design"
-matchCondition = "AND"
+condition = "AND"
 paths = ['''^\.agent/plans-refounding/challenge/[^/]+\.json$''']
 regexTarget = "line"
-regexes = ['''"keySetSha256": "[0-9a-f]{64}"''']
+regexes = ['''^\s*"keySetSha256": "[0-9a-f]{64}",?$''']
 
 [[rules]]
 id = "oak-api-key-uuid"
