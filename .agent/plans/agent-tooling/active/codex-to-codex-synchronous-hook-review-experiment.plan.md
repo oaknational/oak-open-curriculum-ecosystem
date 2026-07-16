@@ -197,8 +197,33 @@ released runtime loads and fires it; successful parsing alone is not runtime evi
 Real absolute Node/bundle paths exist only in generated disposable configuration and never enter
 tracked fixtures or reports.
 
-At execution time, WS0 records the actual installed versions again. Any incompatible version or
-flag change stops the plan for a plan-body refresh; it is not handled with a compatibility branch.
+WS0 recorded the installed runtime once at its released static boundary. The checkpoint below is
+the current execution record and is not rerun. Any later observed incompatible version or flag
+change stops the plan for another plan-body refresh; it is not handled with a compatibility branch.
+
+### WS0 static-preflight checkpoint — 2026-07-16
+
+The released static boundary stopped at its fourth Codex child. The first three children are
+version-bound observations, not a passed boundary:
+
+1. `codex --version` reported `codex-cli 0.144.5`.
+2. `codex exec --help` exposed every pinned execution-control surface.
+3. `codex features list` reported the canonical stable enabled `hooks` and `fast_mode` rows.
+4. The isolated strict-config `doctor --json` child accepted the configuration and returned valid
+   schema-version-1 JSON, but exited non-zero after checking authentication, terminal, provider,
+   and Responses WebSocket health. It therefore violated the intended config-only, zero-network,
+   zero-exit probe contract.
+
+The owner ratified this plan-body refresh on 2026-07-16; that ratification released no Gitleaks or
+later process.
+
+All four static Codex slots are spent. The first three children are never rerun, `doctor` is never
+repeated, and no replacement static Codex child is added. Exact `--strict-config` and effective-hook-set
+proof moves to the already-budgeted pre-inference interactive `/hooks` inspection. The two local
+Gitleaks metadata children did not run and remain pending and unspent. The guarded private root was
+identity-checked, removed, and proven absent; at the cleanup checkpoint, the feature worktree was
+clean at `439a4efcf`. No authentication, hook inspection, model access, prompt, or inference
+occurred.
 
 ## Build-vs-buy attestation
 
@@ -267,9 +292,9 @@ These non-inference top-level Codex CLI/TUI processes are separately fixed:
 
 | Workstream | Codex CLI/TUI processes | Exact purpose |
 | --- | ---: | --- |
-| WS0 static preflight | 4 | `--version`, `exec --help`, `features list`, and one isolated strict-config `doctor --json` parse. |
+| WS0 static preflight | 4 | Spent once: three version-bound observations plus the failed `doctor` probe-contract observation. No static slot remains. |
 | WS0 private auth | 4 | One `login` and one `login status` for each of the origin and reviewer homes. |
-| WS0 capture hook inspection | 1 | One interactive `/hooks` inspection with the capture definition. |
+| WS0 capture hook inspection | 1 | One pre-inference `--strict-config` `/hooks` inspection proving the exact capture definition and effective set. |
 | WS3 effective-set inspection | 3 | Separate interactive `/hooks` inspections proving zero matching handlers for no-hook, exactly one no-op handler, and exactly one review handler. |
 | **Maximum** | **12** | **Top-level Codex processes that must make no inference request.** |
 
@@ -279,8 +304,10 @@ processes are observable but OS-process cardinality is not called exact. The per
 atomic claims in D6 enforce at most six Gitleaks data-scan processes and at most ten reviewer Codex
 processes; origin launch slots enforce at most eleven origin Codex processes. An early stop records
 its lower actual counts. The two local Gitleaks metadata processes (`version` and `stdin --help`)
-are recorded separately. Package-manager, login-browser, launcher, shell-interpreter, and OS helper
-processes are not stable vendor surfaces and receive no false exact-count claim.
+are outside the Codex maximum and remain pending and unspent. They wait for a separately
+adversarially reviewed two-command ledger and explicit process release after this amendment lands.
+Package-manager, login-browser, launcher, shell-interpreter, and OS helper processes are not stable
+vendor surfaces and receive no false exact-count claim.
 
 Before WS0's first reviewer call, first origin call, and WS3's first baseline, print the remaining
 call ledger, requested model/service configuration, synthetic payload contract, estimated credit
@@ -572,12 +599,13 @@ optional tool/capability source relevant here, while the live JSONL contract req
 configuration count is not. The parent JSONL reader terminates its directly owned origin process
 group as soon as a second dynamic tool-start arrives; it does not wait for post-run validation.
 
-Immediately before each live group, the owner starts Codex with the same isolated origin home and
-session override and opens `/hooks`. Capture, no-op, and review groups must show exactly one enabled
-matching handler; the no-hook baseline must show zero. Every group must show no
-user/plugin/managed contaminant. Ignored user config and disabled plugins are supporting controls,
-not substitutes for this effective-set inspection. Any wrong count, additional matching hook, or
-managed hook makes the run INCONCLUSIVE.
+Immediately before each live group, the owner starts Codex with the same isolated origin home,
+`--strict-config`, and session override and opens `/hooks`. Capture, no-op, and review groups must show
+exactly one enabled matching handler; the no-hook baseline must show zero. Every group must show no
+user/plugin/managed contaminant. The WS0 capture inspection is the already-budgeted execution-time
+`--strict-config` and effective-set proof; it is not a replacement static child. Ignored user config
+and disabled plugins are supporting controls, not substitutes for this inspection. Any wrong
+count, additional matching hook, or managed hook makes the run INCONCLUSIVE.
 
 For this generated and externally vetted one-off definition, the harness may use Codex's
 documented automation-only hook-trust override. It never writes user or project trust state and
@@ -911,8 +939,11 @@ Proof levels:
 **Type**: evidence-only prerequisite; no product code and no commit by itself.
 
 1. Re-read the official hooks, non-interactive, speed, and configuration pages.
-2. Record `codex --version`, `codex exec --help`, `codex features list`, `gitleaks version`, and
-   `gitleaks stdin --help` in the private run log.
+2. Preserve the stopped static ledger above without rerunning it: Codex children 1–3 remain
+   version-bound observations, child 4 remains the failed probe-contract observation, and no
+   static Codex child remains. The two pending Gitleaks metadata children wait until after this
+   amendment lands for a separately adversarially reviewed two-command ledger and explicit process
+   release; only then record `gitleaks version` and `gitleaks stdin --help` in the private run log.
 3. Provision and validate separate private origin and reviewer authentication homes without
    copying credentials, using exactly one isolated `codex -c
    'cli_auth_credentials_store="file"' login` and one matching `login status` process per home.
@@ -927,11 +958,12 @@ Proof levels:
    capture controller only inside that private root; none becomes product code. Before inference, use an
    injected harmless child to prove the temporary controller's twenty-second timer boundary,
    process-group kill, bounded reap, and no-descendant check without waiting twenty seconds.
-5. Start an interactive Codex session with the same isolated origin home and exact session hook
-   override, open `/hooks`, and manually verify exactly one enabled `^apply_patch$` handler and no
-   ambient or managed matcher. Exit without a model request. The temporary capture handler records
-   private entry/output-ready clock values while the parent timestamps captured origin JSONL on
-   the same clock projection.
+5. Start an interactive Codex session with the same isolated origin home, `--strict-config`, and exact
+   session hook override; open `/hooks`; and manually verify exactly one enabled `^apply_patch$`
+   handler and no ambient or managed matcher. This is the `--strict-config` and effective-set proof
+   moved from the retired `doctor` purpose. Exit without a model request. The temporary capture
+   handler records private entry/output-ready clock values while the parent timestamps captured
+   origin JSONL on the same clock projection.
 6. Display the remaining ledger and obtain owner confirmation. Through the owned capture controller,
    run the exact clean success, concern success, and context-mismatch failure once each. The concern
    capture is D8's fixed post-output-hold canary; its delayed duration is excluded from speed data.
