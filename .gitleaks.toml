@@ -70,7 +70,8 @@ commits = ["1ea4e2e15e1abc4ac2790d3e01632e6622f8ed8a"]
 # Scoped to the challenge directory and the exact committed field shape so
 # real keys elsewhere still trip the scan. Owner-authorised
 # (Director-session decision card, 2026-07-16); cure drafted by the r2
-# seat (handoff record 2026-07-15-s2-r2-aurora-a1e8fa1a.md §3).
+# seat — full provenance in PR #390 and its review threads (the drafting
+# record is an untracked coordination artefact by design).
 [[allowlists]]
 description = "Refounding challenge commitments publish sha256 digests by design"
 condition = "AND"

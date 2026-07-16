@@ -89,7 +89,10 @@ reassigned to `practice-and-governance` in review); the embedded
 `expectedReach` block is the generation-time snapshot and is superseded
 wherever the final coverage table differs. Both inputs are committed, so
 the recomputation is deterministic and the manifest's regeneration proof
-stays intact.
+stays intact. Consumers never iterate the embedded block as a lane list —
+it carries generation metadata beyond the seed lanes (e.g. the
+`estate-or-unmapped` bookkeeping count); the recomputed falsifier-1
+denominators are keyed strictly by the seven seed lane ids.
 
 Every seed lane either receives assignment rows or its emptiness becomes
 recorded evidence (falsifier 1) — S-B guarantees estate-wide reach.
@@ -126,7 +129,7 @@ Both lenses return schema-forced structured output:
   "confidence": "high | medium | low",
   "warrant": "<=40-word quote-anchored justification",
   "splitFlag": false,
-  "splitLane": "the SECOND lane pulling, one of the 9 closed values — null unless splitFlag is true; feeds falsifier 2's lane-pair co-occurrence matrix",
+  "splitLane": "the SECOND lane pulling, one of the SEVEN SEED LANE ids only (re-home-by-function and unassignable-to-seed are not lanes and would poison the pair matrix) — null unless splitFlag is true; feeds falsifier 2's lane-pair co-occurrence matrix",
   "splitSpans": [],
   "subLaneQualifier": "free-text sub-lane qualifier, recorded ONLY when lane = engineering-tools and the assignment needed one to be usable — null otherwise; feeds falsifier 5"
 }
