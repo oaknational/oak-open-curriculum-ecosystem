@@ -645,7 +645,7 @@ INCONCLUSIVE, not silently repaired by subtracting a single baseline.
 
 No vendor-neutral framework code is promoted. The second adapter is evidence from which a future
 origin-trigger / reviewer-transport / feedback-delivery seam may later be assessed. The executable
-[Codex-to-Codex synchronous hook review plan](../../plans/agent-tooling/current/codex-to-codex-synchronous-hook-review-experiment.plan.md)
+[Codex-to-Codex synchronous hook review plan](../../plans/agent-tooling/active/codex-to-codex-synchronous-hook-review-experiment.plan.md)
 owns the strict subset, TDD cycles, CLI-process-session ceiling, latency decision table, stop
 conditions, and review sequence.
 
@@ -665,7 +665,7 @@ audit-blocked. Until live evidence exists, no claim about Spark versus Luna is w
 independent label agreement permits a benchmark and it produces a qualifying current winner, the
 hook must remain disabled. The associated
 [evaluation plan](../../plans/agent-tooling/future/codex-hook-semantic-classifier-evaluation.plan.md)
-is authoritative for thresholds, activation, acceptance, and non-goals.
+is authoritative for its own qualification thresholds, activation, acceptance, and non-goals.
 
 ## Sources
 

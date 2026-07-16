@@ -26,7 +26,7 @@ activation: an unqualified or stale result must leave local Claude settings unch
 context ceiling, or selection result.
 
 **Owner-directed sequence correction (2026-07-16):** the next experiment is now the isolated
-[Codex-to-Codex synchronous hook review](../current/codex-to-codex-synchronous-hook-review-experiment.plan.md),
+[Codex-to-Codex synchronous hook review](../active/codex-to-codex-synchronous-hook-review-experiment.plan.md),
 not this plan's standalone Claude-shaped probe. That correction supersedes ordering statements
 below that call `probe` the next owner action. It does not enable this hook, lift the corpus-label
 audit stop, or weaken any privacy, protocol, qualification, or activation prerequisite here.

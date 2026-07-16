@@ -4,7 +4,7 @@ overview: 'Build and measure the smallest isolated Codex PostToolUse-to-Codex re
 todos:
   - id: ws0-runtime-wire-capture
     content: 'WS0: Preflight isolated auth/model access; capture and sanitise the two exact successful patches plus one failure in a disposable synthetic repository; freeze wire facts and recursion control within the approved process-session cap.'
-    status: pending
+    status: in_progress
   - id: ws1-cycle-1
     content: 'WS1 cycle 1: fixture-locked PostToolUse adapter, dedicated <=4 KiB patch payload, exact-payload Gitleaks/reviewer composition, six-second whole-hook bound, telemetry, and advisory bin. One test+code commit; tree green.'
     status: pending
@@ -31,7 +31,7 @@ isProject: false
 # Codex-to-Codex synchronous hook review experiment
 
 **Last Updated**: 2026-07-16
-**Status**: DECISION-COMPLETE / NOT STARTED
+**Status**: IN EXECUTION — WS0 STATIC PREFLIGHT; NO INFERENCE STARTED
 **Scope**: One disposable, advisory Codex `PostToolUse` hook for either of two successful,
 fixture-locked, one-file, one-hunk `apply_patch` cases, synchronously reviewed by a fresh
 context-bounded Codex process.
@@ -284,11 +284,13 @@ processes are not stable vendor surfaces and receive no false exact-count claim.
 
 Before WS0's first reviewer call, first origin call, and WS3's first baseline, print the remaining
 call ledger, requested model/service configuration, synthetic payload contract, estimated credit
-class, and the D8 thresholds, then obtain explicit owner confirmation. The first confirmation must
-explicitly ratify the 1.5-second target and 2.5-second ceiling. There are no automatic retries. A
-malformed, mixed, unavailable, or interrupted sample is preserved as failed evidence and stops
-further live calls. Any revised prompt/configuration or additional call requires a new
-owner-approved experiment amendment with a new cap; it cannot be hidden as a retry.
+class, and selected D8 latency-configuration ID and values, then obtain explicit owner
+confirmation. The owner ratified the initial `codex-hook-latency-v1` values on 2026-07-16. There
+are no automatic retries. A malformed, mixed, unavailable, or interrupted sample is preserved as
+failed evidence and stops further live calls. Any revised prompt/runtime configuration or
+additional call requires a new owner-approved experiment amendment with a new cap; it cannot be
+hidden as a retry. Latency-value changes follow D8's between-run versioning rule rather than this
+amendment rule.
 
 The released CLI may issue more than one hosted inference request inside a tool-using origin
 session. The harness records observed turn/usage-completion counts from JSONL and reports them; it
@@ -780,16 +782,27 @@ same Luna model accelerated through Fast service; official documentation current
 Fast mode a 2.5x ChatGPT credit multiplier. The comparison reports this trade-off rather than
 treating Fast and Spark as equivalent mechanisms.
 
-### D8 — Predeclared latency decision
+### D8 — Predeclared latency configuration and decision
 
-The 1.5-second boundary is an intentionally aggressive fast-feedback target derived from the
-owner's goal that this synchronous review feel rapid. The 2.5-second boundary reuses the existing
-classifier evaluation's user-facing p50 ceiling as a maximum tolerable feasibility result; it is
-not called fast here. The four-second reviewer deadline, six-second whole-hook timeout, and
-twenty-second origin watchdog are process-safety ceilings, not experience targets. Because the
-first two values encode product judgment rather than vendor fact, the owner must explicitly ratify
-them before WS0's first live inference session. A different threshold requires a plan amendment,
-not post-hoc relabelling.
+The two experience thresholds are experiment configuration, not architectural invariants or
+vendor facts. The owner ratified this initial configuration on 2026-07-16:
+
+| Field | `codex-hook-latency-v1` value | Meaning |
+| --- | ---: | --- |
+| `fast_target_ms` | 1,500 | Intentionally aggressive target derived from the goal that synchronous review feel rapid. |
+| `feasibility_ceiling_ms` | 2,500 | Maximum tolerable result for this feasibility run; it is not called fast. |
+
+The selected configuration is immutable **within one run**: its ID and both values are recorded
+before the first inference call and apply to every comparable baseline and cell. They may be
+adjusted **between runs** as real-world usage evidence accumulates without an architectural
+amendment or plan rewrite, provided the next configuration has a new ID and both values are
+recorded and owner-confirmed before that run's first inference call. A value change after a run
+starts ends that run; it does not relabel existing evidence, replenish its process-call budget, or
+permit cells from different configuration IDs to be aggregated as one run.
+
+The four-second reviewer deadline, six-second whole-hook timeout, and twenty-second origin
+watchdog remain separate process-safety ceilings. They are not part of this tunable
+experience-threshold pair.
 
 Use these clock boundaries:
 
@@ -843,10 +856,10 @@ Each available reviewer lane has two full samples. Classify each lane independen
 
 | Lane result | Required evidence | Consequence |
 | --- | --- | --- |
-| GREEN — iterate | Both decisions exact; causal marker delivery proven; zero protocol/capability/recursion failures; both inclusive released spans or causally bracketed tool-cycle upper bounds at most 1.5 s | Write a follow-up repeated-sample evaluation plan. Do not activate. |
-| AMBER — mechanically sound, outside fast target | Both decisions exact and delivery clean; zero protocol/capability/recursion failures; both inclusive spans/upper bounds at most 2.5 s but at least one exceeds 1.5 s | Stop implementation and profile transport/process startup before deciding on another experiment. |
-| RED — lane configuration no-go | Either decision is wrong, a clean case raises a false alert, the lane emits a dynamic capability/protocol failure, `handler_body_ms` exceeds 2.5 s, an explicit `released_hook_span_ms` exceeds 2.5 s, or the released origin reports the review hook's six-second timeout | Stop this lane's exact synchronous configuration. Missing handler telemetry after the observed outer timeout cannot weaken this RED to INCONCLUSIVE. Do not infer that another lane failed. |
-| INCONCLUSIVE | The lane is unavailable, its marker/result evidence is unobservable, or no inclusive span/upper bound proves either threshold while the handler lower bound remains at most 2.5 s | Preserve descriptive evidence without a speed or quality claim. |
+| GREEN — iterate | Both decisions exact; causal marker delivery proven; zero protocol/capability/recursion failures; both inclusive released spans or causally bracketed tool-cycle upper bounds at most `fast_target_ms` | Write a follow-up repeated-sample evaluation plan. Do not activate. |
+| AMBER — mechanically sound, outside fast target | Both decisions exact and delivery clean; zero protocol/capability/recursion failures; both inclusive spans/upper bounds at most `feasibility_ceiling_ms` but at least one exceeds `fast_target_ms` | Stop implementation and profile transport/process startup before deciding on another experiment. |
+| RED — lane configuration no-go | Either decision is wrong, a clean case raises a false alert, the lane emits a dynamic capability/protocol failure, `handler_body_ms` exceeds `feasibility_ceiling_ms`, an explicit `released_hook_span_ms` exceeds `feasibility_ceiling_ms`, or the released origin reports the review hook's six-second timeout | Stop this lane's exact synchronous configuration. Missing handler telemetry after the observed outer timeout cannot weaken this RED to INCONCLUSIVE. Do not infer that another lane failed. |
+| INCONCLUSIVE | The lane is unavailable, its marker/result evidence is unobservable, or no inclusive span/upper bound proves either threshold while the handler lower bound remains at most `feasibility_ceiling_ms` | Preserve descriptive evidence without a speed or quality claim. |
 
 Then classify the experiment globally with strict precedence: a shared RED is final even if it
 interrupts the matrix; otherwise incomplete or unavailable required evidence is INCONCLUSIVE; only
@@ -904,8 +917,8 @@ Proof levels:
    copying credentials, using exactly one isolated `codex -c
    'cli_auth_credentials_store="file"' login` and one matching `login status` process per home.
    Confirm ChatGPT-managed Pro without recording identity. Create the guarded root and ten atomic
-   reviewer launch slots, display the ledger and thresholds, obtain owner confirmation and threshold
-   ratification, then perform exactly four reviewer calls: the D6 same-config `SessionStart`
+   reviewer launch slots, display the ledger and selected latency-configuration ID and values, and
+   obtain owner confirmation, then perform exactly four reviewer calls: the D6 same-config `SessionStart`
    positive control and one exact hooks-off structured-output request for each declared lane. Those
    calls, rather than an inferred catalogue, establish access.
 4. Materialize the guarded mode-0700 synthetic repository/root with the D7 JSON file and no
@@ -1046,8 +1059,9 @@ Expected: all named tests run and pass with no skips, child process, or network;
   duplicate, malformed, content-bearing, or incomplete evidence.
 - Test concern-marker delivery ordering, original-result retention, one-patch/one-hook counts, and
   deletion of transient origin evidence.
-- Test D8 lane and global classifications with literal evidence; there is no winner or tie-break
-  function.
+- Test D8 lane and global classifications with literal evidence, including a non-default valid
+  latency configuration that proves classification consumes the injected configuration rather
+  than duplicated threshold literals; there is no winner or tie-break function.
 - Test missing binary, auth, model, tier, or hook-set evidence fails the explicit smoke command
   rather than becoming a skipped normal test.
 
@@ -1055,6 +1069,9 @@ Expected: all named tests run and pass with no skips, child process, or network;
 
 - Materialize and clean up the disposable repository, auth homes, canary, hook config, sidecars,
   and content-free report staging area.
+- Materialize one immutable versioned latency-configuration value (`id`, `fastTargetMs`, and
+  `feasibilityCeilingMs`) and pass that same value through display, classification, and report;
+  threshold values are declared once rather than duplicated across those consumers.
 - Run origin Codex as a directly owned bounded process group with fixed model/context controls and
   an exact generated hook definition.
 - Collect only validated timings, counts, decisions, auth mode, and JSONL token/protocol facts into
@@ -1092,11 +1109,12 @@ pnpm agent-tools:codex-to-codex-hook-smoke
 ```
 
 Before the first network call, the command displays the remaining plan-wide ledger, the WS3
-maximum of eight origin sessions plus six nested reviewer processes, the three lanes, fixed
-thresholds, synthetic-only data contract, and private output location. The owner explicitly starts
-it. It performs exactly one no-hook and one D8-defined no-op-hook baseline immediately before the
-six full pair cells; no earlier baseline is reused. The harness records observed origin turn and
-usage-completion counts without claiming a hosted-request ceiling.
+maximum of eight origin sessions plus six nested reviewer processes, the three lanes, selected
+latency-configuration ID and values, synthetic-only data contract, and private output location.
+The owner explicitly starts it. It performs exactly one no-hook and one D8-defined no-op-hook
+baseline immediately before the six full pair cells; no earlier baseline is reused. The harness
+records observed origin turn and usage-completion counts without claiming a hosted-request
+ceiling.
 
 Use three distinct non-inference `/hooks` preflights with the same isolated home: immediately before
 the no-hook baseline prove zero matching handlers; before the no-op baseline prove exactly one
@@ -1114,6 +1132,7 @@ Create a dated evidence note under `.agent/research/developer-experience/` conta
 
 - exact CLI/Gitleaks versions, exact origin/reviewer configuration identifiers, and
   `auth_mode: chatgpt`;
+- selected latency-configuration ID plus `fast_target_ms` and `feasibility_ceiling_ms`;
 - sanitized supported wire facts and the actual CLI-process/observed-turn ledger;
 - the content-free two-baseline and six-pair tables;
 - D8 classification for each lane and the separate global classification;
@@ -1121,7 +1140,7 @@ Create a dated evidence note under `.agent/research/developer-experience/` conta
   hosted-request-count claims; and
 - the next decision dictated by GREEN, AMBER, RED, or INCONCLUSIVE.
 
-Update the current plan status and relevant READMEs. Add vendor-agnostic framework observations
+Update the active plan status and relevant READMEs. Add vendor-agnostic framework observations
 only to the existing future-seam section. Do not create shared framework code or a framework plan
 unless this second adapter exposes a stable common contract and the owner promotes it. An early
 WS0/WS3 stop still completes cleanup and this decision note; it does not require product code.
@@ -1148,17 +1167,18 @@ the experimental code. A green review or live GREEN result is not hook-activatio
 
 - **Session entry:** use `oak-start-right-thorough` for implementation because this crosses a
   vendor lifecycle, process, auth, and privacy boundary.
-- **Work shape:** this file is the executable current plan. Do not replace it with an informal
+- **Work shape:** this file is the executable active plan. Do not replace it with an informal
   chat checklist during execution.
 - **Pre-edit coordination:** claim the exact `agent-tools/src/codex-hook-review/`, test, bin,
   smoke, package-script, and documentation paths before each cycle.
-- **During work:** report any change to the supported patch subset, process-session count, latency
-  thresholds, or activation boundary before implementation continues.
+- **During work:** report any change to the supported patch subset, process-session count, selected
+  latency configuration, or activation boundary before implementation continues.
 - **Stop semantics:** a falsifier or failed sample immediately halts new product code and live
   sessions, but never skips closeout. Terminate every recorded process group, prove zero live
   descendants, remove private homes/raw captures/sidecars, validate that cleanup, reduce only
   content-free facts into WS4, update the plan verdict, and close claims. A retry, lane substitution,
-  prompt/config change, or threshold change requires a newly owner-approved amendment.
+  prompt/runtime-config change requires a newly owner-approved amendment. A latency-value change
+  starts a separately identified, owner-confirmed run under D8 and never relabels the current run.
 - **Handoff:** close claims, preserve only content-free evidence, and distinguish code complete,
   live experiment complete, and activation explicitly absent.
 - **Consolidation:** run the consolidation trigger after the decision note lands; promote only
@@ -1235,7 +1255,7 @@ activation.
 - Gitleaks with the verified `stdin` surface;
 - provisioned isolated origin and reviewer authentication using ChatGPT-managed Pro;
 - Spark standard, Luna standard, and Luna Fast requested availability for a complete comparison;
-- owner ratification of the 1.5-second target and 2.5-second ceiling; and
+- owner-ratified versioned latency configuration (`codex-hook-latency-v1` initially); and
 - owner consent at each live boundary named in the ledger.
 
 **Related**:
@@ -1253,7 +1273,8 @@ that do not erase scheduling, authority, payload, trust, or context semantics an
 measurable hot-path latency.
 
 **Archive trigger**: global RED closes only the exact fixture-locked synchronous configuration and
-threshold set tested here, not every nested-review mechanism. GREEN or AMBER closes this plan after
-the evidence note and promotes only the next explicitly warranted experiment. INCONCLUSIVE closes
-the attempted run without a feasibility claim; any retry or configuration change needs a new
-owner-approved amendment.
+latency-configuration version tested here, not every nested-review mechanism. GREEN or AMBER closes
+this plan after the evidence note and promotes only the next explicitly warranted experiment.
+INCONCLUSIVE closes the attempted run without a feasibility claim; any retry or runtime
+configuration change needs a new owner-approved amendment, while a later threshold calibration
+follows D8's predeclared between-run versioning rule.

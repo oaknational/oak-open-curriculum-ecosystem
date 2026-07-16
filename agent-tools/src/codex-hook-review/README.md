@@ -28,7 +28,7 @@ pnpm agent-tools:codex-hook-review disable
 ```
 
 `probe` remains an explicit live command, but the owner-directed
-[Codex-to-Codex synchronous experiment](../../../.agent/plans/agent-tooling/current/codex-to-codex-synchronous-hook-review-experiment.plan.md)
+[Codex-to-Codex synchronous experiment](../../../.agent/plans/agent-tooling/active/codex-to-codex-synchronous-hook-review-experiment.plan.md)
 now precedes it. The command runs one malformed JSON concern and one valid JSON clean case once
 against the inline Spark, Luna standard, and Luna Fast lanes: six fresh Codex processes in total.
 It emits a content-free JSON report to stdout with scanner-plus-reviewer time,
