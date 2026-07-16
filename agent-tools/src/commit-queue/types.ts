@@ -48,6 +48,7 @@ export interface CommitIntent extends JsonObject {
   readonly intent_id: string;
   readonly claim_id: string;
   readonly agent_id: CommitQueueAgentId;
+  /** Every changed tree endpoint; a move includes its deleted source and added destination. */
   readonly files: readonly string[];
   readonly commit_subject: string;
   readonly queued_at: string;

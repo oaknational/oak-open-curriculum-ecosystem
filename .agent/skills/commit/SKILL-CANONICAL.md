@@ -210,9 +210,10 @@ direct CLI commands for inspection and recovery.
    Before opening: read
    `.agent/state/collaboration/active-claims.json`
    for fresh `commit_queue` entries and any peer `git:index/head` claim.
-   Inspect `git diff --staged --name-only`; if the staged set is
-   non-empty and not wholly within your intended scope, pause and
-   coordinate or ask the owner before opening the window. Active
+   Inspect `git diff --staged --no-renames --name-only` and treat every
+   reported path as a changed endpoint; if that endpoint set is non-empty
+   and not wholly within your intended scope, pause and coordinate or ask
+   the owner before opening the window. Active
    claims on `.agent/` paths are visibility signals, not commit
    blockers — `.agent` is shared Practice and coordination state, and
    it may be swept into commits when the bundle needs current
@@ -225,6 +226,14 @@ direct CLI commands for inspection and recovery.
    if a hook failure, formatter, generated artefact, or claim /
    lifecycle write introduces an extra path, abandon the old intent
    and enqueue a widened one before staging or verifying the new set.
+   A move or rename has two changed tree endpoints: include both the
+   deleted source and the added destination in the enqueue, guard, and
+   `git add` pathspecs. Git's inferred rename display is a compact diff
+   presentation, not a commit pathspec and not the queue's file identity.
+   When reconciling an already-staged or recovery bundle, derive the endpoint
+   set with `git diff --cached --no-renames --name-only`; never populate
+   `--file` from default rename-folded output. Normal work still enqueues
+   before staging.
    When the bundle creates or renames a module, run a formatting proof
    before the final record-staged step (`pnpm agent-tools:repo-check --
    prettier-staged` or a targeted Prettier command). If formatting mutates a
@@ -359,7 +368,8 @@ For commits whose purpose is to persist collaboration state, prefer a
 4. Re-stage only the intended pathspecs, including the updated
    `active-claims.json`, `closed-claims.archive.json`, comms event(s), and
    `shared-comms-log.md`.
-5. Re-check `git diff --staged --name-only` against the intended bundle.
+5. Re-check the changed-endpoint set from
+   `git diff --staged --no-renames --name-only` against the intended bundle.
 6. Commit immediately with explicit pathspec discipline.
 
 This exception is only for commits that intentionally persist collaboration
