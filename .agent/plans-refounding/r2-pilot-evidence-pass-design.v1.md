@@ -136,7 +136,7 @@ usage; the evidence report's contract (below) consumes both.
   exploration; the dispatcher supplies untruncated file content per J8's
   decision-complete brief discipline.
 
-## Sealed lane-assignment canaries (P4; `plant-challenge-canary` SEAL mode)
+## Sealed lane-assignment canaries (P4; `refound-plant-challenge-canary` SEAL mode)
 
 The pass's catch-machinery must prove it can fire before any zero/agreement
 is trusted:
