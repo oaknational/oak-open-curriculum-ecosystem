@@ -78,9 +78,18 @@ evidence, not work items.
 
 The generated manifest (`r2-evidence/sample-manifest.v1.json`) is the
 draw of record: byte-identical on re-run (proven at generation), carrying
-the draw rule, the strata, and the per-lane expected-reach denominators
-(every seed lane reaches ≥5 sampled files; `compliance-and-readiness` is
-the floor at 5 — the small-collection effect condition 1 anticipated).
+the draw rule, the strata, and a generation-time snapshot of the per-lane
+expected-reach denominators (every seed lane reaches ≥5 sampled files;
+`compliance-and-readiness` is the floor at 5 — the small-collection effect
+condition 1 anticipated). **Falsifier-1 denominators are RECOMPUTED by the
+dispatcher at scoring time** from the two committed sources — the
+manifest's strata and the seed document's FINAL coverage table — because
+the coverage map moved after generation (`architecture-and-infrastructure`
+reassigned to `practice-and-governance` in review); the embedded
+`expectedReach` block is the generation-time snapshot and is superseded
+wherever the final coverage table differs. Both inputs are committed, so
+the recomputation is deterministic and the manifest's regeneration proof
+stays intact.
 
 Every seed lane either receives assignment rows or its emptiness becomes
 recorded evidence (falsifier 1) — S-B guarantees estate-wide reach.
@@ -112,7 +121,7 @@ Both lenses return schema-forced structured output:
 
 ```json
 {
-  "file": "plans/<collection>/<lane>/<name>.md",
+  "file": "the exact path VERBATIM from sample-manifest.v1.json (the manifest includes milestones/**, proposals/**, collection-root READMEs, and nested paths — not only plans/<collection>/<lane>/<name>.md)",
   "lane": "one of the 9 closed values: the 7 seed ids | re-home-by-function | unassignable-to-seed",
   "confidence": "high | medium | low",
   "warrant": "<=40-word quote-anchored justification",
@@ -127,6 +136,18 @@ The two structured fields exist because two falsifiers need deterministic
 inputs a flag and quoted spans cannot encode: falsifier 2 computes lane-pair
 co-occurrence from `splitLane`, and falsifier 5 counts `subLaneQualifier`
 usage; the evidence report's contract (below) consumes both.
+
+Every row in `lane-assignments.v1.jsonl` additionally carries the versioned
+row envelope: `"schemaVersion": "r2-lane-assignment.v1"` and
+`"rowKind": "lens-a" | "lens-b" | "escalation"`. Escalation rows carry the
+escalation-specific fields in place of the lens fields: `"lanePair"` (the
+two disagreeing lane values), `"resolvedLane"` (one of the 9 closed
+values), and `"rationale"` (<=60 words). The dispatcher schema-validates
+the file against this envelope: EXACTLY one `lens-a` and one `lens-b` row
+per sampled file, plus exactly one `escalation` row for each file whose
+lens rows disagree; a file's RESOLVED assignment is the agreed lane, else
+the escalation row's `resolvedLane`. Count parity and this reconstruction
+are dispatcher-side recomputation, never sampling.
 
 - **Agreement** (same lane) → an assignment-evidence row.
 - **Disagreement** → the escalation-only-third lens (a senior-tier agent

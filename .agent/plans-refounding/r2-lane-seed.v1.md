@@ -113,7 +113,7 @@ priors' judgement unit) rather than mapping whole:
 
 | Receiving lane | Collections (27 + proposals) |
 | --- | --- |
-| `mcp-app` | curriculum-mcp-path-to-ga, sdk-and-mcp-enhancements†, slack-assistants, user-experience† |
+| `mcp-app` | curriculum-mcp-path-to-ga, sdk-and-mcp-enhancements†, slack-assistants, user-experience†, telemetry-and-understanding† (product-telemetry content, per the worked correction below) |
 | `engineering-tools` | semantic-search, connecting-oak-resources, exploring-open-education-resources, school-data-search, sdk-and-mcp-enhancements†, upstream-feature-requests†, proposals/upstream-api-endpoint-additions, proposals/kg-ont-mcp-strat† |
 | `agentic-framework` | sector-engagement† (outward adoption face; its EEF-convening content splits to `engineering-tools` per TOOLS-3 and this document's own convening assignment), parts of agentic-engineering-enhancements† (outward-facing docs/exemplar) |
 | `practice-and-governance` | agent-tooling, agentic-engineering-enhancements†, architecture-and-infrastructure† (cross-cutting architecture/system-quality plans; product-scoped items split to their product lanes), product-development-governance, telemetry-and-understanding†, observability†, developer-experience, templates |
@@ -165,10 +165,13 @@ proposals for Walk A to set or adjust:
    a majority of its assignments need a sub-lane qualifier to be usable by
    the assigning lens (recorded free-text), the SDK/SEARCH/GRAPH/EEF
    decomposition fires at Walk A as additive granularity.
-6. **The global falsifier** (r2 todo): >20% of lens rows returning
-   `unassignable-to-seed` (the schema's explicit abstention value, counted
-   after escalation resolution) → the taxonomy re-derives; alongside the per-batch refit
-   triggers (holding-share trend + lane-churn rate) once batches run.
+6. **The global falsifier** (r2 todo), defined over FINAL PER-FILE
+   verdicts so it is deterministic: a file's final verdict is the agreed
+   lane where the two lenses agree, else the escalation lens's
+   `resolvedLane`; the falsifier fires when >20% of sampled files' final
+   verdicts are `unassignable-to-seed` → the taxonomy re-derives;
+   alongside the per-batch refit triggers (holding-share trend +
+   lane-churn rate) once batches run.
 
 ## Open decisions routed to Walk A
 
