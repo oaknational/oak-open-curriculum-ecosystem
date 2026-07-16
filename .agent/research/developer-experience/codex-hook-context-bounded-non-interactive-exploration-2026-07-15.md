@@ -540,10 +540,10 @@ compensation, bundled-skill context, corpus authority, status truthfulness, oper
 and accidental tournament-corpus inclusion in the production bundle. Their value was corrective,
 not evidence that the reviewer model itself works.
 
-The hook remains disabled. No live six-call result, Spark-versus-Luna comparison, Claude UAT, or
-full launch-to-feedback latency exists. The full tournament is additionally stopped by a
-code-owned pending corpus-label audit. The implementation therefore has strong static evidence
-for a safe experiment and no runtime evidence for the product hypothesis.
+At that checkpoint, the hook remained disabled. No live six-call result, Spark-versus-Luna
+comparison, Claude UAT, or full launch-to-feedback latency existed yet. The full tournament was
+additionally stopped by a code-owned pending corpus-label audit. The implementation therefore had
+strong static evidence for a safe experiment and no runtime evidence for the product hypothesis.
 
 Codex hooks add a second observation: trigger grain, matcher behaviour, scheduling, trust,
 payloads, and feedback authority differ materially by vendor. Only the bounded review subject,
@@ -585,7 +585,7 @@ symmetry—the promotion trigger for shared code.
 
 ### Movement 4 — synthesis, warrants, and falsifiers
 
-The foundation is complete; feasibility is unknown. The sequence warranted at this checkpoint
+The foundation was complete; feasibility was unknown at this checkpoint. The warranted sequence
 was:
 
 1. provision the isolated reviewer account and run the standalone six-call probe only;
@@ -602,10 +602,10 @@ falsified if its synchronous delay materially disrupts the loop. Framework promo
 if the second adapter cannot share a review-subject/result seam without erasing vendor scheduling,
 authority, or payload facts.
 
-Unresolved evidence is now explicit: actual six-call data, complete process-launch-to-output
-latency, the released Codex `apply_patch` success/failure response values, synchronous Codex hook
-experience, and—only for reciprocal pairing—a controlled Claude reviewer transport. None is a
-reason to add more MVP code before the first probe.
+The unresolved evidence at this checkpoint was explicit: actual six-call data, complete
+process-launch-to-output latency, the released Codex `apply_patch` success/failure response values,
+synchronous Codex hook experience, and—only for reciprocal pairing—a controlled Claude reviewer
+transport. None was a reason to add more MVP code before the first probe.
 
 ## Owner-directed Codex-first sequence correction — 16 July 2026
 
@@ -644,26 +644,78 @@ bound and cannot earn a fast verdict by itself. Missing qualification or bracket
 INCONCLUSIVE, not silently repaired by subtracting a single baseline.
 
 No vendor-neutral framework code is promoted. The second adapter is evidence from which a future
-origin-trigger / reviewer-transport / feedback-delivery seam may later be assessed. The executable
-[Codex-to-Codex synchronous hook review plan](../../plans/agent-tooling/active/codex-to-codex-synchronous-hook-review-experiment.plan.md)
-owns the strict subset, TDD cycles, CLI-process-session ceiling, latency decision table, stop
-conditions, and review sequence.
+origin-trigger / reviewer-transport / feedback-delivery seam may later be assessed. The original
+Codex-to-Codex synchronous hook review plan is archived as historical design evidence at
+`.agent/plans-old-archive/agent-tooling/archive/completed/codex-to-codex-synchronous-hook-review-experiment.plan.md`;
+the runtime result below is authoritative for what was actually run and what it established.
+
+## Codex-to-Codex runtime result — 16 July 2026
+
+The cheaper evidence sequence changed the mechanism before the original `PostToolUse` plan was
+implemented. First, the existing direct six-call probe exercised one obvious concern and one clean
+case against Spark standard, Luna standard, and Luna Fast. Then one explicitly bounded
+`PreToolUse` integration trial exercised only a clean case and a concern case through Luna Fast.
+No call was retried beyond the separately authorised single compatibility rerun, and no tournament
+or activation followed.
+
+The first direct probe failed all six cells before inference because Codex CLI `0.144.5` rejected
+the `tools.view_image=false` override under strict configuration. Removing that rejected override
+and its obsolete request-shape expectation was a compatibility repair; it was not evidence that an
+image capability materially affected latency or behaviour.
+
+The one authorised direct-probe rerun produced this content-free result:
+
+- Spark concern, Luna standard concern, Spark clean, Luna standard clean, and Luna Fast clean all
+  reached the 4,000 ms reviewer-process safety timeout (`4,022`–`4,024` ms total each).
+- Luna Fast concern completed correctly in `3,242` ms total and `3,219` ms reviewer time. It
+  returned the expected `syntax-schema` concern at change 1 with `5,364` input tokens, `0` cached
+  input tokens, `27` output tokens, and no reasoning item.
+- No lane completed both cases, so the direct feasibility result was `RED` for that run. It did not
+  rank Spark against Luna or qualify a candidate.
+
+The smaller `PreToolUse` trial then established the released hook mechanics with one fresh
+origin/reviewer pair per case:
+
+| Case | Scanner and decision | Reviewer | Whole hook | Origin | Observable effect |
+| --- | --- | ---: | ---: | ---: | --- |
+| clean | Gitleaks clean; pass | 3,763 ms | 3,818 ms | 8,955 ms | Exact target patch applied |
+| concern | Gitleaks clean; concern | 3,706 ms | 3,733 ms | 8,434 ms | Target remained absent after denial |
+
+Both completed cases reported cleanup complete and their disposable homes were removed. This is
+mechanical evidence that Codex `PreToolUse` can synchronously invoke the bounded reviewer and that
+fixed denial prevents the synthetic action. It is not quality, reliability, or activation
+evidence, and the trial-only hook and harness were deliberately discarded rather than promoted.
+
+The decision thresholds were run configuration, not invariants:
+`fast_target_ms=1,500` and `feasibility_ceiling_ms=2,500`. They were fixed before the calls and may
+be changed for a later, separately labelled run, but the observed 3.2–3.8 second reviewer/hook
+durations cannot be retrospectively called fast. The 4,000 ms direct reviewer timeout and the
+trial's 9,000 ms reviewer / 10,000 ms origin watchdogs were process-safety ceilings, not experience
+targets. The archived `PostToolUse` plan's proposed 6,000 ms hook and 20,000 ms origin bounds were
+never exercised.
+
+The resulting verdict is therefore split and explicit:
+
+- **Mechanics:** demonstrated for the two synthetic `PreToolUse` cases.
+- **Speed:** not qualified against the configured experience ceiling.
+- **Model comparison:** not established; the direct matrix had no viable two-case lane.
+- **Activation:** absent and still unauthorised.
+- **Next architecture:** unscheduled. A future authorised experiment should target measured fixed
+  startup/context cost before adding another maintained hook harness or a vendor-neutral framework.
 
 ## Implementation status and remaining evidence
 
-The foundation code boundary is implemented in the dedicated worktree: hook input/path/payload
-policy, Gitleaks adapter, lease, content-free metrics, Codex runner, corpus, dormant tournament,
-private deployment, settings merge, activation CLI, fail-soft hook composition, and the six-call
+The foundation code boundary is implemented in `agent-tools`: hook input/path/payload policy,
+Gitleaks adapter, lease, content-free metrics, Codex runner, corpus, dormant tournament, private
+deployment, settings merge, activation CLI, fail-soft hook composition, and the six-call
 feasibility-probe command. The benchmark command enforces that same non-persisted gate and then a
-code-owned corpus-audit stop. Current hermetic gates and reviewer settlement remain the immediate
-implementation evidence. The Codex-to-Codex plan is the next owner-directed experiment; this
-plan's standalone probe remains available but is no longer the immediate next action. The
-tournament and any explicit local enablement remain blocked pending independent label agreement.
+code-owned corpus-audit stop. The direct feasibility probe has now run once after its compatibility
+repair and produced no viable lane. The synthetic `PreToolUse` trial proved mechanics only and did
+not become product code. The tournament and any explicit local enablement remain blocked pending
+independent label agreement and a later successful same-invocation feasibility gate.
 
-The feasibility probe is deliberately pending, and the live tournament is additionally
-audit-blocked. Until live evidence exists, no claim about Spark versus Luna is warranted; until
-independent label agreement permits a benchmark and it produces a qualifying current winner, the
-hook must remain disabled. The associated
+No candidate has qualified, no Spark-versus-Luna ranking is warranted, and the hook remains
+disabled. The associated
 [evaluation plan](../../plans/agent-tooling/future/codex-hook-semantic-classifier-evaluation.plan.md)
 is authoritative for its own qualification thresholds, activation, acceptance, and non-goals.
 

@@ -10,8 +10,10 @@ history is discoverable.
 
 ## Plans
 
-_(none migrated yet — pre-split agent-tooling completions still live in
-`agentic-engineering-enhancements/archive/completed/`)_
+- [Codex-to-Codex synchronous hook review experiment](completed/codex-to-codex-synchronous-hook-review-experiment.plan.md)
+  — superseded on 2026-07-16 after a smaller `PreToolUse` trial answered the mechanical question;
+  the [research outcome](/.agent/research/developer-experience/codex-hook-context-bounded-non-interactive-exploration-2026-07-15.md#codex-to-codex-runtime-result--16-july-2026)
+  is authoritative for the measurements and current boundary.
 
 ## Notable Pre-Split Completions
 

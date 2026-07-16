@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/practice-session-identity.mjs\"",
+            "timeout": 10,
+            "statusMessage": "Loading Practice agent identity"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^apply_patch$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-pretooluse-proof.mjs\"",
+            "timeout": 5,
+            "statusMessage": "Proving PreToolUse hook discovery"
+          }
+        ]
+      }
+    ]
+  }
+}

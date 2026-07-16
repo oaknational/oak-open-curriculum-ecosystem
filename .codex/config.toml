@@ -6,15 +6,6 @@ project_doc_fallback_filenames = ["RULES_INDEX.md"]
 hooks = true
 multi_agent = true
 
-[[hooks.SessionStart]]
-matcher = "startup|resume"
-
-[[hooks.SessionStart.hooks]]
-type = "command"
-command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/practice-session-identity.mjs"'
-timeout = 10
-statusMessage = "Loading Practice agent identity"
-
 [agents."code-expert"]
 description = "Gateway reviewer for non-trivial changes."
 config_file = "agents/code-expert.toml"

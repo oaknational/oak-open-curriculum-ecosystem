@@ -28,6 +28,8 @@ todos:
 isProject: false
 ---
 
+> **Archived 2026-07-16 — superseded after a smaller `PreToolUse` trial.** The authoritative content-free runtime result and current boundary live in the [Codex hook context-bounded non-interactive exploration](/.agent/research/developer-experience/codex-hook-context-bounded-non-interactive-exploration-2026-07-15.md#codex-to-codex-runtime-result--16-july-2026); this original plan is retained as historical design evidence and is not an execution instruction. All statuses, examples, and configuration literals below are frozen historical content, not current guidance.
+
 # Codex-to-Codex synchronous hook review experiment
 
 **Last Updated**: 2026-07-16
@@ -37,10 +39,10 @@ fixture-locked, one-file, one-hunk `apply_patch` cases, synchronously reviewed b
 context-bounded Codex process.
 
 **Concept source**:
-[Codex hook context-bounded non-interactive exploration](../../../research/developer-experience/codex-hook-context-bounded-non-interactive-exploration-2026-07-15.md)
+[Codex hook context-bounded non-interactive exploration](/.agent/research/developer-experience/codex-hook-context-bounded-non-interactive-exploration-2026-07-15.md)
 
 **Foundation reused**:
-[Context-bounded Codex hook reviewer evaluation](../future/codex-hook-semantic-classifier-evaluation.plan.md)
+[Context-bounded Codex hook reviewer evaluation](/.agent/plans/agent-tooling/future/codex-hook-semantic-classifier-evaluation.plan.md)
 
 ---
 
@@ -522,6 +524,10 @@ single quotes, shell metacharacters, and leading hyphens in every path-bearing v
 concatenation or unquoted interpolation constructs the command.
 
 The origin request builder pins this released invocation shape and unit-tests the complete argv:
+
+> **Historical compatibility note:** Codex CLI `0.144.5` later rejected the
+> `tools.view_image=false` line below under `--strict-config`; the current reviewer invocation omits
+> it. This frozen example must not be copied as current configuration.
 
 ```sh
 codex -a never exec \
@@ -1179,8 +1185,8 @@ WS0/WS3 stop still completes cleanup and this decision note; it does not require
 
 ### WS5 — Quality gates and final review
 
-> See [Quality Gates](../../templates/components/quality-gates.md) and
-> [Evidence and Claims](../../templates/components/evidence-and-claims.md).
+> See [Quality Gates](/.agent/plans/templates/components/quality-gates.md) and
+> [Evidence and Claims](/.agent/plans/templates/components/evidence-and-claims.md).
 
 Run focused commands after each cycle and the canonical aggregate gate after integration:
 
@@ -1195,7 +1201,7 @@ the experimental code. A green review or live GREEN result is not hook-activatio
 
 ## Lifecycle and coordination
 
-> See [Lifecycle Triggers](../../templates/components/lifecycle-triggers.md).
+> See [Lifecycle Triggers](/.agent/plans/templates/components/lifecycle-triggers.md).
 
 - **Session entry:** use `oak-start-right-thorough` for implementation because this crosses a
   vendor lifecycle, process, auth, and privacy boundary.
@@ -1218,7 +1224,7 @@ the experimental code. A green review or live GREEN result is not hook-activatio
 
 ## Risk assessment
 
-> See [Risk Assessment](../../templates/components/risk-assessment.md).
+> See [Risk Assessment](/.agent/plans/templates/components/risk-assessment.md).
 
 | Risk | Likelihood | Impact | Mitigation |
 | --- | --- | --- | --- |
@@ -1241,7 +1247,7 @@ investment around a poor hot-path mechanism.
 
 ## Foundation alignment
 
-> See [Foundation Alignment](../../templates/components/foundation-alignment.md).
+> See [Foundation Alignment](/.agent/plans/templates/components/foundation-alignment.md).
 
 - **Simplicity:** one event, two fixture-locked changes in one operation class, one path, one hunk,
   one payload, one fixed advisory, and no activation.
@@ -1292,11 +1298,11 @@ activation.
 
 **Related**:
 
-- [Context-bounded Codex hook reviewer evaluation](../future/codex-hook-semantic-classifier-evaluation.plan.md)
+- [Context-bounded Codex hook reviewer evaluation](/.agent/plans/agent-tooling/future/codex-hook-semantic-classifier-evaluation.plan.md)
   — supplies the reusable reviewer boundary; its Claude activation/tournament remain separate.
-- [Claude hook reliability remediation](../future/claude-hook-reliability-remediation.plan.md) —
+- [Claude hook reliability remediation](/.agent/plans/agent-tooling/future/claude-hook-reliability-remediation.plan.md) —
   remains outside this experiment.
-- [Hooks portability](../future/hooks-portability.plan.md) — broader portability background, not an
+- [Hooks portability](/.agent/plans/agent-tooling/future/hooks-portability.plan.md) — broader portability background, not an
   implementation dependency.
 
 **Promotion trigger for shared framework work**: only after the Codex-origin adapter has real

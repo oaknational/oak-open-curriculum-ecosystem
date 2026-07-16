@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "verdict": {
+      "enum": ["pass", "concern", "uncertain"]
+    },
+    "kind": {
+      "enum": [
+        "none",
+        "syntax-schema",
+        "runtime",
+        "logic",
+        "security",
+        "data-loss",
+        "contradiction"
+      ]
+    },
+    "change_index": {
+      "enum": [0, 1]
+    }
+  },
+  "required": ["verdict", "kind", "change_index"],
+  "additionalProperties": false
+}

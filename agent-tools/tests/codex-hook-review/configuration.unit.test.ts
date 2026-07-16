@@ -177,8 +177,6 @@ describe('createCodexProcessRequest', () => {
       '-c',
       'features.workspace_dependencies=false',
       '-c',
-      'tools.view_image=false',
-      '-c',
       'skills.include_instructions=false',
       '-c',
       'model_instructions_file="/private/reviewer/assets/instructions.md"',

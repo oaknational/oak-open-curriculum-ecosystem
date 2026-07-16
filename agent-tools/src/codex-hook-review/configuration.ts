@@ -63,7 +63,6 @@ const CONTEXT_CONTROL_OVERRIDES = [
   'features.terminal_visualization_instructions=false',
   'features.use_agent_identity=false',
   'features.workspace_dependencies=false',
-  'tools.view_image=false',
 ] as const;
 
 export type ReviewModelConfiguration = (typeof MODEL_CONFIGURATIONS)[number];

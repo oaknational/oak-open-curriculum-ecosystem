@@ -27,11 +27,12 @@ pnpm agent-tools:codex-hook-review enable
 pnpm agent-tools:codex-hook-review disable
 ```
 
-`probe` remains an explicit live command, but the owner-directed
-[Codex-to-Codex synchronous experiment](../../../.agent/plans/agent-tooling/active/codex-to-codex-synchronous-hook-review-experiment.plan.md)
-now precedes it. The command runs one malformed JSON concern and one valid JSON clean case once
-against the inline Spark, Luna standard, and Luna Fast lanes: six fresh Codex processes in total.
-It emits a content-free JSON report to stdout with scanner-plus-reviewer time,
+`probe` remains an explicit live command. One owner-authorised run on 2026-07-16 returned no viable
+two-case lane, and a smaller Codex `PreToolUse` trial demonstrated mechanics without qualifying
+speed; the [content-free result](/.agent/research/developer-experience/codex-hook-context-bounded-non-interactive-exploration-2026-07-15.md#codex-to-codex-runtime-result--16-july-2026)
+does not grant permission for another run, tournament, or activation. The command runs one malformed
+JSON concern and one valid JSON clean case once against the inline Spark, Luna standard, and Luna
+Fast lanes: six fresh Codex processes in total. It emits a content-free JSON report to stdout with scanner-plus-reviewer time,
 Codex-process time, token usage, protocol outcome, decision, and exact correctness. It cannot
 qualify or enable a lane, and its report is neither persisted nor reused as permission to run a
 tournament. It clears only previously owned hook/manifest state before the first call so an older

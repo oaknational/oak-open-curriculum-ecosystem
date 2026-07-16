@@ -1,6 +1,6 @@
 ---
 name: 'Context-bounded Codex hook reviewer evaluation'
-status: 'FOUNDATION IMPLEMENTED — SEQUENCE SUPERSEDED; TOURNAMENT AUDIT-BLOCKED; NOT ENABLED'
+status: 'FOUNDATION IMPLEMENTED — DIRECT FEASIBILITY RED; TOURNAMENT AUDIT-BLOCKED; NOT ENABLED'
 created: 2026-07-15
 updated: 2026-07-16
 owner: 'Practice owner'
@@ -15,21 +15,25 @@ lineage:
 
 ## Status and completion boundary
 
-The adapter, corpus, dormant tournament, local activation CLI, and hermetic tests are implemented. A deep
-effort-alignment review found that the implementation reached activation-grade assurance before
-collecting enough feasibility evidence. The six-call feasibility probe has not run. Independent
-agreement on the frozen tournament labels is also pending, so the production benchmark stops
-after its embedded six-call report without calling the 279-run tournament or writing qualification
-state. No candidate has qualified and the hook is not enabled. Implementation is not the same as
-activation: an unqualified or stale result must leave local Claude settings unchanged. The earlier
-1.99-second, 1,900-input-token Spark result was one disposable probe, not a latency baseline,
-context ceiling, or selection result.
+The adapter, corpus, dormant tournament, local activation CLI, and hermetic tests are implemented. A
+deep effort-alignment review found that the implementation reached activation-grade assurance
+before collecting enough feasibility evidence. The direct six-call probe has now run once after a
+strict-configuration compatibility repair: five cells reached the 4,000 ms safety timeout and the
+one correct Luna Fast concern cell exceeded the configured 2,500 ms experience ceiling. No lane
+completed both cases. Independent agreement on the frozen tournament labels is also pending, so
+the production benchmark stops after its embedded six-call report without calling the 279-run
+tournament or writing qualification state. No candidate has qualified and the hook is not enabled.
+Implementation is not the same as activation: an unqualified or stale result must leave local
+Claude settings unchanged.
 
-**Owner-directed sequence correction (2026-07-16):** the next experiment is now the isolated
-[Codex-to-Codex synchronous hook review](../active/codex-to-codex-synchronous-hook-review-experiment.plan.md),
-not this plan's standalone Claude-shaped probe. That correction supersedes ordering statements
-below that call `probe` the next owner action. It does not enable this hook, lift the corpus-label
-audit stop, or weaken any privacy, protocol, qualification, or activation prerequisite here.
+**Owner-directed sequence outcome (2026-07-16):** a smaller isolated Codex `PreToolUse` trial
+subsequently demonstrated correct clean and concern mechanics, but its 3.7–3.8 second hook durations
+did not qualify speed against that run's configured experience ceiling. The trial-only harness was
+discarded and the original plan was archived at
+`.agent/plans-old-archive/agent-tooling/archive/completed/codex-to-codex-synchronous-hook-review-experiment.plan.md`.
+The [research result](/.agent/research/developer-experience/codex-hook-context-bounded-non-interactive-exploration-2026-07-15.md#codex-to-codex-runtime-result--16-july-2026)
+is authoritative. This outcome does not enable this hook, lift the corpus-label audit stop, or
+weaken any privacy, protocol, qualification, or activation prerequisite here.
 
 ## Problem and corrected goal
 
@@ -350,13 +354,13 @@ contain paths, source, prompts, responses, credentials, or scanner output.
 - **Beneficial:** request-level inspection of unavailable base/tool-schema detail. Without it,
   v1 makes only measured context/capability claims and treats emitted dynamic events as fatal.
 
-Original sequence: finish the bounded implementation and gates; run only the standalone six-call
-probe; stop and inspect its report. The 2026-07-16 owner direction supersedes that immediate step
-with the linked Codex-to-Codex experiment. Do not run this plan's live tournament until
-independent corpus-label agreement has landed as a reviewed code status change. Only then may a
-fresh benchmark repeat the six-call gate, run the tournament, and produce qualification evidence.
-Enable only a qualifying current winner, then perform a manual Claude UAT. Profile the full
-process-launch-to-JSON envelope before adding any further hot-path assurance.
+The standalone six-call probe and smaller Codex `PreToolUse` trial are complete; neither qualified
+a lane or authorised activation. Do not run this plan's live tournament until independent
+corpus-label agreement has landed as a reviewed code status change. Only then may a fresh benchmark
+repeat the six-call gate under a newly declared configuration, run the tournament if that gate is
+successful, and produce qualification evidence. Enable only a qualifying current winner, then
+perform a manual Claude UAT. Profile the full process-launch-to-JSON envelope before adding any
+further hot-path assurance.
 
 ## Acceptance criteria
 
