@@ -71,6 +71,9 @@ const config: KnipConfig = {
       // entry rather than reporting the whole chain as unused.
       entry: [
         'src/bin/**/*.ts',
+        // Compiled build entry invoked by the build:codex-hook-review package
+        // script after tsc has emitted it into dist/.
+        'src/codex-hook-review/build-hook-bundle.ts',
         'src/claude/**/*.ts',
         'src/cursor/**/*.ts',
         'src/hook-policy/check-blocked-patterns.ts',

@@ -5,7 +5,8 @@
   "type": "module",
   "description": "TypeScript tooling workspace for agent operational CLIs",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && chmod +x dist/src/bin/*.js dist/src/claude/statusline-identity.js && pnpm -s build:workflows",
+    "build": "tsc -p tsconfig.build.json && pnpm -s build:codex-hook-review && chmod +x dist/src/bin/*.js dist/src/claude/statusline-identity.js dist/codex-hook-review-hook.bundle.mjs && pnpm -s build:workflows",
+    "build:codex-hook-review": "node dist/src/codex-hook-review/build-hook-bundle.js",
     "build:workflows": "tsx src/corpus-analysis/workflows/build/build-workflows.ts",
     "build-run-artefact": "tsx src/corpus-analysis/workflows/build/build-run-artefact.ts",
     "post-run-driver": "tsx src/corpus-analysis/post-run/post-run-driver.ts",
@@ -33,6 +34,7 @@
     "claude-agent-ops": "tsx src/bin/claude-agent-ops.ts",
     "commit-queue": "cd .. && node agent-tools/dist/src/bin/agent-tools.js commit-queue",
     "codex-exec": "cd .. && node agent-tools/dist/src/bin/agent-tools.js codex-exec",
+    "codex-hook-review": "pnpm -s build && cd .. && node agent-tools/dist/src/bin/codex-hook-review.js",
     "cursor-session-from-claude-session": "tsx src/bin/cursor-session-from-claude-session.ts",
     "codex-reviewer-resolve": "tsx src/bin/codex-reviewer-resolve.ts",
     "skills-adapter-generate": "tsx src/bin/skills-adapter-generate.ts",

@@ -27,6 +27,13 @@ meaningful homes is deferred.
 - [2026-02-20-onboarding-review.md](./2026-02-20-onboarding-review.md)
   Onboarding friction, quality observations, and improvement opportunities.
 
+- [codex-hook-context-bounded-non-interactive-exploration-2026-07-15.md](./codex-hook-context-bounded-non-interactive-exploration-2026-07-15.md)
+  Concept exploration, official Claude/Codex mechanics, the Gitleaks privacy compromise,
+  the implemented standalone and benchmark-embedded six-call Spark/Luna feasibility gate with its
+  later tournament blocked pending independent corpus-label agreement, and the explicitly non-MVP
+  `ReviewSubject`/three-adapter seam for reciprocal vendor review. Includes the narrow Codex
+  `PostToolUse` adapter delta and its synchronous-latency constraint.
+
 ## Local external research lane
 
 - [novel/README.md] (`./novel/README.md`)

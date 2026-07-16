@@ -31,6 +31,7 @@ ONBOARDING.md
 # hooks, plugin state) and must work on fresh checkout.
 # Local settings contain user-specific paths and one-off permissions.
 .claude/settings.local.json
+.claude/codex-review.local.json
 .cursor/settings.local.json
 # Cursor sessionStart hook: human-readable mirror (gitignored; not committed)
 .cursor/oak-composer-session.local.json

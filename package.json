@@ -61,6 +61,7 @@
     "agent-tools:codex-reviewer-resolve": "pnpm --filter @oaknational/agent-tools codex-reviewer-resolve",
     "agent-tools:branch-touched-files": "pnpm --filter @oaknational/agent-tools branch-touched-files",
     "agent-tools:codex-exec": "pnpm --filter @oaknational/agent-tools codex-exec",
+    "agent-tools:codex-hook-review": "pnpm --filter @oaknational/agent-tools codex-hook-review",
     "agent-tools:pr-watch": "pnpm --filter @oaknational/agent-tools pr-watch",
     "agent-tools:repo-check": "pnpm --filter @oaknational/agent-tools repo-check",
     "agent-tools:check-blocked-patterns": "pnpm --filter @oaknational/agent-tools check-blocked-patterns",
