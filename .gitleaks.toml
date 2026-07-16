@@ -76,7 +76,7 @@ description = "Refounding challenge commitments publish sha256 digests by design
 condition = "AND"
 paths = ['''^\.agent/plans-refounding/challenge/[^/]+\.json$''']
 regexTarget = "line"
-regexes = ['''^\s*"keySetSha256": "[0-9a-f]{64}",?$''']
+regexes = ['''^\s*"keySetSha256"\s*:\s*"[0-9a-fA-F]{64}"\s*,?\s*$''']
 
 [[rules]]
 id = "oak-api-key-uuid"
