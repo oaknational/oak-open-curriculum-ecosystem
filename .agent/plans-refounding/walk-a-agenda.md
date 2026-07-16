@@ -1,8 +1,13 @@
 # Walk A — sitting agenda
 
-FINAL as of 2026-07-16 — assembled by the sitting Director (Mussel rides Coral, team
-Mango) 2026-07-15; its finalisation condition (the r2 staged evidence attached and
-Director-reviewed) is met. Walk A convenes at the owner's call.
+AGENDA FINAL as of 2026-07-16 — assembled by the sitting Director (Mussel rides Coral,
+team Mango) 2026-07-15; the decision list and its attached staged evidence (input 4,
+Director-reviewed) are complete. One evidence input remains in flight by design: the
+pilot pass's MEASURED outputs (`r2-evidence/lane-assignments.v1.jsonl` + the
+lane-evidence report) land only when the merge-anchored dispatch runs. The plan's
+REQUIRED sitting inputs (the R1 denominator and the divergence report) are on main, so
+Walk A convenes at the owner's call — with the measured pilot evidence attached, or
+before it at the owner's choice.
 
 ## What this sitting is
 

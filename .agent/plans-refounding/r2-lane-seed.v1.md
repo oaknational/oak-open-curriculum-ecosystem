@@ -141,12 +141,11 @@ proposals for Walk A to set or adjust:
    lane when `assigned_files / expected_reach_files < 0.25`; a firing
    lane is speculative — demote or merge at Walk A. (Prime candidate this
    could fire on: `capabilities`.) **Judged against expected reach, never
-   raw share** (Director review condition 1, 2026-07-15; the earlier <2%
-   raw-share form is superseded by this ratio): the evidence report
-   carries, per lane, the rows the sample draw could have reached —
+   raw share** (Director review condition 1, 2026-07-15): the evidence
+   report carries, per lane, the rows the sample draw could have reached —
    computed from the coverage-check table below and the S-B draw
    parameters — because small collections feeding a lane contribute few
-   files under the ceil-10%/min-2/cap-8 draw, and a <2% raw share can mean
+   files under the ceil-10%/min-2/cap-8 draw, and a low raw share can mean
    the SAMPLE under-reached the lane, not that the lane is speculative.
    `expected_reach_files` is the lane's value in the manifest's
    `expectedReach` block (every seed lane's floor is ≥5 by the S-B draw
@@ -166,8 +165,9 @@ proposals for Walk A to set or adjust:
    a majority of its assignments need a sub-lane qualifier to be usable by
    the assigning lens (recorded free-text), the SDK/SEARCH/GRAPH/EEF
    decomposition fires at Walk A as additive granularity.
-6. **The global falsifier** (r2 todo): >20% of rows unassignable to any
-   seed lane → the taxonomy re-derives; alongside the per-batch refit
+6. **The global falsifier** (r2 todo): >20% of lens rows returning
+   `unassignable-to-seed` (the schema's explicit abstention value, counted
+   after escalation resolution) → the taxonomy re-derives; alongside the per-batch refit
    triggers (holding-share trend + lane-churn rate) once batches run.
 
 ## Open decisions routed to Walk A

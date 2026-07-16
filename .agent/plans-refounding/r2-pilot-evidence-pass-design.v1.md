@@ -91,8 +91,12 @@ Per sampled file, two INDEPENDENT lens agents, blind to each other:
 
 - **Lens A — derivation lens**: from the file's stated intent (frontmatter,
   lineage, opening framing): which seed lane does this plan SERVE? One value
-  from the closed list — the 7 seed lanes plus `re-home-by-function` — no
-  free text, no abstention. `re-home-by-function` is for wrong-kind content
+  from the closed list — the 7 seed lanes, `re-home-by-function`, or
+  `unassignable-to-seed` — no free text. `unassignable-to-seed` is the
+  EXPLICIT abstention: the lens genuinely cannot place the file in any seed
+  lane and says so with a warrant; its post-escalation share is what
+  falsifier 6 (the global >20% re-derivation trigger) measures — without
+  it that falsifier could never fire. `re-home-by-function` is for wrong-kind content
   (operational records, evidence, research living inside the plans tree),
   which per the priors' homeless-concepts cure 1 re-homes by FUNCTION and
   never into a lane; keeping it out of `conservatory` keeps the holding
@@ -109,11 +113,11 @@ Both lenses return schema-forced structured output:
 ```json
 {
   "file": "plans/<collection>/<lane>/<name>.md",
-  "lane": "one of the 8 closed values: the 7 seed ids | re-home-by-function",
+  "lane": "one of the 9 closed values: the 7 seed ids | re-home-by-function | unassignable-to-seed",
   "confidence": "high | medium | low",
   "warrant": "<=40-word quote-anchored justification",
   "splitFlag": false,
-  "splitLane": "the SECOND lane pulling, one of the 8 closed values — null unless splitFlag is true; feeds falsifier 2's lane-pair co-occurrence matrix",
+  "splitLane": "the SECOND lane pulling, one of the 9 closed values — null unless splitFlag is true; feeds falsifier 2's lane-pair co-occurrence matrix",
   "splitSpans": [],
   "subLaneQualifier": "free-text sub-lane qualifier, recorded ONLY when lane = engineering-tools and the assignment needed one to be usable — null otherwise; feeds falsifier 5"
 }
