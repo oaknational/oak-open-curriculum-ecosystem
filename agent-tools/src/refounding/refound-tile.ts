@@ -4,9 +4,9 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { err, isErr, ok, type Result } from '@oaknational/result';
-import { scanArgs } from '../core/cli-arg-parser.js';
 import { resolveRepoRoot } from '../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
+import { entryUsageText, parseEntryArgs } from './refound-entry-args.js';
 import { DEFAULT_OUT_DIR } from './refound-freeze-helpers.js';
 import { resolveReadPathWithinRepo } from './refound-path-resolve.js';
 import { runTile, type TileReport } from './refound-tile-helpers.js';
@@ -38,40 +38,43 @@ const repoRoot = resolveRepoRoot(import.meta.url);
 /** RED verdicts detail at most this many violations (F1 §5: "first 50"). */
 const MAX_DETAILED_VIOLATIONS = 50;
 
-/** Parse `--out <dir>` / `--area <area>` via the shared scanner. */
+const USAGE = entryUsageText(TOOL, '[--out <dir>] [--area <area>]');
+
+/** Parse `--out <dir>` / `--area <area>` under the shared entry contract. */
 export function parseTileArgs(
   argv: readonly string[],
-): Result<{ outDir: string; area: string }, Error> {
-  const scanned = scanArgs(
+): Result<{ outDir: string; area: string; help: boolean }, Error> {
+  const parsed = parseEntryArgs(
     argv,
+    USAGE,
     { outDir: DEFAULT_OUT_DIR, area: '', areaSupplied: false },
     {
-      flags: {},
-      valueOptions: {
-        '--out': (state, value) => {
-          state.outDir = value;
-        },
-        '--area': (state, value) => {
-          state.area = value;
-          state.areaSupplied = true;
-        },
+      '--out': (state, value) => {
+        state.outDir = value;
       },
-      helpText: 'usage: refound-tile [--out <dir>] [--area <area>]',
+      '--area': (state, value) => {
+        state.area = value;
+        state.areaSupplied = true;
+      },
     },
   );
-  if (!scanned.ok) {
-    return err(new Error(scanned.error));
+  if (isErr(parsed)) {
+    return parsed;
   }
   // An absent `--area` tiles the whole denominator; an explicitly-supplied empty
   // `--area` is a mistake, not a request for whole-denominator scope.
-  if (scanned.state.areaSupplied && scanned.state.area === '') {
+  if (!parsed.value.help && parsed.value.state.areaSupplied && parsed.value.state.area === '') {
     return err(
       new Error(
         '--area was supplied empty; omit the flag to tile the whole denominator, or name an area',
       ),
     );
   }
-  return ok({ outDir: scanned.state.outDir, area: scanned.state.area });
+  return ok({
+    outDir: parsed.value.state.outDir,
+    area: parsed.value.state.area,
+    help: parsed.value.help,
+  });
 }
 
 /** Constrain the artefact home (which must exist to be verifiable) to the repo. */
@@ -140,6 +143,10 @@ async function main(): Promise<void> {
   if (isErr(args)) {
     writeErrorLine(`${TOOL}: ${args.error.message}`);
     process.exitCode = 1;
+    return;
+  }
+  if (args.value.help) {
+    writeLine(USAGE);
     return;
   }
   const outDirAbs = resolveOutDir(args.value.outDir);

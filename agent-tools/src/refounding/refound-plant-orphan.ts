@@ -3,14 +3,13 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { err, isErr, ok, type Result } from '@oaknational/result';
+import { isErr, ok, type Result } from '@oaknational/result';
 
-import { scanArgs } from '../core/cli-arg-parser.js';
 import { resolveRepoRoot } from '../core/repo-root.js';
 
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
+import { freezeUsageText, parseFreezeArgs } from './refound-freeze-args.js';
 import { resolveReadPathWithinRepo } from './refound-path-resolve.js';
-import { DEFAULT_OUT_DIR, DEFAULT_RULE_PATH } from './refound-freeze-helpers.js';
 import { DISCRIMINATION_PROOF_SEGMENT } from './refound-plant-orphan-transcript.js';
 import { runPlantOrphan } from './refound-plant-orphan-runner.js';
 
@@ -39,32 +38,6 @@ import { runPlantOrphan } from './refound-plant-orphan-runner.js';
 const TOOL = 'refound-plant-orphan';
 const repoRoot = resolveRepoRoot(import.meta.url);
 
-/** Parse `--rule <path>` / `--out <dir>` via the shared {@link scanArgs} scanner. */
-function parsePlantArgs(
-  argv: readonly string[],
-): Result<{ rulePath: string; outDir: string }, Error> {
-  const scanned = scanArgs(
-    argv,
-    { rulePath: DEFAULT_RULE_PATH, outDir: DEFAULT_OUT_DIR },
-    {
-      flags: {},
-      valueOptions: {
-        '--rule': (state, value) => {
-          state.rulePath = value;
-        },
-        '--out': (state, value) => {
-          state.outDir = value;
-        },
-      },
-      helpText: 'usage: refound-plant-orphan [--rule <path>] [--out <dir>]',
-    },
-  );
-  if (!scanned.ok) {
-    return err(new Error(scanned.error));
-  }
-  return ok({ rulePath: scanned.state.rulePath, outDir: scanned.state.outDir });
-}
-
 /** Constrain a flag-supplied path to the repository. */
 function resolveWithinRepo(flagPath: string): Result<string, Error> {
   return resolveReadPathWithinRepo(repoRoot, flagPath);
@@ -87,10 +60,14 @@ function resolvePaths(args: {
 }
 
 async function main(): Promise<void> {
-  const args = parsePlantArgs(process.argv.slice(2));
+  const args = parseFreezeArgs(process.argv.slice(2), TOOL);
   if (isErr(args)) {
     writeErrorLine(`${TOOL}: ${args.error.message}`);
     process.exitCode = 1;
+    return;
+  }
+  if (args.value.help) {
+    writeLine(freezeUsageText(TOOL));
     return;
   }
   const paths = resolvePaths(args.value);

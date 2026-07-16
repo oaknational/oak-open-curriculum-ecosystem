@@ -5,9 +5,10 @@ import { pathToFileURL } from 'node:url';
 
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
-import { scanArgs, type ValueHandler } from '../core/cli-arg-parser.js';
+import { type ValueHandler } from '../core/cli-arg-parser.js';
 import { resolveRepoRoot } from '../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
+import { parseEntryArgs } from './refound-entry-args.js';
 import {
   CANARY_USAGE,
   runPlantMode,
@@ -77,10 +78,13 @@ const CANARY_VALUE_OPTIONS: Readonly<Record<string, ValueHandler<CanaryArgs>>> =
   },
 };
 
-/** Parse the mode and per-mode flags via the shared {@link scanArgs} scanner. */
-function parseCanaryArgs(argv: readonly string[]): Result<CanaryArgs, Error> {
-  const scanned = scanArgs<CanaryArgs>(
+/** Parse the mode and per-mode flags under the shared entry contract. */
+export function parseCanaryArgs(
+  argv: readonly string[],
+): Result<{ args: CanaryArgs; help: boolean }, Error> {
+  const parsed = parseEntryArgs<CanaryArgs>(
     argv,
+    CANARY_USAGE,
     {
       mode: '',
       ledgerPath: '',
@@ -92,15 +96,15 @@ function parseCanaryArgs(argv: readonly string[]): Result<CanaryArgs, Error> {
       commitmentPath: '',
       findingsPath: '',
     },
-    { flags: {}, valueOptions: CANARY_VALUE_OPTIONS, helpText: CANARY_USAGE },
+    CANARY_VALUE_OPTIONS,
   );
-  if (!scanned.ok) {
-    return err(new Error(scanned.error));
+  if (isErr(parsed)) {
+    return parsed;
   }
-  if (!['plant', 'seal', 'score'].includes(scanned.state.mode)) {
+  if (!parsed.value.help && !['plant', 'seal', 'score'].includes(parsed.value.state.mode)) {
     return err(new Error(`--mode must be plant, seal, or score\n\n${CANARY_USAGE}`));
   }
-  return ok(scanned.state);
+  return ok({ args: parsed.value.state, help: parsed.value.help });
 }
 
 /** Dispatch the parsed args to their mode (membership validated at parse). */
@@ -122,7 +126,11 @@ async function main(): Promise<void> {
     process.exitCode = 1;
     return;
   }
-  const outcome = await runMode(args.value);
+  if (args.value.help) {
+    writeLine(CANARY_USAGE);
+    return;
+  }
+  const outcome = await runMode(args.value.args);
   if (isErr(outcome)) {
     writeErrorLine(`${TOOL}: ${outcome.error.message}`);
     process.exitCode = 1;

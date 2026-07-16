@@ -1,3 +1,10 @@
+# [1.71.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.70.1...v1.71.0) (2026-07-15)
+
+
+### Features
+
+* **agent-tools:** guard every refound entry with a shared arg contract ([#387](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/387)) ([c0aba5a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c0aba5a5bdf64325034b09b8ff877fe9414357cd))
+
 ## [1.70.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.70.0...v1.70.1) (2026-07-15)
 
 # [1.70.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.69.4...v1.70.0) (2026-07-15)

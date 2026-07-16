@@ -34,11 +34,3 @@ export function unwrapOk<T, E>(result: Result<T, E>): T {
   }
   return result.value;
 }
-
-/** Unwraps an err `Result`, throwing when the result is ok (the failure case under test must occur). */
-export function unwrapErr<T, E>(result: Result<T, E>): E {
-  if (result.ok) {
-    throw new Error('expected error result, got ok');
-  }
-  return result.error;
-}

@@ -9,6 +9,7 @@ import {
   isOk,
   isErr,
   unwrap,
+  unwrapErr,
   map,
   flatMap,
   mapErr,
@@ -104,6 +105,18 @@ describe('unwrap', () => {
   it('throws for Err results', () => {
     const result = err('failed');
     expect(() => unwrap(result)).toThrow('Called unwrap on Err: failed');
+  });
+});
+
+describe('unwrapErr', () => {
+  it('returns the error for Err results', () => {
+    const result = err('failed');
+    expect(unwrapErr(result)).toBe('failed');
+  });
+
+  it('throws for Ok results, rendering the unexpected value as JSON', () => {
+    const result = ok({ a: 1 });
+    expect(() => unwrapErr(result)).toThrow('Called unwrapErr on Ok: {"a":1}');
   });
 });
 
