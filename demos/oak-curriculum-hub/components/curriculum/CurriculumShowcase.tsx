@@ -24,7 +24,7 @@ function HeroSearchInput({
   readonly onQueryChange: (next: string) => void;
 }): ReactElement {
   return (
-    <div className="mt-6 flex max-w-[560px] items-center gap-2.5 rounded-full border-[3px] border-line bg-white px-4 py-2.5 shadow-accent-wide-brand">
+    <div className="mt-6 flex max-w-[560px] items-center gap-2.5 rounded-full border-[3px] border-line bg-surface px-4 py-2.5 shadow-accent-wide-brand">
       <svg
         width="17"
         height="17"
@@ -45,7 +45,7 @@ function HeroSearchInput({
         onChange={(event) => onQueryChange(event.target.value)}
         placeholder="Search lessons, units and threads…"
         aria-label="Search the Oak curriculum"
-        className="w-full border-none bg-transparent text-[16px] font-light leading-none text-ink outline-none placeholder:text-ink-subdued"
+        className="w-full border-none bg-transparent text-[16px] font-light leading-none text-ink placeholder:text-ink-subdued"
       />
     </div>
   );
@@ -80,7 +80,7 @@ function ShowcaseHero({
               <button
                 type="button"
                 onClick={() => onQueryChange(example)}
-                className="rounded-full border-2 border-line bg-white px-3.5 py-[7px] text-[13px] font-bold text-ink transition-shadow hover:shadow-accent-brand"
+                className="rounded-full border-2 border-line bg-btn-secondary px-3.5 py-[7px] text-[13px] font-bold text-ink transition-shadow hover:shadow-accent-brand"
               >
                 {example}
               </button>

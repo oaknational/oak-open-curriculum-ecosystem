@@ -48,6 +48,11 @@
      bg/text stay independently brand-themeable per .oak-btn) */
   --color-btn-primary: var(--bg-btn-primary);
   --color-btn-primary-ink: var(--text-btn-primary);
+  /* kit secondary-control fill pair (.oak-btn--secondary, components.css:323-329):
+     distinct from the page/input --bg-primary role — brands re-point them
+     independently */
+  --color-btn-secondary: var(--bg-btn-secondary);
+  --color-btn-secondary-hover: var(--bg-btn-secondary-hover);
   --color-line: var(--border-primary);
   --color-line-neutral: var(--border-neutral);
   --color-line-soft: var(--border-neutral-lighter);

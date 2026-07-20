@@ -111,12 +111,23 @@
       "pairId": "global",
       "kind": "visual",
       "summary": "Round-9 class cure (PR #413): ornamental/categorical lemon fills moved from the semantic accent role to surface roles. Light-mode-visible shifts: search-highlight <mark> and hotspot active marker full-lemon to selected-state lemon-subtle (--bg-selected); Live badge decorative-1 to success-subtle; focus banner decorative-3-subtle/link-text to info-subtle/ink with border-line; inactive count badge line-soft fill to surface-subtle. Same-value-in-light swaps (accent to decorative-5) have no visible shift.",
+      "evidence": ["../../packages/design/oak-design-system/colors_and_type.css"],
+      "disposition": "deliberate",
+      "rationale": "High-contrast theme resolves the accent role and primary text to the same black, so semantic-accent fills carrying ornamental/categorical meaning go black-on-black; the kit reserves decorative surfaces for categorisation and --bg-selected for selected states, both contrast-manifest pairings. Fidelity capture re-run belongs to the next \u00a7D review moment. Line anchor: the high-contrast block resolves --color-accent and --text-primary to --oak-black-true. Finding trail: PR #413 round-9 review threads (14 findings, 2026-07-20).",
+      "author": "Eagle herds Cirrus (055d36)",
+      "date": "2026-07-20"
+    },
+    {
+      "id": "global/controls-token-roles-slice3",
+      "pairId": "global",
+      "kind": "visual",
+      "summary": "AIP-137 ws-hub-migration \u00a76 slice 1 (controls): fixed bg-white on interactive control surfaces (search pills + inputs, site/mobile nav, filter chips, player buttons) moves onto kit roles split by contract: search/nav SURFACES onto bg-surface (--bg-primary, the .oak-input role) and interactive secondary CONTROLS (filter chips, action buttons, the menu toggle) onto bg-btn-secondary (--bg-btn-secondary, the .oak-btn--secondary role \u2014 brands re-point it independently of the page surface), and dead outline-none utilities on migrated search inputs are removed (the hub's unlayered :focus-visible rule already painted the ring). Zero visible shift in light (--bg-primary is white); dark and high-contrast now theme correctly.",
       "evidence": [
-        "PR #413 round-9 review threads (14 findings, 2026-07-20)",
-        "packages/design/oak-design-system/colors_and_type.css high-contrast block (--color-accent and --text-primary both --oak-black-true)"
+        "../../packages/design/oak-design-system/colors_and_type.css",
+        "../../packages/design/oak-design-system/components.css"
       ],
       "disposition": "deliberate",
-      "rationale": "High-contrast theme resolves the accent role and primary text to the same black, so semantic-accent fills carrying ornamental/categorical meaning go black-on-black; the kit reserves decorative surfaces for categorisation and --bg-selected for selected states, both contrast-manifest pairings. Fidelity capture re-run belongs to the next \u00a7D review moment.",
+      "rationale": "Integration doc \u00a76: hand-built views keep markup, swap literal styles for .oak-* classes + tokens. Control pill/chip geometry is export-shaped, so kit-class adoption (which changes geometry via --btn-radius/--btn-pad) is deferred to the fidelity-capture moment; this slice lands the token-role correctness with no light-mode shift. Remaining bg-white sites are cards (slice 2) and pedagogy blocks (slice 3). Secondary-control hover fills (--bg-btn-secondary-hover) are aliased but not applied \u2014 the export has no background hover on these controls; hover adoption rides the deferred kit-class tranche. Sibling-slice button instances (StandardDetail.tsx:156/:189, CourseSidebar rows \u2014 slice-2-owned lines) receive the same secondary-role refinement in a named follow-up after both slices land, so parallel branches stay conflict-free. Line anchors: colors_and_type.css:289 (--bg-primary light-dark), components.css:566-601 (.oak-input background: var(--bg-primary)).",
       "author": "Eagle herds Cirrus (055d36)",
       "date": "2026-07-20"
     }

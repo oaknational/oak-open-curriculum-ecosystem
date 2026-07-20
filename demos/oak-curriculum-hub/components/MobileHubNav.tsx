@@ -24,7 +24,7 @@ function MenuPanel({
     <nav
       id={id}
       aria-label="Hub sections menu"
-      className="shadow-neutral-brand absolute inset-x-0 top-full flex flex-col gap-1 border-b-[3px] border-line bg-white p-4"
+      className="shadow-neutral-brand absolute inset-x-0 top-full flex flex-col gap-1 border-b-[3px] border-line bg-surface p-4"
     >
       {items.map((item) => (
         <HubNavLink key={item.label} item={item} className={menuLinkClass} onChoose={onChoose} />
@@ -101,7 +101,7 @@ export function MobileHubNav({ items }: { readonly items: readonly HubNavItem[] 
         aria-expanded={open}
         aria-controls={panelId}
         aria-label="Hub sections"
-        className="flex h-10 w-10 items-center justify-center rounded-card border-2 border-line bg-white text-ink"
+        className="flex h-10 w-10 items-center justify-center rounded-card border-2 border-line bg-btn-secondary text-ink"
         onClick={() => setOpen((current) => !current)}
       >
         <svg

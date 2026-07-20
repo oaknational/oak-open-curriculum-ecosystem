@@ -20,7 +20,7 @@ function HubSearchForm({
     <form
       role="search"
       onSubmit={(e) => e.preventDefault()}
-      className="flex max-w-[620px] items-center gap-2 rounded-full border-2 border-line bg-white py-2 pl-5 pr-2 shadow-accent-wide-brand"
+      className="flex max-w-[620px] items-center gap-2 rounded-full border-2 border-line bg-surface py-2 pl-5 pr-2 shadow-accent-wide-brand"
     >
       <svg
         width="22"
@@ -42,7 +42,7 @@ function HubSearchForm({
         onChange={(e) => onQueryChange(e.target.value)}
         placeholder="Search courses, standards, rubrics, exemplars…"
         aria-label="Search the hub"
-        className="min-w-0 flex-1 scroll-mt-24 border-none bg-transparent text-[16px] font-light leading-none text-ink outline-none placeholder:text-ink-subdued"
+        className="min-w-0 flex-1 scroll-mt-24 border-none bg-transparent text-[16px] font-light leading-none text-ink placeholder:text-ink-subdued"
       />
       <button
         type="submit"

@@ -24,7 +24,7 @@ function SearchField({
 }): ReactElement {
   const id = useId();
   return (
-    <div className="flex max-w-[560px] items-center gap-2.5 rounded-full border-[3px] border-line bg-white px-4 py-2.5 shadow-accent-wide-brand">
+    <div className="flex max-w-[560px] items-center gap-2.5 rounded-full border-[3px] border-line bg-surface px-4 py-2.5 shadow-accent-wide-brand">
       <svg
         aria-hidden="true"
         width="20"
@@ -48,7 +48,7 @@ function SearchField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search standards…"
-        className="w-full border-none bg-transparent text-[17px] text-ink outline-none"
+        className="w-full border-none bg-transparent text-[17px] text-ink"
       />
     </div>
   );

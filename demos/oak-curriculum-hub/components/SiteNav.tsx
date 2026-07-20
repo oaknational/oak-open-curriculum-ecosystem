@@ -44,7 +44,7 @@ function HubNav(): ReactElement {
 export default function SiteNav(): ReactElement {
   return (
     // sticky is itself a positioned ancestor — the disclosure panel anchors to it directly.
-    <header className="sticky top-0 z-50 border-b-[3px] border-line bg-white">
+    <header className="sticky top-0 z-50 border-b-[3px] border-line bg-surface">
       <div className="mx-auto flex max-w-[1240px] items-center gap-5 px-4 py-3.5 md:px-7">
         <Link
           href="/"
@@ -58,7 +58,7 @@ export default function SiteNav(): ReactElement {
             alt="Oak National Academy"
             width={74}
             height={34}
-            className="h-[34px] w-auto"
+            className="h-[34px] w-auto [filter:var(--filter-icon)]"
             unoptimized
             priority
           />

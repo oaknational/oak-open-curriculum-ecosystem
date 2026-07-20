@@ -12,7 +12,7 @@ export function HubSearch({ label = 'Hub search' }: { readonly label?: string })
     <div
       role="search"
       aria-label={label}
-      className="flex items-center gap-2 rounded-full border-2 border-line bg-white px-3.5 py-[7px]"
+      className="flex items-center gap-2 rounded-full border-2 border-line bg-surface px-3.5 py-[7px]"
     >
       <svg
         width="17"
@@ -32,7 +32,7 @@ export function HubSearch({ label = 'Hub search' }: { readonly label?: string })
         type="search"
         placeholder="Search the hub"
         aria-label="Search the hub"
-        className="w-full border-none bg-transparent text-[15px] font-light leading-none text-ink outline-none placeholder:text-ink-subdued"
+        className="w-full border-none bg-transparent text-[15px] font-light leading-none text-ink placeholder:text-ink-subdued"
       />
     </div>
   );

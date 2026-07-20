@@ -38,7 +38,7 @@ export function CoursePlayerControls(): ReactElement | null {
             navigate(previousId);
           }
         }}
-        className="rounded-[10px] border-2 border-line bg-white px-4 py-2.5 text-[15px] font-bold leading-none shadow-accent-brand disabled:opacity-40 disabled:shadow-none"
+        className="rounded-[10px] border-2 border-line bg-btn-secondary px-4 py-2.5 text-[15px] font-bold leading-none shadow-accent-brand disabled:opacity-40 disabled:shadow-none"
       >
         <span aria-hidden="true">← </span>
         {'Previous'}

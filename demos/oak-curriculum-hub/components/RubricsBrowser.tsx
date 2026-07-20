@@ -48,7 +48,7 @@ function RubricFacet({
   readonly pressed: boolean;
   readonly onSelect: () => void;
 }): ReactElement {
-  const tint = pressed ? 'bg-surface-inverted text-ink-inverted' : 'bg-white text-ink';
+  const tint = pressed ? 'bg-surface-inverted text-ink-inverted' : 'bg-btn-secondary text-ink';
   return (
     <button
       type="button"

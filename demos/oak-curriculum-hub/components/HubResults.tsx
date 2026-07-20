@@ -127,7 +127,7 @@ export function ResultsHeader({
       <button
         type="button"
         onClick={onClear}
-        className="shrink-0 rounded-full border-2 border-line bg-white px-4 py-1.5 text-[13px] font-bold text-ink transition-shadow hover:shadow-accent-brand"
+        className="shrink-0 rounded-full border-2 border-line bg-btn-secondary px-4 py-1.5 text-[13px] font-bold text-ink transition-shadow hover:shadow-accent-brand"
       >
         Clear search
       </button>
