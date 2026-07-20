@@ -11,7 +11,7 @@ last_reviewed: 2026-05-06
 ## Purpose
 
 This document codifies class-level dispositions for SonarCloud security
-hotspots and HIGH issues. It exists so that the same disposition reasoning is
+hotspots and security-class issues (severity HIGH and MAJOR). It exists so that the same disposition reasoning is
 not re-derived per site by every reviewer. Future hotspots in known classes
 apply this policy by reference; only sites that fall outside a documented
 class require fresh per-site judgement.
@@ -55,8 +55,14 @@ rationale cites this policy and adds the site path + line.
 
 1. **Match the rule key** to a documented class below.
 2. **Match the site shape** against the class's decision criteria.
-3. If both match: dispose `SAFE` with a comment of the form
-   `SAFE per Sonar Disposition Policy §<rule>: <file>:<line> — <one-line site note>`.
+3. If both match, follow the **class's stated outcome** under the
+   Two-Outcome Rule. `SAFE` (hotspot classes) and `FALSE_POSITIVE`
+   (issue classes whose criteria establish the defect is not present)
+   are server-side dispositions, set with a comment of the form
+   `<OUTCOME> per Sonar Disposition Policy §<rule>: <file>:<line> — <one-line site note>`.
+   FIX-only classes have **no server-side action**: `FIXED` is assigned
+   by analysis once the corrected code lands — make the code change and
+   let the next analysis close the finding.
 4. If the rule is documented but the site shape does not match: do per-site
    review, document the rationale fully, and consider whether the class needs
    a sub-clause amendment.
@@ -291,6 +297,81 @@ regression guard".
 that asserts the header's absence. The test is mandatory; the disable
 call alone is insufficient because future config changes can silently
 re-enable the disclosure.
+
+### S6505 — Dependency installation lifecycle scripts
+
+**Pattern**: a dependency-install command (`pnpm install`, `npm install`,
+`yarn install`) without an explicit `--ignore-scripts`, flagged because
+dependency lifecycle scripts can execute arbitrary code at install time.
+
+**Decision criteria**: FALSE_POSITIVE if and only if all hold:
+
+- The installer is **pnpm at major version ≥ 10** — pnpm 10 removed
+  automatic execution of dependency lifecycle scripts
+  ([pnpm 10 release notes](https://github.com/pnpm/pnpm/releases/tag/v10.0.0)).
+  Scripts run only for packages named in an explicit allowlist:
+  `onlyBuiltDependencies` (pnpm 10) or its pnpm 11 replacement, the
+  `allowBuilds` map in `pnpm-workspace.yaml`
+  ([pnpm settings: `allowBuilds`](https://pnpm.io/settings#allowbuilds)).
+- The repo pins that pnpm version authoritatively: root `package.json`
+  `packageManager` field (currently `pnpm@11.8.0`) drives every CI site
+  via `pnpm/action-setup` as an **exact version pin**. The field also
+  carries a `+sha512` integrity suffix, but the pinned action strips it
+  before `pnpm self-update` (`readTargetVersion`'s split on `+`), so CI
+  enforces the version, not the content hash — and the version alone is
+  what this class's script-execution property attaches to.
+- No global script re-enable is in force: `dangerouslyAllowAllBuilds`
+  is absent (or explicitly `false`) in every tracked pnpm config surface
+  (`pnpm-workspace.yaml`, any `.npmrc`) and is not passed on the flagged
+  CI invocation — the setting bypasses the allowlist wholesale, so its
+  absence is a criterion, not an assumption (verified absent in this
+  repo's tracked config, 2026-07-20).
+- Every allowlist entry is a **reviewed, build-requiring package** (the
+  current six: `@clerk/shared`, `@sentry/cli`, `esbuild`,
+  `unrs-resolver`, `core-js`, `sharp` — see
+  [`build-system.md`](../engineering/build-system.md) §allowBuilds). The
+  allowlist is tracked config: no arbitrary or newly added dependency
+  can execute install scripts without a reviewed change to it. This is
+  the rule's own compliant control for pnpm — the finding flags
+  _unrestricted_ script execution, which the allowlist precludes.
+
+**Canonical rationale**: "pnpm `<version>` pinned via `packageManager`;
+pnpm ≥ 10 executes dependency lifecycle scripts only for the reviewed
+`allowBuilds` allowlist (six build-requiring packages, tracked in
+`pnpm-workspace.yaml`); arbitrary dependencies cannot execute install
+scripts at the flagged site".
+
+**FIX path** (all non-pnpm installers, and any pnpm < 10) — the flag is
+installer-specific: `--ignore-scripts` for npm and Yarn Classic (1.x);
+`--mode=skip-build` for Yarn Berry (2–4, whose `install` rejects
+`--ignore-scripts`); `--ignore-scripts` for pnpm < 10. npm and yarn
+execute dependency lifecycle scripts by default at every major version,
+so no version argument substitutes for the flag there.
+
+### S6506 — Unpinned transport on downloaded artefacts
+
+**Pattern**: `curl` fetching an artefact without constraining the
+protocol, so a redirect chain could downgrade to plain HTTP. (A `wget`
+site also matches the rule but has no equivalent compliant flag —
+`--https-only` governs recursive links, not redirect targets — so a
+flagged `wget` fetch is replaced with the curl form below, or run with
+redirects disabled.)
+
+**Decision criteria**: there is no FALSE_POSITIVE disposition for
+production or CI fetch sites — resolve as **FIXED** by pinning the
+transport:
+`--proto '=https' --proto-redir '=https'` (curl —
+[`--proto`](https://curl.se/docs/manpage.html#--proto) /
+[`--proto-redir`](https://curl.se/docs/manpage.html#--proto-redir)),
+keeping any existing content pin (SHA-256 check) in place. The wget
+`--https-only` semantics above are per the
+[GNU Wget manual §HTTPS Options](https://www.gnu.org/software/wget/manual/wget.html). The content pin alone does not
+clear the finding: integrity checking and transport pinning guard
+different failure modes (tampered bytes vs downgrade interception), and
+the analyser flags the transport.
+
+**Canonical rationale** (for the FIXED trail): "transport pinned to HTTPS
+including redirects; SHA-256 content pin retained".
 
 ### Generated Code
 

@@ -70,7 +70,7 @@ jobs:
           # not verified against the same channel the bytes came from. gitleaks is
           # a security control, so its binary is content-pinned, not just version-pinned.
           expected=79a3ab579b53f71efd634f3aaf7e04a0fa0cf206b7ed434638d1547a2470a66e
-          curl -sSfL -o "$asset" \
+          curl -sSfL --proto '=https' --proto-redir '=https' -o "$asset" \
             "https://github.com/gitleaks/gitleaks/releases/download/v${version}/${asset}"
           echo "${expected}  ${asset}" | sha256sum -c -
           sudo tar -xz -C /usr/local/bin -f "$asset" gitleaks
