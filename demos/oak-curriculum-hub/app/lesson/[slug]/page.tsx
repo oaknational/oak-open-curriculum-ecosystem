@@ -201,7 +201,7 @@ function LessonResources({
           href={oakUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block rounded-full border-2 border-line bg-white px-[18px] py-[11px] text-sm font-bold text-ink no-underline shadow-accent-brand transition-[box-shadow,transform] duration-150 hover:shadow-accent-wide-brand active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+          className="inline-block rounded-full border-2 border-line bg-surface px-[18px] py-[11px] text-sm font-bold text-ink no-underline shadow-accent-brand transition-[box-shadow,transform] duration-150 hover:shadow-accent-wide-brand active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
         >
           Download these on thenational.academy ↗
         </a>
@@ -212,7 +212,7 @@ function LessonResources({
 
 function Stat({ n, label }: { readonly n: number; readonly label: string }): ReactElement {
   return (
-    <div className="shadow-accent-brand min-w-[120px] rounded-xl border-2 border-line bg-white px-[18px] py-3">
+    <div className="shadow-accent-brand min-w-[120px] rounded-xl border-2 border-line bg-surface px-[18px] py-3">
       <div className="text-[28px] font-bold leading-none">{n}</div>
       <div className="mt-1 text-xs font-light leading-snug text-ink-subdued">{label}</div>
     </div>

@@ -13,7 +13,7 @@ const ksChipClass =
 // The static card frame; the interactive variant below adds Oak's signature
 // interaction — a lemon offset shadow that widens on hover and collapses as
 // the card translates +2/+2 on press.
-const cardFrameClass = 'flex text-ink border-2 border-line bg-white shadow-accent-brand';
+const cardFrameClass = 'flex text-ink border-2 border-line bg-surface shadow-accent-brand';
 const lemonCardClass =
   `${cardFrameClass} no-underline ` +
   'transition-[box-shadow,transform] duration-150 hover:shadow-accent-wide-brand ' +

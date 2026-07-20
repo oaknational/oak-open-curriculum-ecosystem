@@ -69,7 +69,7 @@ function StageCard({
 }): ReactElement {
   const emphasis = active ? 'ring-2 ring-line shadow-accent-brand' : '';
   return (
-    <li className={`rounded-xl border-2 border-line bg-white p-5 transition-shadow ${emphasis}`}>
+    <li className={`rounded-xl border-2 border-line bg-surface p-5 transition-shadow ${emphasis}`}>
       <div className="mb-2 flex items-center gap-3">
         <span
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-line text-[15px] font-bold"

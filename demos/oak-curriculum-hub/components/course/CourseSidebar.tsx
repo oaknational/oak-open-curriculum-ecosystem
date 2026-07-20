@@ -34,7 +34,7 @@ function SidebarHeader({
           </span>
         </div>
         <div
-          className="h-3 overflow-hidden rounded-full border-2 border-line bg-white"
+          className="h-3 overflow-hidden rounded-full border-2 border-line bg-surface"
           aria-hidden="true"
         >
           <div className="h-full w-0 bg-decorative-1" />
@@ -60,7 +60,7 @@ function IntroItem({
       aria-current={active ? 'location' : undefined}
       className={`flex items-center gap-[11px] rounded-[10px] border-2 px-3 py-[11px] text-[15px] font-bold leading-[19px] ${
         active
-          ? 'border-line bg-white shadow-accent-brand'
+          ? 'border-line bg-surface shadow-accent-brand'
           : 'border-transparent hover:bg-accent-subtle-brand'
       }`}
     >
@@ -100,7 +100,7 @@ export function CourseSidebar({
     });
   };
   return (
-    <div className="shrink-0 border-r-2 border-line bg-white md:w-[320px]">
+    <div className="shrink-0 border-r-2 border-line bg-surface md:w-[320px]">
       <SidebarHeader title={title} sectionTotal={sectionTotal} />
       <nav aria-label="Course navigation" className="px-3.5 pb-7 pt-1">
         <IntroItem

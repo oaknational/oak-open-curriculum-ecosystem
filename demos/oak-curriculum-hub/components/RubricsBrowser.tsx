@@ -11,10 +11,10 @@ import type { QualityStandard } from '@/lib/static-quality-standards';
 /** Sentinel for the "All rubrics" (no rubric constraint) facet selection. */
 const ALL = 'ALL';
 
-/** A rubric-filtered standard row: black-bordered white pill with a lemon hover shadow, deep-linking
+/** A rubric-filtered standard row: a line-bordered surface-role pill with an accent hover shadow, deep-linking
  *  to the standard's detail on the /standards page (the same `#qs=` target the Course callouts use). */
 const rowLinkClass =
-  'flex items-center gap-3 rounded-xl border-2 border-line bg-white px-4 py-3 text-ink no-underline transition-shadow hover:shadow-accent-brand';
+  'flex items-center gap-3 rounded-xl border-2 border-line bg-surface px-4 py-3 text-ink no-underline transition-shadow hover:shadow-accent-brand';
 
 /** One quality-standard row under the selected rubric, linking to its /standards detail. */
 function RubricStandardRow({ standard }: { readonly standard: QualityStandard }): ReactElement {

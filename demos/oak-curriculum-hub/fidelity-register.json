@@ -130,6 +130,17 @@
       "rationale": "Integration doc \u00a76: hand-built views keep markup, swap literal styles for .oak-* classes + tokens. Control pill/chip geometry is export-shaped, so kit-class adoption (which changes geometry via --btn-radius/--btn-pad) is deferred to the fidelity-capture moment; this slice lands the token-role correctness with no light-mode shift. Remaining bg-white sites are cards (slice 2) and pedagogy blocks (slice 3). Secondary-control hover fills (--bg-btn-secondary-hover) are aliased but not applied \u2014 the export has no background hover on these controls; hover adoption rides the deferred kit-class tranche. Sibling-slice button instances (StandardDetail.tsx:156/:189, CourseSidebar rows \u2014 slice-2-owned lines) receive the same secondary-role refinement in a named follow-up after both slices land, so parallel branches stay conflict-free. Line anchors: colors_and_type.css:289 (--bg-primary light-dark), components.css:566-601 (.oak-input background: var(--bg-primary)).",
       "author": "Eagle herds Cirrus (055d36)",
       "date": "2026-07-20"
+    },
+    {
+      "id": "global/cards-token-roles-slice4",
+      "pairId": "global",
+      "kind": "visual",
+      "summary": "AIP-137 ws-hub-migration \u00a76 slice 2 (cards/chips/tags): fixed bg-white on card, panel, sidebar, and badge surfaces moves to the bg-surface role, and the Destinations card tints move from raw hexes to the exact-value decorative-subtle roles (mint30\u2192decorative-1-subtle, aqua30\u2192decorative-2-subtle, lavender30\u2192decorative-3-subtle, pink30\u2192decorative-4-subtle, lemon30\u2192decorative-5-subtle; every hex verified an exact kit primitive match). Zero visible shift in light; dark and high-contrast now theme correctly.",
+      "evidence": ["../../packages/design/oak-design-system/colors_and_type.css"],
+      "disposition": "deliberate",
+      "rationale": "Integration doc \u00a76 + \u00a73 (map each raw value to its role so hue names stop appearing in markup). .oak-card class adoption (geometry-changing) stays deferred to the fidelity-capture moment, same disposition as slice 1's controls entry. This entry covers ONLY the card/tint family in this slice: control surfaces move on the parallel slice-1 PR (#438) and pedagogy blocks on slice 3 (#443) \u2014 sibling branches at authoring time, so bg-white persists on those families here until each lands; the remaining-scope claim composes across the three slices in whatever order they merge. Line anchors: colors_and_type.css:60-78 (primitive tints), :350-366 (decorative ramp + subtle variants).",
+      "author": "Eagle herds Cirrus (055d36)",
+      "date": "2026-07-20"
     }
   ]
 }

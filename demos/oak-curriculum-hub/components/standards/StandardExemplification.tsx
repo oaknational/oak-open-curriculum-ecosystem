@@ -74,7 +74,7 @@ export function StandardExemplification(): ReactElement {
         />
         <ExampleTile tone="bad" heading="✕ Non-example" caption="What falling short looks like" />
       </div>
-      <div className="rounded-large border-2 border-dashed border-line-soft bg-white px-5 py-[18px]">
+      <div className="rounded-large border-2 border-dashed border-line-soft bg-surface px-5 py-[18px]">
         <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.04em] text-ink-subdued">
           Guidance notes
         </p>

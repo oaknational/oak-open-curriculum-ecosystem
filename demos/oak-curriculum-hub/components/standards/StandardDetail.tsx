@@ -56,7 +56,7 @@ function ChipList({
   );
 }
 
-/** Pill tint per statement type (default white for the unmapped case). */
+/** Pill tint per statement type (default: the base surface role for the unmapped case). */
 function pillTintOf(typeVariant: StandardDetailVM['typeVariant']): string {
   if (typeVariant === 'required') {
     return 'bg-decorative-5';
@@ -64,7 +64,7 @@ function pillTintOf(typeVariant: StandardDetailVM['typeVariant']): string {
   if (typeVariant === 'model') {
     return 'bg-decorative-3-subtle';
   }
-  return 'bg-white';
+  return 'bg-surface';
 }
 
 /** The statement card header: id badge, long type label, and optional rubric code. */
@@ -73,7 +73,7 @@ function StatementHeader({ vm }: { readonly vm: StandardDetailVM }): ReactElemen
   return (
     <div className="border-b-[3px] border-line bg-decorative-3-subtle px-[30px] py-6">
       <div className="mb-4 flex flex-wrap items-center gap-2.5">
-        <span className="rounded-card border-2 border-link bg-white px-2.5 py-1.5 text-[13px] font-bold text-link">
+        <span className="rounded-card border-2 border-link bg-surface px-2.5 py-1.5 text-[13px] font-bold text-link">
           {vm.id}
         </span>
         <span
@@ -82,7 +82,7 @@ function StatementHeader({ vm }: { readonly vm: StandardDetailVM }): ReactElemen
           {vm.typeLabel}
         </span>
         {vm.hasCode && (
-          <span className="rounded-mid border-2 border-line-soft bg-white px-2.5 py-1.5 text-[12px] font-bold text-ink-subdued">
+          <span className="rounded-mid border-2 border-line-soft bg-surface px-2.5 py-1.5 text-[12px] font-bold text-ink-subdued">
             Rubric code · {vm.code}
           </span>
         )}
@@ -153,7 +153,7 @@ function RelatedStandards({
               type="button"
               aria-label={`${related.id}: ${related.text}`}
               onClick={() => onOpenRelated(related.id)}
-              className="flex w-full items-center gap-3.5 rounded-large border-2 border-line bg-white px-4 py-3.5 text-left shadow-accent-brand"
+              className="flex w-full items-center gap-3.5 rounded-large border-2 border-line bg-surface px-4 py-3.5 text-left shadow-accent-brand"
             >
               <span className="shrink-0 rounded-mid border-2 border-link bg-decorative-3-subtle px-2.5 py-1.5 text-[12px] font-bold text-link">
                 {related.id}
@@ -186,11 +186,11 @@ export function StandardDetail({
       <button
         type="button"
         onClick={() => onBack()}
-        className="mb-[22px] inline-flex items-center gap-2 rounded-full border-2 border-line bg-white px-4 py-2.5 text-[14px] font-bold shadow-accent-brand"
+        className="mb-[22px] inline-flex items-center gap-2 rounded-full border-2 border-line bg-surface px-4 py-2.5 text-[14px] font-bold shadow-accent-brand"
       >
         <span aria-hidden>←</span> Back to results
       </button>
-      <article className="overflow-hidden rounded-large border-[3px] border-line bg-white shadow-neutral-brand">
+      <article className="overflow-hidden rounded-large border-[3px] border-line bg-surface shadow-neutral-brand">
         <StatementHeader vm={detail} />
         <MetaGrid vm={detail} />
         <StandardExemplification />

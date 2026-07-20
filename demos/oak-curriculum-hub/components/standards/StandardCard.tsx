@@ -69,7 +69,7 @@ export function StandardCard({
       type="button"
       aria-label={`${card.id}: ${card.text}`}
       onClick={() => onOpen(card.id)}
-      className="w-full rounded-large border-2 border-line bg-white px-5 py-[18px] text-left shadow-accent-brand transition-transform hover:-translate-y-0.5 hover:shadow-accent-wide-brand"
+      className="w-full rounded-large border-2 border-line bg-surface px-5 py-[18px] text-left shadow-accent-brand transition-transform hover:-translate-y-0.5 hover:shadow-accent-wide-brand"
     >
       <span className="flex flex-wrap items-start gap-3.5">
         <span className="shrink-0 rounded-mid border-2 border-link bg-decorative-3-subtle px-2.5 py-1.5 text-[12px] font-bold text-link">

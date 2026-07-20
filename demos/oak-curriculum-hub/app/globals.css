@@ -80,8 +80,10 @@
   --color-decorative-6: var(--surface-decorative-6);
   --color-decorative-1-soft: var(--surface-decorative-1-soft);
   --color-decorative-1-subtle: var(--surface-decorative-1-subtle);
+  --color-decorative-2-subtle: var(--surface-decorative-2-subtle);
   --color-decorative-3-subtle: var(--surface-decorative-3-subtle);
   --color-decorative-4-subtle: var(--surface-decorative-4-subtle);
+  --color-decorative-5-subtle: var(--surface-decorative-5-subtle);
   --color-decorative-6-subtle: var(--surface-decorative-6-subtle);
   /* type (Tailwind-side names must differ from the role names — a self-alias
      like --font-sans: var(--font-sans) is circular) */

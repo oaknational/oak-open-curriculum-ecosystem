@@ -14,7 +14,9 @@ interface Destination {
   readonly cta: string;
   readonly href: string;
   readonly badge: string;
-  /** Canonical card background tint (hex, from the export source). */
+  /** Card background tint: a Tailwind utility backed by an Oak decorative-subtle
+   *  role (exact-value match to the canonical export hex — see fidelity register
+   *  entry global/cards-token-roles-slice4). */
   readonly cardTint: string;
   /** Icon-tile background (Oak decorative token; matches the canonical iconBg hex). */
   readonly tileTint: string;
@@ -29,7 +31,7 @@ const destinations: readonly Destination[] = [
     cta: 'Start learning',
     href: '/course',
     badge: '1 live',
-    cardTint: 'bg-[#ebfbeb]',
+    cardTint: 'bg-decorative-1-subtle',
     tileTint: 'bg-decorative-1',
     icon: (
       <>
@@ -44,7 +46,7 @@ const destinations: readonly Destination[] = [
     cta: 'Browse standards',
     href: '/standards',
     badge: '685',
-    cardTint: 'bg-[#e3e9fb]',
+    cardTint: 'bg-decorative-3-subtle',
     tileTint: 'bg-decorative-3',
     icon: (
       <>
@@ -59,7 +61,7 @@ const destinations: readonly Destination[] = [
     cta: 'Open rubrics',
     href: '/rubrics',
     badge: 'Hub',
-    cardTint: 'bg-[#e7f6f5]',
+    cardTint: 'bg-decorative-2-subtle',
     tileTint: 'bg-decorative-2',
     icon: (
       <>
@@ -74,7 +76,7 @@ const destinations: readonly Destination[] = [
     cta: 'See exemplars',
     href: '/exemplars',
     badge: 'Hub',
-    cardTint: 'bg-[#f5e9f2]',
+    cardTint: 'bg-decorative-4-subtle',
     tileTint: 'bg-decorative-4',
     icon: <path d="M12 2l2.4 5 5.6.8-4 3.9 1 5.5L12 19.6 6 17.2l1-5.5-4-3.9L8.6 7z" />,
   },
@@ -84,7 +86,7 @@ const destinations: readonly Destination[] = [
     cta: 'Open the wiki',
     href: '/wiki',
     badge: 'Hub',
-    cardTint: 'bg-[#fff7cc]',
+    cardTint: 'bg-decorative-5-subtle',
     tileTint: 'bg-decorative-5',
     icon: (
       <>
@@ -140,7 +142,7 @@ function CardBody({ d }: { readonly d: Destination }): ReactElement {
             {d.icon}
           </svg>
         </span>
-        <span className="rounded-full border-2 border-line bg-white px-2.5 py-0.5 text-[11px] font-bold">
+        <span className="rounded-full border-2 border-line bg-surface px-2.5 py-0.5 text-[11px] font-bold">
           {d.badge}
         </span>
       </div>

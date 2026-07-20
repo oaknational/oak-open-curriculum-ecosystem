@@ -77,7 +77,7 @@ function FocusBanner({ onBrowseAll }: { readonly onBrowseAll: () => void }): Rea
 
 function NoResults({ onReset }: { readonly onReset: () => void }): ReactElement {
   return (
-    <div className="rounded-large border-2 border-dashed border-line-soft bg-white p-11 text-center">
+    <div className="rounded-large border-2 border-dashed border-line-soft bg-surface p-11 text-center">
       <p className="mb-1.5 text-[20px] font-semibold leading-[26px]">
         No standards match your filters
       </p>

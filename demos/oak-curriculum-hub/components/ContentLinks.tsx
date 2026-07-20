@@ -35,7 +35,7 @@ function LinkedStandardCard(): ReactElement {
 /**
  * The "Content that links to itself" feature block — static explainer prose from the
  * prototype (verified real DOM content, no data source). Two-column: a lavender explainer
- * panel and a white panel modelling a linked-standard callout.
+ * panel and a surface-role panel modelling a linked-standard callout.
  */
 export default function ContentLinks(): ReactElement {
   return (
@@ -58,7 +58,7 @@ export default function ContentLinks(): ReactElement {
             truth, joined up.
           </p>
         </div>
-        <div className="border-t-2 border-line bg-white p-8 md:border-l-2 md:border-t-0">
+        <div className="border-t-2 border-line bg-surface p-8 md:border-l-2 md:border-t-0">
           <div className="mb-3 text-[13px] text-ink-subdued">
             In a training page, you&rsquo;ll see:
           </div>

@@ -69,7 +69,7 @@ export function Keywords({ items }: { readonly items: readonly LessonKeyword[] }
       <h2 className="mb-2.5 text-xs font-bold uppercase tracking-[0.05em] text-ink-subdued">
         Keywords
       </h2>
-      <dl className="shadow-accent-brand flex flex-col gap-3 rounded-xl border-2 border-line bg-white px-5 py-4">
+      <dl className="shadow-accent-brand flex flex-col gap-3 rounded-xl border-2 border-line bg-surface px-5 py-4">
         {items.map((k) => (
           <div key={k.keyword} className="flex flex-col gap-0.5">
             <dt className="text-[15px] font-semibold text-ink">{k.keyword}</dt>
