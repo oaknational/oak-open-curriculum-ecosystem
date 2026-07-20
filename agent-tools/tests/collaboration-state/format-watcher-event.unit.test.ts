@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  type EventView,
-  formatWatcherEventHeader,
-} from '../../src/collaboration-state/comms-relevant-events';
+import { formatWatcherEventHeader } from '../../src/collaboration-state/comms-event-format';
+import { type EventView } from '../../src/collaboration-state/comms-relevant-events';
 
 describe('formatWatcherEventHeader', () => {
   it('renders broadcast view without tags when tags is undefined', () => {

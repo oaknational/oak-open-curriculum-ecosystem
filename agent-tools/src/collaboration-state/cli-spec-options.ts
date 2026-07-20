@@ -53,6 +53,7 @@ export const commsWatchOptions = [
   'seed-from-now',
   'no-auto-seed',
   'supervisor-pid',
+  'exclude-tag',
 ] as const;
 
 export const commsInboxOptions = [

@@ -24,6 +24,7 @@ function makeOptions(values: Record<string, string>): Options {
     files: [],
     areaPatterns: [],
     tags: [],
+    excludeTags: [],
     positionals: [],
   };
 }

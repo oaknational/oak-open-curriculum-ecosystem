@@ -1,4 +1,5 @@
 import { seedSeenStateIfNeeded } from './comms-watch-auto-seed.js';
+import { validateCommsEventTags, type CommsEventTag } from './comms-tag-namespace.js';
 import { drainRelevantEvents, watchCommsLoop, type WatcherTickStatus } from './comms-use-cases.js';
 import {
   HEARTBEAT_FILE_SUFFIX,
@@ -68,20 +69,16 @@ export async function watchComms(
   const commsDir = required(options, 'comms-dir');
   const seenFile = required(options, 'seen-file');
   const self = resolveSelfIdentity(options, env);
-  const pollMs = optionalPositiveInteger(options, 'poll-ms') ?? DEFAULT_POLL_MS;
-  const maxEvents = optionalPositiveInteger(options, 'max-events');
-  const stepTimeoutMs =
-    optionalPositiveInteger(options, 'step-timeout-ms') ?? DEFAULT_STEP_TIMEOUT_MS;
+  const { pollMs, maxEvents, stepTimeoutMs, heartbeatIntervalMs } = resolveWatchTunables(options);
   const heartbeatFile = resolveHeartbeatFile({
     explicit: optional(options, 'heartbeat-file'),
     seenFile,
     noHeartbeat: optional(options, 'no-heartbeat') !== undefined,
   });
-  const heartbeatIntervalMs =
-    optionalPositiveInteger(options, 'heartbeat-interval-ms') ?? DEFAULT_HEARTBEAT_INTERVAL_MS;
   const seedFromNow = optional(options, 'seed-from-now') !== undefined;
   const noAutoSeed = optional(options, 'no-auto-seed') !== undefined;
   const supervisorAlive = resolveSupervisorAlive(options, runtime);
+  const excludeTags = resolveExcludeTags(options);
 
   await io.ensureDirectory(commsDir);
   await seedSeenStateIfNeeded({ io, commsDir, seenFile, seedFromNow, noAutoSeed });
@@ -97,7 +94,8 @@ export async function watchComms(
   const output = await watchCommsLoop({
     maxEvents,
     stepTimeoutMs,
-    drain: (remainingEvents) => drainComms({ commsDir, seenFile, self, remainingEvents, io }),
+    drain: (remainingEvents) =>
+      drainComms({ commsDir, seenFile, self, remainingEvents, io, excludeTags }),
     waitForChange: () => waitForCommsChange(runtime, { directory: commsDir, pollMs }),
     emit: async (text) => {
       runtime.stdout?.write(text);
@@ -108,6 +106,33 @@ export async function watchComms(
   });
 
   return runtime.stdout === undefined ? output : '';
+}
+
+/** The four numeric watch tunables, each defaulting per the constants above. */
+function resolveWatchTunables(options: Options): {
+  readonly pollMs: number;
+  readonly maxEvents: number | undefined;
+  readonly stepTimeoutMs: number;
+  readonly heartbeatIntervalMs: number;
+} {
+  return {
+    pollMs: optionalPositiveInteger(options, 'poll-ms') ?? DEFAULT_POLL_MS,
+    maxEvents: optionalPositiveInteger(options, 'max-events'),
+    stepTimeoutMs: optionalPositiveInteger(options, 'step-timeout-ms') ?? DEFAULT_STEP_TIMEOUT_MS,
+    heartbeatIntervalMs:
+      optionalPositiveInteger(options, 'heartbeat-interval-ms') ?? DEFAULT_HEARTBEAT_INTERVAL_MS,
+  };
+}
+
+/**
+ * F-146: boundary-validate the exclusion set (canonical ADR-183 tags, no
+ * duplicates) BEFORE the watcher arms — a typo must fail loud here, never
+ * silently exclude nothing.
+ */
+function resolveExcludeTags(options: Options): ReadonlySet<CommsEventTag> | undefined {
+  return options.excludeTags.length === 0
+    ? undefined
+    : new Set(validateCommsEventTags(options.excludeTags));
 }
 
 function composeHeartbeatTick(input: {
@@ -161,6 +186,7 @@ async function drainComms(input: {
   readonly self: CollaborationAgentId;
   readonly remainingEvents?: number;
   readonly io: CollaborationStateCliIo;
+  readonly excludeTags?: ReadonlySet<CommsEventTag>;
 }): ReturnType<typeof drainRelevantEvents> {
   const seenIds = await input.io.readSeenIds(input.seenFile);
   const messages = await input.io.readCommsEvents(input.commsDir);
@@ -169,5 +195,6 @@ async function drainComms(input: {
     seenIds,
     self: input.self,
     remainingEvents: input.remainingEvents,
+    excludeTags: input.excludeTags,
   });
 }

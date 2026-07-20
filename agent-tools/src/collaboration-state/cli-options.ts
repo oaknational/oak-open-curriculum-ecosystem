@@ -5,6 +5,8 @@ export interface Options {
   readonly files: readonly string[];
   readonly areaPatterns: readonly string[];
   readonly tags: readonly string[];
+  /** Repeatable `--exclude-tag` values (the sanctioned F-146 watch exclusion). */
+  readonly excludeTags: readonly string[];
   /**
    * Bare (non-`--`) tokens after the `<command> <topic>` prefix, in argv
    * order. The parser captures them rather than rejecting them so a command
@@ -103,13 +105,23 @@ export function parseOptions(argv: readonly string[]): Options {
   const files: string[] = [];
   const areaPatterns: string[] = [];
   const tags: string[] = [];
+  const excludeTags: string[] = [];
   const positionals: string[] = [];
 
   for (let index = 0; index < rest.length; ) {
-    index = parseToken({ rest, index, values, files, areaPatterns, tags, positionals });
+    index = parseToken({
+      rest,
+      index,
+      values,
+      files,
+      areaPatterns,
+      tags,
+      excludeTags,
+      positionals,
+    });
   }
 
-  return { command, topic, values, files, areaPatterns, tags, positionals };
+  return { command, topic, values, files, areaPatterns, tags, excludeTags, positionals };
 }
 
 export function required(options: Options, key: string): string {
@@ -158,6 +170,7 @@ function parseToken(input: {
   readonly files: string[];
   readonly areaPatterns: string[];
   readonly tags: string[];
+  readonly excludeTags: string[];
   readonly positionals: string[];
 }): number {
   const token = input.rest[input.index] ?? '';
@@ -167,16 +180,9 @@ function parseToken(input: {
     input.values.set('help', 'true');
     return input.index + 1;
   }
-  if (token === '--file') {
-    input.files.push(requireFlagValue(token, next));
-    return input.index + 2;
-  }
-  if (token === '--area-pattern') {
-    input.areaPatterns.push(requireFlagValue(token, next));
-    return input.index + 2;
-  }
-  if (token === '--tag') {
-    input.tags.push(requireFlagValue(token, next));
+  const repeatableSink = repeatableSinkFor(token, input);
+  if (repeatableSink !== undefined) {
+    repeatableSink.push(requireFlagValue(token, next));
     return input.index + 2;
   }
   if (token.startsWith('--')) {
@@ -188,6 +194,30 @@ function parseToken(input: {
   // it otherwise, so a stray token remains an error.
   input.positionals.push(token);
   return input.index + 1;
+}
+
+/** The mutable sink for a repeatable flag token, or undefined for non-repeatable tokens. */
+function repeatableSinkFor(
+  token: string,
+  input: {
+    readonly files: string[];
+    readonly areaPatterns: string[];
+    readonly tags: string[];
+    readonly excludeTags: string[];
+  },
+): string[] | undefined {
+  switch (token) {
+    case '--file':
+      return input.files;
+    case '--area-pattern':
+      return input.areaPatterns;
+    case '--tag':
+      return input.tags;
+    case '--exclude-tag':
+      return input.excludeTags;
+    default:
+      return undefined;
+  }
 }
 
 function parseValueOption(input: {

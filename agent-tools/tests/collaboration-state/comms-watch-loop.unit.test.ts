@@ -525,3 +525,81 @@ describe('watchCommsLoop — supervisor-death detection (F-101 refined-(i) kill-
     expect(aliveChecks).toBeGreaterThanOrEqual(1);
   });
 });
+
+describe('watchCommsLoop — excluded-event seen-marking (F-146)', () => {
+  it('marks excluded ids seen even when the drain produced no emit output', async () => {
+    const marked: (readonly string[])[] = [];
+    const stream = describeStream(
+      { output: '', eventCount: 0, eventIds: [], excludedEventIds: ['hb-1', 'hb-2'] },
+      { output: 'real\n', eventCount: 1, eventIds: ['real'] },
+    );
+
+    const output = await watchCommsLoop({
+      maxEvents: 1,
+      drain: stream.drain,
+      waitForChange: async () => undefined,
+      emit: async () => undefined,
+      markSeen: async (eventIds) => {
+        marked.push(eventIds);
+      },
+    });
+
+    expect(output).toBe('real\n');
+    expect(marked).toContainEqual(['hb-1', 'hb-2']);
+    expect(marked).toContainEqual(['real']);
+  });
+
+  it('never counts excluded events toward the maxEvents budget', async () => {
+    const emitted: string[] = [];
+    const stream = describeStream(
+      { output: 'one\n', eventCount: 1, eventIds: ['one'], excludedEventIds: ['hb-a', 'hb-b'] },
+      { output: 'two\n', eventCount: 1, eventIds: ['two'], excludedEventIds: ['hb-c'] },
+    );
+
+    await watchCommsLoop({
+      maxEvents: 2,
+      drain: stream.drain,
+      waitForChange: async () => undefined,
+      emit: async (text) => {
+        emitted.push(text);
+      },
+      markSeen: async () => undefined,
+    });
+
+    expect(emitted).toStrictEqual(['one\n', 'two\n']);
+  });
+
+  it('keeps events-owed-emission unmarked on emit failure while excluded ids still mark', async () => {
+    const marked: (readonly string[])[] = [];
+    let emitAttempts = 0;
+    // A fixed two-result stream: the same owed payload twice models
+    // redelivery after the first emit failure (unmarked events re-drain)
+    // without embedding production logic in the fake.
+    const owedPayload: DrainResult = {
+      output: 'payload\n',
+      eventCount: 1,
+      eventIds: ['owed'],
+      excludedEventIds: ['hb-x'],
+    };
+    const stream = describeStream(owedPayload, owedPayload);
+
+    await watchCommsLoop({
+      maxEvents: 1,
+      drain: stream.drain,
+      waitForChange: async () => undefined,
+      emit: async (text) => {
+        emitAttempts += 1;
+        if (emitAttempts === 1 && text === 'payload\n') {
+          throw new Error('transient emit failure');
+        }
+      },
+      markSeen: async (eventIds) => {
+        marked.push(eventIds);
+      },
+    });
+
+    expect(marked).toContainEqual(['hb-x']);
+    const owedMarks = marked.filter((ids) => ids.includes('owed'));
+    expect(owedMarks).toHaveLength(1);
+  });
+});

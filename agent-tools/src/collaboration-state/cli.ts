@@ -213,11 +213,16 @@ function isUnknownValueOption(key: string, spec: CommandSpec): boolean {
 }
 
 function firstUnknownRepeatableOption(options: Options, spec: CommandSpec): string | undefined {
-  if (options.files.length > 0 && spec.allowsFiles !== true && !spec.options.has('file')) {
-    return 'file';
-  }
-  if (options.areaPatterns.length > 0 && !spec.options.has('area-pattern')) {
-    return 'area-pattern';
+  const repeatables: readonly (readonly [readonly string[], string, boolean])[] = [
+    [options.files, 'file', spec.allowsFiles === true || spec.options.has('file')],
+    [options.areaPatterns, 'area-pattern', spec.options.has('area-pattern')],
+    [options.tags, 'tag', spec.options.has('tag')],
+    [options.excludeTags, 'exclude-tag', spec.options.has('exclude-tag')],
+  ];
+  for (const [supplied, flag, allowed] of repeatables) {
+    if (supplied.length > 0 && !allowed) {
+      return flag;
+    }
   }
 
   return undefined;

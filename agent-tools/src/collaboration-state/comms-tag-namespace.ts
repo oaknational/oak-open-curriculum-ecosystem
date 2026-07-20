@@ -23,17 +23,20 @@ export const COMMS_EVENT_TAG_NAMESPACE = Object.freeze([
   'heartbeat',
 ] as const);
 
-type CommsEventTag = (typeof COMMS_EVENT_TAG_NAMESPACE)[number];
+export type CommsEventTag = (typeof COMMS_EVENT_TAG_NAMESPACE)[number];
 
 /**
  * Validate that every tag in `tags` is a canonical ADR-183 tag and that
- * no tag is repeated. Returns the input unchanged on success; throws
- * with a precise message on failure. The shape mirrors the schema's
- * `uniqueItems: true` constraint at the CLI boundary so the rejection
- * happens before any event reaches disk.
+ * no tag is repeated. Returns the tags at the precise namespace type on
+ * success — the boundary narrowing; nothing widens past it
+ * (typescript-practice §schema-first). Throws with a precise message on
+ * failure. The shape mirrors the schema's `uniqueItems: true` constraint
+ * at the CLI boundary so the rejection happens before any event reaches
+ * disk.
  */
-export function validateCommsEventTags(tags: readonly string[]): readonly string[] {
+export function validateCommsEventTags(tags: readonly string[]): readonly CommsEventTag[] {
   const seen = new Set<string>();
+  const canonical: CommsEventTag[] = [];
   for (const tag of tags) {
     if (!isCanonicalTag(tag)) {
       throw new Error(
@@ -44,12 +47,14 @@ export function validateCommsEventTags(tags: readonly string[]): readonly string
       throw new Error(`duplicate comms event tag: '${tag}'`);
     }
     seen.add(tag);
+    canonical.push(tag);
   }
 
-  return tags;
+  return canonical;
 }
 
-function isCanonicalTag(tag: string): tag is CommsEventTag {
+/** Type guard onto the closed ADR-183 namespace (the zero-widening membership check). */
+export function isCanonicalTag(tag: string): tag is CommsEventTag {
   for (const known of COMMS_EVENT_TAG_NAMESPACE) {
     if (known === tag) {
       return true;

@@ -184,14 +184,25 @@ export type CommsEvent = NarrativeCommsEvent | LifecycleCommsEvent | DirectedCom
  * new was emitted); `eventIds` is the IDs of those drained events for the
  * caller to mark seen AFTER successful emit.
  *
- * The drain function does NOT mark events seen — the caller is responsible
- * for marking AFTER the emit step succeeds, so that a crash between drain
- * and emit produces a duplicate notification (safe) rather than a missed
- * notification (unsafe). See FM-2 cure (2026-05-23): Monitor-harness
- * liveness investigation.
+ * The drain function does NOT mark events seen — for events OWED EMISSION
+ * the caller is responsible for marking AFTER the emit step succeeds, so
+ * that a crash between drain and emit produces a duplicate notification
+ * (safe) rather than a missed notification (unsafe). See FM-2 cure
+ * (2026-05-23): Monitor-harness liveness investigation.
+ *
+ * `excludedEventIds` carries events suppressed by the sanctioned F-146
+ * `--exclude-tag` mechanism: never rendered into `output`, never counted
+ * in `eventCount`, and carrying NO emission debt — the caller marks them
+ * seen unconditionally after a successful drain (before emit), so a
+ * heartbeats-only drain still marks and the backlog never replays when the
+ * filter lifts. Includes every excluded unseen id, including those beyond
+ * any `remainingEvents` slice horizon — safe because the seen store is an
+ * id set, not a cursor; a cursor-shaped seen-store migration must
+ * re-examine this.
  */
 export interface DrainResult {
   readonly output: string;
   readonly eventCount: number;
   readonly eventIds: readonly string[];
+  readonly excludedEventIds?: readonly string[];
 }

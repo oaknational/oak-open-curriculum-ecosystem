@@ -5,6 +5,7 @@ import {
   createDirectedCommsMessage,
   drainRelevantEvents,
 } from '../../src/collaboration-state/comms-use-cases';
+import { type CommsEventTag } from '../../src/collaboration-state/comms-tag-namespace';
 import { deriveOverrideCollaborationIdentity } from '../../src/collaboration-state/identity';
 import {
   type CollaborationAgentId,
@@ -47,6 +48,7 @@ function narrative(input: {
   readonly createdAt?: string;
   readonly audience?: readonly CollaborationAgentId[];
   readonly addressedTo?: CollaborationAgentId;
+  readonly tags?: readonly string[];
 }): NarrativeCommsEvent {
   return {
     schema_version: '2.0.0',
@@ -58,6 +60,7 @@ function narrative(input: {
     body: input.body ?? '',
     ...(input.audience === undefined ? {} : { audience: input.audience }),
     ...(input.addressedTo === undefined ? {} : { addressed_to: input.addressedTo }),
+    ...(input.tags === undefined ? {} : { tags: input.tags }),
   };
 }
 
@@ -463,5 +466,202 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
 
     expect(drained.eventCount).toBe(2);
     expect(drained.eventIds).toStrictEqual(['one', 'two']);
+  });
+});
+
+describe('drainRelevantEvents — sanctioned excludeTags mechanism (F-146)', () => {
+  const excludeHeartbeat: ReadonlySet<CommsEventTag> = new Set(['heartbeat']);
+
+  function heartbeat(eventId: string, createdAt: string): NarrativeCommsEvent {
+    return narrative({
+      eventId,
+      author: peer,
+      title: `Heartbeat: ${eventId}`,
+      createdAt,
+      tags: ['heartbeat'],
+    });
+  }
+
+  it('drops a heartbeat-tagged broadcast from output but returns its id as excluded for seen-marking', async () => {
+    const drained = await drainRelevantEvents({
+      messages: [heartbeat('hb-1', '2026-05-21T08:01:00Z')],
+      seenIds: new Set(),
+      self,
+      excludeTags: excludeHeartbeat,
+    });
+
+    expect(drained.output).toBe('');
+    expect(drained.eventCount).toBe(0);
+    expect(drained.eventIds).toStrictEqual([]);
+    expect(drained.excludedEventIds).toStrictEqual(['hb-1']);
+  });
+
+  it('never excludes a directed-kind event addressed to the agent, whatever its tags', async () => {
+    const directedHeartbeat = createDirectedCommsMessage({
+      eventId: 'directed-hb',
+      createdAt: '2026-05-21T08:01:00Z',
+      messageKind: 'status-ping',
+      from: peer,
+      to: self,
+      subject: 'direct heartbeat ping',
+      body: 'are you alive',
+      tags: ['heartbeat'],
+    });
+    const drained = await drainRelevantEvents({
+      messages: [directedHeartbeat],
+      seenIds: new Set(),
+      self,
+      excludeTags: excludeHeartbeat,
+    });
+
+    expect(drained.eventIds).toStrictEqual(['directed-hb']);
+    expect(drained.excludedEventIds).toStrictEqual([]);
+  });
+
+  it('never excludes a narrative addressed_to the agent, whatever its tags', async () => {
+    const drained = await drainRelevantEvents({
+      messages: [
+        narrative({
+          eventId: 'addressed-hb',
+          author: peer,
+          title: 'Heartbeat check-in addressed to self',
+          addressedTo: self,
+          tags: ['heartbeat'],
+        }),
+      ],
+      seenIds: new Set(),
+      self,
+      excludeTags: excludeHeartbeat,
+    });
+
+    expect(drained.eventIds).toStrictEqual(['addressed-hb']);
+    expect(drained.excludedEventIds).toStrictEqual([]);
+  });
+
+  it('never excludes a group event whose audience includes the agent, whatever its tags', async () => {
+    const drained = await drainRelevantEvents({
+      messages: [
+        narrative({
+          eventId: 'group-hb',
+          author: peer,
+          title: 'Group heartbeat note',
+          audience: [self, stranger],
+          tags: ['heartbeat'],
+        }),
+      ],
+      seenIds: new Set(),
+      self,
+      excludeTags: excludeHeartbeat,
+    });
+
+    expect(drained.eventIds).toStrictEqual(['group-hb']);
+    expect(drained.excludedEventIds).toStrictEqual([]);
+  });
+
+  it('leaks a multi-tag event through when any of its tags is not excluded', async () => {
+    const drained = await drainRelevantEvents({
+      messages: [
+        narrative({
+          eventId: 'capture-with-heartbeat',
+          author: peer,
+          title: 'Failure-mode capture that also carries heartbeat',
+          tags: ['heartbeat', 'failure-mode'],
+        }),
+      ],
+      seenIds: new Set(),
+      self,
+      excludeTags: excludeHeartbeat,
+    });
+
+    expect(drained.eventIds).toStrictEqual(['capture-with-heartbeat']);
+    expect(drained.excludedEventIds).toStrictEqual([]);
+  });
+
+  it('leaves untagged events untouched and excludes a heartbeat-tagged lifecycle event', async () => {
+    const untagged = narrative({
+      eventId: 'plain',
+      author: peer,
+      title: 'Plain broadcast',
+      createdAt: '2026-05-21T08:01:00Z',
+    });
+    const lifecycleHeartbeat: LifecycleCommsEvent = {
+      ...lifecycle({ eventId: 'lc-hb', author: peer, title: 'Lifecycle heartbeat' }),
+      tags: ['heartbeat'],
+    };
+    const drained = await drainRelevantEvents({
+      messages: [untagged, lifecycleHeartbeat],
+      seenIds: new Set(),
+      self,
+      excludeTags: excludeHeartbeat,
+    });
+
+    expect(drained.eventIds).toStrictEqual(['plain']);
+    expect(drained.excludedEventIds).toStrictEqual(['lc-hb']);
+  });
+
+  it('excludes without consuming the remainingEvents budget and marks excluded ids beyond the slice horizon', async () => {
+    const messages: readonly CommsEvent[] = [
+      heartbeat('hb-early', '2026-05-21T08:00:30Z'),
+      narrative({
+        eventId: 'sub-one',
+        author: peer,
+        title: 'Substantive one',
+        createdAt: '2026-05-21T08:01:00Z',
+      }),
+      narrative({
+        eventId: 'sub-two',
+        author: peer,
+        title: 'Substantive two',
+        createdAt: '2026-05-21T08:02:00Z',
+      }),
+      heartbeat('hb-late', '2026-05-21T08:03:00Z'),
+    ];
+    const drained = await drainRelevantEvents({
+      messages,
+      seenIds: new Set(),
+      self,
+      remainingEvents: 2,
+      excludeTags: excludeHeartbeat,
+    });
+
+    expect(drained.eventIds).toStrictEqual(['sub-one', 'sub-two']);
+    expect(drained.eventCount).toBe(2);
+    expect(drained.excludedEventIds).toStrictEqual(['hb-early', 'hb-late']);
+  });
+
+  it('passes the corpus pass/leak count: N heartbeats excluded, M substantive emitted, N+M markable', async () => {
+    const heartbeats = Array.from({ length: 5 }, (_, index) =>
+      heartbeat(`hb-${String(index)}`, `2026-05-21T08:0${String(index)}:00Z`),
+    );
+    const substantive = Array.from({ length: 3 }, (_, index) =>
+      narrative({
+        eventId: `sub-${String(index)}`,
+        author: peer,
+        title: `Substantive ${String(index)}`,
+        createdAt: `2026-05-21T09:0${String(index)}:00Z`,
+      }),
+    );
+    const drained = await drainRelevantEvents({
+      messages: [...heartbeats, ...substantive],
+      seenIds: new Set(),
+      self,
+      excludeTags: excludeHeartbeat,
+    });
+
+    expect(drained.eventCount).toBe(3);
+    expect(drained.eventIds).toHaveLength(3);
+    expect(drained.excludedEventIds).toHaveLength(5);
+    expect([...drained.eventIds, ...(drained.excludedEventIds ?? [])]).toHaveLength(8);
+  });
+
+  it('returns an empty excludedEventIds when no excludeTags are supplied', async () => {
+    const drained = await drainRelevantEvents({
+      messages: [heartbeat('hb-1', '2026-05-21T08:01:00Z')],
+      seenIds: new Set(),
+      self,
+    });
+
+    expect(drained.eventIds).toStrictEqual(['hb-1']);
+    expect(drained.excludedEventIds).toStrictEqual([]);
   });
 });

@@ -593,6 +593,7 @@ function options(
     files,
     areaPatterns,
     tags,
+    excludeTags: [],
     positionals: [],
   };
 }

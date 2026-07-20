@@ -95,9 +95,14 @@ export const commsWatchHelp =
   '[--session-prefix <prefix>] ' +
   '[--poll-ms <n>] [--max-events <n>] [--step-timeout-ms <n>] ' +
   '[--heartbeat-file <path>] [--heartbeat-interval-ms <n>] [--no-heartbeat] ' +
-  '[--seed-from-now] [--no-auto-seed] [--supervisor-pid <pid>] ' +
+  '[--seed-from-now] [--no-auto-seed] [--supervisor-pid <pid>] [--exclude-tag <tag>...] ' +
   '(emits every relevant event — broadcast, group, directed, observed, lifecycle — ' +
-  'with self-exclusion only; step-timeout-ms (default 60000) is the per-step deadline on ' +
+  'with self-exclusion plus the sanctioned repeatable --exclude-tag mechanism ' +
+  '(F-146; ADR-183 namespace tags only; an excluded event still marks seen; ' +
+  'directed and group events always surface; a multi-tag event with any ' +
+  'non-excluded tag leaks through; excluding heartbeat REQUIRES pairing with the ' +
+  'comms peer-liveness poll per the watcher rule) — hand-rolled filtering remains ' +
+  'forbidden; step-timeout-ms (default 60000) is the per-step deadline on ' +
   'drain/emit/markSeen — a step that hangs past it makes the watcher exit non-zero (fail-loud) ' +
   'instead of silently muting; the liveness heartbeat is ON BY DEFAULT at <seen-file>.heartbeat.json ' +
   '(default interval 30000ms) so a staleness consumer can classify a frozen watcher — ' +

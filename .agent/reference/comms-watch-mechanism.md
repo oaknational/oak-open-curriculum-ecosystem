@@ -57,11 +57,16 @@ A watcher takes:
 On each filesystem-change tick:
 
 1. Enumerate event files under the comms directory.
-2. Emit every event with **self-exclusion only** — events authored
-   by the watcher's own identity tuple are dropped (self-exclusion
-   is non-negotiable — a watcher that echoes its own writes as
-   inbound creates a feedback loop that contaminates the agent's
-   reasoning context). **Addressee-filtering is forbidden**: the
+2. Emit every event with **self-exclusion plus the sanctioned
+   tag-exclusion mechanism only** — events authored by the watcher's
+   own identity tuple are dropped (self-exclusion is non-negotiable —
+   a watcher that echoes its own writes as inbound creates a feedback
+   loop that contaminates the agent's reasoning context), and events
+   suppressed by the F-146 `--exclude-tag` surface (ADR-183 tags;
+   addressed events always surface; excluded events still mark seen —
+   see [`comms-all-channels-watcher`](../rules/comms-all-channels-watcher.md)
+   §"Sanctioned tag exclusion") are marked without emission.
+   **Hand-rolled and addressee filtering are forbidden**: the
    comms event stream is canonical truth, and broadcast, group,
    directed-to-self, observed (cross-traffic), and lifecycle views
    all carry coordination substance the agent needs. The agent's

@@ -26,12 +26,36 @@ heartbeat cron, before team-start broadcast, before any source claim.
 
 Run one event-driven watcher over the full
 `.agent/state/collaboration/comms/` directory, emitting one notification
-per new event, with **self-exclusion only** — filter out events authored
-by the agent's own `(agent_name, platform, session_id_prefix)` identity
-tuple (per
+per new event, with **self-exclusion plus, where the seat's economics
+justify it, the sanctioned `--exclude-tag` mechanism** (§"Sanctioned
+tag exclusion" below) — filter out events authored by the agent's own
+`(agent_name, platform, session_id_prefix)` identity tuple (per
 [`.agent/reference/comms-watch-mechanism.md`](../reference/comms-watch-mechanism.md)
 §"Identity discipline") and emit everything else. Apply relevance triage
-in agent reasoning, not at the watcher boundary.
+in agent reasoning, not at the watcher boundary — **hand-rolled filters
+at the watcher boundary remain forbidden** (twice bitten: the 2026-06-10
+muting-filter and 2026-07-02 mute/leak instances); the CLI's tested
+exclusion surface is the only sanctioned narrowing.
+
+### Sanctioned tag exclusion (F-146) — awareness/reserve-seat configuration
+
+`comms watch --exclude-tag <tag>` (repeatable, ADR-183 namespace tags
+only, boundary-validated) suppresses emission of events whose EVERY tag
+is excluded. The mechanism's tested guarantees: excluded events still
+mark seen (no backlog replay when the filter lifts); `directed` and
+`group` events always surface whatever their tags; a multi-tag event
+with any non-excluded tag leaks through (a failure-mode capture that
+also carries `heartbeat` still emits); excluded events never consume
+`--max-events` budget.
+
+**Excluding `heartbeat` MANDATORILY pairs with the F-75
+`comms peer-liveness` poll** (see
+[`liveness-heartbeat-cron` §Surfacing peer heartbeat-silence](liveness-heartbeat-cron.md))
+as the seat's retirement-detection consumer — heartbeat exclusion
+removes the seat's only event-borne retirement signal, and the poll is
+the absence-detector that event-watching structurally cannot be. A seat
+running `--exclude-tag heartbeat` without the paired poll is blind to
+peer retirement and out of contract.
 
 ### Canonical invocation — the `agent-tools` CLI
 
@@ -78,8 +102,9 @@ heartbeat:
 The supervising Monitor/cron re-arms a fresh watcher on exit — the `--seen-file`
 cursor means the restart misses no events, only delays them by the re-arm.
 
-The CLI emits every relevant event with self-exclusion only against the
-identity tuple it derives from the platform-specific session-id env var
+The CLI emits every relevant event with self-exclusion (plus any
+sanctioned `--exclude-tag` narrowing per §"Sanctioned tag exclusion")
+against the identity tuple it derives from the platform-specific session-id env var
 (`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
 `PRACTICE_AGENT_SESSION_ID_CODEX`, or `CODEX_THREAD_ID`) — one of these
 MUST be set in the shell, or the CLI exits with `missing collaboration

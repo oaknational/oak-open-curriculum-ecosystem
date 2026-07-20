@@ -1,38 +1,16 @@
 import { sameAgentRoutingKey } from './active-agent-routing.js';
+import { formatClassifiedEvent } from './comms-event-format.js';
+import { isCanonicalTag, type CommsEventTag } from './comms-tag-namespace.js';
 import {
   type CollaborationAgentId,
   type CommsEvent,
   type DirectedCommsMessage,
   type DrainResult,
-  type LifecycleCommsEvent,
   type NarrativeCommsEvent,
 } from './types.js';
 
-/**
- * Comms-event view types — every event is one of these from the perspective
- * of a given agent. The comms event stream is the canonical truth; these are
- * the views the agent sees onto it.
- *
- * - `broadcast`: narrative event with no addressing — visible to everyone.
- * - `group`: narrative event whose `audience` array includes the agent.
- * - `directed`: directed-kind message addressed to the agent, OR narrative
- *   event whose `addressed_to` names the agent.
- * - `observed`: cross-traffic the agent witnesses but is not the addressee
- *   of — directed-kind events to another agent, narratives `addressed_to`
- *   another agent, or narratives whose `audience` is set but excludes the
- *   agent. **Incidental visibility, not a change to the agent's work
- *   contract**: observed events do not impose action on the agent. They
- *   exist so the broad-awareness contract per
- *   `.agent/rules/comms-all-channels-watcher.md` holds — agents apply
- *   relevance triage in their own reasoning, not at the watcher boundary.
- * - `lifecycle`: structured lifecycle moment (session, claim, consolidation).
- *
- * Sync-urgent messages are not a separate kind today: they are carried by
- * any of the above views with an urgency convention applied at the agent's
- * reasoning layer, not at the watcher boundary. When the schema grows a
- * sync kind or urgency flag, `sync` will be added here as a sixth view.
- */
-export type EventView = 'broadcast' | 'group' | 'directed' | 'observed' | 'lifecycle';
+export { type EventView } from './comms-event-views.js';
+import { type EventView } from './comms-event-views.js';
 
 /**
  * Classify an event relative to an agent's identity, returning `undefined`
@@ -74,34 +52,55 @@ export function classifyEventForAgent(input: {
  * Replaces the legacy `drainDirectedInbox` as the default for `comms watch`
  * and `comms inbox`. Emits every event classified as relevant for `self`
  * (all five views: broadcast, group, directed, observed, lifecycle) with
- * self-exclusion only — see `classifyEventForAgent` for the visibility
- * contract. Output lines are tagged `[BROADCAST]` / `[GROUP]` /
+ * self-exclusion plus, when `excludeTags` is supplied, the sanctioned
+ * F-146 tag-exclusion mechanism — hand-rolled filtering at the watcher
+ * boundary remains forbidden; see `classifyEventForAgent` for the
+ * visibility contract. Output lines are tagged `[BROADCAST]` / `[GROUP]` /
  * `[DIRECTED]` / `[OBSERVED]` / `[LIFECYCLE]` so the agent knows the channel
  * at a glance.
  *
+ * Tag exclusion is deliberately narrow: an event is excluded only when it
+ * is NOT addressed to the agent (`directed` and `group` views always
+ * surface, whatever their tags), it carries at least one tag, and EVERY
+ * tag it carries is excluded — a multi-tag event with any non-excluded tag
+ * (e.g. a failure-mode capture that also carries `heartbeat`) leaks
+ * through. Exclusion applies before any `remainingEvents` slice, so
+ * excluded events never consume the emission budget; their ids return in
+ * `excludedEventIds` (all of them, beyond any slice horizon) for
+ * unconditional seen-marking — see `DrainResult`.
+ *
  * Returns the formatted output and the IDs of drained events; does NOT mark
- * them seen. The caller is responsible for marking AFTER the emit step
+ * them seen. The caller marks events owed emission AFTER the emit step
  * succeeds so a crash between drain and emit produces duplicate (safe)
- * rather than missed (unsafe) notifications. See FM-2 cure (2026-05-23).
+ * rather than missed (unsafe) notifications, and marks `excludedEventIds`
+ * unconditionally after a successful drain (they carry no emission debt).
+ * See FM-2 cure (2026-05-23).
  */
 export async function drainRelevantEvents(input: {
   readonly messages: readonly CommsEvent[];
   readonly seenIds: ReadonlySet<string>;
   readonly self: CollaborationAgentId;
   readonly remainingEvents?: number;
+  readonly excludeTags?: ReadonlySet<CommsEventTag>;
 }): Promise<DrainResult> {
-  const classified = input.messages
+  const unseen = input.messages
     .map((event) => ({ event, view: classifyEventForAgent({ event, self: input.self }) }))
     .filter(
       (entry): entry is { readonly event: CommsEvent; readonly view: EventView } =>
         entry.view !== undefined,
     )
     .filter((entry) => !input.seenIds.has(entry.event.event_id))
-    .toSorted((left, right) => compareCommsEvents(left.event, right.event))
+    .toSorted((left, right) => compareCommsEvents(left.event, right.event));
+
+  const excludedEventIds = unseen
+    .filter((entry) => isExcludedByTags(entry, input.excludeTags))
+    .map((entry) => entry.event.event_id);
+  const classified = unseen
+    .filter((entry) => !isExcludedByTags(entry, input.excludeTags))
     .slice(0, input.remainingEvents);
 
   if (classified.length === 0) {
-    return { output: '', eventCount: 0, eventIds: [] };
+    return { output: '', eventCount: 0, eventIds: [], excludedEventIds };
   }
 
   const eventIds = classified.map((entry) => entry.event.event_id);
@@ -110,7 +109,33 @@ export async function drainRelevantEvents(input: {
     output: classified.map(formatClassifiedEvent).join('\n'),
     eventCount: classified.length,
     eventIds,
+    excludedEventIds,
   };
+}
+
+/**
+ * The F-146 exclusion predicate. Addressed views (`directed`, `group`)
+ * always surface; an unaddressed event is excluded only when it carries at
+ * least one tag and every tag it carries is in `excludeTags`.
+ */
+function isExcludedByTags(
+  entry: { readonly event: CommsEvent; readonly view: EventView },
+  excludeTags: ReadonlySet<CommsEventTag> | undefined,
+): boolean {
+  if (excludeTags === undefined || excludeTags.size === 0) {
+    return false;
+  }
+  if (entry.view === 'directed' || entry.view === 'group') {
+    return false;
+  }
+  const tags = entry.event.tags;
+  if (tags === undefined || tags.length === 0) {
+    return false;
+  }
+  // Stored event tags arrive as strings; the guard narrows each onto the
+  // closed namespace before membership (zero-widening — the set never
+  // becomes a string view).
+  return tags.every((tag) => isCanonicalTag(tag) && excludeTags.has(tag));
 }
 
 function isSelfAuthored(event: CommsEvent, self: CollaborationAgentId): boolean {
@@ -145,103 +170,4 @@ function compareCommsEvents(left: CommsEvent, right: CommsEvent): number {
     return byTime;
   }
   return left.event_id.localeCompare(right.event_id);
-}
-
-function formatClassifiedEvent(entry: {
-  readonly event: CommsEvent;
-  readonly view: EventView;
-}): string {
-  if (entry.event.kind === 'directed') {
-    return formatClassifiedDirected(entry.event, entry.view);
-  }
-  if (entry.event.kind === 'lifecycle') {
-    return formatClassifiedLifecycle(entry.event);
-  }
-  return formatClassifiedNarrative(entry.event, entry.view);
-}
-
-/**
- * Compose the watcher's per-event header marker line.
- *
- * - When `tags` is `undefined` or empty, emits `--- NEW [VIEW] EVENT ---`.
- * - When `tags` is present, sorts a copy alphabetically (input untouched),
- *   uppercases each entry, and composes
- *   `--- NEW [VIEW] [TAG1] [TAG2] EVENT ---`.
- *
- * Unknown tag strings render literal-normalised — no allowlist at render
- * time. Write-time validation handles namespace enforcement at a different
- * layer.
- */
-export function formatWatcherEventHeader(
-  view: EventView,
-  tags: readonly string[] | undefined,
-): string {
-  const viewToken = `[${view.toUpperCase()}]`;
-  if (tags === undefined || tags.length === 0) {
-    return `--- NEW ${viewToken} EVENT ---`;
-  }
-  const tagTokens = [...tags]
-    .sort((left, right) => left.localeCompare(right))
-    .map((tag) => `[${tag.toUpperCase()}]`)
-    .join(' ');
-  return `--- NEW ${viewToken} ${tagTokens} EVENT ---`;
-}
-
-function formatClassifiedDirected(event: DirectedCommsMessage, view: EventView): string {
-  return [
-    formatWatcherEventHeader(view, event.tags),
-    `from: ${formatIdentity(event.from)}`,
-    `to: ${formatIdentity(event.to)}`,
-    `subject: ${event.subject}`,
-    `created_at: ${event.created_at}`,
-    '',
-    event.body,
-    '--- END EVENT ---',
-    '',
-  ].join('\n');
-}
-
-function formatClassifiedNarrative(event: NarrativeCommsEvent, view: EventView): string {
-  return [
-    formatWatcherEventHeader(view, event.tags),
-    `from: ${formatIdentity(event.author)}`,
-    `to: ${formatNarrativeAddressee(event)}`,
-    `title: ${event.title}`,
-    `created_at: ${event.created_at}`,
-    '',
-    event.body,
-    '--- END EVENT ---',
-    '',
-  ].join('\n');
-}
-
-function formatClassifiedLifecycle(event: LifecycleCommsEvent): string {
-  return [
-    formatWatcherEventHeader('lifecycle', event.tags),
-    `from: ${formatIdentity(event.author)}`,
-    `event_type: ${event.event_type}`,
-    `thread: ${event.thread}`,
-    `title: ${event.title}`,
-    `subject: ${event.subject}`,
-    `created_at: ${event.created_at}`,
-    `occurred_at: ${event.occurred_at}`,
-    `claim_id: ${event.claim_id}`,
-    '',
-    event.body,
-    '--- END EVENT ---',
-    '',
-  ].join('\n');
-}
-
-function formatIdentity(agent: CollaborationAgentId): string {
-  return `${agent.agent_name} / ${agent.platform} / ${agent.session_id_prefix}`;
-}
-
-function formatNarrativeAddressee(event: NarrativeCommsEvent): string {
-  if (event.addressed_to !== undefined) {
-    return formatIdentity(event.addressed_to);
-  }
-  return event.audience === undefined
-    ? 'BROADCAST'
-    : `GROUP(${event.audience.map(formatIdentity).join(', ')})`;
 }

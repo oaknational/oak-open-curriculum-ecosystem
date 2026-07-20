@@ -1,21 +1,33 @@
 import {
   emitWatcherError,
   reportTimeout,
-  runWithDeadline,
   WatcherTimeoutError,
   type WatcherErrorKind,
 } from './comms-watch-errors.js';
+import {
+  runFatalDecision,
+  runStep,
+  runTick,
+  type StepResult,
+  type WatcherTickStatus,
+} from './comms-watch-steps.js';
+
+export { type WatcherTickStatus } from './comms-watch-steps.js';
 import { type DrainResult } from './types.js';
 import { supervisorIsGone } from './watcher-supervisor.js';
 
 export { WatcherTimeoutError, type WatcherErrorKind } from './comms-watch-errors.js';
 
 /**
- * Watch loop: drain, emit, markSeen (in that order), then wait. The drain
- * function MUST return event IDs in `result.eventIds`; this function marks
- * them seen only AFTER emit succeeds, so a crash between drain and emit
- * produces a duplicate notification next cycle rather than a missed
- * notification.
+ * Watch loop: drain, mark excluded, emit, markSeen (in that order), then
+ * wait. The drain function MUST return event IDs in `result.eventIds`; this
+ * function marks them seen only AFTER emit succeeds, so a crash between
+ * drain and emit produces a duplicate notification next cycle rather than a
+ * missed notification. Ids in `result.excludedEventIds` (the sanctioned
+ * F-146 tag exclusion) carry no emission debt and are marked seen
+ * UNCONDITIONALLY after a successful drain — including drains whose output
+ * is empty — so an excluded backlog never accumulates or replays; excluded
+ * events never count toward `maxEvents`.
  *
  * Per-step errors are caught and surfaced via the emit channel as
  * `--- WATCHER ERROR --- kind=<step> message=<message> [event_ids=...] ---`
@@ -83,13 +95,6 @@ export interface WatchCommsLoopInput {
   readonly supervisorAlive?: () => boolean | Promise<boolean>;
 }
 
-export interface WatcherTickStatus {
-  readonly lastDrainAt: string | null;
-  readonly lastEmitAt: string | null;
-  readonly lastErrorAt: string | null;
-  readonly emittedCount: number;
-}
-
 interface LoopState {
   emitted: number;
   output: string;
@@ -97,10 +102,6 @@ interface LoopState {
   lastEmitAt: string | null;
   lastErrorAt: string | null;
 }
-
-type StepResult<TValue> =
-  | { readonly status: 'ok'; readonly value: TValue }
-  | { readonly status: 'error'; readonly kind: WatcherErrorKind; readonly error: unknown };
 
 async function runOneIteration(input: WatchCommsLoopInput, state: LoopState): Promise<boolean> {
   const drainOutcome = await runStep(
@@ -115,6 +116,10 @@ async function runOneIteration(input: WatchCommsLoopInput, state: LoopState): Pr
   state.lastDrainAt = nowIso();
 
   const result = drainOutcome.value;
+  const excludedMarked = await markExcluded(input, state, result);
+  if (!excludedMarked) {
+    return false;
+  }
   if (result.output !== '') {
     const emitted = await emitAndMark(input, state, result);
     if (!emitted) {
@@ -125,6 +130,40 @@ async function runOneIteration(input: WatchCommsLoopInput, state: LoopState): Pr
   await runTick(input.tick, snapshotStatus(state));
   if (needsMoreEvents(state.emitted, input.maxEvents)) {
     await input.waitForChange();
+  }
+  return true;
+}
+
+/**
+ * Mark F-146-excluded ids seen, independent of emit — they carry no
+ * emission debt, and skipping them on empty-output drains would re-grow the
+ * unseen backlog every wake (the drain step is the recorded
+ * death-concentration point) and replay it when the filter lifts. A marking
+ * failure routes through the normal error path (duplicate marking next
+ * cycle is safe). Returns false only when `onError` rules the failure
+ * fatal.
+ */
+async function markExcluded(
+  input: WatchCommsLoopInput,
+  state: LoopState,
+  result: DrainResult,
+): Promise<boolean> {
+  const excluded = result.excludedEventIds;
+  if (excluded === undefined || excluded.length === 0) {
+    return true;
+  }
+  const markOutcome = await runStep(
+    'markSeen',
+    () => input.markSeen(excluded),
+    input.stepTimeoutMs,
+  );
+  if (markOutcome.status === 'error') {
+    state.lastErrorAt = nowIso();
+    await emitWatcherError(input.emit, markOutcome.kind, markOutcome.error, excluded);
+    const fatal = await runFatalDecision(input.onError, markOutcome.kind, markOutcome.error);
+    if (fatal) {
+      return false;
+    }
   }
   return true;
 }
@@ -177,53 +216,6 @@ async function handleStepError(
     await input.waitForChange();
   }
   return true;
-}
-
-async function runStep<TValue>(
-  kind: WatcherErrorKind,
-  fn: () => Promise<TValue>,
-  timeoutMs: number | undefined,
-): Promise<StepResult<TValue>> {
-  try {
-    const value = timeoutMs === undefined ? await fn() : await runWithDeadline(kind, fn, timeoutMs);
-    return { status: 'ok', value };
-  } catch (error) {
-    if (error instanceof WatcherTimeoutError) {
-      // A timed-out step is fatal-by-construction: propagate, never demote
-      // it to a recoverable StepResult error or route it through onError.
-      throw error;
-    }
-    return { status: 'error', kind, error };
-  }
-}
-
-async function runFatalDecision(
-  onError: ((kind: WatcherErrorKind, error: unknown) => Promise<boolean>) | undefined,
-  kind: WatcherErrorKind,
-  error: unknown,
-): Promise<boolean> {
-  if (onError === undefined) {
-    return false;
-  }
-  try {
-    return await onError(kind, error);
-  } catch {
-    return false;
-  }
-}
-
-async function runTick(
-  tick: ((status: WatcherTickStatus) => Promise<void>) | undefined,
-  status: WatcherTickStatus,
-): Promise<void> {
-  if (tick === undefined) {
-    return;
-  }
-  try {
-    await tick(status);
-  } catch {
-    // Heartbeat failures must not kill the watcher.
-  }
 }
 
 function snapshotStatus(state: LoopState): WatcherTickStatus {
