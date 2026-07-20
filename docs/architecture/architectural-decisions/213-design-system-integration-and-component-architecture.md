@@ -200,6 +200,83 @@ consumer):** four §2 clauses above are corrected or made concrete against the g
   across the full criteria set (SC 2.4.13 among others), which a token-pair gate cannot
   prove.
 
+**Amendment (2026-07-20, Stage-B interchange-contract exploration — PR #424, doctrine
+slot (c)):** four §2 clauses are amended from the exploration's evidence (the report at
+`.agent/reports/design/aip-137-stage-b-interchange-contract-concept-exploration-2026-07-20.md`
+carries the observations, warrants, and falsifiers each clause cites). This amendment
+**supersedes in part the Stage-B boundary-condition parenthetical above**: the fixed
+`color.` / `semantic.` / `component.` root requirement and the
+expression-pre-compute-or-reject condition are replaced by the per-consumer projections
+and value-class dispositions below (the export ships kit-native trees; `validateTreeRoots`
+pins allowed roots per consumer with a caller-supplied allow-list); the manifest
+schema-validation, overlay-completeness (as amended 2026-07-19), and component-triad
+conditions stand unchanged:
+
+- **The interchange is a per-consumer projection contract, not a normalised tree.** The
+  export is the kit-vocabulary projection of the studio's CSS; the repo consumes it
+  through three declared projections — **contrast** (native read, base ⊕ overlay
+  composition, fixpoint resolution, post-resolution hex-comparand filtering with pinned
+  counts: the landed mechanism above), **web CSS transitional** (an explicit naming map —
+  see the delivery-surface window below), and **terminal** (an explicit 11-entry
+  role→kit-dot-path map, resolved at build). Variable identity is derived from tree paths
+  (`toCssVariable`), so any re-rooting renames every emitted CSS variable — a path
+  convention decision is a consumer-migration decision, and no single normalised
+  interchange tree is authoritative. _Falsification is mechanical, not judged_: each
+  projection is a total checked map **over its declared domain** of the export (the web
+  CSS map's domain is the whole export tree; the terminal map's is its 11 roles; the
+  contrast path's is **every value reaching its boundary**, whose disposition today is
+  the landed pair: the one closed post-resolution value-shape rule (six-digit hex enters
+  the comparand; everything else drops — `toHexComparand` does not discriminate between
+  dropped classes) plus the pinned per-theme comparand counts as the drift net; the
+  per-class discrimination (runtime-computed vs static-alpha vs any new shape) lives in
+  this contract's prose, and its mechanical form — per-path exclusion reporting on the
+  gate — is named Stage-B work alongside the map); a mismatch that can be cured or
+  recorded as a disposition routes to that projection's migration leg as a defect, and a
+  projection falsifies the per-consumer frame when its map **cannot reach zero
+  unaccounted entries after all recordable dispositions** — at which point a single
+  normalised interchange tree is the honest shape after all.
+- **`runtime-computed` is a declared value class** — values whose computation is
+  paint-time-contextual (the `currentColor` mixes `state.hover` and `state.pressed`) are
+  exported verbatim, pass through to CSS emission (the browser evaluates them), are
+  excluded from static contrast resolution **by contract** (mechanically: the
+  post-resolution value-shape drop plus the pinned comparand counts above), and are
+  **barred from the terminal's 11 paths**. The terminal bar is named Stage-B work: the
+  terminal map's build check gains a value-shape leg asserting every mapped value resolves
+  to a terminal-compatible static colour literal (`requiredColour` is presence-only
+  today, and resolution carries expressions verbatim). `state.selected` is NOT in this
+  class: it is statically evaluable to an alpha colour, so its disposition is the existing
+  alpha-exclusion rule. Class membership is discriminated **by value-shape
+  classification** at each consumer boundary, never "by type" — the classes are dated
+  exemplars of an explicitly open set, not a closed enumeration.
+- **The web CSS delivery-surface end state carries a declared transitional window.** §2's
+  end state (one web CSS delivery surface, owned by the design system) stands; between
+  Stage B and the MCP views' direct kit-CSS binding, a mapped `index.css` generated
+  through a **total disposition map** (every kit path → `emit` | `omit`-with-reason;
+  reverse coverage — every currently emitted variable is accounted for by exactly one kit
+  path **or a recorded repo-only disposition**; emit-target uniqueness across the whole
+  map; reference-closure over emitted values) serves the views as a named transitional
+  surface. The acceptance bar is **byte-stable reproduction of the covered emission set**
+  plus zero unaccounted entries on either side, zero emit-target collisions, and no
+  dangling emitted references — with the report's falsifier branch retained: if the map
+  cannot reach zero unaccounted entries without a consumer migration, Stage B gains a
+  migration leg in the same change and the bar for the renamed subset shifts from
+  byte-stability to a **reviewed rename ledger** — checked by a **Stage-B migration-parity check** that lands
+  inside the Stage-B change (distinct from the kit-internal dtcg↔CSS export check, which
+  guards export canonicality, not repo-output compatibility). Retirement condition,
+  recorded here: the map and its check die when the MCP views bind the kit CSS directly —
+  a named post-Stage-B lane, not part of the atomic switch. The replace-dont-bridge
+  invariant holds throughout, as in the dual-gate window above: **at no moment do two
+  paths serve the same consumers** — Stage B deletes the superseded source atomically,
+  `index.css` remains the single canonical web delivery surface (now generated from the
+  kit source) until the later binding change replaces it in its own atomic moment, and no
+  adapter lets an old path and a new path coexist.
+- **The terminal-owned-tree fallback is plan-scoped, not ADR-authorised.** If Stage B's
+  kit trees cannot supply all 11 terminal roles through the map, the implementing plan's
+  falsifier names "the terminal keeps its own tree" as the fallback — but §2 requires the
+  hand-authored trees deleted and the 11-path contract proved, so **firing that falsifier
+  requires a further dated ratification through the doctrine slot**; the plan-recorded
+  exception is never already ADR-authorised.
+
 ### 3. The component system
 
 The consumption model, in decision-table form. "The pairing guides" are the design system's

@@ -38,9 +38,13 @@ todos:
     status: pending
     depends_on: [pr3-cycle-four-theme-gate]
   - id: ws-stage-b-convergence
-    content: "Follow-on lane (pointer, not spec): ADR-213 Stage B atomic token-source switch — ONE change deletes oak-design-tokens' hand-authored trees, re-points generation at the design system's export (trees rooted color./semantic./component., dialect aliases resolved, expressions pre-computed), regenerates index.css + terminal theme, proves the 11-path terminal contract and MCP views, regenerates depcruise boundary rules, and retires design-token-practice.md's transition note in the same change. No interim dual-source landing."
+    content: "Follow-on lane (pointer, not spec): ADR-213 Stage B atomic token-source switch — ONE change deletes oak-design-tokens' hand-authored trees (+ their contrast manifest + gate instance, closing the dual-gate window), re-points generation at the design system's export, regenerates index.css + terminal theme, proves the 11-path terminal contract and MCP views, regenerates depcruise boundary rules, and retires design-token-practice.md's transition note in the same change. No interim dual-source landing. PICKUP SURFACE: the Stage-B interchange-contract exploration report (.agent/reports/design/aip-137-stage-b-interchange-contract-concept-exploration-2026-07-20.md) + the ADR-213 §2 amendment of 2026-07-20 (slot c) — the naming artefact is a TOTAL DISPOSITION map (emit/omit + reverse coverage + emit-target uniqueness + reference-closure) checked by a NEW migration-parity check landing inside the Stage-B change (distinct from the kit-internal dtcg↔CSS export check); runtime-computed values are barred from the terminal map by a NEW value-shape leg on its build check (requiredColour is presence-only today); the mapped index.css is the declared transitional delivery surface with its retirement condition in §2."
     status: pending
-    depends_on: [pr3-cycle-four-theme-gate]
+    depends_on: [pr3-cycle-four-theme-gate, pr2-consistency-check]
+  - id: ws-views-direct-kit-css
+    content: "Follow-on lane (pointer, not spec): retire the transitional mapped index.css — bind the MCP App views to the design system's kit CSS directly, delete the disposition map + the migration-parity check in the same change (the ADR-213 §2 amendment 2026-07-20 records this as the map's retirement condition), and prove the views against the kit CSS in the same change. This closes the declared transitional delivery-surface window."
+    status: pending
+    depends_on: [ws-stage-b-convergence]
   - id: ws-hub-behaviour-consolidation
     content: "Follow-on (pointer; exploration step 1): consolidate the hub's duplicated roving/synthetic-key behaviour into a hub-local components/widgets/behaviour/ module preserving BOTH key-set contracts (radio incl. the any-key fall-through guard; tabs), replace-dont-bridge, SR spot-check on the migrated widgets."
     status: pending
@@ -113,15 +117,18 @@ sound-with-revisions, 2026-07-19, absorbed — their vendoring-frame recommendat
 superseded by the owner's integration ruling the same day). Load-bearing corrections, so
 executors do not re-derive them:
 
-- **The Stage B boundary conditions are owned by ADR-213 §2** (tree re-rooting, dialect-alias
-  resolution, expression pre-computation or boundary rejection, manifest schema-validation,
-  four-tree completeness, triads, the 11-path terminal contract) — read them there. This plan
+- **The Stage B boundary conditions are owned by ADR-213 §2** (naming via the per-consumer
+  projection maps, dialect-alias resolution, per-consumer expression dispositions (§2
+  amendment 2026-07-20), manifest schema-validation, overlay completeness, triads, the
+  11-path terminal contract) — read them there. This plan
   adds only the mechanism specifics behind them: the design system's `dtcg/README.md` claim
   that its `oak.color.*` paths "land on the repo convention" is **false** against
   `design-tokens-core`'s flattener (`toCssVariable` prefixes `--oak-` itself →
   `--oak-oak-color-*`; tier detection keys off the root segment; `validateTierReferences`
-  rejects semantic→semantic; non-hex strings crash `hexToSrgb` with a bare throw). Re-root in
-  the studio's export generator or normalise at the repo import boundary. Do not widen
+  rejects semantic→semantic; non-hex strings crash `hexToSrgb` with a bare throw). The re-root-or-normalise
+  binary this fact once posed is DISSOLVED by the ADR-213 §2 amendment of 2026-07-20
+  (slot c): naming is resolved per consumer — the web-CSS projection's total disposition
+  map owns it; the flattener facts above stand as the mechanism evidence. Do not widen
   `PALETTE_VARIABLE_PATTERN`; do not rename the system's CSS variables.
 - The theme-bootstrap pattern in the system's own Next.js guide (`beforeInteractive`) is wrong
   for FOUC-free theming on Next 16; ADR-213 §3 records the correction (raw inline head
@@ -141,8 +148,11 @@ One system, two first-class surfaces. The workspace README carries the runbook:
   The remaining obligation is the recorded per-consumer divergence: the export contract
   passes the 15 expression values through verbatim, while ADR-213 §2 rejects them on the
   contrast-resolution path (three are `currentColor`-dependent — never statically
-  pre-computable). Stage B's emission lane must decide its expression handling explicitly
-  against the export contract, never by silent adoption of either side.
+  pre-computable). Stage B's emission-lane expression handling is DECIDED by the ADR-213
+  §2 amendment of 2026-07-20: pass-through for CSS emission (the browser evaluates),
+  `runtime-computed` values barred from the terminal map by its value-shape leg, and the
+  contrast path dropping by post-resolution value shape — per-consumer dispositions,
+  never silent adoption of either side.
 - **Repo → studio**: before design sessions, the studio is brought current from the repo copy
   via the design-sync flow (structural diff from `list_files`, then targeted writes).
 - **Conflict rule**: git review is the merge authority. A sync never overwrites unreviewed
@@ -211,8 +221,10 @@ One lane, sequenced PRs, each linked to AIP-137:
   assets, the hub's gitignored-local-assets pattern applies (tracked code, gitignored assets,
   a documented re-obtain runbook) and the manifest records it.
 - If Stage B's 11-path terminal mapping cannot be satisfied from the design system's component
-  tree, the terminal theme keeps its own tree — a deliberate, recorded exception, not silent
-  drift.
+  tree, firing this falsifier HALTS Stage B pending a dated ADR-213 amendment through the
+  doctrine slot ("the terminal keeps its own tree" is never self-authorising — §2 requires the
+  hand-authored trees deleted and the 11-path contract proved; §2 amendment 2026-07-20); only
+  that ratification can record the exception.
 - If the bidirectional sync discipline produces repeated conflicts or drift between the two
   surfaces, that is evidence the membrane needs tooling (a structural-diff helper or a
   drift detector) — raise it as a structural cure, do not fall back to record-access.
