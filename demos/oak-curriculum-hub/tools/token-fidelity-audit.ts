@@ -1,7 +1,9 @@
 // Token-fidelity audit — compares the demo's Tailwind @theme token VALUES against the
-// authoritative token files inside the canonical Claude-Design export, and flags whole token
-// CATEGORIES the demo omits (which then fall back to Tailwind defaults — a prime source of
-// "close but clearly off" drift).
+// authoritative token surface of the IN-REPO design system (ADR-213: the kit is the token
+// source of truth; integration doc §7 re-pointed this audit off the untracked export
+// snapshot, removing the re-obtain step), and flags whole token CATEGORIES the demo omits
+// (which then fall back to Tailwind defaults — a prime source of "close but clearly off"
+// drift).
 //
 // Re-runnable enablement artefact for the reusable-demo process (Ask 2 / codification):
 //   pnpm --filter @oaknational/oak-curriculum-hub tool:token-audit
@@ -10,7 +12,7 @@
 //
 // Framework/consumer split: css-token-parse.ts (parseCssVars + the value normalisers) is the
 // reusable mechanism; MAPPING + the demo/auth paths here are the Oak-specific consumer config.
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -21,34 +23,18 @@ import { MAPPING, type TokenMapping } from './token-audit-mapping';
 // against the repo root derived from this file's own location, so the tool is cwd-independent.
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const DEMO = 'demos/oak-curriculum-hub/app/globals.css';
-// The authority is the canonical export's OWN token surface, in two files under its design-system
-// directory: `tokens/fig-tokens.css` (the Figma-variables export: radii, border widths, palette)
-// and `colors_and_type.css` (the curated oak-components augmentation — shadows, type scale,
-// spacing; source: oaknational/oak-components src/styles/theme/*). The two define disjoint token
-// names, so the union is well-defined. The `_ds/*` directory is resolved dynamically so a
-// re-pulled export with a different design-system id still resolves.
-const EXPORT_DS_PARENT = 'demos/oak-curriculum-hub/claude-design-canonical-export/_ds';
+// The authority is the in-repo design system's `colors_and_type.css` — the kit's single
+// authored token surface (primitives, roles, radii, shadows, type scale, spacing). The
+// untracked canonical-export snapshot is no longer read: the kit IS the source of truth
+// (ADR-213), and its own build gate + the four-theme contrast gate govern its values.
+const KIT_AUTH_FILE = 'packages/design/oak-design-system/colors_and_type.css';
 
-/** Resolve the export's authoritative token files (repo-root-relative), or an error line. */
+/** Resolve the authoritative token file (repo-root-relative), or an error line. */
 function resolveAuthFiles(): { files: string[] } | { error: string } {
-  const parentAbs = path.resolve(REPO_ROOT, EXPORT_DS_PARENT);
-  const matches = readdirSync(parentAbs, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => `${EXPORT_DS_PARENT}/${entry.name}`)
-    .filter((dir) => existsSync(path.resolve(REPO_ROOT, dir, 'tokens', 'fig-tokens.css')))
-    .sort((a, b) => a.localeCompare(b));
-  const dsDir = matches[0];
-  if (dsDir === undefined || matches.length > 1) {
-    return {
-      error: `expected exactly one ${EXPORT_DS_PARENT}/*/tokens/fig-tokens.css, found ${matches.length}`,
-    };
+  if (!existsSync(path.resolve(REPO_ROOT, KIT_AUTH_FILE))) {
+    return { error: `authoritative kit token file missing: ${KIT_AUTH_FILE}` };
   }
-  const files = [`${dsDir}/tokens/fig-tokens.css`, `${dsDir}/colors_and_type.css`];
-  const missing = files.find((file) => !existsSync(path.resolve(REPO_ROOT, file)));
-  if (missing !== undefined) {
-    return { error: `authoritative token file missing from the export: ${missing}` };
-  }
-  return { files };
+  return { files: [KIT_AUTH_FILE] };
 }
 
 /** Union-parse the authoritative files (disjoint names; later files would win on a clash). */
@@ -141,8 +127,7 @@ function demoCount(demoVars: Map<string, string>, test: (key: string) => boolean
 /** True when the authoritative set carries the xs/xl radii but the demo defines neither. */
 function radiiEndsOmitted(demoVars: Map<string, string>, authVars: Map<string, string>): boolean {
   const authRadii = [...authVars.keys()].filter(
-    (k) =>
-      k.endsWith('border-radius-border-radius-xs') || k.endsWith('border-radius-border-radius-xl'),
+    (k) => k.endsWith('radius-xs') || k.endsWith('radius-xl'),
   );
   return authRadii.length > 0 && !demoVars.has('radius-oak-xs') && !demoVars.has('radius-oak-xl');
 }
