@@ -127,6 +127,17 @@ Both lenses return schema-forced structured output:
 
 ## Sealed lane-assignment canaries (P4; `plant-challenge-canary` SEAL mode)
 
+> **STATUS TRUING (2026-07-17).** The 2026-07-16 v1 key artefacts
+> (`canary-key.v1.json`, `canary-keyset.v1.json`) are classified
+> **COMPROMISED-FOR-AUDIT**: commit 5612ae244 put both into reachable PR
+> history (PR #404, closed unmerged; the ref remains reachable), so a key
+> readable in history can no longer prove a finder found rather than read
+> it. Before ANY dispatch consumes this section's gate, the key set and
+> evidence doc MUST be freshly re-authored and re-sealed (a new commitment;
+> never a re-seal of the exposed bytes). The "untracked until reveal"
+> contract below is unchanged and is now mechanically enforced by the
+> repo `.gitignore` canary-key patterns.
+
 The pass's catch-machinery must prove it can fire before any zero/agreement
 is trusted:
 

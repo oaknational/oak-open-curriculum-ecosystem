@@ -1,0 +1,17 @@
+name = "cricket-haiku"
+description = "EXPERIMENTAL small-model conscience check (owner-directed A/B, 2026-07-15): compiled decision procedure paired with cricket on identical supplied context."
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/cricket-haiku.md`.
+
+This file is a thin Codex adapter. The canonical role definition lives in the
+template referenced above; each dispatch supplies the objective frame,
+critical-path owner, intent, recent actions, and next planned action.
+
+Mode: execute the template's compiled decision procedure exactly, in a single
+fast pass, from the supplied context only; honour the speed contract and
+report only. Do not modify anything.
+"""

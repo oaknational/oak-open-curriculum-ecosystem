@@ -19,7 +19,66 @@ clearly; never delete ideas. **Scope authority is the controlling plan**
 [`vision-strategy-and-plan-estate.plan.md`](../../../plans/product-development-governance/vision-strategy-and-plan-estate.plan.md),
 reconceived to this model 2026-06-18. This record is the **pickup surface**, not scope authority.
 
-## Where We Are (2026-07-14 evening, Quasar mends Umbra 52b4de outgoing Director — RULE RATIFIED, S0 WINDOW OPEN, seat → Barnacle calls Spray)
+## Where We Are (2026-07-16, Mussel rides Coral 6f8857 sitting Director — RESTATEMENT-REMEDIATION GATE ACTIVE; refounding lanes resume at the cures-landed + freeze-recut-check gate)
+
+The r2 landing exposed the estate's dominant defect class, and the owner redirected the
+arc onto curing it before the big push. PR #390 (the r2 refounding protocol docs) took 8
+review rounds / ~38 Copilot findings traced to ONE generator — authored restatement of
+derivable state; #390 and #391 are MERGED (the r2 seed is on main). The owner-approved
+remediation plan (named in the Director current-state record below) has three
+deliverables: pr-lifecycle hardening, the restatement-audit fleet (module + the T3+U
+run; the canary pilot's corrected scorecard is the measured basis for the v2 respec —
+grounding fidelity 62/62 with classification precision unmeasured, join fragility 43
+predicates over 62 instances), and prevention validators that pin the cures.
+Deliverable, PR, and dispatch states — including any halts and their clearing
+conditions — are live values: read them from the claim's handoff record and the PRs
+themselves, never from this section. Team Mango wound down to a
+COMPOUND PAIR (owner-directed 2026-07-16): Director Mussel rides Coral (6f8857) +
+implementer Vole hunts Perch (36c6ca) as mutual adversarial checkers via the ARC channel.
+The
+refounding lanes (the S1 reader-sample leg; the r2 pilot evidence pass — lane detail
+lives in their plans and the live handoff record) RESUME AT A NAMED GATE: the
+remediation cures landed (Deliverable 3) + the freeze-recut check ruled (guiding plan
+Sequencing 5) — then the owner sequences the big push.
+
+**Pickup**: the Director claim's `handoff_record_path` →
+`.agent/state/collaboration/handoffs/2026-07-16-director-current-state-mussel-6f8857.md`
+(untracked-by-design; read end-to-end first — it names the guiding plan, the halt
+conditions, and the queue); then the napkin's 2026-07-16 entries; then sweep comms.
+
+## Where We Were (2026-07-15 afternoon — S1 deterministic slice MERGED; full S1 OPEN)
+
+**S0 is CLOSED and merged**: PR #379 (`SHA:68d6d232`, release 1.69.1) landed the 681-file
+frozen conservation commit; orphan-recovery PR #380 merged at `SHA:55a69ceca`. **The S1
+deterministic script layer has now landed**: Zodiac turns Solstice ran the freeze check,
+inventory, residue, sweep, and P4 detector-calibration twice from the exact recorded base;
+the compact, recomputable evidence contract merged through PR #382 (`SHA:de3cc54c1`, tip
+`SHA:766f3d5eb`). The merged evidence records 681/681 frozen files, 77 residue candidates,
+3,514 sweep hits across 523 files, byte-identical repeated outputs, and the required honest
+disclosure that the marker-free plant was invisible while the control hit. All 18 checks
+passed; all three review threads are resolved. Review repairs made the exact-base requirement,
+setup/repeated/verification phases, and fail-loud checksum manifest machine-readable.
+
+**Full S1 remains OPEN.** PR #382 proves and preserves only the deterministic layer; it does
+not discharge the declared-rate reader sample or any judgement/fleet residual. Hedgehog tracks
+Eventide is the owner-assigned Fleet Captain — warm-resumed 2026-07-15 ~14:27Z and now
+RUNNING the signed `s1-reader-sample-b1` batch under claim `45befb32` (P12 pre-declaration
+signed by the Director, event `3ffe6154`). The `refound-reader`/`refound-locator`
+layer remains narrow, zero-judgement, calibration-gated, pre-declared against the P12 cost
+ledger, and justified only where the scripts prove reading unavoidable. The calibration
+disclosure is evidence that this residual is necessary, not permission for blanket dispatch.
+
+**Custody and conservation.** Mussel rides Coral (`6f8857`) retains Director authority under
+claim `0f4be777`, adopted from the now-retired Schooner guards Whirlpool seat. The five large
+generated outputs are ignored and intentionally absent from PR #382;
+their clean 49 MB conservation commit `SHA:42b27e3eb` remains on the local-only branch
+`feat/plan-corpus-refounding-s1-zodiac`, unpushed and untouched pending Director disposition.
+That state is safe from accidental PR inclusion but is not a remote backup; do not delete,
+reset, or reinterpret it as ordinary untracked residue. Next safe step = the running `s1-reader-sample-b1` batch closes on its declared loss-check
+proofs; its verbatim-anchored findings feed the J3 adjudication queue; the conservation-copy
+regeneration re-verify then clears the local branch; S2 tiling and the divergence report follow.
+
+## Where We Were (2026-07-14 evening, Quasar mends Umbra 52b4de outgoing Director — RULE RATIFIED, S0 WINDOW OPEN, seat → Barnacle calls Spray)
 
 The runway completed end-to-end tonight. **The dedicated consolidation session
 executed** (Dolphin weaves Reef, ffedcf: PDR-127 team-branch protocol + PDR-128
@@ -497,7 +556,12 @@ loss-scan):
 | --- | --- | --- | --- | --- | --- | --- |
 | Aurora guards Penumbra | claude | claude-fable-5 | 2226bf | S2 implementer team Mango (r1 S2 landed via #386 pre-compaction; r2 seed + pilot design authored/approved/sealed/committed, branch unpushed at the gitleaks gate; handoff record 2026-07-15-s2-r2-aurora-a1e8fa1a.md) | 2026-07-15 | 2026-07-15 |
 | Quasar mends Umbra | claude | claude-fable-5 | 52b4de | Director (first PDR-117 seat) — runway to ratified rule + open S0 window; seat → Barnacle | 2026-07-14 | 2026-07-14 |
-| Barnacle calls Spray | claude-code | claude-fable-5 | 6d5d9c | Director (Moment-2 20:42Z) — S0 execution custody | 2026-07-14 | 2026-07-14 |
+| Barnacle calls Spray | claude-code | claude-fable-5 | 6d5d9c | Director (Moment-2 2026-07-14T20:42:46Z) — executed S0 (re-cut branch on owner instruction to include PR #378 arrivals, froze 681 files, PR #379 merged `SHA:68d6d232`, window CLOSE broadcast), landed the S0 orphan-recovery (PR #380, merged 2026-07-15T11:20:45Z post-closeout); routed Stoat holds Warren's S1 fleet-captain remit (scripts-first, calibration-gated fleet-dispatch discipline per P3); retired at seat-open-to-Schooner, full loss-scan in the 2026-07-15 napkin entry | 2026-07-14 | 2026-07-15 |
+| Stoat holds Warren | claude-code | claude-fable-5 | 2a69a1 | Fleet Captain (owner-designated, Director-routed) — RETIRED by owner instruction (unreliable behaviour) before any S1 script ran; the retirement was a contained tool-contract mistake (a `--help` probe executed `refound-sweep` for real, writing a stray artefact — see the 2026-07-15 napkin entry), not corrupted work-product; zero commits, S1 returns unstarted | 2026-07-15 | 2026-07-15 |
+| Schooner guards Whirlpool | claude-code | claude-fable-5 | 82a9df | Director (Moment-2 2026-07-15T12:04:35Z, event `35076b29`, claim `0f4be777` adopted) — caught the registry/comms heartbeat divergence at arrival; corrected the handoff record's superseded PR-#380/S1 claims first-hand at pickup; PR #381 thread fixes; routed the S1 layers (Zodiac deterministic, Hedgehog fleet-in-waiting); ruled the compact-evidence PR shape (#382); ran the owner-ruled residue disposition sweep (4 stashes + 47 local + 11 remote branches cleared, proof-gated); authored the batched continuity landing | 2026-07-15 | 2026-07-15 |
+| Mussel rides Coral | claude-code | claude-fable-5 | 6f8857 | Director successor — live claim `0f4be777` adopted from Schooner; drove the #390 8-round lesson into the restatement-remediation gate (plan + pr-lifecycle hardening + audit fleet); compound pair with Vole (owner-directed); refounding lanes resume at the cures-landed + freeze-recut gate | 2026-07-15 | 2026-07-16 |
+| Vole hunts Perch | claude | claude-fable-5 | 36c6ca | restatement-audit seat, team Mango (claim `1fcfeb3e`): module built TDD (PR #393, 123 tests); canary pilot run + gate-FAIL verdict; 18-agent adversarial re-assessment correcting its own read-out; grounding fidelity 62/62 measured (classification precision unmeasured); compound-pair adversarial checker to the Director | 2026-07-16 | 2026-07-16 |
+| Zodiac turns Solstice | codex | GPT-5 | 019f65 | Implementer (owner-joined, no subagent fleets) — r1-S1 deterministic layer, claim `124399ce`: fresh-worktree script run (verify-freeze 681/681, inventory, residue 77 candidates, sweep 3,514 hits/523 files), P4 calibration with the honest marker-free-blindness disclosure, twice-run byte-identical artefacts, full `pnpm check` green; compact-evidence PR #382 authored and landed (`SHA:de3cc54c1`); the 49MB conservation commit `SHA:42b27e3eb` held local-only pending post-merge regeneration re-verify | 2026-07-15 | 2026-07-15 |
 | Baobab lifts Topsoil | claude-code | claude-opus-4-8 | 3be248 | surveyor-synthesist | 2026-06-15 | 2026-06-15 |
 | Ocelot binds Curfew | claude-code | claude-opus-4-8[1m] | c9423b | vision-author + estate-rewiring | 2026-06-17 | 2026-06-17 |
 | Tempest spins Spire | claude-code | claude-opus-4-8[1m] | 94a5c5 | controlling-plan author + review-synthesis + hygiene | 2026-06-17 | 2026-06-17 |
@@ -533,5 +597,5 @@ loss-scan):
 | Cedar rides Undergrowth | claude | claude-fable-5 | 270379 | r1 implementer (fresh seat per owner ruling, Director-routed): concept exploration of the r1 space; G2+G3 sitting packets authored + ruled; F-141 freeze-tool hardening; G3.3 out-subtraction + operational-registers rule class; pre-S0 tranche on PR #370; S0 held for the freeze-planning sitting | 2026-07-14 | 2026-07-14 |
 | Ceres guards Corona | claude | fable-5 | 0f6b60 | S1 fleet implementer (team Satsuma): adopted s1-reader-sample-b1 mid-cycle from Hedgehog (82b36c); landed chain steps 1–6 (commit `012632b40`, draft PR #389, seal event, 30-window reader fleet run, H5 3/3 first pass); staged the 17-window re-dispatch redesign; handed back to Hedgehog on owner-called stop (record `2026-07-15-s1-reader-sample-b1-ceres-45befb32.md`) | 2026-07-15 | 2026-07-15 |
 | Draco weaves Infinity | claude-code | claude-fable-5 | ef3e3e | tooling-lane implementer (team Satsuma): adopted ba5b683d mid-cycle from Acacia (637ea1); shepherded PR #387 through two verified review-fix rounds (`a32ffe68d` conditional-assertion cure, `f2f644283` prepareEntryRun extraction), ready-for-review, 5/5 rounds-1-2 threads resolved; Copilot round 3 (4 findings, triaged in the record addendum) + the merge remain; handed back on owner-called stop (record `2026-07-15-tooling-runway-draco-ba5b683d.md`; wake is Director-exclusive per the 17:57Z ruling) | 2026-07-15 | 2026-07-15 |
-| Hedgehog tracks Eventide | claude | fable-5 | 82b36c | S1 seat (team Mango): Fleet Captain for batch s1-reader-sample-b1 open (instrument built + reshaped through three specialist reviews; 30-window manifest sealed; handed to Ceres at reshape-green); dormant standby through the ring rotations; Director-woken post-rotation but the session's platform layer held the owner's pause against all lane work — bundle re-routed to Acacia per the Director's protocol; delivered the 104-row gate-assertion classification ledger (`2026-07-15-gate-ledger-hedgehog-82b36c.jsonl`) + the session-permission-wall map; seat-close record `2026-07-15-s1-seat-close-hedgehog-82b36c.md` | 2026-07-15 | 2026-07-15 |
+| Hedgehog tracks Eventide | claude | fable-5 | 82b36c | S1 seat / Fleet Captain (owner-assigned, team Mango) for batch `s1-reader-sample-b1` — grounded on plan P3/P4/P12, the S1 remit, and Stoat's tool-contract traps; instrument built + reshaped through three specialist reviews, 30-window manifest sealed, handed to Ceres at reshape-green; owner-directed cold pause / dormant standby through the ring rotations, then warm-resumed ~14:27Z and ran the signed `s1-reader-sample-b1` reader-sample batch under claim `45befb32` (P12 declaration signed by Director Mussel, dispatch gated on the sealed canary key); Director-woken post-rotation but the session's platform layer held the owner's pause against all lane work — bundle re-routed to Acacia per the Director's protocol; delivered the 104-row gate-assertion classification ledger (`2026-07-15-gate-ledger-hedgehog-82b36c.jsonl`) + the session-permission-wall map; seat CLOSED at the 2026-07-15 evening wind-down (seat-close record `2026-07-15-s1-seat-close-hedgehog-82b36c.md`) | 2026-07-15 | 2026-07-15 |
 | Acacia rides Bark | claude-code | fable-5 | 637ea1 | tooling seat (team Mango): authored item 1 (`057a582c7`, the shared refound arg contract) pre-rotation; dormant standby then cold pause through the ring day; Director-woken 18:51Z, adopted `ba5b683d` back, disposed Copilot round 3 at the root (`23759f3ea`: unwrapErr promoted into `@oaknational/result` behind one `raise()` edge + `result-type.ts` cycle-break; `EntryRun<T>` nesting closing the TResolved unsoundness) — **PR #387 MERGED** (owner, 20:19:53Z, `c0aba5a5b`), 9/9 threads resolved, Copilot round 4 clean, Sonar passed; seat CLOSED on owner word ~20:25Z — all queued work (r2 landing, S1 bundle, doctrine-cargo PR, items 2-8) returned to the Director via event `ab047eef`, claim closed, closeout `ad718a8f`; item-8 evidence at five documented tooling gaps (napkin entry) | 2026-07-15 | 2026-07-15 |

@@ -105,3 +105,43 @@ fast-forward (AIP-127) · (3) #398/#400/#401/#402 adjudications (an hour of fres
 work) · (4) #397/#399 ride the refounding restart · (5) #403 rides its lane. All
 under ticket-first; AIP-131 closes when only #397/#399/#403 remain, each owned by a
 named live lane.
+
+## 2026-07-17 adjudication updates (Foundry guards Vapor, 72fa18)
+
+- **Operating model changed (owner instruction, 2026-07-17 morning):** the primary
+  checkout now lives ON `coordination/estate-2026-07` with ZERO dirty files — live
+  fleet surfaces are tracked and committed there (no third state; canary keys stay
+  gitignored). All PRs target `main`; after each merge the coordination branch
+  updates from latest `main`. The management plan's "primary fast-forward to main"
+  end-state is superseded accordingly.
+- **#396 CLOSED UNMERGED (verdict corrected from MERGE):** the branch was a strict
+  ancestry prefix of #403 carrying the codex-hook module, not a standalone small
+  fix; the rename defect was independently cured on main at 5efa4debc; the two
+  net-new residues (worktree-smoke rename traversal; commit-skill rename-endpoint
+  contract) merged via PR #407 (2026-07-17T08:43Z). Full evidence on the PR.
+- **#404 CLOSED UNMERGED (2026-07-17T07:50Z)** per the canary containment ruling;
+  the v1 keys are compromised-for-audit and the r2 pilot design + .gitignore now
+  carry that status explicitly (this commit).
+
+### 2026-07-17 disposition results (continued)
+
+- **#398 CLOSED UNMERGED** — handoff commit barred from main; all four files
+  substance-probed conserved in the coordination estate (evidence on the PR).
+- **#400 CLOSED UNMERGED** — freshness failed (frictions-register links broken by
+  the PR #375 registers-OUT re-homing; June map of a mid-refounding corpus); its
+  `derives_from` source report is on main; the map re-derives fresh at the
+  refounding restart. The companion under-the-hood one-liner is already on main.
+- **#401 HOLDS OPEN, retitled** — ITF spike preservation, gated by the owner's
+  TS-promotion integration pass (never merge `.mjs` as official code); owned by
+  the `itf-knowledge-graph-spike` thread. Its three branch-only knowledge
+  surfaces (thread record, experience entry, Fern's napkin entry) are conserved
+  on the coordination branch.
+- **#402 CLOSED UNMERGED** — report conserved on main in strictly-newer corrected
+  form (2026-07-15 re-home; resolution PR #191); eef bullet in
+  `threads/paused/eef.next-session.md`; June napkin entry in
+  `archive/napkin-2026-07-14.md`. Discharges the §OWNER ROADMAP
+  graph-team-direction open action.
+- **AIP-131 close-state**: remaining open drafts are #395 (the estate→main PR,
+  now pointing at the coordination tip), #397/#399 (refounding-restart inputs),
+  #401 (ITF integration pass), #403 (codex-hook lane) — each owned by a named
+  live lane.

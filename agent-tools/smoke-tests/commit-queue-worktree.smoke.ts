@@ -11,18 +11,18 @@ import { readRegistry } from '../src/commit-queue/registry';
 import { resolveTrustedGit } from '../src/core/trusted-git';
 
 /**
- * F-138 regression smoke — the commit-queue two-root split.
+ * F-138 regression smoke — the commit-queue two-root split and changed-endpoint identity.
  *
- * Reproduces the F-138 field mechanism with a real scratch primary and linked
- * worktree: staged reads and commits use the invoking worktree, registry state
- * stays at the coordination home, and an underivable git root refuses loudly.
- * Real filesystem and process IO make this a smoke rather than an in-process
- * Vitest suite; the package's test:e2e script keeps it in the full gate.
+ * Reproduces the field mechanism with a real scratch primary and linked worktree:
+ * a rename traverses both changed endpoints, registry state stays at the
+ * coordination home, and an underivable git root refuses loudly.
+ * Real filesystem/process IO makes this a smoke; `test:e2e` keeps it in the full gate.
  */
 
 const CLAIM_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 const INTENT_ID = '11111111-1111-4111-8111-111111111111';
-const INTENT_FILE = 'notes/change.md';
+const RENAME_SOURCE = 'notes/current.md';
+const RENAME_DESTINATION = 'notes/active.md';
 const COMMIT_SUBJECT = 'feat(f138): stage from the linked worktree';
 const REGISTRY_REL = '.agent/state/collaboration/active-claims.json';
 
@@ -53,7 +53,7 @@ function seedRegistry(): CommitQueueRegistry {
         intent_id: INTENT_ID,
         claim_id: CLAIM_ID,
         agent_id: agentId,
-        files: [INTENT_FILE],
+        files: [RENAME_SOURCE, RENAME_DESTINATION],
         commit_subject: COMMIT_SUBJECT,
         queued_at: '2026-07-14T00:00:00Z',
         updated_at: '2026-07-14T00:00:00Z',
@@ -85,8 +85,10 @@ async function makeFixture(): Promise<WorktreeFixture> {
   git(primary, 'config', 'user.email', 'f138-regression@test.invalid');
   git(primary, 'config', 'user.name', 'F138 Regression');
   git(primary, 'config', 'commit.gpgsign', 'false');
+  await mkdir(join(primary, 'notes'), { recursive: true });
   await writeFile(join(primary, 'README.md'), 'seed\n');
-  git(primary, 'add', 'README.md');
+  await writeFile(join(primary, RENAME_SOURCE), '# move me atomically\n');
+  git(primary, 'add', 'README.md', RENAME_SOURCE);
   git(primary, 'commit', '-m', 'chore: seed');
 
   const linked = join(root, 'linked');
@@ -99,10 +101,8 @@ async function makeFixture(): Promise<WorktreeFixture> {
   return { root, primary, linked };
 }
 
-async function stageIntentFileInWorktree(fixture: WorktreeFixture): Promise<void> {
-  await mkdir(join(fixture.linked, 'notes'), { recursive: true });
-  await writeFile(join(fixture.linked, INTENT_FILE), '# staged in the linked worktree\n');
-  git(fixture.linked, 'add', INTENT_FILE);
+async function stageIntentRenameInWorktree(fixture: WorktreeFixture): Promise<void> {
+  git(fixture.linked, 'mv', RENAME_SOURCE, RENAME_DESTINATION);
 }
 
 async function readPrimaryIntent(fixture: WorktreeFixture): Promise<CommitIntent | undefined> {
@@ -113,7 +113,7 @@ async function readPrimaryIntent(fixture: WorktreeFixture): Promise<CommitIntent
 async function proveRecordStagedUsesWorktreeIndex(): Promise<void> {
   const fixture = await makeFixture();
   try {
-    await stageIntentFileInWorktree(fixture);
+    await stageIntentRenameInWorktree(fixture);
 
     const result = await runAgentToolsCli({
       argv: ['commit-queue', 'record-staged', '--intent-id', INTENT_ID],
@@ -125,7 +125,8 @@ async function proveRecordStagedUsesWorktreeIndex(): Promise<void> {
     assert.equal(result.stderr, '');
 
     const intent = await readPrimaryIntent(fixture);
-    assert.equal(intent?.staged_name_status, 'A\t' + INTENT_FILE + '\n');
+    const expectedStatus = `A\t${RENAME_DESTINATION}\nD\t${RENAME_SOURCE}\n`;
+    assert.equal(intent?.staged_name_status, expectedStatus);
     assert.match(intent?.staged_bundle_fingerprint ?? '', /^[0-9a-f]{64}$/);
 
     // The registry write must land in the coordination home ONLY — the
@@ -139,7 +140,7 @@ async function proveRecordStagedUsesWorktreeIndex(): Promise<void> {
 async function proveVerifyStagedUsesWorktreeIndex(): Promise<void> {
   const fixture = await makeFixture();
   try {
-    await stageIntentFileInWorktree(fixture);
+    await stageIntentRenameInWorktree(fixture);
 
     const recorded = await runAgentToolsCli({
       argv: ['commit-queue', 'record-staged', '--intent-id', INTENT_ID],
@@ -170,7 +171,7 @@ async function proveVerifyStagedUsesWorktreeIndex(): Promise<void> {
 async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
   const fixture = await makeFixture();
   try {
-    await stageIntentFileInWorktree(fixture);
+    await stageIntentRenameInWorktree(fixture);
     const primaryHeadBefore = git(fixture.primary, 'rev-parse', 'HEAD').trim();
 
     const recorded = await runAgentToolsCli({
@@ -197,9 +198,10 @@ async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
     assert.match(committed.stderr, /advisory orchestrator exit/);
     const reportedSha = committed.stdout.trim();
     assert.equal(git(fixture.linked, 'rev-parse', 'HEAD').trim(), reportedSha);
-    assert.ok(
-      git(fixture.linked, 'show', '--name-only', '--format=%s', 'HEAD').includes(INTENT_FILE),
-    );
+    const committedPaths = git(fixture.linked, 'ls-tree', '-r', '--name-only', 'HEAD').split('\n');
+    assert.ok(committedPaths.includes(RENAME_DESTINATION));
+    assert.equal(committedPaths.includes(RENAME_SOURCE), false);
+    assert.equal(git(fixture.linked, 'status', '--short'), '');
 
     // The primary checkout's HEAD is untouched — the inner commit landed
     // on the invoking worktree's branch.

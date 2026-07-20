@@ -179,6 +179,7 @@ cursor semantics unchanged (excluded events still marked seen); existing watch t
 ### Item 2 — J3 adjudication-queue substrate
 
 **File scope**: `agent-tools/src/refounding/` (new queue schema + status modules + thin CLI
+
 - tests); package.json registration.
 **Shape**: rows carry verbatim-anchored evidence, disposition status (undecided/…),
 provenance; CLI lists/filters/recounts. The queue is the container, not the verdict — no

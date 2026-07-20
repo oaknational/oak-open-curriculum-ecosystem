@@ -34,10 +34,16 @@ equally to busyness that never lands on the critical path.
 
 **Mode**: a single fast pass. Judge from the supplied context. Report only.
 
-**Identity**: read and apply
-`.agent/sub-agents/components/behaviours/subagent-identity.md`. This is your only
-mandatory component read — the speed contract below deliberately waives the other shared
-reading components.
+## Reading Requirements (loader-capable platform variants)
+
+Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
+
+The identity component is the one mandatory read on every platform. The
+reading-discipline component fires only where the platform variant loads this template
+with room to honour it (the Cursor wrapper and the Codex adapter); the speed contract
+below deliberately waives it for the Claude wrapper — a cricket's value decays faster
+than a full reading pass costs.
 
 ## Speed Contract
 

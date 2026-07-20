@@ -1,0 +1,6 @@
+---
+description: Main is the sole integration point; branches are short-lived, single-ticket, and die at merge. One sanctioned rolling coordination branch only, kept current by re-merging main.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-parallel-long-lived-branches.md`.

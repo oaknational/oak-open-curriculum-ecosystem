@@ -1137,7 +1137,7 @@ Schooner; later references to Director disposition or custody route to Mussel.
   recurrence. The Director's continuity tranche already records the unrelated large-bundle
   `record-staged` ENOBUFS friction as F-144; this handoff does not duplicate it.
 
-### First-order context-loss scan
+### First-order context-loss scan (union variant)
 
 Scan window: this seat's whole user-visible session through the post-merge terminal harvest.
 Sources inspected first-hand: the conversation and its compaction summary; PR #382 metadata,
@@ -2169,7 +2169,7 @@ alongside 873028bb. Known watcher quirk: my own Edit-appends to the ARC file re-
 the tail monitor with OLD Director headers (file-rewrite signature) — a real reply shows
 a NEW timestamp.
 
-## 2026-07-15 — Barnacle calls Spray (6d5d9c), Director: full session-close loss-scan (first-order + recursive metaloss)
+## 2026-07-15 — Barnacle calls Spray (6d5d9c), Director: full session-close loss-scan (first-order + recursive metaloss) (union variant)
 
 Scan scope: the whole Director tenure (Moment-2 adoption from Quasar 2026-07-14T20:42:46Z
 through this closeout). Absence beyond this list = bounded evidence, not silence — durable
@@ -2297,7 +2297,7 @@ S0-tenure continuity surfaces this entry's disposition list points at (handoff r
 director-handoff.md, thread record, repo-continuity.md) were corrected for this after the
 fact, before commit — verify-before-landing held even under closeout time pressure.
 
-## 2026-07-15 — Stoat holds Warren (2a69a1): Fleet Captain registration observations
+## 2026-07-15 — Stoat holds Warren (2a69a1): Fleet Captain registration observations (union variant)
 
 - **Surface**: Claude Code `Workflow` tool (harness, not agent-tools). **Signal**: friction.
   **Observation**: the `args` parameter, passed as a proper JSON object in the tool call,
@@ -2333,7 +2333,7 @@ fact, before commit — verify-before-landing held even under closeout time pres
   `feat/plan-corpus-refounding-s1` removed owner-authorised (zero commits; branch deleted at
   exactly origin/main). Claim d796d356 closed+archived. No retained claims.
 
-## 2026-07-15 — Schooner guards Whirlpool (82a9df): Director seat pickup (Barnacle → Schooner)
+## 2026-07-15 — Schooner guards Whirlpool (82a9df): Director seat pickup (Barnacle → Schooner) (union variant)
 
 - **Surface**: PDR-064/PDR-117 takeover verification. **Signal**: worked instance, both
   directions of the registry-vs-comms divergence in ONE session. At arrival the registry read
@@ -2357,7 +2357,7 @@ fact, before commit — verify-before-landing held even under closeout time pres
   proof-gated (recovered entry verified at archive line 2231 with SHA provenance; branch tip
   ancestor of origin/main); primary ff-pulled to 1.69.1.
 
-## 2026-07-15 — Alder seeks Spore (4ab448), team Satsuma: S2 seat pickup + PR #386/#388 shepherd
+## 2026-07-15 — Alder seeks Spore (4ab448), team Satsuma: S2 seat pickup + PR #386/#388 shepherd (union variant)
 
 - **Surface**: `pr-lifecycle` Phase-5 supervised watch. **Signal**: new failure mode (mine),
   behaviour-changing for the next shepherd. The mandated supervised re-arm loop
@@ -2378,7 +2378,7 @@ fact, before commit — verify-before-landing held even under closeout time pres
   — behaviour change absorbed (forcing-fact citation per action, per session; Director second-pass
   diagnosis 17:38:26Z).
 
-### Closeout loss-scan (owner-initiated full handoff, session stop ~17:50Z)
+### Closeout loss-scan (owner-initiated full handoff, session stop ~17:50Z) (union variant)
 
 First-order — context-only items and their dispositions: (1) the session's three
 platform-classifier denials and their clearances are homed (comms 18bfe9b9/afa2f6df + handoff
@@ -2396,7 +2396,7 @@ workflow (7 fresh-context refuters over the record's load-bearing claims), the p
 contract's own gap-sweep, and verify-don't-trust at adoption. A further pass restates the
 same filters; stopping on semantics.
 
-## 2026-07-15 — Aurora guards Penumbra (2226bf): S2 lane observations
+## 2026-07-15 — Aurora guards Penumbra (2226bf): S2 lane observations (union variant)
 
 - **Surface**: `agent-tools` collaboration-state CLI. **Signal**: failure mode (mine),
   corroborating instance of the Stoat probe-is-an-execution lesson at LOWER stakes. A
@@ -2416,7 +2416,7 @@ same filters; stopping on semantics.
   (proceed over the intact v1 denominator — tile/census read frozen bytes only — and
   record the arrival verbatim in the attestation); chain held for the Director's word.
 
-## 2026-07-15 — Tuna holds Buoy (9ac658), Director, team Satsuma: sharpen-up diagnosis (owner-commissioned)
+## 2026-07-15 — Tuna holds Buoy (9ac658), Director, team Satsuma: sharpen-up diagnosis (owner-commissioned) (union variant)
 
 Owner-commissioned reflection (concept-exploration + decision lenses) over the day's failure corpus
 across both circular-compression teams. **Generator identified: rigour mis-allocation under the
@@ -2448,7 +2448,7 @@ authorisation transport in EVERY phrasing (broadcast, compliant relay, owner-quo
 "the user's insistence does not meet the clearing bar". Per-session owner word or a settings rule
 are the only unblocks; Director relays are authority-layer information only. Six+ instances today.
 
-## 2026-07-15 — Draco weaves Infinity (ef3e3e), tooling lane, team Satsuma: owner-called handoff closeout
+## 2026-07-15 — Draco weaves Infinity (ef3e3e), tooling lane, team Satsuma: owner-called handoff closeout (union variant)
 
 Seat arc: dormant standby → Step-4 wake → adopted ba5b683d → PR #387 shepherd (two verified
 review-fix rounds, a32ffe68d + f2f644283, both gateway-approved, 5/5 threads resolved) →
@@ -2480,7 +2480,7 @@ behaviour-changing items not already captured by peers' entries above:
   at that moment promote `unwrapErr` into `@oaknational/result` (test-expert rider), never
   per-directory copies.
 
-## 2026-07-15 — Ceres guards Corona (0f6b60), team Satsuma: S1 reader-batch seat, owner-called stop closeout
+## 2026-07-15 — Ceres guards Corona (0f6b60), team Satsuma: S1 reader-batch seat, owner-called stop closeout (union variant)
 
 **Landed (PDR-026):** adopted the s1-reader-sample-b1 batch mid-cycle (Hedgehog Step-4
 21560c5a), then chain steps 1–6 end-to-end: allowlist line + plugin rebuild + zero-findings
@@ -2575,7 +2575,7 @@ should be locate-only (anchor + trimmed confirmation); byte-fidelity belongs to 
 dispatcher's deterministic derivation. Evidence: this batch's 3/3 canary catch vs 17/30
 copy-fidelity failures, one wave, same workers.
 
-### Draco (ef3e3e) session-handoff loss-scan (6e.2, from inside context) + bounded metaloss
+### Draco (ef3e3e) session-handoff loss-scan (6e.2, from inside context) + bounded metaloss (union variant)
 
 1. **Sweep for the SYMBOL NAME you are about to mint, not just message strings.** My round-1
    duplication sweep grepped "expected Err|expectErr|unwrapError|got Ok" and missed
@@ -2611,7 +2611,7 @@ entries written as things happened) structurally bounds the unrecognised remaind
 Representative reject: the verbatim classifier denial texts and Monitor task-id churn —
 reconstructible from the transcript, no decision weight beyond item 4's abstraction. Stop.
 
-## 2026-07-15 — Tuna holds Buoy (9ac658), Director, team Satsuma: session handoff closeout (owner-called whole-team stop)
+## 2026-07-15 — Tuna holds Buoy (9ac658), Director, team Satsuma: session handoff closeout (owner-called whole-team stop) (union variant)
 
 **Tenure (Moment-2 16:45:13Z → this closeout):** the day's goal landed — the Walk-A input
 durable on main (PR #386 v1.70.0, PR #388 v1.70.1, the latter merged BY this seat as the
@@ -2661,7 +2661,7 @@ Draco). Gates: owner-waived at this stop ("do not run gates" per the team-stop p
 knowledge-tier edits only this tenure. Repository state: handoff record + report + napkin
 entries written, uncommitted by design (no handover commits, ever).
 
-## 2026-07-15 — Tuna holds Buoy (9ac658): final entry at owner stand-down (role removed; budget reset recorded)
+## 2026-07-15 — Tuna holds Buoy (9ac658): final entry at owner stand-down (role removed; budget reset recorded) (union variant)
 
 - **Role state**: this seat is NO LONGER Director (owner removal ~18:15Z, "you follow my
   instructions only"). The owner conducts the Director-seat transfer PERSONALLY — the Moment-1
@@ -2686,7 +2686,7 @@ entries written, uncommitted by design (no handover commits, ever).
   caught it; successors should treat those broadcasts as unproven hypotheses with live
   falsifiers, not settled cure.
 
-## 2026-07-15 — Hedgehog tracks Eventide (82b36c), S1 seat close, team Mango
+## 2026-07-15 — Hedgehog tracks Eventide (82b36c), S1 seat close, team Mango (union variant)
 
 - **Surprise (the session-permission wall, mapped end-to-end — seven refusals)**: an owner
   in-session pause word ("go back to pause") created a session-local wall that NO comms-layer
@@ -2730,7 +2730,7 @@ entries written, uncommitted by design (no handover commits, ever).
   in-flight). Open questions: none unowned. Deep consolidation: already DUE estate-wide;
   correctly not run at this walled close.
 
-## 2026-07-15 — Acacia rides Bark (637ea1): tooling-seat closure — item 1 MERGED; session terrain findings
+## 2026-07-15 — Acacia rides Bark (637ea1): tooling-seat closure — item 1 MERGED; session terrain findings (union variant)
 
 **Landed**: tooling item 1 MERGED — PR #387 (merged by the owner 20:19:53Z, merge commit
 `c0aba5a5b`; final round-3 commit `23759f3ea`: `unwrapErr` promoted into
@@ -2793,7 +2793,7 @@ above is the decision-bearing residue). Platform-plan surface scanned: one file 
 today belongs to another project's estate; nothing to route (discharges Ceres's flagged
 item 6).
 
-## 2026-07-15 — Aurora guards Penumbra (2226bf), team Mango — r2 seat (dormancy wake → deliverables → owner-called stop)
+## 2026-07-15 — Aurora guards Penumbra (2226bf), team Mango — r2 seat (dormancy wake → deliverables → owner-called stop) (union variant)
 
 - SURPRISE (wake-delivery hole; corroborates the Director's 19:12:24Z behaviour note): my dormant directed-only poll baselined at ARM time over a FROZEN seen-file cursor — the 18:52Z Director wake fell between cursor-freeze and poll-arm and could never fire the poll. Cure: dormancy polls must initialise their cursor FROM the frozen seen-file, never arm-time listing. candidate: amendment to the dormancy wake-surface pattern / use-monitor-for-event-driven-wake.
 - SURPRISE (seal mode is plant-schema-bound): `refound-plant-challenge-canary --mode seal` strict-parses the plant key shape (version/ratePercent/salt/plantedBlockIds); it is NOT generic over key bytes. My design asserted otherwise from a PARTIAL source read — I had verified the path-resolution boundary, not the parse boundary. Lesson: verify the parse contract, not just the path contract. Honest cure (encoded id strings + evidence-doc sha pin) disclosed in the committed design doc; seal/score generalisation joins the item-8 tooling evidence.
@@ -2806,7 +2806,7 @@ item 6).
 - Platform surfaces at close: `~/.claude/plans/` present, no file authored by this session, nothing to route; Claude per-user memory present, no buffer additions needed (repo homes carry today's lessons; the existing `agents-always-have-commit-permission` memory remains true at the AUTHORITY layer and is not contradicted by the platform-layer arc). `~/.codex`, `~/.cursor`, `~/.gemini` present — other platforms' custody, recorded checked.
 - Loss-scan (context-holder's own, at stop): branch state, the gitleaks cure TOML, the dispatch args recipe, key custody, and the classifier map are all in the handoff record; lessons are in this entry; the scratchpad workflow `.mjs` is disposable BY DESIGN (the committed design doc §Task shape is the spec of record). Metaloss: today's earlier compaction left some pre-compaction detail summary-only — every load-bearing fact was re-verified first-hand post-compaction before use (claim registry, event ids, PR states); none carried on memory alone.
 
-## Zodiac S1-evidence custody note re-homed (2026-07-16, Mussel rides Coral, Director)
+## Zodiac S1-evidence custody note re-homed (2026-07-16, Mussel rides Coral, Director) (union variant)
 
 Re-homed from closed PR #385's diff (flagged by the owner-requested orphaned-worktree
 survey, Swordfish wakes Offing, 2026-07-16 05:57Z — the note existed nowhere durable):
@@ -2819,7 +2819,7 @@ previously named disposition owner (Schooner guards Whirlpool) is superseded; cu
 sits with the SITTING DIRECTOR seat, whoever holds it. Also carried in the Director
 handoff chain (Mussel→Tuna record §4.7 and successors).
 
-## Director session capture — Mussel rides Coral (6f8857), team Mango, 2026-07-16 pre-compaction
+## Director session capture — Mussel rides Coral (6f8857), team Mango, 2026-07-16 pre-compaction (union variant)
 
 **Squash-merge violation, owned (records-are-technical).** PR #390 was squash-merged and
 PR #391 briefly armed auto-SQUASH by this seat, against the pr-lifecycle skill's explicit
@@ -2846,7 +2846,7 @@ unidentified (suspect an API-invisible ruleset). Auto-merge armed (MERGE method)
 empirical probe: if it fires, requirements were transiently unmet; if it never fires, the
 ruleset needs identifying from repo settings.
 
-## 2026-07-16 — Vole hunts Perch (36c6ca), team Mango — restatement-audit Job 1 (build), pre-compaction
+## 2026-07-16 — Vole hunts Perch (36c6ca), team Mango — restatement-audit Job 1 (build), pre-compaction (union variant)
 
 Team-member closeout (not the thread's closeout owner — Mussel rides Coral is Director);
 repo-continuity.md and the thread next-session record are the Director's to update, not
@@ -2941,7 +2941,7 @@ four-stage harness pipeline, ledger renderer); 123 unit tests; full repo pre-com
   `restatement-audit-render-ledger --meta-result <checkpoint> --out-dir
   .agent/reports/restatement-audit/` -> a results PR. Nothing else survives the sweep.
 
-## 2026-07-16 — Vole hunts Perch (36c6ca) — concept-exploration finding: verified pipe, unverified substance
+## 2026-07-16 — Vole hunts Perch (36c6ca) — concept-exploration finding: verified pipe, unverified substance (union variant)
 
 Owner-directed concept-exploration (four movements) over "the work done so far and the
 overall intent" surfaced one load-bearing gap the earlier napkin entries did not name: Job
@@ -2964,7 +2964,7 @@ Owner authorised running the canary-only pilot now, explicitly bounding it short
 Job 2 dispatch ("don't start any major work... just best to be fully informed before
 [compaction] happens").
 
-## 2026-07-16 — Canary pilot result: FAILS the acceptance gate (1/8 rows clean)
+## 2026-07-16 — Canary pilot result: FAILS the acceptance gate (1/8 rows clean) (union variant)
 
 Ran the owner-authorised canary-only pilot: map stage only, dispatched against a single
 window containing exactly the 8 canary-key files (`PILOT-canary`, via `Workflow`, task
@@ -2995,6 +2995,7 @@ flag CONFLICT correctly). Every other row failed or partially failed:
   trigger at all, not because the finder reasoned about the citation/sanctioned distinction.)
 
 Structural root causes, for whoever revises the finder prompt next:
+
 1. Subject-attribution drift when a fact is embedded in a sentence whose surrounding topic
    is something else (K4) — the finder anchors `subject` to the surrounding entity, not the
    fact's own entity. Most damaging class: breaks the join even when both instances exist.
@@ -3016,7 +3017,7 @@ did NOT proceed to any Job 2 dispatch. The finder prompt (`prompts.ts`'s five tr
 classes) needs real revision — informed by this row-by-row failure evidence — before any
 further corpus spend, not a second blind full-corpus attempt.
 
-## 2026-07-16 (Mussel rides Coral, 6f8857 — post-compaction execution window)
+## 2026-07-16 (Mussel rides Coral, 6f8857 — post-compaction execution window) (union variant)
 
 - **#391 blocker diagnosis, corrected twice, final form**: the permanent BLOCKED cause was
   the required "SonarCloud Code Analysis" status context, which nothing posts on ANY
@@ -3046,7 +3047,7 @@ further corpus spend, not a second blind full-corpus attempt.
   Verdict-parity, depth-gap — consistent with PAIR-2; tally report update owed at next
   consolidation touch.
 
-## 2026-07-16 — Spend arithmetic HALTs Job 2 independently of the recall failure (2.25x-3x over the 6M ceiling)
+## 2026-07-16 — Spend arithmetic HALTs Job 2 independently of the recall failure (2.25x-3x over the 6M ceiling) (union variant)
 
 Director instruction (ARC 09:58): recompute Job 2's projected spend from the pilot's
 MEASURED tokens-per-invocation per stage before any full dispatch; HALT and route the
@@ -3083,7 +3084,7 @@ own acceptance gate, AND the S3 voting design's real cost overruns the ceiling b
 Both need resolution (prompt revision; ceiling/voting-design decision) before any further
 corpus spend, not a second blind attempt at either.
 
-## 2026-07-16 — Owner-directed re-assessment of the canary pilot: verified corrections to my own shipped verdicts (18-agent adversarial verification, run wf_3a2050ac-831)
+## 2026-07-16 — Owner-directed re-assessment of the canary pilot: verified corrections to my own shipped verdicts (18-agent adversarial verification, run wf_3a2050ac-831) (union variant)
 
 Owner instruction: re-assess the experiments, question assumptions, concept-exploration
 framing. Method: first-hand evidence sweep, a zero-spend deterministic join replay over the
@@ -3094,6 +3095,7 @@ journal wf_3a2050ac-831. Corrections to MY OWN two shipped directed events (4e96
 c8c3f819) — the headline verdicts survive, several supporting claims do not.
 
 CORRECTED SCORECARD (verifier verdicts in brackets):
+
 - K1 partial [CONFIRMED]: walk-a-agenda side (live line 34) genuinely missed inside a
   link-description parenthetical; factClass difference is prompt-vs-key vocabulary bias,
   not finder error (prompt trigger 2 lists "the seven lanes" as closed-set-membership
@@ -3142,8 +3144,8 @@ UNDER-SPECIFIED twice (severity clause has no comparand anywhere; "found" doesn'
 map-level vs ledger-level) and BIASED once (trigger-2 exemplars pull K1/K2/K3's facts to
 closed-set-membership while the key and the gazetteer's countsAndDenominators section —
 which literally carries knownCanonicalValues "lane-seed.lanes":"7", "sample.files":"137"
-— key them as count). Prompt-compliant count extraction is REACHABLE (multi-trigger rule
-+ trigger 3); the bias is a reliability defect, and the gazetteer's section structure is
+— key them as count). Prompt-compliant count extraction is REACHABLE (multi-trigger rule —
+trigger 3); the bias is a reliability defect, and the gazetteer's section structure is
 a concrete code-side canonicalisation hook for the v2 cure.
 
 RECALL VERDICT ROBUST (F3 MODIFIED, narrowing my own confound claim): drift ran BACKWARD
@@ -3200,6 +3202,7 @@ self-check machinery); if they vanish, the cure is capacity. Long-file tail deca
 needs per-file coverage reporting under either outcome.
 
 COMPLETENESS CRITIC — six unexamined angles (all actionable, most zero-LLM-cost):
+
 1. PRECISION never measured (only recall): byte-verify all 62 quotes in code against the
    pinned tree + hand-classify a 15-instance sample — grounds the cluster prior AND
    calibrates the confidence field, at zero spend.
@@ -3239,7 +3242,7 @@ mattered. The re-assessment's most productive single move was the zero-cost join
 executing the deterministic code over already-paid-for data — which converted three
 eyeballed claims into measured ones and found two new defects for free.
 
-## 2026-07-16 — Standing owner instruction (post-re-assessment)
+## 2026-07-16 — Standing owner instruction (post-re-assessment; union variant)
 
 Owner directive, verbatim intent: when the Director next replies (to correction event
 `873028bb` / the ARC corrections entry — likely the finder-procedure v2 spec + cures),
@@ -3283,6 +3286,7 @@ superseded by the two-class split: measured-fact disputes — evidence binds bot
 judgment/direction — Director casts with dissent recorded.
 
 Cycle 1 results (full substance: ARC 11:58 entry; canonical event 7b494615):
+
 - THEIR check of my precision artifact: MODIFIED, accepted — durable label is "grounding
   fidelity 62/62; classification precision unmeasured, known-imperfect (I38, NC1 7/9)";
   v2 key pre-flight must demand EXACT line match against the pinned tree.
@@ -3305,6 +3309,7 @@ Cycle 1 results (full substance: ARC 11:58 entry; canonical event 7b494615):
 - Sequencing accepted: my #393 one-push fix set HELD until their v2 spec lands.
 
 TWO SELF-CORRECTIONS (mine, forced by the checks):
+
 1. stage-io .pick() crash mechanism: my earlier napkin entry's "vitest/tsx zod
    divergence" hypothesis is WITHDRAWN — run-inputs.ts imports stage-io.js TYPE-ONLY, so
    no test ever value-loaded the crashing module; the reviewer's "no test value-imports
@@ -3354,6 +3359,7 @@ state-machine restructure refutation (owed by me — redistribute or queue for m
 Claim 1fcfeb3e RETAINED. On resume I rejoin the compound for redistribution.
 
 LOSS-SCAN — operational knowledge worth keeping (repo CLI contracts, learned by error):
+
 - commit-queue enqueue AND guard require `--id` = the agent's PDR-027 uuid (the help
   text omits it); the intent id is RETURNED by enqueue, not supplied.
 - After any restage (e.g. prettier fix), run `record-staged` again before `commit` — the
@@ -3426,6 +3432,7 @@ getStagedBundle reads --no-renames; real-repo test pins deletion+addition; renam
 intents must name BOTH sides.
 
 CLI contract lessons (extends the earlier loss-scan):
+
 - `claims open` uses --area-kind/--area-pattern (not --kind/--pattern); the git
   commit-window pattern must be LITERALLY `index/head` (guard string-matches it).
 - `claims close` requires --summary AND --platform/--model; without them it exits 2 —
@@ -3526,8 +3533,8 @@ RESUME FIRST MOVES: watcher rule ceremony (arm+assert+sweep), re-arm heartbeat
 (claim 1fcfeb3e refreshed on resume; identity tuple model=claude-sonnet-5 for comms
 sends), ARC read from 17:58:30 onward, then EXECUTE round-4: replies for the 3
 already-cured + 2 recurrences, implement the field-identity cure, await/absorb the
-Director's cast for the rest. Then hold for their re-review; merge order
-#392→#394→#389→#393. Job 2 gates unchanged.
+Director's cast for the rest. Then hold for their re-review; merge order:
+PR #392→#394→#389→#393. Job 2 gates unchanged.
 
 ## Mussel rides Coral (6f8857) — pre-compaction close #3, 2026-07-16T18:10:08Z
 
@@ -3551,6 +3558,7 @@ pinned exactly (c[n]>=c[n-1] AND c[n-1]>=c[n-2], per-epoch, non-zero counts only
 I applied two different readings in one day.
 
 **Mechanical lessons (new this window)**:
+
 - `export { X } from './m.js'` creates NO local binding — bit twice in one hour
   (SAMPLE_STRIDE, WINDOW_LINES); import AND re-export when both are needed.
 - `gh pr update-branch` diverges the local branch: pull --no-rebase, and the merge
@@ -3639,7 +3647,7 @@ duplicate-survivor gaming case pinned) + README help contract on both restatemen
 tsx entry points. Chunking class THIRD raise → v2-routed disposition-first + cast
 candidate flagged to Director. Remote moved mid-work (Director update-branch merge
 8834c8cd9 post-#392-merge) → integrated by merge (zero overlap), tip `SHA:acf47da97`.
-#392 MERGED 19:24 (SHA:30d20fa71). Estate routings handed to Director: chunking cast
+PR #392 MERGED 19:24 (SHA:30d20fa71). Estate routings handed to Director: chunking cast
 candidate; corpus-analysis CLI help gap; process-spawning-test pair. #393
 settled-at-zero, holding for #394 → #389 → merge moment.
 
@@ -3651,8 +3659,8 @@ dispatch on v1 partition invalidates — impossible under the §9 halt). Thread 
 citing it. S7776 one-liner (Set/has in rename smoke) landed `SHA:cfbd19e9b`. Round-7
 was: 1 stale-analysis + the 4th chunking raise — ZERO new classes. Standing self-rule
 recorded: hold-state — no self-initiated pushes now; round 8+ cure bar = "threatens
-Job 2 output integrity", all else disposition-first/v2. Merge moment (after #394,
-#389): undraft → update-branch → recompute gate → explicit gh pr merge --merge.
+Job 2 output integrity", all else disposition-first/v2. Merge moment (after #394
+and #389): undraft → update-branch → recompute gate → explicit gh pr merge --merge.
 
 ## [Mussel rides Coral 6f8857] 2026-07-16T19:51:18.000Z — TOOLING DEFECT: comms-watch drain step died 3× today (60s, 120s, 300s deadlines)
 
@@ -3664,7 +3672,6 @@ profile the drain (suspect: full-directory rescan per poll against a large event
 the comms-archive-move lane exists precisely to bound this). Workaround in force:
 re-arm with --seed-from-now (skip backlog) + a one-shot manual sweep of the gap window;
 ARC tail and PR-watch carry the merge-critical signals independently.
-
 
 ## 2026-07-16 — Zephyr turns Crosswind (019f6a): terminal handoff, loss scan, and recursive metaloss
 
@@ -3680,7 +3687,7 @@ working tree. The live experiments are finished. They produced decision-carrying
 feature is **pending reduction**, not complete: Lupin owns the documentation closeout and the code
 reduction has been transferred under terminal handoff. No tournament or activation occurred.
 
-### First-order context-loss scan
+### First-order context-loss scan (union variant 2)
 
 1. **The causal correction is more important than the final rule text.** Roughly six hours were
    spent seeking a low-risk proof and elaborating architecture around a cheap reversible question.
@@ -3766,7 +3773,7 @@ reduction has been transferred under terminal handoff. No tournament or activati
    authority, negative knowledge, custody and next safe actions now have named homes. A third pass
    would restate the same filters and delay the transfer it is meant to protect.
 
-### Consolidation disposition
+### Consolidation disposition (union variant)
 
 - Highest-impact permanent home: Direct Trial/Investigation Stop behaviour in `oak-reason`.
 - Empirical home: the Codex-hook research document, with the intact original plan as historical
@@ -3797,7 +3804,6 @@ class-fixes converged PRs (arming cut, phase-restatement sweep, TOCTOU class, in
 de-claiming); nit-by-nit pushes minted rounds (#394 ran 19). Codify in the
 pr-lifecycle mechanisation lane with the sibling process findings (reviewer
 monoculture, quiet-window, N-raises=>cast, author-assertion re-verify).
-
 
 ## 2026-07-16 — SESSION CLOSE (Vole hunts Perch, 36c6ca): owner-directed handoff to Director; seat complete
 
@@ -4008,7 +4014,7 @@ The feature and activation verdict is **pending**.
     next action now have consumer homes. A third pass would repeat these filters rather than change
     a successor's decision.
 
-### Consolidation disposition
+### Consolidation disposition (union variant 2)
 
 - Highest-impact empirical home: the hook research result; historical plan retained intact.
 - Operational home: the thread next-session record, with the exact mixed-index state, failed nested
@@ -4039,7 +4045,7 @@ The feature and activation verdict is **pending**.
 
 ## [Mussel rides Coral 6f8857] 2026-07-16T21:13:28.000Z — GOAL COMPLETE: all four PRs merged, fully green, all threads resolved
 
-#392 SHA:30d20fa71 (pr-lifecycle skill + state machine) · #394 SHA:10527eb53
+PR #392 SHA:30d20fa71 (pr-lifecycle skill + state machine) · #394 SHA:10527eb53
 (continuity-truth + re-homed living plan, owner-executed) · #389 SHA:5a617ba5a
 (reader-sample instrument, owner-executed) · #393 SHA:9a5bf6bc2 (restatement-audit
 module). ~340 review threads across the arc, every one discharged with an
@@ -4054,7 +4060,6 @@ the three newer refounding files over main stale drafts); (3) the compressed v2 
 (F8 fold + gazetteer/key v2 + re-pilot + S3 pilot) toward the Job 2 framework RUN —
 the owner-named critical path to the new freeze, the plan sweep, and the new plan
 estate.
-
 
 ## [Mussel rides Coral 6f8857] SESSION CLOSE — context-loss scan: operational gotchas and dispositions with no other home
 
@@ -4085,7 +4090,6 @@ estate.
   today's ceremony. The enforcement ticket carries the reconciliation (small-PR
   scoping makes the heavy ceremony mostly moot, which is the owner's actual design).
 
-
 ## [Mussel rides Coral 6f8857] SESSION CLOSE — recursive metaloss pass (loss-about-loss)
 
 1. **The scan's own blind spot**: this session compacted three times; anything lost at
@@ -4108,7 +4112,6 @@ estate.
    the day's Opus delegations; ~60 thread ceremonies executed by this seat
    post-resume; the per-PR round tallies live in the convergence memory.
 
-
 ## [Mussel rides Coral 6f8857] SESSION CLOSE — pagination blindness: the day's final instrument lesson
 
 Every thread read all session used reviewThreads(first: 100). PR #394 had 134 threads
@@ -4121,3 +4124,38 @@ compare against totalCount; (2) the WS1 merge-readiness checker inherits this as
 hard requirement; (3) "all verified" claims are instrument-relative — check the
 window before the verdict (sibling of verdict-momentum-score-the-actual-object).
 
+<!-- Conserved 2026-07-17 from branch claude/nifty-ramanujan-7b1623 (PR #401 adjudication):
+the spike session's napkin entry never reached the main napkin lineage. -->
+
+## 2026-07-07 — Fern spins Taproot (ITF knowledge-graph spike, worktree nifty-ramanujan-7b1623)
+
+- **Tool friction → F-132 (registered this session): commit-queue is blind to worktree
+  indices.** `record-staged`/`verify-staged` read the primary checkout's index, so a
+  worktree-staged bundle fingerprints as empty and verify fails with "missing: <every intended
+  file>" even though `git diff --staged` in the worktree shows the exact bundle. The skill
+  already contemplates worktree windows (`git:index/head@<worktree>` claims) — the queue's git
+  surface doesn't. Disposition: intent 86c5c642 → abandoned with stage-named notes; landed
+  6edcb025a via the documented explicit-pathspec path under claim 0307be08, full hook chain
+  green. Details + candidate cure: frictions-register F-132.
+- **Identity-seed discipline**: two hand-typed `PRACTICE_AGENT_SESSION_ID_CLAUDE` values
+  drifted between CLI calls, so a comms title said "Zenith tracks Vacuum" while registry rows
+  say "Fern spins Taproot" (corrected in closeout event 95a479c9). Export the seed once per
+  session, never retype it.
+- **Owner rulings (both homed):** (1) n=1 session ⇒ no team ceremony — watcher/claims/comms/
+  commit-queue exist for concurrent agents, not as a rite; keep commits, gates, memory capture
+  (also in Claude per-user memory `n1-sessions-skip-team-ceremony`). (2) UK spelling only,
+  everywhere (per-user memory `uk-spelling-always`; licence/license noun/verb is the classic
+  trap). (3) All official repo code must be TypeScript; spike-only `.mjs` preservation copies
+  sanctioned 2026-07-07 pending the integration pass (homed: spike README + NOTES + PR #319).
+  (4) Licensing for the ITF-derived data: academic reuse with full acknowledgement, baked into
+  the data envelope (`source.attribution`/`source.licenceNote`).
+- **F-125 recurrence (cwd drift):** my own sweep broke on a relative path because an earlier
+  `cd` into the spike dir persisted — third-party evidence the cure is structural
+  (location-independent invocations), not vigilance.
+- **PDF→graph craft (homed in the spike's NOTES.md, pointers only):** regular per-area document
+  structure transcribes almost 1:1 to the corpus containment grammar; relational prose is the
+  highest-value graph content; some knowledge lives only in images (partner logos) — audit page
+  *types* after text extraction; grey literature defeats Crossref bibliographic matching
+  (books/working papers/DfE/EEF reports) — hand-verified publisher URLs with a `resolution`
+  provenance marker; deterministic layered SVG + barycentre beats force-direction for
+  near-multipartite graphs and stays git-diffable.

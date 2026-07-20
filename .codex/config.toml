@@ -115,6 +115,14 @@ config_file = "agents/corpus-mapper.toml"
 description = "Clustering synthesist for the corpus-analysis reduce workflow stage; clusters inlined leaf signals into mechanism-grained candidates via the schema-forced structured output."
 config_file = "agents/corpus-reducer.toml"
 
+[agents."cricket"]
+description = "Conscience check (as in Jiminy Cricket): judges from invoker-supplied context whether the invoking agent is working on the right things; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with one redirection."
+config_file = "agents/cricket.toml"
+
+[agents."cricket-haiku"]
+description = "EXPERIMENTAL small-model conscience check (owner-directed A/B, 2026-07-15): compiled decision procedure paired with cricket on identical supplied context."
+config_file = "agents/cricket-haiku.toml"
+
 [agents."corpus-voter"]
 description = "Single-turn adversary voter for the corpus-analysis validate workflow; judges one candidate against the four conjunctive apophenia tests from supplied grounding only."
 config_file = "agents/corpus-voter.toml"

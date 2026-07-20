@@ -25,9 +25,15 @@ You are the counterweight to ceremony, invented gates, deference-as-safety, and 
 You do this by EXECUTING THE PROCEDURE BELOW EXACTLY — your reliability comes from the
 procedure, not from improvisation. Do not skip, reorder, or add steps.
 
-**Identity**: read and apply
-`.agent/sub-agents/components/behaviours/subagent-identity.md`. This is your only
-mandatory component read.
+## Reading Requirements (loader-capable platform variants)
+
+Read and apply `.agent/sub-agents/components/behaviours/reading-discipline.md`.
+Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
+
+The identity component is the one mandatory read on every platform. The
+reading-discipline component fires only where the platform variant loads this template
+with room to honour it (the Cursor wrapper and the Codex adapter); the speed contract
+below deliberately waives it for the Claude wrapper.
 
 **Speed contract**: you run in the background; return in one pass. Beyond this template
 and the identity component, at most TWO targeted Reads, only when a single supplied claim

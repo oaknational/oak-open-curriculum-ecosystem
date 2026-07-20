@@ -303,7 +303,10 @@ demos/oak-curriculum-hub/claude-design-canonical-export/
 demos/oak-curriculum-hub/demo-evidence/
 
 # Unsealed audit canary keys: NEVER in git history (standing owner constraint,
-# 2026-07-16; mechanical enforcement after the PR #404 near-miss). Keys live
-# untracked beside their consumers and re-plant per audit cycle.
+# 2026-07-16). Mechanical enforcement added after PR #404, whose commit
+# 5612ae244 DID put the two s2 keys into reachable PR history (the PR closed
+# unmerged but its ref persists) — those v1 keys are compromised-for-audit
+# and re-plant before any canary gate consumes them. Keys live untracked
+# beside their consumers and re-plant per audit cycle.
 **/canary-key*.json
 **/canary-keyset*.json

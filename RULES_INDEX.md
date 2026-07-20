@@ -113,6 +113,7 @@ without proportional value.
 | `.agent/rules/no-hedging-vocabulary.md`                                    | always-on      | —                                                                                                   |
 | `.agent/rules/no-machine-local-paths.md`                                   | always-on      | —                                                                                                   |
 | `.agent/rules/no-moving-targets-in-permanent-docs.md`                      | always-on      | —                                                                                                   |
+| `.agent/rules/no-parallel-long-lived-branches.md`                          | always-on      | —                                                                                                   |
 | `.agent/rules/no-skipped-tests.md`                                         | always-on      | —                                                                                                   |
 | `.agent/rules/no-speed-pressure.md`                                        | always-on      | —                                                                                                   |
 | `.agent/rules/no-tombstones-for-removed-ideas.md`                          | always-on      | —                                                                                                   |
