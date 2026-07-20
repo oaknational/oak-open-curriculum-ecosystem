@@ -31,12 +31,12 @@
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/oak-design-system": "workspace:*",
-    "@types/node": "^24.13.2",
-    "eslint": "^10.6.0",
+    "@types/node": "^24.13.3",
+    "eslint": "^10.7.0",
     "globals": "^17.7.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   },
   "engines": {
     "node": "24.x"
