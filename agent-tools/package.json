@@ -83,24 +83,24 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^24.13.2",
+    "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "esbuild": "^0.28.1",
-    "eslint": "^10.6.0",
+    "eslint": "^10.7.0",
     "globals": "^17.7.0",
     "ink-testing-library": "^4.0.0",
-    "tsx": "^4.22.4",
-    "vitest": "^4.1.9"
+    "tsx": "^4.23.1",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "@oaknational/result": "workspace:*",
     "@oaknational/safe-path": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "ajv": "^8.20.0",
-    "ink": "^7.1.0",
+    "ink": "^7.1.1",
     "react": "^19.2.7",
     "tinyglobby": "^0.2.17",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "uuid": "^14.0.1",
     "yaml": "^2.9.0",
     "zod": "^4.4.3"
