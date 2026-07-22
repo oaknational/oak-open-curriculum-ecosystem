@@ -73,7 +73,38 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
      * (30 req / 15 min / IP).
      */
     TEST_ERROR_SECRET: z.string().min(16).optional(),
+    /**
+     * PostHog analytics posture — an explicit mode, never inferred from key
+     * presence, so a typo'd variable name is a hard startup failure rather
+     * than silently-disabled analytics. **Default `off`** until the owner
+     * provisions the key; `posthog` requires `POSTHOG_PROJECT_API_KEY`
+     * (`superRefine` below). The EU ingestion host is a code constant in the
+     * analytics module — the data-residency ruling (decisions register D3)
+     * fixes the region, so no host variable exists. App-local by design;
+     * promote to `@oaknational/env` at the second consumer.
+     */
+    POSTHOG_MODE: z.enum(['off', 'posthog']).default('off'),
+    /** PostHog project API key (`phc_`-class, env-only). Required when `POSTHOG_MODE=posthog`. */
+    POSTHOG_PROJECT_API_KEY: z.string().min(1).optional(),
   });
+
+/**
+ * Analytics on requires its credential — a hard startup failure, so a
+ * missing or typo'd key can never silently disable the D3-ruled posture
+ * (release decisions register D3; MCP-63).
+ */
+function requirePostHogKeyWhenEnabled(
+  data: z.infer<typeof BaseEnvSchema>,
+  ctx: z.RefinementCtx,
+): void {
+  if (data.POSTHOG_MODE === 'posthog' && !data.POSTHOG_PROJECT_API_KEY) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['POSTHOG_PROJECT_API_KEY'],
+      message: 'POSTHOG_PROJECT_API_KEY is required when POSTHOG_MODE=posthog',
+    });
+  }
+}
 
 /**
  * HTTP server environment schema with conditional Clerk key requirement.
@@ -112,6 +143,10 @@ export const HttpEnvSchema = BaseEnvSchema.superRefine((data, ctx) => {
     });
     return;
   }
+
+  // Analytics on requires its credential — placed before the auth
+  // early-return so the requirement holds in every mode.
+  requirePostHogKeyWhenEnabled(data, ctx);
 
   if (data.DANGEROUSLY_DISABLE_AUTH === 'true') {
     return;

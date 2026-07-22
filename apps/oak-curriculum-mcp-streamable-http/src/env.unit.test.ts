@@ -144,3 +144,59 @@ describe('Conditional Clerk keys (DANGEROUSLY_DISABLE_AUTH)', () => {
     }
   });
 });
+
+describe('PostHog analytics mode (POSTHOG_MODE)', () => {
+  it('defaults to off when POSTHOG_MODE is absent', () => {
+    const result = HttpEnvSchema.safeParse(withClerkKeys);
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.POSTHOG_MODE).toBe('off');
+    }
+  });
+
+  it('rejects posthog mode without a project API key — misconfiguration fails at startup', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      POSTHOG_MODE: 'posthog',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.flatMap((issue) => issue.path);
+      expect(paths).toContain('POSTHOG_PROJECT_API_KEY');
+    }
+  });
+
+  it('accepts posthog mode with a project API key', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      POSTHOG_MODE: 'posthog',
+      POSTHOG_PROJECT_API_KEY: 'phc_test_key',
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a provisioned key while the mode stays off', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      POSTHOG_MODE: 'off',
+      POSTHOG_PROJECT_API_KEY: 'phc_test_key',
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.POSTHOG_MODE).toBe('off');
+    }
+  });
+
+  it('rejects an unknown mode value', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      POSTHOG_MODE: 'eu-posthog',
+    });
+
+    expect(result.success).toBe(false);
+  });
+});

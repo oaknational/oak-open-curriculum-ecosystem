@@ -50,6 +50,7 @@
     "@oaknational/sentry-node": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "@opentelemetry/api": "^1.9.1",
+    "@posthog/mcp": "0.9.1",
     "@sentry/node": "^10.63.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
@@ -57,6 +58,7 @@
     "express-rate-limit": "^8.5.2",
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
+    "posthog-node": "5.46.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "zod": "^4.4.3"
