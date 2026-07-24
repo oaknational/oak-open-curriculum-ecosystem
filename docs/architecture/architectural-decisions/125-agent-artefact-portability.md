@@ -563,7 +563,9 @@ platforms.
 - `.agent/rules/` and `.agent/directives/` — canonical rules and directives
 - `.agent/sub-agents/` — canonical sub-agent prompts (ADR-114), personas, and components
 - `.agents/skills/`, `.claude/skills/` — generated skill adapter surfaces (only two)
-- `.cursor/`, `.claude/`, `.github/`, `.gemini/`, `.codex/` — platform adapters for sub-agents/rules/settings (no skills, no commands)
+- `.cursor/`, `.claude/`, `.github/`, `.gemini/`, `.codex/` — platform adapters
+  for sub-agents, rules, instructions or entry points, hooks, and settings as
+  supported by each host (no skills, no commands)
 - [PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md) — portable skills standardisation doctrine
 - [ADR-135](135-agent-classification-taxonomy.md) — agent classification taxonomy referenced in the 2026-04-17 amendment
 - [ADR-165](165-agent-work-practice-phenotype-boundary.md) — local phenotype boundary for PDR-035 agent-work capabilities

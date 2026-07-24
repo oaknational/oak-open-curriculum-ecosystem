@@ -80,10 +80,14 @@ wiring so each review has one story.
   and flattened inputs.** Proof: `repo-safe` — the current hook-policy unit and
   integration suites remain unchanged in their observable allow, deny, error,
   and output assertions, with regression fixtures at the new boundary.
-- **Copilot batches and patch documents become faithful canonical commands and
-  content changes.** Proof: `repo-safe` — fixture tests cover multi-call
-  batches, `create` arguments, patch-document `apply_patch` arguments, call
-  identifiers, ordering, and one denied member among allowed members.
+- **Copilot compatibility batches are faithfully classified without policy
+  evaluation, while authoritative native single-call requests preserve patch
+  documents and reach canonical policy.** Proof: `repo-safe` — compatibility
+  fixtures cover multi-call batches, `create` arguments, patch-document
+  `apply_patch` arguments, call identifiers, ordering, and a member that policy
+  would deny, while asserting host-valid pass-through with zero policy loads or
+  evaluations. Native single-call fixtures prove faithful `create` and
+  `apply_patch` normalisation plus native allow and deny decisions.
 - **Codex native tool input reaches the same canonical policy as new scope,
   without adopting Claude or Copilot output semantics.** Proof: `repo-safe` —
   versioned fixtures derived from OpenAI's official Hooks `PreToolUse` contract
@@ -91,9 +95,10 @@ wiring so each review has one story.
   and tested version floor guard tracked activation.
 - **The canonical evaluator and policy loader each run exactly once per valid
   originating request.** Proof: `repo-safe` — integration tests inject counting
-  evaluator and loader boundaries across single and batched inputs, while the
-  routing validator proves every tracked activation enters through the central
-  dispatcher.
+  evaluator and loader boundaries across authoritative single-call inputs and a
+  synthetic authoritative batch adapter; non-authoritative Copilot
+  compatibility batches assert zero calls. The routing validator proves every
+  tracked activation enters through the central dispatcher.
 - **Copilot's inherited Claude activation and native GitHub activation do not
   double-evaluate a request.** Proof: `repo-safe` — coexistence integration
   tests launch both activation sources as separate processes, prove native
