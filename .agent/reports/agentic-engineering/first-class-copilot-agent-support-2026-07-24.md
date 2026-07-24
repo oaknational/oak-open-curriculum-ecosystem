@@ -356,7 +356,7 @@ These report-era slices did not themselves authorise work. Owner ratification
 now releases only work governed by the linked strategic node and its delivery
 plans; the hook-enforcement landing shape is defined by the ratified
 [`first-class-copilot-hook-enforcement`](../../plans/delivery/first-class-copilot-hook-enforcement.plan.md)
-node. The broader exploration candidates remain:
+node. Slices A-C remain exploration candidates; Slice D is ratified:
 
 - **Slice A — Identity.** Native `sessionStart` adapter emitting honest,
   model-visible Copilot identity via documented `additionalContext`.
@@ -366,11 +366,11 @@ node. The broader exploration candidates remain:
 - **Slice C — Communications and wake.** The three-layer event-driven comms
   design (one-shot watcher -> `shell_completed` -> `notification` -> re-arm),
   with turn-boundary safeguard and paired liveness detection.
-- **Slice D — Truth and enforcement.** Validators (including the extended
+- **Ratified Slice D — Truth and enforcement.** Validators (including the extended
   `pretooluse-guard-routing` single-evaluation check), version floors, capability
   probes, and the coexistence de-duplication boundary. The ADR-125 amendment was
-  co-ratified with the strategic and delivery nodes rather than deferred to
-  this slice.
+  co-ratified with the strategic and delivery nodes, and the delivery node now
+  authorises this slice. Slices A-C still require their own delivery plans.
 
 ## Build versus buy
 

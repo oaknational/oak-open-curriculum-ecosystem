@@ -60,7 +60,7 @@ GitHub's first-party hook surfaces provide activation and decision transport,
 but no first-party component projects Oak's policy into those contracts. The
 repository therefore owns only the strict adapters, dispatcher, and validators
 around the existing canonical policy core. This is the smallest build shape
-that preserves native platform behavior without introducing another policy
+that preserves native platform behaviour without introducing another policy
 home.
 
 The plan-body first-principles check fires at the protocol boundary: platform
@@ -76,7 +76,7 @@ wiring so each review has one story.
   cover valid Claude, Copilot, and Codex events, unknown fields, malformed
   serialised arguments, zero matches, an intentionally overlapping fixture,
   and trap adapters proving unselected schemas are never invoked.
-- **Claude's existing Bash and Edit/Write behavior is unchanged for wrapped
+- **Claude's existing Bash and Edit/Write behaviour is unchanged for wrapped
   and flattened inputs.** Proof: `repo-safe` — the current hook-policy unit and
   integration suites remain unchanged in their observable allow, deny, error,
   and output assertions, with regression fixtures at the new boundary.

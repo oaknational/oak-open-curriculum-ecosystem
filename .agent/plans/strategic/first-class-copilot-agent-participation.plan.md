@@ -78,12 +78,13 @@ implementation slices, and open questions live in the linked review and design
 report:
 [First-class GitHub Copilot agent support](../../reports/agentic-engineering/first-class-copilot-agent-support-2026-07-24.md).
 
-Delivery plans serving this node are **authored at pickup** by their
-implementers, each declaring `serves: first-class-copilot-agent-participation`
-and enumerated by search rather than a hand-kept list. This node gained
-implementation authority when the owner ratified it through collaboration
-event `9d305a22-b318-4678-a39b-b5eae6cb736d`; its complete frontmatter stamp is
-the durable record.
+The ratified hook-enforcement delivery plan serves this node. Further delivery
+plans are **authored at pickup** by their implementers, each declaring
+`serves: first-class-copilot-agent-participation` and enumerated by search rather
+than a hand-kept list. This node gained implementation authority when the owner
+ratified it through collaboration event
+`9d305a22-b318-4678-a39b-b5eae6cb736d`; its complete frontmatter stamp is the
+durable record.
 
 ## Tempo
 

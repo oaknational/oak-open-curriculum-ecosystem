@@ -91,10 +91,11 @@ Each platform has thin wrappers that reference canonical content. Skill adapters
 | `.github/copilot/settings.json`          | Tracked repository settings for the GitHub adapter family                 | Copilot |
 
 Copilot reads skills from `.agents/skills/`; no `.github/skills` copy is
-created. GitHub adapters contain activation metadata and platform literals only.
-Hook policy remains canonical under `.agent/hooks/` and `agent-tools`, with the
-durable invariant that each valid originating tool request is evaluated exactly
-once.
+created. GitHub adapters may contain generated projections of canonical content
+alongside activation metadata and platform literals, but never a hand-maintained
+duplicate source of truth. Hook policy remains canonical under `.agent/hooks/`
+and `agent-tools`, with the durable invariant that each valid originating tool
+request is evaluated exactly once.
 
 #### Cursor (`.cursor/`) — sub-agents and rules only
 
@@ -304,13 +305,13 @@ code. **Project settings** define the agentic system contract and must
 work on fresh checkout. **Local settings** contain user-specific paths
 and overrides.
 
-| Platform                  | Project config (tracked)        | Local config                     |
-| ------------------------- | ------------------------------- | -------------------------------- |
-| Claude Code               | `.claude/settings.json`         | `.claude/settings.local.json`    |
-| Copilot (ratified target) | `.github/copilot/settings.json` | `<home>/.copilot/config.json`    |
-| Cursor                    | `.cursor/settings.json`         | `.cursor/settings.local.json`    |
-| Gemini CLI                | `.gemini/settings.json`         | `.gemini/settings.local.json`    |
-| Codex                     | `.codex/config.toml`            | (no local equivalent documented) |
+| Platform                  | Project config (tracked)        | Local config                          |
+| ------------------------- | ------------------------------- | ------------------------------------- |
+| Claude Code               | `.claude/settings.json`         | `.claude/settings.local.json`         |
+| Copilot (ratified target) | `.github/copilot/settings.json` | `.github/copilot/settings.local.json` |
+| Cursor                    | `.cursor/settings.json`         | `.cursor/settings.local.json`         |
+| Gemini CLI                | `.gemini/settings.json`         | `.gemini/settings.local.json`         |
+| Codex                     | `.codex/config.toml`            | (no local equivalent documented)      |
 
 **Project settings contain:**
 
