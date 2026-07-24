@@ -316,7 +316,7 @@ The canonical Practice content stays exactly where it is; a GitHub-native
   `.github/copilot/settings.json`.
 - **One canonical policy core:** extract one platform-free evaluator and one
   policy-snapshot load from the current Bash and content runners;
-  [`agent-tools/src/copilot`](../../../agent-tools) holds Copilot **parsers,
+  the planned `agent-tools/src/copilot` directory holds Copilot **parsers,
   renderers, and platform-adapter composition** — not a parallel guard.
 - **One platform dispatcher:** a single dispatcher owns activation routing —
   **O(N)** in the number of platforms; individual shims do **not** each need to
