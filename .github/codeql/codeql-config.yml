@@ -1,0 +1,22 @@
+name: 'CodeQL config'
+
+# CodeQL analysis configuration for the advanced-setup workflow
+# (.github/workflows/codeql.yml). This file exists so that `paths-ignore`
+# is honoured: CodeQL default setup CANNOT exclude paths, so this repository
+# runs CodeQL via advanced setup purely to gain path-level exclusion. All other
+# settings below mirror the previous default-setup configuration verbatim
+# (query suite `security-extended`, languages actions/javascript-typescript/
+# python, remote threat model).
+
+# Mirrors the previous default-setup "extended" query suite.
+queries:
+  - uses: security-extended
+
+# Exclude the MCP-137 preservation tier from analysis. Everything under
+# studio-source/ is a byte-preserved capture — pure copies from their sources,
+# never edited or run as OCE runtime code (see the adjacent PRESERVATION-README.md
+# and .prettierignore's "MCP-137 preservation tier" block). It must not raise
+# code-scanning alerts. `paths-ignore` is honoured for the interpreted languages
+# scanned here (JavaScript/TypeScript, Python).
+paths-ignore:
+  - packages/design/oak-design-system/studio-source

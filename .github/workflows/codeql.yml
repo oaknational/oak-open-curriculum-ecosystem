@@ -1,0 +1,71 @@
+name: CodeQL
+
+# CodeQL advanced setup. This repository previously used CodeQL DEFAULT setup
+# (configured in repo settings, no workflow file). Default setup cannot exclude
+# paths from analysis, so to stop the MCP-137 preservation tier under
+# packages/design/oak-design-system/studio-source/ from raising alerts, scanning
+# is migrated to advanced setup: this workflow references
+# .github/codeql/codeql-config.yml, whose `paths-ignore` excludes that tier.
+#
+# Every other setting mirrors the retired default-setup configuration exactly so
+# the migration changes only path coverage, not scan behaviour:
+#   languages   : actions, javascript-typescript, python
+#   query suite : security-extended  (default setup "extended")
+#   threat model: remote             (CodeQL default; left implicit)
+#   schedule    : weekly
+#
+# Default setup MUST be disabled in repo settings for this workflow's results to
+# be accepted (the two are mutually exclusive).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly, mirroring the retired default-setup cadence.
+    - cron: '31 4 * * 1'
+
+# Cancel superseded runs for the same PR ref; never cancel main-branch runs.
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      # Required to upload code-scanning results.
+      security-events: write
+      # Needed by the CodeQL Action to read the workflow run (private repos).
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        # Mirrors the retired default-setup language set. `javascript-typescript`
+        # is the single CodeQL language covering both JS and TS.
+        include:
+          - language: actions
+            build-mode: none
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@4187e74d05793876e9989daffde9c3e66b4acd07 # v3.37.3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@4187e74d05793876e9989daffde9c3e66b4acd07 # v3.37.3
+        with:
+          category: '/language:${{ matrix.language }}'
