@@ -2,8 +2,10 @@
 
 **Date:** 2026-07-24
 **Session:** Thistle rides Canopy (494337)
-**Status:** Review and design complete. Director authority covers the delivery
-shape; runtime implementation still awaits owner ratification.
+**Status:** Review and design complete. The strategic node, hook-enforcement
+delivery node, and ADR-125 amendment were owner-ratified through collaboration
+event `9d305a22-b318-4678-a39b-b5eae6cb736d`; implementation is released under
+those plans.
 **Linked plan:** [First-class GitHub Copilot agent participation](../../plans/strategic/first-class-copilot-agent-participation.plan.md)
 
 ## Evidence labels
@@ -190,8 +192,8 @@ should be treated as **stale** until re-measured against the
 [Official sources](#official-sources) **[V][I]**. This adapter family is governed
 by
 [ADR-125 (Agent Artefact Portability)](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md),
-whose proposed amendment adds the GitHub adapter family and names Copilot as a
-reader of the cross-tool `.agents/skills` home. That amendment is co-ratified
+whose 2026-07-24 amendment adds the GitHub adapter family and names Copilot as a
+reader of the cross-tool `.agents/skills` home. That amendment was co-ratified
 with the strategic and delivery nodes before the surfaces are wired **[R][I]**.
 
 **Current state [V]:** `.github/copilot-instructions.md` already exists as a thin
@@ -348,11 +350,13 @@ platform/schema error** (Finding 4), never a **false policy violation**.
 Separate-process tests and a live supported-version probe must prove this
 boundary before activation lands **[I]**.
 
-## Candidate implementation slices (not authorised)
+## Candidate implementation slices (historical exploration)
 
-The following slices are **candidates for a future ratified plan**, not work
-authorised by this report **[I]**. Each is scoped as a single-story PR that
-lands within its round budget under PDR-132 **[R]**:
+These report-era slices did not themselves authorise work. Owner ratification
+now releases only work governed by the linked strategic node and its delivery
+plans; the hook-enforcement landing shape is defined by the ratified
+[`first-class-copilot-hook-enforcement`](../../plans/delivery/first-class-copilot-hook-enforcement.plan.md)
+node. The broader exploration candidates remain:
 
 - **Slice A — Identity.** Native `sessionStart` adapter emitting honest,
   model-visible Copilot identity via documented `additionalContext`.
@@ -364,20 +368,21 @@ lands within its round budget under PDR-132 **[R]**:
   with turn-boundary safeguard and paired liveness detection.
 - **Slice D — Truth and enforcement.** Validators (including the extended
   `pretooluse-guard-routing` single-evaluation check), version floors, capability
-  probes, and the coexistence de-duplication boundary. The proposed ADR-125
-  amendment is co-ratified with the strategic and delivery nodes rather than
-  deferred to this slice.
+  probes, and the coexistence de-duplication boundary. The ADR-125 amendment was
+  co-ratified with the strategic and delivery nodes rather than deferred to
+  this slice.
 
 ## Build versus buy
 
-Use the **first-party repository surfaces directly** **[I]**. GitHub offers **no
-first-party generator** that projects this repository's canonical `.agent` corpus
-into Copilot's adapter metadata **[D]**, so **repo-owned generation is the narrow
-glue** that remains — the validated projection logic, and nothing more **[I]**. A
-Copilot **plugin** is a multi-repo distribution mechanism; for a single
-repository it adds packaging and a marketplace hop with no corresponding benefit
-**[D][I]**. Reconsider a plugin only if a **measured** multi-repo distribution
-need appears later — not speculatively.
+Use the **first-party repository surfaces directly** **[I]**. The official
+surfaces reviewed here provide no generator that projects this repository's
+canonical `.agent` corpus into Copilot adapter metadata **[V]**, so
+**repo-owned generation is the narrow glue** that remains — validated
+projection logic, and nothing more **[I]**. A Copilot **plugin** is useful for
+multi-repository distribution, but for one repository it adds a packaging and
+per-developer installation lifecycle without a corresponding benefit **[D][I]**.
+Reconsider a plugin only if a **measured** multi-repository distribution need
+appears later — not speculatively.
 
 ## Assumptions, falsifiers, and unresolved evidence
 
@@ -386,7 +391,7 @@ need appears later — not speculatively.
 | Native `sessionStart` returning `additionalContext` delivers context to the model. | A native adapter runs but the model shows no injected context. | Documented **[D]**; not yet natively verified here. |
 | One-shot watcher -> `shell_completed` -> `notification` re-arm is a reliable primary transport. | A delivered event fails to wake a turn, or the durable handoff drops events. | Probe confirmed the shell-completion conversion **[V]**; full loop unverified. |
 | Native `.github` activation can be the sole Copilot evaluator while inherited `.claude` compatibility activation is classified without loading policy. | Both activation sources still evaluate the same request, or a supported input cannot be classified without guessing. | Design **[I]**; unproven. |
-| A single CLI version floor is sufficient to gate capability. | A supported-floor build still lacks a relied-upon surface. | Skew observed at 1.0.74 **[V]**; floor unset. |
+| A tested CLI version floor plus capability probes gate every relied-upon surface. | A supported-floor build fails a required probe, or an unprobed surface is wired. | Skew observed at 1.0.74 **[V]**; floor and probes unset. |
 
 **Evidence resolved at delivery pickup [V][D]:**
 

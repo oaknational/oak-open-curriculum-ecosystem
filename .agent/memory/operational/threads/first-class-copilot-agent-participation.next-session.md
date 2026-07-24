@@ -19,10 +19,10 @@ Practice.
 - Next safe step: obtain the required pre-execution code review, then deliver
   the Claude vertical-baseline PR test-first without mixing in Copilot or Codex
   activation.
-- Completed prerequisites: the official-source report and strategic sketch are
-  preserved in draft PR #522; the design-authority handoff is absorbed; live
-  Copilot 1.0.74 hook-event evidence has been inspected without copying caller
-  content into the repository.
+- Completed prerequisites: the official-source report and ratified strategic
+  plan are preserved in draft PR #522; the design-authority handoff is
+  absorbed; live Copilot 1.0.74 hook-event evidence has been inspected without
+  copying caller content into the repository.
 - Team expectation: Thistle holds Blossom implements MCP-150 under Forge rides
   Brimstone. A live Copilot seat performs platform acceptance before any
   implementation stage is declared complete.
@@ -40,8 +40,8 @@ Practice.
 
 ## Standing decisions
 
-- The report and strategic sketch in PR #522 supersede the original instruction
-  to author them from scratch.
+- The report and ratified strategic plan in PR #522 supersede the original
+  instruction to author them from scratch.
 - Explicit activation validates only its selected closed schema; shared
   compatibility activation arbitrates over a bounded candidate set and
   fail-closes on zero or multiple matches.
