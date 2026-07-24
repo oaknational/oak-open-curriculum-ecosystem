@@ -242,38 +242,44 @@ the documented Copilot tool aliases, and inherit the model rather than pinning
 it per profile. The generated family is validated against its templates, giving
 provenance that is committed and checkable.
 
-### Finding 9 — Hooks: rich native event surface, including a wake path
+### Finding 9 — Copilot CLI hooks: rich native event surface, including a wake path
 
-Copilot's native hook events include `sessionStart` and `sessionEnd`, prompt and
-tool events, `agentStop`, `notification`, subagent events, and
-`preCompact`/error events **[D]**. Notably, the `notification` event carries a
+Copilot CLI's native hook events include `sessionStart` and `sessionEnd`, prompt
+and tool events, `agentStop`, `notification`, subagent events, and
+`preCompact`/error events **[D]**. The official hooks reference marks
+`notification` as **Copilot CLI-only** and states that it does not fire in the
+Copilot cloud agent **[D]**. In the CLI, that event carries a
 `shell_completed` signal that **can return `additionalContext` and trigger idle
-processing** **[D]**. That single capability is the seam that makes
-event-driven wake-up possible without a polling loop as the primary transport
-(see Finding 10) **[I]**.
+processing** **[D]**. That capability is the seam that makes event-driven
+wake-up possible without a polling loop as the primary transport for **Copilot
+CLI** (see Finding 10) **[I]**. It does not establish a cloud-agent wake path;
+that mechanism remains unproven and requires separate design **[I]**.
 
 ### Finding 10 — Communications: a native event-driven design in three layers
 
 This session's **owner explicitly stated** that the ability to send messages and
 to know when messages arrive is the **single most important team capability after
 identity** **[V]** — which establishes communications as **core**, not
-speculative. The **bet** is that the transport is **event-driven** (the
-mechanism); the **observable success** is directed **send and reply**, reliable
-**wake and awareness**, and **peer-retirement detection**, however the transport
-is wired **[I]**.
+speculative. For **Copilot CLI**, the **bet** is that the transport is
+**event-driven** (the mechanism); the **observable success** across Copilot
+surfaces is directed **send and reply**, reliable **wake and awareness**, and
+**peer-retirement detection**, however each surface's transport is wired
+**[I]**. The CLI design below must not be generalised to the cloud agent, whose
+wake mechanism is still unresolved **[D][I]**.
 
 The existing Practice comms CLI already supports an all-channel watcher,
 directed send and reply, a durable cursor, a watcher heartbeat, and heartbeat-tag
 exclusion **[R]**. A live probe this session confirmed that `--max-events 1`
 converts a received event into a **background shell completion** **[V]** — which
-is exactly the signal a `notification` `shell_completed` hook consumes
-(Finding 9) **[I]**.
+is exactly the signal a Copilot CLI `notification` `shell_completed` hook
+consumes (Finding 9) **[I]**.
 
 **Design — three cooperating layers [I]:**
 
-1. **Primary transport:** a one-shot watcher -> `shell_completed` ->
-   `notification` hook -> Copilot turn, which then **re-arms** the watcher. This
-   is edge-triggered and event-driven; it is the main channel.
+1. **Copilot CLI primary transport:** a one-shot watcher ->
+   `shell_completed` -> `notification` hook -> Copilot CLI turn, which then
+   **re-arms** the watcher. This is edge-triggered and event-driven; it is the
+   main CLI channel.
 2. **Turn-boundary safeguard:** a watcher/inbox check at turn boundaries, so a
    message that arrives outside the wake path is still picked up.
 3. **Liveness detector:** a scheduled `/every` or `/loop` peer-liveness and
@@ -339,8 +345,9 @@ never a second hand-maintained source of truth **[I]**.
 Because Copilot reads the `.claude` settings subset **[D]**, adding native
 Copilot hooks alongside the existing Claude hooks risks **double or cross-shape
 execution** of the same policy — and Finding 3 shows cross-shape execution is not
-harmless **[V][I]**. The invariant: **exactly one policy evaluation per tool
-call**. This is achieved by a static ownership rule: native `.github`
+harmless **[V][I]**. The invariant: **exactly one policy evaluation per valid
+originating request**, including one batched compatibility request containing
+multiple tool calls. This is achieved by a static ownership rule: native `.github`
 `preToolUse` is the sole Copilot evaluation source, while the central dispatcher
 recognises the inherited compatibility activation and returns its host-valid
 pass-through without loading policy or invoking the evaluator. Individual
@@ -363,9 +370,10 @@ node. Slices A-C remain exploration candidates; Slice D is ratified:
 - **Slice B — Native instructions and agents.** Generated instruction
   activation projections and a validated `.github/agents` family from canonical
   templates.
-- **Slice C — Communications and wake.** The three-layer event-driven comms
-  design (one-shot watcher -> `shell_completed` -> `notification` -> re-arm),
-  with turn-boundary safeguard and paired liveness detection.
+- **Slice C — Copilot CLI communications and wake.** The three-layer
+  event-driven comms design (one-shot watcher -> `shell_completed` ->
+  `notification` -> re-arm), with turn-boundary safeguard and paired liveness
+  detection. Cloud-agent wake requires a separate delivery design.
 - **Ratified Slice D — Truth and enforcement.** Validators (including the extended
   `pretooluse-guard-routing` single-evaluation check), version floors, capability
   probes, and the coexistence de-duplication boundary. The ADR-125 amendment was
@@ -389,7 +397,7 @@ appears later — not speculatively.
 | Assumption | Falsifier | Status |
 | --- | --- | --- |
 | Native `sessionStart` returning `additionalContext` delivers context to the model. | A native adapter runs but the model shows no injected context. | Documented **[D]**; not yet natively verified here. |
-| One-shot watcher -> `shell_completed` -> `notification` re-arm is a reliable primary transport. | A delivered event fails to wake a turn, or the durable handoff drops events. | Probe confirmed the shell-completion conversion **[V]**; full loop unverified. |
+| In Copilot CLI, one-shot watcher -> `shell_completed` -> `notification` re-arm is a reliable primary transport. | A delivered event fails to wake a CLI turn, or the durable handoff drops events. | Probe confirmed the shell-completion conversion **[V]**; full CLI loop unverified. |
 | Native `.github` activation can be the sole Copilot evaluator while inherited `.claude` compatibility activation is classified without loading policy. | Both activation sources still evaluate the same request, or a supported input cannot be classified without guessing. | Design **[I]**; unproven. |
 | A tested CLI version floor plus capability probes gate every relied-upon surface. | A supported-floor build fails a required probe, or an unprobed surface is wired. | Skew observed at 1.0.74 **[V]**; floor and probes unset. |
 
@@ -416,6 +424,8 @@ appears later — not speculatively.
 - Whether a supported Copilot build fires both tracked activation sources in a
   form that the proposed static authority boundary can classify and suppress
   without a second evaluation.
+- What first-party cloud-agent mechanism, if any, can provide event-driven wake
+  and awareness without relying on the CLI-only `notification` event.
 - The exact **durable watcher event-handoff shape** across the wake path.
 - The **batch and idempotency semantics** of the wake path: whether one wake
   **drains or coalesces** a burst, plus proof of **at-least-once delivery**,

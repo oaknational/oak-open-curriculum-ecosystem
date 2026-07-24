@@ -28,6 +28,10 @@ identity, can receive directed messages, reply, and detect when a peer has
 retired, acts through Copilot's own native platform surfaces, and leaves
 executable proof that all of this fired.
 
+This outcome covers both Copilot CLI and cloud-agent sessions, but it does not
+assume that they share one awareness mechanism. Platform-specific delivery must
+remain honest: a wake path proved only on the CLI is not a cloud-agent wake path.
+
 This is a **strategic node**: it carries the why and the what, with no
 implementation detail and no todos.
 
@@ -42,8 +46,9 @@ Copilot-specific Practice fork or a per-tool content copy. Concretely:
   hooks and settings.
 - Keep **one canonical policy and Practice**, with generated and validated
   platform projections rather than a second hand-maintained source of truth.
-- Make communication awareness **event-driven through native mechanisms**, not
-  poll-driven.
+- Make communication awareness **event-driven through native mechanisms** where
+  the platform exposes them, without generalising CLI-only events to cloud-agent
+  sessions.
 - Add **no Copilot-specific Practice fork or plugin** unless a measured
   multi-repo distribution need later proves it necessary.
 
