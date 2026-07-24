@@ -82,6 +82,9 @@ Each platform has thin wrappers that reference canonical content. Skill adapters
 
 #### GitHub Copilot (`.github/`) — ratified target
 
+The vendor-defined paths below follow GitHub's
+[Copilot customisation reference](https://docs.github.com/en/copilot/reference/customization-cheat-sheet).
+
 | Location                                 | Format                                                                    | Read by |
 | ---------------------------------------- | ------------------------------------------------------------------------- | ------- |
 | `.github/copilot-instructions.md`        | Thin repository entry point to canonical Practice instructions            | Copilot |
