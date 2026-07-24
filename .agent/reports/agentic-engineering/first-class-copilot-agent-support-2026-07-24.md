@@ -2,7 +2,8 @@
 
 **Date:** 2026-07-24
 **Session:** Thistle rides Canopy (494337)
-**Status:** Review and design complete; implementation **not** authorised.
+**Status:** Review and design complete. Director authority covers the delivery
+shape; runtime implementation still awaits owner ratification.
 **Linked plan:** [First-class GitHub Copilot agent participation](../../plans/strategic/first-class-copilot-agent-participation.plan.md)
 
 ## Evidence labels
@@ -12,7 +13,7 @@ re-deriving it:
 
 - **[V]** — directly verified this session (a command was run, a variable read,
   a log inspected).
-- **[D]** — stated in official GitHub Copilot documentation (see
+- **[D]** — stated in official first-party GitHub or OpenAI documentation (see
   [Official sources](#official-sources)).
 - **[R]** — grounded in this repository's source or doctrine, with a
   repo-relative citation.
@@ -149,12 +150,15 @@ edge **[I]**:
 
 - Define **strict, closed schemas** for Claude, Copilot, and Codex input events.
 - **Parse the JSON once**.
-- Require **exactly one** schema to match; **zero or multiple** matches throw a
-  clear, fail-closed **boundary error** rather than guessing.
+- For explicit platform activation, validate only the selected schema. For a
+  genuinely shared compatibility activation, require **exactly one** match
+  within a bounded candidate set; **zero or multiple** matches throw a clear,
+  fail-closed **boundary error** rather than guessing.
 - **Normalise** the matched input to one canonical — possibly batched —
   `PreToolUse` event, and then to canonical `ContentChange` values.
-- Run the **existing canonical hook-policy decision core exactly once** over
-  those canonical values.
+- Extract one platform-free evaluator from the current Bash and content
+  runners, load one policy snapshot, and evaluate the canonical event exactly
+  once.
 - **Render** the verdict and context back through the **originating platform's**
   output schema.
 - Where activation already knows the host, **explicit platform entrypoints select
@@ -186,9 +190,9 @@ should be treated as **stale** until re-measured against the
 [Official sources](#official-sources) **[V][I]**. This adapter family is governed
 by
 [ADR-125 (Agent Artefact Portability)](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md),
-which requires an **amendment adding the GitHub adapter family and naming Copilot
-as a reader of the cross-tool `.agents/skills` home** before the surfaces are
-wired **[R][I]**.
+whose proposed amendment adds the GitHub adapter family and names Copilot as a
+reader of the cross-tool `.agents/skills` home. That amendment is co-ratified
+with the strategic and delivery nodes before the surfaces are wired **[R][I]**.
 
 **Current state [V]:** `.github/copilot-instructions.md` already exists as a thin
 pointer to `AGENT.md`; it will be brought under **validated adapter ownership**,
@@ -308,15 +312,19 @@ The canonical Practice content stays exactly where it is; a GitHub-native
 - **GitHub adapter family:** `.github/copilot-instructions.md`,
   `.github/instructions`, `.github/agents`, `.github/hooks`, and
   `.github/copilot/settings.json`.
-- **One canonical policy core:** the existing hook-policy decision core stays the
-  single evaluator; [`agent-tools/src/copilot`](../../../agent-tools) holds
-  Copilot **parsers, renderers, and platform-adapter composition** — not a
-  parallel guard.
+- **One canonical policy core:** extract one platform-free evaluator and one
+  policy-snapshot load from the current Bash and content runners;
+  [`agent-tools/src/copilot`](../../../agent-tools) holds Copilot **parsers,
+  renderers, and platform-adapter composition** — not a parallel guard.
 - **One platform dispatcher:** a single dispatcher owns activation routing —
   **O(N)** in the number of platforms; individual shims do **not** each need to
-  know every other platform. The `.claude` and `.github` configurations both call
-  the dispatcher with an **explicit source/runtime context**, so exactly one
-  adapter parses the payload and exactly one policy evaluation runs.
+  know every other platform. Explicit activation validates only its named
+  adapter; shared compatibility activation arbitrates within a bounded set.
+- **One Copilot evaluation authority:** native `.github` `preToolUse` owns
+  evaluation for a supported Copilot version. Inherited `.claude` compatibility
+  input is classified by the dispatcher but does not load policy or call the
+  evaluator. Capability and version-floor probes must prove native activation
+  before this wiring lands.
 - **Enforcement:** extend the existing
   [`pretooluse-guard-routing`](../../../agent-tools/src/validators/pretooluse-guard-routing)
   validator to cover the new adapter family and the single-evaluation invariant.
@@ -330,12 +338,15 @@ Because Copilot reads the `.claude` settings subset **[D]**, adding native
 Copilot hooks alongside the existing Claude hooks risks **double or cross-shape
 execution** of the same policy — and Finding 3 shows cross-shape execution is not
 harmless **[V][I]**. The invariant: **exactly one policy evaluation per tool
-call**. This is achieved by **centralised dispatch and activation selection** —
-the single platform dispatcher (Target architecture) selects one adapter from the
-explicit source/runtime context — **not** by each Claude shim independently
-learning to **no-op under Copilot**. Unknown or unmatched input **fails closed
-with a clear platform/schema error** (Finding 4), never a **false policy
-violation**. This boundary must be executably proven, not assumed **[I]**.
+call**. This is achieved by a static ownership rule: native `.github`
+`preToolUse` is the sole Copilot evaluation source, while the central dispatcher
+recognises the inherited compatibility activation and returns its host-valid
+pass-through without loading policy or invoking the evaluator. Individual
+Claude shims do not learn the platform matrix, and no unstable request
+fingerprint is used. Unknown or unmatched input **fails closed with a clear
+platform/schema error** (Finding 4), never a **false policy violation**.
+Separate-process tests and a live supported-version probe must prove this
+boundary before activation lands **[I]**.
 
 ## Candidate implementation slices (not authorised)
 
@@ -353,9 +364,9 @@ lands within its round budget under PDR-132 **[R]**:
   with turn-boundary safeguard and paired liveness detection.
 - **Slice D — Truth and enforcement.** Validators (including the extended
   `pretooluse-guard-routing` single-evaluation check), version floors, capability
-  probes, the coexistence de-duplication boundary, and the required **ADR-125
-  amendment** adding the GitHub adapter family and Copilot as a reader of
-  `.agents/skills`.
+  probes, and the coexistence de-duplication boundary. The proposed ADR-125
+  amendment is co-ratified with the strategic and delivery nodes rather than
+  deferred to this slice.
 
 ## Build versus buy
 
@@ -374,15 +385,32 @@ need appears later — not speculatively.
 | --- | --- | --- |
 | Native `sessionStart` returning `additionalContext` delivers context to the model. | A native adapter runs but the model shows no injected context. | Documented **[D]**; not yet natively verified here. |
 | One-shot watcher -> `shell_completed` -> `notification` re-arm is a reliable primary transport. | A delivered event fails to wake a turn, or the durable handoff drops events. | Probe confirmed the shell-completion conversion **[V]**; full loop unverified. |
-| Claude shims can be made to no-op under Copilot as the de-dup boundary. | Both adapters still fire the same policy after the boundary is added. | Design **[I]**; unproven. |
+| Native `.github` activation can be the sole Copilot evaluator while inherited `.claude` compatibility activation is classified without loading policy. | Both activation sources still evaluate the same request, or a supported input cannot be classified without guessing. | Design **[I]**; unproven. |
 | A single CLI version floor is sufficient to gate capability. | A supported-floor build still lacks a relied-upon surface. | Skew observed at 1.0.74 **[V]**; floor unset. |
 
-**Unresolved evidence to gather before a delivery plan is authored [I]:**
+**Evidence resolved at delivery pickup [V][D]:**
 
-- The **raw PascalCase hook stdin/output** shapes as Copilot actually emits and
-  consumes them.
-- Whether Copilot **de-duplicates hooks across sources** (`.github` vs
-  `.claude`) natively, or whether the boundary must be built.
+- The live Copilot 1.0.74 session event stream confirms that the inherited
+  compatibility hook receives `{ sessionId, cwd, toolCalls }`; `toolCalls` is a
+  real batch, each entry carries `id`, `name`, and serialised `args`, `create`
+  arguments decode to `path` plus `file_text`, and `apply_patch` carries a patch
+  document string rather than a Claude edit pair **[V]**.
+- The current official hooks reference documents native `preToolUse` as a
+  single-call camelCase event (`toolName`, `toolArgs`) and documents the
+  PascalCase compatibility event separately **[D]**. Native and inherited
+  activation therefore require explicit adapter context rather than one
+  permissive schema.
+- OpenAI's current Hooks reference documents Codex `PreToolUse` common fields,
+  `tool_name`, `tool_use_id`, and `tool_input`, plus the native
+  `hookSpecificOutput` deny contract **[D]**. The tracked `.codex/config.toml`
+  currently activates only `SessionStart`, so Codex enforcement is new delivery
+  scope rather than an existing protection **[V]**.
+
+**Unresolved evidence to gather during delivery [I]:**
+
+- Whether a supported Copilot build fires both tracked activation sources in a
+  form that the proposed static authority boundary can classify and suppress
+  without a second evaluation.
 - The exact **durable watcher event-handoff shape** across the wake path.
 - The **batch and idempotency semantics** of the wake path: whether one wake
   **drains or coalesces** a burst, plus proof of **at-least-once delivery**,
@@ -413,7 +441,7 @@ A short divergent pass ran alongside the review **[I]**:
 
 ## Official sources
 
-All URLs are official GitHub documentation **[D]**:
+All URLs are first-party documentation **[D]**:
 
 - Adding custom instructions —
   <https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-custom-instructions>
@@ -433,3 +461,5 @@ All URLs are official GitHub documentation **[D]**:
   <https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference>
 - Comparing customization features (customization cheat sheet) —
   <https://docs.github.com/en/copilot/reference/customization-cheat-sheet>
+- OpenAI Codex hooks and `PreToolUse` contract —
+  <https://learn.chatgpt.com/docs/hooks>

@@ -3,10 +3,10 @@ id: first-class-copilot-agent-participation
 node_type: strategic
 name: First-class GitHub Copilot agent participation
 overview: "Make GitHub Copilot sessions named, addressable, aware team members under Oak's one canonical Practice."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-07-24
+ratified_where: collaboration event 9d305a22-b318-4678-a39b-b5eae6cb736d
 serves: FRAME-1
 impact_areas:
   - practice-and-estate
@@ -49,8 +49,9 @@ Copilot-specific Practice fork or a per-tool content copy. Concretely:
 
 This adapter family is governed by
 [ADR-125 (Agent Artefact Portability)](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md);
-ratifying this node requires an ADR-125 amendment adding the GitHub adapter
-family and naming Copilot as a reader of the cross-tool `.agents/skills` home.
+the proposed ADR-125 amendment adding the GitHub adapter family and naming
+Copilot as a reader of the cross-tool `.agents/skills` home is co-ratified with
+this node.
 The core of the bet is honest native asymmetry — Copilot being fully itself on
 its own surfaces — rather than mechanical feature parity with another tool's
 files.
