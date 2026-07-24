@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Educate My Creature">
+<circle cx="34" cy="18" r="6" fill="#ff8fbe"></circle>
+<circle cx="62" cy="14" r="6" fill="#aedff7"></circle>
+<rect x="32" y="18" width="4" height="16" rx="2" fill="#331f30"></rect>
+<rect x="60" y="14" width="4" height="20" rx="2" fill="#331f30"></rect>
+<circle cx="48" cy="58" r="34" fill="#ffe8a0" stroke="#331f30" stroke-width="4"></circle>
+<circle cx="36" cy="52" r="9" fill="#fffdf8" stroke="#331f30" stroke-width="3"></circle>
+<circle cx="60" cy="52" r="9" fill="#fffdf8" stroke="#331f30" stroke-width="3"></circle>
+<circle cx="38" cy="54" r="3.5" fill="#331f30"></circle>
+<circle cx="58" cy="54" r="3.5" fill="#331f30"></circle>
+<path d="M36 70 Q48 80 60 70" fill="none" stroke="#331f30" stroke-width="4" stroke-linecap="round"></path>
+</svg>

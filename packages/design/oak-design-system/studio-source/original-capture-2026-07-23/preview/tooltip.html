@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Tooltip" subtitle="Dark tooltip with pointer" viewport="700x200" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:40px 24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; gap:60px; justify-content:center; align-items:center; flex-wrap:wrap; }
+  .tip-wrap { position:relative; display:inline-block; }
+  .tip { position:relative; background:var(--bg-inverted); color:var(--oak-white); border-radius:6px;
+    padding:10px 14px; font:300 14px/20px var(--font-sans); letter-spacing:-0.005rem; max-width:220px; }
+  .tip.below { margin-top:14px; }
+  .tip.below::before { content:""; position:absolute; top:-7px; left:24px; width:14px; height:14px; background:var(--bg-inverted); transform:rotate(45deg); }
+  .tip.above { margin-bottom:14px; }
+  .tip.above::after { content:""; position:absolute; bottom:-7px; left:24px; width:14px; height:14px; background:var(--bg-inverted); transform:rotate(45deg); }
+  .anchor { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border:2px solid var(--border-primary); border-radius:100px; background:var(--bg-primary); }
+  .anchor img { width:20px; height:20px; }
+  .col { display:flex; flex-direction:column; align-items:center; }
+</style></head>
+<body>
+  <div class="col">
+    <div class="tip above">Quizzes check what pupils already know before the lesson.</div>
+    <span class="anchor"><img src="../assets/icons/info.svg" alt=""></span>
+  </div>
+  <div class="col">
+    <span class="anchor"><img src="../assets/icons/question-mark.svg" alt=""></span>
+    <div class="tip below">You can download any resource as an editable file.</div>
+  </div>
+</body></html>

@@ -1,0 +1,56 @@
+{
+  "text": {
+    "success": {
+      "$value": "{oak.color.ci-blue}",
+      "$type": "color"
+    },
+    "error": {
+      "$value": "{oak.color.ci-vermilion-deep}",
+      "$type": "color"
+    }
+  },
+  "bg": {
+    "success": {
+      "$value": "{oak.color.ci-blue}",
+      "$type": "color"
+    },
+    "error": {
+      "$value": "{oak.color.ci-vermilion-deep}",
+      "$type": "color"
+    },
+    "correct": {
+      "$value": "{oak.color.ci-blue-tint}",
+      "$type": "color"
+    },
+    "incorrect": {
+      "$value": "{oak.color.ci-vermilion-tint}",
+      "$type": "color"
+    },
+    "success-subtle": {
+      "$value": "{oak.color.ci-blue-tint}",
+      "$type": "color"
+    },
+    "error-subtle": {
+      "$value": "{oak.color.ci-vermilion-tint}",
+      "$type": "color"
+    }
+  },
+  "border": {
+    "success": {
+      "$value": "{oak.color.ci-blue}",
+      "$type": "color"
+    },
+    "error": {
+      "$value": "{oak.color.ci-vermilion}",
+      "$type": "color"
+    },
+    "brand": {
+      "$value": "{oak.color.ci-blue}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{oak.color.ci-ochre}",
+      "$type": "color"
+    }
+  }
+}

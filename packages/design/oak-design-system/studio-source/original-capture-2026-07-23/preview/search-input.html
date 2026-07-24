@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Search input" subtitle="Search field + autocomplete results" viewport="700x300" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; }
+  .col { display:flex; flex-direction:column; gap:0; min-width:300px; flex:1; }
+  .search { display:flex; align-items:center; gap:12px; height:56px; padding:0 8px 0 16px;
+    border:2px solid var(--border-primary); border-radius:4px; background:var(--bg-primary); }
+  .search img.lead { width:24px; height:24px; }
+  .search input { flex:1; border:0; outline:0; font:300 18px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); background:transparent; }
+  .search .go { height:40px; padding:0 16px; border:2px solid var(--border-primary); border-radius:4px; background:var(--bg-inverted); color:var(--oak-white);
+    font:700 15px/20px var(--font-sans); letter-spacing:-0.005rem; cursor:pointer; box-shadow:var(--shadow-lemon); }
+  .menu { border:2px solid var(--border-primary); border-top:0; border-radius:0 0 4px 4px; background:var(--bg-primary); box-shadow:var(--shadow-grey); }
+  .ac { display:flex; align-items:center; gap:12px; padding:12px 16px; font:300 16px/22px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); border-bottom:1px solid var(--oak-grey30); cursor:pointer; }
+  .ac:last-child { border-bottom:0; }
+  .ac.hov { background:var(--oak-grey20); }
+  .ac img { width:20px; height:20px; }
+  .ac b { font-weight:700; }
+</style></head>
+<body>
+  <div class="col">
+    <div class="search">
+      <img class="lead" src="../assets/icons/search.svg" alt="">
+      <input value="Search lessons, units, subjects" readonly>
+      <button class="go">Search</button>
+    </div>
+  </div>
+  <div class="col">
+    <div class="search" style="border-radius:4px 4px 0 0;">
+      <img class="lead" src="../assets/icons/search.svg" alt="">
+      <input value="frac" readonly>
+    </div>
+    <div class="menu">
+      <div class="ac hov"><img src="../assets/icons/search.svg" alt=""><span><b>frac</b>tions</span></div>
+      <div class="ac"><img src="../assets/icons/search.svg" alt=""><span><b>frac</b>tions and decimals</span></div>
+      <div class="ac"><img src="../assets/icons/search.svg" alt=""><span>equivalent <b>frac</b>tions</span></div>
+    </div>
+  </div>
+</body></html>

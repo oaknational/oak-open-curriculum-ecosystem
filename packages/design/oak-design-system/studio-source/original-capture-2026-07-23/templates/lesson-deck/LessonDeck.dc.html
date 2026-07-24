@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Lesson deck" description="Teaching slides in Oak's lesson shape: outcome, keywords, learning cycles, check for understanding, practice, summary" -->
+<helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#ffe555"></rect><path d="M50 30c-8 0-14 6-14 14 0 10 14 26 14 26s14-16 14-26c0-8-6-14-14-14z" fill="#222222"></path><circle cx="50" cy="44" r="6" fill="#ffe555"></circle></svg></template>
+<script src="./ds-base.js"></script>
+<style>body{margin:0;background:var(--bg-neutral)}</style>
+</helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+<section data-label="Title" data-screen-label="01" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;font-family:var(--font-sans);color:var(--text-primary);background:var(--bg-primary)">
+  <div style="flex:1;display:flex;flex-direction:column;padding:var(--space-120);gap:var(--space-40)">
+    <div style="display:flex;gap:var(--space-16);align-items:center">
+      <span style="display:inline-flex;align-items:center;height:var(--size-target);padding:0 var(--space-20);border-radius:var(--radius-m);background:var(--surface-decorative-5);font:var(--weight-display) var(--font-size-6)/var(--leading-none) var(--font-display)">Science</span>
+      <span style="display:inline-flex;align-items:center;height:var(--size-target);padding:0 var(--space-20);border-radius:var(--radius-m);background:var(--surface-decorative-1-subtle);font:var(--weight-display) var(--font-size-6)/var(--leading-none) var(--font-display)">Year 4</span>
+    </div>
+    <h1 style="margin:0;font:var(--weight-display) var(--font-size-14)/var(--leading-tight) var(--font-display);letter-spacing:var(--tracking-heading)">Evaporation and condensation</h1>
+    <p style="margin:0;font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans);color:var(--text-subdued)">Unit: States of matter · Lesson 3 of 8</p>
+    <div style="margin-top:auto;display:flex;align-items:center;gap:var(--space-20)">
+      <img src="../../assets/logo-acorn-black.svg" alt="" style="height:var(--space-48);filter:var(--filter-icon)">
+      <span style="font:var(--weight-display) var(--font-size-6)/var(--leading-none) var(--font-display)">Oak National Academy</span>
+    </div>
+  </div>
+  <div style="width:var(--space-640);background:var(--surface-mint);border-left:var(--border-solid-xl) solid var(--border-primary);display:flex;align-items:center;justify-content:center">
+    <img src="../../assets/logo-acorn-black.svg" alt="Oak acorn" style="width:var(--space-360);filter:var(--filter-icon)">
+  </div>
+</section>
+<section data-label="Outcome" data-screen-label="02" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:var(--space-48);padding:var(--space-120);font-family:var(--font-sans);color:var(--text-primary);background:var(--bg-primary)">
+  <p style="margin:0;font:var(--weight-display) var(--font-size-7)/var(--leading-none) var(--font-display);letter-spacing:var(--tracking-heading);border-bottom:var(--border-solid-xxxl) solid var(--border-accent);align-self:flex-start;padding-bottom:var(--space-12)">Learning outcome</p>
+  <p style="margin:0;max-width:var(--space-1360);font:var(--weight-regular) var(--font-size-12)/var(--leading-snug) var(--font-sans);letter-spacing:var(--tracking-heading)">I can describe how water <span style="background:var(--color-accent-soft);padding:0 var(--space-12);border-radius:var(--radius-m2)">evaporates</span> and <span style="background:var(--color-accent-soft);padding:0 var(--space-12);border-radius:var(--radius-m2)">condenses</span>, and give examples from everyday life.</p>
+</section>
+<section data-label="Keywords" data-screen-label="03" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;flex-direction:column;gap:var(--space-48);padding:var(--space-120);font-family:var(--font-sans);color:var(--text-primary);background:var(--bg-primary)">
+  <p style="margin:0;font:var(--weight-display) var(--font-size-7)/var(--leading-none) var(--font-display);letter-spacing:var(--tracking-heading);border-bottom:var(--border-solid-xxxl) solid var(--border-accent);align-self:flex-start;padding-bottom:var(--space-12)">Keywords</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-40);flex:1">
+    <div style="border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);box-shadow:var(--shadow-accent-display);padding:var(--space-40) var(--space-40);display:flex;flex-direction:column;gap:var(--space-16);background:var(--bg-primary)"><span style="font:var(--weight-display) var(--font-size-8)/var(--leading-none) var(--font-display)">evaporation</span><span style="font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans)">When a liquid turns into a gas, without boiling.</span></div>
+    <div style="border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);box-shadow:var(--shadow-accent-display);padding:var(--space-40) var(--space-40);display:flex;flex-direction:column;gap:var(--space-16);background:var(--bg-primary)"><span style="font:var(--weight-display) var(--font-size-8)/var(--leading-none) var(--font-display)">condensation</span><span style="font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans)">When a gas cools and turns back into a liquid.</span></div>
+    <div style="border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);box-shadow:var(--shadow-accent-display);padding:var(--space-40) var(--space-40);display:flex;flex-direction:column;gap:var(--space-16);background:var(--bg-primary)"><span style="font:var(--weight-display) var(--font-size-8)/var(--leading-none) var(--font-display)">water vapour</span><span style="font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans)">Water when it is a gas, spread out in the air.</span></div>
+    <div style="border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);box-shadow:var(--shadow-accent-display);padding:var(--space-40) var(--space-40);display:flex;flex-direction:column;gap:var(--space-16);background:var(--bg-primary)"><span style="font:var(--weight-display) var(--font-size-8)/var(--leading-none) var(--font-display)">state</span><span style="font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans)">Whether something is a solid, a liquid or a gas.</span></div>
+  </div>
+</section>
+<section data-label="Cycle 1" data-screen-label="04" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:var(--space-40);padding:var(--space-120);font-family:var(--font-sans);color:var(--text-primary);background:var(--surface-decorative-1)">
+  <span style="width:var(--space-160);height:var(--space-160);border-radius:var(--radius-circle);border:var(--border-solid-xl) solid var(--border-primary);background:var(--bg-primary);display:inline-flex;align-items:center;justify-content:center;font:var(--weight-display) var(--font-size-12)/var(--leading-none) var(--font-display)">1</span>
+  <h2 style="margin:0;font:var(--weight-display) var(--font-size-13)/var(--leading-tight) var(--font-display);letter-spacing:var(--tracking-heading);max-width:var(--space-1360)">Where does a puddle go?</h2>
+  <p style="margin:0;font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans)">Learning cycle 1 of 2 · Explanation, check, practice, feedback</p>
+</section>
+<section data-label="Explanation" data-screen-label="05" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;gap:var(--space-80);padding:var(--space-120);font-family:var(--font-sans);color:var(--text-primary);background:var(--bg-primary)">
+  <div style="flex:1;display:flex;flex-direction:column;gap:var(--space-40)">
+    <h2 style="margin:0;font:var(--weight-display) var(--font-size-10)/var(--leading-tight) var(--font-display);letter-spacing:var(--tracking-heading)">The sun warms the puddle</h2>
+    <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:var(--space-24)">
+      <li style="display:flex;gap:var(--space-20);align-items:flex-start;font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans)"><span style="width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16);background:var(--color-accent);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-s);margin-top:var(--space-12)"></span>Water at the surface gains energy from the sun.</li>
+      <li style="display:flex;gap:var(--space-20);align-items:flex-start;font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans)"><span style="width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16);background:var(--color-accent);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-s);margin-top:var(--space-12)"></span>Tiny particles escape into the air as water vapour — this is evaporation.</li>
+      <li style="display:flex;gap:var(--space-20);align-items:flex-start;font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans)"><span style="width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16);background:var(--color-accent);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-s);margin-top:var(--space-12)"></span>Warmer, windier days make it happen faster.</li>
+    </ul>
+    <p style="margin:auto 0 0;font:var(--weight-light) var(--font-size-6)/var(--leading-relaxed) var(--font-sans);color:var(--text-subdued);border-left:var(--border-solid-xxl) solid var(--border-accent);padding-left:var(--space-20)">Misconception: the puddle doesn't soak away or vanish — the water changes state.</p>
+  </div>
+  <div style="width:var(--space-640);border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);background:repeating-linear-gradient(45deg,var(--bg-neutral) 0 var(--space-24),var(--bg-subtle) var(--space-24) var(--space-48));display:flex;align-items:center;justify-content:center">
+    <span style="font:var(--weight-medium) var(--font-size-6)/var(--leading-relaxed) var(--font-mono);color:var(--text-subdued);background:var(--bg-primary);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-m2);padding:var(--space-12) var(--space-20)">diagram: puddle drying in sun</span>
+  </div>
+</section>
+<section data-label="Check" data-screen-label="06" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;flex-direction:column;gap:var(--space-48);padding:var(--space-120);font-family:var(--font-sans);color:var(--text-primary);background:var(--bg-primary)">
+  <p style="margin:0;font:var(--weight-display) var(--font-size-7)/var(--leading-none) var(--font-display);letter-spacing:var(--tracking-heading);border-bottom:var(--border-solid-xxxl) solid var(--border-accent);align-self:flex-start;padding-bottom:var(--space-12)">Check for understanding</p>
+  <h2 style="margin:0;font:var(--weight-regular) var(--font-size-10)/var(--leading-snug) var(--font-sans);letter-spacing:var(--tracking-heading);max-width:var(--space-1360)">Which process turns water vapour back into liquid water?</h2>
+  <div style="display:flex;flex-direction:column;gap:var(--space-24);max-width:var(--space-1280)">
+    <div style="display:flex;align-items:center;gap:var(--space-24);border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);padding:var(--space-24) var(--space-32);font:var(--weight-light) var(--font-size-7)/var(--leading-snug) var(--font-sans);background:var(--bg-primary)"><span style="width:var(--size-target-l);height:var(--size-target-l);flex:0 0 var(--size-target-l);border-radius:var(--radius-circle);border:var(--border-solid-l) solid var(--border-primary);display:inline-flex;align-items:center;justify-content:center;font:var(--weight-bold) var(--font-size-6)/var(--leading-none) var(--font-sans)">a</span>Evaporation</div>
+    <div style="display:flex;align-items:center;gap:var(--space-24);border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);padding:var(--space-24) var(--space-32);font:var(--weight-light) var(--font-size-7)/var(--leading-snug) var(--font-sans);background:var(--bg-primary)"><span style="width:var(--size-target-l);height:var(--size-target-l);flex:0 0 var(--size-target-l);border-radius:var(--radius-circle);border:var(--border-solid-l) solid var(--border-primary);display:inline-flex;align-items:center;justify-content:center;font:var(--weight-bold) var(--font-size-6)/var(--leading-none) var(--font-sans)">b</span>Condensation</div>
+    <div style="display:flex;align-items:center;gap:var(--space-24);border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);padding:var(--space-24) var(--space-32);font:var(--weight-light) var(--font-size-7)/var(--leading-snug) var(--font-sans);background:var(--bg-primary)"><span style="width:var(--size-target-l);height:var(--size-target-l);flex:0 0 var(--size-target-l);border-radius:var(--radius-circle);border:var(--border-solid-l) solid var(--border-primary);display:inline-flex;align-items:center;justify-content:center;font:var(--weight-bold) var(--font-size-6)/var(--leading-none) var(--font-sans)">c</span>Melting</div>
+  </div>
+  <p style="margin:auto 0 0;font:var(--weight-light) var(--font-size-6)/var(--leading-relaxed) var(--font-sans);color:var(--text-subdued)">Cold call, then reveal — the answer is b.</p>
+</section>
+<section data-label="Practice" data-screen-label="07" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;gap:var(--space-80);padding:var(--space-120);font-family:var(--font-sans);color:var(--text-primary);background:var(--bg-primary)">
+  <div style="flex:1;display:flex;flex-direction:column;gap:var(--space-40)">
+    <p style="margin:0;font:var(--weight-display) var(--font-size-7)/var(--leading-none) var(--font-display);letter-spacing:var(--tracking-heading);border-bottom:var(--border-solid-xxxl) solid var(--border-accent);align-self:flex-start;padding-bottom:var(--space-12)">Practice task</p>
+    <h2 style="margin:0;font:var(--weight-regular) var(--font-size-11)/var(--leading-snug) var(--font-sans);letter-spacing:var(--tracking-heading)">Explain what happens to the water in wet washing on a warm day.</h2>
+    <p style="margin:0;font:var(--weight-light) var(--font-size-7)/var(--leading-relaxed) var(--font-sans);max-width:var(--space-960)">Write 2–3 sentences. Use the keywords <strong style="font-weight:var(--weight-bold)">evaporation</strong> and <strong style="font-weight:var(--weight-bold)">water vapour</strong>.</p>
+  </div>
+  <div style="width:var(--space-640);border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);box-shadow:var(--shadow-accent-display);background:var(--surface-decorative-1-subtle);padding:var(--space-40);display:flex;flex-direction:column;gap:var(--space-24);align-self:center">
+    <span style="font:var(--weight-display) var(--font-size-7)/var(--leading-none) var(--font-display)">Success criteria</span>
+    <span style="font:var(--weight-light) var(--font-size-6)/var(--leading-relaxed) var(--font-sans);display:flex;gap:var(--space-16)"><img src="../../assets/icons/tick.svg" alt="" style="width:var(--size-icon-xl);height:var(--size-icon-xl);flex:0 0 var(--size-icon-xl);filter:var(--filter-icon)">I name the process.</span>
+    <span style="font:var(--weight-light) var(--font-size-6)/var(--leading-relaxed) var(--font-sans);display:flex;gap:var(--space-16)"><img src="../../assets/icons/tick.svg" alt="" style="width:var(--size-icon-xl);height:var(--size-icon-xl);flex:0 0 var(--size-icon-xl);filter:var(--filter-icon)">I say where the water goes.</span>
+    <span style="font:var(--weight-light) var(--font-size-6)/var(--leading-relaxed) var(--font-sans);display:flex;gap:var(--space-16)"><img src="../../assets/icons/tick.svg" alt="" style="width:var(--size-icon-xl);height:var(--size-icon-xl);flex:0 0 var(--size-icon-xl);filter:var(--filter-icon)">I use both keywords correctly.</span>
+  </div>
+</section>
+<section data-label="Summary" data-screen-label="08" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;flex-direction:column;gap:var(--space-48);padding:var(--space-120);font-family:var(--font-sans);color:var(--text-primary);background:var(--bg-primary)">
+  <p style="margin:0;font:var(--weight-display) var(--font-size-7)/var(--leading-none) var(--font-display);letter-spacing:var(--tracking-heading);border-bottom:var(--border-solid-xxxl) solid var(--border-accent);align-self:flex-start;padding-bottom:var(--space-12)">Summary</p>
+  <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:var(--space-32);max-width:var(--space-1360)">
+    <li style="display:flex;gap:var(--space-24);align-items:flex-start;font:var(--weight-light) var(--font-size-8)/var(--leading-relaxed) var(--font-sans)"><img src="../../assets/icons/tick.svg" alt="" style="width:var(--size-icon-xxl);height:var(--size-icon-xxl);flex:0 0 var(--size-icon-xxl);margin-top:var(--space-4);filter:var(--filter-icon)">Evaporation: liquid water gains energy and becomes water vapour.</li>
+    <li style="display:flex;gap:var(--space-24);align-items:flex-start;font:var(--weight-light) var(--font-size-8)/var(--leading-relaxed) var(--font-sans)"><img src="../../assets/icons/tick.svg" alt="" style="width:var(--size-icon-xxl);height:var(--size-icon-xxl);flex:0 0 var(--size-icon-xxl);margin-top:var(--space-4);filter:var(--filter-icon)">Condensation: water vapour cools and becomes liquid again.</li>
+    <li style="display:flex;gap:var(--space-24);align-items:flex-start;font:var(--weight-light) var(--font-size-8)/var(--leading-relaxed) var(--font-sans)"><img src="../../assets/icons/tick.svg" alt="" style="width:var(--size-icon-xxl);height:var(--size-icon-xxl);flex:0 0 var(--size-icon-xxl);margin-top:var(--space-4);filter:var(--filter-icon)">Both happen all around us — puddles, washing lines, cold windows.</li>
+  </ul>
+  <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between">
+    <span style="display:inline-flex;align-items:center;gap:var(--space-16);border:var(--border-solid-l) solid var(--border-primary);border-radius:var(--radius-l);background:var(--color-accent-subtle);padding:var(--space-20) var(--space-32);font:var(--weight-display) var(--font-size-7)/var(--leading-none) var(--font-display)"><img src="../../assets/icons/quiz.svg" alt="" style="width:var(--size-icon-xl);height:var(--size-icon-xl);filter:var(--filter-icon)">Exit quiz: 5 questions</span>
+    <span style="display:inline-flex;align-items:center;gap:var(--space-16);font:var(--weight-light) var(--font-size-6)/var(--leading-none) var(--font-sans);color:var(--text-subdued)"><img src="../../assets/logo-acorn-black.svg" alt="" style="height:var(--size-icon-xl);filter:var(--filter-icon)">Next lesson: The water cycle</span>
+  </div>
+</section>
+</x-import>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#ffe555"></rect><text x="50" y="50" font-family="Lexend, Arial, sans-serif" font-size="30" font-weight="600" fill="#222222" text-anchor="middle" dominant-baseline="central">Oak</text></svg></template></x-dc>
+</body>
+</html>

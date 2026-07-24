@@ -1,0 +1,47 @@
+/* Theme enhancements — the applied form of explorations/dark-theme-token-review.md.
+   Additive overlay on the synced bundle (canonical roles only, loaded AFTER it);
+   the permanent home for these is upstream via /design-sync.
+   Light theme is official Oak and is left untouched throughout. */
+:root {
+  /* Proposed palette additions (follow Oak's dark-tint pattern) */
+  --oak-dark-red30: #3d1620; /* error-subtle surface, dark */
+  --oak-dark-red50: #521c2b; /* incorrect surface, dark */
+  --oak-lavender20: #eef2fd; /* visited link, dark — one step above lavender30 */
+
+  /* 1. Dark link ramp one tint lighter: base was 4.34:1 on the dark-mint band
+     (AA fail for body text); lavender50 is 10:1 on the canvas and ≥5.3:1 on
+     every dark decorative base. Hover/visited step lighter in turn. */
+  --text-link: light-dark(var(--oak-navy), var(--oak-lavender50));
+  --text-link-hover: light-dark(var(--oak-navy110), var(--oak-lavender30));
+  --text-link-visited: light-dark(var(--oak-navy120), var(--oak-lavender20));
+
+  /* 2. Error surfaces distinct from decorative pink in dark — meaning must
+     never share a hex with decoration. Error text (red50) reads 6.2:1 and
+     5.3:1 on the new tints (was 4.98:1 on the borrowed pink). */
+  --bg-error-subtle: light-dark(var(--oak-red30), var(--oak-dark-red30));
+  --bg-incorrect: light-dark(var(--oak-red30), var(--oak-dark-red50));
+
+  /* 3. Decorative-6 grammar completed WITHOUT changing light: the -6 base is
+     deliberately capped at the 50 tint (full amber is the warning hue —
+     decoration must not impersonate it), so -soft aliases the base. Consumers
+     may now use the full base/soft/subtle grammar on every family. */
+  --surface-decorative-6-soft: var(--surface-decorative-6);
+
+  /* 4. Assets outside the role system carry `filter: var(--filter-icon)`
+     until the local mask-icon set (--ic-* contract) ships upstream. */
+}
+/* 5. Documentation, not change: dark --shadow-standard is intentionally faint —
+   dark elevates by LIGHTENING surfaces (--bg-raised); the lemon accent shadows
+   carry the signature. Do not "fix" the veil. */
+
+/* High-contrast + colour-safe safety (verified, no overrides needed):
+   — HC and CS re-declare their roles under :root[data-theme=…] guards that
+     outrank this overlay's :root, and subtree theming wins by inheritance
+     proximity, so every rule above is dark-polarity-only by construction.
+   — HC resolves the -6-soft alias to white (decoration stripped) and CS
+     resolves it to the unchanged light ramp — correct in both.
+   — The dark link ramp never reaches HC/CS: both pin color-scheme: light.
+   — HC audit alongside this review: link ink 15.2:1, hc-red 10.2:1,
+     disabled 9.7:1 — all sound. One documented (not changed) trait:
+     HC visited links share the unvisited ink — a deliberate flattening;
+     visited-state distinction is traded for maximum ink contrast. */

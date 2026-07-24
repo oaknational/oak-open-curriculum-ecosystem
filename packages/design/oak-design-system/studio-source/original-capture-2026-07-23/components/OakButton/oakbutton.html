@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="OakButton (compiled)" subtitle="Mountable React component — variants, sizes, icons, disabled" viewport="700x230" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../../colors_and_type.css"><link rel="stylesheet" href="../../components.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:24px;background:var(--oak-grey10);font-family:var(--font-sans)}#root{display:flex;flex-direction:column;gap:16px;align-items:flex-start}.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}</style>
+</head><body><div id="root"></div>
+<script>
+const { OakButton } = window.OakNationalAcademyDesignSystem_3ddccf;
+const e = React.createElement;
+ReactDOM.createRoot(document.getElementById("root")).render(
+  e(React.Fragment, null,
+    e("div", { className: "row" },
+      e(OakButton, { variant: "primary", iconRight: "arrow-right" }, "Browse subjects"),
+      e(OakButton, { variant: "secondary" }, "Explore AI tools"),
+      e(OakButton, { variant: "inverted", iconLeft: "download" }, "Download all")),
+    e("div", { className: "row" },
+      e(OakButton, { size: "sm", iconRight: "chevron-right" }, "Next lesson"),
+      e(OakButton, { size: "sm", variant: "secondary", iconLeft: "search" }, "Search"),
+      e(OakButton, { disabled: true }, "Unavailable"))));
+</script>
+</body></html>

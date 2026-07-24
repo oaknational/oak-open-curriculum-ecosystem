@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Breadcrumbs" subtitle="Navigation trail with chevron separators" viewport="700x120" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:28px 24px; background:var(--bg-primary); font-family:var(--font-sans); }
+  .crumbs { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .crumbs a { font:300 16px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-link); text-decoration:underline; text-underline-offset:2px; }
+  .crumbs .sep { width:18px; height:18px; opacity:0.6; }
+  .crumbs .current { font:700 16px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+</style></head>
+<body>
+  <nav class="crumbs">
+    <a href="#">Home</a>
+    <img class="sep" src="../assets/icons/chevron-right.svg" alt="">
+    <a href="#">Key stage 3</a>
+    <img class="sep" src="../assets/icons/chevron-right.svg" alt="">
+    <a href="#">Science</a>
+    <img class="sep" src="../assets/icons/chevron-right.svg" alt="">
+    <span class="current">Cells and organisation</span>
+  </nav>
+</body></html>

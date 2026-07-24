@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Spacing" name="Layout primitives" subtitle="Stack, cluster, grid, box — gap-based, token-typed; breakpoints sm 640 · md 960 · lg 1280" viewport="880x560" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:24px;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans)}
+h2{font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-subdued);margin:18px 0 8px}
+h2:first-child{margin-top:0}
+.demo{background:var(--surface-decorative-3-subtle);border:var(--border-solid-s) solid var(--border-neutral-lighter);border-radius:var(--radius-s);padding:var(--space-8)}
+.cell{background:var(--bg-primary);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-control);padding:var(--space-8) var(--space-12);font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans)}
+code{font:var(--weight-light) var(--font-size-1)/var(--leading-16) var(--font-mono);color:var(--text-subdued)}
+</style></head><body>
+<h2>.oak-stack <code>column · gap-m (--s/--l)</code></h2>
+<div class="demo oak-stack oak-stack--s"><div class="cell">One</div><div class="cell">Two</div><div class="cell">Three</div></div>
+<h2>.oak-cluster <code>wrapping row · gap-m</code></h2>
+<div class="demo oak-cluster"><div class="cell">Year 4</div><div class="cell">Science</div><div class="cell">States of matter</div><div class="cell">Lesson 3</div><div class="cell">Evaporation</div></div>
+<h2>.oak-grid <code>auto-fit, min 240px — resize to see reflow</code></h2>
+<div class="demo oak-grid"><div class="cell">Card A</div><div class="cell">Card B</div><div class="cell">Card C</div><div class="cell">Card D</div></div>
+<h2>.oak-box <code>inset-m (--s/--l) · pair with .oak-stack for content</code></h2>
+<div class="demo oak-box oak-box--l" style="display:inline-block"><span class="cell">Padded content</span></div>
+</body></html>

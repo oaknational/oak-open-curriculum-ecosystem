@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Back link, back-to-top & save count" subtitle="Small navigation & save utilities" viewport="700x220" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; flex-direction:column; gap:20px; align-items:flex-start; }
+  .row { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+  .back-link { display:inline-flex; align-items:center; gap:8px; font:700 16px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); cursor:pointer; }
+  .back-link img { width:22px; height:22px; }
+  .btt { display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border:2px solid var(--border-primary); border-radius:100px;
+    background:var(--bg-primary); cursor:pointer; font:700 15px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); box-shadow:var(--shadow-lemon); }
+  .btt img { width:20px; height:20px; }
+  .save { display:inline-flex; align-items:center; gap:10px; padding:8px 14px 8px 10px; border:2px solid var(--border-primary); border-radius:100px; background:var(--bg-primary); cursor:pointer; }
+  .save img { width:24px; height:24px; }
+  .save .lab { font:700 15px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .save .n { min-width:26px; height:26px; padding:0 8px; border-radius:100px; background:var(--oak-mint); border:2px solid var(--border-primary);
+    font:700 13px/24px var(--font-sans); text-align:center; color:var(--text-primary); }
+</style></head>
+<body>
+  <a class="back-link"><img src="../assets/icons/arrow-left.svg" alt="">Back to all units</a>
+  <div class="row">
+    <button class="btt"><img src="../assets/icons/arrow-up.svg" alt="">Back to top</button>
+    <button class="save"><img src="../assets/icons/bookmark-outlined.svg" alt=""><span class="lab">Saved</span><span class="n">12</span></button>
+    <button class="save"><img src="../assets/icons/bookmark-filled.svg" alt=""><span class="lab">Save</span></button>
+  </div>
+</body></html>

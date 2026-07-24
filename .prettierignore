@@ -93,3 +93,10 @@ research/web-app-deconstruction/.agent/
 # as data into a temporary app — evidence content by role (ADR-215 Decision 3),
 # in the byte-faithful documents class, not the gated tooling-code class.
 research/web-app-deconstruction/packages/research-evidence/fixtures/
+
+# MCP-137 preservation tier (byte-preserved capture folders — pure copies from
+# their sources, never reformatted; see the adjacent PRESERVATION-README.md.
+# The manifest .tsv is derived data in the same byte-faithful class.)
+packages/design/oak-design-system/studio-source/original-capture-2026-07-23/
+packages/design/oak-design-system/studio-source/iteration-pull-preservation-2026-07-23/
+packages/design/oak-design-system/studio-source/capture-manifest-2026-07-24.tsv

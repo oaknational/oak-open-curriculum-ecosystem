@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Accordion" subtitle="Expandable section — open & closed states" viewport="700x320" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; flex-direction:column; gap:16px; }
+  .acc { border:2px solid var(--border-primary); border-radius:8px; overflow:hidden; background:var(--bg-primary); }
+  .head { display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:18px 20px; cursor:pointer; background:var(--bg-primary); }
+  .head.open { border-bottom:2px solid var(--border-primary); background:var(--oak-lemon30); }
+  .title { font:700 18px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .chev { width:28px; height:28px; border-radius:100px; background:var(--bg-inverted); display:flex; align-items:center; justify-content:center; flex:0 0 28px; }
+  .chev img { width:18px; height:18px; filter:invert(1); }
+  .body { padding:18px 20px; font:300 16px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+</style></head>
+<body>
+  <div class="acc">
+    <div class="head open">
+      <span class="title">What's included in a lesson?</span>
+      <span class="chev"><img src="../assets/icons/chevron-up.svg" alt=""></span>
+    </div>
+    <div class="body">Every lesson includes a teacher-led video, a slide deck, starter and exit quizzes, and a downloadable worksheet — all free to adapt.</div>
+  </div>
+  <div class="acc">
+    <div class="head">
+      <span class="title">Can I edit the resources?</span>
+      <span class="chev"><img src="../assets/icons/chevron-down.svg" alt=""></span>
+    </div>
+  </div>
+  <div class="acc">
+    <div class="head">
+      <span class="title">Are the lessons aligned to the national curriculum?</span>
+      <span class="chev"><img src="../assets/icons/chevron-down.svg" alt=""></span>
+    </div>
+  </div>
+</body></html>

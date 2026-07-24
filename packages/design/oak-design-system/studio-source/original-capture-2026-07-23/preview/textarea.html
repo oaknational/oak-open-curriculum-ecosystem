@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Text area" subtitle="Multi-line input — default, focus, error" viewport="700x280" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; gap:20px; flex-wrap:wrap; }
+  .field { display:flex; flex-direction:column; gap:6px; min-width:300px; flex:1; }
+  label { font:700 13px/16px var(--font-sans); letter-spacing:-0.005rem; }
+  .ta { min-height:110px; padding:14px 16px; border:2px solid var(--border-primary); border-radius:4px; background:var(--bg-primary);
+    font:300 18px/26px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .ta.placeholder { color:var(--text-subdued); }
+  .ta.focus { box-shadow:0 0 0 4px var(--oak-lemon); }
+  .ta.error { border-color:var(--oak-red); }
+  .err { display:inline-flex; align-items:center; gap:6px; font:300 14px/20px var(--font-sans); color:var(--oak-red); letter-spacing:-0.005rem; }
+  .err img { width:18px; height:18px; }
+  .count { align-self:flex-end; font:300 13px/16px var(--font-sans); color:var(--text-subdued); }
+</style></head>
+<body>
+  <div class="field">
+    <label>Add context for your pupils</label>
+    <div class="ta focus">Our class has been learning about the Tudors this term, so please link back to Henry VIII where relevant.</div>
+    <span class="count">132 / 500</span>
+  </div>
+  <div class="field">
+    <label>Notes</label>
+    <div class="ta error placeholder">Tell Aila what you'd like to change…</div>
+    <span class="err"><img src="../assets/icons/error.svg" alt="">Please add some detail</span>
+  </div>
+</body></html>

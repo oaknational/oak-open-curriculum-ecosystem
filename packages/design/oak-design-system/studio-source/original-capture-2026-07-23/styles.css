@@ -1,0 +1,19 @@
+/* ============================================================
+   Oak National Academy — Design System root stylesheet
+   THE one file to link. Three token tiers across two files —
+   no raw values at point of use anywhere in the system:
+   1. colors_and_type.css — TIER 1 primitives (--oak-*, scales) +
+      TIER 2 themable roles (--text-*/--bg-*/--border-*/--surface-*/
+      --shadow-*/--focus-*), @font-face, type classes, .oak-scope.
+   2. components.css — TIER 3 component tokens (--btn-*, --input-*…)
+      + the class library (.oak-btn, .oak-tag, .oak-card, inputs,
+      banners, quiz states…), a11y baked in. The compiled React
+      components consume the same tier-3 tokens.
+   Upstream provenance (Figma variable dump, oak-components theme
+   source) lives under reference/ — deliberately NOT loaded at runtime.
+   ============================================================ */
+
+@import "./colors_and_type.css";
+@import "./oak-icons.css";
+@import "./components.css";
+@import "./print.css";

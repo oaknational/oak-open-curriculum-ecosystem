@@ -1,0 +1,32 @@
+/* Educate My Creature — PART A · minimal viable brand (~14 tokens).
+   Sweet-shop / fairground edtech. Load AFTER styles.css. A11y is a condition:
+   this file is not done until preview/contrast-audit.html passes every theme. */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@600;800&display=swap');
+:root {
+  /* 1. Type — Nunito 400 as the lightest body weight (rounded sans; 300 would fail the pastel-fill weight rule) */
+  --font-sans: "Nunito", system-ui, sans-serif;
+  --weight-light: 400;
+  /* 2. Accent — candy pink recolours the whole signature */
+  --color-accent: light-dark(#ff8fbe, #ff8fbe);
+  --color-accent-soft: light-dark(#ffd6e6, #5c2440);
+  --color-accent-subtle: light-dark(#ffebf3, #3f2231);
+  /* 3. Decorative ramp — sweet-shop shelf: floss, bubblegum, sherbet, pistachio, grape, orange cream */
+  --surface-decorative-1: light-dark(#ffc7dc, #5d2a44);
+  --surface-decorative-1-soft: light-dark(#ffdfeb, #47243a);
+  --surface-decorative-1-subtle: light-dark(#fff0f6, #37202f);
+  --surface-decorative-2: light-dark(#aedff7, #1f4a63);
+  --surface-decorative-2-soft: light-dark(#d3effb, #1c3a4d);
+  --surface-decorative-2-subtle: light-dark(#e9f7fd, #1b2f3d);
+  --surface-decorative-3: light-dark(#ffe8a0, #6d4715);
+  --surface-decorative-3-soft: light-dark(#fff3cc, #54371a);
+  --surface-decorative-3-subtle: light-dark(#fff9e5, #3f2c19);
+  --surface-decorative-4: light-dark(#b9ecc6, #275240);
+  --surface-decorative-4-soft: light-dark(#dbf5e1, #22402f);
+  --surface-decorative-4-subtle: light-dark(#edfaf0, #1e3226);
+  --surface-decorative-5: light-dark(#d8c7fa, #45336b);
+  --surface-decorative-5-soft: light-dark(#eae1fc, #382c52);
+  --surface-decorative-5-subtle: light-dark(#f4effd, #2c2540);
+  --surface-decorative-6: light-dark(#ffd2a8, #63401f);
+  --surface-decorative-6-soft: light-dark(#ffe6cd, #4d3520);
+  --surface-decorative-6-subtle: light-dark(#fff3e5, #3c2c1f);
+}

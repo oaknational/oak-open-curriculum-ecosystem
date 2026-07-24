@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Download card" subtitle="Resource download row — available, selected, downloaded" viewport="760x300" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; flex-direction:column; gap:12px; max-width:560px; }
+  .dl { display:flex; align-items:center; gap:16px; padding:16px 20px; border:2px solid var(--border-primary); border-radius:8px; background:var(--bg-primary); box-shadow:var(--shadow-lemon); }
+  .dl .ic { width:32px; height:32px; flex:0 0 32px; }
+  .dl .meta { flex:1; min-width:0; }
+  .dl .t { font:700 17px/22px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .dl .s { font:300 14px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-subdued); }
+  .box { width:26px; height:26px; border:2px solid var(--border-primary); border-radius:4px; flex:0 0 26px; display:inline-flex; align-items:center; justify-content:center; background:var(--bg-primary); }
+  .box.on { background:var(--bg-inverted); } .box.on img { width:18px; height:18px; filter:invert(1); }
+  .pill { display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:100px; border:2px solid var(--oak-green); background:var(--oak-mint50);
+    font:700 13px/18px var(--font-sans); color:var(--text-primary); }
+  .pill img { width:16px; height:16px; }
+  .dl.sel { background:var(--oak-lemon30); box-shadow:4px 4px 0 var(--oak-black); }
+</style></head>
+<body>
+  <div class="dl"><img class="ic" src="../assets/icons/video.svg" alt=""><div class="meta"><div class="t">Lesson video</div><div class="s">MP4 · 4 min</div></div><span class="box"></span></div>
+  <div class="dl sel"><img class="ic" src="../assets/icons/worksheet.svg" alt=""><div class="meta"><div class="t">Worksheet</div><div class="s">PDF · editable</div></div><span class="box on"><img src="../assets/icons/tick.svg" alt=""></span></div>
+  <div class="dl"><img class="ic" src="../assets/icons/slide-deck.svg" alt=""><div class="meta"><div class="t">Slide deck</div><div class="s">PPTX</div></div><span class="pill"><img src="../assets/icons/tick.svg" alt="">Downloaded</span></div>
+</body></html>

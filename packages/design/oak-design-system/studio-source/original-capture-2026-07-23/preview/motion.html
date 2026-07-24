@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Motion" name="Quiet motion" subtitle="Two durations, one easing — press, hover, reveal. Honours reduced-motion" viewport="700x260" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:24px;background:var(--bg-primary);font-family:var(--font-sans);color:var(--text-primary)}
+.grid{display:grid;grid-template-columns:150px 1fr;gap:10px 18px;align-items:center}
+.tok{font:500 12px/16px var(--font-mono);background:var(--oak-grey20);border-radius:4px;padding:3px 8px;justify-self:start}
+.desc{font:300 14px/20px var(--font-sans);letter-spacing:-0.005rem;color:var(--text-subdued)}
+.demo{display:flex;gap:14px;margin-top:20px;align-items:center}
+.note{font:300 12px/18px var(--font-sans);color:var(--oak-grey50);margin-top:16px;max-width:56ch}
+</style></head>
+<body>
+<div class="grid">
+<span class="tok">--motion-quick · 120ms</span><span class="desc">hovers, presses, focus — anything under the pointer</span>
+<span class="tok">--motion-base · 200ms</span><span class="desc">reveals, accordions, toasts — anything entering the page</span>
+<span class="tok">--ease-standard</span><span class="desc">cubic-bezier(0.2, 0, 0.2, 1) — brisk start, soft landing</span>
+</div>
+<div class="demo">
+<button class="oak-btn">Press me</button>
+<button class="oak-btn oak-btn--secondary">Hover me</button>
+<a href="#" class="oak-card-link" style="width:180px"><span class="oak-card" style="display:block;padding:14px 16px;font:600 16px/20px var(--font-sans)">Card press</span></a>
+</div>
+<p class="note">No bounces, no parallax, no scroll-jacking, no opacity fades on interaction. The signature move: shadow widens on hover, collapses with a +2px,+2px translate on press. All transitions collapse under prefers-reduced-motion.</p>
+</body></html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Icon button" subtitle="Round & square icon buttons — filled, outline, states" viewport="700x200" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--oak-grey10); font-family:var(--font-sans); display:flex; flex-direction:column; gap:18px; }
+  .row { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .lbl { width:84px; flex:0 0 84px; font:700 11px/14px var(--font-sans); letter-spacing:0.02em; text-transform:uppercase; color:var(--text-subdued); }
+  .ib { width:48px; height:48px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; border:2px solid var(--border-primary); }
+  .round { border-radius:100px; } .square { border-radius:4px; }
+  .filled { background:var(--bg-inverted); } .filled img { filter:invert(1); }
+  .outline { background:var(--bg-primary); }
+  .ib img { width:24px; height:24px; }
+  .ib.hover { box-shadow:var(--shadow-lemon); }
+  .ib.disabled { background:var(--oak-grey50); border-color:var(--oak-grey50); cursor:not-allowed; }
+  .ib.disabled img { filter:invert(1); }
+</style></head>
+<body>
+  <div class="row">
+    <span class="lbl">Round</span>
+    <button class="ib round filled"><img src="../assets/icons/arrow-right.svg" alt=""></button>
+    <button class="ib round outline"><img src="../assets/icons/bookmark-outlined.svg" alt=""></button>
+    <button class="ib round filled hover"><img src="../assets/icons/share.svg" alt=""></button>
+    <button class="ib round filled disabled"><img src="../assets/icons/download.svg" alt=""></button>
+  </div>
+  <div class="row">
+    <span class="lbl">Square</span>
+    <button class="ib square filled"><img src="../assets/icons/hamburger.svg" alt=""></button>
+    <button class="ib square outline"><img src="../assets/icons/filter.svg" alt=""></button>
+    <button class="ib square outline hover"><img src="../assets/icons/search.svg" alt=""></button>
+    <button class="ib square outline"><img src="../assets/icons/cross.svg" alt=""></button>
+  </div>
+</body></html>

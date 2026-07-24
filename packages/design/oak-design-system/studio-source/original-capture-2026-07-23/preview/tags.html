@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Tags" subtitle="OakTagFunctional — no icon / leading / trailing" viewport="700x200" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; flex-direction:column; gap:18px; align-items:flex-start; }
+  /* OakTagFunctional: border-radius-m (6px), ph spacing-8, pv spacing-4,
+     font heading-light-7 (16/20 400, +0.0115rem), gap spacing-8, icon 20px.
+     $background sets the fill; text is text-primary. */
+  .tag {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:4px 8px; border-radius:6px;
+    font:400 16px/20px var(--font-sans); letter-spacing:0.0115rem;
+    color:var(--text-primary); box-sizing:border-box;
+  }
+  .tag img { width:20px; height:20px; display:block; }
+  .row { display:flex; flex-wrap:wrap; gap:24px; align-items:center; }
+  .lbl { width:100%; font:700 11px/14px var(--font-sans); letter-spacing:0.02em; text-transform:uppercase; color:var(--text-subdued); }
+  .palette { display:flex; flex-wrap:wrap; gap:10px; }
+</style></head>
+<body>
+  <!-- The three canonical Storybook examples -->
+  <div class="row">
+    <span class="tag" style="background:var(--oak-mint);">No icon</span>
+    <span class="tag" style="background:var(--oak-pink);"><img src="../assets/icons/arrow-right.svg" alt="">With icon</span>
+    <span class="tag" style="background:var(--oak-lavender);">Trailing icon<img src="../assets/icons/arrow-right.svg" alt=""></span>
+  </div>
+
+  <div>
+    <div class="lbl" style="margin-bottom:8px;">Background options ($background)</div>
+    <div class="palette">
+      <span class="tag" style="background:var(--oak-mint);">decorative1</span>
+      <span class="tag" style="background:var(--oak-aqua);">decorative2</span>
+      <span class="tag" style="background:var(--oak-lavender);">decorative3</span>
+      <span class="tag" style="background:var(--oak-pink);">decorative4</span>
+      <span class="tag" style="background:var(--oak-lemon);">decorative5</span>
+      <span class="tag" style="background:var(--oak-amber);">decorative6</span>
+      <span class="tag" style="background:var(--oak-grey20); color:var(--text-subdued);">neutral</span>
+    </div>
+  </div>
+</body></html>

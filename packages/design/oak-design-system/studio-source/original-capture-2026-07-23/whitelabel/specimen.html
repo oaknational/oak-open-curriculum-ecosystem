@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Specimen — identical markup, brand applied via ?brand=</title>
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css"><link rel="stylesheet" href="../print.css"><link rel="stylesheet" href="../oak-icons.css">
+<style>
+/* HOOK-CLEAN CONTRACT: all presentation lives here (or in the system sheets),
+   NEVER in inline style attributes — inline styles would cap what a brand's
+   expression layer (brand.css §10) can transform. Brand css loads AFTER this
+   sheet, so equal-specificity brand rules win without !important. */
+a{color:var(--text-link)}a:hover{color:var(--text-link-hover)}
+.m0{margin:0}.sub{color:var(--text-subdued)}
+.crumbs{display:flex;flex-wrap:wrap;gap:var(--gap-s);align-items:center;list-style:none;margin:0;padding:0}
+.crumbs li{display:flex;gap:var(--gap-s);align-items:center}
+.crumbs li:not(:last-child)::after{content:"/";color:var(--text-subdued)}
+.crumbs .here{color:var(--text-subdued)}
+.tabs{display:flex;flex-wrap:wrap;gap:var(--gap-m);list-style:none;margin:0;padding:0;border-bottom:var(--border-solid-m) solid var(--border-neutral)}
+.tabs a{display:inline-block;padding:var(--space-12) 0;text-decoration:none;color:var(--text-subdued);border-bottom:var(--border-solid-l) solid transparent;margin-bottom:calc(-1*var(--border-solid-m))}
+.tabs a[aria-current="page"]{color:var(--text-primary);border-bottom-color:var(--border-primary)}
+.tabs a:hover{color:var(--text-primary)}
+.ledger{list-style:none;margin:0;padding:0;border-bottom:var(--border-solid-s) solid var(--border-neutral)}
+.ledger li{display:flex;gap:var(--gap-m);align-items:baseline;padding-block:var(--space-16);border-top:var(--border-solid-s) solid var(--border-neutral)}
+.ledger .num{min-width:var(--space-32,32px);color:var(--text-subdued)}
+.ledger .entry{flex:1}
+.ledger .entry p{margin:var(--space-4) 0 0;color:var(--text-subdued)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(var(--space-160,160px),100%),1fr));gap:var(--gap-m);margin:0}
+.metric dt{margin:0;color:var(--text-subdued)}.metric dd{margin:0}
+.foot-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(var(--space-160,160px),100%),1fr));gap:var(--gap-l)}
+.foot-cols nav{display:flex;flex-direction:column;gap:var(--gap-s)}
+.foot-cols nav .col-h{font-weight:var(--weight-bold)}
+.media-slot{aspect-ratio:16/9;border:var(--border-solid-s) dashed var(--border-neutral);border-radius:var(--radius-container);background:repeating-linear-gradient(135deg,var(--bg-subtle),var(--bg-subtle) 10px,var(--bg-primary) 10px,var(--bg-primary) 20px);display:flex;align-items:center;justify-content:center}
+.media-slot span{font-family:var(--font-mono,monospace);font-size:var(--font-size-2);color:var(--text-subdued)}
+body{margin:0;color:var(--text-primary)}
+.util{background:var(--bg-inverted);color:var(--text-inverted)}
+.util-inner{padding-block:var(--space-8)}
+.util a{color:var(--text-inverted)}
+.util .push{margin-left:auto}
+.mast{border-bottom:var(--border-solid-m) solid var(--border-primary);background:var(--bg-primary);position:sticky;top:0;z-index:var(--layer-sticky,20)}
+.mast-inner{padding-block:var(--space-16)}
+.brand-name{margin:0}
+.site-nav{margin-left:auto}
+.site-search{margin-left:var(--gap-m)}
+.site-search input{width:var(--space-160,160px)}
+.hero-inner{padding-block:var(--space-40)}
+.hero-crumbs{margin-bottom:var(--space-16)}
+.kicker{margin:0;color:var(--text-subdued)}
+.headline{margin:0}
+.standfirst{margin:0;max-width:var(--measure-prose);justify-self:var(--key-justify)}
+.tabs-wrap{padding-top:var(--space-24)}
+.metrics-wrap{padding-block:var(--space-24)}
+.facets-pad{padding-block:var(--space-32)}
+.facets-pad fieldset{border:0;margin:0;padding:0}
+.facets-pad legend{padding:0}
+.results-pad{padding-block:var(--space-32)}
+.results-bar{justify-content:space-between}
+.results-bar p{margin:0}
+.term-h{margin:0;color:var(--text-subdued)}
+.pagenav{justify-content:center;padding-top:var(--space-8)}
+.detail-pad{padding-block:var(--space-32)}
+.detail-h{margin:0 0 var(--space-24)}
+.lede{margin:0;max-width:var(--measure-prose)}
+.aside-card p{margin:0}
+.aside-card h3{margin:0}
+.tip-body{margin:0}
+.mis-block{margin-top:var(--gap-m)}
+.mis-block p{margin:0}
+.band-pad{padding-inline:var(--band-pad)}
+.res-inner{padding-block:var(--space-40)}
+.res-inner h2{margin:0}
+.res-card h3{margin:0}.res-card p{margin:0}
+.support-pad{padding-block:var(--space-40)}
+.support-pad h2{margin:0 0 var(--space-24)}
+.cta-inner{padding-block:var(--space-40)}
+.cta-inner h2{margin:0}
+.cta-form{align-items:flex-end}
+.cta-field{flex:1;min-width:var(--space-240,240px)}
+.foot{background:var(--bg-inverted);color:var(--text-inverted)}
+.foot-inner{padding-block:var(--space-40)}
+.foot a{color:var(--text-inverted)}
+.foot .brand-name{margin:0}
+.foot .blurb{margin:0}
+.foot hr{border:0;border-top:var(--border-solid-s) solid var(--border-inverted,currentColor);opacity:0.3;margin:var(--space-24) 0}
+.legal{margin-left:auto}
+</style>
+<script>
+/* Brand css injected AFTER the specimen sheet — a brand's expression layer
+   wins equal-specificity ties over the hooks above without !important. */
+const b = new URLSearchParams(location.search).get('brand');
+if (b && /^[\w-]+$/.test(b)) for (const f of ['brand-a.css','brand-full.css']) document.write('<link rel="stylesheet" href="' + b + '/' + f + '">');
+</script>
+</head>
+<body class="oak-scope" data-page="unit">
+<a class="oak-skip-link" href="#main">Skip to content</a>
+<div class="oak-canvas">
+
+<!-- ============ REGION: utility ============ -->
+<div class="oak-region util" data-region="utility">
+<div class="oak-container oak-cluster oak-cluster--s util-inner">
+<span class="oak-body-3">You are viewing the</span>
+<nav class="oak-cluster oak-cluster--s" aria-label="Audience"><a class="oak-link oak-body-3" href="#main" aria-current="page">teacher</a><span class="oak-body-3" aria-hidden="true">·</span><a class="oak-link oak-body-3" href="#main">pupil</a></nav>
+<span class="oak-body-3">experience</span>
+<a class="oak-link oak-body-3 push" href="#main">Help centre</a>
+</div>
+</div>
+
+<!-- ============ REGION: masthead ============ -->
+<header class="oak-region mast" data-region="masthead">
+<div class="oak-container oak-cluster mast-inner">
+<span class="oak-heading-6 brand-name">The learning service</span>
+<nav class="oak-cluster oak-cluster--s site-nav" aria-label="Main"><a class="oak-link oak-body-2" href="#browse">Subjects</a><a class="oak-link oak-body-2" href="#browse">Units</a><a class="oak-link oak-body-2" href="#lesson">Lessons</a><a class="oak-link oak-body-2" href="#resources">Guidance</a><a class="oak-link oak-body-2" href="#support">Support</a></nav>
+<form class="oak-cluster oak-cluster--s site-search" role="search" aria-label="Site search" onsubmit="return false">
+<label class="oak-visually-hidden" for="site-q">Search</label>
+<input class="oak-input" id="site-q" type="search" placeholder="Search lessons…">
+<button class="oak-btn oak-btn--sm oak-btn--secondary" type="submit"><span class="oak-icon--mask ic-search" style="width:var(--size-icon-s);height:var(--size-icon-s)" aria-hidden="true"></span>Search</button>
+</form>
+<button class="oak-btn oak-btn--sm" type="button">Sign in</button>
+</div>
+</header>
+
+<!-- ============ REGION: main — composed by the brand's map ============ -->
+<main id="main" class="oak-main oak-region" data-region="main">
+
+<!-- REGION: hero -->
+<section class="oak-region" data-region="hero" aria-label="Unit overview">
+<div class="oak-band band-pad">
+<div class="oak-container hero-inner">
+<nav aria-label="Breadcrumb" class="hero-crumbs"><ol class="crumbs oak-body-3"><li><a class="oak-link" href="#main">Home</a></li><li><a class="oak-link" href="#main">Teachers</a></li><li><a class="oak-link" href="#browse">Science</a></li><li aria-current="page" class="here">The water cycle</li></ol></nav>
+<div class="oak-flow">
+<p class="oak-flow-key oak-heading-7 kicker">Unit 4 · Science · Year 4 · Key Stage 2</p>
+<h1 class="oak-flow-key oak-heading-2 headline">The water cycle</h1>
+<p class="oak-flow-key oak-body-1 standfirst">Every drop of rain has been rained before. Six lessons following one puddle from the playground into the sky and back again — evaporation, condensation, and the words to name them.</p>
+<div class="oak-flow-key oak-cluster actions"><button class="oak-btn" type="button">Start the unit</button><button class="oak-btn oak-btn--secondary" type="button"><span class="oak-icon--mask ic-download" aria-hidden="true"></span>Download all resources</button><button class="oak-icon-btn oak-icon-btn--secondary" type="button" aria-label="Save this unit"><span class="oak-icon--mask ic-star" aria-hidden="true"></span></button></div>
+<div class="oak-flow-key oak-cluster oak-cluster--s tagrow"><span class="oak-tag oak-tag--mint">Science</span><span class="oak-tag oak-tag--aqua">Year 4</span><span class="oak-tag oak-tag--lavender">States of matter</span><span class="oak-tag oak-tag--grey">6 lessons</span><span class="oak-tag oak-tag--white">Free</span></div>
+</div>
+</div>
+</div>
+<div class="oak-container tabs-wrap">
+<nav aria-label="Unit views"><ul class="tabs oak-body-1"><li><a href="#browse" aria-current="page">Unit sequence</a></li><li><a href="#lesson">Lesson detail</a></li><li><a href="#resources">Downloads</a></li><li><a href="#support">FAQ</a></li></ul></nav>
+</div>
+<div class="oak-container metrics-wrap">
+<dl class="metrics">
+<div class="oak-card oak-stack oak-stack--s metric"><dt class="oak-body-3">Lessons</dt><dd class="oak-heading-4">6</dd></div>
+<div class="oak-card oak-stack oak-stack--s metric"><dt class="oak-body-3">Teaching time</dt><dd class="oak-heading-4">5h 15m</dd></div>
+<div class="oak-card oak-stack oak-stack--s metric"><dt class="oak-body-3">Keywords</dt><dd class="oak-heading-4">18</dd></div>
+<div class="oak-card oak-stack oak-stack--s metric"><dt class="oak-body-3">Downloads</dt><dd class="oak-heading-4">24</dd></div>
+</dl>
+</div>
+</section>
+
+<!-- REGION: facets -->
+<section class="oak-region facets-pad" data-region="facets" aria-label="Filter lessons">
+<form class="oak-stack" onsubmit="return false">
+<div class="oak-stack oak-stack--s"><label class="oak-body-2" for="filter-q">Search this unit</label><input class="oak-input" id="filter-q" type="search" placeholder="e.g. condensation"></div>
+<div class="oak-stack oak-stack--s"><label class="oak-body-2" for="sort">Sort by</label><div class="oak-select-wrap"><select class="oak-select" id="sort"><option>Lesson order</option><option>Shortest first</option><option>Recently updated</option></select></div></div>
+<fieldset class="oak-stack oak-stack--s">
+<legend class="oak-body-2">Lesson length</legend>
+<label class="oak-choice"><input class="oak-checkbox" type="checkbox" checked> 45 minutes</label>
+<label class="oak-choice"><input class="oak-checkbox" type="checkbox" checked> 60 minutes</label>
+<label class="oak-choice"><input class="oak-checkbox" type="checkbox"> 90 minutes</label>
+</fieldset>
+<fieldset class="oak-stack oak-stack--s">
+<legend class="oak-body-2">Has resources</legend>
+<label class="oak-choice"><input class="oak-radio" type="radio" name="res" checked> Any</label>
+<label class="oak-choice"><input class="oak-radio" type="radio" name="res"> Worksheet</label>
+<label class="oak-choice"><input class="oak-radio" type="radio" name="res"> Slide deck</label>
+</fieldset>
+<button class="oak-btn oak-btn--sm oak-btn--secondary" type="reset">Clear filters</button>
+</form>
+</section>
+
+<!-- REGION: results -->
+<section id="browse" class="oak-region results-pad" data-region="results" aria-labelledby="browse-h">
+<div class="oak-stack oak-stack--l">
+<h2 id="browse-h" class="oak-heading-5 m0">Browse the unit sequence</h2>
+<div class="oak-cluster results-bar"><p class="oak-body-2" role="status">Showing <strong>6</strong> of 6 lessons</p><div class="oak-cluster oak-cluster--s"><span class="oak-tag oak-tag--aqua">45 minutes<span class="oak-icon--mask ic-cross" aria-hidden="true" style="width:var(--size-icon-s);height:var(--size-icon-s)"></span></span><span class="oak-tag oak-tag--aqua">60 minutes<span class="oak-icon--mask ic-cross" aria-hidden="true" style="width:var(--size-icon-s);height:var(--size-icon-s)"></span></span></div></div>
+<div class="oak-banner oak-banner--info" role="status"><span class="oak-icon--mask ic-info" aria-hidden="true" style="flex:0 0 auto"></span><div><strong>Updated for 2026.</strong> This unit was revised in line with the latest curriculum guidance.</div></div>
+<div class="oak-stack">
+<h3 class="oak-heading-6 term-h">Autumn term</h3>
+<ol class="ledger">
+<li><span class="oak-body-3 num">1</span><div class="entry"><a class="oak-link oak-body-1" href="#lesson">Where does a puddle go?</a><p class="oak-body-3">Evaporation, observed with chalk and patience.</p></div><span class="oak-tag oak-tag--white">45 min</span><button class="oak-icon-btn oak-icon-btn--secondary" type="button" aria-label="Save lesson"><span class="oak-icon--mask ic-star" aria-hidden="true"></span></button></li>
+<li><span class="oak-body-3 num">2</span><div class="entry"><a class="oak-link oak-body-1" href="#lesson">The window that cried</a><p class="oak-body-3">Condensation on cold surfaces.</p></div><span class="oak-tag oak-tag--white">45 min</span><button class="oak-icon-btn oak-icon-btn--secondary" type="button" aria-label="Save lesson"><span class="oak-icon--mask ic-star" aria-hidden="true"></span></button></li>
+<li><span class="oak-body-3 num">3</span><div class="entry"><a class="oak-link oak-body-1" href="#lesson">Clouds are not smoke</a><p class="oak-body-3">Droplets, vapour and what clouds are made of.</p></div><span class="oak-tag oak-tag--white">60 min</span><button class="oak-icon-btn oak-icon-btn--secondary" type="button" aria-label="Save lesson"><span class="oak-icon--mask ic-star" aria-hidden="true"></span></button></li>
+</ol>
+</div>
+<div class="oak-stack">
+<h3 class="oak-heading-6 term-h">Spring term</h3>
+<ol class="ledger" start="4">
+<li><span class="oak-body-3 num">4</span><div class="entry"><a class="oak-link oak-body-1" href="#lesson">When rain becomes a river</a><p class="oak-body-3">Precipitation and collection.</p></div><span class="oak-tag oak-tag--white">60 min</span><button class="oak-icon-btn oak-icon-btn--secondary" type="button" aria-label="Save lesson"><span class="oak-icon--mask ic-star" aria-hidden="true"></span></button></li>
+<li><span class="oak-body-3 num">5</span><div class="entry"><a class="oak-link oak-body-1" href="#lesson">The whole cycle, drawn</a><p class="oak-body-3">Assembling the diagram from memory.</p></div><span class="oak-tag oak-tag--white">45 min</span><button class="oak-icon-btn oak-icon-btn--secondary" type="button" aria-label="Save lesson"><span class="oak-icon--mask ic-star" aria-hidden="true"></span></button></li>
+<li><span class="oak-body-3 num">6</span><div class="entry"><a class="oak-link oak-body-1" href="#lesson">Review and quiz</a><p class="oak-body-3">Retrieval across the whole unit.</p></div><span class="oak-tag oak-tag--white">45 min</span><button class="oak-icon-btn oak-icon-btn--secondary" type="button" aria-label="Save lesson"><span class="oak-icon--mask ic-star" aria-hidden="true"></span></button></li>
+</ol>
+</div>
+<nav class="oak-cluster oak-cluster--s pagenav" aria-label="Pagination"><button class="oak-btn oak-btn--sm oak-btn--secondary" type="button" disabled>Previous</button><button class="oak-btn oak-btn--sm oak-btn--secondary" type="button" aria-current="page">1</button><button class="oak-btn oak-btn--sm oak-btn--secondary" type="button">2</button><button class="oak-btn oak-btn--sm oak-btn--secondary" type="button">Next</button></nav>
+</div>
+</section>
+
+<!-- REGION: detail -->
+<section id="lesson" class="oak-region detail-pad" data-region="detail" aria-labelledby="lesson-h">
+<h2 id="lesson-h" class="oak-heading-5 detail-h">Lesson 1 — where does a puddle go?</h2>
+<div class="oak-flow">
+<article class="oak-stack">
+<div class="media-slot" aria-hidden="true"><span>lesson video 16:9</span></div>
+<p class="oak-body-1 lede">Pupils draw around a puddle with chalk, return at midday, and reason about the missing water. The lesson builds the word <strong>evaporation</strong> on top of what they already know about solids, liquids and gases.</p>
+<div class="oak-block oak-worked-example"><span class="oak-block-label">Worked example</span>
+<ol class="oak-body-2"><li>Draw around the puddle with chalk at 9am.</li><li>Draw around it again at midday — the outline shrinks.</li><li>The missing water went into the air as water vapour.</li></ol></div>
+<dl class="oak-keywords">
+<div class="oak-keyword"><dt>evaporate</dt> — <dd>to turn from a liquid into a gas.</dd></div>
+<div class="oak-keyword"><dt>water vapour</dt> — <dd>water as a gas, spread out in the air.</dd></div>
+</dl>
+<details class="oak-accordion"><summary>How is this lesson assessed?</summary><div class="oak-accordion__body">A six-question exit quiz with distractors matched to the documented misconceptions. Answers download with the worksheet pack.</div></details>
+</article>
+<aside class="oak-stack" aria-label="Lesson resources">
+<div class="oak-card oak-stack aside-card"><h3 class="oak-heading-6">Next lesson</h3><p class="oak-body-2">Condensation: the window that cried. 45 minutes, worksheet included.</p><button class="oak-btn oak-btn--sm" type="button">Open lesson</button></div>
+<div class="oak-block oak-teacher-tip"><span class="oak-block-label">Teacher tip</span><p class="oak-body-2 tip-body">Cold call after the demonstration: "Where has the water gone?" Take three answers before revealing the chalk outlines.</p></div>
+<div class="oak-card oak-card--flat oak-card--aqua oak-stack aside-card"><h3 class="oak-heading-6">Quiz bank</h3><p class="oak-body-2">Ten questions with distractors that target the documented misconceptions.</p><button class="oak-btn oak-btn--sm oak-btn--secondary" type="button">Preview quiz</button></div>
+</aside>
+<div class="oak-band oak-flow-key band-pad">
+<div class="oak-block oak-outcome"><span class="oak-block-label">Pupil outcome</span><p>I can describe how water evaporates from a puddle and where it goes.</p></div>
+<div class="oak-block oak-misconception mis-block"><span class="oak-block-label">Misconception and common mistake</span><p class="oak-body-2"><strong>"The puddle soaks into the ground, so it's gone."</strong> Some soaks in — but the rest went into the air as water vapour.</p></div>
+</div>
+</div>
+</section>
+
+<!-- REGION: resources -->
+<section id="resources" class="oak-region oak-band band-pad" data-region="resources" aria-labelledby="res-h">
+<div class="oak-container oak-stack oak-stack--l res-inner">
+<h2 id="res-h" class="oak-heading-5">Downloads and resources</h2>
+<div class="oak-grid">
+<a class="oak-card-link" href="#resources"><div class="oak-card oak-card--mint oak-stack res-card"><h3 class="oak-heading-6">Worksheet pack</h3><p class="oak-body-2">Printable A4, answers included.</p><span class="oak-tag oak-tag--white">PDF · 1.2 MB</span></div></a>
+<a class="oak-card-link" href="#resources"><div class="oak-card oak-stack res-card"><h3 class="oak-heading-6">Slide deck</h3><p class="oak-body-2">Editable, projector-safe, 1920×1080.</p><span class="oak-tag oak-tag--white">PPTX · 3.4 MB</span></div></a>
+<a class="oak-card-link" href="#resources"><div class="oak-card oak-card--flat oak-card--lemon oak-stack res-card"><h3 class="oak-heading-6">Knowledge organiser</h3><p class="oak-body-2">One page: keywords, diagram, key learning points.</p><span class="oak-tag oak-tag--white">PDF · 640 KB</span></div></a>
+</div>
+<table class="oak-table">
+<caption class="oak-heading-6">Lesson breakdown</caption>
+<thead><tr><th scope="col">#</th><th scope="col">Lesson</th><th scope="col">Length</th><th scope="col">Worksheet</th><th scope="col">Quiz</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Where does a puddle go?</td><td>45 min</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>2</td><td>The window that cried</td><td>45 min</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>3</td><td>Clouds are not smoke</td><td>60 min</td><td>Yes</td><td>No</td></tr>
+<tr><td>4</td><td>When rain becomes a river</td><td>60 min</td><td>No</td><td>Yes</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- REGION: support -->
+<section id="support" class="oak-region support-pad" data-region="support" aria-labelledby="faq-h">
+<h2 id="faq-h" class="oak-heading-5">Frequently asked questions</h2>
+<div class="oak-stack">
+<details class="oak-accordion"><summary>Can I edit the slides and worksheets?</summary><div class="oak-accordion__body">Yes. Every resource downloads in an editable format — Word, PowerPoint, or the source files — so you can adapt them for your class.</div></details>
+<details class="oak-accordion"><summary>Is this aligned to the national curriculum?</summary><div class="oak-accordion__body">This unit maps to Key Stage 2 science, states of matter and the water cycle. The mapping is listed on each lesson page.</div></details>
+<details class="oak-accordion"><summary>Do I need an account?</summary><div class="oak-accordion__body">No account is needed to view or download. Signing in lets you save units and track which lessons you've used.</div></details>
+</div>
+</section>
+
+<!-- REGION: cta -->
+<section class="oak-region oak-band band-pad" data-region="cta" aria-labelledby="nl-h">
+<div class="oak-container oak-flow cta-inner">
+<h2 id="nl-h" class="oak-flow-key oak-heading-4">Get new units in your inbox</h2>
+<p class="oak-flow-key oak-body-1 standfirst">One email a term. New units, revised lessons, and classroom-tested resources — no more than that.</p>
+<form class="oak-flow-key oak-cluster oak-cluster--s cta-form" onsubmit="return false">
+<div class="oak-stack oak-stack--s cta-field"><label class="oak-body-2" for="email">Email address</label><input class="oak-input" id="email" type="email" placeholder="you@school.sch.uk" required></div>
+<button class="oak-btn" type="submit">Subscribe</button>
+</form>
+<label class="oak-flow-key oak-choice"><input class="oak-checkbox" type="checkbox"> I'm happy to receive the termly newsletter.</label>
+</div>
+</section>
+
+</main>
+
+<!-- ============ REGION: footer ============ -->
+<footer class="oak-region foot" data-region="footer">
+<div class="oak-container foot-inner">
+<div class="foot-cols">
+<div class="oak-stack oak-stack--s"><span class="oak-heading-6 brand-name">The learning service</span><p class="oak-body-3 blurb">Placeholder content. This specimen file is byte-identical under every brand.</p></div>
+<nav aria-label="For teachers"><span class="oak-body-2 col-h">For teachers</span><a class="oak-link oak-body-3" href="#browse">Subjects</a><a class="oak-link oak-body-3" href="#browse">Units</a><a class="oak-link oak-body-3" href="#lesson">Lessons</a></nav>
+<nav aria-label="Resources"><span class="oak-body-2 col-h">Resources</span><a class="oak-link oak-body-3" href="#resources">Downloads</a><a class="oak-link oak-body-3" href="#support">Guidance</a><a class="oak-link oak-body-3" href="#support">FAQ</a></nav>
+<nav aria-label="About"><span class="oak-body-2 col-h">About</span><a class="oak-link oak-body-3" href="#main">Who we are</a><a class="oak-link oak-body-3" href="#main">Accessibility</a><a class="oak-link oak-body-3" href="#main">Contact</a></nav>
+</div>
+<hr>
+<div class="oak-cluster oak-cluster--s"><span class="oak-body-3">© 2026 The learning service</span><nav class="oak-cluster oak-cluster--s legal" aria-label="Legal"><a class="oak-link oak-body-3" href="#main">Terms</a><a class="oak-link oak-body-3" href="#main">Privacy</a><a class="oak-link oak-body-3" href="#main">Licence</a></nav></div>
+</div>
+</footer>
+
+</div>
+</body></html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Modal & accordion (native-first)" subtitle="<dialog> with platform focus trap + scrim; <details> disclosure — keyboard and announcements come from the browser" viewport="880x600" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:24px;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans)}
+h2{font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-subdued);margin:18px 0 8px}
+h2:first-child{margin-top:0}
+.note{font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-subdued);margin:0 0 10px}
+</style></head><body>
+<h2>Modal — native dialog</h2>
+<p class="note">showModal() gives the focus trap, Esc, and inertness for free; the scrim is the --scrim role and the panel sits on --bg-overlay + --shadow-overlay.</p>
+<button class="oak-btn" onclick="document.getElementById('demo-modal').showModal()">Open modal</button>
+<dialog class="oak-modal" id="demo-modal" aria-labelledby="dm-title">
+  <div class="oak-stack">
+    <h3 id="dm-title" class="oak-heading-5" style="margin:0">Remove this lesson?</h3>
+    <p class="oak-body-2" style="margin:0">It will disappear from your plan. Pupils keep any work they've already saved.</p>
+    <div class="oak-cluster oak-cluster--s" style="justify-content:flex-end">
+      <button class="oak-btn oak-btn--secondary" onclick="document.getElementById('demo-modal').close()">Cancel</button>
+      <button class="oak-btn" onclick="document.getElementById('demo-modal').close()">Remove lesson</button>
+    </div>
+  </div>
+</dialog>
+<h2>Accordion — native details</h2>
+<div class="oak-stack oak-stack--s">
+<details class="oak-accordion" open>
+  <summary>What is evaporation?</summary>
+  <div class="oak-accordion__body">When a liquid turns into a gas, without boiling — the puddle doesn't vanish, the water changes state.</div>
+</details>
+<details class="oak-accordion">
+  <summary>What is condensation?</summary>
+  <div class="oak-accordion__body">When a gas cools and turns back into a liquid — like drops on the outside of a cold drink can.</div>
+</details>
+</div>
+</body></html>

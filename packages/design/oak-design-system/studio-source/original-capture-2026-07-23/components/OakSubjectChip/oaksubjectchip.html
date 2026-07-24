@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="OakSubjectChip (compiled)" subtitle="Mountable React component — subject icon in a pastel circle" viewport="700x150" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../../colors_and_type.css"><link rel="stylesheet" href="../../components.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:24px;background:var(--bg-primary);font-family:var(--font-sans)}#root{display:flex;gap:16px;align-items:center;flex-wrap:wrap}</style>
+</head><body><div id="root"></div>
+<script>
+const { OakSubjectChip } = window.OakNationalAcademyDesignSystem_3ddccf;
+const e = React.createElement;
+ReactDOM.createRoot(document.getElementById("root")).render(
+  e(React.Fragment, null,
+    ["english", "maths", "science", "history", "geography", "art", "music", "computing"].map(s =>
+      e(OakSubjectChip, { key: s, subject: s, size: 56 })),
+    e(OakSubjectChip, { icon: "subject-latin", bg: "#fff2aa", size: 56 })));
+</script>
+</body></html>

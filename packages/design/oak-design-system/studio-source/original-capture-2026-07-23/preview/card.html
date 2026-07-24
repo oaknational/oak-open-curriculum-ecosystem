@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Card" subtitle="Generic content card — blog / link card" viewport="760x340" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--oak-grey10); font-family:var(--font-sans); display:flex; gap:20px; flex-wrap:wrap; }
+  .card { width:300px; background:var(--bg-primary); border:2px solid var(--border-primary); border-radius:8px; overflow:hidden; box-shadow:6px 6px 0 var(--oak-black); }
+  .thumb { height:120px; background:var(--oak-aqua); border-bottom:2px solid var(--border-primary); display:flex; align-items:center; justify-content:center; }
+  .thumb img { width:48px; height:48px; }
+  .pad { padding:18px 20px; display:flex; flex-direction:column; gap:8px; }
+  .eyebrow { font:700 11px/14px var(--font-sans); letter-spacing:0.06em; text-transform:uppercase; color:var(--text-subdued); }
+  .card h3 { margin:0; font:600 20px/26px var(--font-sans); letter-spacing:0.0115rem; color:var(--text-primary); }
+  .card p { margin:0; font:300 15px/22px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .link { display:inline-flex; align-items:center; gap:6px; font:700 15px/20px var(--font-sans); color:var(--text-link); text-decoration:underline; text-underline-offset:2px; margin-top:4px; }
+  .link img { width:18px; height:18px; filter:invert(13%) sepia(94%) saturate(4000%) hue-rotate(238deg) brightness(80%) contrast(105%); }
+</style></head>
+<body>
+  <article class="card">
+    <div class="thumb" style="background:var(--oak-lemon30);"><img src="../assets/icons/lightbulb.svg" alt=""></div>
+    <div class="pad">
+      <span class="eyebrow">Blog · 4 min read</span>
+      <h3>Five ways to use Oak in your planning</h3>
+      <p>Practical tips from teachers on weaving our resources into your week.</p>
+      <a class="link">Read more<img src="../assets/icons/arrow-right.svg" alt=""></a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><img src="../assets/icons/video.svg" alt=""></div>
+    <div class="pad">
+      <span class="eyebrow">Webinar</span>
+      <h3>Getting started with Aila</h3>
+      <p>A 20-minute walkthrough of your AI lesson assistant.</p>
+      <a class="link">Watch now<img src="../assets/icons/arrow-right.svg" alt=""></a>
+    </div>
+  </article>
+</body></html>

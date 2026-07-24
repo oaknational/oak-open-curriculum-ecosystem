@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Toast" subtitle="Transient notifications — info, success, error, inverted" viewport="700x300" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:22px 24px; background:var(--oak-grey10); font-family:var(--font-sans); display:flex; flex-direction:column; gap:12px; align-items:flex-start; }
+  .toast { display:flex; align-items:center; gap:12px; min-width:360px;
+    border:2px solid var(--border-primary); border-radius:8px; padding:14px 16px; box-shadow:4px 4px 0 var(--oak-black); }
+  .toast .ic { width:28px; height:28px; flex:0 0 28px; }
+  .toast .msg { flex:1; font:600 16px/22px var(--font-sans); letter-spacing:0.0115rem; }
+  .toast .x { width:28px; height:28px; flex:0 0 28px; border-radius:1000px; border:2px solid currentColor; display:flex; align-items:center; justify-content:center; background:transparent; cursor:pointer; }
+  .toast .x img { width:16px; height:16px; }
+  .info { background:var(--bg-primary); color:var(--text-primary); }
+  .success { background:var(--oak-green); color:var(--oak-white); }
+  .success .x img, .inverted .x img { filter:invert(1); }
+  .error { background:var(--oak-red); color:var(--oak-white); }
+  .error .x img { filter:invert(1); }
+  .inverted { background:var(--bg-inverted); color:var(--oak-white); }
+  .deco { background:var(--oak-mint); color:var(--text-primary); }
+</style></head>
+<body>
+  <div class="toast info"><img class="ic" src="../assets/icons/info.svg" alt=""><span class="msg">Your worksheet is downloading.</span><button class="x"><img src="../assets/icons/cross.svg" alt=""></button></div>
+  <div class="toast success"><img class="ic" src="../assets/icons/success.svg" alt="" style="filter:invert(1)"><span class="msg">Saved to your downloads.</span><button class="x"><img src="../assets/icons/cross.svg" alt=""></button></div>
+  <div class="toast error"><img class="ic" src="../assets/icons/error.svg" alt="" style="filter:invert(1)"><span class="msg">Something went wrong — try again.</span><button class="x"><img src="../assets/icons/cross.svg" alt=""></button></div>
+  <div class="toast inverted"><img class="ic" src="../assets/icons/bell.svg" alt="" style="filter:invert(1)"><span class="msg">3 new lessons added to Science.</span><button class="x"><img src="../assets/icons/cross.svg" alt=""></button></div>
+  <div class="toast deco"><img class="ic" src="../assets/icons/tick.svg" alt=""><span class="msg">Sent to your pupils.</span><button class="x"><img src="../assets/icons/cross.svg" alt=""></button></div>
+</body></html>

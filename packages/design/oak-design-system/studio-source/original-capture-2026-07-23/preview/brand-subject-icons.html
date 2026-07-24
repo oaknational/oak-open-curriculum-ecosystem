@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Subject icons" subtitle="Tweakable: every Oak subject icon on a pastel chip" viewport="820x900" -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; background:var(--bg-primary); color:var(--text-primary); font-family:var(--font-sans); }
+  * { box-sizing:border-box; }
+  .wrap { padding:22px 24px; }
+  h4 { font:400 11px/14px var(--font-mono); color:var(--oak-grey50); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.06em; }
+  .lede { font:300 13px/18px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-subdued); margin:0 0 18px; max-width:64ch; }
+  .grid { display:grid; gap:18px 14px; }
+  .subj { display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center; }
+  .chip { display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .chip img { display:block; object-fit:contain; }
+  .lbl { font:400 10px/13px var(--font-mono); color:var(--oak-grey50); word-break:break-word; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="tweaks-panel.js"></script>
+<script type="text/babel">
+// Every subject icon downloaded from oak-web-application Cloudinary (mirrors OakIcon subject set).
+const SUBJECTS = [
+  "art","biology","chemistry","citizenship","communication-and-language","computing",
+  "cooking-nutrition","creative-arts","design-technology","drama","english",
+  "english-grammar","english-spelling","financial-education","french","geography",
+  "german","handwriting","history","independent-living","language","latin","literature",
+  "maths","music","numeracy","philosophy","physical-development","physical-education",
+  "physical-therapy","physics","reading-writing-oracy","religious-education","rshe-pshe",
+  "science","sensory-integration","social-science","spanish","speech-and-language",
+  "swimming","theology","therapy","understanding-the-world","vocabulary",
+].sort();
+
+// Oak's decorative palette - cycled across chips for variety.
+const PALETTE = ["#bef2bd","#b0e2de","#a0b6f2","#deb7d5","#ffe555","#ff934e",
+  "#ebfbeb","#e7f6f5","#e3e9fb","#f5e9f2","#fff7cc","#ffece0"];
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "chipSize": 56,
+  "chipShape": "circle",
+  "chipColour": "rotate",
+  "showChip": false,
+  "showLabels": true
+}/*EDITMODE-END*/;
+
+const FIXED = { mint:"var(--oak-mint)", aqua:"var(--oak-aqua)", lavender:"var(--oak-lavender)", pink:"var(--oak-pink)", lemon:"var(--oak-lemon)", white:"var(--oak-white)" };
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const radius = t.chipShape === "circle" ? "100px" : t.chipShape === "rounded" ? "16px" : "0";
+  const min = t.chipSize + 24;
+  const chipBg = (i) => t.chipColour === "rotate" ? PALETTE[i % PALETTE.length] : FIXED[t.chipColour];
+
+  return (
+    <div className="wrap">
+      <h4>Subject icons · {SUBJECTS.length} subjects</h4>
+      <p className="lede">Every Oak subject icon, each on a pastel chip. In production these render via <code>&lt;OakIcon iconName="subject-…" /&gt;</code> on a coloured background. Sorted A–Z.</p>
+      <div className="grid" style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${min}px, 1fr))` }}>
+        {SUBJECTS.map((s, i) => (
+          <div className="subj" key={s}>
+            <div className="chip" style={{
+              width: t.chipSize, height: t.chipSize, borderRadius: radius,
+              background: t.showChip ? chipBg(i) : "transparent",
+              border: t.showChip ? "2px solid var(--border-primary)" : "none",
+            }}>
+              <img src={`../assets/icons/subject-${s}.svg`} alt={s}
+                style={{ width: t.chipSize * (t.showChip ? 0.62 : 0.86), height: t.chipSize * (t.showChip ? 0.62 : 0.86) }} />
+            </div>
+            {t.showLabels && <span className="lbl">{s}</span>}
+          </div>
+        ))}
+      </div>
+
+      <TweaksPanel>
+        <TweakSection label="Chip" />
+        <TweakToggle label="Coloured chip" value={t.showChip}
+          onChange={(v) => setTweak("showChip", v)} />
+        <TweakSlider label="Chip size" value={t.chipSize} min={40} max={88} unit="px"
+          onChange={(v) => setTweak("chipSize", v)} />
+        <TweakRadio label="Shape" value={t.chipShape} options={["circle", "rounded", "square"]}
+          onChange={(v) => setTweak("chipShape", v)} />
+        <TweakSelect label="Colour" value={t.chipColour}
+          options={["rotate", "mint", "aqua", "lavender", "pink", "lemon", "white"]}
+          onChange={(v) => setTweak("chipColour", v)} />
+        <TweakSection label="Content" />
+        <TweakToggle label="Show labels" value={t.showLabels}
+          onChange={(v) => setTweak("showLabels", v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

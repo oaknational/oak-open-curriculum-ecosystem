@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Colors" name="Neutral scale" subtitle="9-step grey scale from white to black" viewport="700x170" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); }
+  .row { display:flex; gap:12px; align-items:stretch; }
+  .sw { flex:1; min-width:0; border:2px solid var(--border-primary); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; }
+  .chip { height:72px; }
+  .meta { padding:8px 10px; background:var(--bg-primary); border-top:2px solid var(--border-primary); }
+  .name { font:700 13px/16px var(--font-sans); letter-spacing:-0.005rem; }
+  .hex { font:400 11px/14px var(--font-mono); color:var(--text-subdued); margin-top:2px; }
+</style></head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:var(--bg-primary); border-right:none;"></div><div class="meta"><div class="name">white</div><div class="hex">#ffffff</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-grey10)"></div><div class="meta"><div class="name">grey10</div><div class="hex">#f9f9f9</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-grey20)"></div><div class="meta"><div class="name">grey20</div><div class="hex">#f2f2f2</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-grey30)"></div><div class="meta"><div class="name">grey30</div><div class="hex">#e4e4e4</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-grey40)"></div><div class="meta"><div class="name">grey40</div><div class="hex">#cacaca</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-grey50)"></div><div class="meta"><div class="name">grey50</div><div class="hex">#808080</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-grey60)"></div><div class="meta"><div class="name">grey60</div><div class="hex">#575757</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-grey70)"></div><div class="meta"><div class="name">grey70</div><div class="hex">#2d2d2d</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--bg-inverted)"></div><div class="meta"><div class="name">black</div><div class="hex">#222222</div></div></div>
+  </div>
+</body></html>

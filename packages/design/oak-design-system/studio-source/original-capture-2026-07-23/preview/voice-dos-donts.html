@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Voice - dos & don'ts" subtitle="Tweakable: explore Oak's inclusive writing guide" viewport="780x560" -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; background:var(--bg-primary); color:var(--text-primary); font-family:var(--font-sans); }
+  * { box-sizing:border-box; }
+  .wrap { padding:22px 24px; }
+  h4 { font:400 11px/14px var(--font-mono); color:var(--oak-grey50); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.06em; }
+  .lede { font:300 14px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-subdued); margin:0 0 18px; max-width:60ch; }
+  .principle { margin-bottom:16px; }
+  .p-title { display:flex; align-items:baseline; gap:8px; margin-bottom:8px; }
+  .p-num { font:700 12px/16px var(--font-mono); color:var(--oak-green); }
+  .p-name { font:700 16px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .why { font:300 13px/18px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-subdued); margin:0 0 10px; max-width:64ch; }
+  .row { display:flex; gap:14px; align-items:stretch; }
+  .col { flex:1; background:var(--oak-grey10); border-left:4px solid var(--oak-red); padding:10px 14px; border-radius:0 4px 4px 0; }
+  .col.good { border-left-color:var(--oak-green); }
+  .hd { display:flex; align-items:center; gap:6px; font:700 11px/16px var(--font-sans); color:var(--text-subdued); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.06em; }
+  .hd .ic { width:14px; height:14px; }
+  .quote { letter-spacing:-0.005rem; color:var(--text-primary); }
+  .quote strong { font-weight:700; }
+  mark { background:var(--oak-lemon50); color:inherit; padding:0 2px; border-radius:2px; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="tweaks-panel.js"></script>
+<script type="text/babel">
+const { useMemo } = React;
+
+// Inclusive writing guide - principles distilled from Oak's brand-voice toolkit
+// and accessible content-design practice (write for scanning, plain language,
+// address the reader, sentence case, people-first, meaningful links, active voice).
+// Source: Oak's "Inclusive writing guide" - write content that is clear,
+// accessible and inclusive, built around how people actually read online.
+const BEHAVIOURS = [
+  "scan for relevant information",
+  "focus on headings and key points",
+  "make quick decisions about what to read",
+  "pause and return later",
+  "navigate in short, interrupted bursts",
+];
+
+const PRINCIPLES = [
+  {
+    key: "frontload", name: "Front-load important information",
+    why: "Start with the key message or conclusion, then the supporting detail - in body content and in headings. Many users rely on headings alone to navigate.",
+    avoid: "Before you get started, there are a number of things it's worth knowing about how our resources are organised and what's available to you.",
+    do: "Download free, ready-to-teach lessons - here's how they're organised.",
+  },
+  {
+    key: "concise", name: "Keep content concise",
+    why: "Reduce content to only what's necessary. Concise writing lowers cognitive effort and helps users who are time-constrained or distracted.",
+    avoid: "At this moment in time, we are currently in the process of making a number of additional resources available to you.",
+    do: "More resources are coming soon.",
+  },
+  {
+    key: "plain", name: "Write in plain English",
+    why: "Avoid jargon, idioms and complex sentences. Plain English supports lower literacy, non-native speakers, and cognitive or attention-related differences.",
+    avoid: "Utilise our resources to facilitate enhanced pedagogical outcomes and move the needle for your learners.",
+    do: "Use our resources to help your pupils learn.",
+    swap: [["Utilise","Use"],["facilitate","help"]],
+  },
+  {
+    key: "format", name: "Use formatting where possible",
+    why: "Short paragraphs (one idea each), clear headings and lists help users locate key information without reading everything.",
+    avoid: "Each lesson includes a video, a worksheet, a slide deck, a starter quiz and an exit quiz, and you can download any of them or send them to your pupils to complete at home.",
+    doList: ["A teacher-led video", "A worksheet and slide deck", "Starter and exit quizzes"],
+    do: "Each lesson includes:",
+  },
+  {
+    key: "assume", name: "Avoid assumptions about the user",
+    why: "Don't assume a background, a 'typical' classroom, shared cultural references, or that every pupil has a device or the internet at home.",
+    avoid: "Ask your pupils to finish the activity at home on their laptops this evening.",
+    do: "Pupils can finish the activity in class, or at home if they have a device.",
+  },
+];
+
+function highlight(text, swaps) {
+  if (!swaps) return text;
+  // wrap the first occurrence of each target word in <mark>
+  const parts = [];
+  let remaining = text;
+  // build a regex of all targets
+  const targets = swaps.map(s => s[1]).filter(Boolean);
+  const re = new RegExp("(" + targets.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "i");
+  let m, idx = 0, guard = 0;
+  let work = text;
+  const out = [];
+  while ((m = work.match(re)) && guard < 20) {
+    guard++;
+    const at = m.index;
+    if (at > 0) out.push(work.slice(0, at));
+    out.push(<mark key={guard}>{m[0]}</mark>);
+    work = work.slice(at + m[0].length);
+  }
+  out.push(work);
+  return out;
+}
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "principle": "All",
+  "showWhy": true,
+  "highlightFix": false,
+  "readingWidth": "wide",
+  "bodySize": 17
+}/*EDITMODE-END*/;
+
+const WIDTHS = { compact: 42, regular: 60, wide: 88 };
+
+function Principle({ p, n, t }) {
+  const doContent = (t.highlightFix && p.swap)
+    ? highlight(p.do, p.swap)
+    : p.do;
+  return (
+    <div className="principle">
+      <div className="p-title">
+        <span className="p-num">{String(n).padStart(2, "0")}</span>
+        <span className="p-name">{p.name}</span>
+      </div>
+      {t.showWhy && <p className="why" style={{ maxWidth: t.readingWidth === "compact" ? "42ch" : "64ch" }}>{p.why}</p>}
+      <div className="row">
+        <div className="col bad">
+          <div className="hd">
+            <img className="ic" src="../assets/icons/cross.svg" alt="" /> Avoid
+          </div>
+          <div className="quote" style={{ font: `300 ${t.bodySize}px/${Math.round(t.bodySize*1.5)}px var(--font-sans)` }}>{p.avoid}</div>
+        </div>
+        <div className="col good">
+          <div className="hd">
+            <img className="ic" src="../assets/icons/tick.svg" alt="" /> Do
+          </div>
+          <div className="quote" style={{ font: `300 ${t.bodySize}px/${Math.round(t.bodySize*1.5)}px var(--font-sans)` }}>
+            {doContent}
+            {p.doList && (
+              <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+                {p.doList.map((li, i) => <li key={i}>{li}</li>)}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const shown = useMemo(
+    () => t.principle === "All" ? PRINCIPLES : PRINCIPLES.filter(p => p.name === t.principle),
+    [t.principle]
+  );
+  const showIntro = t.showWhy && t.principle === "All";
+  const options = ["All", ...PRINCIPLES.map(p => p.name)];
+
+  return (
+    <div className="wrap" style={{ maxWidth: WIDTHS[t.readingWidth] * 9 + 48 }}>
+      <h4>Inclusive writing guide · avoid → do</h4>
+      <p className="lede">Write content that's clear, accessible and inclusive. People rarely read from start to finish - especially when busy, distracted, or under cognitive load.</p>
+      {showIntro && (
+        <div style={{ background:"#e3e9fb", borderRadius:4, padding:"10px 14px", margin:"0 0 18px" }}>
+          <div className="hd" style={{ color:"#222", marginBottom:6 }}>People reading online tend to…</div>
+          <ul style={{ margin:0, paddingLeft:18, font:"300 13px/20px var(--font-sans)", letterSpacing:"-0.005rem", color:"#2d2d2d" }}>
+            {BEHAVIOURS.map(b => <li key={b}>{b}</li>)}
+          </ul>
+        </div>
+      )}
+      {shown.map((p, i) => (
+        <Principle key={p.key} p={p} n={t.principle === "All" ? i + 1 : PRINCIPLES.indexOf(p) + 1} t={t} />
+      ))}
+
+      <TweaksPanel>
+        <TweakSection label="Content" />
+        <TweakSelect label="Principle" value={t.principle} options={options}
+          onChange={(v) => setTweak("principle", v)} />
+        <TweakToggle label="Show why it matters" value={t.showWhy}
+          onChange={(v) => setTweak("showWhy", v)} />
+        <TweakToggle label="Highlight the fix" value={t.highlightFix}
+          onChange={(v) => setTweak("highlightFix", v)} />
+        <TweakSection label="Reading experience" />
+        <TweakRadio label="Width" value={t.readingWidth}
+          options={["compact", "regular", "wide"]}
+          onChange={(v) => setTweak("readingWidth", v)} />
+        <TweakSlider label="Body size" value={t.bodySize} min={13} max={20} unit="px"
+          onChange={(v) => setTweak("bodySize", v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

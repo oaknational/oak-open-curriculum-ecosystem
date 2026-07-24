@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Accessibility" name="Contrast audit (live)" subtitle="Computed AA check of every role pairing, per theme — re-run after any re-brand; the brand selector loads the white-label proofs and the failing counter-example" viewport="920x680" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css"><link rel="stylesheet" href="../brand.css">
+<style>
+body{margin:0;padding:20px;background:var(--bg-primary);font-family:var(--font-sans)}
+.bar{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.bar button{min-height:36px;padding:4px 12px;border-radius:var(--radius-s);border:var(--border-solid-m) solid var(--border-primary);background:var(--bg-primary);color:var(--text-primary);font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans);cursor:pointer}
+.bar button[aria-pressed="true"]{background:var(--bg-btn-primary);color:var(--text-btn-primary);border-color:var(--bg-btn-primary)}
+.bar .sum{margin-left:auto;font:var(--weight-bold) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-primary)}
+#audit{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;align-items:start}
+h2{font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-subdued);margin:10px 0 4px;grid-column:1/-1}
+.row{display:flex;align-items:center;gap:8px;font:var(--weight-light) var(--font-size-1)/var(--leading-16) var(--font-sans);color:var(--text-primary)}
+.chip{width:34px;height:22px;flex:0 0 34px;display:grid;place-content:center;border:1px solid var(--border-neutral-lighter);border-radius:var(--radius-xs);font:var(--weight-semibold) var(--font-size-1)/1 var(--font-sans)}
+.name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ratio{font-weight:var(--weight-bold);width:52px;text-align:right}
+.verdict{width:52px;font-weight:var(--weight-bold)}
+.pass{color:var(--text-success)}.fail{color:var(--text-error)}
+</style></head><body>
+<div class="bar" id="themes"></div>
+<div class="bar"><label for="brandsel" style="font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-primary)">Brand override</label><select id="brandsel" style="min-height:36px;padding:4px 8px;border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-s);background:var(--bg-primary);color:var(--text-primary);font:var(--weight-regular) var(--font-size-2)/var(--leading-20) var(--font-sans)">
+<option value="">None (Oak)</option>
+<option value="../whitelabel/creature/brand-a.css">Educate My Creature — Part A</option>
+<option value="../whitelabel/creature/brand-full.css">Educate My Creature — full</option>
+<option value="../whitelabel/freedonia/brand-a.css">Freedonia DSE — Part A</option>
+<option value="../whitelabel/freedonia/brand-full.css">Freedonia DSE — full</option>
+<option value="../whitelabel/failing-example.css">⚠ Failing counter-example</option>
+</select></div>
+<div id="audit"></div>
+<script>
+const TEXT_PAIRS = [
+ ["--text-primary","--bg-primary"],["--text-subdued","--bg-primary"],["--text-primary","--bg-subtle"],
+ ["--text-subdued","--bg-subtle"],["--text-primary","--bg-neutral"],["--text-link","--bg-primary"],
+ ["--text-error","--bg-primary"],["--text-success","--bg-primary"],["--text-btn-primary","--bg-btn-primary"],
+ ["--text-primary","--bg-btn-secondary"],["--text-inverted","--bg-inverted"],
+ ["--text-primary","--surface-decorative-1"],["--text-primary","--surface-decorative-2"],
+ ["--text-primary","--surface-decorative-3"],["--text-primary","--surface-decorative-4"],
+ ["--text-primary","--surface-decorative-5"],["--text-primary","--surface-decorative-6"],
+ ["--text-primary","--bg-correct"],["--text-primary","--bg-incorrect"],["--text-primary","--bg-selected"],
+ ["--text-primary","--bg-info-subtle"],["--text-primary","--bg-success-subtle"],
+ ["--text-primary","--bg-warning-subtle"],["--text-primary","--bg-error-subtle"],
+ ["--text-primary","--color-accent-soft"],["--text-inverted-subdued","--bg-inverted"]
+];
+const UI_PAIRS = [
+ ["--border-primary","--bg-primary"],["--border-neutral","--bg-primary"],["--border-error","--bg-primary"],
+ ["--border-success","--bg-primary"],["--border-warning","--bg-primary"],
+ ["--shadow-ground","--bg-primary"],["--bg-btn-primary","--bg-primary"],["--border-inverted","--bg-inverted"]
+];
+const THEMES = ["light","dark","high-contrast","colour-safe"];
+const probe = document.createElement("div"); probe.style.display="none"; document.body.appendChild(probe);
+function resolve(tok){ probe.style.color = "var("+tok+")"; return getComputedStyle(probe).color; }
+function lum(rgb){
+  const m = rgb.match(/[\d.]+/g); if(!m) return 0;
+  const [r,g,b] = m.slice(0,3).map(v=>{ v=v/255; return v<=0.03928? v/12.92 : Math.pow((v+0.055)/1.055,2.4); });
+  return 0.2126*r+0.7152*g+0.0722*b;
+}
+function ratio(a,b){ const l1=lum(resolve(a)), l2=lum(resolve(b)); const [hi,lo]=l1>l2?[l1,l2]:[l2,l1]; return (hi+0.05)/(lo+0.05); }
+function run(theme){
+  document.documentElement.setAttribute("data-theme", theme);
+  const audit = document.getElementById("audit"); audit.innerHTML = "";
+  let pass=0, total=0;
+  const section = (title, pairs, min, aaa) => {
+    const h = document.createElement("h2"); h.textContent = title; audit.appendChild(h);
+    for (const [fg,bg] of pairs){
+      const r = ratio(fg,bg), ok = r >= min; total++; if(ok) pass++;
+      const row = document.createElement("div"); row.className="row";
+      const chip = document.createElement("span"); chip.className="chip"; chip.textContent="Aa";
+      chip.style.color="var("+fg+")"; chip.style.background="var("+bg+")";
+      const name = document.createElement("span"); name.className="name"; name.textContent = fg.slice(2)+" / "+bg.slice(2);
+      const rat = document.createElement("span"); rat.className="ratio"; rat.textContent = r.toFixed(2);
+      const v = document.createElement("span"); v.className="verdict "+(ok?"pass":"fail");
+      v.textContent = !ok ? "✗ FAIL" : (aaa && r >= aaa) ? "✓ AAA" : "✓ AA";
+      row.append(chip,name,rat,v); audit.appendChild(row);
+    }
+  };
+  section("Text — AA ≥ 4.5:1 (weight 400+ on fills) · AAA ≥ 7:1 aspiration", TEXT_PAIRS, 4.5, 7);
+  section("Non-text (borders, focus, controls) — AA ≥ 3:1", UI_PAIRS, 3, null);
+  document.querySelector(".sum").textContent = pass+"/"+total+" pass AA";
+  for (const b of document.querySelectorAll("#themes button")) b.setAttribute("aria-pressed", String(b.dataset.t===theme));
+}
+const bar = document.getElementById("themes");
+for (const t of THEMES){ const b=document.createElement("button"); b.textContent=t; b.dataset.t=t; b.onclick=()=>run(t); bar.appendChild(b); }
+const sum = document.createElement("span"); sum.className="sum"; bar.appendChild(sum);
+let curTheme = "light";
+const _run = run; run = (t)=>{ curTheme = t; _run(t); };
+document.getElementById("brandsel").onchange = (e) => {
+  document.getElementById("brand-override")?.remove();
+  const href = e.target.value;
+  if (!href) return run(curTheme);
+  const l = document.createElement("link");
+  l.id = "brand-override"; l.rel = "stylesheet"; l.href = href;
+  l.onload = () => run(curTheme);
+  document.head.appendChild(l);
+};
+run("light");
+</script>
+</body></html>

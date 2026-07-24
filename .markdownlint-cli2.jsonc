@@ -54,6 +54,12 @@
     "packages/design/oak-design-system/HANDOFF.md",
     "packages/design/oak-design-system/CLAUDE-CODE-HANDOFF.md",
     "packages/design/design-import/**",
+    // MCP-137 preservation tier: byte-preserved capture folders (pure copies
+    // from their sources — see studio-source/PRESERVATION-README.md); their
+    // markdown is captured content, never repo documentation. The adjacent
+    // PRESERVATION-README.md itself is authored and stays in lint scope.
+    "packages/design/oak-design-system/studio-source/original-capture-2026-07-23/**",
+    "packages/design/oak-design-system/studio-source/iteration-pull-preservation-2026-07-23/**",
     ".agent/state/collaboration/shared-comms-log.md",
     ".agent/state/collaboration/cross-worktree-work-state.md",
     ".agent/collaboration/rapid-comms/2026-*.md",

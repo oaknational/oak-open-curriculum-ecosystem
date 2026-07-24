@@ -1,0 +1,93 @@
+<!-- @dsCard group="Explorations" -->
+<!doctype html>
+<html lang="en-GB" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MCP-128 landing candidate A — band hero</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <style>
+.oak-canvas { --band-pad: var(--space-40); }
+@media (min-width: 960px) { .oak-canvas { --band-pad: var(--space-64); } }
+header[data-region='masthead'] > .oak-container { padding-block: var(--space-16); }
+main.oak-main > [data-region]:not(.oak-band) { padding-block: var(--space-24); }
+footer[data-region='footer'] > .oak-container { padding-block: var(--space-24); }
+    </style>
+  </head>
+  <body class="oak-scope">
+    <div class="oak-canvas">
+      <header data-region="masthead">
+        <div class="oak-container oak-cluster" style="align-items: center">
+          <span class="oak-heading-6">Oak National Academy</span>
+        </div>
+      </header>
+
+      <main data-region="main" class="oak-main" id="main">
+        <section data-region="hero" class="oak-band">
+          <div class="oak-container oak-stack">
+            <h1 class="oak-heading-light-1">Oak, in your AI assistant</h1>
+            <p class="oak-body-1 oak-prose">
+              Bring Oak&rsquo;s free, fully sequenced curriculum into the assistant you already
+              use &mdash; thousands of lessons, units and resources, searchable as you plan.
+            </p>
+            <p class="oak-body-2 oak-prose">
+              It works through MCP, an open standard that lets your assistant connect to trusted
+              sources &mdash;
+              <a class="oak-link" href="https://modelcontextprotocol.io">see how MCP works</a>.
+            </p>
+          </div>
+        </section>
+
+        <section data-region="content">
+          <div class="oak-container oak-stack">
+            <!-- PHASE BLOCK — one renders per phase; all three shown for review -->
+            <div class="oak-card oak-card--lemon oak-stack--s">
+              <span class="oak-tag oak-tag--grey">Phase 1 preview</span>
+              <span class="oak-tag oak-tag--mint">Limited internal testing</span>
+              <p class="oak-body-2">
+                We&rsquo;re testing the Oak app with a small group before wider release. If
+                you&rsquo;re taking part, connect your assistant below.
+              </p>
+            </div>
+            <div class="oak-card oak-card--lemon oak-stack--s">
+              <span class="oak-tag oak-tag--grey">Phase 2 preview</span>
+              <span class="oak-tag oak-tag--mint">Coming soon</span>
+              <p class="oak-body-2">
+                The Oak app is coming soon to AI assistants. You don&rsquo;t need to wait to use
+                Oak: every lesson is free on our website today.
+              </p>
+            </div>
+            <div class="oak-card oak-card--mint oak-stack--s">
+              <span class="oak-tag oak-tag--grey">Phase 3 preview</span>
+              <div class="oak-cluster oak-cluster--s">
+                <a class="oak-btn" href="#connect">Connect Oak to your assistant</a>
+              </div>
+              <p class="oak-body-2">Free for every teacher. Sign-in is currently by invitation.</p>
+            </div>
+          </div>
+        </section>
+
+        <section data-region="context">
+          <div class="oak-container oak-stack--s">
+            <h2 class="oak-heading-4">Use Oak today</h2>
+            <p class="oak-body-2 oak-prose">
+              Every lesson is free to browse and download at
+              <a class="oak-link" href="https://www.thenational.academy">thenational.academy</a>.
+              Want to create and adapt lessons with AI? Try
+              <a class="oak-link" href="https://labs.thenational.academy">Aila, our lesson
+              assistant</a>.
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer data-region="footer" class="oak-band">
+        <div class="oak-container oak-cluster">
+          <span class="oak-body-4">Oak National Academy</span>
+          <a class="oak-link oak-body-4" href="https://www.thenational.academy">Main website</a>
+          <a class="oak-link oak-body-4" href="https://open-api.thenational.academy/docs/about-oaks-api/terms">Licensing</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Table, skeleton & empty state" subtitle="Data display and loading/empty conventions — skeleton is decorative (aria-hidden) and stills under reduced motion" viewport="880x640" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:24px;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans)}
+h2{font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-subdued);margin:18px 0 8px}
+h2:first-child{margin-top:0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+</style></head><body>
+<h2>.oak-table</h2>
+<table class="oak-table">
+<caption class="oak-visually-hidden">Unit progress</caption>
+<thead><tr><th scope="col">Lesson</th><th scope="col">Quiz score</th><th scope="col">Status</th></tr></thead>
+<tbody>
+<tr><td>1 · Solids, liquids and gases</td><td>5/5</td><td>Complete</td></tr>
+<tr><td>2 · Melting and freezing</td><td>4/5</td><td>Complete</td></tr>
+<tr><td>3 · Evaporation and condensation</td><td>—</td><td>In progress</td></tr>
+</tbody>
+</table>
+<div class="cols">
+<div>
+<h2>.oak-skeleton</h2>
+<div role="status"><span class="oak-visually-hidden">Loading lessons…</span>
+<div class="oak-stack oak-stack--s" aria-hidden="true">
+<span class="oak-skeleton" style="width:60%"></span>
+<span class="oak-skeleton" style="width:85%"></span>
+<span class="oak-skeleton" style="width:72%"></span>
+</div></div>
+</div>
+<div>
+<h2>.oak-empty</h2>
+<div class="oak-empty"><strong>No lessons yet</strong>Pick a unit to start planning — everything you add appears here.</div>
+</div>
+</div>
+</body></html>

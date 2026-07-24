@@ -8,6 +8,11 @@
 # prop documentation from the design studio, not generated artefacts.
 !components/**/*.d.ts
 
+# Same re-include for the MCP-137 preservation capture (byte-preserved copies
+# of the same four authored .d.ts files; caught by the S0 check-ignore pass —
+# a silently-unstaged capture file would violate zero-loss by omission).
+!studio-source/original-capture-2026-07-23/components/**/*.d.ts
+
 # Class 15 — studio provenance (screenshots, brand toolkit PDF, note sources,
 # Figma dump, oak-components theme extracts)
 /uploads/

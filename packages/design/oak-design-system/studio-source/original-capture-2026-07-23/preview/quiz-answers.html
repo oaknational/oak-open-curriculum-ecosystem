@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Quiz answers" subtitle="MCQ answer states — default, selected, correct, incorrect" viewport="760x320" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; flex-direction:column; gap:14px; max-width:640px; }
+  .ans { display:flex; align-items:center; gap:18px; padding:18px 20px; border:3px solid var(--border-primary); border-radius:8px;
+    background:var(--bg-primary); font:700 18px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); box-shadow:var(--shadow-wide-lemon); }
+  .ans .letter { width:40px; height:40px; flex:0 0 40px; border-radius:100px; background:var(--bg-inverted); color:var(--oak-white);
+    display:inline-flex; align-items:center; justify-content:center; font:700 18px/1 var(--font-sans); }
+  .ans .end { margin-left:auto; font-size:26px; }
+  .ans .end img { width:28px; height:28px; }
+  .selected { background:var(--oak-lemon30); box-shadow:4px 4px 0 var(--oak-black); }
+  .correct { background:var(--oak-mint50); border-color:var(--oak-green); box-shadow:none; }
+  .incorrect { background:var(--oak-red30); border-color:var(--oak-red); box-shadow:none; }
+</style></head>
+<body>
+  <div class="ans"><span class="letter">A</span> Evaporation</div>
+  <div class="ans selected"><span class="letter">B</span> Condensation</div>
+  <div class="ans correct"><span class="letter" style="background:var(--oak-green)">C</span> Precipitation <span class="end"><img src="../assets/icons/tick.svg" alt=""></span></div>
+  <div class="ans incorrect"><span class="letter" style="background:var(--oak-red)">D</span> Sublimation <span class="end"><img src="../assets/icons/cross.svg" alt=""></span></div>
+</body></html>

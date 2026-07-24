@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Subject cards" subtitle="Subject tiles with icon chip — default & selected" viewport="760x300" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--oak-grey10); font-family:var(--font-sans); display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:16px; }
+  .sc { display:flex; flex-direction:column; align-items:center; gap:12px; padding:22px 16px; background:var(--bg-primary);
+    border:2px solid var(--border-primary); border-radius:12px; cursor:pointer; box-shadow:4px 4px 0 var(--oak-black);
+    font:600 18px/22px var(--font-sans); letter-spacing:0.0115rem; color:var(--text-primary); text-align:center; }
+  .sc.sel { background:var(--oak-lemon30); }
+  .chip { width:56px; height:56px; border-radius:100px; border:2px solid var(--border-primary); display:flex; align-items:center; justify-content:center; }
+  .chip img { width:34px; height:34px; }
+</style></head>
+<body>
+  <div class="sc sel"><span class="chip" style="background:var(--oak-mint)"><img src="../assets/icons/subject-english.svg" alt=""></span>English</div>
+  <div class="sc"><span class="chip" style="background:var(--oak-lavender)"><img src="../assets/icons/subject-maths.svg" alt=""></span>Maths</div>
+  <div class="sc"><span class="chip" style="background:var(--oak-aqua)"><img src="../assets/icons/subject-science.svg" alt=""></span>Science</div>
+  <div class="sc"><span class="chip" style="background:var(--oak-pink)"><img src="../assets/icons/subject-history.svg" alt=""></span>History</div>
+  <div class="sc"><span class="chip" style="background:var(--oak-lemon)"><img src="../assets/icons/subject-geography.svg" alt=""></span>Geography</div>
+</body></html>

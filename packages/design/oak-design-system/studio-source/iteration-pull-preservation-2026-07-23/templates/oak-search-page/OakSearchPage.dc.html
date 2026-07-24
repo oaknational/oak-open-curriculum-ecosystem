@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Oak search page" description="Full-feature semantic search page (oak-search-sdk surface): query + typeahead suggestions, four scopes (lessons/units/threads/sequences), every filter the SDK accepts, highlighted snippets, facet chips, result meta (total/took), timeout banner, pagination, zero-hit state. Real Oak icons via Cloudinary." -->
+<helmet><script src="./ds-base.js"></script><script src="./theme-control.js"></script><style>body{margin:0}</style></helmet>
+<div class="oak-scope oak-canvas" data-page="unit">
+<header data-region="masthead">
+<a class="oak-skip-link" href="#main">Skip to content</a>
+<nav aria-label="Oak site areas" style="background:var(--bg-btn-primary);display:flex;gap:var(--gap-m);padding:var(--space-16) clamp(var(--space-20),4vw,var(--space-40)) 0">
+<a class="oak-btn oak-btn--secondary" aria-current="page" href="https://www.thenational.academy/teachers" style="border-bottom-left-radius:var(--radius-square);border-bottom-right-radius:var(--radius-square);border-bottom-width:0">Teachers</a>
+<a class="oak-btn" href="https://www.thenational.academy" style="border-bottom-left-radius:var(--radius-square);border-bottom-right-radius:var(--radius-square);border-bottom-width:0">Back to www</a>
+</nav>
+<nav aria-label="Oak National Academy" style="background:var(--bg-primary);border-bottom:var(--border-solid-s) solid var(--border-neutral-lighter);display:flex;align-items:center;gap:var(--gap-l);padding:var(--space-16) clamp(var(--space-20),4vw,var(--space-40))">
+<a href="https://www.thenational.academy" aria-label="Oak National Academy home"><img src="./assets/logo.svg" alt="" style="display:block;height:var(--size-icon-xxl);width:auto;filter:var(--filter-icon)" /></a>
+<a class="oak-btn oak-btn--secondary oak-btn--sm" href="https://www.thenational.academy" style="margin-left:auto;border-radius:var(--radius-circle)">Back to the main Oak website<img class="oak-btn__icon" src="https://res.cloudinary.com/oak-web-application/image/upload/v1699953892/icons/hlxmejse3mcr4tqo6t8u.svg" alt="" /></a>
+<span class="oak-select-wrap"><select class="oak-select" id="theme-control" aria-label="Colour theme" style="width:auto;min-width:var(--space-120)"><option value="light" selected="selected">Light</option><option value="dark">Dark</option><option value="system">System</option><option value="high-contrast">High contrast</option></select></span>
+</nav>
+</header>
+<main data-region="main" class="oak-main" id="main" aria-labelledby="page-title" style="align-content:start">
+<section data-region="hero" class="oak-band" style="--band-pad:clamp(var(--space-40),6vw,var(--space-56))">
+<div class="oak-container oak-stack oak-stack--l" style="align-items:flex-start">
+<nav class="oak-cluster oak-cluster--s" aria-label="Breadcrumbs" style="font:var(--type-body-3);letter-spacing:var(--tracking-body);align-items:center"><a class="oak-link" href="https://www.thenational.academy" style="color:var(--text-primary)">Home</a><span aria-hidden="true">›</span><span aria-current="page">Search</span></nav>
+<h1 id="page-title" class="oak-heading-2" style="margin:0">Search the Oak curriculum</h1>
+<form role="search" aria-label="Curriculum search" style="width:100%;max-width:var(--space-640)">
+<div class="oak-field">
+<label class="oak-label" for="q">Search lessons, units, threads and programmes</label>
+<div style="display:flex;gap:var(--gap-s);align-items:stretch">
+<input class="oak-input" id="q" type="search" value="expanding brackets" autocomplete="off" aria-describedby="suggest-panel" />
+<button class="oak-btn" type="submit"><img class="oak-btn__icon" src="https://res.cloudinary.com/oak-web-application/image/upload/v1704901279/icons/canbi3fuz5fanzom2hvi.svg" alt="" />Search</button>
+</div>
+</div>
+<div id="suggest-panel" style="background:var(--bg-primary);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);margin-top:var(--space-8);padding:var(--space-8)">
+<p class="oak-body-4" style="margin:var(--space-4) var(--space-8);color:var(--text-subdued)">Suggestions</p>
+<ul role="list" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+<li><a class="oak-link" href="#" style="display:flex;justify-content:space-between;align-items:center;gap:var(--gap-m);padding:var(--space-8);text-decoration:none;border-radius:var(--radius-control)" style-hover="background:var(--bg-subtle)"><span><strong>Expanding brackets</strong> — Year 8</span><span class="oak-tag oak-tag--grey">Lesson</span></a></li>
+<li><a class="oak-link" href="#" style="display:flex;justify-content:space-between;align-items:center;gap:var(--gap-m);padding:var(--space-8);text-decoration:none;border-radius:var(--radius-control)" style-hover="background:var(--bg-subtle)"><span><strong>Expanding double brackets</strong> — Year 9</span><span class="oak-tag oak-tag--grey">Lesson</span></a></li>
+<li><a class="oak-link" href="#" style="display:flex;justify-content:space-between;align-items:center;gap:var(--gap-m);padding:var(--space-8);text-decoration:none;border-radius:var(--radius-control)" style-hover="background:var(--bg-subtle)"><span><strong>Algebraic expressions</strong> — KS3 unit</span><span class="oak-tag oak-tag--grey">Unit</span></a></li>
+</ul>
+</div>
+</form>
+<nav aria-label="Search scope" class="oak-cluster oak-cluster--s">
+<a class="oak-btn oak-btn--sm" aria-current="page" href="#">Lessons (42)</a>
+<a class="oak-btn oak-btn--secondary oak-btn--sm" href="#">Units (18)</a>
+<a class="oak-btn oak-btn--secondary oak-btn--sm" href="#">Threads (7)</a>
+<a class="oak-btn oak-btn--secondary oak-btn--sm" href="#">Programmes (3)</a>
+</nav>
+</div>
+</section>
+<section data-region="facets" aria-label="Search filters" style="padding-block:clamp(var(--space-40),5vw,var(--space-56)) var(--space-80)">
+<form class="oak-stack">
+<h2 class="oak-heading-6" style="display:flex;align-items:center;gap:var(--gap-s);margin:0"><img src="https://res.cloudinary.com/oak-web-application/image/upload/v1727783280/icons/Icon_Filter_eitb2p.svg" alt="" style="width:var(--size-icon-m);height:var(--size-icon-m);filter:var(--filter-icon)" />Filters</h2>
+<div class="oak-field"><label class="oak-label" for="f-subject">Subject</label><span class="oak-select-wrap"><select class="oak-select" id="f-subject"><option>Maths</option><option>All subjects</option><option>Science</option><option>English</option><option>History</option></select></span></div>
+<fieldset style="border:0;padding:0;margin:0">
+<legend class="oak-label" style="padding:0;margin-bottom:var(--space-8)">Key stage</legend>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<label class="oak-choice"><input type="checkbox" class="oak-checkbox" /> KS1</label>
+<label class="oak-choice"><input type="checkbox" class="oak-checkbox" /> KS2</label>
+<label class="oak-choice"><input type="checkbox" class="oak-checkbox" checked="checked" /> KS3</label>
+<label class="oak-choice"><input type="checkbox" class="oak-checkbox" /> KS4</label>
+</div>
+</fieldset>
+<div class="oak-field"><label class="oak-label" for="f-year">Year group</label><span class="oak-select-wrap"><select class="oak-select" id="f-year"><option selected="selected">All years</option><option>Year 7</option><option>Year 8</option><option>Year 9</option></select></span></div>
+<div class="oak-field"><label class="oak-label" for="f-thread">Curriculum thread</label><span class="oak-select-wrap"><select class="oak-select" id="f-thread"><option selected="selected">Any thread</option><option>Number and place value</option><option>Algebraic thinking</option></select></span></div>
+<fieldset style="border:0;padding:0;margin:0">
+<legend class="oak-label" style="padding:0;margin-bottom:var(--space-8)">KS4 filters</legend>
+<div class="oak-stack--s" style="display:flex;flex-direction:column">
+<div class="oak-field"><label class="oak-label" for="f-board" style="font:var(--type-label)">Exam board</label><span class="oak-select-wrap"><select class="oak-select" id="f-board"><option selected="selected">Any board</option><option>AQA</option><option>Edexcel</option><option>Eduqas</option><option>OCR</option><option>WJEC</option></select></span></div>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<label class="oak-choice"><input type="radio" name="tier" class="oak-radio" checked="checked" /> Any tier</label>
+<label class="oak-choice"><input type="radio" name="tier" class="oak-radio" /> Foundation</label>
+<label class="oak-choice"><input type="radio" name="tier" class="oak-radio" /> Higher</label>
+</div>
+</div>
+</fieldset>
+<div class="oak-field"><label class="oak-label" for="f-min">Minimum lessons per unit</label><input class="oak-input" id="f-min" type="number" min="1" value="3" /><p class="oak-hint">Units scope only</p></div>
+<label class="oak-choice"><input type="checkbox" class="oak-checkbox" checked="checked" /> Highlight matching snippets</label>
+<div class="oak-field"><label class="oak-label" for="f-size">Results per page</label><span class="oak-select-wrap"><select class="oak-select" id="f-size"><option>25</option><option>10</option><option>50</option><option>100</option></select></span></div>
+<button class="oak-btn oak-btn--secondary" type="submit">Apply filters</button>
+</form>
+</section>
+<section data-region="results" aria-label="Search results" style="padding-block:clamp(var(--space-40),5vw,var(--space-56)) var(--space-80)">
+<div class="oak-stack">
+<div class="oak-banner oak-banner--warning" role="status" style="display:flex;gap:var(--gap-s);align-items:center;padding:var(--inset-m)"><img src="https://res.cloudinary.com/oak-web-application/image/upload/v1704901279/icons/zzszodmk7fvxm9xzzg9s.svg" alt="" style="width:var(--size-icon-m);height:var(--size-icon-m);filter:var(--filter-icon)" /><span>Search timed out — showing partial results. Try again or narrow your filters.</span></div>
+<div class="oak-cluster" style="align-items:baseline;justify-content:space-between">
+<h2 class="oak-heading-5" style="margin:0">Lessons</h2>
+<p class="oak-body-4" style="margin:0;color:var(--text-subdued)">25 results on this page · 143 ms</p>
+</div>
+<div class="oak-cluster oak-cluster--s" aria-label="Refine by facet">
+<button class="oak-btn oak-btn--secondary oak-btn--sm" type="button" style="border-radius:var(--radius-circle)">KS3 (12)</button>
+<button class="oak-btn oak-btn--secondary oak-btn--sm" type="button" style="border-radius:var(--radius-circle)">KS4 (13)</button>
+<button class="oak-btn oak-btn--secondary oak-btn--sm" type="button" style="border-radius:var(--radius-circle)">Maths (20)</button>
+<button class="oak-btn oak-btn--secondary oak-btn--sm" type="button" style="border-radius:var(--radius-circle)">Science (5)</button>
+</div>
+<ol role="list" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--gap-m)">
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-stack--s">
+<div class="oak-cluster oak-cluster--s"><span class="oak-tag oak-tag--mint">Lesson</span><span class="oak-tag oak-tag--grey">Maths</span><span class="oak-tag oak-tag--grey">KS3</span><span class="oak-tag oak-tag--grey">Year 8</span></div>
+<h3 class="oak-heading-6" style="margin:0">Expanding a pair of brackets</h3>
+<p class="oak-body-3" style="margin:0">…in this lesson we practise <mark style="background:var(--surface-decorative-5);color:inherit;border-radius:var(--radius-xs);padding:0 var(--space-2)">expanding brackets</mark> using the distributive law, before…</p>
+<p class="oak-body-4" style="margin:0;color:var(--text-subdued)">Unit: Algebraic expressions · rank 0.0324</p>
+</div></a></li>
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-stack--s">
+<div class="oak-cluster oak-cluster--s"><span class="oak-tag oak-tag--mint">Lesson</span><span class="oak-tag oak-tag--grey">Maths</span><span class="oak-tag oak-tag--grey">KS4</span><span class="oak-tag oak-tag--grey">Higher</span><span class="oak-tag oak-tag--grey">AQA</span></div>
+<h3 class="oak-heading-6" style="margin:0">Expanding double brackets</h3>
+<p class="oak-body-3" style="margin:0">…a common misconception when <mark style="background:var(--surface-decorative-5);color:inherit;border-radius:var(--radius-xs);padding:0 var(--space-2)">expanding double brackets</mark> is forgetting the product of…</p>
+<p class="oak-body-4" style="margin:0;color:var(--text-subdued)">Unit: Quadratic expressions · rank 0.0291</p>
+</div></a></li>
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-card--aqua oak-stack--s">
+<div class="oak-cluster oak-cluster--s"><span class="oak-tag oak-tag--white">Unit</span><span class="oak-tag oak-tag--grey">Maths</span><span class="oak-tag oak-tag--grey">KS3</span></div>
+<h3 class="oak-heading-6" style="margin:0">Algebraic expressions</h3>
+<p class="oak-body-3" style="margin:0">…simplifying, factorising and <mark style="background:var(--surface-decorative-5);color:inherit;border-radius:var(--radius-xs);padding:0 var(--space-2)">expanding brackets</mark> across six lessons…</p>
+<p class="oak-body-4" style="margin:0;color:var(--text-subdued)">6 lessons · rank 0.0187</p>
+</div></a></li>
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-card--lavender oak-stack--s">
+<div class="oak-cluster oak-cluster--s"><span class="oak-tag oak-tag--white">Thread</span><span class="oak-tag oak-tag--grey">Maths</span></div>
+<h3 class="oak-heading-6" style="margin:0">Algebraic thinking</h3>
+<p class="oak-body-4" style="margin:0;color:var(--text-subdued)">Progression strand · Years 1–11 · 14 units · rank 0.0141</p>
+</div></a></li>
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-card--lemon oak-stack--s">
+<div class="oak-cluster oak-cluster--s"><span class="oak-tag oak-tag--white">Programme</span><span class="oak-tag oak-tag--grey">Secondary</span></div>
+<h3 class="oak-heading-6" style="margin:0">maths-secondary</h3>
+<p class="oak-body-4" style="margin:0;color:var(--text-subdued)">KS3–KS4 · AQA, Edexcel, OCR · one programme per year group · rank 0.0117</p>
+</div></a></li>
+</ol>
+<nav aria-label="Pagination" class="oak-cluster" style="justify-content:space-between;align-items:center">
+<button class="oak-btn oak-btn--secondary oak-btn--sm" type="button" disabled="disabled"><img class="oak-btn__icon" src="https://res.cloudinary.com/oak-web-application/image/upload/v1707752509/icons/rbvzan0ozubmr4j0uqdn.svg" alt="" />Previous</button>
+<p class="oak-body-3" style="margin:0">Showing 1–25</p>
+<button class="oak-btn oak-btn--secondary oak-btn--sm" type="button">Next<img class="oak-btn__icon" src="https://res.cloudinary.com/oak-web-application/image/upload/v1707752509/icons/vk9xxxhnsltsickom6q9.svg" alt="" /></button>
+</nav>
+<div class="oak-empty"><strong>No results for "quantum basket weaving"</strong><span>Try a shorter query, or remove a filter or two — searches match lesson content as well as titles.</span></div>
+</div>
+</section>
+</main>
+<footer data-region="footer" style="background:var(--bg-primary)">
+<img src="./assets/header-underline.svg" alt="" style="display:block;width:100%;height:var(--space-4);filter:var(--filter-icon)" />
+<div class="oak-container" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--gap-l);padding-block:var(--space-32) var(--space-56)">
+<a href="https://www.thenational.academy" aria-label="Oak National Academy home"><img src="./assets/logo.svg" alt="" style="display:block;height:var(--size-icon-xxl);width:auto;filter:var(--filter-icon)" /></a>
+<address style="font-style:normal">
+<p class="oak-body-3-bold" style="margin:0">© Oak National Academy Limited, No 14174888</p>
+<p class="oak-body-4" style="margin:0">1 Scott Place, 2 Hardman Street, Manchester, M3 3AA</p>
+</address>
+</div>
+</footer>
+</div>
+</x-dc>
+</body>
+</html>

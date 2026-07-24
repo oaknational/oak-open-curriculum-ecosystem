@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Accessibility" name="Accessibility charter" subtitle="The holistic commitment — what the system guarantees, and what every build must still do" viewport="920x620" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:24px;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans)}
+.lede{font:var(--weight-semibold) var(--font-size-4)/var(--leading-28) var(--font-sans);letter-spacing:var(--tracking-heading);margin:0 0 4px;border-bottom:var(--border-solid-xl) solid var(--border-accent);align-self:flex-start;display:inline-block;padding-bottom:4px}
+.sub{font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-subdued);margin:6px 0 16px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.col{border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-m2);padding:16px}
+.col h2{font:var(--weight-semibold) var(--font-size-3)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-heading);margin:0 0 10px;display:flex;gap:8px;align-items:center}
+.col.sys{background:var(--surface-decorative-1-subtle)}
+.col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+.col li{font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-body);position:relative;padding-left:16px}
+.col li::before{content:"";position:absolute;left:0;top:6px;width:8px;height:8px;background:var(--color-accent);border:var(--border-solid-s) solid var(--border-primary);border-radius:var(--radius-xs)}
+.col li strong{font-weight:var(--weight-bold)}
+.foot{margin:14px 0 0;font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-subdued)}
+</style></head><body>
+<p class="lede">Access is the point</p>
+<p class="sub">All learners have a fundamental right to access education. WCAG 2.2 AA is the floor in every theme and every re-brand; AAA is the aspiration. Contrast is one clause — the commitment is perceivable, operable, understandable, robust.</p>
+<div class="cols">
+<div class="col sys">
+<h2>The system guarantees</h2>
+<ul>
+<li><strong>Contrast</strong> AA–AAA in all four themes, machine-checked by the contrast audit card.</li>
+<li><strong>Focus</strong> — double ring on every interactive class, forced-colors safe. Not removable.</li>
+<li><strong>Targets</strong> ≥44px (md 48px); sm is dense-desktop only.</li>
+<li><strong>State ≠ colour alone</strong> — fills always pair with border + icon + text.</li>
+<li><strong>Quiet motion</strong> (120/200ms) that collapses under reduced-motion.</li>
+<li><strong>OS preferences honoured</strong> — prefers-contrast, forced-colors, colour-scheme.</li>
+<li><strong>Legible type</strong> — Lexend, weight rules on fills, ≥1.5 body line-height, --measure-prose.</li>
+<li><strong>Colour-safe theme</strong> for red–green colour-vision deficiency.</li>
+</ul>
+</div>
+<div class="col">
+<h2>Every build must still</h2>
+<ul>
+<li><strong>Semantic HTML first</strong> — real buttons, links, labels; headings in order; ARIA only for genuine gaps.</li>
+<li><strong>Keyboard</strong> — everything reachable, logical order, no traps, visible skip link.</li>
+<li><strong>Forms</strong> — labels, hints and errors wired with aria-describedby; errors say how to fix.</li>
+<li><strong>Images teach or vanish</strong> — meaningful alt text, or alt="" for decoration.</li>
+<li><strong>Announce changes</strong> — role="status"/"alert" for dynamic content.</li>
+<li><strong>Reflow</strong> — usable at 400% zoom / 320px width.</li>
+<li><strong>Recomposition sanity</strong> — composition maps move regions visually; DOM order stays canonical, so tab through and check the focus path still makes sense.</li>
+<li><strong>Plain language</strong> — sentence case, age-appropriate reading level, consistent patterns.</li>
+<li><strong>Time and speed</strong> — no time limits on learning; fast on low-end devices.</li>
+</ul>
+</div>
+</div>
+<p class="foot"><strong>Support policy (falsifiable):</strong> current stable Chrome, Firefox, Edge, Safari + the last 4 Safari majors; CSS degrades gracefully where <code>light-dark()</code>/<code>color-mix()</code> are missing and <code>oak-theme.js</code> failing to load must leave a working light-theme page (JS is enhancement, never structure). Tested pairs: NVDA+Chrome, VoiceOver+Safari, TalkBack+Chrome; 400% zoom / 320px reflow; Windows forced colors.</p>
+<p class="foot">The white-label contract (brand.css) carries all of this with it — a re-brand that fails any of it is not finished.</p>
+</body></html>

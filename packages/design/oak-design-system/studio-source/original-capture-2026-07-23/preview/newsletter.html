@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Newsletter form" subtitle="Inline registration / sign-up banner" viewport="760x260" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); }
+  .nl { background:var(--oak-lavender30); border:3px solid var(--border-primary); border-radius:16px; padding:28px 32px; box-shadow:8px 8px 0 var(--oak-black); max-width:660px; }
+  .nl h2 { margin:0 0 8px; font:600 26px/32px var(--font-sans); letter-spacing:0.0115rem; color:var(--text-primary); }
+  .nl p { margin:0 0 20px; font:300 16px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .form { display:flex; gap:12px; flex-wrap:wrap; }
+  .form input { flex:1; min-width:220px; height:56px; padding:0 16px; border:2px solid var(--border-primary); border-radius:4px;
+    font:300 18px/24px var(--font-sans); letter-spacing:-0.005rem; background:var(--bg-primary); color:var(--text-subdued); }
+  .form button { height:56px; padding:0 24px; border:2px solid var(--border-primary); border-radius:4px; background:var(--bg-inverted); color:var(--oak-white);
+    font:700 16px/20px var(--font-sans); letter-spacing:-0.010em; cursor:pointer; box-shadow:var(--shadow-lemon); display:inline-flex; align-items:center; gap:8px; }
+  .form button img { width:22px; height:22px; filter:invert(1); }
+</style></head>
+<body>
+  <div class="nl">
+    <h2>Get Oak in your inbox</h2>
+    <p>New lessons, curriculum updates and teaching tips — about once a month. No spam, ever.</p>
+    <div class="form">
+      <input value="name@school.uk" readonly>
+      <button>Sign up<img src="../assets/icons/arrow-right.svg" alt=""></button>
+    </div>
+  </div>
+</body></html>

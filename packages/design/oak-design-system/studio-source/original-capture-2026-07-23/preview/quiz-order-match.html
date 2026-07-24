@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Quiz: order & match" subtitle="Order (drag handles) and match (paired) question types" viewport="760x340" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; gap:28px; flex-wrap:wrap; }
+  .col { flex:1; min-width:300px; }
+  h4 { font:700 11px/14px var(--font-sans); letter-spacing:0.02em; text-transform:uppercase; color:var(--text-subdued); margin:0 0 12px; }
+  .ord { display:flex; align-items:center; gap:14px; padding:14px 16px; border:2px solid var(--border-primary); border-radius:8px;
+    background:var(--bg-primary); margin-bottom:10px; box-shadow:var(--shadow-lemon); font:700 16px/22px var(--font-sans); letter-spacing:-0.005rem; }
+  .num { width:32px; height:32px; flex:0 0 32px; border-radius:100px; background:var(--oak-lemon); border:2px solid var(--border-primary);
+    display:inline-flex; align-items:center; justify-content:center; font:700 15px/1 var(--font-sans); }
+  .grip { margin-left:auto; display:flex; flex-direction:column; gap:3px; }
+  .grip span { display:block; width:18px; height:2px; background:var(--oak-grey60); }
+  .pair { display:flex; gap:10px; align-items:stretch; margin-bottom:10px; }
+  .pair .l, .pair .r { flex:1; padding:14px 16px; border:2px solid var(--border-primary); border-radius:8px; background:var(--bg-primary);
+    font:700 15px/20px var(--font-sans); letter-spacing:-0.005rem; }
+  .pair .r { background:var(--oak-aqua30); }
+  .pair .link { align-self:center; width:18px; height:2px; background:var(--bg-inverted); flex:0 0 18px; }
+</style></head>
+<body>
+  <div class="col">
+    <h4>Order</h4>
+    <div class="ord"><span class="num">1</span> Evaporation <span class="grip"><span></span><span></span><span></span></span></div>
+    <div class="ord"><span class="num">2</span> Condensation <span class="grip"><span></span><span></span><span></span></span></div>
+    <div class="ord"><span class="num">3</span> Precipitation <span class="grip"><span></span><span></span><span></span></span></div>
+  </div>
+  <div class="col">
+    <h4>Match</h4>
+    <div class="pair"><div class="l">Heart</div><span class="link"></span><div class="r">Pumps blood</div></div>
+    <div class="pair"><div class="l">Lungs</div><span class="link"></span><div class="r">Gas exchange</div></div>
+    <div class="pair"><div class="l">Kidneys</div><span class="link"></span><div class="r">Filter waste</div></div>
+  </div>
+</body></html>

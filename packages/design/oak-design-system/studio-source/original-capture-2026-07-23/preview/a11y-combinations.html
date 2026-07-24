@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Accessibility" name="Accessible combinations" subtitle="Legal text-on-fill pairings, focus ring, hit targets" viewport="760x460" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:22px 24px;background:var(--bg-primary);font-family:var(--font-sans);color:var(--text-primary)}
+h4{font:400 11px/14px var(--font-mono);color:var(--oak-grey50);margin:0 0 10px;text-transform:uppercase;letter-spacing:0.06em}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.sw{border:1px solid var(--oak-grey30);border-radius:6px;padding:10px 12px;font:400 14px/20px var(--font-sans)}
+.sw .ratio{display:block;font:500 11px/16px var(--font-mono);margin-top:4px;opacity:0.75}
+.rules{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.rule{display:flex;gap:10px;align-items:flex-start;font:300 14px/20px var(--font-sans);letter-spacing:-0.005rem}
+.rule img{width:18px;height:18px;flex:0 0 18px;margin-top:1px}
+.row{display:flex;gap:16px;align-items:center}
+</style></head>
+<body>
+<h4>Text on fills — all AA at body size (contrast vs #222)</h4>
+<div class="swatches">
+<div class="sw" style="background:var(--oak-lemon)">On lemon<span class="ratio">12.7 : 1</span></div>
+<div class="sw" style="background:var(--oak-mint)">On mint<span class="ratio">12.9 : 1</span></div>
+<div class="sw" style="background:var(--oak-lavender)">On lavender<span class="ratio">8.1 : 1</span></div>
+<div class="sw" style="background:var(--bg-primary)">Navy link on white<span class="ratio" style="color:var(--text-link)">#0d24c4 · 10.2 : 1</span></div>
+</div>
+<h4>Rules</h4>
+<div class="rules">
+<div class="rule"><img src="../assets/icons/tick.svg" alt="Do">Text on any pastel fill is <strong>#222 at weight 400+</strong>. Never white, never weight 300 below 18px.</div>
+<div class="rule"><img src="../assets/icons/tick.svg" alt="Do">Body weight 300 lives on white / grey10 surfaces at 16px+ only.</div>
+<div class="rule"><img src="../assets/icons/cross.svg" alt="Don't">Green, red, navy and amber are never text-on-pastel — pair them with white or their own 30-tint.</div>
+<div class="rule"><img src="../assets/icons/cross.svg" alt="Don't">Colour never carries meaning alone — quiz states pair fill with border + icon.</div>
+</div>
+<h4>Focus &amp; hit targets — tab to try</h4>
+<div class="row">
+<button class="oak-btn">44px+ target</button>
+<button class="oak-btn oak-btn--secondary oak-btn--sm">sm = dense desktop only</button>
+<label class="oak-choice"><input type="checkbox" class="oak-checkbox" checked>Double focus ring</label>
+</div>
+</body></html>

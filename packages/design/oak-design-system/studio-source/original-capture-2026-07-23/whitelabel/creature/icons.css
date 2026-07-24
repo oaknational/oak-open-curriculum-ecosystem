@@ -1,0 +1,8 @@
+/* Educate My Creature — brand icon set.
+   Strategy: icon FONT via currentColor (Material Symbols Rounded — openly
+   licensed, Apache 2.0 — filled,
+   weight 600 — chunky and toy-like). currentColor means icons follow every
+   theme with no filter juggling. Always aria-hidden with adjacent real text,
+   or an aria-label on the control. */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,1,0&display=block');
+.emc-icon{font-family:"Material Symbols Rounded";font-weight:600;font-style:normal;font-size:var(--size-icon-m);line-height:1;display:inline-block;vertical-align:middle;color:currentColor;font-variation-settings:'FILL' 1;-webkit-font-smoothing:antialiased;user-select:none}

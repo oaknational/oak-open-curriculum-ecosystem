@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Worksheet" description="Printable A4 pupil worksheet: keywords, tasks with answer space, challenge — exports straight to PDF" -->
+<helmet>
+<script src="./ds-base.js"></script>
+<style>body{margin:0}</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="1.8cm" hint-size="100%,1100px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-24);border-bottom:var(--border-solid-l) solid var(--border-primary);padding-bottom:var(--space-16);font-family:var(--font-sans);color:var(--text-primary)">
+  <div>
+    <p style="margin:0 0 var(--space-4);font:var(--weight-display) var(--font-size-1)/var(--leading-16) var(--font-display);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-subdued)">Science · Year 4 · States of matter</p>
+    <h1 style="margin:0;font:var(--weight-display) var(--font-size-6)/var(--leading-32) var(--font-display);letter-spacing:var(--tracking-heading)">Evaporation and condensation</h1>
+  </div>
+  <img src="../../assets/logo-acorn-black.svg" alt="Oak National Academy" style="height:var(--size-target-min);flex:0 0 auto">
+</div>
+<div style="display:flex;gap:var(--space-24);margin-top:var(--space-12);font:var(--weight-regular) var(--font-size-2)/var(--leading-28) var(--font-sans);color:var(--text-primary)">
+  <span style="flex:1">Name: <span style="display:inline-block;width:70%;border-bottom:var(--border-solid-s) solid var(--border-neutral)"></span></span>
+  <span style="width:var(--space-180)">Date: <span style="display:inline-block;width:60%;border-bottom:var(--border-solid-s) solid var(--border-neutral)"></span></span>
+</div>
+<div style="border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-m2);background:var(--color-accent-subtle);padding:var(--space-12) var(--space-16);margin-top:var(--space-16);font-family:var(--font-sans);color:var(--text-primary)">
+  <p style="margin:0 0 var(--space-4);font:var(--weight-bold) var(--font-size-2)/var(--leading-20) var(--font-sans)">Keywords</p>
+  <p style="margin:0;font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans)"><strong style="font-weight:var(--weight-bold)">evaporation</strong> — when a liquid turns into a gas, without boiling · <strong style="font-weight:var(--weight-bold)">condensation</strong> — when a gas cools and turns back into a liquid · <strong style="font-weight:var(--weight-bold)">water vapour</strong> — water when it is a gas</p>
+</div>
+<div style="display:flex;gap:var(--space-12);align-items:baseline;margin-top:var(--space-24);font-family:var(--font-sans);color:var(--text-primary)">
+  <span style="width:var(--space-32);height:var(--space-32);flex:0 0 var(--space-32);border-radius:var(--radius-circle);border:var(--border-solid-m) solid var(--border-primary);background:var(--color-accent);display:inline-flex;align-items:center;justify-content:center;font:var(--weight-bold) var(--font-size-2)/var(--leading-none) var(--font-sans);align-self:flex-start">1</span>
+  <div style="flex:1">
+    <p style="margin:0 0 var(--space-8);font:var(--weight-regular) var(--font-size-3)/var(--leading-24) var(--font-sans)">Tick the process that turns water vapour back into liquid water.</p>
+    <p style="margin:0 0 var(--space-8);font:var(--weight-light) var(--font-size-2)/var(--leading-24) var(--font-sans)"><span style="display:inline-block;width:var(--space-16);height:var(--space-16);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-xs);vertical-align:-0.125em;margin-right:var(--space-8)"></span>evaporation</p>
+    <p style="margin:0 0 var(--space-8);font:var(--weight-light) var(--font-size-2)/var(--leading-24) var(--font-sans)"><span style="display:inline-block;width:var(--space-16);height:var(--space-16);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-xs);vertical-align:-0.125em;margin-right:var(--space-8)"></span>condensation</p>
+    <p style="margin:0;font:var(--weight-light) var(--font-size-2)/var(--leading-24) var(--font-sans)"><span style="display:inline-block;width:var(--space-16);height:var(--space-16);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-xs);vertical-align:-0.125em;margin-right:var(--space-8)"></span>melting</p>
+  </div>
+</div>
+<div style="display:flex;gap:var(--space-12);align-items:baseline;margin-top:var(--space-24);font-family:var(--font-sans);color:var(--text-primary)">
+  <span style="width:var(--space-32);height:var(--space-32);flex:0 0 var(--space-32);border-radius:var(--radius-circle);border:var(--border-solid-m) solid var(--border-primary);background:var(--color-accent);display:inline-flex;align-items:center;justify-content:center;font:var(--weight-bold) var(--font-size-2)/var(--leading-none) var(--font-sans);align-self:flex-start">2</span>
+  <div style="flex:1">
+    <p style="margin:0 0 var(--space-4);font:var(--weight-regular) var(--font-size-3)/var(--leading-24) var(--font-sans)">A puddle disappears on a sunny day. Explain where the water goes. Use the keywords <strong style="font-weight:var(--weight-bold)">evaporation</strong> and <strong style="font-weight:var(--weight-bold)">water vapour</strong>.</p>
+    <div style="height:var(--space-32);border-bottom:var(--border-solid-s) solid var(--border-neutral)"></div>
+    <div style="height:var(--space-32);border-bottom:var(--border-solid-s) solid var(--border-neutral)"></div>
+    <div style="height:var(--space-32);border-bottom:var(--border-solid-s) solid var(--border-neutral)"></div>
+    <div style="height:var(--space-32);border-bottom:var(--border-solid-s) solid var(--border-neutral)"></div>
+  </div>
+</div>
+<div style="display:flex;gap:var(--space-12);align-items:baseline;margin-top:var(--space-24);font-family:var(--font-sans);color:var(--text-primary)">
+  <span style="width:var(--space-32);height:var(--space-32);flex:0 0 var(--space-32);border-radius:var(--radius-circle);border:var(--border-solid-m) solid var(--border-primary);background:var(--color-accent);display:inline-flex;align-items:center;justify-content:center;font:var(--weight-bold) var(--font-size-2)/var(--leading-none) var(--font-sans);align-self:flex-start">3</span>
+  <div style="flex:1">
+    <p style="margin:0 0 var(--space-8);font:var(--weight-regular) var(--font-size-3)/var(--leading-24) var(--font-sans)">Draw and label what happens to the water particles as the puddle dries.</p>
+    <div style="height:var(--space-160);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-m2);background:repeating-linear-gradient(45deg,var(--bg-primary) 0 var(--space-16),var(--bg-subtle) var(--space-16) var(--space-32));display:flex;align-items:flex-end;justify-content:flex-end;padding:var(--space-8)"><span style="font:var(--weight-regular) var(--font-size-1)/var(--leading-16) var(--font-mono);color:var(--text-subdued)">draw here</span></div>
+  </div>
+</div>
+<div style="display:flex;gap:var(--space-12);align-items:baseline;margin-top:var(--space-24);font-family:var(--font-sans);color:var(--text-primary);break-inside:avoid">
+  <span style="width:var(--space-32);height:var(--space-32);flex:0 0 var(--space-32);border-radius:var(--radius-circle);border:var(--border-solid-m) solid var(--border-primary);background:var(--surface-decorative-1);display:inline-flex;align-items:center;justify-content:center;font:var(--weight-bold) var(--font-size-1)/var(--leading-none) var(--font-sans);align-self:flex-start">★</span>
+  <div style="flex:1">
+    <p style="margin:0 0 var(--space-4);font:var(--weight-regular) var(--font-size-3)/var(--leading-24) var(--font-sans)"><strong style="font-weight:var(--weight-bold)">Challenge:</strong> Why do drops of water appear on the outside of a cold drink can? Explain using the word <strong style="font-weight:var(--weight-bold)">condensation</strong>.</p>
+    <div style="height:var(--space-32);border-bottom:var(--border-solid-s) solid var(--border-neutral)"></div>
+    <div style="height:var(--space-32);border-bottom:var(--border-solid-s) solid var(--border-neutral)"></div>
+  </div>
+</div>
+<p slot="footer" style="margin:0;display:flex;justify-content:space-between;font:var(--weight-light) var(--font-size-1)/var(--leading-16) var(--font-sans);color:var(--text-subdued)">
+  <span>Oak National Academy · free, adaptable resources</span>
+  <span>Evaporation and condensation · worksheet</span>
+</p>
+</x-import>
+</x-dc>
+</body>
+</html>

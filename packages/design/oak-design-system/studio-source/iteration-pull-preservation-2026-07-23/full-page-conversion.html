@@ -1,0 +1,836 @@
+<!-- @dsCard group="Explorations" -->
+<!doctype html>
+<html lang="en-GB" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Oak Curriculum MCP (HTTP)</title>
+    <meta name="theme-color" content="rgb(190, 242, 189)" />
+    <link rel="icon" href="/favicons/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="./theme-enhancements.css" />
+    <script src="./theme-control.js" defer></script>
+    <style>
+/* System gap: bands ship --band-pad: 0. The permanent cure lands upstream via
+   /design-sync; this override carries the intended values (OWA programme-header
+   padding: 40 mobile / 64 desktop) until it does. */
+[data-page='home'] { --band-pad: var(--space-40); --main-gap: var(--space-40); }
+@media (min-width: 960px) { [data-page='home'] { --band-pad: var(--space-64); --main-gap: var(--space-56); } }
+
+/* Content rhythm — full-bleed colour bands (homepage grammar) + generous section gaps */
+.band-lemon { --band-bg: var(--surface-decorative-5-subtle); }
+.connect { max-width: var(--measure-prose); }
+.connect pre, .connect code { background: var(--bg-primary); }
+.connect pre code { background: none; }
+.content-cards { margin-top: var(--space-56); }
+[data-region='content'] { padding-bottom: var(--space-80); }
+
+/* Site chrome — matches OWA TopNavMinimal / LayoutSiteFooter grammar, tokens only */
+.site-tabs { background: var(--bg-btn-primary); display: flex; gap: var(--gap-m); padding: var(--space-16) clamp(var(--space-20), 4vw, var(--space-40)) 0; }
+.site-tabs .oak-btn { border-bottom-left-radius: var(--radius-square); border-bottom-right-radius: var(--radius-square); border-bottom-width: var(--border-solid-none); }
+.site-nav { background: var(--bg-primary); border-bottom: var(--border-solid-s) solid var(--border-neutral-lighter); display: flex; align-items: center; gap: var(--gap-l); padding: var(--space-16) clamp(var(--space-20), 4vw, var(--space-40)); }
+.site-nav-logo img, .site-footer-inner img { display: block; height: var(--size-icon-xxl); width: auto; filter: var(--filter-icon); }
+.site-nav-back { margin-left: auto; border-radius: var(--radius-circle); }
+.site-footer-meta { font-style: normal; }
+[data-region='footer'] { background: var(--bg-primary); }
+.site-footer-rule { display: block; width: 100%; height: var(--space-4); filter: var(--filter-icon); }
+.site-footer-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--gap-l); padding-block: var(--space-32) var(--space-56); }
+.site-footer-meta p { margin: 0; }
+
+/* Hero copy column — OWA Header: 24px gap, left-aligned, own margins off */
+.hero-copy { align-items: flex-start; }
+.breadcrumbs { font: var(--type-body-3); letter-spacing: var(--tracking-body); align-items: center; margin-bottom: var(--space-24); }
+.breadcrumbs .oak-link { color: var(--text-primary); }
+.hero-copy h1, .hero-copy p { margin: 0; }
+@media (max-width: 640px) { .hero-copy h1 { font: var(--type-heading-4); } }
+
+/* Code — the system ships no code surface yet; composed from tokens only */
+code { font-family: var(--font-mono); font-size: inherit; font-weight: var(--weight-regular); letter-spacing: var(--tracking-heading); background: var(--bg-subtle); border: var(--border-solid-s) solid var(--border-neutral-lighter); border-radius: var(--radius-xs); padding: var(--space-2) var(--space-4); }
+pre { background: var(--bg-subtle); border: var(--border-solid-s) solid var(--border-neutral-lighter); border-radius: var(--radius-container); padding: var(--inset-m); margin: 0; overflow-x: auto; }
+pre code { font: var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-mono); letter-spacing: var(--tracking-heading); background: none; border: none; border-radius: 0; padding: 0; }
+
+/* Card-accordions: card inset governs; oak-accordion control padding stands down */
+.oak-card.oak-accordion { padding: 0; }
+.oak-card.oak-accordion > summary { padding: var(--card-pad); }
+.oak-card.oak-accordion > .oak-accordion__body { padding: 0 var(--card-pad) var(--card-pad); }
+.oak-accordion summary h2 { margin: 0; }
+
+/* Interior lists (Resources / Tools) */
+.tool-list { margin: var(--space-8) 0 0; }
+ul.tool-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--gap-m); }
+ul.tool-list li { margin: 0; }
+div.tool-list { display: flex; flex-direction: column; gap: var(--gap-s); }
+.tool-list code { font-weight: var(--weight-semibold); }
+.resource-title { display: block; font: var(--weight-semibold) var(--font-size-3)/var(--leading-24) var(--font-sans); letter-spacing: var(--tracking-body); margin-top: var(--space-4); }
+.tool-desc { display: block; font: var(--type-body-3); letter-spacing: var(--tracking-body); margin-top: var(--space-4); }
+
+/* Nested disclosures: stand down the inherited .oak-accordion summary treatment; dense rows, self-scoped chevrons */
+.tool-list summary { justify-content: flex-start; min-height: var(--size-target-dense); padding: var(--space-4) 0; font: var(--type-body-2); letter-spacing: var(--tracking-body); }
+.tool-list summary::after { content: none; }
+.tool-list summary::before { content: ''; width: var(--select-chevron); height: var(--select-chevron); flex: 0 0 auto; border: solid var(--text-primary); border-width: 0 var(--border-solid-m) var(--border-solid-m) 0; transform: rotate(-45deg); margin-right: var(--space-8); transition: transform var(--motion-quick) var(--ease-standard); }
+.tool-list details[open] > summary::before { transform: rotate(45deg); }
+.tool-item > .tool-desc { margin: 0 0 var(--space-8); padding-left: calc(var(--select-chevron) + var(--space-8) + var(--space-2)); }
+.tool-how-to-use { margin-top: var(--space-8); }
+.tool-how-to-use > summary { font: var(--type-label); letter-spacing: var(--tracking-body); color: var(--text-subdued); }
+.tool-how-to-use > summary::before { border-color: var(--text-subdued); }
+.tool-how-to-use-body { margin-top: var(--space-4); font: var(--type-body-3); letter-spacing: var(--tracking-body); white-space: pre-wrap; }
+
+/* Group labels within Tools */
+.tool-group-label { font: var(--type-heading-7); letter-spacing: var(--tracking-heading); margin: var(--space-24) 0 0; }
+.tool-group-label.muted { color: var(--text-subdued); }
+.tool-group-hint { font: var(--type-body-3); letter-spacing: var(--tracking-body); color: var(--text-subdued); margin: var(--space-4) 0 var(--space-8); }
+.tool-divider { border: none; border-top: var(--border-solid-s) solid var(--border-neutral-lighter); margin: var(--space-24) 0; }
+    </style>
+      <meta name="app-version" content="1.82.4" />
+</head>
+  <body class="oak-scope">
+  <div class="oak-canvas" data-page="home">
+    <header data-region="masthead">
+      <a class="oak-skip-link" href="#main">Skip to content</a>
+      <nav class="site-tabs" aria-label="Oak site areas">
+        <a class="oak-btn oak-btn--secondary" aria-current="page" href="https://www.thenational.academy/teachers">Teachers</a>
+        <a class="oak-btn" href="https://www.thenational.academy">Back to www</a>
+      </nav>
+      <nav class="site-nav" aria-label="Oak National Academy">
+        <a class="site-nav-logo" href="https://www.thenational.academy" aria-label="Oak National Academy home"><img src="./assets/logo.svg" alt="" /></a>
+        <a class="oak-btn oak-btn--secondary oak-btn--sm site-nav-back" href="https://www.thenational.academy">Back to the main Oak website<img class="oak-btn__icon" src="https://res.cloudinary.com/oak-web-application/image/upload/v1699953892/icons/hlxmejse3mcr4tqo6t8u.svg" alt="" /></a>
+        <span class="oak-select-wrap"><select class="oak-select" id="theme-control" aria-label="Colour theme" style="width:auto;min-width:var(--space-120)"><option value="light" selected="selected">Light</option><option value="dark">Dark</option><option value="system">System</option><option value="high-contrast">High contrast</option></select></span>
+      </nav>
+    </header>
+    <main data-region="main" class="oak-main" id="main" style="align-content: start" aria-labelledby="title">
+      <section data-region="hero" class="oak-band">
+      <div class="oak-container oak-stack oak-stack--l hero-copy">
+        <nav class="breadcrumbs oak-cluster oak-cluster--s" aria-label="Breadcrumbs"><a class="oak-link" href="https://www.thenational.academy">Home</a><span aria-hidden="true">&rsaquo;</span><span aria-current="page">Oak Curriculum MCP</span></nav>
+        <span class="oak-tag oak-tag--white">Invite Only Private Beta</span>
+        <h1 id="title" class="oak-heading-1">Oak Curriculum MCP</h1>
+        <p class="oak-body-2 oak-prose">Designed for educators, this service connects your AI assistant to Oak's high quality, free, fully sequenced and <a class="oak-link" target="_blank" rel="noopener noreferrer" href="https://open-api.thenational.academy/docs/about-oaks-api/terms">openly licenced</a> curriculum resources — thousands of lessons, units, and assets across subjects and key stages.</p>
+      </div>
+    </section>
+      <section data-region="content">
+        <div class="oak-band band-lemon">
+          <div class="oak-container">
+            <section class="oak-stack--s connect" aria-labelledby="connect-title">
+        <h2 class="oak-heading-4" id="connect-title">Connect the Oak Curriculum MCP to your AI assistant</h2>
+        <p class="oak-body-4">Status: ok • Route: <code>/mcp</code> • Auth: OAuth 2.1</p>
+        <p>Add this to your MCP client configuration:</p>
+        <pre aria-label="JSON configuration snippet"><code>{
+  "mcpServers": {
+    "oak-curriculum": {
+      "type": "http",
+      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
+    }
+  }
+}</code></pre>
+        <p>This server uses <a class="oak-link" href="/.well-known/oauth-protected-resource">OAuth 2.1 authorization</a>. You will be prompted to log in. Access is currently for internal staff or by invitation.</p>
+            </section>
+          </div>
+        </div>
+        <div class="oak-container oak-stack content-cards">
+
+      
+    <details class="oak-card oak-accordion">
+      <summary>
+        <h2 class="oak-heading-5">Resources (6)</h2>
+      </summary>
+      <div class="oak-accordion__body">
+      <p>Resources available via MCP resources/read:</p>
+      <ul class="tool-list" role="list">
+      <li>
+        <code>docs://oak/getting-started.md</code>
+        <span class="resource-title">Getting Started with Oak Curriculum</span>
+        <span class="tool-desc">Introduction to the Oak Curriculum MCP server, authentication, and first steps.</span>
+      </li>
+      <li>
+        <code>curriculum://model</code>
+        <span class="resource-title">Oak Curriculum Model</span>
+        <span class="tool-desc">Combined curriculum orientation: domain model (key stages, subjects, entity hierarchy, property graph) and tool usage guidance (categories, workflows, tips).</span>
+      </li>
+      <li>
+        <code>eef://interpretation</code>
+        <span class="resource-title">EEF Toolkit — Interpretation Guide</span>
+        <span class="tool-desc">How to interpret and faithfully apply EEF Teaching and Learning Toolkit evidence: the corpus methodology, caveats, source attribution, and a complete strand index, plus agent reasoning guidance and the graph field names. Read context for grounding get-eef-evidence; the agent reasons over the evidence.</span>
+      </li>
+      <li>
+        <code>docs://oak/guidance/find-lessons.md</code>
+        <span class="resource-title">Agent guidance: find lessons</span>
+        <span class="tool-desc">Workflow guidance for the assistant: find curriculum lessons on a topic the teacher names, across all subjects and key stages, and surface the most relevant with summaries.</span>
+      </li>
+      <li>
+        <code>docs://oak/guidance/explore-curriculum.md</code>
+        <span class="resource-title">Agent guidance: explore the curriculum</span>
+        <span class="tool-desc">Workflow guidance for the assistant: explore what Oak has on a topic across lessons, units, and threads in parallel, then drill into the most relevant results.</span>
+      </li>
+      <li>
+        <code>docs://oak/guidance/learning-progression.md</code>
+        <span class="resource-title">Agent guidance: learning progression</span>
+        <span class="tool-desc">Workflow guidance for the assistant: understand how a concept builds across year groups by walking progression threads and mapping prerequisite dependencies.</span>
+      </li>
+      </ul>
+      </div>
+    </details>
+      
+    <details class="oak-card oak-accordion">
+      <summary>
+        <h2 class="oak-heading-5">Tools (42)</h2>
+      </summary>
+      <div class="oak-accordion__body">
+      <p>The following tools are available via the MCP protocol:</p>
+      <h3 class="tool-group-label">Curriculum tools</h3>
+      <p class="tool-group-hint">Higher-level tools that combine multiple API calls</p>
+      <div class="tool-list">
+      <details class="tool-item">
+        <summary><code>get-curriculum-model</code></summary>
+        <div class="tool-desc">Returns a complete orientation to Oak National Academy&#039;s curriculum: domain model (key stages, subjects, entity hierarchy, property graph) AND tool usage guidance (categories, workflows, tips).
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">You MUST call this tool before using other curriculum tools.
+
+Use this when you need to understand:
+- The Oak curriculum structure (key stages, subjects, units, lessons, threads)
+- Which tools are available and how to use them
+- Common workflows for finding and using curriculum content
+- How to interpret ID formats for the &#039;fetch&#039; tool
+
+Do NOT use for:
+- Fetching actual curriculum content (use &#039;search&#039; or &#039;fetch&#039;)
+- Looking up specific lessons, units, or resources</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>browse-curriculum</code></summary>
+        <div class="tool-desc">Browse what&#039;s available in Oak&#039;s curriculum without searching.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">PREREQUISITE: You MUST call `get-curriculum-model` first to understand the curriculum domain.
+
+Returns structured facet data showing subjects, key stages, sequences (programmes),
+units, and lesson counts. Useful for orientation and discovery.
+
+Use this when:
+- The teacher wants to see what&#039;s available (&quot;What subjects do you have?&quot;)
+- The teacher wants to browse a subject (&quot;Show me the maths curriculum&quot;)
+- The teacher wants to see what&#039;s at a key stage (&quot;What&#039;s in KS2?&quot;)
+- You need to understand curriculum structure before searching
+
+Do NOT use for:
+- Searching for specific content (use &#039;search&#039; with a query)
+- Getting full lesson details (use &#039;fetch&#039;)
+- Understanding the domain model (use &#039;get-curriculum-model&#039;)
+
+NATURAL LANGUAGE MAPPING EXAMPLES:
+- &quot;What subjects are available?&quot; → no arguments (returns all facets)
+- &quot;Show me KS2 science&quot; → { subject: &#039;science&#039;, keyStage: &#039;ks2&#039; }
+- &quot;What&#039;s in the maths curriculum?&quot; → { subject: &#039;maths&#039; }
+- &quot;What subjects are at Key Stage 3?&quot; → { keyStage: &#039;ks3&#039; }
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host&#039;s per-result token limit. Pass `subject` and/or `keyStage` to narrow; an unfiltered call returns the whole curriculum.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>explore-topic</code></summary>
+        <div class="tool-desc">Explore a topic across the entire Oak curriculum in one call.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">PREREQUISITE: You MUST call `get-curriculum-model` first to understand the curriculum domain.
+
+Searches lessons, units, AND learning threads in parallel for a topic,
+returning a unified topic map showing what&#039;s available across all scopes.
+Returns a small set from each scope (top 5) for a quick overview.
+
+Use this when:
+- The teacher says &quot;What does Oak have about volcanos?&quot;
+- The teacher says &quot;I want to teach about electricity&quot;
+- You need to discover what content exists before drilling down
+- The teacher&#039;s intent doesn&#039;t clearly map to one scope
+- The teacher mentions a subject and you need cross-scope results (pass the subject parameter explicitly)
+
+Do NOT use for:
+- Precise search in a single scope (use &#039;search&#039; with a specific scope)
+- Browsing without a topic (use &#039;browse-curriculum&#039;)
+- Fetching known content by ID (use &#039;fetch&#039;)
+- Understanding the curriculum structure (use &#039;get-curriculum-model&#039;)
+
+NATURAL LANGUAGE MAPPING EXAMPLES:
+- &quot;What does Oak have about volcanos?&quot; → { query: &#039;volcanos&#039; }
+- &quot;Explore fractions across the curriculum&quot; → { query: &#039;fractions&#039;, subject: &#039;maths&#039; }
+- &quot;Explore maths topics&quot; → { query: &#039;topics&#039;, subject: &#039;maths&#039; }
+- &quot;I want to teach about electricity in KS3&quot; → { query: &#039;electricity&#039;, keyStage: &#039;ks3&#039; }
+- &quot;What can you tell me about the Romans?&quot; → { query: &#039;the Romans&#039; }
+
+NEXT STEPS AFTER EXPLORE:
+- Use search(scope: &#039;lessons&#039;) for more lesson results
+- Use search(scope: &#039;threads&#039;) for progression details
+- Use fetch(lesson:slug) for full lesson content
+- Use get-thread-progressions for ordered unit sequences</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>search</code></summary>
+        <div class="tool-desc">Search Oak&#039;s curriculum using semantic search across all four content indexes.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">PREREQUISITE: You MUST call `get-curriculum-model` first to understand the curriculum domain.
+
+Required parameters: `scope` (which index to search) and `query` (your search query). For `threads` scope, `query` may be omitted if `subject` or `keyStage` is provided.
+
+SCOPE SELECTION — choose the right scope for the teacher&#039;s intent:
+- &quot;lessons&quot;: Find specific lessons on a topic. Best for &quot;find me a lesson about X&quot;.
+- &quot;units&quot;: Find teaching units (groups of lessons). Best for &quot;what units cover X?&quot;.
+- &quot;threads&quot;: Find learning progression strands across year groups. Best for &quot;how does X build across years?&quot;. If the teacher mentions a subject (for example, &quot;maths threads&quot;), pass it in the subject filter parameter rather than relying on the query alone.
+- &quot;sequences&quot;: Find curriculum programme structures. Best for &quot;show me the programme for X&quot;. Sequence names are structural (for example, &quot;maths-secondary&quot;), so broad subject terms should be passed via subject filters.
+- &quot;suggest&quot;: Typeahead suggestions as the user types. Best for autocomplete.
+
+Use this when you need to:
+- Find lessons, units, threads, or sequences on a topic
+- Search with specific filters (key stage, subject, year, tier)
+- Get typeahead suggestions for a partial query
+- Discover what content exists for a subject or topic
+
+Do NOT use for:
+- Fetching known content by ID (use &#039;fetch&#039;)
+- Understanding the curriculum structure (use &#039;get-curriculum-model&#039;)
+- Browsing what&#039;s available without a search query (use &#039;browse-curriculum&#039;)
+- Exploring a topic across multiple indexes at once (use &#039;explore-topic&#039;)
+
+NATURAL LANGUAGE MAPPING EXAMPLES:
+- &quot;Find KS3 science lessons about photosynthesis&quot; → scope: &#039;lessons&#039;, query: &#039;photosynthesis&#039;, subject: &#039;science&#039;, keyStage: &#039;ks3&#039;
+- &quot;What units cover fractions in primary maths?&quot; → scope: &#039;units&#039;, query: &#039;fractions&#039;, subject: &#039;maths&#039;, keyStage: &#039;ks2&#039;
+- &quot;What&#039;s the learning progression for algebra?&quot; → scope: &#039;threads&#039;, query: &#039;algebra&#039;, subject: &#039;maths&#039;
+- &quot;What maths threads are there?&quot; → scope: &#039;threads&#039;, subject: &#039;maths&#039; (no query needed — returns all maths threads sorted by size)
+- &quot;Show me secondary science programmes&quot; → scope: &#039;sequences&#039;, query: &#039;science&#039;, keyStage: &#039;ks3&#039;
+- &quot;Find lessons on the Romans for Year 3&quot; → scope: &#039;lessons&#039;, query: &#039;Romans&#039;, year: &#039;3&#039;
+- &quot;KS4 higher tier maths on trigonometry&quot; → scope: &#039;lessons&#039;, query: &#039;trigonometry&#039;, keyStage: &#039;ks4&#039;, tier: &#039;higher&#039;
+
+SCOPE LIMITATIONS:
+- &quot;suggest&quot; requires at least one filter: subject or keyStage.
+- &quot;sequences&quot; works best with structural names (for example, &quot;maths-secondary&quot;), not topic words.
+- &quot;threads&quot; can omit query when subject or keyStage is provided, returning all matching threads sorted by unit count.
+CROSS-TOOL WORKFLOWS:
+- For lesson planning: search(scope: &#039;lessons&#039;) → fetch(lesson:slug) for full details
+- For prerequisites: search(scope: &#039;threads&#039;) → get-prior-knowledge-graph with the found unit slugs for dependencies
+- For progressions: search(scope: &#039;threads&#039;) → get-thread-progressions for ordered units
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host&#039;s per-result token limit. Broad scopes such as `sequences` are largest; pass `size` to cap results and `from` to page.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>fetch</code></summary>
+        <div class="tool-desc">Fetch curriculum resource by canonical identifier.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">PREREQUISITE: You MUST call `get-curriculum-model` first to understand the curriculum domain before using the fetch tool.
+
+Use this when you need to:
+- Get lesson details (learning objectives, keywords, misconceptions)
+- Get unit information (lessons list, subject context)
+- Get subject or sequence overview
+- Retrieve thread progression data
+
+Do NOT use for:
+- Finding content when you don&#039;t have the ID (use &#039;search&#039;)
+- Understanding ID formats (use &#039;get-curriculum-model&#039; first)
+
+Use format &quot;type:slug&quot; (e.g., &quot;lesson:add-fractions-with-the-same-denominator&quot;, &quot;unit:comparing-fractions&quot;).</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-thread-progressions</code></summary>
+        <div class="tool-desc">Returns how an Oak curriculum thread progresses across year groups, for the anchor you name.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Threads connect units into conceptual progressions across years (164 threads across 16 subjects). Every call is anchored — exactly ONE of:
+- threadSlug: the detail anchor; returns that ONE thread&#039;s full unit progression ordered by teaching year (earliest → latest; &quot;All years&quot; units last) — never the whole thread estate.
+- subject + keyStage (both together): the discovery anchor; returns bounded thread descriptors (slug, title, year span, unit count — no sequences) so you can pick a threadSlug to anchor next.
+
+Ordering semantics, stated honestly: the progression axis is the teaching year. Within one year the order is not curricular (the curriculum data defines no within-year unit sequence); treat same-year units as a group, not a chain.
+
+Slugs are corpus keys — resolve them first with search (scope &quot;threads&quot;), fetch, or browse-curriculum. An unknown threadSlug is reported in the result&#039;s unknownAnchors, not errored; an unmatched subject+keyStage returns a well-formed empty result.
+
+Use this to answer questions like:
+- &quot;What&#039;s the learning path for fractions?&quot; (discover with subject+keyStage, then anchor the thread)
+- &quot;How does this thread build from early years to GCSE?&quot; (threadSlug)
+- &quot;Which threads cover algebra at KS3?&quot; (subject + keyStage)
+
+Complements get-prior-knowledge-graph (unit-level prerequisite subgraphs) and get-misconception-graph (per-lesson misconceptions along a thread).</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-prior-knowledge-graph</code></summary>
+        <div class="tool-desc">Returns the bounded prior-knowledge subgraph for the anchor units you name.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">&quot;Prior knowledge of unit X&quot; means X&#039;s predecessors: the units that are (transitively, up to the requested depth) prerequisites of X. Edges are prerequisiteFor relationships (prerequisite → dependent), derived from curriculum thread ordering.
+
+The query is anchored, never whole-corpus:
+- unitSlugs: the anchor units. Slugs are corpus keys — resolve them first with search, fetch, or browse-curriculum. Unknown slugs are reported in the result&#039;s unknownAnchors, not errored.
+- depth (optional): predecessor levels to include. Default 2, maximum 3. Typical result sizes per anchor: depth 1 ≈ 2 units (median, max 8); depth 2 ≈ 4 units (median, max 21); depth 3 ≈ 8 units (median, max 42).
+
+The result reports nodes (unit metadata: slug, title, subject, key stage, year, prior-knowledge statements, thread memberships), edges, resolvedAnchors, unknownAnchors, and the depth used.
+
+Use this to answer questions like:
+- &quot;What should students know before this unit?&quot; (anchor: that unit&#039;s slug)
+- &quot;Which prerequisite gaps could explain difficulty with this lesson&#039;s unit?&quot;
+- &quot;What earlier units does this scheme of work build on?&quot;
+
+Complements get-thread-progressions (full thread learning paths) with anchored prior-knowledge detail.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-misconception-graph</code></summary>
+        <div class="tool-desc">Returns the misconceptions (with teacher responses) addressed by the anchor you name.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Misconceptions are extracted per lesson from the Oak curriculum and reached through the thread → unit → lesson → misconception chain. Every call is anchored — exactly ONE of:
+- lessonSlugs: the leaf anchor; each lesson carries at most two misconceptions.
+- unitSlugs: the core anchor; each unit returns every placed lesson with its misconceptions (typical bodies 2–11 KB per unit).
+- threadSlug (+ optional unitOffset/unitLimit): a unit-granular window over one thread, default 10 units per page (maximum 25), with totalUnits and hasMore reported so partial coverage is always visible. unitOffset/unitLimit are valid ONLY with threadSlug — combining them with lessonSlugs or unitSlugs is rejected.
+
+Slugs are corpus keys — resolve them first with search, fetch, or browse-curriculum. Unknown slugs are reported in the result&#039;s unknownAnchors, not errored.
+
+Coverage honesty: some units belong to no thread (unit entries carry threadSlugs membership; an empty list marks a thread-unreachable unit), so thread-anchored results are thread-scoped and never subject-complete.
+
+Use this to answer questions like:
+- &quot;What misconceptions should I anticipate in this lesson?&quot; (anchor: that lesson&#039;s slug)
+- &quot;Which misconceptions does this unit address across its lessons?&quot;
+- &quot;How do misconceptions develop along this curriculum thread?&quot; (windowed)
+
+Complements get-prior-knowledge-graph (prerequisite gaps) with per-lesson misconception detail.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-keyword-graph</code></summary>
+        <div class="tool-desc">Returns the key vocabulary for one teaching context: a bounded, frequency-ranked page of curriculum keywords, each decorated with its in-scope placing lessons.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Every call is anchored by subject + keyStage (both required — corpus keys, e.g. &quot;maths&quot; + &quot;ks2&quot;), narrowable by unitSlugs and/or lessonSlugs. Ranking is by in-scope placement count (how many anchor-matching lessons place the keyword), descending — vocabulary frequent elsewhere in the curriculum never outranks locally relevant vocabulary. Results are bounded top-N (default 25, max 100) with honest totals (totalMatchingKeywords, hasMore); each entry carries the keyword node (term, description, global frequency = unique placing lessons corpus-wide, coarse firstYear at key-stage granularity: ks1→1, ks2→3, ks3→7, ks4→10) plus up to 10 in-scope placing lessons (hasMoreLessons marks the cut) — richness arrives by edge traversal on the curriculum graph, never a flat dump.
+
+Data is a point-in-time snapshot of the published curriculum (bulk export), not the live API; coverage can lag live content, materially at KS4 while subjects restructure.
+
+When to prefer which keywords tool: get-keywords returns the LIVE full keyword set for a key stage + subject — fresh, authoritative at KS4, alphabetical, unranked, and large. This tool returns a bounded frequency-ranked subset with lesson connections — token-economical, best for &quot;the most relevant vocabulary for this teaching context&quot; and for navigating from keywords into lessons, units, and the wider curriculum graph.
+
+Slugs are corpus keys — resolve them first with search, fetch, or browse-curriculum. Unknown unitSlugs/lessonSlugs are reported in the result&#039;s unknown-anchor fields, not errored; an unknown subject or keyStage returns a well-formed empty result.
+
+Use this to answer questions like:
+- &quot;What vocabulary should I emphasise teaching maths at KS2?&quot; (subject + keyStage)
+- &quot;Which keywords matter most in this unit?&quot; (narrow with unitSlugs)
+- &quot;What terms does this lesson rely on?&quot; (narrow with lessonSlugs)
+
+Complements get-keywords (live full set), get-misconception-graph, get-prior-knowledge-graph, and get-thread-progressions on the same curriculum graph.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-eef-evidence</code></summary>
+        <div class="tool-desc">Returns the Education Endowment Foundation (EEF) Teaching and Learning Toolkit&#039;s evidence for a pedagogical move — strength, cost, months of additional progress, caveats, and source attribution — as deterministic facts to reason over (not recommendations).
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Two queries via `function`:
+- &#039;inspect-strand&#039;: the evidence for one named EEF strand, by `strandId`.
+- &#039;evidence-for-move&#039;: the strands matching a pedagogical context — any of `phase`, `keyStage`, `priority`, or explicit `strandIds`. At least one selector is required. Pass `detail: &#039;headline&#039;` to scan a bounded list (identity, headline metrics, tags, EEF page), then drill a chosen strand with &#039;inspect-strand&#039;.
+
+Use this when the teacher asks for the evidence behind an approach, or when you are already adapting, combining, or framing Oak material pedagogically. State a terse rationale first (e.g. &quot;EEF because: &lt;pedagogical choice&gt;&quot;).
+
+Do NOT use for plain curriculum retrieval (use &#039;search&#039;/&#039;fetch&#039;), for guaranteed-outcome claims, for individual-pupil causal claims, or to make a teacher-replacing selection. The evidence is population-level; carry its caveats and attribution into anything drafted from it.
+
+Inputs are a closed set drawn from the corpus&#039;s own vocabulary. Axis filters (`phase`/`keyStage`/`priority`) match only the strands the corpus tags for school context — they focus the result, they do not bound coverage, and a missing tag is not evidence of inapplicability. The result&#039;s `answerType` says which it is: &#039;strand-lookup&#039; (exactly the strands you named, complete) or &#039;context-subset&#039; (the corpus-curated, non-exhaustive axis match). Use `eef://interpretation` for the full strand index and how to read the evidence faithfully.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>user-search</code></summary>
+        <div class="tool-desc">Interactive user-facing curriculum search within the Oak MCP App.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">This tool provides a visual, interactive search experience for teachers using
+the MCP App interface. Unlike the agent-facing &#039;search&#039; tool, this tool is
+designed to be invoked when the user wants to browse and explore results
+visually.
+
+Required parameters: `query` (search text) and `scope` (which index to search).
+
+SCOPE SELECTION:
+- &quot;lessons&quot;: Find specific lessons on a topic
+- &quot;units&quot;: Find teaching units (groups of lessons)
+- &quot;threads&quot;: Find learning progression strands across year groups
+- &quot;sequences&quot;: Find curriculum programme structures
+
+Use this when:
+- The user wants to search and browse results interactively
+- A visual, filterable search experience is more appropriate than text results
+- The teacher wants to explore curriculum content with Oak branding
+
+Do NOT use for:
+- Agent-initiated search (use &#039;search&#039; instead)
+- Fetching known content by ID (use &#039;fetch&#039;)</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>user-search-query</code></summary>
+        <div class="tool-desc">App-only search query helper for the Oak MCP App.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">This tool executes search queries initiated by the MCP App UI without
+requiring model mediation. It is hidden from the model (app-only visibility)
+and designed for responsive, interactive search within the app.
+
+The app calls this tool via app.callServerTool() when the user interacts
+with search controls directly.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>download-asset</code></summary>
+        <div class="tool-desc">Generate a short-lived, secure download link for a lesson asset.
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Returns a clickable URL valid for 5 minutes that downloads the asset
+directly in the user&#039;s browser — no authentication needed on their side.
+
+Use this when:
+- The user wants to download a slide deck, worksheet, quiz, or video
+- You have the lesson slug and asset type from a previous get-lessons-assets call
+
+IMPORTANT: When presenting download links to the user, always include this tip
+(once, not per-link): &quot;Our resources work best if you install the Google Fonts
+Lexend and Kalam — https://support.thenational.academy/how-to-install-the-google-fonts-lexend-and-kalan&quot;
+
+Do NOT use for:
+- Browsing available assets (use &#039;get-lessons-assets&#039; first)
+- Getting lesson content or metadata (use &#039;fetch&#039;)</div>
+        </details></div>
+      </details>
+      </div>
+      <hr class="tool-divider" />
+      <h3 class="tool-group-label muted">API pass-through</h3>
+      <p class="tool-group-hint">Individual Oak Curriculum API endpoints</p>
+      <div class="tool-list">
+      <details class="tool-item">
+        <summary><code>get-changelog</code></summary>
+        <div class="tool-desc">API changelog
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need the full history of API changes — for surfacing release notes or checking which version introduced a field. Returns every changelog entry with version and date. Not for: the current version (GET /changelog/latest).</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-changelog-latest</code></summary>
+        <div class="tool-desc">Latest API version
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you only need the current API version — e.g. a version banner or deployment check. Returns the most recent changelog entry. Not for: full version history (GET /changelog).</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-key-stages</code></summary>
+        <div class="tool-desc">All key stages
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need the master list of key stages. Returns every key stage with its title and slug. Not for: key stages restricted to a subject (GET /subjects/{subject}/key-stages).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-key-stages-subject-assets</code></summary>
+        <div class="tool-desc">Downloadable assets by key stage and subject
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want every downloadable asset for a key stage + subject, without programme structure or unit sequence order, optionally scoped to a unit or asset type. Returns assets grouped by lesson, each with signed download URLs, asset type, lesson title and slug, and attribution. Pass unit to restrict to one unit and type to restrict to one asset type (one of: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video). Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms. Not for: assets across a sequence (GET /sequences/{sequence}/assets); assets in one programme (GET /programmes/{programme}/assets); a single lesson&#039;s downloads (GET /lessons/{lesson}/assets); streaming one file (GET /lessons/{lesson}/assets/{type}).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.
+
+NOTE: The asset `url` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. To generate a clickable download link for the user, call the `download-asset` tool with the lesson slug and asset type. If `download-asset` is not available (e.g. stdio transport), direct users to the lesson page on the Oak website — use the lesson&#039;s `oakUrl` (e.g. `https://www.thenational.academy/teachers/lessons/{lessonSlug}`).
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host&#039;s per-result token limit. Narrow with `unit` and/or `type` (asset type), or use `get-lessons-assets` for one lesson.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-key-stages-subject-lessons</code></summary>
+        <div class="tool-desc">List lessons in a key stage and subject
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want every published lesson in a key stage + subject, grouped by unit, without programme structure or unit sequence order. Returns an array of units, each with slug, title, and the lessons inside. Pass unit to restrict to one. Supports offset/limit pagination; Link: rel=&quot;next&quot; header signals more pages. Not for: finding a lesson from a search term (GET /search/lessons); a single lesson&#039;s metadata (GET /lessons/{lesson}/summary); all units across a sequence (GET /sequences/{sequence}/units); units in one programme (GET /programmes/{programme}/units). Example: keyStage=ks3, subject=maths, unit=perimeter-and-area.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-key-stages-subject-questions</code></summary>
+        <div class="tool-desc">Quiz questions by key stage and subject
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want every quiz question for a key stage + subject, without programme structure or unit sequence order. Returns lessons each with starter and exit quiz questions and answers. Supports offset/limit pagination; Link: rel=&quot;next&quot; header signals more pages. Not for: a single lesson&#039;s quiz (GET /lessons/{lesson}/quiz); questions across a sequence (GET /sequences/{sequence}/questions); questions in one programme (GET /programmes/{programme}/questions).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-key-stages-subject-units</code></summary>
+        <div class="tool-desc">Units in a key stage and subject
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want a flat list of every unit with published lessons in a key stage + subject, without programme structure or unit sequence order. Returns units grouped by year slug; units without published lessons are omitted. Pass examBoard to restrict KS4 to one board (one of: aqa, edexcel (Edexcel A), eduqas, ocr, wjec, edexcelb (Edexcel B)); otherwise each unit lists the boards it appears in. Not for: all units across a sequence (GET /sequences/{sequence}/units); units in one programme (GET /programmes/{programme}/units); a single unit (GET /units/{unit}/summary); lessons rather than units (GET /key-stages/{keyStage}/subject/{subject}/lessons); units in a thread (GET /threads/{threadSlug}/units).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-keywords</code></summary>
+        <div class="tool-desc">Keywords by subject and key stage
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want the vocabulary for a key stage, subject, unit, lesson, or phase — e.g. to build a glossary or attach definitions to content. Returns keywords with definition, the subject + key stage they appear in, and the lessons that use them, sorted alphabetically. All filters are optional, but pass at least one of keyStage, subject, unit, lesson, or phase.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.
+
+WHEN TO PREFER WHICH KEYWORDS TOOL: this tool returns the LIVE full keyword set for a key stage + subject — fresh and authoritative (including KS4 during curriculum restructures), alphabetical, unranked, and large at subject scope. For a bounded frequency-ranked subset with lesson connections (token economy + relationship navigation over the curriculum graph), prefer get-keyword-graph, which serves a point-in-time curriculum snapshot.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-lessons-assets</code></summary>
+        <div class="tool-desc">Downloadable assets for a lesson
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you have a lesson slug and need the list of what&#039;s downloadable. Returns every available asset type with a signed download URL per asset and attribution. The 9 type values are: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video. Pass type to return only one. Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms. Not for: streaming the file itself (GET /lessons/{lesson}/assets/{type}); bulk asset retrieval across a key stage + subject (GET /key-stages/{keyStage}/subject/{subject}/assets), a sequence (GET /sequences/{sequence}/assets), or one programme (GET /programmes/{programme}/assets); lesson metadata (GET /lessons/{lesson}/summary).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.
+
+NOTE: The asset `url` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. To generate a clickable download link for the user, call the `download-asset` tool with the lesson slug and asset type. If `download-asset` is not available (e.g. stdio transport), direct users to the lesson page on the Oak website — use the lesson&#039;s `oakUrl` (e.g. `https://www.thenational.academy/teachers/lessons/{lessonSlug}`).</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-lessons-quiz</code></summary>
+        <div class="tool-desc">Quiz questions for a lesson
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you have a lesson slug and need its starter and exit quiz questions with correct answers marked. Returns two arrays, starterQuiz and exitQuiz; each question includes the prompt, the answers (with correct ones flagged), and which answers are distractors. Not for: quiz questions across a sequence (GET /sequences/{sequence}/questions); quiz questions in one programme (GET /programmes/{programme}/questions); across a key stage + subject (GET /key-stages/{keyStage}/subject/{subject}/questions); lesson metadata or assets (GET /lessons/{lesson}/summary or GET /lessons/{lesson}/assets).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-lessons-summary</code></summary>
+        <div class="tool-desc">Lesson summary by slug
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you have a lesson slug and need its full metadata: title, key stage, subject, unit, keywords, key learning points, misconceptions, pupil lesson outcome, teacher tips, content guidance, supervision level, and downloadsAvailable. Returns the lesson summary record. Not for: finding a lesson from a search term (GET /search/lessons); searching what&#039;s said in lesson videos (GET /search/transcripts); listing every lesson in a unit or subject (GET /key-stages/{keyStage}/subject/{subject}/lessons); the transcript or assets (GET /lessons/{lesson}/transcript or GET /lessons/{lesson}/assets). Example slug: imagining-you-are-the-characters-the-three-billy-goats-gruff.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-lessons-transcript</code></summary>
+        <div class="tool-desc">Lesson video transcript
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you have a lesson slug and need the video transcript — for accessibility, captioning, or text analysis. Returns the transcript as an array of sentences plus a raw WebVTT captions file (vtt) suitable for a &lt;track&gt; element. Not for: searching across transcripts (GET /search/transcripts); the video file itself (GET /lessons/{lesson}/assets/{type} with type=video); lesson metadata (GET /lessons/{lesson}/summary).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-programmes</code></summary>
+        <div class="tool-desc">Get a programme by slug
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need to get the metadata of one programme. Get programme slugs from GET /subjects/{subject}/programmes. Returns the programme&#039;s year group, slug (e.g. y7, y10-biology-foundation), and applicable programme factors (exam board, tier, child subject). Not for: the units, questions, or assets of one programme (GET /programmes/{programme}/units, GET /programmes/{programme}/questions, or GET /programmes/{programme}/assets); the sequence-level summary (GET /sequences/{sequence}); all programmes for a subject (GET /subjects/{subject}/programmes).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.
+
+NOTE: Programme slugs are the full form — `&lt;subject&gt;-&lt;phase&gt;-year-&lt;year&gt;` plus any KS4 factor — e.g. `english-secondary-year-7` or `english-secondary-year-10-edexcel`, not the short `y7` shorthand used above. Pass the exact slug string this response returns to `get-programmes` and its sub-endpoints.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-programmes-assets</code></summary>
+        <div class="tool-desc">Downloadable assets in a programme
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need every downloadable asset for a single programme (year group) within a subject. Returns assets grouped by lesson with signed download URLs, asset type, lesson title and slug, and attribution. Supports offset/limit pagination; Link: rel=&quot;next&quot; header signals more pages. Optionally narrow by asset type (one of: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video). Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms. Not for: assets across a whole sequence (GET /sequences/{sequence}/assets); assets for a key stage + subject without programme structure (GET /key-stages/{keyStage}/subject/{subject}/assets); a single lesson&#039;s downloads (GET /lessons/{lesson}/assets); streaming one file (GET /lessons/{lesson}/assets/{type}).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.
+
+NOTE: The asset `url` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. To generate a clickable download link for the user, call the `download-asset` tool with the lesson slug and asset type. If `download-asset` is not available (e.g. stdio transport), direct users to the lesson page on the Oak website — use the lesson&#039;s `oakUrl` (e.g. `https://www.thenational.academy/teachers/lessons/{lessonSlug}`).</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-programmes-questions</code></summary>
+        <div class="tool-desc">Quiz questions in a programme
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want every quiz question in a single programme (year group) within a subject. Get programme slugs from GET /subjects/{subject}/programmes. Returns questions grouped by lesson with starter and exit quiz questions and answers. Supports offset/limit pagination; Link: rel=&quot;next&quot; header signals more pages. Not for: questions in a single lesson (GET /lessons/{lesson}/quiz); questions across a whole sequence (GET /sequences/{sequence}/questions); questions for a key stage + subject without programme structure (GET /key-stages/{keyStage}/subject/{subject}/questions).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-programmes-units</code></summary>
+        <div class="tool-desc">Units in a programme
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need the unit sequence for one programme — units as an ordered arrangement designed to build knowledge progressively. Get programme slugs from GET /subjects/{subject}/programmes. Returns units in unit sequence order with title, slug, and any associated factors. Not for: every unit across the whole sequence (GET /sequences/{sequence}/units); a flat list of units for a key stage + subject without programme structure (GET /key-stages/{keyStage}/subject/{subject}/units); a single unit (GET /units/{unit}/summary); units in a thread (GET /threads/{threadSlug}/units).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-rate-limit</code></summary>
+        <div class="tool-desc">Current rate-limit status
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need rate-limit status as a JSON body — e.g. for a quota indicator. Returns limit, remaining, and reset. The same data sits on the &#039;X-RateLimit-*&#039; headers of every response, so this tool is rarely needed directly. Does not count against your quota.
+
+NOTE: A response of limit=0, remaining=0, reset=0 indicates an unlimited API key with no rate cap.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-sequences</code></summary>
+        <div class="tool-desc">Sequencing information for a given sequence slug
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you have a sequence slug and need the sequence-level summary. A sequence is a subject&#039;s curriculum across a phase (e.g. maths-primary, science-secondary-aqa); it spans one or more National Curriculum schemes and contains one programme per year group. Get sequence slugs from GET /subjects or GET /subjects/{subject} (the sequenceSlugs field). Returns slug, phase, key stages, years, and any KS4 programme factors (exam board, tier, child subject, pathway) needed to interpret the programmes within it. Not for: the programmes within this sequence (GET /subjects/{subject}/programmes); the unit sequence for one programme (GET /programmes/{programme}/units); all units across the sequence (GET /sequences/{sequence}/units); subject-level catalogue data (GET /subjects or GET /subjects/{subject}). Example: sequence=maths-primary or science-secondary-aqa.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-sequences-assets</code></summary>
+        <div class="tool-desc">Downloadable assets in a sequence
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need every downloadable asset across a whole sequence — all programmes combined. Returns assets grouped by lesson in unit sequence order, with signed download URLs, asset type, lesson title and slug, and attribution. Pass year as an optional filter. Narrow further with type (one of: slideDeck, starterQuiz, starterQuizAnswers, exitQuiz, exitQuizAnswers, worksheet, worksheetAnswers, supplementaryResource, video). Lesson content is under OGL v3.0; assets are either Oak-owned or third-party under an OGL-compatible licence. Attribution required — see https://open-api.thenational.academy/docs/about-oaks-api/terms. Not for: assets in a single programme (GET /programmes/{programme}/assets); a single lesson&#039;s downloads (GET /lessons/{lesson}/assets); streaming one file (GET /lessons/{lesson}/assets/{type}); assets for a key stage + subject without programme structure (GET /key-stages/{keyStage}/subject/{subject}/assets).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.
+
+NOTE: The asset `url` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. To generate a clickable download link for the user, call the `download-asset` tool with the lesson slug and asset type. If `download-asset` is not available (e.g. stdio transport), direct users to the lesson page on the Oak website — use the lesson&#039;s `oakUrl` (e.g. `https://www.thenational.academy/teachers/lessons/{lessonSlug}`).
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host&#039;s per-result token limit. Narrow with `year` and/or `type` (asset type), or use `get-lessons-assets` for one lesson.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-sequences-questions</code></summary>
+        <div class="tool-desc">Quiz questions across a sequence
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want every quiz question across a whole sequence — all programmes combined. Returns questions grouped by lesson in unit sequence order. Pass year as an optional filter to return only that year&#039;s questions. Supports offset and limit; Link: rel=&quot;next&quot; header signals more pages. Not for: questions in a single programme (GET /programmes/{programme}/questions); a single lesson&#039;s quiz (GET /lessons/{lesson}/quiz); questions for a key stage + subject without programme structure (GET /key-stages/{keyStage}/subject/{subject}/questions).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-sequences-units</code></summary>
+        <div class="tool-desc">Units in a curriculum sequence
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want every unit across a whole sequence — all programmes combined, in unit sequence order. Returns units grouped by programme (year group) in unit sequence order. If the sequence slug includes an exam board (e.g. science-secondary-aqa), units are scoped to that exam board. Secondary sequences also expose tiers, pathways, and exam subjects where applicable. Pass year as an optional filter to return only that year&#039;s units (across all KS4 factor combinations). Not for: units in a single programme (GET /programmes/{programme}/units); a flat list of units for a key stage + subject without programme structure or unit sequence order (GET /key-stages/{keyStage}/subject/{subject}/units); the programmes within this sequence (GET /subjects/{subject}/programmes); a single unit (GET /units/{unit}/summary); units in a thread (GET /threads/{threadSlug}/units). Example: sequence=science-secondary-aqa or maths-primary.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-subject-detail</code></summary>
+        <div class="tool-desc">Single subject with sequences, key stages, and years
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you have a subject slug. Returns subjectTitle, subjectSlug, sequenceSlugs, keyStages, and years. sequenceSlugs lists the sequences available for this subject; each sequence contains one programme per year group — call GET /subjects/{subject}/programmes to enumerate them. Not for: every subject in one call (GET /subjects); the key stages or year groups for a subject (GET /subjects/{subject}/key-stages or GET /subjects/{subject}/years); subject-scoped lessons or units (GET /key-stages/{keyStage}/subject/{subject}/lessons or GET /key-stages/{keyStage}/subject/{subject}/units); the detail of one sequence (GET /sequences/{sequence}). Example: subject=maths.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-subjects</code></summary>
+        <div class="tool-desc">All subjects
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need every subject in one call — the entry point for a subject picker or for crawling the whole curriculum. Returns subjects alphabetically, each with subjectTitle, subjectSlug, sequenceSlugs, keyStages, and years. sequenceSlugs lists the sequences available for that subject; each sequence contains one programme per year group — call GET /subjects/{subject}/programmes to enumerate them. Not for: a single subject (GET /subjects/{subject}); the key stages or year groups for a subject (GET /subjects/{subject}/key-stages or GET /subjects/{subject}/years); lessons or units inside a subject (GET /key-stages/{keyStage}/subject/{subject}/lessons or GET /key-stages/{keyStage}/subject/{subject}/units); the detail of one sequence (GET /sequences/{sequence}).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-subjects-key-stages</code></summary>
+        <div class="tool-desc">Key stages for a subject
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you only need the key stages where this subject is available. Returns key-stage titles and slugs. Not for: every key stage (GET /key-stages); the subject record (GET /subjects/{subject}). Example: &#039;subject=history&#039;.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-subjects-programmes</code></summary>
+        <div class="tool-desc">Get all programmes for a subject slug
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you need to discover the programmes within a subject — to get a programme&#039;s slug for use with GET /programmes/{programme} or its sub-endpoints. Returns programmes grouped by key stage, each with year group, slug (e.g. y7, y10-biology-foundation), and applicable programme factors (exam board, tier, child subject). Not for: the metadata of one programme (GET /programmes/{programme}); the units, questions, or assets of one programme (GET /programmes/{programme}/units, GET /programmes/{programme}/questions, or GET /programmes/{programme}/assets); the sequence-level summary (GET /sequences/{sequence}).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.
+
+NOTE: Programme slugs are the full form — `&lt;subject&gt;-&lt;phase&gt;-year-&lt;year&gt;` plus any KS4 factor — e.g. `english-secondary-year-7` or `english-secondary-year-10-edexcel`, not the short `y7` shorthand used above. Pass the exact slug string this response returns to `get-programmes` and its sub-endpoints.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-subjects-years</code></summary>
+        <div class="tool-desc">Year groups for a subject
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you only need the year groups where this subject is available. Returns an array of year numbers, derived from the subject&#039;s key stages. Not for: the subject record (GET /subjects/{subject}); key stages rather than year groups (GET /subjects/{subject}/key-stages). Example: &#039;subject=english&#039;.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-threads</code></summary>
+        <div class="tool-desc">All threads
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want the catalogue of every thread. A thread is an attribute on a unit that groups units across the curriculum to build a common body of knowledge — making vertical connections across year groups. Returns all threads with published units, sorted alphabetically — each with title, slug, and unitCount. Not for: the units inside a thread (GET /threads/{threadSlug}/units).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-threads-units</code></summary>
+        <div class="tool-desc">Units in a thread
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you want every unit in a thread. A thread is an attribute on a unit that groups units across the curriculum to build a common body of knowledge — for example, number and place value or scientific method. Units in a thread span multiple programmes and key stages; thread order is independent of unit sequence order within any individual programme. Returns units in thread order with unitTitle, unitSlug, and unitOrder. Not for: the catalogue of threads (GET /threads); all units across a sequence (GET /sequences/{sequence}/units); units in one programme (GET /programmes/{programme}/units); a single unit (GET /units/{unit}/summary). Example: &#039;threadSlug=number-and-place-value&#039;.
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      <details class="tool-item">
+        <summary><code>get-units-summary</code></summary>
+        <div class="tool-desc">Unit summary by slug
+        <details class="tool-how-to-use">
+          <summary>How to use</summary>
+          <div class="tool-how-to-use-body">Use when you have a unit slug and need the unit summary: title, description, key stage, subject, year, threads, prior-knowledge requirements, national-curriculum statements, and the lessons inside. Unit variant slugs (ending in -1, -2, etc.) resolve to that specific variant. Not for: listing every unit in a key stage + subject (GET /key-stages/{keyStage}/subject/{subject}/units); all units across a sequence (GET /sequences/{sequence}/units); units in one programme (GET /programmes/{programme}/units); units in a thread (GET /threads/{threadSlug}/units); lessons inside the unit (GET /key-stages/{keyStage}/subject/{subject}/lessons with unit={unit}).
+
+PREREQUISITE: You MUST call the `get-curriculum-model` tool first to understand the curriculum domain.</div>
+        </details></div>
+      </details>
+      </div>
+      </div>
+    </details>
+
+      <section class="oak-card oak-card--aqua oak-stack--s">
+        <h2 class="oak-heading-5">Documentation</h2>
+        <p>For details about the underlying curriculum data, see the <a class="oak-link" href="https://open-api.thenational.academy/docs/about-oaks-api/api-overview">Oak Curriculum API documentation</a>.</p>
+        <p>Browse the MCP server implementation: <a class="oak-link" target="_blank" rel="noopener noreferrer" href="https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http">code on GitHub</a>.</p>
+      </section>
+        
+        </div>
+      </section>
+    </main>
+    <footer data-region="footer">
+      <img class="site-footer-rule" src="./assets/header-underline.svg" alt="" />
+      <div class="oak-container site-footer-inner">
+        <a href="https://www.thenational.academy" aria-label="Oak National Academy home"><img src="./assets/logo.svg" alt="" /></a>
+        <address class="site-footer-meta">
+          <p class="oak-body-3-bold">© Oak National Academy Limited, No 14174888</p>
+          <p class="oak-body-4">1 Scott Place, 2 Hardman Street, Manchester, M3 3AA</p>
+        </address>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

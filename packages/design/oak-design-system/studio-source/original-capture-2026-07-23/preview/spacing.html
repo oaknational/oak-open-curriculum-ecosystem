@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Spacing" name="Spacing scale" subtitle="Full 27-step scale: micro/base + layout tier" viewport="700x400" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:18px 24px; background:var(--bg-primary); font-family:var(--font-sans); color:var(--text-primary); }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .col h5 { font:700 11px/14px var(--font-sans); letter-spacing:0.08em; text-transform:uppercase; color:var(--text-subdued); margin:0 0 8px; }
+  .row { display:flex; align-items:center; padding:3px 0; gap:10px; }
+  .name { width:34px; font:700 11px var(--font-sans); text-align:right; }
+  .val { width:44px; font:400 10px var(--font-mono); color:var(--text-subdued); }
+  .bar { height:10px; background:var(--oak-lemon); border:1.5px solid var(--border-primary); border-radius:2px; min-width:1px; }
+  .lg .bar { height:6px; background:var(--bg-inverted); border:none; border-radius:1px; }
+  .lg .val { color:var(--text-primary); }
+</style></head>
+<body>
+  <div class="grid">
+    <div class="col">
+      <h5>Micro & base (px)</h5>
+      <div class="row"><div class="name">0</div><div class="val">0</div><div class="bar" style="width:1px; background:transparent; border-style:dashed;"></div></div>
+      <div class="row"><div class="name">2</div><div class="val">2px</div><div class="bar" style="width:2px;"></div></div>
+      <div class="row"><div class="name">4</div><div class="val">4px</div><div class="bar" style="width:4px;"></div></div>
+      <div class="row"><div class="name">8</div><div class="val">8px</div><div class="bar" style="width:8px;"></div></div>
+      <div class="row"><div class="name">12</div><div class="val">12px</div><div class="bar" style="width:12px;"></div></div>
+      <div class="row"><div class="name">16</div><div class="val">16px</div><div class="bar" style="width:16px;"></div></div>
+      <div class="row"><div class="name">20</div><div class="val">20px</div><div class="bar" style="width:20px;"></div></div>
+      <div class="row"><div class="name">24</div><div class="val">24px</div><div class="bar" style="width:24px;"></div></div>
+      <div class="row"><div class="name">32</div><div class="val">32px</div><div class="bar" style="width:32px;"></div></div>
+      <div class="row"><div class="name">40</div><div class="val">40px</div><div class="bar" style="width:40px;"></div></div>
+      <div class="row"><div class="name">48</div><div class="val">48px</div><div class="bar" style="width:48px;"></div></div>
+      <div class="row"><div class="name">56</div><div class="val">56px</div><div class="bar" style="width:56px;"></div></div>
+      <div class="row"><div class="name">64</div><div class="val">64px</div><div class="bar" style="width:64px;"></div></div>
+      <div class="row"><div class="name">72</div><div class="val">72px</div><div class="bar" style="width:72px;"></div></div>
+      <div class="row"><div class="name">80</div><div class="val">80px</div><div class="bar" style="width:80px;"></div></div>
+    </div>
+    <div class="col lg">
+      <h5>Layout (px) - scaled 1 : 4</h5>
+      <div class="row"><div class="name">92</div><div class="val">92px</div><div class="bar" style="width:23px;"></div></div>
+      <div class="row"><div class="name">100</div><div class="val">100px</div><div class="bar" style="width:25px;"></div></div>
+      <div class="row"><div class="name">120</div><div class="val">120px</div><div class="bar" style="width:30px;"></div></div>
+      <div class="row"><div class="name">160</div><div class="val">160px</div><div class="bar" style="width:40px;"></div></div>
+      <div class="row"><div class="name">180</div><div class="val">180px</div><div class="bar" style="width:45px;"></div></div>
+      <div class="row"><div class="name">240</div><div class="val">240px</div><div class="bar" style="width:60px;"></div></div>
+      <div class="row"><div class="name">360</div><div class="val">360px</div><div class="bar" style="width:90px;"></div></div>
+      <div class="row"><div class="name">480</div><div class="val">480px</div><div class="bar" style="width:120px;"></div></div>
+      <div class="row"><div class="name">640</div><div class="val">640px</div><div class="bar" style="width:160px;"></div></div>
+      <div class="row"><div class="name">960</div><div class="val">960px</div><div class="bar" style="width:240px;"></div></div>
+      <div class="row"><div class="name">1280</div><div class="val">1280</div><div class="bar" style="width:320px;"></div></div>
+      <div class="row"><div class="name">1360</div><div class="val">1360</div><div class="bar" style="width:340px;"></div></div>
+    </div>
+  </div>
+</body></html>

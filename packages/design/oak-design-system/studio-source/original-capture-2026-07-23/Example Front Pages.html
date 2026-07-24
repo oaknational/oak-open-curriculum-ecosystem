@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Example front pages — composed per identity" subtitle="Three full pages composed per brand (Oak / Freedonia / EMC²); component selection as a brand lever" viewport="1280x960" -->
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example front pages — composed per identity</title>
+<link rel="stylesheet" href="colors_and_type.css"><link rel="stylesheet" href="components.css">
+<style>
+body{margin:0;background:var(--bg-subtle);color:var(--text-primary)}
+a{color:var(--text-link)}a:hover{color:var(--text-link-hover)}
+.head{padding:var(--space-32);border-bottom:var(--border-solid-m) solid var(--border-primary);background:var(--bg-primary)}
+.head .max{max-width:var(--measure-prose)}
+.nav{display:flex;gap:var(--space-16);margin-top:var(--space-16)}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-16);padding:var(--space-24) var(--space-32);align-items:start}
+.col{display:flex;flex-direction:column;gap:var(--space-8);min-width:0}
+.col h2{margin:0;font:var(--weight-display) var(--font-size-5)/var(--leading-24) var(--font-display)}
+.col p{margin:0;font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-subdued);min-height:calc(4*var(--leading-20, 20px))}
+.frame{border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);overflow:hidden;background:var(--bg-primary);aspect-ratio:3/4}
+.frame iframe{width:1280px;height:calc(1280px*4/3);border:0;transform-origin:0 0;display:block}
+.col a.oak-link{font:var(--weight-regular) var(--font-size-2)/var(--leading-20) var(--font-sans)}
+@media (max-width:960px){.cols{grid-template-columns:1fr}}
+</style></head>
+<body class="oak-scope">
+<header class="head">
+<div class="max">
+<h1 class="oak-heading-4" style="margin:0">Example front pages — composed per identity</h1>
+<p class="oak-body-1" style="margin:var(--space-8) 0 0;color:var(--text-subdued)">One class library, one token contract — but each page here is <strong>composed</strong> for its identity. Component selection is itself a brand lever, so the pages differ in content and structure by design. Frames show each brand's default theme; a stored personal theme choice still applies when you open the full page.</p>
+</div>
+<nav class="nav"><a class="oak-link oak-body-2" href="Identity White-Labelling.html">The controlled experiment (byte-identical page) →</a><a class="oak-link oak-body-2" href="Identity Switchboard.html">Identity switchboard (live controls) →</a></nav>
+</header>
+<main class="cols">
+<section class="col"><h2>Oak</h2><p>Daylight, paper, staffroom. The warm colleague — light-first, lemon accent, thick borders, diagonal offset shadows. The established brand; the baseline.</p><div class="frame"><iframe src="ui_kits/oak/index.html" title="Oak homepage" onload="showDefault(this)"></iframe></div><a class="oak-link" href="ui_kits/oak/index.html" target="_blank">Open full page ↗</a></section>
+<section class="col"><h2>Freedonia DSE</h2><p>The public service — GDS visual design (OGL): black masthead + blue bar, action-green buttons with the hard bottom edge, blue underlined links, grey panels, tight bold ramp in Public Sans. No crown, no GDS Transport.</p><div class="frame"><iframe src="whitelabel/freedonia/index.html" title="Freedonia DSE proof page" onload="showDefault(this)"></iframe></div><a class="oak-link" href="whitelabel/freedonia/index.html" target="_blank">Open full page ↗</a></section>
+<section class="col"><h2>Educate My Creature Too</h2><p>A nocturnal pocket world — a toy, not a tool. Dark-first, bedtime-glow gradients, toy buttons with gloss, candy-drop shadows, gummy tags, filled rounded icons.</p><div class="frame"><iframe src="whitelabel/creature/index.html" title="Educate My Creature proof page" onload="showDefault(this)"></iframe></div><a class="oak-link" href="whitelabel/creature/index.html" target="_blank">Open full page ↗</a></section>
+</main>
+<script>
+function showDefault(ifr){
+  try { ifr.contentDocument.documentElement.removeAttribute('data-theme'); } catch (e) {}
+}
+function fit(){for (const fr of document.querySelectorAll('.frame')){const s = fr.clientWidth/1280; fr.firstElementChild.style.transform = 'scale('+s+')';}}
+addEventListener('resize', fit); fit();
+</script>
+</body></html>

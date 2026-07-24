@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Identity switchboard — one copy, live controls" subtitle="The same specimen.html once, with controls for identity, contract stage and theme — the white-label contract as an instrument" viewport="1280x960" -->
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Identity switchboard — one copy, live controls</title>
+<link rel="stylesheet" href="colors_and_type.css"><link rel="stylesheet" href="components.css">
+<style>
+body{margin:0;background:var(--bg-subtle);color:var(--text-primary)}
+a{color:var(--text-link)}a:hover{color:var(--text-link-hover)}
+.head{padding:var(--space-32);border-bottom:var(--border-solid-m) solid var(--border-primary);background:var(--bg-primary)}
+.head .max{max-width:var(--measure-prose)}
+.nav{display:flex;gap:var(--space-16);margin-top:var(--space-16)}
+.controls{display:flex;flex-wrap:wrap;gap:var(--space-24);align-items:flex-end;padding:var(--space-16) var(--space-32);background:var(--bg-primary);border-bottom:var(--border-solid-s) solid var(--border-neutral-lighter)}
+.controls fieldset{border:0;margin:0;padding:0}
+.controls legend{padding:0;margin:0 0 var(--space-8);font:var(--weight-bold) var(--font-size-2)/var(--leading-20) var(--font-sans)}
+.seg{display:flex;flex-wrap:wrap;gap:var(--space-8)}
+.seg label{display:inline-flex;align-items:center;gap:var(--space-8);min-height:var(--size-target-min);padding:0 var(--space-16);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-control);background:var(--bg-primary);font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans);cursor:pointer}
+.seg label:has(input:checked){background:var(--bg-btn-primary);color:var(--text-btn-primary)}
+.seg label:has(input:focus-visible){outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+.seg input{position:absolute;width:1px;height:1px;opacity:0}
+.field{display:flex;flex-direction:column;gap:var(--space-8)}
+.field label{font:var(--weight-bold) var(--font-size-2)/var(--leading-20) var(--font-sans)}
+.field select{min-height:var(--size-target-min);padding:var(--space-4) var(--space-8);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-control);background:var(--bg-primary);color:var(--text-primary);font:var(--weight-regular) var(--font-size-2)/var(--leading-20) var(--font-sans)}
+.field select:focus-visible,.controls a:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+.open-link{margin-left:auto;font:var(--weight-regular) var(--font-size-2)/var(--leading-20) var(--font-sans)}
+.stage{padding:var(--space-24) var(--space-32)}
+.frame{border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);overflow:hidden;background:var(--bg-primary);aspect-ratio:16/10}
+.frame iframe{width:1280px;height:800px;border:0;transform-origin:0 0;display:block}
+</style></head>
+<body class="oak-scope">
+<header class="head">
+<div class="max">
+<h1 class="oak-heading-4" style="margin:0">Identity switchboard — one copy, live controls</h1>
+<p class="oak-body-1" style="margin:var(--space-8) 0 0;color:var(--text-subdued)">One copy of <code>specimen.html</code>. Switch the identity, wind the contract back to Part A, change the theme — the markup never changes; every difference is the token contract.</p>
+</div>
+<nav class="nav"><a class="oak-link oak-body-2" href="Identity White-Labelling.html">← Side-by-side, all three at once</a><a class="oak-link oak-body-2" href="Example Front Pages.html">Example front pages →</a></nav>
+</header>
+<div class="controls">
+<fieldset>
+<legend>Identity</legend>
+<div class="seg" role="radiogroup">
+<label><input type="radio" name="brand" value="" checked> Oak</label>
+<label><input type="radio" name="brand" value="freedonia"> Freedonia DSE</label>
+<label><input type="radio" name="brand" value="creature"> EMC²</label>
+</div>
+</fieldset>
+<div class="field"><label for="stage">Contract stage</label><select id="stage"><option value="full">Part A + B (full)</option><option value="a">Part A only (~14 tokens)</option></select></div>
+<div class="field"><label for="theme">Theme</label><select id="theme"><option value="">Page default</option><option>light</option><option>dark</option><option>system</option><option>high-contrast</option><option>colour-safe</option></select></div>
+<a class="oak-link open-link" id="open" href="whitelabel/specimen.html" target="_blank">Open full page ↗</a>
+</div>
+<main class="stage">
+<div class="frame"><iframe id="ifr" src="whitelabel/specimen.html" title="Specimen under the selected identity"></iframe></div>
+</main>
+<script>
+const ifr = document.getElementById('ifr'), stage = document.getElementById('stage'), theme = document.getElementById('theme'), open = document.getElementById('open');
+function brand(){ return document.querySelector('input[name="brand"]:checked').value; }
+function src(){ return 'whitelabel/specimen.html' + (brand() ? '?brand=' + brand() : ''); }
+function applyInside(){
+  try {
+    const doc = ifr.contentDocument;
+    if (theme.value) doc.documentElement.setAttribute('data-theme', theme.value);
+    else doc.documentElement.removeAttribute('data-theme');
+    // Contract stage: Part A only = disable the brand's Part B sheet
+    for (const l of doc.querySelectorAll('link[href$="brand-full.css"]')) l.disabled = (stage.value === 'a');
+  } catch (e) {}
+}
+function reload(){ open.href = src(); stage.disabled = !brand(); ifr.src = src(); }
+ifr.addEventListener('load', applyInside);
+for (const r of document.querySelectorAll('input[name="brand"]')) r.addEventListener('change', reload);
+stage.addEventListener('change', applyInside);
+theme.addEventListener('change', applyInside);
+function fit(){ const fr = document.querySelector('.frame'); const s = fr.clientWidth / 1280; ifr.style.transform = 'scale(' + s + ')'; }
+addEventListener('resize', fit); fit(); reload();
+</script>
+</body></html>

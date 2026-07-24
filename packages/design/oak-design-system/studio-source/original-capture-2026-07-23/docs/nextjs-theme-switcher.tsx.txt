@@ -1,0 +1,61 @@
+'use client';
+/* Theme + motion controls for the Oak design system in a Next.js app.
+   Pairs with public/oak-theme.js loaded via <Script strategy="beforeInteractive">
+   (see docs/consuming-nextjs.md §4). Renders after mount: theme state lives in
+   localStorage, so the server must not guess. All five themes are offered —
+   the access themes (high-contrast, colour-safe) are not optional extras. */
+import { useEffect, useState } from 'react';
+
+declare global {
+  interface Window {
+    oakTheme?: {
+      get(): string; set(t: string): void; themes: string[];
+      motion: { get(): string; set(m: string): void; modes: string[] };
+    };
+  }
+}
+
+const THEME_LABELS: Record<string, string> = {
+  light: 'Light', dark: 'Dark', system: 'Match device',
+  'high-contrast': 'High contrast', 'colour-safe': 'Colour safe',
+};
+const MOTION_LABELS: Record<string, string> = {
+  system: 'Match device', reduced: 'Reduced', full: 'Full',
+};
+
+export default function ThemeSwitcher() {
+  const [theme, setTheme] = useState<string>();
+  const [motion, setMotion] = useState<string>();
+
+  useEffect(() => {
+    setTheme(window.oakTheme?.get() ?? 'light');
+    setMotion(window.oakTheme?.motion.get() ?? 'system');
+  }, []);
+
+  if (theme === undefined) return null; // pre-mount: server HTML stays theme-neutral
+
+  return (
+    <div className="oak-cluster oak-cluster--s">
+      <label className="oak-body-3" htmlFor="oak-theme-select">Theme</label>
+      <select
+        className="oak-select" id="oak-theme-select" value={theme}
+        style={{ width: 'auto', minHeight: 'var(--size-target-min)' }}
+        onChange={(e) => { window.oakTheme?.set(e.target.value); setTheme(e.target.value); }}
+      >
+        {(window.oakTheme?.themes ?? ['light']).map((t) => (
+          <option key={t} value={t}>{THEME_LABELS[t] ?? t}</option>
+        ))}
+      </select>
+      <label className="oak-body-3" htmlFor="oak-motion-select">Motion</label>
+      <select
+        className="oak-select" id="oak-motion-select" value={motion}
+        style={{ width: 'auto', minHeight: 'var(--size-target-min)' }}
+        onChange={(e) => { window.oakTheme?.motion.set(e.target.value); setMotion(e.target.value); }}
+      >
+        {(window.oakTheme?.motion.modes ?? ['system']).map((m) => (
+          <option key={m} value={m}>{MOTION_LABELS[m] ?? m}</option>
+        ))}
+      </select>
+    </div>
+  );
+}

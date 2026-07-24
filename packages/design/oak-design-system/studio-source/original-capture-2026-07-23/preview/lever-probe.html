@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<script>
+const q = new URLSearchParams(location.search); const brand = q.get('brand');
+if (brand) for (const f of ['brand-a.css','brand-full.css']) {
+  document.write('<link rel="stylesheet" href="../whitelabel/' + brand + '/' + f + '">');
+}
+</script>
+</head><body data-page="unit" style="margin:0">
+<div id="p" style="display:none"></div>
+<h1 id="h" style="margin:0;position:absolute;visibility:hidden;font:var(--type-heading-1)">Hg</h1>
+<p id="b" style="margin:0;position:absolute;visibility:hidden;font:var(--type-body-1)">Hg</p>
+<script>
+addEventListener('load', () => setTimeout(() => {
+  const root = getComputedStyle(document.documentElement);
+  const probe = document.getElementById('p');
+  const resolve = (prop, tok) => { probe.style.cssText = 'display:none;' + prop + ':var(' + tok + ')'; return getComputedStyle(probe)[prop.replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]; };
+  const raw = (tok) => root.getPropertyValue(tok).trim().replace(/\s+/g,' ');
+  const hs = getComputedStyle(document.getElementById('h')), bs = getComputedStyle(document.getElementById('b'));
+  const bodyCS = getComputedStyle(document.body);
+  const levers = {
+    'polarity (color-scheme)': root.colorScheme || raw('color-scheme'),
+    'bg-primary': resolve('background-color','--bg-primary'),
+    'text-primary': resolve('color','--text-primary'),
+    'color-accent': resolve('color','--color-accent'),
+    'bg-btn-primary': resolve('background-color','--bg-btn-primary'),
+    'text-link': resolve('color','--text-link'),
+    'surface-decorative-1': resolve('background-color','--surface-decorative-1'),
+    'body face': bs.fontFamily.split(',')[0].replace(/"/g,''),
+    'display face': hs.fontFamily.split(',')[0].replace(/"/g,'') + ' ' + hs.fontWeight,
+    'heading-1 size': hs.fontSize,
+    'body-1 size/leading': bs.fontSize + '/' + bs.lineHeight,
+    'label grammar': raw('--label-transform') + ' · ' + raw('--label-variant'),
+    'radius control/container': resolve('width','--radius-control') + ' / ' + resolve('width','--radius-container'),
+    'card border': resolve('width','--card-border'),
+    'density (gap-m)': resolve('width','--gap-m'),
+    'container-max': resolve('width','--container-max'),
+    'size-target': resolve('width','--size-target'),
+    'btn-shadow': raw('--btn-shadow') || 'none',
+    'btn-bg-image': raw('--btn-bg-image') || 'none',
+    'tag form (border)': raw('--tag-border') || 'none',
+    'shadow-accent': raw('--shadow-accent') || 'none',
+    'band-bg': raw('--band-bg') || 'transparent',
+    'page atmosphere': raw('--surface-page-image') || 'none',
+    'motion-quick': raw('--motion-quick'),
+    'flow-columns': raw('--flow-columns'),
+    'unit map (columns)': bodyCS.getPropertyValue('--main-columns').trim().replace(/\s+/g,' '),
+  };
+  parent.postMessage({ leverProbe: brand || 'oak', levers }, '*');
+}, 300));
+</script>
+</body></html>

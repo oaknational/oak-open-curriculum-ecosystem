@@ -1,0 +1,403 @@
+/* ============================================================
+   Oak National Academy — component class library
+   Requires colors_and_type.css (primitives + roles). Link styles.css
+   to get both. TIER 3 of the token architecture lives here:
+   component tokens (--btn-*, --input-*, …) composed from roles +
+   scales — never raw values. The compiled React components consume
+   the SAME tokens, so class library and bundle cannot drift.
+   Fully themable: light / dark / high-contrast / colour-safe come
+   free via [data-theme] on <html> or any subtree. WCAG 2.2 AA:
+   - visible double focus ring on :focus-visible, plus a transparent
+     outline so Windows High Contrast (forced-colors) draws its own
+   - md controls ≥44px hit target (2.5.8 asks 24px; we exceed);
+     sm (36px) is for dense desktop UI only
+   - text on pastel fills: --text-primary at weight ≥400, never 300 <18px
+   - state is never colour alone: pair fills with borders + icons + labels
+   - all transitions collapse under prefers-reduced-motion
+   ============================================================ */
+
+/* --- TIER 3: component tokens --- */
+:root{
+  /* button */
+  --btn-min-h:var(--size-target);--btn-pad:var(--control-pad-block) var(--control-pad-inline);--btn-gap:var(--space-8);
+  --btn-min-h-sm:var(--size-target-dense);--btn-pad-sm:var(--space-4) var(--space-8);--btn-gap-sm:var(--space-4);
+  --btn-radius:var(--radius-control);--btn-border:var(--border-solid-m);
+  --btn-bg-image:none;/* @kind other */--btn-shadow:none;/* @kind other */
+  /* flow topology — column structure is brand surface (grid-template strings are tokens) */
+  --flow-columns:1fr;/* @kind other */--flow-gap:var(--gap-l) var(--gap-m);/* @kind other */
+  --key-align:left;/* @kind other */--key-justify:stretch;/* @kind other */
+  /* tone bands — full-width demarcated regions; Oak's dress is the solid
+     mint band (thenational.academy hero grammar) — brands re-point or hide */
+  --band-bg:var(--surface-decorative-1);/* @kind other */--band-border:0 solid transparent;/* @kind other */--band-pad:0px;--band-radius:0px; /* full-bleed bands stay square; inset bands may opt in */
+  --container-max:var(--space-1280);
+  /* tag — form is brand surface: border + shadow default to none (Oak's
+     borderless lozenge is Oak trade dress, not a system constant) */
+  --tag-min-h:calc(var(--size-icon-m) + var(--space-4));--tag-pad:var(--space-4) var(--space-8);--tag-gap:var(--space-8);--tag-radius:var(--radius-control);
+  --tag-border:0 solid transparent;/* @kind other */--tag-shadow:none;
+  /* label case grammar — brands may go small-caps/no-transform (FDSE) or lowercase (EMC) */
+  --label-transform:uppercase;/* @kind other */--label-variant:normal;/* @kind other */
+  /* card — bg + image are brand surface (gradients allowed; AA is on the text pairing) */
+  --card-pad:calc(var(--density)*var(--space-24));--card-radius:var(--radius-container);--card-border:var(--border-solid-m);
+  --card-bg:var(--bg-primary);/* @kind other */--card-bg-image:none;/* @kind other */
+  /* subject chip */
+  --chip-size:var(--size-target);--chip-border:var(--border-solid-m);
+  /* form fields */
+  --field-gap:var(--space-8);--input-min-h:var(--size-target);--input-pad:var(--control-pad-block) var(--control-pad-inline);
+  --input-border:var(--border-solid-m);--input-radius:var(--radius-control);--textarea-min-h:var(--space-120);
+  --select-chevron:9px;--select-chevron-inset:calc(var(--space-16) + var(--space-2));
+  /* checkbox & radio */
+  --control-size:var(--size-icon-m);--control-border:var(--border-solid-m);
+  --check-glyph-w:calc(var(--space-8) - var(--space-2));--check-glyph-h:calc(var(--space-12) - var(--space-2)*0.5);
+  --check-glyph-stroke:var(--border-solid-l);--radio-dot:var(--space-12);
+  /* banner */
+  --banner-pad:var(--space-16);--banner-gap:var(--space-12);--banner-radius:var(--radius-container);
+  /* quiz answer */
+  --quiz-min-h:var(--size-target-l);--quiz-pad:calc(var(--space-16) - var(--space-2)) var(--space-16);
+  --quiz-gap:var(--space-12);--quiz-radius:var(--radius-container);--quiz-key-size:var(--size-icon-l);
+  /* layout primitives — all derive from ONE density knob (brand surface:
+     a brand sets --density instead of five tokens; direct overrides still win) */
+  --density:1;/* @kind other */
+  --gap-s:calc(var(--density)*var(--space-8));--gap-m:calc(var(--density)*var(--space-16));--gap-l:calc(var(--density)*var(--space-24));
+  --inset-s:calc(var(--density)*var(--space-8));--inset-m:calc(var(--density)*var(--space-16));--inset-l:calc(var(--density)*var(--space-24));
+  /* modal */
+  --modal-pad:var(--space-24);--modal-max-w:min(var(--space-640),90vw);
+}
+
+/* --- Layout ---
+   Breakpoints (custom properties cannot appear in @media — documented
+   constants): sm 640px · md 960px · lg 1280px. Prefer the primitives
+   below + auto-fit grids over bespoke media queries. */
+.oak-container{max-width:var(--container-max);margin-inline:auto;padding-inline:clamp(var(--space-16),4vw,var(--space-24))}
+.oak-prose{max-width:var(--measure-prose)}
+/* Gap-based layout primitives — never space siblings with margins */
+.oak-stack{display:flex;flex-direction:column;gap:var(--gap-m)}
+.oak-stack--s{gap:var(--gap-s)}
+.oak-stack--l{gap:var(--gap-l)}
+.oak-cluster{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gap-m)}
+.oak-cluster--s{gap:var(--gap-s)}
+.oak-cluster--l{gap:var(--gap-l)}
+.oak-grid{display:grid;gap:var(--gap-m);grid-template-columns:repeat(auto-fit,minmax(min(var(--space-240),100%),1fr))}
+.oak-box{padding:var(--inset-m)}
+.oak-box--s{padding:var(--inset-s)}
+.oak-box--l{padding:var(--inset-l)}
+/* Flow: brand-shaped grid topology. Children are cells; .oak-flow-key items
+   span full width and take the brand's key-item grammar (centred hero vs
+   left document title). DOM order is reading order — flow never reorders. */
+.oak-flow{display:grid;grid-template-columns:var(--flow-columns);gap:var(--flow-gap);align-items:start}
+.oak-flow>*{min-width:0}
+.oak-flow-key{grid-column:1/-1;text-align:var(--key-align);justify-self:var(--key-justify)}
+.oak-flow-key .oak-cluster{justify-content:var(--key-justify)}
+/* Tone band: a demarcated full-width region — Oak's solid mint by default */
+.oak-band{background:var(--band-bg);border-block:var(--band-border);padding-block:var(--band-pad);border-radius:var(--band-radius)}
+
+/* --- Links --- */
+.oak-link,:where(.oak-scope) a{color:var(--text-link);text-decoration:underline;text-underline-offset:var(--space-2);border-radius:var(--radius-xs)}
+.oak-link:hover{color:var(--text-link-hover)}
+.oak-link:visited{color:var(--text-link-visited)}
+.oak-link:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+
+/* --- Icons (img-based) --- */
+.oak-icon{width:var(--size-icon-m);height:var(--size-icon-m);filter:var(--filter-icon)}
+/* currentColor icons — colour-true on ANY surface (no filter juggling):
+   <span class="oak-icon--mask" style="--icon-src:url(assets/icons/tick.svg)" aria-hidden="true"></span> */
+.oak-icon--mask{display:inline-block;width:var(--size-icon-m);height:var(--size-icon-m);background:currentColor;-webkit-mask:var(--icon-src) center/contain no-repeat;mask:var(--icon-src) center/contain no-repeat}
+
+/* --- SVG styling contract ---
+   Inline SVG themes like everything else — never hardcode fills.
+   Icons: author fill/stroke="currentColor" + .oak-svg-icon.
+   Diagrams: the token classes below (work on any SVG element). --- */
+.oak-svg-icon{width:var(--size-icon-m);height:var(--size-icon-m);fill:currentColor;flex:0 0 auto}
+.oak-svg-ink{fill:var(--text-primary)}
+.oak-svg-subdued{fill:var(--text-subdued)}
+.oak-svg-surface{fill:var(--bg-primary)}
+.oak-svg-accent{fill:var(--color-accent)}
+.oak-svg-d1{fill:var(--surface-decorative-1)}
+.oak-svg-d2{fill:var(--surface-decorative-2)}
+.oak-svg-d3{fill:var(--surface-decorative-3)}
+.oak-svg-d4{fill:var(--surface-decorative-4)}
+.oak-svg-d5{fill:var(--surface-decorative-5)}
+.oak-svg-stroke-ink{stroke:var(--border-primary)}
+.oak-svg-stroke-accent{stroke:var(--color-accent)}
+
+/* --- Buttons ---
+   .oak-btn (primary) · .oak-btn--secondary · .oak-btn--inverted · + .oak-btn--sm
+   Icons: <img class="oak-btn__icon" src="assets/icons/arrow-right.svg" alt=""> */
+.oak-btn{min-height:var(--btn-min-h);box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;padding:var(--btn-pad);gap:var(--btn-gap);border-radius:var(--btn-radius);font:var(--weight-semibold) var(--font-size-3)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-heading);border:var(--btn-border) solid var(--bg-btn-primary);background:var(--bg-btn-primary);color:var(--text-btn-primary);cursor:pointer;text-decoration:none;white-space:nowrap;transition:background var(--motion-quick) var(--ease-standard),box-shadow var(--motion-quick) var(--ease-standard);background-image:var(--btn-bg-image);box-shadow:var(--btn-shadow)}
+.oak-btn:hover{background:var(--bg-btn-primary-hover);border-color:var(--bg-btn-primary-hover);box-shadow:var(--shadow-accent);text-decoration:underline}
+.oak-btn:active{box-shadow:var(--shadow-press)}
+.oak-btn:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+.oak-btn:disabled,.oak-btn[aria-disabled="true"]{background:var(--bg-btn-disabled);border-color:var(--bg-btn-disabled);color:var(--text-btn-disabled);cursor:not-allowed;box-shadow:none;text-decoration:none}
+.oak-btn__icon{width:var(--size-icon-m);height:var(--size-icon-m);flex:0 0 var(--size-icon-m)}
+.oak-btn .oak-btn__icon{filter:var(--filter-icon-on-btn-primary)}
+.oak-btn:disabled .oak-btn__icon{filter:var(--filter-icon-on-btn-disabled)}
+.oak-btn--secondary{background:var(--bg-btn-secondary);border-color:var(--border-primary);color:var(--text-primary)}
+.oak-btn--secondary:hover{background:var(--bg-btn-secondary-hover);border-color:var(--border-primary)}
+.oak-btn--secondary:disabled{background:var(--bg-primary);color:var(--text-disabled);border-color:var(--border-neutral-lighter)}
+.oak-btn--secondary .oak-btn__icon,.oak-btn--inverted .oak-btn__icon,.oak-btn--secondary:disabled .oak-btn__icon{filter:var(--filter-icon)}
+.oak-btn--inverted{background:var(--bg-primary);border-color:var(--bg-primary);color:var(--text-primary)}
+.oak-btn--inverted:hover{background:var(--bg-neutral);border-color:var(--bg-neutral);box-shadow:none}
+.oak-btn--sm{min-height:var(--btn-min-h-sm);padding:var(--btn-pad-sm);gap:var(--btn-gap-sm);font:var(--weight-bold) var(--font-size-2)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-body)}
+.oak-btn--sm .oak-btn__icon{width:var(--size-icon-s);height:var(--size-icon-s);flex:0 0 var(--size-icon-s)}
+
+/* Round icon-only button — give it an aria-label */
+.oak-icon-btn{width:var(--btn-min-h);height:var(--btn-min-h);box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-circle);border:var(--btn-border) solid var(--bg-btn-primary);background:var(--bg-btn-primary);cursor:pointer;transition:background var(--motion-quick) var(--ease-standard),box-shadow var(--motion-quick) var(--ease-standard)}
+.oak-icon-btn img{width:var(--size-icon-m);height:var(--size-icon-m);filter:var(--filter-icon-on-btn-primary)}
+.oak-icon-btn:hover{background:var(--bg-btn-primary-hover);border-color:var(--bg-btn-primary-hover);box-shadow:var(--shadow-accent)}
+.oak-icon-btn:active{box-shadow:var(--shadow-press)}
+.oak-icon-btn:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+.oak-icon-btn--secondary{background:var(--bg-btn-secondary);border-color:var(--border-primary)}
+.oak-icon-btn--secondary img{filter:var(--filter-icon)}
+.oak-icon-btn--secondary:hover{background:var(--bg-btn-secondary-hover)}
+
+/* --- Tags --- */
+.oak-tag{display:inline-flex;align-items:center;gap:var(--tag-gap);min-height:var(--tag-min-h);padding:var(--tag-pad);border-radius:var(--tag-radius);border:var(--tag-border);box-shadow:var(--tag-shadow);background:var(--surface-decorative-5);font:var(--weight-regular) var(--font-size-3)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-heading);color:var(--text-primary)}
+.oak-tag img{width:var(--size-icon-s);height:var(--size-icon-s);flex:0 0 var(--size-icon-s);filter:var(--filter-icon)}
+.oak-tag--mint{background:var(--surface-decorative-1)}
+.oak-tag--aqua{background:var(--surface-decorative-2)}
+.oak-tag--lavender{background:var(--surface-decorative-3)}
+.oak-tag--pink{background:var(--surface-decorative-4)}
+.oak-tag--grey{background:var(--bg-neutral-stronger)}
+.oak-tag--white{background:var(--bg-primary);border:var(--border-solid-s) solid var(--border-primary)}
+
+/* --- Cards ---
+   .oak-card static · wrap in <a class="oak-card-link"> to make it press */
+.oak-card{box-sizing:border-box;background:var(--card-bg);background-image:var(--card-bg-image);border:var(--card-border) solid var(--border-primary);border-radius:var(--card-radius);box-shadow:var(--shadow-accent);padding:var(--card-pad);color:var(--text-primary)}
+.oak-card--flat{box-shadow:none}
+.oak-card--grey-shadow{box-shadow:var(--shadow-neutral)}
+.oak-card--mint{background:var(--surface-decorative-1-subtle)}
+.oak-card--aqua{background:var(--surface-decorative-2-subtle)}
+.oak-card--lavender{background:var(--surface-decorative-3-subtle)}
+.oak-card--pink{background:var(--surface-decorative-4-subtle)}
+.oak-card--lemon{background:var(--surface-decorative-5-subtle)}
+.oak-card-link{display:block;color:inherit;text-decoration:none;border-radius:var(--card-radius);transition:transform var(--motion-quick) var(--ease-standard)}
+.oak-card-link:hover .oak-card{box-shadow:var(--shadow-accent-raised)}
+.oak-card-link:active{transform:translate(var(--space-2),var(--space-2))}
+.oak-card-link:active .oak-card{box-shadow:none}
+.oak-card-link:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+
+/* --- Subject chip --- */
+.oak-chip{width:var(--chip-size);height:var(--chip-size);flex:0 0 var(--chip-size);box-sizing:border-box;border-radius:var(--radius-circle);border:var(--chip-border) solid var(--border-primary);background:var(--surface-decorative-1);display:inline-flex;align-items:center;justify-content:center}
+.oak-chip img{width:60%;height:60%;filter:var(--filter-icon)}
+.oak-chip--aqua{background:var(--surface-decorative-2)}
+.oak-chip--lavender{background:var(--surface-decorative-3)}
+.oak-chip--pink{background:var(--surface-decorative-4)}
+.oak-chip--lemon{background:var(--surface-decorative-5)}
+
+/* --- Form fields ---
+   <div class="oak-field"><label class="oak-label" for=…>…</label>
+   <input class="oak-input" id=…><p class="oak-hint">…</p></div>
+   Error: add .oak-input--error, aria-invalid="true", and
+   <p class="oak-error" id=…>…</p> referenced by aria-describedby. */
+.oak-field{display:flex;flex-direction:column;gap:var(--field-gap);font-family:var(--font-sans)}
+.oak-label{font:var(--weight-bold) var(--font-size-3)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-body);color:var(--text-primary)}
+.oak-hint{font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-subdued);margin:0}
+.oak-error{font:var(--weight-regular) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-error);margin:0;display:flex;align-items:center;gap:var(--field-gap)}
+.oak-input,.oak-textarea,.oak-select{box-sizing:border-box;width:100%;min-height:var(--input-min-h);padding:var(--input-pad);border:var(--input-border) solid var(--border-neutral);border-radius:var(--input-radius);background:var(--bg-primary);font:var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-sans);letter-spacing:var(--tracking-body);color:var(--text-primary);transition:border-color var(--motion-quick) var(--ease-standard),box-shadow var(--motion-quick) var(--ease-standard)}
+.oak-input::placeholder,.oak-textarea::placeholder{color:var(--text-subdued);opacity:1}
+.oak-input:hover,.oak-textarea:hover,.oak-select:hover{border-color:var(--border-primary)}
+.oak-input:focus-visible,.oak-textarea:focus-visible,.oak-select:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);border-color:var(--border-primary);box-shadow:var(--focus-ring)}
+.oak-input--error,.oak-textarea--error,.oak-input[aria-invalid="true"],.oak-textarea[aria-invalid="true"]{border-color:var(--border-error)}
+.oak-textarea{min-height:var(--textarea-min-h);resize:vertical}
+.oak-select-wrap{position:relative;display:block}
+.oak-select-wrap .oak-select{appearance:none;padding-right:var(--size-target-min)}
+.oak-select-wrap::after{content:"";position:absolute;right:var(--select-chevron-inset);top:50%;width:var(--select-chevron);height:var(--select-chevron);border:solid var(--text-primary);border-width:0 var(--border-solid-m) var(--border-solid-m) 0;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+
+/* --- Checkbox & radio (native inputs, custom-drawn in pure CSS — themable) ---
+   <label class="oak-choice"><input type="checkbox" class="oak-checkbox"> Label</label> */
+.oak-choice{display:inline-flex;align-items:center;gap:var(--space-12);font:var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-sans);letter-spacing:var(--tracking-body);color:var(--text-primary);cursor:pointer;min-height:var(--size-target-min)}
+.oak-checkbox,.oak-radio{appearance:none;box-sizing:border-box;width:var(--control-size);height:var(--control-size);flex:0 0 var(--control-size);margin:0;border:var(--control-border) solid var(--border-primary);background:var(--bg-primary);cursor:pointer;display:inline-grid;place-content:center;transition:background var(--motion-quick) var(--ease-standard)}
+.oak-checkbox{border-radius:var(--radius-xs)}
+.oak-radio{border-radius:var(--radius-circle)}
+.oak-checkbox:checked{background:var(--bg-btn-primary);border-color:var(--bg-btn-primary)}
+.oak-checkbox:checked::before{content:"";width:var(--check-glyph-w);height:var(--check-glyph-h);margin-top:calc(-1*var(--space-2));border:solid var(--text-btn-primary);border-width:0 var(--check-glyph-stroke) var(--check-glyph-stroke) 0;transform:rotate(45deg)}
+.oak-radio:checked::before{content:"";width:var(--radio-dot);height:var(--radio-dot);border-radius:var(--radius-circle);background:var(--bg-btn-primary)}
+.oak-checkbox:focus-visible,.oak-radio:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+
+/* --- Inline banners — role="status" (info/success) or role="alert" (warning/error) --- */
+.oak-banner{box-sizing:border-box;display:flex;gap:var(--banner-gap);align-items:flex-start;padding:var(--banner-pad);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--banner-radius);background:var(--bg-neutral);font:var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-sans);letter-spacing:var(--tracking-body);color:var(--text-primary)}
+.oak-banner img{width:var(--size-icon-m);height:var(--size-icon-m);flex:0 0 var(--size-icon-m);filter:var(--filter-icon)}
+.oak-banner strong{font-weight:var(--weight-bold)}
+.oak-banner--info{background:var(--bg-info-subtle)}
+.oak-banner--success{background:var(--bg-success-subtle);border-color:var(--border-success)}
+.oak-banner--warning{background:var(--bg-warning-subtle);border-color:var(--border-warning)}
+.oak-banner--error{background:var(--bg-error-subtle);border-color:var(--border-error)}
+
+/* --- Quiz answers ---
+   <button class="oak-quiz-answer"> · + --selected / --correct / --incorrect
+   State is never colour alone: correct/incorrect also change border and
+   should carry a tick/cross icon + visually-hidden text. */
+.oak-quiz-answer{box-sizing:border-box;display:flex;align-items:center;gap:var(--quiz-gap);width:100%;min-height:var(--quiz-min-h);padding:var(--quiz-pad);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--quiz-radius);background:var(--bg-primary);font:var(--weight-light) var(--font-size-4)/var(--leading-28) var(--font-sans);letter-spacing:var(--tracking-body);color:var(--text-primary);text-align:left;cursor:pointer;transition:background var(--motion-quick) var(--ease-standard),box-shadow var(--motion-quick) var(--ease-standard)}
+.oak-quiz-answer:hover{box-shadow:var(--shadow-accent)}
+.oak-quiz-answer:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+.oak-quiz-answer--selected{background:var(--bg-selected);border-width:var(--border-solid-l)}
+.oak-quiz-answer--correct{background:var(--bg-correct);border-color:var(--border-success)}
+.oak-quiz-answer--incorrect{background:var(--bg-incorrect);border-color:var(--border-error)}
+.oak-quiz-answer__key{width:var(--quiz-key-size);height:var(--quiz-key-size);flex:0 0 var(--quiz-key-size);border-radius:var(--radius-circle);border:var(--border-solid-m) solid var(--border-primary);display:inline-grid;place-content:center;font:var(--weight-bold) var(--font-size-2)/var(--leading-none) var(--font-sans);background:var(--bg-primary)}
+
+/* --- Modal — native <dialog class="oak-modal"> (showModal(): platform focus
+   trap + Esc). Label with aria-labelledby; keep a visible close button. --- */
+.oak-modal{border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);background:var(--bg-overlay);color:var(--text-primary);padding:var(--modal-pad);box-shadow:var(--shadow-overlay);max-width:var(--modal-max-w)}
+.oak-modal::backdrop{background:var(--scrim)}
+
+/* --- Accordion — native <details class="oak-accordion"><summary> --- */
+.oak-accordion{border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);background:var(--bg-primary);color:var(--text-primary)}
+.oak-accordion summary{list-style:none;cursor:pointer;min-height:var(--size-target);box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:var(--space-12);padding:var(--control-pad-block) var(--control-pad-inline);font:var(--weight-semibold) var(--font-size-3)/var(--leading-24) var(--font-sans);letter-spacing:var(--tracking-heading);border-radius:var(--radius-container)}
+.oak-accordion summary::-webkit-details-marker{display:none}
+.oak-accordion summary::after{content:"";width:var(--select-chevron);height:var(--select-chevron);flex:0 0 auto;border:solid var(--text-primary);border-width:0 var(--border-solid-m) var(--border-solid-m) 0;transform:rotate(45deg);margin-top:calc(-1*var(--space-4));transition:transform var(--motion-quick) var(--ease-standard)}
+.oak-accordion[open] summary::after{transform:rotate(225deg);margin-top:var(--space-4)}
+.oak-accordion summary:focus-visible{outline:var(--focus-outline);outline-offset:var(--focus-outline-offset);box-shadow:var(--focus-ring)}
+.oak-accordion__body{padding:0 var(--control-pad-inline) var(--space-16);font:var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-sans);letter-spacing:var(--tracking-body)}
+
+/* --- Data table --- */
+.oak-table{width:100%;border-collapse:collapse;font:var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-sans);letter-spacing:var(--tracking-body);color:var(--text-primary)}
+.oak-table caption{text-align:left;font:var(--weight-semibold) var(--font-size-4)/var(--leading-28) var(--font-sans);padding-bottom:var(--space-12)}
+.oak-table th{font-weight:var(--weight-bold);text-align:left}
+.oak-table th,.oak-table td{padding:var(--space-12) var(--space-16);border-bottom:var(--border-solid-s) solid var(--border-neutral-lighter)}
+.oak-table thead th{border-bottom:var(--border-solid-m) solid var(--border-primary)}
+.oak-table tbody tr:hover{background:var(--bg-subtle)}
+
+/* --- Loading skeleton — decorative: aria-hidden the bars, pair with a
+   visually-hidden "Loading…" inside role="status" --- */
+.oak-skeleton{display:block;height:var(--space-16);border-radius:var(--radius-xs);background:var(--bg-neutral-stronger);animation:oak-skeleton-pulse var(--motion-loop) var(--ease-standard) infinite}
+@keyframes oak-skeleton-pulse{50%{opacity:0.55}}
+
+/* --- Empty state --- */
+.oak-empty{display:flex;flex-direction:column;align-items:center;gap:var(--space-12);text-align:center;padding:var(--space-40) var(--space-24);border:var(--border-solid-m) dashed var(--border-neutral);border-radius:var(--radius-container);color:var(--text-subdued);font:var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-sans)}
+.oak-empty strong{font:var(--weight-semibold) var(--font-size-4)/var(--leading-28) var(--font-sans);color:var(--text-primary)}
+
+/* --- Icon ROLES (shared-markup contract) ---
+   Byte-identical markup references icons by ROLE; each identity resolves
+   the role to its own set (mask URL + currentColor, so any SVG source
+   works: Oak local set by default — tokens in assets/oak-icons.css —
+   brands re-point --ic-* to their licensed sets' SVG URLs).
+   <span class="oak-icon--mask ic-search" aria-hidden="true"></span> */
+.ic-search{--icon-src:var(--ic-search)}.ic-download{--icon-src:var(--ic-download)}.ic-next{--icon-src:var(--ic-next)}.ic-prev{--icon-src:var(--ic-prev)}.ic-external{--icon-src:var(--ic-external)}.ic-close{--icon-src:var(--ic-close)}.ic-menu{--icon-src:var(--ic-menu)}.ic-tick{--icon-src:var(--ic-tick)}.ic-cross{--icon-src:var(--ic-cross)}.ic-warning{--icon-src:var(--ic-warning)}.ic-info{--icon-src:var(--ic-info)}.ic-star{--icon-src:var(--ic-star)}.ic-book{--icon-src:var(--ic-book)}.ic-quiz{--icon-src:var(--ic-quiz)}.ic-video{--icon-src:var(--ic-video)}.ic-worksheet{--icon-src:var(--ic-worksheet)}
+
+/* --- Utilities --- */
+.oak-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.oak-skip-link{position:absolute;left:-9999px;top:0;z-index:var(--layer-top);background:var(--bg-primary);color:var(--text-primary);padding:var(--space-12) var(--space-16);border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-s);font:var(--weight-semibold) var(--font-size-3)/var(--leading-20) var(--font-sans)}
+.oak-skip-link:focus-visible{left:var(--space-8);top:var(--space-8);outline:var(--focus-outline);box-shadow:var(--focus-ring)}
+
+/* --- Windows High Contrast Mode (forced-colors) ---
+   System colours win; shadows vanish. Real borders + transparent focus
+   outlines (above) keep every state visible. --- */
+@media (forced-colors: active){
+  .oak-btn,.oak-icon-btn,.oak-tag--white{border:var(--border-solid-m) solid ButtonText}
+  .oak-quiz-answer--selected{border-width:var(--border-solid-xl)}
+}
+
+/* In the high-contrast theme, surfaces go white — give shape back a border */
+[data-theme="high-contrast"] .oak-tag{border:var(--border-solid-s) solid var(--border-primary)}
+[data-theme="high-contrast"] .oak-chip{border-width:var(--border-solid-l)}
+
+/* --- Reduced motion --- (durations also collapse at token level in
+   colors_and_type.css — the media query + [data-motion="reduced"]; these
+   rules are belt-and-braces plus the animation:none cases) */
+@media (prefers-reduced-motion: reduce){
+  .oak-btn,.oak-icon-btn,.oak-card-link,.oak-input,.oak-textarea,.oak-select,.oak-checkbox,.oak-radio,.oak-quiz-answer,.oak-interactive,.oak-accordion summary::after{transition-duration:var(--motion-instant)}
+  .oak-skeleton{animation:none}
+}
+[data-motion="reduced"] .oak-skeleton{animation:none}
+
+/* --- Authoring: the lesson anatomy ---
+   Class names match Oak's real lesson components (see the "Authoring blocks"
+   card and SKILL.md): pupil outcome · key learning points · keywords (with
+   pupil-facing definitions) · starter/exit quiz · worked example ·
+   misconceptions and common mistakes (+ teacher response) · practice ·
+   teacher tips · content guidance (+ supervision level). Semantic HTML
+   first; every block pairs fill + border + a visible text label — never
+   colour alone. */
+.oak-block{box-sizing:border-box;border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);padding:var(--inset-m);background:var(--bg-primary)}
+.oak-block>:last-child{margin-bottom:0}
+.oak-block-label{display:block;font:var(--type-label);letter-spacing:var(--tracking-caps);text-transform:var(--label-transform);font-variant:var(--label-variant);color:var(--text-subdued);margin:0 0 var(--space-8)}
+.oak-outcome{background:var(--color-accent-subtle)}
+.oak-outcome p{font:var(--weight-regular) var(--font-size-6)/var(--leading-32) var(--font-sans);letter-spacing:var(--tracking-heading);margin:0}
+.oak-keywords{display:grid;gap:var(--gap-s);margin:0}
+.oak-keyword{background:var(--surface-decorative-2-subtle);border:var(--border-solid-s) solid var(--border-neutral-lighter);border-radius:var(--radius-container);padding:var(--inset-s);margin:0}
+.oak-keyword dt{display:inline;font-weight:var(--weight-bold)}
+.oak-keyword dd{display:inline;margin:0}
+.oak-worked-example{background:var(--bg-subtle)}
+.oak-worked-example ol{margin:0;padding-left:var(--space-24);display:flex;flex-direction:column;gap:var(--space-8)}
+.oak-misconception{background:var(--bg-warning-subtle);border-color:var(--border-warning)}
+.oak-guidance{background:var(--bg-info-subtle)}
+.oak-teacher-tip{background:var(--bg-subtle);border-style:dashed;border-color:var(--border-neutral)}
+.oak-key-learning-points ol{margin:0;padding-left:var(--space-24);display:flex;flex-direction:column;gap:var(--space-8)}
+.oak-quiz{background:var(--bg-primary)}
+.oak-quiz ol{margin:0;padding-left:var(--space-24);display:flex;flex-direction:column;gap:var(--space-8)}
+.oak-practice{background:var(--surface-decorative-4-subtle)}
+
+/* --- Composition: the REGION CONTRACT (one HTML, many compositions) ---
+   A page shell is .oak-canvas > regions (utility/masthead/main/footer), and
+   <main class="oak-main"> composes the content regions (hero/facets/results/
+   detail/resources/support/cta). Regions are SIBLINGS at each theming
+   boundary — never wrap two regions to fake a column: HTML ancestry caps
+   transformability. Brands recompose by overriding the whole-map tokens;
+   DOM order is canonical and never changes (test the focus path after any
+   recomposition). Below 840px the -narrow maps apply (default: one gutter-padded column).
+   A map MUST place every region — one missing name invalidates the whole
+   template (see KNOWN-ISSUES.md). */
+:root{
+  --canvas-columns: minmax(0,1fr); /* @kind other */
+  --canvas-areas: "utility" "masthead" "main" "footer"; /* @kind other */
+  --canvas-rows: auto auto 1fr auto; /* @kind other */ /* main absorbs spare height — footer never floats mid-page */
+  --canvas-gap: 0;
+  --main-gutter: clamp(var(--space-16), 4vw, var(--space-32));
+  --main-gap: 0 var(--gap-l);
+  /* Universal fallback map: every region name, stacked in canonical order —
+     safe for ANY subset of regions (empty rows collapse; row-gap is 0) */
+  --main-columns: minmax(0,1fr); /* @kind other */
+  --main-areas: "hero" "navigation" "featured" "facets" "results" "detail" "content" "context" "resources" "support" "cta"; /* @kind other */
+  --main-columns-narrow: minmax(0,1fr); /* @kind other */
+  --main-areas-narrow: "hero" "navigation" "featured" "facets" "results" "detail" "content" "context" "resources" "support" "cta"; /* @kind other */
+}
+/* PAGE-TYPE SCOPING: maps live under [data-page="<type>"] (on <body> or the
+   canvas), never at :root — different page shapes need different maps, and
+   inheritance proximity lets the page always win over a stray global. Brands
+   override the SAME scoped selector (their sheet loads later). Shipped types: */
+[data-page="unit"]{
+  --main-columns: minmax(var(--main-gutter),1fr) minmax(0,280px) minmax(0,948px) minmax(var(--main-gutter),1fr); /* @kind other */
+  --main-areas: "hero hero hero hero" ". facets results ." ". detail detail ." "resources resources resources resources" ". support support ." "cta cta cta cta"; /* @kind other */
+  --main-columns-narrow: var(--main-gutter) minmax(0,1fr) var(--main-gutter); /* @kind other */
+  --main-areas-narrow: "hero hero hero" ". facets ." ". results ." ". detail ." "resources resources resources" ". support ." "cta cta cta"; /* @kind other */
+}
+[data-page="home"]{
+  --main-columns: minmax(0,1fr); /* @kind other */
+  --main-areas: "hero" "featured" "content" "context" "cta"; /* @kind other */
+  --main-columns-narrow: minmax(0,1fr); /* @kind other */
+  --main-areas-narrow: "hero" "featured" "content" "context" "cta"; /* @kind other */
+}
+[data-page="proof"]{
+  --main-columns: minmax(0,1fr); /* @kind other */
+  --main-areas: "hero" "featured" "support" "context"; /* @kind other */
+  --main-columns-narrow: minmax(0,1fr); /* @kind other */
+  --main-areas-narrow: "hero" "featured" "support" "context"; /* @kind other */
+}
+.oak-canvas{display:grid;grid-template-columns:var(--canvas-columns);grid-template-rows:var(--canvas-rows);grid-template-areas:var(--canvas-areas);gap:var(--canvas-gap);min-height:100dvh;align-content:start}
+.oak-canvas>[data-region="utility"]{grid-area:utility}
+.oak-canvas>[data-region="masthead"]{grid-area:masthead}
+.oak-canvas>[data-region="main"]{grid-area:main}
+.oak-canvas>[data-region="footer"]{grid-area:footer}
+.oak-main{display:grid;grid-template-columns:var(--main-columns);grid-template-areas:var(--main-areas);gap:var(--main-gap)}
+.oak-main>[data-region="hero"]{grid-area:hero}
+.oak-main>[data-region="navigation"]{grid-area:navigation}
+.oak-main>[data-region="featured"]{grid-area:featured}
+.oak-main>[data-region="content"]{grid-area:content}
+.oak-main>[data-region="context"]{grid-area:context}
+.oak-main>[data-region="facets"]{grid-area:facets}
+.oak-main>[data-region="results"]{grid-area:results}
+.oak-main>[data-region="detail"]{grid-area:detail}
+.oak-main>[data-region="resources"]{grid-area:resources}
+.oak-main>[data-region="support"]{grid-area:support}
+.oak-main>[data-region="cta"]{grid-area:cta}
+/* Regions are containers BY NAME: an inner wrapper may opt into width
+   queries (container-type:inline-size on a child, or @container region).
+   The size containment does NOT live on the region itself: a region is a
+   grid item, and inline-size containment zeroes its intrinsic width — any
+   auto-margin region (.oak-container) then collapses to its padding.
+   (This was live as a "narrow column" render bug, long misread as a
+   screenshot artifact.) */
+.oak-region{min-width:0;container-name:region}
+@media (max-width:840px){.oak-main{grid-template-columns:var(--main-columns-narrow);grid-template-areas:var(--main-areas-narrow)}}
+/* Progressive enhancement: where supported, expose visually reordered
+   regions to speech/sequential nav in visual row order */
+@supports (reading-flow: grid-rows){.oak-canvas,.oak-main{reading-flow:grid-rows}}

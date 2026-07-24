@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Core icons" subtitle="Every OakIcon, grouped by category" viewport="820x1400" -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; background:var(--bg-primary); color:var(--text-primary); font-family:var(--font-sans); }
+  * { box-sizing:border-box; }
+  .wrap { padding:24px 26px; }
+  h4 { font:400 11px/14px var(--font-mono); color:var(--oak-grey50); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.06em; }
+  .lede { font:300 13px/18px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-subdued); margin:0 0 8px; max-width:64ch; }
+  .cat { display:flex; align-items:baseline; gap:8px; margin:26px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--border-primary); }
+  .cat h2 { font:700 16px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); margin:0; }
+  .cat .count { font:400 11px/16px var(--font-mono); color:var(--oak-grey50); }
+  .grid { display:grid; gap:20px 14px; }
+  .grp { display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center; }
+  .ic { display:block; object-fit:contain; }
+  .nm { font:400 10px/12px var(--font-mono); color:var(--oak-grey50); word-break:break-word; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="tweaks-panel.js"></script>
+<link rel="stylesheet" href="../components.css"><link rel="stylesheet" href="../oak-icons.css">
+<style>.maskrow{display:flex;flex-wrap:wrap;gap:16px;align-items:center;padding:12px 16px;border:2px solid var(--border-primary);border-radius:8px;margin:0 0 16px;background:var(--bg-subtle)}.maskrow code{font:400 12px/16px var(--font-mono);color:var(--text-subdued)}</style>
+<div class="maskrow" aria-label="Mask-tint usage">
+<span class="oak-icon--mask" style="--icon-src:var(--i-tick);color:var(--text-success)" aria-hidden="true"></span>
+<span class="oak-icon--mask" style="--icon-src:var(--i-warning);color:var(--text-error)" aria-hidden="true"></span>
+<span class="oak-icon--mask" style="--icon-src:var(--i-download);color:var(--text-link)" aria-hidden="true"></span>
+<span class="oak-icon--mask" style="--icon-src:var(--i-quiz);color:var(--text-primary)" aria-hidden="true"></span>
+<span class="oak-icon--mask" style="--icon-src:var(--i-bell);color:var(--text-subdued)" aria-hidden="true"></span>
+<code>currentColor tint: &lt;span class="oak-icon--mask" style="--icon-src:var(--i-tick)"&gt; — name map in oak-icons.css (loaded by styles.css); prefer &lt;img&gt; + --filter-icon for the official colouring</code>
+</div>
+<script type="text/babel">
+// Every SVG in assets/icons/ (mirrors oak-components OakIcon set), grouped and A-Z within group.
+const CATS = {
+  "System & UI": ["bell","copy","copyright","cross","dot","download","edit","error","expand",
+    "external","filter","go","hamburger","home","info","lock","minimise","pause","pencil",
+    "play","question-mark","save","search","send","share","success","tick","warning"],
+  "Arrows & chevrons": ["arrow-down","arrow-left","arrow-right","arrow-up",
+    "chevron-down","chevron-left","chevron-right","chevron-up"],
+  "Teaching & resources": ["additional-material","ai","book-steps","bookmark-filled",
+    "bookmark-outlined","books","clipboard","content-guidance","curriculum-plan",
+    "equipment-required","free-tag","intro","lightbulb","lightbulb-yellow","magic-carpet",
+    "project","quiz","rocket","slide-deck","slide-deck-3","spreadsheet","supervision-level",
+    "teacher-lesson","teacher-unit","video","worksheet","worksheet-3"],
+  "Subjects": ["subject-art","subject-biology","subject-chemistry","subject-citizenship",
+    "subject-communication-and-language","subject-computing","subject-cooking-nutrition",
+    "subject-creative-arts","subject-design-technology","subject-drama","subject-dt",
+    "subject-english","subject-english-grammar","subject-english-spelling",
+    "subject-financial-education","subject-french","subject-geography","subject-german",
+    "subject-handwriting","subject-history","subject-independent-living","subject-language",
+    "subject-latin","subject-literature","subject-maths","subject-music","subject-numeracy",
+    "subject-pe","subject-philosophy","subject-physical-development",
+    "subject-physical-education","subject-physical-therapy","subject-physics",
+    "subject-reading-writing-oracy","subject-religious-education","subject-rshe-pshe",
+    "subject-science","subject-sensory-integration","subject-social-science",
+    "subject-spanish","subject-speech-and-language","subject-swimming","subject-theology",
+    "subject-therapy","subject-understanding-the-world","subject-vocabulary"],
+  "Social": ["facebook","instagram","linkedin","social-facebook","social-x","threads","twitter","x"],
+  "Brand & decorative": ["bubble-1","bubble-2","burst","confetti","header-underline",
+    "homepage-robot-waving","homepage-teacher","homepage-three-pupils","logo",
+    "speech-bubble","underline-1"],
+};
+
+const TINTS = { black:"#222222", green:"#287c34", navy:"#0d24c4", grey:"#808080", white:"#ffffff" };
+// oakColorFilterTokens (oak-components src/styles/theme/color.ts) — how OakIcon recolours.
+const FILTERS = {
+  black:  "invert(10%) sepia(1%) saturate(236%) hue-rotate(314deg) brightness(95%) contrast(91%)",
+  green:  "invert(37%) sepia(16%) saturate(1947%) hue-rotate(77deg) brightness(100%) contrast(88%)",
+  navy:   "invert(21%) sepia(90%) saturate(3220%) hue-rotate(232deg) brightness(71%) contrast(127%)",
+  grey:   "invert(54%) sepia(0%) saturate(38%) hue-rotate(176deg) brightness(92%) contrast(91%)",
+  white:  "invert(98%) sepia(98%) saturate(0%) hue-rotate(328deg) brightness(102%) contrast(102%)",
+};
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "iconSize": 32,
+  "tint": "black",
+  "background": "white",
+  "showLabels": true,
+  "decorative": true
+}/*EDITMODE-END*/;
+
+function Group({ name, names, size, tintKey, showLabels }) {
+  const min = size + 28;
+  return (
+    <div>
+      <div className="cat"><h2>{name}</h2><span className="count">{names.length}</span></div>
+      <div className="grid" style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${min}px, 1fr))` }}>
+        {names.map((n) => (
+          <div className="grp" key={n}>
+            <img className="ic" src={`../assets/icons/${n}.svg`} alt={n}
+              style={{ width: size, height: size, filter: FILTERS[tintKey] }} />
+            {showLabels && <span className="nm">{n.replace(/^subject-/, "")}</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const bg = t.background === "dark" ? "#222222" : t.background === "mint" ? "#ebfbeb" : "#ffffff";
+  const tintKey = t.background === "dark" && t.tint === "black" ? "white" : t.tint;
+  const total = Object.values(CATS).flat().length;
+  const entries = Object.entries(CATS).filter(([n]) => t.decorative || n !== "Brand & decorative");
+
+  return (
+    <div className="wrap" style={{ background: bg, minHeight: "100%" }}>
+      <h4>Core icons · OakIcon</h4>
+      <p className="lede">All {total} icons in the set, grouped by category and sorted A–Z within each group. In production they load from Cloudinary via <code>&lt;OakIcon iconName="…" /&gt;</code>; here they're local SVGs recoloured with Oak's <code>oakColorFilterTokens</code> filters.</p>
+      {entries.map(([name, names]) => (
+        <Group key={name} name={name} names={names}
+          size={name === "Brand & decorative" ? Math.round(t.iconSize * 2.2) : t.iconSize}
+          tintKey={tintKey} showLabels={t.showLabels} />
+      ))}
+
+      <TweaksPanel>
+        <TweakSection label="Appearance" />
+        <TweakSlider label="Icon size" value={t.iconSize} min={20} max={56} unit="px"
+          onChange={(v) => setTweak("iconSize", v)} />
+        <TweakColor label="Tint" value={TINTS[t.tint]}
+          options={["#222222", "#287c34", "#0d24c4", "#808080"]}
+          onChange={(v) => setTweak("tint", Object.keys(TINTS).find(k => TINTS[k] === v) || "black")} />
+        <TweakRadio label="Background" value={t.background}
+          options={["white", "mint", "dark"]}
+          onChange={(v) => setTweak("background", v)} />
+        <TweakSection label="Content" />
+        <TweakToggle label="Show labels" value={t.showLabels}
+          onChange={(v) => setTweak("showLabels", v)} />
+        <TweakToggle label="Show decorative" value={t.decorative}
+          onChange={(v) => setTweak("decorative", v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

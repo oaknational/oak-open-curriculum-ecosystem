@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Tabs" subtitle="Text tabs with active lemon underline" viewport="700x140" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); }
+  .tabs { display:flex; gap:8px; border-bottom:2px solid var(--oak-grey30); }
+  .tab { font:700 16px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-subdued);
+    background:transparent; border:0; padding:12px 16px; cursor:pointer; border-bottom:4px solid transparent; margin-bottom:-2px; }
+  .tab.active { color:var(--text-primary); border-bottom-color:var(--oak-lemon); }
+  .panel { padding:20px 4px; font:300 16px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+</style></head>
+<body>
+  <div class="tabs">
+    <button class="tab active">Lessons</button>
+    <button class="tab">Units</button>
+    <button class="tab">Curriculum</button>
+    <button class="tab">Downloads</button>
+  </div>
+  <div class="panel">Showing all lessons in this unit. Pick one to preview its video, quizzes and worksheet.</div>
+</body></html>

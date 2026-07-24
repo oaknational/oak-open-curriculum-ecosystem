@@ -1,0 +1,86 @@
+/* Oak icon URL token map — the OFFICIAL Oak icon set (assets/icons/*.svg,
+   from res.cloudinary.com/oak-web-application). Loaded by styles.css.
+   LIVES AT PROJECT ROOT next to components.css ON PURPOSE: url() inside a
+   custom property may resolve against the DECLARING or the CONSUMING
+   stylesheet depending on engine — with both sheets sharing one base, the
+   ambiguity is moot. Keep it beside components.css.
+   Usage (classes live in components.css):
+     <img class="oak-icon" src=".../assets/icons/tick.svg" alt="">                       - img + --filter-icon theming (path relative to your page)
+     <span class="oak-icon--mask" style="--icon-src:var(--i-tick)" aria-hidden="true"></span> - currentColor tint on any surface
+   The --i-* tokens below let mask usage reference icons by NAME instead of path.
+   Counter-brand sets (openly licensed, identity-appropriate) live in
+   whitelabel/<brand>/icons.css. */
+
+:root {
+  --icons: "assets/icons"; /* @kind other */
+  --i-question-mark: url("assets/icons/question-mark.svg"); /* @kind other */
+  --i-ai: url("assets/icons/ai.svg"); /* @kind other */
+  --i-home: url("assets/icons/home.svg"); /* @kind other */
+  --i-send: url("assets/icons/send.svg"); /* @kind other */
+  --i-rocket: url("assets/icons/rocket.svg"); /* @kind other */
+  --i-edit: url("assets/icons/edit.svg"); /* @kind other */
+  --i-expand: url("assets/icons/expand.svg"); /* @kind other */
+  --i-minimise: url("assets/icons/minimise.svg"); /* @kind other */
+  --i-hamburger: url("assets/icons/hamburger.svg"); /* @kind other */
+  --i-cross: url("assets/icons/cross.svg"); /* @kind other */
+  --i-copy: url("assets/icons/copy.svg"); /* @kind other */
+  --i-bell: url("assets/icons/bell.svg"); /* @kind other */
+  --i-share: url("assets/icons/share.svg"); /* @kind other */
+  --i-arrow-right: url("assets/icons/arrow-right.svg"); /* @kind other */
+  --i-arrow-left: url("assets/icons/arrow-left.svg"); /* @kind other */
+  --i-arrow-up: url("assets/icons/arrow-up.svg"); /* @kind other */
+  --i-arrow-down: url("assets/icons/arrow-down.svg"); /* @kind other */
+  --i-chevron-right: url("assets/icons/chevron-right.svg"); /* @kind other */
+  --i-chevron-left: url("assets/icons/chevron-left.svg"); /* @kind other */
+  --i-chevron-up: url("assets/icons/chevron-up.svg"); /* @kind other */
+  --i-chevron-down: url("assets/icons/chevron-down.svg"); /* @kind other */
+  --i-save: url("assets/icons/save.svg"); /* @kind other */
+  --i-success: url("assets/icons/success.svg"); /* @kind other */
+  --i-error: url("assets/icons/error.svg"); /* @kind other */
+  --i-filter: url("assets/icons/filter.svg"); /* @kind other */
+  --i-download: url("assets/icons/download.svg"); /* @kind other */
+  --i-search: url("assets/icons/search.svg"); /* @kind other */
+  --i-go: url("assets/icons/go.svg"); /* @kind other */
+  --i-tick: url("assets/icons/tick.svg"); /* @kind other */
+  --i-dot: url("assets/icons/dot.svg"); /* @kind other */
+  --i-warning: url("assets/icons/warning.svg"); /* @kind other */
+  --i-lightbulb: url("assets/icons/lightbulb.svg"); /* @kind other */
+  --i-lightbulb-yellow: url("assets/icons/lightbulb-yellow.svg"); /* @kind other */
+  --i-pencil: url("assets/icons/pencil.svg"); /* @kind other */
+  --i-quiz: url("assets/icons/quiz.svg"); /* @kind other */
+  --i-video: url("assets/icons/video.svg"); /* @kind other */
+  --i-slide-deck: url("assets/icons/slide-deck.svg"); /* @kind other */
+  --i-worksheet: url("assets/icons/worksheet.svg"); /* @kind other */
+  --i-additional-material: url("assets/icons/additional-material.svg"); /* @kind other */
+  --i-intro: url("assets/icons/intro.svg"); /* @kind other */
+  --i-play: url("assets/icons/play.svg"); /* @kind other */
+  --i-info: url("assets/icons/info.svg"); /* @kind other */
+  --i-bookmark-outlined: url("assets/icons/bookmark-outlined.svg"); /* @kind other */
+  --i-bookmark-filled: url("assets/icons/bookmark-filled.svg"); /* @kind other */
+  --i-external: url("assets/icons/external.svg"); /* @kind other */
+  --i-content-guidance: url("assets/icons/content-guidance.svg"); /* @kind other */
+  --i-equipment-required: url("assets/icons/equipment-required.svg"); /* @kind other */
+  --i-supervision-level: url("assets/icons/supervision-level.svg"); /* @kind other */
+  --i-facebook: url("assets/icons/facebook.svg"); /* @kind other */
+  --i-twitter: url("assets/icons/twitter.svg"); /* @kind other */
+  --i-x: url("assets/icons/x.svg"); /* @kind other */
+  --i-instagram: url("assets/icons/instagram.svg"); /* @kind other */
+  --i-linkedin: url("assets/icons/linkedin.svg"); /* @kind other */
+  --i-threads: url("assets/icons/threads.svg"); /* @kind other */
+  --i-free-tag: url("assets/icons/free-tag.svg"); /* @kind other */
+  --i-clipboard: url("assets/icons/clipboard.svg"); /* @kind other */
+  --i-books: url("assets/icons/books.svg"); /* @kind other */
+  --i-logo: url("assets/icons/logo.svg"); /* @kind other */
+
+  /* Icon ROLES — the shared-markup vocabulary (see components.css .ic-*).
+     Oak resolves roles to the official set; brands re-point --ic-* to
+     their own openly-licensed sets' SVG URLs. */
+  --ic-search: var(--i-search); --ic-download: var(--i-download); --ic-next: var(--i-arrow-right); --ic-prev: var(--i-arrow-left);
+  --ic-external: var(--i-external); --ic-close: var(--i-cross); --ic-menu: var(--i-hamburger); --ic-tick: var(--i-tick);
+  --ic-cross: var(--i-cross); --ic-warning: var(--i-warning); --ic-info: var(--i-info); --ic-star: var(--i-bookmark-outlined);
+  --ic-book: var(--i-books); --ic-quiz: var(--i-quiz); --ic-video: var(--i-video); --ic-worksheet: var(--i-worksheet);
+}
+
+/* (Sizing + mask classes live in components.css: .oak-icon, .oak-icon--mask.
+   The legacy .oak-icon/.oak-mask blocks that lived here pre-dated the token
+   architecture and conflicted with them — removed 1.6.2.) */

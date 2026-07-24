@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oak reveal.js sample deck</title>
+<link rel="stylesheet" href="vendor/reveal.css">
+<link rel="stylesheet" href="vendor/simple.css">
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="../../print.css">
+<link rel="stylesheet" href="oak-reveal-theme.css">
+</head><body>
+<div class="reveal"><div class="slides">
+<section data-screen-label="01">
+<p class="oak-kicker">Lesson</p>
+<h1>Where does a puddle go?</h1>
+<p style="color:var(--text-subdued)">Science · Year 4 · The water cycle</p>
+</section>
+<section data-screen-label="02">
+<p class="oak-kicker">Lesson outcome</p>
+<h2>I can describe how water <strong>evaporates</strong> from a puddle and where it goes.</h2>
+</section>
+<section data-screen-label="03">
+<p class="oak-kicker">Keywords</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-24);text-align:left">
+<div style="border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);padding:var(--space-24);background:var(--surface-decorative-1-subtle)"><strong>evaporate</strong><br>To turn from a liquid into a gas.</div>
+<div style="border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);padding:var(--space-24);background:var(--surface-decorative-2-subtle)"><strong>water vapour</strong><br>Water as a gas, spread out in the air.</div>
+</div>
+</section>
+<section data-screen-label="04">
+<p class="oak-kicker">Check</p>
+<h3>Which process turns water into water vapour?</h3>
+<ol style="text-align:left;display:inline-block">
+<li>Freezing</li>
+<li>Evaporation</li>
+<li>Melting</li>
+</ol>
+</section>
+</div></div>
+<script src="vendor/reveal.js"></script>
+<script>
+Reveal.initialize({
+  transition: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'none' : 'fade',
+  transitionSpeed: 'fast', // quiet motion: fade only, never convex/zoom
+  hash: true, center: true, width: 1920, height: 1080
+});
+</script>
+</body></html>

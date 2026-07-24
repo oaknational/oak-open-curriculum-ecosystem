@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Media" name="SVG styling" subtitle="Inline SVG on the token contract — same markup, themed by scope; never hardcode a fill" viewport="880x520" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:24px;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);padding:16px;background:var(--bg-primary);color:var(--text-primary)}
+.panel h2{font:var(--weight-semibold) var(--font-size-2)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-subdued);margin:0 0 8px}
+.note{font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-subdued);margin:14px 0 0}
+.note code{font:var(--weight-regular) var(--font-size-1)/var(--leading-16) var(--font-mono);background:var(--bg-neutral);border-radius:var(--radius-xs);padding:0 4px}
+.row{display:flex;gap:12px;align-items:center;margin-top:10px;font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans)}
+</style></head><body>
+<div class="cols">
+<div class="panel">
+<h2>Light scope</h2>
+<svg viewBox="0 0 240 120" width="100%" role="img" aria-label="Diagram: the sun warms a puddle and vapour rises">
+<rect x="0" y="96" width="240" height="24" class="oak-svg-d2"></rect>
+<ellipse cx="120" cy="102" rx="52" ry="9" class="oak-svg-d3"></ellipse>
+<circle cx="36" cy="28" r="16" class="oak-svg-accent oak-svg-stroke-ink" stroke-width="2"></circle>
+<g class="oak-svg-ink"><rect x="112" y="58" width="4" height="26" rx="2"></rect><rect x="128" y="50" width="4" height="34" rx="2"></rect><rect x="96" y="52" width="4" height="32" rx="2"></rect></g>
+<path d="M150 30 q10 -14 26 -8 q16 -8 24 4 q14 2 8 14 q-6 10 -20 6 q-14 8 -26 0 q-16 2 -12 -16z" class="oak-svg-surface oak-svg-stroke-ink" stroke-width="2"></path>
+</svg>
+<div class="row"><svg class="oak-svg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17.2 4.8 12.5l1.7-1.7 3 3 7.9-7.9 1.7 1.7z"></path></svg>currentColor icon inherits this text colour</div>
+</div>
+<div class="panel" data-theme="dark">
+<h2>Dark scope — same markup</h2>
+<svg viewBox="0 0 240 120" width="100%" role="img" aria-label="The same diagram, themed dark by the subtree">
+<rect x="0" y="96" width="240" height="24" class="oak-svg-d2"></rect>
+<ellipse cx="120" cy="102" rx="52" ry="9" class="oak-svg-d3"></ellipse>
+<circle cx="36" cy="28" r="16" class="oak-svg-accent oak-svg-stroke-ink" stroke-width="2"></circle>
+<g class="oak-svg-ink"><rect x="112" y="58" width="4" height="26" rx="2"></rect><rect x="128" y="50" width="4" height="34" rx="2"></rect><rect x="96" y="52" width="4" height="32" rx="2"></rect></g>
+<path d="M150 30 q10 -14 26 -8 q16 -8 24 4 q14 2 8 14 q-6 10 -20 6 q-14 8 -26 0 q-16 2 -12 -16z" class="oak-svg-surface oak-svg-stroke-ink" stroke-width="2"></path>
+</svg>
+<div class="row"><svg class="oak-svg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17.2 4.8 12.5l1.7-1.7 3 3 7.9-7.9 1.7 1.7z"></path></svg>currentColor icon inherits this text colour</div>
+</div>
+</div>
+<p class="note">Contract: icons author <code>fill="currentColor"</code> + <code>.oak-svg-icon</code>; diagram parts take <code>.oak-svg-ink/-subdued/-surface/-accent/-d1…d5/-stroke-*</code>. Attribute fills (<code>fill="#…"</code>) are reserved for fixed brand art only — everything else themes, prints, and re-brands for free.</p>
+</body></html>

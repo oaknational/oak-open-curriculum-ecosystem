@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Links" subtitle="OakLink — primary & secondary, optional icon" viewport="700x220" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; flex-direction:column; gap:18px; align-items:flex-start; }
+  .lbl { font:700 11px/14px var(--font-sans); letter-spacing:0.02em; text-transform:uppercase; color:var(--text-subdued); }
+  .row { display:flex; gap:24px; align-items:center; flex-wrap:wrap; }
+  /* OakLink: body text, primary = navy + underline (hover navy110, visited navy120);
+     secondary = text-primary, no underline. Optional 20px leading/trailing icon. */
+  .oak-link { display:inline-flex; align-items:center; gap:6px;
+    font:300 18px/28px var(--font-sans); letter-spacing:-0.005rem; cursor:pointer; }
+  .oak-link img { width:20px; height:20px; }
+  .primary { color:var(--text-link); text-decoration:underline; text-underline-offset:2px; }
+  .primary:hover { color:var(--oak-navy110); }
+  .primary.visited { color:var(--oak-navy120); }
+  .secondary { color:var(--text-primary); text-decoration:none; }
+  .secondary:hover { text-decoration:underline; text-underline-offset:2px; }
+  .primary img { filter:invert(13%) sepia(94%) saturate(4000%) hue-rotate(238deg) brightness(80%) contrast(105%); }
+</style></head>
+<body>
+  <div class="lbl">Primary</div>
+  <div class="row">
+    <a class="oak-link primary">Browse all lessons</a>
+    <a class="oak-link primary">Curriculum plans<img src="../assets/icons/chevron-right.svg" alt=""></a>
+    <a class="oak-link primary visited">Visited link</a>
+  </div>
+
+  <div class="lbl">Secondary</div>
+  <div class="row">
+    <a class="oak-link secondary">Back to subjects</a>
+    <a class="oak-link secondary"><img src="../assets/icons/chevron-left.svg" alt="">Previous lesson</a>
+  </div>
+</body></html>

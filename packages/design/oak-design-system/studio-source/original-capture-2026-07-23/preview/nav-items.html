@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Navigation items" subtitle="Dashboard nav, side menu & menu items — active/default" viewport="760x340" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; gap:28px; flex-wrap:wrap; }
+  .col { min-width:240px; }
+  h4 { font:700 11px/14px var(--font-sans); letter-spacing:0.02em; text-transform:uppercase; color:var(--text-subdued); margin:0 0 12px; }
+  .nav { display:flex; flex-direction:column; gap:6px; }
+  .item { display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:8px; cursor:pointer;
+    font:700 16px/22px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .item img { width:24px; height:24px; }
+  .item.active { background:var(--oak-lemon30); box-shadow:inset 4px 0 0 var(--oak-lemon); }
+  .item.hover { background:var(--oak-grey20); }
+  .side .item { border:2px solid transparent; }
+  .side .item.active { background:var(--bg-primary); border-color:var(--text-primary); box-shadow:var(--shadow-lemon); }
+  .badge { margin-left:auto; min-width:24px; height:24px; padding:0 7px; border-radius:100px; background:var(--oak-red); color:var(--oak-white);
+    font:700 12px/24px var(--font-sans); text-align:center; }
+</style></head>
+<body>
+  <div class="col">
+    <h4>Dashboard nav</h4>
+    <nav class="nav">
+      <a class="item active"><img src="../assets/icons/home.svg" alt="">Overview</a>
+      <a class="item"><img src="../assets/icons/quiz.svg" alt="">Quizzes</a>
+      <a class="item hover"><img src="../assets/icons/worksheet.svg" alt="">Worksheets</a>
+      <a class="item"><img src="../assets/icons/bell.svg" alt="">Updates<span class="badge">3</span></a>
+    </nav>
+  </div>
+  <div class="col side">
+    <h4>Side menu</h4>
+    <nav class="nav">
+      <a class="item active"><img src="../assets/icons/subject-maths.svg" alt="">Maths</a>
+      <a class="item"><img src="../assets/icons/subject-english.svg" alt="">English</a>
+      <a class="item"><img src="../assets/icons/subject-science.svg" alt="">Science</a>
+    </nav>
+  </div>
+</body></html>

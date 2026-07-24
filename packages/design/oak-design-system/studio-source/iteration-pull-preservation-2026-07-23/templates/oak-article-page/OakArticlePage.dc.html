@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Oak article page" description="Prose page (blog post / about / legal grammar): compact lavender hero with category tag and byline, 65ch article column with headings and an info callout, closing CTA. Delete what you don't need." -->
+<helmet><script src="./ds-base.js"></script><script src="./theme-control.js"></script><style>body{margin:0}</style></helmet>
+<div class="oak-scope oak-canvas" data-page="home">
+<header data-region="masthead">
+<a class="oak-skip-link" href="#main">Skip to content</a>
+<nav aria-label="Oak site areas" style="background:var(--bg-btn-primary);display:flex;gap:var(--gap-m);padding:var(--space-16) clamp(var(--space-20),4vw,var(--space-40)) 0">
+<a class="oak-btn oak-btn--secondary" aria-current="page" href="https://www.thenational.academy/teachers" style="border-bottom-left-radius:var(--radius-square);border-bottom-right-radius:var(--radius-square);border-bottom-width:0">Teachers</a>
+<a class="oak-btn" href="https://www.thenational.academy" style="border-bottom-left-radius:var(--radius-square);border-bottom-right-radius:var(--radius-square);border-bottom-width:0">Back to www</a>
+</nav>
+<nav aria-label="Oak National Academy" style="background:var(--bg-primary);border-bottom:var(--border-solid-s) solid var(--border-neutral-lighter);display:flex;align-items:center;gap:var(--gap-l);padding:var(--space-16) clamp(var(--space-20),4vw,var(--space-40))">
+<a href="https://www.thenational.academy" aria-label="Oak National Academy home"><img src="./assets/logo.svg" alt="" style="display:block;height:var(--size-icon-xxl);width:auto;filter:var(--filter-icon)" /></a>
+<a class="oak-btn oak-btn--secondary oak-btn--sm" href="https://www.thenational.academy" style="margin-left:auto;border-radius:var(--radius-circle)">Back to the main Oak website<img class="oak-btn__icon" src="https://res.cloudinary.com/oak-web-application/image/upload/v1699953892/icons/hlxmejse3mcr4tqo6t8u.svg" alt="" /></a>
+<span class="oak-select-wrap"><select class="oak-select" id="theme-control" aria-label="Colour theme" style="width:auto;min-width:var(--space-120)"><option value="light" selected="selected">Light</option><option value="dark">Dark</option><option value="system">System</option><option value="high-contrast">High contrast</option></select></span>
+</nav>
+</header>
+<main data-region="main" class="oak-main" id="main" aria-labelledby="page-title" style="align-content:start">
+<section data-region="hero" class="oak-band" style="--band-pad:var(--space-40);--band-bg:var(--surface-decorative-3-subtle)">
+<div class="oak-container oak-stack--l" style="display:flex;flex-direction:column;align-items:flex-start">
+<nav class="oak-cluster oak-cluster--s" aria-label="Breadcrumbs" style="font:var(--type-body-3);letter-spacing:var(--tracking-body);align-items:center"><a class="oak-link" href="https://www.thenational.academy" style="color:var(--text-primary)">Home</a><span aria-hidden="true">›</span><a class="oak-link" href="https://www.thenational.academy/blog" style="color:var(--text-primary)">Blog</a><span aria-hidden="true">›</span><span aria-current="page">Article title</span></nav>
+<span class="oak-tag oak-tag--white">Category</span>
+<h1 id="page-title" class="oak-heading-3" style="margin:0">Article title goes here, kept to a line or two</h1>
+<p class="oak-body-3" style="margin:0;color:var(--text-subdued)">Author Name · 23 July 2026 · 4 min read</p>
+</div>
+</section>
+<section data-region="content" style="padding-block:clamp(var(--space-40),5vw,var(--space-56)) var(--space-80)">
+<div class="oak-container">
+<article class="oak-flow" style="max-width:var(--measure-prose)">
+<p class="oak-body-1">A standfirst paragraph that summarises the article in two or three sentences, set slightly larger than the body copy that follows.</p>
+<h2 class="oak-heading-5">First section heading</h2>
+<p>Body copy paragraph. Keep paragraphs short and scannable; the column is capped at a comfortable reading measure.</p>
+<p>A second paragraph continues the argument. Links look like <a class="oak-link" href="#">this inline link</a> and inherit Oak's underline treatment.</p>
+<aside class="oak-block oak-guidance" style="margin-block:var(--space-32)"><span class="oak-block-label">Worth knowing</span><p style="margin:0">Use this callout for an aside, a definition, or a key fact you want to lift out of the flow.</p></aside>
+<h2 class="oak-heading-5">Second section heading</h2>
+<p>More body copy. End sections with something actionable where you can.</p>
+<ul style="padding-left:var(--space-24);display:flex;flex-direction:column;gap:var(--space-8)"><li>A short list item.</li><li>Another short list item.</li><li>A third, because lists read best at three.</li></ul>
+<div class="oak-cluster oak-cluster--s" style="margin-top:var(--space-40)"><a class="oak-btn" href="#">Related action</a><a class="oak-btn oak-btn--secondary" href="https://www.thenational.academy/blog">More from the blog</a></div>
+</article>
+</div>
+</section>
+</main>
+<footer data-region="footer" style="background:var(--bg-primary)">
+<img src="./assets/header-underline.svg" alt="" style="display:block;width:100%;height:var(--space-4);filter:var(--filter-icon)" />
+<div class="oak-container" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--gap-l);padding-block:var(--space-32) var(--space-56)">
+<a href="https://www.thenational.academy" aria-label="Oak National Academy home"><img src="./assets/logo.svg" alt="" style="display:block;height:var(--size-icon-xxl);width:auto;filter:var(--filter-icon)" /></a>
+<address style="font-style:normal">
+<p class="oak-body-3-bold" style="margin:0">© Oak National Academy Limited, No 14174888</p>
+<p class="oak-body-4" style="margin:0">1 Scott Place, 2 Hardman Street, Manchester, M3 3AA</p>
+</address>
+</div>
+</footer>
+</div>
+</x-dc>
+</body>
+</html>

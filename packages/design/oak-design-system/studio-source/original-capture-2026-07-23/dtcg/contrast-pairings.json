@@ -1,0 +1,175 @@
+{
+  "pairs": [
+    {
+      "foreground": "text.primary",
+      "background": "bg.primary",
+      "context": "text"
+    },
+    {
+      "foreground": "text.subdued",
+      "background": "bg.primary",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.subtle",
+      "context": "text"
+    },
+    {
+      "foreground": "text.subdued",
+      "background": "bg.subtle",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.neutral",
+      "context": "text"
+    },
+    {
+      "foreground": "text.link",
+      "background": "bg.primary",
+      "context": "text"
+    },
+    {
+      "foreground": "text.error",
+      "background": "bg.primary",
+      "context": "text"
+    },
+    {
+      "foreground": "text.success",
+      "background": "bg.primary",
+      "context": "text"
+    },
+    {
+      "foreground": "text.btn-primary",
+      "background": "bg.btn-primary",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.btn-secondary",
+      "context": "text"
+    },
+    {
+      "foreground": "text.inverted",
+      "background": "bg.inverted",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "surface.decorative-1",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "surface.decorative-2",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "surface.decorative-3",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "surface.decorative-4",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "surface.decorative-5",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "surface.decorative-6",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.correct",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.incorrect",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.selected",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.info-subtle",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.success-subtle",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.warning-subtle",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "bg.error-subtle",
+      "context": "text"
+    },
+    {
+      "foreground": "text.primary",
+      "background": "color.accent-soft",
+      "context": "text"
+    },
+    {
+      "foreground": "border.primary",
+      "background": "bg.primary",
+      "context": "non-text"
+    },
+    {
+      "foreground": "border.neutral",
+      "background": "bg.primary",
+      "context": "non-text"
+    },
+    {
+      "foreground": "border.error",
+      "background": "bg.primary",
+      "context": "non-text"
+    },
+    {
+      "foreground": "border.success",
+      "background": "bg.primary",
+      "context": "non-text"
+    },
+    {
+      "foreground": "border.warning",
+      "background": "bg.primary",
+      "context": "non-text"
+    },
+    {
+      "foreground": "shadow.ground",
+      "background": "bg.primary",
+      "context": "non-text"
+    },
+    {
+      "foreground": "bg.btn-primary",
+      "background": "bg.primary",
+      "context": "non-text"
+    },
+    {
+      "foreground": "text.inverted-subdued",
+      "background": "bg.inverted",
+      "context": "text"
+    },
+    {
+      "foreground": "border.inverted",
+      "background": "bg.inverted",
+      "context": "non-text"
+    }
+  ],
+  "triads": []
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Media" name="Media & formats" subtitle="One system, every medium — how web, mobile, print, PDF, DOCX, slides and classroom projection are served" viewport="920x760" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css"><link rel="stylesheet" href="../print.css">
+<style>
+body{margin:0;padding:24px;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans)}
+.lede{font:var(--weight-semibold) var(--font-size-4)/var(--leading-28) var(--font-sans);letter-spacing:var(--tracking-heading);margin:0 0 4px;border-bottom:var(--border-solid-xl) solid var(--border-accent);display:inline-block;padding-bottom:4px}
+.sub{font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);color:var(--text-subdued);margin:6px 0 16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.m{border:var(--border-solid-m) solid var(--border-primary);border-radius:var(--radius-container);padding:14px 16px}
+.m h2{font:var(--weight-semibold) var(--font-size-3)/var(--leading-20) var(--font-sans);margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.m p{font:var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans);letter-spacing:var(--tracking-body);margin:0}
+.m code{font:var(--weight-regular) var(--font-size-1)/var(--leading-16) var(--font-mono);background:var(--bg-neutral);border-radius:var(--radius-xs);padding:0 4px}
+.dot{width:10px;height:10px;flex:0 0 10px;background:var(--color-accent);border:var(--border-solid-s) solid var(--border-primary);border-radius:var(--radius-xs)}
+</style></head><body>
+<p class="lede">Design excellence is multi-medium</p>
+<p class="sub">Every medium consumes the same roles — the token architecture is the portability layer. Nothing is re-specified per format.</p>
+<div class="grid">
+<div class="m"><h2><span class="dot"></span>Web & mobile</h2><p>Classes + layout primitives; targets ≥44px; reflow to 320px / 400% zoom; breakpoints sm 640 · md 960 · lg 1280; fluid container padding.</p></div>
+<div class="m"><h2><span class="dot"></span>Print & PDF</h2><p><code>print.css</code> ships in the cascade: one <code>color-scheme</code> flip makes dark pages print light; meaning-bearing fills keep ink; no unit splits across pages. <code>templates/worksheet</code> is the A4 reference; 12pt body floor.</p></div>
+<div class="m"><h2><span class="dot"></span>Editable exports — shipped</h2><p><code>Oak Worksheet.docx</code> (Word/Docs/LibreOffice — native heading styles), <code>worksheet.md</code>, <code>Oak Lesson Deck.pptx</code> (PowerPoint/Slides/Keynote — native text &amp; shapes), <code>Oak Lesson Deck (standalone).html</code> (offline, email/USB/VLE, presents in any browser). All user-editable; the <code>.dc.html</code> templates are the source of truth.</p></div>
+<div class="m"><h2><span class="dot"></span>Shipped editable files</h2><p><code>Oak Worksheet.docx</code> (Word / Google Docs / LibreOffice), <code>worksheet.md</code> (anywhere), <code>Oak Lesson Deck.pptx</code> (PowerPoint / Google Slides import / Keynote), <code>Oak Lesson Deck (standalone).html</code> (offline, any browser) — in each template's folder.</p></div>
+<div class="m"><h2><span class="dot"></span>Presentations & projection</h2><p>Display type scale <code>--font-size-11…14</code> (64–96px); <code>templates/lesson-deck</code> at 1920×1080 with a ≥24px floor; borders + fills carry hierarchy so slides survive washed-out classroom projectors and sunlight.</p></div>
+<div class="m"><h2><span class="dot"></span>DOCX & word processors</h2><p>CSS can't reach Word — the type ramp maps to named paragraph styles instead (see README): Title ← heading-3, Heading 1 ← heading-4, Body ← body-1 at 13.5pt, Lexend embedded. Reference file ships (left).</p></div>
+<div class="m"><h2><span class="dot"></span>SVG</h2><p>Inline SVG themes like HTML: <code>currentColor</code> icons + <code>.oak-svg-*</code> token classes for diagrams. Asset icons stay monochrome for the filter/mask contracts. See the SVG styling card.</p></div>
+<div class="m" style="grid-column:1/-1"><h2><span class="dot"></span>Every one of them</h2><p>WCAG 2.2 AA is medium-independent: contrast, focus, targets, reflow, plain language hold on paper, screen and projector alike.</p></div>
+</div>
+</body></html>

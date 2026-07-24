@@ -1,0 +1,46 @@
+/* Tailwind v4 @theme mapping — aliases Tailwind's utility vocabulary onto the
+   Oak role tokens. Copy into the consuming app's globals.css AFTER the Oak
+   sheets are imported. `inline` is required: values must resolve at point of
+   use so light-dark() and [data-theme] scopes apply. */
+@theme inline {
+  /* colour roles → color-* utilities (text-ink, bg-surface, border-line…) */
+  --color-ink: var(--text-primary);
+  --color-ink-subdued: var(--text-subdued);
+  --color-ink-inverted: var(--text-inverted);
+  --color-link: var(--text-link);
+  --color-link-hover: var(--text-link-hover);
+  --color-error: var(--text-error);
+  --color-success: var(--text-success);
+  --color-warning: var(--text-warning);
+  --color-info: var(--text-info, var(--text-link));
+  --color-surface: var(--bg-primary);
+  --color-surface-subtle: var(--bg-subtle);
+  --color-surface-neutral: var(--bg-neutral);
+  --color-surface-raised: var(--bg-raised);
+  --color-surface-overlay: var(--bg-overlay);
+  --color-line: var(--border-primary);
+  --color-line-neutral: var(--border-neutral);
+  --color-accent-brand: var(--color-accent);
+  --color-accent-soft-brand: var(--color-accent-soft);
+  /* decorative ramp */
+  --color-decorative-1: var(--surface-decorative-1);
+  --color-decorative-2: var(--surface-decorative-2);
+  --color-decorative-3: var(--surface-decorative-3);
+  --color-decorative-4: var(--surface-decorative-4);
+  --color-decorative-5: var(--surface-decorative-5);
+  /* type (Tailwind-side names must differ from the role names — an alias like
+     --font-sans: var(--font-sans) is circular) */
+  --font-oak-sans: var(--font-sans);
+  --font-oak-mono: var(--font-mono);
+  /* shape */
+  --radius-card: var(--radius-container);
+  --radius-ctl: var(--radius-control, var(--radius-container));
+  /* signature shadows (crisp offsets; brands re-point the underlying tokens) */
+  --shadow-accent-brand: var(--shadow-accent);
+  --shadow-neutral-brand: var(--shadow-neutral);
+  /* motion */
+  --duration-quick: var(--motion-quick);
+  --duration-base: var(--motion-base);
+}
+/* Spacing: keep Tailwind's default scale OR pin it to the Oak 4px grid: */
+@theme { --spacing: 4px; }

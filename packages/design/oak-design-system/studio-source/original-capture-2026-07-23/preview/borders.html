@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Spacing" name="Border widths" subtitle="0 → 10px · 2–3px is the workhorse" viewport="700x170" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:26px 24px; background:var(--bg-primary); font-family:var(--font-sans); }
+  .row { display:flex; gap:18px; align-items:flex-end; }
+  .item { text-align:center; }
+  .bar { width:68px; background:var(--bg-inverted); border-radius:2px; position:relative; }
+  .name { margin-top:8px; font:700 11px var(--font-sans); }
+  .val { font:400 10px var(--font-mono); color:var(--text-subdued); }
+</style></head>
+<body>
+  <div class="row">
+    <div class="item"><div class="bar" style="height:0;"></div><div class="name">none</div><div class="val">0</div></div>
+    <div class="item"><div class="bar" style="height:1px;"></div><div class="name">s</div><div class="val">1px</div></div>
+    <div class="item"><div class="bar" style="height:2px;"></div><div class="name">m</div><div class="val">2px</div></div>
+    <div class="item"><div class="bar" style="height:3px;"></div><div class="name">l</div><div class="val">3px</div></div>
+    <div class="item"><div class="bar" style="height:4px;"></div><div class="name">xl</div><div class="val">4px</div></div>
+    <div class="item"><div class="bar" style="height:6px;"></div><div class="name">xxl</div><div class="val">6px</div></div>
+    <div class="item"><div class="bar" style="height:8px;"></div><div class="name">xxxl</div><div class="val">8px</div></div>
+    <div class="item"><div class="bar" style="height:10px;"></div><div class="name">xxxxl</div><div class="val">10px</div></div>
+  </div>
+  <div style="margin-top:20px; font:300 13px/20px var(--font-sans); color:var(--text-subdued);">Oak's signature is a <strong style="font-weight:700; color:var(--text-primary);">2px or 3px solid black border</strong> on almost every interactive element.</div>
+</body></html>

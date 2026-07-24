@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Text inputs & checkboxes" subtitle="OakTextInput + OakCheckBox / OakRadioButton" viewport="700x340" -->
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:22px; background:var(--bg-primary); font-family:var(--font-sans);
+         display:flex; flex-direction:column; gap:16px; align-items:flex-start; }
+  .row { display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap; width:100%; }
+  .field { display:flex; flex-direction:column; gap:6px; min-width:280px; flex:1; }
+  label { font:700 14px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+
+  /* OakTextInput: border-solid-m (2px), border-radius-s (4px), ph spacing-20, gap spacing-16,
+     icon 32px, input pv spacing-20 + height spacing-72, body-1 text.
+     Focus ring = centred lemon (2px) + centred grey (~5px). hover bg grey20. */
+  .oak-input {
+    display:flex; align-items:center; gap:16px;
+    height:72px; padding:0 20px;
+    border:2px solid var(--border-primary); border-radius:4px; background:var(--bg-primary);
+    font:300 18px/28px var(--font-sans); letter-spacing:-0.005rem;
+    color:var(--text-subdued);
+  }
+  .oak-input img { width:32px; height:32px; flex:0 0 32px; }
+  .oak-input.filled { color:var(--text-primary); }
+  .oak-input.focus  { box-shadow: var(--focus-ring); }
+  .oak-input.valid  { border-color:var(--oak-green); }
+  .oak-input.error  { border-color:var(--oak-red); }
+  .oak-err { display:inline-flex; align-items:center; gap:6px;
+             font:300 14px/20px var(--font-sans); color:var(--oak-red); letter-spacing:-0.005rem; }
+  .oak-err img { width:18px; height:18px; }
+
+  /* OakCheckBox: 24px, border-solid-m (2px), border-radius-xs (2px), checked = black fill + tick.
+     OakRadioButton: 24px circle, 2px border, filled dot when checked. label gap spacing-16. */
+  .check-row { display:flex; gap:24px; flex-wrap:wrap; }
+  .oak-check { display:inline-flex; align-items:center; gap:16px;
+               font:300 18px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .oak-box { width:24px; height:24px; border:2px solid var(--border-primary); border-radius:2px; background:var(--bg-primary);
+             flex:0 0 24px; display:inline-flex; align-items:center; justify-content:center; }
+  .oak-box.on { background:var(--bg-inverted); border-color:var(--text-primary); }
+  .oak-box.on img { width:18px; height:18px; filter:invert(1); }
+  .oak-radio { width:24px; height:24px; border:2px solid var(--border-primary); border-radius:100px; background:var(--bg-primary);
+               position:relative; flex:0 0 24px; }
+  .oak-radio.on::after { content:""; position:absolute; inset:4px; border-radius:100px; background:var(--bg-inverted); }
+</style></head>
+<body>
+  <div class="row">
+    <div class="field">
+      <label for="s">Search</label>
+      <div class="oak-input">
+        <img src="../assets/icons/search.svg" alt="">
+        <span>Search by keyword</span>
+      </div>
+    </div>
+    <div class="field">
+      <label for="v">Valid</label>
+      <div class="oak-input valid filled">
+        <img src="../assets/icons/tick.svg" alt="" style="filter:invert(31%) sepia(86%) saturate(420%) hue-rotate(78deg) brightness(94%) contrast(88%)">
+        <span>Sphynx Primary School</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="f">Focus</label>
+      <div class="oak-input focus filled">
+        <span>Year 5</span>
+      </div>
+    </div>
+    <div class="field">
+      <label for="e">Error</label>
+      <div class="oak-input error filled">
+        <span>4011</span>
+        <img src="../assets/icons/error.svg" alt="" style="margin-left:auto; filter:invert(13%) sepia(78%) saturate(5255%) hue-rotate(337deg) brightness(88%) contrast(111%)">
+      </div>
+      <div class="oak-err">
+        <img src="../assets/icons/error.svg" alt="" style="filter:invert(13%) sepia(78%) saturate(5255%) hue-rotate(337deg) brightness(88%) contrast(111%)">
+        Please enter 6 digits
+      </div>
+    </div>
+  </div>
+
+  <div class="check-row" style="margin-top:4px">
+    <label class="oak-check"><span class="oak-box on"><img src="../assets/icons/tick.svg" alt=""></span> Quality-assured</label>
+    <label class="oak-check"><span class="oak-box"></span> Free to download</label>
+    <label class="oak-check"><span class="oak-radio on"></span> Key stage 3</label>
+    <label class="oak-check"><span class="oak-radio"></span> Key stage 4</label>
+  </div>
+</body></html>

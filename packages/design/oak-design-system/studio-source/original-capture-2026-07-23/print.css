@@ -1,0 +1,24 @@
+/* ============================================================
+   Oak National Academy — print & PDF layer
+   Loaded by styles.css (and ds-base.js) so every page is print-
+   ready by default. Because EVERY colour role is a light-dark()
+   pair, one color-scheme declaration reverts the whole system to
+   ink-safe light for paper — dark-theme pages print light.
+   ============================================================ */
+@media print {
+  html, html[data-theme="dark"], html[data-theme="system"] { color-scheme: light; }
+  :root { --shadow-standard: none; --shadow-raised: none; --shadow-overlay: none; }
+  /* Meaning-bearing and signature fills must survive "economy" printing */
+  .oak-card, .oak-tag, .oak-chip, .oak-banner, .oak-quiz-answer, .oak-btn,
+  .oak-quiz-answer--correct, .oak-quiz-answer--incorrect {
+    print-color-adjust: exact; -webkit-print-color-adjust: exact;
+  }
+  /* Never split a semantic unit across a page break */
+  .oak-card, .oak-banner, .oak-quiz-answer, .oak-accordion, .oak-empty, .oak-field { break-inside: avoid; }
+  .oak-table tr { break-inside: avoid; }
+  .oak-table thead { display: table-header-group; } /* repeat header per page */
+  /* Screen-only chrome */
+  .oak-skip-link, .oak-skeleton, .oak-modal { display: none; }
+  /* Disclosure content is part of the document on paper */
+  .oak-accordion:not([open]) summary::after { display: none; }
+}

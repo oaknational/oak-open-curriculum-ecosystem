@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Accessibility" name="Themes" subtitle="One markup, four themes — light, dark, high contrast, colour-safe. data-theme on html or any subtree" viewport="760x480" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:20px;background:var(--oak-grey20);font-family:var(--font-sans)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{border-radius:8px;border:1px solid var(--oak-grey40);overflow:hidden}
+.panel-inner{background:var(--bg-primary);color:var(--text-primary);padding:18px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;min-height:150px}
+.pname{font:500 11px/16px var(--font-mono);color:var(--text-subdued);text-transform:uppercase;letter-spacing:0.06em}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.note{font:300 12px/18px var(--font-sans);color:var(--text-subdued);margin:14px 2px 0;max-width:72ch}
+code{font:500 11px/16px var(--font-mono);background:var(--oak-grey30);border-radius:3px;padding:1px 5px}
+</style></head>
+<body>
+<div class="grid">
+<div class="panel"><div class="panel-inner"><span class="pname">default · light</span>
+<div class="row"><button class="oak-btn">Continue</button><span class="oak-tag oak-tag--mint">Year 7</span></div>
+<button class="oak-quiz-answer oak-quiz-answer--correct" style="min-height:44px;font-size:15px"><span class="oak-quiz-answer__key" style="width:26px;height:26px;flex-basis:26px;font-size:12px">B</span>Condensation <img src="../assets/icons/tick.svg" alt="Correct" style="width:20px;height:20px;margin-left:auto;filter:var(--filter-icon)"></button>
+<a class="oak-link" href="#">Next lesson</a></div></div>
+<div class="panel"><div class="panel-inner" data-theme="dark"><span class="pname">data-theme="dark"</span>
+<div class="row"><button class="oak-btn">Continue</button><span class="oak-tag oak-tag--mint">Year 7</span></div>
+<button class="oak-quiz-answer oak-quiz-answer--correct" style="min-height:44px;font-size:15px"><span class="oak-quiz-answer__key" style="width:26px;height:26px;flex-basis:26px;font-size:12px">B</span>Condensation <img src="../assets/icons/tick.svg" alt="Correct" style="width:20px;height:20px;margin-left:auto;filter:var(--filter-icon)"></button>
+<a class="oak-link" href="#">Next lesson</a></div></div>
+<div class="panel"><div class="panel-inner" data-theme="high-contrast"><span class="pname">data-theme="high-contrast"</span>
+<div class="row"><button class="oak-btn">Continue</button><span class="oak-tag oak-tag--mint">Year 7</span></div>
+<button class="oak-quiz-answer oak-quiz-answer--correct" style="min-height:44px;font-size:15px"><span class="oak-quiz-answer__key" style="width:26px;height:26px;flex-basis:26px;font-size:12px">B</span>Condensation <img src="../assets/icons/tick.svg" alt="Correct" style="width:20px;height:20px;margin-left:auto;filter:var(--filter-icon)"></button>
+<a class="oak-link" href="#">Next lesson</a></div></div>
+<div class="panel"><div class="panel-inner" data-theme="colour-safe"><span class="pname">data-theme="colour-safe"</span>
+<div class="row"><button class="oak-btn">Continue</button><span class="oak-tag oak-tag--mint">Year 7</span></div>
+<button class="oak-quiz-answer oak-quiz-answer--correct" style="min-height:44px;font-size:15px"><span class="oak-quiz-answer__key" style="width:26px;height:26px;flex-basis:26px;font-size:12px">B</span>Condensation <img src="../assets/icons/tick.svg" alt="Correct" style="width:20px;height:20px;margin-left:auto;filter:var(--filter-icon)"></button>
+<a class="oak-link" href="#">Next lesson</a></div></div>
+</div>
+<p class="note">Build with semantic tokens (<code>--text-primary</code>, <code>--bg-primary</code>, <code>--surface-mint</code>…) and theming is free. <code>oak-theme.js</code> persists the choice; <code>data-theme="system"</code> follows the OS. Windows High Contrast Mode is handled separately via <code>forced-colors</code>. Colour-safe remaps success/error to blue/vermilion (Okabe-Ito) for the ~8% of men with red-green colour-vision deficiency — and state is never colour alone.</p>
+</body></html>

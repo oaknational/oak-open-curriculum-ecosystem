@@ -1,0 +1,235 @@
+/* ============================================================
+   brand.css — the WHITE-LABEL OVERRIDE CONTRACT
+   ------------------------------------------------------------
+   This file is the complete, supported surface for re-branding
+   the system. Copy it, uncomment what you change, and load it
+   AFTER styles.css:
+
+     <link rel="stylesheet" href="styles.css">
+     <link rel="stylesheet" href="brand.css">
+
+   Rules:
+   - ACCESSIBILITY IS A CONDITION OF THIS CONTRACT, not a preference.
+     WCAG 2.2 AA is the floor in EVERY theme; AAA is the aspiration.
+     All learners have a right to access education — a re-brand that
+     fails the "Contrast audit (live)" card is not finished. Do not
+     weaken focus rings, hit targets, motion behaviour, or the
+     state-never-colour-alone rule; they are not on this surface.
+   - Override CANONICAL roles only (the names below). Never re-point
+     the Oak-dialect aliases (--surface-mint, --shadow-lemon, …) —
+     they are var() references and follow automatically (SSOT).
+   - Colour roles are light-dark() pairs: supply BOTH values or your
+     brand breaks in dark mode. `light-dark(x, x)` is fine.
+   - The [data-theme="high-contrast"] and [data-theme="colour-safe"]
+     themes keep working untouched — they override the same roles.
+   - After any change, open the "Contrast audit (live)" card and
+     check every pairing passes in every theme. Oak's AA guarantees
+     do NOT transfer to a new palette automatically.
+   - Assets are part of the brand: replace assets/logo-*.svg and keep
+     assets/icons/*.svg MONOCHROME BLACK — the --filter-icon* roles
+     invert them per theme; coloured icons will render wrongly.
+   - STABILITY: everything named in this file is the PUBLIC surface,
+     protected by semver (see CHANGELOG.md). Names are never silently
+     renamed — a deprecated name keeps working for ≥1 minor release,
+     marked `/* @deprecated since x.y — use --replacement *\/` at its
+     definition. Tier-1 --oak-* primitives and unlisted tier-3
+     internals are PRIVATE: do not override them; they may change.
+   ============================================================ */
+
+:root {
+  /* ================= PART A · MINIMAL VIABLE BRAND =================
+     ~16 tokens make it yours: the three faces (body, display, mono), the
+     accent trio, and the decorative ramp. Everything else derives or can wait. ============ */
+
+  /* --- 1. Type ------------------------------------------------
+     Add your own @font-face above this block, then re-point: */
+  /* --font-sans: "YourSans", system-ui, sans-serif; */
+  /* --font-mono: "YourMono", ui-monospace, monospace; */
+  /* --font-display: "YourDisplay", var(--font-sans);  (headings/kickers —
+     the single biggest "different feel" knob; serif here transforms the
+     whole system) */
+  /* --weight-display: 600;  (heading weight — 800 reads playful, 700 serif-formal) */
+
+  /* --- 1b. THE RAMPS — the deepest re-brand level. Faces recolour a brand;
+     RAMPS restructure it. Each type slot is a whole font shorthand —
+     re-point slots to reshape scale, hierarchy and rhythm:
+     --type-heading-1…7, --type-body-1…4, --type-label,
+     plus case grammar: --label-transform (uppercase|lowercase|none),
+     --label-variant (normal|all-small-caps).
+     Density is the other ramp: --gap-* / --inset-* / --card-pad /
+     --control-pad-* / --btn-min-h.
+     FLOORS that survive any re-brand: primary body + label slots ≥16px,
+     slide slots ≥24px, targets ≥44px (--btn-min-h never below 44px). */
+
+  /* --- 2b. POLARITY — which world does the brand live in? Oak is daylight
+     (light-first). A screen-native, bedtime, or arcade identity can be
+     DARK-FIRST with one line — every light-dark() role flips its default,
+     and an explicit theme choice (incl. "light") still wins — ALL five
+     data-theme values carry :root[data-theme] specificity guards, so
+     high-contrast and colour-safe also beat any brand :root override: */
+  /* color-scheme: dark; */
+
+  /* --- 2. Accent — ONE token recolours the whole signature
+     (offset shadows, focus-ring inner, highlights, markers,
+     selected states). Oak: lemon #ffe555 in both modes. */
+  /* --color-accent: light-dark(#ffe555, #ffe555); */
+  /* --color-accent-soft: light-dark(#fff2aa, #49421a); */
+  /* --color-accent-subtle: light-dark(#fff7cc, #3c3820); */
+
+  /* --- 3. Decorative ramp — 6 categorisation surfaces, each with
+     -soft and -subtle tints. Never carries meaning. */
+  /* --surface-decorative-1: light-dark(#bef2bd, #2e5338); */
+  /* --surface-decorative-1-soft: light-dark(#dff9de, #25372a); */
+  /* --surface-decorative-1-subtle: light-dark(#ebfbeb, #202b23); */
+  /* … -2 … -3 … -4 … -5 … -6 (see colors_and_type.css for the shape) */
+
+  /* ================= PART B · EXTENDED SURFACE =================
+     Neutrals, buttons, functional colours, shape & density — override
+     only where your brand genuinely diverges. ==================== */
+
+  /* --- 4. Core neutrals ---------------------------------------- */
+  /* --text-primary: light-dark(#222222, #ffffff); */
+  /* --text-subdued: light-dark(#575757, #e4e4e4); */
+  /* --text-link: light-dark(#0d24c4, #a0b6f2); */
+  /* --text-link-hover: light-dark(#0a1d9d, #bdcdf5); */
+  /* --text-link-visited: light-dark(#081676, #e3e9fb); */
+  /* --bg-primary: light-dark(#ffffff, #222222); */
+  /* --bg-subtle: light-dark(#f9f9f9, #1b1b1b); */
+  /* --bg-neutral: light-dark(#f2f2f2, #575757); */
+  /* --bg-neutral-stronger: light-dark(#e4e4e4, #2d2d2d); */
+  /* --border-primary: light-dark(#222222, #ffffff); */
+  /* --border-neutral: light-dark(#808080, #cacaca); */
+  /* --text-inverted-subdued / --border-inverted: muted text + dividers ON
+     inverted surfaces (footers, quote bands) — audited pairs vs --bg-inverted;
+     a brand that re-points --bg-inverted must keep both ≥4.5:1 / ≥3:1. */
+  /* PAPER RULE: a brand that re-points --bg-primary off white must carry the
+     WHOLE elevation family with it — --bg-btn-secondary, --bg-raised,
+     --bg-overlay — or secondary plates and modals punch screen-white holes
+     in the page (Freedonia v6 lesson). */
+
+  /* --- 5. Buttons ----------------------------------------------
+     Tip — derive hovers instead of picking them:
+     --bg-btn-primary-hover: color-mix(in oklab, var(--bg-btn-primary), var(--bg-primary) 25%); */
+  /* --bg-btn-primary: light-dark(#222222, #ffffff); */
+  /* --bg-btn-primary-hover: light-dark(#575757, #e4e4e4); */
+  /* --text-btn-primary: light-dark(#ffffff, #222222); */
+  /* --bg-btn-secondary-hover: light-dark(#f2f2f2, #575757); */
+  /* --bg-btn-disabled / --text-btn-disabled */
+
+  /* --- 6. Functional (meaning-bearing — keep clearly distinct
+     from your decoratives; colour-safe theme remaps these) */
+  /* --text-success / --bg-success / --border-success / --bg-success-subtle */
+  /* --text-error / --bg-error / --border-error / --bg-error-subtle */
+  /* --border-warning / --bg-warning-subtle / --bg-info-subtle */
+  /* --bg-correct / --bg-incorrect / --bg-selected */
+
+  /* --- 7. Shape, density & motion — the "feel" knobs ------------ */
+  /* --radius-control: 4px;      (buttons, inputs, tags — 999px = pill, 2px = square) */
+  /* --radius-container: 8px;    (cards, banners, quiz answers) */
+  /* --control-pad-block: 12px; --control-pad-inline: 16px; (control density —
+     min-height targets hold the ≥44px floor regardless) */
+  /* --density: 1;  (ONE knob — scales --gap-* / --inset-* / --card-pad together:
+     plush >1 (EMC² territory), dense <1 (document brands). Targets, type and
+     focus floors are NOT density-derived; direct token overrides still win.) */
+  /* --size-target: 48px; --size-target-dense: 36px; (≥44px md — a11y floor) */
+  /* --border-solid-m: 2px;                (signature border weight) */
+  /* --tracking-heading: 0.0115em;         (0 for display faces with built-in personality) */
+  /* --shadow-ground: light-dark(#575757, #f2f2f2); (press/focus outer) */
+  /* --motion-quick: 120ms; --motion-base: 200ms; --ease-standard: …; */
+
+  /* --- 7b. The SIGNATURE itself — Oak's diagonal offset-shadow is a brand
+     choice, not a system constant. Three ready recipes (see whitelabel/):
+     · Oak (default): diagonal accent offset — leave untouched.
+     · Drop ("candy drop", whitelabel/creature): straight down —
+       --shadow-accent: 0 6px 0 0 var(--color-accent);
+       --shadow-accent-raised: 0 9px 0 0 var(--color-accent);
+       --shadow-accent-pressed: 0 2px 0 0 var(--color-accent);
+     · Flat (whitelabel/freedonia): none at all — set the five below to none
+       and keep --shadow-press as a 1px drop; affordance then comes from
+       fills + underlines + the focus ring.
+     The FOCUS RING is not on this surface — never restyle it away. */
+  /* --shadow-accent / --shadow-accent-raised / --shadow-accent-pressed */
+  /* --shadow-neutral / --shadow-standard / --shadow-press */
+
+  /* --- 7d. Atmosphere — gradients, glows, blur (opt-in; Oak stays flat by
+     its own brand rule, which is a BRAND rule, not a system invariant):
+     --surface-page-image  page-glow gradients behind everything
+     --card-bg / --card-bg-image  card fills and sheens
+     --btn-bg-image  glossy top-light on buttons
+     blurred glow layers in any --shadow-* verb; backdrop-filter at page level.
+     THE RULE THAT MAKES IT SAFE: glows and gradients are garnish — no text
+     pairing may depend on a gradient stop; every audited role stays a flat
+     colour and the audit still gates the re-brand. Print flattens gracefully
+     (browsers drop background images by default). */
+
+  /* --- 7c. Component FORM — escaping the trade dress. Colour alone cannot
+     un-Oak a component whose shape IS the brand (the borderless pastel
+     lozenge tag, the offset-shadow card). Form tokens are on the surface:
+     --tag-radius / --tag-border / --tag-shadow / --tag-pad, --card-radius /
+     --card-border, --btn-radius. If a re-branded component would still read
+     as Oak in a screenshot with the colours stripped, change its form.
+     COMPONENT SELECTION is a lever too: a brand kit chooses WHICH components
+     it deploys (a gazette identity may use rule-lined lists and never .oak-card;
+     an arcade identity leans on decorative surfaces Oak uses sparingly).
+
+     Candidate levers deliberately NOT on the surface yet (ask before using):
+     type-scale shape (--font-size-* carries the projection/print floors),
+     background texture (flat = print + a11y
+     safety). If a re-brand keeps fighting the system, the system may need
+     the lever — raise it, don't hack it. */
+
+  /* --- 9. VOICE — the words are brand surface too -----------------
+     Each brand's copy register lives in its BRAND.md and is exercised on
+     its proof page (Oak: warm colleague · FDSE: the public record · EMC²:
+     read-aloud bedtime). The byte-identical comparison page deliberately
+     stays voice-NEUTRAL: it is the controlled experiment (CSS-only
+     distance, a lower bound). Example Front Pages is where voice runs
+     free (the upper bound). Do not "fix" neutral copy on the specimen. */
+
+  /* --- 8. Icons — assets are part of the brand. Three supported strategies:
+     a) Oak's monochrome SVG set + --filter-icon (default);
+     b) an icon FONT via currentColor (theme-safe with zero filter work —
+        see whitelabel/(*)/icons.css: Material Symbols Rounded (Apache 2.0)
+        for the playful pole, Bootstrap Icons (MIT) for the institutional
+        one — each identity gets its OWN set, not a restyle);
+     SHARED MARKUP references icons by ROLE, never by set: .ic-<role> on
+     .oak-icon--mask (roles: search download next prev external close menu
+     tick cross warning info star book quiz video worksheet). Oak resolves
+     roles in oak-icons.css; a brand re-points --ic-* to its own
+     set's SVG URLs (mask + currentColor, so any SVG source works — see
+     both counter-brands' brand-full.css §icon roles).
+     c) pre-coloured per-theme icons: set both filters to none and supply
+        per-theme assets.
+     Whichever strategy: decorative icons are aria-hidden next to real text;
+     functional icons get labels. */
+  /* --filter-icon: none; --filter-icon-inverted: invert(1); */
+}
+
+/* ================= COMPOSITION SURFACE (region contract) =================
+   One shipped HTML, many compositions. Pages built on the region contract
+   (.oak-canvas / .oak-main, see components.css) expose their whole outer
+   composition as map tokens. A brand may redraw the page map — regions can
+   sit beside, above, below or across one another — WITHOUT touching HTML.
+   Rules:
+   - SCOPE MAPS BY PAGE TYPE: write them under [data-page="<type>"]
+     (the attribute sits on <body> or the canvas), NEVER at :root — a
+     global map from one page shape corrupts every other page. Shipped
+     types: "unit" (specimen), "home", "proof". Generic region
+     vocabulary: navigation/featured/content/context join the
+     specialised set.
+   - Compose against REGION NAMES only (hero/facets/results/detail/
+     resources/support/cta + utility/masthead/main/footer). Never target a
+     region's internals from a composition map.
+   - A map must place EVERY region; none may be hidden by omission.
+   - DOM order is canonical and unchangeable: after recomposing, tab
+     through the page — if the focus path is confusing, change the map.
+   - Provide (or accept the default single-column) -narrow maps.
+:root {
+  --canvas-columns: …;          --canvas-areas: …;   --canvas-gap: …;
+  --main-columns: …;            --main-gap: …;
+  --main-areas: "hero hero" ". results" …;   (whole-template strings)
+  --main-columns-narrow: …;     --main-areas-narrow: …;
+}
+   Worked examples: whitelabel/freedonia/brand-full.css (GDS two-thirds
+   document, filter panel right) and whitelabel/creature/brand-full.css
+   (quest-log shelf). ============================================== */

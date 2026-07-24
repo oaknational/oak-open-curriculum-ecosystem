@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Inline banners" subtitle="Tweakable: OakInlineBanner — 6 types, regular/large" viewport="720x360" -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; background:var(--oak-grey10); color:var(--text-primary); font-family:var(--font-sans); }
+  * { box-sizing:border-box; }
+  .wrap { padding:22px 24px; display:flex; flex-direction:column; gap:14px; }
+  h4 { font:400 11px/14px var(--font-mono); color:var(--oak-grey50); margin:0; text-transform:uppercase; letter-spacing:0.06em; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="tweaks-panel.js"></script>
+<script type="text/babel">
+// OakInlineBanner (oak-components/src/components/messaging-and-feedback/OakInlineBanner).
+// bannerTypes -> bg = *-very-subdued decorative tint, border = decorative-stronger / functional.
+// Border = border-solid-s (1px), radius = border-radius-m (6px). Icon recoloured via $colorFilter.
+const FILTERS = {
+  primary: "invert(10%) sepia(1%) saturate(236%) hue-rotate(314deg) brightness(95%) contrast(91%)",
+  warning: "brightness(0) saturate(100%) invert(57%) sepia(99%) saturate(395%) hue-rotate(330deg) brightness(102%) contrast(101%)",
+  error:   "invert(13%) sepia(78%) saturate(5255%) hue-rotate(337deg) brightness(88%) contrast(111%)",
+};
+const TYPES = {
+  info:    { icon:"info",    filter:"primary", bg:"var(--surface-lavender-subtle)", border:"var(--oak-lavender)" },
+  neutral: { icon:"info",    filter:"primary", bg:"var(--bg-neutral)", border:"var(--border-neutral-lighter)" },
+  success: { icon:"success", filter:"primary", bg:"var(--surface-mint-subtle)", border:"var(--oak-mint110)" },
+  alert:   { icon:"bell",    filter:"primary", bg:"var(--surface-lemon-subtle)", border:"var(--oak-lemon110)" },
+  warning: { icon:"warning", filter:"warning", bg:"var(--surface-amber-subtle)", border:"var(--border-warning)" },
+  error:   { icon:"error",   filter:"error",   bg:"var(--surface-red-subtle)", border:"var(--border-error)" },
+};
+// Storybook uses the same generic copy across every type - only colour + icon change.
+const TITLE = "Information";
+const MSG_REGULAR = "Provide users with non-disruptive feedback";
+const MSG_LARGE = "Provide users with clear, timely, and non-disruptive feedback to support their understanding of actions and outcomes without interrupting their flow. Whether confirming a successful task, alerting them to an error, or informing them of a background process, feedback should be subtle and contextual - reinforcing confidence without demanding unnecessary attention.";
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "type": "alert",
+  "variant": "regular",
+  "showTitle": true,
+  "canDismiss": true,
+  "showCta": false,
+  "showAll": false
+}/*EDITMODE-END*/;
+
+function Banner({ type, variant, showTitle, canDismiss, showCta }) {
+  const t = TYPES[type];
+  const large = variant === "large";
+  const iconSize = large ? 40 : 32;
+  const pad = large ? 24 : 16;
+  return (
+    <div style={{
+      position:"relative", display:"flex", flexDirection:"column",
+      background:t.bg, border:`1px solid ${t.border}`, borderRadius:6, padding:pad,
+    }}>
+      <div style={{
+        display:"flex", flexDirection: large ? "column" : "row",
+        gap:12, width:"100%",
+        alignItems: (showTitle || large) ? "flex-start" : "center",
+      }}>
+        <img src={`../assets/icons/${t.icon}.svg`} alt="" style={{
+          width:iconSize, height:iconSize, flex:`0 0 ${iconSize}px`, filter:FILTERS[t.filter],
+        }} />
+        <div style={{
+          flex:1, display:"flex",
+          flexDirection: showTitle ? "column" : "row",
+          alignItems: showTitle ? "flex-start" : "center",
+          justifyContent: showTitle ? "center" : "space-between",
+          gap: showTitle ? (large ? 16 : 4) : 12, width:"100%",
+        }}>
+          {showTitle && (
+            <div style={{ font: large ? "600 24px/32px var(--font-sans)" : "600 20px/24px var(--font-sans)", letterSpacing:"0.0115rem", color:"var(--text-primary)" }}>{TITLE}</div>
+          )}
+          <div style={{ font:"300 16px/24px var(--font-sans)", letterSpacing:"-0.005rem", color:"var(--text-primary)" }}>{large ? MSG_LARGE : MSG_REGULAR}</div>
+          {showCta && large && (
+            <div style={{ marginTop: showTitle ? 8 : 0 }}>
+              <button style={{
+                display:"inline-flex", alignItems:"center", gap:8,
+                font:"700 16px/20px var(--font-sans)", letterSpacing:"0.0115rem",
+                padding:"12px 16px", background:"var(--bg-inverted)", color:"var(--text-inverted)",
+                border:"2px solid var(--border-primary)", borderRadius:4, cursor:"pointer",
+              }}>Button<img src="../assets/icons/chevron-right.svg" alt="" style={{ width:24, height:24, filter:"invert(1)" }} /></button>
+            </div>
+          )}
+          {showCta && !large && (
+            <a href="#" style={{
+              display:"inline-flex", alignItems:"center", gap:6,
+              font:"700 16px/24px var(--font-sans)", letterSpacing:"-0.005rem",
+              color:"var(--text-primary)", textDecoration:"underline", textUnderlineOffset:3,
+              marginTop: showTitle ? 4 : 0, whiteSpace:"nowrap",
+            }}>Link<img src="../assets/icons/chevron-right.svg" alt="" style={{ width:20, height:20, filter:FILTERS.primary }} /></a>
+          )}
+        </div>
+        {canDismiss && (
+          <button aria-label="Dismiss banner" style={{
+            position: large ? "absolute" : "static",
+            top: large ? 12 : "auto", right: large ? 12 : "auto",
+            order:2, width:24, height:24, flex:"0 0 24px", padding:0,
+            background:"transparent", border:0, cursor:"pointer",
+          }}>
+            <img src="../assets/icons/cross.svg" alt="" style={{ width:24, height:24, filter:FILTERS.primary }} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const types = t.showAll ? Object.keys(TYPES) : [t.type];
+  return (
+    <div className="wrap">
+      <h4>OakInlineBanner</h4>
+      {types.map((ty) => (
+        <Banner key={ty} type={ty} variant={t.variant}
+          showTitle={t.showTitle} canDismiss={t.canDismiss} showCta={t.showCta} />
+      ))}
+
+      <TweaksPanel>
+        <TweakSection label="Banner" />
+        <TweakSelect label="Type" value={t.type}
+          options={["info", "neutral", "success", "alert", "warning", "error"]}
+          onChange={(v) => setTweak("type", v)} />
+        <TweakRadio label="Variant" value={t.variant} options={["regular", "large"]}
+          onChange={(v) => setTweak("variant", v)} />
+        <TweakSection label="Parts" />
+        <TweakToggle label="Title" value={t.showTitle} onChange={(v) => setTweak("showTitle", v)} />
+        <TweakToggle label="Dismissible" value={t.canDismiss} onChange={(v) => setTweak("canDismiss", v)} />
+        <TweakToggle label="Call to action" value={t.showCta} onChange={(v) => setTweak("showCta", v)} />
+        <TweakToggle label="Show all types" value={t.showAll} onChange={(v) => setTweak("showAll", v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

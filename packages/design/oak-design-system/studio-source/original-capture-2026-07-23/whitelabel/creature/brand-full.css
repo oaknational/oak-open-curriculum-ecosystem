@@ -1,0 +1,139 @@
+/* Educate My Creature Too — FULL contract (Part A + Part B).
+   v4, after the concept-exploration pass: structure joins the surface.
+   Two-column toy shelf, full-width centred key items, tone-banded regions,
+   DIAGONAL gradients, ANGLED shadows, bevels and gloss — three-dimensional,
+   decorated, nocturnal. All garnish: audited text pairings stay flat. */
+@import url('brand-a.css');
+:root {
+  color-scheme: dark; /* dark-first: the bedtime arcade is the native face */
+  /* Display type — the fairground voice */
+  --font-display: "Baloo 2", var(--font-sans);
+  --weight-display: 800;
+  --tracking-heading: 0em;
+  /* THE RAMP — toy-big */
+  --type-heading-1: 800 84px/1.02 var(--font-display);
+  --type-heading-2: 800 64px/1.05 var(--font-display);
+  --type-heading-3: 800 52px/1.08 var(--font-display);
+  --type-heading-4: 800 40px/1.1 var(--font-display);
+  --type-heading-5: 800 32px/1.12 var(--font-display);
+  --type-heading-6: 800 25px/1.15 var(--font-display);
+  --type-heading-7: 800 18px/1.2 var(--font-display);
+  --type-body-1: 400 19px/1.65 var(--font-sans);
+  --type-body-2: 400 17px/1.6 var(--font-sans);
+  --type-body-3: 400 16px/1.5 var(--font-sans);
+  --type-body-4: 400 16px/1.45 var(--font-sans);
+  --type-label: 800 16px/1.3 var(--font-sans);
+  --label-transform: lowercase;
+  /* STRUCTURE — the toy shelf: two columns, key items full-width and centred;
+     the shelf is WIDE (arcade cabinet, not document) and motion is springier
+     (still quiet; the motion axis and reduced-motion collapse still govern) */
+  --container-max: 1360px;
+  --motion-quick: 160ms;
+  --motion-base: 260ms;
+  --flow-columns: 1fr 1fr;
+  --flow-gap: var(--space-32) var(--space-24);
+  --key-align: center;
+  --key-justify: center;
+  /* Tone bands — candy regions demarcated by DIAGONAL gradient + border */
+  --band-bg: linear-gradient(135deg, light-dark(#ffd6e6, #4c2246), light-dark(#d3effb, #1f3a5c));
+  --band-border: var(--border-solid-m) solid var(--border-primary);
+  --band-pad: var(--space-24);
+  /* Density — airy */
+  --gap-m: 24px;
+  --inset-m: 32px;
+  --card-pad: 32px;
+  --btn-min-h: 56px;
+  /* 4. Core neutrals */
+  --text-primary: light-dark(#331f30, #fff3f7);
+  --text-subdued: light-dark(#5f4460, #e3cede);
+  --text-inverted: light-dark(#fffdf8, #331f30);
+  --text-link: light-dark(#a51256, #ff9fca);
+  --text-link-hover: light-dark(#7e0d41, #ffc0da);
+  --text-link-visited: light-dark(#6d1d5e, #eed0ff);
+  --bg-primary: light-dark(#fffdf8, #251426);
+  --bg-subtle: light-dark(#fff6ee, #1d101f);
+  --bg-neutral: light-dark(#f6e8ef, #4d3a4d);
+  --bg-neutral-stronger: light-dark(#ecd8e2, #342635);
+  --bg-inverted: light-dark(#331f30, #fffdf8);
+  /* Elevation family stays in the PLUM world (contract paper rule): the
+     secondary plate is the page sheet; raised/overlay lift by lightening
+     the plum, never Oak's cool greys */
+  --bg-btn-secondary: light-dark(#fffdf8, #331f30);
+  --bg-raised: light-dark(#fffdf8, #3a2a3b);
+  --bg-overlay: light-dark(#fffdf8, #3a2a3b);
+  --border-primary: light-dark(#331f30, #fff3f7);
+  --border-neutral: light-dark(#7c6379, #cbb3c8);
+  /* 5. Buttons — toy buttons: bubblegum face, bevelled, glossy */
+  --bg-btn-primary: light-dark(#331f30, #ff8fbe);
+  --bg-btn-primary-hover: color-mix(in oklab, var(--bg-btn-primary), var(--bg-primary) 25%);
+  --text-btn-primary: light-dark(#fffdf8, #331f30);
+  --bg-btn-secondary-hover: light-dark(#f6e8ef, #4d3a4d);
+  --btn-bg-image: linear-gradient(160deg, rgba(255,255,255,0.35), rgba(255,255,255,0) 55%);
+  --btn-shadow: inset 0 2px 0 rgba(255,255,255,0.35), inset 0 -3px 0 rgba(0,0,0,0.28), 8px 10px 0 0 light-dark(#83265e, #12060f);
+  /* 7. Geometry — pill, plush, chunky */
+  --radius-control: 999px;
+  --radius-container: 28px;
+  --border-solid-m: 3px;
+  --control-pad-block: 14px;
+  --control-pad-inline: 28px;
+  --size-target: 56px;
+  /* 8. Signature — ANGLED candy shadows; bevels make things solid. Crisp
+     offsets only at rest — the ambient glow is a REWARD, reserved for
+     hover/featured (-raised), so the shelf reads calm and hierarchy holds */
+  --shadow-ground: light-dark(#83265e, #f3c1dd);
+  --shadow-accent: 8px 10px 0 0 var(--color-accent);
+  --shadow-accent-raised: 12px 14px 0 0 var(--color-accent), 24px 34px 56px light-dark(rgba(255,143,190,0.45), rgba(255,143,190,0.55));
+  --shadow-accent-pressed: 3px 4px 0 0 var(--color-accent);
+  --shadow-neutral: 8px 10px 0 0 var(--bg-neutral-stronger);
+  --shadow-press: 2px 3px 0 0 var(--shadow-ground);
+  /* Atmosphere — DIAGONAL nebulas + corner glows (all deep under white text) */
+  --surface-page-image: linear-gradient(135deg, light-dark(rgba(255,214,230,0.5), rgba(76,34,70,0.55)) 0%, transparent 40%, light-dark(rgba(211,239,251,0.4), rgba(31,58,92,0.5)) 100%), radial-gradient(900px 500px at 108% 8%, light-dark(#d3effb, #1f4a63) 0%, transparent 60%);
+  /* Card sheen — diagonal gloss + inner rim light: three-dimensional shelf toys */
+  --card-bg-image: linear-gradient(135deg, light-dark(rgba(255,255,255,0.6), rgba(255,255,255,0.07)), transparent 55%);
+  /* 9. Component form — gummy sweets, never lozenges */
+  --tag-border: var(--border-solid-m) solid var(--border-primary);
+  --tag-shadow: 3px 4px 0 0 var(--color-accent);
+  --tag-pad: var(--space-4) var(--space-16);
+  /* Icon roles → Material Symbols Rounded filled SVG URLs (Apache 2.0,
+     jsDelivr @material-symbols/svg-600) — shared markup resolves to the
+     chunky toy forms */
+  --ic-search: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/search-fill.svg");
+  --ic-download: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/download-fill.svg");
+  --ic-next: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/arrow_forward-fill.svg");
+  --ic-prev: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/arrow_back-fill.svg");
+  --ic-external: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/open_in_new-fill.svg");
+  --ic-close: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/close-fill.svg");
+  --ic-menu: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/menu-fill.svg");
+  --ic-tick: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/check-fill.svg");
+  --ic-cross: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/close-fill.svg");
+  --ic-warning: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/warning-fill.svg");
+  --ic-info: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/info-fill.svg");
+  --ic-star: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/star-fill.svg");
+  --ic-book: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/menu_book-fill.svg");
+  --ic-quiz: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/quiz-fill.svg");
+  --ic-video: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/play_circle-fill.svg");
+  --ic-worksheet: url("https://cdn.jsdelivr.net/npm/@material-symbols/svg-600@0.19.0/rounded/description-fill.svg");
+  /* Bands: candy gradients, square edges — the container radius on a
+     full-bleed band collides with the masthead rule (the "ears") */
+  --band-radius: 0px;
+}
+
+/* §EXPRESSION — hook-clean rules on specimen classes (same contract as
+   FDSE §11): the utility strip joins the nocturne instead of flashing an
+   inverted cream bar across the bedtime arcade */
+.util{background:var(--bg-subtle);color:var(--text-primary);border-bottom:var(--border-solid-s) solid var(--bg-neutral-stronger)}
+.util a{color:var(--text-link)}
+
+/* COMPOSITION (page-type scoped) */
+[data-page="unit"]{
+  /* The toy shelf: the quest log (detail) pinned tall on the left beside
+     the browse stack (results, then the tuning drawer); rewards
+     (resources) and the bedtime CTA run full-bleed; FAQ last */
+  --main-columns: minmax(var(--space-16),1fr) minmax(0,720px) minmax(0,460px) minmax(var(--space-16),1fr);
+  --main-areas: "hero hero hero hero" ". detail results ." ". detail facets ." "resources resources resources resources" "cta cta cta cta" ". support support .";
+}
+[data-page="proof"]{
+  /* Proof page: quests beside the name-your-creature drawer */
+  --main-columns: minmax(var(--space-16),1fr) minmax(0,700px) minmax(0,480px) minmax(var(--space-16),1fr);
+  --main-areas: "hero hero hero hero" ". featured support ." ". context context .";
+}

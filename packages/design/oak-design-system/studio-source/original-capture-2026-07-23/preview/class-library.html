@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Class library" subtitle="components.css — one link, class names, done. The canonical way to build Oak" viewport="760x560" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:22px 24px;background:var(--oak-grey10);font-family:var(--font-sans);color:var(--text-primary)}
+h4{font:400 11px/14px var(--font-mono);color:var(--oak-grey50);margin:18px 0 8px;text-transform:uppercase;letter-spacing:0.06em}
+h4:first-child{margin-top:0}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+code{font:500 11px/16px var(--font-mono);background:var(--oak-grey20);border-radius:3px;padding:1px 5px;color:var(--text-subdued)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+</style></head>
+<body>
+<h4>&lt;link rel="stylesheet" href="styles.css"&gt; then:</h4>
+<div class="row">
+<button class="oak-btn">oak-btn<img class="oak-btn__icon" src="../assets/icons/arrow-right.svg" alt=""></button>
+<button class="oak-btn oak-btn--secondary">--secondary</button>
+<button class="oak-btn oak-btn--secondary oak-btn--sm">--sm</button>
+<button class="oak-icon-btn" aria-label="Search"><img src="../assets/icons/search.svg" alt=""></button>
+<span class="oak-tag"><img src="../assets/icons/free-tag.svg" alt="">oak-tag</span>
+<span class="oak-tag oak-tag--mint">--mint</span>
+<span class="oak-chip"><img src="../assets/icons/subject-maths.svg" alt="Maths"></span>
+</div>
+<div class="cols">
+<div>
+<h4>oak-card + oak-card--lavender</h4>
+<div class="oak-card oak-card--lavender" style="padding:16px">
+<p style="font:600 16px/20px var(--font-sans);margin:0 0 4px">Cells, tissues and organs</p>
+<p style="font:300 14px/20px var(--font-sans);margin:0;color:var(--text-subdued)">Science · Year 7 · 8 lessons</p>
+</div>
+<h4>oak-banner--success</h4>
+<div class="oak-banner oak-banner--success"><img src="../assets/icons/success.svg" alt=""><span><strong>Saved.</strong> Find it in your library.</span></div>
+</div>
+<div>
+<h4>oak-field · oak-input</h4>
+<div class="oak-field">
+<label class="oak-label" for="cl-email">School email</label>
+<input class="oak-input" id="cl-email" type="email" placeholder="you@school.org.uk">
+<p class="oak-hint">We'll only use this for your account.</p>
+</div>
+<h4>oak-quiz-answer--correct</h4>
+<button class="oak-quiz-answer oak-quiz-answer--correct"><span class="oak-quiz-answer__key">B</span>Condensation</button>
+</div>
+</div>
+</body></html>

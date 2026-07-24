@@ -1,0 +1,472 @@
+/* @import must precede all other rules. Roboto Mono - code contexts only
+   (network; swap for local files if licensing requires). */
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap");
+/* ============================================================
+   Oak National Academy — Foundations (tokens + type)
+   THREE-TIER TOKEN ARCHITECTURE — no raw values at point of use:
+   1. PRIMITIVES  --oak-*, scales (--space/--radius/--font-size/…)
+      Literal values live ONLY here. Reference primitives solely
+      inside token definitions or for deliberately fixed art.
+   2. ROLES       --text-* --bg-* --border-* --surface-* --shadow-*
+      Themable meaning, composed from primitives via light-dark().
+      Build UI with these (+ component tokens in components.css).
+   3. COMPONENT   --btn-* --input-* … (see components.css) —
+      per-part decisions, composed from roles + scales. Shared by
+      the CSS class library AND the compiled React components.
+   Themes: (default light) · data-theme="dark" · "system" (follows OS)
+           · "high-contrast" · "colour-safe" (colour-vision-deficiency)
+   Apply data-theme to <html> or any subtree; oak-theme.js persists it.
+   WCAG 2.2 AA throughout.
+   ============================================================ */
+
+/* Lexend - variable font, local file. Weights 100–900. */
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/Lexend-VariableFont_wght.ttf") format("truetype-variations"),
+       url("fonts/Lexend-VariableFont_wght.ttf") format("truetype");
+}
+
+/* ---------- 1. PRIMITIVES ---------- */
+:root {
+  /* Neutral / grey scale */
+  --oak-white: #ffffff;
+  --oak-grey10: #f9f9f9;
+  --oak-grey20: #f2f2f2;
+  --oak-grey30: #e4e4e4;
+  --oak-grey40: #cacaca;
+  --oak-grey50: #808080;
+  --oak-grey60: #575757;
+  --oak-grey70: #2d2d2d;
+  --oak-grey80: #1b1b1b;
+  --oak-black: #222222;
+  --oak-black-true: #000000;
+
+  /* Brand */
+  --oak-green: #287c34;
+
+  /* Decorative pastels (light) + 110 hovers + 50/30 tints */
+  --oak-mint: #bef2bd; --oak-mint30: #ebfbeb; --oak-mint50: #dff9de; --oak-mint110: #93e892;
+  --oak-aqua: #b0e2de; --oak-aqua30: #e7f6f5; --oak-aqua50: #d7f1ef; --oak-aqua110: #7cd8d0;
+  --oak-lavender: #a0b6f2; --oak-lavender30: #e3e9fb; --oak-lavender50: #bdcdf5; --oak-lavender110: #7c9aec;
+  --oak-pink: #deb7d5; --oak-pink30: #f5e9f2; --oak-pink50: #efdbea; --oak-pink110: #cf9cc3;
+  --oak-lemon: #ffe555; --oak-lemon30: #fff7cc; --oak-lemon50: #fff2aa; --oak-lemon110: #fbd60e;
+
+  /* Decorative pastels (dark counterparts — Oak's own dark palette) */
+  --oak-dark-mint: #2e5338; --oak-dark-mint30: #202b23; --oak-dark-mint50: #25372a; --oak-dark-mint110: #306d41;
+  --oak-dark-aqua: #0c5651; --oak-dark-aqua30: #162d2a; --oak-dark-aqua50: #163632; --oak-dark-aqua110: #00746a;
+  --oak-dark-lavender: #38488b; --oak-dark-lavender30: #303444; --oak-dark-lavender50: #374061; --oak-dark-lavender110: #2343a5;
+  --oak-dark-pink: #72225c; --oak-dark-pink30: #3f2137; --oak-dark-pink50: #4f2341; --oak-dark-pink110: #8c166d;
+  --oak-dark-lemon: #645811; --oak-dark-lemon30: #3c3820; --oak-dark-lemon50: #49421a; --oak-dark-lemon110: #7a6900;
+  --oak-dark-amber: #66381d; --oak-dark-amber30: #482f20; --oak-dark-amber50: #503220; --oak-dark-amber110: #85441b;
+
+  /* Functional */
+  --oak-amber: #ff934e; --oak-amber30: #ffece0; --oak-amber50: #ffc8a6;
+  --oak-amber110: #b45309; /* border-grade amber — ≥3:1 on white (1.4.11) */
+  --oak-red: #dd0035; --oak-red30: #f8d8e0; --oak-red50: #ee809a;
+  --oak-navy: #0d24c4; --oak-navy110: #0a1d9d; --oak-navy120: #081676;
+
+  /* Teaching resources only (slides etc) */
+  --oak-blue: #374cf1; --oak-magenta: #d02aa7; --oak-purple: #845ad9; --oak-teal: #037b7d;
+
+  /* High-contrast theme ink set */
+  --oak-hc-ink-soft: #333333; --oak-hc-ink-muted: #444444;
+  --oak-hc-red: #870020; --oak-hc-green: #0f4a17;
+
+  /* Colour-independent (Okabe–Ito) set — colour-safe theme */
+  --oak-ci-blue: #0072b2; --oak-ci-blue-tint: #d9ecf7;
+  --oak-ci-vermilion: #d55e00; --oak-ci-vermilion-deep: #b34700; --oak-ci-vermilion-tint: #fbe4d2;
+  --oak-ci-ochre: #6f5500;
+
+  /* Shadow tint */
+  --oak-shadow-veil: rgb(92 92 92 / 0.2); /* @kind color */
+  --oak-shadow-veil-deep: rgb(34 34 34 / 0.3); /* @kind color */
+  --oak-veil-ink: rgb(34 34 34 / 0.55); /* @kind color */
+  --oak-veil-black: rgb(0 0 0 / 0.65); /* @kind color */
+
+  /* Border widths */
+  --border-solid-none: 0; /* @kind spacing */ --border-solid-s: 1px; --border-solid-m: 2px; --border-solid-l: 3px;
+  --border-solid-xl: 4px; --border-solid-xxl: 6px; --border-solid-xxxl: 8px; --border-solid-xxxxl: 10px;
+
+  /* Border radii */
+  --radius-square: 0; --radius-xs: 2px; --radius-s: 4px; --radius-m: 6px;
+  --radius-m2: 8px; --radius-l: 16px; --radius-xl: 24px; --radius-circle: 100px;
+
+  /* Spacing (4px grid) */
+  --space-0: 0; --space-2: 2px; --space-4: 4px; --space-8: 8px; --space-12: 12px;
+  --space-16: 16px; --space-20: 20px; --space-24: 24px; --space-32: 32px; --space-40: 40px;
+  --space-48: 48px; --space-56: 56px; --space-64: 64px; --space-72: 72px; --space-80: 80px;
+  --space-92: 92px; --space-100: 100px; --space-120: 120px; --space-160: 160px; --space-180: 180px;
+  --space-240: 240px; --space-360: 360px; --space-480: 480px; --space-640: 640px;
+  --space-960: 960px; --space-1280: 1280px; --space-1360: 1360px;
+
+  /* Type — family, size (rem: respects user font-size prefs), leading, weight, tracking */
+  --font-sans: "Lexend", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-size-1: 0.75rem; --font-size-2: 0.875rem; --font-size-3: 1rem; --font-size-4: 1.125rem;
+  --font-size-5: 1.25rem; --font-size-6: 1.5rem; --font-size-7: 2rem; --font-size-8: 2.5rem;
+  --font-size-9: 3rem; --font-size-10: 3.5rem;
+  /* display sizes — teaching materials (slides) only */
+  --font-size-11: 4rem; --font-size-12: 4.5rem; --font-size-13: 5rem; --font-size-14: 6rem;
+  --leading-16: 1rem; --leading-20: 1.25rem; --leading-24: 1.5rem; --leading-28: 1.75rem;
+  --leading-32: 2rem; --leading-40: 2.5rem; --leading-48: 3rem; --leading-56: 3.5rem; --leading-64: 4rem;
+  --leading-none: 1; /* @kind other */ --leading-tight: 1.1; /* @kind other */
+  --leading-snug: 1.25; /* @kind other */ --leading-relaxed: 1.45; /* @kind other */
+  --weight-light: 300; /* @kind other */ --weight-regular: 400; /* @kind other */
+  --weight-medium: 500; /* @kind other */ --weight-semibold: 600; /* @kind other */
+  --weight-bold: 700; /* @kind other */
+  --tracking-heading: 0.0115rem; --tracking-body: -0.005rem; --tracking-caps: 0.06em;
+  --measure-prose: 65ch;
+
+  /* Fixed sizes — icons + hit targets (WCAG 2.5.8: min 24px; Oak targets 44–48px) */
+  --size-icon-s: 20px; --size-icon-m: 24px; --size-icon-l: 32px; --size-icon-xl: 40px; --size-icon-xxl: 48px;
+  --size-target-dense: 36px; --size-target-min: 44px; --size-target: 48px; --size-target-l: 56px;
+
+  /* Z-index layers */
+  --layer-raised: 10; /* @kind other */ --layer-sticky: 40; /* @kind other */
+  --layer-overlay: 90; /* @kind other */ --layer-top: 100; /* @kind other */
+
+  /* Motion — "quiet motion" */
+  --motion-instant: 0.01ms; /* @kind other */
+  /* raw durations (-full) split from the consumed tokens so the motion axis can
+     collapse and restore by reference, never by re-stating literals */
+  --motion-quick-full: 120ms; /* @kind other */
+  --motion-base-full: 200ms; /* @kind other */
+  --motion-loop-full: 1200ms; /* @kind other */
+  --motion-quick: var(--motion-quick-full); /* @kind other */
+  --motion-base: var(--motion-base-full); /* @kind other */
+  --motion-loop: var(--motion-loop-full); /* @kind other */
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1); /* @kind other */
+}
+
+/* ---------- 2. ROLES (themable — build with THESE) ---------- */
+/* 2a. CANONICAL intent-named roles — the single source of truth and the
+   white-label override surface (see brand.css). Themes and re-brands
+   override ONLY canonical roles, never the aliases in 2b. */
+:root {
+  color-scheme: light; /* default: light. data-theme switches below. */
+
+  --text-primary: light-dark(var(--oak-black), var(--oak-white));
+  --text-subdued: light-dark(var(--oak-grey60), var(--oak-grey30));
+  --text-error: light-dark(var(--oak-red), var(--oak-red50));
+  --text-success: light-dark(var(--oak-green), var(--oak-mint));
+  --text-disabled: light-dark(var(--oak-grey50), var(--oak-grey40));
+  --text-link: light-dark(var(--oak-navy), var(--oak-lavender));
+  --text-link-hover: light-dark(var(--oak-navy110), var(--oak-lavender50));
+  --text-link-visited: light-dark(var(--oak-navy120), var(--oak-lavender30));
+  --text-inverted: light-dark(var(--oak-white), var(--oak-black));
+  --text-inverted-subdued: light-dark(var(--oak-grey40), var(--oak-grey60)); /* muted text ON inverted surfaces (footers, quote bands) */
+  --border-inverted: var(--oak-grey50); /* dividers/rings ON inverted surfaces — ≥3:1 vs bg-inverted in both polarities */
+
+  --bg-primary: light-dark(var(--oak-white), var(--oak-black));
+  --bg-subtle: light-dark(var(--oak-grey10), var(--oak-grey80));
+  --bg-neutral: light-dark(var(--oak-grey20), var(--oak-grey60));
+  --bg-neutral-stronger: light-dark(var(--oak-grey30), var(--oak-grey70));
+  --bg-inverted: light-dark(var(--oak-black), var(--oak-white));
+
+  /* Elevation — dark mode elevates by LIGHTENING the surface (shadows
+     carry less on dark); the scrim dims the page under overlays */
+  --bg-raised: light-dark(var(--oak-white), var(--oak-grey70));
+  --bg-overlay: light-dark(var(--oak-white), var(--oak-grey70));
+  --scrim: light-dark(var(--oak-veil-ink), var(--oak-veil-black));
+
+  --bg-btn-primary: light-dark(var(--oak-black), var(--oak-white));
+  --bg-btn-primary-hover: light-dark(var(--oak-grey60), var(--oak-grey30));
+  --text-btn-primary: light-dark(var(--oak-white), var(--oak-black));
+  --bg-btn-secondary: light-dark(var(--oak-white), var(--oak-black));
+  --bg-btn-secondary-hover: light-dark(var(--oak-grey20), var(--oak-grey60));
+  --bg-btn-disabled: light-dark(var(--oak-grey50), var(--oak-grey60));
+  --text-btn-disabled: light-dark(var(--oak-white), var(--oak-grey30));
+
+  --bg-correct: light-dark(var(--oak-mint50), var(--oak-dark-mint50));
+  --bg-incorrect: light-dark(var(--oak-red30), var(--oak-dark-pink50));
+  --bg-success: light-dark(var(--oak-green), var(--oak-mint));
+  --bg-error: light-dark(var(--oak-red), var(--oak-red50));
+
+  --border-primary: light-dark(var(--oak-black), var(--oak-white));
+  --border-neutral: light-dark(var(--oak-grey50), var(--oak-grey40));   /* ≥3:1 vs bg (WCAG 1.4.11) */
+  --border-neutral-lighter: light-dark(var(--oak-grey40), var(--oak-grey60)); /* decorative dividers only */
+  --border-brand: light-dark(var(--oak-green), var(--oak-mint));
+  --border-error: light-dark(var(--oak-red), var(--oak-red50));
+  --border-warning: light-dark(var(--oak-amber110), var(--oak-amber50));
+  --border-success: light-dark(var(--oak-green), var(--oak-mint));
+  /* Accent — ONE token drives the whole signature: offset shadows, focus
+     ring inner, highlights, markers. Re-point it to re-brand. Stays lemon
+     in dark: it's the signature. */
+  --color-accent: var(--oak-lemon);
+  --color-accent-soft: light-dark(var(--oak-lemon50), var(--oak-dark-lemon50));
+  --color-accent-subtle: light-dark(var(--oak-lemon30), var(--oak-dark-lemon30));
+  --border-accent: var(--color-accent);
+  --bg-selected: var(--color-accent-subtle);
+
+  /* State overlays — mix-derived, brand-agnostic: layer over any surface
+     (::after or a stacked element); correct in every theme for free */
+  --state-hover: color-mix(in oklab, currentColor 8%, transparent);
+  --state-pressed: color-mix(in oklab, currentColor 14%, transparent);
+  --state-selected: color-mix(in oklab, var(--color-accent) 24%, transparent);
+
+  /* Functional fills (banners, callouts) — meaning-bearing, defined
+     independently of the decorative ramp so re-branding decoratives
+     never moves semantics */
+  --bg-info-subtle: light-dark(var(--oak-lavender30), var(--oak-dark-lavender30));
+  --bg-success-subtle: light-dark(var(--oak-mint30), var(--oak-dark-mint30));
+  --bg-warning-subtle: light-dark(var(--oak-amber30), var(--oak-dark-amber30));
+  --bg-error-subtle: light-dark(var(--oak-red30), var(--oak-dark-pink50));
+
+  /* Decorative surfaces — categorisation only, NEVER meaning.
+     Brand-neutral ramp: -N / -N-soft (50 tint) / -N-subtle (30 tint).
+     Oak dialect: 1 mint · 2 aqua · 3 lavender · 4 pink · 5 lemon · 6 amber. */
+  --surface-decorative-1: light-dark(var(--oak-mint), var(--oak-dark-mint));
+  --surface-decorative-1-soft: light-dark(var(--oak-mint50), var(--oak-dark-mint50));
+  --surface-decorative-1-subtle: light-dark(var(--oak-mint30), var(--oak-dark-mint30));
+  --surface-decorative-2: light-dark(var(--oak-aqua), var(--oak-dark-aqua));
+  --surface-decorative-2-soft: light-dark(var(--oak-aqua50), var(--oak-dark-aqua50));
+  --surface-decorative-2-subtle: light-dark(var(--oak-aqua30), var(--oak-dark-aqua30));
+  --surface-decorative-3: light-dark(var(--oak-lavender), var(--oak-dark-lavender));
+  --surface-decorative-3-soft: light-dark(var(--oak-lavender50), var(--oak-dark-lavender50));
+  --surface-decorative-3-subtle: light-dark(var(--oak-lavender30), var(--oak-dark-lavender30));
+  --surface-decorative-4: light-dark(var(--oak-pink), var(--oak-dark-pink));
+  --surface-decorative-4-soft: light-dark(var(--oak-pink50), var(--oak-dark-pink50));
+  --surface-decorative-4-subtle: light-dark(var(--oak-pink30), var(--oak-dark-pink30));
+  --surface-decorative-5: light-dark(var(--oak-lemon), var(--oak-dark-lemon));
+  --surface-decorative-5-soft: light-dark(var(--oak-lemon50), var(--oak-dark-lemon50));
+  --surface-decorative-5-subtle: light-dark(var(--oak-lemon30), var(--oak-dark-lemon30));
+  --surface-decorative-6: light-dark(var(--oak-amber50), var(--oak-dark-amber50));
+  --surface-decorative-6-subtle: light-dark(var(--oak-amber30), var(--oak-dark-amber30));
+
+  /* Non-colour theme tokens (light-dark() is colours-only, so these
+     are re-declared per theme scope below) */
+  --filter-icon: none; /* @kind other */          /* black icons on light surfaces */
+  --filter-icon-inverted: invert(1); /* @kind other */ /* icons on dark/inverted surfaces */
+  --filter-icon-on-btn-primary: invert(1); /* @kind other */
+  --filter-icon-on-btn-disabled: invert(1); /* @kind other */ /* disabled fills are dark in every theme */
+
+  /* Drop shadows — intent-named. The accent family derives from
+     --color-accent (re-brand follows automatically). */
+  --shadow-standard: 0 0.5rem 0.5rem var(--oak-shadow-veil);
+  --shadow-accent: 0.125rem 0.125rem 0 var(--color-accent);
+  --shadow-accent-raised: 0.25rem 0.25rem 0 var(--color-accent);
+  --shadow-accent-display: 0.375rem 0.375rem 0 var(--color-accent); /* display scale (slides) */
+  --shadow-accent-ring: 0 0 0 0.125rem var(--color-accent);
+  --shadow-accent-pressed: 0 0 0 var(--color-accent); /* collapsed but interpolatable */
+  --shadow-ground: light-dark(var(--oak-grey60), var(--oak-grey20));
+  --shadow-neutral: 0.25rem 0.25rem 0 var(--shadow-ground);
+  --shadow-neutral-ring: 0 0 0 0.3rem var(--shadow-ground);
+  --shadow-ink: 0.063rem 0.125rem 0 var(--oak-black-true);
+  --shadow-press: var(--border-solid-xl) var(--border-solid-xl) 0 0 var(--shadow-ground), var(--border-solid-m) var(--border-solid-m) 0 0 var(--color-accent);
+  --shadow-raised: var(--shadow-standard);
+  --shadow-overlay: 0 1rem 2rem var(--oak-shadow-veil-deep);
+
+  /* Focus (WCAG 2.4.7) — double ring: lemon inner, contrast outer.
+     Pair box-shadow ring with a transparent outline so forced-colors
+     (Windows High Contrast) can draw its own. */
+  --focus-ring-halo: 5px;
+  --focus-ring: 0 0 0 var(--border-solid-m) var(--color-accent), 0 0 0 var(--focus-ring-halo) var(--shadow-ground);
+  --focus-outline: var(--border-solid-l) solid transparent; /* @kind other */
+  --focus-outline-offset: 1px;
+
+  /* Geometry roles — shape + density knobs (part of the white-label
+     surface): controls (buttons, inputs, tags) vs containers (cards,
+     banners, quiz answers) round and pad independently. */
+  --radius-control: var(--radius-s);
+  --radius-container: var(--radius-m2);
+  --control-pad-block: var(--space-12);
+  --control-pad-inline: var(--space-16);
+
+  /* Motion verbs — intent over duration. Projections: everything
+     collapses to --motion-instant under prefers-reduced-motion. */
+  --motion-enter: var(--motion-base); /* @kind other */
+  --motion-exit: var(--motion-quick); /* @kind other */
+  --motion-emphasis: var(--motion-base); /* @kind other */
+
+  /* Type roles — the display face carries headings/kickers and re-points
+     independently of body type (the single biggest "different feel" knob). */
+  --font-display: var(--font-sans);
+  --weight-display: var(--weight-semibold); /* @kind other */
+
+  /* TYPE SLOTS — the ramp itself is brand surface. Each slot is a whole
+     font shorthand (weight size/line-height family); classes consume slots,
+     brands re-point them to reshape scale, hierarchy and rhythm — not just
+     faces. Floors that survive any re-brand: body/label slots >=16px,
+     slide slots >=24px, targets >=44px. */
+  --type-heading-1: var(--weight-display) var(--font-size-10)/var(--leading-64) var(--font-display); /* @kind font */
+  --type-heading-2: var(--weight-display) var(--font-size-9)/var(--leading-56) var(--font-display); /* @kind font */
+  --type-heading-3: var(--weight-display) var(--font-size-8)/var(--leading-48) var(--font-display); /* @kind font */
+  --type-heading-4: var(--weight-display) var(--font-size-7)/var(--leading-40) var(--font-display); /* @kind font */
+  --type-heading-5: var(--weight-display) var(--font-size-6)/var(--leading-32) var(--font-display); /* @kind font */
+  --type-heading-6: var(--weight-display) var(--font-size-5)/var(--leading-24) var(--font-display); /* @kind font */
+  --type-heading-7: var(--weight-display) var(--font-size-3)/var(--leading-20) var(--font-display); /* @kind font */
+  --type-body-1: var(--weight-light) var(--font-size-4)/var(--leading-28) var(--font-sans); /* @kind font */
+  --type-body-2: var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-sans); /* @kind font */
+  --type-body-3: var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans); /* @kind font */
+  --type-body-4: var(--weight-light) var(--font-size-1)/var(--leading-16) var(--font-sans); /* @kind font */
+  --type-label: var(--weight-bold) var(--font-size-2)/var(--leading-20) var(--font-sans); /* @kind font */
+
+  /* Page atmosphere — a brand may paint gradient glows behind the page
+     (see brand.css §7d). Flat none for Oak. Never carries text contrast:
+     audited roles stay flat colours. */
+  --surface-page-image: none; /* @kind other */
+}
+
+/* Motion preference — an orthogonal AXIS, not a theme: it composes with every
+   colour theme. Default follows the OS (prefers-reduced-motion); an explicit
+   data-motion choice wins — pupils and teachers on school-managed devices
+   often cannot change OS settings, so the knob must exist in-product
+   (oak-theme.js persists it as oakTheme.motion). Collapse happens at TOKEN
+   level, so every consumer of the motion tokens — classes, templates,
+   integrations, consuming apps — goes still automatically. "full" re-enables only
+   quiet motion: 120/200ms fades are all that exist to re-enable. */
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-quick: var(--motion-instant); --motion-base: var(--motion-instant); --motion-loop: var(--motion-instant); }
+}
+[data-motion="reduced"] { --motion-quick: var(--motion-instant); --motion-base: var(--motion-instant); --motion-loop: var(--motion-instant); }
+/* explicit "full" wins over the OS collapse: same specificity, later in source */
+[data-motion="full"] { --motion-quick: var(--motion-quick-full); --motion-base: var(--motion-base-full); --motion-loop: var(--motion-loop-full); }
+
+/* 2b. Oak-dialect ALIASES — authoring sugar. Every alias is a pure var()
+   reference to one canonical role above (SSOT). Never re-point an alias
+   per theme or per brand — override the canonical role instead. */
+:root {
+  --surface-mint: var(--surface-decorative-1); --surface-mint-soft: var(--surface-decorative-1-soft); --surface-mint-subtle: var(--surface-decorative-1-subtle);
+  --surface-aqua: var(--surface-decorative-2); --surface-aqua-soft: var(--surface-decorative-2-soft); --surface-aqua-subtle: var(--surface-decorative-2-subtle);
+  --surface-lavender: var(--surface-decorative-3); --surface-lavender-soft: var(--surface-decorative-3-soft); --surface-lavender-subtle: var(--surface-decorative-3-subtle);
+  --surface-pink: var(--surface-decorative-4); --surface-pink-soft: var(--surface-decorative-4-soft); --surface-pink-subtle: var(--surface-decorative-4-subtle);
+  --surface-lemon: var(--surface-decorative-5); --surface-lemon-soft: var(--surface-decorative-5-soft); --surface-lemon-subtle: var(--surface-decorative-5-subtle);
+  --surface-amber: var(--surface-decorative-6); --surface-amber-subtle: var(--surface-decorative-6-subtle);
+  --surface-red-subtle: var(--bg-error-subtle);
+  --shadow-lemon: var(--shadow-accent); --shadow-wide-lemon: var(--shadow-accent-raised);
+  --shadow-slide-lemon: var(--shadow-accent-display); --shadow-centered-lemon: var(--shadow-accent-ring);
+  --shadow-lemon-flat: var(--shadow-accent-pressed);
+  --shadow-grey: var(--shadow-neutral); --shadow-centered-grey: var(--shadow-neutral-ring);
+  --shadow-black: var(--shadow-ink);
+}
+
+/* ---------- 3. THEMES ---------- */
+/* Dark & system: light-dark() flips on color-scheme, so these are one-liners
+   plus the non-colour tokens. Scopes are unprefixed so any SUBTREE can be themed. */
+[data-theme="light"] { color-scheme: light; }
+/* Root-level polarity guards: a dark-first BRAND may declare :root{color-scheme:dark}
+   after this sheet (the polarity lever in brand.css); these higher-specificity
+   rules keep an EXPLICIT theme choice winning over the brand default. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="system"] { color-scheme: light dark; }
+[data-theme="dark"] { color-scheme: dark; }
+[data-theme="system"] { color-scheme: light dark; }
+[data-theme="dark"], :root[data-theme="dark"] {
+  --filter-icon: invert(1); /* @kind other */
+  --filter-icon-inverted: none; /* @kind other */
+  --filter-icon-on-btn-primary: none; /* @kind other */
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"], :root[data-theme="system"] {
+    --filter-icon: invert(1); /* @kind other */
+    --filter-icon-inverted: none; /* @kind other */
+    --filter-icon-on-btn-primary: none; /* @kind other */
+  }
+}
+
+/* High contrast — pure black on white, decoration stripped, meaning kept.
+   (Windows High Contrast Mode is handled separately via forced-colors in
+   components.css; this theme is for users who choose it in-product.) */
+[data-theme="high-contrast"], :root[data-theme="high-contrast"] {
+  color-scheme: light;
+  --text-primary: var(--oak-black-true); --text-subdued: var(--oak-black-true); --text-disabled: var(--oak-hc-ink-muted);
+  --text-error: var(--oak-hc-red); --text-success: var(--oak-hc-green);
+  --text-link: var(--oak-navy120); --text-link-hover: var(--oak-black-true); --text-link-visited: var(--oak-navy120);
+  --text-inverted: var(--oak-white); --text-inverted-subdued: var(--oak-white); --border-inverted: var(--oak-white);
+  --bg-primary: var(--oak-white); --bg-subtle: var(--oak-white); --bg-neutral: var(--oak-white); --bg-neutral-stronger: var(--oak-grey30);
+  --bg-inverted: var(--oak-black-true);
+  --bg-raised: var(--oak-white); --bg-overlay: var(--oak-white); --scrim: var(--oak-veil-black);
+  --shadow-raised: none; --shadow-overlay: none;
+  --bg-btn-primary: var(--oak-black-true); --bg-btn-primary-hover: var(--oak-hc-ink-soft); --text-btn-primary: var(--oak-white);
+  --bg-btn-secondary: var(--oak-white); --bg-btn-secondary-hover: var(--oak-grey30);
+  --bg-btn-disabled: var(--oak-hc-ink-muted); --text-btn-disabled: var(--oak-white);
+  --bg-correct: var(--oak-white); --bg-incorrect: var(--oak-white); --bg-success: var(--oak-hc-green); --bg-error: var(--oak-hc-red);
+  --border-primary: var(--oak-black-true); --border-neutral: var(--oak-black-true); --border-neutral-lighter: var(--oak-black-true);
+  --border-brand: var(--oak-black-true); --border-error: var(--oak-hc-red); --border-warning: var(--oak-black-true); --border-success: var(--oak-hc-green);
+  --color-accent: var(--oak-black-true); --color-accent-soft: var(--oak-white); --color-accent-subtle: var(--oak-white);
+  --bg-info-subtle: var(--oak-white); --bg-success-subtle: var(--oak-white); --bg-warning-subtle: var(--oak-white); --bg-error-subtle: var(--oak-white);
+  --surface-decorative-1: var(--oak-white); --surface-decorative-1-soft: var(--oak-white); --surface-decorative-1-subtle: var(--oak-white);
+  --surface-decorative-2: var(--oak-white); --surface-decorative-2-soft: var(--oak-white); --surface-decorative-2-subtle: var(--oak-white);
+  --surface-decorative-3: var(--oak-white); --surface-decorative-3-soft: var(--oak-white); --surface-decorative-3-subtle: var(--oak-white);
+  --surface-decorative-4: var(--oak-white); --surface-decorative-4-soft: var(--oak-white); --surface-decorative-4-subtle: var(--oak-white);
+  --surface-decorative-5: var(--oak-white); --surface-decorative-5-soft: var(--oak-white); --surface-decorative-5-subtle: var(--oak-white);
+  --surface-decorative-6: var(--oak-white); --surface-decorative-6-subtle: var(--oak-white);
+  --shadow-ground: var(--oak-black-true); --shadow-standard: none;
+  --shadow-press: var(--border-solid-xl) var(--border-solid-xl) 0 0 var(--shadow-ground), var(--border-solid-m) var(--border-solid-m) 0 0 var(--oak-lemon);
+  --focus-ring: 0 0 0 var(--border-solid-l) var(--oak-black-true), 0 0 0 var(--focus-ring-halo) var(--oak-lemon);
+}
+
+/* Colour-safe — for colour-vision deficiency (deuteranopia/protanopia, ~8% of men).
+   Success/error stop relying on green-vs-red: success → Okabe-Ito blue,
+   error → vermilion (darkened to 4.5:1 for text). Decoratives unchanged —
+   they never carry meaning. Always pair state colour with icon + label. */
+[data-theme="colour-safe"], :root[data-theme="colour-safe"] {
+  color-scheme: light;
+  --text-success: var(--oak-ci-blue); --text-error: var(--oak-ci-vermilion-deep);
+  --bg-success: var(--oak-ci-blue); --bg-error: var(--oak-ci-vermilion-deep);
+  --bg-correct: var(--oak-ci-blue-tint); --bg-incorrect: var(--oak-ci-vermilion-tint);
+  --bg-success-subtle: var(--oak-ci-blue-tint); --bg-error-subtle: var(--oak-ci-vermilion-tint);
+  --border-success: var(--oak-ci-blue); --border-error: var(--oak-ci-vermilion); --border-brand: var(--oak-ci-blue);
+  --border-warning: var(--oak-ci-ochre);
+}
+
+/* ---------- 4. BASE ---------- */
+html, body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  background-image: var(--surface-page-image);
+  background-attachment: fixed;
+  font-weight: var(--weight-light);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 5. TYPE CLASSES (match oakFontTokens) ---------- */
+.oak-heading-1 { font: var(--type-heading-1); letter-spacing: var(--tracking-heading); }
+.oak-heading-2 { font: var(--type-heading-2); letter-spacing: var(--tracking-heading); }
+.oak-heading-3 { font: var(--type-heading-3); letter-spacing: var(--tracking-heading); }
+.oak-heading-4 { font: var(--type-heading-4); letter-spacing: var(--tracking-heading); }
+.oak-heading-5 { font: var(--type-heading-5); letter-spacing: var(--tracking-heading); }
+.oak-heading-6 { font: var(--type-heading-6); letter-spacing: var(--tracking-heading); }
+.oak-heading-7 { font: var(--type-heading-7); letter-spacing: var(--tracking-heading); }
+.oak-heading-light-1 { font: var(--weight-regular) var(--font-size-10)/var(--leading-64) var(--font-display); letter-spacing: var(--tracking-heading); }
+.oak-heading-light-2 { font: var(--weight-regular) var(--font-size-9)/var(--leading-56) var(--font-display); letter-spacing: var(--tracking-heading); }
+.oak-heading-light-3 { font: var(--weight-regular) var(--font-size-8)/var(--leading-48) var(--font-display); letter-spacing: var(--tracking-heading); }
+.oak-heading-light-4 { font: var(--weight-regular) var(--font-size-7)/var(--leading-40) var(--font-display); letter-spacing: var(--tracking-heading); }
+.oak-heading-light-5 { font: var(--weight-regular) var(--font-size-6)/var(--leading-32) var(--font-display); letter-spacing: var(--tracking-heading); }
+.oak-heading-light-6 { font: var(--weight-regular) var(--font-size-5)/var(--leading-24) var(--font-display); letter-spacing: var(--tracking-heading); }
+.oak-heading-light-7 { font: var(--weight-regular) var(--font-size-3)/var(--leading-20) var(--font-display); letter-spacing: var(--tracking-heading); }
+.oak-body-1 { font: var(--type-body-1); letter-spacing: var(--tracking-body); }
+.oak-body-2 { font: var(--type-body-2); letter-spacing: var(--tracking-body); }
+.oak-body-3 { font: var(--type-body-3); letter-spacing: var(--tracking-body); }
+.oak-body-4 { font: var(--type-body-4); letter-spacing: var(--tracking-body); }
+.oak-body-1-bold { font: var(--weight-bold) var(--font-size-4)/var(--leading-28) var(--font-sans); letter-spacing: var(--tracking-body); }
+.oak-body-2-bold { font: var(--weight-bold) var(--font-size-3)/var(--leading-24) var(--font-sans); letter-spacing: var(--tracking-body); }
+.oak-body-3-bold { font: var(--weight-bold) var(--font-size-2)/var(--leading-20) var(--font-sans); letter-spacing: var(--tracking-body); }
+.oak-code-2 { font: var(--weight-light) var(--font-size-4)/var(--leading-24) var(--font-mono); letter-spacing: var(--tracking-heading); }
+.oak-code-2-bold { font: var(--weight-bold) var(--font-size-4)/var(--leading-24) var(--font-mono); letter-spacing: var(--tracking-heading); }
+
+/* ---------- 6. SCOPED NATIVE-ELEMENT DEFAULTS ---------- */
+:where(.oak-scope) h1 { font: var(--type-heading-2); letter-spacing: var(--tracking-heading); margin: 0 0 var(--space-24); }
+:where(.oak-scope) h2 { font: var(--type-heading-3); letter-spacing: var(--tracking-heading); margin: 0 0 var(--space-20); }
+:where(.oak-scope) h3 { font: var(--type-heading-4); letter-spacing: var(--tracking-heading); margin: 0 0 var(--space-16); }
+:where(.oak-scope) h4 { font: var(--type-heading-5); letter-spacing: var(--tracking-heading); margin: 0 0 var(--space-12); }
+:where(.oak-scope) h5 { font: var(--type-heading-6); letter-spacing: var(--tracking-heading); margin: 0 0 var(--space-8); }
+:where(.oak-scope) p  { font: var(--type-body-1); letter-spacing: var(--tracking-body); margin: 0 0 var(--space-16); color: var(--text-primary); }
+:where(.oak-scope) a  { color: var(--text-link); text-decoration: underline; text-underline-offset: var(--space-2); }
+:where(.oak-scope) a:hover { color: var(--text-link-hover); }
+
+/* Oak's signature: thick border + offset yellow shadow for interactive things */
+.oak-interactive {
+  border: var(--border-solid-m) solid var(--border-primary);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-accent);
+  transition: transform var(--motion-quick) var(--ease-standard), box-shadow var(--motion-quick) var(--ease-standard);
+}
+.oak-interactive:hover { box-shadow: var(--shadow-accent-raised); }
+.oak-interactive:active { transform: translate(var(--space-2), var(--space-2)); box-shadow: var(--shadow-accent-pressed); }
+.oak-interactive:focus-visible { outline: var(--focus-outline); outline-offset: var(--focus-outline-offset); box-shadow: var(--focus-ring); }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Oak lesson page" description="Unit/lesson detail (unit-lessons grammar): compact hero, the white unit panel with mint numbered lesson list, then the full lesson-anatomy block set (outcome, key learning points, keywords, misconception, teacher tip, quiz). Delete blocks you don't need." -->
+<helmet><script src="./ds-base.js"></script><script src="./theme-control.js"></script><style>body{margin:0}</style></helmet>
+<div class="oak-scope oak-canvas" data-page="home">
+<header data-region="masthead">
+<a class="oak-skip-link" href="#main">Skip to content</a>
+<nav aria-label="Oak site areas" style="background:var(--bg-btn-primary);display:flex;gap:var(--gap-m);padding:var(--space-16) clamp(var(--space-20),4vw,var(--space-40)) 0">
+<a class="oak-btn oak-btn--secondary" aria-current="page" href="https://www.thenational.academy/teachers" style="border-bottom-left-radius:var(--radius-square);border-bottom-right-radius:var(--radius-square);border-bottom-width:0">Teachers</a>
+<a class="oak-btn" href="https://www.thenational.academy" style="border-bottom-left-radius:var(--radius-square);border-bottom-right-radius:var(--radius-square);border-bottom-width:0">Back to www</a>
+</nav>
+<nav aria-label="Oak National Academy" style="background:var(--bg-primary);border-bottom:var(--border-solid-s) solid var(--border-neutral-lighter);display:flex;align-items:center;gap:var(--gap-l);padding:var(--space-16) clamp(var(--space-20),4vw,var(--space-40))">
+<a href="https://www.thenational.academy" aria-label="Oak National Academy home"><img src="./assets/logo.svg" alt="" style="display:block;height:var(--size-icon-xxl);width:auto;filter:var(--filter-icon)" /></a>
+<a class="oak-btn oak-btn--secondary oak-btn--sm" href="https://www.thenational.academy" style="margin-left:auto;border-radius:var(--radius-circle)">Back to the main Oak website<img class="oak-btn__icon" src="https://res.cloudinary.com/oak-web-application/image/upload/v1699953892/icons/hlxmejse3mcr4tqo6t8u.svg" alt="" /></a>
+<span class="oak-select-wrap"><select class="oak-select" id="theme-control" aria-label="Colour theme" style="width:auto;min-width:var(--space-120)"><option value="light" selected="selected">Light</option><option value="dark">Dark</option><option value="system">System</option><option value="high-contrast">High contrast</option></select></span>
+</nav>
+</header>
+<main data-region="main" class="oak-main" id="main" aria-labelledby="page-title" style="align-content:start">
+<section data-region="hero" class="oak-band" style="--band-pad:var(--space-40)">
+<div class="oak-container oak-stack--l" style="display:flex;flex-direction:column;align-items:flex-start">
+<nav class="oak-cluster oak-cluster--s" aria-label="Breadcrumbs" style="font:var(--type-body-3);letter-spacing:var(--tracking-body);align-items:center"><a class="oak-link" href="https://www.thenational.academy" style="color:var(--text-primary)">Home</a><span aria-hidden="true">›</span><a class="oak-link" href="#" style="color:var(--text-primary)">Subject</a><span aria-hidden="true">›</span><span aria-current="page">Unit title</span></nav>
+<div class="oak-cluster oak-cluster--s"><span class="oak-tag oak-tag--white">Key stage 3</span><span class="oak-tag oak-tag--white">Year 8</span></div>
+<h1 id="page-title" class="oak-heading-3" style="margin:0">Unit title goes here</h1>
+</div>
+</section>
+<section data-region="content" style="padding-block:clamp(var(--space-40),5vw,var(--space-56)) var(--space-80)">
+<div class="oak-container oak-stack--l" style="display:flex;flex-direction:column">
+<div>
+<p class="oak-body-2-bold" aria-hidden="true" style="display:inline-block;background:var(--surface-decorative-3-subtle);padding:var(--space-20);border-radius:var(--radius-l) var(--radius-l) 0 0;margin:0"><strong>Unit 1</strong> of 24</p>
+<div class="oak-stack" style="background:var(--bg-primary);border:var(--border-solid-m) solid var(--border-primary);border-radius:0 var(--radius-l) var(--radius-l) var(--radius-l);padding:clamp(var(--space-24),4vw,var(--space-40))">
+<div class="oak-stack--s">
+<h2 class="oak-heading-5" aria-label="Unit 1 of 24: Unit title goes here" style="margin:0">Unit title goes here</h2>
+<p class="oak-body-2" style="margin:0">A sentence or two describing what pupils learn across this unit.</p>
+</div>
+<div>
+<h3 class="oak-body-2" style="display:inline-block;background:var(--surface-decorative-1-subtle);padding:var(--space-20);border-radius:var(--radius-l) var(--radius-l) 0 0;margin:0"><strong>4</strong> lessons in unit</h3>
+<ol style="list-style:none;display:flex;flex-direction:column;gap:var(--space-8);margin:0;background:var(--surface-decorative-1);padding:var(--space-8);border-radius:0 var(--radius-l) var(--radius-l) var(--radius-l)">
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-card--flat" style="display:flex;gap:var(--gap-m);align-items:baseline"><span class="oak-heading-6" aria-hidden="true">1</span><div><h4 class="oak-heading-6" style="margin:0 0 var(--space-4)">First lesson title</h4><p class="oak-body-3" style="margin:0">Pupil lesson outcome in one sentence.</p></div></div></a></li>
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-card--flat" style="display:flex;gap:var(--gap-m);align-items:baseline"><span class="oak-heading-6" aria-hidden="true">2</span><div><h4 class="oak-heading-6" style="margin:0 0 var(--space-4)">Second lesson title</h4><p class="oak-body-3" style="margin:0">Pupil lesson outcome in one sentence.</p></div></div></a></li>
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-card--flat" style="display:flex;gap:var(--gap-m);align-items:baseline"><span class="oak-heading-6" aria-hidden="true">3</span><div><h4 class="oak-heading-6" style="margin:0 0 var(--space-4)">Third lesson title</h4><p class="oak-body-3" style="margin:0">Pupil lesson outcome in one sentence.</p></div></div></a></li>
+<li><a class="oak-card-link" href="#"><div class="oak-card oak-card--flat" style="display:flex;gap:var(--gap-m);align-items:baseline"><span class="oak-heading-6" aria-hidden="true">4</span><div><h4 class="oak-heading-6" style="margin:0 0 var(--space-4)">Fourth lesson title</h4><p class="oak-body-3" style="margin:0">Pupil lesson outcome in one sentence.</p></div></div></a></li>
+</ol>
+</div>
+</div>
+</div>
+<h2 class="oak-heading-4" style="margin:0">Lesson details</h2>
+<section class="oak-block oak-outcome"><span class="oak-block-label">Pupil lesson outcome</span><p>I can describe what pupils will be able to do by the end of the lesson.</p></section>
+<section class="oak-block oak-key-learning-points"><span class="oak-block-label">Key learning points</span><ol><li>First key learning point.</li><li>Second key learning point.</li><li>Third key learning point.</li></ol></section>
+<section class="oak-block"><span class="oak-block-label">Keywords</span><dl class="oak-keywords"><div class="oak-keyword"><dt>Term</dt> <dd>— a pupil-facing definition of the term.</dd></div><div class="oak-keyword"><dt>Another term</dt> <dd>— a pupil-facing definition of the term.</dd></div></dl></section>
+<section class="oak-block oak-misconception"><span class="oak-block-label">Common misconception</span><p style="margin:0 0 var(--space-8)">The misconception pupils commonly hold, stated plainly.</p><p style="margin:0"><strong>Response:</strong> how the teacher addresses it in this lesson.</p></section>
+<section class="oak-block oak-teacher-tip"><span class="oak-block-label">Teacher tip</span><p style="margin:0">A practical tip from the teacher who made the lesson.</p></section>
+<section class="oak-block oak-quiz"><span class="oak-block-label">Starter quiz</span><ol><li>First question pupils answer before the lesson?</li><li>Second question?</li></ol></section>
+</div>
+</section>
+</main>
+<footer data-region="footer" style="background:var(--bg-primary)">
+<img src="./assets/header-underline.svg" alt="" style="display:block;width:100%;height:var(--space-4);filter:var(--filter-icon)" />
+<div class="oak-container" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--gap-l);padding-block:var(--space-32) var(--space-56)">
+<a href="https://www.thenational.academy" aria-label="Oak National Academy home"><img src="./assets/logo.svg" alt="" style="display:block;height:var(--size-icon-xxl);width:auto;filter:var(--filter-icon)" /></a>
+<address style="font-style:normal">
+<p class="oak-body-3-bold" style="margin:0">© Oak National Academy Limited, No 14174888</p>
+<p class="oak-body-4" style="margin:0">1 Scott Place, 2 Hardman Street, Manchester, M3 3AA</p>
+</address>
+</div>
+</footer>
+</div>
+</x-dc>
+</body>
+</html>

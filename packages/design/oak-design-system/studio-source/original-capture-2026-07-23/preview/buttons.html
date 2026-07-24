@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Buttons" subtitle="Primary, inverted, secondary, tertiary, left-aligned + small" viewport="760x440" -->
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:22px 20px; background:var(--oak-grey10); font-family:var(--font-sans);
+    display:flex; flex-direction:column; gap:14px; align-items:flex-start; }
+  .row { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  .lbl { width:124px; flex:0 0 124px; font:700 11px/14px var(--font-sans);
+    letter-spacing:0.02em; color:var(--text-subdued); text-transform:uppercase; }
+
+  /* InternalShadowRectButton: border-solid-m (2px), radius border-radius-s (4px).
+     md  -> font heading-7 (16/20 600 +0.0115rem), pv 12 ph 16, icon 24, gap 8.
+     Hover: yellow drop-shadow (2px 2px 0 lemon) + bg shift + underline.
+     Focus: centred lemon (2px) + centred grey (~5px) rings.
+     Pressed/active: grey drop-shadow (4px) behind lemon (2px). */
+  .btn {
+    height:48px; box-sizing:border-box; display:inline-flex; align-items:center;
+    justify-content:center; padding:12px 16px; gap:8px; border-radius:4px;
+    font:600 16px/20px var(--font-sans); letter-spacing:0.0115rem;
+    border:2px solid transparent; cursor:pointer;
+    transition: background 120ms ease, box-shadow 120ms ease;
+  }
+  .btn img { width:24px; height:24px; flex:0 0 24px; }
+  .btn.sm { height:36px; padding:4px 8px; gap:4px;
+            font:700 14px/20px var(--font-sans); letter-spacing:-0.005rem; }
+  .btn.sm img { width:20px; height:20px; flex:0 0 20px; }
+
+  /* OakPrimaryButton / OakSmallPrimaryButton: black fill+border, white text. */
+  .btn--primary { background:var(--bg-inverted); border-color:var(--text-primary); color:var(--oak-white); }
+  .btn--primary:hover { background:var(--oak-grey60); border-color:var(--text-subdued); box-shadow:var(--shadow-lemon); }
+  .btn--primary:hover span { text-decoration: underline; }
+  .btn--primary:focus-visible { outline:none; box-shadow: var(--focus-ring); }
+  .btn--primary:active { box-shadow: var(--shadow-press); }
+  .btn--primary:disabled { background:var(--oak-grey50); border-color:var(--oak-grey50); cursor:not-allowed; box-shadow:none; }
+  .btn--primary:disabled span { text-decoration:none; }
+
+  /* OakSecondaryButton / OakSmallSecondaryButton: white fill, black border, black text. */
+  .btn--secondary { background:var(--bg-primary); border-color:var(--text-primary); color:var(--text-primary); }
+  .btn--secondary:hover { background:var(--oak-grey20); box-shadow:var(--shadow-lemon); }
+  .btn--secondary:hover span { text-decoration: underline; }
+  .btn--secondary:focus-visible { outline:none; box-shadow: var(--focus-ring); }
+  .btn--secondary:active { box-shadow: var(--shadow-press); }
+  .btn--secondary:disabled { background:var(--bg-primary); color:var(--oak-grey50); border-color:var(--oak-grey40); cursor:not-allowed; box-shadow:none; }
+
+  /* OakPrimaryInvertedButton / OakSmallPrimaryInvertedButton: white fill+border, black text.
+     hoverShadow = null -> NO drop-shadow on hover. */
+  .btn--inverted { background:var(--bg-primary); border-color:var(--oak-white); color:var(--text-primary); }
+  .btn--inverted:hover { background:var(--oak-grey20); border-color:var(--oak-grey20); }
+  .btn--inverted:hover span { text-decoration: underline; }
+  .btn--inverted:focus-visible { outline:none; box-shadow: var(--focus-ring); }
+  .btn--inverted:active { box-shadow: var(--shadow-press); }
+  .btn--inverted:disabled { color:var(--oak-grey50); cursor:not-allowed; }
+
+  /* OakLeftAlignedButton: inverted-style (white fill, no visible border), body-3-bold,
+     pv4 ph8, left-aligned text + icon, full-width. Hover grey20. */
+  .btn--left { background:var(--bg-primary); border-color:var(--oak-white); color:var(--text-primary);
+    height:auto; justify-content:flex-start; text-align:left;
+    padding:4px 8px; gap:8px; font:700 14px/20px var(--font-sans); letter-spacing:-0.005rem;
+    width:260px; }
+  .btn--left.space { justify-content:space-between; }
+  .btn--left img { width:24px; height:24px; flex:0 0 24px; }
+  .btn--left:hover { background:var(--oak-grey20); border-color:var(--oak-grey20); }
+  .btn--left:focus-visible { outline:none; box-shadow: var(--focus-ring); }
+  .btn--left:active { box-shadow: var(--shadow-press); }
+
+  /* OakTertiaryButton / OakTertiaryInvertedButton / OakSmallTertiaryInvertedButton:
+     text + round icon chip, no rect background/border. */
+  .btn-round { display:inline-flex; align-items:center; gap:8px; border:0; background:transparent;
+    padding:2px; cursor:pointer; font:600 16px/20px var(--font-sans); letter-spacing:0.0115rem;
+    color:var(--text-primary); border-radius:100px; }
+  .btn-round.sm { gap:4px; font:700 14px/20px var(--font-sans); letter-spacing:-0.005rem; }
+  .chip { width:32px; height:32px; flex:0 0 32px; border-radius:100px;
+    display:inline-flex; align-items:center; justify-content:center;
+    background:var(--bg-inverted); border:2px solid transparent; transition: background 120ms ease; }
+  .btn-round.sm .chip { width:28px; height:28px; flex:0 0 28px; }
+  .chip img { width:24px; height:24px; filter:invert(1); }
+  .btn-round.sm .chip img { width:20px; height:20px; }
+  .btn-round:hover .chip { background:var(--oak-grey60); }
+  .btn-round:hover span { text-decoration: underline; color:var(--text-subdued); }
+  .btn-round:focus-visible { outline:none; box-shadow: var(--focus-ring); }
+  .btn-round:active .chip { box-shadow: var(--shadow-press); }
+  /* inverted: white chip, black border, black icon */
+  .btn-round--inv .chip { background:var(--bg-primary); border-color:var(--text-primary); }
+  .btn-round--inv .chip img { filter:none; }
+  .btn-round--inv:hover .chip { background:var(--oak-grey20); }
+
+  .dark { padding:10px 14px; background:var(--bg-inverted); border-radius:4px;
+    display:inline-flex; gap:12px; align-items:center; flex-wrap:wrap; }
+</style></head>
+<body>
+  <div class="row">
+    <span class="lbl">Primary</span>
+    <button class="btn btn--primary"><span>Continue</span></button>
+    <button class="btn btn--primary"><span>Next</span><img src="../assets/icons/arrow-right.svg" style="filter:invert(1)" alt=""></button>
+    <button class="btn btn--primary" disabled><span>Disabled</span></button>
+  </div>
+
+  <div class="row">
+    <span class="lbl">Secondary</span>
+    <button class="btn btn--secondary"><span>Cancel</span></button>
+    <button class="btn btn--secondary"><img src="../assets/icons/download.svg" alt=""><span>Download</span></button>
+    <button class="btn btn--secondary" disabled><span>Disabled</span></button>
+  </div>
+
+  <div class="row">
+    <span class="lbl">Primary inverted</span>
+    <div class="dark">
+      <button class="btn btn--inverted"><span>Sign in</span></button>
+      <button class="btn btn--inverted"><span>Continue</span><img src="../assets/icons/arrow-right.svg" alt=""></button>
+    </div>
+  </div>
+
+  <div class="row">
+    <span class="lbl">Tertiary</span>
+    <button class="btn-round"><span class="chip"><img src="../assets/icons/chevron-right.svg" alt=""></span><span>Continue</span></button>
+    <button class="btn-round btn-round--inv"><span class="chip"><img src="../assets/icons/arrow-left.svg" alt=""></span><span>Back</span></button>
+  </div>
+
+  <div class="row">
+    <span class="lbl">Left-aligned</span>
+    <button class="btn btn--left"><img src="../assets/icons/bookmark-outlined.svg" alt=""><span>Save to your library</span></button>
+    <button class="btn btn--left space"><span>Year 7 curriculum</span><img src="../assets/icons/chevron-right.svg" alt=""></button>
+  </div>
+
+  <div class="row">
+    <span class="lbl">Small</span>
+    <button class="btn btn--primary sm"><span>Save</span></button>
+    <button class="btn btn--secondary sm"><img src="../assets/icons/share.svg" alt=""><span>Share</span></button>
+    <button class="btn-round sm btn-round--inv"><span class="chip"><img src="../assets/icons/arrow-left.svg" alt=""></span><span>Back</span></button>
+    <div class="dark">
+      <button class="btn btn--inverted sm"><span>Log in</span></button>
+    </div>
+  </div>
+</body></html>

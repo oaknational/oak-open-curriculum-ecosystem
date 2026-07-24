@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Quiz results" subtitle="Score summary + per-question marking" viewport="760x340" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; }
+  .score { display:flex; flex-direction:column; align-items:center; gap:12px; padding:28px 32px;
+    border:3px solid var(--border-primary); border-radius:16px; background:var(--bg-primary); box-shadow:6px 6px 0 var(--oak-black); }
+  .ring { width:120px; height:120px; border-radius:100px; background:var(--oak-mint); border:3px solid var(--border-primary);
+    display:flex; align-items:center; justify-content:center; font:700 44px/1 var(--font-sans); color:var(--text-primary); }
+  .score h3 { margin:0; font:600 24px/30px var(--font-sans); letter-spacing:0.0115rem; }
+  .marks { flex:1; min-width:280px; display:flex; flex-direction:column; gap:10px; }
+  .mark { display:flex; align-items:center; gap:14px; padding:12px 16px; border:2px solid var(--border-primary); border-radius:8px;
+    font:700 16px/22px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .mark.ok { background:var(--oak-mint50); } .mark.no { background:var(--oak-red30); }
+  .badge { width:32px; height:32px; flex:0 0 32px; border-radius:100px; display:inline-flex; align-items:center; justify-content:center; }
+  .ok .badge { background:var(--oak-green); } .no .badge { background:var(--oak-red); }
+  .badge img { width:18px; height:18px; filter:invert(1); }
+</style></head>
+<body>
+  <div class="score">
+    <div class="ring">5/6</div>
+    <h3>Great effort!</h3>
+  </div>
+  <div class="marks">
+    <div class="mark ok"><span class="badge"><img src="../assets/icons/tick.svg" alt=""></span> Q1 · States of matter</div>
+    <div class="mark ok"><span class="badge"><img src="../assets/icons/tick.svg" alt=""></span> Q2 · Evaporation</div>
+    <div class="mark no"><span class="badge"><img src="../assets/icons/cross.svg" alt=""></span> Q3 · Condensation</div>
+    <div class="mark ok"><span class="badge"><img src="../assets/icons/tick.svg" alt=""></span> Q4 · The water cycle</div>
+  </div>
+</body></html>

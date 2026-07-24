@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Lesson bottom nav" subtitle="Pupil lesson step bar — done / active / upcoming" viewport="760x160" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--oak-grey10); font-family:var(--font-sans); }
+  .bar { display:flex; gap:6px; padding:12px; background:var(--bg-primary); border:2px solid var(--border-primary); border-radius:12px; box-shadow:4px 4px 0 var(--oak-black); }
+  .step { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 8px; border-radius:8px;
+    font:700 14px/18px var(--font-sans); letter-spacing:-0.005rem; }
+  .step img { width:26px; height:26px; }
+  .done { background:var(--oak-mint); color:var(--text-primary); }
+  .active { background:var(--bg-inverted); color:var(--oak-white); }
+  .active img { filter:invert(1); }
+  .todo { background:var(--oak-grey20); color:var(--text-subdued); }
+</style></head>
+<body>
+  <nav class="bar">
+    <div class="step done"><img src="../assets/icons/intro.svg" alt="">Intro ✓</div>
+    <div class="step done"><img src="../assets/icons/quiz.svg" alt="">Starter ✓</div>
+    <div class="step active"><img src="../assets/icons/video.svg" alt="">Video</div>
+    <div class="step todo"><img src="../assets/icons/worksheet.svg" alt="">Worksheet</div>
+    <div class="step todo"><img src="../assets/icons/quiz.svg" alt="">Exit quiz</div>
+  </nav>
+</body></html>

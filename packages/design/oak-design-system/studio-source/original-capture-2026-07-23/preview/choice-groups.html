@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Radio & checkbox groups" subtitle="Grouped options with selected states" viewport="700x260" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; gap:48px; flex-wrap:wrap; }
+  .grp { display:flex; flex-direction:column; gap:14px; }
+  .legend { font:700 13px/16px var(--font-sans); letter-spacing:0.02em; text-transform:uppercase; color:var(--text-subdued); }
+  .opt { display:inline-flex; align-items:center; gap:12px; font:300 18px/24px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); cursor:pointer; }
+  .radio { width:28px; height:28px; border:2px solid var(--border-primary); border-radius:100px; background:var(--bg-primary); position:relative; flex:0 0 28px; }
+  .radio.on::after { content:""; position:absolute; inset:4px; border-radius:100px; background:var(--bg-inverted); }
+  .box { width:28px; height:28px; border:2px solid var(--border-primary); border-radius:4px; background:var(--bg-primary); flex:0 0 28px; display:inline-flex; align-items:center; justify-content:center; }
+  .box.on { background:var(--bg-inverted); }
+  .box.on img { width:20px; height:20px; filter:invert(1); }
+</style></head>
+<body>
+  <fieldset class="grp" style="border:0; margin:0; padding:0;">
+    <span class="legend">Key stage (radio)</span>
+    <label class="opt"><span class="radio on"></span> Key stage 3</label>
+    <label class="opt"><span class="radio"></span> Key stage 4</label>
+    <label class="opt"><span class="radio"></span> Both</label>
+  </fieldset>
+  <fieldset class="grp" style="border:0; margin:0; padding:0;">
+    <span class="legend">Resource types (checkbox)</span>
+    <label class="opt"><span class="box on"><img src="../assets/icons/tick.svg" alt=""></span> Quizzes</label>
+    <label class="opt"><span class="box on"><img src="../assets/icons/tick.svg" alt=""></span> Worksheets</label>
+    <label class="opt"><span class="box"></span> Videos</label>
+  </fieldset>
+</body></html>

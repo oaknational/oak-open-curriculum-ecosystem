@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Headless, accessibility-first component frameworks — research</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body{margin:0;background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans)}
+a{color:var(--text-link)}a:hover{color:var(--text-link-hover,var(--text-link))}
+.page{max-width:var(--measure-prose,72ch);margin:0 auto;padding:48px 24px 96px}
+.kicker{font:400 12px/16px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text-subdued);margin:0 0 8px}
+h1{font:700 34px/1.15 var(--font-sans);letter-spacing:-.01em;margin:0 0 12px;text-wrap:pretty}
+.standfirst{font:300 18px/1.5 var(--font-sans);color:var(--text-subdued);margin:0 0 8px;text-wrap:pretty}
+.meta{font:400 12px/18px var(--font-mono);color:var(--text-subdued);margin:0 0 40px}
+h2{font:700 22px/1.25 var(--font-sans);margin:48px 0 12px;padding-top:24px;border-top:2px solid var(--border-primary)}
+h3{font:700 16px/1.3 var(--font-sans);margin:28px 0 6px}
+p,li{font:400 15px/1.6 var(--font-sans);text-wrap:pretty}
+ul{padding-left:22px;display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.take{display:flex;flex-direction:column;gap:12px;list-style:none;padding:0;counter-reset:tk}
+.take li{position:relative;padding:14px 16px 14px 52px;background:var(--bg-subtle,var(--surface-decorative-1));border-radius:8px;counter-increment:tk}
+.take li::before{content:counter(tk);position:absolute;left:16px;top:12px;font:700 18px/1.4 var(--font-sans);color:var(--text-subdued)}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:13.5px}
+th{font:700 12px/16px var(--font-sans);text-align:left;padding:8px 10px;border-bottom:2px solid var(--border-primary);vertical-align:bottom}
+td{padding:8px 10px;border-bottom:1px solid var(--border-primary);vertical-align:top;line-height:1.45}
+td:first-child{font-weight:700;white-space:nowrap}
+.caveat{border:2px solid var(--border-primary);border-radius:8px;padding:16px 20px;margin:20px 0;background:var(--bg-subtle,transparent)}
+.caveat p{margin:8px 0}
+.src{font-size:13px;line-height:1.6}
+.src li{font-size:13px}
+code{font:400 .92em var(--font-mono);background:var(--bg-subtle,rgba(0,0,0,.05));padding:1px 4px;border-radius:3px}
+.verdict{font-weight:700}
+@media print{.page{max-width:none;padding:0}}
+</style>
+</head>
+<body>
+<div class="page">
+<p class="kicker">Research · design-system consumption</p>
+<h1>Headless, accessibility-first component frameworks</h1>
+<p class="standfirst">Which behaviour-only ("headless") component libraries are fit to carry this design system's WCAG 2.2 AA-floor obligations when consuming apps need interaction logic we don't ship — comboboxes, dialogs, menus, date pickers.</p>
+<p class="meta">Researched 19 July 2026 · rev 3 — direction refined: Base UI default · React Aria scoped non-default · Ark UI third · Ink for console TUIs · operative docs: consuming-nextjs.md §5b + the three pairing guides</p>
+
+<h2>Takeaways</h2>
+<ol class="take">
+<li><strong>The headless model matches our contract exactly.</strong> These libraries own behaviour — keyboard navigation, focus management, ARIA semantics, RTL, controlled/uncontrolled state — and leave 100% of appearance to the consumer, which is where our role tokens, focus ring, and state rules live. Pre-styled libraries (MUI, Ant, Chakra) remain the wrong fit for re-brandable Oak UI.</li>
+<li><strong>Owner direction (refined): Base UI is our default; React Aria scoped, not excluded.</strong> Base UI — built by the Radix, Floating UI and Material UI creators, backed by MUI's dedicated team — reached stable v1.0 (Dec 2025) with 35 components and is the actively maintained primitive layer (v1.3 as of mid-2026); Radix itself slowed after the WorkOS acquisition. React Aria (initially excluded by preference) is admitted as a documented non-default scoped to date/time + locale widgets and conformance-critical surfaces; Ark UI/Zag.js is the documented third for non-React surfaces. One pairing guide per library in docs/.</li>
+<li><strong>React Aria (Adobe) remains the deepest accessibility implementation</strong> — 40+ WAI-ARIA patterns tested across ~30 screen-reader/browser combinations plus i18n depth — and the only credible accessible DatePicker story, which is exactly the scope it keeps here; its hooks-first model is the most code per component, against our avoid-complexity bias, so it never duplicates a widget class Base UI covers.</li>
+<li><strong>"WAI-ARIA compliant" is a claim, not a guarantee.</strong> A Publicis Sapient screen-reader audit of Radix logged 35 issues (P1–P3), many still open in 2025. Whatever the consuming app adopts, our per-pairing audit and the a11y charter's "every build must still" list stay in force — the library removes a class of failure, not the obligation.</li>
+<li><strong>For non-React or multi-framework consumers</strong>, Zag.js (vanilla-JS state machines, WAI-ARIA-modelled, Playwright-tested per spec) and its wrapper Ark UI (React/Vue/Solid/Svelte) are the credible options — same machines everywhere, styled via <code>data-part</code>/<code>data-state</code> hooks that take our tokens cleanly.</li>
+<li><strong>Console TUIs are a separate stack: Ink.</strong> The ecosystem repo already ships a React console TUI (the collaboration TUI, <code>agent-tools/src/collaboration-state/tui/</code>, Ink v7 + ink-testing-library). None of the web headless libraries apply in a terminal — Ink's Box/Text primitives are the layer there, and the repo deliberately keeps it on “local Ink primitives” with no design-workspace dependency. What carries over is our <em>vocabulary</em>, not our CSS — see §TUI below.</li>
+</ol>
+
+<h2>The landscape</h2>
+<table>
+<thead><tr><th>Library</th><th>Steward</th><th>Model</th><th>Scope</th><th>A11y posture</th><th>Risk / cost</th></tr></thead>
+<tbody>
+<tr><td>React Aria</td><td>Adobe</td><td>Hooks + Components (stable 2024)</td><td>40+ patterns incl. DatePicker, ComboBox, Table multi-select, drag-and-drop</td><td>Deepest: tested across ~30 SR/browser combos; full i18n/RTL</td><td>Most verbose; steeper learning curve</td></tr>
+<tr><td>Base UI</td><td>MUI (+ ex-Radix/Floating UI authors)</td><td>Composable components, v1.0 stable 2026</td><td>35 components incl. Combobox, NumberField, Toast, Field</td><td>WCAG-minded from Radix lessons; iOS VoiceOver fixes in point releases</td><td>Youngest stable; smaller ecosystem than Radix (for now)</td></tr>
+<tr><td>Radix Primitives</td><td>WorkOS</td><td>Compound components (Root/Trigger/Content…)</td><td>30+ primitives; shadcn/ui's foundation; ~131M weekly downloads via react-slot</td><td>WAI-ARIA APG, SR-tested — but a 35-issue external audit sat unfixed into 2025</td><td>Maintenance slowed post-acquisition (Combobox, multi-select cited)</td></tr>
+<tr><td>Ariakit</td><td>Independent (ex-Reakit)</td><td>Components + hooks, mid-grained</td><td>25+</td><td>Accessibility-core; smaller bundles than Radix/React Aria</td><td>Smallest community of the primitive layer</td></tr>
+<tr><td>Headless UI</td><td>Tailwind Labs</td><td>Simple components, Tailwind-first</td><td>~10 (only the genuinely hard ones)</td><td>Good on what it covers</td><td>Deliberately narrow; hard to extend behaviour</td></tr>
+<tr><td>Ark UI</td><td>Chakra team</td><td>Components over Zag machines</td><td>35–50+, React/Vue/Solid/Svelte</td><td>WAI-ARIA-modelled machines, per-spec e2e tests</td><td>State-machine mental model; smaller ecosystem</td></tr>
+<tr><td>Zag.js</td><td>Chakra team</td><td>Framework-agnostic state machines (vanilla JS, web components OK)</td><td>50+ machines</td><td>Same as Ark (it is Ark's engine)</td><td>Lowest-level API of the set</td></tr>
+</tbody>
+</table>
+<p>Layering note: shadcn/ui is not a primitive library — it is copy-paste Tailwind styling over Radix/Base UI primitives. A consumer adopting shadcn/ui still inherits the primitive layer underneath, plus styling opinions that would have to be stripped back to our tokens; §5b's "pre-styled no" applies to its default form.</p>
+
+<h2>What this means for Oak consumers</h2>
+<h3>Default — Base UI</h3>
+<p>Owner direction plus the maintenance evidence line up: Base UI has the least API ceremony of the primitive layer (composition-style, learned from Radix's mistakes), a funded team committed to long-term maintenance, and v1.x point releases already shipping a11y fixes (e.g. iOS VoiceOver). Already in production at Paper, Zed and Unsplash. Radix remains acceptable in existing codebases but is no longer the default for new builds. Guide: <code>docs/pairing-base-ui.md</code>.</p>
+<h3>Scoped non-default — React Aria Components</h3>
+<p>Adobe's library is the sector's deepest screen-reader-tested implementation and the usual “conformance is contractual” pick. Direction initially excluded it outright; when the docs went multi-library it was admitted with scope: date/time + locale-aware widgets (its genuine monopoly) and conformance-critical surfaces — never duplicating a widget class Base UI covers. Guide: <code>docs/pairing-react-aria.md</code>.</p>
+<h3>Non-React and multi-framework — Ark UI / Zag.js</h3>
+<p>The documented third (chosen over Ariakit, which overlaps ~90% with Base UI's territory): the same WAI-ARIA state machines across React, Vue, Solid, Svelte and vanilla JS/web components; styling lands on <code>[data-scope]</code>/<code>[data-part]</code> attributes, so tier-3 tokens apply without adapters. Guide: <code>docs/pairing-ark-ui.md</code>.</p>
+
+<h2>Console TUIs — Ink</h2>
+<p>The ecosystem repo requires React-based console TUIs: the <strong>collaboration TUI</strong> (<code>agent-tools/src/collaboration-state/tui/</code>) is an <strong>Ink v7</strong> app — React components rendering to the terminal via flexbox-like <code>&lt;Box&gt;</code>/<code>&lt;Text&gt;</code> — tested with <code>ink-testing-library</code>, with a documented boundary: it uses local Ink primitives and takes no dependency on a built design workspace. It already encodes a mini token system by hand: a <code>StatusTone</code> union (<code>active/success/warning/danger/muted</code> → cyan/green/yellow/red/dim) plus <code>StatusBadge</code>, <code>Panel</code>, <code>OakText</code>, and key-hint components.</p>
+<p>What our system can and can't give a terminal:</p>
+<ul>
+<li><strong>Tokens port as a vocabulary, not as CSS.</strong> Terminal cells have no custom properties; the honest mapping is role-name → ANSI 16-colour, mirroring what the TUI's <code>StatusTone</code> already does (<code>success</code>/<code>warning</code>/<code>danger</code>/<code>active</code>/<code>muted</code> ≡ our text-success/error/warning/link/subdued roles). If more console surfaces appear, a tiny shared <code>tones.ts</code> (role names + ANSI mapping + the state-never-colour-alone rule) is the right artefact — not an Ink dependency from this project.</li>
+<li><strong>The a11y obligations translate.</strong> State never colour alone → the TUI's badges already pair colour with bracketed text labels; keep that. Honour <code>NO_COLOR</code>/dumb terminals → the tone map must degrade to plain text. Screen-reader access in terminals is line-based → the non-interactive <code>--format text</code> path (which the TUI ships) IS the accessible output; keep it first-class, never chrome-only.</li>
+<li><strong>16-colour honesty:</strong> ANSI palette colours are themed by the user's terminal, so contrast is ultimately theirs — never encode meaning in colour pairs we can't guarantee (another reason the bracketed-label rule is load-bearing).</li>
+<li><strong>Web headless libraries have no role here.</strong> Ink is the framework and the primitive layer in one; the avoid-complexity call is to keep it exactly as the repo has it.</li>
+</ul>
+
+<div class="caveat">
+<p><strong>Non-negotiable regardless of library:</strong> adopting an "accessible" library discharges none of our obligations. The Radix audit episode is the proof case — externally logged screen-reader defects (P1–P3) persisted for years in the most popular primitive library. Concretely, for every wrapped component:</p>
+<ul>
+<li>Re-apply the double focus ring on <code>:focus-visible</code> (headless libraries ship no focus styling at all — an unstyled primitive is <em>invisibly</em> focusable by default).</li>
+<li>State never colour alone; targets ≥44px; probe every rendered pairing ×4 themes via <code>preview/contrast-audit.html</code>.</li>
+<li>Honour <code>data-motion</code> — library-internal transitions must collapse under reduced motion.</li>
+<li>Screen-reader spot-checks stay in the definition of done (per the a11y charter's "every build must still" column); axe-level automation misses the interaction subtleties these libraries exist to solve.</li>
+</ul>
+</div>
+
+<h2>Suggested follow-ups</h2>
+<ul>
+<li>All recorded (1.6.8–1.7.0): §5b is the chooser (native-first matrix + version watch); one pairing guide per library (<code>pairing-base-ui.md</code> / <code>pairing-react-aria.md</code> / <code>pairing-ark-ui.md</code>); §7b worked Combobox; <code>docs/wrapped-widget-a11y-checklist.md</code>; <code>docs/console-tui-tones.md</code>; <code>LICENCES.md</code>; <code>docs/integration-oak-curriculum-hub.md</code> for the live consumer.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul class="src">
+<li><a href="https://www.greatfrontend.com/blog/top-headless-ui-libraries-for-react-in-2026">GreatFrontEnd — Top headless UI libraries for React in 2026</a> (May 2026)</li>
+<li><a href="https://www.infoq.com/news/2026/02/baseui-v1-accessible/">InfoQ — MUI releases Base UI 1 with 35 accessible components</a> (Feb 2026)</li>
+<li><a href="https://mui.com/blog/2026-and-beyond/">MUI — 2026 and beyond</a> (Jan 2026); <a href="https://base-ui.com/react/overview/releases">Base UI release notes</a></li>
+<li><a href="https://designrevision.com/alternatives/base-ui">DesignRevision — Base UI alternatives, 8 headless libraries compared</a> (June 2026)</li>
+<li><a href="https://blog.logrocket.com/headless-ui-alternatives/">LogRocket — Radix Primitives vs React Aria vs Ark UI vs Base UI</a> (Mar 2026)</li>
+<li><a href="https://www.pkgpulse.com/guides/best-react-component-libraries-2026">PkgPulse — Best headless React component libraries 2026</a> (Mar 2026)</li>
+<li><a href="https://github.com/radix-ui/primitives/discussions/2232">radix-ui/primitives #2232 — external accessibility audit (35 issues, Publicis Sapient)</a></li>
+<li><a href="https://www.radix-ui.com/primitives/docs/overview/accessibility">Radix Primitives — accessibility overview</a></li>
+<li><a href="https://zaidahmaddev.com/blog/react-aria-accessible-components-without-the-style-lock-in">Zaid Ahmad — React Aria without the style lock-in</a> (June 2026)</li>
+<li><a href="https://zagjs.com/">Zag.js</a> · <a href="https://github.com/chakra-ui/zag">chakra-ui/zag</a> · <a href="https://github.com/chakra-ui/ark/discussions/2795">Ark vs Zag (maintainer answer)</a></li>
+<li>oaknational/oak-open-curriculum-ecosystem — <code>agent-tools/src/collaboration-state/tui/</code> (Ink v7 collaboration TUI: app.tsx, panes.tsx, text.ts) · <code>agent-tools/README.md</code> §Human collaboration TUI · <code>agent-tools/package.json</code> (ink ^7.1.0, ink-testing-library ^4.0.0)</li>
+<li><a href="https://heroui.com/en/blog/best-react-ui-component-libraries">HeroUI — 12 best React UI libraries 2026</a> (May 2026)</li>
+</ul>
+</div>
+</body>
+</html>

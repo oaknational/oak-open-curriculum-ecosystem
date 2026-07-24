@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Pagination" subtitle="Page controls — current, default & prev/next" viewport="700x130" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:28px 24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; justify-content:center; }
+  .pag { display:flex; align-items:center; gap:10px; }
+  .pg { min-width:44px; height:44px; padding:0 8px; border:2px solid var(--border-primary); border-radius:4px; background:var(--bg-primary);
+    font:700 16px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; }
+  .pg.current { background:var(--bg-inverted); color:var(--oak-white); box-shadow:var(--shadow-lemon); }
+  .pg.arrow { gap:6px; padding:0 14px; }
+  .pg img { width:20px; height:20px; }
+  .pg.arrow img { filter:none; }
+  .ell { font:700 16px var(--font-sans); color:var(--text-subdued); padding:0 4px; }
+</style></head>
+<body>
+  <nav class="pag">
+    <button class="pg arrow"><img src="../assets/icons/arrow-left.svg" alt="">Prev</button>
+    <button class="pg">1</button>
+    <button class="pg current">2</button>
+    <button class="pg">3</button>
+    <span class="ell">…</span>
+    <button class="pg">8</button>
+    <button class="pg arrow">Next<img src="../assets/icons/arrow-right.svg" alt=""></button>
+  </nav>
+</body></html>

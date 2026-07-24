@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Colors" name="Semantic colors" subtitle="Brand · link · error · warning · promo" viewport="700x190" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background:var(--bg-primary); font-family:var(--font-sans); }
+  .row { display:flex; gap:12px; }
+  .sw { flex:1; border:2px solid var(--border-primary); border-radius:8px; overflow:hidden; }
+  .chip { height:80px; display:flex; align-items:center; justify-content:center; color:var(--oak-white); font:700 14px var(--font-sans); }
+  .meta { padding:8px 10px; border-top:2px solid var(--border-primary); }
+  .name { font:700 13px/16px var(--font-sans); }
+  .hex { font:400 11px/14px var(--font-mono); color:var(--text-subdued); }
+  .desc { font:300 11px/14px var(--font-sans); color:var(--text-subdued); margin-top:2px; }
+</style></head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:var(--oak-green);">Oak green</div><div class="meta"><div class="name">green</div><div class="hex">#287c34</div><div class="desc">Brand · success · border-brand</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-navy);">Navy</div><div class="meta"><div class="name">navy</div><div class="hex">#0d24c4</div><div class="desc">Links (active)</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-red);">Red</div><div class="meta"><div class="name">red</div><div class="hex">#dd0035</div><div class="desc">Errors · text-error</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-amber);">Amber</div><div class="meta"><div class="name">amber</div><div class="hex">#ff934e</div><div class="desc">Warnings</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--oak-lemon); color:var(--text-primary);">Lemon</div><div class="meta"><div class="name">lemon</div><div class="hex">#ffe555</div><div class="desc">Signature shadow · promo</div></div></div>
+  </div>
+</body></html>

@@ -1,0 +1,11 @@
+/* FAILING COUNTER-EXAMPLE — do not use. This is a deliberately broken
+   re-brand proving the guardrails work: the contrast audit must flag it.
+   Every value below is the classic pretty-but-inaccessible mistake. */
+:root {
+  --text-subdued: light-dark(#b3a6ae, #6b5a66);        /* ~2.5:1 — "elegant" grey that vanishes */
+  --text-link: light-dark(#8ec5ff, #47597a);           /* pastel link on white — ~2:1 */
+  --text-btn-primary: light-dark(#fefefe, #f0f0f0);    /* on the pale button below */
+  --bg-btn-primary: light-dark(#9fd0b5, #7d8f85);      /* mint button with white text — ~1.8:1 */
+  --border-neutral: light-dark(#e6dee3, #4a4048);      /* hairline that isn't there */
+  --shadow-ground: light-dark(#d8cfd4, #3a3338);       /* focus halo you can't see */
+}

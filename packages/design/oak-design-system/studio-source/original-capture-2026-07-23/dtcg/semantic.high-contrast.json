@@ -1,0 +1,279 @@
+{
+  "text": {
+    "primary": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "subdued": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "disabled": {
+      "$value": "{oak.color.hc-ink-muted}",
+      "$type": "color"
+    },
+    "error": {
+      "$value": "{oak.color.hc-red}",
+      "$type": "color"
+    },
+    "success": {
+      "$value": "{oak.color.hc-green}",
+      "$type": "color"
+    },
+    "link": {
+      "$value": "{oak.color.navy120}",
+      "$type": "color"
+    },
+    "link-hover": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "link-visited": {
+      "$value": "{oak.color.navy120}",
+      "$type": "color"
+    },
+    "inverted": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "inverted-subdued": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "btn-primary": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "btn-disabled": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    }
+  },
+  "border": {
+    "inverted": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "primary": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "neutral": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "neutral-lighter": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "brand": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "error": {
+      "$value": "{oak.color.hc-red}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "success": {
+      "$value": "{oak.color.hc-green}",
+      "$type": "color"
+    }
+  },
+  "bg": {
+    "primary": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "neutral": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "neutral-stronger": {
+      "$value": "{oak.color.grey30}",
+      "$type": "color"
+    },
+    "inverted": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "raised": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "overlay": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "btn-primary": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "btn-primary-hover": {
+      "$value": "{oak.color.hc-ink-soft}",
+      "$type": "color"
+    },
+    "btn-secondary": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "btn-secondary-hover": {
+      "$value": "{oak.color.grey30}",
+      "$type": "color"
+    },
+    "btn-disabled": {
+      "$value": "{oak.color.hc-ink-muted}",
+      "$type": "color"
+    },
+    "correct": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "incorrect": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "success": {
+      "$value": "{oak.color.hc-green}",
+      "$type": "color"
+    },
+    "error": {
+      "$value": "{oak.color.hc-red}",
+      "$type": "color"
+    },
+    "info-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "success-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "warning-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "error-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    }
+  },
+  "scrim": {
+    "$value": "{oak.color.veil-black}",
+    "$type": "color"
+  },
+  "shadow": {
+    "raised": {
+      "$value": "none"
+    },
+    "overlay": {
+      "$value": "none"
+    },
+    "ground": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "standard": {
+      "$value": "none"
+    },
+    "press": {
+      "$value": "{border.solid-xl} {border.solid-xl} 0 0 {shadow.ground}, {border.solid-m} {border.solid-m} 0 0 {oak.color.lemon}"
+    }
+  },
+  "color": {
+    "accent": {
+      "$value": "{oak.color.black-true}",
+      "$type": "color"
+    },
+    "accent-soft": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "accent-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    }
+  },
+  "surface": {
+    "decorative-1": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-1-soft": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-1-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-2": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-2-soft": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-2-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-3": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-3-soft": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-3-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-4": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-4-soft": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-4-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-5": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-5-soft": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-5-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-6": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    },
+    "decorative-6-subtle": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
+    }
+  },
+  "focus": {
+    "ring": {
+      "$value": "0 0 0 {border.solid-l} {oak.color.black-true}, 0 0 0 {focus.ring-halo} {oak.color.lemon}"
+    }
+  }
+}

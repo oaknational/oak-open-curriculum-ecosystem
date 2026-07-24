@@ -20,7 +20,7 @@ owner_gates:
   - awaiting: owner-decision
     clears_when: "S2 adjudication cards answered — genuine design-judgment calls only (protected-by-default rules decide the rest); batched, not per-file"
     expires: 2026-07-26
-last_updated: 2026-07-23
+last_updated: 2026-07-24
 ---
 
 # Design-system semantic merge
@@ -48,6 +48,39 @@ decides each divergent surface; the owner rules only on genuine design
 calls. The repo is the design source of truth throughout (ADR-213);
 content flows studio→repo exactly once (the capture), then repo→studio
 forever after.
+
+## Amendment — 2026-07-24 (owner rulings at execution pickup; recorded by the executing seat)
+
+1. **Three-tier model** (owner, verbatim): *"We need a preservation of the prior system so it
+   cannot be lost, we need a preservation of the system in Claude Design on this account, so it
+   cannot be lost, and we need our working system. The working system must not contain stopgaps,
+   the preservation folders must contain pure and full copies from their respective sources. Once
+   we have satisfied about the final state of our working design system workspaces we can remove
+   the preservation copies, but they will still exist in the git history, which is good."* S0
+   therefore lands TWO preservation folders (the original-project capture named below, plus
+   `studio-source/iteration-pull-preservation-2026-07-23/` — the pristine as-pulled 2026-07-23
+   pull-set, uncleaned, including the overlay and both candidate explorations), and the plan gains
+   a terminal owner-gated step: a removal PR deletes both folders from the tree at the owner's
+   satisfaction after S5 (git history is the permanent record).
+2. **Acquisition** (owner choice): S0's corpus came down as the owner's studio export
+   (2026-07-24 11:41), verified complete against a fresh `list_files` denominator (329 = 329,
+   zero diffs) and byte-faithful on two independent hash witnesses. The API's 256 KiB cap
+   therefore left NO unfetchable residue — the `unfetchable` manifest class is empty, and S4's
+   discharge precondition for it is satisfied by construction.
+3. **Held-out classes** (owner, verbatim in substance): every import-era held-out piece is fetched
+   in full to the local gitignored staging tier, and the import-era hold-out dispositions are
+   hypotheses only — the owner re-reviews **every piece** at the S1/S2 card ("I was not involved
+   in the prior decision making").
+4. **S4 sequencing** (owner choice): S4 runs after S3 and before the MCP-128 port, with hard
+   preconditions — the held-out per-piece re-review answered, and owner confirmation of the
+   original project's post-switch fate — and the up-sync file-set derives from working surfaces
+   only, excluding both preservation folders by name.
+5. **S2 adjudication lens** (owner correction): the design system is a multi-layer product —
+   framework-agnostic token workspace at depth, simple then complex components per target system
+   (currently React, React-in-NextJS, Ink; trivially adaptable further) — per the generality-depth
+   gradient. External framing (e.g. the export bundle's "recreate pixel-perfectly" wrapper) does
+   not overrule this; divergences adjudicate toward token-tier generality, never flattened
+   recreation.
 
 ## Slices
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Spacing" name="Drop shadows" subtitle="Oak's signature offset-yellow shadow system" viewport="700x170" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:28px 24px 22px; background:var(--oak-grey10); font-family:var(--font-sans); }
+  .row { display:flex; gap:28px; justify-content:center; align-items:center; flex-wrap:wrap; }
+  .item { text-align:center; }
+  .tile { width:88px; height:68px; background:var(--bg-primary); border:2px solid var(--border-primary); border-radius:8px; display:inline-block; }
+  .name { margin-top:12px; font:700 12px/15px var(--font-sans); letter-spacing:-0.005rem; }
+  .val { font:400 10px/13px var(--font-mono); color:var(--text-subdued); margin-top:2px; }
+</style></head>
+<body>
+  <div class="row">
+    <div class="item"><div class="tile" style="box-shadow:var(--shadow-lemon);"></div><div class="name">drop-shadow-lemon</div><div class="val">2px 2px 0 var(--oak-lemon)</div></div>
+    <div class="item"><div class="tile" style="box-shadow:var(--shadow-wide-lemon);"></div><div class="name">wide-lemon</div><div class="val">4px 4px 0 var(--oak-lemon)</div></div>
+    <div class="item"><div class="tile" style="box-shadow:var(--shadow-grey);"></div><div class="name">grey</div><div class="val">4px 4px 0 var(--oak-grey60)</div></div>
+    <div class="item"><div class="tile" style="box-shadow: 0 0 0 2px var(--oak-lemon);"></div><div class="name">centered-lemon</div><div class="val">focus ring</div></div>
+    <div class="item"><div class="tile" style="box-shadow: 0 8px 8px var(--oak-shadow-veil);"></div><div class="name">standard</div><div class="val">0 8px 8px grey/20</div></div>
+    <div class="item"><div class="tile" style="box-shadow: 1px 2px 0 var(--oak-black-true);"></div><div class="name">black</div><div class="val">1px 2px 0 var(--oak-black-true)</div></div>
+  </div>
+</body></html>

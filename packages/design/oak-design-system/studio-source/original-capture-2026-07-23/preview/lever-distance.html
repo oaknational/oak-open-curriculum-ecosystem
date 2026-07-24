@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" viewport="1240x900" name="Lever distance matrix" subtitle="Every brand lever, sampled live per identity — equal cells flagged; pairwise distance scored. The instrument that catches a collapse (v5: Oak↔FDSE) before the eye has to." -->
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="../components.css">
+<style>
+body{margin:0;padding:24px;background:var(--bg-primary);color:var(--text-primary);font:var(--type-body-2);font-family:var(--font-sans)}
+h1{font:var(--type-heading-5);margin:0 0 4px}
+p.intro{font:var(--type-body-3);color:var(--text-subdued);margin:0 0 16px;max-width:72ch}
+table{border-collapse:collapse;width:100%;font:var(--type-body-3)}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--border-neutral-lighter);vertical-align:top}
+th{font:var(--type-label);font-size:0.8125rem}
+td.lever{font-weight:var(--weight-semibold);white-space:nowrap}
+td .sw{display:inline-block;width:12px;height:12px;border:1px solid var(--border-neutral);border-radius:2px;vertical-align:-1px;margin-right:6px}
+td.same{background:var(--bg-error-subtle)}
+td.same::after{content:" ⚠";font-weight:var(--weight-bold)}
+.scores{display:flex;gap:var(--gap-m);margin:16px 0}
+.score{border:var(--border-solid-m) solid var(--border-primary);padding:10px 14px}
+.score b{font:var(--type-heading-6);display:block}
+.mono{font-family:var(--font-mono);font-size:0.75rem;word-break:break-all}
+iframe{position:absolute;width:10px;height:10px;left:-9999px}
+</style></head><body>
+<h1>Lever distance matrix</h1>
+<p class="intro">Each row is a brand lever, sampled from the live cascade (computed values, not source). A cell is flagged when two identities COINCIDE on a lever — coincidence on dominant axes (polarity, value structure, body face, atmosphere) is where "near identical" comes from. The score is the count of levers on which a pair differs; maximise the minimum.</p>
+<div class="scores" id="scores" role="status"></div>
+<table id="matrix"><thead><tr><th>Lever</th><th>Oak</th><th>FDSE</th><th>EMC²</th></tr></thead><tbody></tbody></table>
+<iframe src="lever-probe.html" title="Oak probe"></iframe>
+<iframe src="lever-probe.html?brand=freedonia" title="FDSE probe"></iframe>
+<iframe src="lever-probe.html?brand=creature" title="EMC² probe"></iframe>
+<script>
+const got = {};
+const ORDER = ['oak','freedonia','creature'];
+addEventListener('message', (e) => {
+  if (!e.data || !e.data.leverProbe) return;
+  got[e.data.leverProbe] = e.data.levers;
+  if (ORDER.every(k => got[k])) render();
+});
+function isColor(v){ return /^rgb|^#|color\(/.test(v); }
+function cell(v, flag){
+  const td = document.createElement('td'); if (flag) td.className = 'same';
+  if (isColor(v)) { const s = document.createElement('span'); s.className='sw'; s.style.background=v; td.appendChild(s); }
+  const span = document.createElement('span'); span.textContent = v.length > 46 ? v.slice(0,44)+'…' : v;
+  if (v.length > 30) span.className = 'mono';
+  span.title = v; td.appendChild(span); return td;
+}
+function render(){
+  const [oak, fdse, emc] = ORDER.map(k => got[k]);
+  const tbody = document.querySelector('tbody');
+  const diff = { 'Oak↔FDSE':0, 'Oak↔EMC²':0, 'FDSE↔EMC²':0 }; let total = 0;
+  for (const lever of Object.keys(oak)){
+    total++;
+    const [a,b,c] = [oak[lever], fdse[lever], emc[lever]];
+    const ab = a===b, ac = a===c, bc = b===c;
+    if (!ab) diff['Oak↔FDSE']++; if (!ac) diff['Oak↔EMC²']++; if (!bc) diff['FDSE↔EMC²']++;
+    const tr = document.createElement('tr');
+    const th = document.createElement('td'); th.className='lever'; th.textContent = lever; tr.appendChild(th);
+    tr.appendChild(cell(a, ab||ac)); tr.appendChild(cell(b, ab||bc)); tr.appendChild(cell(c, ac||bc));
+    tbody.appendChild(tr);
+  }
+  const scores = document.getElementById('scores');
+  for (const [pair, n] of Object.entries(diff)){
+    const d = document.createElement('div'); d.className='score';
+    d.innerHTML = '<b>' + n + '/' + total + '</b>' + pair + ' levers differ';
+    scores.appendChild(d);
+  }
+}
+</script>
+</body></html>

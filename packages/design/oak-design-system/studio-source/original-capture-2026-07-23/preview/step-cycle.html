@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Step & learning cycle" subtitle="Numbered step progress + learning-cycle markers" viewport="760x240" -->
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:28px 24px; background:var(--bg-primary); font-family:var(--font-sans); display:flex; flex-direction:column; gap:32px; }
+  .steps { display:flex; align-items:center; }
+  .node { width:44px; height:44px; flex:0 0 44px; border-radius:100px; border:2px solid var(--border-primary); background:var(--bg-primary);
+    display:flex; align-items:center; justify-content:center; font:700 18px/1 var(--font-sans); color:var(--text-primary); }
+  .node.done { background:var(--oak-green); color:var(--oak-white); border-color:var(--oak-green); }
+  .node.active { background:var(--oak-lemon); box-shadow:0 0 0 4px var(--oak-lemon30); }
+  .seg { flex:1; height:4px; background:var(--oak-grey30); }
+  .seg.done { background:var(--oak-green); }
+  .cycle { display:flex; gap:14px; flex-wrap:wrap; }
+  .lc { display:flex; align-items:center; gap:10px; padding:10px 16px; border:2px solid var(--border-primary); border-radius:100px; background:var(--oak-lemon30);
+    font:700 15px/20px var(--font-sans); letter-spacing:-0.005rem; color:var(--text-primary); }
+  .lc img { width:24px; height:24px; }
+</style></head>
+<body>
+  <div class="steps">
+    <span class="node done"><img src="../assets/icons/tick.svg" alt="" style="width:20px;filter:invert(1)"></span>
+    <span class="seg done"></span>
+    <span class="node done"><img src="../assets/icons/tick.svg" alt="" style="width:20px;filter:invert(1)"></span>
+    <span class="seg done"></span>
+    <span class="node active">3</span>
+    <span class="seg"></span>
+    <span class="node">4</span>
+    <span class="seg"></span>
+    <span class="node">5</span>
+  </div>
+  <div class="cycle">
+    <span class="lc"><img src="../assets/icons/lightbulb.svg" alt="">Learn</span>
+    <span class="lc"><img src="../assets/icons/pencil.svg" alt="">Practise</span>
+    <span class="lc"><img src="../assets/icons/quiz.svg" alt="">Check</span>
+  </div>
+</body></html>
