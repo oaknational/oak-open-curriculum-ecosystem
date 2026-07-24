@@ -57,29 +57,30 @@ forever after.
    the preservation folders must contain pure and full copies from their respective sources. Once
    we have satisfied about the final state of our working design system workspaces we can remove
    the preservation copies, but they will still exist in the git history, which is good."* S0
-   therefore lands TWO preservation folders (the original-project capture named below, plus
+   therefore lands **two** preservation folders: the original-project capture named below, and
    `studio-source/iteration-pull-preservation-2026-07-23/` — the pristine as-pulled 2026-07-23
-   pull-set, uncleaned, including the overlay and both candidate explorations), and the plan gains
+   pull-set, uncleaned, including the overlay and both candidate explorations. The plan also gains
    a terminal owner-gated step: a removal PR deletes both folders from the tree at the owner's
    satisfaction after S5 (git history is the permanent record).
 2. **Acquisition** (owner choice): S0's corpus came down as the owner's studio export
    (2026-07-24 11:41), verified complete against a fresh `list_files` denominator (329 = 329,
    zero diffs) and byte-faithful on two independent hash witnesses. The API's 256 KiB cap
-   therefore left NO unfetchable residue — the `unfetchable` manifest class is empty, and S4's
+   therefore left **no** unfetchable residue — the `unfetchable` manifest class is empty, and S4's
    discharge precondition for it is satisfied by construction.
-3. **Held-out classes** (owner, verbatim in substance): every import-era held-out piece is fetched
-   in full to the local gitignored staging tier, and the import-era hold-out dispositions are
-   hypotheses only — the owner re-reviews **every piece** at the S1/S2 card ("I was not involved
-   in the prior decision making").
-4. **S4 sequencing** (owner choice): S4 runs after S3 and before the MCP-128 port, with hard
-   preconditions — the held-out per-piece re-review answered, and owner confirmation of the
-   original project's post-switch fate — and the up-sync file-set derives from working surfaces
-   only, excluding both preservation folders by name.
+3. **Held-out classes** (owner, verbatim in substance): S0 landed every import-era held-out piece
+   in full, byte-faithful, in the local gitignored staging tier
+   (`packages/design/design-import/original-capture-held-out-2026-07-24/`, primary checkout). The
+   import-era hold-out dispositions are hypotheses only: the owner re-reviews **every piece** at
+   the S1/S2 card ("I was not involved in the prior decision making").
+4. **S4 sequencing** (owner choice): S4 runs after S3 and before the MCP-128 port. Two
+   preconditions gate it: the held-out per-piece re-review answered, and owner confirmation of the
+   original project's post-switch fate. The up-sync file-set derives from working surfaces only,
+   excluding both preservation folders by name.
 5. **S2 adjudication lens** (owner correction): the design system is a multi-layer product —
    framework-agnostic token workspace at depth, simple then complex components per target system
    (currently React, React-in-NextJS, Ink; trivially adaptable further) — per the generality-depth
    gradient. External framing (e.g. the export bundle's "recreate pixel-perfectly" wrapper) does
-   not overrule this; divergences adjudicate toward token-tier generality, never flattened
+   not overrule this; resolve divergences toward token-tier generality, never flattened
    recreation.
 
 ## Slices
@@ -97,17 +98,22 @@ surface; the iteration pull-set present on main (landed via #511 at
 main (981a2543a). Any unsafe finding stops the lane and routes before
 S0 proceeds.
 
-Fetch the ENTIRE original corpus via DesignSync (`get_file`, project
-`314dd517-…`) into a clearly-marked capture area:
+Acquire the ENTIRE original corpus (project `314dd517-…`) byte-perfect
+into a clearly-marked capture area:
 `packages/design/oak-design-system/studio-source/original-capture-2026-07-23/`
 (pre-adoption staging tier — deliberately outside build/lint gates per
 the ADR-213 §1 boundary; verify the staging area's existing gate
 exemptions cover it, and extend the same ignore entries if not — never
-a new exemption class). Binaries and >256 KiB files: hash-compare
-against same-named repo files where they exist; genuinely unfetchable
-files become ledger rows marked `unfetchable` with an owner-assisted
-export path — **never a silent skip**. The PR body carries the fetch
-manifest: every remote path, fetched/hash-matched/unfetchable.
+a new exemption class). Acquisition mechanism as executed (owner
+choice, 2026-07-24 — replaces this slice's drafted DesignSync
+`get_file` loop, per Amendment item 2): the owner's studio export
+supplies the bytes; the API supplies the `list_files` denominator and
+spot verification, so the 256 KiB fetch cap never binds and the
+`unfetchable` class is empty by construction. A future re-capture that
+cannot use an export falls back to per-file fetch, where genuinely
+unfetchable files become ledger rows marked `unfetchable` with an
+owner-assisted export path — **never a silent skip**. The PR body
+carries the fetch manifest: every remote path with its disposition.
 
 - Acceptance: every path in the project's `list_files` output appears
   in the manifest with a disposition; capture directory contents are
