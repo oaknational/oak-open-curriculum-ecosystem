@@ -1,0 +1,23 @@
+# CodeQL advanced-setup configuration.
+#
+# Exists for exactly one reason the default setup cannot express: path
+# exclusion of the MCP-137 preservation tier — byte-preserved studio
+# records that are never consumed (verified unreachable from product,
+# build, and design-sync; ADR-213 staging boundary; the tier's own
+# PRESERVATION-README rules 1-2 forbid editing it). Scanning it mints
+# alerts nobody may act on. Everything else replicates the default
+# setup this replaces: extended query suite, same languages, weekly
+# schedule (see .github/workflows/codeql.yml).
+#
+# Owner-sanctioned (2026-07-24 Director card: "Dismiss 16 + fix the
+# generator"). The exclusions are exactly the two preservation
+# folders — authored/working design-system source stays scanned.
+
+name: oak-open-curriculum-ecosystem CodeQL config
+
+queries:
+  - uses: security-extended
+
+paths-ignore:
+  - packages/design/oak-design-system/studio-source/original-capture-2026-07-23
+  - packages/design/oak-design-system/studio-source/iteration-pull-preservation-2026-07-23
