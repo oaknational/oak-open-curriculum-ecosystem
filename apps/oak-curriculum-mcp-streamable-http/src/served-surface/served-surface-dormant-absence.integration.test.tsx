@@ -26,8 +26,9 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { getCurriculumModelJson } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { registerHandlers } from '../handlers.js';
-import { renderToolsSection } from '../landing-page/render-tools-section.js';
-import { renderResourcesSection } from '../landing-page/render-resources-section.js';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { ToolsSection } from '../landing-page/components/tools-section.js';
+import { ResourcesSection } from '../landing-page/components/resources-section.js';
 import { SERVED_SURFACE } from './served-surface.js';
 import { filterCurriculumModelJson } from './filter-guidance-content.js';
 import {
@@ -69,8 +70,8 @@ function walkRegistration(): {
 }
 
 const registration = walkRegistration();
-const toolsSectionHtml = renderToolsSection();
-const resourcesSectionHtml = renderResourcesSection();
+const toolsSectionHtml = renderToStaticMarkup(<ToolsSection />);
+const resourcesSectionHtml = renderToStaticMarkup(<ResourcesSection />);
 
 /**
  * Structured tool references in the SERVED curriculum-model guidance —

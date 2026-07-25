@@ -24,9 +24,12 @@ test.describe('Landing page', () => {
   test('displays hero explainer text', async ({ page }) => {
     await page.goto('/');
 
-    // Hero should be a prominent paragraph after the title
-    const hero = page.locator('.hero');
+    // The hero band carries an explainer paragraph alongside the title.
+    // Located by region and position rather than by a styling class, so the
+    // test describes what a visitor sees rather than how it is dressed.
+    const hero = page.locator("[data-region='hero'] p").first();
     await expect(hero).toBeVisible();
+    await expect(hero).toContainText(/educators/i);
   });
 
   test('has collapsible sections for Resources and Tools — and no Prompts section', async ({

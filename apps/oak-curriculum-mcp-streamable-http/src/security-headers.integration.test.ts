@@ -128,7 +128,7 @@ describe('Security Headers (Integration)', () => {
       const res = await request(app).get('/').set('Host', 'localhost');
 
       expect(res.headers['x-app-version']).toBe('0.0.0-test');
-      expect(res.text).toContain('<meta name="app-version" content="0.0.0-test" />');
+      expect(res.text).toContain('<meta name="app-version" content="0.0.0-test"/>');
     });
   });
 

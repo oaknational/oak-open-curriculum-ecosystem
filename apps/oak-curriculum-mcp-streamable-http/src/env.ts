@@ -37,6 +37,17 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
     REMOTE_MCP_MODE: ModeSchema.optional(),
     DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: z.enum(['true', 'false']).optional(),
+    /**
+     * Shows the landing page's theme control when `'true'`.
+     *
+     * Default-hidden: the control is a development affordance for
+     * exercising the design system's five themes, not a feature the
+     * public page offers yet. Set on selected preview deployments to
+     * play with theming; absent (the default) renders no control, and
+     * the page still honours a stored choice or the visitor's OS
+     * contrast preference through the design system's own theme script.
+     */
+    THEME_SELECTOR_ENABLED: z.enum(['true', 'false']).optional(),
     ALLOWED_HOSTS: z.string().optional(),
     APP_VERSION_OVERRIDE: z.string().optional(),
     GIT_SHA_OVERRIDE: z.string().optional(),

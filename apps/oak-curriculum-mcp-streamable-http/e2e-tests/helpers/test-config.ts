@@ -69,6 +69,7 @@ export function createMockRuntimeConfig(
 
   const shared = {
     useStubTools: false,
+    themeSelectorEnabled: false,
     version: '0.0.0-test',
     versionSource: 'APP_VERSION_OVERRIDE' as const,
     vercelHostnames: [],

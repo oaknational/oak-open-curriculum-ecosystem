@@ -1,15 +1,18 @@
 /**
- * Unit tests for the tools section renderer.
- *
- * Verifies that the landing page tool list includes both generated tools
- * (from OpenAPI schema) and aggregated tools (hand-authored), with a
- * visual split between the two groups.
+ * The landing page tool list includes both generated tools (from the OpenAPI
+ * schema) and aggregated tools (hand-authored), with a visual split between
+ * the two groups, and only the served-surface's live rows.
  */
 import { AGGREGATED_TOOL_DEFS } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { describe, it, expect } from 'vitest';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it } from 'vitest';
 
-import { SERVED_SURFACE } from '../served-surface/served-surface.js';
-import { AGGREGATED_TOOL_ORDER, renderToolsSection } from './render-tools-section.js';
+import { SERVED_SURFACE } from '../../served-surface/served-surface.js';
+import {
+  AGGREGATED_TOOL_ORDER,
+  splitDescriptionByFirstParagraph,
+  ToolsSection,
+} from './tools-section.js';
 
 const AGGREGATED_TOOL_NAMES = Object.keys(AGGREGATED_TOOL_DEFS);
 
@@ -19,8 +22,8 @@ const SAMPLE_GENERATED_TOOL_NAMES = [
   'get-lessons-summary',
 ] as const;
 
-describe('renderToolsSection', () => {
-  const html = renderToolsSection();
+describe('ToolsSection', () => {
+  const html = renderToStaticMarkup(<ToolsSection />);
 
   it('includes every LIVE aggregated tool name in the rendered HTML (served-surface filter)', () => {
     const liveNames = new Set(
@@ -39,6 +42,7 @@ describe('renderToolsSection', () => {
     const dormant = Object.entries(SERVED_SURFACE.universalTools)
       .filter(([, state]) => state === 'dormant')
       .map(([name]) => name);
+    expect(dormant.length).toBeGreaterThan(0);
     for (const name of dormant) {
       expect(html, name).not.toContain(`<code>${name}</code>`);
     }
@@ -70,15 +74,30 @@ describe('renderToolsSection', () => {
     expect(searchPos).toBeLessThan(fetchPos);
   });
 
-  it('renders each tool with details/summary structure', () => {
+  it('renders each tool as a disclosure with a how-to-use control', () => {
     expect(html).toContain('<details class="tool-item">');
     expect(html).toContain('<summary>');
     expect(html).toContain('How to use');
   });
 
+  it('names the tool inside each repeated how-to-use control', () => {
+    // Two dozen identical "How to use" labels are indistinguishable in a
+    // screen reader's control list; each carries a hidden tool name.
+    expect(html).toContain(
+      '<summary>How to use<span class="oak-visually-hidden"> get-curriculum-model</span></summary>',
+    );
+  });
+
   it('renders separate labelled groups for aggregated and API tools', () => {
     expect(html).toContain('Curriculum tools');
     expect(html).toContain('API pass-through');
+  });
+
+  it('renders the count from the served live-set length', () => {
+    const liveCount = Object.values(SERVED_SURFACE.universalTools).filter(
+      (state) => state === 'live',
+    ).length;
+    expect(html).toContain(`Tools (${String(liveCount)})`);
   });
 });
 
@@ -88,5 +107,17 @@ describe('AGGREGATED_TOOL_ORDER', () => {
     expect([...AGGREGATED_TOOL_ORDER].sort(byName)).toEqual(
       [...AGGREGATED_TOOL_NAMES].sort(byName),
     );
+  });
+});
+
+describe('splitDescriptionByFirstParagraph', () => {
+  it('returns the whole description as the summary when there is one paragraph', () => {
+    expect(splitDescriptionByFirstParagraph('Just a summary.')).toEqual(['Just a summary.', '']);
+  });
+
+  it('splits the summary from the how-to-use remainder at the first blank line', () => {
+    expect(
+      splitDescriptionByFirstParagraph('Summary line.\n\nHow to use it.\n\nAnd more.'),
+    ).toEqual(['Summary line.', 'How to use it.\n\nAnd more.']);
   });
 });

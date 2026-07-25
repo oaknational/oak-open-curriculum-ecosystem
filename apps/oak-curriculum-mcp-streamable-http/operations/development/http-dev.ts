@@ -1,5 +1,7 @@
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { copyOakDs } from '../../build-scripts/copy-oak-ds.js';
 import {
   createNodeProcessRunner,
   parseHttpDevMode,
@@ -8,6 +10,13 @@ import {
 } from './index.js';
 
 const workspaceRoot = fileURLToPath(new URL('../../', import.meta.url));
+
+// The dev path bypasses esbuild entirely, so it copies the design system
+// into `public/` itself — without this the dev page serves no stylesheet.
+// Once at start-up: the design system is a sibling package that does not
+// change during a session (restart to pick up an edit to it).
+await copyOakDs(path.join(workspaceRoot, 'public'));
+
 const parsedMode = parseHttpDevMode(process.argv[2]);
 
 if (!parsedMode.ok) {

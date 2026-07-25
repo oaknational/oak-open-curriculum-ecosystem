@@ -77,7 +77,7 @@
     "@oaknational/oak-curriculum-mcp-streamable-http#build": {
       "dependsOn": ["^build"],
       "cache": true,
-      "outputs": ["dist/**", ".tsup/**"],
+      "outputs": ["dist/**", ".tsup/**", "public/oak-ds/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
@@ -87,7 +87,30 @@
         "tsup.config.ts",
         "src/**/*.ts",
         "!src/**/*.test.ts",
-        "!src/**/*.spec.ts"
+        "!src/**/*.spec.ts",
+        // The design system is copied into public/oak-ds at build time. It has
+        // no build script, so ^build contributes no hash leg for it — without
+        // these inputs a design-system edit replays a stale bundle.
+        "$TURBO_ROOT$/packages/design/oak-design-system/**",
+        "!$TURBO_ROOT$/packages/design/oak-design-system/studio-source/**"
+      ]
+    },
+    "@oaknational/oak-curriculum-mcp-streamable-http#test": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.ts",
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts",
+        // Same reason as #build above: the manifest and static-serving guards
+        // assert against the design system's real contents, so a
+        // design-system-only change must re-run them rather than replay a
+        // stale green verdict.
+        "$TURBO_ROOT$/packages/design/oak-design-system/**",
+        "!$TURBO_ROOT$/packages/design/oak-design-system/studio-source/**"
       ]
     },
     "@oaknational/oak-curriculum-hub#build": {

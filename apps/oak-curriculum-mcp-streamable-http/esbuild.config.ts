@@ -37,6 +37,7 @@ import {
   assertBuiltServerDefaultExport,
   assertNoEsbuildWarnings,
 } from './build-scripts/build-output-contract.js';
+import { copyOakDs } from './build-scripts/copy-oak-ds.js';
 import {
   MCP_DEPLOY_ENTRY_POINTS,
   MCP_SUPPORT_ENTRY_POINTS,
@@ -82,6 +83,11 @@ if (!intent.ok) {
     `[esbuild.config] Sentry build-plugin intent error: ${JSON.stringify(intent.error)}`,
   );
 }
+
+// Copy the design system into `public/` BEFORE the three-arm intent switch
+// at the foot of this file, so the `disabled`, `skipped`, and `configured`
+// arms cannot diverge on whether the served page has a stylesheet.
+await copyOakDs(path.join(import.meta.dirname, 'public'));
 
 const supportBuildOptions = createMcpEsbuildOptions(MCP_SUPPORT_ENTRY_POINTS);
 const deployBuildOptions = createMcpEsbuildOptions(MCP_DEPLOY_ENTRY_POINTS);

@@ -11,18 +11,17 @@ import path from 'node:path';
 import fs from 'node:fs';
 import type { Logger } from '@oaknational/logger';
 
-import { renderLandingPageHtml } from '../landing-page/index.js';
+import { renderLandingPageHtml, type LandingPageOptions } from '../landing-page/index.js';
 
 function addRootLandingPage(
   app: Express,
   dnsRebindingMw: RequestHandler,
   log: Logger,
-  vercelHostname?: string,
-  appVersion?: string,
+  landingPage: LandingPageOptions,
 ): void {
   app.get('/', dnsRebindingMw, (req, res) => {
     log.debug('landing.get', { path: req.path, method: req.method });
-    res.type('text/html').send(renderLandingPageHtml(vercelHostname, appVersion));
+    res.type('text/html').send(renderLandingPageHtml(landingPage));
   });
 }
 
@@ -41,9 +40,8 @@ export function mountStaticContentRoutes(
   app: Express,
   dnsRebindingMw: RequestHandler,
   log: Logger,
-  vercelHostname?: string,
-  appVersion?: string,
+  landingPage: LandingPageOptions,
 ): void {
-  addRootLandingPage(app, dnsRebindingMw, log, vercelHostname, appVersion);
+  addRootLandingPage(app, dnsRebindingMw, log, landingPage);
   mountStaticAssets(app);
 }

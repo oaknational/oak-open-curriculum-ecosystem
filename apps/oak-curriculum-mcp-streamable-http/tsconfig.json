@@ -1,9 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // The landing page is server-rendered React (`react-dom/server`), so the
+    // app's own source now carries .tsx alongside the widget's.
+    "jsx": "react-jsx"
+  },
   "include": [
     "operations/**/*.ts",
     "src/**/*.ts",
+    "src/**/*.tsx",
     "scripts/**/*.ts",
     "build-scripts/**/*.ts",
     "runtime-only-scripts/**/*.d.mts",
@@ -12,6 +18,7 @@
     "**/*.spec.ts",
     "e2e-tests/**/*.ts",
     "*.config.ts",
+    "vitest.global-setup.ts",
     "vitest.e2e.config.ts",
     "bin/**/*.ts"
   ],

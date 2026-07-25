@@ -1,22 +1,21 @@
 /**
- * Unit tests for the resources section renderer.
- *
- * Verifies the landing page lists exactly the SERVED resources — the SDK
- * inventory filtered to the served-surface definition's live rows. The page
- * advertises what a connected client sees; dormant inventory (the
- * creation-oriented guidance documents, D11) never renders.
+ * The landing page lists exactly the SERVED resources — the SDK inventory
+ * filtered to the served-surface definition's live rows. The page advertises
+ * what a connected client sees; dormant inventory (the creation-oriented
+ * guidance documents, D11) never renders.
  */
 import { ALL_MCP_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { describe, it, expect } from 'vitest';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it } from 'vitest';
 
-import { renderResourcesSection } from './render-resources-section.js';
-import { SERVED_SURFACE, isResourceLive } from '../served-surface/served-surface.js';
+import { isResourceLive, SERVED_SURFACE } from '../../served-surface/served-surface.js';
+import { ResourcesSection } from './resources-section.js';
 
 const SERVED_RESOURCES = ALL_MCP_RESOURCES.filter((r) => isResourceLive(SERVED_SURFACE, r.uri));
 const DORMANT_RESOURCES = ALL_MCP_RESOURCES.filter((r) => !isResourceLive(SERVED_SURFACE, r.uri));
 
-describe('renderResourcesSection', () => {
-  const html = renderResourcesSection();
+describe('ResourcesSection', () => {
+  const html = renderToStaticMarkup(<ResourcesSection />);
 
   it('includes the uri and title of every SERVED resource — and no dormant inventory', () => {
     expect(SERVED_RESOURCES.length).toBeGreaterThan(0);
@@ -54,9 +53,9 @@ describe('renderResourcesSection', () => {
     expect(html).toContain(`Resources (${String(SERVED_RESOURCES.length)})`);
   });
 
-  it('renders the expandable section structure', () => {
-    expect(html).toContain('<details class="card expandable">');
+  it('renders as a design-system card accordion', () => {
+    expect(html).toContain('<details class="oak-card oak-accordion">');
     expect(html).toContain('<summary>');
-    expect(html).toContain('<ul class="tool-list">');
+    expect(html).toContain('<ul class="tool-list"');
   });
 });

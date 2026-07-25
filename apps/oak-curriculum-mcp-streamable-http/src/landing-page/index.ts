@@ -10,13 +10,14 @@
  *
  * // In an Express route handler
  * app.get('/', (req, res) => {
- *   const vercelHost = req.headers['x-forwarded-host'];
- *   const html = renderLandingPageHtml(
- *     typeof vercelHost === 'string' ? vercelHost : undefined
- *   );
+ *   const html = renderLandingPageHtml({
+ *     vercelHost: runtimeConfig.displayHostname,
+ *     appVersion: runtimeConfig.version,
+ *     themeSelectorEnabled: runtimeConfig.themeSelectorEnabled,
+ *   });
  *   res.type('html').send(html);
  * });
  * ```
  */
 
-export { renderLandingPageHtml } from './render-landing-page.js';
+export { renderLandingPageHtml, type LandingPageOptions } from './render-landing-page.js';

@@ -1,0 +1,315 @@
+/* Landing-page composition layer.
+ *
+ * Everything here resolves through design-system tokens — no raw colours,
+ * fonts, or spacing values. This file carries only what the system does not
+ * yet ship as a class: the OWA-grammar site chrome, the code surface, and the
+ * nested-disclosure density inside the Resources and Tools cards.
+ *
+ * Ported from the ratified design at
+ * .agent/reports/mcp-128-landing/full-page-conversion.html, with the three
+ * blocking cures from that design's pre-integration accessibility audit
+ * applied (each marked "a11y cure" below).
+ */
+
+/* System gap: bands ship --band-pad: 0. The permanent cure lands upstream via
+   /design-sync; this override carries the intended values (OWA programme-header
+   padding: 40 mobile / 64 desktop) until it does. */
+[data-page='home'] {
+  --band-pad: var(--space-40);
+  --main-gap: var(--space-40);
+}
+@media (min-width: 960px) {
+  [data-page='home'] {
+    --band-pad: var(--space-64);
+    --main-gap: var(--space-56);
+  }
+}
+
+/* System gap: .oak-main does not set align-content, so its rows stretch to
+   fill the viewport on a short page instead of stacking from the top. Carried
+   here (the design carried it as an inline style) until the upstream cure
+   lands via /design-sync. */
+.oak-main {
+  align-content: start;
+}
+
+/* Content rhythm — full-bleed colour bands (homepage grammar) + section gaps */
+.band-lemon {
+  --band-bg: var(--surface-decorative-5-subtle);
+}
+.connect {
+  max-width: var(--measure-prose);
+}
+.connect pre,
+.connect code {
+  background: var(--bg-primary);
+}
+.connect pre code {
+  background: none;
+}
+.content-cards {
+  margin-top: var(--space-56);
+}
+[data-region='content'] {
+  padding-bottom: var(--space-80);
+}
+
+/* Site chrome — matches OWA TopNavMinimal / LayoutSiteFooter grammar, tokens only */
+.site-tabs {
+  background: var(--bg-btn-primary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-m);
+  padding: var(--space-16) clamp(var(--space-20), 4vw, var(--space-40)) 0;
+}
+.site-tabs .oak-btn {
+  border-bottom-left-radius: var(--radius-square);
+  border-bottom-right-radius: var(--radius-square);
+  border-bottom-width: var(--border-solid-none);
+}
+
+/* a11y cure — SC 1.4.11 / 2.4.7, dark theme.
+   Dark flips this band to white while --bg-btn-primary flips against the
+   canvas, so the inherited focus ring lands at 1.33:1 and the grey halo at
+   1.06:1 — invisible to a low-vision keyboard user. Re-declaring the shadow
+   ground band-locally puts grey60 on the white band (7.2:1). */
+.site-tabs {
+  --shadow-ground: light-dark(var(--oak-grey20), var(--oak-grey60));
+}
+
+.site-nav {
+  background: var(--bg-primary);
+  border-bottom: var(--border-solid-s) solid var(--border-neutral-lighter);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-l);
+  padding: var(--space-16) clamp(var(--space-20), 4vw, var(--space-40));
+}
+.site-nav-logo img,
+.site-footer-inner img {
+  display: block;
+  height: var(--size-icon-xxl);
+  width: auto;
+  filter: var(--filter-icon);
+}
+.site-nav-back {
+  margin-left: auto;
+  border-radius: var(--radius-circle);
+}
+.site-footer-meta {
+  font-style: normal;
+}
+[data-region='footer'] {
+  background: var(--bg-primary);
+}
+.site-footer-rule {
+  display: block;
+  width: 100%;
+  height: var(--space-4);
+  filter: var(--filter-icon);
+}
+.site-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-l);
+  padding-block: var(--space-32) var(--space-56);
+}
+.site-footer-meta p {
+  margin: 0;
+}
+
+/* a11y cure — SC 1.4.10 Reflow.
+   At 320px the masthead forced 603px of horizontal scroll: the nav rows did
+   not wrap and .oak-btn is white-space: nowrap. The rows wrap (above), the
+   long label's trailing words are dropped at narrow widths (the short label
+   is exposed to assistive tech either way — see SiteMasthead), the back pill
+   stops claiming the row, and the theme select gives up its min-width. */
+@media (max-width: 640px) {
+  .site-nav-back {
+    margin-left: 0;
+  }
+  .site-nav-back .site-nav-back__long {
+    display: none;
+  }
+  .theme-control {
+    min-width: 0;
+  }
+}
+
+/* Theme control — width follows content rather than the input default */
+.theme-control {
+  width: auto;
+  min-width: var(--space-120);
+}
+
+/* Hero copy column — OWA Header: 24px gap, left-aligned, own margins off */
+.hero-copy {
+  align-items: flex-start;
+}
+.breadcrumbs {
+  font: var(--type-body-3);
+  letter-spacing: var(--tracking-body);
+  align-items: center;
+  margin-bottom: var(--space-24);
+}
+.breadcrumbs .oak-link {
+  color: var(--text-primary);
+}
+.hero-copy h1,
+.hero-copy p {
+  margin: 0;
+}
+@media (max-width: 640px) {
+  .hero-copy h1 {
+    font: var(--type-heading-4);
+  }
+}
+
+/* Code — the system ships no code surface yet; composed from tokens only */
+code {
+  font-family: var(--font-mono);
+  font-size: inherit;
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-heading);
+  background: var(--bg-subtle);
+  border: var(--border-solid-s) solid var(--border-neutral-lighter);
+  border-radius: var(--radius-xs);
+  padding: var(--space-2) var(--space-4);
+}
+pre {
+  background: var(--bg-subtle);
+  border: var(--border-solid-s) solid var(--border-neutral-lighter);
+  border-radius: var(--radius-container);
+  padding: var(--inset-m);
+  margin: 0;
+  overflow-x: auto;
+}
+pre code {
+  font: var(--weight-light) var(--font-size-2) / var(--leading-20) var(--font-mono);
+  letter-spacing: var(--tracking-heading);
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+/* Card-accordions: card inset governs; oak-accordion control padding stands down */
+.oak-card.oak-accordion {
+  padding: 0;
+}
+.oak-card.oak-accordion > summary {
+  padding: var(--card-pad);
+}
+.oak-card.oak-accordion > .oak-accordion__body {
+  padding: 0 var(--card-pad) var(--card-pad);
+}
+.oak-accordion summary h2 {
+  margin: 0;
+}
+
+/* Interior lists (Resources / Tools) */
+.tool-list {
+  margin: var(--space-8) 0 0;
+}
+ul.tool-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+}
+ul.tool-list li {
+  margin: 0;
+}
+div.tool-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+.tool-list code {
+  font-weight: var(--weight-semibold);
+}
+.resource-title {
+  display: block;
+  font: var(--weight-semibold) var(--font-size-3) / var(--leading-24) var(--font-sans);
+  letter-spacing: var(--tracking-body);
+  margin-top: var(--space-4);
+}
+.tool-desc {
+  display: block;
+  font: var(--type-body-3);
+  letter-spacing: var(--tracking-body);
+  margin-top: var(--space-4);
+}
+
+/* Nested disclosures: stand down the inherited .oak-accordion summary
+   treatment; dense rows, self-scoped chevrons */
+.tool-list summary {
+  justify-content: flex-start;
+  min-height: var(--size-target-dense);
+  padding: var(--space-4) 0;
+  font: var(--type-body-2);
+  letter-spacing: var(--tracking-body);
+}
+.tool-list summary::after {
+  content: none;
+}
+.tool-list summary::before {
+  content: '';
+  width: var(--select-chevron);
+  height: var(--select-chevron);
+  flex: 0 0 auto;
+  border: solid var(--text-primary);
+  border-width: 0 var(--border-solid-m) var(--border-solid-m) 0;
+  transform: rotate(-45deg);
+  margin-right: var(--space-8);
+  transition: transform var(--motion-quick) var(--ease-standard);
+}
+.tool-list details[open] > summary::before {
+  transform: rotate(45deg);
+}
+.tool-item > .tool-desc {
+  margin: 0 0 var(--space-8);
+  padding-left: calc(var(--select-chevron) + var(--space-8) + var(--space-2));
+}
+.tool-how-to-use {
+  margin-top: var(--space-8);
+}
+.tool-how-to-use > summary {
+  font: var(--type-label);
+  letter-spacing: var(--tracking-body);
+  color: var(--text-subdued);
+}
+.tool-how-to-use > summary::before {
+  border-color: var(--text-subdued);
+}
+.tool-how-to-use-body {
+  margin-top: var(--space-4);
+  font: var(--type-body-3);
+  letter-spacing: var(--tracking-body);
+  white-space: pre-wrap;
+}
+
+/* Group labels within Tools */
+.tool-group-label {
+  font: var(--type-heading-7);
+  letter-spacing: var(--tracking-heading);
+  margin: var(--space-24) 0 0;
+}
+.tool-group-label.muted {
+  color: var(--text-subdued);
+}
+.tool-group-hint {
+  font: var(--type-body-3);
+  letter-spacing: var(--tracking-body);
+  color: var(--text-subdued);
+  margin: var(--space-4) 0 var(--space-8);
+}
+.tool-divider {
+  border: none;
+  border-top: var(--border-solid-s) solid var(--border-neutral-lighter);
+  margin: var(--space-24) 0;
+}

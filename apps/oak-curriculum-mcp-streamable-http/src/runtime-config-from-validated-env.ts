@@ -33,6 +33,7 @@ function resolveSharedRuntimeFields(env: Env): Result<SharedRuntimeFields, Confi
 
   return ok({
     useStubTools: resolveOptInFlag(env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS),
+    themeSelectorEnabled: resolveOptInFlag(env.THEME_SELECTOR_ENABLED),
     version: versionResult.value.value,
     versionSource: versionResult.value.source,
     ...(gitShaResult.value

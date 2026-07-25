@@ -63,6 +63,7 @@ const BASE_CLERK_KEYS = {
 
 const BASE_SHARED_FIELDS = {
   useStubTools: false,
+  themeSelectorEnabled: false,
   version: '0.0.0-test',
   versionSource: 'APP_VERSION_OVERRIDE',
   vercelHostnames: [],

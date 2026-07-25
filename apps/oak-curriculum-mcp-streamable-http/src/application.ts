@@ -131,19 +131,17 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
   );
 
   mountAppVersionHeader(app, options.runtimeConfig.version);
-  mountStaticContentRoutes(
-    app,
-    dnsRebindingMiddleware,
-    log,
-    options.runtimeConfig.displayHostname,
-    options.runtimeConfig.version,
-  );
+  const landingPage = {
+    vercelHost: options.runtimeConfig.displayHostname,
+    appVersion: options.runtimeConfig.version,
+    themeSelectorEnabled: options.runtimeConfig.themeSelectorEnabled,
+  };
+  mountStaticContentRoutes(app, dnsRebindingMiddleware, log, landingPage);
   app.use(
     '/mcp',
     createMcpHtmlNegotiation({
       log,
-      renderHtml: () =>
-        renderLandingPageHtml(options.runtimeConfig.displayHostname, options.runtimeConfig.version),
+      renderHtml: () => renderLandingPageHtml(landingPage),
       dnsRebindingMiddleware,
       rateLimiter: assetRateLimiter,
     }),

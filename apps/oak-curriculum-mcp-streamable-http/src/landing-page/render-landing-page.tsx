@@ -1,0 +1,74 @@
+/**
+ * Main landing page renderer.
+ *
+ * @remarks
+ * The page is a server-rendered React tree (`react-dom/server`), returned as
+ * a complete HTML document string so the Express route stays a one-liner.
+ * `renderToStaticMarkup` is deliberate over `renderToString`: nothing on this
+ * page hydrates, so no React bookkeeping attributes need to reach the wire.
+ *
+ * React escapes interpolated text by construction, which is why the
+ * hand-rolled `escapeHtml` the string renderers needed has gone with them.
+ *
+ * The document element itself is rendered by {@link LandingPageDocument};
+ * only the doctype is prepended here, because React does not emit one.
+ *
+ * @packageDocumentation
+ */
+
+import { renderToStaticMarkup } from 'react-dom/server';
+
+import { LandingPageDocument } from './components/landing-page-document.js';
+
+/** Everything the landing page needs from the runtime. */
+export interface LandingPageOptions {
+  /**
+   * Deployment host for URL resolution. When provided, the config snippet
+   * uses HTTPS with this host; when absent, localhost for development.
+   */
+  readonly vercelHost?: string;
+  /** App build identity, emitted as HTML metadata when known. */
+  readonly appVersion?: string;
+  /**
+   * Renders the masthead theme control. Default false — the control is a
+   * development affordance, enabled per deployment via
+   * `THEME_SELECTOR_ENABLED`.
+   */
+  readonly themeSelectorEnabled?: boolean;
+}
+
+/**
+ * Renders the complete landing page HTML.
+ *
+ * Generates a full HTML document including:
+ * - HTML head with the design-system stylesheet, pre-paint theme script, and meta tags
+ * - Oak site chrome (masthead tabs, logo bar, optional theme control) and footer
+ * - Hero band with the phase tag, title, and explainer for educators
+ * - Connection instructions with a request-host-derived JSON config snippet
+ * - Collapsible sections for the SERVED resources and tools
+ * - Documentation links
+ *
+ * @param options - Runtime inputs; every field is optional and the
+ *   all-defaults render is the local-development page.
+ * @returns Complete HTML string for the landing page
+ *
+ * @example
+ * ```typescript
+ * // Production (Vercel)
+ * const html = renderLandingPageHtml({ vercelHost: 'my-app.vercel.app' });
+ *
+ * // Development
+ * const devHtml = renderLandingPageHtml();
+ * ```
+ */
+export function renderLandingPageHtml(options: LandingPageOptions = {}): string {
+  const markup = renderToStaticMarkup(
+    <LandingPageDocument
+      vercelHost={options.vercelHost}
+      appVersion={options.appVersion}
+      themeSelectorEnabled={options.themeSelectorEnabled ?? false}
+    />,
+  );
+
+  return `<!doctype html>\n${markup}`;
+}

@@ -40,6 +40,11 @@ const config = defineConfigArray(
       '.logs/**',
       'temp-secrets/**',
       '../../.agent/reference/**',
+      // Build-time copy of @oaknational/oak-design-system (see
+      // build-scripts/copy-oak-ds.ts). Generated, gitignored, and owned by
+      // the design-system package — linting it here would report that
+      // package's style choices as this app's errors.
+      'public/oak-ds/**',
     ],
   },
   configs.strict,
@@ -82,6 +87,55 @@ const config = defineConfigArray(
       'import-x/no-relative-parent-imports': 'off',
       ...appArchitectureRules,
       'max-lines-per-function': ['error', { max: 50, skipComments: true, skipBlankLines: true }],
+    },
+  },
+  {
+    // Static browser scripts served from public/. They run in the browser,
+    // not in Node, so they need the browser globals rather than Node's.
+    files: ['public/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'script',
+      globals: globals.browser,
+      parserOptions: {
+        program: null,
+        project: false,
+        projectService: false,
+      },
+    },
+    rules: {
+      ...javaScriptRuleOverrides,
+      ...tseslint.configs.disableTypeChecked.rules,
+      ...eslint.configs.recommended.rules,
+      ...importX.flatConfigs.recommended.rules,
+    },
+  },
+  {
+    // The landing page is server-rendered React under src/. Mirrors the
+    // widget's typed-linting block; kept separate from the `**/*.ts` block
+    // above because `ecmaFeatures.jsx` changes how `<T>x` parses in .ts.
+    files: ['src/**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: thisDir,
+        ecmaFeatures: { jsx: true },
+      },
+    },
+    settings: workspaceImportResolverSettings,
+    rules: {
+      'import-x/no-relative-parent-imports': 'off',
+      ...appArchitectureRules,
+      'max-lines-per-function': ['error', { max: 50, skipComments: true, skipBlankLines: true }],
+    },
+  },
+  {
+    files: ['src/**/*.test.tsx'],
+    rules: {
+      ...testRules,
+      'import-x/no-relative-parent-imports': 'off',
+      'import-x/no-restricted-paths': 'off',
+      'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
     },
   },
   // ADR-162 observability-first: require structured emission in newly

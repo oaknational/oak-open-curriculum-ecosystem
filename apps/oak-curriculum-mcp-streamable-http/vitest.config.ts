@@ -11,10 +11,13 @@ export default defineConfig({
       'operations/**/*.unit.test.ts',
       'operations/**/*.integration.test.ts',
       'src/**/*.unit.test.ts',
+      'src/**/*.unit.test.tsx',
       'src/**/*.integration.test.ts',
+      'src/**/*.integration.test.tsx',
     ],
     exclude: ['**/*.e2e.test.ts', '../../.agent/reference/**'],
     globals: true,
+    globalSetup: ['vitest.global-setup.ts'],
     setupFiles: ['src/test.setup.ts'],
   },
 });
