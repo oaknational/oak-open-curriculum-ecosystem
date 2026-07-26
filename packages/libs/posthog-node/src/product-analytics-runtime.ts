@@ -1,15 +1,20 @@
 import type {
-  McpServerInstrumenter,
+  McpTransportObserver,
   ProductAnalyticsCloseError,
   ProductAnalyticsRuntime,
   ProductAnalyticsSink,
 } from '@oaknational/observability';
+import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { err, ok, type Result } from '@oaknational/result';
-import { PostHog, type EventMessage, type PostHogOptions } from 'posthog-node';
+import { PostHogMCP } from '@posthog/mcp';
+import type { EventMessage, PostHogOptions } from 'posthog-node';
 
 import { createPostHogEventPolicies, type PostHogEventPolicyConfig } from './event-policy.js';
 import { reportSafely } from './event-policy-helpers.js';
-import { createPostHogMcpServerInstrumenter } from './mcp-server-instrumenter.js';
+import {
+  createPostHogMcpTransportObserver,
+  type PostHogMcpCaptureClient,
+} from './mcp-transport-observer.js';
 import {
   createPostHogProductAnalyticsSink,
   type PostHogProductAnalyticsSinkConfig,
@@ -19,30 +24,27 @@ import type {
   PostHogProductAnalyticsConfig,
 } from './product-analytics-runtime-contract.js';
 
-type PosthogProductAnalyticsRuntime<TServer> = Extract<
-  ProductAnalyticsRuntime<TServer>,
+type PosthogProductAnalyticsRuntime = Extract<
+  ProductAnalyticsRuntime<Transport>,
   { readonly mode: 'posthog' }
 >;
 
-export interface PostHogRuntimeClient {
+export interface PostHogRuntimeClient extends PostHogMcpCaptureClient {
   capture(event: EventMessage): void;
   on(event: 'error', callback: () => void): unknown;
   _shutdown(): Promise<void>;
 }
 
-export interface PostHogProductAnalyticsRuntimeDependencies<
-  TServer,
-  TClient extends PostHogRuntimeClient,
-> {
+export interface PostHogProductAnalyticsRuntimeDependencies<TClient extends PostHogRuntimeClient> {
   readonly createClient: (projectApiKey: string, options: PostHogOptions) => TClient;
   readonly createSink: (
     client: TClient,
     config: PostHogProductAnalyticsSinkConfig,
   ) => ProductAnalyticsSink;
-  readonly createInstrumenter: (
+  readonly createTransportObserver: (
     client: TClient,
     config: PostHogEventPolicyConfig,
-  ) => McpServerInstrumenter<TServer>;
+  ) => McpTransportObserver<Transport>;
 }
 
 function snapshotConfig(config: PostHogProductAnalyticsConfig): PostHogProductAnalyticsConfig {
@@ -145,12 +147,11 @@ function attachClientErrorObserver(
 }
 
 export function createPostHogProductAnalyticsRuntimeWithDependencies<
-  TServer,
   TClient extends PostHogRuntimeClient,
 >(
   config: PostHogProductAnalyticsConfig,
-  dependencies: PostHogProductAnalyticsRuntimeDependencies<TServer, TClient>,
-): PosthogProductAnalyticsRuntime<TServer> {
+  dependencies: PostHogProductAnalyticsRuntimeDependencies<TClient>,
+): PosthogProductAnalyticsRuntime {
   const snapshottedConfig = snapshotConfig(config);
   const policyConfig = createPolicyConfig(snapshottedConfig);
   const policies = createPostHogEventPolicies(policyConfig);
@@ -159,26 +160,26 @@ export function createPostHogProductAnalyticsRuntimeWithDependencies<
 
   attachClientErrorObserver(client, snapshottedConfig.reportOperationalError);
   const sink = dependencies.createSink(client, createSinkConfig(snapshottedConfig));
-  const instrumenter = dependencies.createInstrumenter(client, policyConfig);
+  const transportObserver = dependencies.createTransportObserver(client, policyConfig);
 
   return {
     mode: 'posthog',
     sink,
-    instrumenter,
+    transportObserver,
     close: createCloseOnce(client, snapshottedConfig.reportOperationalError),
   };
 }
 
-function createProductionRuntime<TServer extends WeakKey>(
+function createProductionRuntime(
   config: PostHogProductAnalyticsConfig,
   fetch?: NonNullable<PostHogOptions['fetch']>,
-): PosthogProductAnalyticsRuntime<TServer> {
-  return createPostHogProductAnalyticsRuntimeWithDependencies<TServer, PostHog>(config, {
+): PosthogProductAnalyticsRuntime {
+  return createPostHogProductAnalyticsRuntimeWithDependencies<PostHogMCP>(config, {
     createClient: (projectApiKey, options) =>
-      new PostHog(projectApiKey, fetch === undefined ? options : { ...options, fetch }),
+      new PostHogMCP(projectApiKey, fetch === undefined ? options : { ...options, fetch }),
     createSink: (client, sinkConfig) => createPostHogProductAnalyticsSink(client, sinkConfig),
-    createInstrumenter: (client, policyConfig) =>
-      createPostHogMcpServerInstrumenter<TServer>(client, policyConfig),
+    createTransportObserver: (client, policyConfig) =>
+      createPostHogMcpTransportObserver(client, policyConfig),
   });
 }
 
@@ -187,42 +188,41 @@ function createProductionRuntime<TServer extends WeakKey>(
  *
  * @remarks
  * The runtime snapshots the validated configuration, constructs one shared
- * client, and exposes only the closed sink and MCP instrumenter capabilities.
+ * client, and exposes only the closed sink and MCP transport-observer
+ * capabilities.
  * Verified actor principals reach the client only after synchronous projection
  * to the configured PostHog-scoped identity.
  *
  * The application composition root owns this lifecycle. It should reuse the
- * runtime across request-scoped MCP servers and call `close()` only during
+ * runtime across request-scoped MCP transports and call `close()` only during
  * process teardown. Repeated or overlapping closes share one promise.
  * Shutdown failure resolves to
  * `Err({ kind: 'product_analytics_close_failed' })` and emits only the fixed
  * content-free operational signal; it does not reject with vendor details.
  * Bounded post-response flush work is delegated through `config.waitUntil`.
  *
- * @typeParam TServer - Object identity accepted by the returned MCP server
- * instrumenter. Each distinct server object is instrumented at most once.
  * @param config - Already-validated PostHog, release, canonical registry,
  * identity-projection, reporting, and serverless-lifecycle inputs.
- * @returns A closed PostHog-mode runtime whose sink and instrumenter are safe
- * to share and whose `close` method is the sole client-shutdown boundary.
+ * @returns A closed PostHog-mode runtime whose sink and transport observer are
+ * safe to share and whose `close` method is the sole client-shutdown boundary.
  *
  * @example
  * ```ts
- * const analytics = createPostHogProductAnalyticsRuntime<McpServer>(config);
+ * const analytics = createPostHogProductAnalyticsRuntime(config);
  *
- * analytics.instrumenter.instrument(requestScopedServer);
+ * await server.connect(analytics.transportObserver.observe(serverTransport));
  * processCloseOwner.add(() => analytics.close());
  * ```
  */
-export function createPostHogProductAnalyticsRuntime<TServer extends WeakKey>(
+export function createPostHogProductAnalyticsRuntime(
   config: PostHogProductAnalyticsConfig,
-): PosthogProductAnalyticsRuntime<TServer> {
-  return createProductionRuntime<TServer>(config);
+): PosthogProductAnalyticsRuntime {
+  return createProductionRuntime(config);
 }
 
-export function createPostHogProductAnalyticsRuntimeWithFetch<TServer extends WeakKey>(
+export function createPostHogProductAnalyticsRuntimeWithFetch(
   config: PostHogProductAnalyticsConfig,
   fetch: NonNullable<PostHogOptions['fetch']>,
-): PosthogProductAnalyticsRuntime<TServer> {
-  return createProductionRuntime<TServer>(config, fetch);
+): PosthogProductAnalyticsRuntime {
+  return createProductionRuntime(config, fetch);
 }

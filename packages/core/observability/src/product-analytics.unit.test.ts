@@ -5,13 +5,13 @@ import {
   type ProductAnalyticsEvent,
 } from './product-analytics.js';
 
-interface TestServer {
+interface TestTransport {
   readonly id: string;
 }
 
 describe('createOffProductAnalyticsRuntime', () => {
-  it('provides exact inert capture, instrumentation, and close behaviour', async () => {
-    const runtime = createOffProductAnalyticsRuntime<TestServer>();
+  it('provides exact inert capture, transport observation, and close behaviour', async () => {
+    const runtime = createOffProductAnalyticsRuntime<TestTransport>();
     const event: ProductAnalyticsEvent = {
       kind: 'mcp_resource_read',
       resourceName: 'lesson-summary',
@@ -23,7 +23,8 @@ describe('createOffProductAnalyticsRuntime', () => {
     expect(
       runtime.sink.capture(event, { verifiedActorId: 'verified-clerk-principal' }),
     ).toBeUndefined();
-    expect(runtime.instrumenter.instrument({ id: 'server' })).toBeUndefined();
+    const transport = { id: 'transport' };
+    expect(runtime.transportObserver.observe(transport)).toBe(transport);
     await expect(runtime.close()).resolves.toStrictEqual({ ok: true, value: undefined });
   });
 });

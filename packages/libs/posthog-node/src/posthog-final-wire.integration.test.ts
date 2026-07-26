@@ -2,6 +2,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { SUPPORTED_PROTOCOL_VERSIONS } from '@modelcontextprotocol/sdk/types.js';
 import type { ResolvedRelease } from '@oaknational/build-metadata';
 import type { ProductAnalyticsRuntime } from '@oaknational/observability';
@@ -67,7 +68,7 @@ interface RecordedRequest {
 
 interface Subject {
   readonly reportedErrors: PostHogOperationalErrorKind[];
-  readonly runtime: Extract<ProductAnalyticsRuntime<McpServer>, { mode: 'posthog' }>;
+  readonly runtime: Extract<ProductAnalyticsRuntime<Transport>, { mode: 'posthog' }>;
   readonly requests: RecordedRequest[];
   readonly waitUntilPromises: Promise<unknown>[];
 }
@@ -108,7 +109,7 @@ function createSubject(responseStatus: number): Subject {
     reportOperationalError: (kind) => reportedErrors.push(kind),
   };
   const requests: RecordedRequest[] = [];
-  const runtime = createPostHogProductAnalyticsRuntimeWithFetch<McpServer>(
+  const runtime = createPostHogProductAnalyticsRuntimeWithFetch(
     config,
     createRecordingFetch(responseStatus, requests),
   );
@@ -135,9 +136,8 @@ async function connectInstrumentedRuntime(subject: Subject): Promise<McpConnecti
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
   const send = clientTransport.send.bind(clientTransport);
   clientTransport.send = (message, options) => send(message, { ...options, authInfo: AUTH_INFO });
-  subject.runtime.instrumenter.instrument(server);
   try {
-    await server.connect(serverTransport);
+    await server.connect(subject.runtime.transportObserver.observe(serverTransport));
     await client.connect(clientTransport);
     return { client, server };
   } catch (error: unknown) {
@@ -250,13 +250,93 @@ function expectNoForbiddenContent(value: unknown): void {
   expect(serialised).not.toContain('$process_person_profile');
 }
 
+async function expectSuccessfulFinalWireBatch(subject: Subject): Promise<void> {
+  expect(subject.requests).toHaveLength(1);
+  const batch = readBatch(await parseLegacyBody(subject.requests[0]));
+  const [initializeDynamic, listDynamic, toolDynamic, resourceDynamic] = [
+    readDynamicWireValues(batch[0]),
+    readDynamicWireValues(batch[1]),
+    readDynamicWireValues(batch[2]),
+    readDynamicWireValues(batch[3]),
+  ];
+  const [protocolVersion, listDuration, toolDuration] = [
+    initializeDynamic.properties.$mcp_protocol_version,
+    listDynamic.properties.$mcp_duration_ms,
+    toolDynamic.properties.$mcp_duration_ms,
+  ];
+  assert(typeof protocolVersion === 'string', 'Expected a negotiated MCP protocol');
+  assert(
+    SUPPORTED_PROTOCOL_VERSIONS.includes(protocolVersion),
+    'Expected an SDK-supported MCP protocol',
+  );
+  assert(typeof listDuration === 'number', 'Expected a numeric list duration');
+  assert(typeof toolDuration === 'number', 'Expected a numeric tool duration');
+
+  expect(batch).toStrictEqual([
+    {
+      distinct_id: DISTINCT_ID,
+      event: '$mcp_initialize',
+      properties: {
+        ...COMMON_PROPERTIES,
+        $mcp_is_error: false,
+        oak_client_family: 'chatgpt',
+        $mcp_protocol_version: protocolVersion,
+        ...expectedMcpSdkProperties(initializeDynamic.libVersion),
+      },
+      timestamp: initializeDynamic.timestamp,
+      uuid: initializeDynamic.uuid,
+    },
+    {
+      distinct_id: DISTINCT_ID,
+      event: '$mcp_tools_list',
+      properties: {
+        ...COMMON_PROPERTIES,
+        $mcp_duration_ms: listDuration,
+        $mcp_is_error: false,
+        $mcp_listed_tool_names: [TOOL_NAME],
+        ...expectedMcpSdkProperties(listDynamic.libVersion),
+      },
+      timestamp: listDynamic.timestamp,
+      uuid: listDynamic.uuid,
+    },
+    {
+      distinct_id: DISTINCT_ID,
+      event: '$mcp_tool_call',
+      properties: {
+        ...COMMON_PROPERTIES,
+        $mcp_tool_name: TOOL_NAME,
+        $mcp_duration_ms: toolDuration,
+        $mcp_is_error: false,
+        ...expectedMcpSdkProperties(toolDynamic.libVersion),
+      },
+      timestamp: toolDynamic.timestamp,
+      uuid: toolDynamic.uuid,
+    },
+    {
+      distinct_id: DISTINCT_ID,
+      event: '$mcp_resource_read',
+      properties: {
+        ...COMMON_PROPERTIES,
+        $mcp_resource_name: RESOURCE_NAME,
+        $mcp_duration_ms: 23,
+        $mcp_is_error: false,
+        ...expectedMcpSdkProperties(resourceDynamic.libVersion),
+      },
+      timestamp: RESOURCE_TIMESTAMP,
+      uuid: resourceDynamic.uuid,
+    },
+  ]);
+  expectNoForbiddenContent(batch);
+}
+
 describe('PostHog final wire', () => {
-  it('sends only reconstructed automatic and resource rows through the real client', async () => {
+  it('sends only reconstructed manual MCP and resource rows through the real client', async () => {
     const subject = createSubject(200);
     let connection: McpConnection | undefined;
 
     try {
       connection = await connectInstrumentedRuntime(subject);
+      const toolsList = await connection.client.listTools();
       const toolResult = await connection.client.callTool({
         name: TOOL_NAME,
         arguments: { privateQuery: RAW_TOOL_ARGUMENT },
@@ -272,67 +352,9 @@ describe('PostHog final wire', () => {
       expect(toolResult).toStrictEqual({
         content: [{ type: 'text', text: RAW_TOOL_RESULT }],
       });
+      expect(toolsList.tools).toEqual([expect.objectContaining({ name: TOOL_NAME })]);
       expect(subject.reportedErrors).toStrictEqual([]);
-      expect(subject.requests).toHaveLength(1);
-      const batch = readBatch(await parseLegacyBody(subject.requests[0]));
-      const [initializeDynamic, toolDynamic, resourceDynamic] = [
-        readDynamicWireValues(batch[0]),
-        readDynamicWireValues(batch[1]),
-        readDynamicWireValues(batch[2]),
-      ];
-      const [protocolVersion, toolDuration] = [
-        initializeDynamic.properties.$mcp_protocol_version,
-        toolDynamic.properties.$mcp_duration_ms,
-      ];
-      assert(typeof protocolVersion === 'string', 'Expected a negotiated MCP protocol');
-      assert(
-        SUPPORTED_PROTOCOL_VERSIONS.includes(protocolVersion),
-        'Expected an SDK-supported MCP protocol',
-      );
-      assert(typeof toolDuration === 'number', 'Expected a numeric tool duration');
-
-      expect(batch).toStrictEqual([
-        {
-          distinct_id: DISTINCT_ID,
-          event: '$mcp_initialize',
-          properties: {
-            ...COMMON_PROPERTIES,
-            $mcp_is_error: false,
-            oak_client_family: 'chatgpt',
-            $mcp_protocol_version: protocolVersion,
-            ...expectedMcpSdkProperties(initializeDynamic.libVersion),
-          },
-          timestamp: initializeDynamic.timestamp,
-          uuid: initializeDynamic.uuid,
-        },
-        {
-          distinct_id: DISTINCT_ID,
-          event: '$mcp_tool_call',
-          properties: {
-            ...COMMON_PROPERTIES,
-            $mcp_tool_name: TOOL_NAME,
-            $mcp_duration_ms: toolDuration,
-            $mcp_is_error: false,
-            ...expectedMcpSdkProperties(toolDynamic.libVersion),
-          },
-          timestamp: toolDynamic.timestamp,
-          uuid: toolDynamic.uuid,
-        },
-        {
-          distinct_id: DISTINCT_ID,
-          event: '$mcp_resource_read',
-          properties: {
-            ...COMMON_PROPERTIES,
-            $mcp_resource_name: RESOURCE_NAME,
-            $mcp_duration_ms: 23,
-            $mcp_is_error: false,
-            ...expectedMcpSdkProperties(resourceDynamic.libVersion),
-          },
-          timestamp: RESOURCE_TIMESTAMP,
-          uuid: resourceDynamic.uuid,
-        },
-      ]);
-      expectNoForbiddenContent(batch);
+      await expectSuccessfulFinalWireBatch(subject);
     } finally {
       await closeSubject(subject, connection);
     }

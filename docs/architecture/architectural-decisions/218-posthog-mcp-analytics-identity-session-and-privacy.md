@@ -1,7 +1,7 @@
 # ADR-218: PostHog MCP Analytics Identity, Session, and Privacy Boundary
 
-**Status**: Accepted (owner-ratified 2026-07-26; implementation and
-October public-beta enablement remain to be proven)
+**Status**: Accepted (revised 2026-07-26; implementation and October
+public-beta enablement remain to be proven)
 **Date**: 2026-07-26
 **Related**:
 [ADR-112](112-per-request-mcp-transport.md) — fresh server and
@@ -62,10 +62,19 @@ web technology, but it is not an Oak webpage and Oak does not control
 the host's cookie banner or persistence. The intended analytics are
 therefore server-side product events, not browser analytics.
 
-PostHog's official `@posthog/mcp` package is the chosen first-party MCP
-instrumentation. It is a pre-1.0 beta whose event surface may change,
-so its output is an untrusted vendor input to Oak's policy boundary,
-not the definition of Oak's analytics contract.
+PostHog's official `@posthog/mcp` package supplies the chosen
+first-party MCP event constructors. It is a pre-1.0 beta whose event
+surface may change, so its output is an untrusted vendor input to Oak's
+policy boundary, not the definition of Oak's analytics contract.
+
+Evaluation of the package's automatic server wrappers found that
+neither is protocol-transparent enough for Oak's server. The
+high-level wrapper removes legitimate `context` and `conversation_id`
+tool-call arguments before Oak's handlers receive them. The low-level
+wrapper preserves those arguments but reconstructs `tools/list`
+results without legal `nextCursor` and top-level `_meta` fields.
+Instrumentation that changes the MCP wire contract is not
+observational and is not accepted.
 
 ## Decision
 
@@ -185,9 +194,11 @@ It excludes:
   iframe persistence; and
 - stable person identifiers shared with another processor.
 
-Oak reconstructs every outbound event from this exact allowlist and
-drops unknown events and properties. Vendor sanitisation is defence in
-depth.
+Oak's transport observer constructs only the closed facts needed by
+the applicable official manual capture call. It never supplies request
+parameters, responses, errors, or free text. Oak then reconstructs
+every outbound event from the exact allowlist and drops unknown events
+and properties. Vendor sanitisation is defence in depth.
 
 The supported PostHog deletion API resolves a Person before it queues
 event deletion. Purely profileless events can be located by
@@ -205,6 +216,37 @@ ADR-112's fresh MCP server and transport per request remains binding.
 A protocol session is client-carried context across those fresh
 instances, not a long-lived Express process, sticky Vercel instance,
 or server-side session store.
+
+Oak observes the protocol through a provider-neutral decorator around
+the public MCP SDK `Transport` passed to `server.connect`. The
+application retains its concrete transport for transport-owned
+operations such as HTTP request handling. The decorator:
+
+- receives the original inbound JSON-RPC message and
+  `MessageExtraInfo`;
+- recognises only `initialize`, `tools/list`, and `tools/call`
+  requests;
+- derives the PostHog-scoped actor pseudonym synchronously from
+  verified `authInfo` and then discards the principal;
+- stores only the closed operation facts and start time keyed by the
+  exact JSON-RPC request identifier;
+- observes the matching outbound success or error without retaining
+  request parameters, response bodies, thrown values, or error
+  content; and
+- delegates the same message and send options to the underlying
+  transport and returns the underlying send promise unchanged.
+
+Unsupported methods, notifications, and unmatched messages are
+forwarded without analytics. Multiple request identifiers may remain
+in flight concurrently and cannot exchange actor or operation state.
+When analytics is off, observation returns the original transport
+reference.
+
+The official manual `PostHogMCP.captureInitialize`,
+`captureToolsList`, and `captureToolCall` methods construct the three
+vendor events. Oak passes only the approved identity and categorical
+facts. It does not call the package's automatic high- or low-level
+instrumentation wrappers.
 
 This clarifies the old assumption that per-request serverless
 transport and protocol-session measurement are incompatible in
@@ -286,24 +328,31 @@ boundary, not delivery status.
 ### 6. Use one MCP-dedicated client and a serverless delivery boundary
 
 Oak uses one warm-instance PostHog client for the current all-MCP event
-estate. The official instrumentation may apply its installed package
+estate. The official manual MCP API may apply its installed package
 name and version as client provenance; that label is accurate for the
-package-observed events and Oak-authored MCP resource events. The app
-currently serves no MCP prompts. A second client is warranted only if
-Oak later sends genuinely non-MCP product events that need different
-provenance or policy.
+three manually constructed MCP events and Oak-authored MCP resource
+events. The app currently serves no MCP prompts. A second client is
+warranted only if Oak later sends genuinely non-MCP product events
+that need different provenance or policy.
 
-The researched package baseline automatically observes only
-initialisation, tool listing, and tool calls. Oak emits resource reads
-explicitly through a closed adapter; it does not expose the Node
-client's general capture method to application code.
+The provider-neutral transport observer supplies initialisation, tool
+listing, and tool-call facts to the official manual MCP API. Oak emits
+resource reads explicitly through a closed adapter; it does not expose
+the Node client's general capture method to application code.
 
-Both policy boundaries are synchronous. The instrumentation-level
-policy removes content and paired exception events as defence in
-depth. The client-level policy is the universal, non-bypassable final
-reconstruction barrier for automatic and Oak-authored events.
-Asynchronous policy is not permitted because the automatic wrapper
-does not await publication before its MCP handler returns.
+The transport projection and final client policy are synchronous,
+closed reconstruction boundaries. The observer reads only the
+allowlisted categorical facts from protocol messages and passes no
+content fields to the vendor API. The client-level policy is the
+universal, non-bypassable final reconstruction barrier for manual MCP
+and Oak-authored resource events.
+
+Observation and capture faults fail open: they emit only the fixed,
+content-free `posthog_event_policy_failed` operational signal and
+never change, replace, delay, or annotate an MCP message or transport
+promise. Identity-projection failure remains a distinct
+`posthog_identity_projection_failed` signal with the same content-free
+and fail-open constraint.
 
 The module-scoped client receives Vercel's `waitUntil` function. The
 installed compatible Node SDK then schedules a bounded debounced flush
@@ -356,13 +405,15 @@ support deterministic Oak statistics. Activity windows meet the
 remaining engagement-analysis need without pretending Oak can see a
 host conversation.
 
-### Why first-party MCP instrumentation plus an Oak boundary
+### Why official manual MCP events plus an Oak transport boundary
 
-The official package already observes MCP initialisation, tool
-listing, and tool calls. Accepting its default payload would collect
-substantially more data than Oak needs. First-party instrumentation
-therefore supplies those observations; Oak adds resource-read
-observations through its own closed MCP adapter in the current release,
+The official package already constructs canonical MCP initialisation,
+tool-listing, and tool-call events. Its automatic wrappers do more than
+observe: the high-level wrapper removes legitimate request fields and
+the low-level wrapper removes legitimate response fields. Oak
+therefore owns the observation seam at the public transport boundary
+and calls the official manual event API with closed categorical facts.
+Oak adds resource-read observations through its own closed MCP adapter,
 and Oak's allowlist defines what may leave the process. A future prompt
 event requires a separately approved event surface and deterministic
 observation seam.
@@ -413,6 +464,14 @@ observation seam.
     because all current events describe MCP interaction and share one
     policy and lifecycle. The package's client relabelling is accurate
     for that bounded estate.
+14. **Use the package's high-level automatic wrapper.** Rejected
+    because it removes legitimate `context` and `conversation_id`
+    tool-call arguments before dispatch and therefore changes
+    application behaviour.
+15. **Use the package's low-level automatic wrapper.** Rejected
+    because it reconstructs tool-list results without legal
+    `nextCursor` and top-level `_meta` fields and therefore changes the
+    wire response.
 
 ## Consequences
 
@@ -442,10 +501,22 @@ observation seam.
 - The current release reports no MCP protocol-session statistics. A
   future mechanism must prove server issuance, actor binding, client
   replay, and transport compatibility before that changes.
-- A pre-1.0 vendor package requires contract tests and re-verification
-  whenever its compatible dependency range advances.
+- A pre-1.0 vendor package requires manual-API and final-wire contract
+  tests and re-verification whenever its compatible dependency range
+  advances.
 - Event-level access and exports require explicit governance because
   minimised rows can still reveal behavioural patterns.
+
+Package-level transport contract tests prove that the observed
+transport preserves successful and error responses, including legal
+`nextCursor` and top-level `_meta`; that the exact message object,
+options object, error identity, result identity, and underlying send
+promise are preserved; that overlapping request identifiers remain
+isolated; that pre-existing callbacks run in the SDK-defined order;
+and that unsupported operations, projection failures, and capture
+failures cannot affect protocol behaviour. Application-level
+analytics-on/off wire equivalence remains required delivery evidence;
+this ADR does not claim that proof is complete.
 
 ### Maturity
 
@@ -487,6 +558,7 @@ access controls, or deletion route are already live.
 - [PostHog MCP conversation-ID caveats](https://posthog.com/docs/mcp-analytics/conversation-id)
 - [PostHog MCP user identification](https://posthog.com/docs/mcp-analytics/identifying-users)
 - [PostHog MCP privacy and redaction](https://posthog.com/docs/mcp-analytics/privacy)
+- [PostHog manual MCP event API (`PostHogMCP` source)](https://github.com/PostHog/posthog-js/blob/a027bf5c0d48a39388f9db3da7565e2d283e0b65/packages/mcp/src/extensions/posthog-mcp.ts)
 - [PostHog anonymous and identified events](https://posthog.com/docs/data/anonymous-vs-identified-events)
 - [PostHog person deletion](https://posthog.com/docs/data/persons#deleting-person-data)
 - [PostHog bulk-deletion implementation](https://github.com/PostHog/posthog/blob/1b7381290f60da044f05358ae09f46a4b3e7c827/posthog/api/person.py#L653-L722)

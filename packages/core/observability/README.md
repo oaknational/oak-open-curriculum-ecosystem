@@ -9,7 +9,7 @@ This workspace owns six shared concerns:
 - **JSON sanitisation** (`sanitiseForJson`, `sanitiseObject`, `isJsonValue`) — converts arbitrary values to JSON-safe form (primitives pass through; `undefined` becomes `null`; `Date` becomes ISO string; `Error` becomes `{message, name, stack}`; arrays/objects recurse; unserialisable values become `'[unserializable]'`; circular references become `'[Circular]'`).
 - **OpenTelemetry span context** (`getActiveSpanContextSnapshot`, `withActiveSpan`) — read the active span context and run manual spans without depending on a concrete runtime transport.
 - **Observability selection and diagnostic sinks** (`OBSERVABILITY_SINK_DEFINITIONS`, `OBSERVABILITY_SINK_KINDS`, `DIAGNOSTIC_SINK_KINDS`, `SinkRegistry`) — derive the full app-local selection and diagnostic-only registry from one closed literal source.
-- **Product-analytics capabilities** (`ProductAnalyticsSink`, `McpServerInstrumenter`, `ProductAnalyticsRuntime`, `createOffProductAnalyticsRuntime`) — expose a closed provider-neutral runtime slot alongside, rather than inside, diagnostic exception and message sinks.
+- **Product-analytics capabilities** (`ProductAnalyticsSink`, `McpTransportObserver`, `ProductAnalyticsRuntime`, `createOffProductAnalyticsRuntime`) — expose a closed provider-neutral runtime slot alongside, rather than inside, diagnostic exception and message sinks. The transport observer decorates the transport passed to `server.connect`; applications retain their concrete transport for request handling.
 
 ## Canonical JSON-safe type
 

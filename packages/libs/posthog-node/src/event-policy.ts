@@ -29,7 +29,7 @@ function readInitializeClientName(request: McpRequest): unknown {
   return isUnknownProperties(clientInfo) ? readOwn(clientInfo, 'name') : undefined;
 }
 
-function readVerifiedActorId(extra: McpRequestExtra): string | null {
+function readVerifiedActorId(extra?: McpRequestExtra): string | null {
   if (!isUnknownProperties(extra)) {
     return null;
   }

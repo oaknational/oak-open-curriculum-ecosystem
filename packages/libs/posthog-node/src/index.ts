@@ -3,7 +3,7 @@
  *
  * @remarks
  * The package root exposes only bootstrap configuration, actor projection, and
- * the closed runtime capability. Vendor client and instrumentation types stay
+ * the closed runtime capability. Vendor client and transport-observer types stay
  * inside the adapter.
  *
  * @packageDocumentation

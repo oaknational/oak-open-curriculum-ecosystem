@@ -1,5 +1,6 @@
 import type { ResolvedRelease } from '@oaknational/build-metadata';
-import type { McpServerInstrumenter, ProductAnalyticsSink } from '@oaknational/observability';
+import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
+import type { McpTransportObserver, ProductAnalyticsSink } from '@oaknational/observability';
 import { ok } from '@oaknational/result';
 import type { EventMessage, PostHogOptions } from 'posthog-node';
 import { assert, describe, expect, it } from 'vitest';
@@ -26,10 +27,6 @@ const RELEASE: ResolvedRelease = {
   environment: 'production',
 };
 
-interface TestServer {
-  readonly name: 'test-server';
-}
-
 interface ErrorSubscription {
   readonly event: 'error';
   readonly callback: () => void;
@@ -47,14 +44,14 @@ interface ClientCreation {
 interface SinkCreation {
   readonly client: TestClient;
   readonly config: Parameters<
-    PostHogProductAnalyticsRuntimeDependencies<TestServer, TestClient>['createSink']
+    PostHogProductAnalyticsRuntimeDependencies<TestClient>['createSink']
   >[1];
 }
 
-interface InstrumenterCreation {
+interface TransportObserverCreation {
   readonly client: TestClient;
   readonly config: Parameters<
-    PostHogProductAnalyticsRuntimeDependencies<TestServer, TestClient>['createInstrumenter']
+    PostHogProductAnalyticsRuntimeDependencies<TestClient>['createTransportObserver']
   >[1];
 }
 
@@ -102,18 +99,21 @@ function createRuntimeHarness(
 ) {
   const clientCreations: ClientCreation[] = [];
   const sinkCreations: SinkCreation[] = [];
-  const instrumenterCreations: InstrumenterCreation[] = [];
+  const transportObserverCreations: TransportObserverCreation[] = [];
   const errorSubscriptions: ErrorSubscription[] = [];
   const shutdownCalls: undefined[] = [];
   const sink: ProductAnalyticsSink = {
     capture: () => undefined,
   };
-  const instrumenter: McpServerInstrumenter<TestServer> = {
-    instrument: () => undefined,
+  const transportObserver: McpTransportObserver<Transport> = {
+    observe: (transport) => transport,
   };
   const client: TestClient = {
     kind: 'test-client',
     capture: () => undefined,
+    captureInitialize: () => undefined,
+    captureToolCall: () => undefined,
+    captureToolsList: () => undefined,
     on: (event, callback) => {
       errorSubscriptions.push({ event, callback });
     },
@@ -131,23 +131,23 @@ function createRuntimeHarness(
       sinkCreations.push({ client: createdClient, config: sinkConfig });
       return sink;
     },
-    createInstrumenter: (createdClient, instrumenterConfig) => {
-      instrumenterCreations.push({ client: createdClient, config: instrumenterConfig });
-      return instrumenter;
+    createTransportObserver: (createdClient, observerConfig) => {
+      transportObserverCreations.push({ client: createdClient, config: observerConfig });
+      return transportObserver;
     },
-  } satisfies PostHogProductAnalyticsRuntimeDependencies<TestServer, TestClient>;
+  } satisfies PostHogProductAnalyticsRuntimeDependencies<TestClient>;
 
   const runtime = createPostHogProductAnalyticsRuntimeWithDependencies(config, dependencies);
   return {
     client,
     clientCreations,
     errorSubscriptions,
-    instrumenter,
-    instrumenterCreations,
     runtime,
     shutdownCalls,
     sink,
     sinkCreations,
+    transportObserver,
+    transportObserverCreations,
   };
 }
 
@@ -160,15 +160,15 @@ function only<T>(items: readonly T[]): T {
 
 function expectClosedRuntimeSurface(subject: ReturnType<typeof createRuntimeHarness>): void {
   expect(subject.sinkCreations).toHaveLength(1);
-  expect(subject.instrumenterCreations).toHaveLength(1);
+  expect(subject.transportObserverCreations).toHaveLength(1);
   expect(subject.sinkCreations.at(0)?.client).toBe(subject.client);
-  expect(subject.instrumenterCreations.at(0)?.client).toBe(subject.client);
+  expect(subject.transportObserverCreations.at(0)?.client).toBe(subject.client);
   expect(subject.runtime.mode).toBe('posthog');
   expect(subject.runtime.sink).toBe(subject.sink);
-  expect(subject.runtime.instrumenter).toBe(subject.instrumenter);
+  expect(subject.runtime.transportObserver).toBe(subject.transportObserver);
   expect(
     Object.keys(subject.runtime).sort((left, right) => left.localeCompare(right)),
-  ).toStrictEqual(['close', 'instrumenter', 'mode', 'sink']);
+  ).toStrictEqual(['close', 'mode', 'sink', 'transportObserver']);
   expect(Object.hasOwn(subject.runtime, 'client')).toBe(false);
   expect(Object.hasOwn(subject.runtime, 'config')).toBe(false);
 }
@@ -353,7 +353,7 @@ describe('createPostHogProductAnalyticsRuntimeWithDependencies integration', () 
 
     const clientCreation = only(subject.clientCreations);
     const sinkCreation = only(subject.sinkCreations);
-    const instrumenterCreation = only(subject.instrumenterCreations);
+    const transportObserverCreation = only(subject.transportObserverCreations);
     expect(clientCreation.projectApiKey).toBe(PROJECT_API_KEY);
     expect(clientCreation.options.waitUntil).toBe(fixture.originalWaitUntil);
     expect(sinkCreation.config).toStrictEqual({
@@ -363,7 +363,7 @@ describe('createPostHogProductAnalyticsRuntimeWithDependencies integration', () 
       activeActorProjector: fixture.originalProjector,
       reportOperationalError: fixture.originalReporter,
     });
-    expect(instrumenterCreation.config).toStrictEqual({
+    expect(transportObserverCreation.config).toStrictEqual({
       release: RELEASE,
       serverVersion: SERVER_VERSION,
       servedToolNames: ['search'],

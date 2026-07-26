@@ -1,5 +1,5 @@
 import type { ResolvedRelease } from '@oaknational/build-metadata';
-import type { BeforeSendFn, MCPAnalyticsOptions } from '@posthog/mcp';
+import type { BeforeSendFn, McpCaptureCommon } from '@posthog/mcp';
 import type { EventMessage } from 'posthog-node';
 
 import type { ActivePostHogActorProjector } from './actor-pseudonym-contract.js';
@@ -20,11 +20,15 @@ export const RESOURCE_READ_EVENT_NAME = '$mcp_resource_read';
 export type AutomaticEventName = (typeof AUTOMATIC_EVENT_NAMES)[keyof typeof AUTOMATIC_EVENT_NAMES];
 export type AcceptedEventName = AutomaticEventName | typeof RESOURCE_READ_EVENT_NAME;
 export type McpBeforeSendEvent = Parameters<BeforeSendFn>[0];
-export type McpEventPropertiesProjector = NonNullable<MCPAnalyticsOptions['eventProperties']>;
-export type McpRequest = Parameters<McpEventPropertiesProjector>[0];
-export type McpRequestExtra = Parameters<McpEventPropertiesProjector>[1];
 export type OakClientFamily = 'chatgpt' | 'claude' | 'other';
-export type UnknownProperties = NonNullable<Awaited<ReturnType<McpEventPropertiesProjector>>>;
+export type UnknownProperties = NonNullable<McpCaptureCommon['properties']>;
+
+export interface McpRequest {
+  readonly method?: string;
+  readonly params?: UnknownProperties;
+}
+
+export type McpRequestExtra = unknown;
 
 export interface PostHogEventPolicyConfig {
   readonly release: ResolvedRelease;

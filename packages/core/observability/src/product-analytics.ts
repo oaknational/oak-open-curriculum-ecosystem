@@ -36,12 +36,23 @@ export interface ProductAnalyticsSink {
 }
 
 /**
- * Provider-neutral capability for instrumenting a newly created MCP server.
+ * Provider-neutral decorator for the MCP transport passed to a server connection.
  *
- * @typeParam TServer - Concrete MCP server type owned by the application.
+ * @remarks The application retains its concrete transport reference for
+ * transport-owned operations such as request handling. It passes this method's
+ * returned transport to `server.connect`, allowing an adapter to observe the
+ * MCP protocol without requiring a dependency on the MCP SDK here.
+ *
+ * @typeParam TTransport - Concrete MCP transport type owned by the application.
  */
-export interface McpServerInstrumenter<TServer> {
-  instrument(server: TServer): void;
+export interface McpTransportObserver<TTransport> {
+  /**
+   * Returns the transport to pass to `server.connect`.
+   *
+   * @param transport - The concrete application-owned MCP transport.
+   * @returns The observed transport. Off mode returns `transport` unchanged.
+   */
+  observe(transport: TTransport): TTransport;
 }
 
 /**
@@ -51,9 +62,9 @@ export type ProductAnalyticsCloseError = Readonly<{
   kind: 'product_analytics_close_failed';
 }>;
 
-interface ProductAnalyticsRuntimeCapabilities<TServer> {
+interface ProductAnalyticsRuntimeCapabilities<TTransport> {
   readonly sink: ProductAnalyticsSink;
-  readonly instrumenter: McpServerInstrumenter<TServer>;
+  readonly transportObserver: McpTransportObserver<TTransport>;
   close(): Promise<Result<void, ProductAnalyticsCloseError>>;
 }
 
@@ -61,13 +72,14 @@ interface ProductAnalyticsRuntimeCapabilities<TServer> {
  * Exact inert product-analytics runtime variant.
  *
  * @remarks Exposes the same closed capabilities as a provider-backed runtime,
- * but captures and instruments nothing and closes successfully.
+ * but captures and observes nothing and closes successfully.
  *
- * @typeParam TServer - Concrete MCP server type owned by the application.
+ * @typeParam TTransport - Concrete MCP transport type owned by the application.
  */
-export type OffProductAnalyticsRuntime<TServer> = ProductAnalyticsRuntimeCapabilities<TServer> & {
-  readonly mode: 'off';
-};
+export type OffProductAnalyticsRuntime<TTransport> =
+  ProductAnalyticsRuntimeCapabilities<TTransport> & {
+    readonly mode: 'off';
+  };
 
 /**
  * Required product-analytics runtime slot derived from the shared selection.
@@ -75,29 +87,32 @@ export type OffProductAnalyticsRuntime<TServer> = ProductAnalyticsRuntimeCapabil
  * @remarks PostHog mode retains closed provider-neutral capabilities and does
  * not expose a client or configuration object to application code.
  *
- * @typeParam TServer - Concrete MCP server type owned by the application.
+ * @typeParam TTransport - Concrete MCP transport type owned by the application.
  */
-export type ProductAnalyticsRuntime<TServer> =
-  | OffProductAnalyticsRuntime<TServer>
-  | (ProductAnalyticsRuntimeCapabilities<TServer> & {
+export type ProductAnalyticsRuntime<TTransport> =
+  | OffProductAnalyticsRuntime<TTransport>
+  | (ProductAnalyticsRuntimeCapabilities<TTransport> & {
       readonly mode: 'posthog';
     });
 
 /**
  * Creates the inert product-analytics runtime used when PostHog is not selected.
  *
- * @typeParam TServer - Concrete MCP server type owned by the application.
- * @returns An exact off-mode runtime that captures nothing, instruments
- * nothing, reads no configuration, creates no client, and closes successfully.
+ * @typeParam TTransport - Concrete MCP transport type owned by the application.
+ * @returns An exact off-mode runtime that captures nothing, observes no
+ * transport behaviour, reads no configuration, creates no client, and closes
+ * successfully.
  */
-export function createOffProductAnalyticsRuntime<TServer>(): OffProductAnalyticsRuntime<TServer> {
+export function createOffProductAnalyticsRuntime<
+  TTransport,
+>(): OffProductAnalyticsRuntime<TTransport> {
   return {
     mode: 'off',
     sink: {
       capture: () => undefined,
     },
-    instrumenter: {
-      instrument: () => undefined,
+    transportObserver: {
+      observe: (transport) => transport,
     },
     close: () => Promise.resolve(ok(undefined)),
   };

@@ -13,12 +13,14 @@ Deletion can deterministically recompute every retained projection without a
 principal ledger.
 
 The live runtime owns one dedicated PostHog client. It exposes only Oak's
-provider-neutral product-event sink, MCP-server instrumenter, and Result-typed
-close capability. Automatic MCP analytics are closed to initialise, tool-list,
-and tool-call facts; authenticated resource reads use the Oak sink. Both the
-instrumentation and final client boundaries reconstruct exact allowlisted rows,
-so raw identities, parameters, results, errors, sessions, client versions, and
-unknown properties cannot cross the adapter.
+provider-neutral product-event sink, public MCP-transport observer, and
+Result-typed close capability. The observer maps initialise, tool-list, and
+tool-call responses onto the official manual PostHog MCP capture API;
+authenticated resource reads use the Oak sink. Both the transport and final
+client boundaries reconstruct exact allowlisted rows, so raw identities,
+parameters, results, errors, sessions, client versions, and unknown properties
+cannot cross the adapter. The observer forwards protocol messages, options, and
+delegate promises without modification.
 
 Configuration is supplied as an already-validated snapshot. The adapter never
 reads environment variables, and its public surface exposes neither the raw

@@ -2,7 +2,7 @@
 id: mcp-63-posthog-product-analytics
 node_type: delivery
 name: "Deterministic PostHog product analytics for the MCP app"
-overview: "Deliver privacy-bounded, deterministic MCP usage facts through the shared analytics sink and PostHog's official MCP instrumentation."
+overview: "Deliver privacy-bounded, deterministic MCP usage facts through a public MCP transport observer and PostHog's official manual MCP event API."
 status: ratified
 ratified_by: "Jim Cresswell"
 ratified_date: 2026-07-26
@@ -45,26 +45,41 @@ The durable identity, session, event, and privacy boundary is
 The shared observability package exposes a provider-neutral product
 analytics capability selected through the existing sink axis. An
 adapter around PostHog's official Node client owns delivery,
-lifecycle, and the final outbound policy. Emission sites depend on
-the closed Oak contract, never the vendor. The contract deliberately
-has no generic `name: string` or arbitrary-property escape hatch.
-The concrete adapter lives in `packages/libs/posthog-node`; it owns
-all `posthog-node` and `@posthog/mcp` imports.
+lifecycle, a public MCP transport observer, and the final outbound
+policy. Emission sites depend on the closed Oak contract, never the
+vendor. The contract deliberately has no generic `name: string` or
+arbitrary-property escape hatch. The concrete adapter lives in
+`packages/libs/posthog-node`; it owns all `posthog-node`,
+`@posthog/mcp`, and MCP SDK imports.
 
-PostHog's official MCP instrumentation supplies protocol-native events
-for initialisation, tool listing, and tool calls. The researched
-package baseline does not intercept resource reads. Oak adopts the
-first-party wrapper for the three proven operations and observes
-authenticated resource reads by wrapping the server-owned resource
-callbacks. A dependency upgrade does not automatically expand this
-closed event surface. The app currently serves no MCP prompts under
+The adapter decorates the public MCP SDK `Transport` passed to
+`server.connect`. It observes the original JSON-RPC request and
+response without replacing either and maps only `initialize`,
+`tools/list`, and `tools/call` to PostHog's official manual
+`PostHogMCP.captureInitialize`, `captureToolsList`, and
+`captureToolCall` methods. The application retains its concrete
+Streamable HTTP transport for `handleRequest`; analytics never needs
+that private or transport-specific operation. The package's automatic
+high-level wrapper is rejected because it removes legitimate `context`
+and `conversation_id` tool-call arguments before dispatch. Its
+low-level wrapper is rejected because it removes legal `nextCursor`
+and top-level `_meta` when it reconstructs `tools/list` responses.
+
+The researched package baseline does not observe resource reads. Oak
+continues to observe authenticated resource reads by wrapping the
+server-owned resource callbacks. A dependency upgrade does not
+automatically expand this closed event surface. The app currently
+serves no MCP prompts under
 [ADR-123](../../../docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md),
 so prompt events are not part of this release.
 
-The Oak boundary remains authoritative. It reconstructs every
-outgoing event from an exact allowlist, removes content-bearing and
-diagnostic fields, and drops unknown shapes. PostHog's automatic
-sanitiser is defence in depth, not the privacy boundary.
+The Oak boundary remains authoritative. The observer constructs only
+closed allowlisted facts, passes no request parameters, response
+bodies, errors, or free text to the vendor API, and discards the raw
+verified principal after deriving the destination-scoped pseudonym.
+The final client policy reconstructs every outgoing event from the
+exact allowlist and drops unknown shapes. PostHog's sanitiser is
+defence in depth, not the privacy boundary.
 
 The verified authentication principal is projected into a versioned,
 destination- and environment-scoped keyed pseudonym. Direct
@@ -100,16 +115,27 @@ call-level bridge requires a separately approved purpose, identifier,
 access boundary, and delivery plan. No stable person identifier is
 shared between the two providers.
 
-One MCP-dedicated PostHog client owns automatic and Oak-authored MCP
-events. The installed official instrumentation may label that client
-with its own package name and version, which is accurate provenance
-for this bounded event estate. The adapter installs a synchronous
-instrumentation-level policy and a universal synchronous client-level
-final policy; the latter reconstructs every outbound event. Vercel's
-`waitUntil` is injected into the module-scoped client so the Node SDK
-performs its bounded debounced flush after the response without
-depending on process lifetime. A client is not created or shut down
-per request.
+One MCP-dedicated `PostHogMCP` client owns manually constructed and
+Oak-authored MCP events. The installed official package may label that
+client with its own package name and version, which is accurate
+provenance for this bounded event estate. The adapter installs a
+closed synchronous transport projection and a universal synchronous
+client-level final policy; the latter reconstructs every outbound
+event. Vercel's `waitUntil` is injected into the module-scoped client
+so the Node SDK performs its bounded debounced flush after the response
+without depending on process lifetime. A client is not created or
+shut down per request.
+
+## Current execution state
+
+The closed sink selection, keyed actor projection, outbound policy,
+delivery primitives, provider-neutral transport-observer port, manual
+PostHog MCP adapter, and package-level protocol/final-wire suites are
+implemented and under draft review. The superseded high-level wrapper
+implementation was rejected by protocol-fidelity review and is not
+accepted evidence. Application composition, application-level on/off
+wire equivalence, authenticated resource registration, and the
+complete affected-estate and built-artefact proof remain incomplete.
 
 ## Relationship to adjacent plans
 
@@ -147,9 +173,9 @@ This is the complete event surface for MCP-63:
 
 | Observed MCP operation | Stored event | Producer | Actor rule |
 | --- | --- | --- | --- |
-| `initialize` | `$mcp_initialize` | `@posthog/mcp` | authenticated only |
-| `tools/list` | `$mcp_tools_list` | `@posthog/mcp` | authenticated only |
-| `tools/call` | `$mcp_tool_call` | `@posthog/mcp` | authenticated only |
+| successful `initialize` | `$mcp_initialize` | Oak transport observer → `PostHogMCP.captureInitialize` | authenticated only |
+| `tools/list` | `$mcp_tools_list` | Oak transport observer → `PostHogMCP.captureToolsList` | authenticated only |
+| `tools/call` | `$mcp_tool_call` | Oak transport observer → `PostHogMCP.captureToolCall` | authenticated only |
 | `resources/read` | `$mcp_resource_read` | Oak resource-callback wrapper | authenticated only |
 
 The app's zero-prompt surface produces no prompt event. `resources/list`,
@@ -188,25 +214,25 @@ export interface ProductAnalyticsSink {
   ): void;
 }
 
-export interface McpServerInstrumenter<TServer> {
-  instrument(server: TServer): void;
+export interface McpTransportObserver<TTransport> {
+  observe(transport: TTransport): TTransport;
 }
 
 export type ProductAnalyticsCloseError = {
   readonly kind: 'product_analytics_close_failed';
 };
 
-type ProductAnalyticsRuntimeCapabilities<TServer> = {
+type ProductAnalyticsRuntimeCapabilities<TTransport> = {
   readonly sink: ProductAnalyticsSink;
-  readonly instrumenter: McpServerInstrumenter<TServer>;
+  readonly transportObserver: McpTransportObserver<TTransport>;
   close(): Promise<Result<void, ProductAnalyticsCloseError>>;
 };
 
-export type ProductAnalyticsRuntime<TServer> =
-  | (ProductAnalyticsRuntimeCapabilities<TServer> & {
+export type ProductAnalyticsRuntime<TTransport> =
+  | (ProductAnalyticsRuntimeCapabilities<TTransport> & {
       readonly mode: 'off';
     })
-  | (ProductAnalyticsRuntimeCapabilities<TServer> & {
+  | (ProductAnalyticsRuntimeCapabilities<TTransport> & {
       readonly mode: 'posthog';
     });
 ```
@@ -216,18 +242,19 @@ There is no generic event name and no arbitrary property record.
 emission site; provider selection remains a composition-root concern.
 `capture` is observational and does not throw into the caller.
 The app receives
-`McpServerInstrumenter<McpServer>` as a second closed capability; its
-PostHog adapter maps the installed official instrumentation API to the
-Oak behaviour contract below and invokes it exactly once, without
-exposing either dependency to the app.
+`McpTransportObserver<Transport>` as a second closed capability. Its
+PostHog adapter maps the installed official manual MCP API to the Oak
+behaviour contract below, without exposing the vendor client to the
+app. The observer returns the transport passed to `server.connect`;
+the app retains the original concrete transport for `handleRequest`.
 
 `ProductAnalyticsRuntime.close()` is the exact, non-throwing lifecycle
-boundary. `mode: 'off'` supplies inert sink and instrumenter
-capabilities and an immediate successful close result; it reads no
-PostHog configuration and creates no client. `mode: 'posthog'` maps
-client shutdown failure to the fixed content-free error kind above.
-The process-level composition owner passes only `sink` and
-`instrumenter` into request handling.
+boundary. `mode: 'off'` supplies an inert sink and a transport observer
+that returns the exact input reference, plus an immediate successful
+close result; it reads no PostHog configuration and creates no client.
+`mode: 'posthog'` maps client shutdown failure to the fixed
+content-free error kind above. The process-level composition owner
+passes only `sink` and `transportObserver` into request handling.
 
 `verifiedActorId` is separate protected capture context, not an event
 property. It is accepted only from the validated
@@ -245,6 +272,36 @@ the timer immediately before invoking the original callback, records
 before rethrowing the same error, and never reads the resource result.
 The adapter validates the name against the live served-surface
 resource set. An unknown name drops the event.
+
+The transport observer receives each inbound JSON-RPC message and its
+original `MessageExtraInfo`. For an authenticated in-scope request it
+derives the actor pseudonym synchronously from `authInfo`, retains only
+the closed operation facts and start time in a map keyed by the exact
+string or number request identifier, and then forwards the same
+message and metadata. Notifications, unsupported methods, and requests
+without valid authenticated identity are forwarded without state or
+capture.
+
+When the matching outbound response reaches `send`, the observer
+removes the pending state before capture, derives only the applicable
+allowlisted response facts, invokes the matching official manual
+capture method, and calls the delegate with the exact message and
+options objects. `send` is not declared `async`: it returns the
+delegate's exact promise. For a successful tool list, only canonical
+served-tool names are read from `result.tools`; pagination and
+top-level metadata remain untouched. For a tool call, only JSON-RPC
+error presence or `result.isError === true` determines the bounded
+outcome. For successful initialisation, the negotiated protocol
+version in the result is preferred over the requested version. No
+request parameter, response body, error object, or free-text field is
+retained or passed to PostHog.
+
+Observation, projection, and capture failures are contained before
+delegation and emit only the fixed content-free operational signal
+specified below. Concurrent request lifetimes remain isolated by
+request identifier. The observer delegates `start`, `close`, callback
+registration, session access, and protocol-version notification
+without changing their public behaviour.
 
 ### Sink-axis and registry shape
 
@@ -288,7 +345,7 @@ parsed selection:
 
 - the existing diagnostic `SinkRegistry`, keyed only by diagnostic sink
   kinds such as `sentry` and `file`; and
-- one required `ProductAnalyticsRuntime<TServer>` slot: `mode: 'posthog'`
+- one required `ProductAnalyticsRuntime<Transport>` slot: `mode: 'posthog'`
   when the same selection contains `posthog`, otherwise the exact inert
   `mode: 'off'` runtime described above.
 
@@ -378,9 +435,9 @@ Event-specific properties are:
 | `$mcp_resource_read` | `$mcp_resource_name`, `$mcp_duration_ms`, `$mcp_is_error` | none |
 
 `oak_client_family` is the closed union `chatgpt | claude | other`.
-The per-invocation projection stage maps only the current
-`initialize.params.clientInfo.name` before the package can recover
-session metadata. After ASCII lower-casing and trimming, values
+The transport observer maps only the current
+`initialize.params.clientInfo.name` while processing that request.
+After ASCII lower-casing and trimming, values
 beginning with `chatgpt` followed by end, space, slash, or hyphen map
 to `chatgpt`; the equivalent `claude` prefix maps to `claude`; every
 other value maps to `other`. Raw client names, the package's
@@ -417,16 +474,17 @@ error types or messages, exception fields, arbitrary correlation
 values, request IDs, headers, IP, GeoIP, `$groups`, `$set`,
 `$set_once`, `$unset`, and unknown properties.
 
-The researched automatic wrapper has an identity gap: its identity
-path runs for `initialize` and `tools/call`, but not `tools/list`. Oak
-therefore never relies on that path. The synchronous per-invocation
-projection derives the actor value for all three automatic operations
-and places it in the private intermediate field
-`__oak_posthog_distinct_id`. The instrumentation-level policy requires
-that field, moves its validated value to top-level `distinct_id`,
-removes the marker and the package's profileless flag, and
-reconstructs the approved row. Neither the marker nor the
-package-generated session identity can reach the Node client.
+For every manual capture call, the observer passes the derived actor
+through `distinctId` and supplies only the fixed Oak server, release,
+environment, and applicable client-family properties needed by the
+final policy. It never supplies `sessionId`, `setProperties`, `groups`,
+request parameters, responses, errors, descriptions, intent, or
+arbitrary caller properties. The official API contributes only its
+canonical event name and the operation-specific name, duration,
+outcome, listed-name, or negotiated-protocol fact. The final policy
+then independently reconstructs the approved row. Package-generated
+session identity cannot reach the Node client because no automatic
+wrapper or package session mechanism participates.
 
 ### Keyed actor identity and rotation
 
@@ -495,7 +553,7 @@ Secrets are consumed at bootstrap into the adapter closure. They are
 omitted from the handler-facing `RuntimeConfig.env` and never enter
 `handlerOptions`, MCP request context, logs, errors, Sentry, or a
 serialisable generic config object. Handler code receives only the
-closed sink and instrumenter capabilities.
+closed sink and transport-observer capabilities.
 
 Only the active projection is emitted. Rotation adds a key-ring entry
 and changes the active ID atomically. The pure deletion-derivation
@@ -557,35 +615,34 @@ Identity-projection and unexpected policy failures emit only
 drops emit no operational signal. No signal forwards the SDK error
 message, event, pseudonym, principal, key ID, or credential.
 
-The adapter maps the installed official instrumentation API to these
-required behaviours for every fresh MCP server:
+The adapter maps the public MCP `Transport` contract and installed
+official manual MCP API to these required behaviours for every fresh
+request:
 
 | Concern | Required behaviour |
 | --- | --- |
-| Missing operations | Do not report them |
-| Conversation continuity | Disable the agent-echo conversation identifier |
-| Exceptions and context | Disable exception autocapture and context capture |
-| Identity hook | Do not use the package identify path |
-| Pre-capture policy | Apply `synchronousMcpEventPolicy` |
-| Per-request projection | Apply `projectVerifiedIdentityAndRelease` |
+| Protocol seam | Decorate only the public `Transport`; do not read or replace private server handlers |
+| Operation set | Map only `initialize`, `tools/list`, and `tools/call` requests to their official manual capture methods |
+| Missing operations | Forward them unchanged and do not report them |
+| Content | Never pass parameters, responses, errors, descriptions, intent, free text, headers, or tokens |
+| Identity | Derive one pseudonym from the request's verified `authInfo`; do not use a package identify hook |
+| Continuity | Keep pending closed facts only by exact JSON-RPC request ID; do not use package sessions or conversations |
+| Delegation | Preserve callback order and exact message, metadata, options, result/error identity, and send-promise identity |
+| Failure | Emit only `posthog_event_policy_failed` and continue the unchanged protocol path |
 
-The official instrumenter is called exactly once. `intentFallback`,
-custom capture, group identity, and a package logger are not configured.
+The observer calls only `captureInitialize`, `captureToolsList`, or
+`captureToolCall`. `sessionId`, `setProperties`, groups, parameters,
+responses, errors, descriptions, intent, package preparation helpers,
+custom capture, and a package logger are not configured or supplied.
+Exception autocapture remains disabled.
 
-Both policy functions are synchronous, pure reconstruction functions.
-The package policy handles the three automatic events; the client
-policy independently revalidates every automatic and Oak-authored
-event. Unknown events and properties are dropped at both applicable
-boundaries.
-
-`projectVerifiedIdentityAndRelease` returns only
-`__oak_posthog_distinct_id`, `oak_environment`, `oak_release`, and,
-for the current initialise request, the already-normalised
-`oak_client_family`. It derives the identity marker from that
-invocation's validated `extra.authInfo` and the client family directly
-from that invocation's request. It stores neither on the shared client
-or in module state. Overlapping requests therefore cannot exchange
-actor identity or client metadata.
+The observer projection and final client policy are synchronous, pure
+reconstruction functions. The projection handles only the three
+transport-observed operations; the client policy independently
+revalidates every manual and Oak-authored event. Unknown events and
+properties are dropped at the final boundary. The observer stores no
+actor, client metadata, or operation state on the shared client, so
+overlapping request lifetimes cannot exchange them.
 
 ### Composition and lifecycle order
 
@@ -594,7 +651,7 @@ Application bootstrap, once per function isolate:
 1. validate the complete selected configuration;
 2. construct the dedicated client and its final policy;
 3. attach the one bounded client-error observer; and
-4. close the product-analytics sink and MCP-instrumenter
+4. close the product-analytics sink and MCP transport-observer
    capabilities over that client; and
 5. discard the raw selected PostHog configuration before constructing
    handler-facing runtime options.
@@ -606,16 +663,15 @@ For each MCP HTTP request:
    recordOutputs: false })`;
 3. register tools and resources, passing resources through the
    analytics-aware `ResourceRegistrar` facade;
-4. call the injected
-   `McpServerInstrumenter<McpServer>.instrument(server)` once, after
-   registration; its adapter maps the installed official API to the
-   semantic instrumentation contract above;
-5. construct a fresh Streamable HTTP transport with server-issued
+4. construct a fresh Streamable HTTP transport with server-issued
    protocol sessions disabled, mapping that behaviour through the
    installed SDK API;
-6. connect and handle the request through the existing per-request
-   lifecycle; and
-7. close only the MCP server and transport on response close.
+5. pass that transport through
+   `McpTransportObserver<Transport>.observe(transport)` and connect the
+   fresh server to the returned public transport;
+6. handle the HTTP request through the retained concrete transport;
+   and
+7. close only the MCP server and concrete transport on response close.
 
 The shared PostHog client is never shut down or flushed per request.
 Vercel `waitUntil` owns queued post-response delivery. Local and test
@@ -639,8 +695,8 @@ binding, replay integrity, and identical privacy reconstruction.
 ### Delivery and failure semantics
 
 Each authenticated in-scope operation constructs and enqueues at most
-one accepted event. The package-generated `$identify` event is
-dropped, exception siblings are disabled and dropped, and MCP-63
+one accepted event. The manual API path emits no standalone
+`$identify`; exception siblings are disabled and dropped, and MCP-63
 introduces no generic HTTP-completion event.
 
 The event UUID is assigned once before the Node SDK's outbound
@@ -651,13 +707,14 @@ with a new event UUID.
 
 `waitUntil` is bounded best effort, not a durable outbox or proof of
 ingestion. Terminal delivery failure may result in no stored row. A
-configuration error stops bootstrap. Identity, policy, capture, or
-delivery failure drops only the analytical event, emits at most the
-fixed non-recursive signal defined above, and never changes, delays,
-or annotates the MCP response. Oak leaves the package logger unset;
-package-contract tests and the required live acceptance event detect
-instrumentation setup failure without making log content part of the
-contract.
+configuration error stops bootstrap. Identity, policy, observation,
+capture, or delivery failure drops only the analytical event, emits at
+most the fixed non-recursive signal defined above, and never changes,
+delays, or annotates the MCP response. Transport delegation returns the
+delegate's exact promise even after capture fails. Oak leaves the
+package logger unset; package-contract tests and the required live
+acceptance event detect manual API setup failure without making log
+content part of the contract.
 
 ### Dependency currency and compatibility gate
 
@@ -674,15 +731,15 @@ for a commit rather than the supported-version contract.
 The shipped application resolves one interoperable runtime copy of
 each package across this integration boundary. Every dependency
 upgrade reruns the operation, payload, identity, person-processing,
-session-header, retry, lifecycle, client-mutation, protocol-equivalence,
-and final-wire contract suites against a lockfile rebuilt from the
-manifest declarations. A failing upgrade is repaired inside the
-adapter while preserving these contracts; tests may be maintained or
-strengthened, never weakened to accept vendor drift. A version change
-that satisfies those contracts is routine maintenance and does not
-return this plan to planning. Only an intended outcome or privacy
-change, or a vendor change that makes this contract impossible to
-preserve, reopens design.
+session-header, retry, lifecycle, transport-delegation,
+protocol-equivalence, manual-capture-call, and final-wire contract
+suites against a lockfile rebuilt from the manifest declarations. A
+failing upgrade is repaired inside the adapter while preserving these
+contracts; tests may be maintained or strengthened, never weakened to
+accept vendor drift. A version change that satisfies those contracts
+is routine maintenance and does not return this plan to planning. Only
+an intended outcome or privacy change, or a vendor change that makes
+this contract impossible to preserve, reopens design.
 
 ## First-principles checks
 
@@ -708,31 +765,34 @@ evidence on MCP-63.
 
 1. **The shared capability is closed and provider-neutral.** The app
    composition root receives one discriminated
-   `ProductAnalyticsRuntime<McpServer>` and passes only its closed sink
-   and instrumenter capabilities into request handling; resource-emission
-   sites receive only `ProductAnalyticsSink`. Off mode is inert and
-   requires no PostHog configuration. Application and domain packages
-   contain no PostHog import or arbitrary capture escape hatch. Proof
+   `ProductAnalyticsRuntime<Transport>` and passes only its closed sink
+   and transport-observer capabilities into request handling;
+   resource-emission sites receive only `ProductAnalyticsSink`. Off
+   mode is inert, returns the exact transport reference, and requires
+   no PostHog configuration. Application and domain packages contain
+   no PostHog import or arbitrary capture escape hatch. Proof
    (`repo-safe`): type tests, package-boundary lint, selection-axis,
    diagnostic-registry, production-locality truth-table, on/off
    product-runtime tests, and an app composition integration test.
-2. **The four-operation matrix is exact.** Authenticated initialise,
-   tool-list, tool-call, and resource-read paths each enqueue at most
-   one approved event. Prompt, resource-list, unsupported-method,
-   public-resource, package-identify, exception-sibling, and generic
-   HTTP-completion paths enqueue none. Proof (`repo-safe`): dependency
-   wrapper contract tests plus real `McpServer` resource-callback
+2. **The four-operation matrix is exact.** Authenticated successful
+   initialise, tool-list, tool-call, and resource-read paths each
+   enqueue at most one approved event. Prompt, resource-list,
+   unsupported-method, notification, unauthenticated, package-identify,
+   exception-sibling, and generic HTTP-completion paths enqueue none.
+   Proof (`repo-safe`): manual-API collaborator tests, public-transport
+   integration tests, and real `McpServer` resource-callback
    integration tests.
 3. **The final row is content-free and closed.** Hostile arguments,
    responses, prompts, resource contents, direct identifiers, client
    free text, errors, headers, session/conversation values, groups,
-   person properties, and unknown fields cannot survive either
-   policy boundary. Tool/resource labels come only from canonical
-   registries. Both providers receive the same canonical release and
-   environment projection when enabled together. Proof
-   (`repo-safe`): release truth-table and coexistence tests,
-   event-policy unit tests, plus a loopback capture test asserting the
-   actual HTTP payload after SDK metadata is added.
+   person properties, and unknown fields cannot survive transport
+   projection or the final policy boundary. Tool/resource labels come
+   only from canonical registries. Both providers receive the same
+   canonical release and environment projection when enabled
+   together. Proof (`repo-safe`): hostile protocol-message tests,
+   release truth-table and coexistence tests, event-policy unit tests,
+   plus a loopback capture test asserting the actual HTTP payload
+   after SDK metadata is added.
 4. **Repeat-use identity is narrow, rotatable, and
    deletion-addressable.** The golden vector passes; same input is
    stable; destination, environment, version, key ID, key, or
@@ -744,26 +804,32 @@ evidence on MCP-63.
    (`owner-held`): the controlled event resolves one minimal Person
    with no Oak-supplied person properties.
 5. **Session and conversation claims are absent without changing the
-   protocol.** Tool schemas and results are unchanged; events contain
-   no `$session_id` or conversation value; a forged package token
-   cannot supply client or protocol facts. Every protocol version in
-   the installed SDK's authoritative supported set is negotiated
-   through a real initialise handshake and passes the closed event,
-   final-wire, session, and protocol-equivalence assertions. Shipped
-   SSE responses have identical status, headers, and body with
-   analytics on or off and no `MCP-Session-Id`. Proof (`repo-safe`):
-   exhaustive supported-version handshake tests, fresh-instance HTTP
-   E2E tests for missing, replayed, and forged tokens, plus
-   schema/result equivalence tests.
+   protocol.** Tool schemas and every legal result field are unchanged;
+   events contain no `$session_id` or conversation value; a forged
+   package token cannot supply client or protocol facts. Every
+   protocol version in the installed SDK's authoritative supported set
+   is negotiated through a real initialise handshake and passes the
+   closed event, final-wire, session, and protocol-equivalence
+   assertions. Shipped SSE responses have identical status, headers,
+   and body with analytics on or off and no `MCP-Session-Id`. Proof
+   (`repo-safe`): exhaustive supported-version handshake tests,
+   fresh-instance HTTP E2E tests for missing, replayed, and forged
+   tokens, tool-list pagination and top-level `_meta` preservation,
+   and schema/result/error identity tests.
 6. **Analytics remains observational and coexists with Sentry.**
-   Capture success, policy drop, identity failure, queue failure, and
-   terminal delivery failure leave MCP results byte-equivalent.
-   Oak constructs and enqueues at most one operation fact; SDK retries
-   carry the same UUID. Existing Sentry error and trace behaviour
-   remains intact; Sentry inputs/outputs remain explicitly disabled;
-   operational signals contain only the three fixed error kinds.
-   Proof (`repo-safe`): composition, failure-isolation, concurrency,
-   and coexistence integration tests.
+   Capture success, policy drop, identity failure, observation failure,
+   capture throw, queue failure, and terminal delivery failure leave
+   MCP traffic byte-equivalent. The observer preserves the exact
+   inbound message and metadata, outbound message and options, result
+   or error identity, and delegate send promise. Overlapping request
+   identifiers and callback-registration order cannot exchange or lose
+   state. Oak constructs and enqueues at most one operation fact; SDK
+   retries carry the same UUID. Existing Sentry error and trace
+   behaviour remains intact; Sentry inputs/outputs remain explicitly
+   disabled; operational signals contain only the three fixed error
+   kinds. Proof (`repo-safe`): composition, exact-delegation,
+   failure-isolation, concurrent-request, registration-order, and
+   coexistence integration tests.
 7. **Serverless delivery matches the bounded contract.** One
    module-scoped client receives `waitUntil`; each enqueue schedules
    the bounded debounced flush; SDK retries preserve the UUID; no
@@ -779,9 +845,11 @@ evidence on MCP-63.
    resolved compatible versions and contain one interoperable runtime
    copy across the integration boundary. A clean lockfile rebuild from
    the manifest ranges and every upgrade must pass the complete
-   package-contract probe matrix; no test asserts a permanent
-   package-version literal. Proof (`repo-safe`): dependency-graph,
-   clean-install, upgrade-contract, and built-artefact tests.
+   package-contract probe matrix, including the official manual method
+   signatures and public MCP transport contract; no test asserts a
+   permanent package-version literal. Proof (`repo-safe`):
+   dependency-graph, clean-install, upgrade-contract, and
+   built-artefact tests.
 9. **A live invocation proves the useful path.** One authenticated
    controlled tool call produces the expected event and minimal
    Person in the approved EU project, with no excluded property.
@@ -790,20 +858,19 @@ evidence on MCP-63.
 
 ## Todos
 
-- Land the closed provider-neutral port, parallel product-analytics
-  slot, conditional key-ring configuration, and compatible current
-  dependencies as one TDD slice, within the default two-review-round
-  budget.
-- Land HMAC projection, rotation/deletion derivation, the four-event
-  reconstruction policy, minimal-Person behaviour, and real-client
-  final-wire/retry proofs as one TDD slice, within the default
-  two-review-round budget.
-- Land the one-client Vercel lifecycle and official instrumentation
-  adapter for initialise, tool-list, and tool-call as one TDD slice,
-  within the default two-review-round budget.
-- Land the authenticated resource registrar, app composition order,
-  Sentry coexistence, protocol equivalence, and built-artefact proof
-  as one TDD slice, within the default two-review-round budget.
+- Wire the provider-neutral public-transport observer into application
+  composition while retaining the concrete Streamable HTTP transport
+  for `handleRequest`.
+- Complete application-level analytics-on/off wire equivalence and
+  request-context/lifecycle proof around the package-level
+  exact-delegation, pagination, metadata, identity, concurrency,
+  callback-order, unsupported-operation, and capture-failure suites.
+- Complete the authenticated resource registrar, application lifecycle,
+  Sentry coexistence, final-wire, retry, protocol-equivalence, and
+  built-artefact proofs.
+- Run the full affected estate against the final integrated change and
+  resolve the required code, MCP, architecture, documentation, and
+  onboarding reviews.
 - Record the controlled live-project acceptance evidence on MCP-63.
 
 ## Out of scope

@@ -48,7 +48,7 @@ export {
 } from './sink-registry.js';
 export {
   createOffProductAnalyticsRuntime,
-  type McpServerInstrumenter,
+  type McpTransportObserver,
   type OffProductAnalyticsRuntime,
   type ProductAnalyticsCaptureContext,
   type ProductAnalyticsCloseError,
