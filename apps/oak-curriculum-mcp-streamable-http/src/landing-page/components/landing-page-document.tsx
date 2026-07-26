@@ -27,11 +27,27 @@
 
 import type { JSX } from 'react';
 
-import { OAK_DS_BASE, OAK_MINT } from './design-system-refs.js';
-import { ConnectSection, DocumentationCard, PageHero } from './page-sections.js';
+import { resolveOrigin } from '../resolve-canonical-url.js';
+import {
+  OAK_DS_BASE,
+  OAK_MINT,
+  OAK_SITE_NAME,
+  SHARE_IMAGE_PATH,
+  SHARE_IMAGE_SIZE,
+} from './design-system-refs.js';
+import { ConnectSection, DocumentationCard, PAGE_DESCRIPTION, PageHero } from './page-sections.js';
 import { ResourcesSection } from './resources-section.js';
 import { SiteFooter, SiteMasthead } from './site-chrome.js';
 import { ToolsSection } from './tools-section.js';
+
+/**
+ * The page's title, shared by `<title>` and the share card.
+ *
+ * @remarks
+ * One constant because a browser tab and a shared link showing different names
+ * for the same page is a defect nobody notices until someone shares it.
+ */
+const PAGE_TITLE = 'Oak Curriculum MCP (HTTP)';
 
 export interface LandingPageDocumentProps {
   /** Deployment host used to derive the MCP endpoint URL. */
@@ -42,11 +58,49 @@ export interface LandingPageDocumentProps {
   readonly themeSelectorEnabled?: boolean;
 }
 
+/**
+ * Share and search metadata.
+ *
+ * @remarks
+ * The tag set follows the main Oak website's — title, description, site name,
+ * locale, type, url, image, and a Twitter card. The machinery does not: there,
+ * each field is its own optional public env var defaulting to null, and the
+ * image URL is string-built from one of them, so an unset variable yields a
+ * card pointing at `null/...`. Here every value is either the owner's copy or
+ * derived from the deployment, and there is nothing to leave unset.
+ *
+ * `summary`, not `summary_large_image`: a large card wants purpose-made
+ * 1200x630 artwork, and this page has a square logo.
+ */
+function ShareMetadata({ siteOrigin }: { readonly siteOrigin: string }): JSX.Element {
+  return (
+    <>
+      <meta name="description" content={PAGE_DESCRIPTION} />
+      <link rel="canonical" href={siteOrigin} />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content={OAK_SITE_NAME} />
+      <meta property="og:locale" content="en_GB" />
+      <meta property="og:title" content={PAGE_TITLE} />
+      <meta property="og:description" content={PAGE_DESCRIPTION} />
+      <meta property="og:url" content={siteOrigin} />
+      <meta property="og:image" content={`${siteOrigin}${SHARE_IMAGE_PATH}`} />
+      <meta property="og:image:width" content={String(SHARE_IMAGE_SIZE)} />
+      <meta property="og:image:height" content={String(SHARE_IMAGE_SIZE)} />
+      <meta property="og:image:alt" content={OAK_SITE_NAME} />
+      <meta name="twitter:card" content="summary" />
+    </>
+  );
+}
+
 export function LandingPageDocument({
   vercelHost,
   appVersion,
   themeSelectorEnabled = false,
 }: LandingPageDocumentProps): JSX.Element {
+  // Named rather than `origin`, which would shadow the browser global and read
+  // as if this file had a document to ask.
+  const siteOrigin = resolveOrigin(vercelHost);
+
   return (
     // Explicit rather than relying on the stylesheet's default: an explicit
     // choice also beats a polarity-flipped brand default, so the page is
@@ -55,7 +109,7 @@ export function LandingPageDocument({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Oak Curriculum MCP (HTTP)</title>
+        <title>{PAGE_TITLE}</title>
         {/* `--oak-mint`, the hero band's fill. A <meta> cannot take var(), so
             this is the one literal on the page — but its provenance is not
             guesswork: it is the design system's `colour.mint` DTCG token, and
@@ -64,6 +118,7 @@ export function LandingPageDocument({
             pair would need `media` variants, which is work for the change that
             makes the other themes reachable. */}
         <meta name="theme-color" content={OAK_MINT} />
+        <ShareMetadata siteOrigin={siteOrigin} />
         {appVersion !== undefined && <meta name="app-version" content={appVersion} />}
         <link rel="icon" href="/favicons/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />

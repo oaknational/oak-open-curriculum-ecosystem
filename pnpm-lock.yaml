@@ -284,6 +284,9 @@ importers:
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
         version: link:../../packages/core/oak-eslint
+      '@oaknational/oak-design-assets':
+        specifier: workspace:*
+        version: link:../../packages/design/oak-design-assets
       '@oaknational/oak-design-system':
         specifier: workspace:*
         version: link:../../packages/design/oak-design-system
@@ -908,6 +911,8 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(happy-dom@20.11.1)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+
+  packages/design/oak-design-assets: {}
 
   packages/design/oak-design-ink:
     dependencies:

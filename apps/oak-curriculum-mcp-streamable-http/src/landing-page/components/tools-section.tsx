@@ -81,7 +81,7 @@ function sortAggregatedTools(tools: UniversalToolListEntry[]): UniversalToolList
 }
 
 /** The live universal tools, unsorted. */
-export function servedTools(): UniversalToolListEntry[] {
+function servedTools(): UniversalToolListEntry[] {
   return listUniversalTools(generatedToolRegistry).filter((tool) =>
     isUniversalToolLive(SERVED_SURFACE, tool.name),
   );

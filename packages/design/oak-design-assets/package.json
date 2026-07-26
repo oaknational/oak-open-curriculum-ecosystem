@@ -1,0 +1,10 @@
+{
+  "name": "@oaknational/oak-design-assets",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Oak brand raster artwork — the assets that must be files rather than tokens or CSS, held once for every surface that needs them.",
+  "license": "SEE LICENSE IN LICENCES.md",
+  "exports": {
+    "./assets/*": "./assets/*"
+  }
+}

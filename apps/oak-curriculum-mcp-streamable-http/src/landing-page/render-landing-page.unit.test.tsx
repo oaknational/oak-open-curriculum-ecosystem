@@ -9,6 +9,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
+import { PAGE_DESCRIPTION } from './components/page-sections.js';
 import { renderLandingPageHtml } from './render-landing-page.js';
 import { THEME_OPTIONS } from './components/site-chrome.js';
 
@@ -139,6 +140,50 @@ describe('renderLandingPageHtml', () => {
       // Below ~500px the snippet is a scroll container. Without a tabindex,
       // keyboard users outside Chromium cannot scroll it to read the endpoint.
       expect(html).toMatch(/<pre[^>]*tabindex="0"/);
+    });
+  });
+
+  describe('share and search metadata', () => {
+    it('describes the page with the same words the page shows', () => {
+      // The card is not a second piece of copy. <meta> cannot carry the link
+      // the visible sentence holds, so the words live twice — and this holds
+      // them equal. Change the hero wording without changing PAGE_DESCRIPTION
+      // and a shared link starts describing a page that no longer exists.
+      const hero = /<section data-region="hero"[\s\S]*?<\/section>/.exec(html)?.[0] ?? '';
+      const heroText = hero
+        .replaceAll(/<[^>]+>/g, '')
+        .replaceAll('&apos;', '\u2019')
+        .replaceAll('&#x27;', '\u2019')
+        .replaceAll(/\s+/g, ' ')
+        .trim();
+
+      expect(heroText).toContain(PAGE_DESCRIPTION);
+    });
+
+    it('gives crawlers absolute URLs derived from the deployment', () => {
+      // og:url and og:image are read with no page context, so a relative path
+      // is simply dropped and the card renders bare.
+      const deployed = renderLandingPageHtml({ vercelHost: 'mcp.example.test' });
+
+      expect(deployed).toContain('property="og:url" content="https://mcp.example.test"');
+      expect(deployed).toContain(
+        'property="og:image" content="https://mcp.example.test/oak-assets/assets/oak-national-academy-logo-512.png"',
+      );
+      expect(deployed).toContain('rel="canonical" href="https://mcp.example.test"');
+    });
+
+    it('names the page identically in the tab and in a shared link', () => {
+      const title = /<title>([^<]*)<\/title>/.exec(html)?.[1];
+
+      expect(title).toBeDefined();
+      expect(html).toContain(`property="og:title" content="${title ?? ''}"`);
+    });
+
+    it('declares a card the square logo can actually fill', () => {
+      // summary, not summary_large_image: the latter crops a 512 square badly.
+      expect(html).toContain('name="twitter:card" content="summary"');
+      expect(html).toContain('property="og:image:width" content="512"');
+      expect(html).toContain('property="og:image:height" content="512"');
     });
   });
 });

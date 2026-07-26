@@ -28,3 +28,24 @@ export const OAK_DS_BASE = '/oak-ds';
  * custom property. Equality with `dtcg/palette.json` is test-enforced.
  */
 export const OAK_MINT = '#bef2bd';
+
+/** The name Oak is known by, for the share card's site attribution. */
+export const OAK_SITE_NAME = 'Oak National Academy';
+
+/**
+ * The page's share-card image.
+ *
+ * @remarks
+ * Square, so the card is a `summary` rather than a `summary_large_image`. That
+ * is the whole reason it stays simple: a large card wants purpose-built
+ * 1200×630 artwork, and a square logo already exists.
+ *
+ * Served from `@oaknational/oak-design-assets` via the build's copy step, not
+ * vendored into this app. It used to sit in `public/` with no reference
+ * anywhere in the repo, next to a source comment claiming the app vendored no
+ * logo artwork.
+ */
+export const SHARE_IMAGE_PATH = '/oak-assets/assets/oak-national-academy-logo-512.png';
+
+/** Edge length of {@link SHARE_IMAGE_PATH}, declared for the card. */
+export const SHARE_IMAGE_SIZE = 512;

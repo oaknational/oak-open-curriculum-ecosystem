@@ -17,7 +17,7 @@ import { ALL_MCP_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools.
 import { isResourceLive, SERVED_SURFACE } from '../../served-surface/served-surface.js';
 
 /** The live resource rows, in inventory order. */
-export function servedResources(): readonly (typeof ALL_MCP_RESOURCES)[number][] {
+function servedResources(): readonly (typeof ALL_MCP_RESOURCES)[number][] {
   return ALL_MCP_RESOURCES.filter((resource) => isResourceLive(SERVED_SURFACE, resource.uri));
 }
 

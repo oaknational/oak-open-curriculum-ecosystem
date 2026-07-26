@@ -27,6 +27,22 @@ const OAK_API_OVERVIEW_URL =
 const WORKSPACE_GITHUB_URL =
   'https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http';
 
+/**
+ * The hero's explainer sentence as plain text, for the share card.
+ *
+ * @remarks
+ * Not a second piece of copy. `<meta>` cannot hold the link the visible
+ * sentence carries, so the same words exist here without it — and a test holds
+ * the rendered hero to this string, so the card cannot drift away from the page
+ * it describes. Editing the page's wording means editing this too, which is the
+ * point: the owner's copy stays the only copy, here as everywhere else.
+ */
+export const PAGE_DESCRIPTION =
+  'Designed for teachers, this service connects your AI assistant to Oak’s ' +
+  'high quality, free, fully sequenced and openly licensed curriculum ' +
+  'resources — thousands of lessons, units, and assets across subjects and ' +
+  'key stages.';
+
 /** Hero band: breadcrumbs, status tag, title, and the explainer sentence. */
 export function PageHero(): JSX.Element {
   return (

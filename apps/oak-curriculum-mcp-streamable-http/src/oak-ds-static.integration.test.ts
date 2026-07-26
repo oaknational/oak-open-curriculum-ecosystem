@@ -6,6 +6,8 @@ import { createApp } from './application.js';
 import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
 import { createFakeRateLimiterFactory } from './test-helpers/rate-limiter-fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
+import { SHARE_IMAGE_PATH } from './landing-page/components/design-system-refs.js';
+import { renderLandingPageHtml } from './landing-page/index.js';
 
 /**
  * The design system reaches the browser as ordinary static assets.
@@ -62,5 +64,33 @@ describe('Oak design system static serving', () => {
       .set('Host', 'localhost');
 
     expect(res.status).toBe(200);
+  });
+
+  it('serves every asset the rendered page references from /oak-ds or /oak-assets', async () => {
+    // The CSS closure test covers what the stylesheets reach. This covers the
+    // other half — assets named only in markup — by asking the page itself
+    // what it references, so a new one cannot be added without being served.
+    const html = renderLandingPageHtml({ themeSelectorEnabled: true });
+    const referenced = [
+      ...new Set([...html.matchAll(/"(\/oak-(?:ds|assets)\/[^"]+)"/g)].map((match) => match[1])),
+    ];
+
+    expect(referenced.length).toBeGreaterThan(0);
+
+    for (const assetPath of referenced) {
+      const res = await request(app)
+        .get(assetPath ?? '')
+        .set('Host', 'localhost');
+      expect(res.status, assetPath).toBe(200);
+    }
+  });
+
+  it('serves the share-card image at the exact path the card advertises', async () => {
+    // og:image is fetched by a crawler with no page context; a 404 here is a
+    // bare share card, and nothing on the page would look wrong.
+    const res = await request(app).get(SHARE_IMAGE_PATH).set('Host', 'localhost');
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('image/png');
   });
 });

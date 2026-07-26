@@ -3,3 +3,5 @@
 .generated/
 .widget-build/
 public/oak-ds/
+# Brand artwork copied from @oaknational/oak-design-assets at build time.
+public/oak-assets/

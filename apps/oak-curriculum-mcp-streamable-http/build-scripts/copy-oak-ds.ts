@@ -109,4 +109,50 @@ export async function copyOakDs(destRoot: string): Promise<void> {
       recursive: true,
     });
   }
+
+  await copyOakAssets(destRoot);
+}
+
+/** Where the brand-asset copy is published, relative to the served root. */
+export const OAK_ASSETS_PUBLIC_DIRNAME = 'oak-assets';
+
+/**
+ * Brand artwork the page needs as a file rather than through CSS.
+ *
+ * @remarks
+ * Just the share-card logo today. It lives in `@oaknational/oak-design-assets`
+ * rather than the design system because `og:image` is fetched by a crawler with
+ * no stylesheet and often no SVG support, so it has to be a raster at an
+ * absolute URL — a different kind of thing from the vector the masthead uses.
+ *
+ * Copied rather than vendored, for the reason the whole manifest exists: this
+ * file previously sat unreferenced in `public/`, while the app's own source
+ * claimed it vendored no logo artwork.
+ */
+export const OAK_ASSETS_MANIFEST = {
+  files: ['assets/oak-national-academy-logo-512.png'],
+} as const;
+
+/** Absolute path to the installed `@oaknational/oak-design-assets` root. */
+export function resolveOakAssetsPackageRoot(): string {
+  const require = createRequire(import.meta.url);
+  return path.dirname(
+    path.dirname(
+      require.resolve('@oaknational/oak-design-assets/assets/oak-national-academy-logo-512.png'),
+    ),
+  );
+}
+
+/** Copy the declared brand artwork into `<destRoot>/oak-assets/`. */
+export async function copyOakAssets(destRoot: string): Promise<void> {
+  const packageRoot = resolveOakAssetsPackageRoot();
+  const destination = path.join(destRoot, OAK_ASSETS_PUBLIC_DIRNAME);
+
+  await rm(destination, { recursive: true, force: true });
+
+  for (const relativePath of OAK_ASSETS_MANIFEST.files) {
+    const target = path.join(destination, relativePath);
+    await mkdir(path.dirname(target), { recursive: true });
+    await cp(path.join(packageRoot, relativePath), target);
+  }
 }

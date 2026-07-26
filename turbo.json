@@ -98,7 +98,10 @@
         // no build script, so ^build contributes no hash leg for it — without
         // these inputs a design-system edit replays a stale bundle.
         "$TURBO_ROOT$/packages/design/oak-design-system/**",
-        "!$TURBO_ROOT$/packages/design/oak-design-system/studio-source/**"
+        "!$TURBO_ROOT$/packages/design/oak-design-system/studio-source/**",
+        // Same reasoning for the brand artwork: copied at build time, no build
+        // script of its own, so nothing else contributes a hash leg for it.
+        "$TURBO_ROOT$/packages/design/oak-design-assets/**"
       ]
     },
     "@oaknational/oak-curriculum-mcp-streamable-http#test": {
@@ -116,7 +119,8 @@
         // design-system-only change must re-run them rather than replay a
         // stale green verdict.
         "$TURBO_ROOT$/packages/design/oak-design-system/**",
-        "!$TURBO_ROOT$/packages/design/oak-design-system/studio-source/**"
+        "!$TURBO_ROOT$/packages/design/oak-design-system/studio-source/**",
+        "$TURBO_ROOT$/packages/design/oak-design-assets/**"
       ]
     },
     "@oaknational/oak-curriculum-hub#build": {
