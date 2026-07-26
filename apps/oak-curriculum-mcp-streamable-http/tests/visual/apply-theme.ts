@@ -31,11 +31,11 @@ export async function applyTheme(page: Page, theme: string): Promise<void> {
     reducedMotion: 'reduce',
   });
   await page.evaluate((chosen) => {
-    document.documentElement.setAttribute('data-theme', chosen);
+    document.documentElement.dataset['theme'] = chosen;
   }, theme);
 
   const applied = await page.evaluate(() => ({
-    theme: document.documentElement.getAttribute('data-theme'),
+    theme: document.documentElement.dataset['theme'] ?? null,
     colorScheme: getComputedStyle(document.documentElement).colorScheme,
   }));
   expect(applied.theme, 'theme did not reach the document').toBe(theme);

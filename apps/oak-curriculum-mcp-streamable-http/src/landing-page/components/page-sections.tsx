@@ -28,20 +28,30 @@ const WORKSPACE_GITHUB_URL =
   'https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/apps/oak-curriculum-mcp-streamable-http';
 
 /**
- * The hero's explainer sentence as plain text, for the share card.
+ * The hero's explainer sentence — the single source for both the visible
+ * paragraph and the share card's description.
  *
  * @remarks
- * Not a second piece of copy. `<meta>` cannot hold the link the visible
- * sentence carries, so the same words exist here without it — and a test holds
- * the rendered hero to this string, so the card cannot drift away from the page
- * it describes. Editing the page's wording means editing this too, which is the
- * point: the owner's copy stays the only copy, here as everywhere else.
+ * The owner's copy, held once. `<meta>` cannot carry the link the visible
+ * sentence contains, so an earlier version kept the words twice and used a
+ * test to hold the copies equal. That test had to strip tags out of the
+ * rendered hero to compare them, which CodeQL correctly flagged as incomplete
+ * sanitisation — a regex tag-stripper is unsafe whatever it is pointed at.
+ *
+ * The duplication was the actual defect. The hero now composes this string
+ * around the link, so the visible sentence and the card's description cannot
+ * differ: they are the same characters.
  */
 export const PAGE_DESCRIPTION =
-  'Designed for teachers, this service connects your AI assistant to Oak’s ' +
+  "Designed for teachers, this service connects your AI assistant to Oak's " +
   'high quality, free, fully sequenced and openly licensed curriculum ' +
   'resources — thousands of lessons, units, and assets across subjects and ' +
   'key stages.';
+
+/** The words inside the hero sentence that link to Oak's API terms. */
+const TERMS_LINK_TEXT = 'openly licensed';
+
+const [heroBeforeLink = '', heroAfterLink = ''] = PAGE_DESCRIPTION.split(TERMS_LINK_TEXT);
 
 /** Hero band: breadcrumbs, status tag, title, and the explainer sentence. */
 export function PageHero(): JSX.Element {
@@ -60,18 +70,16 @@ export function PageHero(): JSX.Element {
           Oak Curriculum MCP
         </h1>
         <p className="oak-body-2 oak-prose">
-          Designed for teachers, this service connects your AI assistant to Oak&apos;s high quality,
-          free, fully sequenced and{' '}
+          {heroBeforeLink}
           <a
             className="oak-link"
             target="_blank"
             rel="noopener noreferrer"
             href={OAK_API_TERMS_URL}
           >
-            openly licensed
-          </a>{' '}
-          curriculum resources — thousands of lessons, units, and assets across subjects and key
-          stages.
+            {TERMS_LINK_TEXT}
+          </a>
+          {heroAfterLink}
         </p>
       </div>
     </section>

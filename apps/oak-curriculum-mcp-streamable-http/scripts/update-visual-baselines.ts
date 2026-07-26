@@ -33,6 +33,7 @@
  */
 
 import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
@@ -41,6 +42,33 @@ const CI_UBUNTU_CODENAME = 'noble';
 
 /** Port used inside the container. Matches `playwright.config.ts`. */
 const PORT = 3336;
+
+/**
+ * Standard install locations for the Docker CLI, most specific first.
+ *
+ * @remarks
+ * Resolved from a fixed list rather than found on `PATH`. A `PATH` entry that
+ * anyone can write to is an entry that can shadow `docker`, and this script
+ * hands the resulting binary a bind mount of the whole repository. Naming the
+ * locations also produces a better failure than "command not found" when
+ * Docker simply is not installed.
+ */
+const DOCKER_LOCATIONS = [
+  '/usr/local/bin/docker', // Docker Desktop, macOS Intel and Linux installs
+  '/opt/homebrew/bin/docker', // Homebrew on Apple Silicon
+  '/usr/bin/docker', // distro packages
+] as const;
+
+function resolveDockerBinary(): string {
+  const found = DOCKER_LOCATIONS.find((candidate) => existsSync(candidate));
+  if (found === undefined) {
+    throw new Error(
+      `Docker CLI not found. Looked in: ${DOCKER_LOCATIONS.join(', ')}. ` +
+        'Baselines must be generated in the CI-matching Linux image, so Docker is required.',
+    );
+  }
+  return found;
+}
 
 function playwrightVersion(): string {
   const require = createRequire(import.meta.url);
@@ -98,7 +126,7 @@ function main(): void {
   ].join('\n');
 
   const result = spawnSync(
-    'docker',
+    resolveDockerBinary(),
     [
       'run',
       '--rm',

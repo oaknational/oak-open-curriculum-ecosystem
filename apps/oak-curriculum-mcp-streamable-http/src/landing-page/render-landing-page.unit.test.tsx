@@ -13,6 +13,16 @@ import { PAGE_DESCRIPTION } from './components/page-sections.js';
 import { renderLandingPageHtml } from './render-landing-page.js';
 import { THEME_OPTIONS } from './components/site-chrome.js';
 
+/** React's escaping of text nodes, for comparing against rendered output. */
+function htmlEscape(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#x27;');
+}
+
 describe('renderLandingPageHtml', () => {
   const html = renderLandingPageHtml();
 
@@ -144,20 +154,33 @@ describe('renderLandingPageHtml', () => {
   });
 
   describe('share and search metadata', () => {
-    it('describes the page with the same words the page shows', () => {
-      // The card is not a second piece of copy. <meta> cannot carry the link
-      // the visible sentence holds, so the words live twice — and this holds
-      // them equal. Change the hero wording without changing PAGE_DESCRIPTION
-      // and a shared link starts describing a page that no longer exists.
-      const hero = /<section data-region="hero"[\s\S]*?<\/section>/.exec(html)?.[0] ?? '';
-      const heroText = hero
-        .replaceAll(/<[^>]+>/g, '')
-        .replaceAll('&apos;', '\u2019')
-        .replaceAll('&#x27;', '\u2019')
-        .replaceAll(/\s+/g, ' ')
-        .trim();
+    it('shows the description as the hero sentence, wrapped around the link', () => {
+      // The card's description and the visible sentence are one string: the
+      // hero composes it around the terms link rather than restating it. So
+      // the invariant is that the composition renders whole and in order —
+      // there is no second copy left to drift.
+      //
+      // An earlier version of this test stripped tags out of the hero with a
+      // regex so it could compare two copies. CodeQL flagged that as
+      // incomplete sanitisation and was right to: a regex tag-stripper is
+      // unsafe wherever it is pointed. Removing the duplication removed the
+      // need for it.
+      // Searched from the hero onward: the same words are in the <meta>
+      // description in the head, so an unscoped search finds those first.
+      const heroStart = html.indexOf('data-region="hero"');
+      const [before = '', after = ''] = PAGE_DESCRIPTION.split('openly licensed');
+      const beforePos = html.indexOf(htmlEscape(before), heroStart);
+      const linkPos = html.indexOf('>openly licensed<', heroStart);
+      const afterPos = html.indexOf(htmlEscape(after), linkPos);
 
-      expect(heroText).toContain(PAGE_DESCRIPTION);
+      expect(heroStart, 'hero section not rendered').toBeGreaterThan(-1);
+      expect(beforePos, 'hero opening not rendered').toBeGreaterThan(-1);
+      expect(linkPos, 'terms link not rendered').toBeGreaterThan(beforePos);
+      expect(afterPos, 'hero remainder not rendered').toBeGreaterThan(linkPos);
+    });
+
+    it('gives the card the same description the page displays', () => {
+      expect(html).toContain(`name="description" content="${htmlEscape(PAGE_DESCRIPTION)}"`);
     });
 
     it('gives crawlers absolute URLs derived from the deployment', () => {
