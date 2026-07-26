@@ -13,6 +13,7 @@ import type { Linter } from 'eslint';
 const LIB_PACKAGE_IMPORTS = [
   '@oaknational/env-resolution',
   '@oaknational/logger',
+  '@oaknational/posthog-node',
   '@oaknational/search-contracts',
   '@oaknational/sentry-node',
 ] as const;
@@ -66,6 +67,11 @@ function createDeepSubpathSpecifierPatterns(
     message,
   }));
 }
+
+const POSTHOG_VENDOR_IMPORT_PATTERNS = createPackageSpecifierPatterns(
+  ['posthog-node', '@posthog/mcp'],
+  'Only packages/libs/posthog-node may import PostHog vendor SDKs. Other workspaces must consume Oak provider-neutral product-analytics contracts.',
+);
 
 /**
  * Core boundary rules
@@ -128,6 +134,7 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
         {
           ...WORKSPACE_ALIAS_IMPORT_PATTERN,
         },
+        ...POSTHOG_VENDOR_IMPORT_PATTERNS,
         ...createPackageSpecifierPatterns(
           LIB_PACKAGE_IMPORTS,
           'Core cannot import from libraries. Core packages may depend only on other core packages and explicitly declared provider-neutral external primitives.',
@@ -163,7 +170,7 @@ export const FOUNDATION_LIB_PACKAGES = [
 /**
  * Adapter libraries may depend on foundation libraries only.
  */
-export const ADAPTER_LIB_PACKAGES = ['sentry-node'] as const;
+export const ADAPTER_LIB_PACKAGES = ['posthog-node', 'sentry-node'] as const;
 
 /**
  * List of all libraries for reference.
@@ -273,6 +280,7 @@ export function createLibBoundaryRules(libName: LibPackage): Partial<Linter.Rule
           {
             ...WORKSPACE_ALIAS_IMPORT_PATTERN,
           },
+          ...(libName === 'posthog-node' ? [] : POSTHOG_VENDOR_IMPORT_PATTERNS),
           ...restrictedImportPatterns,
           ...restrictedSdkImportPatterns,
           ...createPackageSpecifierPatterns(
@@ -434,6 +442,7 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
           {
             ...WORKSPACE_ALIAS_IMPORT_PATTERN,
           },
+          ...POSTHOG_VENDOR_IMPORT_PATTERNS,
           ...restrictedDesignImportPatterns,
           ...createPackageSpecifierPatterns(
             SDK_PACKAGE_IMPORTS,
@@ -465,6 +474,7 @@ export const appBoundaryRules: Partial<Linter.RulesRecord> = {
     'error',
     {
       patterns: [
+        ...POSTHOG_VENDOR_IMPORT_PATTERNS,
         ...createPackageSpecifierPatterns(APP_PACKAGE_IMPORTS, APP_BOUNDARY_MESSAGE),
         ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
         {
@@ -509,6 +519,7 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
     'error',
     {
       patterns: [
+        ...POSTHOG_VENDOR_IMPORT_PATTERNS,
         ...createPackageSpecifierPatterns(APP_PACKAGE_IMPORTS, APP_BOUNDARY_MESSAGE),
         ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
         {
@@ -584,6 +595,7 @@ export function createSdkBoundaryRules(
         'error',
         {
           patterns: [
+            ...POSTHOG_VENDOR_IMPORT_PATTERNS,
             ...createPackageSpecifierPatterns(
               ['@oaknational/curriculum-sdk'],
               'Generation cannot import from runtime SDK. Dependency is one-way: runtime depends on generation, not vice versa (ADR-108).',
@@ -635,6 +647,7 @@ export function createSdkBoundaryRules(
             },
           ],
           patterns: [
+            ...POSTHOG_VENDOR_IMPORT_PATTERNS,
             {
               group: ['@oaknational/curriculum-sdk/**'],
               message:
@@ -679,6 +692,7 @@ export function createSdkBoundaryRules(
       'error',
       {
         patterns: [
+          ...POSTHOG_VENDOR_IMPORT_PATTERNS,
           ...searchSdkImportPatterns,
           ...createDeepSubpathSpecifierPatterns(
             ['@oaknational/sdk-codegen'],

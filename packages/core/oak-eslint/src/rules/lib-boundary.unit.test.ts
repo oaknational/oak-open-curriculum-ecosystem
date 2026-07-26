@@ -117,6 +117,7 @@ describe('createLibBoundaryRules', () => {
       'graph-project',
       'logger',
       'search-contracts',
+      'posthog-node',
       'sentry-node',
     ]);
     expect(FOUNDATION_LIB_PACKAGES).toEqual([
@@ -126,7 +127,7 @@ describe('createLibBoundaryRules', () => {
       'logger',
       'search-contracts',
     ]);
-    expect(ADAPTER_LIB_PACKAGES).toEqual(['sentry-node']);
+    expect(ADAPTER_LIB_PACKAGES).toEqual(['posthog-node', 'sentry-node']);
   });
 
   it('blocks foundation libraries from importing any other library', () => {
@@ -140,6 +141,7 @@ describe('createLibBoundaryRules', () => {
       '../env-resolution/**',
       '../graph-ingest/**',
       '../graph-project/**',
+      '../posthog-node/**',
       '../search-contracts/**',
       '../sentry-node/**',
     ]);
@@ -153,6 +155,7 @@ describe('createLibBoundaryRules', () => {
     const blockedLibPrefixes = [
       '@oaknational/env-resolution',
       '@oaknational/graph-ingest',
+      '@oaknational/posthog-node',
       '@oaknational/search-contracts',
       '@oaknational/sentry-node',
     ] as const;
@@ -168,6 +171,9 @@ describe('createLibBoundaryRules', () => {
       '@oaknational/graph-ingest',
       '@oaknational/graph-ingest/*',
       '@oaknational/graph-ingest/**',
+      '@oaknational/posthog-node',
+      '@oaknational/posthog-node/*',
+      '@oaknational/posthog-node/**',
       '@oaknational/search-contracts',
       '@oaknational/search-contracts/*',
       '@oaknational/search-contracts/**',
@@ -185,24 +191,50 @@ describe('createLibBoundaryRules', () => {
   });
 
   it('allows adapter libraries to import foundation libraries but blocks adapter-to-adapter imports', () => {
-    const zones = getRestrictedPathZones(createLibBoundaryRules('sentry-node'));
-    const blockedLibs = zones
+    const sentryZones = getRestrictedPathZones(createLibBoundaryRules('sentry-node'));
+    const sentryBlockedLibs = sentryZones
+      .filter((zone) => zone.from.startsWith('../') && !zone.from.startsWith('../../../'))
+      .map((zone) => zone.from);
+    const posthogZones = getRestrictedPathZones(createLibBoundaryRules('posthog-node'));
+    const posthogBlockedLibs = posthogZones
       .filter((zone) => zone.from.startsWith('../') && !zone.from.startsWith('../../../'))
       .map((zone) => zone.from);
 
-    expect(blockedLibs).toEqual([]);
-    expect(zones.some((zone) => zone.from === '../../../apps/**')).toBe(true);
-    expect(zones.some((zone) => zone.from === '../../../agent-tools/**')).toBe(true);
+    expect(sentryBlockedLibs).toEqual(['../posthog-node/**']);
+    expect(posthogBlockedLibs).toEqual(['../sentry-node/**']);
+    expect(sentryZones.some((zone) => zone.from === '../../../apps/**')).toBe(true);
+    expect(sentryZones.some((zone) => zone.from === '../../../agent-tools/**')).toBe(true);
+    expect(posthogZones.some((zone) => zone.from === '../../../apps/**')).toBe(true);
+    expect(posthogZones.some((zone) => zone.from === '../../../agent-tools/**')).toBe(true);
   });
 
   it('allows adapter libraries to import foundation package specifiers', () => {
-    const patterns = getRestrictedImportPatterns(createLibBoundaryRules('sentry-node'));
-    const blockedImports = patterns
+    const sentryPatterns = getRestrictedImportPatterns(createLibBoundaryRules('sentry-node'));
+    const posthogPatterns = getRestrictedImportPatterns(createLibBoundaryRules('posthog-node'));
+    const sentryBlockedImports = sentryPatterns
+      .flatMap((pattern) => pattern.group)
+      .filter((group) => group.startsWith('@oaknational/posthog-node'))
+      .sort((a, b) => a.localeCompare(b));
+    const posthogBlockedImports = posthogPatterns
       .flatMap((pattern) => pattern.group)
       .filter((group) => group.startsWith('@oaknational/sentry-node'))
       .sort((a, b) => a.localeCompare(b));
 
-    expect(blockedImports).toEqual([]);
+    expect(sentryBlockedImports).toEqual([
+      '@oaknational/posthog-node',
+      '@oaknational/posthog-node/*',
+      '@oaknational/posthog-node/**',
+    ]);
+    expect(posthogBlockedImports).toEqual([
+      '@oaknational/sentry-node',
+      '@oaknational/sentry-node/*',
+      '@oaknational/sentry-node/**',
+    ]);
+    expect(
+      posthogPatterns
+        .flatMap((pattern) => pattern.group)
+        .some((group) => group.startsWith('@oaknational/logger')),
+    ).toBe(false);
   });
 
   it('blocks libraries from importing SDK package specifiers', () => {

@@ -19,6 +19,7 @@ packages:
   - packages/libs/graph-ingest
   - packages/libs/graph-project
   - packages/libs/logger
+  - packages/libs/posthog-node
   - packages/libs/sentry-node
   - packages/libs/search-contracts
   - packages/sdks/graph-corpus-sdk

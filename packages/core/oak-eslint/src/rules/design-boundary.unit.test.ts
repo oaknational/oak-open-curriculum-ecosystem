@@ -72,6 +72,7 @@ describe('createDesignBoundaryRules', () => {
     expect(groups).toContain('@oaknational/curriculum-sdk');
     expect(groups).toContain('@oaknational/search-cli');
     expect(groups).toContain('@oaknational/logger');
+    expect(groups).toContain('@oaknational/posthog-node');
 
     const inkPattern = patterns.find((pattern) =>
       pattern.group.includes('@oaknational/oak-design-ink'),
