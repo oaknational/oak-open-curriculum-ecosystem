@@ -29,6 +29,7 @@ import { registerHandlers } from '../handlers.js';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ToolsSection } from '../landing-page/components/tools-section.js';
 import { ResourcesSection } from '../landing-page/components/resources-section.js';
+import { deriveLandingPageViewProps } from '../landing-page/derive-view-props.js';
 import { SERVED_SURFACE } from './served-surface.js';
 import { filterCurriculumModelJson } from './filter-guidance-content.js';
 import {
@@ -70,8 +71,17 @@ function walkRegistration(): {
 }
 
 const registration = walkRegistration();
-const toolsSectionHtml = renderToStaticMarkup(<ToolsSection />);
-const resourcesSectionHtml = renderToStaticMarkup(<ResourcesSection />);
+// Rendered through the build-time derivation, as the baked page is.
+const viewProps = deriveLandingPageViewProps();
+const toolsSectionHtml = renderToStaticMarkup(
+  <ToolsSection
+    aggregatedTools={viewProps.aggregatedTools}
+    generatedTools={viewProps.generatedTools}
+  />,
+);
+const resourcesSectionHtml = renderToStaticMarkup(
+  <ResourcesSection resources={viewProps.resources} />,
+);
 
 /**
  * Structured tool references in the SERVED curriculum-model guidance —

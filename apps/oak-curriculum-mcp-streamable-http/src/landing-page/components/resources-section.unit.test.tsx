@@ -9,13 +9,18 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import { isResourceLive, SERVED_SURFACE } from '../../served-surface/served-surface.js';
+import { deriveLandingPageViewProps } from '../derive-view-props.js';
 import { ResourcesSection } from './resources-section.js';
 
 const SERVED_RESOURCES = ALL_MCP_RESOURCES.filter((r) => isResourceLive(SERVED_SURFACE, r.uri));
 const DORMANT_RESOURCES = ALL_MCP_RESOURCES.filter((r) => !isResourceLive(SERVED_SURFACE, r.uri));
 
 describe('ResourcesSection', () => {
-  const html = renderToStaticMarkup(<ResourcesSection />);
+  // Rendered through the build-time derivation — the composed invariant the
+  // baked page ships.
+  const html = renderToStaticMarkup(
+    <ResourcesSection resources={deriveLandingPageViewProps().resources} />,
+  );
 
   it('includes the uri and title of every SERVED resource — and no dormant inventory', () => {
     expect(SERVED_RESOURCES.length).toBeGreaterThan(0);

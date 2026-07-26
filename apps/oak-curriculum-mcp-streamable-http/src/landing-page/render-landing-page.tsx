@@ -19,8 +19,9 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { LandingPageDocument } from './components/landing-page-document.js';
+import { deriveLandingPageViewProps } from './derive-view-props.js';
 
-/** Everything the landing page needs from the runtime. */
+/** Everything the landing page needs from its environment at bake time. */
 export interface LandingPageOptions {
   /**
    * Deployment host for URL resolution. When provided, the config snippet
@@ -64,11 +65,7 @@ export interface LandingPageOptions {
  */
 export function renderLandingPageHtml(options: LandingPageOptions = {}): string {
   const markup = renderToStaticMarkup(
-    <LandingPageDocument
-      vercelHost={options.vercelHost}
-      appVersion={options.appVersion}
-      themeSelectorEnabled={options.themeSelectorEnabled ?? false}
-    />,
+    <LandingPageDocument {...deriveLandingPageViewProps(options)} />,
   );
 
   return `<!doctype html>\n${markup}`;

@@ -8,11 +8,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import { SERVED_SURFACE } from '../../served-surface/served-surface.js';
-import {
-  AGGREGATED_TOOL_ORDER,
-  splitDescriptionByFirstParagraph,
-  ToolsSection,
-} from './tools-section.js';
+import { AGGREGATED_TOOL_ORDER, deriveLandingPageViewProps } from '../derive-view-props.js';
+import { splitDescriptionByFirstParagraph, ToolsSection } from './tools-section.js';
 
 const AGGREGATED_TOOL_NAMES = Object.keys(AGGREGATED_TOOL_DEFS);
 
@@ -23,7 +20,13 @@ const SAMPLE_GENERATED_TOOL_NAMES = [
 ] as const;
 
 describe('ToolsSection', () => {
-  const html = renderToStaticMarkup(<ToolsSection />);
+  // Rendered through the build-time derivation: these tests hold the composed
+  // invariant (derived membership × presentation), exactly what the baked
+  // page ships.
+  const { aggregatedTools, generatedTools } = deriveLandingPageViewProps();
+  const html = renderToStaticMarkup(
+    <ToolsSection aggregatedTools={aggregatedTools} generatedTools={generatedTools} />,
+  );
 
   it('includes every LIVE aggregated tool name in the rendered HTML (served-surface filter)', () => {
     const liveNames = new Set(
