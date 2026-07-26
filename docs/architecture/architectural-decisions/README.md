@@ -443,6 +443,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   owner-ratified D23 estate structure whose validator and templates landed in
   PR #478; carries the dated ADR-200 relationship note — the living idea-graph
   is deferred, not deleted; Proposed born-sketch 2026-07-23)
+- [ADR-217: Server-rendered HTML in the MCP app](217-server-rendered-html-in-the-mcp-app.md)
+  (React rendered to static markup; the design system delivered as app-served
+  static assets under a closure-tested manifest; served-surface claims derived
+  at render time; optional affordances as declared flags whose machinery ships
+  with their control; Accepted 2026-07-26)
 
 ## Key Architectural Decisions
 
@@ -495,6 +500,7 @@ For understanding the agentic engineering practice:
 - **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location (§Source Format superseded in part by ADR-213)
 - **[ADR-149](149-frontend-specialist-expert-gateway-cluster.md)** - Frontend specialist expert gateway cluster: accessibility-expert, design-system-expert, react-component-expert cohort with MCP boundary rule
 - **[ADR-151](151-mcp-app-styling-independence.md)** - MCP App styling independence: CSS custom properties over styled-components, self-contained HTML resources, host theme composition
+- **[ADR-217](217-server-rendered-html-in-the-mcp-app.md)** - Server-rendered HTML in the MCP app: React static markup, design system as app-served assets under a closure-tested manifest, derived served-surface claims, flagged affordances whose machinery ships with their control
 - **[ADR-165](165-agent-work-practice-phenotype-boundary.md)** - Agent work Practice phenotype boundary: local implementation surfaces for PDR-035 agent-work authority
 
 For understanding semantic search and Elastic-native AI/ML approach:
