@@ -101,7 +101,4 @@ export function createPostHogEventPolicies(config: PostHogEventPolicyConfig): Po
   };
 }
 
-export type {
-  PostHogEventPolicies,
-  PostHogEventPolicyConfig,
-} from './event-policy-contract.js';
+export type { PostHogEventPolicies, PostHogEventPolicyConfig } from './event-policy-contract.js';
