@@ -2,6 +2,7 @@ import type { ResolvedRelease } from '@oaknational/build-metadata';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import type { McpTransportObserver, ProductAnalyticsSink } from '@oaknational/observability';
 import { ok } from '@oaknational/result';
+import { PostHogMCP, setLogger } from '@posthog/mcp';
 import type { EventMessage, PostHogOptions } from 'posthog-node';
 import { assert, describe, expect, it } from 'vitest';
 
@@ -34,6 +35,13 @@ interface ErrorSubscription {
 
 interface TestClient extends PostHogRuntimeClient {
   readonly kind: 'test-client';
+}
+
+class ThrowingCapturePostHogMcp extends PostHogMCP {
+  override capture(event: EventMessage): void {
+    expect(event).toBeDefined();
+    assert.fail('vendor-sensitive-detail');
+  }
 }
 
 interface ClientCreation {
@@ -101,6 +109,7 @@ function createRuntimeHarness(
   const sinkCreations: SinkCreation[] = [];
   const transportObserverCreations: TransportObserverCreation[] = [];
   const errorSubscriptions: ErrorSubscription[] = [];
+  const mcpSdkLoggers: ((message: string) => void)[] = [];
   const shutdownCalls: undefined[] = [];
   const sink: ProductAnalyticsSink = {
     capture: () => undefined,
@@ -123,6 +132,9 @@ function createRuntimeHarness(
     },
   };
   const dependencies = {
+    configureMcpSdkLogger: (logger) => {
+      mcpSdkLoggers.push(logger);
+    },
     createClient: (projectApiKey, options) => {
       clientCreations.push({ projectApiKey, options });
       return client;
@@ -142,6 +154,7 @@ function createRuntimeHarness(
     client,
     clientCreations,
     errorSubscriptions,
+    mcpSdkLoggers,
     runtime,
     shutdownCalls,
     sink,
@@ -300,6 +313,68 @@ describe('createPostHogProductAnalyticsRuntimeWithDependencies integration', () 
     expect(() => subscription.callback()).not.toThrow();
     expect(reportedKinds).toStrictEqual(['posthog_client_delivery_failed']);
     expect(JSON.stringify(reportedKinds)).not.toContain('reporter-sensitive-detail');
+  });
+
+  it('maps production MCP SDK capture warnings to one fixed content-free signal', () => {
+    const reportedKinds: PostHogOperationalErrorKind[] = [];
+    const subject = createRuntimeHarness(
+      createConfig((kind) => {
+        reportedKinds.push(kind);
+      }),
+    );
+    const logger = only(subject.mcpSdkLoggers);
+
+    logger('Captured PostHog event evt-safe | mcp.initialize | 1 ms | anonymous');
+    logger('Failed to capture PostHog event actor-sensitive-detail');
+
+    expect(reportedKinds).toStrictEqual(['posthog_event_policy_failed']);
+    expect(JSON.stringify(reportedKinds)).not.toContain('actor-sensitive-detail');
+  });
+
+  it('isolates a throwing operational reporter from MCP SDK capture warnings', () => {
+    const reportedKinds: PostHogOperationalErrorKind[] = [];
+    const subject = createRuntimeHarness(
+      createConfig((kind) => {
+        reportedKinds.push(kind);
+        assert.fail('reporter-sensitive-detail');
+      }),
+    );
+    const logger = only(subject.mcpSdkLoggers);
+
+    expect(() =>
+      logger('Warning: PostHogMCP failed to capture event - vendor-detail'),
+    ).not.toThrow();
+    expect(reportedKinds).toStrictEqual(['posthog_event_policy_failed']);
+    expect(JSON.stringify(reportedKinds)).not.toContain('vendor-detail');
+  });
+
+  it('observes capture faults that the production PostHogMCP pipeline suppresses', async () => {
+    const reportedKinds: PostHogOperationalErrorKind[] = [];
+    let client: ThrowingCapturePostHogMcp | undefined;
+    const config = createConfig((kind) => {
+      reportedKinds.push(kind);
+    });
+    createPostHogProductAnalyticsRuntimeWithDependencies(config, {
+      configureMcpSdkLogger: setLogger,
+      createClient: (projectApiKey, options) => {
+        client = new ThrowingCapturePostHogMcp(projectApiKey, options);
+        return client;
+      },
+      createSink: () => ({ capture: () => undefined }),
+      createTransportObserver: () => ({ observe: (transport) => transport }),
+    });
+    const createdClient = client;
+    assert(createdClient);
+
+    expect(() =>
+      createdClient.captureInitialize({
+        distinctId: DISTINCT_ID,
+        properties: {},
+        protocolVersion: '2025-06-18',
+      }),
+    ).not.toThrow();
+    await expect.poll(() => reportedKinds).toStrictEqual(['posthog_event_policy_failed']);
+    expect(JSON.stringify(reportedKinds)).not.toContain('vendor-sensitive-detail');
   });
 
   it('shares one successful shutdown promise across overlapping and repeated closes', async () => {

@@ -24,20 +24,21 @@ const DENIED_BOUNDARIES = [
   ['SDK', createSdkBoundaryRules('runtime')],
   ['foundation library', createLibBoundaryRules('logger')],
   ['other adapter', createLibBoundaryRules('sentry-node')],
-  ['strict shared config', strictVendorBoundaryRules()],
 ] as const;
 
 const linter = new Linter({ configType: 'flat' });
 
-function strictVendorBoundaryRules(): Partial<ESLintLinter.RulesRecord> {
-  for (let index = strict.length - 1; index >= 0; index -= 1) {
-    const rule = strict[index]?.rules?.['@typescript-eslint/no-restricted-imports'];
-    if (rule !== undefined) {
-      return { '@typescript-eslint/no-restricted-imports': rule };
-    }
-  }
-  return {};
-}
+const STRICT_FIXTURE_RULES_OFF = {
+  '@typescript-eslint/no-misused-promises': 'off',
+  '@typescript-eslint/no-floating-promises': 'off',
+  '@typescript-eslint/no-unsafe-assignment': 'off',
+  '@typescript-eslint/no-unsafe-return': 'off',
+  '@typescript-eslint/no-deprecated': 'off',
+  '@typescript-eslint/consistent-return': 'off',
+  '@typescript-eslint/consistent-type-exports': 'off',
+  'sonarjs/no-alphabetical-sort': 'off',
+  'sonarjs/void-use': 'off',
+} as const;
 
 function lintVendorImport(
   rules: Partial<ESLintLinter.RulesRecord>,
@@ -65,6 +66,30 @@ function lintVendorImport(
   );
 }
 
+function lintStrictVendorImport(
+  specifier: (typeof VENDOR_IMPORT_SPECIFIERS)[number],
+  filename: string,
+) {
+  return linter.verify(
+    `import vendorDefault from '${specifier}';\nvoid vendorDefault;`,
+    [
+      ...strict,
+      {
+        rules: {
+          '@typescript-eslint/no-restricted-imports': [
+            'error',
+            {
+              paths: [{ name: 'zod', message: "Import from 'zod/v4' instead." }],
+            },
+          ],
+        },
+      },
+      { rules: STRICT_FIXTURE_RULES_OFF },
+    ],
+    { filename },
+  );
+}
+
 describe('exclusive PostHog vendor boundary', () => {
   describe.each(DENIED_BOUNDARIES)('%s consumer', (_name, rules) => {
     it.each(VENDOR_IMPORT_SPECIFIERS)('rejects %s', (specifier) => {
@@ -86,4 +111,26 @@ describe('exclusive PostHog vendor boundary', () => {
   it.each(VENDOR_IMPORT_SPECIFIERS)('allows the posthog-node adapter to import %s', (specifier) => {
     expect(lintVendorImport(createLibBoundaryRules('posthog-node'), specifier)).toStrictEqual([]);
   });
+
+  it.each(VENDOR_IMPORT_SPECIFIERS)(
+    'survives a later no-restricted-imports override for %s',
+    (specifier) => {
+      const issues = lintStrictVendorImport(specifier, 'packages/core/example/src/fixture.ts');
+
+      expect(issues.map((issue) => issue.ruleId)).toContain(
+        '@oaknational/no-posthog-vendor-imports',
+      );
+    },
+  );
+
+  it.each(VENDOR_IMPORT_SPECIFIERS)(
+    'keeps the dedicated strict rule exempt for the adapter importing %s',
+    (specifier) => {
+      const issues = lintStrictVendorImport(specifier, 'packages/libs/posthog-node/src/fixture.ts');
+
+      expect(issues.map((issue) => issue.ruleId)).not.toContain(
+        '@oaknational/no-posthog-vendor-imports',
+      );
+    },
+  );
 });

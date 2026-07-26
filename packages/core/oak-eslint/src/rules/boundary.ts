@@ -74,12 +74,7 @@ const POSTHOG_VENDOR_IMPORT_PATTERNS = createPackageSpecifierPatterns(
 );
 
 export const postHogVendorBoundaryRules = {
-  '@typescript-eslint/no-restricted-imports': [
-    'error',
-    {
-      patterns: POSTHOG_VENDOR_IMPORT_PATTERNS,
-    },
-  ],
+  '@oaknational/no-posthog-vendor-imports': 'error',
 } satisfies Partial<Linter.RulesRecord>;
 
 /**

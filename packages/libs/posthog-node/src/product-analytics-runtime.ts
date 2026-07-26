@@ -6,7 +6,7 @@ import type {
 } from '@oaknational/observability';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { err, ok, type Result } from '@oaknational/result';
-import { PostHogMCP } from '@posthog/mcp';
+import { PostHogMCP, setLogger } from '@posthog/mcp';
 import type { EventMessage, PostHogOptions } from 'posthog-node';
 
 import { createPostHogEventPolicies, type PostHogEventPolicyConfig } from './event-policy.js';
@@ -15,6 +15,10 @@ import {
   createPostHogMcpTransportObserver,
   type PostHogMcpCaptureClient,
 } from './mcp-transport-observer.js';
+import {
+  createPostHogMcpSdkLogger,
+  type PostHogMcpSdkLogger,
+} from './posthog-mcp-sdk-logger.js';
 import {
   createPostHogProductAnalyticsSink,
   type PostHogProductAnalyticsSinkConfig,
@@ -36,6 +40,8 @@ export interface PostHogRuntimeClient extends PostHogMcpCaptureClient {
 }
 
 export interface PostHogProductAnalyticsRuntimeDependencies<TClient extends PostHogRuntimeClient> {
+  /** Installs the package-level SDK logger before the sole process-owned client is created. */
+  readonly configureMcpSdkLogger: (logger: PostHogMcpSdkLogger) => void;
   readonly createClient: (projectApiKey: string, options: PostHogOptions) => TClient;
   readonly createSink: (
     client: TClient,
@@ -156,6 +162,9 @@ export function createPostHogProductAnalyticsRuntimeWithDependencies<
   const policyConfig = createPolicyConfig(snapshottedConfig);
   const policies = createPostHogEventPolicies(policyConfig);
   const options = createPostHogClientOptions(snapshottedConfig, policies.finalOakEventPolicy);
+  dependencies.configureMcpSdkLogger(
+    createPostHogMcpSdkLogger(snapshottedConfig.reportOperationalError),
+  );
   const client = dependencies.createClient(snapshottedConfig.projectApiKey, options);
 
   attachClientErrorObserver(client, snapshottedConfig.reportOperationalError);
@@ -175,6 +184,7 @@ function createProductionRuntime(
   fetch?: NonNullable<PostHogOptions['fetch']>,
 ): PosthogProductAnalyticsRuntime {
   return createPostHogProductAnalyticsRuntimeWithDependencies<PostHogMCP>(config, {
+    configureMcpSdkLogger: setLogger,
     createClient: (projectApiKey, options) =>
       new PostHogMCP(projectApiKey, fetch === undefined ? options : { ...options, fetch }),
     createSink: (client, sinkConfig) => createPostHogProductAnalyticsSink(client, sinkConfig),

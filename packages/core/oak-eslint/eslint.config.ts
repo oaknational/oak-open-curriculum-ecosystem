@@ -34,6 +34,21 @@ export default defineConfig(
   ...tseslint.configs.stylistic,
   {
     rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['posthog-node', 'posthog-node/*', 'posthog-node/**'],
+              message: 'Only packages/libs/posthog-node may import PostHog vendor SDKs.',
+            },
+            {
+              group: ['@posthog/mcp', '@posthog/mcp/*', '@posthog/mcp/**'],
+              message: 'Only packages/libs/posthog-node may import PostHog vendor SDKs.',
+            },
+          ],
+        },
+      ],
       '@typescript-eslint/no-explicit-any': ['error'],
       '@typescript-eslint/no-deprecated': ['error'],
       '@typescript-eslint/no-unused-vars': ['error'],
