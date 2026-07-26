@@ -108,7 +108,7 @@ export function parseOptions(argv: readonly string[]): Options {
   const excludeTags: string[] = [];
   const positionals: string[] = [];
 
-  for (let index = 0; index < rest.length; ) {
+  for (let index = 0; index < rest.length;) {
     index = parseToken({
       rest,
       index,

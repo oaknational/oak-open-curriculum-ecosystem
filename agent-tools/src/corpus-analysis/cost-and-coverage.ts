@@ -56,12 +56,10 @@ export function estimatePipelineCost(input: {
   readonly effortMultipliers?: Record<Effort, number>;
 }): CostEstimate {
   const multipliers = input.effortMultipliers ?? DEFAULT_EFFORT_MULTIPLIERS;
-  const perStage = input.stages.map(
-    (stage): StageCost => ({
-      name: stage.name,
-      tokens: Math.round(stage.invocations * stage.tokensPerInvocation * multipliers[stage.effort]),
-    }),
-  );
+  const perStage = input.stages.map((stage): StageCost => ({
+    name: stage.name,
+    tokens: Math.round(stage.invocations * stage.tokensPerInvocation * multipliers[stage.effort]),
+  }));
   const totalTokens = perStage.reduce((sum, stage) => sum + stage.tokens, 0);
   return {
     perStage,

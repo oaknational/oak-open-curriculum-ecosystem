@@ -38,9 +38,7 @@ export type ExpandedJsonLdDocument = JsonLdObject[];
 export type JsonLdProcessorOperation = 'expand' | 'compact' | 'frame';
 
 export type JsonLdProcessorErrorKind =
-  | 'processor_failed'
-  | 'invalid_processor_output'
-  | 'remote_context_disallowed';
+  'processor_failed' | 'invalid_processor_output' | 'remote_context_disallowed';
 
 export interface JsonLdProcessorError {
   readonly kind: JsonLdProcessorErrorKind;

@@ -9,11 +9,7 @@ export type IngestionPhase = 'units' | 'lessons' | 'rollups' | 'threads';
 
 /** Reasons why a lesson may be skipped during ingestion. */
 export type LessonSkipReason =
-  | 'summary_404'
-  | 'summary_invalid'
-  | 'transcript_error'
-  | 'validation_error'
-  | 'unknown';
+  'summary_404' | 'summary_invalid' | 'transcript_error' | 'validation_error' | 'unknown';
 
 /** Reasons why a unit may be skipped during ingestion. */
 type UnitSkipReason = 'summary_unavailable' | 'fetch_error';

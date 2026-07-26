@@ -102,8 +102,7 @@ describe('createDefaultRequestExecutor', () => {
     // The executeMcpTool inside createExecutor is the wrapped version
     // We need to test the full composition by capturing the wrapper
     let capturedExecuteMcpTool:
-      | ((name: 'get-key-stages', args: unknown) => Promise<ToolExecutionResult>)
-      | undefined;
+      ((name: 'get-key-stages', args: unknown) => Promise<ToolExecutionResult>) | undefined;
     const createExecutor = vi.fn(
       (deps: {
         readonly executeMcpTool: (
@@ -141,8 +140,7 @@ describe('createDefaultRequestExecutor', () => {
     const onToolExecution = vi.fn();
 
     let capturedExecuteMcpTool:
-      | ((name: 'get-key-stages', args: unknown) => Promise<ToolExecutionResult>)
-      | undefined;
+      ((name: 'get-key-stages', args: unknown) => Promise<ToolExecutionResult>) | undefined;
     const createExecutor = vi.fn(
       (deps: {
         readonly executeMcpTool: (

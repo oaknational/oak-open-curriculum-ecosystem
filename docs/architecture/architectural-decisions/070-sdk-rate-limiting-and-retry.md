@@ -153,9 +153,7 @@ let _singletonClient: OakSdkClient | null = null;
 export function createOakSdkClient(): OakSdkClient {
   if (_singletonClient) return _singletonClient;
   // ... create client
-  _singletonClient = {
-    /* ... */
-  };
+  _singletonClient = {/* ... */};
   return _singletonClient;
 }
 ```

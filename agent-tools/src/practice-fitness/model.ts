@@ -19,9 +19,7 @@ export const ZONE_RANK = Object.freeze({
 });
 
 export type FitnessMode =
-  | typeof FITNESS_MODE_STRICT
-  | typeof FITNESS_MODE_STRICT_HARD
-  | typeof FITNESS_MODE_INFORMATIONAL;
+  typeof FITNESS_MODE_STRICT | typeof FITNESS_MODE_STRICT_HARD | typeof FITNESS_MODE_INFORMATIONAL;
 
 export type FitnessZone = 'healthy' | 'soft' | 'hard' | 'critical';
 

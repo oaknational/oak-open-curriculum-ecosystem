@@ -206,10 +206,7 @@ export const REQUIRED_CATEGORIES = [
  * @see Audit: .agent/evaluations/audits/ground-truth-audit-2026-01.md
  */
 export type GroundTruthCategorySlug =
-  | 'precise-topic'
-  | 'natural-expression'
-  | 'imprecise-input'
-  | 'cross-topic';
+  'precise-topic' | 'natural-expression' | 'imprecise-input' | 'cross-topic';
 
 export const CATEGORY_MINIMUMS: Readonly<Record<GroundTruthCategorySlug, number>> = {
   'precise-topic': 1,

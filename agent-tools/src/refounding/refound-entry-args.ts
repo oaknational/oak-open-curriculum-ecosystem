@@ -123,8 +123,7 @@ export function parseOutDirArgs(
  * resolution payload under `resolved`.
  */
 export type EntryRun<TResolved> =
-  | { readonly help: true }
-  | { readonly help: false; readonly resolved: TResolved };
+  { readonly help: true } | { readonly help: false; readonly resolved: TResolved };
 
 /**
  * The shared entry preflight: given a parsed entry verdict, short-circuit

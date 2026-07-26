@@ -30,10 +30,7 @@ export type TriageBand = 'strong' | 'moderate' | 'review-first';
 
 /** The typed reasons a candidate routes review-first. */
 export type ReviewFirstTrigger =
-  | 'narrow-quorum'
-  | 'low-confidence-pass'
-  | 'longitudinal-suspect'
-  | 'reroute';
+  'narrow-quorum' | 'low-confidence-pass' | 'longitudinal-suspect' | 'reroute';
 
 /** The evidence slice the banding policy reads. */
 export interface BandEvidence {

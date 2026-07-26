@@ -189,8 +189,7 @@ function handleTranscriptResult(
 /** Handles summary fetch result. Returns null on recoverable skip, throws on non-recoverable. */
 function handleSummaryResult(
   result:
-    | { ok: true; value: unknown }
-    | { ok: false; error: Parameters<typeof isRecoverableError>[0] },
+    { ok: true; value: unknown } | { ok: false; error: Parameters<typeof isRecoverableError>[0] },
   lessonSlug: string,
   errorContext: IngestionContext,
 ): SearchLessonSummary | null {

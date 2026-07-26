@@ -30,8 +30,7 @@ export interface CliArgScanSpec<TState> {
 
 /** Result of {@link scanArgs}: the mutated state, or a usage error. */
 export type CliArgScanResult<TState> =
-  | { readonly ok: true; readonly state: TState }
-  | { readonly ok: false; readonly error: string };
+  { readonly ok: true; readonly state: TState } | { readonly ok: false; readonly error: string };
 
 /**
  * The `--json` / `--help` / `-h` flags every agent-tools CLI topic shares.

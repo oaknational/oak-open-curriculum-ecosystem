@@ -18,9 +18,7 @@ export type { SentryContextPayload, SentryPrimitiveValue, SentryUser } from './t
 
 export type SentryMode = 'off' | 'fixture' | 'sentry';
 export type SentryBooleanFlagName =
-  | 'SENTRY_ENABLE_LOGS'
-  | 'SENTRY_SEND_DEFAULT_PII'
-  | 'SENTRY_DEBUG';
+  'SENTRY_ENABLE_LOGS' | 'SENTRY_SEND_DEFAULT_PII' | 'SENTRY_DEBUG';
 
 export type SentryEnvironmentSource = 'SENTRY_ENVIRONMENT_OVERRIDE' | 'VERCEL_ENV' | 'development';
 
@@ -79,8 +77,7 @@ export interface SentryConfigEnvironment extends ReleaseInput {
  * from the expected production shape (per ADR-163 §3).
  */
 export type SentryEnvironmentWarning =
-  | 'production_env_with_non_main_branch'
-  | 'production_env_with_missing_branch';
+  'production_env_with_non_main_branch' | 'production_env_with_missing_branch';
 
 /**
  * Result of deciding whether a given build should register a Sentry release

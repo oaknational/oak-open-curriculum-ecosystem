@@ -27,24 +27,24 @@ last_updated: 2026-07-24
 
 ## Dated notes
 
-- 2026-07-24 — Gates re-dated 2026-07-26 → 2026-07-30 (MCP-141 scan
-  truing, Director-ruled): no live seat existed at the authoring
-  expiry, so both cards re-date to lane pickup rather than carding the
-  owner cold on Clerk decisions with no executor lane; 2026-07-30 is
-  the M4 milestone target, the outer bound by which both must resolve.
-  The M4 execution ticket minted at the same scan carries the pickup;
-  the pointer ticket MCP-67 (Done at its authoring scope) is no longer
-  this plan's execution anchor.
+- 2026-07-24 — Gates re-dated (MCP-141 scan truing, Director-ruled): no
+  live seat existed at the authoring expiry, so both cards re-date to
+  lane pickup rather than carding the owner cold on Clerk decisions with
+  no executor lane. The gate expiries are the outer bound by which both
+  must resolve; milestone timing lives in Linear, not here. The M4
+  execution ticket minted at the same scan carries the pickup; the
+  pointer ticket MCP-67 (Done at its authoring scope) is no longer this
+  plan's execution anchor.
 
 ## Goal
 
 Teachers sign in to the app through a dedicated production Clerk
 instance: an unauthenticated request to the production `/mcp` receives
 a standards-compliant challenge, a real assistant completes the full
-OAuth flow against the production realm, and the store reviewer can
-walk the whole journey — this is milestone M4 (production sign-in
-live, target 2026-07-30), and M5's unattended conformance runs and
-M8's listing submission both stand on it.
+OAuth flow against the production realm, and a reviewer can walk the
+whole journey — this is milestone M4 (production sign-in live), and
+M5's unattended conformance runs and M8 both stand on it. Milestone
+dates and their sequencing live in Linear.
 
 ## Evidence base (probed first-hand, 2026-07-23)
 

@@ -41,8 +41,7 @@ export function extractLiveVersions(targets: AliasTargetMap): ReadonlySet<string
 
 /** Result of validating whether a version is safe to delete. */
 export type DeletionValidation =
-  | { readonly blocked: true; readonly message: string }
-  | { readonly blocked: false };
+  { readonly blocked: true; readonly message: string } | { readonly blocked: false };
 
 /**
  * Validate that a version is safe to delete.

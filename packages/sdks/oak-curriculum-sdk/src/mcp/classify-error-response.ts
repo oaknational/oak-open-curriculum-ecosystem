@@ -26,10 +26,7 @@ import { McpToolError } from './error-types.js';
  * Classification codes for documented error responses (400/401/404).
  */
 type DocumentedErrorCode =
-  | 'RESOURCE_NOT_FOUND'
-  | 'AUTHENTICATION_REQUIRED'
-  | 'CONTENT_NOT_AVAILABLE'
-  | 'UPSTREAM_API_ERROR';
+  'RESOURCE_NOT_FOUND' | 'AUTHENTICATION_REQUIRED' | 'CONTENT_NOT_AVAILABLE' | 'UPSTREAM_API_ERROR';
 
 type UpstreamErrorCode = 'UPSTREAM_SERVER_ERROR' | 'CONTENT_NOT_AVAILABLE' | 'UPSTREAM_API_ERROR';
 

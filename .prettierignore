@@ -100,3 +100,10 @@ research/web-app-deconstruction/packages/research-evidence/fixtures/
 packages/design/oak-design-system/studio-source/original-capture-2026-07-23/
 packages/design/oak-design-system/studio-source/iteration-pull-preservation-2026-07-23/
 packages/design/oak-design-system/studio-source/capture-manifest-2026-07-24.tsv
+
+# Vendored third-party assets ship under their own upstream licence (see the
+# adjacent LICENSE) and must stay byte-faithful to the release they came from.
+# Reformatting them would rewrite code we do not own and make upstream diffs
+# unreadable. Surfaced by the prettier 3.9 bump, which would otherwise have
+# reformatted reveal.js.
+packages/design/oak-design-system/studio-source/integrations/revealjs/vendor/

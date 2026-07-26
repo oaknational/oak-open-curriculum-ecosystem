@@ -20,8 +20,7 @@ import { type WatcherStalenessResult } from './watcher-staleness.js';
  * reason the gate surfaces (with a fix instruction) on stderr.
  */
 export type WatcherPresenceVerdict =
-  | { readonly kind: 'present' }
-  | { readonly kind: 'blind'; readonly reason: string };
+  { readonly kind: 'present' } | { readonly kind: 'blind'; readonly reason: string };
 
 /** Canonical location of per-agent comms seen-files (and their heartbeats). */
 export const DEFAULT_COMMS_SEEN_DIR = '.agent/state/collaboration/comms-seen';

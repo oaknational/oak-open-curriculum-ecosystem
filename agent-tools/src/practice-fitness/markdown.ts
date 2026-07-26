@@ -1,10 +1,5 @@
 type FitnessLineKind =
-  | 'frontmatter'
-  | 'code-fence'
-  | 'code-block'
-  | 'table'
-  | 'link-reference'
-  | 'prose';
+  'frontmatter' | 'code-fence' | 'code-block' | 'table' | 'link-reference' | 'prose';
 
 export interface ClassifiedLine {
   readonly text: string;

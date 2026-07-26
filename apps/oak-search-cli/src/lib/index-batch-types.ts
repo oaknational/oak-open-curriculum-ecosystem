@@ -22,9 +22,7 @@ import type { SequenceFacetProcessingMetrics } from './indexing/sequence-facet-i
  * - `all`: Single batch containing everything (legacy behavior)
  */
 export type BatchGranularity =
-  | { readonly kind: 'subject-keystage' }
-  | { readonly kind: 'subject' }
-  | { readonly kind: 'all' };
+  { readonly kind: 'subject-keystage' } | { readonly kind: 'subject' } | { readonly kind: 'all' };
 
 // ============================================================================
 // Batch Types

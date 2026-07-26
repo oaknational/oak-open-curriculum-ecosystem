@@ -103,12 +103,10 @@ export const threadProgressionStats: ThreadProgressionStats = {
 /** Builds one thread's progression by joining its sequence placements to unit nodes. */
 function progressionEntry(id: GraphCorpusThreadNodeId): ThreadProgression {
   const sequence = projection.sequencesByThreadId.get(id);
-  const entries = (sequence?.placements ?? []).map(
-    (placement): ThreadProgressionEntry => ({
-      unit: mustGet(projection.unitsById, placement.unitId),
-      year: placement.year,
-    }),
-  );
+  const entries = (sequence?.placements ?? []).map((placement): ThreadProgressionEntry => ({
+    unit: mustGet(projection.unitsById, placement.unitId),
+    year: placement.year,
+  }));
   return { thread: mustGet(projection.threadsById, id), totalUnits: entries.length, entries };
 }
 

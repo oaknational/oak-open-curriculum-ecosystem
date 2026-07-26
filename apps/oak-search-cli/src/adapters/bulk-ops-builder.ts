@@ -9,10 +9,7 @@ import type { BulkIndexAction } from './bulk-data-adapter';
 
 /** Bulk operation entry (action or document) */
 export type BulkOperationEntry =
-  | BulkIndexAction
-  | SearchLessonsIndexDoc
-  | SearchUnitsIndexDoc
-  | SearchUnitRollupDoc;
+  BulkIndexAction | SearchLessonsIndexDoc | SearchUnitsIndexDoc | SearchUnitRollupDoc;
 
 /** Build bulk operations from transformed documents */
 export function buildBulkOps(

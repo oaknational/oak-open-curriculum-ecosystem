@@ -119,11 +119,3 @@ overrides:
   # it arrives. Drop this floor once next's own range admits >=0.35.
   sharp: '>=0.35.0'
   sucrase: '>=3.35.1'
-  # Scoped to the MCPJam CLI subtree only: every published @mcpjam/cli
-  # (3.9.0–3.11.1) floats `@modelcontextprotocol/server: ^2.0.0-alpha.2`, and the
-  # alpha.3 release removed the `StdioServerTransport` root export the CLI imports,
-  # so the CLI crashes at module load. Pin its transitive back to alpha.2. No other
-  # workspace depends on @modelcontextprotocol/server (only @modelcontextprotocol/sdk),
-  # so the scope is precautionary. Drop this with the @mcpjam/cli devDependency once
-  # upstream pins or fixes the import (see README MCPJam prereq).
-  '@mcpjam/cli>@modelcontextprotocol/server': 2.0.0-alpha.2

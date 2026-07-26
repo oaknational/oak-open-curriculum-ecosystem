@@ -163,11 +163,9 @@ export function findRecallIntegrityViolations(input: {
   );
   const unknownMatches = input.matches
     .filter((match) => !knownIds.has(match.baselineId))
-    .map(
-      (match): RecallIntegrityViolation => ({
-        kind: 'unknown-baseline',
-        baselineId: match.baselineId,
-      }),
-    );
+    .map((match): RecallIntegrityViolation => ({
+      kind: 'unknown-baseline',
+      baselineId: match.baselineId,
+    }));
   return [...duplicateBaselines, ...duplicateMatches, ...unknownMatches];
 }

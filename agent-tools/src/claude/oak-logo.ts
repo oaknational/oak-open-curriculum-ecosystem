@@ -35,12 +35,7 @@ import { frameIndex } from './statusline-logo-cycle.js';
 
 /** Glyph style used to draw the Oak mark, or `none` to suppress it. */
 export type OakLogoStyle =
-  | 'braille-sharp'
-  | 'braille-sharp-compact'
-  | 'braille'
-  | 'quad'
-  | 'sextant'
-  | 'none';
+  'braille-sharp' | 'braille-sharp-compact' | 'braille' | 'quad' | 'sextant' | 'none';
 
 /**
  * The `braille-sharp` cycle: four five-row × seven-column acorn marks (frame ids

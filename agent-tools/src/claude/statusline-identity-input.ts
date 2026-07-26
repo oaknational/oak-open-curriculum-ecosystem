@@ -46,8 +46,7 @@ export interface StatuslineInputs {
  * Plan for the Claude Code statusline adapter.
  */
 export type StatuslinePlan =
-  | { readonly kind: 'noop' }
-  | { readonly kind: 'render'; readonly inputs: StatuslineInputs };
+  { readonly kind: 'noop' } | { readonly kind: 'render'; readonly inputs: StatuslineInputs };
 
 /** Expected top-level shape of the statusline stdin payload. */
 interface StatuslinePayload {

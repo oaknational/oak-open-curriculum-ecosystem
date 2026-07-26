@@ -52,26 +52,11 @@ import { VideoImportBlockView } from './VideoImportBlockView';
  */
 
 type ContentBlock =
-  | TextBlock
-  | HeadingBlock
-  | CalloutBlock
-  | SummaryBlock
-  | StatsBlock
-  | ColumnsBlock;
+  TextBlock | HeadingBlock | CalloutBlock | SummaryBlock | StatsBlock | ColumnsBlock;
 type EmbedBlock =
-  | CompareBlock
-  | ImageBlock
-  | VideoBlock
-  | VideoImportBlock
-  | DownloadBlock
-  | CoursemapBlock;
+  CompareBlock | ImageBlock | VideoBlock | VideoImportBlock | DownloadBlock | CoursemapBlock;
 type InteractiveBlock =
-  | QuizBlock
-  | TabsBlock
-  | AccordionBlock
-  | FlipBlock
-  | SortableBlock
-  | HotspotBlock;
+  QuizBlock | TabsBlock | AccordionBlock | FlipBlock | SortableBlock | HotspotBlock;
 
 function isInteractive(block: Block): block is InteractiveBlock {
   return (

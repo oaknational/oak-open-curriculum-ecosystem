@@ -36,8 +36,7 @@ describe('createDeployEntryHandler', () => {
   it('shares the in-flight load across concurrent requests', async () => {
     let loads = 0;
     let resolveHandler:
-      | ((value: (request: TestRequest, response: TestResponse) => void) => void)
-      | undefined;
+      ((value: (request: TestRequest, response: TestResponse) => void) => void) | undefined;
 
     const handler = createDeployEntryHandler<TestRequest, TestResponse>({
       loadHandler: async () => {

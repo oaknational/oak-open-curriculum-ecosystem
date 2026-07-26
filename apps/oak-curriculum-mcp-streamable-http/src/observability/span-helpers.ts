@@ -59,8 +59,7 @@ function toActiveSpanContextSnapshot(
 
 function createSyntheticSpanContext(
   parentSpan?:
-    | Pick<SpanContext, 'traceFlags' | 'traceId'>
-    | ReturnType<typeof getActiveSpanContextSnapshot>,
+    Pick<SpanContext, 'traceFlags' | 'traceId'> | ReturnType<typeof getActiveSpanContextSnapshot>,
 ): SpanContext {
   const activeSpan = parentSpan ?? getActiveSpanContextSnapshot();
 

@@ -8,13 +8,7 @@ import type { JsonValue } from './types.js';
  * Plain object shape accepted by the sanitiser.
  */
 type PlainObjectValue =
-  | JsonValue
-  | Date
-  | Error
-  | bigint
-  | WeakKey
-  | readonly PlainObjectValue[]
-  | undefined;
+  JsonValue | Date | Error | bigint | WeakKey | readonly PlainObjectValue[] | undefined;
 
 export type PlainObject = Readonly<Record<string, PlainObjectValue>>;
 

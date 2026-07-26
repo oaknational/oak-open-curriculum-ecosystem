@@ -43,12 +43,7 @@ import {
  * is a build-time intermediate representation, serialised straight to JSON, never shared.
  */
 type LiteralValue =
-  | string
-  | number
-  | boolean
-  | null
-  | LiteralValue[]
-  | { [key: string]: LiteralValue };
+  string | number | boolean | null | LiteralValue[] | { [key: string]: LiteralValue };
 
 /** The assembled raw course object, before schema validation in `generate-course.ts`. */
 export interface RawCourse {

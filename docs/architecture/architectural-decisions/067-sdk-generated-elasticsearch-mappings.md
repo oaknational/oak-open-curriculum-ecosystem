@@ -60,9 +60,7 @@ packages/sdks/oak-curriculum-sdk/
    ```typescript
    export const OAK_LESSONS_MAPPING = {
      settings: {
-       analysis: {
-         /* analyzers, normalizers, filters */
-       },
+       analysis: {/* analyzers, normalizers, filters */},
      },
      mappings: {
        dynamic: 'strict',

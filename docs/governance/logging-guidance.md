@@ -865,9 +865,7 @@ try {
 ```typescript
 // ❌ Creating new logger instance per request
 function handler(req: Request) {
-  const logger = new UnifiedLogger({
-    /* ... */
-  }); // ❌ New instance per request!
+  const logger = new UnifiedLogger({/* ... */}); // ❌ New instance per request!
   logger.info('Handling request');
 }
 

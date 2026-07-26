@@ -65,11 +65,24 @@ not part of this file.
 Two majors are held deliberately. A sweep must not cross either, and
 `pnpm -r up --latest` crosses both:
 
-- **`typescript` stays on 6.x.** TypeScript 7's exports map removes the
-  `typescript/bin/tsc` subpath that `agent-tools/src/bootstrap/bootstrap.ts`
-  resolves at postinstall, so the major breaks install (worked failure: PR
-  #416). Adopting TS 7 is a deliberate separate change that must fix the
-  bootstrap resolve first. Enforced by the `^6` ranges in each manifest.
+- **`typescript` stays on 6.x.** The binding blocker is the type-aware lint
+  stack: every published `typescript-eslint`, including the newest 8.65.1
+  alphas, declares `typescript: ">=4.8.4 <6.1.0"`. Nothing admits TS 7, so
+  adopting it would run type-aware linting across all 28 packages on an
+  unsupported compiler — and the only way to make that pass is to switch the
+  layer off, which
+  [`never-disable-checks`](../../.agent/rules/never-disable-checks.md) forbids.
+  **Lift condition: `typescript-eslint` ships TS 7 support.** Enforced by the
+  `^6` ranges in each manifest.
+
+  A second, smaller blocker sits behind it, recorded so it is not rediscovered:
+  `agent-tools/src/bootstrap/bootstrap.ts` resolves `typescript/bin/tsc` at
+  postinstall, and TS 7's exports map does not expose that subpath (worked
+  failure: PR #416). TS 7 still ships `bin/tsc` and still exports
+  `./package.json`, so the cure is to read the package's own declared `bin.tsc`
+  rather than guess a subpath — correct on TS 6 too. Not built yet: it would
+  unblock nothing while the lint stack is the binding constraint.
+
 - **`@types/node` stays on 24.x**, matching `engines.node: 24.x`. Enforced by
   the `'@types/node': '^24.x.y'` override in `pnpm-workspace.yaml`, which
   covers workspaces that pull it only as a transitive peer. Lift it when the

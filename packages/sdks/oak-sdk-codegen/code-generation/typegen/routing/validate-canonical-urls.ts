@@ -24,8 +24,7 @@ export { loadSitemapReference, type SitemapRefError } from './sitemap-reference.
 
 /** Result of validating a single URL against the reference map. */
 export type UrlValidationResult =
-  | { readonly valid: true }
-  | { readonly valid: false; readonly reason: string };
+  { readonly valid: true } | { readonly valid: false; readonly reason: string };
 
 /** Summary of validating a batch of generated URLs. */
 export interface ValidationSummary {

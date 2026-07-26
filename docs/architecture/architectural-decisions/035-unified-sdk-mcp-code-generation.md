@@ -109,9 +109,7 @@ packages/sdks/oak-curriculum-sdk/
 ```typescript
 // Literal union of all tool names
 export type McpToolName =
-  | 'oak-get-sequences-units'
-  | 'oak-get-lessons-transcript'
-  | 'oak-search-lessons';
+  'oak-get-sequences-units' | 'oak-get-lessons-transcript' | 'oak-search-lessons';
 // ... all 25 tools
 
 // Discriminated union of parameters

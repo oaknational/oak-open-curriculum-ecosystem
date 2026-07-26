@@ -62,8 +62,7 @@ const FULL_ENSEMBLE_SIZE = adversaryLensSchema.options.length;
 
 /** One candidate's replayed quorum: complete ensembles carry the frozen keep verdict. */
 export type QuorumOutcome =
-  | { readonly complete: true; readonly keep: boolean }
-  | { readonly complete: false };
+  { readonly complete: true; readonly keep: boolean } | { readonly complete: false };
 
 /** Banked entries naming no known candidate — a checkpoint mismatch the caller fails loud on. */
 export function unknownBankedCandidateIds(

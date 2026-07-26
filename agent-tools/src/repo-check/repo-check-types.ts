@@ -10,17 +10,10 @@ export interface RepoCheckRuntime {
 }
 
 export type CheckProfileFailurePhase =
-  | 'passed'
-  | 'environment'
-  | 'turbo-task'
-  | 'post-turbo-gate'
-  | 'check-command';
+  'passed' | 'environment' | 'turbo-task' | 'post-turbo-gate' | 'check-command';
 
 export type PostTurboGateStatus =
-  | 'not-captured'
-  | 'ran'
-  | 'skipped-after-turbo-failure'
-  | 'not-observed';
+  'not-captured' | 'ran' | 'skipped-after-turbo-failure' | 'not-observed';
 
 export interface CheckProfileEnvironmentEvidence {
   readonly nodeVersion: string;

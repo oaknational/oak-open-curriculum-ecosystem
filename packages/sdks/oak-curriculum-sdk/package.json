@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/curriculum-sdk",
-  "version": "1.87.6",
+  "version": "1.87.9",
   "description": "TypeScript SDK for Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/index.js",
@@ -115,7 +115,7 @@
     "@elastic/elasticsearch": "^9.4.2",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^24.13.3",
-    "eslint": "^10.7.0",
+    "eslint": "^10.8.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"

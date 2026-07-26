@@ -71,11 +71,7 @@ export function findGroupsMissingReappraisal(scopedBlocks: unknown): MissingReap
 
 /** Why a Bash `blocked_patterns` entry fails the teaching-presence check. */
 type BashEntryReappraisalReason =
-  | 'not-an-object'
-  | 'concept-absent'
-  | 'concept-empty'
-  | 'reappraisal-absent'
-  | 'reappraisal-empty';
+  'not-an-object' | 'concept-absent' | 'concept-empty' | 'reappraisal-absent' | 'reappraisal-empty';
 
 /** A Bash blocked-pattern entry that cannot teach a reappraisal, with the reason. */
 export interface BashEntryMissingReappraisalFinding {

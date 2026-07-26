@@ -82,9 +82,7 @@ structured record, not the source of truth.
 ```ts
 type LogContextScalar = string | number | boolean | null;
 type LogContextValue =
-  | LogContextScalar
-  | readonly LogContextValue[]
-  | { readonly [key: string]: LogContextValue };
+  LogContextScalar | readonly LogContextValue[] | { readonly [key: string]: LogContextValue };
 type LogContext = { readonly [key: string]: LogContextValue };
 
 interface NormalizedError {

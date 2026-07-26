@@ -122,10 +122,7 @@ export interface SearchSdkArgs {
  * `'threads'`, `'sequences'`) that serves as the discriminant.
  */
 export type ScopedSearchResult =
-  | LessonsSearchResult
-  | UnitsSearchResult
-  | ThreadsSearchResult
-  | SequencesSearchResult;
+  LessonsSearchResult | UnitsSearchResult | ThreadsSearchResult | SequencesSearchResult;
 
 /**
  * Compile-time assertion: no member of `ScopedSearchResult` may have a

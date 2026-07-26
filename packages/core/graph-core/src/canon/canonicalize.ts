@@ -19,9 +19,7 @@ import { canonizeRuntime, type CanonizeRuntime, type ParsedQuad } from './runtim
 import { reconstructQuad } from './term-reconstruction.js';
 
 export type CanonicalizationErrorKind =
-  | 'canonize_failed'
-  | 'reparse_failed'
-  | 'reconstruction_failed';
+  'canonize_failed' | 'reparse_failed' | 'reconstruction_failed';
 
 export interface CanonicalizationError {
   readonly kind: CanonicalizationErrorKind;

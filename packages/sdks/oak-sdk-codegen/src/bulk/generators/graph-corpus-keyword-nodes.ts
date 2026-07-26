@@ -33,17 +33,15 @@ export interface KeywordBuild {
  */
 export function buildKeywordNodes(keywords: readonly ExtractedKeyword[]): KeywordBuild {
   const nodes = keywords
-    .map(
-      (keyword): GraphCorpusKeywordNode => ({
-        kind: 'keyword',
-        id: keywordNodeId(keyword.term),
-        term: keyword.displayTerm,
-        description: keyword.definition,
-        frequency: keyword.lessonSlugs.length,
-        firstYear: keyword.firstYear,
-        subjects: keyword.subjects,
-      }),
-    )
+    .map((keyword): GraphCorpusKeywordNode => ({
+      kind: 'keyword',
+      id: keywordNodeId(keyword.term),
+      term: keyword.displayTerm,
+      description: keyword.definition,
+      frequency: keyword.lessonSlugs.length,
+      firstYear: keyword.firstYear,
+      subjects: keyword.subjects,
+    }))
     .sort((a, b) => a.id.localeCompare(b.id));
 
   const lessonSlugsById = new Map<GraphCorpusKeywordNodeId, readonly string[]>(

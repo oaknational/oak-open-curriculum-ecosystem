@@ -60,8 +60,7 @@ export type ParsedArgs =
  * `-m` and `-F` are mutually exclusive; unknown flags are a usage error.
  */
 type CollectedFlags =
-  | { readonly msgs: readonly string[]; readonly file?: string }
-  | { readonly error: string };
+  { readonly msgs: readonly string[]; readonly file?: string } | { readonly error: string };
 
 type FlagStep =
   | { readonly kind: 'msg'; readonly value: string }

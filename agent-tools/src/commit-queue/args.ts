@@ -23,7 +23,7 @@ export function parseCommitQueueArgs(argv: readonly string[]): {
   const [command, ...tokens] = effectiveArgv;
   const options: MutableCommitQueueCliOptions = { file: [] };
 
-  for (let index = 0; index < tokens.length; ) {
+  for (let index = 0; index < tokens.length;) {
     const token = tokens[index];
     if (!token.startsWith('--')) {
       throw new Error(`unexpected positional argument: ${token}`);

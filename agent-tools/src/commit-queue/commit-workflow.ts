@@ -58,10 +58,7 @@ export interface CommitWorkflowDependencies {
  * is transitioned to `abandoned`.
  */
 type CommitWorkflowFailureStage =
-  | 'load-intent'
-  | 'verify-staged-before'
-  | 'verify-staged-after'
-  | 'git-commit';
+  'load-intent' | 'verify-staged-before' | 'verify-staged-after' | 'git-commit';
 
 /**
  * Outcome of `runCommitWorkflow`.

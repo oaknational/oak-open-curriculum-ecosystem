@@ -18,12 +18,7 @@
  * - `object` → `z.record(z.string(), z.unknown())` or specific schema reference
  */
 export type ZodFieldType =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'array-string'
-  | 'array-number'
-  | 'object';
+  'string' | 'number' | 'boolean' | 'array-string' | 'array-number' | 'object';
 
 /**
  * Definition for a single field in a search index document.

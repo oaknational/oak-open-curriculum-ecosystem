@@ -16,8 +16,7 @@
 
 /** Result of resolving a transcript path. */
 export type TranscriptPathResult =
-  | { readonly ok: true; readonly path: string }
-  | { readonly ok: false; readonly error: string };
+  { readonly ok: true; readonly path: string } | { readonly ok: false; readonly error: string };
 
 /**
  * Allowlist for a session id: alphanumerics, underscore, and hyphen only.

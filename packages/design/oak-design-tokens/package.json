@@ -33,9 +33,9 @@
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/oak-design-system": "workspace:*",
     "@types/node": "^24.13.3",
-    "eslint": "^10.7.0",
+    "eslint": "^10.8.0",
     "globals": "^17.7.0",
-    "postcss": "^8.5.22",
+    "postcss": "^8.5.23",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"

@@ -1,14 +1,7 @@
 import type { SchemaObject } from 'openapi3-ts/oas31';
 
 export type ResponseMapMethod =
-  | 'get'
-  | 'post'
-  | 'put'
-  | 'delete'
-  | 'patch'
-  | 'head'
-  | 'options'
-  | '*';
+  'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options' | '*';
 
 export interface ResponseMapEntry {
   readonly operationId: string;

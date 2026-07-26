@@ -61,9 +61,7 @@ export interface ReservedThemeIdentifierError {
 
 /** Union of overlay-coverage failure shapes. */
 export type OverlayCoverageError =
-  | InvalidThemeNodeError
-  | OrphanOverridesError
-  | ReservedThemeIdentifierError;
+  InvalidThemeNodeError | OrphanOverridesError | ReservedThemeIdentifierError;
 
 function leafPathsOf(
   tree: DtcgTokenTree,

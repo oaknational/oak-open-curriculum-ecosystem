@@ -124,15 +124,11 @@ export async function buildThreeWayLessonRrfRequest(
   const queries: QueryContainer[] = [
     // BM25 query
     {
-      multi_match: {
-        /* ... */
-      },
+      multi_match: {/* ... */},
     },
     // ELSER query
     {
-      semantic: {
-        /* ... */
-      },
+      semantic: {/* ... */},
     },
   ];
 
