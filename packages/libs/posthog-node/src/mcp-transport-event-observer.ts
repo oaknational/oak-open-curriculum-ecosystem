@@ -197,6 +197,9 @@ class PostHogMcpTransportEventObserver implements McpTransportEventObserver {
     const toolNames = isError
       ? undefined
       : readListedToolNames(message, this.snapshot.servedToolNames);
+    if (toolNames === null) {
+      return;
+    }
     this.client.captureToolsList({
       distinctId: pending.distinctId,
       durationMs,

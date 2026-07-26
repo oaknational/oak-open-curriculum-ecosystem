@@ -86,6 +86,9 @@ const noPostHogVendorImportsRule: RuleWithReappraisingMessages<'postHogVendorImp
       ImportExpression(node) {
         report(node, node.source);
       },
+      TSImportType(node) {
+        report(node, node.source);
+      },
       CallExpression(node) {
         if (
           node.callee.type === 'Identifier' &&

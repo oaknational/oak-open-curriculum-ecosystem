@@ -1,14 +1,11 @@
 import { SUPPORTED_PROTOCOL_VERSIONS } from '@modelcontextprotocol/sdk/types.js';
 import type { ResolvedRelease } from '@oaknational/build-metadata';
 import { err, ok } from '@oaknational/result';
-import type { BeforeSendFn } from '@posthog/mcp';
 import { FeatureFlagEvaluations, type EventMessage } from 'posthog-node';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { ActivePostHogActorProjector } from './actor-pseudonym-contract.js';
 import { createPostHogEventPolicies } from './event-policy.js';
-
-type InstrumentationEvent = Parameters<BeforeSendFn>[0];
 
 const ACTOR_ID = 'user_sensitive_identity';
 const DISTINCT_ID = 'oakph:v1:2026-07:PIfQfJcEc74jSWuy1nDltrZrud8sidpN0qAch9noHwU';
@@ -92,45 +89,6 @@ function createSubject(options: SubjectOptions = {}) {
   });
 
   return { activeActorProjector, policies, reportOperationalError };
-}
-
-function intermediateProperties(
-  eventProperties: Readonly<Record<string, unknown>>,
-): Record<string, unknown> {
-  return {
-    ...COMMON_PROPERTIES,
-    __oak_posthog_distinct_id: DISTINCT_ID,
-    ...eventProperties,
-  };
-}
-
-function instrumentationEvent(
-  event: string,
-  properties: Readonly<Record<string, unknown>>,
-): InstrumentationEvent {
-  return {
-    distinct_id: 'vendor-session-identity',
-    event,
-    properties: intermediateProperties(properties),
-    timestamp: CAPTURE_TIMESTAMP,
-    type: 'capture',
-  };
-}
-
-function expectedInstrumentationEvent(
-  event: string,
-  properties: Readonly<Record<string, unknown>>,
-): InstrumentationEvent {
-  return {
-    distinct_id: DISTINCT_ID,
-    event,
-    properties: {
-      ...COMMON_PROPERTIES,
-      ...properties,
-    },
-    timestamp: CAPTURE_TIMESTAMP,
-    type: 'capture',
-  };
 }
 
 function nodeEvent(event: string, properties: Readonly<Record<string, unknown>>): EventMessage {
@@ -263,199 +221,6 @@ describe('projectVerifiedIdentityAndRelease', () => {
       policies.projectVerifiedIdentityAndRelease({ method: 'tools/list' }, authenticatedExtra()),
     ).toBeNull();
     expect(reportOperationalError).toHaveBeenCalledWith('posthog_identity_projection_failed');
-  });
-});
-
-describe('synchronousMcpEventPolicy integration', () => {
-  it.each(SUPPORTED_PROTOCOL_VERSIONS)(
-    'accepts initialize for SDK-supported protocol %s and reconstructs the exact row',
-    (protocolVersion) => {
-      const { policies } = createSubject();
-      const input = instrumentationEvent('$mcp_initialize', {
-        $mcp_is_error: false,
-        $mcp_protocol_version: protocolVersion,
-        oak_client_family: 'chatgpt',
-        $mcp_client_name: ACTOR_ID,
-        $mcp_client_version: 'raw-version',
-        $session_id: 'raw-session',
-        $mcp_conversation_id: 'raw-conversation',
-        $mcp_parameters: { raw: true },
-        $mcp_response: { raw: true },
-        $mcp_error_message: 'raw-error',
-        $groups: { organisation: 'raw-group' },
-        $set: { email: 'raw-email@example.test' },
-        $process_person_profile: false,
-        unknown_property: ACTOR_ID,
-      });
-      const inputBefore = structuredClone(input);
-
-      const result = policies.synchronousMcpEventPolicy(input);
-
-      expect(result).not.toBeInstanceOf(Promise);
-      expect(result).toStrictEqual(
-        expectedInstrumentationEvent('$mcp_initialize', {
-          $mcp_is_error: false,
-          oak_client_family: 'chatgpt',
-          $mcp_protocol_version: protocolVersion,
-        }),
-      );
-      expect(input).toStrictEqual(inputBefore);
-      expect(JSON.stringify(result)).not.toContain(ACTOR_ID);
-    },
-  );
-
-  it('intersects, deduplicates, and sorts listed tools only for a successful list', () => {
-    const { policies } = createSubject();
-    const success = instrumentationEvent('$mcp_tools_list', {
-      $mcp_duration_ms: 0,
-      $mcp_is_error: false,
-      $mcp_listed_tool_names: ['search', 'private-tool', 'browse', 'search'],
-      $mcp_tool_description: 'raw-description',
-    });
-    const failure = instrumentationEvent('$mcp_tools_list', {
-      $mcp_duration_ms: Number.MAX_SAFE_INTEGER,
-      $mcp_is_error: true,
-      $mcp_listed_tool_names: ['search'],
-    });
-
-    expect(policies.synchronousMcpEventPolicy(success)).toStrictEqual(
-      expectedInstrumentationEvent('$mcp_tools_list', {
-        $mcp_duration_ms: 0,
-        $mcp_is_error: false,
-        $mcp_listed_tool_names: ['browse', 'search'],
-      }),
-    );
-    expect(policies.synchronousMcpEventPolicy(failure)).toStrictEqual(
-      expectedInstrumentationEvent('$mcp_tools_list', {
-        $mcp_duration_ms: Number.MAX_SAFE_INTEGER,
-        $mcp_is_error: true,
-      }),
-    );
-  });
-
-  it.each([
-    ['search', 'search'],
-    ['private-tool', 'unknown'],
-    [undefined, 'unknown'],
-  ] as const)('maps tool name %j to the closed value %s', (toolName, expectedName) => {
-    const { policies } = createSubject();
-    const input = instrumentationEvent('$mcp_tool_call', {
-      $mcp_tool_name: toolName,
-      $mcp_duration_ms: 17,
-      $mcp_is_error: false,
-      $mcp_parameters: { query: ACTOR_ID },
-      $mcp_response: { result: ACTOR_ID },
-      $mcp_intent: ACTOR_ID,
-      $mcp_error_type: ACTOR_ID,
-    });
-
-    expect(policies.synchronousMcpEventPolicy(input)).toStrictEqual(
-      expectedInstrumentationEvent('$mcp_tool_call', {
-        $mcp_tool_name: expectedName,
-        $mcp_duration_ms: 17,
-        $mcp_is_error: false,
-      }),
-    );
-  });
-
-  it.each([
-    ['negative', -1],
-    ['fractional', 1.5],
-    ['NaN', Number.NaN],
-    ['infinite', Number.POSITIVE_INFINITY],
-    ['unsafe', Number.MAX_SAFE_INTEGER + 1],
-    ['string', '17'],
-  ])('drops a %s duration', (_label, duration) => {
-    const { policies } = createSubject();
-    const input = instrumentationEvent('$mcp_tool_call', {
-      $mcp_tool_name: 'search',
-      $mcp_duration_ms: duration,
-      $mcp_is_error: false,
-    });
-
-    expect(policies.synchronousMcpEventPolicy(input)).toBeNull();
-  });
-
-  it.each([
-    [
-      'unsupported event',
-      instrumentationEvent('$mcp_resource_read', {
-        $mcp_resource_name: 'lesson-guide',
-        $mcp_duration_ms: 1,
-        $mcp_is_error: false,
-      }),
-    ],
-    [
-      'missing private identity marker',
-      {
-        ...instrumentationEvent('$mcp_tool_call', {
-          $mcp_tool_name: 'search',
-          $mcp_duration_ms: 1,
-          $mcp_is_error: false,
-        }),
-        properties: {
-          ...COMMON_PROPERTIES,
-          $mcp_tool_name: 'search',
-          $mcp_duration_ms: 1,
-          $mcp_is_error: false,
-        },
-      },
-    ],
-    [
-      'invalid private identity marker',
-      instrumentationEvent('$mcp_tool_call', {
-        __oak_posthog_distinct_id: 'raw-user-id',
-        $mcp_tool_name: 'search',
-        $mcp_duration_ms: 1,
-        $mcp_is_error: false,
-      }),
-    ],
-    [
-      'captured release mismatch',
-      instrumentationEvent('$mcp_tool_call', {
-        oak_release: 'another-release',
-        $mcp_tool_name: 'search',
-        $mcp_duration_ms: 1,
-        $mcp_is_error: false,
-      }),
-    ],
-    [
-      'captured environment mismatch',
-      instrumentationEvent('$mcp_tool_call', {
-        oak_environment: 'preview',
-        $mcp_tool_name: 'search',
-        $mcp_duration_ms: 1,
-        $mcp_is_error: false,
-      }),
-    ],
-    [
-      'errored initialize',
-      instrumentationEvent('$mcp_initialize', {
-        $mcp_is_error: true,
-        oak_client_family: 'chatgpt',
-        $mcp_protocol_version: SUPPORTED_PROTOCOL_VERSIONS[0],
-      }),
-    ],
-    [
-      'unknown initialize client family',
-      instrumentationEvent('$mcp_initialize', {
-        $mcp_is_error: false,
-        oak_client_family: 'raw-client',
-        $mcp_protocol_version: SUPPORTED_PROTOCOL_VERSIONS[0],
-      }),
-    ],
-    [
-      'unsupported initialize protocol',
-      instrumentationEvent('$mcp_initialize', {
-        $mcp_is_error: false,
-        oak_client_family: 'chatgpt',
-        $mcp_protocol_version: '1900-01-01',
-      }),
-    ],
-  ])('drops %s', (_label, input) => {
-    const { policies } = createSubject();
-
-    expect(policies.synchronousMcpEventPolicy(input)).toBeNull();
   });
 });
 
@@ -670,8 +435,8 @@ describe('policy configuration snapshots', () => {
         $mcp_is_error: false,
       };
     }
-    function toolEvent(toolName: string): InstrumentationEvent {
-      return instrumentationEvent('$mcp_tool_call', toolProperties(toolName));
+    function toolEvent(toolName: string): EventMessage {
+      return nodeEvent('$mcp_tool_call', toolProperties(toolName));
     }
     function resourceEvent(resourceName: string): EventMessage {
       return nodeEvent('$mcp_resource_read', {
@@ -682,13 +447,13 @@ describe('policy configuration snapshots', () => {
     }
 
     expect([
-      policies.synchronousMcpEventPolicy(toolEvent('search')),
-      policies.synchronousMcpEventPolicy(toolEvent('private-tool')),
+      policies.finalOakEventPolicy(toolEvent('search')),
+      policies.finalOakEventPolicy(toolEvent('private-tool')),
       policies.finalOakEventPolicy(resourceEvent('lesson-guide')),
       policies.finalOakEventPolicy(resourceEvent('private-resource')),
     ]).toStrictEqual([
-      expectedInstrumentationEvent('$mcp_tool_call', toolProperties('search')),
-      expectedInstrumentationEvent('$mcp_tool_call', {
+      toolEvent('search'),
+      nodeEvent('$mcp_tool_call', {
         ...toolProperties('private-tool'),
         $mcp_tool_name: 'unknown',
       }),

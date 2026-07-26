@@ -49,8 +49,9 @@ lifecycle, a public MCP transport observer, and the final outbound
 policy. Emission sites depend on the closed Oak contract, never the
 vendor. The contract deliberately has no generic `name: string` or
 arbitrary-property escape hatch. The concrete adapter lives in
-`packages/libs/posthog-node`; it owns all `posthog-node`,
-`@posthog/mcp`, and MCP SDK imports.
+`packages/libs/posthog-node`; it exclusively owns all `posthog-node`
+and `@posthog/mcp` imports. The MCP application and adapter both
+legitimately consume the provider-neutral public MCP SDK contract.
 
 The adapter decorates the public MCP SDK `Transport` passed to
 `server.connect`. It observes the original JSON-RPC request and
@@ -569,8 +570,9 @@ An authenticated event omits `$process_person_profile`. Under the
 supported PostHog ingestion contract this permits one minimal Person
 keyed only by the pseudonym. Oak emits no standalone `$identify`,
 person properties, aliases, merges, or group relationships. The
-package logger remains unset because vendor implementations may
-interpolate the pseudonym into log strings.
+package logger is installed only behind the adapter's fixed mapper:
+vendor text, including any interpolated pseudonym, is discarded before
+the Oak operational reporter receives a content-free failure kind.
 
 ### Configuration and required client behaviour
 
@@ -633,8 +635,12 @@ request:
 The observer calls only `captureInitialize`, `captureToolsList`, or
 `captureToolCall`. `sessionId`, `setProperties`, groups, parameters,
 responses, errors, descriptions, intent, package preparation helpers,
-custom capture, and a package logger are not configured or supplied.
-Exception autocapture remains disabled.
+and custom capture are not configured or supplied. Before constructing
+the sole process-owned client, the runtime installs the package-level
+logger with a fixed Oak mapper: the SDK's known success message is
+ignored, every other message emits only
+`posthog_event_policy_failed`, and raw vendor text never crosses the
+adapter. Exception autocapture remains disabled.
 
 The observer projection and final client policy are synchronous, pure
 reconstruction functions. The projection handles only the three
@@ -711,10 +717,11 @@ configuration error stops bootstrap. Identity, policy, observation,
 capture, or delivery failure drops only the analytical event, emits at
 most the fixed non-recursive signal defined above, and never changes,
 delays, or annotates the MCP response. Transport delegation returns the
-delegate's exact promise even after capture fails. Oak leaves the
-package logger unset; package-contract tests and the required live
-acceptance event detect manual API setup failure without making log
-content part of the contract.
+delegate's exact promise even after capture fails. Oak configures the
+package logger only with the fixed content-free mapper. Isolated
+package-contract tests prove that failures swallowed by the manual API
+reach that logger; mapper tests and the required live acceptance event
+detect failure without making vendor log content part of the contract.
 
 ### Dependency currency and compatibility gate
 

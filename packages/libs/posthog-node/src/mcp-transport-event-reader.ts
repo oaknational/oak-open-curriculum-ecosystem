@@ -76,14 +76,14 @@ export function canonicalToolName(value: unknown, servedToolNames: ReadonlySet<s
 export function readListedToolNames(
   message: JSONRPCMessage,
   servedToolNames: ReadonlySet<string>,
-): string[] {
+): string[] | null {
   if (!('result' in message) || !isUnknownProperties(message.result)) {
-    return [];
+    return null;
   }
 
   const tools = readOwn(message.result, 'tools');
   if (!Array.isArray(tools)) {
-    return [];
+    return null;
   }
 
   const names = tools.map((tool) =>

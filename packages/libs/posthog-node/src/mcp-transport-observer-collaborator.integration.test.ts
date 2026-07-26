@@ -563,6 +563,31 @@ describe('createPostHogMcpTransportObserver collaborator integration', () => {
     expectClosedCapturePrivacy(subject);
   });
 
+  it('drops a successful tools/list response without a valid tools array', () => {
+    const subject = createSubject(createClock(10, 20));
+    subject.transport.onmessage = () => undefined;
+    void subject.transport.start();
+    subject.delegate.emit(
+      {
+        jsonrpc: '2.0',
+        id: 'malformed-list',
+        method: 'tools/list',
+      },
+      AUTH_EXTRA,
+    );
+    const response: JSONRPCMessage = {
+      jsonrpc: '2.0',
+      id: 'malformed-list',
+      result: { raw: 'missing-tools-array' },
+    };
+
+    const send = subject.transport.send(response);
+
+    expect(send).toBe(subject.delegate.sendPromise);
+    expect(subject.delegate.sendCalls[0]?.message).toBe(response);
+    expect(subject.toolsListCaptures).toStrictEqual([]);
+  });
+
   it('correlates overlapping IDs, closes unknown names, and ignores unsupported traffic', () => {
     const subject = createSubject(createClock(1, 2, 8, 10));
     subject.transport.onmessage = () => undefined;

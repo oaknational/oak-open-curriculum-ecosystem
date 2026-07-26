@@ -16,7 +16,6 @@ import {
 } from './event-policy-contract.js';
 import { isUnknownProperties, normaliseOakClientFamily, readOwn } from './event-policy-helpers.js';
 import { projectActiveActor } from './active-actor-projection.js';
-import { applySynchronousMcpEventPolicy } from './automatic-event-policy.js';
 import { applyFinalOakEventPolicy } from './final-event-policy.js';
 
 function readInitializeClientName(request: McpRequest): unknown {
@@ -95,7 +94,6 @@ export function createPostHogEventPolicies(config: PostHogEventPolicyConfig): Po
   return {
     projectVerifiedIdentityAndRelease: (request, extra) =>
       projectVerifiedIdentityAndRelease(snapshot, request, extra),
-    synchronousMcpEventPolicy: (event) => applySynchronousMcpEventPolicy(snapshot, event),
     finalOakEventPolicy: (event) => applyFinalOakEventPolicy(snapshot, event),
   };
 }

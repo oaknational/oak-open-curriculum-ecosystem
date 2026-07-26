@@ -22,7 +22,7 @@
     "clean": "rm -rf dist .turbo",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "test": "vitest run",
+    "test": "vitest run && node src/posthog-mcp-logger.smoke.ts",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint .",

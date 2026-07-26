@@ -1,22 +1,15 @@
 import {
-  ACTOR_MARKER,
   AUTOMATIC_EVENT_NAMES,
   type AutomaticEventName,
-  type McpBeforeSendEvent,
   type PolicySnapshot,
   type UnknownProperties,
 } from './event-policy-contract.js';
 import {
   commonProperties,
-  hasExpectedProjection,
-  isActorPseudonym,
   isOakClientFamily,
   isSupportedProtocolVersion,
-  isUnknownProperties,
   isValidDuration,
-  isValidTimestampString,
   readOwn,
-  reportSafely,
   sortedCanonicalToolIntersection,
 } from './event-policy-helpers.js';
 
@@ -120,45 +113,4 @@ export function isAutomaticEventName(value: unknown): value is AutomaticEventNam
     value === AUTOMATIC_EVENT_NAMES.toolsList ||
     value === AUTOMATIC_EVENT_NAMES.toolCall
   );
-}
-
-function hasValidMcpEnvelope(event: McpBeforeSendEvent): boolean {
-  return (
-    isUnknownProperties(event) &&
-    event.type === 'capture' &&
-    isValidTimestampString(event.timestamp) &&
-    isUnknownProperties(event.properties)
-  );
-}
-
-export function applySynchronousMcpEventPolicy(
-  snapshot: PolicySnapshot,
-  event: McpBeforeSendEvent,
-): McpBeforeSendEvent | null {
-  try {
-    if (!hasValidMcpEnvelope(event) || !isAutomaticEventName(event.event)) {
-      return null;
-    }
-
-    const marker = readOwn(event.properties, ACTOR_MARKER);
-    if (!isActorPseudonym(marker) || !hasExpectedProjection(event.properties, snapshot)) {
-      return null;
-    }
-
-    const properties = normaliseAutomaticProperties(event.event, event.properties, snapshot);
-    if (properties === null) {
-      return null;
-    }
-
-    return {
-      distinct_id: marker,
-      event: event.event,
-      properties,
-      timestamp: event.timestamp,
-      type: 'capture',
-    };
-  } catch {
-    reportSafely(snapshot.reportOperationalError, 'posthog_event_policy_failed');
-    return null;
-  }
 }

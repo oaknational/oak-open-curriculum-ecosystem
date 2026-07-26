@@ -1,13 +1,10 @@
 import type { ResolvedRelease } from '@oaknational/build-metadata';
 import { ok } from '@oaknational/result';
-import type { BeforeSendFn } from '@posthog/mcp';
 import type { EventMessage } from 'posthog-node';
 import { describe, expect, it } from 'vitest';
 
 import type { ActivePostHogActorProjector } from './actor-pseudonym-contract.js';
 import { createPostHogEventPolicies } from './event-policy.js';
-
-type InstrumentationEvent = Parameters<BeforeSendFn>[0];
 
 const DISTINCT_ID = 'oakph:v1:2026-07:PIfQfJcEc74jSWuy1nDltrZrud8sidpN0qAch9noHwU';
 const SERVER_VERSION = '1.2.3';
@@ -45,19 +42,18 @@ function createPolicies(servedToolNames: readonly string[]) {
   });
 }
 
-function instrumentationToolListEvent(listedToolNames: readonly string[]): InstrumentationEvent {
+function toolListEvent(listedToolNames: readonly string[]): EventMessage {
   return {
-    distinct_id: 'vendor-session-identity',
+    distinctId: DISTINCT_ID,
     event: '$mcp_tools_list',
     properties: {
       ...COMMON_PROPERTIES,
-      __oak_posthog_distinct_id: DISTINCT_ID,
       $mcp_duration_ms: 1,
       $mcp_is_error: false,
       $mcp_listed_tool_names: listedToolNames,
     },
-    timestamp: CAPTURE_TIMESTAMP,
-    type: 'capture',
+    timestamp: new Date(CAPTURE_TIMESTAMP),
+    uuid: EVENT_UUID_V7,
   };
 }
 
@@ -81,11 +77,9 @@ describe('event-policy canonical value integration', () => {
     const policies = createPolicies(['zeta', 'Alpha', '_private', 'beta']);
 
     expect(
-      policies.synchronousMcpEventPolicy(
-        instrumentationToolListEvent(['beta', '_private', 'zeta', 'Alpha']),
-      ),
+      policies.finalOakEventPolicy(toolListEvent(['beta', '_private', 'zeta', 'Alpha'])),
     ).toStrictEqual({
-      distinct_id: DISTINCT_ID,
+      distinctId: DISTINCT_ID,
       event: '$mcp_tools_list',
       properties: {
         ...COMMON_PROPERTIES,
@@ -93,8 +87,8 @@ describe('event-policy canonical value integration', () => {
         $mcp_is_error: false,
         $mcp_listed_tool_names: ['Alpha', '_private', 'beta', 'zeta'],
       },
-      timestamp: CAPTURE_TIMESTAMP,
-      type: 'capture',
+      timestamp: new Date(CAPTURE_TIMESTAMP),
+      uuid: EVENT_UUID_V7,
     });
   });
 

@@ -69,9 +69,10 @@ function lintVendorImport(
 function lintStrictVendorImport(
   specifier: (typeof VENDOR_IMPORT_SPECIFIERS)[number],
   filename: string,
+  source = `import vendorDefault from '${specifier}';\nvoid vendorDefault;`,
 ) {
   return linter.verify(
-    `import vendorDefault from '${specifier}';\nvoid vendorDefault;`,
+    source,
     [
       ...strict,
       {
@@ -116,6 +117,21 @@ describe('exclusive PostHog vendor boundary', () => {
     'survives a later no-restricted-imports override for %s',
     (specifier) => {
       const issues = lintStrictVendorImport(specifier, 'packages/core/example/src/fixture.ts');
+
+      expect(issues.map((issue) => issue.ruleId)).toContain(
+        '@oaknational/no-posthog-vendor-imports',
+      );
+    },
+  );
+
+  it.each(VENDOR_IMPORT_SPECIFIERS)(
+    'rejects a TypeScript import-type query for %s after a later override',
+    (specifier) => {
+      const issues = lintStrictVendorImport(
+        specifier,
+        'packages/core/example/src/fixture.ts',
+        `type VendorEvent = import('${specifier}').EventMessage;\nexport type { VendorEvent };`,
+      );
 
       expect(issues.map((issue) => issue.ruleId)).toContain(
         '@oaknational/no-posthog-vendor-imports',

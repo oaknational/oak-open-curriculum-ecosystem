@@ -2,7 +2,6 @@ import type { ResolvedRelease } from '@oaknational/build-metadata';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import type { McpTransportObserver, ProductAnalyticsSink } from '@oaknational/observability';
 import { ok } from '@oaknational/result';
-import { PostHogMCP, setLogger } from '@posthog/mcp';
 import type { EventMessage, PostHogOptions } from 'posthog-node';
 import { assert, describe, expect, it } from 'vitest';
 
@@ -35,13 +34,6 @@ interface ErrorSubscription {
 
 interface TestClient extends PostHogRuntimeClient {
   readonly kind: 'test-client';
-}
-
-class ThrowingCapturePostHogMcp extends PostHogMCP {
-  override capture(event: EventMessage): void {
-    expect(event).toBeDefined();
-    assert.fail('vendor-sensitive-detail');
-  }
 }
 
 interface ClientCreation {
@@ -346,35 +338,6 @@ describe('createPostHogProductAnalyticsRuntimeWithDependencies integration', () 
     ).not.toThrow();
     expect(reportedKinds).toStrictEqual(['posthog_event_policy_failed']);
     expect(JSON.stringify(reportedKinds)).not.toContain('vendor-detail');
-  });
-
-  it('observes capture faults that the production PostHogMCP pipeline suppresses', async () => {
-    const reportedKinds: PostHogOperationalErrorKind[] = [];
-    let client: ThrowingCapturePostHogMcp | undefined;
-    const config = createConfig((kind) => {
-      reportedKinds.push(kind);
-    });
-    createPostHogProductAnalyticsRuntimeWithDependencies(config, {
-      configureMcpSdkLogger: setLogger,
-      createClient: (projectApiKey, options) => {
-        client = new ThrowingCapturePostHogMcp(projectApiKey, options);
-        return client;
-      },
-      createSink: () => ({ capture: () => undefined }),
-      createTransportObserver: () => ({ observe: (transport) => transport }),
-    });
-    const createdClient = client;
-    assert(createdClient);
-
-    expect(() =>
-      createdClient.captureInitialize({
-        distinctId: DISTINCT_ID,
-        properties: {},
-        protocolVersion: '2025-06-18',
-      }),
-    ).not.toThrow();
-    await expect.poll(() => reportedKinds).toStrictEqual(['posthog_event_policy_failed']);
-    expect(JSON.stringify(reportedKinds)).not.toContain('vendor-sensitive-detail');
   });
 
   it('shares one successful shutdown promise across overlapping and repeated closes', async () => {
