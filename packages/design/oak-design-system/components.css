@@ -854,6 +854,49 @@
   letter-spacing: var(--tracking-body);
 }
 
+/* --- Disclosure ---
+   The dense, borderless sibling of .oak-accordion: a leading chevron, no card.
+   Use it for rows within a list; use .oak-accordion for a standalone card
+   that opens.
+
+   Its selectors are DESCENDANT where .oak-accordion's are CHILD. That is
+   deliberate on both sides. .oak-accordion scopes to `> summary` so a nested
+   <details> keeps its own identity — but the consequence is that a nested
+   disclosure inherits no marker reset, and the browser's native triangle
+   paints alongside whatever chevron the consumer draws. Closing that is this
+   class's whole job, so it reaches down. */
+.oak-disclosure summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-height: var(--size-target);
+  box-sizing: border-box;
+  border-radius: var(--radius-control);
+}
+.oak-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+.oak-disclosure summary::before {
+  content: '';
+  width: var(--select-chevron);
+  height: var(--select-chevron);
+  flex: 0 0 auto;
+  border: solid currentcolor;
+  border-width: 0 var(--border-solid-m) var(--border-solid-m) 0;
+  transform: rotate(-45deg);
+  transition: transform var(--motion-quick) var(--ease-standard);
+}
+.oak-disclosure[open] > summary::before {
+  transform: rotate(45deg);
+}
+.oak-disclosure summary:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring);
+}
+
 /* --- Data table --- */
 .oak-table {
   width: 100%;

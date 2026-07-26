@@ -40,7 +40,11 @@ async function collectImportClosure(packageRoot: string, entry: string): Promise
     seen.add(current);
 
     const source = await readPackageText(packageRoot, current);
-    for (const match of source.matchAll(/@import\s+['"]([^'"]+)['"]/g)) {
+    // Quotes are optional in CSS, and both `@import url('x')` and the bare
+    // `@import 'x'` are valid. A quote-only pattern silently walks a smaller
+    // graph than the real one, so the manifest would be held to less than it
+    // claims — and the suite would stay green while an unlisted sheet shipped.
+    for (const match of source.matchAll(/@import\s+(?:url\(\s*)?['"]?([^'")\s;]+)['"]?\s*\)?/g)) {
       const target = match[1];
       if (target !== undefined) {
         queue.push(resolveRelative(current, target));
@@ -54,7 +58,10 @@ async function collectImportClosure(packageRoot: string, entry: string): Promise
 /** Collects `url('x')` targets from a stylesheet, resolved package-relative. */
 function collectUrlReferences(stylesheetRelativePath: string, source: string): string[] {
   const references: string[] = [];
-  for (const match of source.matchAll(/url\(\s*['"]([^'"]+)['"]\s*\)/g)) {
+  // Quote-optional for the same reason as the @import walk: `url(x.svg)` is
+  // valid CSS, and a pattern that only matches `url('x.svg')` asks the manifest
+  // about fewer assets than the stylesheet actually loads.
+  for (const match of source.matchAll(/url\(\s*['"]?([^'")]+?)['"]?\s*\)/g)) {
     const target = match[1];
     if (target === undefined || target.startsWith('data:') || /^https?:/.test(target)) {
       continue;

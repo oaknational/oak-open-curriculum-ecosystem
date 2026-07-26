@@ -50,12 +50,23 @@ describe('Security Headers (Integration)', () => {
       expect(csp).toContain("'unsafe-inline'");
     });
 
-    it('CSP allows Google Fonts', async () => {
+    it('CSP permits the fonts the served page actually requests', async () => {
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
-      expect(csp).toContain('fonts.googleapis.com');
-      expect(csp).toContain('fonts.gstatic.com');
+      // Asserted on the emitted header, not the directive object: font-src is
+      // set, so it overrides default-src instead of inheriting it. A host-only
+      // value here blocks /oak-ds/fonts/*.ttf and the page renders in system
+      // faces — silently, with only a console violation to show for it.
+      expect(csp).toContain("font-src 'self'");
+    });
+
+    it('CSP names no third-party host', async () => {
+      const res = await request(app).get('/').set('Host', 'localhost');
+      const csp = res.headers['content-security-policy'];
+
+      expect(csp).not.toContain('fonts.googleapis.com');
+      expect(csp).not.toContain('fonts.gstatic.com');
     });
 
     it('CSP allows same-origin and inline scripts for Cloudflare', async () => {

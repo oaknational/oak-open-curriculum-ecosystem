@@ -87,11 +87,11 @@ export function servedTools(): UniversalToolListEntry[] {
   );
 }
 
-function ToolItem({ tool }: { tool: UniversalToolListEntry }): JSX.Element {
+function ToolItem({ tool }: { readonly tool: UniversalToolListEntry }): JSX.Element {
   const [summary, howToUse] = splitDescriptionByFirstParagraph(tool.description);
 
   return (
-    <details className="tool-item">
+    <details className="oak-disclosure tool-item">
       <summary>
         <code>{tool.name}</code>
       </summary>
@@ -99,7 +99,7 @@ function ToolItem({ tool }: { tool: UniversalToolListEntry }): JSX.Element {
         <div className="tool-desc">
           {summary}
           {howToUse && (
-            <details className="tool-how-to-use">
+            <details className="oak-disclosure tool-how-to-use">
               {/* Two dozen identical "How to use" controls read as one
                   repeated, meaningless label out of context in a screen
                   reader's control list; the hidden suffix names which tool

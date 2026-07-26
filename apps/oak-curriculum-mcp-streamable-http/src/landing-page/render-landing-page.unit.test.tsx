@@ -126,9 +126,19 @@ describe('renderLandingPageHtml', () => {
       expect(html).not.toContain('aria-current="page" href="https://www.thenational.academy');
     });
 
-    it('names the config snippet with a caption rather than a prohibited label', () => {
-      expect(html).toContain('<figcaption class="oak-visually-hidden">');
-      expect(html).not.toContain('<pre aria-label');
+    it('gives the config snippet a role that may legitimately carry a name', () => {
+      // A bare <pre> is role `generic`, which ARIA 1.2 forbids naming. The
+      // explicit region role is what makes the label legal, so the two must
+      // travel together — a label without the role is the prohibited shape.
+      expect(html).toContain('role="region"');
+      expect(html).toContain('aria-label="JSON configuration snippet"');
+      expect(html).not.toMatch(/<pre(?![^>]*role=)[^>]*aria-label/);
+    });
+
+    it('makes the scrollable snippet reachable by keyboard', () => {
+      // Below ~500px the snippet is a scroll container. Without a tabindex,
+      // keyboard users outside Chromium cannot scroll it to read the endpoint.
+      expect(html).toMatch(/<pre[^>]*tabindex="0"/);
     });
   });
 });

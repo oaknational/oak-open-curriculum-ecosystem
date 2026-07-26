@@ -86,8 +86,14 @@
         "tsconfig.build.json",
         "tsup.config.ts",
         "src/**/*.ts",
+        "src/**/*.tsx",
+        // The .tsx twins matter as much as the .ts ones: $TURBO_DEFAULT$ pulls
+        // in every tracked file, so without these negations a landing-page
+        // component test invalidates the build cache and replays the bundle.
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts",
+        "!src/**/*.test.tsx",
+        "!src/**/*.spec.tsx",
         // The design system is copied into public/oak-ds at build time. It has
         // no build script, so ^build contributes no hash leg for it — without
         // these inputs a design-system edit replays a stale bundle.
@@ -366,6 +372,15 @@
       "outputs": [],
       "cache": true,
       "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts"]
+    },
+    "test:visual": {
+      // Runs after test:a11y so the three browser suites serialise rather than
+      // contending for the same dev-server ports. Baselines are an input: a
+      // regenerated PNG must re-run the comparison, not replay a cached pass.
+      "dependsOn": ["build", "test:a11y"],
+      "outputs": [],
+      "cache": true,
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts", "tests/appearance/**"]
     },
     "test:a11y": {
       "dependsOn": ["build", "test:ui"],

@@ -11,34 +11,27 @@
  * applied (each marked "a11y cure" below).
  */
 
-/* System gap: bands ship --band-pad: 0. The permanent cure lands upstream via
-   /design-sync; this override carries the intended values (OWA programme-header
-   padding: 40 mobile / 64 desktop) until it does. */
+/* Page-scoped re-point of the main grid's gap, which components.css declares
+   as `0 var(--gap-l)` — no row gap, because a generic main does not know its
+   rows are stacked bands. This page's are. `--main-gap` is on brand.css's
+   re-pointable list, so this is the sanctioned lever, not a workaround.
+
+   --band-pad is deliberately NOT re-pointed. The system ships it as a clamp
+   that already delivers the OWA rhythm fluidly (40px at 375, 64px at 1440);
+   an earlier version of this file overrode it to a hard step at 960px on the
+   false premise that bands shipped `--band-pad: 0`. */
 [data-page='home'] {
-  --band-pad: var(--space-40);
   --main-gap: var(--space-40);
 }
 @media (min-width: 960px) {
   [data-page='home'] {
-    --band-pad: var(--space-64);
     --main-gap: var(--space-56);
   }
-}
-
-/* System gap: .oak-main does not set align-content, so its rows stretch to
-   fill the viewport on a short page instead of stacking from the top. Carried
-   here (the design carried it as an inline style) until the upstream cure
-   lands via /design-sync. */
-.oak-main {
-  align-content: start;
 }
 
 /* Content rhythm — full-bleed colour bands (homepage grammar) + section gaps */
 .band-lemon {
   --band-bg: var(--surface-decorative-5-subtle);
-}
-.connect {
-  max-width: var(--measure-prose);
 }
 .connect pre,
 .connect code {
@@ -47,20 +40,33 @@
 .connect pre code {
   background: none;
 }
-.content-cards {
-  margin-top: var(--space-56);
-}
 [data-region='content'] {
+  display: grid;
+  gap: var(--space-56);
   padding-bottom: var(--space-80);
 }
 
-/* Site chrome — matches OWA TopNavMinimal / LayoutSiteFooter grammar, tokens only */
+/* Site chrome — matches OWA TopNavMinimal / LayoutSiteFooter grammar, tokens only.
+
+   The band is an INVERTED SURFACE, and says so: --bg-inverted carries that
+   meaning across all four themes, where --bg-btn-primary merely happens to
+   resolve to the same values today and would drag the masthead along with any
+   re-point of the primary button.
+
+   --focus-ring is swapped wholesale rather than recomposed. A custom property
+   is substituted where it is DECLARED: --focus-ring resolves against :root's
+   --shadow-ground and inherits down already-resolved, so overriding the ground
+   here would not reach it. The previous version of this rule did exactly that
+   and measured 1.27:1 in dark — a cure that read correctly and did nothing. */
 .site-tabs {
-  background: var(--bg-btn-primary);
+  background: var(--bg-inverted);
+  --focus-ring: var(--focus-ring-inverted);
+  padding-block: var(--space-16) 0;
+}
+.site-tabs-inner {
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap-m);
-  padding: var(--space-16) clamp(var(--space-20), 4vw, var(--space-40)) 0;
 }
 .site-tabs .oak-btn {
   border-bottom-left-radius: var(--radius-square);
@@ -68,23 +74,16 @@
   border-bottom-width: var(--border-solid-none);
 }
 
-/* a11y cure — SC 1.4.11 / 2.4.7, dark theme.
-   Dark flips this band to white while --bg-btn-primary flips against the
-   canvas, so the inherited focus ring lands at 1.33:1 and the grey halo at
-   1.06:1 — invisible to a low-vision keyboard user. Re-declaring the shadow
-   ground band-locally puts grey60 on the white band (7.2:1). */
-.site-tabs {
-  --shadow-ground: light-dark(var(--oak-grey20), var(--oak-grey60));
-}
-
 .site-nav {
   background: var(--bg-primary);
   border-bottom: var(--border-solid-s) solid var(--border-neutral-lighter);
+  padding-block: var(--space-16);
+}
+.site-nav-inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gap-l);
-  padding: var(--space-16) clamp(var(--space-20), 4vw, var(--space-40));
 }
 .site-nav-logo img,
 .site-footer-inner img {
@@ -234,7 +233,8 @@ div.tool-list {
 }
 .resource-title {
   display: block;
-  font: var(--weight-semibold) var(--font-size-3) / var(--leading-24) var(--font-sans);
+  font: var(--type-body-2);
+  font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-body);
   margin-top: var(--space-4);
 }
@@ -245,10 +245,15 @@ div.tool-list {
   margin-top: var(--space-4);
 }
 
-/* Nested disclosures: stand down the inherited .oak-accordion summary
-   treatment; dense rows, self-scoped chevrons */
+/* Nested disclosures. The marker reset, flex row and chevron now come from
+   .oak-disclosure — this file previously hand-rolled them and got it wrong:
+   it set `justify-content` and a sized, transformed `::before` without ever
+   setting `display: flex` or `list-style: none`. .oak-accordion's rules are
+   child-scoped and never reached these nested <details>, so the summary stayed
+   `display: list-item`, the ::before stayed an inline box that ignores width,
+   height and transform, and every row rendered the native triangle beside a
+   2px stub. Only the density and the ::after stand-down remain page-local. */
 .tool-list summary {
-  justify-content: flex-start;
   min-height: var(--size-target-dense);
   padding: var(--space-4) 0;
   font: var(--type-body-2);
@@ -256,20 +261,6 @@ div.tool-list {
 }
 .tool-list summary::after {
   content: none;
-}
-.tool-list summary::before {
-  content: '';
-  width: var(--select-chevron);
-  height: var(--select-chevron);
-  flex: 0 0 auto;
-  border: solid var(--text-primary);
-  border-width: 0 var(--border-solid-m) var(--border-solid-m) 0;
-  transform: rotate(-45deg);
-  margin-right: var(--space-8);
-  transition: transform var(--motion-quick) var(--ease-standard);
-}
-.tool-list details[open] > summary::before {
-  transform: rotate(45deg);
 }
 .tool-item > .tool-desc {
   margin: 0 0 var(--space-8);

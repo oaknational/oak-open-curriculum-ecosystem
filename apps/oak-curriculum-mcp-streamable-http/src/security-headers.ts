@@ -17,16 +17,16 @@ import helmet from 'helmet';
 import type { RequestHandler } from 'express';
 
 /**
- * CSP directives for the landing page.
+ * CSP directives for the HTML this app serves.
  *
  * Configured to allow:
- * - Inline styles (landing page uses `<style>` tags)
- * - Google Fonts (Lexend font from fonts.googleapis.com and fonts.gstatic.com)
- * - Same-origin images and favicons
+ * - Same-origin stylesheets, fonts, scripts, and images — the page's whole
+ *   asset list resolves within this origin, per ADR-217 §2
+ * - Inline styles, for Cloudflare's challenge pages only
  * - Cloudflare challenge/bot protection scripts (inline + /cdn-cgi/ path)
  *
  * Configured to block:
- * - External scripts (only same-origin and Cloudflare allowed)
+ * - Every third-party host, including font and stylesheet CDNs
  * - External connections except same-origin
  * - Embedding in frames from other origins (clickjacking protection)
  *
@@ -35,21 +35,41 @@ import type { RequestHandler } from 'express';
  * from `/cdn-cgi/challenge-platform/`. The `'unsafe-inline'` directive is required
  * for the bootstrap script, and `'self'` allows the challenge platform JS files.
  *
+ * `'unsafe-inline'` on `styleSrc` is NOT for this app's own pages — they render
+ * zero `<style>` blocks and zero `style` attributes. It is retained solely
+ * because the Cloudflare rationale above is documented for scripts and unproven
+ * for styles, and breaking a bot-protection page is worse than the residual
+ * risk. Prove Cloudflare's challenge pages need no inline style and it goes.
+ *
+ * The MCP App widget is NOT governed by this policy. It is delivered as an MCP
+ * resource (`text/html;profile=mcp-app`), and declares its own font-host
+ * allowances to the host via `_meta.ui.csp.resourceDomains` in
+ * `register-widget-resource.ts`. The Google Fonts entries that used to sit here
+ * were vestigial from when this page imported Lexend from a CDN; removing them
+ * does not touch the widget.
+ *
  * These directives are applied to ALL responses but only affect HTML rendering.
  * JSON responses from MCP endpoints ignore CSP headers.
  */
 const LANDING_PAGE_CSP_DIRECTIVES = {
   /** Default policy: only allow same-origin resources */
   defaultSrc: ["'self'"],
-  /** Styles: allow inline (for `<style>` tags) and Google Fonts CSS */
-  styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-  /** Fonts: allow Google Fonts font files */
-  fontSrc: ['https://fonts.gstatic.com'],
+  /** Styles: same-origin sheets; inline retained for Cloudflare only */
+  styleSrc: ["'self'", "'unsafe-inline'"],
+  /**
+   * Fonts: same-origin only. The design system's faces are served from
+   * `/oak-ds/fonts/` and referenced by relative `url()`, so an explicit
+   * third-party host here would not merely be redundant — because `fontSrc` is
+   * set at all, it overrides `defaultSrc`, and a host-only value blocks the
+   * app's own fonts outright.
+   */
+  fontSrc: ["'self'"],
   /**
    * Scripts: allow same-origin and inline for Cloudflare integration.
-   * - 'self': Cloudflare challenge scripts from /cdn-cgi/challenge-platform/
+   * - 'self': Cloudflare challenge scripts from /cdn-cgi/challenge-platform/,
+   *   and this app's own `/landing-page.js` and `/oak-ds/oak-theme.js` when
+   *   the theme control ships
    * - 'unsafe-inline': Cloudflare's injected bootstrap script
-   * Note: Landing page itself has no JavaScript; this is purely for Cloudflare.
    */
   scriptSrc: ["'self'", "'unsafe-inline'"],
   /** Images: same-origin only (data: no longer needed as logo is inline SVG) */

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    // Playwright specs span two execution contexts: the test body runs in
+    // Node, the page.evaluate callbacks run in the browser. They need the DOM
+    // lib, and the app project must not have it — this is a Node server, and
+    // widening the app project would let server source reference `document`.
+    // Same separation widget/tsconfig.json already uses.
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
+    "noEmit": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
+}

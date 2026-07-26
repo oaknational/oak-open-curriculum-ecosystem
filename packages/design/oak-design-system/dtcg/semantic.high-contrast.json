@@ -185,6 +185,10 @@
     },
     "press": {
       "$value": "{border.solid-xl} {border.solid-xl} 0 0 {shadow.ground}, {border.solid-m} {border.solid-m} 0 0 {oak.color.lemon}"
+    },
+    "ground-inverted": {
+      "$value": "{oak.color.white}",
+      "$type": "color"
     }
   },
   "color": {
@@ -282,6 +286,9 @@
   "focus": {
     "ring": {
       "$value": "0 0 0 {border.solid-l} {oak.color.black-true}, 0 0 0 {focus.ring-halo} {oak.color.lemon}"
+    },
+    "ring-inverted": {
+      "$value": "0 0 0 {border.solid-l} {oak.color.white}, 0 0 0 {focus.ring-halo} {oak.color.lemon}"
     }
   }
 }

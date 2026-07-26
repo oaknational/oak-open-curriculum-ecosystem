@@ -75,7 +75,11 @@ describe('ToolsSection', () => {
   });
 
   it('renders each tool as a disclosure with a how-to-use control', () => {
-    expect(html).toContain('<details class="tool-item">');
+    // Asserted on the design-system class rather than the whole class list:
+    // .oak-disclosure is what supplies the marker reset and the chevron, so
+    // losing it is the regression worth catching. A nested <details> without
+    // it renders the browser's native triangle beside the CSS chevron.
+    expect(html).toMatch(/<details class="[^"]*\boak-disclosure\b[^"]*\btool-item\b/);
     expect(html).toContain('<summary>');
     expect(html).toContain('How to use');
   });

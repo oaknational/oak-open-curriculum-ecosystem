@@ -67,33 +67,42 @@ export function PageHero(): JSX.Element {
  *
  * @param vercelHost - Deployment host used to derive the endpoint URL.
  */
-export function ConnectSection({ vercelHost }: { vercelHost?: string }): JSX.Element {
+export function ConnectSection({ vercelHost }: { readonly vercelHost?: string }): JSX.Element {
   return (
-    <section className="oak-stack--s connect" aria-labelledby="connect-title">
+    <section className="oak-stack oak-stack--s oak-prose connect" aria-labelledby="connect-title">
       <h2 className="oak-heading-4" id="connect-title">
         Connect the Oak Curriculum MCP to your AI assistant
       </h2>
-      {/* oak-body-4 is 12px/300; on this tinted band that breaches the design
-          system's own floors (body >= 16px, never weight 300 below 18px on a
-          pastel fill), so the meta line takes the smallest conforming class. */}
-      <p className="oak-body-3">
+      {/* The design system's floor for a pastel fill is weight 400+, and its
+          body floor is 16px. oak-body-3 is 14px at weight 300 and meets
+          neither — an earlier comment here rejected oak-body-4 by citing that
+          floor and then picked a class that breaches it too. oak-body-2-bold
+          is 16px/700 and is the smallest class on this band that conforms. */}
+      <p className="oak-body-2-bold">
         Status: ok • Route: <code>/mcp</code> • Auth: OAuth 2.1
       </p>
       <p>Add this to your MCP client configuration:</p>
-      {/* `aria-label` is naming-prohibited on <pre>; a figure caption names
-          the region legitimately and stays available to assistive tech. */}
-      <figure>
-        <figcaption className="oak-visually-hidden">JSON configuration snippet</figcaption>
-        <pre>
-          <code>{`{${createSnippet(vercelHost)}}`}</code>
-        </pre>
-      </figure>
+      {/* `overflow-x: auto` makes this a scroll container below ~500px, and a
+          scroll container with no focusable descendant is unreachable by
+          keyboard outside Chromium — SC 2.1.1, Level A, on the one string the
+          page exists to convey. `tabIndex` supplies the affordance.
+
+          A bare <pre> maps to role `generic`, which ARIA 1.2 §5.2.8.6 forbids
+          naming — so `role="region"` is what makes `aria-label` legitimate
+          here, not a workaround for it. That also retires the figure wrapper:
+          a visually-hidden <figcaption> stays in the accessibility tree as
+          CONTENT but yields no accessible NAME in Chromium, so it never did
+          the naming job it was added for. */}
+      <pre tabIndex={0} role="region" aria-label="JSON configuration snippet">
+        <code>{`{${createSnippet(vercelHost)}}`}</code>
+      </pre>
       <p>
         This server uses{' '}
         <a className="oak-link" href="/.well-known/oauth-protected-resource">
           OAuth 2.1 authorisation
         </a>
-        . You will be prompted to log in. Access is currently for internal staff or by invitation.
+        {'. '}
+        You will be prompted to log in. Access is currently for internal staff or by invitation.
       </p>
     </section>
   );
@@ -102,14 +111,14 @@ export function ConnectSection({ vercelHost }: { vercelHost?: string }): JSX.Ele
 /** Pointers to the API documentation and the server's source. */
 export function DocumentationCard(): JSX.Element {
   return (
-    <section className="oak-card oak-card--aqua oak-stack--s">
+    <section className="oak-card oak-card--aqua oak-stack oak-stack--s">
       <h2 className="oak-heading-5">Documentation</h2>
       <p>
         For details about the underlying curriculum data, see the{' '}
         <a className="oak-link" href={OAK_API_OVERVIEW_URL}>
           Oak Curriculum API documentation
         </a>
-        .
+        {'.'}
       </p>
       <p>
         Browse the MCP server implementation:{' '}
@@ -121,7 +130,7 @@ export function DocumentationCard(): JSX.Element {
         >
           code on GitHub
         </a>
-        .
+        {'.'}
       </p>
     </section>
   );

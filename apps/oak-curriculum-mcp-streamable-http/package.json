@@ -20,17 +20,19 @@
     "prod:harness": "pnpm exec tsx scripts/server-harness.ts",
     "prod:requests": "pnpm exec tsx scripts/run-requests.ts",
     "prod:diagnostics": "pnpm build && pnpm prod:harness",
-    "type-check": "tsc -p tsconfig.lint.json --noEmit && tsc -p widget/tsconfig.json --noEmit",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit && tsc -p widget/tsconfig.json --noEmit && tsc -p tests/tsconfig.json --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:widget": "vitest run --config vitest.widget.config.ts",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "test:ui": "env -u NO_COLOR playwright test --grep-invert @a11y",
-    "test:a11y": "env -u NO_COLOR playwright test --grep @a11y",
+    "test:ui": "env -u NO_COLOR playwright test --project=visual --project=theme-control --grep-invert @a11y",
+    "test:a11y": "env -u NO_COLOR playwright test --project=visual --project=theme-control --grep @a11y",
     "test:widget:ui": "env -u NO_COLOR playwright test --config playwright.widget.config.ts --grep-invert @a11y",
-    "test:widget:a11y": "env -u NO_COLOR playwright test --config playwright.widget.config.ts --grep @a11y"
+    "test:widget:a11y": "env -u NO_COLOR playwright test --config playwright.widget.config.ts --grep @a11y",
+    "test:visual:baselines": "tsx scripts/update-visual-baselines.ts",
+    "test:visual": "env -u NO_COLOR playwright test --project=appearance"
   },
   "dependencies": {
     "@clerk/backend": "^3.13.1",

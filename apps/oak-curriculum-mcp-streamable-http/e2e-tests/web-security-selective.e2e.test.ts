@@ -293,13 +293,16 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
       expect(res.headers['content-security-policy']).toContain("default-src 'self'");
     });
 
-    it('CSP allows Google Fonts for landing page styling', async () => {
+    it('CSP permits the app to serve its own fonts', async () => {
       const app = await createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
-      expect(csp).toContain('fonts.googleapis.com');
-      expect(csp).toContain('fonts.gstatic.com');
+      // The design system is served from this origin, so the policy must
+      // permit same-origin fonts. font-src overrides default-src wherever it
+      // is set, which is why this cannot be left to inheritance.
+      expect(csp).toContain("font-src 'self'");
+      expect(csp).not.toContain('fonts.gstatic.com');
     });
 
     it('CSP allows images from same origin', async () => {

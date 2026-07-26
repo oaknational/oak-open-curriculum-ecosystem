@@ -13,16 +13,36 @@ describe('security-headers', () => {
       expect(CSP_DIRECTIVES.defaultSrc).toEqual(["'self'"]);
     });
 
-    it('allows inline styles for landing page <style> tags', () => {
+    it('allows inline styles, which only Cloudflare challenge pages use', () => {
       expect(CSP_DIRECTIVES.styleSrc).toContain("'unsafe-inline'");
     });
 
-    it('allows Google Fonts CSS', () => {
-      expect(CSP_DIRECTIVES.styleSrc).toContain('https://fonts.googleapis.com');
+    it('permits the app to load its own fonts', () => {
+      // fontSrc is set, so it overrides defaultSrc rather than inheriting it.
+      // The design system's faces are served from /oak-ds/fonts/ and referenced
+      // by relative url(); without 'self' here the browser refuses them and the
+      // page silently falls back to system faces.
+      expect(CSP_DIRECTIVES.fontSrc).toContain("'self'");
     });
 
-    it('allows Google Fonts font files', () => {
-      expect(CSP_DIRECTIVES.fontSrc).toContain('https://fonts.gstatic.com');
+    it('permits the app to load its own stylesheets', () => {
+      expect(CSP_DIRECTIVES.styleSrc).toContain("'self'");
+    });
+
+    it('allows no third-party host in any asset directive', () => {
+      // Every asset a served page references resolves within this origin
+      // (ADR-217 §2). The widget's font-host needs are declared separately, to
+      // the MCP host, and are not governed by this policy.
+      const assetDirectives = [
+        CSP_DIRECTIVES.defaultSrc,
+        CSP_DIRECTIVES.styleSrc,
+        CSP_DIRECTIVES.fontSrc,
+        CSP_DIRECTIVES.scriptSrc,
+        CSP_DIRECTIVES.imgSrc,
+        CSP_DIRECTIVES.connectSrc,
+      ].flat();
+
+      expect(assetDirectives.filter((source) => source.includes('//'))).toEqual([]);
     });
 
     it('allows same-origin and inline scripts for Cloudflare integration', () => {

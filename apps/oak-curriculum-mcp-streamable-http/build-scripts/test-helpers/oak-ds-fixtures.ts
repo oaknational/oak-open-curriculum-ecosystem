@@ -60,3 +60,8 @@ export function directoryOf(relativePath: string): string {
 export function resolveRelative(fromFile: string, reference: string): string {
   return path.normalize(path.join(path.dirname(fromFile), reference));
 }
+
+/** Read a file from the app's own workspace, workspace-relative. */
+export async function readAppText(relativePath: string): Promise<string> {
+  return readFile(path.resolve(import.meta.dirname, '..', '..', relativePath), 'utf8');
+}

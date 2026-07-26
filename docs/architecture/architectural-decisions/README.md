@@ -500,8 +500,8 @@ For understanding the agentic engineering practice:
 - **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location (§Source Format superseded in part by ADR-213)
 - **[ADR-149](149-frontend-specialist-expert-gateway-cluster.md)** - Frontend specialist expert gateway cluster: accessibility-expert, design-system-expert, react-component-expert cohort with MCP boundary rule
 - **[ADR-151](151-mcp-app-styling-independence.md)** - MCP App styling independence: CSS custom properties over styled-components, self-contained HTML resources, host theme composition
-- **[ADR-217](217-server-rendered-html-in-the-mcp-app.md)** - Server-rendered HTML in the MCP app: React static markup, design system as app-served assets under a closure-tested manifest, derived served-surface claims, flagged affordances whose machinery ships with their control
 - **[ADR-165](165-agent-work-practice-phenotype-boundary.md)** - Agent work Practice phenotype boundary: local implementation surfaces for PDR-035 agent-work authority
+- **[ADR-217](217-server-rendered-html-in-the-mcp-app.md)** - Server-rendered HTML in the MCP app: React static markup, design system as app-served assets under a closure-tested manifest, derived served-surface claims, flagged affordances whose machinery ships with their control
 
 For understanding semantic search and Elastic-native AI/ML approach:
 

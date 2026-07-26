@@ -223,9 +223,9 @@ jobs:
           key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
       - name: Install Playwright (browser + OS deps)
         run: pnpm exec playwright install --with-deps chromium
-      - name: Browser suites (e2e, ui, a11y, widget)
+      - name: Browser suites (e2e, ui, a11y, visual, widget)
         run: >-
-          pnpm exec turbo run test:e2e test:ui test:a11y test:widget
+          pnpm exec turbo run test:e2e test:ui test:a11y test:visual test:widget
           test:widget:ui test:widget:a11y --continue --log-order=grouped --summarize
       - name: Report Turbo summary
         if: always()

@@ -12,13 +12,11 @@
     "src/**/*.tsx",
     "scripts/**/*.ts",
     "e2e-tests/**/*.ts",
-    "tests/**/*.ts",
     "**/*.test.ts",
     // Scoped to src/, deliberately: a bare `**/*.test.tsx` reaches into
     // widget/, whose tests are .tsx and whose DOM lib is declared in its own
     // project — pulling them in here type-checks them without lib.dom.
     "src/**/*.test.tsx",
-    "**/*.spec.ts",
     "*.config.ts",
     "vitest.global-setup.ts",
     "vitest.e2e.config.ts"

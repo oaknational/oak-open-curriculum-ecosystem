@@ -58,8 +58,13 @@ export const OAK_DS_MANIFEST = {
     'fonts/Lexend-OFL.txt',
     'fonts/RobotoMono-VariableFont_wght.ttf',
     'fonts/RobotoMono-OFL.txt',
-    // Markup-referenced (masthead + footer), so no CSS closure reaches it.
+    // Markup-referenced, so no CSS closure reaches either of these. Declared
+    // individually even though `assets/icons` is copied wholesale: the footer
+    // rule is not an icon, it merely lives in that directory today, and a
+    // design-system commit that reorganised it would 404 the footer with the
+    // whole suite green.
     'assets/logo-full-black.svg',
+    'assets/icons/header-underline.svg',
   ],
   directories: ['assets/icons'],
 } as const;

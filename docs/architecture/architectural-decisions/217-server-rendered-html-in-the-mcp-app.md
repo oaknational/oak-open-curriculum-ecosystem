@@ -55,6 +55,21 @@ both font faces with their licence notices, mask icons, logo artwork, and the th
 all served from `/oak-ds/`. A page's asset list is a statement about what the app itself
 serves.
 
+The Content-Security-Policy is part of that statement, and is asserted against the **emitted
+header** rather than the directive object. A directive naming only third-party hosts is worse
+than a redundant one: `font-src` overrides `default-src` wherever it is set, so a host-only
+value refuses the app's own fonts and the page renders in system faces — silently, with only a
+console violation. The policy therefore names no third-party host, and every asset directive
+has a test asserting the app can load what it serves. The MCP App widget is not governed by
+this policy: it is delivered as an MCP resource and declares its own host allowances through
+`_meta.ui.csp`.
+
+The static asset root is a boot-time requirement, not a best effort. It is located by trying
+`process.cwd()`-relative candidates, because the app runs from the workspace directory locally
+and the repository root on Vercel; if none resolves, or the design system is absent from the
+one that does, the app refuses to start. Failing open would serve a 200 with unstyled HTML and
+nothing in the logs.
+
 The copy is wired at the three points that produce a running app — the esbuild composition
 root, the dev server, and the Vitest global setup — and the esbuild wiring sits ahead of that
 file's build-intent switch so every build arm ships the same assets. Turbo carries the design
@@ -98,7 +113,10 @@ put a visitor into a state the page never offered and gives them no way out.
 
 The page therefore declares its own default state explicitly (`data-theme="light"`), so the
 served appearance is a property of the page rather than of what the visitor's browser
-volunteers.
+volunteers — **in the configuration where the mechanism is absent, which is the point.** The
+theme script owns the attribute whenever it loads: given no stored choice it calls
+`removeAttribute`, so the server-rendered declaration survives exactly while the script is
+withheld. The declaration is the no-script posture, not an override of the script.
 
 ## Consequences
 
@@ -109,8 +127,14 @@ volunteers.
 - `public/oak-ds/` is generated and gitignored. It is registered with the dependency-boundary
   checker alongside the other browser-served scripts, which have no importer by construction.
 - Adding a served asset means editing the manifest. The closure test covers assets the CSS
-  reaches; one referenced only from markup is declared directly and proven by the
-  static-serving test.
-- Fonts served from the app's origin need no third-party font CSP allowance for these pages.
+  reaches; one referenced only from markup is declared directly — individually, even when a
+  `directories` entry would copy it incidentally, because incidental coverage breaks silently
+  when the design system reorganises.
+- Fonts served from the app's origin need `font-src 'self'`, not the absence of a font
+  directive. Setting `font-src` at all overrides `default-src`, so "no third-party allowance"
+  and "no directive" are different policies and only one of them serves fonts.
+- A page's composition CSS is held to the tier discipline mechanically — no raw colour, no
+  bare length, no tier-1 `--oak-*` reference — because the claim is otherwise a comment in a
+  file that cannot check itself.
 - A future served surface — a second page, an error page, a status page — inherits all five
   clauses without further decision.

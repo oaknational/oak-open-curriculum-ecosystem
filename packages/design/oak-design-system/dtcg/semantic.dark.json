@@ -249,6 +249,10 @@
     "ground": {
       "$value": "{oak.color.grey20}",
       "$type": "color"
+    },
+    "ground-inverted": {
+      "$value": "{oak.color.grey60}",
+      "$type": "color"
     }
   },
   "filter": {

@@ -16,8 +16,7 @@
 
 import type { JSX } from 'react';
 
-/** Where the design system's runtime files are served from. */
-const OAK_DS_BASE = '/oak-ds';
+import { OAK_DS_BASE } from './design-system-refs.js';
 
 const OAK_WEBSITE_URL = 'https://www.thenational.academy';
 const OAK_TEACHERS_URL = 'https://www.thenational.academy/teachers';
@@ -63,9 +62,12 @@ function ThemeControl(): JSX.Element {
  * The masthead: Oak's black tab bar over the white logo bar.
  *
  * @param themeSelectorEnabled - Renders the theme control when true.
- *   Default-hidden; the page still honours a stored theme or the visitor's
- *   OS contrast preference through the design system's own theme script,
- *   so hiding the control removes the affordance, never the theming.
+ *   Default-hidden, and the theme script is withheld with it: a mechanism that
+ *   changes a user-visible setting ships only alongside the control that
+ *   changes it back (ADR-217 §5). Left to load alone, `oak-theme.js` applies a
+ *   stored or OS-derived theme and leaves the visitor in a state the page never
+ *   offered, with no way out. Hiding the control therefore removes the theming
+ *   too, deliberately; the page declares `data-theme="light"` and stays there.
  */
 export function SiteMasthead({
   themeSelectorEnabled = false,
@@ -77,29 +79,44 @@ export function SiteMasthead({
       <a className="oak-skip-link" href="#main">
         Skip to content
       </a>
+      {/* Both bands are full-bleed with an inner `.oak-container`, the shape
+          the footer already uses. Hand-rolled gutters here previously put the
+          masthead logo out of line with the page's content column at every
+          width, and the error reversed direction between 1200px and 1440px. */}
       <nav className="site-tabs" aria-label="Oak site areas">
-        <a className="oak-btn oak-btn--secondary" href={OAK_TEACHERS_URL}>
-          Teachers
-        </a>
-        <a className="oak-btn" href={OAK_WEBSITE_URL}>
-          Oak home
-        </a>
+        <div className="oak-container site-tabs-inner">
+          <a className="oak-btn oak-btn--secondary" href={OAK_TEACHERS_URL}>
+            Teachers
+          </a>
+          <a className="oak-btn" href={OAK_WEBSITE_URL}>
+            Oak home
+          </a>
+        </div>
       </nav>
       <nav className="site-nav" aria-label="Site">
-        <a className="site-nav-logo" href={OAK_WEBSITE_URL} aria-label="Oak National Academy home">
-          <img src={`${OAK_DS_BASE}/assets/logo-full-black.svg`} alt="" />
-        </a>
-        <a className="oak-btn oak-btn--secondary oak-btn--sm site-nav-back" href={OAK_WEBSITE_URL}>
-          {/* The trailing words are dropped below 640px so the masthead
-              reflows at 320px without horizontal scroll; the full label stays
-              in the accessibility tree either way because CSS `display: none`
-              on the inner span removes it from both. Keeping "Back to" +
-              "the main Oak website" split lets the short form remain a
-              sentence rather than a truncation. */}
-          Back to<span className="site-nav-back__long"> the main Oak website</span>
-          <span className="oak-btn__icon oak-icon--mask ic-external" aria-hidden="true" />
-        </a>
-        {themeSelectorEnabled && <ThemeControl />}
+        <div className="oak-container site-nav-inner">
+          <a
+            className="site-nav-logo"
+            href={OAK_WEBSITE_URL}
+            aria-label="Oak National Academy home"
+          >
+            <img src={`${OAK_DS_BASE}/assets/logo-full-black.svg`} alt="" />
+          </a>
+          <a
+            className="oak-btn oak-btn--secondary oak-btn--sm site-nav-back"
+            href={OAK_WEBSITE_URL}
+          >
+            {/* The trailing words are dropped below 640px so the masthead
+                reflows at 320px without horizontal scroll; the full label stays
+                in the accessibility tree either way because CSS `display: none`
+                on the inner span removes it from both. Keeping "Back to" +
+                "the main Oak website" split lets the short form remain a
+                sentence rather than a truncation. */}
+            Back to<span className="site-nav-back__long"> the main Oak website</span>
+            <span className="oak-btn__icon oak-icon--mask ic-external" aria-hidden="true" />
+          </a>
+          {themeSelectorEnabled && <ThemeControl />}
+        </div>
       </nav>
     </header>
   );

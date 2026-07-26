@@ -27,12 +27,11 @@
 
 import type { JSX } from 'react';
 
+import { OAK_DS_BASE, OAK_MINT } from './design-system-refs.js';
 import { ConnectSection, DocumentationCard, PageHero } from './page-sections.js';
 import { ResourcesSection } from './resources-section.js';
 import { SiteFooter, SiteMasthead } from './site-chrome.js';
 import { ToolsSection } from './tools-section.js';
-
-const OAK_DS_BASE = '/oak-ds';
 
 export interface LandingPageDocumentProps {
   /** Deployment host used to derive the MCP endpoint URL. */
@@ -57,7 +56,14 @@ export function LandingPageDocument({
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Oak Curriculum MCP (HTTP)</title>
-        <meta name="theme-color" content="rgb(190, 242, 189)" />
+        {/* `--oak-mint`, the hero band's fill. A <meta> cannot take var(), so
+            this is the one literal on the page — but its provenance is not
+            guesswork: it is the design system's `colour.mint` DTCG token, and
+            a test holds the two equal so the value cannot drift silently.
+            Single-valued because only the light theme ships; a theme-aware
+            pair would need `media` variants, which is work for the change that
+            makes the other themes reachable. */}
+        <meta name="theme-color" content={OAK_MINT} />
         {appVersion !== undefined && <meta name="app-version" content={appVersion} />}
         <link rel="icon" href="/favicons/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
@@ -79,7 +85,7 @@ export function LandingPageDocument({
                   <ConnectSection vercelHost={vercelHost} />
                 </div>
               </div>
-              <div className="oak-container oak-stack content-cards">
+              <div className="oak-container oak-stack">
                 <ResourcesSection />
                 <ToolsSection />
                 <DocumentationCard />

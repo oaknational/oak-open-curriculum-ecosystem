@@ -475,6 +475,10 @@
     },
     "black": {
       "$value": "{shadow.ink}"
+    },
+    "ground-inverted": {
+      "$value": "{oak.color.grey20}",
+      "$type": "color"
     }
   },
   "focus": {
@@ -491,6 +495,9 @@
     "outline-offset": {
       "$value": "1px",
       "$type": "dimension"
+    },
+    "ring-inverted": {
+      "$value": "0 0 0 {border.solid-m} {color.accent}, 0 0 0 {focus.ring-halo} {shadow.ground-inverted}"
     }
   },
   "control": {
@@ -537,6 +544,12 @@
     },
     "label": {
       "$value": "{weight.bold} {font.size.2}/{leading.20} {font.family.sans}"
+    },
+    "code-2": {
+      "$value": "{weight.light} {font.size.4}/{leading.24} {font.family.mono}"
+    },
+    "code-3": {
+      "$value": "{weight.light} {font.size.3}/{leading.24} {font.family.mono}"
     }
   }
 }

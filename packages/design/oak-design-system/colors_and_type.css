@@ -399,6 +399,11 @@
   --shadow-accent-ring: 0 0 0 0.125rem var(--color-accent);
   --shadow-accent-pressed: 0 0 0 var(--color-accent); /* collapsed but interpolatable */
   --shadow-ground: light-dark(var(--oak-grey60), var(--oak-grey20));
+  /* The inverted-surface member of the family: --shadow-ground assumes the
+     canvas, and flips with it. On a surface painted --bg-inverted the polarity
+     is already reversed, so the canvas ground lands at ~1.1:1 and the ring
+     around it disappears. This is that surface's ground. */
+  --shadow-ground-inverted: light-dark(var(--oak-grey20), var(--oak-grey60));
   --shadow-neutral: 0.25rem 0.25rem 0 var(--shadow-ground);
   --shadow-neutral-ring: 0 0 0 0.3rem var(--shadow-ground);
   --shadow-ink: 0.063rem 0.125rem 0 var(--oak-black-true);
@@ -415,6 +420,14 @@
   --focus-ring:
     0 0 0 var(--border-solid-m) var(--color-accent),
     0 0 0 var(--focus-ring-halo) var(--shadow-ground);
+  /* Ships as a whole ring, not as a ground to recompose. A custom property is
+     substituted where it is DECLARED, so a surface that overrides
+     --shadow-ground alone never reaches --focus-ring — the :root value has
+     already resolved and merely inherits down. Consumers of an inverted
+     surface set `--focus-ring: var(--focus-ring-inverted)`. */
+  --focus-ring-inverted:
+    0 0 0 var(--border-solid-m) var(--color-accent),
+    0 0 0 var(--focus-ring-halo) var(--shadow-ground-inverted);
   --focus-outline: var(--border-solid-l) solid transparent; /* @kind other */
   --focus-outline-offset: 1px;
 
@@ -454,6 +467,12 @@
   --type-body-3: var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-sans); /* @kind font */
   --type-body-4: var(--weight-light) var(--font-size-1)/var(--leading-16) var(--font-sans); /* @kind font */
   --type-label: var(--weight-bold) var(--font-size-2)/var(--leading-20) var(--font-sans); /* @kind font */
+  /* Code ramp. The .oak-code-* classes composed their own shorthands from
+     primitives, which left monospace type as the one ramp a re-brand could
+     not re-point — the reason the slot layer exists at all. Slot numbers
+     track the .oak-code-* class they back, not the body ramp's sizes. */
+  --type-code-2: var(--weight-light) var(--font-size-4)/var(--leading-24) var(--font-mono); /* @kind font */
+  --type-code-3: var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-mono); /* @kind font */
 
   /* Page atmosphere — a brand may paint gradient glows behind the page
      (see brand.css §7d). Flat none for Oak. Never carries text contrast:
@@ -636,12 +655,19 @@
   ); /* new-in-this-change dialect alias gets the same subtree re-declaration */
   --surface-decorative-6-subtle: var(--oak-white);
   --shadow-ground: var(--oak-black-true);
+  /* --bg-inverted is black-true here, so the canvas ground would vanish into
+     the surface it sits on. */
+  --shadow-ground-inverted: var(--oak-white);
   --shadow-standard: none;
   --shadow-press:
     var(--border-solid-xl) var(--border-solid-xl) 0 0 var(--shadow-ground),
     var(--border-solid-m) var(--border-solid-m) 0 0 var(--oak-lemon);
   --focus-ring:
     0 0 0 var(--border-solid-l) var(--oak-black-true), 0 0 0 var(--focus-ring-halo) var(--oak-lemon);
+  /* Same double ring, inner flipped to white so it reads on an inverted
+     surface; the lemon halo already does. */
+  --focus-ring-inverted:
+    0 0 0 var(--border-solid-l) var(--oak-white), 0 0 0 var(--focus-ring-halo) var(--oak-lemon);
 }
 
 /* Colour-safe — for colour-vision deficiency (deuteranopia/protanopia, ~8% of men).
@@ -763,7 +789,11 @@ body {
   letter-spacing: var(--tracking-body);
 }
 .oak-code-2 {
-  font: var(--weight-light) var(--font-size-4)/var(--leading-24) var(--font-mono);
+  font: var(--type-code-2);
+  letter-spacing: var(--tracking-heading);
+}
+.oak-code-3 {
+  font: var(--type-code-3);
   letter-spacing: var(--tracking-heading);
 }
 .oak-code-2-bold {
@@ -810,6 +840,31 @@ body {
 }
 :where(.oak-scope) a:hover {
   color: var(--text-link-hover);
+}
+/* Code and figure natives. Without these a consumer inherits UA defaults —
+   `figure { margin: 1em 40px }` in particular, which indents a code block
+   away from the prose around it by a raw browser constant no token governs. */
+:where(.oak-scope) figure {
+  margin: 0;
+}
+:where(.oak-scope) figcaption {
+  font: var(--type-body-3);
+  letter-spacing: var(--tracking-body);
+  color: var(--text-subdued);
+  margin: var(--space-8) 0 0;
+}
+:where(.oak-scope) pre {
+  font: var(--type-code-3);
+  letter-spacing: var(--tracking-heading);
+  margin: 0;
+  overflow-x: auto;
+}
+:where(.oak-scope) code {
+  font: var(--type-code-3);
+  letter-spacing: var(--tracking-heading);
+}
+:where(.oak-scope) pre code {
+  font: inherit;
 }
 
 /* Oak's signature: thick border + offset yellow shadow for interactive things */
