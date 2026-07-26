@@ -140,6 +140,21 @@ describe('exclusive PostHog vendor boundary', () => {
   );
 
   it.each(VENDOR_IMPORT_SPECIFIERS)(
+    'rejects a TypeScript import-equals declaration for %s after a later override',
+    (specifier) => {
+      const issues = lintStrictVendorImport(
+        specifier,
+        'packages/core/example/src/fixture.ts',
+        `import vendor = require('${specifier}');\nvoid vendor;`,
+      );
+
+      expect(issues.map((issue) => issue.ruleId)).toContain(
+        '@oaknational/no-posthog-vendor-imports',
+      );
+    },
+  );
+
+  it.each(VENDOR_IMPORT_SPECIFIERS)(
     'keeps the dedicated strict rule exempt for the adapter importing %s',
     (specifier) => {
       const issues = lintStrictVendorImport(specifier, 'packages/libs/posthog-node/src/fixture.ts');
