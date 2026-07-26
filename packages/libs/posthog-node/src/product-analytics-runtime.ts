@@ -15,10 +15,7 @@ import {
   createPostHogMcpTransportObserver,
   type PostHogMcpCaptureClient,
 } from './mcp-transport-observer.js';
-import {
-  createPostHogMcpSdkLogger,
-  type PostHogMcpSdkLogger,
-} from './posthog-mcp-sdk-logger.js';
+import { createPostHogMcpSdkLogger, type PostHogMcpSdkLogger } from './posthog-mcp-sdk-logger.js';
 import {
   createPostHogProductAnalyticsSink,
   type PostHogProductAnalyticsSinkConfig,
