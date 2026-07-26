@@ -82,7 +82,7 @@ export function SiteMasthead({
           Teachers
         </a>
         <a className="oak-btn" href={OAK_WEBSITE_URL}>
-          Back to www
+          Oak home
         </a>
       </nav>
       <nav className="site-nav" aria-label="Site">

@@ -41,10 +41,11 @@ export interface LandingPageOptions {
  * Renders the complete landing page HTML.
  *
  * Generates a full HTML document including:
- * - HTML head with the design-system stylesheet, pre-paint theme script, and meta tags
+ * - HTML head with the design-system stylesheet, meta tags, and — only when the
+ *   theme control ships — the pre-paint theme script
  * - Oak site chrome (masthead tabs, logo bar, optional theme control) and footer
- * - Hero band with the phase tag, title, and explainer for educators
- * - Connection instructions with a request-host-derived JSON config snippet
+ * - Hero band with the phase tag, title, and explainer for teachers
+ * - Connection instructions with a deployment-host-derived JSON config snippet
  * - Collapsible sections for the SERVED resources and tools
  * - Documentation links
  *

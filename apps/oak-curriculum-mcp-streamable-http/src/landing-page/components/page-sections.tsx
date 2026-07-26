@@ -2,10 +2,16 @@
  * The page's authored sections: hero, connect, and documentation.
  *
  * @remarks
- * Every word here is carried verbatim from the page this replaces. The one
- * value that is not authored is the connection snippet's URL, which comes
- * from {@link createSnippet} and stays request-host-derived — the endpoint
- * is never hand-written, so the open domain decision costs the app nothing.
+ * The wording here is the owner's. It came verbatim from the page this
+ * replaces, and changes only at his word — the 2026-07-26 pass applied the
+ * `editorial-tone` directive's terminology and British-English spelling rules
+ * to four strings. No wording on this page is agent-authored.
+ *
+ * The one value that is not authored is the connection snippet's URL, which
+ * comes from {@link createSnippet}. It is derived from the deployment host,
+ * resolved once at startup into `runtimeConfig.displayHostname` rather than
+ * read per request — the endpoint is never hand-written, so the open domain
+ * decision costs the app nothing.
  *
  * @packageDocumentation
  */
@@ -38,15 +44,15 @@ export function PageHero(): JSX.Element {
           Oak Curriculum MCP
         </h1>
         <p className="oak-body-2 oak-prose">
-          Designed for educators, this service connects your AI assistant to Oak&apos;s high
-          quality, free, fully sequenced and{' '}
+          Designed for teachers, this service connects your AI assistant to Oak&apos;s high quality,
+          free, fully sequenced and{' '}
           <a
             className="oak-link"
             target="_blank"
             rel="noopener noreferrer"
             href={OAK_API_TERMS_URL}
           >
-            openly licenced
+            openly licensed
           </a>{' '}
           curriculum resources — thousands of lessons, units, and assets across subjects and key
           stages.
@@ -85,7 +91,7 @@ export function ConnectSection({ vercelHost }: { vercelHost?: string }): JSX.Ele
       <p>
         This server uses{' '}
         <a className="oak-link" href="/.well-known/oauth-protected-resource">
-          OAuth 2.1 authorization
+          OAuth 2.1 authorisation
         </a>
         . You will be prompted to log in. Access is currently for internal staff or by invitation.
       </p>

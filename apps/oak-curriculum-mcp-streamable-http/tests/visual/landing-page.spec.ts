@@ -29,7 +29,7 @@ test.describe('Landing page', () => {
     // test describes what a visitor sees rather than how it is dressed.
     const hero = page.locator("[data-region='hero'] p").first();
     await expect(hero).toBeVisible();
-    await expect(hero).toContainText(/educators/i);
+    await expect(hero).toContainText(/teachers/i);
   });
 
   test('has collapsible sections for Resources and Tools — and no Prompts section', async ({
