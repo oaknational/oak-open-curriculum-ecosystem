@@ -41,10 +41,6 @@ export function isValidDuration(value: unknown): value is number {
   );
 }
 
-export function isValidTimestampString(value: unknown): value is string {
-  return typeof value === 'string' && value.length > 0 && Number.isFinite(Date.parse(value));
-}
-
 export function isValidTimestamp(value: unknown): value is Date {
   return value instanceof Date && Number.isFinite(value.getTime());
 }
@@ -91,10 +87,7 @@ export function commonProperties(snapshot: PolicySnapshot): UnknownProperties {
   };
 }
 
-export function hasExpectedProjection(
-  properties: UnknownProperties,
-  snapshot: PolicySnapshot,
-): boolean {
+function hasExpectedProjection(properties: UnknownProperties, snapshot: PolicySnapshot): boolean {
   return (
     readOwn(properties, 'oak_environment') === snapshot.environment &&
     readOwn(properties, 'oak_release') === snapshot.release
