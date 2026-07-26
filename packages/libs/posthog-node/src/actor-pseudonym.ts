@@ -21,12 +21,12 @@ const PSEUDONYM_PREFIX = `oakph:${PSEUDONYM_VERSION}`;
 const KEY_ID_PATTERN = /^[a-z0-9][a-z0-9_-]{0,31}$/u;
 const KEY_LENGTH_BYTES = 32;
 const MAX_PRINCIPAL_LENGTH_BYTES = 512;
-const VALID_ENVIRONMENTS: readonly PostHogPseudonymEnvironment[] = [
+const VALID_ENVIRONMENTS = new Set<PostHogPseudonymEnvironment>([
   'production',
   'preview',
   'development',
   'test',
-];
+]);
 
 function configurationError(): Result<never, PostHogPseudonymConfigurationError> {
   return err({ kind: 'invalid_posthog_pseudonym_configuration' });
@@ -39,7 +39,7 @@ function projectionError(): Result<never, PostHogIdentityProjectionError> {
 function isValidEnvironment(
   environment: PostHogPseudonymEnvironment,
 ): environment is PostHogPseudonymEnvironment {
-  return VALID_ENVIRONMENTS.includes(environment);
+  return VALID_ENVIRONMENTS.has(environment);
 }
 
 function keyMaterialMatches(left: Uint8Array, right: Uint8Array): boolean {
