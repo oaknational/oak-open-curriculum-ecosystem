@@ -42,6 +42,13 @@
 }
 [data-region='content'] {
   display: grid;
+  /* minmax(0, 1fr), not 1fr: a grid item's automatic minimum size is its
+     min-content, and the config snippet's URL is one unbreakable token. Left
+     at 1fr the column widens to fit it and the whole page scrolls sideways —
+     393px inside a 320px viewport, breaking SC 1.4.10. Zero as the floor lets
+     the item shrink, so the <pre> scrolls within itself as intended, which is
+     what its tabindex is there to make reachable. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-56);
   padding-bottom: var(--space-80);
 }
