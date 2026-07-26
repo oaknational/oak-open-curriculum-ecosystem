@@ -15,11 +15,11 @@ export interface ObservedMcpRequest {
   readonly request: JSONRPCRequest;
 }
 
-export function isRequestId(value: unknown): value is RequestId {
+function isRequestId(value: unknown): value is RequestId {
   return typeof value === 'string' || typeof value === 'number';
 }
 
-export function isJsonRpcRequest(message: JSONRPCMessage): message is JSONRPCRequest {
+function isJsonRpcRequest(message: JSONRPCMessage): message is JSONRPCRequest {
   return (
     'method' in message &&
     typeof message.method === 'string' &&

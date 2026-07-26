@@ -4,7 +4,7 @@ import type {
   UnknownProperties,
 } from './event-policy-contract.js';
 
-export interface PostHogMcpCaptureProperties extends UnknownProperties {
+interface PostHogMcpCaptureProperties extends UnknownProperties {
   readonly $mcp_is_error?: false;
   readonly $mcp_listed_tool_names?: readonly string[];
   readonly $mcp_server_name: string;
@@ -70,7 +70,7 @@ export interface PendingToolsList extends PendingBase {
   readonly kind: 'tools_list';
 }
 
-export interface PendingToolCall extends PendingBase {
+interface PendingToolCall extends PendingBase {
   readonly kind: 'tool_call';
   readonly toolName: string;
 }

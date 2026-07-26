@@ -101,9 +101,7 @@ export function createPostHogEventPolicies(config: PostHogEventPolicyConfig): Po
   };
 }
 
-export { normaliseOakClientFamily };
 export type {
-  OakClientFamily,
   PostHogEventPolicies,
   PostHogEventPolicyConfig,
 } from './event-policy-contract.js';
