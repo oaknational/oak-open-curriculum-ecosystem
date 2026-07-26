@@ -1,4 +1,3 @@
-import { typeSafeEntries } from '@oaknational/type-helpers';
 import { parse as parseYaml } from 'yaml';
 
 import { isJsonObject } from '../../core/json.js';
@@ -135,7 +134,11 @@ function collectRunScalars(node: unknown, accumulator: string[]): void {
   if (!isJsonObject(node)) {
     return;
   }
-  for (const [key, value] of typeSafeEntries(node)) {
+  for (const key in node) {
+    if (!Object.hasOwn(node, key)) {
+      continue;
+    }
+    const value = node[key];
     if (key === 'run' && typeof value === 'string') {
       accumulator.push(value);
       continue;

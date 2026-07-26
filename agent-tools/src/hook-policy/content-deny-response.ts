@@ -1,8 +1,5 @@
-import {
-  PRE_TOOL_USE_EVENT_NAME,
-  type ContentDenyInput,
-  type PreToolUseDenyResponse,
-} from './types.js';
+import { PRE_TOOL_USE_EVENT_NAME, type PreToolUseDenyResponse } from './types.js';
+import type { CopilotPreToolUseDenyResponse, ContentDenyInput } from './content-types.js';
 
 /**
  * Deny-payload construction for the PreToolUse content guard.
@@ -58,7 +55,7 @@ function buildContentDenyReason(input: ContentDenyInput): string {
       return buildConceptReason(input);
     default: {
       const exhaustive: never = input;
-      throw new Error(`Unhandled ContentDenyInput kind: ${JSON.stringify(exhaustive)}`);
+      return exhaustive;
     }
   }
 }
@@ -79,5 +76,17 @@ export function buildPreToolUseDenyResponse(input: ContentDenyInput): PreToolUse
       permissionDecision: 'deny',
       permissionDecisionReason: buildContentDenyReason(input),
     },
+  };
+}
+
+/**
+ * Build the native top-level denial expected by GitHub Copilot CLI.
+ */
+export function buildCopilotPreToolUseDenyResponse(
+  input: ContentDenyInput,
+): CopilotPreToolUseDenyResponse {
+  return {
+    permissionDecision: 'deny',
+    permissionDecisionReason: buildContentDenyReason(input),
   };
 }

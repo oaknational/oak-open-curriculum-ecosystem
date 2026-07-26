@@ -18,11 +18,14 @@ later migrated to `oak-` per the 2026-05-22 amendment.)
 **Amended**: 2026-07-13 — added the root `skills.md` entry point (Layer 3) for [Linear coding sessions](https://linear.app/docs/coding-sessions). A delegated Linear session runs Claude Code or Codex (inheriting those entry-point chains) and can use a repo-root `skills.md` as supplementary guidance, so the file carries the same thin-pointer shape as `AGENTS.md` (AGENT.md pointer plus rules-index line). Owner-directed.
 **Amended**: 2026-07-24 — ratified a **local GitHub Copilot CLI**
 adapter family as a target under the same canonical Practice. The target uses
-Copilot CLI's documented repository instruction, custom-agent, hook, settings,
-skill-discovery, and MCP surfaces without creating another canonical content
-home. This amendment is architectural authority, not a wired-state claim; the
-cross-platform surface matrix remains the live target-versus-wired record.
-Owner-directed through the first-class Copilot CLI plan estate.
+direct `AGENTS.md` and `.agents/skills` discovery, CLI-only inline repository
+settings hooks, launcher-scoped local instructions, locally installed
+namespaced agents, and session-only MCP configuration. Shared cloud-capable
+GitHub repository projections are explicitly excluded. This amendment is
+architectural authority, not a wired-state claim; the cross-platform surface
+matrix remains the live target-versus-wired record. Owner-ratified directly on
+2026-07-24; the first-class Copilot CLI plan estate derives from this
+amendment.
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md), [PDR-035 (Agent Work Capabilities Belong to the Practice)](../../../.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md), [PDR-051 (Vendor-Agnostic Skills Standardisation)](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md), [ADR-165 (Agent Work Practice Phenotype Boundary)](165-agent-work-practice-phenotype-boundary.md)
 
 ## Context
@@ -109,11 +112,11 @@ fresh verification and adapter design lands.
 
 #### Codex (`.codex/`)
 
-| Location               | Format                                                         | Count |
-| ---------------------- | -------------------------------------------------------------- | ----- |
-| `.codex/agents/*.toml` | Codex project-agent adapters -> `.agent/sub-agents/templates/` | 22    |
-| `.codex/hooks/*.mjs`   | Soft Codex hook adapters -> canonical Practice tooling         | —     |
-| `.codex/config.toml`   | Tracked Codex project configuration                            | 1     |
+| Location               | Format                                                         | State   |
+| ---------------------- | -------------------------------------------------------------- | ------- |
+| `.codex/agents/*.toml` | Codex project-agent adapters -> `.agent/sub-agents/templates/` | live    |
+| `.codex/hooks/*.mjs`   | Soft Codex hook adapters -> canonical Practice tooling         | live    |
+| `.codex/config.toml`   | Tracked Codex project configuration                            | tracked |
 
 Codex reads skills from `.agents/skills/` per its current docs (with parent-walk
 to repo root); `.codex/skills/` is not used.
@@ -131,25 +134,28 @@ Codex project hooks are Layer 2 adapters: they may surface session context or
 invoke repo tooling, but the behavioural contract remains in `.agent/`
 doctrine and canonical `agent-tools` commands.
 
-#### GitHub Copilot CLI (`.github/`) — ratified target
+#### GitHub Copilot CLI — ratified local-only target
 
-The GitHub adapter family serves **Copilot CLI running locally**. GitHub
-Copilot coding-agent/cloud execution is not part of this decision.
+The adapter family serves **Copilot CLI running locally**. GitHub Copilot
+coding-agent/cloud execution is not part of this decision. A supported path is
+not eligible merely because the local CLI reads it: if GitHub.com, cloud agent,
+or another hosted Copilot surface also consumes it, this programme does not
+create or change it.
 
-| Surface                  | Ratified repository projection                                                             |
-| ------------------------ | ------------------------------------------------------------------------------------------ |
-| Repo-wide instructions   | `.github/copilot-instructions.md` imports the canonical repository entry point             |
-| Path-scoped instructions | Generated `.github/instructions/**/*.instructions.md` activation projections               |
-| Skills                   | Existing `.agents/skills/`; no duplicate `.github/skills/` tree                            |
-| Custom agents            | Generated `.github/agents/*.agent.md` wrappers over canonical specialists                  |
-| Hooks                    | `.github/hooks/*.json` plus thin platform I/O adapters over canonical identity and policy  |
-| Settings                 | `.github/copilot/settings.json` only where a tracked project setting is required           |
-| MCP                      | A tracked, secret-free projection from a canonical server manifest established by delivery |
+| Surface                  | Ratified local Copilot CLI projection                                                                                               |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Repo-wide instructions   | Existing root `AGENTS.md`, discovered directly; no change to shared `.github/copilot-instructions.md`                               |
+| Path-scoped instructions | Generated under ignored `.agent/runtime/copilot/instructions/` and enabled only through launcher `COPILOT_CUSTOM_INSTRUCTIONS_DIRS` |
+| Skills                   | Existing `.agents/skills/`; no duplicate `.github/skills/` tree                                                                     |
+| Custom agents            | Namespaced local wrappers under resolved `COPILOT_HOME/agents`, ownership-safe, reversible, and preserving user-owned files         |
+| Hooks                    | CLI-only inline `hooks` in tracked `.github/copilot/settings.json`; never `.github/hooks/*.json`                                    |
+| Settings                 | `.github/copilot/settings.json` for tested CLI-only project settings; `.github/copilot/settings.local.json` for ignored overrides   |
+| MCP                      | Ignored secret-free file passed for one local session through `--additional-mcp-config=@...`                                        |
 
 Copilot CLI's documented skill discovery precedence is `.github/skills`,
 `.agents/skills`, then `.claude/skills`, with first-found wins. The repository
 deliberately keeps `.agents/skills` as its chosen Copilot skill home, so adding
-the GitHub adapter family does not change the two-surface skills contract.
+the local adapter family does not change the two-surface skills contract.
 
 Native GitHub hook activation owns Copilot CLI platform I/O. Canonical
 decisions remain platform-free, and inherited Claude compatibility must not
@@ -157,17 +163,25 @@ become a second evaluation authority. Whether each target surface is wired and
 acceptance-proven is recorded in the cross-platform surface matrix, never
 inferred from this ADR.
 
+GitHub's hooks reference states that `.github/hooks/*.json` is loaded by both
+Copilot CLI and cloud agent, while cloud agent does not load repository
+`settings.json`. Inline settings are therefore a load-bearing scope boundary,
+not a formatting preference. Likewise, `.github/agents`,
+`.github/instructions`, `.mcp.json`, and `.github/mcp.json` are excluded from
+new delivery because they are shared surfaces. Locally installed agent files
+must be namespaced, ownership-safe, reversible, and preserve user-owned entries;
+the delivery plan owns the concrete installation and cleanup mechanics.
+
 ### Layer 3: Entry Points
 
 Entry-point files direct each platform to the canonical practice:
 
-| File                              | Platform               |
-| --------------------------------- | ---------------------- |
-| `CLAUDE.md`                       | Claude Code            |
-| `AGENTS.md`                       | Codex                  |
-| `GEMINI.md`                       | Gemini CLI             |
-| `.github/copilot-instructions.md` | GitHub Copilot CLI     |
-| `skills.md`                       | Linear coding sessions |
+| File        | Platform                           |
+| ----------- | ---------------------------------- |
+| `CLAUDE.md` | Claude Code                        |
+| `AGENTS.md` | Codex and local GitHub Copilot CLI |
+| `GEMINI.md` | Gemini CLI                         |
+| `skills.md` | Linear coding sessions             |
 
 All entry points redirect to `.agent/directives/AGENT.md`.
 
@@ -206,13 +220,13 @@ identity is unprefixed.
 
 Each platform uses its native mechanism for sub-agent-equivalent functionality:
 
-| Platform                 | Mechanism                                                  | Key fields                                                                            |
-| ------------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Cursor                   | `.cursor/agents/*.md`                                      | `name`, `description`, `model`, `tools`, `readonly`                                   |
-| Claude Code              | `.claude/agents/*.md`                                      | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color` |
-| Gemini / Antigravity CLI | `.gemini/commands/review-*.toml`; native `/agents` unwired | Transitional reviewer invocation adapter plus native platform capability              |
-| Codex                    | `.codex/agents/*.toml`                                     | TOML roster and developer instructions loaded from canonical templates                |
-| GitHub Copilot CLI       | `.github/agents/*.agent.md` (ratified target)              | Generated custom-agent metadata, tool aliases, MCP selection, and inherited model     |
+| Platform                 | Mechanism                                                                       | Key fields                                                                                             |
+| ------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Cursor                   | `.cursor/agents/*.md`                                                           | `name`, `description`, `model`, `tools`, `readonly`                                                    |
+| Claude Code              | `.claude/agents/*.md`                                                           | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color`                  |
+| Gemini / Antigravity CLI | `.gemini/commands/review-*.toml`; native `/agents` unwired                      | Transitional reviewer invocation adapter plus native platform capability                               |
+| Codex                    | `.codex/agents/*.toml`                                                          | TOML roster and developer instructions loaded from canonical templates                                 |
+| GitHub Copilot CLI       | Locally installed namespaced `COPILOT_HOME/agents/*.agent.md` (ratified target) | Generated custom-agent metadata, tool aliases, MCP selection, inherited model, and owned-entry receipt |
 
 Read-only reviewers on Claude Code use `permissionMode: plan` and `disallowedTools: Write, Edit` to enforce read-only behaviour at the platform level, not just via instructions.
 
@@ -264,10 +278,10 @@ canonical rules and triggers, not the number of layers.
 **Gemini CLI and Codex** receive policies via the entry-point chain:
 `GEMINI.md` / `AGENTS.md` -> `.agent/directives/AGENT.md` ->
 `.agent/directives/principles.md`. **Copilot CLI's ratified target** reaches
-the same chain through `.github/copilot-instructions.md`, with bounded
-path-scoped activation under `.github/instructions/`. `.agents/rules/*.md`
-also provides a portable thin-wrapper rule surface for platforms that scan
-`.agents/` directly.
+the same chain through direct `AGENTS.md` discovery, with bounded local-only
+path-scoped activation through launcher `COPILOT_CUSTOM_INSTRUCTIONS_DIRS`.
+`.agents/rules/*.md` also provides a portable thin-wrapper rule surface for
+platforms that scan `.agents/` directly.
 
 **Triggers that activate skills or directives:**
 
@@ -427,9 +441,10 @@ Claude Code natively supports read-only permission modes. Using `permissionMode:
   or generated.
 - Platform-specific capabilities (Cursor `globs`, Claude `permissionMode`, Gemini `{{args}}`) require wrapper maintenance.
 - `.agents/skills/` and `.agents/rules/` are portable adapter layers, while canonical content remains in `.agent/`. Thin wrappers bridge those surfaces consistently with the pattern used for all other platforms.
-- Cursor and the ratified Copilot CLI target have host-specific path-scoped
-  instruction mechanisms with different contracts; other entry-point chains
-  remain broad.
+- Cursor has tracked host-specific path-scoped rules. The ratified local
+  Copilot CLI target generates ignored path-scoped instructions and activates
+  them only through the launcher environment; other entry-point chains remain
+  broad.
 - Gemini CLI lacks native sub-agent spawning; review commands serve as the user-invoked equivalent but lack automatic delegation.
 
 ## Known Limitations
@@ -443,12 +458,13 @@ Agents may not follow "Read and follow X" instructions in thin wrappers, skippin
   include guards ("If you have not read X, stop and read it now"). Minimal
   fallback context in wrappers helps when the agent skips the read.
 
-**Copilot CLI** has a stronger root-instruction mechanism:
-`.github/copilot-instructions.md` supports recursive repository-contained
-`@relative/path` imports. Modular
-`.github/instructions/**/*.instructions.md` files do not expand `@` imports,
-so generated modular projections contain their bounded instruction content and
-remain governed by disposition and stale-output validation.
+**Copilot CLI** discovers root `AGENTS.md` directly. Its
+`COPILOT_CUSTOM_INSTRUCTIONS_DIRS` environment variable enables additional
+local instruction directories without creating shared
+`.github/instructions` files. Modular `*.instructions.md` files do not expand
+`@` imports, so locally generated modular projections contain only their
+bounded instruction content and remain governed by disposition,
+environment-scope, and stale-output validation.
 
 ### Externally installed skills
 
@@ -596,10 +612,15 @@ canonical-first boundary:
 - `.agents/skills/` remains the selected Copilot skill home under GitHub's
   documented `.github/skills` → `.agents/skills` → `.claude/skills`
   first-found precedence;
-- GitHub-native instructions, custom agents, hooks, settings, and repository
-  MCP files are generated or thin projections only; MCP delivery first
-  establishes a canonical secret-free server manifest by dispositioning every
-  tracked platform candidate;
+- root `AGENTS.md` is the direct instruction entry point; launcher-scoped
+  ignored path instructions and locally installed namespaced agents cover the
+  missing local-only surfaces;
+- CLI-only inline hooks live in `.github/copilot/settings.json`;
+  `.github/hooks`, `.github/agents`, `.github/instructions`, `.mcp.json`, and
+  `.github/mcp.json` are forbidden delivery outputs for this programme;
+- MCP delivery first establishes a canonical secret-free server manifest, then
+  passes an ignored generated file through `--additional-mcp-config` for one
+  local session;
 - Copilot identity, policy, communications, and lifecycle reuse canonical
   `agent-tools` boundaries through Copilot-specific parsers, renderers, probes,
   and composition;

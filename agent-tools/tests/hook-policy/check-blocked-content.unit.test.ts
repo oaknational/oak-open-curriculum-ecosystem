@@ -1,8 +1,8 @@
+import { unwrap, unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import {
   buildPreToolUseDenyResponse,
-  extractContentChange,
   findAddedBlockedContent,
   findAddedScopedBlock,
   isPathInScope,
@@ -26,113 +26,14 @@ async function* emptyStdin(): AsyncGenerator<Buffer> {
 
 describe('parseHookInput', () => {
   it('parses valid JSON text', () => {
-    expect(parseHookInput('{"tool_name":"Write"}')).toStrictEqual({ tool_name: 'Write' });
-  });
-
-  it('throws a helpful error for invalid JSON', () => {
-    expect(() => parseHookInput('{')).toThrow('Claude PreToolUse hook input was not valid JSON:');
-  });
-});
-
-describe('extractContentChange', () => {
-  it('extracts new_string and old_string from an Edit payload', () => {
-    const hookInput = {
-      tool_input: {
-        new_string: 'const updated = true;',
-        old_string: 'const original = true;',
-      },
-    };
-
-    expect(extractContentChange(hookInput)).toStrictEqual({
-      newContent: 'const updated = true;',
-      priorContent: 'const original = true;',
+    expect(unwrap(parseHookInput('{"tool_name":"Write"}'))).toStrictEqual({
+      tool_name: 'Write',
     });
   });
 
-  it('uses empty string as prior when Edit payload omits old_string', () => {
-    const hookInput = {
-      tool_input: {
-        new_string: 'new content',
-      },
-    };
-
-    expect(extractContentChange(hookInput)).toStrictEqual({
-      newContent: 'new content',
-      priorContent: '',
-    });
-  });
-
-  it('extracts content and prior file path from a Write payload', () => {
-    const hookInput = {
-      tool_input: {
-        content: 'file content here',
-        file_path: '/workspace/check-blocked-content-test.ts',
-      },
-    };
-
-    expect(extractContentChange(hookInput)).toStrictEqual({
-      newContent: 'file content here',
-      priorContent: '',
-      filePath: '/workspace/check-blocked-content-test.ts',
-      priorFilePath: '/workspace/check-blocked-content-test.ts',
-    });
-  });
-
-  it('extracts file_path from an Edit payload when present', () => {
-    const hookInput = {
-      tool_input: {
-        new_string: 'new prose',
-        old_string: 'old prose',
-        file_path: '/repo/.agent/plans/example.plan.md',
-      },
-    };
-
-    expect(extractContentChange(hookInput)).toStrictEqual({
-      newContent: 'new prose',
-      priorContent: 'old prose',
-      filePath: '/repo/.agent/plans/example.plan.md',
-    });
-  });
-
-  it('handles flattened payload shape (no tool_input wrapper)', () => {
-    const hookInput = {
-      new_string: 'flat new',
-      old_string: 'flat old',
-    };
-
-    expect(extractContentChange(hookInput)).toStrictEqual({
-      newContent: 'flat new',
-      priorContent: 'flat old',
-    });
-  });
-
-  it('accepts toolInput (camelCase) as alternative to tool_input', () => {
-    const hookInput = {
-      toolInput: {
-        new_string: 'camel new',
-        old_string: 'camel old',
-      },
-    };
-
-    expect(extractContentChange(hookInput)).toStrictEqual({
-      newContent: 'camel new',
-      priorContent: 'camel old',
-    });
-  });
-
-  it('throws when input has no writable content', () => {
-    const hookInput = {
-      tool_input: { command: 'echo hello' },
-    };
-
-    expect(() => extractContentChange(hookInput)).toThrow(
-      'Claude PreToolUse hook input did not include writable content.',
-    );
-  });
-
-  it('throws when input is not an object', () => {
-    expect(() => extractContentChange('not an object')).toThrow(
-      'Claude PreToolUse hook input was not an object.',
+  it('returns a helpful error for invalid JSON', () => {
+    expect(unwrapErr(parseHookInput('{')).message).toContain(
+      'PreToolUse hook input was not valid JSON:',
     );
   });
 });

@@ -1,5 +1,7 @@
 import { fileURLToPath } from 'node:url';
 
+import { unwrapOrThrow } from '@oaknational/result';
+
 import {
   buildPreToolUseDenyResponse,
   extractBashCommand,
@@ -52,7 +54,7 @@ export async function runPreToolUseGuard(
 
   try {
     const inputText = await readStreamText(seams.stdin);
-    const command = extractBashCommand(parseHookInput(inputText));
+    const command = extractBashCommand(unwrapOrThrow(parseHookInput(inputText)));
     const patterns = seams.blockedPatterns ?? (await loadBlockedPatterns(seams.policyUrl));
     const blockedEntry = findBlockedPattern(command, patterns);
 

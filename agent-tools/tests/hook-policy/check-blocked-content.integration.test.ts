@@ -127,7 +127,7 @@ describe('runPreToolUseContentGuard', () => {
 
     expect(result).toStrictEqual({ exitCode: 2 });
     expect(stderrChunks).toHaveLength(1);
-    expect(stderrChunks[0]).toContain('Claude PreToolUse hook input was not valid JSON:');
+    expect(stderrChunks[0]).toContain('PreToolUse hook input was not valid JSON:');
   });
 
   it('writes a scoped-block deny payload when hedging vocabulary is added on a doctrine path', async () => {

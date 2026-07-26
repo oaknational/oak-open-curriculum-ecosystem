@@ -30,12 +30,40 @@ than being blocked by a Claude-shaped parser or evaluated twice.
 
 First land a complete Claude-only production composition over one validated
 policy snapshot and one platform-free evaluator. Then add a native Copilot CLI
-adapter and renderer behind the same closed dispatcher. Explicit activation
-selects the host adapter. Native GitHub `preToolUse` owns Copilot CLI
-evaluation through its documented single-tool input. The observed
-version-pinned inherited Claude batch is a separate compatibility route: its
-activation provenance is explicit, it returns a neutral pass-through, and it
-loads no policy and performs no evaluation.
+adapter and renderer behind the same closed dispatcher. A CLI-only inline hook
+in tracked `.github/copilot/settings.json` invokes the native route explicitly;
+`.github/hooks/*.json` is forbidden because Copilot cloud agent also loads it.
+Native GitHub `preToolUse` owns Copilot CLI evaluation through its documented
+single-tool input.
+
+MCP-150 also owns the minimal `sessionStart`/`sessionEnd` attestation lifecycle
+needed to secure inherited-route discrimination. This is a policy security
+primitive, not user-visible identity: it records only bounded session,
+repository, version, and configuration facts. MCP-154 composes model-visible
+identity context into the already-established `sessionStart` activation without
+creating a second attestation lifecycle.
+
+Because the inline settings file is tracked and automatically read, its hook
+commands are inert runtime-gating shims rather than evidence that a collaborator
+has a supported host. MCP-150 owns the minimal local launcher/preflight
+primitive: the supported entry point probes the installed binary and required
+event surfaces before starting a managed session, and refuses unsupported or
+unprobed hosts. Every invoked shim also checks the actual version and selected
+event schema. Unsupported or mismatched `preToolUse` fails closed; unsupported
+session lifecycle input writes no attestation. Raw, unsupported CLI invocation
+outside that entry point is explicitly outside the supported activation claim.
+
+The observed version-pinned inherited Claude batch is a separate compatibility
+route selected only by a conjunctive, fail-closed discriminator: probe-approved
+`COPILOT_CLI=1` and binary version, a valid `COPILOT_AGENT_SESSION_ID`, an
+exact versioned inherited-batch schema whose `sessionId` matches that
+environment value, and a current local native-session attestation keyed by the
+same documented session ID, repository identity, version, and configuration
+hash. The marker variables are observed, undocumented evidence rather than
+standalone authority. Any partial marker, mismatch, missing attestation, or
+malformed batch fails closed. A selected compatibility route returns neutral
+success with zero policy loads and evaluations; the unmarked Claude route
+continues to parse and evaluate genuine Claude input.
 
 Fixture provenance, composition details, and execution evidence stay in
 MCP-150. The failure contract is versioned here:
@@ -44,7 +72,8 @@ MCP-150. The failure contract is versioned here:
 | --- | --- |
 | Explicit Claude route, valid supported envelope | Load one snapshot, evaluate once, and render the unchanged Claude result |
 | Explicit native Copilot route, valid documented single-tool envelope | Load one snapshot, evaluate once, and render the native Copilot decision |
-| Explicit inherited Copilot compatibility route | Return neutral host success with zero policy loads and evaluations, regardless of the compatibility body; this route may exist only while native activation is proven present |
+| Fully attested inherited Copilot compatibility route | Return neutral host success with zero policy loads and evaluations; this route may exist only while the native session attestation and supported-version probe remain current |
+| Partial marker, malformed inherited batch, session/configuration mismatch, or missing/expired attestation | Fail closed before policy loading; never guess the host or neutralise Claude enforcement |
 | Malformed selected native input or renderer failure | Fail closed with the selected host's boundary error when the hook completes before timeout |
 | Shared synthetic arbitration with zero or multiple matches | Fail closed; never guess a platform |
 | Missing built runtime | Preserve the current loud fail-open bootstrap contract; support is not claimed until the build/probe passes |
@@ -68,14 +97,17 @@ MCP-150. The failure contract is versioned here:
   versioned literal fixtures and closed-schema unit tests covering valid,
   malformed, unknown, and renderer-failure inputs.
 - **The version-pinned inherited compatibility batch returns neutral success
-  with zero policy loads and evaluations.** Proof: `repo-safe` — the observed
-  batch fixture, malformed/unknown bodies, and trap dependencies prove that
-  activation provenance selects the no-op route before schema arbitration.
+  with zero policy loads and evaluations only when every attestation and
+  discriminator fact agrees.** Proof: `repo-safe` — injected environment and
+  attestation-store interfaces, the observed batch fixture, partial-marker,
+  mismatch, expiry, malformed/unknown-body cases, and trap dependencies prove
+  that a spoofable ambient variable or body alone cannot neutralise policy.
 - **Each successfully dispatched Copilot CLI write request produces exactly one
   policy evaluation; native and inherited activation cannot double-run.**
   Proof: `repo-safe` — deterministic injected in-process routing/count tests
   plus the pre-tool-use routing validator; a separately classified smoke/system
-  harness proves real multi-process coexistence.
+  harness proves that genuine Claude still evaluates while local Copilot's
+  attested inherited batch is neutral.
 - **The host timeout is recorded as a fail-open ceiling, not as proof that every
   request was evaluated.** Proof: `repo-safe` — timeout-path tests and operator
   documentation use that exact contract without wall-clock ceilings in Vitest.
@@ -83,6 +115,12 @@ MCP-150. The failure contract is versioned here:
   runtime distinction.** Proof: `repo-safe` — a smoke/system harness proves a
   loud fail-open with missing build output, native enforcement after build, and
   fail-closed behaviour for a present but broken runtime.
+- **Committed inline hook entries cannot silently claim or enable policy support
+  on an unsupported collaborator host.** Proof: `repo-safe` — launcher
+  preflight and per-invocation shim tests cover supported, unsupported,
+  unprobed, version-mismatch, absent-event, and malformed-event cases;
+  unsupported `preToolUse` fails closed and no unsupported session attestation
+  is written.
 - **A real local Copilot CLI session performs an allowed create and patch,
   receives a native denial for a policy violation, proves inherited
   compatibility causes no second evaluation, and observes a forced timeout
@@ -98,10 +136,11 @@ MCP-150. The failure contract is versioned here:
   migration second. Delete the old runners and update every structural
   consumer in that landing.
 - **Copilot CLI vertical PR (round budget: at most two review rounds).** Add the
-  native single-call adapter and renderer, inherited neutral route,
-  supported-version probe, sole-authority activation, routing validation,
-  clean-checkout system harness, and live CLI acceptance as one complete
-  vertical.
+  native single-call adapter and renderer, CLI-only inline activation,
+  minimal launcher/preflight, session-attestation lifecycle, conjunctive
+  inherited neutral route, supported-version and event probes, per-invocation
+  runtime gates, routing validation, clean-checkout system harness, and live CLI
+  acceptance as one complete vertical.
 
 ## Out of scope
 
@@ -111,4 +150,5 @@ MCP-150. The failure contract is versioned here:
 - New policy rules, weakened denials, bypass switches, or a second policy
   implementation.
 - Copilot CLI identity, Practice projections, and communications; their own
-  delivery nodes hold those proofs.
+  delivery nodes hold those proofs. The non-model-visible policy attestation
+  remains in scope here solely as an inherited-route security primitive.

@@ -47,8 +47,8 @@ participant in the repository's canonical Practice and agentic tools.
 - First-class means behavioural citizenship: honest identity, deliberate team
   join, canonical capability through native surfaces, communications, policy,
   lifecycle, and proof.
-- `.agent/` remains canonical. GitHub files are thin or generated projections,
-  never another Practice.
+- `.agent/` remains canonical. Direct portable discovery and local-CLI-only
+  generated activation adapt it without making GitHub.com a second Practice.
 - `.agents/skills/` remains the chosen Copilot skill home under documented
   precedence; no duplicate `.github/skills/` tree is planned.
 - Native Copilot startup supplies repository and identity context.
@@ -58,15 +58,22 @@ participant in the repository's canonical Practice and agentic tools.
   no dormant Copilot or Codex production branches.
 - Native GitHub pre-tool-use is the sole Copilot evaluation authority for a
   tested supported version and consumes the documented single-tool envelope.
-  The version-pinned inherited Claude batch is a separate neutral route with
-  zero policy loads or evaluations.
+  Its hook is inline in `.github/copilot/settings.json`, which cloud agent does
+  not load. The version-pinned inherited Claude batch is neutral only when a
+  strict environment/schema/session/native-attestation discriminator passes;
+  partial evidence fails closed.
 - Exact-once policy proof covers successfully dispatched requests. The host
   timeout remains a fail-open ceiling.
 - Communications reuse the existing local file-backed substrate. Native wake
   is primary; bounded drain and seen-file gap sweep are recovery.
 - MCP tool projection cannot generate from another platform adapter. MCP-155
   first establishes a canonical secret-free server manifest with a total
-  disposition over tracked platform candidates.
+  disposition over tracked platform candidates, then passes an ignored
+  session-only file through `--additional-mcp-config`.
+- Shared `.github/hooks`, `.github/agents`, `.github/instructions`, and
+  repository MCP projections are excluded because they can affect hosted or
+  non-CLI consumers. Custom agents install locally with namespaced ownership
+  and reversible cleanup; bounded path instructions are launcher-scoped.
 - Plans and ADRs describe the ratified target. The cross-platform matrix
   records target separately from wired and acceptance-proven state.
 

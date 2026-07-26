@@ -1,3 +1,4 @@
+import { unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -184,8 +185,10 @@ describe('extractBashCommand', () => {
 });
 
 describe('parseHookInput', () => {
-  it('throws a helpful error for invalid JSON', () => {
-    expect(() => parseHookInput('{')).toThrow('Claude PreToolUse hook input was not valid JSON:');
+  it('returns a helpful error for invalid JSON', () => {
+    expect(unwrapErr(parseHookInput('{')).message).toContain(
+      'PreToolUse hook input was not valid JSON:',
+    );
   });
 });
 

@@ -33,9 +33,21 @@ coordination substrate, without adding a remote transport.
 
 Reuse the canonical comms CLI and shared local coordination home. Convert the
 one-shot all-channel watcher completion into Copilot CLI's native local
-notification path, re-arm after each wake, and retain turn-boundary drain plus
-seen-file gap sweep as recovery. The standard claim, heartbeat, handoff, and
-retirement lifecycle remains authoritative.
+notification path through the CLI-only inline hooks block in
+`.github/copilot/settings.json`, re-arm after each wake, and retain
+turn-boundary drain plus seen-file gap sweep as recovery. Repository hooks
+under `.github/hooks/` are forbidden because cloud agent also loads them. The
+standard claim, heartbeat, handoff, and retirement lifecycle remains
+authoritative.
+
+The tracked wake entry is an inert runtime-gating shim. Before joining team
+comms, the launcher checks the installed host against the tested version floor
+and an executable probe proving that `notification` dispatches
+`shell_completed` and consumes returned context; the shim repeats the actual
+version and event-shape check whenever invoked. An unsupported or failed host
+starts no watcher, registers no wake lifecycle, returns no injected comms
+context, and is refused team join. It therefore cannot claim local comms
+support merely because the tracked entry exists.
 
 The minimum shippable shape without the beneficial projections node uses the
 already discoverable team skill and comms CLI after identity/join has landed.
@@ -46,6 +58,12 @@ Detailed wake, burst, cursor, and cleanup contracts live in MCP-156.
 
 ## Acceptance criteria (each with a proof)
 
+- **The supported launcher and committed wake shim activate comms only after the
+  installed CLI meets the tested version floor and an executable probe proves
+  the relied-upon `notification`/`shell_completed` request and returned-context
+  shapes.** Proof: `repo-safe` — supported, unsupported, missing-event,
+  version-mismatch, and malformed-context fixtures plus launcher-refusal,
+  no-side-effect, and per-invocation runtime-gate tests.
 - **A joined Copilot CLI session sends and receives directed and broadcast
   events on the existing local comms substrate.** Proof: `repo-safe` — isolated
   multi-session comms integration tests.
@@ -66,8 +84,9 @@ Detailed wake, burst, cursor, and cleanup contracts live in MCP-156.
 ## Todos
 
 - **Wake-and-drain PR (round budget: at most two review rounds).** Wire native
-  local notification to one-shot watch, re-arm, turn-boundary drain, and gap
-  recovery with failure-injection tests.
+  local notification to one-shot watch only after its version/probe gate
+  passes, then prove re-arm, turn-boundary drain, and gap recovery with
+  failure-injection tests.
 - **Lifecycle-proof PR (round budget: at most two review rounds).** Prove
   claims, heartbeat, peer liveness, handoff, retirement, and live CLI
   acceptance as one closing story.

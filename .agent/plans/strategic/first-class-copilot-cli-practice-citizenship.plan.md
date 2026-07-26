@@ -34,11 +34,11 @@ participation.
 ## The bet
 
 First-class citizenship is behavioural, not a count of matching files. The
-Practice remains canonical under `.agent/`; thin, validated GitHub projections
-adapt it to Copilot CLI's real asymmetries. Native startup provides repository
-and identity context, while `oak-start-right-team` remains the deliberate
-boundary that enrols a session in claims, heartbeat, watcher, and lifecycle
-state.
+Practice remains canonical under `.agent/`; direct portable discovery plus
+thin, validated **local-CLI-only** activation adapts it to Copilot CLI's real
+asymmetries. Native startup provides repository and identity context, while
+`oak-start-right-team` remains the deliberate boundary that enrols a session
+in claims, heartbeat, watcher, and lifecycle state.
 
 The bet is deliberately local and narrow. GitHub Copilot coding-agent or cloud
 execution, remote transport, hosted bridges, and a parallel Codex programme do
@@ -49,8 +49,9 @@ not serve this node.
 - A local Copilot CLI session has stable, truthful Copilot identity and can
   choose whether to join the team Practice.
 - A joined session receives canonical instructions, skills, specialist agents,
-  policy enforcement, and repository MCP tools through supported Copilot CLI
-  surfaces without creating a second authority.
+  policy enforcement, and session-scoped MCP tools through supported local
+  Copilot CLI surfaces without creating a second authority or activating a
+  hosted Copilot surface.
 - Directed and broadcast communications, watcher recovery, handoff, and
   retirement work on the existing local coordination substrate.
 - Repository validators prove generated-projection freshness, closed platform

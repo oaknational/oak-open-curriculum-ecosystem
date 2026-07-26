@@ -26,9 +26,9 @@ bidirectional communications, policy enforcement, lifecycle, and proof.
 
 The repository already owns the durable substance under `.agent/` and the
 portable skill projection under `.agents/skills/` **[R]**. The missing work is
-a thin GitHub adapter family plus Copilot-aware boundaries in canonical
-tooling. It is not a new Practice, a plugin, a remote service, or a second
-policy implementation **[I]**.
+a thin local-CLI-only adapter composition plus Copilot-aware boundaries in
+canonical tooling. It is not a new Practice, a plugin, a remote service, or a
+second policy implementation **[I]**.
 
 This report is intentionally limited to the CLI process running locally,
 alongside local Claude and Codex seats. GitHub Copilot coding-agent/cloud
@@ -95,9 +95,12 @@ platform boundary could not represent the request **[I]**.
 The cure has two explicit routes, not one permissive Copilot schema **[I]**:
 
 - the documented native GitHub single-tool envelope (`toolName`/`toolArgs`) is
-  the evaluator contract and renders a native decision **[D]**;
+  the evaluator contract, is activated through the CLI-only inline hooks block
+  in `.github/copilot/settings.json`, and renders a native decision **[D]**;
 - the version-pinned inherited batch is compatibility-defect evidence and
-  returns a neutral pass-through with zero policy loads or evaluations.
+  returns a neutral pass-through with zero policy loads or evaluations only
+  after a conjunctive environment/schema/session/native-attestation
+  discriminator succeeds.
 
 The observed batch and patch-document semantics remain intact in their fixture;
 they are never approximated as Claude edit pairs or elevated into architectural
@@ -121,16 +124,30 @@ Codex production branches.
 
 ### 5. Native and inherited hook activation can coexist only with one authority
 
-Copilot CLI can read selected Claude configuration, while GitHub also documents
-native repository hooks under `.github/hooks` **[D]**. Wiring both naively
-would risk two evaluations or a second cross-shape failure **[V][I]**.
+Copilot CLI reads selected Claude configuration. GitHub's current reference
+also makes an important scope distinction: `.github/hooks/*.json` is loaded by
+both local CLI and cloud agent, whereas the inline hooks block in
+`.github/copilot/settings.json` is a CLI source and cloud agent does not load
+repository settings **[D]**. The local-only activation must therefore be
+inline settings; a `.github/hooks` projection would violate the ratified scope
+even if its script later tried to self-filter **[I]**.
 
-For a tested supported version, native GitHub `preToolUse` is the sole Copilot
-CLI evaluator. Explicit activation provenance selects the native parser before
-evaluation. The explicit inherited compatibility route ignores the body and
-returns neutral host success without loading policy or evaluating. Malformed
-selected native inputs and ambiguous genuinely shared routes fail closed
-**[I]**.
+For a tested supported version, inline native GitHub `preToolUse` is the sole
+Copilot CLI evaluator. The inherited `.claude` wrapper selects a neutral
+compatibility route only when all of these agree: observed
+`COPILOT_CLI=1`; a probe-approved observed binary version; a valid observed
+`COPILOT_AGENT_SESSION_ID`; the exact versioned inherited-batch schema with a
+matching `sessionId`; and a current local attestation written by the CLI-only
+native `sessionStart` hook for that session, repository, version, and
+configuration hash **[V][I]**. These environment variables are undocumented
+observations, not standalone authority. Any partial marker, mismatch, missing
+attestation, or malformed batch fails closed. With no Copilot marker, the
+genuine Claude route still parses and evaluates Claude input **[I]**.
+
+Native `sessionEnd` removes the ephemeral attestation; bounded TTL cleanup
+covers abnormal exits. Tests inject environment and attestation-store
+interfaces so a caller cannot spoof one ambient value to disable Claude
+enforcement **[I]**.
 
 The exact-once claim applies to **successfully dispatched** requests. GitHub's
 hook timeout is a host fail-open ceiling: a timed-out hook may not have
@@ -149,52 +166,61 @@ keeping `.agents/skills/` as this repository's chosen Copilot skill home.
 Generating duplicate `.github/skills/` wrappers would create a third adapter
 surface and a new drift opportunity without adding capability **[I]**.
 
-### 7. Instructions need supported, bounded projections
+### 7. Instructions need supported, local-only projections
 
-The existing `.github/copilot-instructions.md` is a Markdown link to
-`AGENT.md`, not yet a validated Copilot import projection **[R]**. GitHub
-documents the repo-wide instruction file and recursive path-specific files
-under `.github/instructions/**/*.instructions.md` **[D]**.
+GitHub documents direct Copilot CLI discovery of root `AGENTS.md` and optional
+additional instruction directories through
+`COPILOT_CUSTOM_INSTRUCTIONS_DIRS` **[D]**. Those surfaces are sufficient
+without changing `.github/copilot-instructions.md` or emitting
+`.github/instructions`, which are shared with other Copilot products **[D][I]**.
 
-The repo-wide file should import the canonical entry point using the supported
-relative-reference mechanism. Path-specific projections should be generated
-from a total disposition manifest over the live canonical rule set. Each rule
-is classified repo-wide, path-projected, or excluded with a reason.
-Path-projected files require valid `applyTo` metadata and tests for positive,
-negative, recursive, comma-separated, and simultaneous-match behaviour. They
-must not copy the full rule corpus or use `@` imports, which GitHub does not
-expand inside modular instruction bodies **[D][I]**.
+The root `AGENTS.md` remains the repository-wide entry point. Path-specific
+files generate from a total disposition manifest into gitignored
+`.agent/runtime/copilot/instructions/`, and the deliberate launcher alone adds
+that directory to the local process environment. Each rule is classified
+repo-wide, local-path-projected, or excluded with a reason. Local projections
+require valid `applyTo` metadata and tests for positive, negative, recursive,
+comma-separated, simultaneous-match, environment-scope, and stale-output
+behaviour. They must not copy the full rule corpus or use `@` imports, which
+GitHub does not expand inside modular instruction bodies **[D][I]**.
 
-### 8. Custom agents are a generated adapter family
+The existing `.github/copilot-instructions.md` is a pre-existing shared file
+and remains unchanged in this programme. Its current Markdown link is not
+counted as local CLI acceptance evidence **[R][I]**.
 
-Copilot CLI discovers custom agents under `.github/agents/*.agent.md` and
-supports documented agent frontmatter, tool selection, MCP-server selection,
-and model inheritance **[D]**. The repository currently has canonical
-specialists and Claude/Cursor/Codex adapters, but no validated GitHub family
-**[R]**.
+### 8. Custom agents need generated local installation
+
+GitHub documents `.github/agents/*.agent.md` for both GitHub.com and Copilot
+CLI, so that repository path cannot satisfy a strictly local-CLI-only
+programme **[D]**. Copilot CLI also discovers user-level custom agents under
+the resolved `COPILOT_HOME/agents` and supports agent frontmatter, tool
+selection, MCP selection, and model inheritance **[D]**.
 
 The target is deterministic generation from a total disposition manifest over
-every live non-archived canonical specialist, with Copilot tool aliases and no
-unnecessary model pin. Every exclusion carries a reason. Forward coverage,
-reverse-orphan checks, schema validation, same-ID precedence over
-`.claude/agents`, and live invocation prove the family is real rather than
-decorative **[D][I]**.
+every live non-archived canonical specialist, with namespaced agent IDs,
+Copilot tool aliases, and no unnecessary model pin. The local installer uses a
+lock and an owned-entry manifest, atomically preserves every user-owned entry,
+updates only Oak-owned files, and provides reversible cleanup. Forward
+coverage, reverse-orphan checks, schema validation, collision tests, cleanup
+proof, and live invocation make the family real without creating a cloud agent
+surface **[D][I]**.
 
-### 9. Repository MCP tools require a canonical manifest first
+### 9. Session-scoped MCP tools require a canonical manifest first
 
-Copilot CLI documents repository MCP configuration in `.mcp.json` and
-`.github/mcp.json`, with defined configuration priority **[D]**. This
-repository has platform-specific MCP configuration but no canonical
-secret-free server inventory and no tracked, validated Copilot CLI projection
-**[R]**.
+Copilot CLI documents `--additional-mcp-config` as a session-only source with
+higher priority than persistent or workspace configuration **[D]**.
+Repository MCP files such as `.mcp.json` and `.github/mcp.json` are shared
+workspace surfaces and are therefore excluded from this local-only programme
+**[D][I]**. The repository has platform-specific MCP configuration but no
+canonical secret-free server inventory **[R]**.
 
-The delivery must first establish a canonical server manifest by reconciling
-every server found in tracked platform configuration to an included or
-excluded disposition. `.cursor/mcp.json` or another adapter must not silently
-become authority. The Copilot projection then generates from that manifest,
-remains deterministic on a clean checkout, and contains no credentials or
-machine-local paths **[I]**. Personal authentication and secret values remain
-local.
+Delivery must first establish a canonical server manifest by reconciling every
+server found in tracked platform configuration to an included or excluded
+disposition. `.cursor/mcp.json` or another adapter must not silently become
+authority. The local launcher then generates a deterministic, gitignored,
+secret-free file and passes it as
+`--additional-mcp-config=@<repo-runtime-path>` for that session. It never
+rewrites user configuration, and credentials remain local **[D][I]**.
 
 ### 10. Local comms need no new transport
 
@@ -205,10 +231,12 @@ therefore needs an adapter into the existing substrate, not an MCP bridge or
 hosted broker **[I]**.
 
 GitHub documents a CLI-only `notification` hook and a `shell_completed` event
-that can return additional context **[D]**. A one-shot watcher can turn a newly
-received event into that completion, wake the intended session, and then be
-re-armed **[V][I]**. Turn-boundary drain and bounded periodic checks remain
-recovery, not the primary transport.
+that can return additional context **[D]**. Its activation belongs in the
+CLI-only inline hooks block in `.github/copilot/settings.json`, not
+`.github/hooks` **[D][I]**. A one-shot watcher can turn a newly received event
+into that completion, wake the intended session, and then be re-armed
+**[V][I]**. Turn-boundary drain and bounded periodic checks remain recovery,
+not the primary transport.
 
 The acceptance suite must prove burst handling, cursor advancement, ordering,
 duplicate tolerance, re-arm gaps, peer liveness, and cleanup. A live local
@@ -219,12 +247,22 @@ Copilot CLI seat must then demonstrate wake, reply, handoff, and retirement.
 The design session observed documentation-versus-installed-version skew: a
 documented CLI command was absent from Copilot CLI 1.0.74 **[V][D]**. Every
 relied-upon hook, instruction, agent, skill, and MCP surface therefore needs a
-tested version floor plus a capability probe before tracked activation is
-enabled **[I]**.
+tested version floor plus a capability probe before tracked or locally
+materialised activation is enabled **[I]**.
 
 The live acceptance seat remains required. Repository fixtures establish the
 contract; only a real local CLI process proves that the installed host
 dispatches and consumes it.
+
+Tracked `.github/copilot/settings.json` cannot be conditionally absent per
+collaborator. Its hook entries must therefore be inert runtime-gating shims, not
+support claims. MCP-150's minimal launcher probes the installed binary and
+required native events before starting a managed session; MCP-154 extends that
+same launcher for identity/join, and MCP-155 then extends it for local
+projections. Each shim also validates the actual version and event shape at
+invocation. Unsupported policy input fails closed; unsupported identity and
+wake input creates no context, attestation, watcher, or lifecycle state, and the
+supported launcher refuses that managed mode **[I]**.
 
 ## Target architecture
 
@@ -232,10 +270,11 @@ dispatches and consumes it.
    identity contracts, policy, agents, tools, and lifecycle.
 2. **Existing portable skill surface:** `.agents/skills/` remains the chosen
    Copilot CLI skill home.
-3. **GitHub adapter family:** `.github/copilot-instructions.md`,
-   `.github/instructions/`, `.github/agents/`, `.github/hooks/`, and the
-   supported repository MCP projection carry only activation metadata,
-   generated projections, or platform I/O.
+3. **Local-only adapter family:** `.github/copilot/settings.json` contains
+   inline CLI hooks; root `AGENTS.md` and `.agents/skills/` are discovered
+   directly; launcher-scoped ignored instructions, locally installed
+   namespaced agents, and session-only MCP configuration cover remaining
+   surfaces.
 4. **Canonical MCP manifest:** a new secret-free server inventory is
    established from total dispositions over tracked platform candidates before
    any Copilot MCP projection is generated.
@@ -251,11 +290,14 @@ dispatches and consumes it.
 ## Delivery order
 
 1. **MCP-150:** Claude-only canonical policy baseline, then native Copilot CLI
-   enforcement.
-2. **MCP-154:** one complete identity, launcher, and deliberate-Practice-join
-   vertical.
-3. **MCP-155:** instructions/skills, specialist agents, then repository MCP
-   tools as separate PR-sized slices.
+   enforcement including the minimal launcher/preflight and non-model-visible
+   session-attestation lifecycle needed to secure inherited routing.
+2. **MCP-154:** one complete identity and deliberate-Practice-join vertical that
+   extends MCP-150's launcher and composes model-visible identity into its
+   established session-start activation without taking ownership of the
+   attestation.
+3. **MCP-155:** instructions/skills, locally installed specialist agents, then
+   session-scoped MCP tools as separate PR-sized slices.
 4. **MCP-156:** local wake/drain recovery, then lifecycle and live acceptance.
 5. **Closure:** reconcile the target-versus-wired matrix and archive delivery
    plans only after every proof passes.
@@ -280,10 +322,11 @@ lands this report, ADR amendment, matrix correction, and ratified plan estate.
 | Assumption | Falsifier | Required response |
 | --- | --- | --- |
 | Native `sessionStart` can deliver identity through `additionalContext`. | A supported CLI build fires the hook but the model receives no context. | Re-shape MCP-154 before activation. |
-| Explicit native GitHub pre-tool-use can be the sole Copilot evaluator while the explicit inherited route is neutral. | Activation provenance cannot select the routes without body guessing, or inherited activation still evaluates. | Do not land Copilot activation; return MCP-150 to design. |
+| Inline native GitHub pre-tool-use can be the sole local Copilot evaluator while the strictly attested inherited route is neutral. | The discriminator cannot require marker, version, schema, session match, and live native attestation together, or inherited activation still evaluates. | Do not land Copilot activation; return MCP-150 to design. |
 | `.agents/skills/` supplies the required skill set under documented precedence. | Clean-checkout discovery misses or shadows a required skill. | Correct the projection/precedence contract; do not copy blindly. |
+| Namespaced user-level agents can be installed without changing user-owned files or exposing a cloud agent profile. | Installation cannot be atomic, ownership cannot be proved, or cleanup would remove non-Oak files. | Keep agent projection unshipped and re-shape MCP-155. |
 | One-shot watch to `shell_completed` provides a reliable wake edge. | Delivered events fail to wake, re-arm loses events, or unrelated sessions wake. | Keep comms delivery unshipped and re-shape MCP-156. |
-| The tracked MCP projection can remain secret-free. | A required server cannot be described without committing credentials or a host path. | Keep that server local and narrow the supported repository set. |
+| The session-only MCP projection can remain secret-free. | A required server cannot be described without credentials or a host path in the generated file. | Exclude that server and narrow the supported local set. |
 
 ## Explicit non-goals
 
@@ -293,6 +336,8 @@ lands this report, ADR amendment, matrix correction, and ratified plan estate.
 - A parallel Codex parity programme.
 - Duplicate skill trees, hand-maintained agent copies, or empty speculative
   settings.
+- `.github/hooks`, `.github/agents`, `.github/instructions`, `.mcp.json`, or
+  `.github/mcp.json` delivery that would activate a hosted or non-CLI consumer.
 - Weakened policy enforcement, timeout-as-success claims, or bypass switches.
 
 ## Official sources
@@ -304,3 +349,4 @@ lands this report, ADR amendment, matrix correction, and ratified plan estate.
 - [Custom instructions support](https://docs.github.com/en/copilot/reference/custom-instructions-support)
 - [Add repository custom instructions](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions)
 - [Custom agents configuration](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
+- [Create custom agents for Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-custom-agents-for-cli)

@@ -1,26 +1,43 @@
-import { readFileSync } from 'node:fs';
+import { appendFileSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { buildPreToolUseDenyResponse } from './content-deny-response.js';
+import { isErr, ok, type Result } from '@oaknational/result';
+
 import {
-  extractContentChange,
-  parseHookInput,
-  readStreamText,
-  resolveContentPair,
-} from './hook-input.js';
+  buildCopilotPreToolUseDenyResponse,
+  buildPreToolUseDenyResponse,
+} from './content-deny-response.js';
+import {
+  extractContentChanges,
+  routeContentChanges,
+  selectExactlyOneSchema,
+} from './content-change-router.js';
+import { parseHookInput, readStreamText, resolveContentPair } from './hook-input.js';
+import { evaluateContentPolicy } from './content-policy-core.js';
 import { findAddedBlockedContent, findAddedScopedBlock } from './matchers.js';
 import {
   POLICY_URL,
   loadBlockedContentPatterns,
   loadScopedContentBlocks,
 } from './policy-loader.js';
-import { type RunPreToolUseContentGuardOptions, type ScopedContentBlockGroup } from './types.js';
+import {
+  type RoutedContentChanges,
+  type RunPreToolUseContentGuardOptions,
+} from './content-types.js';
+import type { ScopedContentBlockGroup } from './types.js';
 
-export type { PreToolUseDenyResponse, RunPreToolUseContentGuardOptions } from './types.js';
+export type {
+  CopilotPreToolUseDenyResponse,
+  RunPreToolUseContentGuardOptions,
+} from './content-types.js';
+export type { PreToolUseDenyResponse } from './types.js';
 
+export { CopilotPreToolUseDenyResponseSchema } from './content-types.js';
 export { PreToolUseDenyResponseSchema } from './types.js';
 
-export { extractContentChange, parseHookInput, readStreamText } from './hook-input.js';
+export { extractContentChanges, routeContentChanges, selectExactlyOneSchema };
+
+export { parseHookInput, readStreamText } from './hook-input.js';
 
 export {
   findAddedBlockedContent,
@@ -35,7 +52,10 @@ export {
   parseScopedContentBlocks,
 } from './policy-loader.js';
 
-export { buildPreToolUseDenyResponse } from './content-deny-response.js';
+export {
+  buildCopilotPreToolUseDenyResponse,
+  buildPreToolUseDenyResponse,
+} from './content-deny-response.js';
 
 /**
  * Read prior file content for the real hook adapter.
@@ -73,19 +93,53 @@ function applyGuardDefaults(options: RunPreToolUseContentGuardOptions): {
 }
 
 /**
- * Read + parse the Claude hook stdin payload into the resolved
- * new/prior content pair plus the optional file path. Extracted so the
- * orchestrator stays under the workspace's complexity cap.
+ * Read, schema-route, and normalise a hook payload, then resolve any
+ * whole-file prior-content references. The platform discriminant is retained
+ * only for the response renderer.
  */
-async function readResolvedContent(
+async function readResolvedContentChanges(
   stdin: AsyncIterable<string | Buffer>,
   readPriorContent: (filePath: string) => string | null,
-): Promise<{ newContent: string; priorContent: string; filePath?: string }> {
+): Promise<Result<RoutedContentChanges, Error>> {
   const inputText = await readStreamText(stdin);
-  const hookInput = parseHookInput(inputText);
-  const change = extractContentChange(hookInput);
-  const { newContent, priorContent } = resolveContentPair(change, readPriorContent);
-  return { newContent, priorContent, filePath: change.filePath };
+  const hookInputResult = parseHookInput(inputText);
+  if (isErr(hookInputResult)) {
+    return hookInputResult;
+  }
+  const routedResult = routeContentChanges(hookInputResult.value);
+  if (isErr(routedResult)) {
+    captureUnmatchedInput(inputText, routedResult.error.message);
+    return routedResult;
+  }
+  const changes = routedResult.value.changes.map((change) => {
+    const { newContent, priorContent } = resolveContentPair(change, readPriorContent);
+    return {
+      newContent,
+      priorContent,
+      ...(change.filePath === undefined ? {} : { filePath: change.filePath }),
+    };
+  });
+  return ok({ responseFormat: routedResult.value.responseFormat, changes });
+}
+
+/**
+ * DIAGNOSTIC SCAFFOLD — worktree-only, removed before any landing. Appends
+ * the raw PreToolUse payload that matched zero schemas to a gitignored
+ * machine-local file (`tmp/pretooluse-unmatched.jsonl`) so the live Copilot
+ * CLI envelope shape can be OBSERVED before it is schematised
+ * (verify-data-supports-shape: a schema is never guessed from a denial).
+ * Capture failure is swallowed deliberately: the fail-closed deny result
+ * must never be masked or altered by diagnostics.
+ */
+function captureUnmatchedInput(rawInput: string, reason: string): void {
+  try {
+    appendFileSync(
+      'tmp/pretooluse-unmatched.jsonl',
+      `${JSON.stringify({ at: new Date().toISOString(), reason, rawInput })}\n`,
+    );
+  } catch {
+    /* deliberate: diagnostics must never change the guard's result */
+  }
 }
 
 /**
@@ -97,56 +151,7 @@ function formatGuardError(error: unknown): string {
 }
 
 /**
- * Resolve a flat-blocked-pattern denial against new/prior content. Writes
- * the deny payload to stdout when matched; returns true so the orchestrator
- * skips the scoped-block phase.
- */
-function denyOnBlockedPattern(
-  newContent: string,
-  priorContent: string,
-  patterns: readonly string[],
-  stdout: { write(text: string): void },
-): boolean {
-  const blockedPattern = findAddedBlockedContent(newContent, priorContent, patterns);
-  if (blockedPattern === null) {
-    return false;
-  }
-  stdout.write(
-    `${JSON.stringify(buildPreToolUseDenyResponse({ kind: 'owner-marker', pattern: blockedPattern }))}\n`,
-  );
-  return true;
-}
-
-/**
- * Resolve a scoped-block denial against new/prior content. Writes the deny
- * payload (with citation) to stdout when matched.
- */
-function denyOnScopedBlock(
-  newContent: string,
-  priorContent: string,
-  filePath: string | undefined,
-  blocks: readonly ScopedContentBlockGroup[],
-  stdout: { write(text: string): void },
-): void {
-  const matched = findAddedScopedBlock(newContent, priorContent, filePath, blocks);
-  if (matched === null) {
-    return;
-  }
-  stdout.write(
-    `${JSON.stringify(
-      buildPreToolUseDenyResponse({
-        kind: 'concept',
-        pattern: matched.matchedText,
-        concept: matched.group.concept,
-        citation: matched.group.citation,
-        reappraisal: matched.group.reappraisal,
-      }),
-    )}\n`,
-  );
-}
-
-/**
- * Execute the content guard using Claude's stdin/stdout contract.
+ * Execute the content guard using a schema-routed PreToolUse contract.
  *
  * Two layers of detection are run, in order:
  *   1. Flat `blocked_patterns` — universal, path-agnostic block.
@@ -160,18 +165,22 @@ export async function runPreToolUseContentGuard(
   const seams = applyGuardDefaults(options);
 
   try {
-    const { newContent, priorContent, filePath } = await readResolvedContent(
-      seams.stdin,
-      seams.readPriorContent,
-    );
-    const patterns = seams.blockedPatterns ?? (await loadBlockedContentPatterns(seams.policyUrl));
-
-    if (denyOnBlockedPattern(newContent, priorContent, patterns, seams.stdout)) {
-      return { exitCode: 0 };
+    const routedResult = await readResolvedContentChanges(seams.stdin, seams.readPriorContent);
+    if (isErr(routedResult)) {
+      seams.stderr.write(`${routedResult.error.message}\n`);
+      return { exitCode: 2 };
     }
-
+    const routed = routedResult.value;
+    const patterns = seams.blockedPatterns ?? (await loadBlockedContentPatterns(seams.policyUrl));
     const blocks = seams.scopedBlocks ?? (await loadScopedContentBlocks(seams.policyUrl));
-    denyOnScopedBlock(newContent, priorContent, filePath, blocks, seams.stdout);
+    const decision = evaluateContentPolicy(routed.changes, patterns, blocks);
+    if (decision.kind === 'deny') {
+      const response =
+        routed.responseFormat === 'claude'
+          ? buildPreToolUseDenyResponse(decision.deny)
+          : buildCopilotPreToolUseDenyResponse(decision.deny);
+      seams.stdout.write(`${JSON.stringify(response)}\n`);
+    }
     return { exitCode: 0 };
   } catch (error) {
     seams.stderr.write(`${formatGuardError(error)}\n`);
