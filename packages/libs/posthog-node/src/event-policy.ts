@@ -8,7 +8,6 @@
 
 import {
   type McpRequest,
-  type McpRequestExtra,
   type PolicySnapshot,
   type PostHogEventPolicies,
   type PostHogEventPolicyConfig,
@@ -29,7 +28,7 @@ function readInitializeClientName(request: McpRequest): unknown {
   return isUnknownProperties(clientInfo) ? readOwn(clientInfo, 'name') : undefined;
 }
 
-function readVerifiedActorId(extra?: McpRequestExtra): string | null {
+function readVerifiedActorId(extra?: unknown): string | null {
   if (!isUnknownProperties(extra)) {
     return null;
   }
@@ -51,7 +50,7 @@ function readVerifiedActorId(extra?: McpRequestExtra): string | null {
 function projectVerifiedIdentityAndRelease(
   snapshot: PolicySnapshot,
   request: McpRequest,
-  extra?: McpRequestExtra,
+  extra?: unknown,
 ): UnknownProperties | null {
   const actorId = readVerifiedActorId(extra);
   if (actorId === null) {

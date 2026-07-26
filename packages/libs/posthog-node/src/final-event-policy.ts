@@ -60,7 +60,7 @@ function normaliseFinalEvent(
   }
 
   if (isAutomaticEventName(event)) {
-    const automatic = normaliseAutomaticProperties(event, properties, snapshot, true);
+    const automatic = normaliseAutomaticProperties(event, properties, snapshot);
     return automatic === null ? null : { event, properties: automatic };
   }
 
@@ -100,7 +100,7 @@ export function applyFinalOakEventPolicy(
       distinctId: event.distinctId,
       event: normalised.event,
       properties: normalised.properties,
-      timestamp: new Date(event.timestamp.getTime()),
+      timestamp: new Date(event.timestamp),
       ...(event.uuid === undefined ? {} : { uuid: event.uuid }),
     };
   } catch {

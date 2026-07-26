@@ -39,38 +39,17 @@ function projectionError(): Result<never, PostHogIdentityProjectionError> {
 function isValidEnvironment(
   environment: PostHogPseudonymEnvironment,
 ): environment is PostHogPseudonymEnvironment {
-  return VALID_ENVIRONMENTS.some((candidate) => candidate === environment);
+  return VALID_ENVIRONMENTS.includes(environment);
 }
 
 function keyMaterialMatches(left: Uint8Array, right: Uint8Array): boolean {
   return left.every((byte, index) => byte === right[index]);
 }
 
-function isHighSurrogate(codeUnit: number): boolean {
-  return codeUnit >= 0xd800 && codeUnit <= 0xdbff;
-}
-
-function isLowSurrogate(codeUnit: number): boolean {
-  return codeUnit >= 0xdc00 && codeUnit <= 0xdfff;
-}
-
-function hasFollowingLowSurrogate(value: string, index: number): boolean {
-  if (index + 1 >= value.length) {
-    return false;
-  }
-  return isLowSurrogate(value.charCodeAt(index + 1));
-}
-
 function isWellFormedUnicode(value: string): boolean {
-  for (let index = 0; index < value.length; index += 1) {
-    const codeUnit = value.charCodeAt(index);
-
-    if (isHighSurrogate(codeUnit)) {
-      if (!hasFollowingLowSurrogate(value, index)) {
-        return false;
-      }
-      index += 1;
-    } else if (isLowSurrogate(codeUnit)) {
+  for (const character of value) {
+    const codePoint = character.codePointAt(0);
+    if (codePoint === undefined || (codePoint >= 0xd800 && codePoint <= 0xdfff)) {
       return false;
     }
   }

@@ -23,14 +23,12 @@ import {
 function normaliseInitializeProperties(
   properties: UnknownProperties,
   snapshot: PolicySnapshot,
-  requireExplicitSuccess: boolean,
 ): UnknownProperties | null {
   const clientFamily = readOwn(properties, 'oak_client_family');
   const protocolVersion = readOwn(properties, '$mcp_protocol_version');
   const isError = readOwn(properties, '$mcp_is_error');
-  const hasValidSuccess = requireExplicitSuccess ? isError === false : isError !== true;
   if (
-    !hasValidSuccess ||
+    isError !== false ||
     !isOakClientFamily(clientFamily) ||
     !isSupportedProtocolVersion(protocolVersion)
   ) {
@@ -99,10 +97,9 @@ export function normaliseAutomaticProperties(
   event: AutomaticEventName,
   properties: UnknownProperties,
   snapshot: PolicySnapshot,
-  requireExplicitInitializeSuccess = false,
 ): UnknownProperties | null {
   if (event === AUTOMATIC_EVENT_NAMES.initialize) {
-    return normaliseInitializeProperties(properties, snapshot, requireExplicitInitializeSuccess);
+    return normaliseInitializeProperties(properties, snapshot);
   }
 
   const duration = readOwn(properties, '$mcp_duration_ms');

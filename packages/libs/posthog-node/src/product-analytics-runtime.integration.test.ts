@@ -219,7 +219,7 @@ function createMutableConfigFixture() {
 }
 
 describe('createPostHogClientOptions', () => {
-  it('returns the exact closed, EU, profileless delivery configuration', () => {
+  it('returns the exact closed, EU, minimal-person delivery configuration', () => {
     const config = createConfig();
     const finalOakEventPolicy = (event: EventMessage | null): EventMessage | null => event;
 

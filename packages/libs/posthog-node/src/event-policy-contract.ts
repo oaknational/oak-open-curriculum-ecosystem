@@ -28,8 +28,6 @@ export interface McpRequest {
   readonly params?: UnknownProperties;
 }
 
-export type McpRequestExtra = unknown;
-
 export interface PostHogEventPolicyConfig {
   readonly release: ResolvedRelease;
   readonly serverVersion: string;
@@ -42,7 +40,7 @@ export interface PostHogEventPolicyConfig {
 export interface PostHogEventPolicies {
   readonly projectVerifiedIdentityAndRelease: (
     request: McpRequest,
-    extra?: McpRequestExtra,
+    extra?: unknown,
   ) => UnknownProperties | null;
   readonly synchronousMcpEventPolicy: (event: McpBeforeSendEvent) => McpBeforeSendEvent | null;
   readonly finalOakEventPolicy: (event: EventMessage | null) => EventMessage | null;

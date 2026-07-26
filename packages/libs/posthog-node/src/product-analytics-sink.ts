@@ -78,7 +78,7 @@ function buildResourceReadMessage(
   return {
     distinctId,
     event: RESOURCE_READ_EVENT_NAME,
-    timestamp: new Date(event.startedAt.getTime()),
+    timestamp: new Date(event.startedAt),
     properties: {
       $mcp_source: POSTHOG_MCP_SOURCE,
       $mcp_server_name: OAK_MCP_SERVER_NAME,

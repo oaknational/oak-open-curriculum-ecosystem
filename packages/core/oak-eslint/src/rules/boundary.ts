@@ -73,6 +73,15 @@ const POSTHOG_VENDOR_IMPORT_PATTERNS = createPackageSpecifierPatterns(
   'Only packages/libs/posthog-node may import PostHog vendor SDKs. Other workspaces must consume Oak provider-neutral product-analytics contracts.',
 );
 
+export const postHogVendorBoundaryRules = {
+  '@typescript-eslint/no-restricted-imports': [
+    'error',
+    {
+      patterns: POSTHOG_VENDOR_IMPORT_PATTERNS,
+    },
+  ],
+} satisfies Partial<Linter.RulesRecord>;
+
 /**
  * Core boundary rules
  * Apply these to all core packages (src files only)

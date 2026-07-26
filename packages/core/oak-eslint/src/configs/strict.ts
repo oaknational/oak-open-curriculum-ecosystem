@@ -2,6 +2,7 @@ import vitestPlugin from '@vitest/eslint-plugin';
 import { defineConfig } from 'eslint/config';
 import type { TSESLint } from '@typescript-eslint/utils';
 import { recommended, RECOMMENDED_RESTRICTED_TYPES } from './recommended.js';
+import { postHogVendorBoundaryRules } from '../rules/boundary.js';
 
 /**
  * Strict shared lint config for Oak workspaces.
@@ -46,6 +47,7 @@ const strictExtensions: TSESLint.FlatConfig.ConfigArray = defineConfig(
       vitest: vitestPlugin,
     },
     rules: {
+      ...postHogVendorBoundaryRules,
       'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
       '@typescript-eslint/ban-ts-comment': [

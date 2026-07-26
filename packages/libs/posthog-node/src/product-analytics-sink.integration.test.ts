@@ -98,7 +98,7 @@ function onlyCapturedEvent(capture: CaptureSpy): EventMessage {
 }
 
 describe('createPostHogProductAnalyticsSink integration', () => {
-  it('captures one exact, profileless resource-read row from closed inputs', () => {
+  it('captures one exact, propertyless minimal-person resource-read row from closed inputs', () => {
     const project = vi.fn<ActivePostHogActorProjector['project']>(() =>
       ok({
         environment: RELEASE.environment,
