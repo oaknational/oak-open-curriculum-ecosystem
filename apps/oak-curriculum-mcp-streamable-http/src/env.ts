@@ -43,9 +43,11 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
      * Default-hidden: the control is a development affordance for
      * exercising the design system's five themes, not a feature the
      * public page offers yet. Set on selected preview deployments to
-     * play with theming; absent (the default) renders no control, and
-     * the page still honours a stored choice or the visitor's OS
-     * contrast preference through the design system's own theme script.
+     * play with theming. Absent (the default), the page ships neither
+     * the control nor the theme script: it declares and stays on the
+     * explicit light theme, honouring no stored choice or OS contrast
+     * preference — a mechanism that changes a user-visible setting
+     * ships only alongside the control that changes it back (ADR-217).
      */
     THEME_SELECTOR_ENABLED: z.enum(['true', 'false']).optional(),
     ALLOWED_HOSTS: z.string().optional(),

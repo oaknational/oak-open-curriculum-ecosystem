@@ -15,7 +15,7 @@
  * **Baselines are platform-specific.** CI renders on `ubuntu-latest`; these are
  * generated in a Linux image matching the installed Playwright, because
  * baselines captured on macOS would compare a different font rasteriser against
- * CI and fail on every run. Regenerate with `pnpm test:visual:update`.
+ * CI and fail on every run. Regenerate with `pnpm test:visual:baselines`.
  *
  * The tolerance in `playwright.config.ts` absorbs sub-pixel antialiasing, not
  * layout: a moved element or a wrong fill shifts far more than 1% of pixels.

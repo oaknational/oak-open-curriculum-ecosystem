@@ -550,6 +550,9 @@
     },
     "code-3": {
       "$value": "{weight.light} {font.size.3}/{leading.24} {font.family.mono}"
+    },
+    "code-4": {
+      "$value": "{weight.light} {font.size.2}/{leading.20} {font.family.mono}"
     }
   }
 }

@@ -194,7 +194,9 @@ pre {
   overflow-x: auto;
 }
 pre code {
-  font: var(--weight-light) var(--font-size-2) / var(--leading-20) var(--font-mono);
+  /* The system's dense-code slot, added for this page — never recompose
+     the shorthand from primitives; the slot is what a re-brand re-points. */
+  font: var(--type-code-4);
   letter-spacing: var(--tracking-heading);
   background: none;
   border: none;

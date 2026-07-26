@@ -24,4 +24,20 @@ describe('createRuntimeConfigFromValidatedEnv', () => {
     expect(runtimeConfig.env.SENTRY_RELEASE_OVERRIDE).toBeUndefined();
     expect(runtimeConfig.version).toBe('1.2.3-test');
   });
+
+  it('resolves the theme-selector flag through the env schema', () => {
+    const enabled = unwrap(
+      createRuntimeConfigFromValidatedEnv({ ...localOffModeEnv, THEME_SELECTOR_ENABLED: 'true' }),
+    );
+    expect(enabled.themeSelectorEnabled).toBe(true);
+
+    const disabled = unwrap(
+      createRuntimeConfigFromValidatedEnv({ ...localOffModeEnv, THEME_SELECTOR_ENABLED: 'false' }),
+    );
+    expect(disabled.themeSelectorEnabled).toBe(false);
+
+    // Absent is the deployed default: control withheld, page stays light.
+    const absent = unwrap(createRuntimeConfigFromValidatedEnv(localOffModeEnv));
+    expect(absent.themeSelectorEnabled).toBe(false);
+  });
 });

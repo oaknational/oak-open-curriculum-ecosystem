@@ -473,6 +473,11 @@
      track the .oak-code-* class they back, not the body ramp's sizes. */
   --type-code-2: var(--weight-light) var(--font-size-4)/var(--leading-24) var(--font-mono); /* @kind font */
   --type-code-3: var(--weight-light) var(--font-size-3)/var(--leading-24) var(--font-mono); /* @kind font */
+  /* Dense code surfaces (config snippets, inline terminal output). First
+     consumer: the MCP landing page's connection snippet, which was
+     recomposing this shorthand from primitives — the exact bypass the
+     slot layer exists to prevent. */
+  --type-code-4: var(--weight-light) var(--font-size-2)/var(--leading-20) var(--font-mono); /* @kind font */
 
   /* Page atmosphere — a brand may paint gradient glows behind the page
      (see brand.css §7d). Flat none for Oak. Never carries text contrast:

@@ -65,7 +65,12 @@ function mountStaticAssets(app: Express, log: Logger): void {
     );
   }
 
-  app.use(expressStatic(chosen, { etag: true, maxAge: '1d' }));
+  // Revalidate-always, not a freshness window: these are mutable URLs
+  // (`/oak-ds/styles.css`, `/landing-page.css`), so any positive maxAge lets
+  // a browser pair pre-deploy assets with post-deploy HTML for that long.
+  // ETag keeps the steady state cheap (304, no body). Content-hashed URLs
+  // are the durable cure and belong to the asset-versioning follow-up.
+  app.use(expressStatic(chosen, { etag: true, maxAge: 0 }));
 }
 
 export function mountStaticContentRoutes(

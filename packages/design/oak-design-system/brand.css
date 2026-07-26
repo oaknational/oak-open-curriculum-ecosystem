@@ -55,6 +55,8 @@
      RAMPS restructure it. Each type slot is a whole font shorthand —
      re-point slots to reshape scale, hierarchy and rhythm:
      --type-heading-1…7, --type-body-1…4, --type-label,
+     --type-code-2…4 (the monospace ramp — code surfaces re-point here,
+     never by recomposing --font-mono from primitives),
      plus case grammar: --label-transform (uppercase|lowercase|none),
      --label-variant (normal|all-small-caps).
      Density is the other ramp: --gap-* / --inset-* / --card-pad /
