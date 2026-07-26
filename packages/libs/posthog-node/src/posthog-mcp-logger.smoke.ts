@@ -29,6 +29,6 @@ setLogger(undefined);
 await client._shutdown(100);
 
 assert(
-  failureMessage !== undefined && failureMessage.includes(SENSITIVE_DETAIL),
+  failureMessage?.includes(SENSITIVE_DETAIL) === true,
   'The PostHog MCP SDK did not surface its suppressed capture failure',
 );

@@ -98,24 +98,29 @@ function captureResourceRead(
   event: ProductAnalyticsEvent,
   context: ProductAnalyticsCaptureContext,
 ): void {
-  if (!isValidResourceRead(event, snapshot.servedResourceNames)) {
-    return;
-  }
-
-  const actorId = readVerifiedActorId(context);
-  if (actorId === null) {
-    return;
-  }
-
-  const distinctId = projectActiveActor(snapshot, actorId);
-  if (distinctId === null) {
-    return;
-  }
-
   try {
-    client.capture(buildResourceReadMessage(snapshot, event, distinctId));
+    if (!isValidResourceRead(event, snapshot.servedResourceNames)) {
+      return;
+    }
+
+    const actorId = readVerifiedActorId(context);
+    if (actorId === null) {
+      return;
+    }
+
+    const distinctId = projectActiveActor(snapshot, actorId);
+    if (distinctId === null) {
+      return;
+    }
+
+    const message = buildResourceReadMessage(snapshot, event, distinctId);
+    try {
+      client.capture(message);
+    } catch {
+      reportSafely(snapshot.reportOperationalError, 'posthog_client_delivery_failed');
+    }
   } catch {
-    reportSafely(snapshot.reportOperationalError, 'posthog_client_delivery_failed');
+    reportSafely(snapshot.reportOperationalError, 'posthog_event_policy_failed');
   }
 }
 

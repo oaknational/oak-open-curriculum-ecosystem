@@ -245,6 +245,7 @@ function expectCallbackDelegation(
   expect(exercise.start).toBe(subject.delegate.startPromise);
   expect(subject.delegate.callbacksPresentAtStart).toBe(true);
   expect(subject.observer.observe(subject.delegate)).toBe(subject.transport);
+  expect(subject.observer.observe(subject.transport)).toBe(subject.transport);
   expect(subject.transport).not.toBe(subject.delegate);
   expect(subject.transport.sessionId).toBe('updated-session');
   expect(subject.delegate.protocolVersions).toStrictEqual([PROTOCOL_VERSION]);

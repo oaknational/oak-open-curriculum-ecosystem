@@ -285,6 +285,54 @@ describe('createPostHogProductAnalyticsSink integration', () => {
     expect(reportOperationalError).toHaveBeenCalledWith('posthog_client_delivery_failed');
   });
 
+  it.each([
+    [
+      'event property access',
+      () =>
+        new Proxy(validEvent(), {
+          getOwnPropertyDescriptor() {
+            assert.fail('event-proxy-failed');
+          },
+        }),
+      () => ({ verifiedActorId: ACTOR_ID }),
+    ],
+    [
+      'timestamp validation',
+      () => ({
+        ...validEvent(),
+        startedAt: Object.assign(new Date(STARTED_AT_ISO), {
+          getTime() {
+            assert.fail('date-validation-failed');
+          },
+        }),
+      }),
+      () => ({ verifiedActorId: ACTOR_ID }),
+    ],
+    [
+      'context property access',
+      validEvent,
+      () =>
+        new Proxy(
+          { verifiedActorId: ACTOR_ID },
+          {
+            getOwnPropertyDescriptor() {
+              assert.fail('context-proxy-failed');
+            },
+          },
+        ),
+    ],
+  ] as const)('isolates throwing %s with one fixed policy signal', (_label, event, context) => {
+    const { capture, reportOperationalError, sink } = createSubject();
+
+    expect(() => captureAtRuntime(sink, event(), context())).not.toThrow();
+
+    expect(capture).not.toHaveBeenCalled();
+    expect(reportOperationalError).toHaveBeenCalledOnce();
+    expect(reportOperationalError).toHaveBeenCalledWith('posthog_event_policy_failed');
+    expect(JSON.stringify(reportOperationalError.mock.calls)).not.toContain('-proxy-failed');
+    expect(JSON.stringify(reportOperationalError.mock.calls)).not.toContain('-validation-failed');
+  });
+
   it('snapshots release, server version, and canonical resource names at creation', () => {
     const release: {
       value: string;

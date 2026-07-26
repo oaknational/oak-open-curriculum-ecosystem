@@ -143,6 +143,7 @@ export function createPostHogMcpTransportObserver(
         snapshottedConfig.reportOperationalError,
       );
       observed.set(transport, observer);
+      observed.set(observer, observer);
       return observer;
     },
   };
