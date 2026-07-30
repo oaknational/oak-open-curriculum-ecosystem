@@ -21,13 +21,12 @@
  * fakes instead of mutating globals (no-global-state-in-tests / ADR-078);
  * the app-wide instance below binds the real inlined runtime and storage.
  *
- * Second in-estate copy of the hub's adapter CONTRACT — the copies are
- * deliberately DIVERGED as of PR #637: this copy holds the choice-model
- * cure; the hub's still reads runtime.get() and carries the conflation
- * defect live (recorded on MCP-372 with the cure shape). Canonical owner:
- * the owned React binding tier per ADR-213 (React code never enters the
- * CSS package) — intake recorded on MCP-134; the final shape waits on the
- * kit's choice() accessor (MCP-388).
+ * Second in-estate copy of the hub's adapter CONTRACT — the copies
+ * CONVERGED on the choice-model cure at MCP-372 slice 1 (this copy landed
+ * it first in PR #637; the hub's lib/oak-theme-store.ts now mirrors it).
+ * Canonical owner: the owned React binding tier per ADR-213 (React code
+ * never enters the CSS package) — intake recorded on MCP-134; the final
+ * shape waits on the kit's choice() accessor (MCP-388).
  */
 
 export type OakThemeName = 'light' | 'dark' | 'system' | 'high-contrast' | 'colour-safe';

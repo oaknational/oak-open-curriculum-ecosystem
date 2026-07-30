@@ -7,21 +7,30 @@
    snapshot is undefined, so server HTML renders no controls and the client
    upgrades after hydration: theme state lives in localStorage, so the server
    must not guess. All five themes are offered — the access themes
-   (high-contrast, colour-safe) are not optional extras. */
+   (high-contrast, colour-safe) are not optional extras.
+
+   The theme select binds the store's CHOICE snapshot, never the applied
+   theme: with no explicit choice it shows the "Page default" placeholder
+   (value ''), so the OS contrast route is not misreported as a choice and
+   the first real choice always fires a change event. The placeholder shape
+   depends on React emitting `selected=""` on the value-matching option even
+   when that option is `disabled hidden` (the showcase's LabelledSelect
+   records the same dependency). Motion binds the applied mode — 'system'
+   is its own no-choice semantic. */
 import { useSyncExternalStore } from 'react';
 import type { ReactElement } from 'react';
 
 import { oakThemeStore } from '@/lib/oak-theme-store';
-import type { OakThemeStore } from '@/lib/oak-theme-store';
+import type { OakMotionMode, OakThemeName, OakThemeStore } from '@/lib/oak-theme-store';
 
-const THEME_LABELS: Record<string, string> = {
+const THEME_LABELS: Readonly<Record<OakThemeName, string>> = {
   light: 'Light',
   dark: 'Dark',
   system: 'Match device',
   'high-contrast': 'High contrast',
   'colour-safe': 'Colour safe',
 };
-const MOTION_LABELS: Record<string, string> = {
+const MOTION_LABELS: Readonly<Record<OakMotionMode, string>> = {
   system: 'Match device',
   reduced: 'Reduced',
   full: 'Full',
@@ -33,13 +42,15 @@ function AxisSelect({
   value,
   options,
   labels,
+  placeholderLabel,
   onChange,
 }: {
   readonly id: string;
   readonly label: string;
   readonly value: string;
   readonly options: readonly string[];
-  readonly labels: Record<string, string>;
+  readonly labels: Readonly<Record<string, string>>;
+  readonly placeholderLabel?: string;
   readonly onChange: (value: string) => void;
 }): ReactElement {
   return (
@@ -54,6 +65,11 @@ function AxisSelect({
         style={{ width: 'auto', minHeight: 'var(--size-target-min)' }}
         onChange={(e) => onChange(e.target.value)}
       >
+        {placeholderLabel !== undefined && (
+          <option value="" disabled hidden>
+            {placeholderLabel}
+          </option>
+        )}
         {options.map((option) => (
           <option key={option} value={option}>
             {labels[option] ?? option}
@@ -84,6 +100,7 @@ export default function ThemeSwitcher({
         value={theme}
         options={store.themeOptions()}
         labels={THEME_LABELS}
+        placeholderLabel="Page default"
         onChange={store.setTheme}
       />
       <AxisSelect
