@@ -1,4 +1,11 @@
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
+
+import { uuidV5Schema } from '../src/collaboration-state/agent-id';
+import { readRegistry, updateRegistry } from '../src/commit-queue/registry';
 
 import {
   runCommitQueueCli,
@@ -15,7 +22,7 @@ const agentId: CommitQueueAgentId = {
   session_id_prefix: '019dcd',
   // Deterministic v5 derived from '019dcd' under the collaboration-identity
   // namespace; stable fixture for write-side identity contracts.
-  id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
+  id: uuidV5Schema.parse('e2e793c7-923e-5baa-97f0-2bedfb9b6b50'),
 };
 
 function intent(overrides: Partial<CommitIntent> = {}): CommitIntent {
@@ -436,5 +443,94 @@ describe('commit-queue CLI read commands', () => {
         resolveGitRoot: rejectGitRootResolution,
       }),
     ).rejects.toThrow('unknown option for commit-queue commit: --commit-subject');
+  });
+});
+
+describe('registry round-trip (PDR-076a identity boundary)', () => {
+  const legacyClaim = {
+    claim_id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    agent_id: {
+      agent_name: 'Vintage Pre-Sunset Seat',
+      platform: 'codex',
+      model: 'gpt-4.9',
+      session_id_prefix: '00aa11',
+    },
+    thread: 'legacy-thread',
+    areas: [{ kind: 'files', patterns: ['notes/**'] }],
+    claimed_at: '2026-04-27T07:00:00Z',
+    intent: 'Pre-sunset legacy row exercising the write-back preservation contract.',
+  };
+
+  function fileRegistry(commitQueue: readonly unknown[]): string {
+    return JSON.stringify(
+      { schema_version: '1.3.0', commit_queue: commitQueue, claims: [legacyClaim] },
+      null,
+      2,
+    );
+  }
+
+  function validIntentRow(): Record<string, unknown> {
+    return {
+      intent_id: '33333333-3333-4333-8333-333333333333',
+      claim_id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+      agent_id: {
+        agent_name: 'Prismatic Waxing Constellation',
+        platform: 'codex',
+        model: 'gpt-5.5',
+        session_id_prefix: '019dcd',
+        id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
+      },
+      files: ['agent-tools/src/commit-queue/index.ts'],
+      commit_subject: 'feat(queue): exercise the registry round trip',
+      queued_at: '2026-04-27T07:20:00Z',
+      updated_at: '2026-04-27T07:20:00Z',
+      expires_at: '2026-04-27T07:35:00Z',
+      phase: 'queued',
+    };
+  }
+
+  it('preserves a legacy id-less claim row unchanged through a registry write', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'commit-queue-registry-'));
+    try {
+      const registryPath = join(dir, 'active-claims.json');
+      writeFileSync(registryPath, fileRegistry([validIntentRow()]));
+
+      await updateRegistry(registryPath, (current) => current);
+
+      const after: unknown = JSON.parse(readFileSync(registryPath, 'utf8'));
+      expect(after).toMatchObject({ claims: [legacyClaim] });
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('fails loudly naming the intent when an intent row lacks the routing id', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'commit-queue-registry-'));
+    try {
+      const registryPath = join(dir, 'active-claims.json');
+      const idlessIntent = { ...validIntentRow(), agent_id: legacyClaim.agent_id };
+      writeFileSync(registryPath, fileRegistry([idlessIntent]));
+
+      await expect(readRegistry(registryPath)).rejects.toThrow(
+        /commit_queue entry 33333333-3333-4333-8333-333333333333 carries an invalid agent_id/,
+      );
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('round-trips a valid intent row with its branded routing id intact', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'commit-queue-registry-'));
+    try {
+      const registryPath = join(dir, 'active-claims.json');
+      writeFileSync(registryPath, fileRegistry([validIntentRow()]));
+
+      const parsed = await readRegistry(registryPath);
+
+      expect(parsed.commit_queue).toHaveLength(1);
+      expect(parsed.commit_queue[0].agent_id).toStrictEqual(validIntentRow().agent_id);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { uuidV5Schema } from '../src/collaboration-state/agent-id';
+
 import {
   completeCommitIntent,
   createStagedBundleFingerprint,
@@ -12,6 +14,7 @@ import {
   type CommitIntent,
   type CommitQueueAgentId,
   type CommitQueueClaim,
+  type CommitQueueClaimAgentId,
   type CommitQueueRegistry,
   verifyStagedBundle,
 } from '../src/commit-queue';
@@ -23,7 +26,7 @@ const agentId: CommitQueueAgentId = {
   session_id_prefix: '019dcd',
   // Deterministic v5 derived from '019dcd' under the collaboration-identity
   // namespace; used as a stable fixture for write-side identity contracts.
-  id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
+  id: uuidV5Schema.parse('e2e793c7-923e-5baa-97f0-2bedfb9b6b50'),
 };
 
 const queuedAt = '2026-04-27T07:20:00Z';
@@ -295,9 +298,121 @@ describe('guardStageFiles', () => {
       ok: false,
       reason:
         'no fresh active commit-queue intent for Prismatic Waxing Constellation / ' +
-        'codex / gpt-5.5 / 019dcd matches requested files: ' +
+        'codex / gpt-5.5 / 019dcd / id:e2e793c7-923e-5baa-97f0-2bedfb9b6b50 ' +
+        'matches requested files: ' +
         'agent-tools/src/commit-queue/index.ts. Enqueue the bundle before ' +
         'staging: pnpm agent-tools:commit-queue -- enqueue ...',
+    });
+  });
+
+  it('accepts an intent and claim whose display tuple drifted when the routing id matches', () => {
+    const driftedTuple: CommitQueueAgentId = {
+      agent_name: 'Prismatic Waxing Constellation (renamed)',
+      platform: 'codex',
+      model: 'gpt-5.6',
+      session_id_prefix: 'ffffff',
+      id: agentId.id,
+    };
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [gitClaim({ agent_id: driftedTuple })],
+      commit_queue: [intent({ agent_id: driftedTuple, phase: 'staging' })],
+    };
+
+    expect(
+      guardStageFiles({
+        registry,
+        agentId,
+        files: ['agent-tools/src/commit-queue/index.ts'],
+        nowIso: now,
+      }),
+    ).toStrictEqual({ ok: true, intent: registry.commit_queue[0] });
+  });
+
+  it('rejects an intent whose identity matches every display field but carries a different routing id', () => {
+    const prefixCollider: CommitQueueAgentId = {
+      ...agentId,
+      id: uuidV5Schema.parse('0a105546-2c71-5107-ae67-e04a133bd2ba'),
+    };
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [gitClaim()],
+      commit_queue: [intent({ agent_id: prefixCollider })],
+    };
+
+    expect(
+      guardStageFiles({
+        registry,
+        agentId,
+        files: ['agent-tools/src/commit-queue/index.ts'],
+        nowIso: now,
+      }),
+    ).toStrictEqual({
+      ok: false,
+      reason:
+        'no fresh active commit-queue intent for Prismatic Waxing Constellation / ' +
+        'codex / gpt-5.5 / 019dcd / id:e2e793c7-923e-5baa-97f0-2bedfb9b6b50 ' +
+        'matches requested files: ' +
+        'agent-tools/src/commit-queue/index.ts. Enqueue the bundle before ' +
+        'staging: pnpm agent-tools:commit-queue -- enqueue ...',
+    });
+  });
+
+  it('treats a legacy id-less claim identity as never the same live agent', () => {
+    const legacyClaimIdentity: CommitQueueClaimAgentId = {
+      agent_name: agentId.agent_name,
+      platform: agentId.platform,
+      model: agentId.model,
+      session_id_prefix: agentId.session_id_prefix,
+    };
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [gitClaim({ agent_id: legacyClaimIdentity })],
+      commit_queue: [intent()],
+    };
+
+    expect(
+      guardStageFiles({
+        registry,
+        agentId,
+        files: ['agent-tools/src/commit-queue/index.ts'],
+        nowIso: now,
+      }),
+    ).toStrictEqual({
+      ok: false,
+      reason:
+        'queued intent 11111111-1111-4111-8111-111111111111 claim ' +
+        'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa does not belong to ' +
+        'Prismatic Waxing Constellation / codex / gpt-5.5 / 019dcd ' +
+        '/ id:e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
+    });
+  });
+
+  it('rejects a claim whose identity matches every display field but carries a different routing id', () => {
+    const prefixCollider: CommitQueueAgentId = {
+      ...agentId,
+      id: uuidV5Schema.parse('0a105546-2c71-5107-ae67-e04a133bd2ba'),
+    };
+    const registry: CommitQueueRegistry = {
+      schema_version: '1.3.0',
+      claims: [gitClaim({ agent_id: prefixCollider })],
+      commit_queue: [intent()],
+    };
+
+    expect(
+      guardStageFiles({
+        registry,
+        agentId,
+        files: ['agent-tools/src/commit-queue/index.ts'],
+        nowIso: now,
+      }),
+    ).toStrictEqual({
+      ok: false,
+      reason:
+        'queued intent 11111111-1111-4111-8111-111111111111 claim ' +
+        'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa does not belong to ' +
+        'Prismatic Waxing Constellation / codex / gpt-5.5 / 019dcd ' +
+        '/ id:e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
     });
   });
 
