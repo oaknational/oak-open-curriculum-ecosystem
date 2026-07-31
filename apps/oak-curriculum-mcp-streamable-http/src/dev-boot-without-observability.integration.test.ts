@@ -5,7 +5,6 @@ import { type Env } from './env.js';
 import { HttpEnvSchema } from './env.js';
 import { createRuntimeConfigFromValidatedEnv } from './runtime-config-from-validated-env.js';
 import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
-import { createFakeRateLimiterFactory } from './test-helpers/rate-limiter-fakes.js';
 import { TEST_UPSTREAM_METADATA } from './test-helpers/upstream-metadata-fixture.js';
 import { getScratchStaticRoot } from './test-helpers/static-root-fixture.js';
 
@@ -73,7 +72,6 @@ describe('dev server boots without observability or Vercel deploy env', () => {
       getLandingPageHtml: () =>
         '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
       upstreamMetadata: TEST_UPSTREAM_METADATA,
-      rateLimiterFactory: createFakeRateLimiterFactory().factory,
     });
 
     expect(app).toBeDefined();

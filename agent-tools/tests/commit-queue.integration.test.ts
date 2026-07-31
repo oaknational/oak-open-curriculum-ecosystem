@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { uuidV5Schema } from '../src/collaboration-state/agent-id';
+
 import {
   runCommitQueueCli,
   type CommitIntent,
@@ -15,7 +17,7 @@ const agentId: CommitQueueAgentId = {
   session_id_prefix: '019dcd',
   // Deterministic v5 derived from '019dcd' under the collaboration-identity
   // namespace; stable fixture for write-side identity contracts.
-  id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50',
+  id: uuidV5Schema.parse('e2e793c7-923e-5baa-97f0-2bedfb9b6b50'),
 };
 
 function intent(overrides: Partial<CommitIntent> = {}): CommitIntent {

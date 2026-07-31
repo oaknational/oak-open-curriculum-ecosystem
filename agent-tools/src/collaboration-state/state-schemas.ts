@@ -70,6 +70,7 @@ const directedCommsMessageSchema = z.strictObject({
   to: agentIdSchema,
   subject: nonEmptyString,
   body: nonEmptyString,
+  in_response_to: nonEmptyString.optional(),
   tags: z.array(nonEmptyString).optional(),
 });
 
@@ -185,6 +186,7 @@ function directedEvent(parsed: z.infer<typeof directedCommsMessageSchema>): Dire
     to: agentId(parsed.to),
     subject: parsed.subject,
     body: parsed.body,
+    ...(parsed.in_response_to === undefined ? {} : { in_response_to: parsed.in_response_to }),
     ...(parsed.tags === undefined ? {} : { tags: parsed.tags }),
   };
 }

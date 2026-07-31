@@ -2,8 +2,8 @@
 
 **Audience**: working agents (Claude Code, Codex, Cursor) and human reviewers driving quality remediation across this monorepo.
 
-**Status**: living knowledge document. Last updated 2026-05-24 by Shaded
-Silencing Dusk during knowledge-curator consolidation.
+**Status**: living knowledge document. Last updated 2026-07-30 by Glowworm
+spins Pewter during the MCP-411 rate-limiter removal.
 
 This document captures the operational knowledge for driving repo quality up using three coupled tools — SonarCloud (with the Sonar MCP), CodeQL (via GitHub), and Sentry (with the Sentry MCP) — and the discipline that turns each tool's signal into a principled fix or a defensible dismissal.
 
@@ -238,7 +238,7 @@ When a finding appears in both — e.g., a regex DoS in `S5852` (Sonar) AND `js/
 ### Common Oak CodeQL alerts
 
 - `js/polynomial-redos` HIGH — regex with overlapping quantifiers vulnerable to ReDoS. Often co-fired with Sonar `S5852`. Investigate per-site for actual vulnerability; many alerts are linear-time with no overlap.
-- `js/missing-rate-limiting` HIGH — handler routes without rate-limit middleware visible in CodeQL's dataflow. Often a false-positive when DI hides the limiter from the analyser. Investigate whether a structural change (e.g., `withRateLimit(limiter, handler)` curry) makes the wiring legible to CodeQL without weakening DI.
+- `js/missing-rate-limiting` HIGH — routes with no rate-limit middleware in CodeQL's dataflow. On the HTTP MCP server this is a standing false positive: the control is at the edge, where CodeQL cannot see it. Disposition and rationale are fixed by [ADR-219](../architecture/architectural-decisions/219-rate-limiting-is-an-edge-concern.md); cite it rather than re-deriving one per alert.
 - `js/http-to-file-access` MEDIUM — network data written to file without sanitisation. Sometimes correctly reflects defence-in-depth shape (validate-then-skip-with-warning); dismiss-with-rationale when the architectural shape is correct.
 - `js/incomplete-sanitization` HIGH — common pattern when escaping a single character with a non-`/g` regex. Real bug when the input is user-controlled; investigate per-site.
 - `js/regex/missing-regexp-anchor` HIGH — regex used as a whole-string match without `^...$`. Real bug at security boundaries (auth, hostname); fix or dismiss per-site.

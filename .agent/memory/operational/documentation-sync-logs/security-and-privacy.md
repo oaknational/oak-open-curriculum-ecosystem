@@ -26,7 +26,7 @@ Do not mark a phase complete without an entry.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: expected artefacts are `phase-0-control-mapping.md` and `.agent/memory/operational/deferred-controls-register.md`.
@@ -36,7 +36,7 @@ Do not mark a phase complete without an entry.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: expected artefact is `phase-1-security-claim-contract.md`.
@@ -46,7 +46,7 @@ Do not mark a phase complete without an entry.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: expected artefact is `phase-2-evidence-merge-readiness-rules.md`.
@@ -56,7 +56,7 @@ Do not mark a phase complete without an entry.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: expected artefact is `phase-3-baseline-control-cut-list.md`.

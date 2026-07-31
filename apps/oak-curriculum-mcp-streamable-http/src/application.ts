@@ -12,7 +12,6 @@ import { finalizeApp } from './app/bootstrap-finalize.js';
 import { mountAppVersionHeader } from './app/app-version-header.js';
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
-import { createRateLimiters } from './rate-limiting/create-rate-limiters.js';
 import { initializeCoreEndpoints } from './app/core-endpoints.js';
 import { resolveServedMcpUrl } from './served-origin.js';
 import { runOAuthAndAuthContextPhases } from './app/orchestration.js';
@@ -62,8 +61,6 @@ interface SetupPostAuthPhasesDeps {
   readonly allowedHosts: readonly string[];
   readonly canonicalOrigin?: string;
   readonly dnsRebindingMiddleware: RequestHandler;
-  readonly mcpRateLimiter: RequestHandler;
-  readonly assetRateLimiter: RequestHandler;
 }
 
 /**
@@ -82,7 +79,7 @@ function deriveResourceUrl(options: CreateAppOptions, canonicalOrigin?: string):
 
 function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
   const { app, options, log, bootstrapTimer, appId, allowedHosts, canonicalOrigin } = deps;
-  const { dnsRebindingMiddleware, mcpRateLimiter, assetRateLimiter } = deps;
+  const { dnsRebindingMiddleware } = deps;
 
   const resourceUrl = deriveResourceUrl(options, canonicalOrigin);
   const { mcpFactory } = runBootstrapPhase(
@@ -90,7 +87,7 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
     bootstrapTimer,
     'initializeCoreEndpoints',
     appId,
-    () => initializeCoreEndpoints(app, { ...options, resourceUrl }, log, assetRateLimiter),
+    () => initializeCoreEndpoints(app, { ...options, resourceUrl }, log),
     options.observability,
   );
 
@@ -107,7 +104,6 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
       // res.sendFile, so the negotiation's pinned headers (no-store) hold.
       renderHtml: options.getLandingPageHtml,
       dnsRebindingMiddleware,
-      rateLimiter: assetRateLimiter,
     }),
   );
   app.use('/mcp', createEnsureMcpAcceptHeader(log));
@@ -126,7 +122,6 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
         allowedHosts,
         canonicalOrigin,
         observability: options.observability,
-        mcpRateLimiter,
         mcpAuthClerkDeps: options.mcpAuthClerkDeps,
       });
     },
@@ -136,20 +131,12 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
 
 /**
  * Creates an Express MCP-over-HTTP app. See ADR-143 / ADR-160 for middleware order.
- *
- * `VERCEL_ENV` is set on Vercel (production|preview|development) and absent
- * elsewhere — see the `rate-limiter-factory` module TSDoc for why that gates
- * trust of `x-vercel-forwarded-for`.
  */
 // observability-emission-exempt: orchestration wrapper; emissions live in nested helpers.
 export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const log =
     options.logger ?? options.observability.createLogger({ name: 'streamable-http:app-instance' });
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(log);
-
-  const isVercelRuntime = options.runtimeConfig.env.VERCEL_ENV !== undefined;
-  const { mcpRateLimiter, oauthRateLimiter, metadataRateLimiter, assetRateLimiter } =
-    createRateLimiters({ isVercelRuntime }, options.rateLimiterFactory);
 
   const { dnsRebindingMiddleware, allowedHosts, canonicalOrigin } = setupPreAuthPhases(
     app,
@@ -170,8 +157,6 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     appId,
     allowedHosts,
     canonicalOrigin,
-    oauthRateLimiter,
-    metadataRateLimiter,
   });
 
   setupPostAuthPhases({
@@ -183,10 +168,8 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     allowedHosts,
     canonicalOrigin,
     dnsRebindingMiddleware,
-    mcpRateLimiter,
-    assetRateLimiter,
   });
 
-  finalizeApp({ app, options, log, appId, bootstrapTimer, oauthRateLimiter });
+  finalizeApp({ app, options, log, appId, bootstrapTimer });
   return app;
 }

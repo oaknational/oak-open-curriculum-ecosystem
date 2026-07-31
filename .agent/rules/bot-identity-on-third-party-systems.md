@@ -6,8 +6,10 @@ thread resolution, a PR creation, a label edit — the moment before the call,
 as a named credential-selection step: *whose name will this surface
 display?* Three seats in one session (2026-07-26) each filed this rule under
 the noun in its tooling's name ("merge-bot") and posted under the owner's
-identity at non-merge writes; the trigger is the WRITE, never the tool
-category.
+identity at non-merge writes; a fourth (2026-07-31) opened a roll-up PR with
+bare `gh pr create` and caught it only at the pre-merge compliance read,
+paying a close/recreate and a full checks re-run (PRs 661→662); the trigger
+is the WRITE, never the tool category.
 
 Owner ruling (agreed ~2026-07-21; re-asserted verbatim 2026-07-23): "if we
 have a bot identity created to represent us on that system, then we MUST

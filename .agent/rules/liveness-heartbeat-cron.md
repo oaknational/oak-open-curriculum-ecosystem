@@ -106,8 +106,14 @@ authoritative for intent, the registry check for age.
 Platform-specific shapes:
 
 - **Claude Code**: the `Monitor` tool with `persistent: true` and a
-  `while/sleep 240` loop emitting heartbeats; alternatively
-  `CronCreate` with `*/4 * * * *` if the cron primitive is preferred.
+  `while/sleep 240` loop emitting heartbeats. **`CronCreate` is NOT a
+  valid emitter shape** (calibrated first-hand 2026-07-31): cron
+  prompts fire only while the session is IDLE, so a seat in one long
+  working turn never fires them — the heartbeat goes dark exactly when
+  the seat is busiest, which is indistinguishable from retirement on
+  the F-75 detector (worked instance: a cron-armed seat flagged at the
+  retirement threshold ~15 minutes into an active graduation batch,
+  cleared only by the peer's work-evidence cross-check).
   A seat holding MULTIPLE active claims runs `claims heartbeat` once
   per claim-id per tick — the command updates only the named claim, so
   a singular-claim loop leaves every sibling claim silently stale (the
@@ -115,6 +121,13 @@ Platform-specific shapes:
 - **Cursor**: the equivalent watch / background-task primitive per
   platform docs.
 - **Codex**: the equivalent background-task mechanism.
+
+macOS host note (owner-ruled 2026-07-31): fleet/workflow windows run under
+`caffeinate -dims`, scoped to the window (started and stopped with it) —
+host idle-sleep otherwise kills every monitor and heartbeat loop mid-window,
+and the silence is indistinguishable from fleet-wide retirement. A standing
+`pmset` change was considered and not adopted; the scoped, reversible form
+is the ruling.
 
 The loop SHOULD swallow stdout on success (failures emit so the agent
 can react). The loop dies when the session ends, which correctly
@@ -318,6 +331,35 @@ the same classifier into `comms watch` as an `--alert-stale-peers` mode is a
 recorded follow-on (it would couple an absence/timer concern into the
 event-driven watcher, so it is kept a separate thin consumer).
 
+### Reading calibrations (consolidated 2026-07-30, all measured)
+
+- **The knife-edge**: "active < 4 m" against the fleet-standard 240 s beat means
+  a poll sampling seconds before the next beat reads a HEALTHY seat as offline —
+  every active→offline flicker in one measured day was followed by live
+  activity, including the observer flagging ITSELF. Alert only on transitions
+  INTO retired (≥ 10 m, the recipe above), keep margin between cadence and the
+  active window, and cross-check work-evidence before any retirement claim.
+  Under fleet load the OUTGOING liveness surface starves first, so peer-liveness
+  over-reports retirement exactly when the fleet is busiest.
+- **The shared-substrate signature**: a liveness signal naming EVERY seat
+  simultaneously — especially one naming the observer itself — is evidence about
+  a SHARED substrate (host sleep, reboot, comms home, clock), never about N
+  independent retirements. First check `sysctl kern.sleeptime kern.waketime` AND
+  `kern.boottime` (a fresh boot zeroes sleeptime); if the window covers the
+  silence it is environmental — no retirement broadcasts, re-arm and move on.
+  The host power-management posture (caffeinate/pmset during fleet windows) is
+  an owner-level decision, not agent-side retry logic.
+- **Process restart is a distinct event class from compaction**: monitors
+  SURVIVE compaction but NOT a platform process restart. The restart signature
+  is vanished tasks ("no completion record") plus MCP servers reconnecting —
+  on it, re-arm all monitors and run the foreground gap sweep; do not trust
+  any monitor's apparent continuity.
+- **Never diff lines that contain their own clocks**: a delta poll comparing
+  raw output whose age field changes every pass never converges (two measured
+  noise classes: the moving age field, then its residual column padding) —
+  strip the timestamp/age and squeeze whitespace before comparing, as the
+  recipe's `extract` does.
+
 ### Claim auto-rebalance protocol on retirement
 
 When an agent crosses the 10-minute threshold without heartbeat:
@@ -442,8 +484,12 @@ bootstrap.
   ≥10 min threshold.
 - [`comms-all-channels-watcher`](comms-all-channels-watcher.md) — the
   incoming-visibility sibling.
+- [`directed-routing-requires-absorption-ack`](directed-routing-requires-absorption-ack.md)
+  — the `ABSORB`-class sibling: heartbeats certify `EMIT` only, and the
+  ack convention that rule owns is the added delivery signal that
+  detects a heartbeat-fresh-but-absorption-dark seat.
 - [PDR-133](../practice-core/decision-records/PDR-133-liveness-classes-and-platform-declaration.md)
-  (Proposed) — the liveness class model this rule's `EMIT` / `REGISTRY`
+  (Accepted) — the liveness class model this rule's `EMIT` / `REGISTRY`
   / `PROGRESS` coverage sits inside, and the home of the reading rule,
   the self-observation corollary, the two external instruments, the
   absence conjunction, and the platform-declaration obligation.

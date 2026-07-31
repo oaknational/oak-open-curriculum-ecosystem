@@ -64,7 +64,7 @@ Correlation IDs enable request tracing across the system. All tests should verif
 ### Asserting Correlation ID Presence
 
 ```typescript
-import request from 'supertest';
+import { request } from './test-helpers/loopback-request.js';
 
 it('includes correlation ID in response headers', async () => {
   const response = await request(app).get('/healthz');

@@ -41,6 +41,16 @@ discipline held for expensive chains gets skipped.
 - When a command fails, capture the FULL output on that first run —
   `tail -N` on a failure swallows the reason and forces a re-run
   (sibling discipline: capture-expensive-command-output-first-run).
+- **Propagate as well as print** when a wrapper (harness task, Monitor,
+  background shell) will summarise the invocation:
+  `cmd; rc=$?; echo "CMD_EXIT:$rc"; exit $rc`. The bare in-band echo
+  makes the SHELL exit 0, so the harness notification reads
+  "completed (exit 0)" over a failed command — the in-band discipline
+  otherwise defeats the out-of-band failure summary (three instances in
+  one session, 2026-07-29; the idiom held at two further seats the same
+  night). The printed marker stays the primary truth; the propagated
+  code makes the wrapper honest too. Note `$rc` propagates only when no
+  later command replaces `$?` before the exit.
 
 ## Why
 

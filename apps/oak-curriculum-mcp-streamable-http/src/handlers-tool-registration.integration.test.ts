@@ -191,20 +191,25 @@ describe('Tool Registration (Integration)', () => {
     }
   });
 
-  it('no registered tool description carries an imperative call-another-tool-first instruction', () => {
+  it('no registered tool description instructs the model — no sequencing imperative, no presentation directive', () => {
     // Directory compliance (acknowledgement 5), enforced at the same walk as
     // the annotations validator so the generated, aggregated, and app-local
-    // registration PATHS are all reached. The banned CLASS is the imperative
+    // registration PATHS are all reached. Two banned CLASSES: the imperative
     // prerequisite — "PREREQUISITE: You MUST call X first" and the softer
     // "(use 'X' first)" sequencing alike — that duplicated the server's
-    // `instructions` field, guarded by case-insensitive patterns; routing
-    // cross-references ("Not for X — use Y", no sequencing imperative) are
-    // documentation and stay. This walk also holds a second invariant: every
-    // registered tool carries a non-empty description.
+    // `instructions` field, and the presentation directive — an
+    // "IMPORTANT:"-marked or "always include ..." instruction telling the
+    // model how to present output (the download-asset fonts tip was the
+    // worked instance). Both are guarded by case-insensitive patterns;
+    // routing cross-references ("Not for X — use Y", no sequencing
+    // imperative) are documentation and stay. This walk also holds a second
+    // invariant: every registered tool carries a non-empty description.
     const bannedDescriptionGuidance = [
       /prerequisite:/i,
       /you must call/i,
       /\b(?:use|call) '[^']+' first\b/i,
+      /\bimportant:/i,
+      /\balways include\b/i,
     ];
     const describedConfigSchema = z.object({ description: z.string().min(1) });
     const { toolConfigs } = walkCanonicalRegistration(ALL_UNIVERSAL_TOOLS_LIVE);

@@ -10,13 +10,9 @@
 
 import { describe, it, expect, beforeAll } from 'vitest';
 import type { Express } from 'express';
-import request from 'supertest';
+import { request } from '../src/test-helpers/loopback-request.js';
 import { createApp } from '../src/application.js';
-import {
-  createMockObservability,
-  createMockRuntimeConfig,
-  createNoOpRateLimiterFactory,
-} from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 import { getScratchStaticRoot } from '../src/test-helpers/static-root-fixture.js';
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
@@ -36,7 +32,6 @@ describe('Auth Bypass for Development (E2E)', () => {
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       getLandingPageHtml: () =>
         '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
   });
 

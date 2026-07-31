@@ -182,13 +182,22 @@ a:focus-visible {
    inherit the text colour via currentColor.
    max-height is rem, not em: it scales with the host root font size
    without compounding through local font-size changes; content beyond
-   the cap scrolls inside the panel rather than growing the document. */
+   the cap scrolls inside the panel rather than growing the document.
+   Padding COMPOSES the page-padding token with the host safe-area
+   insets — `--oak-safe-area-inset-*` custom properties set inline by
+   the app shell when the host reports insets, 0px fallback otherwise.
+   Composition is load-bearing: a zero-inset host (ChatGPT desktop)
+   must keep the authored token padding; inline padding would replace
+   it with 0 (MCP-434). */
 .oak-app {
   display: flex;
   flex-direction: column;
   gap: var(--oak-component-shell-gap);
   max-height: 24rem;
-  padding: var(--oak-component-page-padding);
+  padding: calc(var(--oak-component-page-padding) + var(--oak-safe-area-inset-top, 0px))
+    calc(var(--oak-component-page-padding) + var(--oak-safe-area-inset-right, 0px))
+    calc(var(--oak-component-page-padding) + var(--oak-safe-area-inset-bottom, 0px))
+    calc(var(--oak-component-page-padding) + var(--oak-safe-area-inset-left, 0px));
   overflow-y: auto;
   color: var(--oak-semantic-text-inverse);
   background: var(--oak-semantic-accent-strong);

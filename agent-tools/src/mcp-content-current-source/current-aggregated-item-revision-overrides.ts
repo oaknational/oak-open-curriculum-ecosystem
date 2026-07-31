@@ -54,5 +54,9 @@ export const CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES = {
   // resource now composes the shared MCP_RESOURCE_PATH constant.
   C706: 'modified',
   C707: 'modified',
+  // MCP-411: the stub-mode registration line lost its metadataRateLimiter
+  // middleware with the in-code limiter (ADR-219); the served body is
+  // unchanged.
+  C708: 'modified',
   C717: 'added',
 } as const;

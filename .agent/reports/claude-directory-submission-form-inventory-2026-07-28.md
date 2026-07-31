@@ -104,7 +104,18 @@ Step 3 flags **11 suggestions**, including "Missing annotations: title" on Brows
 Download Asset, and Explore Topic. Tools correctly carry `idempotent`; the surface is all
 read-only. Mechanical fix.
 
-### 6. No screenshot or carousel requirement exists in either flow
+### 6. [TRUED 2026-07-30 — falsified for MCP Apps; see the note below] No screenshot or carousel requirement exists in either flow
+
+> **TRUED 2026-07-30 — this finding is FALSIFIED for our surface.** It was accurate for the
+> 28 July form captures, but the live MCP Apps submission page (verified first-hand
+> 2026-07-30, twice: the Director's post-pause verification and the submission-copy review)
+> REQUIRES carousel screenshots for connectors that serve a `ui://` widget resource — ours
+> does, so the clause binds: 3–5 PNG, ≥1000px, cropped to the app response only, no prompt
+> in the image, PAIRED prompt text per screenshot, no video/GIF; a Figma template is linked
+> from the page. Do not inherit the paragraph below as current truth; it stands only as the
+> record of what the 28 July flow showed. (MCP-293's closure predates this and was made on
+> the then-true evidence; the carousel work is tracked on the submission path, not by
+> reviving MCP-293.)
 
 Confirmed across all eleven connector steps and all three plugin steps: **no image upload, no
 count, no dimensions, no carousel.** The owner's challenge was correct. MCP-293 should be

@@ -15,10 +15,10 @@
  */
 
 import {
-  CODEX_CONFIG_PATH,
-  type CodexRegistration,
-  readTomlBasicStringValue,
-} from './validate-subagents-codex-toml.js';
+  createTopLevelTomlBasicStringReader,
+  type TopLevelTomlBasicStringReader,
+} from '../../core/toml-top-level-basic-string.js';
+import { CODEX_CONFIG_PATH, type CodexRegistration } from './validate-subagents-codex-toml.js';
 
 import {
   extractCanonicalPaths,
@@ -38,20 +38,75 @@ import {
 const DEFAULT_TEMPLATE_DIR = '.agent/sub-agents/templates';
 
 // ---------------------------------------------------------------------------
-// Public constants
+// Role contracts
 // ---------------------------------------------------------------------------
 
 /**
- * The required TOML settings for every Codex subagent adapter file.
- *
- * Each entry is a `[key, expectedValue]` pair.  An adapter file must declare
- * all of these keys with exactly these values to be considered valid.
+ * The settings shared by every Codex subagent adapter file.
  */
-const REQUIRED_CODEX_SETTINGS: readonly (readonly [string, string])[] = [
-  ['model_reasoning_effort', 'high'],
+const COMMON_CODEX_SETTINGS: readonly (readonly [string, string])[] = [
   ['sandbox_mode', 'read-only'],
   ['approval_policy', 'never'],
 ];
+
+interface CodexCricketRoleContract {
+  readonly settings: readonly (readonly [string, string])[];
+  readonly templatePath: string;
+}
+
+/** The model, effort, and method contract for each Codex Cricket panel role. */
+const CODEX_CRICKET_ROLE_CONTRACTS: Readonly<Record<string, CodexCricketRoleContract>> = {
+  'cricket-judgement-low': {
+    settings: [
+      ['model', 'gpt-5.6-sol'],
+      ['model_reasoning_effort', 'low'],
+    ],
+    templatePath: '.agent/sub-agents/templates/cricket-judgement.md',
+  },
+  'cricket-judgement-medium': {
+    settings: [
+      ['model', 'gpt-5.6-terra'],
+      ['model_reasoning_effort', 'medium'],
+    ],
+    templatePath: '.agent/sub-agents/templates/cricket-judgement.md',
+  },
+  'cricket-procedure-xhigh': {
+    settings: [
+      ['model', 'gpt-5.6-luna'],
+      ['model_reasoning_effort', 'xhigh'],
+    ],
+    templatePath: '.agent/sub-agents/templates/cricket-procedure.md',
+  },
+};
+
+/** Resolve the required settings for an adapter role. */
+function getRequiredCodexSettings(adapterBasename: string): readonly (readonly [string, string])[] {
+  const roleSettings = CODEX_CRICKET_ROLE_CONTRACTS[adapterBasename]?.settings ?? [
+    ['model_reasoning_effort', 'high'] as const,
+  ];
+  return [...roleSettings, ...COMMON_CODEX_SETTINGS];
+}
+
+function getCricketMethodContractIssues(
+  adapterBasename: string,
+  codexAdapterFile: string,
+  templatePaths: readonly string[],
+): string[] {
+  const cricketContract = CODEX_CRICKET_ROLE_CONTRACTS[adapterBasename];
+  if (cricketContract === undefined) {
+    return [];
+  }
+  if (templatePaths.length === 1 && templatePaths[0] === cricketContract.templatePath) {
+    return [];
+  }
+  return [
+    `${codexAdapterFile}: developer_instructions must reference exactly ${cricketContract.templatePath} for its Cricket method contract`,
+  ];
+}
+
+function formatErrorMessage(error: unknown): string {
+  return (error instanceof Error ? error.message : String(error)).trimEnd();
+}
 
 // ---------------------------------------------------------------------------
 // I/O shape interfaces
@@ -82,7 +137,9 @@ export interface CodexAdapterValidationInput {
   /**
    * List of required `[key, expectedValue]` TOML basic-string settings that
    * must be present in the adapter file.
-   * Defaults to {@link REQUIRED_CODEX_SETTINGS}.
+   * Defaults to the role-aware Codex contract: ordinary reviewers retain
+   * their current high-effort setting, while Cricket roles pin their named
+   * model and effort.
    */
   readonly requiredSettings?: readonly (readonly [string, string])[];
 
@@ -121,13 +178,14 @@ export interface CodexAdapterValidationResult {
  * Validates a single Codex subagent adapter TOML file.
  *
  * Checks performed:
+ * - The adapter is valid TOML; malformed input produces one file-scoped issue.
  * - Required TOML keys `name` and `description` are present.
  * - The `name` value matches the adapter's filename (without `.toml`).
  * - A matching entry exists in `.codex/config.toml`, and both `name` and
  *   `description` are consistent with that registration.
  * - All required settings (e.g. `model_reasoning_effort`, `sandbox_mode`,
  *   `approval_policy`) are set to their mandated values.
- * - A `developer_instructions` triple-quoted block is present.
+ * - A top-level string-valued `developer_instructions` field is present.
  * - The `developer_instructions` body references at least one canonical
  *   template path inside `templateDir`.
  *
@@ -142,25 +200,36 @@ export function getCodexAdapterValidation({
   content,
   registeredAgent = null,
   templateDir = DEFAULT_TEMPLATE_DIR,
-  requiredSettings = REQUIRED_CODEX_SETTINGS,
+  requiredSettings,
   configPath = CODEX_CONFIG_PATH,
 }: CodexAdapterValidationInput): CodexAdapterValidationResult {
+  let readValue: TopLevelTomlBasicStringReader;
+  try {
+    readValue = createTopLevelTomlBasicStringReader(content);
+  } catch (error) {
+    return {
+      issues: [`${codexAdapterFile}: invalid TOML: ${formatErrorMessage(error)}`],
+      templatePaths: [],
+      canonicalPaths: [],
+    };
+  }
+
   const adapterBasename = stripBasename(codexAdapterFile, '.toml');
-  const declaredName = readTomlBasicStringValue(content, 'name');
-  const declaredDescription = readTomlBasicStringValue(content, 'description');
+  const declaredName = readValue('name');
+  const declaredDescription = readValue('description');
   const issues: string[] = validateAdapterFields({
     adapterFile: codexAdapterFile,
     adapterBasename,
     declaredName,
     declaredDescription,
     registeredAgent,
-    content,
-    requiredSettings,
+    readValue,
+    requiredSettings: requiredSettings ?? getRequiredCodexSettings(adapterBasename),
     configPath,
   });
-  const developerInstructions = readCodexDeveloperInstructions(content);
+  const developerInstructions = readCodexDeveloperInstructions(readValue);
   if (!developerInstructions) {
-    issues.push(`${codexAdapterFile}: missing triple-quoted developer_instructions block`);
+    issues.push(`${codexAdapterFile}: missing top-level developer_instructions string`);
     return { issues, templatePaths: [], canonicalPaths: [] };
   }
   const canonicalPaths = extractCanonicalPaths(developerInstructions);
@@ -170,5 +239,6 @@ export function getCodexAdapterValidation({
       `${codexAdapterFile}: developer_instructions must reference at least one canonical template inside ${templateDir}`,
     );
   }
+  issues.push(...getCricketMethodContractIssues(adapterBasename, codexAdapterFile, templatePaths));
   return { issues, templatePaths, canonicalPaths };
 }

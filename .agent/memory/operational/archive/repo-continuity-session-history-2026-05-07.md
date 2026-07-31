@@ -2091,8 +2091,8 @@ session closed without commit.
 
 Visible owner-appetite items, not blockers for the active lanes:
 
-1. `prog-frame/agentic-engineering-practice.md` disposition, recorded in
-  `[research/notes/README.md](../../research/notes/README.md)`.
+1. The personal holding-bay item's disposition, recorded in the
+  research-notes bay README (bay since retired).
 2. `platform-adapter-formats.md` promotion proposal under PDR-032.
 3. `boundary-enforcement-with-eslint.md` promotion proposal under PDR-032.
 4. ADR/PDR candidates queue lives at

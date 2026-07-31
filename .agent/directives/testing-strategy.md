@@ -187,6 +187,30 @@ Formal home: [`validation-strategy.md`](validation-strategy.md) (seeded
   If product code resolves `.agent/` paths, exercise it against a
   `mkdtemp` fixture repo, never the live tree.
 
+### Prove the guard bites (mutation check on every gap-closing test)
+
+Any test added to close a proof gap is validated by MUTATING the source to
+the wrong behaviour and confirming exactly that test fails — then reverting.
+A guard that cannot be shown to bite is decoration; the mutation check is
+one minute of work and the only direct evidence the test guards anything
+(recorded 2026-07-2x; composes with the atomic-landing invariant — the
+mutation check happens before the commit that lands test and code together).
+The same disease in existing suites: DECORATIVE assertions — asserted
+values that never enter the exercised run — read as coverage while proving
+nothing (a privacy-surface review found six under a README claiming the
+behaviour was tested); the mutation check exposes them identically.
+
+### Test doubles model the boundary, never the engine
+
+A fake that models a vendor SDK's INTERNALS is wrong twice over: it encodes
+guesses about the engine (wrong twice in two rounds on PR #618), and its
+green proves conformance to the guess, not the behaviour. Fakes assert only
+the handler's own observable behaviour at its boundary; composition with
+the real engine is proven by real-SDK integration tests. Related trap: an
+`isError`-shaped assertion is unfalsifiable as a liveness check when
+unmatched anchors return well-formed empty envelopes — assert on content,
+not on error-shape absence.
+
 ## Definitions
 
 ### System Architecture Components
@@ -596,6 +620,21 @@ measure, reject the framing at plan-author time. Worked recipe:
 Tooling-mechanics recipes (tsconfig include patterns, ESLint `projectService`,
 vitest glob staleness, `.env` isolation, entry-point refactors) live in
 [`testing-patterns.md` §Test Configuration Gotchas](../../docs/engineering/testing-patterns.md#test-configuration-gotchas).
+
+## Harnesses Adapt to Shared Hosts
+
+Owner-ruled, twice in one day (2026-07-29/30): when a test harness collides
+with a live surface on a shared host, "the problem is lack of configuration
+or adaptation in the server" — **the config adapts, never the seats**, and a
+live owner-facing surface never pauses for a push gate. The first suspect in
+any gate-vs-environment collision is the harness's missing adaptation, never
+the schedule. Worked instances: a fixed-port Playwright `webServer` turned
+one seat's render server into a fleet-wide push outage (cure: an ephemeral
+port probed at config load — no `process.env` in config, `reuseExistingServer`
+stays `false`); a UI-test webServer inheriting `.env.local` refused a valid
+sink configuration (cure: the webServer pins its own observability env).
+Corollary for guard design: when a guard bites the innocent, fix the shared
+context so the guard's premise holds per-worktree — never weaken the guard.
 
 ## Test Data Anchoring
 

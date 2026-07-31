@@ -481,6 +481,18 @@ met) triggers a closeout pass that:
   landed; the fallback is logged as named technical debt and cleared
   when WS3 here unblocks (which itself blocks on the comms research
   plan completion).
+- **Downstream consumer**:
+  [`mcp-393-delivery-signal.plan.md`](../../../plans/delivery/mcp-393-delivery-signal.plan.md)
+  (slice B, the absorption read surface) depends on **membership of an
+  event-id in a seat's seen set** — readable today from the shared
+  `.agent/state/collaboration/comms-seen/<display name>.json` UUID sets.
+  This plan's WS2 watermark (`{ last_seen_mtime, last_seen_filenames }`)
+  cannot answer set-membership for an arbitrary older event-id, and WS3
+  moves the state machine-local — either destroys that evidence. Named
+  here per PDR-133 §Notes (an UNNAMED proxy is one a later optimisation
+  removes as redundant, restoring an outage already paid for once):
+  before WS2/WS3 land, the delivery-signal read surface needs a
+  replacement membership source or a recorded degradation decision.
 - **Documentation surfaces updated by WS3**:
   `.agent/skills/start-right-team/SKILL-CANONICAL.md` §0;
   `.agent/reference/comms-watch-mechanism.md`.

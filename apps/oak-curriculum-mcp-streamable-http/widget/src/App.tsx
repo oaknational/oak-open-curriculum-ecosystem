@@ -35,6 +35,7 @@ import {
   type AppRuntimeAction,
 } from './app-runtime-state.js';
 import { BrandBanner } from './BrandBanner.js';
+import { safeAreaInsetStyle } from './safe-area-insets.js';
 
 /**
  * Applies host-provided visual styling to the document.
@@ -100,8 +101,11 @@ export function openHostLink(
  * curriculum-model data serves the agent via text content; the human
  * sees the brand banner and disclaimer for orientation.
  *
- * Safe area insets from the host context are applied as inline padding
- * so content is not obscured by device notches or system UI overlays.
+ * Safe area insets from the host context are exposed as CSS custom
+ * properties ({@link safeAreaInsetStyle}) that the stylesheet composes
+ * with the shell's token padding, so content is not obscured by device
+ * notches or system UI overlays while zero-inset hosts keep the
+ * authored padding.
  */
 export function AppView({
   onOpenLink,
@@ -114,16 +118,7 @@ export function AppView({
     <div
       className="oak-app"
       data-testid="oak-mcp-app-shell"
-      style={
-        safeAreaInsets
-          ? {
-              paddingTop: safeAreaInsets.top,
-              paddingRight: safeAreaInsets.right,
-              paddingBottom: safeAreaInsets.bottom,
-              paddingLeft: safeAreaInsets.left,
-            }
-          : undefined
-      }
+      style={safeAreaInsets ? safeAreaInsetStyle(safeAreaInsets) : undefined}
     >
       <BrandBanner onOpenLink={onOpenLink} />
       <main>

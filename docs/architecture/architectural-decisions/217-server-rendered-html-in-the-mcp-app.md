@@ -42,6 +42,17 @@ on each author remembering to escape.
 bookkeeping attributes belong on the wire. The document element itself is a component; only the
 doctype is prepended.
 
+**Dated amendment (2026-07-31, recording the owner ruling of 2026-07-26).** The no-hydration
+clause above was falsified by the owner as ever having been the requirement — verbatim: _"Full
+React, as was always the requirement… That doesn't mean we can't render almost the entire page
+on the server, we can and should do that."_ The standing shape is therefore server rendering
+for almost everything PLUS a client layer for interactive behaviour (`renderToString` + a
+hydration entry), with components owning behaviour. The delivery tail carrying that conversion
+(hydration client, theme control, renderer switch — recorded as deliberate deviations in
+PR #583's description) is owned by MCP-448; until it lands, the code deliberately bakes static
+markup at build time per PR #583. This amendment exists because the §1 text above was cited
+back to the owner as authority for no-hydration — it was never that.
+
 ### 2. The design system reaches the browser as app-served static assets
 
 A declared manifest (`build-scripts/copy-oak-ds.ts`) copies the design system's runtime files

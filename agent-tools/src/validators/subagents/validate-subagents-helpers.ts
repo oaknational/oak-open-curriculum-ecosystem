@@ -12,7 +12,7 @@
  * - `validate-subagents-codex-registration-validation` — registration
  *   validation logic and its I/O-shape interfaces.
  * - `validate-subagents-codex-adapter-validation` — adapter validation logic,
- *   its I/O-shape interfaces, and the `REQUIRED_CODEX_SETTINGS` constant.
+ *   including common settings and role-specific Cricket contracts.
  *
  * Adding a new helper: place it in the module whose responsibility it best
  * fits, then add a re-export here.
@@ -22,7 +22,6 @@ export type { CodexRegistration } from './validate-subagents-codex-toml.js';
 
 export {
   CODEX_CONFIG_PATH,
-  readTomlBasicStringValue,
   parseCodexRegistrations,
   resolveCodexConfigFilePath,
 } from './validate-subagents-codex-toml.js';

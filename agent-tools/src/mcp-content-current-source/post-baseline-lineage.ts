@@ -166,6 +166,27 @@ const MCP_AUTH_RESPONSE_RELOCATIONS = [
   ['C400', [MCP_AUTH_RESPONSES]],
 ] as const;
 
+/**
+ * MCP-411 removed the in-code rate limiter (ADR-219: rate limiting is an
+ * edge concern): the four profile 429 message rows retired with
+ * rate-limit-profiles.ts — the server no longer emits 429s of its own.
+ */
+const RATE_LIMITER_REMOVAL_RETIREMENTS = [
+  ['C409', []],
+  ['C410', []],
+  ['C411', []],
+  ['C412', []],
+] as const;
+
+/**
+ * MCP-438 removed the download-asset description's embedded presentation
+ * directive (the "IMPORTANT: ... always include this tip" fonts block):
+ * directory policy bars descriptions from instructing the model, and the
+ * automated directory scan reads the served description verbatim. The tip's
+ * guidance remains on the Oak support site; no served surface carries it.
+ */
+const PRESENTATION_DIRECTIVE_RETIREMENTS = [['C163', []]] as const;
+
 /** All post-baseline lineage, composed for the current-item lineage map. */
 export const POST_BASELINE_LINEAGE_ENTRIES = [
   ...ORIENTATION_ERA_LINEAGE_ENTRIES,
@@ -176,4 +197,6 @@ export const POST_BASELINE_LINEAGE_ENTRIES = [
   ...UNDER_THE_HOOD_BAKE_RETIREMENTS,
   ...SERVED_ORIGIN_PROMOTION,
   ...MCP_AUTH_RESPONSE_RELOCATIONS,
+  ...RATE_LIMITER_REMOVAL_RETIREMENTS,
+  ...PRESENTATION_DIRECTIVE_RETIREMENTS,
 ] as const;

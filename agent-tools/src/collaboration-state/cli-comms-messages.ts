@@ -33,6 +33,7 @@ export async function directComms(
   const eventId = valueOrDefault(options, 'event-id', randomUUID());
   const nowIso = valueOrDefault(options, 'now', new Date().toISOString());
   const tags = validateCommsEventTags(options.tags);
+  const inResponseTo = optional(options, 'in-response-to');
   const message = createDirectedCommsMessage({
     eventId,
     createdAt: nowIso,
@@ -41,6 +42,10 @@ export async function directComms(
     to: recipientAgent(options),
     subject: nonEmptyRequired(options, 'subject'),
     body: await resolveNonEmptyBody(options, io),
+    // `in_response_to` threads a directed message to an antecedent event —
+    // parity with `comms send`, so a directed acknowledgement carries its
+    // antecedent machine-readably instead of naming it in prose (MCP-393).
+    ...(inResponseTo === undefined ? {} : { inResponseTo }),
     tags,
   });
   await enforceCommsConceptGates(io, {

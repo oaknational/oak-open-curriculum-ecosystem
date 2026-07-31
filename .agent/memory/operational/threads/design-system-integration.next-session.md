@@ -22,6 +22,7 @@ recompute live state from claims/comms/git at pickup.
 | 2026-07-26 | Triton mends Void | claude-code / Opus 5 (1M) | `9f070b` | MCP-128 landing lane — design-system consumption in the MCP app |
 | 2026-07-26 | Skipper tracks Abyss | claude-code / fable-5 | `4144b4` | MCP-128 lane successor (Lavender→Skipper); executes the owner-ratified #565 restack |
 | 2026-07-26 | Schooner binds Trench | claude-code / claude-fable-5 | `5492d7` | MCP-128 restack successor (Skipper→Schooner, PDR-063 at owner word); continues PR-3 from the frozen inventory |
+| 2026-07-30 | Thyme weaves Hedgerow | claude-code / claude-fable-5 | `762020` | design-showcase lane (adopted claim `ebb3efe2` from Altair turns Infinity `7a97a1` at owner word 2026-07-29 — Altair held the lane 2026-07-29 unregistered on this table); landed #637 + #641; MCP-372 carrier at owner ruling; deliberate succession → Sycamore herds Xylem `028dc4` 2026-07-30 |
 
 ## Board state at writing (recompute, do not trust)
 
@@ -325,3 +326,48 @@ successor (Triton→Lavender), retired at owner word; claim 68088465 pending suc
   sits awkwardly beside the ARIA banner landmark (GOV.UK: notification-banner).
   The disclaimer's declarations are `.oak-hint` spelled in oak-design-tokens;
   kit-binding swap is class-for-class, comment at widget index.css names it.
+
+## Design-showcase lane at the Thyme→Sycamore succession (2026-07-30 ~06:25Z — recompute, do not trust)
+
+- **Seat chain**: Altair turns Infinity (`7a97a1`; their lane state lives in the 2026-07-29
+  freeze events and `handoffs/2026-07-29-altair-to-thyme-design-showcase-closeout.md`) →
+  Thyme weaves Hedgerow (`762020`, claim `ebb3efe2` adopted 21:08Z at owner word) →
+  Sycamore herds Xylem (`028dc4`, owner-named 2026-07-30 ~06:20Z; standby at writing).
+- **Landed by this seat**: PR #637 MERGED `SHA:886bb8d28` (MCP-371 slice 2, showcase page +
+  identity/theme switchers + the full adjudicated review-round hardening); PR #641 MERGED
+  `SHA:8675bf11e` (MCP-399 — the fleet-wide JS-disabled geometry-guard load-flake cure,
+  `document.fonts.ready` on both sides; ticket Done).
+- **Live objective**: MCP-372 (In Progress; owner-ruled carrier is this lane; item 4 IN as
+  its own final slice by owner card ~06:10Z) then MCP-371 slices 3–5. Authoritative lane
+  state: the MCP-372 ticket comments (five-slice sequencing 06:10Z; slice-1 first-hand
+  grounding 06:24Z) and the succession record at
+  `.agent/state/collaboration/handoffs/thyme-weaves-hedgerow-to-sycamore-herds-xylem-2026-07-30.md`
+  (claim-addressed via `claims set-handoff`).
+- **Worktree**: `oak-open-curriculum-ecosystem-worktrees/design-showcase-lane`, branch
+  `jimcresswell/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the` at
+  `5a7d4406c` (current main), ZERO commits — safe to re-cut; no unpushed work anywhere.
+- **Gate not yet discharged**: the slice-1 pre-execution code-expert review (two dispatches
+  died on the 06:12–06:15Z Opus 529 burst) — the successor's first act before any code.
+
+## Design lane PAUSED at durable point (2026-07-30 ~09:55Z — recompute, do not trust)
+
+- **Owner word** ~09:05Z card: "Pause at durable point" (supersedes the ~08:10Z
+  "full arc today" TIMING; the arc SHAPE stands). Seat: Sycamore herds Xylem
+  (`028dc4`), standby; claims `ebb3efe2` + `d5e70346` OPEN, both pointing at the
+  pause record `handoffs/sycamore-herds-xylem-compaction-continuation-2026-07-30.md`
+  — THAT record is the authoritative resume state; this entry is the pointer.
+- **Durable**: slice 1 in PR #644 (OPEN by design; Sonar duplication red clears only
+  at the PR-2 both-copies deletion). Kit TS-source runtime + `choice()` + toolchain
+  pushed on `jimcresswell/mcp-372-kit-ts-source-runtime-and-choice-accessor` at
+  `SHA:95bdfee3a` (commits `05ed8482c` hook env fix + `95bdfee3a` kit content; full
+  gate suites green). Scaffold branch `checkpoint/mcp-372-pr1-lockfile-2026-07-30`
+  local-only, delete after PR 1 lands.
+- **Fleet-relevant, RESOLVED**: the turbo/GIT_DIR hook-env defect (intermittent,
+  state-dependent — "Is a directory (os error 21)" in linked worktrees) landed on
+  main via PR #650 at `SHA:094b7a145` (MCP-414 Done, owner-authorised extraction at
+  this seat ~10:05-10:45Z). Resume consequence: the design branch's twin commit
+  `05ed8482c` CONFLICTS at rebase — take main's version (its comments are the
+  review-cured invariant form).
+- **Resume order**: docs/ADR checklist → batched owner-wording card → PR 1
+  open/shepherd/merge → PR 2 reworks #644 → lane rests (write-up + MCP-372/388/134
+  true-ups). Linear MCP-372/MCP-371 carry matching pause comments.

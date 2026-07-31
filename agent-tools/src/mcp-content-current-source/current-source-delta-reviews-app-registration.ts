@@ -39,16 +39,29 @@ export const APP_REGISTRATION_DELTA_REVIEWS: Readonly<Record<string, CurrentSour
     '0ddeaa2c8e1938d0be9951b51ccaedea6eb58e77bbb255dd949fb5a1852986c4',
     ['C690', 'C691', 'C692'],
   ),
+  // MCP-439: the in-memory client harness extracted from the registration
+  // proof so the served-tool-table generator observes the same composition
+  // root instead of re-deriving the surface.
+  'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/connected-client.ts': excluded(
+    '13f24c3118a61fdf03f5097486080168c450c9ddaddbbdfe4b3351e3c4ecdaa4',
+    VALIDATION_ONLY,
+  ),
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/current-source-guidance-registration-evidence.ts':
     excluded('49f654ce6379cab1f07621104b33c8407d7f3380c1c71a4dd31bd44423020469', VALIDATION_ONLY),
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/current-source-registration-proof.ts':
-    excluded('acc2fecf7dce1156c4d680ae61cfb930ffe485409854fca37a29a4cb8934e3fb', VALIDATION_ONLY),
+    excluded('2008c3346c080581540e09c232e29d8049286ed3c162d25ce1d7ca6ab5c3c8a7', VALIDATION_ONLY),
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/guidance-list-parity.ts':
     excluded('ebb75cfdf95db96e295c62b54fc8f63e349d0749e447dbefffedcb2355dc43df', VALIDATION_ONLY),
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/guidance-read-parity.ts':
     excluded('6a8d90126daa6a0e6e786c4d71b9b79d1db8241d7db5dfec8425c8bad3fe8f67', VALIDATION_ONLY),
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/require-mcp-error-code.ts':
     excluded('50edf574104e4412b9a573b347995eb6943e7ea5365f1762b26300b83c8da79f', VALIDATION_ONLY),
+  // MCP-439: the reviewer-facing tool-table renderer — validation/artefact
+  // tooling over the served surface, no served content of its own.
+  'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/served-tool-table.ts': excluded(
+    '1dc27288d76137be66083a4d0ad364a59b0043ab58aab7439db35abdf392ff64',
+    VALIDATION_ONLY,
+  ),
   // MCP-337: the per-resource registration bodies extracted from
   // register-resources.ts; the audit rows moved with their content.
   // MCP-353: the under-the-hood pointer resource deleted (§2.F cure) — its

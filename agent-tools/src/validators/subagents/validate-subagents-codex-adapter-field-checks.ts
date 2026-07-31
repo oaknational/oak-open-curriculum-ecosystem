@@ -14,9 +14,9 @@
  * `validate-subagents-codex-adapter-validation.ts`, which imports from here.
  */
 
+import type { TopLevelTomlBasicStringReader } from '../../core/toml-top-level-basic-string.js';
 import {
   type CodexRegistration,
-  readTomlBasicStringValue,
   resolveCodexConfigFilePath,
 } from './validate-subagents-codex-toml.js';
 
@@ -46,28 +46,49 @@ export function stripBasename(filePath: string, extension: string): string {
 
 /**
  * Validates that each required TOML setting key in `requiredSettings` is
- * present in `content` with exactly the expected value.
+ * present in the parsed adapter with exactly the expected value.
  *
  * @param adapterFile - Repository-relative path to the adapter (for messages).
- * @param content - Full text content of the adapter TOML file.
+ * @param readValue - Reader for the adapter's parsed top-level string values.
  * @param requiredSettings - Pairs of `[settingKey, expectedValue]` to verify.
  * @returns Array of issue strings for any settings that are missing or wrong.
  */
 function validateRequiredSettings(
   adapterFile: string,
-  content: string,
+  readValue: TopLevelTomlBasicStringReader,
   requiredSettings: readonly (readonly [string, string])[],
 ): string[] {
   const issues: string[] = [];
   for (const [settingKey, expectedValue] of requiredSettings) {
-    const actualValue = readTomlBasicStringValue(content, settingKey);
-    if (actualValue !== expectedValue) {
+    const state = readValue.inspect(settingKey);
+    if (state.kind !== 'string' || state.value !== expectedValue) {
       issues.push(
-        `${adapterFile}: ${settingKey} must be "${expectedValue}" (found: ${actualValue ?? 'missing'})`,
+        `${adapterFile}: ${settingKey} must be "${expectedValue}" (found: ${formatSettingState(state)})`,
       );
     }
   }
   return issues;
+}
+
+function formatSettingState(state: ReturnType<TopLevelTomlBasicStringReader['inspect']>): string {
+  if (state.kind === 'string') {
+    return state.value;
+  }
+  return state.kind === 'missing' ? 'missing' : 'non-string';
+}
+
+function validateOptionalModelType(
+  adapterFile: string,
+  readValue: TopLevelTomlBasicStringReader,
+  requiredSettings: readonly (readonly [string, string])[],
+): string[] {
+  if (requiredSettings.some(([settingKey]) => settingKey === 'model')) {
+    return [];
+  }
+  if (readValue.inspect('model').kind !== 'non-string') {
+    return [];
+  }
+  return [`${adapterFile}: model must be a TOML string when present (found: non-string)`];
 }
 
 // ---------------------------------------------------------------------------
@@ -148,8 +169,8 @@ export interface ValidateAdapterFieldsParams {
   declaredDescription: string | null;
   /** The matching registry entry, or `null`. */
   registeredAgent: CodexRegistration | null;
-  /** Full text content of the adapter TOML file. */
-  content: string;
+  /** Reader for the adapter's parsed top-level string values. */
+  readValue: TopLevelTomlBasicStringReader;
   /** Settings pairs to validate. */
   requiredSettings: readonly (readonly [string, string])[];
   /** Repository-relative path to the Codex config file. */
@@ -175,7 +196,7 @@ export function validateAdapterFields(params: ValidateAdapterFieldsParams): stri
     declaredName,
     declaredDescription,
     registeredAgent,
-    content,
+    readValue,
     requiredSettings,
     configPath,
   } = params;
@@ -192,6 +213,7 @@ export function validateAdapterFields(params: ValidateAdapterFieldsParams): stri
     ...(declaredDescription === null
       ? [`${adapterFile}: missing required TOML key "description"`]
       : []),
+    ...validateOptionalModelType(adapterFile, readValue, requiredSettings),
     ...validateRegistrationSync(
       adapterFile,
       adapterBasename,
@@ -200,6 +222,6 @@ export function validateAdapterFields(params: ValidateAdapterFieldsParams): stri
       registeredAgent,
       configPath,
     ),
-    ...validateRequiredSettings(adapterFile, content, requiredSettings),
+    ...validateRequiredSettings(adapterFile, readValue, requiredSettings),
   ];
 }

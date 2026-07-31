@@ -1,0 +1,6 @@
+---
+description: Directed comms events carrying routing or an ask include ACK-REQUESTED in the subject; the receiver acks absorption with a content-bearing narrative reply threaded via comms send --in-response-to. An unanswered challenge past ~10 minutes is absorb-absent evidence feeding ping-before-escalate, never a verdict.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/directed-routing-requires-absorption-ack.md`.

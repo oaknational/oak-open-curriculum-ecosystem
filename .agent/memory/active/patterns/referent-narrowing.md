@@ -85,3 +85,35 @@ designed around that asymmetry, so the burden falls on the reader: spend the
 independent witness on the claims whose false-green cost is high (a gate
 passing, a merge "done", a permission "granted"), and accept single-source
 reads where a false green merely wastes a retry.
+
+## The transmitting dual
+
+This pattern governs READING instruments. Its dual — what you owe when a
+claim of yours is about to be consumed by another context — is
+`verify-dont-trust` §"Claims Crossing Boundaries Carry Their Derivation"
+(three-question transmission gate, scope/frame/rung carriage,
+change-at-a-distance). The two compose: transmitters carry derivation
+because receivers cannot re-derive; receivers keep the independent witness
+because transmitters do not always carry it.
+
+## Post-graduation record (2026-07-30 dedicated pass)
+
+The §falsifier above FIRED: instances continued after this pattern landed
+(a Director re-committed the piped-exit trap while holding the rule; a seat
+retried an ambiguous write without reading state fifteen hours into a long
+day; a rule paraphrase was obeyed as the rule). Honest reading, from the
+same corpus: capture buys **recognition speed, not immunity** — later bites
+cost seconds-to-minutes and were mostly self-caught where earlier ones cost
+hours and were owner-caught. Both facts route together: the mechanical-gate
+question is live at the PDR-098 lane (a hook guard for the piped-exit
+signature is ticketed, MCP-358; the retrievability question — rules indexed
+by incident are unreachable at construction time — is recurrence evidence
+for the action-time structural-interrupt design space). Additional named
+faces collected since graduation: manufactured absence (the absence you see
+is usually your instrument — head-truncation, matched-nothing filters,
+wrong-field projections); zero-match false-greens (a probe must prove it
+SAW something before its silence means anything); always-succeeding
+controls (ask what the instrument does on invalid input before using its
+success as evidence); projection blindness (verify the instrument's input
+domain matches the object you certify); coverage denominators taken from a
+paged view; instruments that diff lines containing their own clocks.

@@ -68,6 +68,18 @@ coordination noise; WS5 evidence is the re-evaluation gate. Commit-window
 claims intentionally override this to 900 seconds because staging/commit
 should be brief.
 
+## Claims Are Provenance (Immutable Undertakings)
+
+The registry ROW is operationally mutable (heartbeat refresh, handoff-record
+pointer, close/adopt through the transaction helper), but the claim's
+UNDERTAKING — its boundary, intent, and role as staked at open — is immutable
+provenance of what the seat took on (owner ruling, July 2026, homed by the
+2026-07-31 comms-corpus run). A changed lane CLOSES the claim and opens a new
+one; editing scope or intent in place rewrites history and breaks the
+`claim_id` citation chain that closed-claims archiving exists to preserve.
+`claims adopt` is the one sanctioned in-place identity rewrite (mid-cycle
+pickup, PDR-063), and it deliberately preserves the undertaking unchanged.
+
 ## Write-Safety Contract
 
 Shared state is intentionally read/write. An active claim on shared-state docs
@@ -93,8 +105,33 @@ adoption instruction, 2026-07-01) — and unquoted metacharacters exit 2. The
 `--body-file` argument must be a REAL readable file at an ABSOLUTE path: process
 substitution (`<(printf …)`), `/dev/stdin` heredocs, and repo-root-relative
 traversals into a scratchpad all fail. Resolve every referenced event id from
-the artefact (`ls` the comms dir), never from recall — `append
---in-response-to` does not validate its antecedent (frictions F-121).
+the artefact (`ls` the comms dir), never from recall — neither
+`append`/`send --in-response-to` nor `direct --in-response-to` validates
+its antecedent
+(frictions F-121; `comms reply` is the one verb that resolves-or-fails).
+
+Further `comms send` argv traps (recorded 2026-07-31): `--body` caps around
+1,500 characters, so `--body-file` is the only path for substantive events;
+an inline body with shell-hazard characters exits 2 and a trailing
+`| tail` pipe EATS that exit; the drain timeout is 600s; sends are rejected
+on an identity-tuple mismatch (heartbeat-tagged sends bypass that guard);
+and `comms direct` needs the recipient's FULL identity tuple, not a display
+name.
+
+Threading field: `in_response_to` is CANONICAL and `in_reply_to` does not
+exist (corpus check 2026-07-30: 114 uses vs 0) — a reader or filter written
+against `in_reply_to` silently matches nothing.
+
+Two commit-tooling traps, live until their tickets cure them (recorded
+2026-07-31): `git commit -- <paths>` commits from the TREE while the
+commit-workflow's record/verify-staged steps checksum the INDEX — staged
+DELETIONS can silently drop from the commit while every ceremony check
+passes (MCP-334; 326 staged deletions dropped in the founding instance) —
+after any pathspec commit that includes deletions, verify the commit's
+name-status against the intent; and queue-mediated commits stage only the
+ENQUEUED file list, so a late-staged file silently misses the commit while
+local gates run green on the full index (MCP-417) — re-verify the staged
+set against the intent immediately before the commit window closes.
 
 The canonical communication-event directory is
 `.agent/state/collaboration/comms/`. Merges reconcile any legacy-era event

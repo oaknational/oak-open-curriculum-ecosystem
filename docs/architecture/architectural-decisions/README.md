@@ -185,7 +185,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-155: Decompose at the Tension](155-decompose-at-the-tension.md)
 - [ADR-156: Embed Widget HTML as Committed TypeScript Constant](156-embed-widget-html-at-build-time.md)
 - [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md) ← **Proposed**
-- [ADR-158: Multi-Layer Security Architecture and Application Rate Limiting](158-multi-layer-security-and-rate-limiting.md)
+- [ADR-158: Multi-Layer Security Architecture and Application Rate Limiting](158-multi-layer-security-and-rate-limiting.md) ← **Superseded by [ADR-219](219-rate-limiting-is-an-edge-concern.md)**
 - [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked Configuration](159-per-workspace-vendor-cli-ownership.md)
 - [ADR-160: Non-Bypassable Redaction Barrier as Principle](160-non-bypassable-redaction-barrier-as-principle.md) (supersedes ADR-143 §6 in part)
 - [ADR-161: Network-Free PR-Check CI Boundary](161-network-free-pr-check-ci-boundary.md)
@@ -349,6 +349,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (ideas are the fundamental unit of intent; the idea knowledge-graph is the authoritative source of truth,
   the human documents its co-equal embodiment connected by frontmatter typed-edges; built as a domain
   instance over graph-core; two drift mechanisms; the planning-estate rewrite; Accepted 2026-06-22)
+  ← **Partially superseded by [ADR-221](221-estate-knowledge-graph.md) (authority model, 2026-07-31)**
 - [ADR-201: External systems as evidence edges — integrating external state into the idea knowledge-graph](201-external-systems-evidence-integration.md)
   (external systems are typed evidence edges and the graph stays canonical; direction invariant — intent
   projects outward, services report back; capability modes + supervision + no-PII-in-VCS; unlocks the full
@@ -454,6 +455,25 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   no-current-session and no-conversation posture, closed content-free event
   envelope, minimal deletion-index Person, and October public-beta governance
   boundary; Accepted by owner direction 2026-07-26)
+- [ADR-219: Rate limiting is an edge concern](219-rate-limiting-is-an-edge-concern.md)
+  (volumetric control is owned at the Cloudflare/Vercel edge; the HTTP MCP
+  server runs no in-process limiter; static-analysis findings are
+  adjudicated against the actual architecture; supersedes ADR-158;
+  Accepted 2026-07-30)
+- [ADR-220: The comms-event threading edge spans every respondable kind](220-comms-event-threading-edge-across-kinds.md)
+  (`in_response_to` is a substrate-wide optional affordance on every kind that
+  can be a response — `narrative` and `directed` today, `sync` when ADR-184's
+  kind lands; the edge is advisory and unvalidated, with write-time validation
+  deferred behind ADR-199's archived-antecedent question, and unrendered, so the
+  human-readable back-reference stays an authoring obligation; Accepted
+  2026-07-30)
+- [ADR-221: The Estate Knowledge Graph — files-authoritative, named-graph strata, concept scheme](221-estate-knowledge-graph.md)
+  (the repo-stratum embodiment of PDR-134: authored files are authoritative and
+  the graph is a derived, per-home-recomputable index; the quad's graph name is
+  the public/operator seam with the clone test as a CI validator; PROV-O/SKOS/DC
+  vocabularies; the concept scheme lands with link-as-annotation; refines
+  ADR-200 (authority model) and ADR-216, amends ADR-173/ADR-041 by activation;
+  Accepted, owner-ratified 2026-07-31)
 
 ## Key Architectural Decisions
 
@@ -479,7 +499,8 @@ For understanding authentication, authorization, and observability:
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
 - **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk; amended 2026-07-26 — transparency scoped against advertised-AS request validation)
 - **[ADR-143](143-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out for the Sentry and OpenTelemetry foundation (§6 superseded in part by ADR-160)
-- **[ADR-158](158-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting
+- **[ADR-158](158-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting ← **Superseded by [ADR-219](219-rate-limiting-is-an-edge-concern.md)**
+- **[ADR-219](219-rate-limiting-is-an-edge-concern.md)** - Rate limiting is an edge concern
 - **[ADR-159](159-per-workspace-vendor-cli-ownership.md)** - Per-workspace vendor CLI ownership with repo-tracked configuration (formalises the Sentry CLI adoption pattern; applies to all future vendor CLIs)
 - **[ADR-160](160-non-bypassable-redaction-barrier-as-principle.md)** - Non-bypassable redaction barrier as principle (generalises ADR-143 §6 from enumerated list to closure property + test gate; covers every current and future fan-out path)
 - **[ADR-161](161-network-free-pr-check-ci-boundary.md)** - Network-free PR-check CI boundary (PR-check CI runs unit + integration + E2E without network; Vercel deploy and smoke tests own network-capable work)

@@ -553,14 +553,14 @@ No P0 blockers remain after owner dispositions.
   - Evidence: README lines 162–169 describe internal practice with claim
     that "a single engineer, working with AI" produced the entire system.
   - **Owner disposition**: The README section should be reframed for an
-    external audience. Additionally, the internal progression framework
-    application document
-    (`.agent/practice-core/practice.md`)
-    is for internal Oak use ONLY and MUST NOT be linked to from any other
-    file in the repo. It should not be discoverable by external visitors.
-    Add frontmatter to that document making this clear.
+    external audience. Additionally, a named internal-only personal
+    document is for internal Oak use ONLY and MUST NOT be linked to from
+    any other file in the repo. It should not be discoverable by external
+    visitors. Add frontmatter to that document making this clear.
+    (That document was later relocated out of the repository entirely,
+    at owner word, 2026-07-30.)
   - Fix: (1) Reframe README section for external audience. (2) Add
-    "internal only, do not link" frontmatter to the progression framework
+    "internal only, do not link" frontmatter to the named internal
     document.
   - Classification: docs-only. Blocks M0.
 

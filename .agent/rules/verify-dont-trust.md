@@ -215,6 +215,56 @@ the sentence, observable to you as you write and to a reader as they read. Gate
 on the artefact the fluent claim omits, not on the feeling you hoped to notice.
 The smoother and more convenient the claim, the harder the citation is owed.
 
+## Claims Crossing Boundaries Carry Their Derivation
+
+The transmitting-side dual of `patterns/referent-narrowing.md` (which governs
+reading instruments). Consolidated at the 2026-07-30 dedicated pass from
+twelve-plus first-hand instances across four seats in one week (napkin
+2026-07-28→30; distilled provenance-at-boundary entry, graduated here).
+
+Internal working beliefs stay cheap. The moment a claim is about to be
+**consumed by another context** — a key-turn, a retry, a handoff record, a
+verdict, an ACK, an owner card — the crossing pays: re-derive from the source
+and name the deriving command/ref/time in the same sentence as the claim.
+Three questions gate the transmission, in the order they catch failures:
+
+1. **When did I last read this state?** A stale observation restated in the
+   present tense is a new claim (fifteen "dirty" paths broadcast as peer work
+   were landed content; a "pushed" ACK composed before its ls-remote line was
+   read).
+2. **Whose sentence is this?** When relaying an owner ruling, quote it and
+   stop; implications go in a separate paragraph attributed to the relayer by
+   name — a derived inference inside a quoted paragraph inherits the owner's
+   authority on the way past, and a reader cannot tell where the owner stopped
+   speaking.
+3. **Did anyone read this state, ever?** An inference about an unprobed
+   surface is a hypothesis wearing a fact's clothes; it carries no staleness
+   signal and no borrowed authority to spot.
+
+Carriage extends beyond the source pointer: state the claim's **scope** (a
+measurement's population), its **frame** (the domain an absolute holds over),
+and its **verification rung** (recorded prior → published docs → authoritative
+surface → live enactment; each rung falsifies below itself and nothing above).
+Tag inherited links honestly: if any load-bearing datum in a mechanism claim
+was inherited rather than first-hand, ship the claim as a **question to
+whoever owns that surface**, never as a finding. Attribution is also the
+containment when verification fails — a finding recorded under its true
+observer's name has a one-comment blast radius; one absorbed as your own
+becomes a premise others act on.
+
+The **change-at-a-distance** facet: the world can move underneath a standing
+artefact with no claim transmitted at all (a dependency override changing
+resolution truth; a vendor re-imposing a cancelled requirement; an edge config
+changing header truth). The working cure, twice-evidenced in one morning, is
+the residual ticket minted **at the change moment by whoever saw the domain
+move** — structure over vigilance; a record referencing a moved domain has no
+staleness signal of its own.
+
+Falsifiers, carried from the source captures: a provenance-carrying claim that
+still misleads breaks carriage and moves the cure receiver-side; a fresh seat
+paying a new miss on a genuinely new surface after this section lands means
+passive capture failed and a mechanical gate is warranted (route via PDR-098).
+
 ## Run Gates, Pushes, and Probes BARE — the Exit Code Is the Verdict
 
 `gate | tail` / `| head` / `| grep` returns the LAST pipe stage's exit, so a
@@ -428,3 +478,33 @@ UTC-to-UTC; never a local clock).
   you already hold and isolate the layer (auth vs volume) before adopting a
   primed frame; on a `401`/unauthenticated signature check `gh auth status` and
   retry, never assume volume. (Tooling cure lives at frictions F-110.)
+- 2026-07-30 vendor-capability arity: when a review finding's premise is a
+  claim about platform or vendor capability, fetch the vendor documentation
+  first-hand at time of use before classifying — and check the capability's
+  ARITY, not just its existence: two individually-true vendor facts composed
+  can yield a false third claim (the capability exists AND the surface exists
+  does not mean the capability applies to that surface N times, in that
+  direction, or at that layer).
+- 2026-07-2x "stands unchanged" claims cite their survey: any conformance
+  claim of the form "X stands unchanged" / "no impact on Y" must cite the
+  verification that established it (which files were surveyed, by what
+  method, when) — an uncited stands-claim is a status marker, and this
+  rule's first bullet already says what a status marker is worth. (A
+  recurring doctrine candidate parked three times in machine-local records
+  before landing here.)
+- 2026-07-3x engaged-path before mechanism: A GREP HIT IS NOT A CONSUMER —
+  a reviewer-adopted claim about a value's consumer was falsified by
+  re-reading the found site (the match existed; nothing consumed it), and
+  two expert rounds mis-read PostHog retry arithmetic until
+  `resolveCaptureMode()` settled WHICH code path was actually engaged.
+  Before reasoning about a mechanism's behaviour, settle the engaged path
+  and the actual consumer first-hand; a text match proves presence, never
+  participation.
+- 2026-07-2x captures go stale against live surfaces: a captured artefact (a
+  saved page, a screenshotted portal, a studio HTML export) is a DATED
+  record, not the surface — a design capture showed Resources 6 / Tools 42
+  against a live serve of 5 and a different count, and a submission portal's
+  LIVE form outranked docs pages and prior captures (the portal had gained a
+  Team/Enterprise-plan requirement no doc mentioned). For any third-party
+  requirement or served-surface fact, read the live source at time of use;
+  cite captures as "as of <date>".

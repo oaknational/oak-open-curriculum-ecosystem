@@ -19,7 +19,6 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import express from 'express';
-import type { RequestHandler } from 'express';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
@@ -59,9 +58,6 @@ describe('native Sentry MCP wrapping is inert without Sentry.init', () => {
 describe('per-request transport observation (MCP-241)', () => {
   function initialize(transportObserver?: McpTransportObserver<Transport>) {
     const app = express();
-    const passThroughLimiter: RequestHandler = (_req, _res, next) => {
-      next();
-    };
     return initializeCoreEndpoints(
       app,
       {
@@ -72,7 +68,6 @@ describe('per-request transport observation (MCP-241)', () => {
         ...(transportObserver ? { transportObserver } : {}),
       },
       createFakeLogger(),
-      passThroughLimiter,
     );
   }
 

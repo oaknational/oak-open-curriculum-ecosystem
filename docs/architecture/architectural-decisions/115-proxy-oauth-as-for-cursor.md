@@ -7,7 +7,9 @@ passthrough" means protocol payload passthrough, not absence of protective
 traffic controls. Amended 2026-07-26 (MCP-188) to scope transparency against
 request validation that a cited OAuth clause obliges the _advertised_
 authorisation server to perform and that the upstream is demonstrated not to
-perform.
+perform. Amended 2026-07-30 (MCP-411): the application-layer rate-limiting
+precondition is retired; volumetric control is owned at the edge — see
+[ADR-219](219-rate-limiting-is-an-edge-concern.md).
 
 **Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-113 (Spec-Compliant Auth)](113-mcp-spec-compliant-auth-for-all-methods.md)
 
@@ -94,15 +96,14 @@ the real authorisation server and handles OAuth security decisions. Two scoped
 exceptions are recorded: the request-side one below, and the response-side
 error normalisation described under Error Handling.
 
-The proxy may still sit behind application and edge traffic controls. Current
-runtime wires application rate limiting for OAuth proxy routes per ADR-158;
-that does not violate transparency because the limiter rejects excess traffic
+The proxy sits behind edge traffic controls (Cloudflare and Vercel, per
+ADR-219); that does not violate transparency because edge rejection acts
 before proxy semantics are applied rather than modifying OAuth messages.
 
 #### Advertised-AS request validation (amended 2026-07-26, MCP-188)
 
 This is a second and independently justified exception, NOT an extension of
-the rate-limiting clause above — that clause is licensed by acting _before_
+the edge-controls clause above — that clause is licensed by acting _before_
 proxy semantics apply, whereas this one reads an OAuth message body and
 decides on its content.
 
@@ -230,7 +231,7 @@ behaviour decision with its own evidence bar.
 
 1. **Host header trust**: The server derives self-origin from the request `Host` header via `deriveSelfOrigin()`. All OAuth metadata (`authorization_servers`, `issuer`, endpoint URLs) uses this value. Ingress (Vercel, reverse proxy) must enforce a canonical host/protocol — otherwise, a malicious `Host` header could cause metadata to advertise incorrect endpoints. Locally, `isLoopbackHost()` forces `http://` for `localhost`; in production, Vercel enforces the canonical domain.
 
-2. **Rate limiting**: The proxy endpoints (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) are unauthenticated, public OAuth endpoints and therefore require traffic controls. Application-layer rate limiting is now applied as defence-in-depth per ADR-158, with edge/WAF rate limiting remaining the authoritative volumetric control.
+2. **Traffic controls**: The proxy endpoints (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) are unauthenticated, public OAuth endpoints and therefore require traffic controls. Edge rate limiting configured at the CDN layer (Cloudflare and Vercel) is the authoritative volumetric control ([ADR-219](219-rate-limiting-is-an-edge-concern.md)); the application runs no in-process limiter. `GET /oauth/authorize` builds a 302 redirect with no upstream call, and Clerk's own throttling bounds the register/token legs — upstream 429s surface to clients through the preserved `Retry-After` mapping.
 
 ### Precedent
 
@@ -276,16 +277,6 @@ A community member published a [working solution using this exact pattern with M
 | `e2e-tests/auth-enforcement.e2e.test.ts`                           | End-to-end assertions that the served metadata carries self-origin                                             |
 
 All files within `apps/oak-curriculum-mcp-streamable-http/`.
-
-## Deployment Preconditions
-
-**Rate limiting must be in place before production rollout.** The proxy
-OAuth flow exposes publicly reachable `/register` and `/token` endpoints.
-Without edge/WAF and application-layer rate limiting, these are vulnerable to
-credential-stuffing and denial-of-service patterns. Configure rate limiting at
-the CDN/reverse proxy layer (e.g. Vercel Edge Middleware, Cloudflare WAF, or
-AWS WAF) and keep the application limiter wired per ADR-158 before deploying to
-production.
 
 ## Related ADRs
 

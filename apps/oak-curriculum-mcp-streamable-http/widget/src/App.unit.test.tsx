@@ -59,6 +59,60 @@ describe('AppView', () => {
   });
 });
 
+describe('AppView safe-area insets', () => {
+  it('applies no inline styling when the host provides no safe-area insets', () => {
+    render(<AppView onOpenLink={() => undefined} />);
+
+    const shell = screen.getByTestId('oak-mcp-app-shell');
+
+    expect(shell.getAttribute('style')).toBeNull();
+  });
+
+  it('exposes host insets as custom properties and emits no inline padding declarations', () => {
+    render(
+      <AppView
+        onOpenLink={() => undefined}
+        safeAreaInsets={{ top: 12, right: 8, bottom: 4, left: 16 }}
+      />,
+    );
+
+    const shell = screen.getByTestId('oak-mcp-app-shell');
+
+    expect(shell.style.getPropertyValue('--oak-safe-area-inset-top')).toBe('12px');
+    expect(shell.style.getPropertyValue('--oak-safe-area-inset-right')).toBe('8px');
+    expect(shell.style.getPropertyValue('--oak-safe-area-inset-bottom')).toBe('4px');
+    expect(shell.style.getPropertyValue('--oak-safe-area-inset-left')).toBe('16px');
+    // The authored `.oak-app` token padding must survive: no inline
+    // padding declarations that would shadow the class rule.
+    expect(shell.style.paddingTop).toBe('');
+    expect(shell.style.paddingRight).toBe('');
+    expect(shell.style.paddingBottom).toBe('');
+    expect(shell.style.paddingLeft).toBe('');
+  });
+
+  it('emits zero-value custom properties and no inline padding for zero insets (ChatGPT desktop)', () => {
+    render(
+      <AppView
+        onOpenLink={() => undefined}
+        safeAreaInsets={{ top: 0, right: 0, bottom: 0, left: 0 }}
+      />,
+    );
+
+    const shell = screen.getByTestId('oak-mcp-app-shell');
+
+    // Zero insets compose to zero EXTRA padding via the custom
+    // properties; they must never zero out the token padding itself.
+    expect(shell.style.getPropertyValue('--oak-safe-area-inset-top')).toBe('0px');
+    expect(shell.style.getPropertyValue('--oak-safe-area-inset-right')).toBe('0px');
+    expect(shell.style.getPropertyValue('--oak-safe-area-inset-bottom')).toBe('0px');
+    expect(shell.style.getPropertyValue('--oak-safe-area-inset-left')).toBe('0px');
+    expect(shell.style.paddingTop).toBe('');
+    expect(shell.style.paddingRight).toBe('');
+    expect(shell.style.paddingBottom).toBe('');
+    expect(shell.style.paddingLeft).toBe('');
+  });
+});
+
 describe('openHostLink', () => {
   it('opens the requested URL through host link handling when available', () => {
     const dispatched: AppRuntimeAction[] = [];

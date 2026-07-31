@@ -5,7 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@ai-sdk/provider-utils': '>=3.0.98'
   '@types/node': ^24.13.3
   axios: '>=1.15.1'
   brace-expansion: '>=5.0.8'
@@ -148,6 +147,9 @@ importers:
       react:
         specifier: ^19.2.8
         version: 19.2.8
+      smol-toml:
+        specifier: ^1.7.0
+        version: 1.7.0
       tinyglobby:
         specifier: ^0.2.17
         version: 0.2.17
@@ -263,9 +265,6 @@ importers:
       express-list-routes:
         specifier: ^1.3.2
         version: 1.3.2
-      express-rate-limit:
-        specifier: ^8.6.0
-        version: 8.6.0(express@5.2.1)
       helmet:
         specifier: ^8.3.0
         version: 8.3.0
@@ -1592,6 +1591,12 @@ packages:
 
   '@ai-sdk/openai@2.0.115':
     resolution: {integrity: sha512-/lzMx32DICp6EREEguKEihDVL1wjPc8pBuroDtomRdFd7lqRApRg0Bplz/iXVu0suxoWNv5Fsc1HwUXApsSkTg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
+
+  '@ai-sdk/provider-utils@3.0.30':
+    resolution: {integrity: sha512-NCJ9JKow5ENAgEZxzvEvF20thwDiH+hutvzmrUDbloRX0azpJHNst8+7pZIVryYhLM9wgpT5/ShTSjPTFhkxEQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -8369,7 +8374,7 @@ snapshots:
     dependencies:
       '@ai-sdk/anthropic': 2.0.91(zod@4.4.3)
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       '@smithy/eventstream-codec': 4.4.13
       '@smithy/util-utf8': 4.4.13
       aws4fetch: 1.0.20
@@ -8378,7 +8383,7 @@ snapshots:
   '@ai-sdk/anthropic@2.0.91(zod@4.4.3)':
     dependencies:
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       zod: 4.4.3
 
   '@ai-sdk/azure@2.0.120(zod@4.4.3)':
@@ -8386,13 +8391,13 @@ snapshots:
       '@ai-sdk/deepseek': 1.0.48(zod@4.4.3)
       '@ai-sdk/openai': 2.0.115(zod@4.4.3)
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       zod: 4.4.3
 
   '@ai-sdk/deepseek@1.0.48(zod@4.4.3)':
     dependencies:
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       zod: 4.4.3
 
   '@ai-sdk/gateway@3.0.157(zod@4.4.3)':
@@ -8405,25 +8410,32 @@ snapshots:
   '@ai-sdk/google@2.0.85(zod@4.4.3)':
     dependencies:
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       zod: 4.4.3
 
   '@ai-sdk/mistral@2.0.40(zod@4.4.3)':
     dependencies:
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       zod: 4.4.3
 
   '@ai-sdk/openai-compatible@1.0.46(zod@4.4.3)':
     dependencies:
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       zod: 4.4.3
 
   '@ai-sdk/openai@2.0.115(zod@4.4.3)':
     dependencies:
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
+      zod: 4.4.3
+
+  '@ai-sdk/provider-utils@3.0.30(zod@4.4.3)':
+    dependencies:
+      '@ai-sdk/provider': 2.0.3
+      '@standard-schema/spec': 1.1.0
+      eventsource-parser: 3.1.0
       zod: 4.4.3
 
   '@ai-sdk/provider-utils@4.0.40(zod@4.4.3)':
@@ -8445,7 +8457,7 @@ snapshots:
     dependencies:
       '@ai-sdk/openai-compatible': 1.0.46(zod@4.4.3)
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       zod: 4.4.3
 
   '@alcalzone/ansi-tokenize@0.3.0':
@@ -13898,7 +13910,7 @@ snapshots:
   ollama-ai-provider-v2@1.5.5(zod@4.4.3):
     dependencies:
       '@ai-sdk/provider': 2.0.3
-      '@ai-sdk/provider-utils': 4.0.40(zod@4.4.3)
+      '@ai-sdk/provider-utils': 3.0.30(zod@4.4.3)
       zod: 4.4.3
 
   on-finished@2.4.1:

@@ -30,6 +30,21 @@ personal working style is Practice intent — the pairing doctrine is
 statements are seeded in the pattern library
 (`mechanism-without-legible-intent` §Intent-Layer Seed Material).
 
+A ratified constraint set plus a ticket is NOT an owner-formed goal
+(established 2026-07-22, when the owner stopped a lane mid-execution with
+"we have not yet planned this work"): constraints bound the solution space
+and tickets track intent, but execution starts from a goal the owner has
+actually formed and stated — inferring readiness-to-execute from the
+artefact trail alone is a routing error, whoever makes it.
+
+Two precedence tiebreaks (owner rulings, 2026-07-28): **a specific owner
+instruction about a specific piece of work outranks a general standing
+practice** — apply the specific word and record the divergence rather than
+arguing the general rule back; and when owner directions genuinely cross,
+the owner may name a single final authority for the window (a named
+Director seat was the founding instance) — route the collision there
+instead of choosing between the directions yourself.
+
 ## Working Model
 
 The collaboration model is dialogue, not an authority hierarchy. The owner is

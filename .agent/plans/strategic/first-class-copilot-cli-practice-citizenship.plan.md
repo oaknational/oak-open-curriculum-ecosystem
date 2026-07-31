@@ -28,6 +28,14 @@ last_updated: 2026-07-25
 - **2026-07-25** — Corrected platform capability facts and the distinction
   between bounded claim registration in every working session and continuous
   team participation. These amendments do not widen the ratified outcome.
+- **2026-07-30** (backfilled 2026-07-31 by the comms-corpus run) —
+  Official-source-verified Copilot CLI platform facts for this plan's
+  executors: skill precedence is `.github/skills` > `.agents/skills` >
+  `.claude/skills`, FIRST-FOUND-WINS per skill name (a repo `.github` copy
+  silently shadows the canonical `.agents` adapter — placement is a
+  correctness decision, not a convenience); repository-level skills resolve
+  before user-level ones. Version-pin any recorded verdict on these facts —
+  the CLI's resolution order is vendor surface and can move.
 
 ## Outcome
 

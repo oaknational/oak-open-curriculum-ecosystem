@@ -26,8 +26,29 @@ The one-sentence contract: **a PR is done when it is live** — opened is not
 done, green checks are not done, "ready for review" is not done; done is
 merged with every finding genuinely settled. Standing down (closeout,
 claim-close, monitor-stop) while the work is unmerged is the error: a
-feature branch with an open PR is one cleanup away from gone, and the
-owner's merge signoff is a gate, never a handoff of ownership.
+feature branch with an open PR is one cleanup away from gone, and a merge
+gate — settled-state, or owner signoff where a surface reserves it — is a
+gate, never a handoff of ownership.
+
+Standing merge doctrine (owner verbatim, 2026-07-26/29): **a green and clean
+PR — CI passing, no unresolved comments — merges without owner approval**,
+and any resulting problem makes recurrence-prevention the immediate
+priority. At genuinely-settled (all required checks green by name across
+both check-runs AND commit statuses, zero unresolved threads), the seat
+executes the merge itself under bot identity (REST merge-commit method,
+never squash). Freeze-bound surfaces and anything a rule explicitly
+reserves to the owner remain outside this grant. The dual discipline: a
+gate nobody can NAME is an INVENTED gate — a reviewer listed on a Linear
+issue is not a PR merge gate, and holding green work on an unnamed gate is
+the inverse failure of merging past a real one (owner ruling, 2026-07-30);
+a verdict that a gate exists carries its counter-consideration, and an
+owner-constitutive reading goes to him as a card.
+
+One stacked-PR mechanic that bites at open and at retarget: **a base
+retarget fires no `synchronize` event, so required checks do not re-run**
+and the PR can sit green-stale or pending forever. The cure is an empty
+commit on the head branch (`git commit-tree` against the same tree, push),
+touching no checkout.
 
 ## What a PR is (the intent under every phase below)
 
@@ -67,6 +88,9 @@ into the permanent record):
    into the branch (never rebase-and-force-push an already-pushed branch).
    When the update touches agent memory/state files, author the union by hand
    per the `semantic-merge` skill — a git line-merge silently corrupts them.
+   Tripwire: a conflict beyond trivial union-append on `.agent`
+   continuity/state/memory files STOPS the merge and routes to the Director —
+   resolving it solo is how approved versions get silently reverted.
 2. **Tree and gates**: working tree clean; a successful push already ran the
    full pre-push gate suite, so a clean push IS the local-green proof — do not
    re-run gates just to re-confirm it.
@@ -102,6 +126,21 @@ artefact for reviewers**, never a file list: what changed, why it matters,
 what reviewers should focus on, what was deliberately left out, and what
 evidence supports merge readiness. Update the description whenever the review
 story materially changes (a reshaped scope, a new commit class).
+
+**Copilot review policy (owner grants, 2026-07-26→29, standing).** Request a
+Copilot review AT PR-OPEN for every source-touching PR; docs-only PRs stay
+selective (important-or-risky only). Cadence is at-open plus
+substance-triggered (a reshaped diff), never per cure push; Copilot's absence
+never blocks a merge. Suppressed findings are Copilot's own low-confidence
+bucket: the burden of proof is REPRODUCTION before cure — a non-reproducing
+finding gets a reasoned decline with the falsifier recorded, never a
+speculative cure or a silent skip. Two scope facts: the Copilot-review
+ruleset does NOT bind `.design-sync/`, `.agent/plans/`, or
+`packages/design` doc paths (confirmed on PR #536's timeline — zero review
+fired), so absence there is configuration, not a skipped reviewer; and a
+claude[bot] review SKIP is a spend-limit signature, not a blocker — an
+organisation review-overage exhaustion is a capability ceiling to note,
+never a gate to wait on.
 
 ### Title and description are CLAIMS about the diff — derive them from it
 
@@ -148,7 +187,9 @@ surfaces. Partial reads produce false "no problems" verdicts:
    the comments connection with each comment's body and its originating
    review's commit binding — i.e. the first comment's
    `pullRequestReview { commit { oid } }` — the field the review-round
-   state machine's tally store (item 2) is built from. REST issue
+   state machine's tally store (item 2) is built from.
+   `reviewThreads(first: 100)` is the API MAXIMUM, not "all" — a PR past
+   100 threads needs pagination or the harvest silently truncates. REST issue
    comments MISS inline bot threads (Copilot, Bugbot); a REST-only read is the
    canonical way to falsely conclude "no comments". Worked failure 2026-07-02:
    two REST comments were triaged as "noise" while four unresolved Copilot
@@ -157,11 +198,23 @@ surfaces. Partial reads produce false "no problems" verdicts:
    each review's own `commit.oid` retained alongside its body (the paged
    `reviews` connection carries both) — the binding the state machine's
    tally (item 2) buckets body findings by; a Sonar gate summary or a bot
-   capability notice lives here.
+   capability notice lives here. The dual of item 1's REST-only failure: a
+   reviewThreads-ONLY harvest also structurally undercounts — Copilot's
+   "suppressed low-confidence findings" live only in review submission
+   bodies with no thread state, and those suppressed findings have run real
+   at a striking rate. A thread never auto-outdates when its fix lands in a
+   DIFFERENT file than the anchored line — reply with the actual fix
+   location and resolve manually, or it reads unaddressed forever.
 3. **All checks** — `gh pr checks`, including the external ones (SonarCloud,
    CodeQL, Vercel, Cursor Bugbot, Codex). A failed check's *first* failure is
    the root to chase: a 20-second `install` failure cascades into skipped
-   builds and a failed deployment — fix the root, not the echoes.
+   builds and a failed deployment — fix the root, not the echoes. CodeQL
+   alert reads are ref-scoped: the per-number GET returns `state=null` when
+   no default-branch instance exists; the authoritative read passes
+   `?ref=refs/pull/N/merge`, and any recorded verdict names the ref it was
+   read against in the same sentence. GraphQL `statusCheckRollup` can show
+   a STALE "Vercel pending" long after the deployment finished — the
+   commit-status REST API is the ground truth for status-context checks.
 4. **Sonar quality gate** — when it fails, pull the ACTUAL issues
    (`search_sonar_issues_in_projects` with `pullRequestId`, per the
    `sonarqube-mcp-instructions` rule) and read each flagged site. The gate
@@ -178,7 +231,12 @@ surfaces. Partial reads produce false "no problems" verdicts:
 - The three-way test, exactly one terminal state per finding:
   1. **INCORRECT → reject**, with verified reasoning in the reply
      (`dispositions-need-verified-failure-scenarios`). Rejection is a
-     first-class outcome, never a failure of nerve.
+     first-class outcome, never a failure of nerve. Every disposition
+     names its EVIDENCE CLASS: READ (reasoned from source, never
+     executed) or RUN (exercised first-hand). A whole round dispositioned
+     READ-NOT-RUN is sound as readings and is NOT test evidence — say so
+     in the disposition, so downstream consumers never upgrade a reading
+     into a proof (worked instance: #570, all findings READ-NOT-RUN).
   2. **CORRECT and relevant and proportionate → address**, fixed at source.
      ALL THREE conjuncts are required: individual validity is NOT
      sufficiency — a correct finding whose cure widens the PR beyond its
@@ -207,6 +265,16 @@ surfaces. Partial reads produce false "no problems" verdicts:
 - Fix the class, not the instance: a spelling finding on two lines gets a
   repo-wide sweep of the class; a stale literal gets checked against its
   source constant convention.
+- **A cure is a claim: it gets the same verification tier as the finding it
+  cures, and it carries its paired test.** Review-round cures are the next
+  round's most likely defect surface (one round's Sonar failures were ALL
+  inside the previous round's cures; a cache-correctness fix shipped its own
+  unhashed input; a loud-failure alert was born with a silent-failure
+  default). A cure without the test that would have caught the finding is
+  half a cure — the atomic pair discipline applies to review cures exactly
+  as to features. And after absorbing cures from MULTIPLE reviews, the
+  COMPOSITION needs its own pass: two independent, individually-correct
+  cures interacted to create a third defect (worked instance 2026-07-28).
 - Disposition is content-based and binary — a comment's timestamp is
   irrelevant. "This predates my change" / "nothing new since T" is not
   addressed, and a fresh finding introduced by the fix commit itself is an
@@ -239,6 +307,13 @@ select(.conclusion=="failure")'`), never from the `--log-failed` tail — an
   currency; NOT the state machine's round-owed leg, so CLEAN with an OWED
   reviewer leg is still not merge-ready — and a composite/component
   disagreement is itself a finding to chase, never noise.
+- **CI can go SILENT, and silence reads as pending forever** (recorded on
+  MCP-373, homed 2026-07-31): a PR in CONFLICTING mergeable-state silently
+  stops `pull_request` workflow runs — no failure, no event, just absence.
+  A settle watch therefore carries legs beyond checks-by-name: read
+  `MERGEABLE`/mergeable-state alongside the checks, and confirm runs exist
+  for the CURRENT head via `gh run list` filtered per-head — a checks-green
+  read against a head with zero runs is reading the PREVIOUS head's truth.
 - Run the repo's budgeted watcher in the background:
   `pnpm agent-tools:pr-watch <n> --watch --interval 60` — one line per state
   change, including new comments by author and the unresolved review-thread
@@ -343,7 +418,12 @@ as phase-local restatements.
    2026-07-16 — on #390 a review for `861bb8924` arrived after `783c567af`
    was pushed; arrival-order tallying charges findings to the wrong round
    and can falsely trigger, or mask, non-convergence). Convergence is the
-   per-round count strictly decreasing. **The step-back trigger is
+   per-round count strictly decreasing. Born-sketch PLAN PRs carry an owner
+convergence-cap ruling (2026-07-25): after round 4, further reviewer waves
+DISPOSITION to named homes rather than editing plan text — unless a finding
+shows an actual falsehood in the plan; merge at any settle-green tip whose
+deltas are cap-dispositions or falsehood-cures; hard-stop only for new
+owner parameters. **The step-back trigger is
    mechanical, with the exact predicate `c[n] >= c[n-1] AND
    c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    three settled counts) OR 4 total settled rounds in the epoch — and
@@ -552,6 +632,40 @@ as phase-local restatements.
    silently, so before removing any queue or protection rule, enumerate
    and disarm every armed intent.
 
+### Read mechanics the settled verdict depends on (consolidated 2026-07-30)
+
+- **Read STATUSES alongside check-runs.** Vercel is a required commit
+  STATUS that publishes NO check-run — a check-runs-only read shows green
+  with a required context pending or failed. Derive the required list from
+  `/rules/branches/<base>` and read each name across BOTH
+  `/commits/{sha}/check-runs` AND `/commits/{sha}/status`.
+- **A review-request 201 is not a registration.** The REST
+  `requested_reviewers` POST can return 201 and silently drop per-PR
+  (reproduced on two PRs, two seats, ~5 minutes apart); the roster read is
+  ambiguous in both directions (Copilot leaves it the moment it starts).
+  Verify via the issue TIMELINE's `review_requested` events; the proven
+  alternate path is the GitHub MCP `request_copilot_review` tool. Cap
+  identical REST retries at two.
+- **A review row is not a review.** Read the review BODY before counting
+  it — a `COMMENTED` row on the exact head once contained only a
+  spend-limit skip notice (the spend limit itself is never an agent
+  concern; just do not count the notice as a review). And a review PRESENT
+  on the PR is not a review OF the merge head — match its `commit_id` to
+  the head at the merge moment.
+- **Paginate reviews to exhaustion.** `/pulls/{n}/reviews` pages
+  oldest-first (default 30): an unpaginated read on a busy PR is
+  structurally guaranteed to hide the recent rows — the ones being asked
+  about. Bot reviewers are visible only via the GraphQL `... on Bot`
+  fragment; REST `requested_reviewers` and `gh pr view` omit them.
+- **Run the merge-base deletion sweep before ANY merge**:
+  `git diff "$(git merge-base origin/<base> HEAD)" -- <touched paths> |
+  grep -E "^-" | grep -v "^---"` and read every printed line — each is an
+  intended deletion or a silent revert. A stale whole-file capture
+  produces a clean, conflict-free overwrite that every gate in the chain
+  is structurally blind to (worked instance 2026-07-28: a green docs PR
+  one command from silently deleting a landed security clause; the
+  stale-capture-wins class with the consequence sharpened).
+
 ## Phase 6 — After EVERY push, re-fetch; resolve only what is settled
 
 - Bots re-review each push asynchronously: **"0 unresolved" is a moment, not
@@ -644,7 +758,12 @@ regardless of green checks and zero unresolved threads; the SKIPPED timeout
 intent, verify the checks are green-or-progressing (PDR-132): an armed
 intent behind a red check is invisible-stuck — nothing progresses it and
 nothing alerts (live instance 2026-07-20: an armed docs PR sat ~2h behind a
-two-line lint failure believed self-landing).** Then:
+two-line lint failure believed self-landing).** Holds on a merge-ready PR
+are EVENT-released, never timer-released (adjudicated 2026-07-30): a
+zero-cost hold (waiting on a named arrival, an obsolescence check, a cost
+change) releases the moment its event fires — a hold that would release "in
+a while" is an invented gate; and a hold placed for a composing review
+covers only SUBSTANTIVE changes, never docs/comment-only deltas. Then:
 
 - **`mergeable` means POSSIBLE to merge; it does NOT mean READY to merge**
   (owner, 2026-07-08). GitHub's `mergeable: MERGEABLE` asserts only
@@ -775,12 +894,28 @@ allow_squash_merge, allow_rebase_merge}'`; `allow_merge_commit` has
 
 ## Phase 8 — After merge
 
+**Every merge gets its own fleet broadcast, no exceptions** (obligation
+recorded 2026-07-2x: a bot merge went unbroadcast for 40 minutes and left a
+peer seat disposition-blocked on state it could not see). In a cascade of
+merges, post-merge harvest custody is assigned PER PR — name who owns each
+merged PR's Phase-8 harvest in the broadcast, and late findings route to
+follow-up branches, never to merged ones.
+
+**Merge auto-delete overrides recorded dispositions** (worked instance: a
+merge auto-deleted a remote coordination branch despite a "branch lives on"
+disposition, leaving the primary tracking a deleted ref). If a branch must
+survive its PR's merge, re-push it immediately after — the disposition text
+does not bind GitHub's delete-on-merge setting.
+
 **One post-merge harvest before stand-down.** MERGED ends the merge-state
 question, not the feedback stream: a bot round composing at merge time still
 posts findings on the merged code up to ~10 minutes later. Apply the settled
 quiet window ONCE after MERGED (one final full harvest after >10 quiet
 minutes); route any real finding to a follow-up branch, never to the merged
-PR's branch.
+PR's branch. The quiet window is a PROXY predicate — it exists only because
+agents cannot see a bot review start or finish; the owner's settled word
+from his own visibility supersedes it (owner ruling, 2026-07-2x): when he
+says it is settled, it is settled, and the window is not re-imposed on him.
 
 `worktree-hygiene` §3/§6 owns the cleanup: remove the worktree and delete the
 branch (content-verified, owner-authorisation-gated for destructive ops);

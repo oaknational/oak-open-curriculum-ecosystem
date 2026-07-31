@@ -159,6 +159,10 @@ owner direction allow it. Reviewer routing, timing, roster, depth, and reporting
 requirements live in
 [invoke-code-experts.md](../memory/executive/invoke-code-experts.md).
 
+For a fast second opinion on whether the current work is the right work, invoke
+[`$oak-cricket`](../skills/cricket/SKILL-CANONICAL.md). Cricket is a
+priority-and-framing conscience check, never a substitute for an artefact reviewer.
+
 Agent workflow CLIs live in [agent-tools](../../agent-tools/README.md). Use
 root scripts such as `pnpm agent-tools:claude-agent-ops health` from the repo
 root.

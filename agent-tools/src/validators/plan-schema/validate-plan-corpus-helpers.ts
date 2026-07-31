@@ -10,7 +10,15 @@
  * runbook's `serves` resolves against the strategic nodes actually in
  * the corpus; `depends_on` edges and `impact_areas` members resolve or
  * the corpus fails; an empty corpus is a failure, never a vacuous
- * green.
+ * green; and ratified delivery plans satisfy execution-anchor
+ * consistency (the rule, its derivation, and its deliberate limit
+ * live in `plan-execution-anchors.ts`).
+ *
+ * Subtree resolution needs no recursion, by validation rather than by
+ * luck: a strategic node's `serves` must resolve against the published
+ * choice registry, so a strategic node can never serve another plan
+ * and the corpus is exactly two levels deep. A future nested shape
+ * would surface here as a visible gap, not a silent wrong answer.
  *
  * @packageDocumentation
  */
@@ -20,20 +28,10 @@ import { parse as parseYaml } from 'yaml';
 
 import { isJsonObject } from '../../core/json.js';
 import { extractFrontmatter } from '../portability/portability-fs.js';
+import { type ParsedPlanFile, type PlanConformanceFailure } from './plan-corpus-types.js';
+import { anchoringEvidence, executionAnchorMessages } from './plan-execution-anchors.js';
 import { type ChoiceRegistry } from './plan-corpus-registries.js';
 import { planNodeSchema, type PlanNode } from './plan-node-schema.js';
-
-/** One plan file's conformance failure, path-anchored for the report. */
-export interface PlanConformanceFailure {
-  readonly path: string;
-  readonly messages: readonly string[];
-}
-
-/** A parsed, file-level-valid plan awaiting corpus-level resolution. */
-export interface ParsedPlanFile {
-  readonly path: string;
-  readonly node: PlanNode;
-}
 
 /**
  * Validate one `*.plan.md` file's frontmatter against the plan-node
@@ -69,7 +67,8 @@ export function validatePlanFile(
  * Corpus-level rules over the file-level-valid plans: non-emptiness,
  * id uniqueness, `serves` resolution (strategic → published choice
  * registry; delivery/runbook → a strategic node in the corpus),
- * `impact_areas` registry membership, and `depends_on` resolution.
+ * `impact_areas` registry membership, `depends_on` resolution, and
+ * execution-anchor consistency for ratified delivery plans.
  *
  * @returns Path-anchored failures; empty means the corpus coheres.
  */
@@ -90,6 +89,7 @@ export function validateCorpus(
   const strategicIds = new Set(
     files.filter((file) => file.node.node_type === 'strategic').map((file) => file.node.id),
   );
+  const anchors = anchoringEvidence(files);
   const failures: PlanConformanceFailure[] = [];
   for (const file of files) {
     const messages = [
@@ -97,6 +97,7 @@ export function validateCorpus(
       ...servesMessages(file.node, choices, strategicIds),
       ...impactAreaMessages(file.node, impactAreas),
       ...dependsOnMessages(file.node, allIds),
+      ...executionAnchorMessages(file.node, anchors),
     ];
     if (messages.length > 0) {
       failures.push({ path: file.path, messages });

@@ -7,21 +7,15 @@
  * emits JSON for the repository validator. No host-delivery claim is made.
  */
 
-import express, { type RequestHandler } from 'express';
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
+import type { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { ErrorCode } from '@modelcontextprotocol/sdk/types.js';
-import { type Logger } from '@oaknational/logger';
 import { typeSafeEntries } from '@oaknational/type-helpers';
 import {
   AGENT_GUIDANCE_RESOURCES,
   getAgentGuidanceContent,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { initializeCoreEndpoints } from '../app/core-endpoints.js';
-import { createHttpObservability } from '../observability/http-observability.js';
-import { resolveServedMcpUrl } from '../served-origin.js';
 import { SERVED_SURFACE } from '../served-surface/served-surface.js';
-import type { RuntimeConfig } from '../runtime-config.js';
+import { createConnectedClient } from './connected-client.js';
 import {
   buildGuidanceRegistrationEvidenceByUri,
   type ServedState,
@@ -32,34 +26,6 @@ import { requireMcpErrorCode } from './require-mcp-error-code.js';
 
 type PolicyEntry = readonly [string, ServedState];
 const alphabetical = (left: string, right: string) => left.localeCompare(right);
-
-const runtimeConfig: RuntimeConfig = {
-  env: {
-    OAK_API_KEY: 'current-source-validator-key',
-    ELASTICSEARCH_URL: 'https://current-source-validator.invalid',
-    ELASTICSEARCH_API_KEY: 'current-source-validator-key',
-    SENTRY_MODE: 'off',
-  },
-  dangerouslyDisableAuth: true,
-  useStubTools: true,
-  version: '0.0.0-current-source-validator',
-  versionSource: 'APP_VERSION_OVERRIDE',
-  vercelHostnames: [],
-};
-
-function createLogger(): Logger {
-  const logger: Logger = {
-    trace: () => undefined,
-    debug: () => undefined,
-    info: () => undefined,
-    warn: () => undefined,
-    error: () => undefined,
-    fatal: () => undefined,
-    isLevelEnabled: () => false,
-    child: () => logger,
-  };
-  return logger;
-}
 
 function selectors(
   entries: readonly (readonly [string, ServedState])[],
@@ -139,33 +105,6 @@ async function requireGuidanceReadParity(
       readResult,
     );
   }
-}
-
-async function createConnectedClient(): Promise<Client> {
-  const observabilityResult = createHttpObservability(runtimeConfig);
-  if (!observabilityResult.ok) {
-    throw new Error('Could not create inert HTTP observability for registration proof');
-  }
-  const app = express();
-  const passThrough: RequestHandler = (_request, _response, next) => {
-    next();
-  };
-  const { mcpFactory } = initializeCoreEndpoints(
-    app,
-    {
-      runtimeConfig,
-      observability: observabilityResult.value,
-      resourceUrl: resolveServedMcpUrl({}),
-      getWidgetHtml: () => '<html>current-source-validator</html>',
-    },
-    createLogger(),
-    passThrough,
-  );
-  const { server } = mcpFactory();
-  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-  const client = new Client({ name: 'current-source-validator', version: '0.0.0' });
-  await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
-  return client;
 }
 
 interface ObservedSurface {

@@ -2,6 +2,15 @@
 
 ## Status
 
+~~Accepted~~ → **Superseded by ADR-219** (2026-07-30)
+
+> The in-process limiter this ADR specifies was removed in MCP-411. Its
+> premise — that an application-layer counter adds defence-in-depth and that
+> upstream per-key quota was exhaustible — does not hold on this deployment.
+> [ADR-219](219-rate-limiting-is-an-edge-concern.md) governs. The original
+> decision, threat model, and §Honest Limitations are preserved below as the
+> record of what was built and why.
+
 Accepted (2026-03-31). Amended 2026-04-28 to add Runtime-Aware Key
 Extraction (Vercel-aware `keyGenerator`) under Decision and re-state
 Trust Boundaries accordingly. The amendment landed on PR-87 Phase 2.0.5

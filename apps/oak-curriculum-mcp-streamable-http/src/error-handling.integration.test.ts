@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { Mock } from 'vitest';
 import express, { type Express, type NextFunction, type Request, type Response } from 'express';
-import request from 'supertest';
+import { request } from './test-helpers/loopback-request.js';
 import {
   UnifiedLogger,
   buildResourceAttributes,

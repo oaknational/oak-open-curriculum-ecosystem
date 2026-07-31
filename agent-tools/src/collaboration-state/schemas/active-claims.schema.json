@@ -62,14 +62,7 @@
     "claim": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "claim_id",
-        "agent_id",
-        "thread",
-        "areas",
-        "claimed_at",
-        "intent"
-      ],
+      "required": ["claim_id", "agent_id", "thread", "areas", "claimed_at", "intent"],
       "properties": {
         "claim_id": {
           "type": "string",
@@ -185,7 +178,15 @@
           "description": "Active claim this queue entry belongs to."
         },
         "agent_id": {
-          "$ref": "#/$defs/agent_id"
+          "allOf": [
+            {
+              "$ref": "#/$defs/agent_id"
+            },
+            {
+              "required": ["id"]
+            }
+          ],
+          "$comment_provenance": "Amended 2026-07-31: intents require the PDR-076a UUID v5 id (every live writer emits it via collaborationAgentIdWriteSchema; the read boundary enforces the same shape). Claims keep the shared optional-id def — legacy rows are legal, preserved on write-back, and never match a live agent."
         },
         "files": {
           "type": "array",
@@ -263,7 +264,7 @@
         "id": {
           "type": "string",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-          "description": "PDR-076a §Cascade item 3 deterministic UUID v5 derived from the stable session seed. Optional during the additive migration window; promoted to required when the legacy-fallback diagnostic count reaches zero across one calendar week (PDR-076a §Cascade item 2 sunset)."
+          "description": "PDR-076a §Cascade item 3 deterministic UUID v5 derived from the stable session seed. The routing key: same-agent comparisons are single-path on this field, and an id-less identity is never the same live agent (PDR-076a §Sunset, landed 2026-05-29). Optional HERE only for legacy claim rows, which are preserved on write-back; commit_queue intents require it via their allOf overlay (2026-07-31)."
         },
         "naming_schema_version": {
           "enum": ["v1-adjective-verb-noun", "v2-noun-verb-noun", "override"],
@@ -295,13 +296,7 @@
     "closure": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "kind",
-        "closed_at",
-        "closed_by",
-        "summary",
-        "evidence"
-      ],
+      "required": ["kind", "closed_at", "closed_by", "summary", "evidence"],
       "properties": {
         "kind": {
           "type": "string",

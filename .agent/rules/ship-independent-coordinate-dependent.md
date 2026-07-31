@@ -18,6 +18,18 @@ promptly: origin-visible commit, addressed review comment, refreshed CI signal,
 or equivalent. The coordinated work continues in parallel under its own claim,
 review, and marshal path.
 
+## Zero value until merged (owner ruling, 2026-07-27)
+
+Owner verbatim: *"work has delivered ZERO value until it is merged to
+`main`."* Zero — not "almost none." The delivered-value ledger counts merges
+to main and nothing else: a green branch is zero, a settled draft is zero, an
+adjudicated-but-unpushed cure is zero, doctrine on a side branch is zero.
+Distance-to-merge outranks polish, breadth, and adjacent findings (route
+those). When a fleet opens PRs faster than it merges them, serialise
+open-one-merge-one — outflow first. This is the value frame the
+ship-independent discipline below operationalises: the independent item's
+impact artefact matters because unmerged work is inventory carrying cost.
+
 ## Trigger
 
 This rule fires before a commit marshal, coordinator, or implementer bundles

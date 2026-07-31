@@ -25,7 +25,13 @@ rule, base updates, sequencing within the seat's own claim, tooling choices. It 
 
 - **freeze-bound surfaces** (served surface, auth path, landing page — these take the Director
   or owner word whoever executes);
-- **merge execution** at settled (the word/key-turn topology is unchanged);
+- **merge execution** at settled follows the standing merge doctrine, not this rule's grant.
+  That doctrine (owner verbatim, 2026-07-26/29, superseding the earlier word/key-turn
+  topology this bullet once recorded): a green and clean PR — CI passing, no unresolved
+  comments — merges without owner approval, and any resulting problem makes
+  recurrence-prevention the immediate priority. Settled-state derivation and the bot-identity
+  REST-merge mechanics live in the pr-lifecycle skill; freeze-bound surfaces above stay
+  reserved regardless;
 - anything the estate's rules already reserve to the owner (credentials, destructive
   operations, doctrine ratification, milestone placement).
 

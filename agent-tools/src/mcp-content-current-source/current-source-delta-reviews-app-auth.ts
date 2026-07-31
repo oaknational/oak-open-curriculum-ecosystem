@@ -17,7 +17,7 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-351: the published PRM resource composes the shared
   // MCP_RESOURCE_PATH constant; the served document is byte-identical.
   'apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts': reviewed(
-    '94c65d04ef765c200610280fec337cd37d0bee716f1a530e7f1263a685ca8386',
+    '374e6f7c8b3b173b4a00a2d475f4f6b0aa97f5bec4aec40cadd679657dd9dddb',
     ['C705', 'C706', 'C707', 'C708'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-mcp-resource-url.ts': excluded(

@@ -16,9 +16,13 @@
  *   `asyncRoute` pattern in `oauth-proxy-routes.ts`).
  *
  * Authentication uses constant-time comparison on the
- * `X-Test-Error-Secret` header. Rate-limited via the existing
- * `oauthRateLimiter` profile (30 req / 15 min / IP) so the route
- * cannot be used as a DoS amplifier.
+ * `X-Test-Error-Secret` header. The secret gates the route's EFFECT:
+ * without it a request costs one 401 body and one warn log line — no
+ * upstream call, no Sentry capture. Operators must provision a random
+ * (high-entropy) value — the env schema enforces only the 16-char
+ * length floor, which is not itself entropy. Unauthorised request
+ * VOLUME is bounded at the edge (ADR-219), and the route cannot exist
+ * in production (the env super-refine hard-fails startup).
  *
  * Why this exists:
  *   The Phase 1 baseline probes prove the transactions stream. The
@@ -35,7 +39,7 @@
 
 import { timingSafeEqual } from 'node:crypto';
 
-import type { Express, NextFunction, Request, RequestHandler, Response } from 'express';
+import type { Express, NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import type { Logger } from '@oaknational/logger';
@@ -115,7 +119,6 @@ function constantTimeStringEqual(a: string, b: string): boolean {
 interface RegisterTestErrorRouteDeps {
   readonly app: Express;
   readonly secret: string;
-  readonly rateLimiter: RequestHandler;
   readonly observability: Pick<HttpObservability, 'captureHandledError'>;
   readonly log: Logger;
 }
@@ -194,7 +197,6 @@ function dispatchMode(
  *   registerTestErrorRoute({
  *     app,
  *     secret: env.TEST_ERROR_SECRET,
- *     rateLimiter: oauthRateLimiter,
  *     observability,
  *     log,
  *   });
@@ -202,9 +204,9 @@ function dispatchMode(
  * ```
  */
 export function registerTestErrorRoute(deps: RegisterTestErrorRouteDeps): void {
-  const { app, secret, rateLimiter, observability, log } = deps;
+  const { app, secret, observability, log } = deps;
 
-  app.post('/test-error', rateLimiter, (req: Request, res: Response, next: NextFunction): void => {
+  app.post('/test-error', (req: Request, res: Response, next: NextFunction): void => {
     const provided = req.header('x-test-error-secret') ?? '';
 
     if (!constantTimeStringEqual(provided, secret)) {
@@ -224,5 +226,5 @@ export function registerTestErrorRoute(deps: RegisterTestErrorRouteDeps): void {
     dispatchMode(inputs.mode, inputs.token, res, next, observability);
   });
 
-  log.info('test-error.route.registered', { rateLimitProfile: 'oauth' });
+  log.info('test-error.route.registered');
 }

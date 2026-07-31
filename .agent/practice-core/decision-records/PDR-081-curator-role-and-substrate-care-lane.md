@@ -6,6 +6,11 @@ pdr_kind: governance
 
 **Status**: Proposed
 **Date**: 2026-05-24
+**Dated note (2026-07-31, owner-ratified at the knowledge-estate
+sitting)**: the curator role formally stewards the concept scheme —
+minting candidates from consolidation passes, proposing promotions at
+second consumer, and maintaining the concept-maturity board (PDR-134
+§The concept layer; ADR-221 obligation 5).
 **Related**:
 [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md)
 (capture, distil, graduate, enforce);

@@ -30,7 +30,6 @@ import {
   releaseInputFromRuntimeEnv,
 } from './compose-product-analytics-runtime.js';
 import { createDeployEntryHandler } from './deploy-entry-handler.js';
-import { createDefaultRateLimiterFactory } from './rate-limiting/index.js';
 import {
   createHttpObservability,
   describeHttpObservabilityError,
@@ -144,9 +143,6 @@ async function loadConfiguredApp(): Promise<NodeRequestHandler> {
     // filesystem has no .generated/ artefact, so a runtime read is not an
     // option at this boundary — see src/app/landing-page-baked.ts.
     getLandingPageHtml: () => BAKED_LANDING_PAGE_HTML,
-    rateLimiterFactory: createDefaultRateLimiterFactory({
-      isVercelRuntime: runtimeConfig.env.VERCEL_ENV !== undefined,
-    }),
     setupSentryErrorHandler:
       runtimeConfig.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
   });

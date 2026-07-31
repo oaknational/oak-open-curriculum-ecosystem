@@ -81,6 +81,15 @@ lookups entirely). The cure is structural: bind to the built artefact,
 not to the in-progress source. Source: Claude per-user memory
 `feedback_use_built_agent_tools_only`.
 
+The built-artefact contract has a staleness dual — the **build/dist
+inversion** (three instances, late July 2026): validators, gates, and
+PreToolUse hooks that import an unbuilt or STALE dist silently misbehave or
+fail OPEN — a hook that cannot load its guard blocks nothing. Consequences:
+gate chains order the Turbo build before dist-importing checks, and **the
+primary's dist is rebuilt immediately after merging main** — main may name
+artefacts the old dist lacks, and every dist-binding surface degrades
+silently until the rebuild.
+
 ## Related Surfaces
 
 - [`agent-tools/README.md`](../../agent-tools/README.md) §Unified entrypoint —

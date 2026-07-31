@@ -33,7 +33,6 @@ import {
   releaseInputFromRuntimeEnv,
 } from '../src/compose-product-analytics-runtime.js';
 import { WIDGET_HTML_CONTENT } from '../src/generated/widget-html-content.js';
-import { createDefaultRateLimiterFactory } from '../src/rate-limiting/index.js';
 import {
   createHttpObservability,
   describeHttpObservabilityError,
@@ -203,9 +202,6 @@ async function main() {
         getLandingPageHtml: () => landingPageHtml,
         transportObserver: analytics.transportObserver,
         productAnalyticsSink: analytics.sink,
-        rateLimiterFactory: createDefaultRateLimiterFactory({
-          isVercelRuntime: runtimeConfig.env.VERCEL_ENV !== undefined,
-        }),
         setupSentryErrorHandler:
           runtimeConfig.env.SENTRY_MODE === 'off' ? undefined : setupExpressErrorHandler,
       }),

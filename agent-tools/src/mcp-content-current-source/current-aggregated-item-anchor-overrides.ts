@@ -211,8 +211,13 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
       'This service is experimental. It uses Oak National Academy content, but AI can make',
     ],
   },
+  // MCP-411: the metadataRateLimiter middleware left with the in-code
+  // limiter (ADR-219); the registration lines anchor on their handlers alone.
   C707: {
-    [AUTH_ROUTES]: ["app.get('/.well-known/oauth-protected-resource', metadataRateLimiter,"],
+    [AUTH_ROUTES]: ["app.get('/.well-known/oauth-protected-resource', servePrm);"],
+  },
+  C708: {
+    [AUTH_ROUTES]: ["app.get('/.well-known/mcp-stub-mode', (_req, res) => {"],
   },
   // MCP-351: the published PRM resource now composes the shared
   // MCP_RESOURCE_PATH constant, so it cannot diverge from the RFC 8707

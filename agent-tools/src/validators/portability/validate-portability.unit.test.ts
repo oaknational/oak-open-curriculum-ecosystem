@@ -262,6 +262,54 @@ describe('getReviewerAdapterParityIssues', () => {
       }),
     ).toStrictEqual([]);
   });
+
+  it('supports the Claude and Cursor high-judgement Cricket seat without a fake Codex adapter', () => {
+    expect(
+      getReviewerAdapterParityIssues({
+        cursorAgentFiles: [
+          '.cursor/agents/cricket-judgement-low.md',
+          '.cursor/agents/cricket-judgement-medium.md',
+          '.cursor/agents/cricket-judgement-high.md',
+          '.cursor/agents/cricket-procedure-xhigh.md',
+        ],
+        claudeAgentFiles: [
+          '.claude/agents/cricket-judgement-low.md',
+          '.claude/agents/cricket-judgement-medium.md',
+          '.claude/agents/cricket-judgement-high.md',
+          '.claude/agents/cricket-procedure-xhigh.md',
+        ],
+        codexAgentFiles: [
+          '.codex/agents/cricket-judgement-low.toml',
+          '.codex/agents/cricket-judgement-medium.toml',
+          '.codex/agents/cricket-procedure-xhigh.toml',
+        ],
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('still reports missing Codex adapters for every shared Cricket seat', () => {
+    expect(
+      getReviewerAdapterParityIssues({
+        cursorAgentFiles: ['.cursor/agents/cricket-judgement-medium.md'],
+        claudeAgentFiles: ['.claude/agents/cricket-judgement-medium.md'],
+        codexAgentFiles: [],
+      }),
+    ).toContain(
+      '.codex/agents/cricket-judgement-medium.toml: missing reviewer adapter required for cross-platform parity',
+    );
+  });
+
+  it('rejects a fake Codex adapter for the Claude and Cursor only Cricket seat', () => {
+    expect(
+      getReviewerAdapterParityIssues({
+        cursorAgentFiles: ['.cursor/agents/cricket-judgement-high.md'],
+        claudeAgentFiles: ['.claude/agents/cricket-judgement-high.md'],
+        codexAgentFiles: ['.codex/agents/cricket-judgement-high.toml'],
+      }),
+    ).toContain(
+      '.codex/agents/cricket-judgement-high.toml: reviewer adapter is unsupported on codex by the shared platform contract',
+    );
+  });
 });
 
 describe('getRulesIndexPortabilityIssues', () => {

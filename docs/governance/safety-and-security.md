@@ -1,3 +1,7 @@
+---
+last_reviewed: 2026-07-30
+---
+
 # Safety and Security
 
 ## Overview
@@ -8,7 +12,7 @@ The Oak MCP Servers are designed with security and privacy as core principles. T
 
 1. **Principle of Least Privilege**: Read-only access by default
 2. **Defence in Depth**: Multiple layers of security controls
-3. **Privacy by Design**: Automatic PII protection
+3. **Privacy by Design**: PII protection at the ADR-160 redaction barrier
 4. **Fail Secure**: Safe defaults when errors occur
 5. **No Trust Assumptions**: Validate all inputs
 
@@ -165,40 +169,39 @@ Errors are classified and handled appropriately:
 
 The HTTP MCP server operates behind multiple defence layers. Each layer
 catches threats the others miss. No single layer is sufficient alone.
-The two edge-protection layers (Cloudflare in front of Vercel) are the
-authoritative volumetric defence; application-layer controls are
-deliberately probabilistic defence-in-depth.
+The edge-protection layers (Cloudflare in front of Vercel) are the
+authoritative volumetric defence and the only layer that counts traffic;
+application-layer controls are authentication, authorisation, and input
+validation.
 
 ### Layer Stack
 
-| Layer                        | Protection                                                                                                                                                                                                                                            | Failure Mode                                                               |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| **DNS**                      | DNS rebinding guard rejects requests with unrecognised `Host` headers. Applied selectively (landing page); MCP routes use OAuth instead.                                                                                                              | Bypassed if attacker controls DNS for an allowed host                      |
-| **Cloudflare (outer edge)**  | CDN/WAF in front of Vercel: volumetric DDoS, bot management, edge rate-limit rules, TLS termination, geo-restrictions                                                                                                                                 | Bypassed by direct-origin access or low-rate attacks below edge thresholds |
-| **Vercel (inner edge)**      | Vercel platform DDoS protection, edge functions, regional routing                                                                                                                                                                                     | Bypassed by direct-origin access or low-rate attacks below edge thresholds |
-| **Application — auth**       | OAuth 2.1 via Clerk (`mcpAuth` middleware), CORS, security headers (CSP, HSTS, X-Frame-Options)                                                                                                                                                       | Bypassed if OAuth token compromised or auth disabled                       |
-| **Application — rate limit** | Per-IP rate limiting on MCP, OAuth, and asset routes (`express-rate-limit`). Probabilistic on Vercel serverless (per-instance in-memory store). See [ADR-158](../architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md). | Distributed attacks across IPs; counter reset on cold start                |
-| **Upstream API**             | Oak API per-key rate limiting and quota management                                                                                                                                                                                                    | Exhaustible via amplification from our server                              |
+| Layer                       | Protection                                                                                                                               | Failure Mode                                                                                               |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **DNS**                     | DNS rebinding guard rejects requests with unrecognised `Host` headers. Applied selectively (landing page); MCP routes use OAuth instead. | Bypassed if attacker controls DNS for an allowed host                                                      |
+| **Cloudflare (outer edge)** | CDN/WAF in front of Vercel: volumetric DDoS, bot management, edge rate-limit rules, TLS termination, geo-restrictions                    | Bypassed by direct-origin access or low-rate attacks below edge thresholds                                 |
+| **Vercel (inner edge)**     | Vercel platform DDoS protection, edge functions, regional routing                                                                        | Bypassed by direct-origin access or low-rate attacks below edge thresholds                                 |
+| **Application — auth**      | OAuth 2.1 via Clerk (`mcpAuth` middleware), CORS, security headers (CSP, HSTS, X-Frame-Options)                                          | Bypassed if OAuth token compromised or auth disabled                                                       |
+| **Upstream API**            | Oak API per-key rate limiting; this service's key is exempt as an internal consumer                                                      | Not a quota ceiling for this service — amplification is bounded by upstream capacity, not by per-key quota |
 
 **Read-only blast radius.** All MCP tools exposed by this server are
 read-only — there is no state-mutation surface. A successful bypass at
-any layer cannot corrupt data; the worst-case impact is exhaustion of
-upstream Oak API per-key quota or Vercel compute budget. This shapes
-proportionality across the controls below: the application-layer rate
-limiter protects quota and compute budget, not data integrity.
+any layer cannot corrupt data; the worst case is upstream load and Vercel
+compute spend. This shapes proportionality across the controls below: the
+volumetric controls that bound that load live at the edge, where traffic
+can actually be counted (see
+[ADR-219](../architecture/architectural-decisions/219-rate-limiting-is-an-edge-concern.md)).
 
 ### Trust Boundaries
 
 - **Client → CDN**: untrusted; CDN applies edge protection
-- **CDN → app origin**: semi-trusted. Rate-limit key extraction is
-  runtime-aware: on Vercel the limiter reads `x-vercel-forwarded-for`
-  (Vercel-edge-written); on non-Vercel runtimes it falls back to
-  `req.ip` (and the operator's local proxy chain must be configured for
-  that fallback to be correct). `x-vercel-forwarded-for` is **never**
-  trusted on non-Vercel runtimes — any client could spoof it. See
-  [ADR-158 §Runtime-Aware Key Extraction](../architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md#runtime-aware-key-extraction)
-  for the load-bearing platform assumptions and configuration-drift
-  tripwires.
+- **CDN → app origin**: semi-trusted. The origin does not derive client
+  identity from forwarded-for headers: on this deployment they resolve to
+  Cloudflare egress addresses, not to clients, so they are treated as
+  diagnostic context only and never as a security or accounting key.
+  Client identity at the application layer comes from the OAuth token,
+  not from the network address (see
+  [ADR-219](../architecture/architectural-decisions/219-rate-limiting-is-an-edge-concern.md)).
 - **App → upstream API**: authenticated via `OAK_API_KEY`; our server is
   the trust principal, not the end user
 - **Iframe sandbox → host**: MCP Apps SDK widget runs in a sandboxed
@@ -229,20 +232,26 @@ rule.
 
 ### Amplification Vectors
 
-Two patterns allow a single inbound request to produce upstream load:
+One pattern allows a single inbound request to produce upstream load; a
+second pattern, once thought to, does not:
 
-1. **OAuth authorise redirect**: `GET /oauth/authorize` produces a 302 to
-   Clerk's authorisation server. Each hit creates a pending session at
-   Clerk, consuming per-application quota. The attacker needs no auth —
-   the redirect is public.
+1. **OAuth authorise redirect — zero amplification**: `GET /oauth/authorize`
+   builds a 302 redirect URL and makes no upstream call. Clerk load is
+   created only by a client choosing to follow the redirect, which an
+   abuser has no incentive to do.
 
 2. **HMAC-signed asset replay**: Asset download URLs are HMAC-signed with
    a 5-minute TTL but no single-use constraint. Within the window, a
-   valid URL can be replayed to generate unlimited upstream Oak API
-   requests, all authenticated with the server's `OAK_API_KEY`.
+   valid URL can be replayed to re-read one already-authorised asset
+   through the server's `OAK_API_KEY`.
 
-Both are mitigated by application-layer rate limiting (see
-[ADR-158](../architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md)).
+The replay vector is bounded at the edge, where request volume per source
+can actually be counted; it is not bounded in the application, which
+cannot count per client on this deployment (see
+[ADR-219](../architecture/architectural-decisions/219-rate-limiting-is-an-edge-concern.md)).
+Its upstream cost is bounded by upstream capacity rather than a per-key
+quota, because this service's Oak API key is exempt from per-key rate
+limiting as an internal consumer.
 
 ## Network Security
 
@@ -294,10 +303,65 @@ Both are mitigated by application-layer rate limiting (see
 
 ### GDPR/Privacy
 
-- PII automatically scrubbed
-- No data persistence
-- No tracking or analytics
-- User data not stored
+The production MCP service processes personal data, and says so plainly.
+Three processors receive application-level personal data, each behind a
+defined boundary:
+
+- **Clerk** — authentication and user management (OAuth 2.1, see
+  [ADR-052](../architecture/architectural-decisions/052-oauth-2.1-for-mcp-http-authentication.md)).
+  Account data lives in Clerk, in the fields its configured sign-in
+  journey collects; this document does not restate that field list.
+  The verified Clerk principal is the service's identity source. The
+  raw Clerk identifier does not reach PostHog: analytics attribution
+  uses a derived pseudonym (below).
+- **PostHog** — product analytics, EU-hosted (`eu.i.posthog.com`), live
+  in production. Capture is bounded by
+  [ADR-218](../architecture/architectural-decisions/218-posthog-mcp-analytics-identity-session-and-privacy.md)'s
+  closed, content-free event allowlist; §3 of that ADR is the ceiling
+  and this section does not restate it. In outline: MCP interaction
+  facts (an event identifier, capability names, timings, outcome
+  categories, protocol/client/environment/release categories),
+  attributed to a keyed actor pseudonym derived from the Clerk
+  principal. Content never enters — tool arguments and responses, free
+  text, names, emails, tokens, headers, cookies, IP addresses and
+  GeoIP are excluded by construction, as are browser autocapture,
+  session replay and fingerprinting. The pseudonym is pseudonymised
+  personal data, not anonymous data: it carries transparency, access,
+  retention and erasure duties. ADR-218 §5 commits this processing to
+  a maximum 12-month retention period across PostHog and every
+  authorised copy, and to a tested person-scoped deletion route. Both
+  are commitments whose operational proof is outstanding — ADR-218's
+  maturity note states that acceptance does not assert retention,
+  access controls, or the deletion route are live — and MCP-173 tracks
+  that evidence.
+- **Sentry** — error tracking and diagnostics, behind
+  [ADR-160](../architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md)'s
+  non-bypassable redaction barrier (see §Privacy Protection above).
+  Diagnostic events carry the opaque Clerk user identifier on the
+  per-request scope, so Sentry holds a direct authentication
+  identifier where PostHog holds only a destination-scoped pseudonym.
+  No stable person identifier is therefore shared between the two.
+  Whether that identifier may flow to any further sink remains the
+  open redaction-policy question recorded in ADR-160's history.
+
+Infrastructure and upstream recipients sit alongside those three: the
+Cloudflare and Vercel layers named in §Multi-Layer Security
+Architecture see client network data at the edge, and the Oak
+Curriculum API and the Elasticsearch search backend receive request
+content in order to answer each call. This section names them so the
+recipient list is not read as closed at three; their boundaries are
+not restated here.
+
+Request content — tool arguments, including free-text search terms — is
+processed to serve each request and is not written to any Oak analytics
+or product data store. It reaches the Oak Curriculum API and the search
+backend that answer the call, and it never enters the analytics
+envelope. Conversations are not observed or stored: ADR-218 keeps
+PostHog's conversation mechanism disabled.
+
+PII scrubbing applies at the ADR-160 redaction barrier, with the proven
+coverage and the recorded gap both described in §Privacy Protection
+above.
 
 ## Security Incident Response
 

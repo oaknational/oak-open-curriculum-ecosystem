@@ -146,6 +146,16 @@ Slipping Night session of 2026-05-22 — three action-moment owner
 interventions, zero reasoning-moment interventions, across one full
 substantive cycle (t12-citation-shape) plus the session handoff.
 
+## Blocking asks are ALWAYS cards (owner verbatim, seventh escalation)
+
+Any request that BLOCKS on owner input is delivered as a visible card
+(AskUserQuestion), never as prose the owner must notice. The mechanical
+tell: any "holding for your word" line WITHOUT a live card is the failure —
+a question alive only in prose is invisible at the moment it matters. This
+was the owner's SEVENTH escalation of the same defect before it was
+promoted here from buffer memory (2026-07-31); treat prose-blocking as a
+zero-tolerance shape.
+
 ## Cross-references
 
 - Composes with [`present-verdicts-not-menus.md`](present-verdicts-not-menus.md)

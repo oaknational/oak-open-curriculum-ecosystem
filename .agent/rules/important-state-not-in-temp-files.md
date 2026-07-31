@@ -214,6 +214,14 @@ permanent homes). The per-pass log's frontmatter pointer updates to
 the durable home — or the pointer is removed entirely once substance
 is distributed.
 
+The same custody hazard applies to UNTRACKED files inside the repo:
+durable-tier artefacts (formation letters, succession and permanent
+records) reported as "committed" while actually untracked on disk are one
+prune from loss. After writing any permanent record, run
+`git status --short <path>` — commit status is verified transport, never a
+safety classification to assert from memory (recurring instance class,
+July 2026).
+
 ## Related
 
 - `.agent/directives/principles.md` §"No machine-local paths".

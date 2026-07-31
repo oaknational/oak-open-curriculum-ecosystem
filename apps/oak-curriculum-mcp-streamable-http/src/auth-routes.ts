@@ -15,31 +15,21 @@ import { MCP_RESOURCE_PATH } from './served-origin.js';
 
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true).
- * Rate limiting is still applied — abuse is possible even without auth.
- *
- * Both `/mcp` registrations attach the injected `mcpRateLimiter` as the
- * first middleware. The limiter is constructed in
- * `rate-limiting/create-rate-limiters.ts` from the `MCP_RATE_LIMIT`
- * profile (120 req/min/IP) and reaches this function via DI per
- * ADR-078. CodeQL's `js/missing-rate-limiting` static analysis cannot
- * trace the limiter through the `RequestHandler`-typed parameter (it
- * looks structurally identical to any other middleware); dismissals of
- * its alerts on these registrations cite this attestation.
- *
- * @param mcpRateLimiter - Per-IP limiter; see create-rate-limiters.ts.
+ * Volumetric abuse control is owned at the Cloudflare/Vercel edge
+ * (ADR-219); `js/missing-rate-limiting` findings on these registrations
+ * are dispositioned against that ADR.
  */
 function registerUnauthenticatedRoutes(
   app: Express,
   mcpFactory: McpServerFactory,
   log: Logger,
   observability: HttpObservability,
-  mcpRateLimiter: RequestHandler,
 ): void {
   log.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
   log.debug('Registering POST /mcp route (auth disabled)');
-  app.post('/mcp', mcpRateLimiter, createMcpHandler(mcpFactory, observability, log));
+  app.post('/mcp', createMcpHandler(mcpFactory, observability, log));
   log.debug('Registering GET /mcp route (auth disabled)');
-  app.get('/mcp', mcpRateLimiter, createMcpHandler(mcpFactory, observability, log));
+  app.get('/mcp', createMcpHandler(mcpFactory, observability, log));
 }
 
 /**
@@ -51,25 +41,13 @@ function registerUnauthenticatedRoutes(
  * (`/.well-known/oauth-protected-resource/mcp`) per RFC 9728 Section 3.1.
  * Both serve identical responses.
  *
- * Each registered route attaches the injected `metadataRateLimiter`
- * before its handler. The limiter is constructed in
- * `rate-limiting/create-rate-limiters.ts` from the
- * `METADATA_RATE_LIMIT` profile (60 req/min/IP, OAuth error shape) —
- * not the OAuth-flow `OAUTH_RATE_LIMIT` profile, because protocol
- * discovery and OAuth flow are semantically distinct traffic
- * categories. Closes CodeQL `js/missing-rate-limiting` alert #5.
- *
- * **Convention for new `/.well-known/*` routes**: any new metadata
- * route registered in this function MUST receive `metadataRateLimiter`
- * as its first middleware, otherwise CodeQL will (correctly) flag the
- * registration as missing rate limiting.
+ * Every handler here is a Host-allowlist check followed by an in-memory
+ * JSON render — no upstream call. Volumetric control is owned at the
+ * edge (ADR-219).
  *
  * @param upstreamMetadata - Upstream AS metadata, fetched from Clerk and
  *   injected by the caller. Endpoint URLs are rewritten per-request to
  *   point to this server's origin; capability fields are passed through.
- * @param metadataRateLimiter - Per-IP rate-limiter for OAuth metadata
- *   discovery routes. Constructed from `METADATA_RATE_LIMIT`; injected
- *   via the same DI chain as `oauthRateLimiter` (ADR-078).
  */
 export function registerPublicOAuthMetadataEndpoints(
   app: Express,
@@ -77,7 +55,6 @@ export function registerPublicOAuthMetadataEndpoints(
   upstreamMetadata: UpstreamAuthServerMetadata,
   log: Logger,
   allowedHosts: readonly string[],
-  metadataRateLimiter: RequestHandler,
   canonicalOrigin?: string,
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
@@ -101,10 +78,10 @@ export function registerPublicOAuthMetadataEndpoints(
     });
   };
 
-  app.get('/.well-known/oauth-protected-resource', metadataRateLimiter, servePrm);
-  app.get('/.well-known/oauth-protected-resource/mcp', metadataRateLimiter, servePrm);
+  app.get('/.well-known/oauth-protected-resource', servePrm);
+  app.get('/.well-known/oauth-protected-resource/mcp', servePrm);
 
-  app.get('/.well-known/oauth-authorization-server', metadataRateLimiter, (req, res) => {
+  app.get('/.well-known/oauth-authorization-server', (req, res) => {
     const originResult = deriveSelfOrigin(req, allowedHosts, canonicalOrigin);
     if (!originResult.ok) {
       const msg = hostValidationErrorMessage(originResult.error);
@@ -116,7 +93,7 @@ export function registerPublicOAuthMetadataEndpoints(
   });
 
   if (runtimeConfig.useStubTools) {
-    app.get('/.well-known/mcp-stub-mode', metadataRateLimiter, (_req, res) => {
+    app.get('/.well-known/mcp-stub-mode', (_req, res) => {
       res.json({ stubMode: true });
     });
   }
@@ -124,18 +101,10 @@ export function registerPublicOAuthMetadataEndpoints(
 
 /**
  * Registers /mcp routes with HTTP-level auth (HTTP 401 for unauthenticated).
- * Both `/mcp` registrations attach the injected `mcpRateLimiter` as the
- * first middleware (before `mcpRouter` and `createMcpHandler`). The
- * limiter is constructed in `rate-limiting/create-rate-limiters.ts`
- * from the `MCP_RATE_LIMIT` profile and reaches this function via DI
- * per ADR-078. Closes — at the source-of-truth level — the architectural
- * concern CodeQL alerts #70 (line 113) and #71 (line 115) raise: the
- * static analyser cannot trace the limiter through the
- * `RequestHandler`-typed parameter, but the wiring is in fact present
- * and tested via `rate-limiter-di.integration.test.ts`. Dismissals of
- * those alerts cite this attestation.
+ * Volumetric control is owned at the edge (ADR-219);
+ * `js/missing-rate-limiting` findings on these registrations are
+ * dispositioned against that ADR.
  *
- * @param mcpRateLimiter - Per-IP limiter; see create-rate-limiters.ts.
  * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
  */
 function registerAuthenticatedRoutes(deps: {
@@ -144,20 +113,19 @@ function registerAuthenticatedRoutes(deps: {
   readonly log: Logger;
   readonly allowedHosts: readonly string[];
   readonly observability: HttpObservability;
-  readonly mcpRateLimiter: RequestHandler;
   readonly mcpAuthClerkDeps?: CreateMcpAuthClerkDeps;
   readonly canonicalOrigin?: string;
 }): void {
-  const { app, mcpFactory, log, allowedHosts, observability, mcpRateLimiter } = deps;
+  const { app, mcpFactory, log, allowedHosts, observability } = deps;
   const { mcpAuthClerkDeps, canonicalOrigin } = deps;
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'mcp-auth' }) : log;
   const mcpRouter = createMcpRouter({
     auth: createMcpAuthClerk(authLog, allowedHosts, mcpAuthClerkDeps, canonicalOrigin),
   });
   log.debug('Registering POST /mcp route (HTTP-level auth via mcpRouter)');
-  app.post('/mcp', mcpRateLimiter, mcpRouter, createMcpHandler(mcpFactory, observability, log));
+  app.post('/mcp', mcpRouter, createMcpHandler(mcpFactory, observability, log));
   log.debug('Registering GET /mcp route (HTTP-level auth via mcpRouter)');
-  app.get('/mcp', mcpRateLimiter, mcpRouter, createMcpHandler(mcpFactory, observability, log));
+  app.get('/mcp', mcpRouter, createMcpHandler(mcpFactory, observability, log));
 }
 
 /**
@@ -176,7 +144,6 @@ export interface SetupAuthRoutesOptions {
   readonly allowedHosts: readonly string[];
   readonly canonicalOrigin?: string;
   readonly observability: HttpObservability;
-  readonly mcpRateLimiter: RequestHandler;
   readonly mcpAuthClerkDeps?: CreateMcpAuthClerkDeps;
 }
 
@@ -193,14 +160,13 @@ export function setupAuthRoutes(options: SetupAuthRoutesOptions): void {
     allowedHosts,
     canonicalOrigin,
     observability,
-    mcpRateLimiter,
     mcpAuthClerkDeps,
   } = options;
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
 
   if (runtimeConfig.dangerouslyDisableAuth) {
     measureAuthSetupStep(authLog, 'auth.disabled.register', () => {
-      registerUnauthenticatedRoutes(app, mcpFactory, authLog, observability, mcpRateLimiter);
+      registerUnauthenticatedRoutes(app, mcpFactory, authLog, observability);
     });
     return;
   }
@@ -216,7 +182,6 @@ export function setupAuthRoutes(options: SetupAuthRoutesOptions): void {
       log: authLog,
       allowedHosts,
       observability,
-      mcpRateLimiter,
       mcpAuthClerkDeps,
       canonicalOrigin,
     });

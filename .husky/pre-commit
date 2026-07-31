@@ -50,8 +50,25 @@ echo "🧪 Running build, type-check, lint, and unit tests..."
 # absent or empty read defaults to failure.
 mkdir -p .turbo
 : > .turbo/last-gate.status
+# git exports repo-discovery env to hooks: GIT_DIR (in a linked worktree it
+# points at .git/worktrees/<name>) and GIT_INDEX_FILE — which during a real
+# commit is a TRANSIENT LOCK FILE (index.lock; next-index-<pid>.lock for
+# --only commits) that git renames or deletes as the commit completes. A
+# build tool's children must not inherit repo-discovery env pointing at
+# another process's transient state: turbo 2.10.6 died on GIT_DIR here
+# ("I/O error: Is a directory", os error 21 — intermittent and state-
+# dependent; dated account on MCP-414), and any turbo-spawned child reading
+# the inherited GIT_INDEX_FILE races the commit's lock-file lifecycle.
+# Unset the trio for the turbo child ONLY — turbo re-derives the repo from
+# cwd, correct in every checkout shape. The narrow scope is LOAD-BEARING:
+# the staged-file gates above (prettier-staged, markdownlint-staged) read
+# the exported GIT_INDEX_FILE to see the staged set, so hoisting this
+# unset to the top of the hook would empty their file lists and fail open.
+# GIT_WORK_TREE rides along: set without GIT_DIR it would break discovery.
+# No gate is narrowed: the same tasks run in the same order.
 {
-  pnpm turbo run --continue --output-logs=errors-only build type-check lint test \
+  env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE \
+    pnpm turbo run --continue --output-logs=errors-only build type-check lint test \
     && echo 0 > .turbo/last-gate.status \
     || echo 1 > .turbo/last-gate.status
 } 2>&1 | tee .turbo/last-gate.log

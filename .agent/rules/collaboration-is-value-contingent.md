@@ -53,6 +53,16 @@ current context. No consumer means no value; do not do it.
   is present.
 - An owner direction to "minimise ceremony" trims the ceremony surface
   (repetitive low-value emission), never the awareness monitors.
+- **Self-limits are gated on asking, never silent** (owner instruction,
+  standing, 2026-07-28 — verbatim: *"that quota was for a specific situation
+  and no longer applies, please do not silently limit yourself, always
+  ask"*). Doing less than the stated scope — narrower, fewer, partial,
+  deferred — is surfaced as a QUESTION before narrowing, never inferred from
+  a cost observation. A cost constraint arrives as an owner ruling in the
+  owner's words; a napkin entry or peer observation about cost is never one
+  (founding instance: a seat stood down its watcher and heartbeat on an
+  inferred "monitoring cost" ruling that was situational, one account, one
+  hour).
 - Re-evaluate when context changes — the classification is contingent and
   self-healing, not a one-time switch.
 - If a mechanism does not fit one category cleanly — a claim, say, is both

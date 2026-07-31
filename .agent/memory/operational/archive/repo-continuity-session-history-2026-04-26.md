@@ -324,8 +324,8 @@ Expected next session (observability branch-primary), per owner direction:
 These are visible owner-appetite items, not blockers for
 `observability-sentry-otel`:
 
-1. `prog-frame/agentic-engineering-practice.md` disposition —
-   recorded in [`research/notes/README.md`](../../research/notes/README.md).
+1. The personal holding-bay item's disposition —
+   recorded in the research-notes bay README (bay since retired).
 2. `platform-adapter-formats.md` promotion proposal under PDR-032 —
    recorded in `.agent/reference/README.md` and the archived
    reference/notes rehoming plan.

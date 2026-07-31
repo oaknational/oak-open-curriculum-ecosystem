@@ -12,6 +12,7 @@
       "displayName": "Oak Open Curriculum",
       "source": "./plugins/oak-open-curriculum",
       "description": "Navigate, check, and review teaching against Oak National Academy's live curriculum graph: prerequisite and national-curriculum coverage checks, documented pupil misconceptions, sequencing audits, and quality reviews against Oak's standards — grounded in real Oak data.",
+      "license": "MIT (code — see LICENCE). Curriculum content from the Oak Open Curriculum API: Open Government Licence v3.0 — see LICENCE-DATA.md for upstream terms. Oak branding is not MIT-licensed — see BRANDING.md and https://support.thenational.academy/using-the-oak-brand",
       "keywords": ["education", "curriculum", "national-curriculum", "oak", "teaching"]
     }
   ]

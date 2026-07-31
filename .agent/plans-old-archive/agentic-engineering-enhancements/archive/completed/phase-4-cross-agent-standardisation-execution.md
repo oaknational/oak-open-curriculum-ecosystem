@@ -66,7 +66,7 @@ todos:
   - required canonical docs updated or explicitly marked no-change with rationale
   - consolidation review completed using `jc-consolidate-docs`
 - Deterministic validation:
-  - `rg -n "## Phase 4|Status:|ADR-119 update or rationale|practice.md update or rationale|prog-frame update or rationale|Consolidation review" .agent/plans/agentic-engineering-enhancements/documentation-sync-log.md`
+  - `rg -n "## Phase 4|Status:|ADR-119 update or rationale|practice.md update or rationale|personal-item update or rationale|Consolidation review" .agent/plans/agentic-engineering-enhancements/documentation-sync-log.md`
   - `test -f docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
   - `test -f .agent/practice-core/practice.md`
 

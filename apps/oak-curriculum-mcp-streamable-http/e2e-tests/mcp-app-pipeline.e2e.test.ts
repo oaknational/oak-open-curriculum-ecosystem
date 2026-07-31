@@ -16,7 +16,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import request from 'supertest';
+import { request } from '../src/test-helpers/loopback-request.js';
 import { z } from 'zod';
 import {
   createStubbedHttpApp,

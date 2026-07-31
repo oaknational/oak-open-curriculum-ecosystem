@@ -31,8 +31,6 @@ interface RunOAuthAndAuthContextDeps {
   readonly appId: number;
   readonly allowedHosts: readonly string[];
   readonly canonicalOrigin?: string;
-  readonly oauthRateLimiter: RequestHandler;
-  readonly metadataRateLimiter: RequestHandler;
 }
 
 /**
@@ -57,8 +55,6 @@ export async function runOAuthAndAuthContextPhases(
     deps.allowedHosts,
     deps.observability,
     deps.upstreamMetadata,
-    deps.oauthRateLimiter,
-    deps.metadataRateLimiter,
     deps.canonicalOrigin,
   );
 

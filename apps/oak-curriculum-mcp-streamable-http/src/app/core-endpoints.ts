@@ -7,9 +7,8 @@
  * bootstrap.
  *
  * @see ADR-112 for the per-request MCP transport pattern.
- * @see ADR-158 for the asset rate limiter parameter.
  */
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
@@ -87,7 +86,6 @@ export function initializeCoreEndpoints(
   app: Express,
   options: CoreEndpointOptions,
   log: Logger,
-  assetRateLimiter: RequestHandler,
 ): { mcpFactory: McpServerFactory } {
   const { runtimeConfig, observability, transportObserver, productAnalyticsSink } = options;
   const searchRetrieval = runtimeConfig.useStubTools
@@ -105,7 +103,6 @@ export function initializeCoreEndpoints(
     log,
     runtimeConfig.env.OAK_API_BASE_URL ?? 'https://open-api.thenational.academy/api/v0',
     observability,
-    assetRateLimiter,
   );
 
   const handlerOptions = {

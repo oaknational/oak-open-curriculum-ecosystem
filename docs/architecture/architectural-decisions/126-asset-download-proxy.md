@@ -98,10 +98,10 @@ The `/assets/download/` route **bypasses Clerk middleware** — the HMAC signatu
 
 ### Accepted Risks
 
-1. **No app-level rate limiting**: Cloudflare and Vercel provide network-level DDoS protection and bot mitigation. An authenticated user with valid OAuth tokens could theoretically generate many download URLs. This is acceptable because:
-   - The Oak API has its own rate limiting
+1. **No app-level rate limiting** (governing decision: [ADR-219](219-rate-limiting-is-an-edge-concern.md)): Cloudflare and Vercel provide network-level DDoS protection and bot mitigation. An authenticated user with valid OAuth tokens could theoretically generate many download URLs. This is acceptable because:
+   - The upstream cost is bounded by upstream capacity, not a per-key quota — this service's Oak API key is exempt from per-key rate limiting as an internal consumer
    - Assets are educational content, not sensitive data
-   - Adding app-level rate limiting adds complexity disproportionate to the risk
+   - Adding app-level rate limiting adds complexity disproportionate to the risk (and on this deployment an in-process counter cannot count per client)
 
 2. **Signing secret not independently rotatable**: The signing secret is derived from `OAK_API_KEY`. Rotating the API key rotates the signing secret, which invalidates all outstanding download URLs (acceptable given the 5-minute TTL). If independent rotation is needed in future, add an `ASSET_DOWNLOAD_SIGNING_SECRET` env var.
 

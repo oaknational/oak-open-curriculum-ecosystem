@@ -11,7 +11,6 @@ import {
   operationalErrorReporter,
   releaseInputFromRuntimeEnv,
 } from './compose-product-analytics-runtime.js';
-import { createDefaultRateLimiterFactory } from './rate-limiting/index.js';
 import {
   createHttpObservability,
   describeHttpObservabilityError,
@@ -73,9 +72,6 @@ await startConfiguredHttpServer({
       getLandingPageHtml: () => LANDING_PAGE_HTML,
       transportObserver: analytics.transportObserver,
       productAnalyticsSink: analytics.sink,
-      rateLimiterFactory: createDefaultRateLimiterFactory({
-        isVercelRuntime: config.env.VERCEL_ENV !== undefined,
-      }),
       setupSentryErrorHandler:
         config.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
     }),

@@ -120,7 +120,7 @@ describe('comms use cases', () => {
     expect(event).not.toHaveProperty('tags');
   });
 
-  it('builds a reply by reading source messages and swapping sender and recipient', () => {
+  it('builds a reply swapping sender and recipient, threaded to its source by construction', () => {
     const source = createDirectedCommsMessage({
       eventId: 'message-one',
       createdAt: '2026-05-13T09:46:00Z',
@@ -150,6 +150,10 @@ describe('comms use cases', () => {
         to: senderWrite,
         subject: 're: Please check this',
         body: 'Looks good.',
+        // A reply names its source to resolve it, so the threading edge is
+        // carried by construction — the reply verb cannot produce an
+        // unthreaded acknowledgement.
+        inResponseTo: 'message-one',
       }),
     );
   });

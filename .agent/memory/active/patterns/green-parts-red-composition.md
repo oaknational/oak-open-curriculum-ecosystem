@@ -42,6 +42,13 @@ silent and surfaces far from its cause. Three instances in one day
   drifted. Every deploy riding the cache stayed green; the first PR to
   invalidate the core chain failed its Vercel check on code nobody
   wrote (MCP-130).
+- **Token × token (fourth instance, late July 2026, design domain)**: every
+  design token passed its individual contrast/focus check; the COMPOSED
+  focus ring — token layered on token — failed accessibility. The class is
+  not pipeline-specific: any domain where per-part checks exist and the
+  behaviour lives in the composition qualifies. (This instance's surfaces
+  are values, not derive-chains, so the refinement-watch split below does
+  not fire on it.)
 
 The connecting property: each part's health check answers "is this part
 working?"; no surface answers "is the chain working?". Green parts are

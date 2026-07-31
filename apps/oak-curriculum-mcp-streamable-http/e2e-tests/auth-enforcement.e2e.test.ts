@@ -39,13 +39,12 @@
 
 import { describe, it, expect } from 'vitest';
 import type { Express } from 'express';
-import request from 'supertest';
+import { request } from '../src/test-helpers/loopback-request.js';
 import { createApp } from '../src/application.js';
 import {
   createMockObservability,
   createMockRuntimeConfig,
   createNoOpClerkMiddleware,
-  createNoOpRateLimiterFactory,
   createUnauthenticatedMcpAuthClerkDeps,
 } from './helpers/test-config.js';
 import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
@@ -146,7 +145,6 @@ async function createAuthApp(): Promise<Express> {
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
     mcpAuthClerkDeps: createUnauthenticatedMcpAuthClerkDeps(),
-    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 }
 

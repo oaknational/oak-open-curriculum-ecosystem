@@ -496,6 +496,8 @@ describe('collaboration-state comms integration', () => {
         to: senderWithId,
         subject: 're: Please check this',
         body: 'Looks good.',
+        // Replies thread to their source by construction (MCP-393).
+        in_response_to: 'message-one',
       }),
     );
   });

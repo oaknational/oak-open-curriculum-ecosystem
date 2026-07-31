@@ -439,6 +439,57 @@ const config = defineConfigArray(
       'no-restricted-properties': 'off',
     },
   },
+  {
+    // MCP-403: test HTTP servers must own the exact loopback address test
+    // clients dial. Bare supertest boots host-less servers on `::` while
+    // its client dials 127.0.0.1, so a foreign v4 listener on the same
+    // ephemeral port silently receives the request under concurrent-graph
+    // load. The loopback-request helper is the sanctioned entry point; a
+    // host-less listen in a test is the same vulnerable shape spelled by
+    // hand. The helper itself is not a test file, so these rules never
+    // apply to it — no exemption needed.
+    //
+    // Flat-config rule values REPLACE rather than merge, so this block
+    // re-carries the shared testRules values for both rules — dropping
+    // them here would silently disable the ADR-078 hermetic-test bans
+    // for the app's whole test surface.
+    //
+    // The listen selector flags any `.listen(...)` whose second argument
+    // is not a literal: it catches listen(), listen(0), listen(0, cb),
+    // and listen(0, undefined) — every shape that falls through to the
+    // host-less `::` bind. Known conservative residuals: an explicit
+    // listen(0, '::') passes (deliberate, not the silent default); an
+    // options-object listen({ port, host }) is flagged even when
+    // host-ful (esquery cannot discriminate — use the positional form);
+    // a destructured bare `listen` and a dynamic import of supertest are
+    // unreachable by these rules.
+    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            ...testRules['no-restricted-imports'][1].patterns,
+            {
+              group: ['supertest', 'supertest/*'],
+              message:
+                'Bare supertest boots host-less (`::`) servers whose ports foreign v4 listeners can share (MCP-403). Import { request } from the loopback-request test helper instead.',
+            },
+          ],
+        },
+      ],
+      'no-restricted-syntax': [
+        'error',
+        ...testRules['no-restricted-syntax'].slice(1),
+        {
+          selector:
+            'CallExpression[callee.property.name="listen"]:not([arguments.1.type="Literal"])',
+          message:
+            'A listen(...) without a literal host in a test binds `::` while test clients dial 127.0.0.1 (MCP-403). Pass an explicit host — listen(port, "127.0.0.1") or listen(port, "127.0.0.1", callback) — or use the loopback-request helper.',
+        },
+      ],
+    },
+  },
 );
 
 export default config;

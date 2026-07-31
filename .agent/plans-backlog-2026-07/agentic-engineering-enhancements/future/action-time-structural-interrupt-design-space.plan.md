@@ -154,6 +154,30 @@ location-independent root gate scripts); relabel-heartbeat-at-lane-transition
 (slips exactly when heads-down — cure candidate: relabel IS part of the
 task-start move, the same one-action fusion as adopt+arm-heartbeat).
 
+**Recurrence-evidence ledger routed from the 2026-07-30 dedicated consolidation**
+(the week 2026-07-24→30, the heaviest recorded fleet traffic; PDR-098 traction
+evidence): the piped-exit-code class recurred 15+ times across 8+ seats
+DESPITE its rule, per-user memory, and same-day peer captures — including by
+seats WHILE holding or quoting the rule; a hook guard for its literal surface
+signature is now ticketed (MCP-358) and `verify-dont-trust` names it a PDR-044
+innate-hook candidate. Three RETRIEVABILITY findings sharpen the design brief,
+each naming why passive homes miss the action moment: (a) incident-indexed
+rules are unreachable at CONSTRUCTION time — when writing a new predicate
+against a new signal, nothing in the reaching-space says "this is a proxy"
+(patterns/referent-narrowing §Why-incident-rules-did-not-stop-it; a ninth
+incident rule deepens the problem); (b) a rule whose enforcement TOOL has a
+narrower name than the rule's trigger gets mentally indexed under the tool's
+case — three seats posted under the owner's credential in one hour, none
+ignorant of the bot-identity rule, all filing it as a "merge rule" after its
+`merge-bot` tool; (c) prose corrections converge only when their firing
+condition becomes an OBSERVABLE (the card discipline converged at its sixth
+escalation, when "blocked-on-owner without a live card" became the tell —
+2026-07-28 exploration, routed via new-rule-vs-pdr-clause). Calibration for
+the mechanism choice: the same corpus shows passive capture DOES buy
+recognition speed (bites got cheaper and self-caught over the week —
+patterns/passive-guidance §value-model) — the gap the mechanism must close is
+prevention at flow moments, not awareness.
+
 ## The Reconciliation (the distinct value)
 
 The register item demands reconciliation with metacognition and immune-system

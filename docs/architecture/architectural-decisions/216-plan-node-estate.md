@@ -86,6 +86,13 @@ would formalise, so the corpus stays graph-ready without carrying the
 graph substrate now. When the idea-graph lands, plan nodes become node
 types over it; nothing in this ADR forecloses that.
 
+**Dated note (2026-07-31)**: the deferred authority question is now
+settled by [ADR-221](221-estate-knowledge-graph.md) (owner-ratified):
+authored files are authoritative, the graph is a derived
+per-home-recomputable index, and the idea layer lands as the concept
+scheme rather than a graph-authoritative store. This estate's
+graph-ready frontmatter is exactly the connection ADR-221 builds on.
+
 ## Lane vocabulary (dated note, 2026-07-24)
 
 "Lane" here originally read as a synonym for a delivery plan. The owner-

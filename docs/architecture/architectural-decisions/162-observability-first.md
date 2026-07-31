@@ -224,10 +224,10 @@ any future vendor-boundary enforcement work in this ADR (graduated
 | Product       | What is used, by whom, how (tool-call outcomes, search queries, curriculum usage) | `observability-events-workspace.plan.md` + `search-observability.plan.md`                     |
 | Usability     | Did the user succeed (session outcomes, feedback, abandonment)                    | `sentry-observability-maximisation-mcp.plan.md` (L-9, L-12) + widget-session-outcome emission |
 | Accessibility | Preferences, frustration proxies, incomplete-flow correlation                     | `accessibility-observability.plan.md`                                                         |
-| Security      | Trust-boundary events (auth failure, rate-limit triggered)                        | `security-observability.plan.md`                                                              |
+| Security      | Trust-boundary events (auth failure)                                              | `security-observability.plan.md`                                                              |
 
 Transport / bot / DDoS observability is explicitly **Cloudflare's**
-layer, not this application's (cross-reference: [ADR-158](158-multi-layer-security-and-rate-limiting.md)).
+layer, not this application's (cross-reference: [ADR-219](219-rate-limiting-is-an-edge-concern.md)).
 
 ## Supersession
 

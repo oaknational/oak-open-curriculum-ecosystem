@@ -1,0 +1,1939 @@
+{
+  "coverage": "322/322",
+  "unverifiedByFleet": [],
+  "unverifiedNote": "batch04 failed twice in the wide fleet; its 18 candidates were re-verified by a focused run of 3 opus/high agents at 6 candidates each (owner-directed narrow-and-high-power shape), 3/3 clean.",
+  "results": [
+    {
+      "id": "M01",
+      "verdict": "no-home-found",
+      "path": ".agent/memory/operational/frictions-register.md#F-93; .agent/reference/shell-and-tooling-gotchas.md",
+      "evidence": "F-93 verifies the 1500-char --body limit + body-file overflow guidance; shell-and-tooling-gotchas.md verifies the backtick/body-file quoting hazard. But the drain-timeout=600s, identity-tuple-mismatch send rejection, heartbeat-bypass, and 'comms direct needs full recipient tuple' facts were not found anywhere in the corpus \u2014 the compound claim is only partially homed."
+    },
+    {
+      "id": "M02",
+      "verdict": "home-verified",
+      "path": ".agent/rules/exit-codes-in-band-never-piped.md",
+      "evidence": "Rule states verbatim mechanism: 'A pipeline's exit status is the LAST stage's... cmd; rc=$?; echo EXIT:$rc' and covers comms send/git push/wrapped task false-green cases exactly as claimed."
+    },
+    {
+      "id": "M03",
+      "verdict": "home-verified",
+      "path": ".agent/rules/bot-identity-on-third-party-systems.md",
+      "evidence": "Rule states owner ruling verbatim, mandates minted installation token, worktree-scoped git config, and names the fallback ban plus multiple worked PR instances of ambient-credential authorship."
+    },
+    {
+      "id": "M04",
+      "verdict": "home-verified",
+      "path": ".agent/rules/use-monitor-for-event-driven-wake.md",
+      "evidence": "Covers Monitor as the only wake primitive, background/detached shells deliver no notifications, PDR-133 'a green on the delivery path is evidence about nothing above it' (drain-cursor\u2260delivery), supervisor-pid crash-orphan handling, and mandatory foreground gap sweep after re-arm."
+    },
+    {
+      "id": "M05",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Documents 'Copilot REST review-request 201s WITHOUT registering' twice (Schooner + reproduction on #614), naming the working alternate path 'GitHub MCP request_copilot_review tool... inside the owner grant' and a later entry 'bot token cannot request Copilot (MCP request_copilot_review works)'."
+    },
+    {
+      "id": "M06",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "Lines ~356-372: 'step-back trigger is... two consecutive non-decreasing transitions', settled-round tally precedence, and 'second step-back firing on the same PR is terminal for fix-pushing'."
+    },
+    {
+      "id": "M07",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "docs/engineering/merge-bot.md and pr-lifecycle SKILL-CANONICAL.md cover BLOCKED/mergeStateStatus mechanics and the merge-bot's lack of bypass generally, but the specific claim (bot's bypass covers ONLY code-owner review and is honoured at the REST layer, requiring PUT /pulls/{n}/merge over the CLI) was not found anywhere in the corpus and appears to conflict with merge-bot.md's stated design (bot deliberately has NO bypass). Best candidate home: docs/engineering/merge-bot.md."
+    },
+    {
+      "id": "M08",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "Lines ~515 and ~571 cover the never-created-check invisibility, MERGEABLE state reads, and 'BOTH /commits/{sha}/check-runs AND /commits/{sha}/status' requirement matching the claim."
+    },
+    {
+      "id": "M09",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/frictions-register.md#F-116",
+      "evidence": "F-116 entry: 'commit-queue guard rejects the commit-window claim when its area-pattern is spelled git:index/head'... 'a claim opened with --area-pattern \"git:index/head\"... fails' \u2014 matches the claim exactly (MCP-186 not independently confirmable but the mechanism is homed)."
+    },
+    {
+      "id": "M10",
+      "verdict": "no-home-found",
+      "path": ".agent/memory/operational/frictions-register.md#F-83",
+      "evidence": "F-83 verifies the whole-tree pre-commit/pre-push gate hostage-to-peers-WIP mechanism, but the specific 600s-timeout / 120s-default-kills-mid-suite / worktree-push cure detail was not found in F-83, worktree-hygiene.md, or docs/engineering/build-system.md."
+    },
+    {
+      "id": "M12",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Entry 'a green PR silently reverted a landed security clause' documents PR #614, ADR-126, the MCP-321 clause nearly deleted by a stale whole-file capture, verified via git merge-base diff \u2014 matches the claim's #614/MCP-321 detail exactly; pre-merge-divergence-analysis.md rule exists but does not itself carry this worked instance."
+    },
+    {
+      "id": "M13",
+      "verdict": "home-verified",
+      "path": ".agent/sub-agents/templates/cricket-judgement.md",
+      "evidence": "Template requires CRITICAL-PATH OWNER as a named mandatory input, provenance 'ruling EVENT ID \u2014 never a bare timestamp', 'every verification conclusion carries a one-line method', citing cricket-two-pair-tally-2026-07-26.md for the false-DRIFTING frame-grounding failure this all cures."
+    },
+    {
+      "id": "M14",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "No file matching 'git status --short after writing a permanent record', 'custody hazard', or an untracked-files-first-class rule was found in the repo (that memory appears to be user-side only). Live corroborating evidence: the session's own .agent/experience/2026-07-30-plover-hunts-sundog-formation-letter.md sits untracked ('??') in git status right now, matching the exact hazard described. Suggested home: a new clause in .agent/rules/important-state-not-in-temp-files.md or a dedicated rule."
+    },
+    {
+      "id": "M15",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/test-helpers/loopback-request.ts",
+      "evidence": "Header comment: 'Loopback-pinned supertest entry point (MCP-403)... a host-less listen(0) binds the IPv6 any-address (::)... supertest's client dials 127.0.0.1... observed live as HPE_INVALID_CONSTANT from a non-HTTP Java listener' \u2014 the exact root cause and cure (bind 127.0.0.1 explicitly), also mirrored in vitest.e2e.config.base.ts comment."
+    },
+    {
+      "id": "M16",
+      "verdict": "home-verified",
+      "path": ".agent/rules/liveness-heartbeat-cron.md",
+      "evidence": "Covers 'autonomous-emitter generator' (suspended harness keeps heartbeating), F-92 comms-only-loop leaving registry heartbeat_at stale, the 'knife-edge' false-negative flicker section, and 'derive liveness from... work-evidence cross-check' plus claims-heartbeat bump-per-claim discipline."
+    },
+    {
+      "id": "M17",
+      "verdict": "home-verified",
+      "path": ".agent/reports/mcp-agent-facing-content-audit/report.md",
+      "evidence": "Report header explicitly frames itself as 'Historical audit baseline plus generated current-source projection', names MCP-103 phase (a)/(c) delta-refresh, '44 baseline rows are explicitly retired', and states current-source re-extraction is the ongoing discipline \u2014 matching the claim's substance directly."
+    },
+    {
+      "id": "M18",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched .agent/hooks/README.md, ADR corpus, and broad greps for 'depcruise'+'knip:gate' ordering, extensionless-ESM dist breakage, and the post-merge dist-rebuild requirement; no single file was found carrying this compound claim. Best candidate home: .agent/hooks/README.md or a new ADR amendment near ADR-121 (docs/architecture/architectural-decisions/121-quality-gate-surfaces.md)."
+    },
+    {
+      "id": "M19",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": ".agent/memory/operational/director-handoff.md confirms 'MCP-192 secrets-environment finding MINTED' and 'PR #572 (MCP-192 mint-scope, settled-shaped: 17/17 green)' \u2014 this is a Linear ticket + PR reference that cannot be verified as a durable knowledge-home from the filesystem alone."
+    },
+    {
+      "id": "M20",
+      "verdict": "home-verified",
+      "path": ".agent/rules/verify-dont-trust.md",
+      "evidence": "\u00a7'Claims Crossing Boundaries Carry Their Derivation': 'The moment a claim is about to be consumed by another context... the crossing pays: re-derive from the source and name the deriving command/ref/time in the same sentence as the claim' with the three gating questions incl. 'When did I last read this state?'"
+    },
+    {
+      "id": "A01",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-system/colors_and_type.css",
+      "evidence": "Lines 349, 374-376: --state-selected (color-mix on --color-accent) and --surface-decorative-5 both defined as the named cures; --bg-selected also present at line 343."
+    },
+    {
+      "id": "A02",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-system/oak-theme.js + demos/oak-design-showcase/tools/kit-asset-parity.unit.test.ts + demos/oak-curriculum-hub/app/oak-theme-parity.test.ts",
+      "evidence": "oak-theme.js lines 5-7 comment: 'This comment must never contain a literal closing-script sequence: the file is documented for INLINE embedding, and the HTML parser ends an inline script element at the first such sequence regardless of JS context.' Byte-parity tests exist in both consuming demos (kit-asset-parity.unit.test.ts, oak-theme-parity.test.ts) confirming the tracked public/ copy + parity-test cure."
+    },
+    {
+      "id": "A03",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "components.css lines 1090-1114 shows the reduced-motion @media block still applying unconditionally (transition-duration: var(--motion-instant)) without scoping around [data-motion='full'], consistent with the claimed unfixed contradiction, but no KNOWN-ISSUES entry, DECISIONS.md note, or ticket/batch name ('ws-design-sync-corrections', 'motion-cascade-authority') was found anywhere in the repo. Best candidate home: packages/design/oak-design-system/KNOWN-ISSUES.md (new numbered entry)."
+    },
+    {
+      "id": "A04",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-system/KNOWN-ISSUES.md",
+      "evidence": "Item 12 (RESOLVED 2026-07-20): 'Roboto Mono now ships as the local variable font... Its licence is SIL OFL 1.1 \u2014 this entry's earlier \"Apache-2.0\" note was stale... the verbatim notice + OFL text ship beside the font (fonts/RobotoMono-OFL.txt)...'; fonts/RobotoMono-OFL.txt confirmed present on disk."
+    },
+    {
+      "id": "A05",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-system/studio-source/iteration-pull-preservation-2026-07-23/PRE-INTEGRATION-AUDIT.md + KNOWN-ISSUES.md #13",
+      "evidence": "PRE-INTEGRATION-AUDIT.md lists exactly: (1) SC1.4.10 reflow at 320px masthead nav 603px scroll, (2) dark-theme tab focus ring 1.33:1 invisible, (3) colour-safe theme unreachable from UI (select omits it). KNOWN-ISSUES #13 covers the fourth point, dark-lemon link contrast at 4.48:1."
+    },
+    {
+      "id": "A06",
+      "verdict": "home-missing-substance",
+      "path": ".agent/memory/active/patterns/green-parts-red-composition.md",
+      "evidence": "File documents only 3 of the claimed 4 instances (ruleset\u00d7semantic-release, Vercel ignore-script\u00d7version bump, turbo-cache\u00d7live-API codegen/MCP-130). The fourth instance \u2014 token-level composed focus ring passing individually but failing composed \u2014 is absent from this pattern file, though it is referenced as 'fourth instance of the green-parts-red-composition pattern, now in token space' in PRE-INTEGRATION-AUDIT.md line 28, which the pattern file itself does not cite or fold in."
+    },
+    {
+      "id": "A07",
+      "verdict": "home-verified",
+      "path": "docs/governance/design-token-practice.md",
+      "evidence": "Lines 133-146: 'Never express elevation or interaction-state light in absolute colours inside the themed system (owner-ratified, 2026-07-25, EMC2 button-states arc)... the first EMC2 calibration was perfect in dark, washed out in light, and produced a magenta shadow with unanchored motion in high-contrast... physics (translate/scale) may be universal, but \"lighter on hover\" is theme-spoken.'"
+    },
+    {
+      "id": "A08",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-system/assets/",
+      "evidence": "Canonical assets/ dir now contains only logo-full-black.svg, logo-acorn-black.svg, logo-wide-black.svg \u2014 the -official duplicate filenames are absent from the live tracked tree (they persist only in historical studio-source/original-capture-2026-07-23 snapshot and external scratch dirs), consistent with the claimed dedup-and-delete."
+    },
+    {
+      "id": "A09",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/verify-obligations-not-just-presence.md",
+      "evidence": "Full worked instance present: 'Round 1: I grepped googleapis/Roboto to prove doc-consistency... The real defect was the consuming guides' Lexend-only deletion instructions'; 'Round 2: I recorded \"SIL OFL 1.1\" consistently... OFL 1.1 condition 2 requires the copyright notice + licence text to ship beside every redistributed copy \u2014 neither font... shipped it.'"
+    },
+    {
+      "id": "A10",
+      "verdict": "home-verified",
+      "path": ".agent/practice-core/decision-records/PDR-129-diagnosis-reads-whole-surfaces-catalogues-are-open-sets.md",
+      "evidence": "PDR-129 file confirmed present at named path (open-set/closed-world diagnosis doctrine); the specific 2026-07-20 experience file name in the claim was not found verbatim but the PDR is the substantive landed home."
+    },
+    {
+      "id": "A12",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "Lines ~453-535 define the settled-round predicate: 'no review bound to the tip after one full checks-green quiet window', 'reviewer leg reads SATISFIED or SKIPPED for the current tip AND a quiet window', and 'In a coordinated drive, the settled-round predicate binds GRANTS... a full quiet window since the latest tip-bound review, checks green'."
+    },
+    {
+      "id": "A13",
+      "verdict": "home-verified",
+      "path": ".agent/practice-core/decision-records/PDR-131-merge-concurrency-is-free-quality-binds-at-settled-ready.md",
+      "evidence": "'Concurrent auto-merge... the same eleven settled+green PRs landed in ~6 minutes. Outcome: main green, Sonar quality gate green on all four conditions, releases shipping, every Phase-8 post-merge harvest clean, zero breakage.' Status: Accepted (owner-ratified 2026-07-20)."
+    },
+    {
+      "id": "A14",
+      "verdict": "home-verified",
+      "path": ".agent/reports/agentic-engineering/pr-throughput-register.md",
+      "evidence": "Row: '2026-07-20 | 7d | 67 | 9.57 | 135 | 802 | founding window: incl. 2026-07-20 net-to-zero drive...' matches the claimed founding-row figures exactly; register file confirmed present and tracked (also mirrored in stale worktrees, canonical copy at this path)."
+    },
+    {
+      "id": "A15",
+      "verdict": "home-verified",
+      "path": ".agent/practice-core/decision-records/PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md",
+      "evidence": "File present at named path on main, titled 'changeset health: round budgets bind at authoring time', confirming the PDR-132 commission claim."
+    },
+    {
+      "id": "A16",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/204-merge-gate-strategy-require-up-to-date-not-merge-queue.md",
+      "evidence": "'CodeQL (default setup) does not run on the merge_group event and cannot report in a queue... github/codeql-action#1537 has been open since 2023-02-11'; 'SonarCloud automatic analysis (GitHub App) analyses on PR-create and PR-push and is not documented or observed to post its status against a merge_group ref'; decision: 'Do not use a merge queue.'"
+    },
+    {
+      "id": "A17",
+      "verdict": "home-verified",
+      "path": ".agent/practice-core/decision-records/PDR-131-merge-concurrency-is-free-quality-binds-at-settled-ready.md",
+      "evidence": "Decision item 6: 'Rule-removal disarms first: armed merge intents survive queue/rule removal and fire silently \u2014 captured as a failure-mode on the comms stream... Before removing any queue or protection rule, disarm every armed intent.' Also documented as the natural-experiment source in the same PDR's Context section (eleven settled+green PRs cascade-merged on merge-queue-rule removal)."
+    },
+    {
+      "id": "A18",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-23.md",
+      "evidence": "'Mechanism 2 (structure): ruleset 13402577 lists OrganizationAdmin bypass always \u2014 the shared admin credential NEVER had required checks evaluated; plain flagless merges bypass silently'; also 'AIP-158 (the merge bot, self-proof landing: mergedBy=app/jimbot-oakington-iii) \u2192 MAIN GREEN' and docs/engineering/merge-bot.md's standing rule 'never add the app to the ruleset's bypass actors \u2014 a bypass-capable bot is the disease this design cures.'"
+    },
+    {
+      "id": "A19",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/read-verdicts-by-name-never-column-parse.md",
+      "evidence": "Per-user memory file (not a repo-tracked rule, despite the .md rule-style homeClaim) carries the exact worked instance: \"gh pr checks 437 | awk '{print $2}' rendered 'SonarCloud Code Analysis fail' as the fragment '1 Code'... PR #437 merged behind a red Sonar gate\"; names AIP-157 D1 (pr-state tool) as the durable code home, matching the homeClaim's ticket reference."
+    },
+    {
+      "id": "A20",
+      "verdict": "home-verified",
+      "path": "docs/engineering/merge-bot.md",
+      "evidence": "Doc states verbatim standing rules: \"`--admin` is always banned; direct `--merge` is banned; land work by arming auto-merge at a settled review... or by merging as the merge bot\"; pr-lifecycle SKILL-CANONICAL.md line 792 adds \"prefer a merge commit (--merge), never squash\". All named elements (admin ban, direct-merge ban, merge-commit-only, arm-allowed, bot REST path) present."
+    },
+    {
+      "id": "A21",
+      "verdict": "home-verified",
+      "path": "docs/engineering/merge-bot.md",
+      "evidence": ".github/merge-bot.json: {\"appSlug\":\"jimbot-oakington-iii\",\"appId\":\"4352989\"}; merge-bot.md documents the pull-request-work scope (pull_requests:write, contents:write, workflows:write), the `token=$(pnpm --silent agent-tools merge-bot mint-token --scope pull-request-work)` mutation form, and explains workflows:write is needed only for `gh pr update-branch` writing the merge commit onto the head branch (matches 'head-branch workflow-file writes only, not base-branch merge commits')."
+    },
+    {
+      "id": "A22",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "docs/engineering/merge-bot.md documents only the correct mint-token form; no mention of the tsx/pnpm-silent false-green entry points or the missing direct-run bootstrap. frictions-register.md has no mint-token entry either. Best candidate home: docs/engineering/merge-bot.md (add a 'known bad invocations' note) or .agent/memory/operational/frictions-register.md as a new F-entry."
+    },
+    {
+      "id": "A25",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 429-437: \"Ruleset `13402577` binds our bot in full (bypass is `[2995796]`, the semantic-release app, NOT us)... `19474916` (Copilot review) has an EMPTY bypass list... No approving review is required.\" Matches claim's ruleset ID, bypass semantics, and zero-required-approvals. Corroborated by per-user memory file merge-rulings-no-admin-no-direct-merge-arm-allowed.md."
+    },
+    {
+      "id": "A26",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "napkin-2026-07-30.md lines 376-378 records the exact scenario (#568's ADR-218 finding fixed in README.md but anchored to the ADR file, 'GitHub can never mark it outdated'), but this is an ephemeral running log, not a permanent doc. Grepped pr-lifecycle SKILL-CANONICAL.md for 'outdated'/'never auto-outdate'/anchor-mismatch language: no matches. Best candidate home: .agent/skills/pr-lifecycle/SKILL-CANONICAL.md Phase 6 harvest/resolve section."
+    },
+    {
+      "id": "A28",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Substance is well corroborated across napkin-2026-07-30.md (lines 2472-2476, 3076-3080, 3196-3199, 3420-3424, 3708-3712 \u2014 'Suppressed-low-confidence review notes still earn triage, not dismissal'; '8 of 11 here were real defects') but only in the ephemeral napkin log. pr-lifecycle SKILL-CANONICAL.md has no 'suppressed'/'low-confidence' language beyond an unrelated line 206. No permanent-doc home found; candidate: .agent/skills/pr-lifecycle/SKILL-CANONICAL.md full-surface-harvest section (Phase 3)."
+    },
+    {
+      "id": "A29",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "Lines 408-424: \"a multi-story PR whose reviewers re-review the whole diff on every push cannot reach the zero-new-findings exit... #529 ran 14\u219219 unresolved across nine push-per-cure pushes, three rounds, no convergence... Batching one adjudicated round per push cures only the re-trigger half.\" Matches the claimed mechanism and PR #529 worked instance (numeric detail 14\u219219 vs claim's 14\u219215\u219219 is a close paraphrase of the same instance)."
+    },
+    {
+      "id": "A30",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "Lines 408-424 (owner-ratified 2026-07-25, #529): \"Classify every finding: CLASS F \u2014 the PR would LAND a false statement \u2192 cure in the PR... CLASS P \u2014 true and valuable, but about how the named work is EXECUTED later \u2192 reply naming the owning ticket... 'later' with no home is ignoring, not dispositioning.\" Matches Class F/Class P naming and the real-ticket requirement exactly."
+    },
+    {
+      "id": "A31",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped pr-lifecycle SKILL-CANONICAL.md and .agent/memory/active/napkin.md for 'born-sketch', 'round 4', 'falsehood-cures', 'Convergence-cap': the SKILL-CANONICAL round-budget/step-back-trigger machinery (lines 355-407) is a distinct, more general PDR-132-owned mechanism (predicate on settled-round counts, not specifically 'born-sketch plan PRs' or 'round 4' cap). napkin.md's only 'sketch' hit (line 96) is an unrelated P2-engine context. No home carries this specific ruling; candidate: .agent/skills/pr-lifecycle/SKILL-CANONICAL.md convergence-discipline section, alongside the existing step-back-trigger text."
+    },
+    {
+      "id": "A32",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "Lines 618-630: \"The sweep's third leg is review-RUN liveness: `gh agent-task list` enumerates review runs... `gh agent-task view <session-id> --json` maps a run to its PR... a wait on a review whose run never started is the silent-wait class, not patience.\" Lines 433-452 area covers SKIPPED-vs-SATISFIED reviewer-leg states estate-wide."
+    },
+    {
+      "id": "A33",
+      "verdict": "home-verified",
+      "path": "docs/engineering/build-system.md",
+      "evidence": "\u00a7'Dependency updates' (line 54 on): \"npm dependencies are updated by agent-run sweeps, not by Dependabot. `.github/dependabot.yml` covers github-actions only... Dependabot vulnerability alerts stay on \u2014 they are a repo setting.\" Confirms the manual-sweep model, npm-entry removal, and alerts-left-on. The specific PR #430/#525 closure detail is not itself in this doc (worked-instance evidence, not required for the core substance)."
+    },
+    {
+      "id": "A34",
+      "verdict": "home-verified",
+      "path": ".agent/rules/lockfile-rebuild-survivability.md",
+      "evidence": "\"Owner rule, verbatim (2026-07-25): 'all updates and overrides must be able to survive having the lockfile fully deleted and rebuilt.'... An override left lagging behind the manifests it governs desyncs the lockfile... failing with ERR_PNPM_OUTDATED_LOCKFILE.\" Matches claim exactly."
+    },
+    {
+      "id": "A35",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/frictions-register.md",
+      "evidence": "Line 3417 'F-150 \u2014 turbo run lint returns a cached green that never ran the new linter': \"after the bump, `pnpm exec turbo run lint` reported FULL TURBO, 47/47 cached, exit 0... The lint task's cache key does not account for the resolved version of the plugins.\" Matches claim verbatim (note: register has a duplicate F-150 numbering collision with the unrelated ignore-scripts entry at line 3359, pre-existing defect not introduced by this verification)."
+    },
+    {
+      "id": "A36",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/frictions-register.md",
+      "evidence": "Line 3438 'F-151 \u2014 the major-version guard blocks prose...': \"prevent-accidental-major-version uppercases the whole commit message and substring-matches BREAKING CHANGES... The guard's own error text then advises... which its matcher makes impossible.\" Matches claim verbatim, including the candidate cure (anchor on the footer line)."
+    },
+    {
+      "id": "A37",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/frictions-register.md",
+      "evidence": "Disp was needs-home but an existing home was found: line 3359 'F-150 \u2014 pnpm install --ignore-scripts in a fresh worktree silently disarms ALL git hooks': \"skips the husky prepare lifecycle script, so .husky/_ is never materialised... git then SILENTLY SKIPS EVERY HOOK: pre-commit and pre-push ran as no-ops (push exit 0, fully ungated)\"; candidate cure explicitly proposes \"verify `.husky/_` exists before trusting any gate\". Matches claim verbatim; the reducer missed this existing entry."
+    },
+    {
+      "id": "A39",
+      "verdict": "home-verified",
+      "path": "agent-tools/src/validators/markdown-links/validate-markdown-links.ts",
+      "evidence": "Code defines SOURCE_IGNORE_GLOBS (line 62) including '.pnpm-store/**' (line 58, commented 'gitignored, machine-local... never live sources') and '.agent/state/collaboration/handoffs/**' (line 74, commented 'Handoff and succession records are frozen point-in-time captures... link integrity is not a property frozen records can or should hold'). Confirms the validator's own-glob-list mechanism ignoring .gitignore; the specific '215 broken links' and 'PR 521' worked-instance numbers and the 'use code spans' authoring convention were not independently located, but the core mechanism substance is verified in code."
+    },
+    {
+      "id": "A40",
+      "verdict": "home-verified",
+      "path": ".agent/rules/hook-policy-substring-discipline.md",
+      "evidence": "\"The repo's PreToolUse hook policy is a substring-matcher. It blocks literal forbidden-pattern strings regardless of the surrounding natural-language context... 'do not use X' and 'use X' trip the same filter\"; 'What to Do When the Hook Blocks You': 'Do not try to bypass... Rewrite using descriptive language.' Matches claim's mechanism and sanctioned response exactly, including argv-position anchoring as a named refinement candidate."
+    },
+    {
+      "id": "A60",
+      "verdict": "home-verified",
+      "path": "~/.claude/projects/<project-slug>/memory/all-tickets-mcp-team-only.md and linear-mcp-team-and-project-hygiene.md",
+      "evidence": "Both files carry the substance verbatim: 'ALL of our tickets MUST be MCP- tickets, NEVER AIP- tickets' with the audit note 'AIP team fully enumerated (137 tickets), zero ours remaining' \u2014 matches the 39-tickets-migrated/audit claim in substance (project name differs slightly: 'MCP App: First Major Release' vs the candidate's 'Live Vision, Strategy, and Planning Estate' project, a naming drift but the core doctrine matches)."
+    },
+    {
+      "id": "A62",
+      "verdict": "home-verified",
+      "path": "~/.claude/projects/<project-slug>/memory/priority-means-importance-never-speed.md",
+      "evidence": "'priority means important, it does not mean fast, in fact fast is likely to reduce quality' verbatim, with 'praise attaches to the care, never the clock' \u2014 matches claim substance exactly."
+    },
+    {
+      "id": "A63",
+      "verdict": "no-home-found",
+      "path": "docs/architecture/architectural-decisions/217-server-rendered-html-in-the-mcp-app.md",
+      "evidence": "ADR-217 exists and does state 'these pages do not hydrate' (\u00a71) as a design decision, but the file contains no discussion of a contradiction with a standing 'Full-React requirement', no record of surviving four reviewer passes, and no note of being cited back to the owner as authority. No corpus-governance findings record with this critique was found anywhere in the repo (only the source JSON candidate files reference it). Best candidate home: a new/amended entry in ADR-217's Revision-history section, or a governance-findings report."
+    },
+    {
+      "id": "A64",
+      "verdict": "home-verified",
+      "path": ".agent/practice-core/decision-records/PDR-094-coordination-event-rotation-is-class-tiered-archive-not-delete.md",
+      "evidence": "Revision history v3/v4 sections match exactly: 'v3 corrected... absorption-gated deletion... per-event disposition ledger retired'; v4 'restores archive-move with the anti-hedge clause' and quotes owner verbatim 'I am happy for events to be archived, in order to ENABLE future mining, but not as a mechanism for hedging'; also references comms-archive restoration and MCP-185-style watermark language via Invariant 2's pass-watermark eligibility."
+    },
+    {
+      "id": "A65",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "PDR-094 (read in full) resolves the archive/delete question definitively for coordination-event rotation generally but does not carry an open-questions section specifically asking whether absorb-then-delete extends to the tracked .agent/state/collaboration/archive/ decision-provenance store (316K). No such open-question section or owner sitting agenda entry was found anywhere in the repo. Best candidate home: a new '## Open questions' subsection in PDR-094 or a dedicated line in repo-continuity.md's open-decisions list."
+    },
+    {
+      "id": "A66",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/patterns/description-is-not-a-check.md",
+      "evidence": "Frontmatter 'proven_in' field lists exactly the four instances: '\"system gap\" comments naming gaps that do not exist; an endpoint described as request-derived that resolves once at startup; ADR-217 asserting fonts need no CSP allowance; a handoff record assigning the Google Fonts allowance to the wrong component; a commit message describing an OLDER copy as a \"refinement\"...' plus the tenure-error-signature cross-reference ('Independently named the same evening as a second seat's tenure error signature')."
+    },
+    {
+      "id": "A68",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped .agent/memory/operational/collaboration-state-conventions.md (the claims lifecycle doc) and the wider .agent tree for 'immutable'/'closes the claim and opens a new one' framing; the conventions doc describes active-claims.json as a mutable registry ('Mutate through the collaboration-state transaction helper; remove claims after durable close') rather than the immutable-provenance framing the candidate states. No matching doctrine record found. Best candidate home: .agent/memory/operational/collaboration-state-conventions.md (claims lifecycle table) or a new PDR on claim-record provenance."
+    },
+    {
+      "id": "A69",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/frictions-register.md (F-89, F-104) and .agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "napkin-2026-07-30.md line ~2514: 'path relative to the INVOKING tree: `claims open` from a linked worktree reads as comms-blind even when the primary's watcher is live \u2014 open commit-window claims from the primary' matches the cwd/worktree hazard exactly; F-89 confirms 'claims open fails with missing required option --now'; F-104 and the coordination-home-cli-path-defaulting.plan.md ws3 item name the cure ('make assert-watcher-live and the claims-open F-95 backstop resolve the same exact-display-name heartbeat under the PRIMARY coordination home')."
+    },
+    {
+      "id": "A74",
+      "verdict": "home-verified",
+      "path": "~/.claude/projects/<project-slug>/memory/fork-identity-is-external-keep-parent-by-default.md",
+      "evidence": "Matches substance closely: 'introspection cannot resolve it... self-model says \"Director\" with total confidence... What settles it is external: the claims registry, ps output... a fork's first act' and the keep-parent protected-by-default clause. PDR-064 exists at .agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md as the related doctrine record (not independently re-verified for this specific fork-hazard content, but the memory file alone fully carries the claimed substance)."
+    },
+    {
+      "id": "A75",
+      "verdict": "home-verified",
+      "path": "~/.claude/projects/<project-slug>/memory/probe-the-deployment-before-planning.md",
+      "evidence": "Matches exactly: 'the Clerk promotion plan and its owner Card 1 asked domain/staging questions while the live alpha deployment already answered them... TWO expert reviewer rounds shared the blind spot, and so did my own Director post-landing read' \u2014 three verifiers + Director all named."
+    },
+    {
+      "id": "A76",
+      "verdict": "home-verified",
+      "path": ".agent/directives/orientation.md",
+      "evidence": "The Layers table and Routing Rule establish '.agent/plans/ (V0 corpus)' as scope/sequencing authority #1, and separately states Doctrine (ADRs/PDRs) sits above for governance claims. The specific phrase 'point-in-time evidence goes in PR bodies and ticket comments' was not found verbatim in this file (searched directives tree, no match), so that clause of the claim is unconfirmed, but the repo-vs-Linear/plans-are-authority core substance is present and correct."
+    },
+    {
+      "id": "A77",
+      "verdict": "home-verified",
+      "path": ".design-sync/estate.json and .design-sync/NOTES.md",
+      "evidence": "NOTES.md: 'Estate reconciliation at EVERY ordinary sync... DesignSync list_files, match every remote path against the declaration, and DELETE every unmatched file' and 'MCP-160 curation delete set = 44 unmatched + 3 glob-orphans = 47' \u2014 exact match to the claimed 44\u219247 delete set and MCP-160 mechanism."
+    },
+    {
+      "id": "A78",
+      "verdict": "home-missing-substance",
+      "path": ".design-sync/NOTES.md",
+      "evidence": "Confirmed: projectId targeting the ORIGINAL Claude Design project 314dd517 ('the owner-ruled go-forward studio'); CLAUDE.md under ownerMaintained, owner-executed in studio UI; bulk-delete 'required project-owner login (editor rights suffice for writes only)'. NOT found anywhere in .design-sync/: the '256KiB DesignSync get_file cap / unfetchable files becoming ledger rows' detail \u2014 grepped the whole .design-sync tree and repo, no match. Three of four claimed facts are verified in this home; the file-size-cap fact is missing."
+    },
+    {
+      "id": "A79",
+      "verdict": "home-verified",
+      "path": ".agent/reports/agentic-engineering/consolidation-retrospective-2026-07-20.md",
+      "evidence": "'days of graduation latency for fast-lane lessons, paid in recurrences' and 'PDR-063's owner-absent deadline-and-default machinery exists for retirement authority but nothing equivalent exists for routing contracts' and 'A Director processing gap serialises every seat's owner-facing contract' \u2014 matches the headline and the routing-contract/serialising-gap claims. The three specific fast-lane clause names (same-close graduation, consolidate-until-done staged-base recompute, route-blocks one-ping-after-one-cadence) were not found as exact phrases in the section read, but the surrounding proposal content matches the retrospective's shape."
+    },
+    {
+      "id": "A80",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped the full repo for 'tmp/plan-retrue-mcp150', 'tmp/copilot-cli-practice', 'tmp/first-class-copilot', 'tmp/mcp-151-security' \u2014 zero matches anywhere (only the source candidate JSON files reference this list, not shown in results since search was repo-wide excluding those). No worktree-hygiene disposition queue or owner cleanup card names these specific worktrees. Best candidate home: .agent/rules/worktree-hygiene.md (an appended disposition-queue section) or .agent/memory/operational/repo-continuity.md."
+    },
+    {
+      "id": "A83",
+      "verdict": "home-verified",
+      "path": "~/.claude/projects/<project-slug>/memory/first-major-release-standing-rulings.md",
+      "evidence": "Sensitivity-tier section (T0/T1/T2) matches the release-sensitivity-rules claim in substance: release-timing rationale is T0/T1 (never public repo), vendor-relationship existence/intentions is T1 ('never in the public repo'). The exact phrases 'no release dates of any kind' / 'schema-mandated expires: dates stay but prose... removed' were not found verbatim, but the governing sensitivity-split doctrine this claim compresses is present and correctly attributed."
+    },
+    {
+      "id": "A84",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched director-handoff.md and napkin-2026-07-30.md for 'Wednesday 30 July' submission framing with MCP-106; found only a superseded 2026-07-27 entry citing 'Submission moved to Friday 31 July' and per first-major-release-standing-rulings.md the deadline was later moved again to 'Thursday 2026-08-06' with Matt Gregory having the conn \u2014 the specific dated V1-submission-framing claim (Wed 30 July, Tue 29 EOD freeze) as stated does not appear as a durable record in any repo file; it is superseded owner-word visible only via the source corpus. Best candidate home: .agent/memory/operational/director-handoff.md dated block or a milestone record in .agent/plans/strategic/first-major-release.plan.md."
+    },
+    {
+      "id": "A85",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped repo-wide for 'drifted away', 'lost in detail', 'protected research floor', 'Claude-Design work completes' \u2014 no matches outside the source comms-corpus JSON files. .agent/plans/strategic/first-major-release.plan.md does not contain this re-aim framing. No Director routing map or milestone record carries this owner-word. Best candidate home: .agent/memory/operational/director-handoff.md or .agent/plans/strategic/first-major-release.plan.md (a dated 'owner re-aim' section)."
+    },
+    {
+      "id": "A86",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/open-prs-merged-closed-or-owned.md",
+      "evidence": "Memory carries Jim's verbatim ruling: 'zero includes drafts... dispositioned is not dealt with, if they have an owner then fine, otherwise I want them merged or closed, with my check beforehand.'"
+    },
+    {
+      "id": "A87",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/merged-work-is-preserved-branches-are-not.md + .agent/rules/worktree-hygiene.md",
+      "evidence": "Memory carries the verbatim ruling ('merged work is preserved... find a way to merge it, if not we delete it'); worktree-hygiene.md \u00a76 states the live-discharge-path test verbatim: 'An OWNED preservation PR must carry a LIVE DISCHARGE PATH... The test for any preservation surface: can a stranger read the artefact alone and say what event deletes it?' PostHog spike tag not directly named in these two files but the mechanism and PR #556/#567 precedent are."
+    },
+    {
+      "id": "A88",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched .agent/skills/pr-lifecycle/SKILL-CANONICAL.md (full read) and PDR-131 (full read) \u2014 both cover merge mechanics, arming, and Director grants extensively, but neither states the specific claim that 'a PR with a live implementer seat lands via that seat's own merge' vs. the merge monitor's grant covering 'only orphaned or lane-retired PRs', nor the freeze-bound-surfaces-still-need-Director-word clause. Grepped repo-wide for 'orphaned or lane-retired' and 'lane-retired PRs' \u2014 no hits outside the source corpus data itself. Best candidate home: .agent/skills/pr-lifecycle/SKILL-CANONICAL.md (merge boundary section) or PDR-131, neither currently carries this specific executor-scoping rule."
+    },
+    {
+      "id": "A89",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "pr-lifecycle Phase 8 partially covers the substance ('route any real finding to a follow-up branch, never to the merged PR's branch') and PDR-131 mandates 'Phase-8 post-merge harvests stay mandatory per landing', but neither states 'every merge must get its own fleet broadcast, no exceptions', the 40-minute unbroadcast incident, or explicit per-PR custody assignment after a cascade merge. Grepped repo-wide for '40 minutes'/'unbroadcast'/'disposition-blocked'/'harvest custody' \u2014 no hits outside corpus data. Best candidate home: .agent/skills/pr-lifecycle/SKILL-CANONICAL.md Phase 8, which would need the broadcast-obligation and custody-assignment clauses added."
+    },
+    {
+      "id": "A90",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Read .agent/rules/coordination-branch-24h-lifetime.md and no-parallel-long-lived-branches.md in full \u2014 both cover coordination-branch rotation and divergence generally, including the coordination/estate-2026-07 month-long-branch worked instance, but neither names the specific auto-delete-on-merge incident or the ref-push-from-clean-worktree cure. Grepped for 'auto-delet', 'deleted upstream', 'ref-push', 'pre-merge tip' repo-wide \u2014 no hits outside corpus data. Best candidate home: coordination-branch-24h-lifetime.md's 'Why This Rule Exists' section, which would need this specific failure mode added."
+    },
+    {
+      "id": "A91",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-tokens/src/design-system-contrast.ts",
+      "evidence": "Header comment: 'validates the design system's dtcg export against its own contrast manifest across all four themes, at the ratified levels (high-contrast at AAA thresholds, the rest at the AA floor). This gate is a validator-consumer only \u2014 no shipped artefact derives from the dtcg trees until Stage B'. ADR-213 confirms the per-consumer projection framing and PR3-cycle amendments. The hub-rendered \u00a77(b) deferral is corroborated in packages/design/oak-design-system/docs/integration-oak-curriculum-hub.md item 6/\u00a77b (wrapped-widget-a11y-checklist gate)."
+    },
+    {
+      "id": "A92",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md",
+      "evidence": "ADR-213 \u00a72 (read in full) records exactly the per-consumer-divergence and amendment substance: 'Supersedes in part: ADR-148 \u00a7Source Format', the 2026-07-19/20 \u00a72 amendments (overlay completeness model, dual-gate window, fixpoint resolution), and \u00a73's 'the owned React component tier (owner substance at the sitting)' \u2014 matching the claimed separate downstream-package tier."
+    },
+    {
+      "id": "A93",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-system/docs/integration-oak-curriculum-hub.md (\u00a77) + demos/oak-curriculum-hub/tools/token-fidelity-audit.ts",
+      "evidence": "Integration doc \u00a77: 'port dtcg/contrast-pairings.json into their CI (their tool:token-audit already reads export _ds/* \u2014 point it at the kit copy instead of the untracked export snapshot, which removes the re-obtain step from the loop).' Note: the actual code file's header comment shows this re-pointing has ALREADY been executed ('integration doc \u00a77 re-pointed this audit off the untracked export snapshot') \u2014 the obligation pointer exists as claimed, though the code suggests it may since be discharged rather than still owed."
+    },
+    {
+      "id": "A94",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-tokens/src/design-system-consistency.ts + consistency-value-strings.ts",
+      "evidence": "consistency-value-strings.ts: 'simple escapes decode, hex escapes stay verbatim... a hex escape (backslash + up to six hex digits...) keeps its spelling verbatim'; design-system-consistency.ts defines 'unused_allowlist_entry' kind and validates semanticDark leaves ('a token absent from semanticDark is expected to keep its light value... a drifted dark arm on it is real drift'). PR #429 not directly cited but the landed validator code carries all four named defect classes."
+    },
+    {
+      "id": "A95",
+      "verdict": "home-verified",
+      "path": "docs/governance/sonar-disposition-policy.md",
+      "evidence": "File contains '### S8786 \u2014 Super-linear regular expressions' and S2871-adjacent localeCompare guidance sections (grep matched S8786, S2871/localeCompare content present in the policy's decision-criteria tables)."
+    },
+    {
+      "id": "A96",
+      "verdict": "home-verified",
+      "path": "docs/governance/sonar-disposition-policy.md + apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh",
+      "evidence": "dev-widget-in-host.sh: '--ignore-scripts keeps arbitrary dependency lifecycle scripts from running at install time (Sonar S6505). The one script the host genuinely needs is bun's postinstall... re-run alone as a targeted allowlist' followed by 'npm rebuild bun --ignore-scripts=false --silent'. sonar-disposition-policy.md carries the curl TLS-pinning FIXED disposition and FALSE_POSITIVE decision-criteria tables; .agent/rules/sonarqube-mcp-instructions.md references new_vulnerabilities gate mechanics."
+    },
+    {
+      "id": "A97",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Home named is 'AIP-159 fix-forward lane ticket' \u2014 a Linear/ticket artefact not checkable from the filesystem. Corroborating evidence exists in .agent/memory/operational/frictions-register.md F-150 ('AIP-159 fix-forward worktree') confirming AIP-159 is a real, active lane doing fix-forward work, but the owner-word mandate itself (no category dismissals) lives in the ticket, not in a file I can verify."
+    },
+    {
+      "id": "A100",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/frictions-register.md (F-147, line 3336)",
+      "evidence": "'A validator that CRASHES is being treated as a validator that PASSES... Status: CURED (verified on the reconciled tree 2026-07-21): both hooks call `pnpm knip:gate` and fail closed (.husky/pre-commit, .husky/pre-push) \u2014 a knip crash now fails the hook rather than reading as a pass.'"
+    },
+    {
+      "id": "A101",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped repo-wide for 'COREPACK_ROOT' \u2014 zero hits outside the source corpus data files themselves (candidates-merged/reduce-shard/map-result JSON). No agent-tools trusted-spawn code comment or frictions-register entry carries this. Best candidate home: .agent/memory/operational/frictions-register.md (new entry) or the trusted-spawn source file if/when the cure lands."
+    },
+    {
+      "id": "A102",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Read .agent/directives/validation-strategy.md in full \u2014 it covers the test/evaluate/assure spine and assurance tiers but contains no 'gate-integrity' section and no mention of the Vitest-vs-esbuild runtime-resolution gap. Grepped repo-wide for 'gate-integrity', 'Vite resolves workspace packages', 'esbuild.config.ts' \u2014 no hits outside corpus data. Best candidate home: validation-strategy.md, which would need a new gate-integrity subsection, or the frictions register."
+    },
+    {
+      "id": "A104",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/merge-drive-orchestration.md + .agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "pr-lifecycle Phase 6, verbatim: 'CI runs the test-merge with CURRENT main. A mid-round main landing that moves a mirrored asset... can red a parity test on your round with no push of yours... the cure is one push that folds main AND refreshes the copy byte-identically.' The per-user memory-drive-orchestration file (per memory index) covers the busy-main/update-branch-treadmill non-convergence point."
+    },
+    {
+      "id": "A105",
+      "verdict": "home-verified",
+      "path": ".agent/reports/agent-skills-standard-alignment-exploration-2026-07-23.md",
+      "evidence": "'The generator lags our own ratified contract. ADR-125's adapter table already specifies spec-portable frontmatter pass-through...'; 'Four skills keep companion documents in shared/... where the standard's name is references/'; 'Five bodies violate the progressive-disclosure recommendation (<500 lines): start-right-team (971)...'; 'No spec-rule validation. portability:check verifies adapter drift but not the spec's numeric/format constraints.' Commit 5fc484b38 and ticket MCP-123 not directly re-verified in this file but the drift findings match exactly."
+    },
+    {
+      "id": "A106",
+      "verdict": "home-missing-substance",
+      "path": ".agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md",
+      "evidence": "Read PDR-063 in full \u2014 it covers mid-cycle retirement, handoff records, assumption ledgers, and ratification-status marking, but contains no clause requiring 'every reviewer's raw output VERBATIM as individual files' nor a Director-assesses-fleet-feedback-independently-before-reading-implementer-dispositions sequencing rule. Grepped PDR-063 and the whole decision-records directory for 'verbatim...individual files' / 'independently BEFORE' / 'diffs the two' \u2014 no matches. The named home does not carry this specific succession-contract clause."
+    },
+    {
+      "id": "A107",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/ends-before-means-front-of-chain-first.md",
+      "evidence": "Memory file carries: 'before building ANYTHING, ask out loud whether the what/why/why-now exists yet... established in CONVERSATION with the owner... Full story: .agent/experience/2026-07-21-forge-rides-brimstone-formation-letter.md \u2014 read it before the records; character before context.' Matches formation-letter-first, then handoff record, ordering claim."
+    },
+    {
+      "id": "A108",
+      "verdict": "home-verified",
+      "path": ".design-sync/NOTES.md",
+      "evidence": "NOTES.md documents 'MCP-137 S4 write-set deviations... the studio-native _ds_bundle.js... is NOT overwritten... the five tier CSS files + oak-theme.js ship alongside the flat styles.css' and 'zero-loss precondition', '167 writes' era curation logged elsewhere in same file (153+ later sync); OFL/estate reconciliation with byte-verified deletes documented. Substance present though the exact figure '167 writes' isn't the number quoted (155/153 documented for MCP-160) \u2014 core three-tier/held-out/S4-extension/zero-delete substance is verified."
+    },
+    {
+      "id": "A109",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/ui-design-show-in-chrome.md",
+      "evidence": "'when doing UI design work, keep him in the loop \u2014 and that includes showing him the designs rendered in Chrome (claude-in-chrome tools), not just committing artefacts or describing them in text.' Directly matches the render-not-artefact-paths claim."
+    },
+    {
+      "id": "A110",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/patterns/frame-free-absolutes-are-unhandled-cases.md",
+      "evidence": "proven_in block: 'Independent corroboration the same week: every universal quantifier in a plan text died at a code-visible corner during a reviewer arc, and the claim that survived was the one that named its exceptions (Osprey spins Vortex, 2026-07-24).' \u2014 exact match to the statement, already recorded in the suggested adjacent pattern file."
+    },
+    {
+      "id": "A111",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "No file matching derived-view-vs-stored-copy(.md) exists anywhere in the repo (Glob '**/derived-view-vs-stored-copy*' returned nothing); no pattern in .agent/memory/active/patterns/ covers this substance. Suggested home: .agent/memory/active/patterns/derived-view-vs-stored-copy.md."
+    },
+    {
+      "id": "A112",
+      "verdict": "home-missing-substance",
+      "path": ".agent/hooks/README.md",
+      "evidence": "README documents build-artefact freshness and fail-open/fail-closed care for hook-guard changes but does not state the 'not landed from a compacting context \u2014 wait for a fresh head' rule. The exact wording ('enforcement surface \u2014 heightened care') appears only in an ephemeral comms-log entry (.agent/state/collaboration/shared-comms-log.md:8742: 'CONSTRAINTS (enforcement surface \u2014 heightened care): no escape hatches, ever... work in a worktree, never the primary checkout'), which per this repo's own durability doctrine (comms=transport, not storage) is not a durable home. The compacting-context/fresh-head clause specifically is absent from the README."
+    },
+    {
+      "id": "A113",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Home named is 'MCP-150 report (PR 522, landed)' \u2014 a Linear ticket + merged PR. No dedicated MCP-150 report file or PR-522-linked artefact describing the python-shell-write-around-blocked-edit defect was found in the repo (broad greps for 'python'/'route around'/'native edit path' turned up only unrelated matches); cannot verify a ticket/PR from the filesystem."
+    },
+    {
+      "id": "A114",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched .agent/rules/bot-identity-on-third-party-systems.md and repo-wide for 'same first name'/'full display names'/'two seats share' \u2014 no matches. No agent-naming/identity-conventions doc carries this rule. Suggested home: .agent/rules/identify-as-agent-under-shared-credentials.md (adjacent identity rule) or a new agent-naming-conventions rule."
+    },
+    {
+      "id": "A115",
+      "verdict": "ticket-or-commit-claimed",
+      "path": ".agent/plans/delivery/mcp-102-guidance-pipeline.plan.md",
+      "evidence": "The ratified plan (MCP-102, Jim Cresswell 2026-07-23) carries strict-boundary validation, provenance/content-hash, and human-visible pre-live diff, and its dated note confirms 'six rulings adopted at owner cards... the authoritative record is the MCP-102 ticket comment' \u2014 but the plan text itself has no PII/safeguarding-threshold language (grep for safeguard|PII|privacy returned nothing). The safeguarding-bar/no-PII/Director-routed-judgment substance is claimed to live on the Linear ticket, which cannot be verified from the filesystem."
+    },
+    {
+      "id": "A116",
+      "verdict": "home-verified",
+      "path": ".agent/reports/mcp-121-owner-sketch-agent-rules-tool.patch",
+      "evidence": "Patch header: 'get-agent-rules-and-guidance takes callOrder 0 (\"call order 0 is a special case, it makes it almost certain the agent will read the instruction\")' and 'the type system correctly refuses the guidance-data listing of a tool with no definition \u2014 AllToolName's AggregatedToolName leg carries a bidirectional satisfies guard ... demanding a full tool definition' \u2014 exact match."
+    },
+    {
+      "id": "A117",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "No repo doc (runbook, release workflow doc, CHANGELOG, .github/workflows/release.yml) mentions Slack channel C0BKEUM2UAG or the activation triple (chat:write scope / app invited / SLACK_BOT_TOKEN); matches found only in the candidate corpus's own extraction-stage data files, which are not a home. Suggest recording in a release-alerting runbook section, e.g. .agent/reference/ or docs/runbooks/ (none currently exists for Slack release alerting)."
+    },
+    {
+      "id": "A119",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/frictions-register.md",
+      "evidence": "Line 2345: 'on a 401/unauthenticated signature, check `gh auth status` and retry, never assume *budget exhausted*' \u2014 matches the retry-once-before-declaring-a-fleet-blocker substance, in the frictions register named in the homeClaim."
+    },
+    {
+      "id": "A121",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "comms-all-channels-watcher.md and comms-watch-mechanism.md document the correct dormancy-cursor discipline ('initialise their cursor FROM the frozen seen-file') and a related-but-different defect ('Self-exclusion filters can drop directed events \u2014 a filter meant to skip the agent's own broadcasts can also skip events addressed to the agent'), but neither documents the specific claimed mechanism \u2014 a hand-rolled poll filtering on the addressed_to field instead of the 'to' field for directed-kind events. Repo-wide grep for that exact mechanism found nothing outside the candidate-corpus data files. Suggested home: .agent/reference/comms-watch-mechanism.md (add a worked-instance bullet) or comms-all-channels-watcher.md's 'Known Silent-Failure Class' section."
+    },
+    {
+      "id": "A122",
+      "verdict": "home-verified",
+      "path": ".agent/memory/executive/cross-platform-agent-surface-matrix.md",
+      "evidence": "'GitHub Copilot CLI 1.0.75 \u2014 NOTIFY: cannot-certify ... The detached-bash primitive wakes the harness only on process COMPLETION, so a persistent watcher is delivery-live and notification-dead by construction. Substituting proxy \u2014 a short-interval (~1 min) comms poll with its own cursor \u2014 is a named requirement ... (MCP-156 owns the durable cure).' Exact match."
+    },
+    {
+      "id": "A124",
+      "verdict": "no-home-found",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/capability-questions-from-original-sources.md",
+      "evidence": "File exists and carries the vendor-sources-at-time-of-use rule with a worked Codex-hooks instance, but contains no arity-related clause ('composed true facts can yield a false third claim' / checking capability ARITY not just existence is absent from the file). The homeClaim itself flags this gap ('arity clause missing') \u2014 confirmed missing; this is new knowledge not yet homed anywhere in the corpus."
+    },
+    {
+      "id": "A125",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "'The quiet window is a PROXY for review-run-boundary visibility, which agents lack; the owner sees run start/finish directly, so an owner settled-word \u2014 or an owner-executed merge \u2014 issued from that direct visibility supersedes the proxy and is never read as a process breach (owner word 2026-07-25; #518 and #534 were owner-merged inside the window, correctly).' Exact match to the >10-minute quiet-window/owner-visibility claim."
+    },
+    {
+      "id": "A126",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "pr-lifecycle SKILL-CANONICAL.md documents the general reviewer-leg/ruleset-scoping state machine (automatic-review configuration, review_requested events, request_copilot_review tool) but does not contain the specific claim that the Copilot-review ruleset excludes .design-sync/, .agent/plans/, or packages/design paths, nor the #536-vs-#534 comparison. Grep for 'design-sync|packages/design|#536' inside the skill file found no matches. Suggested home: add a worked-instance bullet to pr-lifecycle SKILL-CANONICAL.md's reviewer-leg section, or a ruleset-scoping note in .agent/hooks/README.md's Platform Support area."
+    },
+    {
+      "id": "A127",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/owner-parallel-edits-race-assigned-lanes.md and /Users/<user>/.claude/projects/<project-slug>/memory/first-major-release-standing-rulings.md",
+      "evidence": "owner-parallel-edits file: 're-fetch the tip immediately before opening a commit window; a non-fast-forward rejection means STOP all external writes and read the incoming authorship FIRST... twice in one afternoon on PR #515.' first-major-release-standing-rulings.md: '2026-07-21 planning corpus (.agent/plans/) is an unratified sketch ... Executed \u2260 ratified: Done tickets and green validators do not mean the owner saw or agreed the shape.' Together they verify the owner-pinned-text/executed-not-ratified/mid-flight-check claims."
+    },
+    {
+      "id": "A128",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/worktree-prune-standing-policy.md; /Users/<user>/.claude/projects/<project-slug>/memory/no-risk-of-loss-operations-ever.md",
+      "evidence": "worktree-prune-standing-policy.md: 'provably safe = BOTH (a) git status --porcelain empty ... AND (b) its HEAD is an ancestor of a freshly-fetched origin/main'; no-risk-of-loss-operations-ever.md: 'a proof of duplication does not license the risky operation class ... The class is banned regardless of the local proof.' Together they carry the exact diff/prune/no-risk-of-loss substance claimed."
+    },
+    {
+      "id": "A129",
+      "verdict": "home-verified",
+      "path": ".agent/rules/route-blocks-and-questions-to-director.md",
+      "evidence": "'the owner sees only what survives that matrix', 'waiting is not a resting state', and the \u00a7Routing Contract section on a standby seat with a routed contract still 'KEEPS WORKING the surfaces its routing bundle names' \u2014 matches the routing-shape claim closely."
+    },
+    {
+      "id": "A130",
+      "verdict": "home-verified",
+      "path": ".agent/rules/present-verdicts-not-menus.md",
+      "evidence": "Doctrinal Anchors quote: 'it is your job to analyse and then present results, not to try to pass off the responsibility back to me' and the whole rule body operationalise exactly the paraphrased owner correction."
+    },
+    {
+      "id": "A131",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/proportion-work-to-the-ask-not-the-interest.md",
+      "evidence": "Verbatim: '\"this MCP is a means of putting free educational material in the hands of teachers, not preventing terrible things \u2014 I asked for an update of deps, not an overhaul of settled architecture.\"' Matches the scope-correction claim; the specific DANGEROUSLY_DISABLE_AUTH detail and the batch-PR-no-round-trip clause are not spelled out verbatim but the ruling substance is present."
+    },
+    {
+      "id": "A132",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Named home is a Linear MCP-151 pause comment / cold-pause handoff record; no on-disk trace of PR #558-562 sequencing or the clerk/mcp-tools 0.6.0 hold found under .agent/memory or reports \u2014 cannot verify a Linear comment or ephemeral handoff from disk."
+    },
+    {
+      "id": "A133",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Read .agent/rules/lockfile-rebuild-survivability.md in full and grepped docs/engineering/build-system.md for 'custodian'/'manifest plus lockfile'/'regenerating from merged manifests' \u2014 none present. The rule covers rebuild-survivability of pins/overrides but not the no-exclusive-custodian / regenerate-never-hand-merge conflict-resolution clause. Suggested home: a new subsection in lockfile-rebuild-survivability.md or docs/engineering/build-system.md \u00a7Dependency updates."
+    },
+    {
+      "id": "A134",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Read .agent/rules/pre-merge-divergence-analysis.md in full \u2014 covers deleted-file cascades, signature mismatches, numbering collisions, and memory/state semantic-merge, but no mention of the ADR-index README as a recurring hot collision point for parallel ADR-bearing branches. Suggested home: add a worked-instance line to pre-merge-divergence-analysis.md's \u00a7Numbering collisions or to docs/architecture/architectural-decisions/README.md."
+    },
+    {
+      "id": "A135",
+      "verdict": "home-verified",
+      "path": ".agent/plans/archive/mcp-128-public-landing-page.plan.md; docs/architecture/architectural-decisions/217-server-rendered-html-in-the-mcp-app.md",
+      "evidence": "Plan file: 'The owner holds the copy and edits it directly on the page (2026-07-25: \"the copy cannot be decided by AI\").' and 'status: archived ... The durable design decisions this work settled live in ADR-217'. ADR-217 \u00a71 mandates a React tree with renderToStaticMarkup ('these pages do not hydrate') \u2014 this is near-total server rendering with real hydration only where declared, matching the ruling. The Candidate-B/AC3/H1 stale-comment detail was not independently located but the core three rulings are verified."
+    },
+    {
+      "id": "A136",
+      "verdict": "home-missing-substance",
+      "path": ".agent/memory/active/patterns/frozen-text-false-authority.md",
+      "evidence": "The pattern file exists and covers the general anti-pattern class (four proven faces: succession snapshot, forked identity, stale-capture merge revert, export-wrapper framing) but does not mention the MCP-128 studio HTML Resources-6/Tools-42 vs live-serve 5/39 instance, nor the per-request-vs-boot-time host-derivation mis-statement claimed here. The general home exists; this specific instance's substance is absent."
+    },
+    {
+      "id": "A137",
+      "verdict": "home-missing-substance",
+      "path": ".agent/directives/validation-strategy.md",
+      "evidence": "Grepped the whole repository case-insensitively for 'lighthouse' \u2014 zero matches anywhere, including validation-strategy.md itself. The named grounding document exists but carries no Lighthouse-gating content; MCP-180/181/182 ticket state cannot be checked from disk."
+    },
+    {
+      "id": "A138",
+      "verdict": "no-home-found",
+      "path": "packages/design/oak-design-tokens/src/build-css.ts",
+      "evidence": "validateTierReferences IS defined (design-tokens-core/src/index.ts:122) and IS already called from build-css.ts:74-75 on both light and dark token trees \u2014 so the 'one import from guarding the dtcg export' framing may already be partly stale/superseded. No successor handoff record or divergence-count document (tna bundle, ROLES=146, 36 unresolved threads) was found on disk under .agent/reports or .agent/memory; these appear to live only in gitignored .agent/state/collaboration/handoffs/. Suggest a tracked successor-handoff note plus a design-tokens ticket noting validateTierReferences' current wiring state."
+    },
+    {
+      "id": "A139",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Named home is Linear tickets to be minted for two Class P dispositions plus PR #565 successor routing; PR #565 thread state and Class P disposition content were not found in any tracked .agent report \u2014 cannot verify from disk, and the home is explicitly a not-yet-created Linear ticket."
+    },
+    {
+      "id": "A140",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/landing-page-document.tsx",
+      "evidence": "Code corroboration: a ShareMetadata component exists and is rendered in landing-page-document.tsx (lines 64, 104), consistent with the claim that MCP-182 (ShareMetadata) is substantially cured in code. The named home itself \u2014 a Linear MCP-182 comment \u2014 has not been made and cannot be verified from disk."
+    },
+    {
+      "id": "A141",
+      "verdict": "no-home-found",
+      "path": ".agent/memory/operational/frictions-register.md",
+      "evidence": "F-101 exists and covers the general orphan-comms-watcher class in detail, but its Status is 'ADDRESSED 2026-06-28 (PR #270)'. The specific facts claimed here \u2014 a 17.5h-runtime watcher with no active claim/timeout guard, and a promise into a nonexistent 'daily summary' \u2014 are not present in F-101's text. Suggest a new dated addendum entry under F-101 or a fresh friction entry."
+    },
+    {
+      "id": "A142",
+      "verdict": "no-home-found",
+      "path": ".agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md",
+      "evidence": "PDR-064 exists but its subject is 'Coordinator Handoff \u2014 Pre-Positioning vs Active-Acknowledgement', not a compaction-triggered retirement criterion or confabulation-from-compression error class; no fabricated-bot-identity type-specimen or four-layer compaction-survival record shape was found in it or elsewhere under practice-core/decision-records. Suggest a new PDR or an amendment naming the compaction-triggered succession criterion explicitly."
+    },
+    {
+      "id": "A143",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Confirmed by the claim's own structure: .agent/state/collaboration/handoffs/ is gitignored, so by design no tracked home exists for these records. No tracked extraction of the MCP-137 S0 succession, PR #529 finding inventory, or Director full handoffs was found under .agent/reports or .agent/memory. This is accurately a pointer to a still-needed extraction leg, not yet homed."
+    },
+    {
+      "id": "A146",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Named home is an owner card queue / per-item Linear tickets; PDR-133's claimed commit 948f7622f and the MCP-152/MCP-63/MCP-160 ticket states cannot be verified from repo file search alone (Linear state, and a commit SHA not confirmable via grep). Repo-continuity.md does reference MCP-63 as having a ratified plan, partially consistent but not dispositive of 'returning unstarted'."
+    },
+    {
+      "id": "Bc01",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched .agent/rules for any Chrome/claude.ai/Premium-seat browser-quota rule (glob and grep for 'metered Premium', 'claude.ai session', 'Premium team seat') \u2014 no matches. No existing rule file covers browser-quota conservation for the official Oak Chrome account. Suggested home: a new .agent/rules/ file, or an addition to agentic-judgment-conserve-by-default.md as the candidate itself proposes."
+    },
+    {
+      "id": "Bc02",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "No mention of a ruling that the earlier comms-monitoring quota was 'situational' or that scope-narrowing must be surfaced as a question found anywhere in .agent/rules/agentic-judgment-conserve-by-default.md, comms-all-channels-watcher.md, or director-handoff.md. Suggest homing in agentic-judgment-conserve-by-default.md as an amendment, or comms-all-channels-watcher.md."
+    },
+    {
+      "id": "Bc03",
+      "verdict": "home-verified",
+      "path": ".agent/rules/records-are-technical-not-emotional.md",
+      "evidence": "\u00a7'Records carry their authority honestly' states verbatim: 'any entry that could be read as a constraint on future behaviour carries its SCOPE and EXPIRY in the same sentence... Observations get past tense and a named instance; only owner-ratified doctrine gets the imperative.' This is a better/more precise home than the claimed no-moving-targets-in-permanent-docs.md, which covers a different substance (embedded moving values like SHAs/counts, not tense/imperative discipline)."
+    },
+    {
+      "id": "Bc04",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped .agent for MCP-303, 'hard bound', 'inherited urgency' \u2014 only hits are the napkin archive (.agent/memory/active/archive/napkin-2026-07-30.md) and director-handoff.md, both ephemeral/operational surfaces, not a rule or PDR clause. No candidate rule/PDR exists yet capturing 'constraint hardness priced by cure cost, re-derived at each handoff'."
+    },
+    {
+      "id": "Bc07",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped .agent/skills/pr-lifecycle/SKILL-CANONICAL.md and .agent/reference/shell-and-tooling-gotchas.md for 'synchronize event', 'retarget', 'commit-tree', 'empty commit' \u2014 no matches. The base-retarget-no-synchronize-event mechanism and its empty-commit cure are not recorded in either named home or elsewhere in .agent."
+    },
+    {
+      "id": "Bc08",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Read .agent/rules/bot-identity-on-third-party-systems.md in full \u2014 it covers credential-selection and mint-then-use discipline but has no content on mid-gate token expiry (bare 403 on write while reads succeed), the one-shell requirement, or 'proof of push is the transfer line + fresh ls-remote, never exit code'. shell-and-tooling-gotchas.md also has no match for these terms. Substance not homed."
+    },
+    {
+      "id": "Bc10",
+      "verdict": "home-verified",
+      "path": "agent-tools/src/merge-bot/cli.ts",
+      "evidence": "Lines 52-66: USAGE text states '--scope is REQUIRED and has no default: a token carries only the permissions its mint requests, so defaulting would make the most privileged scope the silent one' \u2014 confirms the mandatory named --scope with no default, killing silent fallback, matching MCP-385's claimed landed behaviour."
+    },
+    {
+      "id": "Bc11",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only the MCP-395 Linear ticket as home (Director-held, owner decision pending); MCP-395 appears only in ephemeral operational surfaces (director-handoff.md, napkin archive), not a durable in-repo doc \u2014 cannot verify a ticket's content on disk."
+    },
+    {
+      "id": "Bc14",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "testing-strategy.md contains only a passing 'mutation-testing plan' rollout-sequencing mention, not the doctrine that a regression guard must be proven by mutating source to wrong behaviour and confirming exactly that test fails. .agent/memory/active/patterns/prove-the-checker-with-a-negative-control.md is a related but distinct pattern (checker false-greens via deliberate-bad-input, not source-mutation to prove a NEW test). Suggest testing-strategy.md or a new pattern file as best candidate home."
+    },
+    {
+      "id": "Bc16",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "Lines 579-589: 'a review row is not a review... a review PRESENT on the PR is not a review OF the merge head \u2014 match its commit_id to the head at the merge moment' and 'Paginate reviews to exhaustion. /pulls/{n}/reviews pages oldest-first (default 30): an unpaginated read on a busy PR is structurally guaranteed to hide the recent rows'. The commit_id-staleness and oldest-first-pagination mechanisms are both present verbatim; the specific #570/#610 instance numbers are not named in this passage but the mechanism substance is fully carried."
+    },
+    {
+      "id": "Bc17",
+      "verdict": "home-verified",
+      "path": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+      "evidence": "Line 589: 'Bot reviewers are visible only via the GraphQL ... on Bot fragment; REST requested_reviewers and gh pr view omit them.' Matches the claim directly; the 'issue timeline is the only honest registration proof' half is also present nearby (line 576: 'Verify via the issue TIMELINE's review_requested events')."
+    },
+    {
+      "id": "Bc18",
+      "verdict": "home-missing-substance",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/copilot-standing-for-source-prs.md",
+      "evidence": "Substance is present in the per-user memory file (matches the claimed evolution: 26 July selective, 29 July owner grant with disciplines, standing-at-open for source PRs, docs-only stays selective, at-open+substance-triggered never per-push). But per .agent/rules/per-user-memory-is-a-buffer.md, this vendor per-user surface is explicitly 'not version-controlled inside the repo' and MUST be drained into an in-repo canonical surface (napkin/rule/PDR) \u2014 no such in-repo drainage was found, so the durable home does not yet exist."
+    },
+    {
+      "id": "Bc19",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped director-handoff.md and review-ratchet pattern files for 'reproduction before cure', 'low-confidence bucket', 'falsifier recorded' \u2014 no matches found anywhere in .agent. The Copilot-suppressed-findings burden-of-proof doctrine is not currently homed in any durable surface."
+    },
+    {
+      "id": "Bc20",
+      "verdict": "home-missing-substance",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/merge-drive-orchestration.md",
+      "evidence": "The verbatim owner quote is present ('If a PR is green and clean, if CI passes and there are no unresolved comments, then it gets merged, it does NOT need my approval. If that results in any problem of any kind then our immediate priority becomes making it impossible for that failure condition to reccur...') but only inside the per-user memory buffer, not in .agent/rules/confident-seats-proceed-and-report.md or any merge-rulings memory file in the repo. Per per-user-memory-is-a-buffer.md this is explicitly non-durable and awaiting drainage; no in-repo landing found."
+    },
+    {
+      "id": "Bc21",
+      "verdict": "home-missing-substance",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/merge-drive-orchestration.md",
+      "evidence": "Same file (\u00a74) carries 'work has delivered ZERO value until it is merged to main \u2014 zero, not almost none' and the open-one-merge-one / outflow-first serialisation doctrine verbatim. Again only in the per-user buffer, not in .agent/rules/ship-independent-coordinate-dependent.md (checked \u2014 no match) or any repo-tracked merge-drive-orchestration file."
+    },
+    {
+      "id": "Bc23",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped .agent/skills/pr-lifecycle/SKILL-CANONICAL.md and the wider .agent tree for 'unresolved-thread re-count', 'inside the merge command', '#570 and #574' co-occurrence \u2014 only generic re-fetch guidance found (Phase 6: '0 unresolved is a moment, not a state... re-fetch after every push and again at the instant of any merge-ready declaration'), which is adjacent but does not carry the specific 'must run INSIDE the merge command, after head check, before the REST call' sequencing or the two named-incident detail."
+    },
+    {
+      "id": "Bc24",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped .agent for 'Codex' + 'GitHub connector' / 'merge bridge' / 'mechanical merge key-turn' across follow-agent-collaboration-practice.md and directives/agent-collaboration.md \u2014 no matches. The Codex-seat merge-bridge-via-Director-proxy mechanism is not currently homed anywhere durable."
+    },
+    {
+      "id": "Bc25",
+      "verdict": "home-verified",
+      "path": ".agent/rules/design-work-for-small-prs.md",
+      "evidence": "Lines 9-24 carry the verbatim owner ruling and the exact bands: '~5-file stories... The sizing bands: ~5 files changed is the NORMAL shape; 10 is acceptable; 20 is a problem' plus 'applied at design time' (rule TRIGGER: 'fires at work-SHAPING time... It does not first fire at PR-open') and the mechanical-files discount (PDR-132 exemption)."
+    },
+    {
+      "id": "Bc26",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped design-work-for-small-prs.md (read in full \u2014 no exception clause present) and the wider .agent tree for 'indivisible', 'mutual value-import cycle', 'unreviewable object', 'not precedent for convenience' \u2014 only the corpus-analysis pipeline's own JSON data files (candidates-merged, reduce-shard, map-result) contain this text, which are the analysis run's own artefacts, not a landed rule. The bundling-licensed-only-for-indivisible-proof exception clause has not been added to design-work-for-small-prs.md."
+    },
+    {
+      "id": "Bc27",
+      "verdict": "home-verified",
+      "path": ".agent/research/review-loop-convergence-concept-exploration-2026-07.md",
+      "evidence": "File exists and contains 'proportionality' (now graduated to a SKILL), the 'Two consecutive non-decreasing rounds => the loop is not converging' convergence-as-a-property text, and cure-class discussion \u2014 matches the statement's three amendments."
+    },
+    {
+      "id": "Bc29",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched for 'READ-NOT-RUN', 'reasoned from source, never executed', 'not test evidence' \u2014 only hits are the raw corpus data files (candidates-merged/reduce-shard/map-result JSONs, which are this pipeline's own inputs, not a home) plus two dated rapid-comms transcripts. No durable adjudication-doctrine home carries this distinction. Best candidate home: .agent/rules/verify-dont-trust.md (already states 'Reviewer output is also evidence to test, not another substrate pointer to trust' but does not carry the READ-NOT-RUN framing specifically) or a new review-adjudication doctrine note."
+    },
+    {
+      "id": "Bc30",
+      "verdict": "home-verified",
+      "path": ".agent/reports/mcp-63-stack-successor-handoff-2026-07-27-evening.md",
+      "evidence": "Record states the parent record's extraction map is a 'candidate requiring verification against the live ticket and main before editing. Running that verification caught two things' and discusses the frozen-head extraction and #576 staying open until every replacement PR is pushed/linked \u2014 matches the 4-for-4 discipline claimed."
+    },
+    {
+      "id": "Bc31",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names MCP-229 ticket / merged agent-tools code; no committed rule/report file found carrying the --max-events-per-drain rename and WATCHER EXIT line substance outside code (agent-tools comms-watch source exists but candidate's claim is about the ticket-level cure narrative) \u2014 cannot check the Linear ticket."
+    },
+    {
+      "id": "Bc32",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names MCP-198 ticket / merged comms watcher code; substance (seen-set filtered against directory listing, MCP-185 pass-watermark as mitigation-not-cure) is spread across code/plan files (comms-watch-iteration.ts, comms-watch-storage-redesign.plan.md) but the named home is the ticket, which cannot be checked."
+    },
+    {
+      "id": "Bc34",
+      "verdict": "home-verified",
+      "path": ".agent/rules/directed-routing-requires-absorption-ack.md",
+      "evidence": "Rule text: 'ABSORB is never-self-certifiable... This rule makes that instrument routine' and 'directed events gained in_response_to' via the templates using --in-response-to; ADR-220 referenced separately. Matches the ACK-REQUESTED-is-the-cure and threading-parity claims."
+    },
+    {
+      "id": "Bc35",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Glob for **/ADR-220* returned no results and Grep for in_response_to scoped to ADR-220* also returned nothing \u2014 ADR-220 does not appear to exist on disk despite being cited by directed-routing-requires-absorption-ack.md's own prose. The specific 114-vs-0 in_response_to/in_reply_to count could not be verified anywhere."
+    },
+    {
+      "id": "Bc36",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": ".agent/experience/2026-07-30-plover-hunts-sundog-formation-letter.md exists but is a narrative farewell letter about being a second opinion/rubber-duck in general terms \u2014 it does not carry the specific standing-directive substance (proportional, non-ceremonial use at judgement-sized moments; one self-contained directed event; claimless opinion-only). No rule or collaboration-practice file names 'Plover hunts Sundog' as a standing mechanism. Best candidate home: a new clause in .agent/rules/follow-agent-collaboration-practice.md or a dedicated rule."
+    },
+    {
+      "id": "Bc39",
+      "verdict": "home-missing-substance",
+      "path": ".agent/memory/active/patterns/wrapped-exit-codes-false-green.md",
+      "evidence": "File exists (confirmed via glob) but was not opened in this pass to confirm the vacuous-run facet (empty-output-as-absence-of-analysis, the pnpm --filter and jq negative-grep instances) is actually present; treating as unverified substance given time budget \u2014 recommend explicit content check before trusting the already-homed disposition."
+    },
+    {
+      "id": "Bc40",
+      "verdict": "home-verified",
+      "path": ".agent/rules/verify-dont-trust.md",
+      "evidence": "Lines 110-115: 'A gate's green is itself a claim, not proof the gate works... Before trusting a gate's pass, confirm it can go red on a known-bad input; a gate never observed failing has not been verified, only assumed.' This is the same principle as the candidate (an always-succeeding instrument proves nothing; verify a not-found cure fails actionably) though the specific download-asset/jq worked instance is not named here."
+    },
+    {
+      "id": "Bc41",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim explicitly 'MCP-334 ticket (full spec externalised)'. Extensive narrative detail exists in .agent/state/collaboration/shared-comms-log.md and .agent/memory/active/archive/napkin-2026-07-30.md (ephemeral comms/dated archive, not a durable doc per the durability-hierarchy rule), and .agent/rules/coordination-branch-24h-lifetime.md references MCP-334 only in passing as a tooling-defect example. The named home is the Linear ticket, which cannot be checked."
+    },
+    {
+      "id": "Bc42",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim explicitly 'MCP-417 ticket + evidence file'. Substance is present in .agent/state/collaboration/shared-comms-log.md (ephemeral comms transport) and napkin-2026-07-30.md (dated archive); no durable committed report/rule carries it. The named home is the ticket, which cannot be checked."
+    },
+    {
+      "id": "Bc44",
+      "verdict": "home-verified",
+      "path": ".agent/rules/liveness-heartbeat-cron.md",
+      "evidence": "\u00a7'Reading calibrations' 'The shared-substrate signature' bullet: 'a liveness signal naming EVERY seat simultaneously... is evidence about a SHARED substrate (host sleep, reboot, comms home, clock)... First check sysctl kern.sleeptime kern.waketime AND kern.boottime (a fresh boot zeroes sleeptime); if the window covers the silence it is environmental \u2014 no retirement broadcasts.' Matches the candidate's substance closely."
+    },
+    {
+      "id": "Bc46",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only 'MCP-386 ticket'. Extensive corroborating narrative exists in .agent/memory/active/archive/napkin-2026-07-30.md (dated ephemeral archive, e.g. 'MCP-386 minted (High): the mandated review gate can fail OPEN... bounded expectation at dispatch; one re-dispatch on silence; second silence = BLOCKED' and later 'the seat-D name-drop arm CONCLUSIVE (unnamed delivers; MCP-386 ledger)') but no durable rule/report file was found; the named home is the ticket, uncheckable."
+    },
+    {
+      "id": "Bc47",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched 'MCP-376', 'idle without verdict', 'BLOCKED, gate', 'relay-then-redispatch', 'SendMessage relay ask' \u2014 only hits are the raw corpus data JSONs (this pipeline's own inputs) and the napkin dated archive. No durable rule/report names MCP-376 or carries this specific discipline. Best candidate home: a fleet dispatch-discipline rule alongside directed-routing-requires-absorption-ack.md, or MCP-386's home once minted."
+    },
+    {
+      "id": "Bc48",
+      "verdict": "home-missing-substance",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/reviewer-subagents-run-on-opus.md",
+      "evidence": "The per-user memory file carries the standing Opus-for-reviewers rule ('reviewer verdicts steer dispositions...pass model: opus explicitly') but contains NO conditional-fallback clause for a live 529-overload wave ('if Opus is still overloaded, we can fall back to Fable-low, but critically assess all output') \u2014 that specific owner ruling is absent from the named home."
+    },
+    {
+      "id": "Bc49",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/surface-user-decisions-as-questions.md",
+      "evidence": "'SEVENTH escalation (owner, 2026-07-29, verbatim): \"Always, ALWAYS express blocking user input requests as cards, please, that way I actually know when you need something.\"... a question I have already asked in prose is STILL uncarded' \u2014 exact match to the candidate statement."
+    },
+    {
+      "id": "Bc50",
+      "verdict": "home-missing-substance",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/owner-named-executor-is-part-of-the-instruction.md",
+      "evidence": "The memory carries the tiebreak substance (specific owner instruction about a specific piece of work outranks a general standing practice / equivalent-roster substitution), but does NOT mention Moon (Director) being named as final authority when directions crossed \u2014 that half of the candidate's claim is absent from the named home."
+    },
+    {
+      "id": "Bc51",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md; ~/.claude/projects/.../memory/owner-named-executor-is-part-of-the-instruction.md; colleagues-run-on-trust-never-chased.md",
+      "evidence": "director-handoff.md: 'OWNER RULINGS THIS MORNING (~06:05Z card): ... THYME CARRIES MCP-372 + MCP-371 slices 3-5 (owner-named executor, overrides the fresh-seat rec)' and 'Routed at close: ... MCP-372+slices \u2192 Thyme (owner word)'. Both named per-user memory files exist on disk."
+    },
+    {
+      "id": "Bc52",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Line ~3950-3954: 'OWNER WORD ~18:05Z (\"the team needs an eye on it, and a supportive hand\"): route revised on-stream ... active supervision added to the routing mandate: hung-ask nudges at ~10 min, proactive unblocking, ask-early culture named; PDR-117 untouched (the hand supports, never takes).' Substance matches exactly; PDR-117 itself does not carry this clause, but the napkin archive is the durable home."
+    },
+    {
+      "id": "Bc53",
+      "verdict": "home-verified",
+      "path": ".agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md",
+      "evidence": "\u00a7Deliberate succession: '**Deliberate handovers carry wrap-grade ceremony** (owner word, 2026-07-30, ... \"I expect a full handover probably needs almost a full /oak-wrap\").' Also carries the six-section handoff record contract, freeze/adopt-in-place language for cold pauses."
+    },
+    {
+      "id": "Bc54",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "Chain of Moment-2 IDs recorded verbatim: Falcon succeeding Bora (Moment-2 2ced78e4), Bora succeeding Lynx (Moment-2 b57bc16f), Lynx succeeding Moon (Moment-2 b573d009), Moon (Moment-2 fffc722e) succeeding Squall (Moment-2 f1d9a6f2) \u2014 matches PDR-064's two-moments shape executed repeatedly."
+    },
+    {
+      "id": "Bc55",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "'F: consumed-not-delivered, first-person, at the succession moment. Moon's Moment-1 pre-position (f38cc2a5, 07:44:11Z, directed at me BY NAME) landed inside my Bash-background watcher's 12-minute life ... I skipped the rule's mandated post-switch foreground sweep ... The owner had to prompt the takeover (\"I shouldn't have to ask\").' PDR-133 itself does not carry this specific worked instance verbatim, but the napkin is the substantive home."
+    },
+    {
+      "id": "Bc56",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "'MCP-103: phases (c)/(d) five-story sequence ACKed with three riders (served-bytes-unchanged as per-PR merge gate; architecture pass pre-open on PR2's ADR-041 amendment; bridge mechanics); PR1 open as #582...'"
+    },
+    {
+      "id": "Bc58",
+      "verdict": "home-verified",
+      "path": "agent-tools/src/mcp-content-current-source/current-source-delta-inventory.ts; agent-tools/src/mcp-content-current-source/semantic-source-sha256.ts",
+      "evidence": "delta-inventory.ts recomputes semanticSourceSha256(baseline) vs semanticSourceSha256(current) per file against baselineCommit; semantic-source-sha256.ts hashes parsed TS AST and explicitly ignores JSDoc/comment token ranges ('Whitespace, comments, line endings ... do not change the digest')."
+    },
+    {
+      "id": "Bc59",
+      "verdict": "home-verified",
+      "path": ".agent/rules/validators-must-recompute-not-just-record.md; agent-tools/src/collaboration-state/claims-open-watcher-gate.ts (workspace_scope/source_locus schema)",
+      "evidence": "Rule file states the recompute-not-record principle verbatim; schema carries workspace_scope: z.enum(['in','out-upstream-api']) and source_locus enum including 'this-repo'/'upstream-in-house-api' \u2014 the authority/scope fields the fix required."
+    },
+    {
+      "id": "Bc60",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "'a 121-commit re-base had NO green intermediate commit and the pressure surfaced as a well-reasoned --no-verify request. The rule held ... the finding is about the tool: checks that cannot express staged progress convert correct behaviour on all sides into bypass requests.'"
+    },
+    {
+      "id": "Bc61",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "'Design stack: #583 open (PR-3, seven-Opus round, turbo env-declaration cache defect + 320px reflow cured pre-open)' \u2014 confirms the MCP-128 PR-3 turbo cache defect and its cure, in the design-stack summary."
+    },
+    {
+      "id": "Bc62",
+      "verdict": "home-verified",
+      "path": "turbo.json",
+      "evidence": "Line 108-110 comment still reads: 'The design system is copied into public/oak-ds at build time. It has no build script, so ^build contributes no hash leg for it \u2014 without these inputs a design-system edit replays a stale bundle.' Comment is present unchanged, consistent with the candidate's claim it was flagged for re-truing but possibly never landed."
+    },
+    {
+      "id": "Bc63",
+      "verdict": "home-verified",
+      "path": ".husky/pre-commit; .husky/pre-push",
+      "evidence": "pre-commit:53-70 and pre-push:91-96 carry 'env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE' narrowly wrapping the turbo invocation, with comments citing 'turbo 2.10.6 died on GIT_DIR here' \u2014 matches the claimed cure exactly."
+    },
+    {
+      "id": "Bc64",
+      "verdict": "home-verified",
+      "path": ".agent/reference/shell-and-tooling-gotchas.md; package.json",
+      "evidence": "gotchas.md: 'turbo parses bare --force as value-taking and eats the task name (turbo run --force sdk-codegen runs nothing); use --force=true.' package.json script: 'sdk-codegen:refresh': '... turbo run --continue --force=true sdk-codegen ...' \u2014 cure is landed."
+    },
+    {
+      "id": "Bc65",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "'Stale-.next class, second instance today at this seat (fleet's third): a clean rebuild of the workspace cures .next/types/validator.ts TS2307 './routes.js'; suspect surface = turbo cache restore racing a long-lived next start on the same .next.' Not present in shell-and-tooling-gotchas.md itself; napkin is the actual home."
+    },
+    {
+      "id": "Bc68",
+      "verdict": "home-verified",
+      "path": "~/.claude/projects/<project-slug>/memory/sonar-automatic-analysis-dropped-trigger.md",
+      "evidence": "Per-user memory file exists carrying: 'SonarCloud on this repo is AUTOMATIC ANALYSIS ... Cure for a dropped trigger: git commit --allow-empty + push re-fires the webhook ... settle watch must check BOTH checks-not-pending AND the Sonar public API.' (dated 2026-07-21, predates the 07-26 maintenance window the candidate describes, but is the standing mechanism home; the specific 07-26 maintenance-window instance itself is only in napkin-2026-07-30.md, not a separate durable doc)."
+    },
+    {
+      "id": "Bc69",
+      "verdict": "home-verified",
+      "path": ".sonarcloud.properties",
+      "evidence": "Line 24: 'sonar.cpd.exclusions=**/src/types/generated/**,...,agent-tools/src/mcp-content-current-source/current-source-delta-reviews-*.ts'; line 27 comment: 'Owner ruling, verbatim: \"Product code gets no sonar exclusions...\"'; line 41 'sonar.exclusions=packages/design/...' confirms cpd-only scoping distinct from full exclusions."
+    },
+    {
+      "id": "Bc70",
+      "verdict": "home-verified",
+      "path": ".gitleaks.toml",
+      "evidence": "File exists at repo root (also mirrored into active worktrees), consistent with the claimed narrowest-fix disposition; not read in full but presence + location matches the claim."
+    },
+    {
+      "id": "Bc71",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "'Schooner holds the stranded-credentials lane. origin/main's .gitignore has no credential pattern; the hardening exists only on the coordination branch. I verified the exposure is latent, not live ... Standalone PR prepared now, merges FIRST when the window clears.' Matches the candidate claim verbatim; could not independently re-check origin/main (no git-log tool available), but the first-hand verified record is the home."
+    },
+    {
+      "id": "Bc72",
+      "verdict": "home-verified",
+      "path": ".gitignore",
+      "evidence": "Lines 26-29: '# Local MCP server config\\n.mcp.json\\n# Plugin-shipped MCP configs are tracked release artefacts, not local config.\\n!plugins/*/.mcp.json' \u2014 the negation rule curing the MCP-302 swallow is present and tracked."
+    },
+    {
+      "id": "Bc73",
+      "verdict": "home-verified",
+      "path": ".github/CODEOWNERS",
+      "evidence": "CODEOWNERS line 2/5: '* @jimCresswell @mantagen' confirms the @mantagen addition from the PR #569 remediation; the design-bundle untrack + gitignore is the merged-main state (bundle not present as tracked design blobs on current tree)."
+    },
+    {
+      "id": "Bc74",
+      "verdict": "home-verified",
+      "path": "packages/sdks/oak-sdk-codegen/src/bulk/restricted-lesson-filter.ts",
+      "evidence": "File header: 'Removes lessons flagged restricted: true by upstream, and prunes the matching unitLessons references on every unit... restricted lesson slugs and titles would otherwise survive into unit lesson_ids, semantic summary text' \u2014 matches the unitLessons/lesson_ids/ELSER leak-site substance. The specific percentage stats (25-46%, 94/106, 0/3372) were not found in any durable doc; they only appear in the ephemeral corpus-transfer data files, so the quantitative detail is not itself homed, but the mechanism substance is."
+    },
+    {
+      "id": "Bc75",
+      "verdict": "home-verified",
+      "path": "packages/sdks/oak-sdk-codegen/src/bulk/restricted-lesson-filter.ts",
+      "evidence": "Same file states: 'This is a deliberate product decision... The MCP-204 ruling (owner-directed, 2026-07-27) excludes restricted lessons... to support on-time submission. The decision is revisited post-submission... on MCP-204' and 'every consumer reports the excluded count on each run' \u2014 single named home, documented, runtime-visible exclusion count, decision provenance, MCP-204 revisit, all present."
+    },
+    {
+      "id": "Bc76",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only 'MCP-201 Linear ticket comment d9e18b34'; the specific stats (2,348/12,391, 19.0%, per-subject %, index name) appear only in the ephemeral corpus-transfer working files (candidates-merged/reduce-shard/map-result/napkin/director-handoff), not in any durable repo doc \u2014 cannot verify a Linear comment from this tool."
+    },
+    {
+      "id": "Bc77",
+      "verdict": "home-verified",
+      "path": ".agent/reports/upstream-and-bulk-alignment-concept-exploration-2026-07-26.md",
+      "evidence": "Lines 15-18: 'Bulk corpus measured: the 2026-06-10 download... (30 subject files, 635 MB, 12,864 lesson records)'; lines 123-127: 'schema.json's structural claims are false and were never true: its required oakUrl/canonicalUrl... occur in zero of 12,864 records \u2014 in the SAME ZIP that shipped the schema.' Matches the inverted-premise/0-occurrence/635MB/30-of-32-subjects substance closely, though homeClaim named only the MCP-203 ticket."
+    },
+    {
+      "id": "Bc78",
+      "verdict": "home-verified",
+      "path": "packages/sdks/oak-sdk-codegen/code-generation/excluded-paths.ts",
+      "evidence": "'The check-restricted (usage-licence) family, deferred whole-pipeline' with DEFERRED_PATHS entries ticketed MCP-214, and header text 'Owner-ruled deferral (2026-07-26) tracked by MCP-214... and MCP-215' \u2014 matches the check-restricted-not-exposed-this-refresh ruling exactly, though homeClaim named only the ticket sweep."
+    },
+    {
+      "id": "Bc79",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched for 'readOnlyHint...POST', 'uncallable tool', 'anti-guard', 'fingerprint'/'invisibly' across the repo; MCP-152 shape-novelty substance (uncallable tool, anti-guard-class green test, 5 operations' limit-default/example/max drift) appears only in the ephemeral corpus-transfer data files, not in any rule/ADR/decision-record/report. Suggested home: docs/architecture/architectural-decisions/ (a new ADR on generated-tool shape-novelty risk) or agent-tools/docs/agent-support-tools-specification.md."
+    },
+    {
+      "id": "Bc80",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched for 'Strict, all the time, everywhere' and 'graph tools...real data'/'hand-authored runtime checks' across the repo; no match outside the ephemeral corpus-transfer data files. Suggested home: docs/architecture/architectural-decisions or agent-tools/docs/agent-support-tools-specification.md (schema/example strictness doctrine)."
+    },
+    {
+      "id": "Bc81",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/oak-under-the-hood/oak-under-the-hood-tool.ts",
+      "evidence": "Lines 34-40: 'accepts only the empty object... and NO outputSchema \u2014 the result body is free-form markdown, with no object contract worth declaring. The dual shape is ADR-058 (content + structuredContent)...'. Note: ADR-058 itself (docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md) documents the dual content/structuredContent shape but does not itself state the no-outputSchema decision \u2014 that decision text lives in this tool's code comment, which cites ADR-058 for the dual-shape rationale. The estate-wide 'no tool declares outputSchema' gap claim was not independently corroborated by a grep for outputSchema across the generated registry in this pass."
+    },
+    {
+      "id": "Bc82",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched for 'parity' near example/annotations/aggregated-*.ts language in .agent/directives and repo-wide; only an unrelated 'check\u2194CI parity validator' (smoke-test reachability, testing-strategy.md L415) and unrelated JSON candidate-data hits were found. No generator-level parity-contract doc exists yet, consistent with needs-home. Suggested home: agent-tools/docs/agent-support-tools-specification.md or a new ADR under docs/architecture/architectural-decisions."
+    },
+    {
+      "id": "Bc83",
+      "verdict": "home-verified",
+      "path": "agent-tools/src/mcp-conformance/derive-example-args.ts",
+      "evidence": "Lines 16-20 and 52-58: 'every REQUIRED property takes its first advertised example; optional properties are omitted... A required property without an example is a loud failure'; code derives args only from `required` properties, confirming the claim that all-optional tools (thread-progressions, misconception-graph) would get {}."
+    },
+    {
+      "id": "Bc84",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only MCP-319/MCP-321 tickets. Found download-asset-user-only-url.plan.md (.agent/plans-backlog-2026-07/sdk-and-mcp-enhancements/current/) discussing the signed-URL model-visibility boundary, but it does not document the MCP-321-inversion narrative (defect moved from fetch to download-asset minting an unvalidated signed URL) or the four-graph-tools optional-but-semantically-required finding; substance not durably homed outside the ticket."
+    },
+    {
+      "id": "Bc85",
+      "verdict": "home-verified",
+      "path": ".agent/directives/testing-strategy.md",
+      "evidence": "Line 100-104: 'Prove behaviour, never config or content \u2014 The umbrella over the rules above: a test proves observable behaviour *without* pinning bytes... fails loud on a [drift]' and line 83-91 'Test real behaviour, not implementation details'. Matches the round-trip/non-empty assertion doctrine. The 'hand-authored SDK test files pinning dead example slugs still need reshaping' remediation item was not independently located as a tracked TODO in this pass."
+    },
+    {
+      "id": "Bc86",
+      "verdict": "home-verified",
+      "path": ".agent/directives/testing-strategy.md",
+      "evidence": "Lines 267-273: 'Classification of supertest (and any HTTP test harness) follows the boundary, not the tool (owner-ratified 2026-07-29): \"It depends on if it is calling a black box running system over a network interface (E2E), or if it is importing code and running it inside the test (integration).\" supertest(app) against an imported, in-process app is an integration test' \u2014 exact match, PR #622/MCP-338 amendment confirmed by content."
+    },
+    {
+      "id": "Bc87",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "MCP-398 and the 'remain owner/Director-held' status are recorded in .agent/memory/operational/director-handoff.md (line 295: 'MCP-395 + axe-core + MCP-398 remain owner/Director-held; napkin OVER rotation threshold') \u2014 this is a rolling operational handoff record, not a permanent doc per the durability-hierarchy rule (comms/handoff = ephemeral transport, not storage), so the obligation is confirmed live and unowned but not durably homed. No ADR/plan/rule captures the 23-of-24 e2e-tier-shaped finding, ADR-161 text, test-expert template, or sentry-cli doc residue as a single tracked item. Suggested home: a dedicated entry in .agent/plans-backlog-2026-07 (test-tier remediation) referencing MCP-398, or the testing-strategy.md itself."
+    },
+    {
+      "id": "Bc88",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched testing-strategy.md for 'isError', 'modelling the engine', 'fake...SDK internals' \u2014 no match. The PR #618 test-double discipline (fake modelling SDK internals wrong twice; isError unfalsifiable as liveness assertion) is not present in testing-strategy.md or any other directive/rule file found. Suggested home: .agent/directives/testing-strategy.md (a new subsection on test-double/fake discipline) or a decision record under .agent/practice-core/decision-records."
+    },
+    {
+      "id": "Bc89",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/server.ts",
+      "evidence": "Lines 69-78: comment naming server.ts as the MCP-241 composition root, memoising analyticsMemo outside the retried loader, and noting the serverless entry never calls close() (waitUntil-based delivery). Corroborated by handlers.integration.test.ts lines 180-186: 'the concrete transport's close() fires onclose synchronously and the SDK server clears its connection before its own close() runs (verified against the installed SDK)' \u2014 confirms the close()-cascade/onclose-synchronous claim."
+    },
+    {
+      "id": "Bc90",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/compose-product-analytics-runtime.integration.test.ts",
+      "evidence": "Test 'the stateless composition never assigns the observed sessionId (MCP-331 fence)' (line 309) with comment 'The adapter's sessionId setter forwards to the SDK transport, whose own property is not assignable (MCP-331 owns the cure)'; the setter itself is at packages/libs/posthog-node/src/mcp-transport-observer.ts:60-62. The fence already exists and names the ticket that owns the cure \u2014 this candidate should be considered already homed, not needs-home."
+    },
+    {
+      "id": "Bc91",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched docs/architecture/architectural-decisions/055-zod-version-boundaries.md and the codebase's zod-utils.ts/descriptor-utils.ts: the correct pattern (extracting .shape via isZodObject, never annotating an export as bare z.ZodRawShape) is followed in code, but the specific gotcha narrative (': z.ZodRawShape' widening to core $ZodType and killing .meta() reads, bitten twice in one day) is not documented anywhere durable \u2014 only in the sweep's own data files. Best candidate home: docs/architecture/architectural-decisions/055-zod-version-boundaries.md (add a pitfalls/gotchas note) or a memory/active/patterns entry."
+    },
+    {
+      "id": "Bc92",
+      "verdict": "home-verified",
+      "path": ".agent/reports/mcp-281-privacy-evidence-pack/evidence-pack-brief.md",
+      "evidence": "Lines 40-41 and 69: 'event_retention_months | 84 | Vendor default; not the required \u226412-month maximum', 'events_retention_enforced | false'; and 'Owner ruling, verbatim: \"set it to 12 months, we can always change it.\" The vendor cannot currently enforce this on any surface... the API PATCH silently ignores event_retention_months (read-back stays 84 \u2014 the field is API-read-only)... events_retention_enforced is false, so the vendor deletes nothing at any horizon today.' Better home than the bare ticket claim."
+    },
+    {
+      "id": "Bc93",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "evidence-pack-brief.md documents the concrete instance (consultation happens before first collection, ingested_event:false) but not the generalisable sequencing PRINCIPLE (fix-before-first-event = settings change, after = deletion exercise; M0 ordering escalation). Not found in .agent/plans/delivery/mcp-173-posthog-privacy-governance.plan.md either. Suggested home: that plan's decision-record section, or a memory/active/patterns entry on 'free-to-fix windows close at first write'."
+    },
+    {
+      "id": "Bc94",
+      "verdict": "home-verified",
+      "path": ".agent/reports/mcp-281-privacy-evidence-pack/evidence-pack-brief.md",
+      "evidence": "Line 71: 'Erasure: Oak's existing \"delete my data\" process extends to this PostHog project. Owner word, verbatim: \"Oak already has a 'delete my data' process, we need to update it to include this PostHog project as well, fold that into the Linear and Notion privacy review resources.\"' Better home than the bare MCP-283 ticket claim."
+    },
+    {
+      "id": "Bc95",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/218-posthog-mcp-analytics-identity-session-and-privacy.md",
+      "evidence": "\u00a73 (lines 167-195) 'Define raw data as allowlisted facts, never content': envelope includes MCP primitive/capability name, excludes 'tool arguments and responses; prompts, model output... free text'. Matches the MCP-354 catalogue substance (session/tool-use tracking, never arguments/responses) at a durable ADR rather than only the Linear comment."
+    },
+    {
+      "id": "Bc96",
+      "verdict": "home-verified",
+      "path": "packages/libs/posthog-node/src/product-analytics-sink.ts + posthog-final-wire.integration.test.ts",
+      "evidence": "product-analytics-sink.ts:69 'const actorId = readOwn(value, 'verifiedActorId');' and posthog-final-wire.integration.test.ts:23 'const DISTINCT_ID = \"oakph:v1:2026-07:...\"' confirm the verifiedActorId gate and oakph-prefixed distinctId policy described in the claim; ADR-218's identity model corroborates the app-boundary/sink/policy three-layer design. Real code found, better home than the Linear comment alone."
+    },
+    {
+      "id": "Bc97",
+      "verdict": "home-verified",
+      "path": "docs/governance/safety-and-security.md",
+      "evidence": "\u00a7Compliance Considerations/GDPR-Privacy (lines 317-336): 'PostHog \u2014 product analytics, EU-hosted (eu.i.posthog.com), live in production. Capture is bounded by ADR-218's closed, content-free event allowlist... Content never enters \u2014 tool arguments and responses... excluded by construction... no IP addresses and GeoIP.' Confirms the core fact (live production capture, allowlist-bound, no IP) though the exact event/person counts and the 'stale README' framing are not present verbatim."
+    },
+    {
+      "id": "Bc98",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/218-posthog-mcp-analytics-identity-session-and-privacy.md",
+      "evidence": "Line 299 (\u00a75, 'Before public capture is enabled, Oak must also have:') lists 'an MCP-specific privacy notice and an approved lawful basis' as an outstanding gate. Confirms the ADR-218 half of the claim; MCP-443 ticket number and the 'DPIA transplant' narrative were not found anywhere on disk (only in the sweep's own data files), and docs/governance/safety-and-security.md does not itself contain the DPIA-transplant explanation despite being named alongside a specific commit."
+    },
+    {
+      "id": "Bc99",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md",
+      "evidence": "Line 141: 'orientation costs zero tokens against the 25K-token p95 response-size bar (owner-ratified 2026-07-29, recorded on MCP-305).' Confirms the sizing bar and its owner-ratified status at a durable ADR, corroborating the Linear-comment claim."
+    },
+    {
+      "id": "Bc100",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "Line 321: '...its plan recovered from Codex platform history and posted on MCP-305 as a \u26a0\ufe0f QUARANTINED record at owner word \u2014 \"do not assume the plan is correct or useful\". MCP-305 has since been DECLINED at honest capacity checks by BOTH Raccoon and Schooner \u2014 it needs a FRESH owner-launched seat.' Confirms the quarantine narrative durably, beyond the bare Linear comment."
+    },
+    {
+      "id": "Bc101",
+      "verdict": "home-verified",
+      "path": ".agent/plans-backlog-2026-07/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md",
+      "evidence": "Line 464: 'owner decision point \u2014 nothing downstream auto-resumes' with a nearby 2026-06-11 dated entry (line 275: 'corrected 2026-06-11 at the PR #165 year-axis re-chain'), matching the claimed unexercised 2026-06-11 owner decision point. The MCP-305 pointer P3 half remains ticket-only and unverifiable, but the substance itself is homed in this plan file, not absent as 'disposition unverified' suggested."
+    },
+    {
+      "id": "Bc102",
+      "verdict": "home-missing-substance",
+      "path": ".agent/reports/claude-directory-submission-form-inventory-2026-07-28.md",
+      "evidence": "The report confirms the form-authority claim ('outranks every documentation summary') and the auto-listing-is-default finding (\u00a77, lines 124-134: 'by default, listed in the directory as a community connector'). However the specific detail that 'the portal now requires a Claude Team/Enterprise org with Owner/Directory-management access' does not appear anywhere in this report or elsewhere in the tracked repo (only in the sweep's own pipeline data files) \u2014 a load-bearing part of the claim is missing from the named home."
+    },
+    {
+      "id": "Bc103",
+      "verdict": "home-verified",
+      "path": ".agent/reports/claude-directory-submission-form-inventory-2026-07-28.md",
+      "evidence": "\u00a76 (lines 107-122) already carries the truing note the candidate says is 'needed': '[TRUED 2026-07-30 \u2014 falsified for MCP Apps; see the note below]... REQUIRES carousel screenshots for connectors that serve a ui:// widget resource \u2014 ours does, so the clause binds: 3\u20135 PNG, \u22651000px, cropped to the app response only, no prompt in the image, PAIRED prompt text per screenshot, no video/GIF.' The truing already exists at this path \u2014 the candidate's premise that it 'needs' a truing note is stale; verdict is home-verified, not needs-home."
+    },
+    {
+      "id": "Bc104",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only Linear tickets MCP-292/MCP-296/MCP-309; these cannot be checked from the repository filesystem. No corroborating tracked-file home found on a targeted search."
+    },
+    {
+      "id": "Bc105",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only Linear tickets MCP-296/MCP-309; not checkable on disk. No tracked-file home found."
+    },
+    {
+      "id": "Bc106",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "Line 335: 'The submission gates on ALL FOUR upstream defects (MCP-327/328/329/330, Aakesh's) \u2014 encoded mechanically: MCP-309 blockedBy all four.' Also recorded at line 269 ruling 33 and elsewhere. Confirms the blockedBy graph and the 'we never fix upstream defects ourselves' framing is consistent with the record's language, corroborating beyond the ticket-only claim."
+    },
+    {
+      "id": "Bc107",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "Line 275/281 area: '(2026-07-30 ~15:45Z, owner verbatim, SUPERSEDES the Thursday-evening submission timing...): \"Submission deadline has moved to Thursday 6th August. Matt has the conn... transfer ownership of all key tickets to him.\" EXECUTED same hour: handover doc f0e5cef166d2 fully refreshed... gates 7 carousel-screenshots + 8 privacy-policy-truth added... key tickets assigned Matthew Gregory: MCP-309/302/306/292/268/420/143/298/437.' Confirms the deadline move, ticket transfer list, and new gates directly at this tracked home."
+    },
+    {
+      "id": "Bc108",
+      "verdict": "home-verified",
+      "path": "plugins/oak-open-curriculum/",
+      "evidence": "plugins/oak-open-curriculum/agents/ has exactly 4 files (coverage-checker, misconception-miner, sequencing-auditor, standards-reviewer); skills/ has exactly 4 skill dirs (oak-accessibility, oak-curriculum-principles-mcp-enabled, oak-curriculum-principles, oak-quality-standards); workflows/ has exactly 4 (audit-sequence, check-coverage, find-misconceptions, review-resource) \u2014 matches the 4/4/4 subset claim on disk, independent of the PR#620 citation."
+    },
+    {
+      "id": "Bc109",
+      "verdict": "home-verified",
+      "path": "plugins/oak-open-curriculum/.claude-plugin/plugin.json",
+      "evidence": "line 10: \"license\": \"MIT (code \u2014 see LICENCE). Curriculum content from the Oak Open Curriculum API: Open Government Licence v3.0 \u2014 see LICENCE-DATA.md for upstream terms. Oak branding is not MIT-licensed \u2014 see BRANDING.md...\" \u2014 the three-part MIT/OGL/brand split is present verbatim in the manifest's license field."
+    },
+    {
+      "id": "Bc110",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only Linear tickets MCP-437/438-442; cannot verify Linear from this filesystem. No corroborating repo doc found carrying the specific factual-gap enumeration (39 vs 40 tools, six live resources, licence/OGL, URL typo)."
+    },
+    {
+      "id": "Bc111",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/handlers-tool-registration.integration.test.ts",
+      "evidence": "lines 194-203: test titled 'no registered tool description instructs the model \u2014 no sequencing imperative, no presentation directive' explicitly describes the two banned classes including 'the presentation directive \u2014 an \"IMPORTANT:\"-marked or \"always include ...\" instruction... (the download-asset fonts tip was the worked instance)' \u2014 matches the fleet-wide policy-test extension claim."
+    },
+    {
+      "id": "Bc112",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only Linear ticket MCP-353; no repo artefact found carrying the under-the-hood build-time bake / openWorldHint / docs pointer-deletion decision text."
+    },
+    {
+      "id": "Bc113",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched docs/ for the deployment-topology fact (www.thenational.academy/mcp 404, well-known/oauth-* 404, only-alpha-serves-app) \u2014 no match found outside Linear-ticket-only references and corpus-analysis working data. Suggested home: an ADR or docs/architecture note alongside ADR-115/126 documenting deployment topology, since ADR-219 already documents adjacent Vercel/Cloudflare topology facts but not this specific one."
+    },
+    {
+      "id": "Bc114",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim is a specific Linear comment (MCP-271 d983d3d1); cannot verify Linear comments from the filesystem. No matching repo doc found stating the Cloudflare DNS-only vs proxied split for curriculum-mcp-alpha vs the upstream API."
+    },
+    {
+      "id": "Bc115",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim is a Linear comment (MCP-344 ac0850d3); cannot verify. No corroborating repo doc found with the per-client RFC 8414 compat verdicts (Claude Code/claude.ai/ChatGPT)."
+    },
+    {
+      "id": "Bc116",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim is a Linear comment (MCP-307 79061ca6); cannot verify. No corroborating ADR found describing the bounded-selection host-header six-finding security re-pass verdict."
+    },
+    {
+      "id": "Bc117",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim is Linear comments (MCP-143 f4bde195/218e7ecb); cannot verify. docs/governance/safety-and-security.md was checked and does not contain the DCR-ordering/invite-gate/scopes_supported decision text."
+    },
+    {
+      "id": "Bc118",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only Linear tickets MCP-298/MCP-304; cannot verify probe-result figures (supportsCimd, rfc9728Compliant, compat 2/14/0 matrix) against any repo artefact."
+    },
+    {
+      "id": "Bc119",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only Linear tickets MCP-188/MCP-200; cannot verify the MCPJam skip/architectural-gap analysis from the filesystem."
+    },
+    {
+      "id": "Bc120",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md",
+      "evidence": "lines 125-133: 'Its cited clause is RFC 9700 \u00a72.6 ... RFC 8252 \u00a77.3 is the section that clause points at: it DEFINES loopback interface redirection ... It states no prohibition, so it cannot satisfy the cited-clause test alone.' \u2014 matches the claimed RFC-citation correction exactly; MCP-197 pointer not independently verifiable (Linear) but the ADR-side correction is fully present."
+    },
+    {
+      "id": "Bc121",
+      "verdict": "home-verified",
+      "path": ".github/workflows/mcp-conformance-unattended.yml",
+      "evidence": "lines 85-104: 'mcpjamStderr is live-network-derived UNTRUSTED text, and GitHub parses %, CR and LF inside workflow commands. A bare CR TERMINATES this command ... Percent must be encoded FIRST or the encodings below are [corrupted]' with escapeData/escapeProperty implementing percent-then-CR/LF encoding \u2014 matches the claimed cure exactly; PR #570 itself not independently checkable but the landed code is present and demonstrates it."
+    },
+    {
+      "id": "Bc122",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/219-rate-limiting-is-an-edge-concern.md",
+      "evidence": "lines 29-33: 'The deployment cannot count per client in process. On Vercel Fluid Compute, instances are short-lived, request routing is not client-affine, and the forwarded-for header the limiter keyed on resolves to Cloudflare egress addresses. An in-process counter therefore counted per point-of-presence per instance lifetime \u2014 never per client.' Matches the trust-proxy/rate-limiting-collapse claim; MCP-288 ticket itself not independently verifiable."
+    },
+    {
+      "id": "Bc123",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/219-rate-limiting-is-an-edge-concern.md",
+      "evidence": "ADR-219 (Accepted 2026-07-30, Supersedes ADR-158) states all three adjudication facts verbatim: edge owns volumetric control, upstream-quota threat 'never applied to this service', and Fluid Compute precludes in-process counting; Decision section: 'Rate limiting for the HTTP MCP server is owned at the edge; the application runs no in-process rate limiter' \u2014 full match to the owner-ruled removal claim. MCP-411 ticket not independently verifiable but ADR carries the substance."
+    },
+    {
+      "id": "Bc124",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Checked .agent/rules/never-disable-checks.md (only lists CodeQL as an example static-analysis tool, no dismissal-posture reversal text) and docs/governance/sonar-disposition-policy.md (has adjacent 'Precedent is not correctness' principle, lines 76-79, but not the specific CodeQL fix-first-zero-dismissals posture, the #83-86/#226-229 recurrence detail, or the owner quote 'why should I dismiss issues detected by CodeQL?'). No home found for this specific decision; docs/governance/sonar-disposition-policy.md is the best candidate home to extend."
+    },
+    {
+      "id": "Bc125",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "The general pattern .agent/memory/active/patterns/read-surface-is-not-decide-surface.md documents the adjacent 'per-check verdicts read BY NAME from structured state' principle but contains no CodeQL-specific detail (state=null on no-default-branch-instance, ref-scoped GET via ?ref=refs/pull/N/merge). No file matching 'read-verdicts-by-name-never-column-parse' exists in .agent/rules despite being referenced in the user's memory index \u2014 likely a naming mismatch or unmerged item. Suggest homing this CodeQL-specific gotcha as a new subsection in read-surface-is-not-decide-surface.md or a new rule file."
+    },
+    {
+      "id": "Bc126",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "docs/engineering/merge-bot.md confirms merge-bot's GitHub App scopes list only `security_events: read` (no write), consistent with the premise, but no file records the obligation itself (owner one-click dismissal needed per new-route CodeQL re-fire until a permission-grant decision). .agent/plans-backlog-2026-07/observability/current/pr-87-codeql-alerts.plan.md discusses per-row dismissal cures for an existing alert but not the merge-bot permission gap or the standing future obligation. Best candidate home: that plan file, or a new frictions-register entry."
+    },
+    {
+      "id": "Bc128",
+      "verdict": "home-verified",
+      "path": "demos/oak-design-showcase/tools/showcase-origin.ts",
+      "evidence": "Comment block: 'Derivation, not probing: Playwright evaluates the config once in the main process and again in every worker, so the value must be stable across evaluations (worked failure, MCP-384). No `process.env` access...' and derives SHOWCASE_PORT deterministically via sha256 of the workspace path, clear of fixed dev ports incl. 3020 showcase."
+    },
+    {
+      "id": "Bc129",
+      "verdict": "home-verified",
+      "path": "demos/oak-design-showcase/tests/apply-state.ts",
+      "evidence": "Lines ~113-136: 'MCP-399 recorded (three load-dependent outcomes on identical code). Both measurements therefore wait for document.fonts.ready...' followed by `await page.evaluate(() => document.fonts.ready);`."
+    },
+    {
+      "id": "Bc130",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/operations/test-ui-webserver-env.integration.test.ts",
+      "evidence": "Test models the ambient .env.local OBSERVABILITY_SINKS selection reaching the webServer child unless pinned, matching the MCP-359 cure description; turbo.json line 29 confirms `\"globalDependencies\": [\"**/.env.*local\", \"tsconfig.base.json\"]`."
+    },
+    {
+      "id": "Bc131",
+      "verdict": "home-verified",
+      "path": ".agent/rules/design-values-come-from-the-system.md",
+      "evidence": "\"Owner-ruled (2026-07-29, in-chat, verbatim): 'everywhere we use a value it should come from the design system, no hardcoded values.'... the rule binds CONSUMER surfaces; kit-internal literals ARE the definitions and are exempt; infrastructure values (ports, timeouts, URLs) are not design values\" \u2014 matches claim verbatim including replace-with-role default and retained-literal owner-word requirement."
+    },
+    {
+      "id": "Bc132",
+      "verdict": "home-missing-substance",
+      "path": ".agent/rules/source-is-typescript-esm-only.md",
+      "evidence": "Rule file exists and states the TS-only mandate and JS carve-outs (ADR-168 \u00a74, Husky hooks), but contains no language sharpening it to 'high, high' bar, no mention of an owed rule amendment, and no census of surviving .js exceptions or oak-theme.js rewrite. The specific owner-sharpening/census obligation is not recorded anywhere found (searched for 'census', 'oak-theme.js', 'high, high', 'amendment' \u2014 no matches)."
+    },
+    {
+      "id": "Bc133",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md",
+      "evidence": "Line 354: 'The tier is a separate downstream workspace, never an export of the CSS package.' Lines 361-362: 'the neutral trunk holds what is framework-invariant (tokens, classes, fonts, assets, the theme switcher); bindings hold what is covariant.' Matches the claimed invariant/covariant shape ruling."
+    },
+    {
+      "id": "Bc134",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Home named is the MCP-387 Linear ticket only; cannot verify ticket contents from the repo."
+    },
+    {
+      "id": "Bc135",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Home named is the MCP-388 Linear ticket only; cannot verify ticket contents from the repo."
+    },
+    {
+      "id": "Bc136",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Home named is the MCP-221 Linear ticket only; cannot verify ticket contents from the repo."
+    },
+    {
+      "id": "Bc137",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Home named is the MCP-220 Linear ticket only; cannot verify ticket contents from the repo."
+    },
+    {
+      "id": "Bc138",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/app/static-content.ts",
+      "evidence": "Code for the landed PR #580 cure exists on disk: static-content.ts, src/test-helpers/static-root-fixture.ts, and oak-ds-static.integration.test.ts implement the staticRoot injection seam and static-publishing path referenced by the claim."
+    },
+    {
+      "id": "Bc139",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched for 'FUNCTION_INVOCATION_FAILED', 'MCP-153', and the deploy-vs-serve distinction; no dedicated pattern/rule captures it. The closest related pattern, .agent/memory/active/patterns/probe-deployed-surfaces-before-planning.md, covers a related but different failure mode (artefact-only grounding for deployed surfaces, MCP-67/MCP-63) and does not mention the Vercel-check-proves-deploy-not-serve distinction or the 500/zero-runtime-logs-despite-17-green-checks specifics. Suggested home: a new pattern file, e.g. .agent/memory/active/patterns/deploy-check-is-not-serve-check.md."
+    },
+    {
+      "id": "Bc140",
+      "verdict": "home-missing-substance",
+      "path": "docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md",
+      "evidence": "ADR-213 was grepped for 'appBoundaryRules', 'no-relative-packages', and 'demo.*lint' \u2014 no matches. The ADR does not carry the demo-boundary-lint-wiring gap or the MCP-382 rider adjudication; the remaining home (MCP-382 ticket) is unverifiable from the repo."
+    },
+    {
+      "id": "Bc141",
+      "verdict": "home-verified",
+      "path": "packages/design/oak-design-system/KNOWN-ISSUES.md",
+      "evidence": "Entry 12: 'RESOLVED 2026-07-20 \u2014 colors_and_type.css formerly made one runtime network call (a fonts.googleapis.com @import for Roboto Mono...) Cured by the standing better cure this entry named: Roboto Mono now ships as the local variable font... same pattern as Lexend' \u2014 matches the claimed Roboto Mono self-hosting precedent cited as input to MCP-377."
+    },
+    {
+      "id": "Bc142",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Home named is PR #643 / MCP-368 only. Repo search for 'PR #643' and 'MCP-368' + 'looks good' finds only the ephemeral shared-comms-log.md (transport, not a durable home per the durability-hierarchy rule) and a generic (non-643-specific) formation letter passage in .agent/experience/2026-07-30-bora-binds-thermal-formation-letter.md that describes the same gate pattern without naming PR #643. No durable tracked doc records this specific PR/ticket pairing's substance."
+    },
+    {
+      "id": "Bc143",
+      "verdict": "home-missing-substance",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/linear-mcp-team-and-project-hygiene.md",
+      "evidence": "The named memory file exists and covers team/project hygiene (MCP- vs AIP- tickets, project scoping) but contains nothing about Linear's PR-merge automation auto-closing a multi-slice programme ticket at each slice merge, or the manual-reopen requirement. Substance absent."
+    },
+    {
+      "id": "Bc144",
+      "verdict": "home-missing-substance",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/linear-mcp-team-and-project-hygiene.md",
+      "evidence": "Same memory file checked; it covers team/project placement rulings and repo-vs-ticket durable-knowledge scoping, but has no content about the Linear MCP connector refusing ticket writes carrying internal planning detail/repo paths, nor any note about pausing-and-routing as the correct response. Substance absent."
+    },
+    {
+      "id": "Bc145",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names only MCP-356 (Linear ticket); director-handoff.md line ~318 references MCP-356 in passing but the DoD-discipline substance is not reproduced in any repo file \u2014 cannot verify a Linear ticket's content."
+    },
+    {
+      "id": "Bc146",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim is MCP-404 ticket only; no repo file carries the MCP-354/MCP-305 discharged-but-unflipped substance as durable text \u2014 Linear ticket content is unverifiable from disk."
+    },
+    {
+      "id": "Bc147",
+      "verdict": "no-home-found",
+      "path": ".agent/rules/validators-must-recompute-not-just-record.md",
+      "evidence": "The rule exists and covers the general recompute-not-record principle (including a 2026-07-30 identifier-integrity consolidation), but it does NOT carry this candidate's specific worked instance (claims registry stale-Director-claim ~28h overrun, ~136 never-archived commit-queue entries, raw-JSON readers bypassing the CLI). No cure ticket is named either. Suggest adding this as a worked instance to the existing rule."
+    },
+    {
+      "id": "Bc148",
+      "verdict": "no-home-found",
+      "path": ".agent/reference/comms-watch-mechanism.md",
+      "evidence": "The general schema-0.2.0/watched_comms_dir heartbeat mechanism is documented there (lines 199-259), and assert-watcher-live / claims-open gating is documented in .agent/rules/comms-all-channels-watcher.md (lines 307-380). But the specific claims in this candidate \u2014 merge 34e88477b making the field required, old-binary watchers going 'blind to comms', a provably-live watcher misreporting 'schema mismatch' as stale-build rather than dead-watcher, and --agent-name false-negatives \u2014 are not found anywhere in the corpus. Suggest homing as an addendum to comms-watch-mechanism.md or an MCP-373 recipe note."
+    },
+    {
+      "id": "Bc149",
+      "verdict": "home-verified",
+      "path": ".agent/rules/coordination-branch-24h-lifetime.md",
+      "evidence": "Full rule file present: 'coordination branches last no more than 24 hours...MCP-333...tree-preserving cut (git switch -c)...GitHub auto-deletes the branch at roll-up merge' \u2014 matches the candidate statement closely, including the worked-instance section citing MCP-333/MCP-334 and the worktree-hygiene coordination-exemption evidence."
+    },
+    {
+      "id": "Bc150",
+      "verdict": "no-home-found",
+      "path": ".agent/rules/new-rule-vs-pdr-clause.md",
+      "evidence": "The classifier rule exists and is general (worked instances are 2026-05-26 examples), but it does not document MCP-333's own rule-minting process running this check or folding in worktree-hygiene coordination-exemption evidence as an authoring-process instance. coordination-branch-24h-lifetime.md documents the worktree-hygiene evidence fold-in but not the new-rule-vs-pdr-clause check itself. Substance not found as a recorded instance anywhere."
+    },
+    {
+      "id": "Bc151",
+      "verdict": "home-verified",
+      "path": ".agent/reports/agentic-engineering/cricket-two-pair-tally-2026-07-26.md",
+      "evidence": "File exists, opens 'Cricket two-pair tally \u2014 operating record (2026-07-26 \u2192 2026-07-29, closed)...both run permanently, always as pairs...Consolidated 2026-07-29 at owner word' and contains the ten-run two-pair-era table plus governing owner rulings \u2014 matches the candidate's description of the tally and cadence ruling."
+    },
+    {
+      "id": "Bc153",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Line 5006-5007: 'New D-catch class at the quartet: commitment-vs-artefact (adjudication body existed only as a NEXT at judgement time) \u2014 distinct from frame-legibility; both adjudicated same morning.' Exact match to the candidate's substance."
+    },
+    {
+      "id": "Bc154",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/cricket-two-ab-pairs.md",
+      "evidence": "Lines 24-33: 'Agent types renamed 2026-07-30 by PR #654 (vendor-neutral, ruling 39): now cricket-judgement-low (A)...cricket-procedure-xhigh (D)...The Codex-side trio (Sol/Terra/Luna) was DELIVERED by PR #654 (MCP-433, Done 2026-07-30)'. Corroborated in napkin-2026-07-30.md lines 5268-5270 (PR #654/MCP-433 merge SHAs) and 5278-5283 (vendor-neutral names + Sol/Terra/Luna trio confirmed delivered)."
+    },
+    {
+      "id": "Bc155",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 5315-5317: '2026-07-30 ~19:24Z (Plover closeout verification): the stale Claude Cricket memory route is CLOSED...a first-hand re-read now names PR #654 / MCP-433 as delivered rather than future work.' The named memory file (cricket-two-ab-pairs.md) itself, re-read, already carries the trued statement (line 32-33: 'no longer future work') \u2014 the cross-platform-drift obligation this candidate names has been discharged, not left open."
+    },
+    {
+      "id": "Bc156",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 5056-5059: 'Parallel NOTIFY-dead instance at Plover's codex seat same hour (their child relay polled 48.6s late; their broadcast 12:02:29Z) \u2014 the NOTIFY liveness class failed independently on two platforms in one hour; PDR-133's per-platform declaration obligation is earning its keep.' The 'third instance' framing is corroborated by prior instances recorded at comms-all-channels-watcher.md:278 ('second NOTIFY-dead instance') and napkin-2026-07-30.md:4164 ('NOTIFY-dark third instance (Osprey)'), all filed against PDR-133. PDR-133 itself (.agent/practice-core/decision-records/PDR-133-liveness-classes-and-platform-declaration.md) defines the NOTIFY class this evidence is filed against."
+    },
+    {
+      "id": "Bc157",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Line 5266-5270: '## 2026-07-30 ~19:20Z \u2014 Plover hunts Sundog (019fb2), full-session closeout \u2014 LANDED OUTCOME: PR #638 merged at reviewed head 24d20f9fb (merge c95d795529)...' confirms the PR #638 landing and Plover's executor role in the closing session; matches the candidate's core claim of Plover taking PR #638 to completion."
+    },
+    {
+      "id": "Bc158",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/progression-strand-private-jim-team.md",
+      "evidence": "File states: 'Lives ONLY in the Linear team \"Jim\"...parent JIM-1, children JIM-2...JIM-3...JIM-4 (draft) \u2014 all four Done...the SUBJECT stays unnamed there too...Official document = Notion page...It still carries no [AI Managed] designation \u2014 agent edits ONLY at explicit owner word...' \u2014 matches the candidate's owner-word substance closely (private lane, JIM tickets, read-only-except-owner-word official doc)."
+    },
+    {
+      "id": "Bc159",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names JIM-2/JIM-3 (private Linear tickets) specifically for the 'all claude-in-chrome sessions READ ONLY for five confidentiality-blocked external artefacts' ruling; this specific ruling text is not reproduced in progression-strand-private-jim-team.md or any repo file \u2014 private Linear ticket content is unverifiable from disk."
+    },
+    {
+      "id": "Bc160",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/napkin.md (current) / .agent/memory/active/archive/napkin-2026-07-30.md (rotated)",
+      "evidence": "napkin-2026-07-30.md line 5066-5070: 'the mobilebasic render is [ground truth]...Cure: treat Google Docs as READ-ONLY for browser automation (mobilebasic for reads)'; line 5083-5088 documents the suggestion-layer read gap; lines 5163-5166 document Notion attachment binary-block signed-URL gap. Three of the four named facts confirmed verbatim; the 'shared Chrome profile not signed into Notion' detail specifically was not located in this file."
+    },
+    {
+      "id": "Bc161",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names MCP-298/MCP-303 tickets; these are Linear tickets and cannot be verified from the repo filesystem."
+    },
+    {
+      "id": "Bc162",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "homeClaim names MCP-381/merged PR #646; package.json searches found no current @ai-sdk/provider-utils override (consistent with the claimed removal but not independently confirmable as the PR's outcome without ticket/PR access)."
+    },
+    {
+      "id": "Bc163",
+      "verdict": "home-missing-substance",
+      "path": ".agent/rules/important-state-not-in-temp-files.md + .agent/rules/worktree-hygiene.md",
+      "evidence": "Both named rules exist and are substantive on their general topics \u2014 important-state-not-in-temp-files.md carries a detailed worked-instance section (Ferny Capture D, 2026-05-24) and worktree-hygiene.md covers gitignored-path pruning risk generally \u2014 but neither carries this candidate's specific MCP-143 Clerk-runsheet-vs-PostHog-sheet worked instance (secret-scanned homing on the ticket, dashboard-recoverable rationale for keeping PostHog machine-local). Comms log confirms MCP-143 was minted (shared-comms-log.md ~line 8570) but the runsheet substance itself is not reproduced in any durable repo file found."
+    },
+    {
+      "id": "Bc164",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/query-the-value-never-the-lookalike.md",
+      "evidence": "Memory file carries all three worked instances verbatim: 'A timestamp... reading a peer heartbeat's created_at', 'A commit sha... git log... on the coordination branch' vs git ls-remote, and 'Third instance, code-reading facet... a grep hit inside a docblock that MENTIONS a symbol is not a CONSUMER'. MCP-384/ephemeral-port framing also corroborated separately at napkin-2026-07-30.md:3981-3985."
+    },
+    {
+      "id": "Bc165",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 1220-1241: 'THE CLASS: doctrine asserts a guarantee its mechanism does not deliver' with five verified instances across RULES/SKILLS, and 'The estate already has the principle \u2014 principles.md \u00a7\"Target-architecture wording needs consuming-runtime evidence\"... but it is scoped to ADRs, runbooks, and operator docs. All five failures are in RULES and SKILLS, outside that scope. The cheap cure is extending the scope sentence.' MCP-227's docstring/schema mismatch is separately confirmed at lines 1270,1288 of the same file, consistent with the candidate's sixth-instance framing."
+    },
+    {
+      "id": "Bc166",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "Lines 446-448: 'I filed MCP-324 proposing to remove a deliberate security property, because I criticised a module without reading its governing ADR. Before calling a deliberate-looking behaviour a defect, find out whether it is deliberate.' Lines 463-467 (and restated 573-577) name all five patterns verbatim: always-succeeding control, page read as the whole list, unauthenticated inspector, stale-head review, vacuous zero-match filter."
+    },
+    {
+      "id": "Bc167",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/query-the-value-never-the-lookalike.md",
+      "evidence": "Third instance paragraph: 'a grep hit inside a docblock that MENTIONS a symbol is not a CONSUMER of the symbol. I justified keeping trust proxy by citing get-prm-url.ts:22 as a req.protocol consumer... An Opus gateway review falsified it; my own re-read of the surrounding twenty lines confirmed in seconds.' Also corroborated at napkin-2026-07-30.md:4943-4945."
+    },
+    {
+      "id": "Bc168",
+      "verdict": "home-missing-substance",
+      "path": ".agent/memory/operational/threads/eslint-no-throw-result-migration.next-session.md",
+      "evidence": "The named owning thread file exists but is stale (dated 2026-06-19) and carries none of the claimed substance \u2014 no MCP-224, no '147 pre-existing' or '382 non-failing' warning counts, no PR #654 reference. MCP-224 itself appears only in a bare parenthetical '(max-warnings mechanism)' in design-system-integration.next-session.md:313 and inside the corpus pipeline's own reduction artefacts (map-result/candidates-merged JSON), which are not durable homes. The specific residue claim (147/382 counts, PR #654) is not found anywhere on disk."
+    },
+    {
+      "id": "Bc170",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 2030-2052: MCP-279 lane, worktree identity mis-set as owner not bot, 'the corrective --amend --reset-author was interrupted by a harness restart and stands as the named resume step in pause event 8f56881b.' Line 2224-2229: MCP-279 merge doctrine confirming bot REST-merge bypass boundary."
+    },
+    {
+      "id": "Bc171",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 294-693 (MCP-189/#570 lane), lines 2101-2105 index-of-homes: '#570 dispositions = event 92af6f15, freeze = event 8ab0b3ae... MCP-296 gate evidence = ticket comment + event f8d9c693'. Confirms seven Director-adjudicated fixes and the #570 review arc; MCP-296 form-walkthrough / extension re-pairing corroborated at line 2103-2105."
+    },
+    {
+      "id": "Bc172",
+      "verdict": "home-verified",
+      "path": ".agent/plans/delivery/mcp-63-posthog-product-analytics.plan.md",
+      "evidence": "Plan ratified 2026-07-26 lists tickets MCP-63/230-244 including MCP-237/238/239. napkin-2026-07-30.md:2130-2137 and :3283-3286 confirm 'M0 PostHog boundary (MCP-237 #601 + MCP-238 #602) is engineering-complete' and the boundary-scope caveat. .github/workflows/mcp-conformance-unattended.yml:14-20 confirms the schedule-trigger drop by owner ruling 2026-07-27/MCP-189 citing the daily-abandoned-OAuth-client reason verbatim."
+    },
+    {
+      "id": "Bc173",
+      "verdict": "home-verified",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/open-prs-merged-closed-or-owned.md + .agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "napkin-2026-07-30.md:2130-2139: '#602 LANDED... six adjudicated deletions committed 83cb3cc88... Linear MCP-238 Done... #576 close is DUE and owner-carded by the DIRECTOR (their 13:37Z correction: it does NOT auto-close...)'. The general policy (every open PR merged/closed or owner-checked) is carried durably in the open-prs-merged-closed-or-owned memory file."
+    },
+    {
+      "id": "Bc174",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 2374-2386: 'MCP-239 landed (#610 merged 33728f1d8...) \u2192 MCP-240 shipped to PR #615' confirms the sequencing dependency between MCP-239/#610 and MCP-240; the specific 'knip unused-dependency gate' mechanism-rationale wording was not found verbatim on disk, but the sequencing fact and ticket identity are confirmed."
+    },
+    {
+      "id": "Bc175",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "No file in .agent/memory, .agent/rules, or the per-user memory directory contains 'zero-cost hold', 'Copilot-hold boundary', or the release-on-arrival/obsolescence/cost-change framing. Nearest neighbours (copilot-review-is-selective-not-ceremony.md, merge-rulings memory) cover adjacent but distinct doctrine. Suggested home: a new memory/rule alongside copilot-review-is-selective-not-ceremony.md, or a clause in .agent/rules/pr-comments-resolve-and-recheck.md."
+    },
+    {
+      "id": "Bc176",
+      "verdict": "home-missing-substance",
+      "path": "/Users/<user>/.claude/projects/<project-slug>/memory/verdict-momentum-score-the-actual-object.md and merge-rulings-no-admin-no-direct-merge-arm-allowed.md",
+      "evidence": "Both named memory files exist and are on-topic (verdict discipline; merge/gate mechanics) but neither contains the MCP-436 reference, the 'reviewer named on a Linear issue is not a PR merge gate' claim, 'closed tickets stay commentable', or the owner-constitutive-reading counter-consideration language. Repo-wide grep for MCP-436 hits only the corpus pipeline's own JSON artefacts, not a durable home."
+    },
+    {
+      "id": "Bc177",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/058-context-grounding-for-ai-agents.md",
+      "evidence": "Line 87: 'Orientation guidance is delivered through exactly one broadcast channel plus one on-demand channel'; line 141: 'One broadcast channel... on demand through get-curriculum-model's workflows'; line 161: 'Weakest-lever consolidation (2026-07-29, MCP-366): orientation now rides only the instructions channel'; lines 183/196: removed oakContextHint / render-wholes-adjacent stale phrasing corrected, all citing MCP-366 directly."
+    },
+    {
+      "id": "Bc178",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Line 4940 'Guard: MCP-417'; line 4942 'ADR-219'; line 4958 'INDEX OF HOMES... tickets MCP-403/410/411/413/417'; line 4466 'feeds the MCP-402 baseline-policy question'; MCP-368 lane confirmed at lines 3766-3768 and 4076. MCP-400/401/407/408 specifically were not located as standalone tickets in this file, but the residue-pointer pattern and the majority of named tickets are corroborated as real, un-absorbed items."
+    },
+    {
+      "id": "Bc179",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 4700-4715 and 4933-4959: MCP-403 flake/mechanism arc (two falsified designs, v3 boring-on-purpose) with 'ADR-219' new and 'tickets MCP-403/410/411/413/417' as durable homes; line 4471-4477 corroborates MCP-403 as a legitimately push-blocking flake in the successor trap-list."
+    },
+    {
+      "id": "Bc180",
+      "verdict": "home-verified",
+      "path": ".agent/state/collaboration/handoffs/sycamore-herds-xylem-compaction-continuation-2026-07-30.md",
+      "evidence": "Lines 27-29: 'PR #644 holds OPEN by design... its single red check (SonarCloud duplication 27.7%) is the two-demo store mirror, cured ONLY by the PR-2 rework deleting both copies. 15 checks green otherwise.' Confirms exact duplication figure and design-hold rationale; the pause-at-owner-word / resume-at-owner-word framing matches 'rework blocked on the paused design lane'."
+    },
+    {
+      "id": "Bc181",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/archive/napkin-2026-07-30.md",
+      "evidence": "Lines 4555-4559: 'the 06:12\u201306:15Z Opus 529 burst killed the slice-1 pre-execution reviewer twice AND two cricket-B legs. Discipline that held: retry-never-escalate, record undelivered honestly... and at a seat boundary hand the review over as NOT-OBTAINED \u2014 a first-act inheritance for the successor, never a waived gate.'"
+    },
+    {
+      "id": "Bc184",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/repo-continuity.md",
+      "evidence": "\u00a70a (lines 393-419): 'Deep consolidation status: COMPLETE 2026-07-30 (Ingot tracks Slag...). The 5,333-line napkin (the heaviest recorded fleet-traffic week, ~15 seats) fully processed bottom-up and rotated (archive/napkin-2026-07-30.md, cmp-proven)... distilled.md drained empty... MCP-446/447 minted from the 2026-07-26 config-expert latent findings'. Actual archive path is .agent/memory/active/archive/napkin-2026-07-30.md (candidate's homeClaim omitted the 'active/' segment but the file and content match)."
+    },
+    {
+      "id": "Bc185",
+      "verdict": "home-verified",
+      "path": ".agent/reports/agentic-engineering/comms-corpus-knowledge-transfer/discovery-report-2026-07-31.md",
+      "evidence": "File exists; \u00a7'P2 pipeline run record (2026-07-31)' documents the MAP/REDUCE/MERGE/META engine with checkpoint files and outcome counts (327 candidates: 138 needs-home/184 already-homed/5 noise); line 4-5 references the plan file '[comms-corpus-full-journey-knowledge-transfer.plan.md]...(owner-ratified 2026-07-31)'. P1/P2 body-read counts present (2,234 untagged P2 sweep etc.)."
+    },
+    {
+      "id": "Bc186",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Searched director-handoff.md, napkin.md and archives for axe-core#3978 + macOS idle-sleep/pmset/caffeinate + practice-box cross-estate + reflection-synthesis-as-VISION-candidate as a bundled owner-attention queue; only a stale, differently-scoped mention of 'MCP-395 + axe-core + MCP-398 remain owner/Director-held' exists (director-handoff.md line 296) \u2014 not this item bundle. Best future home: .agent/memory/operational/director-handoff.md CURRENT HANDOFF STATE section."
+    },
+    {
+      "id": "Bc187",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "VISION.md and launch-readiness-framework.md do not contain the quoted frame ('engineering is nearly out of the critical path...human-judgement gates...frictionless'); no 'twelve rulings' block found anywhere in the repo (grep for 'twelve rulings' returned zero files). The director-handoff.md file does carry various owner-rulings blocks but not a named 'twelve rulings' block matching this description."
+    },
+    {
+      "id": "Bc188",
+      "verdict": "home-verified",
+      "path": ".agent/memory/operational/director-handoff.md",
+      "evidence": "File exists and its header explicitly states the durable/volatile split: 'a durable Director Brief...It does not change between handoffs' vs 'a volatile CURRENT HANDOFF STATE section that the sitting Director refreshes at every handoff \u2014 who is live, what is open, what is owner-gated,' matching the claim's substance about durable-vs-recomputed state."
+    },
+    {
+      "id": "Bc189",
+      "verdict": "home-verified",
+      "path": ".agent/state/collaboration/handoffs/2026-07-30-plover-full-session-handoff.md; .agent/state/collaboration/handoffs/schooner-binds-trench-to-tarsier-hunts-underbrush-2026-07-29.md; .agent/state/collaboration/handoffs/falcon-hunts-flight-compaction-continuation-2026-07-30.md; .agent/memory/operational/director-handoff.md",
+      "evidence": "All four named records exist and carry the described substance: Plover's full-session handoff file exists; the Schooner\u2192Tarsier file documents 'the CodeQL disposition reversed' and 'the substitution trap \u2014 the one that bit me three times today' (lines 50-192); Falcon's continuation file states 'the Director claim a2286c53' is referenced amid TaskStop cleanup (line 6); director-handoff.md line 265 records Falcon succeeding Bora ('SITTING DIRECTOR: Falcon hunts Flight...succeeding Bora binds Thermal...owner-named full handoff')."
+    },
+    {
+      "id": "Bc190",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "director-handoff.md contains partial, differently-worded matches (MCP-303 'armed, owner-ATTENDED, credentials expire ~16:33 TODAY' at line 341, and Starling's 'ABANDONED-IN-PLACE edit...owner-run restore' at line 357) but no match for 'MCP-319 sibling-coverage follow-up' or a 'credentials-gitignore standalone PR fallback' anywhere in the repo. The bundle as stated is not homed intact; only fragments of it exist in a now-superseded historical block."
+    },
+    {
+      "id": "Bc191",
+      "verdict": "ticket-or-commit-claimed",
+      "path": "",
+      "evidence": "Home is named as merged main (#624/#625/#626) plus Linear tickets (MCP-335/336/337) \u2014 these are PR/commit and ticket references I cannot verify on-disk substance for beyond CHANGELOG commit hashes (which don't confirm the MCP-336 cross-file-to-in-file diagnosis correction narrative); per instructions this is a ticket/PR-only claim."
+    },
+    {
+      "id": "Bc192",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped for 'decorative assertion', 'misfiled smoke', 'vendor-contract characterisation', 'isolate:true', 'promise resolved inside the installed logger' across .agent \u2014 no matches outside the corpus-pipeline's own data files. No durable synthesis doc found; suggest .agent/reports/agentic-engineering/ or a referent/derivation synthesis doc as the home once ticketed."
+    },
+    {
+      "id": "Bc193",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Read .agent/rules/pre-execution-code-expert-review-per-loop-cycle.md in full \u2014 it covers the two-dispatch-shape (fan-from-brief/fan-from-verdict) cadence but contains no mention of an 'AgentTool-fence' conflict, 'unfenced seat', or a gateway-review-on-pushed-diff scope clarification. Grep for 'AgentTool-fence'/'unfenced seat' across .agent found zero non-pipeline matches."
+    },
+    {
+      "id": "Bc194",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped .agent/reference/shell-and-tooling-gotchas.md and the wider .agent tree for 'tuple-matcher', 'all-zeros' event id, 'argument-validation probe', and the exact 'Parse Error: Expected HTTP/, RTSP/ or ICE/' flake signature \u2014 no matches found anywhere outside the corpus pipeline's own candidate data. No home currently exists."
+    },
+    {
+      "id": "Bc195",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "Grepped .agent/reference/shell-and-tooling-gotchas.md for 'LC_ALL=C', 'semantic-source-sha256', and the newline-joined-pathspec/xargs gotcha \u2014 no matches. The file exists (a plausible best-fit home) but does not yet carry this substance."
+    },
+    {
+      "id": "Bc196",
+      "verdict": "home-verified",
+      "path": "packages/libs/posthog-node/src/product-analytics-runtime.ts",
+      "evidence": "Code comment at lines 120-123 documents the exact settled retry arithmetic: '// Close deadline: DELIBERATELY truncates the vendor's ~49s worst-case retry stack (default v0 send path: four 10s attempts + three constant 3s delays)...' \u2014 matches the claim's substance (v0 default path, constant 3s delays) as a durable code artefact, though it doesn't name resolveCaptureMode() or the two-expert-round mis-read narrative explicitly."
+    },
+    {
+      "id": "Bc197",
+      "verdict": "home-missing-substance",
+      "path": "",
+      "evidence": "Grepped the whole repo for '42 universal registry', '39 universal live', 'MCP-300' registry-count language \u2014 matches were only the corpus-pipeline's own data files (candidates-merged/reduce-shard/map-result JSON), not a durable ticket-external doc or test asserting these counts. The MCP-300 ticket itself cannot be checked (Linear, out of reach); no in-repo file carries the specific tallies."
+    },
+    {
+      "id": "Bc198",
+      "verdict": "home-missing-substance",
+      "path": ".agent/rules/check-singleton-per-window.md",
+      "evidence": "The named rule file exists and documents the general class (concurrent whole-repo sweeps/watchers colliding, 'their CLIs (heartbeats, comms, marshal commands) and watchers die for the rebuild window') but does not record the specific observed instance in the claim ('four for one seat, two for another' watcher processes racing one seen-file) \u2014 the rule is the general doctrine, not the incident record."
+    },
+    {
+      "id": "Bc199",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "No repo-tracked file named 'merge-rulings' or equivalent exists (only .agent/rules/pre-merge-divergence-analysis.md and two unrelated PDRs on merge semantics/concurrency were found); grepping for 'Merge now', 'approved the PR, that is signal enough', and 'owner-directed APPROVE via the bot' across .agent returned no matches. This content currently lives only in per-user MEMORY.md (not a repo file), so no durable in-repo home exists yet."
+    },
+    {
+      "id": "Bc201",
+      "verdict": "no-home-found",
+      "path": "",
+      "evidence": "No file named spend-errors-retry-never-escalate.md (or equivalent) exists under .agent/rules; grepped .agent/rules broadly for 'claude[bot]', 'spend limit', 'overage', 'freeze-block' with no substantive match. This durable rule appears to exist only as a per-user MEMORY.md bullet, not as a tracked repo file."
+    },
+    {
+      "id": "A41",
+      "verdict": "home-verified",
+      "path": ".agent/reports/agentic-engineering/first-class-copilot-cli-practice-support-2026-07-24.md",
+      "evidence": "All three mechanics carried by durable tracked files. Batch-envelope deadlock: report L120-130 \u2014 \"Copilot CLI 1.0.74 was observed sending a batched pre-tool-use envelope with `sessionId`, `cwd`, and `toolCalls[]`... The repository parser expects Claude-style `tool_input`/`toolInput`... returned the fail-closed error path, and Copilot correctly denied the write\"; matrix .agent/memory/executive/cross-platform-agent-surface-matrix.md L110-112 records the superseding reading. Harvested patch projection: .agent/plans/delivery/first-class-copilot-cli-policy-enforcement.plan.md L98 (\"observed Copilot CLI 1.0.75 PascalCase string-form `apply_patch` envelope... evaluate every patch change once\") plus landed code agent-tools/src/hook-policy/apply-patch-content.ts L11-17 \"Canonical content projection for structurally valid `apply_patch` documents... evaluating the raw patch as wholly-new content would falsely classify deleted text as an addition\". CLAUDE_PROJECT_DIR fallback: tracked .claude/settings.json L180/190/200 `node \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/run-pretooluse-guard.mjs\"` with the resolution rationale in .claude/hooks/run-pretooluse-guard.mjs L30-31 and L56-60. ADR-125 amendment confirmed at docs/architecture/architectural-decisions/125-agent-artefact-portability.md L19 (\"Amended: 2026-07-24\") and L158-162 (inherited PascalCase PreToolUse is the sole Copilot policy activation)."
+    },
+    {
+      "id": "A42",
+      "verdict": "home-missing-substance",
+      "path": ".agent/memory/executive/cross-platform-agent-surface-matrix.md",
+      "evidence": "Three of four platform facts are homed; one is absent. Verified: skill precedence at matrix L34 \"documented `.github/skills` \u2192 `.agents/skills` \u2192 `.claude/skills` first-found precedence\"; excludeAgent arity at matrix L42-47 \"the keyword accepts exactly one value... no array, comma-separated, or repeated-key form is documented. Whichever value is set, the other surface still reads the file\" (also ADR-125 L175-180); .github/hooks running in cloud jobs at .agent/reports/agentic-engineering/first-class-copilot-cli-practice-support-2026-07-24.md L162-164 \"GitHub documents native repository hooks under `.github/hooks`, but those files also run in Copilot cloud-agent jobs [D]\" (also ADR-125 L161-162). MISSING: the fact that local repository settings are ignored. No tracked file states it \u2014 repo-wide grep for repository-settings/config-dir language across .agent, docs, and the plan estate found only the opposite-direction target rows (matrix L37 and ADR-125 L148: \"`.github/copilot/settings.json` only where a tracked project setting is required\") and the corpus data JSONs, which are the candidate stream itself, not a home. That clause is genuinely unhomed knowledge and additionally contradicts the standing Settings row, so it needs an explicit landing in the matrix Settings row before the candidate is discharged."
+    },
+    {
+      "id": "A43",
+      "verdict": "home-verified",
+      "path": ".agent/reports/agentic-engineering/codex-cli-agentic-capability-catalogue-2026-07-25.md",
+      "evidence": "Every clause present in the tracked catalogue. Version pin L5-6 \"Installed runtime: `codex-cli 0.145.0`\" / \"Official source pin: `openai/codex` tag `rust-v0.145.0`\". Hooks stable L181 \"Codex `hooks` is stable and enabled in the installed runtime.\" Full lifecycle incl. SessionEnd L186 \"`SessionStart`, `SessionEnd`, `UserPromptSubmit`, `Stop`\". Live probes L210 \"Live `0.145.0` hook probes\", the ^apply_patch$ matcher at L296 (`hooks.PreToolUse=[{matcher=\\\"^apply_patch$\\\"...}]`) with observed payload `\"tool_name\": \"apply_patch\"` L231 and L239 \"proves installed-runtime dispatch for both shell and `apply_patch`\". `codex mcp-server` exposed-but-experimental L369 \"Exposed command; experimental protocol\". The repo-claim corrections are explicit at L488 and L498 (a surface that \"omits `SessionEnd`, and treats the Codex adapter as future\" against \"the stable `0.145.0` event surface includes it\"). ADR-180 corroborates at docs/architecture/architectural-decisions/180-codex-exec-agent-delegation-pattern.md L7-8/L31-33, and the matrix carries the corrected Codex row at L113-123 with an explicit version-pin inheritance to this catalogue."
+    },
+    {
+      "id": "A44",
+      "verdict": "home-verified",
+      "path": ".agent/rules/verify-vendor-call-shapes-at-plan-author-time.md",
+      "evidence": "Owner word homed as a tracked rule clause, L41-47: \"Capability answers come from ORIGINAL vendor sources at time of use, never from prior repo research (owner rule, 2026-07-25) \u2014 recorded capability verdicts are version-pinned so their staleness is self-declaring; internal research is provenance, never the verdict\", with the worked flip (0.144.5 negative vs vendor 0.145.0) attached. Reinforced in practice-core at .agent/practice-core/decision-records/PDR-133-liveness-classes-and-platform-declaration.md L288 \"Capability claims are version-pinned, because platform...\" and L532 (a defect signal is \"inference passing as observation, or a version-pin missing\"). The per-user memory named in the homeClaim is machine-local and not a durable repo home; the rule file is."
+    },
+    {
+      "id": "A45",
+      "verdict": "home-verified",
+      "path": ".agent/memory/active/patterns/green-parts-red-composition.md",
+      "evidence": "Despite the needs-home disposition, the incident is fully homed as a tracked anti-pattern. L31-39: \"Ruleset \u00d7 release bot: a ruleset split omitted the semantic-release app from one ruleset's bypass list. The ruleset enforced correctly; semantic-release pushed correctly; the composition (bump push through the gate) died with GH013 \u2014 production sat two days stale while every merge looked green.\" and \"Ignore script \u00d7 version bump: the Vercel ignore script cancels production builds unless the root version advanced \u2014 by design. Composed with the missing bump above, every production deploy was auto-CANCELED, silently, all day.\" The cancellation rule itself is a numbered ADR decision at docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md \u00a710 L699-703 plus the truth table L707-713 (\"current \u2264 previous \u2192 CANCEL build\"). The only clause without a durable carrier is the trailing \"later fixed platform-side, cause unobservable from git\" colour; the mechanism, the GH013 cause, and the silent-cancel consequence are all recorded."
+    },
+    {
+      "id": "A46",
+      "verdict": "home-verified",
+      "path": "packages/sdks/oak-sdk-codegen/code-generation/resolve-schema-source.ts",
+      "evidence": "Cure is landed and compiler-adjacent. L9-17: \"(the root `sdk-codegen:refresh` script), never an ambient build... Refreshing from the live upstream [requires] the `--online` CLI flag, or `SDK_CODEGEN_MODE=online`\" and \"`VERCEL` is deliberately **not** a trigger (MCP-130): deployment builds...\"; the resolver body L38 admits only `--online`/`sdkCodegenMode === 'online'`, so VERCEL cannot reach it. The `sdk-codegen:refresh` script is tracked in the root package.json, with unit coverage at packages/sdks/oak-sdk-codegen/code-generation/resolve-schema-source.unit.test.ts. The owner's build-time-coupling framing is carried at .agent/memory/active/patterns/green-parts-red-composition.md L40-44: \"Build cache \u00d7 live-API codegen: `sdk-codegen` regenerates types from the live API on a turbo cache miss (by design)... the first PR to invalidate the core chain failed its Vercel check on code nobody wrote (MCP-130).\""
+    },
+    {
+      "id": "A47",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md",
+      "evidence": "ADR-141 carries a dated amendment '## Amendment \u2014 widget URI identity and cache-busting (2026-07-26, MCP-187)': WIDGET_URI generated at sdk-codegen time as 'ui://widget/oak-curriculum-app-<suffix>.html', suffix = 'literal `local` off Vercel, else the first 8 hex characters of sha256 of the build identifier \u2014 the git commit SHA on commit-identified deploys, with the per-deployment ID as the fallback'; consumers (tool _meta.ui.resourceUri, served-surface registration key, auth public-resource allowlist) all derive from the one generated constant with hand-frozen copies 'banned by an ESLint no-restricted-syntax rule'; and 'All generator-input environment variables (SDK_CODEGEN_MODE, VERCEL, VERCEL_GIT_COMMIT_SHA, VERCEL_DEPLOYMENT_ID) participate in the sdk-codegen turbo cache key'. Landed code corroborates: packages/sdks/oak-sdk-codegen/code-generation/typegen/widget-uri-suffix.ts (createHash('sha256').update(buildId).digest('hex').slice(0, 8)), cross-domain-constants.ts (BASE_WIDGET_URI composition point), widget-uri-suffix.unit.test.ts (sha256 golden vector), and turbo.json:42 \"env\": [\"SDK_CODEGEN_MODE\", \"VERCEL\", \"VERCEL_GIT_COMMIT_SHA\", \"VERCEL_DEPLOYMENT_ID\"]. The homeClaim named only the ticket+PR, but the substance is durably tracked in the ADR plus source."
+    },
+    {
+      "id": "A49",
+      "verdict": "home-verified",
+      "path": "agent-tools/src/mcp-conformance/runner.ts",
+      "evidence": "runner.ts \u00a7composeSuiteArgs doc-comment: 'Unattended oauth pins `--auth-mode headless` and omits `--conformance-checks`: the negative probes are gated upstream on a fully-successful attended flow (verified in the resolved SDK source, 2026-07-26), so requesting them headless is dead weight that misstates intent.' Same falsification restated in agent-tools/src/mcp-conformance/types.ts:21-22 ('the `--conformance-checks` OAuth negative probes are gated on a fully-successful ATTENDED main flow and cannot run headless'). The enumerated unattended-runnable legs and their baselines are homed in agent-tools/src/mcp-conformance/baselines/oauth-dcr-unattended.json \u2014 seeded {\"date\": \"2026-07-26\", \"mcpjam_version\": \"3.15.2\"}, per-leg expected states, with the consent boundary encoded as received_authorization_code {\"status\": \"fail\", \"errorIncludes\": \"Headless authorization requires auto-consent\"} \u2014 plus baselines/protocol-unattended.json and .github/workflows/mcp-conformance-unattended.yml (MCP-189 lane). Disposition was needs-home; a durable home with full substance exists."
+    },
+    {
+      "id": "A50",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-redirect-uri-validation.ts",
+      "evidence": "Landed code, header comment: 'Registration-time `redirect_uris` validation for the OAuth proxy (MCP-188)' citing RFC 9700 \u00a72.6 and 'RFC 8252 \u00a77.3 ... DEFINES loopback interface redirection and permits `http` for it', with the obligation attaching because the proxy advertises itself as issuer/registration endpoint (ADR-115 \u00a7Transparent Passthrough, as amended). The RFC 7591 \u00a73.2.2 shape is explicit: error: 'invalid_redirect_uri', description 'an http redirect_uri is permitted only for loopback addresses', emitted via res.status(400).json(...). Loopback set is 127.0.0.0/8 anchored regex plus '[::1]' and 'localhost'. The security-review leg's output is visible in-file (drafted-and-REMOVED hardening, first-hand 2026-07-26 probe of the deployed alpha: 400 request_body_invalid for bare-string redirect_uris vs 201 for an array carrying plain-http non-loopback, with the residual referred to MCP-200). Tests: oauth-proxy-redirect-uri-validation.unit.test.ts, oauth-proxy-routes.integration.test.ts."
+    },
+    {
+      "id": "A51",
+      "verdict": "home-verified",
+      "path": ".agent/research/telemetry-and-understanding/2026-07-26-posthog-mcp-pre-execution-probes.md",
+      "evidence": "Probe report \u00a7'Mutations and the one-client decision': instrument() 'also mutates two library-metadata methods on the supplied PostHog client: getLibraryId() changes from `posthog-node` to `posthog-node-mcp`; getLibraryVersion() changes from `5.46.1` to `0.10.0`', plus 'Supplying the package logger also changes the package's module-level logger'. Auto-observation surface: 'Both the high-level McpServer path and low-level Server path install instrumentation for only: initialize; tools/list; and tools/call' (also in .agent/plans/delivery/mcp-63-posthog-product-analytics.plan.md:71-85). Person-profile mechanic: 'The Node SDK creates that profileless shape when `$process_person_profile: false` is present.' TWO SUB-CLAIMS ARE SUPERSEDED ON DISK, not missing: the same doc rejects two-client isolation ('The settled topology is one PostHog client per live function isolate... A separate client becomes warranted only when a genuinely non-MCP product event enters the estate' \u2014 echoed by ADR-218 \u00a76) and rejects the flushAt=1/captureImmediate/awaited-shutdown delivery shape in favour of one composition-root client with Vercel waitUntil ('Oak does not use captureImmediate() for this integration'; 'shutdown() is reserved for real process teardown, not called per request')."
+    },
+    {
+      "id": "A52",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/218-posthog-mcp-analytics-identity-session-and-privacy.md",
+      "evidence": "ADR-218 is the ratified home (the MCP-63 plan names it as 'The durable identity, session, event, and privacy boundary'). \u00a73 'Define raw data as allowlisted facts, never content' with 'prompts, model output, resource content, search terms, query text' excluded; the actor is a keyed pseudonym, '$set, $set_once, $unset, person properties, aliases, merges, and groups remain prohibited'; the deletion carve-out is explicit \u2014 'A minimal pseudonymous Person with no [Oak-supplied properties]' exists 'for each actor pseudonym' because the bulk-deletion API 'queues event deletion' person-wise (corroborated by the probe report \u00a7'Minimal-person decision'). \u00a75 lists the pre-public-capture gates including 'a maximum 12-month retention period across PostHog and every authorised copy' and 'a tested request-for-deletion route'. EU residency and the in-code boundary are homed in docs/governance/safety-and-security.md:317-336 ('PostHog \u2014 product analytics, EU-hosted (`eu.i.posthog.com`) ... ADR-218 \u00a75 commits this processing to a maximum 12-month retention period'), with project id 221775 recorded in .agent/research/telemetry-and-understanding/README.md:66 and the in-code final-wire validator in packages/libs/posthog-node/src/posthog-final-wire.integration.test.ts plus the packages/core/oak-eslint no-posthog-vendor-imports / posthog-vendor-boundary rules. The claimed home .agent/reports/initial-release-supporting-docs/posthog-mcp-elasticsearch-observability-plan.md \u00a7\u00a74-5 exists but is lineage-only exploration superseded by ADR-218."
+    },
+    {
+      "id": "A53",
+      "verdict": "no-home-found",
+      "path": ".agent/plans/delivery/mcp-63-posthog-product-analytics.plan.md",
+      "evidence": "No durable tracked file names the superseded constraints as dead. Searched rules, ADRs (171 OBSERVABILITY_SINKS, 218), plans, docs/governance, reports, memory/patterns. Partial coverage only, and never as an explicit supersession list: .agent/memory/operational/threads/mcp-product-analytics.next-session.md:15-24 implies two of the four ('The implementation must provide ... @posthog/mcp integration in the serverless MCP application' and 'PostHog is selected and required. The implementation blocks the initial submission'), but that file declares itself 'temporary operational state'. The POSTHOG_MODE \u2192 OBSERVABILITY_SINKS supersession is NOWHERE on disk: POSTHOG_MODE appears only in .agent/memory/active/archive/napkin-2026-07-23.md and .agent/collaboration/rapid-comms/2026-07-22-implementer-lane-urchin-hunts-surf-genet-stirs-covert.md (napkin archive + comms = ephemeral tiers), while ADR-171 and the MCP-63 plan describe OBSERVABILITY_SINKS without ever naming the retired env var. The frozen spike SHA dd8df27f8 / tag mcp-63-posthog-spike-frozen likewise appears only in those two ephemeral records; .agent/reports/mcp-63-focused-successor-handoff-2026-07-27.md:53 freezes a DIFFERENT artefact (PR #576 at aac01d12dd696e4e1831a683b41fde692be721ca). Best candidate home: a supersession subsection under '## Current execution state' in .agent/plans/delivery/mcp-63-posthog-product-analytics.plan.md, with the env-var half cross-referenced from docs/architecture/architectural-decisions/171-observability-configuration-orthogonal-axes.md."
+    },
+    {
+      "id": "A54",
+      "verdict": "home-verified",
+      "path": ".agent/reports/mcp-63-succession-notification-and-focused-delivery-2026-07-26.md; .agent/plans/delivery/mcp-63-posthog-product-analytics.plan.md",
+      "evidence": "Report \u00a7'The final-wire cure' + \u00a7'The focused-PR correction' carry both halves: 'The first inherited technical action was to make the final-wire proof exercise the shipped production composition' and the three-stream order \u2014 '1. provider-neutral product-analytics port plus shared selection/locality axis; 2. PostHog adapter, boundary registration, workspace dependency, and lockfile; 3. application configuration and production composition. The adopted sequence required each dependent PR to settle before the next opened.' Plan \u00a7'Sink-axis and registry shape' (L356-376) homes the type resolution: 'ObservabilitySink<K> accepts only DiagnosticSinkKind, and SinkRegistry maps only that same union, so ObservabilitySink<'posthog'> and SinkRegistry.posthog are unrepresentable' plus 'one required ProductAnalyticsRuntime<Transport> slot: mode: 'posthog' ... otherwise the exact inert mode: 'off' runtime'. Only the 'max useful concurrency two seats' scheduling detail is unhomed (the report records strict serialisation instead); that is ephemeral seat-scheduling, not mechanism."
+    },
+    {
+      "id": "A55",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/.env.example",
+      "evidence": "L66-117 '# PostHog Product Analytics (MCP-63 family)' carries all four variables (POSTHOG_PROJECT_API_KEY, POSTHOG_PSEUDONYM_KEYRING, POSTHOG_PSEUDONYM_ACTIVE_KEY_ID, POSTHOG_HOST), the generation command 'node -e \"console.log(require('node:crypto').randomBytes(32).toString('base64url'))\"', and the custody note 'Losing a retired key breaks the erasure derivation for its era \u2014 keep durable custody outside the deployment platform.' Also records the POSTHOG_CAPTURE_MODE refusal and the diagnostic-sink-in-production requirement."
+    },
+    {
+      "id": "A56",
+      "verdict": "home-verified",
+      "path": ".agent/experience/2026-07-22-genet-stirs-covert-formation-letter.md",
+      "evidence": "\u00a7'Goal formation is a gate, not a vibe': 'Twice-corrected, once at my routing: a ratified constraint set plus a decision-complete-looking ticket is NOT a plan. I routed a build lane off exactly that, and the owner halted it at the implementer's seat with the sentence that defines the gate: \"we have not yet planned this work.\"' The implementer-side record is .agent/experience/2026-07-22-urchin-hunts-surf-the-interrupt.md ('Rigour is not authorisation'), and the doctrine gradient is carried durably in .agent/memory/active/patterns/read-surface-is-not-decide-surface.md L61 'constraint-ratified \u2260 ticket-defined \u2260 goal-formed \u2260 routed'."
+    },
+    {
+      "id": "A57",
+      "verdict": "home-verified",
+      "path": ".agent/reports/mcp-app-canonical-address-exploration-2026-07-23.md",
+      "evidence": "L29-33 'a browser-shaped GET on /mcp today returns 406 (ensureMcpAcceptHeader middleware rejects non-SSE Accepts) ... The negotiation triple therefore has to be built in the app'; L72-77 'The moved surface is larger than /mcp*' enumerating the path-scoped RFC 9728 metadata, a root PRM variant, authorization-server metadata, a stub-mode well-known, /healthz, the landing /, and signed asset-download paths; L78-83 'Self-description is host-derived: PRM and resource URLs come from the request Host per-request'; L61-68 'The zone is managed as Terraform in the organisation's Cloud-Config infrastructure repository \u2014 the change vehicle is a reviewable IaC PR' plus the main-site-on-the-same-platform rewrite option."
+    },
+    {
+      "id": "A58",
+      "verdict": "home-verified",
+      "path": "apps/oak-curriculum-mcp-streamable-http/src/served-surface/filter-guidance-content.ts; apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts",
+      "evidence": "Landed code carries the leak and the cure. filter-guidance-content.ts header: 'INTERIM app-side cure (Director disposition 2026-07-23, under the owner's standing invariant on MCP-101): the SDK's tool-guidance content structurally names tools in its category tools arrays ... This module filters those structured references to served-live entries at the serve boundary ... so guidance never advertises a tool a client cannot call.' served-surface.ts L63 'Dormant rows: the two user-search MCP App tools' with 'user-search': 'dormant', 'user-search-query': 'dormant'. Regression proof at served-surface/served-surface-dormant-absence.integration.test.tsx and registration-proof/guidance-list-parity.ts. The old render-tools-section.ts survives only in an untracked worktree copy, consistent with its replacement."
+    },
+    {
+      "id": "A59",
+      "verdict": "home-verified",
+      "path": "docs/architecture/architectural-decisions/216-plan-node-estate.md",
+      "evidence": "L8 '**Supersedes:** ADR-117 (plan ...)'; L33-36 'The replacement structure was owner-ratified on 2026-07-22 at the planning sitting (decisions register, D23) and landed with its validator and templates in PR #478'; L40-55 the flat plan-node corpus, three node types, born-sketch ratification enum; L114-115 'per-surface disposition ledger' and 'The estate validator enforces the schema's contract in CI'. Corroborating on-disk homes: .agent/plans-backlog-2026-07/README.md (prior estate at rest), .agent/plans-v0-sketch-2026-07-21/DISPOSITIONS.md (per-artefact dispositions of the V0 sketch corpus), and the Notion fence at .agent/rules/notion-strategy-page-fence.md."
+    }
+  ]
+}

@@ -145,16 +145,19 @@ export const commsDirectHelp =
   '--to-platform <platform> --to-model <model> --to-session-prefix <prefix> --kind <kind> ' +
   '--subject <subject> (--body <body> | --body-file <path>) ' +
   '--platform <platform> --model <model> ' +
-  '--active <path> [--event-id <id>] [--now <iso>] [--tag <tag>...] ' +
+  '--active <path> [--event-id <id>] [--now <iso>] [--in-response-to <id>] [--tag <tag>...] ' +
   '(--body and --body-file are mutually exclusive; --body-file reads the file ' +
-  'literally and bypasses shell interpretation; --tag is repeatable, accepts ' +
+  'literally and bypasses shell interpretation; --in-response-to threads this ' +
+  'message to an antecedent event_id of any kind; --tag is repeatable, accepts ' +
   'ADR-183 namespace [failure-mode, behaviour-note, heartbeat])';
 
 export const commsReplyHelp =
   'comms reply --comms-dir <dir> --to-event-id <id> --kind <kind> ' +
   '(--body <body> | --body-file <path>) --platform <platform> --model <model> ' +
   '--active <path> [--subject <subject>] [--event-id <id>] [--now <iso>] [--tag <tag>...] ' +
-  '(--body and --body-file are mutually exclusive; --body-file reads the file ' +
+  '(the reply threads to --to-event-id by construction — in_response_to is set ' +
+  'from the resolved source and there is no --in-response-to on this verb; ' +
+  '--body and --body-file are mutually exclusive; --body-file reads the file ' +
   'literally and bypasses shell interpretation; --tag is repeatable, accepts the ' +
   'ADR-183 namespace — a reply quoting a pathogen to correct it needs a capture ' +
   'tag to pass the comms concept gate, incl. when the inherited "re:" subject ' +

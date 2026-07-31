@@ -73,7 +73,11 @@ describe('MCP App UI Composition (Client SDK)', () => {
       {},
       { servedSurface: SERVED_SURFACE_WITH_USER_SEARCH_LIVE },
     );
-    server = app.listen(0);
+    // Explicit v4 loopback bind + dial (MCP-403): a host-less listen binds
+    // `::` while ambient foreign v4 listeners can hold the same port, and
+    // this harness already awaits 'listening', so the async host-ful bind
+    // is safe here.
+    server = app.listen(0, '127.0.0.1');
     await once(server, 'listening');
 
     const addr = server.address();
@@ -82,7 +86,7 @@ describe('MCP App UI Composition (Client SDK)', () => {
     }
     serverPort = addr.port;
 
-    const url = new URL(`http://localhost:${String(serverPort)}/mcp`);
+    const url = new URL(`http://127.0.0.1:${String(serverPort)}/mcp`);
     const transport = new StreamableHTTPClientTransport(url, {
       fetch: getOriginalFetch(),
     });

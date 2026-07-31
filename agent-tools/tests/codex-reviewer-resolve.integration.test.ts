@@ -2,7 +2,11 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { formatResolutionFailure } from '../src/bin/codex-reviewer-resolve';
+import {
+  formatHumanReadableAgent,
+  formatResolutionFailure,
+} from '../src/bin/codex-reviewer-resolve';
+import type { CodexProjectAgent } from '../src/core/codex-project-agents';
 
 const tempRoots: string[] = [];
 
@@ -49,5 +53,32 @@ config_file = "agents/code-expert.toml"
     );
 
     expect(formatResolutionFailure(repoRoot, 'Original failure.')).toBe('Original failure.');
+  });
+});
+
+describe('formatHumanReadableAgent', () => {
+  const resolvedAgent: CodexProjectAgent = {
+    name: 'cricket-judgement-low',
+    description: 'Contextual judgement at low effort.',
+    configPath: '.codex/config.toml',
+    adapterPath: '.codex/agents/cricket-judgement-low.toml',
+    model: 'gpt-5.6-sol',
+    modelReasoningEffort: 'low',
+    sandboxMode: 'read-only',
+    approvalPolicy: 'never',
+    developerInstructions: 'Read `.agent/sub-agents/cricket-judgement.md`.',
+    referencedCanonicalFiles: ['.agent/sub-agents/cricket-judgement.md'],
+  };
+
+  it('includes the explicitly pinned model in the human-readable mode line', () => {
+    expect(formatHumanReadableAgent(resolvedAgent)).toContain(
+      'mode: model=gpt-5.6-sol, reasoning=low, sandbox=read-only, approval=never',
+    );
+  });
+
+  it('labels an omitted model as inherited', () => {
+    expect(formatHumanReadableAgent({ ...resolvedAgent, model: null })).toContain(
+      'mode: model=inherited, reasoning=low, sandbox=read-only, approval=never',
+    );
   });
 });

@@ -65,9 +65,18 @@ export const APP_LANDING_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDel
     '937dcd100db80d18463b6f3b8bf2aa6f6c78bc7693d5ef4fd7778bfa2c466fef',
     IMPLEMENTATION_ONLY,
   ),
+  // MCP-434: safe-area insets moved from inline padding to composed
+  // custom properties; the governed text nodes (disclaimer, hidden h1,
+  // banner) are unchanged — the cited items re-anchor as before.
   'apps/oak-curriculum-mcp-streamable-http/widget/src/App.tsx': reviewed(
-    '798dc0c115d201f46266ca448be7df7c665d397ae14f136d72f84ccdcead28b9',
+    'e97d9235f16ef00617f41b112f7ebacada3c0220501bfa3bfd7a399c4d4405c0',
     ['C384', 'C385', 'C386', 'C387', 'C717'],
+  ),
+  // MCP-434: styling plumbing only — host inset numbers formatted as CSS
+  // custom properties; carries no agent-facing or user-facing content.
+  'apps/oak-curriculum-mcp-streamable-http/widget/src/safe-area-insets.ts': excluded(
+    '8b943346bfb2511ba5fa233ed81777fd223d8cfac742e8b676d03cb046442314',
+    IMPLEMENTATION_ONLY,
   ),
   // MCP-368: the acorn + visible text became the wide wordmark (design
   // system asset via ?raw, injected inner geometry) with a single

@@ -19,7 +19,10 @@ Adopt Option A (conventional) with clear directories:
 - `packages/core/` – foundational shared code and provider-neutral primitives
   (result types, ESLint config, env, OpenAPI adapter, observability helpers)
 - `packages/libs/` – shared runtime libraries, split into:
-  - foundation libs (`env-resolution`, `logger`, `search-contracts`)
+  - foundation libs (`env-resolution`, `logger`, `search-contracts`;
+    dated amendment 2026-07-31 per ADR-221 obligation 4: `graph-ingest`
+    and `graph-project` classify as foundation libs — transport-agnostic
+    substrate, no vendor adapter nature)
   - adapter libs (`sentry-node`)
 - `packages/sdks/` – SDK packages (curriculum-sdk, oak-search-sdk)
 - `packages/design/` – design token workspaces producing CSS artefacts

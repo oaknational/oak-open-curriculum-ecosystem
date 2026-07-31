@@ -26,9 +26,12 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     '2d86bf6b1cf6241114656a1a2909fbb47ecd0b6f34d5ccd8b9f44c0215301606',
     ['C049', 'C050', 'C051', 'C052', 'C053', 'C054', 'C055'],
   ),
+  // MCP-438: the description's embedded presentation directive (the fonts
+  // tip, C163) retired via lineage — directory policy bars descriptions
+  // from instructing the model. The six surviving rows are unchanged.
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-asset-download/definition.ts': reviewed(
-    '154d483475f32e0fbf31e82e82327b3a313fb61ed13ef45db8337e1f141bb4ab',
-    ['C161', 'C162', 'C163', 'C164', 'C165', 'C166', 'C177'],
+    'd3a9820d7ade25c35e5c7d860fe07ac43b797d8defba55e0758a9c024116d525',
+    ['C161', 'C162', 'C164', 'C165', 'C166', 'C177'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-asset-download/execution.ts': reviewed(
     '4c88fec1899e18a3f934ddabe4ad79daaabf48300bf9271506c0bca266ee99d6',

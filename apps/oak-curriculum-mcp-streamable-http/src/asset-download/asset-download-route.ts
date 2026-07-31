@@ -149,9 +149,10 @@ export function createAssetDownloadUrlFactory(
  * Mounts the asset download proxy route and returns the URL factory for
  * generating signed download URLs.
  *
- * @param assetRateLimiter - Per-IP rate limiter applied before HMAC
- *   validation. Prevents replay-based exhaustion of the upstream Oak API
- *   per-key rate limit within the HMAC TTL window.
+ * Abuse is bounded by the HMAC signature with its 5-minute TTL (replay
+ * re-reads one already-authorised asset) and by edge traffic controls
+ * (ADR-219); this service's Oak API key is exempt from upstream per-key
+ * rate limiting as an internal consumer.
  */
 export function mountAssetDownloadProxy(
   app: Express,
@@ -160,7 +161,6 @@ export function mountAssetDownloadProxy(
   log: Logger,
   oakApiBaseUrl: string,
   observability: Pick<HttpObservability, 'captureHandledError' | 'withSpan'> | undefined,
-  assetRateLimiter: RequestHandler,
 ): (lesson: string, type: string) => string {
   const signingSecret = deriveSigningSecret(oakApiKey);
   const handler = createAssetDownloadRoute({
@@ -173,7 +173,7 @@ export function mountAssetDownloadProxy(
     now: Date.now,
     observability,
   });
-  app.get('/assets/download/:lesson/:type', assetRateLimiter, handler);
+  app.get('/assets/download/:lesson/:type', handler);
   log.info('bootstrap.asset-download.route.mounted', { baseUrl });
   return createAssetDownloadUrlFactory(baseUrl, createDownloadSignature, signingSecret);
 }

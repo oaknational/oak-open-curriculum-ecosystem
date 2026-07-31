@@ -135,3 +135,46 @@ for years if the sibling's tests all use a different extension
   function signature — use for recording call sites
   without casts. Define DI interfaces with `void`
   return when callers don't consume the result.
+
+## Regex Findings That Refuse to Die (2026-07-30 consolidation)
+
+A quantifier-before-required-literal scan (`\d*\.?\d+px`, `[\d.]+px`) is
+O(n²) by construction on non-matching runs — each start position pays a
+linear backtrack hunting the suffix. When Sonar's backtracking findings
+fire twice on one site's successive regex refinements, the instrument is
+right both times: stop refining the regex. If the input grammar is
+token-shaped (computed CSS serialisations, whitespace-tokenised output),
+parse by `split` + `endsWith` + `Number` — linear, simpler, and the
+finding class ends rather than relocates.
+
+## Fixture and Emit Gotchas (2026-07-30 consolidation)
+
+- **Parse-input fixtures are `z.input<schema>`, never the output type** —
+  NULL-sentinel transforms make them differ; an output-typed factory is a
+  genuine mis-model the compiler catches.
+- **Before typing an "undeclared" field as `z.unknown`, falsify "no
+  contract exists" against the WHOLE pipeline** — a field the bulk sidecar
+  omitted was fully declared in the API's response schema.
+- **Script-kind TS files** (no imports/exports) emit classic browser
+  scripts and their top-level `interface` declarations merge globally —
+  the mechanism that lets a pre-paint runtime be TypeScript without a
+  bundler. Adding any export flips the emit to ESM, so testability comes
+  from smoke-testing the EMITTED artefact, not from DI-factory exports.
+  Read a merged global's type back with `NonNullable<Window['x']>` — uses
+  the interface (curing the no-unused-vars false positive) and survives
+  `exactOptionalPropertyTypes`.
+- **TSDoc code spans must not wrap lines** — a backticked command split
+  across docblock lines parses as an unclosed span and fires tsdoc tag
+  errors on the wrapped tokens.
+- **tsc error locations point at the EXPRESSION, not the literal needing
+  fields** — a scripted insertion keyed on an error location can land in
+  a helper call's surrounding literal; unique-anchor asserts + type-check
+  are the guard.
+- **A bare `@` character in TSDoc prose breaks the docblock** — an SHA
+  reference like `main @ 63a7e675` parses as an unknown block tag and fires
+  tsdoc errors; escape it (`\@`) or rephrase (`main at 63a7e675`).
+- **Exporting a zod input shape as `: z.ZodRawShape` kills `.meta()` reads**
+  (bitten twice in one day, 2026-07-30): the annotation widens every field
+  to the core `$ZodType`, discarding the per-field schema types the readers
+  need. Export as `X.shape`, or constrain with `satisfies z.ZodRawShape` —
+  never the widening annotation.

@@ -3,19 +3,24 @@ import { join } from 'node:path';
 import {
   CODEX_CONFIG_PATH,
   readCodexAgentRegistrations,
-  readRequiredTomlValue,
   resolveCodexAgentConfigFilePath,
 } from './codex-project-agent-registry.js';
 import type { CodexAgentRegistration } from './codex-project-agent-registry.js';
+import {
+  createTopLevelTomlBasicStringReader,
+  readOptionalTopLevelTomlBasicString,
+  readRequiredTopLevelTomlBasicString,
+  type TopLevelTomlBasicStringReader,
+} from './toml-top-level-basic-string.js';
 
 export { parseCodexAgentRegistrations } from './codex-project-agent-registry.js';
 
-const DEVELOPER_INSTRUCTIONS_PATTERN = /^developer_instructions\s*=\s*"""\r?\n([\s\S]*?)\r?\n"""/mu;
 const CANONICAL_PATH_PATTERN = /`(\.agent\/[^`]+)`/gu;
 
 interface AdapterMetadata {
   readonly name: string;
   readonly description: string;
+  readonly model: string | null;
   readonly modelReasoningEffort: string;
   readonly sandboxMode: string;
   readonly approvalPolicy: string;
@@ -26,6 +31,7 @@ export interface CodexProjectAgent {
   description: string;
   configPath: string;
   adapterPath: string;
+  model: string | null;
   modelReasoningEffort: string;
   sandboxMode: string;
   approvalPolicy: string;
@@ -42,8 +48,9 @@ export function resolveCodexProjectAgent(repoRoot: string, agentName: string): C
   const registration = findRegistrationOrThrow(registrations, agentName);
   const adapterPath = resolveCodexAgentConfigFilePath(registration.configFile);
   const adapterContent = readAdapterContent(repoRoot, adapterPath, agentName);
-  const adapterMetadata = readAdapterMetadata(registration, adapterPath, adapterContent, agentName);
-  const developerInstructions = readDeveloperInstructions(adapterContent, adapterPath);
+  const readValue = createTopLevelTomlBasicStringReader(adapterContent);
+  const adapterMetadata = readAdapterMetadata(registration, adapterPath, readValue, agentName);
+  const developerInstructions = readDeveloperInstructions(readValue, adapterPath);
   const referencedCanonicalFiles = readReferencedCanonicalFiles(
     repoRoot,
     agentName,
@@ -87,11 +94,11 @@ function readAdapterContent(repoRoot: string, adapterPath: string, agentName: st
 function readAdapterMetadata(
   registration: CodexAgentRegistration,
   adapterPath: string,
-  adapterContent: string,
+  readValue: TopLevelTomlBasicStringReader,
   agentName: string,
 ): AdapterMetadata {
-  const name = readRequiredTomlValue(adapterContent, 'name', adapterPath);
-  const description = readRequiredTomlValue(adapterContent, 'description', adapterPath);
+  const name = readRequiredAdapterValue(readValue, 'name', adapterPath);
+  const description = readRequiredAdapterValue(readValue, 'description', adapterPath);
 
   validateAdapterValue('name', name, registration.name, registration, agentName);
   validateAdapterValue(
@@ -105,14 +112,23 @@ function readAdapterMetadata(
   return {
     name,
     description,
-    modelReasoningEffort: readRequiredTomlValue(
-      adapterContent,
+    model: readOptionalTopLevelTomlBasicString(readValue, 'model', adapterPath),
+    modelReasoningEffort: readRequiredAdapterValue(
+      readValue,
       'model_reasoning_effort',
       adapterPath,
     ),
-    sandboxMode: readRequiredTomlValue(adapterContent, 'sandbox_mode', adapterPath),
-    approvalPolicy: readRequiredTomlValue(adapterContent, 'approval_policy', adapterPath),
+    sandboxMode: readRequiredAdapterValue(readValue, 'sandbox_mode', adapterPath),
+    approvalPolicy: readRequiredAdapterValue(readValue, 'approval_policy', adapterPath),
   };
+}
+
+function readRequiredAdapterValue(
+  readValue: TopLevelTomlBasicStringReader,
+  key: string,
+  adapterPath: string,
+): string {
+  return readRequiredTopLevelTomlBasicString(readValue, key, adapterPath);
 }
 
 function validateAdapterValue(
@@ -171,13 +187,16 @@ function ensureCanonicalFilesExist(
   }
 }
 
-function readDeveloperInstructions(content: string, adapterPath: string): string {
-  const developerInstructionsMatch = content.match(DEVELOPER_INSTRUCTIONS_PATTERN);
-  if (!developerInstructionsMatch?.[1]) {
-    throw new Error(`${adapterPath} is missing a triple-quoted developer_instructions block.`);
+function readDeveloperInstructions(
+  readValue: TopLevelTomlBasicStringReader,
+  adapterPath: string,
+): string {
+  const developerInstructions = readValue('developer_instructions')?.trim();
+  if (!developerInstructions) {
+    throw new Error(`${adapterPath} is missing a top-level developer_instructions string.`);
   }
 
-  return developerInstructionsMatch[1].trim();
+  return developerInstructions;
 }
 
 function extractCanonicalPaths(developerInstructions: string): string[] {

@@ -60,20 +60,6 @@ export function resolveCodexAgentConfigFilePath(configFile: string): string {
   return posix.normalize(posix.join(CODEX_CONFIG_DIR, configFile));
 }
 
-export function readRequiredTomlValue(content: string, key: string, adapterPath: string): string {
-  for (const rawLine of content.split(/\r?\n/u)) {
-    const line = rawLine.trim();
-    const assignment = parseTomlStringAssignment(line);
-    if (!assignment || assignment.key !== key) {
-      continue;
-    }
-
-    return assignment.value;
-  }
-
-  throw new Error(`${adapterPath} is missing required TOML key '${key}'.`);
-}
-
 function parseTomlBasicString(rawValue: string): string {
   const parsedValue: unknown = JSON.parse(`"${rawValue}"`);
   if (typeof parsedValue !== 'string') {

@@ -81,7 +81,7 @@ Phase status: complete (2026-02-24).
 - Deterministic validation:
   - `test -f .agent/plans/agentic-engineering-enhancements/documentation-sync-log.md`
   - `rg -n "Documentation Synchronisation Requirement" .agent/plans/agentic-engineering-enhancements/roadmap.md`
-  - `rg -n "ADR-119|practice.md|prog-frame|Consolidation review" .agent/plans/agentic-engineering-enhancements/documentation-sync-log.md`
+  - `rg -n "ADR-119|practice.md|personal-item|Consolidation review" .agent/plans/agentic-engineering-enhancements/documentation-sync-log.md`
 
 ### Task 0.6: Planning Artifact Validation
 

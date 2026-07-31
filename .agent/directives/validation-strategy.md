@@ -43,6 +43,19 @@ keyed on surface type.
 | **Standard** | User-facing where errors are visible and correctable — semantic search, browse, the MCP tool surface | Tests + conformance + behavioural evals |
 | **Light** | Internal / agent-facing where harm is cheap and self-correcting — formatting, scaffolding, internal tooling | Tests + spot checks; evals optional |
 
+## Gate integrity: a green check proves its own path, nothing more
+
+A green gate is evidence about the path the gate exercised — never about
+the path production runs. Worked instance (2026-07-2x): a Vitest unit test
+passed on a runtime fact the real build path could not satisfy, because
+Vite resolves workspace packages and `tsx esbuild.config.ts` does not — the
+green unit test "proved" a resolution the shipped artefact lacked. When a
+claim is about a RUNTIME or BUILD property, the check must run on that
+runtime or build path (a smoke test on the built artefact, not a unit test
+on the source graph). Composes with the
+`green-parts-red-composition` pattern: per-path checks compose no better
+than per-part ones.
+
 ## Eval home
 
 Evaluation **definitions are always version-controlled in-repo** with the artefact

@@ -73,27 +73,6 @@ function parseTomlBasicString(rawValue: string): string {
   return typeof parsed === 'string' ? parsed : rawValue;
 }
 
-/**
- * Reads the string value associated with `key` from a TOML basic-string
- * assignment anywhere in `content`.
- *
- * Scans line by line and returns the first match.  Returns `null` when the
- * key is not present.
- *
- * @param content - Full text of a TOML file.
- * @param key - The key to look up (e.g. `"name"` or `"sandbox_mode"`).
- * @returns The decoded string value, or `null` if the key is absent.
- */
-export function readTomlBasicStringValue(content: string, key: string): string | null {
-  for (const rawLine of content.split(/\r?\n/u)) {
-    const match = TOML_BASIC_STRING_REGEX.exec(rawLine.trim());
-    if (match !== null && match[1] === key && match[2] !== undefined) {
-      return parseTomlBasicString(match[2]);
-    }
-  }
-  return null;
-}
-
 // ---------------------------------------------------------------------------
 // Registration parsing
 // ---------------------------------------------------------------------------

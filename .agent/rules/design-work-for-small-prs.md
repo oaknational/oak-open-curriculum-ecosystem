@@ -33,6 +33,12 @@ small PRs."*
   exist.
 - Archival-class and generated-artefact changesets keep their PDR-132
   exemption — the bands govern authored work.
+- **The indivisibility exception is proof-shaped, never convenience-shaped**
+  (adjudicated 2026-07-30): bundling into one large PR is licensed only when
+  the PROOF is indivisible — a mutual value-import cycle makes ordering
+  arithmetically impossible, or the split slice would be an unreviewable
+  object (a type-only PR with no consumer). An exception granted on such
+  proof is explicitly not precedent for bundling on convenience.
 
 Related: `pr-lifecycle` §Phase 1 (the downstream check), `ticket-management`
 (one story per ticket), `proportionality` (the SCOPE axis), PDR-132 (round

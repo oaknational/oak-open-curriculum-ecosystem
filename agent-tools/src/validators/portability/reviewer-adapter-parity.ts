@@ -1,13 +1,18 @@
 /**
  * Reviewer-adapter cross-platform parity checks for the portability validator.
  *
- * Every named reviewer agent must have adapter files on all three supported
+ * Named reviewer agents normally have adapter files on all three supported
  * platforms: Cursor (`.cursor/agents/<name>.md`), Claude Code
  * (`.claude/agents/<name>.md`), and Codex (`.codex/agents/<name>.toml`).
- * This module provides the pure function that detects parity gaps given the
- * lists of existing adapter file paths.
+ * Platform-specific seats are encoded in the shared support contract. This
+ * module provides the pure function that detects parity gaps given the lists
+ * of existing adapter file paths.
  */
 
+import {
+  getReviewerAdapterPlatformViolation,
+  type ReviewerAdapterPlatform,
+} from '../../core/reviewer-adapter-platform-contract.js';
 import { stripDirAndExtension } from './portability-constants.js';
 
 /**
@@ -35,16 +40,16 @@ export interface ReviewerAdapterParityIssuesOptions {
  * Returns all portability issues caused by missing reviewer adapter files.
  *
  * A canonical reviewer adapter name is any name that appears in at least one
- * of the three platform adapter lists.  For each canonical name, the function
- * checks whether a corresponding file exists on every platform and emits an
- * issue for each gap.
+ * of the three platform adapter lists. For each canonical name, the function
+ * checks whether a corresponding file exists on every applicable platform and
+ * emits an issue for each gap or unsupported adapter.
  *
  * Issue messages use the expected file path so that operators can immediately
  * identify what needs to be created.
  *
  * @param options - The three platform adapter file lists.
  * @returns An array of human-readable issue strings; empty means all adapters
- *   are present on all three platforms.
+ *   are aligned with their declared platform support.
  */
 export function getReviewerAdapterParityIssues({
   cursorAgentFiles,
@@ -62,22 +67,48 @@ export function getReviewerAdapterParityIssues({
   );
 
   for (const agentName of canonicalNames) {
-    if (!cursorNames.has(agentName)) {
-      issues.push(
-        `.cursor/agents/${agentName}.md: missing reviewer adapter required for cross-platform parity`,
-      );
-    }
-    if (!claudeNames.has(agentName)) {
-      issues.push(
-        `.claude/agents/${agentName}.md: missing reviewer adapter required for cross-platform parity`,
-      );
-    }
-    if (!codexNames.has(agentName)) {
-      issues.push(
-        `.codex/agents/${agentName}.toml: missing reviewer adapter required for cross-platform parity`,
-      );
-    }
+    collectReviewerAdapterParityIssue(
+      issues,
+      agentName,
+      'cursor',
+      cursorNames,
+      `.cursor/agents/${agentName}.md`,
+    );
+    collectReviewerAdapterParityIssue(
+      issues,
+      agentName,
+      'claude-code',
+      claudeNames,
+      `.claude/agents/${agentName}.md`,
+    );
+    collectReviewerAdapterParityIssue(
+      issues,
+      agentName,
+      'codex',
+      codexNames,
+      `.codex/agents/${agentName}.toml`,
+    );
   }
 
   return issues;
+}
+
+function collectReviewerAdapterParityIssue(
+  issues: string[],
+  agentName: string,
+  platform: ReviewerAdapterPlatform,
+  agentNames: ReadonlySet<string>,
+  adapterPath: string,
+): void {
+  const hasAdapter = agentNames.has(agentName);
+  const violation = getReviewerAdapterPlatformViolation(agentName, platform, hasAdapter);
+
+  if (violation?.kind === 'missing') {
+    issues.push(`${adapterPath}: missing reviewer adapter required for cross-platform parity`);
+  }
+  if (violation?.kind === 'unsupported') {
+    issues.push(
+      `${adapterPath}: reviewer adapter is unsupported on ${violation.platform} by the shared platform contract`,
+    );
+  }
 }

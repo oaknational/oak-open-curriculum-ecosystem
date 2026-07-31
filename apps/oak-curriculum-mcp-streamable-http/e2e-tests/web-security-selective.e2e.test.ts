@@ -1,4 +1,4 @@
-import request from 'supertest';
+import { request } from '../src/test-helpers/loopback-request.js';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { RuntimeConfig } from '../src/runtime-config.js';
@@ -6,7 +6,6 @@ import { createFakeHttpObservability } from '../src/test-helpers/observability-f
 import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
 import {
   createNoOpClerkMiddleware,
-  createNoOpRateLimiterFactory,
   createUnauthenticatedMcpAuthClerkDeps,
 } from './helpers/test-config.js';
 import { getScratchStaticRoot } from '../src/test-helpers/static-root-fixture.js';
@@ -42,7 +41,6 @@ async function createTestApp() {
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
     mcpAuthClerkDeps: createUnauthenticatedMcpAuthClerkDeps(),
-    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 }
 

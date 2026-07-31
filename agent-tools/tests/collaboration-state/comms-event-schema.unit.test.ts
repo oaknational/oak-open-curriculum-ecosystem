@@ -151,6 +151,13 @@ describe('comms-event.schema.json — canonical protocol authority', () => {
     expect(validate.errors).toBeNull();
   });
 
+  it('accepts a directed message threading an antecedent via in_response_to', () => {
+    const validate = ajv().compile({ ...commsEventSchema, $ref: '#/$defs/directed' });
+    const threaded = { ...directedPostMigration, in_response_to: 'antecedent-event-1' };
+    expect(validate(threaded)).toBe(true);
+    expect(validate.errors).toBeNull();
+  });
+
   it('rejects a directed message that still carries the legacy timestamp field', () => {
     const validate = ajv().compile({ ...commsEventSchema, $ref: '#/$defs/directed' });
     const legacyShape = {

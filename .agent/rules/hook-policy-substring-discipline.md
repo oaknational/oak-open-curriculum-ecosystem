@@ -144,3 +144,12 @@ Three+ cross-session instances across multiple agents in the
 2026-05-22 from `pending-graduations.md` entry
 *"Hook-policy substring-matching in instructive content is a
 recurring blocker"*.
+
+## Enforcement-surface changes need a fresh head
+
+Hook-guard and policy changes are NOT landed from a compacting or
+near-budget context — they wait for a fresh head (recorded 2026-07-2x).
+An enforcement surface failing open or closed binds every seat at once,
+so it gets heightened care: fresh context, first-hand probe of the
+changed guard's fire/no-fire behaviour, and never a "land it before I
+compact" push.

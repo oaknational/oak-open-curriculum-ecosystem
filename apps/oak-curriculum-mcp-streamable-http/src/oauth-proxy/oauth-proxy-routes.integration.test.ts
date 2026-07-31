@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import express from 'express';
-import request from 'supertest';
+import { request } from '../test-helpers/loopback-request.js';
 import type { LogContextInput } from '@oaknational/logger';
 
 import { createOAuthProxyRoutes, type OAuthProxyConfig } from './oauth-proxy-routes.js';
@@ -78,10 +78,7 @@ function createProxyApp(
     observability,
   };
 
-  const noopRateLimiter: express.RequestHandler = (_req, _res, next) => {
-    next();
-  };
-  app.use(createOAuthProxyRoutes({ config, oauthRateLimiter: noopRateLimiter }));
+  app.use(createOAuthProxyRoutes({ config }));
   return app;
 }
 

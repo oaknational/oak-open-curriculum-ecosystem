@@ -115,21 +115,17 @@ config_file = "agents/corpus-mapper.toml"
 description = "Clustering synthesist for the corpus-analysis reduce workflow stage; clusters inlined leaf signals into mechanism-grained candidates via the schema-forced structured output."
 config_file = "agents/corpus-reducer.toml"
 
-[agents."cricket"]
-description = "Conscience check (as in Jiminy Cricket), judgement template. Part of the permanent cricket quartet; on Codex this is a TEMPLATE-ONLY variant — no per-agent Claude model or effort pinning, so runs here are not quartet data points (the A/B/C/D experiment runs on the Claude wrappers). Fired on both stances; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with one redirection."
-config_file = "agents/cricket.toml"
+[agents."cricket-judgement-low"]
+description = "Fast low-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with evidence and one redirection."
+config_file = "agents/cricket-judgement-low.toml"
 
-[agents."cricket-fable"]
-description = "Conscience check (as in Jiminy Cricket) — quartet seat A's cross-platform name. On Codex this is a TEMPLATE-ONLY variant: no per-agent Claude model or effort pinning, so this seat behaves as the judgement template at the session model and runs here are not quartet data points (seat A — Fable at low effort — runs on the Claude wrapper). Exists so quartet invocation names resolve on every platform."
-config_file = "agents/cricket-fable.toml"
+[agents."cricket-judgement-medium"]
+description = "Fast medium-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with evidence and one redirection."
+config_file = "agents/cricket-judgement-medium.toml"
 
-[agents."cricket-opus"]
-description = "Conscience check (as in Jiminy Cricket) — quartet seat B's cross-platform name. On Codex this is a TEMPLATE-ONLY variant: no per-agent Claude model or effort pinning, so this seat behaves as the judgement template at the session model and runs here are not quartet data points (seat B — Opus at medium effort — runs on the Claude wrapper). Exists so quartet invocation names resolve on every platform."
-config_file = "agents/cricket-opus.toml"
-
-[agents."cricket-haiku"]
-description = "Conscience check by compiled decision procedure — the cricket quartet's procedure variant. On Codex this is a PROCEDURE-ONLY variant: no per-agent Claude model or effort pinning, so runs here are not quartet data points (seat D — Haiku at xhigh effort — runs on the Claude wrapper). Always fired with the judgement variant on identical supplied context, both stances."
-config_file = "agents/cricket-haiku.toml"
+[agents."cricket-procedure-xhigh"]
+description = "Fast xhigh-effort conscience check using a compiled decision procedure with quote-anchored evidence and a mechanical verdict table. Call directly for a reproducible second opinion when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with one redirection."
+config_file = "agents/cricket-procedure-xhigh.toml"
 
 [agents."corpus-voter"]
 description = "Single-turn adversary voter for the corpus-analysis validate workflow; judges one candidate against the four conjunctive apophenia tests from supplied grounding only."

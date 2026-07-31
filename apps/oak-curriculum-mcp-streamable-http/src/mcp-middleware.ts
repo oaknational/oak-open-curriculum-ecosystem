@@ -40,8 +40,6 @@ export interface McpHtmlNegotiationOptions {
   readonly renderHtml: () => string;
   /** Origin/Host validation guard — the browser-rendered class requires it. */
   readonly dnsRebindingMiddleware: RequestHandler;
-  /** Named rate limiter for the HTML leg. */
-  readonly rateLimiter: RequestHandler;
 }
 
 /**
@@ -60,7 +58,7 @@ export interface McpHtmlNegotiationOptions {
 export function createMcpHtmlNegotiation(
   options: McpHtmlNegotiationOptions,
 ): (req: Request, res: Response, next: NextFunction) => void {
-  const { log, renderHtml, dnsRebindingMiddleware, rateLimiter } = options;
+  const { log, renderHtml, dnsRebindingMiddleware } = options;
   return (req, res, next) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') {
       next();
@@ -76,19 +74,13 @@ export function createMcpHtmlNegotiation(
         next(guardError);
         return;
       }
-      rateLimiter(req, res, (limiterError?: unknown) => {
-        if (limiterError !== undefined) {
-          next(limiterError);
-          return;
-        }
-        log.debug('mcp.html-leg.serve', { method: req.method, path: req.path });
-        res.status(200).type('text/html; charset=utf-8').set('Cache-Control', 'no-store');
-        if (req.method === 'HEAD') {
-          res.end();
-          return;
-        }
-        res.send(renderHtml());
-      });
+      log.debug('mcp.html-leg.serve', { method: req.method, path: req.path });
+      res.status(200).type('text/html; charset=utf-8').set('Cache-Control', 'no-store');
+      if (req.method === 'HEAD') {
+        res.end();
+        return;
+      }
+      res.send(renderHtml());
     });
   };
 }

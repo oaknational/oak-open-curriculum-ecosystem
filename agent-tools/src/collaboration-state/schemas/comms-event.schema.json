@@ -193,6 +193,11 @@
         },
         "subject": { "type": "string", "minLength": 1 },
         "body": { "type": "string", "minLength": 1 },
+        "in_response_to": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional reference to an earlier event_id this message responds to. Threading affordance (parity with the narrative kind), so a directed acknowledgement carries its antecedent machine-readably instead of naming it in prose. Readers that do not understand this field MUST ignore it (additive-extension discipline per PDR-049 + PDR-050)."
+        },
         "tags": {
           "type": "array",
           "items": { "type": "string" },

@@ -1,4 +1,3 @@
-import type { RequestHandler } from 'express';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
 import listRoutes from 'express-list-routes';
 import {
@@ -42,15 +41,13 @@ export function finalizeApp(deps: {
   readonly log: Logger;
   readonly appId: number;
   readonly bootstrapTimer: PhasedTimer;
-  readonly oauthRateLimiter: RequestHandler;
 }): void {
-  const { app, options, log, appId, bootstrapTimer, oauthRateLimiter } = deps;
+  const { app, options, log, appId, bootstrapTimer } = deps;
   const { observability } = options;
 
   registerDiagnosticRoutesIfEnabled({
     app,
     env: options.runtimeConfig.env,
-    oauthRateLimiter,
     observability,
     log,
   });

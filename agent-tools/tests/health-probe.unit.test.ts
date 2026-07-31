@@ -5,6 +5,7 @@ import {
   evaluateHookPolicySpineCoherenceFromInputs,
   evaluatePracticeBoxState,
 } from '../src/core/health-probe-hook-state';
+import { evaluateReviewerAdapterParityFromInputs } from '../src/core/health-probe-parity';
 import type { AgentInfrastructureHealthReport } from '../src/core/health-probe-types';
 
 const wiredClaudeSettingsText = JSON.stringify({
@@ -30,6 +31,41 @@ const documentedSurfaceMatrix = [
   'Policy Spine',
   'override prune block',
 ].join('\n');
+
+const sharedCricketAgentNames = [
+  'cricket-judgement-low',
+  'cricket-judgement-medium',
+  'cricket-procedure-xhigh',
+];
+const claudeCursorCricketAgentNames = [...sharedCricketAgentNames, 'cricket-judgement-high'];
+
+describe('reviewer adapter parity health', () => {
+  it('accepts the Claude and Cursor only high-judgement Cricket seat', () => {
+    const result = evaluateReviewerAdapterParityFromInputs({
+      cursorAgents: claudeCursorCricketAgentNames,
+      claudeAgents: claudeCursorCricketAgentNames,
+      codexAgents: sharedCricketAgentNames,
+    });
+
+    expect(result).toMatchObject({
+      status: 'pass',
+      details: [],
+    });
+  });
+
+  it('rejects a fake Codex adapter for the unsupported high-judgement seat', () => {
+    const result = evaluateReviewerAdapterParityFromInputs({
+      cursorAgents: claudeCursorCricketAgentNames,
+      claudeAgents: claudeCursorCricketAgentNames,
+      codexAgents: [...sharedCricketAgentNames, 'cricket-judgement-high'],
+    });
+
+    expect(result).toMatchObject({
+      status: 'fail',
+      details: ['Codex has unsupported reviewer adapter cricket-judgement-high.'],
+    });
+  });
+});
 
 describe('hook policy spine health', () => {
   it('passes when policy, tracked activation, and surface matrix align', () => {

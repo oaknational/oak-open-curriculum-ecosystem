@@ -306,20 +306,6 @@ Some subdirectories have their own README files:
 - [ooc/README.md](ooc/README.md) (if exists)
 - [open-curriculum-concept-graph/README.md](open-curriculum-concept-graph/README.md) (if exists)
 
-## Holding Bay: `notes/`
-
-[`notes/`](notes/README.md) is a transient holding bay for material
-relocated from `.agent/reference/` during the 2026-04-22 reformation
-of `reference/` into a curated library tier
-([PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)).
-Material in `notes/` is awaiting per-file disposition (research
-proper, reference promotion, executive memory, archive, or delete);
-the per-file pass is tracked by
-`reference-research-notes-rehoming.plan.md` (`../plans-old-archive/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md`) (archived 2026-04-22 Session 8 with execution record).
-The bay is removed when empty.
-
----
-
 ## Cross-References
 
 ### From Plans to Research

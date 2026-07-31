@@ -3,7 +3,7 @@
 How to enable live Sentry error capture and tracing for Oak runtimes.
 
 **Status**: The observability foundation code is in the HTTP MCP server
-(PR #73, merged 2026-03-31). Rate limiting is in place (ADR-158).
+(PR #73, merged 2026-03-31).
 Search CLI adoption is complete (2026-04-12). Local `.env.local`
 credentials are provisioned for the HTTP MCP server (2026-04-12).
 L-7 release + commits + deploy linkage landed 2026-04-20 as a bespoke

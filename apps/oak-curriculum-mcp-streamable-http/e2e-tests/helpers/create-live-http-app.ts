@@ -1,11 +1,7 @@
 import type express from 'express';
 import { createApp } from '../../src/application.js';
 import type { ToolHandlerOverrides } from '../../src/handlers.js';
-import {
-  createMockObservability,
-  createMockRuntimeConfig,
-  createNoOpRateLimiterFactory,
-} from './test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './test-config.js';
 import { getScratchStaticRoot } from '../../src/test-helpers/static-root-fixture.js';
 
 export interface LiveHttpApp {
@@ -35,7 +31,6 @@ export async function createLiveHttpApp(options?: CreateLiveHttpAppOptions): Pro
     getLandingPageHtml: () =>
       '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     toolHandlerOverrides: options?.overrides,
-    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
 
   return { app };

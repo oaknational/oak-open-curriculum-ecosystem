@@ -7,6 +7,7 @@
     "name": "Oak National Academy",
     "url": "https://www.thenational.academy"
   },
+  "license": "MIT (code — see LICENCE). Curriculum content from the Oak Open Curriculum API: Open Government Licence v3.0 — see LICENCE-DATA.md for upstream terms. Oak branding is not MIT-licensed — see BRANDING.md and https://support.thenational.academy/using-the-oak-brand",
   "homepage": "https://www.thenational.academy",
   "repository": "https://github.com/oaknational/oak-open-curriculum-ecosystem",
   "keywords": ["education", "curriculum", "national-curriculum", "oak", "teaching"],

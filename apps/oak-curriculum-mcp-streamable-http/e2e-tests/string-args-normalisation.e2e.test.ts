@@ -1,4 +1,4 @@
-import request from 'supertest';
+import { request } from '../src/test-helpers/loopback-request.js';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
@@ -8,11 +8,7 @@ import {
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { ok } from '@oaknational/result';
-import {
-  createMockObservability,
-  createMockRuntimeConfig,
-  createNoOpRateLimiterFactory,
-} from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 import {
   getContentArray,
   parseJsonRpcResult,
@@ -82,7 +78,6 @@ describe('HTTP boundary argument validation', () => {
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       getLandingPageHtml: () =>
         '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
     const res = await request(app)
       .post('/mcp')
@@ -109,7 +104,6 @@ describe('HTTP boundary argument validation', () => {
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       getLandingPageHtml: () =>
         '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
     const res = await request(app)
       .post('/mcp')
@@ -136,7 +130,6 @@ describe('HTTP boundary argument validation', () => {
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       getLandingPageHtml: () =>
         '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
     const res = await request(app)
       .post('/mcp')
@@ -165,7 +158,6 @@ describe('HTTP boundary argument validation', () => {
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       getLandingPageHtml: () =>
         '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-      rateLimiterFactory: createNoOpRateLimiterFactory(),
     });
     const res = await request(app)
       .post('/mcp')

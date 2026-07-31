@@ -163,13 +163,71 @@ declaration set yet. Dated observations already on record:
   seconds; no exact end-to-end latency is asserted. The operational procedure
   lives in
   [`use-monitor-for-event-driven-wake` § Codex NOTIFY](../../rules/use-monitor-for-event-driven-wake.md#codex-notify-session-relay).
-- **Claude Code — no declaration set authored (owed).** Instrument-2
-  evidence (content-bearing replies to directed events, no manual poll)
-  recurs routinely in the comms stream, but per PDR-133 §8 discipline 1 the
-  rows are recorded from a deliberate observation pass, never inferred from
-  ambient traffic.
-- **Codex's other liveness classes, Cursor, and Gemini/Antigravity — declaration
-  rows owed.** The certified Codex row above covers `NOTIFY` only.
+- **Claude Code 2.1.220 — `NOTIFY`: certified for the armed-Monitor
+  path** (observed first-hand 2026-07-30 at the receiving implementer
+  seat Possum weaves Midnight; external observers the sitting Directors
+  — Bora binds Thermal received the primary reply, Falcon hunts Flight
+  the corroborating one; MCP-393 slice A). Directed event
+  `12294923-d059-440c-aefc-b35b11d5623e` (a Director route, created
+  06:11:57Z) woke the receiving seat's reasoning loop through the
+  canonical `comms watch` running under the Monitor primitive, with no
+  manual poll and no user prompt — the host acceptance test named in
+  [`use-monitor-for-event-driven-wake`](../../rules/use-monitor-for-event-driven-wake.md)
+  §"The liveness class this rule owns". The external observation is the
+  Director-received content-bearing reply
+  `640d0a82-3a72-4a79-a935-72d4fd1f4019` at 06:12:30Z (+33 s; per
+  PDR-133 §6 instrument 2 a content-engaging reply certifies the whole
+  path the challenge traversed). Corroborated same-day by a second
+  exchange (`3f1348b6-9641-4181-9d79-ea15a826ac80` → threaded reply
+  `1eaa4d16-5b12-4c4b-b429-cc73c61f4883`, ~138 s). The certification is
+  **path-scoped** per PDR-133 §4: it covers a seat whose watcher is a
+  live Monitor task and is evidence about nothing else — the
+  absorption-dark instances below are the same platform with that path
+  lapsed.
+- **Claude Code 2.1.220 — `ABSORB`: cannot-certify** (recorded
+  2026-07-30 per MCP-393's definition of done). No Claude Code primitive
+  certifies absorption (`ABSORB` is never-self-certifiable, PDR-133 §5,
+  and the platform ships no external-observer machinery for it); three
+  dated instances on 2026-07-29 show the failure shape — seats
+  process-alive and EMIT-fresh (240 s heartbeats) whose directed events
+  went unabsorbed for 17–40+ minutes, each cured by a hand-delivered
+  unblock (~16:34Z, a handover instruction absorbed only at the hourly
+  sweep; ~17:07–17:40Z, three directed events plus a deadline unread
+  ~40 min; 20:47–21:04Z, a merge broadcast unabsorbed ~17 min, unblock
+  re-delivered as directed event `ac509d4e` — the one instance whose
+  event identifier the founding record preserved). Mechanism
+  deliberately unattributed — candidate mechanisms are separately
+  attested with their own dates in the watcher rule (the
+  plain-background-shell re-arm, 2026-07-25) and the heartbeat rule
+  (harness-suspension emitters, 2026-07-20/21). The founding records
+  label these instances NOTIFY-dark; the class-honest filing per
+  PDR-133 §4 is absorption-absent with mechanism unattributed, since
+  `NOTIFY` and `LOOP` failures are indistinguishable from outside. The
+  **substituting proxy, a named requirement of Claude Code seats' team
+  participation**: the ACK-REQUESTED absorption-ack convention plus the
+  outstanding-challenge read in
+  [`directed-routing-requires-absorption-ack`](../../rules/directed-routing-requires-absorption-ack.md)
+  (MCP-393 owns the durable cure; its slice B adds the mechanical read
+  surface). Residual exposure, both halves named: the proxy detects
+  absorption-absence at its threshold but cannot wake the seat; and it
+  covers DIRECTED challenges only — the third founding instance was a
+  BROADCAST whose relevance went unabsorbed, a shape the ack convention
+  does not reach and the consumer-side lane-state-from-PR/merge-truth
+  discipline covers instead.
+- **Claude Code 2.1.220 — every remaining class: explicitly unverified**
+  (PDR-133 §8 discipline 2; recorded 2026-07-30 to complete a compliant
+  first declaration set). `DISPATCH`, `SUBSTRATE`, `PROCESS`, `BINDING`,
+  `CURSOR`, `INTEGRITY`, `DELIVERY`, `LOOP`, `CAPABILITY`, `EMIT`,
+  `REGISTRY`, `PROGRESS`: no dated deliberate observation on record for
+  any of them on this platform version — the watcher/heartbeat rules
+  define check surfaces for several, but a check surface is not a dated
+  observation, and rows are never inferred from ambient traffic. Named
+  backfill: the MCP-393 slice-B observation pass (ticket MCP-393), which
+  exercises the seen-set, sidecar, and heartbeat surfaces these rows
+  need.
+- **Codex's other liveness classes, Cursor, and Gemini/Antigravity —
+  declaration rows owed.** The certified rows above cover the named
+  classes on the named paths only.
 
 ## Policy Spine
 

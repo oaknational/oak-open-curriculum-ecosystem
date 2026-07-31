@@ -8,7 +8,7 @@
  * just check presence.
  */
 
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 
 import type { Logger } from '@oaknational/logger';
 
@@ -19,7 +19,6 @@ import { registerTestErrorRoute } from './test-error-route.js';
 interface RegisterDiagnosticRoutesDeps {
   readonly app: Express;
   readonly env: Env;
-  readonly oauthRateLimiter: RequestHandler;
   readonly observability: HttpObservability;
   readonly log: Logger;
 }
@@ -34,13 +33,12 @@ interface RegisterDiagnosticRoutesDeps {
  * @param deps - Injected dependencies (DI per ADR-078).
  */
 export function registerDiagnosticRoutesIfEnabled(deps: RegisterDiagnosticRoutesDeps): void {
-  const { app, env, oauthRateLimiter, observability, log } = deps;
+  const { app, env, observability, log } = deps;
 
   if (env.TEST_ERROR_SECRET) {
     registerTestErrorRoute({
       app,
       secret: env.TEST_ERROR_SECRET,
-      rateLimiter: oauthRateLimiter,
       observability,
       log,
     });

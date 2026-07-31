@@ -4,11 +4,7 @@ import {
   SERVED_SURFACE,
   type ServedSurfaceDefinition,
 } from '../../src/served-surface/served-surface.js';
-import {
-  createMockObservability,
-  createMockRuntimeConfig,
-  createNoOpRateLimiterFactory,
-} from './test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './test-config.js';
 import { getScratchStaticRoot } from '../../src/test-helpers/static-root-fixture.js';
 
 export const STUB_ACCEPT_HEADER = 'application/json, text/event-stream';
@@ -55,7 +51,6 @@ export async function createStubbedHttpApp(
     getWidgetHtml: () => '<!doctype html><html><body>stub-widget</body></html>',
     getLandingPageHtml: () =>
       '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-    rateLimiterFactory: createNoOpRateLimiterFactory(),
     // Only override the canonical definition when a suite opts into a
     // variant (e.g. the user-search activation seam); omitting it keeps
     // the production-honest served surface.

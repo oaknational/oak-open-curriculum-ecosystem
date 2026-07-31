@@ -17,8 +17,8 @@
  * dependencies per ADR-078 (no global mocks; explicit injection).
  */
 
-import express, { type Express, type ErrorRequestHandler, type RequestHandler } from 'express';
-import request from 'supertest';
+import express, { type Express, type ErrorRequestHandler } from 'express';
+import { request } from '../test-helpers/loopback-request.js';
 import { describe, expect, it } from 'vitest';
 
 import { createFakeLogger } from '../test-helpers/fakes.js';
@@ -32,9 +32,6 @@ import {
 } from './test-error-route.js';
 
 const SECRET = 'test-secret-1234567890';
-const PASSTHROUGH_LIMITER: RequestHandler = (_req, _res, next) => {
-  next();
-};
 
 interface CaptureRecord {
   readonly error: unknown;
@@ -63,7 +60,6 @@ function buildApp(
   registerTestErrorRoute({
     app,
     secret: SECRET,
-    rateLimiter: PASSTHROUGH_LIMITER,
     observability,
     log,
   });

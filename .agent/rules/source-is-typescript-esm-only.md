@@ -36,3 +36,9 @@ files.
 - Shell only where it significantly reduces effort. A shell script that
   accretes parsing or branching logic carries ADR-168 §5's
   promotion-overdue signals; port it to TypeScript.
+
+Owner sharpening (2026-07-30): the bar for JavaScript exceptions is "high,
+high", and an exception never justifies keeping EXISTING hand-authored JS —
+surviving `.js` files are rewrite candidates, not grandfathered
+(`oak-theme.js` was rewritten as TypeScript source under this ruling). Shell
+and occasional Python remain the only non-TypeScript carve-outs.

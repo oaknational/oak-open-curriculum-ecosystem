@@ -30,7 +30,7 @@ observability closure work after PR #73 merged to `main` on 2026-03-31.
 4. [search-observability.plan.md](../../plans-backlog-2026-07/observability/current/search-observability.plan.md)
 5. sentry-observability-translation-crosswalk.plan.md (`../../plans-old-archive/observability/archive/completed/sentry-observability-translation-crosswalk.plan.md`)
 6. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
-7. [ADR-158](../../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md)
+7. [ADR-219](../../../docs/architecture/architectural-decisions/219-rate-limiting-is-an-edge-concern.md) (supersedes ADR-158)
 
 ## Current State (2026-04-16)
 

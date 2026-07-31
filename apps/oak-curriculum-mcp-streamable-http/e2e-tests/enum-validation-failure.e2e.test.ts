@@ -1,12 +1,8 @@
-import request from 'supertest';
+import { request } from '../src/test-helpers/loopback-request.js';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import { hasJsonRpcOrResultError, parseSseEnvelope } from './helpers/sse.js';
-import {
-  createMockObservability,
-  createMockRuntimeConfig,
-  createNoOpRateLimiterFactory,
-} from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 import { getScratchStaticRoot } from '../src/test-helpers/static-root-fixture.js';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -34,7 +30,6 @@ async function post(body: Record<string, unknown>) {
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     getLandingPageHtml: () =>
       '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
   return request(app).post('/mcp').set('Host', 'localhost').set('Accept', ACCEPT).send(body);
 }

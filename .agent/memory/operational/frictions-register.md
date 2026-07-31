@@ -2711,6 +2711,15 @@ commit SHA and the closing plan reference.
   comms-concept-gate test shapes.
 - **Target surface**: `agent-tools/src/collaboration-state/cli-comms-commands.ts` (append options
   resolution).
+- **Second instance + widened surface (2026-07-30, MCP-393 closing build)**: `comms direct
+  --in-response-to` (added that day) inherits the same non-validation, and the directed ack is now a
+  rule-recommended path for routine acknowledgements — so the fabricated-id class rides a busier
+  road. Same-day worked instance of the class on the append side: a codex seat threaded an
+  acknowledgement (event `922bbbfa`) to a wrong id remembered from watcher output (which renders no
+  ids) and shipped a correction event (`ffd7c635`). Design question any cure must answer before landing: ADR-199 rotation moves
+  archived events out of `comms/`, so a VALID antecedent can be unresolvable at write time — the
+  guard needs an archived-antecedent stance (refuse, warn, or resolve-through-archive), which is
+  plausibly why this friction has stayed open.
 - **Status**: open.
 - **Owner direction status**: standing (record-all-frictions); captured at session closeout.
 
@@ -3449,3 +3458,54 @@ commit SHA and the closing plan reference.
   the blank line that starts the footer block) — rather than a bare substring
   anywhere in the message. Then correct the advice line, which currently
   describes behaviour the code does not permit.
+
+### F-152 — comms send/direct with a long inline --body exits 2 writing nothing; --body-file lands the identical body
+
+- **Source**: Sycamore herds Xylem (028dc4), two first-person instances
+  2026-07-30 (~07:10Z cricket-tally direct, ~07:34Z ruling-relay direct);
+  third instance same hour at Possum weaves Midnight (d5848b), their
+  07:41Z ACK broadcast's process note — cross-seat, same signature.
+- **Observed**: `collaboration-state -- comms direct|send` with an inline
+  `--body` of roughly ≥1.5KB fails with bare `[ELIFECYCLE] Command failed
+  with exit code 2` through the pnpm wrapper and writes NO event file (a
+  true failure, not false-silence — state-read verified zero events each
+  time). Re-sending the byte-identical body via `--body-file` succeeds
+  first try. Short inline bodies land fine.
+- **Expected**: inline `--body` and `--body-file` should have identical
+  capacity, or the CLI should refuse long inline bodies with a named
+  error naming the `--body-file` path, not a bare usage-class exit 2.
+- **Mitigation (proven, three instances)**: write the body to a scratch
+  file and pass `--body-file`; on any ambiguous outcome, read the comms
+  dir for own-events-since-timestamp BEFORE retrying (retry is a write).
+- **Candidate structural cure**: reproduce with a controlled body-length
+  bisect to find the boundary and the failing layer (shell argv limits vs
+  pnpm arg forwarding vs CLI parsing); then either fix the intake or add
+  the named refusal. Route: agent-tooling backlog; evidence lives in this
+  entry's three instances and the two seats' napkin notes.
+
+### F-153 — first new-shape comms event poisons all stale-dist readers (strict parsers + poison-pill drain)
+
+- **First observed**: 2026-07-30 ~11:34:35Z, Possum weaves Midnight
+  (d5848b), post-merge live probe of PR #651 (event `34285ab9`, the
+  store's first `in_response_to`-carrying directed event).
+- **Observed**: every reader running the primary checkout's pre-#651
+  dist refused the event (`Unrecognized key: "in_response_to"` — Zod
+  strict), and `comms watch`'s drain retried the unparseable file every
+  tick, delivering NOTHING behind it: this seat's watcher error-stormed
+  until harness-killed; the Director's heartbeat stopped the same
+  minute. Presents at OTHER seats as peer silence, not as self-error.
+- **Expected**: per ADR-220/PDR-049/050, readers that do not understand
+  an additive optional field ignore it; a bad file should not silence
+  the stream behind it.
+- **Mitigation (proven)**: rebuild the primary dist (already owed under
+  use-built-agent-tools-cli §Sequencing whenever main merges into
+  coordination), re-arm watchers on the SAME cursor — zero events lost
+  (the poison blocks the cursor; it never skips). Until every seat's
+  dist is rebuilt, do not write new-shape events.
+- **Candidate structural cures** (routed to Director, event `d62642e7`,
+  submission-day cut respected): (1) ADR-220 post-merge amendment naming
+  reader-rebuild sequencing as a consequence of additive evolution on a
+  strict substrate; (2) drain quarantine-vs-fail-loud design decision
+  for unparseable files; (3) test doctrine: schema-touching changes must
+  exercise the old-reader × new-event compat cell (no rebuild-everything
+  suite can reach it).

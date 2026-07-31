@@ -26,6 +26,8 @@
       "Skill(oak-fidelity-review:*)",
       "Skill(oak-concept-exploration)",
       "Skill(oak-concept-exploration:*)",
+      "Skill(oak-cricket)",
+      "Skill(oak-cricket:*)",
       "Skill(oak-reason)",
       "Skill(oak-reason:*)",
       "Skill(oak-plan)",
@@ -165,6 +167,11 @@
             "type": "command",
             "command": ".claude/hooks/practice-session-identity.mjs",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/plan-gate-drift-alert.mjs",
+            "timeout": 15
           }
         ]
       }

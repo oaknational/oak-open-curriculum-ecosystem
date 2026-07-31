@@ -12,12 +12,9 @@ import {
   recomputeChoiceRegistry,
   type ChoiceRegistry,
 } from './plan-corpus-registries.js';
-import {
-  validateCorpus,
-  validatePlanFile,
-  type ParsedPlanFile,
-  type PlanConformanceFailure,
-} from './validate-plan-corpus-helpers.js';
+import { loadCorpus } from './plan-corpus-loading.js';
+import { type PlanConformanceFailure } from './plan-corpus-types.js';
+import { validateCorpus } from './validate-plan-corpus-helpers.js';
 
 /**
  * Plan-corpus validator: every `*.plan.md` under the live corpus root
@@ -26,7 +23,15 @@ import {
  * edges resolve (strategic → the published strategic-choice registry;
  * delivery/runbook → a strategic node in the corpus), `impact_areas`
  * members resolve against the closed registry, `depends_on` edges name
- * real plans, and an EMPTY corpus is a failure, never a vacuous green.
+ * real plans, ratified delivery plans satisfy execution-anchor
+ * consistency (`plan-execution-anchors.ts`), and an EMPTY corpus is a
+ * failure, never a vacuous green.
+ *
+ * This gate is a deterministic function of repo content — no clock,
+ * by design: re-running it on any historical commit reproduces that
+ * commit's verdict. The time-dependent sibling concern (expired owner
+ * gates) is deliberately NOT here: it alerts without blocking via
+ * `check-plan-gate-drift.ts` (owner ruling 2026-07-31).
  *
  * **Scan root is the admission rule drawn as a directory boundary**:
  * only `.agent/plans/` is scanned. The conserved backlog
@@ -41,25 +46,9 @@ import {
  * @packageDocumentation
  */
 
-const CORPUS_ROOT = '.agent/plans';
 const STRATEGY_DIR = 'docs/strategy';
 const IMPACT_AREAS_FILE = '.agent/plans/impact-areas.md';
 const repoRoot = resolveRepoRoot(import.meta.url);
-
-/** Recursively collect `*.plan.md` files under a directory. */
-async function collectPlanFiles(dir: string): Promise<string[]> {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const collected: string[] = [];
-  for (const entry of entries) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      collected.push(...(await collectPlanFiles(full)));
-    } else if (entry.name.endsWith('.plan.md')) {
-      collected.push(full);
-    }
-  }
-  return collected;
-}
 
 /** Read both strategy surfaces and recompute the choice registry. */
 async function loadChoiceRegistry(): Promise<Result<ChoiceRegistry, Error>> {
@@ -91,25 +80,6 @@ function reportFailures(failures: readonly PlanConformanceFailure[]): void {
   }
 }
 
-/** Parse every corpus file, splitting failures from parsed plans. */
-async function parseCorpus(
-  planPaths: readonly string[],
-): Promise<{ fileFailures: PlanConformanceFailure[]; parsed: ParsedPlanFile[] }> {
-  const fileFailures: PlanConformanceFailure[] = [];
-  const parsed: ParsedPlanFile[] = [];
-  for (const planPath of planPaths) {
-    const relative = path.relative(repoRoot, planPath);
-    const content = await readFile(planPath, 'utf8');
-    const result = validatePlanFile(relative, content);
-    if (isErr(result)) {
-      fileFailures.push(result.error);
-    } else {
-      parsed.push({ path: relative, node: result.value });
-    }
-  }
-  return { fileFailures, parsed };
-}
-
 async function main(): Promise<number> {
   const choices = await loadChoiceRegistry();
   if (isErr(choices)) {
@@ -121,17 +91,14 @@ async function main(): Promise<number> {
     writeErrorLine(`validate-plan-corpus: ${impactAreas.error.message}`);
     return 1;
   }
-  const planPaths = (await collectPlanFiles(path.join(repoRoot, CORPUS_ROOT))).toSorted((a, b) =>
-    a.localeCompare(b),
-  );
-  const { fileFailures, parsed } = await parseCorpus(planPaths);
+  const { fileFailures, parsed } = await loadCorpus(repoRoot);
   const failures = [...fileFailures, ...validateCorpus(parsed, choices.value, impactAreas.value)];
   if (failures.length > 0) {
     reportFailures(failures);
     return 1;
   }
   writeLine(
-    `validate-plan-corpus: OK (${String(parsed.length)} plan file(s) conformant; serves, impact_areas, and depends_on edges resolved).`,
+    `validate-plan-corpus: OK (${String(parsed.length)} plan file(s) conformant; serves, impact_areas, and depends_on edges resolved; execution anchoring consistent).`,
   );
   return 0;
 }

@@ -6,7 +6,7 @@ const PREFLIGHT_COMMAND =
   'pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5';
 
 /**
- * Pure input for the Codex `SessionStart` identity hook planner.
+ * Pure input for the Codex `SessionStart` Practice-context hook planner.
  */
 interface CodexSessionIdentityHookInput {
   /** Raw JSON text Codex passes to command hooks on stdin. */
@@ -20,7 +20,7 @@ interface CodexSessionIdentityHookInput {
  * Empty object is emitted when no deterministic session identity can be
  * derived. Codex treats exit 0 with no useful output as success, so this
  * payload keeps the hook soft while still allowing valid sessions to receive
- * deterministic Practice identity context.
+ * deterministic Practice identity and team-alert activation context.
  */
 interface CodexSessionIdentityHookOutput {
   readonly hookSpecificOutput?: {
@@ -30,18 +30,19 @@ interface CodexSessionIdentityHookOutput {
 }
 
 /**
- * Side-effect-free plan for the Codex `SessionStart` identity hook.
+ * Side-effect-free plan for the Codex `SessionStart` Practice-context hook.
  */
 interface CodexSessionIdentityHookPlan {
   readonly hookOutput: CodexSessionIdentityHookOutput;
 }
 
 /**
- * Plan Codex `SessionStart` hook output from stdin.
+ * Plan Codex `SessionStart` Practice context from stdin.
  *
  * @param input - Raw stdin JSON from Codex.
- * @returns A hook output payload carrying deterministic identity context, or
- * an empty payload when the hook input cannot identify the session.
+ * @returns A hook output payload carrying deterministic identity and a thin
+ * team-alert activation pointer, or an empty payload when the hook input
+ * cannot identify the session.
  */
 export function planCodexSessionIdentityHook(
   input: CodexSessionIdentityHookInput,
@@ -119,5 +120,8 @@ function identityContext(input: {
     'Use this exact preflight before thread registration or shared-state writes:',
     PREFLIGHT_COMMAND,
     'Thread titles and statusline text are display conveniences only; the identity block above is the correctness surface.',
+    '[Codex team alert bootstrap]',
+    'For coordinated sessions, follow the generated Codex team-session alert bootstrap in AGENTS.md before claiming work.',
+    'Canonical procedure: .agent/rules/use-monitor-for-event-driven-wake.md#codex-notify-session-relay',
   ].join('\n');
 }

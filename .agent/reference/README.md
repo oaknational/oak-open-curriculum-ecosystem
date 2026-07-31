@@ -64,8 +64,8 @@ de-promotion (move to `research/notes/`, archive, or delete).
 
 The tier was reformed during the `memory-feedback` Session 6
 closing arc (2026-04-22). All previous contents were relocated to
-[`research/notes/`](../research/notes/README.md) for per-file
-disposition under the
+a transient `research/notes/` holding bay (since fully dispositioned
+and retired) for per-file disposition under the
 reference-research-notes-rehoming plan (`../plans-old-archive/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md`) (archived 2026-04-22 Session 8 with full execution record).
 The first three promotions under PDR-032 (the inaugural
 applications of the gate) populate the tier:

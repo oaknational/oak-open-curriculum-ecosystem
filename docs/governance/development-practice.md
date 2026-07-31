@@ -86,6 +86,22 @@ implementation work; rejected findings need written rationale; non-blocking
 deferrals need owner-visible next action. Full invocation and disposition
 policy lives at `.agent/memory/executive/invoke-code-experts.md`.
 
+### Analysability Is Part of Correctness
+
+For findings from static instruments (CodeQL, Sonar, lint), "false positive"
+is usually the wrong frame: an alert on code whose safety the instrument
+cannot see is a true positive about **analysability**, and only source-shape
+cures are durable states for instrument findings. Dismissal is doubly
+non-durable: the safety stays invisible to every future scan, and positional
+alert identity makes suppression a recurring tax — the same alerts return
+under new numbers on rewrite. Worked instance (2026-07-29, PR #635): five
+CodeQL alerts headed for evidence-bearing dismissal were instead fixed at
+source on the owner's one question ("why should I dismiss issues detected by
+CodeQL?"); a ~39M-pair differential then proved one "false positive" regex
+was a real super-linear backtracking vector the dismissal path would have
+preserved. Fix-first is the default disposition; a dismissal needs grounds
+that the instrument's frame — not just its finding — is inapplicable.
+
 ## Problem-Hiding Patterns
 
 Fix the problem named by a gate; do not silence the signal that names it.

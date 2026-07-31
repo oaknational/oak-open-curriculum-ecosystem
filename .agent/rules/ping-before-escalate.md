@@ -47,7 +47,11 @@ retirement broadcast and direct-ping them instead.
    directed messages addressed to the agent inside the silence
    window. If they have an unread directed message, route through
    that surface first — a missed message is a more economical
-   explanation than retirement.
+   explanation than retirement. For `ACK-REQUESTED` events
+   specifically, check for threading replies per
+   [`directed-routing-requires-absorption-ack`](directed-routing-requires-absorption-ack.md)
+   §Reading for absorption — an unanswered challenge is absorb-absent
+   evidence, an input to this rule, never a verdict.
 
 If all three surfaces are quiet, send a direct ping (`comms direct`
 with subject *"Liveness check: are you still active?"*) and wait

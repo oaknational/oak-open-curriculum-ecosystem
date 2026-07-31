@@ -114,6 +114,18 @@ Monitor:
    user prompt; if it does not, the filter is wrong, the source is not
    flushing line-buffered, or the host notification path is unproved.
 
+<!-- CODEX_TEAM_ALERT_BOOTSTRAP_SOURCE_START -->
+## Codex team-session alert bootstrap
+
+For coordinated Codex work, load `$oak-start-right-team` before claiming and
+keep the root watcher live. Then follow the Codex relay procedure at
+`.agent/rules/use-monitor-for-event-driven-wake.md#codex-notify-session-relay`.
+If the relay child exposes `collaboration.send_message`, use the relay;
+otherwise declare NOTIFY degraded and follow that rule's bounded-poll fallback.
+Watcher liveness is not proof of reasoning wake, and canonical comms monitoring
+does not cover file-only ARC or standards channels.
+<!-- CODEX_TEAM_ALERT_BOOTSTRAP_SOURCE_END -->
+
 ## Codex NOTIFY: session relay
 
 Codex CLI `0.146.0` has a certified `NOTIFY` composition for the canonical
@@ -164,6 +176,37 @@ Its watcher retains the canonical 3600-second backstop and is not
 auto-rearmed. If the child, its exec session, or the watcher exits, the bridge
 is gone. A deliberate replacement resumes from the same relay cursor and
 performs the canonical foreground gap sweep after the restart.
+
+### Degraded fallback when direct send is unavailable
+
+This fallback fires only when the relay child does not expose
+`collaboration.send_message`. Do not claim event-driven wake and do not add a
+second watcher that cannot notify the root. Keep the canonical root watcher and
+its F-95 heartbeat live, retain its foreground exec `session_id`, and declare
+`NOTIFY: degraded — bounded foreground polling; idle wake unavailable` in the
+team-start message.
+
+The participating root owns the poll:
+
+1. Call the platform `write_stdin` tool on the root watcher's exec session with
+   empty `chars`, a `yield_time_ms` no greater than `30000`, and bounded output.
+   This reads only output already delivered by the canonical watcher; it is not
+   a shell command and it does not prove NOTIFY.
+2. Poll at the start of every reasoning turn, after each material tool or gate
+   result, and at least once every 60 seconds while the root is actively
+   executing team work. A root with no active turn cannot self-wake on this
+   fallback; state that gap rather than implying continuous awareness.
+3. Apply normal relevance triage to every emitted non-self event and write any
+   required content-bearing acknowledgement through canonical comms. The poll
+   covers canonical comms only — not file-only ARC, standards files, claims, or
+   the commit queue.
+4. Stop foreground polling when the team session ends or after a distinct relay
+   passes the external directed no-poll NOTIFY/ABSORB challenge. Re-test the
+   direct-send capability after a Codex/harness change or in the next fresh
+   session; never promote the fallback from degraded without that challenge.
+
+After any watcher start or restart, run the canonical foreground gap sweep
+before relying on the next bounded poll.
 
 The dated PDR-133 observation, platform/tool versions, evidence events, and
 bounded notification interval live only in the

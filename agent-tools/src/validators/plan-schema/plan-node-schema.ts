@@ -23,8 +23,14 @@
  *   constant.
  *
  * Cross-FILE rules (serves resolution, `impact_areas` registry
- * membership, `depends_on` resolution, corpus non-emptiness) live in
- * the corpus helpers — this module owns single-file shape only.
+ * membership, `depends_on` resolution, corpus non-emptiness, and the
+ * execution-anchor consistency rule in `plan-execution-anchors.ts`)
+ * compose in the corpus helpers — this module owns single-file shape
+ * only.
+ * The ticket requirement in particular is corpus-level by necessity:
+ * it binds only within anchored subtrees, which is a `serves`-edge
+ * question no single-file refinement can answer (dated amendment
+ * 2026-07-31; ADR-221 lens 4).
  *
  * @packageDocumentation
  */
@@ -168,29 +174,15 @@ function refineTypeDispatch(value: BasePlanNode, ctx: z.RefinementCtx): void {
   }
 }
 
-/** A ratified delivery plan names at least one ticket (its Linear anchor). */
-function refineRatifiedDeliveryTickets(value: BasePlanNode, ctx: z.RefinementCtx): void {
-  const ratifiedDelivery = value.node_type === 'delivery' && value.status === 'ratified';
-  if (ratifiedDelivery && (value.tickets ?? []).length === 0) {
-    ctx.addIssue({
-      code: 'custom',
-      path: ['tickets'],
-      message:
-        'a ratified delivery plan requires at least one ticket (execution state lives in Linear)',
-    });
-  }
-}
-
 /**
  * The plan-node frontmatter contract: the strict base field contract
  * plus the cross-field rules (stamp completeness, superseded coupling,
- * per-type dispatch, ratified-delivery ticket presence).
+ * per-type dispatch).
  */
 export const planNodeSchema = basePlanNodeSchema.superRefine((value, ctx) => {
   refineStampCompleteness(value, ctx);
   refineSupersededCoupling(value, ctx);
   refineTypeDispatch(value, ctx);
-  refineRatifiedDeliveryTickets(value, ctx);
 });
 
 /** The parsed, validated plan-node frontmatter. */

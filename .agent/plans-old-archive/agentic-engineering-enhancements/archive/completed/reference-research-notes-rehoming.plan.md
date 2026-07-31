@@ -21,7 +21,7 @@ todos:
     content: "Phase 3: Decide on work-to-date/ subtree (5 ecosystem-progress files dated 2026-04-20). Time-bound material — likely candidates for archive once superseded, or for promotion to reports/ if still load-bearing."
     status: pending
   - id: phase-4-host-local-decisions
-    content: "Phase 4: Decide on host-local material (platform-notes/, examples/, internal/, prog-frame/, ui/). Each is host-local in nature; decide retain in research/notes/, move to executive memory, or archive."
+    content: "Phase 4: Decide on host-local material (platform-notes/, examples/, internal/, personal-item/, ui/). Each is host-local in nature; decide retain in research/notes/, move to executive memory, or archive."
     status: pending
   - id: phase-5-architecture-research-decisions
     content: "Phase 5: Decide on architecture/ + complex-systems-dynamics/ subtrees (research-heavy, multi-field reviews). Likely belong in research/ proper under thematic subdirs, not in notes/ holding bay."
@@ -87,7 +87,7 @@ Files under `.agent/research/notes/` awaiting disposition:
 - `examples/` — 1 file (validate-practice-fitness.example.ts)
 - `internal/` — 1 file (agent-support-tools-specification.md)
 - `platform-notes/` — 1 file (claude-code-hook-activation.md)
-- `prog-frame/` — 1 file (agentic-engineering-practice.md)
+- `personal-item/` — 1 file (agentic-engineering-practice.md)
 - `ui/` — 3 files (sprite svgs × 2 + styled-components-in-nextjs.md)
 - `work-to-date/` — 5 files (oak-ecosystem-progress-* dated 2026-04-20)
 
@@ -252,11 +252,11 @@ rationale. Disposition kinds:
 | --- | --- | --- | --- |
 | `claude-code-hook-activation.md` | MOVE | `.agent/practice-core/examples/claude-code-hook-activation.md` | Live local-implementation note documenting how to activate hooks; "example" semantically — sibling of `validate-practice-fitness.example.ts`. Currently referenced from `outgoing/README.md`; pointer becomes `practice-core/examples/`. |
 
-### `prog-frame/` (1 file)
+### Personal holding-bay item (1 file)
 
 | Source | Disposition | New home | Rationale |
 | --- | --- | --- | --- |
-| `agentic-engineering-practice.md` | KEEP IN HOLDING (owner-attention) | `.agent/research/notes/prog-frame/agentic-engineering-practice.md` | Frontmatter: "for internal Oak use only. Do not link from public-facing files." Sensitive personal-progression artefact; needs owner judgement on whether it belongs in `.agent/` at all (vs. a non-tracked location, vs. a staff-private repo). Surfaced for owner attention; held in place pending decision. |
+| `agentic-engineering-practice.md` | KEEP IN HOLDING (owner-attention) | the research-notes holding bay | Frontmatter: "for internal Oak use only. Do not link from public-facing files." Sensitive personal artefact; needs owner judgement on whether it belongs in `.agent/` at all (vs. a non-tracked location, vs. a staff-private repo). Surfaced for owner attention; held in place pending decision. (Owner decision arrived 2026-07-30: relocated out of the repository.) |
 
 ### `ui/` (3 files)
 
@@ -287,7 +287,7 @@ rationale. Disposition kinds:
 
 - **Agent-executable MOVE**: 22 files
 - **Agent-executable DELETE**: 6 files
-- **Agent-executable KEEP** (owner-attention surface): 1 file (prog-frame)
+- **Agent-executable KEEP** (owner-attention surface): 1 file (personal-item)
 - **Owner-vet PROMOTE TO REFERENCE proposals**: 3 files (platform-adapter-formats, agentic-engineering hub README, boundary-enforcement-with-eslint)
 - **Bay infrastructure DELETE on retirement**: 2 (README.md, .cursorignore)
 
@@ -471,11 +471,11 @@ with _(v2 change)_.
 | --- | --- | --- | --- |
 | `claude-code-hook-activation.md` | MOVE _(v2 change)_ | `.agent/research/developer-experience/claude-code-hook-activation.md` | v1 was practice-core/ accretion; per Barney #1, DX research lane. Implementation note for Claude Code hook activation. |
 
-### `prog-frame/` (1 file)
+### Personal holding-bay item (1 file)
 
 | Source | Disposition | New home | Rationale |
 | --- | --- | --- | --- |
-| `agentic-engineering-practice.md` | KEEP IN HOLDING (owner-attention §C) | `.agent/research/notes/prog-frame/agentic-engineering-practice.md` | Internal-Oak-only; sensitive personal-progression artefact; needs owner judgement on whether `.agent/` is the right place. |
+| `agentic-engineering-practice.md` | KEEP IN HOLDING (owner-attention §C) | the research-notes holding bay | Internal-Oak-only; sensitive personal artefact; needs owner judgement on whether `.agent/` is the right place. |
 
 ### `ui/` (3 files)
 
@@ -506,9 +506,9 @@ with _(v2 change)_.
 
 - **Agent-executable MOVE**: 21 files
 - **Agent-executable DELETE**: 4 files (3 ui + 1 deep-dives README)
-- **Agent-executable KEEP** (held with owner-attention surface): 1 file (prog-frame)
+- **Agent-executable KEEP** (held with owner-attention surface): 1 file (personal-item)
 - **Owner-vet PROMOTE TO REFERENCE proposals**: 2 files (platform-adapter-formats, boundary-enforcement-with-eslint) — hub README withdrawn pending owner-attention §A
-- **Owner-attention before disposition**: 4 items (hub merge A/B; operational-awareness lane; prog-frame retain; work-to-date-note delete)
+- **Owner-attention before disposition**: 4 items (hub merge A/B; operational-awareness lane; personal-item retain; work-to-date-note delete)
 - **Bay infrastructure DELETE on retirement**: 2
 
 ## Owner-attention items (block execution until resolved)
@@ -549,12 +549,12 @@ unambiguous lane match. Three options:
 Default if owner does not pick: 3 (top-level cross-lane). Preserves
 the genuine ambiguity rather than forcing a lane.
 
-### §C. prog-frame disposition
+### §C. Personal holding-bay item disposition
 
-`prog-frame/agentic-engineering-practice.md` is internal-Oak-only,
-sensitive personal-progression material. Three options:
+The single held-back item is internal-Oak-only,
+sensitive personal material. Three options:
 
-- **Option 1**: KEEP in `.agent/research/notes/prog-frame/` (current).
+- **Option 1**: KEEP in the research-notes holding bay (current).
   Bay does not retire fully; one folder remains.
 - **Option 2**: MOVE to a private `.gitignore`d location outside `.agent/`.
 - **Option 3**: MOVE to a separate staff-private repo entirely.
@@ -616,13 +616,13 @@ plan-body recommendations:
 - **§B operational-awareness lane**: **Option 3** — place at
   `.agent/research/agentic-engineering/operational-awareness-and-state-surfaces.md`
   top-level cross-lane (sibling to `cross-lane-direction-survey.md`).
-- **§C prog-frame**: **Option 1** — KEEP in
-  `.agent/research/notes/prog-frame/`. Bay does NOT fully retire;
+- **§C personal item**: **Option 1** — KEEP in the research-notes
+  holding bay. Bay does NOT fully retire;
   one folder remains. This is an honest deferral per PDR-026:
-  named constraint (sensitive personal-progression artefact requires
+  named constraint (a sensitive personal artefact requires
   owner judgement on `.agent/` vs private location); evidence (frontmatter
-  `for internal Oak use only`); falsifiability (next agent reads bay
-  and finds prog-frame still there + this resolution note + the
+  `for internal Oak use only`); falsifiability (next agent reads the bay
+  and finds the item still there + this resolution note + the
   unresolved owner question).
 - **§D work-to-date-note**: **Option 2** — MOVE to
   `.agent/reports/work-to-date-note-2026-04-20.md` as provenance
@@ -644,7 +644,7 @@ can read this resolution block, the v2 dispositions table, and the
 final tree state, and verify that (a) each owner-attention item has
 a recorded resolution with reasoning, (b) the PROMOTE proposals are
 preserved against the failsafe homes (not silently dropped), (c)
-the bay carries exactly one folder (prog-frame) plus the README and
+the bay carries exactly one folder (personal-item) plus the README and
 .cursorignore that gate it, and (d) the back-link from the lane
 README to the hub is repaired (not pointing at a deleted path).
 
@@ -664,7 +664,7 @@ README to the hub is repaired (not pointing at a deleted path).
    back-link in lane README's "Related Surfaces"; DELETE hub README
    from holding bay.
 4. Bay-infra: `README.md` + `.cursorignore` REMAIN at bay because
-   prog-frame folder remains per §C. Bay does NOT fully retire.
+   personal-item folder remains per §C. Bay does NOT fully retire.
    Plan body acknowledges this honest deferral.
 5. Post-execution reflection: docs-adr-reviewer second pass on the
    resulting tree for reconsiderations.
@@ -674,16 +674,16 @@ README to the hub is repaired (not pointing at a deleted path).
 The original Done definition required `research/notes/` empty + bay
 README removed + plan archived. v2 honestly defers two of these:
 
-- `research/notes/` is **NOT empty**: prog-frame/ remains pending
+- `research/notes/` is **NOT empty**: personal-item/ remains pending
   owner §C decision.
 - `research/notes/README.md` is **NOT removed**: needed to gate the
-  remaining prog-frame/ subdir.
+  remaining personal-item/ subdir.
 - All MOVE/DELETE rows in v2 dispositions executed (35 of 36 items;
-  prog-frame is the held item).
+  personal-item is the held item).
 - All active references updated; per-file `rg` sweeps recorded.
 - Hub merge into lane README complete; lane README back-link repaired.
 - This plan moves to `archive/completed/` once execution is done; the
-  prog-frame holding-bay residual is recorded as PDR-026 honest deferral
+  personal-item holding-bay residual is recorded as PDR-026 honest deferral
   with a future-trigger ("owner makes §C decision") that can re-open
   this plan or spawn a new one.
 
@@ -811,7 +811,7 @@ Updated to point at new homes:
 - `docs/architecture/architectural-decisions/018-complete-biological-architecture.md`
   — complex-systems-dynamics path refreshed
 - `.agent/research/notes/README.md` — bay README rewritten to reflect
-  Session-8 residual state (only `prog-frame/` remains; bay does NOT
+  Session-8 residual state (only `personal-item/` remains; bay does NOT
   fully retire)
 
 ### Final bay state
@@ -820,13 +820,13 @@ Updated to point at new homes:
 .agent/research/notes/
 ├── .cursorignore
 ├── README.md  (rewritten; describes residual state)
-└── prog-frame/
+└── personal-item/
     └── agentic-engineering-practice.md  (KEEP per §C Option 1)
 ```
 
 ### Open items remaining at end of Session 8
 
-- `prog-frame/` disposition (§C) — owner conversation required.
+- `personal-item/` disposition (§C) — owner conversation required.
 - `platform-adapter-formats.md` PROMOTE-TO-REFERENCE proposal — owner-vet
   required per PDR-032.
 - `boundary-enforcement-with-eslint.md` PROMOTE-TO-REFERENCE proposal —

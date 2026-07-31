@@ -110,3 +110,11 @@ the singleton holder is observable through the registry. The broadcast
 convention remains the in-flight signal: roles answer *who holds the
 runner seat this window*; broadcasts answer *is a sweep running right
 now and what did it conclude*.
+
+The same singleton discipline applies to WATCHER processes per seat:
+multiple concurrent watchers racing one seen-file were observed (four for
+one seat, two for another, 2026-07-2x) — each re-arm must confirm the
+prior watcher is DEAD (TaskStop confirmed, or the exit notification
+received) before arming a successor on the same seen-file; two live
+co-writers on one cursor is the F-43 zombie class, and the mark-seen race
+silently eats events.

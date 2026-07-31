@@ -15,7 +15,10 @@ type GlobalWithFetch = OriginalGlobalThis & {
 
 const g: GlobalWithFetch = globalThis;
 
-if (typeof g.fetch === 'function') {
+// Check-then-patch: a second execution of this setup in one process (e.g.
+// under a non-isolating pool) must not capture the blocking fetch as the
+// "original" and lose the real one.
+if (typeof g.fetch === 'function' && g.__WITH_FETCH_BLOCKING__ !== true) {
   const originalFetch = g.fetch.bind(globalThis);
 
   const blockingFetch: Fetch = (input, init) =>

@@ -56,5 +56,12 @@ describe('planCodexSessionIdentityHook', () => {
     expect(additionalContext).toContain(
       'pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5',
     );
+    expect(additionalContext).toContain('[Codex team alert bootstrap]');
+    expect(additionalContext).toContain(
+      'follow the generated Codex team-session alert bootstrap in AGENTS.md',
+    );
+    expect(additionalContext).toContain(
+      '.agent/rules/use-monitor-for-event-driven-wake.md#codex-notify-session-relay',
+    );
   });
 });

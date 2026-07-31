@@ -115,6 +115,58 @@ test.describe('Oak banner widget', () => {
     await expect(body).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
   });
 
+  test('shell keeps the authored token padding with no host insets (MCP-434)', async ({ page }) => {
+    // The standalone page receives no host safe-area insets, so the
+    // 0px fallback in `.oak-app`'s calc() composition must resolve to
+    // exactly the authored token padding. The ChatGPT desktop
+    // regression surfaced here as 0 on all four sides: inline inset
+    // padding replaced the class rule. The expected value is the token
+    // RESOLVED through a probe element, not a hardcoded pixel count,
+    // so a deliberate token change never fails this test.
+    const expected = await page.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.style.paddingTop = 'var(--oak-component-page-padding)';
+      document.body.append(probe);
+      const value = getComputedStyle(probe).paddingTop;
+      probe.remove();
+      return value;
+    });
+
+    const shell = page.locator('[data-testid="oak-mcp-app-shell"]');
+    await expect(shell).toHaveCSS('padding-top', expected);
+    await expect(shell).toHaveCSS('padding-right', expected);
+    await expect(shell).toHaveCSS('padding-bottom', expected);
+    await expect(shell).toHaveCSS('padding-left', expected);
+  });
+
+  test('shell composes host insets on top of the authored padding (MCP-434)', async ({ page }) => {
+    // Both halves of the zero-inset regression and the notch case, in a
+    // real cascade: explicit 0px insets (what ChatGPT desktop sends)
+    // must leave the authored padding untouched, and a non-zero inset
+    // must ADD to it — never replace it. This binds the cross-file
+    // contract between the TS side (custom property names emitted by
+    // safe-area-insets.ts) and the CSS side (`.oak-app`'s calc()
+    // composition); a name drift on either side is swallowed by the
+    // 0px fallback and only this computed-value check catches it.
+    const shell = page.locator('[data-testid="oak-mcp-app-shell"]');
+    const authored = await shell.evaluate((el) => getComputedStyle(el).paddingTop);
+
+    await shell.evaluate((el) => {
+      el.style.setProperty('--oak-safe-area-inset-top', '0px');
+      el.style.setProperty('--oak-safe-area-inset-right', '0px');
+      el.style.setProperty('--oak-safe-area-inset-bottom', '0px');
+      el.style.setProperty('--oak-safe-area-inset-left', '0px');
+    });
+    await expect(shell).toHaveCSS('padding-top', authored);
+    await expect(shell).toHaveCSS('padding-bottom', authored);
+
+    await shell.evaluate((el) => {
+      el.style.setProperty('--oak-safe-area-inset-top', '44px');
+    });
+    await expect(shell).toHaveCSS('padding-top', `${Number.parseFloat(authored) + 44}px`);
+    await expect(shell).toHaveCSS('padding-bottom', authored);
+  });
+
   test('@a11y passes WCAG accessibility checks', async ({ page }) => {
     // Under forced colours ONLY, axe's color-contrast rule is excluded:
     // axe measures the author palette (via -webkit-text-fill-color, which

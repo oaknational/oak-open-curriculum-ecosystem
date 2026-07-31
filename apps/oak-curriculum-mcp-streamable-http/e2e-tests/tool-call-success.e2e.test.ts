@@ -1,4 +1,4 @@
-import request from 'supertest';
+import { request, type Response } from '../src/test-helpers/loopback-request.js';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
@@ -16,11 +16,7 @@ import {
   parseToolSuccessPayload,
 } from './helpers/sse.js';
 import { stubSearchRetrieval } from './helpers/stub-search-retrieval.js';
-import {
-  createMockObservability,
-  createMockRuntimeConfig,
-  createNoOpRateLimiterFactory,
-} from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 import { getScratchStaticRoot } from '../src/test-helpers/static-root-fixture.js';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -62,7 +58,7 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
 }
 
 async function executeToolCall(): Promise<{
-  readonly response: request.Response;
+  readonly response: Response;
   readonly captured: CapturedCall[];
 }> {
   const captured: CapturedCall[] = [];
@@ -76,7 +72,6 @@ async function executeToolCall(): Promise<{
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     getLandingPageHtml: () =>
       '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-    rateLimiterFactory: createNoOpRateLimiterFactory(),
   });
   const response = await request(app)
     .post('/mcp')
@@ -91,7 +86,7 @@ async function executeToolCall(): Promise<{
   return { response, captured };
 }
 
-function assertSuccessfulResponse(res: request.Response, captured: CapturedCall[]): void {
+function assertSuccessfulResponse(res: Response, captured: CapturedCall[]): void {
   expect(res.status).toBe(200);
   expect(res.text).toContain('event: message');
   expect(captured).toEqual([{ tool: 'get-key-stages', args: {} }]);

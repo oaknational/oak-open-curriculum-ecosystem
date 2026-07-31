@@ -82,6 +82,16 @@ different costume of the same class:
   the SHA mismatch was the save). A green is a measurement, and a
   measurement is worthless until you can say what it measured.
 
+- **Differential-fuzz equivalence is the standard proof for
+  behaviour-preserving swaps** (2026-07-29, two independent harnesses
+  converging unprompted): run the old implementation and its replacement
+  over a random corpus plus a hand corpus, both directions, and compare
+  outputs. Cheap and decisive — a "never looser" claim held by careful
+  reasoning was falsified at 142k pairs by three counterexamples, then the
+  one-guard fix was proven EXACTLY equivalent across ~89M pairs, a stronger
+  claim than reasoning had dared make. Reasoning finds the shape;
+  measurement finds the holes.
+
 The connecting discipline: before trusting any verification verdict, name
 the question the method actually answers, and confirm it is the question at
 stake.

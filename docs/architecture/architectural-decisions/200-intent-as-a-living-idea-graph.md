@@ -1,6 +1,12 @@
 # ADR-200: Intent as a living idea-graph — graph-authoritative, dual human/machine embodiment, frontmatter as the connection
 
 - **Status:** Accepted (owner-ratified, 2026-06-22). Open items and in-place resolutions recorded in §Open.
+  **Partially superseded by [ADR-221](221-estate-knowledge-graph.md) (dated amendment, 2026-07-31, owner-ratified):**
+  §1's authority claim (the idea-graph as the authoritative source of truth) and the projections-of-the-store
+  framing are superseded by ADR-221 §2 — authored files are authoritative and every store is a derived,
+  per-home-recomputable index. Conserved and strengthened: §2's co-equal human documents (now authoritative);
+  ideas as first-class units (landing as ADR-221's concept scheme). Deferred items are ledgered, with homes,
+  in ADR-221 §The ADR-200 reconciliation; nothing is dropped.
 - **Thread:** `strategy-and-plan-estate-holistic-review`.
 - **Supersedes/refines:** sharpens the architecture sketched in `repo-intent-graph.plan.md` and
   `plan-node-schema.v0.md` — those plans become consumers of this decision and cite it, not the reverse

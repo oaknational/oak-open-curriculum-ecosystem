@@ -15,19 +15,37 @@ credential:
   For these credentials the standing rules are: `--admin` is always banned;
   direct `--merge` is banned; land work by **arming auto-merge at a settled
   review** (the arm path never exercises bypass), or by **merging as the
-  merge bot**, whose token has no bypass and therefore physically binds.
+  merge bot**, which every protection except the code-owner review gate
+  physically binds (next section).
 
 ## How the bot works
 
 A GitHub App (this repo's is named in [`.github/merge-bot.json`](../../.github/merge-bot.json))
 is installed on the repository and is **deliberately absent from the
-ruleset's bypass list**. Merging with its short-lived installation token
-gives you a credential that GitHub itself stops at any unmet requirement:
+protections ruleset's bypass list** ("Protect default branch": required
+checks, threads, code scanning, code quality, Copilot review) — GitHub
+itself stops its token at any unmet requirement there. Its ONE bypass,
+verified against the rulesets API 2026-07-31, is the separate
+**"Code-owner review gate" ruleset (bot-exempt by owner ruling
+2026-07-21)**: an approving review is not required for a bot merge, while
+everything else still binds. (Trued 2026-07-31 — this doc previously
+claimed the bot had no bypass at all, which contradicted the live ruleset
+split and the standing no-approving-review practice.)
 
 ```bash
 token=$(pnpm --silent agent-tools merge-bot mint-token --scope pull-request-work) || exit 1
 GH_TOKEN="$token" gh pr merge <n> --auto --merge
 ```
+
+**Bot merges at settled run through the REST endpoint, not the `gh pr
+merge` client.** Client-side `gh pr merge` refuses on a
+BLOCKED/viewer-independent mergeability state, and GitHub auto-merge does
+NOT apply ruleset bypass grants — yet the bot's code-owner-gate bypass IS
+honoured at the REST layer. So at genuinely-settled the bot merges via
+`PUT /repos/{owner}/{repo}/pulls/{n}/merge` (merge-commit method, never
+squash), re-counting unresolved threads INSIDE the same command sequence —
+after the head check, before the REST call — because a bot review can land
+in the seconds between (caught twice in forty minutes, #570/#574).
 
 **Assign the token first; never use the `GH_TOKEN=$(…) gh …` prefix form.** A
 prefix substitution cannot fail fast: if the mint fails for any reason — a bad
@@ -58,6 +76,36 @@ That table is a **mirror**, kept inline because a reader choosing a scope
 needs the read/write levels in front of them. `token-scopes.ts` is
 authoritative and wins on any disagreement; `merge-bot mint-token --help`
 derives its list from the same source and is always current.
+
+**False-green entry points.** `pnpm exec tsx agent-tools/src/merge-bot/cli.ts
+mint-token` and its `pnpm --silent` variant exit 0 with EMPTY streams — the
+module has no direct-run bootstrap, so nothing runs and nothing errors. Only
+the built form above (`pnpm agent-tools merge-bot mint-token …`) actually
+mints; an empty `$token` after an exit-0 mint is this failure, not a
+permissions problem.
+
+**Tokens can expire mid-chain.** A minted token can expire between the mint
+and the final write of a long pre-push gate chain — the signature is a bare
+`403` on the WRITE while reads still succeed. Mint, auth-probe, and push in
+ONE shell; take proof of push from the transfer line plus a fresh
+`ls-remote`, never the exit code; and the cure is re-mint-and-retry, not a
+permissions investigation.
+
+## Who executes the merge
+
+- **A PR with a live implementer seat lands via that seat's own bot merge**
+  (merge-commit method). A merge monitor's standing "merge at settled
+  without re-asking" grant covers only orphaned or lane-retired PRs;
+  freeze-bound surfaces need Director word regardless of executor.
+- **Owner merge-word can arrive as chat approval** ("I approved the PR, that
+  is signal enough"; "Merge now") — it is equivalent to the settled-read
+  handshake. Where the owner is the PR author-of-record, GitHub blocks
+  self-review, so the approval is recorded as an owner-directed APPROVE
+  submitted via the bot.
+- **Codex-seat bridge**: the Codex GitHub connector refuses merge actions
+  without in-session owner authorisation, so at genuinely-settled a Codex
+  lane routes the mechanical key-turn to the Director as proxy — judgment
+  stays with the lane seat.
 
 `pull-request-work` is wider than several of its listed uses need: the
 conversation half (comments, review replies, PR edits) requires

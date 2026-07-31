@@ -1,0 +1,19 @@
+name = "cricket-procedure-xhigh"
+description = "Fast xhigh-effort conscience check using a compiled decision procedure with quote-anchored evidence and a mechanical verdict table. Call directly for a reproducible second opinion when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with one redirection."
+model = "gpt-5.6-luna"
+model_reasoning_effort = "xhigh"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/cricket-procedure.md`.
+
+This file is a thin Codex adapter. The canonical role definition lives in the
+template referenced above; each dispatch supplies the objective frame,
+critical-path owner, intent, recent actions, next planned action, and STANCE
+(normal or adversarial, defined in the template).
+
+Mode: execute the template's compiled decision procedure exactly in a single
+fast pass, using at most its two targeted verification Reads when the speed
+contract permits them. Never explore; report only. Do not modify anything.
+"""

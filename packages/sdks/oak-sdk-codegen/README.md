@@ -259,6 +259,16 @@ belongs in the generation workspace. It was evaluated for migration
 to the runtime SDK but rejected because the type's definition depends
 on generated path literals that are only available at codegen time.
 
+## Upstream-refresh guard
+
+A naive regeneration against a refreshed upstream API can mint an
+UNCALLABLE tool: a new POST/`requestBody` endpoint flowing through the
+read-shaped path would be advertised with `readOnlyHint: true` and a
+GET-shaped input surface (risk recorded on MCP-152, 2026-07-2x). At every
+upstream refresh, diff the endpoint METHOD set first — any new non-GET
+endpoint needs deliberate handling (a write-shaped registration or an
+explicit exclusion) before the generated surface ships.
+
 ## References
 
 - [ADR-108: SDK Workspace Decomposition](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)

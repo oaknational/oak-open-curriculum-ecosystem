@@ -119,3 +119,104 @@ tool retires them.
   line is read literally. Read that line before diagnosing; the
   pre-draft `check-commit-message` step in the commit skill collapses
   the whole layer.
+
+## 2026-07-30 consolidation batch (each measured first-hand in the 07-24→30 window)
+
+- **zsh does not word-split unquoted variables** (third monitor-recipe
+  instance — the row is now owed): `for c in $CLAIMS` iterates ONCE with
+  the whole string; four GraphQL ids went as one malformed argument.
+  Iterate literal values or `printf '%s\n' … | while read`. Sibling:
+  `${PIPESTATUS[0]}` is a bashism that expands EMPTY in zsh — the piped-
+  exit trap in a fourth costume.
+- **pnpm re-appends the literal `--` at EACH forwarding layer**: a root
+  alias forwarding through a workspace script delivers `['--', …]` to the
+  leaf bin, and an arg scanner reading leading `--` as its terminator sees
+  nothing. Drop the `--`; smoke the full script chain shell-level.
+- **turbo parses bare `--force` as value-taking** and eats the task name
+  (`turbo run --force sdk-codegen` runs nothing); use `--force=true`.
+- **`spawnSync` timeout sets BOTH `error` (ETIMEDOUT) and `signal`** — an
+  error-first branch swallows the captured streams the signal branch's
+  diagnostics were added for; compose stream excerpts into both.
+- **`join(root, dir)` silently mangles absolute dirs** (`join('/repo',
+  '/abs')` → `/repo/abs`); `resolve(root, dir)` is the cure; every
+  path-taking CLI option earns one absolute-input test.
+- **esquery selector regexes mute on raw slashes**: `Literal[value=/a//]`
+  parses and lint runs green but the selector NEVER fires (the `/`
+  delimiter truncates it). Escape `/` inside `String.raw`, write
+  escape-bearing config via a script, and prove it with a negative
+  control (tmp file with the banned literal → expect the error).
+- **A backtick in an inline `--body` is a live command substitution**:
+  zsh executed a phrase out of a doctrine sentence mid-send and the event
+  landed mangled at exit 0. `--body-file` is the only quoting-safe
+  transport for non-trivial bodies.
+- **`git add -- <deleted-path>` fatals (exit 128) when the deletion is
+  already staged** — pathspec matches nothing and the whole add aborts;
+  add only paths that exist on disk. And `git status --porcelain`
+  collapses untracked DIRECTORIES — enumerating files needs `-uall`.
+- **BSD grep -E has no `\s`** and a mis-quoted retry can still undercount
+  with a clean exit — calibrate any counting instrument against a KNOWN
+  count first; prefer a real parse (`matchAll`) over line-regex on
+  structured sources.
+- **Codex seat salvage paths**: a stopped Codex seat's opening prompt
+  (including any relayed predecessor plan) survives verbatim in
+  `~/.codex/history.jsonl` and `~/.codex/sessions/<date>/rollout-*.jsonl`;
+  distilled tenure summaries in `~/.codex/memories/rollout_summaries/`.
+  A 6-char PDR-027 prefix can span MULTIPLE relaunched platform sessions —
+  prefix-identity is coarser than session-identity at the platform layer.
+- **Google Docs under browser automation**: the canvas editor swallows
+  synthetic input while the tool reports success — treat Docs as
+  READ-ONLY (deliver content as paste-ready blocks). The `/mobilebasic`
+  render is the reliable read surface, but it renders ACCEPTED text only:
+  an absence verdict ("the doc lacks X") also requires the
+  comment/suggestion history panel, where a full draft section can live
+  invisible to mobilebasic. The write-side dual: Google Docs SYNTHETIC
+  TYPING silently fails — the automation tool reports success while the
+  document stays untouched — so mobilebasic is the reliable READ path and
+  browser-automation writes into Docs need an independent read-back
+  verification before any "written" claim.
+- **An open-range dependency override (`>=X`) is a standing exposure, not
+  a one-shot test subject**: its resolution is a moving target, so a
+  survivability test can pass at authoring and fail a day later with zero
+  repo changes (measured: froze at 4.0.40 on the 29th, floated to 5.0.14
+  breaking two more packages on the 30th). The cheapest durable state is
+  not having the override.
+- **Grepping a shipped binary needs `LC_ALL=C`** or grep reports a false
+  "binary file matches" zero-hit read; registry semantic hashes are
+  computable via a temp tsx file inside the package dir importing
+  `./semantic-source-sha256.js`; and a newline-joined variable passed to
+  git reads as ONE pathspec — use `xargs`, and verify with a staged-count
+  check.
+- **Operational signatures worth knowing** (2026-07-30): a model tier can
+  change WITHIN a session id, so tuple-matchers keyed on (session, model)
+  mis-match across the change; a write command is never a probe (a stray
+  all-zeros event id traced to an argument-validation "probe" that was
+  actually a write); and the security-headers integration test's
+  `Parse Error: Expected HTTP/, RTSP/ or ICE/` was ROOT-CAUSED (MCP-403,
+  superseding the earlier "loaded-host flake" reading): supertest servers
+  bind `::` (IPv6-any) while clients dial `127.0.0.1`, and a resident
+  macOS Java listener on the colliding port answered the mismatch — the
+  cure is the loopback-request test helper binding client and server to
+  the same explicit loopback. A gate failure in a package the diff never
+  touched is still a re-run candidate first, but this signature now has a
+  named cause.
+- **Under an inherited `COREPACK_ROOT` the resolved standalone pnpm refuses
+  the `packageManager` self-switch** (observed on an 11.9.0-resolved pnpm
+  against an 11.8.0 pin): strip the corepack env (`env -u COREPACK_ROOT …`
+  or a clean shell) so the pin resolves its own binary.
+- **Analytics/event-store retention config is free to fix only BEFORE first
+  collection**: before any event lands it is a settings change; after, it
+  is a deletion exercise with data-governance weight. The free-to-fix
+  window closes at the first event — configure retention in the same
+  change that enables collection.
+- **Two whole-repo gate suites racing on one checkout can strand a Next
+  build lock**: `next build` refuses with "Another next build process is
+  already running" even after the racing process is gone (observed when a
+  peer's pre-commit gate overlapped a merge-commit gate on the shared
+  primary, 2026-07-31). Check `pgrep -fl "next build"` — if nothing is
+  live, the lock is stale residue and ONE retry succeeds; the singleton
+  gate-runner discipline is the prevention.
+- **A Vercel function boot-throw serves 500 `FUNCTION_INVOCATION_FAILED`
+  with ZERO runtime logs** — the throw happens before the logger exists,
+  so "no logs" is itself the signature: check module-load/boot-path code
+  (top-level awaits, config reads, imports) before instrumenting the
+  handler.

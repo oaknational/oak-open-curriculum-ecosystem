@@ -9,7 +9,7 @@
  * experience works for real clients.
  */
 
-import request from 'supertest';
+import { request } from '../src/test-helpers/loopback-request.js';
 import { describe, it, expect } from 'vitest';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import { parseSseEnvelope } from './helpers/sse.js';

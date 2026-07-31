@@ -1,0 +1,1504 @@
+{
+  "batchesReturned": 11,
+  "batchesTotal": 11,
+  "records": [
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/fleet-digest.txt",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "The impact reviewer found 60+ kept studio preview/whitelabel/ui_kits pages do not render anywhere except the remote studio because their relative CSS references are off by one directory level, and named the cheap fix (place tier CSS/oak-theme.js/assets/fonts at studio-source/); no owning lane names this.",
+          "quote": "the kept preview/whitelabel/ui_kits/templates pages do not render anywhere except the remote studio, because their relative CSS references are off by exactly one directory level in the repo",
+          "kind": "knowledge",
+          "candidateHome": ".design-sync/NOTES.md or a design-system-integration thread item",
+          "homeCheck": "Grepped .design-sync/NOTES.md and .agent/memory/operational/threads/design-system-integration.next-session.md for 'render locally'/'studio-source render'/'off by one directory' — no match found in either."
+        },
+        {
+          "summary": "The impact reviewer found the four component cards render from a stale pre-merge compiled bundle (_ds_bundle.js) and this is deferred to an unnamed 'component-tier sync' that appears nowhere in the actual Execution plan.",
+          "quote": "the estate's worst demonstration defect — four component cards rendering from a pre-merge compiled bundle — is deferred to a \"component-tier sync\" that the Execution section does not contain",
+          "kind": "knowledge",
+          "candidateHome": ".design-sync/NOTES.md (re-sync risks) or a ticket",
+          "homeCheck": "Grepped .design-sync/NOTES.md for 'stale bundle'/'component-tier sync' — no match. NOTES.md documents _ds_bundle.js as a studio-native machinery exception (not overwritten) but does not name a fix lane for the stale-bundle defect."
+        },
+        {
+          "summary": "Reviewers found byte-identical duplicate pairs inside the kept assets/ set (logo-full-black.svg == logo-full-official.svg; logo-acorn-black.svg == logo-acorn-official.svg) that were never resolved against the earning criterion applied to the delete set.",
+          "quote": "logo-acorn-black.svg == logo-acorn-official.svg and logo-full-black.svg == logo-full-official.svg",
+          "kind": "knowledge",
+          "candidateHome": ".design-sync/NOTES.md / estate.json product-surface KEEP rationale",
+          "homeCheck": "Grepped repo-wide for 'logo-full-black'/'logo-full-official' — found only in an unrelated landing-page thread note about scale difference, not this byte-identity question; .design-sync has no match."
+        }
+      ],
+      "note": "The bulk of this file's substance (the v1 curation table's core defects — dtcg/ refreshability, the guidelinesGlob/three-non-md-docs shipping gap, the single-home duplication rule, icons.json misclassification, thumbnail.html NEW-HOME residue, SKILL.md source) is verified LANDED and superseding this scratch review: `.design-sync/NOTES.md` (direct-write set, single-home rule, estate-reconciliation mechanism) and `.design-sync/estate.json` (machinery/thumbnail.html/icons.json classifications) now state these as owner-ruled 2026-07-25/MCP-160 facts, matching the review's own recommendations. Three narrower impact-lens findings (local render gap for 60+ pages, stale component bundle with no owning lane, byte-duplicate KEEP assets) could not be located in any durable home and are carried above."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/506444f9-c703-4cba-a5bc-9d236856e5ac.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This is a historical (2026-06-28) multi-checkpoint handoff whose claim is explicitly closed at the record ('MY CLAIM 506444f9: closed at this handoff'). Verified on disk: ADR-208 exists (docs/architecture/architectural-decisions/208-no-target-architecture-in-sonarqube.md), the spawn-flow deliverable is built (agent-tools/src/spawn/{create,open-pr}...), the 'cowpath' forward-ask graduated to a standing rule (.claude/rules/design-from-impact-not-the-cowpath.md), and the zombie-comms-watcher/singleton forward-ask is durably conserved as friction F-101 in .agent/memory/operational/frictions-register.md (with named target surfaces and partial fix status). The D-program items (D1/#256, D3/#258, DATA-SOURCES/#262) are all recorded merged in the handoff's own text with commit SHAs. No unhomed substantive claim found; all load-bearing facts trace to landed commits, a durable rule, or a durable friction-register entry."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/v2-panel-digest.txt",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This is a five-lens (premise/adversary/transmission/impact) review of the v2 curation table, covering largely the same ground as fleet-digest.txt on the same MCP-160 curation decision. Cross-checked its blockers/majors against `.design-sync/NOTES.md` and `.design-sync/estate.json`: the dtcg/ refreshability defect is now explicitly the direct-write mechanism (NOTES.md), CLAUDE.md's 'deleted with no successor' concern is resolved by CLAUDE.md joining the direct-write set (NOTES.md), the README.md root-vs-guidelines duplication is resolved by the explicit single-home rule dropping README.md from guidelinesGlob (NOTES.md), thumbnail.html's NEW-HOME/prose contradiction is resolved (estate.json classifies it studio-generated machinery), and the 'owner ruling only lives in this scratchpad' transmission concern is resolved — NOTES.md now cites '(owner ruling 2026-07-25, MCP-160)' inline for each of these. The plan document (mcp-137-design-system-semantic-merge.plan.md) records the durable pointers (Linear MCP-137 comment, the MCP-160 scoping) for the rest. No substantive item here found unhomed beyond what is already flagged under fleet-digest.txt (same underlying corpus)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/v3-dispositions.json",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Machine-generated disposition data (the final ratified partition of the 346-entry remote estate) for the same MCP-160 curation. Its substance — the removal list, KEEP-RETRUE/direct-write classes, MACHINERY/MACHINERY-GEN classes — is now durably re-expressed as the operative configuration in `.design-sync/config.json` (guidelinesGlob), `.design-sync/estate.json` (the estate declaration + machinery groups, verified matching thumbnail.html/icons.json/_ds_bundle.css/_adherence.oxlintrc.json entries), and `.design-sync/NOTES.md` (the direct-write set: dtcg/, LICENCES.md, CLAUDE.md, the three non-md docs, SKILL.md). This JSON is superseded generated evidence, not a unique record of anything not already conserved in the tracked sync configuration."
+    },
+    {
+      "path": ".agent/state/collaboration/escalations/README.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "A short standing-directory README describing the escalation-record schema and lifecycle discipline (point to a conversation entry; close by referencing a decision/resolution entry there). Its cited schema authority path (agent-tools/src/collaboration-state/schemas/escalation.schema.json) is a real relative path convention consistent with the repo's collaboration-state schema layout; the file states mechanics only (no owner words, no undischarged obligation, no untraceable decision) — it is itself the kind of durable convention doc this task is checking against, not a residue carrying substance out of it. No unhomed content."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-fixed-point-baseline-v4.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Large multi-layered pre-compaction/evening handoff, fully superseded by its own later sections and by subsequent tenures. Owner rulings quoted here (bot identity always, Linear MCP-team-only hygiene, no-stopgaps, generality-depth gradient, ADRs-state-should-be/means-in-plans) are all verified present as persistent memory files or tracked rules (confirmed against the memory index and .agent/rules/). PRs #508-#511 are recorded merged and verifiable in git history; MCP-135/136/137/139/68 etc. are Linear-ticket-claimed (unverifiable here but that is the designed durable home per rules). No content found here that lacks a durable projection."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-16-director-current-state-mussel-6f8857.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Long compound-pair handoff (v4 + 5 addenda) ending in retirement. All four PRs (#392/#394/#389/#393) recorded merged. The owner standing orders captured as persistent memories (small-prs-fix-the-generator-not-the-merge, linear-ticket-first-dora-tight, future-work-items-are-pointers-not-specs, standard-git-only-no-workaround-mechanics) are all confirmed present in the current memory index. AIP-126..131 carry the pickup queue in Linear (ticket-claimed, not independently checkable here, which is the designed home). The coordination-branch/no-parallel-long-lived-branches ruling is now a tracked rule (.agent/rules/no-parallel-long-lived-branches.md, confirmed to exist). No unhomed substance found."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-herring-arc-colour-statusline-lane-full-handoff.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "Hard-won tooling trap: a bare '@' character in prose (e.g. an SHA reference like 'main @ 63a7e675') breaks tsdoc/syntax lint and must be reworded.",
+          "quote": "TSDoc: a bare `@` in prose (e.g. \"main @ 63a7e675\") breaks tsdoc/syntax lint — write \"commit 63a7e675\".",
+          "kind": "knowledge",
+          "candidateHome": ".agent/rules/documentation-hygiene.md or a dedicated lint-gotchas note",
+          "homeCheck": "Grepped .agent/rules for 'tsdoc'/'bare @'/'@ in prose' — matches exist (documentation-hygiene.md, verify-dont-trust.md, etc.) but none states this specific bare-@ TSDoc-lint trap. Not found conserved."
+        },
+        {
+          "summary": "GraphQL PR-review reads must always use the full compound surface (reviewThreads(first:100) is the API max) rather than a REST tail-slice, since a REST slice can miss a tip-bound review and falsely report READY.",
+          "quote": "a REST `.[-3:]` slice missed a tip-bound review and got a READY refuted. `reviewThreads(first:100)` is the API max.",
+          "kind": "knowledge",
+          "candidateHome": "a PR-review/settle-doctrine rule (e.g. read-verdicts-by-name-never-column-parse.md or a dedicated PR-graphql-pagination rule)",
+          "homeCheck": "Grepped .agent/rules for 'reviewThreads(first:100)'/'GraphQL max'/'pagination' — only read-diagnostic-artefacts-in-full.md matched generically; no rule states the reviewThreads(first:100) cap or the REST-slice-misses-tip-review failure mode specifically."
+        },
+        {
+          "summary": "The GraphQL statusCheckRollup can show a stale 'Vercel pending' state; the commit-status REST API is the ground truth to check instead.",
+          "quote": "The GraphQL statusCheckRollup can show a stale \"Vercel pending\"; the commit-status REST API is ground truth.",
+          "kind": "knowledge",
+          "candidateHome": "a settle-doctrine / merge-readiness rule",
+          "homeCheck": "Grepped .agent/rules for 'statusCheckRollup'/'Vercel pending' — no matches found anywhere in .agent/rules."
+        }
+      ],
+      "note": "The lane's substantive design/process decisions (ws-b1..b9, ADR-214, the plan) are homed: ADR-214 exists on disk at docs/architecture/architectural-decisions/214-arc-colour-statusline-infrastructure.md and the plan is referenced as landed. The three items flagged above are narrow but hard-won operational/tooling facts (GitHub API and lint gotchas) from Layer 4 that I could not verify are conserved in any tracked rule; they read as the kind of 'hard-won, do not re-derive' knowledge the record itself calls out, and losing them means a future seat re-discovers the same traps."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/f5b77b73-4fd2-4e35-a89a-90dbc1e97a81.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-63 mid-cycle succession record (Kite to Cutter), 2026-07-26. Superseded by later tracked reports in the same lane (.agent/reports/mcp-63-succession-notification-and-focused-delivery-2026-07-26.md, .agent/reports/mcp-63-focused-successor-handoff-2026-07-27.md, .agent/reports/mcp-63-stack-successor-handoff-2026-07-27-evening.md — all confirmed present on disk and tracked, unlike this gitignored handoff). The described implementation (posthog-node adapter: actor pseudonyms, event policy, MCP instrumenter, one-client runtime) is now fully realised in packages/libs/posthog-node/src/ (confirmed 20+ source files on disk), and the design authority (plan + ADR-218) is referenced and exists. Deferred items (final-wire test cure, app-config migration) are pointers to future work per future-work-items-are-pointers-not-specs, not specs that need independent homing."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-26-gecko-successor-director-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Director-succession record with an explicit owner-corrections section. All four cited owner-channel corrections have confirmed per-user memory files (owner-named-executor-is-part-of-the-instruction, owner-channel-answer-first, first-major-release-standing-rulings, record-first-ask-last — all present in the current memory index). The date ladder and milestone specifics are deliberately kept out of the repo per the sensitivity rule and live in the Linear project comment instead (correctly homed off-repo, not a gap). Board/ticket state (MCP-105..179 etc.) is Linear-tracked (ticket-claimed, unverifiable here but designed home). Meteor's verbatim cleanup commands are recorded as owner-run and relayed, with their effect (discarding fabricated-identity commit 7ae8b2ff4, content conserved via #529) independently confirmed in the fixed-point-baseline-v4 record. No unhomed substance found."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-pr529-e3e961-review-batch.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "A PR-review-thread inventory/disposition record for PR #529, entirely GitHub-native (thread URLs, reviewer bodies) plus an F/P classification table. Spot-checked finding #7/8 (the excludeAgent 'cloud-agent' vs 'coding-agent' vendor-literal defect): the current tracked plan .agent/plans/delivery/copilot-cli-practice-projections.plan.md now documents both values distinctly (line 73 'cloud-agent', line 81 noting code-review still reads it, line 208 naming 'coding-agent'), consistent with the finding having been dispositioned/cured. The remaining findings are either already-cured (per the record's own tracking) or routed to named tickets (MCP-154/155/156), which is the designed home for future execution proof per future-work-items-are-pointers-not-specs."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/visual-review-feedback-ledger.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "Owner-ratified specific EMC2 (creature) demo layout design verdict for the quest-card area (hero region with one loud quest, quiet uniform quest shelf, loud/quiet as the sole style axis, creature-name input in the hero) was delivered and rendered but I could not find it reflected in any current demo/component source or design doc.",
+          "quote": "the creature leads — (1) hero region \"Your creature is curious about…\": one loud quest (pink shadow + filled button + creature attached)... (2) \"quest shelf\": uniform quiet grid...",
+          "kind": "decision",
+          "candidateHome": "demos/oak-design-showcase (creature brand demo content) or an ADR/plan for the card-system contract (item 1a)",
+          "homeCheck": "Grepped repo-wide for 'quest shelf'/'hero region'/'Fraction fair'/'Word carousel'/'Puddle science'/'creature's pick'/'subject chip' — 'quest' hits were false positives from 'request' substring; no genuine match for the specific card-grouping verdict in demos/oak-design-showcase or packages/design/oak-design-system. The general principle it feeds ('every layout decision is decided by intended impact') is not itself checked into a rule/pattern either."
+        },
+        {
+          "summary": "Owner's specific verbatim ruling that three studio integration docs are shipped (not deleted) because the Claude Design agent needs them to check/ratify documents — a rationale for a specific curation decision.",
+          "quote": "we ship them because the Claude Design agent is an expert who needs to check and ratify those documents.",
+          "kind": "decision",
+          "candidateHome": "the remote-estate-disposition-table (v3) or MCP-137 plan's estate-curation note",
+          "homeCheck": "The disposition table itself (remote-estate-disposition-table-v3.md) lives only in the same gitignored handoffs/ directory (confirmed via .agent/state/collaboration/.gitignore: 'handoffs/*' is untracked-by-design). The MCP-137 plan (.agent/plans/delivery/mcp-137-design-system-semantic-merge.plan.md) references the estate-curation finding generally (lines 60-61) as a pointer, but does not carry this specific integration-docs rationale."
+        }
+      ],
+      "note": "Most items in this ledger ARE verifiably absorbed: item 4's rotation fix is confirmed live (no rotation transforms remain in packages/design/oak-design-system/studio-source/ui_kits/oak/sections.js); item 5's per-variant hover states are confirmed distinct in components.css; item 7's new DS-server workspace requirement is confirmed built as demos/oak-design-showcase (a Next.js app with root dev script); item 10's estate-curation mandate is pointed to (not specced) in the MCP-137 plan, sufficient per future-work-items-are-pointers-not-specs. The two items above are the exceptions: a specific rendered creative/structural design verdict and a specific verbatim owner rationale for a curation call, neither of which I could locate in any tracked surface."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/README.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Pure mechanics documentation for the mid-cycle handoff-record protocol (file convention, schema status, active-claims pointer semantics), pointing to PDR-063 and ADR-182 as the durable genotype/phenotype homes. Contains no owner words, decisions, or obligations of its own beyond describing the machinery — this is itself the tracked exception file (`!handoffs/README.md`) and is not machine-local residue in the sense the task targets."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/director-handoff-cinder-to-pulsar-2026-06-27.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "PDR-079's PDR-portability sub-clause permitting ADR-### references was flagged by the owner as an error (portability purpose overrides the 12-PDR precedent) with a concrete fix plan (amend PDR-079, sweep 12 PDRs, add a host-leakage scanner); the fix was never executed — PDR-079 still carries the exact flagged sub-clause verbatim, and no pending-graduations entry tracks it.",
+          "quote": "PDR-079's \"A PDR body MAY contain named references to ADRs by their ADR identifier (ADR-### is portable vocabulary)\" sub-clause sanctions a repo-bound pointer inside a portable Practice-Core doc.",
+          "kind": "obligation",
+          "candidateHome": ".agent/practice-core/decision-records/PDR-079-pdr-vs-adr-portability-distinction.md (amendment) + .agent/memory/operational/pending-graduations.md",
+          "homeCheck": "Read PDR-079 in full: the 'Named references to ADRs by their ADR identifier (the ADR-### form is portable vocabulary...)' sub-clause is still present unamended (Status: Accepted, Date/Adopted 2026-05-24, no later amendment). Grepped pending-graduations.md for 'PDR-079' and 'host-leakage' — no matches. The fix described in this handoff was never landed."
+        },
+        {
+          "summary": "A structural cure was proposed for the Moment-1 pre-positioning broadcast (make it a DIRECTED event addressed to the named successor, or require a foreground comms sweep before the readiness gate) after a real miss where a non-watching Director-in-Waiting never saw it; PDR-064 still specifies Moment-1 as a plain broadcast narrative event, not directed.",
+          "quote": "Cure: make the PDR-064 Moment-1 pre-position a DIRECTED event (addressed_to the named successor, so it lands in the inbox) and/or require the waiter to run ONE foreground comms sweep on re-engagement before its readiness gate.",
+          "kind": "pointer",
+          "candidateHome": ".agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md",
+          "homeCheck": "Read PDR-064 §Moment 1: it still says 'The outgoing coordinator broadcasts a pre-positioning event' using the existing narrative comms-event kind — no addressed_to/directed mechanism and no mandatory foreground-sweep requirement. F-99 in frictions-register.md covers a related but distinct topic (heartbeat context-tax for observer mode), not this specific directed-broadcast cure."
+        }
+      ],
+      "note": "Most of this handoff's substance (napkin union, F-95 friction, OQ5 composed-liveness lane, repo-continuity fold, the Callisto loss-scan items, the impact-over-authority lesson) is either explicitly superseded/executed same-session or independently verified homed (OQ5 lives on as PDR-118 open question 5; the impact-over-authority lesson cross-links PDR-091 precedence-is-not-approval, which exists). The two items above are the load-bearing residue: a named, scoped PDR-079 fix that was never executed, and a concrete PDR-064 cure proposal that never landed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-director-current-state-galago-60d988.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This record explicitly supersedes an earlier current-state record and is itself explicitly superseded by 2026-07-20-galago-director-full-handoff.md ('This record SUPERSEDES 2026-07-20-director-current-state-galago-60d988.md'), which carries the durable Layer 1-4 synthesis. Its content is otherwise almost entirely PR-drain mechanics (PRs #401-#431, all long since merged/closed/superseded per the visible commit history) and frictions that verified as homed: F-146/F-147/F-148 all present verbatim in frictions-register.md (checked by heading); the 'doctrine-graduation candidate, five/six firings' closure-claims generator is homed in no-moving-targets-in-permanent-docs.md (verified — the rule cites 'closure claims survive kills by climbing one' and 'non-load-bearing by default'). No residue found that isn't either superseded-by-the-fuller-handoff or purely time-expired PR-tracking."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/schooner-binds-trench-to-tarsier-hunts-underbrush-2026-07-29.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "The departing implementer flagged that docs/engineering/README.md does not list merge-bot.md, calling it 'adjacent, outside every claim I held. Unclaimed and unticketed' — this doc-index gap is still present.",
+          "quote": "`docs/engineering/README.md` does not list `merge-bot.md`. Adjacent, outside every claim I held. Unclaimed and unticketed.",
+          "kind": "other-signal",
+          "candidateHome": "docs/engineering/README.md",
+          "homeCheck": "Grepped docs/engineering/README.md for 'merge-bot' — no match. Confirmed docs/engineering/merge-bot.md exists on disk. The gap named in this handoff is still real and unticketed as far as this search can verify (Linear unverifiable here)."
+        }
+      ],
+      "note": "The substantial engineering content of this handoff — withdrawing the CodeQL dismissals and shipping the two structural cures on the auth/host-validation code — is VERIFIED LANDED: apps/oak-curriculum-mcp-streamable-http/src/host-header-validation.ts now does span/prefix matching with no RegExp (the wildcard-regex sink is gone), and mcp-auth.ts now has a `parseAuthorizationHeader` closed-union parse (missing/malformed/token) at the exact line area described. The MCP-391 gating and the Copilot-review-scope finding are ticket/vendor items appropriately left to Linear/MCP-391, not markable unhomed on that basis alone. Only the doc-index gap above is a residual, verifiable, unhomed fact."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/thyme-weaves-hedgerow-to-sycamore-herds-xylem-2026-07-30.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This is live in-flight coordination for MCP-372 (still open per the codebase: demos/oak-curriculum-hub/lib/oak-theme-store.ts still has the old ContrastQuery/mirror shape the plan targets for deletion, confirming slice 1 has not yet landed). The handoff itself names its authoritative homes as the Linear ticket (MCP-372, 'the ticket body is the four-item scope + DoD... comments... carry' the substantive rulings) and the design-system-integration thread record, both of which are the correct durable/live homes for in-progress work per this estate's practice; the detailed dispatch-prompt text is a working artefact for the next pre-execution review cycle, not orphaned residue, since the claim/ticket chain is the mechanism by which it continues to be acted on. Nothing here reads as substance that would be silently lost — it is the normal shape of an active claim handover."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/a63ac21a-lane-a-bandicoot-to-kayak-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The open technical question this handoff turns on (§4.A: whether the spawn-minted identity seed survives into the launched session, and whether 1E should ship the cd-form launch command) is resolved in code: agent-tools/src/spawn/launch-command.ts and launch-command.unit.test.ts exist and are built into the CLI, alongside cli-args.ts (the extraction decided in §3) — confirming 1E shipped and the open question was settled downstream. The remaining deferred items (§4.B: baseBranchOf mis-strip, task #10 cleanup extension, e2e smoke gap) are named future-work pointers of the kind future-work-items-are-pointers-not-specs sanctions leaving as pointers; no distinct undiscovered decision or owner word is stranded here."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-design-lane-final-closeout.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Every load-bearing claim in this closeout's own Pass-1 loss-scan names a durable home and those homes verify on disk: the ownerMaintained/reserved-path design doctrine is present in .design-sync/NOTES.md and .design-sync/estate.json (grep-confirmed); the four forward contracts (MCP-166-169) are pointer tickets (Linear, unverifiable here but explicitly named as pointers, not specs, consistent with future-work-items-are-pointers-not-specs); the design-system-integration lane visibly continued afterward (the 2026-07-30 thyme-to-sycamore handoff references MCP-388/MCP-372 as direct descendants of this closeout's chain, showing the forward items were picked up rather than dropped). The record's own three-pass loss-scan is honest about session-local-by-design losses (scratchpad labs) as accepted, deliberate loss, not unhomed substance."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-galago-director-full-handoff.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A scheduled import of an external 'wrap' skill (session-handoff/consolidate-docs/metacognition/reason programme) from a sibling Resonance repo was named as scheduled via a Linear ticket, a practice-core/incoming capture note, and this record — but no wrap skill exists in .agent/skills, and the named capture note is no longer present in the current tree (only in stale worktree snapshots), indicating the import was never completed and the incoming note was drained without being actioned.",
+          "quote": "the WRAP-SKILL IMPORT (scheduled this closing batch — see §Import)... the capture note at `.agent/practice-core/incoming/resonance-wrap-skill-import-2026-07-20.md`",
+          "kind": "pointer",
+          "candidateHome": ".agent/skills/ (a wrap skill directory, per the SKILL-CANONICAL.md pattern used by other skills) or .agent/memory/operational/pending-graduations.md",
+          "homeCheck": "Globbed .agent/skills/* — no wrap skill present (only start-right-quick, start-right-thorough, go, ground-truth-design, ground-truth-evaluation, tsdoc, undo-change, chatgpt-report-normalisation, curator-pass). Globbed for resonance-wrap-skill-import-2026-07-20.md across the tree — it exists only inside two stale .claude/worktrees/ snapshots, not in the live .agent/practice-core/incoming/ directory, meaning the incoming queue drained past this note without the import landing. Grepped pending-graduations.md for 'wrap-skill'/'SKILL-CANONICAL' — no match. Linear ticket unverifiable here per instructions, but the on-disk capture-note and skill-directory evidence both point to a dropped commitment, not merely an unverifiable ticket."
+        }
+      ],
+      "note": "The rest of this full-handoff's substance verifies as homed: the closure-claims/no-moving-targets generator graduation is on disk in no-moving-targets-in-permanent-docs.md; F-146/F-147/F-148 are in frictions-register.md; the resonance-research-programme-design-guide (a separate, already-landed practice-core incoming item named in the same handoff) now lives at .agent/reference/resonance-research-programme-design-guide.md. The wrap-skill import is the one distinct commitment that appears to have been silently dropped rather than absorbed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-torch-to-meteor-director-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The eight 'owner rules issued today' are standard standing directions already homed generically across the tracked rule/memory corpus (agent-attribution, copy-paste-in-code-blocks, owner-attention-at-action-moments, merge-commits-never-squash, refer-to-PRs-by-number, priority-means-importance-never-speed are all present as named rules/memories in CLAUDE.md's rule list and MEMORY.md, confirmed by file existence at those exact rule paths). The 'notification liveness' third liveness class is homed in PDR-133-liveness-classes-and-platform-declaration.md (grep-confirmed). The graduation-quorum lesson is an instance of PDR-101 (graduation-requires-quorum.md, exists). The 'Design lane is the priority lane' and PR #529 transfer are time-bound, now-resolved operational facts (the design lane closed out five days later per the Cormorant closeout, already assessed absorbed). No distinct technical decision or unenacted owner word survives unhomed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/remote-estate-disposition-table-v2.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This is a mechanically-generated, closure-proved disposition table (346/346 entries, self-described as generated from remote-crossref.tsv) whose whole purpose was pre-execution ratification for the curation sync described as executed in the same-directory Cormorant final closeout (which reports the sync CERTIFIED at 305 files exact-match, PRs #542/#543 merged). Every decision in this table (the 45 removals, the P1-P5 preconditions, the SKILL.md adoption formula) is either already executed (per the closeout) or is a remote-CMS-state fact with no corresponding repo-tracked-file home to check — it is inherently a point-in-time execution plan for a system outside this repo, not a doctrine or standing obligation. No owner word, decision, or technical fact here reads as still-open and un-actioned against the current repo state."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-zenith-aip137-hub-lane-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The one in-flight item (PR #413 round-7 settlement) resolved to merge per this same handoff's own pre-ruled outcome path and per the corpus of later, superseding handoffs (the Galago full-handoff and current-state records name #413 as settled/merged in the same drive). Layer 3's distilled rules (registry key .claims not .active_claims, comms send --body-file, .next stale-types-after-merge, pr-watch body-only-review blind spot, shared-credential self-review exclusion) are generic operational lessons of the kind normally folded into napkin/frictions during routine consolidation, and the drive itself (AIP-137) completed entirely per the commit-log context ('the fixes plan is fully discharged', 'Volcano closed') — none of these read as still-live obligations against current main. The §6 forward build-work items (controls/cards/pedagogy-blocks token migration) are named as future PR-shaped pointers consistent with future-work-items-are-pointers-not-specs, appropriately left unspecced."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0087c313-b3e2-455c-8f4b-4508e494326e.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "Owner-ratified Sonar disposition bar (genuine-fix default, ACCEPT-with-rationale, FALSE_POSITIVE reserved for tool errors)",
+          "quote": "Genuine code fix is the default... FALSE_POSITIVE is reserved for true tool errors only.",
+          "kind": "decision",
+          "candidateHome": "docs/governance/sonar-disposition-policy.md",
+          "homeCheck": "Grepped 'ACCEPT-with-rationale|FALSE_POSITIVE is reserved' — policy doc exists on disk and codifies the same FIXED/FALSE_POSITIVE two-outcome rule with per-rule decision criteria (verified content at lines 47,59,307,360)."
+        },
+        {
+          "summary": "S5914 type-level test cure pattern (expectTypeOf/toExtend over tautological runtime asserts)",
+          "quote": "S5914 type-level tests → expectTypeOf, NOT deletion.",
+          "kind": "knowledge",
+          "candidateHome": "docs/governance/typescript-gotchas.md",
+          "homeCheck": "Grepped expectTypeOf/toExtend/toEqualTypeOf — found and confirmed present in typescript-gotchas.md (lines ~104-108) capturing the same expectTypeOf-over-runtime-tautology guidance."
+        },
+        {
+          "summary": "S8786 lesson: read the tool-rule's actual criterion, not intuition — unanchored patterns are quadratic even when 'linear-looking'",
+          "quote": "S8786 'linear-looking' patterns ARE non-linear... read a tool-rule's actual criterion before dispositioning",
+          "kind": "knowledge",
+          "candidateHome": "docs/governance/sonar-disposition-policy.md §S8786",
+          "homeCheck": "Read sonar-disposition-policy.md §S8786 (lines 517-563) — carries the same decision criteria and disposed-FALSE_POSITIVE example rationale; the criterion-not-intuition lesson is operationalised there."
+        },
+        {
+          "summary": "Phase-4 pacing owner-steer checkpoint left unanswered at this seat's retirement",
+          "quote": "Phase 4 pacing/approach — owner-steer checkpoint flagged, unanswered.",
+          "kind": "pointer",
+          "candidateHome": "n/a — superseded by time",
+          "homeCheck": "Record is from 2026-06-27; later corpus files (e.g. 2026-07-20 foehn record) show Sonar work at Phase 8/main-red-zero, i.e. the Sonar lane progressed far past Phase 4 since — the checkpoint is stale, not lost."
+        }
+      ],
+      "note": "All load-bearing technical/owner substance verified present in tracked docs (sonar-disposition-policy.md, typescript-gotchas.md); the one open item (Phase-4 steer) is mooted by the lane's later progress recorded elsewhere in the corpus."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/bb9073cd-w2-to-w3-seal-to-successor-2026-06-27.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "oak-under-the-hood reframe merged via #243; ADR-205 public-resource classification pattern landed",
+          "quote": "b18c9653f — classify the orientation resource docs://oak/under-the-hood.md PUBLIC... ADR-205",
+          "kind": "decision",
+          "candidateHome": "docs/architecture/architectural-decisions (ADR-205)",
+          "homeCheck": "Not re-read directly but corroborated: MCP server instructions in this session reference a live 'oak-under-the-hood' tool, confirming the rename/reframe shipped; ADR-205 numbering is consistent with the ADR-217 file found later in the 200s range."
+        },
+        {
+          "summary": "Worktree-local coordination-write gotcha: raw Write/Edit to a worktree path lands outside the shared .agent/state/ home (F-41)",
+          "quote": "Coordination artefacts written via the Write tool land in the WORKTREE-LOCAL .agent/state/, NOT the shared coordination home.",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/operational/frictions-register.md, .agent/rules/worktree-hygiene.md",
+          "homeCheck": "Grepped F-41 across the repo — found referenced in frictions-register.md, worktree-hygiene.md, and multiple later plans/napkins, confirming the friction class is tracked."
+        }
+      ],
+      "note": "Lane fully closed at record time with all follow-ons handed to named successors (Cinder, Beluga, Callisto) via comms events; substance re-verified as landed/tracked elsewhere. Over a month stale relative to today's date."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-21-moth-aip157-d1-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "Owner board-to-zero directive covering PR #462 landing without fresh authorisation",
+          "quote": "board-to-zero directed to this seat; bot REST-merge path authorised and PROVEN",
+          "kind": "owner-word",
+          "candidateHome": "AIP-157 Linear ticket / PR #462 thread",
+          "homeCheck": "Ticket-claimed (AIP-157), unverifiable here per rules; PR-thread adjudication ledger described as self-documenting (every resolved reply cites commit+fixture) — decision-sufficient per the record's own §7 index of homes."
+        },
+        {
+          "summary": "D2 (pr watch) / D3 (register wiring) successor plan units named as pointers only",
+          "quote": "D2 (pr watch) / D3 (register wiring): successor plan units — pointers only",
+          "kind": "pointer",
+          "candidateHome": ".agent/plans-backlog-2026-07/agent-tooling/current/ (pr-state-instrumentation plan)",
+          "homeCheck": "Grepped AIP-157/pr-state-instrumentation — found referenced in agent-tooling/current/README.md and BACKLOG.md, i.e. the plan surface still exists to carry these pointers forward."
+        }
+      ],
+      "note": "Record's own §7 metaloss annexe explicitly indexes every substance item to a durable home (PR threads, comms events, tracked exploration report, Linear ticket); nothing found unhomed beyond what the record itself already routes."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-24-whippoorwill-mcp-137-s0-succession.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "F5 sharpest owner-decision: held-out Oak-owned token/reference files sit only 'by care' not 'by construction', violating the owner's zero-loss constraint — needs owner-carded per-piece re-review to decide committing them into the preservation folder",
+          "quote": "the held-out set includes Oak-owned token/reference files... with no PII/licence reason to withhold... Surface prominently.",
+          "kind": "decision",
+          "candidateHome": ".agent/plans/delivery/mcp-137-design-system-semantic-merge.plan.md (S1 per-piece re-review)",
+          "homeCheck": "Grepped 'held-out' against the plan — found present, confirming the plan surface tracks the held-out tier, but did not confirm the plan resolves F5's specific commit-vs-withhold split decision for the Oak-owned token files; the specific F5 recommendation and its disposition were not found verbatim in the plan text I sampled."
+        },
+        {
+          "summary": "F6: studio UUID 314dd517 already public elsewhere, so curing only the S0 doc is incoherent — needs a cross-surface owner call",
+          "quote": "the studio UUID 314dd517… is published... but it is ALREADY public on main (#509)... Rec: cross-surface owner's-call",
+          "kind": "pointer",
+          "candidateHome": "unknown",
+          "homeCheck": "Not located in the plan or ADR-213 amendment text sampled; ticket/PR-body disposition not verifiable from this pass."
+        },
+        {
+          "summary": "F7: whether 'the prior system' means the full 17-file 2026-07-23 pull-set or a broader prior iteration — flagged as needing owner clarification",
+          "quote": "is 'the prior system' fully the 17-file 2026-07-23 pull-set, or a broader prior iteration? Rec: owner clarification.",
+          "kind": "decision",
+          "candidateHome": "unknown",
+          "homeCheck": "No matching clarification found in the mcp-137 plan text sampled; this is a named open owner-question that may not have been asked or answered yet."
+        }
+      ],
+      "note": "This is a design-lane succession record whose Survivor Assessment contains several explicit 'do NOT self-resolve, surface as owner card' items (F5-F7). F1-F4 (factual doc defects) and F8-F12 (named-home pointers) look like ordinary plan/doc-fix material likely folded at the next plan touch, but F5/F6/F7 are genuine unresolved owner-decision forks that I could not verify were actually raised to the owner or dispositioned in the plan/ADR text I sampled — recall-over-precision on the unhomed side."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-26-skipper-mcp-128-restack-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "PR-3 CSP-rides-PR-3-not-PR-2 sequencing decision and its warrant (font swap ordering)",
+          "quote": "CSP rides PR-3 not PR-2 (conflict adjudication: main's page loads Google Fonts until PR-3's font swap — tightening earlier breaks the deployed page's typography).",
+          "kind": "decision",
+          "candidateHome": "docs/architecture/architectural-decisions/217-server-rendered-html-in-the-mcp-app.md",
+          "homeCheck": "Read ADR-217 in full — it documents the final landed shape (static-markup rendering, design-system asset serving, CSP-adjacent asset-origin guarantees) consistent with this PR-3 sequencing; the tactical ordering detail itself is PR-body material, decision-sufficient without a separate durable home per the record's own loss-scan."
+        },
+        {
+          "summary": "PR-4/5/6 pointers (theme flag/fixtures/guard, visual-baseline identity protocol, theme-control spec) named as successor plan units, not specs",
+          "quote": "PR-4/5/6 per the plan file (PR-4: flag + fixtures + guard...; PR-5: baselines + IDENTITY PROTOCOL...; PR-6: theme-control spec + 3335).",
+          "kind": "pointer",
+          "candidateHome": "design-lane plan file cited in the record (Lavender design brief + mcp-128 plan)",
+          "homeCheck": "Confirmed the Lavender brief (sibling handoff, also in this batch) carries the full theme-control/ThemeControl design; mcp-128-public-landing-page.plan.md exists on disk (archived) as the plan surface."
+        }
+      ],
+      "note": "Record's own §Loss-scan explicitly enumerates every substance class and its home (rulings, design brief, PR stack, plan file); zsh/prettier/commit-queue gotchas are session-mechanics noise with no lasting cost if lost."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-tooling-runway-draco-ba5b683d.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "Owner ruling retiring 'merge custody = owner moment': PR lifecycle including merge is agent work at truly-green",
+          "quote": "THIS session's classifier refused the auto-merge arm anyway... the owner ruling (Director relay 17:32:55Z) retired 'merge custody = owner moment': PR lifecycle INCLUDING merge is agent work at truly-green.",
+          "kind": "owner-word",
+          "candidateHome": ".agent/rules/ (merge-authority rules) and later corpus (e.g. bb9073cd, Skipper records show bot-REST-merge as standing practice)",
+          "homeCheck": "Grepped for merge-authority phrasing was not run directly, but multiple later handoffs in this same batch (Moth/Skipper/Whippoorwill, all July) show bot REST-merge / plain gh pr merge as routine established practice, confirming the ruling propagated and is now standing practice, not stranded."
+        },
+        {
+          "summary": "Consolidation trigger for unwrapErr duplication across 3 consumers — promote into @oaknational/result package",
+          "quote": "the consolidation moment has arrived: promote unwrapErr (+ the SDK's unwrapOk sibling?) into @oaknational/result with a first-class message",
+          "kind": "decision",
+          "candidateHome": "@oaknational/result package source / consolidate-at-second-consumer.md rule",
+          "homeCheck": "Not verified on disk whether unwrapErr was actually promoted into @oaknational/result; this is a concrete, specific, named technical follow-on that could be genuinely unexecuted. Given the record is from 2026-07-15 (over two weeks stale) and describes itself as a mid-cycle PR #387 handoff, the PR's own fate (merged/superseded) was not checked."
+        }
+      ],
+      "note": "The session-close mechanics (zsh word-splitting, EXIT code capture, gate-cost details) are ordinary AX friction items with no lasting cost if lost. The unwrapErr consolidation is flagged as a specific technical decision whose execution status I could not confirm — included for recall."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-harrier-aip137-pr3-cycle3-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "ESLint design-boundary roster edit for oak-design-system (ADR-041 regeneration owed) — fully specified deferred item",
+          "quote": "The edit is in packages/core/oak-eslint/src/rules/boundary.ts, createDesignBoundaryRules()... Extend DesignPackageImport... to add '@oaknational/oak-design-system'.",
+          "kind": "pointer",
+          "candidateHome": "packages/core/oak-eslint/src/rules/boundary.ts",
+          "homeCheck": "Read boundary.ts directly — the oak-design-system restriction, the oak-design-ink back-edge restriction, and the deliberate-absence comment for oak-design-tokens are ALL present on disk exactly as specified. This deferred item is fully executed and landed."
+        },
+        {
+          "summary": "dtcg↔CSS consistency-check validator, a separate small PR (task pr2-consistency-check)",
+          "quote": "A workspace-owned repo validator chained into repo-validators:check... Separate small PR.",
+          "kind": "pointer",
+          "candidateHome": "PR #429 (per the later Moth handoff in this same batch)",
+          "homeCheck": "The sibling record 2026-07-20-moth-aip137-cycle3-lane-full-handoff.md (also in this batch) describes PR #429 as exactly this validator, open with 0 unresolved threads — confirms this deferred item was picked up and executed downstream."
+        }
+      ],
+      "note": "Every deferred item in this record is either verified landed on disk (boundary.ts) or corroborated as executed by a later handoff in the same corpus batch (PR #429). Comms-watcher/plan-conflict mechanics are session noise."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-26-lavender-full-react-design-brief.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "Owner Ruling 2 (2026-07-26): build-time static generation supersedes the full-React-hydration target architecture below it",
+          "quote": "Build the page during build-time, produce a static React page... the tools lists are STRICTLY server-side constants created at build time.",
+          "kind": "owner-word",
+          "candidateHome": "docs/architecture/architectural-decisions/217-server-rendered-html-in-the-mcp-app.md",
+          "homeCheck": "Read ADR-217 in full — its Decision §1 states pages are rendered with renderToStaticMarkup and explicitly 'these pages do not hydrate', matching Ruling 2's final direction, not the superseded hydration architecture described later in this same brief."
+        },
+        {
+          "summary": "Superseded hydration/client-bundle architecture (props JSON script tag, useOakTheme hook, hydrateRoot client entry)",
+          "quote": "Client entry: src/landing-page/client.tsx — reads the props payload, calls hydrateRoot(document, ...)",
+          "kind": "other-signal",
+          "candidateHome": "n/a — superseded design, no tombstone required",
+          "homeCheck": "ADR-217's landed decision (renderToStaticMarkup, no hydration) contradicts this section, confirming it was abandoned; per no-tombstones-for-removed-ideas this is expected noise, not a loss."
+        }
+      ],
+      "note": "The brief's own top section already marks Ruling 2 as superseding items 1-2 below; the final landed ADR-217 matches Ruling 2, so the substantial owner-word is conserved and the superseded intermediate design is correctly not re-homed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/director-handoff-hearth-to-callisto-2026-06-27.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "Owner-delegated merge authority to the Director with explicit merge criteria (gates green, comments fixed-or-rejected, no new comments, memory-merge-safe)",
+          "quote": "The owner has DELEGATED merge authority to the Director... Merge criteria (owner-stated, explicit): merge a PR when (1) gates GREEN, (2) ALL comments fixed-or-rejected...",
+          "kind": "owner-word",
+          "candidateHome": ".agent/rules/ merge-related rules; corroborated by later corpus practice",
+          "homeCheck": "Multiple later handoffs in this batch (Draco, Moth, Skipper, Whippoorwill — all through July) describe bot REST-merge / director-merge as routine standing practice matching these exact criteria, confirming propagation into practice even without re-checking a specific rule file."
+        },
+        {
+          "summary": "Atomic event system with renderers for agent-memory — owner-named long-term cure for memory-merge corruption",
+          "quote": "Atomic event system with renderers for agent-memory is the owner-named LTAE cure for the memory-merge-corruption problem.",
+          "kind": "pointer",
+          "candidateHome": "state-vs-memory / intent-graph thread mentioned in the same paragraph",
+          "homeCheck": "Record itself names the home ('belongs in the state-vs-memory / intent-graph thread'); not independently re-verified on disk but the record supplies its own routing, and this is a long-term architectural aspiration rather than an urgent unhomed obligation."
+        }
+      ],
+      "note": "This is a Director-to-Director handoff from over a month ago; virtually all its operational content (merge mechanics, PR estate snapshot, live team roster) is necessarily stale and superseded by the estate's subsequent progress (confirmed via later same-batch records showing further PR numbers, further Sonar phases, further team rotations). The durable owner-word items are corroborated as propagated into standing practice."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-foehn-compaction-survival-record.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "comms send --body argv limit is 1500 chars, forcing body-file for substantive events",
+          "quote": "comms send --body argv limit is 1500 chars (CLI-enforced; error text names it) — body-file is the only path for substantive events.",
+          "kind": "knowledge",
+          "candidateHome": ".agent/rules/use-agent-comms-log.md or frictions-register.md",
+          "homeCheck": "Not directly re-verified in this pass, but this class of comms-CLI friction is exactly the kind captured in frictions-register.md per the pattern seen elsewhere in this batch (F-92/F-98 etc.); the record itself notes it is 'napkin-blocked' pending a curator fold, i.e. explicitly routed, not silently lost."
+        },
+        {
+          "summary": "Hook substring false-positive: a compound command with 'worktree add' in one clause and 'grep -A N' in another matches the 'git add -A' policy substring",
+          "quote": "a compound command containing 'worktree add' in one part and a 'grep … -A N' in another matches the 'git add -A' policy substring — split the commands.",
+          "kind": "knowledge",
+          "candidateHome": ".agent/rules/hook-policy-substring-discipline.md",
+          "homeCheck": "Record states this 'joins hook-policy-substring-discipline's corpus' — a rule file by that exact name exists on disk (confirmed via the CLAUDE.md rules listing in this session's system context), making this a self-declared, plausible home."
+        }
+      ],
+      "note": "Record's own §Layer 3 explicitly labels these items 'comms-only today; napkin-blocked by the frozen window' and names the exact curator/fold mechanism that would absorb them; this is the standard deferred-fold pattern seen throughout the corpus, not a silent loss. The PR-level work (Layer 1) is independently verified merged with SHAs."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-moth-aip137-cycle3-lane-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "Studio-source boundary rule: packages/design/oak-design-system/** content is studio-owned import source; repo-side edits get clobbered at next sync",
+          "quote": "the studio-source boundary — packages/design/oak-design-system/** content... is studio-owned import source; repo-side edits get clobbered at the next sync; corrections route to the studio sync-back batch",
+          "kind": "knowledge",
+          "candidateHome": "mcp-137-design-system-semantic-merge.plan.md / design-token-practice.md",
+          "homeCheck": "The mcp-137 plan (checked earlier in this batch) explicitly tracks a three-tier preservation model and studio-sync mechanics, consistent with this boundary rule; the record itself names the routing (Heron's lane / studio sync-back batch)."
+        },
+        {
+          "summary": "Settled-round slot predicate for PR merge readiness (zero unresolved threads AND zero body-tally findings, every expected reviewer satisfied/skipped, >10min quiet, checks green)",
+          "quote": "Settlement predicate (drive-adopted, Director-ratified 08:58Z): zero unresolved threads AND zero body-tally findings on the tip; every expected reviewer leg SATISFIED... or SKIPPED...",
+          "kind": "decision",
+          "candidateHome": "agent-tools pr-state / SKILL-CANONICAL settlement doctrine (referenced in the 2026-07-21 moth-aip157 record in this same batch)",
+          "homeCheck": "Corroborated by the sibling 2026-07-21 moth-aip157-d1 record in this batch, which references the identical settlement predicate as canonical SKILL doctrine already in force — confirms this predicate propagated into the standing pr-state instrument rather than being stranded in this one record."
+        }
+      ],
+      "note": "Record's own §Index of homes explicitly maps every substance class (merged work, coordination, doctrine) to a durable location; corroborated by cross-reference to sibling records in this same batch."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/601973ca-inferno-weaves-kindling-compaction-continuity-2026-07-30.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "MCP-440 licensing decision: mirrors root README (MIT code / OGL content / brand-guidance for brand assets)",
+          "quote": "MCP-440: licensing mirrors the root README — MIT code / OGL content / brand guidance for brand assets (verbatim on ticket).",
+          "kind": "decision",
+          "candidateHome": "MCP-440 Linear ticket + root README licensing section",
+          "homeCheck": "Ticket-claimed (MCP-440), unverifiable here per rules; the record states it is 'verbatim on ticket', which is the sanctioned home for this class of item."
+        },
+        {
+          "summary": "Open provenance question: who committed 34f24834d, the coordination roll-up ancestor commit MCP-442 gates on",
+          "quote": "MCP-442 closes only when git merge-base --is-ancestor 34f24834d origin/main succeeds... Provenance question (who committed 34f24834d) still open on the ticket — one-glance for Jim/Director.",
+          "kind": "pointer",
+          "candidateHome": ".agent/memory/operational/director-handoff.md",
+          "homeCheck": "Grepped 34f24834d across the repo — found referenced in director-handoff.md and the submission-review-repo-fixes.plan.md, confirming the commit/question is tracked in the live Director continuity surface, not stranded in this handoff alone."
+        }
+      ],
+      "note": "This is the most recent record in the batch (2026-07-30, one day before today per the coordination branch's 24h lifetime rule) and its substance (tickets MCP-437/438/439/440/441/442/444, PR #656/#657) is corroborated as tracked via the plan and director-handoff surfaces checked directly."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-heron-aip137-design-system-lane-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "PR #431 kit-robustness batch and doctrine slot (c) ADR-213 §2 amendment content (per-consumer projections, runtime-computed class, delivery-surface window, falsifier severity-grading) all landed.",
+          "quote": "ADR-213 §2 dated amendment (per-consumer projection contract; the runtime-computed class; explicitly staging the transitional delivery-surface window...)",
+          "kind": "decision",
+          "candidateHome": "docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md",
+          "homeCheck": "Grepped ADR-213 for 'per-consumer', 'runtime-computed', 'delivery-surface window', 'falsifier severity' — all found landed in §2's dated amendment (lines ~208-240)."
+        },
+        {
+          "summary": "The heartbeat-during-suspension false-liveness class is conserved in the tracked frictions register.",
+          "quote": "Heartbeats-during-suspension is a false-liveness class",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/operational/frictions-register.md",
+          "homeCheck": "Grepped frictions-register.md for 'harness-suspended'/'heartbeats-during-suspension' — found at lines 3383-3394, matching the finding."
+        },
+        {
+          "summary": "The settled-round predicate (drive-adopted merge-eligibility gate) is documented in a tracked report.",
+          "quote": "The settled-round predicate (Director-adopted, estate-wide): zero threads + zero body-tally findings on the tip...",
+          "kind": "knowledge",
+          "candidateHome": ".agent/reports/agentic-engineering/merge-concurrency-doctrine-proposal-2026-07-20.md",
+          "homeCheck": "Grepped that report for 'settled-round predicate' — found (lines 15, 21), matching the concept described."
+        },
+        {
+          "summary": "The thread-record appendix meant to be folded verbatim is already present in the tracked thread-record file.",
+          "quote": "the primary's untracked report copy... awaits the Director's track-or-fold disposition",
+          "kind": "pointer",
+          "candidateHome": ".agent/memory/operational/threads/design-system-integration.next-session.md",
+          "homeCheck": "Read the thread-record file end to end; the 'Session update 2026-07-20 ~12:30Z (Heron seeks Bluff...)' section (lines 164-193) matches the handoff's appendix content near-verbatim — already folded."
+        }
+      ],
+      "note": "All landed PRs, doctrine content, and Layer-3 distillations verified present in tracked homes (ADR-213, frictions-register, merge-concurrency-doctrine report, thread-record). Nothing load-bearing is unique to this machine-local file."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-s2-lane-alder-a1e8fa1a.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "PRs #386 and #388 are merged and their content (census stats, ledger set-aside) is committed to main's attestation artefacts.",
+          "quote": "census overlap stated explicitly — recounted from claim-census.v1.jsonl",
+          "kind": "decision",
+          "candidateHome": ".agent/plans-refounding/proofs/s2-deterministic-evidence.v1.json",
+          "homeCheck": "Grepped for 'censusSummary'/'repeatRunPreparation' — found in the tracked proofs JSON on main."
+        },
+        {
+          "summary": "The pr-watch Phase-5 spin-on-all-green-but-unmerged finding and its cure (slow compound poll) landed in the pr-lifecycle skill.",
+          "quote": "cure = swap to a slow compound poll (120s, emit only on deviation/terminal)",
+          "kind": "knowledge",
+          "candidateHome": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+          "homeCheck": "Grepped the skill for 'slow compound poll' — found at line 279, matching the described cure."
+        }
+      ],
+      "note": "Old (2026-07-15), fully superseded handoff whose durable content (attestation JSON, pr-lifecycle cure) verified present on disk. Coordination mechanics (worktree cleanup, dormancy state) carry no residual cost."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-26-lavender-mcp-128-full-react-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "The owner's 'Full React' ruling and the ADR-217 §1 no-hydration contradiction it exposed is already captured as a tracked, named gap (MCP-289) rather than silently lost.",
+          "quote": "ADR-217 §1 recorded no-hydration as decided, contrary to his standing requirement... must not slip",
+          "kind": "owner-word",
+          "candidateHome": ".agent/reports/orphan-risk-review-2026-07-27.md",
+          "homeCheck": "Read the orphan-risk review in full; it documents 'ADR-217 never landed' on the superseded MCP-128 restack branch and mints MCP-289 (ticket-claimed, unverifiable in Linear from here) to track the discharge — the exact substance Lavender's handoff flagged is already surfaced durably, not lost."
+        }
+      ],
+      "note": "The 36-thread disposition table and probe facts are session-scoped detail whose only durable-relevant residue (the ADR-217/Full-React discipline gap) is independently captured in a later tracked report with a named ticket. No further unhomed substance found."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-quoll-compaction-freeze.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "PR #437's ADR-215 renumber disclosure; ADR-215 exists as a tracked file confirming it landed.",
+          "quote": "29 UNADJUDICATED threads... ADR-215 renumber disclosed",
+          "kind": "pointer",
+          "candidateHome": "docs/architecture/architectural-decisions/215-top-level-research-surface.md",
+          "homeCheck": "Globbed docs/architecture/architectural-decisions for ADR-215 — file exists on disk, confirming the renumbered ADR landed."
+        }
+      ],
+      "note": "Compaction freeze for a session that continued (not a retirement); all named PRs (#448, #437, #429, #435, #449) and doctrine (PDR-131) are documented as merged/landed in later, more current handoffs already reviewed in this batch."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-director-tuna-to-mussel-0f4be777.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Superseded Director-seat rotation record (2026-07-15) whose open items (S1/S2/tooling lane completion, substrate-sweep classification, gate-substrate cures) are all resolved in subsequent, more current handoffs and reports already reviewed (e.g. the frictions-register, merge-concurrency-doctrine report, ADR-213/215). Pure coordination mechanics; nothing owner-worded or technical is unique here."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/director-handoff-chinook-to-successor-2026-06-27.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "The DATA-SOURCES governance and PII coarse-region-location calibration items flagged as owner-gated/open are both conserved in tracked homes.",
+          "quote": "DATA-SOURCES governance criteria... line-112 coarse-region reference (domain-model future plan) — the OWNER's judgment",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/operational/repo-continuity.md; .agent/reports/agent-operability-plan-corpus-rationalisation-2026-06-27.md",
+          "homeCheck": "Grepped for 'DATA-SOURCES governance' (found in repo-continuity.md and a plan-backlog file) and 'coarse-region'/'coarse region... PII' (found in the tracked agent-operability report) — both topics have durable tracked homes."
+        }
+      ],
+      "note": "Over a month old (2026-06-27), fully superseded by extensive subsequent activity documented in the other files in this batch. Coordination mechanics only; the two candidate owner-judgment items both resolved to tracked homes."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-harrier-aip137-pr3-compaction-freeze.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "The AA-vs-AAA contrast gate ratification (AAA for high-contrast, AA floor elsewhere) landed and is reflected in ADR-213's amendment content, matching what this freeze records as owner-ratified.",
+          "quote": "the four-theme contrast gate is RATIFIED — high-contrast gates at AAA... light/dark/colour-safe at the AA floor",
+          "kind": "decision",
+          "candidateHome": "docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md",
+          "homeCheck": "Confirmed via the ADR-213 grep pass and Goshawk's later handoff (same batch) which references the same ratified gate levels as already-landed on PR #429/#412's ADR-213 amendments."
+        }
+      ],
+      "note": "A same-day compaction freeze superseded by its own later delta sections and by Goshawk's full handoff (same batch) covering the same lane's continuation to landing. All PRs named (#411, #412, #414) confirmed merged via ADR-213/thread-record evidence."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-goshawk-aip137-cycle3-and-lane-c-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "PR #429 and #435 (AIP-144 knip-gate) and their generator-class lessons (one-directional-verification) are coordination/review-arc detail whose durable residue (ADR-213 amendments, PDR-131 doctrine, frictions-register tooling gotchas) was independently verified present in tracked homes via the other files in this batch. No unique unhomed substance found."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-director-mussel-to-tuna-0f4be777.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Superseded Director rotation record; the S1/S2/tooling lane state it describes progressed and closed per the later Tuna-to-Mussel-successor chain and the s2-lane-alder handoff already checked in this batch (attestation JSON, ADR/skill homes verified). Coordination mechanics only."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-forge-director-full-handoff.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A doctrine-design question about Director processing gaps and the absence of deadline/default machinery for non-retirement routing contracts was routed for owner/PDR consideration but no matching PDR or doctrine note was found.",
+          "quote": "Director processing gaps serialise routing contracts; deadline-and-default machinery exists only for retirement authority — a doctrine-design item for owner/PDR consideration",
+          "kind": "obligation",
+          "candidateHome": ".agent/practice-core/decision-records/ (no matching PDR found)",
+          "homeCheck": "Globbed PDR-130 through PDR-134 (all recent PDRs) and grepped practice-core for 'retirement authority'/'routing contract' — only PDR-063 (mid-cycle retirement protocol) and PDR-117 matched, neither addresses the specific 'deadline-and-default machinery for non-retirement routing' gap Siren raised. Inconclusive; likely still open or resolved only in Linear/owner conversation."
+        },
+        {
+          "summary": "A named future small-PR obligation (the §7(b) composed-pairs gate for the hub's rendered-pairs projection) was forwarded as an owed ticket-to-be-minted, with no confirmed ticket or doc found.",
+          "quote": "§7(b) composed-pairs gate (open since #442): the hub declares rendered pairs as a per-consumer projection; build with the design lane; ticket at pickup",
+          "kind": "obligation",
+          "candidateHome": "demos/oak-curriculum-hub/ or a Linear ticket (unminted at time of writing)",
+          "homeCheck": "Grepped for 'composed-pairs gate'/'§7(b)'/'composed pairs' across the repo — no match outside a corpus-analysis data file (this task's own map-result artefact) and one unrelated deep-dive doc; no ticket number or doc confirms this was ever minted or discharged."
+        }
+      ],
+      "note": "This is a Director-seat full handoff at a drive-close boundary (2026-07-20); most Layer-1/2 content (PR merges, PDR-131) is independently verified landed via other files in this batch. The two items above are open forward-looking obligations named at handoff time whose disposition could not be confirmed on disk; both may be resolved in Linear (unverifiable here) but no tracked repo evidence of resolution was found."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/a63ac21a-lane-a-quasar-to-bandicoot-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "The candidate 'watcher --exclude-tag heartbeat mode for reserve seats' tooling gap was implemented.",
+          "quote": "the dominating cure would be a watcher --exclude-tag heartbeat mode for reserve seats",
+          "kind": "knowledge",
+          "candidateHome": "agent-tools/src/collaboration-state/cli-options.ts",
+          "homeCheck": "Grepped agent-tools/src/collaboration-state for '--exclude-tag' — found implemented in types.ts, cli-spec-help.ts, cli-options.ts."
+        }
+      ],
+      "note": "PRs #269, #272, #275 (1A/1B/1C spawn-flow) all merged per the record's own state; remaining decisions (base/slug normalisation, formatResult extraction) are code-level and verifiable in the merged source. Frictions listed (heartbeat --title requirement, max-lines edge-thrash) are routine tooling notes, not load-bearing beyond what's already implemented."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/sonnet-design-system-expert.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A reviewer identified that the 'generality-depth gradient' design-authority principle, cited as co-equal with ADR-213 to override embedded studio-export instructions, has no anchor in any tracked ADR or governance doc — it exists only in agent/owner memory.",
+          "quote": "the phrase and ruling exist only as an owner-verbal framing captured in session/agent memory... not in docs/architecture/architectural-decisions/ or docs/governance/",
+          "kind": "knowledge",
+          "candidateHome": "docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md or docs/governance/design-token-practice.md",
+          "homeCheck": "Grepped docs/ for 'generality-depth gradient' — no matches found anywhere under docs/. The reviewer's recommendation to consolidate it into a tracked doc for full in-repo traceability appears not yet acted on."
+        }
+      ],
+      "note": "The reviewer's gitignore-gap finding (finding 1) is now moot: the plan file (mcp-137-design-system-semantic-merge.plan.md) records the owner ruling 'Commit all 39' and the nested capture-folder files are confirmed present and manifest-verified fetched-committed — the ignore-pattern non-reach was in fact the wanted behaviour for the held-out tier, not a live defect. Findings 2, 4-7 are confirmed-accurate architecture descriptions absorbed by cross-reference to ADR-213/148. Only finding 3 (the undocumented generality-depth-gradient authority) remains a genuine gap."
+    },
+    {
+      "path": ".agent/state/collaboration/conversations/ws3a-decision-thread-open.example.json",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This is an explicitly-named example/fixture file ('ws3a-decision-thread-open.example.json', body text 'This example shows...') documenting the decision-thread schema, not a real coordination record. No owner words, decisions, or technical substance — pure schema illustration."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/director-handoff-callisto-to-cinder-2026-06-27.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "2026-06-27 Director handoff; every named PR (#253/#259/#243 etc.) is merged history. The keystone (PDR-118 agent-work-state model) is verified on disk under .agent/practice-core/decision-records/, referenced from practice-core/CHANGELOG.md and repo-continuity.md. The session lessons (freshness-not-liveness, re-gate at merge-time) are the stated rationale for PDR-118 and are also independently covered in repo-continuity.md, frictions-register.md, and agent-work-state-registry.plan.md. Napkin-drain instructions describe work this record says already executed via PR #259."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0087c313-starling-phase5a-to-successor-2026-06-27.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Sonar Phase 5A/5B chain fully merged (#257/#261); idiom-lock decisions are landed as committed ESLint config changes, not just narrative. Phase 5B/4 deferred-work counts are explicitly marked by the author as 're-derive', i.e. disposable pointers per future-work-items-are-pointers-not-specs. The napkin fold (Hawthorn's union) is stated as already captured verbatim and merged via #259, corroborated by the Callisto record."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/opus-assumptions-expert.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Verified against the live plan .agent/plans/delivery/mcp-137-design-system-semantic-merge.plan.md: both CONFIRMED findings (39 held-out files not zero-loss-covered; unreconciled S0 body/amendment text) are fully discharged there. Dated note 2026-07-24 records owner ruling 'Commit all 39' with all 39 files byte-verified into original-capture-2026-07-23/, and the amendment section (items 1-5) supersedes/reconciles the superseded body text the review flagged. The plausible finding (scope of 'the prior system') is addressed by the two-preservation-folder model in Amendment item 1. Nothing in this review is unresolved on disk."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/tarsier-hunts-underbrush-to-possum-weaves-midnight-2026-07-30.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The metacognitive synthesis (claims crossing context boundaries carry their derivation) is explicitly routed to distilled.md/verify-dont-trust at next consolidation and is verified present in .agent/rules/verify-dont-trust.md and .agent/memory/active/archive/napkin-2026-07-30.md (grep-confirmed). Named traps (comms send two-faced failure, zsh word-splitting, CodeQL ref-scoping, governed-content ledger re-pinning, token-mint guard, subagent boundary-trapped verdicts) are conserved: the governed-content ledger discipline is present in .agent/reports/mcp-agent-facing-content-audit/ and .agent/memory/operational/threads/mcp-agent-facing-content.next-session.md; MCP-393/395/398 dispositions are tracked in director-handoff.md's current-state block."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2cc48fb6-possum-weaves-midnight-compaction-continuity-2026-07-30.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Closing addendum shows the lane (MCP-393, PR #651) fully discharged: merged, ticket Done, evidence ledger posted, worktree pruned, napkin pushed. The session traps listed (piped-exit masking a commit-hook failure, commitlint subject-case, comms body argv limit, zsh word-splitting, watcher renders no event ids) are each independently verified present in tracked homes (e.g. 'derive ids from the event store' lesson found in .agent/reports/agentic-engineering/pdr-132-delivery-notes-2026-07-20.md; zsh/word-split and piped-exit classes recur across multiple archived napkins and .agent/reference/shell-and-tooling-gotchas.md)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-director-schooner-to-mussel-0f4be777.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "2026-07-15 Director handoff; PR #382 (S1 evidence) and PR #384 (continuity batch) are historical merged PRs per the record's own account, later handoffs (2026-07-17 Foundry record) confirm the estate moved on cleanly with no dangling threads from this seat. The decoy comms-dir and Zodiac branch dispositions are one-off operational residue from a session eleven days stale relative to today's date, superseded by many subsequent Director rotations (Mussel->...->Bora->Falcon) with no forward reference to this file's open items in any later record read in this batch."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-17-full-handoff-foundry-72fa18.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The record is explicit that its operating-model substance is mirrored in tracked surfaces: it names repo-continuity.md §COLD PICKUP as the durable authority, the stray-code register at .agent/reports/agentic-engineering/stray-code-register-2026-07-16.md (verified path pattern consistent with the reports directory), and the restatement-remediation plan under .agent/plans/product-development-governance/active/. The napkin/distilled/pending-graduations pointers are routine consolidation-queue mechanics, not new unhomed substance."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-fixed-point-baseline-v2.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Play seed 'green parts, red composition' is verified conserved verbatim as a graduated pattern at .agent/memory/active/patterns/green-parts-red-composition.md. The D18/D22/D23 register notes (domain migration, PostHog spike tag, release-runbook/Slack-alert incident) are corroborated present via grep hits on 'minimumReleaseAge'/'release runbook' across napkin-2026-07-23.md, napkin-2026-07-26.md, and product-development-governance suggestions. The nine-seed sitting list and standing constraints are dated snapshot narrative from a since-superseded Director tenure (Forge), fully overtaken by later rotations with no forward reference found."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-s2-r2-aurora-a1e8fa1a.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The drafted-but-unapplied gitleaks allowlist cure for the challenge-commitment keySetSha256 false positive is verified LANDED at .gitleaks.toml (the exact allowlist description 'Refounding challenge commitments publish sha256 digests by design' with the matching regex is present, sourced per its own comment from PR #390). The r2 lane deliverables (five-file bundle, canary-key challenge design) were merged per the chain of later Director records (Schooner->Mussel->Foundry) showing the refounding-corpus S1/S2 work proceeding on main. No open thread from this record surfaced in any later file read."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-eagle-aip137-hub-lane-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "All four follow-on PRs (#438/#440/#443/#444) are described as merge-queue-resident with clean review state; the distilled rules (CI test-merge parity class, meta-staleness class, GID zsh-readonly gotcha, piped-exit class, gh pr update-branch leaving local worktree behind, GraphQL enqueuePullRequest queue mechanics) were checked against tracked homes: the GID/readonly-variable gotcha is present in .agent/reference/shell-and-tooling-gotchas.md and napkin-2026-07-23.md; the merge-queue/enqueuePullRequest mechanics are present in .agent/skills/pr-lifecycle/SKILL-CANONICAL.md and .agent/rules/pr-comments-resolve-and-recheck.md. The §7(b) composed-pairs gate and secondary-role follow-up are named future-work pointers, not specs, consistent with future-work-items-are-pointers-not-specs."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/a63ac21a-lane-a-kayak-to-kingfisher-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "PRs #269/#272/#275/#277/#280/#284 are all reported merged or Director-routed-and-verified; the §4.A identity-prediction resolution (SessionStart hook derives identity, spawn cannot pre-inject) is a durable technical finding whose conclusion is embodied in shipped code (the cleanup PR removing the inert seed machinery) rather than left as narrative only. Phase 2 (derived worktree view + F-98 heartbeat-age column) is a named future-work item whose durable home is verified at .agent/plans-backlog-2026-07/agent-tooling/future/agent-work-state-registry.plan.md (F-98), consistent with the pointers-not-specs rule. Task #10 (claude-agent-ops cleanup for oak-* worktrees) is likewise a bounded pointer."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-30-plover-full-session-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This record is explicitly self-describing as machine-local convenience detail pointing to durable homes it names and that are independently verifiable: PR #638 and #654 (merged, per the record's own account), Linear MCP-433 (Done), the napkin entry, and the formation letter (confirmed present as an untracked file per the session's own git status listing, matching the git status shown in the environment context). No content in this record is claimed to exist ONLY here; the record itself performs and documents a loss-scan concluding no unhomed substance remains."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/director-handoff-oyster-to-chinook-2026-06-27.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "2026-06-27 Director handoff; the five-PR merge train (#247-#251/#253) is reported landed to main. PDR-118 (the F-98 keystone under Cedar's D1-D6 program) is verified present in .agent/practice-core/decision-records/. The lowercase-slug filename convention and the /oak-semantic-merge-for-memory-files doctrine are standing owner directions independently verified as durable rules elsewhere in the repo (worktree-hygiene.md, and the general practice of never git-line-merging memory is echoed across many later handoffs read in this batch, e.g. Schooner's and Foundry's)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/a2286c53-c242-4a89-a472-2eafe1897503.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This 2026-07-30 Director-succession record's open items are verified conserved in the current tracked authority: MCP-395 (git-config attribution ruling), the axe-core upstream contribution, and MCP-398 are all named as still owner/Director-held in .agent/memory/operational/director-handoff.md line ~295 ('Routed at close: ... MCP-395 + axe-core + MCP-398 remain owner/Director-held'), which is the live, superseding tracked pointer for exactly this open item -- so the substance carries forward in a durable surface, not only here. The transferred Thursday-leg re-surfacing duty is time-bound to 2026-07-30 and now moot given the current date. The guarded-mint-token discipline and merge mechanics are also present in director-handoff.md's standing-instrument notes."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-18-petrel-closeout-d4f4b7.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The record explicitly states it is a machine-local supplement to the tracked authority (repo-continuity.md §COLD PICKUP) and wins only on orderings/machine-local facts. PR #409 and the AIP-126/128/129/130 queue are ordinary ticket-tracked work (Linear-ticket-first), not unhomed substance; the worktree/branch disposition notes are routine hygiene detail with no owner words or undischarged obligations beyond normal ticket-tracked sequencing."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/levanter-rides-jetstream-to-glowworm-spins-pewter-2026-07-30.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Live PR #647 shepherd handoff, 2026-07-30. All substantive decisions (v1/v2 keep-alive-pooling withdrawn, v3 helper shape settled, lint-guards-app-local, [::1] behaviour deliberate) are recorded as landed in the PR/commit and ticket per the record's own account; merge-mechanics and traps are session-mechanical residue reproducible from tracked rules (pr-review-convergence, comms-all-channels-watcher, hook-policy-substring-discipline). The routing residue items (§5) are explicitly flagged as not-yet-owned friction candidates for the Director, which is itself a correct disposition, not an unhomed loss."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/sonnet-prose-expert.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Pure craft/prose review of the mcp-137 S0 plan amendment and PRESERVATION-README.md. Verified on disk that PRESERVATION-README.md now reads 'review discharged, all 39 committed' -- the document has moved on from the S0 snapshot this review commented on. No independent unhomed knowledge; craft suggestions are either applied or moot given the doc's subsequent evolution."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/sycamore-herds-xylem-compaction-continuation-2026-07-30.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Design-lane pause record naming PR-1 (kit) and PR-2 (#644 rework) state plus a docs/ADR checklist. Everything points at named durable homes: task-output store paths (verdict pointers), the git commits/branches themselves, and MCP-372/371/388/134 tickets. Verified the Turbo/GIT_DIR fix landed on main via PR #650 (MCP-414) as claimed. The remaining PR-2 inventory is a to-do list for an in-flight lane, not unhomed knowledge -- it is the lane's own working state, expected to be superseded by the PR-2 diff itself."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-triton-mcp-128-overnight-pause.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This record's own 2026-07-26 addendum performs the conservation sweep explicitly and gives an 'Index of homes' table. Verified all of it on disk: ADR-217 exists at docs/architecture/architectural-decisions/217-server-rendered-html-in-the-mcp-app.md; the plan is archived at .agent/plans/archive/mcp-128-public-landing-page.plan.md. The remaining named residue (napkin section, MCP-128 ticket comments, formation letter) is pointed at specific homes the record itself names and the addendum's own metaloss pass explicitly reconciles peer-owned untracked files (director-handoff.md, .claude/settings.json, Meteor's formation letter) as flagged-not-swept, which is the correct handling, not a loss."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0ba02fee-hearth-lane-b-to-gannet-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "2026-06-28 mid-cycle CLI-ergonomics handoff (F-70/F-79/F-80/--closed follow-on). All named PRs (#278, #281, #283) are old, small, mechanical CLI features; the design decisions (register centrally managed, throw-based error model, consolidate-at-third-consumer deferral) are now standing named patterns/rules in the repo (consolidate-at-second-consumer.md rule exists and matches the cited discipline). This is routine completed feature work over a month old with nothing identifiably still-open or owner-worded that lacks a home; the one open judgment call (active-agents --closed behaviour change) was a call for the then-current Director on a now-long-merged feature, moot today."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-24-cormorant-design-lane-pre-compaction-map.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Explicitly superseded by its own first line ('SUPERSEDED 2026-07-25 by ...post-walk-map.md; read that first'). The evidence chain it lists (#523/#524/#526/#527/#528, S1 divergence ledger, ADR-213) is independently verified on disk (.agent/reports/mcp-137-divergence-ledger.md exists; ADR-213 exists). The one forward-looking ruling worth checking -- full local parity, no remote-only surfaces, foreclosing the accepted-staleness branch for _ds_bundle.js -- is carried forward and superseded by the later remote-estate-disposition-table-v3.md in the same handoffs tree (walk-pack), which explicitly re-states and operationalises it (MACHINERY row keeps _ds_bundle.js 'until the component tier replaces it'). Nothing here is unhomed once the superseding document is in view."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/a63ac21a-lane-a-dormouse-to-quasar-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "2026-06-28 spawn-flow-tool mid-cycle handoff. Named decisions (Q1 empty-commit, Q2 CommandRunner hoist, resolveTrustedGit-stays-throwing) are implementation choices in a now-long-merged tool area; the deferred items (1C PR open/merge, 1D/1E/Phase-2/Phase-0) are pointed at the still-present plan file .agent/plans/agent-tooling/current/agent-spawn-flow-tool.plan.md as the authoritative forward record. The 'git checkout -b is hook-blocked' lesson is now a standing fact reflected in hook-policy-substring-discipline.md. Nothing owner-worded or otherwise unhomed remains open a month later."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/sonnet-docs-adr-expert.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Docs/ADR review of the same mcp-137 S0 commit. Its one CRITICAL finding (the 39 held-out files claimed 'held complete in local gitignored staging tier' but verifiably absent from the worktree) is resolved on current disk: PRESERVATION-README.md now states 'Held-out classes -- review discharged, all 39 committed' with a full owner-ruling narrative and byte-verification evidence, matching the review's own recommendation. Its Important finding (capture-manifest-2026-07-24.tsv legB-committed rows using a non-resolving 'iteration-pull/' path prefix) is also cured on disk -- the manifest now uses the correct 'iteration-pull-preservation-2026-07-23/' prefix. Both findings fully absorbed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-s1-reader-sample-b1-hedgehog-45befb32.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Mid-cycle handoff for the plans-refounding S1 reader-sample batch, 2026-07-15. This is deep in-flight tooling/process detail (manifest hashes, canary seals, spend ceilings) for a batch that is long since either landed or superseded by the refounding programme's later stages; the plans-refounding directory and its sweep tooling are tracked in-repo (agent-tools/src/refounding). The named deferred items (eslint allowlist authorisation, PRACTICE-CORE-FINDINGs on brief-template scoping) are routine friction-register material the record itself routes to napkin/team-branch per PDR-127. No distinct owner-word or technical fact survives here uniquely; it is session-mechanical detail for a batch process."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-director-barnacle-to-schooner-0f4be777.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Director seat handoff, 2026-07-15, mid the plans-refounding S0/S1 arc. All named PRs (#379, #380) are from mid-2026-07 and long since resolved one way or another; the stray sweep artefact (.agent/plans-refounding/sweep/sweep-hits.v1.jsonl) and the S1 remit are process items for a programme whose later stages (S2/S3/S4) are independently verified merged on disk (per the Triton and Cormorant records' evidence chains). Nothing owner-worded here is uniquely unhomed a fortnight-plus later; standing rulings cited (ARM-AT-SETTLED, --admin banned) are now standing repo rules."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-26-dynamo-mcp-189-compaction-prep.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Live-seat MCP-189/188/198 record, 2026-07-26, its own closing table names the durable homes explicitly: PR states/dispositions live in the PRs themselves (#570, #574, #579), round records in PR bodies/threads, measurements in MCP-198/MCP-185 Linear comments, session lessons in the dated napkin, formation letter. Six tickets are named as minted (MCP-197/198/199/200/216/217) which is itself the durable technical-knowledge home for each finding (ticket-claimed, unverifiable here via Linear but not treated as unhomed on that basis alone per instructions). No owner word or decision here lacks a named, plausible home."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0ba02fee-pegasus-lane-b-to-successor-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "2026-06-28 Lane B CLI-ergonomics handoff (F-75/F-85/F-72-folded, O2 tail sequencing F-89/F-70/F-77/F-79/F-80/--closed). All named PRs (#273, #274) merged per the record; the sequencing and design decisions are superseded by the later Hearth-to-Gannet handoff (same claim id 0ba02fee) covering the same tail's completion (F-70/F-79/F-80 all DONE with PR numbers in that later record). Tooling frictions captured here (process-substitution failure, watcher drain-death at 180000ms) are now reflected in standing practice (comms-all-channels-watcher.md, liveness-heartbeat-cron.md cite exactly this class of drain-timeout issue). Nothing uniquely unhomed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-21-tornado-director-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Full Director handoff, 2026-07-21, superseding an even-earlier same-day record it names. Names its own 'Index of homes': director-handoff.md, repo-continuity, napkin, patterns/registers, PR trails, PDRs -- and this is consistent with the tracked corpus (director-handoff.md exists at .agent/memory/operational/director-handoff.md). Named open items (AIP-161/162, AIP-157/D1, DORA-synthesis report at reports/agentic-engineering/dora-intent-graph-synthesis-2026-07-21.md, s2-divergence preserved via remote tag preserve/refounding-s2-canary-evidence) are each pointed at a named durable artefact or ticket; this is over a week stale and the fleet has since moved through multiple further Director rotations (Forge->Meteor->Gecko, all also in this corpus), each performing their own conservation sweep. No unhomed substance survives independently."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-meteor-to-gecko-director-handover.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Full Director handover, 2026-07-25 ~21:20Z. Substantive owner rulings (submission date Wed 30 vs Tue 29 discrepancy, PostHog learning-contract framing, MCP-143/MCP-125 unstaffed submission-critical gap) are all explicitly carried forward as open items for the incoming Director (Gecko) with named tickets/PRs (#552, #557, #558-560) and Linear ticket references (MCP-106, MCP-125, MCP-143, MCP-16); this record itself states these transfer as duties to the sitting Director, and the corpus contains multiple later Director handoffs (this file predates Sycamore/Levanter records already reviewed) confirming the arc continued and was carried. No content here is confirmed to have NO home -- it is a mid-arc snapshot whose open items were the next seat's explicit inbox, which is the correct handoff mechanism, not a loss."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-urchin-github-liaison-closeout.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "GitHub-liaison closeout, 2026-07-25, self-consciously thorough about durable homing: names the exact durable architecture-invariant homes (copilot-cli-practice-projections.plan.md, ADR-125-agent-artefact-portability.md, the first-class-copilot-cli-practice-support report, cross-platform-agent-surface-matrix.md) and verified all of these are the kind of tracked paths that exist in this repo's docs/architecture and .agent/memory/executive trees per the naming convention used elsewhere in this corpus. PR #529 and companions (#518/#536-541) are all named as merged with commit SHAs. Its 'Proposals carried forward' (vendor-parity-is-default, review-volume-is-signal-not-metric, wake-liveness-separate-from-watcher-liveness) are framed as generalizable practice lessons but are stated as being recorded in the architecture-invariant homes named above -- no separate unhomed substance."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-14-director-quasar-to-barnacle-0f4be777.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Director handoff, 2026-07-14, plus its own closeout addendum that RE-VERIFIES its own orphan-recovery inventory via substance-probes and retracts two of three items as already landed (codex Sentry config via PR #372; index-hygiene finding already in the landed thread record) -- only item (a), the 48-line compaction-prep napkin entry from SHA 882e82687, was confirmed as genuinely still needing recovery at that time. This is over two weeks stale and the S0/S1/S2/S3/S4 refounding programme it discusses is independently verified merged and complete via later records (Cormorant's pre-compaction map lists #523/#524/#526/#527/#528 all merged). The one confirmed-outstanding item at write time (napkin recovery) is exactly the kind of napkin content the later Triton and Sycamore records show being actively maintained and dated -- no evidence it remains lost, and this file's own self-correction discipline (retracting two of three items) demonstrates the loss-scan process this corpus runs is real and working."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/v3-removal-paths.txt",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Plain 44-line list of remote-studio file paths slated for deletion, referenced by the companion remote-estate-disposition-table-v3.md as the literal execution list ('that file, not prose, is what execution binds'). Verified the standing reconciliation instrument this disposition table calls for landed on disk: .design-sync/estate.json and .design-sync/config.json exist, matching the v3 table's description of a declarative-estate sync-config mechanism that retires the need for any future disposition table. The literal path list itself is machine-generated data with no owner-word or judgment content beyond what the (out-of-scope-for-this-dispatch) v3 table already carries and the design-sync config now encodes; nothing distinct or unhomed in this bare list."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-16-audit-brief-team-mango.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Self-superseding by design: Job 2 explicitly HALTED in the file's own text, superseded by a v2 spec landed on PR #393. Job 1 (build restatement-audit module) is confirmed landed — verified agent-tools/src/restatement-audit/ exists on disk with schemas.ts, normalize.ts, join.ts, workflows/{map,reduce,validate,meta}.workflow.ts matching the brief's spec exactly. Nothing here outlives the module's own landing or the v2 spec's supersession."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/falcon-hunts-flight-compaction-continuation-2026-07-30.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Ruling-42 in the file's own text records the mandate COMPLETE and a permanence pass executed the same day (roll-up merged, formation letters written to .agent/experience/, primary rotated). Consistent with the visible git log (napkin/tally/formation-letter commits, 'true slice 5 complete', Volcano closed). This is a closeout record whose substance is recorded as already landed by its own last section."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-s1-reader-sample-b1-ceres-45befb32.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Checked the two candidate unhomed items directly: (1) the PDR-066 'small-model readers catch-but-can't-copy' failure-mode lesson is verbatim-conserved in .agent/memory/active/archive/napkin-2026-07-20.md (two occurrences, matching text 'small models CATCH but cannot COPY'). (2) the commit-queue guard claim-matcher bug (guard.ts:124, exact index/head pattern) is already recorded in .agent/memory/operational/frictions-register.md as F-116/F-132/F-139 — this record's instance is an acknowledged duplicate of an already-homed finding, not new substance. The lane itself (S1 reader-sample) is weeks-closed per the chain of later handoffs."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0ba02fee-peregrine-lane-b-to-hearth-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Month-old CLI feature handoff (F-70/F-77 already merged per the record's own text, F-79/F-80/--closed follow-ons are small mechanical tail items in a lane long since closed). No durable technical knowledge here beyond ordinary shipped-feature mechanics; coordination mechanics whose loss costs nothing at this distance."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/60baf0b1-3eb1-45b9-91e3-f38e77cd607a.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Director handoff from 2026-06-27 (over a month old): merge-ordering/napkin-collision mechanics for PRs #243/#247/#248/#249/#250/#251, all long since resolved by the passage of time and subsequent Director tenures. The /oak-semantic-merge discipline it invokes is already a standing rule on disk."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cygnus-mcp-151-cold-pause.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "Retiring the npm Dependabot ecosystem removed the only mechanism that prompted dependency sweeps, and nothing replaced it — build-system.md still describes 'agent-run sweeps' with no schedule, cron, or workflow.",
+          "quote": "The old mechanism was noisy but **self-firing**; the new one is clean but **inert**.",
+          "kind": "obligation",
+          "candidateHome": "docs/engineering/build-system.md §Dependency updates",
+          "homeCheck": "Read docs/engineering/build-system.md §Dependency updates in full: it still states 'npm dependencies are updated by agent-run sweeps, not by Dependabot' with no schedule/cron/workflow named anywhere in the file. Grepped for a scheduled dependency-sweep workflow; none found (only CodeQL has a cron per the record's own claim, which the file doesn't contradict). This gap is explicitly 'FORWARDED, not ticketed — Owner's call' in the source record and remains genuinely unowned."
+        },
+        {
+          "summary": "Coordination branch had drifted ~10 lines ahead of main on the pr-lifecycle skill (CI test-merge parity, bot re-review timing) at time of writing, unresolved by PR #566.",
+          "quote": "Coordination carries ~10 lines main does not... that drift is pre-existing and untouched by it.",
+          "kind": "knowledge",
+          "candidateHome": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md",
+          "homeCheck": "Could not verify current coordination-vs-main drift state without a live branch diff (coordination branches are 24h-lifetime per rule, so this specific drift instance is likely stale by now); flagging with low confidence since the underlying skill file has clearly been substantially edited since (ROI-exit clause, merge-authorisation sections present at different line numbers than either handoff describes)."
+        }
+      ],
+      "note": "The TS7 bootstrap fix mentioned as 'unclaimed' IS conserved (docs/engineering/build-system.md lines 78-84, matching PR #416 worked-failure detail). The two items above are the genuine forwarded gaps this record itself flags as having no owner."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/sonnet-config-expert.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "A completed, self-contained COMPLIANT review verdict on a specific commit (0f05706ea). All findings are either confirmations (no residual action) or explicitly 'no action needed' (the .tsv redundancy) / 'out of scope, flagged for awareness only' (the pre-existing studio-source/components/ .d.ts anchoring gap, which the reviewer itself scopes as dormant/harmless and not part of the reviewed diff). Nothing here is an outstanding obligation."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-26-triton-to-lavender-mcp-128-design-lane.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A six-item design-workspace reorganisation (moving packages into core/brands tiers, separating generic core from the Oak brand layer) was proposed but explicitly signed off by nobody, and there is no on-disk trace it has since been actioned.",
+          "quote": "Proposed design-workspace reorganisation — SIGNED OFF BY NOBODY YET",
+          "kind": "decision",
+          "candidateHome": "docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md or a design plan under .agent/plans",
+          "homeCheck": "Globbed packages/design/sync/** (item A's target home) — does not exist, suggesting the reorganisation was not executed. Searched ADR-213 and design-system DECISIONS.md; neither is confirmed to carry this specific six-item reorganisation proposal. Genuinely inconclusive — could be superseded by later untracked design-lane sessions this sweep didn't cover."
+        },
+        {
+          "summary": "Three Sonar accessibility-vs-rule collisions on PR #565 require Jim's per-site 'accept' disposition (agents have no Sonar write access); as of this record they were undispositioned.",
+          "quote": "Agents have no Sonar write access. These need Jim's `accept` disposition per site.",
+          "kind": "obligation",
+          "candidateHome": "Sonar dashboard disposition (external system) / PR #565",
+          "homeCheck": "Confirmed the underlying accessibility code (role=\"region\", tabIndex, role=\"list\") is present in apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx, so the code itself survived. Whether Jim has since actioned the three Sonar site-dispositions is unverifiable from the repo (Sonar state, not a repo artefact) — noting per the ticket-claimed convention rather than treating as unhomed on that basis alone, but flagging since the record names it as outstanding at freeze."
+        }
+      ],
+      "note": "PR #565 state and the remote Claude-Design project state are both outside repo-filesystem visibility; the design-import bundle facts (Freedonia/EMC2 museum status, the 24072026 handoff bundle's unique value) are self-contained knowledge in this record with no found durable home, but are lower-stakes descriptive facts rather than owner obligations."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-design-lane-evening-map.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Verified several concrete execution markers: HANDOFF.md (studio-source) no longer exists (matches the ruled deletion), and PR merges e9dcb6681/b0e76b251/cb714a9c0 it names align with subsequent design-lane records (the next day's Lavender handoff references further progress on the same lane). Superseded in practice by the 2026-07-26 triton-to-lavender record, which is separately assessed above."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/remote-estate-disposition-table.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Explicitly a DRAFT superseded by v3 in the same pack (the file itself is v1 of a three-version evolution documented in v3's own rulings ledger, which names the specific v1/v2 defects it cured). No standalone unhomed substance beyond what v3 carries forward."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/remote-estate-disposition-table-v3.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The execution-ready binding disposition table for a REMOTE (Claude-Design project) estate, not a repo surface — its content is inherently outside repo-filesystem verification. The durable repo-side instrument it calls for (ruling 5: declarative estate + delete-reconciliation config) is corroborated as landed by the evening-map record's PR #536 ('the delete-reconciliation instrument... MCP-137 plan owner_gates discharged'). The remote-project curation itself (delete/capture-back the 44 paths) cannot be verified here but is external-system state, not repo knowledge that needs a repo home."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/sonnet-architecture-expert-fred.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "The reviewer's one concrete recommendation — naming the exact held-out staging path in PRESERVATION-README.md so the 'held complete' claim is independently verifiable — was never applied to the file.",
+          "quote": "Add one line to `packages/design/oak-design-system/studio-source/PRESERVATION-README.md` §Rules naming the exact held-out staging path (`packages/design/design-import/original-capture-held-out-2026-07-24/`)",
+          "kind": "obligation",
+          "candidateHome": "packages/design/oak-design-system/studio-source/PRESERVATION-README.md",
+          "homeCheck": "Grepped PRESERVATION-README.md for 'design-import/original-capture-held-out' — no match. The recommended line was not added. The reviewer explicitly marked this non-blocking, so it is minor, but it is a specific, verifiable, never-executed recommendation with no other recorded home."
+        }
+      ],
+      "note": "Rest of the review (boundary compliance, dependency-direction checks) is a completed COMPLIANT verdict with no other outstanding action."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-s1-seat-close-hedgehog-82b36c.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A grounded lesson about session-local pause words: a pause instruction creates a permission-layer wall that no cross-session comms authority (Director wake, owner-directive relays, peer precedents) can lift — only fresh owner word naming the walled session's scope opens it.",
+          "quote": "a session-local pause word creates a session-local wall that NO comms-layer authority lifts; the cure is exactly the Director's bundle re-routing protocol",
+          "kind": "knowledge",
+          "candidateHome": ".agent/rules/respect-active-agent-claims.md or a pattern under .agent/memory/active/patterns/",
+          "homeCheck": "Grepped for 'session-local pause', 'wall map', 'no comms-layer authority lifts', and 'dormant.*wake authority' across .agent/rules, .agent/memory/active/patterns, and .agent/practice-core — no matching home found. The one file that matched a looser pattern (a strategy-and-plan-estate thread record) does not contain this specific lesson on closer read. This looks like a real gap: the seven-refusal wall-map is fairly specific operational knowledge about the platform's permission layer with no durable home found."
+        }
+      ],
+      "note": "The other two candidate items in this record (guard.ts commit-queue bug; the PDR-066-cited small-model-copy lesson) are already homed — confirmed duplicates via frictions-register.md (F-116/F-132/F-139) and napkin-2026-07-20.md respectively, both checked directly during this sweep (see the companion s1-reader-sample-b1-ceres record's note)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/sardine-holds-undertow-federated-visibility-and-sentry-2026-07-14.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Verified the two durable anchors this record's substance rests on both exist: docs/architecture/architectural-decisions/212-federated-visibility-authority-and-evidence-boundaries.md and .agent/practice-core/decision-records/PDR-113-source-intent-from-the-principal-not-the-records.md. The custody items (Notion authority conflict, unauthenticated Sentry lane, dedicated PR for the two commits) are 2.5-week-old handoff mechanics for a lane that has had ample subsequent Director/consolidation attention; no trace of these specific items resurfacing in any later record read this session, consistent with them having been either resolved or superseded."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-16-director-compaction-mussel-6f8857.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The record's own header states it is DISCHARGED (2026-07-16 ~12:00Z): watcher re-armed, Vole's silence resolved, PR #391 merged, PR #392 fix designs landed. It explicitly redirects to a successor live-state record and instructs 'do not rehydrate from this record.' Retained as history by its own design."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-cormorant-design-lane-post-walk-map.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Explicitly SUPERSEDED in its own first line by the evening-map record (assessed separately above), which itself has since been superseded by the following day's Lavender handoff. The walk's eight rulings and evidence pack are retained in remote-estate-disposition-table-v3.md, separately assessed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-director-current-state-forge-398e24.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "An 11-day-old Director-tenure snapshot (merged PR list, live-tail slot state, team map) that fed directly into the same-day 2026-07-20-consolidation-session-brief.md (assessed separately), whose headline items are independently confirmed landed in durable homes. No standalone unhomed substance beyond what that consolidation captured."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-consolidation-session-brief.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Checked the two headline items directly: (1) the seven-firing generator graduation onto no-moving-targets-in-permanent-docs.md is verbatim-landed there ('closure claims survive kills by climbing one abstraction level... worked evidence 2026-07-20: seven review arcs across five document classes'). (2) the Resonance ROI-exit clause import into pr-lifecycle is landed there too ('the exit is a JUDGEMENT, capped on ROI and risk... validity is not the exit variable'). The remaining items (cricket tally, retired-seat wrap pointers, frictions-register batch, napkin items) are pointers to material this manifest itself fed into a consolidation PR — a self-discharging input list, not a standalone substance carrier."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-bonfire-implementer-cold-pause-wrap.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The record names its own authoritative home explicitly: the MCP-122 Linear ticket comment (ticket-claimed, unverifiable here per the standing convention, not treated as unhomed on that basis). All branches/commits it names are described as already merged or deliberately PR-less preserved raw material; decisions deferred all carry named owners (owner-at-sitting, Director, next-seat). No free-floating substance found."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0ba02fee-ingot-lane-b-to-pegasus-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Mid-cycle lane handoff for F-75 (peer heartbeat-silence). Frictions register confirms F-75 status ADDRESSED 2026-06-28 (PR #273, squash-merged 0be09bf05) with the same classifier/command/poll-recipe detail; F-101 likewise ADDRESSED (PR #270). All decisions-made content is reproduced in .agent/memory/operational/frictions-register.md lines ~1830-1848 and ~2178-2188. Register-management mechanics are pure coordination noise."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-barque-implementer-harness-move-freeze.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The lane's own wrap-state (session close, 2026-07-23) records the redo + S5843 cure MERGED to main in 0ecd8f118 (PR #478), claim closed, worktree pruneable. The plan-schema decisions cite .agent/plans/plan-node-schema.md, which exists on disk and is the durable contract; the three named plan files are also present in the current plan corpus. Nothing outstanding."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-tooling-runway-acacia-ba5b683d.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Mid-cycle handoff for the tooling-runway refounding lane. Item 1 (refound-entry-args) is described as landed/PR-shepherded; item 8's F-numbers (--exclude-tag/--only-directed gaps) and the deferred decisions (EntryArgs discriminated union, prepareCensusRun consolidation) are register/ring-rotation mechanics. Plan file .agent/plans-backlog-2026-07/agent-tooling/current/tooling-runway-refounding-instruments.plan.md exists and is the durable home for the lane's remaining scope."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/eac8fbdd-a38c-4408-b596-bfb71632d9f0.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "PDR-063 handoff for the WS-B explain MCP surface (D2.1 done, D2.2-D5 remaining). The whole 'explain' surface was subsequently reframed and renamed to 'Oak Under the Hood' (per the later bb9073cd handoff in this same batch), and that renamed tool now exists on disk with tests and a canonical skill (apps/oak-curriculum-mcp-streamable-http/src/oak-under-the-hood/*, .agent/skills/under-the-hood/SKILL-CANONICAL.md). The specific D2.2/D3/D4/D5 task list is superseded by that later, landed reframe rather than separately unhomed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/a63ac21a-lane-a-beluga-to-avocet-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Lane A (spawn-flow) mid-cycle handoff. 1A already merged (#269); 1B (PR #272) driven toward merge in the immediate successor handoff (a63ac21a-lane-a-avocet-to-successor), which records it reaching GENUINELY-READY with all findings fixed. Design decisions (Result<T,E> everywhere, injectable seams, spawn as unified-CLI topic) are codebase-embodied conventions, not standalone unhomed facts."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0ba02fee-pangolin-lane-b-to-ingot-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Predecessor of the Ingot->Pegasus handoff in this same batch. F-101 and F-75 status both verified ADDRESSED in .agent/memory/operational/frictions-register.md with matching PR numbers/commits. The docs-adr reconciliation flag (frictions-register ~2167-2170 dangling 'supersedes Stop-hook lease' claim) is itself recorded inside the register text at F-101, i.e. already homed there."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/a63ac21a-lane-a-avocet-to-successor-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "PR #272 reported GENUINELY-READY (0 unresolved threads, CI green, blocked only on code-owner review) with all three Cursor/Copilot findings fixed and consolidated into spawn/existing-worktree.ts. This is the terminal state before Director-driven merge; no separate durable-home gap — the design decisions (no-removal idempotent retry, max-lines discipline) are codebase conventions now embodied in agent-tools/src/spawn/**."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/c41e35d2-df6d-4f65-83f5-dc9f5a03243c.json",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Owner-directed temporary lane-swap record for MCP-360 / PR #631 (comms watch defaults + protocol-wire validator). The named new file agent-tools/src/validators/protocol-wire/validate-protocol-wire-contract.ts exists on disk in the primary checkout, confirming the cure landed. Decisions (schema-strict local heartbeats, F-95 binding to watched source, merge key-turns Director-routed) are either embodied in the landed code or covered by standing merge-ruling rules (merge-rulings-no-admin-no-direct-merge-arm-allowed)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0ba02fee-lichen-lane-b-to-peregrine-2026-06-28.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "O2 ergonomics tail handoff (F-89 done/PR #276 routed; F-70/F-77/F-79/F-80 and a new --closed follow-on queued). F-89's DONE status and the F-70/72/77/79/80 items all appear in .agent/memory/operational/frictions-register.md with matching numbers and status text, confirming the register is the durable home the handoff itself names ('Register is Director-managed centrally')."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/abd6041e-e497-483a-833f-5d614291b263.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "PR #222 fixes (pr-watch) verified complete at handoff time; the ADDENDUM's uncommitted prototype-chain-guard fix (Object.hasOwn on UNIFORM_TOPIC_HANDLERS) is now present verbatim in agent-tools/src/bin/agent-tools-cli.ts:175-176. The DATA-SOURCES.md follow-on lane is also landed: docs/governance/DATA-SOURCES.md exists, sourced from the named .agent/memory/operational/threads/data-sources-governance.next-session.md thread file which also still exists."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-26-skua-mcp-187-compaction-pause.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Compaction-pause snapshot for PR #571 (MCP-187 widget-served-surface), dated 2026-07-26, five days before this review. Entirely mid-flight mechanics (merge freeze-word pending, Copilot billing-skip, AC-4a/4b proof steps) explicitly self-invalidating ('recompute live'); MCP-183/MCP-188 pointers are ticket-tracked. No durable decision or owner word found unhomed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-21-quoll-aip159-succession-to-foehn.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "AIP-159 Sonar-fix succession record. PR #452 commit SHA d880a838a is referenced in CHANGELOG.md confirming the mechanical-fix unit landed; the S2871 comparator disposition (code-unit comparator over localeCompare) is homed directly in code: research/web-app-deconstruction/packages/research-evidence/lib/compare.ts and the eslint.config.ts 'no-alphabetical-sort' relaxation comment both exist and carry the contract. Unit-2's six S3776 refactor sites are ticket/plan-tracked follow-on work, not separately unhomed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-s2-divergence-aurora-a1e8fa1a.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "S2 deterministic-lane handoff for the plan-corpus-refounding research exercise (PR #386, divergence report + attestation). The entire plan-corpus-refounding effort has since been superseded: the V0 corpus is archived (.agent/plans-refounding/archive/frozen-v1/**) and a new ratified schema (.agent/plans/plan-node-schema.md) and backlog structure (.agent/plans-backlog-2026-07/**) are now current, per the later barque-implementer-harness-move-freeze record in this same batch. The specific A1 self-arrival / amendment-writer follow-on is superseded research machinery, not standing unhomed substance."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-torch-compaction-map.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Director pre-compaction map, explicitly instructs the waking self to 'verify everything against live surfaces.' The day's headline (Copilot write-block fix, PR #535 merged b725df1ec) and all session lessons are stated as already pushed to the napkin/comms. Fully self-invalidating coordination snapshot; nothing survives as an unhomed fact distinct from the napkin entries it names."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/alder-pr-watch-and-ws-e-integration.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Evaluation handoff for two stale worktrees (oak-pr-watch, oak-pilot-ws-e). Its Lane-1 finding (the proto-chain dispatch guard, commit 2fe5909c2) is the same fix independently confirmed landed in agent-tools-cli.ts (see abd6041e verification above). Lane-2's keeper (search-cli e2e test) is a small, independently-triageable candidate the record itself frames as low-value residual coordination-docs triage."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/bb9073cd-137f-46e5-832f-72a9d6ff74dd.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Oak Under the Hood reframe handoff carrying the corrected-directions arc (reject bake/fallback/optionality, official-sourcing/no-PII, existence-is-not-correctness). The renamed tool, its plan, and its skill all exist on disk today (apps/oak-curriculum-mcp-streamable-http/src/oak-under-the-hood/**, .agent/plans-backlog-2026-07/sdk-and-mcp-enhancements/active/oak-under-the-hood.plan.md, .agent/skills/under-the-hood/SKILL-CANONICAL.md), meaning the decisions this record carries are embodied in the shipped surface, not merely described."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-22-genet-director-full-handoff.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "The handoff asserts that release-sensitivity governance ('sensitivity tiers') lives exclusively in a local memory file that cannot be found anywhere in the tracked repository or any worktree.",
+          "quote": "the local memory file `first-major-release-standing-rulings.md` — the sensitivity tiers live there and ONLY there; read before writing to ANY surface",
+          "kind": "knowledge",
+          "candidateHome": "a durable release-governance doc, e.g. under docs/ or .agent/memory/operational/, referenced by the first-major-release plan/ADR",
+          "homeCheck": "Glob for '**/first-major-release-standing-rulings.md' and grep for the literal filename across the whole repo (including .claude/worktrees/*) returned zero hits; the file does not exist in any tracked or untracked location visible here. Only the operator's own per-user memory index (outside this repo) still names it, which per the durability rules is a buffer, not a durable home."
+        }
+      ],
+      "note": "This record is explicitly superseded as a succession surface by its own header (Forge rides Brimstone was revived same day), and its D19-D22 register items are properly ticket-claimed (Linear decisions register, ratified/current per the record). The one flagged item is the sole piece of asserted-exclusive, safety/sensitivity-relevant knowledge that could not be located in any durable repo surface."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/f2a17e85-55e1-4081-bf9e-a6c4cd69e48b.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Sonar S8707 path-injection fix, sites 2-3 of 3. Site 1's validator (assertPathWithinBase, since relocated/renamed) is now used across agent-tools/src/core/flag-path-resolve.ts, prevent-accidental-major-version.ts, ci-turbo-report.ts and others, confirming sites 1 and 2 (git-dir containment in prevent-accidental-major-version.ts) both landed. Per-site containment-base decisions are embodied in the landed code."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-director-current-state-flame-f82a2f.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Untracked-by-design volatile Director state snapshot for the design-system-integration (AIP-137) merge drive, explicitly superseding itself with a 'FINAL UPDATE' section recording further merges (#417, #418, #409) verified first-hand in origin/main. The plan it drives from (.agent/plans-backlog-2026-07/architecture-and-infrastructure/current/design-system-integration.plan.md) exists and is the durable home for any remaining scope; the rest is PR-state bookkeeping."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-dispatcher-brief-team-mango.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Fresh-seat dispatch brief for the plan-corpus-refounding S1 re-dispatch and r2-pilot-evidence-pass research exercise. Like the related S2-divergence handoff in this batch, this whole research programme (challenge-commitment / canary-key / r2-evidence outputs) sits under the plan corpus that has since been superseded and archived (.agent/plans-refounding/archive/frozen-v1/**, new schema at .agent/plans/plan-node-schema.md). Budget/ceiling figures and dispatch mechanics are pure execution instructions with no standing substance beyond the superseded exercise."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/opus-security-expert.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A security reviewer flagged a private Claude Design workspace UUID committed to the public repo as an owner-decision item (keep or remove); the UUID is still present in the tracked file with no recorded owner disposition found.",
+          "quote": "The source project's Claude Design workspace identifier `314dd517-493d-4be2-bd08-56ae0e80e780` is committed to a public repo. ... Owner's call whether to keep it.",
+          "kind": "decision",
+          "candidateHome": "an owner-ratification note in the MCP-137 plan (.agent/plans/delivery/mcp-137-design-system-semantic-merge.plan.md) or a PDR/report recording the keep/remove call",
+          "homeCheck": "Grep for the literal UUID across the repo found it still present in packages/design/oak-design-system/studio-source/PRESERVATION-README.md (and .design-sync/config.json, .design-sync/NOTES.md, two reports, the mcp-137 plan) — i.e. it is still published exactly as flagged. Grepped .agent/practice-core/decision-records/ for the UUID and for 'workspace identifier' text; no PDR records a keep/remove ruling on this specific finding. No disposition note found anywhere; the owner-facing question this review raised appears never answered on any durable surface."
+        }
+      ],
+      "note": "Everything else in the review (held-out boundary soundness, PII/secrets/credentials clearance) is a point-in-time verdict whose loss costs nothing — it was reproduced for the merge decision already taken. Only the single flagged owner-call item is unresolved and unhomed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-27-schooner-mcp-128-pr4-pickup.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-128 stacked-PR pickup record. The island-hydration architectural deviation (MCP-220 adjudication) is explicitly ticket-tracked (MCP-220..225, minted by the Director) — per the grounding rules a ticket-claimed home is not to be flagged as unhomed solely because Linear is unverifiable here. The plan file is now archived (.agent/plans/archive/mcp-128-public-landing-page.plan.md) consistent with the lane having completed; stack/merge mechanics (train order, Vercel preview-probe gate) are pure coordination detail covered by standing merge rules."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-bonfire-pause-wrap.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Landed work (route-1 consolidation, MCP-130/131, register resave, serving-state arc) all named with commit shas and tickets already closed. The 'switch-plane projection completeness' concept-exploration synthesis is conserved verbatim in .agent/memory/active/archive/napkin-2026-07-26.md (verified by grep). The owner action item (Vercel SDK_CODEGEN_MODE dashboard check) is an out-of-repo owner task, not repo knowledge, and is over a week stale relative to the current corpus (project has since moved through MCP-366/365/368 and beyond) — its loss costs a reminder, not substance."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-24-heron-full-closeout.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "The graduated 'green-parts-red-composition' pattern doc exists but the specific token-space exemplar instance (#4, --shadow-ground/--bg-btn-primary focus-ring conflict) promised for append was never added to it.",
+          "quote": "token-space exemplar → green-parts-red-composition pattern doc... instance #4, --shadow-ground flips polarity with canvas while --bg-btn-primary flips against it → focus ring invisible on dark tab band; first instance in token space.",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/active/patterns/green-parts-red-composition.md",
+          "homeCheck": "Read patterns/README.md index — the pattern file green-parts-red-composition.md exists and is indexed. Grepped that file for 'shadow-ground', 'instance #4', 'token space' — no matches. The instance was never appended despite being named across two records (this one and the mcp-132 compaction-prep record) as pending."
+        },
+        {
+          "summary": "A recurring doctrine candidate — that any 'X stands unchanged'-style conformance claim must cite the survey/verification grounding it — was flagged with four same-day worked instances and gated on Director doctrine routing, but never graduated into a rule or pattern.",
+          "quote": "Doctrine candidate \"'stands' claims cite their survey\": gate = Forge's doctrine routing (owner-ratified rule PR). FOUR same-day worked instances recorded",
+          "kind": "knowledge",
+          "candidateHome": ".agent/rules/ or .agent/memory/active/patterns/",
+          "homeCheck": "Grepped RULES_INDEX.md, .agent/rules, and .agent/memory for 'stands...cite'/'survey' phrasing — no matches. The closest related pattern (adversarially-verify-own-synthesis.md) covers self-verification of long synthesis work generally but does not carry this specific 'stands claims cite their survey' formulation or its four named instances."
+        },
+        {
+          "summary": "A 'declarative-state grammar' napkin seed (phase model / seat states / allowlist live-dormant as a recurring estate grammar) was repeatedly parked pending 'the next estate commit window' and never landed.",
+          "quote": "Napkin seed (declarative-state grammar): held in this seat's records only; gate = the next owner-agreed estate-commit window names it or it is dropped there by decision — it does not ride forward silently again.",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/active/napkin.md or a pattern file",
+          "homeCheck": "Grepped .agent/memory and .agent/directives for 'declarative-state grammar' and 'declarative-state' — no matches anywhere in the tree. Never landed despite being carried forward across at least four records (this one, bonfire-pause-wrap, heron-mcp-128-compaction-prep, heron-mcp-132-compaction-prep)."
+        }
+      ],
+      "note": "Most of this record's substance (MCP-132 merge, MCP-133 design-session record, bot-identity doctrine, ticket hygiene) is verifiably landed. Three specific promised-but-undelivered items surface above."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-guidance-serving-architecture-plan-draft.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This is a frozen sketch-status copy of the guidance-serving-architecture plan. Verified the ratified successor exists at .agent/plans/delivery/mcp-121-guidance-serving-architecture.plan.md with status: ratified, ratified_by Jim Cresswell, ratified_date 2026-07-23 — same id/goal/mechanism. The draft is fully superseded by the tracked ratified plan."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-21-bandicoot-seat-wrap.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "All landed PRs (#467, #471) merged and referenced tickets (MCP-64, MCP-67, MCP-63) have moved far forward since (MCP-63 PostHog appears actively planned in later records; MCP-67 Clerk production promotion is referenced as landed/superseded in later handoffs). The deferred owner decisions (goals discussion, cohort mechanism) are session-local coordination mechanics whose substance was folded into the subsequent Director records (forge-director-evening-state, forge-recovery-compaction-freeze) already reviewed. No standalone unhomed technical claim remains."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-heron-mcp-128-compaction-prep.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "Napkin seed 'declarative-state grammar' (phase model / seat states / allowlist live-dormant) parked again pending an estate commit window that never came.",
+          "quote": "Napkin seed (declarative-state + reviewed-switch as recurring estate grammar: phase model / seat states / allowlist live-dormant) → next estate commit window; BLOCKED from primary commits while the owner's SDK sketch sits uncommitted",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/active/napkin.md or a pattern file",
+          "homeCheck": "Grepped the full .agent tree for 'declarative-state grammar' / 'declarative-state' — zero matches anywhere. Same unhomed seed recurs across four records in this batch; still absent from the current corpus."
+        }
+      ],
+      "note": "Rest of the record (MCP-128 design lane state, PR #491, promises ledger items (a) pattern-doc, (b) design-sync learnings) is either landed (design-sync learnings discharged via MCP-132 per the later heron-full-closeout record) or superseded by subsequent records already reviewed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-25-gecko-director-overnight-pause.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Ratified owner decisions (submission date, four gate surfaces, staffing rule, PostHog split, owner behavioural rules) are the kind of substance that would live in first-major-release.plan.md / standing-rulings memory / Linear; per-user memory index already carries 'First-major-release standing rulings' and multiple owner-behavioural-rule memory entries (owner-channel-answer-first, owner-named-executor-is-part-of-the-instruction) matching this record's content verbatim in spirit. Linear ticket/milestone actions (MCP-172, MCP-162, M0 milestone) are ticket-claimed and unverifiable here per the ticket exemption; not treated as unhomed on that basis alone."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-27-dynamo-wrap-cannot-recur-program.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "The record's own 'index of homes' table flags several items as NOT SAFE (napkin doctrine-vs-mechanism entry, formation lesson, ARC channel) at write time. Verified: the doctrine-vs-mechanism class IS now present in .agent/memory/active/archive/napkin-2026-07-30.md (bidirectional framing, with the extension into principles.md §'Target-architecture wording' named as the cure). MCP-192's secrets-environment finding is DISCHARGED — minted as MCP-245 per .agent/memory/active/archive/napkin-2026-07-30.md and director-handoff.md, both found by grep. The formation-lesson and ARC-channel files exist on disk (confirmed via Glob) despite being flagged untracked at write time. MCP-227/228 are ticket-claimed, unverifiable here per the ticket exemption."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-15-implementer-brief-team-mango.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Job 1 (r2 docs-only landing, PR #390) and the doctrine-cargo PR (Job 2: cricket templates, route-blocks-and-questions-to-director rule, classification evidence set) are all named as either already-done or as a concrete PR cargo list that would have landed as tracked files — the cricket templates and the route-blocks-and-questions-to-director rule both exist on disk today (confirmed present per the system-prompt/CLAUDE.md content and the .claude/rules forwarder pattern cited across this whole task's own instructions). This is a fully-executed old onboarding brief; nothing free-floating remains outside tracked surfaces."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/65332972-78df-4339-929a-82efad3378b7.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Brand batch (MCP-366/365/368) landed with commit shas, all tickets Done. The axe-core#3978 upstream evidence (setup, computed-style divergence, pixel histogram 17,441 black + 921 white px, ~21:1 contrast) is verified conserved in docs/governance/accessibility-practice.md's 'Contrast rules under forced colours: criterion scoping' section, which explicitly cites axe-core#3978 and the pixel-verified 21:1 ratio. Copilot round dispositions and the wordmark component decision are recorded with grounds on the PR/thread record per the file's own account. MCP-394/400/401/402/403 are ticket-claimed, unverifiable here per the ticket exemption. The napkin's 2026-07-30 harvest entry is a pointer this scan did not need to re-verify beyond the items above."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-heron-mcp-132-compaction-prep.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "Same undelivered token-space exemplar (green-parts-red-composition instance #4, --shadow-ground) named again here as pending append.",
+          "quote": "token-space exemplar (--shadow-ground flips with canvas, --bg-btn-primary against it) → append to the graduated green-parts-red-composition pattern doc; instance #4, first in token space. Rides the chain where it fits",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/active/patterns/green-parts-red-composition.md",
+          "homeCheck": "Grepped green-parts-red-composition.md for 'shadow-ground'/'instance #4'/'token space' — no matches; pattern doc exists but never received this instance."
+        },
+        {
+          "summary": "Same 'stands claims cite their survey' doctrine candidate named again here as pending Director doctrine routing.",
+          "quote": "Doctrine-discipline candidate with FORGE: \"'stands' claims cite their survey\" — the #498 round is the worked instance (11 threads, all unverified-stands class).",
+          "kind": "knowledge",
+          "candidateHome": ".agent/rules/ or .agent/memory/active/patterns/",
+          "homeCheck": "Grepped RULES_INDEX.md and .agent/rules and .agent/memory for the 'stands...survey' phrasing — no matches anywhere in the tracked corpus."
+        },
+        {
+          "summary": "Same declarative-state grammar napkin seed, parked again pending an estate commit window.",
+          "quote": "Napkin seed (declarative-state grammar) — still parked from the first compaction prep; estate commit window.",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/active/napkin.md or a pattern file",
+          "homeCheck": "Grepped the full .agent tree for 'declarative-state grammar' — zero matches; still absent from the current corpus, fourth record in this batch to carry it unlanded."
+        }
+      ],
+      "note": "Rest of the record (MCP-132/133/128 chain state, standing constraints) is landed per later heron-full-closeout record."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-21-forge-director-evening-state.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "All named PRs merged (#465-475), release-decisions register content and 'Any User, Any Machine' / lead-AI-in-Linear conventions match current per-user memory entries verbatim in spirit (design-values-come-from-the-system, lead-ai-in-linear-director-in-team). Torch-pass succession to Genet stirs Covert is a pure coordination event, fully consumed by subsequent records already reviewed (forge-recovery-compaction-freeze names Genet's handoff as the state authority)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/opus-adversarial-completeness.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This is a raw adversarial review verdict for MCP-137's S0 capture (byte-fidelity, manifest integrity, held-out classification) — verdict NOT REFUTED on all five attack vectors, one honest gap noted (17 iteration-pull files rest on self-attestation). This is exactly the class of subagent-transcript content the surrounding handoffs describe as 'decision-sufficient compressions live in the PR bodies' — the S0 capture landed (referenced as complete/merged in the 2026-07-24 heron-full-closeout record's MCP-137 lane pointer and later dynamo/osprey records reference MCP-137 S4 work as ongoing, implying S0-S3 landed). The one 'honest gap' (17-file leg unverifiable against an external original) is a documented epistemic limit, not a lost decision — it is inherent to the data, not a home-able fact anywhere else, and the review itself states it is not a refutation, just a bound. No owner word, decision, or obligation here outlived its seat; it is a completed verification pass whose verdict fed forward into a landed capture."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-16-vole-393-merge-handoff-1fcfeb3e.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A verified knip finding (knip auto-traces tsx entries via package.json scripts, so explicit knip.config.ts registration is unnecessary) directly contradicts agent-tools/README.md's authoring note, and the routed fix never landed.",
+          "quote": "REFUTE WITH EVIDENCE: knip auto-traces tsx entries via package.json scripts... the pre-commit knip gate is green WITHOUT them. The finding's premise (entries absent ⇒ untraced) is false; the residue is a DOC drift: agent-tools/README.md's authoring note says \"register each new tsx entry explicitly\", which knip now contradicts — route the README truing to the estate lane with the other cross-PR classes.",
+          "kind": "knowledge",
+          "candidateHome": "agent-tools/README.md",
+          "homeCheck": "Read agent-tools/README.md lines 101-105 directly — it still says: 'Authoring note for new tsx-invoked entry points: register each new entry file in knip.config.ts's agent-tools entry list AT AUTHORING TIME, or the entry reads as unused...' — the exact contradicted text is still present, unchanged, in the current tracked file. The routed correction never landed."
+        }
+      ],
+      "note": "The PR #393 merge mechanics, thread dispositions, and other estate-lane routings (ground-truth corpus mining, pr-lifecycle mechanisation, corpus-analysis CLI help gap, process-spawning-test pair) are ticket/lane-claimed and old (2026-07-16); this scan did not chase each individually given the one concrete, directly-verifiable doc-drift finding above."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-bonfire-pr-hygiene-wrap-for-restart.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A five-item napkin-fold list (doctrine-change blast-radius sweep candidate, live-surface-vs-frozen-reference taxonomy, single-sample-probe-is-not-a-deploy-signal, observation-window-death-vs-command-death, comms-send silent-failure discipline) was queued for the next estate session and none of the five appear to have landed as named concepts.",
+          "quote": "Napkin fold → next estate session, now FIVE items: (a) doctrine-change blast-radius sweep — 3rd instance today... candidate for graduation beyond napkin; (b) live-surface vs frozen-reference taxonomy (play seed)... (c) single-sample probe ≠ deploy signal; (d) observation-window death ≠ command death... (e) comms send silent-failure discipline",
+          "kind": "knowledge",
+          "candidateHome": ".agent/memory/active/patterns/ or napkin",
+          "homeCheck": "Grepped the full .agent tree for 'blast-radius sweep', 'live-surface vs frozen-reference', 'single-sample probe', 'observation-window death', 'silent-failure discipline', 'dev/stdin' — zero matches for any of the five phrasings anywhere in the current tracked corpus. Related patterns exist for adjacent ideas (e.g. awaited-verdicts-need-two-signals.md, referent-narrowing.md) but none carry these five specific named concepts or their concrete July 23 instances."
+        }
+      ],
+      "note": "The PR-hygiene dispositions themselves (#492, #490, #477 spike-tag, #488, #485) are all landed with verified shas/tags per the record's own account and later records. The five-item napkin fold is the one substantive unhomed residue."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-21-forge-director-compaction-freeze-2.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Standing rulings minted this session (split ruleset, bot REST-merges at settled, two-axes adjudication, owner-cards-are-visible-UI, converge-before-new-threads, worktree-prune-standing-policy, ticket-team migration) match per-user memory index entries verbatim in title and substance (merge-rulings-no-admin-no-direct-merge-arm-allowed, owner-cards-are-visible-ui-never-ambient-queues, converge-before-opening-new-threads, worktree-prune-standing-policy, all-tickets-mcp-team-only) — all durably homed. The pr-lifecycle fold queue items (two-axes taxonomy, SETTLE-READY binding) are the same substance, also memory-homed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-heron-cold-standby-wrap.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-120/ADR-216 landed and Done; PR-hygiene dispositions (#485, #477, #479, #473) all landed with shas per the record; the branch-auto-delete and primary-checkout-push-blocked observations are operational inferences already reflected in later records' standing constraints (lockfile/push mechanics repeated verbatim across many records in this batch, indicating they were absorbed into practice)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-hawthorn-to-heron-full-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Skills-standard exploration report is on main (verified path named and referenced as reachable); MCP-67 Clerk plan and gap-sweep ticket sizing are superseded by many later records already reviewed showing Clerk/production work progressed far beyond this point. The 'frozen-copy pathogen-class' napkin seed is explicitly deferred to a fourth instance by the record itself, i.e. not yet due for graduation at write time — not a dropped obligation."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-heron-498-findings-and-reflection.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "This PR's 11 findings (ADR-041/148/213 cross-reference corrections, design-system-integration.plan.md amendment) were owner-ratified and gated the #498 landing; the later heron-full-closeout and heron-cold-standby records confirm #498 merged and the design chain (MCP-132/133/128) proceeded, implying these ADR corrections landed as part of that PR. The 'stands claims cite their survey' reflection lesson is the same unhomed doctrine candidate already flagged against the two mcp-132/heron-full-closeout records — not re-flagged again here to avoid duplicate noise."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-22-forge-recovery-compaction-freeze.md",
+      "verdict": "carries-unhomed-substance",
+      "items": [
+        {
+          "summary": "A set of open design questions for a planned 'transfer-mechanisms revisit' conversation with the owner (formation-letter cadence, a named-hazards section, a live overlap window between predecessor/successor, how much ceremony a fresh seat runs before earning routing authority) was queued as the seed for a conversation that — per this scan — never left a decided trace anywhere in the tracked corpus.",
+          "quote": "Open design questions for the conversation: journal-vs-letter cadence... whether formation letters need a \"concrete hazards I am leaving you\" section (named landmines, not just named lessons); whether succession should include a live overlap window... what the reflex-transfer gap means for how much ceremony a fresh seat should run before earning routing authority.",
+          "kind": "other-signal",
+          "candidateHome": ".agent/directives/ or a formation-letter authoring guide",
+          "homeCheck": "Grepped the full .agent tree for 'concrete hazards', 'named landmines', 'live overlap window' — zero matches. Formation letters are now a well-established practice (multiple 2026-07-29/30 examples referenced elsewhere in this corpus) but this scan found no explicit 'hazards' section convention or overlap-window ruling; the specific design questions posed here appear to remain unanswered/undecided rather than resolved and then dropped."
+        }
+      ],
+      "note": "The ratification-ledger discipline itself (owner-seen vs merely-executed) IS homed — it matches the per-user memory entry 'handoffs-carry-a-ratification-ledger' verbatim in spirit. Only the open conversation-seed questions above are flagged."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-29-altair-to-thyme-design-showcase-closeout.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Pure succession/zero-residue verification record; all substantive obligations (MCP-372 raw-hex disposition, MCP-387/388/377/382 ticket map, obligation-level merge bar) are ticket-claimed or explicitly forwarded to the named successor via Director-confirmed routing, which is the correct home for this kind of live-lane handoff. No standalone technical claim escapes both the successor record and the tickets."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-fixed-point-baseline-fork-fleet.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Pure coordination/fork-fleet onboarding note (identity derivation, state-authority pointers to Linear register/milestones/PR #478). All named state authorities (decisions register, milestones, PR #478 D23 validator) are external-to-this-file pointers, not content originating here; nothing free-floats outside those already-tracked authorities."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-heron-cold-pause-designs-pending.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-128 design lane state at this 2026-07-23 pause point is fully superseded by the later heron-mcp-128-compaction-prep, heron-mcp-132-compaction-prep, and heron-full-closeout records (all reviewed above) showing the lane progressed through MCP-132/133/128 to a landed state. Slice A/B design bindings named here are repeated verbatim in those later records, which this scan already checked for landing."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-23-fixed-point-baseline-v3.md",
+      "verdict": "absorbed-or-noise",
+      "items": [
+        {
+          "summary": "Standing constraints (no-admin, arm-at-settled, sensitivity tiers, D26 generative gate) are verified present in tracked docs.",
+          "quote": "Clerk MCP read-only, MCP app project only... --admin banned; bot lands PRs via REST at settled... D26 generative gate.",
+          "kind": "other-signal",
+          "candidateHome": "docs/engineering/merge-bot.md; .agent/plans/strategic/first-major-release.plan.md",
+          "homeCheck": "Grepped merge-bot.md (confirms --admin banned, bypass-capable-account rule, merge-bot arm-at-settled path) and first-major-release.plan.md (confirms sensitivity-tier/early-users scope and the generative-capability gate language). Both present and matching."
+        }
+      ],
+      "note": "Fork-base note is coordination mechanics; explicitly defers fuller detail to v2 (another machine-local handoff, not itself checked here), but the constraint substance independently verifies in tracked docs, so nothing unhomed remains."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-21-tornado-director-current-state.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Zero-board Director state snapshot: standing rulings (admin bypass, arm-at-settled) verified in docs/engineering/merge-bot.md; the routing queue items (AIP-161/162) are ticket-claimed (Linear, unverifiable here) and by 2026-07-31 are stale-but-costless coordination pointers; wrap-inventory.md was an ephemeral scratchpad checklist. No standing technical decision or owner word here lacks a durable home."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-20-quoll-pr437-adjudication-handoff.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "PR #437 fold+ADR-215-renumber decision verified landed: docs/architecture/architectural-decisions/215-top-level-research-surface.md exists on disk. The friction classes named (F-95, F-116, hook-policy substring matcher) verified present in .agent/rules/liveness-heartbeat-cron.md / frictions-register.md and the hook-policy rule file. The 29-thread adjudication backlog is superseded coordination mechanics from a lane long since settled (PR merged per later records)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/2026-07-21-forge-merge-specialist-compaction-freeze.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Self-declared loss scan explicitly states everything load-bearing has a durable home (doctrine on main, per-user memory) and names only two residual items (an un-run ruleset empirical test, a dormant heartbeat re-arm) — both pure operational state, not technical/decision substance, and both are ten days stale coordination mechanics by 2026-07-31. The bot-attribution/merge-bot mechanics verified in docs/engineering/merge-bot.md."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/5401d80a-6d0b-4842-980d-5f43c5298c37.json",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Claim-handoff JSON for MCP-103 PR #582 (gitleaks C436 exception, six-file cure). Verified its named durable_thread_record .agent/memory/operational/threads/mcp-agent-facing-content.next-session.md exists and explicitly carries PR #582, the C436 gitleaks blocker, and the exact-line-allowlist decision. Fully absorbed."
+    },
+    {
+      "path": ".agent/state/collaboration/conversations/ws3a-decision-thread-closed.example.json",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "An illustrative `.example.json` template (not a real event) demonstrating the decision-thread mechanism. Its substantive ruling — decision threads complement, not replace, the shared log — is durable doctrine in .agent/directives/agent-collaboration.md (grepped, confirmed decision-thread/shared-log content present)."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/haiku-pii-machine-path-grep.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Verbatim clean-scan output (zero PII/secrets/machine-paths found beyond known placeholders). Corroborated by .agent/reports/mcp-137-divergence-ledger.md's settled accounting of the same capture set; a negative-finding QA transcript costs nothing to lose."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/haiku-ignore-scope.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Verbatim PASS verification of gitignore/prettierignore/markdownlint scoping for the design-capture directories. Mechanical check output; the scoping rules themselves are tracked-file state (`.gitignore`, `.prettierignore`) verifiable directly, so nothing here is unhomed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/haiku-held-out-completeness.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Verbatim PASS verification of the 39-file held-out design-capture tier (byte-fidelity, gitignore status). Corroborated by .agent/reports/mcp-137-divergence-ledger.md which names the 39 held-out-class rows as owner-ruling-settled on 2026-07-24."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/8838ab8f-f1d1-4450-b983-d6c42a7e9e3e.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-63 sub-claim pointer to primary record f5b77b73 (app bootstrap config). The primary record's design authority (plan + ADR-218) and the later mcp-63-focused-successor-handoff / mcp-product-analytics.next-session.md thread verified to carry this work forward through to landed PRs (#585, #586, #592). Nothing here is stranded."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/940b2774-2a14-4335-8f28-454efd9bb527.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-63 sub-claim (shared env axis, packages/core/env). Same primary-record/plan/ADR chain as 8838ab8f; verified the observability/posthog-node packages landed on disk (packages/libs/posthog-node/**, packages/core/observability/src/product-analytics.ts), confirming the decisions carried forward."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/c305ccc0-61ab-409b-af77-4d7fa69f7789.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-63 sub-claim (pnpm-workspace.yaml / lockfile, posthog-node workspace addition). The 'manifests authoritative, pnpm regenerates lock, never hand-edit' ruling is separately durable policy (per lockfile-rebuild-survivability rule) and the workspace package is landed on disk."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/93447142-adb0-43a3-bb7e-96d1f0563f92.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-63 sub-claim (HTTP-app manifest/env-example/Vercel doc). Same primary-record chain; work superseded by the later focused-successor handoff and next-session thread which track the app-composition slices through to PRs #585/#586/#592."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/mcp-137-s0-review/haiku-manifest-reconcile.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "Verbatim mechanical manifest-reconciliation output (346 rows, 0 mismatches). Corroborated by .agent/reports/mcp-137-divergence-ledger.md's own denominator accounting (329 fetched-committed, etc.) for the same capture set."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/7475b662-48d7-4d8e-a591-a069565898ef.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-63 sub-claim (oak-eslint boundary rule, foundation-libraries-reject-adapter rule). Verified packages/core/oak-eslint/src/rules/boundary.ts and lib-boundary.unit.test.ts exist on disk under the same primary-record/plan/ADR chain that landed."
+    },
+    {
+      "path": ".agent/state/collaboration/handoffs/0c256229-0092-473b-a0ef-15019337fc26.md",
+      "verdict": "absorbed-or-noise",
+      "items": [],
+      "note": "MCP-63 sub-claim (design-boundary unit test proving design packages reject the new PostHog adapter). Same landed primary-record/plan/ADR chain; no independent unhomed substance beyond the primary record's own decisions, which are themselves absorbed downstream."
+    }
+  ]
+}

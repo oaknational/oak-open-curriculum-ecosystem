@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 
+import { collaborationAgentIdWriteSchema } from '../collaboration-state/agent-id.js';
 import { validateCollaborationJsonFileText } from '../collaboration-state/collaboration-json-validation.js';
 import { updateJsonFileWithRetry } from '../collaboration-state/index.js';
 
@@ -63,15 +64,16 @@ function parseIntent(value: unknown): CommitIntent {
   if (!isRecord(value) || !isCommitQueuePhase(value.phase)) {
     throw new Error('commit_queue entries must be complete intent objects');
   }
-  if (!isStringArray(value.files) || !isAgentId(value.agent_id)) {
-    throw new Error('commit_queue entries must contain agent_id and files');
+  const intentId = requireStringField(value, 'intent_id');
+  if (!isStringArray(value.files)) {
+    throw new Error(`commit_queue entry ${intentId} must contain a files array`);
   }
 
   return {
     ...value,
-    intent_id: requireStringField(value, 'intent_id'),
+    intent_id: intentId,
     claim_id: requireStringField(value, 'claim_id'),
-    agent_id: value.agent_id,
+    agent_id: parseIntentAgentId(value.agent_id, intentId),
     files: value.files,
     commit_subject: requireStringField(value, 'commit_subject'),
     queued_at: requireIsoDateTime(requireStringField(value, 'queued_at'), 'queued_at'),
@@ -81,6 +83,36 @@ function parseIntent(value: unknown): CommitIntent {
   };
 }
 
+/**
+ * Boundary validation for an INTENT row's identity: the canonical
+ * PDR-076a write schema (UUID v5 `id` required). Every live writer emits
+ * `id` (`createIntent` parses through the same schema), so a failure here
+ * means registry corruption — the error names the offending intent so a
+ * blocked agent can surface it precisely. Recovery is an owner-run
+ * removal of the named row; do not work around it.
+ */
+function parseIntentAgentId(value: unknown, intentId: string): CommitQueueAgentId {
+  const parsed = collaborationAgentIdWriteSchema.safeParse(value);
+  if (!parsed.success) {
+    const issues = parsed.error.issues
+      .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
+      .join('; ');
+    throw new Error(
+      `commit_queue entry ${intentId} carries an invalid agent_id ` +
+        `(PDR-076a requires the UUID v5 id on intents): ${issues}. ` +
+        `Every live writer emits id, so this indicates registry corruption — ` +
+        `surface to the owner; recovery is removing intent ${intentId} (owner-run).`,
+    );
+  }
+  return parsed.data;
+}
+
+/**
+ * Claims are PRESERVED as written (the registry's compatibility contract:
+ * unrecognised and legacy content survives write-back byte-identical).
+ * An id-less legacy `agent_id` is legal here — ownership checks narrow
+ * through the canonical comparator, which never matches an id-less row.
+ */
 function parseClaim(value: unknown): CommitQueueClaim {
   if (!isRecord(value)) {
     throw new Error('claims entries must be objects');
@@ -98,16 +130,6 @@ function isRecord(value: unknown): value is JsonObject {
 
 function isStringArray(value: unknown): value is readonly string[] {
   return Array.isArray(value) && value.every((entry) => typeof entry === 'string');
-}
-
-function isAgentId(value: unknown): value is CommitQueueAgentId {
-  return (
-    isRecord(value) &&
-    typeof value.agent_name === 'string' &&
-    typeof value.platform === 'string' &&
-    typeof value.model === 'string' &&
-    typeof value.session_id_prefix === 'string'
-  );
 }
 
 function requireStringField(record: JsonObject, key: string): string {

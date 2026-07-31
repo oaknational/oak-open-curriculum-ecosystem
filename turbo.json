@@ -105,13 +105,18 @@
         "src/**/*.ts",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts",
-        // The design system is copied into public/oak-ds at build time. It has
-        // no build script, so ^build contributes no hash leg for it — without
-        // these inputs a design-system edit replays a stale bundle.
+        // The design system is copied into public/oak-ds at build time. It
+        // has no build script, but its file changes still reach this task's
+        // hash through ^build (probed 2026-07-31 on Turbo 2.10.6: a
+        // scriptless workspace dependency's file change moved the
+        // dependent's #build hash). These explicit inputs pin the
+        // stale-bundle invalidation contract to the files themselves rather
+        // than riding that implicit, version-dependent graph hashing.
         "$TURBO_ROOT$/packages/design/oak-design-system/**",
         "!$TURBO_ROOT$/packages/design/oak-design-system/studio-source/**",
-        // Same reasoning for the brand artwork: copied at build time, no build
-        // script of its own, so nothing else contributes a hash leg for it.
+        // Same contract for the brand artwork: copied at build time, no
+        // build script of its own; the explicit leg keeps its invalidation
+        // pinned too.
         "$TURBO_ROOT$/packages/design/oak-design-assets/**"
       ]
     },
@@ -403,7 +408,26 @@
       "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
-      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"]
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "e2e-tests/**/*.ts",
+        "vitest.e2e.config.ts",
+        "$TURBO_ROOT$/vitest.e2e.config.base.ts",
+        "$TURBO_ROOT$/test.setup.no-network.ts"
+      ]
+    },
+    "@oaknational/agent-tools#test:e2e": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "cache": true,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "e2e-tests/**/*.ts",
+        "vitest.e2e.config.ts",
+        "$TURBO_ROOT$/vitest.e2e.config.base.ts",
+        "$TURBO_ROOT$/test.setup.no-network.ts",
+        "$TURBO_ROOT$/.codex/hooks/practice-session-identity.mjs"
+      ]
     },
     "test:ui": {
       "dependsOn": ["build"],

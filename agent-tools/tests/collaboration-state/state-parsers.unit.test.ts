@@ -300,6 +300,14 @@ describe('parseDirectedCommsMessage', () => {
 
     expect(event.tags).toEqual(['failure-mode']);
   });
+
+  it('round-trips the optional in_response_to threading edge on a directed message', () => {
+    const event = parseDirectedCommsMessage(
+      JSON.stringify({ ...directedPostMigration, in_response_to: 'antecedent-event-1' }),
+    );
+
+    expect(event.in_response_to).toBe('antecedent-event-1');
+  });
 });
 
 describe('parseCommsEvent', () => {

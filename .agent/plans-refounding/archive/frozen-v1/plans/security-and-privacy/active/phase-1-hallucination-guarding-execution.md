@@ -86,7 +86,7 @@ cp .agent/plans/security-and-privacy/evidence-bundle.template.md \
   - required canonical docs updated or explicitly marked no-change with rationale
   - consolidation review completed using `jc-consolidate-docs`
 - Deterministic validation:
-  - `rg -n "## Phase 1|Status:|ADR-119 update or rationale|practice.md update or rationale|prog-frame update or rationale|Consolidation review" .agent/memory/operational/documentation-sync-logs/security-and-privacy.md`
+  - `rg -n "## Phase 1|Status:|ADR-119 update or rationale|practice.md update or rationale|practice-application update or rationale|Consolidation review" .agent/memory/operational/documentation-sync-logs/security-and-privacy.md`
   - `test -f docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`
   - `test -f .agent/practice-core/practice.md`
 

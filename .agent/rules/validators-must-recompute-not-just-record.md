@@ -65,6 +65,24 @@ This rule applies to any validator-shaped or check-shaped tool that:
 - Could (with the same inputs) recompute that value.
 - Does not currently do so.
 
+The rule extends beyond content hashes to **identity and reference
+integrity at the touchpoint** (consolidated 2026-07-30 from the
+identifier-integrity cluster — three instantiations the estate paid in
+one week, one problem: the corpus records truth but nothing recomputes
+it where it is used):
+
+- **Liveness read from a stored status** — a claims/status row is a
+  recording; freshness is recomputed against the clock at read time,
+  never inherited from the row's own label.
+- **Sequential identifiers at write time** — a register whose next id
+  is "the last one plus one, by eye" gets duplicate ids under
+  concurrent writers (F-150 assigned twice by different sessions);
+  the writer recomputes the next id from the current corpus at write.
+- **Id references at use** — an event/claim/ticket id typed from
+  memory is a fabricated value of the right type; derive the id from
+  the store in the same command that uses it, and read back the
+  written artefact's reference after the write.
+
 It does NOT apply to:
 
 - Pure recording surfaces explicitly framed as audit logs (the
@@ -81,6 +99,17 @@ It does NOT apply to:
   accept)
 - `no-warning-toleration.md` (the related rule for warning-class
   signals: also fail, also do not defer)
+
+## Worked instance — stored expiry nobody recomputes (2026-07-2x)
+
+The claims registry stores `freshness_seconds` but no read surface
+recomputed it: a stale Director claim ran ~28 hours beyond its freshness
+bound with a completed handoff already recorded, and the commit queue
+accumulated ~136 never-archived abandoned entries — raw-JSON readers bypass
+any CLI-side cure, so the recompute must live in every read surface that
+renders the state, not only in the writer. (Recorded by the 2026-07-31
+comms-corpus run; the registry-side cure is tooling work for the
+agent-tooling backlog.)
 
 ## Enforcement
 

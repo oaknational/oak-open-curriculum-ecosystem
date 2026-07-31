@@ -146,11 +146,10 @@ function logBootstrapPhaseError(
 /**
  * Sets up base Express middleware: JSON, correlation, and debug request logging.
  * Error handlers register later for Sentry compatibility. Not a route handler:
- * CodeQL #69 and #90 (lines 146 `app.use(createCorrelationMiddleware(...))`
- * and 151 `app.use(createRequestLogger(...))`) are misclassifications —
+ * CodeQL #69 and #90 (the `app.use(createCorrelationMiddleware(...))` and
+ * `app.use(createRequestLogger(...))` registrations) are misclassifications —
  * correlation and request-logger middleware are cross-cutting, not
- * auth-bearing. Rate limiting applies at auth-bearing routes
- * (see `auth-routes.ts`).
+ * auth-bearing, and volumetric control is owned at the edge (ADR-219).
  */
 export function setupBaseMiddleware(
   app: Express,
@@ -237,10 +236,13 @@ export function initializeAppInstance(log: Logger): {
   const app: ExpressWithAppId = express();
   app.__appId = appId;
 
-  // Trust exactly one reverse proxy (Vercel CDN) so req.ip reflects the
-  // real client IP from X-Forwarded-For rather than the CDN's address.
-  // This MUST be set before any rate-limiting middleware.
-  app.set('trust proxy', 1);
+  // Deliberately NO `trust proxy` setting: with it, Express's proxy-aware
+  // getters (req.protocol, req.secure, req.host, req.ip) read client-supplied
+  // X-Forwarded-* headers — a spoofing hazard this app's origin derivation
+  // refuses by hand (see canonical-origin.ts and get-prm-url.ts). Nothing here
+  // consumes a proxy-derived value: the request logger's ip field is fully
+  // redacted before any sink, and Host-based guards read the raw header
+  // (ADR-219).
 
   const timer = createPhasedTimer();
   return { app, timer, appId };

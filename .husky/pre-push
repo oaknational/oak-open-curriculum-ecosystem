@@ -87,7 +87,14 @@ echo "🔭 Checking schema cache staleness (advisory, non-blocking)..."
 pnpm --filter @oaknational/agent-tools ci-schema-drift-check || true
 
 echo "🔤 Running build, type-check, lint, and tests..."
-if ! pnpm turbo run --continue sdk-codegen build type-check lint test test:e2e test:ui; then
+# Same env hygiene as pre-commit's turbo step (full rationale there): git
+# exports repo-discovery env to hooks — GIT_DIR, and a GIT_INDEX_FILE that
+# during real commits is a transient lock file — and a build tool's
+# children must not inherit either. Unset the trio for the turbo child
+# only (same load-bearing narrow scope); turbo re-derives the repo from
+# cwd in every checkout shape. No gate is narrowed. Dated account: MCP-414.
+if ! env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE \
+  pnpm turbo run --continue sdk-codegen build type-check lint test test:e2e test:ui; then
   echo "❌ Turbo quality gate checks failed!"
   exit 1
 fi

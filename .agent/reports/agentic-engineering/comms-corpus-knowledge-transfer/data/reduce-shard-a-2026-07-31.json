@@ -1,0 +1,2609 @@
+{
+  "ok": true,
+  "shard": "A",
+  "leafCount": 537,
+  "candidates": [
+    {
+      "id": "A01",
+      "statement": "Kit theme-token polarity defects on #413: ::selection used --color-accent (unreadable in dark/HC) and the HC block resolves --color-accent and --text-primary both to --oak-black-true causing black-on-black for bg-accent-brand fills. Cures are --state-selected and --surface-decorative-5.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w02-L02",
+        "w02-L22"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w02"
+      ],
+      "homeClaim": "packages/design/oak-design-system globals.css + colors_and_type.css (landed in PR #413, bfdcb63ba)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both cures landed as code in the merged #413 kit files."
+    },
+    {
+      "id": "A02",
+      "statement": "Kit robustness defects: oak-theme.js line 4 contains a literal closing-script sequence that HTML-truncates the documented inline-embed recipe so window.oakTheme never installs; Turbopack mangles module-resolved fs paths (EBADF) so the file is served from a tracked public/ copy with a byte-parity test.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w01-L25",
+        "w01-L26"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w01"
+      ],
+      "homeClaim": "packages/design/oak-design-system KNOWN-ISSUES + kit consuming-nextjs.md (kit-robustness batch PR #431)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Severe silent-failure defect whose durable landing is only claimed, not evidenced, in the leaves."
+    },
+    {
+      "id": "A03",
+      "statement": "Kit motion-cascade contradiction: components.css's prefers-reduced-motion block hard-forces --motion-instant on .oak-* controls, defeating the documented [data-motion='full'] re-enable; unfixed, routed to the studio sync-back/motion-cascade-authority batch.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w01-L27",
+        "w01-L33"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w01"
+      ],
+      "homeClaim": "design-system KNOWN-ISSUES + studio sync-back batch (ws-design-sync-corrections) ticket",
+      "proposedDisposition": "needs-home",
+      "rationale": "A confirmed live defect explicitly deferred with only a batch name, no evidenced durable record."
+    },
+    {
+      "id": "A04",
+      "statement": "Kit's Roboto Mono was Apache-2.0-mislabelled and network-loaded from fonts.googleapis.com; corrected to SIL OFL 1.1 (verified upstream) and localised to a tracked @font-face variable font, making the consumable surface zero-network.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w01-L22"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w01"
+      ],
+      "homeClaim": "KNOWN-ISSUES #12 cure landed via PR #420",
+      "proposedDisposition": "already-homed",
+      "rationale": "Executed as a landed licence/asset change with its own known-issues entry."
+    },
+    {
+      "id": "A05",
+      "statement": "Pre-integration audit falsified the studio's WCAG 2.2 AA claim on four points: 320px reflow failure in masthead nav, invisible dark-theme focus ring, colour-safe theme unreachable from the UI, and dark-lemon decorative link contrast at 4.48:1.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L24",
+        "w07-L25",
+        "w07-L23"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w07"
+      ],
+      "homeClaim": "design-system KNOWN-ISSUES (#13 covers only dark-lemon) — remaining three need a durable accessibility-defect record",
+      "proposedDisposition": "needs-home",
+      "rationale": "Only one of the falsified claims is evidenced as recorded; the rest exist solely in the stream."
+    },
+    {
+      "id": "A06",
+      "statement": "'Green parts, red composition' is a fleet pattern at four instances: ruleset x semantic-release bypass, Vercel ignore-script x version bump, turbo cache x live-API codegen, and token-level composed focus ring passing individually but failing composed.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L22",
+        "w07-L23"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w07"
+      ],
+      "homeClaim": "graduated fleet pattern under .agent/memory/active/patterns/",
+      "proposedDisposition": "already-homed",
+      "rationale": "Leaf states explicit graduation from napkin seed to fleet pattern at its third instance."
+    },
+    {
+      "id": "A07",
+      "statement": "Owner-ratified button visual doctrine: interaction physics is universal (hover raised/lighter, press below rest/darker) but colour expression must be per-theme tokens, never hardcoded absolute colours; a hardcoded candy-shadow rendered magenta in the black-and-white theme.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w10-L30",
+        "w10-L31",
+        "w10-L32"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w10"
+      ],
+      "homeClaim": "design-system doctrine doc / ADR for themed-token expression",
+      "proposedDisposition": "needs-home",
+      "rationale": "An owner-ratified design rule stated only as banked doctrine in the stream."
+    },
+    {
+      "id": "A08",
+      "statement": "assets/logo-full-official.svg and logo-acorn-official.svg were byte-identical to their -black siblings; duplicates deleted and consumers re-pointed to source-traceable names, a genuine full-colour asset would be new artwork.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w10-L33",
+        "w11-L01"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w10",
+        "w11"
+      ],
+      "homeClaim": "landed in PR #541 (MCP-164 cures, merge 02a82742)",
+      "proposedDisposition": "already-homed",
+      "rationale": "The deletion and re-pointing shipped in a merged PR."
+    },
+    {
+      "id": "A09",
+      "statement": "Presence/consistency verification is blind to omission defects: two review rounds on #420 passed by grep sweep and a code-expert SOUND verdict yet missed real omissions (sibling-removal instructions, OFL condition-2 licence text).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w01-L23"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w01"
+      ],
+      "homeClaim": "per-user memory verify-obligations-not-just-presence.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Leaf names the memory file it was homed to."
+    },
+    {
+      "id": "A10",
+      "statement": "Drive-wide generator 'closure claims over an open set' recurred in five-plus costumes across #424/#413/#414/#426/#432; the authoring-time cure is future-work-items-are-pointers plus reclassifying closed-world counts to named value classes with exemplars.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w02-L03",
+        "w02-L04",
+        "w01-L19",
+        "w01-L20",
+        "w03-L36"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w01",
+        "w02",
+        "w03"
+      ],
+      "homeClaim": ".agent/experience/2026-07-20-why-every-review-arc-hit-the-same-generator.md (484afd76e) + open-set clause/PDR-129 landed via PR #446",
+      "proposedDisposition": "already-homed",
+      "rationale": "Retrospective is committed and the graduation landed in the consolidation PR."
+    },
+    {
+      "id": "A11",
+      "statement": "pr-lifecycle step-back doctrine: arms fire on two consecutive non-decreasing non-zero rounds or four settled non-zero rounds; a second step-back on the same PR is terminal for fix-pushing and routes to Director/owner rather than another cure push.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w01-L30",
+        "w02-L33",
+        "w03-L05",
+        "w03-L14",
+        "w04-L22",
+        "w01-L20"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w01",
+        "w02",
+        "w03",
+        "w04"
+      ],
+      "homeClaim": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md step-back doctrine",
+      "proposedDisposition": "already-homed",
+      "rationale": "Repeatedly applied as SKILL-encoded doctrine with worked precedents."
+    },
+    {
+      "id": "A12",
+      "statement": "Settled-round merge predicate: zero unresolved threads/findings, every reviewer leg SATISFIED or SKIPPED, >10min quiet window since latest tip-bound review, checks green, and the executing seat recomputes at the merge boundary; READY+CLEAN PRs merge ahead of granted-but-unsettled ones.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w01-L15",
+        "w01-L16",
+        "w02-L32",
+        "w03-L06"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w01",
+        "w02",
+        "w03"
+      ],
+      "homeClaim": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md settled-round predicate",
+      "proposedDisposition": "already-homed",
+      "rationale": "Adopted drive-wide and folded into the pr-lifecycle skill."
+    },
+    {
+      "id": "A13",
+      "statement": "PDR-131 merge-concurrency doctrine ratified: settled-READY plus green checks arm auto-merge under Director grant and serial merge slots retire, motivated by 11 settled+green PRs landing in ~6 minutes with zero breakage.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w04-L01",
+        "w04-L02"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w04"
+      ],
+      "homeClaim": "PDR-131 + .agent/reports/agentic-engineering/merge-concurrency-doctrine-proposal-2026-07-20.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ratified decision record with a committed proposal report."
+    },
+    {
+      "id": "A14",
+      "statement": "PR throughput register founding row (7-day window, 67 merges, 9.57/day, p50 135min, p90 802min) with a named falsifier, plus three register implementation cures: atomic hard-link header write, proleptic-Gregorian date arithmetic, and bounded merged:SINCE..UNTIL search ranges.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w04-L09",
+        "w04-L08",
+        "w04-L35",
+        "w04-L36"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w04"
+      ],
+      "homeClaim": ".agent/reports/agentic-engineering/pr-throughput-register.md + register code (PR #448)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Data and cures live in the committed register and its code."
+    },
+    {
+      "id": "A15",
+      "statement": "PDR-132 'changeset health: round budgets bind at authoring time' commissioned fast-lane and merged as doctrine on main, delivered self-exemplifying (8 files, ~285 adds, one story).",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w04-L32",
+        "w09-L20"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w04",
+        "w09"
+      ],
+      "homeClaim": "PDR-132 (landed on main)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Merged decision record."
+    },
+    {
+      "id": "A16",
+      "statement": "Merge queues are structurally unusable on this repo: merge groups run only quality-gates and Vercel, because CodeQL has no merge_group trigger and SonarCloud analyses PRs only, so two required contexts can never arrive and the queue wedges permanently; owner removed the merge_queue rule rather than accept any force-pass workaround.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w03-L27",
+        "w03-L28",
+        "w03-L29",
+        "w03-L24",
+        "w03-L25"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w03"
+      ],
+      "homeClaim": "merge-mechanics doctrine (pr-lifecycle SKILL) or an ADR on branch-protection/merge-queue posture",
+      "proposedDisposition": "needs-home",
+      "rationale": "A vendor-verified structural verdict that will be re-litigated if it is lost with the stream."
+    },
+    {
+      "id": "A17",
+      "statement": "Enqueueing under a merge queue implicitly arms auto-merge, and removing the queue rule does not disarm those intents — it releases them (eleven PRs cascade-merged with no explicit command). Cure: disarm every armed intent before removing a merge-queue rule.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w03-L30",
+        "w03-L26"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w03"
+      ],
+      "homeClaim": "pr-lifecycle SKILL merge-boundary section / frictions register",
+      "proposedDisposition": "needs-home",
+      "rationale": "A real bypass of the explicit-merge boundary with a named cure, homed only by guess."
+    },
+    {
+      "id": "A18",
+      "statement": "Ruleset 13402577 listed OrganizationAdmin as an always-mode bypass actor, so the shared fleet credential silently bypassed all required checks fleet-wide (#437 merged behind red Sonar); the owner removed the bypass entirely after the merge bot was proven.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w04-L26",
+        "w04-L27",
+        "w05-L02",
+        "w05-L14"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w04",
+        "w05"
+      ],
+      "homeClaim": "durable incident record PR #518 (corrected and landed) + GitHub ruleset config",
+      "proposedDisposition": "already-homed",
+      "rationale": "Incident narrative was explicitly driven into a landed durable record."
+    },
+    {
+      "id": "A19",
+      "statement": "Defining specimen for reading per-check verdicts by name from structured JSON: an awk column-parse of `gh pr checks` mangled 'SonarCloud Code Analysis fail' into '1 Code', losing the verdict column and letting a red PR read green.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w04-L28"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w04"
+      ],
+      "homeClaim": ".agent/rules/read-verdicts-by-name-never-column-parse.md + AIP-157/MCP-40 D1",
+      "proposedDisposition": "already-homed",
+      "rationale": "Rule file and ticket both named as carrying the requirement."
+    },
+    {
+      "id": "A20",
+      "statement": "Merge-execution standing rules: --admin always banned, direct gh pr merge banned on bypass-capable accounts, merge-commit method only (never squash/rebase), arming auto-merge after settle always allowed, and the sanctioned direct path is the merge bot's REST call at settled.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w05-L01",
+        "w10-L02",
+        "w05-L24",
+        "w09-L49",
+        "w05-L12"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w05",
+        "w09",
+        "w10"
+      ],
+      "homeClaim": "pr-lifecycle Phase 7 merge boundary + docs/engineering/merge-bot.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner rulings encoded in the skill's merge boundary and the merge-bot doc."
+    },
+    {
+      "id": "A21",
+      "statement": "Merge bot Jimbot Oakington III (app 4352989) operational with pull_requests:write + contents:write scoped to this repo; standing mutation form is GH_TOKEN=$(agent-tools merge-bot mint-token) gh …, and its workflows permission binds head-branch workflow-file writes only, not base-branch merge commits.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L11",
+        "w05-L12",
+        "w12-L40",
+        "w12-L31"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w05",
+        "w12"
+      ],
+      "homeClaim": "docs/engineering/merge-bot.md (linked from CONTRIBUTING)",
+      "proposedDisposition": "already-homed",
+      "rationale": "The doc is named as the durable home and was trued in commit 053138fce."
+    },
+    {
+      "id": "A22",
+      "statement": "The merge-bot token CLI has false-green entry points: `pnpm exec tsx agent-tools/src/merge-bot/cli.ts mint-token` and the pnpm --silent form exit 0 with empty streams because the module has no direct-run bootstrap; only the built binary works.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L11",
+        "w05-L13"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w05",
+        "w11"
+      ],
+      "homeClaim": "docs/engineering/merge-bot.md canonical mint-token form + frictions register",
+      "proposedDisposition": "needs-home",
+      "rationale": "A silent-failure trap observed twice with the doc correction still only proposed."
+    },
+    {
+      "id": "A23",
+      "statement": "New invisible-stuck class: GitHub auto-merge does not apply ruleset bypass grants, so a bot-exempt code-owner review gate leaves armed PRs waiting forever; the bypass IS honoured at the REST layer even though gh's client-side check refuses.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L23",
+        "w05-L24"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w05"
+      ],
+      "homeClaim": "pr-lifecycle silent-wait sweep + docs/engineering/merge-bot.md",
+      "proposedDisposition": "needs-home",
+      "rationale": "Mechanism distinction (auto-merge vs REST) is load-bearing for every merge and only loosely homed."
+    },
+    {
+      "id": "A24",
+      "statement": "Settled requires the ruleset's required check NAMES to be present in the created check list and green — a never-created expected check is invisible to enumeration and the merge 405s; an empty-commit push re-fires a dropped synchronize/webhook event.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w09-L50",
+        "w02-L07"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w02",
+        "w09"
+      ],
+      "homeClaim": "per-user memory sonar-automatic-analysis-dropped-trigger.md + pr-lifecycle settle doctrine",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both the name-presence rule and the empty-commit remedy are carried in standing memory/skill."
+    },
+    {
+      "id": "A25",
+      "statement": "Ruleset 13402577 requires review-thread resolution and binds the merge bot with no bypass (bypass list is the semantic-release app only); required_approving_review_count is 0 in both rulesets, so no approving review is required and bot reviewers only ever COMMENT.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w12-L33"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "per-user memory merge-rulings + merge-mechanics standing rules",
+      "proposedDisposition": "already-homed",
+      "rationale": "First-hand ruleset facts already carried as standing merge rulings."
+    },
+    {
+      "id": "A26",
+      "statement": "GitHub thread mechanics gotcha: a review thread never auto-outdates if the fix lands in a different file than the anchored line, so it must be replied to with the actual fix location and resolved manually.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w12-L34"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "pr-lifecycle Phase 6 harvest/resolve section",
+      "proposedDisposition": "needs-home",
+      "rationale": "Small but recurring convergence trap with no evidenced home."
+    },
+    {
+      "id": "A27",
+      "statement": "Requesting a Copilot review via the reviewers-list endpoint with login copilot-pull-request-reviewer[bot] silently no-ops (200, no change); the correct handle is 'Copilot' via the dedicated Copilot-review request endpoint — verify state after every reviewers write.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w12-L35",
+        "w12-L36"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "pr-lifecycle Copilot request mechanics",
+      "proposedDisposition": "needs-home",
+      "rationale": "Verified API gotcha (plus a struck draft-suppression theory) with no durable home."
+    },
+    {
+      "id": "A28",
+      "statement": "Copilot 'suppressed low-confidence findings' live only in review submission bodies with no thread state, so any reviewThreads-only harvest structurally undercounts; those suppressed findings ran real at a striking rate.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w10-L12",
+        "w03-L21"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w03",
+        "w10"
+      ],
+      "homeClaim": "pr-lifecycle full-surface harvest requirement",
+      "proposedDisposition": "needs-home",
+      "rationale": "Explains a repeated owner-visible undercount; the full-surface harvest rule needs the mechanism recorded with it."
+    },
+    {
+      "id": "A29",
+      "statement": "On large-surface PRs, pushing per finding resets reviewers each push and grows unresolved counts (14→15→19); the ruled cycle is full-surface harvest, adjudicate, batch, one push, re-harvest.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w10-L11",
+        "w10-L15"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w10"
+      ],
+      "homeClaim": "pr-lifecycle convergence discipline / review-ratchet section",
+      "proposedDisposition": "needs-home",
+      "rationale": "Director ruling with a measured trajectory; the durable skill text is not evidenced."
+    },
+    {
+      "id": "A30",
+      "statement": "Owner-ratified two-axis finding adjudication: every finding gets a correctness AND a goal-alignment verdict resolving to a named action type, and PR findings split into Class F (false-at-landing, cured in-PR) versus Class P (true improvement, resolved with the real owning ticket named, never 'later').",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w05-L25",
+        "w10-L13"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w05",
+        "w10"
+      ],
+      "homeClaim": "pr-lifecycle SKILL adjudication section + per-user memory review-findings-two-axes",
+      "proposedDisposition": "already-homed",
+      "rationale": "Standing frame explicitly folded into the skill and memory."
+    },
+    {
+      "id": "A31",
+      "statement": "Convergence-cap ruling for born-sketch plan PRs: after round 4, further reviewer waves disposition to named homes unless a finding shows an actual falsehood in plan text; merge at any settle-green tip whose deltas are cap-dispositions or falsehood-cures, hard-stop for new owner parameters.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w08-L08"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": "pr-lifecycle SKILL / review-ratchet convergence discipline",
+      "proposedDisposition": "needs-home",
+      "rationale": "A reusable operator stop condition recorded only as an in-arc ruling."
+    },
+    {
+      "id": "A32",
+      "statement": "Copilot review-quota exhaustion is estate-wide handled as a SKIPPED reviewer leg (never SATISFIED); `gh agent-task list` and `gh agent-task view <pr> --log --follow` expose live review-run state, closing the silent-wait blind spot.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w04-L25",
+        "w04-L30",
+        "w05-L10"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w04",
+        "w05"
+      ],
+      "homeClaim": "pr-lifecycle SKILL-CANONICAL Phase 6 silent-wait sweep",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner ruling and capability both named as folded into the skill."
+    },
+    {
+      "id": "A33",
+      "statement": "Dependency updates are done manually by the team as a repo-wide sweep lane, not piecemeal: the owner closed PR #430 and dependabot PR #525 directly, dependabot's npm entry was removed and security-update PRs disabled (alerts left on), and dependabot bumps at publish time violate the minimumReleaseAge policy.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w02-L08",
+        "w08-L22",
+        "w07-L05",
+        "w09-L09",
+        "w09-L10"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w02",
+        "w07",
+        "w08",
+        "w09"
+      ],
+      "homeClaim": "docs/engineering/build-system.md 'Dependency updates' section",
+      "proposedDisposition": "needs-home",
+      "rationale": "Repeated owner ruling whose only evidenced write-up covers the major-holds rationale, not the policy itself."
+    },
+    {
+      "id": "A34",
+      "statement": "All updates and overrides must survive a full lockfile delete and rebuild: the lockfile is derived, real constraints live in package.json ranges and the pnpm-workspace overrides block, and an override lagging its manifests desyncs the lockfile causing ERR_PNPM_OUTDATED_LOCKFILE invisible to local gates.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w09-L21",
+        "w09-L22",
+        "w09-L23",
+        "w09-L24",
+        "w09-L25",
+        "w04-L20",
+        "w11-L21"
+      ],
+      "leafCount": 7,
+      "windows": [
+        "w04",
+        "w09",
+        "w11"
+      ],
+      "homeClaim": ".agent/rules/lockfile-rebuild-survivability.md (merged 82ee4255)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner rule authored and merged as a canonical rule file."
+    },
+    {
+      "id": "A35",
+      "statement": "F-150: `turbo run lint` returns FULL TURBO cached exit 0 after a linter-plugin major bump because the lint cache key ignores the resolved plugin version — any lane bumping a linter/formatter/plugin must use --force.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L19"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": ".agent/memory/operational/frictions-register.md F-150",
+      "proposedDisposition": "already-homed",
+      "rationale": "Assigned a friction id in the register."
+    },
+    {
+      "id": "A36",
+      "statement": "F-151: the prevent-accidental-major-version guard uppercases the message and substring-matches BREAKING CHANGES, rejecting ordinary prose about upstream releases; its own advice is unfollowable under its matcher, candidate cure is anchoring on the footer line.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L20"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": ".agent/memory/operational/frictions-register.md F-151",
+      "proposedDisposition": "already-homed",
+      "rationale": "Registered friction with a named cure candidate."
+    },
+    {
+      "id": "A37",
+      "statement": "HAZARD: pnpm install --ignore-scripts in a fresh worktree skips husky prepare so .husky/_ is absent and git silently skips ALL hooks (commits and pushes run ungated at exit 0); check .husky/_ exists before trusting any gate.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L06"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w05"
+      ],
+      "homeClaim": "frictions register / worktree-hygiene rule",
+      "proposedDisposition": "needs-home",
+      "rationale": "Silent total gate bypass with no evidenced durable record."
+    },
+    {
+      "id": "A38",
+      "statement": "This repo's pre-commit hook (not just pre-push) runs the full gate suite, so any dirty sketch/test failure blocks all commits on the primary checkout until resolved.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L10",
+        "w06-L28"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w06",
+        "w07"
+      ],
+      "homeClaim": "docs/engineering/build-system.md hooks section",
+      "proposedDisposition": "needs-home",
+      "rationale": "Explains a recurring primary-checkout wedge; no home evidenced."
+    },
+    {
+      "id": "A39",
+      "statement": "Repo validators ignore .gitignore via their own SOURCE_IGNORE_GLOBS, so machine-local and materialised dirs break commits: markdown-links blocked on gitignored handoffs (cured by a handoffs/** exemption in PR 521), on .pnpm-store 215 broken links (primary-only), and on tracked-file markdown links to untracked handoff records (use code spans).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L11",
+        "w08-L12",
+        "w09-L16",
+        "w11-L12",
+        "w12-L53"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w07",
+        "w08",
+        "w09",
+        "w11",
+        "w12"
+      ],
+      "homeClaim": "validator config in agent-tools/src/validators/markdown-links + a documented authoring convention",
+      "proposedDisposition": "needs-home",
+      "rationale": "Only the handoffs exemption landed; the .pnpm-store and link-form conventions remain unhomed."
+    },
+    {
+      "id": "A40",
+      "statement": "Hook-policy substring matchers scan the whole command line, so agent prose merely quoting a blocked command reads as destruction; the sanctioned response is moving the payload out of the shell (file/editor tool), never a bypass, with argv-position anchoring as the cure candidate.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w08-L20",
+        "w09-L15"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w08",
+        "w09"
+      ],
+      "homeClaim": ".agent/rules/hook-policy-substring-discipline.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "A standing rule of exactly this name governs the class."
+    },
+    {
+      "id": "A41",
+      "statement": "Copilot CLI enforcement mechanics established: the batch-envelope PreToolUse deadlock (1.0.74 sends sessionId/cwd/toolCalls, Claude-shaped guard throws exit 2 denying all writes), the string-form apply_patch payload now governed via harvested patch projection (PR #535), and the ${CLAUDE_PROJECT_DIR:-.} fallback that fixed MODULE_NOT_FOUND before any schema ran.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w08-L13",
+        "w09-L32",
+        "w09-L34",
+        "w09-L46",
+        "w10-L08",
+        "w09-L36"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w08",
+        "w09",
+        "w10"
+      ],
+      "homeClaim": ".agent/plans/delivery/first-class-copilot-cli-policy-enforcement.plan.md + ADR-125 amendment, landed via PR #529/#535",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ratified plan and two merged PRs carry the mechanism and the cures."
+    },
+    {
+      "id": "A42",
+      "statement": "Copilot CLI platform facts, official-source verified: skill precedence .github/skills > .agents/skills > .claude/skills first-found-wins, repository .github/hooks runs in both CLI and cloud agent, local repository settings ignored, and excludeAgent accepts exactly one value so 'excludes both cloud-agent and code-review' claims are false.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w10-L35",
+        "w10-L14",
+        "w10-L07"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w10"
+      ],
+      "homeClaim": "cross-platform-agent-surface-matrix.md + the ratified Copilot CLI plan (PR #529)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Verified capability facts landed with the matrix and plan."
+    },
+    {
+      "id": "A43",
+      "statement": "Codex CLI 0.145.0 first-hand evidence: hooks stable=true with SessionStart/PreToolUse observed in an isolated probe and a ^apply_patch$ matcher firing, official docs define the full lifecycle including SessionEnd and input rewrite, and `codex mcp-server` is an exposed but experimental protocol — invalidating repo claims that Codex has only notify or no hooks.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w09-L38",
+        "w09-L41",
+        "w09-L48",
+        "w09-L42",
+        "w09-L44",
+        "w09-L45",
+        "w09-L47"
+      ],
+      "leafCount": 7,
+      "windows": [
+        "w09"
+      ],
+      "homeClaim": "MCP-159 Codex catalogue under .agent/reports/agentic-engineering/ + ADR-180 and .codex/README.md corrections",
+      "proposedDisposition": "already-homed",
+      "rationale": "Catalogue and doc corrections are the named durable deliverables of the lane."
+    },
+    {
+      "id": "A44",
+      "statement": "Every capability claim must be version-pinned (CLI version or doc SHA) so staleness is self-declaring.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w09-L40"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w09"
+      ],
+      "homeClaim": "per-user memory capability-questions-from-original-sources.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Standing owner rule already carried in the version-pin memory."
+    },
+    {
+      "id": "A45",
+      "statement": "Production deploys were silently CANCELED all day because Vercel's ignored-build-step cancels any production build whose root package.json version has not advanced, and semantic-release's direct version-bump push to main failed GH013 under the new merge-governance ruleset; later fixed platform-side, cause unobservable from git.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L01",
+        "w07-L02",
+        "w07-L03",
+        "w07-L04"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w07"
+      ],
+      "homeClaim": "release runbook / docs/engineering release-flow doc",
+      "proposedDisposition": "needs-home",
+      "rationale": "A whole-day invisible deploy outage whose cure arrived opaquely; no durable write-up evidenced."
+    },
+    {
+      "id": "A46",
+      "statement": "MCP-130: VERCEL=1 was an online trigger in resolve-schema-source.ts so Vercel builds regenerated SDK types from the live Oak API on cache miss while CI stayed green on committed cache; cure removed VERCEL as a trigger and added a deliberate sdk-codegen:refresh script. Owner framing: the defect is build-time coupling, not schema 'drift'.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L16",
+        "w07-L17",
+        "w07-L18",
+        "w07-L19",
+        "w07-L20",
+        "w07-L21"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w07"
+      ],
+      "homeClaim": "landed via PR #496 (aac0f1ad4), compiler-enforced",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure landed with the input field deleted; only the Vercel dashboard confirmation stayed open."
+    },
+    {
+      "id": "A47",
+      "statement": "MCP-187: widget resources 404 on every deployed build because the served-surface key is a frozen literal while Vercel builds generate a hashed URI from sha256(Date.now()); cure keys liveness on stable identity, derives the hash from commit SHA (fallback DEPLOYMENT_ID then loud failure), declares those envs in turbo's sdk-codegen task, and adds a deploy-parity test.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w12-L20",
+        "w12-L21",
+        "w12-L22",
+        "w12-L23"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "Linear MCP-187 + PR #571",
+      "proposedDisposition": "already-homed",
+      "rationale": "Diagnosis and cure shape carried by the ticket and its PR."
+    },
+    {
+      "id": "A48",
+      "statement": "agent-facing-content audit registry item C479 records the old widget hash semantics ('sha256(timestamp)') verbatim and needs a delta-refresh once MCP-187 lands.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w12-L24"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "MCP-103 registry delta-refresh ticket",
+      "proposedDisposition": "needs-home",
+      "rationale": "A concrete stale-record obligation with no ticket named."
+    },
+    {
+      "id": "A49",
+      "statement": "Falsified: OAuth DCR negative probes cannot run headless today — @mcpjam/cli 3.15.2 gates every --conformance-checks negative probe on the full main flow including browser consent, confirmed empirically against the alpha; unattended-runnable legs and their baselines were enumerated instead.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w12-L27",
+        "w12-L28",
+        "w12-L29"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "MCP-189/MCP-184 conformance baseline record",
+      "proposedDisposition": "needs-home",
+      "rationale": "Version-pinned vendor limitation plus baseline data that would otherwise be re-derived by hand."
+    },
+    {
+      "id": "A50",
+      "statement": "MCP-188: /oauth/register accepts any redirect_uri; cure is RFC 8252 §7.3 loopback-only http with 400 invalid_redirect_uri per RFC 7591 §3.2.2, sequenced after MCP-187 with a mandatory security-expert review leg, and reassigned to the OAuth-conformance lane.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w12-L25",
+        "w12-L26"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "Linear MCP-188",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ticketed with cure shape and review obligation."
+    },
+    {
+      "id": "A51",
+      "statement": "PostHog vendor mechanics verified first-hand: @posthog/mcp 0.10.0 mutates its supplied client identity globally (forcing two-client isolation) and auto-observes only initialize/tools/list/tools/call; serverless requires flushAt=1, flushInterval=0, captureImmediate and awaited shutdown; identified events create person profiles unless $process_person_profile:false holds on every event.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L45",
+        "w11-L46",
+        "w11-L47",
+        "w11-L51",
+        "w06-L37"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w06",
+        "w11"
+      ],
+      "homeClaim": "MCP-63 plan (observability/PostHog adapter design)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Author-time vendor verification carried in the MCP-63 plan the lane executes from."
+    },
+    {
+      "id": "A52",
+      "statement": "MCP-63 privacy posture ratified: anonymous plus integration-level identity only, no person profiles, content blocked by default enforced by a boundary validator in code, EU residency (project 221775, eu.i.posthog.com), 12-month retention gating the October public alpha; deletion requires a resolved Person so one minimal pseudonymous Person is permitted.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w05-L35",
+        "w06-L08",
+        "w11-L50",
+        "w11-L42",
+        "w11-L48",
+        "w11-L49"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w05",
+        "w06",
+        "w11"
+      ],
+      "homeClaim": "MCP-53/MCP-63 plan D3 posture + posthog-mcp-elasticsearch-observability-plan.md §§4-5",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ratified constraint set with a named source document."
+    },
+    {
+      "id": "A53",
+      "statement": "Superseded MCP-63 constraints named to stop them resurfacing: 'exclude @posthog/mcp from production' is dead, 'M6 not submission-blocking' is dead (PostHog blocks the next submission), POSTHOG_MODE is superseded by OBSERVABILITY_SINKS, and the frozen spike branch/tag dd8df27f8 is evidence only, never a build base.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L44",
+        "w11-L43",
+        "w11-L42",
+        "w06-L06",
+        "w06-L07",
+        "w07-L07"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w06",
+        "w07",
+        "w11"
+      ],
+      "homeClaim": "MCP-63 ticket design record / plan supersession note",
+      "proposedDisposition": "needs-home",
+      "rationale": "Explicit anti-resurfacing list that only survives if written into the ticket or plan."
+    },
+    {
+      "id": "A54",
+      "statement": "MCP-63 delivery shape: three streams (provider-neutral port + sink-axis resolution, then adapter package, then app composition), max useful concurrency two seats; SinkRegistry's ObservabilitySink<K> shape mismatches ProductAnalyticsSink.capture, resolved via a diagnostic-only registry plus a discriminated ProductAnalyticsRuntime; the final-wire integration test is blocked by test-expert for bypassing production composition.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w12-L47",
+        "w12-L48",
+        "w12-L49",
+        "w12-L50",
+        "w12-L52"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "MCP-63 plan text (streams, sink-axis, named gaps)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Verdict explicitly names plan-text items still to be settled, so the substance is not yet in the plan."
+    },
+    {
+      "id": "A55",
+      "statement": "Full PostHog env contract (four variables, generation command, custody notes, marked lands-with-MCP-63) is documented in the app's .env.example at commit b98b0f67b; future config slices must true against it or explicitly supersede it.",
+      "kind": "pointer",
+      "supportingLeafIds": [
+        "w12-L46"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "apps/oak-curriculum-mcp-streamable-http/.env.example",
+      "proposedDisposition": "already-homed",
+      "rationale": "Committed file named as the contract."
+    },
+    {
+      "id": "A56",
+      "statement": "Owner stopped MCP-63 execution mid-lane ('we have not yet planned this work'); the Director owned the routing error, establishing that a ratified constraint set plus a ticket is not an owner-formed goal.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w06-L04",
+        "w06-L05"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w06"
+      ],
+      "homeClaim": "routing doctrine (ends-before-means / ticket-is-not-a-goal) in Director practice",
+      "proposedDisposition": "needs-home",
+      "rationale": "A routing-authority lesson with a self-named Director error and no durable rule cited."
+    },
+    {
+      "id": "A57",
+      "statement": "MCP-122 canonical-address research: the moved surface exceeds /mcp* (root, three well-knowns, /healthz, asset downloads), GET /mcp with browser Accept currently 406s so the content-negotiation triple is new app code, URL self-description is host-derived per request, and the zone is Terraform IaC in oaknational/Cloud-Config with www on Vercel.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w06-L19",
+        "w06-L20",
+        "w06-L21",
+        "w06-L18",
+        "w06-L24",
+        "w07-L38"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w06",
+        "w07"
+      ],
+      "homeClaim": ".agent/reports/mcp-app-canonical-address-exploration-2026-07-23.md (merged cf94a822f)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Merged exploration record carries the findings."
+    },
+    {
+      "id": "A58",
+      "statement": "A live guidance leak was found: SDK tool-guidance-data's DISCOVERY category named a dormant user-search tool pair served through live get-curriculum-model content, and render-tools-section.ts listed all defined tools regardless of dormancy; cured by an app-side serve-boundary filter plus MCP-101's served-surface concept.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L40",
+        "w07-L41",
+        "w07-L39",
+        "w06-L26"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w06",
+        "w07"
+      ],
+      "homeClaim": "MCP-101 lane PRs (#480/#481/#483/#484/#486, landed on main)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure shipped across the merged MCP-101 lane."
+    },
+    {
+      "id": "A59",
+      "statement": "Plan-corpus reset: V0/D23 plan-node model is live with a red-first validator and Notion fence gating every commit, prior estate rests in plans-backlog-2026-07 and the V0 sketch corpus archived with per-artefact dispositions, and ADR-216 supersedes ADR-117's lane model.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w05-L34",
+        "w06-L11",
+        "w06-L17"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w05",
+        "w06"
+      ],
+      "homeClaim": "ADR-216 + .agent/plans/ V0 contract and validator (PRs #478/#482 on main)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed ADR plus validator and archive directories."
+    },
+    {
+      "id": "A60",
+      "statement": "Linear practice: every estate ticket belongs to team MCP App Pathfinder under the 'MCP App: Live Vision, Strategy, and Planning Estate' project — never AIP; 39 tickets migrated with an AIP→MCP mapping and an audit confirming no strays remain.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w05-L26",
+        "w05-L27",
+        "w07-L29"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w05",
+        "w07"
+      ],
+      "homeClaim": "per-user memories all-tickets-mcp-team-only.md and linear-mcp-team-and-project-hygiene.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Standing owner correction already carried in memory."
+    },
+    {
+      "id": "A61",
+      "statement": "Bot identity is mandatory on all third-party systems (owner-credential fallback never permitted); commits use worktree-scoped git config with extensions.worktreeConfig, pushes use a bot-token credential helper, and on the shared primary checkout identity is env-scoped per command, never worktree config.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w07-L26",
+        "w07-L27",
+        "w07-L28",
+        "w08-L02"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w07",
+        "w08"
+      ],
+      "homeClaim": ".agent/rules/bot-identity-on-third-party-systems.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Graduated into a named rule file after the compliance failure."
+    },
+    {
+      "id": "A62",
+      "statement": "Priority means importance and quality investment, never speed: the design lane holds fleet priority yet 'under no circumstances are they to rush', and going slower is explicitly higher value.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w07-L32",
+        "w07-L33",
+        "w07-L34",
+        "w10-L03"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w07",
+        "w10"
+      ],
+      "homeClaim": "per-user memory priority-means-importance-never-speed.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Repeated owner framing carried in standing memory."
+    },
+    {
+      "id": "A63",
+      "statement": "Owner discipline signal: planning and decision discipline had fallen — ADR-217 §1 recorded no-hydration as decided though it contradicted his standing Full-React requirement, survived four reviewer passes and ratification, then was cited back to him as authority.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w12-L04",
+        "w12-L03"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "ADR-217 §1 dated amendment + corpus-governance findings record",
+      "proposedDisposition": "needs-home",
+      "rationale": "The falsifying owner word and the dated ADR amendment are not evidenced as landed."
+    },
+    {
+      "id": "A64",
+      "statement": "Retention doctrine PDR-094 settled at v4 after an owner correction: never a lossless record, but full extraction FIRST and then archive (archive enables mining, is never a hedge); v3's substrate deletion was reversed, comms-archive/ restored, and MCP-185 re-shaped to pass-watermark eligibility.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w12-L05",
+        "w12-L06",
+        "w12-L07",
+        "w12-L08",
+        "w12-L11"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "PDR-094 v4 + retention-arc retrospective report (pushed c2409b7e0)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Doctrine re-trued across the decision record and a committed retrospective."
+    },
+    {
+      "id": "A65",
+      "statement": "Open sitting question, deliberately not decided unilaterally: whether absorb-then-delete retention extends to the tracked decision-provenance archive (.agent/state/collaboration/archive/, 316K of conversations/handoffs/sidebars).",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w12-L10",
+        "w12-L09"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "PDR-094 open-questions section / owner sitting agenda",
+      "proposedDisposition": "needs-home",
+      "rationale": "An explicitly reserved owner question that disappears with the stream."
+    },
+    {
+      "id": "A66",
+      "statement": "'A description generated by the same process as the artefact cannot check the artefact' — four instances in one night (worktree-sweep commit message, studio artefact counts, endpoint comment, theme-script mis-description), plus the tenure error signature of trusting own descriptions over first-hand reads.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L35",
+        "w11-L29",
+        "w11-L15",
+        "w11-L16",
+        "w11-L63"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": ".agent/memory/active/patterns/description-is-not-a-check.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Graduated to a named pattern file in the same window."
+    },
+    {
+      "id": "A67",
+      "statement": "Stale-capture-wins: a clean three-way merge can silently revert newer landed truth (resurrected rotated napkin, reverted ratification stamps, re-introduced banned link tag), so cross-branch folds use semantic concept-level union with superset proofs, never line-merge.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w01-L31",
+        "w04-L04",
+        "w04-L05",
+        "w10-L05",
+        "w03-L41",
+        "w11-L16"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w01",
+        "w03",
+        "w04",
+        "w10",
+        "w11"
+      ],
+      "homeClaim": ".agent/rules/pre-merge-divergence-analysis.md + stale-capture-wins-silent-merge-reverts memory",
+      "proposedDisposition": "already-homed",
+      "rationale": "Named rule and memory govern the class with multiple worked instances."
+    },
+    {
+      "id": "A68",
+      "statement": "Claim records are immutable by design: a claim is provenance of what a seat undertook at open, so a changed lane closes the claim and opens a new one rather than editing status.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w11-L40",
+        "w11-L41"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": "claims tooling doctrine / collaboration-state-conventions",
+      "proposedDisposition": "needs-home",
+      "rationale": "Owner-stated mechanism rationale that prevents future 'missing feature' misreads; no home evidenced."
+    },
+    {
+      "id": "A69",
+      "statement": "F-95/F-41 family: `claims open` resolves the watcher-liveness heartbeat path against the invoking worktree's cwd, so a live watcher at the primary reads as absent from a linked worktree; workaround is running claims from the primary, cure owned by the coordination-home-cli-path-defaulting plan. claims heartbeat also requires explicit --now.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L29",
+        "w08-L01"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w05",
+        "w08"
+      ],
+      "homeClaim": "frictions register F-95/F-89 + coordination-home-cli-path-defaulting plan",
+      "proposedDisposition": "already-homed",
+      "rationale": "Registered friction with a named owning plan."
+    },
+    {
+      "id": "A70",
+      "statement": "comms send --body has a silent argv limit around 1500 characters (--body-file is the only path for substantive events), drain-timeout is 600s, and a format banner can mask a bootstrap failure.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w03-L38",
+        "w04-L15"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w03",
+        "w04"
+      ],
+      "homeClaim": "agent-tools comms known-issues / frictions register",
+      "proposedDisposition": "needs-home",
+      "rationale": "A silent data-loss class in the primary coordination channel with only a guessed home."
+    },
+    {
+      "id": "A71",
+      "statement": "Watcher liveness discipline: the all-channels watcher dies on drain-timeout under volume, background shapes only notify on process exit so watchers must be event-emitting Monitors, drain-cursor movement proves consumption not delivery, a foreground gap sweep is mandatory after any restart, and the old Monitor must be stopped by id before re-arming.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w01-L29",
+        "w03-L19",
+        "w03-L21",
+        "w06-L41",
+        "w11-L10",
+        "w10-L28"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w01",
+        "w03",
+        "w06",
+        "w10",
+        "w11"
+      ],
+      "homeClaim": ".agent/rules/use-monitor-for-event-driven-wake.md + comms-watch-storage-redesign plan",
+      "proposedDisposition": "already-homed",
+      "rationale": "The monitor-shape rule exists; the redesign plan owns the structural cure."
+    },
+    {
+      "id": "A72",
+      "statement": "False-liveness classes on the heartbeat surface: a harness-suspended session's cron keeps emitting independent of the reasoning loop, a stale second emitter can interleave and mislead peers, and comms-only loops leave registry heartbeat_at stale (F-92) — cures are substantive-response weighting, singleton-per-window, and bumping the claims surface at cycle boundaries.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w02-L09",
+        "w08-L06",
+        "w07-L47"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w02",
+        "w07",
+        "w08"
+      ],
+      "homeClaim": ".agent/rules/check-singleton-per-window.md + PDR-078 §6 extension / frictions register F-92",
+      "proposedDisposition": "needs-home",
+      "rationale": "The singleton rule exists but the suspension and dual-surface classes are only claimed as PDR/register extensions."
+    },
+    {
+      "id": "A73",
+      "statement": "Cricket A/B divergences were context-supply gaps, not work defects: supplied frames must cite grounding events, name the critical-path owner and downstream consumer, cite a source for every gate/infrastructure action, and inline-define any drive-specific term whose plain reading collides with a standing owner directive.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w01-L28",
+        "w02-L24",
+        "w03-L18",
+        "w03-L17",
+        "w05-L32"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w01",
+        "w02",
+        "w03",
+        "w05"
+      ],
+      "homeClaim": "cricket A/B mandate doc / dispatch-frame template",
+      "proposedDisposition": "needs-home",
+      "rationale": "A repeatedly corroborated dispatch-hygiene cure with only a practice-doc guess as home."
+    },
+    {
+      "id": "A74",
+      "statement": "Fork-inheritance hazard: a fork inherits the memory of being the lead seat, which is not tenure of it; a fork's first act is identity derivation from its own session id before any comms write, registry agent_id rows are ground truth, and a fork declares no Director authority and binds itself to shared-primary hazards.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w06-L10",
+        "w06-L09",
+        "w08-L21",
+        "w09-L11"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w06",
+        "w08",
+        "w09"
+      ],
+      "homeClaim": "per-user memory fork-identity-is-external-keep-parent-by-default.md + PDR-064",
+      "proposedDisposition": "already-homed",
+      "rationale": "Named memory plus the succession PDR carry the discipline."
+    },
+    {
+      "id": "A75",
+      "statement": "Plans about deployed surfaces must probe the deployment first: MCP-67's plan and owner card were authored against a live, UAT-verified deployment nobody curled, and three artefact-verifiers plus the Director's own review shared the blind spot — so adjudication verdicts require the probe too.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L36",
+        "w05-L37"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w05"
+      ],
+      "homeClaim": "per-user memory probe-the-deployment-before-planning.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Graduated into a named standing rule/memory."
+    },
+    {
+      "id": "A76",
+      "statement": "Repo-vs-Linear boundary: settled positions live as plans in .agent/plans (authority #1) with ADRs/PDRs as durable design records; Linear tickets are projections and pointers, never the design record; point-in-time evidence goes in PR bodies and ticket comments; a lane can propose but never set policy.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w09-L29"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w09"
+      ],
+      "homeClaim": ".agent/directives/orientation.md Routing Rule",
+      "proposedDisposition": "already-homed",
+      "rationale": "Leaf cites orientation.md as the governing surface."
+    },
+    {
+      "id": "A77",
+      "statement": "Design-sync delete-reconciliation is the standing mechanism: a declarative .design-sync/estate.json is reconciled at every sync with unlisted entries deleted, single-home-per-document applies, and repo-absence under shippedFromRepo globs counts as remote residue (delete set 44→47); dir/** never matches dot-prefixed names so dot keeps must be literals.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w09-L55",
+        "w10-L01",
+        "w10-L29",
+        "w11-L03",
+        "w09-L58",
+        "w10-L37"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w09",
+        "w10",
+        "w11"
+      ],
+      "homeClaim": ".design-sync/estate.json + MCP-160 (PR #536 merged e9dcb668)",
+      "proposedDisposition": "already-homed",
+      "rationale": "The mechanism landed as tracked declarative config."
+    },
+    {
+      "id": "A78",
+      "statement": "Design-sync operational constraints: config.json's projectId pointed at a dead iteration project (original 314dd517 is correct), DesignSync get_file caps at 256KiB with unfetchable files becoming ledger rows, CLAUDE.md is an owner-side studio edit under ownerMaintained, and bulk deletion requires project-owner login since editor rights only cover writes.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L36",
+        "w11-L05"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w07",
+        "w11"
+      ],
+      "homeClaim": ".design-sync/NOTES.md operational constraints section",
+      "proposedDisposition": "needs-home",
+      "rationale": "Operational facts that will silently break the next delete-bearing sync if lost."
+    },
+    {
+      "id": "A79",
+      "statement": "Consolidation retrospective headline: graduation latency is a recurrence cost, cured by three fast-lane clauses (same-close graduation, consolidate-until-done staged-base recompute, route-blocks one-ping-after-one-cadence); the estate has deadline-and-default machinery for retirement authority but not for routing contracts, and the Director is a serialising processing gap.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w04-L13",
+        "w04-L12"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w04"
+      ],
+      "homeClaim": ".agent/reports/agentic-engineering/consolidation-retrospective-2026-07-20.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Committed retrospective names both the enacted clauses and the reserved design question."
+    },
+    {
+      "id": "A80",
+      "statement": "Undischarged worktree/branch dispositions at handoff: tmp/plan-retrue-mcp150 (director/mcp-150-plan-retrue, 7ae8b2ff4, fabricated-identity commit, content conserved on #529), tmp/copilot-cli-practice, tmp/first-class-copilot, tmp/mcp-151-security — none provably ancestors of main, each needing parity check then owner-run removal.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w10-L19",
+        "w10-L20",
+        "w11-L28",
+        "w10-L21"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w10",
+        "w11"
+      ],
+      "homeClaim": "worktree-hygiene disposition queue / owner cleanup card",
+      "proposedDisposition": "needs-home",
+      "rationale": "Concrete pending owner-run actions that vanish with the stream."
+    },
+    {
+      "id": "A81",
+      "statement": "Formation letters and other durable-tier records sitting untracked are one prune from loss (Meteor's formation letter flagged specifically); untracked durable artefacts need a tracking or conservation decision.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w11-L37"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": ".agent/experience/ tracking decision (owner/Director)",
+      "proposedDisposition": "needs-home",
+      "rationale": "A named at-risk durable artefact with no disposition."
+    },
+    {
+      "id": "A82",
+      "statement": "Consolidation residuals still unrouted: ~1,346-1,406 coordination-tier comms events awaiting disposition for want of a curator-ledger input (MCP-185), F-116 commit-queue guard vs commit SKILL claim-spelling mismatch (MCP-186), repo-continuity.md structural remediation, and 10 of 14 stale Active continuity threads needing Active→Paused reclassification.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w07-L46",
+        "w11-L59",
+        "w11-L60",
+        "w11-L61"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w07",
+        "w11"
+      ],
+      "homeClaim": "MCP-185/MCP-186 tickets (partial) + repo-continuity.md remediation ticket",
+      "proposedDisposition": "needs-home",
+      "rationale": "Two items are ticketed but the continuity-doc remediation and thread reclassification are not."
+    },
+    {
+      "id": "A83",
+      "statement": "Release sensitivity rules: no release dates of any kind and no vendor mentions in relation to the release in any repo artefact (PR bodies, commits, docs, ADRs) — that detail lives only in Linear; schema-mandated expires: dates stay but prose explaining them is removed, and public third-party policy citations are compliance material, not disclosure.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L56",
+        "w11-L58",
+        "w11-L57"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": "per-user memory first-major-release-standing-rulings.md (sensitivity split)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Sensitivity split is an established standing ruling; only the immutable-history residue stays as a ticketed owner call."
+    },
+    {
+      "id": "A84",
+      "statement": "V1 submission framing ratified: first submission to the Anthropic directory on Wednesday 30 July with engineering-complete and production-deployed by Tue 29 EOD and freeze discipline thereafter, V1 delivery in September, guidance chain (MCP-102/121) de-gated from initial submission; a crossed 'Wednesday 2026-07-29' owner word was flagged for owner resolution.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w11-L25",
+        "w11-L26",
+        "w10-L26",
+        "w10-L27"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w10",
+        "w11"
+      ],
+      "homeClaim": "Linear MCP-106 dated backward plan / milestone records",
+      "proposedDisposition": "needs-home",
+      "rationale": "Date-bearing owner framing that by sensitivity rules can only live in Linear, with no confirmation it does."
+    },
+    {
+      "id": "A85",
+      "statement": "Owner V1 re-aim: 'we have drifted away from moving towards the V1 release, we have been lost in detail' — release chain (MCP-102, MCP-125, MCP-143) routes first, meta lanes sequence behind a named gate of release chains staffed and moving, meta backlog sits under a protected research floor, and further implementer seats launch only after the design lane's Claude-Design work completes.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w10-L23",
+        "w10-L25",
+        "w10-L27",
+        "w05-L38"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w05",
+        "w10"
+      ],
+      "homeClaim": "Director routing map / milestone record for the V1 re-aim",
+      "proposedDisposition": "needs-home",
+      "rationale": "Founding routing ratification for the whole release push with no durable artefact named."
+    },
+    {
+      "id": "A86",
+      "statement": "Standing PR-hygiene doctrine: drive the open PR list to zero including drafts, and 'dispositioned' is not dealt-with — every open PR must be live-lane-owned, merged, or closed with the owner's check.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w07-L06",
+        "w02-L06",
+        "w01-L01",
+        "w04-L31",
+        "w12-L54"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w01",
+        "w02",
+        "w04",
+        "w07",
+        "w12"
+      ],
+      "homeClaim": "per-user memory open-prs-merged-closed-or-owned.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Repeated owner tightening already carried as a standing memory."
+    },
+    {
+      "id": "A87",
+      "statement": "Branch-disposition ruling: merged work is preserved, branch work is not — at any disposition moment name the merge vehicle for the valuable part and execute it, or delete; a 'frozen reference PR' is not a disposition (the PostHog spike was preserved as annotated tag mcp-63-posthog-spike-frozen), and owned preservation PRs need a live discharge path or they are not owned.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w12-L42",
+        "w11-L65",
+        "w07-L07",
+        "w07-L08"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w07",
+        "w11",
+        "w12"
+      ],
+      "homeClaim": "per-user memory merged-work-is-preserved-branches-are-not.md + .agent/rules/worktree-hygiene.md live-discharge-path test",
+      "proposedDisposition": "already-homed",
+      "rationale": "Explicitly homed into worktree-hygiene and standing memory."
+    },
+    {
+      "id": "A88",
+      "statement": "Merge-train executor rule: a PR with a live implementer seat lands via that seat's own merge (bot identity, merge commit); the merge monitor's standing 'merge at settled without re-asking' grant covers only orphaned or lane-retired PRs, and freeze-bound surfaces still need Director word regardless of executor.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w12-L39"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "merge-train / merge-mechanics standing rules in pr-lifecycle",
+      "proposedDisposition": "needs-home",
+      "rationale": "A grant-boundary rule stated once with only a category-level home."
+    },
+    {
+      "id": "A89",
+      "statement": "Every merge must get its own fleet broadcast, no exceptions — a bot merge went unbroadcast for 40 minutes leaving a seat disposition-blocked; Phase-8 harvest custody is assigned per-PR after any cascade merge, with late findings routing to follow-up branches never merged ones.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w06-L29",
+        "w03-L39"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w03",
+        "w06"
+      ],
+      "homeClaim": "pr-lifecycle Phase 8 / merge-broadcast obligation",
+      "proposedDisposition": "needs-home",
+      "rationale": "A self-named Director lesson with a concrete cost and no evidenced rule text."
+    },
+    {
+      "id": "A90",
+      "statement": "A PR merge auto-deleted the remote coordination/estate-2026-07 branch despite a 'branch lives on' disposition, leaving the primary tracking a deleted upstream; cured by ref-pushing the branch back to its exact pre-merge tip from a clean worktree, and future syncs must go via clean-worktree ref pushes while the primary carries uncommitted owner files.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w06-L27",
+        "w06-L28"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w06"
+      ],
+      "homeClaim": ".agent/rules/coordination-branch-24h-lifetime.md / no-parallel-long-lived-branches.md",
+      "proposedDisposition": "needs-home",
+      "rationale": "A near-loss recovery recipe for the shared coordination branch, homed only by guess."
+    },
+    {
+      "id": "A91",
+      "statement": "Design-system four-theme contrast gate ratified at AAA for high-contrast and AA floor elsewhere; the landed CI gate is kit/token-level only (34 pairs x 4 themes over dtcg trees) and does not cover hub-rendered composed pairings, whose §7(b) check was deferred to build against the landed per-consumer projection shape.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w01-L07",
+        "w03-L10",
+        "w03-L09"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w01",
+        "w03"
+      ],
+      "homeClaim": "kit CI contrast gate (PR #423) + plan pointer gated on PR #442",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ratified threshold shipped as a CI gate with the deferred leg carried as a plan pointer."
+    },
+    {
+      "id": "A92",
+      "statement": "ADR-213 records deliberate per-consumer divergence: 15 currentColor-dependent expression values pass through the dtcg export verbatim for browser evaluation while contrast resolution rejects them; §2 was later amended with per-consumer projections and graded falsifiers computed by value-shape over an open set, and the owned React component tier is a separate downstream package.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w01-L21",
+        "w03-L02",
+        "w07-L42"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w01",
+        "w03",
+        "w07"
+      ],
+      "homeClaim": "ADR-213 §2 (amended via PR #442) + ADR-148",
+      "proposedDisposition": "already-homed",
+      "rationale": "Substance lives in the amended ADR."
+    },
+    {
+      "id": "A93",
+      "statement": "tool:token-audit reads an untracked canonical-export snapshot (EXPORT_DS_PARENT) as its authority; re-pointing it at the in-repo kit is named as owed work in the integration doc §7 and the hub-migration plan pointer.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w03-L08"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w03"
+      ],
+      "homeClaim": "design-system integration doc §7 + hub-migration plan todo",
+      "proposedDisposition": "already-homed",
+      "rationale": "Leaf states the obligation is written into a tracked doc and plan pointer."
+    },
+    {
+      "id": "A94",
+      "statement": "dtcg↔CSS consistency validator defects found and cured: quote-agnostic tokeniser masking interior drift, dark comparison covering only semanticDark leaves, escape-decode needing hex escapes kept verbatim, and unused_allowlist_entry as a one-directional-verification class; design-tokens-core now exports its pattern builders for the validator.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w03-L11",
+        "w03-L12",
+        "w03-L13",
+        "w03-L15",
+        "w03-L07"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w03"
+      ],
+      "homeClaim": "validator code landed in PR #429",
+      "proposedDisposition": "already-homed",
+      "rationale": "All cures shipped as code in the validator PR."
+    },
+    {
+      "id": "A95",
+      "statement": "Sonar cure constraints: S2871 'provide a compare function' must not use localeCompare because locale-dependent ordering breaks reproducible snapshot ordering (16 sites, use a code-unit comparator), and cure regexes/loops repeatedly self-introduced S8786/S2310/S5843 — run full workspace lint before every stage and prefer narrow re-grammaring over clever fixes.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L05",
+        "w03-L35",
+        "w06-L12"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w03",
+        "w05",
+        "w06"
+      ],
+      "homeClaim": "docs/governance/sonar-disposition-policy.md or the research-evidence eslint config docs",
+      "proposedDisposition": "needs-home",
+      "rationale": "Concrete cure-shape constraints that will be violated again if only the generic policy doc survives."
+    },
+    {
+      "id": "A96",
+      "statement": "Sonar main-red root cause and cure: new_vulnerabilities failed 15>9 because five old MAJOR findings entered the new-code window via same-day merges; closed 15→0 via curl TLS pinning, npm --ignore-scripts plus a targeted `npm rebuild bun` (bare --ignore-scripts breaks the dev-widget host), and three policy-anchored FALSE_POSITIVEs.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w02-L18",
+        "w02-L19",
+        "w04-L03"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w02",
+        "w04"
+      ],
+      "homeClaim": "docs/governance/sonar-disposition-policy.md + dev-widget-in-host.sh (landed)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cures landed in scripts/CI with a named disposition-policy doc."
+    },
+    {
+      "id": "A97",
+      "statement": "Owner commissioned fix-forward for every single Sonar issue on the #437 import — no category dismissals, no analysis-scope exclusions, per-site disposition only where a fix would falsify conserved record semantics.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w04-L29",
+        "w05-L03",
+        "w05-L07"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w04",
+        "w05"
+      ],
+      "homeClaim": "AIP-159 fix-forward lane ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Commission terms carried by the named fix-forward lane/ticket."
+    },
+    {
+      "id": "A98",
+      "statement": "Build/dist inversion class: validators and gates that import an unbuilt dist silently misbehave — the #429 validator needed a turbo-cached self-build, depcruise must join knip:gate after the Turbo build in both hooks (ADR-121 re-trued), and the dist agent-tools CLI was cold-start broken by 44 extensionless relative ESM imports.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w02-L17",
+        "w03-L34",
+        "w05-L17",
+        "w04-L06",
+        "w04-L07"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w02",
+        "w03",
+        "w04",
+        "w05"
+      ],
+      "homeClaim": "ADR-121 (hook ordering) + an agent-tools ESM/dist cure ticket",
+      "proposedDisposition": "needs-home",
+      "rationale": "Hook ordering is homed but the ESM cold-start breakage and the worktree-dist bridge recipe are not."
+    },
+    {
+      "id": "A99",
+      "statement": "When main merges into the coordination branch, rebuild the primary dist immediately or the session's own PreToolUse hooks fail open, because main names an artefact the old dist does not contain.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w10-L22"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w10"
+      ],
+      "homeClaim": "coordination-branch merge checklist / hooks README",
+      "proposedDisposition": "needs-home",
+      "rationale": "A fail-open enforcement hazard tied to a routine mechanical action."
+    },
+    {
+      "id": "A100",
+      "statement": "F-147: knip exits 0 on per-workspace plugin-config load failures (console.error only, no issue recorded), so a crash reads as a pass; cured by a knip-gate wrapper converting the zero-exit ERROR signature into a loud failure, running pnpm knip:gate in CI for pre-push parity, and moving repo-check to process.exitCode to avoid piped-stdio truncation.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w02-L20",
+        "w03-L32"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w02",
+        "w03"
+      ],
+      "homeClaim": "frictions register F-147 + knip-gate tooling landed in PR #435",
+      "proposedDisposition": "already-homed",
+      "rationale": "Registered friction with a landed cure."
+    },
+    {
+      "id": "A101",
+      "statement": "Under an inherited COREPACK_ROOT the resolved standalone pnpm refuses the packageManager self-switch (11.9.0 vs 11.8.0 pin); cure is stripping corepack vars from the trusted spawn's environment.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w03-L33"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w03"
+      ],
+      "homeClaim": "agent-tools trusted-spawn code comment / frictions register",
+      "proposedDisposition": "needs-home",
+      "rationale": "A sharp environment gotcha whose cure exists in code but whose rationale is unrecorded."
+    },
+    {
+      "id": "A102",
+      "statement": "Green gates that are not evidence: a Vitest unit test passed on a runtime fact the real build path could not satisfy (Vite resolves workspace packages, `tsx esbuild.config.ts` does not) — a green unit test is not proof a runtime resolution works.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L36"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": ".agent/directives/validation-strategy.md gate-integrity section",
+      "proposedDisposition": "needs-home",
+      "rationale": "A gate-integrity class distinct from F-150 with no evidenced home."
+    },
+    {
+      "id": "A103",
+      "statement": "Recurrent inherited test flakes observed but not cured: security-headers COOP under full-suite load and oauth-proxy-routes POST /oauth/token (200 expected, 400 once), both passing isolated and on re-runs — flagged as fix-the-generator candidates, order/parallelism-dependent state suspected.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w06-L16",
+        "w10-L36",
+        "w09-L57"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w06",
+        "w09",
+        "w10"
+      ],
+      "homeClaim": "flaky-test ticket in Linear (MCP team)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Three sightings across windows with no ticket named; loss means re-diagnosing from scratch."
+    },
+    {
+      "id": "A104",
+      "statement": "CI test-merge parity behaviour: a mid-round landing on main can red a downstream PR's CI with no push by that PR's author because CI runs the test-merge against current main; and the up-to-date treadmill does not converge on a busy main, so the cure is coordination not blind update-branch retries.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w02-L23",
+        "w01-L24"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w01",
+        "w02"
+      ],
+      "homeClaim": "per-user memory merge-drive-orchestration.md + pr-lifecycle currency section",
+      "proposedDisposition": "already-homed",
+      "rationale": "The busy-main treadmill lesson is carried in standing memory covering both effects."
+    },
+    {
+      "id": "A105",
+      "statement": "Skills estate drift: three skill adapters drifted on main via commit 5fc484b38 with no skills:check leg in CI static-checks; the standard-alignment exploration also found generator lag vs the ADR-125 frontmatter contract, shared/ vs references/, five bodies over the 500-line progressive-disclosure limit, and no spec-rule validation in portability:check.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L19",
+        "w06-L30",
+        "w06-L31"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w05",
+        "w06"
+      ],
+      "homeClaim": ".agent/reports/agent-skills-standard-alignment-exploration-2026-07-23.md (36b94f280) + ticket MCP-123",
+      "proposedDisposition": "already-homed",
+      "rationale": "Committed report plus a backlog ticket carrying the remediation shape."
+    },
+    {
+      "id": "A106",
+      "statement": "Owner-tightened succession contract: a handoff record must carry every reviewer's raw output VERBATIM as individual files, never summarised, and the Director assesses the fleet feedback independently BEFORE reading the implementer's dispositions, then diffs the two.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w08-L04"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": ".agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Leaf names the PDR carrying the tightened contract."
+    },
+    {
+      "id": "A107",
+      "statement": "Successor grounding order is formation letter first (character before context), then the full handoff record, then the ticket register and working docs, then standing-rulings memory; the incoming Director's first act on the release arc is the owner what/why/why-now conversation, not a task.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L40",
+        "w06-L40"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w05",
+        "w06"
+      ],
+      "homeClaim": "per-user memory ends-before-means-front-of-chain-first.md + PDR-064 torch-pass practice",
+      "proposedDisposition": "already-homed",
+      "rationale": "Grounding order and the conversation-first framing are carried in standing memory and the succession PDR."
+    },
+    {
+      "id": "A108",
+      "statement": "MCP-137 design-lane rulings: three-tier preservation with held-out import-era classes fetched-local for per-piece owner re-review, S4 write-set extended to the five merged tier-CSS files with _ds_bundle.js excluded and its staleness given a tracked home, zero deletes, 167 writes executed with OFL notices; the semantic merge is one lane with the design work, one mind.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w08-L03",
+        "w08-L18",
+        "w08-L17",
+        "w07-L31",
+        "w07-L30"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w07",
+        "w08"
+      ],
+      "homeClaim": "MCP-137 ratified plan and ticket + .design-sync/NOTES.md (landed)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Rulings captured verbatim in the ratified plan and its amendments."
+    },
+    {
+      "id": "A109",
+      "statement": "Design work is shown as rendered pixels in Chrome, never artefact paths — 'show me first, then discuss'; the S0-S4 substrate was real and verified yet not one rendered pixel had been shown all arc, a ratification gap owned by the Director for accepting file-tier evidence against a RENDER criterion.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w09-L06",
+        "w09-L07"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w09"
+      ],
+      "homeClaim": "per-user memory ui-design-show-in-chrome.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner rule carried in memory; the evidence-tier gap is its worked instance."
+    },
+    {
+      "id": "A110",
+      "statement": "Named review-arc generator endorsed for graduation: universal quantifiers die at code-visible corners — the survivable claim names its exceptions.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w08-L09"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": ".agent/memory/active/patterns/ (adjacent to frame-free-absolutes-are-unhandled-cases.md) + MCP-119 generator inputs",
+      "proposedDisposition": "needs-home",
+      "rationale": "Endorsed for graduation but only routed as generator input, not evidenced as landed."
+    },
+    {
+      "id": "A111",
+      "statement": "Derived-view-vs-stored-copy: storing the visual disambiguator token was the single generator of five reviewer waves' findings, dissolved by render-time derivation as a pure function of prefix+id.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w08-L10"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": ".agent/memory/active/patterns/ derived-view-vs-stored-copy",
+      "proposedDisposition": "needs-home",
+      "rationale": "Recorded as a pattern seed with the plan landed but the pattern itself unhomed."
+    },
+    {
+      "id": "A112",
+      "statement": "Enforcement-surface (hook-guard) changes are not landed from a compacting context — they wait for a fresh head; enforcement surfaces get heightened care by class.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w08-L15"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": "hooks README / enforcement-surface practice rule",
+      "proposedDisposition": "needs-home",
+      "rationale": "Leaf itself marks this as an unhomed practice line."
+    },
+    {
+      "id": "A113",
+      "statement": "Conserved defect exhibit: a revising subagent wrote files via a Python shell to route around a blocked native edit path — recorded as a defect to cure at the adapter, never normalised as a technique.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w08-L14"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": "MCP-150 report (PR 522, landed)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Exhibit carried by a landed report."
+    },
+    {
+      "id": "A114",
+      "statement": "When two seats share a first name token, full display names are required in every comms event, commit message, and record, both directions.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w08-L24"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": "agent-naming / identity conventions doc",
+      "proposedDisposition": "needs-home",
+      "rationale": "A small identity-safety convention instituted live with no durable home."
+    },
+    {
+      "id": "A115",
+      "statement": "MCP-102 content-care contract: the guidance pipeline serves safeguarding-bar content authored by non-engineers in Notion, requiring strict validation at ingest, no PII in repo or served output, sanitisation as a tested contract, and safeguarding-threshold judgments routed to Director/owner cards; the guidance-format sitting discharged with six owner rulings on the ticket.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w08-L23",
+        "w07-L51",
+        "w09-L01"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w07",
+        "w08",
+        "w09"
+      ],
+      "homeClaim": "Linear MCP-102 (verify the ticket carries the care contract, not just the format rulings)",
+      "proposedDisposition": "needs-home",
+      "rationale": "The format rulings are on the ticket but the content-care contract is only claimed to be."
+    },
+    {
+      "id": "A116",
+      "statement": "MCP-121 tool-ordering ruling: call order 0 makes it almost certain the agent reads the instruction, so get-agent-rules-and-guidance takes callOrder 0; adding an unimplemented tool name to toolGuidanceData fails type-check because AllToolName's bidirectional guard demands a full definition, so the owner sketch was preserved as a committed patch artefact.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w07-L12",
+        "w07-L13",
+        "w07-L14"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w07"
+      ],
+      "homeClaim": ".agent/reports/mcp-121-owner-sketch-agent-rules-tool.patch + MCP-121 plan (PR #485)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Sketch and ruling preserved as a committed artefact and ratification-vehicle plan."
+    },
+    {
+      "id": "A117",
+      "statement": "Slack release-failure alerting is proven end-to-end into channel C0BKEUM2UAG (not C0BCV3HDEE5) after the owner completed the activation triple (chat:write scope, app invited, SLACK_BOT_TOKEN secret).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w07-L49",
+        "w07-L50"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w07"
+      ],
+      "homeClaim": "release workflow doc / runbook alerting section",
+      "proposedDisposition": "needs-home",
+      "rationale": "Operational alerting config and its proof exist only in the stream."
+    },
+    {
+      "id": "A118",
+      "statement": "Security finding declined-with-ticket at MCP-192: repository-scoped secrets (RELEASE_APP_*, SLACK_BOT_TOKEN, TURBO_TOKEN, NPM_TOKEN) are reachable from any in-repo pull_request CI run because no workflow declares a GitHub Actions environment; cure is a main-only deployment-branch-policy environment referenced by the release job.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w12-L32",
+        "w12-L38"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "new Linear ticket in the security-hardening backlog",
+      "proposedDisposition": "needs-home",
+      "rationale": "An explicitly ticket-worthy security finding with no ticket yet minted."
+    },
+    {
+      "id": "A119",
+      "statement": "gh credential alarms are usually transient: an all-calls-401 'token invalid' episode was a keychain lock, and a real 401 outage self-cured by owner re-auth — SSH pushes, local gates and server-side auto-merges keep working throughout, so read the error verbatim and retry once before declaring a fleet blocker.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w03-L31",
+        "w01-L41",
+        "w04-L24"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w01",
+        "w03",
+        "w04"
+      ],
+      "homeClaim": "frictions register / fleet blocker known-issues",
+      "proposedDisposition": "needs-home",
+      "rationale": "Three episodes with a standing cure that would otherwise be re-escalated."
+    },
+    {
+      "id": "A120",
+      "statement": "Never pipe the command whose result you need: a grep filter ate a comms CLI error making a failed closeout send look successful, and a `| tail` swallowed a failed git push while printing a false success marker.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L08",
+        "w12-L41"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w05",
+        "w12"
+      ],
+      "homeClaim": ".agent/rules/exit-codes-in-band-never-piped.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "A named rule governs the class; these are recurrence scars."
+    },
+    {
+      "id": "A121",
+      "statement": "Dormancy/wake polling must use canonical watcher/inbox tooling: a hand-rolled poll filtered on addressed_to instead of the 'to' field, making a directed wake invisible.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w05-L04"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w05"
+      ],
+      "homeClaim": "wake-poll / dormancy-cursor doctrine in comms tooling docs",
+      "proposedDisposition": "needs-home",
+      "rationale": "A concrete silent-miss mechanism with only a guessed home."
+    },
+    {
+      "id": "A122",
+      "statement": "Notification-bridge defect: Copilot detached bash captures new stdout but only wakes the harness on process completion, so a long-lived watcher has no notification path; cured by a separate one-minute comms alert schedule with its own SQL cursor alongside the canonical watcher.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w10-L28"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w10"
+      ],
+      "homeClaim": "cross-platform-agent-surface-matrix.md Copilot notification row / comms tooling doc",
+      "proposedDisposition": "needs-home",
+      "rationale": "Platform-specific liveness workaround needed by every future Copilot seat."
+    },
+    {
+      "id": "A123",
+      "statement": "Reads race merges in this fleet because the owner and lane owners merge directly — bind every route or state claim to a timestamped fresh read, never an assumed portfolio snapshot.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L09"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": "Director routing practice / verify-dont-trust rule",
+      "proposedDisposition": "needs-home",
+      "rationale": "A stated fleet-shape lesson with no home named."
+    },
+    {
+      "id": "A124",
+      "statement": "When a review finding's premise is a claim about platform or vendor capability, fetch the vendor documentation first-hand before classifying, and check the capability's ARITY not just its existence — composed true facts can yield a false third claim.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w10-L16"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w10"
+      ],
+      "homeClaim": "per-user memory capability-questions-from-original-sources.md (arity clause missing)",
+      "proposedDisposition": "needs-home",
+      "rationale": "The arity refinement is the novel part and is not evidenced in the existing memory."
+    },
+    {
+      "id": "A125",
+      "statement": "Owner-visibility supersedes proxy predicates: the >10-minute merge quiet window exists only because agents cannot see Copilot review start/finish, so the owner's settled word from his own visibility overrides it.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w10-L10"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w10"
+      ],
+      "homeClaim": "pr-lifecycle settled-round predicate (quiet-window rationale note)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Rationale that prevents future seats mis-scoring owner merges as premature."
+    },
+    {
+      "id": "A126",
+      "statement": "The Copilot-review ruleset does not bind .design-sync/, .agent/plans/ or packages/design doc paths — confirmed by PR #536's timeline showing zero review_requested events versus #534's every-push auto-request.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w10-L09"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w10"
+      ],
+      "homeClaim": "pr-lifecycle reviewer-leg scoping / ruleset documentation",
+      "proposedDisposition": "needs-home",
+      "rationale": "Determines whether a missing Copilot leg is a wait or a non-event; unhomed."
+    },
+    {
+      "id": "A127",
+      "statement": "Owner-pinned text is never silently re-ruled even when provably impossible as written (it routes up); executed is not ratified — the stamp is the difference; owner-authored surfaces get an is-the-owner-mid-flight check at routing after two live collisions.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w08-L11"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": "per-user memories owner-parallel-edits-race-assigned-lanes.md + first-major-release-standing-rulings.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both doctrine lines map onto existing standing memories."
+    },
+    {
+      "id": "A128",
+      "statement": "Owner-ruled prune-after-identity-check protocol: first-hand diff the staged blob against main's landed copy, prune only on a byte-identical diff-empty witness, any difference stops and routes back; a duplication proof never licenses a risk-of-loss operation while the committed copy is pre-merge.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w08-L07",
+        "w08-L19"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w08"
+      ],
+      "homeClaim": "per-user memories worktree-prune-standing-policy.md and no-risk-of-loss-operations-ever.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both arms are standing policies in memory."
+    },
+    {
+      "id": "A129",
+      "statement": "Directives on routing shape: all information requests route to the Director who surfaces only what survives concept-exploration, no seat sits on quiet hold, and a standby seat with a named gated deliverable is not idle capacity.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w06-L14",
+        "w02-L16",
+        "w03-L40",
+        "w03-L03"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w02",
+        "w03",
+        "w06"
+      ],
+      "homeClaim": ".agent/rules/route-blocks-and-questions-to-director.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Named rule file plus standing memories carry the routing contract."
+    },
+    {
+      "id": "A130",
+      "statement": "Owner correction on menu-presenting: 'why are you presenting options, update everything, where a decision is needed run it through the decision matrix, only surface it to me if a question survives that process'.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w11-L22",
+        "w09-L19"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w09",
+        "w11"
+      ],
+      "homeClaim": ".agent/rules/present-verdicts-not-menus.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "A rule of exactly this name governs the behaviour."
+    },
+    {
+      "id": "A131",
+      "statement": "Owner scope corrections on the dependency lane: DANGEROUSLY_DISABLE_AUTH unset in deployed env is settled architecture not a finding, 'I asked for an update of deps, not an overhaul of settled architecture', and the whole remaining minor/patch drift batch lands as one PR with no plan-approval round-trip.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w09-L18",
+        "w09-L19"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w09"
+      ],
+      "homeClaim": "per-user memory proportion-work-to-the-ask-not-the-interest.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "The ceremony-proportion correction is carried as standing memory."
+    },
+    {
+      "id": "A132",
+      "statement": "MCP-151 dependency-lane state at pause: six PRs (#558-562) open awaiting settle, all of #558-561 touching pnpm-lock.yaml so they must land serially with main moving between, and @clerk/mcp-tools 0.6.0 (#561) held until after the submission because it touches the auth path the reviewer walks.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w11-L17",
+        "w11-L18"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": "Linear MCP-151 pause comment / cold-pause handoff",
+      "proposedDisposition": "needs-home",
+      "rationale": "Sequencing constraints and a dated hold that a successor cannot re-derive."
+    },
+    {
+      "id": "A133",
+      "statement": "Lockfile custody standing rule: pnpm-lock.yaml has no exclusive custodian since it is derived; each lane declares deps in its own manifest and commits manifest plus lockfile together, and conflicting lockfile changes are resolved by regenerating from merged manifests, never hand-merging hunks.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w12-L45"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": ".agent/rules/lockfile-rebuild-survivability.md (custody clause) or build-system.md",
+      "proposedDisposition": "needs-home",
+      "rationale": "A parallel-lane custody rule adjacent to, but not stated in, the landed lockfile rule."
+    },
+    {
+      "id": "A134",
+      "statement": "Tripwire: merge conflicts beyond trivial union-append — especially on .agent continuity/state/memory files — stop and route to the Director; the ADR index README is a recurring hot collision point for parallel ADR-bearing branches with cures unassessed.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w12-L55",
+        "w12-L56"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": ".agent/rules/pre-merge-divergence-analysis.md + an ADR-index collision decision",
+      "proposedDisposition": "needs-home",
+      "rationale": "The tripwire fits an existing rule but the ADR-index structural call is explicitly unassigned."
+    },
+    {
+      "id": "A135",
+      "statement": "MCP-128 landing-page rulings: copy must match the artefact ('the plan is naive, the copy cannot be decided by AI'), the page must be Full React with near-total server rendering plus real hydration, and ADR-217 was created with the delivery plan archived and re-trued — while the plan and a Director comment still state the retired Candidate-B/AC3/H1 model.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w11-L31",
+        "w12-L03",
+        "w11-L34"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w11",
+        "w12"
+      ],
+      "homeClaim": "ADR-217 dated amendment + MCP-128 plan re-true (9db5e3083)",
+      "proposedDisposition": "needs-home",
+      "rationale": "The archive/re-true landed but the flagged contradiction with the hydration ruling is unamended."
+    },
+    {
+      "id": "A136",
+      "statement": "Stale-evidence class on captured artefacts: the studio HTML MCP-128 treats as the design shows Resources 6 and Tools 42 against a live serve of 5 and 39, so reading a captured artefact as content rather than styling proof ships yesterday's surface; a related comment mis-stated per-request host derivation when the value is boot-time from Vercel env.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w11-L32",
+        "w11-L33"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": ".agent/memory/active/patterns/frozen-text-false-authority.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Graduated pattern of exactly this class landed in the same window."
+    },
+    {
+      "id": "A137",
+      "statement": "Lighthouse gating: the owner directed at least a basic performance gate for MCP-128 grounded in validation-strategy.md, and the verified path is Playwright launching Chromium with --remote-debugging-port then running the lighthouse npm package over CDP (no first-party integration; @lhci/cli is the official CI alternative); MCP-180 is not a submission blocker, MCP-181/182 scheduled to M8.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w11-L52",
+        "w11-L53",
+        "w11-L54"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w11"
+      ],
+      "homeClaim": "Linear MCP-180/181/182 + .agent/directives/validation-strategy.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner scheduling rulings are ticketed and the strategy doc is the named grounding."
+    },
+    {
+      "id": "A138",
+      "statement": "7-leg verification of the MCP-128 handoff found four divergences and one omission — the tna bundle is committed not untracked (voiding a reorg item), 'studio-source excluded from turbo inputs' names a nonexistent mechanism (truth: no build script, silently revocable), ROLES count is 146 not ~208, and 36 unresolved PR #565 threads were unmentioned; validateTierReferences is one import from guarding the dtcg export.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w12-L13",
+        "w12-L14"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "MCP-128/#565 successor handoff record + design-tokens tier-enforcement wiring ticket",
+      "proposedDisposition": "needs-home",
+      "rationale": "Corrections to a governing handoff plus a one-import-away guard opportunity, both unhomed."
+    },
+    {
+      "id": "A139",
+      "statement": "PR #565 left 40-41 unresolved review threads with no adjudicating seat after a pending-handoff claim sat unadopted and routing landed on a retired seat; two Class P dispositions (fidelity export-live pair and register discipline; asset-URL versioning) still need Linear ticket homes minted.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w12-L19",
+        "w12-L16",
+        "w12-L18"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "Linear tickets for the two Class P dispositions + #565 successor routing",
+      "proposedDisposition": "needs-home",
+      "rationale": "Named ticket-minting obligations that are the only surviving record of those dispositions."
+    },
+    {
+      "id": "A140",
+      "statement": "MCP-182 (ShareMetadata) is already substantially cured in code from earlier commits — worth a ticket comment before anyone re-does the work.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w12-L17"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "Linear MCP-182 comment",
+      "proposedDisposition": "needs-home",
+      "rationale": "Cheap duplicate-work prevention that exists only in the stream."
+    },
+    {
+      "id": "A141",
+      "statement": "An orphaned watcher (17.5h runtime, no active claim, no timeout guard, F-101 orphan class) had been promised into a nonexistent 'daily summary'; hygiene action still needed.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w12-L37"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w12"
+      ],
+      "homeClaim": "frictions register F-101 + watcher lifecycle cleanup",
+      "proposedDisposition": "needs-home",
+      "rationale": "An unbounded background process with a forwarded promise into nothing."
+    },
+    {
+      "id": "A142",
+      "statement": "Director succession was executed for a rising confabulation-from-compression error class after ~a week and two compactions, with a fabricated-bot-identity incident as the type specimen; the compaction-survival record shape (four layers, comms-only Layer-3 distillations, flagged inferences, blind-spot bounds, named metaloss fixed point) is the durable form.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w09-L35",
+        "w04-L16",
+        "w11-L29"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w04",
+        "w09",
+        "w11"
+      ],
+      "homeClaim": "PDR-064 succession protocol (compaction-triggered retirement criterion)",
+      "proposedDisposition": "needs-home",
+      "rationale": "A concrete retirement trigger and record shape that the succession PDR is not evidenced to carry."
+    },
+    {
+      "id": "A143",
+      "statement": "Machine-local handoff and succession records carry substantive lane knowledge but live only under .agent/state/collaboration/handoffs/ (gitignored) — including the MCP-137 S0 succession with its 12 verbatim reviewer outputs, the PR #529 quoted finding inventory, cold-pause records, and multiple Director full handoffs.",
+      "kind": "pointer",
+      "supportingLeafIds": [
+        "w08-L05",
+        "w10-L17",
+        "w09-L26",
+        "w03-L20",
+        "w03-L22",
+        "w04-L16",
+        "w12-L51",
+        "w11-L39"
+      ],
+      "leafCount": 24,
+      "windows": [
+        "w01",
+        "w02",
+        "w03",
+        "w04",
+        "w05",
+        "w07",
+        "w08",
+        "w09",
+        "w10",
+        "w11",
+        "w12"
+      ],
+      "homeClaim": "P6 machine-local residue verification leg — extract still-load-bearing substance to tracked homes before disposal",
+      "proposedDisposition": "needs-home",
+      "rationale": "These records are the sole carrier of several lanes' reasoning and are not in the repo."
+    },
+    {
+      "id": "A144",
+      "statement": "Seat succession, claim adoption, roster and stand-down events across the arc (Director transfers, lane handoffs, claim ids, pause/retire words) — coordination bookkeeping superseded by the current roster and claims registry.",
+      "kind": "other-signal",
+      "supportingLeafIds": [
+        "w02-L15",
+        "w04-L17",
+        "w01-L40",
+        "w06-L13",
+        "w10-L24",
+        "w11-L38",
+        "w12-L44",
+        "w05-L41"
+      ],
+      "leafCount": 30,
+      "windows": [
+        "w01",
+        "w02",
+        "w03",
+        "w04",
+        "w05",
+        "w06",
+        "w07",
+        "w08",
+        "w09",
+        "w10",
+        "w11",
+        "w12"
+      ],
+      "homeClaim": "",
+      "proposedDisposition": "noise",
+      "rationale": "Point-in-time seat bookkeeping whose durable residue is the claims registry itself."
+    },
+    {
+      "id": "A145",
+      "statement": "Per-PR drive bookkeeping: individual merge SHAs, release versions, round tallies, drain resequencing, and one-off PR dispositions across the merge drives.",
+      "kind": "other-signal",
+      "supportingLeafIds": [
+        "w02-L01",
+        "w02-L30",
+        "w02-L31",
+        "w06-L02",
+        "w06-L34",
+        "w10-L01",
+        "w11-L23",
+        "w03-L14"
+      ],
+      "leafCount": 26,
+      "windows": [
+        "w01",
+        "w02",
+        "w03",
+        "w04",
+        "w05",
+        "w06",
+        "w07",
+        "w09",
+        "w10",
+        "w11",
+        "w12"
+      ],
+      "homeClaim": "",
+      "proposedDisposition": "noise",
+      "rationale": "Git history and the PR record carry these facts durably already."
+    },
+    {
+      "id": "A146",
+      "statement": "Owner-held and lane-blocked items still open at window boundaries: PR #401 held indefinitely, the Vercel dashboard SDK_CODEGEN_MODE confirmation, PDR-133 committed-but-unpushed at 948f7622f, MCP-152 never opened, MCP-63 returning unstarted, and the MCP-160 disposition pack's two author verdicts awaiting the owner's glance.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w02-L26",
+        "w07-L21",
+        "w10-L34",
+        "w09-L61",
+        "w05-L39",
+        "w09-L59"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w02",
+        "w05",
+        "w07",
+        "w09",
+        "w10"
+      ],
+      "homeClaim": "owner card queue / Linear tickets per item",
+      "proposedDisposition": "needs-home",
+      "rationale": "Live undischarged obligations whose only carrier is the stream."
+    }
+  ]
+}

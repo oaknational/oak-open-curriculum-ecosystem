@@ -63,7 +63,9 @@ that owns a lane in its own worktree, see PDR-117.)
 
 ### 3. A worktree is a temporary means, not a home — the lifecycle
 
-create → build (`pnpm install && pnpm build`, before any gate or work) → open draft PR
+create → enter (session-level residency per
+[`worktree-residency`](worktree-residency.md)) → build (`pnpm install && pnpm build`,
+before any gate or work) → open draft PR
 → do the bounded work → update onto `main` → mark the PR ready → merge → **remove the
 worktree AND delete the branch.** A worktree that outlives its PR's merge, or never
 opens a PR, is a hygiene violation to resolve.
@@ -158,7 +160,10 @@ the map is the only surface on which a forgotten worktree becomes visible.
 
 ### 8. Operate correctly from a worktree
 
-Build before work (`pnpm install && pnpm build` — the eslint plugin dist and the
+Working-directory residency — the lane agent's session cwd IS the worktree,
+established by a session-level mechanism and stable until the agent changes it —
+is governed by [`worktree-residency`](worktree-residency.md) (owner directive
+2026-07-31). Build before work (`pnpm install && pnpm build` — the eslint plugin dist and the
 statusline both come from the build). From a worktree, collaboration-state commands need
 the primary path passed explicitly (`comms list/watch/inbox --comms-dir`, `claims
 --active`); only `comms send` auto-anchors to the primary, and a relative path silently

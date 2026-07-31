@@ -1,0 +1,3366 @@
+{
+  "ok": true,
+  "shard": "B",
+  "leafCount": 444,
+  "candidates": [
+    {
+      "id": "Bc01",
+      "statement": "The Chrome claude.ai session on the official Oak account is a metered Premium team seat: reach for the browser last, prefer one full-page read per step, and report a named unknown rather than spend quota on completeness.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w15-L01"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": ".agent/rules/ (new rule) or agentic-judgment-conserve-by-default — no confident existing home",
+      "proposedDisposition": "needs-home",
+      "rationale": "Standing owner constraint binding every seat with no verified durable home."
+    },
+    {
+      "id": "Bc02",
+      "statement": "Self-limits are gated on asking, never silent: owner ruled the earlier comms-monitoring quota was situational, and any narrowing of scope must be surfaced as a question before narrowing.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w16-L04",
+        "w16-L05"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": ".agent/rules/agentic-judgment-conserve-by-default.md (amendment)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Owner-ratified behaviour rule stated in-stream with no confirmed rule text carrying it."
+    },
+    {
+      "id": "Bc03",
+      "statement": "Any entry that reads as a constraint on future behaviour must carry scope and expiry in the same sentence; observations use past tense and only owner-ratified doctrine takes the imperative.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w16-L06"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "records/no-moving-targets-in-permanent-docs rule family",
+      "proposedDisposition": "needs-home",
+      "rationale": "Writing-discipline ruling for durable records with no named home."
+    },
+    {
+      "id": "Bc04",
+      "statement": "A constraint's hardness must be priced by its cure cost and inherited urgency re-derived at each handoff — the MCP-303 credentials-expiry 'hard bound' rode five compaction boundaries unexamined until the owner said re-minting is 'the work of seconds'.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L34",
+        "w18-L35"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "napkin (rotated to archive) — candidate rule/PDR clause",
+      "proposedDisposition": "needs-home",
+      "rationale": "Named lesson whose only recorded home was the napkin, now archived."
+    },
+    {
+      "id": "Bc05",
+      "statement": "Settled reads must derive required contexts from /rules/branches/main and confirm each by name across BOTH /commits/{sha}/check-runs and /commits/{sha}/status, because Vercel is a required commit status publishing no check-run; neutral/skipped satisfies a required check.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L06",
+        "w16-L10",
+        "w16-L14"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w15",
+        "w16"
+      ],
+      "homeClaim": ".agent/skills/pr-lifecycle/SKILL-CANONICAL.md §Read mechanics",
+      "proposedDisposition": "needs-home",
+      "rationale": "Load-bearing settle mechanics whose presence in the skill file is asserted but unverified."
+    },
+    {
+      "id": "Bc06",
+      "statement": "Settle watches need three legs — checks-by-name across both surfaces, MERGEABLE state, and gh-run-list-per-head — because a CONFLICTING PR (or a dropped trigger) silently stops pull_request CI runs while a check-runs-only watch reads 'settling' forever.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w19-L05"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w19"
+      ],
+      "homeClaim": "MCP-373 (recorded); pr-lifecycle SKILL amendment",
+      "proposedDisposition": "needs-home",
+      "rationale": "CI-silent failure mode with a concrete three-leg cure not confirmed in the skill."
+    },
+    {
+      "id": "Bc07",
+      "statement": "A base retarget on a stacked PR fires no synchronize event so required checks do not re-run; the cure is an empty commit (commit-tree against the same tree) on the head branch, touching no checkout.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L33"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "pr-lifecycle SKILL / shell-and-tooling-gotchas",
+      "proposedDisposition": "needs-home",
+      "rationale": "Reusable mechanical fact with no named durable home."
+    },
+    {
+      "id": "Bc08",
+      "statement": "The bot token can expire mid pre-push gate chain (bare 403 on write while reads succeed); mint, auth-probe and push must run in ONE shell, proof of push is the transfer line plus a fresh ls-remote, never the exit code, and re-mint-and-retry is the cure rather than a permissions investigation.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L07",
+        "w16-L12"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w15",
+        "w16"
+      ],
+      "homeClaim": ".agent/rules/bot-identity-on-third-party-systems.md or shell-and-tooling-gotchas",
+      "proposedDisposition": "needs-home",
+      "rationale": "Recurring write-path failure signature whose home coverage is explicitly unverified."
+    },
+    {
+      "id": "Bc09",
+      "statement": "Ambient gh/stored login silently uses the owner's credential for PR creation and SSH push: multiple seats opened PRs under the owner identity (Skua #577, Dynamo, Director #569, Codex seats, PR #642, PR #661), so every third-party write exports GH_TOKEN from a bot mint and reads the identity back from the response.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L31",
+        "w16-L15",
+        "w20-L05",
+        "w20-L41",
+        "w23-L39"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w13",
+        "w16",
+        "w20",
+        "w23"
+      ],
+      "homeClaim": ".agent/rules/bot-identity-on-third-party-systems.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "The rule exists and the leaves cite it directly as the governing home."
+    },
+    {
+      "id": "Bc10",
+      "statement": "MCP-385 landed per-use bot-token minting with a mandatory named --scope from a closed table, killing the silent owner-credential GH_TOKEN fallback; after any rebuild past 55d6cc8a3, merge-bot mint-token requires --scope with no default.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w20-L31"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-385 / merged main (merge-bot CLI)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed code change carrying its own substance."
+    },
+    {
+      "id": "Bc11",
+      "statement": "MCP-395 (Director-held, owner decision pending): the primary checkout's shared .git/config sets user.name/email to the bot identity, so the owner's own commits from the primary are misattributed.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w20-L29"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-395 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ticketed with the substance on the ticket."
+    },
+    {
+      "id": "Bc12",
+      "statement": "Untracked-records custody class: permanent records were reported 'committed' while untracked on disk; the mechanical cure is `git status --short <path>` after writing ANY permanent record — commit status is checkout transport, never a safety classification, and untracked live state may be critically important.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L08",
+        "w13-L13"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w13",
+        "w15"
+      ],
+      "homeClaim": ".agent/reports/mcp-63-succession-notification-and-focused-delivery-2026-07-26.md + untracked-files-first-class memory",
+      "proposedDisposition": "already-homed",
+      "rationale": "A committed report carries the substance; only the mechanical-check clause is unverified."
+    },
+    {
+      "id": "Bc13",
+      "statement": "Fabricated-rationale and unread-state transmission class: a seat transmitted an inferred owner rationale unhedged with the owner's name on it (provenance unknown, owner later confirmed he did not know why), and two same-session instances asserted state not re-read at assertion time; proposed transmission-time check is 'when did I last read the state I am about to assert, and has anything changed since?'.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L09",
+        "w16-L11"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w15",
+        "w16"
+      ],
+      "homeClaim": "dont-transmit-assumptions-as-truth + verify-dont-trust §Claims Crossing Boundaries",
+      "proposedDisposition": "needs-home",
+      "rationale": "The rules exist but the transmission-time check and these instances are not confirmed carried."
+    },
+    {
+      "id": "Bc14",
+      "statement": "Prove a regression guard bites: any test added to close a proof gap is validated by mutating the source to the wrong behaviour and confirming exactly that test fails.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L10"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": "testing-strategy.md / test-expert doctrine",
+      "proposedDisposition": "needs-home",
+      "rationale": "Explicitly flagged as a graduation candidate left for consolidation."
+    },
+    {
+      "id": "Bc15",
+      "statement": "Copilot review requesting mechanics: the generic REST requested_reviewers POST returns 200/201 but writes nothing under bot/App credentials on any PR; the discriminator is the requesting CREDENTIAL identity, not PR authorship; the GitHub MCP request tool under the owner's grant is the reliable path; the merge-bot App lacks copilot-agent-settings write scope (MCP-391).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L05",
+        "w16-L16",
+        "w16-L41",
+        "w17-L19",
+        "w20-L30",
+        "w21-L26"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w13",
+        "w16",
+        "w17",
+        "w20",
+        "w21"
+      ],
+      "homeClaim": "MCP-313 / MCP-391 tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "MCP-313 is repeatedly named as the model's home and MCP-391 carries the scope defect."
+    },
+    {
+      "id": "Bc16",
+      "statement": "A Copilot review's presence is not coverage: verify the delivered review's commit_id matches the merged head (#570 merged on a review one commit stale, #610 likewise), a head move re-arms a standing request so both re-request paths no-op, and the reviews endpoint pages oldest-first so unpaginated reads miss recent reviews.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w16-L20",
+        "w16-L21",
+        "w16-L42",
+        "w17-L20"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w16",
+        "w17"
+      ],
+      "homeClaim": "MCP-313 / pr-lifecycle SKILL",
+      "proposedDisposition": "needs-home",
+      "rationale": "Verification discipline is mechanically specific and only partially attributed to MCP-313."
+    },
+    {
+      "id": "Bc17",
+      "statement": "REST requested_reviewers and gh pr view reviewRequests are structurally blind to Bot reviewers — only the GraphQL Bot fragment shows them; the issue timeline is the only honest registration proof.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L04",
+        "w17-L19"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w13",
+        "w17"
+      ],
+      "homeClaim": "pr-lifecycle SKILL / estate gotchas doc",
+      "proposedDisposition": "needs-home",
+      "rationale": "API read blindness fact with no named durable home."
+    },
+    {
+      "id": "Bc18",
+      "statement": "Copilot review policy evolved across the shard: selective/important-or-risky only (2026-07-26), then owner grant for agents to request under his credentials with four disciplines, then STANDING at PR-open for every source-touching PR with docs-only staying selective (2026-07-29); at-open plus substance-triggered, never per cure push; absence never blocks.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w14-L04",
+        "w16-L17",
+        "w16-L39",
+        "w16-L40",
+        "w18-L06",
+        "w18-L13",
+        "w19-L04",
+        "w20-L30"
+      ],
+      "leafCount": 8,
+      "windows": [
+        "w14",
+        "w16",
+        "w18",
+        "w19",
+        "w20"
+      ],
+      "homeClaim": "copilot-standing-for-source-prs + copilot-review-is-selective memories",
+      "proposedDisposition": "already-homed",
+      "rationale": "The ruling chain is carried in named memory entries."
+    },
+    {
+      "id": "Bc19",
+      "statement": "Suppressed Copilot findings are Copilot's own low-confidence bucket: burden of proof is reproduction before cure, and a non-reproducing finding gets a reasoned decline with the falsifier recorded, never a speculative cure or silent skip.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w23-L01",
+        "w23-L02"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "director-handoff.md rulings / review-ratchet discipline",
+      "proposedDisposition": "needs-home",
+      "rationale": "Owner ruling whose only cited home is a machine-local handoff file."
+    },
+    {
+      "id": "Bc20",
+      "statement": "Standing merge doctrine (owner verbatim): a green and clean PR with CI passing and no unresolved comments gets merged without owner approval, and any resulting problem makes recurrence-prevention the immediate priority.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w14-L27",
+        "w13-L30",
+        "w19-L16"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13",
+        "w14",
+        "w19"
+      ],
+      "homeClaim": "merge-rulings memory + confident-seats-proceed-and-report rule",
+      "proposedDisposition": "already-homed",
+      "rationale": "Core merge ruling carried in the named rule/memory set."
+    },
+    {
+      "id": "Bc21",
+      "statement": "Work has delivered ZERO value until merged to main: green branches, settled drafts and adjudicated-but-unpushed cures all count as zero, and the fleet was creating PRs faster than merging them — serialise stacks open-one-merge-one, distance-to-merge outranks polish.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w14-L25",
+        "w14-L26"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "merge-drive-orchestration memory / ship-independent-coordinate-dependent rule",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner ruling reflected in named merge-drive doctrine."
+    },
+    {
+      "id": "Bc22",
+      "statement": "The bot must REST-merge (PUT /pulls/{n}/merge), never gh pr merge: the CLI refuses client-side on mergeStateStatus:BLOCKED, a viewer-independent field that does not model the bot's bypass grant, so the server never sees the request; owner clarified the bot ruleset bypass covers ONLY the code-owner review requirement.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w16-L22",
+        "w16-L23",
+        "w16-L24"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "merge-rulings-no-admin-no-direct-merge-arm-allowed memory",
+      "proposedDisposition": "already-homed",
+      "rationale": "The named merge-rulings memory is the stated home for exactly this."
+    },
+    {
+      "id": "Bc23",
+      "statement": "The unresolved-thread re-count must run INSIDE the merge command (after head check, before the REST call) because a bot review can land in the seconds between; caught twice in forty minutes on #570 and #574.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L33"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "pr-lifecycle SKILL merge step",
+      "proposedDisposition": "needs-home",
+      "rationale": "Fleet practice adopted in-stream with no named durable home."
+    },
+    {
+      "id": "Bc24",
+      "statement": "Codex-seat merge bridge: the Codex GitHub connector refuses merge actions without in-session owner authorisation, so at genuinely-settled a Codex lane routes the mechanical merge key-turn to the Director as proxy while judgment stays with the lane seat.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w13-L29"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "all-agent-platforms-first-class-citizens memory / merge doctrine",
+      "proposedDisposition": "needs-home",
+      "rationale": "Standing cross-platform bridge with no confirmed durable home."
+    },
+    {
+      "id": "Bc25",
+      "statement": "Owner PR-size doctrine: PRs stay small and focused because surface growth defeats convergence; bands are ~5 files normal, 10 acceptable, 20 a problem, applied at design time, with mechanical files discounted.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w13-L07",
+        "w14-L22",
+        "w14-L44",
+        "w14-L41",
+        "w15-L15"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w13",
+        "w14",
+        "w15"
+      ],
+      "homeClaim": ".agent/rules/design-work-for-small-prs.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed rule explicitly named as the home."
+    },
+    {
+      "id": "Bc26",
+      "statement": "Bundling into one large PR is licensed only when the PROOF is indivisible (a mutual value-import cycle makes ordering arithmetically impossible; a type-only PR with no consumer is an unreviewable object) and is explicitly not precedent for convenience.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w15-L15"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": "design-work-for-small-prs.md (exception clause)",
+      "proposedDisposition": "needs-home",
+      "rationale": "A named exception with reasoning not confirmed present in the rule."
+    },
+    {
+      "id": "Bc27",
+      "statement": "Fleet-wide review-loop non-convergence was diagnosed (four seats one night) as doctrine rich in 'state' discipline and near-silent on 'dynamics' discipline; three proposed amendments — proportionality as a pre-decision gate, convergence-as-a-property (two non-decreasing rounds means freeze-and-adjudicate), cure-class separation (unrequested hardening becomes a ticket) — were owner-ratification pending.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L11",
+        "w14-L12",
+        "w14-L13"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": ".agent/research/review-loop-convergence-concept-exploration-2026-07.md (committed)",
+      "proposedDisposition": "already-homed",
+      "rationale": "An owner-directed committed report carries the diagnosis and proposals."
+    },
+    {
+      "id": "Bc28",
+      "statement": "Review-ratchet regime from PR 628's ten-round loop: two-axis disposition (correct AND proportionate) with reasoned decline plus falsifier first-class, respect the finder's confidence bucket, tally-then-step-back at ~4 settled rounds, two consecutive zero-thread rounds means converged.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w19-L04"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w19"
+      ],
+      "homeClaim": "review-ratchet-convergence-discipline memory",
+      "proposedDisposition": "already-homed",
+      "rationale": "Named memory updated at occurrence."
+    },
+    {
+      "id": "Bc29",
+      "statement": "Review findings from #570 were all READ-NOT-RUN (reasoned from source, never executed), so dispositions are sound as readings but are not test evidence.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L17"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "review adjudication doctrine",
+      "proposedDisposition": "needs-home",
+      "rationale": "A named evidence-grade distinction with no durable home."
+    },
+    {
+      "id": "Bc30",
+      "statement": "Extraction-stack discipline proven 4-for-4: verify the published map against current main BEFORE editing, extract by path from the frozen head rather than cherry-picking mixed commits, keep one replacement PR open at a time, and close the parent PR without merging once every replacement is pushed and linked.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L14"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": ".agent/reports/mcp-63-stack-successor-handoff records (committed)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Leaf names committed handoff reports as the home."
+    },
+    {
+      "id": "Bc31",
+      "statement": "MCP-229 cured the comms watcher silent-death: --max-events was a cumulative LIFETIME emission budget causing silent exit-0 death under backlog ≥100, renamed --max-events-per-drain with an in-band '--- WATCHER EXIT --- reason=... emitted_count=N' line; rollout needed one Director-coordinated window because live seats ran the old flag.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w14-L18",
+        "w14-L20"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "MCP-229 / merged agent-tools code",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed fix carrying its own substance."
+    },
+    {
+      "id": "Bc32",
+      "statement": "MCP-198/PR #579 cured the comms watcher wedge: drain re-read the entire comms directory every wake (O(total) not O(new)); the cure filters the seen-set against the directory listing, and MCP-185 pass-watermark is explicitly a mitigation, never the wedge cure.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L26",
+        "w13-L27"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-198 ticket / merged agent-tools comms watcher",
+      "proposedDisposition": "already-homed",
+      "rationale": "Merged cure with the sequencing recorded on tickets."
+    },
+    {
+      "id": "Bc33",
+      "statement": "Watchers can be NOTIFY-dark or stale-by-construction: a background-shell watcher drains and marks seen but cannot wake the seat (only the Monitor primitive notifies), harness Monitor plumbing can silently reap tasks with no notification, and any comms-parsing process started before a schema-changing merge crash-loops until re-armed on the rebuilt CLI.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L19",
+        "w18-L27",
+        "w18-L28",
+        "w20-L13",
+        "w22-L20",
+        "w20-L06"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w14",
+        "w18",
+        "w20",
+        "w22"
+      ],
+      "homeClaim": ".agent/rules/use-monitor-for-event-driven-wake.md + MCP-393 (generator cure)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Multiple distinct NOTIFY/stale-build signatures whose mechanical tells are not confirmed in the rule."
+    },
+    {
+      "id": "Bc34",
+      "statement": "MCP-393 landed the absorption-ack convention and comms threading parity: ACK-REQUESTED is itself the cure (generic-silence detection backs out to ~1.4% precision), directed events gained in_response_to via PR #651/ADR-220, and slice B was adjudicated dead except threading parity.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w21-L33",
+        "w21-L34",
+        "w22-L13",
+        "w22-L14",
+        "w22-L15",
+        "w22-L17",
+        "w20-L37"
+      ],
+      "leafCount": 7,
+      "windows": [
+        "w20",
+        "w21",
+        "w22"
+      ],
+      "homeClaim": ".agent/rules/directed-routing-requires-absorption-ack.md + ADR-220",
+      "proposedDisposition": "already-homed",
+      "rationale": "A new rule and a landed ADR carry the substance."
+    },
+    {
+      "id": "Bc35",
+      "statement": "ADR-220 review caught a cross-model blind spot: the corpus has 114 uses of in_response_to versus 0 of in_reply_to, so in_response_to is canonical and in_reply_to is a narrative-only legacy alias; the edge is one non-authoritative primary-antecedent hint with enumerated traversal hazards.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L16"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "ADR-220",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure landed in the ADR text."
+    },
+    {
+      "id": "Bc36",
+      "statement": "Standing owner directive: use Plover hunts Sundog (Codex/GPT-5) for second opinions at judgement-sized moments (contested dispositions, design forks, blind-spot-prone verdicts) — proportional, never routine ceremony; one self-contained directed event per ask, Plover claimless and opinion-only, asking seat owns disposition.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w22-L18",
+        "w22-L19",
+        "w22-L23"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": ".agent/rules/ or collaboration practice (no named home)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Fleet-standing owner directive with only a generic home guess."
+    },
+    {
+      "id": "Bc37",
+      "statement": "Comms-send traps: exit 2 is eaten by a tail pipe on inline --body with shell-hazard characters, --body argv caps at ~1500 chars (use --body-file), a plain send is rejected on identity-tuple mismatch while heartbeat sends bypass that guard, and `comms direct` needs the full recipient tuple.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L06",
+        "w16-L48",
+        "w20-L25",
+        "w21-L36"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w13",
+        "w16",
+        "w20",
+        "w21"
+      ],
+      "homeClaim": "shell-and-tooling-gotchas / agent-tools CLI docs",
+      "proposedDisposition": "needs-home",
+      "rationale": "Repeated CLI traps with no confirmed durable home."
+    },
+    {
+      "id": "Bc38",
+      "statement": "Never pipe a command into tail before echoing its exit marker (the pipe reports tail's code); the cure idiom is `cmd; rc=$?; echo EXIT:$rc; exit $rc`, and task-notifications report exit 0 even when the wrapped command fails, so read the artefact's own EXIT line.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L19",
+        "w16-L01",
+        "w18-L40",
+        "w20-L24"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w15",
+        "w16",
+        "w18",
+        "w20"
+      ],
+      "homeClaim": "patterns/wrapped-exit-codes-false-green.md + exit-codes-in-band-never-piped rule",
+      "proposedDisposition": "already-homed",
+      "rationale": "Pattern file and rule both exist and are named."
+    },
+    {
+      "id": "Bc39",
+      "statement": "Vacuous-run variant of the false-green class: exit zero WITH EMPTY output reads as absence-of-problems when it is absence-of-analysis — instances include a mistyped pnpm --filter matching no package and jq probes passing a negative grep.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L19",
+        "w16-L43",
+        "w16-L44"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w15",
+        "w16"
+      ],
+      "homeClaim": "patterns/wrapped-exit-codes-false-green.md (vacuous-run facet)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Explicitly minted as a new facet on the existing pattern file."
+    },
+    {
+      "id": "Bc40",
+      "statement": "Always-succeeding instruments prove nothing: download-asset returning success for any slug was invalid as a control, and verification of a not-found cure must prove an invalid input now fails actionably, not that a valid one still works.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w16-L31",
+        "w17-L48"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w16",
+        "w17"
+      ],
+      "homeClaim": "verify-dont-trust / testing doctrine",
+      "proposedDisposition": "needs-home",
+      "rationale": "Named epistemic lesson from the MCP-321 inversion without a confirmed home."
+    },
+    {
+      "id": "Bc41",
+      "statement": "MCP-334: commit-workflow-runtime.ts's pathspec commit reads the TREE while record/verify-staged checksum the INDEX, so `git commit -- <paths>` silently dropped 326 staged deletions while ceremony checks certified content the commit ignored.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L03",
+        "w18-L04",
+        "w18-L05"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "MCP-334 ticket (full spec externalised)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Spec and worked instances deliberately externalised onto the ticket."
+    },
+    {
+      "id": "Bc42",
+      "statement": "MCP-417: commits stage only the enqueued file list, so late-staged files silently miss a commit while local gates run green on the full index — a false-green generator; two peer git-add/git-commit races are recorded as evidence.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L11",
+        "w23-L30",
+        "w22-L37"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w22",
+        "w23"
+      ],
+      "homeClaim": "MCP-417 ticket + evidence file",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ticketed with an evidence file holding the instances."
+    },
+    {
+      "id": "Bc43",
+      "statement": "F-116 recurrence: the commit-queue guard hard-fails on the commit SKILL's prescribed worktree-suffixed claim spelling (guard.ts exact array membership); the working form is bare index/head with the worktree named in intent text.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L10",
+        "w18-L33"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14",
+        "w18"
+      ],
+      "homeClaim": "MCP-186 / frictions register F-116 + commit SKILL",
+      "proposedDisposition": "needs-home",
+      "rationale": "Recurring three-seat friction whose doctrine-vs-mechanism mismatch is still unfixed."
+    },
+    {
+      "id": "Bc44",
+      "statement": "Host idle-sleep and reboot freeze all heartbeats and watchers fleet-wide and produce false all-seats-retired signatures; the mechanical first check before any simultaneous-silence verdict is kern.sleeptime AND kern.boottime (a fresh boot zeroes sleeptime), and idle claimless seats have no self-wake after a reboot.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L30",
+        "w18-L14",
+        "w18-L15"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w17",
+        "w18"
+      ],
+      "homeClaim": "liveness-heartbeat-cron rule / frictions register",
+      "proposedDisposition": "needs-home",
+      "rationale": "Mechanical diagnostic check with no confirmed durable home."
+    },
+    {
+      "id": "Bc45",
+      "statement": "Heartbeat and liveness surfaces fail false-negative: seats went silent on heartbeat while demonstrably live under contention, and stale heartbeat labels advertise wrong lane state (twice) — derive liveness and lane state from work/PR/merge evidence, never labels alone.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L28",
+        "w16-L49",
+        "w21-L28"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13",
+        "w16",
+        "w21"
+      ],
+      "homeClaim": "liveness-heartbeat-cron / agent-state-observable rules",
+      "proposedDisposition": "needs-home",
+      "rationale": "Repeated across windows with a specific cross-check discipline not confirmed in rules."
+    },
+    {
+      "id": "Bc46",
+      "statement": "MCP-386: reviewer/cricket dispatches idle without verdict silently with notice lag up to ~65 min; the identified mechanism is the Agent tool's name parameter (named dispatches 10/10 dark, unnamed corroborated across four seats), so D legs dispatch UNNAMED from round 13, with bounded-expectation and relay-then-redispatch-then-BLOCKED escalation.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L16",
+        "w21-L04",
+        "w21-L38",
+        "w19-L12"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w19",
+        "w20",
+        "w21"
+      ],
+      "homeClaim": "MCP-386 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Mechanism and interim discipline recorded on the ticket."
+    },
+    {
+      "id": "Bc47",
+      "statement": "Reviewer subagents deliver reports ONLY on explicit SendMessage request — a summary-less idle notification means no report was emitted (6/6 instances); and a long-silent consult (~12 min) is a defective dispatch to kill and re-dispatch, never a reason for a seat to idle.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w19-L12",
+        "w21-L19"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w19",
+        "w21"
+      ],
+      "homeClaim": "MCP-376 + fleet dispatch discipline",
+      "proposedDisposition": "needs-home",
+      "rationale": "Owner-ruled dispatch discipline with only a ticket-shaped partial home."
+    },
+    {
+      "id": "Bc48",
+      "statement": "Owner ruled a conditional fallback on the standing every-reviewer-on-Opus rule during a live 529-overload wave: 'if Opus is still overloaded, we can fall back to Fable-low, but critically assess all output'.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w21-L20"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w21"
+      ],
+      "homeClaim": "reviewer-subagents-run-on-opus memory (conditional clause)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Scoped exception to a standing rule that must carry its condition in the rule."
+    },
+    {
+      "id": "Bc49",
+      "statement": "Blocking user-input requests must ALWAYS be cards (seventh escalation, owner verbatim): the mechanical tell is any holding-for-your-word line without a live card, and a question already asked in prose is still uncarded.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w19-L03"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w19"
+      ],
+      "homeClaim": "surface-user-decisions-as-questions memory",
+      "proposedDisposition": "already-homed",
+      "rationale": "Memory updated at occurrence per the leaf."
+    },
+    {
+      "id": "Bc50",
+      "statement": "Owner tiebreak: a specific owner instruction about a specific piece of work outranks a general standing practice; and the owner named Moon (Director) as final authority when directions crossed.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w16-L47",
+        "w17-L07"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w16",
+        "w17"
+      ],
+      "homeClaim": "owner-named-executor-is-part-of-the-instruction memory / precedence doctrine",
+      "proposedDisposition": "needs-home",
+      "rationale": "A general precedence tiebreak stated once with no confirmed durable home."
+    },
+    {
+      "id": "Bc51",
+      "statement": "Owner-named executor binds over a seat's own recommendation (MCP-372/MCP-371 slices 3-5 stay with Thyme), and honest capacity declines are the mechanism working — declines on evidence are accepted, work re-queues, seats are never chased.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w21-L01",
+        "w19-L17",
+        "w18-L25",
+        "w20-L38"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w18",
+        "w19",
+        "w20",
+        "w21"
+      ],
+      "homeClaim": "owner-named-executor + colleagues-run-on-trust memories",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both halves map to named standing memories."
+    },
+    {
+      "id": "Bc52",
+      "statement": "Owner posture ruling: 'the team needs an eye on it, and a supportive hand' — the Director adds active supervision and support (nudges at ~10 min on hung asks, proactive unblocking, appreciation) without changing PDR-117 lane ownership.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w20-L19"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "PDR-117 clause / director doctrine",
+      "proposedDisposition": "needs-home",
+      "rationale": "Owner-set Director posture with no named durable home."
+    },
+    {
+      "id": "Bc53",
+      "statement": "Wrap-grade ceremony is the bar for deliberate lane handovers ('a full handover probably needs almost a full /oak-wrap'); an owner STOP order takes a six-section self-contained handoff, and a frozen seat's self-contained freeze broadcast IS the handoff record (adopt-in-place, acceptance at resume).",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w19-L10",
+        "w19-L11",
+        "w15-L20"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w15",
+        "w19"
+      ],
+      "homeClaim": "PDR-063 §wrap-grade deliberate handovers",
+      "proposedDisposition": "already-homed",
+      "rationale": "Leaf states it graduated to PDR-063 on 2026-07-30."
+    },
+    {
+      "id": "Bc54",
+      "statement": "PDR-064 two-moment Director succession executed repeatedly and correctly across the shard (Squall→Moon, Moon→Lynx, Lynx→Bora, Bora→Falcon), with authority transferring only at the incoming Director's Moment-2 active acknowledgement and outgoing monitors never transferring.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w17-L47",
+        "w18-L26",
+        "w20-L46",
+        "w21-L35"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w17",
+        "w18",
+        "w20",
+        "w21"
+      ],
+      "homeClaim": "PDR-064 + committed handoff records",
+      "proposedDisposition": "already-homed",
+      "rationale": "Protocol is documented and the instances are recorded in handoff files."
+    },
+    {
+      "id": "Bc55",
+      "statement": "A PDR-064 Moment-1 pre-positioning landed inside an incoming Director's Bash-watcher window and was consumed-not-delivered; the mandated post-switch foreground sweep would have caught it but was skipped and the owner had to prompt the takeover.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L28",
+        "w14-L35"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14",
+        "w18"
+      ],
+      "homeClaim": "PDR-133 clause 'cursor movement proves CONSUMPTION never DELIVERY'",
+      "proposedDisposition": "needs-home",
+      "rationale": "The consolidation of this clause into PDR-133 was routed but explicitly not actioned."
+    },
+    {
+      "id": "Bc56",
+      "statement": "MCP-103 phase (b) owner-approved: ONE canonical workspace for Oak-authored model-behaviour content with generated reviewer views; phases (c)/(d) run as a five-story sequence with SERVED-BYTES-UNCHANGED as an explicit merge gate on any PR touching serving inputs.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w14-L01",
+        "w14-L02",
+        "w13-L36"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13",
+        "w14"
+      ],
+      "homeClaim": "MCP-103 ticket / decision card",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ticketed programme decision with the phases recorded."
+    },
+    {
+      "id": "Bc57",
+      "statement": "MCP-103's 716-item audit baseline is migration-only, not current serving truth (44 in-scope rows point at ten deleted prompt-era files while MCP-101 exposes six guidance resources), so phase (c) must begin with current-source re-extraction.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L37"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-103 ticket / mcp-agent-facing-content-audit report",
+      "proposedDisposition": "already-homed",
+      "rationale": "Audit corpus and registry have a committed report home."
+    },
+    {
+      "id": "Bc58",
+      "statement": "PR #582 landed the delta-ledger gate on main: every open PR whose test-merge tree semantically changes a governed source fails CI without a matching reviewed entry; the hasher canonicalises the AST and skips comment trivia so docblock-only fixes never trip it.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w18-L01",
+        "w18-L02"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "merged main (current-source-delta validator) / MCP-103",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed gate in code."
+    },
+    {
+      "id": "Bc59",
+      "statement": "Two validator design defects fixed in PR #582: presence-check blindness (source-file existence treated as item presence, retaining false 'available' after in-place deletion) and authority-vs-scope conflation (workspace_scope falsely labelling 11 upstream rows authoritative); cures recompute item-level evidence from an immutable baseline and derive authority from source_locus.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L05",
+        "w14-L06"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "validators-must-recompute-not-just-record + verify-obligations-not-just-presence rules",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both defect classes map onto named existing rules and the fix is landed."
+    },
+    {
+      "id": "Bc60",
+      "statement": "PR #569's own pre-commit validator is structurally all-or-nothing (the ledger must exactly equal the changed-file set), so no ordering of small commits during a rebase can pass the hook — a gate design that manufactures pressure toward a bypass request.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L29",
+        "w17-L11"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "current-source-delta-inventory.ts / validators-must-recompute rule",
+      "proposedDisposition": "needs-home",
+      "rationale": "Gate-design lesson (validators must not force bypasses) with no confirmed home."
+    },
+    {
+      "id": "Bc61",
+      "statement": "MCP-128 PR-3 turbo cache defect: a missing env declaration on the build task meant a cache hit could serve a landing page telling users to connect to localhost:3333/mcp, proven via identical cache hashes across production and preview before curing.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L07"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "MCP-128 PR-3 / turbo.json",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cured in landed configuration."
+    },
+    {
+      "id": "Bc62",
+      "statement": "turbo.json's comment claiming a scriptless dependency package 'contributes no hash leg' was falsified by an isolated probe on the estate's Turbo version; flagged as a doctrine-grade re-true candidate and possibly never landed.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w19-L13"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w19"
+      ],
+      "homeClaim": "turbo.json comment (needs truing) — no confirmed landing",
+      "proposedDisposition": "needs-home",
+      "rationale": "An untrue'd in-repo comment explicitly flagged as possibly never fixed."
+    },
+    {
+      "id": "Bc63",
+      "statement": "turbo 2.10.6 crashes with 'I/O error: Is a directory' when GIT_DIR points at a linked worktree's .git/worktrees/<name>; the cure is env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE narrowly around the turbo invocation (never hoisted hook-wide, which would blank staged-file gates), and the crash is intermittent/state-dependent.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L02",
+        "w22-L03",
+        "w22-L04"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "MCP-414 / .husky hooks on main",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure landed in hooks with the reasoning on the ticket."
+    },
+    {
+      "id": "Bc64",
+      "statement": "turbo 2.10.6 parses --force as value-taking and consumes the task name, so the sdk-codegen:refresh task was born broken at authoring and prior 'exit 0 / null result' runs actually exited 1 and never fetched; the fix is --force=true.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L35"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-152 / MCP-130 ticket",
+      "proposedDisposition": "needs-home",
+      "rationale": "A vendor CLI parsing trap likely to recur, only cited against a ticket."
+    },
+    {
+      "id": "Bc65",
+      "statement": "Newly-arrived or post-merge Next.js workspaces need one local build to regenerate .next types before type-check passes (TS2307 on the generated validator); the cure is regeneration, never a source edit.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L10",
+        "w20-L39"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "shell-and-tooling-gotchas",
+      "proposedDisposition": "needs-home",
+      "rationale": "Recurred twice with no named home."
+    },
+    {
+      "id": "Bc66",
+      "statement": "The primary checkout's pre-push hook lints the whole working tree, so another seat's uncommitted dirty file (markdown violations, a machine-local-path line in the napkin) blocks all pushes from the primary; push from a worktree, and the hook needs a 600s Bash timeout since the 120s default kills mid-suite producing an ambiguous WRITE.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L31",
+        "w20-L02",
+        "w18-L40"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w17",
+        "w18",
+        "w20"
+      ],
+      "homeClaim": "frictions register F-83 / worktree-hygiene rule",
+      "proposedDisposition": "needs-home",
+      "rationale": "Recurring push-blocker with only a friction-register pointer."
+    },
+    {
+      "id": "Bc67",
+      "statement": "Near-miss silent reverts caught by manual diff reads, not by green checks: PR #614's branch copy of ADR-126 would have deleted a clause landed by MCP-321, and a napkin write racing a read briefly destroyed a committed capture — cure is exact-match-anchor or append-only edits on shared files and commit-then-merge-resolve rather than clearing the working tree.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L32",
+        "w17-L33",
+        "w16-L25"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w16",
+        "w17"
+      ],
+      "homeClaim": "stale-capture-wins-silent-merge-reverts memory",
+      "proposedDisposition": "already-homed",
+      "rationale": "The named memory covers the silent-revert class and the edit cure."
+    },
+    {
+      "id": "Bc68",
+      "statement": "SonarCloud EU/US scheduled maintenance (2026-07-26 12:00-16:00 UTC) suppressed Automatic Analysis, explaining missing Sonar checks; the directive was to stop empty-commit re-fires, hold PRs as settled-shaped, and after recovery wait ~10 minutes then fire at most one re-fire per PR.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w13-L08",
+        "w13-L09"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "sonar-automatic-analysis-dropped-trigger memory",
+      "proposedDisposition": "already-homed",
+      "rationale": "The Sonar drop/re-fire discipline lives in the named memory."
+    },
+    {
+      "id": "Bc69",
+      "statement": "Scoped sonar.cpd.exclusions naming exact ledger/table files (cpd only, not sonar.exclusions) with a config comment and posted file list before merge is the sanctioned form when a duplication gate fires on legitimate design — configure the check, never disable it; owner ruled 'agreed, apply'.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w17-L09",
+        "w17-L18"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "configure-checks-not-blindly-obey memory + sonar-project.properties",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ruling applied in landed config under a named standing rule."
+    },
+    {
+      "id": "Bc70",
+      "statement": "Fleet-wide local secrets:scan showed 807/807 gitleaks reds as false positives from high-entropy content-digest hashes in a committed anchors artefact (PR-scoped CI scan passes clean); owner ruled the narrowest fix is a .gitleaks.toml file exclusion.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w14-L23",
+        "w14-L24"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": ".gitleaks.toml on main",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure landed in configuration."
+    },
+    {
+      "id": "Bc71",
+      "statement": "origin/main's .gitignore carried no credential pattern while the coordination branch did, so any credentials file created in a main-based worktree would be stageable with nothing to stop it — latent, not live, exposure.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L35",
+        "w17-L39"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "UNKNOWN — verify .gitignore on main carries the pattern",
+      "proposedDisposition": "needs-home",
+      "rationale": "A latent security gap whose fix reached main only via a coordination merge that may not have landed."
+    },
+    {
+      "id": "Bc72",
+      "statement": "A root .gitignore silently swallowed the MCP-302 plugin's own .mcp.json (a clean checkout would ship with no MCP server); cured by a negation rule and tracking the file.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L11"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "merged main / MCP-302",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure landed."
+    },
+    {
+      "id": "Bc73",
+      "statement": "PR #569's accidentally-tracked design bundle (283/317 blobs already on main) caused CodeQL 34 alerts and Sonar failure; owner authorised un-track via git rm --cached plus gitignore and a CODEOWNERS @mantagen addition after a byte-level value assessment.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w17-L05",
+        "w17-L34",
+        "w13-L40"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13",
+        "w17"
+      ],
+      "homeClaim": "PR #569 / merged main",
+      "proposedDisposition": "already-homed",
+      "rationale": "Disposition landed with the value assessment on the PR."
+    },
+    {
+      "id": "Bc74",
+      "statement": "MCP-153 restricted-content findings: the ingest filter must also prune sequence[].unitLessons or restricted slugs ship via lesson_ids and ELSER semantic text (25-46% restricted in music/PE/French); 0/3,372 restricted lessons carried transcripts so the live leak was keywords via vocab/graph artifacts, and 94/106 music-primary restricted slugs were already in the committed graph corpus.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L29",
+        "w14-L30"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "MCP-153 ticket / PR #588",
+      "proposedDisposition": "already-homed",
+      "rationale": "Design-review findings recorded on the ticket and cured in the landed regen."
+    },
+    {
+      "id": "Bc75",
+      "statement": "Owner ruling on the MCP-153 ingest filter: restricted===true exclusion at the ingest boundary must be discoverable in one named home covering both leak sites, documented, runtime-visible via a per-run exclusion count, and carry explicit decision provenance, revisited post-submission via MCP-204.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w14-L28"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "MCP-153 / MCP-204 tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Verbatim ruling recorded against the tickets it governs."
+    },
+    {
+      "id": "Bc76",
+      "statement": "MCP-201 first-hand enumeration: 2,348 of 12,391 served lessons (19.0%) return restricted from upstream's live check-restricted endpoint (geography 50.6%, RE 45.2%, music 36.2%, maths 0.6%), full-set not sampled, against index oak_lessons_v2026-03-24-145540.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L24",
+        "w13-L43",
+        "w13-L25"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-201 Linear ticket comment d9e18b34",
+      "proposedDisposition": "already-homed",
+      "rationale": "Enumerated finding recorded verbatim on the ticket."
+    },
+    {
+      "id": "Bc77",
+      "statement": "Bulk-download premise inverted: committed schema.json required fields have 0/12,864 real occurrences on the 635MB corpus and the baseline silently lacks 2 of 32 subjects; owner ruled the schema is the schema, isolate the machinery into a separate workspace and mark it non-functional until reworked (MCP-203).",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w13-L19",
+        "w13-L20",
+        "w13-L11"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-203 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner ruling captured as a quarantine ticket."
+    },
+    {
+      "id": "Bc78",
+      "statement": "Owner rulings on the curriculum-data refresh: all curriculum data tools update NOW with only the usage-licence tool deferred under explicit tickets and sequencing; the check-restricted family is not exposed this refresh; exposure of new endpoints is wanted but sequencing depends on estimating new tool-shape support work.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w13-L21",
+        "w13-L22",
+        "w13-L23"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-201..MCP-215 ticket sweep",
+      "proposedDisposition": "already-homed",
+      "rationale": "Rulings were minted into a named ticket sweep at occurrence."
+    },
+    {
+      "id": "Bc79",
+      "statement": "MCP-152 shape-novelty risk: a naive upstream refresh would mint an uncallable tool advertised readOnlyHint:true for a new POST/requestBody endpoint, and an existing green integration test would defend that defect — a new anti-guard class; five operations also changed limit default/example/max invisibly to the runbook fingerprint.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L18",
+        "w13-L10"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-152 ticket",
+      "proposedDisposition": "needs-home",
+      "rationale": "The anti-guard class (a green test defending a defect) is generalisable beyond the ticket."
+    },
+    {
+      "id": "Bc80",
+      "statement": "Owner strictness rulings on tools: 'Strict, all the time, everywhere' — proper input/output schemas and realistic examples from real data on graph tools — but hand-authored runtime checks stay for now because of workload and the tight deadline.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w16-L32",
+        "w17-L08"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w16",
+        "w17"
+      ],
+      "homeClaim": "MCP-319 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both halves recorded against MCP-319 with the fence explicit."
+    },
+    {
+      "id": "Bc81",
+      "statement": "Estate-wide gap: no tool declares outputSchema (registration passes only title/description/inputSchema/annotations) while the server returns structuredContent extensively, so structured output has no client contract; ADR-058 records a deliberate no-outputSchema decision only for the free-form pointer tool.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w16-L33"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "MCP-319 / ADR-058",
+      "proposedDisposition": "already-homed",
+      "rationale": "Gap recorded against the ticket and the ADR it contradicts."
+    },
+    {
+      "id": "Bc82",
+      "statement": "Recurring parity-gap pattern (three instances one day): hand-authored tool definitions drift from what the generated path guarantees (missing annotations.title, missing examples on required properties, 6 of 7 aggregated-*.ts modules with no examples), needing a generator-level parity contract rather than one-off fixes.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w16-L34"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "MCP-300 ticket — no durable parity-contract home",
+      "proposedDisposition": "needs-home",
+      "rationale": "A diagnosed structural need whose cure was never given a home."
+    },
+    {
+      "id": "Bc83",
+      "statement": "MCP-303's conformance drive derives example args only from wire-REQUIRED properties, so tools with all anchor properties optional by design (thread-progressions, misconception-graph) get {} and cannot be exercised regardless of example quality.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L21"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "agent-tools/src/mcp-conformance/derive-example-args.ts",
+      "proposedDisposition": "already-homed",
+      "rationale": "Behaviour is located in named source with the mechanism understood."
+    },
+    {
+      "id": "Bc84",
+      "statement": "MCP-303's live authed drive found four graph tools with optional-but-semantically-required schemas, a product defect (later MCP-321), and two example-data mismatches including one pointing at copyright-restricted content; MCP-321 was then inverted mid-investigation — the real defect is download-asset minting a signed URL without validating lesson/asset existence, not fetch.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w16-L29",
+        "w16-L30",
+        "w16-L50"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "MCP-319 / MCP-321 tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Findings and the scope inversion are recorded on the tickets."
+    },
+    {
+      "id": "Bc85",
+      "statement": "Owner doctrine: tests must never test config, only behaviour — assert effects (round-trip, non-empty) rather than exact config values; multiple hand-authored SDK test files pinning dead example slugs still need reshaping atomically with the value fix.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w16-L45",
+        "w17-L03",
+        "w16-L46"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w16",
+        "w17"
+      ],
+      "homeClaim": "testing-strategy.md §Rules",
+      "proposedDisposition": "already-homed",
+      "rationale": "The leaf cites the existing rule text carrying the clause."
+    },
+    {
+      "id": "Bc86",
+      "statement": "Owner ruling: test tier is classified by BOUNDARY not tool — 'if it is calling a black box running system over a network interface (E2E), or importing code and running it inside the test (integration)'; testing-strategy.md amended via PR #622, all 14 integration files verified correct.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w18-L13",
+        "w18-L16"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "testing-strategy.md (amended, PR #622 / MCP-338)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed doctrine amendment."
+    },
+    {
+      "id": "Bc87",
+      "statement": "Reverse-direction consequence unowned at window end: 23 of 24 e2e-tests/*.e2e.test.ts use in-process request(app), so the whole e2e supertest tier reads integration-shaped; the re-tier sweep plus residue (ADR-161 text, test-expert template, sentry-cli doc, the live http-mcp-test-suite plan) is Director-held and unowned, with MCP-398 covering unit-named-but-integration-shaped files.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w18-L17",
+        "w18-L18",
+        "w20-L36"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w18",
+        "w20"
+      ],
+      "homeClaim": "MCP-398 + the named plan/ADR files needing re-truing",
+      "proposedDisposition": "needs-home",
+      "rationale": "A large stale-doctrine surface explicitly recorded as unowned."
+    },
+    {
+      "id": "Bc88",
+      "statement": "Test-double discipline from PR #618: a fake modelling SDK internals was wrong twice in two rounds; stop modelling the engine and assert only the handler's own observable behaviour, leaving composition proofs to real-SDK integration tests. Also, isError is unfalsifiable as a liveness assertion since unmatched anchors return well-formed empty envelopes.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L24",
+        "w17-L23"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "testing-strategy.md / test-expert doctrine",
+      "proposedDisposition": "needs-home",
+      "rationale": "Two reusable assertion-design lessons with no named home."
+    },
+    {
+      "id": "Bc89",
+      "statement": "MCP-241 wiring facts verified first-hand: the deployed composition root is server.ts (not the TODO-marked index.ts, which would have shipped nothing); @vercel/functions waitUntil throws only for non-thenables and no-ops silently off-Vercel with the promise still settling; Protocol.close() cascades to the transport but webStandardStreamableHttp fires onclose synchronously so no double-close occurs.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L26",
+        "w17-L27",
+        "w17-L25",
+        "w17-L13",
+        "w17-L14"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "MCP-241 / merged PRs #618, #621",
+      "proposedDisposition": "already-homed",
+      "rationale": "Verified vendor behaviour landed with the merged slices."
+    },
+    {
+      "id": "Bc90",
+      "statement": "ObservedMcpTransport declares a sessionId setter delegating to a getter-only SDK property, so assignment throws in strict mode — latent today, requiring its own small adapter-side ticket referencing the real-SDK integration test that fences it.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w17-L28",
+        "w17-L38"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "promised MCP ticket — filing not confirmed",
+      "proposedDisposition": "needs-home",
+      "rationale": "A latent defect whose ticket was only committed to, never confirmed filed."
+    },
+    {
+      "id": "Bc91",
+      "statement": "Exporting a zod input shape as `: z.ZodRawShape` (rather than X.shape or `satisfies`) widens every field to core $ZodType and kills .meta() reads — bitten twice in one day.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L22"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "in-code comment on PR #611's files only",
+      "proposedDisposition": "needs-home",
+      "rationale": "A repeat-biting typing trap homed only as a local code comment."
+    },
+    {
+      "id": "Bc92",
+      "statement": "PostHog retention: project 221775 had event_retention_months 84 with enforcement OFF against a ratified twelve-month posture and zero events ingested; owner ruled 'set it to 12 months, we can always change it', but the API field is read-only and enforcement stays false so the remaining write surface is the dashboard UI.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w15-L17",
+        "w16-L02",
+        "w16-L27"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w15",
+        "w16"
+      ],
+      "homeClaim": "MCP-117 / MCP-281 / MCP-282 tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Finding, ruling and residual write surface all recorded on MCP-117."
+    },
+    {
+      "id": "Bc93",
+      "statement": "Fixing retention config BEFORE first event collection is a settings change and after it a deletion exercise — the free-to-fix window closes when events start flowing, which is why the finding was escalated as an M0 ordering constraint.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w15-L17"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": "MCP-282 ticket — the generalisable sequencing principle has no home",
+      "proposedDisposition": "needs-home",
+      "rationale": "A reusable ordering principle stated once inside a ticket-specific escalation."
+    },
+    {
+      "id": "Bc94",
+      "statement": "Owner ruled Oak's existing 'delete my data' process must be updated to include the PostHog project, folded into the Linear and Notion privacy review resources (technical half MCP-283).",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w16-L28"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "MCP-283 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ruling tracked as a ticket."
+    },
+    {
+      "id": "Bc95",
+      "statement": "MCP-354 analytics catalogue approved unamended (owner verbatim): track session start and which tools are used when, never tool arguments or responses, everything else is a bonus.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w19-L02",
+        "w18-L42"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w18",
+        "w19"
+      ],
+      "homeClaim": "Linear MCP-354 comment 653eabdd",
+      "proposedDisposition": "already-homed",
+      "rationale": "Recorded verbatim on the ticket at occurrence."
+    },
+    {
+      "id": "Bc96",
+      "statement": "Public-route analytics identity is impossible by construction in three layers (app boundary derives identity only from authInfo.extra.userId, the sink returns without capture on missing verifiedActorId, the final policy drops non-oakph distinctIds) — PostHog handles anonymous ids fine, our closed contracts refuse identity-less events.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w19-L08"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w19"
+      ],
+      "homeClaim": "Linear MCP-242 comment 799ecd72",
+      "proposedDisposition": "already-homed",
+      "rationale": "Recorded on the ticket at occurrence."
+    },
+    {
+      "id": "Bc97",
+      "statement": "Live PostHog production capture has been running since 2026-07-29 ~15:01 BST (4,159 events / 31 persons, all keys within the ADR-218 allowlist, no IP, pseudonymous distinct_ids only), contradicting stale 'capture not yet composed' notes in the research README and env doc.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w23-L07"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "docs/governance/safety-and-security.md + ADR-218",
+      "proposedDisposition": "already-homed",
+      "rationale": "Trued into the committed governance doc this window."
+    },
+    {
+      "id": "Bc98",
+      "statement": "The live privacy policy names MCP apps in scope but has no MCP-specific collection section, while ADR-218 §5 requires an MCP privacy notice and lawful basis before public capture — tracked as MCP-443 (DPO-gated) and MCP-173 AC9; the earlier wrong privacy claims came from a DPIA transplant describing browser-side PostHog applied to a server-side deployment.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w23-L08",
+        "w23-L09",
+        "w23-L10"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "MCP-443 ticket + docs/governance/safety-and-security.md (commit ce6049c7e)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Gap ticketed and the false doc claim corrected in a landed commit."
+    },
+    {
+      "id": "Bc99",
+      "statement": "MCP-305 sizing rulings: response doubling KEPT with a named owner-set flip trigger (drop the text-JSON leg when six named clients demonstrably feed structuredContent to the model); the bar binds on doubled sizes as sent at estimated tokens (totalChars/4) ≤ 25,000 p95 per tool call, anchored on Claude Code's 25K MCP truncation.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w19-L06",
+        "w21-L11",
+        "w21-L12"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w19",
+        "w21"
+      ],
+      "homeClaim": "Linear MCP-305 deliverable comment (ADR-058 cites it)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner-ratified and cited by an ADR."
+    },
+    {
+      "id": "Bc100",
+      "statement": "A shut-down seat's opening-prompt plan was posted to MCP-305 as a QUARANTINED provenance-only record after the owner warned 'do not assume the plan is correct or useful' — its invented 'Oak internal sizing bar' is not a ratified institution and any sizing bar remains a proposal for owner ratification.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w18-L22",
+        "w18-L23",
+        "w18-L21",
+        "w18-L20"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "MCP-305 ticket (quarantined comment)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Quarantine record and warning live on the ticket."
+    },
+    {
+      "id": "Bc101",
+      "statement": "An unexercised 2026-06-11 owner decision point (graph-tools-value-redesign completion opened a decision with nothing downstream auto-resuming) was never surfaced and still gates the traversal work; it rides MCP-305 pointer P3.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w19-L07"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w19"
+      ],
+      "homeClaim": "MCP-305 pointer P3 — disposition unverified",
+      "proposedDisposition": "needs-home",
+      "rationale": "A decision point that already went un-surfaced for seven weeks."
+    },
+    {
+      "id": "Bc102",
+      "statement": "Directory-submission requirements authority: the live submission FORM outranks docs pages and prior captures, the portal now requires a Claude Team/Enterprise org with Owner/Directory-management access, community-tier auto-listing is the documented default, and verdicts must name the auth-migration state they tested.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L16"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": ".agent/reports/claude-directory-submission-form-inventory-2026-07-28.md + MCP-16/296",
+      "proposedDisposition": "already-homed",
+      "rationale": "Committed report is the named home."
+    },
+    {
+      "id": "Bc103",
+      "statement": "The 2026-07-28 form-inventory report §6 ('no screenshot or carousel requirement exists') is FALSIFIED: live vendor docs require 3-5 PNG carousel screenshots (≥1000px, cropped to app response, no prompt in-image) with paired prompt text and no video/GIF, and the served ui://widget makes this connector an MCP App so the clause binds.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L06",
+        "w22-L34"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": ".agent/reports/claude-directory-submission-form-inventory-2026-07-28.md (needs truing note)",
+      "proposedDisposition": "needs-home",
+      "rationale": "A committed report carries a now-false conclusion future seats will inherit."
+    },
+    {
+      "id": "Bc104",
+      "statement": "Owner rulings on submission logistics: no agent submits the connector or plugin (submission is a manual human act), listing name is provisionally 'Oak National Academy' pending human review, listing copy is a Notion draft needing external sign-off and never repo copy, and comms sign-off is outside our remit.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w17-L01",
+        "w17-L02",
+        "w15-L05"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w15",
+        "w17"
+      ],
+      "homeClaim": "MCP-292/MCP-296/MCP-309 tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Submission-scope rulings recorded against the submission tickets."
+    },
+    {
+      "id": "Bc105",
+      "statement": "Anthropic's directory policy requires public documentation live by the publish date (a blog post or help-centre article suffices) — flagged as unowned documentation-shaped work.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w16-L08"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "MCP-296 / MCP-309",
+      "proposedDisposition": "already-homed",
+      "rationale": "Requirement recorded against the submission tickets."
+    },
+    {
+      "id": "Bc106",
+      "statement": "Submission gates on ALL FOUR upstream API example defects (MCP-327/328/329/330), encoded as MCP-309 blockedBy all four and fixed upstream by Aakesh per the standing rule that we never fix upstream defects ourselves.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w18-L13",
+        "w22-L05"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w18",
+        "w22"
+      ],
+      "homeClaim": "MCP-309 ticket blockedBy graph",
+      "proposedDisposition": "already-homed",
+      "rationale": "Gate encoded structurally in Linear."
+    },
+    {
+      "id": "Bc107",
+      "statement": "Submission deadline moved to Thursday 6 August with Matt Gregory holding the conn (he may submit earlier); MCP-309/302/306/292/268/420/143/298/437 transferred to him, M0/M4/M6 re-dated, and his handover doc refreshed with new gates for carousel screenshots and privacy-policy truth.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w23-L05",
+        "w23-L06",
+        "w23-L23"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "Matt's Linear handover doc f0e5cef166d2 + director-handoff.md ruling 40",
+      "proposedDisposition": "needs-home",
+      "rationale": "Half the home is a machine-local director-handoff file; only the Linear doc is durable."
+    },
+    {
+      "id": "Bc108",
+      "statement": "MCP-302 plugin: subset ratified as 4 skills / 4 workflows / 4 agents under the owner's presents-not-creates ruling, owner approved as-is, held at draft overnight so public-facing copy rode his glance, merged as PR #620; `claude plugin validate` passes with no license field so the licence question was left unguessed.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w18-L07",
+        "w18-L08",
+        "w18-L09",
+        "w18-L10",
+        "w18-L12"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "MCP-302 / merged PR #620",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ratified subset landed in the plugin manifest."
+    },
+    {
+      "id": "Bc109",
+      "statement": "Owner card decision: licensing is three-part — MIT code / OGL v3.0 content / Oak brand guidance, mirroring the root README — applied verbatim to plugin.json and the marketplace entry (PR #658); 'license' is a recognised marketplace manifest field in Claude Code v2.1.220.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w23-L19",
+        "w23-L20",
+        "w23-L32"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "plugin.json / marketplace manifest on main (MCP-440)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ruling landed in the manifest."
+    },
+    {
+      "id": "Bc110",
+      "statement": "Submission-copy review found factual gaps in the draft: tool table omits oak-under-the-hood (39 vs 40 served tools), the 'no resources' claim is false (six live resources including the widget), licence stated as OGL only, and the download-asset description embedded a model directive with a URL typo.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L33",
+        "w23-L13",
+        "w23-L17"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w22",
+        "w23"
+      ],
+      "homeClaim": "MCP-437 parent + children MCP-438..442",
+      "proposedDisposition": "already-homed",
+      "rationale": "Every repo-fixable finding was ticketed and the children merged."
+    },
+    {
+      "id": "Bc111",
+      "statement": "PR #656 removed the embedded presentation directive from served download-asset copy and extended the MCP-300 policy test with a fleet-wide presentation-directive class, retiring the C163 content-audit artefact via lineage; the artefact-staleness pin then proved live for the first time by forcing regeneration and catching a stale SDK dist.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w23-L17",
+        "w23-L18"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "MCP-438 / merged main (policy test)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure landed with a guard test."
+    },
+    {
+      "id": "Bc112",
+      "statement": "MCP-353 (Urgent, owner word 'finish under the hood first'): bake the digested canonical skill into the under-the-hood tool result at build time, delete the docs://oak/under-the-hood.md pointer resource, and set openWorldHint false — an internal compliance finding from a named reviewer.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w18-L36"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "MCP-353 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Owner word minted directly into a ticket."
+    },
+    {
+      "id": "Bc113",
+      "statement": "Critical deployment fact: www.thenational.academy/mcp and both /.well-known/oauth-* paths return 404 from the main Oak Next.js site — only the alpha serves the app, so every design premise assuming Cloudflare routes www to the app describes intended, not actual, state.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L37"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "MCP-344 / MCP-307 tickets",
+      "proposedDisposition": "needs-home",
+      "rationale": "A premise-reordering fact whose ticket capture is asserted but its blast radius across design docs is not."
+    },
+    {
+      "id": "Bc114",
+      "statement": "Deployment topology: curriculum-mcp-alpha.oaknational.dev is Vercel-direct with the Cloudflare zone DNS-only (no Cloudflare WAF in its request path), while the upstream API is Cloudflare-proxied and Upstash rate-limited in code.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w19-L15",
+        "w20-L33"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w19",
+        "w20"
+      ],
+      "homeClaim": "Linear MCP-271 comment d983d3d1",
+      "proposedDisposition": "already-homed",
+      "rationale": "Recorded on the ticket at occurrence."
+    },
+    {
+      "id": "Bc115",
+      "statement": "MCP-344 client-compat verdicts: Claude Code passes path-inserted RFC 8414 discovery (verified in shipped binary 2.1.220), claude.ai/Desktop likely pass but AS-side ordering is undocumented (inference), ChatGPT is UNKNOWN and is the risk-bearing client.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L38"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "Linear MCP-344 comment ac0850d3",
+      "proposedDisposition": "already-homed",
+      "rationale": "Verdicts with provenance recorded on the ticket."
+    },
+    {
+      "id": "Bc116",
+      "statement": "MCP-307 security re-pass: the bounded-selection host-header design differs materially from the header-as-authenticity shape MCP-269 rejected, but as written is unsound with six blocking findings (four re-verified first-hand); recommendation is an edge shared secret over bounded-selection-plus-conditions.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L39"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "Linear MCP-307 comment 79061ca6",
+      "proposedDisposition": "already-homed",
+      "rationale": "Verdict recorded on the ticket."
+    },
+    {
+      "id": "Bc117",
+      "statement": "Clerk production-window decisions: the DCR flip is deliberately ordered LAST to shrink the open-registration window to minutes; no app-layer invite gate exists despite the M4 text asserting one; scopes_supported stays [email] because no scope is functionally required, Clerk defaults scope-omitting clients to the wider profile+email, and same-user recognition rides token sub.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w19-L14",
+        "w20-L33"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w19",
+        "w20"
+      ],
+      "homeClaim": "Linear MCP-143 comments f4bde195 + 218e7ecb",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both decisions carry named ticket comments."
+    },
+    {
+      "id": "Bc118",
+      "statement": "MCP-303 probe results on the deployed alpha: supportsCimd=false, rfc9728Compliant=true, strictClientCompatible=true, registrationStrategy=dcr; apps conformance 7/7 server-side only; compat --offline across 16 hosts gave works=2 / degraded=14 / blocked=0 with the Claude verdict provenance 'assumed' rather than probed.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w16-L36",
+        "w16-L37"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "MCP-298 / MCP-304 tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Probe verdicts recorded against the questions they answer."
+    },
+    {
+      "id": "Bc119",
+      "statement": "oauth_invalid_authorize_redirect skips in MCPJam because our /oauth/authorize answers 307 to Clerk carrying the poisoned redirect_uri verbatim, so the probe never follows the hop; flipping it requires a terminal 400 with exact-match state the stateless proxy does not hold — architectural, owner-call, out of scope, raised as pointer ticket MCP-200.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L15",
+        "w13-L16"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-188 / MCP-200 tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Finding preserved as a deliberate pointer ticket."
+    },
+    {
+      "id": "Bc120",
+      "statement": "ADR-115 corrections: the cited-clause test wrongly named RFC 8252 §7.3 as the source of the non-loopback-http prohibition when the real MUST NOT is RFC 9700 §2.6 (three code sites fixed), and the oauth-proxy error-handling clause was amended as documentation-of-actual-behaviour only, carrying 'behaviour recorded as-built; soundness not re-adjudicated here' with MCP-197 as the pointer.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L34",
+        "w13-L17",
+        "w13-L44"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "ADR-115 + MCP-197 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Corrections and fences landed in the ADR."
+    },
+    {
+      "id": "Bc121",
+      "statement": "CR-injection vulnerability in CI annotations: mcpjamStderr is untrusted network-derived text where a bare CR terminates a GitHub workflow command allowing forged annotations; demonstrated live and fixed by encoding percent-first, then CR/LF.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L32"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "merged cure on PR #570",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed code cure."
+    },
+    {
+      "id": "Bc122",
+      "statement": "MCP-288 verification broke both trust-proxy assumptions: Vercel overwrites X-Forwarded-For behind a fronting proxy and does not forward external IPs, collapsing per-client rate limiting to per-Cloudflare-egress buckets.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w21-L21"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w21"
+      ],
+      "homeClaim": "MCP-288 ticket / ADR-219",
+      "proposedDisposition": "already-homed",
+      "rationale": "Finding recorded and superseded by the landed ADR."
+    },
+    {
+      "id": "Bc123",
+      "statement": "In-code rate limiting was adjudicated away entirely: it was never asked for (it entered to discharge a CodeQL false positive), edge protection already exists in Cloudflare+Vercel, ADR-158's upstream-quota threat never applied, and Fluid Compute precludes in-process counting; owner ruled removal now, keeping any genuinely useful pieces.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w21-L22",
+        "w21-L23",
+        "w21-L24",
+        "w22-L09",
+        "w22-L10"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w21",
+        "w22"
+      ],
+      "homeClaim": "ADR-219 (supersedes ADR-158) + MCP-411",
+      "proposedDisposition": "already-homed",
+      "rationale": "Decision landed as an ADR with the removal merged."
+    },
+    {
+      "id": "Bc124",
+      "statement": "Owner reversed the CodeQL dismissal posture ('why should I dismiss issues detected by CodeQL?'): dismissals are per-instance and do not survive refactors (#83-86 recurred as #226-229), so posture is fix-first with structural code cures and zero dismissals — later vindicated by a real super-linear-backtracking ReDoS vector.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w20-L26",
+        "w20-L27"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-351 / PR #635 — no rule home",
+      "proposedDisposition": "needs-home",
+      "rationale": "A standing security-posture ruling recorded only against a PR and ticket."
+    },
+    {
+      "id": "Bc125",
+      "statement": "CodeQL per-number alert GET returns state=null when there is no default-branch instance; the authoritative read is ref-scoped (?ref=refs/pull/N/merge), so name the instrument's ref in the same sentence as its verdict.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L28"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "read-verdicts-by-name-never-column-parse memory / gotchas doc",
+      "proposedDisposition": "needs-home",
+      "rationale": "Specific API read trap with no confirmed home."
+    },
+    {
+      "id": "Bc126",
+      "statement": "The merge-bot GitHub App lacks security_events:write, so every predicted js/missing-rate-limiting CodeQL re-fire on new routes needs an owner one-click dismissal until a permission-grant decision is made.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w22-L07",
+        "w22-L08"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "Director's map / follow-on ticket — not confirmed ticketed",
+      "proposedDisposition": "needs-home",
+      "rationale": "A recurring owner-touch obligation with no named durable home."
+    },
+    {
+      "id": "Bc127",
+      "statement": "MCP-403 root cause: supertest e2e servers bind :: (IPv6-any) while clients dial 127.0.0.1, and two resident macOS Java listeners inside the ephemeral range intercept requests on landmine ports, producing both HPE parse errors and spurious 400s; cured by binding e2e servers explicitly to 127.0.0.1 (PR #647).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w21-L05",
+        "w21-L06",
+        "w15-L18"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w15",
+        "w21"
+      ],
+      "homeClaim": "MCP-403 ticket / merged PR #647",
+      "proposedDisposition": "already-homed",
+      "rationale": "Diagnosis on the ticket, cure merged."
+    },
+    {
+      "id": "Bc128",
+      "statement": "Owner ruled a Playwright port-3020 collision is a harness configuration defect; a probed ephemeral port differs per config evaluation (main vs worker) and strands workers, so the port must be derived deterministically per worktree, never probed (MCP-384/PR #636).",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w20-L17",
+        "w20-L18"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-384 / merged PR #636",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure landed with the ruling recorded."
+    },
+    {
+      "id": "Bc129",
+      "statement": "MCP-399: the showcase geometry spec was load-flaky in every seat's pre-push graph because font-loading interception never silences self-hosted same-origin kit faces; cured by awaiting document.fonts.ready on both sides (PR #641), and the interim solo-green-retry sanction stands down once trees carry that merge.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L42"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-399 / merged PR #641",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure merged with a falsifiable sanction retirement."
+    },
+    {
+      "id": "Bc130",
+      "statement": "MCP-359: the UI-test webServer inherits .env.local instead of pinning its own observability env and turbo's globalDependencies '**/.env.*local' masks the cache, blocking primary pushes; the OBSERVABILITY_SINKS pin cure merged in PR #648, retiring the sed toggle-dance interim.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w21-L25",
+        "w22-L01"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w21",
+        "w22"
+      ],
+      "homeClaim": "MCP-359 / merged PR #648",
+      "proposedDisposition": "already-homed",
+      "rationale": "Root cause and cure both landed."
+    },
+    {
+      "id": "Bc131",
+      "statement": "Owner design-values ruling: 'everywhere we use a value it should come from the design system, no hardcoded values' — binding consumer surfaces, with kit-internal literals being the definitions, infrastructure values excluded, replace-with-role as the default and retained literals each needing his named word.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w19-L09",
+        "w20-L12"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w19",
+        "w20"
+      ],
+      "homeClaim": ".agent/rules/design-values-come-from-the-system.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Rule exists and is named as the verified home."
+    },
+    {
+      "id": "Bc132",
+      "statement": "Owner sharpened the TypeScript-only rule: all code across the repo must be TypeScript except shell and occasional Python, the bar for JS exceptions is 'high, high', and it never justifies keeping existing JS — flagged as warranting a rule amendment plus a census of surviving .js exceptions (oak-theme.js already rewritten as TS source).",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w21-L17",
+        "w21-L15"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w21"
+      ],
+      "homeClaim": ".agent/rules/source-is-typescript-esm-only.md (amendment + census owed)",
+      "proposedDisposition": "needs-home",
+      "rationale": "The rule exists but the sharpened bar and the census are explicitly outstanding."
+    },
+    {
+      "id": "Bc133",
+      "statement": "ADR-213 shape ruled by the owner: the invariant contract lives in the kit and the covariant store goes to a downstream sibling, 'never an export of the CSS package'; the duplicated oak-theme-store was resolved architecturally by moving it into the kit as a framework-neutral operations export.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w21-L16",
+        "w21-L13",
+        "w21-L14"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w21"
+      ],
+      "homeClaim": "ADR-213",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ruling landed as an ADR."
+    },
+    {
+      "id": "Bc134",
+      "statement": "MCP-387 records seven measured kit accessibility/design defects (directly-declared paragraph colour beating inheritance on inverted bands giving invisible footer text, link colour losing to hover/visited, no focus-ring restore token, shadow-ground twin token not re-pointed, Creature scope-marker selector mismatch, switcher pinning a private size primitive, six runtime states collapsed into five).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L20",
+        "w20-L23"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-387 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Measured defects enumerated on the ticket."
+    },
+    {
+      "id": "Bc135",
+      "statement": "MCP-388 tracks kit contract/doc contradictions: consuming-nextjs.md §5 references a nonexistent --logo-* role, no counter-brand ships a 'home' composition map, and the type ramp lacks narrow-width self-protection below 320px.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L21"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-388 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ticketed with the specifics."
+    },
+    {
+      "id": "Bc136",
+      "statement": "MCP-128 PR-3 forced-colours (Windows HCM) bug: both logo links render black-on-black; the cure is design-system territory (mask icon with CanvasText or a forced-colors block), ticketed as MCP-221.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L09"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "MCP-221 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ticketed accessibility defect."
+    },
+    {
+      "id": "Bc137",
+      "statement": "MCP-220: island hydration (hydrating only a ThemeControl container) was chosen over whole-document hydrateRoot based on a measured 42,381-byte props payload (+70% document size) for one theme toggle.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w14-L08"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "MCP-220 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Measured adjudication recorded on the ticket."
+    },
+    {
+      "id": "Bc138",
+      "statement": "PR #580 exposed a real four-writer race (build, two vitest globalSetups, Playwright webServer all rm-and-recopying the same public/ trees) upgraded to fatal by a new boot-throw; fixed via atomic stage-then-swap publishing plus a staticRoot injection seam across 25 app-constructing suites.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L39"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w13"
+      ],
+      "homeClaim": "MCP-128 PR #580 (landed cure)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Cure landed with a named mechanism."
+    },
+    {
+      "id": "Bc139",
+      "statement": "MCP-153 PR-583 boot-throw: the React landing page had never actually served (500 FUNCTION_INVOCATION_FAILED on both previews with zero runtime logs despite 17 green checks) — the Vercel check proves deploy but not serve.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L38"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "UNKNOWN — the deploy-vs-serve distinction has no named home",
+      "proposedDisposition": "needs-home",
+      "rationale": "A green-check blind spot with generalisable consequence and no confirmed home."
+    },
+    {
+      "id": "Bc140",
+      "statement": "Demos sit outside the app-boundary lint wiring: appBoundaryRules (import-x/no-relative-packages plus ADR-041 app-independence zones) is composed into neither demo's ESLint config and root dependency-cruiser has no demo-to-demo rule; adjudicated to be wired as a rider on MCP-382's ADR-213 sanctioned-shape clause.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L49",
+        "w20-L14"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-382 / ADR-213",
+      "proposedDisposition": "already-homed",
+      "rationale": "Gap routed onto a named ticket and ADR clause."
+    },
+    {
+      "id": "Bc141",
+      "statement": "Real third-party exposure on the deployed showcase is two Google Fonts fetches per counter-brand switch (32 jsDelivr icon URLs never fire); the OFL self-hosting cure is precedented by the kit's own Roboto Mono, as input to the owner's MCP-377 deployment decision.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L22"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-377 ticket / kit KNOWN-ISSUES #12",
+      "proposedDisposition": "already-homed",
+      "rationale": "Measured finding routed to a named owner decision."
+    },
+    {
+      "id": "Bc142",
+      "statement": "PR #643 (MCP-368 wordmark widget) was held at the Director's key-turn pending an explicit owner gate because the DoD requires the owner to have SEEN the render in both themes — standing-in-Chrome is not confirmed-seen — and was approved verbatim '643 looks good!'.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w20-L43",
+        "w21-L03"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20",
+        "w21"
+      ],
+      "homeClaim": "PR #643 / MCP-368",
+      "proposedDisposition": "already-homed",
+      "rationale": "Gate and its discharge recorded on the PR."
+    },
+    {
+      "id": "Bc143",
+      "statement": "Linear's PR-merge automation auto-closes a multi-slice programme ticket at every slice merge even with slices outstanding, requiring manual reopen at each landing until the final one.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L15"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "linear-mcp-team-and-project-hygiene memory",
+      "proposedDisposition": "needs-home",
+      "rationale": "A workflow trap that will silently misreport programme state."
+    },
+    {
+      "id": "Bc144",
+      "statement": "The Linear MCP connector refuses ticket writes whose payload carries internal planning detail and repo paths, treating a general Linear permission as insufficiently specific; the correct response was to pause and route rather than work around it, and no documented general no-ticket exception exists.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L19",
+        "w22-L26",
+        "w22-L27",
+        "w23-L04"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w18",
+        "w22",
+        "w23"
+      ],
+      "homeClaim": "linear-mcp-team-and-project-hygiene memory / connector notes",
+      "proposedDisposition": "needs-home",
+      "rationale": "A recurring third-party guard behaviour with no confirmed durable home."
+    },
+    {
+      "id": "Bc145",
+      "statement": "Owner DoD discipline (MCP-356): ticket Definitions of Done change only by proposal-comment then owner ratification, never by direct edit.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w18-L43"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "MCP-356 ticket",
+      "proposedDisposition": "needs-home",
+      "rationale": "A standing process rule recorded only on a single ticket."
+    },
+    {
+      "id": "Bc146",
+      "statement": "Discharged-but-unflipped tickets appeared twice in one day (MCP-354, MCP-305 verified discharged by recomputation and trued Backlog→Done), a theme fed into MCP-404.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w21-L11"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w21"
+      ],
+      "homeClaim": "MCP-404 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Theme routed to a named ticket."
+    },
+    {
+      "id": "Bc147",
+      "statement": "The claims registry stores expiry data but no read surface recomputes it: a stale Director claim ran ~28h beyond its freshness bound with a completed handoff already recorded, the commit queue carries ~136 never-archived abandoned entries, and raw-JSON readers bypass any CLI-side cure.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L22",
+        "w23-L33"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w22",
+        "w23"
+      ],
+      "homeClaim": "validators-must-recompute-not-just-record rule — no cure ticket named",
+      "proposedDisposition": "needs-home",
+      "rationale": "A structural registry defect diagnosed twice with no named cure home."
+    },
+    {
+      "id": "Bc148",
+      "statement": "A schema-0.2.0 heartbeat carrying watched_comms_dir became required by `claims open` after merge 34e88477b, so any watcher on the old binary fails the gate as 'blind to comms'; separately, a provably-live stale-build watcher reports 'schema mismatch' (stale-build, not dead-watcher) and assert-watcher-live's --agent-name form false-negatives under the new gate.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L06",
+        "w20-L13"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-373 recipe / agent-tools docs",
+      "proposedDisposition": "needs-home",
+      "rationale": "Diagnostic disambiguation that will otherwise be re-derived on every rebuild."
+    },
+    {
+      "id": "Bc149",
+      "statement": "Coordination branches last no more than 24 hours: rule authored at owner instruction (MCP-333) and exercised repeatedly (estate-2026-07-28 through -30-c), with fresh branches cut tree-preservingly from the merged main tip; GitHub auto-deletes the branch at roll-up merge so it must be re-created to continue.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w17-L04",
+        "w18-L44",
+        "w20-L09",
+        "w20-L40",
+        "w22-L21",
+        "w23-L22"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w17",
+        "w18",
+        "w20",
+        "w22",
+        "w23"
+      ],
+      "homeClaim": ".agent/rules/coordination-branch-24h-lifetime.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Rule landed and named; only the auto-delete gotcha may be missing from it."
+    },
+    {
+      "id": "Bc150",
+      "statement": "MCP-333's rule minting had to run the new-rule-vs-pdr-clause check first (weighing a clause on the operating-model doctrine instead) and fold in the worktree-hygiene coordination-exemption evidence.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w17-L41",
+        "w17-L06"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": ".agent/rules/new-rule-vs-pdr-clause.md (process) — outcome unverified",
+      "proposedDisposition": "needs-home",
+      "rationale": "A named pre-minting obligation whose discharge is not evidenced."
+    },
+    {
+      "id": "Bc151",
+      "statement": "Cricket two-pair tally era consolidated to .agent/reports/agentic-engineering/cricket-two-pair-tally-2026-07-26.md (ten directive-era runs, six calibration patterns, four absorbed doctrine cures), and owner ratified cricket cadence as event-driven between owner sessions, never bare timers.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w18-L29",
+        "w21-L02"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w18",
+        "w21"
+      ],
+      "homeClaim": ".agent/reports/agentic-engineering/cricket-two-pair-tally-2026-07-26.md (commit 8da03a930)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Committed consolidation report."
+    },
+    {
+      "id": "Bc152",
+      "statement": "Cricket haiku calibration: verdicts price supplied-frame completeness rather than the work and are verdict-unstable across identical re-asks; the standing cure is frames citing ruling event IDs and gates by file/artefact id (never bare timestamps or narrative) with a one-line method beside every verification conclusion, and quartet seat names resolve only on a checkout containing the merge.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L31",
+        "w19-L18",
+        "w21-L39"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w18",
+        "w19",
+        "w21"
+      ],
+      "homeClaim": "cricket-two-ab-pairs memory + cricket tally report",
+      "proposedDisposition": "already-homed",
+      "rationale": "Calibration patterns consolidated into the committed tally and memory."
+    },
+    {
+      "id": "Bc153",
+      "statement": "New cricket D-catch class named: 'commitment-vs-artefact' — a mandate-required adjudication body existing only as a NEXT commitment rather than a written artefact at judgement time is a genuine drift finding, distinct from 'frame-legibility' where evidence existed but was invisible to the judge.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L12"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "cricket quartet tally — post-consolidation home unverified",
+      "proposedDisposition": "needs-home",
+      "rationale": "A new taxonomy class minted after the tally report froze."
+    },
+    {
+      "id": "Bc154",
+      "statement": "MCP-433 replaced model-named Cricket variants with vendor-neutral judgement/procedure names and added the Codex Sol-low/Terra-medium/Luna-xhigh triad plus $oak-cricket invocation guidance; merged as PR #654 with wrapper regeneration and a zero-stale-name grep excluding historical experiment records.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w22-L25",
+        "w22-L26",
+        "w22-L28",
+        "w23-L03",
+        "w23-L15",
+        "w23-L16"
+      ],
+      "leafCount": 6,
+      "windows": [
+        "w22",
+        "w23"
+      ],
+      "homeClaim": "MCP-433 / merged PR #654",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed rename with scope recorded on the ticket."
+    },
+    {
+      "id": "Bc155",
+      "statement": "Claude project memory cricket-two-ab-pairs.md still named Sol/Terra/Luna as a future increment after PR #654 delivered them; cross-platform memory drift must be trued when the work lands.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w23-L26"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "Claude project memory cricket-two-ab-pairs.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Flagged and later trued in the named memory file."
+    },
+    {
+      "id": "Bc156",
+      "statement": "Codex/Plover NOTIFY-relay proven: an external directed event woke the Plover root session via an independent relay without manual polling — third instance of this NOTIFY class fleet-wide and the first with a probe-proven cure.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L19"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "PDR-133 / NOTIFY-class findings",
+      "proposedDisposition": "needs-home",
+      "rationale": "Cross-platform wake mechanism with only a tentative home."
+    },
+    {
+      "id": "Bc157",
+      "statement": "Owner named Plover the executor for PR #638 ('take to completion'), lifting the no-edit bootstrap boundary; Plover self-merged at the exact reviewed head and an optional peer-review request was treated as optional under the owner's CI+Copilot merge gate.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w22-L23",
+        "w22-L24",
+        "w23-L29"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w22",
+        "w23"
+      ],
+      "homeClaim": "PR #638 / MCP-373",
+      "proposedDisposition": "already-homed",
+      "rationale": "Grant and its exercise recorded on the PR."
+    },
+    {
+      "id": "Bc158",
+      "statement": "Owner-directed private proposal lane: the subject is deliberately not named on any repo-homed surface including comms, tickets live in a private Linear team (JIM-1..4), the official external document is read-only to agents, drafts land on JIM-4 for owner promotion, and every factual claim must be measured first-hand.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w22-L29"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "progression-strand-private-jim-team memory + JIM tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Fence carried in a named memory and the private team."
+    },
+    {
+      "id": "Bc159",
+      "statement": "Owner ruled all claude-in-chrome sessions are READ ONLY for the private lane's five confidentiality-blocked external artefacts, and offered manual retrieval for anything still blocked.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w22-L30",
+        "w22-L31"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "JIM-2/JIM-3 (private Linear)",
+      "proposedDisposition": "already-homed",
+      "rationale": "Access ruling recorded on the private lane's tickets."
+    },
+    {
+      "id": "Bc160",
+      "statement": "Browser-automation read/write facts: Google Docs synthetic typing silently fails (tool reports success, doc untouched) so mobilebasic is the reliable read path; the Docs suggestion layer is a distinct read surface invisible to mobilebasic; and the shared Chrome profile is not signed into Notion while the Notion API returns no signed URL for binary attachment blocks.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L31",
+        "w22-L32",
+        "w23-L11",
+        "w23-L14"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w22",
+        "w23"
+      ],
+      "homeClaim": "napkin (rotated) — needs a durable Chrome/Notion access-notes home",
+      "proposedDisposition": "needs-home",
+      "rationale": "Reusable tool-capability facts whose only home was the archived napkin."
+    },
+    {
+      "id": "Bc161",
+      "statement": "MCPJam credentials (24h life, owner-attended oauth login, gitignored mode 0600, scoped to the alpha MCP server test identity only) unlock the live drive, apps render, apps conformance and compat runs; token content never enters comms, PR bodies or committed baselines, and the authenticated conformance leg rides the owner's attended login with zero standing credentials.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L14",
+        "w16-L35",
+        "w17-L36",
+        "w21-L10"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w13",
+        "w16",
+        "w17",
+        "w21"
+      ],
+      "homeClaim": "MCP-298 / MCP-303 tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Credential handling and its uses are recorded against the conformance tickets."
+    },
+    {
+      "id": "Bc162",
+      "statement": "MCPJam instrument was RED in-repo (every invocation died at module load) and the @ai-sdk/provider-utils GHSA override failed lockfile delete+rebuild survivability; owner ruled 'remove the override, it only affects mcpjam and the risk is minor', restored via PR #646.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w21-L07",
+        "w21-L08",
+        "w21-L09"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w21"
+      ],
+      "homeClaim": "MCP-381 / merged PR #646",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ruling and cure landed with the ticket closed."
+    },
+    {
+      "id": "Bc163",
+      "statement": "Important state must not live in tmp: MCP-143's Clerk runsheet was found in tmp, secret-scanned in full and homed verbatim on the ticket, while the sibling PostHog sheet deliberately stays machine-local because it carries real key values (never-in-tickets outranks; dashboard-recoverable). Evidence written to gitignored paths inside a worktree dies silently at prune.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L34",
+        "w21-L27"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20",
+        "w21"
+      ],
+      "homeClaim": "important-state-not-in-temp-files + worktree-hygiene rules",
+      "proposedDisposition": "already-homed",
+      "rationale": "Both rules exist and the adjudicated exception is recorded on the ticket."
+    },
+    {
+      "id": "Bc164",
+      "statement": "Substitution trap: using an ambient value of the right type instead of the value actually needed is silent (no type mismatch, no modal vocabulary) — worked instances include a peer heartbeat's created_at used as the clock, git log on a rotated branch used as main (use git ls-remote), and mis-naming MCP-384's deterministic per-worktree derivation an 'ephemeral-port fix' before reading it.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w20-L32"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "query-the-value-never-the-lookalike memory",
+      "proposedDisposition": "already-homed",
+      "rationale": "The named memory is the stated home for this class."
+    },
+    {
+      "id": "Bc165",
+      "statement": "Bidirectional doctrine/mechanism mismatch class (six instances in one night, all sitting in a RULE or SKILL rather than an ADR/runbook): docs assert a guarantee the mechanism does not deliver, or assert less capability than it does — a stale BlockedPatternEntrySchema docstring cost a wrongly-scoped ticket (MCP-227), and principles.md's coverage is scoped too narrowly.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w14-L16",
+        "w14-L36"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "principles.md (scope widening) — no confirmed home",
+      "proposedDisposition": "needs-home",
+      "rationale": "A named recurring class whose existing coverage was explicitly judged too narrow."
+    },
+    {
+      "id": "Bc166",
+      "statement": "Before calling a deliberate-looking behaviour a defect, find out whether it is deliberate — a ticket was filed to remove a deliberate security property without reading its governing ADR; five recurring self-error patterns were named alongside it (always-succeeding control, page-read-as-whole-list, unauthenticated inspector, stale-head review, vacuous zero-match filter).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L48"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "napkin (rotated) — candidate rule clause",
+      "proposedDisposition": "needs-home",
+      "rationale": "Compaction retrospective lessons whose only home was the now-archived napkin."
+    },
+    {
+      "id": "Bc167",
+      "statement": "A grep hit is not a consumer: a reviewer-adopted claim about trust-proxy's consumer was falsified by the seat's own re-read — a named failure class worth generalising.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w22-L39"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "verify-dont-trust / review practice",
+      "proposedDisposition": "needs-home",
+      "rationale": "Small generalisable review-evidence class with no home."
+    },
+    {
+      "id": "Bc168",
+      "statement": "MCP-224 minted for an estate-wide --max-warnings 0 mechanism (147 pre-existing no-throw warnings structurally invisible); the residue persists, with 382 non-failing no-throw warnings still emitted on PR #654's head owned by the eslint-no-throw-result-migration thread.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w14-L40",
+        "w23-L27"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14",
+        "w23"
+      ],
+      "homeClaim": "MCP-224 + eslint-no-throw-result-migration thread",
+      "proposedDisposition": "already-homed",
+      "rationale": "Ticketed with a named owning thread."
+    },
+    {
+      "id": "Bc169",
+      "statement": "Undischarged carrier gaps recorded at closeouts: MCP-192's secrets-environment security finding had no ticket or owner decision since 2026-07-26 (later ticketed MCP-195/246), and MCP-199/200/216/217/218 plus MCP-190/191's proposed M1 homes had no named carrier or owner agreement.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w14-L14",
+        "w14-L15",
+        "w14-L39",
+        "w17-L42"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w14",
+        "w17"
+      ],
+      "homeClaim": "Linear tickets (carrier assignment) — partially discharged",
+      "proposedDisposition": "needs-home",
+      "rationale": "Carrier-less tickets are exactly the state that evaporates when the stream is disposed of."
+    },
+    {
+      "id": "Bc170",
+      "statement": "MCP-279's rule-truing commit f8f4d09f9 (Notion edit-boundary to [AI Managed]) was authored as the owner not the bot, the amend died mid-hook, and nothing was pushed — a frozen defect with a seven-step reset-author resume recorded only in a pause event.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w15-L02"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": "UNKNOWN — verify MCP-279 landing and authorship on main",
+      "proposedDisposition": "needs-home",
+      "rationale": "A known authorship defect whose only record is an ephemeral pause event."
+    },
+    {
+      "id": "Bc171",
+      "statement": "PR 570 (MCP-189) was frozen with seven Director-adjudicated fixes plus the owner-ruled schedule-trigger drop applied only LOCALLY in a claimed worktree with the remote untouched, and MCP-296's form walkthrough pending on extension re-pairing.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w15-L03"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": "UNKNOWN — verify PR 570 / MCP-189 landed state",
+      "proposedDisposition": "needs-home",
+      "rationale": "Unpushed adjudicated work recorded only in a pause event."
+    },
+    {
+      "id": "Bc172",
+      "statement": "Owner rulings scoping M0: 'initial PostHog' means events flowing safely plus @posthog/mcp in place, the M0 line lands at MCP-238, MCP-239-244 moved to Engineering Complete 12 Aug (later pulled forward by owner word 'J-O app-wiring starts NOW'), and the schedule trigger was dropped from mcp-conformance-unattended.yml because 'we trust Clerk to work' (a daily run minted one abandoned OAuth client per day).",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w15-L04",
+        "w15-L05",
+        "w16-L26"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w15",
+        "w16"
+      ],
+      "homeClaim": "Linear MCP-63 / M0 milestone",
+      "proposedDisposition": "already-homed",
+      "rationale": "Milestone rulings recorded in Linear at occurrence."
+    },
+    {
+      "id": "Bc173",
+      "statement": "#602 was one six-line deletion from merge with the adjudication verbatim in the napkin resume block; merging it completed the PostHog replacement stack through MCP-238, after which #576 closes without merging — but #576 does not auto-close and its close is the owner's call.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w16-L03",
+        "w16-L13",
+        "w14-L03"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w14",
+        "w16"
+      ],
+      "homeClaim": "open-prs-merged-closed-or-owned memory + MCP-238",
+      "proposedDisposition": "already-homed",
+      "rationale": "The standing open-PR disposition rule covers it and the stack boundary is ticketed."
+    },
+    {
+      "id": "Bc174",
+      "statement": "MCP-240 was deliberately sequenced to branch only after #610 merged because knip's unused-dependency gate forces a real adapter import whose natural site exists only on #610's branch — avoiding both a stale-surface conflict and coupling two stories into one landing.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w15-L52",
+        "w16-L52"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "MCP-240 ticket",
+      "proposedDisposition": "already-homed",
+      "rationale": "Sequencing rationale recorded on the ticket."
+    },
+    {
+      "id": "Bc175",
+      "statement": "Zero-cost holds release on arrival, obsolescence or cost-change, never on a timer; and the Copilot-hold boundary applies only to substantive changes (code paths, data handling, auth, protocol surface), not static chrome, copy, docs or record-truing.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w16-L18",
+        "w16-L19"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w16"
+      ],
+      "homeClaim": "review/merge doctrine — no named home",
+      "proposedDisposition": "needs-home",
+      "rationale": "Two reusable hold-discipline boundaries stated only in-stream."
+    },
+    {
+      "id": "Bc176",
+      "statement": "MCP-436-era guidance on gates: holding green work on an unnamed gate is an INVENTED gate — a reviewer named on a Linear issue is not a PR merge gate, closed tickets stay commentable, and the verdict must carry its counter-consideration (an owner-constitutive reading cards to him).",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w19-L16",
+        "w13-L30"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w13",
+        "w19"
+      ],
+      "homeClaim": "verdict-momentum + merge-rulings memories",
+      "proposedDisposition": "already-homed",
+      "rationale": "Maps onto named standing memories about scoring the actual gate clause."
+    },
+    {
+      "id": "Bc177",
+      "statement": "MCP-366 bounded cure for the ADR-058 live-doc tombstone gap: rewrite ADR-058 and the spec positively (one broadcast channel plus on-demand get-curriculum-model dual-shape workflows), remove live removed-layer sections, correct the spec visibility claim, drop stale render-wholes phrasing — no new ADR, no broad archaeology.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w20-L03"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w20"
+      ],
+      "homeClaim": "MCP-366 ticket / ADR-058",
+      "proposedDisposition": "already-homed",
+      "rationale": "Scoped cure recorded on the ticket."
+    },
+    {
+      "id": "Bc178",
+      "statement": "Residue pointers deliberately un-absorbed pending post-submission: MCP-410 (loopback-request guard hardening), MCP-413 (Cache-Control on OAuth discovery metadata), MCP-417 (commit-queue refusal guard), MCP-400/401/402/403 from the MCP-368 lane, and MCP-407/408 from MCP-305.",
+      "kind": "pointer",
+      "supportingLeafIds": [
+        "w22-L37",
+        "w20-L44",
+        "w21-L12",
+        "w21-L32"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w20",
+        "w21",
+        "w22"
+      ],
+      "homeClaim": "Linear post-submission backlog tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Every pointer is a minted ticket."
+    },
+    {
+      "id": "Bc179",
+      "statement": "Two passive falsifier watches recorded as record-anchored (no live watcher): any recurrence of either MCP-403 flake flavour reopens as a fresh ticket citing that ticket's mechanism comments, and ADR-219's premise is falsified if edge protection for a served domain is weakened without compensation (cure class = edge configuration, never an in-process counter).",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w22-L38"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "MCP-403 ticket + ADR-219",
+      "proposedDisposition": "already-homed",
+      "rationale": "Falsifiers anchored to durable ticket and ADR text."
+    },
+    {
+      "id": "Bc180",
+      "statement": "PR #644 (MCP-372 slice 1) holds open by design, red on the Sonar duplication gate at 27.7% vs a 3% bar from two 144-line demo-store duplicates; rework is blocked on the paused design lane resuming at owner word, with the pickup vehicle being a named committed handoff record.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w22-L36",
+        "w21-L14"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w21",
+        "w22"
+      ],
+      "homeClaim": ".agent/state/collaboration/handoffs/sycamore-herds-xylem-compaction-continuation-2026-07-30.md + MCP-372",
+      "proposedDisposition": "already-homed",
+      "rationale": "Held state carried in a committed handoff file and the ticket."
+    },
+    {
+      "id": "Bc181",
+      "statement": "MCP-372 slice-1's pre-execution code-expert review died twice on the 529 overload burst and handed over explicitly NOT-OBTAINED, with the verbatim dispatch prompt preserved for re-dispatch.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w21-L29"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w21"
+      ],
+      "homeClaim": "MCP-372 succession/handoff record",
+      "proposedDisposition": "needs-home",
+      "rationale": "An undischarged mandated gate whose only record is a handoff file's gate line."
+    },
+    {
+      "id": "Bc182",
+      "statement": "Owner cut the submission-day board: the fail-set is entirely human/owner-held, the four in-flight agent PRs finish at full condition with no freeze, everything else rests until after submission, and seats go submission-support standby after their PR lands.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w21-L18"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w21"
+      ],
+      "homeClaim": "director-handoff.md / napkin (machine-local)",
+      "proposedDisposition": "noise",
+      "rationale": "A day-scoped routing board whose substance has been overtaken by the 6 August deadline move."
+    },
+    {
+      "id": "Bc183",
+      "statement": "Owner PAUSE then UNPAUSE (2026-07-27): all seats stopped and held state with heartbeats and watchers staying up since liveness is not work, resuming under the morning's landed doctrine; the later 'Lift the stop order' word superseded a Director-permitted one-shot bounded watcher pass.",
+      "kind": "owner-word",
+      "supportingLeafIds": [
+        "w14-L21",
+        "w14-L22",
+        "w14-L42",
+        "w14-L43"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": "",
+      "proposedDisposition": "noise",
+      "rationale": "A closed episode whose only durable substance (liveness is not work) is already fleet doctrine."
+    },
+    {
+      "id": "Bc184",
+      "statement": "Ingot's deep-consolidation pass completed: the 5,333-line napkin was fully processed bottom-up and rotated to archive/napkin-2026-07-30.md, distilled.md drained empty, and MCP-446/447 minted from latent config-expert findings; patterns/referent-narrowing's falsifier formally fired with honest counter-evidence recorded.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w23-L35",
+        "w23-L37"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "repo-continuity §0a + .agent/memory/archive/napkin-2026-07-30.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "Consolidation output committed to named archive and pattern files."
+    },
+    {
+      "id": "Bc185",
+      "statement": "Owner ratified the comms-corpus full-journey knowledge-transfer plan; the P1 discovery report (2,251 body-read events, 177 re-verify) is committed, and the P2 coordination-class sweep engine plus fleet spend goes to the owner for pricing before execution.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w23-L38",
+        "w23-L40"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w23"
+      ],
+      "homeClaim": "reports/agentic-engineering/comms-corpus-knowledge-transfer/discovery-report-2026-07-31.md + the ratified plan file",
+      "proposedDisposition": "already-homed",
+      "rationale": "Plan and discovery report are both committed artefacts."
+    },
+    {
+      "id": "Bc186",
+      "statement": "Owner-attention items still pending and not ticketed: the axe-core#3978 upstream contribution decision under bot identity, a macOS idle-sleep power-management decision (pmset/caffeinate during fleet windows), practice-box cross-estate session re-confirmation, and a reflection synthesis as a VISION-adjacent candidate.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w23-L36",
+        "w20-L45"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w20",
+        "w23"
+      ],
+      "homeClaim": "director-handoff.md owner-attention queue (machine-local)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Un-ticketed owner-decision items held only in a machine-local queue."
+    },
+    {
+      "id": "Bc187",
+      "statement": "The owner-commissioned strategic frame ('engineering is nearly out of the critical path; what remains is mostly human-judgement gates — our job is to make every human gate frictionless') has named homes including a director-handoff sitting block holding twelve rulings verbatim, which is machine-local.",
+      "kind": "pointer",
+      "supportingLeafIds": [
+        "w19-L01"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w19"
+      ],
+      "homeClaim": "VISION.md + first-major-release plan; the twelve-rulings block needs a durable home",
+      "proposedDisposition": "needs-home",
+      "rationale": "Load-bearing owner rulings sitting only in a machine-local handoff block."
+    },
+    {
+      "id": "Bc188",
+      "statement": "Director handoff durable state lives in .agent/memory/operational/director-handoff.md §CURRENT HANDOFF STATE, where only owner rulings, deliberate oddities and recorded mistakes are durable — lane state and PR numbers must be recomputed, never inherited.",
+      "kind": "pointer",
+      "supportingLeafIds": [
+        "w17-L45"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": ".agent/memory/operational/director-handoff.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "The file itself states its own durability contract."
+    },
+    {
+      "id": "Bc189",
+      "statement": "Session handoff records committed this shard carry the recoverable lane state: Plover's full-session record, Schooner→Tarsier (4 claims, CodeQL reversal, traps), the claim-addressed Bora→Falcon Director record, and Falcon's cold-pause continuation record with the Director claim left open.",
+      "kind": "pointer",
+      "supportingLeafIds": [
+        "w23-L28",
+        "w20-L47",
+        "w21-L30",
+        "w23-L34"
+      ],
+      "leafCount": 4,
+      "windows": [
+        "w20",
+        "w21",
+        "w23"
+      ],
+      "homeClaim": ".agent/state/collaboration/handoffs/ (committed records)",
+      "proposedDisposition": "already-homed",
+      "rationale": "All named as committed handoff paths."
+    },
+    {
+      "id": "Bc190",
+      "statement": "MCP-319's sibling-coverage follow-up, MCP-303's armed owner-attended pack run, the armed standalone credentials-gitignore PR fallback, and the primary's abandoned-in-place plan edit (owner-run restore, no agent clears it) were all live obligations at window close.",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w17-L36",
+        "w17-L37",
+        "w17-L39",
+        "w17-L40",
+        "w17-L43"
+      ],
+      "leafCount": 5,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "MCP-303 / MCP-319 tickets + owner morning card",
+      "proposedDisposition": "needs-home",
+      "rationale": "Armed-but-undischarged items whose arming state lived in stream records."
+    },
+    {
+      "id": "Bc191",
+      "statement": "Registration-hygiene trio merged (MCP-335 vendor-import lint guard, MCP-336 setLogger double-install, MCP-337 registration descriptor), with MCP-336's real defect corrected on the record from a cross-file leak diagnosis to an in-file order-dependent flake.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w18-L32",
+        "w18-L41"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w18"
+      ],
+      "homeClaim": "merged main (#624/#625/#626) + tickets",
+      "proposedDisposition": "already-homed",
+      "rationale": "Landed with the diagnosis correction on the ticket record."
+    },
+    {
+      "id": "Bc192",
+      "statement": "Privacy-surface test hygiene from the 602 review: six decorative assertions (values never entering the run) sat under a README claim that sessions/errors/unknowns cannot cross the adapter — false confidence on a privacy surface, deleted pre-merge, with three ticketed cures (pin vitest isolate:true, rename a misfiled smoke as a vendor-contract characterisation probe, replace a wall-clock delay with a promise resolved inside the installed logger).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L13",
+        "w15-L12"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": "tickets minted at occurrence + referent/derivation synthesis",
+      "proposedDisposition": "needs-home",
+      "rationale": "Decorative-assertion-as-false-confidence is a generalisable test class only partly ticketed."
+    },
+    {
+      "id": "Bc193",
+      "statement": "The AgentTool-fence vs mandated-review conflict dissolves by scope reading plus seat transfer: the pre-execution-review rule binds only fan-out cycles, so a gateway review runs from an unfenced seat on the pushed diff, sized proportionally to the new code.",
+      "kind": "decision",
+      "supportingLeafIds": [
+        "w15-L11"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": "invoke-code-experts / pre-execution-code-expert-review rule (scope clarification)",
+      "proposedDisposition": "needs-home",
+      "rationale": "A scope reading that resolves a recurring rule conflict, unrecorded in the rule."
+    },
+    {
+      "id": "Bc194",
+      "statement": "Operational signatures: model tier can change WITHIN a session id (tuple-matchers beware), a stray all-zeros event id came from an argument-validation probe (a write command is never a probe), and the security-headers integration test's 'Parse Error: Expected HTTP/, RTSP/ or ICE/' is a loaded-host concurrency flake — a gate failure in a package you did not touch is not automatically yours.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w15-L18"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w15"
+      ],
+      "homeClaim": "shell-and-tooling-gotchas (flake signature unverified)",
+      "proposedDisposition": "needs-home",
+      "rationale": "Three diagnostic signatures whose home coverage is explicitly unverified."
+    },
+    {
+      "id": "Bc195",
+      "statement": "Grepping a shipped binary needs LC_ALL=C or grep reports false 'binary file matches' zero-hit reads; registry semantic hashes are computable via a temp tsx file inside the package dir importing ./semantic-source-sha256.js; and a newline-joined variable into git reads as ONE pathspec (use xargs, verify with a staged-count check).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w18-L40",
+        "w19-L12"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w18",
+        "w19"
+      ],
+      "homeClaim": "shell-and-tooling-gotchas",
+      "proposedDisposition": "needs-home",
+      "rationale": "Concrete shell recipes recorded at seat-close with no confirmed home."
+    },
+    {
+      "id": "Bc196",
+      "statement": "Vendor path-selection gates outrank mechanism reads: two expert rounds mis-read PostHog retry arithmetic until resolveCaptureMode() settled which path was actually engaged (v0 default, constant 3s delays).",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w19-L12"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w19"
+      ],
+      "homeClaim": "review/verification doctrine — no named home",
+      "proposedDisposition": "needs-home",
+      "rationale": "A reusable verification-ordering lesson stated once."
+    },
+    {
+      "id": "Bc197",
+      "statement": "Live registry count established: 42 universal registry entries (29 generated + 13 hand-built), 39 universal live after three dormant rows, plus one app-local tool for 40 live tools total, on MCP SDK 1.29.0 / ext-apps 1.7.5; MCP-300 closed with the live wire verified (40 tools, 40 titled, imperatives gone) and apps conformance 7/7.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w17-L50",
+        "w17-L49"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w17"
+      ],
+      "homeClaim": "MCP-300 ticket / deployed wire",
+      "proposedDisposition": "already-homed",
+      "rationale": "Counts verified against the live wire and recorded on the closed ticket."
+    },
+    {
+      "id": "Bc198",
+      "statement": "Multiple concurrent watcher processes racing one seen-file were observed (four for one seat, two for another) — a check-singleton-per-window class violation surfaced mid-window.",
+      "kind": "other-signal",
+      "supportingLeafIds": [
+        "w14-L34"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w14"
+      ],
+      "homeClaim": ".agent/rules/check-singleton-per-window.md",
+      "proposedDisposition": "already-homed",
+      "rationale": "The rule already names and governs this class."
+    },
+    {
+      "id": "Bc199",
+      "statement": "Owner merge-word can arrive as chat approval rather than the settled-read handshake ('I approved the PR, that is signal enough'; 'Merge now'), and where the owner is the PR author-of-record GitHub blocks his own review so approval is recorded as an owner-directed APPROVE via the bot.",
+      "kind": "other-signal",
+      "supportingLeafIds": [
+        "w14-L45",
+        "w20-L04"
+      ],
+      "leafCount": 2,
+      "windows": [
+        "w14",
+        "w20"
+      ],
+      "homeClaim": "merge-rulings memory (owner-word equivalence)",
+      "proposedDisposition": "needs-home",
+      "rationale": "A recurring signal-equivalence and a GitHub mechanic that will recur on every owner-authored PR."
+    },
+    {
+      "id": "Bc200",
+      "statement": "Merged branch jimcresswell/mcp-414-worktree-gates-turbo-git-dir-env-fix awaits an owner one-click delete (permission-gated at the implementer seat).",
+      "kind": "obligation",
+      "supportingLeafIds": [
+        "w22-L40"
+      ],
+      "leafCount": 1,
+      "windows": [
+        "w22"
+      ],
+      "homeClaim": "",
+      "proposedDisposition": "noise",
+      "rationale": "Trivial branch-cleanup chore whose loss costs nothing."
+    },
+    {
+      "id": "Bc201",
+      "statement": "claude[bot] review skips on PRs were spend-limit skips, not blockers, and an organisation Claude-review overage exhaustion is a capability ceiling rather than an approval or finding; a freeze-block claim that 'dispatches die' is stale as written.",
+      "kind": "knowledge",
+      "supportingLeafIds": [
+        "w13-L42",
+        "w23-L31",
+        "w23-L25"
+      ],
+      "leafCount": 3,
+      "windows": [
+        "w13",
+        "w23"
+      ],
+      "homeClaim": ".agent/rules or memory spend-errors-retry-never-escalate",
+      "proposedDisposition": "already-homed",
+      "rationale": "The standing spend-errors doctrine is explicitly cited as the governing home."
+    }
+  ]
+}

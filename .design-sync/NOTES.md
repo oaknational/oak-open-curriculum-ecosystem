@@ -1,5 +1,14 @@
 # design-sync NOTES — oak-design-system
 
+- **Estate-declaration edits re-run the match-count check** (2026-07-25,
+  graduated from distilled 2026-07-30): `estate.json`'s keep/ship
+  declaration pairs matching `paths` arrays with provenance `sources`
+  arrays — a `sources` entry added without its `paths` twin leaves the
+  file's own delete-contract free to delete the very file being adopted
+  (first-hand near-miss, design lane). Any edit to the declaration
+  re-runs the match-count check for the touched path (must be exactly 1)
+  before commit; symmetry between parallel arrays is a review tripwire,
+  never a given.
 - Tokens-only sync (2026-07-23, first sync): the package deliberately
   exports no React components (ADR-213 §3 as landed). Owner's original
   vision includes the full building-block set — an owned React
@@ -165,3 +174,25 @@
 - **thumbnail.html reclassified** shippedFromRepo → machinery: it has no
   repo source (studio-generated; the package .gitignore records it) —
   the shippedFromRepo claim was untrue for it.
+- **Design work is shown as rendered pixels in Chrome, never artefact
+  paths** (owner standing discipline, promoted from buffer memory
+  2026-07-31 — verbatim: "show me first, then discuss"): the done-test for
+  any design change is pixels in front of the owner in the browser; a
+  verified substrate with no rendered pixel shown is not done.
+- **The generality-depth gradient, defined** (cited by
+  `studio-source/PRESERVATION-README.md` as co-equal with ADR-213, promoted
+  from buffer memory 2026-07-31): deeper layers are MORE general — semantic
+  tokens are never Oak-specific; brand specificity enters only at the
+  shallow identity/theme layer (the 3×4 identity/theme matrix). A deep
+  layer that names Oak is a layering defect.
+- **Backfills from the 2026-07-31 consolidation run** (machine-local review
+  records → this surface): reviewers found BYTE-IDENTICAL duplicate pairs
+  inside the kept `assets/` set (e.g. `logo-full-black.svg` ==
+  `logo-full-official.svg`) — dedup is owed at the next asset pass; the
+  owner RATIFIED the EMC2 creature-demo quest-card layout (hero region,
+  one loud quest card) — the ledger record is the authority for its
+  specifics; the owner ruled the three studio integration docs SHIP (not
+  deleted) because the Claude Design surface needs them; and the studio
+  UUID `314dd517…` already appears on public surfaces beyond the S0 doc,
+  so any future redaction must be cross-surface or not attempted (F6,
+  2026-07-24).

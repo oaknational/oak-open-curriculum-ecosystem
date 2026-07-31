@@ -19,6 +19,10 @@ shared-comms-log.md
 cross-worktree-work-state.md
 comms-archive/*
 !comms-archive/.gitkeep
+# Derived comms-analysis bundles (machine-local renderings of the machine-local
+# event stream, built for the 2026-07-31 corpus run; checkpoints commit to the
+# run's report data dir, never these raw mirrors).
+comms-analysis-*/
 # Processed (knowledge-extracted) conversations/sidebars/handoffs are archive-moved
 # here, untracked-by-design (see archive/README.md). Only the README is tracked.
 archive/*

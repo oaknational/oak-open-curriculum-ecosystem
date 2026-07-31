@@ -53,7 +53,7 @@ Do not mark a phase complete without an entry.
 - Status: completed (2026-02-24)
 - ADR-119 update or rationale: Added "Documentation Propagation Contract" section.
 - practice.md update or rationale: Added workflow requirement for documentation propagation before phase closure.
-- prog-frame update or rationale: Added canonical-source note extension requiring propagation + consolidation.
+- practice-application update or rationale: Added canonical-source note extension requiring propagation + consolidation.
 - Other ADR/docs/README updates: Updated ADR-117 template/component inventory and guardrails; updated collection `README.md`, `roadmap.md`, `active/README.md`, and templates/components to encode the same rule.
 - Consolidation review (`jc-consolidate-docs`): Completed by aligning phase closure expectations to `.cursor/commands/jc-consolidate-docs.md`.
 - Notes: Phase 0 closed; Phase 1 is the next executable phase.
@@ -63,7 +63,7 @@ Do not mark a phase complete without an entry.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: Phase 1 kickoff package prepared in `active/phase-1-hallucination-guarding-execution.md` (baseline capture, edit order, pilot protocol). Implementation not started yet.
@@ -73,7 +73,7 @@ Do not mark a phase complete without an entry.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: pending
@@ -83,7 +83,7 @@ Do not mark a phase complete without an entry.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: pending
@@ -93,7 +93,7 @@ Do not mark a phase complete without an entry.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: pending
@@ -177,8 +177,8 @@ round. The plan now lives in `archive/completed/`.
 - practice.md update or rationale: No-change — `.agent/practice-core/practice.md`
   remains the canonical operational map. This lane indexes it more clearly but
   does not change its mechanics or doctrine.
-- prog-frame update or rationale: No-change — progression framing and the
-  internal progression document set were not changed by this discoverability
+- practice-application update or rationale: No-change — the internal
+  application document set was not changed by this discoverability
   restructure.
 - Other ADR/docs/README updates:
   - Added `.agent/reference/agentic-engineering/README.md`, the deep-dives
@@ -221,7 +221,7 @@ round. The plan now lives in `archive/completed/`.
 - practice.md update or rationale: No-change — `.agent/practice-core/practice.md`
   remains the canonical operational map. This lane extracted value by changing
   adjacent planning and evidence surfaces rather than altering the core map.
-- prog-frame update or rationale: No-change — the human-facing explanation in
+- practice-application update or rationale: No-change — the human-facing explanation in
   `docs/foundation/agentic-engineering-system.md` was reviewed and left
   untouched because the governance-plane vocabulary remains repo-local and not
   yet ready for doctrine promotion.
@@ -280,7 +280,7 @@ round. The plan now lives in `archive/completed/`.
 - Status: pending
 - ADR-119 update or rationale: pending
 - practice.md update or rationale: pending
-- prog-frame update or rationale: pending
+- practice-application update or rationale: pending
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: pending

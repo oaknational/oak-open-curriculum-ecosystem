@@ -3,7 +3,7 @@
  * adapter TOML files.
  *
  * Responsibilities:
- * - Locating and extracting the triple-quoted `developer_instructions` block.
+ * - Reading the parsed top-level `developer_instructions` string.
  * - Extracting the de-duplicated sorted set of canonical `.agent/...` paths
  *   referenced inside that block.
  *
@@ -14,20 +14,7 @@
  * strings.
  */
 
-// ---------------------------------------------------------------------------
-// Regex constants
-// ---------------------------------------------------------------------------
-
-/**
- * Matches the TOML multiline string block used for `developer_instructions`.
- *
- * The block opens with `developer_instructions = """` on its own line,
- * contains the body on subsequent lines, and closes with a bare `"""`.
- *
- * Captures the trimmed body in group 1.
- */
-const CODEX_DEVELOPER_INSTRUCTIONS_REGEX =
-  /^developer_instructions\s*=\s*"""\r?\n([\s\S]*?)\r?\n"""/mu;
+import type { TopLevelTomlBasicStringReader } from '../../core/toml-top-level-basic-string.js';
 
 /**
  * Matches backtick-delimited `.agent/...` paths referenced inside developer
@@ -43,17 +30,16 @@ const CANONICAL_PATH_REGEX = /`(\.agent\/[^`]+)`/gu;
 // ---------------------------------------------------------------------------
 
 /**
- * Extracts the body of the `developer_instructions` triple-quoted TOML block
- * from a Codex adapter TOML file.
+ * Reads the top-level `developer_instructions` string from parsed adapter TOML.
  *
- * Returns an empty string when the block is absent or empty, so callers can
+ * Returns an empty string when the field is absent or empty, so callers can
  * treat a falsy return value as "instructions not present".
  *
- * @param content - Full text of a Codex adapter TOML file.
+ * @param readValue - Reader for decoded top-level TOML string values.
  * @returns The trimmed developer instructions body, or `""` if absent.
  */
-export function readCodexDeveloperInstructions(content: string): string {
-  return CODEX_DEVELOPER_INSTRUCTIONS_REGEX.exec(content)?.[1]?.trim() ?? '';
+export function readCodexDeveloperInstructions(readValue: TopLevelTomlBasicStringReader): string {
+  return readValue('developer_instructions')?.trim() ?? '';
 }
 
 // ---------------------------------------------------------------------------

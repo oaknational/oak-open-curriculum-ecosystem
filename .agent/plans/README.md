@@ -41,9 +41,17 @@ The estate structure above was owner-ratified at the planning sitting
 (decisions register D23) and its first content ratified at part 2; the
 doctrine home is
 [ADR-216](../../docs/architecture/architectural-decisions/216-plan-node-estate.md).
-The prior 2026-07-21 sketch corpus is archived with per-artefact
-dispositions in
+Four conserved planning corpora precede this estate, all evidence and
+none baselines: the prior 2026-07-21 sketch corpus, archived with
+per-artefact dispositions in
 [`.agent/plans-v0-sketch-2026-07-21/`](../plans-v0-sketch-2026-07-21/DISPOSITIONS.md);
-the conserved pre-reset estate stays untouched in
-[`.agent/plans-backlog-2026-07/`](../plans-backlog-2026-07/BACKLOG.md).
-Both are evidence, not baselines.
+the conserved pre-reset estate, untouched in
+[`.agent/plans-backlog-2026-07/`](../plans-backlog-2026-07/BACKLOG.md);
+the archive tier of the generation before it, in
+`.agent/plans-old-archive/`; and the paused plan-corpus refounding
+programme's working corpus and instruments, in
+`.agent/plans-refounding/` (its controlling plan lives in the backlog's
+product-development-governance collection). Their incremental
+absorption is governed by the
+[`planning-and-intent-estate`](strategic/planning-and-intent-estate.plan.md)
+strategic node.

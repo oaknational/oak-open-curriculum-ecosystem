@@ -7,6 +7,11 @@ pdr_kind: governance
 **Status**: Accepted
 **Date**: 2026-04-18
 **Related**:
+[PDR-134](PDR-134-knowledge-strata-carriers-and-the-concept-layer.md)
+(dated cross-reference, 2026-07-31: the concept lifecycle mechanises
+this record's capture → distil → graduate → enforce pipeline at concept
+grain — candidate/working/ratified with the ratification stamp as the
+enforce edge);
 [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
 (new Core contract);
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)

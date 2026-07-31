@@ -18,7 +18,7 @@
  * review, asserted here only as structural presences/absences.
  */
 
-import request from 'supertest';
+import { request } from '../src/test-helpers/loopback-request.js';
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';

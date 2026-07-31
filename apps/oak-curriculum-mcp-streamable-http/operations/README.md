@@ -15,7 +15,9 @@ workspace but are not part of the HTTP runtime itself.
 
 ```text
 operations/
-└── development/   # HTTP dev-server orchestration and supporting helpers
+├── development/   # HTTP dev-server orchestration and supporting helpers
+└── test-ui-webserver-env.integration.test.ts   # cross-cutting guard: the
+    # test:ui webServer env composition stays hermetic at the analytics axis
 ```
 
 ## Standards

@@ -60,7 +60,6 @@ peerDependencyRules:
     eslint-plugin-react>eslint: '10'
     eslint-plugin-react-hooks>eslint: '10'
 overrides:
-  '@ai-sdk/provider-utils': '>=3.0.98'
   # Pin @types/node to the Node 24 LTS line across the whole tree, including
   # transitive peers (vite/vitest pull @types/node@26 as an optional peer).
   # Matches engines.node 24.x and keeps every workspace — including those that

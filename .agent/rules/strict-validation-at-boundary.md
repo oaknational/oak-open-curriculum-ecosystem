@@ -13,5 +13,12 @@ The correct pattern:
 3. Use the validated, fully-typed result from then on
 4. If the shape is genuinely open-ended, that is a design problem to fix, not a type problem to work around
 
+Owner ruling on tool surfaces (2026-07-28): **"Strict, all the time,
+everywhere"** — every MCP tool carries proper input AND output schemas, with
+realistic examples drawn from real data (graph tools were the founding
+instance). The dated tolerance from the same ruling — hand-authored runtime
+checks staying for now under the V1 deadline — is an exception with a named
+revisit (MCP-319 carries the schema follow-up), never doctrine.
+
 See `docs/governance/typescript-practice.md` §Compiler-time Types and
 Runtime Validation.

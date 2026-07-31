@@ -1,5 +1,5 @@
 import express, { type Response } from 'express';
-import request from 'supertest';
+import { request } from '../test-helpers/loopback-request.js';
 import { describe, expect, it, vi } from 'vitest';
 import type { Logger } from '@oaknational/logger';
 

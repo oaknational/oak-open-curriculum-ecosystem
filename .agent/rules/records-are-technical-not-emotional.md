@@ -10,6 +10,30 @@ correction was delivered. Describe the mistake and the cure factually
 ("owner corrected X; cure is Y"), never the owner's affect ("owner was
 frustrated"; "owner sharply corrected").
 
+## Records carry their authority honestly
+
+A record's REGISTER encodes its authority, and readers obey the register
+(a napkin observation written in the imperative hardened into a cited
+"owner ruling" within thirty minutes and stood a peer's monitors down,
+2026-07-28). The cure is a pair, and each half alone is insufficient:
+
+- **Author side**: any entry that could be read as a constraint on future
+  behaviour carries its SCOPE and EXPIRY in the same sentence ("true of X
+  at time T, revisit when Y"). Observations get past tense and a named
+  instance; **only owner-ratified doctrine gets the imperative.** When a
+  constraint lifts, the correction goes to every surface that carried it
+  AND to any seat observed acting on it — a stale entry is not neutralised
+  by a newer entry sitting below it.
+- **Reader side**: before citing a recorded constraint as authority,
+  check WHOSE word it is — provenance of authority, not just of facts.
+  A napkin entry is evidence of what one mind concluded at one moment;
+  only an owner ruling — quoted, dated, attributable — is authority.
+
+Before enacting the irreversible part of any correction, restate the
+policy back to its giver first (the three minutes this costs is nothing;
+a licence read as a mandate once deleted six weeks of archive inside the
+hour, 2026-07-26).
+
 ## When an expunge request fires
 
 If the owner asks for something to be removed from the record, the request

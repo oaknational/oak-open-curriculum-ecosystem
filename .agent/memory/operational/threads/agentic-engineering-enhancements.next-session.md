@@ -44,6 +44,29 @@ work brief and the recent identity stretch, per
   graduation-candidate capture at `43c03362a`); provenance-of-authority — a napkin imperative cited
   as an owner ruling, corrected by the Director's constraint-lift broadcast (11:11Z, napkin entry).
 
+## DEDICATED CONSOLIDATION — EXECUTED (2026-07-30)
+
+Ingot tracks Slag (claude-code / claude-fable-5 / `be4ac9`), curator,
+first_session 2026-07-30, last_session 2026-07-30. Owner-named dedicated
+pass, n=2 with Director Falcon hunts Flight (cold-paused mid-pass); base
+`coordination/estate-2026-07-30-c`. Owner ordering honoured: ALL raw
+sources swept into/against the napkin FIRST (46 experience letters whole;
+177 tagged events; 4 platform memories; ~140 handoff records risk-sampled;
+non-repo plans; box), then the 5,333-line napkin bottom-up, then distilled,
+then the upper registers. Napkin rotated (`archive/napkin-2026-07-30.md`,
+cmp-proven); distilled drained EMPTY (both entries graduated on their own
+recorded routing); pending-graduations = 2 trigger-gated rows only;
+open-questions empty. The full graduation ledger is repo-continuity §0a +
+the pass commits; headline: the referent/derivation synthesis
+(verify-dont-trust §Claims-Crossing-Boundaries + referent-narrowing
+transmitting-dual + post-graduation record), frame-free-absolutes pattern,
+the PDR-063 writer/reader/succession amendment bundle, pr-lifecycle
+read-mechanics + cure-is-a-claim, liveness reading calibrations,
+MCP-446/447 minted. Named next-pass items: the ~7,600-event comms
+archive-move (gates run fresh); this record's own char-critical drain
+(unchanged from Magnetar's naming); director-handoff curation
+(Director-routed).
+
 ## DEDICATED CONSOLIDATION — EXECUTED (2026-07-26)
 
 Magnetar guards Perigee (claude-code / fable-5 / `565521`), curator,

@@ -7,6 +7,10 @@ pdr_kind: governance
 **Status**: Accepted
 **Date**: 2026-07-20
 **Related**:
+[PDR-134](PDR-134-knowledge-strata-carriers-and-the-concept-layer.md)
+(dated cross-reference, 2026-07-31: the concept lifecycle is this
+record's two speeds formalised — `candidate` is the fast lane, `ratified`
+the slow, and predictions map onto the computed-confidence axis);
 [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md) (the
 capture → distil → graduate → enforce pipeline this record gives a second
 speed); [PDR-046](PDR-046-layered-knowledge-processing.md) (preserve first,

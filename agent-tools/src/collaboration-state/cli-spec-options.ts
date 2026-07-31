@@ -82,6 +82,7 @@ export const commsDirectOptions = [
   'active',
   'event-id',
   'now',
+  'in-response-to',
   'tag',
 ] as const;
 

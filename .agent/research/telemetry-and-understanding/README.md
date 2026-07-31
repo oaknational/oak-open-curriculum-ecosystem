@@ -55,6 +55,11 @@ Resolve disagreement according to the claim being made:
 
 ## Live baseline
 
+> **Dated snapshot — superseded in practice.** Production capture went live
+> 2026-07-29 (runtime composition MCP-241; thousands of events within the
+> first day). The zeros below describe the 2026-07-11 starting condition
+> only; read live state from the PostHog project, never from this table.
+
 The PostHog project inspected on 2026-07-11 is:
 
 - project: **Oak Open Curriculum Ecosystem**

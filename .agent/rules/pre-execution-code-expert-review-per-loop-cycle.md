@@ -163,6 +163,15 @@ without signal gain. The fan-from-brief shape preserves code-expert's
 architectural review role while parallelising the named-set specialists
 from cycle-open.
 
+## Scope reading (adjudicated 2026-07-30)
+
+The apparent conflict between an AgentTool fence (a seat barred from
+sub-agent dispatch) and this rule's mandated review dissolves by SCOPE
+reading plus seat transfer: the pre-execution-review obligation binds
+fan-out CYCLES, not fenced seats — a fenced seat routes the dispatch to a
+peer or the Director (the coordinator-delegates discipline), and the
+review still happens. Neither rule yields; the executor moves.
+
 ## Cross-references
 
 - Parent rule: [`invoke-code-experts.md`](invoke-code-experts.md) —

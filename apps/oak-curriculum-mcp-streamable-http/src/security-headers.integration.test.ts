@@ -1,8 +1,7 @@
-import request from 'supertest';
+import { request } from './test-helpers/loopback-request.js';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createApp } from './application.js';
 import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
-import { createFakeRateLimiterFactory } from './test-helpers/rate-limiter-fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
 import type { Express } from 'express';
 import { getScratchStaticRoot } from './test-helpers/static-root-fixture.js';
@@ -29,7 +28,6 @@ describe('Security Headers (Integration)', () => {
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       getLandingPageHtml: () =>
         '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-      rateLimiterFactory: createFakeRateLimiterFactory().factory,
     });
   });
 

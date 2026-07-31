@@ -61,6 +61,26 @@ lose their carriers. Curation is a periodic, deliberate pass — Director-owned 
 4. **Duplicates**: same finding from different reviewers converges on one ticket with the second
    source cited (worked instance: MCP-199 absorbing a duplicate finding without a new ticket).
 
+## Linear Platform Behaviours (operational facts, recorded 2026-07-31)
+
+- **PR-merge automation auto-closes multi-slice tickets at EVERY slice
+  merge**, even with slices outstanding — manually reopen at each landing
+  until the final one, or the programme ticket silently reads Done at
+  slice 1 of N.
+- **The Linear MCP connector refuses ticket writes whose payload carries
+  internal planning detail and repo paths** (it treats a general Linear
+  permission as insufficiently specific) — keep ticket bodies
+  plain-language and pointer-shaped (which the plain-language discipline
+  wants anyway), and carry internals in repo surfaces the ticket points at.
+
+## Definition-of-Done Ceremony (owner discipline, MCP-356)
+
+A ticket's Definition of Done changes only by PROPOSAL COMMENT followed by
+owner ratification — never by direct edit. A DoD is the owner's acceptance
+contract; editing it in place moves the goalposts invisibly. Propose the
+change as a comment naming old text, new text, and reason; the owner's
+ratifying reply licenses the edit.
+
 ## Routing Boundaries
 
 - Owner decisions discovered during ticket work (milestone homes, blocking-posture confirmations,

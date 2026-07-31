@@ -25,11 +25,11 @@
     "itemCount": 728,
     "baselineItemCount": 717,
     "additionCount": 11,
-    "availableCount": 689,
-    "retiredCount": 39,
-    "unchangedCount": 524,
+    "availableCount": 684,
+    "retiredCount": 44,
+    "unchangedCount": 518,
     "expandedCount": 0,
-    "modifiedCount": 85,
+    "modifiedCount": 86,
     "relocatedCount": 68,
     "addedCount": 12,
     "workspaceScopeInCount": 612,
@@ -3490,18 +3490,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-asset-download/definition.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-asset-download/definition.ts"
       },
       "registrations": []
@@ -9317,18 +9310,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts"
       },
       "registrations": []
@@ -9338,18 +9324,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts"
       },
       "registrations": []
@@ -9359,18 +9338,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts"
       },
       "registrations": []
@@ -9380,18 +9352,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts"
       },
       "registrations": []
@@ -15496,7 +15461,7 @@
           "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }

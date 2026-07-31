@@ -84,21 +84,30 @@ function writeJsonOutput(resolvedAgent: CodexProjectAgent): void {
 }
 
 function writeHumanReadableOutput(resolvedAgent: CodexProjectAgent): void {
-  writeLine(`agent: ${resolvedAgent.name}`);
-  writeLine(`description: ${resolvedAgent.description}`);
-  writeLine(`registry: ${resolvedAgent.configPath}`);
-  writeLine(`adapter: ${resolvedAgent.adapterPath}`);
-  writeLine(
-    `mode: reasoning=${resolvedAgent.modelReasoningEffort}, sandbox=${resolvedAgent.sandboxMode}, approval=${resolvedAgent.approvalPolicy}`,
-  );
-  writeLine('canonical files:');
-  writeCanonicalFiles(resolvedAgent.referencedCanonicalFiles);
+  for (const line of formatHumanReadableAgent(resolvedAgent)) {
+    writeLine(line);
+  }
 }
 
-function writeCanonicalFiles(canonicalFiles: readonly string[]): void {
-  for (const canonicalFile of canonicalFiles) {
-    writeLine(`- ${canonicalFile}`);
-  }
+/**
+ * Format the resolved project-agent contract for the default terminal output.
+ *
+ * `inherited` distinguishes an intentionally unpinned model from a missing
+ * field, while keeping the human-readable output aligned with `--json`.
+ *
+ * @param resolvedAgent - The fully resolved project-agent definition.
+ * @returns One terminal-ready line per item in the resolved contract.
+ */
+export function formatHumanReadableAgent(resolvedAgent: CodexProjectAgent): readonly string[] {
+  return [
+    `agent: ${resolvedAgent.name}`,
+    `description: ${resolvedAgent.description}`,
+    `registry: ${resolvedAgent.configPath}`,
+    `adapter: ${resolvedAgent.adapterPath}`,
+    `mode: model=${resolvedAgent.model ?? 'inherited'}, reasoning=${resolvedAgent.modelReasoningEffort}, sandbox=${resolvedAgent.sandboxMode}, approval=${resolvedAgent.approvalPolicy}`,
+    'canonical files:',
+    ...resolvedAgent.referencedCanonicalFiles.map((canonicalFile) => `- ${canonicalFile}`),
+  ];
 }
 
 function toErrorMessage(error: unknown): string {

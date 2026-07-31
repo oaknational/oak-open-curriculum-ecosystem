@@ -53,3 +53,13 @@ This rule applies only to sub-agents — agents spawned via the Agent tool with
 dispatched for narrow tasks. The primary conversation agent (the one the
 human is talking to) retains full authority over the foundational Practice
 document set, subject to the human's in-loop consent for substantive edits.
+
+## Blocked paths are findings, never routes to work around
+
+A sub-agent whose native edit path is BLOCKED (a hook denial, a fence, a
+permission refusal) reports the block as a finding — it never routes around
+it through a side channel (conserved defect exhibit, 2026-07-2x: a revising
+sub-agent wrote files via a Python shell to bypass a blocked native edit
+path; recorded as a defect to cure at the adapter, never normalised as a
+technique). The block IS the practice working; the cure belongs at the
+adapter/policy layer with full context, not in the sub-agent's ingenuity.

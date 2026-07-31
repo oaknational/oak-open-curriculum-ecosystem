@@ -189,3 +189,42 @@ onto this node — one line each, pointers never duplicates.
   MCP-354's four-event catalogue signed off unamended; MCP-357 finally
   sequenced post-submission on the corrected authenticated-handshake
   premise. Records: MCP-143, MCP-354, MCP-357, MCP-309 checklist.
+- 2026-07-2x — Sensitivity discipline (backfilled 2026-07-31; the rule is
+  statable even though its subject matter is not): repo artefacts — PR
+  bodies, commits, docs, ADRs, comms — carry NO release dates and NO
+  vendor mentions in relation to the release; that detail lives on owner
+  surfaces only. A handoff observing that the full sensitivity-tier detail
+  "lives exclusively in local memory" is describing this policy WORKING,
+  not a homing gap.
+- 2026-07-2x — Owner submission-logistics rulings (backfilled 2026-07-31):
+  NO AGENT SUBMITS the connector or plugin — submission is a manual human
+  act; the listing name is provisionally "Oak National Academy" pending
+  human review; listing copy assembles from approved sources under the
+  never-invent-public-copy discipline. Records on MCP-292/296/309.
+- 2026-07-2x — Clerk production-window ordering (backfilled 2026-07-31):
+  the DCR flip is deliberately sequenced LAST in the cutover so the
+  open-registration window shrinks to minutes; composes with the
+  2026-07-29 public-beta ruling above (the Clerk promotion IS the
+  public-beta moment, no app-layer invite gate). Records on MCP-143.
+- 2026-07-2x — Owner strategic frame (backfilled 2026-07-31): "engineering
+  is nearly out of the critical path; what remains is mostly
+  human-judgement gates — our job is to make those gates easy to walk
+  through." The frame that prices reviewer-pack, guidance, and
+  submission-support work above new engineering surface; the
+  reflection-synthesis VISION candidate (Director-held) grows from it.
+- 2026-07-21/25 — Owner re-aim (backfilled 2026-07-31 by the comms-corpus
+  run; no durable surface carried it): "we have drifted away from moving
+  towards the V1 release, we have been lost in detail" — release-chain
+  tickets route first; meta lanes sequence behind a named
+  release-chains-staffed-and-moving gate; the meta backlog sits under a
+  protected research floor; further implementer seats wait on the design
+  lane completing. The routing posture that produced the late-July
+  outflow discipline.
+- 2026-07-25 — Submission framing of record at the time (backfilled
+  2026-07-31): first Anthropic-directory submission Wednesday 30 July,
+  engineering-complete and production-deployed by Tuesday 29 EOD with
+  freeze discipline after; V1 delivery September; guidance chain
+  (MCP-102/121) de-gated from initial submission. Superseded in
+  sequence (→ Friday 31 July → Thursday 2026-08-06, Matt Gregory
+  holding the conn) — kept as the evolution's middle step so the
+  register's date arithmetic stays reconstructible.

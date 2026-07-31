@@ -7,7 +7,7 @@ validation) and 2026-06-23 to record the actual `/mcp` posture: Host validation
 is enforced in the auth layer, Origin is deliberately permissive, and the OAuth
 Bearer token is the security boundary. See ADR-158 for the layer topology.
 
-**Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-113 (MCP spec-compliant auth for all methods)](113-mcp-spec-compliant-auth-for-all-methods.md), [ADR-116 (resolveEnv pipeline)](116-resolve-env-pipeline-architecture.md), [ADR-158 (multi-layer security)](158-multi-layer-security-and-rate-limiting.md)
+**Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-113 (MCP spec-compliant auth for all methods)](113-mcp-spec-compliant-auth-for-all-methods.md), [ADR-116 (resolveEnv pipeline)](116-resolve-env-pipeline-architecture.md), [ADR-158 (multi-layer security)](158-multi-layer-security-and-rate-limiting.md), [ADR-219 (rate limiting is an edge concern)](219-rate-limiting-is-an-edge-concern.md)
 
 ## Context
 

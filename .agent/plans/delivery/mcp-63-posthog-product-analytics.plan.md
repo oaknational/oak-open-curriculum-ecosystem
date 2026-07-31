@@ -146,6 +146,13 @@ shut down per request.
 
 ## Current execution state
 
+Dead constraints, named to stop them resurfacing (backfilled 2026-07-31 by
+the comms-corpus run): "exclude `@posthog/mcp` from production" is DEAD;
+"M6 not submission-blocking" is DEAD (the owner's day-0 analytics ruling of
+2026-07-29 supersedes it — day-0 visibility gates the submission). A plan or
+review that re-imports either constraint is working from a superseded
+capture.
+
 Linear MCP-63 and its child graph remain the live execution authority.
 The adapter foundation is intentionally being re-landed from main SHA
 `04a36b5e3ee85ae50d8da4795eb4c2546fe60365` as the small, ordered

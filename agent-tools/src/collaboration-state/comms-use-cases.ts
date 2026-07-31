@@ -49,6 +49,7 @@ export function createDirectedCommsMessage(input: {
   readonly to: CollaborationAgentIdWrite;
   readonly subject: string;
   readonly body: string;
+  readonly inResponseTo?: string;
   readonly tags?: readonly string[];
 }): DirectedCommsMessage {
   const base: DirectedCommsMessage = {
@@ -61,6 +62,7 @@ export function createDirectedCommsMessage(input: {
     to: input.to,
     subject: input.subject,
     body: input.body,
+    ...(input.inResponseTo === undefined ? {} : { in_response_to: input.inResponseTo }),
   };
   return input.tags !== undefined && input.tags.length > 0 ? { ...base, tags: input.tags } : base;
 }
@@ -118,6 +120,9 @@ export function replyToDirectedCommsMessage(input: {
     to: collaborationAgentIdWriteSchema.parse(source.from),
     subject: input.subject ?? defaultReplySubject(source.subject),
     body: input.body,
+    // The reply names its source to resolve it, so the threading edge is
+    // carried by construction — a reply cannot be unthreaded.
+    inResponseTo: input.sourceEventId,
     tags: input.tags,
   });
 }

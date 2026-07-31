@@ -1,0 +1,18 @@
+name = "cricket-judgement-low"
+description = "Fast low-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with evidence and one redirection."
+model = "gpt-5.6-sol"
+model_reasoning_effort = "low"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/cricket-judgement.md`.
+
+This file is a thin Codex adapter. The canonical role definition lives in the
+template referenced above; each dispatch supplies the objective frame,
+critical-path owner, intent, recent actions, next planned action, and STANCE
+(normal or adversarial, defined in the template).
+
+Mode: a single fast pass — judge from the supplied context, honour the
+template's speed contract, and report only. Do not modify anything.
+"""

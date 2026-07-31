@@ -22,6 +22,9 @@ or a policy. Therefore it does not need to be canonical or exhaustive. -->
   situation. Starting with pending graduations means emptying those buffers then filling them
   up again, but sometimes that is the right choice.
 
+  Since 2026-07-31 (PDR-134/ADR-221 ratified): concept nodes are a graduation target class —
+  recurring named ideas graduate as candidate/working concepts, and the curator stewards the scheme.
+
 ## Team Session
 
 /goal ultrathink /oak-metacognition /oak-reason /oak-start-right-team /oak-consolidate-until-done /oak-concept-exploration /oak-free-play 

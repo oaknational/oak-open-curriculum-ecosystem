@@ -1,4 +1,4 @@
-import request from 'supertest';
+import { request } from './test-helpers/loopback-request.js';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { Express } from 'express';
 
@@ -9,7 +9,6 @@ import {
   removeStaticRoot,
 } from './test-helpers/static-root-fixture.js';
 import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
-import { createFakeRateLimiterFactory } from './test-helpers/rate-limiter-fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
 import { renderLandingPageHtml } from './landing-page/index.js';
 
@@ -41,7 +40,6 @@ describe('Oak Open Curriculum Design System static serving', () => {
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       getLandingPageHtml: () =>
         '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-      rateLimiterFactory: createFakeRateLimiterFactory().factory,
       staticRoot: scratchRoot,
     });
   });
@@ -129,7 +127,6 @@ describe('Oak Open Curriculum Design System static serving', () => {
           getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
           getLandingPageHtml: () =>
             '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-          rateLimiterFactory: createFakeRateLimiterFactory().factory,
           staticRoot: emptyRoot,
         }),
       ).rejects.toThrow(/missing .*oak-ds/);

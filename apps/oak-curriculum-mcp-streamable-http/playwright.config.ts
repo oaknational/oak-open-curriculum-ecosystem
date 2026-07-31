@@ -28,6 +28,18 @@ export default defineConfig({
       ELASTICSEARCH_URL: 'http://fake-es:9200',
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-playwright',
       SENTRY_MODE: 'off',
+      // The observe-noauth mode this webServer runs FORCES
+      // DANGEROUSLY_DISABLE_AUTH=true after spreading this block
+      // (operations/development/http-dev-contract.ts resolveServerEnv), so
+      // the harness must also pin the analytics axis that flag constrains:
+      // the app refuses a posthog selection under disabled auth
+      // (src/env-product-analytics.ts), and without this pin the
+      // developer's .env.local selection reaches the server and it cannot
+      // start (MCP-359). Playwright spreads this block over the runner's
+      // ambient process env, and processEnv is the top layer in resolveEnv,
+      // so the pin beats every ambient channel. '[]' is the shared schema's
+      // own default — stdout-only baseline.
+      OBSERVABILITY_SINKS: '[]',
     },
   },
   use: {

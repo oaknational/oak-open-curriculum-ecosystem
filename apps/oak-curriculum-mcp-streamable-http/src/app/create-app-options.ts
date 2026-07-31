@@ -4,7 +4,6 @@ import type { Logger } from '@oaknational/logger';
 import type { McpTransportObserver, ProductAnalyticsSink } from '@oaknational/observability';
 import type { RuntimeConfig } from '../runtime-config.js';
 import type { HttpObservability } from '../observability/http-observability.js';
-import type { RateLimiterFactory } from '../rate-limiting/index.js';
 import type { ToolHandlerOverrides } from '../handlers.js';
 import type { CreateMcpAuthClerkDeps } from '../auth/mcp-auth/index.js';
 import type { UpstreamAuthServerMetadata } from '../oauth-proxy/index.js';
@@ -43,15 +42,6 @@ export interface CreateAppOptions {
    * functions are used. (ADR-078)
    */
   readonly mcpAuthClerkDeps?: CreateMcpAuthClerkDeps;
-  /**
-   * Factory for per-IP rate-limit middleware. Required: production passes
-   * {@link createDefaultRateLimiterFactory}; tests pass a no-op or recording
-   * fake from `src/test-helpers/rate-limiter-fakes.ts`. Required (not
-   * optional) so the test boundary cannot silently fall back to the
-   * production `express-rate-limit` factory and its `MemoryStore` cleanup
-   * interval. (ADR-078, ADR-158)
-   */
-  readonly rateLimiterFactory: RateLimiterFactory;
   /** Sentry Express error-handler registration; live mode only, not fixture/off. (ADR-078) */
   readonly setupSentryErrorHandler?: SentryExpressErrorHandlerSetup;
   /**

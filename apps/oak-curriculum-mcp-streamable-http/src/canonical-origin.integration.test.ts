@@ -11,10 +11,9 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import request from 'supertest';
+import { request } from './test-helpers/loopback-request.js';
 import { createApp } from './application.js';
 import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
-import { createFakeRateLimiterFactory } from './test-helpers/rate-limiter-fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
 import { TEST_UPSTREAM_METADATA } from './test-helpers/upstream-metadata-fixture.js';
 import { getScratchStaticRoot } from './test-helpers/static-root-fixture.js';
@@ -48,7 +47,6 @@ async function createTestApp(env: Record<string, string>) {
     getLandingPageHtml: () =>
       '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
-    rateLimiterFactory: createFakeRateLimiterFactory().factory,
   });
 }
 

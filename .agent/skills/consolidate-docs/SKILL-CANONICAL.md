@@ -96,6 +96,10 @@ completion criteria, and closeout evidence for the pass.
   this do the most good?"; process drainable buffers item by item toward empty,
   deciding each (graduate, reject, or confirm duplicate); what cannot be decided
   yet is visible decision-debt in the count, decided in a later pass.
+  **Dated addition (2026-07-31, ADR-221 obligation 5, owner-ratified)**:
+  concept nodes are a graduation target class — a recurring named idea
+  graduates as a `candidate`/`working` concept per PDR-134's lifecycle,
+  and the curator role stewards the scheme (owner call, same sitting).
 
 Fitness output is routing evidence in both modes — never completion evidence and
 never a completion gate. `session-completion` must not imply that all curation

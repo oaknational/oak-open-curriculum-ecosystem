@@ -45,6 +45,12 @@ knowledge where it has impact; let any fitness change fall out as a side effect.
 "No file worse than soft" is a weak proxy to glance at, never the work and never
 the point.
 
+**Dated note (2026-07-31, ADR-221 obligation 5)**: this invariant's
+highest-impact-home test is PDR-134's stratum-homing stated informally —
+"a portable decision in the PDR that travels to every repo" is the
+generality axis; run the PDR-134 homing questions when the home is in
+doubt, and the two disciplines are one.
+
 ## Approach
 
 This is deep, thoughtful work. It takes time. It must be done first hand.

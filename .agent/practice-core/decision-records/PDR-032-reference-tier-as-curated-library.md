@@ -203,7 +203,7 @@ until the next reformation pass.
   (`agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md`,
   archived 2026-04-22 Session 8 with full execution record:
   22 MOVED + 4 DELETED + 1 KEPT, bay reduced to single residual
-  `prog-frame/` item awaiting owner disposition) executed the
+  `personal-item/` item awaiting owner disposition) executed the
   first drain pass and is the precedent for subsequent drains.
 - **Definition ambiguity at edges**: some material is genuinely
   hard to classify (e.g., long-form how-to notes that age slowly

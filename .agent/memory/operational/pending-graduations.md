@@ -116,6 +116,23 @@ debt register, 2026-07-08).
 
 <!-- New pending-graduation capture appends below as inline-bracket entries. -->
 
+- **Provenance-erasing APIs (a `get()` that erases choice-vs-fallback forces
+  consumers to bind a lookalike or privately re-derive)**
+  `[captured: 2026-07-30 | source: napkin 2026-07-30 ~06:28Z (Thyme) +
+  MCP-388 06:24Z comment (connective frame) | target: rule or PDR clause
+  beside query-the-value / validators-recompute / fix-the-generator |
+  trigger: a THIRD paid instance anywhere in the estate (first two: showcase
+  PR #637 dead control; hub MCP-372 slice-1 duplicated demo stores) |
+  size: small clause | status: pending]`
+- **Digest-truncated rules: fired-known, mechanics-dark (a rules digest
+  carrying triggers but not compliance mechanics produces confident wrong
+  compliance plans)**
+  `[captured: 2026-07-27 | source: napkin 2026-07-27 Peony first-contact +
+  Squall specimen note | target: trigger-first rule-indexing doctrine (rules
+  carry a compliance-mechanics line inside the trigger-first opening) |
+  trigger: a SECOND specimen of a constrained seat acting on a trigger-only
+  digest read | size: small clause + authoring convention | status: pending]`
+
 <!-- Register drained to empty at the 2026-07-20 dedicated consolidation (Siren lifts
 Trench): the F-92 heartbeat-loop item was already terminal (duplicate of F-92, whose cure
 now also lives in the liveness-heartbeat-cron rule's canonical-invocation clause); the

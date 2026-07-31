@@ -172,6 +172,7 @@ export interface DirectedCommsMessage extends BaseCommsEvent {
   readonly to: CollaborationAgentId;
   readonly subject: string;
   readonly body: string;
+  readonly in_response_to?: string;
   readonly tags?: readonly string[];
 }
 

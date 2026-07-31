@@ -88,6 +88,16 @@ The §"Handoff artefacts teach by their form" discipline was graduated 2026-06-0
 candidate: present-truth-plus-destination form, transit-degradation (launch from
 the canonical file; three-session evidence), and compress-but-never-extend scope.
 
+## Inherited constraints carry their cure cost
+
+A constraint's HARDNESS is repriced at every handoff: state its cure cost
+alongside it, and let the receiver re-derive the urgency rather than
+inheriting the adjective. Worked instance (2026-07-2x): the MCP-303
+credentials-expiry "hard bound" rode five compaction boundaries unexamined
+until the owner priced the cure — re-minting is "the work of seconds". A
+handoff that transmits "hard" without the cure cost manufactures urgency
+the facts never carried.
+
 ## Cross-references
 
 - Composes with [`start-right-team` SKILL §Continuation Pointer Contract](../skills/start-right-team/SKILL-CANONICAL.md) — that section covers the specific continuation-record-as-pointer case; this rule is the broader principle applied to every handoff message.

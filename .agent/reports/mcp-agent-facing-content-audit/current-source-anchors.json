@@ -2974,25 +2974,6 @@
       }
     },
     {
-      "auditId": "C163",
-      "evidence": {
-        "revision": "unchanged",
-        "targets": [
-          {
-            "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-asset-download/definition.ts",
-            "anchors": [
-              {
-                "tokenCount": 66,
-                "tokenSha256": "297d944fdbdcd968e3e4709cbcee47309da67bd60f2cfb86672e6b7e7d4444d2",
-                "indexToken": "thenational",
-                "indexOffset": 44
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "auditId": "C164",
       "evidence": {
         "revision": "modified",
@@ -7922,82 +7903,6 @@
                 "tokenSha256": "c68bbb68bca32a4ad889663a4b52ae9e2c5539bad22a26801ed0929137033b47",
                 "indexToken": "register",
                 "indexOffset": 63
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "auditId": "C409",
-      "evidence": {
-        "revision": "unchanged",
-        "targets": [
-          {
-            "file": "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts",
-            "anchors": [
-              {
-                "tokenCount": 45,
-                "tokenSha256": "804acdef4cabc4a8d47a66c564b423ef51931e37b5cb630b28b6b0fe417e71f8",
-                "indexToken": "MCP_RATE_LIMIT",
-                "indexOffset": 2
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "auditId": "C410",
-      "evidence": {
-        "revision": "unchanged",
-        "targets": [
-          {
-            "file": "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts",
-            "anchors": [
-              {
-                "tokenCount": 43,
-                "tokenSha256": "3f6e31c2b006ab717af6c9b1b73e53dfc29b62ac59936f2b293107feb1aba9df",
-                "indexToken": "900_000",
-                "indexOffset": 7
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "auditId": "C411",
-      "evidence": {
-        "revision": "unchanged",
-        "targets": [
-          {
-            "file": "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts",
-            "anchors": [
-              {
-                "tokenCount": 43,
-                "tokenSha256": "19f9dea565b6ba05a7c8c6bf043086c9f2f707a621f2f6a4c3a7938861d1245a",
-                "indexToken": "METADATA_RATE_LIMIT",
-                "indexOffset": 2
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "auditId": "C412",
-      "evidence": {
-        "revision": "unchanged",
-        "targets": [
-          {
-            "file": "apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts",
-            "anchors": [
-              {
-                "tokenCount": 45,
-                "tokenSha256": "2d2ce913d23e471bb49847b3904f16e843b8f0216018c4f93ba339269a00739c",
-                "indexToken": "ASSET_RATE_LIMIT",
-                "indexOffset": 2
               }
             ]
           }
@@ -13566,8 +13471,8 @@
               {
                 "tokenCount": 13,
                 "tokenSha256": "e3bc3ef33776183f39e44226f3a4a10a6b3f599992dea26d5b9fa86016b28a37",
-                "indexToken": "servePrm",
-                "indexOffset": 1
+                "indexToken": "RequestHandler",
+                "indexOffset": 3
               }
             ]
           }
@@ -13602,10 +13507,10 @@
             "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
             "anchors": [
               {
-                "tokenCount": 20,
-                "tokenSha256": "032632b7bd8cca3bfb0b38a0240312c8ab208b28cb2826526c1a63427547eedf",
-                "indexToken": "protected",
-                "indexOffset": 13
+                "tokenCount": 21,
+                "tokenSha256": "b61432776ae725e55aba5b336d7f72893a8b0b02a6d5f84f34b94114251e9b92",
+                "indexToken": "servePrm",
+                "indexOffset": 18
               }
             ]
           }
@@ -13615,16 +13520,16 @@
     {
       "auditId": "C708",
       "evidence": {
-        "revision": "unchanged",
+        "revision": "modified",
         "targets": [
           {
             "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
             "anchors": [
               {
-                "tokenCount": 50,
-                "tokenSha256": "694928fbf11e2affa2cd5b6996011c208a5567725d38d95c48ef7a300e046d13",
-                "indexToken": "useStubTools",
-                "indexOffset": 4
+                "tokenCount": 26,
+                "tokenSha256": "39b34146bbbc344a1737a3fd84fd82a082d881bfa8db2407845608cf385c42dc",
+                "indexToken": "stub",
+                "indexOffset": 13
               }
             ]
           }

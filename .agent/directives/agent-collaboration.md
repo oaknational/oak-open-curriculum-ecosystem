@@ -247,6 +247,13 @@ the named gate evidence and exact pathspec immediately before the commit window.
 Once the hook runs, that hook output is the authority for the attempt; older
 independent probes are diagnostic context, not an override.
 
+Lockfile custody (standing, recorded 2026-07-2x): `pnpm-lock.yaml` has NO
+exclusive custodian — it is derived. Each lane declares its dependencies in
+its own workspace manifest and commits the resulting lockfile delta with its
+bundle; a lane blocking on "who owns the lockfile" has invented a custodian
+the derivation model does not have. Conflicts resolve by re-running the
+install on the merged manifests, never by hand-merging the lockfile.
+
 ### d. Cleanup Ethics for Apparently Orphaned Claims
 
 Resist unilateral cleanup; archive only via deliberate governance passes
@@ -268,6 +275,27 @@ Two positive complements to the scope-discipline tripwires above (PDR-026/027/02
   safely; a subtle correctness boundary stays with the agent who understands it
   unless the brief names that boundary precisely — delegating a judgement-heavy
   edit on parallelism alone plants a false claim the reviewer must then catch.
+- **Route work as offers with a costless decline.** An honest capacity decline
+  ("deep window; this deserves a fresh seat") is a load-bearing structural
+  member of the routing culture, never a confession — the fleet is built to
+  catch work, not seats. Two obligations keep it honest: the decliner names
+  what the no covers AND what it does not, in the same breath (a decline
+  scoped to one work-shape is not seat-wide unavailability — an idle agent is
+  a defect, and a sloppy no propagates faster than a careful one because it
+  is easier to quote); and the router treats a decline as scoped to the
+  work-shape asked about, re-offering different-shaped work freely. Three
+  worked instances 2026-07-29/30 (two precision-telemetry declines converging
+  on fresh-seat; an offer/decline/route arc cited as the culture working).
+- **Second opinions from a cross-platform seat at judgement-sized moments**
+  (owner standing directive, 2026-07-30). Contested dispositions, design
+  forks, and blind-spot-prone verdicts may route to a designated
+  second-opinion seat on a DIFFERENT model family (founding instance: a
+  Codex/GPT-5 seat) — proportional, never routine ceremony. One
+  self-contained directed event per ask; the second-opinion seat holds no
+  claim and returns opinion only; the asking seat owns the disposition. The
+  value is the different failure surface, so the seat's platform diversity
+  is the point, not its identity — the designated seat is re-derived from
+  the live roster at time of use.
 
 ## PR Closeout Discipline
 

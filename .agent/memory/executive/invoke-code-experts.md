@@ -139,6 +139,31 @@ cheap first-hand check, run the check before adjudicating — reviewer
 contradiction is a gift (a 2026-07-02 panel's opposite claims about an
 exported function were settled by one direct read of the source).
 
+## Reviewer Reports Arrive Only on Request
+
+Reviewer subagents deliver their reports ONLY on an explicit SendMessage
+request — a summary-less idle notification means NO report was emitted
+(6/6 instances, late July 2026): request the report, never infer one from
+the idle. And a long-silent consult (~12 minutes) is a DEFECTIVE dispatch —
+kill it and re-dispatch; a seat idling on a dead consult is the failure,
+not patience. Known mechanism (MCP-386, until cured): the Agent tool's
+`name` parameter correlates with dark dispatches — named dispatches went
+dark 10/10 while unnamed ones reported; prefer unnamed reviewer dispatches
+while the ticket is open.
+
+## Reviewer Model Tier
+
+Every expert-reviewer dispatch passes `model: opus` explicitly — reviewer
+verdicts steer dispositions, so the judgement tier is not left to the
+default (owner standing direction; bulk mechanical sweeps may tier
+per-leg, but REVIEW legs stay on Opus). Under a live provider-overload
+wave the owner ruled a conditional fallback (2026-07-30, verbatim: *"if
+Opus is still overloaded, we can fall back to Fable-low, but critically
+assess all output"*): fall back UP in capability at lower effort — never
+downgrade to a smaller tier, never drop the review — and treat every
+fallback verdict as needing first-hand critical assessment before it
+steers a disposition.
+
 ## Delegation Snapshot
 
 Every bounded reviewer or worker lane should receive this minimum snapshot:
@@ -368,6 +393,21 @@ closure proofs (the table author sits in the Sonnet position with respect
 to their own frame). Composes with the frame clause below: specialist
 review validates correctness WITHIN a frame — tier choice decides whether
 anyone in the fleet can reject the frame at all.
+
+**Review instruments see STRATA, not depth-scalars — keep the cheap and
+literal instruments in the loop, and listen hardest when they disagree
+with the expensive ones** (consolidated 2026-07-30 from four-plus
+instances in one week): a lockfile-literal reviewer caught the one
+factual error in an ADR that three Opus specialists waved past; a bot's
+suppressed low-confidence notes found four real cross-document
+contradictions after two Opus experts and the author had read the same
+files; a dispatch-gate read settled a vendor-behaviour question two
+rounds of careful experts had studied from the wrong layer; a compiled
+xhigh procedure on the cheapest cricket seat caught a commitment-vs-
+artefact gap seven deeper seats graded ON-TRACK. Depth buys frame
+judgement; literalness buys stratum coverage — neither substitutes for
+the other, and a cheap instrument's dissent from an expensive consensus
+is a signal to investigate, never noise to average away.
 
 ### Codex Reviewer Adapter Preflight
 

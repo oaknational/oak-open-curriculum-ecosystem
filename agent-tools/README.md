@@ -420,6 +420,7 @@ pnpm agent-tools commit-queue guard \
   --platform codex \
   --model GPT-5 \
   --session-id-prefix 019e1c \
+  --id 6f1a2c3d-4e5f-5a6b-8c7d-9e0f1a2b3c4d \
   --file agent-tools/src/commit-queue/index.ts
 pnpm agent-tools commit-queue list --agent-name "Embered" --queue-status active
 pnpm agent-tools commit-queue show --intent-id 11111111-1111-4111-8111-111111111111

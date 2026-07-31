@@ -9,23 +9,53 @@ import {
   listBasenames,
 } from './health-probe-shared.js';
 import type { HealthCheckResult } from './health-probe-types.js';
+import {
+  getReviewerAdapterPlatformViolation,
+  type ReviewerAdapterPlatform,
+} from './reviewer-adapter-platform-contract.js';
+
+interface ReviewerAdapterParityInputs {
+  /** Reviewer adapter basenames present on the Cursor surface. */
+  readonly cursorAgents: readonly string[];
+  /** Reviewer adapter basenames present on the Claude Code surface. */
+  readonly claudeAgents: readonly string[];
+  /** Reviewer adapter basenames present on the Codex surface. */
+  readonly codexAgents: readonly string[];
+}
 
 export function evaluateParityChecks(repoRoot: string): readonly HealthCheckResult[] {
   return [evaluateReviewerAdapterParity(repoRoot), evaluateReviewerRegistrationParity(repoRoot)];
 }
 
 function evaluateReviewerAdapterParity(repoRoot: string): HealthCheckResult {
-  const cursorAgents = listBasenames(repoRoot, CURSOR_AGENTS_DIR, '.md');
-  const claudeAgents = listBasenames(repoRoot, CLAUDE_AGENTS_DIR, '.md');
-  const codexAgents = listBasenames(repoRoot, CODEX_AGENTS_DIR, '.toml');
-  const allAgentNames = [...new Set([...cursorAgents, ...claudeAgents, ...codexAgents])].sort(
-    (a, b) => a.localeCompare(b),
-  );
-  const details = collectReviewerAdapterParityDetails(allAgentNames, {
-    cursorAgents,
-    claudeAgents,
-    codexAgents,
+  return evaluateReviewerAdapterParityFromInputs({
+    cursorAgents: listBasenames(repoRoot, CURSOR_AGENTS_DIR, '.md'),
+    claudeAgents: listBasenames(repoRoot, CLAUDE_AGENTS_DIR, '.md'),
+    codexAgents: listBasenames(repoRoot, CODEX_AGENTS_DIR, '.toml'),
   });
+}
+
+/**
+ * Evaluates reviewer-adapter parity from already enumerated platform surfaces.
+ *
+ * This pure seam keeps filesystem discovery in the production composition
+ * while allowing unit tests to exercise role-aware parity directly.
+ *
+ * @param platformAgents - Adapter basenames present on each platform surface.
+ * @returns A passing result when every adapter appears exactly where supported,
+ *   otherwise a failing result with one detail per parity violation.
+ */
+export function evaluateReviewerAdapterParityFromInputs(
+  platformAgents: ReviewerAdapterParityInputs,
+): HealthCheckResult {
+  const allAgentNames = [
+    ...new Set([
+      ...platformAgents.cursorAgents,
+      ...platformAgents.claudeAgents,
+      ...platformAgents.codexAgents,
+    ]),
+  ].sort((a, b) => a.localeCompare(b));
+  const details = collectReviewerAdapterParityDetails(allAgentNames, platformAgents);
 
   if (details.length > 0) {
     return {
@@ -41,34 +71,54 @@ function evaluateReviewerAdapterParity(repoRoot: string): HealthCheckResult {
     key: 'reviewer-adapter-parity',
     label: 'Reviewer adapter parity',
     status: 'pass',
-    summary: `${allAgentNames.length} reviewer adapters are aligned across Cursor, Claude Code, and Codex.`,
+    summary: `${allAgentNames.length} reviewer adapters are aligned across their applicable platform surfaces.`,
     details: [],
   };
 }
 
 function collectReviewerAdapterParityDetails(
   allAgentNames: readonly string[],
-  platformAgents: {
-    readonly cursorAgents: readonly string[];
-    readonly claudeAgents: readonly string[];
-    readonly codexAgents: readonly string[];
-  },
+  platformAgents: ReviewerAdapterParityInputs,
 ): string[] {
   const details: string[] = [];
 
   for (const agentName of allAgentNames) {
-    if (!platformAgents.cursorAgents.includes(agentName)) {
-      details.push(`Cursor is missing reviewer adapter ${agentName}.`);
-    }
-    if (!platformAgents.claudeAgents.includes(agentName)) {
-      details.push(`Claude Code is missing reviewer adapter ${agentName}.`);
-    }
-    if (!platformAgents.codexAgents.includes(agentName)) {
-      details.push(`Codex is missing reviewer adapter ${agentName}.`);
-    }
+    collectPlatformParityDetail(
+      details,
+      agentName,
+      'cursor',
+      'Cursor',
+      platformAgents.cursorAgents,
+    );
+    collectPlatformParityDetail(
+      details,
+      agentName,
+      'claude-code',
+      'Claude Code',
+      platformAgents.claudeAgents,
+    );
+    collectPlatformParityDetail(details, agentName, 'codex', 'Codex', platformAgents.codexAgents);
   }
 
   return details;
+}
+
+function collectPlatformParityDetail(
+  details: string[],
+  agentName: string,
+  platform: ReviewerAdapterPlatform,
+  platformLabel: string,
+  platformAgents: readonly string[],
+): void {
+  const hasAdapter = platformAgents.includes(agentName);
+  const violation = getReviewerAdapterPlatformViolation(agentName, platform, hasAdapter);
+
+  if (violation?.kind === 'missing') {
+    details.push(`${platformLabel} is missing reviewer adapter ${violation.reviewerName}.`);
+  }
+  if (violation?.kind === 'unsupported') {
+    details.push(`${platformLabel} has unsupported reviewer adapter ${violation.reviewerName}.`);
+  }
 }
 
 function evaluateReviewerRegistrationParity(repoRoot: string): HealthCheckResult {

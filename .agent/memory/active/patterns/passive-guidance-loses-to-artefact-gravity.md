@@ -148,6 +148,27 @@ above:
   generator of the ephemeral output has no check "is this
   already in a durable home I should point at instead?"
 
+## The value model of passive capture (2026-07-30 refinement)
+
+The pattern does not mean passive capture is worthless — it prices what
+capture actually buys. A week of first-person instances (2026-07-24→30,
+five-plus seats re-committing failure modes they had READ, sometimes within
+the hour, sometimes while quoting the warning) settled the model:
+
+> **Inherited knowledge buys recognition speed, not immunity. Only
+> structure prevents.**
+
+A seat that has read a trap-list still walks into the trap under flow — but
+the bite costs ninety seconds instead of an afternoon, because the shape of
+the mouth is recognised ("transmission is not immunity"; "the toll booth is
+always at the moment of flow, on the surface you trust most"). So the
+design rule has two halves: keep writing the passive capture (it accelerates
+recognition and bounds the cost of the bite), AND never count it as the
+guardrail (only a tripwire with a firing cadence prevents the bite). A
+capture programme that stops because "reading doesn't prevent it" throws
+away the recognition speed; a guardrail programme that stops at capture
+ships the failure mode.
+
 ## Countermeasure
 
 For every passive countermeasure considered, ask the
