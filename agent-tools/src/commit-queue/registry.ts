@@ -94,10 +94,12 @@ function parseIntent(value: unknown): CommitIntent {
 function parseIntentAgentId(value: unknown, intentId: string): CommitQueueAgentId {
   const parsed = collaborationAgentIdWriteSchema.safeParse(value);
   if (!parsed.success) {
+    const issues = parsed.error.issues
+      .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
+      .join('; ');
     throw new Error(
       `commit_queue entry ${intentId} carries an invalid agent_id ` +
-        `(PDR-076a requires the UUID v5 id on intents): ` +
-        `${parsed.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`).join('; ')}. ` +
+        `(PDR-076a requires the UUID v5 id on intents): ${issues}. ` +
         `Every live writer emits id, so this indicates registry corruption — ` +
         `surface to the owner; recovery is removing intent ${intentId} (owner-run).`,
     );
