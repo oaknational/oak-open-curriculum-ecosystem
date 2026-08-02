@@ -1,0 +1,15 @@
+[
+  {"query":"Given this Epistemic Profile, choose between rollout, a reversible pilot, more research and no action, then define what would make us reverse course.","should_trigger":true},
+  {"query":"We have evidence but still need to decide. Separate factual uncertainty from values and compare the options under downside risk.","should_trigger":true},
+  {"query":"Make an authority-bounded launch recommendation and write the monitoring, rollback and reopening contract.","should_trigger":true},
+  {"query":"Should we commit, defer, or preserve optionality? Test the recommendation across plausible frames and parameter ranges.","should_trigger":true},
+  {"query":"Turn this completed synthesis into a decision record without hiding concentrated harms behind aggregate benefit.","should_trigger":true},
+  {"query":"Decide whether another investigation has enough value of information to justify delaying this reversible change.","should_trigger":true},
+  {"query":"Generate counterframes for our ambiguous product question.","should_trigger":false},
+  {"query":"Design the mixed-method evidence plan; we have not collected any evidence yet.","should_trigger":false},
+  {"query":"Reconcile these conflicting reports and create an Epistemic Profile, but do not choose an option.","should_trigger":false},
+  {"query":"Implement the approved rollout and update production configuration.","should_trigger":false},
+  {"query":"Audit the decision independently for omitted risks and unsupported bridges.","should_trigger":false},
+  {"query":"Analyse outcomes from last quarter and propose changes to our skill routing policy.","should_trigger":false}
+]
+

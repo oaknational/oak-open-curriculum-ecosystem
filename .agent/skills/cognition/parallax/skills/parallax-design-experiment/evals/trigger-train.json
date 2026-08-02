@@ -1,0 +1,16 @@
+[
+  {"query":"Design a randomised controlled experiment for this intervention, including the estimand, measurement plan and analysis.","should_trigger":true},
+  {"query":"How many clusters do we need, and how sensitive is precision to the ICC and attrition assumptions?","should_trigger":true},
+  {"query":"Compare a factorial experiment with a response-surface design for optimising this process.","should_trigger":true},
+  {"query":"Critique the validity, ethics, power and stopping rules of this proposed clinical experiment.","should_trigger":true},
+  {"query":"Plan a preregistered sequential trial with a futility boundary and simulated operating characteristics.","should_trigger":true},
+  {"query":"Randomisation is impossible; decide whether regression discontinuity, interrupted time series or difference-in-differences could identify the effect.","should_trigger":true},
+  {"query":"This experiment was underpowered. Work out whether a precision-based redesign would answer the real decision.","should_trigger":true},
+  {"query":"Define the treatment effect we actually want, including non-adherence and competing events, before choosing an estimator.","should_trigger":true},
+  {"query":"Summarise the published literature on adaptive clinical trials.","should_trigger":false},
+  {"query":"Describe last year's usage data and make a dashboard.","should_trigger":false},
+  {"query":"Configure a routine A/B test for a new signup button and check sample-ratio mismatch.","should_trigger":false},
+  {"query":"Implement the already approved experiment-assignment service exactly as specified.","should_trigger":false},
+  {"query":"Frame this ambiguous strategic problem before we decide whether evidence collection is needed.","should_trigger":false},
+  {"query":"Reconcile these completed qualitative and quantitative reports into an epistemic profile.","should_trigger":false}
+]

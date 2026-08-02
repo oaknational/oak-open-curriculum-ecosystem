@@ -1,0 +1,10 @@
+[
+  {"query":"We know the hypotheses; now specify which evidence streams cover measurement, mechanism, causality, meaning, feasibility and distributional risk.","should_trigger":true},
+  {"query":"Design an investigation where some passes must stay independent until synthesis and make the shared-data dependencies visible.","should_trigger":true},
+  {"query":"Our evidence budget is tiny. Work out the smallest reversible learning plan that can still change the decision.","should_trigger":true},
+  {"query":"Derive observable consequences from these frames and create method-report contracts for the teams executing them.","should_trigger":true},
+  {"query":"Define three serious counterframes and a scale map for this ambiguous problem.","should_trigger":false},
+  {"query":"Design the precise sequential test, power simulation and stopping boundary for this online experiment.","should_trigger":false},
+  {"query":"Resolve contradictions and defeaters across the completed research outputs.","should_trigger":false},
+  {"query":"Audit this investigation plan independently for missing functions and ethical risks.","should_trigger":false}
+]

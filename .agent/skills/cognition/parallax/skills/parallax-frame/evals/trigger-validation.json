@@ -1,0 +1,10 @@
+[
+  {"query":"Everyone calls this an engagement problem, but that label may be hiding several different phenomena. Pull the constructs apart before we investigate.","should_trigger":true},
+  {"query":"Show how the answer changes when the system boundary moves from one UI component to the whole user journey and then the institution.","should_trigger":true},
+  {"query":"Find counterframes for this strategy, including one that the current engineering-led team is structurally unlikely to notice.","should_trigger":true},
+  {"query":"Compare entity, process, experience and power-based decompositions of the same concern and identify discriminating observations.","should_trigger":true},
+  {"query":"Work out power, allocation ratio and stopping rules for the already specified online experiment.","should_trigger":false},
+  {"query":"Summarise where these method reports agree and conflict, retaining source dependence.","should_trigger":false},
+  {"query":"The decision is made; write a rollback and outcome-monitoring plan.","should_trigger":false},
+  {"query":"Investigate this ambiguous, high-stakes issue end to end and recommend what we should do.","should_trigger":false}
+]

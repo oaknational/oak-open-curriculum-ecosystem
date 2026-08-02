@@ -1,0 +1,85 @@
+{
+  "skill_name": "parallax",
+  "metadata": {
+    "scope": "collection",
+    "suite": "contract-compatibility",
+    "version": "0.1.0",
+    "execution": "authored-not-yet-executed",
+    "grading": "Prefer deterministic inspection for field and validator assertions; use clean-context handoff replay for semantic assertions."
+  },
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Inspect every artifact template under .agent/skills/parallax*/assets. Verify the common Parallax envelope across YAML and JSON without editing files. Report every missing, renamed, wrongly typed, or semantically incompatible field.",
+      "expected_output": "A deterministic compatibility report covering the common envelope while allowing documented artifact-specific extensions.",
+      "assertions": [
+        "Every template is checked for schema_version, artifact_id, artifact_type, artifact_revision, inquiry_id, inquiry_revision, status, created_at, created_by, producing_skill, execution_context, inputs, permissions_and_scope, identity, assumptions, uncertainties, provenance, validity_domain, defeaters, and reopen_when",
+        "identity is checked for plural basis_ids, scale_regions, method_pass_ids, and domain_profiles arrays",
+        "execution_context is checked for run_id, mode, independence, and host semantics",
+        "The report distinguishes permitted artifact-specific extensions from contract incompatibilities",
+        "No passing result is inferred merely because each file parses"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Replay a clean-context handoff from parallax-frame's Frame Set to parallax-design-inquiry, then into parallax-synthesise and parallax-decide. Check that each consumer can interpret identifiers, provenance, scales, bases, method passes, profiles, status and permissions produced upstream.",
+      "expected_output": "A producer-consumer compatibility trace that identifies exact field mappings, loss, ambiguity, and any required migration rather than relying on similar prose labels.",
+      "assertions": [
+        "Every handoff names the exact producer and consumer artifact revisions",
+        "The trace checks field paths and types, not only conceptual similarity",
+        "Scale regions, basis IDs, method-pass IDs and domain profiles remain plural and traceable",
+        "Permissions and action authority cannot become broader downstream without an explicit authority source",
+        "Any incompatible mapping fails the handoff rather than being silently guessed"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Test combinations of common epistemic status and operational lifecycle state for inquiry and experiment artifacts: provisional/draft, provisional/ready-to-run, validated/ready-to-run, inconclusive/completed, reopened/completed, and superseded/completed. State which combinations are meaningful and what each permits.",
+      "expected_output": "Treats status and lifecycle as orthogonal dimensions, rejects semantically incoherent uses, and never infers warrant from completion or readiness.",
+      "assertions": [
+        "The output distinguishes epistemic status from operational lifecycle explicitly",
+        "A completed experiment may have an inconclusive result",
+        "Ready-to-run does not mean the experiment's claim is validated",
+        "Reopened or superseded status changes effective use without deleting completed history",
+        "Consumers gate separately on warrant, lifecycle and authority"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Copy each experiment template without replacing any empty, TODO, replace-with, or sentinel values. Run its bundled validator and evaluate whether it may be marked ready-to-run. Do not fill the template.",
+      "expected_output": "Every untouched placeholder template fails semantic readiness with actionable errors even if its JSON/YAML parses and common envelope is structurally present.",
+      "assertions": [
+        "Unresolved placeholders and semantically empty required fields are detected",
+        "No untouched template is accepted as ready-to-run",
+        "The report separates parse validity, structural contract validity, lifecycle readiness and epistemic status",
+        "Errors identify fields that require real inquiry-specific content",
+        "The validator result is not described as epistemic certification"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Compose a general Experimental Design with a Product Experiment Protocol for a cluster-randomised feature rollout. Inspect the artifacts for duplicate or conflicting estimand, design-family, power, exposure, telemetry, analysis, guardrail and rollout fields. Do not resolve conflicts by silently choosing the later file.",
+      "expected_output": "Treats the product protocol as a typed overlay that references the exact base design and supplies an explicit field-authority crosswalk and justified overrides.",
+      "assertions": [
+        "The product artifact references the exact general Experimental Design artifact and revision",
+        "The field-authority crosswalk distinguishes base-authoritative, overlay-authoritative, specialised, derived and overridden fields",
+        "Estimand, design family, assignment, causal assumptions and power or precision have one explicit authority",
+        "Exposure, telemetry, product guardrails, rollout and decision integration have one explicit authority",
+        "Every override identifies the field path, preserved base value, rationale, evidence and provenance"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Create an inquiry with all four profiles: investigation, science, software-engineering, and digital-product-service. Pass it through framing, inquiry design, product/general experiment composition, synthesis, decision, audit and learning. Verify that no template, validator or handoff collapses domain_profiles to one scalar value.",
+      "expected_output": "Preserves the four stackable profile identifiers and their distinct criteria across the entire artifact chain, reporting any loss as a contract failure.",
+      "assertions": [
+        "domain_profiles remains an array at every material artifact boundary",
+        "All four profile identifiers remain present unless an explicit scoped artifact records why a subset applies",
+        "Profile-specific evidence criteria and external execution boundaries remain distinguishable",
+        "Synthesis does not convert profiles into votes or a single generic method standard",
+        "Any consumer that accepts only one profile is reported as incompatible"
+      ]
+    }
+  ]
+}
+

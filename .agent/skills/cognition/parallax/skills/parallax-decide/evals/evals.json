@@ -1,0 +1,38 @@
+{
+  "skill_name": "parallax-decide",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "The evidence profile says a new search experience probably improves short-term task completion, but long-term teacher trust is uncertain and a minority accessibility group may be harmed. Decide between full rollout, staged rollout, another study, or no change. We can authorise only a reversible pilot.",
+      "expected_output": "An authority-bounded decision comparing complete options, separating evidence and values, testing distribution and scale bridges, and specifying a reversible World-Return Contract.",
+      "assertions": [
+        "The recommendation remains within authority and does not implement the action",
+        "Short-term task completion is not silently equated with long-term trust or impact",
+        "Accessibility risk is treated as a material constraint or explicit value judgement",
+        "Reversible probe, further inquiry, and no action are considered alongside rollout",
+        "The output includes thresholds, rollback, defeaters, owners, monitoring scales, and reopening conditions"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Pick option A or B. There is no evidence summary, no stated objective and we do not know who has authority, but this migration would be difficult to reverse.",
+      "expected_output": "A safe direct-entry refusal to manufacture a consequential recommendation, with missing inputs and a route to synthesis or framing.",
+      "assertions": [
+        "The response does not invent evidence, objectives, affected parties, or authority",
+        "Irreversibility raises rather than lowers the evidential and governance threshold",
+        "The output states the minimum work needed before a recommendation is legitimate",
+        "The result is labelled insufficient-evidence, declined, or provisional as appropriate"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Here are four raw research reports that contradict one another. Summarize what the evidence jointly warrants, but make no recommendation yet.",
+      "expected_output": "A decline or route to parallax-synthesise because the evidence has not yet been synthesised and no decision is requested.",
+      "assertions": [
+        "The response routes to synthesis instead of forcing a choice",
+        "The skill respects the explicit instruction not to recommend an action"
+      ]
+    }
+  ]
+}
+

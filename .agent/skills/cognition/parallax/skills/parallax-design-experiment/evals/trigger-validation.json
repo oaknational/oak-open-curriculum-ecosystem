@@ -1,0 +1,10 @@
+[
+  {"query":"Design a cluster-randomised study and show power or interval width across plausible cluster sizes, ICCs and dropout.","should_trigger":true},
+  {"query":"We need an ethical experiment to discriminate two causal mechanisms, not merely a significance test.","should_trigger":true},
+  {"query":"Audit whether this crossover design can survive carryover, period effects and missing measurements.","should_trigger":true},
+  {"query":"Create the protocol, preregistration, allocation, measurement, multiplicity and world-return plan for this intervention study.","should_trigger":true},
+  {"query":"Run an ordinary split test for a product copy change using our existing platform conventions.","should_trigger":false},
+  {"query":"Find current sources about statistical power but do not design a study.","should_trigger":false},
+  {"query":"Analyse this observational dataset descriptively; no causal claim is intended.","should_trigger":false},
+  {"query":"Monitor the real-world outcomes specified by this completed experiment's return contract.","should_trigger":false}
+]

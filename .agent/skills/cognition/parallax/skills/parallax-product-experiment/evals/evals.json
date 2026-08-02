@@ -1,0 +1,51 @@
+{
+  "skill_name": "parallax-product-experiment",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design an A/B test for a shorter account-creation flow. We care about completed registrations, but the service is public-facing and some users rely on assistive technology. Traffic varies strongly by weekday.",
+      "expected_output": "A decision-anchored product experiment plan with stable assignment and exposure, a valid registration estimand, metric and guardrail contracts, MDE/precision sensitivity, full-cycle duration, accessibility protections, ramp/rollback, scale bridges and post-rollout outcomes.",
+      "assertions": [
+        "Assignment, eligibility, exposure event, analysis population and identity persistence are defined separately",
+        "Registration is connected to intended user value through an explicit defeasible bridge rather than treated as value itself",
+        "Accessibility and assistive-technology outcomes are guardrails or side constraints, not optional subgroup wins",
+        "Sizing states a practical effect threshold and covers weekday cycles, exposure rate and plausible variance",
+        "SRM, telemetry integrity, ramp, stop and rollback checks exist before effect interpretation",
+        "The World-Return Contract extends to successful use or service outcomes after registration"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our checkout experiment ended at p=0.03 with +1.2% conversion, but treatment has 7% more exposed users than expected and the team filtered to people who clicked the new treatment-only control. Can we ship?",
+      "expected_output": "A refusal to ship from the dashboard result, diagnosis of likely SRM and post-treatment triggering, quarantine of confirmatory inference, reconstruction of untriggered assignment/exposure, and a safe redesign or rerun plan.",
+      "assertions": [
+        "The p-value and apparent uplift are not treated as trustworthy before integrity checks",
+        "SRM is treated as a symptom requiring root-cause diagnosis rather than adjusted away",
+        "The treatment-only click filter is identified as post-assignment selection without a control counterfactual",
+        "The response asks for assignment-level counts, symmetric exposure, joins, identity, redirects, logging and filtering checks",
+        "A corrected protocol, rerun or explicitly limited unaffected population is preferred to opportunistic shipping"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We want to test collaborative recommendations in schools. Pupils influence one another, teachers manage whole classes, and the outcome is lesson completion over a term. Is a normal user-level A/B test enough?",
+      "expected_output": "A multi-scale interference analysis that rejects unexamined user-level randomisation, considers class/school cluster or other designs, composes with parallax-design-experiment, and connects short product signals to term outcomes.",
+      "assertions": [
+        "Pupil, classroom, teacher, school and term scales are distinguished",
+        "Interference and intervention delivery motivate cluster or alternative design comparison",
+        "Cluster count, ICC, recruitment timing and dependence-aware analysis are surfaced",
+        "The skill composes with parallax-design-experiment without becoming unusable alone",
+        "Safeguarding, accessibility, school governance and long-term outcome monitoring are included"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We have no intervention yet. Interview six users and run a usability session to understand why this form is confusing.",
+      "expected_output": "A decline or route to user research/inquiry design because no assignment, exposure, or causal product experiment is requested.",
+      "assertions": [
+        "The skill does not force qualitative discovery into A/B-test form",
+        "It identifies user research or broader inquiry design as the appropriate entry point"
+      ]
+    }
+  ]
+}

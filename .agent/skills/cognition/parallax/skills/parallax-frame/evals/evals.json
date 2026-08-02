@@ -1,0 +1,37 @@
+{
+  "skill_name": "parallax-frame",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We keep treating low search conversion as a ranking bug. Reframe the problem before anyone proposes another algorithm change; include user, curriculum, interface, organisational and time-scale possibilities.",
+      "expected_output": "A protected set of consequential Frame Cards with explicit constructs, boundaries, scales, bridge claims, crosswalks and discriminating observations.",
+      "assertions": [
+        "The frames differ in explanatory or intervention consequences rather than wording alone",
+        "Each frame declares basis and scale identity, blind spots, and discriminating observations",
+        "Cross-scale inferences and inter-frame mappings are explicit Bridge and Crosswalk Claims",
+        "The response challenges omitted stakeholders, shared anchors, and construct confusion",
+        "The output hands off without prematurely choosing a method or action"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The Charter is missing. We only know that a team asks whether an AI assistant improved teacher workload. Identify alternative definitions and scales without pretending we know the intended decision.",
+      "expected_output": "A provisional direct-entry Frame Set that exposes missing context, alternative workload constructs, observation and consequence scales, and safe next steps.",
+      "assertions": [
+        "The response does not invent a Charter, decision owner, or intended impact",
+        "Multiple operationalisations of workload and relevant time or population scales are preserved",
+        "The result is explicitly provisional and states what context is needed next"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our question is fixed: estimate the average treatment effect of variant B on completion for eligible users over 14 days. Please calculate the required sample size.",
+      "expected_output": "A decline or route to experimental design because the request is a technical design calculation under a settled frame.",
+      "assertions": [
+        "The skill does not manufacture alternative frames when framing is not the requested problem",
+        "The response recommends the appropriate inquiry or experimental-design capability"
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,15 @@
+[
+  {"query":"The frames are agreed. Design the observations and methods that would actually discriminate these three explanations.","should_trigger":true},
+  {"query":"Plan a mixed-method investigation combining telemetry, interviews, code/runtime evidence and a reversible product probe.","should_trigger":true},
+  {"query":"What evidence should we collect, in what order, and when should we stop because further research cannot change the decision?","should_trigger":true},
+  {"query":"Create protected parallel research passes for these competing causal and interpretive claims, and record where their sources are dependent.","should_trigger":true},
+  {"query":"Turn this Frame Set into an auditable evidence plan with measurement, sampling, analysis, ethics and handoff contracts.","should_trigger":true},
+  {"query":"Should this uncertainty be addressed through observation, a controlled experiment, qualitative work or a reversible implementation probe? Design the portfolio.","should_trigger":true},
+  {"query":"We may be solving the wrong problem; generate alternative constructs and units of analysis first.","should_trigger":false},
+  {"query":"Calculate power and allocation for this fully specified cluster-randomised experiment.","should_trigger":false},
+  {"query":"Configure an A/B test in our experimentation platform and validate exposure logging.","should_trigger":false},
+  {"query":"Synthesize the five method reports we have already completed.","should_trigger":false},
+  {"query":"Choose a rollout option from this existing Epistemic Profile.","should_trigger":false},
+  {"query":"Run the entire inquiry and monitor its eventual real-world impact.","should_trigger":false}
+]
+

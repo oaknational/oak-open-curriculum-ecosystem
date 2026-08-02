@@ -1,0 +1,58 @@
+{
+  "skill_name": "parallax",
+  "metadata": {
+    "scope": "collection",
+    "suite": "cross-domain",
+    "version": "0.1.0"
+  },
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We are considering replacing authentication in a national curriculum service. Investigate prior incidents and policy, assess the architecture/security migration, understand effects on teachers with low digital confidence, and design a staged evaluation. The intended impact is reliable equitable curriculum access, not sign-in completion itself.",
+      "expected_output": "Stacks investigation, software-engineering, digital-product-service and science/experimental profiles, creates scale and theory-of-change bridges, and routes external execution without collapsing criteria.",
+      "assertions": [
+        "All four profiles are selected with distinct reasons",
+        "The plan includes documentary/incident evidence, technical verification, user/accessibility research and a defensible evaluation design",
+        "Sign-in completion is treated as a proxy requiring a bridge to equitable curriculum access",
+        "Security and rights constraints are not traded away through an aggregate score",
+        "External implementation and participant exposure remain separately authorised"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "A service latency optimisation passes microbenchmarks and component tests, but support contacts increased after rollout and some users abandon a multi-step journey. Determine what we know and what should happen next.",
+      "expected_output": "Composes software and product/service profiles, distinguishes component, service, journey and user-outcome scales, synthesises contradictory evidence, and proposes monitored/reversible next action.",
+      "assertions": [
+        "Component evidence is not treated as sufficient system or user-outcome evidence",
+        "The output defines Bridge Claims between component, service, journey and user consequences",
+        "Support and abandonment evidence enters the Conflict Ledger",
+        "The next action includes rollback or reversible testing and a World-Return Contract"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "A published causal study claims an educational feature improves attainment. We need to assess the paper, reproduce its analysis code, compare its population with our users, and decide whether a product pilot would be ethical and informative.",
+      "expected_output": "Combines investigation, science, software and product profiles with source appraisal, reproducibility, transportability, ethical pilot design and explicit decision separation.",
+      "assertions": [
+        "The publication and code are treated as related but distinct evidence artifacts",
+        "Reproducing code is not equated with validating the causal claim",
+        "Population transport requires an explicit Bridge Claim",
+        "The pilot decision includes ethics, affected parties, estimand, guardrails and informative feasibility",
+        "Specialist/external execution boundaries are explicit"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We found a correlation between a new dashboard and reduced operational incidents. The dashboard was rolled out first to higher-performing teams. Product wants an A/B test, engineering says team spillovers make that impossible, and operations says withholding it could be harmful.",
+      "expected_output": "Frames competing questions and values, diagnoses selection/interference/equipoise issues, compares cluster or quasi-experimental alternatives, and preserves ethical and operational constraints.",
+      "assertions": [
+        "The initial correlation is not treated as causal because rollout selection is material",
+        "Team-level interference and assignment/analysis scales are explicit",
+        "At least one cluster and one non-randomised causal alternative are compared",
+        "Potential harm from withholding is treated as an ethical side constraint",
+        "The output may recommend no ordinary A/B test"
+      ]
+    }
+  ]
+}
+

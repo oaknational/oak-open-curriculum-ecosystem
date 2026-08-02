@@ -1,0 +1,52 @@
+{
+  "skill_name": "parallax-design-experiment",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We can vary temperature, catalyst concentration and mixing speed in a pilot process. Design an efficient experiment to find which factors and interactions matter, then tell us what evidence would justify moving the settings into production.",
+      "expected_output": "A decision-anchored comparison of factorial or response-surface designs with an estimand, explicit process and production scales, measurement and precision plan, analysis, safety gate, counterdesign and world-return monitoring.",
+      "assertions": [
+        "The design is selected against the scientific and production decision rather than defaulting to a two-arm trial",
+        "Factor interactions, aliasing or design resolution, and confirmation are addressed",
+        "Experimental-unit, process, measurement, inference and production scales are explicit",
+        "The laboratory-to-production inference is represented as a defeasible bridge claim",
+        "Sizing discusses information or precision across assumptions rather than power alone",
+        "Safety, preregistration or protocol freezing, analysis, critique and world-return are included"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Critique this proposed school trial: randomise 8 schools, recruit pupils afterward, compare end-of-year scores with a t-test, and use 80% power based on treating 1,200 pupils as independent. We mainly want to know whether to scale the programme nationally.",
+      "expected_output": "A critique that identifies the cluster as the assignment and dependence unit, recruitment and selection risks, ICC and few-cluster precision, estimand ambiguity, scale/transport bridges, ethics, analysis alternatives, and limits on a national scaling decision.",
+      "assertions": [
+        "The response rejects the pupil-independent power calculation and discusses cluster count and ICC uncertainty",
+        "Recruitment after cluster assignment and possible differential selection are challenged",
+        "The estimand, intervention fidelity, outcome validity and analysis population are made explicit",
+        "School-to-national transport and short-to-long horizon bridges are recorded rather than assumed",
+        "The output distinguishes design critique from authorisation to run"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a preregistered adaptive experiment with an interim futility stop. We have a rare binary outcome, two primary endpoints and uncertain baseline rates. Give me the sample size.",
+      "expected_output": "A refusal to provide a spurious single sample size before the estimand and assumptions are resolved, followed by a simulation-based design plan covering multiplicity, sequential rules, operating characteristics, ethics and independent review.",
+      "assertions": [
+        "The response defines or requests the estimand and decision-relevant effect before sizing",
+        "Baseline-rate and effect sensitivity scenarios replace a single optimistic calculation",
+        "Multiplicity and interim monitoring are jointly specified",
+        "Simulation evaluates error, power or precision, bias, interval coverage and expected sample size",
+        "Adaptation rules, information access, registration, governance and independent audit are required prospectively"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Our checkout A/B test has ended and the dashboard says p=0.03. Tell us whether to ship to everyone.",
+      "expected_output": "A route to parallax-product-experiment, optionally composed with this skill for deeper design or inference review, while refusing to infer a rollout decision from the p-value alone.",
+      "assertions": [
+        "The product-specialised skill is identified as the primary entry point",
+        "The response does not equate p=0.03 with practical or causal certainty",
+        "SRM, assignment/exposure integrity, effect magnitude, guardrails, multiplicity and rollout monitoring are named as necessary checks"
+      ]
+    }
+  ]
+}

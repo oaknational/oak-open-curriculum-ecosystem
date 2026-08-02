@@ -1,0 +1,41 @@
+{
+  "graph_id": "parallax-inquiry-state-v0.1",
+  "title": "Parallax inquiry state graph",
+  "description": "Guarded lifecycle states. Reopening transitions create a new immutable inquiry revision.",
+  "graph_type": "state-machine",
+  "version": "0.1.0",
+  "nodes": [
+    { "id": "unassessed", "label": "Unassessed", "type": "state" },
+    { "id": "screening", "label": "Screening", "type": "state" },
+    { "id": "declined", "label": "Declined", "type": "terminal-state" },
+    { "id": "chartered", "label": "Chartered", "type": "state" },
+    { "id": "framed", "label": "Framed", "type": "state" },
+    { "id": "designed", "label": "Designed", "type": "state" },
+    { "id": "executing", "label": "Executing", "type": "state" },
+    { "id": "synthesised", "label": "Synthesised", "type": "state" },
+    { "id": "decided", "label": "Decided", "type": "state" },
+    { "id": "monitoring", "label": "Monitoring", "type": "state" },
+    { "id": "closed", "label": "Closed", "type": "terminal-state" },
+    { "id": "reopened", "label": "Reopened", "type": "revision-boundary" }
+  ],
+  "edges": [
+    { "from": "unassessed", "to": "screening", "type": "transition" },
+    { "from": "screening", "to": "declined", "type": "transition", "guard": "Another capability is sufficient or expected inquiry value is too low" },
+    { "from": "screening", "to": "chartered", "type": "transition", "guard": "Parallax adds expected value" },
+    { "from": "chartered", "to": "framed", "type": "transition", "guard": "Minimum viable Frame Set and Scale Map exist" },
+    { "from": "framed", "to": "designed", "type": "transition", "guard": "Evidence and method design is proportionate and valid" },
+    { "from": "designed", "to": "executing", "type": "transition", "guard": "Execution is ready and authorised" },
+    { "from": "executing", "to": "synthesised", "type": "transition", "guard": "Required method outputs exist or missingness is explicitly synthesised" },
+    { "from": "synthesised", "to": "decided", "type": "transition", "guard": "A decision is requested, authorised, and sufficiently supported" },
+    { "from": "synthesised", "to": "monitoring", "type": "transition", "guard": "The inquiry produces an observation-only World-Return Contract" },
+    { "from": "decided", "to": "monitoring", "type": "transition", "guard": "Action or observation begins under a World-Return Contract" },
+    { "from": "monitoring", "to": "closed", "type": "transition", "guard": "Closure conditions are satisfied and no reopening trigger remains" },
+    { "from": "monitoring", "to": "reopened", "type": "reopens", "guard": "A threshold, surprise, harm, new evidence, or missing monitoring trigger occurs" },
+    { "from": "synthesised", "to": "reopened", "type": "reopens", "guard": "Conflict exposes a framing or evidence gap" },
+    { "from": "decided", "to": "reopened", "type": "reopens", "guard": "Decision review exposes value/evidence confusion or changed constraints" },
+    { "from": "reopened", "to": "chartered", "type": "new-revision", "guard": "Purpose, authority, or constraints changed" },
+    { "from": "reopened", "to": "framed", "type": "new-revision", "guard": "Constructs, bases, boundaries, stakeholders, or scales failed" },
+    { "from": "reopened", "to": "designed", "type": "new-revision", "guard": "Evidence or method design failed while framing remains adequate" }
+  ]
+}
+

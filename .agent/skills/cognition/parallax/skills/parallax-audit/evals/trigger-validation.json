@@ -1,0 +1,11 @@
+[
+  {"query":"Before I sign this off, try hard to falsify its key assumptions and tell me what must reopen","should_trigger":true},
+  {"query":"Review whether evidence gathered at service level supports the claimed user outcome","should_trigger":true},
+  {"query":"Assess this synthesis for premature convergence and hidden source dependence","should_trigger":true},
+  {"query":"Give me a hostile but fair assurance pass over the decision record","should_trigger":true},
+  {"query":"Reformat this YAML file","should_trigger":false},
+  {"query":"Design an A/B test for onboarding copy","should_trigger":false},
+  {"query":"Help me identify alternative decompositions of this problem","should_trigger":false},
+  {"query":"Explain statistical power","should_trigger":false}
+]
+

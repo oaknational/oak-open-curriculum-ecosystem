@@ -1,0 +1,38 @@
+{
+  "skill_name": "parallax-design-inquiry",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We have three retained explanations for falling lesson-search success: ranking relevance, query formulation and downstream page usability. Design a proportionate inquiry that could discriminate them across short sessions and term-level teacher outcomes.",
+      "expected_output": "A traceable multi-method Evidence and Method Plan with critical functions, protected passes, scale bridges, dependence controls, stopping conditions and world-return observations.",
+      "assertions": [
+        "Each retained explanation is connected to discriminating consequences and method passes",
+        "Software-engineering and digital-product/service profiles are stackable and add distinct method and authority constraints",
+        "Observation, mechanism, intervention, consequence, and monitoring scales are distinguished",
+        "Cross-scale claims are explicit and source dependence is not mistaken for triangulation",
+        "The design includes challenge, abort, insufficiency, stopping, and escalation conditions",
+        "World return has an owner, cadence, baseline, and explicit observation, consequence, and monitoring scales",
+        "Specialised experimental work is routed rather than reduced to a sample-size calculation"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "There is no Charter, but we need a research plan for whether a new API improves developer adoption. Give us a safe first design and be explicit about what you cannot determine yet.",
+      "expected_output": "A provisional direct-entry plan that reconstructs minimal context, identifies construct and scale uncertainty, and either proposes a reversible discovery sequence or routes to framing.",
+      "assertions": [
+        "Missing purpose, affected parties, construct definitions, and decision authority are not invented",
+        "The response identifies which framing gaps block or condition the plan",
+        "The plan remains proportionate and labels its epistemic status"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I already have six completed reports. Please reconcile their findings and tell me where confidence is justified.",
+      "expected_output": "A decline or route to parallax-synthesise rather than a new evidence plan.",
+      "assertions": [
+        "The response recognises that evidence execution is complete and routes to synthesis",
+        "The skill does not create unnecessary new methods before assessing the existing reports"
+      ]
+    }
+  ]
+}

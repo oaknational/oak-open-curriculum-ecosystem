@@ -1,0 +1,38 @@
+{
+  "skill_name": "parallax-learn",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Three investigations using Parallax missed the same deployment-boundary failure. Here are their original predictions, audit reports, production outcomes, and skill versions. Work out what we should learn and whether a skill change is warranted.",
+      "expected_output": "A portfolio learning review that separates object, method and routing explanations, assesses case dependence, routes the learning into Practice, and proposes a versioned evaluated change only if the evidence clears the structural threshold.",
+      "assertions": [
+        "The output distinguishes at least two possible failure levels",
+        "The output assesses dependence between the three cases",
+        "The output names a Practice memory or graduation destination",
+        "The Practice handoff remains a not-written proposal unless explicit host-workflow write authority is recorded",
+        "Any proposed change includes baseline, regression and rollback criteria"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our onboarding A/B test increased click-through, but six weeks later completion and support outcomes fell. Compare this with the World-Return Contract and decide what should reopen.",
+      "expected_output": "An outcome-driven review preserving metric and time scales, challenging attribution, reopening the relevant product inference, and distinguishing experiment learning from a general skill-policy change.",
+      "assertions": [
+        "The output distinguishes immediate proxy and later outcome scales",
+        "The output discusses attribution uncertainty",
+        "The output identifies an inquiry or decision to reopen",
+        "The output does not automatically rewrite a skill from this one case"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We have not shipped yet and have no experiment, incident, evaluation, or observed outcome. Please tell me what the team learned from the release.",
+      "expected_output": "A refusal to claim learning, with a recommendation to define expectations and a World-Return Contract first.",
+      "assertions": [
+        "The output states that outcome evidence is absent",
+        "The output does not invent lessons",
+        "The output proposes prospective monitoring or a World-Return Contract"
+      ]
+    }
+  ]
+}

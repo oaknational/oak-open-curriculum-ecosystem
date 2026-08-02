@@ -1,0 +1,78 @@
+{
+  "skill_name": "parallax",
+  "metadata": {
+    "scope": "collection",
+    "suite": "metamorphic-scale",
+    "version": "0.1.0",
+    "method": "Each case states a transformation and expected relation to its base case. Grade the relation, not only each output independently."
+  },
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Base case: a component benchmark shows a 20% latency reduction. Variant: the evidence is identical, but the requested conclusion changes from component latency to end-to-end user task completion. Analyse both conclusions.",
+      "expected_output": "Accepts the local conclusion within validity but requires explicit technical/journey Bridge Claims and evidence for the transformed consequence-scale claim.",
+      "assertions": [
+        "The component-level conclusion remains supported within its declared scale",
+        "The user-task conclusion does not inherit the same support automatically",
+        "At least one Bridge Claim and additional system/journey evidence are required",
+        "The differing output follows from the scale transformation rather than wording alone"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Base case: two independent surveys corroborate a finding. Variant: reveal that both use the same respondent panel, instrument and source dataset while keeping all reported numbers unchanged. Synthesize each case.",
+      "expected_output": "Reduces independence/support in the variant while preserving the observations themselves, demonstrating provenance-sensitive rather than count-sensitive synthesis.",
+      "assertions": [
+        "The base case can treat the surveys as more independent if provenance supports it",
+        "The variant records shared panel, instrument and dataset dependence",
+        "The variant does not count duplication as equal corroboration",
+        "Numerically identical reported results do not force identical Epistemic Profiles"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Base case: a technical-service frame maps API success to user task success in one direction with known residual user-experience factors. Variant: ask to reverse the mapping and infer API success from user task success. Analyse the crosswalk.",
+      "expected_output": "Preserves the partial/asymmetric mapping and refuses automatic inversion in the variant.",
+      "assertions": [
+        "The base Crosswalk Claim records unmatched user-experience residuals",
+        "The reverse mapping is not assumed valid",
+        "The output identifies additional constructs or evidence needed for reversal",
+        "Literal basis equivalence or orthogonality is not claimed"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Base case: a four-week experiment supports a four-week behavioural outcome. Variant: keep the data unchanged but claim the effect will persist for two years after rollout. Compare the warranted conclusions.",
+      "expected_output": "Preserves short-horizon evidence but weakens or rejects the two-year claim pending temporal transport and monitoring evidence.",
+      "assertions": [
+        "The four-week conclusion is evaluated on its own merits",
+        "The two-year claim requires a temporal Bridge Claim",
+        "Novelty, learning, decay, seasonality or environmental change are considered",
+        "A long-term World-Return monitoring plan is required"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Base case: the Charter authorises investigation, decision and deployment of a reversible test. Variant: remove decision and action authority while keeping the evidence and requested deployment unchanged. Respond to both.",
+      "expected_output": "The analytical conclusion may remain stable, but the variant stops before decision/deployment and requests authority rather than treating evidence as permission.",
+      "assertions": [
+        "Evidence assessment does not change solely because authority changes",
+        "The base case may proceed subject to other gates",
+        "The variant refuses decision and deployment",
+        "The output distinguishes epistemic readiness from action authority"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Base case: inquiry I-9 revision r1 has a provisional conclusion. Variant: a declared defeater occurs. Show the graph/provenance change required by the variant.",
+      "expected_output": "The base remains r1; the variant emits a Reopen Event and creates r2 linked to but not overwriting r1, with a new bounded run DAG targeted at the affected stage.",
+      "assertions": [
+        "The base case does not reopen without the defeater",
+        "The variant preserves r1 and creates r2",
+        "The provenance graph remains acyclic",
+        "The reusable capability semantics may cycle while the materialised r2 run remains a DAG"
+      ]
+    }
+  ]
+}
+

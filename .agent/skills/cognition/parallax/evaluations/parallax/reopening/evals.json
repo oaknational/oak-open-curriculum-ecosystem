@@ -1,0 +1,56 @@
+{
+  "skill_name": "parallax",
+  "metadata": {
+    "scope": "collection",
+    "suite": "reopening",
+    "version": "0.1.0"
+  },
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Inquiry I-17 revision r2 concluded that a feature was safe to roll out if the error rate stayed below 1%. A monitoring event now reports 1.4% for screen-reader users while the overall rate is 0.4%. Reopen the correct part of the inquiry and preserve provenance.",
+      "expected_output": "Treats the subgroup guardrail as triggered, creates revision r3, preserves r2, reopens affected framing/measurement/design or decision work, and does not average away the harm.",
+      "assertions": [
+        "Inquiry ID I-17 is preserved and a new revision r3 is created",
+        "Revision r2 remains immutable and linked through a Reopen Event",
+        "The screen-reader threshold is treated as material despite the aggregate metric",
+        "The output identifies the earliest affected artifacts rather than restarting everything automatically",
+        "The outcome is routed to learning only after immediate safety/reopening needs are handled"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "During synthesis we discover that two supposedly independent surveys used the same respondent panel and copied the same question wording. No world outcome has occurred yet. What changes?",
+      "expected_output": "Updates dependence, re-evaluates synthesis, and reopens evidence design if support is no longer sufficient without inventing a new external outcome.",
+      "assertions": [
+        "The shared panel and instrument are recorded as common dependencies",
+        "The surveys no longer count as two independent corroborations",
+        "The Epistemic Profile is revised or the inquiry is reopened at design/synthesis",
+        "The output does not fabricate an Outcome Event"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "A six-week product experiment met its success threshold, but the decision claimed a one-year reduction in teacher workload. No long-term data have been collected and the monitoring window has expired.",
+      "expected_output": "Identifies the unsupported temporal bridge and missing monitoring as a reopen condition, distinguishes short-term evidence from the durable claim, and creates a new revision or marks insufficient evidence.",
+      "assertions": [
+        "The six-week result is preserved as evidence within its validity horizon",
+        "The one-year workload claim is not validated",
+        "A temporal Bridge Claim and its missing evidence are explicit",
+        "Expired or absent monitoring is treated as an outcome state rather than success by default"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "An audit finds a missing stakeholder but confirms that the existing statistical analysis and telemetry are valid. The missing group may experience a different access mechanism. Reopen proportionately.",
+      "expected_output": "Reopens framing and affected evidence/product design while preserving validated statistical/telemetry artifacts unless the new frame changes their applicability.",
+      "assertions": [
+        "The new stakeholder and mechanism create a framing revision",
+        "The output does not discard validated analysis merely because something reopened",
+        "The applicability of prior analysis to the new group is reassessed through scale/basis/construct context",
+        "New research or experiment work is scoped to the material gap"
+      ]
+    }
+  ]
+}
+

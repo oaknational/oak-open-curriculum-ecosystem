@@ -1,0 +1,59 @@
+{
+  "skill_name": "parallax",
+  "metadata": {
+    "scope": "collection",
+    "suite": "recursive-learning",
+    "version": "0.1.0"
+  },
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Across eight inquiries, parallax-frame was missed on five prompts phrased as 'are we solving the wrong problem?' but worked when explicitly named. Outcomes suggest missed framing led to avoidable rework. Propose what should happen next in the Practice.",
+      "expected_output": "Produces an evidence-backed invocation Improvement Proposal, separates training and held-out description cases, plans baseline/regression/cost evaluation, and does not directly edit memory or the skill.",
+      "assertions": [
+        "The issue is classified as an L1 invocation failure supported by cross-case evidence",
+        "The proposal targets description/routing before changing unrelated procedure",
+        "Training and held-out natural-language trigger sets are required",
+        "Sibling false positives and token/context regressions are evaluated",
+        "The skill and Practice memory are not silently mutated"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "One deep Parallax inquiry took three times longer than expected and produced no better decision than a core inquiry in hindsight. Update the skills so this never happens again.",
+      "expected_output": "Rejects immediate universal self-modification, emits a bounded Learning Signal, considers task-specific causes and gathers comparative cases before a depth-policy proposal.",
+      "assertions": [
+        "The output does not rewrite a skill from one retrospective case",
+        "The event is captured as a Learning Signal with attribution uncertainty",
+        "Alternative explanations include task conditions, execution quality, metric limitations and hindsight bias",
+        "The next step compares depth quality/cost across additional or replayed cases",
+        "A severe exception route remains possible if the event exposed material harm"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Version 0.2 changed the admission policy after portfolio evidence showed overuse. It reduced token cost in later runs. How do we determine whether that meta-learning policy actually improved Parallax rather than merely doing less work?",
+      "expected_output": "Treats this as L2 evaluation, compares downstream L0/L1 quality and outcomes as well as cost, controls case mix/version dependence, and defines retention/rollback criteria.",
+      "assertions": [
+        "The output identifies a learning-policy or L2 question",
+        "Reduced token cost alone is not accepted as improvement",
+        "The plan compares object-level quality, missed errors, calibration, decisions and outcomes before and after",
+        "Case-mix, model/client/version and evaluation dependence are considered",
+        "Retention, revision and rollback thresholds are predeclared"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "An inquiry predicted a 10% reduction in support demand, observed 2%, but revealed a previously unknown accessibility benefit. The method was well executed. Classify the learning and propose Practice destinations without losing the positive surprise.",
+      "expected_output": "Separates object outcome, theory/estimand interpretation, method performance and possible new inquiry; records both disappointment and beneficial surprise; routes operational and durable memory appropriately.",
+      "assertions": [
+        "The 2% support result is compared honestly with the 10% prediction",
+        "The accessibility benefit is preserved as exploratory/new evidence rather than used to retroactively declare the primary prediction successful",
+        "Method execution is distinguished from theory or prediction failure",
+        "Immediate monitoring/reopening and longer-term distillation destinations are distinguished",
+        "Any skill change requires broader evidence or a justified severe-exception rationale"
+      ]
+    }
+  ]
+}
+

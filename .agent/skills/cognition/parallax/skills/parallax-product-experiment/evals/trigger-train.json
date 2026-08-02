@@ -1,0 +1,16 @@
+[
+  {"query":"Design an A/B test for the new signup flow, including metrics, MDE, SRM checks and rollout rules.","should_trigger":true},
+  {"query":"Audit our feature experiment: assignment is by account, exposure by session and analysis by event row.","should_trigger":true},
+  {"query":"The split test is significant. Should we ship, and what guardrails and long-term outcomes must we check first?","should_trigger":true},
+  {"query":"Plan an A/B/n experiment with three variants and a valid multiplicity and sequential-peeking policy.","should_trigger":true},
+  {"query":"Diagnose this sample-ratio mismatch and check whether treatment-dependent exposure logging biased the experiment.","should_trigger":true},
+  {"query":"Choose between user randomisation, a switchback and a geo experiment for a marketplace change with interference.","should_trigger":true},
+  {"query":"Set up a long-term holdout to test whether the short-term engagement metric predicts retention and user value.","should_trigger":true},
+  {"query":"Design a safe ramp and rollback plan with accessibility, performance and safeguarding guardrails.","should_trigger":true},
+  {"query":"Implement this already approved feature flag without changing the experiment design.","should_trigger":false},
+  {"query":"Interview users to explore unmet needs before we propose a solution.","should_trigger":false},
+  {"query":"Build a dashboard describing monthly active users; no intervention is being compared.","should_trigger":false},
+  {"query":"Evaluate this model on a fixed offline benchmark with no product assignment or exposure.","should_trigger":false},
+  {"query":"Calculate power for a laboratory factorial experiment unrelated to a digital product.","should_trigger":false},
+  {"query":"Write unit tests for our checkout component.","should_trigger":false}
+]

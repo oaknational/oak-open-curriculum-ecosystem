@@ -1,0 +1,15 @@
+[
+  {"query":"I think we are solving the wrong problem. Give me genuinely different ways to define what this service failure is.","should_trigger":true},
+  {"query":"Map alternative conceptual decompositions of teacher workload and show where translations between them lose meaning.","should_trigger":true},
+  {"query":"Before designing research, challenge the unit of analysis, boundaries and causal direction in our retention question.","should_trigger":true},
+  {"query":"Look at this incident at function, service, platform, team and organisation scales; make every leap between levels explicit.","should_trigger":true},
+  {"query":"Whose perspective and which time horizon are missing from the way this product problem is currently stated?","should_trigger":true},
+  {"query":"Build a set of near-orthogonal conceptual bases for this inquiry, but preserve overlaps and cases where no crosswalk is honest.","should_trigger":true},
+  {"query":"The research question and estimand are signed off. Design the evidence collection and analysis plan.","should_trigger":false},
+  {"query":"Reconcile these completed qualitative, telemetry and experiment reports.","should_trigger":false},
+  {"query":"Choose between launch and another pilot using this existing evidence profile.","should_trigger":false},
+  {"query":"Run the full Parallax framework from problem discovery through monitored action.","should_trigger":false},
+  {"query":"Audit whether this completed inquiry omitted an affected group.","should_trigger":false},
+  {"query":"Refactor the search adapter without changing its public contract.","should_trigger":false}
+]
+

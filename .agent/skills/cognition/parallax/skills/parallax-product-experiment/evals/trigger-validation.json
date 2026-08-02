@@ -1,0 +1,10 @@
+[
+  {"query":"Our A/B dashboard shows a win, but first verify SRM, triggering, identity stability, practical lift and guardrail effects.","should_trigger":true},
+  {"query":"Design a product experiment where teams are randomised but users and events are the measurement rows.","should_trigger":true},
+  {"query":"We will inspect results daily. Specify a valid sequential policy, stop rules and minimum practical effect.","should_trigger":true},
+  {"query":"Test whether a new recommendation feature improves meaningful learning rather than clicks, including long-term return.","should_trigger":true},
+  {"query":"Do exploratory usability testing on two prototypes without estimating a causal population effect.","should_trigger":false},
+  {"query":"Deploy the treatment to 100% because the approved decision record already authorises it.","should_trigger":false},
+  {"query":"Summarise product analytics from the last quarter.","should_trigger":false},
+  {"query":"Design a clinical adaptive trial with no digital-product context.","should_trigger":false}
+]

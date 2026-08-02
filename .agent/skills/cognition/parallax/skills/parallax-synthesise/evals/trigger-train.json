@@ -1,0 +1,15 @@
+[
+  {"query":"Reconcile these completed experiment, interview and telemetry reports without averaging away their disagreement.","should_trigger":true},
+  {"query":"What do these five evidence streams jointly warrant once shared data sources and assumptions are accounted for?","should_trigger":true},
+  {"query":"Build a conflict and defeater ledger from these research outputs and give me a multidimensional confidence profile.","should_trigger":true},
+  {"query":"The reports disagree, but they use different populations and time horizons. Work out which conflicts are real and which are scope differences.","should_trigger":true},
+  {"query":"Synthesize findings expressed in two conceptual bases and be explicit where the crosswalk is partial or lossy.","should_trigger":true},
+  {"query":"Trace each conclusion back to raw evidence and show where apparently separate reports depend on the same instrument.","should_trigger":true},
+  {"query":"Generate alternative frames for our vague engagement problem.","should_trigger":false},
+  {"query":"Plan what evidence and methods we should collect next; no studies have run yet.","should_trigger":false},
+  {"query":"Calculate the required sample size for the proposed experiment.","should_trigger":false},
+  {"query":"Choose whether we launch based on this already synthesised Epistemic Profile.","should_trigger":false},
+  {"query":"Run an independent audit of the whole investigation.","should_trigger":false},
+  {"query":"Summarise this single article in five bullets.","should_trigger":false}
+]
+

@@ -1,0 +1,13 @@
+[
+  {"query":"Compare these completed inquiries and improve the method from their outcomes","should_trigger":true},
+  {"query":"We keep making the same framing mistake; is the skill or routing policy wrong?","should_trigger":true},
+  {"query":"Run a portfolio calibration review of our Parallax decisions","should_trigger":true},
+  {"query":"The monitored outcome contradicted our prediction; decide what must reopen","should_trigger":true},
+  {"query":"Use these eval traces to propose and test a skill improvement","should_trigger":true},
+  {"query":"Save my current branch name for the next session","should_trigger":false},
+  {"query":"Design an experiment before we have outcomes","should_trigger":false},
+  {"query":"Audit this one report for unsupported assumptions","should_trigger":false},
+  {"query":"Implement the accepted API endpoint","should_trigger":false},
+  {"query":"Summarise today's meeting","should_trigger":false}
+]
+

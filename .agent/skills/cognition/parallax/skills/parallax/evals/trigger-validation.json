@@ -1,0 +1,10 @@
+[
+  {"query":"Before we commit a year to this product direction, examine the competing theories of user value, technical feasibility and systemic impact, then define what outcomes would prove us wrong.","should_trigger":true},
+  {"query":"This investigation has several plausible decompositions and the evidence comes from incompatible time horizons. I need an end-to-end, auditable way through it.","should_trigger":true},
+  {"query":"Help us decide whether more research, a small reversible probe, or no action has the highest value given serious uncertainty and affected stakeholders.","should_trigger":true},
+  {"query":"Run a proportionate multi-method inquiry and make sure its own method can learn from the eventual outcome.","should_trigger":true},
+  {"query":"We may be solving the wrong problem. Stop after mapping alternative constructs, boundaries and scales.","should_trigger":false},
+  {"query":"Here are seven method reports; reconcile their conflicts and source dependence, but do not recommend an action.","should_trigger":false},
+  {"query":"Implement the accepted API endpoint exactly as specified and run the existing checks.","should_trigger":false},
+  {"query":"Audit this completed inquiry independently for missing stakeholders, unsupported scale bridges and premature convergence.","should_trigger":false}
+]

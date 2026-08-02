@@ -1,0 +1,15 @@
+[
+  {"query":"We need to decide whether to rebuild this service. The evidence spans incidents, user outcomes, cost, team capacity and long-term platform strategy, and reasonable people frame the problem differently.","should_trigger":true},
+  {"query":"Use Parallax for a deep investigation of why this public digital service is failing some groups despite healthy aggregate metrics.","should_trigger":true},
+  {"query":"I have a consequential research question with causal, ethical and product dimensions. Help me choose and combine methods without flattening their disagreements.","should_trigger":true},
+  {"query":"We keep chasing local fixes. Can you investigate whether the task itself is the wrong unit of analysis and connect implementation evidence back to strategic impact?","should_trigger":true},
+  {"query":"Plan an inquiry into this contested scientific and policy claim; it crosses individual, organisational and population scales and must end in a monitored decision.","should_trigger":true},
+  {"query":"Our qualitative research, A/B result and operational telemetry conflict. Work out what we know, what to do, and how reality should update us afterwards.","should_trigger":true},
+  {"query":"Give me three alternative framings of this already well-defined question.","should_trigger":false},
+  {"query":"Design a powered randomised controlled experiment for these two interventions; the estimand and population are already fixed.","should_trigger":false},
+  {"query":"Synthesize these four completed evidence reports into a conflict ledger; no new investigation or decision is needed.","should_trigger":false},
+  {"query":"Given this signed-off evidence profile and our stated risk limits, choose between the two reversible rollout options.","should_trigger":false},
+  {"query":"Rename this TypeScript function and update its tests.","should_trigger":false},
+  {"query":"What is the boiling point of water at standard pressure?","should_trigger":false}
+]
+

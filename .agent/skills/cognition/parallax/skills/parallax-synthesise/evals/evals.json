@@ -1,0 +1,39 @@
+{
+  "skill_name": "parallax-synthesise",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Synthesize these findings: an A/B test improved clicks for exposed users over seven days, interviews report lower trust, support tickets increased, and all quantitative reports use the same event pipeline. Do not make the launch decision.",
+      "expected_output": "A scope-bounded synthesis with explicit dependence, scale and construct conflicts, defeaters, and a multidimensional Epistemic Profile without collapsing to one score.",
+      "assertions": [
+        "The shared quantitative pipeline is represented as dependence rather than independent corroboration",
+        "Each input preserves its exact artifact revision, basis, scale, method-pass, domain profiles, assumptions, uncertainty, and provenance",
+        "Short-term clicks are not silently bridged to trust or long-term user value",
+        "Empirical, interpretive, and decision-value dimensions remain distinct",
+        "The output includes conflicts, defeaters, validity domains, and discriminating observations",
+        "The skill stops before selecting an action"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The original Charter is unavailable. I have three reports using different definitions of adoption and different observation windows. Tell me what they jointly warrant.",
+      "expected_output": "A provisional direct-entry synthesis that preserves construct and horizon differences, exposes missing context, and avoids invented crosswalks.",
+      "assertions": [
+        "The missing Charter and decision context are recorded",
+        "Each report retains exact artifact and provenance identity rather than only aggregate coverage",
+        "Different adoption constructs and time scales are not flattened",
+        "Crosswalks are marked partial, lossy, or unavailable where appropriate",
+        "The result has an explicit epistemic status and safe next steps"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We have no evidence yet. Please design interviews, telemetry analysis and an experiment to test our retention hypotheses.",
+      "expected_output": "A decline or route to parallax-design-inquiry because there are no completed inputs to synthesize.",
+      "assertions": [
+        "The response recognises the absence of synthesis inputs",
+        "The response routes to inquiry design rather than inventing evidence"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+[
+  {"query":"These analyses look like consensus but all derive from the same dataset. Tell me what confidence is actually justified.","should_trigger":true},
+  {"query":"Separate direct contradiction, construct mismatch, scale difference and value disagreement across the attached reports.","should_trigger":true},
+  {"query":"Produce a scope-bounded evidence synthesis and preserve any genuinely incomparable stakeholder interpretations.","should_trigger":true},
+  {"query":"Map supporting, challenging and non-discriminating evidence to each claim, including unresolved alternatives.","should_trigger":true},
+  {"query":"Before collecting data, identify which methods could distinguish our hypotheses.","should_trigger":false},
+  {"query":"We think the current unit of analysis is wrong; construct counterframes.","should_trigger":false},
+  {"query":"Given the evidence summary, decide whether to roll out, run another pilot, or stop.","should_trigger":false},
+  {"query":"Monitor the launched change and update our method-selection policy from the outcome.","should_trigger":false}
+]

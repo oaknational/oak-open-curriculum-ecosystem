@@ -1,0 +1,41 @@
+{
+  "graph_id": "parallax-run-template-v0.1",
+  "title": "Illustrative bounded run DAG",
+  "description": "A template showing protected parallel domain/method branches, synthesis, audit, and decision for one inquiry revision. A real run records concrete invocation and artifact identifiers.",
+  "graph_type": "run-dag-template",
+  "version": "0.1.0",
+  "acyclic": true,
+  "nodes": [
+    { "id": "charter", "label": "Charter and depth", "type": "run-step" },
+    { "id": "frame-a", "label": "Primary frame pass", "type": "run-step" },
+    { "id": "frame-b", "label": "Protected counterframe pass", "type": "run-step" },
+    { "id": "join-frame", "label": "Frame coverage join", "type": "join" },
+    { "id": "investigation", "label": "Investigation branch", "type": "run-step" },
+    { "id": "science", "label": "Scientific/experimental branch", "type": "run-step" },
+    { "id": "software", "label": "Software evidence branch", "type": "run-step" },
+    { "id": "product", "label": "Product/service evidence branch", "type": "run-step" },
+    { "id": "join-evidence", "label": "Protected evidence join", "type": "join" },
+    { "id": "synthesis", "label": "Synthesis", "type": "run-step" },
+    { "id": "audit", "label": "Audit", "type": "run-step" },
+    { "id": "decision", "label": "Decision and World-Return", "type": "run-step" }
+  ],
+  "edges": [
+    { "from": "charter", "to": "frame-a", "type": "precedes" },
+    { "from": "charter", "to": "frame-b", "type": "precedes" },
+    { "from": "frame-a", "to": "join-frame", "type": "joins" },
+    { "from": "frame-b", "to": "join-frame", "type": "joins" },
+    { "from": "join-frame", "to": "investigation", "type": "precedes", "guard": "Investigation profile selected" },
+    { "from": "join-frame", "to": "science", "type": "precedes", "guard": "Science profile selected" },
+    { "from": "join-frame", "to": "software", "type": "precedes", "guard": "Software-engineering profile selected" },
+    { "from": "join-frame", "to": "product", "type": "precedes", "guard": "Digital product/service profile selected" },
+    { "from": "investigation", "to": "join-evidence", "type": "joins" },
+    { "from": "science", "to": "join-evidence", "type": "joins" },
+    { "from": "software", "to": "join-evidence", "type": "joins" },
+    { "from": "product", "to": "join-evidence", "type": "joins" },
+    { "from": "join-evidence", "to": "synthesis", "type": "precedes" },
+    { "from": "synthesis", "to": "audit", "type": "precedes", "guard": "Audit threshold is met" },
+    { "from": "audit", "to": "decision", "type": "precedes", "guard": "No unresolved blocking audit finding" },
+    { "from": "synthesis", "to": "decision", "type": "precedes", "guard": "Audit is not required and decision authority exists" }
+  ]
+}
+

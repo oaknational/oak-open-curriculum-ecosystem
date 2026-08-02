@@ -1,0 +1,13 @@
+[
+  {"query":"Independently challenge this investigation before publication","should_trigger":true},
+  {"query":"Audit whether this architecture decision is actually supported by the evidence","should_trigger":true},
+  {"query":"Find omitted scales and unsupported assumptions in this product proposal","should_trigger":true},
+  {"query":"We have three agreeing analyses; check whether they are genuinely independent","should_trigger":true},
+  {"query":"Adversarially review this experiment conclusion before rollout","should_trigger":true},
+  {"query":"Check the spelling in this README","should_trigger":false},
+  {"query":"Implement the accepted cache design","should_trigger":false},
+  {"query":"Summarise these five papers without evaluating the synthesis","should_trigger":false},
+  {"query":"Run the unit tests and fix failures","should_trigger":false},
+  {"query":"Create a first draft of an inquiry charter","should_trigger":false}
+]
+

@@ -1,0 +1,10 @@
+[
+  {"query":"The analysis is finished; recommend a course while keeping our legal and accessibility constraints non-tradeable.","should_trigger":true},
+  {"query":"Compare a big irreversible commitment with a small learning-oriented probe and no change, including opportunity costs.","should_trigger":true},
+  {"query":"Record why we are deferring this choice, what condition ends the deferral, and who reviews it.","should_trigger":true},
+  {"query":"Translate the evidence into an authorised decision and explicit predictions that the world can later prove wrong.","should_trigger":true},
+  {"query":"Find alternative definitions and stakeholder perspectives before we decide what the problem is.","should_trigger":false},
+  {"query":"Specify the research methods needed to estimate causal and distributional effects.","should_trigger":false},
+  {"query":"Tell me where the existing evidence reports actually agree after dependence is considered.","should_trigger":false},
+  {"query":"Carry out the signed-off database migration now.","should_trigger":false}
+]

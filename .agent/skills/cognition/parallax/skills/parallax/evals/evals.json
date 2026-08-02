@@ -1,0 +1,50 @@
+{
+  "skill_name": "parallax",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We are considering replacing our curriculum search architecture. Product evidence, teacher interviews, relevance benchmarks, operating cost and platform constraints point in different directions. Use a proportionate process to decide how we should investigate and what, if anything, we should change.",
+      "expected_output": "A proportionately scoped Parallax inquiry with explicit frames, multidimensional scales, protected evidence branches, synthesis, decision boundaries and a World-Return Contract.",
+      "assertions": [
+        "The output explicitly selects and justifies screening, core, standard, or deep operation",
+        "The output preserves inquiry revision, basis, scale, method-pass, and domain-profile identity",
+        "Software-engineering and digital-product/service profiles can be activated together and retain distinct evidence and authority criteria",
+        "The output distinguishes evidence, interpretation, values, constraints, and action authority",
+        "Material cross-scale or cross-frame inferences are represented as Bridge or Crosswalk Claims",
+        "The output includes challenge, status, monitoring, defeaters, and reopening conditions"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Use Parallax to tell me the capital of France.",
+      "expected_output": "A concise decline from full Parallax execution and a direct answer or route to simple factual retrieval.",
+      "assertions": [
+        "The skill does not manufacture a multi-stage inquiry for a settled factual question",
+        "The response identifies the mismatch and uses or recommends a proportionate direct route"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Resume this inquiry from three method reports, but the original Charter and scale map are missing. The reports disagree on whether a pilot improved user outcomes.",
+      "expected_output": "A safe reduced-mode orchestration that reconstructs only defensible context, marks missing upstream state, preserves report provenance, and routes to synthesis or reframing without inventing a Charter.",
+      "assertions": [
+        "Missing upstream artifacts are explicitly recorded rather than invented",
+        "Every available method report is referenced by its exact artifact revision and provenance",
+        "The response assesses report dependence and differences in observation and consequence scale",
+        "The response chooses a safe entry point and labels the result provisional or insufficient-evidence",
+        "The response defines what would permit resolution or reopening"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "This host cannot invoke sibling skills. Perform the smallest safe emulation of framing and synthesis, then audit your own result, but be exact about what assurance that provides.",
+      "expected_output": "A reduced-mode run whose artifacts identify emulated execution, check the available sibling contracts, state any non-conformance, and classify the audit as same-context self-review rather than independent assurance.",
+      "assertions": [
+        "Every emulated capability and artifact is labelled emulated-reduced",
+        "The response checks available sibling invariants and completion contracts before claiming conformance",
+        "Missing checks are reported as non-conformance or limitation",
+        "The self-audit is explicitly not represented as independent assurance"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "skill_name": "parallax-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Independently audit this architecture proposal before we commit: the new cache passes unit tests, so the proposal concludes it will reduce teacher-facing latency and improve product adoption. The evidence is the implementation author's test report.",
+      "expected_output": "An audit that distinguishes same-context evidence from independence, identifies unsupported bridges from unit tests to production latency and adoption, requests runtime and product evidence, and gives a qualified or reopen disposition without rewriting the proposal.",
+      "assertions": [
+        "The output does not label the implementation author's evidence independent",
+        "An orchestrator-emulated audit is explicitly classified as same-context self-review",
+        "The output identifies at least two distinct cross-scale bridge claims",
+        "The output distinguishes technical performance from product adoption",
+        "The output gives a disposition and concrete resolving evidence"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Audit the conclusion of a study with five primary outcomes, optional stopping after each 20 participants, and a final p-value of 0.04 on one outcome. The report calls the intervention proven.",
+      "expected_output": "A bounded audit identifying multiplicity, optional stopping, estimand and power/precision concerns, challenging the word proven, and recommending appropriate specialist/statistical resolution.",
+      "assertions": [
+        "The output identifies multiplicity",
+        "The output identifies optional stopping or invalid peeking",
+        "The output challenges categorical proof language",
+        "The output states limits of the audit and need for domain validation"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Please proofread this two-paragraph release note for grammar.",
+      "expected_output": "The skill declines or routes to ordinary editing because no epistemic audit is requested.",
+      "assertions": [
+        "The output does not perform a full Parallax audit",
+        "The output identifies ordinary proofreading as the appropriate task"
+      ]
+    }
+  ]
+}

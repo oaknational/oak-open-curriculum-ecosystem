@@ -1,0 +1,110 @@
+{
+  "skill_name": "parallax",
+  "metadata": {
+    "scope": "collection",
+    "suite": "routing",
+    "version": "0.1.0"
+  },
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We need to decide whether to replace our public service's identity system. The technical migration, user access, safeguarding, operational support, cost and policy implications all point in different directions. We may be solving the wrong problem. Please structure the inquiry, but do not implement anything.",
+      "expected_output": "Invokes the parallax orchestrator at a proportionate depth, selects multiple stackable profiles and likely framing/design/audit capabilities, creates a Charter and bounded run plan, and preserves the no-implementation scope.",
+      "assertions": [
+        "The output identifies parallax as the primary orchestration entry rather than loading every sibling without routing",
+        "The output selects at least software-engineering and digital-product-service profiles and explains why",
+        "The output includes authority that permits investigation but not implementation or deployment",
+        "The output defines relevant scale regions and at least one prospective Bridge Claim",
+        "The output proposes a bounded depth and explains the cost/value trade-off"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Everyone is asking how to make onboarding faster, but I think speed may be the wrong construct and the journey boundary may exclude people who cannot create an account. Help me reframe it; I don't need a complete research programme yet.",
+      "expected_output": "Directly invokes parallax-frame, produces alternative constructs/boundaries/bases and scale context, and does not force full orchestration.",
+      "assertions": [
+        "The output identifies parallax-frame as the narrow direct entry",
+        "The output does not require a complete end-to-end Parallax run",
+        "The output creates at least two operationally differentiated frames",
+        "The output includes affected or excluded stakeholders and journey/system scale differences"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "How many participants do I need for 90% power to detect a 4 percentage point treatment effect? We have not decided the baseline rate, randomisation unit, analysis, or whether that effect matters.",
+      "expected_output": "Invokes general experimental design, refuses false precision, requests or explores missing assumptions, and situates power within estimand, validity, precision and decision relevance.",
+      "assertions": [
+        "The output identifies parallax-design-experiment rather than product experimentation solely from the percentage wording",
+        "The output does not provide one definitive sample size from missing assumptions",
+        "The output names baseline rate, unit/allocation, estimand or effect relevance, alpha/sidedness, analysis, and attrition/dependence as material inputs",
+        "The output recommends sensitivity scenarios or curves rather than one optimistic point estimate"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Design a routine A/B test for a new search-result label behind our feature flag. We have stable user IDs, event telemetry and a pre-existing experimentation platform. The decision is whether to roll out, based on successful task completion plus accessibility and support guardrails.",
+      "expected_output": "Directly invokes parallax-product-experiment without unnecessarily demanding the entire general framework, while preserving estimand, telemetry, guardrails, exposure, analysis and rollout semantics.",
+      "assertions": [
+        "The output selects parallax-product-experiment as the primary entry",
+        "The output does not automatically require parallax-design-experiment unless a material complexity is identified",
+        "The output defines exposure, outcome, telemetry-quality, guardrail, rollout and rollback requirements",
+        "The output does not treat task completion alone as permission to ignore accessibility or support effects"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "We want to test a collaborative editor with organisation-level randomisation, strong network interference, unequal cluster sizes, an adaptive rollout, and low event volume. This is a digital product experiment and we need a defensible power and precision strategy.",
+      "expected_output": "Co-activates product and general experimental-design capabilities, explicitly handling clusters, interference, adaptation, simulation and digital telemetry/rollout.",
+      "assertions": [
+        "The output selects both parallax-product-experiment and parallax-design-experiment",
+        "The output explains the distinct contribution of each skill",
+        "The output rejects an ordinary independent-user A/B analysis",
+        "The output calls for cluster/interference-aware simulation or sensitivity analysis"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Here are three completed studies and two engineering test reports. They disagree, share some source data, and use different definitions of success. I only need a defensible synthesis, not a new study or a decision.",
+      "expected_output": "Directly invokes synthesis, reconstructs frames/scales as needed, analyses dependence and construct mismatch, and stops before decision or new execution.",
+      "assertions": [
+        "The output identifies parallax-synthesise as the primary direct entry",
+        "The output distinguishes shared data dependence from independent corroboration",
+        "The output creates or proposes Conflict/Dependence/Defeater and Epistemic Profile outputs",
+        "The output does not make a decision or design a new study unless presented as an optional hand-off"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Convert 17 degrees Celsius to Fahrenheit.",
+      "expected_output": "Declines Parallax activation and answers the simple deterministic question directly.",
+      "assertions": [
+        "No Parallax skill is invoked",
+        "The conversion is answered directly and correctly",
+        "The response does not create an Inquiry Charter, audit, or learning artifact"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Six months ago we shipped the decision documented in inquiry Q-42. Monitoring now shows the accessibility guardrail crossed its reopen threshold even though the primary conversion metric improved. Review what was learned and route the next step.",
+      "expected_output": "Uses outcome/reopening entry, invokes learning and relevant reopening capability, preserves Q-42 history, and treats the guardrail as a blocking world-return signal.",
+      "assertions": [
+        "The output identifies parallax-learn and reopening rather than starting an unrelated new inquiry",
+        "The output preserves Q-42 and creates a new revision rather than overwriting the original",
+        "The accessibility threshold is not averaged away by improved conversion",
+        "The output separates object-level correction from any proposed skill or routing improvement"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "We already rolled the feature out to everyone last month. Product calls the before/after dashboard an A/B test and wants a causal effect estimate, but there was no random assignment and marketing changed at the same time.",
+      "expected_output": "Invokes product experimentation and general design depth, classifies the design as observational or quasi-experimental rather than randomised A/B, and requires an identification strategy with appropriate diagnostics and limitations.",
+      "assertions": [
+        "The output does not label the before/after comparison a randomised A/B test",
+        "The output declares an observational or quasi-experimental design family",
+        "The concurrent marketing change is treated as a material identification threat",
+        "At least one defensible comparison strategy, assumption set and falsification or sensitivity check is considered",
+        "The output preserves limits on causal interpretation"
+      ]
+    }
+  ]
+}

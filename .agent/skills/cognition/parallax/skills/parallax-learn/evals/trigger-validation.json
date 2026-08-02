@@ -1,0 +1,10 @@
+[
+  {"query":"Our last four incidents suggest the review workflow is not firing; extract a stable lesson and an eval plan","should_trigger":true},
+  {"query":"Did last month's change to skill selection improve later task outcomes?","should_trigger":true},
+  {"query":"Turn these expected-versus-actual records into a governed improvement proposal","should_trigger":true},
+  {"query":"Distinguish product failure from method and invocation failure across these cases","should_trigger":true},
+  {"query":"Write a continuity note so another agent can resume tomorrow","should_trigger":false},
+  {"query":"Calculate the sample size for a two-arm experiment","should_trigger":false},
+  {"query":"Synthesize these conflicting studies","should_trigger":false},
+  {"query":"Critique the proposed architecture before implementation","should_trigger":false}
+]

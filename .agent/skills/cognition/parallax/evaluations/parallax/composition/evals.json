@@ -1,0 +1,56 @@
+{
+  "skill_name": "parallax",
+  "metadata": {
+    "scope": "collection",
+    "suite": "composition",
+    "version": "0.1.0"
+  },
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Plan an inquiry into intermittent search failures. Run protected repository/runtime, user-impact, and operational-evidence branches before synthesis. All branches use the same initial incident report and the same model family. Do not fix the service yet.",
+      "expected_output": "Materialises a bounded run DAG with protected branches, records shared incident/model dependence, joins through artifacts, and preserves diagnosis-only authority.",
+      "assertions": [
+        "The run plan is acyclic for the current inquiry revision",
+        "The three branches have distinct method-pass identities and explicit artifact outputs",
+        "The shared incident report and model family are recorded as dependencies rather than independent corroboration",
+        "A synthesis join occurs only after protected branch outputs",
+        "No implementation or production action is performed"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "An inquiry design exists for whether a new recommendation feature improves curriculum discovery. It calls for interviews, log analysis, an A/B experiment and accessibility testing. Explain how Parallax composes these without turning them into four votes.",
+      "expected_output": "Uses composite and protected methods, common artifacts, explicit dependence and claim relevance, product/general experiment design where warranted, and multidimensional synthesis.",
+      "assertions": [
+        "The methods are related to distinct claims, error modes or scales rather than counted as votes",
+        "The experiment hand-off distinguishes product-specific and general design responsibilities",
+        "When general and product experiment skills compose, the Product Experiment Protocol references the base Experimental Design as a typed overlay rather than duplicating it",
+        "Evidence Records preserve source, scale, basis and dependence",
+        "Synthesis produces conflicts and an Epistemic Profile instead of a majority conclusion"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Resume directly from an Epistemic Profile. The original Charter is missing, action authority is unknown, and the profile contains a strong technical conclusion but a weak public-value bridge. The user asks for analysis of decision options only.",
+      "expected_output": "Uses decision direct entry in reduced mode, reconstructs or requests missing context, refuses action authority, keeps the weak bridge blocking, and emits an analysis-only Decision Record.",
+      "assertions": [
+        "The output does not invent a Charter or action authority",
+        "The output marks reconstructed context and missing provenance explicitly",
+        "The weak public-value bridge remains visible and constrains conclusions",
+        "The output analyses options but does not execute a decision"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Audit a product experiment protocol before launch. The audit agent receives the same protocol but not the authoring discussion; it uses a different prompt, the same base model, and independent accessibility evidence. State what assurance this composition supports.",
+      "expected_output": "Labels the audit dependence precisely, recognises partial protection but shared-model dependence, identifies the independent evidence contribution, and does not overclaim full independence.",
+      "assertions": [
+        "The audit is not labelled fully independent solely because the prompt/context differs",
+        "Shared base-model dependence is recorded",
+        "Independent accessibility evidence is distinguished from the audit pass as a whole",
+        "The Audit Report states the assurance scope and limitations"
+      ]
+    }
+  ]
+}
