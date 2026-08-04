@@ -7,11 +7,14 @@ import { RELEASE_ENVIRONMENTS } from '@oaknational/build-metadata';
  * The env schema composes these refinements the same way it composes the
  * product-analytics rules from `env-product-analytics.ts`: the field shape
  * stays in the base schema, the conditional rules live here, and `env.ts`
- * calls them from its `superRefine`. This module is the single home of the
- * "is this a deployment / a production deployment?" trust-boundary
- * classification — every production guard keys on the helpers below rather
- * than re-deriving `VERCEL_ENV` semantics, so the classification cannot drift
- * between guards (a divergence of exactly that kind was the item-1 gap).
+ * calls them from its `superRefine`. This module is the home of the "is this
+ * a deployment / a production deployment?" trust-boundary classification: the
+ * four env-safety guards (Clerk key locality, canonical-host requirement, the
+ * auth-disable valve, and the test-error-secret ban) all key on the helpers
+ * below rather than re-deriving `VERCEL_ENV` semantics, so the classification
+ * cannot drift between them (a divergence of exactly that kind was the item-1
+ * gap). The product-analytics production rule in `env-product-analytics.ts`
+ * still derives production independently — a tracked hardening follow-up.
  */
 
 interface DeploymentSignals {
