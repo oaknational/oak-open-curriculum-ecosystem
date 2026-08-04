@@ -2,6 +2,8 @@
 
 Companion to `report.md` / `registry.json`. Where the registry lists a cohesive delivered surface as separate authored fragments, this file shows the **assembled whole** — rendered directly from the built SDK, so it is **exact** for deterministic content and marked with `{{placeholder}}` where a value is supplied at runtime (a user prompt argument, or interpolated curriculum data). Regenerate with `render-wholes.mjs`.
 
+Rendered: 2026-08-03 — the render is exact for the SDK build it ran against and goes stale as the SDK moves; this date is the staleness signal.
+
 
 ## 1. Server instructions — delivered once at connection
 
@@ -395,10 +397,6 @@ directly in the user's browser — no authentication needed on their side.
 Use this when:
 - The user wants to download a slide deck, worksheet, quiz, or video
 - You have the lesson slug and asset type from a previous get-lessons-assets call
-
-IMPORTANT: When presenting download links to the user, always include this tip
-(once, not per-link): "Our resources work best if you install the Google Fonts
-Lexend and Kalam — https://support.thenational.academy/how-to-install-the-google-fonts-lexend-and-kalan"
 
 Do NOT use for:
 - Browsing available assets (use 'get-lessons-assets')

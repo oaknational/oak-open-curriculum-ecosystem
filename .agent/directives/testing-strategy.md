@@ -104,7 +104,17 @@ Formal home: [`validation-strategy.md`](validation-strategy.md) (seeded
   antithesis — it pins bytes, proves no behaviour, fails loud on a
   harmless change; and the cure for a **content-quality invariant**
   (a firewall, e.g. "no curriculum data in this prose") is NOT a
-  grep test but **construction plus human review**.
+  grep test but **construction plus human review**. The
+  **designed-sentinel carve-out** (owner doctrine 2026-08-03): a
+  literal content pin is admissible only when a named decision
+  attaches to the value changing and the failure message instructs
+  re-adjudication of that decision, never removal-on-sight —
+  correction-layer override sentinels qualify; example-value pins
+  do not, and their cure is a source-anchored test of the
+  generating mechanism, red only when the mechanism breaks and
+  silent on upstream content drift (trigger artefact: the MCP-462
+  differential examples test that replaced three value-pinned
+  tests).
 - **No useless tests** - Each test must prove something useful
   about the product code. If a test is only testing the test or
   mocks, delete it.

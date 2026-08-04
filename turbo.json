@@ -372,6 +372,19 @@
         "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },
+    "@oaknational/agent-tools#test": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.ts",
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts",
+        "$TURBO_ROOT$/runtime-only-scripts/**"
+      ]
+    },
     "@oaknational/research-evidence#test": {
       "dependsOn": ["^build"],
       "cache": true,
@@ -442,7 +455,9 @@
         "vitest.e2e.config.ts",
         "$TURBO_ROOT$/vitest.e2e.config.base.ts",
         "$TURBO_ROOT$/test.setup.no-network.ts",
-        "$TURBO_ROOT$/.codex/hooks/practice-session-identity.mjs"
+        "$TURBO_ROOT$/.codex/hooks/practice-session-identity.mjs",
+        "$TURBO_ROOT$/package.json",
+        "$TURBO_ROOT$/runtime-only-scripts/**"
       ]
     },
     "test:ui": {

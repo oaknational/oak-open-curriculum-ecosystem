@@ -65,6 +65,8 @@ parts.push(`# Rendered wholes — the content as an agent receives it
 
 Companion to \`report.md\` / \`registry.json\`. Where the registry lists a cohesive delivered surface as separate authored fragments, this file shows the **assembled whole** — rendered directly from the built SDK, so it is **exact** for deterministic content and marked with \`{{placeholder}}\` where a value is supplied at runtime (a user prompt argument, or interpolated curriculum data). Regenerate with \`render-wholes.mjs\`.
 
+Rendered: ${new Date().toISOString().slice(0, 10)} — the render is exact for the SDK build it ran against and goes stale as the SDK moves; this date is the staleness signal.
+
 `);
 
 // 1. SERVER INSTRUCTIONS (exact, delivered once on connection)

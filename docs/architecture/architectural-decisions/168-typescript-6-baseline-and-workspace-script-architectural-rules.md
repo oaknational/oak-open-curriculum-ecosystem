@@ -8,6 +8,8 @@ amended 2026-05-31 to record the dissolution of `agent-tools/scripts/` — the
 §5 forcing function applied to completion (§5a); amended 2026-07-06 to widen
 the shell-scope exception from Husky-entry-points-only to
 shell-where-it-significantly-reduces-effort (§Shell-scope exception).
+Amended 2026-08-03 to authorise the repository-root package's pre-install
+runtime tier and its constrained test seam (§4–5).
 **Date**: 2026-04-29
 **Related**:
 [ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) —
@@ -19,8 +21,10 @@ would have applied to any vendor `ignoreCommand` shape;
 `.agent/plans/architecture-and-infrastructure/active/typescript-6-migration-and-workspace-script-rules.plan.md` —
 the executable plan whose closure this ADR records;
 [`apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/`](../../../apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/) —
-canonical reference instance of the dedicated no-compile-no-deps
-directory.
+original application-workspace reference instance of the dedicated
+no-compile-no-deps directory;
+[`runtime-only-scripts/`](../../../runtime-only-scripts/) — repository-root
+reference instance for the package-manager version guard.
 
 ## Context
 
@@ -173,18 +177,38 @@ installed). Such scripts cannot have a build step (no `tsc` or `tsx`
 is available pre-install) and cannot import from `node_modules`
 (no dependencies are installed yet).
 
-These scripts MUST live in a per-workspace dedicated directory named
-`runtime-only-scripts/`. The directory name is load-bearing — it
+A runtime-only script MUST live in a dedicated `runtime-only-scripts/`
+directory owned by the package project whose `package.json` invokes it. A
+package project may be the repository-root package or a declared workspace.
+The directory name is load-bearing — it
 makes the special case visible to readers and prevents the
 no-compile-no-deps pattern from spreading to scripts that don't
 need it.
 
-`runtime-only-scripts/` files MUST be `.mjs` (not `.ts`) because
-`.ts` requires a build step or a runtime stripper. The `.mjs`
-extension is the explicit signal that this file runs in a constrained
-environment.
+Executable `runtime-only-scripts/` files MUST be `.mjs` (not `.ts`) because
+`.ts` requires a build step or a runtime stripper. The `.mjs` extension is the
+explicit signal that this file runs in a constrained environment. Where a
+TypeScript verification surface imports the script, a sibling `.d.mts` MUST
+describe its exported API. The declaration supplies types only, never duplicate
+runtime logic, and is not executed pre-install.
 
-The repo's canonical reference instance is:
+The repo's authorised reference instances are:
+
+```text
+runtime-only-scripts/
+├── README.md
+├── validate-package-manager-version.mjs
+└── validate-package-manager-version.d.mts
+```
+
+The repository-root instance is invoked by the root
+`pnpm:devPreinstall` lifecycle hook. It must compare the running pnpm version
+with the root `packageManager` pin before pnpm can rewrite an incompatible
+lockfile, so it necessarily runs before workspace dependencies or compiled
+tooling are available. `@oaknational/agent-tools` owns its pure-decision unit
+test and shipped-lifecycle smoke.
+
+The original application-workspace reference instance is:
 
 ```text
 apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/
@@ -224,10 +248,20 @@ Consequences:
 - The vitest include globs are not widened to cover `scripts/**`. Widening them
   would defeat the forcing function and pull thin glue into the checked surface
   where it does not belong.
-- Behaviour a script depends on is verified by the `src/` modules it calls
-  (unit-tested there) or by the end-to-end gate that exercises the script (e.g.
-  a validator script is covered by running its gate) — not by unit-testing the
-  script in place.
+- Behaviour ordinary scripts depend on is verified by the `src/` modules they
+  call (unit-tested there) or by the end-to-end gate that exercises the script
+  — not by unit-testing the script in place.
+- **Narrow runtime-only limit:** when genuine pre-install constraints make
+  promotion to dependency-backed TypeScript impossible, the `.mjs` MAY export
+  a small dependency-free, IO-free decision function whose inputs are explicit
+  and whose result is returned. A named test-owner workspace MAY import that
+  function through an existing `src/**` or `tests/**` unit-test surface. This
+  does not widen Vitest globs, authorise production cross-boundary imports, or
+  permit filesystem, environment, or process access in the tested unit. The
+  executable IO and adoption path MUST have a CI-reachable smoke that invokes
+  the exact shipped lifecycle command and proves refusal occurs before lockfile
+  mutation. `@oaknational/agent-tools` is the named test and smoke owner for the
+  repository-root package-manager guard.
 - Existing `*.test.ts` files under `scripts/` are pre-existing promote-to-`src/`
   debt, addressed when the script is next touched substantively — not a reason
   to widen the include.
@@ -288,9 +322,11 @@ required JS compiled from TS; ESM only, no CJS; this shell scope) is
   introduces `node ../../scripts/...`-style invocations.
 - **Code review** rejects any new `.js` or `.mjs` script in a
   workspace `scripts/` or `build-scripts/` directory.
-- `runtime-only-scripts/` directories are explicitly authorised
-  per-workspace; new ones require ADR amendment with a documented
-  pre-install constraint.
+- `runtime-only-scripts/` directories are explicitly authorised per package
+  project (the repository root or a workspace); new ones require ADR amendment
+  with a documented pre-install constraint.
+- The repository-root `runtime-only-scripts/` directory is authorised for the
+  root `pnpm:devPreinstall` package-manager version guard described in §4.
 
 ### Carried forward
 
@@ -385,3 +421,11 @@ tsconfig.build.json` pattern. The choice of `tsup` for JS emit
   `.agent/rules/source-is-typescript-esm-only.md` (TypeScript unless absolutely
   impractical; required JS compiled from TS; ESM only, no CJS; this shell
   scope) landed in the same change.
+
+- **2026-08-03** — authorised the repository-root `runtime-only-scripts/`
+  instance for the `pnpm:devPreinstall` version guard. Clarified that executable
+  files use `.mjs` with optional `.d.mts` declarations, and that a pure exported
+  decision may be tested from an existing workspace `src/` surface when §4's
+  pre-install constraint makes promotion impossible. The shipped lifecycle
+  remains covered by a standalone smoke that proves refusal before lockfile
+  mutation.

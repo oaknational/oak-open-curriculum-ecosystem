@@ -54,6 +54,19 @@ cheap, and requiring it even for throwaways is the point — "committed work on 
 with no PR" is the single state this rule exists to forbid, so nothing is ever silently
 dropped.
 
+**The clause generalises beyond worktree lanes to EVERY pushed branch** (owner word,
+2026-08-03: "generally, I want branches to have at least draft PRs"), and the firing
+moment includes the FIRST PUSH, not only creation and first commit. The coordination
+branch opens its fold PR as a draft at the cut and rides it to the fold; a build-ahead
+lane stacks its draft on the branch it builds on and retargets at that branch's merge
+(push an empty commit after the retarget — required checks do not re-run on a base
+retarget alone); a probe branch gets its draft at push and closes with the probe.
+History-only preservation still uses `preserve/` tags (§6), never a parked PR. Worked
+instance, 2026-08-03: two branches (a build-ahead lane and the fresh coordination
+branch) sat pushed and PR-less for an hour with this rule loaded — the owner noticed
+from the branches page before any seat did; the creation/first-commit triggers had not
+fired because neither branch read as a worktree lane at push time.
+
 ### 2. One bounded lane per worktree
 
 A worktree owns one bounded lane — one coherent change set heading to one PR — not a
@@ -236,7 +249,9 @@ holding a worktree.
 
 ## Enforcement
 
-Behavioural at worktree creation and retirement. The draft-PR-on-creation discipline is
-observable (every branch with work has a PR on the list); the content-check-before-removal
+Behavioural at worktree creation, first push, and retirement. The draft-PR discipline is
+observable (every pushed branch with work has a PR on the list); the content-check-before-removal
 is the named retirement step; the cross-worktree map makes a forgotten worktree visible.
-Future hardening could add a check that flags any local worktree branch with no open PR.
+Future hardening could add a check that flags any pushed branch with no open PR — the
+2026-08-03 worked instance above is the evidence that the behavioural clause alone does
+not hold, so this check is a live candidate, not speculative hardening.

@@ -120,6 +120,8 @@ jobs:
         run: pnpm format-check:root
       - name: Check markdown
         run: pnpm markdownlint-check:root
+      - name: Lint runtime-only scripts
+        run: pnpm lint:runtime-only
       - name: Lint shell scripts
         run: pnpm lint:shell
       - name: Validate sub-agents

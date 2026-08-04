@@ -26,6 +26,8 @@
       "Skill(oak-fidelity-review:*)",
       "Skill(oak-sif)",
       "Skill(oak-sif:*)",
+      "Skill(oak-set-up-worktree-lane)",
+      "Skill(oak-set-up-worktree-lane:*)",
       "Skill(oak-the-codex-dialogues)",
       "Skill(oak-the-codex-dialogues:*)",
       "Skill(oak-concept-exploration)",

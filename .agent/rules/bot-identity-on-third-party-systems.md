@@ -32,21 +32,63 @@ after.
 
 ## Action (GitHub — the worked mechanics)
 
-The GitHub bot identity is `jimbot-oakington-iii[bot]` (app 4352989).
+The GitHub bot identity is `jimbot-oakington-iii[bot]`. Two different numbers
+attach to it and **only one belongs in an email address**:
 
-- **Commits** (author AND committer):
-  `jimbot-oakington-iii[bot] <307435217+jimbot-oakington-iii[bot]@users.noreply.github.com>`,
-  set via **worktree-scoped** git config only
-  (`git config extensions.worktreeConfig true` once, then
-  `git config --worktree user.name …` / `user.email …`). NEVER the shared
-  repo or global config — that flips the owner's own commits in the primary
-  checkout: with `extensions.worktreeConfig` enabled, a PLAIN `git config
-  user.*` write from a worktree still targets the SHARED local scope
-  (worked near-miss 2026-07-24 — the primary read the bot for ~1 min).
-  Before any worktree commit, verify both surfaces:
-  `git -C <primary> config user.name` still resolves the human AND the
-  worktree's own config resolves the bot. The `Co-Authored-By` model
-  trailer stays.
+| Number      | What it is           | Where it is used                     |
+| ----------- | -------------------- | ------------------------------------ |
+| `4352989`   | the GitHub **App** id | app/installation API paths            |
+| `307435217` | the **bot user** id   | the commit email, and nowhere else    |
+
+The noreply address takes the BOT USER id: `307435217+jimbot-oakington-iii[bot]@users.noreply.github.com`.
+Worked instance 2026-08-04: the shared repo config was set with the app id, so
+the address resolved to no GitHub user at all. It surfaced on Vercel's
+deployment list as a three-warning cascade — "Invalid git email address" →
+"GitHub User: No matching user" → "Vercel Account: Unavailable" — because
+Vercel maps commit email → GitHub user → Vercel account and the chain broke at
+the first hop. Confirm the id from the API, never from prose:
+`gh api "users/jimbot-oakington-iii%5Bbot%5D" --jq .id`.
+
+- **Commits — author and committer are DIFFERENT identities** (owner ruling
+  2026-08-04). Git separates them precisely so a commit can say who
+  *authorised* the work and who *performed* it, and collapsing both onto the
+  agent throws the authority signal away:
+
+  - **committer** = the acting agent, `jimbot-oakington-iii[bot] <307435217+…>`,
+    from the clone's shared local `user.name` / `user.email` (below);
+  - **author** = the human on whose authority the work was done, passed
+    explicitly per commit:
+    `git commit --author="Jim Cresswell <1314980+jimCresswell@users.noreply.github.com>" -F <file>`.
+
+  The owner's framing: *"we are keeping the deploy as is… what we have here is
+  a failure to communicate, we need to tell Vercel on whose authority this work
+  was done."* The default stays FAIL-SAFE: `user.*` remains the bot, so a
+  forgotten `--author` yields a bot-authored commit (visible, honest, merely
+  unattributed to its authority) and never silently credits the owner with
+  agent work — the failure this rule exists to prevent. The `Co-Authored-By`
+  model trailer stays, so the acting model is named in the message body too.
+
+- **Identity config lives in the clone's shared local config** — `.git/config`,
+  written once with a plain `git config user.name …` / `user.email …` (owner
+  ruling 2026-08-04: *"keep the bot identity locally shared, not in version
+  control"*). One clone, one copy: every worktree inherits it, a newly created
+  worktree needs no identity step, and no per-worktree duplicate can survive a
+  correction to the shared value. A plain `git config user.*` write reaches
+  this scope even with `extensions.worktreeConfig` enabled, so the ordinary
+  command is the correct one.
+
+  Two scopes stay banned. **Version control** — never a tracked file, never an
+  `include.path` reaching one; the identity is machine state, not repository
+  content, and committing it would publish a per-machine value to every clone.
+  **Global** — `--global` reaches the owner's every other repository.
+
+  The consequence is deliberate: every commit made in this clone is
+  *committed by* the bot, the owner's own included. Authority is carried by
+  `--author` above, not by the config — which is exactly why git keeps the two
+  fields apart. Verify from any worktree with `git config user.email`; a
+  `--worktree`-scoped `user.*` override is a second copy of a single fact and
+  is removed with `git config --worktree --unset-all user.name` (likewise
+  `user.email`). The `Co-Authored-By` model trailer stays.
 - **PR creation, comments, review replies, thread resolution, merges**: a
   minted installation token exported as `GH_TOKEN` for the `gh` invocation.
   **Assign it first and stop if the mint fails** — never the
@@ -97,6 +139,37 @@ are cured by recreation, not rewrite — worked instance (2026-07-23): the
 MCP-132 pull request, opened under owner credentials, was closed and
 recreated under the bot identity on the same branch; the bot-authored commit
 and bot-token push were verified end-to-end the same hour.
+
+## Personal per-person ambient bots
+
+The shared team bot is not the only sanctioned identity. An individual may run
+their OWN GitHub App as a personal, machine-local ambient git identity for their
+own agent sessions — worked instance: `emgeebot-oakenfold[bot]` (App 4482842),
+wired on one maintainer's machine as the ambient commit-author and push
+credential for the `oak-open-curriculum-ecosystem` tree via a machine-local
+`includeIf` (2026-08-04). Its mechanics and key live only on that machine
+(`~/.config/<slug>/`), never in this repo.
+
+This does not weaken the shared-bot contract above; it refines the attribution
+model:
+
+- **Team surfaces use the shared bot.** Shared-repo PRs, doctrine changes,
+  merges, and any action taken as the team use `jimbot-oakington-iii[bot]` per
+  the mechanics above. A personal ambient bot is for an individual's own agent
+  work, not for acting as the team.
+- **A personal bot answers "whose agent did this".** The shared bot says "a
+  team agent did this"; a personal ambient bot says "this maintainer's agent
+  did this". Both keep agent work off the owner's personal identity — the
+  failure class this rule exists to prevent.
+- **Same guardrails, no exceptions.** A personal bot is machine-local (its key
+  exists only where its owner put it), least-privilege (`pull-request-work`,
+  repo-scoped installation tokens minted on demand), and MUST NEVER be added to
+  any ruleset bypass list — the bypass prohibition binds every bot identity
+  equally.
+- **Not a team default.** A personal ambient bot is one maintainer's local
+  configuration; it is never provisioned for, or assumed by, other machines or
+  seats. Agents running off that machine cannot use it, and no seat may treat
+  its absence as licence to fall back to owner credentials.
 
 ## Why
 

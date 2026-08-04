@@ -70,6 +70,12 @@ The remaining two are a one-line manifest gap and a posture decision.
    available as its own deliberate lane if the owner wants the behaviour; the graph tools'
    bounded-with-honest-totals pattern is the template. Owner-confirmed 2026-07-30 (card;
    the gate above is cleared).
+   *Premise truing (2026-08-03, upstream update lane):* the rationale's "full keyword set
+   today" example was overtaken by upstream — spec 0.7.x now server-paginates `/keywords`
+   (enforced default 20), so the paging arrived from upstream, not from us. The VERDICT
+   stands on its own grounds (we still never subtract capability in a hygiene lane; the
+   MCP-462 cure was disclosure-shaped: served paging guidance, not bounding); the example
+   is historical. Recorded by the MCP-462 alignment (PR #735).
 5. **MCP-442 — inventory truing** (class: record; no new work). COMPLETE: landed as
    `SHA:34f24834d` before this plan was authored, verified against the ticket's definition of
    done, and closed 2026-07-30 after roll-up PR 659 (merge `81fd98053`) put the truing commit

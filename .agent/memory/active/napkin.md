@@ -1528,6 +1528,57 @@ thread record's canary item gets trued when the differential test lands
 (its re-pin disposition is superseded for this class by the structural
 cure).
 
+## 2026-08-03 ~10:45Z (Birch holds Seedling/e48fe2): OWNER NOTE FOR LATER — upstream-update skills (verbatim)
+
+Owner, in-session at this seat: "note for later: the repo needs skills
+specifically for updating the upstream Oak Open Curriculum API spec and
+Bulk Download schema." Route: the sdk-codegen README §Responding to
+Upstream Spec Changes is the proven runbook substance for the API-spec
+half (followed exactly twice on 2026-08-03); the bulk half's substance
+accretes in the MCP-463 lane (ADR-222 truing + freshness contract). Skill
+authoring is post-embargo work — carried to the Director's doctrine/skill
+queue via the update-lane ARC channel; the MCP-462/463 PR records are the
+worked instances the skills should distil.
+
+## 2026-08-03 ~10:58Z (Birch holds Seedling/e48fe2): compaction-boundary instrument notes + the boundary record
+
+- CREDENTIAL-HELPER QUOTING TRAP (first-hand, cost one failed push): in
+  `GH_TOKEN="$t" git -c "credential.helper=!f() { ... password=$GH_TOKEN; }; f" push`,
+  the OUTER shell expands `$GH_TOKEN` inside the double-quoted -c argument at
+  composition time — when the prefix assignment has not yet populated the
+  outer shell — so the helper echoes an EMPTY password and auth fails with
+  "Invalid username or token". Cure: `export GH_TOKEN` first and SINGLE-QUOTE
+  the helper string so expansion happens in the helper's own shell (which
+  inherits git's env). Same silent-twin family as exit-codes: a right-shaped
+  command carrying an empty value. Candidate: the bot-identity rule's push
+  example could name the single-quote requirement explicitly.
+- `pnpm agent-tools:check-commit-message` takes `-F <file>` (or -m/stdin),
+  NOT a bare path argument (bare path = exit 2 usage error); and mint-token
+  under `pnpm --silent` still prints its "token expires" note to stderr —
+  capture with `2>/dev/null` for a clean single-line token.
+- BOUNDARY RECORD: owner measured this seat at 84% and called compaction
+  prep with a continue mandate ("both PRs all the way to validated and
+  merged; everyone else is stopping, you keep going"). The resume map is
+  the plan node `upstream-update-lane-completion` (delivery corpus, born
+  sketch, primary disk) + the upstream-api-alignment thread record's
+  2026-08-03 entry; claim 186e6899 retained; monitors stopped at owner
+  word after the final broadcasts; solo posture post-compaction (no
+  heartbeat consumer, no comms writers) until the fleet returns.
+- OWNER CLEARANCE at the boundary (~11:00Z, verbatim): "clear all wait
+  for owner legs now, I don't want to be blocking on any of this work
+  from this moment on." SUPERSEDES the ~09:05Z type-walkthrough contract
+  for this lane's remaining work and the activation pack's ruling-4
+  wait-legs: the MCP-463 truing executes autonomously (gateway reviewers
+  replace the co-design pass; ADR-222 authority ordering unchanged), and
+  the KeywordsResponseSchema promotion question is lane-adjudicable.
+  NOT unlocked by this (their own rationale is release-window
+  sequencing, not owner-wait): ADR-222 phase-2 derivation and the
+  invoker next-page signal stay post-release. The plan node and thread
+  record are re-trued to the cleared state. (Splice note, Director
+~10:58Z: this entry's concurrent append landed mid-paragraph inside the
+ratification entry above; the paragraph was restored content-preserving —
+two seats appending one buffer is the seam, disclosed here.)
+
 ## 2026-08-03 ~09:15Z (Magnetar/74d914): SEVEN OWNER CARD ANSWERS (all-open-questions batch, verbatim-critical)
 
 1. OVERRIDES (update lane): KEEP + re-pin sentinels — owner-ratified.
@@ -1665,3 +1716,778 @@ recurrence); the 4e5f1032 re-adopt failed behind a tail and read as done
 until the wrap's metaloss pass re-derived the holder first-hand (cure:
 adopt/verify output unpiped, verify the registry after every
 authority-affecting write).
+
+## 2026-08-03 ~11:15Z (Magnetar/74d914): DOOR-SHUT RESIDUE — P1 verdicts + local-only items for the successor branch
+
+Owner word: note the P1s and residue locally, no further PRs; we are done.
+
+FOLD-REVIEW P1/P2 VERDICTS (all six REAL, dispositions on the merged #714's
+resolved threads, verbatim there): (1) Cursor `tool:*` loader —
+bbdf09077 flipped seven `tool:*` wrappers to alwaysApply:false with
+description-based attachment; Cursor has no command-pattern loader, so
+RULES_INDEX's loader-contract wording has no Cursor implementation for
+`tool:*`; POLICY TRUE-UP AT RESUME (true the contract wording, or revert
+the seven — owner call). (2) skill-creator holdout-during-optimization,
+(3) skill-creator silent eval-worker failure, (4) skill-creator symlink
+packaging — all die with the owner-ruled deletion. (5) Parallax
+variant-ID duplicate check (non-string evasion), (6) Parallax
+graph_id-loss skip — join the three validator defects queued behind the #731
+cures (team-resume doc carries all five Parallax items).
+
+## 2026-08-03 ~11:20Z (Birch/e48fe2, post-compaction n=1): OWNER GATE REFINEMENT + preview-env defect
+
+- OWNER VERBATIM (mid-turn, 2026-08-03): "Landing the PRs is gated on the
+  validation and the skill creation, the todo list needs updating." The two
+  upstream-update skills (update-upstream-api-spec,
+  update-bulk-download-schema) move from interleave to MERGE GATE on the
+  lane's PRs; the UAT validation is likewise a named gate. Task list +
+  plan node re-trued at occurrence.
+- PREVIEW-ENV DEFECT (first-hand, Vercel runtime logs): #735's preview
+  500s on EVERY route — boot fails at
+  "invalid PostHog product-analytics configuration: pseudonym keyring
+  failed strict validation" (content-free by design,
+  product-analytics-config.ts). First occurrence 2026-07-31T22:18Z
+  PREDATES the PR; production alpha healthy. Cure is an owner-hands
+  Vercel Preview env correction of POSTHOG_PSEUDONYM_KEYRING (contract +
+  generation command in docs/operations/environment-variables.md);
+  UAT proceeds meanwhile against a local no-auth boot of the PR head.
+
+## 2026-08-03 ~11:50Z (Birch/e48fe2): owner-caught inference-as-fact in the preview diagnosis; re-analysis record
+
+Owner correction (verbatim substance): the local .env.local "only contains
+the preview values" — my transmitted claim "the stored Preview copy is
+mangled (differs from local)" rode the unexamined assumption that local
+and preview values were entered independently. Same class as
+dont-transmit-assumptions-as-truth: the claim left this seat without its
+derivation. Cure applied at occurrence: PR #735 comment PATCHed to carry
+established-vs-open parts explicitly. ESTABLISHED first-hand: failing
+guard is exactly parseKeyring (message text unique to that guard);
+env-level and pre-PR (first occurrence 2026-07-31T22:18Z); the intended
+value passes the REAL resolver locally (authed boot with posthog
+selected served traffic — impossible on refusal). OPEN: the byte-level
+defect class in the runtime-visible stored value (candidates: wrapping
+quotes, escaped JSON, smart quotes, literal \n escape inside a JSON
+string [legal JSON → newline in decoded key → regex fail], uppercase in
+id, duplicate/branch-scoped Preview entry; a Sensitive-marked var makes
+all of these invisible post-entry). Instrument ladder: owner dashboard
+eyes (checklist above) → content-free runtime diagnostic on a THROWAWAY
+probe branch (never the PR branch) → re-set-and-redeploy (cures without
+diagnosing). Vercel CLI on this machine is personal-account
+(engraph team only) — no team env pull available to agents.
+
+## 2026-08-03 ~12:30Z (Birch/e48fe2): the goal-hook × Practice clash (owner-diagnosed) + basic-mistakes inventory + seat handoff to Wyvern
+
+OWNER DIAGNOSIS (verbatim substance): "the `goal` mechanism was clashing
+with the Practice in a strange way... I cleared the goal and now you are
+working perfectly sensibly." Inside-view mechanism, confirmed from the
+seat: the /goal stop-hook is STANDING COMPLETION DRIVE ("do not stop
+until both PRs merged") — exactly the finish-line pressure
+metacognition.md names as the fluency-failure amplifier — and in an n=1
+session there is no peer brake. Behavioural evidence: the basic-mistake
+cluster below all fired inside the goal window; behaviour normalised at
+goal-clear. ROUTE (capture-practice-tool-feedback): harness goal-hooks
+need a Practice counterweight (pacing clause or a prohibition on
+standing goal-hooks in Practice sessions) — doctrine candidate for the
+Director/consolidation.
+
+BASIC-MISTAKES INVENTORY (owner-prompted "why?", one generator):
+
+1. cwd-stickiness recurrences (3+: doubled paths, false file-not-found,
+   wrong-package script resolution) — a KNOWN napkined trap applied by
+   vigilance, not structure.
+2. Keyring diagnosis transmitted inference-as-fact — and it was the
+   SILENT-TWIN class (query-the-value-never-the-lookalike): I validated
+   the LOCAL copy and spoke about the STORED value.
+3. Skill adapters hand-written BEFORE reading the corpus README that
+   says adapters are generator-emitted (caught, regenerated).
+4. Asked the owner to eyeball Vercel sensitive env values that are
+   secret-from-everyone by design — instrument proposed without
+   grounding the system's actual capability.
+5. "process.env restrictions apply only to tests" — INVENTED scoping
+   from a two-line grep; owner-corrected: raw process.env in product
+   code violates the validated-env boundary doctrine regardless of lint
+   mechanics. (The probe design carries this constraint forward.)
+
+Common generator: acting on a fluent model instead of grounding the
+system first, amplified by the goal-hook, unchecked in n=1.
+STRUCTURAL CURES adopted and transferred: (a) every Bash call
+cd-anchored absolute; (b) one grounding sentence naming the checked
+source BEFORE proposing any instrument; (c) "who owns/generates this?"
+BEFORE authoring any artefact class new this session; (d) the felt urge
+to keep moving at a finish line is itself the tripwire — slow the last
+moves.
+
+SEAT HANDOFF at owner word: Wyvern lifts Kindling (1da2b1) succeeds
+Birch holds Seedling (e48fe2). Full transfer in the
+upstream-api-alignment thread record (2026-08-03 handoff entry) + the
+plan node upstream-update-lane-completion (re-trued). Monitors stopped:
+15-min Matt-scan cron DELETED, local dev server STOPPED. PostHog
+preview issue NOT resolved at handoff — see the handoff entry for the
+established/open split and the granted probe instrument.
+OWNER CORRECTION (~13:00Z, verbatim substance): "disappointed that you
+would suggest turning a system off to deal with the fact that it is
+misconfigured." The sinks-removal reframe was a DISABLE-SHAPED cure —
+the no-change-freezes / configure-don't-disable / no-stopgaps class
+worn as a fresh look. Mechanism: the step-way-back prompt overswung
+from mechanism-descent PAST the correct frame into system-disabling
+(metacognition §Stance Under Correction: correcting on the last
+correction's direction, not the axis's principle). Corrected verdict
+enacted: FIX THE MISCONFIGURATION IN PLACE — content-free probe
+(granted) names the defect class → owner re-enters the keyring
+byte-faithfully → redeploy → one boot verifies; the reframe's only
+surviving yield is urgency calibration (near-zero preview-analytics
+utilisation), never the cure. Matt is covered meanwhile by the local
+validation evidence on #735.
+
+CORRECTION minutes later (owner word): NOT a shutdown — "do work in an
+n=2 pair with Wyvern, collaborate on this work, open an ARC channel."
+Birch CONTINUES; the transfer brief became the pair's shared-context
+opening in the ARC channel
+2026-08-03-upstream-lane-pair-birch-holds-seedling-wyvern-lifts-kindling.md;
+the cron/dev-server stops stand (re-armed on need); n=2 comms ceremony
+resumes (channel Monitor armed at this seat).
+
+## 2026-08-03 ~15:20Z (Birch/e48fe2): code-owner gate exemption (owner-directed, TEMPORARY MODE) + #738 agent review + five-step preview-gate plan ratified
+
+- RULESET EDIT executed at owner word ("for now we should exempt my id
+  and matt's from the codeowner requirement, otherwise he is going to
+  be stuck when I am not online"): ruleset 19395183 (Code-owner review
+  gate) gained User bypass actors jimCresswell (1314980) and mantagen
+  (12934669) alongside the two bot Integrations; PUT verified in the
+  response. Executed under the owner's ambient gh credential at his
+  explicit direction (admin scope is deliberately withheld from the
+  bot). TEMPORARY MODE with named revisit condition: revisit when a
+  second code-owner-capable review identity exists or at release
+  completion — whichever first; the exemption means owner/Matt PRs can
+  merge WITHOUT any code-owner review, so the compensating control is
+  the standing agent-review grant below.
+- STANDING GRANT (owner, saved to per-user memory): agents review
+  Matt's PRs on Jim's behalf, clearly agent-marked, bot identity;
+  surface if Matt insists on Jim personally. First exercise: PR #738
+  (retention 12mo→5y) APPROVED after three-surface consistency check +
+  estate-wide completeness sweep.
+- FIVE-STEP PREVIEW-GATE PLAN ratified in-conversation (owner-dictated,
+  exploration-refined): (1) ticket + fix PR making invalid deploy
+  config fail the BUILD (sensitive values ARE build-available — vendor
+  doc verified; Vercel check IS required — ruleset verified); (2) prove
+  the bite on the live broken env, owner or agent rotates the keyring,
+  merge; (3) add the new post-deploy check to the required list;
+  (4) GitHub-side deployment_status smoke (route to Wyvern);
+  (5) branch-scoped red-team proof. KEY FACT (owner): a PREVIOUS
+  DIRECTOR set the preview values Jul 29 — the entry path is in the
+  estate records (napkin archive 2026-07-30 window, MCP-241 trail,
+  vercel-environment-config doc) and a team-scoped agent write path
+  likely exists; records search + credential hunt open step 1, agent
+  rotation with FRESH minted key material preferred, owner in-place
+  Edit as fallback; boot-verify closes it either way.
+
+## 2026-08-03 ~16:15Z (Birch/e48fe2): #735 merge gate re-ruled — preview proof replaces Matt
+
+OWNER VERBATIM: "I don't think we should block 735 on Matt, but we
+should test the hell out of that preview to prove that a merge will
+not result in Matt being blocked." Supersedes the pass-to-Matt gate
+(same-day earlier word). New gate: FULL UAT matrix against the live
+preview (restored ~15:55Z after the owner's env repair; healthz 200,
+PRM + 401 correct, posthog accepted). Plan node re-trued. Preview
+restoration + MCP-475 arc recorded in the ticket + PR #735 comments.
+
+## 2026-08-03 ~17:00Z (Birch/e48fe2): COMPACTION WRAP #2 — two outages, four hardening nodes, and the session's dominant failure pattern
+
+### The pattern worth carrying (metacognition, owner-prompted twice)
+
+**I asserted mechanism from partial evidence at least four times in one
+session**, each time stating an inference as a fact and each time being
+corrected by the owner or by the record: (1) "the stored preview value is
+mangled" — I had validated the LOCAL copy and spoke about the STORED one
+(silent-twin, `query-the-value-never-the-lookalike`); (2) "process.env
+restrictions are tests-only" — invented from a two-line grep; (3) "the
+step sheet's placeholder was pasted" — a theory, written into a Linear
+ticket as root cause; (4) "recovery is instant, no deploy needed" —
+asserted, reversed, re-reversed. THE CURE IS ONE MOVE: when the
+authoritative surface (runtime logs, the code, the vendor doc) is
+unreadable, RESTORE ACCESS — never substitute inference. In the
+production incident the Vercel logs named the exact failing key the
+whole time; my token had expired, and instead of saying "I cannot see,
+fix that first" I theorised for thirty minutes and we cut a release on
+a wrong theory. Structural tripwire adopted: *about to state a
+mechanism? → have I read the authoritative surface in the last few
+minutes?* `verify-dont-trust` exists and was passively held, not fired.
+
+**Second pattern: verification scope narrower than change scope.** I
+asked the owner for an env change and verified only PREVIEW; the change
+touched PRODUCTION's row too, and took production down. Same shape as
+(1). Rule: verify every environment a change touches, not the one you
+were thinking about.
+
+**Third: speed costs shape.** The plan node was written fast to answer
+"is it visible?" and carried five real defects, all caught by Matt's
+agent, all accepted. Rushing an artefact to answer a question about the
+artefact is its own trap.
+
+### What happened (both outages, definitively diagnosed)
+
+- **Preview dead 5 days** (2026-07-31→08-03): a pseudonym-keyring value
+  failed strict validation; required `Vercel` check stayed green
+  because its predicate is "build+deploy completed" while the crash is
+  at first invocation. Cured by owner re-entry of machine-validated
+  values + redeploy; boot-verified.
+- **Production down ~13 min** (~15:45→15:58Z): the ACTIVE_KEY_ID split
+  DELETED the original env record and created two new ones.
+  **Deployments bind env by internal record ID, not by name** — the
+  running deployment held a dangling reference and saw the variable as
+  ABSENT while the dashboard showed two correct entries. It never
+  self-heals; a new deployment is required. The production build guard
+  cancels same-version redeploys, so recovery needed a release cut
+  (#744 → 1.146.2). Log evidence: `POSTHOG_PSEUDONYM_ACTIVE_KEY_ID is
+  required when posthog is selected`.
+- **Sentry finding (empirical)**: the error pipe WORKS (probe error
+  `Invalid JSON` landed in seconds, prod, release 1.146.3) but boot
+  failures are UNREPORTABLE BY CONSTRUCTION — `loadConfiguredApp`
+  resolves config BEFORE `createObservabilityOrThrow`, and Sentry is
+  built from that config. Zero Sentry events from either outage.
+
+### State at wrap (all first-hand)
+
+- **Both environments healthy**, boot-verified.
+- **Merged today**: #736 (skills), #744 (runbook/release), #738
+  (Matt's retention docs — needed owner approval; the User-type ruleset
+  bypass does NOT work, recorded on MCP-474).
+- **Open, mine**: #735 (spec alignment; Matt's agent found TWO REAL
+  generator defects — `maximum: 300` lost at the MCP input boundary,
+  and `oakUrl` advertised on keyword responses the runtime cannot
+  decorate; both cure at the GENERATOR, both need regression coverage);
+  #746 (four delivery nodes + env procedure, reworked after five
+  accepted findings, awaiting re-review).
+- **Open, Wyvern's**: #741, #742, #743, #745, #731 (#731 has
+  CHANGES_REQUESTED — routed to them on the ARC channel).
+- **Tickets**: MCP-475 (deploy gate), MCP-479 (version guard), MCP-480
+  (boot observability), MCP-481 (liveness) — all Urgent, all with
+  matching repo plan nodes. MCP-462/463 are the lane.
+- **Owner-held**: alert destination for monitor 1593267 (it has NO
+  ALERT — detection without notification); production key rotation +
+  shredding `tmp/jim-posthog-setup-steps.md` (plaintext prod key since
+  Jul 29).
+
+### Post-compaction restart
+
+Monitors/crons ALL STOPPED at owner word. Re-arm on resume: the 15-min
+Matt-scan cron (`check Linear and GitHub for messages from Matt…`), and
+a comms watcher if the pair is still live (Wyvern 1da2b1). Next work in
+order: MCP-479 (recovery floor — every future incident's cost depends
+on it), then #735's two generator cures, then MCP-480. The superseded
+`~/.claude/plans/synchronous-dancing-coral.md` is replaced by the four
+repo nodes — do not reopen it.
+
+LOCAL-ONLY RESIDUE riding the successor coordination branch at resume
+(owner-acknowledged, no further PRs at his word): this napkin's
+uncommitted delta (Birch's owner-note verbatim + the splice fix);
+Birch's resume-map files (.agent/plans/delivery/
+upstream-update-lane-completion.plan.md UNTRACKED + the
+upstream-api-alignment thread record's latest entries) — their
+substance is partially mirrored in PR #735's records and Birch's
+freeze broadcast; the abandoned preservation worktree
+.claude/worktrees/update-lane-resume-records (branch
+jimcresswell/update-lane-resume-records, zero commits, staged copies
+of those two files + two content-preserving lint reflows) — adopt or
+prune at resume. The primary checkout sits on the DEAD
+coordination/estate-2026-08-02 branch (merged 3fe18580c, remote
+deleted); the successor cuts fresh from main.
+
+## 2026-08-03 Lava lifts Brimstone — bare `gh pr create` rode the keyring again (MCP-473, PRs 739→740)
+
+Opened the MCP-473 PR with bare `gh pr create` from a fresh worktree; it rode the
+owner's keyring identity. Owner caught it live; cured per the bot-identity worked
+mechanics (mint-token assign-first, close #739, recreate #740 as the bot). Same shape
+as the 2026-07-31 instance (661→662) the rule already records. New observation worth
+keeping: the commit surface LOOKED safe (author/committer already the bot via the
+shared local config), and that safety did not transfer — commit identity and `gh`
+identity are separate credential surfaces; verifying one says nothing about the
+other. The credential-selection pause fires per WRITE per surface, not per session.
+
+## 2026-08-03 ~16:15Z (Wyvern lifts Kindling/1da2b1): OWNER WORD — branches carry at least draft PRs; adoption-failure capture
+
+Owner (2026-08-03, with the branches-page screenshot showing this seat's
+two PR-less pushes): "generally, I want branches to have at least draft
+PRs." Enacted at occurrence: draft PR #741 (mcp-463 build-ahead, stacked
+on the #735 branch, retarget-at-merge noted) + draft PR #742 (the live
+coordination branch — its fold PR, open as draft from the cut); the
+generalisation clause landed in worktree-hygiene §1 with the push-moment
+trigger and this worked instance; Enforcement section now names the
+pushed-branch-without-PR check as a live candidate.
+
+The metacognitive capture: worktree-hygiene §1 was LOADED at this seat
+all session and did not fire at either push — the seat conflated the
+final PR's merge-sequencing ("PR cuts off origin/main AFTER #735
+merges", from the plan node) with the visibility draft, which the rule
+explicitly separates (draft ≠ ready ≠ merge). Neither branch read as a
+"worktree lane" at push time (one was the coordination branch on the
+primary; one was a build-ahead), so the creation/first-commit triggers
+pattern-matched to nothing. Passive-guidance-loses-to-artefact-gravity,
+push edition; the cure is the trigger widened to the PUSH moment + the
+census check. Census at capture: two proven-merged stale refs
+(collab-sweep-2026-07-20, coordination/estate-2026-07-30-c — safe
+deletes at owner word) and four branches with unmerged commits needing
+§6 content dispositions (aip-131 snapshot, agent-operability map,
+commit-queue-sameagent, mcp-128 landing page, mcp-372 true-up —
+follow-up sweep, not blind PR wrappers).
+
+## 2026-08-03 ~17:30Z (Wyvern lifts Kindling/1da2b1): compaction-boundary captures
+
+- Piped-exit recurrences at this seat, three in one session with the warnings
+  loaded (a spurious `--` argv error read as a formatting failure through
+  tail; codegen's ELIFECYCLE behind tail; a lint count through grep) — every
+  one recovered in a single step via unpiped re-runs.
+  Recognition-speed-not-immunity, tally +3.
+- Append-only shared channels under dual-active load: three anchor-slip races
+  in one day (two at the peer seat, disclosed; one avoided here). Cure adopted
+  mid-session and held: shell heredoc APPEND for every entry on a live shared
+  append-only file; Edit-anchored insertion only on surfaces with a single
+  live writer.
+- Napkin fitness is CRITICAL (rotation due); disposition: the owner has the
+  dedicated-consolidation prompt open — the rotation belongs to that named
+  session, not to a compaction boundary at depth.
+- BOUNDARY RECORD: owner-called compaction prep at this seat (~17:25Z), n=2
+  with Birch live. Freeze record + in-flight ledger in the pair channel's
+  compaction entry (committed with this capture); monitors stopped at owner
+  word after the freeze broadcast; claims retained; seat resumes
+  post-compaction and recomputes from live surfaces.
+
+- **2026-08-03 16:35Z (Wyvern) — BST-mislabelled-as-Z timestamp drift**:
+  every hand-stamped "~HH:MMZ" I wrote in the pair channel today was
+  LOCAL BST (UTC+1) labelled Z — caught at resume when `date -u`
+  (16:33Z) read EARLIER than my freeze stamp ("~17:30Z"; freeze commit
+  `SHA:47c90a9` committer time 16:15:48Z). Cure applied: correction-of-
+  record entry in the channel; stamps from `date -u` only, never the
+  assumed clock. Class: hand-written timestamps are silent-twin values —
+  derive from the observable record (`date -u`, commit timestamps), same
+  discipline as query-the-value-never-the-lookalike.
+
+## 2026-08-03 Lava lifts Brimstone — session lessons (full versions pushed: adversarial-plan record on PR #745)
+
+- The ripgrep `-rn` flag-cluster typo (`-r` is --replace) fired the Bash
+  guard TWICE this session (+2 on six recorded instances); the guard bit
+  correctly both times; the spell-flags-separately habit is still not
+  automatic. (Meta: quoting the literal in this very entry fired the guard a
+  THIRD time through the heredoc — the substring matcher cannot tell a
+  mention from an invocation; recorded as a known limitation instance.)
+- `markdownlint --fix` silently rewrote wrapped doctrine prose (an
+  `ask`-plus-`log` continuation line became a `- log` bullet) — autofix over
+  meaning-dense prose needs a diff read before staging.
+- Source-direct guard premise falsified in adversarial round 1 (plan D11):
+  verification must walk the CLAIM's full dependency chain — probing Node
+  type-stripping said nothing about the import closure ending in dist-only
+  workspace exports.
+- Home: .agent/reports/agentic-engineering/claim-freshness-guard-adversarial-plan-record-2026-08-03.md
+
+- **2026-08-03 17:05Z (Wyvern) — case-glob suffix match does not anchor
+  URL authority**: `case "$url" in https://*.example.com)` ACCEPTS
+  `https://evil.com/x.example.com` — `*` in case patterns spans `/`,
+  `?`, `#`, `@`. Config-expert demonstrated an end-to-end merge-gate
+  bypass from this in preview-serves (hand-posted deployment STATUS
+  carries attacker environment_url past a deployment-creator gate).
+  Cure shape: reject any char outside `[a-zA-Z0-9.-]` in
+  `${url#https://}` BEFORE the family suffix match. Class: shell
+  pattern-match as security boundary needs a charset anchor, not just
+  a suffix; same family as the piped-exit-codes class (the tool's
+  cheap idiom is not the contract you meant).
+
+- **2026-08-03 ~22:40Z (Wyvern) — piped-exit tally +1 (git commit | tail)**:
+  `git commit -F msg | tail -3; echo EXIT:$?` reported 0 while the
+  pre-commit hook FAILED (prettier) — the echo read tail's exit; the
+  dependent push then also failed behind the same mask. Caught only by
+  the ls-remote state-read showing the ref unmoved. Same class, fourth
+  instance at this seat; the cure that held: redirect full output to a
+  scratch file, capture `rc=$?` on the next line, tail the FILE for the
+  human-readable half. Candidate for a hook/lint on `git commit ... |`
+  patterns if the class recurs again.
+
+- **2026-08-04 ~09:0xZ (Wyvern) — a crashed checker reported as a failed
+  check**: the pre-commit gate said "❌ Formatting issues found!" when
+  prettier had never run — its NESTED `pnpm exec` died on pnpm 11.20's
+  trusted-location check (PNPM_HOME points at ~/Library/pnpm; the binary
+  is at ~/Library/pnpm/bin/pnpm). Two lessons: (1) a gate that conflates
+  "checker crashed" with "check failed" sends every reader to the wrong
+  cure — worth a cure at the hook (distinguish non-zero-from-crash from
+  non-zero-from-finding); (2) my first diagnosis ("the branch pins a
+  broken pnpm beta") read ANOTHER SESSION'S uncommitted working-tree
+  edit as committed truth — the silent-twin class again, cured by
+  diffing HEAD vs the working tree before believing a config value.
+  Env fix that makes the gate RUN (never a bypass):
+  `PNPM_HOME="$HOME/Library/pnpm/bin"` prefixed to the command.
+
+- **2026-08-04 ~10:1xZ (Wyvern) — the adjacent-number trap, and a frame I
+  had wrong**: a config took `4352989` (the GitHub APP id) into the bot's
+  commit email where `307435217` (the BOT USER id) belongs — both numbers
+  sit in the same paragraph of the rule, one labelled "app". Address
+  resolved to no user; Vercel's email→GitHub-user→Vercel-account chain
+  broke at hop one. Class: when a doc names two ids of different kinds
+  near each other, the copy-target is ambiguous — tables beat prose, and
+  the value should be derived from the API (`gh api users/<login>` .id),
+  never transcribed. FRAME CORRECTION worth more than the bug: I read
+  this as a seat/billing gate and proposed buying a seat or decoupling
+  deploys. The owner reframed it as a COMMUNICATION failure — git already
+  separates author (authority) from committer (actor), and collapsing
+  both onto the agent destroys the signal downstream systems need. Ask
+  "what is this metadata trying to SAY?" before "how do I get around the
+  check?".
+
+## 2026-08-04T09:28Z (Birch/e48fe2): COMPACTION WRAP #3 — the day the instruments paid, and the claim-before-check pattern got its name
+
+### The pattern, now with a mechanism (owner-prompted twice: "complexity spiralling", "reflect")
+
+**I narrate a mechanism before I check it.** Four instances today, every one
+caught, every one by reaching for an instrument that was already within reach:
+
+1. "the paging feature is unusable / possibly release-blocking" — from ONE
+   client's behaviour. A second client (MCPJam) falsified it in three calls.
+2. "#748 is safe, and I can prove it without reading secrets" — the proof used
+   cross-field rules from a library schema the app does not consume. Matt's
+   reply falsified the premises.
+3. "that file was created three minutes ago, you're fixing it as we speak" —
+   from a misread `ls`. One `existsSync` call settled it.
+4. "costs nothing in the advertised contract" (MCP-487 TSDoc + PR body) —
+   Copilot falsified it; the live path IS the Zod conversion, and I had
+   already MEASURED the examples loss and then mis-attributed it as invisible.
+
+The diagnosis is not ignorance. A coherent story is cheaper and faster than a
+check, and I ship the story. #4 is the sharpest: I had the measurement in hand
+and narrated past it. **The tripwire that works: before any claim about a
+mechanism reaches a durable surface, name the instrument that proved it.** If
+the answer is "reasoning", it is not proven.
+
+Contrast that earns the point: yesterday the Vercel logs were unreadable (token
+expired) and I theorised for 30 minutes on a wrong theory. Today every check was
+reachable and every wrong claim died within minutes. **The variable is access,
+not discipline** — which argues for spending 30 seconds restoring an instrument
+over 30 minutes reasoning around its absence.
+
+### Second pattern: local justification without global assessment
+
+The owner felt it before I did ("complexity spiralling"). Chain: MCP-487 verified
+→ env check → guard defect → pnpm diagnosis → machine-local paths → FOUR commit
+attempts. Each link defensible; the chain never assessed. Fighting a toolchain
+four times to land a one-line fix should have triggered surface-and-ask by
+attempt two. Owner interventions each cost less than my next three steps.
+
+### Architectural debt found (the day's most valuable output)
+
+**One concern, two implementations, now contradicting.** The app builds
+`HttpEnvSchema` from `SentryEnvSchema.shape` — and `.shape` silently drops
+every `superRefine`. No type error, no failing test. Consequences escalate:
+rules vanish; duplicates drift (branch 5 exists twice, Matt confirms); and they
+now CONTRADICT — the library's `refineLegacySentryMode` rejects any non-empty
+`SENTRY_MODE` as retired, while `server.ts:147`/`index.ts:76` REQUIRE
+`SENTRY_MODE === 'sentry'` to install the error handler. `includes('sentry')`
+appears exactly ONCE in the repo — in the library file the app does not consume.
+A half-finished migration with both halves live: library = destination,
+app = origin.
+
+**Loaded accident**: someone retires `SENTRY_MODE` trusting the sink list, and
+production error reporting goes off silently — the thing you would use to notice
+anything else. Communicated to Matt on #748 with a suggested ordering constraint
+(never retire SENTRY_MODE before the app reads the sink list) and a structural
+cure: a library owning an invariant must export a parse function, not a schema
+whose `.shape` is publicly liftable.
+
+**Generalisable**: exporting shapes AND composed contracts invites consumers to
+take the fields and reimplement the rules. Graduation candidate.
+
+### State at wrap (all first-hand)
+
+- **#735 MERGED** (`d4f84947d`), live in production 1.147.0, proven
+  BEHAVIOURALLY: `limit:5000` → "Too big… <=300" from the live server.
+- **#741 MERGED** (`6bc704316`, Wyvern) — search-cli only, no deploy needed.
+  **Both spec/schema PRs are in.** Lane mandate complete.
+- **#737** cured (4 findings) + #746, #751 re-requested; Matt re-reviewed all
+  three at 08:32Z with CHANGES_REQUESTED — UNREAD, next session's first job.
+- **#752** (MCP-487) draft — design now in question per the Copilot finding
+  above; the layer is wrong, normalise at the request boundary instead.
+- **#754** pnpm resolver fix pushed (`b5d3d43cf`).
+- **#748 cleared for owner approval**; #747 too. Both need HIS click — only a
+  code owner discharges it, and Matt cannot approve his own.
+- Tickets raised: MCP-486 (oakUrl drift), MCP-487 (numeric sanitising).
+
+### Owner-held at wrap
+
+Approve #747/#748; authorise the preview MCP connection (Clerk) for #752;
+Sentry alert destination for monitor 1593267; production key rotation +
+shredding `tmp/jim-posthog-setup-steps.md`; and the observability-debt ticket.
+
+### Instrument notes worth keeping
+
+- Claude Code's MCP bridge **stringifies numeric tool arguments** — numeric
+  contracts cannot be exercised through it at all.
+- `mcpjam compat` covers 16 hosts but is CAPABILITY-based: it rated Claude Code
+  fine on tools while this bug was live. Not coverage for behaviour.
+- The pre-commit hook reports ANY non-zero from prettier-staged as "Formatting
+  issues found" — masking crash-class failures. Cost two agents time today.
+
+- **2026-08-04 (Wyvern) — the owner reframes, he rarely corrects**: twice in
+  one morning a competent answer of mine was at the wrong ALTITUDE, not
+  wrong on facts — the Vercel identity fix (I proposed buying a seat or
+  decoupling deploys; he said "it's a failure to communicate, tell Vercel
+  on whose authority") and the gate ledger (I would have written a better
+  list; he said "a ledger with a schema and a validator"). Both reframes
+  made the work SMALLER. Tell: an answer that arrives fluently is the
+  moment to ask what the thing is FOR, not to start building. Related:
+  a wrapper's summary is a lossy restatement — when wrapper and tool
+  disagree, the tool wins (cost me 20 min and a wrong action today).
+
+- **2026-08-04 (Birch) — access, not discipline, is what makes claims true**:
+  the sharpest lesson of two days. Yesterday the Vercel logs were unreadable
+  and a wrong theory survived thirty minutes and produced a release cut.
+  Today every check was reachable — a second MCP client, a schema read, one
+  `existsSync`, a live `tools/list`, my own session transcript — and every
+  wrong claim died within minutes. The variable was not care. **Spend thirty
+  seconds restoring an instrument rather than thirty minutes reasoning around
+  its absence.** The tripwire that follows: *before a mechanism claim reaches
+  a durable surface, name the instrument that proved it.* If the answer is
+  "reasoning", it is not proven yet.
+
+- **2026-08-04 (Birch) — the control that controlled nothing**: I ran preview
+  vs production as an A/B for MCP-487's string-coercion fix. Both returned 200.
+  I nearly wrote that up as "the fix works". It proved the opposite of what I
+  designed it to prove: the client had stopped sending strings, so neither arm
+  exercised the path. **A comparison only isolates a variable if you have
+  confirmed the variable still varies.** The instrument that settled it was my
+  own session transcript — Claude Code 2.1.220 at session open, 2.1.221 at
+  the restart, with 16 recorded instances of the error in between. Transcripts
+  are evidence about the harness, not just conversation. Consequence: MCP-487
+  buys nothing and costs `examples` on two params; recommended CLOSE.
+
+- **2026-08-04 (Birch) — a rule two careful reviewers miss in one hour is a
+  tooling gap**: Matt approved #754 at 09:26 and withdrew at 09:27 (threads
+  landed mid-review); I approved #748 at 09:59 and withdrew after finding a
+  Copilot finding from 09:43. `pr-comments-resolve-and-recheck` already says
+  to re-check. Both of us know it. Neither was reminded **at the moment the
+  verdict was submitted**, and a reviewer reading a diff for ten minutes is by
+  construction working from a stale thread list. MCP-496 raised. This is
+  `structure-over-vigilance` pointing at itself.
+
+- **2026-08-04 (Birch) — "never" in a doc is a measurable claim**: ADR-168 §5
+  said the vitest globs "never" cover `build-scripts/**`. Two workspaces opt
+  it in; 130 tests run from it in the MCP app alone. Meanwhile
+  `runtime-only-scripts/**` is covered by nothing, and §4's canonical tree
+  showed a unit test living there — 663 lines of assertions about the gate
+  guarding every production deploy that had **never executed once**. One
+  defect, both directions: the ADR *asserted* a configuration fact instead of
+  deriving it. Wyvern took it as D14 and it changed the gate ledger's design —
+  the derived half must recompute **test-file reachability**, not just script
+  invocation. A suite matched by no runner glob is a gate that does not exist,
+  and nothing reports it.
+
+- **2026-08-04 (Birch) — verify the subagent, especially when it agrees**:
+  the architecture review confirmed my SENTRY_MODE finding and **falsified**
+  my `.shape` claim — the app never composes `ObservabilityEnvSchema` at all,
+  so nothing is being dropped; the trap is armed and unfired. I had told Matt
+  `.shape` "caused this". It did not. I re-verified every load-bearing claim
+  by hand before transmitting, and found the agent's own grep list slightly
+  off (its `env-resolution` hit was a comment) — which strengthened rather
+  than weakened its point. Corrected on the PR.
+
+- **2026-08-04 (Birch) — check the live state before pricing the alarm**: I
+  wrote MCP-495 saying the dark-Sentry config "is the configuration the owner
+  asked us to prove works", which reads as *this is happening now*. It is not.
+  Production has been receiving errors all along — latest 08:38Z today, tagged
+  `release: 1.147.0`, stack frames resolved. Config-reading could not have
+  told me (values encrypted); **behaviour could**. The defect is real but
+  latent: nothing enforces the coupling, so we are one env edit from silence.
+  Urgent -> High. An alarm priced above its evidence spends the owner's
+  attention at the wrong moment.
+
+- **2026-08-04 (Birch) — slips that recur**: piped a `git commit` through
+  `tail` and read `tail`'s exit code as the commit's — the commit had NOT
+  landed. That is `exit-codes-in-band-never-piped`, which I have in memory,
+  violated while quoting other rules correctly. Also: the pnpm resolver bug
+  reproduced live in a worktree lacking the #754 fix, again reported as
+  "Formatting issues found!" — and once the resolver was pointed at
+  `$PNPM_HOME/bin`, the *real* Prettier failure appeared underneath. The
+  masking error hid a genuine one.
+
+- **2026-08-04 (Birch) — a gate can be green against an artefact that is
+  not the one shipping**: CI's `static-checks` went red on a push while my
+  local `format-check:root` passed on the same SHA. Both ran the identical
+  command. The difference: **local reads the working tree, CI reads the
+  commit.** `prettier --write` had fixed the file on disk, but the blob in
+  `HEAD` was still unformatted, so "my gate is green" was never evidence
+  about the thing being reviewed. The check that settles it is
+  `git show HEAD:<file> | prettier --check --stdin-filepath <file>` — assert
+  against the *committed* content, not the buffer. Generalises past
+  formatting: whenever a local and a remote gate disagree while running the
+  same command, suspect they are reading different objects before suspecting
+  the tool.
+
+- **2026-08-04 (Birch) — the contract nobody checks (MCP-499)**: the plan
+  skill states five REQUIRED body sections; no validator reads a single body
+  heading — `validate-plan-corpus` is frontmatter-only. Measured on section 4
+  alone: 8 of 31 delivery nodes and 5 of 5 strategic nodes missing it, while
+  the validator prints "OK (43 conformant)". Matt caught it by hand in review,
+  which is careful human attention doing a validator's job. Two things worth
+  keeping: a **100% violation rate is evidence about the RULE, not the corpus**
+  (5/5 strategic almost certainly means the contract's "every non-trivial
+  plan" is wrong, not that five authors erred) — so a validator built
+  straight from the text would encode a rule nobody intended; and a
+  never-built gate standing beside a real one, under a shared verdict, is
+  invisible at every level an invocation-site ledger models.
+
+- **2026-08-04 (Birch) — unmeasured estimates skew PESSIMISTIC, and that has a
+  cost too**: three instances inside ninety minutes, all reported to a
+  colleague before I measured, all worse than reality.
+
+  | claim I made | measured |
+  | --- | --- |
+  | ADR-168 conflict: "four overlapping hunks, a hand resolution coming" | 1 conflict hunk, 12 lines, only the status line |
+  | #749 entry-point check: "silent fail-open, defeats the guard's purpose" | fires correctly in the real wiring — his own smoke test killed it |
+  | #756: "was CLEAN, now BLOCKED" | never changed; `gh pr list` returns a stale `mergeStateStatus` |
+
+  I had been treating the verify-before-claiming reflex as protection against
+  **over**-claiming — saying a thing works when it does not. These are the
+  mirror image: saying a thing is broken, or expensive, when it is neither. The
+  cost is not smaller for being cautious-shaped. Each one would have spent
+  Matt's attention on a non-problem, and a reviewer who raises three false
+  alarms is a reviewer whose fourth finding gets discounted.
+
+  Mechanism in all three: I read a **summary** and described the underlying
+  thing — hunk headers instead of `git merge`, an isolated repro instead of the
+  real invocation, a bulk list instead of a per-item query. The summary is
+  always cheaper and always lossy in the pessimistic direction, because it
+  drops the reasons something might be fine.
+
+  The existing rule already covers the third one verbatim
+  (`read-verdicts-by-name-never-column-parse`) and I read the aggregate anyway.
+  Knowing a rule is not the same as its firing at the moment it applies — which
+  is the same lesson as MCP-496, one layer in.
+
+  Tripwire, extending the earlier one: *before a claim about SIZE or SEVERITY
+  reaches a colleague, name the instrument.* "I read the hunk headers" is not
+  "I ran the merge". Applies to good news and bad news equally; I had only been
+  applying it to good news.
+
+- **2026-08-04 (Birch) — a check's value is its COST TO RUN, not its
+  correctness**: the synthesis of a long window, and every ticket I raised
+  today turns out to be a version of it.
+
+  Three times a colleague's artefact falsified me within minutes, and each
+  time the artefact was *cheap*: Matt's 15-second smoke test killed my
+  entry-point theory; Copilot's automatic review killed "costs nothing in the
+  advertised contract"; his re-review caught my ADR amendment contradicting
+  its own section. Three more times I falsified myself, each with ONE command:
+  `git merge` (conflict was 1 hunk, not four), a per-item API query (#756
+  never changed state), a live `tools/list` (the Zod path is the served one).
+
+  Nothing about my reasoning improved between the wrong claim and the
+  correction. What differed was that a check was **within arm's reach**. On
+  2026-08-03 the Vercel logs were unreadable and a wrong theory survived
+  thirty minutes and produced a release cut. Same reasoner, worse instruments,
+  far worse outcome.
+
+  Read the day's tickets in that light and they are one ticket:
+  - **MCP-499** — a contract with no mechanism: cost-to-check is infinite, so
+    13 nodes drifted and a human did the validator's job in review.
+  - **MCP-496** — the recheck rule exists and two careful reviewers still
+    missed it in one hour: cost-to-check is "remember at the right moment",
+    which is not a mechanism.
+  - **D14 / ADR-168** — 663 lines of assertions matched by no runner glob:
+    cost-to-run was infinite because nothing ran them.
+  - **#754** — the resolver error surfaced as "Formatting issues found!":
+    cost-to-diagnose inflated by a lying message. It misdirected me AGAIN
+    this window, a fourth time, on my own napkin commit.
+
+  So the quality programme is not "add more checks". It is **make
+  falsification cheap, and make its absence loud** — which is exactly what a
+  gate ledger computes, and why the derived half must model reachability and
+  scope rather than existence.
+
+  The personal corollary: when I want to claim something, the question is not
+  "am I confident?" but **"what is the cheapest thing that would prove me
+  wrong, and have I run it?"** If that thing costs nothing and I skipped it,
+  confidence is not the issue — laziness dressed as judgement is.
+
+- **2026-08-04 (Galaxy) — the estate wrote today's diagnosis two weeks ago and
+  nothing ever read it back**: Quoll mends Lair's abandoned commit intent
+  (20 July, queue notes field) records the exact failure signature that consumed
+  this afternoon — a pnpm pin-vs-binary version drift on this machine, WITH
+  pnpm's own clear explanation of cause and fix, buried under the same lying
+  "Formatting issues found!" message. Nobody read it because no surface ever
+  reads failure notes back; the queue is write-only memory once an intent
+  abandons. Lesson at the seat: when a failure signature repeats, grep past
+  failure records for the signature BEFORE diagnosing fresh. Lesson for the
+  estate: a record that is only ever written is not knowledge; the gate-ledger
+  family (STATED vs CHECKED) applies to failure archives too. Exhibit for the
+  retrospective at owner word.
+
+- **2026-08-04 (Galaxy) — a 14-day-old queue row read as a living colleague by
+  two seats in one afternoon**: expired intents still render `phase: queued`;
+  Petrel and I both addressed Quoll (retired 20 July) as a live peer, and Petrel
+  asked it to announce itself. The claim-freshness pilot (MCP-476/ADR-223,
+  draft PR #745) is exactly the cure class for this — dated rows, clock-free
+  staleness — and it sits in draft. Interim discipline: before treating a
+  registry row as presence, read its dates; a queue row is not a seat.
+
+- **2026-08-04 (Galaxy) — one error message masked three different root causes
+  across two weeks**: "Formatting issues found!" covered corepack version drift
+  (July, Quoll's notes), the resolver path defect (#754), and the store-binding
+  purge (today). A gate that reports its guess instead of its evidence trains
+  operators to distrust it and invents fresh wrong theories per incident. #754
+  cured one layer; the class belongs with MCP-492 (tool output is the
+  interface): failing gates must surface the underlying command's actual
+  output, never a category guess.
+
+- **2026-08-04 (Galaxy) — the author of the defect-class report re-enacted the
+  class four times within the hour**: claim-close summary written before the
+  verdict was read ("commit landed" — it had not); a "recovery watch armed"
+  that never was; "#754's defect blocks this gate" without checking the fix was
+  already in-tree (it was); a usage message read as a persistent failure (my
+  own malformed argv). Mechanism: claims written under self-generated urgency
+  before their checks ran. The felt urge to keep moving IS the tripwire;
+  name-the-instrument applies to one's own records first. Owner's brake was
+  exogenous three times — crickets now arm at real cycle boundaries at this
+  seat; an unarmed cricket is the tell the executor has taken over.
+
+- **2026-08-04 (Galaxy) — everything wrong today was fast, everything right was
+  slow**: two stacked workarounds normalised fleet-wide in ~15 minutes on
+  vendor error text quoted as authorisation; the corrections (Birch's MCP-498
+  pushback, the owner's three one-line rulings, Petrel's measured root-cause)
+  were all slow and all right. Nobody set a deadline; the urgency was
+  self-generated — the queue became the self, exactly as the wake-up prior
+  predicts. No-speed-pressure is not a nicety; it is the estate's error-rate
+  control.
+
+## 2026-08-04 ~14:0xZ (Petrel holds Turbulence, a0892f) — succession-day captures; owner rulings verbatim; week-off extrication
+
+- **Owner rulings at this seat, verbatim substance, all 2026-08-04**: (1) "of
+  course relying on CI=true is a bypass" (fleet-relayed; MCP-498 rewrite must
+  never read it as the remedy); (2) "Don't merge Matt's PRs for him, ever, but
+  do review and if appropriate approve" — answers Birch's standing-ruling
+  question with NO; merge is Matt's own act; applies to mantagen AND
+  emgeebot-oakenfold[bot] (per-user memory updated); (3) "if it's tracked it's
+  not bloody local... it's shared between ALL copies, that is what tracked
+  means" — kills the tracked-descriptor "reading B" in the D7 synthesis
+  (event 97b6ba5c); instance expectations live with the INSTANCE (forge
+  variable/settings store), the repo carries portable mechanism + tier only;
+  (4) extrication: Matt received bypass permissions 2026-08-03 and merges his
+  own commits; the fleet withdraws from his surfaces for the week — "the more
+  we do the more we risk creating a situation where we are blocking".
+- **pnpm store-binding root cause** (chain + instruments: event a0585e7e;
+  confirmed by Wyvern with own instruments): PNPM_HOME re-point derived a
+  second store (`pnpm store path` proves derivation), rebound two trees;
+  default-env runs then demanded a destructive purge; CI=true auto-confirmed
+  it. Primary self-healed 13:29Z (canonical rebinding); last corrupted tree
+  mcp-463-bulk-truing is clean+merged = prunable. Doctrine fix landed in
+  set-up-worktree-lane §Failure-shapes (this commit).
+- **Session lesson (owner-prompted STOP + metacognition)**: tempo defeats
+  discipline the way missing access does — every rule I bent I held in memory
+  while the comms stream defined my cycle boundaries as "the next event", so
+  no boundary ever looked like one and Cricket never fired. The day's three
+  incidents (store binding, strata question, PDR-135 double-mint) are ONE
+  mechanism: instance-local state leaking into shared substrates. Also: the
+  Director seat sat empty all day and nobody flagged the absence — the
+  damping seat missing IS the anomaly, not the resonance. Full reflection in
+  the session; graduation candidates ride the owner-queued dedicated
+  consolidation.
+- **#748 read for the record** (review NOT submitted — extrication): current
+  head c6aefcadb is sound; the MCP-356 DoD fork is closed by owner-directed
+  strengthening (Sentry actively live: sink + SENTRY_MODE=sentry + DSN, every
+  environment, accumulating issues); tests pin the false-marker case; the
+  app/library SENTRY_MODE contradiction is the known half-finished migration,
+  made LOUDER (not worse) by this PR. Nothing blocking found.

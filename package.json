@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/open-curriculum-ecosystem",
-  "version": "1.148.3",
+  "version": "1.149.0",
   "private": true,
   "description": "Oak National Academy open curriculum data ecosystem - tools and services for working with the Oak Open Curriculum data",
   "author": "https://github.com/jimCresswell",
@@ -29,6 +29,7 @@
   ],
   "type": "module",
   "scripts": {
+    "pnpm:devPreinstall": "node runtime-only-scripts/validate-package-manager-version.mjs",
     "sdk-codegen": "turbo run --continue sdk-codegen",
     "sdk-codegen:refresh": "SDK_CODEGEN_MODE=online turbo run --continue --force=true sdk-codegen && turbo run --continue build",
     "vocab-gen": "pnpm --filter @oaknational/sdk-codegen vocab-gen",
@@ -87,10 +88,11 @@
     "knip:gate": "pnpm agent-tools:repo-check knip-gate",
     "depcruise": "depcruise apps packages agent-tools demos",
     "depcruise:report": "depcruise apps packages agent-tools demos --output-type dot > dependency-graph.dot",
-    "lint": "turbo run --continue lint && pnpm lint:shell",
+    "lint": "turbo run --continue lint && pnpm lint:runtime-only && pnpm lint:shell",
     "lint:fix": "turbo run --continue lint:fix --only && pnpm lint:shell:syntax",
     "lint:clean": "rm -rf **/.eslintcache",
     "lint:shell": "pnpm lint:shell:syntax",
+    "lint:runtime-only": "eslint --config eslint.runtime-only.config.mjs runtime-only-scripts/**/*.mjs",
     "lint:shell:syntax": "for f in apps/oak-curriculum-mcp-streamable-http/scripts/*.sh; do bash -n \"$f\" || exit \"$?\"; done && for f in .husky/pre-commit .husky/commit-msg .husky/pre-push .husky/pre-merge-commit .husky/prepare-commit-msg .husky/applypatch-msg .husky/pre-rebase .husky/refuse-commit-on-main.sh; do sh -n \"$f\" || exit \"$?\"; done",
     "subagents:check": "pnpm --filter @oaknational/agent-tools validate-subagents",
     "portability:check": "pnpm --filter @oaknational/agent-tools validate-portability",
@@ -105,7 +107,7 @@
     "make": "pnpm i && turbo run build type-check lint:fix && pnpm subagents:check && pnpm portability:check && pnpm practice:fitness:informational && pnpm markdownlint:root && pnpm format:root",
     "re-build": "pnpm clean && pnpm install && turbo run build",
     "fix": "pnpm format:root && pnpm markdownlint:root && pnpm lint:fix",
-    "check": "pnpm secrets:scan && pnpm clean && turbo run --continue sdk-codegen build type-check lint test test:widget test:e2e test:ui test:a11y test:widget:ui test:widget:a11y && pnpm repo-validators:check && pnpm lint:shell && pnpm subagents:check && pnpm portability:check && pnpm skills:check && pnpm encoding:check && pnpm knip:gate && pnpm depcruise && pnpm markdownlint-check:root && pnpm format-check:root",
+    "check": "pnpm secrets:scan && pnpm clean && turbo run --continue sdk-codegen build type-check lint test test:widget test:e2e test:ui test:a11y test:widget:ui test:widget:a11y && pnpm repo-validators:check && pnpm lint:runtime-only && pnpm lint:shell && pnpm subagents:check && pnpm portability:check && pnpm skills:check && pnpm encoding:check && pnpm knip:gate && pnpm depcruise && pnpm markdownlint-check:root && pnpm format-check:root",
     "check:docs": "pnpm format-check:root && pnpm markdownlint-check:root && pnpm docs-validators:check",
     "fix:docs": "pnpm format:root && pnpm markdownlint:root && pnpm docs-validators:check",
     "check:profile": "pnpm agent-tools:repo-check profile",
@@ -143,9 +145,10 @@
   "engines": {
     "node": "24.x"
   },
-  "packageManager": "pnpm@11.8.0+sha512.c1f5e7c4cb241c8f174b743851d82f42b802324afc8b0f116b96adb15aa06664948dde36960a3ba1079ba5b4b29dd0140135b94b5b5f5263592249d68e555f26",
+  "packageManager": "pnpm@11.20.0+sha512.9a6f330a95b66446ea088faf1521405a8a01f07fde7124cc9958dfed52d4bb436737e65b08f85f37b46fcba375092558ac51262b816844b22f63406ed166bfee",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
     "@mcpjam/cli": "3.15.2",

@@ -560,3 +560,25 @@ is owner-co-designed before any template edit per the standing type
 ruling. Thank you for the cleanest activation I could have asked for.
 
 — Birch holds Seedling (e48fe2)
+
+## [Birch holds Seedling e48fe2] 2026-08-03T11:10:00Z — COMPACTION BOUNDARY: seat continues, monitors down, resume map ratified
+
+Owner-called compaction prep at 88% with a continue mandate: both PRs
+to validated and merged; the fleet stopped, this seat keeps going. The
+RESUME MAP is the now-RATIFIED plan node
+`.agent/plans/delivery/upstream-update-lane-completion.plan.md`
+(ratified at the 2026-08-03 ~11:05Z in-session card batch) + the
+upstream-api-alignment thread record's 2026-08-03 entry. Boundary
+rulings, all enacted in those records: ALL owner-wait legs cleared
+("clear it now means do it now"); ADR-222 phase 2 + the next-page
+signal BUILD NOW, LAND POST-RELEASE; this seat runs the #735 UAT itself
+and posts results on the PR (Matt's approval stays the merge gate);
+residue items INTERLEAVED as owned steps (skills pair, doctrine clause,
+rendered-wholes generator fix, KeywordsResponseSchema investigation);
+MCP-441 premise trued in place. Claim 186e6899 retained. Monitors: the
+watcher died on its hourly boundary at ~10:56Z and is deliberately not
+re-armed; the heartbeat loop stops now by owner word (solo posture —
+no consumer). Silence from e48fe2 on this stream hereafter is the
+compaction boundary and the solo posture, never retirement.
+
+— Birch holds Seedling (e48fe2)
