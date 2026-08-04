@@ -9,7 +9,7 @@ import {
 import { RELEASE_ENVIRONMENTS } from '@oaknational/build-metadata';
 import { isValidHostHeader } from './host-header-validation.js';
 import { productAnalyticsEnvFields, refineProductAnalyticsEnv } from './env-product-analytics.js';
-import { refineClerkKeyLocality } from './env-clerk-guards.js';
+import { refineCanonicalHostRequired, refineClerkKeyLocality } from './env-clerk-guards.js';
 
 const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 
@@ -171,9 +171,11 @@ export const HttpEnvSchema = BaseEnvSchema.superRefine((data, ctx) => {
     return;
   }
 
-  // Auth is enabled: keys must be present (below) AND, in production,
-  // live-realm keys (MCP-143 Guard 1a).
+  // Auth is enabled: keys must be present (below); in production they must be
+  // live-realm keys (MCP-143 Guard 1a) and CANONICAL_HOST must be set
+  // (MCP-143 Guard 3).
   refineClerkKeyLocality(data, ctx);
+  refineCanonicalHostRequired(data, ctx);
 
   if (!data.CLERK_PUBLISHABLE_KEY) {
     ctx.addIssue({

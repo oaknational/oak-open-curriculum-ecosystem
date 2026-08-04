@@ -54,3 +54,39 @@ export function refineClerkKeyLocality(data: ClerkKeyLocalityData, ctx: z.Refine
     });
   }
 }
+
+interface CanonicalHostData {
+  readonly CANONICAL_HOST?: string;
+  readonly VERCEL_ENV?: string;
+}
+
+/**
+ * Canonical-host requirement in production (MCP-143 Guard 3).
+ *
+ * In production `CANONICAL_HOST` is mandatory. Without it the
+ * self-description surfaces (RFC 9728 protected-resource metadata, RFC 8414
+ * authorization-server metadata, the RFC 8707 resource URL, and the
+ * `WWW-Authenticate` `resource_metadata` pointer) derive per request from the
+ * incoming Host, so every Vercel alias or preview URL that can reach the
+ * origin mints its own OAuth resource identifier — a client then holds a token
+ * bound to one identifier and is challenged for another. Requiring it makes
+ * the canonical origin a single configured value. Callers gate on auth being
+ * enabled before invoking this — with the middleware absent there is no
+ * resource identifier to pin.
+ */
+export function refineCanonicalHostRequired(data: CanonicalHostData, ctx: z.RefinementCtx): void {
+  if (data.VERCEL_ENV !== RELEASE_ENVIRONMENTS.production) {
+    return;
+  }
+
+  if (!data.CANONICAL_HOST) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['CANONICAL_HOST'],
+      message:
+        'CANONICAL_HOST is required in production. Without it every deployment ' +
+        'alias would mint its own OAuth resource identifier; set it to the ' +
+        'canonical production host.',
+    });
+  }
+}

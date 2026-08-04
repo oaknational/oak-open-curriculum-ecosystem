@@ -22,6 +22,15 @@ const withLiveClerkKeys = {
   CLERK_SECRET_KEY: 'sk_live_123',
 };
 
+// A minimal VALID production environment: live-realm keys (Guard 1a) plus a
+// canonical host (Guard 3). Any fixture that asserts a production env is
+// accepted must include both.
+const withProdEnv = {
+  ...withLiveClerkKeys,
+  VERCEL_ENV: 'production' as const,
+  CANONICAL_HOST: 'www.thenational.academy',
+};
+
 describe('Environment Schema', () => {
   it('requires CLERK_PUBLISHABLE_KEY when auth enabled', () => {
     const result = HttpEnvSchema.safeParse(baseEnv);
@@ -244,8 +253,8 @@ describe('Clerk key-format locality (production)', () => {
     }
   });
 
-  it('accepts live keys in production', () => {
-    const result = HttpEnvSchema.safeParse({ ...withLiveClerkKeys, VERCEL_ENV: 'production' });
+  it('accepts a valid production environment (live keys + canonical host)', () => {
+    const result = HttpEnvSchema.safeParse(withProdEnv);
     expect(result.success).toBe(true);
   });
 
@@ -255,6 +264,34 @@ describe('Clerk key-format locality (production)', () => {
       expect(result.success).toBe(true);
     }
     // unset VERCEL_ENV (local, non-Vercel) also passes
+    expect(HttpEnvSchema.safeParse(withClerkKeys).success).toBe(true);
+  });
+});
+
+describe('CANONICAL_HOST required in production (Guard 3)', () => {
+  // In production, CANONICAL_HOST is mandatory when auth is enabled: without
+  // it, per-request Host derivation lets every Vercel alias mint its own OAuth
+  // resource identifier. See MCP-143 spec Guard 3.
+  it('rejects a production environment without CANONICAL_HOST when auth is enabled', () => {
+    const result = HttpEnvSchema.safeParse({ ...withLiveClerkKeys, VERCEL_ENV: 'production' });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CANONICAL_HOST');
+    }
+  });
+
+  it('accepts a production environment with CANONICAL_HOST set', () => {
+    const result = HttpEnvSchema.safeParse(withProdEnv);
+    expect(result.success).toBe(true);
+  });
+
+  it('does not require CANONICAL_HOST outside production — preview, development, and unset pass', () => {
+    expect(HttpEnvSchema.safeParse({ ...withClerkKeys, VERCEL_ENV: 'preview' }).success).toBe(true);
+    expect(HttpEnvSchema.safeParse({ ...withClerkKeys, VERCEL_ENV: 'development' }).success).toBe(
+      true,
+    );
     expect(HttpEnvSchema.safeParse(withClerkKeys).success).toBe(true);
   });
 });
@@ -379,8 +416,7 @@ describe('PostHog product-analytics selection (OBSERVABILITY_SINKS)', () => {
 
   it('rejects posthog as the only sink in production — product analytics is not a diagnostic sink', () => {
     const result = HttpEnvSchema.safeParse({
-      ...withLiveClerkKeys,
-      VERCEL_ENV: 'production',
+      ...withProdEnv,
       OBSERVABILITY_SINKS: '["posthog"]',
       ...validPostHogVars,
     });
@@ -393,8 +429,7 @@ describe('PostHog product-analytics selection (OBSERVABILITY_SINKS)', () => {
 
   it('accepts posthog alongside a diagnostic sink in production', () => {
     const result = HttpEnvSchema.safeParse({
-      ...withLiveClerkKeys,
-      VERCEL_ENV: 'production',
+      ...withProdEnv,
       OBSERVABILITY_SINKS: '["sentry","posthog"]',
       ...validPostHogVars,
     });
