@@ -48,6 +48,26 @@ export function createUnauthenticatedMcpAuthClerkDeps(): CreateMcpAuthClerkDeps 
 }
 
 /**
+ * Clerk auth dependencies where `getAuth` reports an AUTHENTICATED
+ * `oauth_token` context but `verifyClerkToken` rejects it (returns
+ * `undefined`), so the MCP auth middleware still responds HTTP 401.
+ *
+ * Models the negative-token classes whose rejection Clerk performs at
+ * verification time rather than at `getAuth` — notably a wrong-resource token
+ * on the opaque path, where `validateResourceParameter` returns `valid: true`
+ * unconditionally (resource-parameter-validator.ts) so the audience binding
+ * rests solely on Clerk. This proves the middleware's 401 + `WWW-Authenticate`
+ * handling when verification fails; it does NOT prove Clerk enforces the
+ * rejection (that is owner-held live evidence).
+ */
+export function createVerifyRejectsMcpAuthClerkDeps(): CreateMcpAuthClerkDeps {
+  return {
+    getAuth: () => createFakeMachineAuthObject({ isAuthenticated: true }),
+    verifyClerkToken: () => undefined,
+  };
+}
+
+/**
  * Creates a mock RuntimeConfig for E2E tests.
  *
  * When `dangerouslyDisableAuth` is true, Clerk keys are omitted.
