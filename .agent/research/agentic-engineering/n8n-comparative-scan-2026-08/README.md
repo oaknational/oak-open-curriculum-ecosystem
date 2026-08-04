@@ -1,8 +1,8 @@
 ---
 title: 'Comparative scan of a mature workflow-automation organism for Practice learning'
 type: research-index
-status: active
-stage: 'Tranche 1: source boundary, structural cartography, and initial hypotheses'
+status: complete
+stage: 'Source scan, independent Practice diagnosis, evidence register, and source-independent synthesis complete'
 date: 2026-08-04
 audience: 'Practice maintainers and reviewers interested in agentic engineering, coordination, memory, feedback, extension, governance, and system evolution'
 subject: 'A source-safe comparative investigation using the public n8n repository to reveal possible improvements, reductions, refusals, and preserved strengths in the Practice'
@@ -10,23 +10,21 @@ related:
   - .agent/directives/principles.md
   - .agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md
   - docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md
-  - .agent/reports/external-organising-and-stakeholder-surfaces-review-2026-07-13.md
+  - ../../../reports/agentic-engineering/practice-systemic-capabilities-2026-08/README.md
 ---
 
 # Comparative scan for Practice learning
 
-> **Active research.** This index records a staged comparative investigation. The eventual
-> Practice-facing report will be understandable without knowledge of n8n. Source-facing material
-> remains in this research companion so that claims are traceable without allowing the source
-> system's vocabulary, package topology, or implementation to become the architecture of the
-> Practice.
+> **Research complete; proposals remain review-only.** The source-facing evidence and independent
+> diagnosis live here. The Practice-facing report is organised entirely in Practice vocabulary and
+> remains understandable without knowledge of the comparative source.
 
 ## Purpose
 
 Use observation of a mature workflow-automation system as a lens through which to examine the
 Practice across multiple scales and dimensions.
 
-The governing question is:
+The governing question was:
 
 > Across all relevant scales and dimensions, what does comparative observation reveal about
 > capabilities, relationships, feedback loops, boundaries, and evolutionary arrangements that the
@@ -34,97 +32,101 @@ The governing question is:
 > preserve, or consciously refuse?
 
 The work is not a code review, implementation study, reimplementation brief, or attempt to make the
-Practice resemble n8n. It studies pressures, concepts, relationships, seams, lifecycles,
-feedback, clustering, and cross-scale arrangements.
+Practice resemble n8n. It studies pressures, concepts, relationships, seams, lifecycles, feedback,
+clustering, and cross-scale arrangements.
 
 ## Research estate
 
 | Artefact | Role | Status |
 | --- | --- | --- |
-| [Method and source boundary](method-and-source-boundary.md) | Defines the licensing-safe method, evidence classes, and transformation from source observation to original Practice analysis | Tranche 1 complete |
-| [Structural observations](tranche-1-structural-observations.md) | First cartography of recurring arrangements and initial Practice hypotheses | Tranche 1 complete |
-| `tranche-2-lifecycles-and-coordination.md` | Definition/execution, activation, scheduling, queueing, task-running, event, retry, cancellation, retention, and replay lifecycles | Planned |
-| `tranche-3-extension-governance-and-evolution.md` | Extension membranes, testing ecology, observability, security, contribution governance, migrations, compatibility pressure, and forgetting | Planned |
-| `comparative-diagnosis.md` | Practice-by-Practice diagnosis: absent, nascent, fragmented, underpowered, well matched, overdeveloped, misplaced, counterproductive, valuable and distinct, or unknown | Planned |
-| `evidence-register.md` | Finding-to-source traceability with confidence, alternative interpretation, and context-difference notes | Planned |
-| `.agent/reports/agentic-engineering/practice-systemic-capabilities-2026-08/` | Source-independent synthesis, outcome portfolio, interaction graph, transition sequencing, and falsifiers | Planned final synthesis |
+| [Method and source boundary](method-and-source-boundary.md) | Licensing-safe method, evidence classes, excluded material, transformation discipline, and final review gate | Complete |
+| [Tranche 1 — structural observations](tranche-1-structural-observations.md) | Semantic authority, projections, boundaries, agent operations, testing, communication, and cross-scale structural hypotheses | Complete |
+| [Tranche 2 — lifecycles and coordination](tranche-2-lifecycles-and-coordination.md) | Intent, occurrence, attempt, actor, evidence, waiting, recovery, cancellation, retention, and distributed coordination | Complete |
+| [Tranche 3 — extension, governance, and evolution](tranche-3-extension-governance-and-evolution.md) | Extension membrane, trust, testing ecology, observability, compatibility pressure, migration, security, and forgetting | Complete |
+| [Comparative diagnosis](comparative-diagnosis.md) | Independent OCE classification: absent, nascent, fragmented, underpowered, well matched, overdeveloped, misplaced, counterproductive, valuable and distinct, or unknown | Complete |
+| [Evidence register](evidence-register.md) | Finding-to-OCE and source traceability, evidence classes, confidence, contradiction register, and negative evidence | Complete |
+| [Source-independent Practice report](../../../reports/agentic-engineering/practice-systemic-capabilities-2026-08/README.md) | Main synthesis in Practice terms | Complete; proposed for review |
+| [Outcome portfolio](../../../reports/agentic-engineering/practice-systemic-capabilities-2026-08/outcome-portfolio.md) | Additive, connective, subtractive, preservative, and refusal outcomes with dependencies and evidence gates | Complete; proposed for review |
+| [Interaction and transition map](../../../reports/agentic-engineering/practice-systemic-capabilities-2026-08/interaction-and-transition-map.md) | Dependency graph, sequencing, anti-sequence, expected deletions, and smallest coherent experiment | Complete; proposed for review |
+| [Evaluation and falsifiers](../../../reports/agentic-engineering/practice-systemic-capabilities-2026-08/evaluation-and-falsifiers.md) | Measures, kill conditions, privacy constraints, and minimum evidence before ratification | Complete; proposed for review |
 
-## Research tranches
+## Principal finding
 
-### Tranche 1 — source boundary and structural cartography
+The Practice is not mainly short of concepts, rules, or governance. It is unusually advanced in
+canonical content, memotype/phenotype separation, identity, liveness, state/memory contracts,
+provenance, forgetting, AX, plan authority, and seam-specific compatibility.
 
-- establish the licence and attribution boundary;
-- identify high-level responsibility clusters;
-- inspect canonical registries and their projections;
-- inspect architectural enforcement and agent-facing operational surfaces;
-- record early hypotheses without promoting them to recommendations.
+The central weakness is **operational discontinuity**: correct concepts are embodied in many
+operational, human, machine, host, and external projections, but the relationships proving those
+embodiments remain aligned are incomplete or depend on repeated agent procedure.
 
-### Tranche 2 — lifecycles, state, and distributed coordination
+The keystone proposal is a thin portable lifecycle connecting:
 
-Trace representative concepts through time and across process boundaries:
+```text
+ratified intent or standing rule
+    → concrete obligation
+    → attempt lineage
+    → bounded actor authority
+    → durable evidence
+    → waiting / correction / cancellation / recovery
+    → terminal account
+    → audience-specific projections
+    → consolidation, retention, and forgetting
+```
 
-- workflow definition, validation, persistence, activation, execution, observation, retry,
-  cancellation, retention, and pruning;
-- control-plane and execution-plane communication;
-- task-runner containment and failure diagnosis;
-- event publication, storage, replay, and user steering;
-- agent planning, execution, memory, human approval, and deterministic verification loops.
+It is not a central orchestrator or new source of truth. Its success is subtractive: it must allow
+current instructions, status fields, duplicate indexes, manual reconstruction, and defensive gates
+to disappear.
 
-### Tranche 3 — extension, governance, testing, observability, and evolution
+## Direct contradiction discovered
 
-- extension registration, discovery, versioning, trust, and distribution;
-- testing as a composable system-environment ecology;
-- architecture fitness functions and change-impact selection;
-- product telemetry, operational observability, and evidence transport;
-- security and public-repository information boundaries;
-- migration, compatibility, deprecation, and historical residue;
-- commercial/community and licensed/unlicensed seams, without examining excluded source.
+The scan found one current projection mismatch that demonstrates the broader diagnosis:
 
-### Tranche 4 — Practice diagnosis and synthesis
+- accepted PDR-094 and current collaboration conventions require pass-level absorption evidence,
+  no per-event disposition ledger, and no archive curation obligation;
+- `.agent/state/README.md` still describes a permanent archive with a `manifest.jsonl` disposition
+  row per event.
 
-For each meaningful finding, classify the Practice state and possible direction:
+The research records but does not repair this unrelated operational drift. It is the recommended
+worked example for any projection-convergence experiment.
 
-- introduce;
-- strengthen;
-- connect;
-- relocate;
-- simplify;
-- constrain;
-- reduce;
-- stop;
-- preserve;
-- refuse;
-- investigate.
+## Important findings of non-absence
 
-The final synthesis will include interactions and sequencing. An addition that makes three existing
-surfaces unnecessary is not one additive recommendation; it is a transition in the topology of the
-Practice.
+The scan did **not** support claims that the Practice lacks:
 
-## Initial cross-cutting signal
+- state/memory separation;
+- canonical content and platform adapters;
+- liveness semantics;
+- forgetting and provenance;
+- provider-neutral telemetry intent;
+- strict local replacement and explicit external compatibility;
+- capacity to amend, supersede, retire, or refuse.
 
-The first pass suggests a recurring arrangement more important than any individual package:
+Several source observations therefore became preservation findings or evidence that the Practice
+should remain deliberately different.
 
-> A semantic definition is placed in one canonical surface; human-facing, machine-facing, runtime,
-> and governance projections are derived from or checked against it; specialised transports and
-> consumers remain outside the definition layer.
+## Source boundary
 
-Examples under investigation include telemetry definitions and their catalogue, shared API
-contracts, agent-skill sources and harness links, database-schema checks, package-boundary checks,
-and test capability declarations. The Practice already contains related ideas — generated schema
-flow, canonical skills, memotype/phenotype separation, and repo-owned intent — so the research must
-determine whether this is a genuinely missing capability, a unifying name for fragmented existing
-capabilities, or merely a useful external confirmation.
+The source-facing work:
 
-## Required caution
+- reads only the public `master` branch;
+- excludes `.ee` directories and `.ee.` files;
+- does not reproduce code, schemas, prompts, tests, configuration, diagrams, or implementation;
+- uses paths, links, public architectural descriptions, and independently formulated abstractions;
+- keeps source evidence out of the organising structure of the main report;
+- treats third-party components and public-product compatibility as contextual rather than reusable
+  Practice architecture.
 
-No finding is a recommendation merely because it is visible in a successful system. Each finding
-must identify:
+See [method-and-source-boundary.md](method-and-source-boundary.md) for the complete contract.
 
-1. the pressure it appears to answer;
-2. whether the Practice experiences the same pressure;
-3. differences in obligations and freedoms;
-4. current Practice evidence;
-5. benefits and harms at each affected scale;
-6. a falsifier;
-7. whether the right response is adoption, adaptation, connection, reduction, refusal, or no
-   change.
+## Review posture
+
+The final report is deliberately proposal-status. Before any broad ratification it asks for:
+
+1. one completed projection-convergence repair;
+2. one historical episode modelled through the proposed lifecycle;
+3. one live bounded experiment;
+4. one interruption/recovery and stale-actor scenario;
+5. measured AX and coordination-cost comparison;
+6. explicit deletions or retirements caused by the new capability;
+7. owner judgement that the conceptual gain warrants the vocabulary and maintenance cost.
