@@ -21,10 +21,15 @@ It complements, rather than replaces:
 
 ### Proposal syntheses
 
-Proposal-status, **explicitly non-doctrine**: these two documents propose and
-argue; they do not decide anything. Their analysis-and-integration was routed
-2026-08-02.
+Proposal-status, **explicitly non-doctrine**: these documents propose and
+argue; they do not decide anything.
 
+- [practice-systemic-capabilities-2026-08/README.md](./practice-systemic-capabilities-2026-08/README.md)
+  — source-independent systemic diagnosis of how the Practice can connect
+  durable intent, concrete obligations, attempts, actor authority, evidence,
+  projection, learning, and forgetting; accompanied by an outcome portfolio,
+  interaction/transition map, and falsifiable evaluation programme; produced
+  from a separately retained source-safe comparative research estate
 - [governed-forgetting-and-temporally-governed-authority-2026-08-02.md](./governed-forgetting-and-temporally-governed-authority-2026-08-02.md)
   — cross-disciplinary synthesis of how retained history can lose operational
   eligibility without losing evidence, with current-Practice mapping, worked
