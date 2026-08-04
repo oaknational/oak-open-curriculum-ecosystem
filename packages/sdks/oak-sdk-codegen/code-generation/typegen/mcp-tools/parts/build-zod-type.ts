@@ -31,6 +31,39 @@ function buildNumericBoundSuffix(meta: ParamMetadata): string {
 }
 
 /**
+ * Wrap a numeric flat-schema type so a string-encoded number is accepted
+ * (MCP-487).
+ *
+ * Real MCP clients send numeric tool arguments as JSON strings — Claude Code's
+ * bridge does, verified against live production on 2026-08-04, where the same
+ * call succeeds with `limit: 25` and fails with `limit: "25"`. The server is
+ * right and the client is not, but the MCP surface has to work on every major
+ * host, so the boundary normalises the REPRESENTATION and never the
+ * CONSTRAINT: the bound stays inside the wrapper and still rejects a coerced
+ * value that is out of range.
+ *
+ * Only strings matching a plain decimal are converted. Everything else —
+ * `"abc"`, `""`, `"0x10"`, `"Infinity"`, `null`, `true`, `[]` — passes through
+ * untouched and fails the inner schema with its ordinary message. This is why
+ * `z.coerce.number()` is unsuitable: it is `Number(value)` underneath, which
+ * silently turns `""`, `null` and `[]` into `0` and `true` into `1`, masking
+ * precisely the errors that must keep failing.
+ *
+ * Applied in the flat MCP context only. The nested SDK schema is called from
+ * typed code, where a string genuinely is a defect and should fail loudly.
+ *
+ * Costs nothing in the advertised contract: tool descriptors publish the
+ * hand-built `toolInputJsonSchema`, not a Zod conversion, so the `examples`
+ * that Zod drops from transforming schemas never reach a client from here.
+ *
+ * @param inner - the numeric Zod expression, bounds included
+ * @returns the same expression wrapped in a guarded `z.preprocess`
+ */
+function buildNumericStringSanitiser(inner: string): string {
+  return String.raw`z.preprocess((val) => typeof val === 'string' && /^-?\d+(\.\d+)?$/.test(val) ? Number(val) : val, ${inner})`;
+}
+
+/**
  * Build a Zod type string from parameter metadata.
  *
  * Generates Zod schema strings that include:
@@ -77,9 +110,11 @@ export function buildZodType(
       case 'string':
         base = 'z.string()';
         break;
-      case 'number':
-        base = `z.number()${buildNumericBoundSuffix(meta)}`;
+      case 'number': {
+        const numeric = `z.number()${buildNumericBoundSuffix(meta)}`;
+        base = context === 'flat' ? buildNumericStringSanitiser(numeric) : numeric;
         break;
+      }
       case 'boolean':
         base = 'z.boolean()';
         break;

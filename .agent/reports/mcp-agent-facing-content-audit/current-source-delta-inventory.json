@@ -1220,7 +1220,7 @@
     },
     {
       "file": "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts",
-      "semanticSha256": "3fd17c0fa37d9f59b4ee037db515f6f43c4cfc8313a819fe73b6bbd401ef241b",
+      "semanticSha256": "441c9d21be7c612b8b246f05c849fdd7ad2cb8afc42d2b83d656a166ea51d8af",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
@@ -1319,7 +1319,7 @@
     },
     {
       "file": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-key-stages-subject-lessons.ts",
-      "semanticSha256": "554d3e3f41e4d821a7e0b2395cb32c4a21467ab91257af7861350b7c19a19c2d",
+      "semanticSha256": "f74f1ffc7baa146a3f773b1bdae2717bd9d83cefdf47d7b62d7f3724c01afbae",
       "itemIds": [
         "C511",
         "C512",
@@ -1334,7 +1334,7 @@
     },
     {
       "file": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-key-stages-subject-questions.ts",
-      "semanticSha256": "2f77d32057c1c1706aec8ac5d6e3167daf18765062ffb7ca8c42d3f65121e4aa",
+      "semanticSha256": "22672b664fc9003bdebbf2f8d45cf6e4938601ce02c4a10dfb4bdb9a1fc0830e",
       "itemIds": [
         "C521",
         "C522",
@@ -1371,7 +1371,7 @@
     },
     {
       "file": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-keywords.ts",
-      "semanticSha256": "88f9e98e4eeb2e06fab48de2f0e0065cd80369986065b75af7ad9fd846e84a8a",
+      "semanticSha256": "19c6ecd4fd8df7c5eaa1ad5673e51ee2f5ada13f0e534e48d543c7b79a8d9b0d",
       "itemIds": [
         "C543",
         "C544",
@@ -1430,7 +1430,7 @@
     },
     {
       "file": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-programmes-assets.ts",
-      "semanticSha256": "395c3888826019f420ead335d3e26420d64a16a653b44af2f707fe8973ed547b",
+      "semanticSha256": "fbea34eacdb1f2513ccfc77f43ebf72b139778ad8736aa51c925f89cdd3dba2e",
       "itemIds": [
         "C577",
         "C578",
@@ -1446,7 +1446,7 @@
     },
     {
       "file": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-programmes-questions.ts",
-      "semanticSha256": "881950578216e7f48cd5fc70ceb996ab7f3a1c78b5c764f97c8752a72ab9a7ab",
+      "semanticSha256": "42172412c2548a9bf6dc4cea41b411ed71b3386036c8fb5bed9e6868aa2490c3",
       "itemIds": [
         "C588",
         "C589",
@@ -1495,7 +1495,7 @@
     },
     {
       "file": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-sequences-questions.ts",
-      "semanticSha256": "ec5e84391a4873eec7bd02d138d475d2ac9650104ed6996c7aa2b4a303ede01e",
+      "semanticSha256": "4b389e16b0628b919cc6d30a1d75fb46bcbd3c815e58fef59adc76eb915f10cd",
       "itemIds": [
         "C619",
         "C620",

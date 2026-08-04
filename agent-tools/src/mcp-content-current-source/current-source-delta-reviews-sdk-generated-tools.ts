@@ -22,7 +22,7 @@ export const SDK_GENERATED_TOOLS_DELTA_REVIEWS: Readonly<Record<string, CurrentS
         'C510',
       ]),
     'packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-key-stages-subject-lessons.ts':
-      reviewed('554d3e3f41e4d821a7e0b2395cb32c4a21467ab91257af7861350b7c19a19c2d', [
+      reviewed('f74f1ffc7baa146a3f773b1bdae2717bd9d83cefdf47d7b62d7f3724c01afbae', [
         'C511',
         'C512',
         'C514',
@@ -34,7 +34,7 @@ export const SDK_GENERATED_TOOLS_DELTA_REVIEWS: Readonly<Record<string, CurrentS
         'C520',
       ]),
     'packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-key-stages-subject-questions.ts':
-      reviewed('2f77d32057c1c1706aec8ac5d6e3167daf18765062ffb7ca8c42d3f65121e4aa', [
+      reviewed('22672b664fc9003bdebbf2f8d45cf6e4938601ce02c4a10dfb4bdb9a1fc0830e', [
         'C521',
         'C522',
         'C524',
@@ -62,7 +62,7 @@ export const SDK_GENERATED_TOOLS_DELTA_REVIEWS: Readonly<Record<string, CurrentS
         'C542',
       ]),
     'packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-keywords.ts':
-      reviewed('88f9e98e4eeb2e06fab48de2f0e0065cd80369986065b75af7ad9fd846e84a8a', [
+      reviewed('19c6ecd4fd8df7c5eaa1ad5673e51ee2f5ada13f0e534e48d543c7b79a8d9b0d', [
         'C543',
         'C544',
         'C546',
@@ -106,7 +106,7 @@ export const SDK_GENERATED_TOOLS_DELTA_REVIEWS: Readonly<Record<string, CurrentS
         'C576',
       ]),
     'packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-programmes-assets.ts':
-      reviewed('395c3888826019f420ead335d3e26420d64a16a653b44af2f707fe8973ed547b', [
+      reviewed('fbea34eacdb1f2513ccfc77f43ebf72b139778ad8736aa51c925f89cdd3dba2e', [
         'C577',
         'C578',
         'C579',
@@ -119,7 +119,7 @@ export const SDK_GENERATED_TOOLS_DELTA_REVIEWS: Readonly<Record<string, CurrentS
         'C587',
       ]),
     'packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-programmes-questions.ts':
-      reviewed('881950578216e7f48cd5fc70ceb996ab7f3a1c78b5c764f97c8752a72ab9a7ab', [
+      reviewed('42172412c2548a9bf6dc4cea41b411ed71b3386036c8fb5bed9e6868aa2490c3', [
         'C588',
         'C589',
         'C591',
@@ -156,7 +156,7 @@ export const SDK_GENERATED_TOOLS_DELTA_REVIEWS: Readonly<Record<string, CurrentS
         'C618',
       ]),
     'packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-sequences-questions.ts':
-      reviewed('ec5e84391a4873eec7bd02d138d475d2ac9650104ed6996c7aa2b4a303ede01e', [
+      reviewed('4b389e16b0628b919cc6d30a1d75fb46bcbd3c815e58fef59adc76eb915f10cd', [
         'C619',
         'C620',
         'C621',

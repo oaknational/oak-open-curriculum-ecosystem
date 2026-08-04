@@ -3,6 +3,12 @@ import { buildZodType, buildZodFields } from './build-zod-type.js';
 import type { ParamMetadata } from './param-metadata.js';
 
 /**
+ * MCP-487 — flat numeric params are wrapped so a string-encoded number from a
+ * real MCP client is accepted, without relaxing the bound inside.
+ */
+const FLAT_NUMERIC_GUARD = String.raw`z.preprocess((val) => typeof val === 'string' && /^-?\d+(\.\d+)?$/.test(val) ? Number(val) : val, `;
+
+/**
  * Unit tests for buildZodType and buildZodFields functions.
  *
  * These tests verify that Zod type strings are generated correctly from
@@ -176,7 +182,7 @@ describe('buildZodType', () => {
         required: true,
       };
 
-      expect(buildZodType(meta, 'size', 'flat')).toBe('z.number()');
+      expect(buildZodType(meta, 'size', 'flat')).toBe(`${FLAT_NUMERIC_GUARD}z.number())`);
     });
   });
 
@@ -204,7 +210,7 @@ describe('buildZodType', () => {
         example: 50,
       };
       expect(buildZodType(meta, 'offset', 'flat')).toBe(
-        'z.number().describe("Offset for pagination").meta({ examples: [50] })',
+        `${FLAT_NUMERIC_GUARD}z.number()).describe("Offset for pagination").meta({ examples: [50] })`,
       );
     });
 
@@ -260,7 +266,7 @@ describe('buildZodType', () => {
         required: false,
         maximum: 300,
       };
-      expect(buildZodType(meta, 'limit', 'flat')).toBe('z.number().lte(300)');
+      expect(buildZodType(meta, 'limit', 'flat')).toBe(`${FLAT_NUMERIC_GUARD}z.number().lte(300))`);
     });
 
     it('emits .gte() for a minimum', () => {
@@ -270,7 +276,7 @@ describe('buildZodType', () => {
         required: false,
         minimum: 1,
       };
-      expect(buildZodType(meta, 'limit', 'flat')).toBe('z.number().gte(1)');
+      expect(buildZodType(meta, 'limit', 'flat')).toBe(`${FLAT_NUMERIC_GUARD}z.number().gte(1))`);
     });
 
     it('emits .gte() before .lte() when both bounds are present', () => {
@@ -281,7 +287,9 @@ describe('buildZodType', () => {
         minimum: 1,
         maximum: 300,
       };
-      expect(buildZodType(meta, 'limit', 'flat')).toBe('z.number().gte(1).lte(300)');
+      expect(buildZodType(meta, 'limit', 'flat')).toBe(
+        `${FLAT_NUMERIC_GUARD}z.number().gte(1).lte(300))`,
+      );
     });
 
     it('chains bounds before .describe() and .meta()', () => {
@@ -294,7 +302,7 @@ describe('buildZodType', () => {
         maximum: 300,
       };
       expect(buildZodType(meta, 'limit', 'flat')).toBe(
-        'z.number().lte(300).describe("Limit the number of keywords").meta({ examples: [20] })',
+        `${FLAT_NUMERIC_GUARD}z.number().lte(300)).describe("Limit the number of keywords").meta({ examples: [20] })`,
       );
     });
 
@@ -455,5 +463,99 @@ describe('buildZodFields', () => {
     expect(buildZodFields(entries, 'flat')).toEqual([
       'unit: z.string().describe("Unit filter").meta({ examples: ["word-class"] }).optional()',
     ]);
+  });
+});
+
+/**
+ * MCP-487 — numeric arguments arrive as strings from real clients.
+ *
+ * Claude Code's MCP bridge encodes numeric tool arguments as JSON strings.
+ * Verified against live production 2026-08-04: an independent client sending
+ * `limit: 25` as a number succeeds, while `limit: "25"` is refused with
+ * "expected number, received string". The server is correct and the client is
+ * not, but the MCP surface has to work on every major host, so the flat input
+ * schema normalises the REPRESENTATION without ever relaxing the CONSTRAINT.
+ *
+ * `z.coerce.number()` is deliberately not used: it is `Number(value)`
+ * underneath, so `""`, `null` and `[]` become `0` and `true` becomes `1` —
+ * masking exactly the errors that must keep failing.
+ *
+ * Flat context only. The nested SDK schema is called from typed code, where a
+ * string genuinely is a defect and should fail loudly.
+ */
+describe('buildZodType — numeric input sanitising for MCP clients (MCP-487)', () => {
+  const NUMERIC_STRING_GUARD = FLAT_NUMERIC_GUARD;
+
+  it('wraps a plain numeric flat parameter so a string-encoded number is accepted', () => {
+    const meta: ParamMetadata = {
+      typePrimitive: 'number',
+      valueConstraint: false,
+      required: false,
+    };
+    expect(buildZodType(meta, 'offset', 'flat')).toBe(`${NUMERIC_STRING_GUARD}z.number())`);
+  });
+
+  it('keeps the bound INSIDE the wrapper, so a coerced value is still range-checked', () => {
+    const meta: ParamMetadata = {
+      typePrimitive: 'number',
+      valueConstraint: false,
+      required: false,
+      maximum: 300,
+    };
+    expect(buildZodType(meta, 'limit', 'flat')).toBe(`${NUMERIC_STRING_GUARD}z.number().lte(300))`);
+  });
+
+  it('chains .describe() and .meta() outside the wrapper', () => {
+    const meta: ParamMetadata = {
+      typePrimitive: 'number',
+      valueConstraint: false,
+      required: false,
+      description: 'Limit the number of keywords',
+      example: 20,
+      maximum: 300,
+    };
+    expect(buildZodType(meta, 'limit', 'flat')).toBe(
+      `${NUMERIC_STRING_GUARD}z.number().lte(300)).describe("Limit the number of keywords").meta({ examples: [20] })`,
+    );
+  });
+
+  it('leaves the nested SDK schema strict — a string there is a real defect', () => {
+    const meta: ParamMetadata = {
+      typePrimitive: 'number',
+      valueConstraint: false,
+      required: false,
+      maximum: 300,
+    };
+    expect(buildZodType(meta, 'limit', 'nested')).toBe('z.number().lte(300)');
+  });
+
+  it('does not wrap an enum base, whose accepted set is already fixed', () => {
+    const meta: ParamMetadata = {
+      typePrimitive: 'number',
+      valueConstraint: true,
+      required: false,
+      allowedValues: [1, 2, 3],
+    };
+    expect(buildZodType(meta, 'tier', 'flat')).toBe('z.enum([1, 2, 3] as const)');
+  });
+
+  it('does not double-wrap the year parameter, which has its own preprocess', () => {
+    const meta: ParamMetadata = {
+      typePrimitive: 'number',
+      valueConstraint: false,
+      required: false,
+    };
+    const result = buildZodType(meta, 'year', 'flat');
+    expect(result).toContain('String(val)');
+    expect(result).not.toContain('Number(val)');
+  });
+
+  it('does not wrap non-numeric flat parameters', () => {
+    const meta: ParamMetadata = {
+      typePrimitive: 'string',
+      valueConstraint: false,
+      required: false,
+    };
+    expect(buildZodType(meta, 'unit', 'flat')).toBe('z.string()');
   });
 });

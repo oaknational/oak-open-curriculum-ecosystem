@@ -28,7 +28,10 @@ describe('buildFlatMcpZodObject', () => {
       // Assert: Should generate flat Zod object string with .describe() for documented params
       expect(result).toContain('z.strictObject({');
       expect(result).toContain('q: z.string().describe("Search query")');
-      expect(result).toContain('limit: z.number().optional()');
+      // MCP-487: flat numeric params are wrapped so string-encoded numbers are accepted.
+      expect(result).toContain(
+        String.raw`limit: z.preprocess((val) => typeof val === 'string' && /^-?\d+(\.\d+)?$/.test(val) ? Number(val) : val, z.number()).optional()`,
+      );
       expect(result).not.toContain('params');
       // Note: 'query' appears in the description, so we check for nested structure indicator instead
       expect(result).not.toContain('query:');
