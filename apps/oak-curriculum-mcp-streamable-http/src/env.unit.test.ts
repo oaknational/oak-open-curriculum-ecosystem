@@ -296,6 +296,82 @@ describe('CANONICAL_HOST required in production (Guard 3)', () => {
   });
 });
 
+describe('production-detection corroboration (VERCEL_ENV unset)', () => {
+  // MCP-143 security-expert item 1: the production guard family must not
+  // silently no-op if a genuine Vercel production deployment boots with
+  // VERCEL_ENV unset. A Vercel deploy (VERCEL='1') carrying a canonical host
+  // but missing VERCEL_ENV is treated as production; local (VERCEL unset) and
+  // preview are not.
+  it('rejects a test publishable key on a Vercel deploy missing VERCEL_ENV but carrying CANONICAL_HOST', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...baseEnv,
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_live_123',
+      VERCEL: '1',
+      CANONICAL_HOST: 'www.thenational.academy',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CLERK_PUBLISHABLE_KEY');
+    }
+  });
+
+  it('permits test keys locally even with CANONICAL_HOST set — VERCEL unset is not production', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      CANONICAL_HOST: 'www.thenational.academy',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('does not treat preview as production even with VERCEL=1 and CANONICAL_HOST set', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      VERCEL: '1',
+      VERCEL_ENV: 'preview',
+      CANONICAL_HOST: 'www.thenational.academy',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a test key on a Vercel deploy missing VERCEL_ENV even when CANONICAL_HOST is also absent', () => {
+    // The residual the CANONICAL_HOST conjunct would have left open: a real
+    // deploy that lost VERCEL_ENV and has no canonical host must still fail
+    // closed rather than boot against the Clerk development realm.
+    const result = HttpEnvSchema.safeParse({
+      ...baseEnv,
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_live_123',
+      VERCEL: '1',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CLERK_PUBLISHABLE_KEY');
+    }
+  });
+
+  it('rejects DANGEROUSLY_DISABLE_AUTH=true on a Vercel deploy missing VERCEL_ENV', () => {
+    // Highest-severity: a deployment that lost VERCEL_ENV must not be able to
+    // disable auth. isDeployedEnvironment treats VERCEL=1 + VERCEL_ENV-absent
+    // as deployed, so the valve is blocked.
+    const result = HttpEnvSchema.safeParse({
+      ...baseEnv,
+      DANGEROUSLY_DISABLE_AUTH: 'true',
+      VERCEL: '1',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('DANGEROUSLY_DISABLE_AUTH');
+    }
+  });
+});
+
 describe('PostHog product-analytics selection (OBSERVABILITY_SINKS)', () => {
   const ZERO_KEY = Buffer.alloc(32, 0).toString('base64url');
   const validPostHogVars = {

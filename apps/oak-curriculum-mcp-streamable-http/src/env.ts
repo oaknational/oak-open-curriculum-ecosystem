@@ -6,10 +6,14 @@ import {
   OakApiKeyEnvSchema,
   SentryEnvSchema,
 } from '@oaknational/env';
-import { RELEASE_ENVIRONMENTS } from '@oaknational/build-metadata';
 import { isValidHostHeader } from './host-header-validation.js';
 import { productAnalyticsEnvFields, refineProductAnalyticsEnv } from './env-product-analytics.js';
-import { refineCanonicalHostRequired, refineClerkKeyLocality } from './env-clerk-guards.js';
+import {
+  isDeployedEnvironment,
+  isDeployedProduction,
+  refineCanonicalHostRequired,
+  refineClerkKeyLocality,
+} from './env-clerk-guards.js';
 
 const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 
@@ -99,6 +103,7 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
 interface ProductionSafetyData {
   readonly DANGEROUSLY_DISABLE_AUTH?: string;
   readonly TEST_ERROR_SECRET?: string;
+  readonly VERCEL?: string;
   readonly VERCEL_ENV?: string;
 }
 
@@ -109,17 +114,14 @@ interface ProductionSafetyData {
  */
 function refineProductionSafety(data: ProductionSafetyData, ctx: z.RefinementCtx): boolean {
   // Deployment safety: DANGEROUSLY_DISABLE_AUTH must NEVER be true in a
-  // DEPLOYED environment — production OR preview (MCP-143 Guard 1b). A
-  // VERCEL_ENV that is set and is not `development` is an internet-reachable
-  // Vercel deployment; disabling auth there exposes an unauthenticated MCP
-  // endpoint. Only `development` and an unset VERCEL_ENV (a local, non-Vercel
-  // run) may use the valve. This makes misconfiguration a hard startup
-  // failure rather than a silent bypass.
-  if (
-    data.DANGEROUSLY_DISABLE_AUTH === 'true' &&
-    data.VERCEL_ENV !== undefined &&
-    data.VERCEL_ENV !== RELEASE_ENVIRONMENTS.development
-  ) {
+  // DEPLOYED environment — production OR preview (MCP-143 Guard 1b). Any
+  // internet-reachable Vercel deployment disabling auth exposes an
+  // unauthenticated MCP endpoint. Only `development` and a local, non-Vercel
+  // run may use the valve. `isDeployedEnvironment` also catches a Vercel
+  // deploy that lost VERCEL_ENV, so the valve cannot be smuggled onto a
+  // deployment by dropping that one variable. This makes misconfiguration a
+  // hard startup failure rather than a silent bypass.
+  if (data.DANGEROUSLY_DISABLE_AUTH === 'true' && isDeployedEnvironment(data)) {
     ctx.addIssue({
       code: 'custom',
       path: ['DANGEROUSLY_DISABLE_AUTH'],
@@ -135,7 +137,9 @@ function refineProductionSafety(data: ProductionSafetyData, ctx: z.RefinementCtx
   // The /test-error route exists for diagnostic capture validation;
   // production has no need for it and a misconfigured secret would
   // expose a controlled-throw surface to the public internet.
-  if (data.TEST_ERROR_SECRET && data.VERCEL_ENV === RELEASE_ENVIRONMENTS.production) {
+  // `isDeployedProduction` keeps the ban firing even if a production deploy
+  // lost VERCEL_ENV (the same corroboration as the Clerk guards).
+  if (data.TEST_ERROR_SECRET && isDeployedProduction(data)) {
     ctx.addIssue({
       code: 'custom',
       path: ['TEST_ERROR_SECRET'],
