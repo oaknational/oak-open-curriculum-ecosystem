@@ -35,6 +35,7 @@ import { ObservabilityEnvBaseSchema } from './observability-base.js';
 import {
   refineLegacyLoggerKeys,
   refineLegacySentryMode,
+  refinePosthogRequiresSentry,
   refineProductionLocality,
   refineSinkConditionalRequirements,
 } from './observability-refinements.js';
@@ -45,13 +46,13 @@ export { OBSERVABILITY_FIXTURES_SCHEMA, OBSERVABILITY_SINKS_SCHEMA } from './obs
  * Composed environment-variable contract for the orthogonal-axes
  * observability configuration.
  *
- * @remarks Five cross-field rules encoded across four helper
+ * @remarks Six cross-field rules encoded across five helper
  * functions (`refineSinkConditionalRequirements` covers branches 3 and
  * 4 because the per-sink conditional requirements share a common
  * shape). The rules are named by the observability multi-sink +
- * fixtures shape plan (locality-enforcement and migration sections).
- * The dedicated ADR is authored at WS8.6 of that plan; until then the
- * plan body is the canonical source.
+ * fixtures shape plan (locality-enforcement and migration sections);
+ * rule 6 is the MCP-361 owner ruling. The dedicated ADR is authored at
+ * WS8.6 of that plan; until then the plan body is the canonical source.
  *
  * 1. Legacy `SENTRY_MODE` set ⇒ hard error with the rename-replacement
  *    message. The mode-as-switch shape is gone; operators must move to
@@ -64,6 +65,11 @@ export { OBSERVABILITY_FIXTURES_SCHEMA, OBSERVABILITY_SINKS_SCHEMA } from './obs
  * 5. `VERCEL_ENV === 'production'` AND no diagnostic sink selected ⇒
  *    hard error. PostHog alone does not satisfy diagnostic locality
  *    (ADR-162 §The Vendor-Independence Clause and ADR-218).
+ * 6. `'posthog'` in sinks AND `'sentry'` not in sinks ⇒ hard error, in
+ *    EVERY environment. Sentry-as-a-sink alongside PostHog is
+ *    non-negotiable (owner ruling 2026-07-29; MCP-361). Composed last so
+ *    that, in production, rule 5's issue precedes it on the shared
+ *    `OBSERVABILITY_SINKS` path; rule 3 composes unchanged.
  *
  * The preview-with-empty-sinks warning is NOT emitted via `addIssue`
  * — warnings will be surfaced through the `warnings` channel on
@@ -78,6 +84,7 @@ export const ObservabilityEnvSchema = ObservabilityEnvBaseSchema.superRefine((da
   refineLegacyLoggerKeys(data, ctx);
   refineSinkConditionalRequirements(data, ctx);
   refineProductionLocality(data, ctx);
+  refinePosthogRequiresSentry(data, ctx);
 });
 
 /**

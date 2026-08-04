@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { OBSERVABILITY_SINKS_SCHEMA } from '@oaknational/env';
-import { DIAGNOSTIC_SINK_KINDS } from '@oaknational/observability';
 import type { PostHogProductAnalyticsConfig } from '@oaknational/posthog-node';
 
 /**
@@ -75,7 +74,8 @@ interface ProductAnalyticsRefinementData {
   readonly POSTHOG_PSEUDONYM_KEYRING?: string;
   readonly POSTHOG_CAPTURE_MODE?: string;
   readonly DANGEROUSLY_DISABLE_AUTH?: string;
-  readonly VERCEL_ENV?: string;
+  readonly SENTRY_MODE?: string;
+  readonly SENTRY_DSN?: string;
 }
 
 function refineSelectedPostHogFields(
@@ -124,6 +124,11 @@ function refineSelectedPostHogFields(
  * analytics never takes the service down over leftover values — including
  * a cleared-but-present `POSTHOG_CAPTURE_MODE`.
  *
+ * When `posthog` IS selected, Sentry must be actively delivering (owner
+ * ruling 2026-07-29, strengthened 2026-08-04 via MCP-356): the `sentry`
+ * sink selected, `SENTRY_MODE=sentry` (not the default `off`, which boots
+ * the sink dark), and `SENTRY_DSN` set — in every environment.
+ *
  * @returns `true` when a fatal issue was added and the caller should stop
  * refining; `false` when refinement may continue.
  */
@@ -162,26 +167,70 @@ export function refineProductAnalyticsEnv(
     return true;
   }
 
-  // The plan's production-locality rule, scoped to the posthog selection:
-  // product analytics alone is not a diagnostic sink. The shared
-  // refineProductionLocality also rejects an EMPTY production selection,
-  // which this app cannot adopt until SENTRY_MODE retires — deviation
-  // recorded in the delivery plan.
-  if (
-    data.VERCEL_ENV === 'production' &&
-    !DIAGNOSTIC_SINK_KINDS.some((kind) => data.OBSERVABILITY_SINKS.includes(kind))
-  ) {
-    ctx.addIssue({
-      code: 'custom',
-      path: ['OBSERVABILITY_SINKS'],
-      message:
-        'OBSERVABILITY_SINKS must include at least one diagnostic sink ' +
-        '(sentry or file) when posthog is selected in production; product ' +
-        'analytics alone does not satisfy diagnostic locality.',
-    });
+  if (refineSentryLiveForPostHog(data, ctx)) {
     return true;
   }
 
   refineSelectedPostHogFields(data, ctx);
   return false;
+}
+
+/**
+ * Requires Sentry to be ACTIVELY delivering whenever posthog is selected —
+ * the `sentry` sink chosen, `SENTRY_MODE=sentry`, and `SENTRY_DSN` set.
+ *
+ * @remarks
+ * Owner ruling 2026-07-29, strengthened by owner decision 2026-08-04
+ * (MCP-356). In this app `"sentry"` in `OBSERVABILITY_SINKS` is only a
+ * selection marker; `SENTRY_MODE` gates real delivery (its default `off`
+ * boots the sink dark — the "false Sentry marker"), and `SENTRY_DSN` is
+ * where Sentry delivers. All three are required together, in every
+ * environment. This strictly supersedes the earlier production-only "any
+ * diagnostic sink" rule. Every missing piece is reported so the operator
+ * sees the whole gap at once.
+ *
+ * @returns `true` when Sentry is not live (one or more issues were added).
+ */
+function refineSentryLiveForPostHog(
+  data: ProductAnalyticsRefinementData,
+  ctx: z.RefinementCtx,
+): boolean {
+  let sentryNotLive = false;
+  if (!data.OBSERVABILITY_SINKS.includes('sentry')) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['OBSERVABILITY_SINKS'],
+      message:
+        'OBSERVABILITY_SINKS includes "posthog" but not "sentry". Sentry ' +
+        'must be selected alongside PostHog in every environment (owner ' +
+        'ruling 2026-07-29: Sentry-as-a-sink is non-negotiable; MCP-361). ' +
+        'Add "sentry" to OBSERVABILITY_SINKS.',
+    });
+    sentryNotLive = true;
+  }
+  if (data.SENTRY_MODE !== 'sentry') {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['SENTRY_MODE'],
+      message:
+        'SENTRY_MODE must be "sentry" when posthog is selected. A selected ' +
+        '"sentry" sink with SENTRY_MODE=off (the default) boots dark — a ' +
+        'false marker — so product analytics would ship without the ' +
+        'non-negotiable Sentry diagnostics (owner ruling 2026-07-29; ' +
+        'MCP-361). Set SENTRY_MODE=sentry with SENTRY_DSN.',
+    });
+    sentryNotLive = true;
+  }
+  if (!data.SENTRY_DSN) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['SENTRY_DSN'],
+      message:
+        'SENTRY_DSN is required when posthog is selected: Sentry must be ' +
+        'actively delivering, not merely selected (owner ruling 2026-07-29; ' +
+        'MCP-361). Set SENTRY_DSN.',
+    });
+    sentryNotLive = true;
+  }
+  return sentryNotLive;
 }

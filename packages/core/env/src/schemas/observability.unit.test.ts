@@ -97,7 +97,7 @@ describe('OBSERVABILITY_FIXTURES_SCHEMA', () => {
   });
 });
 
-describe('ObservabilityEnvSchema cross-field superRefine — five rules + negative-path acceptance', () => {
+describe('ObservabilityEnvSchema cross-field superRefine — six rules + negative-path acceptance', () => {
   describe('Branch 1: legacy SENTRY_MODE rejection', () => {
     it('rejects any non-empty SENTRY_MODE with the canonical rename-replacement message', () => {
       const error = parseFailure(ObservabilityEnvSchema, {
@@ -247,7 +247,91 @@ describe('ObservabilityEnvSchema cross-field superRefine — five rules + negati
     });
   });
 
-  describe('Branch 6: development / preview / unset VERCEL_ENV with empty sinks does not fail', () => {
+  describe('Branch 6: "posthog" requires "sentry" alongside in every environment (MCP-361)', () => {
+    // Owner ruling 2026-07-29: "We do need to also use Sentry as a sink for
+    // observability logs, that is non-negotiable." No environment may select
+    // the posthog sink without sentry alongside — dev, preview, and production
+    // alike. This is stricter than Branch 5 (which only mandates *some*
+    // diagnostic sink, in production only): here the required sink is sentry
+    // specifically, everywhere.
+    const EVERY_ENVIRONMENT = ['development', 'preview', 'production'] as const;
+
+    it.each(EVERY_ENVIRONMENT)(
+      'rejects OBSERVABILITY_SINKS=["posthog"] without "sentry" in %s, citing the owner ruling',
+      (vercelEnv) => {
+        const error = parseFailure(ObservabilityEnvSchema, {
+          VERCEL_ENV: vercelEnv,
+          OBSERVABILITY_SINKS: '["posthog"]',
+        });
+        // Select this rule's issue specifically by its ruling citation — in
+        // production Branch 5 also emits an OBSERVABILITY_SINKS issue whose
+        // text mentions "sentry" and "posthog", so a looser predicate would
+        // grab the wrong one.
+        const issue = error.issues.find(
+          (candidate) =>
+            candidate.path[0] === 'OBSERVABILITY_SINKS' &&
+            candidate.message.includes('non-negotiable'),
+        );
+        expect(issue, `expected a sentry-alongside issue in ${vercelEnv}`).toBeDefined();
+        expect(issue?.message).toContain('"posthog"');
+        expect(issue?.message).toContain('"sentry"');
+        expect(issue?.message).toContain('every environment');
+      },
+    );
+
+    it.each(EVERY_ENVIRONMENT)(
+      'rejects OBSERVABILITY_SINKS=["file","posthog"] in %s — a diagnostic sink is not enough; sentry specifically is required',
+      (vercelEnv) => {
+        // "file" is a diagnostic sink, so this selection satisfies Branch 5
+        // even in production; OBSERVABILITY_FILE_PATH is set so Branch 4 does
+        // not fire either. The only rule left to reject it is Branch 6 — this
+        // is the case that pins "sentry specifically", not "any diagnostic
+        // sink". A weaker rule checking for any diagnostic sink would pass.
+        const error = parseFailure(ObservabilityEnvSchema, {
+          VERCEL_ENV: vercelEnv,
+          OBSERVABILITY_SINKS: '["file","posthog"]',
+          OBSERVABILITY_FILE_PATH: '/workspace/logs/oak-mcp.log',
+        });
+        const issue = error.issues.find(
+          (candidate) =>
+            candidate.path[0] === 'OBSERVABILITY_SINKS' &&
+            candidate.message.includes('non-negotiable'),
+        );
+        expect(issue, `expected a sentry-alongside issue in ${vercelEnv}`).toBeDefined();
+        expect(issue?.message).toContain('"sentry"');
+      },
+    );
+
+    it.each(EVERY_ENVIRONMENT)(
+      'accepts OBSERVABILITY_SINKS=["sentry","posthog"] with SENTRY_DSN in %s',
+      (vercelEnv) => {
+        const result = ObservabilityEnvSchema.safeParse({
+          VERCEL_ENV: vercelEnv,
+          OBSERVABILITY_SINKS: '["sentry","posthog"]',
+          SENTRY_DSN: VALID_DSN,
+        });
+        expect(result.success).toBe(true);
+      },
+    );
+
+    it('composes with Branch 3: ["sentry","posthog"] without SENTRY_DSN still fails on SENTRY_DSN only', () => {
+      const error = parseFailure(ObservabilityEnvSchema, {
+        OBSERVABILITY_SINKS: '["sentry","posthog"]',
+      });
+      const dsnIssue = error.issues.find((candidate) => candidate.path[0] === 'SENTRY_DSN');
+      expect(dsnIssue).toBeDefined();
+      expect(dsnIssue?.message).toContain('SENTRY_DSN is required');
+      // sentry IS present, so the posthog-requires-sentry rule must NOT fire.
+      const posthogIssue = error.issues.find(
+        (candidate) =>
+          candidate.path[0] === 'OBSERVABILITY_SINKS' &&
+          candidate.message.includes('non-negotiable'),
+      );
+      expect(posthogIssue).toBeUndefined();
+    });
+  });
+
+  describe('Negative-path acceptance: development / preview / unset VERCEL_ENV with empty sinks does not fail', () => {
     it('accepts VERCEL_ENV=development with empty sinks (local-dev path)', () => {
       const result = ObservabilityEnvSchema.safeParse({
         VERCEL_ENV: 'development',

@@ -1,3 +1,18 @@
+# [1.150.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.149.1...v1.150.0) (2026-08-04)
+
+
+### Bug Fixes
+
+* **mcp-server:** enforce posthog-requires-sentry on the app boot path (MCP-361) ([61773a6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/61773a68f7b4cf18c6a9e744903e407dff67c4ae)), closes [#748](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/748)
+* **mcp-server:** require Sentry actively live when posthog is selected (MCP-361) ([c6aefca](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c6aefcadb33136daecb362d233a60e156b1ad798))
+
+
+### Features
+
+* **env:** require sentry alongside posthog in every environment (MCP-361) ([f6d4661](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f6d46615a2d49e50776bb79cda883ef0736fee03))
+
+## [1.149.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.149.0...v1.149.1) (2026-08-04)
+
 # [1.149.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.148.5...v1.149.0) (2026-08-04)
 
 

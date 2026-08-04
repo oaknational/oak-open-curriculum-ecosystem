@@ -1,7 +1,7 @@
 /**
  * Internal cross-field `superRefine` helpers for `observability.ts`'s
  * `ObservabilityEnvSchema`. Each branch is encoded as a small focused
- * function so the composed schema reads as five named rules and so each
+ * function so the composed schema reads as six named rules and so each
  * helper stays under the package complexity / line-count budgets.
  *
  * @remarks Not exported from the package barrel — these helpers are
@@ -184,7 +184,48 @@ export function refineProductionLocality(data: ObservabilityEnvBase, ctx: z.Refi
       'locality, and production observability cannot rely on stdout alone. ' +
       'Inline fix examples: ' +
       'OBSERVABILITY_SINKS=["sentry"] (with SENTRY_DSN); or ' +
-      'OBSERVABILITY_SINKS=["file"] (with OBSERVABILITY_FILE_PATH=<path>); ' +
-      'or include either diagnostic sink alongside "posthog".',
+      'OBSERVABILITY_SINKS=["file"] (with OBSERVABILITY_FILE_PATH=<path>). ' +
+      'When "posthog" is selected, the required companion is "sentry" ' +
+      'specifically, in every environment (see the posthog-requires-sentry ' +
+      'rule) — a "file" sink alone satisfies this rule but not that one.',
+  });
+}
+
+/**
+ * `superRefine` branch 6 — fails closed when `'posthog'` is selected
+ * without `'sentry'` alongside, in EVERY environment.
+ *
+ * @remarks Stricter than {@link refineProductionLocality} (branch 5),
+ * which mandates only *some* diagnostic sink and only in production: here
+ * the required companion sink is `sentry` specifically, and the rule holds
+ * in development and preview too. PostHog product analytics must never ship
+ * without the Sentry diagnostic sink alongside it — the owner's ruling
+ * (2026-07-29) that Sentry-as-a-sink is non-negotiable is held here, in the
+ * validator, rather than by owner vigilance (MCP-361). Composed LAST so
+ * that, in production, branch 5's diagnostic-locality issue precedes this
+ * one on the shared `OBSERVABILITY_SINKS` path. Rule 3 (`sentry` ⇒
+ * `SENTRY_DSN`, {@link refineSinkConditionalRequirements}) composes
+ * unchanged, so `["sentry","posthog"]` without a DSN still fails on the
+ * DSN requirement.
+ */
+export function refinePosthogRequiresSentry(
+  data: ObservabilityEnvBase,
+  ctx: z.RefinementCtx,
+): void {
+  const sinks = data.OBSERVABILITY_SINKS;
+  if (!sinks.includes('posthog') || sinks.includes('sentry')) {
+    return;
+  }
+  ctx.addIssue({
+    code: 'custom',
+    path: ['OBSERVABILITY_SINKS'],
+    message:
+      'OBSERVABILITY_SINKS includes "posthog" but not "sentry". Sentry must ' +
+      'be selected alongside PostHog in every environment — development, ' +
+      'preview, and production alike — this is non-negotiable (owner ruling ' +
+      '2026-07-29: "We do need to also use Sentry as a sink for observability ' +
+      'logs, that is non-negotiable"). Add "sentry" to OBSERVABILITY_SINKS ' +
+      '(and set SENTRY_DSN); PostHog product analytics must never ship ' +
+      'without the Sentry diagnostic sink alongside it.',
   });
 }
