@@ -22,6 +22,15 @@ const withLiveClerkKeys = {
   CLERK_SECRET_KEY: 'sk_live_123',
 };
 
+// A minimal VALID production environment: live-realm keys (Guard 1a) plus a
+// canonical host (Guard 3). Any fixture that asserts a production env is
+// accepted must include both.
+const withProdEnv = {
+  ...withLiveClerkKeys,
+  VERCEL_ENV: 'production' as const,
+  CANONICAL_HOST: 'www.thenational.academy',
+};
+
 describe('Environment Schema', () => {
   it('requires CLERK_PUBLISHABLE_KEY when auth enabled', () => {
     const result = HttpEnvSchema.safeParse(baseEnv);
@@ -244,8 +253,8 @@ describe('Clerk key-format locality (production)', () => {
     }
   });
 
-  it('accepts live keys in production', () => {
-    const result = HttpEnvSchema.safeParse({ ...withLiveClerkKeys, VERCEL_ENV: 'production' });
+  it('accepts a valid production environment (live keys + canonical host)', () => {
+    const result = HttpEnvSchema.safeParse(withProdEnv);
     expect(result.success).toBe(true);
   });
 
@@ -256,6 +265,110 @@ describe('Clerk key-format locality (production)', () => {
     }
     // unset VERCEL_ENV (local, non-Vercel) also passes
     expect(HttpEnvSchema.safeParse(withClerkKeys).success).toBe(true);
+  });
+});
+
+describe('CANONICAL_HOST required in production (Guard 3)', () => {
+  // In production, CANONICAL_HOST is mandatory when auth is enabled: without
+  // it, per-request Host derivation lets every Vercel alias mint its own OAuth
+  // resource identifier. See MCP-143 spec Guard 3.
+  it('rejects a production environment without CANONICAL_HOST when auth is enabled', () => {
+    const result = HttpEnvSchema.safeParse({ ...withLiveClerkKeys, VERCEL_ENV: 'production' });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CANONICAL_HOST');
+    }
+  });
+
+  it('accepts a production environment with CANONICAL_HOST set', () => {
+    const result = HttpEnvSchema.safeParse(withProdEnv);
+    expect(result.success).toBe(true);
+  });
+
+  it('does not require CANONICAL_HOST outside production — preview, development, and unset pass', () => {
+    expect(HttpEnvSchema.safeParse({ ...withClerkKeys, VERCEL_ENV: 'preview' }).success).toBe(true);
+    expect(HttpEnvSchema.safeParse({ ...withClerkKeys, VERCEL_ENV: 'development' }).success).toBe(
+      true,
+    );
+    expect(HttpEnvSchema.safeParse(withClerkKeys).success).toBe(true);
+  });
+});
+
+describe('production-detection corroboration (VERCEL_ENV unset)', () => {
+  // MCP-143 security-expert item 1: the production guard family must not
+  // silently no-op if a genuine Vercel production deployment boots with
+  // VERCEL_ENV unset. A Vercel deploy (VERCEL='1') carrying a canonical host
+  // but missing VERCEL_ENV is treated as production; local (VERCEL unset) and
+  // preview are not.
+  it('rejects a test publishable key on a Vercel deploy missing VERCEL_ENV but carrying CANONICAL_HOST', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...baseEnv,
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_live_123',
+      VERCEL: '1',
+      CANONICAL_HOST: 'www.thenational.academy',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CLERK_PUBLISHABLE_KEY');
+    }
+  });
+
+  it('permits test keys locally even with CANONICAL_HOST set — VERCEL unset is not production', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      CANONICAL_HOST: 'www.thenational.academy',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('does not treat preview as production even with VERCEL=1 and CANONICAL_HOST set', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      VERCEL: '1',
+      VERCEL_ENV: 'preview',
+      CANONICAL_HOST: 'www.thenational.academy',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a test key on a Vercel deploy missing VERCEL_ENV even when CANONICAL_HOST is also absent', () => {
+    // The residual the CANONICAL_HOST conjunct would have left open: a real
+    // deploy that lost VERCEL_ENV and has no canonical host must still fail
+    // closed rather than boot against the Clerk development realm.
+    const result = HttpEnvSchema.safeParse({
+      ...baseEnv,
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_live_123',
+      VERCEL: '1',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CLERK_PUBLISHABLE_KEY');
+    }
+  });
+
+  it('rejects DANGEROUSLY_DISABLE_AUTH=true on a Vercel deploy missing VERCEL_ENV', () => {
+    // Highest-severity: a deployment that lost VERCEL_ENV must not be able to
+    // disable auth. isDeployedEnvironment treats VERCEL=1 + VERCEL_ENV-absent
+    // as deployed, so the valve is blocked.
+    const result = HttpEnvSchema.safeParse({
+      ...baseEnv,
+      DANGEROUSLY_DISABLE_AUTH: 'true',
+      VERCEL: '1',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('DANGEROUSLY_DISABLE_AUTH');
+    }
   });
 });
 

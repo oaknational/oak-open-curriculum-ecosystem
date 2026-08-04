@@ -135,6 +135,9 @@ describe('createHttpObservability', () => {
         SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
         SENTRY_TRACES_SAMPLE_RATE: '0.5',
         VERCEL_ENV: 'production',
+        // Required in production since MCP-143 Guard 3; keeps this a valid
+        // production env so the Sentry release-identity assertions below run.
+        CANONICAL_HOST: 'www.thenational.academy',
         VERCEL_GIT_COMMIT_REF: 'main',
         VERCEL_GIT_COMMIT_SHA: 'abcdef1234567890abcdef1234567890abcdef12',
       }),

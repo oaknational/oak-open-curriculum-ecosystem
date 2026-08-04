@@ -74,7 +74,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-clerk-guards.ts': excluded(
-    'f08199cd222367d14b39eb2576d1280c1e32382fb85ce6eed043bfe7b7cc558e',
+    'd9456bb6a6e9092b51923917db9c827b2058f8833008dc9e684b8c13351d41b1',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-product-analytics.ts': excluded(
@@ -82,7 +82,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env.ts': excluded(
-    'fa8e7ff9a903c30e8d8eb8a909d61497bc9122e8f21a18cb5485742fcf005479',
+    'cc2dbdb547fdb068c6992b137174e81434d757315c1d7daeddd650d40160c45b',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/feature-flags.ts': excluded(
