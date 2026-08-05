@@ -73,8 +73,12 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     'df0cfab0201177986caa0454d94407077f5930f45a8e34d6d15f6ea4b625b35b',
     IMPLEMENTATION_ONLY,
   ),
+  'apps/oak-curriculum-mcp-streamable-http/src/env-live-sentry-requirements.ts': excluded(
+    'c08205e010de0062c378cc57671d3656a0ed70ba541659fc2229ee55695428da',
+    IMPLEMENTATION_ONLY,
+  ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-product-analytics.ts': excluded(
-    '8a67d2cb8ce836a2b2c34bb7782d8b0bee67dadf437ba9e0a60b0be0baf62a36',
+    'e94341d1e523a42b85e51838130bde552529f023e15c8418a052809008c054ea',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env.ts': excluded(

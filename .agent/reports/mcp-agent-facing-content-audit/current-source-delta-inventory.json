@@ -159,8 +159,14 @@
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
     {
+      "file": "apps/oak-curriculum-mcp-streamable-http/src/env-live-sentry-requirements.ts",
+      "semanticSha256": "c08205e010de0062c378cc57671d3656a0ed70ba541659fc2229ee55695428da",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
+    },
+    {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/env-product-analytics.ts",
-      "semanticSha256": "8a67d2cb8ce836a2b2c34bb7782d8b0bee67dadf437ba9e0a60b0be0baf62a36",
+      "semanticSha256": "e94341d1e523a42b85e51838130bde552529f023e15c8418a052809008c054ea",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
