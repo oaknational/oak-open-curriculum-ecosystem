@@ -2545,3 +2545,53 @@ shredding `tmp/jim-posthog-setup-steps.md`; and the observability-debt ticket.
   mechanically to text already unambiguous in context, it optimises the artefact against
   a reader who does not exist and pays in noise for readers who do. Weigh the
   clarification against the cost of re-opening a settled surface.
+
+### Reusable diagnostic instruments — Clerk OAuth and deployment verification (2026-08-05)
+
+Recorded at Director request from the MCP-143/MCP-507 cutover afternoon. Each is stated with
+what it CANNOT tell you, because every one of them had a near-miss where the wrong reading
+looked authoritative.
+
+- **CLIENT-EXISTENCE ORACLE: probe `/oauth/authorize/continue`, never `/oauth/authorize`, and
+  always carry a bogus-id control.** Measured: Clerk does NOT validate `client_id` at the initial
+  authorize hop — a fabricated id gets a 302 identical to a real one, on both a development and a
+  production instance. Validation happens one hop later at `continue`, where a real client 302s to
+  sign-in and an absent one returns `401 invalid_client`. **Anything concluded from the authorize
+  hop measures nothing.** I nearly published two findings off it; the bogus-id control killed
+  both. Run the control in the same minute against the same instance, or a 302 cannot be
+  distinguished from a false pass.
+
+- **DCR clients belong to the CLERK INSTANCE, not to the deployment.** Confirmed by accident: a
+  client registered at 17:16Z survived a production key change AND a full redeploy and still
+  resolved on its original instance 13 minutes later. So only an INSTANCE change orphans a
+  client; no deploy can. Consequence for any migration notice: "wait until deploys finish" is
+  FALSE as a mechanism, and the only real ordering constraint is *re-register after the realm
+  switch, never before*.
+
+- **NEVER verify a deployment's binding from one host or one sample.** During a rollout production
+  serves a MIXED binding — AS metadata is fetched once per instance at boot and cached, so each
+  lambda answers from its own boot-time env while the fleet turns over gradually. Two hosts
+  disagreed for ~27 seconds mid-revert. Sample both hosts, twice, require agreement across
+  consecutive rounds, and treat PERSISTENT disagreement as a STOP rather than retrying until it
+  agrees.
+
+- **The Clerk realm is in the key's PAYLOAD, not its prefix.** A publishable key base64-encodes
+  its own Frontend API host and the OAuth upstream derives from that; the prefix is a label Clerk
+  assigns by construction. So `pk_live_` + a dev-host payload passes a prefix guard and still
+  routes to dev. Publishable keys are public, so decode before trusting:
+  `node -e 'const k=process.argv[1];const p=k.slice(k.indexOf("_",k.indexOf("_")+1)+1);
+  console.log(Buffer.from(p,"base64").toString("utf8"))' "<pk_...>"`
+
+- **FALSIFIED, do not reuse: GitHub deployment records do NOT detect a manual Vercel redeploy.**
+  I proposed watching for a new deployment record as a redeploy signal. The binding demonstrably
+  flipped while the newest record stayed unchanged. Its ABSENCE reading is therefore not weak but
+  WRONG for manual redeploys — worse than having no instrument, because "no new id" reads as "no
+  build yet". Still untested for push-triggered release builds, where the records demonstrably
+  exist.
+
+- **`/healthz` is not the production canary.** It 404s on `www` (the Cloudflare route scopes to
+  `/mcp*`) and 200s only on the alpha host. The canary is an unauthenticated `POST /mcp` with
+  `accept: application/json, text/event-stream` — **401 means healthy** (booted, env parsed, auth
+  live), 500 means the env failed to parse, and **406 means your own Accept header was missing and
+  says nothing at all**. A green release build proves nothing either way: env validation runs at
+  handler init, so a bad env builds cleanly and fails on the first request.
