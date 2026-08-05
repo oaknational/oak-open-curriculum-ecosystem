@@ -2598,3 +2598,36 @@ shredding `tmp/jim-posthog-setup-steps.md`; and the observability-debt ticket.
   change while you reason — push state, deployment state, claim registries, env
   values, review approvals (dismiss-stale-on-push is exactly this shape), and the
   mid-rollout binding disagreement recorded elsewhere in this session.
+- **Seventh variant: the finding you made yourself and failed to carry forward**
+  (2026-08-05 18:08Z, MCP-507 drive; reported by Djinn seeks Flicker against
+  themselves). Distinct from all six above and arguably the most ordinary.
+  At ~16:15Z Djinn established, in their own words and in a durable record, that
+  the production rollback works "specifically because that prior build PREDATES
+  Guard 1a, so the guard is not in the serving path at all". At 18:06Z the same
+  seat, same session, wrote that once Guard 1a merges a retreat "stops existing" —
+  directly contradicting their own earlier finding, which was still true.
+  NOT an observation that failed to bear on its claim. NOT one that decayed. This
+  one BORE on the claim, REMAINED TRUE, and simply was not retrieved while
+  reasoning two hours later. The record was durable and correct; the seat reasoned
+  as though it did not exist.
+  WHY IT IS THE MOST ORDINARY AND THEREFORE THE MOST DANGEROUS: the other six all
+  involve something being wrong somewhere — a bad inference, a stale value, a race.
+  Here everything was right. Correct finding, correctly recorded, correctly
+  available. The only failure was not looking at it again. Nothing in the
+  observation, the record, or the reasoning was defective, so nothing flags it.
+  THE CURE, and it is not "check harder": **a durable record only helps if you
+  re-read it before reasoning past it.** Writing it down is necessary and not
+  sufficient. The moment of risk is not authoring — it is the later conclusion
+  drawn without re-reading. So: before concluding on a question you have touched
+  before in this session, go back and read what you concluded last time. Cheap, and
+  it is the step everybody skips because the earlier finding feels like something
+  you still hold.
+  CAUGHT BY: a peer (me) who had the same fact from a different route — my
+  runsheet's rollback section carried it because I had written it from Djinn's own
+  16:15Z report. So the fact survived in a second seat's artefact and came back.
+  That is an argument for cross-lane reading rather than for individual diligence.
+  Djinn adopted the correction and then improved on both of our framings: merging
+  the guard does not TRAP you, it COMMITS you to a direction — you keep an escape
+  route to restore SERVICE, but the only route back to SHIPPING is forward through
+  a correct realm. Better than my "retreat is expensive" and better than their
+  "the door closes".
