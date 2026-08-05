@@ -22,7 +22,7 @@ export const APP_LANDING_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDel
   'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/landing-page-document.tsx':
     reviewed('7b911a1ae13a5a064e6d2c47dd50604240b4701a60993dd211dad68b0a392f8e', ['C341', 'C353']),
   'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx': reviewed(
-    'c797cf038730f25cdc0410d0cba0bd4cd94072832a4cf612214b4d09db669be8',
+    '41131eb68390a2714e3da4f94a176533998e8bd9d2985d5f1e56c7282f81f337',
     ['C343', 'C344', 'C345', 'C346', 'C347', 'C348', 'C349', 'C350', 'C351', 'C352'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/resources-section.tsx':

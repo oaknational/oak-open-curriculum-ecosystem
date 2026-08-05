@@ -5,7 +5,12 @@
  * The wording here is the owner's. It came verbatim from the page this
  * replaces, and changes only at his word — the 2026-07-26 pass applied the
  * `editorial-tone` directive's terminology and British-English spelling rules
- * to four strings. No wording on this page is agent-authored.
+ * to four strings. No wording on this page is agent-authored. The 2026-08-05
+ * pass flipped the invite-only positioning to public for the directory launch
+ * at the owner's word (MCP-128, paired with the MCP-308 public docs): the
+ * status tag → "Public Beta" and the access line → sign-in-with-your-Oak-account
+ * (the invite-only restriction removed). Do not merge before the M4 public
+ * sign-in switchover — a public claim must be true when read.
  *
  * The one value that is not authored is the connection snippet's URL, which
  * arrives through the view-props seam (`mcpEndpointUrl`), derived ONCE at
@@ -65,7 +70,7 @@ export function PageHero(): JSX.Element {
           <span aria-hidden="true">›</span>
           <span aria-current="page">Oak Curriculum MCP</span>
         </nav>
-        <span className="oak-tag oak-tag--white">Invite Only Private Beta</span>
+        <span className="oak-tag oak-tag--white">Public Beta</span>
         <h1 id="title" className="oak-heading-1">
           Oak Curriculum MCP
         </h1>
@@ -130,7 +135,7 @@ export function ConnectSection({
           OAuth 2.1 authorisation
         </a>
         {'. '}
-        You will be prompted to log in. Access is currently for internal staff or by invitation.
+        You will be prompted to sign in with your Oak account.
       </p>
     </section>
   );
