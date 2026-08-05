@@ -43,7 +43,7 @@ export const APP_REGISTRATION_DELTA_REVIEWS: Readonly<Record<string, CurrentSour
   // proof so the served-tool-table generator observes the same composition
   // root instead of re-deriving the surface.
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/connected-client.ts': excluded(
-    '13f24c3118a61fdf03f5097486080168c450c9ddaddbbdfe4b3351e3c4ecdaa4',
+    '7a1c3acf157be1af771411db80e627b1dc5dda6a481b8b0693dca2c1a072832d',
     VALIDATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/current-source-guidance-registration-evidence.ts':

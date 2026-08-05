@@ -142,3 +142,40 @@ export function refineCanonicalHostRequired(data: CanonicalHostData, ctx: z.Refi
     });
   }
 }
+
+/**
+ * Whether `value` is EXACTLY a canonical HTTP(S) origin — `scheme://host[:port]`
+ * with no path, query, fragment, userinfo, or trailing slash.
+ *
+ * Clerk matches each `authorizedParties` entry against a session token's `azp`
+ * claim by literal `Array.includes` with no normalisation (`@clerk/backend`
+ * `assertAuthorizedPartiesClaim`), so an entry that is not already the exact
+ * origin — a trailing slash, a path, a bare host — can never match, and the
+ * control would silently never fire. `URL.origin` is the canonical form; the
+ * raw value must equal it, which rejects a trailing slash (`https://h/` has
+ * origin `https://h`) and any path.
+ */
+function isCanonicalHttpOrigin(value: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return false;
+  }
+  return (url.protocol === 'https:' || url.protocol === 'http:') && url.origin === value;
+}
+
+/**
+ * Validates the raw `CLERK_AUTHORIZED_PARTIES` env value (MCP-143 Guard 1c): a
+ * comma-separated list of canonical HTTP(S) origins. Rejects an empty string
+ * and any entry (after trimming surrounding whitespace) that is not an exact
+ * origin. The runtime parser trims the same way, so a value that validates here
+ * parses to the identical origin list at the Clerk boundary.
+ */
+export function isValidAuthorizedPartiesCsv(value: string): boolean {
+  const entries = value.split(',').map((entry) => entry.trim());
+  if (entries.some((entry) => entry.length === 0)) {
+    return false;
+  }
+  return entries.every(isCanonicalHttpOrigin);
+}

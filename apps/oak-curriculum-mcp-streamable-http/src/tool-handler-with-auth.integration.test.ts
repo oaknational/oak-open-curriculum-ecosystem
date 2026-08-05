@@ -84,6 +84,7 @@ function createMockRuntimeConfig(
       version: '1.0.0-test',
       versionSource: 'APP_VERSION_OVERRIDE',
       vercelHostnames: [],
+      authorizedParties: [],
     } satisfies AuthDisabledRuntimeConfig;
   }
   const { env: envOverrides } = overrides ?? {};
@@ -95,6 +96,7 @@ function createMockRuntimeConfig(
     version: '1.0.0-test',
     versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
+    authorizedParties: [],
   } satisfies AuthEnabledRuntimeConfig;
 }
 

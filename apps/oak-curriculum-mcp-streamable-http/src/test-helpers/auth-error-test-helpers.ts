@@ -66,6 +66,7 @@ const BASE_SHARED_FIELDS = {
   version: '0.0.0-test',
   versionSource: 'APP_VERSION_OVERRIDE',
   vercelHostnames: [],
+  authorizedParties: [],
 } as const;
 
 /**

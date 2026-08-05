@@ -17,6 +17,8 @@ export interface AuthEnabledRuntimeConfig {
   readonly gitShaSource?: GitShaSource;
   readonly vercelHostnames: readonly string[];
   readonly displayHostname?: string;
+  /** Parsed CLERK_AUTHORIZED_PARTIES origins; empty when unset (MCP-143 Guard 1c). */
+  readonly authorizedParties: readonly string[];
 }
 
 /**
@@ -34,6 +36,8 @@ export interface AuthDisabledRuntimeConfig {
   readonly gitShaSource?: GitShaSource;
   readonly vercelHostnames: readonly string[];
   readonly displayHostname?: string;
+  /** Parsed CLERK_AUTHORIZED_PARTIES origins; empty when unset (MCP-143 Guard 1c). */
+  readonly authorizedParties: readonly string[];
 }
 
 /**
@@ -71,6 +75,8 @@ export interface SharedRuntimeFields {
   readonly gitShaSource?: GitShaSource;
   readonly vercelHostnames: readonly string[];
   readonly displayHostname?: string;
+  /** Parsed CLERK_AUTHORIZED_PARTIES origins; empty when unset (MCP-143 Guard 1c). */
+  readonly authorizedParties: readonly string[];
 }
 
 export {

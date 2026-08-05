@@ -622,3 +622,54 @@ describe('PostHog product-analytics selection (OBSERVABILITY_SINKS)', () => {
     });
   });
 });
+
+describe('CLERK_AUTHORIZED_PARTIES (session-token azp allowlist — Guard 1c)', () => {
+  // The value is an origin allowlist Clerk validates against a SESSION token's
+  // `azp` claim (subdomain-cookie-leak / CSRF hardening). Clerk matches each
+  // entry byte-for-byte (`authorizedParties.includes(azp)`) with NO
+  // normalisation — a trailing slash, a path, or a bare host would silently
+  // fail to match. So the boundary rejects anything that is not an exact
+  // scheme://host[:port] origin, making a misconfiguration a startup failure
+  // rather than a security control that quietly never matches.
+
+  it('accepts an environment without it — the option is simply omitted (allow-all)', () => {
+    const result = HttpEnvSchema.safeParse(withClerkKeys);
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a single canonical origin', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      CLERK_AUTHORIZED_PARTIES: 'https://www.thenational.academy',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a comma-separated list of origins with surrounding whitespace', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      CLERK_AUTHORIZED_PARTIES: 'https://www.thenational.academy, https://labs.thenational.academy',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it.each([
+    ['a trailing slash — would never match the azp claim', 'https://www.thenational.academy/'],
+    ['a path', 'https://www.thenational.academy/mcp'],
+    ['a bare host with no scheme', 'www.thenational.academy'],
+    ['a non-http(s) scheme', 'ftp://www.thenational.academy'],
+    ['one bad entry among good ones', 'https://www.thenational.academy,evil.example'],
+    ['an empty value', ''],
+  ])('rejects %s at startup', (_label, value) => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      CLERK_AUTHORIZED_PARTIES: value,
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CLERK_AUTHORIZED_PARTIES');
+    }
+  });
+});

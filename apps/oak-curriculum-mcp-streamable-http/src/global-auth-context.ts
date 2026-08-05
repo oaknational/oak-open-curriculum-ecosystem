@@ -7,6 +7,44 @@ import { createConditionalClerkMiddleware } from './conditional-clerk-middleware
 import type { RuntimeConfig } from './runtime-config.js';
 
 /**
+ * The option bag passed to the real `clerkMiddleware` from `@clerk/express`.
+ * A structural subset of `ClerkMiddlewareOptions` — the fields this app
+ * configures from runtime config.
+ */
+export interface ClerkMiddlewareRuntimeOptions {
+  readonly publishableKey?: string;
+  readonly secretKey?: string;
+  readonly authorizedParties?: string[];
+}
+
+/**
+ * Builds the `clerkMiddleware` option bag from runtime config (MCP-143 Guard
+ * 1c). `authorizedParties` is a session-token `azp` allowlist (subdomain-
+ * cookie-leak / CSRF hardening); it is INERT on the OAuth `oauth_token`
+ * enforcement path and does not constrain OAuth client identity.
+ *
+ * The option is included ONLY when the configured origin list is non-empty.
+ * Clerk treats both an absent option and an empty array as allow-all, so
+ * omitting an empty list is behaviourally identical while reading as "not
+ * configured" rather than an intentional empty allowlist — keeping the seam a
+ * true no-op until the owner supplies origins.
+ */
+export function buildClerkMiddlewareOptions(
+  runtimeConfig: RuntimeConfig,
+): ClerkMiddlewareRuntimeOptions {
+  const base: ClerkMiddlewareRuntimeOptions = {
+    publishableKey: runtimeConfig.env.CLERK_PUBLISHABLE_KEY,
+    secretKey: runtimeConfig.env.CLERK_SECRET_KEY,
+  };
+
+  if (runtimeConfig.authorizedParties.length === 0) {
+    return base;
+  }
+
+  return { ...base, authorizedParties: [...runtimeConfig.authorizedParties] };
+}
+
+/**
  * Installs global Clerk middleware early in the chain. MUST be called before
  * path-specific middleware. Actual auth enforcement happens via createMcpAuthClerk.
  *
@@ -37,10 +75,7 @@ export function setupGlobalAuthContext(
   const rawClerkMiddleware = measureAuthSetupStep(authLog, 'clerkMiddleware.create', () =>
     clerkMiddlewareFactory
       ? clerkMiddlewareFactory()
-      : clerkMiddleware({
-          publishableKey: runtimeConfig.env.CLERK_PUBLISHABLE_KEY,
-          secretKey: runtimeConfig.env.CLERK_SECRET_KEY,
-        }),
+      : clerkMiddleware(buildClerkMiddlewareOptions(runtimeConfig)),
   );
   const instrumentedClerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
 

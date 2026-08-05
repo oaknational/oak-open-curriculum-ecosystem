@@ -152,3 +152,54 @@ describe('createRuntimeConfigFromValidatedEnv', () => {
     });
   });
 });
+
+describe('authorizedParties derivation (Guard 1c)', () => {
+  const authEnabledBase = {
+    OAK_API_KEY: 'test-api-key',
+    ELASTICSEARCH_URL: 'https://example-elasticsearch.test',
+    ELASTICSEARCH_API_KEY: 'test-es-key',
+    CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+    CLERK_SECRET_KEY: 'sk_test_123',
+    LOG_LEVEL: 'info',
+    SENTRY_MODE: 'off',
+    APP_VERSION_OVERRIDE: '1.2.3-test',
+  } satisfies Env;
+
+  it('defaults to the empty array when CLERK_AUTHORIZED_PARTIES is unset', () => {
+    const runtimeConfig = unwrap(createRuntimeConfigFromValidatedEnv(authEnabledBase));
+
+    expect(runtimeConfig.authorizedParties).toEqual([]);
+  });
+
+  it('parses a single origin', () => {
+    const runtimeConfig = unwrap(
+      createRuntimeConfigFromValidatedEnv({
+        ...authEnabledBase,
+        CLERK_AUTHORIZED_PARTIES: 'https://www.thenational.academy',
+      }),
+    );
+
+    expect(runtimeConfig.authorizedParties).toEqual(['https://www.thenational.academy']);
+  });
+
+  it('parses a comma-separated list, trimming surrounding whitespace on each entry', () => {
+    const runtimeConfig = unwrap(
+      createRuntimeConfigFromValidatedEnv({
+        ...authEnabledBase,
+        CLERK_AUTHORIZED_PARTIES:
+          'https://www.thenational.academy, https://labs.thenational.academy',
+      }),
+    );
+
+    expect(runtimeConfig.authorizedParties).toEqual([
+      'https://www.thenational.academy',
+      'https://labs.thenational.academy',
+    ]);
+  });
+
+  it('is present as the empty array on an auth-disabled config too', () => {
+    const runtimeConfig = unwrap(createRuntimeConfigFromValidatedEnv(localOffModeEnv));
+
+    expect(runtimeConfig.authorizedParties).toEqual([]);
+  });
+});
