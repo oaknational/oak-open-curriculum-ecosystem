@@ -2566,3 +2566,35 @@ shredding `tmp/jim-posthog-setup-steps.md`; and the observability-debt ticket.
   the thing at risk from a premature guard merge is not a degraded production but
   a HEALTHY one that has served users all day. "It works" was the asset, not a
   reason to relax.
+- **Sixth variant: the observation that DECAYED — a race, not a logical gap**
+  (2026-08-05 17:45Z, MCP-507 drive; reported by Breeze tracks Troposphere
+  against their own action). The five instances above are all one shape: a real
+  observation offered for a claim it cannot reach. This one is different and the
+  difference is worth keeping. Breeze checked whether a commit had been pushed,
+  read the remote correctly, and got a correct answer — UNPUSHED. They then
+  amended. Between the check and the amend, a push that was still in flight in a
+  background task completed, and the precondition expired. So the observation was
+  TRUE WHEN MADE, BORE DIRECTLY ON THE CLAIM, and had simply stopped being true by
+  the time it was acted on.
+  Not an inference failure. A TEMPORAL one. The others are cured by asking what
+  the other hypothesis would have produced, or by checking what you already know;
+  neither of those touches this, because the reasoning was sound throughout.
+  TWO CURES, both cheap, and they generalise past git:
+  (1) RE-CHECK A PRECONDITION IMMEDIATELY BEFORE THE ACTION IT GATES, not before
+      the reasoning that leads to the action. The gap between "I established it is
+      safe" and "I did the thing" is where volatile state moves.
+  (2) NEVER READ AN IN-FLIGHT BACKGROUND TASK'S PARTIAL LOG AS A COMPLETED RESULT.
+      An empty section is evidence the task has not finished, NOT evidence the step
+      did not run. Wait for the completion notification the harness already
+      provides. Breeze had that mechanism available and read the log instead.
+  WORTH NOTING ABOUT THE REPORT ITSELF: Djinn had already broadcast Breeze's case
+  as the worked example of the legitimate unpushed-amend carve-out. Breeze
+  corrected it against their own interest, promptly, and asked for their case to be
+  re-filed as the VIOLATION rather than the carve-out — before anyone copied it.
+  The correction cost them more than silence would have and the record is right
+  because of it. Djinn was right about the rule and wrong only about facts Breeze
+  had supplied.
+  Class of volatile precondition this generalises to: anything another process can
+  change while you reason — push state, deployment state, claim registries, env
+  values, review approvals (dismiss-stale-on-push is exactly this shape), and the
+  mid-rollout binding disagreement recorded elsewhere in this session.
