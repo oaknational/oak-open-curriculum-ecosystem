@@ -2491,3 +2491,44 @@ shredding `tmp/jim-posthog-setup-steps.md`; and the observability-debt ticket.
   environment, accumulating issues); tests pin the false-marker case; the
   app/library SENTRY_MODE contradiction is the known half-finished migration,
   made LOUDER (not worse) by this PR. Nothing blocking found.
+- **The observation that does not bear on the claim** (2026-08-05, MCP-507
+  submission drive; captured at Director override of my own "three instances is
+  too thin to home"). THREE seats, THREE surfaces, ~30 minutes, one shape: a real
+  observation, correctly made and faithfully reported, offered as evidence for a
+  claim it cannot support. (1) Bilby read `issuer: www` from `www` and wrote
+  "CANONICAL_HOST is www" — but per-request self-derivation returns `www` too, so
+  the read cannot separate the hypotheses; caught by Djinn. (2) Bilby re-traced the
+  prod authorize chain after the owner said "I think Clerk is fixed", found it
+  byte-identical and reported no evidence of a fix — but a redirect chain's SHAPE
+  does not determine the behaviour the fault lived in; caught by the run going
+  green, and the framing had already pushed the Director toward pessimism. (3) The
+  Director read `pull:false` from a token's permissions block and concluded the App
+  had no permissions — but the API call that RETURNED that block was itself a
+  successful authenticated read; caught by Djinn, then killed outright when Breeze
+  pushed for real.
+  NOT fabrication and not laziness — in every case the command was run first-hand
+  and the output reported accurately. The failure is entirely in the step from
+  OUTPUT to CLAIM, and it hides precisely because the observation half was done
+  well. Director's own words: "running the command myself made it feel like
+  observation when it was still interpretation."
+  WHY IT FIRES HERE: every instance was a config-state question asked of a system
+  that reports a DERIVED value with a FALLBACK path — issuer derives from
+  CANONICAL_HOST-or-per-request; the permissions block is a user-shaped projection
+  of an App token; a redirect chain derives from config we cannot see. The fallback
+  is exactly what makes the surface ambiguous between the two hypotheses you are
+  trying to separate.
+  THE CURE, which worked both times it was applied: find the input that makes the
+  candidate causes DIVERGE, then vary it. Djinn's alias test (ask via a
+  NON-canonical host — per-request mirrors it, configured stays `www`). Bilby's
+  duplicate-scope probe (send `scope` twice and watch whether Clerk collapses it).
+  Generalised: **before citing an observation as evidence for a config fact, ask
+  what the OTHER hypothesis would have produced. If the answer is "the same
+  output", you have not measured anything yet — however faithfully you ran the
+  command.**
+  Sibling lesson from the same window (Breeze): a lower-authority seat's weaker
+  evidence is still evidence. Breeze nearly withdrew a correct finding because the
+  Director asserted the opposite with a stronger-looking instrument; deferring to
+  authority BEFORE the cheap decisive test has run is its own failure mode. They
+  ran the real push first and it settled the other way.
+  Not rule-shaped yet — three instances is a mechanism, not doctrine. Homed here
+  for the capture → distil → graduate pipeline to judge.
