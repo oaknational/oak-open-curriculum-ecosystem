@@ -2491,3 +2491,57 @@ shredding `tmp/jim-posthog-setup-steps.md`; and the observability-debt ticket.
   environment, accumulating issues); tests pin the false-marker case; the
   app/library SENTRY_MODE contradiction is the known half-finished migration,
   made LOUDER (not worse) by this PR. Nothing blocking found.
+
+## Session: 2026-08-05 — MCP-143 guard cascade (Djinn seeks Flicker, Implementer)
+
+### Mistakes Made
+
+- **Ran a gate in the wrong worktree and read a FALSE GREEN as clearance.** With my
+  change sitting in a linked worktree, I ran the MCP content-audit validator from the
+  PRIMARY checkout. It reported `OK (728 current items accounted)` — entirely true of a
+  tree where my file was unmodified — and I read it as having cleared my change. The
+  husky hook, correctly running in the resident worktree, then failed twice on a
+  genuinely stale artefact. A gate run against the wrong tree is not a null result; it
+  is a confident wrong answer.
+- **Reported a commit as landed when it had not.** My backgrounded wrapper ended in
+  `tail`, so the exit code I captured was `tail`'s, not the commit's. Two failures read
+  as successes before I noticed HEAD had not moved.
+- **RIGHT ANSWER, WRONG FRAME — and the frame propagated.** Finding production bound to
+  a Clerk dev realm, I reached straight for the expensive cure: built an
+  alias-discriminator test, re-read the derivation paths. The conclusion was correct.
+  But I attached the frame "this is the MCP-143 gap, observed live", and that framing
+  spread — it contributed to a fleet-wide belief that production could not serve Claude
+  users. The owner falsified it in five words: "it's been working all day." A closed
+  beta was running; if users could not connect there would be no beta.
+  **Twice in the same lane the answer was already known and I paid for it anyway:**
+  this napkin ALREADY recorded "Vercel scoped `CANONICAL_HOST` to Production only for
+  the MCP project" — the exact fact I spent the alias test proving.
+
+### Patterns to Remember
+
+- **Before hunting a discriminating test, ask whether anything you ALREADY KNOW
+  contradicts the claim.** The free arm, and it should be tried first. Sibling to the
+  cure recorded at `5d47cf611` ("find the input that makes the hypotheses diverge, then
+  vary it"), which answers the cases needing new evidence and does NOT answer this one.
+- **A correct conclusion carrying an unexamined implication is a distinct failure from a
+  wrong conclusion, and plausibly the harder one** — because being right suppresses
+  scrutiny of the frame the rightness arrived in. Nobody audits the premises of an
+  answer that checks out. So state the implication separately from the finding, and
+  sanity-check it against what everyone already knows.
+- **Run gates in the tree whose diff you are gating.** On a multi-worktree machine, `cd`
+  to the primary to run a check silently gates a different working tree.
+- **Read the remote's own line, never a wrapper's exit code.** Same class as the false
+  green: the instrument answered honestly about something other than what was asked.
+- **An authorisation outcome can change under you mid-session — vary TIME before
+  theorising structure.** A push 403 that contradicted a peer's success eleven minutes
+  later drew four structural theories from three seats (branch namespace, ruleset, App
+  permissions, stale cache). The cause was that the capability changed in between. The
+  cheap first move on any contradictory-observation pair is to re-attempt.
+- **For a GitHub App installation token, the `permissions` block is not a capability
+  report** — it is a user-shaped projection, all-false by design. Its own refutation is
+  that the call returning `pull:false` was itself a successful authenticated read.
+- **A correction is not automatically free.** Today's discipline was "correct it and make
+  the correction visible", which is right where a reader could be misled. Applied
+  mechanically to text already unambiguous in context, it optimises the artefact against
+  a reader who does not exist and pays in noise for readers who do. Weigh the
+  clarification against the cost of re-opening a settled surface.
