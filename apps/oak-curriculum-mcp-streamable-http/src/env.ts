@@ -11,6 +11,7 @@ import { productAnalyticsEnvFields, refineProductAnalyticsEnv } from './env-prod
 import {
   isDeployedEnvironment,
   isDeployedProduction,
+  isValidAuthorizedPartiesCsv,
   refineCanonicalHostRequired,
   refineClerkKeyLocality,
 } from './env-clerk-guards.js';
@@ -90,6 +91,27 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
       .refine(
         (value) => isValidHostHeader(value) && !value.includes(':') && !isLoopbackHostname(value),
         'CANONICAL_HOST must be a bare public hostname — no scheme, port, path, or loopback name',
+      )
+      .optional(),
+    /**
+     * Origin allowlist threaded into `clerkMiddleware` as `authorizedParties`
+     * (MCP-143 Guard 1c). A comma-separated list of exact HTTP(S) origins.
+     *
+     * This is a defence-in-depth safeguard on the Clerk SESSION-token path:
+     * Clerk validates each origin against a session JWT's `azp` claim to blunt
+     * subdomain-cookie-leak / CSRF. It is INERT on the OAuth `oauth_token` path
+     * that actually enforces MCP auth (`verifyClerkToken` takes no
+     * authorizedParties option) — it does NOT constrain which OAuth client may
+     * call the server. Unset means the option is omitted (allow-all); the value
+     * is owner-provided (Card-1). Entries are validated as exact origins
+     * because Clerk matches `azp` with no normalisation.
+     */
+    CLERK_AUTHORIZED_PARTIES: z
+      .string()
+      .refine(
+        isValidAuthorizedPartiesCsv,
+        'CLERK_AUTHORIZED_PARTIES must be a comma-separated list of exact HTTP(S) origins ' +
+          '(scheme://host[:port]) — no path, trailing slash, or bare host',
       )
       .optional(),
     /**

@@ -71,6 +71,7 @@ function createRuntimeConfig(
     version: '1.2.3-test',
     versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
+    authorizedParties: [],
     env: {
       OAK_API_KEY: 'test-api-key',
       ELASTICSEARCH_URL: 'https://example-elasticsearch.test',

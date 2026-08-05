@@ -27,6 +27,7 @@ const mockRuntimeConfig: RuntimeConfig = {
   version: '0.0.0-test',
   versionSource: 'APP_VERSION_OVERRIDE',
   vercelHostnames: [],
+  authorizedParties: [],
 };
 
 async function createTestApp() {

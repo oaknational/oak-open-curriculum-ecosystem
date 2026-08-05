@@ -1,5 +1,11 @@
 import { err, ok, type Result } from '@oaknational/result';
-import { HttpEnvSchema, type AuthDisabledEnv, type Env, type ValidatedHttpEnv } from './env.js';
+import {
+  HttpEnvSchema,
+  parseCsv,
+  type AuthDisabledEnv,
+  type Env,
+  type ValidatedHttpEnv,
+} from './env.js';
 import { resolveOptInFlag } from './feature-flags.js';
 import {
   resolveProductAnalyticsConfig,
@@ -67,6 +73,9 @@ function resolveSharedRuntimeFields(env: Env): Result<SharedRuntimeFields, Confi
       : {}),
     vercelHostnames,
     displayHostname: getDisplayHostname(env),
+    // Guard 1c: the env-layer refinement already validated each entry is an
+    // exact origin; parseCsv trims and drops empties, so unset → [].
+    authorizedParties: parseCsv(env.CLERK_AUTHORIZED_PARTIES) ?? [],
   });
 }
 

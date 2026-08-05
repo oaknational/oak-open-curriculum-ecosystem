@@ -17,7 +17,7 @@ import {
 
 export const APP_TEST_HELPERS_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview>> = {
   'apps/oak-curriculum-mcp-streamable-http/src/test-helpers/auth-error-test-helpers.ts': excluded(
-    '1f09358427ac9ca4f2f0027636515abcfd123c64ae6bf468574c8d767fcccd6c',
+    'b672975290fab014c1d159d84faf28f3a1564b6fe553211dbd399becfbe23a8e',
     TEST_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/test-helpers/fakes-mcp-server.ts': excluded(

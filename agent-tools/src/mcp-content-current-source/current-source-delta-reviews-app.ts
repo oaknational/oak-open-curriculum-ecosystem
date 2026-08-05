@@ -74,7 +74,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-clerk-guards.ts': excluded(
-    'd9456bb6a6e9092b51923917db9c827b2058f8833008dc9e684b8c13351d41b1',
+    '2b01858817bf453e3464e1d0f20f496db9dc8232ce392dcc97732a8babbca43c',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-product-analytics.ts': excluded(
@@ -82,11 +82,15 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env.ts': excluded(
-    'cc2dbdb547fdb068c6992b137174e81434d757315c1d7daeddd650d40160c45b',
+    '2981fdaead59c6fd462bbaa23304a9c2f548c053bd03c44a0189a77195d58a17',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/feature-flags.ts': excluded(
     '0078dfaf0635235210ac1be277692f97d6b87a1e6e7c49ac7f6169c87bbb17aa',
+    IMPLEMENTATION_ONLY,
+  ),
+  'apps/oak-curriculum-mcp-streamable-http/src/global-auth-context.ts': excluded(
+    'abf76079eb95ec82cd430e6cc523bbb0f7656c346d8fbb37a0bf4dae29330a86',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/generated/oak-under-the-hood-content.ts': reviewed(
@@ -163,11 +167,11 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/runtime-config-from-validated-env.ts': excluded(
-    '1b0a02d27b6f29e88a0cc9c4aa5576ee72bbf0770f44a56ccab423668acb1043',
+    'a1452301d3fd80534174619bfc7a41da623658be26df73a8e9af5901c612b7eb',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/runtime-config-support.ts': excluded(
-    '4b9051b733ea0e6cef7e072352c597117d24b330c3df3697978332bf0c6af4f3',
+    '4679b9e321ce5b63b4ed6a0c2746a62f2480bf13db9f79a85a2a3638a5a89678',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts': excluded(

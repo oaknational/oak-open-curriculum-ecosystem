@@ -27,6 +27,7 @@ const runtimeConfig: RuntimeConfig = {
   version: '0.0.0-current-source-validator',
   versionSource: 'APP_VERSION_OVERRIDE',
   vercelHostnames: [],
+  authorizedParties: [],
 };
 
 function createLogger(): Logger {
