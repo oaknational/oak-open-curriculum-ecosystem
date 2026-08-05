@@ -2532,3 +2532,37 @@ shredding `tmp/jim-posthog-setup-steps.md`; and the observability-debt ticket.
   ran the real push first and it settled the other way.
   Not rule-shaped yet — three instances is a mechanism, not doctrine. Homed here
   for the capture → distil → graduate pipeline to judge.
+- **Fifth instance of the observation-does-not-bear-on-the-claim pattern**
+  (2026-08-05 16:46Z, same drive; added at Director request because it is the
+  clearest of the set). The Director inferred that production could not serve
+  Claude users, because production is bound to a Clerk DEVELOPMENT instance
+  (native-hippo-15). MG falsified it in four words: "it's been working all day."
+  Oak has been running a closed beta on that instance the whole time.
+  THE TWO UNWARRANTED STEPS, which the Director named themselves: the
+  cross-site-wall evidence was about a DIFFERENT instance (cheerful-mammoth-48)
+  and a DIFFERENT transport (an mcpjam LOOPBACK flow), and it was generalised to
+  native-hippo-15 and to a BROWSER arriving from claude.ai. Provenance note for
+  the record: that wall was not observed this session by any seat — it was
+  inherited from MCP-505's earlier arc and cited as such; the generalisation was
+  the new step, not the observation.
+  WHY IT IS THE CLEAREST OF THE FIVE: the disconfirming fact was not obscure or
+  expensive to obtain. It was common knowledge to everyone on the drive. A closed
+  beta was running. If Claude users could not connect there would be no beta. The
+  other four instances needed a probe or a diff to refute; this one needed only
+  asking "is that consistent with what we already know?" — which nobody did,
+  because the inference sounded like a technical finding rather than a claim about
+  the world.
+  THE ADDITIONAL LESSON, distinct from the cure already recorded above: the
+  earlier four all needed a DIVERGING INPUT to separate the hypotheses. This one
+  needed no new evidence at all — only a consistency check against facts already
+  held. So the cure has two arms, and the cheap arm should be tried first:
+  **before hunting for a discriminating test, ask whether anything you ALREADY
+  KNOW contradicts the claim.** An inference that survives only because nobody
+  cross-referenced it against common knowledge is the cheapest kind to catch and
+  the easiest to miss, because it arrives dressed as a technical result.
+  CONSEQUENCE THAT MATTERED: the false frame made the Clerk realm switch look
+  like a REPAIR with technical urgency. It is not — it is a deliberate product
+  move so the submission can carry the production realm. And the stakes inverted:
+  the thing at risk from a premature guard merge is not a degraded production but
+  a HEALTHY one that has served users all day. "It works" was the asset, not a
+  reason to relax.
