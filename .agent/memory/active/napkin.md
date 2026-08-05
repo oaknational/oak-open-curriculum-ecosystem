@@ -2631,3 +2631,23 @@ shredding `tmp/jim-posthog-setup-steps.md`; and the observability-debt ticket.
   route to restore SERVICE, but the only route back to SHIPPING is forward through
   a correct realm. Better than my "retreat is expensive" and better than their
   "the door closes".
+  **CORRECTION to the cure above, same session, from Breeze and Djinn — the cure I
+  wrote is insufficient and I would rather amend it than leave it.** I wrote that
+  the cure is "re-read your durable record before reasoning past it". Breeze
+  pointed out that Djinn's record WAS durable and correctly written, so
+  write-it-down-better cannot be the cure — and neither can re-read-more, because
+  the whole problem is not knowing there is anything to re-read. Both statements
+  felt correct when written; nothing signals a contradiction from inside.
+  BETTER FORM (Breeze): **when a later conclusion contradicts something you
+  established earlier, the contradiction IS the signal** — and nobody was diffing
+  the 16:15Z statement against the 18:06Z one, including its author. It was caught
+  from OUTSIDE, by a peer who happened to hold the same fact from a different route.
+  SO THE CURE IS STRUCTURAL, NOT A DISCIPLINE (Djinn): a seat cannot reliably diff
+  its own present reasoning against its own hours-old conclusions. If this variant
+  is only externally catchable, then the cure is not something a seat does — it is
+  the PRESENCE OF A PEER who reads your earlier claims and challenges your later
+  ones. Which is an argument for cross-lane reading as a structural requirement
+  rather than a courtesy, and against the solo-seat shape for long sessions.
+  Recorded with the correction visible rather than by editing the original, because
+  the sequence — a cure proposed, found insufficient by two peers within minutes,
+  replaced by a structural one — is itself the evidence for the structural claim.
