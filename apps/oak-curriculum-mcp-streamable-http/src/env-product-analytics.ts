@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { OBSERVABILITY_SINKS_SCHEMA } from '@oaknational/env';
 import type { PostHogProductAnalyticsConfig } from '@oaknational/posthog-node';
+import { refineSentryLiveForPostHog } from './env-live-sentry-requirements.js';
 
 /**
  * The EU ingestion host, typed against the adapter's own contract.
@@ -76,6 +77,8 @@ interface ProductAnalyticsRefinementData {
   readonly DANGEROUSLY_DISABLE_AUTH?: string;
   readonly SENTRY_MODE?: string;
   readonly SENTRY_DSN?: string;
+  readonly SENTRY_TRACES_SAMPLE_RATE?: string;
+  readonly SENTRY_ENABLE_LOGS?: string;
 }
 
 function refineSelectedPostHogFields(
@@ -124,10 +127,13 @@ function refineSelectedPostHogFields(
  * analytics never takes the service down over leftover values — including
  * a cleared-but-present `POSTHOG_CAPTURE_MODE`.
  *
- * When `posthog` IS selected, Sentry must be actively delivering (owner
- * ruling 2026-07-29, strengthened 2026-08-04 via MCP-356): the `sentry`
- * sink selected, `SENTRY_MODE=sentry` (not the default `off`, which boots
- * the sink dark), and `SENTRY_DSN` set — in every environment.
+ * When `posthog` IS selected, Sentry must be actively delivering AND
+ * emitting logs (owner ruling 2026-07-29, strengthened 2026-08-04 via
+ * MCP-356): the `sentry` sink selected, `SENTRY_MODE=sentry` (not the
+ * default `off`, which boots the sink dark), `SENTRY_DSN` and
+ * `SENTRY_TRACES_SAMPLE_RATE` set (live mode parses the rate at boot), and
+ * `SENTRY_ENABLE_LOGS` not `"false"` (which turns the log sink off) — in
+ * every environment. See {@link LIVE_SENTRY_REQUIREMENTS}.
  *
  * @returns `true` when a fatal issue was added and the caller should stop
  * refining; `false` when refinement may continue.
@@ -173,64 +179,4 @@ export function refineProductAnalyticsEnv(
 
   refineSelectedPostHogFields(data, ctx);
   return false;
-}
-
-/**
- * Requires Sentry to be ACTIVELY delivering whenever posthog is selected —
- * the `sentry` sink chosen, `SENTRY_MODE=sentry`, and `SENTRY_DSN` set.
- *
- * @remarks
- * Owner ruling 2026-07-29, strengthened by owner decision 2026-08-04
- * (MCP-356). In this app `"sentry"` in `OBSERVABILITY_SINKS` is only a
- * selection marker; `SENTRY_MODE` gates real delivery (its default `off`
- * boots the sink dark — the "false Sentry marker"), and `SENTRY_DSN` is
- * where Sentry delivers. All three are required together, in every
- * environment. This strictly supersedes the earlier production-only "any
- * diagnostic sink" rule. Every missing piece is reported so the operator
- * sees the whole gap at once.
- *
- * @returns `true` when Sentry is not live (one or more issues were added).
- */
-function refineSentryLiveForPostHog(
-  data: ProductAnalyticsRefinementData,
-  ctx: z.RefinementCtx,
-): boolean {
-  let sentryNotLive = false;
-  if (!data.OBSERVABILITY_SINKS.includes('sentry')) {
-    ctx.addIssue({
-      code: 'custom',
-      path: ['OBSERVABILITY_SINKS'],
-      message:
-        'OBSERVABILITY_SINKS includes "posthog" but not "sentry". Sentry ' +
-        'must be selected alongside PostHog in every environment (owner ' +
-        'ruling 2026-07-29: Sentry-as-a-sink is non-negotiable; MCP-361). ' +
-        'Add "sentry" to OBSERVABILITY_SINKS.',
-    });
-    sentryNotLive = true;
-  }
-  if (data.SENTRY_MODE !== 'sentry') {
-    ctx.addIssue({
-      code: 'custom',
-      path: ['SENTRY_MODE'],
-      message:
-        'SENTRY_MODE must be "sentry" when posthog is selected. A selected ' +
-        '"sentry" sink with SENTRY_MODE=off (the default) boots dark — a ' +
-        'false marker — so product analytics would ship without the ' +
-        'non-negotiable Sentry diagnostics (owner ruling 2026-07-29; ' +
-        'MCP-361). Set SENTRY_MODE=sentry with SENTRY_DSN.',
-    });
-    sentryNotLive = true;
-  }
-  if (!data.SENTRY_DSN) {
-    ctx.addIssue({
-      code: 'custom',
-      path: ['SENTRY_DSN'],
-      message:
-        'SENTRY_DSN is required when posthog is selected: Sentry must be ' +
-        'actively delivering, not merely selected (owner ruling 2026-07-29; ' +
-        'MCP-361). Set SENTRY_DSN.',
-    });
-    sentryNotLive = true;
-  }
-  return sentryNotLive;
 }

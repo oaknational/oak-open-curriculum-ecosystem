@@ -43,10 +43,13 @@ describe('createRuntimeConfigFromValidatedEnv', () => {
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
       LOG_LEVEL: 'info',
-      // posthog is selected, so Sentry must be actively delivering, not
-      // merely marked (MCP-361, owner-strengthened): SENTRY_MODE=sentry + DSN.
+      // posthog is selected, so Sentry must be actively delivering and
+      // logging, not merely marked (MCP-361, owner-strengthened):
+      // SENTRY_MODE=sentry + DSN + traces sample rate (SENTRY_ENABLE_LOGS
+      // defaults to true when unset).
       SENTRY_MODE: 'sentry',
       SENTRY_DSN: 'https://public@example.ingest.sentry.io/123456',
+      SENTRY_TRACES_SAMPLE_RATE: '0.1',
       APP_VERSION_OVERRIDE: '1.2.3-test',
       OBSERVABILITY_SINKS: '["sentry","posthog"]',
       POSTHOG_PROJECT_API_KEY: 'phc_test_project_key',
