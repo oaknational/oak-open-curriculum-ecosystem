@@ -14,7 +14,7 @@ last_reviewed: 2026-08-06
 
 Attribution, Open Government Licence v3.0 notices, trademark, and EEF citation obligations.
 
-**20 items.** Of those, 0 are traced to a surface an agent can reach today, 2 to a surface that is retained but switched off, and 1 no longer exist in the codebase. The rest live in code that ships, but this pass has not traced which registered surface carries them — each says so.
+**20 items.** Of those, 0 are traced to a surface an agent can reach today, 2 to a surface that is retained but switched off, and 1 no longer exists in the codebase. The rest live in code that ships, but this pass has not traced which registered surface carries them — each says so.
 
 [Back to the workspace index](../README.md)
 
