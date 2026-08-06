@@ -121,6 +121,10 @@ const config: KnipConfig = {
         'src/ci/ci-schema-drift-check.ts',
         'src/ci/ci-turbo-report.ts',
         'src/mcp-content-current-source/validate-current-source.ts',
+        // MCP-103 content-workspace generator: invoked via the
+        // `build-mcp-content-workspace` / `validate-mcp-content-workspace`
+        // package scripts (`pnpm exec tsx`), not imported.
+        'src/mcp-content-workspace/build-content-workspace.ts',
         // PDR-131 throughput register CLI: invoked via the
         // `agent-tools:pr-throughput` package script (`pnpm exec tsx`), not
         // imported.

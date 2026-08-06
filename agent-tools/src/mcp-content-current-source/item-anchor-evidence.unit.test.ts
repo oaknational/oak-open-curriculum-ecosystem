@@ -1,4 +1,8 @@
-import { buildTokenAnchor, requireItemEvidenceTargets } from './item-anchor-evidence.js';
+import {
+  buildTokenAnchor,
+  locateAnchoredText,
+  requireItemEvidenceTargets,
+} from './item-anchor-evidence.js';
 
 describe('current-source item anchor evidence', () => {
   const file = 'current/shared.ts';
@@ -70,5 +74,40 @@ describe('current-source item anchor evidence', () => {
         new Map([[file, repeated]]),
       ),
     ).toThrow(`Current audit item C679 anchors lack distinct occurrences in ${file}`);
+  });
+});
+
+describe('locateAnchoredText', () => {
+  const source = [
+    '// leading comment',
+    "export const GREETING = 'Call get-curriculum-model first.';",
+    'export const OTHER = 1;',
+  ].join('\n');
+  const greeting = "export const GREETING = 'Call get-curriculum-model first.';";
+
+  it('returns the source text the anchor covers, formatting intact', () => {
+    expect(locateAnchoredText(buildTokenAnchor(greeting, source), source)).toBe(greeting);
+  });
+
+  it('still finds the text after the surrounding file has moved on', () => {
+    const anchor = buildTokenAnchor('export const OTHER = 1;', source);
+    const edited = `// a rewritten comment\n\nexport const OTHER = 1;\nexport const EXTRA = 2;\n`;
+
+    expect(locateAnchoredText(anchor, edited)).toBe('export const OTHER = 1;');
+  });
+
+  it('spans multiple lines when the anchored content does', () => {
+    const multiline = 'export const A = {\n  b: 1,\n};';
+    const multilineSource = `${multiline}\nexport const C = 2;`;
+
+    expect(locateAnchoredText(buildTokenAnchor(multiline, multilineSource), multilineSource)).toBe(
+      multiline,
+    );
+  });
+
+  it('reports no match once the anchored wording is gone', () => {
+    const anchor = buildTokenAnchor(greeting, source);
+
+    expect(locateAnchoredText(anchor, 'export const UNRELATED = 3;')).toBeNull();
   });
 });

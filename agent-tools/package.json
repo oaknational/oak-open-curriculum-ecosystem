@@ -99,6 +99,8 @@
     "validate-markdown-links": "cd .. && pnpm exec tsx agent-tools/src/validators/markdown-links/validate-markdown-links.ts",
     "validate-mcp-content-current-source": "cd .. && pnpm exec turbo run sdk-codegen build --filter=@oaknational/oak-curriculum-mcp-streamable-http^... --output-logs=errors-only && pnpm exec tsx agent-tools/src/mcp-content-current-source/validate-current-source.ts",
     "refresh-mcp-content-current-source-anchors": "cd .. && pnpm exec turbo run sdk-codegen build --filter=@oaknational/oak-curriculum-mcp-streamable-http^... --output-logs=errors-only && pnpm exec tsx agent-tools/src/mcp-content-current-source/validate-current-source.ts --refresh-anchors",
+    "build-mcp-content-workspace": "cd .. && pnpm exec tsx agent-tools/src/mcp-content-workspace/build-content-workspace.ts",
+    "validate-mcp-content-workspace": "cd .. && pnpm exec tsx agent-tools/src/mcp-content-workspace/build-content-workspace.ts --check",
     "validate-portability": "cd .. && pnpm exec tsx agent-tools/src/validators/portability/validate-portability.ts",
     "validate-portability:fix": "cd .. && pnpm exec tsx agent-tools/src/validators/portability/validate-portability.ts --fix",
     "validate-practice-fitness": "cd .. && pnpm exec tsx agent-tools/src/practice-fitness/validate-practice-fitness.ts",
