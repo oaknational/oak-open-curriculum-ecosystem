@@ -866,3 +866,138 @@ opening state; this constraint rides any routing brief VERBATIM.
   preparatory branch pushed to the remote (loss-risk closed); the two
   spent cure worktrees pruned (proven merged); no monitors, tasks, or
   crons remain.
+
+## 2026-08-06/07 (Spark lifts Slag, 05d9e6, Director) — tenure instrument lessons, mistakes
+
+Recorded 2026-08-07 by a separate seat from Spark's supplied tenure brief, with every claim
+re-verified against the tree, the config, GitHub, Linear or the live surface first. The brief
+itself was wrong in five places, so treat the provenance as: brief-claimed, recorder-verified.
+Full tenure record in `.agent/memory/operational/director-handoff.md` §Spark lifts Slag.
+
+- **CLAIM-BEFORE-CHECK RECURRED SIX-PLUS TIMES IN ONE TENURE, and every instance was caught
+  by the owner's browser or by a reviewer — never by the Director.** This is recurrence
+  evidence for the pattern Birch named 2026-08-04, not a new finding. Two variants earn
+  their own names because the existing tripwire does not catch them:
+  - **TARGET-VS-ACTUAL**: the seat probed whether `www.thenational.academy/mcp` would be
+    *accepted* as a Clerk `redirect_url` and reported that as what the app *sends*. It sends
+    what `@clerk/backend` derives from `x-forwarded-host ?? host`. So the probe answered a
+    different question than the claim, and both were about the same string.
+  - **RECORDED-THEN-BELIEVED**: the decay was not in the original observation, which was
+    true when made, but in the later re-reading. So the tripwire must fire at CITATION time,
+    not only at authoring time — "name the instrument" is a check on quoting yourself too.
+  - Convergent independent evidence the same 24h: Petrel took an owner correction on the
+    morning of 2026-08-07 for the same shape ("stop rushing to conclusions, slow down,
+    discuss"). Two seats, same pattern, no shared prompt.
+  - **`claim-before-check` still has no pattern file and no distilled entry** — it lives only
+    in this napkin. Graduation candidate; scope note, not an instruction.
+
+- **AN ADR'S CONTEXT SECTION IS NOT ITS DECISION, AND A CODE COMMENT IS NOT EVIDENCE.** The
+  seat reported "sequence search is lexical-only" as a verified correctness fix, citing
+  ADR-139's *pre-implementation* Context plus a false header comment
+  (`packages/sdks/oak-search-sdk/src/retrieval/search-sequences.ts:2` — "Sequence search
+  implementation — lexical RRF"). ADR-139 **Decision §5** specifies hybrid BM25 + ELSER on
+  `sequence_semantic`, and unit and integration tests pin the semantic leg. It nearly entered
+  a submission document; mantagen's blocking review on #815 caught it. The corrected claim was
+  then re-proved against the live surface with a probe whose four scores were exactly
+  `1/(40+rank)` at `rank_constant: 40` — a single-leg RRF signature, which is the kind of
+  proof that survives being quoted. **LIVE RESIDUE at recording: the false comment is still in
+  the tree.** #815 (`SHA:16665f24e`) fixed the served description, not the comment that caused
+  the error, so the next reader of that file gets the same wrong answer.
+
+- **`gh` ON THIS MACHINE IS THE OWNER, NOT THE BOT — third recorded instance, with a
+  consequence the first two did not name.** `gh auth status` reports account `mantagen`. A bare
+  `gh pr create` authors as a human, so `require_code_owner_review` becomes unsatisfiable
+  (GitHub forbids self-approval) **and a `--reviewer mantagen` request is silently dropped for
+  the same reason, with CODEOWNERS substituting jimCresswell**. Cost a closed-and-recreated PR
+  (#802 closed unmerged, author `mantagen`; #803 merged `SHA:ccc03508d`, author
+  `app/emgeebot-oakenfold`). Prior instances: 2026-07-31 (#661→#662) and 2026-08-03 (MCP-473,
+  #739→#740). Cure: `git credential fill` against the ambient emgeebot helper piped into
+  `GH_TOKEN`, never printed. `gh api user` 403s on an installation token — expected, so test
+  against a repo-scoped endpoint instead of concluding the mint failed.
+
+- **`merge-bot mint-token` DEFAULTS TO A KEY THAT IS ABSENT ON THIS MACHINE.**
+  `.github/merge-bot.json` names `jimbot-oakington-iii` / appId `4352989`, and
+  `~/.config/jimbot-oakington-iii/` does not exist here while
+  `~/.config/emgeebot-oakenfold/private-key.pem` does. Works with explicit
+  `--app-id 4482842 --private-key-path ~/.config/emgeebot-oakenfold/private-key.pem`.
+  Scope: this machine, 2026-08-07; the repo config is correct for the fleet, not for here.
+
+- **`claims close` requires `--now` AND, on this machine, `--platform` and `--model`**, which
+  the skill's own example omits. Another F-89 asymmetry instance: a sibling subcommand
+  defaults what its neighbour demands.
+
+- **THE MCP CONTENT AUDIT GOVERNS `apps/` AND `packages/` ONLY, AND ITS TWO ITEM COUNTS ARE
+  DIFFERENT SURFACES.** `DELTA_SCOPE_PATHS`
+  (`agent-tools/src/mcp-content-current-source/current-source-delta-inventory.ts:19`) is an
+  explicit seven-root allow-list; the registry holds zero `plugins/` rows (verified: no
+  `plugins/` occurrence anywhere under `.agent/reports/mcp-agent-facing-content-audit/`).
+  Adding one breaks `requireSameStringMembers`. So a plugin-only change correctly leaves the
+  validator at **728** items (`current-source.json`) with a byte-identical anchors refresh —
+  while `registry.json` says **717**. Citing the wrong file is how a spurious "the validator
+  moved" claim gets manufactured. **The Director briefed this wrongly twice, in both
+  directions, and an agent's evidence corrected it both times** — which is the useful part:
+  the brief was the least reliable surface in the loop.
+
+- **A HALF-RUN GATE READS EXACTLY LIKE A TRANSIENT ONE.** The seat read a failing
+  `run-quality-gates` on #809 as "transient, resolved on its own". The run had **never
+  executed**: a stale identity-naming census had main's CI red for three runs and was failing
+  every pre-commit hook in the estate (cured by #810, `SHA:eca5dd0c7`). Related and separate:
+  **CI on this repo drops webhooks**, so a PR may show no checks at all and a push re-fires it
+  — corroborated on main by the deliberate re-fire commits `SHA:43707974e` and `SHA:d35479dfc`
+  ("webhook events lost in the throttle"). Bot authorship is not the cause of either.
+
+- **THE 406 THAT MEANS NOTHING.** A bare `curl https://www.thenational.academy/mcp` returns
+  **406**, because that path is also the MCP endpoint; an `Accept: text/html` header returns
+  **200**. Re-probed live 2026-08-07. A bare-curl 406 is therefore never evidence about the
+  landing page.
+
+- **CONCURRENT SAME-SESSION SEATS SHARE ONE SCRATCHPAD DIRECTORY AND ONE `agent_id`, so the
+  claims registry cannot detect same-session contention.** Verified structurally: this
+  session's scratchpad holds 432 files including a single `agent_id`, with filenames in exactly
+  the collision-prone shapes (`a1.log`, `amend.log`). Three collisions in a day; **one
+  overwrote a validated commit message between validation and `git commit -F`, so a commit
+  landed carrying a sibling's message on its own diff.** Cure: a distinguishing token in every
+  scratchpad filename. Adjacent registry finding at recording time: 17 claim rows all read
+  open, oldest 2026-07-28, including Spark's own `22585dbc` and Wisteria's `c3050091` —
+  MCP-528 is the ticket for separating seat-holding from liveness.
+
+- **A LOCAL BRANCH TRACKING `origin/main` MAKES A BARE `git push` SUGGEST
+  `git push origin HEAD:main`** — one accepted suggestion away from pushing a feature branch
+  onto main.
+
+- **NO AUTOMATED GUARD IN THE ESTATE COULD SEE THE MCP-516/517/518 FAMILY, BECAUSE THEY ALL
+  RUN UNAUTHENTICATED.** The only instrument that caught it was the owner deleting `__session`
+  and its suffixed twin in DevTools while leaving `__client_uat` real. The reviews on #812,
+  #813 and #815 then each found real defects the seat had missed. Reading for this tenure: the
+  review surface, not the gate surface, was the load-bearing control — and a signed-in leg
+  needs a signed-in prober, which no gate here has.
+
+- **AN UNSOUND CURE CAN BE MANDATED BY THE DIRECTOR AND STILL BE CAUGHT DOWNSTREAM (#812).**
+  The seat mandated ranking misconceptions by prior-knowledge dependency; the reviewer's
+  blocking finding was right that the shipped claim was wrong, and the Director's instructed
+  cure was **also** wrong. The empirical kill was cheap and decisive: anchoring
+  `comparing-fractions` in `get-prior-knowledge-graph` returns the anchor only ever as an edge
+  target and never as a source, and every node is `kind: "unit"` while misconceptions attach to
+  lessons — so a downstream count would give every misconception the same number and order
+  nothing. Landed fix orders by teaching sequence from `get-units-summary`
+  `unitLessons[].lessonOrder` (`SHA:b6e62eaf3`). Reading: two wrong answers in the same thread
+  did not stop a right one arriving, because the graph was probed rather than argued about.
+
+- **AN OWNER-CONVEYED SIGN-OFF WITH NO DURABLE HOME IS NOT A SIGN-OFF ANYONE CAN LATER READ.**
+  MCP-339 was reported signed off twice (HB Clark + Benyna on 2026-08-06; HB, Benyna and Aakesh
+  on 2026-08-07 for the reduced seven). At recording, MCP-339 is still `Backlog` with **no
+  sign-off comment**, and its most recent substantive comment (2026-08-05) explicitly frames
+  the earlier Slack agreement as "a dated scope decision, not yet as version-specific
+  sign-off". MCP-514 was minted this same tenure to stop exactly this decay, which makes the
+  gap a worked instance of its own ticket. Recording it on the ticket is owed.
+
+- **A SUPPLIED BRIEF IS A CLAIM, NOT EVIDENCE — five errors in the brief for this very
+  record.** It named the wrong sitting Director (Falcon, two blocks stale by then), the wrong
+  line count (1424 vs 1454), a pre-rotation napkin (2,631 lines vs the 868 left by the
+  2026-08-06 Sardine rides Trench rotation), asserted the MCP-339 sign-offs as settled, and
+  **inverted the #813 finding** — calling it "a live authentication bypass" when the reviewer's
+  finding and the cure commit both say the `/MCP` case variants still *ran Clerk and stayed
+  handshake-eligible*, i.e. auth reaching a surface ruled fully public, with the approval
+  explicitly confirming protocol traffic still cannot bypass Clerk. Every one was caught by
+  opening the target instead of trusting the summary. The pattern the brief described
+  reproduced inside the brief.
