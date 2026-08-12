@@ -52,16 +52,27 @@ function leafIdentityFrom(
     : ok(identity);
 }
 
+/** True when any path segment is `.` or `..` — inputs here must be already-resolved. */
+function hasDotSegments(value: string): boolean {
+  return value.split(/[\\/]/u).some((segment) => segment === '.' || segment === '..');
+}
+
 /** Validate lexical roots before any injected filesystem operation is consulted. */
 export function validateIdentityContainment(
   input: ContainedIdentityRead,
 ): Result<undefined, Error> {
-  if (
-    !path.isAbsolute(input.chainRoot) ||
-    !path.isAbsolute(input.ownerRoot) ||
-    !path.isAbsolute(input.path)
-  ) {
+  const inputs = [input.chainRoot, input.ownerRoot, input.path];
+  if (!inputs.every((value) => path.isAbsolute(value))) {
     return err(new Error('identity roots and member path must be absolute'));
+  }
+  // Refuse dot segments outright rather than resolving them: a `..` through a
+  // symlinked component would be collapsed lexically by the normalised
+  // comparisons below, letting the observed component chain skip the very
+  // component the no-symlink sweep exists to inspect (2026-08-12 security
+  // review). Callers hold fully resolved paths; there is no legitimate
+  // dot-segment input.
+  if (inputs.some((value) => hasDotSegments(value))) {
+    return err(new Error('identity roots and member path must not contain "." or ".." segments'));
   }
   if (!isWithin(input.chainRoot, input.ownerRoot)) {
     return err(
@@ -90,7 +101,7 @@ export function validateIdentityPathObservation(
   if (isErr(components)) {
     return components;
   }
-  return observation.canonicalPath === input.path &&
+  return path.normalize(observation.canonicalPath) === path.normalize(input.path) &&
     isWithin(input.ownerRoot, observation.canonicalPath)
     ? ok(undefined)
     : err(
@@ -107,7 +118,13 @@ function validateObservedComponents(
 ): Result<undefined, Error> {
   for (const [index, expectedPath] of expectedPaths.entries()) {
     const component = components[index];
-    if (component?.path !== expectedPath) {
+    // Normalised comparison for the same reason as isWithin: separator form
+    // is not identity — Windows accepts both, and the expected chain is
+    // host-joined while the observed one echoes the caller's form.
+    if (
+      component === undefined ||
+      path.normalize(component.path) !== path.normalize(expectedPath)
+    ) {
       return err(new Error(`identity path observation for '${memberPath}' is reordered`));
     }
     const expectedKind: IdentityFileKind =
@@ -172,7 +189,16 @@ function identityComponentPaths(input: ContainedIdentityRead): readonly string[]
 }
 
 function isWithin(base: string, candidate: string): boolean {
-  return candidate === base || candidate.startsWith(`${base}${path.sep}`);
+  // Normalise before the lexical comparison: Windows accepts forward-slash
+  // absolute paths, and comparing them raw against a `path.sep` boundary
+  // falsely classifies a contained path as escaping (an over-refusal, but a
+  // wrong verdict either way).
+  const normalisedBase = path.normalize(base);
+  const normalisedCandidate = path.normalize(candidate);
+  return (
+    normalisedCandidate === normalisedBase ||
+    normalisedCandidate.startsWith(`${normalisedBase}${path.sep}`)
+  );
 }
 
 function invoke<T>(operation: () => Result<T, Error>): Result<T, Error> {

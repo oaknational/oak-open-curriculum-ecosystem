@@ -16,13 +16,20 @@ import path from 'node:path';
 /**
  * Reads the UTF-8 text content of a file at `<repoRoot>/<relPath>`.
  *
+ * @remarks
+ * Line endings are normalised to LF at this shared read edge: committed
+ * blobs are LF, but a Windows checkout under Git's default autocrlf=true
+ * presents them CRLF on disk, and every validator built on this surface
+ * judges CONTENT (frontmatter shapes, index equality, rendered
+ * comparisons), never checkout presentation.
+ *
  * @param repoRoot - Absolute path to the repository root.
  * @param relPath  - Repo-relative path to the file.
- * @returns The full text content of the file.
+ * @returns The full text content of the file, LF line endings.
  * @throws When the file cannot be read.
  */
 export async function readText(repoRoot: string, relPath: string): Promise<string> {
-  return fs.readFile(path.join(repoRoot, relPath), 'utf8');
+  return (await fs.readFile(path.join(repoRoot, relPath), 'utf8')).replaceAll('\r\n', '\n');
 }
 
 /**

@@ -1,3 +1,4 @@
+import { sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { err, isErr, ok, unwrapOrThrow, type Result } from '@oaknational/result';
@@ -26,7 +27,14 @@ class MemoryIdentityReader implements IdentityReadPort {
     readonly ownerRoot: string;
     readonly path: string;
   }): Result<Uint8Array, Error> {
-    const bytes = this.#files.get(input.path);
+    // On Windows the module-URL round trip hands the product drive-prefixed,
+    // backslash paths; the fixture is authored in POSIX form, so lookups
+    // shed the drive and separators first.
+    const key = input.path
+      .replace(/^[A-Za-z]:/u, '')
+      .split(sep)
+      .join('/');
+    const bytes = this.#files.get(key);
     return bytes === undefined ? err(new Error(`missing ${input.path}`)) : ok(bytes);
   }
 }

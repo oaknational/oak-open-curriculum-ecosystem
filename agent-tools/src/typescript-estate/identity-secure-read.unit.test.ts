@@ -100,6 +100,24 @@ describe('secure identity read orchestration', () => {
     });
   });
 
+  it('rejects a dot-segment member path before consulting injected operations', () => {
+    // A `..` through a symlinked component would be collapsed lexically by
+    // the normalised comparisons while the observed component chain skips the
+    // symlink itself — so dot segments are refused outright, never resolved.
+    const failure = unwrapErr(
+      createSecureIdentityReadPort({
+        ...ACCEPTING_OPERATIONS,
+        validateBeforeOpen: () => err(new Error('operations must not run')),
+      }).readRegularFileNoFollow({
+        chainRoot: '/checkout',
+        ownerRoot: '/checkout/agent-tools/dist',
+        path: '/checkout/agent-tools/dist/link/../member.js',
+      }),
+    );
+
+    expect(failure.message).toContain('must not contain "." or ".." segments');
+  });
+
   it('rejects lexical escape before consulting injected operations', () => {
     const failure = unwrapErr(
       createSecureIdentityReadPort({

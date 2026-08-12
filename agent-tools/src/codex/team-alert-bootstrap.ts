@@ -182,7 +182,11 @@ async function readRequiredText(
 
 async function readNodeText(path: string): Promise<Result<string, Error>> {
   try {
-    return ok(await readFile(path, 'utf8'));
+    // Committed blobs are LF; a Windows checkout under Git's default
+    // autocrlf=true presents them CRLF on disk. Normalise the presentation
+    // at this read edge so marker structure and projection equality judge
+    // CONTENT — the projection itself is composed and written LF regardless.
+    return ok((await readFile(path, 'utf8')).replaceAll('\r\n', '\n'));
   } catch (cause: unknown) {
     return err(errorFrom(cause));
   }

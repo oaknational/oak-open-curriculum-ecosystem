@@ -152,7 +152,11 @@ export interface GeneratorFileIo {
 export const NODE_FILE_IO: GeneratorFileIo = {
   readTextFile: async (path: string): Promise<string | undefined> => {
     try {
-      return await readFile(path, 'utf8');
+      // Committed blobs are LF; a Windows checkout under Git's default
+      // autocrlf=true presents them CRLF on disk. Normalise the presentation
+      // at this read edge so generation and staleness checks judge CONTENT —
+      // the generated module is composed and written LF regardless.
+      return (await readFile(path, 'utf8')).replaceAll('\r\n', '\n');
     } catch {
       return undefined;
     }

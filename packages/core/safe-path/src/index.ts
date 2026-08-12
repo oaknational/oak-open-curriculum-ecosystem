@@ -1,5 +1,5 @@
 import { realpathSync } from 'node:fs';
-import { sep } from 'node:path';
+import { normalize, sep } from 'node:path';
 
 /** Injectable seam for {@link assertPathWithinBase} (testing + composition). */
 export interface AssertPathWithinBaseOptions {
@@ -44,9 +44,18 @@ export function assertPathWithinBase(
   const realBase = realpath(baseDir);
   const realCandidate = realpath(candidatePath);
 
-  const baseWithSep = realBase.endsWith(sep) ? realBase : `${realBase}${sep}`;
+  // Compare in normalised form: on Windows a canonicaliser (the documented
+  // seam, or a caller-supplied one) may express absolute paths with forward
+  // slashes, and a raw comparison against the host separator would misjudge
+  // containment on separator form alone. On POSIX normalisation is the
+  // identity for canonical paths (a backslash there is an ordinary filename
+  // character). The RETURN value stays the canonicaliser's own bytes.
+  const comparableBase = normalize(realBase);
+  const comparableCandidate = normalize(realCandidate);
 
-  if (realCandidate !== realBase && !realCandidate.startsWith(baseWithSep)) {
+  const baseWithSep = comparableBase.endsWith(sep) ? comparableBase : `${comparableBase}${sep}`;
+
+  if (comparableCandidate !== comparableBase && !comparableCandidate.startsWith(baseWithSep)) {
     throw new Error(
       `Refusing path outside the permitted base: '${candidatePath}' resolves to '${realCandidate}', which is not within '${realBase}'.`,
     );

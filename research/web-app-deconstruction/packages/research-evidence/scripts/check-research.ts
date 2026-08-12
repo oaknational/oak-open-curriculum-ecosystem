@@ -149,7 +149,11 @@ for (const file of markdownFiles) {
   }
 
   if (isLifecycleRecord(fileName)) {
-    const frontMatter = source.match(/^---\n([\s\S]*?)\n---(?:\n|$)/)?.[1];
+    // \r?\n: committed blobs are LF, but a Windows checkout under the Git
+    // default autocrlf=true renders CRLF on disk — the record is the same
+    // document either way, and a byte-exact LF match would misreport it as
+    // missing its front matter.
+    const frontMatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1];
     if (!frontMatter) {
       failures.push(`${fileName}: missing lifecycle front matter`);
     } else {

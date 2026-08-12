@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import { sep } from 'node:path';
 
 import { err, ok, unwrapErr, unwrapOrThrow, type Result } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
@@ -15,6 +16,9 @@ const CHECKOUT = '/checkout';
 const OWNER_ROOT = '/checkout/agent-tools/dist';
 const SRC_DIR = '/checkout/agent-tools/dist/src';
 const MEMBER = '/checkout/agent-tools/dist/src/member.js';
+
+/** The product's error messages embed HOST-joined paths; expectations derive the same form. */
+const hostForm = (posixPath: string): string => posixPath.split('/').join(sep);
 
 interface MemoryNode {
   readonly kind: IdentityFileKind;
@@ -58,13 +62,21 @@ class MemoryIdentityFileSystem implements IdentityFileSystemPort<MemoryDescripto
     this.#options = options;
   }
 
+  // The product addresses the port in HOST-joined form; this fixture is
+  // authored in POSIX form for readability. Keying and recording through one
+  // normaliser makes the fake separator-blind, so the same fixture holds on
+  // every platform.
+  static #key(path: string): string {
+    return path.split(sep).join('/');
+  }
+
   mintNode(kind: IdentityFileKind, bytes?: Uint8Array): MemoryNode {
     this.#nextInode += 1;
     return { kind, device: 7, inode: this.#nextInode, bytes };
   }
 
   setNode(path: string, kind: IdentityFileKind, bytes?: Uint8Array): void {
-    this.nodes.set(path, this.mintNode(kind, bytes));
+    this.nodes.set(MemoryIdentityFileSystem.#key(path), this.mintNode(kind, bytes));
   }
 
   /** Every path a descriptor was successfully created against, in mint order. */
@@ -78,27 +90,28 @@ class MemoryIdentityFileSystem implements IdentityFileSystemPort<MemoryDescripto
   }
 
   lstat(path: string): Result<IdentityNodeObservation | undefined, Error> {
-    const node = this.nodes.get(path);
+    const node = this.nodes.get(MemoryIdentityFileSystem.#key(path));
     return ok(
       node === undefined ? undefined : { kind: node.kind, device: node.device, inode: node.inode },
     );
   }
 
   realpath(path: string): Result<string, Error> {
-    const node = this.nodes.get(path);
+    const node = this.nodes.get(MemoryIdentityFileSystem.#key(path));
     return node === undefined ? err(new Error(`missing ${path}`)) : ok(node.realpath ?? path);
   }
 
   openReadNoFollow(path: string): Result<MemoryDescriptor, Error> {
-    const node = this.nodes.get(path);
+    const key = MemoryIdentityFileSystem.#key(path);
+    const node = this.nodes.get(key);
     if (node === undefined) {
       return err(new Error(`missing ${path}`));
     }
     const descriptor: MemoryDescriptor = {
-      path,
+      path: key,
       node: this.#options.openHijack ?? node,
     };
-    this.#opened.push(path);
+    this.#opened.push(key);
     this.#live.add(descriptor);
     return ok(descriptor);
   }
@@ -172,7 +185,7 @@ describe('secure identity read over a filesystem port', () => {
       }),
     );
 
-    expect(failure.message).toContain(`'${SRC_DIR}' is a symlink`);
+    expect(failure.message).toContain(`'${hostForm(SRC_DIR)}' is a symlink`);
     expect(fs.openedPaths).toEqual([]);
   });
 
@@ -188,7 +201,7 @@ describe('secure identity read over a filesystem port', () => {
       }),
     );
 
-    expect(failure.message).toContain(`'${SRC_DIR}' is a symlink`);
+    expect(failure.message).toContain(`'${hostForm(SRC_DIR)}' is a symlink`);
     expect(fs.openedPaths).toEqual([MEMBER]);
     expect(fs.openDescriptorPaths).toEqual([]);
   });
@@ -205,7 +218,7 @@ describe('secure identity read over a filesystem port', () => {
       }),
     );
 
-    expect(failure.message).toContain("'/checkout/agent-tools' is a symlink");
+    expect(failure.message).toContain(`'${hostForm('/checkout/agent-tools')}' is a symlink`);
     expect(fs.openDescriptorPaths).toEqual([]);
   });
 
