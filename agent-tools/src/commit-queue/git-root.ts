@@ -1,4 +1,5 @@
 import { defaultRunGit, type GitRunner } from '../collaboration-state/coordination-home.js';
+import { TrustedGitResolutionError } from '../core/trusted-git.js';
 
 /**
  * Resolve the root of the git worktree the CLI was INVOKED from.
@@ -32,6 +33,12 @@ export function resolveInvokingGitRoot(cwd: string, runGit: GitRunner = defaultR
   try {
     topLevel = runGit(['rev-parse', '--show-toplevel'], cwd);
   } catch (cause) {
+    // A resolver refusal is its own diagnosis — git never ran, so the
+    // not-inside-a-working-tree translation below would be false (the
+    // misleading-error class this repository has now hit three times).
+    if (cause instanceof TrustedGitResolutionError) {
+      throw cause;
+    }
     throw new Error(
       `Unable to resolve the invoking git worktree root: '${cwd}' is not inside a git working tree. ` +
         `Commit-queue staged reads and the inner commit operate against the INVOKING worktree's index; ` +

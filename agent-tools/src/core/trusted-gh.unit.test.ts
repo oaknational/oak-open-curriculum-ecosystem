@@ -4,32 +4,75 @@ import { describe, expect, it } from 'vitest';
 import { resolveTrustedGh } from './trusted-gh.js';
 
 describe('resolveTrustedGh', () => {
-  it('returns ok with the absolute path to gh from the first trusted directory that has it', () => {
-    // Homebrew's bin is searched before the system dirs, so it wins when present.
-    const result = resolveTrustedGh((candidate) => candidate === '/opt/homebrew/bin/gh');
-    expect(isOk(result)).toBe(true);
-    expect(unwrap(result)).toBe('/opt/homebrew/bin/gh');
-  });
+  it.each([['linux'], ['darwin']] as const)(
+    'on %s returns ok with the trusted POSIX path that holds gh',
+    (platform) => {
+      // Homebrew's entry is searched before the system paths, so it wins when present.
+      const result = resolveTrustedGh(
+        (candidate) => candidate === '/opt/homebrew/bin/gh',
+        platform,
+      );
+      expect(isOk(result)).toBe(true);
+      expect(unwrap(result)).toBe('/opt/homebrew/bin/gh');
+    },
+  );
 
-  it('searches the trusted directories in priority order, taking the first hit', () => {
-    // Both exist; the earlier-listed directory must win (deterministic resolution).
+  it('on win32 returns ok with the GitHub CLI installer path when present', () => {
     const result = resolveTrustedGh(
-      (candidate) => candidate === '/opt/homebrew/bin/gh' || candidate === '/usr/local/bin/gh',
+      (candidate) => candidate === String.raw`C:\Program Files\GitHub CLI\gh.exe`,
+      'win32',
     );
-    expect(unwrap(result)).toBe('/opt/homebrew/bin/gh');
+    expect(isOk(result)).toBe(true);
+    expect(unwrap(result)).toBe(String.raw`C:\Program Files\GitHub CLI\gh.exe`);
   });
 
-  it('resolves by absolute path only — never a bare "gh" (S4036 PATH-hijack defence)', () => {
-    const path = unwrap(resolveTrustedGh((candidate) => candidate === '/usr/local/bin/gh'));
-    expect(path).toBe('/usr/local/bin/gh');
-    expect(path.startsWith('/')).toBe(true);
+  it.each([
+    ['linux', '/opt/homebrew/bin/gh'],
+    ['win32', String.raw`C:\Program Files\GitHub CLI\gh.exe`],
+  ] as const)('on %s searches in priority order, taking the first hit', (platform, first) => {
+    const result = resolveTrustedGh(() => true, platform);
+    expect(unwrap(result)).toBe(first);
   });
 
-  it('returns err naming the remedy when gh is in none of the trusted directories', () => {
-    const result = resolveTrustedGh(() => false);
+  // Cross-family candidates are never consulted (S4036): on win32 a rooted
+  // POSIX path is drive-relative and lands in user-plantable space; on POSIX a
+  // literal 'C:\...' is a legal relative filename. Partitioning closes both.
+  it('on win32 returns err even when a POSIX-family path exists', () => {
+    const result = resolveTrustedGh((candidate) => candidate === '/opt/homebrew/bin/gh', 'win32');
+    expect(isErr(result)).toBe(true);
+  });
+
+  it('on linux returns err even when a Windows-family path exists', () => {
+    const result = resolveTrustedGh(
+      (candidate) => candidate === String.raw`C:\Program Files\GitHub CLI\gh.exe`,
+      'linux',
+    );
+    expect(isErr(result)).toBe(true);
+  });
+
+  it.each([['linux'], ['darwin']] as const)(
+    'on %s the err names only POSIX candidates and the symlink remedy',
+    (platform) => {
+      const result = resolveTrustedGh(() => false, platform);
+      expect(isErr(result)).toBe(true);
+      if (isErr(result)) {
+        expect(result.error.message).toMatch(/No trusted gh/u);
+        expect(result.error.message).toMatch(/\/opt\/homebrew\/bin\/gh/u);
+        expect(result.error.message).toMatch(/symlink it at one of those paths/u);
+        expect(result.error.message).not.toMatch(/Program Files/u);
+      }
+    },
+  );
+
+  it('on win32 the err names only Windows candidates and the system-wide install remedy', () => {
+    const result = resolveTrustedGh(() => false, 'win32');
     expect(isErr(result)).toBe(true);
     if (isErr(result)) {
-      expect(result.error.message).toMatch(/gh.*not found|No trusted gh/u);
+      expect(result.error.message).toMatch(/No trusted gh/u);
+      expect(result.error.message).toMatch(/Program Files\\GitHub CLI\\gh\.exe/u);
+      expect(result.error.message).toMatch(/winget install GitHub\.cli/u);
+      expect(result.error.message).not.toMatch(/symlink/u);
+      expect(result.error.message).not.toMatch(/\/usr\/bin/u);
     }
   });
 });

@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { statSync } from 'node:fs';
 import { isAbsolute, join } from 'node:path';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
+import { resolveTrustedGit, TrustedGitResolutionError } from '../core/trusted-git.js';
 
 /** Runs a git subcommand from `cwd` and returns stdout; throws on non-zero exit. */
 export type GitRunner = (args: readonly string[], cwd: string) => string;
@@ -112,6 +112,14 @@ export function resolveCoordinationHome(
   try {
     porcelain = runGit(['worktree', 'list', '--porcelain'], cwd);
   } catch (cause) {
+    // A resolver refusal is its own diagnosis — git never ran, so "not inside
+    // a git working tree" would be a false statement about a true repository
+    // (observed 2026-08-11 on Windows: the POSIX-only allowlist refused and
+    // this wrapper rebranded it, exactly the pnpm-path misleading-error
+    // precedent).
+    if (cause instanceof TrustedGitResolutionError) {
+      throw cause;
+    }
     throw new Error(
       `Unable to resolve the collaboration home: '${cwd}' is not inside a git working tree. ` +
         `Run from inside the repository, or pass an explicit --repo-root <path>.`,

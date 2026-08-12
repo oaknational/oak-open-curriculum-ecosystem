@@ -1,4 +1,4 @@
-import { execSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import type { SessionEntry, SubagentSummary } from './session-tools.js';
@@ -6,6 +6,7 @@ import { shouldSkipCompactAgent } from './session-tools.js';
 import { escapedRepoPath, isSessionId } from './runtime-paths.js';
 import { isHistoryRow, isMetaRow, readJsonLines } from './json-parsing.js';
 import { writeErrorLine } from './terminal-output.js';
+import { resolveTrustedGit } from './trusted-git.js';
 export { listAgentShortIds, resolveAgentJsonlPath } from './runtime-agent-index.js';
 export { readAgentEvents } from './runtime-agent-events.js';
 /** File-system contract used by runtime helpers for dependency injection in tests. */
@@ -37,7 +38,11 @@ const maxDirectoryFilesRead = 200;
 const maxFileBytesRead = 256 * 1024;
 export function repoRoot(): string {
   try {
-    return execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim();
+    // Absolute-path git via the trusted resolver (S4036) — the last by-name,
+    // via-shell git call in agent-tools, migrated 2026-08-12.
+    return execFileSync(resolveTrustedGit(), ['rev-parse', '--show-toplevel'], {
+      encoding: 'utf8',
+    }).trim();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Unable to determine repository root from '${process.cwd()}': ${message}`, {

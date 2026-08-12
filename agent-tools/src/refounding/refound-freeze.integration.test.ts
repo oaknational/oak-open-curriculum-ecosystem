@@ -329,7 +329,11 @@ describe('runFreeze — refusal chain (nothing written)', () => {
     await mkdir(elsewhere, { recursive: true });
     await writeFile(path.join(elsewhere, 'sentinel.txt'), 'untouched\n', 'utf8');
     await mkdir(path.join(fixture.outDirAbs, 'archive'), { recursive: true });
-    await symlink(elsewhere, fixture.frozenRoot);
+    // 'junction' so the fixture is creatable without privilege on Windows
+    // (plain directory symlinks need admin or Developer Mode there); ignored
+    // on POSIX, and lstat classifies a junction as a symlink on win32, so the
+    // refusal under test is identical everywhere.
+    await symlink(elsewhere, fixture.frozenRoot, 'junction');
     const result = await runFreeze({ ...fixture, secretScan: cleanScan });
     expect(result.ok).toBe(false);
     if (!result.ok) {
@@ -500,16 +504,19 @@ describe('runFreeze — secret-scan ordering and rollback', () => {
 });
 
 describe('gitleaks resolution (the pinned-binary attestation seam)', () => {
-  it('resolves gitleaks from the fixed trusted-directory allowlist, never via PATH', () => {
-    const resolved = resolveTrustedGitleaks((candidate) => candidate === '/usr/local/bin/gitleaks');
+  it('resolves gitleaks from the fixed trusted-path allowlist, never via PATH', () => {
+    const resolved = resolveTrustedGitleaks(
+      (candidate) => candidate === '/usr/local/bin/gitleaks',
+      'linux',
+    );
     expect(resolved.ok).toBe(true);
     if (resolved.ok) {
       expect(resolved.value).toBe('/usr/local/bin/gitleaks');
     }
   });
 
-  it('refuses with the symlink remedy when no trusted directory holds gitleaks', () => {
-    const resolved = resolveTrustedGitleaks(() => false);
+  it('refuses with the symlink remedy when no trusted path holds gitleaks', () => {
+    const resolved = resolveTrustedGitleaks(() => false, 'linux');
     expect(resolved.ok).toBe(false);
     if (!resolved.ok) {
       expect(resolved.error.message).toContain('No trusted gitleaks binary found');
@@ -517,16 +524,61 @@ describe('gitleaks resolution (the pinned-binary attestation seam)', () => {
     }
   });
 
-  it('probes the pinned binary for its self-reported version', async () => {
-    const binDir = await mkdtemp(path.join(tmpdir(), 'refound-gitleaks-bin-'));
-    tempRoots.push(binDir);
-    const fakeBin = path.join(binDir, 'gitleaks');
-    await writeFile(fakeBin, '#!/bin/sh\necho fake-gitleaks 0.0.0-test\n', { mode: 0o755 });
-    const version = probeGitleaksVersion(fakeBin);
+  it('refuses unconditionally on win32, naming the missing admin-protected location', () => {
+    // Even a gitleaks that "exists" everywhere is refused: no Windows install
+    // location is administrator-protected, so none can be a fixed trusted path.
+    const resolved = resolveTrustedGitleaks(() => true, 'win32');
+    expect(resolved.ok).toBe(false);
+    if (!resolved.ok) {
+      expect(resolved.error.message).toContain('No trusted gitleaks binary is possible on Windows');
+      expect(resolved.error.message).toContain('POSIX host');
+    }
+  });
+
+  it('reports the trimmed version line from a clean probe', () => {
+    const version = probeGitleaksVersion('/usr/local/bin/gitleaks', () => ({
+      status: 0,
+      stdout: 'fake-gitleaks 0.0.0-test\n',
+      stderr: '',
+    }));
     expect(version.ok).toBe(true);
     if (version.ok) {
       expect(version.value).toBe('fake-gitleaks 0.0.0-test');
     }
-    expect(probeGitleaksVersion(path.join(binDir, 'absent')).ok).toBe(false);
+  });
+
+  it('refuses when the probe cannot launch the binary at all', () => {
+    const version = probeGitleaksVersion('/usr/local/bin/absent', () => ({
+      error: new Error('spawn ENOENT'),
+      status: null,
+      stdout: '',
+      stderr: '',
+    }));
+    expect(version.ok).toBe(false);
+    if (!version.ok) {
+      expect(version.error.message).toContain('cannot probe gitleaks version');
+    }
+  });
+
+  it('refuses a non-zero probe exit, carrying the stderr tail', () => {
+    const version = probeGitleaksVersion('/usr/local/bin/gitleaks', () => ({
+      status: 3,
+      stdout: '',
+      stderr: 'corrupt install\n',
+    }));
+    expect(version.ok).toBe(false);
+    if (!version.ok) {
+      expect(version.error.message).toContain('exit 3');
+      expect(version.error.message).toContain('corrupt install');
+    }
+  });
+
+  it('refuses an empty version report even on exit 0', () => {
+    const version = probeGitleaksVersion('/usr/local/bin/gitleaks', () => ({
+      status: 0,
+      stdout: '',
+      stderr: '',
+    }));
+    expect(version.ok).toBe(false);
   });
 });
