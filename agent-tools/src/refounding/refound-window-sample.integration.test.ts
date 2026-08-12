@@ -1,5 +1,14 @@
 import { existsSync } from 'node:fs';
-import { mkdir, mkdtemp, readFile, rename, rm, symlink, writeFile } from 'node:fs/promises';
+import {
+  mkdir,
+  mkdtemp,
+  readdir,
+  readFile,
+  rename,
+  rm,
+  symlink,
+  writeFile,
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
@@ -290,12 +299,17 @@ describe('runWindowSample — refusal chain (nothing written)', () => {
     await expectRefusal(fixture, 'sweep hit line 2');
   });
 
+  // Directory links throughout these refusal fixtures are created as
+  // 'junction' so they need no privilege on Windows (plain symlinks require
+  // admin or Developer Mode there); the argument is ignored on POSIX, and
+  // lstat classifies a junction as a symlink, so the refusal under test is
+  // identical everywhere.
   it('refuses to write through a symlinked sweep directory', async () => {
     const fixture = await makeFixture(HAPPY);
     const sweepDirAbs = path.join(fixture.outDirAbs, 'sweep');
     const decoyDirAbs = path.join(fixture.repoRoot, 'decoy-sweep');
     await rename(sweepDirAbs, decoyDirAbs);
-    await symlink(decoyDirAbs, sweepDirAbs);
+    await symlink(decoyDirAbs, sweepDirAbs, 'junction');
     const run = await runWindowSample(fixture);
     expect(unwrapErr(run).message).toContain('symlink');
     expect(existsSync(path.join(decoyDirAbs, 'window-sample.v1.json'))).toBe(false);
@@ -303,12 +317,15 @@ describe('runWindowSample — refusal chain (nothing written)', () => {
 
   it('refuses to write through a symlink at the manifest path itself, leaving its target untouched', async () => {
     const fixture = await makeFixture(HAPPY);
-    const decoyAbs = path.join(fixture.repoRoot, 'decoy-manifest.json');
-    await writeFile(decoyAbs, 'sealed decoy content\n', 'utf8');
-    await symlink(decoyAbs, path.join(fixture.outDirAbs, WINDOW_SAMPLE_SEGMENT));
+    // A directory decoy behind the link: the refusal probes lstat at the
+    // manifest PATH, which sees a symlink either way, and a directory target
+    // lets the fixture stay junction-creatable without privilege.
+    const decoyDirAbs = path.join(fixture.repoRoot, 'decoy-manifest-home');
+    await mkdir(decoyDirAbs);
+    await symlink(decoyDirAbs, path.join(fixture.outDirAbs, WINDOW_SAMPLE_SEGMENT), 'junction');
     const run = await runWindowSample(fixture);
     expect(unwrapErr(run).message).toContain('symlink');
-    expect(await readFile(decoyAbs, 'utf8')).toBe('sealed decoy content\n');
+    expect(await readdir(decoyDirAbs)).toEqual([]);
   });
 
   it('halts when the hits queue does not match the evidence-recorded sha256', async () => {
@@ -408,7 +425,7 @@ describe('writeManifest — TOCTOU re-canonicalisation guard (nothing written)',
     const decoyAgent = path.join(repoRoot, 'decoy-agent');
     await mkdir(decoyAgent);
     await rm(path.join(repoRoot, '.agent'), { recursive: true, force: true });
-    await symlink(decoyAgent, path.join(repoRoot, '.agent'));
+    await symlink(decoyAgent, path.join(repoRoot, '.agent'), 'junction');
     const written = await writeManifest(target, emptyManifest());
     expect(unwrapErr(written).message).toContain('an ancestor was swapped');
     expect(existsSync(path.join(decoyAgent, 'plans-refounding', WINDOW_SAMPLE_SEGMENT))).toBe(
@@ -429,7 +446,7 @@ describe('writeManifest — TOCTOU re-canonicalisation guard (nothing written)',
     // outside the repo. A recursive mkdir would follow it and escape.
     const plantedTarget = path.join(outsideRoot, 'planted');
     await mkdir(plantedTarget, { recursive: true });
-    await symlink(plantedTarget, outDirAbs);
+    await symlink(plantedTarget, outDirAbs, 'junction');
     const written = await writeManifest(target, emptyManifest());
     expect(unwrapErr(written).message).toContain('not a real directory');
     expect(existsSync(path.join(plantedTarget, WINDOW_SAMPLE_SEGMENT))).toBe(false);
@@ -446,7 +463,7 @@ describe('writeManifest — TOCTOU re-canonicalisation guard (nothing written)',
     const decoyAgent = path.join(repoRoot, 'decoy-agent');
     await mkdir(path.join(decoyAgent, 'plans-refounding'), { recursive: true });
     await rm(path.join(repoRoot, '.agent'), { recursive: true, force: true });
-    await symlink(decoyAgent, path.join(repoRoot, '.agent'));
+    await symlink(decoyAgent, path.join(repoRoot, '.agent'), 'junction');
     const written = await writeManifest(target, emptyManifest());
     expect(unwrapErr(written).message).toContain('an ancestor was swapped');
     expect(existsSync(path.join(decoyAgent, 'plans-refounding', WINDOW_SAMPLE_SEGMENT))).toBe(
@@ -464,7 +481,7 @@ describe('writeManifest — TOCTOU re-canonicalisation guard (nothing written)',
     // A pre-existing --out symlink pointing outside the repo is refused when the
     // chain is canonicalised — before any target is produced or byte written.
     const outDirAbs = path.join(repoRoot, 'linked-out');
-    await symlink(outsideOut, outDirAbs);
+    await symlink(outsideOut, outDirAbs, 'junction');
     expect(unwrapErr(canonicaliseOutDir(repoRoot, outDirAbs)).message).toContain('symlink');
     expect(existsSync(path.join(outsideOut, WINDOW_SAMPLE_SEGMENT))).toBe(false);
   });
@@ -476,7 +493,7 @@ describe('writeManifest — TOCTOU re-canonicalisation guard (nothing written)',
     await mkdir(realTarget, { recursive: true });
     await mkdir(path.join(repoRoot, '.agent'));
     const outDirAbs = path.join(repoRoot, '.agent/plans-refounding');
-    await symlink(realTarget, outDirAbs);
+    await symlink(realTarget, outDirAbs, 'junction');
     expect(unwrapErr(canonicaliseOutDir(repoRoot, outDirAbs)).message).toContain('symlink');
     expect(existsSync(path.join(realTarget, WINDOW_SAMPLE_SEGMENT))).toBe(false);
   });
@@ -486,7 +503,7 @@ describe('writeManifest — TOCTOU re-canonicalisation guard (nothing written)',
     tempRoots.push(repoRoot);
     const realAgent = path.join(repoRoot, 'real-agent');
     await mkdir(path.join(realAgent, 'plans-refounding'), { recursive: true });
-    await symlink(realAgent, path.join(repoRoot, '.agent'));
+    await symlink(realAgent, path.join(repoRoot, '.agent'), 'junction');
     const outDirAbs = path.join(repoRoot, '.agent/plans-refounding');
     expect(unwrapErr(canonicaliseOutDir(repoRoot, outDirAbs)).message).toContain('symlink');
   });

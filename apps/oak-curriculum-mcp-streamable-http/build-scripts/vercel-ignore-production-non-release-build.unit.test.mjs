@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -33,7 +35,10 @@ import {
  */
 
 const REPOSITORY_ROOT = '/repo';
-const ROOT_PACKAGE_JSON_PATH = '/repo/package.json';
+// Host form of the root package.json path: the command resolves it against
+// the repository root, so the fake's guard must expect the host-joined form
+// (drive-prefixed backslash path on Windows, `/repo/package.json` on POSIX).
+const ROOT_PACKAGE_JSON_PATH = path.resolve(REPOSITORY_ROOT, 'package.json');
 const VALID_SHA = 'a'.repeat(40);
 const VALID_SHA_OTHER = 'b1'.repeat(20);
 

@@ -161,8 +161,11 @@ describe('collaboration state integrity validator', () => {
       // absence is a genuine integrity fault, not the untracked-by-design case.
       await removeDirectory(join(repoRoot, '.agent/state/collaboration/conversations'));
 
+      // The raw filesystem error names the directory in host separators, so
+      // the expected substring is derived in host form (the POSIX literal on
+      // POSIX).
       await expect(validateCollaborationStateIntegrity({ repoRoot })).rejects.toThrow(
-        '.agent/state/collaboration/conversations',
+        join('.agent', 'state', 'collaboration', 'conversations'),
       );
     } finally {
       await removeDirectory(repoRoot);

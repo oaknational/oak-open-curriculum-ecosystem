@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { deriveIdentity } from '../../src/core/agent-identity';
@@ -56,7 +58,9 @@ describe('planCursorSessionIdentityHook', () => {
       `Oak · ${expectedDisplayName} — suggested Composer tab title; details in .cursor/oak-composer-session.local.json`,
     );
     expect(plan.mirror).toStrictEqual({
-      absolutePath: '/repo/.cursor/oak-composer-session.local.json',
+      // The mirror path is a real filesystem path built with host joins, so
+      // the expectation derives the same host form.
+      absolutePath: join(projectDir, '.cursor', 'oak-composer-session.local.json'),
       payload: {
         schema: 'oak.cursor-composer-session.v1',
         updatedAt: nowIso,

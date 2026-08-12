@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { runCollaborationStateCli } from '../../src/collaboration-state';
@@ -7,8 +9,10 @@ import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
 const LINKED = '/workspace/oak-worktrees/lane-b';
 const PRIMARY = '/workspace/oak';
 const EXPLICIT_COMMS_DIR = '/explicit/comms';
-const CANONICAL_ACTIVE = `${PRIMARY}/.agent/state/collaboration/active-claims.json`;
-const CANONICAL_LOG = `${PRIMARY}/.agent/state/collaboration/shared-comms-log.md`;
+// Derived defaults are host-joined onto the home, so these expectations are
+// built in host form (identical to the POSIX literals on POSIX).
+const CANONICAL_ACTIVE = join(PRIMARY, '.agent/state/collaboration/active-claims.json');
+const CANONICAL_LOG = join(PRIMARY, '.agent/state/collaboration/shared-comms-log.md');
 
 const senderEnv = {
   OAK_AGENT_IDENTITY_OVERRIDE: 'Juniper crosses Vale',
@@ -62,7 +66,9 @@ describe('comms send path defaults', () => {
     expect(fake.readActiveClaimsPaths()).toStrictEqual(['/explicit/active-claims.json']);
     expect(fake.readCommsEvents(EXPLICIT_COMMS_DIR)).toHaveLength(1);
     expect(JSON.parse(result.stdout)).toMatchObject({
-      event_path: `${EXPLICIT_COMMS_DIR}/resolver-boundary-regression.json`,
+      // The event path is host-joined from the comms dir; the shared log path
+      // is echoed verbatim and stays a literal.
+      event_path: join(EXPLICIT_COMMS_DIR, 'resolver-boundary-regression.json'),
       shared_log_path: '/explicit/shared-comms-log.md',
     });
   });
@@ -88,7 +94,7 @@ describe('comms send path defaults', () => {
     expect(fake.readCommsEvents(EXPLICIT_COMMS_DIR)).toHaveLength(1);
     expect(fake.readTextFile(CANONICAL_LOG)).toBeDefined();
     expect(JSON.parse(result.stdout)).toMatchObject({
-      event_path: `${EXPLICIT_COMMS_DIR}/resolver-boundary-regression.json`,
+      event_path: join(EXPLICIT_COMMS_DIR, 'resolver-boundary-regression.json'),
       shared_log_path: CANONICAL_LOG,
     });
   });

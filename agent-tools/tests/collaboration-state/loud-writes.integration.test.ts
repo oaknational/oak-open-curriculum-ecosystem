@@ -77,7 +77,11 @@ describe('comms write commands report their writes', () => {
     });
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toBe('wrote comms event loud-append to state/comms/loud-append.json\n');
+    // The reported event path is host-joined from the comms dir, so the
+    // expectation is derived in host form (the POSIX literal on POSIX).
+    expect(result.stdout).toBe(
+      `wrote comms event loud-append to ${join('state/comms', 'loud-append.json')}\n`,
+    );
   });
 
   it('comms append in heartbeat mode reports the written event id and path', async () => {
@@ -139,7 +143,7 @@ describe('comms write commands report their writes', () => {
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toBe(
-      'wrote comms event loud-heartbeat to state/comms/loud-heartbeat.json\n',
+      `wrote comms event loud-heartbeat to ${join('state/comms', 'loud-heartbeat.json')}\n`,
     );
   });
 

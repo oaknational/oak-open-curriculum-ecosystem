@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { readBranchTouchedFileReport, readGitStdout } from '../src/branch-touched-files/git';
 import type { GitCommandExecutor } from '../src/branch-touched-files/git';
+import { resolveTrustedGit } from '../src/core/trusted-git';
 
 describe('branch touched files git boundary', () => {
   it('executes git by its absolute trusted path, not by name via PATH', () => {
@@ -28,7 +29,10 @@ describe('branch touched files git boundary', () => {
     expect(calls[0]?.args).toStrictEqual(['rev-parse', '--show-toplevel']);
     // The hardening is the absolute binary path itself — not a PATH override.
     expect(path.isAbsolute(calls[0]?.file ?? '')).toBe(true);
-    expect(path.basename(calls[0]?.file ?? '')).toBe('git');
+    // The trusted binary's name is host-shaped ('git' on POSIX, 'git.exe' on
+    // Windows), so pin the executed file to the fixed-allowlist resolution
+    // itself — strictly stronger than a basename check.
+    expect(calls[0]?.file).toBe(resolveTrustedGit());
     expect(calls[0]?.env).toBeUndefined();
   });
 

@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { runMergeBotCli, type MergeBotCliInput } from './cli.js';
@@ -254,9 +256,10 @@ describe('merge-bot push credential discipline', () => {
       .map(([name]) => name);
     expect(carriers).toEqual([]);
     // What the environment carries is the PATH to the 0600 token file the
-    // helper reads — a path is harmless in any env dump.
-    expect(push?.env.GH_PUSH_TOKEN_FILE).toBe(`${STORE_DIR}/token`);
-    expect(run.writes).toEqual([{ path: `${STORE_DIR}/token`, content: TOKEN, mode: 0o600 }]);
+    // helper reads — a path is harmless in any env dump. The product joins it
+    // with host separators; the expectation derives the same host form.
+    expect(push?.env.GH_PUSH_TOKEN_FILE).toBe(join(STORE_DIR, 'token'));
+    expect(run.writes).toEqual([{ path: join(STORE_DIR, 'token'), content: TOKEN, mode: 0o600 }]);
     // Prompting stays disabled: an unanswered helper must fail loudly, never
     // fall back to asking the signed-in human. The fail-closed property of an
     // empty or missing token file rests entirely on this variable.
@@ -405,7 +408,7 @@ describe('merge-bot push credential discipline', () => {
     });
 
     expect(await run.exit).toBe(1);
-    expect(run.writes).toEqual([{ path: `${STORE_DIR}/token`, content: TOKEN, mode: 0o600 }]);
+    expect(run.writes).toEqual([{ path: join(STORE_DIR, 'token'), content: TOKEN, mode: 0o600 }]);
     expect(run.removed).toEqual([STORE_DIR]);
   });
 });

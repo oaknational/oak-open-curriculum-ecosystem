@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -7,6 +9,11 @@ import {
   type ClearFs,
 } from '../../src/skills-adapter-generate/clear';
 
+// The product joins with the HOST separator (correct for real fs access);
+// this fake is keyed and asserted in POSIX form for readability, so both the
+// lookups and the recorded removals normalise first.
+const posixPath = (hostPath: string): string => hostPath.split(sep).join('/');
+
 function makeClearFs(subdirectories: ReadonlyMap<string, readonly string[]>): {
   readonly fs: ClearFs;
   readonly removed: string[];
@@ -15,10 +22,10 @@ function makeClearFs(subdirectories: ReadonlyMap<string, readonly string[]>): {
   return {
     fs: {
       async listSubdirectoryNames(path) {
-        return { kind: 'ok', names: subdirectories.get(path) ?? [] };
+        return { kind: 'ok', names: subdirectories.get(posixPath(path)) ?? [] };
       },
       async removeDirectory(path) {
-        removed.push(path);
+        removed.push(posixPath(path));
       },
     },
     removed,

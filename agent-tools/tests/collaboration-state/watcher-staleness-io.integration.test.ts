@@ -4,7 +4,7 @@
  * and the literal `'missing'` for an absent one (never throwing on ENOENT), and
  * `readTextFile` returns the file contents.
  */
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdtemp, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -48,14 +48,14 @@ describe('productionWatcherStalenessIo', () => {
   });
 
   it('rethrows a non-ENOENT stat error rather than reporting it as missing', async () => {
-    // Statting THROUGH a regular file yields ENOTDIR (not ENOENT): the file
-    // exists but the path is unusable, so the adapter must fail loud, not
-    // masquerade as a watcher that was never started.
-    const file = join(dir, 'not-a-dir');
-    await writeFile(file, 'x', 'utf8');
+    // Statting a self-referential link yields ELOOP (not ENOENT) on every
+    // platform: the path exists but is unusable, so the adapter must fail
+    // loud, not masquerade as a watcher that was never started. Created as a
+    // 'junction' so no privilege is needed on Windows; the type argument is
+    // ignored on POSIX, and lstat-style loop detection fires either way.
+    const loop = join(dir, 'loop');
+    await symlink(loop, loop, 'junction');
 
-    await expect(
-      productionWatcherStalenessIo.statMtimeMs(join(file, 'child.json')),
-    ).rejects.toThrow();
+    await expect(productionWatcherStalenessIo.statMtimeMs(loop)).rejects.toThrow();
   });
 });

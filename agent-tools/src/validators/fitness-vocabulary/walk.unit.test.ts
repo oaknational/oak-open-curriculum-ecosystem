@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { isForeignWorkingTreeRoot, shouldInspectFile, walkFiles, type ReaddirFn } from './walk.js';
@@ -7,9 +9,12 @@ interface FakeEntry {
   readonly kind: 'directory' | 'file';
 }
 
+/** The product joins host-separator paths; the POSIX-keyed fake normalises at lookup. */
+const posixPath = (hostPath: string): string => hostPath.split(sep).join('/');
+
 function fakeReaddir(dirs: Readonly<Record<string, readonly FakeEntry[]>>): ReaddirFn {
   return async (absDir) =>
-    (dirs[absDir] ?? []).map((entry) => ({
+    (dirs[posixPath(absDir)] ?? []).map((entry) => ({
       name: entry.name,
       isDirectory: () => entry.kind === 'directory',
       isFile: () => entry.kind === 'file',

@@ -5,6 +5,7 @@
  * injected FS predicates — no real filesystem access needed.
  */
 
+import { join, resolve } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { resolveBulkDir, resolveBulkDirFromInputs, type FsPredicates } from './resolve-bulk-dir.js';
 
@@ -26,7 +27,11 @@ const emptyFs: FsPredicates = {
   readdirSync: () => [],
 };
 
-const appRoot = '/app';
+// Anchored via resolve so the root is genuinely absolute on every host —
+// a POSIX literal like '/app' is drive-relative on Windows, and the
+// product emits host-form joined paths, so expectations derive from this
+// same anchor with join.
+const appRoot = resolve('/app');
 
 describe('resolveBulkDir', () => {
   it('returns err when raw path is empty or whitespace', () => {
@@ -50,7 +55,7 @@ describe('resolveBulkDir', () => {
     const result = resolveBulkDir('bulk-downloads', appRoot, validFs);
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value).toBe('/app/bulk-downloads');
+      expect(result.value).toBe(join(appRoot, 'bulk-downloads'));
     }
   });
 
@@ -99,7 +104,7 @@ describe('resolveBulkDirFromInputs', () => {
     });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value).toBe('/app/from-flag');
+      expect(result.value).toBe(join(appRoot, 'from-flag'));
     }
   });
 
@@ -112,7 +117,7 @@ describe('resolveBulkDirFromInputs', () => {
     });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value).toBe('/app/from-env');
+      expect(result.value).toBe(join(appRoot, 'from-env'));
     }
   });
 
@@ -125,7 +130,7 @@ describe('resolveBulkDirFromInputs', () => {
     });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value).toBe('/app/bulk-downloads');
+      expect(result.value).toBe(join(appRoot, 'bulk-downloads'));
     }
   });
 
@@ -138,7 +143,7 @@ describe('resolveBulkDirFromInputs', () => {
     });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value).toBe('/app/bulk-downloads');
+      expect(result.value).toBe(join(appRoot, 'bulk-downloads'));
     }
   });
 
@@ -151,7 +156,7 @@ describe('resolveBulkDirFromInputs', () => {
     });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value).toBe('/app/bulk-downloads');
+      expect(result.value).toBe(join(appRoot, 'bulk-downloads'));
     }
   });
 
@@ -165,7 +170,7 @@ describe('resolveBulkDirFromInputs', () => {
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.type).toBe('bulk_dir_not_found');
-      expect(result.error.message).toContain('/app/bulk-downloads');
+      expect(result.error.message).toContain(join(appRoot, 'bulk-downloads'));
       expect(result.error.message).toContain('bulk:download');
     }
   });

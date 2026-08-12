@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -481,12 +483,14 @@ describe('claim CLI reports', () => {
     expect(
       commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one', {}),
     ).toStrictEqual({
-      'comms-dir': '/repo/.agent/state/collaboration/comms',
-      active: '/repo/.agent/state/collaboration/active-claims.json',
+      // Defaults are host-joined from the repo root, so the expectations are
+      // derived in host form (identical to the POSIX literals on POSIX).
+      'comms-dir': join('/repo', '.agent/state/collaboration/comms'),
+      active: join('/repo', '.agent/state/collaboration/active-claims.json'),
       now: nowIso,
       'created-at': nowIso,
       'event-id': 'event-one',
-      output: '/repo/.agent/state/collaboration/shared-comms-log.md',
+      output: join('/repo', '.agent/state/collaboration/shared-comms-log.md'),
     });
   });
 
@@ -511,9 +515,11 @@ describe('claim CLI reports', () => {
         'event-one',
       ),
     ).toBe(
+      // The event path is host-joined from the comms dir, so its JSON form is
+      // derived (the shared log path is echoed verbatim and stays literal).
       '{\n' +
         '  "event_id": "event-one",\n' +
-        '  "event_path": "/custom/comms/event-one.json",\n' +
+        `  "event_path": ${JSON.stringify(join('/custom/comms', 'event-one.json'))},\n` +
         '  "shared_log_path": "/custom/shared-comms-log.md"\n' +
         '}\n',
     );

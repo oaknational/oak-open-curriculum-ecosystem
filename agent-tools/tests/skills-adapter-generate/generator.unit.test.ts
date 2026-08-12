@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { checkAdapters, type CheckerFs } from '../../src/skills-adapter-generate/checker';
@@ -93,13 +95,24 @@ describe('buildAdapterFrontmatter', () => {
   });
 });
 
+// The product joins with the HOST separator (correct for real fs access);
+// these fakes are keyed in POSIX form for readability, so lookups normalise
+// the incoming path first — the fixture then recognises the same paths on
+// every platform.
+const posixPath = (hostPath: string): string => hostPath.split(sep).join('/');
+
+/** Re-key a fixture map into POSIX form so host-joined and literal keys meet. */
+const posixKeyed = <V>(entries: ReadonlyMap<string, V>): ReadonlyMap<string, V> =>
+  new Map([...entries].map(([key, value]) => [posixPath(key), value]));
+
 function makeFs(files: ReadonlyMap<string, string>): CheckerFs {
+  const byPath = posixKeyed(files);
   return {
     async readFileOrUndefined(path) {
-      return files.get(path);
+      return byPath.get(posixPath(path));
     },
     async listSubdirectoryNames(path) {
-      return path === '/repo/.agent/skills' ? ['sample'] : [];
+      return posixPath(path) === '/repo/.agent/skills' ? ['sample'] : [];
     },
   };
 }
@@ -110,12 +123,14 @@ function makeTreeFs(
   directories: ReadonlyMap<string, readonly string[]>,
   files: ReadonlyMap<string, string>,
 ): CheckerFs {
+  const dirsByPath = posixKeyed(directories);
+  const filesByPath = posixKeyed(files);
   return {
     async readFileOrUndefined(path) {
-      return files.get(path);
+      return filesByPath.get(posixPath(path));
     },
     async listSubdirectoryNames(path) {
-      return directories.get(path) ?? [];
+      return dirsByPath.get(posixPath(path)) ?? [];
     },
   };
 }
