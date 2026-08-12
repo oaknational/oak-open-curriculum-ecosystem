@@ -1,6 +1,6 @@
 # ADR-171: Observability Configuration — Orthogonal Sinks and Fixtures Axes
 
-**Status**: Accepted
+**Status**: Accepted (Amended 2026-08-12)
 **Date**: 2026-05-10
 **Related**:
 [ADR-116](116-resolve-env-pipeline-architecture.md) — environment
@@ -15,6 +15,39 @@ commitment requires;
 [ADR-163](163-sentry-release-identifier-and-vercel-production-attribution.md)
 — Sentry release identifier; build-time scope is preserved (orthogonal
 to the runtime sink/fixture axes).
+
+> **Amendment note (2026-08-12, actual-state correction — MCP-581)**: three
+> present-tense claims below did not hold when re-checked against the code.
+> They are corrected here, and marked in place, rather than rewritten above —
+> the record of what was decided survives.
+>
+> 1. **The closed sink enum is `sentry`, `file`, `posthog`** — not `sentry`,
+>    `console`, `log-file`. Neither `console` nor `log-file` ever existed as an
+>    enum member, and the real third member (`posthog`) was unnamed. stdout is
+>    the always-on baseline and is deliberately not a sink (ADR-162 §The
+>    Vendor-Independence Clause). Instrument: `OBSERVABILITY_SINK_DEFINITIONS`
+>    in `packages/core/observability/src/sink-registry.ts`, asserted by
+>    `packages/core/env/src/schemas/observability.unit.test.ts`.
+> 2. **The axes are exported from `@oaknational/env`, not
+>    `@oaknational/env-resolution`.** `OBSERVABILITY_SINKS_SCHEMA` and
+>    `OBSERVABILITY_FIXTURES_SCHEMA` are defined in
+>    `packages/core/env/src/schemas/observability-axes.ts` and re-exported from
+>    that package's `observability.ts`. Instrument: a recursive `grep` for
+>    `OBSERVABILITY` over `packages/libs/env-resolution/src/` returns a single
+>    doc comment and no export of either axis.
+> 3. **`SENTRY_MODE` is not retired, and the transitional bridge was never
+>    built.** `SENTRY_MODE` remains the load-bearing delivery switch: it
+>    defaults to `off` (`packages/core/env/src/schemas/sentry.ts`) and
+>    `Sentry.init` is reached only when the mode is exactly `sentry`
+>    (`packages/libs/sentry-node/src/runtime.ts` — `off` returns a noop
+>    runtime, `fixture` an in-memory one). Instrument: a `git grep` for
+>    `SENTRY_MODE` scoped to `packages/libs/env-resolution` returns no output.
+>    Decision items 1–2 and 4–5 stand; item 3 records intent that has not been
+>    enacted.
+>
+> The operator contract in force is therefore
+> [Logging Guidance § Current Observability Contract](../../governance/logging-guidance.md#current-observability-contract),
+> which is the SSOT for what the HTTP MCP server honours today.
 
 ## Context
 
@@ -58,6 +91,8 @@ configuration model:
    sinks the runtime emits to. Each value is a member of a closed
    enum (current set: `sentry`, `console`, `log-file`; future sinks
    add new enum members). The env field declares the _set_ directly.
+   _Corrected 2026-08-12: the enum as built is `sentry`, `file`,
+   `posthog` — see the amendment note above._
 
 2. **`OBSERVABILITY_FIXTURES`** — a boolean independent of the sink
    set. When `true`, the runtime sources telemetry payloads from
@@ -71,6 +106,9 @@ configuration model:
    backwards-compatibility through a transitional bridge in
    `@oaknational/env-resolution`; the bridge is deleted once every
    consumer has migrated to the orthogonal axes.
+   _Corrected 2026-08-12: not enacted. `SENTRY_MODE` is still the delivery
+   switch and the `@oaknational/env-resolution` bridge was never built — see
+   the amendment note above._
 
 4. **Build-time scope is preserved**. The Sentry release identifier
    and build-time attribution (per ADR-163) are _not_ runtime sink
@@ -122,6 +160,8 @@ boundary.
 - The shared env-resolution package (`@oaknational/env-resolution`)
   exposes `OBSERVABILITY_SINKS` (typed list) and `OBSERVABILITY_FIXTURES`
   (boolean) as the canonical fields.
+  _Corrected 2026-08-12: the axes landed in `@oaknational/env`, not
+  `@oaknational/env-resolution` — see the amendment note above._
 - ADR-143 amends to record the typed-list-as-config shape (the runtime
   registry was already set-shaped; the env now matches).
 - ADR-116 amends to record the new env field shapes in the resolution
@@ -133,6 +173,9 @@ boundary.
 - Consuming runtimes migrate from `SENTRY_MODE` to the orthogonal
   axes incrementally. The transitional bridge in env-resolution is
   the migration path; it is removed once every consumer has migrated.
+  _Corrected 2026-08-12: the bridge was never built, so this migration path
+  does not exist and no consuming runtime has migrated off `SENTRY_MODE` —
+  see the amendment note above._
 
 **Forbidden**:
 
