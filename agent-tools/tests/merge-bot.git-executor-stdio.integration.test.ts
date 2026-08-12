@@ -36,10 +36,15 @@ describe('realGitExecutor default runner stdio topology (F-112)', () => {
   it('reports a signal-killed capturing-arm child as the 128 sentinel with the signal named', async () => {
     // Exit/signal fidelity of a real child at the capturing arm — the same
     // sanctioned shape: spawnSync is the seam floor, nothing to inject below.
+    // The kill is Node-initiated (the executor's own timeout bound): that is
+    // the one termination every platform reports with the signal named — a
+    // child terminating itself surfaces on Windows as a plain exit carrying
+    // no signal, so a self-kill fixture could never prove this contract
+    // there.
     const result = await realGitExecutor()(
       process.execPath,
-      ['-e', `process.kill(process.pid, 'SIGTERM');`],
-      { cwd: tmpdir(), env: {} },
+      ['-e', 'setTimeout(() => {}, 60000);'],
+      { cwd: tmpdir(), env: {}, timeoutMs: 300 },
     );
 
     expect(result.status).toBe(128);

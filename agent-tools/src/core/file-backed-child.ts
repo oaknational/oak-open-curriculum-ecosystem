@@ -28,6 +28,15 @@ export interface FileBackedChildOptions {
    * merged transcript (the merge-bot push).
    */
   readonly combinedOutput?: boolean;
+  /**
+   * Aborting kills the child (Node's own spawn option, SIGTERM). Passed
+   * through verbatim so callers can bound a child's lifetime; also the seam
+   * that lets the signal-reporting contract be proven on every platform — a
+   * PARENT-initiated kill is the one termination Windows reports with the
+   * signal named (a child terminating itself surfaces there as a plain
+   * exit, carrying no signal at all).
+   */
+  readonly abortSignal?: AbortSignal;
 }
 
 /**
@@ -71,6 +80,16 @@ export interface FileBackedChildResult {
  * each stream), orders of magnitude above any gate chain's output —
  * spawnSync's 1 MiB default was the ceiling this replaced.
  */
+/**
+ * An abort-kill is a NORMAL termination for this runner: the close event
+ * still fires with the signal, and the F-112 contract (128 sentinel + named
+ * signal) reports it — rejecting on the accompanying `AbortError` would
+ * replace that structured outcome with a throw.
+ */
+function isAbortKill(error: Error): boolean {
+  return error.name === 'AbortError';
+}
+
 export async function runFileBackedChild(
   options: FileBackedChildOptions,
 ): Promise<FileBackedChildResult> {
@@ -91,9 +110,13 @@ export async function runFileBackedChild(
         cwd: options.cwd,
         env: options.env,
         stdio: ['ignore', files.stdoutFd, files.stderrFd],
+        signal: options.abortSignal,
       });
 
       child.on('error', (error) => {
+        if (settled || isAbortKill(error)) {
+          return;
+        }
         settled = true;
         reject(error);
       });
