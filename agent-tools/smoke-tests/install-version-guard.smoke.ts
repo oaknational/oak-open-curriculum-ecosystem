@@ -115,8 +115,8 @@ try {
   }
 
   const install = spawnSync(
-    pnpm.value,
-    ['install', '--offline', '--ignore-workspace', '--reporter=silent'],
+    pnpm.value.file,
+    [...pnpm.value.leadingArgs, 'install', '--offline', '--ignore-workspace', '--reporter=silent'],
     {
       cwd: fixtureRoot,
       encoding: 'utf8',

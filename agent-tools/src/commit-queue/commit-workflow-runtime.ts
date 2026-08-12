@@ -19,6 +19,7 @@ import { execFileSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 
 import { resolveTrustedGit } from '../core/trusted-git.js';
+import { resolvePnpm } from '../spawn/pnpm-path.js';
 import {
   runCommitWorkflow,
   type CommitWorkflowDependencies,
@@ -89,9 +90,20 @@ async function runAdvisoryOrchestrator(
   input: CommitWorkflowRuntimeInput,
 ): Promise<CommitWorkflowProcessResult> {
   process.stderr.write(`${ADVISORY_BANNER}\n`);
+  // Bare 'pnpm' never reaches spawn (the agent-tools invariant, and on
+  // Windows a shell-less by-name spawn cannot resolve the .cmd shim at all).
+  const pnpm = resolvePnpm(process.env);
+  if (!pnpm.ok) {
+    return { exitCode: 1, stderr: pnpm.error.message };
+  }
   return runFileBackedChild({
-    command: 'pnpm',
-    args: ['agent-tools:check-commit-skill-advisories', '-F', input.messageFilePath],
+    command: pnpm.value.file,
+    args: [
+      ...pnpm.value.leadingArgs,
+      'agent-tools:check-commit-skill-advisories',
+      '-F',
+      input.messageFilePath,
+    ],
     cwd: input.gitRoot,
   });
 }

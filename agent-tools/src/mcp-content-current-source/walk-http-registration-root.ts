@@ -87,6 +87,10 @@ function pnpmSpawnEnvironment(): NodeJS.ProcessEnv {
   delete environment.COREPACK_ROOT;
   delete environment.COREPACK_ENABLE_AUTO_PIN;
   delete environment.COREPACK_ENABLE_DOWNLOAD_PROMPT;
+  // COREPACK_HOME redirects which cached package-manager build corepack
+  // executes — an env knob over code selection, stripped with its siblings
+  // (2026-08-12 security review).
+  delete environment.COREPACK_HOME;
   return environment;
 }
 
@@ -115,11 +119,15 @@ export async function walkHttpRegistrationRoot(repoRoot: string): Promise<HttpRe
   if (!pnpm.ok) {
     throw pnpm.error;
   }
-  const { stdout } = await execFileAsync(pnpm.value, ['exec', 'tsx', proofScript], {
-    cwd: repoRoot,
-    env: pnpmSpawnEnvironment(),
-    maxBuffer: 16 * 1024 * 1024,
-  });
+  const { stdout } = await execFileAsync(
+    pnpm.value.file,
+    [...pnpm.value.leadingArgs, 'exec', 'tsx', proofScript],
+    {
+      cwd: repoRoot,
+      env: pnpmSpawnEnvironment(),
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  );
   const parsed = httpRegistrationWalkSchema.parse(JSON.parse(stdout));
   return {
     root: parsed.root,

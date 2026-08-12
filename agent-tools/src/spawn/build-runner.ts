@@ -24,7 +24,7 @@ export const realPnpmRunner = (args: readonly string[], cwd: string): Result<voi
     return pnpm;
   }
   try {
-    execFileSync(pnpm.value, [...args], { cwd, stdio: 'inherit' });
+    execFileSync(pnpm.value.file, [...pnpm.value.leadingArgs, ...args], { cwd, stdio: 'inherit' });
     return ok(undefined);
   } catch (cause) {
     return err(cause instanceof Error ? cause : new Error(String(cause)));

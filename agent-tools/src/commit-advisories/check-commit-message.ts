@@ -32,6 +32,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { resolvePnpm } from '../spawn/pnpm-path.js';
+
 const USAGE = `Usage: pnpm agent-tools:check-commit-message [-m <msg>]... [-F <file>]
 
 Test a commit message against this repo's commitlint configuration in
@@ -177,10 +179,21 @@ function runCommitlint(message: string): number {
   const messageFile = join(dir, 'COMMIT_EDITMSG');
   try {
     writeFileSync(messageFile, message);
-    const result = spawnSync('pnpm', ['exec', 'commitlint', '--edit', messageFile], {
-      cwd: repoRoot,
-      stdio: 'inherit',
-    });
+    // Bare 'pnpm' never reaches spawn (the agent-tools invariant, and on
+    // Windows a shell-less by-name spawn cannot resolve the .cmd shim).
+    const pnpm = resolvePnpm(process.env);
+    if (!pnpm.ok) {
+      process.stderr.write(`${pnpm.error.message}\n`);
+      return 2;
+    }
+    const result = spawnSync(
+      pnpm.value.file,
+      [...pnpm.value.leadingArgs, 'exec', 'commitlint', '--edit', messageFile],
+      {
+        cwd: repoRoot,
+        stdio: 'inherit',
+      },
+    );
     return result.status ?? 2;
   } finally {
     rmSync(dir, { recursive: true, force: true });

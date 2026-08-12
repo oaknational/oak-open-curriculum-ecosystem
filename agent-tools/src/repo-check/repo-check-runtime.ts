@@ -19,6 +19,10 @@ function pnpmSpawnEnvironment(): NodeJS.ProcessEnv {
   delete environment.COREPACK_ROOT;
   delete environment.COREPACK_ENABLE_AUTO_PIN;
   delete environment.COREPACK_ENABLE_DOWNLOAD_PROMPT;
+  // COREPACK_HOME redirects which cached package-manager build corepack
+  // executes — an env knob over code selection, stripped with its siblings
+  // (2026-08-12 security review).
+  delete environment.COREPACK_HOME;
   return environment;
 }
 
@@ -32,6 +36,7 @@ function pnpmSpawnEnvironment(): NodeJS.ProcessEnv {
  */
 function trustedSpawnTarget(command: string): {
   readonly command: string;
+  readonly leadingArgs?: readonly string[];
   readonly environment?: NodeJS.ProcessEnv;
   readonly error?: string;
 } {
@@ -42,7 +47,11 @@ function trustedSpawnTarget(command: string): {
       return { command, error: resolved.error.message };
     }
 
-    return { command: resolved.value, environment: pnpmSpawnEnvironment() };
+    return {
+      command: resolved.value.file,
+      leadingArgs: resolved.value.leadingArgs,
+      environment: pnpmSpawnEnvironment(),
+    };
   }
 
   if (command === 'git') {
@@ -74,7 +83,10 @@ export function runInheritedProcess(command: string, args: readonly string[]): P
   }
 
   return new Promise((resolve) => {
-    const child = spawn(trusted.command, args, { stdio: 'inherit', env: trusted.environment });
+    const child = spawn(trusted.command, [...(trusted.leadingArgs ?? []), ...args], {
+      stdio: 'inherit',
+      env: trusted.environment,
+    });
     child.on('close', (code) => resolve(code ?? 1));
     child.on('error', (error) => {
       writeErrorLine(`${command}: ${error.message}`);
@@ -102,7 +114,7 @@ export function runCapturedProcess(
 
   return normaliseSpawnResult(
     command,
-    spawnSync(trusted.command, args, {
+    spawnSync(trusted.command, [...(trusted.leadingArgs ?? []), ...args], {
       encoding: 'utf8',
       maxBuffer: 1024 * 1024 * 50,
       env: trusted.environment,
