@@ -233,6 +233,88 @@ and
   `mcp-inspector` skill installs at the machine level via
   `pnpm dlx skills add mcpjam/inspector --skill mcp-inspector`.
 
+### Windows (via WSL)
+
+Windows contributors work through [WSL2](https://learn.microsoft.com/windows/wsl/) —
+inside it, every prerequisite above applies as written for Debian/Ubuntu, with
+one pnpm exception covered in step 3. Steps 1-2
+run in Windows PowerShell; steps 3-6 run inside Ubuntu. Requires Windows 11 (or
+Windows 10 2004+) with virtualization enabled in firmware — if `wsl --install`
+ends in error `0x80370102`, enable virtualization in your BIOS/UEFI first. The
+steps below were run end to end on Windows 11, 2026-08.
+
+1. **Install WSL and Ubuntu** — in an administrator PowerShell (right-click
+   Start → Terminal (Admin)) run `wsl --install`, approve the elevation prompt,
+   and create your Unix account when Ubuntu first launches (a reboot is only
+   needed if the installer asks for one).
+2. **Cap the VM if the machine has 16 GB or less** — by default WSL2 may take up
+   to half the machine's RAM with only a quarter of that as swap, and this
+   repository's whole-tree gates can then be OOM-killed inside the VM or starve
+   the Windows side (the symptom: Windows becomes unresponsive and `Vmmem`
+   dominates Task Manager). Back in PowerShell, create the file
+   (`notepad $env:USERPROFILE\.wslconfig`):
+
+   ```ini
+   [wsl2]
+   memory=8GB
+   processors=4
+   swap=8GB
+   ```
+
+   Scale to your machine: cap `memory` at roughly half your RAM, `processors` at
+   no more than your core count, and keep swap at least equal to memory so the
+   gates page rather than die. Apply with `wsl --shutdown` (also from
+   PowerShell) — this closes any running Ubuntu session; reopen it with `wsl`.
+
+3. **Install the toolchain inside Ubuntu** — start with
+   `sudo apt update && sudo apt install -y curl git ca-certificates`, then follow
+   [Prerequisites](#prerequisites) above; every entry's Debian/Ubuntu
+   instructions apply unchanged (for Node, `nvm install` picks up the version in
+   `.nvmrc`) with one exception: install pnpm with its
+   [standalone script](https://pnpm.io/installation#using-a-standalone-script) —
+   `curl -fsSL https://get.pnpm.io/install.sh | sh -`, then open a new shell or
+   `source ~/.bashrc` — not `corepack enable`. The standalone binary still
+   honours the repository's pinned pnpm version. The commit hooks resolve pnpm
+   only from a fixed list of trusted install locations; the standalone install
+   at `~/.local/share/pnpm` is on that list, a corepack shim under nvm's Node
+   directory is not, and with corepack alone every commit fails — currently
+   misreported as a formatting failure. Two additions Ubuntu's default sources do
+   not carry: the pre-push hook requires `gitleaks` — install it with the Go
+   route the hook itself suggests (`go install github.com/gitleaks/gitleaks/v8@latest`),
+   or from a [release tarball](https://github.com/gitleaks/gitleaks/releases):
+
+   ```bash
+   curl -sL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz | tar -xz gitleaks
+   sudo install -m 0755 gitleaks /usr/local/bin/ && rm gitleaks
+   ```
+
+   and the repo's PR and agent tooling uses `gh` (the GitHub CLI), which installs
+   from [GitHub's apt repository](https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
+
+4. **Give pnpm network patience once** — WSL2's NAT (its network translation
+   layer) can time out fetching large tarballs (`pnpm install` dies with
+   `ETIMEDOUT` or `socket hang up`; you can set this after a failed install and
+   simply re-run): `pnpm config set fetch-timeout 300000` and
+   `pnpm config set fetch-retries 5`.
+5. **Reuse Windows' stored git credentials — only if you already use Git for
+   Windows.** Check the helper exists first
+   (`ls '/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe'`; a
+   user-scope install puts it under `%LOCALAPPDATA%\Programs\Git`), then:
+
+   ```bash
+   git config --global credential.helper "/mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe"
+   ```
+
+   Without Git for Windows, authenticate with `gh auth login` instead — do not
+   configure a helper path that does not exist.
+
+6. **Continue with [Install and verify](#install-and-verify) below**, cloning
+   inside the Linux filesystem (for example `~/oak`), never under `/mnt/c` —
+   cross-boundary file access is an order of magnitude slower. On a capped VM,
+   prefix the verify commands with `TURBO_CONCURRENCY=1` (add
+   `VITEST_MAX_WORKERS=2` if memory stays tight — the symptom of a starved
+   suite: vitest reports 5000 ms timeouts, or the gate exits with no error text).
+
 ### Install and verify
 
 ```bash
