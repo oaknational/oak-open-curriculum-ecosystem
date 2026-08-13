@@ -13,6 +13,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+import { toLfText } from '../../core/lf-text.js';
+
 /**
  * Reads the UTF-8 text content of a file at `<repoRoot>/<relPath>`.
  *
@@ -29,7 +31,7 @@ import path from 'node:path';
  * @throws When the file cannot be read.
  */
 export async function readText(repoRoot: string, relPath: string): Promise<string> {
-  return (await fs.readFile(path.join(repoRoot, relPath), 'utf8')).replaceAll('\r\n', '\n');
+  return toLfText(await fs.readFile(path.join(repoRoot, relPath), 'utf8'));
 }
 
 /**

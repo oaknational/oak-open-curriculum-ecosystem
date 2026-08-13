@@ -1,8 +1,18 @@
+/**
+ * Fixed-location pnpm resolution — never a `PATH` lookup. The S4036
+ * reasoning this module applies (a writable PATH entry must not choose
+ * which binary runs) is shared with, and explained at length in,
+ * `../core/trusted-git.ts`.
+ *
+ * @packageDocumentation
+ */
+
 import { existsSync } from 'node:fs';
 import { isAbsolute } from 'node:path';
 
 import { err, ok, type Result } from '@oaknational/result';
 
+import { fullyQualifiedWin32 } from '../core/fully-qualified-path.js';
 import { type PathExists } from '../core/path-exists.js';
 
 /**
@@ -36,33 +46,35 @@ interface PnpmCandidate {
  */
 const WIN32_COREPACK_PNPM = String.raw`C:\Program Files\nodejs\node_modules\corepack\dist\pnpm.js`;
 
-/**
- * On win32 an env-derived candidate must be FULLY qualified — drive letter
- * plus separator. `path.isAbsolute` is not enough there: it accepts rooted
- * drive-relative paths (`/foo` → resolved against the process's current
- * drive, e.g. `C:\foo` — caller-influenced space) and UNC paths (`\\host\…`
- * — a network location is not a fixed local install). Rejecting both keeps
- * the candidate fixed in the S4036 sense.
- */
-const fullyQualifiedWin32 = (candidate: string): boolean => /^[A-Za-z]:[\\/]/u.test(candidate);
-
 /** A trimmed env value, or undefined when unset or blank. */
 function envValue(env: NodeJS.ProcessEnv, name: string): string | undefined {
   const value = env[name]?.trim();
   return value !== undefined && value.length > 0 ? value : undefined;
 }
 
+/**
+ * An env-derived win32 root, with any trailing separator trimmed so
+ * candidate composition never produces a doubled separator (`D:\pnpm-home\`
+ * + `\pnpm.exe` would otherwise probe `D:\pnpm-home\\pnpm.exe`).
+ */
+function win32Root(env: NodeJS.ProcessEnv, name: string): string | undefined {
+  return envValue(env, name)?.replace(/[\\/]+$/u, '');
+}
+
 function win32Candidates(env: NodeJS.ProcessEnv): readonly PnpmCandidate[] {
   const candidates: PnpmCandidate[] = [{ path: WIN32_COREPACK_PNPM, launch: 'via-node' }];
-  const pnpmHome = envValue(env, 'PNPM_HOME');
+  const pnpmHome = win32Root(env, 'PNPM_HOME');
   if (pnpmHome !== undefined) {
-    candidates.push({ path: String.raw`${pnpmHome}\pnpm.exe`, launch: 'direct' });
+    candidates.push(
+      { path: String.raw`${pnpmHome}\pnpm.exe`, launch: 'direct' },
+      { path: String.raw`${pnpmHome}\bin\pnpm.exe`, launch: 'direct' },
+    );
   }
-  const localAppData = envValue(env, 'LOCALAPPDATA');
+  const localAppData = win32Root(env, 'LOCALAPPDATA');
   if (localAppData !== undefined) {
     candidates.push({ path: String.raw`${localAppData}\pnpm\pnpm.exe`, launch: 'direct' });
   }
-  const appData = envValue(env, 'APPDATA');
+  const appData = win32Root(env, 'APPDATA');
   if (appData !== undefined) {
     candidates.push({
       path: String.raw`${appData}\npm\node_modules\pnpm\bin\pnpm.cjs`,
@@ -108,13 +120,15 @@ function posixCandidates(env: NodeJS.ProcessEnv): readonly PnpmCandidate[] {
  * `pnpm` is never a candidate — resolution must never fall back to a PATH
  * lookup.
  *
- * `$PNPM_HOME/bin/pnpm` is probed because pnpm's own installer treats
- * `PNPM_HOME` as the *global bin directory* while some installations place the
- * launcher one level down. Observed 2026-08-04: on a contributor machine whose
- * `PNPM_HOME` held the launcher under a `bin/` subdirectory, none of the
- * previous candidates existed, so every commit failed — and the pre-commit
- * hook surfaced the resolver's error as "formatting issues found", which sent
- * two separate agents hunting a formatting problem that did not exist.
+ * The `bin/` sub-layout is probed on BOTH platforms — `$PNPM_HOME/bin/pnpm`
+ * on POSIX, `%PNPM_HOME%\bin\pnpm.exe` on Windows — because pnpm's own
+ * installer treats `PNPM_HOME` as the *global bin directory* while some
+ * installations place the launcher one level down. Observed 2026-08-04: on a
+ * contributor machine whose `PNPM_HOME` held the launcher under a `bin/`
+ * subdirectory, none of the previous candidates existed, so every commit
+ * failed — and the pre-commit hook surfaced the resolver's error as
+ * "formatting issues found", which sent two separate agents hunting a
+ * formatting problem that did not exist.
  */
 function pnpmCandidates(
   env: NodeJS.ProcessEnv,

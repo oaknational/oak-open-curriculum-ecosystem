@@ -1,4 +1,4 @@
-import { sep } from 'node:path';
+import { dirname, join } from 'node:path';
 
 import { err, isErr, isOk, ok, unwrap } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
@@ -6,14 +6,17 @@ import { describe, expect, it } from 'vitest';
 import { createSpawnWorktree, type SpawnGitRunner } from './create.js';
 
 /**
- * The product derives the sibling worktree path with host-separator joins and
- * compares it against the caller-supplied coordination home, so the fixtures
- * are expressed in host form — the shape every real caller passes.
+ * Fixture forms follow their real sources: the coordination home and every
+ * porcelain path are FORWARD-SLASH, because git emits forward slashes on
+ * every platform and `resolveCoordinationHome` passes them through — while
+ * the expected worktree path is HOST-JOINED, because that is the product's
+ * documented output (a sibling of the home named `oak-<slug>`). The product
+ * compares the two through normalised forms; a fixture that host-joined the
+ * porcelain would prove a git that does not exist (2026-08-12 review).
  */
-const hostForm = (posixPath: string): string => posixPath.split('/').join(sep);
-
-const HOME = hostForm('/workspace/oak-open-curriculum-ecosystem');
-const SIBLING_WORKTREE = hostForm('/workspace/oak-spawn-flow');
+const HOME = '/workspace/oak-open-curriculum-ecosystem';
+const GIT_SIBLING_WORKTREE = '/workspace/oak-spawn-flow';
+const SIBLING_WORKTREE = join(dirname(HOME), 'oak-spawn-flow');
 
 interface GitCall {
   readonly args: readonly string[];
@@ -78,7 +81,7 @@ describe('createSpawnWorktree', () => {
     // A prior `agent spawn` created the worktree+branch but a later step (build)
     // failed, leaving it on disk. Retrying must RESUME (so the caller re-runs build)
     // rather than erroring — and without removing anything (never-use-git-to-remove-work).
-    const { runGit, calls } = recordingGit(porcelainBlock(SIBLING_WORKTREE, 'feat/spawn-flow'));
+    const { runGit, calls } = recordingGit(porcelainBlock(GIT_SIBLING_WORKTREE, 'feat/spawn-flow'));
 
     const result = createSpawnWorktree({
       slug: 'spawn-flow',
@@ -100,7 +103,9 @@ describe('createSpawnWorktree', () => {
   });
 
   it('returns err when the target path exists on a different branch (genuine collision, no add)', () => {
-    const { runGit, calls } = recordingGit(porcelainBlock(SIBLING_WORKTREE, 'feat/something-else'));
+    const { runGit, calls } = recordingGit(
+      porcelainBlock(GIT_SIBLING_WORKTREE, 'feat/something-else'),
+    );
 
     const result = createSpawnWorktree({
       slug: 'spawn-flow',
@@ -268,7 +273,7 @@ describe('createSpawnWorktree', () => {
       calls.push({ args, cwd });
       if (args[0] === 'worktree' && args[1] === 'list') {
         // A different worktree exists; the target path is absent from the list.
-        return ok(porcelainBlock(hostForm('/workspace/oak-other'), 'feat/other'));
+        return ok(porcelainBlock('/workspace/oak-other', 'feat/other'));
       }
       return err(new Error("fatal: a branch named 'feat/spawn-flow' already exists"));
     };

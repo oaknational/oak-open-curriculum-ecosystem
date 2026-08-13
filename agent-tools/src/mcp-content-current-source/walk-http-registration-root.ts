@@ -9,6 +9,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
+import { pnpmSpawnEnvironment } from '../spawn/pnpm-env.js';
 import { resolvePnpm } from '../spawn/pnpm-path.js';
 import type { RegistrationRoot, RegistrationSourceEvidence } from './current-source-model.js';
 import { GUIDANCE_SOURCE_ENTRIES } from './prompt-era-lineage.js';
@@ -82,18 +83,6 @@ export interface HttpRegistrationWalk {
   readonly guidanceRegistrationsBySource: Readonly<Record<string, RegistrationSourceEvidence>>;
 }
 
-function pnpmSpawnEnvironment(): NodeJS.ProcessEnv {
-  const environment = { ...process.env };
-  delete environment.COREPACK_ROOT;
-  delete environment.COREPACK_ENABLE_AUTO_PIN;
-  delete environment.COREPACK_ENABLE_DOWNLOAD_PROMPT;
-  // COREPACK_HOME redirects which cached package-manager build corepack
-  // executes — an env knob over code selection, stripped with its siblings
-  // (2026-08-12 security review).
-  delete environment.COREPACK_HOME;
-  return environment;
-}
-
 function indexGuidanceRegistrationsBySource(
   registrationsByUri: Readonly<Record<string, RegistrationSourceEvidence>>,
 ): Readonly<Record<string, RegistrationSourceEvidence>> {
@@ -124,7 +113,7 @@ export async function walkHttpRegistrationRoot(repoRoot: string): Promise<HttpRe
     [...pnpm.value.leadingArgs, 'exec', 'tsx', proofScript],
     {
       cwd: repoRoot,
-      env: pnpmSpawnEnvironment(),
+      env: pnpmSpawnEnvironment(process.env),
       maxBuffer: 16 * 1024 * 1024,
     },
   );

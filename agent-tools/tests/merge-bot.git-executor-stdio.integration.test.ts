@@ -49,5 +49,25 @@ describe('realGitExecutor default runner stdio topology (F-112)', () => {
 
     expect(result.status).toBe(128);
     expect(result.signal).toBe('SIGTERM');
+    // The capturing arm names the CAUSE: spawnSync reports the executor's own
+    // timeout as ETIMEDOUT, and the note distinguishes it from an externally
+    // delivered SIGTERM (the file-backed arm cannot carry this note — its
+    // streams are empty by design).
+    expect(result.stderr).toContain('killed by executor timeout');
+  });
+
+  it('honours timeoutMs on the file-backed arm — the abort bridge kills and names the signal', async () => {
+    // The sink's presence selects the file-backed arm, so this drives the
+    // AbortController bridge end to end: without the timeoutMs pass-through
+    // this child would run its full 60s and the test would time out instead.
+    const chunks: string[] = [];
+    const result = await realGitExecutor()(
+      process.execPath,
+      ['-e', 'setTimeout(() => {}, 60000);'],
+      { cwd: tmpdir(), env: {}, timeoutMs: 300, onOutput: (chunk) => chunks.push(chunk) },
+    );
+
+    expect(result.status).toBe(128);
+    expect(result.signal).toBe('SIGTERM');
   });
 });

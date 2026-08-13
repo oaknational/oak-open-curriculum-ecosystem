@@ -19,16 +19,13 @@ import {
   resolveLandingPageArtefact,
 } from './landing-page-artefact.js';
 
-// Host-absolute roots: the candidates are emitted by `path.resolve`, so the
-// literals are resolved once here to the host form (drive-prefixed backslash
-// paths on Windows, unchanged on POSIX) the assertions compare against.
-const WORKSPACE = path.resolve('/srv/app/apps/oak-curriculum-mcp-streamable-http');
-const REPO_ROOT = path.resolve('/srv/app');
-
-/** Escape a host path for literal use inside a RegExp source. */
-function escapeForRegExp(literal: string): string {
-  return literal.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-}
+// Host-absolute roots anchored at this module's own filesystem root: joining
+// onto `path.parse(import.meta.dirname).root` yields host-form absolute
+// fixtures ('/srv/app' on POSIX, '<drive>:\srv\app' on Windows) without the
+// ambient-drive read a bare `path.resolve('/srv/app')` performs.
+const ROOT = path.parse(import.meta.dirname).root;
+const REPO_ROOT = path.join(ROOT, 'srv', 'app');
+const WORKSPACE = path.join(REPO_ROOT, 'apps', 'oak-curriculum-mcp-streamable-http');
 
 describe('landingPageArtefactCandidates', () => {
   it('probes the working directory first, then the workspace under a repo-root cwd', () => {
@@ -71,14 +68,15 @@ describe('resolveLandingPageArtefact', () => {
 
   it('fails fast with every candidate and the cwd in the message when none exists', () => {
     const candidates = landingPageArtefactCandidates(REPO_ROOT);
+    const attempt = (): string => resolveLandingPageArtefact(candidates, () => false, REPO_ROOT);
 
-    expect(() => resolveLandingPageArtefact(candidates, () => false, REPO_ROOT)).toThrow(
-      new RegExp(
-        String.raw`No baked landing page found[\s\S]*` +
-          escapeForRegExp(path.join(REPO_ROOT, LANDING_PAGE_ARTEFACT_RELATIVE_PATH)) +
-          String.raw`[\s\S]*cwd: ` +
-          escapeForRegExp(REPO_ROOT),
-      ),
-    );
+    // Substring assertions, one per contracted fragment: `toThrow` with a
+    // string checks message containment, so no regex escaping of host paths
+    // is needed.
+    expect(attempt).toThrow('No baked landing page found');
+    for (const candidate of candidates) {
+      expect(attempt).toThrow(candidate);
+    }
+    expect(attempt).toThrow(`cwd: ${REPO_ROOT}`);
   });
 });

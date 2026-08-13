@@ -5,8 +5,10 @@ import { join } from 'node:path';
 import { err, ok, type Result } from '@oaknational/result';
 
 /**
- * The push credential file's lifecycle: a fresh private directory, one 0600
- * exclusive-create write, one removal — and the two translations that keep
+ * The push credential file's lifecycle: a fresh private directory, one
+ * exclusive-create write at mode 0600 (owner-only on POSIX; Windows has no
+ * POSIX mode bits, so protection there rests on the per-user temp
+ * directory's ACL), one removal — and the two translations that keep
  * filesystem failures off the CLI's usage-error path. Split from
  * `push-git.ts` at the size gate; the two files together are the whole
  * credential discipline (`push-git.ts` owns the helper, the environment, and
@@ -41,7 +43,7 @@ export function realTokenFileStore(): TokenFileStore {
   };
 }
 
-/** The token file, staged: the private directory and the 0600 file inside it. */
+/** The token file, staged: the private directory and the file inside it (0600 on POSIX). */
 export interface StagedToken {
   readonly dir: string;
   readonly tokenPath: string;

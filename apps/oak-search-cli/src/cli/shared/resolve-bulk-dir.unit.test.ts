@@ -5,7 +5,7 @@
  * injected FS predicates — no real filesystem access needed.
  */
 
-import { join, resolve } from 'node:path';
+import { join, parse } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { resolveBulkDir, resolveBulkDirFromInputs, type FsPredicates } from './resolve-bulk-dir.js';
 
@@ -27,11 +27,12 @@ const emptyFs: FsPredicates = {
   readdirSync: () => [],
 };
 
-// Anchored via resolve so the root is genuinely absolute on every host —
-// a POSIX literal like '/app' is drive-relative on Windows, and the
-// product emits host-form joined paths, so expectations derive from this
-// same anchor with join.
-const appRoot = resolve('/app');
+// Anchored at this module's own filesystem root so the root is genuinely
+// absolute on every host — a POSIX literal like '/app' is drive-relative on
+// Windows, and a bare `resolve('/app')` would read the AMBIENT process
+// drive. The product emits host-form joined paths, so expectations derive
+// from this same anchor with join.
+const appRoot = join(parse(import.meta.dirname).root, 'app');
 
 describe('resolveBulkDir', () => {
   it('returns err when raw path is empty or whitespace', () => {

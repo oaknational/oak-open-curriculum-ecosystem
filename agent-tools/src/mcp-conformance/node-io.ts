@@ -90,20 +90,18 @@ function spawnMcpjam(
   return ok({ exitCode: child.status ?? undefined, stdout: child.stdout, stderr: child.stderr });
 }
 
-// Writes resolve against the repo root; an absolute reportDir stands as
-// given. The REPORTED path preserves the caller's own form (relative in,
-// repo-root-relative out; absolute in, absolute out) so the emitted
-// report never names a path that does not exist. Retained artefacts are
-// OWNER-ONLY, established before any content lands — the full rationale
-// and ordering discipline live with {@link writeOwnerOnly} in
-// `owner-only-write.ts`.
-
 /**
- * Owner-only write of one file under a directory (created if absent),
- * resolving relative paths against the repo root. Shared by the suites'
- * retention here and the drive's per-tool evidence retention
- * (`drive-node-io.ts`) — every retained artefact can embed authed vendor
- * output, so all of them get the 0600 discipline above.
+ * Owner-only write of one file under a directory (created if absent).
+ * Relative paths resolve against the repo root; an absolute `reportDir`
+ * stands as given. The REPORTED path preserves the caller's own form
+ * (relative in, repo-root-relative out; absolute in, absolute out) so the
+ * emitted report never names a path that does not exist.
+ *
+ * Shared by the suites' retention here and the drive's per-tool evidence
+ * retention (`drive-node-io.ts`) — every retained artefact can embed authed
+ * vendor output, so all of them are OWNER-ONLY, established before any
+ * content lands; the full rationale and ordering discipline live with
+ * {@link writeOwnerOnly} in `owner-only-write.ts`.
  */
 export function writeUnder(
   repoRoot: string,
@@ -187,12 +185,18 @@ export function buildMcpConformanceNodeIo(
  * same write-then-never-expose discipline as `writeUnder`, for artefacts
  * whose destination the caller has already resolved (the reviewer pack via
  * `--pack-out`): the pack embeds vendor failure text from authed runs, the
- * same content class the summary protects at 0600.
+ * same content class the summary protects owner-only. `ops` is the same
+ * injectable seam as everywhere else on this surface, so the ordering
+ * contract is provable through this entry point too.
  */
-export function retainOwnerOnlyAt(absolutePath: string, content: string): RetentionOutcome {
+export function retainOwnerOnlyAt(
+  absolutePath: string,
+  content: string,
+  ops?: OwnerOnlyWriteOps,
+): RetentionOutcome {
   try {
     mkdirSync(dirname(absolutePath), { recursive: true });
-    writeOwnerOnly(absolutePath, content);
+    writeOwnerOnly(absolutePath, content, ops);
     return { ok: true, reportedPath: absolutePath };
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : String(error) };

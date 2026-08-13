@@ -10,7 +10,7 @@
  * `claims open` precondition. Path derivation lives here too so the two surfaces
  * resolve a session's heartbeat path identically.
  */
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 
 import { sameAgentRoutingKey } from './active-agent-routing.js';
 import { type CollaborationAgentId } from './types.js';
@@ -44,7 +44,10 @@ export function commsSeenFileForCodename(codename: string, commsSeenDir: string)
   ) {
     throw new Error(`agent codename is not a safe path segment: ${JSON.stringify(codename)}`);
   }
-  const trimmedDir = commsSeenDir.endsWith('/') ? commsSeenDir.slice(0, -1) : commsSeenDir;
+  // Trim trailing separators of BOTH flavours before joining: a caller
+  // handing `...\comms-seen\` or `.../comms-seen/` must compose the same
+  // host-joined file path, never a mixed-separator one.
+  const trimmedDir = commsSeenDir.replace(/[\\/]+$/u, '');
   if (trimmedDir.length === 0) {
     throw new Error(
       `comms-seen dir must be a non-empty path that is not the filesystem root, not ` +
@@ -52,7 +55,7 @@ export function commsSeenFileForCodename(codename: string, commsSeenDir: string)
         `heartbeat path); absolute paths under a real directory are accepted`,
     );
   }
-  return `${trimmedDir}/${codename}.json`;
+  return join(trimmedDir, `${codename}.json`);
 }
 
 /** Heartbeat path derived from a watcher's seen-file (`<seen-file>.heartbeat.json`). */

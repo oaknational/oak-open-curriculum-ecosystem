@@ -36,7 +36,10 @@ interface GitCallOptions {
    * timeout on the capturing arm; an abort bridge on the file-backed arm).
    * Also the seam that lets the signal-reporting contract be proven on
    * every platform, because a Node-initiated kill is the one termination
-   * Windows reports with the signal named.
+   * Windows reports with the signal named. Only the capturing arm can
+   * annotate the CAUSE in `stderr` — the file-backed arm returns empty
+   * streams by design, so there a timeout kill and an external SIGTERM read
+   * identically in the result.
    */
   readonly timeoutMs?: number;
 }
@@ -63,23 +66,30 @@ export type GitExecutor = (
   },
 ) => GitCommandResult | Promise<GitCommandResult>;
 
+/** Whether a spawn result's error names the executor's own timeout as the cause. */
+function isTimeoutError(error: Error | undefined): boolean {
+  return error !== undefined && 'code' in error && error.code === 'ETIMEDOUT';
+}
+
+/**
+ * Names the cause when the executor's own timeout delivered the kill —
+ * without it a timeout kill and an externally delivered signal would be
+ * indistinguishable in the result. Capturing-arm only: the file-backed arm
+ * returns empty streams by design, so its abort-kill carries no note (the
+ * `timeoutMs` docblock states this asymmetry).
+ */
+function timeoutNoteFor(error: Error | undefined, timeoutMs: number | undefined): string {
+  return isTimeoutError(error)
+    ? `\ngit killed by executor timeout after ${String(timeoutMs)}ms`
+    : '';
+}
+
 /**
  * Capture the whole of a child's output into the result. Sound ONLY where
  * this tool controls the volume, because the buffer here is `spawnSync`'s
  * 1 MiB default — a runtime's choice, and therefore never a limit this tool
  * may rely on for anything it does not bound itself (R2).
  */
-/**
- * Names the cause when the executor's own timeout delivered the kill —
- * without it a timeout kill and an externally delivered signal would be
- * indistinguishable in the result.
- */
-function timeoutNoteFor(error: Error | undefined, timeoutMs: number | undefined): string {
-  return error !== undefined && 'code' in error && error.code === 'ETIMEDOUT'
-    ? `\ngit killed by executor timeout after ${String(timeoutMs)}ms`
-    : '';
-}
-
 function capturingGitCall(
   file: string,
   args: readonly string[],
@@ -201,6 +211,11 @@ export function realGitExecutor(
     const { onOutput } = options;
     return onOutput === undefined
       ? capturingGitCall(file, args, options)
-      : fileBackedGitCall(file, args, { cwd: options.cwd, env: options.env, onOutput }, runner);
+      : fileBackedGitCall(
+          file,
+          args,
+          { cwd: options.cwd, env: options.env, timeoutMs: options.timeoutMs, onOutput },
+          runner,
+        );
   };
 }

@@ -83,6 +83,21 @@ describe('realGitExecutor arm selection and runner wiring (F-112 cure seam)', ()
     });
   });
 
+  it('bridges timeoutMs to the runner as a defined abortSignal on the file-backed arm', async () => {
+    const fake = runnerFake({ exitCode: 0, signal: null, stderr: '' });
+    await realGitExecutor(fake.runner)('/usr/bin/git', ['push'], {
+      cwd: '/repo',
+      env: {},
+      timeoutMs: 60000,
+      onOutput: () => undefined,
+    });
+
+    // Without the abort bridge, timeoutMs would be a silently dropped option
+    // on this arm; the runner must receive a live signal to honour it.
+    expect(fake.calls).toHaveLength(1);
+    expect(fake.calls[0]?.abortSignal).toBeDefined();
+  });
+
   it('keeps a sinkless call on the capturing arm: the runner is never invoked', async () => {
     // The capturing arm's target is an unlaunchable absolute path, so
     // spawnSync fails at launch — no process comes into existence — and the

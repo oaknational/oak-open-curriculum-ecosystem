@@ -21,6 +21,8 @@ import { join } from 'node:path';
 
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
+import { toLfText } from '../core/lf-text.js';
+
 import {
   CANONICAL_SKILL_PATH,
   parseCanonicalSections,
@@ -152,11 +154,10 @@ export interface GeneratorFileIo {
 export const NODE_FILE_IO: GeneratorFileIo = {
   readTextFile: async (path: string): Promise<string | undefined> => {
     try {
-      // Committed blobs are LF; a Windows checkout under Git's default
-      // autocrlf=true presents them CRLF on disk. Normalise the presentation
-      // at this read edge so generation and staleness checks judge CONTENT —
-      // the generated module is composed and written LF regardless.
-      return (await readFile(path, 'utf8')).replaceAll('\r\n', '\n');
+      // LF-normalised at the read edge (see toLfText) so generation and
+      // staleness checks judge CONTENT — the generated module is composed
+      // and written LF regardless.
+      return toLfText(await readFile(path, 'utf8'));
     } catch {
       return undefined;
     }

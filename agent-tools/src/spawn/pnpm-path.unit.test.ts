@@ -216,6 +216,32 @@ describe('resolvePnpm — win32', () => {
     });
   });
 
+  // The win32 sibling of the POSIX `$PNPM_HOME/bin` layout: pnpm's installer
+  // treats PNPM_HOME as the global bin directory, but some installations
+  // place the launcher one level down.
+  it(String.raw`finds the standalone binary under PNPM_HOME\bin when it is not directly in PNPM_HOME`, () => {
+    const result = resolvePnpm(
+      { PNPM_HOME: String.raw`D:\pnpm-home` },
+      onlyExists(String.raw`D:\pnpm-home\bin\pnpm.exe`),
+      'win32',
+    );
+
+    expect(result.ok && result.value).toEqual({
+      file: String.raw`D:\pnpm-home\bin\pnpm.exe`,
+      leadingArgs: [],
+    });
+  });
+
+  it('composes cleanly from a PNPM_HOME carrying a trailing backslash', () => {
+    const result = resolvePnpm(
+      { PNPM_HOME: 'D:\\pnpm-home\\' },
+      onlyExists(String.raw`D:\pnpm-home\pnpm.exe`),
+      'win32',
+    );
+
+    expect(result.ok && result.value.file).toBe(String.raw`D:\pnpm-home\pnpm.exe`);
+  });
+
   it('resolves the standalone default home from LOCALAPPDATA with no PNPM_HOME set', () => {
     const result = resolvePnpm(
       { LOCALAPPDATA: String.raw`D:\local-app-data` },

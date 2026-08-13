@@ -55,6 +55,17 @@ export interface FileBackedChildResult {
 }
 
 /**
+ * An abort-kill is a NORMAL termination for this runner: the close event
+ * still fires with the signal, and the F-112 contract (128 sentinel + named
+ * signal) reports it — rejecting on the accompanying `AbortError` would
+ * replace that structured outcome with a throw. Discriminates on Node's
+ * stable `code` (`ABORT_ERR`), with the `name` as a fallback.
+ */
+function isAbortKill(error: Error): boolean {
+  return ('code' in error && error.code === 'ABORT_ERR') || error.name === 'AbortError';
+}
+
+/**
  * Runs a child process with its stdout/stderr redirected to temporary
  * FILES, replayed to the parent's streams on completion.
  *
@@ -80,16 +91,6 @@ export interface FileBackedChildResult {
  * each stream), orders of magnitude above any gate chain's output —
  * spawnSync's 1 MiB default was the ceiling this replaced.
  */
-/**
- * An abort-kill is a NORMAL termination for this runner: the close event
- * still fires with the signal, and the F-112 contract (128 sentinel + named
- * signal) reports it — rejecting on the accompanying `AbortError` would
- * replace that structured outcome with a throw.
- */
-function isAbortKill(error: Error): boolean {
-  return error.name === 'AbortError';
-}
-
 export async function runFileBackedChild(
   options: FileBackedChildOptions,
 ): Promise<FileBackedChildResult> {

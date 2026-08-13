@@ -3,7 +3,11 @@ import { join } from 'node:path';
 import { unwrapErr } from '@oaknational/result';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { buildMcpConformanceNodeIo, writeRunSummary } from '../../src/mcp-conformance/node-io.js';
+import {
+  buildMcpConformanceNodeIo,
+  retainOwnerOnlyAt,
+  writeRunSummary,
+} from '../../src/mcp-conformance/node-io.js';
 import { type OwnerOnlyWriteOps } from '../../src/mcp-conformance/owner-only-write.js';
 import {
   cleanupSandboxes,
@@ -105,6 +109,19 @@ describe('retainRawReport — verbatim retention with caller-shaped paths', () =
     expect(outcome.ok).toBe(true);
     expect(calls.indexOf('fchmod:17:600')).toBeGreaterThan(calls.indexOf('open:600'));
     expect(calls.indexOf('fchmod:17:600')).toBeLessThan(calls.indexOf('write:17'));
+  });
+
+  it('an already-resolved absolute destination gets the same ordered owner-only write', () => {
+    // The reviewer pack (`--pack-out`) embeds vendor failure text from authed
+    // runs — the same content class the summary protects — so the absolute
+    // path entry point must carry the identical ordering contract.
+    const root = sandbox();
+    const { calls, ops } = recordingOps();
+
+    const outcome = retainOwnerOnlyAt(join(root, 'packs', 'reviewer-pack.md'), 'pack', ops);
+
+    expect(outcome.ok).toBe(true);
+    expect(calls).toEqual(['open:600', 'fchmod:17:600', 'write:17', 'close:17']);
   });
 
   it('a chmod failure is a loud retention failure before any content lands, and the descriptor still closes', () => {

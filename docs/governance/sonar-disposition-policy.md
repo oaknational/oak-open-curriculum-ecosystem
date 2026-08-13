@@ -226,6 +226,12 @@ genuine fix is cheap and available, so per `never-disable-checks` and the
 Two-Outcome Rule above, S4036 resolves to FIXED. A prior allowance for this
 class is reviewed and migrated, never extended.
 
+Where a platform offers no admin-protected install location for a binary, the
+compliant outcome is a loud refusal on that platform, never an allowlist entry
+in user-writable space. The worked instance is
+`agent-tools/src/refounding/refound-gitleaks.ts`, which refuses on win32
+because every gitleaks install location there is user-writable.
+
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 
 **Pattern**: `Math.random()` used in code.

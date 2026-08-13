@@ -27,6 +27,16 @@
  * already carries the true cause; a second throw here would replace it with
  * the less useful close error).
  *
+ * PLATFORM SCOPE: the ordering discipline delivers owner-only protection on
+ * POSIX. On Windows, `fchmod` cannot express owner-only — NTFS access
+ * control is ACL-based and the POSIX mode surface reaches only the
+ * read-only flag — so retained artefacts' protection there rests on the
+ * profile directory's ACL (per-user by default). Deliberately, the real
+ * `node:fs` adapter's ON-DISK effect is proven nowhere in-process: NTFS
+ * cannot express the observable, so any such assertion would be
+ * conditional by host. That acceptance is named here explicitly; the tests
+ * pin the requested operations and their order instead.
+ *
  * @packageDocumentation
  */
 

@@ -89,6 +89,9 @@ export async function listFilesRecursive(...segments: readonly string[]): Promis
   return entries
     .filter((entry) => entry.isFile())
     .map((entry) =>
+      // Same host-to-forward-slash translation as agent-tools'
+      // `core/git-relative-path.ts` `toGitPath`; inlined because the
+      // workspace boundary prevents importing it here.
       path.relative(root, path.join(entry.parentPath, entry.name)).split(path.sep).join('/'),
     )
     .sort((a, b) => a.localeCompare(b));

@@ -88,9 +88,17 @@ describe('findEscapingMatches', () => {
 
 describe('resolveCopySink', () => {
   // Production passes an already-resolved host-absolute frozen root; the
-  // fixture derives the same host form so the sink and the containment check
-  // agree on every platform.
-  const frozenRoot = path.resolve('/repo/out/archive/frozen-v1');
+  // fixture derives the same host form — anchored at this module's own
+  // filesystem root rather than a bare `path.resolve('/…')`, which would
+  // read the AMBIENT process drive on Windows — so the sink and the
+  // containment check agree on every platform.
+  const frozenRoot = path.join(
+    path.parse(import.meta.dirname).root,
+    'repo',
+    'out',
+    'archive',
+    'frozen-v1',
+  );
 
   it('resolves an ordinary frozen path inside the tree', () => {
     const sink = resolveCopySink(frozenRoot, 'plans/a.md');

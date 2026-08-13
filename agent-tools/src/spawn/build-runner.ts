@@ -5,11 +5,14 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 import { resolvePnpm } from './pnpm-path.js';
 
 /**
- * The real pnpm runner: resolves pnpm to an absolute path (via {@link resolvePnpm},
- * so command resolution never consults `PATH` — no S4036 binary-shadowing surface),
- * runs it with `args` from `cwd` inheriting stdio so the user sees install/build
- * progress, and translates a non-zero exit into an `err` Result at this single
- * library boundary (ADR-088) rather than letting `execFileSync`'s throw escape.
+ * The real pnpm runner: resolves pnpm to a launchable invocation — an
+ * executable file plus leading arguments, where the file may be the running
+ * Node binary when the resolved pnpm is a JS entry point (via
+ * {@link resolvePnpm}, so command resolution never consults `PATH` — no
+ * S4036 binary-shadowing surface), runs it with `args` from `cwd` inheriting
+ * stdio so the user sees install/build progress, and translates a non-zero
+ * exit into an `err` Result at this single library boundary (ADR-088)
+ * rather than letting `execFileSync`'s throw escape.
  *
  * @remarks
  * Structurally a `PnpmRunner` (see `build.ts`); the composition-root default

@@ -1,4 +1,4 @@
-import { join, resolve } from 'node:path';
+import { join, parse } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ok } from '@oaknational/result';
 import { SearchCliEnvSchema } from '../../src/env.js';
@@ -10,12 +10,15 @@ import type {
   ReadbackAuditResult,
 } from './field-readback-audit-lib.js';
 
-// Anchored via resolve so the fixture tree is genuinely absolute on every
-// host — a POSIX literal like '/repo/root' is drive-relative on Windows,
-// where fileURLToPath refuses a drive-less file URL outright. The module
-// URL is derived from the same anchor with pathToFileURL, so the command's
-// URL-to-directory round trip lands exactly on SCRIPT_DIR.
-export const REPO_ROOT = resolve('/repo/root');
+// Anchored at this module's own filesystem root so the fixture tree is
+// genuinely absolute on every host — a POSIX literal like '/repo/root' is
+// drive-relative on Windows, where fileURLToPath refuses a drive-less file
+// URL outright, and a bare `resolve('/repo/root')` would read the AMBIENT
+// process drive instead. The module URL is derived from the same anchor with
+// pathToFileURL, so the command's URL-to-directory round trip lands exactly
+// on SCRIPT_DIR.
+const ROOT = parse(import.meta.dirname).root;
+export const REPO_ROOT = join(ROOT, 'repo', 'root');
 export const SCRIPT_DIR = join(REPO_ROOT, 'apps', 'oak-search-cli', 'operations', 'ingestion');
 export const TEST_MODULE_URL = pathToFileURL(join(SCRIPT_DIR, 'field-readback-audit.ts')).href;
 

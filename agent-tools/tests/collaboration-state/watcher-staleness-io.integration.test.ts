@@ -56,6 +56,16 @@ describe('productionWatcherStalenessIo', () => {
     const loop = join(dir, 'loop');
     await symlink(loop, loop, 'junction');
 
-    await expect(productionWatcherStalenessIo.statMtimeMs(loop)).rejects.toThrow();
+    // Pin the rethrow class, not just "it threw": the escaping error must be
+    // an errno-carrying failure that is NOT the missing-file class — ENOENT
+    // is the one code the adapter maps to 'missing' instead of throwing.
+    const failure: unknown = await productionWatcherStalenessIo.statMtimeMs(loop).then(
+      () => undefined,
+      (cause: unknown) => cause,
+    );
+    expect(failure).toBeInstanceOf(Error);
+    const code = failure instanceof Error && 'code' in failure ? failure.code : undefined;
+    expect(code).toBeDefined();
+    expect(code).not.toBe('ENOENT');
   });
 });

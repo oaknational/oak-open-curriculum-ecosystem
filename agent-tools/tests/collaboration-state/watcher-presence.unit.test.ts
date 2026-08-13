@@ -6,6 +6,8 @@
  * `stale-no-emit` are blind. Derivers compose codename, seen-file, and
  * heartbeat path and reject unsafe segments / a root dir.
  */
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -277,13 +279,17 @@ describe('classifyWatcherPresence', () => {
 });
 
 describe('watcher path derivers', () => {
-  it('composes a seen-file path from a codename and dir, tolerating a trailing slash', () => {
+  it('composes a host-joined seen-file path from a codename and dir, tolerating a trailing separator of either flavour', () => {
+    const expected = join('.agent/state/collaboration/comms-seen', 'Seal hunts Offing.json');
     expect(
       commsSeenFileForCodename('Seal hunts Offing', '.agent/state/collaboration/comms-seen'),
-    ).toBe('.agent/state/collaboration/comms-seen/Seal hunts Offing.json');
+    ).toBe(expected);
     expect(
       commsSeenFileForCodename('Seal hunts Offing', '.agent/state/collaboration/comms-seen/'),
-    ).toBe('.agent/state/collaboration/comms-seen/Seal hunts Offing.json');
+    ).toBe(expected);
+    expect(
+      commsSeenFileForCodename('Seal hunts Offing', '.agent/state/collaboration/comms-seen\\'),
+    ).toBe(expected);
   });
 
   it('rejects a codename that is not a safe path segment (separators / traversal / empty)', () => {

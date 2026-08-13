@@ -38,8 +38,11 @@ const maxDirectoryFilesRead = 200;
 const maxFileBytesRead = 256 * 1024;
 export function repoRoot(): string {
   try {
-    // Absolute-path git via the trusted resolver (S4036) — the last by-name,
-    // via-shell git call in agent-tools, migrated 2026-08-12.
+    // Absolute-path git via the trusted resolver (S4036) — this was the last
+    // VIA-SHELL git call in agent-tools, migrated 2026-08-12. Two by-name
+    // (shell-free) `spawnSync('git', …)` sites remain as recorded S4036
+    // follow-ups, deliberately NOT migrated in that pass: `runGit` below and
+    // `commit-advisories/check-commit-message.ts`'s repo-root lookup.
     return execFileSync(resolveTrustedGit(), ['rev-parse', '--show-toplevel'], {
       encoding: 'utf8',
     }).trim();
@@ -124,6 +127,9 @@ export function subagentSummaries(sessionDir: string): SubagentSummary[] {
   return result;
 }
 export function targetNeedles(root: string, targetFile: string): string[] {
+  // Same separator translation as `core/git-relative-path.ts`'s `toGitPath`
+  // (host form → git's forward-slash form), inlined here because the inputs
+  // are already strings of mixed provenance, not host-relative paths.
   const normalized = targetFile.replaceAll('\\', '/');
   const values = new Set<string>([normalized, basename(normalized)]);
   const prefix = `${root.replaceAll('\\', '/')}/`;

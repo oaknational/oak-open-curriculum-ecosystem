@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
 import {
+  lstat,
   mkdir,
   mkdtemp,
   readdir,
@@ -325,6 +326,11 @@ describe('runWindowSample — refusal chain (nothing written)', () => {
     await symlink(decoyDirAbs, path.join(fixture.outDirAbs, WINDOW_SAMPLE_SEGMENT), 'junction');
     const run = await runWindowSample(fixture);
     expect(unwrapErr(run).message).toContain('symlink');
+    // "Leaving its target untouched" is falsifiable only if the link SURVIVED:
+    // a refusal that unlinked-and-rewrote would also leave the decoy empty.
+    expect(
+      (await lstat(path.join(fixture.outDirAbs, WINDOW_SAMPLE_SEGMENT))).isSymbolicLink(),
+    ).toBe(true);
     expect(await readdir(decoyDirAbs)).toEqual([]);
   });
 

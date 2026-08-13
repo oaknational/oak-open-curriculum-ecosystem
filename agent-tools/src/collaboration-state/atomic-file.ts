@@ -36,13 +36,13 @@ export function directorySyncStrategy(
 }
 
 /** Node-backed {@link AtomicFileSystem} with the platform-correct rename-durability step. */
-function nodeAtomicFileSystem(platform: NodeJS.Platform = process.platform): AtomicFileSystem {
+function nodeAtomicFileSystem(): AtomicFileSystem {
   return {
     writeSyncedFile,
     link,
     rename,
     remove: (path) => rm(path, { force: true }),
-    syncDirectory: directorySyncStrategy(platform),
+    syncDirectory: directorySyncStrategy(process.platform),
   };
 }
 
