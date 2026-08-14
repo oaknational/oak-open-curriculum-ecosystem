@@ -20,7 +20,7 @@ export interface Containment {
   readonly realpath: ((path: string) => string) | undefined;
 }
 
-export async function readJson(
+async function readJson(
   filePath: string,
   containment: Containment,
 ): Promise<Result<unknown, Error>> {
