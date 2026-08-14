@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/open-curriculum-ecosystem",
-  "version": "1.161.0",
+  "version": "1.170.1",
   "private": true,
   "description": "Oak National Academy open curriculum data ecosystem - tools and services for working with the Oak Open Curriculum data",
   "author": "https://github.com/jimCresswell",
@@ -98,6 +98,7 @@
     "portability:check": "pnpm --filter @oaknational/agent-tools validate-portability",
     "portability:fix": "pnpm --filter @oaknational/agent-tools validate-portability:fix",
     "skills:check": "pnpm --filter @oaknational/agent-tools -s build && node agent-tools/dist/src/bin/skills-adapter-generate.js --check --prefix=oak-",
+    "skills:generate": "pnpm --filter @oaknational/agent-tools -s build && node agent-tools/dist/src/bin/skills-adapter-generate.js --prefix=oak-",
     "encoding:check": "pnpm --filter @oaknational/agent-tools -s build && node agent-tools/dist/src/encoding/check-encoding.js --fail-on critical",
     "practice:fitness": "pnpm --filter @oaknational/agent-tools validate-practice-fitness",
     "practice:fitness:informational": "pnpm --filter @oaknational/agent-tools validate-practice-fitness -- --informational",

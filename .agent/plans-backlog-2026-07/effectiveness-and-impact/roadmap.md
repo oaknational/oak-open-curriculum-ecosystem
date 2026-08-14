@@ -37,5 +37,5 @@ Authoritative execution sources:
 No milestone closes without documentation updates (or a no-change rationale)
 for `validation-strategy.md` (the operational method graduates there), the
 collection README, and any impacted ADRs. Apply the
-[`consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md) skill
+[`consolidate-docs`](../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md) skill
 before closing major phases.

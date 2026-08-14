@@ -136,7 +136,7 @@ authority to be obeyed.
 
 **Probe-verified.** Evidence recorded first-hand 2026-08-02 against
 the pinned `codex_cli_version` in
-[`the-codex-dialogues/probe-record.md`](../the-codex-dialogues/probe-record.md)
+[`the-codex-dialogues/probe-record.md`](../the-codex-dialogues/references/probe-record.md)
 (the record is the sole holder of the version literal; the runnable
 probe lives beside it at
 [`the-codex-dialogues/scripts/probe-codex-mcp-server.mjs`](../the-codex-dialogues/scripts/probe-codex-mcp-server.mjs)):

@@ -237,11 +237,19 @@ jobs:
           # handshake advertises (RFC 9728 §3.1; get-prm-url.ts) — the
           # unqualified alias serving while the qualified route breaks
           # would fail the real handshake.
+          #
+          # Both health paths are probed (MCP-580). The preview host serves this
+          # app at its root, so /healthz is reachable here — but the CANONICAL
+          # host only forwards /mcp and /mcp/*, so /mcp/healthz is the path the
+          # production uptime monitor actually polls. Proving it on the deployed
+          # artefact is the only guard that survives the bundle: the in-process
+          # suite cannot catch a build that drops the route from the served
+          # output.
           attempt=1
           max_attempts=10
           while [ "$attempt" -le "$max_attempts" ]; do
-            if probe "/healthz" && probe "/.well-known/oauth-protected-resource/mcp"; then
-              finish success "healthz and path-qualified protected-resource metadata both serve (attempt ${attempt}/${max_attempts})"
+            if probe "/healthz" && probe "/mcp/healthz" && probe "/.well-known/oauth-protected-resource/mcp"; then
+              finish success "both health paths and path-qualified protected-resource metadata all serve (attempt ${attempt}/${max_attempts})"
               exit 0
             fi
             # An edge auth wall or host-allowlist rejection is
@@ -255,5 +263,5 @@ jobs:
             [ "$attempt" -le "$max_attempts" ] && sleep 15
           done
 
-          finish failure "deployment reported success but the app does not serve: healthz or protected-resource metadata failed after ${max_attempts} attempts"
+          finish failure "deployment reported success but the app does not serve: a health path or protected-resource metadata failed after ${max_attempts} attempts"
           exit 1

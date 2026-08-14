@@ -17,7 +17,7 @@ import { readRepoDocument } from '../../src/collaboration-state/test-helpers/rep
  * equality-pinned. ADR-078 helper-mediated committed-artefact reads.
  */
 
-const RECORD_PATH = '.agent/skills/the-codex-dialogues/probe-record.md';
+const RECORD_PATH = '.agent/skills/the-codex-dialogues/references/probe-record.md';
 const INSTRUMENT_SKILL_PATH = '.agent/skills/the-codex-dialogues/SKILL-CANONICAL.md';
 const SIF_SKILL_PATH = '.agent/skills/sif/SKILL-CANONICAL.md';
 const PROBE_SCRIPT_PATH = '.agent/skills/the-codex-dialogues/scripts/probe-codex-mcp-server.mjs';
@@ -61,7 +61,7 @@ describe('the-codex-dialogues probe evidence lockstep', () => {
     expect(skill, 'semantic pointer to the canonical field').toContain(
       'the pinned `codex_cli_version` in',
     );
-    expect(skill, 'resolving link to the record').toContain('](./probe-record.md)');
+    expect(skill, 'resolving link to the record').toContain('](./references/probe-record.md)');
     expect(skill, 'no subject-adjacent version literal outside the record').not.toMatch(
       /codex[- ](?:cli|mcp-server)[^\n]{0,24}\d+\.\d+\.\d+/i,
     );
@@ -74,7 +74,7 @@ describe('the-codex-dialogues probe evidence lockstep', () => {
     expect(pin, 'canonical pin parses from the record').toMatch(/^\d+\.\d+\.\d+$/);
     expect(sif, 'semantic pointer to the canonical field').toContain('`codex_cli_version`');
     expect(sif, 'resolving link to the record').toContain(
-      '](../the-codex-dialogues/probe-record.md)',
+      '](../the-codex-dialogues/references/probe-record.md)',
     );
     expect(sif, 'no subject-adjacent version literal outside the record').not.toMatch(
       /codex[- ](?:cli|mcp-server)[^\n]{0,24}\d+\.\d+\.\d+/i,

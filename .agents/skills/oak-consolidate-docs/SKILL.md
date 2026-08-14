@@ -5,4 +5,4 @@ description: Declare and run session-completion or dedicated-knowledge-curation 
 
 # Consolidate Docs (Cross-tool)
 
-Read and follow `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md`.

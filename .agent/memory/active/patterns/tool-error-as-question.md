@@ -123,5 +123,5 @@ pause and name the pattern rather than bypass it a third time.
 - [`respect-active-agent-claims` rule][claims-rule] — the read-then-Edit safety contract is the same shape (claims surface a question about overlap; the answer is consult-decide-log, not bypass).
 - PDR-018 §"Tool error as question" amendment — the meta-pattern's home in Practice doctrine.
 
-[napkin-skill]: ../../../skills/napkin/SKILL-CANONICAL.md#knowledge-preservation-is-absolute--fitness-is-never-a-constraint
+[napkin-skill]: ../../../skills/knowledge/napkin/SKILL-CANONICAL.md#knowledge-preservation-is-absolute--fitness-is-never-a-constraint
 [claims-rule]: ../../../rules/respect-active-agent-claims.md

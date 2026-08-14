@@ -15,7 +15,7 @@ to be unambiguous in team-start, claim, or handoff prose.
 The portable doctrine for the curator role lives in
 [`PDR-081`](../../../practice-core/decision-records/PDR-081-curator-role-and-substrate-care-lane.md).
 The actionable workflow for a single pass lives in the
-[`curator-pass` SKILL](../../../skills/curator-pass/SKILL-CANONICAL.md).
+[`curator-pass` SKILL](../../../skills/knowledge/curator-pass/SKILL-CANONICAL.md).
 
 ## Metadata-only contract
 

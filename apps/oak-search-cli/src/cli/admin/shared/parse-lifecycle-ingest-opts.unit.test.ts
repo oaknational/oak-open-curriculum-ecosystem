@@ -32,6 +32,16 @@ describe('parseLifecycleIngestOpts', () => {
     });
   });
 
+  it('parses includeRestricted as a boolean flag (default omitted)', () => {
+    expect(parseLifecycleIngestOpts({ bulkDir: './bulk-downloads' }).includeRestricted).toBe(
+      undefined,
+    );
+    expect(
+      parseLifecycleIngestOpts({ bulkDir: './bulk-downloads', includeRestricted: true })
+        .includeRestricted,
+    ).toBe(true);
+  });
+
   it('rejects arrays as invalid option objects', () => {
     expectInvalidOption([], 'Invalid command options: expected an option object.');
   });
@@ -84,5 +94,12 @@ describe('parseLifecycleIngestOpts', () => {
 
   it('rejects non-boolean verbose values', () => {
     expectInvalidOption({ verbose: 1 }, '--verbose must be a boolean flag.');
+  });
+
+  it('rejects non-boolean includeRestricted values', () => {
+    expectInvalidOption(
+      { includeRestricted: 'yes' },
+      '--include-restricted must be a boolean flag.',
+    );
   });
 });

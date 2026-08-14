@@ -61,6 +61,26 @@ export function readClientFamily(value: unknown): OakClientFamily | undefined {
   return value === 'chatgpt' || value === 'claude' || value === 'other' ? value : undefined;
 }
 
+function readHeaderValue(headers: UnknownProperties, key: string): unknown {
+  const value = readOwn(headers, key);
+  return Array.isArray(value) ? value.at(0) : value;
+}
+
+export function readClientSurfaceHeaderValues(extra: unknown): readonly unknown[] {
+  if (!isUnknownProperties(extra)) {
+    return [];
+  }
+  const requestInfo = readOwn(extra, 'requestInfo');
+  if (!isUnknownProperties(requestInfo)) {
+    return [];
+  }
+  const headers = readOwn(requestInfo, 'headers');
+  if (!isUnknownProperties(headers)) {
+    return [];
+  }
+  return [readHeaderValue(headers, 'x-anthropic-client'), readHeaderValue(headers, 'user-agent')];
+}
+
 export function normaliseDuration(startedAt: number, endedAt: number): number {
   const duration = Math.trunc(endedAt - startedAt);
   if (!Number.isFinite(duration)) {

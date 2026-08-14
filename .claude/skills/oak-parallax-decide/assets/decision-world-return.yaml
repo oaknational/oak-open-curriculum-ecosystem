@@ -1,0 +1,85 @@
+schema_version: "parallax/decision-world-return/0.1"
+artifact_id: ""
+artifact_type: decision-world-return
+artifact_revision: 1
+inquiry_id: ""
+inquiry_revision: 1
+status: provisional
+created_at: ""
+updated_at: ""
+created_by:
+  kind: "agent | human | mixed"
+  identifier: ""
+producing_skill:
+  name: parallax-decide
+  version: "0.1.0"
+execution_context:
+  run_id: ""
+  mode: "native-skill | emulated-reduced | manual"
+  independence: shared-context
+  host: ""
+inputs: []
+permissions_and_scope:
+  requested_operation: decision-analysis
+  task_artifact_writes: false
+  practice_memory_writes: false
+  decision_authority: false
+  external_actions: false
+identity:
+  basis_ids: []
+  scale_regions: []
+  method_pass_ids: []
+  domain_profiles: []
+assumptions: []
+uncertainties: []
+provenance:
+  sources: []
+  transformations: []
+validity_domain:
+  populations: []
+  systems: []
+  contexts: []
+  time_horizons: []
+defeaters: []
+reopen_when: []
+
+decision_id: ""
+decision_question: ""
+authority:
+  owner: ""
+  recommend: false
+  decide: false
+  act: false
+affected_parties: []
+objectives: []
+values: []
+side_constraints: []
+options: []
+bridge_claims: []
+crosswalk_claims: []
+comparison:
+  methods: []
+  assumptions: []
+  sensitivities: []
+  distributional_effects: []
+selected_option: ""
+rationale: []
+residual_uncertainty: []
+dissent: []
+implementation_preconditions: []
+authorised_next_step: ""
+world_return:
+  owner: ""
+  review_cadence: ""
+  baseline: []
+  expected_outcomes: []
+  unacceptable_outcomes: []
+  indicators: []
+  observation_scale: {}
+  consequence_scale: {}
+  monitoring_scale: {}
+  time_horizons: []
+  thresholds: []
+  defeaters: []
+  rollback_conditions: []
+  reopening_conditions: []

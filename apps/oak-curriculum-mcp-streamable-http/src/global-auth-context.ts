@@ -51,7 +51,8 @@ export function setupGlobalAuthContext(
   const instrumentedClerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
 
   // Wrap with conditional middleware to skip Clerk for non-MCP paths
-  // (/.well-known/*, /healthz) and public resource reads
+  // (/.well-known/*, both health paths incl. the routed /mcp/healthz) and
+  // public resource reads
   const conditionalClerkMw = measureAuthSetupStep(
     authLog,
     'conditionalClerkMiddleware.create',
@@ -80,8 +81,9 @@ export function setupGlobalAuthContext(
 
   measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
     // Apply conditional clerkMiddleware globally to all routes.
-    // Non-MCP paths (/.well-known/*, /healthz) and public resource
-    // reads skip Clerk. All MCP methods get full Clerk auth context.
+    // Non-MCP paths (/.well-known/*, both health paths) and public
+    // resource reads skip Clerk. All MCP methods get full Clerk auth
+    // context.
     // Actual enforcement happens via createMcpAuthClerk on /mcp routes.
     authLog.info('Installing conditional Clerk middleware globally (all routes)');
     app.use(conditionalClerkMw);

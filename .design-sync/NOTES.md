@@ -1,5 +1,22 @@
 # design-sync NOTES — oak-design-system
 
+- **Skill supporting-directory carriage declared** (2026-08-11,
+  skill-standard-pilot S1a): `estate.json` §directWrites now carries
+  `references/**` and `scripts/**` for the studio-shipped skill, sourced
+  from the canonical's own subdirectories under
+  `.agent/skills/domain-craft/ui-design/design-system-usage/` — the same
+  byte-stable carriage the `.claude`/`.agents` projections gained, so the
+  studio surface never silently strips the substance `SKILL.md` points
+  at. `evals/` never ships. The skill's `assets/` tier is deliberately
+  undeclared: remote root `assets/**` is the DS asset cargo's namespace
+  (§shippedFromRepo), so skill-asset carriage takes its own ruled remote
+  home if a studio-shipped skill ever carries assets. Match-count check
+  run at this edit: `references/**` and `scripts/**` each match exactly
+  one declaration entry; paths/sources twins paired. The canonical
+  carries no supporting files yet (S2 re-homes reference substance), so
+  the first carriage-bearing sync is S2's — these entries make that sync
+  declaration-complete before the content exists, and reconciliation is
+  unchanged until it does.
 - **Estate-declaration edits re-run the match-count check** (2026-07-25,
   graduated from distilled 2026-07-30): `estate.json`'s keep/ship
   declaration pairs matching `paths` arrays with provenance `sources`

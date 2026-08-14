@@ -1,0 +1,21 @@
+{
+  "artefact": ".agent/reports/design/skill-standard-pilot-evals/iteration-1/artefacts/case-a-with-skill.html",
+  "mode": "page",
+  "assertions": {
+    "referenced-oak-classes-exist": {
+      "pass": true,
+      "binding": true,
+      "evidence": "43 referenced, 0 not in the trunk"
+    },
+    "no-literal-design-values": {
+      "pass": false,
+      "binding": true,
+      "evidence": "2 literal(s): 15rem, 12rem"
+    },
+    "zero-ad-hoc-css": {
+      "pass": false,
+      "binding": true,
+      "evidence": "39 authored declaration(s) across <style>, style=, and fenced css"
+    }
+  }
+}

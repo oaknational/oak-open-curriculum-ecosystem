@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "description": "Declarative remote estate for the Claude Design studio (projectId in config.json). Reconciliation contract: at every ordinary sync, list the remote project and DELETE any file whose path matches no glob or literal below; additionally (owner-ratified 2026-07-25, glob-orphan amendment), a remote file under a shippedFromRepo GLOB must also have a repo counterpart at its mapped source (a source file, or the generator mapping for converter-generated outputs) — repo absence under a shipped glob is residue and deletes, with the same capture-first precondition ('dir/**' matches any depth but does NOT match dot-prefixed names at any level — every dot-prefixed keep must be a literal entry, as the .thumbnail entries are; all other entries are literal paths). Every intentional addition to the remote estate lands as an entry here in the same change. Adopted by owner ruling 2026-07-25 (MCP-160; retires the MCP-137 S4 no-prune deviation). Derived from the ruled disposition of all 346 then-remote files — evidence pack: .agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/. Single-home rule (owner ruling 2026-07-25, stricter card answer): never ship the same document to two remote paths — every document has exactly one remote home.",
+  "description": "Declarative remote estate for the Claude Design studio (projectId in config.json). Reconciliation contract: at every ordinary sync, list the remote project and DELETE any file whose path matches no glob or literal below; additionally (owner-ratified 2026-07-25, glob-orphan amendment), a remote file under a shippedFromRepo GLOB must also have a repo counterpart at its mapped source (a source file, or the generator mapping for converter-generated outputs) — repo absence under a shipped glob is residue and deletes, with the same capture-first precondition ('dir/**' matches any depth but does NOT match dot-prefixed names at any level — every dot-prefixed keep must be a literal entry, as the .thumbnail entries are; all other entries are literal paths). The same source-counterpart rule binds the two carriage-bearing directWrites globs — references/** and scripts/** — whose sources entries map directories (extended 2026-08-11, review round 3 of the carriage change; deliberately NOT widened to dtcg/** or any other pre-existing glob, whose deletion semantics stay as ruled 2026-07-25): a remote file under either carriage glob whose mapped repo source file is absent is residue and deletes — without this, a renamed or removed carried file would keep its old remote twin matching the keep glob forever. Every intentional addition to the remote estate lands as an entry here in the same change. Adopted by owner ruling 2026-07-25 (MCP-160; retires the MCP-137 S4 no-prune deviation). Derived from the ruled disposition of all 346 then-remote files — evidence pack: .agent/state/collaboration/handoffs/2026-07-25-cormorant-walk-pack/. Single-home rule (owner ruling 2026-07-25, stricter card answer): never ship the same document to two remote paths — every document has exactly one remote home.",
   "estate": {
     "shippedFromRepo": {
       "description": "Repo is canonical; the converter pipeline and the studio-source up-sync re-ship these current each sync (converter outputs; the five tier CSS files + oak-theme.js + brand_voice.txt per the MCP-137 S4 scope ruling; the asset cargo; and the studio-source surfaces tracked in packages/design/oak-design-system/studio-source/).",
@@ -29,14 +29,16 @@
       ]
     },
     "directWrites": {
-      "description": "Shipped current from repo canonicals by explicit DesignSync writes each sync, because the converter cannot carry them: tokensGlob requires an installed tokensPkg (absent), and guidelinesGlob accepts .md/.mdx only (verified: lib/docs.mjs matchGlob/isDocExt). Owner rulings 2026-07-25: dtcg ships by direct write; the three non-md docs ship because the design agent is a reviewing expert. CLAUDE.md is a KEEP but NOT a direct write: the Design API reserves it (instructions to the design agent are unwritable by sync); its repo canonical is packages/design/oak-design-system/CLAUDE.md and updates are owner-executed in the studio UI from that canonical.",
+      "description": "Shipped current from repo canonicals by explicit DesignSync writes each sync, because the converter cannot carry them: tokensGlob requires an installed tokensPkg (absent), and guidelinesGlob accepts .md/.mdx only (verified: lib/docs.mjs matchGlob/isDocExt). Owner rulings 2026-07-25: dtcg ships by direct write; the three non-md docs ship because the design agent is a reviewing expert. CLAUDE.md is a KEEP but NOT a direct write: the Design API reserves it (instructions to the design agent are unwritable by sync); its repo canonical is packages/design/oak-design-system/CLAUDE.md and updates are owner-executed in the studio UI from that canonical. Skill supporting-directory carriage (skill-standard-pilot S1a, ratified 2026-08-11): the studio-shipped skill carries its spec supporting directories beside SKILL.md as direct writes, byte-stable from the canonical's own subdirectories — references/** and scripts/** below; evals/ NEVER ships (development/QA artifacts, not runtime skill content); empty canonical directories ship nothing. The skill's assets/ tier is deliberately undeclared: the remote root assets/** namespace is the design-system asset cargo's (shippedFromRepo), so a skill assets/ carriage needs its own ruled remote home at the moment a studio-shipped skill first carries assets — declaring it here now would collide two sources over one glob.",
       "paths": [
         "dtcg/**",
         "LICENCES.md",
         "guidelines/docs/headless-a11y-frameworks.html",
         "guidelines/docs/nextjs-theme-mapping.css",
         "guidelines/docs/nextjs-theme-switcher.tsx.txt",
-        "SKILL.md"
+        "SKILL.md",
+        "references/**",
+        "scripts/**"
       ],
       "sources": {
         "dtcg/**": "packages/design/oak-design-system/dtcg/",
@@ -44,7 +46,9 @@
         "guidelines/docs/headless-a11y-frameworks.html": "packages/design/oak-design-system/docs/headless-a11y-frameworks.html",
         "guidelines/docs/nextjs-theme-mapping.css": "packages/design/oak-design-system/docs/nextjs-theme-mapping.css",
         "guidelines/docs/nextjs-theme-switcher.tsx.txt": "packages/design/oak-design-system/docs/nextjs-theme-switcher.tsx.txt",
-        "SKILL.md": "derived from .agent/skills/domain-craft/ui-design/design-system-usage/SKILL-CANONICAL.md — the canonical body with the studio frontmatter block (name: oak-design; the canonical's description; user-invocable: true) in place of the repo frontmatter (adopted under the owner's usefulness formula, 2026-07-25)"
+        "SKILL.md": "derived from .agent/skills/domain-craft/ui-design/design-system-usage/SKILL-CANONICAL.md — the canonical body with the studio frontmatter block (name: oak-design; the canonical's description; user-invocable: true) in place of the repo frontmatter (adopted under the owner's usefulness formula, 2026-07-25)",
+        "references/**": ".agent/skills/domain-craft/ui-design/design-system-usage/references/",
+        "scripts/**": ".agent/skills/domain-craft/ui-design/design-system-usage/scripts/"
       }
     },
     "machinery": {

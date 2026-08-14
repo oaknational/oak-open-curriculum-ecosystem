@@ -58,8 +58,8 @@ governs *decisions*, not *homings*). When diagnosing a failure, **bias toward "i
 there a concrete instruction/guardrail fix?" before concluding "emergent."** The
 structural backing for this pattern is the consolidation read-gate and
 graduation-non-deferrable clauses in
-[`consolidate-docs`](../../../skills/consolidate-docs/SKILL-CANONICAL.md) and
-[`consolidate-until-done`](../../../skills/consolidate-until-done/SKILL-CANONICAL.md)
+[`consolidate-docs`](../../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md) and
+[`consolidate-until-done`](../../../skills/knowledge/consolidate-until-done/SKILL-CANONICAL.md)
 — the firing gates, since naming the pattern does not inoculate against it
 (`passive-guidance-loses-to-artefact-gravity`).
 

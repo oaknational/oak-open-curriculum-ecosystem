@@ -133,7 +133,7 @@ describe('createRunVersionedIngest', () => {
     const run = createRunVersionedIngest({
       oakClient: fakeOakClient(),
       esTransport: fakeEsTransport(),
-      target: 'primary',
+      target: 'sandbox',
       prepareBulkIngestion: prepare,
       dispatchBulk: dispatch,
     });
@@ -141,16 +141,18 @@ describe('createRunVersionedIngest', () => {
     await run('v2026-03-09-120000', {
       bulkDir: '/tmp/bulk',
       subjectFilter: ['maths'],
+      includeRestricted: true,
     });
 
     expect(prepare).toHaveBeenCalledOnce();
-    const callArgs = prepare.mock.calls[0]?.[0];
-    expect(callArgs).toBeDefined();
-    if (callArgs) {
-      expect(callArgs.bulkDir).toBe('/tmp/bulk');
-      expect(callArgs.subjectFilter).toEqual(['maths']);
-      expect(typeof callArgs.resolveIndex).toBe('function');
-    }
+    expect(prepare).toHaveBeenCalledWith(
+      expect.objectContaining({
+        bulkDir: '/tmp/bulk',
+        subjectFilter: ['maths'],
+        includeRestricted: true,
+      }),
+    );
+    expect(typeof prepare.mock.calls[0]?.[0]?.resolveIndex).toBe('function');
   });
 
   it('dispatches operations via dispatchBulk', async () => {
@@ -269,6 +271,7 @@ describe('createRunVersionedIngest', () => {
     await run('v2026-03-09-120000', { bulkDir: '/tmp/bulk' });
 
     expect(prepare).toHaveBeenCalledOnce();
+    expect(prepare).toHaveBeenCalledWith(expect.objectContaining({ includeRestricted: undefined }));
     const callArgs = prepare.mock.calls[0]?.[0];
     expect(callArgs).toBeDefined();
     if (callArgs) {

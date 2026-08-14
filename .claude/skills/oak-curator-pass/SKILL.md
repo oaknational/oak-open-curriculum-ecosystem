@@ -5,4 +5,4 @@ description: Run one curator pass on the repo's knowledge substrate. Use when al
 
 # Curator Pass (Claude Code)
 
-Read and follow `.agent/skills/curator-pass/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/knowledge/curator-pass/SKILL-CANONICAL.md`.

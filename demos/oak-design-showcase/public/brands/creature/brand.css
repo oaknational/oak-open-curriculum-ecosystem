@@ -4,16 +4,43 @@
    DIAGONAL gradients, ANGLED shadows, bevels and gloss — three-dimensional,
    decorated, nocturnal. All garnish: audited text pairings stay flat. */
 @import url('brand-a.css');
+/* Identity-default face: with NO explicit theme the arcade is DARK (the
+   polarity lever below), so the kit's icon filters — keyed to explicit
+   [data-theme] arms only — get their no-attribute re-point here. Scoped
+   :root:not([data-theme]) so every explicit choice (light included) falls
+   back to the kit's own arms. */
+:root:not([data-theme]) {
+  --filter-icon: invert(1); /* @kind other */
+  --filter-icon-inverted: none; /* @kind other */
+  --filter-icon-on-btn-primary: none; /* @kind other */
+}
 :root {
-  color-scheme: dark; /* dark-first: the bedtime arcade is the native face */
+  /* dark-first: the bedtime arcade is the native face — the identity
+     default, first-class design intent (DDR-003 dated amendment
+     2026-08-11: the person's choice wins, and the identity speaks first
+     when the person is silent). An explicit choice, light included, still
+     wins via the kit's :root[data-theme] specificity guards. */
+  color-scheme: dark;
   /* Display type — the fairground voice */
   --font-display: 'Baloo 2', var(--font-sans);
   --weight-display: 800;
   --tracking-heading: 0em;
   /* THE RAMP — toy-big */
-  --type-heading-1: 800 84px/1.02 var(--font-display);
-  --type-heading-2: 800 64px/1.05 var(--font-display);
-  --type-heading-3: 800 52px/1.08 var(--font-display);
+  /* Fluid display slots (h1-3): unitless PARTS — the kit derives the curve
+     (brand.css §1b). Weight rides --weight-display above. Floors are
+     fit-derived and LOUD: 56px is the largest display type that fits
+     "Curriculum" on a 320px line in Baloo 2 at 800 — up to 11, even on a
+     phone. (84px = 5.25rem etc.: the old px maxima restated in rem so a
+     reader's font-size setting still scales them.) */
+  --type-heading-1-min: 3.5;
+  --type-heading-1-max: 5.25;
+  --type-heading-1-leading: 1.02;
+  --type-heading-2-min: 2.75;
+  --type-heading-2-max: 4;
+  --type-heading-2-leading: 1.05;
+  --type-heading-3-min: 2.25;
+  --type-heading-3-max: 3.25;
+  --type-heading-3-leading: 1.08;
   --type-heading-4: 800 40px/1.1 var(--font-display);
   --type-heading-5: 800 32px/1.12 var(--font-display);
   --type-heading-6: 800 25px/1.15 var(--font-display);
@@ -55,6 +82,11 @@
   --bg-neutral: light-dark(#f6e8ef, #4d3a4d);
   --bg-neutral-stronger: light-dark(#ecd8e2, #342635);
   --bg-inverted: light-dark(#331f30, #fffdf8);
+  /* The kit's inverted-band contract (brand.css: a brand that re-points
+     --bg-inverted must keep the inverted family >=4.5:1 against it):
+     the subdued twin rides the brand's own audited subdued pair —
+     measured 1.61:1 with the kit default (specimen matrix, 2026-08-10). */
+  --text-inverted-subdued: light-dark(#e3cede, #5f4460);
   /* Elevation family stays in the PLUM world (contract paper rule): the
      secondary plate is the page sheet; raised/overlay lift by lightening
      the plum, never Oak's cool greys */
@@ -160,7 +192,7 @@
 }
 
 /* §EXPRESSION — hook-clean rules on specimen classes (same contract as
-   FDSE §11): the utility strip joins the nocturne instead of flashing an
+   PDS §11): the utility strip joins the nocturne instead of flashing an
    inverted cream bar across the bedtime arcade */
 .util {
   background: var(--bg-subtle);
@@ -253,4 +285,14 @@
   --main-areas: 'hero' 'featured' 'support' 'context';
   --main-columns-narrow: minmax(0, 1fr);
   --main-areas-narrow: 'hero' 'featured' 'support' 'context';
+}
+
+/* Flow topology collapses at the kit's narrow seam: multi-column key-item
+   flow needs room the -narrow maps do not have (measured: 132px/66px
+   tracks at a 320px viewport overflowed the reflow floor — the specimen
+   accessibility matrix's finding, 2026-08-10). */
+@media (max-width: 840px) {
+  :root {
+    --flow-columns: minmax(0, 1fr);
+  }
 }

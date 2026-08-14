@@ -25,9 +25,6 @@ import {
   getClaudeHookPortabilityIssues,
   getReviewerAdapterParityIssues,
   getRulesIndexPortabilityIssues,
-  getSkillPermissionIssues,
-  getSkillsLockCrossReferenceIssues,
-  getSkillsLockEntries,
   CLAUDE_SETTINGS_PATH,
   HOOK_POLICY_PATH,
   RULES_INDEX_PATH,
@@ -45,19 +42,18 @@ import {
   stripFrontmatter,
   writeText,
 } from './portability-fs.js';
+import { practiceSkillPermissionIssues } from './skill-census.js';
 import { reportPortabilityValidation } from './portability-report.js';
 
 const repoRoot = resolveRepoRoot(import.meta.url);
-const SKILLS_LOCK_PATH = 'skills-lock.json';
 const fixMode = process.argv.includes('--fix');
 const writtenWrappers: string[] = [];
 const issues: string[] = [];
 
-const { canonicalPaths: discoveredCanonicalPaths, leafNames: canonicalLeafNames } =
-  await collectCanonicalSkillPaths({
-    listSubdirs: (relPath) => listSubdirs(repoRoot, relPath),
-    exists: (relPath) => exists(repoRoot, relPath),
-  });
+const { canonicalPaths: discoveredCanonicalPaths } = await collectCanonicalSkillPaths({
+  listSubdirs: (relPath) => listSubdirs(repoRoot, relPath),
+  exists: (relPath) => exists(repoRoot, relPath),
+});
 const validatedCanonicalPaths: string[] = [];
 
 async function validateCanonicalFrontmatter(skillPath: string): Promise<void> {
@@ -154,19 +150,6 @@ for (const ruleFile of [...cursorRules, ...claudeRules, ...agentsRules]) {
   }
 }
 
-if (await exists(repoRoot, SKILLS_LOCK_PATH)) {
-  try {
-    const lockedSkills = getSkillsLockEntries(await readJson(repoRoot, SKILLS_LOCK_PATH));
-    issues.push(
-      ...getSkillsLockCrossReferenceIssues(lockedSkills, canonicalLeafNames, SKILLS_LOCK_PATH),
-    );
-  } catch (error) {
-    issues.push(
-      `${SKILLS_LOCK_PATH}: validation failed: ${error instanceof Error ? error.message : 'Unknown skills-lock failure.'}`,
-    );
-  }
-}
-
 const rulesIndexState = await readOptionalText(repoRoot, RULES_INDEX_PATH);
 for (const issue of getRulesIndexPortabilityIssues({
   canonicalRuleFiles: canonicalRules,
@@ -204,14 +187,7 @@ if (await exists(repoRoot, CLAUDE_SETTINGS_PATH)) {
         ? claudeSettings['permissions']['allow']
         : [];
     const permissions = allowList.filter((e): e is string => typeof e === 'string');
-    const claudeSkillDirs = await listSubdirs(repoRoot, '.claude/skills');
-    for (const issue of getSkillPermissionIssues({
-      claudeCommandFiles: [],
-      claudeSkillDirs,
-      claudeSettingsPermissions: permissions,
-    })) {
-      issues.push(issue);
-    }
+    issues.push(...(await practiceSkillPermissionIssues(repoRoot, permissions)));
   } catch (error) {
     issues.push(
       `Skill permission validation failed: ${error instanceof Error ? error.message : 'Unknown skill permission check failure.'}`,

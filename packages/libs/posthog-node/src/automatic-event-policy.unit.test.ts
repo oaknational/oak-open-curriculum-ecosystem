@@ -21,6 +21,33 @@ const SNAPSHOT = {
   reportOperationalError: () => undefined,
 } satisfies PolicySnapshot;
 
+const AUTOMATIC_EVENT_SHAPES = [
+  [
+    'initialize',
+    AUTOMATIC_EVENT_NAMES.initialize,
+    {
+      oak_client_family: 'chatgpt',
+      $mcp_protocol_version: SUPPORTED_PROTOCOL_VERSIONS[0],
+      $mcp_is_error: false,
+    },
+  ],
+  [
+    'tools-list error',
+    AUTOMATIC_EVENT_NAMES.toolsList,
+    { $mcp_duration_ms: 5, $mcp_is_error: true },
+  ],
+  [
+    'tools-list success',
+    AUTOMATIC_EVENT_NAMES.toolsList,
+    { $mcp_duration_ms: 5, $mcp_is_error: false, $mcp_listed_tool_names: [] },
+  ],
+  [
+    'tool-call',
+    AUTOMATIC_EVENT_NAMES.toolCall,
+    { $mcp_duration_ms: 5, $mcp_is_error: false, $mcp_tool_name: 'unserved' },
+  ],
+] as const;
+
 describe('normaliseAutomaticProperties', () => {
   it.each([
     ['missing', undefined],
@@ -28,6 +55,7 @@ describe('normaliseAutomaticProperties', () => {
   ])('drops initialize when the success signal is %s', (_label, isError) => {
     const properties: UnknownProperties = {
       oak_client_family: 'chatgpt',
+      oak_client_surface: 'other',
       $mcp_protocol_version: SUPPORTED_PROTOCOL_VERSIONS[0],
       ...(isError === undefined ? {} : { $mcp_is_error: isError }),
     };
@@ -35,36 +63,12 @@ describe('normaliseAutomaticProperties', () => {
     expect(normaliseAutomaticProperties('$mcp_initialize', properties, SNAPSHOT)).toBeNull();
   });
 
-  it.each([
-    [
-      'initialize',
-      AUTOMATIC_EVENT_NAMES.initialize,
-      {
-        oak_client_family: 'chatgpt',
-        $mcp_protocol_version: SUPPORTED_PROTOCOL_VERSIONS[0],
-        $mcp_is_error: false,
-      },
-    ],
-    [
-      'tools-list error',
-      AUTOMATIC_EVENT_NAMES.toolsList,
-      { $mcp_duration_ms: 5, $mcp_is_error: true },
-    ],
-    [
-      'tools-list success',
-      AUTOMATIC_EVENT_NAMES.toolsList,
-      { $mcp_duration_ms: 5, $mcp_is_error: false, $mcp_listed_tool_names: [] },
-    ],
-    [
-      'tool-call',
-      AUTOMATIC_EVENT_NAMES.toolCall,
-      { $mcp_duration_ms: 5, $mcp_is_error: false, $mcp_tool_name: 'unserved' },
-    ],
-  ])(
+  it.each(AUTOMATIC_EVENT_SHAPES)(
     'strips the @posthog/mcp 0.11.x auto-captured client-identity properties from %s',
     (_label, event, base) => {
       const properties: UnknownProperties = {
         ...base,
+        oak_client_surface: 'other',
         $mcp_client_user_agent: 'claude-ai/1.0',
         $mcp_vendor_client: 'anthropic',
       };
@@ -80,6 +84,36 @@ describe('normaliseAutomaticProperties', () => {
         normalised,
         'an undeclared upstream property must never reach the sink; declaring it is a reviewed policy edit',
       ).not.toHaveProperty('$mcp_vendor_client');
+    },
+  );
+
+  it.each(AUTOMATIC_EVENT_SHAPES)(
+    'carries the declared oak_client_surface category on %s',
+    (_label, event, base) => {
+      const normalised = normaliseAutomaticProperties(
+        event,
+        { ...base, oak_client_surface: 'cli' },
+        SNAPSHOT,
+      );
+
+      expect(normalised).not.toBeNull();
+      expect(normalised).toHaveProperty('oak_client_surface', 'cli');
+    },
+  );
+
+  it.each(AUTOMATIC_EVENT_SHAPES)(
+    'drops %s when the required oak_client_surface is missing',
+    (_label, event, base) => {
+      expect(normaliseAutomaticProperties(event, { ...base }, SNAPSHOT)).toBeNull();
+    },
+  );
+
+  it.each(AUTOMATIC_EVENT_SHAPES)(
+    'drops %s when oak_client_surface is outside the closed category set',
+    (_label, event, base) => {
+      const properties: UnknownProperties = { ...base, oak_client_surface: 'browser' };
+
+      expect(normaliseAutomaticProperties(event, properties, SNAPSHOT)).toBeNull();
     },
   );
 });

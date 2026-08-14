@@ -3,7 +3,7 @@
 **Shared operational methodology.** Not a standalone workflow. Referenced by
 [`session-handoff`](../../skills/session-handoff/SKILL-CANONICAL.md)
 (session-scoped sweep, especially platform-specific entry points) and
-[`consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md)
+[`consolidate-docs`](../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md)
 (thread-scoped deep sweep across napkin, distilled.md, plans, platform
 memory).
 
@@ -144,7 +144,7 @@ phrasings — *"budget consumed"*, *"out of scope"*, *"for later"*,
 - [`session-handoff`](../../skills/session-handoff/SKILL-CANONICAL.md) —
   session-scoped caller; sweeps the session's drift surfaces (especially
   platform entry points).
-- [`consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md) —
+- [`consolidate-docs`](../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md) —
   thread-scoped caller; sweeps the cross-session drift surfaces (napkin,
   distilled.md, completed plans, platform memory) at deep convergence
   time.

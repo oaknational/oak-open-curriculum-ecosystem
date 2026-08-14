@@ -92,7 +92,7 @@ date, and where the work concluded. Shape:
 ```
 
 The banner is enforced at consolidation by
-[`consolidate-docs` step 7c check 7](../../../skills/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
+[`consolidate-docs` step 7c check 6](../../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
 (retired-record banner hygiene), which flags any on-disk record absent
 from both indexes whose top lacks a banner and applies the missing
 banner as a follow-on diff.

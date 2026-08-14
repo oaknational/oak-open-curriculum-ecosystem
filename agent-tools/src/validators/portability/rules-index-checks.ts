@@ -1,6 +1,5 @@
 /**
- * Rules-index and skills-lock portability checks for the portability
- * validator.
+ * Rules-index portability checks for the portability validator.
  *
  * The Codex platform cannot load `.claude/rules/` triggers, so the repo
  * maintains a Markdown fallback (`RULES_INDEX.md`) that must list every
@@ -10,14 +9,8 @@
  * - Every canonical `.agent/rules/<name>.md` file is listed in the index.
  * - The index does not list any non-canonical paths.
  * - The index stays within the Codex project-document byte budget.
- *
- * It also provides {@link getSkillsLockEntries}, which parses the
- * `skills-lock.json` file so the orchestrating validator can cross-reference
- * locked skills against the canonical `.agent/skills/` directory.
  */
 
-import type { JsonObject } from '../../core/json.js';
-import { isJsonObject } from '../../core/json.js';
 import { DEFAULT_CODEX_PROJECT_DOC_MAX_BYTES, RULES_INDEX_PATH } from './portability-constants.js';
 
 /**
@@ -131,81 +124,6 @@ export function getRulesIndexPortabilityIssues(opts: RulesIndexPortabilityIssues
     issues.push(
       `${rulesIndexPath}: ${byteSize} bytes exceeds Codex project-doc budget ${maxBytes}`,
     );
-  }
-
-  return issues;
-}
-
-/**
- * Parses the `skills` map from a `skills-lock.json` value and returns it as
- * an array of `[skillName, entryObject]` pairs.
- *
- * Returns an empty array when the input is not a JSON object, when the
- * `skills` property is absent, or when `skills` is not itself a JSON object.
- *
- * @param skillsLock - The parsed JSON value of `skills-lock.json`.
- * @returns An array of `[string, JsonObject]` pairs, one per locked skill.
- */
-export function getSkillsLockEntries(skillsLock: unknown): [string, JsonObject][] {
-  if (!isJsonObject(skillsLock) || !isJsonObject(skillsLock['skills'])) {
-    return [];
-  }
-
-  const skills = skillsLock['skills'];
-  const result: [string, JsonObject][] = [];
-
-  for (const key in skills) {
-    if (!Object.hasOwn(skills, key)) {
-      continue;
-    }
-    const entry = skills[key];
-    result.push([key, isJsonObject(entry) ? entry : {}]);
-  }
-
-  return result;
-}
-
-/**
- * Validates the skills lock as the EXTERNAL-skill registry (owner ruling
- * 2026-07-21): the estate has two skill classes, distinguished by home.
- * Canonical practice skills live in `.agent/skills/` under the portability
- * system and are never lock entries; external skills (installed
- * programmatically, e.g. a vendor plugin set) are pinned here by
- * provenance and are never canonical — ingestion was deliberately
- * declined, so a lock entry claiming a canonical name is a shadowing
- * hazard, not a missing ingestion.
- *
- * Checks per entry: (1) the name does NOT collide with a canonical skill;
- * (2) the required provenance fields (`source`, `sourceType`,
- * `computedHash`) are present and non-empty.
- *
- * @param lockedSkills - `[skillName, entry]` pairs from {@link getSkillsLockEntries}.
- * @param canonicalSkillNames - Names of skills that have a canonical
- *   `.agent/skills/<name>/SKILL-CANONICAL.md`.
- * @param lockPath - Path label used in issue messages.
- * @returns An array of human-readable issue strings; empty means no issues.
- */
-export function getSkillsLockCrossReferenceIssues(
-  lockedSkills: readonly [string, JsonObject][],
-  canonicalSkillNames: readonly string[],
-  lockPath: string,
-): string[] {
-  const canonicalSkillSet = new Set(canonicalSkillNames);
-  const requiredStringFields = ['source', 'sourceType', 'computedHash'] as const;
-  const issues: string[] = [];
-
-  for (const [skillName, entry] of lockedSkills) {
-    if (canonicalSkillSet.has(skillName)) {
-      issues.push(
-        `${lockPath}: external skill "${skillName}" collides with the canonical practice skill "${skillName}" — external skills must never shadow canonical practice skills (rename or remove one)`,
-      );
-    }
-    for (const field of requiredStringFields) {
-      const value = entry[field];
-      if (typeof value !== 'string' || value.length === 0) {
-        issues.push(`${lockPath}: locked skill "${skillName}" missing ${field}`);
-      }
-    }
   }
 
   return issues;

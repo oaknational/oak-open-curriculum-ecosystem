@@ -14,6 +14,39 @@ import { deriveSelfOrigin, hostValidationErrorMessage } from './host-validation-
 import { MCP_RESOURCE_PATH } from './served-origin.js';
 
 /**
+ * Refuses the standalone GET SSE stream with the spec-mandated 405 (MCP-545).
+ *
+ * This server does not offer the standalone SSE stream: under the stateless
+ * per-request pattern a GET-opened stream can never receive an event, so it
+ * idles until the platform kills the function at its duration ceiling
+ * (measured rates live on MCP-545). The body mirrors
+ * the SDK's own refusal idiom verbatim; `Allow` names this server's surface.
+ *
+ * Mounted WITHOUT auth middleware: the refusal is identity-independent
+ * (matching the accept-header gate precedent), and a 401 on a method that
+ * can never succeed would invite a token retry into the same 405. Residual
+ * asymmetry, kept deliberately: a GET whose Accept lacks text/event-stream
+ * still draws 406 from the upstream accept gate; only stream-accepting GETs
+ * reach this 405. Express routes HEAD through this handler too, curing the
+ * same hang for HEAD requests.
+ */
+function createRefuseGetMcp(log: Logger): RequestHandler {
+  return (req, res) => {
+    log.debug('Refused standalone /mcp SSE stream request (405, MCP-545)', {
+      method: req.method,
+    });
+    res
+      .status(405)
+      .set('Allow', 'POST')
+      .json({
+        jsonrpc: '2.0',
+        error: { code: -32000, message: 'Method not allowed.' },
+        id: null,
+      });
+  };
+}
+
+/**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true).
  * Volumetric abuse control is owned at the Cloudflare/Vercel edge
  * (ADR-219); `js/missing-rate-limiting` findings on these registrations
@@ -28,8 +61,8 @@ function registerUnauthenticatedRoutes(
   log.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
   log.debug('Registering POST /mcp route (auth disabled)');
   app.post('/mcp', createMcpHandler(mcpFactory, observability, log));
-  log.debug('Registering GET /mcp route (auth disabled)');
-  app.get('/mcp', createMcpHandler(mcpFactory, observability, log));
+  log.debug('Registering GET /mcp stream refusal (auth disabled)');
+  app.get('/mcp', createRefuseGetMcp(log));
 }
 
 /**
@@ -100,10 +133,11 @@ export function registerPublicOAuthMetadataEndpoints(
 }
 
 /**
- * Registers /mcp routes with HTTP-level auth (HTTP 401 for unauthenticated).
- * Volumetric control is owned at the edge (ADR-219);
- * `js/missing-rate-limiting` findings on these registrations are
- * dispositioned against that ADR.
+ * Registers the /mcp method mounts: POST with HTTP-level auth (HTTP 401
+ * for unauthenticated) and the identity-independent GET 405 stream
+ * refusal (MCP-545 — see {@link createRefuseGetMcp}). Volumetric control
+ * is owned at the edge (ADR-219); `js/missing-rate-limiting` findings on
+ * these registrations are dispositioned against that ADR.
  *
  * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
  */
@@ -124,8 +158,8 @@ function registerAuthenticatedRoutes(deps: {
   });
   log.debug('Registering POST /mcp route (HTTP-level auth via mcpRouter)');
   app.post('/mcp', mcpRouter, createMcpHandler(mcpFactory, observability, log));
-  log.debug('Registering GET /mcp route (HTTP-level auth via mcpRouter)');
-  app.get('/mcp', mcpRouter, createMcpHandler(mcpFactory, observability, log));
+  log.debug('Registering GET /mcp stream refusal (identity-independent, no auth leg)');
+  app.get('/mcp', createRefuseGetMcp(log));
 }
 
 /**
@@ -148,8 +182,10 @@ export interface SetupAuthRoutesOptions {
 }
 
 /**
- * Registers /mcp routes -- protected (auth enabled) or unprotected (bypass mode).
- * Called AFTER OAuth metadata endpoints and clerkMiddleware are installed.
+ * Registers /mcp routes: POST protected (auth enabled) or unprotected
+ * (bypass mode); GET is the identity-independent 405 stream refusal in
+ * both modes (MCP-545). Called AFTER OAuth metadata endpoints and
+ * clerkMiddleware are installed.
  */
 export function setupAuthRoutes(options: SetupAuthRoutesOptions): void {
   const {
@@ -172,8 +208,9 @@ export function setupAuthRoutes(options: SetupAuthRoutesOptions): void {
   }
 
   // OAuth metadata endpoints are registered BEFORE clerkMiddleware (in Phase 2.5)
-  // This function registers /mcp routes with HTTP-level auth enforcement
-  // Auth middleware returns HTTP 401 per MCP spec and OpenAI Apps docs
+  // This function registers POST /mcp with HTTP-level auth enforcement (the
+  // auth middleware returns HTTP 401 per MCP spec and OpenAI Apps docs) and
+  // the identity-independent GET /mcp 405 stream refusal (MCP-545)
   authLog.debug('Registering MCP routes (HTTP-level auth enforcement)');
   measureAuthSetupStep(authLog, 'mcp.routes.register', () => {
     registerAuthenticatedRoutes({

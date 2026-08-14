@@ -81,6 +81,27 @@ workspace-config-isolation containment leg (2026-08-09) — its
 replacement with dependency-cruiser rules was ruled at the owner's
 word; the isolation lane executes it.
 
+## Validation jurisdiction: we validate our own systems
+
+Every validator names whose system it validates, and external-system
+content is never in scope — the testing doctrine's existing "NEVER test
+external functionality, that is not under our control"
+([testing-strategy.md](testing-strategy.md)), applied to the whole
+validation estate. A check whose walk crosses territory another system
+owns (an external installer's output, a vendor's artifacts) must be
+scoped so that territory is invisible to it, never tolerated through an
+exemption list: an exemption over foreign territory is a jurisdiction
+claim wearing a tolerance, and it converts the other system's normal
+output into findings. Class membership derives from the owned system's
+own definition — location, recorded derivation, declared membership —
+never from name patterns, which are configurable. Worked instance
+(2026-08-12): the skills reconciliation sweep adjudicated every entry at
+the projection roots, defining the external skills CLI's standard
+install layout as a defect tolerated only via a homegrown lock
+exemption; cured by recognising Practice projections through their
+recorded derivation and leaving everything else untouched (ADR-125
+§Skill classes and validation jurisdiction).
+
 ## Eval home
 
 Evaluation **definitions are always version-controlled in-repo** with the artefact

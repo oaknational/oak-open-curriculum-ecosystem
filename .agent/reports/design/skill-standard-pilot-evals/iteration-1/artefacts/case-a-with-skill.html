@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Separating mixtures: filtration and evaporation | Year 7 science</title>
+    <meta
+      name="description"
+      content="A year 7 science lesson page on separating mixtures by filtration and evaporation, with keywords, a starter quiz, a worked example, a practice task and a teacher tip."
+    />
+    <!-- oak-theme.js applies the persisted or system theme before first paint (see
+         design-system-usage SKILL-CANONICAL.md: "loaded synchronously in <head>"). -->
+    <script src="oak-theme.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Page-owned composition glue only — tokens throughout, no raw hexes, no
+         design-system rules copied. Page-type map for this new page shape
+         (single content column: hero, lesson body, look-ahead, next steps),
+         scoped under [data-page], never :root, per the region contract. */
+      [data-page='lesson'] {
+        --main-columns: minmax(0, 1fr);
+        --main-areas: 'hero' 'content' 'context' 'cta';
+        --main-columns-narrow: minmax(0, 1fr);
+        --main-areas-narrow: 'hero' 'content' 'context' 'cta';
+      }
+      body {
+        margin: 0;
+      }
+      .lesson-masthead {
+        border-bottom: var(--border-solid-m) solid var(--border-primary);
+        background: var(--bg-primary);
+      }
+      .lesson-masthead__bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--gap-m);
+        padding-block: var(--space-16);
+      }
+      .lesson-breadcrumb {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--gap-s);
+        margin: 0;
+        padding: 0;
+      }
+      .lesson-breadcrumb li[aria-hidden='true'] {
+        color: var(--text-subdued);
+      }
+      .lesson-theme-field {
+        max-width: 15rem;
+        min-width: 12rem;
+      }
+      .lesson-region {
+        padding-block: var(--space-32);
+      }
+      .lesson-region--tight {
+        padding-block: var(--space-24);
+      }
+      .lesson-keywords-heading {
+        margin: 0 0 var(--space-12);
+      }
+      .lesson-cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--gap-m);
+        align-items: center;
+      }
+      .lesson-quiz-answer__result-icon {
+        width: var(--size-icon-m);
+        height: var(--size-icon-m);
+        margin-left: auto;
+        filter: var(--filter-icon);
+      }
+      .lesson-footer {
+        border-top: var(--border-solid-m) solid var(--border-primary);
+        background: var(--bg-subtle);
+      }
+      .lesson-footer__bar {
+        padding-block: var(--space-16);
+      }
+    </style>
+  </head>
+  <body class="oak-scope" data-page="lesson">
+    <a class="oak-skip-link" href="#main-content">Skip to lesson content</a>
+
+    <div class="oak-canvas" data-page="lesson">
+      <header data-region="masthead" class="lesson-masthead">
+        <div class="oak-container">
+          <div class="lesson-masthead__bar">
+            <div class="oak-cluster oak-cluster--s">
+              <img
+                src="assets/icons/subject-science.svg"
+                alt=""
+                width="32"
+                height="32"
+                style="filter: var(--filter-icon)"
+              />
+              <nav aria-label="Breadcrumb">
+                <ol class="lesson-breadcrumb">
+                  <li><a class="oak-link" href="#">Science</a></li>
+                  <li aria-hidden="true">/</li>
+                  <li><a class="oak-link" href="#">Year 7</a></li>
+                  <li aria-hidden="true">/</li>
+                  <li><a class="oak-link" href="#">Separation techniques</a></li>
+                </ol>
+              </nav>
+            </div>
+            <div class="oak-field lesson-theme-field">
+              <label class="oak-label" for="theme-select">Theme</label>
+              <div class="oak-select-wrap">
+                <select class="oak-select" id="theme-select">
+                  <option value="system">System</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="high-contrast">High contrast</option>
+                  <option value="colour-safe">Colour-safe</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="oak-main oak-region" data-region="main" id="main-content">
+        <section data-region="hero" class="oak-region lesson-region">
+          <div class="oak-container oak-stack">
+            <div class="oak-cluster oak-cluster--s">
+              <span class="oak-tag oak-tag--mint">
+                <img src="assets/icons/subject-science.svg" alt="" />
+                Science
+              </span>
+              <span class="oak-tag oak-tag--aqua">Year 7</span>
+              <span class="oak-tag oak-tag--grey">Separation techniques</span>
+            </div>
+            <h1 class="oak-heading-2">Separating mixtures: filtration and evaporation</h1>
+            <div class="oak-block oak-outcome">
+              <span class="oak-block-label">Pupil outcome</span>
+              <p>
+                I can use filtration and evaporation to separate the parts of a mixture, and
+                explain why each method works.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-region="content" class="oak-region lesson-region lesson-region--tight">
+          <div class="oak-container oak-stack">
+            <div class="oak-block oak-key-learning-points">
+              <span class="oak-block-label">Key learning points</span>
+              <ol class="oak-body-2">
+                <li>
+                  A mixture is two or more substances combined together without a chemical
+                  reaction taking place, so each substance keeps its own properties.
+                </li>
+                <li>
+                  Filtration separates an insoluble solid from a liquid: filter paper lets the
+                  tiny liquid particles through but traps the larger solid particles as a
+                  residue.
+                </li>
+                <li>
+                  Evaporation separates a dissolved solid from a solution by heating it, so the
+                  solvent turns to vapour and escapes, leaving the solute behind.
+                </li>
+                <li>
+                  Choosing the right technique depends on the properties of the mixture — whether
+                  the solid is soluble or insoluble in the liquid.
+                </li>
+              </ol>
+            </div>
+
+            <div>
+              <h2 class="oak-heading-5 lesson-keywords-heading">Keywords</h2>
+              <dl class="oak-keywords">
+                <div class="oak-keyword">
+                  <dt>mixture</dt>
+                  — <dd>two or more substances combined together without a chemical reaction.</dd>
+                </div>
+                <div class="oak-keyword">
+                  <dt>filtration</dt>
+                  — <dd>a technique that separates an insoluble solid from a liquid using filter paper.</dd>
+                </div>
+                <div class="oak-keyword">
+                  <dt>residue</dt>
+                  — <dd>the solid left behind in the filter paper after filtration.</dd>
+                </div>
+                <div class="oak-keyword">
+                  <dt>filtrate</dt>
+                  — <dd>the liquid that passes through the filter paper during filtration.</dd>
+                </div>
+                <div class="oak-keyword">
+                  <dt>solvent</dt>
+                  — <dd>the liquid part of a solution, which evaporates away to leave the solute behind.</dd>
+                </div>
+                <div class="oak-keyword">
+                  <dt>evaporation</dt>
+                  — <dd>a technique that separates a dissolved solid from a solution by heating it until the solvent turns to vapour.</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div class="oak-block oak-quiz">
+              <span class="oak-block-label">Starter quiz — checks prior knowledge</span>
+              <ol class="oak-body-2">
+                <li>
+                  What do we call a substance that dissolves completely in a liquid?
+                  <em>(soluble)</em>
+                </li>
+                <li>
+                  True or false: mixing sand into water makes a new substance.
+                  <em>(false — it's still sand and water, just mixed together)</em>
+                </li>
+                <li>
+                  What's the general name for a mixture made when a solid dissolves in a liquid?
+                  <em>(a solution)</em>
+                </li>
+              </ol>
+            </div>
+
+            <div class="oak-block oak-worked-example">
+              <span class="oak-block-label">Worked example</span>
+              <p class="oak-body-2-bold" style="margin: 0 0 var(--space-8)">
+                Separating a mixture of sand and salt water
+              </p>
+              <ol class="oak-body-2">
+                <li>
+                  Pour the mixture through filter paper set in a funnel. The sand is insoluble, so
+                  it's trapped as the residue; the salt solution passes straight through as the
+                  filtrate.
+                </li>
+                <li>Pour the filtrate into an evaporating basin and heat it gently.</li>
+                <li>
+                  As the water heats up, it turns to vapour and escapes into the air — leaving dry
+                  salt crystals behind in the basin.
+                </li>
+              </ol>
+            </div>
+
+            <div class="oak-block oak-quiz">
+              <span class="oak-block-label">Check your understanding</span>
+              <p class="oak-body-2" id="check-question" style="margin: 0 0 var(--space-12)">
+                In the worked example, what is the <strong>residue</strong> — the solid left in
+                the filter paper?
+              </p>
+              <div
+                class="oak-stack oak-stack--s"
+                id="quick-check"
+                role="group"
+                aria-labelledby="check-question"
+              >
+                <button
+                  class="oak-quiz-answer"
+                  type="button"
+                  data-answer="incorrect"
+                  aria-pressed="false"
+                >
+                  <span class="oak-quiz-answer__key">A</span>The salt crystals
+                </button>
+                <button
+                  class="oak-quiz-answer"
+                  type="button"
+                  data-answer="correct"
+                  aria-pressed="false"
+                >
+                  <span class="oak-quiz-answer__key">B</span>The sand
+                </button>
+                <button
+                  class="oak-quiz-answer"
+                  type="button"
+                  data-answer="incorrect"
+                  aria-pressed="false"
+                >
+                  <span class="oak-quiz-answer__key">C</span>The filtrate
+                </button>
+                <button
+                  class="oak-quiz-answer"
+                  type="button"
+                  data-answer="incorrect"
+                  aria-pressed="false"
+                >
+                  <span class="oak-quiz-answer__key">D</span>The water vapour
+                </button>
+              </div>
+              <p
+                class="oak-body-3"
+                id="check-feedback"
+                role="status"
+                aria-live="polite"
+                style="margin: var(--space-12) 0 0"
+              ></p>
+            </div>
+
+            <div class="oak-block oak-practice">
+              <span class="oak-block-label">Practice</span>
+              <p class="oak-body-2">
+                You've been given a mixture of gravel and salty water. Write the steps you'd take
+                to separate it into three separate substances: gravel, water and salt. Use the
+                keywords <strong>filtration</strong>, <strong>residue</strong>,
+                <strong>filtrate</strong> and <strong>evaporation</strong> in your answer.
+              </p>
+            </div>
+
+            <div class="oak-block oak-misconception">
+              <span class="oak-block-label">Misconception and common mistake</span>
+              <p class="oak-body-2-bold" style="margin: 0 0 var(--space-8)">
+                "Filtering the mixture removes the salt as well as the sand."
+              </p>
+              <p class="oak-body-2" style="margin: 0">
+                <strong>Response:</strong> filtration only catches insoluble solids. Salt is
+                soluble, so once it's dissolved it passes straight through the filter paper as
+                part of the filtrate — you can't see it, but it's still there. You need
+                evaporation, not filtration, to get the salt back out.
+              </p>
+            </div>
+
+            <div class="oak-block oak-teacher-tip">
+              <span class="oak-block-label">Teacher tip</span>
+              <p class="oak-body-2">
+                Before you filter, ask pupils to predict what the filtrate will look like. Many
+                expect it to be clear of everything solid, including the dissolved salt. Reveal
+                that the filtrate is clear, then evaporate a small sample on a watch glass over a
+                beaker of hot water so pupils watch the crystals appear in real time.
+              </p>
+            </div>
+
+            <div class="oak-block oak-guidance">
+              <span class="oak-block-label">Content guidance · supervision level</span>
+              <p class="oak-body-2" style="margin: 0">
+                This lesson uses heating equipment for evaporation. Adult supervision required —
+                complete a risk assessment before the practical.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-region="context" class="oak-region lesson-region--tight">
+          <div class="oak-container">
+            <div class="oak-card oak-card--aqua">
+              <p class="oak-body-2-bold" style="margin: 0 0 var(--space-8)">Look ahead</p>
+              <p class="oak-body-2" style="margin: 0">
+                Filtration and evaporation both work on mixtures with one solid and one liquid.
+                Later in this unit, <em>Separating liquids</em> tackles mixtures of two liquids
+                instead — where boiling point, not solubility, decides the method.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-region="cta" class="oak-region lesson-region--tight">
+          <div class="oak-container lesson-cta-row">
+            <a class="oak-btn" href="#">
+              <img
+                class="oak-btn__icon"
+                src="assets/icons/arrow-right.svg"
+                alt=""
+              />
+              Next lesson: Separating liquids
+            </a>
+            <a class="oak-btn oak-btn--secondary" href="#">
+              <img
+                class="oak-btn__icon"
+                src="assets/icons/download.svg"
+                alt=""
+              />
+              Download lesson resources
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer data-region="footer" class="lesson-footer">
+        <div class="oak-container lesson-footer__bar">
+          <p class="oak-body-3" style="margin: 0; color: var(--text-subdued)">
+            Built with the Oak Open Curriculum Design System.
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Theme selector: reflects the user's CHOICE, never the applied value
+      // (DDR-003) — oakTheme.choice() returns null when nothing has been
+      // explicitly chosen, so an unset control reads "System".
+      (function () {
+        var select = document.getElementById('theme-select');
+        if (!select || !window.oakTheme) return;
+        select.value = window.oakTheme.choice() || 'system';
+        select.addEventListener('change', function () {
+          window.oakTheme.set(select.value);
+        });
+      })();
+
+      // Quick check: a single click reveals correct/incorrect state on the
+      // chosen answer, plus the correct answer if the pupil got it wrong.
+      // State is never colour alone — icon + text feedback accompany it.
+      (function () {
+        var group = document.getElementById('quick-check');
+        var feedback = document.getElementById('check-feedback');
+        if (!group || !feedback) return;
+        var buttons = Array.prototype.slice.call(
+          group.querySelectorAll('.oak-quiz-answer'),
+        );
+        var answered = false;
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            if (answered) return;
+            answered = true;
+            var picked = btn.dataset.answer === 'correct';
+            buttons.forEach(function (b) {
+              b.setAttribute('aria-pressed', String(b === btn));
+              if (b.dataset.answer === 'correct') {
+                b.classList.add('oak-quiz-answer--correct');
+                var tick = document.createElement('img');
+                tick.src = 'assets/icons/tick.svg';
+                tick.alt = 'Correct answer';
+                tick.className = 'lesson-quiz-answer__result-icon';
+                b.appendChild(tick);
+              } else if (b === btn) {
+                b.classList.add('oak-quiz-answer--incorrect');
+                var cross = document.createElement('img');
+                cross.src = 'assets/icons/cross.svg';
+                cross.alt = 'Incorrect';
+                cross.className = 'lesson-quiz-answer__result-icon';
+                b.appendChild(cross);
+              }
+            });
+            feedback.textContent = picked
+              ? 'Correct — the sand cannot pass through the filter paper, so it stays behind as the residue.'
+              : "Not quite. The sand is the residue: it's insoluble, so it's trapped in the filter paper. The salt crystals only appear later, after evaporation.";
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

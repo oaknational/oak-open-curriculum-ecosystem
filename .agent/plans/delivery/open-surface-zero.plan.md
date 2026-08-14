@@ -13,7 +13,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-08-10
+last_updated: 2026-08-11
 ---
 
 # Open-surface zero
@@ -81,8 +81,8 @@ turbo-edges PR) finish as make-safe; nothing new starts.**
 |----|--------|------|--------------------------------|
 | #731 | 08-03 | Parallax family relocation (draft) | DETERMINATE (ratified skills structure, WS6): retire the superseded family-bundle walker shape, keep reusable machinery, land Parallax as `cognition/parallax-*`. Seat-needing — the ask fires first in the queue. **EXECUTED 2026-08-09: MERGED `1356579ca`** (grant `86E976CA`; owner card "dismiss via bot" on the stale Aug-3 review; Director-executed at the owner's naming). |
 | #734 | 08-03 | typescript-estate measurement foundations | Carried ledger row: the typescript-estate lane owns it; adjudicate merge-vs-close at slot if that lane stays unstaffed. **EXECUTED 2026-08-09: MERGED `dab59963f`** (grant `440D4744`; owner card: four S6564 issues ACCEPTED with residual-risk authorisation, recorded server-side per-issue; own-review gate waived "merge on green"; Director-executed per the 10:16Z re-homing). |
-| #745 | 08-03 | claim-freshness pilot (draft) | Carried ledger row: MCP-528's implementer consumes it; adjudicate at slot. **ADJUDICATED 2026-08-09 (Director, first-hand): KEEP-AND-LAND via a bounded seat reconcile** — the pilot (ADR-223 + validator + tests) stays current truth: MCP-528's own plan preserves claim-TTL liveness intact (its "Liveness stays exactly where it is" clause), so the two compose; reconcile measured at 2 config-file conflicts (knip.config.ts, package.json), 389 commits behind, 3 stale-head check failures, zero reviews yet. Seat-needing; queues behind WS7 (the owner's 2026-08-09 landing priority). |
-| #746 | 08-03 | deploy-reliability plan node (draft) | No standing adjudication — first-hand at slot (Director-executable, docs). **ADJUDICATED 2026-08-09 (Director, first-hand): KEEP — route via the corpus-amendment plan already on main** (`deploy-reliability-corpus-amendment.plan.md`, authored 2026-08-05 expressly to make #746 mergeable; none of the four nodes is on main, so nothing is superseded). Blocked on that plan's ratification (`status: sketch`) — surfaced on the owner card 2026-08-09. **2026-08-10: the blocker cleared inside this same fold** — the corpus-amendment plan rides it at `status: ratified` (stamp 2026-08-09 recorded in its frontmatter), so #746 is Director-executable at slot: execute the amendment slice, then merge at full condition. |
+| #745 | 08-03 | claim-freshness pilot (draft) | Carried ledger row: MCP-528's implementer consumes it; adjudicate at slot. **ADJUDICATED 2026-08-09 (Director, first-hand): KEEP-AND-LAND via a bounded seat reconcile** — the pilot (ADR-223 + validator + tests) stays current truth: MCP-528's own plan preserves claim-TTL liveness intact (its "Liveness stays exactly where it is" clause), so the two compose; reconcile measured at 2 config-file conflicts (knip.config.ts, package.json), 389 commits behind, 3 stale-head check failures, zero reviews yet. Seat-needing; queues behind WS7 (the owner's 2026-08-09 landing priority). **EXECUTED 2026-08-11: MERGED `236a8e3437`** after the closed `pinned \| not-tracked` schema reconcile, exact-tip review, green CI and full comment harvest. |
+| #746 | 08-03 | deploy-reliability plan node (draft) | No standing adjudication — first-hand at slot (Director-executable, docs). **ADJUDICATED 2026-08-09 (Director, first-hand): KEEP — route via the corpus-amendment plan already on main** (`deploy-reliability-corpus-amendment.plan.md`, authored 2026-08-05 expressly to make #746 mergeable; none of the four nodes is on main, so nothing is superseded). Blocked on that plan's ratification (`status: sketch`) — surfaced on the owner card 2026-08-09. **2026-08-10: the blocker cleared inside this same fold** — the corpus-amendment plan rides it at `status: ratified` (stamp 2026-08-09 recorded in its frontmatter), so #746 is Director-executable at slot: execute the amendment slice, then merge at full condition. **EXECUTED 2026-08-11: MERGED `9dbf78328c`** after a post-submission content re-review, Linear truing, all checks green and 15/15 review threads resolved. |
 | #766 | 08-04 | MCP-501 research (owner draft) | ADJUDICATED: merges as research docs (plans-truing sweep). Director-executable. **EXECUTED 2026-08-09: MERGED** (grant `737971B6`) — owner chose the agent cure round at the card, then "merge now, I'll read on main": 14 first-hand sources cited, invariant rephrased ×3, disabled-usage-credits stated as provisioned invariant, one in-doc unverified flag (§8 weekly-caps rationale, press-only), threads 3/3 replied+resolved. |
 | #769 | 08-05 | release-redeploy guard-truing plan (draft) | Plans-truing sweep set — adjudications recorded; Director-executable. **EXECUTED 2026-08-09: MERGED (grant `9790652E`; checks green, threads 0, clean vs main, born-sketch node class).** |
 | #771 | 08-05 | observability-contract plan (draft) | Plans-truing sweep set; Director-executable. **2026-08-09: adjudicated MERGE; first attempt refused — required check Vercel absent at the draft-era head (checks-by-name lesson re-proven); branch updated to re-fire, settle-watch armed. EXECUTED: MERGED 2026-08-09 at SHA:d7912a27d (verified first-hand 2026-08-11).** |
@@ -93,6 +93,7 @@ turbo-edges PR) finish as make-safe; nothing new starts.**
 | #807 | 08-06 | mutation canary slice 1 | **EXECUTED 2026-08-09: MERGED `d502341e7`** (grant `4a1db233`; ratified canary plan complete, evidence on main). |
 | #818 | 08-07 | statusline logging (draft) | Custodial pair — standing route; Director-executable adjudication at slot, seat ask if code work surfaces. |
 | #819 | 08-07 | developer-experience home (draft) | Custodial pair, as #818. |
+| #852 | 08-11 | atomic CodeQL v4.37.6 bump, replacing #839 + #840 | **OWNER-DIRECTED COMPOSITE, 2026-08-11**: the originals split one config invariant and could not become green independently. Both were closed in favour of #852; combined head `68fd50402b` updates both CodeQL references together and removes incorrect deviation annotations. OPEN at terminal handoff; **EXECUTED: MERGED 2026-08-11 13:10:40Z at SHA:52bfdfb4d** (owner-merged before the 13:20Z terminal record was written — fold correction 2026-08-11). |
 
 ### Open PRs — tracked, not ours to execute
 
@@ -102,7 +103,7 @@ turbo-edges PR) finish as make-safe; nothing new starts.**
 | #761 | 08-04 | emgeebot (MCP-143 PR-3) | Same series as #772/pr5; coordinate with that lane's owner at slot. |
 | #768 | 08-05 | mantagen | As #750. |
 | #772 | 08-05 | mantagen | As #750. |
-| #816 | 08-07 | emgeebot (tenure record) | Docs record; adjudicate merge at slot with provenance check. **ADJUDICATED 2026-08-09 (Director, first-hand): RECONCILE-THEN-MERGE** — the content is the missing Wisteria→Panther lineage block (valuable continuity), but the Aug-7 snapshot conflicts for real against the moved napkin + director-handoff (187 insertions); reconcile on the PR branch slots the tenure block at its lineage position and date-orders the napkin appends; queued after WS7 group 1 under the impact order. |
+| #816 | 08-07 | emgeebot (tenure record) | Docs record; adjudicate merge at slot with provenance check. **ADJUDICATED 2026-08-09 (Director, first-hand): RECONCILE-THEN-MERGE** — the content is the missing Wisteria→Panther lineage block (valuable continuity), but the Aug-7 snapshot conflicts for real against the moved napkin + director-handoff (187 insertions); reconcile on the PR branch slots the tenure block at its lineage position and date-orders the napkin appends; queued after WS7 group 1 under the impact order. **EXECUTED 2026-08-11: CLOSED UNMERGED** — the tenure record was hand-reconciled into director-handoff.md and the napkin at the Director seat (e066d0131) and the PR closed with a disposition comment; no reconcile remains. |
 
 (#833, the live coordination fold, is ceremony — not a disposition item.)
 
@@ -172,10 +173,12 @@ get the ask, never a unilateral disposition.
    surprise**: fire the single dated seat ask (or Director-execution
    ruling if the owner prefers) immediately at ratification; the
    reconcile shape is determinate in the ratified skills plan (WS6).
-2. **Director-executable backlog, oldest first**: #734/#745
-   adjudications; #746; then the plans-truing set (#766, #769, #771,
-   #774, #788, #792) at their recorded adjudications; #805; the
-   custodial pair (#818/#819).
+2. **Director-executable backlog, oldest first**: #745 and #746 are
+   **EXECUTED 2026-08-11** (merge commits `236a8e3437` and
+   `9dbf78328c`). Next is #805, then the custodial pair (#818/#819).
+   The owner-added CodeQL composite #852 is **EXECUTED** (owner-merged
+   2026-08-11 13:10:40Z, `52bfdfb4d`) — fold correction: it merged
+   before the terminal record was written.
 3. **Orphan-branch sweep, oldest first** per the ledger's per-branch
    procedure (draft PRs opened as found-live; deletion asks batched
    into ONE owner card per sweep round, never one-per-branch).

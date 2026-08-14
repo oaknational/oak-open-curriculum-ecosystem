@@ -242,5 +242,4 @@ equivalent) so it dies with your session.
 The generated Claude Code adapter lives at
 `.claude/skills/oak-inter-practice-collaboration/SKILL.md`.
 Regenerate with
-`pnpm --filter @oaknational/agent-tools skills-adapter-generate` and verify
-with `pnpm skills:check`.
+`pnpm skills:generate` and verify with `pnpm skills:check`.

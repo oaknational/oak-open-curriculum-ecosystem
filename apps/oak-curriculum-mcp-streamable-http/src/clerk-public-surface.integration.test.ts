@@ -322,6 +322,75 @@ describe('the root landing page never reaches Clerk (MCP-518)', () => {
   });
 });
 
+/**
+ * The routed health path is public too (MCP-580).
+ *
+ * It shares the `/mcp` prefix and nothing else: it is the only health path the
+ * canonical host can reach, so it is the sole probe that measures the surface
+ * users actually hit. Clerk must not be in that path — a liveness check that
+ * depends on the auth vendor reports the vendor, and a browser-shaped GET that
+ * Clerk observes is handshake-eligible at the vendor (MCP-517/MCP-518).
+ *
+ * Asserted through the assembled app rather than the skip predicate, for the
+ * reason this file's header gives. It has to be here specifically: drop the
+ * routed entry from `CLERK_SKIP_PATHS` and the in-process health suite stays
+ * green, because that suite boots with auth disabled and no Clerk at all. Only
+ * this harness can see the vendor run.
+ */
+describe('the routed health path never reaches Clerk (MCP-580)', () => {
+  const ROUTED_HEALTH = '/mcp/healthz';
+
+  it('answers a monitor-shaped poll without Clerk seeing the request', async () => {
+    const { app, reachedClerk } = await createHarness();
+
+    const res = await request(app)
+      .get(ROUTED_HEALTH)
+      .set('Host', SERVED_HOST)
+      .set('Accept', '*/*')
+      .set('Cookie', SIGNED_IN_COOKIES);
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+    expect(clerkHeaderNames(res.headers)).toStrictEqual([]);
+    expect(reachedClerk).not.toHaveBeenCalled();
+  });
+
+  it('keeps Clerk off a browser-shaped poll, which is the handshake-eligible shape', async () => {
+    // Belt and braces, and the two are worth distinguishing: this shape is also
+    // covered by the public-page-surface fork (any `/mcp/*` path plus browser
+    // headers), so removing the routed entry from `CLERK_SKIP_PATHS` leaves this
+    // case green while the two either side of it go red. Kept because a monitor
+    // configured with a browser Accept must get JSON and no redirect regardless
+    // of which of the two mechanisms is carrying it.
+    const { app, reachedClerk } = await createHarness();
+
+    const res = await request(app)
+      .get(ROUTED_HEALTH)
+      .set('Host', SERVED_HOST)
+      .set('Accept', BROWSER_ACCEPT)
+      .set('Sec-Fetch-Dest', 'document')
+      .set('Cookie', SIGNED_IN_COOKIES);
+
+    expect(res.status).toBe(200);
+    expect(res.status).not.toBe(307);
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+    expect(reachedClerk).not.toHaveBeenCalled();
+  });
+
+  it('keeps Clerk off the HEAD verb a monitor may be configured for', async () => {
+    const { app, reachedClerk } = await createHarness();
+
+    const res = await request(app)
+      .head(ROUTED_HEALTH)
+      .set('Host', SERVED_HOST)
+      .set('Accept', '*/*')
+      .set('Cookie', SIGNED_IN_COOKIES);
+
+    expect(res.status).toBe(200);
+    expect(reachedClerk).not.toHaveBeenCalled();
+  });
+});
+
 describe('the MCP protocol leg still reaches Clerk (MCP-518)', () => {
   it('routes a conformant protocol POST through Clerk', async () => {
     const { app, reachedClerk } = await createHarness();
@@ -354,20 +423,55 @@ describe('the MCP protocol leg still reaches Clerk (MCP-518)', () => {
     expect(res.headers[CLERK_STATUS_HEADER]).toBe('signed-out');
   });
 
-  it('routes a protocol GET through Clerk even when it also names HTML', async () => {
+  it('classifies a protocol GET as protocol (Clerk observes) and refuses it 405', async () => {
     // The one shape that is browser-ish and protocol-ish at once. The
-    // protocol leg wins, so auth must too — otherwise the browser skip
-    // would be a way to reach the MCP handler with no auth context, which
-    // `getAuth` cannot survive.
+    // protocol leg wins — the global surface fork still routes it through
+    // Clerk, so the browser skip is not a classification escape — and the
+    // protocol leg's terminal answer is the 405 stream refusal (MCP-545):
+    // no GET reaches the MCP handler at all. The refusal contract is
+    // identity-invariant at the ROUTE level (status, Allow, body); Clerk's
+    // global observation still stamps its own response headers per the
+    // MCP-518 fork, so whole-response identity-independence is NOT claimed.
     const { app, reachedClerk } = await createHarness();
 
-    await request(app)
+    const res = await request(app)
       .get('/mcp')
       .set('Host', SERVED_HOST)
       .set('Accept', 'text/html, text/event-stream')
       .set('Sec-Fetch-Dest', 'document')
       .set('Cookie', SIGNED_IN_COOKIES);
 
+    expect(res.status).toBe(405);
+    expect(res.headers['allow']).toBe('POST');
     expect(reachedClerk).toHaveBeenCalledWith('GET /mcp');
+  });
+
+  it('answers an unauthenticated protocol GET with the 405 refusal, not the 401 challenge', async () => {
+    // Deliberate posture (MCP-545): the route-level auth leg is gone from
+    // the GET mount, so an anonymous GET draws the same terminal 405
+    // (status, Allow, body) as a signed-in one — a 401 on a method that
+    // can never succeed would only invite a token retry into the same
+    // refusal. The global surface fork still observes the request and may
+    // stamp its own headers (MCP-518); what must be absent is the
+    // challenge.
+    const { app } = await createHarness();
+
+    const res = await request(app)
+      .get('/mcp')
+      .set('Host', SERVED_HOST)
+      .set('Accept', PROTOCOL_ACCEPT);
+
+    expect(res.status).toBe(405);
+    expect(res.headers['allow']).toBe('POST');
+    expect(res.headers['www-authenticate']).toBeUndefined();
+    // Body pinned in the auth-ENABLED variant too: the two registration
+    // modes mount the refusal at separate call sites, and only a shared
+    // envelope pin catches one of them drifting to a different handler.
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+    expect(res.body).toStrictEqual({
+      jsonrpc: '2.0',
+      error: { code: -32000, message: 'Method not allowed.' },
+      id: null,
+    });
   });
 });

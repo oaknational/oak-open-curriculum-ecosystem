@@ -1,4 +1,89 @@
 {
   "version": 1,
-  "entries": []
+  "entries": [
+    {
+      "id": "global/utility-band-not-inverted",
+      "pairId": "global",
+      "kind": "visual",
+      "summary": "The utility strip renders on the subtle surface, not the export's inverted band — the largest single block of diff in every pair.",
+      "evidence": [
+        "app/identity-switchboard/specimen/specimen.css",
+        "app/globals.css",
+        "demo-evidence/export-picker-oak-fold.png",
+        "demo-evidence/live-picker-oak-fold.png"
+      ],
+      "disposition": "superseded",
+      "rationale": "Owner reprice 2026-08-10 (screenshot comparison): appearance converges — the strip is now inverted like the reference, with the .foot ring pattern carrying the canonical focus ring on the inverted surface (--focus-ring-inverted on every control). The original blocker (no token to restore the ring) had already been solved for the footer; the cure generalises. The kit inverted-ring token contract stays routed with the DS trunk slice.",
+      "author": "design-lane-implementer",
+      "date": "2026-08-10"
+    },
+    {
+      "id": "global/band-rhythm-trunk-evolution",
+      "pairId": "global",
+      "kind": "token",
+      "summary": "Tone-band block rhythm differs (fluid 40-64 vs the export's flush band + page padding), offsetting everything below the hero in every capture.",
+      "evidence": [
+        "app/identity-switchboard/specimen/specimen.css",
+        "demo-evidence/diff-picker-oak-full.png"
+      ],
+      "disposition": "superseded",
+      "rationale": "Owner reprice 2026-08-10 (screenshot comparison: 'content size and margins in the green header'): the hero converges on the reference's measured rhythm — band flush, inner padding-block 40px, content inset from the container alone (was: band-pad fluid 40-64 on all four sides, +64px inline inset). Scope: the hero; the remaining bands keep the trunk rhythm pending the next fidelity pass.",
+      "author": "design-lane-implementer",
+      "date": "2026-08-10"
+    },
+    {
+      "id": "global/no-form-elements",
+      "pairId": "global",
+      "kind": "feature",
+      "summary": "The facets panel, masthead search and newsletter CTA carry no <form> elements (the export neutered its forms with inline onsubmit handlers).",
+      "evidence": [
+        "app/identity-switchboard/specimen/facets.tsx",
+        "app/identity-switchboard/specimen/support.tsx"
+      ],
+      "disposition": "deliberate",
+      "rationale": "Inside the picker's frame a stray Enter-submit would re-navigate the frame and break the in-place re-skin's no-reload invariant; fieldsets and labels carry the semantics without a form, and the demo controls are presentational until wired. Zero pixel cost.",
+      "author": "design-lane-implementer",
+      "date": "2026-08-10"
+    },
+    {
+      "id": "global/keyword-separator-css",
+      "pairId": "global",
+      "kind": "content",
+      "summary": "The keyword definitions' dash separator is CSS-generated, not a text node inside the dl.",
+      "evidence": [
+        "app/identity-switchboard/specimen/detail.tsx",
+        "app/identity-switchboard/specimen/specimen.css",
+        "tests/specimen-a11y.spec.ts"
+      ],
+      "disposition": "deliberate",
+      "rationale": "Export source defect, not reproduced: the bare text node inside the dl is an axe definition-list violation (serious), caught by the specimen matrix's first run. The separator is presentation, so it lives in CSS; visually identical. Upstream home: the export's specimen.html carries the defect for any future consumer — flagged for the next export refresh.",
+      "author": "design-lane-implementer",
+      "date": "2026-08-10"
+    },
+    {
+      "id": "global/footer-blurb-wording",
+      "pairId": "global",
+      "kind": "content",
+      "summary": "Footer blurb reads 'renders identical markup under every brand' where the export claims 'this specimen file is byte-identical'.",
+      "evidence": ["app/identity-switchboard/specimen/footer.tsx"],
+      "disposition": "deliberate",
+      "rationale": "The export's sentence is true of a static file and false of a server-rendered route; carrying it verbatim would put an untruth on the page. Restated to the claim that is true here (identical markup, brand as data).",
+      "author": "design-lane-implementer",
+      "date": "2026-08-10"
+    },
+    {
+      "id": "picker-chrome/chrome-diverges-by-design",
+      "pairId": "picker-chrome",
+      "kind": "visual",
+      "summary": "The picker chrome differs from the export's switchboard chrome throughout: native select vs segmented control, responsive 16/10 stage vs scale()-fitted 1280 frame, no contract-stage control.",
+      "evidence": [
+        "demo-evidence/export-picker-chrome.png",
+        "demo-evidence/live-picker-chrome.png"
+      ],
+      "disposition": "deliberate",
+      "rationale": "Owner ruling 2026-08-10: match the appearance and functionality of the PAGE, not necessarily the chrome for selecting theme and identity — the demo chrome is ours to design from the estate's own patterns. Reference-only pair; judged side by side, never pixel-diffed.",
+      "author": "design-lane-implementer",
+      "date": "2026-08-10"
+    }
+  ]
 }

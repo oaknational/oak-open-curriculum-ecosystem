@@ -10,7 +10,7 @@ not allow another agent to repair the same material independently.
 
 Use $oak-start-right-quick, $oak-consolidate-until-done, and
 $oak-consolidate-docs. Re-read
-.agent/skills/consolidate-until-done/SKILL-CANONICAL.md first. Mode is
+.agent/skills/knowledge/consolidate-until-done/SKILL-CANONICAL.md first. Mode is
 dedicated-knowledge-curation.
 
 Core rule: fitness output is routing evidence only. Completion requires real

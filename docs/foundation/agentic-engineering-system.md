@@ -76,7 +76,7 @@ The system improves over time through the [Knowledge Flow](../../.agent/practice
 Each stage serves a broader audience: the napkin serves the current session,
 distilled learnings serve future agents, permanent docs (ADRs, governance,
 READMEs) serve everyone. Session handoff may conserve a sharp cross-session
-lesson directly in `distilled.md`; [`/oak-consolidate-docs`](../../.agent/skills/consolidate-docs/SKILL-CANONICAL.md)
+lesson directly in `distilled.md`; [`/oak-consolidate-docs`](../../.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md)
 remains the deeper graduation pass where the intra-repo loop, inter-repo
 integration, and fitness regulation converge
 ([ADR-131 §Consolidate-Docs](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)).

@@ -93,19 +93,10 @@ export interface SynonymsResult {
  * provide one.
  */
 export interface IngestOptions {
-  /**
-   * Path to the directory containing bulk download data.
-   *
-   * This is the root directory where Oak bulk data files are stored.
-   */
+  /** Path to the directory containing bulk download data (root of the Oak bulk data files). */
   readonly bulkDir: string;
 
-  /**
-   * Optional filter to ingest only specific subjects.
-   *
-   * When provided, only lessons and units belonging to these subjects
-   * are processed. When omitted, all subjects are ingested.
-   */
+  /** Optional filter to ingest only specific subjects; omitted ingests all subjects. */
   readonly subjectFilter?: readonly string[];
 
   /** Whether this is a dry run (no data written to Elasticsearch). */
@@ -113,6 +104,9 @@ export interface IngestOptions {
 
   /** Whether to emit verbose progress output. */
   readonly verbose?: boolean;
+
+  /** If true, retain restricted lessons instead of excluding them; default false (exclude). See ADR-224. */
+  readonly includeRestricted?: boolean;
 }
 
 /** Summary statistics from an ingestion run. */

@@ -1,0 +1,17 @@
+{
+  "artefact": "<workspace>/s4-iteration-1/case-3/with-skill/response.md",
+  "assertions": {
+    "no-invented-values-in-authored-css": {
+      "pass": true,
+      "evidence": "no authored CSS"
+    },
+    "no-invented-values-in-prose": {
+      "pass": false,
+      "evidence": "3: #222222, #ffffff, #000000"
+    },
+    "no-bespoke-size-proposals": {
+      "pass": true,
+      "evidence": "no size proposed outside the documented values"
+    }
+  }
+}

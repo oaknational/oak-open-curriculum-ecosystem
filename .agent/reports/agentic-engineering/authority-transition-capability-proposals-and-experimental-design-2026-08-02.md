@@ -436,7 +436,7 @@ An illustrative output could be:
       "confidence_kind": "deterministic"
     },
     {
-      "path": ".agent/skills/curator-pass/SKILL-CANONICAL.md",
+      "path": ".agent/skills/knowledge/curator-pass/SKILL-CANONICAL.md",
       "reason": "semantic-similarity-only",
       "confidence_kind": "candidate-not-proof"
     }
@@ -682,7 +682,7 @@ defects, and owner decisions in the pass log, then names or finalises it during 
 the substrate in Cascade.
 
 **Correction to the original framing (2026-08-02).** The skill declares this residue itself.
-[`SKILL-CANONICAL.md:161-164`](../../skills/curator-pass/SKILL-CANONICAL.md) states that "the
+[`SKILL-CANONICAL.md:161-164`](../../skills/knowledge/curator-pass/SKILL-CANONICAL.md) states that "the
 step-prose above that still mentions 'the per-pass log' references this superseded surface and aligns
 to a commit-plus-broadcast record on next curator use". Steps 2–5 and 7 therefore sit _below_ an
 explicit, in-source warning; only §Closeout (which still names the pass log file among the closeout
@@ -843,7 +843,7 @@ Reviewers can use these questions without adopting the proposal:
 - [PDR-091 — Precedence Is Not Approval](../../practice-core/decision-records/PDR-091-precedence-is-not-approval.md).
 - [PDR-107 — Directive Supersedes and Reconciles ADR](../../practice-core/decision-records/PDR-107-directive-supersedes-and-reconciles-adr.md).
 - [PDR-114 — Knowledge Surfaces Are Curated Suggestions, Not Control-Flow](../../practice-core/decision-records/PDR-114-knowledge-surfaces-are-curated-suggestions-not-control-flow.md).
-- [Curator-pass canonical skill](../../skills/curator-pass/SKILL-CANONICAL.md).
+- [Curator-pass canonical skill](../../skills/knowledge/curator-pass/SKILL-CANONICAL.md).
 - [Practice lineage](../../practice-core/practice-lineage.md).
 - [Standardising skills research](../../research/agentic-engineering/standardising-skills.md).
 - [Learning promotion and reversal inquiry](./agent-tools-learning-promotion-and-reversal-inquiry-2026-08-01.md).

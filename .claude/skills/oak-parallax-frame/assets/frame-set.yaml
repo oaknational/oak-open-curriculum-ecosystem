@@ -1,0 +1,73 @@
+schema_version: "parallax/frame-set/0.1"
+artifact_id: ""
+artifact_type: frame-set
+artifact_revision: 1
+inquiry_id: ""
+inquiry_revision: 1
+status: provisional
+created_at: ""
+updated_at: ""
+created_by:
+  kind: "agent | human | mixed"
+  identifier: ""
+producing_skill:
+  name: parallax-frame
+  version: "0.1.0"
+execution_context:
+  run_id: ""
+  mode: "native-skill | emulated-reduced | manual"
+  independence: shared-context
+  host: ""
+inputs: []
+permissions_and_scope:
+  requested_operation: framing-analysis
+  task_artifact_writes: false
+  practice_memory_writes: false
+  decision_authority: false
+  external_actions: false
+identity:
+  basis_ids: []
+  scale_regions: []
+  method_pass_ids: []
+  domain_profiles: []
+assumptions: []
+uncertainties: []
+provenance:
+  sources: []
+  transformations: []
+validity_domain:
+  populations: []
+  systems: []
+  contexts: []
+  time_horizons: []
+defeaters: []
+reopen_when: []
+
+framing_context:
+  focal_question: ""
+  intended_impact: ""
+  affected_parties: []
+  non_goals: []
+scale_dimensions: []
+frames:
+  - basis_id: "basis-a"
+    label: ""
+    question_types: []
+    constructs: []
+    boundaries: []
+    unit_of_analysis: ""
+    relationships: []
+    standpoint: ""
+    foregrounded_values: []
+    scale_regions: []
+    domain_profiles: []
+    admitted_evidence: []
+    suggested_methods: []
+    enabled_actions: []
+    blind_spots: []
+    discriminating_observations: []
+bridge_claims: []
+crosswalk_claims: []
+coverage_gaps: []
+missing_context: []
+next_capabilities: []

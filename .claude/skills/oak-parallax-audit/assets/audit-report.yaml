@@ -1,0 +1,71 @@
+schema_version: "parallax/audit-report/0.1"
+artifact_id: ""
+artifact_type: audit-report
+artifact_revision: 1
+inquiry_id: ""
+inquiry_revision: 1
+status: provisional
+created_at: ""
+updated_at: ""
+created_by:
+  kind: "agent | human | mixed"
+  identifier: ""
+producing_skill:
+  name: parallax-audit
+  version: "0.1.0"
+execution_context:
+  run_id: ""
+  mode: "native-skill | emulated-reduced | manual"
+  independence: same-context-self-review
+  shared_anchors: []
+  competence_limits: []
+  host: ""
+inputs:
+  - artifact_id: ""
+    artifact_type: ""
+    artifact_revision: 1
+    relationship: audited-target
+permissions_and_scope:
+  requested_operation: assurance-review
+  task_artifact_writes: false
+  practice_memory_writes: false
+  decision_authority: false
+  external_actions: false
+identity:
+  basis_ids: []
+  scale_regions: []
+  method_pass_ids: []
+  domain_profiles: []
+assumptions: []
+uncertainties: []
+provenance:
+  sources: []
+  transformations: []
+validity_domain:
+  populations: []
+  systems: []
+  contexts: []
+  time_horizons: []
+defeaters: []
+reopen_when: []
+
+audit_id: ""
+target:
+  intended_reliance: ""
+  stakes: ""
+scope:
+  included: []
+  excluded: []
+  scales: []
+  bases: []
+  methods: []
+findings: []
+unresolved_uncertainty: []
+inaccessible_evidence: []
+disposition: "pass | qualified | reopen | block | inconclusive"
+required_follow_up: []
+world_return_implications: []
+practice_learning_signal:
+  emitted: false
+  destination_or_intent: ""
+  reason: ""

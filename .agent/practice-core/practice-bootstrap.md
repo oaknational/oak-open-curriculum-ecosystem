@@ -401,7 +401,8 @@ retired. Unsupported states belong in the local surface matrix.
 Each receiving repo MUST provide canonical bodies for these named
 workflows under `.agent/skills/<name>/SKILL-CANONICAL.md`. Generated
 adapters land at host-configured surfaces using the host's owned-skill
-prefix.
+prefix. (A host that relocates canonicals within its own tree records
+that mapping in its host bridge; this portable contract stays flat.)
 
 | Skill            | Canonical body                                                | Core logic                                                                                                                                                                                                                             |
 | ---------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -488,7 +489,7 @@ Surprise follows an explicit pipeline: capture → distil → graduate → enfor
 Surprise becomes durable only when it changes future behaviour and clears the
 usual graduation bar.
 
-### Napkin (.agent/skills/napkin/SKILL.md)
+### Napkin (.agent/skills/napkin/SKILL-CANONICAL.md)
 
 The napkin is the capture stage of the learning loop. It is always active.
 

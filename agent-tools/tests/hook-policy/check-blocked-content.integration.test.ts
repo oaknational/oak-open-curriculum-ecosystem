@@ -249,6 +249,63 @@ describe('canonical policy: hedging-vocabulary trip-list (WS3)', () => {
   });
 });
 
+describe('canonical policy: acceptance-euphemism group (graduated 2026-08-12)', () => {
+  const acceptancePhrases = [
+    'standing cure',
+    'standing workaround',
+    'honest bypass',
+    'live with it for now',
+  ];
+
+  it('registers the acceptance-euphemism sub-family as its own group scoped to operational records in addition to doctrine surfaces', async () => {
+    const groups = await loadScopedContentBlocks();
+    const acceptance = groups.find((group) => group.concept === 'acceptance-euphemism');
+
+    expect(acceptance).toBeDefined();
+    expect(acceptance?.kind ?? 'literal').toBe('literal');
+    expect(acceptance?.patterns).toEqual(expect.arrayContaining(acceptancePhrases));
+    // The pathogen's observed habitat is operational records, not only doctrine:
+    // the graduating instances lived in the Director handoff and thread records.
+    expect(acceptance?.include_paths).toEqual(
+      expect.arrayContaining(['.agent/memory/operational/', '.agent/reports/']),
+    );
+    // The cataloguing home may name the phrases it forbids.
+    expect(acceptance?.exclude_paths).toEqual(expect.arrayContaining(['no-hedging-vocabulary.md']));
+    expect(acceptance?.citation).toBeTruthy();
+    expect(acceptance?.reappraisal).toBeTruthy();
+  });
+
+  it('denies an acceptance euphemism written to an operational-memory path via the wired path', async () => {
+    const groups = await loadScopedContentBlocks();
+    const acceptanceGroups = groups.filter((group) => group.concept === 'acceptance-euphemism');
+    expect(acceptanceGroups).toHaveLength(1);
+
+    const stdoutChunks: string[] = [];
+    const result = await runPreToolUseDispatch({
+      stdin: stdinFromJson({
+        tool_input: {
+          new_string: 'the standing cure for this failure is the foreground path',
+          old_string: 'the failure is undiagnosed',
+          file_path: '/repo/.agent/memory/operational/director-handoff.md',
+        },
+      }),
+      stdout: {
+        write: (text: string) => {
+          stdoutChunks.push(text);
+        },
+      },
+      stderr: { write: () => undefined },
+      contentPatterns: [],
+      scopedBlocks: acceptanceGroups,
+    });
+
+    expect(result).toStrictEqual({ exitCode: 0 });
+    const deny = parseDenyPayloadFromStdout(stdoutChunks);
+    expect(deny.hookSpecificOutput.permissionDecision).toBe('deny');
+    expect(deny.hookSpecificOutput.permissionDecisionReason).toContain('standing cure');
+  });
+});
+
 describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
   it('registers a regex scoped block group detecting 7- to 40-char hex with code-block and historical-reference exclusions', async () => {
     const groups = await loadScopedContentBlocks();

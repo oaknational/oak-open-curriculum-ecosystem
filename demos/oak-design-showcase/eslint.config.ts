@@ -80,7 +80,13 @@ export default [
     // interaction waits and measurement shots are not capture evidence.
     // Rule options REPLACE, never merge, so the ExportAllDeclaration
     // ban from `recommended` is re-included verbatim.
-    files: ['tools/capture-live-pages.ts', 'tools/render-export-targets.ts'],
+    files: [
+      'tools/capture-live-pages.ts',
+      'tools/render-export-targets.ts',
+      'tools/capture-shared.ts',
+      'tools/capture-pair.ts',
+      'tools/capture-null.ts',
+    ],
     rules: {
       'no-restricted-syntax': [
         'error',

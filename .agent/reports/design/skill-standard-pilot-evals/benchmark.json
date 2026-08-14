@@ -1,0 +1,234 @@
+{
+  "suite": "design-system-usage",
+  "iteration": 1,
+  "date": "2026-08-12",
+  "supersedes": "The first-published iteration-1 numbers, which were wrong. See corrections_to_first_publication.",
+  "method": "Clean-context subagent legs, blind to each other. The with-skill leg is pointed at SKILL-CANONICAL.md and its references/ and may read the design system; the without-skill leg gets the same brief plus a short factual framing, and is instructed not to read anything under the repo root. Script assertions then grade both legs with the same grader. Case (a)'s rendered pages additionally go to two W0.7 instrument legs, anonymised as page-A/page-B with the key withheld.",
+  "commands": {
+    "note": "Run from the repo root. Each command prints one JSON object per artefact and exits non-zero when a binding assertion fails.",
+    "grade_page_page_mode": "pnpm exec tsx .agent/skills/domain-craft/ui-design/design-system-usage/evals/scripts/grade-page.ts --mode=page <artefact.html>",
+    "grade_page_response_mode": "pnpm exec tsx .agent/skills/domain-craft/ui-design/design-system-usage/evals/scripts/grade-page.ts --mode=response <reply.md>",
+    "grade_theming": "pnpm exec tsx .agent/skills/domain-craft/ui-design/design-system-usage/evals/scripts/grade-theming.ts <artefact.html>"
+  },
+  "corrections_to_first_publication": [
+    {
+      "claim_withdrawn": "with-skill invents 4.7% of its class references (2 of 43): oak-quiz-answer__key and oak-btn__icon",
+      "why_it_was_wrong": "The trunk scanner's character class excluded `_`, so it recorded `.oak-quiz-answer` and `.oak-btn` and never saw the BEM element classes the design system actually defines. Both named classes exist in components.css.",
+      "corrected_value": "43 referenced, 0 unknown — 0% invention",
+      "found_by": "PR review on #869, verified first-hand against components.css before the fix"
+    },
+    {
+      "claim_withdrawn": "Finding F3: a grader that separated near-miss BEM extensions from inventions-from-nothing would tell a skill author something",
+      "why_it_was_wrong": "There were no near-misses. The finding described the tokeniser defect above, not a property of the artefact.",
+      "corrected_value": "withdrawn entirely"
+    },
+    {
+      "claim_withdrawn": "frictions.md: 'The grader handles fenced CSS blocks in prose for exactly this reason'",
+      "why_it_was_wrong": "It did not. `authoredCss()` extracted only <style> blocks and style= attributes. The claim was false when written.",
+      "corrected_value": "fenced ```css extraction now implemented and controlled"
+    },
+    {
+      "claim_withdrawn": "Finding F4, and the case-(b) result that with-skill 'mints a data-theme=\"system\" token tree'",
+      "why_it_was_wrong": "Caught by this seat before publication, while diagnosing an unrelated gate failure. The flagged rules were design-system CSS the leg had COPIED into its page, and the design system's [data-theme='system'] rules are a resolution shim (color-scheme: light dark, plus icon filters inside a prefers-color-scheme block) — not a palette. The assertion matched any data-theme='x' text, so it read CSS attribute SELECTORS as applications and would have failed the design system itself.",
+      "corrected_value": "case (b) with-skill PASSES all three script assertions. The assertion is now specified on the tree itself, per the plan's wording: the grader reads the authored CSS for a non-palette token tree outside a prefers-color-scheme resolution block, and the fixtures pin the distinction in both directions. Write-site analysis was retired with it — the shipped runtime (oak-theme.js) writes data-theme=\"system\" by design and colors_and_type.css resolves it, so a grader that fails the write fails the estate's own runtime.",
+      "found_by": "this seat, first-hand, before the claim reached the PR"
+    }
+  ],
+  "cases": {
+    "case-a-branded-lesson-page": {
+      "status": "both legs measured; regraded after the tokeniser fix",
+      "note": "The artefacts are the ones banked in iteration-1/artefacts/ — deliberately regraded rather than regenerated, so the corrected numbers isolate the grader fix from run-to-run variance.",
+      "generation_transcripts": "not preserved — the two case-(a) generation legs were dispatched without transcript capture, so no transcript of either leg exists. The banked artefacts and grades are the surviving record; iteration-1/transcripts/ therefore holds cases (b) and (c) only.",
+      "without_skill": {
+        "artefact_lines": 372,
+        "referenced_classes": 42,
+        "not_in_trunk": 34,
+        "assertions": {
+          "referenced-oak-classes-exist": {
+            "pass": false,
+            "evidence": "42 referenced, 34 not in the trunk: oak-lesson-page, oak-site-header, oak-site-header__inner, oak-logo, oak-logo__mark, oak-logo__text, oak-theme-selector, oak-theme-selector__label, oak-theme-selector__select, oak-breadcrumbs"
+          },
+          "no-literal-design-values": {
+            "pass": true,
+            "evidence": "authored CSS carries no literal design values",
+            "note": "vacuous — the leg authored no page CSS at all (finding F2)"
+          },
+          "zero-ad-hoc-css": {
+            "pass": true,
+            "declarations": 0,
+            "evidence": "0 authored declaration(s) across <style>, style=, and fenced css",
+            "note": "vacuous — same cause"
+          }
+        }
+      },
+      "with_skill": {
+        "artefact_lines": 438,
+        "referenced_classes": 43,
+        "not_in_trunk": 0,
+        "assertions": {
+          "referenced-oak-classes-exist": {
+            "pass": true,
+            "evidence": "43 referenced, 0 not in the trunk"
+          },
+          "no-literal-design-values": {
+            "pass": false,
+            "literals": [
+              "15rem",
+              "12rem"
+            ],
+            "evidence": "2 literal(s): 15rem, 12rem"
+          },
+          "zero-ad-hoc-css": {
+            "pass": false,
+            "declarations": 39,
+            "evidence": "39 authored declaration(s) across <style>, style=, and fenced css"
+          }
+        }
+      },
+      "delta": {
+        "class-invention": "81.0% (34/42) without skill to 0% (0/43) with skill. Not a reduction — an elimination. Every class the grounded page names exists.",
+        "authored-css": "0 declarations without skill to 39 with skill, and 0 to 2 literal design values.",
+        "reading": "The two axes are not independent. The ungrounded leg passed the CSS assertions by writing no CSS at all — it names classes it hopes exist and lays nothing out. The grounded leg uses only real classes and then reaches for its own CSS to compose them."
+      },
+      "w07_holistic": {
+        "instrument": "W0.7 design-review rubric v0",
+        "legs": "independent design-system-expert (opus) + paired accessibility-expert (opus), each judging both pages anonymised as page-A/page-B with the key withheld; neither saw the other's verdict",
+        "register_exclusion": "verdicts are confined to this evidence home and are NOT entered in wow-verdict-register.json, per the plan",
+        "result": {
+          "page-A (without-skill)": "FAIL from both legs",
+          "page-B (with-skill)": "ITERATE from both legs"
+        },
+        "convergence": "The two legs agree on the overall verdict for both pages and on five of seven criteria directions, having judged blind and independently.",
+        "why_A_fails": "Not one oak-heading-*/oak-body-* class, no spacing token, and none of the region contract — the page names classes that do not exist and composes nothing. Both legs reach this independently.",
+        "why_B_iterates": "Type scale, spacing, colour discipline and composition grammar all PASS; the open criterion on both legs is hierarchy.",
+        "the_nuance_worth_keeping": "The accessibility leg scored page-A's hierarchy a PASS and called it 'better than its peer', while both legs gave page-B's hierarchy an ITERATE. The ungrounded page has the cleaner document outline; the grounded page has the cleaner system usage and a hierarchy gap. The skill's contribution is system fluency, not structural judgment — which is precisely the boundary ui-visual-design was minted to cover.",
+        "files": "iteration-1/w07-verdicts/"
+      }
+    },
+    "case-b-theme-correctness": {
+      "status": "both legs measured; assertions 1-3 by script, assertion 4 judged by hand from the banked artefacts",
+      "without_skill": {
+        "assertions": {
+          "five-selections-offered": {
+            "pass": false,
+            "evidence": "offered set is dark, light, system; missing high-contrast, colour-safe (DDR-004: a subset control is non-conformant)"
+          },
+          "only-palette-themes-carry-trees": {
+            "pass": true,
+            "evidence": "no non-palette data-theme value carries a token tree in the authored CSS"
+          },
+          "applied-value-never-round-trips": {
+            "pass": true,
+            "evidence": "no read of the applied attribute reaches a choice or storage sink"
+          },
+          "first-time-visitor-placeholder-state": {
+            "pass": false,
+            "graded": "by hand from the banked artefact — this assertion has no script",
+            "evidence": "with no stored value, currentChoice() returns 'system' (artefact lines 208-210) and the initial applyChoice(currentChoice()) call (line 241) renders that guess as aria-pressed=\"true\" on the system button — a guessed value, not a placeholder selection state"
+          }
+        }
+      },
+      "with_skill": {
+        "assertions": {
+          "five-selections-offered": {
+            "pass": true,
+            "evidence": "offers colour-safe, dark, high-contrast, light, system"
+          },
+          "only-palette-themes-carry-trees": {
+            "pass": true,
+            "evidence": "no non-palette data-theme value carries a token tree in the authored CSS"
+          },
+          "applied-value-never-round-trips": {
+            "pass": true,
+            "evidence": "no read of the applied attribute reaches a choice or storage sink"
+          },
+          "first-time-visitor-placeholder-state": {
+            "pass": false,
+            "graded": "by hand from the banked artefact — this assertion has no script",
+            "evidence": "an inline bootstrap calls window.oakTheme.set('system') behind a window.oakTheme.choice() !== null guard (artefact lines 2655-2665), minting a stored choice the user never made; the switcher then initialises from window.oakTheme.get() (line 2793), which can never return null — no placeholder state is reachable"
+          }
+        },
+        "caveat": "The leg copied a large block of design-system CSS into its page despite being told not to, so the artefact is ~2800 lines. The assertion outcomes are unaffected, but the artefact is not a clean sample of the leg's own authoring."
+      },
+      "delta": {
+        "reading": "The skill transfers the DDR-004 theme set cleanly: the grounded leg offers all five selections where the ungrounded leg omits both access themes — the exact non-conformance DDR-004 calls out — and both legs keep the tree and round-trip rules. Assertion 4 is the one theming assertion where the skill made no difference: both legs FAIL it, the ungrounded leg by rendering 'system' as a guessed pressed state, the grounded leg by minting a stored choice the user never made. The skill's measured contribution here is the access themes.",
+        "routed": "none — F4 withdrawn"
+      },
+      "reference_implementation": {
+        "artefact": "demos/oak-curriculum-hub/components/ThemeSwitcher.tsx",
+        "result": "all three script assertions pass",
+        "note": "DDR-004 cites this component as carrying the working statement, so a pass is the expected direction. Banked because the review asked for the positive real-artefact run, and because grading it exposed the object-map parser gap."
+      }
+    },
+    "case-c-ad-hoc-css-temptation": {
+      "status": "both legs measured, response mode",
+      "without_skill": {
+        "assertions": {
+          "no-literal-design-values": {
+            "pass": false,
+            "evidence": "13 literal(s): #f2f2f2, 4px solid #fbbf24, 8px, 16px 20px, var(--color-grey-background, #f2f2f2), 4px solid var(--color-yellow, #fbbf24), 8px, 16px 20px",
+            "note": "#fbbf24 is an invented hex for the request's \"Oak's yellow\""
+          },
+          "zero-ad-hoc-css": {
+            "pass": false,
+            "declarations": 13,
+            "evidence": "13 authored declaration(s) across <style>, style=, and fenced css"
+          },
+          "referenced-oak-classes-exist": {
+            "pass": true,
+            "binding": false,
+            "evidence": "artefact references no oak-* classes"
+          }
+        }
+      },
+      "with_skill": {
+        "assertions": {
+          "no-literal-design-values": {
+            "pass": true,
+            "evidence": "authored CSS carries no literal design values"
+          },
+          "zero-ad-hoc-css": {
+            "pass": false,
+            "declarations": 5,
+            "evidence": "5 authored declaration(s) across <style>, style=, and fenced css"
+          },
+          "referenced-oak-classes-exist": {
+            "pass": false,
+            "binding": false,
+            "evidence": "2 referenced, 1 not in the trunk: oak-exam-board-note"
+          }
+        }
+      },
+      "delta": {
+        "reading": "The skill eliminates raw values under direct temptation — 13 literals including an invented brand hex, down to zero — but does not produce the refusal the case asks for. It still hands over five declarations of one-off CSS and names one class that does not exist. Corroborates F1 independently of case (a).",
+        "routed": "F1"
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "class": "skill cure",
+      "status": "corroborated by cases (a) and (c) independently",
+      "finding": "The skill tells an agent to compose from the design system's classes but never says what to do when no class fits. Case (a) answered that gap with 39 authored declarations and two raw lengths; case (c) answered it with 5 declarations and an invented class name. The skill has a routing answer available — docs/consuming-nextjs.md §7, the new-component recipe — and does not point at it from the composition guidance.",
+      "route": "iteration 2. NOT applied in iteration 1: curing before banking the number would have destroyed the measurement."
+    },
+    {
+      "id": "F2",
+      "class": "eval design",
+      "finding": "no-literal-design-values and zero-ad-hoc-css both pass vacuously on an artefact that authors no CSS, which is how the weaker leg outscored the stronger one on them in case (a). The pair needs a companion assertion that fails an artefact for being under-composed, so the suite cannot be gamed by doing less.",
+      "route": "iteration 2 of this suite."
+    },
+    {
+      "id": "F5",
+      "class": "machinery gap",
+      "finding": "Regex reading of source is the wrong instrument for this job. The theming grader produced a false NEGATIVE against three real control shapes (option tags, button groups, object maps — including the estate's own reference switcher) and a false POSITIVE against copied design-system CSS, which would have published a second wrong finding in the same round that withdrew three others. Eight theming controls and three page controls now pin the boundaries; the pattern is the finding.",
+      "route": "WS8-general, with the eval-design skill. The honest next step is an AST parser."
+    }
+  ],
+  "controls": {
+    "note": "Every assertion in both graders has a control that must fail it: the theming assertions have per-boundary controls in both directions, and each page-mode assertion has a negative control in fixtures/page/ — so a green run distinguishes a conforming artefact from a blind grader.",
+    "results": "8 theming controls plus the reference implementation (iteration-1/grades/controls-theming.txt) and 3 page controls (iteration-1/grades/controls-page.txt), all behaving as specified"
+  },
+  "honest_summary": "Iteration 1 produced measured with/without deltas on all three cases and a repeatedly repaired instrument. The skill's effect is real and uneven: it eliminates class invention entirely (81% to 0%), eliminates raw design values under direct temptation (13 to 0, including an invented brand hex), and carries the DDR-004 theme set cleanly where the ungrounded leg omitted both access themes — while inducing page-authored CSS the baseline never wrote, never producing the refusal case (c) asks for, and leaving case (b)'s first-time-visitor assertion failed on both legs. The W0.7 holistic legs corroborate the script assertions — FAIL for the ungrounded page, ITERATE for the grounded one, agreed blind by both experts — while surfacing that the ungrounded page has the better document outline. Three findings are routed, one of them a skill cure deliberately not applied inside iteration 1. Four claims from the first publication are withdrawn with cause, including one this seat caught in itself before it reached the PR."
+}

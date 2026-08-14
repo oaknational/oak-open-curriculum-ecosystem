@@ -11,6 +11,7 @@ export type { AliasSwap, AliasTargetInfo } from '../types/index-lifecycle-types.
 export {
   createIndexLifecycleService,
   createAliasLifecycleService,
+  enforceRestrictedInclusionBoundary,
 } from './index-lifecycle-service.js';
 export { buildLifecycleDeps, buildAliasLifecycleDeps } from './build-lifecycle-deps.js';
 export { createVersionedIndexResolver } from './versioned-index-resolver.js';

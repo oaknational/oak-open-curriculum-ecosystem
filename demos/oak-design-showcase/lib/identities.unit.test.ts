@@ -20,38 +20,42 @@ describe('targetFragmentsFor on the live identity list', () => {
     }
   });
 
-  it('maps the renamed identities by name and the pending one to pds', () => {
-    // The pending slug is reached through the imported list, never written
-    // here — the identity-naming ratchet bars the legacy literal in any new
-    // tracked file.
-    const pending = IDENTITIES.find((slug) => slug !== 'oak' && slug !== 'creature');
-
+  it('names each identity by its fragment, which differs from the slug for creature', () => {
     expect(result.ok ? undefined : result.error).toBeUndefined();
-    expect(pending).toBeDefined();
-    if (result.ok && pending !== undefined) {
+    if (result.ok) {
       expect(result.value.oak).toBe('oak');
+      expect(result.value.pds).toBe('pds');
       expect(result.value.creature).toBe('emc2');
-      expect(result.value[pending]).toBe('pds');
     }
   });
 });
 
 describe('targetFragmentsFor on synthetic lists', () => {
-  it('fails loud when no identity is pending a rename', () => {
-    const result = targetFragmentsFor(['oak', 'creature']);
+  it('fails loud on a slug with no fragment row — a later addition must not be silently unnamed', () => {
+    const result = targetFragmentsFor(['oak', 'aurora']);
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.error).toContain('exactly one');
+      expect(result.error).toContain("'aurora'");
     }
   });
 
-  it('fails loud when more than one identity is pending — a later addition must not silently collide onto pds', () => {
-    const result = targetFragmentsFor(['oak', 'creature', 'aurora', 'borealis']);
+  it('reports every unknown slug, not just the first', () => {
+    const result = targetFragmentsFor(['aurora', 'borealis']);
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.error).toContain('exactly one');
+      expect(result.error).toContain("'aurora'");
+      expect(result.error).toContain("'borealis'");
+    }
+  });
+
+  it('accepts a subset of the roster', () => {
+    const result = targetFragmentsFor(['oak']);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(typeSafeKeys(result.value)).toStrictEqual(['oak']);
     }
   });
 });

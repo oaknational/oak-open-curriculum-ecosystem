@@ -1,7 +1,7 @@
 # design-system-integration — next-session record
 
 Thread: the AIP-137 design-system integration (ADR-213; plan
-`.agent/plans/architecture-and-infrastructure/current/design-system-integration.plan.md`).
+`.agent/plans-backlog-2026-07/architecture-and-infrastructure/current/design-system-integration.plan.md`).
 First written 2026-07-20 ~06:15Z by Salmon binds Undertow (`de5c10`, claude-code/fable-5)
 at a compaction boundary; additive-identity discipline applies — later writers append,
 never rewrite. This record owns the HUB-MIGRATION lane's continuation; Caracal wakes
@@ -2545,3 +2545,516 @@ OPEN OWNER ITEMS: fleet ratification + W1 sanction; Sonar S6845
 disposition (per-site accept with the PR #565 precedent, at his word).
 The creature dark-first question is RESOLVED by the identity-default
 ruling. Formation letter: `.agent/experience/2026-08-10-swordfish-wakes-trench.md`.
+
+## SLICE 2 DESIGN — σ calibration (decision-complete, 2026-08-11 morning; Swordfish wakes Trench, d0274e)
+
+Owner word (2026-08-11): "sigma should at least approximate the meaning
+of calibrated probabilities." Grounded first-hand against
+`packages/libs/fidelity-review/src/visual-stats.ts` at PR #846 head
+`7b693ce43`. The three DDR-010 candidates COMPOSE, never compete:
+
+1. **S2a — empirical null calibration (the backbone).** capture-pair
+   gains a null mode (`--null-runs k`): capture the LEFT url k+1 times
+   at the same canonical width, score every same-page pair on the SAME
+   window grid, and emit the null distribution of window meanAbsDiff as
+   a quantile table into stats.json. `analysePair` accepts an optional
+   `calibration` (the table); each window then carries
+   `empiricalP = (r+1)/(N+1)` (continuity-corrected rank against the
+   null) and `calibratedSigma = Φ⁻¹(1−p)` so the σ vocabulary keeps its
+   meaning while now MEANING its magnitude. Rejection under calibration:
+   beyond the observed null maximum, with the resolution floor
+   (1/(N+1)) stated in the output — the instrument names what it can
+   and cannot claim. DDR-010 gains the dated amendment when S2a lands.
+2. **S2b — correlation diagnostics inside the null (never a second
+   correction).** Estimate row/column lag-1 autocorrelation of the null
+   diff field and report n_eff/n as a diagnostic in the null summary.
+   The empirical quantiles already absorb correlation — correcting the
+   z-scale AND calibrating against the empirical null would
+   double-count; the diagnostic keeps the naive-z reader honest.
+3. **S2c — per-region alignment (its own follow-on cycle).** Cures the
+   cascade: per horizontal band, find the vertical offset minimising
+   mean abs diff (bounded search), score within aligned segments — and
+   report every non-zero offset as a FIRST-CLASS structural-shift
+   finding, never silently absorb it (false alignment hiding a real
+   offset is the failure mode; the offset IS a finding). Red-first
+   cells with synthetic shifted fields.
+
+Test shape (S2a): unit cells on synthetic fields with known
+distributions (quantile mapping, continuity correction, calibratedSigma
+monotonicity); CLI null-mode cell; integration: a same-image pair
+yields ZERO rejecting windows at the calibrated threshold, a
+synthetically shifted pair rejects. Per-cycle review discipline as
+slice 1 (pre-execution + gateway).
+
+### S2a pre-execution review FOLDED (2026-08-11, REVISE → amendments below; verdict full text in the session transcript)
+
+The reviewer computed the real numbers: pooled N = C(k+1,2)·windows;
+calibratedSigma SATURATES at Φ⁻¹(N/(N+1)) ≈ 4.2 at k=6 — **6σ is
+unreachable for any feasible null**, so under calibration `--threshold`
+goes INERT and the rejection predicate is `meanAbsDiff > nullMax`
+(empiricalP at the floor), with the floor and the σ saturation printed.
+The naive z stays reported alongside — the z=100-vs-σmax=4 disagreement
+IS the honesty the owner asked for. Binding amendments:
+
+- **k=6 default** (~21 pairs, ~5% per-run family false-alarm; floor
+  k≥2 at parse). Serial captures, fresh launch per capture (matches the
+  live path — the exchangeability warrant), order + timestamps + per-
+  capture heights recorded; all k+1 cropped to common min height.
+- **Settle identity**: capture-pair ADOPTS the estate settle recipe
+  (settleForCapture/captureShot — second consumer); null and live
+  captures traverse the IDENTICAL capture path, else the null inflates
+  and the instrument desensitises.
+- **Rank raw meanAbsDiff against the null, never z** — removes σ₀ and
+  its MAD floor from the calibrated path entirely.
+- **Calibration block** (single-invocation self-calibration: left k+1 +
+  right once, null in memory, ONE stats.json; no persisted-table mode
+  in S2a): k, pair count, N, exact nullMax, top-100 order statistics
+  (the 1/(N+1) floor is real only if tail ranks are exact), coarse
+  quantiles for display, floor, settle-recipe identity. Result-typed at
+  every boundary.
+- **Pool FULL windows only**; partial bottom-row windows are marked
+  uncalibrated with the reason — never silently pooled. The pooled null
+  licenses the MARGINAL claim (exceeds all-but-p of same-page null
+  windows anywhere), stated in the output.
+- **Heatmap/ordering under calibration**: exceedance meanAbsDiff/nullMax
+  drives both strength and rejecting order.
+- **Φ⁻¹** as a pure Acklam rational approximation in visual-stats,
+  unit-tested against known quantiles; seeded in-test LCG (never
+  Math.random); tie rule p = (1 + #{null ≥ observed})/(N+1).
+- **The red-first integration cell**: a within-null-jitter pair (small
+  uniform Δ) REJECTS under the naive rule today (σ₀ floors at 0.5) and
+  yields ZERO rejections under calibration — genuinely red at head.
+  (The same-image cell is vacuous: zero diff already passes.)
+
+## COMPACTION FREEZE 4 (2026-08-11 midday) — Swordfish wakes Trench (d0274e); seat CONTINUES; ALL PROCESSES STOP at owner word
+
+Owner word: "prepare for compaction … and once you are ready please stop
+all processes." Claim `645b9e0b-afea-4743-8cc6-5dad3ad39575` RETAINED.
+An INDEX, not a summary.
+
+STATE, first-hand at freeze: PR #846 branch
+`jimcresswell/design-identity-switchboard-pr2` at `995e7e08c` — clean,
+local == remote. Coordination `coordination/2026-08-11-7b3df0` at
+`87978266b` + this entry. Sonar on PR #846: ONE open MAJOR — S6845
+(owner-gated, per-site accept with the PR #565 precedent at his word).
+Suites at the last code commit: fidelity-review 188/188, showcase
+114/114 unit + 27/27 UI + 43/43 a11y e2e, hub 325/325, kit 17/17.
+
+THE DAY'S FIVE LANDINGS (all two-moment reviewed; SHAs):
+
+1. `dff0f48ec`+`6bcb8541d` — slice 1, identity-default theme model
+   (DDR-003 amendment implemented; creature lever restored WITH
+   :root:not([data-theme]) icon-filter arms; ~20 cells re-trued as
+   relations).
+2. `145cf6592`+`a8e54738d` — Copilot round: 12/12 empirically
+   adjudicated (10 cured incl. the RSC undefined-headings defect worse
+   than reviewed; 2 declined with evidence), all threads replied (bot
+   identity) and resolved 12/12.
+3. `7b693ce43` — picker-contrast round: idempotent applyFrameTheme +
+   filtered MutationObserver; the flip cell earned a real red via
+   marker-then-assert (a naive poll passed vacuously).
+4. `75de6db37`+`995e7e08c` — S2a σ calibration: exact empirical p, both-
+   end saturation (gateway caught +saturation stamped on the QUIETEST
+   windows in live data), inert threshold, exact top-100 tail,
+   settle-identity auditable, degenerate-null shape (settle makes the
+   static specimen byte-stable — nullMax 0). First live run: N=21480,
+   floor 4.66e-5, σ-saturation 3.91. DDR-010 dated amendment records it.
+5. `9ea40e53f` (coordination) — S2b/S2c design + review amendments
+   folded (§SLICE 2 DESIGN above).
+
+RESUME ORDER:
+
+1. Re-arm per start-right: canonical watcher (`--exclude-tag heartbeat`,
+   3600s backstop — re-arm on exit notification) PAIRED with the F-75
+   delta poll; heartbeat pair (comms `--tag heartbeat` typed args +
+   `claims heartbeat`) on the retained claim, model string `Opus-5`
+   (F-92); ARC design-lane tail
+   (`.agent/collaboration/rapid-comms/2026-08-10-design-lane-…`); gap
+   sweep from BEFORE freeze (watch for the Director's adjudication of
+   comms-landscape event 4d92b772).
+2. **S2b — correlation diagnostics** (small, report-only): lag-1
+   row/column autocorrelation of the null diff fields + n_eff/n ratio
+   into the calibration summary — needs diff-field retention at pooling
+   (capture-null's fullWindowScores currently discards fields); never a
+   second correction (the empirical quantiles already absorb
+   correlation).
+3. **S2c — per-region alignment** (own cycle, red-first): per-band
+   vertical offset search, score within aligned segments, EVERY non-zero
+   offset a first-class structural-shift finding.
+4. **Fleet W1 at owner sanction** (plan `pr-846-review-fleet` rev 1;
+   gate expires 2026-08-13; T3 pre-flight incl. SHA-pinned range).
+
+OPEN OWNER ITEMS: S6845 disposition; fleet ratification + W1 sanction;
+PR #846 un-draft at review-credit return (Copilot re-request per head
+move). Separate lane: agent-registry-resurrection plan T1 awaits pickup.
+
+REFLECTION (held): the two-moment review discipline the owner made
+standing this morning paid five times in one day — and its best
+catches all shared one shape: reviews that COMPUTE (the unreachable 6σ,
+the mutation-record loop, the +σ sign in live data) rather than opine.
+The instrument now prints its own limits — saturation, floor, inert
+threshold, degenerate null — which is the design lane's thesis carried
+into statistics: honesty as structure, not vigilance.
+
+## COLD PAUSE marker (2026-08-11 evening) — Swordfish wakes Trench (d0274e); wake-and-hold at owner word; FREEZE 4 map stands with one correction
+
+Owner word: "come up to speed, and then cold pause." Grounding was
+first-hand; no processes armed at any point; claim
+`645b9e0b-afea-4743-8cc6-5dad3ad39575` retained.
+
+STATE DELTA since FREEZE 4 (the only corrections to its map):
+
+- PR #846 tip is now `351102655` — the OWNER merged main into the lane
+  branch at 2026-08-11 16:42 +0100 (main traffic only: releases
+  1.159.0–1.159.3; PRs #745/#746/#852/#853; no design-lane source
+  changes). Worktree fast-forwarded to match, clean. PR still draft,
+  mergeStateStatus BLOCKED, no new review threads.
+- Comms sweep 12:00Z→20:41Z: dependency drive complete (MCP-549;
+  #855/#856/#857 merged), Wren's #851 cure arc complete, Director
+  froze/resumed with card answers on MCP lanes only. NOTHING routed to
+  the design lane; comms-landscape event 4d92b772 remains
+  un-adjudicated (stays on the resume map).
+- Fleet-relevant napkin harvests worth reading at resume: Copilot does
+  NOT auto-re-review on push (explicit re-request each round, verify
+  via reviewRequests); Copilot 20k-line diff ceiling returns
+  size-skips; merge-bot stale-attempt blindness (worst-of-all-instances
+  vs latest-per-name).
+
+RESUME ORDER: unchanged from FREEZE 4 (re-arm; S2b correlation
+diagnostics; S2c per-region alignment; fleet W1 at owner sanction —
+gate expires 2026-08-13). OPEN OWNER ITEMS unchanged: S6845
+disposition; fleet ratification + W1 sanction; PR #846 un-draft at
+review-credit return (Copilot re-request per head move — now confirmed
+mandatory by Forge's finding above).
+
+## MAIN-ABSORB cycle (2026-08-12 evening) — Swordfish wakes Trench (d0274e); owner-instructed merge executed; PR #846 head f2eceea9a
+
+Owner instruction (relayed via Director event 77f643f0, ACKed 91171af8):
+update the worktree from latest main after the #870 merge. Executed as
+the UPDATE path: `origin/main` (d105b4ab2, release 1.167.0) merged into
+the branch at `f2eceea9a` — zero conflicts (divergence analysis:
+merge-base f376162d5, three overlap files, all auto-merged). Gates
+green post-merge under the moved estate (Next 16.3.0, jest-axe 11,
+turbo 2.10.9): 34/34 turbo tasks across the five lane workspaces,
+70/70 showcase Playwright cells (27 UI + 43 a11y). Pushed; PR #846
+still draft at owner gates.
+
+Lane re-truing vs the repo-only ruling (events d13401a6 + b3c30134):
+swept every branch-touched file — zero two-homes/studio-sync claims;
+nothing to cure. `studio-source/` is a provenance directory name, not
+a sync claim.
+
+NEW LANE INPUTS from the moved main (read at next cycle open):
+`.agent/skills/domain-craft`-homed ui-visual-design skill
+(owner-ratified v1; WCAG target-size clauses); design-system-usage
+eval suite + benchmark; defect tickets MCP-586 (card-link accname
+void, High) and MCP-587 (dense token below the 44px floor) — eval-born
+design-system defects adjacent to this lane. Queue after them remains
+S2b → S2c → fleet W1 at sanction (gate expiry 2026-08-13).
+
+## S2b LANDED (2026-08-12 evening) — Swordfish wakes Trench (d0274e); two-moment reviewed; PR #846 head 5243224f9
+
+Owner word: "go ahead with S2b." Landed as `3d1b9c029` (slice) +
+`5243224f9` (gateway cures), pushed. Pre-execution review REVISE (four
+computed criticals — AR(1)-domain-gated n_eff with named omission;
+exact all-equal constant-field guard curing the float-dust case;
+inverse-normal-cdf.ts extracted at the line cap; correlation machinery
+homed in the NEW library module
+`@oaknational/fidelity-review/visual-correlation`, never the demo
+tool). Gateway verdict LAND with independent recomputation (five
+mutation checks bite, invariance path structurally closed, built-dist
+resolution proven); its F1–F4 docs/naming findings cured in
+`5243224f9` (pairCount always C(n,2) + estimablePairCount beside it;
+DDR-010 trued: constant-field trigger, verbatim discriminant,
+follow-on as pointer). Suites: 205 library + 116 demo green; live run
+printed the named degenerate verdict on the byte-stable switchboard
+page.
+
+DISPOSITIONS CARRIED FORWARD (gateway F5–F7):
+
+- F5 (noted, no change): `lumasOf` holds k+1 luma arrays at once
+  (~73 MB/capture at full-page 1512×6000) — fine at the k=2 floor and
+  k=6 default; a bound belongs with any future large-k work.
+- F6 (ratchet at 2 for the visual-* module shape): the next addition
+  to visual-correlation.ts forces a third split → solution-class
+  review at that moment.
+- F7 (PRE-UNDRAFT ITEM, named): `no-throw-statement` warning at
+  `demos/oak-design-showcase/app/identity-white-labelling/page.tsx:35`
+  (from earlier branch commits, absent on main) — cure BEFORE #846
+  un-drafts; no-warning-toleration bites at the PR boundary.
+
+CRICKET FULL SUITE run at this boundary (owner-invoked): 7×ON-TRACK,
+1×DRIFTING (frame-citation defect, cured in-flight); tally with
+tokens/runtime at
+`.agent/reports/agentic-engineering/cricket-quartet-tally-2026-08-12-s2b-gateway-boundary.md`;
+split routed to the Director. Adopted redirection: the fleet W1 owner
+card raised at the synthesis (gate expires 2026-08-13).
+
+NEXT CYCLE CANDIDATES (sequencing at this seat): the Director-ruled
+n_eff true-up (event `4b5afe31` — replace the modelled ratio with the
+direct measured variance ratio, replace-don't-bridge) OR S2c
+per-region alignment. Standing gate citations now carried here: S6845
+= one open Sonar MAJOR on PR #846, owner-gated per the PR #565
+per-site-accept precedent; #846 un-draft requires an explicit Copilot
+re-request (Forge's first-hand finding, napkin 2026-08-11 MCP-549
+drive, finding 3).
+
+## W1 SANCTIONED (2026-08-12 evening) — owner card answer "Sanction W1 now"; fleet executing at this seat
+
+The pr-846-review-fleet plan's owner gate cleared by card at the S2b
+gateway boundary (the Cricket-adopted redirection raised it; the gate
+would have expired 2026-08-13). Plan stamped ratified at revision 2:
+the reviewed object gains P7 (fidelity instrumentation — the S2a/S2b
+landings), T3 re-pins to head `5243224f9`, fleet design unchanged.
+Execution order: T3 pre-flight (SHA pin + changedFiles assert + F-159
+model check + production server :3020 + export overlay :3030 with the
+styled-sentinel assertion + fresh suite counts) → W1 (11 legs +
+category-routed verification) → seat adjudication → W2 (completeness
+critic + release-readiness, two named verdicts) → report at
+`.agent/reports/design/pr-846-review-fleet/report.md` → owner card
+with both verdicts. The n_eff true-up and S2c queue BEHIND the fleet
+verdict absorption.
+
+## COMPACTION FREEZE 5 (2026-08-12 ~21:5xZ) — Swordfish wakes Trench (d0274e); owner word "pause when you can"; fleet W1 FROZEN RESUMABLE at 10/11
+
+Claim `645b9e0b-afea-4743-8cc6-5dad3ad39575` RETAINED; seat CONTINUES.
+All processes stopped by intent at this freeze (canonical order).
+
+STATE, first-hand: PR #846 branch at `5243224f9`, clean, == remote
+(the day's landings: main-absorb `f2eceea9a`; S2b `3d1b9c029` +
+gateway cures `5243224f9`, two-moment reviewed, Cricket-suite tallied
+7/8-1/8-cured). Coordination at this commit. Ticket MCP-591 In
+Progress. T3 pre-flight header committed at
+`.agent/reports/design/pr-846-review-fleet/report.md` (pins, asserts,
+sentinel evidence, suite counts).
+
+FLEET W1 FROZEN, RESUMABLE — this is the executing input at resume:
+
+- Run `wf_8e740b28-943`, Phase 1 at 10/11 legs complete when frozen
+  (the fidelity instrument leg L11 was in flight; it re-runs at
+  resume, the 10 completed legs return from journal cache). Phase 2
+  (category-routed verification) had not opened.
+- Resume recipe, verbatim: restart the production server FIRST
+  (`cd demos/oak-design-showcase && pnpm start` in the PR-2 worktree,
+  assert :3020 → 200 — L11 and empirical refuters need it), then
+  invoke the Workflow tool with `resumeFromRunId: "wf_8e740b28-943"`
+  and `scriptPath: <session workflows dir>/pr-846-review-fleet-w1-wf_8e740b28-943.js`
+  (the harness prints the absolute session path at launch; on a fresh
+  session, re-launching from the plan with a fresh run id is the
+  fallback — the plan is decision-complete and this freeze block plus
+  the report header carry every T3 pin).
+- Then per plan: integrity gate (worktree clean at `5243224f9`) →
+  seat adjudication (two axes; refutation audit with overturn count;
+  K1–K12 knowns scoring per the pre-declared map) → W2 (completeness
+  critic + release-readiness, TWO named verdicts) → cross-check
+  script output embedded in the report → owner card with both
+  verdicts.
+
+RESUME ORDER: (1) start-right re-arm — watcher (heartbeat-excluded,
+3600s backstop, re-arm on exit + gap sweep) PAIRED with the F-75
+delta poll; heartbeat pair on the retained claim, label
+`fleet-w1-execution`, model string `Opus-5`; (2) the fleet resume
+recipe above; (3) after the fleet card: the Director-ruled n_eff
+true-up (event `4b5afe31`, replace-don't-bridge) → S2c per-region
+alignment. OPEN OWNER GATES unchanged: S6845 (PR #565 precedent, his
+word); #846 un-draft (REQUIRES first: the F7 no-throw cure at
+identity-white-labelling/page.tsx:35, then explicit Copilot
+re-request); the fleet W1 verdict card once W2 lands. Director
+(Plover, b10c37) was in owner-directed warm pause supporting this
+lane; Nautilus/Wren paused at owner word.
+
+## OWNER RULINGS 2026-08-13 + ARC OPENING (Swordfish wakes Trench, d0274e) — an INDEX
+
+The owner's in-session rulings (session d0274e, 2026-08-13 morning),
+each binding on the design lane; verbatim wording lives in the cited
+artefacts:
+
+1. **Recognisability criterion**: the Oak identity in this repo must be
+   instantly recognisable as Oak; canonical references: the teacher and
+   pupil experiences at <https://www.thenational.academy> AND
+   <https://labs.thenational.academy/aila>. Carried in
+   `oak-identity-recognisability.plan.md` (PR #873) §Goal.
+2. **Metrics, not owner vigilance**: he provides final sign-off but is
+   not the operating judge — metrics/measures/goals carry the loop.
+   Carried in the same plan (§Mechanism, held-out sign-off).
+3. **Orthogonality admission rule** (his escalation: one proxy
+   gameable; two orthogonal very hard; three near impossible) —
+   ratified; carried in the plan AND generalised in PDR-137.
+4. **The basis frame**: origin system → desired characteristics →
+   orthogonal basis model → plan/acceptance/metrics/fitness →
+   perturb-and-iterate; "model optimisation and parameter optimisation
+   adjacent conceptual space"; "I want the basis set method generalised
+   and recorded" → PDR-137 (PR #874, Proposed; his PR glance is the
+   ratification moment).
+5. **The method is domain-general** (mid-turn, same sitting): transform
+   AND creation, any characteristic class — "it could be literally
+   anything"; the design case "happens to be about a visual identity
+   expressed through css and components". Dated amendment in PDR-137.
+
+ARTEFACTS OPENED TODAY: PR #873 (two born-sketch plans:
+oak-identity-recognisability + showcase-information-architecture, plus
+the two-pass readiness-review record with its by-ID discharge rule);
+PR #874 (PDR-137); ticket MCP-592 (In Progress). Owner gates on the
+plans expire 2026-09-03 (ratification + default-face decision).
+
+FLEET W1 (MCP-591): quota health-check at owner ask — journal CLEAN
+(79/79 results real, zero null/error shapes; the only quota casualty
+was the Director's own fold-review leg, recorded by them in #872).
+Resumed ~09:35Z on run wf_8e740b28-943 (cached legs replay; two
+kill-interrupted legs re-run; Phase 2 completes). Then per plan:
+integrity gate at 5243224f9 → two-axis adjudication → W2 → owner card.
+
+ESTATE: day-roll discharged by the Director (fold #872 merged
+ca6b0fd8f; estate rotated to coordination/2026-08-13-ca6b0f; directed
+request 266a3e74 thereby discharged; the fleet plan's stale
+sanction-gate row was cured in the fold). Director resumed in
+owner-directed support posture (their broadcast f8f73bab5-prefixed,
+09:38Z). Open owner gates unchanged otherwise: S6845; #846 un-draft
+(F7 cure + explicit Copilot re-request first). KNOWN RESIDUE: the
+basis-method-pdr worktree carries this block as a misplaced
+staged-uncommitted copy (cwd slip, surfaced to owner 2026-08-13) —
+content identical to this landing; disposition at owner word.
+
+## COMPACTION FREEZE 6 (2026-08-13 ~12:0xZ) — Swordfish wakes Trench (d0274e); seat CONTINUES; cure arc at bundle 1/11
+
+Claim `645b9e0b-afea-4743-8cc6-5dad3ad39575` RETAINED. All processes
+stopped by intent in canonical order (heartbeat first with declared
+end; watcher last; showcase server down). This block lands via WARDEN
+INTENT — the single-writer arrangement (Director sole committer on the
+primary; adopted at owner word after the 2026-08-13 commit-failure
+sort-out) is ACTIVE and this freeze is its first boundary.
+
+STATE, first-hand: PR #846 head `30bd9e36c` (bundle 1 landed+pushed:
+`291a24cd1` capture height honesty + `30bd9e36c` gateway cures; clean,
+== remote). Fleet W1+W2 COMPLETE: verdicts GO WITH CONDITIONS
+(open-for-review) + SOUND-WITH-CURES (doctrine); full record incl. the
+two-axis disposition ledger, promotions, and conditions at
+`.agent/reports/design/pr-846-review-fleet/report.md` §T4 (warden
+commit `8b83962a0`). Owner rulings of the day indexed in §OWNER
+RULINGS above (`218d5e591`). Plans RATIFIED on main (stamps via #875);
+PDR-137 ACCEPTED (#876); #873/#874 owner-merged; default face stays
+Oak. MCP-591 In Progress (cure arc); MCP-592 Done. Merged-branch
+worktrees design-arc-plans + basis-method-pdr pruned (provably safe).
+
+RESUME ORDER: (1) re-arm per start-right — watcher (heartbeat-excluded,
+3600s backstop, re-arm on exit + gap sweep) PAIRED with the F-75 delta
+poll; heartbeat pair on the retained claim, label `cure-arc-846`,
+model string `Opus-5`; the showcase server restarts only when a bundle
+needs the browser (the a11y mechanism bundle and the fresh Playwright
+run will). (2) **Bundle 2 — a11y instrument cure** in
+`demos/oak-design-showcase/tests/apply-state.ts`: F15 (assert the axe
+incomplete bucket, never drop it), F16 (matchMedia forced-colors gate +
+self-retiring assertion per accessibility-practice.md), F40
+(theme-distinctive application proof for the 4 vacuous-capable cells)
+— ONE instrument cure per the W2 promotion; pre-execution code-expert
+review per cycle, mutation checks, gateway, push. (3) Then per the
+report §T4 ledger: a11y mechanism (F01/F02/F36 + F10/F12) → masthead
+(F03/F05/F14) → register honesty (F25/F37/F38 — F04 ordering
+satisfied) → docs truth (F07 incl. stale 62/62, F20, F22 token cure) →
+frame readiness (F08/F30/F31/F32) → remaining fix-in-open bundles +
+overflow disposition sweep (named home per row at first pickup) → F7
+no-throw + S6845 (decision matrix; seat work per owner ruling) → K9
+bounded two-look pass → fresh Playwright + body rewrite from fresh
+counts → release-readiness leg re-run alone → at GO: un-draft #846 +
+explicit Copilot re-request + MCP-591 comment. (4) The recognisability
+arc (ratified) opens after: S1/S2/A2 slices are unblocked; S3+ waits
+on #846 merge.
+
+STANDING: warden intents for ANY primary-checkout content (pathspec +
+pre-checked subject ≤100 lower-case); five mechanical disciplines
+(single-purpose git commands; subject pre-check; full hook output;
+census-slug pre-scan; explicit pathspec). Director (Plover, b10c37)
+live in owner-directed support posture; arc channel
+`2026-08-13-design-lane-…` is the dialogue surface.
+
+## BUNDLE 2 LANDED (2026-08-13 ~13:30Z) — a11y instrument cure + mutation-method practice record
+
+Seat resumed post-compaction, ceremony re-armed, bundle 2 landed on
+PR #846: head `3c7124be7` (cure `ec1695bd6` — F15 measured-failure seam +
+adjudicated-reason fence, F16 one mode-observing axe helper + gate-intent
+asserts + self-retiring artefact probe, F40 distinctive-token equality
+proof, settle polls; practice record `3c7124be7` — two-mode
+mutation-testing method at owner word, docs-review-cured to preserve the
+binding 2026-08-05 score-is-evidence doctrine). Four-reviewer chain
+(pre-exec pair, gateway, docs, test-expert); unit x6 + live x3 mutants
+killed. A11y suite 40/6: the six red are the pds masthead cells, declared
+(comms log + demo README), removal = bundle 4. T4 addendum with eight
+new/enriched ledger rows appended to the fleet report (same warden
+intent). Gitleaks false positive cured at source (THEME_PROBE_PROPERTY).
+Owner asks absorbed this window: mutation method recorded in
+development-practice.md with Stryker notes. NEXT: bundle 3 (a11y
+mechanism F01/F02/F36 + F10/F12 + F7 no-throw; plus the three bundle-3
+inputs in the addendum).
+
+## COMPACTION FREEZE 7 (2026-08-13 ~14:4xZ) — Swordfish wakes Trench (d0274e); seat CONTINUES; tight scope governs
+
+Claim `645b9e0b-afea-4743-8cc6-5dad3ad39575` RETAINED. All processes
+stopped by owner word in canonical order (heartbeat first with declared
+end; watcher last; dev server down). Warden arrangement ACTIVE.
+
+GOVERNING SCOPE (owner, 2026-08-13, verbatim in per-user memory
+showcase-tight-scope-2026-08-13): purge the old showcase; a new good
+front page; an identity+theme switching demo page; a CSS-only
+page-structure configurability demo page. Impact before improvements;
+a11y fixes on kept identity pages ARE delivery (owner ratification).
+Owner sees rendered pages at short intervals — never work-to-done.
+Report in outcome language; internal codenames mean nothing to him.
+
+RESUME POINT: the owner's Chrome look at the skeleton (dev server
+`pnpm dev` in demos/oak-design-showcase, :3020). UNCOMMITTED working-tree
+files in the PR-2 worktree carrying the skeleton (safe on disk, NOT yet
+committed because the front-page swap re-targets the test suite and
+awaits his steer): app/page.tsx (rewritten landing — masthead, hero
+thesis from kit README, two door cards), app/composition/page.tsx (NEW —
+identical region markup under the three shipped maps unit / home / proof),
+app/globals.css (appended .doors/.door/.comp-* styles). After his steer:
+one commit = front-page swap + a11y matrix re-target (matrix currently
+drives the switchboard ON the front page — move to /identity-switchboard) +
+purge of orphaned components (Switchboard-on-front, Hero, TypeSpecimen,
+ButtonsSpecimen, TagsSpecimen, CardSpecimen — knip forces same-commit
+deletion; provenance listed in the commit).
+
+PUSHED STATE: branch jimcresswell/design-identity-switchboard-pr2 at
+`1f730517a` (specimen keyboard cure, slice 1: hero headline takes the
+skip target; census cells; mutant-proven). A11y suite 42 green / 6
+declared pds masthead reds (removal = masthead cure, task #18).
+
+READY-TO-EXECUTE (task #17, all pre-execution-reviewed with first-hand
+probes): slice 2 — picker + white-labelling tabindex removal MUST land
+WITH frame inert + role="img" wrappers (name + aria-describedby) +
+visible non-interactive affordance + parent-space target-measurement
+pure module (axe false-passes target-size inside scaled frames);
+behaviour-level assertions ONLY (assumptions-review binding constraint).
+Then hooks family (F10/F12 shared identity-default extraction, F09
+listener justified by shared-storage precondition, F7 total fallback +
+lib/identities.ts comment truing) and coverage cells (forced-colors
+outline: boxShadow none + style/width + colour alpha>0, NO ratio;
+specimen system cell dark-OS only). Kit motion PR: ruled spec in task #23
+(-full token split completion + important floor on duration
+properties). Cricket 7/8 ON-TRACK panel + Director CONCUR on the
+reslice are on record.
+
+ROUTED TO DIRECTOR (directed event at freeze): all non-design-lane work
+— dev-practice cure sequence (synthesis + three reports at
+.agent/reports/governance/development-practice-review-2026-08-13/),
+config-expert gate-list reconciliation, validation-strategy home owner
+call, cross-package axe/motion/stale-path items. Editorial doctrine
+recorded (memory editorial-voices-audience-keyed): voices are
+audience-keyed — Oak voice for products, accurate+clear for internal
+humans, agent-optimised for agents.
+
+RE-ARM AT RESUME: watcher (canonical invocation, heartbeat-excluded,
+3600s backstop, re-arm on exit + sweep) + F-75 diff poll + heartbeat
+pair on the retained claim (comms leg: intent design-lane-pr-846,
+branch jimcresswell/design-identity-switchboard-pr2, cycle label
+tight-scope-showcase; claims leg: --active absolute path, --now
+required). Dev server only when pixels are being shown.
+
+## SESSION CLOSE 2026-08-13 evening (Swordfish wakes Trench, d0274e — owner-called close-out; successor picks up the lane)
+
+- THE RESUME MAP IS THE RATIFIED PLAN: `.agent/plans/delivery/design-showcase-experience.plan.md` (owner-ratified 2026-08-13, commit 96115d142 + true-up 76a0d9e13, PR-2 branch, pushed). Execution opens at W1 (kit responsive foundations) then W2 (composition rebuild from scratch). Branch jimcresswell/design-identity-switchboard-pr2 tip 76a0d9e13 == origin, tree clean. PR #846 draft. Playwright: 48 green + exactly six declared pds masthead reds (any OTHER red is new information). Landed today: a967f8979 (tight-scope landing, narrow-first picker, complete pds rename across demo+kit, test re-target).
+- ASSUMPTIONS THE SUCCESSOR MUST QUESTION (owner instruction at close): (1) worktree copies of coordination-authored corpus LAG — check the coordination branch before trusting any status/relationship claim read from the PR-2 branch (proven instance: the pr-846-review-fleet row, cured 76a0d9e13); (2) the ratified plan's citations were fleet+Director+owner checked but re-verify load-bearing ones at pickup — one staleness survived ratification by hours; (3) the guard hypothesis (worktree agent-tools/dist built 17:17 → enforcement began) is corroborated, not cured — watcher/comms writes may still be blocked; interim protocol = cross-session send + warden append + ARC read at boundaries; (4) the radio-control ruling and the R13 correction are owner-verbatim in the plan's rulings table and per-user memory — read the quotes, never a paraphrase; (5) whether the switching page re-affirms or reverses identity non-persistence + client-side-switch-not-production was delegated to the plan author and NOT seat-verified — check the plan's W3 before building; (6) session task-board specs for old bundles (#17/#18) predate the plan — the PLAN governs, tasks are pointers; (7) pixels: the owner approved the landing and picker AT his screenshot moments; nothing after 76a0d9e13 has been shown to him; (8) this seat's earlier ARC/record timestamps were local-time-written-as-Z.
+- Day's owner rulings all carried in the plan's rulings table R1-R13 + per-user memory (authority-identifiable-and-appropriate is THE generator memory; css-owns-appearance-including-visual-order carries the envelope correction verbatim; lowest-effective-level generalisation in R10 + ratified_where).
+- Estate: the outgoing identity = zero in design surfaces (census 19 residual .agent carriers routed to Director); comms watcher DOWN at this seat since ~17:17 (guard); heartbeat pair honest until stopped at this close; MEMORY.md per-user index owes a careful compaction (19.7KB > 17.1 target).
+
+— Swordfish wakes Trench (d0274e), via warden append at session close; the MEMORY.md compaction in the final line landed before this append (16.5KB, Director seat, same evening)

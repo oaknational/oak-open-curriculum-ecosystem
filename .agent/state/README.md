@@ -152,7 +152,7 @@ This directory is governed by:
   `platform`, `model`, `session_id_prefix` (or `unknown`).
 - **Stale entries become noise to be audited at consolidation**, not
   blockers — see
-  [`.agent/skills/consolidate-docs/SKILL-CANONICAL.md`](../skills/consolidate-docs/SKILL-CANONICAL.md)
+  [`.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md`](../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md)
   for the audit step. It reports active/stale claims, recent closures,
   open/stale decision threads, open/stale sidebars, unresolved decision
   requests, unacknowledged or evidence-missing joint decisions, active

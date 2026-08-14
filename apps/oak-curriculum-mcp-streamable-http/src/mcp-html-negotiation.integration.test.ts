@@ -1,5 +1,3 @@
-import http from 'node:http';
-import { once } from 'node:events';
 import { request } from './test-helpers/loopback-request.js';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createApp } from './application.js';
@@ -71,53 +69,26 @@ describe('MCP endpoint HTML negotiation (integration)', () => {
     expect(mcpRes.status).toBeGreaterThanOrEqual(400);
   });
 
-  /**
-   * The SSE leg responds with an open stream that never ends, so these
-   * cases read only the response head over a raw ephemeral connection
-   * and destroy the stream instead of awaiting a body that will not
-   * terminate (supertest cannot express this without leaking an
-   * aborted-socket error).
-   */
-  const headOfStream = async (accept: string): Promise<{ status: number; contentType: string }> => {
-    // Explicit v4 loopback bind + awaited listening (MCP-403): a host-less
-    // listen(0) binds `::` while the dial below goes to the v4 loopback,
-    // which under ambient foreign v4 listeners can reach the wrong server.
-    const server = app.listen(0, '127.0.0.1');
-    try {
-      await once(server, 'listening');
-      const address = server.address();
-      if (address === null || typeof address !== 'object') {
-        throw new Error('ephemeral server did not report a port');
-      }
-      return await new Promise((resolve, reject) => {
-        const pending = http.get(
-          {
-            host: '127.0.0.1',
-            port: address.port,
-            path: '/mcp',
-            headers: { Host: 'localhost', Accept: accept },
-          },
-          (res) => {
-            resolve({
-              status: res.statusCode ?? 0,
-              contentType: String(res.headers['content-type'] ?? ''),
-            });
-            res.destroy();
-          },
-        );
-        pending.on('error', (error) => {
-          reject(error);
-        });
-      });
-    } finally {
-      await new Promise<void>((resolve) => server.close(() => resolve()));
-    }
+  // These cases previously read response heads over a raw socket because the
+  // SSE leg's stream never terminated; the MCP-545 405 refusal ends the
+  // response immediately, so plain requests suffice — the helper's deletion
+  // is itself proof the hang is gone.
+  const STREAM_REFUSAL_BODY = {
+    jsonrpc: '2.0',
+    error: { code: -32000, message: 'Method not allowed.' },
+    id: null,
   };
 
-  it('I5: GET /mcp with text/event-stream reaches the SSE leg, never HTML', async () => {
-    const head = await headOfStream('text/event-stream');
-    expect(head.contentType).toMatch(/text\/event-stream/);
-    expect(head.contentType).not.toMatch(/text\/html/);
+  it('I5: GET /mcp with text/event-stream draws the 405 stream refusal, never HTML', async () => {
+    const res = await request(app)
+      .get('/mcp')
+      .set('Host', 'localhost')
+      .set('Accept', 'text/event-stream');
+    expect(res.status).toBe(405);
+    expect(res.headers['allow']).toBe('POST');
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+    expect(res.headers['content-type']).not.toMatch(/text\/html/);
+    expect(res.body).toStrictEqual(STREAM_REFUSAL_BODY);
   });
 
   it('I8: the root landing page still serves at /', async () => {
@@ -126,10 +97,14 @@ describe('MCP endpoint HTML negotiation (integration)', () => {
     expect(res.headers['content-type']).toMatch(/text\/html/);
   });
 
-  it('I10: GET /mcp with both html and event-stream tokens takes the protocol leg', async () => {
-    const head = await headOfStream('text/html, text/event-stream');
-    expect(head.contentType).toMatch(/text\/event-stream/);
-    expect(head.contentType).not.toMatch(/text\/html/);
+  it('I10: GET /mcp with both html and event-stream tokens takes the protocol leg (405)', async () => {
+    const res = await request(app)
+      .get('/mcp')
+      .set('Host', 'localhost')
+      .set('Accept', 'text/html, text/event-stream');
+    expect(res.status).toBe(405);
+    expect(res.headers['allow']).toBe('POST');
+    expect(res.headers['content-type']).not.toMatch(/text\/html/);
   });
 
   it('U5 downstream: GET /mcp with */* alone stays a 406 protocol refusal', async () => {
@@ -150,6 +125,19 @@ describe('MCP endpoint HTML negotiation (integration)', () => {
     const res = await request(app).head('/mcp').set('Host', 'localhost').accept(BROWSER_ACCEPT);
     expect(res.status).toBe(200);
     expect(res.headers['content-type']).toMatch(/text\/html/);
+    expect(res.text ?? '').toBe('');
+  });
+
+  it('HEAD /mcp with a protocol Accept draws the 405 stream refusal with no body', async () => {
+    // The accept gate requires application/json AND text/event-stream on
+    // non-GET methods; this is the gate-passing shape that previously rode
+    // Express's HEAD-via-GET routing into the hanging SSE leg.
+    const res = await request(app)
+      .head('/mcp')
+      .set('Host', 'localhost')
+      .set('Accept', 'application/json, text/event-stream');
+    expect(res.status).toBe(405);
+    expect(res.headers['allow']).toBe('POST');
     expect(res.text ?? '').toBe('');
   });
 });

@@ -1,0 +1,34 @@
+{
+  "graph_id": "parallax-scale-decomposition-v0.1",
+  "title": "Scale, basis, and bridge claim graph",
+  "description": "Illustrative graph showing distinct scale roles, alternative conceptual bases, first-class Bridge Claims, and a partial Crosswalk Claim.",
+  "graph_type": "scale-decomposition",
+  "version": "0.1.0",
+  "nodes": [
+    { "id": "observation-session", "label": "Session-level observation", "type": "scale-region" },
+    { "id": "mechanism-user", "label": "User-level mechanism", "type": "scale-region" },
+    { "id": "intervention-journey", "label": "Journey-level intervention", "type": "scale-region" },
+    { "id": "consequence-service", "label": "Service-level consequence", "type": "scale-region" },
+    { "id": "monitoring-public", "label": "Public-value monitoring", "type": "scale-region" },
+    { "id": "bridge-measurement", "label": "Measurement Bridge Claim", "type": "bridge-claim" },
+    { "id": "bridge-intervention", "label": "Intervention-mechanism Bridge Claim", "type": "bridge-claim" },
+    { "id": "bridge-aggregation", "label": "Aggregation Bridge Claim", "type": "bridge-claim" },
+    { "id": "bridge-theory-change", "label": "Theory-of-change Bridge Claim", "type": "bridge-claim" },
+    { "id": "basis-technical", "label": "Technical-service basis", "type": "basis" },
+    { "id": "basis-journey", "label": "User-journey basis", "type": "basis" },
+    { "id": "crosswalk", "label": "Partial asymmetric Crosswalk Claim", "type": "crosswalk-claim" }
+  ],
+  "edges": [
+    { "from": "observation-session", "to": "bridge-measurement", "type": "source-scale" },
+    { "from": "bridge-measurement", "to": "mechanism-user", "type": "target-scale" },
+    { "from": "mechanism-user", "to": "bridge-intervention", "type": "source-scale" },
+    { "from": "bridge-intervention", "to": "intervention-journey", "type": "target-scale" },
+    { "from": "intervention-journey", "to": "bridge-aggregation", "type": "source-scale" },
+    { "from": "bridge-aggregation", "to": "consequence-service", "type": "target-scale" },
+    { "from": "consequence-service", "to": "bridge-theory-change", "type": "source-scale" },
+    { "from": "bridge-theory-change", "to": "monitoring-public", "type": "target-scale" },
+    { "from": "basis-technical", "to": "crosswalk", "type": "source-basis" },
+    { "from": "crosswalk", "to": "basis-journey", "type": "target-basis", "guard": "Only mapped constructs transport; residuals remain visible" }
+  ]
+}
+

@@ -23,8 +23,12 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   ),
   // MCP-351: the published PRM resource composes the shared
   // MCP_RESOURCE_PATH constant; the served document is byte-identical.
+  // MCP-545: both GET /mcp mounts now serve the 405 standalone-stream
+  // refusal; its body mirrors the SDK's own refusal idiom verbatim (a
+  // vendor-shaped wire error, no new Oak-authored agent-facing copy) and
+  // the C705–C708 metadata rows are untouched by the delta.
   'apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts': reviewed(
-    '374e6f7c8b3b173b4a00a2d475f4f6b0aa97f5bec4aec40cadd679657dd9dddb',
+    'd19554a15174e8472540b189b4f17e089c9d489f0ebeb455984253e6644b36f1',
     ['C705', 'C706', 'C707', 'C708'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-mcp-resource-url.ts': excluded(
@@ -69,8 +73,12 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-518: the public-path sets, and the case-normalisation rule they are
   // compared under, extracted from the Clerk conditional. Path literals for a
   // routing decision; serves no agent-facing content.
+  //
+  // MCP-580 re-review: the health entry is now spread from `HEALTH_PATHS`, so
+  // the routed `/mcp/healthz` the canonical host reaches is auth-exempt exactly
+  // as the root path already was. Still a routing decision over path literals.
   'apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts': excluded(
-    'fac659994388ebd20d267596eb2fac3344dcc2bb836771cefa7b3334dafa441b',
+    'c96fa6a897a638088c9841c8a4dbb85229ae7f800a14ac52c57b25cce91b9203',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-518: the Clerk conditional now forks on the request's surface before

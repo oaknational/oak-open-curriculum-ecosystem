@@ -6,6 +6,7 @@ export interface ParsedLifecycleIngestOpts {
   readonly subjectFilter?: string[];
   readonly minDocCount?: number;
   readonly verbose?: boolean;
+  readonly includeRestricted?: boolean;
 }
 
 interface LifecycleIngestOptsCandidate {
@@ -13,10 +14,17 @@ interface LifecycleIngestOptsCandidate {
   readonly subjectFilter?: unknown;
   readonly minDocCount?: unknown;
   readonly verbose?: unknown;
+  readonly includeRestricted?: unknown;
 }
 
 function isAllowedOptionKey(key: string): boolean {
-  return key === 'bulkDir' || key === 'subjectFilter' || key === 'minDocCount' || key === 'verbose';
+  return (
+    key === 'bulkDir' ||
+    key === 'subjectFilter' ||
+    key === 'minDocCount' ||
+    key === 'verbose' ||
+    key === 'includeRestricted'
+  );
 }
 
 function hasOnlyAllowedKeys(value: LifecycleIngestOptsCandidate): boolean {
@@ -80,6 +88,16 @@ function parseVerbose(value: unknown): boolean | undefined {
   return value;
 }
 
+function parseIncludeRestricted(value: unknown): boolean | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (typeof value !== 'boolean') {
+    throw new InvalidArgumentError('--include-restricted must be a boolean flag.');
+  }
+  return value;
+}
+
 /**
  * Validate and parse commander lifecycle ingest options.
  *
@@ -96,5 +114,6 @@ export function parseLifecycleIngestOpts(rawOpts: unknown): ParsedLifecycleInges
     subjectFilter: parseSubjectFilter(rawOpts.subjectFilter),
     minDocCount: parseMinDocCount(rawOpts.minDocCount),
     verbose: parseVerbose(rawOpts.verbose),
+    includeRestricted: parseIncludeRestricted(rawOpts.includeRestricted),
   };
 }

@@ -22,12 +22,18 @@ const EVENT_UUID = '0199e8f0-8abc-7def-8abc-123456789abc';
 const SERVED_TOOL_NAMES = ['search', 'browse'] as const;
 const SERVED_RESOURCE_NAMES = ['lesson-guide', 'quiz-results'] as const;
 
-const COMMON_PROPERTIES = {
+// Resource reads are Oak-constructed at the sink and never pass the transport
+// observer, so their envelope carries no observer-derived client surface.
+const RESOURCE_COMMON_PROPERTIES = {
   $mcp_source: 'posthog_mcp_analytics',
   $mcp_server_name: SERVER_NAME,
   $mcp_server_version: SERVER_VERSION,
   oak_environment: RELEASE.environment,
   oak_release: RELEASE.value,
+} as const;
+const COMMON_PROPERTIES = {
+  ...RESOURCE_COMMON_PROPERTIES,
+  oak_client_surface: 'other',
 } as const;
 
 function authenticatedExtra(userId: unknown = ACTOR_ID): Record<string, unknown> {
@@ -97,6 +103,19 @@ function nodeEvent(event: string, properties: Readonly<Record<string, unknown>>)
     event,
     properties: {
       ...COMMON_PROPERTIES,
+      ...properties,
+    },
+    timestamp: NODE_TIMESTAMP,
+    uuid: EVENT_UUID,
+  };
+}
+
+function resourceReadEvent(properties: Readonly<Record<string, unknown>>): EventMessage {
+  return {
+    distinctId: DISTINCT_ID,
+    event: '$mcp_resource_read',
+    properties: {
+      ...RESOURCE_COMMON_PROPERTIES,
       ...properties,
     },
     timestamp: NODE_TIMESTAMP,
@@ -317,12 +336,12 @@ describe('finalOakEventPolicy integration', () => {
 
   it('accepts a canonical resource read and drops an unknown resource name', () => {
     const { policies } = createSubject();
-    const canonical = nodeEvent('$mcp_resource_read', {
+    const canonical = resourceReadEvent({
       $mcp_resource_name: 'lesson-guide',
       $mcp_duration_ms: 21,
       $mcp_is_error: false,
     });
-    const unknown = nodeEvent('$mcp_resource_read', {
+    const unknown = resourceReadEvent({
       $mcp_resource_name: 'private-resource',
       $mcp_duration_ms: 21,
       $mcp_is_error: false,
@@ -439,7 +458,7 @@ describe('policy configuration snapshots', () => {
       return nodeEvent('$mcp_tool_call', toolProperties(toolName));
     }
     function resourceEvent(resourceName: string): EventMessage {
-      return nodeEvent('$mcp_resource_read', {
+      return resourceReadEvent({
         $mcp_resource_name: resourceName,
         $mcp_duration_ms: 1,
         $mcp_is_error: false,

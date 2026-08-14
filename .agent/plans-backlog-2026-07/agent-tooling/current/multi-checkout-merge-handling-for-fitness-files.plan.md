@@ -333,7 +333,7 @@ Before beginning work and at the start of each phase:
    substrate; collisions with peer work are particularly likely.
 3. Register active areas before edits — drivers under `scripts/`
    or `.git/`-adjacent infrastructure; reconcile command in
-   `.agent/skills/consolidate-docs/`, `agent-tools/`, scripts, or
+   `.agent/skills/knowledge/consolidate-docs/`, `agent-tools/`, scripts, or
    the final package/tooling surface; CI workflow files; precommit
    hook configuration.
 4. Apply
@@ -573,7 +573,7 @@ touched files; surfaces issues; walks the agent through cures.
    the section-level merges (where applicable).
 4. ✅ Command is invoked from any branch; not main-only.
 5. ✅ Documented in the appropriate canonical location, currently
-   `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` or the package/tooling
+   `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` or the package/tooling
    surface that owns the final `pnpm` entrypoint.
 
 **Deterministic Validation**:
@@ -861,7 +861,7 @@ files?
 ## References
 
 - Existing fitness infrastructure: `pnpm practice:fitness:*`.
-- Existing consolidation: `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`.
+- Existing consolidation: `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md`.
 - Existing collaboration directive: `.agent/directives/agent-collaboration.md`.
 - Existing collision-safety rule:
   `.agent/rules/respect-active-agent-claims.md` (write-time analogue).
@@ -930,7 +930,7 @@ passes end-to-end.
 
 ```bash
 # 1. No type shortcuts in drivers or reconcile.
-git diff main..HEAD -- scripts/git-merge-drivers/ .agent/skills/consolidate-docs/ agent-tools/ scripts/ \
+git diff main..HEAD -- scripts/git-merge-drivers/ .agent/skills/knowledge/consolidate-docs/ agent-tools/ scripts/ \
   | grep -E '\b(as |any\b|@ts-expect-error)'
 # Expected: no new matches.
 

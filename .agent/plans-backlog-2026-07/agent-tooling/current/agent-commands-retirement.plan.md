@@ -64,7 +64,7 @@ Plan-time code-expert dispatch surfaced five critical issues that shape this pla
 
 | File | Lines | Disposition |
 |---|---|---|
-| consolidate-docs.md | 582 | Inline into `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` |
+| consolidate-docs.md | 582 | Inline into `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` |
 | gates.md | 64 | Inline into `.agent/skills/gates/SKILL-CANONICAL.md` |
 | plan.md | 154 | Inline into `.agent/skills/plan/SKILL-CANONICAL.md` |
 | review.md | 96 | Inline into `.agent/skills/review/SKILL-CANONICAL.md` |
@@ -150,7 +150,7 @@ After Commit 1 specifically: `pnpm portability:check` must transition from curre
 - `agent-tools/src/core/health-probe-continuity-state.ts`, `health-probe-hook-state.ts`, `health-probe-state.ts`
   - Update imports if they referenced removed exports
 - `scripts/validate-fitness-vocabulary.unit.test.ts` line 43
-  - Update fixture path: `.agent/commands/consolidate-docs.md` → `.agent/skills/consolidate-docs/SKILL-CANONICAL.md`
+  - Update fixture path: `.agent/commands/consolidate-docs.md` → `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md`
 - `.claude/settings.json`
   - Add 30 missing `Skill(jc-*)` + `Skill(jc-*:*)` permission entries
 - `skills-lock.json`
@@ -168,7 +168,7 @@ After Commit 1 specifically: `pnpm portability:check` must transition from curre
 
 **Files** (new content):
 
-- `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` — inline 582 lines
+- `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` — inline 582 lines
 - `.agent/skills/gates/SKILL-CANONICAL.md` — inline 64 lines
 - `.agent/skills/plan/SKILL-CANONICAL.md` — inline 154 lines
 - `.agent/skills/review/SKILL-CANONICAL.md` — inline 96 lines

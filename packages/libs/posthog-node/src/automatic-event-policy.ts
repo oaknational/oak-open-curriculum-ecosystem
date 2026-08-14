@@ -7,6 +7,7 @@ import {
 import {
   commonProperties,
   isOakClientFamily,
+  isOakClientSurface,
   isSupportedProtocolVersion,
   isValidDuration,
   readOwn,
@@ -18,11 +19,13 @@ function normaliseInitializeProperties(
   snapshot: PolicySnapshot,
 ): UnknownProperties | null {
   const clientFamily = readOwn(properties, 'oak_client_family');
+  const clientSurface = readOwn(properties, 'oak_client_surface');
   const protocolVersion = readOwn(properties, '$mcp_protocol_version');
   const isError = readOwn(properties, '$mcp_is_error');
   if (
     isError !== false ||
     !isOakClientFamily(clientFamily) ||
+    !isOakClientSurface(clientSurface) ||
     !isSupportedProtocolVersion(protocolVersion)
   ) {
     return null;
@@ -32,6 +35,7 @@ function normaliseInitializeProperties(
     ...commonProperties(snapshot),
     $mcp_is_error: false,
     oak_client_family: clientFamily,
+    oak_client_surface: clientSurface,
     $mcp_protocol_version: protocolVersion,
   };
 }
@@ -42,11 +46,17 @@ function normaliseToolsListProperties(
   duration: number,
   isError: boolean,
 ): UnknownProperties | null {
+  const clientSurface = readOwn(properties, 'oak_client_surface');
+  if (!isOakClientSurface(clientSurface)) {
+    return null;
+  }
+
   if (isError) {
     return {
       ...commonProperties(snapshot),
       $mcp_duration_ms: duration,
       $mcp_is_error: true,
+      oak_client_surface: clientSurface,
     };
   }
 
@@ -63,6 +73,7 @@ function normaliseToolsListProperties(
     $mcp_duration_ms: duration,
     $mcp_is_error: false,
     $mcp_listed_tool_names: listedToolNames,
+    oak_client_surface: clientSurface,
   };
 }
 
@@ -71,7 +82,12 @@ function normaliseToolCallProperties(
   snapshot: PolicySnapshot,
   duration: number,
   isError: boolean,
-): UnknownProperties {
+): UnknownProperties | null {
+  const clientSurface = readOwn(properties, 'oak_client_surface');
+  if (!isOakClientSurface(clientSurface)) {
+    return null;
+  }
+
   const requestedToolName = readOwn(properties, '$mcp_tool_name');
   const toolName =
     typeof requestedToolName === 'string' && snapshot.servedToolNames.has(requestedToolName)
@@ -83,6 +99,7 @@ function normaliseToolCallProperties(
     $mcp_tool_name: toolName,
     $mcp_duration_ms: duration,
     $mcp_is_error: isError,
+    oak_client_surface: clientSurface,
   };
 }
 

@@ -818,10 +818,9 @@ For this owned skill the generated adapters currently live at:
 - `.claude/skills/oak-commit/SKILL.md` — Claude Code adapter.
 
 The retired custom-command and per-platform skill directories are not valid
-homes for this workflow. Regenerate adapters **from the repo root** with
-`node agent-tools/dist/src/bin/skills-adapter-generate.js --prefix=oak-`
-(after `pnpm agent-tools:build`) and verify with `pnpm skills:check` or
-`pnpm portability:check` after canonical changes. The filtered form
-(`pnpm --filter @oaknational/agent-tools skills-adapter-generate`) fails —
-the generator scans `.agent/skills` relative to its cwd, which the filtered
-run sets to `agent-tools/` (verified 2026-07-02).
+homes for this workflow. Regenerate adapters with `pnpm skills:generate`
+(the root script — it builds first and pins the estate's required
+`--prefix=oak-`) and verify with `pnpm skills:check` or
+`pnpm portability:check` after canonical changes. The workspace-filtered
+form now also works (its script anchors at the repo root and pins the
+prefix; the 2026-07-02 wrong-cwd failure is cured at the script).

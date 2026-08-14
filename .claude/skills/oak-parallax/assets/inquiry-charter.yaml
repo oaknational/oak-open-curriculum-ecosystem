@@ -1,0 +1,75 @@
+schema_version: "parallax/inquiry-charter/0.1"
+artifact_id: ""
+artifact_type: inquiry-charter
+artifact_revision: 1
+inquiry_id: ""
+inquiry_revision: 1
+status: provisional
+created_at: ""
+updated_at: ""
+created_by:
+  kind: "agent | human | mixed"
+  identifier: ""
+producing_skill:
+  name: parallax
+  version: "0.1.0"
+execution_context:
+  run_id: ""
+  mode: "native-skill | emulated-reduced | manual"
+  independence: shared-context
+  host: ""
+inputs: []
+permissions_and_scope:
+  requested_operation: inquiry-orchestration
+  task_artifact_writes: false
+  practice_memory_writes: false
+  decision_authority: false
+  external_actions: false
+identity:
+  basis_ids: []
+  scale_regions: []
+  method_pass_ids: []
+  domain_profiles: []
+assumptions: []
+uncertainties: []
+provenance:
+  sources: []
+  transformations: []
+validity_domain:
+  populations: []
+  systems: []
+  contexts: []
+  time_horizons: []
+defeaters: []
+reopen_when: []
+
+purpose: ""
+intended_impact: ""
+question: ""
+claim_types: []
+decision_owner: ""
+affected_parties: []
+authority:
+  investigate: true
+  decide: false
+  act: false
+scope:
+  in: []
+  out: []
+  constraints: []
+scales:
+  dimensions: []
+  observation: []
+  mechanism: []
+  intervention: []
+  consequence: []
+  monitoring: []
+candidate_frames: []
+critical_functions: []
+budgets:
+  evidence: ""
+  time: ""
+  action: ""
+stopping_conditions: []
+reopening_conditions: []
+missing_context: []

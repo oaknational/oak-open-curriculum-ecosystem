@@ -1,0 +1,35 @@
+{
+  "graph_id": "parallax-catalogue-v0.1",
+  "title": "Parallax skill catalogue",
+  "description": "Flat standards-level membership and adjacent external capability classes. Membership edges do not imply runtime order.",
+  "graph_type": "catalogue",
+  "version": "0.1.0",
+  "nodes": [
+    { "id": "collection", "label": "Parallax collection", "type": "collection" },
+    { "id": "parallax", "label": "parallax", "type": "skill" },
+    { "id": "frame", "label": "parallax-frame", "type": "skill" },
+    { "id": "design-inquiry", "label": "parallax-design-inquiry", "type": "skill" },
+    { "id": "design-experiment", "label": "parallax-design-experiment", "type": "skill" },
+    { "id": "product-experiment", "label": "parallax-product-experiment", "type": "skill" },
+    { "id": "synthesise", "label": "parallax-synthesise", "type": "skill" },
+    { "id": "decide", "label": "parallax-decide", "type": "skill" },
+    { "id": "audit", "label": "parallax-audit", "type": "skill" },
+    { "id": "learn", "label": "parallax-learn", "type": "skill" },
+    { "id": "external-execution", "label": "External domain and execution capabilities", "type": "external-capability-class" },
+    { "id": "practice", "label": "Embedding Practice", "type": "host-capability" }
+  ],
+  "edges": [
+    { "from": "collection", "to": "parallax", "type": "contains" },
+    { "from": "collection", "to": "frame", "type": "contains" },
+    { "from": "collection", "to": "design-inquiry", "type": "contains" },
+    { "from": "collection", "to": "design-experiment", "type": "contains" },
+    { "from": "collection", "to": "product-experiment", "type": "contains" },
+    { "from": "collection", "to": "synthesise", "type": "contains" },
+    { "from": "collection", "to": "decide", "type": "contains" },
+    { "from": "collection", "to": "audit", "type": "contains" },
+    { "from": "collection", "to": "learn", "type": "contains" },
+    { "from": "collection", "to": "external-execution", "type": "composes-with" },
+    { "from": "collection", "to": "practice", "type": "embedded-in" }
+  ]
+}
+

@@ -8,28 +8,46 @@ overview: >-
   sufficient to decide open-for-review readiness — produced by a goal-blind
   reviewer fleet with category-routed adversarial verification and a
   two-verdict synthesis.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell (owner)"
+ratified_date: "2026-08-12"
+ratified_where: >-
+  Owner card answer "Sanction W1 now" at the S2b gateway boundary
+  (session d0274e, 2026-08-12 evening); recorded in
+  .agent/memory/operational/threads/design-system-integration.next-session.md
+  §W1 SANCTIONED.
 serves: design-system-as-configured-framework
 impact_areas:
   - design-system
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      Jim sanctions fleet execution (W1) after reading this plan and the
-      plan-review fleet's verdicts, with the agent-count and token estimate
-      visible.
-    expires: 2026-08-13
-last_updated: 2026-08-10
+owner_gates: []
+last_updated: 2026-08-13
 ---
 
 # PR #846 review fleet — multi-lens, multi-scale review
 
+**Gate discharged 2026-08-12.** The owner sanctioned W1 at the decision card
+("Sanction W1 now", ~19:47Z, recorded in the ratification stamp); the
+`owner_gates` entry is removed per the plan-schema's discharge-by-removal
+shape — the frontmatter carries no cleared state, and consumers must not
+read execution as owner-blocked (fold #872 review, 2026-08-13).
+
+> **Revision 2 (2026-08-12, at sanction).** Owner sanctioned W1 by card
+> ("Sanction W1 now", session d0274e). Since revision 1 the PR absorbed
+> main at owner instruction (`f2eceea9a`) and landed the S2a/S2b
+> calibration slices, so the reviewed object gains a part: **P7
+> fidelity instrumentation** — `visual-stats` / `visual-calibration` /
+> `visual-correlation` / `inverse-normal-cdf` in
+> `@oaknational/fidelity-review`, the capture-pair/capture-null/
+> capture-shared tooling, and DDR-010's dated amendments. Assigned:
+> L1 (S1–S2 code), L5 (test discipline incl. the mutation-check
+> claims), L6 (types), L9 (DDR-010 amendment pair-audit); L8 gains the
+> capture tooling's failure modes. T3 re-pins BASE/HEAD to the tip at
+> sanction (`5243224f9`). Fleet design — legs, phases, schemas, caps,
+> the serial instrument lane — is unchanged.
+>
 > **Revision 1 (2026-08-10, same day).** The five-leg plan-review fleet
 > (assumptions-expert, architecture-expert-wilma, test-expert, code-expert,
 > frame-challenger; run journal `wf_bd46940f-c97`) returned 5/5 *revise*

@@ -6,14 +6,11 @@
  * @remarks turbo silently hashes zero files for an input that matches
  * nothing (measured: five stale entries contributed nothing, with no
  * warning), so cache invalidation rots invisibly. Two facts pin this
- * leg's contract, both measured with the repo's own turbo via
- * `--dry=json` resolved inputs (MCP-542, 2026-08-11 — the dry run is
- * the authoritative instrument, never a docs statement):
+ * leg's contract, measured via `--dry=json` resolved inputs (MCP-542,
+ * 2026-08-11 — the dry run is the authoritative instrument):
  *
  * - `**` matches ZERO or more path segments, and dot-directories match
- *   (`research/web-app-deconstruction/**\/*.yaml` hashes
- *   `pnpm-workspace.yaml` directly under the prefix; `**\/*.yml`
- *   hashes `.github/workflows/research.yml`).
+ *   (measured on the research-tree yaml/yml entries).
  * - turbo's `inputs` globs walk the FILESYSTEM, not the git index
  *   (untracked and gitignored files hash — that is what the `!`
  *   negations in turbo.json do their work against).
@@ -29,10 +26,14 @@
  * fire on it. Negated entries are exempt (turbo applies them as
  * filters; they legitimately match generated content). Pattern syntax
  * outside the supported subset (`**`, `*`, `?`) is a REFUSAL, never a
- * guess — extend the matcher's supported subset with a red-proof
- * rather than working around the gate. Only `inputs` arrays are
- * scanned; `outputs` globs legitimately match nothing before a build.
- * turbo.json is JSONC, so the scan uses the `jsonc-parser` visitor.
+ * guess — and so is every malformed macro FORM (`macroFormVerdict`):
+ * non-leading or repeated macros, an absolute remainder, a backslash,
+ * and a root-escaping `..` — the last three probe-measured as forms
+ * turbo itself rejects config-wide or mis-resolves (measurements at
+ * each refusal site and in the turbo-glob probe ledger). Only
+ * `inputs` arrays are scanned; `outputs` globs legitimately match
+ * nothing before a build. turbo.json is JSONC, so the scan uses the
+ * `jsonc-parser` visitor.
  *
  * @packageDocumentation
  */
@@ -40,7 +41,12 @@
 import { visit } from 'jsonc-parser';
 
 import { lineOf } from './text-position.js';
-import { GLOB_CANDIDATE, compileTurboGlob, isTrackedDirectoryPrefix } from './turbo-glob.js';
+import {
+  GLOB_CANDIDATE,
+  compileTurboGlob,
+  isTrackedDirectoryPrefix,
+  normaliseTurboPathSpelling,
+} from './turbo-glob.js';
 
 /** One `$TURBO_ROOT$` input entry that matches zero tracked files. */
 interface TurboInputFinding {
@@ -54,18 +60,24 @@ interface TurboParseError {
   readonly line: number;
 }
 
-/** One entry whose pattern syntax sits outside the supported turbo subset. */
+/** One entry whose pattern syntax or macro form sits outside the pinned subset. */
 interface TurboInputRefusal {
   readonly entry: string;
   readonly line: number;
   readonly reason: string;
 }
 
-/** The scan's three outcome streams: findings, refusals, and parse errors. */
+/** The scan's outcome streams plus the alive count the success line derives from. */
 export interface TurboInputScan {
   readonly findings: readonly TurboInputFinding[];
   readonly parseErrors: readonly TurboParseError[];
   readonly refusals: readonly TurboInputRefusal[];
+  /**
+   * Positive `$TURBO_ROOT$` entries that matched ≥1 tracked file — the
+   * bin's success line derives its claim from this count, so the
+   * sentence it prints is true by construction.
+   */
+  readonly positives: number;
 }
 
 /** The per-entry verdict of the pinned matcher — a closed union. */
@@ -77,15 +89,6 @@ export type TurboEntryVerdict =
 
 const TURBO_ROOT_PREFIX = '$TURBO_ROOT$/';
 
-/**
- * Classify one `$TURBO_ROOT$` input entry against the tracked file set.
- *
- * @remarks The single decision point both the scan and its tests
- * exercise. Negations are exempt BEFORE any syntax inspection (a
- * negation carrying unsupported syntax must not refuse the gate — the
- * leg never evaluates negations). A `$TURBO_ROOT$` occurrence not in
- * leading `$TURBO_ROOT$/` prefix form is unanalysable.
- */
 /** Structural checks on the entry's macro form, ahead of any matching. */
 function macroFormVerdict(entry: string): TurboEntryVerdict | undefined {
   if (entry.startsWith('!')) {
@@ -97,19 +100,46 @@ function macroFormVerdict(entry: string): TurboEntryVerdict | undefined {
       reason: `$TURBO_ROOT$ occurrence outside leading '${TURBO_ROOT_PREFIX}' prefix form`,
     };
   }
-  if (entry.slice(TURBO_ROOT_PREFIX.length).includes('$TURBO_ROOT$')) {
-    // A repeated macro would otherwise fall through to the literal arm and
-    // read as a dead FINDING; it is malformed input the leg cannot
-    // evaluate, so it refuses (Copilot round 2 suppressed comment,
-    // 2026-08-11 — harvested per the suppressed-comments discipline).
+  const remainder = entry.slice(TURBO_ROOT_PREFIX.length);
+  if (remainder.includes('$TURBO_ROOT$')) {
+    // Would otherwise read as a dead FINDING via the literal arm; it is
+    // malformed input the leg cannot evaluate (Copilot round 2, 2026-08-11).
     return {
       kind: 'unsupported',
       reason: `repeated $TURBO_ROOT$ occurrence — the macro is valid only as the single leading prefix`,
     };
   }
+  if (remainder.startsWith('/')) {
+    // Not fussiness of ours: turbo rejects the WHOLE config on this form
+    // (turbo 2.10.9 dry-run, 2026-08-11), so no verdict is derivable.
+    return {
+      kind: 'unsupported',
+      reason:
+        `absolute remainder after the macro — turbo itself refuses the whole config ` +
+        `on this entry ('inputs' cannot contain an absolute path)`,
+    };
+  }
+  if (remainder.includes('\\')) {
+    // Measured (2.10.9, 2026-08-11): an invalid escape rejects the whole
+    // config as a bad pattern; the valid escape `\.` was accepted yet
+    // resolved ZERO files. The pinned subset reproduces neither.
+    return {
+      kind: 'unsupported',
+      reason: String.raw`backslash in entry — turbo reads '\' as a glob escape (an invalid escape rejects the whole config as a bad pattern; a valid escape resolved zero files when measured); the pinned subset does not reproduce escape semantics`,
+    };
+  }
   return undefined;
 }
 
+/**
+ * Classify one `$TURBO_ROOT$` input entry against the tracked file set.
+ *
+ * @remarks The single decision point both the scan and its tests
+ * exercise. Negations are exempt BEFORE any syntax inspection (the leg
+ * never evaluates negations); malformed macro forms refuse
+ * (`macroFormVerdict`); spellings turbo itself resolves lexically are
+ * resolved first ({@link normaliseTurboPathSpelling} has the ledger).
+ */
 export function classifyTurboRootInput(
   entry: string,
   trackedFiles: readonly string[],
@@ -118,7 +148,14 @@ export function classifyTurboRootInput(
   if (formVerdict !== undefined) {
     return formVerdict;
   }
-  const relative = entry.slice(TURBO_ROOT_PREFIX.length);
+  const normalised = normaliseTurboPathSpelling(entry.slice(TURBO_ROOT_PREFIX.length));
+  if (normalised.kind === 'escapes-root') {
+    return {
+      kind: 'unsupported',
+      reason: `'..' escapes the repository root — turbo itself refuses the whole config on this entry (Path error: not parent of the root)`,
+    };
+  }
+  const relative = normalised.value;
   if (!GLOB_CANDIDATE.test(relative)) {
     return trackedFiles.includes(relative) || isTrackedDirectoryPrefix(relative, trackedFiles)
       ? { kind: 'alive' }
@@ -133,41 +170,48 @@ export function classifyTurboRootInput(
     : { kind: 'dead' };
 }
 
+/** The scan's mutable accumulator, shared with the per-entry recorder. */
+interface TurboScanState {
+  readonly findings: TurboInputFinding[];
+  readonly parseErrors: TurboParseError[];
+  readonly refusals: TurboInputRefusal[];
+  positives: number;
+}
+
+/** Route one entry's verdict into the scan's streams and count evaluated positives. */
+function recordInputsEntry(input: {
+  readonly state: TurboScanState;
+  readonly value: string;
+  readonly line: number;
+  readonly trackedFiles: readonly string[];
+}): void {
+  const { state, value, line, trackedFiles } = input;
+  const verdict = classifyTurboRootInput(value, trackedFiles);
+  if (verdict.kind === 'dead') {
+    state.findings.push({ entry: value, line });
+  } else if (verdict.kind === 'unsupported') {
+    state.refusals.push({ entry: value, line, reason: verdict.reason });
+  }
+  if (verdict.kind === 'alive') {
+    state.positives += 1;
+  }
+}
+
 /**
  * Scan turbo.json (JSONC) for `$TURBO_ROOT$` entries inside `inputs`
  * arrays, reporting dead entries and refusals with their lines.
  *
- * @remarks `jsonc-parser`'s visitor is fault-tolerant: without an
- * `onError` handler it silently accepts malformed JSONC and visits only
- * the recoverable fragments, so a truncated turbo.json could scan as
- * clean. Parse errors are therefore first-class output — the bin
- * refuses (exit 2) on any, per the validator's fail-loud contract.
+ * @remarks `jsonc-parser`'s visitor is fault-tolerant: unhandled, it
+ * silently scans only the recoverable fragments of malformed JSONC, so
+ * parse errors are first-class output — the bin refuses (exit 2) on
+ * any, per the validator's fail-loud contract.
  */
-/** Route one entry's verdict into the scan's finding/refusal streams. */
-function recordEntryVerdict(input: {
-  readonly value: string;
-  readonly line: number;
-  readonly trackedFiles: readonly string[];
-  readonly findings: TurboInputFinding[];
-  readonly refusals: TurboInputRefusal[];
-}): void {
-  const { value, line, trackedFiles, findings, refusals } = input;
-  const verdict = classifyTurboRootInput(value, trackedFiles);
-  if (verdict.kind === 'dead') {
-    findings.push({ entry: value, line });
-  } else if (verdict.kind === 'unsupported') {
-    refusals.push({ entry: value, line, reason: verdict.reason });
-  }
-}
-
 export function scanTurboRootInputs(input: {
   readonly turboJsonText: string;
   readonly trackedFiles: readonly string[];
 }): TurboInputScan {
   const { turboJsonText, trackedFiles } = input;
-  const findings: TurboInputFinding[] = [];
-  const parseErrors: TurboParseError[] = [];
-  const refusals: TurboInputRefusal[] = [];
+  const state: TurboScanState = { findings: [], parseErrors: [], refusals: [], positives: 0 };
   let currentProperty = '';
   let inInputs = false;
   let arrayDepth = 0;
@@ -194,19 +238,13 @@ export function scanTurboRootInputs(input: {
     },
     onLiteralValue(value, offset) {
       if (inInputs && typeof value === 'string' && value.includes('$TURBO_ROOT$')) {
-        recordEntryVerdict({
-          value,
-          line: lineOf(turboJsonText, offset),
-          trackedFiles,
-          findings,
-          refusals,
-        });
+        recordInputsEntry({ state, value, line: lineOf(turboJsonText, offset), trackedFiles });
       }
     },
     onError(code, offset) {
-      parseErrors.push({ code, line: lineOf(turboJsonText, offset) });
+      state.parseErrors.push({ code, line: lineOf(turboJsonText, offset) });
     },
   });
 
-  return { findings, parseErrors, refusals };
+  return state;
 }

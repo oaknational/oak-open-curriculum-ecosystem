@@ -4,6 +4,7 @@ import {
   OAK_MCP_SERVER_NAME,
   POSTHOG_MCP_SOURCE,
   type OakClientFamily,
+  type OakClientSurface,
   type PolicySnapshot,
   type UnknownProperties,
 } from './event-policy-contract.js';
@@ -75,6 +76,63 @@ export function normaliseOakClientFamily(value: unknown): OakClientFamily {
     return 'claude';
   }
   return 'other';
+}
+
+// Tokens must stay evidence-backed: self-declaring client strings, or values
+// verified first-hand in live traffic. Unmatched traffic lands in 'other';
+// the correction path is a token row plus its derivation-table test row.
+const CLIENT_SURFACE_TOKEN_RULES: readonly (readonly [string, OakClientSurface])[] = [
+  ['sdk', 'sdk'],
+  ['vscode', 'vscode'],
+  ['claude-code', 'cli'],
+  ['mozilla', 'web'],
+];
+
+function isAsciiAlphanumeric(character: string | undefined): boolean {
+  return character !== undefined && /[a-z0-9]/u.test(character);
+}
+
+function hasTokenSegment(value: string, token: string): boolean {
+  let index = value.indexOf(token);
+  while (index !== -1) {
+    const before = index === 0 ? undefined : value.at(index - 1);
+    const after = value.at(index + token.length);
+    if (!isAsciiAlphanumeric(before) && !isAsciiAlphanumeric(after)) {
+      return true;
+    }
+    index = value.indexOf(token, index + 1);
+  }
+  return false;
+}
+
+function readClientSurfaceToken(value: unknown): OakClientSurface | undefined {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  const normalised = asciiLower(value);
+  for (const [token, surface] of CLIENT_SURFACE_TOKEN_RULES) {
+    if (hasTokenSegment(normalised, token)) {
+      return surface;
+    }
+  }
+  return undefined;
+}
+
+export function normaliseOakClientSurface(headerValues: readonly unknown[]): OakClientSurface {
+  for (const value of headerValues) {
+    const surface = readClientSurfaceToken(value);
+    if (surface !== undefined) {
+      return surface;
+    }
+  }
+  return 'other';
+}
+
+export function isOakClientSurface(value: unknown): value is OakClientSurface {
+  return (
+    value === 'cli' || value === 'sdk' || value === 'vscode' || value === 'web' || value === 'other'
+  );
 }
 
 export function commonProperties(snapshot: PolicySnapshot): UnknownProperties {

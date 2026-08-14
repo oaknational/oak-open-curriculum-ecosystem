@@ -837,7 +837,7 @@ Outcome-level; each maps to WS-level proof contracts above:
   claim registration per session, work-shape declaration, handoff closure,
   consolidation at milestone boundaries.
 - Plan completion, gate-bundle closure, and archival run
-  [`consolidate-docs`](../../../skills/consolidate-docs/SKILL-CANONICAL.md);
+  [`consolidate-docs`](../../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md);
   outcomes mine into ADRs/READMEs before archive per ADR-117.
 - Quality gates per
   [quality-gates](../../../plans/templates/components/quality-gates.md): focused

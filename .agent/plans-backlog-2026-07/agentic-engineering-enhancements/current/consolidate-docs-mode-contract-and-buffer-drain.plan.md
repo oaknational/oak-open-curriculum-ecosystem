@@ -65,7 +65,7 @@ Make the skill carry the missing operating contract:
 
 ### WS1: Mode Contract
 
-Amend `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` and the wrapper skill
+Amend `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` and the wrapper skill
 at `.agents/skills/oak-consolidate-docs/SKILL.md` if needed.
 
 The skill should require agents to declare one of:

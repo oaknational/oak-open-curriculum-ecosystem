@@ -110,7 +110,7 @@ to unrelated sessions is names-only.
    restart the session, re-run this check.
 2. **Version gate.** Compare `codex --version` against the
    `codex_cli_version` pin in
-   [`probe-record.md`](./probe-record.md). On ANY mismatch, STOP and run
+   [`probe-record.md`](./references/probe-record.md). On ANY mismatch, STOP and run
    [`scripts/probe-codex-mcp-server.mjs`](./scripts/probe-codex-mcp-server.mjs)
    `--candidate` first — candidate mode runs every leg against the
    installed version while the old pin stands; the dialogue proceeds
@@ -161,7 +161,7 @@ or personal data.
   `approval-policy`, `cwd`, `model`, `config`, `base-instructions`,
   `developer-instructions`, or `compact-prompt`: the full recorded
   authority surface, canonical in
-  [`probe-record.md`](./probe-record.md) and machine-pinned by the
+  [`probe-record.md`](./references/probe-record.md) and machine-pinned by the
   probe's tool-contract check, which updates this list in the same
   reviewed change if the surface ever reshapes. Disciplined calls ride
   the launch pins. This is skill discipline, not machine enforcement —
@@ -403,7 +403,7 @@ calls never pass per-call authority parameters; the launch-arg defaults
 for every call that omits them.
 
 Probe-verified 2026-08-02 against the pinned `codex_cli_version` in
-[`probe-record.md`](./probe-record.md) (the version literal lives ONLY
+[`probe-record.md`](./references/probe-record.md) (the version literal lives ONLY
 there — doctrine references it, never restates it): after a
 disciplined call's write-request turn the sentinel path was ABSENT on
 disk (ENOENT-only, checked after server termination — a final-state
@@ -438,6 +438,6 @@ sentinel path absent on disk after the write-request turn, checked
 after server termination; the refusal self-report is corroborating,
 not observation), and compares the
 installed CLI version against the pin in
-[`probe-record.md`](./probe-record.md) — exiting non-zero on any
+[`probe-record.md`](./references/probe-record.md) — exiting non-zero on any
 mismatch or failed leg. Run it at every version-gate stop and before
 re-ratifying the record.

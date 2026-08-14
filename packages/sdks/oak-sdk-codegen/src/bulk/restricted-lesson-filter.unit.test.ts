@@ -201,4 +201,46 @@ describe('excludeRestrictedLessons', () => {
     expect(result.restrictedLessonsExcluded).toBe(0);
     expect(result.files[0]?.data.lessons).toHaveLength(1);
   });
+
+  it('defaults to excluding restricted lessons when no option is given', () => {
+    const unit = createUnitInput({
+      unitLessons: [createUnitLessonRef('kept', 1), createUnitLessonRef('hidden', 2)],
+    });
+    const file = createFile(
+      [unit],
+      [
+        createLessonInput({ lessonSlug: 'kept' }),
+        createLessonInput({ lessonSlug: 'hidden', restricted: true }),
+      ],
+    );
+
+    const result = excludeRestrictedLessons([createFileResult('maths-primary.json', file)]);
+
+    expect(result.files[0]?.data.lessons.map((l) => l.lessonSlug)).toEqual(['kept']);
+    expect(result.restrictedLessonsExcluded).toBe(1);
+  });
+
+  it('retains restricted lessons and their unit references when includeRestricted is true', () => {
+    const unit = createUnitInput({
+      unitLessons: [createUnitLessonRef('kept', 1), createUnitLessonRef('hidden', 2)],
+    });
+    const file = createFile(
+      [unit],
+      [
+        createLessonInput({ lessonSlug: 'kept' }),
+        createLessonInput({ lessonSlug: 'hidden', restricted: true }),
+      ],
+    );
+
+    const result = excludeRestrictedLessons([createFileResult('maths-primary.json', file)], {
+      includeRestricted: true,
+    });
+
+    expect(result.files[0]?.data.lessons.map((l) => l.lessonSlug)).toEqual(['kept', 'hidden']);
+    expect(result.files[0]?.data.sequence[0]?.unitLessons.map((l) => l.lessonSlug)).toEqual([
+      'kept',
+      'hidden',
+    ]);
+    expect(result.restrictedLessonsExcluded).toBe(0);
+  });
 });

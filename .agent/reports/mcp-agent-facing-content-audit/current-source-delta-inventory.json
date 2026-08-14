@@ -41,6 +41,18 @@
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
     {
+      "file": "apps/oak-curriculum-mcp-streamable-http/src/app/health-endpoints.ts",
+      "semanticSha256": "8861cf8030757030655cb462cce6282fa3041e990960b153cad47d47ac66ab84",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
+    },
+    {
+      "file": "apps/oak-curriculum-mcp-streamable-http/src/app/health-paths.ts",
+      "semanticSha256": "0574e655b9f5d634c9d364b288c88346dea0f66ef95fedaef5728d1cbb2cd21c",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
+    },
+    {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/app/landing-page-artefact.ts",
       "semanticSha256": "e62f6c8466af6c86bf6eba00b7d1c3085d0032d0f4ce4c0a821e6fe76d33f08e",
       "itemIds": [],
@@ -96,7 +108,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
-      "semanticSha256": "374e6f7c8b3b173b4a00a2d475f4f6b0aa97f5bec4aec40cadd679657dd9dddb",
+      "semanticSha256": "d19554a15174e8472540b189b4f17e089c9d489f0ebeb455984253e6644b36f1",
       "itemIds": [
         "C705",
         "C706",
@@ -166,7 +178,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts",
-      "semanticSha256": "fac659994388ebd20d267596eb2fac3344dcc2bb836771cefa7b3334dafa441b",
+      "semanticSha256": "c96fa6a897a638088c9841c8a4dbb85229ae7f800a14ac52c57b25cce91b9203",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },

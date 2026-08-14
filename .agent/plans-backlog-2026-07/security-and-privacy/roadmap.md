@@ -51,7 +51,7 @@ Each phase must either:
   [.agent/memory/operational/documentation-sync-logs/security-and-privacy.md](../../memory/operational/documentation-sync-logs/security-and-privacy.md)
 
 Before phase closure, apply the
-[`consolidate-docs` workflow](../../skills/consolidate-docs/SKILL-CANONICAL.md).
+[`consolidate-docs` workflow](../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md).
 
 ---
 

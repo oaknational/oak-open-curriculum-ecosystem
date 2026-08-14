@@ -203,6 +203,39 @@
           "reappraisal": "Re-assess whether the design is actually uniform \u2014 in which case state it positively \u2014 or whether you are about to encode expediency."
         },
         {
+          "concept": "acceptance-euphemism",
+          "kind": "literal",
+          "patterns": [
+            "standing cure",
+            "standing workaround",
+            "honest bypass",
+            "live with it for now"
+          ],
+          "include_paths": [
+            ".agent/practice-core/",
+            ".agent/plans/",
+            ".agent/reports/",
+            ".agent/memory/operational/",
+            "docs/architecture/",
+            "docs/governance/",
+            "**/*.plan.md"
+          ],
+          "exclude_paths": [
+            "principles.md",
+            "distilled.md",
+            "PDR-043",
+            "PDR-044",
+            "PDR-047",
+            "no-hedging-vocabulary.md",
+            "archive/",
+            "fixtures/",
+            "/tests/",
+            ".test.ts"
+          ],
+          "citation": "no-hedging-vocabulary.md \u00a7Trip-List (acceptance-shaped euphemisms, owner-graduated); principles.md \u00a7Architectural Excellence Over Expediency",
+          "reappraisal": "A known defect labelled as handled is not handled \u2014 the label travels between records and seats faster than the instance. Name the owning ticket and the retirement condition in the same breath, or fix it now."
+        },
+        {
           "concept": "sha-in-permanent-doc",
           "kind": "regex",
           "patterns": [
@@ -322,7 +355,7 @@
           "reappraisal": "Use a repo-root-relative path for in-repo targets, or a platform-provided variable / tilde form (~/...) for per-user surfaces. A user-home or machine-temp absolute path resolves only on one machine and often leaks a username (PII). Portable system paths (/usr/bin, /opt/homebrew/bin) are fine; placeholder forms (/Users/<user>/) are fine."
         }
       ],
-      "description": "Block agents from writing into Edit/Write content. Two surfaces: (blocked_patterns) the owner-approval marker, path-agnostic, which only the project owner may author; (scoped_blocks) path-scoped doctrine block GROUPS per PDR-044 \u00a7Innate immunity. Each group gathers the surface patterns for one concept and carries the doctrinal `citation` PLUS a `reappraisal` \u2014 the positive direction the firing signals \u2014 so a block teaches the agent to step back and re-assess the concept rather than to reword around the wall (PDR-044 \u00a7Innate immunity, as amended; the doctrine that an enforcement surface must carry the advisory-response content, not only a refusal). `kind` and the `excludes_*` options are group-level: every pattern in a group shares them. The five concepts: (literal) `expediency-hedging` \u2014 language that means 'I know the rule applies, but this situation is special' rejected on doctrine surfaces (PDRs, plans, ADRs, governance), with doctrine-defining surfaces excluded so principles.md, distilled.md, PDR-043/044/047 may catalogue the words they forbid; (regex) `sha-in-permanent-doc` \u2014 7- to 40-character hex tokens with at least one a-f character on portable-permanent-doc paths (practice-core, rules, memory/active/patterns, principles.md, testing-strategy.md; ADRs are repo-bound and out of scope per PDR-079), with fenced code blocks, inline-code spans, and `(historical reference)` marker lines excluded; (regex) `indefinite-deferral` \u2014 deferral-to-nowhere vocabulary (owner-directed 2026-06-10) rejected on doctrine and operational-memory surfaces: work is a live deliverable with named gates or it is removed by owner decision, never left in an unagreed holding state; word-boundary regex so substrings inside names (e.g. agent display names containing 'Sparking') never false-positive, with no-hedging-vocabulary.md excluded as the cataloguing home; (literal) `menu-framing` \u2014 owner-decision phrasings rejected on architectural surfaces so menu-shaped option-sets do not slip past the re-apply-first-question-at-elaboration-boundaries discipline (the rule file itself is excluded so it may catalogue the phrases it forbids); (regex) `machine-local-path` — user-home and machine-temp absolute paths blocked EVERYWHERE (owner-directed invariant: the repo MUST NOT contain machine-local paths, ever; a user-home path also leaks a username = PII), with the pattern-defining surfaces (important-state-not-in-temp-files.md, this policy file) excluded so they may name the patterns (the teaching homes — principles.md §No machine-local paths and safety-and-security.md §Machine-local paths — carry the shapes defanged and need no exclusion); portable system paths and placeholder forms (slash-user-placeholder) are exempt by construction (the regex requires a concrete segment); the same invariant is enforced over all tracked files at commit/CI by the `validate-no-machine-local-paths` repo-validator, which single-sources its pattern set from this block. `reappraisal` is enforced present at commit-time by the `validate-policy-reappraisal` repo validator; it is optional at load time so a missing value never fails the guard closed. PDR-044 names false positives as a design property of the innate layer."
+      "description": "Block agents from writing into Edit/Write content. Two surfaces: (blocked_patterns) the owner-approval marker, path-agnostic, which only the project owner may author; (scoped_blocks) path-scoped doctrine block GROUPS per PDR-044 \u00a7Innate immunity. Each group gathers the surface patterns for one concept and carries the doctrinal `citation` PLUS a `reappraisal` \u2014 the positive direction the firing signals \u2014 so a block teaches the agent to step back and re-assess the concept rather than to reword around the wall (PDR-044 \u00a7Innate immunity, as amended; the doctrine that an enforcement surface must carry the advisory-response content, not only a refusal). `kind` and the `excludes_*` options are group-level: every pattern in a group shares them. The six concepts: (literal) `expediency-hedging` \u2014 language that means 'I know the rule applies, but this situation is special' rejected on doctrine surfaces (PDRs, plans, ADRs, governance), with doctrine-defining surfaces excluded so principles.md, distilled.md, PDR-043/044/047 may catalogue the words they forbid; (literal) `acceptance-euphemism` \u2014 the owner-graduated acceptance-shaped euphemisms (labels that dress a known defect as handled without a routed fix or ratified policy), scoped to operational records (.agent/memory/operational/, .agent/reports/) in addition to doctrine surfaces because the graduating instances lived in continuity records, with the napkin out of scope as the first-capture observation buffer and no-hedging-vocabulary.md excluded as the cataloguing home; (regex) `sha-in-permanent-doc` \u2014 7- to 40-character hex tokens with at least one a-f character on portable-permanent-doc paths (practice-core, rules, memory/active/patterns, principles.md, testing-strategy.md; ADRs are repo-bound and out of scope per PDR-079), with fenced code blocks, inline-code spans, and `(historical reference)` marker lines excluded; (regex) `indefinite-deferral` \u2014 deferral-to-nowhere vocabulary (owner-directed 2026-06-10) rejected on doctrine and operational-memory surfaces: work is a live deliverable with named gates or it is removed by owner decision, never left in an unagreed holding state; word-boundary regex so substrings inside names (e.g. agent display names containing 'Sparking') never false-positive, with no-hedging-vocabulary.md excluded as the cataloguing home; (literal) `menu-framing` \u2014 owner-decision phrasings rejected on architectural surfaces so menu-shaped option-sets do not slip past the re-apply-first-question-at-elaboration-boundaries discipline (the rule file itself is excluded so it may catalogue the phrases it forbids); (regex) `machine-local-path` — user-home and machine-temp absolute paths blocked EVERYWHERE (owner-directed invariant: the repo MUST NOT contain machine-local paths, ever; a user-home path also leaks a username = PII), with the pattern-defining surfaces (important-state-not-in-temp-files.md, this policy file) excluded so they may name the patterns (the teaching homes — principles.md §No machine-local paths and safety-and-security.md §Machine-local paths — carry the shapes defanged and need no exclusion); portable system paths and placeholder forms (slash-user-placeholder) are exempt by construction (the regex requires a concrete segment); the same invariant is enforced over all tracked files at commit/CI by the `validate-no-machine-local-paths` repo-validator, which single-sources its pattern set from this block. `reappraisal` is enforced present at commit-time by the `validate-policy-reappraisal` repo validator; it is optional at load time so a missing value never fails the guard closed. PDR-044 names false positives as a design property of the innate layer."
     },
     "sessionStart": {
       "grounding_reminder": "Read .agent/directives/AGENT.md and .agent/memory/active/distilled.md before starting work.",

@@ -53,7 +53,7 @@
     "cursor-session-from-claude-session": "tsx src/bin/cursor-session-from-claude-session.ts",
     "codex-reviewer-resolve": "tsx src/bin/codex-reviewer-resolve.ts",
     "codex-team-alert-bootstrap-generate": "tsx src/codex/team-alert-bootstrap-cli.ts",
-    "skills-adapter-generate": "tsx src/bin/skills-adapter-generate.ts",
+    "skills-adapter-generate": "cd .. && tsx agent-tools/src/bin/skills-adapter-generate.ts --prefix=oak-",
     "repo-check": "cd .. && pnpm exec tsx agent-tools/src/repo-check/repo-check.ts",
     "refound-freeze": "cd .. && pnpm exec tsx agent-tools/src/refounding/refound-freeze.ts",
     "refound-verify-freeze": "cd .. && pnpm exec tsx agent-tools/src/refounding/refound-verify-freeze.ts",

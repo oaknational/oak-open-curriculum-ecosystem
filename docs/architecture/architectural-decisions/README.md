@@ -478,6 +478,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   Accepted, owner-ratified 2026-07-31)
 - [ADR-222: Bulk schema contract — interim hand-truing, then full derivation from the upstream schema](222-bulk-schema-contract-interim-truing-then-derivation.md)
 - [ADR-223: Perishable external-surface claims carry risk-based freshness metadata](223-perishable-claims-carry-risk-based-freshness-metadata.md)
+- [ADR-224: Restricted-lesson exclusion is a documented, configurable switch](224-restricted-lesson-exclusion-configurable-switch.md)
 
 ## Key Architectural Decisions
 

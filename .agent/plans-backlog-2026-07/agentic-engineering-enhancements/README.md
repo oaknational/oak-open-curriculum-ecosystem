@@ -192,7 +192,7 @@ discoverable in `current/` (queued or in progress).
 Each phase must also include documentation propagation updates (or explicit
 no-change rationale) for ADR-119, `.agent/practice-core/practice.md`, and any
 additionally impacted ADRs/docs/READMEs. Apply the
-[`oak-consolidate-docs` workflow](../../skills/consolidate-docs/SKILL-CANONICAL.md)
+[`oak-consolidate-docs` workflow](../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md)
 before phase closure.
 
 ## Direction-of-Travel Integration (2026-04-20)

@@ -34,7 +34,7 @@
      borderless lozenge is Oak trade dress, not a system constant) */
   --tag-min-h:calc(var(--size-icon-m) + var(--space-4));--tag-pad:var(--space-4) var(--space-8);--tag-gap:var(--space-8);--tag-radius:var(--radius-control);
   --tag-border:0 solid transparent;/* @kind other */--tag-shadow:none;
-  /* label case grammar — brands may go small-caps/no-transform (FDSE) or lowercase (EMC) */
+  /* label case grammar — brands may go small-caps/no-transform (PDS) or lowercase (EMC) */
   --label-transform:uppercase;/* @kind other */--label-variant:normal;/* @kind other */
   /* card — bg + image are brand surface (gradients allowed; AA is on the text pairing) */
   --card-pad:calc(var(--density)*var(--space-24));--card-radius:var(--radius-container);--card-border:var(--border-solid-m);

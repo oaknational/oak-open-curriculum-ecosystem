@@ -3,7 +3,10 @@ import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
-import { SUPPORTED_PROTOCOL_VERSIONS } from '@modelcontextprotocol/sdk/types.js';
+import {
+  SUPPORTED_PROTOCOL_VERSIONS,
+  type MessageExtraInfo,
+} from '@modelcontextprotocol/sdk/types.js';
 import type { ResolvedRelease } from '@oaknational/build-metadata';
 import type { ProductAnalyticsRuntime } from '@oaknational/observability';
 import { setLogger } from '@posthog/mcp';
@@ -29,6 +32,8 @@ const RAW_CLIENT_NAME = 'ChatGPT Desktop/raw-client-name';
 const RAW_CLIENT_VERSION = 'raw-client-version';
 const RAW_TOOL_ARGUMENT = 'raw-parameters';
 const RAW_TOOL_RESULT = 'raw-result';
+const RAW_UA_SENTINEL = 'RAW-UA-SENTINEL-9f31';
+const RAW_USER_AGENT = `${RAW_UA_SENTINEL} Claude-User (claude-code/1.0) raw-host`;
 const UUID_V7 = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 const RELEASE: ResolvedRelease = {
   value: 'release-2026-07-26',
@@ -128,7 +133,10 @@ function createServer(): McpServer {
   return server;
 }
 
-async function connectInstrumentedRuntime(subject: Subject): Promise<McpConnection> {
+async function connectInstrumentedRuntime(
+  subject: Subject,
+  headers: Record<string, string> = {},
+): Promise<McpConnection> {
   const server = createServer();
   const client = new Client({
     name: RAW_CLIENT_NAME,
@@ -139,6 +147,14 @@ async function connectInstrumentedRuntime(subject: Subject): Promise<McpConnecti
   clientTransport.send = (message, options) => send(message, { ...options, authInfo: AUTH_INFO });
   try {
     await server.connect(subject.runtime.transportObserver.observe(serverTransport));
+    // InMemoryTransport delivers only authInfo, so request headers are injected
+    // at the wired server-transport seam, matching a network transport's extra.
+    const installed = serverTransport.onmessage;
+    assert(installed !== undefined, 'Expected the observer to wire the server transport');
+    serverTransport.onmessage = (message, extra) => {
+      const enriched: MessageExtraInfo = { ...extra, requestInfo: { headers } };
+      installed(message, enriched);
+    };
     await client.connect(clientTransport);
     return { client, server };
   } catch (error: unknown) {
@@ -238,6 +254,7 @@ function expectNoForbiddenContent(value: unknown): void {
   expect(serialised).not.toContain(RAW_CLIENT_VERSION);
   expect(serialised).not.toContain(RAW_TOOL_ARGUMENT);
   expect(serialised).not.toContain(RAW_TOOL_RESULT);
+  expect(serialised).not.toContain(RAW_UA_SENTINEL);
   expect(serialised).not.toContain('$mcp_client_name');
   expect(serialised).not.toContain('$mcp_client_version');
   expect(serialised).not.toContain('$mcp_parameters');
@@ -275,6 +292,7 @@ async function expectSuccessfulFinalWireBatch(subject: Subject): Promise<void> {
         ...COMMON_PROPERTIES,
         $mcp_is_error: false,
         oak_client_family: 'chatgpt',
+        oak_client_surface: 'other',
         $mcp_protocol_version: protocolVersion,
         ...expectedMcpSdkProperties(initializeDynamic.libVersion),
       },
@@ -289,6 +307,7 @@ async function expectSuccessfulFinalWireBatch(subject: Subject): Promise<void> {
         $mcp_duration_ms: listDuration,
         $mcp_is_error: false,
         $mcp_listed_tool_names: [TOOL_NAME],
+        oak_client_surface: 'other',
         ...expectedMcpSdkProperties(listDynamic.libVersion),
       },
       timestamp: listDynamic.timestamp,
@@ -302,6 +321,7 @@ async function expectSuccessfulFinalWireBatch(subject: Subject): Promise<void> {
         $mcp_tool_name: TOOL_NAME,
         $mcp_duration_ms: toolDuration,
         $mcp_is_error: false,
+        oak_client_surface: 'other',
         ...expectedMcpSdkProperties(toolDynamic.libVersion),
       },
       timestamp: toolDynamic.timestamp,
@@ -364,6 +384,34 @@ describe('PostHog final wire', () => {
     }
   });
 
+  it('derives the client surface from request headers without shipping the raw value', async () => {
+    const subject = createSubject(200);
+    let connection: McpConnection | undefined;
+
+    try {
+      connection = await connectInstrumentedRuntime(subject, { 'user-agent': RAW_USER_AGENT });
+      await connection.client.listTools();
+
+      await expect(subject.runtime.close()).resolves.toStrictEqual({
+        ok: true,
+        value: undefined,
+      });
+      await Promise.all(subject.waitUntilPromises);
+
+      expect(subject.reportedErrors).toStrictEqual([]);
+      expect(subject.requests).toHaveLength(1);
+      const batch = readBatch(await parseLegacyBody(subject.requests[0]));
+      expect(batch).toHaveLength(2);
+      for (const row of batch) {
+        assert(isRecord(row) && isRecord(row.properties), 'Expected a PostHog event row');
+        expect(row.properties.oak_client_surface).toBe('cli');
+      }
+      expectNoForbiddenContent(batch);
+    } finally {
+      await closeSubject(subject, connection);
+    }
+  });
+
   it('uses the configured initial attempt plus three identical retries', async () => {
     const subject = createSubject(500);
     let connection: McpConnection | undefined;
@@ -400,6 +448,7 @@ describe('PostHog final wire', () => {
           ...COMMON_PROPERTIES,
           $mcp_is_error: false,
           oak_client_family: 'chatgpt',
+          oak_client_surface: 'other',
           $mcp_protocol_version: protocolVersion,
           ...expectedMcpSdkProperties(dynamic.libVersion),
         },

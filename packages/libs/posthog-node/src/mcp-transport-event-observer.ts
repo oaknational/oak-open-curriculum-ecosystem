@@ -11,12 +11,18 @@ import {
   POSTHOG_MCP_SOURCE,
   type PostHogEventPolicyConfig,
 } from './event-policy-contract.js';
-import { isActorPseudonym, isUnknownProperties, readOwn } from './event-policy-helpers.js';
+import {
+  isActorPseudonym,
+  isUnknownProperties,
+  normaliseOakClientSurface,
+  readOwn,
+} from './event-policy-helpers.js';
 import { createPostHogEventPolicies } from './event-policy.js';
 import {
   canonicalToolName,
   normaliseDuration,
   readClientFamily,
+  readClientSurfaceHeaderValues,
   readListedToolNames,
   readObservedRequest,
   readParams,
@@ -109,6 +115,7 @@ class PostHogMcpTransportEventObserver implements McpTransportEventObserver {
         $mcp_source: POSTHOG_MCP_SOURCE,
         $mcp_server_name: OAK_MCP_SERVER_NAME,
         $mcp_server_version: this.snapshot.serverVersion,
+        oak_client_surface: normaliseOakClientSurface(readClientSurfaceHeaderValues(extra)),
         oak_environment: this.snapshot.environment,
         oak_release: this.snapshot.release,
       },

@@ -1,0 +1,72 @@
+{
+  "leg": "accessibility-expert",
+  "rubric_revision": "v0",
+  "pages": {
+    "page-A.html": {
+      "verdict": "FAIL",
+      "criteria": {
+        "type-scale-usage": {
+          "verdict": "FAIL",
+          "note": "Three of the page's own class names are not classes the system ships, so they render inert: `oak-body` (the shipped families are oak-body-1..4) leaves the hero teaser with no type style (renders 16px/300 by inheritance from html,body), and `oak-btn-primary`/`oak-btn-secondary` do not exist (the shipped modifier is `oak-btn--secondary`). Four raw off-scale sizes paint: 15px (.downloads-list li, .related-card__title), 14px (.related__heading), 13px (.related-card__meta) — none is a step on the 12/14/16/18px scale. The section-heading role carries three unrelated treatments, measured: h2 'Lessons in this unit' 40px oak-heading-3, h2 'Unit summary'/'Unit resources' 24px oak-heading-5, h2 'Related units' 14px/700 uppercase from a hand-rolled .related__heading with no type class. Lesson descriptions and related-card text carry no type class at all."
+        },
+        "spatial-rhythm": {
+          "verdict": "FAIL",
+          "note": "Every spacing reference names a custom property absent from the system (--oak-space-1..14, --oak-radius-2; the shipped scale is --space-4..--space-960 and --radius-*), so all spacing paints from the hardcoded rem fallbacks in the page's own <style> — the rhythm is off-scale by construction, not by drift. Measured consequence at 320px: documentElement.scrollWidth 435 vs clientWidth 320, i.e. 115px of horizontal page scroll (still 60px over at 375px). Cause, isolated by measuring every overflowing box: .lesson-row's `auto 1fr auto` grid never collapses at narrow widths and .oak-btn's `white-space: nowrap` holds each 'View lesson' control at 131.2px, pushing all eight off-canvas. WCAG 2.2 SC 1.4.10 Reflow, Level AA, failed."
+        },
+        "hierarchy": {
+          "verdict": "FAIL",
+          "note": "Outline is correct and the pairing is used well, judged independently: 13 headings, one h1, h1 -> h2 -> h3 with no skipped or misordered ranks; `<h1 class=\"oak-heading-2\">` and `<h2 class=\"oak-heading-3\">` reproduce exactly the system's own scoped element defaults (:where(.oak-scope) h1 { font: var(--type-heading-2) }), and the sidebar's rank-2 headings held at 24px oak-heading-5 demote the sidebar without touching the outline. The outline has NOT been distorted to serve the visuals. The visual layer is what fails. Because `oak-btn-secondary` is not a shipped class, the hero CTA, all eight row CTAs and the sidebar CTA render as ten identical 48px primary buttons — competing primary emphases, this criterion's own fail condition, and the one action the hero is built around is indistinguishable from the eight beneath it. Prominence is also inverted at the foot: a rank-2 heading ('Related units') renders at 14px, smaller than the page's 16px body copy. Landmarks compound it (verified in the Chromium AX tree): the h1 sits inside a `banner` landmark, `main` contains only the lesson list, the unit summary/downloads/related units all sit outside `main`, and there is no `contentinfo`."
+        },
+        "colour-discipline": {
+          "verdict": "FAIL",
+          "note": "Seven raw hex literals are what actually paint — #f7f7f7, #ffffff, #e0e0e0, #eee, #dff1ee, #1b4d46, #595959 — because every --oak-color-* name guarding them is absent from the system, so each var() falls through to its literal. Theme cells, measured with axe-core 4.12.1 at 1280px and 320px: light is clean (0 violations, and computed text ratios 6.5:1 to 15.9:1). Dark FAILS catastrophically — 15 nodes at 1.00, 1.07, 1.48, 1.58 and 2.23:1, including the h1, 'Lessons in this unit' and every lesson title at 1.00:1 (white on the pinned #ffffff card). Mechanism: `body` replaces `background` with a pinned light literal while still inheriting `color: var(--text-primary)`, which is `light-dark(#222222, #ffffff)` — the page pins its surfaces and lets the system supply its foregrounds. WCAG 2.2 SC 1.4.3, Level AA, failed in the dark cell; the same pinning defeats the high-contrast and colour-safe themes. Separately, the page redefines the shipped `.oak-card` class inside its own <style>, overriding that component document-wide."
+        },
+        "composition-grammar": {
+          "verdict": "FAIL",
+          "note": "None of the export's region model is present: no oak-canvas, no oak-region, no oak-container, no oak-band, no data-page map, no masthead and no footer. The page hand-rolls .lesson-row, .related-strip and a name-clashing .oak-card where shipped patterns exist, and free-floats its aside and related-units section outside `main`."
+        },
+        "cross-page-cohesion": {
+          "verdict": "FAIL",
+          "note": "Redefining the shared `.oak-card` class means a sibling page using the shipped card would not match this one — the divergence is exported, not contained. Control faces diverge from the kit in both directions: every button renders as the primary face, and the four downloads use bare `oak-link` text where a sibling would use the shipped `oak-icon-btn`. Focus presentation splits within the page as well (measured by tabbing): system-classed controls show the designed double ring, while the four hand-rolled .related-card anchors fall back to Chromium's default ring."
+        },
+        "ordered-calm-readability": {
+          "verdict": "ITERATE",
+          "note": "None of this criterion's fail conditions is met: no overlap or collage, no rotation of any kind, no authored motion. Readability is nonetheless eroded in ways this rule exists to prevent — a 14px uppercase letter-spaced section heading (all-caps at the page's smallest size is the hardest setting for dyslexic and low-vision readers), 13px and 15px text below the system's smallest body step, a horizontally scrolling related strip that hides two of its four cards at 1280px, and the measured 320px horizontal scroll that puts every lesson's control off-screen. Target sizes, with floors named: breadcrumb links measure 53.6x20 and 47.2x20 and the four 'Download' links 71.1x19 — these CLEAR SC 2.5.8 (AA, 24x24) via the spacing/inline exceptions (row pitch is ~36px, so the 24px circles do not intersect), but sit below Oak's house floor of 44px (--size-target-min, SC 2.5.5 at AAA). All ten buttons measure 48px tall and clear both floors."
+        }
+      }
+    },
+    "page-B.html": {
+      "verdict": "FAIL",
+      "criteria": {
+        "type-scale-usage": {
+          "verdict": "PASS",
+          "note": "Every text node carries a shipped composite class (oak-heading-1/3/5/6, oak-body-1/2/3/4, oak-body-1-bold, oak-body-2-bold); no raw font sizing paints anywhere. The section-heading role does carry three steps (40px, 24px, 20px), but the ladder is monotonic with position and importance and every step is on-scale, so it reads as deliberate demotion rather than drift. Two notes: .lesson-num assembles a one-off `font:` shorthand from scale tokens instead of using a shipped composite; and `<h3 class=\"oak-body-1-bold\">` puts a BODY style on a heading rank where oak-heading-7 is the on-scale small-heading step — it renders 18px/700 in primary text against its own parent h2 at 20px/600 subdued, so the child heading reads heavier than the section it sits under."
+        },
+        "spatial-rhythm": {
+          "verdict": "PASS",
+          "note": "All spacing resolves through --space-* tokens that exist; a single .oak-region-pad rule gives every content region the same 48px block rhythm, and internal density comes from the kit's oak-stack / oak-cluster / oak-grid / oak-container classes rather than per-section gaps. Two minor off-role choices: --space-960 (a size step) used as a max-width on .hero-content, and a raw 760px media-query breakpoint."
+        },
+        "hierarchy": {
+          "verdict": "ITERATE",
+          "note": "The visual and semantic layers are both well made and are chosen independently in the way this system intends: 14 headings, one h1, h1 -> h2 -> h3 with no skips; rank is held at h2 across four sections while the visual step walks down 40px -> 24px -> 24px -> 20px with importance, and the h1 takes the loudest step (oak-heading-1, 56px). Neither axis is distorted to serve the other. One primary focus, one primary CTA, single column, DOM order identical to visual order. What blocks it: the nine card links (six lesson cards, three related-unit cards) expose an EMPTY accessible name in Chromium's accessibility tree — verified by reading the full AX tree (20 links, 9 with no name) and the cause verified by mutation (swapping the nested `<article>` for a `<div>` takes empty names from 9 to 0; role=article does not support name-from-content, so the accname computation contributes nothing to the wrapping link). A screen-reader user tabbing the page's primary interaction set hears 'link' nine times with no text. WCAG 2.2 SC 4.1.2 Name, Role, Value and SC 2.4.4 Link Purpose (In Context), both Level A. axe-core 4.12.1 does NOT flag this (its accname implementation diverges from Blink's), so it is a manual-only catch. Fix: put oak-card on a div, or give each link aria-labelledby pointing at its h3. Second defect: the breadcrumb sets aria-current=\"page\" on 'Year 8' while the page is the unit, and the unit is absent from the trail — AT users are told they are somewhere they are not."
+        },
+        "colour-discipline": {
+          "verdict": "PASS",
+          "note": "Zero raw literals; colour arrives only through semantic roles (--text-primary, --text-subdued, --bg-subtle, --border-primary, --surface-decorative-1, --surface-decorative-4-subtle) and through the band component's own tier-3 tokens re-pointed via the documented --band-bg / --band-border / --band-pad lever, which is the system's sanctioned mechanism rather than a new rule. Roles are used for their meaning. Contrast verified in the judged cell and its counterpart, axe-core 4.12.1 at 1280px and 320px in light and dark: zero violations (one dark/320 hit in the first sweep did not reproduce across three repeats and was a pre-paint timing artefact). Computed spot checks — #222222 on #ffffff 15.9:1, #222222 on the hero band #f5e9f2 13.5:1, #575757 on #f9f9f9 6.9:1; dark cell white on #3f2137 14.2:1, white on #2e5338 8.7:1, #e4e4e4 on #1b1b1b 13.5:1. Because nothing is pinned, the high-contrast and colour-safe themes resolve through the system's own pairings too."
+        },
+        "composition-grammar": {
+          "verdict": "ITERATE",
+          "note": "The region model is present and correct: canvas -> main region-grid -> hero / results / content / resources / support -> footer, built from oak-canvas, oak-main, oak-region, oak-container, oak-band, with nothing free-floating. The minted [data-page='unit-landing'] map declares all four contract properties (--main-columns, --main-areas, and both narrow variants), uses only canonical region names, and is scoped under the page type as the system requires, so no sibling page is affected — this is the documented way to mint a page type, not an improvisation. Two gaps: there is no masthead region even though the skip link and the breadcrumb's 'Home' both imply site chrome above the page; and the `a > article > h3` card composition is what voids the nine link names recorded under hierarchy — the composition choice is the accessibility defect."
+        },
+        "cross-page-cohesion": {
+          "verdict": "PASS",
+          "note": "Control faces come from the kit for every control role (oak-btn primary/secondary/sm, oak-icon-btn, oak-card-link, oak-tag, oak-card with the shipped shadow variants used as a deliberate weight ladder: accent shadow for lessons, grey shadow for downloads, flat for related), so a sibling page would match. The only new construct is scoped and cannot leak. Two notes: the missing masthead would surprise a reader arriving from a sibling that has one; and the three breadcrumb anchors carry no oak-link class, so they fall back to Chromium's 1px default focus ring while every other control shows the system's designed double ring — the one focus-presentation inconsistency on the page, and one that page A avoids."
+        },
+        "ordered-calm-readability": {
+          "verdict": "PASS",
+          "note": "Single column, no overlap or collage, no rotation, no authored motion, and no carousel — every related unit is visible in a grid that wraps via minmax(min(240px,100%),1fr). Measure is deliberately controlled (20ch title, 60ch teaser) and the 48px region rhythm gives the scan clear rests. Two notes. Readability soft spot: .related-eyebrow sets text-transform: uppercase on 12px oak-body-4, the page's smallest text. Reflow: at 320px the 56px oak-heading-1 h1 overruns its 288px container by 27px and scrolls the page 11px horizontally (scrollWidth 331 vs clientWidth 320) — WCAG 2.2 SC 1.4.10 Reflow, Level AA, failed, though marginally, from one long word rather than from structure; clean at 375px and cured by overflow-wrap or a narrower-width step. Target sizes with floors named: breadcrumb links measure ~20px tall — they CLEAR SC 2.5.8 (AA, 24x24) via the spacing and inline exceptions, but sit below Oak's 44px house floor (--size-target-min, SC 2.5.5 at AAA); 'Download all' measures 136.8x36, which clears the AA 24px floor comfortably and misses the 44px house floor even though it is built from the system's own --size-target-dense: 36px; oak-icon-btn measures 48x48 and the card links 1232x132 and 400x128, clearing both floors."
+        }
+      }
+    }
+  }
+}

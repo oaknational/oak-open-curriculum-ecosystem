@@ -40,8 +40,10 @@ import { MCP_RESOURCE_PATH } from '../served-origin.js';
  * BEFORE the `/mcp` accept-header gate (see `application.ts` ordering): a
  * browser sends `Accept: text/css` with no `text/event-stream`, which that
  * gate answers with a 406. `express.static` calls `next()` on a miss, so
- * `GET /mcp` and `POST /mcp` still reach the MCP handler untouched. Both
- * properties are asserted in `oak-ds-static.integration.test.ts`.
+ * `POST /mcp` still reaches the MCP handler untouched (asserted in
+ * `oak-ds-static.integration.test.ts`) and `GET /mcp` still reaches its
+ * identity-independent 405 stream refusal (MCP-545, asserted in
+ * `mcp-html-negotiation.integration.test.ts`).
  *
  * Clerk is not part of that ordering, despite the shared prefix, and no mount
  * order produces a 401 on an asset: enforcement is bound to the exact `/mcp`

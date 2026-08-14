@@ -1,0 +1,100 @@
+schema_version: "parallax/synthesis-record/0.1"
+artifact_id: ""
+artifact_type: synthesis-record
+artifact_revision: 1
+inquiry_id: ""
+inquiry_revision: 1
+status: provisional
+created_at: ""
+updated_at: ""
+created_by:
+  kind: "agent | human | mixed"
+  identifier: ""
+producing_skill:
+  name: parallax-synthesise
+  version: "0.1.0"
+execution_context:
+  run_id: ""
+  mode: "native-skill | emulated-reduced | manual"
+  independence: shared-context
+  host: ""
+inputs:
+  - artifact_id: ""
+    artifact_type: "evidence-record | method-report | prior-synthesis"
+    artifact_revision: 1
+    relationship: "supports | challenges | qualifies | contextualises"
+    basis_ids: []
+    scale_regions: []
+    method_pass_ids: []
+    domain_profiles: []
+    assumptions: []
+    uncertainties: []
+    provenance:
+      sources: []
+      transformations: []
+permissions_and_scope:
+  requested_operation: evidence-synthesis
+  task_artifact_writes: false
+  practice_memory_writes: false
+  decision_authority: false
+  external_actions: false
+identity:
+  basis_ids: []
+  scale_regions: []
+  method_pass_ids: []
+  domain_profiles: []
+assumptions: []
+uncertainties: []
+provenance:
+  sources: []
+  transformations: []
+validity_domain:
+  populations: []
+  systems: []
+  contexts: []
+  time_horizons: []
+defeaters: []
+reopen_when: []
+
+synthesis_question: ""
+identity_coverage:
+  basis_ids: []
+  scale_regions: []
+  method_pass_ids: []
+  domain_profiles: []
+claim_evidence_edges: []
+dependence_edges: []
+bridge_claims: []
+crosswalk_claims: []
+conflicts:
+  - conflict_id: ""
+    claim_ids: []
+    conflict_type: "contradiction | scope | scale | construct | method | value | implementation | incomparability"
+    compatible_comparison: false
+    shared_dependencies: []
+    bridge_claims: []
+    crosswalk_claims: []
+    current_resolution: ""
+    residual_uncertainty: ""
+    discriminating_evidence: []
+    reopening_conditions: []
+conclusions:
+  - claim: ""
+    validity_domain: ""
+    supporting_evidence: []
+    challenging_evidence: []
+    unresolved_alternatives: []
+epistemic_profile: []
+missing_evidence: []
+world_return:
+  owner: ""
+  review_cadence: ""
+  baseline: []
+  observations: []
+  observation_scale: {}
+  consequence_scale: {}
+  monitoring_scale: {}
+  horizons: []
+  thresholds: []
+  reopening_conditions: []
+missing_context: []

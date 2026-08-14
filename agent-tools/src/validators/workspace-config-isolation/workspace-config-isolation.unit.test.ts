@@ -365,6 +365,107 @@ describe('classifyTurboRootInput — the pinned turbo-glob matcher', () => {
   });
 });
 
+describe('classifyTurboRootInput — separator and spelling truth cures (MCP-553)', () => {
+  const tracked = [
+    'tsconfig.base.json',
+    'research/web-app-deconstruction/pnpm-workspace.yaml',
+    'research/web-app-deconstruction/.github/workflows/research.yml',
+    'research/web-app-deconstruction/packages/research-evidence/lib/cli.ts',
+    'packages/design/oak-design-system/src/tokens/color.ts',
+  ];
+
+  it('refuses a backslash whether the entry reads as a literal or as a glob (the refusal red-proof)', () => {
+    // turbo reads `\` as a glob ESCAPE (measured, 2.10.9, 2026-08-11):
+    // an invalid escape rejects the WHOLE config as a bad pattern, and
+    // the measured valid escape (`stdout-epipe\.ts`, in-repo) was
+    // accepted yet resolved ZERO files. Neither arm of the pinned
+    // matcher reproduces either behaviour, so the entry refuses.
+    const literalArm = classifyTurboRootInput(String.raw`$TURBO_ROOT$/a\b.ts`, [
+      String.raw`a\b.ts`,
+    ]);
+    expect(literalArm.kind).toBe('unsupported');
+    expect(literalArm.kind === 'unsupported' && literalArm.reason).toContain('\\');
+
+    const globArm = classifyTurboRootInput(String.raw`$TURBO_ROOT$/a\b/*.ts`, [
+      String.raw`a\b/x.ts`,
+    ]);
+    expect(globArm.kind).toBe('unsupported');
+    expect(globArm.kind === 'unsupported' && globArm.reason).toContain('\\');
+  });
+
+  it('normalises interior doubled separators as turbo does (dry-run-pinned), literal and glob entries alike', () => {
+    expect(
+      classifyTurboRootInput('$TURBO_ROOT$/agent-tools//package.json', [
+        'agent-tools/package.json',
+      ]),
+    ).toEqual({ kind: 'alive' });
+    expect(
+      classifyTurboRootInput('$TURBO_ROOT$/agent-tools/src//bin/*.ts', [
+        'agent-tools/src/bin/x.ts',
+      ]),
+    ).toEqual({ kind: 'alive' });
+  });
+
+  it('normalises single-dot segments as turbo does (dry-run-pinned), in every position', () => {
+    expect(classifyTurboRootInput('$TURBO_ROOT$/./package.json', ['package.json'])).toEqual({
+      kind: 'alive',
+    });
+    expect(
+      classifyTurboRootInput('$TURBO_ROOT$/agent-tools/./tsconfig.json', [
+        'agent-tools/tsconfig.json',
+      ]),
+    ).toEqual({ kind: 'alive' });
+    expect(
+      classifyTurboRootInput('$TURBO_ROOT$/agent-tools/./src/*.ts', ['agent-tools/src/x.ts']),
+    ).toEqual({ kind: 'alive' });
+  });
+
+  it('treats a bare dot remainder as the repository root (turbo resolved the whole repo — dry-run-pinned)', () => {
+    expect(classifyTurboRootInput('$TURBO_ROOT$/.', tracked)).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/.', [])).toEqual({ kind: 'dead' });
+  });
+
+  it('treats a trailing dot segment as the directory it follows (turbo walked it — dry-run-pinned)', () => {
+    expect(
+      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/packages/.', tracked),
+    ).toEqual({ kind: 'alive' });
+  });
+
+  it('drops trailing separator runs on both arms (directory literal stays alive; the glob gains its match)', () => {
+    expect(
+      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/packages//', tracked),
+    ).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/a/*//', ['a/x.ts'])).toEqual({ kind: 'alive' });
+  });
+
+  it('ignores a trailing slash after a glob as turbo does (dry-run-pinned)', () => {
+    expect(classifyTurboRootInput('$TURBO_ROOT$/a/*/', ['a/x.ts'])).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/a/**/', ['a/b/c.ts'])).toEqual({ kind: 'alive' });
+  });
+
+  it('refuses an absolute remainder, which turbo rejects config-wide (dry-run-pinned)', () => {
+    const absolute = classifyTurboRootInput('$TURBO_ROOT$//package.json', ['package.json']);
+    expect(absolute.kind).toBe('unsupported');
+    expect(absolute.kind === 'unsupported' && absolute.reason).toContain('absolute');
+  });
+
+  it('normalises a non-escaping `..` segment as turbo does (dry-run-pinned), literal and glob entries alike', () => {
+    expect(
+      classifyTurboRootInput('$TURBO_ROOT$/agent-tools/../package.json', ['package.json']),
+    ).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/agent-tools/../src/*.ts', ['src/x.ts'])).toEqual({
+      kind: 'alive',
+    });
+  });
+
+  it('refuses a `..` that escapes the repository root, which turbo rejects config-wide (dry-run-pinned)', () => {
+    const escaping = classifyTurboRootInput('$TURBO_ROOT$/..', ['package.json']);
+    expect(escaping.kind).toBe('unsupported');
+    expect(escaping.kind === 'unsupported' && escaping.reason).toContain('escape');
+    expect(classifyTurboRootInput('$TURBO_ROOT$/a/../../b', ['b']).kind).toBe('unsupported');
+  });
+});
+
 describe('scanTurboRootInputs', () => {
   it('reports each dead occurrence with its line in JSONC', () => {
     const turboJsonText = [
@@ -412,6 +513,38 @@ describe('scanTurboRootInputs', () => {
     expect(scan.refusals).toHaveLength(1);
     expect(scan.refusals[0]?.line).toBe(1);
     expect(scan.refusals[0]?.reason).toContain('{');
+  });
+
+  it('counts only the $TURBO_ROOT$ entries that matched tracked files — dead, refused, and negated all excluded', () => {
+    // The bin's success line derives its claim ("N positive $TURBO_ROOT$
+    // inputs each matching ≥1 tracked file") from this count, so the
+    // sentence is true by construction in every state — the S1 line
+    // over-claimed "every positive turbo input" as bare prose while
+    // only $TURBO_ROOT$ entries were ever evaluated.
+    const turboJsonText = [
+      '{',
+      '  "tasks": {',
+      '    "test": {',
+      '      "inputs": [',
+      '        "$TURBO_ROOT$/tsconfig.base.json",',
+      '        "!$TURBO_ROOT$/packages/design/dist/**",',
+      '        "$TURBO_ROOT$/vitest.config.ts",',
+      '        "$TURBO_ROOT$/packages/{core,libs}/**",',
+      '        "src/**/*.ts"',
+      '      ]',
+      '    }',
+      '  }',
+      '}',
+    ].join('\n');
+
+    const scan = scanTurboRootInputs({
+      turboJsonText,
+      trackedFiles: ['tsconfig.base.json'],
+    });
+
+    expect(scan.positives).toBe(1);
+    expect(scan.findings).toHaveLength(1);
+    expect(scan.refusals).toHaveLength(1);
   });
 
   it('surfaces JSONC parse errors instead of scanning recoverable fragments (the red-proof)', () => {

@@ -3,9 +3,8 @@
  * (`skills-adapter-generate/skill-tree-walk.ts` — the canonical owner of
  * the three-tier shape, consolidated at its second consumer, 2026-08-10).
  * This consumer collects existing canonical paths for
- * frontmatter/classification validation and the flat leaf-name namespace
- * for skills-lock shadow detection; dead-end directories are the adapter
- * checker's loud-skip territory, not this validator's.
+ * frontmatter/classification validation; dead-end directories are the
+ * adapter checker's loud-skip territory, not this validator's.
  */
 
 import { walkSkillTree } from '../../skills-adapter-generate/skill-tree-walk.js';
@@ -18,17 +17,15 @@ export interface SkillsWalkFs {
 export interface CanonicalSkillWalk {
   /** Repo-relative canonical paths for frontmatter validation. */
   readonly canonicalPaths: string[];
-  /** Flat leaf-name namespace for skills-lock shadow detection. */
-  readonly leafNames: string[];
 }
 
 /**
  * Collect every canonical `SKILL-CANONICAL.md` at the three ratified tiers,
- * so frontmatter validation and the skills-lock cross-reference see the
- * same corpus the adapter generator serves.
+ * so frontmatter validation sees the same corpus the adapter generator
+ * serves.
  */
 export async function collectCanonicalSkillPaths(fs: SkillsWalkFs): Promise<CanonicalSkillWalk> {
-  const walk: CanonicalSkillWalk = { canonicalPaths: [], leafNames: [] };
+  const walk: CanonicalSkillWalk = { canonicalPaths: [] };
   await walkSkillTree(
     {
       listChildDirectories: (relativeDir) =>
@@ -38,7 +35,6 @@ export async function collectCanonicalSkillPaths(fs: SkillsWalkFs): Promise<Cano
     {
       onCanonical(relativeDir) {
         walk.canonicalPaths.push(`.agent/skills/${relativeDir}/SKILL-CANONICAL.md`);
-        walk.leafNames.push(relativeDir.split('/').at(-1) ?? relativeDir);
       },
     },
   );

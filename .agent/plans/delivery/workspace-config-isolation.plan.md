@@ -2,20 +2,23 @@
 id: workspace-config-isolation
 node_type: delivery
 name: "Workspace-config isolation: shared config bases become a declared dependency, enforced"
-overview: "Move the root vitest/tsup/e2e config bases into a config workspace consumed via declared package dependencies, cure all 53 parent-relative config imports, and land enforcement that cannot silently vanish — a dedicated repo validator plus de-hatched lint coverage plus a standing disabled-checks census."
+overview: "Move the root vitest/tsup/e2e config bases into a config workspace consumed via declared package dependencies, cure all 53 parent-relative config imports, and land enforcement that cannot silently vanish — a dedicated repo validator plus de-hatched lint coverage. (The standing disabled-checks census was extracted 2026-08-11 at the owner's word to the exemption-removal node.)"
 status: ratified
 ratified_by: "Jim Cresswell"
-ratified_date: 2026-08-09
-ratified_where: "Owner ratification card at the implementer seat 2026-08-09 ~11:1xZ (card answer: 'Ratify as presented', on the plan at 5698208fc; session Wren calls Downdraft 6b29b5 — the seat the owner commissioned directly in-session, both commissioning words quoted in §Goal)"
+ratified_date: 2026-08-11
+ratified_where: "Owner approval of the decision-complete completion-arc plan, in-session at the implementer seat (Wren calls Downdraft 6b29b5), 2026-08-11 — the plan-mode artefact enumerated the three scope deltas explicitly (search-contracts layer move with ADR record; tsconfig-extends entering scope; acceptance-criterion 5 + Mechanism ESLint rewrite) and the approval is the re-ratification word. Prior stamp history in §Notes. Amended 2026-08-11 (owner word at the lane seat, decision-matrix run): the search-contracts layer move and the tsconfig-extends scope entry were WITHDRAWN the same day — S2 re-scoped to keep-lib plus a named lawful edge; H3 dropped. The stamp covers the plan as re-scoped; a ratification stamp owner-locks nothing."
 serves: outcome-informed-practice-learning
 impact_areas:
   - practice-and-estate
-tickets: []
+tickets:
+  - MCP-540
+  - MCP-542
+  - MCP-543
 depends_on:
   - plan: mutation-testing-core-canary
     kind: blocking
 owner_gates: []
-last_updated: 2026-08-10
+last_updated: 2026-08-11
 ---
 
 # Workspace-config isolation
@@ -123,7 +126,8 @@ config files.
   resolve; relative escapes do not) could not resolve the real
   `vitest.config.ts`, forcing the `vitest.config.stryker.ts`
   duplicate in the mutation canary (see
-  `mutation-testing-core-canary`, ratified and in flight). A
+  `mutation-testing-core-canary`, completed and archived
+  2026-08-11 — its criteria proved via #848). A
   package-based convention would have needed no duplicate. The
   sandbox-resolution assumption is source-verified:
   `@stryker-mutator/core` `sandbox.js` symlinks `node_modules` when
@@ -270,7 +274,10 @@ surface. Decisions, made:
   disabled-checks register) or content-bearing source (un-ignored,
   findings cured). Dispositions already measured: the two tsup globs
   (deleted, above); `reference/` AND `commitlint.config.js` (both
-  dead globs — no `reference/` directory exists, and the commitlint
+  dead globs — no root-level `reference/` directory exists;
+  `.agent/reference/` does exist (14 tracked files) but the
+  root-anchored flat-config glob matches nothing (ground trued
+  2026-08-11) — and the commitlint
   config is `commitlint.config.mjs`, so the `.js` entry ignores
   nothing; both deleted, and whether `commitlint.config.mjs` is
   inside the lint surface is the live audit question in their
@@ -340,9 +347,253 @@ PR #836:
   new degenerate-scan guard (exit 2 on zero workspaces or zero config
   files).
 
+## Amendment (2026-08-11, owner-ratified — the decision-complete completion arc)
+
+Four owner rulings (2026-08-11) reshaped the remainder: error-severity
+findings get fixed, never warranted; an exemption inside an enforcement
+surface is an alarm bell — fix the problem or change the policy, with a
+clock; follow-up registers receive critical assessment then sequencing
+or rejection; and the lane's scope stays isolation-only (estate-wide
+mutation roll-out is owner-committed future work — "We ARE going to
+roll out mutation testing everywhere, but later, and in stages" — see
+Out of scope). Reviewed pre-ratification by an assumptions-expert pass
+and a design stress-test; all 23 findings folded in. The
+enforcement-hardening slices (three surviving after the same-day
+H3 withdrawal and H1 slim) cut to the successor node
+`workspace-config-enforcement-hardening` (archived 2026-08-12; under `delivery/archive/`)
+(born with the same ratification word) so this node stays one step of
+the lane and archives when its criteria prove.
+
+### State record
+
+- **Todo 1 DONE**: PR #836 merged `d4e256294` (2026-08-10) — package,
+  migration, depcruise rules, resolver-invisible validator,
+  cold-install cure.
+- **Todo 3 DONE**: PR #848 merged `bb40ecdf5` (2026-08-11) — Stryker
+  runs the real `vitest.config.ts`, duplicate deleted, re-run banked
+  (18/18, 100%) plus the reversible config-load sentinel probe. The
+  `mutation-testing-core-canary` plan archives in this same landing
+  (its criteria prove via #848), clearing this plan's blocking edge.
+- Ground correction (would otherwise seed the census register
+  verbatim): §Mechanism's ignores-audit disposition said "no
+  `reference/` directory exists"; the true ground is that no
+  **root-level** `reference/` exists — `.agent/reference/` does exist
+  (14 tracked files) but the root-anchored flat-config glob matches
+  nothing. The disposition (delete the dead glob) is unchanged.
+- 7f closure, trued: exit-2-on-unreadable is implemented
+  (`validate-workspace-config-isolation.ts` readRepoFile try/catch)
+  and the JSONC parse-error refusal path is test-covered; the
+  fs-unreadable branch is implementation-verified-only — its bin-level
+  test lands with the successor node's H1 validator rewrite.
+
+### Register triage ledger (supersedes the open rows of §Enforcement-completeness follow-ups)
+
+| Row | Disposition |
+|---|---|
+| 7a | Withdrawn 2026-08-11 with successor H3 (an extends reference is not an import — principles §Tooling; returned to Out of scope; re-enters only with a named live consumer) |
+| 7b | Reshaped → successor H1: one idiom by construction (4 spellings / ~40 legitimate sites measured; allowlist-one-refuse-rest would refuse ~40 correct files) |
+| 7c | Reclassified 2026-08-11 as a recorded condition: the config-VALUE scanner was dropped at the owner's matrix word (an instrument built to find nothing — both live strings target lint-ignored reference surfaces); this row is the class's pointer |
+| 7d | Cured in successor H1's validator rewrite (the quote-parity false-refusal heuristic is rewritten, not fixture-patched) |
+| 7e | Sequenced → successor H2 |
+| 7f | Closed — already done (trued in State record above) |
+| 7g | Sequenced → successor H4 |
+| 7h | DONE — slice S1, PR #850 merged `3afe99113` (MCP-542 Done); the post-merge harvest cures land as slice S1b |
+| 7i | Folded → todo 2 with a decision gate: `@oaknational/no-dynamic-import` already fires on every ImportExpression once config files are linted; todo 2 opens with one `--print-config` check for `@typescript-eslint/no-require-imports` — present → doc note; absent → its own rule-authoring PR |
+| 7j | Merged into successor H2 (two widened-family configs sit below their workspace root; the row has no live material until H2 lands) |
+| 7k | Folded → successor H4 |
+| 7l | Reclassified — a recorded falsifier condition already living in the rule comment, not work; row deleted |
+
+### Slice S1 — dead references in root build configs (MCP-542, DONE — completion recorded below)
+
+First act: pin the matcher and the domain — "tracked" means
+`git ls-files`; glob semantics are the turbo-compatible subset (`**`
+matches zero or more segments, `*`, `?`, leading `!` negation stays
+existence-exempt), and the validator REFUSES pattern syntax outside
+that subset rather than guessing. Then DERIVE the dead-entry set under
+the pinned matcher and delete every derived-dead entry.
+
+Execution record (2026-08-11, commit `653d170ec` on the S1 branch;
+pre-execution code-expert review findings absorbed): the derivation
+ran against turbo's own `--dry=json` resolved inputs — the
+authoritative instrument — and settled both disputes. The `*.yaml`
+entry is ALIVE (`**` matches zero segments; `pnpm-workspace.yaml`
+hashes under it) and stays; the dead set is exactly the three
+`js/cjs/mjs` entries, deleted. Two further review facts recorded:
+turbo's `inputs` globs walk the FILESYSTEM, not the git index
+(probe-measured — untracked and gitignored files hash), so the
+validator's tracked-set domain is a deliberate deterministic
+over-approximation whose finding message names the class honestly;
+and the root `tsconfig.json` stryker include was verified ALREADY
+DISCHARGED (removed at the todo-1 landing), so that fold-in is a
+no-op. The canary-archival plan-path re-points moved OUT of this
+slice and (re-adjudicated 2026-08-11, recorded in the thread record's
+correction ledger) are DEMOTED to a rider on the next PR touching
+those files once the archival reaches main — never a standalone PR
+and no longer S2 cargo. Live surfaces only:
+`packages/core/type-helpers/stryker.config.mjs` and
+`mutation-evidence/survivor-dispositions.md`; the frozen `.txt`
+evidence snapshots and their verbatim reproductions in
+`mechanics-report.md` stay as historical record.
+
+### Slice S2 — the search-contracts exemption dies at its owning level (re-scoped 2026-08-11)
+
+Dated re-scope, 2026-08-11 (owner-settled via the decision matrix at
+the lane seat — verdict "keep-lib plus a named lawful edge"; the
+owner's challenge, verbatim: "that package is not an sdk, it's a lib
+supporting an sdk, why would we move it?"): the package MOVE is dead.
+Its doctrinal hook (§Layer Role Topology) adjudicates apps-vs-sdks,
+not libs-vs-sdks, and ADR-138's ratified decision places the package
+in libs with the sdk-codegen edge as the documented generated-contract
+exception, already first-class in ESLint
+(`searchContractsSdkException`, tested). The exemption alarm's
+legitimate target was depcruise's crude per-file `pathNot` FORM, not
+the edge.
+
+S2 as re-scoped, one small PR: replace the anonymous `pathNot`
+exemption with a NAMED lawful-edge rule (search-contracts →
+sdk-codegen generated contract exports), citing ADR-138/041 in the
+rule comment — the policy changes at its owning level; no per-file
+warrant shape survives. Red-proof: temporarily delete only the
+exemption line, run depcruise, observe exactly one `no-libs-to-sdks`
+error on field-inventory.ts, restore — the real edge (a bare-specifier
+libs fixture false-greens as npm-no-pkg and never exercises the rule).
+
+Independent survivors of the dead move, each its own small row (from
+the review's correction ledger): (1) the field-integrity include list
+carries a phantom — the baseline is ELEVEN live files; the dead
+include line deletes in the same commit as any config re-point, proof
+by `vitest list -c vitest.field-integrity.config.ts --filesOnly`
+diffed before and after; (2) `createSdkBoundaryRules` gains an
+`assertNever` exhaustiveness backstop (the trailing implicit-runtime
+return silently absorbs unknown roles). Items tied to the relocation
+(role addition, boundary-machinery deletion, ADR amendments,
+lockfile/mdc/README moves) are MOOT with the move.
+
+### Slice S1 completion + Slice S1b (recorded 2026-08-11 at the settle)
+
+**S1 COMPLETE**: PR #850 merged `3afe99113` (2026-08-11, merge-commit
+method, owner-armed auto-merge; MCP-542 Done). The drive's record: a
+round-4 CHANGES_REQUESTED from the owner's PR Review Warden seat
+(under `mantagen`, at his direction) found the pinned matcher
+misclassifying the bare `$TURBO_ROOT$/` root input as dead — cured at
+`bca591fb5` after in-repo probe confirmation (root: 1,006 → 93,515
+dry-run resolved inputs; the mechanism's trailing-slash sibling
+probe-confirmed and cured in the same predicate); the stale review was
+dismissed at the owner's word. A SonarCloud PHANTOM followed: the gate
+scored one new MAJOR smell that no issue index carried (UI and five
+API query shapes all empty — a measure/issue divergence on Sonar's
+side); removing the trim regex (`a273bf1d4`, a linear index walk,
+behaviour identical) flipped the gate green, falsifier-confirmed.
+
+**S1b — validator truth cures (one small PR; ticket at cut).** The
+post-merge harvest (Copilot suppressed comments, 16:02Z round)
+produced two confirmed latent findings, and round 4 left one probe
+pointer; all three are truth-of-instrument defects in the S1 validator
+and land together, red-proof-first:
+
+1. Backslash joins `GLOB_CANDIDATE`: an entry containing `\` currently
+   compiles as a literal/regex escape instead of refusing, while turbo
+   treats `\` semantically — verdicts can diverge silently on exotic
+   spellings. One-character cure plus a refusal red-proof.
+2. The bin success line scopes down to what the scan proves: "every
+   positive turbo input" over-claims a scan that evaluates only
+   `$TURBO_ROOT$` inputs.
+3. Interior doubled separators (`$TURBO_ROOT$/a//b`): probe turbo's
+   own dry-run handling FIRST (the entry condition — unprobed today),
+   then encode the measured truth (normalise or refuse; the current
+   prefix construction would misread it dead — a loud false positive,
+   no live entry).
+
+**S1b IN EXECUTION at the lane seat 2026-08-11 (probes complete and
+cures authored; the post-execution cure round is mid-flight — three
+reviewer verdicts absorbed, red-proofs landing next — and the
+implementation reaches the repository via the lane's PR, not this
+record; "executed" binds only at that landing).** The measured truths,
+from one probe session (turbo 2.10.9 dry-run; full ledger in
+`turbo-glob.ts`): interior `//` and single-dot segments are NORMALISED
+by turbo in every position (including bare `.` = the repository root,
+94,158 resolved inputs, and trailing `/.` = the directory's full
+tree), so the matcher normalises them — the `./` spelling was probed
+in the same session at the reviewer's direction and FOLDED into the
+same cure; an absolute remainder (`$TURBO_ROOT$//x`) makes turbo
+refuse the whole config ("`inputs` cannot contain an absolute path"),
+so the matcher refuses it as a macro-form verdict; the backslash
+refusal needed no probe — the two arms read `\` under mutually
+inconsistent interpretations (raw in the tracked-set lookup, escaped
+in the compiled regex), which alone forces refusal under the matcher's
+own pinned contract, and the worst case was a FALSE NEGATIVE (a
+tracked backslash-named file exact-matches while turbo hashes zero
+files). The bin's success clause now derives from the scan's
+recomputed `positives` count instead of bare prose.
+
+**S1b follow-up rows (recorded at execution from the pre-execution
+code-expert round; distinct mechanisms, deliberately NOT folded):**
+
+1. `..` segments — DISCHARGED IN-PR (2026-08-11, the same S1b PR):
+   the gateway reviewer's own probe, confirmed in-repo, showed turbo
+   NORMALISES a non-escaping `..` (lexical pop) and REJECTS the whole
+   config on an escaping one (Path error, exit 1) — the case splits
+   exactly like the cured spellings, not into a containment question.
+   Both behaviours are encoded and red-proofed; the ledger is in
+   `turbo-glob.ts`.
+2. Directory-matching globs — DISCHARGED BY MEASUREMENT (2026-08-11):
+   probed in-repo, turbo resolves ZERO files for a glob whose matches
+   are directories (no expansion), so the matcher's dead verdict on
+   that form is turbo's own answer. No code change owed; the ledger
+   records the measurement.
+3. Zero-`$TURBO_ROOT$`-inputs green pass: the bin's header promises
+   it never reports success over nothing checked, but
+   `isDegenerateScan` guards workspaces and config files only — a
+   turbo.json with zero macro inputs passes green having evaluated
+   none. Arguably a legitimate configuration state; needs its own
+   first-principles pass, never a rider. (Partially mitigated: the
+   success line now prints the recomputed count, so "0 positive
+   $TURBO_ROOT$ inputs" is loud.)
+4. GATE (friction-ratchet escalation, pre-execution code-expert
+   2026-08-11: five-plus independent friction signals against the
+   hand-rolled-matcher shape, every one resolved by adding code):
+   before any further hand-encoded vendor semantics, run
+   assumptions-expert at deep depth on the solution class — the
+   matcher reimplements an engine whose ground truth
+   (`turbo --dry=json` resolved inputs) the validator could query
+   directly, and the dry-run cost is now measurable in-repo rather
+   than assumed. Rows 1–2 discharged before the gate fired (re-trued
+   2026-08-11 post-execution: the `..` cure rode the S1b PR at the
+   gateway reviewer's probe-refutation; the directory-glob question
+   closed by measurement); the gate now guards row 3 and ANY future
+   vendor-semantics addition to the matcher.
+
+### Census enrichment (todos 4–5) — EXTRACTED 2026-08-11
+
+Extracted at the owner's word ("let's move the exemption hunting to a
+separate plan"; broadened the same day to "the repo review for
+carveouts, exemptions, 'special cases' and planning to remove them")
+to the standalone
+[`exemption-removal`](exemption-removal.plan.md) node, which carries
+the full mechanism (per-surface registers, scoping/suppression
+classification, disposition enum, programmatic seeding, cure-first
+sweeps, CI enforcement) plus the broadened special-case ledger. This
+lane's remaining slices land their shapes there as register rows; the
+former coupling ("the seeder re-runs as todo 2's final commit")
+dissolves — seeding re-derives whenever it runs.
+
+### Execution order (re-trued 2026-08-11 at the settle)
+
+S1 DONE (#850 `3afe99113`) → S1b (small, first — it trues the landed
+instrument) → S2 re-scoped (MCP-543) → todo 2's arc → todo 6 close.
+The successor node's slices (H1 slimmed → H2 → H4; H3 dropped
+2026-08-11) proceed independently after S1b, H1 before H2 so
+per-family red-proofs are written once under final refusal semantics.
+The census todos left this plan (extraction above); the
+`exemption-removal` node schedules its own sweeps. Todo 2's arc is
+three named PRs: (a) de-hatch plus ignores audit plus shared-preset
+binding plus fixture; (b) the `research/` cure; (c) the 7i rule PR
+only if its opening check shows `no-require-imports` absent.
+
 ## Todos (sliced per PDR-132 §5; classes named per todo)
 
-1. **The isolation cure** (source/config sweep):
+1. **The isolation cure** (source/config sweep) — **DONE, PR #836
+   merged `d4e256294` 2026-08-10**:
    `@oaknational/workspace-config` package (zero internal deps,
    subpath exports, the four moved files per the Mechanism); all 53
    imports across 29 workspaces migrated (counts re-derived at
@@ -359,19 +610,38 @@ PR #836:
    plus one validator), and fragmenting it would move cost into
    integration; it proceeds as one PR. The probe-worktree seed edits
    fold in here.
-2. **Lint de-hatching (commissioned; config sweep)**: both tsup globs
-   removed from the shared `ignores`, the full ignores-list audit
-   dispositioned (each entry registered-with-grounds or
-   un-ignored-and-cured, per the Mechanism's measured dispositions),
-   the 20 hatches replaced with explicit `'error'` bindings (single
-   rule, never the `boundaryRules` spread), the six absent
-   config-file blocks added, the `files` glob widened to the
-   `vitest*.config.ts` class, the committed firing fixture landed in
-   the standards package's test suite. Lands after todo 1 — the
-   migration is what lets the un-ignoring land green. The
-   `research/` cure lands as its own PR inside this todo's arc.
+2. **Lint de-hatching (commissioned; config sweep)** — reshaped
+   2026-08-11 (owner-ratified; right-tool ruling applied; nothing
+   commissioned is reduced): ALL 52 decoy `'off'` lines are DELETED
+   (measured: 21 × `import-x/no-relative-packages`, 31 ×
+   `import-x/no-relative-parent-imports`, across 21 files) — no hatch
+   survives. The binding moves to the SHARED preset, not
+   per-workspace blocks (fix the generator: one config-file binding
+   in `oak-eslint`'s shared config covers every workspace; the former
+   "six absent blocks" item dissolves). `no-relative-packages` is
+   inherited, with depcruise remaining the authoritative
+   cross-workspace gate; `no-relative-parent-imports` is BOUND, not
+   retired — depcruise's `to.pathNot ^$1/` deliberately permits
+   within-workspace paths, so this rule is the only instrument
+   policing `../` within a workspace; sites that fire are cured, and
+   a cure-resistant site returns as an owner policy card, never a
+   silent `'off'`. Both tsup globs and the two dead globs leave the
+   shared `ignores`; the full ignores-list audit is dispositioned;
+   the `files` glob widens to the `vitest*.config.ts` class;
+   `linterOptions.reportUnusedDisableDirectives` lands at error
+   (unset anywhere today); coverage proof is config files present in
+   the effective lint surface (`--print-config`) plus the committed
+   firing fixture. The reflective JS-override pattern (four
+   workspaces, grep-invisible) is census-registered with grounds; its
+   removal follows `.js`-source retirement, not this lane. The
+   `research/` cure lands as its own PR inside this todo's arc under
+   a decided policy: all research TS joins the lint surface under the
+   standard preset with no new hatches (the config mechanism is
+   implementer discretion recorded in that PR). Opens with the 7i
+   decision gate (Amendment §Register triage ledger).
 3. **Stryker config cured — the silent fallback dies** (small source
-   change): measured 2026-08-09, `stryker.config.mjs` on main names
+   change) — **DONE, PR #848 merged `bb40ecdf5` 2026-08-11** (18/18
+   at 100%, sentinel probe banked): measured 2026-08-09, `stryker.config.mjs` on main names
    `vitest.stryker.config.ts` — a file that does NOT exist — and a
    dry-run SUCCEEDS anyway (11 tests), so mutation testing currently
    works through a silent fallback, the fail-fast violation class
@@ -384,74 +654,26 @@ PR #836:
    canary plan's restore-the-conserved-copy step — reconcile that
    plan's todo in the same landing. Executable immediately after
    todo 1 merges.
-4. **Disabled-checks census mechanism** (source): the register
-   schema, the census validator with fixture red-proof, mechanical
-   day-1 seeding of all ~320 rows (source location as grounds),
-   wiring into `repo-validators:check`.
-5. **Census registration sweeps** (record class): per-surface
-   hand-authored grounds, contested rows surfaced as owner cards,
-   cures routed to their owning lanes.
+4. **Disabled-checks census mechanism** — EXTRACTED 2026-08-11 at the
+   owner's word to [`exemption-removal`](exemption-removal.plan.md)
+   todo 1.
+5. **Census registration sweeps** — EXTRACTED 2026-08-11 with todo 4
+   to [`exemption-removal`](exemption-removal.plan.md) todos 2–3.
 6. **Closing re-derivation** (record class): acceptance criteria
    re-proven against the live tree; plan archived with dispositions.
-7. **Enforcement-completeness follow-ups** (recorded per the #836
-   review packet + Codex addendum, 2026-08-09/10 — each lands with a
-   red-proof, never as a silent gap; sliced into single-story PRs at
-   pickup):
-   a. tsconfig-`extends` leg — package the base tsconfig as a
-      `@oaknational/workspace-config` export (TypeScript resolves
-      package-specifier `extends`); true the "crosses no resolver
-      boundary" ground in this plan's Out of scope and in
-      principles.md §Tooling.
-   b. Path-arithmetic idiom coverage — the validator matches one
-      spelling; `new URL(rel, import.meta.url)`,
-      `fileURLToPath(new URL(...))`, the two-step `dirname` form,
-      `join(...)`, and `import.meta.dirname` pass silently.
-   c. Config-VALUE relative strings (`setupFiles:
-      ['../../x.ts']` escapes with no import statement).
-   d. Comment-stripping robustness (`/*` inside string globs; the
-      quote-parity false-refusal).
-   e. Config file-class widening — playwright/vite/next/postcss/
-      esbuild configs are unscanned by rule and validator alike.
-   f. Exit-2-on-unreadable — documented in the bin, unimplemented
-      (`readRepoFile` throws → exit 1 + stack).
-   g. Bootstrap-closure ordering check (the cold-install recurrence
-      class): every config import in the install-time closure must be
-      registered earlier in `WORKSPACE_DEPS`.
-   h. Turbo-glob resolution (Codex): positive `$TURBO_ROOT$` globs are
-      checked only to their leading literal directory — require ≥1
-      tracked-file match with turbo-compatible semantics. Red-proof
-      material named by Copilot round 4 (2026-08-10): the three
-      `research/**/*.{js,cjs,mjs}` entries match zero files today
-      (measured; pre-existing on main).
-   i. Estate-wide syntactic bar for non-literal dynamic imports AND
-      non-literal `require(expr)` calls — the depcruise rules see only
-      resolvable (literal) sites for both forms (probe-verified for
-      import; the require analog was Copilot-confirmed on the swap
-      round, 2026-08-10); the live `@oaknational/no-dynamic-import`
-      ESLint rule already bars every dynamic-import form in LINTED
-      files, so the residue is config files until todo 2 lands plus a
-      require-form rule; lands with todo 2's reshaped arc.
-   j. Workspace-root drift in the depcruise rule regexes — the
-      from.path alternation hand-encodes workspace root locations;
-      evaluate deriving it from `pnpm-workspace.yaml` (or a validator
-      leg asserting every expanded member dir is matched) so a new
-      workspace root cannot silently sit outside the rule. The
-      derivation also subsumes the depth gap Copilot round 4 named
-      (config files below a workspace root; zero instances today, and
-      the naive any-depth regex is rejected by depcruise's safe-regex
-      guard — measured).
-   k. Transitive bootstrap staleness (Copilot round 4): a
-      workspace-config rebuild does not invalidate the leaf deps'
-      staleness skip — propagate upstream-rebuilt state or count the
-      shared config's dist artifacts as leaf inputs. Bounded exposure
-      meanwhile: cold installs unaffected; turbo's `^build` edge
-      rebuilds leaves on the next orchestrated build.
-   l. Registry-publication falsifier (Copilot round 4, recorded
-      condition): the phantom-deps rule enforces declaredness, and the
-      `workspace:*` protocol cannot drift silently ONLY while
-      `@oaknational/workspace-config` has no registry presence (a
-      non-workspace range fails install). If the package is ever
-      published, add a manifest-level protocol check with a red-proof.
+7. **Enforcement-completeness follow-ups** — SUPERSEDED 2026-08-11 by
+   the Amendment's register triage ledger (every former row a–l
+   dispositioned there: closed, in flight as S1, folded into todo 2,
+   reclassified as a recorded condition, or sequenced into the
+   successor node's surviving slices — H1 slimmed, H2, H4; H3
+   withdrawn 2026-08-11 — whose slice definitions carry the
+   surviving evidence). One row's substance stays here as a recorded
+   condition rather than work: the phantom-deps rule enforces
+   declaredness, and the `workspace:*` protocol cannot drift silently
+   ONLY while `@oaknational/workspace-config` has no registry
+   presence; if the package is ever published, a manifest-level
+   protocol check lands with a red-proof (also recorded in the rule
+   comment).
 
 ## Known issues at execution (recorded 2026-08-09; every row has a named immediate home)
 
@@ -513,19 +735,39 @@ PR #836:
 - The Stryker canary runs against the real `vitest.config.ts` with
   `vitest.config.stryker.ts` deleted — `repo-safe`: the banked re-run
   log under `mutation-evidence/` showing config load and a completed
-  pass.
-- Every check-disabling surface in the estate is enumerated in the
-  register with grounds, and an unregistered disable fails CI —
-  `repo-safe` for the mechanism (validator + fixture); `owner-held`
-  for the register's contested rows, recorded in the register file
-  itself (each contested row carries the comms event id of its owner
-  card and the answer).
-- The 20 lint hatches are replaced with live bindings, the six absent
-  blocks added, and no source-file class is ignored — `repo-safe`:
-  the hatch grep returns zero `'off'` entries for the boundary rules;
-  every surviving `ignores` entry has a registered
-  generated/ephemeral disposition; the de-hatch PR carries the
-  committed firing fixture.
+  pass. **PROVEN 2026-08-11** (#848 `bb40ecdf5`: 18/18 at 100% plus
+  the config-load sentinel probe).
+- (MOVED 2026-08-11, owner word: the census criterion — register
+  enumeration, classification, dispositions, unregistered-disable
+  CI failure — now lives verbatim in
+  [`exemption-removal`](exemption-removal.plan.md) §Acceptance
+  criteria.)
+- Zero `'off'` entries for `import-x/no-relative-packages` and
+  `import-x/no-relative-parent-imports` anywhere in the estate;
+  config files lint under the shared preset; and no source-file class
+  is ignored — `repo-safe`: the hatch grep returns zero, config files
+  appear in the effective lint surface (`--print-config`), every
+  surviving `ignores` entry has a registered generated/ephemeral
+  disposition, and the de-hatch PR carries the committed firing
+  fixture. Cross-workspace containment proof cites the depcruise
+  check-fires suite, not lint. (Rewritten 2026-08-11 — the former
+  "replaced with live bindings" wording prescribed the superseded
+  lint-containment design.)
+- `no-libs-to-sdks` carries no ANONYMOUS `pathNot` exemption: the
+  search-contracts → sdk-codegen generated-contract edge is a NAMED
+  lawful-edge rule citing ADR-138/041 in the rule comment —
+  `repo-safe`: the named rule present + depcruise green +
+  `validate-boundaries` green. (Re-scoped 2026-08-11 at the owner's
+  word; the exception-machinery deletion and ADR relocation
+  amendments died with the move.)
+- `search-contracts` REMAINS under `packages/libs/` (the move
+  withdrawn at the owner's word 2026-08-11) and the field-integrity
+  suite executes its eleven live include files (corrected 2026-08-11:
+  the prior twelve-count carried one dead entry) — `repo-safe`: the
+  explicit eleven-path file-count proof plus full `pnpm check` green.
+- Every positive `$TURBO_ROOT$` glob input matches ≥1 tracked file
+  under the pinned matcher — `repo-safe`: the widened validator leg
+  green + its committed red-proof. (Added 2026-08-11.)
 - principles.md §Tooling names the config-workspace convention, not
   root base configs — `repo-safe`: the stale line is absent from the
   landed tree.
@@ -544,12 +786,25 @@ PR #836:
   story; todo 2 touches each block one line, not its shape.
 - The demo workspaces' `vitest.config.ts` files that import no base —
   excluded by fact, not by rule; the validator scans them harmlessly.
-- Root-anchored conventions that are their tools' own design
-  (`tsconfig.base.json` extends-chains, turbo pipeline config,
-  commitlint/husky) — named here so their exclusion is deliberate:
-  `extends` is not a module import and crosses no resolver boundary.
-  (The `commitlint.config.js` lint-coverage cure in todo 2's audit is
-  the ignoring question, not this structural one.)
+- Root-anchored conventions that are their tools' own design (turbo
+  pipeline config, commitlint/husky) — named here so their exclusion
+  is deliberate. (Re-trued twice, both dated: the extends-chain entered scope
+  2026-08-11 as successor H3 at ratification, then was WITHDRAWN the
+  same day at the owner's matrix word — an `extends` reference is not
+  a module import (principles §Tooling), and no live consumer copies
+  workspace subtrees. Re-enters only with a named consumer. The
+  original exclusion ground stands.)
+- **Estate-wide mutation-testing roll-out** — owner-committed future
+  work, not this plan's scope (owner word 2026-08-11: "We ARE going
+  to roll out mutation testing everywhere, but later, and in
+  stages"). Carrier: a staged roll-out delivery plan authored at
+  owner scheduling, priced with the canary's real cost data.
+- Considered-and-rejected alternatives, recorded at the decision:
+  folding search-contracts into `sdk-codegen` (hand-authored
+  contracts inside the generated-code package, against ADR-138's
+  separation); a `safe-path`-style path helper for config files (adds
+  a dependency to every config's install-time closure; the native
+  `import.meta.dirname` property is zero-dep — successor H1).
 - The Sonar disposition policy and `.sonarcloud.properties` doctrine —
   its own owner-ruled surface; the census REGISTERS its exclusions,
   never re-adjudicates them.
@@ -557,8 +812,13 @@ PR #836:
 
 ## Notes
 
-- Born sketch 2026-08-09, ratified the same day (stamp in
-  frontmatter). Review trail, all 2026-08-09: the
+- Stamp history: born sketch 2026-08-09, ratified the same day
+  ("Owner ratification card at the implementer seat 2026-08-09
+  ~11:1xZ, card answer 'Ratify as presented', on the plan at
+  5698208fc"). Returned to sketch and RE-RATIFIED 2026-08-11 at the
+  decision-complete completion-arc approval (current stamp in
+  frontmatter) — the scope deltas ratified there are enumerated in
+  the Amendment. Review trail, all 2026-08-09: the
   `assumptions-expert` pass before presentation (verdict: not-ready
   on measurement grounds; every flagged count re-measured first-hand
   and cured before the stamp), then the pre-execution `code-expert`

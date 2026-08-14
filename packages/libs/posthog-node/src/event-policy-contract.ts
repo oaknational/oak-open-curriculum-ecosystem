@@ -20,6 +20,7 @@ export const RESOURCE_READ_EVENT_NAME = '$mcp_resource_read';
 export type AutomaticEventName = (typeof AUTOMATIC_EVENT_NAMES)[keyof typeof AUTOMATIC_EVENT_NAMES];
 type AcceptedEventName = AutomaticEventName | typeof RESOURCE_READ_EVENT_NAME;
 export type OakClientFamily = 'chatgpt' | 'claude' | 'other';
+export type OakClientSurface = 'cli' | 'sdk' | 'vscode' | 'web' | 'other';
 export type UnknownProperties = NonNullable<McpCaptureCommon['properties']>;
 
 export interface McpRequest {

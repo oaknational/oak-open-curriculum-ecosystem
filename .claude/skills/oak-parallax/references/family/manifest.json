@@ -1,0 +1,107 @@
+{
+  "collection": "parallax",
+  "version": "0.1.0",
+  "status": "evaluation-ready",
+  "empirical_validation": "not-yet-validated",
+  "description": "A portable, multi-scale, plural, artifact-mediated collection of agent skills for inquiry, experimental design, synthesis, decision, assurance, and recursively governed learning.",
+  "canonical_surface": ".agent",
+  "vendor_adapters_included": false,
+  "memory_owner": "embedding-practice",
+  "licensing": {
+    "policy": "inherits-host-repository",
+    "bundled_license": false
+  },
+  "skills": [
+    {
+      "name": "parallax",
+      "path": "../../../parallax"
+    },
+    {
+      "name": "parallax-frame",
+      "path": "../../../parallax-frame"
+    },
+    {
+      "name": "parallax-design-inquiry",
+      "path": "../../../parallax-design-inquiry"
+    },
+    {
+      "name": "parallax-design-experiment",
+      "path": "../../../parallax-design-experiment"
+    },
+    {
+      "name": "parallax-product-experiment",
+      "path": "../../../parallax-product-experiment"
+    },
+    {
+      "name": "parallax-synthesise",
+      "path": "../../../parallax-synthesise"
+    },
+    {
+      "name": "parallax-decide",
+      "path": "../../../parallax-decide"
+    },
+    {
+      "name": "parallax-audit",
+      "path": "../../../parallax-audit"
+    },
+    {
+      "name": "parallax-learn",
+      "path": "../../../parallax-learn"
+    }
+  ],
+  "documentation": [
+    "README.md",
+    "installation.md",
+    "CHANGELOG.md",
+    "framework.md",
+    "concept-provenance.md",
+    "architecture.md",
+    "invocation-and-entry-points.md",
+    "graph-semantics.md",
+    "multi-scale-model.md",
+    "domain-profiles.md",
+    "artifact-protocol.md",
+    "experimental-design-boundaries.md",
+    "practice-memory-and-learning.md",
+    "evaluation-and-governance.md",
+    "skill-design-meta-learning.md",
+    "traceability-matrix.md",
+    "glossary.md",
+    "references.md"
+  ],
+  "graphs": [
+    "graphs/catalogue.json",
+    "graphs/invocation.json",
+    "graphs/capability-artifact.json",
+    "graphs/inquiry-state.json",
+    "graphs/run-template.json",
+    "graphs/provenance.json",
+    "graphs/scale-decomposition.json",
+    "graphs/learning.json"
+  ],
+  "collection_evaluations": "../../evaluations",
+  "evaluation_suites": [
+    "../../evaluations/routing/evals.json",
+    "../../evaluations/composition/evals.json",
+    "../../evaluations/cross-domain/evals.json",
+    "../../evaluations/reopening/evals.json",
+    "../../evaluations/recursive-learning/evals.json",
+    "../../evaluations/metamorphic-scale/evals.json",
+    "../../evaluations/contract-compatibility/evals.json"
+  ],
+  "evaluation_status": "authored-not-yet-executed",
+  "tools": [
+    "../../scripts/render_graph.py"
+  ],
+  "invariants": [
+    "typed-question-warrant",
+    "same-scale-pluralism",
+    "cross-scale-bridge-claims",
+    "basis-crosswalk-claims",
+    "evidence-provenance-and-dependence",
+    "versioned-reopening",
+    "world-return-contract",
+    "practice-owned-memory",
+    "governed-skill-improvement"
+  ]
+}

@@ -49,6 +49,26 @@
       "types": "./dist/orchestrator.d.ts",
       "import": "./dist/orchestrator.js",
       "default": "./dist/orchestrator.js"
+    },
+    "./visual-stats": {
+      "types": "./dist/visual-stats.d.ts",
+      "import": "./dist/visual-stats.js",
+      "default": "./dist/visual-stats.js"
+    },
+    "./png-codec": {
+      "types": "./dist/png-codec.d.ts",
+      "import": "./dist/png-codec.js",
+      "default": "./dist/png-codec.js"
+    },
+    "./visual-calibration": {
+      "types": "./dist/visual-calibration.d.ts",
+      "import": "./dist/visual-calibration.js",
+      "default": "./dist/visual-calibration.js"
+    },
+    "./visual-correlation": {
+      "types": "./dist/visual-correlation.d.ts",
+      "import": "./dist/visual-correlation.js",
+      "default": "./dist/visual-correlation.js"
     }
   },
   "files": [

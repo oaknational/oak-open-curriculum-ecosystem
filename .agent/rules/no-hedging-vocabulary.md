@@ -50,9 +50,41 @@ land it then iterate
 cheap cure
 good enough
 quick fix
+standing cure
+standing workaround
+honest bypass
+live with it for now
 ```
 
 The list is not exhaustive. New shapes graduate when observed.
+
+Graduated 2026-08-12 (owner-flagged, first-hand instance the same night):
+the **acceptance-shaped euphemism** sub-family — *standing cure*,
+*standing workaround*, *honest bypass*, *live with it for now* — labels
+that dress a known, recognised defect as handled without a routed fix or
+a ratified policy. The owner's words at the flagging, verbatim: "it's a
+red flag on par with 'parked' or 'honest bypass', it means something
+that is a known and recognised problem has been labelled as not relevant
+or something we can live with... and once those cognitive shapes are in
+the team they will propagate to other decisions... entropy is always
+coming, we have to be strict, everywhere, all the time." The harm is
+memetic: the label travels between records and seats faster than any
+single instance, so the vocabulary itself is the detection surface. A
+mitigation is lawful only while it carries its owning ticket and its
+retirement condition in the same breath.
+
+Because the graduating instances lived in OPERATIONAL RECORDS (the
+Director handoff and thread records), not doctrine documents, this
+sub-family carries its own hook group (`concept: acceptance-euphemism`)
+whose scope extends beyond the literal trip-list's doctrine surfaces to
+`.agent/memory/operational/` and `.agent/reports/` — mirroring the
+indefinite-deferral group's habitat reasoning: continuity and thread
+records are where acceptance language hides. The napkin
+(`.agent/memory/active/`) is deliberately NOT in scope: it is the
+first-capture observation buffer, where pathogen instances are recorded
+as observations and owner corrections are quoted verbatim — the same
+recursive-exclusion logic that exempts this file as the cataloguing
+home.
 
 ## Indefinite-Deferral Vocabulary (regex family, added 2026-06-10)
 

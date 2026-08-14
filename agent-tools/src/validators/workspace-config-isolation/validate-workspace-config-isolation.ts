@@ -121,8 +121,8 @@ if (turboScan.parseErrors.length > 0) {
 }
 if (turboScan.refusals.length > 0) {
   writeErrorLine(
-    `✖ ${String(turboScan.refusals.length)} turbo input(s) with pattern syntax outside the ` +
-      `pinned subset — the scan refuses rather than guessing:`,
+    `✖ ${String(turboScan.refusals.length)} turbo input(s) with pattern syntax or macro ` +
+      `form outside the pinned subset — the scan refuses rather than guessing:`,
   );
   for (const refusal of turboScan.refusals) {
     writeErrorLine(`  turbo.json:${String(refusal.line)}  '${refusal.entry}': ${refusal.reason}`);
@@ -141,11 +141,15 @@ if (refusalCount > 0) {
 }
 
 if (escapes.length === 0 && turboFindings.length === 0) {
+  // The turbo clause derives its claim from the scan's own count — the
+  // one bare-prose predecessor over-claimed "every positive turbo input"
+  // while only $TURBO_ROOT$ entries were ever evaluated (MCP-553).
   writeLine(
     `✓ workspace-config resolver-invisible legs hold (${String(configFiles.length)} config ` +
       `files, ${String(workspaceDirs.length)} workspaces: path arithmetic contained, no ` +
-      'unanalysable constructs, every positive turbo input matches ≥1 tracked file; ' +
-      'static-import containment is enforced by the dependency-cruiser boundary rules)',
+      `unanalysable constructs, ${String(turboScan.positives)} positive $TURBO_ROOT$ ` +
+      'inputs each matching ≥1 tracked file; static-import containment is enforced by ' +
+      'the dependency-cruiser boundary rules)',
   );
   process.exit(0);
 }

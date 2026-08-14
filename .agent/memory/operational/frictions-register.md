@@ -3683,3 +3683,35 @@ commit SHA and the closing plan reference.
   which have earned mechanical enforcement (the day's evidence: prose is
   vigilance; only enforcement is structure). Route: agent-tooling backlog
   - PDR-014 graduation pipeline.
+
+### F-160 — comms watcher quiet config dies at the drain-step deadline on a large event directory
+
+- **Observed**: 2026-08-11 ~09:1xZ (this seat, Fable 5): the
+  heartbeat-excluded watcher exited fail-loud with `step "drain"
+  exceeded 60000ms deadline` over a comms directory of ~3,600 event
+  files while several gate suites ran concurrently on the host. This is
+  the same fast-death the 2026-08-10 seat hit twice with the quiet
+  config and recorded cause-unknown before falling back to the noisy
+  full-stream config. The initial read at capture — that the default
+  per-step deadline, not the exclusion mechanism, was the binding
+  constraint — was FALSIFIED the same day by the probes below: 180s
+  died identically while the full stream survived at 60s, isolating
+  the EXCLUSION PATH as the implicated mechanism. Preserved here as
+  falsified history; the probe entries below carry the live cause.
+- **Expected**: a drain pass over the live event directory completes
+  comfortably inside the step deadline at any realistic directory size.
+- **Mitigation attempt FALSIFIED same day**: `--step-timeout-ms 180000`
+  died identically within ~30 minutes (drain exceeded 180s). Deadline
+  size is not the constraint. The discriminating evidence: the
+  FULL-STREAM config drained the same directory all morning on the
+  default 60s deadline with zero deaths; both quiet-config arms died
+  within the hour. The defect lives on the exclusion path — leading
+  hypothesis: excluded events do not durably advance the seen cursor,
+  so each drain rescans a growing heartbeat backlog until the scan
+  outlives any deadline.
+- **Working mitigation**: run the full-stream config (no
+  `--exclude-tag`) and absorb the heartbeat wake noise; ticketed as
+  MCP-548 for a code-level cure (exclusion must advance the cursor
+  exactly as emission does). The curator-pass archive cadence (PDR-094)
+  remains the companion pressure valve — ~3,600 live events means the
+  archive pass is overdue. Route: agent-tooling backlog.

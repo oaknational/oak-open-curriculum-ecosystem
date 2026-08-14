@@ -19,7 +19,7 @@ import { parse as parseYaml } from 'yaml';
 
 import { walkSkillTree } from './skill-tree-walk.js';
 
-const CANONICAL_FILENAME = 'SKILL-CANONICAL.md';
+export const CANONICAL_FILENAME = 'SKILL-CANONICAL.md';
 
 export interface CanonicalFrontmatter {
   name: string;
@@ -29,7 +29,8 @@ export interface CanonicalFrontmatter {
 export interface ParsedCanonical {
   readonly id: string;
   /** Directory of the canonical relative to `.agent/skills/` — the leaf id
-   * for a flat individual, `<concern>/<id>` for a concern-tier member. */
+   * for a flat individual, `<concern>/<id>` for a concern-tier member,
+   * `<concern>/<domain>/<id>` for a domain-tier member. */
   readonly relativeDir: string;
   readonly frontmatter: CanonicalFrontmatter;
   readonly canonicalPath: string;
