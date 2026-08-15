@@ -150,7 +150,7 @@ describe('validateGitSha — trust-boundary input gate', () => {
 });
 
 describe('scrubbedGitEnv — defence-in-depth env construction', () => {
-  it('does NOT include PATH — the production capabilities invoke git via the absolute GIT_BINARY path so PATH never participates in binary lookup (closes S4036)', () => {
+  it('does NOT include PATH — the production capabilities invoke git via a fixed absolute path so PATH never participates in binary lookup (closes S4036)', () => {
     const env = scrubbedGitEnv();
     expect(env.PATH).toBeUndefined();
   });

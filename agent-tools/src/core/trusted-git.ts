@@ -21,7 +21,8 @@
  * like `/usr/bin/git` as *drive-relative* (`path.isAbsolute` returns true, yet
  * it resolves against the process's current drive to e.g. `C:\usr\bin\git`,
  * user-plantable space on a default Windows ACL); on POSIX, a literal
- * `C:\...\git.exe` is a legal relative FILENAME plantable in a writable cwd.
+ * `C:\...\git.exe` is a legal relative FILENAME, which `execvp` resolves by
+ * PATH search — the S4036 hole restated.
  * Each family is therefore only ever consulted on its own platform. The
  * Windows entries are hard-coded literals deliberately: deriving them from
  * `%ProgramFiles%` would turn a fixed path into an environment-influenced one —
