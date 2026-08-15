@@ -33,6 +33,7 @@ describe('resolveHttpDevExecutionPlan', () => {
       workspaceRoot,
       parentEnv,
       now,
+      platform: 'linux',
     });
 
     expect(plan.initialWidgetBuild).toStrictEqual({
@@ -78,6 +79,7 @@ describe('resolveHttpDevExecutionPlan', () => {
       workspaceRoot,
       parentEnv,
       now,
+      platform: 'linux',
     });
 
     expect(plan.server.env).toStrictEqual({
@@ -103,6 +105,7 @@ describe('resolveHttpDevExecutionPlan', () => {
         SENTRY_MODE: 'sentry',
       },
       now,
+      platform: 'linux',
     });
 
     expect(plan.server.env.VERCEL_ENV).toBeUndefined();
@@ -111,5 +114,50 @@ describe('resolveHttpDevExecutionPlan', () => {
     expect(plan.server.env.VERCEL_BRANCH_URL).toBeUndefined();
     expect(plan.server.env.SENTRY_RELEASE_OVERRIDE).toBeUndefined();
     expect(plan.server.env.SENTRY_MODE).toBe('off');
+  });
+
+  // pnpm writes an extensionless shell script for POSIX and a `.CMD` batch
+  // wrapper for Windows. Node cannot spawn the shell script on win32, so
+  // naming the wrong shim starts nothing — and the dev session tees child
+  // output to a log, so the operator sees a bare non-zero exit with no
+  // diagnostic. Both branches are pinned here, from either host.
+  it('names the platform-correct binary shim', () => {
+    const posixPlan = resolveHttpDevExecutionPlan({
+      mode: 'observe-noauth',
+      workspaceRoot,
+      parentEnv,
+      now,
+      platform: 'linux',
+    });
+    const windowsPlan = resolveHttpDevExecutionPlan({
+      mode: 'observe-noauth',
+      workspaceRoot,
+      parentEnv,
+      now,
+      platform: 'win32',
+    });
+
+    // POSIX spawns the .bin shim directly, with no leading arguments.
+    expect(posixPlan.server.command).toBe(join(workspaceRoot, 'node_modules', '.bin', 'tsx'));
+    expect(posixPlan.server.args).toStrictEqual([
+      '--import',
+      '@sentry/node/preload',
+      'src/index.ts',
+    ]);
+    expect(posixPlan.widgetWatch.command).toBe(join(workspaceRoot, 'node_modules', '.bin', 'vite'));
+
+    // win32 launches the module entry through the running Node, because the
+    // .CMD shim cannot be spawned without a shell (EINVAL).
+    expect(windowsPlan.server.command).toBe(process.execPath);
+    expect(windowsPlan.server.args).toStrictEqual([
+      join(workspaceRoot, 'node_modules', 'tsx', 'dist', 'cli.mjs'),
+      '--import',
+      '@sentry/node/preload',
+      'src/index.ts',
+    ]);
+    expect(windowsPlan.widgetWatch.command).toBe(process.execPath);
+    expect(windowsPlan.widgetWatch.args[0]).toBe(
+      join(workspaceRoot, 'node_modules', 'vite', 'bin', 'vite.js'),
+    );
   });
 });
