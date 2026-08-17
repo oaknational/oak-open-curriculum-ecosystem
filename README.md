@@ -241,7 +241,7 @@ one pnpm exception covered in step 3. Steps 1-2
 run in Windows PowerShell; steps 3-6 run inside Ubuntu. Requires Windows 11 (or
 Windows 10 2004+) with virtualization enabled in firmware — if `wsl --install`
 ends in error `0x80370102`, enable virtualization in your BIOS/UEFI first. The
-steps below were run end to end on Windows 11, 2026-08.
+steps below were run end to end on Windows 11 in August 2026.
 
 1. **Install WSL and Ubuntu** — in an administrator PowerShell (right-click
    Start → Terminal (Admin)) run `wsl --install`, approve the elevation prompt,
@@ -279,17 +279,17 @@ steps below were run end to end on Windows 11, 2026-08.
    at `~/.local/share/pnpm` is on that list, a corepack shim under nvm's Node
    directory is not, and with corepack alone every commit fails — currently
    misreported as a formatting failure. Two additions Ubuntu's default sources do
-   not carry: the pre-push hook requires `gitleaks` — install it with the Go
-   route the hook itself suggests (`go install github.com/gitleaks/gitleaks/v8@latest`),
-   or from a [release tarball](https://github.com/gitleaks/gitleaks/releases):
-
-   ```bash
-   curl -sL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz | tar -xz gitleaks
-   sudo install -m 0755 gitleaks /usr/local/bin/ && rm gitleaks
-   ```
-
-   and the repo's PR and agent tooling uses `gh` (the GitHub CLI), which installs
-   from [GitHub's apt repository](https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
+   not carry. The pre-push hook requires `gitleaks`: install it with the Go route
+   the hook itself suggests
+   (`go install github.com/gitleaks/gitleaks/v8@latest`), which verifies the
+   module through Go's checksum database. If you would rather install the
+   released binary, mirror the pinned, digest-checked block CI uses
+   (`.github/workflows/ci.yml`, "Install pinned gitleaks") rather than
+   downloading an unverified asset — gitleaks is a security control, so its
+   binary is content-pinned, not just version-pinned, and CI is the one place
+   that version and digest are kept current. Second, the repo's PR and agent
+   tooling uses `gh` (the GitHub CLI), which installs from
+   [GitHub's apt repository](https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
 
 4. **Give pnpm network patience once** — WSL2's NAT (its network translation
    layer) can time out fetching large tarballs (`pnpm install` dies with
@@ -297,16 +297,20 @@ steps below were run end to end on Windows 11, 2026-08.
    simply re-run): `pnpm config set fetch-timeout 300000` and
    `pnpm config set fetch-retries 5`.
 5. **Reuse Windows' stored git credentials — only if you already use Git for
-   Windows.** Check the helper exists first
-   (`ls '/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe'`; a
-   user-scope install puts it under `%LOCALAPPDATA%\Programs\Git`), then:
+   Windows.** The helper lives in one of two places depending on how Git was
+   installed, so find the one you have and configure that path:
 
    ```bash
-   git config --global credential.helper "/mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe"
+   helper=$(ls "/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe" \
+               /mnt/c/Users/*/AppData/Local/Programs/Git/mingw64/bin/git-credential-manager.exe \
+               2>/dev/null | head -1)
+   [ -n "$helper" ] && git config --global credential.helper "${helper// /\\ }"
+   echo "${helper:-no Git for Windows credential helper found}"
    ```
 
-   Without Git for Windows, authenticate with `gh auth login` instead — do not
-   configure a helper path that does not exist.
+   The first path is an all-users install, the second a per-user one. If neither
+   exists you do not have Git for Windows: authenticate with `gh auth login`
+   instead, and do not configure a helper path that is not there.
 
 6. **Continue with [Install and verify](#install-and-verify) below**, cloning
    inside the Linux filesystem (for example `~/oak`), never under `/mnt/c` —
