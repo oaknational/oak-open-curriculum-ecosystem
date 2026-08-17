@@ -19,7 +19,7 @@
  */
 import { isErr, type Result } from '@oaknational/result';
 
-import { boundedExcerpt } from './bounded-excerpt.js';
+import { boundedExcerpt, redactCredentials } from './bounded-excerpt.js';
 import {
   compatErrorEnvelopeSchema,
   compatReportSchema,
@@ -110,6 +110,23 @@ function safeJsonParse(raw: string): unknown {
 }
 
 /**
+ * The vendor's documented exit vocabulary is 1 for operational and 2 for
+ * usage. Any other exit (127, a signal surviving as an odd code) is outside
+ * that vocabulary, and
+ * asserting vendor semantics there would be a guess — the suites' gate names
+ * the same class "tool failure".
+ */
+function describeExitKind(exitCode: number | undefined): string {
+  if (exitCode === 2) {
+    return 'usage error (our invocation is wrong)';
+  }
+  if (exitCode === 1) {
+    return 'operational failure';
+  }
+  return "exit outside the vendor's documented codes (tool failure)";
+}
+
+/**
  * Read the vendor's failure envelope, preserving its own words.
  *
  * The vendor classifies an authorisation failure as `INTERNAL_ERROR` rather
@@ -118,21 +135,20 @@ function safeJsonParse(raw: string): unknown {
  * silently drift the day their classification improves. An unparseable stderr
  * falls back to a bounded excerpt of the raw stream — the case where
  * diagnostics matter most is exactly the one where the shape is unexpected.
+ *
+ * Every vendor string here is redacted first: a parsed envelope is not safer
+ * than a raw stream just because it parsed.
  */
 function describeRunFailure(exitCode: number | undefined, stderr: string): string {
-  // The vendor's documented vocabulary is {1: operational, 2: usage}. Any
-  // other exit (127, a signal surviving as an odd code) is OUTSIDE that
-  // vocabulary, and asserting vendor semantics for it would be a guess — the
-  // suites' gate names the same class "tool failure".
-  const kind =
-    exitCode === 2
-      ? 'usage error (our invocation is wrong)'
-      : exitCode === 1
-        ? 'operational failure'
-        : "exit outside the vendor's documented codes (tool failure)";
+  const kind = describeExitKind(exitCode);
   const parsed = compatErrorEnvelopeSchema.safeParse(safeJsonParse(stderr));
   if (parsed.success) {
-    return `mcpjam compat ${kind}, exit ${String(exitCode ?? 'unknown')}: ${parsed.data.error.code} — ${parsed.data.error.message}`;
+    // Redacted like any other vendor text reaching a failure reason: a parsed
+    // envelope is not safer than a raw stream just because it parsed. A vendor
+    // echoing the failing request puts a live token in `message`.
+    const code = redactCredentials(parsed.data.error.code);
+    const message = redactCredentials(parsed.data.error.message);
+    return `mcpjam compat ${kind}, exit ${String(exitCode ?? 'unknown')}: ${code} — ${message}`;
   }
   return `mcpjam compat ${kind}, exit ${String(exitCode ?? 'unknown')}, and its stderr was not a recognised error envelope${boundedExcerpt('stderr', stderr)}`;
 }

@@ -116,6 +116,32 @@ describe('runCompat — a failed run can never read as a pass', () => {
     expect(outcome.failureReasons.join(' ')).not.toContain('not a recognised error envelope');
   });
 
+  it('redacts credentials the vendor reflects into a PARSED error message', () => {
+    // The raw-stderr fallback redacts because it goes through boundedExcerpt.
+    // The parsed path formats the vendor's own code and message, and for a
+    // while did so unredacted — failure reasons reach stdout and summary.json,
+    // outside the 0600 discipline that protects retained captures. A vendor
+    // echoing the failing request puts a live bearer token there.
+    const { io } = fakeIo({
+      exitCode: 1,
+      stdout: '',
+      stderr: JSON.stringify({
+        error: {
+          code: 'INTERNAL_ERROR',
+          message: 'request failed: authorization: Bearer sk-live-SECRETVALUE123',
+        },
+      }),
+    });
+
+    const reason = runCompat(io, TARGET).failureReasons.join(' ');
+
+    expect(reason).not.toContain('sk-live-SECRETVALUE123');
+    expect(reason).toContain('[redacted]');
+    // The diagnostic must survive its own redaction — a reason stripped of
+    // the vendor's code would be safe and useless.
+    expect(reason).toContain('INTERNAL_ERROR');
+  });
+
   it('names a usage error distinctly, since exit 2 is our argv being wrong, not drift', () => {
     const { io } = fakeIo({
       exitCode: 2,

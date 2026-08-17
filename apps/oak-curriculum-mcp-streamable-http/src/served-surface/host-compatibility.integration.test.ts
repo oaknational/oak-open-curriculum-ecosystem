@@ -116,14 +116,36 @@ async function evaluateServedSurface(): Promise<SurfaceEvaluation> {
 const evaluation: Promise<SurfaceEvaluation> = evaluateServedSurface();
 
 describe('served surface — the evaluation actually ran', () => {
-  it('evaluated the whole host catalogue', async () => {
+  it('evaluated every host in the pinned catalogue, by name', async () => {
     const { hosts } = await evaluation;
 
-    // Every assertion below filters this list, so an empty list would make
-    // all of them pass while proving nothing. This is the guard against that
-    // vacuous green.
-    expect(hosts.length).toBeGreaterThan(0);
-    expect(hosts.map((host) => host.hostId)).toContain('claude');
+    // Every assertion below FILTERS this list, so a short list passes them all
+    // while proving nothing about the hosts that vanished. An earlier version
+    // of this guard asserted only "non-empty and contains claude", which any
+    // subset containing Claude and ChatGPT satisfies — review caught that it
+    // was itself the vacuous green it existed to prevent.
+    //
+    // The exact set, not a count: a count passes if one host is swapped for
+    // another. The SDK is pinned, so this list changes only when the pin moves
+    // — at which point the change should be read, not absorbed.
+    expect([...hosts.map((host) => host.hostId)].sort((a, b) => a.localeCompare(b))).toEqual([
+      'agentcore',
+      'chatgpt',
+      'claude',
+      'claude-code',
+      'cline',
+      'codex',
+      'copilot',
+      'cursor',
+      'goose',
+      'mcpjam',
+      'mistral',
+      'n8n',
+      'notion',
+      'perplexity',
+      'slack',
+      'vscode',
+    ]);
   });
 
   it('saw the whole tool list in one page', async () => {

@@ -125,6 +125,15 @@ const compatFindingSchema = z
   })
   .strict();
 
+/**
+ * The smallest host count a complete capture can have. The catalogue bundled
+ * with the pinned SDK carries 16; this floor is deliberately that number and
+ * not "whatever the catalogue says at runtime", because the point is to catch
+ * a vendor report that is SHORTER than the catalogue it claims to cover.
+ * Raise it when the pin moves and the catalogue grows.
+ */
+const CATALOGUE_HOST_FLOOR = 16;
+
 const compatHostSchema = z
   .object({
     hostId: z.string().min(1),
@@ -142,10 +151,12 @@ const compatHostSchema = z
  * surface at all; that is a property of the CLI, recorded here so a future
  * reader does not go looking for lane data the wrapper could have kept.
  *
- * `hosts` is `.min(1)`: an empty host list has no verdict semantics — a
- * document that judged no hosts is not a compatibility report, and letting it
- * parse would hand the caller a vacuous pass. The compat twin of the suites'
- * every-group-carries-a-case refinement.
+ * `hosts` carries a FLOOR and a uniqueness rule, not a non-empty check: a
+ * document naming fewer hosts than the pinned catalogue is an incomplete
+ * capture, and letting it parse hands the caller a verdict about hosts nobody
+ * evaluated. The compat twin of the suites' every-group-carries-a-case
+ * refinement — see the constraint below for why a floor rather than an exact
+ * count.
  */
 export const compatReportSchema = z
   .object({
@@ -165,7 +176,24 @@ export const compatReportSchema = z
         unknown: z.number(),
       })
       .strict(),
-    hosts: z.array(compatHostSchema).min(1),
+    // The pinned offline catalogue carries a fixed host set, so a capture
+    // naming fewer is INCOMPLETE, not small — and an incomplete capture read
+    // as usable is a verdict about hosts nobody evaluated. A bare non-empty
+    // check accepted a one-host report until review caught it.
+    //
+    // A floor rather than an exact count: the count belongs to the SDK pin,
+    // and hard-coding it here would red the parse on a dependency bump that
+    // legitimately adds a host. The floor catches the failure mode that
+    // actually occurs (a truncated or partial vendor report) while letting
+    // the catalogue grow. The app's own gate asserts the exact set by name.
+    hosts: z
+      .array(compatHostSchema)
+      .min(CATALOGUE_HOST_FLOOR, {
+        message: `a compat capture must name at least ${String(CATALOGUE_HOST_FLOOR)} hosts — fewer means the vendor reported a partial catalogue, which has no verdict semantics`,
+      })
+      .refine((hosts) => new Set(hosts.map((host) => host.hostId)).size === hosts.length, {
+        message: 'a compat capture must not name the same host twice',
+      }),
   })
   .strict();
 

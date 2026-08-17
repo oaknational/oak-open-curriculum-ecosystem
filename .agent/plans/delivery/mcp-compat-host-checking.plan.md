@@ -35,10 +35,18 @@ this plan carries the mechanism.
 
 ## Goal
 
-Today nothing tells us whether Oak's served surface works in Claude, ChatGPT,
-Cursor or the rest — which is the release bet's own success condition. When
-this lands, a change that breaks or degrades a host fails a check with the
-host named, rather than being discovered by a teacher.
+Nothing currently tells us whether Oak's served surface works in Claude,
+ChatGPT, Cursor or the rest. When this lands, a change that puts a host
+beyond use — or leaves the engine unable to reach a verdict — fails a check
+on the commit that makes it, with the host named.
+
+Stated precisely, because the gate is narrower than "any degradation fails".
+It fails on: a `blocked` verdict anywhere, an `unknown` verdict anywhere, the
+widget-bearing tool set changing, a paginated tool list, and Claude or
+ChatGPT dropping to a text fallback. A NEW degradation in another host does
+not fail it — degradation is the expected state for the seven hosts that
+render no widgets at all, and a threshold that fired on it would be red from
+the first run.
 
 ## Mechanism
 
@@ -84,14 +92,19 @@ an upstream publish cannot move a verdict underneath us) and
 
 ### The inverted exit contract
 
-Verified first-hand against the pinned CLI: a failed `compat` run writes
+Verified first-hand against the pinned CLI: a failed `compat` CHILD writes
 ZERO bytes to stdout and a structured envelope to stderr, exiting 1
 (operational) or 2 (usage). The three suites do the opposite — a failing
 suite still writes its full report to stdout, so its exit code is
 verdict-neutral. Reusing the suites' evidence gate would therefore read a
 failed compat run as a passing one. Compat carries its own gate, and the
-vendor's error code and message ride the failure reason verbatim rather than
-being reinterpreted.
+vendor's error code and message ride the failure reason — redacted, never
+reinterpreted.
+
+The inversion is the CHILD's, not this wrapper's. The wrapper always emits
+its own aggregate JSON to stdout and `summary.json`, whatever the outcome;
+its `verdict` field is the contract, and empty wrapper stdout means the
+wrapper itself failed, not that the run did.
 
 ## Acceptance criteria (each with a proof — required)
 
@@ -173,9 +186,9 @@ CLI ships the static half alone.
 - **Live-render qualification itself** — no capability in this repository
   renders an Oak widget inside a host and judges it. If the owner rules it
   in, that is a separate build.
-- **Declining telemetry on the three existing suites** — a real gap found
-  here (they never pass `--no-telemetry`, so every run to date has sent usage
-  data to MCPJam), belonging to the suites' own story.
+- **A flag-level telemetry fix for the three existing suites** — their argv
+  still omits `--no-telemetry`. The environment gate below already covers
+  them in practice; aligning the flags is the suites' own story.
 
 ## Findings to route
 
@@ -188,7 +201,12 @@ Three, none blocking this work:
    there — but the alpha cannot be used for spec-strict client testing.
 2. **The MCPJam capability scan over-reports** (above). Unreported upstream
    as of 2026-08-15.
-3. **The existing suites send telemetry by default** (above).
+3. **The telemetry gate reaches further than this lane.** It lives in the
+   shared spawn seam, so the three existing suites and `--drive` now launch
+   with the kill-switch too. That is the right outcome and it was not this
+   lane's to decide — recorded so the suites' owners know their runs changed.
+   Nothing of ours was ever sent: the vendor's single `capture()` fires on an
+   eval feature this repo never invokes.
 
 ## Where the first-principles check fires
 

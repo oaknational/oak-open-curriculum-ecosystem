@@ -95,7 +95,40 @@ describe('compatErrorEnvelopeSchema — the failure channel is evidence, not pro
  */
 const OAK_CAPTURE = 'compat-local-oak-2026-08-15.json';
 
-/** A minimal well-formed report; each rejection case overrides one field. */
+/**
+ * Every host the pinned offline catalogue carries. A well-formed capture
+ * names all of them; a shorter one is an incomplete run, not a small one.
+ */
+const CATALOGUE_HOST_IDS = [
+  'mcpjam',
+  'claude',
+  'claude-code',
+  'chatgpt',
+  'mistral',
+  'goose',
+  'slack',
+  'cursor',
+  'codex',
+  'copilot',
+  'vscode',
+  'agentcore',
+  'n8n',
+  'perplexity',
+  'cline',
+  'notion',
+];
+
+function fullHostList(): Record<string, unknown>[] {
+  return CATALOGUE_HOST_IDS.map((hostId) => ({
+    hostId,
+    hostLabel: hostId,
+    verdict: 'works',
+    provenance: 'assumed',
+    findings: [],
+  }));
+}
+
+/** A well-formed report; each rejection case overrides one field. */
 function minimalReport(): Record<string, unknown> {
   return {
     target: 'http://localhost:3333/mcp',
@@ -103,17 +136,14 @@ function minimalReport(): Record<string, unknown> {
     catalogVersion: 0,
     widgets: { total: 1, appOnly: 0 },
     unknownDimensions: [],
-    summary: { works: 1, degraded: 0, blocked: 0, unknown: 0 },
-    hosts: [
-      {
-        hostId: 'claude',
-        hostLabel: 'Claude',
-        verdict: 'works',
-        provenance: 'assumed',
-        findings: [],
-      },
-    ],
+    summary: { works: 16, degraded: 0, blocked: 0, unknown: 0 },
+    hosts: fullHostList(),
   };
+}
+
+/** A capture naming fewer hosts than the catalogue — an incomplete run. */
+function partialReport(): Record<string, unknown> {
+  return { ...minimalReport(), hosts: fullHostList().slice(0, 3) };
 }
 
 describe('compatReportSchema — the verdict document is parsed strictly', () => {
@@ -188,6 +218,24 @@ describe('compatReportSchema — the verdict document is parsed strictly', () =>
   it('refuses an empty host list, which carries no verdict semantics', () => {
     const report = minimalReport();
     report.hosts = [];
+
+    expect(compatReportSchema.safeParse(report).success).toBe(false);
+  });
+
+  it('refuses a PARTIAL capture, not merely an empty one', () => {
+    // The pinned offline catalogue has 16 hosts, so a report naming fewer is
+    // an incomplete capture — and an incomplete capture reported as usable is
+    // a verdict about hosts nobody evaluated. A bare non-empty check let this
+    // through until review caught it: `.min(1)` proves a guard exists, never
+    // that it sits at the right threshold.
+    expect(compatReportSchema.safeParse(partialReport()).success).toBe(false);
+  });
+
+  it('refuses a capture naming the same host twice', () => {
+    // Duplicate ids make the summary counts and the host set disagree, and
+    // "which one is the verdict?" has no answer.
+    const report = minimalReport();
+    report.hosts = fullHostList().concat(fullHostList()[0]);
 
     expect(compatReportSchema.safeParse(report).success).toBe(false);
   });

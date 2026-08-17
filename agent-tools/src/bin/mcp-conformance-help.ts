@@ -61,10 +61,13 @@ host-compatibility.integration.test.ts). This route exists to prove what the
 DEPLOYMENT actually serves, which is the one question that test cannot
 answer.
 
-NOTE on compat exit semantics — the INVERSE of the suites: a failed compat
-run writes NOTHING to stdout and puts a structured error envelope on stderr
-(exit 1 operational, 2 usage), so a non-zero exit means there is no report
-to judge, never a judged failure.
+NOTE on compat exit semantics. The inversion is in the MCPJam CHILD, not in
+this wrapper: a failed child writes NOTHING to stdout and puts a structured
+error envelope on stderr (exit 1 operational, 2 usage), where a failing suite
+would still emit its full report. That is why compat carries its own evidence
+gate — reusing the suites' would read a failed run as a passing one. This
+wrapper always emits its own aggregate JSON to stdout and to summary.json,
+whatever the outcome; read its "verdict" field, never stdout's emptiness.
 
 The wrapper's aggregate report goes to stdout AND <report-dir>/summary.json.
 

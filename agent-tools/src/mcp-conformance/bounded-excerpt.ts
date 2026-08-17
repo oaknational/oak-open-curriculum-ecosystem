@@ -29,19 +29,32 @@ export function boundedExcerpt(label: string, content: string): string {
 }
 
 /**
- * Excerpts ride failure reasons onto STDOUT (and into CI job logs), where
- * the retention layer's owner-only 0600 discipline does not reach — so any
- * credential shape in a child stream is redacted BEFORE the excerpt is
- * composed, at this single choke point every stream excerpt passes through.
+ * Failure reasons ride onto STDOUT and into CI job logs, where the retention
+ * layer's owner-only 0600 discipline does not reach — so credential shapes
+ * are stripped before any of that text is composed.
+ *
+ * EXPORTED because excerpts are not the only path. A parsed vendor error
+ * envelope reaches a failure reason without passing through `boundedExcerpt`,
+ * and went unredacted until review caught it: every caller that puts vendor
+ * text into a reason redacts it here. Treating this as "the single choke
+ * point" was the mistake — it is the single redactor, and callers must reach
+ * for it.
+ *
  * The pattern set mirrors the vendor's own `redactSensitiveValue` (evidence
  * the shapes are the right ones), kept local rather than imported — ten
  * lines do not justify an `@mcpjam/sdk` edge into agent-tools.
  */
-function redactCredentials(content: string): string {
-  return content
-    .replaceAll(
-      /\b(authorization|proxy-authorization|cookie|set-cookie)\s*:\s*[^\r\n]*/giu,
-      '$1: [redacted]',
-    )
-    .replaceAll(/\bBearer\s+[A-Za-z0-9\-._~+/]+=*/giu, 'Bearer [redacted]');
+export function redactCredentials(content: string): string {
+  return (
+    content
+      .replaceAll(
+        /\b(authorization|proxy-authorization|cookie|set-cookie)\s*:\s*[^\r\n]*/giu,
+        '$1: [redacted]',
+      )
+      // Deliberately NOT case-insensitive: the `i` flag makes `a-z` redundant
+      // against `A-Z` in the token class — a genuine duplicate, and a lint
+      // finding. The scheme keyword carries its own case alternation instead,
+      // because HTTP auth schemes are case-insensitive.
+      .replaceAll(/\b[Bb]earer\s+[A-Za-z0-9\-._~+/]+=*/gu, 'Bearer [redacted]')
+  );
 }

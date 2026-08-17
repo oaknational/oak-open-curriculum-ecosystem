@@ -51,7 +51,7 @@ export interface CompatOutcome {
  * or an exit code the run did not produce.
  */
 function retainedFields(evidence: {
-  readonly exitCode?: number | undefined;
+  readonly exitCode?: number;
   readonly rawReportPath?: string;
 }): Pick<CompatOutcome, 'mcpjamExitCode' | 'rawReportPath'> {
   return {
