@@ -10,7 +10,10 @@
 - **Branch:** `chore/owner-liaison`, cut from `origin/main`
 - **Role:** `liaison`
 - **Thread:** `mcp-submission-drive`
-- **Director:** Wildfire holds Quench (`ee2764`), claude / Opus-5, seated 2026-08-13
+- **Director:** Tuna holds Ballast (`a2ce03`), claude / Opus-5, seated 2026-08-17.
+  (Prior Directors on this thread, for record only: Wildfire holds Quench
+  `ee2764` 2026-08-13; Schooner rides Marsh `d9d5b8` and Walrus herds Jetty
+  `a9cd9a` 2026-08-12; Wisteria lifts Verdure `c4294f` 2026-08-06.)
 - **Identity:** assigned at launch by the `SessionStart` hook. Confirm it with
   `pnpm agent-tools:collaboration-state -- identity preflight --platform claude --model Opus-5`.
 
@@ -76,7 +79,13 @@ not **whether** it may be asked.
 ## Drive context
 
 - **The goal:** Oak's MCP app public beta, **publicised 6 September 2026**
-  (owner-confirmed 2026-08-13).
+  (owner-confirmed 2026-08-13). The acceptance bar is a **verified tag from
+  Anthropic** (owner, 2026-08-17) — an external verdict, not a self-assessment,
+  so anything on the path to that tag outranks internal tidiness.
+- **The constraint that governs scheduling** (owner, 2026-08-13): MG's effective
+  availability ends **20 August**. For anything dated after that, the question is
+  not "is it before 6 Sept" but "does it need MG personally, and can that
+  dependency be removed or pulled inside the window?"
 - **Boards of record:** `MCP App: First Major Release` (the agent-authored
   engineering project) and `MCP OKR: We reach 8000 requests to the Oak MCP app`
   (the human-authored project, Aakesh Pattani). **Both sit on team `MCP App
