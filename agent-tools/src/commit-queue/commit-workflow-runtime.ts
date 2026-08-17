@@ -105,6 +105,7 @@ async function runAdvisoryOrchestrator(
       input.messageFilePath,
     ],
     cwd: input.gitRoot,
+    env: pnpm.value.env,
   });
 }
 

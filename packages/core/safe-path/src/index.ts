@@ -44,11 +44,16 @@ export interface AssertPathWithinBaseOptions {
  *   host separator would misjudge containment on separator form alone. On
  *   POSIX normalisation is the identity for canonical paths (a backslash
  *   there is an ordinary filename character).
- * - On the win32 flavour the comparison is additionally case-folded: Windows
- *   filesystems are case-insensitive and drive-letter case varies by source,
- *   so a case-only difference is a false escape. The POSIX comparison stays
- *   case-sensitive — folding there would treat two genuinely distinct paths
- *   as one, a security regression.
+ * - On the win32 flavour ONLY the drive letter is case-normalised. Drive
+ *   letters are case-insensitive unconditionally and their case varies by
+ *   source, so comparing them raw is a false escape. Path components stay
+ *   case-sensitive on every flavour: a Windows directory can opt into
+ *   case-sensitive lookup, so `C:\Base` and `C:\base` may be distinct, and
+ *   folding them would let a candidate outside the base compare as contained
+ *   — a false accept on a security boundary. (An earlier revision folded the
+ *   whole path on win32, reasoning that Windows filesystems are
+ *   case-insensitive. That is not reliably true, and the direction of the
+ *   error mattered: over-refusal is recoverable, over-acceptance is not.)
  * - The comparison appends a trailing separator to the base so a sibling
  *   whose name merely shares the base as a prefix (`/repo-secret` against a
  *   `/repo` base) is rejected rather than treated as contained.
@@ -92,5 +97,23 @@ export function assertPathWithinBase(
 /** Comparison form of a path — see the {@link assertPathWithinBase} rules. */
 function comparable(value: string, pathApi: PathApi): string {
   const normalised = pathApi.normalize(value);
-  return pathApi.sep === '\\' ? normalised.toLowerCase() : normalised;
+  return pathApi.sep === '\\' ? withNormalisedDriveLetter(normalised) : normalised;
+}
+
+/**
+ * Upper-cases a leading `x:` drive letter and nothing else.
+ *
+ * Drive letters are case-insensitive on Windows unconditionally, and their
+ * case genuinely varies by source (`C:\…` from one API, `c:\…` from another),
+ * so comparing them raw is a false escape. The REST of the path is compared
+ * case-sensitively: Windows directories can opt into case-sensitive lookup
+ * (`fsutil file setCaseSensitiveInfo`, and every directory created under WSL
+ * interop), so `C:\Base` and `C:\base` can be genuinely distinct — folding
+ * them would let a candidate outside the base compare as contained, which is
+ * a false ACCEPT on a security boundary. A case-only difference in a
+ * component now refuses: over-refusal is the safe direction here, and the
+ * caller can pass the path as the filesystem spells it.
+ */
+function withNormalisedDriveLetter(value: string): string {
+  return /^[a-z]:/u.test(value) ? `${value[0]?.toUpperCase() ?? ''}${value.slice(1)}` : value;
 }

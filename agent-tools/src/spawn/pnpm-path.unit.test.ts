@@ -22,7 +22,8 @@ describe('resolvePnpm', () => {
     );
 
     expect(isOk(result)).toBe(true);
-    expect(unwrap(result)).toEqual({ file: '/pnpm-home/pnpm', leadingArgs: [] });
+    expect(unwrap(result).file).toBe('/pnpm-home/pnpm');
+    expect(unwrap(result).leadingArgs).toEqual([]);
   });
 
   it('falls back to the per-user macOS standalone location', () => {
@@ -180,6 +181,42 @@ describe('resolvePnpm — PNPM_HOME/bin layout (2026-08-04 regression)', () => {
   });
 });
 
+// The invocation carries its own environment because both launch modes need
+// it and a resolver that returns only a file invites the omission: five of
+// six call sites had spawned without it, so an inherited COREPACK_ROOT could
+// redirect which package-manager build ran, or stop the standalone binary
+// self-switching to the repository's pin.
+describe('resolvePnpm — the invocation carries its spawn environment', () => {
+  const corepackPolluted = {
+    HOME: FAKE_HOME,
+    COREPACK_ROOT: '/somewhere/corepack',
+    COREPACK_HOME: '/somewhere/cache',
+    COREPACK_ENABLE_AUTO_PIN: '1',
+    UNRELATED: 'kept',
+  };
+
+  it('scrubs the corepack knobs that redirect code selection, on the direct launch path', () => {
+    const result = resolvePnpm(corepackPolluted, onlyExists('/usr/bin/pnpm'), 'linux');
+
+    expect(result.ok && result.value.env).toEqual({
+      HOME: FAKE_HOME,
+      UNRELATED: 'kept',
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: '0',
+    });
+  });
+
+  it('scrubs them on the via-node launch path too — the corepack launcher obeys them', () => {
+    const result = resolvePnpm(
+      corepackPolluted,
+      onlyExists(String.raw`C:\Program Files\nodejs\node_modules\corepack\dist\pnpm.js`),
+      'win32',
+    );
+
+    expect(result.ok && result.value.env.COREPACK_ROOT).toBeUndefined();
+    expect(result.ok && result.value.env.COREPACK_ENABLE_DOWNLOAD_PROMPT).toBe('0');
+  });
+});
+
 describe('resolvePnpm — win32', () => {
   const COREPACK = String.raw`C:\Program Files\nodejs\node_modules\corepack\dist\pnpm.js`;
 
@@ -210,10 +247,8 @@ describe('resolvePnpm — win32', () => {
       'win32',
     );
 
-    expect(result.ok && result.value).toEqual({
-      file: String.raw`D:\pnpm-home\pnpm.exe`,
-      leadingArgs: [],
-    });
+    expect(result.ok && result.value.file).toBe(String.raw`D:\pnpm-home\pnpm.exe`);
+    expect(result.ok && result.value.leadingArgs).toEqual([]);
   });
 
   // The win32 sibling of the POSIX `$PNPM_HOME/bin` layout: pnpm's installer
@@ -228,10 +263,8 @@ describe('resolvePnpm — win32', () => {
         'win32',
       );
 
-      expect(result.ok && result.value).toEqual({
-        file: String.raw`D:\pnpm-home\bin\pnpm.exe`,
-        leadingArgs: [],
-      });
+      expect(result.ok && result.value.file).toBe(String.raw`D:\pnpm-home\bin\pnpm.exe`);
+      expect(result.ok && result.value.leadingArgs).toEqual([]);
     },
   );
 

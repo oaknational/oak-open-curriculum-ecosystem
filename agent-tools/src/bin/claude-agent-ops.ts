@@ -233,6 +233,7 @@ function runPnpmGate(gate: string, root: string): boolean {
     spawnSync(pnpm.value.file, [...pnpm.value.leadingArgs, gate], {
       cwd: root,
       stdio: 'ignore',
+      env: pnpm.value.env,
     }).status === 0
   );
 }

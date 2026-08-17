@@ -242,23 +242,50 @@ describe('identity path observation validation — path flavours', () => {
     ).toBeUndefined();
   });
 
-  it('win32: accepts case-only differences — Windows filesystems are case-insensitive', () => {
+  // Drive letters are case-insensitive on Windows unconditionally, and their
+  // case varies by which API produced the path, so this difference is noise.
+  it('win32: accepts a drive-letter case difference', () => {
     expect(
       unwrapOrThrow(
         validateIdentityPathObservation(
           WIN_INPUT,
           {
             components: [
-              { path: String.raw`c:\CHECKOUT\agent-tools`, kind: 'directory' },
-              { path: String.raw`c:\CHECKOUT\agent-tools\dist`, kind: 'directory' },
-              { path: String.raw`c:\CHECKOUT\agent-tools\dist\member.js`, kind: 'file' },
+              { path: String.raw`c:\checkout\agent-tools`, kind: 'directory' },
+              { path: String.raw`c:\checkout\agent-tools\dist`, kind: 'directory' },
+              { path: String.raw`c:\checkout\agent-tools\dist\member.js`, kind: 'file' },
             ],
-            canonicalPath: String.raw`c:\CHECKOUT\agent-tools\dist\member.js`,
+            canonicalPath: String.raw`c:\checkout\agent-tools\dist\member.js`,
           },
           path.win32,
         ),
       ),
     ).toBeUndefined();
+  });
+
+  // Case sensitivity on Windows is per-directory, not global: a directory can
+  // opt in via `fsutil file setCaseSensitiveInfo`, and anything created under
+  // WSL interop already has. `C:\checkout` and `C:\CHECKOUT` can therefore be
+  // different directories, so treating them as one would accept an
+  // observation outside the owner — the failure this validation exists to
+  // catch. Over-refusal is the safe direction.
+  it('win32: refuses a component-case difference — case sensitivity is per-directory', () => {
+    const failure = unwrapErr(
+      validateIdentityPathObservation(
+        WIN_INPUT,
+        {
+          components: [
+            { path: String.raw`C:\CHECKOUT\agent-tools`, kind: 'directory' },
+            { path: String.raw`C:\CHECKOUT\agent-tools\dist`, kind: 'directory' },
+            { path: String.raw`C:\CHECKOUT\agent-tools\dist\member.js`, kind: 'file' },
+          ],
+          canonicalPath: String.raw`C:\CHECKOUT\agent-tools\dist\member.js`,
+        },
+        path.win32,
+      ),
+    );
+
+    expect(failure.message).toBeTruthy();
   });
 
   it('win32: still refuses a genuine canonical redirect outside the owner', () => {

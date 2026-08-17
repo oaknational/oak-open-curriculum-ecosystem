@@ -2,7 +2,6 @@ import { spawn, spawnSync, type SpawnSyncReturns } from 'node:child_process';
 
 import { writeErrorLine } from '../core/terminal-output.js';
 import { resolveTrustedGit } from '../core/trusted-git.js';
-import { pnpmSpawnEnvironment } from '../spawn/pnpm-env.js';
 import { resolvePnpm } from '../spawn/pnpm-path.js';
 
 import type { RepoCheckRuntime } from './repo-check-types.js';
@@ -33,7 +32,7 @@ function trustedSpawnTarget(command: string): {
     return {
       command: resolved.value.file,
       leadingArgs: resolved.value.leadingArgs,
-      environment: pnpmSpawnEnvironment(process.env),
+      environment: resolved.value.env,
     };
   }
 

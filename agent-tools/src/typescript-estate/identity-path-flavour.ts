@@ -41,15 +41,25 @@ export function hasDotSegments(value: string): boolean {
 }
 
 /**
- * Comparison form of a path: normalised, and case-folded on the win32
- * flavour only — Windows filesystems are case-insensitive and drive-letter
- * case varies by source, so a case-only difference is a false escape. POSIX
- * comparison stays case-sensitive: folding there would treat two genuinely
- * distinct paths as one, a security regression.
+ * Comparison form of a path: normalised, with the leading drive letter
+ * case-normalised on the win32 flavour only.
+ *
+ * Drive letters are case-insensitive on Windows unconditionally and their
+ * case varies by source, so comparing them raw is a false escape. Path
+ * COMPONENTS stay case-sensitive on every flavour: a Windows directory can
+ * opt into case-sensitive lookup (`fsutil file setCaseSensitiveInfo`, and
+ * anything created under WSL interop), so two paths differing only in a
+ * component's case can identify different nodes — folding them would let
+ * {@link isWithin} report an escape as contained. An earlier revision folded
+ * the whole path on win32, reasoning that Windows filesystems are
+ * case-insensitive; that is not reliably true, and over-acceptance on a
+ * containment boundary is the unrecoverable direction of error.
  */
 export function comparablePath(value: string, pathApi: IdentityPathApi): string {
   const normalised = pathApi.normalize(value);
-  return isWin32Flavour(pathApi) ? normalised.toLowerCase() : normalised;
+  return isWin32Flavour(pathApi) && /^[a-z]:/u.test(normalised)
+    ? `${normalised[0]?.toUpperCase() ?? ''}${normalised.slice(1)}`
+    : normalised;
 }
 
 /**

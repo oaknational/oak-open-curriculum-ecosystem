@@ -14,6 +14,9 @@ import { err, ok, type Result } from '@oaknational/result';
 
 import { fullyQualifiedWin32 } from '../core/fully-qualified-path.js';
 import { type PathExists } from '../core/path-exists.js';
+import { trimTrailingSeparators } from '../core/path-separators.js';
+
+import { pnpmSpawnEnvironment } from './pnpm-env.js';
 
 /**
  * How to launch the resolved pnpm: an executable `file` plus the
@@ -28,6 +31,19 @@ import { type PathExists } from '../core/path-exists.js';
 export interface PnpmInvocation {
   readonly file: string;
   readonly leadingArgs: readonly string[];
+  /**
+   * The environment this invocation must be spawned with — the caller's own
+   * environment, scrubbed by {@link pnpmSpawnEnvironment}.
+   *
+   * It rides in the contract rather than being left to each call site because
+   * both launch modes need it and five of six callers had omitted it: the
+   * corepack launcher (the win32 first candidate) obeys `COREPACK_ROOT` and
+   * `COREPACK_HOME`, which redirect which package-manager build executes, and
+   * the standalone binary refuses to self-switch to the repository's pin when
+   * `COREPACK_ROOT` is inherited. A resolver that hands back a file but not
+   * the environment it must run in is a shape that invites the omission.
+   */
+  readonly env: NodeJS.ProcessEnv;
 }
 
 /** A probe-able pnpm location: the artefact to `exists`-check and how to launch it. */
@@ -58,7 +74,9 @@ function envValue(env: NodeJS.ProcessEnv, name: string): string | undefined {
  * + `\pnpm.exe` would otherwise probe `D:\pnpm-home\\pnpm.exe`).
  */
 function win32Root(env: NodeJS.ProcessEnv, name: string): string | undefined {
-  return envValue(env, name)?.replace(/[\\/]+$/u, '');
+  const value = envValue(env, name);
+
+  return value === undefined ? undefined : trimTrailingSeparators(value);
 }
 
 function win32Candidates(env: NodeJS.ProcessEnv): readonly PnpmCandidate[] {
@@ -178,9 +196,11 @@ export function resolvePnpm(
       ),
     );
   }
+  const spawnEnv = pnpmSpawnEnvironment(env);
+
   return ok(
     found.launch === 'direct'
-      ? { file: found.path, leadingArgs: [] }
-      : { file: process.execPath, leadingArgs: [found.path] },
+      ? { file: found.path, leadingArgs: [], env: spawnEnv }
+      : { file: process.execPath, leadingArgs: [found.path], env: spawnEnv },
   );
 }

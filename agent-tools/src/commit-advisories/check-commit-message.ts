@@ -192,6 +192,7 @@ function runCommitlint(message: string): number {
       {
         cwd: repoRoot,
         stdio: 'inherit',
+        env: pnpm.value.env,
       },
     );
     return result.status ?? 2;

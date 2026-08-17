@@ -300,9 +300,25 @@ describe('watcher path derivers', () => {
     expect(() => commsSeenFileForCodename('', dir)).toThrow();
   });
 
-  it('rejects an empty or root comms-seen dir (would derive a root-absolute path)', () => {
-    expect(() => commsSeenFileForCodename('Seal hunts Offing', '')).toThrow();
-    expect(() => commsSeenFileForCodename('Seal hunts Offing', '/')).toThrow();
+  // The win32 rows are the regression: the guard used to trim first and then
+  // test for emptiness, which catches `/` but leaves `C:\` as `C:` — a
+  // drive-RELATIVE prefix that `join` resolves against the current directory
+  // on that drive. The heartbeat then landed somewhere unpredictable while
+  // the error message claimed roots were refused.
+  it.each([
+    { label: 'empty', dir: '' },
+    { label: 'the posix root', dir: '/' },
+    { label: 'repeated posix separators', dir: '///' },
+    // Quoted escapes, not String.raw: a raw template cannot end in a single
+    // backslash — it escapes the closing backtick.
+    { label: 'a windows drive root', dir: 'C:\\' },
+    { label: 'a windows drive root in forward-slash form', dir: 'C:/' },
+    { label: 'a lower-case drive root', dir: 'c:\\' },
+    { label: 'a bare drive designator', dir: 'C:' },
+  ])('rejects $label as a comms-seen dir (would derive a root-absolute path)', ({ dir }) => {
+    expect(() => commsSeenFileForCodename('Seal hunts Offing', dir)).toThrow(
+      /not the filesystem root/u,
+    );
   });
 
   it('appends a single .heartbeat.json suffix to a seen-file', () => {

@@ -154,6 +154,7 @@ async function main(forwardedArgs: readonly string[]): Promise<number> {
       command: pnpm.value.file,
       args: [...pnpm.value.leadingArgs, ...args],
       cwd: repoRoot,
+      env: pnpm.value.env,
     });
 
   const result = await runCommitSkillAdvisories({

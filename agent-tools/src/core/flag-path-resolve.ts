@@ -47,7 +47,7 @@ export interface ReadPathOptions {
    * `assertPathWithinBase` default (`realpathSync`); tests inject a pure
    * function to prove containment refusals with literal fixtures and no IO.
    */
-  readonly realpath?: ((path: string) => string) | undefined;
+  readonly realpath?: (path: string) => string;
 }
 
 /**

@@ -89,17 +89,6 @@ describe('assertPathWithinBase — path flavours', () => {
       returns: 'C:/base/run.json',
     },
     {
-      label: 'win32 accepts a case-only difference (case-insensitive filesystems)',
-      pathApi: path.win32,
-      base: String.raw`C:\Base`,
-      candidate: String.raw`c:\base\RUN.json`,
-      table: {
-        [String.raw`C:\Base`]: String.raw`C:\Base`,
-        [String.raw`c:\base\RUN.json`]: String.raw`c:\base\RUN.json`,
-      },
-      returns: String.raw`c:\base\RUN.json`,
-    },
-    {
       label: 'win32 accepts a drive-letter case difference between base and candidate',
       pathApi: path.win32,
       base: String.raw`C:\base`,
@@ -135,13 +124,28 @@ describe('assertPathWithinBase — path flavours', () => {
       },
     },
     {
-      label: 'win32 refuses a sibling sharing the base as a prefix, case-folded',
+      label: 'win32 refuses a sibling sharing the base as a prefix, across drive-letter case',
       pathApi: path.win32,
       base: String.raw`C:\base`,
       candidate: String.raw`c:\BASE-secret\data.json`,
       table: {
         [String.raw`C:\base`]: String.raw`C:\base`,
         [String.raw`c:\BASE-secret\data.json`]: String.raw`c:\BASE-secret\data.json`,
+      },
+    },
+    {
+      // Windows directories can opt into case-sensitive lookup (fsutil, and
+      // anything created under WSL interop), so `C:\Base` and `C:\base` may be
+      // different directories. Folding them would report a candidate outside
+      // the base as contained — a false accept on a security boundary. The
+      // drive letter still normalises; only components are case-sensitive.
+      label: 'win32 refuses a component-case difference — case sensitivity is per-directory',
+      pathApi: path.win32,
+      base: String.raw`C:\Base`,
+      candidate: String.raw`c:\base\RUN.json`,
+      table: {
+        [String.raw`C:\Base`]: String.raw`C:\Base`,
+        [String.raw`c:\base\RUN.json`]: String.raw`c:\base\RUN.json`,
       },
     },
     {
