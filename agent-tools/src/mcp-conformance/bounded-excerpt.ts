@@ -17,7 +17,7 @@ const EXCERPT_MAX_CHARS = 2000;
  * for retained evidence artefacts.
  */
 export function boundedExcerpt(label: string, content: string): string {
-  const trimmed = content.trim();
+  const trimmed = redactCredentials(content.trim());
   if (trimmed === '') {
     return '';
   }
@@ -26,4 +26,22 @@ export function boundedExcerpt(label: string, content: string): string {
       ? trimmed
       : `${trimmed.slice(0, EXCERPT_MAX_CHARS)} … (truncated from ${String(trimmed.length)} trimmed chars)`;
   return ` — ${label}: ${body}`;
+}
+
+/**
+ * Excerpts ride failure reasons onto STDOUT (and into CI job logs), where
+ * the retention layer's owner-only 0600 discipline does not reach — so any
+ * credential shape in a child stream is redacted BEFORE the excerpt is
+ * composed, at this single choke point every stream excerpt passes through.
+ * The pattern set mirrors the vendor's own `redactSensitiveValue` (evidence
+ * the shapes are the right ones), kept local rather than imported — ten
+ * lines do not justify an `@mcpjam/sdk` edge into agent-tools.
+ */
+function redactCredentials(content: string): string {
+  return content
+    .replaceAll(
+      /\b(authorization|proxy-authorization|cookie|set-cookie)\s*:\s*[^\r\n]*/giu,
+      '$1: [redacted]',
+    )
+    .replaceAll(/\bBearer\s+[A-Za-z0-9\-._~+/]+=*/giu, 'Bearer [redacted]');
 }

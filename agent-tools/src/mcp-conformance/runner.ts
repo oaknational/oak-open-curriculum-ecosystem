@@ -90,8 +90,11 @@ export function findTargetMismatch(
  * differences. An unparseable value falls back to a trimmed literal compare
  * rather than throwing — a malformed target must surface as a mismatch, never
  * as a crash inside the parse boundary.
+ *
+ * Exported at its second consumer: the compat operation's evidence gate runs
+ * the same identity check over its report's single `target` field.
  */
-function canonicalTarget(value: string): string {
+export function canonicalTarget(value: string): string {
   const parsed = URL.parse(value);
   return parsed === null ? value.trim() : parsed.href.replace(/\/$/u, '');
 }

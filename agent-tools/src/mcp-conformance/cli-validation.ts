@@ -10,6 +10,7 @@ export interface CliState {
   unattended: boolean;
   seed: boolean;
   drive: boolean;
+  compat: boolean;
   target: string | undefined;
   suites: ConformanceSuite[];
   credentialsFile: string | undefined;
@@ -52,6 +53,56 @@ function validateDriveUsage(state: CliState): string | undefined {
 }
 
 /**
+ * The compat operation's rules. Compat evaluates the served tool surface
+ * against a host catalogue, so the suites' vocabulary does not apply to it —
+ * and unlike the suites it has no unattended plan at all, because it cannot
+ * reach the tool list without the authed surface. It DOES take
+ * `--credentials-file` (that is how it reaches the surface). It takes no
+ * `--seed`: seeding authors a suite baseline, and compat keeps no baseline —
+ * accepting the flag would silently ignore it.
+ */
+function validateCompatUsage(state: CliState): string | undefined {
+  if (!state.compat) {
+    return undefined;
+  }
+  if (state.drive) {
+    return '--compat and --drive are different operations — pick one';
+  }
+  if (state.suites.length > 0) {
+    return '--compat evaluates the served surface against the host catalogue — drop --suite';
+  }
+  if (state.unattended) {
+    return '--compat has no unattended mode (reading the tool surface needs the authed surface) — drop --unattended';
+  }
+  if (state.seed) {
+    return '--compat keeps no baseline to seed — drop --seed';
+  }
+  if (state.baselineDir !== undefined) {
+    return '--compat keeps no baseline to read — drop --baseline-dir';
+  }
+  return validateCompatTransportSecurity(state);
+}
+
+/**
+ * A credentialed run against a cleartext target puts the access token on the
+ * wire. Loopback is exempt — local capture against a dev server is the
+ * documented workflow, and those bytes never leave the machine.
+ */
+function validateCompatTransportSecurity(state: CliState): string | undefined {
+  if (state.credentialsFile === undefined || state.target === undefined) {
+    return undefined;
+  }
+  const parsed = URL.parse(state.target);
+  if (parsed === null || parsed.protocol === 'https:') {
+    return undefined;
+  }
+  const loopback = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(parsed.hostname);
+  return loopback
+    ? undefined
+    : '--credentials-file with a non-https --target would send the token in clear — use https (loopback targets are exempt)';
+}
+
+/**
  * The credentials-file rules, separated from the structural checks: the
  * unattended plan is credential-free, and the oauth suite never consumes
  * credentials (its argv carries no --credentials-file; the suite drives
@@ -72,12 +123,8 @@ function validateCredentialsUsage(state: CliState): string | undefined {
   return undefined;
 }
 
-/**
- * Validates the scanned CLI state, returning the bare refusal reason (no
- * usage text — the bin appends its help text at the print site) or
- * undefined when the state is runnable.
- */
-export function validateCliState(state: CliState): string | undefined {
+/** The checks every operation shares: suite parsing, duplicates, target. */
+function validateCommonUsage(state: CliState): string | undefined {
   if (state.suiteErrors.length > 0) {
     return state.suiteErrors.join('; ');
   }
@@ -88,11 +135,28 @@ export function validateCliState(state: CliState): string | undefined {
   if (state.target === undefined || state.target.trim() === '') {
     return '--target is required';
   }
+  return undefined;
+}
+
+/**
+ * Validates the scanned CLI state, returning the bare refusal reason (no
+ * usage text — the bin appends its help text at the print site) or
+ * undefined when the state is runnable.
+ */
+export function validateCliState(state: CliState): string | undefined {
+  const commonRefusal = validateCommonUsage(state);
+  if (commonRefusal !== undefined) {
+    return commonRefusal;
+  }
+  const compatRefusal = validateCompatUsage(state);
+  if (compatRefusal !== undefined) {
+    return compatRefusal;
+  }
   const driveRefusal = validateDriveUsage(state);
   if (driveRefusal !== undefined) {
     return driveRefusal;
   }
-  // Drive consumes credentials directly on every call; the suites' rules
-  // (unattended-forbids, oauth-only-drops) are not its rules.
-  return state.drive ? undefined : validateCredentialsUsage(state);
+  // Drive and compat consume credentials directly; the suites' rules
+  // (unattended-forbids, oauth-only-drops) are not their rules.
+  return state.drive || state.compat ? undefined : validateCredentialsUsage(state);
 }

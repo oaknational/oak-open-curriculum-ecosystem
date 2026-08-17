@@ -41,9 +41,12 @@ export const APP_REGISTRATION_DELTA_REVIEWS: Readonly<Record<string, CurrentSour
   ),
   // MCP-439: the in-memory client harness extracted from the registration
   // proof so the served-tool-table generator observes the same composition
-  // root instead of re-deriving the surface.
+  // root instead of re-deriving the surface. 2026-08-15 (ADR-226 lane):
+  // optional getWidgetHtml override so the host-compatibility test injects
+  // the real generated widget bytes — the default stub and every other
+  // consumer are unchanged; still a harness, registers no governed content.
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/connected-client.ts': excluded(
-    '13f24c3118a61fdf03f5097486080168c450c9ddaddbbdfe4b3351e3c4ecdaa4',
+    '7579b7f08424c2b902fb1e3f2ad84489e3145795de9e811cf161a6350a22b284',
     VALIDATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/registration-proof/current-source-guidance-registration-evidence.ts':

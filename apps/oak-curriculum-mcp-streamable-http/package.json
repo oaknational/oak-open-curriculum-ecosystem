@@ -64,6 +64,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^10.0.1",
+    "@mcpjam/sdk": "2.4.0",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/oak-design-assets": "workspace:*",
     "@oaknational/oak-design-system": "workspace:*",

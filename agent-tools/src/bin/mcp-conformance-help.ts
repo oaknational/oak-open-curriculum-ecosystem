@@ -18,7 +18,7 @@ export const HELP_TEXT = `Usage: pnpm -s mcp:conformance --target <url> [options
 appends to stdout when a failing run exits 1)
 
 Runs MCPJam conformance suites (lockfile-installed @mcpjam/cli) against a
-deployed MCP surface. Three operations:
+deployed MCP surface. Four operations:
 
 VERDICT (default): each suite is compared BY NAME against its committed
 baseline — pass requires a usable baseline, retained raw evidence, no
@@ -44,12 +44,35 @@ written. Only tools advertising readOnlyHint: true are invoked. Takes
 no --suite/--unattended (it enumerates from the server); needs
 --credentials-file against an authed surface.
 
+COMPAT (--compat): CAPTURES a per-host compatibility report for the DEPLOYED
+surface — each catalogue host's verdict (works | degraded | blocked |
+unknown) and the provenance grading how far that verdict can be trusted.
+Pins --offline (the catalogue bundled with the resolved SDK) so the only
+varying input is Oak's own surface, and --no-telemetry. ATTENDED ONLY:
+reading the tool surface needs the authed surface, so it takes
+--credentials-file and no --unattended, and takes no --suite (it evaluates
+hosts, not suites) and no --seed/--baseline-dir (it keeps no baseline at
+all — the per-commit test is the gate; this route only captures).
+
+It reports; it does not judge. The per-commit GATE is a separate, cheaper
+thing — an in-repo test that evaluates the served surface directly with no
+server (apps/oak-curriculum-mcp-streamable-http/src/served-surface/
+host-compatibility.integration.test.ts). This route exists to prove what the
+DEPLOYMENT actually serves, which is the one question that test cannot
+answer.
+
+NOTE on compat exit semantics — the INVERSE of the suites: a failed compat
+run writes NOTHING to stdout and puts a structured error envelope on stderr
+(exit 1 operational, 2 usage), so a non-zero exit means there is no report
+to judge, never a judged failure.
+
 The wrapper's aggregate report goes to stdout AND <report-dir>/summary.json.
 
-Examples (verdict, seed, then drive):
+Examples (verdict, seed, drive, then compat):
   pnpm -s mcp:conformance --target https://mcp.example.test/mcp --unattended
   pnpm -s mcp:conformance --target https://mcp.example.test/mcp --unattended --seed
   pnpm -s mcp:conformance --target https://mcp.example.test/mcp --drive --credentials-file tmp/creds.json
+  pnpm -s mcp:conformance --target https://mcp.example.test/mcp --compat --credentials-file tmp/creds.json
 
 Options:
   --target <url>             MCP server URL (required), e.g. https://<host>/mcp
@@ -64,6 +87,10 @@ Options:
   --baseline-dir <path>      Baseline dir (default: the committed baselines)
   --drive                    Drive operation: exercise every advertised tool,
                              render the reviewer pack
+  --compat                   Compat operation: capture per-host compatibility
+                             verdicts for the deployed surface. Reports; does
+                             not judge. Attended only; takes no
+                             --suite/--unattended/--seed
   --pack-out <path>          Reviewer-pack output path (drive only; default
                              <report-dir>/reviewer-pack.md)
   --preamble-file <path>     JSON with the pack's owner-approved preamble

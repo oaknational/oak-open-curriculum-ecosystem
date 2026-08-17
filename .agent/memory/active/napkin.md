@@ -3408,3 +3408,54 @@ the echo-back is the only reliable detector.
   (three-identities-are-a-demonstration-instrument). Scope: standing seat
   practice; the ontology is estate doctrine pending its contract-surface
   landing with tranche 1.
+
+## 2026-08-15 17:49Z (Possum spins Hollow, 2c295a, mcp-compat review lane) — mutation sweep found one surviving mutant; containment assertions could not tell the two failure paths apart
+
+- The compat-evidence mutation sweep (5 mutants, owner-directed) killed 4 on
+  the first run; mutant 3 (envelope parse deleted, raw-excerpt fallback always
+  taken) SURVIVED 32/32 because the test asserted `toContain('INTERNAL_ERROR')`
+  and `toContain('HTTP 401')` — strings the raw stderr excerpt also contains.
+  A containment assertion cannot discriminate a structured path from a
+  raw-dump fallback when the fallback embeds the same source text; the
+  discriminator has to be a NEGATIVE assertion on the fallback's own marker
+  (`not.toContain('not a recognised error envelope')`). Cured in
+  compat-run.unit.test.ts; the mutant now dies to exactly one test. Same class
+  as the handoff's decorative-test warning — the sweep earned its cost.
+- The blocked/unknown bite-check ran through the REAL pipeline: `visibility:
+  ['app']` (one-word app-only regression in the SDK widget definition) failed
+  exactly the no-host-blocked assertion naming 7 hosts; a stale `resourceUri`
+  (`${WIDGET_URI}-renamed`) failed exactly the determinate-verdict assertion
+  naming 9 unknown hosts. Both mutations rebuilt the SDK dist and were
+  grep-proven IN the dist before the test ran (the 2026-08-09 stale-dist
+  lesson applied); both reverted, dist grep-proven clean, 5/5 green after.
+- Worked-instance note: the compat lane's untracked files cannot be restored
+  by `git checkout` — the sweep used a cmp-verified scratchpad pristine copy
+  per mutant. Scope: any mutation work on not-yet-committed files.
+
+## 2026-08-15 18:38Z (Possum spins Hollow, 2c295a) — five-reviewer pass on the compat lane: outcomes and one own-mistake
+
+- Five-reviewer pass (code/test/mcp/security/docs-adr) on the mcp-compat lane
+  produced 30+ findings, all cured, dispositioned, or declined-with-reason in
+  one consolidated pass. Highest-value catches: the parsed compat report's
+  `target` was never compared to the requested target (the suites' worst-answer
+  class, demonstrated by the lane's own fixture/TARGET mismatch — cured with
+  canonicalTarget at its second consumer, mutation-proven); and the vendor
+  SDK's OWN telemetry (module-load PostHog + Sentry DSN) is env-gated only —
+  the CLI's --no-telemetry flag never reaches it; the spawn seam now sets
+  DO_NOT_TRACK/MCPJAM_TELEMETRY_DISABLED. Reviewer-conflict adjudication
+  worked instance: code-expert wanted a lazy memo on the app test's module
+  promise, test-expert sanctioned the immutable shape — kept the doctrine
+  carrier's shape, recorded the reason.
+- OWN MISTAKE (transmitting an unverified frame): reported the plan's
+  "strongest provenance tier present is vendor-doc" as FALSE using the
+  compat-types TSDoc ordering (probe above vendor-doc) — the TSDoc itself was
+  wrong; the vendor's PROVENANCE_RANK puts vendor-doc above probe, so the plan
+  was right and my "fix" replaced a true claim with a justification error.
+  mcp-expert caught it by reading the engine source. Class: verifying a claim
+  against a SECOND-HAND record (our own TSDoc) instead of the authority
+  surface (vendor code) — trace-constraint-provenance biting a reviewer
+  mid-review. Cure applied: TSDoc trued against PROVENANCE_RANK, plan claim
+  restored, correction reported to the owner honestly.
+- Vendor fact worth keeping: MCPJam catalogue provenance ordering is
+  assumed < probe < vendor-doc < observed (engine PROVENANCE_RANK); a lane's
+  TSDoc asserting vendor semantics is not evidence — the dist is.

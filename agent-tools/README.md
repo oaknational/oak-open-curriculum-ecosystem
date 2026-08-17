@@ -35,7 +35,7 @@ domain-specific flows:
 - `cursor-session-from-claude-session`: find/inspect Claude sessions and generate Cursor takeover bundles with an explicit reintegration contract.
 - `codex-reviewer-resolve`: resolve a repo-local Codex reviewer adapter to the exact `.codex` and canonical `.agent` files that should ground a review.
 - `protocol-conformance`: recompute the estate's collaboration-protocol tier from artefacts and gates and compare it against the declared floor.
-- `mcp-conformance`: run MCPJam conformance suites (lockfile-installed `@mcpjam/cli`) against a deployed MCP surface — verdicts BY NAME against committed baselines (default), capture observation seeds for authoring baselines via `--seed`, or drive every advertised tool once with its advertised example inputs and render the reviewer walkthrough pack via `--drive` (root alias `pnpm -s mcp:conformance` — the `-s` keeps stdout pure JSON on failing runs).
+- `mcp-conformance`: run MCPJam conformance suites (lockfile-installed `@mcpjam/cli`) against a deployed MCP surface — verdicts BY NAME against committed baselines (default), capture observation seeds for authoring baselines via `--seed`, drive every advertised tool once with its advertised example inputs and render the reviewer walkthrough pack via `--drive`, or capture per-host compatibility verdicts for the deployed surface via `--compat` (reports, never judges; a failed compat run writes nothing to stdout and describes itself on stderr — see the help text for the full operation list and each operation's exit semantics). Root alias `pnpm -s mcp:conformance`; the `-s` keeps stdout pure JSON wherever a run emits a report.
 
 ## Structure
 
