@@ -418,7 +418,20 @@ detector-contract cause.
 
 ## Todos
 
-### Current execution state — documentation handoff 2026-08-03
+### Execution state at the 2026-08-03 documentation handoff (historical)
+
+**Amendment 2026-08-12 — this section is a dated historical record, no longer
+current state.** The tranche it describes was preserved to main by the owner's
+safety commit `c69b0746c` (2026-08-03, 125 paths) and subsequently GREENED by
+the foundations-review lane (`d16ba0e7d`, 2026-08-05, plus three follow-on
+cure rounds: tsc 0, eslint 0 errors, three boundary smokes wired into
+`test:e2e`). Per the plan-node schema's governing principle, execution state
+is never a durable plan field — current state is read from the estate. The
+`survey-machinery-deconstruction` node (2026-08-12) reads this plan's corpus
+as design input for the owner's survey programme; its ledger proposes
+dispositions and retires nothing here.
+
+The paragraph below stands as what was true at the 2026-08-03 handoff moment:
 
 This plan remains active. The implementation is an uncommitted, incomplete
 tranche in the dedicated worktree; no preservation commit, push, pull request,

@@ -338,6 +338,57 @@ positional args instead:
 
 ## Agent Workflow Issues
 
+### Statusline Segments Missing, or Payload Diagnosis
+
+When an expected statusline segment does not render (context %, session
+or weekly usage %, identity, git location), the question splits: is the
+adapter dropping it, or did the harness never send the field? The
+adapter deliberately drops absent fields — for example the usage
+percentages render only when the payload carries `rate_limits`, which
+Claude Code includes only for Claude.ai subscriber auth after the first
+model response.
+
+To see exactly what the harness sends, set the diagnosis log and
+restart the session:
+
+```json
+// .claude/settings.local.json (machine-local, untracked)
+{ "env": { "OAK_STATUSLINE_LOG_FILE": ".logs/statusline.log" } }
+```
+
+Each statusline invocation then appends one timestamped line with the
+payload as received (line breaks collapsed to keep one line per
+invocation) to the named `.log` file; `.logs/` is the repo's gitignored
+log directory. Read the latest line and check which fields are present.
+
+Reading the outcomes honestly:
+
+- **A set non-blank value that does not end `.log` renders a loud
+  statusline warning** and logs nothing — misconfiguration is never
+  silent. A blank or whitespace-only value is treated as unset:
+  neither a warning nor a log.
+- **No file and no warning?** Check the adapter is current before
+  concluding anything: the shim runs the BUILT adapter, so a stale
+  `agent-tools/dist` silently predates the feature —
+  `grep -c OAK_STATUSLINE_LOG_FILE agent-tools/dist/src/claude/statusline-identity.js`
+  returning `0` means rebuild (`pnpm --filter @oaknational/agent-tools build`).
+  A current adapter can also produce no-file-and-no-warning when the
+  destination refuses (unwritable parent, a symlink or non-regular file
+  at the path, a file the invoking user cannot own, denied append) —
+  refusals are deliberately swallowed, so check the destination is a
+  creatable, writable, regular file owned by you before concluding the
+  payload never arrived.
+- **Hygiene**: the log grows unbounded (one line per refresh) and
+  carries session ids and project paths. The destination is a boundary
+  (symlinks refuse to open, non-regular files never receive a write, a
+  pre-existing file is retightened to owner-only before each append), but
+  a pre-existing parent directory's permissions are not retightened —
+  prefer a private directory, and delete the file after the diagnosis,
+  don't just unset the variable.
+
+Mechanism reference:
+[agent-tools README §Claude statusline quick reference](../../agent-tools/README.md#claude-statusline-quick-reference).
+
 ### Background Reviewer Agents Not Returned
 
 Reviewer sub-agents dispatched near the end of a conversation

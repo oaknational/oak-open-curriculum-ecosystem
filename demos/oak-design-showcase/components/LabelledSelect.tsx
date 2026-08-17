@@ -2,10 +2,12 @@
  * The one labelled-select view the switchboard composes three times — the
  * kit's shipped switcher markup (label.oak-body-3 + select.oak-select in a
  * cluster), props-only. `placeholderLabel` renders a disabled, hidden
- * option shown only while `value` is the empty no-choice sentinel: the
- * select then reads truthfully ("Page default") AND the first real choice
- * fires a change event — a value pinned to a real option would make that
- * first click a dead control.
+ * option shown only while `value` is '' — the PRE-HYDRATION no-knowledge
+ * state (the shell shows an em dash because it cannot know a returning
+ * user's persisted choice). The no-CHOICE state needs no placeholder: it
+ * is the selectable "Identity default" option (DDR-003 dated amendment
+ * 2026-08-11), so the live control always holds a real value and every
+ * first click on a different option fires a change event.
  *
  * The disabled-placeholder shape depends on React emitting `selected=""`
  * on the value-matching option even when that option is `disabled hidden`

@@ -10,7 +10,8 @@ Index lifecycle management is handled by the SDK's `IndexLifecycleService`, expo
 
 ```bash
 # Full blue/green ingest cycle: create versioned indexes, ingest, verify, swap aliases, clean up
-oak-search admin versioned-ingest --bulk-dir <path> [--subject-filter <subjects...>] [--version <version>] [--min-doc-count <count>] [-v]
+# (--include-restricted is rejected for index-producing runs until restricted lessons are labelled in results — ADR-224)
+oak-search admin versioned-ingest --bulk-dir <path> [--subject-filter <subjects...>] [--version <version>] [--min-doc-count <count>] [--include-restricted] [-v]
 
 # Roll back to the previous index version recorded in metadata
 oak-search admin rollback

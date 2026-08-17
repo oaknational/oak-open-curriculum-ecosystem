@@ -18,8 +18,10 @@
     "test:ui": "env -u NO_COLOR playwright test --grep-invert @a11y",
     "test:a11y": "env -u NO_COLOR playwright test --grep @a11y",
     "tool:fidelity": "tsx tools/fidelity-review.ts",
+    "tool:visual-probe": "tsx tools/visual-probe.ts",
     "validate-authored-css": "tsx tools/validate-authored-css.ts",
-    "validate-kit-assets": "tsx tools/validate-kit-assets.ts"
+    "validate-kit-assets": "tsx tools/validate-kit-assets.ts",
+    "tool:capture-pair": "tsx tools/capture-pair.ts"
   },
   "dependencies": {
     "@oaknational/oak-design-react": "workspace:*",

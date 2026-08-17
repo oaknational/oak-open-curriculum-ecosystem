@@ -360,7 +360,7 @@ Out of scope). Reviewed pre-ratification by an assumptions-expert pass
 and a design stress-test; all 23 findings folded in. The
 enforcement-hardening slices (three surviving after the same-day
 H3 withdrawal and H1 slim) cut to the successor node
-[`workspace-config-enforcement-hardening`](workspace-config-enforcement-hardening.plan.md)
+`workspace-config-enforcement-hardening` (archived 2026-08-12; under `delivery/archive/`)
 (born with the same ratification word) so this node stays one step of
 the lane and archives when its criteria prove.
 

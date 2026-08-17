@@ -1,0 +1,43 @@
+/* Public Digital Service — Part A (minimal viable brand), v7 "the public service".
+   GDS-ALIGNED BY DIRECTION (July 2026): authentic GOV.UK Design System
+   visual grammar (design-system.service.gov.uk, OGL v3.0) is the stated
+   requirement, superseding v6's maximal-distance placement. Distance from
+   Oak now comes from GDS's OWN signatures: black masthead + blue bar,
+   action-green buttons, blue underlined links, grey panels, tight bold
+   ramp. NOT taken: the crown, GDS Transport, the GOV.UK header trade
+   dress. See BRAND.md v7. */
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap');
+:root {
+  /* 1. Type — a transport-grade workhorse grotesque (GDS Transport is
+     restricted; Public Sans is the open government-service equivalent). */
+  --font-sans: 'Public Sans', Arial, 'Helvetica Neue', sans-serif;
+  --font-display: 'Public Sans', Arial, 'Helvetica Neue', sans-serif;
+  --weight-display: 700;
+  --weight-light: 400; /* GDS has no light text */
+  /* 2. Accent — GDS brand blue drives the signature (focus inner ring,
+     selection, markers, the masthead bar). */
+  --color-accent: light-dark(#1d70b8, #5694ca);
+  --color-accent-soft: light-dark(#d2e2f1, #1c4a75);
+  --color-accent-subtle: light-dark(#eef4fa, #122435);
+  /* 3. Decorative ramp — the GDS web palette (blue, turquoise, light-purple,
+     pink, yellow, orange) at panel tints; dark polarity re-derived on the
+     same hue axes (GDS ships light-only). */
+  --surface-decorative-1: light-dark(#d2e2f1, #1c4a75);
+  --surface-decorative-1-soft: light-dark(#e4eef7, #17344f);
+  --surface-decorative-1-subtle: light-dark(#eef4fa, #122435);
+  --surface-decorative-2: light-dark(#d4ecea, #14514c);
+  --surface-decorative-2-soft: light-dark(#e5f4f3, #10403c);
+  --surface-decorative-2-subtle: light-dark(#eff9f8, #0c2f2c);
+  --surface-decorative-3: light-dark(#e2e3ef, #3a3c61);
+  --surface-decorative-3-soft: light-dark(#ededf5, #2e3050);
+  --surface-decorative-3-subtle: light-dark(#f4f4f9, #22233c);
+  --surface-decorative-4: light-dark(#f7d7e6, #6b1c40);
+  --surface-decorative-4-soft: light-dark(#fae6ef, #521833);
+  --surface-decorative-4-subtle: light-dark(#fdf0f6, #3a1225);
+  --surface-decorative-5: light-dark(#fff7bf, #605300);
+  --surface-decorative-5-soft: light-dark(#fffadb, #4a4000);
+  --surface-decorative-5-subtle: light-dark(#fffcea, #332d00);
+  --surface-decorative-6: light-dark(#fce4d7, #7a3c1c);
+  --surface-decorative-6-soft: light-dark(#fdeee5, #5e2f17);
+  --surface-decorative-6-subtle: light-dark(#fef5f0, #422210);
+}

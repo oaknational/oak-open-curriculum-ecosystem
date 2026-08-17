@@ -49,6 +49,14 @@ export interface CarriageReadFs {
   listOtherEntryNames(path: string): Promise<FsRead<readonly string[]>>;
   /** File bytes; `undefined` iff the path is absent (ENOENT). */
   readFileBytesOrUndefined(path: string): Promise<FsRead<Uint8Array | undefined>>;
+  /**
+   * Lexical entry kind via lstat — NEVER follows a symlink: `file` is a
+   * regular file, `directory` a real directory, `other` covers symlinks
+   * and special files, `absent` is ENOENT. Class recognition and
+   * emission targeting are gated on this so no classification read and
+   * no write ever crosses a link.
+   */
+  entryKind(path: string): Promise<FsRead<'file' | 'directory' | 'other' | 'absent'>>;
   /** Whether the file carries any executable bit; `undefined` iff absent. */
   isExecutableOrUndefined(path: string): Promise<FsRead<boolean | undefined>>;
   /**
@@ -101,6 +109,19 @@ export const realCarriageReadFs: CarriageReadFs = {
       return isAbsence(error)
         ? ok(undefined)
         : { kind: 'failure', message: `cannot read ${path}: ${String(error)}` };
+    }
+  },
+  async entryKind(path) {
+    try {
+      const entryStat = await lstat(path);
+      if (entryStat.isFile()) {
+        return ok('file' as const);
+      }
+      return ok(entryStat.isDirectory() ? ('directory' as const) : ('other' as const));
+    } catch (error: unknown) {
+      return isAbsence(error)
+        ? ok('absent' as const)
+        : { kind: 'failure', message: `cannot lstat ${path}: ${String(error)}` };
     }
   },
   async isExecutableOrUndefined(path) {

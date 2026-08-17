@@ -10,11 +10,9 @@
  *   skills-adapter-generate --check --prefix=oak-    # exit non-zero on drift
  *   skills-adapter-generate --clear --prefix=oak-    # clear then generate
  */
-import { join } from 'node:path';
 import { argv, exit, stderr, stdout } from 'node:process';
 
 import { checkAdapters } from '../skills-adapter-generate/checker.js';
-import { clearGeneratedAdapters, readLockedSkillIds } from '../skills-adapter-generate/clear.js';
 import { CLI_USAGE, parseCliFlags, type CliFlags } from '../skills-adapter-generate/cli-flags.js';
 import { generateAdapters, generateExitCode } from '../skills-adapter-generate/generator.js';
 
@@ -46,7 +44,7 @@ function reportCheckFailures(result: Awaited<ReturnType<typeof checkAdapters>>):
   if (result.stale.length > 0) {
     const staleList = result.stale.map((p) => `  ${p}`).join('\n');
     stderr.write(
-      `Stale projection-root entries (no discovered canonical, not lock-pinned; a generator run removes them):\n${staleList}\n`,
+      `Stale Practice-namespace entries (no discovered canonical; a generator run removes them):\n${staleList}\n`,
     );
   }
   if (result.refused.length > 0) {
@@ -58,13 +56,13 @@ function reportCheckFailures(result: Awaited<ReturnType<typeof checkAdapters>>):
   stderr.write('Regenerate with `pnpm skills:generate`, then `pnpm skills:check` to confirm.\n');
 }
 
-async function runCheck(
-  repoRoot: string,
-  prefix: string,
-  lockedIds: ReadonlySet<string>,
-): Promise<number> {
-  const result = await checkAdapters({ repoRoot, prefix, lockedIds });
+async function runCheck(repoRoot: string, prefix: string): Promise<number> {
+  const result = await checkAdapters({ repoRoot, prefix });
   if (result.canonicalCount === 0) {
+    if (result.refused.length > 0) {
+      const refusedList = result.refused.map((p) => `  ${p}`).join('\n');
+      stderr.write(`Refusals:\n${refusedList}\n`);
+    }
     stderr.write(
       'Zero canonical skills discovered — a missing or unreadable `.agent/skills` root, not an empty estate. Refusing to certify.\n',
     );
@@ -89,22 +87,17 @@ async function runCheck(
   return 1;
 }
 
-async function runGenerate(
-  repoRoot: string,
-  flags: CliFlags,
-  lockedIds: ReadonlySet<string>,
-): Promise<number> {
-  if (flags.clear) {
-    const clearResult = await clearGeneratedAdapters(repoRoot, lockedIds);
-    if (clearResult.kind === 'error') {
-      stderr.write(`--clear failed: ${clearResult.message}\n`);
-      return 1;
-    }
-    stdout.write(
-      `Cleared adapter directories (${String(lockedIds.size)} lock-pinned preserved).\n`,
-    );
-  }
-  const outcome = await generateAdapters({ repoRoot, prefix: flags.prefix, lockedIds });
+async function runGenerate(repoRoot: string, flags: CliFlags): Promise<number> {
+  // The clear is folded into generation behind the discovery-completeness
+  // gate: `generateAdapters` clears only after it has fully discovered the
+  // canonicals it must regenerate, so `--clear` from the wrong directory (zero
+  // canonicals) removes nothing (review 2026-08-12, defect 1). The removed
+  // directories come back on `outcome.cleared`.
+  const outcome = await generateAdapters({
+    repoRoot,
+    prefix: flags.prefix,
+    clearFirst: flags.clear,
+  });
   reportGenerateOutcome(outcome);
   if (outcome.written.length === 0 && outcome.skipped.length === 0) {
     stderr.write(
@@ -116,6 +109,13 @@ async function runGenerate(
 }
 
 function reportGenerateOutcome(outcome: Awaited<ReturnType<typeof generateAdapters>>): void {
+  if (outcome.cleared.length > 0) {
+    const clearedList = outcome.cleared.map((p) => `  ${p}`).join('\n');
+    stdout.write(
+      `Cleared ${String(outcome.cleared.length)} Practice-projection directories before ` +
+        `regeneration (entries without the class marker are not ours; untouched):\n${clearedList}\n`,
+    );
+  }
   stdout.write(`Wrote ${String(outcome.written.length)} projection files.\n`);
   if (outcome.pruned.length > 0) {
     const prunedList = outcome.pruned.map((p) => `  ${p}`).join('\n');
@@ -126,8 +126,8 @@ function reportGenerateOutcome(outcome: Awaited<ReturnType<typeof generateAdapte
   if (outcome.sweptStale.length > 0) {
     const sweptList = outcome.sweptStale.map((p) => `  ${p}`).join('\n');
     stdout.write(
-      `Removed ${String(outcome.sweptStale.length)} stale projection-root entries ` +
-        `(no discovered canonical, not lock-pinned):\n${sweptList}\n`,
+      `Removed ${String(outcome.sweptStale.length)} stale Practice-namespace entries ` +
+        `(no discovered canonical):\n${sweptList}\n`,
     );
   }
   if (outcome.duplicates.length > 0) {
@@ -164,17 +164,7 @@ async function main(): Promise<number> {
   }
   const flags = parsed.flags;
   const repoRoot = process.cwd();
-  // Both modes are lock-aware: the projection-root sweep must know which
-  // directories are vendored externals generation cannot re-create, and an
-  // unreadable lock refuses the run rather than reading as "nothing pinned".
-  const lockResult = await readLockedSkillIds(join(repoRoot, 'skills-lock.json'));
-  if (lockResult.kind === 'error') {
-    stderr.write(`refused: ${lockResult.message}\n`);
-    return 1;
-  }
-  return flags.check
-    ? await runCheck(repoRoot, flags.prefix, lockResult.value)
-    : await runGenerate(repoRoot, flags, lockResult.value);
+  return flags.check ? await runCheck(repoRoot, flags.prefix) : await runGenerate(repoRoot, flags);
 }
 
 try {

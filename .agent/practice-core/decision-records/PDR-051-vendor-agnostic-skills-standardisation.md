@@ -335,6 +335,25 @@ fail on drift between canonical and adapters.
 
 ## Notes
 
+### Skill classes supersede owned-vs-ingested (2026-08-12 note)
+
+The owned/ingested apparatus above (lock file, `metadata.owned` flag,
+generator/validator consistency check) is superseded by the owner's
+three-class taxonomy of 2026-08-12: **Practice skills** (the owned
+corpus and its projections, recognised by the class marker recording
+each generated stub's derivation from the canonical tree), **Vendor
+skills** (installed and managed by the external skills machinery —
+`pnpx skills` — with no host-side lock or oversight: a host registry
+over foreign content had the host validating an external system,
+against its own testing doctrine), and **User-facing skills** (product
+deliverables assured as product). In the Oak host the lock apparatus
+was never fully exercised (`metadata.owned` was enforced nowhere; the
+lock's recorded hashes reconciled against nothing) and is now removed —
+host phenotype: ADR-125 §Skill classes and validation jurisdiction.
+This section's lock-file model stands as the record of the superseded
+shape; portable adopters should classify by recorded derivation, never
+by registries of content another system owns.
+
 ### Skill-listing budgets rise with Practice adoption (2026-06-12 note)
 
 Repos adopting the Practice exhibit a structurally higher skill count

@@ -15,7 +15,7 @@
    value is a kit role, scale, or plain CSS keyword (the owner's
    no-hardcoded-values invariant, gated by tools/validate-authored-css.ts).
    Painted properties stay at hook-level specificity so a brand sheet
-   loaded later restyles them (Freedonia's §11 expression layer targets
+   loaded later restyles them (PDS's §11 expression layer targets
    .mast/.brand-name); the two heavier selectors below set only custom
    properties or non-brand-surface text behaviour, so brand layers keep
    winning on everything painted. */
@@ -25,36 +25,6 @@ body {
      overflows 320px reflow. */
   margin: 0;
   color: var(--text-primary);
-}
-.hero-inner h1 {
-  /* SC 1.4.10: 'Curriculum' is wider than a 320px line at display sizes
-     (Creature's 84px ramp especially) — hyphenate rather than overflow. */
-  overflow-wrap: anywhere;
-  hyphens: auto;
-}
-.util .oak-select {
-  /* The kit's selects are width:100%; the switchboard's size to content.
-     No min-height override: the kit's own --input-min-h governs (the
-     reference switcher's --size-target-min pin is a routed kit finding —
-     it shrinks controls below the kit's control rhythm and binds a
-     private primitive no brand lever can move). */
-  width: auto;
-}
-.util {
-  /* The interactive band is deliberately NOT inverted: the kit's canonical
-     focus ring needs --focus-ring-inverted on every control placed on an
-     inverted surface, and a brand that re-polarises the band (Creature
-     does exactly this) then has no token to restore it — measured
-     invisible in creature/high-contrast. Non-inverted chrome keeps the
-     canonical ring audit-clean in every identity × theme cell. */
-  background: var(--bg-subtle);
-  color: var(--text-primary);
-}
-.util-inner {
-  padding-block: var(--space-8);
-  /* No height reservation needed: the switchboard server-renders its full
-     geometry (theme/motion as disabled placeholders until hydration), so
-     the shell is layout-stable at every width — see Switchboard.tsx. */
 }
 .mast {
   border-bottom: var(--border-solid-m) solid var(--border-primary);
@@ -67,9 +37,6 @@ body {
   margin: 0;
 }
 .hero-inner {
-  padding-block: var(--space-40);
-}
-.content-inner {
   padding-block: var(--space-40);
 }
 .foot {
@@ -96,4 +63,39 @@ body {
 }
 .foot-inner {
   padding-block: var(--space-40);
+}
+
+/* Landing doors: two demonstration cards side by side, stacking narrow.
+   Layout only — every visible value resolves through kit tokens. */
+.doors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--space-360), 100%), 1fr));
+  gap: var(--gap-l);
+  padding-block: var(--space-40);
+}
+.door {
+  justify-items: start;
+}
+.door-btn {
+  margin-block-start: auto;
+}
+
+/* Composition demo stage: the nested canvases are exhibits inside the
+   page, so the full-viewport minimum is inapplicable there — layout
+   override only, in the demo's own stage scope. */
+.comp-stage .oak-canvas {
+  min-height: auto;
+}
+.comp-stub {
+  background: var(--surface-decorative-1-soft);
+  border: var(--border-solid-m) solid var(--border-neutral);
+  padding: var(--space-16);
+  min-height: var(--space-48);
+}
+.comp-stub-label {
+  background: var(--bg-primary);
+  padding-inline: var(--space-8);
+}
+.comp-exhibit {
+  padding-block: var(--space-24);
 }

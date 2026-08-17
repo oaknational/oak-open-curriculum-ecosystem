@@ -12,40 +12,32 @@ This workspace **is** the design system — a first-class part of the
 [oak-open-curriculum-ecosystem](https://github.com/oaknational/oak-open-curriculum-ecosystem)
 monorepo and the estate's design source of truth
 ([ADR-213](../../../docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md)).
-The Claude Design studio project ("Oak Open Curriculum Design System") is the system's
-second first-class working surface — design sessions run there with affordances the repo
-lacks (live specimen rendering, the design compiler, in-page probes, the live contrast
-audit). One system, two surfaces; never a fork, never a record.
-
-**The design-sync runbook:**
-
-- **Studio → repo**: after a design session, pull the changed files (DesignSync reads; the
-  studio's `_ds_sync.json` anchor and `guidelines/CHANGELOG.md` name what changed) and land
-  them as a normal reviewed PR — incremental, per-component, never a wholesale replace.
-- **Repo → studio**: before a design session, bring the studio current from this workspace
-  (structural diff via `list_files`, then targeted writes).
-- **Conflict rule**: git review is the merge authority. A sync never overwrites unreviewed
-  repo changes; disagreements resolve in the PR, and the studio re-syncs from the merged
-  result. Sync runs are deliberate session actions — no background automation.
+This repo is the system's only surface. Owner ruling 2026-08-12: "there is no
+studio sync, the design system lives in this repo and this repo only." The Claude
+Design studio project that once served as a second working surface is gone, and the
+design-sync runbook that described exchanging files with it no longer describes
+anything — every change lands here as a normal reviewed PR.
 
 **Repo-specific notes:**
 
 - The compiled React components under `components/` are deliberately **not** on this
   package's export surface (ADR-213 §3); apps compose Base UI + the class library instead.
 - Some tracked files (the four component specimen cards, `templates/*/ds-base.js`, the
-  standalone deck) reference `_ds_bundle.js` / `_ds_manifest.json` — the studio's compiled
-  bundle, held out here as studio-generated. That wiring renders live on the studio surface
-  only; in-repo these files are sources and fidelity targets, not served pages.
+  standalone deck) reference `_ds_bundle.js` / `_ds_manifest.json` — a compiled bundle that
+  is not built here. Those files are absent from the runtime locations these pages
+  reference; the copies under `studio-source/original-capture-2026-07-23/` are provenance,
+  not a runtime dependency. In-repo these pages are sources and fidelity targets, not
+  served pages.
 - **Structural boundary (owner ruling 2026-07-19)**: the non-production studio material
   (specimens, proofs, reference build, templates, reference components, integrations,
   proof pages) lives under [`studio-source/`](studio-source/README.md) — quality-gate
   scopes bind that path alone; everything at the workspace root is product surface under
-  the full strict gate. Design-sync maps `studio:/<instrument-dirs>` ⇄
-  `repo:studio-source/<instrument-dirs>`; consumable files map root ⇄ root. The file
-  index below describes the STUDIO layout.
+  the full strict gate. The file index below is the layout of this workspace: instrument
+  directories sit under `studio-source/`, consumable files and guidance documents at the
+  root.
 - Licensing dispositions per file class: [LICENSING-MANIFEST.md](LICENSING-MANIFEST.md);
   Oak marks are outside MIT per the repo's [BRANDING.md](../../../BRANDING.md).
-- For Next.js theme bootstrap in THIS repo, ADR-213 §3 corrects `docs/consuming-nextjs.md` (studio: `guidelines/docs/consuming-nextjs.md`):
+- For Next.js theme bootstrap in THIS repo, ADR-213 §3 corrects `docs/consuming-nextjs.md`:
   use a raw inline head script, not `next/script beforeInteractive`.
 
 ## Quick start
@@ -57,7 +49,7 @@ audit). One system, two surfaces; never a fork, never a record.
 <!-- optional: persisted theme switcher -->
 ```
 
-**No-build install (copy path):** copy `colors_and_type.css`, `oak-icons.css`, `components.css`, `print.css`, `oak-theme.js`, `assets/icons/`, and `fonts/` — link the four CSS files in that order (equivalent to `styles.css`, which only `@import`s them; some serve contexts drop `@import`-only sheets — see `KNOWN-ISSUES.md` (studio: `guidelines/KNOWN-ISSUES.md`); `oak-icons.css` must stay root-adjacent to `components.css`). The copy path stays build-free for consumers: `oak-theme.js` is generated in this repo from `src/oak-theme.ts` (type-erasure only) and committed, with a repo gate holding the committed file byte-identical to the build output — copy it as-is. Versioning and what-changed: `CHANGELOG.md` (studio: `guidelines/CHANGELOG.md`).
+**No-build install (copy path):** copy `colors_and_type.css`, `oak-icons.css`, `components.css`, `print.css`, `oak-theme.js`, `assets/icons/`, and `fonts/` — link the four CSS files in that order (equivalent to `styles.css`, which only `@import`s them; some serve contexts drop `@import`-only sheets — see `KNOWN-ISSUES.md` #1; `oak-icons.css` must stay root-adjacent to `components.css`). The copy path stays build-free for consumers: `oak-theme.js` is generated in this repo from `src/oak-theme.ts` (type-erasure only) and committed, with a repo gate holding the committed file byte-identical to the build output — copy it as-is. Versioning and what-changed: `CHANGELOG.md`.
 
 Then build with **classes** and **semantic tokens**:
 
@@ -202,11 +194,11 @@ colors_and_type.css     ← tier 1 primitives + tier 2 roles (canonical + aliase
 components.css          ← the class library
 oak-theme.js            ← persisted theme switcher
 brand_voice.txt         ← full voice & style toolkit
-CHANGELOG.md            ← semver history, public-surface definition, deprecation policy (studio: guidelines/CHANGELOG.md)
-KNOWN-ISSUES.md         ← understood gotchas — read before debugging (studio: guidelines/KNOWN-ISSUES.md)
-DECISIONS.md            ← the decision journey — intent, rationale, rejected alternatives, lessons (studio: guidelines/DECISIONS.md)
+CHANGELOG.md            ← semver history, public-surface definition, deprecation policy
+KNOWN-ISSUES.md         ← understood gotchas — read before debugging
+DECISIONS.md            ← the decision journey — intent, rationale, rejected alternatives, lessons
 LICENCES.md             ← third-party licences + Oak-marks boundary — travels with every export
-docs/                   ← consumption guides (studio: guidelines/docs/): consuming-nextjs.md (full
+docs/                   ← consumption guides: consuming-nextjs.md (full
                           Next.js guide: install, fonts, Tailwind mapping, theme wiring, identity,
                           §5b chooser, new-component recipe), pairing guides (base-ui / react-aria /
                           ark-ui), integration-oak-curriculum-hub.md,
@@ -215,13 +207,12 @@ docs/                   ← consumption guides (studio: guidelines/docs/): consu
                           headless-a11y-frameworks.html (research), nextjs-theme-mapping.css,
                           nextjs-theme-switcher.tsx.txt
 dtcg/                   ← DTCG JSON token export (generated FROM the CSS; see dtcg/README.md)
-whitelabel/             ← white-label PROOFS: creature/ + freedonia/ (brand-a.css, brand-full.css,
+whitelabel/             ← white-label PROOFS: creature/ + pds/ (brand-a.css, brand-full.css,
                           logo, live proof page, card) + failing-example.css (guardrail stress test)
 Identity White-Labelling.html ← byte-identical proof — one specimen, three brands side by side
 Identity Switchboard.html     ← one specimen copy + live identity/stage/theme controls
 Example Front Pages.html      ← three composed per-identity front pages, side by side
 integrations/revealjs/  ← Oak reveal.js theme + sample deck
-thumbnail.html          ← homepage tile (studio-side; held out here — see .gitignore)
 assets/                 ← logos, brand marks, icons/ (local SVG set)
 oak-icons.css           ← icon URL token map (--i-* names + --ic-* roles; root-adjacent to components.css by design)
 fonts/                  ← Lexend + Roboto Mono variable fonts + their OFL notices
@@ -231,8 +222,6 @@ templates/
 components/             ← compiled React components (.jsx + .d.ts + card)
 preview/                ← specimen cards for the Design System tab
 ui_kits/oak/            ← full homepage reference build
-SKILL.md                ← studio agent-skill descriptor — derived from the repo canonical
-                          (.agent/skills/domain-craft/ui-design/design-system-usage/SKILL-CANONICAL.md) at each sync
 
 ```
 

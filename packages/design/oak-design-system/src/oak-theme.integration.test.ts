@@ -23,6 +23,7 @@ interface FakeWorld {
     matchMedia?: (query: string) => FakeMediaQueryList;
     oakTheme?: {
       set(t: string): void;
+      clear(): void;
       get(): string;
       choice(): string | null;
       themes: string[];
@@ -31,6 +32,10 @@ interface FakeWorld {
   };
   attributes: Map<string, string>;
   fireContrastChange: () => void;
+  /** Boot the runtime AGAIN over the same storage and document — the
+   *  observation point for persistence claims: state a clear() removed
+   *  must stay gone across a reload, not merely across the session. */
+  reboot: () => FakeWorld['window'];
 }
 
 interface FakeMediaQueryList {
@@ -43,6 +48,10 @@ function createWorld(options?: {
   storedMotion?: string;
   prefersMoreContrast?: boolean;
   storageThrows?: boolean;
+  /** Write-only denial (quota-style): getItem works, setItem/removeItem
+   *  throw — the shape that exposes a cleared choice resurrecting from a
+   *  still-readable store. */
+  storageWriteThrows?: boolean;
 }): FakeWorld {
   const attributes = new Map<string, string>();
   // dataset mirrors the real DOMStringMap contract: property writes and
@@ -89,10 +98,16 @@ function createWorld(options?: {
       return store.get(key) ?? null;
     },
     setItem: (key: string, value: string): void => {
-      if (options?.storageThrows) {
+      if (options?.storageThrows || options?.storageWriteThrows) {
         throw new Error('storage denied');
       }
       store.set(key, value);
+    },
+    removeItem: (key: string): void => {
+      if (options?.storageThrows || options?.storageWriteThrows) {
+        throw new Error('storage denied');
+      }
+      store.delete(key);
     },
   };
   const contrastListeners: (() => void)[] = [];
@@ -119,11 +134,19 @@ function createWorld(options?: {
         listener();
       }
     },
+    reboot: () => {
+      const secondWindow: FakeWorld['window'] = { matchMedia: matchMediaFake };
+      run(secondWindow, documentFake, localStorageFake, matchMediaFake);
+      return secondWindow;
+    },
   };
 }
 
 describe('oakTheme choice() — the explicit-choice accessor', () => {
-  it('reports null with no stored or session choice, while get() collapses to light', () => {
+  it('reports null with no stored or session choice, while get() collapses to the kit-base default', () => {
+    // No choice = no data-theme attribute — the identity's own default
+    // governs the page (DDR-003 amendment 2026-08-11). get() cannot see a
+    // brand's polarity lever, so its collapse names the kit-base default.
     const world = createWorld();
     expect(world.window.oakTheme?.choice()).toBeNull();
     expect(world.window.oakTheme?.get()).toBe('light');
@@ -150,6 +173,68 @@ describe('oakTheme choice() — the explicit-choice accessor', () => {
 
   it('treats a stored value outside the theme list as no choice', () => {
     const world = createWorld({ storedTheme: 'sepia' });
+    expect(world.window.oakTheme?.choice()).toBeNull();
+    expect(world.attributes.has('data-theme')).toBe(false);
+  });
+});
+
+describe('oakTheme clear() — the return to the identity default', () => {
+  it('clears a session choice, and a reboot over the same storage does not resurrect it', () => {
+    const world = createWorld();
+    world.window.oakTheme?.set('dark');
+    world.window.oakTheme?.clear();
+    expect(world.attributes.has('data-theme')).toBe(false);
+    expect(world.window.oakTheme?.choice()).toBeNull();
+    // The claim is about the STORED choice: only a second boot can prove
+    // the persisted half is gone rather than merely shadowed in memory.
+    const secondBoot = world.reboot();
+    expect(secondBoot.oakTheme?.choice()).toBeNull();
+    expect(world.attributes.has('data-theme')).toBe(false);
+  });
+
+  it('clears a persisted choice from an earlier visit', () => {
+    const world = createWorld({ storedTheme: 'dark' });
+    world.window.oakTheme?.clear();
+    expect(world.window.oakTheme?.choice()).toBeNull();
+    expect(world.attributes.has('data-theme')).toBe(false);
+  });
+
+  it('keeps the cleared state for the whole session when storage removal fails', () => {
+    // Quota-style denial: the store stays READABLE while removal throws, so
+    // a persisted choice survives on disk — the session must still treat
+    // the clear as authoritative rather than resurrecting the stored value.
+    const world = createWorld({ storedTheme: 'dark', storageWriteThrows: true });
+    world.window.oakTheme?.clear();
+    expect(world.window.oakTheme?.choice()).toBeNull();
+    expect(world.window.oakTheme?.get()).toBe('light');
+    expect(world.attributes.has('data-theme')).toBe(false);
+  });
+
+  it('follows a live OS contrast change after a clear whose removal failed', () => {
+    // The access commitment survives the same denial: with the session
+    // cleared, an OS prefers-contrast change must still auto-apply —
+    // a readable-but-unremovable stored choice is not an explicit choice.
+    const world = createWorld({ storedTheme: 'dark', storageWriteThrows: true });
+    world.window.oakTheme?.clear();
+    world.fireContrastChange();
+    expect(world.attributes.get('data-theme')).toBe('high-contrast');
+  });
+
+  it('keeps the access commitment: clearing under an OS contrast request re-applies high-contrast', () => {
+    const world = createWorld({ prefersMoreContrast: true });
+    world.window.oakTheme?.set('dark');
+    expect(world.attributes.get('data-theme')).toBe('dark');
+    world.window.oakTheme?.clear();
+    // DDR-003 amendment 2026-08-11: returning to the identity default must
+    // not drop an OS-level request for more contrast.
+    expect(world.attributes.get('data-theme')).toBe('high-contrast');
+    expect(world.window.oakTheme?.choice()).toBeNull();
+  });
+
+  it('clears the in-memory choice even when storage denies the removal', () => {
+    const world = createWorld({ storageThrows: true });
+    world.window.oakTheme?.set('dark');
+    world.window.oakTheme?.clear();
     expect(world.window.oakTheme?.choice()).toBeNull();
     expect(world.attributes.has('data-theme')).toBe(false);
   });

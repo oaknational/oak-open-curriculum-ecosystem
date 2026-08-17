@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- @dsCard group="Brand" viewport="1240x900" name="Lever distance matrix" subtitle="Every brand lever, sampled live per identity — equal cells flagged; pairwise distance scored. The instrument that catches a collapse (v5: Oak↔FDSE) before the eye has to." -->
+<!-- @dsCard group="Brand" viewport="1240x900" name="Lever distance matrix" subtitle="Every brand lever, sampled live per identity — equal cells flagged; pairwise distance scored. The instrument that catches a collapse (v5: Oak↔PDS) before the eye has to." -->
 <html>
   <head>
     <meta charset="utf-8" />
@@ -100,18 +100,18 @@
         <tr>
           <th>Lever</th>
           <th>Oak</th>
-          <th>FDSE</th>
+          <th>PDS</th>
           <th>EMC²</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
     <iframe src="lever-probe.html" title="Oak probe"></iframe>
-    <iframe src="lever-probe.html?brand=freedonia" title="FDSE probe"></iframe>
+    <iframe src="lever-probe.html?brand=pds" title="PDS probe"></iframe>
     <iframe src="lever-probe.html?brand=creature" title="EMC² probe"></iframe>
     <script>
       const got = {};
-      const ORDER = ['oak', 'freedonia', 'creature'];
+      const ORDER = ['oak', 'pds', 'creature'];
       addEventListener('message', (e) => {
         if (!e.data || !e.data.leverProbe) return;
         got[e.data.leverProbe] = e.data.levers;
@@ -137,19 +137,19 @@
         return td;
       }
       function render() {
-        const [oak, fdse, emc] = ORDER.map((k) => got[k]);
+        const [oak, pds, emc] = ORDER.map((k) => got[k]);
         const tbody = document.querySelector('tbody');
-        const diff = { 'Oak↔FDSE': 0, 'Oak↔EMC²': 0, 'FDSE↔EMC²': 0 };
+        const diff = { 'Oak↔PDS': 0, 'Oak↔EMC²': 0, 'PDS↔EMC²': 0 };
         let total = 0;
         for (const lever of Object.keys(oak)) {
           total++;
-          const [a, b, c] = [oak[lever], fdse[lever], emc[lever]];
+          const [a, b, c] = [oak[lever], pds[lever], emc[lever]];
           const ab = a === b,
             ac = a === c,
             bc = b === c;
-          if (!ab) diff['Oak↔FDSE']++;
+          if (!ab) diff['Oak↔PDS']++;
           if (!ac) diff['Oak↔EMC²']++;
-          if (!bc) diff['FDSE↔EMC²']++;
+          if (!bc) diff['PDS↔EMC²']++;
           const tr = document.createElement('tr');
           const th = document.createElement('td');
           th.className = 'lever';

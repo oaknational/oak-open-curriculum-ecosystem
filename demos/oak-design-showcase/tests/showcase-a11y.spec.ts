@@ -1,24 +1,26 @@
 /**
- * The accessibility half of the showcase's Playwright proof surface (see
+ * The accessibility half of the landing's Playwright proof surface (see
  * showcase.spec.ts for the behaviour half; both run against the BUILT
- * artefact): axe WCAG 2.2 AA across the identity × theme matrix (system
- * cells under an emulated dark OS — under the default light emulation they
- * replay the light cells by construction), the OS accessibility signals,
- * keyboard focus visibility, and 320px reflow per identity.
+ * artefact): axe WCAG 2.2 AA across the palette themes, the OS
+ * accessibility signals, keyboard focus visibility, and 320px reflow.
+ * The landing renders the base identity only under the 2026-08-13 tight
+ * scope — the identity × theme matrix, identity-default faces,
+ * forced-colors per identity and per-identity reflow all live in
+ * specimen-a11y.spec.ts against the route that actually switches
+ * identity. Themes here are driven by stored state (the landing has no
+ * control): set the store, reload, and the pre-paint bootstrap applies.
  */
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 import { parseColour, ringChainContrast } from '../tools/focus-ring-contrast';
 import {
-  applyIdentity,
-  applyTheme,
   assertOnlyKnownExternalOrigins,
-  expectNoAxeViolations,
-  IDENTITIES,
   openShowcase,
   PALETTE_THEMES,
+  reloadWithStoredChoice,
 } from './apply-state';
+import { expectNoAxeViolations } from './axe-checks';
 
 test.describe('OS accessibility signals', () => {
   test('prefers-contrast: more auto-selects the high-contrast theme @a11y', async ({ page }) => {
@@ -32,8 +34,10 @@ test.describe('OS accessibility signals', () => {
   });
 
   test('forced-colors keeps the page renderable @a11y', async ({ page }) => {
-    await page.emulateMedia({ forcedColors: 'active' });
-    const aborted = await openShowcase(page);
+    // Declared intent: expectNoAxeViolations observes the mode and
+    // scopes color-contrast out (criterion scoping — before bundle 2
+    // this cell ran the rule un-scoped and passed on author-ink luck).
+    const aborted = await openShowcase(page, { forcedColors: true });
     await expect(
       page.getByRole('heading', { level: 1, name: 'Oak Open Curriculum Design System' }),
     ).toBeVisible();
@@ -97,23 +101,13 @@ async function expectRingContrast(page: Page, message: string): Promise<void> {
 }
 
 test.describe('keyboard focus visibility', () => {
-  test('the focus ring holds 3:1 on the switchboard in light and dark @a11y', async ({ page }) => {
+  test('the focus ring holds 3:1 on the door links in light and dark @a11y', async ({ page }) => {
     const aborted = await openShowcase(page);
-    // Sequential focus starts at the document on a fresh page, so the
-    // first Tab lands on the first tabbable element: the identity select.
-    await page.keyboard.press('Tab');
-    await expect(page.locator('#oak-identity-select')).toBeFocused();
-    await expectRingContrast(page, 'switchboard ring, light (tools/focus-ring-contrast.ts)');
-    // Under the dark palette: Chromium's sequential-navigation point
-    // survives interactions, so the next Tab lands on SOME switchboard
-    // select — which one is navigation state, not the claim. The claim is
-    // that wherever keyboard focus lands on the switchboard, its ring
-    // holds SC 1.4.11 contrast against the surface it renders on.
-    await applyTheme(page, 'dark');
-    await page.keyboard.press('Tab');
-    const focusedId = await page.evaluate(() => document.activeElement?.id ?? '');
-    expect(['oak-identity-select', 'oak-theme-select', 'oak-motion-select']).toContain(focusedId);
-    await expectRingContrast(page, 'switchboard ring, dark (tools/focus-ring-contrast.ts)');
+    expect(await tabInto(page, '.doors', 25)).toBe(true);
+    await expectRingContrast(page, 'door ring, light (tools/focus-ring-contrast.ts)');
+    await reloadWithStoredChoice(page, 'oak-theme', 'dark');
+    expect(await tabInto(page, '.doors', 25)).toBe(true);
+    await expectRingContrast(page, 'door ring, dark (tools/focus-ring-contrast.ts)');
     assertOnlyKnownExternalOrigins(aborted);
   });
 
@@ -127,70 +121,62 @@ test.describe('keyboard focus visibility', () => {
     const aborted = await openShowcase(page);
     expect(await tabInto(page, '.foot', 25)).toBe(true);
     await expectRingContrast(page, 'footer-link ring, light');
-    await applyTheme(page, 'dark');
+    await reloadWithStoredChoice(page, 'oak-theme', 'dark');
     expect(await tabInto(page, '.foot', 25)).toBe(true);
     await expectRingContrast(page, 'footer-link ring, dark');
     assertOnlyKnownExternalOrigins(aborted);
   });
 });
 
-test.describe('identity × theme matrix', () => {
-  for (const identity of IDENTITIES) {
-    for (const theme of PALETTE_THEMES) {
-      test(`${identity} × ${theme} has no WCAG 2.2 AA violations @a11y`, async ({ page }) => {
-        const aborted = await openShowcase(page);
-        await applyIdentity(page, identity);
-        await applyTheme(page, theme);
-        await expectNoAxeViolations(page);
-        // axe ships no focus-indicator-contrast rule; the ring measure
-        // covers the cell the axe pass just proved.
-        await page.keyboard.press('Tab');
-        await expectRingContrast(page, `switchboard ring, ${identity} × ${theme}`);
-        assertOnlyKnownExternalOrigins(aborted);
-      });
-    }
-  }
-});
-
-test.describe('identity × system theme (dark OS)', () => {
-  test.use({ colorScheme: 'dark' });
-  for (const identity of IDENTITIES) {
-    test(`${identity} × system has no WCAG 2.2 AA violations @a11y`, async ({ page }) => {
+test.describe('landing × theme', () => {
+  for (const theme of PALETTE_THEMES) {
+    test(`landing × ${theme} has no WCAG 2.2 AA violations @a11y`, async ({ page }) => {
       const aborted = await openShowcase(page);
-      await applyIdentity(page, identity);
-      await applyTheme(page, 'system');
+      await reloadWithStoredChoice(page, 'oak-theme', theme);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await expectNoAxeViolations(page);
+      // axe ships no focus-indicator-contrast rule; the ring measure
+      // covers the cell the axe pass just proved.
+      expect(await tabInto(page, '.doors', 25)).toBe(true);
+      await expectRingContrast(page, `door ring, ${theme}`);
       assertOnlyKnownExternalOrigins(aborted);
     });
   }
+});
+
+test.describe('landing × system theme (dark OS)', () => {
+  test.use({ colorScheme: 'dark' });
+  test('landing × system has no WCAG 2.2 AA violations @a11y', async ({ page }) => {
+    const aborted = await openShowcase(page);
+    await reloadWithStoredChoice(page, 'oak-theme', 'system');
+    await expectNoAxeViolations(page);
+    assertOnlyKnownExternalOrigins(aborted);
+  });
 });
 
 test.describe('reflow at 320px', () => {
   test.use({ viewport: { width: 320, height: 900 } });
-  for (const identity of IDENTITIES) {
-    test(`${identity} reflows to 320px without loss @a11y`, async ({ page }) => {
-      const aborted = await openShowcase(page);
-      await applyIdentity(page, identity);
-      // SC 1.4.10 Reflow — axe ships no rule for it (MCP landing-page
-      // precedent). Content pushed left of the origin is unreachable in
-      // LTR, so negative offsets are content loss even when scrollWidth
-      // stays clean.
-      const reflow = await page.evaluate(() => ({
-        scrollW: document.documentElement.scrollWidth,
-        clientW: document.documentElement.clientWidth,
-        minLeft: Math.min(
-          0,
-          ...[...document.querySelectorAll('body *')].map(
-            (element) => element.getBoundingClientRect().left,
-          ),
+  test('the landing reflows to 320px without loss @a11y', async ({ page }) => {
+    const aborted = await openShowcase(page);
+    // SC 1.4.10 Reflow — axe ships no rule for it (MCP landing-page
+    // precedent). Content pushed left of the origin is unreachable in
+    // LTR, so negative offsets are content loss even when scrollWidth
+    // stays clean.
+    const reflow = await page.evaluate(() => ({
+      scrollW: document.documentElement.scrollWidth,
+      clientW: document.documentElement.clientWidth,
+      minLeft: Math.min(
+        0,
+        ...[...document.querySelectorAll('body *')].map(
+          (element) => element.getBoundingClientRect().left,
         ),
-      }));
-      expect(reflow.scrollW, 'SC 1.4.10: horizontal scroll must not appear').toBeLessThanOrEqual(
-        reflow.clientW,
-      );
-      expect(reflow.minLeft, 'content pushed left of the origin is unreachable').toBe(0);
-      await expectNoAxeViolations(page);
-      assertOnlyKnownExternalOrigins(aborted);
-    });
-  }
+      ),
+    }));
+    expect(reflow.scrollW, 'SC 1.4.10: horizontal scroll must not appear').toBeLessThanOrEqual(
+      reflow.clientW,
+    );
+    expect(reflow.minLeft, 'content pushed left of the origin is unreachable').toBe(0);
+    await expectNoAxeViolations(page);
+    assertOnlyKnownExternalOrigins(aborted);
+  });
 });

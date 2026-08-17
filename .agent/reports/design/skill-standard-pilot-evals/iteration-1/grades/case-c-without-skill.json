@@ -1,0 +1,21 @@
+{
+  "artefact": ".agent/reports/design/skill-standard-pilot-evals/iteration-1/artefacts/case-c-without-skill.md",
+  "mode": "response",
+  "assertions": {
+    "referenced-oak-classes-exist": {
+      "pass": true,
+      "binding": false,
+      "evidence": "artefact references no oak-* classes"
+    },
+    "no-literal-design-values": {
+      "pass": false,
+      "binding": true,
+      "evidence": "13 literal(s): #f2f2f2, 4px solid #fbbf24, 8px, 16px 20px, var(--color-grey-background, #f2f2f2), 4px solid var(--color-yellow, #fbbf24), 8px, 16px 20px"
+    },
+    "zero-ad-hoc-css": {
+      "pass": false,
+      "binding": true,
+      "evidence": "13 authored declaration(s) across <style>, style=, and fenced css"
+    }
+  }
+}

@@ -4,6 +4,19 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-08-13 — provider-independent capability composition
+
+- New PDR-139, status Proposed: separates provider-independent semantic
+  capability contracts from explicit host composition; makes omission
+  capability-specific; separates provider extensions; and requires behaviour
+  portability wherever another binding serves a capability — with state
+  portability for authoritative state and an exercised rebuild from
+  authority for derived state — plus, for each named external provider, a
+  documented and exercised
+  independent composition: another conforming binding, a local or
+  self-hosted binding, or omission of a non-constitutive capability. The
+  pattern is tested across storage, telemetry, and agent tooling.
+
 ## [oak-open-curriculum-ecosystem] 2026-08-02 — cost-of-change gradient (Lichen guards Phloem)
 
 - New PDR-135, status Proposed: gives the cost-of-change gradient a portable

@@ -17,6 +17,21 @@
     --shadow-standard: none;
     --shadow-raised: none;
     --shadow-overlay: none;
+    /* Fluid display slots print at their maxima: a clamp tuned for a
+       320-1920px viewport would resolve against the print page box
+       (~794px at A4/96dpi) and shrink display type on paper. Plain :root
+       deliberately (not html:root): this file loads after
+       colors_and_type.css so it wins the kit-internal tie for
+       parts-driven brands, while a brand that opted OUT via a whole-slot
+       shorthand (loaded after all kit css) still keeps its own fixed
+       print size by cascade order — an html:root pin would wrongly
+       override that opt-out with these derived values. */
+    --type-heading-1: var(--weight-display) calc(var(--type-heading-1-max) * 1rem) /
+      var(--type-heading-1-leading) var(--font-display);
+    --type-heading-2: var(--weight-display) calc(var(--type-heading-2-max) * 1rem) /
+      var(--type-heading-2-leading) var(--font-display);
+    --type-heading-3: var(--weight-display) calc(var(--type-heading-3-max) * 1rem) /
+      var(--type-heading-3-leading) var(--font-display);
   }
   /* Meaning-bearing and signature fills must survive "economy" printing */
   .oak-card,

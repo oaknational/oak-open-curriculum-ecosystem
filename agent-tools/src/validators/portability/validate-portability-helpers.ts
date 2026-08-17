@@ -15,8 +15,7 @@
  * - `reviewer-adapter-parity` — Cross-platform reviewer adapter parity checks.
  * - `skill-permission-checks` — Claude Code skill/command permission
  *   allow-list checks.
- * - `rules-index-checks` — Codex fallback rules index and
- *   `skills-lock.json` checks.
+ * - `rules-index-checks` — Codex fallback rules index checks.
  */
 
 export {
@@ -37,11 +36,7 @@ export { getClaudeHookPortabilityIssues } from './claude-hook-wiring.js';
 
 export { getReviewerAdapterParityIssues } from './reviewer-adapter-parity.js';
 
-export { getSkillPermissionIssues } from './skill-permission-checks.js';
+export { getSkillPermissionIssues, selectPracticeSkillDirs } from './skill-permission-checks.js';
 
-export {
-  getRulesIndexPortabilityIssues,
-  getSkillsLockCrossReferenceIssues,
-  getSkillsLockEntries,
-} from './rules-index-checks.js';
+export { getRulesIndexPortabilityIssues } from './rules-index-checks.js';
 export { collectCanonicalSkillPaths } from './skills-walk.js';

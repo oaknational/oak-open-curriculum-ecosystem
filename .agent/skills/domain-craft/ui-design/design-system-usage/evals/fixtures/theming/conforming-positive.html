@@ -1,0 +1,38 @@
+<!-- POSITIVE control: all three assertions in grade-theming.ts must PASS.
+
+     Offers the DDR-004 five, resolves `system` to a palette theme before
+     writing (so no token tree is ever minted for it), persists the CHOICE,
+     and reads the applied attribute only for a diagnostic log — which
+     DDR-003 permits, because the rule forbids the applied value becoming
+     state, not being observed. -->
+<select id="theme-choice">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+  <option value="system">Match my device</option>
+  <option value="high-contrast">High contrast</option>
+  <option value="colour-safe">Colour safe</option>
+</select>
+<script>
+  const root = document.documentElement;
+
+  function resolve(choice) {
+    if (choice === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return choice;
+  }
+
+  function apply(choice) {
+    root.setAttribute('data-theme', resolve(choice));
+  }
+
+  document.getElementById('theme-choice').addEventListener('change', (event) => {
+    const choice = event.target.value;
+    localStorage.setItem('oak-theme-choice', choice); // the CHOICE, not the applied value
+    apply(choice);
+  });
+
+  // Diagnostics only — observed, never stored. DDR-003 permits this.
+  const appliedForLogging = root.getAttribute('data-theme');
+  console.debug('applied theme is', appliedForLogging);
+</script>

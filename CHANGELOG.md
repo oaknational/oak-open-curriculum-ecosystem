@@ -1,3 +1,182 @@
+## [1.170.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.170.1...v1.170.2) (2026-08-14)
+
+## [1.170.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.170.0...v1.170.1) (2026-08-14)
+
+
+### Bug Fixes
+
+* **showcase:** probe refuses non-canonical widths; skill recipe and permissions completed ([a5f67a5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a5f67a5b7fa05931ea592644ee161ee42f3e7ad7))
+* **showcase:** visual probe refuses non-OK documents as proof material ([c0dd4a9](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c0dd4a9f2882803c485543fbe19fa9ee7ceb18eb))
+
+# [1.170.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.169.1...v1.170.0) (2026-08-13)
+
+
+### Bug Fixes
+
+* **design-system:** emitted runtime hoists motion application to outer scope ([145cf65](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/145cf65925fa8f92033d9ce7e2471bb6ab0bc38a))
+* **design:** clear() stays authoritative for the session when storage removal fails ([3b02fa8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3b02fa8a1f512b9bf7e32cf9b24df0443d06faba))
+* **design:** cure the pds masthead cascade defect - the six declared reds go green ([d2c4e4e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d2c4e4e24d486a2f727459faf8f01558aaa90ad5))
+* **design:** cure the two sonar classes on the pr head ([bbe6803](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/bbe6803ef80b13bda5c2fffc0141373cdc7b8a53))
+* **design:** equality-form membership as a loop - six sonar smells cured at source ([7aaa9e6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7aaa9e6e47502fbeac80560584051774a77c68b3))
+* **design:** one generic membership guard; nested ternary and hook pairs cured ([ea029a9](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ea029a9fa1d8e2c8275e2834b4d35994dc22b8cc))
+* **fidelity-review:** gateway cures — pairCount one meaning, ddr-010 trued to the code ([5243224](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5243224f9091b1afcf5b96fa0f0a6a1ca0d40e44))
+* **pr-watch:** drop redundant explicit undefined from optional rollup fields ([10f73d6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/10f73d6b14ea401e4e0e1c988bcde6c37926f0b1))
+* **pr-watch:** evaluate checks by their latest run per name, as GitHub does ([b2a08bd](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b2a08bdda32252aadff2948f41d6ed61dc3a2e9a)), closes [#846](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/846)
+* **pr-watch:** full-tie survivors resolve to the later completion anchor ([d39cf0c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d39cf0cc86152be5021198d8d30d6c6553614bb9))
+* **pr-watch:** start-time recency, order-independent reduction, provider-safe keys ([8b3181a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8b3181a50b124a2699b1775f0495346b4b791ea3))
+* **showcase:** a11y instrument cure — measured-failure seam, gated scoping, theme proof ([ec1695b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ec1695bd60fdd9563f0c3ed1f9a121948f9161d8)), closes [axe-core#3978](https://github.com/axe-core/issues/3978) [hi#contrast](https://github.com/hi/issues/contrast)
+* **showcase:** capture height honesty — caveats first, pre-crop heights recorded ([291a24c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/291a24cd162c7cf8388205c80890696ad2bbec84))
+* **showcase:** capture-pair entry awaits main at top level ([e09eaf5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e09eaf5d5e4522ce024c54988e1e1adbacdc2cf0))
+* **showcase:** converge the specimen on the reference at the measured values ([b9dc436](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b9dc4360fb8abbccdf6a588c17bceb8b79a2b4c5))
+* **showcase:** cure the F01/F02 keyboard blackout on the picker and side-by-side pages ([db3a4e4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/db3a4e45bd046e86ab2ca76fb69613c28648d443)), closes [#main](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/main)
+* **showcase:** cure the twelve sonar majors at source ([17ca5ea](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/17ca5ea14fcb3f6b41680c9c7823d5ec67221ec3))
+* **showcase:** gateway cures — honest remedy clause, compared-height proof, record home ([30bd9e3](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/30bd9e36c38f679f10d368513044a5900aadd273))
+* **showcase:** specimen keyboard order — hero headline takes the skip target off main ([1f73051](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/1f730517aff8b2d0aa5d9d930e3adc926dfdbe8b))
+* **showcase:** the adjudicated Copilot round — ten cures, two reasoned declines ([a8e5473](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a8e54738d7f0fd68efa16296daeb2b3d2bc885fc))
+* **showcase:** the picker holds its theme against the frame's own runtime ([7b693ce](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7b693ce43d64d32b67a0e37a2dfab81f0c72e36f))
+
+
+### Features
+
+* **design-system:** oakTheme.clear() — the return to the identity default ([dff0f48](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dff0f48ec8cc7af9202055329623bb425b4766d5)), closes [hi#contrast](https://github.com/hi/issues/contrast)
+* **design-system:** the person owns the colour scheme — system default estate-wide ([02c9dde](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/02c9dde7c7dc059afb45d4aeae165ae4ad7b93f8))
+* **design:** fluid display type - the fluidity pillar, tranche 1 ([8b89ad9](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8b89ad988fb3488c95d13ae23c862734c7c9296c))
+* **design:** identity default — the no-choice theme state, estate-wide ([6bcb854](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6bcb8541da01e2bf4f17ba98f765b46baf5c720d))
+* **fidelity-review:** empirical null calibration — sigma earns its magnitude ([75de6db](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/75de6db375242a7dc3812ed5f0c4227f127d01a3))
+* **fidelity-review:** s2b correlation diagnostics — lag-1 + domain-gated n_eff, reporting only ([3d1b9c0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3d1b9c029296d1baf0d56857258d1f2389d623f6))
+* **fidelity:** windowed rejection statistics and the capture-pair instrument (ddr-010) ([8f54a59](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8f54a590c9f1cf16bf47e171d89930ed23b413fe))
+* **showcase:** canonical measurement widths, derived and recorded ([5beef64](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5beef64d207ab35fe92446488c52ea9c781718b7))
+* **showcase:** capture-pair --null-runs — the calibrated arm ([995e7e0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/995e7e08c8e91a42a510be98fab2952b4d225720))
+* **showcase:** detail, resources, support, cta and footer — the specimen is whole ([e7b5b79](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e7b5b79ad0285b17092758d8fc9fb765f8620181))
+* **showcase:** facets and results regions — the browse experience lands ([a45c171](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a45c171f0b5400bcac068b5e90b43fadfd20e840))
+* **showcase:** fidelity capture refuses free-hand widths ([c94e4d7](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c94e4d7176b0c87b7bd1fb146135c2e117d25c57))
+* **showcase:** identity switchboard — specimen route and in-place picker, with mechanism proofs ([0ab93c1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0ab93c18d229a334e3b9f9973b945986d1641e90))
+* **showcase:** picker gains theme and width controls, all in place ([929ca70](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/929ca70625c922ee6055eb391a81d0b5df922657))
+* **showcase:** specimen hero rebuilt from the kit against the captured reference ([146e7c3](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/146e7c3a0cbedeba9c1c3745c27eab56991f338d))
+* **showcase:** specimen regions trued to the a11y review; skip link survives reading-flow ([2d70f12](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2d70f12d0b3b0ac8d85c2a0705659c12789cf62e))
+* **showcase:** the side-by-side page — one route, three brands at once ([3a15564](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3a15564129220c2dc85c0a0fdfb5be6a9795a042))
+* **showcase:** the specimen conformance matrix, and every defect it found ([fd27de1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/fd27de13a707e578172d78ea9410132c78a00aa2))
+* **showcase:** tight-scope landing + narrow-first picker; pds rename across demo and kit ([a967f89](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a967f8979ac7b43f3ef0d9093197e543b3509226))
+* **showcase:** utility and masthead re-trued to the reference; band rhythm single-sourced ([4061471](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/40614715d607e30863574c4ecb28a3998a131620))
+
+## [1.169.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.169.0...v1.169.1) (2026-08-13)
+
+# [1.169.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.168.4...v1.169.0) (2026-08-13)
+
+
+### Bug Fixes
+
+* **search:** enforce restricted-inclusion target boundary and export options type [MCP-590] ([7710980](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7710980a6c51797286c3f2f52393699925326429))
+* **search:** reject includeRestricted on every target — index families stay consistent [MCP-590] ([93750f4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/93750f404b3db2a55415d8c7db599fa18b55f9bb))
+
+
+### Features
+
+* **sdk-codegen:** reject includeRestricted at the vocab corpus boundary (adr-224) ([377c53b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/377c53b46bfee1fb4416db730db0fbb3d2b77dea))
+* **search:** configurable restricted-lesson exclusion switch (default exclude) [MCP-590] ([4314a0c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4314a0c059cff6cf16196c48ae05148747083eeb))
+
+## [1.168.4](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.168.3...v1.168.4) (2026-08-13)
+
+
+### Bug Fixes
+
+* **mcp-http:** serve the health check inside the routed /mcp surface ([90a40c4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/90a40c4a39b710d95b88d9052c474b5d41494a72))
+
+## [1.168.3](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.168.2...v1.168.3) (2026-08-13)
+
+## [1.168.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.168.1...v1.168.2) (2026-08-13)
+
+## [1.168.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.168.0...v1.168.1) (2026-08-13)
+
+# [1.168.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.167.0...v1.168.0) (2026-08-13)
+
+
+### Bug Fixes
+
+* **search-cli:** neutralise external text in probe logs (S5145 cure on the fold) ([153e247](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/153e247139449241d32116b8ac70ff3018289aa0))
+
+
+### Features
+
+* **search-cli:** add lesson-availability probe script; refresh bulk data ([3cceeab](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3cceeabcea2a4a60c6cfbecb19ac71c9dea1b910))
+
+# [1.167.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.166.1...v1.167.0) (2026-08-12)
+
+
+### Bug Fixes
+
+* **skills:** decouple the two type ladders, separate Oak's floor from AA, rebuild the grader ([163243c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/163243ce80e6dc3708ae06bc114d6d6f04643c5b)), closes [#870](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/870)
+* **skills:** record discharged s4 gate, grade case-1 pages, fix proposal detector (870 cures) ([7643504](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/76435047a84d697b68e65c65f21ba42113362251))
+
+
+### Features
+
+* **skills:** mint ui-visual-design born to the proven standard ([612bb7f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/612bb7f3a910bd2de2509cfe490f25b63999af36))
+
+## [1.166.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.166.0...v1.166.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* **agent-tools:** clear guards both roots before acting; pin the check-guard cure ([2ff1eb0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2ff1eb02539a0cc1da8020e5ced88ebfe9956f5e))
+* **agent-tools:** close [#865](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/865) Copilot round — record + destructive-path hardening (MCP-570) ([1a98b08](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/1a98b08070f4862f7445f79f8d62c4ae0beb91f8))
+* **agent-tools:** close [#865](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/865) review round — safe clear ordering, fail-closed reads (MCP-570) ([a73ff86](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a73ff86b8759516c899218f0869f32cd1c83d46d))
+* **agent-tools:** close [#865](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/865) round-4 — recogniser filename + foreign-target preflight (MCP-570) ([5aadd64](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5aadd6400adebbad72c42ca72b30ded0d90e62e9))
+* **agent-tools:** close the review round — structural recognition, guarded emission targets ([cb593b1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/cb593b1aaf6536cc5257c250549cb12ced684ed2))
+* **agent-tools:** guard the clear/check/census paths at the surface root (security round 2) ([848b972](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/848b972f3a6f2f247e3d25ffaeebdf804ec236da))
+* **agent-tools:** preflight emission refusals before --clear (MCP-570 [#865](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/865)) ([d3d38ce](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d3d38ce6a91fbbf601685dd36920c13cf644d758))
+* **agent-tools:** reinstate skills-lock.json — external tooling's state (MCP-570 [#865](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/865) review) ([323805a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/323805abfbec02216670eb6a31b9cd5e88069148))
+* **agent-tools:** scope skills validation to the Practice class it owns ([e18332b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e18332bac4ccc055c02db7be2c2f651d18b6e162))
+
+# [1.166.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.165.2...v1.166.0) (2026-08-12)
+
+
+### Bug Fixes
+
+* **skills:** re-specify system-tree assertion, close grader blindness, true banked evidence ([724ee26](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/724ee26a676bd03214ec1d6872e89ccd7791f93d))
+* **skills:** repair the eval instruments and withdraw three false iteration-1 claims ([a9e2450](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a9e24504b4b5d48b1e32ba2f5fa9467c07ac9e07))
+
+
+### Features
+
+* **skills:** design-system-usage evals — first execution of the estate convention ([9ce15d8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9ce15d8670495ff17d54643d41ba8495dfee901f))
+
+## [1.165.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.165.1...v1.165.2) (2026-08-12)
+
+## [1.165.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.165.0...v1.165.1) (2026-08-12)
+
+# [1.165.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.164.0...v1.165.0) (2026-08-12)
+
+
+### Bug Fixes
+
+* **skills:** card overlay, measured arc latency, session-open trigger (MCP-571) ([6a7a449](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6a7a449a444f2c24cf6350c1c6733eeb842ba4a9))
+* **skills:** comms-channels scopes to delivery lanes under the canonical card (MCP-571) ([a44f054](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a44f054395a93ffd236aa782572d42cde4649cf7))
+* **skills:** reachability bounds consistent; ListAgents ceremony is Claude-scoped (MCP-571) ([289231b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/289231bbb4774a126bbbedf13bf2f4c9accc8d67))
+* **skills:** the stream announces state, it never stores it (MCP-571) ([3222ea2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3222ea26a56ad584c63d6e3bc27766c487278e7e))
+
+
+### Features
+
+* **skills:** mint comms-channels — channel selection and the s2s behaviours (MCP-571) ([6fab315](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6fab315d99c38c2c3b4197e3e40001532fe9a814))
+
+# [1.164.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.163.3...v1.164.0) (2026-08-12)
+
+
+### Bug Fixes
+
+* **agent-tools:** cure the review round — loud misconfiguration, faithful payload, guarded trims ([99f2efb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/99f2efb0d660b9dd5cfcd82b6e67d1da1e14c10c)), closes [#818](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/818)
+* **agent-tools:** linear-scan trailing-linebreak strip retires the backtracking regex (MCP-529) ([ca5cc69](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ca5cc697d7916d048b0c0d713cd3820010cec89e))
+* **agent-tools:** short writes never truncate the log line; blank-value docs trued (MCP-529) ([0c15c5a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0c15c5a1191151bd199be19dae2f28b03abf95a2))
+* **agent-tools:** statusline log destination is a boundary; composition seam extracted (MCP-529) ([01809b4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/01809b42fdee9314e5c2f71c7f89981ae3716564))
+* **agent-tools:** statusline logging fails loud on noop; payload bytes preserved (MCP-529) ([5ae71e0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5ae71e02dd4ec1059e45f0a2b7377e5a02ad4a81))
+* **agent-tools:** warning precedes render output; branch-free fakes; docs true-ups (MCP-529) ([3a7d0c8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3a7d0c8b3445ef5d27d4ff76596189098f2acd11))
+
+
+### Features
+
+* **agent-tools:** optional statusline payload logging via OAK_STATUSLINE_LOG_FILE ([5905073](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5905073ff87c3e7adf172d4f19ef464cb75c3459))
+
 ## [1.163.3](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.163.2...v1.163.3) (2026-08-12)
 
 

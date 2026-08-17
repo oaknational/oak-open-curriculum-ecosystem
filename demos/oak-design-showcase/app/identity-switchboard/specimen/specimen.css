@@ -1,0 +1,478 @@
+/* ============================================================
+   Specimen route — layout only.
+
+   Every declaration here is layout or spacing expressed in token
+   roles. Colour, type and border VALUES belong to the kit's classes
+   and the identity's override sheet: that separation is the whole
+   demonstration, so a raw colour in this file would be the page
+   contradicting its own claim.
+
+   The export's inline `style` on the search icon lives here instead —
+   the workspace bans inline styles, and a token-role class is the
+   correct home regardless.
+   ============================================================ */
+
+/* Inverted like the reference (owner reprice 2026-08-10: appearance
+   converges — superseding the earlier non-inverted divergence). The ring
+   cure is the .foot pattern: every control on the inverted surface rides
+   the kit's inverted family, including the focus ring. */
+[data-page='unit'] .util {
+  background: var(--bg-inverted);
+  color: var(--text-inverted);
+  --text-link: var(--text-inverted);
+  --text-link-hover: var(--text-inverted);
+  --text-link-visited: var(--text-inverted);
+}
+
+[data-page='unit'] .util a {
+  --focus-ring: var(--focus-ring-inverted);
+}
+
+[data-page='unit'] .util-inner {
+  align-items: center;
+  padding-block: var(--space-8);
+}
+
+/* The audience pair reads "teacher · pupil": the dot is presentation, so
+   it lives here rather than as markup in the (list-marked) nav; each item
+   spaces its own separator, mirroring the crumbs pattern. */
+[data-page='unit'] .audience-list li {
+  display: flex;
+  gap: var(--gap-s);
+  align-items: center;
+}
+
+[data-page='unit'] .audience-list li:not(:last-child)::after {
+  content: '·';
+}
+
+/* Pushes the trailing utility link to the far edge without a float or a
+   spacer element. */
+[data-page='unit'] .push {
+  margin-inline-start: auto;
+}
+
+/* Sticky masthead, as the reference has it. Adopting stickiness adopts
+   the WCAG 2.2 2.4.11 obligation with it: the scroll-padding below keeps
+   a focused control from being revealed UNDER the bar, and short
+   viewports de-stick entirely so the bar can never dominate the screen. */
+[data-page='unit'] .mast {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--layer-sticky);
+}
+/* Hook-clean contract: brand expression layers restyle the masthead at
+   EQUAL specificity from a later-loaded sheet (see the PDS §11 comment),
+   so the brand-expressible visual properties — surface and rule — live at
+   (0,1,0) exactly like a brand's own .mast. The scoped block above keeps
+   the layout-only properties; declaring the surface there at (0,2,0) is
+   the recorded cascade defect that rendered PDS's inverted ink on a
+   non-inverted surface (the six declared specimen reds). */
+.mast {
+  background: var(--bg-primary);
+  border-block-end: var(--border-solid-m) solid var(--border-primary);
+}
+
+/* Focus-not-obscured (2.4.11): the masthead's own height, derived from
+   the tokens that build it — block padding both sides plus the control
+   row's target height. */
+html {
+  scroll-padding-block-start: calc(var(--space-16) * 2 + var(--size-target));
+}
+
+/* Kit documented constant: short-viewport 500px max-height (components.css
+   breakpoint doctrine) — de-stick the masthead where vertical room is
+   scarce. */
+@media (max-height: 500px) {
+  [data-page='unit'] .mast {
+    position: static;
+  }
+}
+
+[data-page='unit'] .mast-inner {
+  align-items: center;
+  gap: var(--space-16);
+  padding-block: var(--space-16);
+}
+
+[data-page='unit'] .brand-name {
+  margin: 0;
+}
+
+/* Nav gathers RIGHT with the search beside it, per the reference. */
+[data-page='unit'] .site-nav {
+  align-items: center;
+  margin-inline-start: auto;
+}
+
+[data-page='unit'] .site-search {
+  align-items: center;
+  margin-inline-start: var(--gap-m);
+}
+
+/* The narrow input is what keeps the whole masthead on one row. */
+[data-page='unit'] .site-search .oak-input {
+  inline-size: var(--space-160);
+}
+
+/* Small mask-icon sizing, one class for every inline icon on the page —
+   the app-local stand-in until the trunk's mask-icon sizing gap is cured
+   (routed to the DS slice). */
+[data-page='unit'] .icon-s {
+  inline-size: var(--size-icon-s);
+  block-size: var(--size-icon-s);
+}
+
+/* Nav lists are real lists (consistent with the export's other navs); the
+   reset is layout only — the semantics live in the markup. */
+[data-page='unit'] .nav-list {
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 0;
+}
+
+/* The current audience carries a non-colour marker — weight plus a heavier
+   underline — so the state survives forced-colors. The deliberate inverse
+   of the export's checked-state-by-colour-alone defect. */
+[data-page='unit'] .nav-list a[aria-current='true'] {
+  font-weight: var(--weight-semibold);
+  text-decoration-thickness: var(--border-solid-m);
+}
+
+/* ============ hero region ============ */
+
+/* The band's inline padding rides the brand map's --band-pad token so a
+   counter-brand can recompose the band without touching markup. */
+[data-page='unit'] .band-pad {
+  padding-inline: var(--band-pad);
+}
+
+/* The hero band is FLUSH and its inner carries the reference's measured
+   40px block rhythm (owner reprice 2026-08-10: the green header's size
+   and margins converge on the export — superseding the earlier
+   trunk-rhythm divergence; measured export: band pads 0, inner
+   padding-block 40, content inset 24 from the container alone). */
+[data-page='unit'] .hero-band {
+  padding: 0;
+}
+
+[data-page='unit'] .hero-inner {
+  padding-block: var(--space-40);
+}
+
+[data-page='unit'] .hero-crumbs {
+  margin-block-end: var(--space-16);
+}
+
+[data-page='unit'] .crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+[data-page='unit'] .crumbs li {
+  display: flex;
+  gap: var(--gap-s);
+  align-items: center;
+}
+
+[data-page='unit'] .crumbs li:not(:last-child)::after {
+  content: '/';
+  color: var(--text-subdued);
+}
+
+[data-page='unit'] .crumbs .here {
+  color: var(--text-subdued);
+}
+
+[data-page='unit'] .kicker {
+  margin: 0;
+  color: var(--text-subdued);
+}
+
+[data-page='unit'] .headline {
+  margin: 0;
+}
+
+[data-page='unit'] .standfirst {
+  margin: 0;
+  max-inline-size: var(--measure-prose);
+  justify-self: var(--key-justify);
+}
+
+/* ============ facets + results regions ============ */
+
+[data-page='unit'] .facets-pad,
+[data-page='unit'] .results-pad {
+  padding-block: var(--space-32);
+}
+
+[data-page='unit'] .facets-pad fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+[data-page='unit'] .facets-pad legend {
+  padding: 0;
+}
+
+[data-page='unit'] .m0 {
+  margin: 0;
+}
+
+[data-page='unit'] .results-bar {
+  justify-content: space-between;
+}
+
+[data-page='unit'] .term-h {
+  margin: 0;
+  color: var(--text-subdued);
+}
+
+/* The lesson ledger: numbered rows on hairline rules. */
+[data-page='unit'] .ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-block-end: var(--border-solid-s) solid var(--border-neutral);
+}
+
+[data-page='unit'] .ledger li {
+  display: flex;
+  /* Wrap engages only when a brand's wider controls need it (measured:
+     creature's pills at the 320px reflow floor). */
+  flex-wrap: wrap;
+  gap: var(--gap-m);
+  align-items: baseline;
+  padding-block: var(--space-16);
+  border-block-start: var(--border-solid-s) solid var(--border-neutral);
+}
+
+[data-page='unit'] .ledger .num {
+  min-inline-size: var(--space-32);
+  color: var(--text-subdued);
+}
+
+[data-page='unit'] .ledger .entry {
+  flex: 1;
+}
+
+[data-page='unit'] .ledger .entry p {
+  margin: var(--space-4) 0 0;
+}
+
+[data-page='unit'] .pagenav {
+  justify-content: center;
+}
+
+/* ============ detail region ============ */
+
+[data-page='unit'] .detail-pad {
+  padding-block: var(--space-32);
+}
+
+[data-page='unit'] .detail-h {
+  margin: 0 0 var(--space-24);
+}
+
+[data-page='unit'] .lede {
+  margin: 0;
+  max-inline-size: var(--measure-prose);
+}
+
+/* The 16:9 stand-in for the lesson video. The hatch stripe widths ride the
+   space scale (the export used near-identical raw pixels; tokens here). */
+[data-page='unit'] .media-slot {
+  aspect-ratio: 16 / 9;
+  border: var(--border-solid-s) dashed var(--border-neutral);
+  border-radius: var(--radius-container);
+  background: repeating-linear-gradient(
+    to bottom right,
+    var(--bg-subtle),
+    var(--bg-subtle) var(--space-8),
+    var(--bg-primary) var(--space-8),
+    var(--bg-primary) var(--space-16)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-page='unit'] .media-slot span {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2);
+  color: var(--text-subdued);
+}
+
+[data-page='unit'] .aside-card p,
+[data-page='unit'] .aside-card h3,
+[data-page='unit'] .tip-body {
+  margin: 0;
+}
+
+[data-page='unit'] .mis-block {
+  margin-block-start: var(--gap-m);
+}
+
+/* The keyword separator is presentation, so it lives here — the export
+   carried it as a bare text node inside the dl, which is the axe
+   definition-list violation the specimen matrix caught on its first run
+   (an export defect, not reproduced; trunk candidate: the kit's
+   .oak-keyword could ship this separator). */
+[data-page='unit'] .oak-keyword dt::after {
+  content: ' — ';
+  font-weight: var(--weight-regular);
+}
+
+/* ============ resources / support / cta / footer ============ */
+
+[data-page='unit'] .res-inner {
+  padding-block: var(--space-40);
+}
+
+[data-page='unit'] .res-card h3,
+[data-page='unit'] .res-card p {
+  margin: 0;
+}
+
+[data-page='unit'] .support-pad {
+  padding-block: var(--space-40);
+}
+
+[data-page='unit'] .support-pad h2 {
+  margin: 0 0 var(--space-24);
+}
+
+[data-page='unit'] .cta-inner {
+  padding-block: var(--space-40);
+}
+
+[data-page='unit'] .cta-inner h2 {
+  margin: 0;
+}
+
+[data-page='unit'] .cta-form {
+  align-items: flex-end;
+}
+
+[data-page='unit'] .cta-field {
+  flex: 1;
+  min-inline-size: var(--space-240);
+}
+
+/* The inverted footer uses the house cures (globals.css .foot, kit
+   KNOWN-ISSUES #13): links re-point the LINK ROLES — never a colour on
+   descendants, or the kit's :hover state rules win and land illegible —
+   and every control takes the inverted focus ring. */
+[data-page='unit'] .foot {
+  background: var(--bg-inverted);
+  color: var(--text-inverted);
+  --text-link: var(--text-inverted);
+  --text-link-hover: var(--text-inverted);
+  --text-link-visited: var(--text-inverted);
+}
+
+[data-page='unit'] .foot a {
+  --focus-ring: var(--focus-ring-inverted);
+}
+
+/* Muted text on the inverted band rides the kit's audited inverted
+   family, never the ordinary subdued role. */
+[data-page='unit'] .foot .blurb {
+  margin: 0;
+  color: var(--text-inverted-subdued);
+}
+
+/* Under forced colors the system palette wins (the kit's own pattern):
+   the subdued nuance yields to CanvasText via inheritance. */
+@media (forced-colors: active) {
+  [data-page='unit'] .foot .blurb {
+    color: inherit;
+  }
+}
+
+[data-page='unit'] .foot-inner {
+  padding-block: var(--space-40);
+}
+
+[data-page='unit'] .foot-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--space-160), 100%), 1fr));
+  gap: var(--gap-l);
+}
+
+[data-page='unit'] .foot-cols nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+
+[data-page='unit'] .foot-cols nav .col-h {
+  font-weight: var(--weight-bold);
+}
+
+[data-page='unit'] .foot hr {
+  border: 0;
+  border-block-start: var(--border-solid-s) solid var(--border-neutral);
+  margin-block: var(--space-24);
+}
+
+[data-page='unit'] .legal {
+  margin-inline-start: auto;
+}
+
+/* SC 1.4.10: the data table scrolls here, never the page. */
+[data-page='unit'] .table-scroll {
+  overflow-x: auto;
+}
+
+/* Tab row: the underline carries the current state (a non-colour marker),
+   sitting on the row's own baseline rule. */
+[data-page='unit'] .tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-m);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-block-end: var(--border-solid-m) solid var(--border-neutral);
+}
+
+[data-page='unit'] .tabs a {
+  display: inline-block;
+  padding-block: var(--space-12);
+  text-decoration: none;
+  color: var(--text-subdued);
+  border-block-end: var(--border-solid-l) solid transparent;
+  margin-block-end: calc(-1 * var(--border-solid-m));
+}
+
+[data-page='unit'] .tabs a[aria-current='page'] {
+  color: var(--text-primary);
+  font-weight: var(--weight-semibold);
+  border-block-end-color: var(--border-primary);
+}
+
+[data-page='unit'] .tabs a:hover {
+  color: var(--text-primary);
+}
+
+[data-page='unit'] .metrics-wrap {
+  padding-block: var(--space-24);
+}
+
+[data-page='unit'] .metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--space-160), 100%), 1fr));
+  gap: var(--gap-m);
+  margin: 0;
+}
+
+[data-page='unit'] .metric dd {
+  margin: 0;
+}

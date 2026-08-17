@@ -52,6 +52,10 @@ function formatOutputFiles(result: PipelineResult): readonly string[] {
  * @returns Formatted string for console output
  */
 export function formatPipelineResult(result: PipelineResult): string {
+  if (!result.success) {
+    return `Pipeline failed: ${result.error ?? 'unknown error'}`;
+  }
+
   const lines: string[] = [];
 
   if (result.dryRun) {

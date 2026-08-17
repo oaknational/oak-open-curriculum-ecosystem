@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Industrial Revolution — Year 8 History Unit | Oak National Academy</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /*
+      Layout-only rules. No framework tokens are invented as colour/type
+      values here — every visual property below reads from the oak-*
+      custom properties the stylesheet is assumed to define, with a
+      conservative fallback so the composition still holds if a token
+      name doesn't resolve.
+    */
+    body {
+      margin: 0;
+      background: var(--oak-color-grey-01, #f7f7f7);
+    }
+
+    .page {
+      max-width: 76rem;
+      margin: 0 auto;
+      padding: 0 var(--oak-space-6, 1.5rem) var(--oak-space-14, 4rem);
+    }
+
+    /* ---------- Hero: deliberately short. It orients, it doesn't perform. ---------- */
+    .hero {
+      padding: var(--oak-space-6, 1.5rem) 0 var(--oak-space-5, 1.25rem);
+      border-bottom: 1px solid var(--oak-color-grey-03, #e0e0e0);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--oak-space-4, 1rem);
+    }
+
+    .hero__text {
+      max-width: 42rem;
+    }
+
+    .hero__meta {
+      display: flex;
+      gap: var(--oak-space-3, 0.75rem);
+      flex-wrap: wrap;
+      margin-top: var(--oak-space-2, 0.5rem);
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: var(--oak-space-3, 0.75rem);
+      align-items: center;
+    }
+
+    /* ---------- Two-column body: lessons dominate, sidebar supports ---------- */
+    .unit-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--oak-space-8, 2rem);
+      margin-top: var(--oak-space-8, 2rem);
+    }
+
+    @media (min-width: 64rem) {
+      .unit-grid {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        align-items: start;
+      }
+    }
+
+    .lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--oak-space-3, 0.75rem);
+    }
+
+    .lesson-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: var(--oak-space-4, 1rem);
+      padding: var(--oak-space-4, 1rem) var(--oak-space-5, 1.25rem);
+      background: var(--oak-color-white, #fff);
+      border: 1px solid var(--oak-color-grey-03, #e0e0e0);
+      border-radius: var(--oak-radius-2, 0.5rem);
+    }
+
+    .lesson-row__number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 999px;
+      background: var(--oak-color-teal-50, #dff1ee);
+      color: var(--oak-color-teal-90, #1b4d46);
+      font-weight: 700;
+    }
+
+    .lesson-row__title {
+      margin: 0 0 var(--oak-space-1, 0.25rem);
+    }
+
+    .lesson-row__desc {
+      margin: 0;
+      color: var(--oak-color-grey-06, #595959);
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--oak-space-5, 1.25rem);
+    }
+
+    .oak-card {
+      background: var(--oak-color-white, #fff);
+      border: 1px solid var(--oak-color-grey-03, #e0e0e0);
+      border-radius: var(--oak-radius-2, 0.5rem);
+      padding: var(--oak-space-5, 1.25rem);
+    }
+
+    .downloads-list {
+      list-style: none;
+      margin: var(--oak-space-3, 0.75rem) 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--oak-space-2, 0.5rem);
+    }
+
+    .downloads-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--oak-space-2, 0.5rem) 0;
+      border-bottom: 1px solid var(--oak-color-grey-02, #eee);
+      font-size: 0.9375rem;
+    }
+
+    .downloads-list li:last-child {
+      border-bottom: none;
+    }
+
+    /* ---------- Related units: quiet, muted, deliberately low-weight ---------- */
+    .related {
+      margin-top: var(--oak-space-12, 3rem);
+      padding-top: var(--oak-space-6, 1.5rem);
+      border-top: 1px solid var(--oak-color-grey-03, #e0e0e0);
+    }
+
+    .related__heading {
+      color: var(--oak-color-grey-06, #595959);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0 0 var(--oak-space-3, 0.75rem);
+    }
+
+    .related-strip {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(11rem, 14rem);
+      gap: var(--oak-space-3, 0.75rem);
+      overflow-x: auto;
+      padding-bottom: var(--oak-space-2, 0.5rem);
+    }
+
+    .related-card {
+      border: 1px solid var(--oak-color-grey-03, #e0e0e0);
+      border-radius: var(--oak-radius-2, 0.5rem);
+      padding: var(--oak-space-3, 0.75rem);
+      background: var(--oak-color-grey-01, #f7f7f7);
+    }
+
+    .related-card__title {
+      font-size: 0.9375rem;
+      margin: 0 0 var(--oak-space-1, 0.25rem);
+    }
+
+    .related-card__meta {
+      font-size: 0.8125rem;
+      color: var(--oak-color-grey-06, #595959);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- HERO: orientation only — breadcrumb, title, one-line subtitle, one CTA.
+         Kept short on purpose so it doesn't compete with the lesson list below. -->
+    <header class="hero">
+      <div class="hero__text">
+        <nav aria-label="Breadcrumb" class="oak-body-2">
+          <a href="#" class="oak-link">History</a> ›
+          <a href="#" class="oak-link">Year 8</a> ›
+          <span aria-current="page">The Industrial Revolution</span>
+        </nav>
+        <h1 class="oak-heading-2">The Industrial Revolution</h1>
+        <p class="oak-body">
+          How steam, factories and cities remade Britain — and who paid the price for it.
+        </p>
+        <div class="hero__meta">
+          <span class="oak-tag">Key Stage 3</span>
+          <span class="oak-tag">Year 8</span>
+          <span class="oak-tag">12 lessons</span>
+        </div>
+      </div>
+      <div class="hero__actions">
+        <a href="#lessons" class="oak-btn oak-btn-primary">View lessons</a>
+      </div>
+    </header>
+
+    <div class="unit-grid">
+
+      <!-- PRIMARY: lesson list. This is what most teachers land on the page to find,
+           so it gets the largest column, the most detail per row, and the top
+           position in reading order after the hero. -->
+      <main>
+        <h2 id="lessons" class="oak-heading-3">Lessons in this unit</h2>
+        <ol class="lesson-list" aria-label="Lessons in this unit">
+          <li class="lesson-row">
+            <span class="lesson-row__number" aria-hidden="true">1</span>
+            <div>
+              <h3 class="lesson-row__title oak-heading-5">Why did Britain industrialise first?</h3>
+              <p class="lesson-row__desc">Coal, capital and geography — the starting conditions.</p>
+            </div>
+            <a href="#" class="oak-btn oak-btn-secondary">View lesson</a>
+          </li>
+          <li class="lesson-row">
+            <span class="lesson-row__number" aria-hidden="true">2</span>
+            <div>
+              <h3 class="lesson-row__title oak-heading-5">The factory system</h3>
+              <p class="lesson-row__desc">From domestic production to the factory floor.</p>
+            </div>
+            <a href="#" class="oak-btn oak-btn-secondary">View lesson</a>
+          </li>
+          <li class="lesson-row">
+            <span class="lesson-row__number" aria-hidden="true">3</span>
+            <div>
+              <h3 class="lesson-row__title oak-heading-5">Steam power and the railways</h3>
+              <p class="lesson-row__desc">How steam changed what distance meant.</p>
+            </div>
+            <a href="#" class="oak-btn oak-btn-secondary">View lesson</a>
+          </li>
+          <li class="lesson-row">
+            <span class="lesson-row__number" aria-hidden="true">4</span>
+            <div>
+              <h3 class="lesson-row__title oak-heading-5">Child labour and the 1833 Factory Act</h3>
+              <p class="lesson-row__desc">Working conditions, and the campaign that changed them.</p>
+            </div>
+            <a href="#" class="oak-btn oak-btn-secondary">View lesson</a>
+          </li>
+          <li class="lesson-row">
+            <span class="lesson-row__number" aria-hidden="true">5</span>
+            <div>
+              <h3 class="lesson-row__title oak-heading-5">The growth of cities</h3>
+              <p class="lesson-row__desc">Rapid urbanisation and its human cost.</p>
+            </div>
+            <a href="#" class="oak-btn oak-btn-secondary">View lesson</a>
+          </li>
+          <li class="lesson-row">
+            <span class="lesson-row__number" aria-hidden="true">6</span>
+            <div>
+              <h3 class="lesson-row__title oak-heading-5">Public health and disease</h3>
+              <p class="lesson-row__desc">Cholera, sanitation, and the reformers who responded.</p>
+            </div>
+            <a href="#" class="oak-btn oak-btn-secondary">View lesson</a>
+          </li>
+          <li class="lesson-row">
+            <span class="lesson-row__number" aria-hidden="true">7</span>
+            <div>
+              <h3 class="lesson-row__title oak-heading-5">Trade unions and protest</h3>
+              <p class="lesson-row__desc">Workers organising for better conditions.</p>
+            </div>
+            <a href="#" class="oak-btn oak-btn-secondary">View lesson</a>
+          </li>
+          <li class="lesson-row">
+            <span class="lesson-row__number" aria-hidden="true">8</span>
+            <div>
+              <h3 class="lesson-row__title oak-heading-5">Assessment: explaining industrial change</h3>
+              <p class="lesson-row__desc">Consolidating causation across the unit.</p>
+            </div>
+            <a href="#" class="oak-btn oak-btn-secondary">View lesson</a>
+          </li>
+        </ol>
+      </main>
+
+      <!-- SECONDARY: sidebar. Confirms fit (summary) and supports planning
+           (downloads) without competing with the lesson list for attention. -->
+      <aside class="sidebar" aria-label="Unit information">
+        <section class="oak-card">
+          <h2 class="oak-heading-5">Unit summary</h2>
+          <p class="oak-body-2">
+            Pupils explain why Britain industrialised first, then trace the
+            consequences for work, cities and health. The unit builds to an
+            extended-writing assessment on causation, and assumes prior
+            knowledge of the agricultural revolution from the Year 7 unit
+            on early modern Britain.
+          </p>
+        </section>
+
+        <section class="oak-card">
+          <h2 class="oak-heading-5">Unit resources</h2>
+          <ul class="downloads-list">
+            <li><span>Slide decks (12)</span> <a href="#" class="oak-link">Download</a></li>
+            <li><span>Worksheets (12)</span> <a href="#" class="oak-link">Download</a></li>
+            <li><span>End-of-unit assessment</span> <a href="#" class="oak-link">Download</a></li>
+            <li><span>Knowledge organiser</span> <a href="#" class="oak-link">Download</a></li>
+          </ul>
+          <a href="#" class="oak-btn oak-btn-secondary" style="width:100%; text-align:center;">Download all resources</a>
+        </section>
+      </aside>
+    </div>
+
+    <!-- TERTIARY: related units. Discovery, not the reason anyone opened this
+         page — muted colour, small type, horizontal strip, bottom of page. -->
+    <section class="related" aria-label="Related units">
+      <h2 class="related__heading">Related units</h2>
+      <div class="related-strip">
+        <a class="related-card" href="#">
+          <p class="related-card__title">The British Empire</p>
+          <p class="related-card__meta">Year 8 · History</p>
+        </a>
+        <a class="related-card" href="#">
+          <p class="related-card__title">The Transatlantic Slave Trade</p>
+          <p class="related-card__meta">Year 8 · History</p>
+        </a>
+        <a class="related-card" href="#">
+          <p class="related-card__title">Votes for Women</p>
+          <p class="related-card__meta">Year 9 · History</p>
+        </a>
+        <a class="related-card" href="#">
+          <p class="related-card__title">Early Modern Britain</p>
+          <p class="related-card__meta">Year 7 · History</p>
+        </a>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+/* ============================================================
+   Picker route — layout only, narrow-first.
+
+   Same discipline as the specimen's sheet: every declaration is
+   layout or spacing in token roles. The picker chrome must not
+   introduce colour or type VALUES, because the page's claim is
+   that presentation is data and the chrome is the frame around
+   that claim.
+
+   Narrow first, wide follows (owner ruling 2026-08-13): the base
+   rules ARE the narrow design — the embedded page dominates the
+   first screenful — and the single min-width band spends the
+   extra room. Breakpoints are the kit's documented constants
+   (md 960px; short-viewport 500px max-height), never invented.
+   ============================================================ */
+
+[data-page='identity-picker'] .picker-head {
+  padding-block: var(--inset-m);
+}
+
+[data-page='identity-picker'] .picker-lede {
+  max-inline-size: var(--measure-prose);
+}
+
+/* Controls ride the kit's .oak-grid auto-fit primitive; the override
+   narrows the track floor so the three 48px selects share one row
+   wherever three tracks fit, and wrap without bespoke media queries
+   below that. Gaps stay on the semantic tier so the brand density
+   knob moves this chrome with everything else. */
+[data-page='identity-picker'] .picker-controls {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--space-160), 100%), 1fr));
+  gap: var(--gap-s) var(--gap-m);
+  align-items: end;
+  padding-block-end: var(--inset-s);
+}
+
+/* The caption under the stage: live status + the full-page link,
+   wrapping by kit cluster default at narrow widths. */
+[data-page='identity-picker'] .picker-caption {
+  padding-block: var(--inset-s);
+}
+
+/* The stage carries no brand of its own — it is a viewport onto the
+   specimen, so it is SHAPED like one. The stationary rectangle matters —
+   if the frame resized on each swap, the eye would read the movement
+   rather than the re-skin; the width control changes the SIMULATED
+   viewport inside, never the stage. Portrait 3/4 at base makes the demo
+   dominate the narrow first screenful; the wide band restores the 16/10
+   screen ratio. (Bare ratios carry no design value per the classifier's
+   own doctrine; the kit has no viewport-height token to compose here.) */
+[data-page='identity-picker'] .picker-stage {
+  inline-size: 100%;
+  aspect-ratio: 3 / 4;
+  border: var(--border-solid-s) solid var(--border-neutral-lighter);
+  overflow: hidden;
+}
+
+/* The scale-fit hook owns the frame's simulated size and scale (one
+   source for the numbers); this sheet carries only the invariants plus
+   the pre-hydration default, so the server shell fills the stage until
+   the hook takes over. */
+[data-page='identity-picker'] .picker-stage iframe {
+  border: 0;
+  display: block;
+  transform-origin: 0 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+@media (min-width: 960px) {
+  [data-page='identity-picker'] .picker-head {
+    padding-block: var(--inset-l);
+  }
+
+  [data-page='identity-picker'] .picker-stage {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* Short-viewport (kit constant, 500px max-height): on a landscape phone
+   a 3/4 stage computes taller than the whole viewport, so the screen
+   ratio wins there. Last, so it beats both bands above. */
+@media (max-height: 500px) {
+  [data-page='identity-picker'] .picker-stage {
+    aspect-ratio: 16 / 10;
+  }
+}

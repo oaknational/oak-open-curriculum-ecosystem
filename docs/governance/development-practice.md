@@ -79,6 +79,66 @@ Each layer catches a different class of defect; the layers compose:
 9. **Accessibility audit** (`test:a11y`) — WCAG 2.2 AA compliance for
    UI-shipping workspaces, zero-tolerance, both themes.
 
+### Mutation testing — method and tooling
+
+Layer 6 has two complementary modes. Both answer the same question — would
+this test suite notice if the code stopped doing what it claims? — at
+different costs and coverages. The hand-picked discipline is stated as
+binding doctrine in `.agent/directives/testing-strategy.md` ("Prove the
+guard bites"), whose declared formal home for mutation testing is
+`validation-strategy.md`; this section is the repo-bound elaboration —
+tooling wiring and worked instances live here, the portable method there.
+
+**Claim-directed mutants (hand-picked).** When a change's value IS an
+assertion (a test instrument, a validator, a guard), each claim the change
+makes lands with a mutant that negates exactly that claim, verified killed in
+the same commit. The discipline:
+
+1. Pick one mutant per failure mode the change claims to close — negate the
+   claim itself (invert the predicate, drop the branch, skip the write),
+   never an incidental line.
+2. Apply it as a temporary forward file edit from a driver script that holds
+   the original text (string-replace with a matched-needle assertion; restore
+   by writing the original back — never via git checkout/restore).
+3. Run the narrowest suite that judges the claim; record the outcome; restore;
+   re-run green.
+4. Read the direction honestly. At unit level a mutant is killed when a cell
+   fails. Against a live surface that is already red from a known defect, the
+   direction inverts: the mutant must turn the red cell GREEN — that proves
+   the new assertion (not some other break) is what catches the defect. "The
+   cell went red" alone is evidence a defect surfaced, not evidence the
+   instrument caught it.
+5. The durable record is the commit body: which mutants, judged where, with
+   what outcome. Driver scripts are throwaway.
+
+Worked instance: the PR #846 bundle-2 instrument cure (2026-08-13) — unit
+mutants against the `demos/oak-design-showcase/tools/axe-verdicts.ts` cells
+and live mutants judged by named Playwright cells, including the
+inverted-direction proof that removing the incomplete-bucket scan turned the
+known-defect cell green.
+
+**Framework sweeps (Stryker).** The estate wires StrykerJS already: the root
+`mutate` script fans out through turbo, and `packages/core/type-helpers` is
+the first workspace wired this way (2026-08). Stryker generates the mutants
+you did NOT think of — an exhaustive operator sweep (conditionals,
+boundaries, literals, removals) scored as a surviving-mutant report — so it
+audits test adequacy broadly where hand-picked mutants prove named claims
+deeply. To extend coverage: give a workspace its own `stryker.config.mjs`
+plus a `mutate` script, copying fields from the root reference template
+`stryker.config.base.ts` (vitest runner, per-test coverage analysis).
+StrykerJS has no config-extension mechanism and auto-discovers only
+`json|js|mjs|cjs` config filenames, so the `.ts` base can never be the
+loaded config — it is a template to copy, and the exemplar's header records
+which fields deliberately differ. Pure logic modules split out of instrument
+code (the axe-verdicts shape) are exactly the Stryker-amenable surface —
+splitting for unit-testability also buys frameworkability. Two boundaries
+keep the modes honest: Stryker judges only what its test runner executes, so
+Playwright-run instruments and cross-process claims stay with hand-picked
+mutants; and the mutation score is evidence, never a gate — no threshold
+gates anything (owner doctrine 2026-08-05, binding, recorded in the canary
+plan and the exemplar config; promotion to a gate is a separate owner
+decision with its own evidence).
+
 ### Specialist Review Findings
 
 Reviewer findings are action items by default. Accepted findings are

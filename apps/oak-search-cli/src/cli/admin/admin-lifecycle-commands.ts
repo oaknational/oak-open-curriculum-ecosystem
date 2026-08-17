@@ -4,6 +4,7 @@ import { InvalidArgumentError, type Command } from 'commander';
 import type { Client } from '@elastic/elasticsearch';
 import { sanitiseForJson } from '@oaknational/observability';
 import {
+  enforceRestrictedInclusionBoundary,
   withLifecycleLease,
   type AdminError,
   type IndexLifecycleService,
@@ -121,6 +122,11 @@ async function runVersionedIngestAction(
   cliEnv: LifecycleIngestEnv,
   opts: ParsedLifecycleIngestOpts,
 ): Promise<void> {
+  const restrictedGuard = enforceRestrictedInclusionBoundary(opts);
+  if (!restrictedGuard.ok) {
+    handleLifecycleResult(restrictedGuard, () => undefined);
+    return;
+  }
   await withVerifiedBulkData(
     gateInputFor(cliEnv, opts),
     async (bulkDir) => {
@@ -152,6 +158,11 @@ async function runStageAction(
   cliEnv: LifecycleIngestEnv,
   opts: ParsedLifecycleIngestOpts,
 ): Promise<void> {
+  const restrictedGuard = enforceRestrictedInclusionBoundary(opts);
+  if (!restrictedGuard.ok) {
+    handleLifecycleResult(restrictedGuard, () => undefined);
+    return;
+  }
   await withVerifiedBulkData(
     gateInputFor(cliEnv, opts),
     async (bulkDir) => {
@@ -195,6 +206,10 @@ export function registerVersionedIngestCmd(
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
     .option('--min-doc-count <count>', 'Minimum docs per index', validateMinDocCount)
     .option('-v, --verbose', 'Enable verbose output')
+    .option(
+      '--include-restricted',
+      'Retain restricted lessons instead of excluding them (default: exclude; rejected for index-producing runs until restricted lessons are labelled in results — ADR-224)',
+    )
     .action(
       withLoadedCliEnv(cliEnvLoader, async (cliEnv: LifecycleIngestEnv, rawOpts: unknown) =>
         runVersionedIngestAction(cliEnv, parseLifecycleIngestOpts(rawOpts)),
@@ -213,6 +228,10 @@ export function registerStageCmd(parent: Command, cliEnvLoader: SearchCliEnvLoad
     .option('--subject-filter <subjects...>', 'Ingest only specific subjects')
     .option('--min-doc-count <count>', 'Minimum docs per index', validateMinDocCount)
     .option('-v, --verbose', 'Enable verbose output')
+    .option(
+      '--include-restricted',
+      'Retain restricted lessons instead of excluding them (default: exclude; rejected for index-producing runs until restricted lessons are labelled in results — ADR-224)',
+    )
     .action(
       withLoadedCliEnv(cliEnvLoader, async (cliEnv: LifecycleIngestEnv, rawOpts: unknown) =>
         runStageAction(cliEnv, parseLifecycleIngestOpts(rawOpts)),

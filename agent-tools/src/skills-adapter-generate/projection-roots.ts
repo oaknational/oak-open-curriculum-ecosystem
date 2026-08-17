@@ -1,33 +1,49 @@
 /**
- * Whole-surface reconciliation of the projection roots.
+ * Class-scoped reconciliation of the projection roots.
  *
  * Per-skill carriage only ever visits currently discovered canonicals, so a
  * deleted or renamed canonical would leave its complete old projection
  * directory live — stale `SKILL.md`, carried files and all — while both
  * checker and generator stayed green (review round 3, 2026-08-11). This
- * module closes that hole: every entry under `.claude/skills/` and
- * `.agents/skills/` must be a projection of a discovered canonical
- * (`<prefix><id>`) or a lock-pinned vendored skill from `skills-lock.json`.
- * Anything else — including any symlink, which is never a valid projection —
- * is stale: the checker reports it; a generator run removes it.
+ * module closes that hole for the PRACTICE CLASS ONLY: an entry under
+ * `.claude/skills/` or `.agents/skills/` is adjudicated iff its `SKILL.md`
+ * carries the class marker recording its derivation from `.agent/skills/`
+ * (see `adapter-stub.ts`) — only our own emission writes such a stub. A
+ * recognised entry is stale when its recorded canonical is no longer
+ * discovered, or when its name is not the canonical's current projection
+ * name (a canonical rename or a prefix migration). The checker reports
+ * stale entries; a generator run removes them.
+ *
+ * Everything else is out of jurisdiction: Vendor-class skills (installed
+ * and managed by the external skills machinery, `pnpx skills`, as real
+ * directories or symlinks) and any other foreign entry are never
+ * adjudicated, reported, or removed. Names are NEVER the discriminator —
+ * the generation prefix is a configurable naming parameter, not a class
+ * boundary, and a foreign skill whose name happens to share it stays
+ * untouched. Symlinked entries are never ours by construction (emission
+ * writes only real directories) and are never read through — at the
+ * directory level (dirent-kind listing) AND at the stub level (the
+ * classification read is lstat-gated, so a symlinked `SKILL.md` inside a
+ * foreign directory cannot borrow a genuine stub's content). Our
+ * validation governs our own system only (testing-strategy.md: never test
+ * external functionality that is not under our control; the skill-class
+ * taxonomy lives in ADR-125).
  *
  * An absent surface root is fine (nothing to reconcile); any other listing
- * failure lands in `failures`, because reading a failure as "empty" would
- * certify or delete over a surface that was never actually observed. Two
- * deliberate bounds: a stray REGULAR FILE at a surface root is outside
- * this sweep's contract (the roots hold skill directories; a loose file
- * is inert and left for a human), and a lock-pinned NAME is exempt
- * whatever its kind — including the estate's nine committed vendored
- * symlinks, a REGISTERED carve-out (exemption-removal plan register; cure
- * routed: vendoring writes real files to both surfaces, then the
- * exemption narrows to real directories only).
+ * or classification read failure lands in `failures`, because reading a
+ * failure as "empty" would certify or delete over a surface that was never
+ * actually observed. Two deliberate bounds: a stray regular FILE at a
+ * surface root is outside this sweep's contract, and a directory with no
+ * readable-as-ours `SKILL.md` (including our own projection residue that
+ * lost its stub) is left in place — never deleting what cannot be proven
+ * ours is the fail-safe direction.
  */
 import { join } from 'node:path';
 
-import { realCarriageWriteFs, type CarriageReadFs } from './carriage-fs.js';
+import { parseAdapterStubPointer } from './adapter-stub.js';
+import { realCarriageWriteFs, type CarriageReadFs, type FsRead } from './carriage-fs.js';
 import { byPath } from './carriage-walk.js';
-
-const PROJECTION_SURFACE_ROOTS = ['.claude/skills', '.agents/skills'] as const;
+import { PROJECTION_SURFACE_ROOTS, surfaceRootGuardFailure } from './surface-roots.js';
 
 /** The shared checker/generator completeness contract: reconciliation and
  * emission may act only when discovery saw the WHOLE canonical estate — a
@@ -49,46 +65,46 @@ export interface ProjectionRootSweep {
 }
 
 /**
- * Enumerate stale projection-root entries: directories that project no
- * discovered canonical and are not lock-pinned, plus every non-regular
- * entry (a lock-pinned NAME is preserved whatever its kind — the lock is
- * the one authority for content generation cannot re-create).
+ * One discovered canonical's identity at the projection roots: the class
+ * marker its stub records (`canonicalRef`, relative to `.agent/skills/`)
+ * and the directory name its projection must carry today.
+ */
+export interface ProjectionIdentity {
+  readonly canonicalRef: string;
+  readonly expectedName: string;
+}
+
+/**
+ * Enumerate stale Practice projections: directories whose `SKILL.md`
+ * carries the class marker but whose recorded canonical is no longer
+ * discovered, or whose name is not that canonical's current projection
+ * name. Entries without the marker are not ours and are never
+ * enumerated.
  */
 export async function findStaleProjectionEntries(input: {
   readonly repoRoot: string;
-  readonly prefix: string;
-  readonly canonicalIds: readonly string[];
-  readonly lockedIds: ReadonlySet<string>;
+  readonly projections: readonly ProjectionIdentity[];
   readonly fs: CarriageReadFs;
 }): Promise<ProjectionRootSweep> {
-  const expected = new Set(input.canonicalIds.map((id) => `${input.prefix}${id}`));
+  const expectedByRef = new Map(
+    input.projections.map((entry) => [entry.canonicalRef, entry.expectedName]),
+  );
   const stale: string[] = [];
   const failures: string[] = [];
-  const lockCollisions = [...input.lockedIds].filter((name) => expected.has(name));
-  if (lockCollisions.length > 0) {
-    // A vendored id colliding with a projection name would be pruned or
-    // overwritten by carriage; the state is unrepresentable by refusal.
-    failures.push(
-      `lock-pinned id(s) collide with expected projection name(s): ${lockCollisions.join(', ')} — ` +
-        `rename the canonical or the vendored entry before reconciling`,
-    );
-  }
   const repoReal = await input.fs.resolveRealPath(input.repoRoot);
   for (const surface of PROJECTION_SURFACE_ROOTS) {
     const root = join(input.repoRoot, surface);
-    const guardFailure = await assertRealSurfaceRoot(root, surface, repoReal, input.fs);
+    const guardFailure = await surfaceRootGuardFailure({
+      root,
+      surface,
+      repoReal,
+      resolveRealPath: (path) => input.fs.resolveRealPath(path),
+    });
     if (guardFailure !== undefined) {
       failures.push(guardFailure);
       continue;
     }
-    await sweepSurfaceRoot({
-      root,
-      expected,
-      lockedIds: input.lockedIds,
-      fs: input.fs,
-      stale,
-      failures,
-    });
+    await sweepSurfaceRoot({ root, expectedByRef, fs: input.fs, stale, failures });
   }
   return { stale: stale.toSorted(byPath), failures: failures.toSorted(byPath) };
 }
@@ -110,9 +126,7 @@ interface SweepOutcome {
  */
 export async function sweepStaleProjections(input: {
   readonly repoRoot: string;
-  readonly prefix: string;
-  readonly canonicalIds: readonly string[];
-  readonly lockedIds: ReadonlySet<string>;
+  readonly projections: readonly ProjectionIdentity[];
   readonly discoveryComplete: boolean;
 }): Promise<SweepOutcome> {
   if (!input.discoveryComplete) {
@@ -120,9 +134,7 @@ export async function sweepStaleProjections(input: {
   }
   const sweep = await findStaleProjectionEntries({
     repoRoot: input.repoRoot,
-    prefix: input.prefix,
-    canonicalIds: input.canonicalIds,
-    lockedIds: input.lockedIds,
+    projections: input.projections,
     fs: realCarriageWriteFs,
   });
   if (sweep.failures.length > 0) {
@@ -136,58 +148,56 @@ export async function sweepStaleProjections(input: {
   return { pruned, refusedRun: [] };
 }
 
-/**
- * The surface root AND every ancestor under the repo root must be real
- * directories: readdir follows a symlink at any depth, so every verdict
- * and removal would act on (and delete inside) whatever tree the link
- * points at. One realpath comparison catches root and ancestors alike
- * (security round, 2026-08-11 — a symlinked `.claude` defeated a
- * root-only check). Returns the failure message, or undefined when safe.
- */
-async function assertRealSurfaceRoot(
-  root: string,
-  surface: string,
-  repoReal: Awaited<ReturnType<CarriageReadFs['resolveRealPath']>>,
-  fs: CarriageReadFs,
-): Promise<string | undefined> {
-  if (repoReal.kind === 'failure') {
-    return repoReal.message;
-  }
-  const rootReal = await fs.resolveRealPath(root);
-  if (rootReal.kind === 'failure') {
-    return rootReal.message;
-  }
-  if (rootReal.value !== join(repoReal.value, surface)) {
-    return (
-      `projection surface root resolves outside its lexical home (symlinked root or ` +
-      `ancestor): ${root} -> ${rootReal.value} — refusing to reconcile through it`
-    );
-  }
-  return undefined;
-}
-
 async function sweepSurfaceRoot(input: {
   readonly root: string;
-  readonly expected: ReadonlySet<string>;
-  readonly lockedIds: ReadonlySet<string>;
+  readonly expectedByRef: ReadonlyMap<string, string>;
   readonly fs: CarriageReadFs;
   readonly stale: string[];
   readonly failures: string[];
 }): Promise<void> {
+  // Only real directories are candidates: `listSubdirectoryNames` classifies
+  // by dirent kind, so a symlinked entry never reaches the stub read below —
+  // nothing is ever read (or later removed) through a link.
   const subdirectoryNames = await input.fs.listSubdirectoryNames(input.root);
   if (subdirectoryNames.kind === 'failure') {
     input.failures.push(subdirectoryNames.message);
-  } else {
-    const staleDirs = subdirectoryNames.value.filter(
-      (name) => !input.expected.has(name) && !input.lockedIds.has(name),
-    );
-    input.stale.push(...staleDirs.map((name) => join(input.root, name)));
+    return;
   }
-  const otherNames = await input.fs.listOtherEntryNames(input.root);
-  if (otherNames.kind === 'failure') {
-    input.failures.push(otherNames.message);
-  } else {
-    const staleOthers = otherNames.value.filter((name) => !input.lockedIds.has(name));
-    input.stale.push(...staleOthers.map((name) => join(input.root, name)));
+  for (const name of subdirectoryNames.value) {
+    const verdict = await classifyEntry(join(input.root, name), input.fs);
+    if (verdict.kind === 'failure') {
+      // An unclassifiable entry means no verdict either way; certifying
+      // or deleting over it would act on an unobserved surface.
+      input.failures.push(verdict.message);
+    } else if (verdict.value !== undefined && input.expectedByRef.get(verdict.value) !== name) {
+      input.stale.push(join(input.root, name));
+    }
   }
+}
+
+/** The entry's recorded canonicalRef when it is recognisably ours, or
+ * `undefined` when out of jurisdiction. Kind first, then content: a
+ * symlinked SKILL.md inside a foreign real directory is never read
+ * through to classify the directory as ours (its target could be one of
+ * our genuine stubs). */
+async function classifyEntry(
+  entryDir: string,
+  fs: CarriageReadFs,
+): Promise<FsRead<string | undefined>> {
+  const stubPath = join(entryDir, 'SKILL.md');
+  const stubKind = await fs.entryKind(stubPath);
+  if (stubKind.kind === 'failure') {
+    return stubKind;
+  }
+  if (stubKind.value !== 'file') {
+    return { kind: 'ok', value: undefined };
+  }
+  const stubRead = await fs.readFileBytesOrUndefined(stubPath);
+  if (stubRead.kind === 'failure') {
+    return stubRead;
+  }
+  if (stubRead.value === undefined) {
+    return { kind: 'ok', value: undefined };
+  }
+  return { kind: 'ok', value: parseAdapterStubPointer(new TextDecoder().decode(stubRead.value)) };
 }

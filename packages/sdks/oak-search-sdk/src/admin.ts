@@ -9,6 +9,7 @@ export { createAdminService } from './admin/index.js';
 export {
   createIndexLifecycleService,
   createAliasLifecycleService,
+  enforceRestrictedInclusionBoundary,
   buildLifecycleDeps,
   buildAliasLifecycleDeps,
   createVersionedIndexResolver,
