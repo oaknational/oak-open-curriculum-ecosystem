@@ -1,6 +1,7 @@
 /**
- * The compat operation: capture a per-host compatibility report for a running
- * MCP surface.
+ * The compat operation: capture a per-host MCP Apps / widget compatibility
+ * report for a running MCP surface (protocol negotiation is outside the
+ * capture's scope — it supplies no connection facts).
  *
  * CAPTURE ONLY, deliberately. This route exists to prove what a DEPLOYED
  * surface actually serves, which is why it needs credentials and cannot run

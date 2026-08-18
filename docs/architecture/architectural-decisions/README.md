@@ -480,7 +480,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-223: Perishable external-surface claims carry risk-based freshness metadata](223-perishable-claims-carry-risk-based-freshness-metadata.md)
 - [ADR-224: Restricted-lesson exclusion is a documented, configurable switch](224-restricted-lesson-exclusion-configurable-switch.md)
 - [ADR-225: Adopt provider-independent capability composition for runtime services](225-provider-independent-capability-contracts.md) ← **Proposed**
-- [ADR-226: Host compatibility as a per-commit served-surface gate, judged by the vendor's pinned capability catalogue](226-host-compatibility-per-commit-served-surface-gate.md) ← **Proposed**
+- [ADR-226: MCP Apps widget compatibility as a per-commit served-surface gate, judged by the vendor's pinned capability catalogue](226-host-compatibility-per-commit-served-surface-gate.md) ← **Proposed**
 
 ## Key Architectural Decisions
 

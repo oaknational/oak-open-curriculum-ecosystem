@@ -1,4 +1,4 @@
-# ADR-226: Host compatibility as a per-commit served-surface gate, judged by the vendor's pinned capability catalogue
+# ADR-226: MCP Apps widget compatibility as a per-commit served-surface gate, judged by the vendor's pinned capability catalogue
 
 **Status**: Proposed
 **Date**: 2026-08-15
@@ -58,6 +58,16 @@ the vendor's CLI elsewhere in the estate sets the vendor's telemetry
 kill-switch env vars, so no vendor channel reports from Oak runs.
 
 ### What the gate asserts — and deliberately does not
+
+The gate's scope is **MCP Apps / widget compatibility**: the tools and widget
+lanes of the vendor's model — what a CONNECTED host would do with what Oak
+serves. The evaluation supplies no connection facts, so the vendor's
+protocol-negotiation lane is not evaluated: a host that cannot initialise
+against the server's supported MCP protocol versions is outside this gate's
+sight (review-narrowed 2026-08-18; the per-host protocol check is a named
+follow-up on MCP-605, and passing the generic test client's negotiated
+version would not be a substitute — a server can accept several versions at
+once, so a modern client's success says nothing about an older host's).
 
 Per-commit assertions: no host `blocked`, no verdict `unknown`, exactly one
 tool carrying `_meta.ui`, and no text-fallback in Claude or ChatGPT. The

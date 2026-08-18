@@ -40,6 +40,12 @@ ChatGPT, Cursor or the rest. When this lands, a change that puts a host
 beyond use — or leaves the engine unable to reach a verdict — fails a check
 on the commit that makes it, with the host named.
 
+Scope (review-narrowed 2026-08-18): the gate judges MCP Apps / widget
+compatibility — the tools and widget lanes of the vendor's model, for a host
+that has already connected. It supplies no connection facts, so
+protocol-version negotiation is not evaluated; the per-host protocol check
+is a named follow-up on MCP-605.
+
 Stated precisely, because the gate is narrower than "any degradation fails".
 It fails on: a `blocked` verdict anywhere, an `unknown` verdict anywhere, the
 widget-bearing tool set changing, a paginated tool list, and Claude or

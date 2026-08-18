@@ -1,5 +1,13 @@
 /**
- * The served surface's AI-host compatibility, checked on every commit.
+ * The served surface's MCP Apps / WIDGET compatibility with the AI hosts,
+ * checked on every commit.
+ *
+ * SCOPE (review-narrowed, 2026-08-18): the evaluation covers the tools and
+ * widget lanes of the vendor's model — what a CONNECTED host would do with
+ * what we serve. It supplies no connection facts, so the protocol-negotiation
+ * lane is NOT evaluated: a host that cannot initialise against the server's
+ * protocol versions is outside this gate's sight. Checking that lane per
+ * host is a named follow-up on MCP-605, not a silent assumption here.
  *
  * Sibling of the other served-surface proofs here: those assert that the
  * surface is internally coherent (advertised widgets are registered, dormant

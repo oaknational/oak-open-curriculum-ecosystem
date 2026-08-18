@@ -1,6 +1,7 @@
 /**
- * Boundary schemas for the `mcpjam compat` operation — per-host compatibility
- * verdicts for the served surface.
+ * Boundary schemas for the `mcpjam compat` operation — per-host MCP Apps /
+ * widget compatibility verdicts for the served surface (protocol negotiation
+ * is outside the capture's scope — it supplies no connection facts).
  *
  * WHY THIS IS A SEPARATE BOUNDARY FROM THE SUITES. The `protocol`, `apps` and
  * `oauth` suites share one contract that `types.ts` models: a

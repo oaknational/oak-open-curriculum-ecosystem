@@ -44,9 +44,12 @@ written. Only tools advertising readOnlyHint: true are invoked. Takes
 no --suite/--unattended (it enumerates from the server); needs
 --credentials-file against an authed surface.
 
-COMPAT (--compat): CAPTURES a per-host compatibility report for the DEPLOYED
-surface — each catalogue host's verdict (works | degraded | blocked |
-unknown) and the provenance grading how far that verdict can be trusted.
+COMPAT (--compat): CAPTURES a per-host MCP Apps / WIDGET compatibility report
+for the DEPLOYED surface — each catalogue host's verdict (works | degraded |
+blocked | unknown) on the tools-and-widget lanes, and the provenance grading
+how far that verdict can be trusted. SCOPE: the evaluation supplies no
+connection facts, so protocol-version negotiation is NOT judged — a host
+unable to initialise against the server is outside this capture's sight.
 Pins --offline (the catalogue bundled with the resolved SDK) so the only
 varying input is Oak's own surface, and --no-telemetry. ATTENDED ONLY:
 reading the tool surface needs the authed surface, so it takes
@@ -90,8 +93,9 @@ Options:
   --baseline-dir <path>      Baseline dir (default: the committed baselines)
   --drive                    Drive operation: exercise every advertised tool,
                              render the reviewer pack
-  --compat                   Compat operation: capture per-host compatibility
-                             verdicts for the deployed surface. Reports; does
+  --compat                   Compat operation: capture per-host MCP Apps/widget
+                             compatibility verdicts for the deployed surface
+                             (protocol negotiation not judged). Reports; does
                              not judge. Attended only; takes no
                              --suite/--unattended/--seed
   --pack-out <path>          Reviewer-pack output path (drive only; default
