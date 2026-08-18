@@ -269,8 +269,10 @@ steps below were run end to end on Windows 11 in August 2026.
 3. **Install the toolchain inside Ubuntu** — start with
    `sudo apt update && sudo apt install -y curl git ca-certificates`, then follow
    [Prerequisites](#prerequisites) above; every entry's Debian/Ubuntu
-   instructions apply unchanged (for Node, `nvm install` picks up the version in
-   `.nvmrc`) with one exception: install pnpm with its
+   instructions apply unchanged (for Node, run `nvm install 24` — the version
+   `.nvmrc` pins; the repo is not cloned until step 6, so there is no
+   `.nvmrc` for a bare `nvm install` to read yet, and `nvm use` inside the
+   repo confirms the match after cloning) with one exception: install pnpm with its
    [standalone script](https://pnpm.io/installation#using-a-standalone-script) —
    `curl -fsSL https://get.pnpm.io/install.sh | sh -`, then open a new shell or
    `source ~/.bashrc` — not `corepack enable`. The standalone binary still
@@ -279,15 +281,34 @@ steps below were run end to end on Windows 11 in August 2026.
    at `~/.local/share/pnpm` is on that list, a corepack shim under nvm's Node
    directory is not, and with corepack alone every commit fails — currently
    misreported as a formatting failure. Two additions Ubuntu's default sources do
-   not carry. The pre-push hook requires `gitleaks`: install it with the Go route
-   the hook itself suggests
-   (`go install github.com/gitleaks/gitleaks/v8@latest`), which verifies the
-   module through Go's checksum database. If you would rather install the
-   released binary, mirror the pinned, digest-checked block CI uses
-   (`.github/workflows/ci.yml`, "Install pinned gitleaks") rather than
-   downloading an unverified asset — gitleaks is a security control, so its
-   binary is content-pinned, not just version-pinned, and CI is the one place
-   that version and digest are kept current. Second, the repo's PR and agent
+   not carry. The pre-push hook requires `gitleaks` — install the released
+   binary with the same version and content pins CI uses, architecture-aware
+   (gitleaks is a security control, so its binary is content-pinned, not just
+   version-pinned; both digests below come from the official
+   `gitleaks_8.30.0_checksums.txt`, and the x64 value is byte-identical to the
+   pin in `.github/workflows/ci.yml`, "Install pinned gitleaks" — CI is where
+   version and digest are kept current, so when CI bumps its pin, mirror it
+   here):
+
+   ```bash
+   version=8.30.0
+   case "$(dpkg --print-architecture)" in
+     amd64) asset="gitleaks_${version}_linux_x64.tar.gz"
+            expected=79a3ab579b53f71efd634f3aaf7e04a0fa0cf206b7ed434638d1547a2470a66e ;;
+     arm64) asset="gitleaks_${version}_linux_arm64.tar.gz"
+            expected=b4cbbb6ddf7d1b2a603088cd03a4e3f7ce48ee7fd449b51f7de6ee2906f5fa2f ;;
+     *)     echo "unsupported architecture: $(dpkg --print-architecture)" ;;
+   esac
+   curl -sSfL --proto '=https' --proto-redir '=https' -o "$asset" \
+     "https://github.com/gitleaks/gitleaks/releases/download/v${version}/${asset}"
+   echo "${expected}  ${asset}" | sha256sum -c - &&
+     sudo tar -C /usr/local/bin -xzf "$asset" gitleaks && rm "$asset"
+   ```
+
+   (If you already have Go, `go install github.com/gitleaks/gitleaks/v8@latest`
+   also works and verifies through Go's checksum database — but these steps do
+   not install Go, and `~/go/bin` must then be on your `PATH` for the pre-push
+   hook to find it.) Second, the repo's PR and agent
    tooling uses `gh` (the GitHub CLI), which installs from
    [GitHub's apt repository](https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
 
@@ -301,14 +322,24 @@ steps below were run end to end on Windows 11 in August 2026.
    installed, so find the one you have and configure that path:
 
    ```bash
-   helper=$(ls "/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe" \
-               /mnt/c/Users/*/AppData/Local/Programs/Git/mingw64/bin/git-credential-manager.exe \
-               2>/dev/null | head -1)
+   winuser=$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r')
+   helper=""
+   for candidate in \
+     "/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe" \
+     "/mnt/c/Program Files/Git/clangarm64/bin/git-credential-manager.exe" \
+     "/mnt/c/Users/${winuser}/AppData/Local/Programs/Git/mingw64/bin/git-credential-manager.exe" \
+     "/mnt/c/Users/${winuser}/AppData/Local/Programs/Git/clangarm64/bin/git-credential-manager.exe"; do
+     [ -x "$candidate" ] && { helper="$candidate"; break; }
+   done
    [ -n "$helper" ] && git config --global credential.helper "${helper// /\\ }"
    echo "${helper:-no Git for Windows credential helper found}"
    ```
 
-   The first path is an all-users install, the second a per-user one. If neither
+   The first pair are all-users installs (x64, then Windows-on-ARM's
+   `clangarm64` layout), the second pair per-user ones — resolved for the
+   CURRENT Windows user via `cmd.exe`, never globbed across every profile,
+   because on a shared machine a glob can configure another user's helper;
+   each candidate is also checked executable before it is configured. If none
    exists you do not have Git for Windows: authenticate with `gh auth login`
    instead, and do not configure a helper path that is not there.
 
