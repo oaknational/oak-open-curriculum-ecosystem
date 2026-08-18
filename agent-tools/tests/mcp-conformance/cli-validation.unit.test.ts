@@ -129,6 +129,21 @@ describe('validateCliState — refusals are loud, the runnable state is silent',
     expect(refusal).toContain('duplicate --suite');
     expect(refusal).toContain('protocol');
   });
+
+  it('a target embedding URL userinfo is refused: reports echo the target verbatim', () => {
+    const refusal = validateCliState({
+      ...RUNNABLE,
+      target: 'https://user:secret@mcp.example.test/mcp',
+    });
+    expect(refusal).toContain('must not embed credentials');
+    expect(refusal).toContain('--credentials-file');
+  });
+
+  it('a username-only userinfo is refused too — the shape leaks identity even without a password', () => {
+    expect(
+      validateCliState({ ...RUNNABLE, target: 'https://user@mcp.example.test/mcp' }),
+    ).toContain('must not embed credentials');
+  });
 });
 
 describe('validateCliState — the drive operation (MCP-303)', () => {

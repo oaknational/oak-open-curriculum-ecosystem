@@ -135,6 +135,14 @@ function validateCommonUsage(state: CliState): string | undefined {
   if (state.target === undefined || state.target.trim() === '') {
     return '--target is required';
   }
+  // Every operation echoes the target verbatim into stdout and retained
+  // reports, so credentials embedded as URL userinfo would escape the
+  // owner-only capture the credential flags protect. Refuse at the edge
+  // rather than sanitising at every emit site.
+  const parsedTarget = URL.parse(state.target);
+  if (parsedTarget !== null && (parsedTarget.username !== '' || parsedTarget.password !== '')) {
+    return '--target must not embed credentials (user:password@) — the target is echoed into reports; pass credentials via --credentials-file';
+  }
   return undefined;
 }
 
