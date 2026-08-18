@@ -322,13 +322,13 @@ steps below were run end to end on Windows 11 in August 2026.
    installed, so find the one you have and configure that path:
 
    ```bash
-   winuser=$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r')
+   localappdata=$(wslpath "$(cmd.exe /c "echo %LOCALAPPDATA%" 2>/dev/null | tr -d '\r')" 2>/dev/null)
    helper=""
    for candidate in \
      "/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe" \
      "/mnt/c/Program Files/Git/clangarm64/bin/git-credential-manager.exe" \
-     "/mnt/c/Users/${winuser}/AppData/Local/Programs/Git/mingw64/bin/git-credential-manager.exe" \
-     "/mnt/c/Users/${winuser}/AppData/Local/Programs/Git/clangarm64/bin/git-credential-manager.exe"; do
+     "${localappdata}/Programs/Git/mingw64/bin/git-credential-manager.exe" \
+     "${localappdata}/Programs/Git/clangarm64/bin/git-credential-manager.exe"; do
      [ -x "$candidate" ] && { helper="$candidate"; break; }
    done
    [ -n "$helper" ] && git config --global credential.helper "${helper// /\\ }"
@@ -336,12 +336,15 @@ steps below were run end to end on Windows 11 in August 2026.
    ```
 
    The first pair are all-users installs (x64, then Windows-on-ARM's
-   `clangarm64` layout), the second pair per-user ones — resolved for the
-   CURRENT Windows user via `cmd.exe`, never globbed across every profile,
-   because on a shared machine a glob can configure another user's helper;
-   each candidate is also checked executable before it is configured. If none
-   exists you do not have Git for Windows: authenticate with `gh auth login`
-   instead, and do not configure a helper path that is not there.
+   `clangarm64` layout), the second pair per-user ones — resolved from the
+   CURRENT user's `%LOCALAPPDATA%` itself (converted with `wslpath`), never
+   globbed across every profile and never reconstructed from `%USERNAME%`:
+   on a shared machine a glob can configure another user's helper, and an
+   account rename can leave the profile directory differing from the
+   username. Each candidate is checked executable before it is configured.
+   If none exists you do not have Git for Windows: authenticate with
+   `gh auth login` instead, and do not configure a helper path that is not
+   there.
 
 6. **Continue with [Install and verify](#install-and-verify) below**, cloning
    inside the Linux filesystem (for example `~/oak`), never under `/mnt/c` —
