@@ -1,0 +1,12 @@
+/* Public Digital Service — brand icon set.
+   Strategy: Bootstrap Icons (MIT — openly licensed, github.com/twbs/icons),
+   an icon FONT via currentColor: plain, workmanlike, square-plate forms —
+   the public-service register (GDS itself is icon-sparse; use sparingly,
+   wayfinding only). currentColor follows every theme with no filter work.
+   Distinct set per identity: Oak = official local SVGs (assets/icons/),
+   EMC² = Material Symbols Rounded (Apache 2.0), PDS = Bootstrap Icons.
+   Markup: <span class="pds-icon bi bi-book" aria-hidden="true"></span>
+   (class-per-icon; always aria-hidden with adjacent real text, or an
+   aria-label on the control). */
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
+.pds-icon{font-size:var(--size-icon-m);line-height:1;display:inline-block;vertical-align:-0.15em;color:currentColor}

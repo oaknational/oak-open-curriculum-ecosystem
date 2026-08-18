@@ -74,6 +74,40 @@ describe('buildSnapshot', () => {
     expect(snap.checks).toStrictEqual({ total: 0, passed: 0, failed: 0, pending: 0 });
   });
 
+  it('a superseded twin run does not hold the summary un-green (PR #846 residue class)', () => {
+    // Same defect class as the settlement reader's: without the
+    // latest-run-per-check reduction, a concurrency-cancelled twin held
+    // `pr watch` un-green forever on a head GitHub evaluated as green.
+    const snap = buildSnapshot(
+      {
+        ...prViewJson,
+        statusCheckRollup: [
+          {
+            __typename: 'CheckRun',
+            name: 'build',
+            workflowName: 'CI',
+            status: 'COMPLETED',
+            conclusion: 'CANCELLED',
+            startedAt: '2026-08-13T21:17:17Z',
+            completedAt: '2026-08-13T21:17:18Z',
+          },
+          {
+            __typename: 'CheckRun',
+            name: 'build',
+            workflowName: 'CI',
+            status: 'COMPLETED',
+            conclusion: 'SUCCESS',
+            startedAt: '2026-08-13T21:18:00Z',
+            completedAt: '2026-08-13T21:20:12Z',
+          },
+        ],
+      },
+      [],
+      reviewThreadPagesJson,
+    );
+    expect(snap.checks).toStrictEqual({ total: 1, passed: 1, failed: 0, pending: 0 });
+  });
+
   it('fails loud on a genuinely malformed (non-array) statusCheckRollup', () => {
     expect(() =>
       buildSnapshot({ ...prViewJson, statusCheckRollup: 'broken' }, [], reviewThreadPagesJson),

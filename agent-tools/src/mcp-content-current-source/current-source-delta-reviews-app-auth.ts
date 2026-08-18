@@ -73,8 +73,12 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-518: the public-path sets, and the case-normalisation rule they are
   // compared under, extracted from the Clerk conditional. Path literals for a
   // routing decision; serves no agent-facing content.
+  //
+  // MCP-580 re-review: the health entry is now spread from `HEALTH_PATHS`, so
+  // the routed `/mcp/healthz` the canonical host reaches is auth-exempt exactly
+  // as the root path already was. Still a routing decision over path literals.
   'apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts': excluded(
-    'fac659994388ebd20d267596eb2fac3344dcc2bb836771cefa7b3334dafa441b',
+    'c96fa6a897a638088c9841c8a4dbb85229ae7f800a14ac52c57b25cce91b9203',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-518: the Clerk conditional now forks on the request's surface before

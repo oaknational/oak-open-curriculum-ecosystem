@@ -100,6 +100,15 @@ packages/sdks/oak-sdk-codegen/reference/*.json
 .agent/reference-local/**/*
 !.agent/reference-local/.gitignore
 
+# Operator profile: machine-local facts about the human at this checkout —
+# identity/credential bindings, tone of voice, personal operating preferences.
+# Absence is the expected condition on any other machine; nothing may depend on
+# it. The two stubs are tracked and declare the contract.
+# See .agent/operator-local/README.md
+.agent/operator-local/**/*
+!.agent/operator-local/.gitignore
+!.agent/operator-local/README.md
+
 # Logs
 *.log
 .logs/*

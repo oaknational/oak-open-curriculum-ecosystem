@@ -19,6 +19,7 @@
  */
 
 import { MCP_RESOURCE_PATH } from './served-origin.js';
+import { HEALTH_PATHS } from './app/health-paths.js';
 import {
   OAK_ASSETS_PUBLIC_DIRNAME,
   OAK_DS_PUBLIC_DIRNAME,
@@ -28,13 +29,24 @@ import {
 /**
  * Paths that should always skip clerkMiddleware.
  * OAuth metadata endpoints must be publicly accessible per RFC 9728.
+ *
+ * @remarks
+ * The health paths are spread from {@link HEALTH_PATHS} rather than listed,
+ * because there are now two of them (MCP-580) and only the routed one is
+ * reachable on the canonical host. Naming the root one alone would leave the
+ * canonical probe — the only probe that measures the surface users actually
+ * hit — running through the auth vendor on every poll: a needless dependency
+ * inside a liveness check, and the handshake-redirect exposure the root path
+ * was exempted from in the first place. Composing from the constant means a
+ * change to the served health layout moves the skip with it instead of leaving
+ * a stale literal behind.
  */
 export const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
   '/.well-known/oauth-protected-resource',
   '/.well-known/oauth-protected-resource/mcp',
   '/.well-known/oauth-authorization-server',
   '/.well-known/openid-configuration',
-  '/healthz',
+  ...HEALTH_PATHS,
   '/oauth/authorize',
   '/oauth/token',
   '/oauth/register',

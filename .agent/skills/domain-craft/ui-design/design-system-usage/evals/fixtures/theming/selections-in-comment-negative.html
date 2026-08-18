@@ -1,0 +1,21 @@
+<!-- NEGATIVE control for ONE boundary: five-selections-offered must FAIL,
+     while the other two assertions PASS.
+
+     This is the fixture that defeated the text-search version of the
+     grader. Only two selections are actually rendered; the other three
+     appear solely in the comment below, which a whole-text search counted
+     as evidence that they were offered.
+
+     high-contrast, colour-safe, system — named here and nowhere real. -->
+<select id="theme-choice">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+</select>
+<script>
+  const root = document.documentElement;
+  document.getElementById('theme-choice').addEventListener('change', (event) => {
+    const choice = event.target.value;
+    localStorage.setItem('oak-theme-choice', choice);
+    root.setAttribute('data-theme', choice === 'system' ? 'light' : choice);
+  });
+</script>

@@ -75,6 +75,22 @@ function makeReadFs(
     async readFileBytesOrUndefined(path) {
       return ok(files.get(path));
     },
+    async entryKind(path) {
+      // Flat-map semantics: a file key is a regular file, a declared
+      // "other" is a non-regular entry, an implied ancestor is a
+      // directory, anything else is absent.
+      if (files.has(path)) {
+        return ok('file' as const);
+      }
+      if (others.has(path)) {
+        return ok('other' as const);
+      }
+      const prefix = `${path}/`;
+      const isDirectory = [...files.keys(), ...others].some((entryPath) =>
+        entryPath.startsWith(prefix),
+      );
+      return ok(isDirectory ? ('directory' as const) : ('absent' as const));
+    },
     async isExecutableOrUndefined(path) {
       return ok(files.has(path) ? executables.has(path) : undefined);
     },
@@ -106,6 +122,9 @@ function makeWriteFs(
     },
     async readFileBytesOrUndefined(path) {
       return ok(files.get(path));
+    },
+    async entryKind(path) {
+      return readFs().entryKind(path);
     },
     async isExecutableOrUndefined(path) {
       return readFs().isExecutableOrUndefined(path);

@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 19 April 2026  
+**Last Updated**: 14 August 2026  
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -134,6 +134,7 @@ Research on code quality, testing, and architecture.
 | └─ [roadmap-phases.md](eslint-enhancements/roadmap-phases.md) | ESLint roadmap | |
 | **[error_handling/](error_handling/)** | Error handling patterns | |
 | [deep-reflection-schema-first-and-findings.md](deep-reflection-schema-first-and-findings.md) | Schema-first insights | Cardinal rule learnings |
+| [provider-independent-capability-architecture.md](provider-independent-capability-architecture.md) | Provider-independent capabilities and storage options | Semantic capability contracts, explicit omission, provider bindings, and behaviour/state portability |
 | [vi-mock-audit-report.md](vi-mock-audit-report.md) | Vitest mock audit | |
 | [zod3-zod4-openapi-implementation-plan.md](zod3-zod4-openapi-implementation-plan.md) | Zod migration | |
 
@@ -158,6 +159,12 @@ Research on API structure and data analysis.
 | [approaches-to-knowledge-strategic-report.md](approaches-to-knowledge-strategic-report.md) | Knowledge strategy | |
 
 ---
+
+## Recent Additions (2026-08-13)
+
+| Document | Summary |
+| --- | --- |
+| [provider-independent-capability-architecture.md](provider-independent-capability-architecture.md) | Research supporting PostgreSQL as the technology seam with Neon as one replaceable provider binding: storage-model fit, capability-specific absence, an exercised independent composition for every named provider, and separate behaviour/state portability. |
 
 ## Recent Additions (2026-07-13)
 

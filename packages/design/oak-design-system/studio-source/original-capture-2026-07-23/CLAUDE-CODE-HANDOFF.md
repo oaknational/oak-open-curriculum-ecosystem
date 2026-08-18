@@ -37,4 +37,4 @@ Chooser in `docs/consuming-nextjs.md` §5b: native elements first; **Base UI** d
 
 ## Validation that must survive the port
 
-`preview/contrast-audit.html` logic (or port `dtcg/contrast-pairings.json` into CI): every role pairing AA in all four themes, per brand — a re-brand that fails is not done. Current state: Oak 32/32, EMC² 32/32, FDSE 34/34, all ×4 themes; `failing-example.css` fails (control intact).
+`preview/contrast-audit.html` logic (or port `dtcg/contrast-pairings.json` into CI): every role pairing AA in all four themes, per brand — a re-brand that fails is not done. Current state: Oak 32/32, EMC² 32/32, PDS 34/34, all ×4 themes; `failing-example.css` fails (control intact).

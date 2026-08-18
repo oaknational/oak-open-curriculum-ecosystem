@@ -34,9 +34,11 @@ import {
   generateGraphCorpusData,
   writeGraphCorpusAsJson,
 } from '../src/bulk.js';
-import { excludeRestrictedLessons, readAllBulkFiles, type BulkFileResult } from './lib/index.js';
-import { type BulkDataInput, processBulkData, type ProcessingResult } from './vocab-gen-core.js';
+import { readAllBulkFiles } from './lib/index.js';
+import { processBulkData, type ProcessingResult } from './vocab-gen-core.js';
 import { type PipelineConfig, type PipelineResult } from './vocab-gen-config.js';
+import { toBulkDataInputs } from './vocab-gen-inputs.js';
+import { enforceRestrictedInclusionCorpusBoundary } from './vocab-gen-restricted-boundary.js';
 
 // Re-export core types and functions
 export {
@@ -159,45 +161,39 @@ async function generateOutputFiles(
   return outputFiles;
 }
 
-/** Result of preparing pipeline inputs from read bulk files */
-export interface BulkDataInputsResult {
-  /** Pipeline inputs with restricted lessons and their unit references removed */
-  readonly inputs: readonly BulkDataInput[];
-  /** Number of restricted lesson records excluded (reported on every run) */
-  readonly restrictedLessonsExcluded: number;
-}
-
-/**
- * Prepares pipeline inputs from read bulk files, excluding restricted
- * lessons first (MCP-204 decision — provenance and revisit condition live
- * on `src/bulk/restricted-lesson-filter.ts`).
- */
-export function toBulkDataInputs(files: readonly BulkFileResult[]): BulkDataInputsResult {
-  const filtered = excludeRestrictedLessons(files);
-  const inputs = filtered.files.map((file) => ({
-    sequenceSlug: file.data.sequenceSlug,
-    lessons: file.data.lessons,
-    units: file.data.sequence,
-  }));
-  return { inputs, restrictedLessonsExcluded: filtered.restrictedLessonsExcluded };
+/** Injectable dependencies for {@link runPipeline} (ADR-078 testability). */
+export interface RunPipelineDeps {
+  /** Bulk-file reader; defaults to the disk-backed {@link readAllBulkFiles}. */
+  readonly readAllBulkFiles?: typeof readAllBulkFiles;
 }
 
 /**
  * Runs the vocabulary mining pipeline.
  *
  * @param config - Pipeline configuration
+ * @param logger - Optional logger for progress reporting
+ * @param deps - Injectable dependencies (ADR-078)
  * @returns Pipeline result with statistics and output files
  */
 export async function runPipeline(
   config: PipelineConfig,
   logger?: Logger,
+  deps: RunPipelineDeps = {},
 ): Promise<PipelineResult> {
+  const corpusBoundaryRejection = enforceRestrictedInclusionCorpusBoundary(config);
+  if (corpusBoundaryRejection) {
+    return corpusBoundaryRejection;
+  }
+
   const startTime = Date.now();
 
   // Read all bulk download files
-  const allFiles = await readAllBulkFiles(config.bulkDataPath, logger);
+  const readFiles = deps.readAllBulkFiles ?? readAllBulkFiles;
+  const allFiles = await readFiles(config.bulkDataPath, logger);
 
-  const { inputs: bulkData, restrictedLessonsExcluded } = toBulkDataInputs(allFiles);
+  const { inputs: bulkData, restrictedLessonsExcluded } = toBulkDataInputs(allFiles, {
+    includeRestricted: config.includeRestricted,
+  });
 
   // Process the data (extraction)
   const result = processBulkData(bulkData);

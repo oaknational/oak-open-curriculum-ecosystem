@@ -43,6 +43,7 @@ import { err, type Result } from '@oaknational/result';
 import { APP_SENTINEL, DEFAULT_BASE, SERVER_HINT } from './capture-checks';
 import { captureLivePages } from './capture-live-pages';
 import { FIDELITY_PAIRS } from './fidelity-pairs';
+import { assertCanonicalWidth } from './measurement-widths';
 import { renderExportTargets } from './render-export-targets';
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -96,6 +97,12 @@ async function main(): Promise<Result<void, string>> {
   const flags = resolveRunFlags(process.argv.slice(2), process.env, DEFAULT_BASE);
   if (!flags.ok) {
     return flags;
+  }
+  // Measurement happens at canonical widths (DDR-009): a free-hand width
+  // would produce a capture nothing else can be compared against.
+  const width = assertCanonicalWidth(flags.value.width);
+  if (!width.ok) {
+    return err(`fidelity: ${width.error}`);
   }
   fs.mkdirSync(reportDirFor(DEMO_DIR), { recursive: true });
 

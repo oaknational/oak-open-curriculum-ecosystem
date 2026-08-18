@@ -1,6 +1,10 @@
 import type { JSONRPCMessage, JSONRPCRequest, RequestId } from '@modelcontextprotocol/sdk/types.js';
 
-import type { OakClientFamily, UnknownProperties } from './event-policy-contract.js';
+import type {
+  ClientIdentityHeaders,
+  OakClientFamily,
+  UnknownProperties,
+} from './event-policy-contract.js';
 import {
   isSupportedProtocolVersion,
   isUnknownProperties,
@@ -66,19 +70,66 @@ function readHeaderValue(headers: UnknownProperties, key: string): unknown {
   return Array.isArray(value) ? value.at(0) : value;
 }
 
-export function readClientSurfaceHeaderValues(extra: unknown): readonly unknown[] {
+const UNREADABLE_HEADERS: ClientIdentityHeaders = { readable: false };
+
+/**
+ * Whether an own-property read can actually see this container's entries.
+ *
+ * @remarks Being an object is not enough, and this is the load-bearing check. A
+ * WHATWG `Headers` instance — what MCP SDK v2 supplies at `extra.http.req` — and
+ * a `Map` are both objects that pass a plain `typeof` test, yet keep their
+ * entries behind accessors that {@link readOwn} cannot reach, so every header
+ * would read as absent while the container looked fine. Requiring a plain record
+ * (own-property data, `Object.prototype` or a null prototype) means such a
+ * container is reported as unreadable rather than as a request that carried no
+ * headers — the difference between "the transport shape changed under us" and
+ * "this client sent no User-Agent".
+ */
+function isOwnPropertyReadableRecord(value: unknown): value is UnknownProperties {
+  if (!isUnknownProperties(value)) {
+    return false;
+  }
+  const prototype: unknown = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+/**
+ * Reads the ordered client-identity header values, reporting separately when the
+ * container itself could not be read.
+ *
+ * @remarks The vendor-specific header is read before the User-Agent so a
+ * query-time resolver can prefer whichever the vendor keeps stable. Values may be
+ * `undefined` within a readable container: that is a client that sent no such
+ * header, which is a different fact from an unreadable container. Never throws.
+ */
+export function readClientIdentityHeaders(extra: unknown): ClientIdentityHeaders {
   if (!isUnknownProperties(extra)) {
-    return [];
+    return UNREADABLE_HEADERS;
   }
   const requestInfo = readOwn(extra, 'requestInfo');
   if (!isUnknownProperties(requestInfo)) {
-    return [];
+    return UNREADABLE_HEADERS;
   }
   const headers = readOwn(requestInfo, 'headers');
-  if (!isUnknownProperties(headers)) {
-    return [];
+  if (!isOwnPropertyReadableRecord(headers)) {
+    return UNREADABLE_HEADERS;
   }
-  return [readHeaderValue(headers, 'x-anthropic-client'), readHeaderValue(headers, 'user-agent')];
+  return {
+    readable: true,
+    values: [
+      readHeaderValue(headers, 'x-anthropic-client'),
+      readHeaderValue(headers, 'user-agent'),
+    ],
+  };
+}
+
+/**
+ * Flattens to the value list for axes whose vocabulary has no member for an
+ * unreadable container (the form-factor axis), which therefore treats it exactly
+ * as it treats a request carrying no client header.
+ */
+export function clientIdentityValues(headers: ClientIdentityHeaders): readonly unknown[] {
+  return headers.readable ? headers.values : [];
 }
 
 export function normaliseDuration(startedAt: number, endedAt: number): number {

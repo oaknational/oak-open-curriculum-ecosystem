@@ -36,10 +36,28 @@ describe('IndexLifecycleService — stage and promote', () => {
       }
       expect(deps.createVersionedIndexes).toHaveBeenCalledOnce();
       expect(deps.runVersionedIngest).toHaveBeenCalledOnce();
+      expect(deps.runVersionedIngest).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({ includeRestricted: undefined }),
+      );
       expect(deps.verifyDocCounts).toHaveBeenCalledOnce();
       expect(deps.atomicAliasSwap).not.toHaveBeenCalled();
       expect(deps.writeIndexMeta).not.toHaveBeenCalled();
     });
+
+    it.each([['primary'], ['sandbox']] as const)(
+      'rejects includeRestricted on the %s target without creating or ingesting into any index (ADR-224: index families stay consistent)',
+      async (target) => {
+        const deps = createFakeDeps({ target });
+        const service = createIndexLifecycleService(deps);
+
+        const result = await service.stage({ bulkDir: '/tmp/bulk', includeRestricted: true });
+
+        expect(result).toMatchObject({ ok: false, error: { type: 'validation_error' } });
+        expect(deps.createVersionedIndexes).not.toHaveBeenCalled();
+        expect(deps.runVersionedIngest).not.toHaveBeenCalled();
+      },
+    );
 
     it('records previous version from existing metadata', async () => {
       const deps = createFakeDeps({

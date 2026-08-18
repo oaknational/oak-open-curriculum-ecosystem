@@ -6,12 +6,10 @@
  * drifted entry fails the import loudly (the hub's zod-at-module-init
  * pattern).
  *
- * NAMING: pair ids and every evidence basename use TARGET-STATE identity
- * naming (`picker-oak-*` / `picker-pds-*` / `picker-emc2-*`), derived from
- * the imported identity list through lib/identities — the pre-rename brand
- * slug is never written in this file, keeping the identity-naming ratchet
- * at zero delta (its census-exact contract bars the token in new tracked
- * files, including the register's evidence paths downstream).
+ * NAMING: pair ids and every evidence basename are built from identity
+ * FRAGMENTS (`picker-oak-*` / `picker-pds-*` / `picker-emc2-*`), mapped from
+ * the imported slug list through lib/identities — `creature` names its
+ * evidence `emc2`, so the fragment, not the slug, is what appears on disk.
  *
  * The register of JUDGMENTS about these pairs lives separately in
  * fidelity-register.json (owner-editable); this module only declares what
@@ -72,10 +70,10 @@ export interface ExportRenderTarget {
   readonly shots: readonly { readonly pairId: string; readonly kind: 'fold' | 'full' }[];
 }
 
-/** The six diff-eligible ids the declared map must carry — static
- *  target-state names; the ShowcaseMapSchema refine below fails the module
- *  load when the derivation stops producing them, so no throw statement is
- *  needed here (ADR-088: zod's parse is the single module-init boundary). */
+/** The six diff-eligible ids the declared map must carry — static fragment
+ *  names; the ShowcaseMapSchema refine below fails the module load when the
+ *  mapping stops producing them, so no throw statement is needed here
+ *  (ADR-088: zod's parse is the single module-init boundary). */
 const DIFF_PAIR_IDS = [
   'picker-oak-fold',
   'picker-oak-full',

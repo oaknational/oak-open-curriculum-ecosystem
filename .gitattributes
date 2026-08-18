@@ -1,0 +1,8 @@
+# The repository is LF-only: every text file is stored with LF and checked
+# out with LF on every platform. This overrides Git for Windows' default
+# core.autocrlf=true, whose CRLF working trees break byte-comparing checks
+# (pnpm skills:check) and dirty generated files (pnpm sdk-codegen).
+# Binary files are untouched: text=auto applies only to files git detects
+# as text. Encoding is enforced separately (UTF-8 without BOM) by
+# pnpm encoding:check.
+* text=auto eol=lf

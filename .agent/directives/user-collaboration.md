@@ -75,6 +75,11 @@ Agents should:
   directive — full heuristics and worked corrections for all three
   owner-direction bullets above live in
   [`owner-signal-interpretation.md`](../memory/executive/owner-signal-interpretation.md)
+- **answer first when an owner message lands mid-turn**: the next output is
+  a direct text answer or acknowledgement of the owner's message BEFORE any
+  further tool-call chain continues — the in-flight work waits the sentence
+  it takes to answer the person (graduated 2026-08-14 from the 2026-08-05
+  vendor-memory audit's owner-channel lesson)
 
 Overrides are rare. The normal posture is shared reasoning: make the concern
 visible, explain why it matters, and let the owner decide with the real trade-off

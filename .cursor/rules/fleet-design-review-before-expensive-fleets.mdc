@@ -1,0 +1,7 @@
+---
+description: Any potentially expensive fleet (over the default workflow size guideline or ~500k estimated tokens) has its design reviewed by a smaller adversarial fleet before the owner prices it; the review's verdicts travel with the plan to the ratification ask.
+globs: '.agent/plans/**,.agent/skills/**'
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/fleet-design-review-before-expensive-fleets.md`.

@@ -27,8 +27,6 @@ Body.
 /** Deliberately not valid UTF-8 — byte stability must survive binary assets. */
 const binaryAsset = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x00, 0xff, 0xfe, 0x0d, 0x0a]);
 
-const EMPTY_LOCK: ReadonlySet<string> = new Set();
-
 function seedSkill(root: string): void {
   const skillDir = '.agent/skills/cognition/parallax';
   writeRepoFile(root, `${skillDir}/SKILL-CANONICAL.md`, canonicalBody);
@@ -52,7 +50,6 @@ describe('generateAdapters carriage over a real filesystem', () => {
     const outcome = await generateAdapters({
       repoRoot: root,
       prefix: 'oak-',
-      lockedIds: EMPTY_LOCK,
     });
 
     expect(outcome.skipped).toEqual([]);
@@ -79,8 +76,8 @@ describe('generateAdapters carriage over a real filesystem', () => {
     const root = sandboxRepo();
     seedSkill(root);
 
-    await generateAdapters({ repoRoot: root, prefix: 'oak-', lockedIds: EMPTY_LOCK });
-    const result = await checkAdapters({ repoRoot: root, prefix: 'oak-', lockedIds: EMPTY_LOCK });
+    await generateAdapters({ repoRoot: root, prefix: 'oak-' });
+    const result = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
 
     expect(result.drifted).toEqual([]);
     expect(result.missing).toEqual([]);
@@ -92,11 +89,11 @@ describe('generateAdapters carriage over a real filesystem', () => {
   it('detects a mutated carried copy as drift and a deleted copy as missing', async () => {
     const root = sandboxRepo();
     seedSkill(root);
-    await generateAdapters({ repoRoot: root, prefix: 'oak-', lockedIds: EMPTY_LOCK });
+    await generateAdapters({ repoRoot: root, prefix: 'oak-' });
 
     writeRepoFile(root, '.claude/skills/oak-parallax/references/orchestration.md', 'mutated\n');
 
-    const result = await checkAdapters({ repoRoot: root, prefix: 'oak-', lockedIds: EMPTY_LOCK });
+    const result = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
 
     expect(result.drifted).toEqual([
       `${root}/.claude/skills/oak-parallax/references/orchestration.md`,
@@ -106,12 +103,12 @@ describe('generateAdapters carriage over a real filesystem', () => {
   it('prunes orphans (and the directories they emptied) when a canonical source is deleted', async () => {
     const root = sandboxRepo();
     seedSkill(root);
-    await generateAdapters({ repoRoot: root, prefix: 'oak-', lockedIds: EMPTY_LOCK });
+    await generateAdapters({ repoRoot: root, prefix: 'oak-' });
 
     // Delete the canonical script; the projection copies become orphans.
     removeRepoFile(root, '.agent/skills/cognition/parallax/scripts/render_graph.py');
 
-    const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-', lockedIds: EMPTY_LOCK });
+    const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
     expect([...flagged.orphaned].sort((a, b) => a.localeCompare(b, 'en'))).toEqual([
       `${root}/.agents/skills/oak-parallax/scripts/render_graph.py`,
       `${root}/.claude/skills/oak-parallax/scripts/render_graph.py`,
@@ -120,7 +117,6 @@ describe('generateAdapters carriage over a real filesystem', () => {
     const regenerated = await generateAdapters({
       repoRoot: root,
       prefix: 'oak-',
-      lockedIds: EMPTY_LOCK,
     });
     expect([...regenerated.pruned].sort((a, b) => a.localeCompare(b, 'en'))).toEqual([
       `${root}/.agents/skills/oak-parallax/scripts/render_graph.py`,
@@ -129,7 +125,7 @@ describe('generateAdapters carriage over a real filesystem', () => {
     expect(repoPathExists(root, '.claude/skills/oak-parallax/scripts')).toBe(false);
     expect(repoPathExists(root, '.agents/skills/oak-parallax/scripts')).toBe(false);
 
-    const after = await checkAdapters({ repoRoot: root, prefix: 'oak-', lockedIds: EMPTY_LOCK });
+    const after = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
     expect(after.orphaned).toEqual([]);
     expect(after.missing).toEqual([]);
   });

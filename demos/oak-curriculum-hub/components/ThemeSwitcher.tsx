@@ -7,15 +7,20 @@
    next/script beforeInteractive — it does not block first paint). The server
    snapshot is undefined, so server HTML renders no controls and the client
    upgrades after hydration: theme state lives in localStorage, so the server
-   must not guess. All five themes are offered — the access themes
-   (high-contrast, colour-safe) are not optional extras. */
+   must not guess. The store offers Identity default (the no-choice state,
+   DDR-003 dated amendment 2026-08-11) plus every theme the runtime exposes —
+   the access themes (high-contrast, colour-safe) are not optional extras. */
 import { useSyncExternalStore } from 'react';
 import type { ReactElement } from 'react';
 
-import { oakThemeStore } from '@oaknational/oak-design-react';
+import { IDENTITY_DEFAULT, oakThemeStore } from '@oaknational/oak-design-react';
 import type { OakThemeStore } from '@oaknational/oak-design-react';
 
 const THEME_LABELS: Record<string, string> = {
+  // The no-choice default (DDR-003 dated amendment 2026-08-11): the page's
+  // own identity speaks first when the person is silent; the store offers
+  // it as the leading, selectable option and choosing it clears the choice.
+  [IDENTITY_DEFAULT]: 'Identity default',
   light: 'Light',
   dark: 'Dark',
   system: 'Match device',
@@ -35,7 +40,6 @@ function AxisSelect({
   options,
   labels,
   onChange,
-  placeholderLabel,
 }: {
   readonly id: string;
   readonly label: string;
@@ -43,10 +47,6 @@ function AxisSelect({
   readonly options: readonly string[];
   readonly labels: Record<string, string>;
   readonly onChange: (value: string) => void;
-  /** Renders a disabled, hidden '' option so the no-choice snapshot ('')
-   *  reads truthfully instead of leaving a controlled select with no
-   *  matching option — the showcase's LabelledSelect placeholder shape. */
-  readonly placeholderLabel?: string;
 }): ReactElement {
   return (
     <>
@@ -60,11 +60,6 @@ function AxisSelect({
         style={{ width: 'auto', minHeight: 'var(--size-target-min)' }}
         onChange={(e) => onChange(e.target.value)}
       >
-        {placeholderLabel !== undefined && (
-          <option value="" disabled hidden>
-            {placeholderLabel}
-          </option>
-        )}
         {options.map((option) => (
           <option key={option} value={option}>
             {labels[option] ?? option}
@@ -96,7 +91,6 @@ export default function ThemeSwitcher({
         options={store.themeOptions() ?? []}
         labels={THEME_LABELS}
         onChange={store.setTheme}
-        placeholderLabel="Page default"
       />
       <AxisSelect
         id="oak-motion-select"

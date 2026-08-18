@@ -46,7 +46,7 @@ For any incoming HTTP request, middleware executes in this order:
    10a. 405 stream refusal (identity-independent, no auth leg; MCP-545 —
         the standalone SSE stream is not offered)
    ↓
-   [For GET /healthz:]
+   [For GET /healthz or GET /mcp/healthz:]
    9a. CORS preflight (corsMw)
    9b. Health Check Handler
    ↓
@@ -102,7 +102,7 @@ sequenceDiagram
         else POST, auth disabled
             Handler->>Handler: Process MCP request (no auth)
         end
-    else Path is /healthz
+    else Path is /healthz or /mcp/healthz
         ClerkAuth->>Handler: Pass to health handler
         Handler->>Handler: Return health status
     else Path is /.well-known/*
@@ -165,7 +165,22 @@ Client Request
 Response
 ```
 
-#### GET /healthz
+#### GET /healthz (and its routed twin GET /mcp/healthz)
+
+Both paths are one handler (`app/health-endpoints.ts`). The routed twin exists
+because the canonical host reaches this app through a Cloudflare origin rule
+scoped to `/mcp` and `/mcp/*` without stripping the prefix: a root-level
+`/healthz` probe on `www` never arrives here, so the only health path an
+external monitor can reach on the canonical surface is `/mcp/healthz`
+(MCP-580). Both skip `clerkMiddleware` (`clerk-skip-surfaces.ts`) and neither
+carries DNS rebinding protection — a liveness probe must not depend on the auth
+vendor or on a Host allowlist.
+
+Registration order is load-bearing for the routed twin: the health routes are
+registered in phase 4, ahead of the phase-6 `/mcp` accept-header gate, which
+matches the whole `/mcp` subtree. Registered after it, `/mcp/healthz` would be
+answered `406` for want of `Accept: text/event-stream` — which is what
+production returned before this route existed.
 
 ```text
 Client Request
@@ -277,7 +292,7 @@ flowchart TD
     SetAuthNull --> RouteCheck{Path?}
 
     RouteCheck -->|/mcp| MCPPath[Accept Header Check]
-    RouteCheck -->|/healthz| HealthHandler[Health Check Handler]
+    RouteCheck -->|/healthz or /mcp/healthz| HealthHandler[Health Check Handler]
     RouteCheck -->|/.well-known/*| OAuthMeta[OAuth Metadata Handler]
     RouteCheck -->|/| Landing[Landing Page Handler]
 
@@ -335,7 +350,7 @@ flowchart TD
 
 4. **Phase 4**: Core Endpoints (`initializeCoreEndpoints`)
    - MCP server initialization
-   - Health check handlers (`/healthz`)
+   - Health check handlers (`/healthz` and `/mcp/healthz`)
 
 5. **Phase 5**: Static Assets & Landing Page
    - Static file serving (`/public`)
@@ -363,7 +378,7 @@ Then, depending on path:
 
   POST /mcp → Accept header check → MCP readiness → mcpAuthClerk → MCP handler
   GET /mcp → Accept header check → MCP readiness → 405 stream refusal (MCP-545)
-  /healthz → Health handler
+  /healthz, /mcp/healthz → Health handler
   /.well-known/* → OAuth metadata handler
   / → Landing page handler
   /static/* → Static file handler

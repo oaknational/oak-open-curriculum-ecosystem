@@ -1,0 +1,6 @@
+{
+  "note": "Order was varied per case so no judging leg could learn a positional habit. Withheld from every leg at dispatch.",
+  "case-1": {"page-A.html": "without-skill", "page-B.html": "with-skill"},
+  "case-2": {"response-A.md": "with-skill", "response-B.md": "without-skill"},
+  "case-3": {"response-A.md": "without-skill", "response-B.md": "with-skill"}
+}

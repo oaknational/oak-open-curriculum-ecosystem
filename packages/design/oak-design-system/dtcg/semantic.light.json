@@ -509,14 +509,50 @@
     }
   },
   "type": {
+    "heading-1-min": {
+      "$value": 2.5,
+      "$type": "number"
+    },
+    "heading-1-max": {
+      "$value": 3.5,
+      "$type": "number"
+    },
+    "heading-1-leading": {
+      "$value": 1.1429,
+      "$type": "number"
+    },
+    "heading-2-min": {
+      "$value": 2,
+      "$type": "number"
+    },
+    "heading-2-max": {
+      "$value": 3,
+      "$type": "number"
+    },
+    "heading-2-leading": {
+      "$value": 1.1667,
+      "$type": "number"
+    },
+    "heading-3-min": {
+      "$value": 1.5,
+      "$type": "number"
+    },
+    "heading-3-max": {
+      "$value": 2.5,
+      "$type": "number"
+    },
+    "heading-3-leading": {
+      "$value": 1.2,
+      "$type": "number"
+    },
     "heading-1": {
-      "$value": "{weight.display} {font.size.10}/{leading.64} {font.family.display}"
+      "$value": "{weight.display} clamp(calc({type.heading-1-min} * 1rem), calc({type.heading-1-min} * 1rem + ({type.heading-1-max} - {type.heading-1-min}) * (100vw - 20rem) / 40), calc({type.heading-1-max} * 1rem))/{type.heading-1-leading} {font.family.display}"
     },
     "heading-2": {
-      "$value": "{weight.display} {font.size.9}/{leading.56} {font.family.display}"
+      "$value": "{weight.display} clamp(calc({type.heading-2-min} * 1rem), calc({type.heading-2-min} * 1rem + ({type.heading-2-max} - {type.heading-2-min}) * (100vw - 20rem) / 40), calc({type.heading-2-max} * 1rem))/{type.heading-2-leading} {font.family.display}"
     },
     "heading-3": {
-      "$value": "{weight.display} {font.size.8}/{leading.48} {font.family.display}"
+      "$value": "{weight.display} clamp(calc({type.heading-3-min} * 1rem), calc({type.heading-3-min} * 1rem + ({type.heading-3-max} - {type.heading-3-min}) * (100vw - 20rem) / 40), calc({type.heading-3-max} * 1rem))/{type.heading-3-leading} {font.family.display}"
     },
     "heading-4": {
       "$value": "{weight.display} {font.size.7}/{leading.40} {font.family.display}"

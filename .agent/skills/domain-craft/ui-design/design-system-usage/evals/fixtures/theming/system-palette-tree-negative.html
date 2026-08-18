@@ -1,0 +1,32 @@
+<!-- NEGATIVE control for ONE boundary: only-palette-themes-carry-trees must
+     FAIL, while the other two assertions PASS.
+
+     This is the CSS-side defect DDR-004 actually forbids, and its
+     difference from resolution-shim-positive.html is the whole point of the
+     assertion. Here `system` is given its OWN PALETTE — an independent set
+     of token declarations, outside any prefers-color-scheme resolution — so
+     it becomes a fifth theme rather than a selection that resolves. Token
+     additions would then have to land in five trees, not four, which is
+     precisely what DDR-004 says must never happen. -->
+<select id="theme-choice">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+  <option value="system">Match my device</option>
+  <option value="high-contrast">High contrast</option>
+  <option value="colour-safe">Colour safe</option>
+</select>
+<style>
+  :root[data-theme='system'] {
+    --text-primary: #333333;
+    --bg-primary: #fafafa;
+    --border-primary: #cccccc;
+  }
+</style>
+<script>
+  const root = document.documentElement;
+  document.getElementById('theme-choice').addEventListener('change', (event) => {
+    const choice = event.target.value;
+    localStorage.setItem('oak-theme-choice', choice);
+    root.setAttribute('data-theme', choice === 'system' ? 'light' : choice);
+  });
+</script>

@@ -234,7 +234,13 @@ a zero-match sweep reads as a confirmed negative.
   the RUNTIME call path (which import runs, on which route) — a
   dependency edge into code the app never executes is not runtime
   reachability (worked instance 2026-08-11: express-rate-limit lives
-  only in SDK OAuth handlers the app bypasses).
+  only in SDK OAuth handlers the app bypasses). A reachability verdict
+  is dated evidence about one resolution and one estate shape, never a
+  property of the package: re-verify the resolved version and the
+  estate before reusing one (worked instance: a 2026-07-24
+  "next unreachable / defer sharp" verdict pair was invalidated within
+  three weeks — a demo became a deployed Next surface, and sharp
+  resolved past the advisory floor on the ordinary patch sweep).
 
 ## Failure shapes this skill exists to prevent
 

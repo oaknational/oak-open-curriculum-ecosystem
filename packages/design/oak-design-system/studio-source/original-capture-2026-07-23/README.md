@@ -164,7 +164,7 @@ docs/                   ← consumption guides: consuming-nextjs.md (+ §5b choo
                           wrapped-widget-a11y-checklist.md, console-tui-tones.md,
                           headless-a11y-frameworks.html (research)
 dtcg/                   ← DTCG JSON token export (generated FROM the CSS; see dtcg/README.md)
-whitelabel/             ← white-label PROOFS: creature/ + freedonia/ (brand-a.css, brand-full.css,
+whitelabel/             ← white-label PROOFS: creature/ + pds/ (brand-a.css, brand-full.css,
                           logo, live proof page, card) + failing-example.css (guardrail stress test)
 docs/                   ← consuming-nextjs.md (full Next.js guide: install, fonts, Tailwind mapping,
                           theme wiring, identity, new-component recipe) + theme-switcher.tsx + @theme mapping

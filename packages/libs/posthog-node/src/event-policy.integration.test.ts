@@ -33,6 +33,7 @@ const RESOURCE_COMMON_PROPERTIES = {
 } as const;
 const COMMON_PROPERTIES = {
   ...RESOURCE_COMMON_PROPERTIES,
+  oak_client_product: 'other',
   oak_client_surface: 'other',
 } as const;
 

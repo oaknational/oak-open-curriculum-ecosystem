@@ -42,12 +42,12 @@ export const KIT_ASSET_COPIES: readonly KitAssetPair[] = [
   // instead of a per-demo test-time fs read.
   { source: 'oak-theme.js', copy: '../oak-curriculum-hub/public/oak-theme.js' },
   {
-    source: 'studio-source/whitelabel/freedonia/brand-full.css',
-    copy: 'public/brands/freedonia/brand.css',
+    source: 'studio-source/whitelabel/pds/brand-full.css',
+    copy: 'public/brands/pds/brand.css',
   },
   {
-    source: 'studio-source/whitelabel/freedonia/brand-a.css',
-    copy: 'public/brands/freedonia/brand-a.css',
+    source: 'studio-source/whitelabel/pds/brand-a.css',
+    copy: 'public/brands/pds/brand-a.css',
   },
   {
     source: 'studio-source/whitelabel/creature/brand-full.css',

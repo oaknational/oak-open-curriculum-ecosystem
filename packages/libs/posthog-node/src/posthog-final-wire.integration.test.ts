@@ -34,6 +34,9 @@ const RAW_TOOL_ARGUMENT = 'raw-parameters';
 const RAW_TOOL_RESULT = 'raw-result';
 const RAW_UA_SENTINEL = 'RAW-UA-SENTINEL-9f31';
 const RAW_USER_AGENT = `${RAW_UA_SENTINEL} Claude-User (claude-code/1.0) raw-host`;
+/** Verified first-hand in Oak's inbound traffic, 7 days to 2026-08-13 (~3,100 requests). */
+const OBSERVED_CLAUDE_CODE_VERSION = '2.1.226';
+const OBSERVED_CLAUDE_CODE_USER_AGENT = `claude-code/${OBSERVED_CLAUDE_CODE_VERSION} (cli)`;
 const UUID_V7 = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 const RELEASE: ResolvedRelease = {
   value: 'release-2026-07-26',
@@ -257,6 +260,11 @@ function expectNoForbiddenContent(value: unknown): void {
   expect(serialised).not.toContain(RAW_UA_SENTINEL);
   expect(serialised).not.toContain('$mcp_client_name');
   expect(serialised).not.toContain('$mcp_client_version');
+  // The remaining two properties PostHog's own `harness` column resolves from.
+  // ADR-218 §3 excludes all three as raw client strings, so the wire assertion
+  // covers the ADR's whole rejection list rather than two thirds of it.
+  expect(serialised).not.toContain('$mcp_client_user_agent');
+  expect(serialised).not.toContain('$mcp_vendor_client');
   expect(serialised).not.toContain('$mcp_parameters');
   expect(serialised).not.toContain('$mcp_response');
   expect(serialised).not.toContain('$process_person_profile');
@@ -292,6 +300,7 @@ async function expectSuccessfulFinalWireBatch(subject: Subject): Promise<void> {
         ...COMMON_PROPERTIES,
         $mcp_is_error: false,
         oak_client_family: 'chatgpt',
+        oak_client_product: 'other',
         oak_client_surface: 'other',
         $mcp_protocol_version: protocolVersion,
         ...expectedMcpSdkProperties(initializeDynamic.libVersion),
@@ -307,6 +316,7 @@ async function expectSuccessfulFinalWireBatch(subject: Subject): Promise<void> {
         $mcp_duration_ms: listDuration,
         $mcp_is_error: false,
         $mcp_listed_tool_names: [TOOL_NAME],
+        oak_client_product: 'other',
         oak_client_surface: 'other',
         ...expectedMcpSdkProperties(listDynamic.libVersion),
       },
@@ -321,6 +331,7 @@ async function expectSuccessfulFinalWireBatch(subject: Subject): Promise<void> {
         $mcp_tool_name: TOOL_NAME,
         $mcp_duration_ms: toolDuration,
         $mcp_is_error: false,
+        oak_client_product: 'other',
         oak_client_surface: 'other',
         ...expectedMcpSdkProperties(toolDynamic.libVersion),
       },
@@ -405,7 +416,43 @@ describe('PostHog final wire', () => {
       for (const row of batch) {
         assert(isRecord(row) && isRecord(row.properties), 'Expected a PostHog event row');
         expect(row.properties.oak_client_surface).toBe('cli');
+        // The product axis is anchored to the LEADING token, so a value that
+        // merely buries a product name mid-string is not treated as that product
+        // self-declaring — it stays genuinely unidentifiable (MCP-594).
+        expect(row.properties.oak_client_product).toBe('other');
       }
+      expectNoForbiddenContent(batch);
+    } finally {
+      await closeSubject(subject, connection);
+    }
+  });
+
+  it('carries a self-declaring client product onto the wire without shipping the raw value', async () => {
+    const subject = createSubject(200);
+    let connection: McpConnection | undefined;
+
+    try {
+      connection = await connectInstrumentedRuntime(subject, {
+        'user-agent': OBSERVED_CLAUDE_CODE_USER_AGENT,
+      });
+      await connection.client.listTools();
+
+      await expect(subject.runtime.close()).resolves.toStrictEqual({
+        ok: true,
+        value: undefined,
+      });
+      await Promise.all(subject.waitUntilPromises);
+
+      expect(subject.reportedErrors).toStrictEqual([]);
+      expect(subject.requests).toHaveLength(1);
+      const batch = readBatch(await parseLegacyBody(subject.requests[0]));
+      expect(batch).toHaveLength(2);
+      for (const row of batch) {
+        assert(isRecord(row) && isRecord(row.properties), 'Expected a PostHog event row');
+        expect(row.properties.oak_client_product).toBe('claude_code');
+      }
+      // The category reaches PostHog; the raw client-controlled string never does.
+      expect(JSON.stringify(batch)).not.toContain(OBSERVED_CLAUDE_CODE_VERSION);
       expectNoForbiddenContent(batch);
     } finally {
       await closeSubject(subject, connection);
@@ -448,6 +495,7 @@ describe('PostHog final wire', () => {
           ...COMMON_PROPERTIES,
           $mcp_is_error: false,
           oak_client_family: 'chatgpt',
+          oak_client_product: 'other',
           oak_client_surface: 'other',
           $mcp_protocol_version: protocolVersion,
           ...expectedMcpSdkProperties(dynamic.libVersion),

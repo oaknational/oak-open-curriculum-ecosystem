@@ -187,6 +187,16 @@ Every bounded reviewer or worker lane should receive this minimum snapshot:
 - **Reintegration owner**
 - **Stop or escalate rule**
 
+When commissioning review, point external scrutiny at **freshly-authored
+claim-bearing prose** first — new text asserting facts (PR bodies, plan
+statements, record entries, doc claims) is where external review pays
+most: one 2026-08-11 day produced four falsified premises in new
+claim-bearing text at one seat, with sibling instances at two others
+(a false interval verdict from a mis-stamped record; a stale attribution),
+and every catch was external (Copilot rounds, opus reviewers, a pin's
+409). Process steps mostly self-catch; fresh factual prose mostly does
+not.
+
 This keeps reintegration cheaper and reduces clarification loops. Mailbox
 delivery alone is not reintegration; the parent lane must absorb the outcome
 back into the authoritative plan or dialogue.

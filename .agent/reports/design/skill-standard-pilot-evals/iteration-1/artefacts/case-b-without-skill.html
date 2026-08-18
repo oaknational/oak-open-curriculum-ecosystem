@@ -1,0 +1,243 @@
+<title>Theme switcher demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>
+  // Runs before first paint so the page never flashes the wrong theme.
+  (function () {
+    var STORAGE_KEY = "theme-preference"; // stored value: "light" | "dark". Absent = "follow system".
+    var stored = null;
+    try {
+      stored = localStorage.getItem(STORAGE_KEY);
+    } catch (e) {
+      // localStorage can throw in private-browsing/blocked-storage contexts; fall back to system theme.
+    }
+    var systemDark =
+      window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var theme = stored || (systemDark ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+  :root {
+    --oak-color-background: #ffffff;
+    --oak-color-text-primary: #1b1b1f;
+    --oak-color-text-secondary: #55565c;
+    --oak-color-surface: #f4f3f1;
+    --oak-color-border: #d7d5d0;
+    --oak-color-accent: #ba0e0e;
+    --oak-color-accent-contrast: #ffffff;
+    --oak-color-focus-ring: #1b6fde;
+  }
+
+  html[data-theme="dark"] {
+    --oak-color-background: #17181c;
+    --oak-color-text-primary: #f2f1ee;
+    --oak-color-text-secondary: #b7b6bd;
+    --oak-color-surface: #232429;
+    --oak-color-border: #3a3b42;
+    --oak-color-accent: #ff8a80;
+    --oak-color-accent-contrast: #17181c;
+    --oak-color-focus-ring: #7db6ff;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--oak-color-background);
+    color: var(--oak-color-text-primary);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  main {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  p.lede {
+    color: var(--oak-color-text-secondary);
+    margin-top: 0;
+  }
+
+  .theme-switcher {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    background: var(--oak-color-surface);
+    border: 1px solid var(--oak-color-border);
+    border-radius: 999px;
+    margin: 1.5rem 0 2rem;
+  }
+
+  .theme-switcher button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--oak-color-text-primary);
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .theme-switcher button[aria-pressed="true"] {
+    background: var(--oak-color-accent);
+    color: var(--oak-color-accent-contrast);
+  }
+
+  .theme-switcher button:focus-visible {
+    outline: 2px solid var(--oak-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .status {
+    font-size: 0.85rem;
+    color: var(--oak-color-text-secondary);
+  }
+
+  .card {
+    background: var(--oak-color-surface);
+    border: 1px solid var(--oak-color-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+</style>
+
+<main>
+  <h1>Theme switcher</h1>
+  <p class="lede">
+    Pick a theme below. Your choice is remembered on this device. If you have
+    never chosen one, the page follows your operating system's light/dark
+    setting automatically.
+  </p>
+
+  <div
+    class="theme-switcher"
+    role="group"
+    aria-label="Theme"
+    id="theme-switcher"
+  >
+    <button type="button" data-theme-choice="light" aria-pressed="false">
+      Light
+    </button>
+    <button type="button" data-theme-choice="dark" aria-pressed="false">
+      Dark
+    </button>
+    <button type="button" data-theme-choice="system" aria-pressed="false">
+      System
+    </button>
+  </div>
+
+  <p class="status" id="theme-status" role="status" aria-live="polite"></p>
+
+  <div class="card">
+    <p>
+      This card uses themed surface, text, and border tokens so you can see
+      the switch take effect immediately, with no reload required.
+    </p>
+  </div>
+</main>
+
+<script>
+  (function () {
+    var STORAGE_KEY = "theme-preference";
+    var root = document.documentElement;
+    var buttons = Array.prototype.slice.call(
+      document.querySelectorAll("[data-theme-choice]")
+    );
+    var statusEl = document.getElementById("theme-status");
+    var mediaQuery =
+      window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
+
+    function readStored() {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeStored(value) {
+      try {
+        if (value === null) {
+          localStorage.removeItem(STORAGE_KEY);
+        } else {
+          localStorage.setItem(STORAGE_KEY, value);
+        }
+      } catch (e) {
+        // Ignore write failures (e.g. storage disabled); the choice still
+        // applies for this page view, it just won't persist.
+      }
+    }
+
+    function systemTheme() {
+      return mediaQuery && mediaQuery.matches ? "dark" : "light";
+    }
+
+    // activeChoice is "light" | "dark" | "system" — what the UI should show
+    // as pressed. appliedTheme is always "light" | "dark" — what data-theme
+    // gets set to.
+    function applyChoice(choice) {
+      var appliedTheme = choice === "system" ? systemTheme() : choice;
+      root.setAttribute("data-theme", appliedTheme);
+
+      buttons.forEach(function (button) {
+        button.setAttribute(
+          "aria-pressed",
+          String(button.getAttribute("data-theme-choice") === choice)
+        );
+      });
+
+      statusEl.textContent =
+        choice === "system"
+          ? "Following your system setting (currently " + appliedTheme + ")."
+          : "Using " + choice + " theme.";
+    }
+
+    function currentChoice() {
+      var stored = readStored();
+      return stored === "light" || stored === "dark" ? stored : "system";
+    }
+
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var choice = button.getAttribute("data-theme-choice");
+        if (choice === "system") {
+          writeStored(null); // no explicit preference recorded
+        } else {
+          writeStored(choice);
+        }
+        applyChoice(choice);
+      });
+    });
+
+    // If the user has not expressed a preference, keep following the OS
+    // setting live (e.g. the OS switches to dark mode at sunset).
+    if (mediaQuery) {
+      var onSystemChange = function () {
+        if (currentChoice() === "system") {
+          applyChoice("system");
+        }
+      };
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener("change", onSystemChange);
+      } else if (mediaQuery.addListener) {
+        // Older browsers.
+        mediaQuery.addListener(onSystemChange);
+      }
+    }
+
+    applyChoice(currentChoice());
+  })();
+</script>

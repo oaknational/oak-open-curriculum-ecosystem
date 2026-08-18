@@ -18,19 +18,25 @@ generally must only be instigated by the user."
 
 On any third-party system where a bot identity exists to represent this
 team's agents, every agent-driven action on that system carries the bot
-identity. Falling back to the owner's personal credentials without explicit,
-user-instigated permission is **never permitted** — the fallback silently
-attributes agent work to the owner on every surface the system displays
-(authorship, activity feeds, contribution graphs, audit logs).
+identity **except the action classes the owner has routed to the operator's own
+credential** — enumerated exhaustively in the action map below, and nowhere
+else. Reaching for the owner's personal credentials for any action outside that
+map is **never permitted** — the unmapped fallback silently attributes agent
+work to the owner on every surface the system displays (authorship, activity
+feeds, contribution graphs, audit logs).
 
 ## Trigger
 
 An agent is about to perform ANY action on a third-party system — creating,
-commenting, pushing, merging, editing — and a bot identity exists for that
-system. The rule fires before the action, at credential-selection time, not
-after.
+commenting, reviewing, pushing, merging, editing — and a bot identity exists
+for that system. The rule fires before the action, at credential-selection
+time, not after. It fires on every action; the action map below decides which
+credential the action takes.
 
 ## Action (GitHub — the worked mechanics)
+
+Which credential each GitHub action class takes is settled by the action map
+below; this section is the mechanics for its bot-credential rows.
 
 The GitHub bot identity is `jimbot-oakington-iii[bot]`. Two different numbers
 attach to it and **only one belongs in an email address**:
@@ -105,7 +111,8 @@ the first hop. Confirm the id from the API, never from prose:
   pnpm agent-tools merge-bot push
   ```
 
-- **PR creation, comments, review replies, thread resolution**: a
+- **PR creation, PR and issue comments, standalone inline review comments and
+  thread replies, thread resolution** — every bot-credential row of the map: a
   minted installation token exported as `GH_TOKEN` for the `gh` invocation.
   **Assign it first and stop if the mint fails** — never the
   `GH_TOKEN=$(…) gh …` prefix form:
@@ -123,6 +130,23 @@ the first hop. Confirm the id from the API, never from prose:
   first-hand 2026-07-29: `GH_TOKEN="" gh auth status` reports the human
   account with `repo` and `workflow` scopes, and a failing mint captures zero
   bytes through the direct entry point.
+
+  Three tripwires close the residual paths the guard alone has missed
+  (both instances first-hand, 2026-08-08 and 2026-08-13):
+
+  1. **Pin the cwd before an identity-bearing write.** A persistent shell
+     whose cwd has drifted into a worktree resolves the front door against
+     an unbuilt `dist` — the mint exits 0 printing NOTHING, `$()` captures
+     empty, and the fallback fires despite the guard reading only exit
+     codes. Identity-bearing writes run from the primary root; `pwd` is one
+     token.
+  2. **Guard the token by LENGTH, not exit code** (`[ ${#token} -ge 20 ]`)
+     — an empty read is a failure whatever the exit code.
+  3. **Echo the author back in-band on every bot write** — request
+     `.user.login` / `.user.type` in the same call and read it before
+     proceeding. An empty `GH_TOKEN` is invisible at the call site; the
+     echo-back is the only reliable detector, and it converts a silent
+     misattribution into a same-call stop.
 
 ## Action (all other systems)
 
@@ -143,28 +167,92 @@ Director, or to the owner at an action moment — never a licence to fall back
 to owner credentials. The fallback happens only when the owner explicitly
 permits it, and the owner generally instigates it.
 
+## The action map (owner ruling 2026-08-17) — general, not per-seat
+
+Owner ruling, MG, 2026-08-17, verbatim:
+
+> emgee-bot for commits/PR raises ... mantagen for reviews/approvals
+
+Stated portably: **a pull-request review is performed under the operator's own
+credential; commits, PR raises, and every other write are performed under the bot
+identity.** It is not a per-seat grant, and no seat needs its own version of it.
+
+**The discriminator is the endpoint, never the noun in the action's name.**
+Anything submitted through the pull-request _reviews_ endpoint
+(`POST /repos/<org>/<repo>/pulls/<n>/reviews`) is a review — whatever state it
+carries, and whatever body or inline comments travel inside the same call. One
+call, one credential: a review's body has no credential of its own, so an
+approval that carries a body and a changes-requested review each have exactly one
+path. Every other write on the system is an ordinary write.
+
+The map below is exhaustive and its rows do not overlap. Read the row, not the
+noun.
+
+| Action | Credential | Why this row |
+| --- | --- | --- |
+| Review submitted as `APPROVE` | operator | only a human review supplies the approval a code-owner ruleset waits on |
+| Review submitted as `REQUEST_CHANGES` | operator | same endpoint, same gate: a bot's changes-requested neither discharges the human review request nor registers with the ruleset |
+| Review submitted as `COMMENT` state | operator | same endpoint; it discharges the review request assigned to the human |
+| The **body** of any review, and any inline comment carried inside the same submission | operator, inseparably — it is one API call | see the discriminator above |
+| A **standalone** inline review comment or thread reply (`POST …/pulls/<n>/comments`, `POST …/pulls/comments/<id>/replies`) | bot | not a review submission: it discharges no request and sets no review state |
+| An ordinary PR or issue comment (`POST …/issues/<n>/comments`) | bot | as above — a comment is a write, not a review |
+| Requesting or re-requesting a review **from a human** | bot | an ordinary mutating write: the `422` below is specific to the Copilot reviewer, and a human reviewer is accepted from the bot installation token |
+| Requesting a review **from Copilot** | operator | mechanism, not preference: `requested_reviewers` rejects a bot/app token with `422` — dated grant below |
+| Commits, pushes, PR creation, merges, thread resolutions, label and state edits, and every other `gh api -X POST/PATCH/DELETE` | bot | the closed default: nothing reaches the operator's credential except a row above |
+
+The trigger is the **write**, at credential-selection time, never the tool
+category.
+
+**Why the review rows are a capability boundary rather than an inconsistency.**
+Under a code-owner review ruleset, a review posted by a bot neither discharges a
+review request assigned to a human nor supplies the approval the ruleset is
+waiting on — so a bot-posted review leaves the pull request exactly as blocked as
+before. The operator's credential is the only one that can clear that gate. The
+split is forced by mechanism, not chosen for convenience.
+
+**Which bot and which human is machine-local** and is deliberately not stated
+here; it belongs in the operator profile
+([`.agent/operator-local/README.md`](../operator-local/README.md)). This rule
+owns the portable mapping, the profile owns the bindings. A rule that hard-coded
+one person's accounts would be false on every other machine (`principles.md`
+§Any User, Any Machine).
+
+Three riders bind every operator-credential row:
+
+- **The credential is licensed, never the judgement.** An agent reviews
+  first-hand before approving. The grant permits posting a review, never
+  posting one it has not earned.
+- **Content written under a human credential must state that an agent wrote
+  it**, and name the seat, per
+  [`identify-as-agent-under-shared-credentials`](identify-as-agent-under-shared-credentials.md).
+  The credential displays the human; the words must not let a reader conclude the
+  human wrote them. The grant makes this requirement stronger, not weaker.
+- **The author-cannot-review intersection applies.** GitHub forbids the author of
+  a pull request from reviewing it in any state, so on a PR authored by the same
+  human account the review would be posted under, no review row yields a usable
+  path: the agent's review of record rides an ordinary PR **comment** (bot, per
+  the map), and any `APPROVE` or `REQUEST_CHANGES` state needs a different
+  non-author account. Route that case rather than working around it.
+
 ## Standing owner-granted exceptions (dated, narrow)
 
-- **GitHub PR approvals (granted 2026-08-04).** Owner word, verbatim: "I do
-  not have to approve PRs, you can use my identity to do that, that is
-  permitted." Scope: submitting a PR _approval_ review as `jimCresswell`,
-  and nothing else — commits, PR creation, comments, review bodies, merges,
-  and every other write stay on the bot. Why it was granted: the code-owner
-  review ruleset (`require_code_owner_review: true`) means a PR authored by
-  one code owner needs the _other_ code owner's approval, so every PR
-  authored by the second code owner sat blocked on the owner personally — a
-  standing bottleneck this user-instigated grant removes. Two riders bind:
-  the agent reviews first-hand before approving (the grant licenses the
-  credential, never an unreviewed approval), and it intersects the
-  author-cannot-review constraint — GitHub forbids the PR author reviewing
-  its own PR in any state, so on bot-authored PRs the agent review of
-  record rides a bot COMMENT while any approve/changes-requested state
-  needs a non-author account.
+The two grants below **pre-date** the action map above and are now dated
+instances of its rows rather than departures from it. The map states the scope;
+each entry is retained because it records a mechanism finding the map does not
+carry.
 
-- **Copilot review requests (granted 2026-08-06).** Owner word, verbatim:
+- **GitHub PR approvals (granted 2026-08-04)** — the first instance of the
+  review rows. Owner word, verbatim: "I do not have to approve PRs, you can use
+  my identity to do that, that is permitted." What it cured: the code-owner
+  review ruleset (`require_code_owner_review: true`) means a PR authored by one
+  code owner needs the _other_ code owner's approval, so every PR authored by
+  the second code owner sat blocked on the owner personally — a standing
+  bottleneck this user-instigated grant removed.
+
+- **Copilot review requests (granted 2026-08-06)** — the warrant for the
+  Copilot row. Owner word, verbatim:
   "there is standing permission to use my/user credentials for requesting
-  reviews from copilot." Scope: requesting a GitHub Copilot code review on
-  a pull request, and nothing else. Mechanics: the REST
+  reviews from copilot." Mechanics: the REST
   `requested_reviewers` endpoint accepts
   `copilot-pull-request-reviewer[bot]` only from a HUMAN user token — a
   bot/app token gets `422` (tooling-lane probe + first-hand human-token
@@ -177,9 +265,8 @@ permits it, and the owner generally instigates it.
   ```
 
   The surface displays the owner as the requester — the grant's accepted
-  consequence. This exception licenses exactly this action class; every
-  other write on the system stays under the bot identity, and the grant is
-  never precedent for any other fallback.
+  consequence. It licenses exactly the Copilot row and is never precedent for
+  any other fallback.
 
 ## History and grandfathering
 

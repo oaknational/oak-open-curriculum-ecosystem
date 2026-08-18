@@ -1,0 +1,17 @@
+<!-- NEGATIVE control for ONE boundary: zero-ad-hoc-css must FAIL, while the
+     other two assertions PASS.
+
+     Every declaration below draws its value from a semantic token, so
+     no-literal-design-values stays green — and the page still fails, because
+     the assertion counts AUTHORED declarations, not literal values. An
+     artefact that restyles the system with the system's own tokens is still
+     authoring ad-hoc CSS. The one class named is real, so
+     referenced-oak-classes-exist passes. -->
+<div class="oak-btn">Restyled with tokens, which is still restyling</div>
+<style>
+  .page-callout {
+    background: var(--bg-neutral-stronger);
+    padding: var(--space-16);
+    color: var(--text-primary);
+  }
+</style>
