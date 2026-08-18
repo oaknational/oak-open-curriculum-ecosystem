@@ -84,6 +84,24 @@ confirmation after the `data-region` row pin; DOM-fact echoes printed
 with each capture. The defect was invisible to every code-level gate and
 obvious on the first rendered artefact.
 
+## Prediction and falsifier
+
+Stated as an expected-observable-effect plus falsifier pair, the form
+the estate's two-speed-learning discipline (PDR-130) requires of enacted
+doctrine; drafted at the 2026-08-13 session close and added at the
+2026-08-14 consolidation pass. Prediction: by the first consolidation on
+or after 2026-10-01, design-lane sessions produce rendered proof
+artefacts at cure boundaries by default, and at least one defect
+invisible to code-level gates is caught on pixels before merge (the
+class the 2026-08-13 keyboard blackout instantiated). Measurement: read
+the design-lane session records and PR review rounds over the window for
+probe invocations at cure boundaries and for pixel-caught defects.
+Falsifier: design-lane cures in the window repeatedly land without
+rendered proof despite the rule being loaded, or every pixel-read in the
+window merely restates what a code-level gate had already caught — either
+reading means the discipline is ceremony and the PDR is re-examined at
+its review rather than assumed.
+
 ## Provenance
 
 Owner rulings 2026-08-13 (quoted above), issued while directing the

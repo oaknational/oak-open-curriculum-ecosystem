@@ -38,9 +38,10 @@ state**, under the same conventions as every other thread.
 - Claims at pause: `a2286c53` (Director) retained stopped-seat-held — the
   successor adopts via `claims adopt` per the brief's readiness gate.
   `dd3f640f` closed 2026-08-13 (premise complete as PDR-136).
-- Fleet at pause: Skua (e2b222) closed after #846's disposition (their
-  close broadcast is the record); Nautilus (c6d48b) cold-paused, claim
-  `95a0678d` retained, survey owner-HELD (gates expire 2026-09-02).
+- Fleet at pause: Skua (e2b222) was live driving #846 at the wind-down
+  write — their close broadcast is the authoritative record of their exit;
+  Nautilus (c6d48b) cold-paused, claim `95a0678d` retained, survey
+  owner-HELD (gates expire 2026-09-02).
 - Open-PR disposition at pause: #846 owner-worded to merge (Skua drove);
   #774 illustrative never-merge (owner verbatim); #772/#761 Clerk-stack
   gated on the production promotion settling; #867 and #750 are draft
@@ -68,8 +69,12 @@ state**, under the same conventions as every other thread.
 
 ## The live board (authoritative restatement, adopted 2026-08-13 from Plover's closeout)
 
-1. IN PROGRESS — support the design lane: ratified plan governs, W1→W2;
-   Skua active; owner-held moments are pixels in his Chrome.
+1. Design lane: ratified plan governs, W1→W2. At the wind-down write Skua
+   (e2b222) was live driving #846 to merge at owner word; their close
+   broadcast (or its absence) is the authoritative close record —
+   re-ground from the claims registry and comms at pickup, never this row
+   (Copilot thread on fold PR #884 caught the earlier
+   anticipatory/adopted-verbatim incoherence here).
 2. MCP-590 tail: error-envelope PR (`formatError` + two callers,
    `{code,message,upstreamMessage}` via `structuredContent.error` +
    `content[1]` mirror, NOT `_meta`; contract test). Question A1 first.
@@ -102,6 +107,23 @@ state**, under the same conventions as every other thread.
     the same stale name. (b) The design-system-usage skill canonical still
     names the outgoing counter-brand directory (whats-where reference
     likewise, unverified).
+13. Cure the `practice-index.md` §"Rules cited by Practice Core" framing —
+    owner verdict 2026-08-14 (verbatim: "wow, that is deeply incorrect"):
+    the section asserts portable Practice-Core PDRs cite host-local rule
+    files as their enforcement, which inverts the reference-direction law
+    (host surfaces cite the portable doctrine they operationalise, never
+    the reverse; kin: the PDR-117 host-indirection truing). Cure shape:
+    restate the section as host-rules-operationalising-core AND
+    first-hand-audit the named PDR bodies (014, 028, 038, 003, 091, 138)
+    for host-path citations — each found citation is its own truing.
+    Bounded fix on the coordination branch; not absorbed into PR #886.
+14. ADR-225 acceptance gate (critical-pass finding, PR #886, 2026-08-14):
+    the §Supported-independent-compositions MUST binds EVERY provider a
+    host profile selects — at acceptance this retroactively covers the
+    existing estate (hosting, auth, search, telemetry) with no exercised
+    compositions and no transition story. Safe while Proposed; the
+    transition/scope decision is the owner's at the acceptance moment.
+    Recorded on the PR at merge.
 
 HELD STATES (not tasks): survey lane owner-HELD (machine-readable gates
 expire 2026-09-02; Nautilus cold-paused, claim `95a0678d`); #774 =
@@ -196,6 +218,88 @@ and presented. Rulings inventory complete; verification fleet running under
 the two-at-a-time throttle after a session-limit event killed 7 of 12 legs
 (5 banked, resume from cache). This record founded as plan S1.
 
+### 2026-08-13 ~20:3xZ — Smith hunts Obsidian (e98f17): wind-down fold executed
+
+Owner wind-down word executed within the hour: fold PR **#884** (bot-authored,
+jimbot label) merged to main at `c8586f477` — full condition held (four
+required checks green by name; Copilot's seven-thread round read in full,
+replied and resolved at the boundary; claude leg org-overage quota-skip,
+recorded exclusion). Successor branch `coordination/2026-08-13-c8586f` cut
+from post-fold main; primary resides there. moved for teachers: no
+live-service change in the fold (the day's teacher-facing motion, the #871
+lesson-search freshness slice, landed earlier). moved for the Practice: the
+Director continuity-surface redesign S1/S2 durable on main — thread record,
+81-row rulings ledger with authority classes, inheritance-audit outcomes
+(stale claim closed against PDR-136), live-state banner, make-safe pause
+state, formation letter. The plan-readiness verdict (READY-WITH-EDITS, 8
+before-stamp findings) is conserved as bot comment 5285713690 on #884 —
+applying findings 1–8 is the FIRST pickup act, before the ratification card.
+Finding 1's claim-side cure executed at this entry: the Director claim
+re-threaded to `estate-coordination` (close+reopen, new claim id in the
+registry) so the claim→record path resolves. Copilot's three tonight-cures
+landed in this commit (fleet-state truing, two plan `last_updated` fields,
+one report label). #846 was in CI at Skua's seat at this write.
+
+### 2026-08-14 ~06:3xZ — Smith hunts Obsidian (e98f17): COMPACTION FREEZE mid-PR-886 drive; seat continues
+
+Owner word "prepare for compaction" (no stop-processes word — the #886
+settle watch stays armed; the canonical comms watcher was deliberately not
+re-armed this morning under the n=1 exemption). Drive state, durable and
+resumable from the PR alone:
+
+- PR #886 (owner-agent docs: capability architecture) at tip `d6f664036` —
+  conflicts resolved, PDR renumbered 138→139 (main took 138 overnight),
+  Copilot round-1 findings cured, my false be4ec15ba reply citations
+  CORRECTED on both threads (staged-vs-worktree divergence: a git mv had
+  staged pre-cure content, my pathspec omitted the file, verification read
+  the tree — Copilot's re-round caught it; verify the INDEX, not the tree).
+- Owner-ordered adversarial panel (2 legs, opus, max-different lenses):
+  BOTH returned FINDINGS-BLOCK-MERGE, near-disjoint findings. Reports
+  conserved verbatim as PR comments 5290506438 (assumptions lens) and
+  5290514095 (failure-modes lens). Waves 2–3 deliberately held: verdict
+  settled; fresh lenses go to the CURED text.
+- THREE OWNER RULINGS (in-session, 2026-08-14): MUST forward-scoped +
+  priors named (ADR-074/076, 219, 162 not retroactively bound); the
+  no-vendor-structural-dependence constraint IS the owner's, ESTABLISHED
+  in ADR-225 (owner-declared at review) — ledger row XPLAT-2; full cure
+  in this PR now, acceptance residue on the checklist, fresh adversarial
+  leg on cured text before merge.
+- Cure state: NOT YET APPLIED — the first cure script died on a stale
+  anchor BEFORE its write (all-or-nothing protected the tree; worktree
+  verified clean). The full cure map + acceptance checklist is PR comment
+  5290518682. Resume lesson: re-derive every anchor from LIVE file text.
+- Resume order: (1) re-ground; (2) apply the cure map in the worktree
+  `.claude/worktrees/pr-886-capability-architecture` (built, deps in);
+  (3) commit+push; (4) fresh adversarial leg (architecture-expert-fred —
+  both reviewers recommended it) on the cured text + Copilot re-request;
+  (5) settle per the state machine; (6) bot merge at the fetched oid
+  (owner word "fix and merge" stands, post-panel); (7) Phase 8 harvest;
+  (8) worktree removal; (9) board items 13/14 remain routed, untouched.
+
+## 2026-08-14 ~07:4xZ — three-body comparison recorded and homed (Smith hunts Obsidian, e98f17)
+
+- Owner-invoked comparison of the PR-886 capability architecture, the
+  web-app-deconstruction corpus, and the survey programme delivered and
+  owner-agreed ("Thank you, I agree"), with the direction to record the
+  findings everywhere they matter. Permanent home:
+  `.agent/research/capability-deconstruction-survey-comparison.md`
+  (six findings; stitches routed). Survey-design inputs banked at
+  `survey-machinery-deconstruction.plan.md` §Banked inputs (pointer-carry,
+  no scope change). Ledger row DECON-5 records the placement-doctrine
+  scope verdict. Napkin harvest at `2ef203c1b` preceded this.
+- RESUME-ORDER ADDENDUM for the PR-886 drive (extends step 2 above,
+  owner-agreed 2026-08-14): during the cure application, also add one
+  Related line to the PR's research doc
+  (`.agent/research/provider-independent-capability-architecture.md`)
+  citing the deconstruction meta-analysis's provider rows (negative-space
+  "tested semantic portability, exit, restoration and retained options" +
+  lens 30) — the convergence stitch. Conserved on the PR as a bot comment
+  at this entry's commit.
+- Deconstruction-side stitch deliberately deferred: log ADR-225/PDR-139
+  as an evidence event in the deconstruction hypothesis register per its
+  own review rule only AFTER #886 merges — Proposed doctrine is not yet
+  evidence.
+
 ## Participating agent identities
 
 | platform | model | session_id_prefix | agent_name | role | first_session | last_session |
@@ -228,3 +332,149 @@ instinct the rulings ledger (plan S2) formalises.
   applies to it too).
 - The owner directs through the Director; blocking owner asks are cards,
   never prose; lens-gate before owner-surface.
+
+## 2026-08-14 ~11:5xZ — PR-886 drive COMPLETE (Smith hunts Obsidian, e98f17)
+
+- MERGED by the owner directly (jimCresswell, 2026-08-14T11:39:49Z, merge
+  commit c0a6c08d3, branch tip ab608269b). Task 9 closed. Thirteen review
+  rounds ran (adversarial panel x2 lenses, architecture-expert-fred,
+  Copilot x10 content rounds, round 13 clean); 55 findings harvested
+  including every suppressed comment; per-round dispositions are PR
+  comments 5290506438 through 5292754030. Owner rulings in-drive beyond
+  the original three: the provider-quantified invariant restatement
+  (ledger XPLAT-3) and the hour-idle cold-pause policy (ledger
+  COLD-PAUSE). The owner-directed comment-record audit found and cured
+  the attribution-drift defect (owner-ruling heading over review-derived
+  sentences; split at d3a9fa269) and restated checklist items as
+  decision pointers.
+- Board item 14 (ADR-225 acceptance gate) now carries the full
+  acceptance checklist: original residue (cure-map comment 5290518682)
+  plus ADR-042 amend/supersede/retain decision, PDR-139-first-or-joint
+  ordering, and the constraint-wording residue — all owner decisions at
+  the Proposed-to-Accepted flip, none predetermined.
+- Post-merge follow-on executing at this entry: the deconstruction
+  hypothesis-register evidence event (per its own review rule, deferred
+  until merge). Worktree pr-886-capability-architecture removed after
+  this entry's commit.
+
+## 2026-08-17 ~11:0xZ — COMPACTION FREEZE (Smith hunts Obsidian, e98f17): fold mid-ceremony, 890 round conserved, two new owner directives routed
+
+Owner word at the freeze: "prepare for compaction then stop all processes."
+All monitors stopped; every in-flight surface conserved below. RESUME MAP,
+in priority order (the owner's SKILLS-FIRST ruling governs):
+
+- (a) FOLD PR #896 is OPEN mid-ceremony (branch coordination/2026-08-13-c8586f
+  merged main in at 98a607bcc with the napkin union-resolved — 113/116
+  branch-side entries verified in archive/napkin-2026-08-14.md, three carried
+  under the fold-merge union note; Nautilus's staged research doc rode at
+  their own 16c3a4e0c). Resume: settle per the four named checks, bot REST
+  merge at the FETCHED sha (merge method merge), cut successor
+  coordination/estate-<date> from post-fold main per the skill, refresh
+  branch-labelled surfaces, broadcast rotation. The freeze commits below
+  ride this PR.
+- (b) SKILLS LANE FIRST (owner priority, ledger SKILLS-FIRST): PR #890 cure
+  round conserved as PR comment 5314990205 (dead-SKILL.md-filename class x9
+  plus three live-surface paths; sweep lesson: filename class, not only
+  directory class); then wave 2 per PR #890 comments 5293457222 (link
+  ledger) + 5293529733 (config additions) + task #10; then the eval
+  programme to EVERY Practice skill (plan WS8 + pilot convention
+  estate-wide). mantagen re-review stands requested; Copilot re-request at
+  the cured tip.
+- (c) PROFANITY-FILTER in-repo plan node to AUTHOR (ledger PROF-FILTER,
+  owner verbatim there): validator with fixed-hash target-word list (hashes
+  so the repo never carries the wordlist; not secrecy), no Linear ticket.
+  Author as born sketch AFTER the skills lane per SKILLS-FIRST; sequence
+  its execution behind the evals completion.
+- (d) PR-CLASH COMPARISON (owner ask 2026-08-17, NOT yet executed):
+  compare our open PRs vs other contributors' new PRs for clashes.
+  Inventory banked at the freeze: ours #890 (skills wave 1), #889
+  (census, Nautilus), #774 (illustrative, never merges); theirs #891
+  luke-arnold-oak NATIVE-WINDOWS ESTATE FIX — intersects the ratified
+  cross-platform node's research-first rider (XPLAT row); FLAG at the
+  comparison, verdict needed on rider-vs-contribution; #892 plugin skill
+  feedback DRAFT — touches BUNDLED SKILL COPIES, direct WS7 clash
+  candidate; #895 conformance DRAFT; #888 WSL docs; #883/#881/#880/#867
+  emgeebot lanes; #772/#768/#761/#750 older gated lanes. Comparison =
+  changed-file overlap + semantic clash verdicts, report to owner.
+- (e) Redesign S3-S6 (task #7) queued behind the above.
+- (f) Instrument notes: the claims CLI answered "unknown topic: claims" at
+  2026-08-17 — its command surface changed over the gap; re-derive the
+  liveness-check invocation from the CLI help at resume, never from
+  memory. The worktree-isolation guard pins sessions by cwd: keep the
+  shell at the primary root, use git -C for worktree git, plain commands
+  (no pipes) for guarded operations, tokens via short-lived files with
+  the wc -c length tripwire (an empty mint WAS caught by it this
+  session).
+- (g) Watch scripts .watch-890.sh (wave worktree) and .watch-896.sh
+  (primary root) deleted at the freeze; re-create from the resume map's
+  needs, actionable-transitions-only per COLD-PAUSE.
+
+## 2026-08-17 ~11:2xZ — freeze addendum: three owner answers true the map (Smith hunts Obsidian, e98f17)
+
+- XPLAT sequencing corrected by owner word: "I intended our Windows work
+  to go in first in order to support the manual windows work" — the
+  research-first rider is SUPPORT-SEQUENCING, not a contribution fence.
+  Resume treatment of #891: supportive review, no rider adjudication; the
+  cross-platform research node gains urgency behind SKILLS-FIRST.
+- Resume-map (d) corrected: #892 is NOT a WS7 clash — verified against
+  its file list, it touches only plugins/oak-open-curriculum/skills/oak-*
+  (bundled PRODUCT skills), zero overlap with the Practice corpus; it
+  even adds an evals/evals.json, consistent with the all-skills-evals
+  ruling. Consistency glance at review only.
+- Freeze-note (f) sharpened: the CLI's `claims` topic is absent from
+  today's topic list (agent-identity, collaboration-state, commit-queue,
+  branch-touched-files, context-cost, session-metadata, codex-exec,
+  merge-bot, pr, pr-watch, spawn) — renamed/absorbed over the gap,
+  likely into collaboration-state; re-derive the liveness invocation
+  from `--help` at resume. No other agent-tools surface misbehaved this
+  session.
+
+## 2026-08-17 ~11:5xZ — resume: XPLAT-4 head discharged (Smith hunts Obsidian, e98f17)
+
+Owner resume order (ledger XPLAT-4) executed ahead of the freeze map's (a)/(b):
+
+- REGROUND facts that moved over the freeze: the owner worked this branch
+  directly — `ac23efc66` (workspace basis panel, his authorship) and
+  `234450771` (the survey-lane landscape-survey born sketch; his authorship,
+  bot committer, pushed 11:23Z from this checkout while this seat was
+  resuming — the file this seat found staged and left untouched). Comms
+  quiet since 2026-08-16; Nautilus's claims fresh (heartbeat 10:21Z);
+  claims topic confirmed absorbed into `collaboration-state` (invocations
+  re-derived from `--help`). Fold PR #896 checks re-running at the new tip;
+  fold completes at a stable moment (owner mid-activity on the branch is
+  not one).
+- LUKE'S PRs reviewed warmly per the order (both reviews bot-posted,
+  author echo verified): #891 review 4951157320 — centrepiece is
+  first-hand macOS proof at his tip `299a33f1b` (Apple Silicon, macOS
+  26.6, APFS case-insensitive default: `pnpm install --frozen-lockfile`
+  clean; `pnpm check` green end to end, main turbo run 142/142), closing
+  his named macOS-untested risk; plus goal-alignment (the ratified
+  strategic node declines WSL-as-answer, so his "merge both" option is
+  the doctrine-aligned path — final disposition the owner's). #888 review
+  4951133339 — verified his tip cures the two unresolved threads; one
+  real defect remains (the gitleaks `go install` route: module declares
+  `zricethezav`, verified at source) and it is INHERITED FROM OUR OWN
+  `.husky/pre-push:13` — generator fix is estate-side (micro-PR queued);
+  Copilot's suppressed-comments were harvested and verified (the
+  env-vars no-op claim REFUTED at pinned versions: turbo 2.10.9 reads
+  `TURBO_CONCURRENCY`, vitest 4.1.10 reads `VITEST_MAX_WORKERS`; the
+  nvm-before-clone ordering defect real; build-before-lint claim is a
+  main-README matter taken estate-side).
+- XPLAT RESEARCH NODE authored:
+  `.agent/plans/delivery/cross-platform-research.plan.md` (status
+  `sketch` per the plan-corpus enum — Nautilus corrected this seat's
+  out-of-enum `active` in place, broadcast 11:42Z, absorbed; execution
+  state rides ticket MCP-607, created this seating, related
+  MCP-602/MCP-600, moved In Progress). Four research questions (census
+  delta over #891; platform verification; guard design;
+  support-sequencing decision briefs — `.gitattributes`, Windows CI
+  leg, gate settings). Assumptions-expert pass absorbed pre-commit
+  (blocking finding cured: briefs tranche never queues behind census).
+- SCOPE CORRECTION to freeze-map (b), superseding its wording: every
+  skills-lane quantifier — including the eval programme phrase "pilot
+  convention estate-wide" — ranges over the Practice corpus
+  `.agent/skills` ONLY, per the owner's 2026-08-17 word (ledger
+  SKILLS-FIRST routing cell trued this entry). `plugins/oak-open-curriculum`
+  is another lane's.
+- Validation-worktree residue to clean at fold: `pr-891-macos-validation`
+  (detached, untracked logs only) — prune after the #891 lane settles.

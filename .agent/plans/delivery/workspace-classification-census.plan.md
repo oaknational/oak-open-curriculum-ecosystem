@@ -10,19 +10,12 @@ ratified_where: "Owner decision card at the Director seat (b10c37), 2026-08-12 ~
 serves: outcome-informed-practice-learning
 impact_areas:
   - practice-and-estate
-tickets: []
+tickets:
+  - MCP-601
 depends_on:
   - plan: survey-machinery-deconstruction
     kind: beneficial
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      Jim gives the explicit go on the survey lane — the 2026-08-12 hold
-      ("don't start the survey until I give the word", worded direct to the
-      lane seat, Director-concurred broad on both nodes) discharges at his
-      word through any seat.
-    expires: 2026-09-02
-last_updated: 2026-08-12
+last_updated: 2026-08-14
 ---
 
 # Workspace classification census
@@ -84,15 +77,21 @@ with a delta section, so its consumers stop reading a stale map.
 
 **Census subjects, defined mechanically:** the union of (i) every pnpm
 workspace member (per `pnpm-workspace.yaml`); (ii) the parent directory of
-every tracked `package.json` outside the member set; (iii) every top-level
-path segment of `git ls-files` filtered to a stated code-extension set
-(declared in the enumeration instrument; `.ts`/`.tsx`/`.js`/`.mjs`/`.cts`/
-`.mts`/`.sh` at minimum) that is not already covered by (i) or (ii) —
-which is what catches `plugins/oak-open-curriculum/`, per-workspace
-`runtime-only-scripts/` tiers, and the deliberately-unregistered research
-roots without a judgement call. The boundary decision this census serves
-is precisely about surfaces the member list cannot see; each derived
-subject gets a matrix row or a recorded exclusion, never silence.
+every tracked `package.json` outside the member set; (ii-b) the parent
+directory of every tracked `.claude-plugin/plugin.json` manifest outside
+the member set (the owner-approved manifest arm, 2026-08-14 — plugin
+surfaces such as `plugins/oak-open-curriculum/` carry no `package.json`
+and no code-extension files); (iii) every top-level path segment of
+`git ls-files` holding files in a stated code-extension set (declared in
+the enumeration instrument; `.ts`/`.tsx`/`.js`/`.mjs`/`.cts`/`.mts`/`.sh`
+at minimum) that are not themselves inside a directory covered by (i),
+(ii), or (ii-b) — coverage judged per file, so a segment holding a nested
+subject AND code outside it keeps its code root. This is what catches the
+per-workspace `runtime-only-scripts/` tiers and the
+deliberately-unregistered research roots without a judgement call. The
+boundary decision this census serves is precisely about surfaces the
+member list cannot see; each derived subject gets a matrix row or a
+recorded exclusion, never silence.
 
 **Subject identity is dual:** each row carries the directory path AND the
 published package name where one exists (the live estate already diverges
@@ -211,3 +210,18 @@ open holding state.
    edited into the surface-isolation brief.
 5. Report assembly; enumeration instrument green; validator and gate
    green; PR.
+
+## Amendment trail
+
+- **2026-08-18 — merge-round truing: reground re-grade recorded; false-edge cures; prose counts re-banked.** The workspace-basis re-grounding (2026-08-17, owner correction; record at `.agent/research/workspace-basis-regrounding-2026-08-17.md`) re-grades the round-2 target inventory (34→66) and taxonomy adoption to historical data carrying zero deference weight; the round-2 card path is cancelled at owner ruling, and the work that follows the census is governed by the owner's five-point repo-architecture brief (MCP-619). The decomposition artefacts (decomposition-analysis.json, target-inventory.json, decomposition-synthesis.md — status header re-trued) remain banked as candidate archive material stripped of deference arguments; the current-state census (facts/rows/matrix and the instrument) is unaffected as baseline evidence. Same round, review cures: sourceDependencies no longer fabricates root-subject edges from Node builtins or unresolvable specifiers (both classes verified first-hand, facts regenerated — the runtime-only-scripts `.` edge and two other false residuals cleared); facts parity is byte-exact over the whole artefact envelope via one canonical serialisation shared by `facts` and `check`, with duplicate-subject rejection; artefact orderings use a locale-independent comparator (host-ICU `localeCompare` could render byte-different artefacts across machines). Recorded limitations, deliberate: the depcruise scope is the fixed boundary-gate root list, so a subject outside those roots carries an empty-vs-not-scanned ambiguity in sourceDependencies, and the root subject's `.` catch-all attribution is the same design family (derive cruise scope from the live subject set as follow-on); prose-embedded counts in rows.json are banked snapshots that `check` does not cross-validate against facts.json — this round re-banked them against the regenerated facts, restating the word-boundary grep case-insensitive at 136 of 1296 (the prior 227/1287 pairing reproduced under no stated method). The post-cure Copilot round (2026-08-18, suppressed comments, zero threads) added four instrument follow-ons recorded with the same deferred disposition: the delta's rename fallback (a rename that also changes classification currently reports only under its new directory), a literal ROWS_SCHEMA_VERSION equality check at the rows-artefact boundary, strict rejection of malformed depcruise dependency entries (parity with parseTurboTasks), and the vocabulary membership check's literal widening.
+- **2026-08-17 — review-round cures: predicate text formalised; coverage judged per file; subject 45.** The mechanism's predicate paragraph now enumerates arm (ii-b) explicitly (it had lived only in the amendment trail — a reviewer-caught split state) and records the per-file coverage refinement to arm (iii): a top-level segment holding a nested subject AND code outside it keeps its code root (previously the whole segment was skipped — the reviewer-found gap). Under the refined arm the instrument derives 45 subjects: `.agents` (vendored external skills + generated skill projections) enters with a recorded exclusion. The same round hardened the instrument (full row-shape parse, non-blank evidence pointers, dual-identity coverage, Result-contract resolver parse, legacy-label parse errors, all-rows delta presence with dangling-rename surfacing, TOCTOU-free scanning with declared skips) and extended `check` to recompute facts.json and matrix.md for parity (validators-must-recompute).
+- **2026-08-14 — review card round 2 (~15:3xZ): DIRECTION CONFIRMED; criterion 4 satisfied on the decomposition spine.** The round-2 target inventory (34 workspaces -> 66, one lifecycle each; codegen split into spec-acquisition / reusable pipeline / generated artifact holders; editorial synonyms separated; generated output never co-resident with handwritten code; banked at the census report home: decomposition-analysis.json, target-inventory.json, decomposition-synthesis.md) was presented at the owner's round-2 card with three questions. Answers, verbatim: "Direction confirmed" (the census finalises on this spine — revised matrix dispositions, manifest arm, instrument green); "One programme node (Recommended)" (a single strategic reorganisation node owns the target inventory and sequencing, per-tranche delivery nodes authored at pickup); "Adopt as proposed" (directory taxonomy: packages/codegen/, packages/generated/, packages/search/, packages/mcp/, packages/graph/ join the existing roots; generated/ is the separation tier). Decision card direct to the lane seat.
+- **2026-08-14 — review card round 1 (~12:2xZ): matrix NOT YET SUFFICIENT; decomposition depth directed.** The census ran end to end (PR #889: 43 subjects, check PASS, matrix rendered, 2026-04-28 superseded). The owner's criterion-4 answer, verbatim: "not yet sufficient, it's the right start, but I think we can go CONSIDERABLY thinner in the oak leaves, I was expecting much more splitting of reusable code. Additionally I want the SDK codegen and SDK both split along at least two dimensions, oak Vs reusable, and generic openapi parsing, and type/constant generation, and bulk data processing... just really tidy the lifecycle of the codegen, there are at least three or four mixed concerns blurring different life cycles. Go back to basics and ask what transformations are present, who consumes the result and when, when matters, and could it be simpler if we split it more. and I don't want the generated output mixed with non generated code, I want a much cleaner and better defined separation. In summary, I expect the number of workspaces to increase significantly, the scope of individual workspaces to narrow, and the organisation of workspaces to improve" (decision card, direct to the lane seat). Binding consequences: (a) decomposition dispositions extend beyond mixed rows — oak-leaf rows carry reusable-code extraction dispositions; the SDK/codegen chain is analysed on the named lifecycle dimensions (oak vs reusable; openapi parsing / type-and-constant generation / bulk data processing); (b) generated-vs-non-generated separation becomes a judged concern on every row where generated output exists; (c) the census re-presents at a round-2 card. The mixed-only thinnest-slice restriction in §Goal and §Out of scope is superseded by this owner word for round 2.
+- **2026-08-14 — manifest arm approved at the same card.** The mechanical predicate gains arm (ii-b): the parent directory of every tracked `.claude-plugin/plugin.json` manifest — curing the predicate finding (the plan's motivating example `plugins/oak-open-curriculum` previously failed the plan's own mechanical predicate; discovered by the instrument 2026-08-14). Owner answer verbatim: "Add the manifest arm".
+- **2026-08-14 — execution gate discharged at the owner's word.** The
+  2026-08-12 hold ("don't start the survey until I give the word",
+  narrowed 2026-08-14 to design-only) discharged at Jim's decision-card
+  answer, verbatim "Go — run the survey lane", given direct to the lane
+  seat (Nautilus calls Plankton, c6d48b) 2026-08-14 ~10:44Z. The
+  `owner_gates` entry is removed by this amendment; execution ticket
+  MCP-601 opened the same hour.

@@ -6,7 +6,7 @@ Summary: Read-only craft review of `docs/governance/development-practice.md` for
 
 **Document class: precise-transmission — Layer A (craft) only.** `editorial-tone.md` §"Where this applies" excludes "agent directives, the Practice Core, rules, code, code comments" and "the `docs/engineering/` and `docs/operations/` surfaces". It does **not** enumerate `docs/governance/`. I read that as an enumeration gap rather than an inclusion: this file is builder-facing doctrine read to act precisely, which is exactly the kind the directive says the voice must stay out of. Per the template's ambiguity rule I default to Layer A and say so. No Layer B findings appear below, and none should — contractions, "you"-flipping, and teacher-protagonist framing would actively damage this document.
 
-Absolute path: `.claude/worktrees/identity-switchboard-pr2/docs/governance/development-practice.md`
+Repository-relative path (machine root removed at the portability sweep): `.claude/worktrees/identity-switchboard-pr2/docs/governance/development-practice.md`
 
 One scope note for the docs reviewer: the directive's exclusion list should probably name `docs/governance/` explicitly, since three of this repo's densest doctrine surfaces live there and a future author has no textual authority for withholding the voice.
 

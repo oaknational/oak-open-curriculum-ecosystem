@@ -10,19 +10,11 @@ ratified_where: "Owner decision card at the Director seat (b10c37), 2026-08-12 ~
 serves: outcome-informed-practice-learning
 impact_areas:
   - practice-and-estate
-tickets: []
+tickets: [MCP-603]
 depends_on:
   - plan: typescript-estate-consolidation-review
     kind: beneficial
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      Jim gives the explicit go on the survey lane — the 2026-08-12 hold
-      ("don't start the survey until I give the word", worded direct to the
-      lane seat, Director-concurred broad on both nodes) discharges at his
-      word through any seat.
-    expires: 2026-09-02
-last_updated: 2026-08-12
+last_updated: 2026-08-14
 ---
 
 # Survey machinery deconstruction
@@ -82,23 +74,41 @@ edits. The deliverable is one report under
 existing home) carrying:
 
 1. **A disposition ledger** at a defined member granularity: one row per
-   top-level member of `detector-config.json` (30 members — the contract's
-   real knobs), one row per `properties` member of each of the three
-   schemas (37 + 15 + 17), with each schema's `$defs` riding the row of the
-   property that references them; plus one row per promotion-test gate
-   (10), per architectural-value-stack layer (5), and per named calibration
-   finding and knowledge-safety constraint. The row sets split by
+   top-level member of `detector-config.json` (37 members by fresh
+   recount at execution open, 2026-08-14 — 31 contract knobs plus 6
+   contract-metadata members, `schemaVersion` `contractRevision`
+   `reviewId` `calibrationBaseCommit` `frozenAt` `refreezeReason`, each
+   metadata member still taking a row: the metadata fields carry the
+   freeze discipline itself, which is exactly the kind of element the
+   `survey-method` target exists for), one row per `properties` member
+   of each of the three schemas (37 + 15 + 17, recount-confirmed), with
+   each schema's `$defs` riding the row of the property that references
+   them; plus one row per promotion-test gate (10, recount-confirmed),
+   per architectural-value-stack layer (5, recount-confirmed), and per
+   named calibration finding and knowledge-safety constraint. The row sets split by
    derivation class: contract members, schema properties, gates, and
    layers are MECHANICALLY derivable (jq keys; the frame's own tables);
    calibration findings and knowledge-safety constraints are
    PROSE-DERIVED — they enter via a committed enumerated list whose
    derivation is documented row-by-row (source heading + anchor), which
    the instrument then checks coverage against; a reviewer spot-checks
-   the list against the prose. Expected ledger size: ~110–130 rows.
-   Each row: `proved` / `generalises-to <scale>` /
+   the list against the prose. Expected ledger size: ~125–150 rows
+   (121 mechanical + the prose-derived sets).
+   Each row: `proved` / `generalises-to <target>` /
    `dies-because <reason>`, with pointers. (The disposition-ledger
    discipline: every input gets a recorded decision; work is sized to
-   unique substance.)
+   unique substance.) **Closed `generalises-to` target vocabulary**
+   (declared at authoring; owner-approved amendment, 2026-08-14):
+   `estate` (cross-workspace programme scale), `workspace`
+   (census-subject scale), `module` (within-workspace file/directory
+   scale), `construct` (TypeScript-construct / code scale),
+   `survey-method` (scale-independent survey machinery and discipline),
+   `corpus-design` (elements that generalise into the pattern corpus's
+   own schema or batteries). A surviving row whose element resists
+   every value takes `needs-scale-adjudication`; the accumulated set
+   routes ONCE to the Director/owner at fill completion, mirroring the
+   census falsifier's shape. The enumeration instrument validates the
+   column against this vocabulary.
 2. **Detector-facts vs judged-readings separation** carried forward
    explicitly — the frame's own discipline, named per surviving element.
 3. **A contract-coverage map for the extractor**: which frozen-contract
@@ -129,9 +139,10 @@ existing home) carrying:
    banks the command lines and their output verbatim beside the map.
 3. Every surviving (`proved`/`generalises-to`) element is marked
    detector-fact or judged-reading, and every `generalises-to` names its
-   target scale. Proof: repo-safe — the same committed instrument checks
-   the two columns are non-empty on every surviving row (ledger row data
-   is a structured artefact, the human table rendered from or
+   target from the closed vocabulary declared in the mechanism. Proof:
+   repo-safe — the same committed instrument checks the two columns are
+   non-empty and vocabulary-valid on every surviving row (ledger row
+   data is a structured artefact, the human table rendered from or
    cross-checked against it, as in the census node).
 4. The owner confirms, at this ledger's own review card, that it is
    sufficient design input for the fresh-design node. Proof: owner-held —
@@ -149,6 +160,34 @@ existing home) carrying:
   belongs to the fresh design, informed by this ledger's coverage map).
 - The reference pattern corpus (a deliverable of the fresh design).
 
+## Banked inputs for the fresh survey design (pointer-carry, 2026-08-14)
+
+Owner-agreed findings from the three-body comparison (PR #886 capability
+architecture / web-app deconstruction / this survey programme), recorded
+in full at
+`.agent/research/capability-deconstruction-survey-comparison.md`. These
+are inputs for the successor fresh-design node, banked here because this
+node's ledger feeds that design; they add no work to, and change no scope
+of, this node.
+
+1. **Pattern-corpus seeds**: the deconstruction meta-analysis basis
+   (seven primitives, seven coordinates, the seam rule) and
+   PDR-135/PDR-139 are candidate corpus members; the three existing test
+   batteries (meta-analysis survival test, PDR-139 established-pattern
+   test, the foundational frame's promotion test) should be reconciled
+   into the corpus, not accreted as a fourth.
+2. **Capability vocabulary fix**: "capability" carries three live senses
+   (product capability, runtime service capability, semantic capability
+   contract); fix terms at design time, before the corpus inherits the
+   ambiguity.
+3. **Placement-doctrine adjudication**: estate placement rules
+   (`consolidate-at-second-consumer`, PDR-108, the promotion test) vs the
+   deconstruction charter's "boundaries follow meaning" refusal of
+   placement doctrines — both stand in their frames; the fresh design
+   chooses its placement epistemology visibly, with the owner present.
+4. **Candidate instrument**: the deconstruction's premise-record template
+   is a candidate instrument for the survey's judged scales.
+
 ## Todos
 
 1. Land the TypeScript enumeration instrument + the documented
@@ -158,6 +197,38 @@ existing home) carrying:
 3. Contract-coverage map: fresh gate/smoke runs banked verbatim; held
    slices from the refreezeReason; coverage distance stated.
 4. Separation pass: detector-fact vs judged-reading per surviving element;
-   target scale per `generalises-to`.
+   closed-vocabulary target per `generalises-to`.
 5. Report assembly; enumeration instrument green; validator and gate
    green; PR.
+
+## Amendment trail
+
+- **2026-08-14 — execution gate discharged at the owner's word.** The
+  2026-08-12 hold (narrowed 2026-08-14 to design-only) discharged at
+  Jim's decision-card answer, verbatim "Go — run the survey lane",
+  given direct to the lane seat (Nautilus calls Plankton, c6d48b)
+  2026-08-14 ~10:44Z. The `owner_gates` entry is removed by this
+  amendment. Census executes first per the standing sequencing; this
+  node's execution ticket opens at its own start.
+- **2026-08-14 — closed `generalises-to` target vocabulary added.** The
+  column previously required a target on every surviving row without
+  closing the value set — a gap against this node's own
+  closed-at-authoring discipline, found by the same-day concept
+  exploration (`.agent/research/survey-fresh-design-concept-exploration.md`)
+  and proposed on the survey-lane ARC channel. Owner approval, verbatim:
+  "I approve the ledger edit" (2026-08-14 ~10:45Z, direct to the lane
+  seat). The vocabulary, its escape value, and its route-once semantics
+  now live in mechanism item 1; acceptance criterion 3 validates
+  against it.
+- **2026-08-14 — member counts corrected at the execution-open recount.**
+  The authoring-time claim "30 members — the contract's real knobs" for
+  `detector-config.json` was wrong: `jq 'keys | length'` over the frozen
+  file returns **37** (31 knobs + 6 contract-metadata members, named in
+  mechanism item 1). The three schema counts (37 + 15 + 17), the gate
+  count (10), and the layer count (5) recount-confirmed against the
+  frozen files and the frame's own tables. Expected ledger size revised
+  ~110–130 → ~125–150. Technical correction, no scope change: the
+  mechanism already declares jq keys as the mechanical derivation — the
+  parenthetical was an estimate the derivation now supersedes. This is
+  the freeze-entry falsifier ("check the plan's claimed counts before
+  filling") firing as designed.

@@ -116,53 +116,17 @@ debt register, 2026-07-08).
 
 <!-- New pending-graduation capture appends below as inline-bracket entries. -->
 
-- **Ends before means, front of chain first: what/why/why-now established in
-  CONVERSATION with the owner before building ANY structure; probing
-  artefacts/code/deployments is still means-side**
-  `[captured: 2026-08-07 | source: vendor-memory graduation audit 2026-08-05
-  (memory ends-before-means-front-of-chain-first, owner teaching 2026-07-2x)
-  | target: principles.md near §First Question, or metacognition.md |
-  trigger: a fresh seat with directive-file headroom —
-  directive-file-context-budget gated this row past the 2026-08-07 curator
-  pass, which landed its 16 non-directive siblings | size: one short
-  paragraph | status: pending]`
-- **Generality-depth gradient, articulated: the deeper the layer, the more
-  general it must be; investment bar rises with depth; counter-instances are
-  falsifiers against generality-by-assertion**
-  `[captured: 2026-08-07 | source: vendor-memory graduation audit 2026-08-05
-  (memory generality-depth-gradient) | target: principles.md §Context
-  Specificity Gradient (articulation of the WHY) | trigger: fresh seat with
-  directive-file headroom, as the row above | size: a few sentences |
-  status: pending]`
-- **Owner channel: answer first — when an owner message lands mid-turn, the
-  next output is a direct text answer/acknowledgement before any further
-  tool-call chain**
-  `[captured: 2026-08-07 | source: vendor-memory graduation audit 2026-08-05
-  (memory owner-channel-answer-first) | target: user-collaboration.md
-  §Working Model | trigger: fresh seat with directive-file headroom, as the
-  rows above | size: one short paragraph | status: pending]`
-- **Goal-hook pacing clause (owner-ratified 2026-08-07): under any standing
-  goal-hook, boundary rituals (grounding sentence, falsifier-check) bind
-  HARDER, and n=1 sessions treat the goal as direction, never as permission
-  to skip gates**
-  `[captured: 2026-08-07 | source: Director verdict event f81076d9 (cure
-  shape (a) adjudicated on standing owner principles; prohibition rejected
-  under additions-never-subtract); owner ratification 2026-08-07 at the
-  Director decision card (Plover seat, b10c37) | target: metacognition.md
-  (or the goal-hook's own guidance) as the counterweight clause | trigger:
-  fresh seat with directive-file headroom, as the rows above | size: one
-  short paragraph | status: pending]`
-- **File-emitting watchers need an explicit read cadence or a wake
-  mechanism, or they are half-armed — an emit-to-file watcher whose buffer
-  is swept only at wake boundaries can sit on directed routings for tens of
-  minutes while reading as armed**
-  `[captured: 2026-08-08 | source: worked instance at the design seat (an
-  ARC opener and an ADOPT ruling sat ~25 min in a file-emitting watcher
-  buffer, owner-flagged; cure applied the same window — live Monitor tail
-  plus per-turn buffer sweep; agreed Director+design over the ARC pairing) |
-  target: use-monitor-for-event-driven-wake (clause), cross-referenced from
-  comms-all-channels-watcher | trigger: next curator pass or a fresh seat
-  with headroom | size: one short paragraph | status: pending]`
+<!-- Register drained to empty at the 2026-08-14 dedicated consolidation (Quasar
+wakes Nadir, the fresh directive-headroom seat all five rows were gated on):
+ends-before-means graduated to principles.md §Ends Before Means, Front of Chain
+First; the generality-depth articulation to principles.md §Context Specificity
+Gradient; owner-channel-answer-first to user-collaboration.md §Working Model
+(bullet); the goal-hook pacing clause to metacognition.md §Fluency (standing
+goal-hook paragraph); the file-emitting-watcher clause to
+use-monitor-for-event-driven-wake §A File-Emitting Watcher Is Half-Armed
+Without a Read Path, cross-referenced from comms-all-channels-watcher §Related
+Surfaces. Homes verified live at drain. The commits and the homes are the
+record. -->
 
 <!-- Register drained to empty at the 2026-08-07 curator pass (Gull lifts Nimbus, fresh
 seat clearing the directive-file-context-budget gate both rows were held on): the
@@ -200,3 +164,19 @@ not-yet-minted concepts.**
 | Two-speed learning itself (PDR-130) | ≥3 fast-lane graduations carry prediction lines; ≥1 slow entry promoted or killed BY its review | Register untouched at review — the lane is theatre; retire the PDR by its own rule | 2026-10-01 (first consolidation on/after) |
 | Close-time single-lesson graduation (retrospective 2026-07-20 proposal 1): a captured lesson that is single-instance sufficient (PDR-100), has a nameable doctrine home, and needs no cross-seat synthesis graduates AT session close; the frozen-corpus constraint gates rotation and cross-seat synthesis only. Promotion target: `session-handoff` step 6b, landed under the PDR-101 quorum. Provenance: authored FAST-enacted in the retrospective, reclassified slow-lane at PR #450 review (PDR-130 §§2/4; Director-ratified 2026-07-20) | Pre-promotion observable, accrued in this row during the quarter: each clause-eligible lesson that recurs between capture and its homing is logged here as it occurs — the measured cost of batching while the clause stays unenacted (worked warrant: a June-documented class re-surfaced 2026-07-17 and re-bit three seats before homing, ~3 days from that re-surfacing). At review: promote if at least one recurrence class accrued; the post-promotion prediction (recurrence drops to ~zero) binds only after enactment | No recurrence accrues by review (the batching frame carries no measured cost — the entry is killed), or the accrual log itself goes untouched (the row is theatre; kill it by the register's own rule) | 2026-10-20 |
 | Blame-referent calibration (retrospective 2026-07-26, PDR-094 arc): agents calibrate to the most salient blame signal (accreted caution, or the last correction), not the standing policy, whenever the policy exists only in the owner's head; a WRITTEN owner-ratified policy line converts reversal-grade corrections on that axis into calibration-grade refinements. Provenance: `.agent/reports/agentic-engineering/2026-07-26-pdr-094-retention-arc-retrospective.md` §Meta root (v1–v2 hoard, v3 over-delete, v4 co-authored referent, all one arc) | By review: NO reversal-grade owner correction on the retention axis (the axis now carries its written line, PDR-094 v4); any retention correction observed is a refinement, not a reversal | A reversal-grade retention correction lands despite the written line — the written-referent cure is insufficient and the mechanism needs an action-time instrument (kill this row into that finding) | 2026-10-26 |
+
+- **PDR-117 missing axes: role-scoped value lens and seat-deliverable framing**
+  `[captured: 2026-08-14 | source: owner corrections 2026-08-10 (Director fold cascade) and
+  2026-08-14 (curator self-executed merge-back; archive/napkin-2026-08-14.md 06:08Z entry) |
+  target: PDR-117 amendment — the value lens runs role-scoped BEFORE the licensing/safety
+  lens on self-initiated work; a seat's deliverable is its role's output, never legible
+  effort; shared-git-state operations route to the warden/Director from non-warden seats |
+  trigger: owner ratification (amendment authored at next consolidation or Director PDR
+  pass; two owner-correction instances already recorded) | size: S | status: pending]`
+
+- **Codex review leg as a standing member of significant-PR review rounds**
+  `[captured: 2026-08-14 | source: owner rating 2026-08-09 (high-value; "route through the
+  rules process, not assumed") | target: rule — review-round composition (pr-lifecycle
+  Phase 4 round membership or a dedicated rule per new-rule-vs-pdr-clause) | trigger: run
+  the rules process with the owner; until then the leg is selective, never assumed |
+  size: S | status: pending]`

@@ -48,3 +48,12 @@ carriage, change-at-a-distance facet appended per Brazier's instruction) with
 the receiving-side dual and post-graduation record extended in
 `patterns/referent-narrowing.md` §"The transmitting dual". Homes verified
 live at drain. The commits and the homes are the record. -->
+
+<!-- Buffer drained empty at the 2026-08-14 dedicated consolidation (Quasar
+wakes Nadir): the four rotation entries were promoted on first instance the
+same pass — warm-masks-cold to `patterns/warm-masks-cold.md`;
+reclassification-is-the-event to `consolidate-at-second-consumer`
+§Reclassification is the event; external-scrutiny-at-claim-bearing-prose to
+`invoke-code-experts` §Delegation Snapshot; grant-premise-on-the-PR-record to
+the `pr-lifecycle` skill Phase 7. Homes verified live at drain. The commits
+and the homes are the record. -->

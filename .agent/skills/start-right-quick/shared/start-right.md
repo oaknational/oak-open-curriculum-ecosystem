@@ -63,6 +63,35 @@ workstream from the [full ADR index](../../../../docs/architecture/architectural
   activity, not a session-open one — see `consolidate-docs`
   step 3.
 
+### 3a. Operator profile (machine-local; absence is normal)
+
+Read the operator profile if this machine has one. It carries facts about the
+human you are working with that cannot be tracked: which credential identity
+performs which action class on third-party systems, their tone-of-voice and
+communication preferences, and personal operating preferences. The contract,
+including what must never be stored there, is
+[`.agent/operator-local/README.md`](../../../operator-local/README.md).
+
+It is machine-local, so it does not travel through git and a linked worktree
+holds no copy. Resolve it in the **primary checkout**:
+
+```bash
+PRIMARY="$(git worktree list --porcelain | head -1 | sed 's/^worktree //')"
+[ -f "$PRIMARY/.agent/operator-local/profile.md" ] \
+  && cat "$PRIMARY/.agent/operator-local/profile.md"
+```
+
+**A missing profile is the expected condition, not a defect** (`principles.md`
+§Any User, Any Machine): proceed on tracked defaults and say nothing. Never
+block, warn, or treat its absence as a gap to fill, and never make a
+correctness property depend on it.
+
+This is a **durable** home, unlike the per-user memory buffer above
+(`per-user-memory-is-a-buffer`) — so when a session learns a stable preference
+that keeps being re-derived, graduating it into the profile is the cure. The
+reverse also holds: a profile entry that turns out to matter to more than one
+person is doctrine, and belongs in a tracked surface instead.
+
 ### 4. Live state (operational memory) — authority order
 
 Read in order; stop at whichever answers your next-step question:

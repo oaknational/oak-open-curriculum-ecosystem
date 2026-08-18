@@ -1,5 +1,6 @@
 import type {
   OakClientFamily,
+  OakClientProduct,
   OakClientSurface,
   PostHogEventPolicyConfig,
   UnknownProperties,
@@ -12,6 +13,7 @@ interface PostHogMcpCaptureProperties extends UnknownProperties {
   readonly $mcp_server_version: string;
   readonly $mcp_source: string;
   readonly oak_client_family?: OakClientFamily;
+  readonly oak_client_product: OakClientProduct;
   readonly oak_client_surface: OakClientSurface;
   readonly oak_environment: PostHogEventPolicyConfig['release']['environment'];
   readonly oak_release: string;

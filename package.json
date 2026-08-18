@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/open-curriculum-ecosystem",
-  "version": "1.170.2",
+  "version": "1.172.1",
   "private": true,
   "description": "Oak National Academy open curriculum data ecosystem - tools and services for working with the Oak Open Curriculum data",
   "author": "https://github.com/jimCresswell",
@@ -71,6 +71,7 @@
     "agent-tools:pre-tool-use-dispatch": "pnpm --filter @oaknational/agent-tools pre-tool-use-dispatch",
     "agent-tools:check-encoding": "pnpm --filter @oaknational/agent-tools check-encoding",
     "agent-tools:check-commit-message": "pnpm --filter @oaknational/agent-tools check-commit-message",
+    "agent-tools:workspace-census": "pnpm --filter @oaknational/agent-tools workspace-census",
     "agent-tools:secret-scan": "pnpm --filter @oaknational/agent-tools secret-scan",
     "agent-tools:check-commit-skill-advisories": "pnpm --filter @oaknational/agent-tools check-commit-skill-advisories",
     "agent-tools:prevent-accidental-major-version": "pnpm --filter @oaknational/agent-tools prevent-accidental-major-version",

@@ -24,6 +24,25 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
+## DEDICATED CONSOLIDATION — EXECUTED (2026-08-14, Quasar wakes Nadir, 0fabcd, curator)
+
+Owner-launched consolidate-until-done pass, run inside a live team window (Director seat
+Smith hunts Obsidian active in the morning; commit-window and expletive-sweep coordination
+on the stream). Napkin rotated at 3,490 lines (`archive/napkin-2026-08-14.md`,
+cmp-proven); pending-graduations and distilled both drained to EMPTY by first-instance
+promotion (homes in the commit records `aba0128dd` / `99e3eb026` / `2633f2fd4`);
+open-questions verified empty. Comms step-3a: 4,420 events archive-moved loss-free under
+the three gates; watermarks extended (non-heartbeat 2026-08-14T06:16:28Z via a full
+in-seat body-read of all 496 post-watermark events; heartbeats 2026-08-12T06:29Z with the
+batch aggregate in the napkin rotation record). Session lesson conserved in the archive's
+06:08Z entry: the owner corrected this seat for self-executing the coordination-branch
+merge-back and push (role-scope breach at a curator seat — licensed-activity class
+recurrence, routed to PDR-098's action-time lane). Live signals left named, not chased:
+director-handoff.md remains its own bounded owner-named sitting; this record's char
+pressure drains at the salvage-plan closure (the 2026-07-02/03 ws1b ledger half of the
+salvage section is conserve-and-delete eligible once the rescue-set workstream completes;
+its rescue-set pointer half stays live intake).
+
 ## LONGITUDINAL STEP-6A SYNTHESIS — EXECUTED AND ARCHIVED (2026-08-07/08, Nettle weaves Root, 5cfa11, implementer)
 
 Identity: `Nettle weaves Root` (`claude-code` / `fable-5` / `5cfa11`), implementer,

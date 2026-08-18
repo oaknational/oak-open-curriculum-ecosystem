@@ -74,6 +74,16 @@ Always apply the first question; **Ask: could it be simpler *without
 compromising quality or value*?**. The answer will often be no, that is fine,
 but bring real critical thinking to the question each time.
 
+### Ends Before Means, Front of Chain First
+
+The what, the why, and the why-now are established in CONVERSATION with the
+owner before building ANY structure. Probing artefacts, code, or deployments
+to derive the purpose is still means-side work — the front of the chain is
+the owner's stated end, and every elaboration boundary re-asks whether the
+work is still denominated in that end rather than in the means built so far
+(owner teaching 2026-07-2x, graduated 2026-08-14; the companion rule is
+[`re-apply-first-question-at-elaboration-boundaries`](../rules/re-apply-first-question-at-elaboration-boundaries.md)).
+
 ## Strict and Complete
 
 **Strict and complete, everywhere, all the time.** Prefer explicit, strict,
@@ -219,6 +229,14 @@ Every capability decomposes by context specificity. Push functionality
 to the lowest general layer that preserves architectural excellence;
 keep the highest-specificity layer as thin as possible, preferably
 configuration only.
+
+The WHY of the gradient: the deeper the layer, the more general it must
+be, because everything above stands on it — and the investment bar rises
+with depth for the same reason (a deep layer is expensive to change and
+its defects propagate everywhere). Generality is demonstrated, never
+asserted: a counter-instance (one consumer the "general" layer cannot
+serve unchanged) is a falsifier against generality-by-assertion, not an
+exception to accommodate.
 
 Agent-work capabilities (collaboration, coordination, work management,
 direction, lifecycle, identity, claims, handoff, review routing, and adjacent

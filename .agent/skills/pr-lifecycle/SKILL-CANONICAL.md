@@ -809,7 +809,13 @@ are EVENT-released, never timer-released (adjudicated 2026-07-30): a
 zero-cost hold (waiting on a named arrival, an obsolescence check, a cost
 change) releases the moment its event fires — a hold that would release "in
 a while" is an invented gate; and a hold placed for a composing review
-covers only SUBSTANTIVE changes, never docs/comment-only deltas. Then:
+covers only SUBSTANTIVE changes, never docs/comment-only deltas.
+**Every premise the merge decision rests on must be ON THE PR RECORD before
+the merge fires** — a review verdict, adjudication, or eligibility ground
+that lives only in a session is invisible to the morning reader and to any
+future audit; post it as a PR comment first (worked instance 2026-08-07:
+a grant was withheld until the in-session code-expert adjudication was
+posted, then fired within the minute — fully auditable). Then:
 
 - **`mergeable` means POSSIBLE to merge; it does NOT mean READY to merge**
   (owner, 2026-07-08). GitHub's `mergeable: MERGEABLE` asserts only

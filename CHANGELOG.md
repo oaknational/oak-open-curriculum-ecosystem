@@ -1,3 +1,50 @@
+## [1.172.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.172.0...v1.172.1) (2026-08-18)
+
+# [1.172.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.171.0...v1.172.0) (2026-08-18)
+
+
+### Bug Fixes
+
+* **agent-tools:** cure the seven PR-889 Sonar issues; refresh stale census facts ([2b05e16](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2b05e164e61eb6f4a40184a7998ab033b4ea4c6f))
+* **workspace-census:** drop false root edges, make facts parity byte-exact ([a62c8d5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a62c8d5f0affd44f4526119fcb332fb056765027))
+* **workspace-census:** review-round cures — every current-tip thread discharged ([a16b95e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a16b95e094fb3e08735d3792eea49f276488e97d))
+
+
+### Features
+
+* **agent-tools:** census judged pass complete — matrix rendered, 2026-04-28 superseded ([c33c6c4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c33c6c4ac1d22357e21749ec580b630772fc9139))
+* **agent-tools:** manifest arm ii-b lands — plugin surface is census subject 44 ([c4aed89](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c4aed89baa3b0b1b84cc48e87a4697fbddc520b1))
+* **agent-tools:** workspace-census detector-fact sweep (facts subcommand) ([ebb2624](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ebb26243f28b42699e78f9e738e61d65127459d3))
+* **agent-tools:** workspace-census enumeration and validation instrument ([1bac643](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/1bac64392e91a8730b9d61498028fdd8697aa4df))
+
+# [1.171.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.170.5...v1.171.0) (2026-08-17)
+
+
+### Bug Fixes
+
+* **estate:** declare the repository LF-only via .gitattributes ([756cead](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/756cead2eb8d85087b4b4828bb36d83565b694da)), closes [#888](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/888) [#891](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/891)
+* **mcp-http:** generic carousel filenames and literal URL sentinels (MCP-606) ([f25a57d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f25a57da069a8b13b65bd9e6f78c717479e9c1b4))
+* **posthog-node:** distinguish an absent client signal from an unrecognised one ([bdf458a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/bdf458a20313594ba915215b52afab37708ee85f))
+* **posthog-node:** key unavailable on container readability, not value presence ([6de779e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6de779e4bbb09bed5d6f09440cd766b42e906bcd))
+* **reports:** renormalise the one CRLF report CSV to LF ([0e9a506](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0e9a5061016f33417460a502235ed08b472a9bdf))
+
+
+### Features
+
+* **mcp-http:** serve the submission carousel images at stable /mcp URLs ([7e4968e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7e4968ee22ad38eec7ab5413a02a077615c48f43))
+* **posthog-node:** attribute every MCP event to its client product (MCP-594) ([0b17477](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0b174775c4b4cbd5dbfbc099e241cdeb62300770))
+
+## [1.170.5](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.170.4...v1.170.5) (2026-08-17)
+
+## [1.170.4](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.170.3...v1.170.4) (2026-08-17)
+
+
+### Bug Fixes
+
+* **hooks:** correct the gitleaks go install suggestion to the declared module path ([f0b2e29](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f0b2e2987179105c810f7c162c31e45b7ed8a106)), closes [#888](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/888)
+
+## [1.170.3](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.170.2...v1.170.3) (2026-08-17)
+
 ## [1.170.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.170.1...v1.170.2) (2026-08-14)
 
 ## [1.170.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.170.0...v1.170.1) (2026-08-14)

@@ -55,6 +55,7 @@ describe('normaliseAutomaticProperties', () => {
   ])('drops initialize when the success signal is %s', (_label, isError) => {
     const properties: UnknownProperties = {
       oak_client_family: 'chatgpt',
+      oak_client_product: 'other',
       oak_client_surface: 'other',
       $mcp_protocol_version: SUPPORTED_PROTOCOL_VERSIONS[0],
       ...(isError === undefined ? {} : { $mcp_is_error: isError }),
@@ -68,6 +69,7 @@ describe('normaliseAutomaticProperties', () => {
     (_label, event, base) => {
       const properties: UnknownProperties = {
         ...base,
+        oak_client_product: 'other',
         oak_client_surface: 'other',
         $mcp_client_user_agent: 'claude-ai/1.0',
         $mcp_vendor_client: 'anthropic',
@@ -92,7 +94,7 @@ describe('normaliseAutomaticProperties', () => {
     (_label, event, base) => {
       const normalised = normaliseAutomaticProperties(
         event,
-        { ...base, oak_client_surface: 'cli' },
+        { ...base, oak_client_product: 'other', oak_client_surface: 'cli' },
         SNAPSHOT,
       );
 
@@ -104,14 +106,59 @@ describe('normaliseAutomaticProperties', () => {
   it.each(AUTOMATIC_EVENT_SHAPES)(
     'drops %s when the required oak_client_surface is missing',
     (_label, event, base) => {
-      expect(normaliseAutomaticProperties(event, { ...base }, SNAPSHOT)).toBeNull();
+      expect(
+        normaliseAutomaticProperties(event, { ...base, oak_client_product: 'other' }, SNAPSHOT),
+      ).toBeNull();
     },
   );
 
   it.each(AUTOMATIC_EVENT_SHAPES)(
     'drops %s when oak_client_surface is outside the closed category set',
     (_label, event, base) => {
-      const properties: UnknownProperties = { ...base, oak_client_surface: 'browser' };
+      const properties: UnknownProperties = {
+        ...base,
+        oak_client_product: 'other',
+        oak_client_surface: 'browser',
+      };
+
+      expect(normaliseAutomaticProperties(event, properties, SNAPSHOT)).toBeNull();
+    },
+  );
+
+  it.each(AUTOMATIC_EVENT_SHAPES)(
+    'carries the declared oak_client_product category on %s',
+    (_label, event, base) => {
+      const normalised = normaliseAutomaticProperties(
+        event,
+        { ...base, oak_client_product: 'claude_code', oak_client_surface: 'other' },
+        SNAPSHOT,
+      );
+
+      expect(normalised).not.toBeNull();
+      expect(normalised).toHaveProperty('oak_client_product', 'claude_code');
+    },
+  );
+
+  // A missing category must DROP the event, never default to 'other'. Defaulting
+  // is what made `harness = other` unreadable: it cannot be told apart from a
+  // derivation that ran and recognised nothing (MCP-594).
+  it.each(AUTOMATIC_EVENT_SHAPES)(
+    'drops %s when the required oak_client_product is missing',
+    (_label, event, base) => {
+      expect(
+        normaliseAutomaticProperties(event, { ...base, oak_client_surface: 'other' }, SNAPSHOT),
+      ).toBeNull();
+    },
+  );
+
+  it.each(AUTOMATIC_EVENT_SHAPES)(
+    'drops %s when oak_client_product is outside the closed category set',
+    (_label, event, base) => {
+      const properties: UnknownProperties = {
+        ...base,
+        oak_client_product: 'claude-code/2.1.226 (cli)',
+        oak_client_surface: 'other',
+      };
 
       expect(normaliseAutomaticProperties(event, properties, SNAPSHOT)).toBeNull();
     },

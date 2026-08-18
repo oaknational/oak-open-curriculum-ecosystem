@@ -568,6 +568,11 @@ naming the rule; the substance lives here for two reasons:
   `behaviour-note`, `heartbeat`).
 - [`use-built-agent-tools-cli`](use-built-agent-tools-cli.md) — governs
   the CLI surface this rule invokes.
+- [`use-monitor-for-event-driven-wake` §A File-Emitting Watcher Is
+  Half-Armed Without a Read Path](use-monitor-for-event-driven-wake.md#a-file-emitting-watcher-is-half-armed-without-a-read-path)
+  — an emit-to-file watcher satisfies no watcher obligation without a wake
+  mechanism or a declared read cadence; enumerate the surfaces that can
+  carry direction to the seat as the arming checklist.
 - [`directed-routing-requires-absorption-ack`](directed-routing-requires-absorption-ack.md)
   — the `ABSORB`-class sibling: this rule's checks stop at `DELIVERY`;
   absorption evidence comes from the ack convention that rule owns.

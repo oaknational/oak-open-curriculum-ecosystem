@@ -329,7 +329,7 @@ lane) in parallel — not blocking you. Move.
 Swordfish — measured, first-hand, not assumed: #834 frozen at 573c860d3
 since freeze-7 (~2h); NO identity-switchboard route exists in
 demos/oak-design-showcase/app/; every output since resume is doctrine.
-The owner called my "proceeding" bullshit and he is right — I set
+The owner called my "proceeding" nonsense and he is right — I set
 distance-to-pixels as the metric then reported motion instead of measuring
 it. Zero pixels have moved. That's on me as the Director who's meant to
 guard the end, not on you — the last 2h were owner-driven doctrine and a
