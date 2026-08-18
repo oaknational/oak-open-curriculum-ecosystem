@@ -293,9 +293,18 @@ contract for troubleshooting:
 
 ## Rollback
 
-Remove `SENTRY_DSN` or deploy with the observability runtime configured for its
-noop path and redeploy. The runtime creates a noop observability bundle with no
-Sentry network calls. No code change required.
+Set `SENTRY_MODE=off` and redeploy. The config builder takes its off path
+without reading `SENTRY_DSN` at all, and the runtime returns a noop
+observability bundle that makes no Sentry network calls. No code change
+required. `SENTRY_MODE` is the only safe rollback lever.
+
+Do **not** roll back by removing `SENTRY_DSN` while `SENTRY_MODE` is still
+`sentry`. The live config path requires a DSN, so the app fails the
+observability boundary with `missing_sentry_dsn`, writes that to stderr and
+exits non-zero — it does not degrade to a dark sink
+(`validateDsn` in `packages/libs/sentry-node/src/config-parsing.ts`, reached
+from the live branch of `packages/libs/sentry-node/src/config.ts`; boundary in
+`apps/oak-curriculum-mcp-streamable-http/src/index.ts`).
 
 ## Vercel Log Drains as an Alternative
 
