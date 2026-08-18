@@ -1,0 +1,3 @@
+comment-only-class-negative.html         FAIL:referenced-oak-classes-exist        PASS:no-literal-design-values          PASS:zero-ad-hoc-css
+literal-values-negative.html             PASS:referenced-oak-classes-exist        FAIL:no-literal-design-values          FAIL:zero-ad-hoc-css
+ad-hoc-css-negative.html                 PASS:referenced-oak-classes-exist        PASS:no-literal-design-values          FAIL:zero-ad-hoc-css

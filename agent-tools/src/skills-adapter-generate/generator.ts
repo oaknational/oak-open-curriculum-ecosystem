@@ -15,32 +15,34 @@
  * whose canonical source is gone are pruned — see `carriage.ts`.
  */
 import { mkdir, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname } from 'node:path';
 
-import { stringify as stringifyYaml } from 'yaml';
-
+import { isRoundTrippableCanonicalRef } from './adapter-stub.js';
 import { realCarriageWriteFs, syncCarriage } from './carriage.js';
-import {
-  discoverCanonicals,
-  type CanonicalFrontmatter,
-  type ParsedCanonical,
-} from './discovery.js';
+import { clearGeneratedAdapters, type ClearResult } from './clear.js';
+import { emissionRefusalsBeforeClear, nonRoundTrippableRefusal } from './emission-refusals.js';
+import { classifyEmissionTarget, foreignTargetRefusal } from './emission-target.js';
+import { adapterTargetPath, renderAdapter, type AdapterSurface } from './adapter-render.js';
+import { discoverCanonicals, type ParsedCanonical } from './discovery.js';
 import { isDiscoveryComplete, sweepStaleProjections } from './projection-roots.js';
 
 export { discoverCanonicals, parseFrontmatter, type DiscoveryFs } from './discovery.js';
-
-const ADAPTER_FILENAME = 'SKILL.md';
+export {
+  adapterTargetPath,
+  buildAdapterFrontmatter,
+  renderAdapter,
+  type AdapterSurface,
+} from './adapter-render.js';
 
 export interface GeneratorOptions {
   readonly repoRoot: string;
   readonly prefix: string;
-  /**
-   * Lock-pinned vendored skill ids from `skills-lock.json` — the projection
-   * directories generation cannot re-create and the root sweep must never
-   * touch. Pass the loaded set explicitly; an empty set is a statement that
-   * nothing is vendored, never a default.
-   */
-  readonly lockedIds: ReadonlySet<string>;
+  /** Remove every existing Practice projection before regenerating. The clear
+   * runs ONLY after discovery is proven complete AND every canonical is proven
+   * emittable (see `generateAdapters`), so a run that could not fully discover
+   * its canonicals never strands the surfaces empty, and a canonical that would
+   * refuse at emit never loses its projection to the clear. */
+  readonly clearFirst?: boolean;
 }
 
 export interface GenerateOutcome {
@@ -59,15 +61,20 @@ export interface GenerateOutcome {
    * root-level links) — reported separately from `pruned` so the operator
    * never reads a swept directory as an orphaned carried file. */
   readonly sweptStale: readonly string[];
+  /** Practice-projection directories removed by a `clearFirst` pass BEFORE
+   * regeneration — empty unless clearing was requested. The clear runs only
+   * after discovery is proven complete, so this is never a partial teardown
+   * of a tree the run then failed to rebuild. */
+  readonly cleared: readonly string[];
 }
 
-interface AdapterFrontmatter {
-  readonly name: string;
-  readonly description: string;
-}
-
-export type AdapterSurface = 'claude' | 'agents';
 export type ParsedCanonicalSkill = ParsedCanonical;
+
+/** The no-emission outcome: every stream empty except the discovery streams the
+ * caller already computed. Spread with per-gate overrides at each early return. */
+function emptyOutcome(skipped: readonly string[], duplicates: readonly string[]): GenerateOutcome {
+  return { written: [], pruned: [], refused: [], sweptStale: [], cleared: [], skipped, duplicates };
+}
 
 /**
  * Discover, parse, and emit adapters for every canonical skill under
@@ -79,47 +86,64 @@ export type ParsedCanonicalSkill = ParsedCanonical;
  */
 export async function generateAdapters(options: GeneratorOptions): Promise<GenerateOutcome> {
   const discovery = await discoverCanonicals(options.repoRoot);
-  const empty = {
-    written: [],
-    pruned: [],
-    refused: [],
-    sweptStale: [],
-    skipped: discovery.skipped,
-    duplicates: discovery.duplicates,
-  };
+  const empty = emptyOutcome(discovery.skipped, discovery.duplicates);
 
   if (discovery.duplicates.length > 0) {
     return empty;
   }
-  // NOTHING runs over an incomplete discovery — not the sweep and not
-  // emission. A skipped directory or an empty canonical set means an
-  // unreadable canonical or skills root read as absent, so both the
-  // expected-projection set AND the per-skill write targets are
-  // unverified: the round-4 probe showed a symlinked projection root
-  // being written through (and its contents deleted) exactly because
-  // emission continued while the sweep had stood down. The run already
-  // exits non-zero on the skipped / no-canonicals streams; a
-  // half-applied cure over an unobserved tree is the shape this round
-  // deletes.
+  // NOTHING runs over an incomplete discovery — not clear, sweep, or emission.
+  // A skipped or empty canonical set leaves the projection set and per-skill
+  // write targets unverified, and a half-applied cure over an unobserved tree
+  // is how valid copies get deleted (round-4 write-through-a-symlinked-root).
   if (!isDiscoveryComplete(discovery)) {
     return empty;
   }
-  // Sweep BEFORE emission: stale directories (canonical deleted or renamed)
-  // and root-level symlinks leave the surfaces first, so no adapter is ever
-  // written into or through an entry the sweep is about to adjudicate. A
-  // sweep read failure refuses the whole run.
+  // Preflight BEFORE the destructive clear: a canonical that would refuse at
+  // emit must abort the run before a single removal, or --clear loses the
+  // projection the emit then refuses to rebuild (defect 1; emission-refusals.ts).
+  const preflightRefusals =
+    options.clearFirst === true
+      ? await emissionRefusalsBeforeClear(options.repoRoot, options.prefix, discovery.canonicals)
+      : [];
+  if (preflightRefusals.length > 0) {
+    return { ...empty, refused: [...preflightRefusals] };
+  }
+  // Clear runs ONLY here — behind the discovery gate AND the preflight — and a
+  // clear failure refuses the run (surfacing any partial teardown on `cleared`).
+  const clearOutcome = await clearIfRequested(options);
+  if (clearOutcome.kind === 'error') {
+    return { ...empty, cleared: clearOutcome.removed ?? [], refused: [clearOutcome.message] };
+  }
+  const cleared = clearOutcome.removed;
+  // Sweep BEFORE emission: stale Practice projections (canonical deleted or
+  // renamed) leave the surfaces first, so no adapter is written into an entry
+  // the sweep is about to adjudicate. A sweep read failure refuses the run.
   const sweepOutcome = await sweepStaleProjections({
     repoRoot: options.repoRoot,
-    prefix: options.prefix,
-    lockedIds: options.lockedIds,
-    canonicalIds: discovery.canonicals.map((parsed) => parsed.id),
+    projections: discovery.canonicals.map((parsed) => ({
+      canonicalRef: `${parsed.relativeDir}/${parsed.canonicalFilename}`,
+      expectedName: `${options.prefix}${parsed.id}`,
+    })),
     discoveryComplete: true,
   });
   if (sweepOutcome.refusedRun.length > 0) {
-    return { ...empty, refused: [...sweepOutcome.refusedRun] };
+    return { ...empty, cleared, refused: [...sweepOutcome.refusedRun] };
   }
   const emitted = await emitAllAdapters(options, discovery.canonicals);
-  return { ...empty, ...emitted, sweptStale: [...sweepOutcome.pruned] };
+  return { ...empty, ...emitted, cleared, sweptStale: [...sweepOutcome.pruned] };
+}
+
+/**
+ * Clear every existing Practice projection when `clearFirst` is set. The
+ * destructive act is reached ONLY from `generateAdapters`, AFTER its
+ * discovery-completeness gate, so a run from the wrong directory (zero
+ * canonicals) or over a half-authored corpus never tears the surfaces down
+ * (review 2026-08-12, defect 1). No clear requested is an empty `ok`.
+ */
+async function clearIfRequested(options: GeneratorOptions): Promise<ClearResult> {
+  return options.clearFirst === true
+    ? clearGeneratedAdapters(options.repoRoot)
+    : { kind: 'ok', removed: [] };
 }
 
 async function emitAllAdapters(
@@ -130,6 +154,16 @@ async function emitAllAdapters(
   const pruned: string[] = [];
   const refused: string[] = [];
   for (const parsed of canonicals) {
+    const canonicalRef = `${parsed.relativeDir}/${parsed.canonicalFilename}`;
+    // Refuse a canonical whose ref cannot round-trip as a class marker (a
+    // pathological directory name carrying a backtick or newline): writing its
+    // stub would land content every later check then rejects as foreign —
+    // first-write-then-refuse (review 2026-08-12). Refuse per skill so the run
+    // fails loud and reports it, rather than emitting an unrecognisable stub.
+    if (!isRoundTrippableCanonicalRef(canonicalRef)) {
+      refused.push(nonRoundTrippableRefusal(canonicalRef));
+      continue;
+    }
     for (const surface of ['claude', 'agents'] as const) {
       const emitted = await emitAdapter(options, parsed, surface);
       written.push(...emitted.written);
@@ -152,7 +186,17 @@ async function emitAdapter(
   surface: AdapterSurface,
 ): Promise<EmitAdapterOutcome> {
   const target = adapterTargetPath(options.repoRoot, options.prefix, parsed.id, surface);
-  // Carriage first: a refused sync (canonical symlink, seam read failure)
+  // Target guard FIRST: emission is name-addressed, so before any write the
+  // occupant of the name must be absent or provably ours — a symlink or
+  // foreign content at the name refuses the skill (emission-target.ts).
+  const targetState = await classifyEmissionTarget(dirname(target), realCarriageWriteFs);
+  if (targetState.kind === 'failure') {
+    return { written: [], pruned: [], refused: [targetState.message] };
+  }
+  if (targetState.value === 'foreign') {
+    return { written: [], pruned: [], refused: [foreignTargetRefusal(dirname(target))] };
+  }
+  // Carriage next: a refused sync (canonical symlink, seam read failure)
   // refuses the whole skill on this surface — not even the adapter stub is
   // written over a state the run could not fully observe.
   const carriage = await syncCarriage(
@@ -167,70 +211,6 @@ async function emitAdapter(
   await mkdir(dirname(target), { recursive: true });
   await writeFile(target, fileContent, 'utf8');
   return { written: [target, ...carriage.carried], pruned: carriage.pruned, refused: [] };
-}
-
-export function renderAdapter(
-  parsed: ParsedCanonicalSkill,
-  prefix: string,
-  surface: AdapterSurface,
-): string {
-  const frontmatter = buildAdapterFrontmatter(parsed.frontmatter, prefix, parsed.id);
-  const surfaceLabel = surface === 'claude' ? 'Claude Code' : 'Cross-tool';
-  const body = renderAdapterBody(
-    parsed.id,
-    parsed.relativeDir,
-    surfaceLabel,
-    parsed.canonicalFilename,
-  );
-  const yamlBlock = stringifyYaml(frontmatter, { lineWidth: 0 }).trimEnd();
-  return `---\n${yamlBlock}\n---\n\n${body.trimStart()}`;
-}
-
-export function adapterTargetPath(
-  repoRoot: string,
-  prefix: string,
-  canonicalId: string,
-  surface: AdapterSurface,
-): string {
-  const surfaceRoot = surface === 'claude' ? '.claude' : '.agents';
-  return join(repoRoot, surfaceRoot, 'skills', `${prefix}${canonicalId}`, ADAPTER_FILENAME);
-}
-
-/**
- * Construct the adapter frontmatter from the canonical's frontmatter.
- * Always renames the skill: `<prefix><id>`. Description is preserved.
- */
-export function buildAdapterFrontmatter(
-  canonical: CanonicalFrontmatter,
-  prefix: string,
-  id: string,
-): AdapterFrontmatter {
-  return {
-    name: `${prefix}${id}`,
-    description: canonical.description,
-  };
-}
-
-function renderAdapterBody(
-  canonicalId: string,
-  relativeDir: string,
-  surfaceLabel: string,
-  canonicalFilename: string,
-): string {
-  const title = toTitleCase(canonicalId);
-  return [
-    `# ${title} (${surfaceLabel})`,
-    '',
-    `Read and follow \`.agent/skills/${relativeDir}/${canonicalFilename}\`.`,
-    '',
-  ].join('\n');
-}
-
-function toTitleCase(id: string): string {
-  return id
-    .split('-')
-    .map((part) => (part.length === 0 ? part : `${part[0]?.toUpperCase() ?? ''}${part.slice(1)}`))
-    .join(' ');
 }
 
 /**

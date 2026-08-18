@@ -11,25 +11,28 @@
  * "sheet parsed" is not "styles applied" — membership in
  * document.styleSheets plus a computed-style change is the applied signal.
  */
-import { AxeBuilder } from '@axe-core/playwright';
 import { expect } from '@playwright/test';
-import type { Browser, Page } from '@playwright/test';
+import type { Frame, Page } from '@playwright/test';
 
 import type { OakThemeName } from '@oaknational/oak-design-react';
 import { RATIFIED_EXTERNAL_ORIGINS } from '@oaknational/fidelity-review/capture-flags';
 import { SHOWCASE_ORIGIN } from '../tools/showcase-origin';
+import { assertForcedColorsMode } from './axe-checks';
 
-export const IDENTITIES = ['oak', 'freedonia', 'creature'] as const;
+export const IDENTITIES = ['oak', 'pds', 'creature'] as const;
 export const PALETTE_THEMES = ['light', 'dark', 'high-contrast', 'colour-safe'] as const;
 export type Identity = (typeof IDENTITIES)[number];
 /** The runtime's closed theme union is the single source of the five names. */
 export type ThemeName = OakThemeName;
 
-export async function expectNoAxeViolations(page: Page): Promise<void> {
-  const results = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-    .analyze();
-  expect(results.violations).toEqual([]);
+/** Computed face of the specimen's brand-name — the element every identity
+ *  restyles. Polled by callers: the value, not the poll, is the claim.
+ *  Shared by the specimen and picker specs. */
+export async function brandNameFont(target: Page | Frame): Promise<string> {
+  return target.evaluate(() => {
+    const name = document.querySelector('.brand-name');
+    return name === null ? '' : getComputedStyle(name).fontFamily;
+  });
 }
 
 /** Origins the kit-authored counter-brand sheets are known to reference;
@@ -41,16 +44,6 @@ export async function expectNoAxeViolations(page: Page): Promise<void> {
  *  surfaces cannot drift apart. */
 const EXPECTED_THIRD_PARTY_ORIGINS: readonly string[] = RATIFIED_EXTERNAL_ORIGINS;
 
-/** Cascade-level application proof per explicit theme: the computed
- *  color-scheme each choice must resolve to (a per-cell table, not a branch). */
-const EXPECTED_COLOR_SCHEME: Record<ThemeName, string> = {
-  light: 'light',
-  dark: 'dark',
-  system: 'light dark',
-  'high-contrast': 'light',
-  'colour-safe': 'light',
-};
-
 /** Abort every request that is not same-origin with the suite's own
  *  server, recording the aborted ORIGINS. Same-origin means the full
  *  origin from tools/showcase-origin.ts — hostname equality would admit
@@ -59,7 +52,7 @@ const EXPECTED_COLOR_SCHEME: Record<ThemeName, string> = {
  *  under abort; that does not weaken the a11y claim — the kit's contract
  *  pairs fills with borders, icons AND text, so text carries every
  *  state's meaning. */
-async function interceptExternalOrigins(page: Page): Promise<Set<string>> {
+export async function interceptExternalOrigins(page: Page): Promise<Set<string>> {
   const abortedOrigins = new Set<string>();
   await page.route('**/*', (route) => {
     const url = new URL(route.request().url());
@@ -80,140 +73,44 @@ export function assertOnlyKnownExternalOrigins(abortedOrigins: ReadonlySet<strin
   }
 }
 
-/** Open the page hermetically and wait for the hydrated switchboard.
- *  Reduced-motion emulation is on by default: axe reading a mid-transition
- *  frame is a recorded failure mode (MCP apply-theme.ts); the motion
- *  behaviour test opts out to observe the tokens move. */
+/** Open the landing hermetically. The page is a static server component —
+ *  no hydrating control exists to gate on, so readiness is the doors being
+ *  visible (they are links in the initial HTML). Reduced-motion emulation
+ *  is on by default: axe reading a mid-transition frame is a recorded
+ *  failure mode (MCP apply-theme.ts). The theme runtime on this route is
+ *  driven by OS emulation and stored state, never a control — the
+ *  switchboard left the landing under the 2026-08-13 tight scope, and the
+ *  control-driven proofs live with the demo routes' own specs. */
 export async function openShowcase(
   page: Page,
-  options: { readonly reducedMotion?: boolean } = {},
+  options: { readonly reducedMotion?: boolean; readonly forcedColors?: boolean } = {},
 ): Promise<Set<string>> {
+  const forcedColors = options.forcedColors ?? false;
   const abortedOrigins = await interceptExternalOrigins(page);
   await page.emulateMedia({
     reducedMotion: (options.reducedMotion ?? true) ? 'reduce' : 'no-preference',
+    ...(forcedColors ? { forcedColors: 'active' as const } : {}),
   });
   await page.goto('/');
-  // Hydration gate: the Theme select exists pre-hydration as a DISABLED
-  // placeholder, so visibility alone is not readiness — wait for it to
-  // become enabled (keyboard tests Tab immediately and do not auto-wait).
-  // Stated blind spot: everything downstream of this gate observes the
-  // POST-hydration DOM only; the pre-hydration shell is proven by the
-  // dedicated JS-disabled geometry test, never by these helpers.
-  await expect(page.getByRole('combobox', { name: 'Theme' })).toBeEnabled();
+  await expect(page.getByRole('link', { name: /switching demo/i })).toBeVisible();
+  await assertForcedColorsMode(page, forcedColors);
   return abortedOrigins;
 }
 
-/** Geometry snapshot of the switchboard band in its own fresh context —
- *  masthead, switchboard section and both hydrating selects. JS disabled
- *  is the server shell, deterministically pre-paint interactive state. The
- *  interception does NOT silence fonts here: the kit's faces are
- *  SELF-HOSTED (same-origin), so they load asynchronously and swap the
- *  metrics mid-page-life — under concurrent machine load one context can
- *  measure pre-swap and the other post-swap, which is exactly the flake
- *  MCP-399 recorded (three load-dependent outcomes on identical code).
- *  Both measurements therefore wait for document.fonts.ready (the
- *  FontFaceSet promise resolves in a JS-disabled context too — the
- *  setting blocks page-authored scripts, not CSS font loading or the
- *  driver's evaluation). A fresh context inherits NO test-config options,
- *  so the base origin is passed explicitly. */
-export async function measureSwitchboardGeometry(
-  browser: Browser,
-  width: number,
-  javaScriptEnabled: boolean,
-): Promise<unknown> {
-  const context = await browser.newContext({
-    baseURL: SHOWCASE_ORIGIN,
-    javaScriptEnabled,
-    viewport: { width, height: 900 },
-  });
-  const page = await context.newPage();
-  await interceptExternalOrigins(page);
-  await page.goto('/');
-  const themeSelect = page.getByRole('combobox', { name: 'Theme' });
-  await (javaScriptEnabled
-    ? expect(themeSelect).toBeEnabled()
-    : expect(themeSelect).toBeDisabled());
-  await page.evaluate(() => document.fonts.ready);
-  const boxes = await page.evaluate(() => {
-    const rect = (selector: string) => {
-      const box = document.querySelector(selector)?.getBoundingClientRect();
-      return box ? { top: box.top, height: box.height, width: box.width } : null;
-    };
-    return {
-      mast: rect('[data-region="masthead"]'),
-      switchboard: rect('section[aria-label="Brand and display settings"]'),
-      theme: rect('#oak-theme-select'),
-      motion: rect('#oak-motion-select'),
-    };
-  });
-  await context.close();
-  return boxes;
-}
-
-async function headingFontFamily(page: Page): Promise<string> {
-  const fontFamily = await page.evaluate(() => {
-    const heading = document.querySelector('h1');
-    return heading === null ? null : getComputedStyle(heading).fontFamily;
-  });
-  expect(fontFamily, 'the page must have an h1 to probe').not.toBeNull();
-  return fontFamily ?? '';
-}
-
-/** Select an identity and assert it is IN EFFECT: brand link present with
- *  the right href, its sheet a member of document.styleSheets, and the
- *  heading face changed (both counter-brands re-point the display face). */
-export async function applyIdentity(page: Page, identity: Identity): Promise<void> {
-  const baselineFont = await headingFontFamily(page);
-  await page.getByRole('combobox', { name: 'Identity' }).selectOption(identity);
-  if (identity === 'oak') {
-    await page.waitForFunction(() => document.querySelector('link[data-oak-brand]') === null);
-    return;
-  }
-  // Target the identity-specific link: during a load-then-swap transition
-  // the outgoing and incoming brand links briefly coexist by design.
-  await expect(page.locator(`link[data-oak-brand="${identity}"]`)).toHaveAttribute(
-    'href',
-    `/brands/${identity}/brand.css`,
+/** Store a runtime choice the way the real store does, then reload so the
+ *  pre-paint bootstrap is the ONLY path that can have applied it. The
+ *  landing carries no controls (2026-08-13 tight scope), so stored state
+ *  is how its specs drive the theme and motion runtimes. */
+export async function reloadWithStoredChoice(
+  page: Page,
+  key: string,
+  value: string,
+): Promise<void> {
+  await page.evaluate(
+    ([storageKey, storedValue]) => {
+      localStorage.setItem(storageKey ?? '', storedValue ?? '');
+    },
+    [key, value],
   );
-  await page.waitForFunction((slug) => {
-    return [...document.styleSheets].some((sheet) =>
-      (sheet.href ?? '').endsWith(`/brands/${slug}/brand.css`),
-    );
-  }, identity);
-  // The parent sheet joining the cascade does NOT mean its nested @import
-  // (brand-a.css) has: Chromium attaches the imported sheet a frame later,
-  // and a scan in that gap sees the brand's base rules without its token
-  // overrides (a CI axe run caught creature x high-contrast mid-gap at
-  // 1.37:1). Applied means every import rule carries its stylesheet.
-  await page.waitForFunction((slug) => {
-    const parent = [...document.styleSheets].find((sheet) =>
-      (sheet.href ?? '').endsWith(`/brands/${slug}/brand.css`),
-    );
-    if (parent === undefined) {
-      return false;
-    }
-    try {
-      return [...parent.cssRules].every(
-        (rule) => !(rule instanceof CSSImportRule) || rule.styleSheet !== null,
-      );
-    } catch {
-      return false;
-    }
-  }, identity);
-  await expect
-    .poll(async () => headingFontFamily(page), {
-      message: 'the counter-brand face must reach the heading',
-    })
-    .not.toBe(baselineFont);
-}
-
-/** Select a theme and assert it is IN EFFECT: the attribute landed and the
- *  document's computed color-scheme matches the per-theme expectation. */
-export async function applyTheme(page: Page, theme: ThemeName): Promise<void> {
-  await page.getByRole('combobox', { name: 'Theme' }).selectOption(theme);
-  await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-  const colorScheme = await page.evaluate(
-    () => getComputedStyle(document.documentElement).colorScheme,
-  );
-  expect(colorScheme).toBe(EXPECTED_COLOR_SCHEME[theme]);
+  await page.reload();
 }

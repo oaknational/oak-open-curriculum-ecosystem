@@ -18,6 +18,18 @@ export interface PipelineConfig {
   readonly dryRun: boolean;
   /** If true, log verbose output */
   readonly verbose: boolean;
+  /**
+   * If true, retain restricted lessons instead of excluding them. Default
+   * false (exclude) — the documented, configurable restricted-exclusion switch
+   * (owner ruling 2026-08-12). See the SDK filter's
+   * `RestrictedLessonExclusionOptions`. `runPipeline` rejects `true` by
+   * returning a failed `PipelineResult` (`success: false`; `error` names
+   * ADR-224) — it does not throw — until restricted lessons are labelled in
+   * serving surfaces: the generated corpus is committed and MCP-consumed, so
+   * the exclusion policy binds the corpus-producing boundary as it binds
+   * index-producing runs.
+   */
+  readonly includeRestricted: boolean;
 }
 
 /**
@@ -32,6 +44,13 @@ export interface PipelineConfigInput {
   readonly dryRun?: boolean;
   /** If true, log verbose output */
   readonly verbose?: boolean;
+  /**
+   * If true, retain restricted lessons instead of excluding them (default
+   * false — exclude). `runPipeline` rejects `true` with a failed
+   * `PipelineResult` — not a throw — until the labelled-serving follow-on
+   * (ADR-224).
+   */
+  readonly includeRestricted?: boolean;
 }
 
 /**
@@ -84,5 +103,6 @@ export function createPipelineConfig(input: PipelineConfigInput): PipelineConfig
     outputPath: input.outputPath,
     dryRun: input.dryRun ?? false,
     verbose: input.verbose ?? false,
+    includeRestricted: input.includeRestricted ?? false,
   };
 }

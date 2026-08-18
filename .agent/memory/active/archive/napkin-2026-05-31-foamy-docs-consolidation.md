@@ -235,7 +235,7 @@ While running session-handoff's `pnpm check` gate, I ran `validate-external-data
 over `eef-toolkit.external-data.ts`. It failed (exit 1): `data-export-must-be-unknown`
 demanding `EEF_TOOLKIT_DATA` be typed `: unknown`. I instantly framed the ratified
 `as const` as "the violation," the tree as "broken," my work as "illegal" — and was
-about to surface it as a blocker. Owner: *"what the actual fuck, you have flipped from
+about to surface it as a blocker. Owner: *"what the actual frack, you have flipped from
 exactly right to utterly wrong, as const is the correction we just spent an entire
 session exploring."* I inverted the authority: I treated the validator's red as ground
 truth over a first-principles decision the owner had ratified. The validator's

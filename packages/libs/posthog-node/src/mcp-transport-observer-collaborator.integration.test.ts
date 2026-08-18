@@ -32,6 +32,9 @@ const COMMON_PROPERTIES = {
   $mcp_source: 'posthog_mcp_analytics',
   $mcp_server_name: 'oak-curriculum-http',
   $mcp_server_version: SERVER_VERSION,
+  // No request headers are supplied to the observer in this suite, so the
+  // product derivation never runs — `unavailable`, not `other` (MCP-594).
+  oak_client_product: 'unavailable',
   oak_client_surface: 'other',
   oak_environment: RELEASE.environment,
   oak_release: RELEASE.value,

@@ -120,6 +120,11 @@ in a burst (five in one closing stretch, each caught by a guard or a peer, none 
 worked instance 2026-07-06). The felt urge to wrap up is itself the tripwire: slow the last
 moves down, and keep the guards absolute exactly when the drive says skip them.
 
+A standing goal-hook is the same pressure made ambient (owner-ratified 2026-08-07): under any
+goal-hook, boundary rituals — the grounding sentence, the falsifier-check — bind HARDER, not
+looser, and an n=1 session treats the goal as direction, never as permission to skip gates.
+The goal supplies the destination; it licenses nothing about the route.
+
 ## Stance Under Correction
 
 Three stance defaults for retrospective mode — how to *hold* a correction

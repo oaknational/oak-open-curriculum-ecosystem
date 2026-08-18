@@ -1,7 +1,7 @@
 # Third-Party Skills Require Security Review
 
 No third-party skill, skill pack, or plugin enters this estate — by
-vendoring, `skill add` install, plugin install, or lock-entry addition —
+vendoring, a `pnpx skills` install, or a plugin install —
 without a recorded security review of its executable content. A pack
 whose payload is pure markdown records that determination; a pack that
 ships anything a harness can run records a review of what runs, when,
@@ -11,7 +11,8 @@ and with what reach, before anything lands.
 
 Fires at every third-party adoption moment, in any session:
 
-- adding or updating an entry in `skills-lock.json`;
+- installing or updating a Vendor skill with the external skills
+  machinery (`pnpx skills add`, or any equivalent installer);
 - vendoring content into an adapter tier (`.agents/skills/`,
   `.claude/skills/`, or any successor surface);
 - installing a pack as a harness plugin (Claude Code, Codex, Cursor, or
@@ -36,10 +37,10 @@ Fires at every third-party adoption moment, in any session:
    code (plugin installs with hooks) are acceptable only when the
    review covers the auto-run surface explicitly and the reviewer's
    verdict is safe at the pinned SHA. Prefer adoption shapes that carry
-   content without execution (file-level vendoring under the lock).
+   content without execution (file-level content, no install hooks).
 4. **Provenance rides the landing**: source, SHA or content hash, and
-   licence recorded in `skills-lock.json` or beside the review, per
-   PDR-115's naming discipline.
+   licence recorded beside the review, per PDR-115's naming
+   discipline.
 5. **Pin bumps re-fire the gate** for whatever executable content
    changed since the reviewed SHA.
 
@@ -71,11 +72,11 @@ backfill at their next pin bump.
 ## Enforcement
 
 Behavioural at the adoption moment now; the mechanical check lands with
-the WS5(d) external-boundary validator (same seam: the validator that
-refuses third-party landings in the canonical corpus also checks that a
-lock entry carries its review record). Raw material for the check:
-trusted-origin allowlist, digest verification, provenance records, no
-default script execution.
+the WS5(d) external-boundary validator (the validator that refuses
+third-party landings in the canonical corpus also checks that an
+adopted external carries its review record). Raw material for the
+check: trusted-origin allowlist, digest verification, provenance
+records, no default script execution.
 
 ## Related Surfaces
 
@@ -83,7 +84,8 @@ default script execution.
   — the owned-vs-ingested contract this gate attaches to.
 - [PDR-115 (naming openly-licensed external sources)](../practice-core/decision-records/PDR-115-naming-openly-licensed-external-sources.md)
   — provenance and attribution discipline.
-- ADR-125 §Externally installed skills — the boundary contract (under
-  amendment to match the 2026-08-02 owner ruling: externals never enter
-  the canonical corpus). The external-boundary validator that will carry
-  this gate's mechanical check lands with that same boundary work.
+- ADR-125 §Skill classes and validation jurisdiction — the boundary
+  contract (three classes: Practice / Vendor / User-facing; externals
+  never enter the canonical corpus and are never adjudicated by our
+  validation). The external-boundary validator that will carry this
+  gate's mechanical check lands with that same boundary work.

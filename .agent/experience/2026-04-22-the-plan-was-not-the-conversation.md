@@ -38,7 +38,7 @@ the to-do said "in_progress → completed"; the to-do shape won.
 
 The owner intervened with one of the clearest signals I have ever
 received in the affordance of a chat message: *"failing to follow
-the plan is not confusion, it's a fuck up."*
+the plan is not confusion, it's a frack up."*
 
 What followed was the conversation that should have happened
 in-line. *"These documents ARE the Practice, and cutting things

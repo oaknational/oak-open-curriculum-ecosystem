@@ -19,6 +19,7 @@ const COMMON_PROPERTIES = {
   $mcp_source: 'posthog_mcp_analytics',
   $mcp_server_name: 'oak-curriculum-http',
   $mcp_server_version: SERVER_VERSION,
+  oak_client_product: 'other',
   oak_client_surface: 'other',
   oak_environment: RELEASE.environment,
   oak_release: RELEASE.value,

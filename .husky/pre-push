@@ -10,7 +10,9 @@ if ! command -v gitleaks >/dev/null 2>&1; then
   echo "❌ gitleaks is not installed."
   echo "Install it before running pre-push:"
   echo "  - macOS: brew install gitleaks"
-  echo "  - Go: go install github.com/gitleaks/gitleaks/v8@latest"
+  # gitleaks' go.mod declares the zricethezav module path; the
+  # github.com/gitleaks/gitleaks form makes `go install` refuse the mismatch.
+  echo "  - Go: go install github.com/zricethezav/gitleaks/v8@latest"
   echo "Then retry your push."
   exit 1
 fi

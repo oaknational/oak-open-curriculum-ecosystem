@@ -19,7 +19,7 @@ import { parse as parseYaml } from 'yaml';
 
 import { walkSkillTree } from './skill-tree-walk.js';
 
-const CANONICAL_FILENAME = 'SKILL-CANONICAL.md';
+export const CANONICAL_FILENAME = 'SKILL-CANONICAL.md';
 
 export interface CanonicalFrontmatter {
   name: string;

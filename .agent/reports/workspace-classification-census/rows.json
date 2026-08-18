@@ -1,0 +1,1392 @@
+{
+  "schema_version": "1.0.0",
+  "plan": ".agent/plans/delivery/workspace-classification-census.plan.md",
+  "rows": [
+    {
+      "dirPath": ".",
+      "publishedName": null,
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit",
+        "content-ogl",
+        "brand-reserved"
+      ],
+      "targetState": "Hold as the Oak estate's composition and identity root; keep the tri-licence declaration (MIT code, OGL curriculum data, reserved Oak brand) authoritative at this surface and keep root configs thin delegations to the workspace-config foundation.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "package.json \u2014 name @oaknational/open-curriculum-ecosystem, private: true, no exports, 97 orchestration scripts: a composition shell for the estate, never a consumable package (facts manifest.hasExports=false)"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "README.md ('Oak Open Curriculum Ecosystem', MCP app live at www.thenational.academy/mcp) + BRANDING.md ('Oak branding and trademarks... are not licensed under MIT') + LICENCE-DATA.md (curriculum content via the Oak Open Curriculum API under Open Government Licence v3.0)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json '.' \u2014 internalDependents: [] and manifest.internalDependencies: ['@oaknational/eslint-plugin-standards']: the root composes the whole workspace graph and nothing consumes it"
+        }
+      ]
+    },
+    {
+      "dirPath": ".agent",
+      "publishedName": null,
+      "disposition": "excluded",
+      "exclusionReason": "Agent-practice estate records \u2014 the named exclusion class. .agent/ is the canonical Practice layer (rules, skills, memory, plans, reports, directives): 4513 tracked files with only 36 code files of hook/instrument glue, no manifest, no internal dependents. Its own charter declares 'Practice, not product' \u2014 nothing here is a workspace or published package, and with one deliberate charter-recorded carve-out none of it is product surface: the under-the-hood skill's content is served as public orientation via the MCP app, but the serving code surface lives in apps/, so the exception adds no foundational code surface under .agent/. The Oak-specificity axis, which prices foundational code surfaces for separation, tranche ownership, and licence mapping, does not apply. The high mechanical Oak-marker counts (32636 doc hits) are the Practice writing about Oak, not Oak identity leaking into a foundational surface.",
+      "evidence": [
+        {
+          "kind": "doctrine-record",
+          "pointer": ".agent/README.md lines 11-18 \u2014 'Practice, not product. Everything under `.agent/` is Oak's internal engineering practice \u2026 none of it is part of the Oak MCP product surface, and none of it is served to MCP clients, with one deliberate exception: the under-the-hood skill (.agent/skills/under-the-hood/SKILL-CANONICAL.md) is the public orientation method the MCP server points integrators at' (ADR-119, ADR-125)"
+        },
+        {
+          "kind": "static-structure",
+          "pointer": "facts.json .agent entry: manifest null, internalDependents [], fileProfile trackedFiles 4513 vs codeFiles 36 \u2014 a record estate, not a code surface"
+        }
+      ]
+    },
+    {
+      "dirPath": ".agents",
+      "publishedName": null,
+      "disposition": "excluded",
+      "exclusionReason": "Third-party vendor-managed skills tier (`pnpm skills`-managed, lock-pinned, vendored \u2014 the code files are upstream-owned scripts and templates) plus platform mirror surfaces; not an estate code workspace. Owner clarification 2026-08-17: this tier, the Practice skills (.agent/skills), and the user-facing plugin skills (plugins/oak-open-curriculum) are three unrelated conceptual entities."
+    },
+    {
+      "dirPath": ".agents/skills/clerk-nextjs-patterns/templates/nextjs-basic-auth",
+      "publishedName": null,
+      "disposition": "excluded",
+      "exclusionReason": "Template fixture inside the vendored third-party Clerk skill: .agents/skills/clerk-nextjs-patterns/SKILL.md frontmatter records metadata.author: clerk (version 2.2.0), and this directory is the scaffolding the skill copies into consumer projects (package.json name 'clerk-nextjs', deps only next/react/@clerk/nextjs). It is not registered in the OCE pnpm workspace, has no internal dependents or dependencies, and carries zero Oak markers (facts.json oakMarkers all 0). The Oak-specificity axis judges Oak workspace code/product surfaces for extraction; it does not apply to vendored third-party template fixtures in the agent-skill estate.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": ".agents/skills/clerk-nextjs-patterns/templates/nextjs-basic-auth/package.json name 'clerk-nextjs', dependencies limited to next/react/react-dom/@clerk/nextjs; proxy.ts is stock clerkMiddleware() scaffolding"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": ".agents/skills/clerk-nextjs-patterns/SKILL.md frontmatter: 'metadata: author: clerk, version: 2.2.0' \u2014 vendored Clerk-authored skill whose templates/ dir this fixture belongs to"
+        }
+      ]
+    },
+    {
+      "dirPath": ".claude",
+      "publishedName": null,
+      "disposition": "excluded",
+      "exclusionReason": "Platform-config dot-dir \u2014 the named exclusion class. .claude/ is the Claude Code adapter layer of the ADR-125 three-layer model: rules/ files are one-line pointers back to .agent/rules/, agents/ are thin reviewer-role adapters, hooks/ delegate to the shared agent-tools implementation, settings.json is harness configuration. No manifest, no internal dependents, nothing consumable or publishable \u2014 the Oak-specificity axis classifies product/foundation code surfaces for separation and has no purchase on per-platform activation config.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": ".claude/rules/verify-dont-trust.md \u2014 entire file content is 'Read and follow `.agent/rules/verify-dont-trust.md`.' (one-line pointer adapter; same shape across .claude/rules/*)"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": ".agent/README.md structural-model diagram \u2014 '.claude/ .cursor/ .codex/ \u2026 (thin platform adapters \u2014 one-line pointers)' per ADR-125 agent-artefact portability"
+        }
+      ]
+    },
+    {
+      "dirPath": ".codex",
+      "publishedName": null,
+      "disposition": "excluded",
+      "exclusionReason": "Platform-config dot-dir \u2014 the named exclusion class. .codex/ is the Codex CLI activation layer: config.toml (trusted-project policy, hooks, agents, MCP), thin per-role adapter TOMLs in agents/, and one SessionStart hook adapter that delegates to agent-tools. Its README states canonical Practice content 'remain[s] under .agent/; .codex/ translates only the parts Codex needs to activate them'. Not a workspace, no manifest, no internal dependents, no consumable code surface \u2014 the Oak-specificity axis does not apply to platform activation config.",
+      "evidence": [
+        {
+          "kind": "doctrine-record",
+          "pointer": ".codex/README.md \u2014 'This directory is the thin, project-specific activation layer for Codex CLI. Canonical Practice instructions, policies, skills, and subagent definitions remain under `.agent/`'"
+        },
+        {
+          "kind": "static-structure",
+          "pointer": ".codex/ contents: config.toml, agents/*.toml adapters, hooks/practice-session-identity.mjs ('delegates to the shared `agent-tools` implementation'); facts.json: manifest null, internalDependents [], 33 tracked files / 1 code file"
+        }
+      ]
+    },
+    {
+      "dirPath": ".cursor",
+      "publishedName": null,
+      "disposition": "excluded",
+      "exclusionReason": "Platform-config dot-dir \u2014 the named exclusion class. .cursor/ is the Cursor adapter layer: rules/*.mdc are frontmatter-wrapped one-line pointers back to canonical .agent/rules content (every .mdc body reads 'Read and follow `.agent/rules/<rule>.md`.'), plus mcp.json, hooks.json, settings.json, and statusline platform configuration. No manifest, no internal dependents, nothing published or consumed as code \u2014 the Oak-specificity axis classifies product/foundation code surfaces for separation and does not apply to per-platform activation config.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": ".cursor/ contents: rules/*.mdc adapter rules (e.g. .cursor/rules/agent-state-observable.mdc \u2014 frontmatter plus the one-line body 'Read and follow `.agent/rules/agent-state-observable.md`.'), mcp.json, hooks.json, settings.json, statusline.cli.fragment.json; facts.json: manifest null, internalDependents []"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": ".agent/README.md \u2014 'When you see a rule in `.claude/rules/` or `.cursor/rules/`, it is a one-line pointer back to the canonical version in `.agent/rules/`' (ADR-125 three-layer model)"
+        }
+      ]
+    },
+    {
+      "dirPath": ".husky",
+      "publishedName": null,
+      "disposition": "excluded",
+      "exclusionReason": "Platform-config dot-dir \u2014 git client-hook wiring (husky). Eight sh hook files that enforce the repo's own development process: pre-commit runs the repo's gates (pnpm agent-tools:repo-check prettier-staged, pnpm repo-validators:check, turbo build/type-check/lint/test, depcruise, knip:gate) and every commit-creating hook sources refuse-commit-on-main.sh, the wiring for the .agent/rules/never-commit-to-main.md Practice rule. No manifest, no internal dependents. facts.json oakMarkers are all zero, but that is scoped by the instrument's docs/code extension predicate \u2014 the extensionless hook files are outside the scan, and .husky/pre-push does reference the repo's own tooling by name ('pnpm --filter @oaknational/agent-tools ci-schema-drift-check', '--prefix=oak-'). Those are the repository invoking its own gates, not Oak identity leaking into a consumable surface: commit-time gate plumbing for this repository is not a code/product surface the Oak-specificity axis prices for separation, tranche, or licence.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": ".husky/pre-commit \u2014 sh hook invoking 'pnpm agent-tools:repo-check prettier-staged', 'pnpm repo-validators:check', turbo build/type-check/lint/test, depcruise (line 85), knip:gate (line 96); .husky/pre-push lines 67/87 referencing '--prefix=oak-' and '@oaknational/agent-tools'; facts.json: manifest null, internalDependents [], trackedFiles 8 / codeFiles 1"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": ".agent/rules/never-commit-to-main.md \u2014 'Local main receives no commits, ever. main advances only via reviewed pull requests' \u2014 activated by the .husky/refuse-commit-on-main.sh header ('Shared branch guard (.agent/rules/never-commit-to-main.md): main advances only via reviewed pull requests'), sourced by pre-commit, pre-merge-commit, prepare-commit-msg, applypatch-msg, and pre-rebase: hook plumbing enacting a Practice rule, not a product surface"
+        }
+      ]
+    },
+    {
+      "dirPath": "agent-tools",
+      "publishedName": "@oaknational/agent-tools",
+      "disposition": "classified",
+      "classification": "mixed",
+      "tranche": "3",
+      "licence": [
+        "code-mit",
+        "brand-reserved"
+      ],
+      "targetState": "Split the portable agent-ops core (agent-identity, collaboration-state, commit-queue, context-cost, validators, workflow machinery) from the Oak-bound modules; put the OAK_* runtime env namespace and emitted schema ids behind a configurable prefix; keep oak-logo, mcp-content-current-source, and under-the-hood content generation in the Oak leaf.",
+      "thinnestSlice": "Move: the generic agent-ops core \u2014 src/core, src/collaboration-state, src/commit-queue, src/bin CLI dispatch, src/context-cost, branch-touched-files, and the validator/workflow machinery \u2014 as a portable foundation once the OAK_* env keys and oak.* schema ids are re-namespaced. Stay: src/claude/oak-logo.ts (Oak acorn brand mark), src/mcp-content-current-source (bound to @oaknational/oak-curriculum-mcp-streamable-http), src/under-the-hood-content-generate, and the --prefix=oak- skills-adapter default. Split: package.json scripts that turbo-filter on Oak workspaces separate from the generic script surface.",
+      "evidence": [
+        {
+          "kind": "emitted-surface",
+          "pointer": "agent-tools/src/cursor/oak-session-identity-hook.ts:7 \u2014 MIRROR_SCHEMA = 'oak.cursor-composer-session.v1', written at runtime into the mirror file oak-composer-session.local.json"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "agent-tools/src/claude/oak-logo.ts \u2014 Oak National Academy acorn mark held as 'fixed brand assets' glyph constants (BRAILLE_SHARP_FRAMES) and rendered into the Claude Code statusline at runtime"
+        },
+        {
+          "kind": "static-structure",
+          "pointer": "agent-tools/package.json \u2014 'validate-mcp-content-current-source' runs turbo --filter=@oaknational/oak-curriculum-mcp-streamable-http^...; 'skills-adapter-generate' defaults --prefix=oak-; runtime workspace deps limited to generic @oaknational/{result,safe-path,type-helpers}"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "agent-tools/README.md \u00a7Boundary \u2014 declares the workspace a host-local implementation surface with the portable contract in .agent doctrine, per PDR-035 and ADR-165"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "emitted-surfaces",
+          "depth": "runtime-emitted",
+          "note": "Oak acorn brand mark embedded as glyph constants in src/claude/oak-logo.ts (TSDoc: 'fixed brand assets') and emitted into the statusline on every render \u2014 a brand asset inside an otherwise generic ops surface, hence brand-reserved in the licence composite."
+        },
+        {
+          "type": "defaults",
+          "depth": "runtime-emitted",
+          "note": "OAK_-prefixed runtime env contract read by shipped code \u2014 OAK_AGENT_IDENTITY_OVERRIDE, OAK_STATUSLINE_LOGO/MOTION/LOG_FILE, OAK_SKIP_COMPOSER_SESSION_MIRROR (facts oakEnvKeys=163) \u2014 plus the package.json skills-adapter-generate default --prefix=oak-."
+        },
+        {
+          "type": "names",
+          "depth": "runtime-emitted",
+          "note": "Versioned schema id 'oak.cursor-composer-session.v1' (src/cursor/oak-session-identity-hook.ts:7) written into runtime session-mirror JSON; facts count 6 dotted oak namespaces."
+        },
+        {
+          "type": "domain-assumptions",
+          "depth": "runtime-emitted",
+          "note": "Whole modules assume the Oak estate: mcp-content-current-source validates the served @oaknational/oak-curriculum-mcp-streamable-http content surface, and under-the-hood-content-generate emits Oak orientation content into generated output (the OAK_UNDER_THE_HOOD_ORIENTATION export, generator.ts:135). Oak-identity tokens pervade the source: facts oakInSource=1699 occurrences; a case-insensitive word-boundary 'oak' grep matches 136 of 1296 tracked code files."
+        }
+      ]
+    },
+    {
+      "dirPath": "apps/oak-curriculum-mcp-streamable-http",
+      "publishedName": "@oaknational/oak-curriculum-mcp-streamable-http",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "apps/oak-curriculum-mcp-streamable-http/package.json \u2014 description 'OAuth-enabled MCP server over HTTP for the Oak National Academy Curriculum API'; dependencies @oaknational/curriculum-sdk and @oaknational/oak-search-sdk (workspace:*)"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/served-surface/served-surface.ts:120 serves resource URI 'curriculum://model': 'live'; src/observability/outbound-size-observability.ts:48-49 emits span attributes 'oak.mcp.response.body_bytes'/'oak.mcp.response.tokens_est'; src/env.ts:48 env schema key OAK_CURRICULUM_MCP_USE_STUB_TOOLS"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json 'apps/oak-curriculum-mcp-streamable-http': internalDependents = [], manifest.hasExports = false \u2014 terminal product leaf, nothing in-estate consumes it"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md names this the canonical (sole) MCP server workspace (cited README.md lines 20-24); 2026-04-28 matrix row 'apps/oak-curriculum-mcp-streamable-http|oak-leaf|6'"
+        }
+      ],
+      "targetState": "Hold as the canonical Oak curriculum MCP server, a tranche 6 product leaf; push any genuinely generic MCP/OAuth plumbing down into foundation packages before reuse \u2014 never publish it from here.",
+      "tranche": "6",
+      "licence": [
+        "code-mit",
+        "brand-reserved"
+      ]
+    },
+    {
+      "dirPath": "apps/oak-search-cli",
+      "publishedName": "@oaknational/search-cli",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "apps/oak-search-cli/package.json \u2014 name '@oaknational/search-cli', description 'Semantic search CLI for Oak curriculum \u2014 ingestion, hybrid search, ground truth evaluation'; dependencies @oaknational/curriculum-sdk and @oaknational/oak-search-sdk (workspace:*); bin/oaksearch.ts entry"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/observability/cli-observability.ts:40 DEFAULT_CLI_SERVICE_NAME = 'oak-search-cli' (telemetry service name); tracked fetched Oak curriculum data fixtures/fetched-data/search-fixture-source-ks2-maths.json (e.g. \"sequenceSlug\": \"maths-primary\") and generated ground-truths/generated/lesson-slugs-by-subject.data.json"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json 'apps/oak-search-cli': internalDependents = [], manifest.hasExports = false \u2014 terminal operator app over the tranche 5 search stack (consumes @oaknational/oak-search-sdk and @oaknational/search-contracts)"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row 'apps/oak-search-cli|oak-leaf|5 / 6'"
+        }
+      ],
+      "targetState": "Hold as the Oak search operator CLI. The legacy '5 / 6' value names a split: reusable search primitives ride tranche 5 with the search stack (oak-search-sdk, search-contracts), while the CLI application shell belongs with the tranche 6 app leaves; tranche recorded as '5' per the census inheritance rule.",
+      "tranche": "5",
+      "licence": [
+        "code-mit",
+        "content-ogl"
+      ]
+    },
+    {
+      "dirPath": "demos/oak-curriculum-hub",
+      "publishedName": "@oaknational/oak-curriculum-hub",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "demos/oak-curriculum-hub/package.json \u2014 name '@oaknational/oak-curriculum-hub'; dependencies @oaknational/curriculum-sdk, @oaknational/oak-search-sdk, @oaknational/oak-design-system, @oaknational/oak-design-react (workspace:*); README.md line 3: 'Oak-styled web UI over the live curriculum search \u2026 and content \u2026 stacks'"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "Tracked Oak brand and content assets shipped by the Next.js app: public/oak-logo.svg, public/oak-logo-mark.svg, public/assets/Oak-planning-tool-2024.pdf (git ls-files-confirmed); lib/static-training-courses.ts serves the 21-section Oak training-course index; lib/env.ts / README require OAK_API_KEY + ELASTICSEARCH_* to reach live Oak backends"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json 'demos/oak-curriculum-hub': internalDependents = [], manifest.hasExports = false \u2014 demos-tier terminal leaf; its tools/ compose over the shared @oaknational/fidelity-review package rather than exporting anything"
+        }
+      ],
+      "targetState": "Hold as the demos-tier Oak-branded curriculum hub reference app (Tailwind-mapped kit consumption path); keep reusable fidelity tooling flowing into @oaknational/fidelity-review rather than accreting app-local copies. Not in the 2026-04-28 matrix \u2014 tranche assignment is brief/owner work.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit",
+        "content-ogl",
+        "brand-reserved"
+      ]
+    },
+    {
+      "dirPath": "demos/oak-design-showcase",
+      "publishedName": "@oaknational/oak-design-showcase",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "demos/oak-design-showcase/package.json \u2014 name '@oaknational/oak-design-showcase'; dependencies @oaknational/oak-design-system and @oaknational/oak-design-react (workspace:*); README.md line 3-4: 'A one-page live showcase of the Oak Open Curriculum Design System'"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "app/page.tsx:11-18 renders the kit's Oak-namespaced classes ('oak-container', 'oak-card', 'oak-heading-4', 'oak-btn'); public/oak-theme.js is the kit theme runtime inlined pre-paint; default identity is the Oak brand with counter-brand swaps tracked under public/brands/{pds,creature}/brand.css"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json 'demos/oak-design-showcase': internalDependents = [], manifest.hasExports = false, oakEnvKeys = 0 \u2014 terminal demo leaf over the design packages, no curriculum API surface"
+        }
+      ],
+      "targetState": "Hold as the plain-CSS consumption showcase for the Oak design system; keep counter-brand assets demo-local and consume the kit only through its published entries. Not in the 2026-04-28 matrix \u2014 tranche assignment is brief/owner work.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit",
+        "brand-reserved"
+      ]
+    },
+    {
+      "dirPath": "packages/core/build-metadata",
+      "publishedName": "@oaknational/build-metadata",
+      "disposition": "classified",
+      "classification": "mixed",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep resolver core generic; move Oak release-policy wording and thenational.academy example strings into consumer-injected message copy.",
+      "thinnestSlice": "Stays: the pure resolver core (semver.ts, git-sha.ts, release-branch-url.ts parsing, release derivation) \u2014 generic Vercel/semver machinery. Moves/splits: Oak release-policy assertions and Oak deploy-domain examples baked into runtime error messages (release-internals.ts:137, release-branch-url.ts:70) become consumer-supplied policy/copy.",
+      "evidence": [
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/core/build-metadata/src/release-internals.ts:137 \u2014 runtime error string 'pre-release identifier. Oak does not publish pre-releases to main.'"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/core/build-metadata/src/release-branch-url.ts:70 \u2014 runtime error message cites Oak deploy domain '\"feat-x-poc-oak.vercel.thenational.academy\"'"
+        },
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/build-metadata/src \u2014 pure resolver modules (semver.ts, git-sha.ts, release-*.ts); facts.json manifest.internalDependencies = [@oaknational/env, @oaknational/result, @oaknational/workspace-config, eslint-plugin-standards]"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = [oak-curriculum-mcp-streamable-http, posthog-node, search-cli, sentry-node] \u2014 shared release-metadata foundation for Oak apps and adapters"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "domain-assumptions",
+          "depth": "runtime-emitted",
+          "note": "Oak release policy asserted in a shipped error message: 'Oak does not publish pre-releases to main.' (release-internals.ts:137); the pre-release rejection behaviour is justified by that Oak policy"
+        },
+        {
+          "type": "names",
+          "depth": "runtime-emitted",
+          "note": "Oak deploy domain example 'feat-x-poc-oak.vercel.thenational.academy' shipped inside a runtime error message (release-branch-url.ts:70)"
+        },
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "TSDoc remarks reference Oak's release pipeline and named Oak apps (semver.ts:2-14, release-internals.ts:102, release.ts:6)"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/env",
+      "publishedName": "@oaknational/env",
+      "disposition": "classified",
+      "classification": "mixed",
+      "tranche": "1",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Split the Oak-specific contracts (oak-api.ts, bulk-data.ts) from the generic env-contract composition core.",
+      "thinnestSlice": "Stays: the opt-in Zod contract-composition pattern and generic contracts (logging.ts, elasticsearch.ts, sentry.ts, observability*.ts, build-env.ts). Moves/splits: OakApiKeyEnvSchema/OAK_API_KEY (schemas/oak-api.ts) and the oak-search-cli-shaped bulk-data.ts contract into an Oak-leaf contracts module.",
+      "evidence": [
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/core/env/src/schemas/oak-api.ts:22 \u2014 OAK_API_KEY: z.string().min(1, 'OAK_API_KEY is required') \u2014 Oak env schema and validation message shipped in runtime output"
+        },
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/env/src/schemas \u2014 Oak-specific contracts (oak-api.ts, bulk-data.ts) sit beside generic contracts (logging.ts, elasticsearch.ts, sentry.ts, observability*.ts); facts.json oakEnvKeys interpreted: the Oak keys concentrate in these two files"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/core/env/README.md:19-20 \u2014 'Contract for Oak API authentication. Required when your app calls the Oak Curriculum API.'"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "emitted-surfaces",
+          "depth": "runtime-emitted",
+          "note": "OakApiKeyEnvSchema ships the OAK_API_KEY key and its 'OAK_API_KEY is required' message in runtime output (src/schemas/oak-api.ts:22)"
+        },
+        {
+          "type": "domain-assumptions",
+          "depth": "source-embedded-docs",
+          "note": "oak-api.ts TSDoc binds the contract to the Oak National Academy curriculum API; bulk-data.ts:12 names apps/oak-search-cli's resolveBulkDirFromInputs as the shaping consumer"
+        },
+        {
+          "type": "names",
+          "depth": "docs-level",
+          "note": "README frames the package as 'Environment schema contracts for MCP applications' with Oak Curriculum API usage guidance"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/graph-core",
+      "publishedName": "@oaknational/graph-core",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep as the generic RDF/JSON-LD graph foundation.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/graph-core/src/vocab \u2014 only W3C vocabularies (dcterms.ts, owl.ts, prov.ts, rdfs.ts, schema-org.ts, shacl.ts, skos.ts); grep -ri oak over src/ matches only @oaknational import specifiers, zero domain tokens"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/core/graph-core/README.md:4-5 \u2014 'Transport-agnostic; consumed by graph-ingest, graph-project, and graph-corpus-sdk', grounded in ADR-179 (transport-agnostic graph substrate)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = [graph-corpus-sdk, graph-ingest, graph-project] \u2014 foundation position under the graph stack"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/oak-eslint",
+      "publishedName": "@oaknational/eslint-plugin-standards",
+      "disposition": "classified",
+      "classification": "mixed",
+      "tranche": "3",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Separate the generic rules and config presets from the Oak workspace-topology boundary data.",
+      "thinnestSlice": "Stays: generic rule machinery and rules (no-throw-statement, no-dynamic-import, no-eslint-disable, max-files-per-dir, no-export-trivial-type-aliases, no-real-io-in-tests) plus base/react/next/strict config presets. Moves/splits: the hard-coded @oaknational/* workspace package lists, layer-boundary factories, and vendor fences keyed to Oak workspace names (src/rules/boundary.ts) into an Oak-leaf boundary-config layer.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/oak-eslint/src/rules/boundary.ts:37-73 \u2014 LIB/DESIGN/SDK/APP/TOOLING package lists hard-code @oaknational/* workspace names as rule data"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/core/oak-eslint/src/rules/boundary.ts:106 \u2014 lint message emitted at lint runtime: 'Only packages/libs/posthog-node may import PostHog vendor SDKs. Other workspaces must consume Oak provider-neutral product-analytics contracts.'"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = 32 workspaces \u2014 every workspace in the estate consumes the plugin"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "runtime-emitted",
+          "note": "@oaknational/* workspace package lists shipped as rule data driving boundary behaviour (boundary.ts:37-73)"
+        },
+        {
+          "type": "emitted-surfaces",
+          "depth": "runtime-emitted",
+          "note": "lint messages naming Oak workspaces and policies are emitted in lint output (boundary.ts:82, boundary.ts:106)"
+        },
+        {
+          "type": "domain-assumptions",
+          "depth": "runtime-emitted",
+          "note": "the Oak monorepo layer model (core/libs/design/sdks/apps, ADR-108 SDK roles) is enforced as shipped rule behaviour"
+        },
+        {
+          "type": "names",
+          "depth": "docs-level",
+          "note": "README.md:3-4 scopes the plugin to 'the Oak Open Curriculum Ecosystem monorepo'"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/observability",
+      "publishedName": "@oaknational/observability",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "1",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep provider-neutral; rename the internal oak.local parsing base to a neutral host.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/observability/src \u2014 provider-neutral modules (redaction*.ts, json-sanitisation.ts, span-context.ts, sink-registry.ts, product-analytics.ts); no oak.* namespace in any runtime module; browser-safety enforced by src/no-node-only-imports.unit.test.ts"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/core/observability/src/redaction-url.ts:35 \u2014 'https://oak.local' shipped as the internal URL-parsing base; formatParsedUrl (lines 80-86) strips it so it never appears in returned values"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/core/observability/README.md:3 \u2014 'Provider-neutral observability helpers for Oak runtimes', grounded in ADR-160 (non-bypassable redaction barrier)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = 8 workspaces (env, logger, sentry-node, posthog-node, oak-search-sdk, sdk-codegen, search-cli, oak-curriculum-mcp-streamable-http)"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "defaults",
+          "depth": "runtime-emitted",
+          "note": "'https://oak.local' is a default constant in shipped runtime code (redaction-url.ts:35); it is an internal parsing base only and is stripped from all returned values"
+        },
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "'oak.manual' used as the example span name in test source (span-context.unit.test.ts:168,179)"
+        },
+        {
+          "type": "names",
+          "depth": "docs-level",
+          "note": "README prose frames the package 'for Oak runtimes'; ADR cross-references"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/openapi-zod-client-adapter",
+      "publishedName": "@oaknational/openapi-zod-client-adapter",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "4",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep generic; retire when Castr replaces openapi-zod-client per ADR-108.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/openapi-zod-client-adapter/src \u2014 generic openapi-zod-client wrapper (generate-zod-schemas.ts, get-endpoint-definitions.ts) plus zod-v3-to-v4-transform.ts; no Oak token in runtime source"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/core/openapi-zod-client-adapter/README.md:12-32 \u2014 Zod v3/v4 boundary purpose, sdk-codegen consumer, and planned Castr replacement (ADR-108)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = [@oaknational/sdk-codegen] \u2014 single consumer in the generation pipeline"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "'oakUrl' as a test-fixture identifier in zod-v3-to-v4-transform.unit.test.ts:74-75; TSDoc usage examples self-reference the @oaknational package name"
+        },
+        {
+          "type": "names",
+          "depth": "docs-level",
+          "note": "README ties the adapter to the Oak sdk-codegen pipeline path (packages/sdks/oak-curriculum-sdk/code-generation/zodgen.ts)"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/result",
+      "publishedName": "@oaknational/result",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "1",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep as a clean generic Result<T,E> foundation.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/result/src \u2014 three files (result-type.ts, unwrapping.ts, index.ts) with zero runtime dependencies and no domain imports; facts.json manifest.internalDependencies are lint/config-only"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = 18 workspaces spanning core, libs, design, sdks, and apps \u2014 the widest non-tooling foundation"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/core/result/README.md \u2014 fully generic Result<T,E> API and philosophy; no Oak domain content"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "unwrapping.ts:22 eslint-disable directive names the @oaknational/no-throw-statement rule \u2014 repo-tooling identity only, no domain content"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/safe-path",
+      "publishedName": "@oaknational/safe-path",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep as a clean generic path-containment guard.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/safe-path/src/index.ts \u2014 single realpath-canonicalising containment guard (assertPathWithinBase) with an injectable realpath seam; grep finds no Oak token in src"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = [agent-tools, search-cli]"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/core/safe-path/README.md:20-21 \u2014 'Single source of truth: consumed by @oaknational/agent-tools and the oak-search-cli app.'"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "docs-level",
+          "note": "README names its Oak consumers (agent-tools, oak-search-cli) in prose only"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/type-helpers",
+      "publishedName": "@oaknational/type-helpers",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "1",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep as a clean generic typed-iteration foundation.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/type-helpers/src/index.ts \u2014 typed own-key iteration and property-access helpers only; grep finds no Oak token in src; facts.json oakInSource count resolves to package-identity specifiers in config files"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = 12 workspaces across core, libs, sdks, and apps"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/core/type-helpers/README.md \u2014 fully generic TypeScript iteration rationale; no Oak domain content"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/core/workspace-config",
+      "publishedName": "@oaknational/workspace-config",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep generic; neutralise the oaksearch TSDoc example.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/core/workspace-config/src \u2014 tsup/vitest base factories (tsup.config.base.ts, vitest.config.base.ts, vitest.e2e.config.base.ts) plus no-network.setup.ts; facts.json manifest.internalDependencies = [] (zero internal deps by design)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents = 30 workspaces \u2014 the estate-wide tooling root"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/core/workspace-config/README.md:45-50 \u2014 config-only package whose assurance is consuming proof (no unit tests by design)"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "tsup.config.base.ts:178 TSDoc example uses the Oak-flavoured entry name 'bin/oaksearch'"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/design/design-tokens-core",
+      "publishedName": "@oaknational/design-tokens-core",
+      "disposition": "classified",
+      "classification": "mixed",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/design/design-tokens-core/package.json \u2014 description 'Pure helpers for validating DTCG token tiers and emitting Oak CSS custom properties'; runtime deps only zod + @oaknational/result \u2014 a pure build-time DTCG library"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/design/design-tokens-core/src/index.ts:47 \u2014 toCssVariable returns `--oak-${path.map(normalizePathSegment).join('-')}`: every flattened token the core emits is an Oak-prefixed CSS custom property"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json packages/design/design-tokens-core internalDependents = ['@oaknational/oak-design-tokens'] \u2014 sole consumer is the Oak token build pipeline"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row: packages/design/design-tokens-core | mixed | 2"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "emitted-surfaces",
+          "depth": "runtime-emitted",
+          "note": "toCssVariable (src/index.ts:47) hard-codes the `--oak-` prefix, so all CSS custom properties the flattener emits carry Oak identity into consumer stylesheets; unit tests pin the behaviour (src/index.unit.test.ts:26-56 expect `--oak-color-ink` etc.)"
+        },
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "src/root-convention.ts module docblock (lines 6-10) encodes the Oak convention inside source TSDoc \u2014 'no `oak.` root group \u2014 the flattener prefixes `--oak-` itself', guarding against `--oak-oak-*` emission; the validator function itself is generic (allowedRoots parameter)"
+        }
+      ],
+      "thinnestSlice": "Move the hard-coded `--oak-` prefix out of toCssVariable into a caller-supplied prefix owned by oak-design-tokens; the DTCG tier validation, contrast, colour-literal, overlay-coverage, and flattening machinery stays as the generic core; the Oak-convention prose in root-convention.ts moves with the prefix to the Oak consumer.",
+      "targetState": "Parameterise the CSS variable prefix so the DTCG core emits brand-neutral custom properties.",
+      "tranche": "2",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "packages/design/oak-design-assets",
+      "publishedName": "@oaknational/oak-design-assets",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/design/oak-design-assets/package.json \u2014 description 'Oak brand raster artwork \u2014 the assets that must be files rather than tokens or CSS'; sole asset assets/oak-national-academy-logo-512.png; facts.json codeFiles = 0"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/design/oak-design-assets/LICENCES.md \u2014 'Everything in this package is an Oak National Academy brand asset. Oak's marks are NOT open-licensed', governed by BRANDING.md (owner ruling 2026-07-19); 'A white-label consumer MUST replace them'"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json packages/design/oak-design-assets internalDependents = ['@oaknational/oak-curriculum-mcp-streamable-http'], which copies assets into served output at build (README names build-scripts/copy-oak-ds.ts as the worked example)"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "emitted-surfaces",
+          "depth": "runtime-emitted",
+          "note": "assets/oak-national-academy-logo-512.png is copied into consumers' served output at build time, so the Oak mark ships in runtime-served surfaces (share cards, email, app listings); LICENCES.md requires white-label consumers to replace it"
+        }
+      ],
+      "targetState": "Keep as the single home for Oak raster brand artwork; white-label consumers replace it wholesale.",
+      "tranche": "none-assigned",
+      "licence": [
+        "brand-reserved"
+      ]
+    },
+    {
+      "dirPath": "packages/design/oak-design-ink",
+      "publishedName": "@oaknational/oak-design-ink",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/design/oak-design-ink/src/theme.tsx:1-13 \u2014 imports oakTerminalThemes from '@oaknational/oak-design-tokens/terminal-theme' and defaults the context to oakTerminalThemes.dark; OakInkThemeProvider selects only from oakTerminalThemes, no foreign-theme injection point"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json packages/design/oak-design-ink \u2014 manifest.internalDependencies includes '@oaknational/oak-design-tokens' as the sole runtime workspace dependency; internalDependents = [] (binding tier not yet adopted by repo terminal tools)"
+        },
+        {
+          "kind": "static-structure",
+          "pointer": "packages/design/oak-design-ink/package.json \u2014 description 'Reusable Oak Ink primitives for terminal user interfaces'; README: 'adapts the Oak design-token terminal theme into layout and text primitives'"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "runtime-emitted",
+          "note": "the built module ships OakInkThemeProvider/useOakInkTheme/OakText and binds oakTerminalThemes at module load \u2014 the Oak theme is the shipped default and only theme source; the primitives (Panel, StatusBadge, KeyHint) are structurally generic but consume Oak colours by construction"
+        }
+      ],
+      "targetState": "Keep as the Oak terminal binding tier; adopt it in repo-owned Ink tools.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "packages/design/oak-design-react",
+      "publishedName": "@oaknational/oak-design-react",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/design/oak-design-react/package.json \u2014 description 'React binding tier for the Oak Open Curriculum Design System (ADR-213 \u00a73): framework-covariant adapters over the kit's framework-neutral surface'"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/design/oak-design-react/src/oak-theme-store.ts:71-75 \u2014 the built dist ships the estate's canonical ambient declaration of Window.oakTheme and the oakThemeStore singleton that resolves the Oak oak-theme.js runtime at runtime; OakThemeName ('light'|'dark'|'system'|'high-contrast'|'colour-safe') mirrors the kit's theme list verbatim"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json packages/design/oak-design-react internalDependents = ['@oaknational/oak-curriculum-hub', '@oaknational/oak-design-showcase'] \u2014 Oak product and showcase surfaces"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "ADR-213 \u00a73 (docs/architecture/architectural-decisions/213-design-system-integration-and-component-architecture.md, cited in the package README) assigns this package the React-covariant tier and gates any component export on the ADR-147 accessibility gate extension"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "runtime-emitted",
+          "note": "shipped exports (oakThemeStore, createOakThemeStore, OakThemeRuntime, IDENTITY_DEFAULT) and the Window.oakTheme ambient contract carry Oak identity as the module's runtime API; the package exists solely to adapt the Oak theme runtime for React"
+        }
+      ],
+      "targetState": "Keep as the Oak design system's React-covariant tier; ship components only after the ADR-147 accessibility gate lands.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "packages/design/oak-design-system",
+      "publishedName": "@oaknational/oak-design-system",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/design/oak-design-system/package.json \u2014 description 'The Oak design system \u2014 the estate's design source of truth (ADR-213)'; export map ships brand.css, oak-icons.css, oak-theme.js, fonts/*, assets/* (Oak marks), dtcg/*"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/design/oak-design-system/colors_and_type.css:45+ defines the `--oak-*` primitive palette; components.css ships the `.oak-*` class library; oak-theme.js installs the window.oakTheme runtime \u2014 all on the package export surface, shipped verbatim to every consumer"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json packages/design/oak-design-system internalDependents = ['@oaknational/oak-curriculum-hub', '@oaknational/oak-curriculum-mcp-streamable-http', '@oaknational/oak-design-showcase', '@oaknational/oak-design-tokens'] \u2014 every Oak-branded surface in the estate consumes it"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/design/oak-design-system/LICENSING-MANIFEST.md (ADR-213 \u00a71) \u2014 per-file-class dispositions under owner rulings 2026-07-19 (marks gate), 2026-07-24 ('Commit all 39'), 2026-08-02 (OGL provenance); Oak marks excluded from MIT per BRANDING.md"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "emitted-surfaces",
+          "depth": "runtime-emitted",
+          "note": "the entire export surface is Oak-branded runtime output: `--oak-*` custom properties, `.oak-*` classes, the window.oakTheme runtime, Oak logo/icon SVGs under assets/ \u2014 by design; the white-label contract (brand.css + mark replacement) is the sanctioned de-Oaking path"
+        }
+      ],
+      "targetState": "Remain the estate's single design source of truth (ADR-213); white-label consumers re-brand via brand.css and replace Oak marks.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit",
+        "content-ogl",
+        "brand-reserved"
+      ]
+    },
+    {
+      "dirPath": "packages/design/oak-design-tokens",
+      "publishedName": "@oaknational/oak-design-tokens",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/design/oak-design-tokens/src/tokens/palette.json \u2014 hand-authored Oak brand palette values ('ink-950' #102033, 'oak-green-500' #287c34, 'paper-050' #fcfbf8 \u2026); package.json description 'Oak token source files and generated CSS custom properties'"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "packages/design/oak-design-tokens/dist/index.css \u2014 ':root { --oak-color-ink-950: #102033; --oak-color-oak-green-500: #287c34; \u2026 }'; dist/terminal-theme.js exports oakTerminalThemes resolved from the same Oak token trees"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json packages/design/oak-design-tokens internalDependents = ['@oaknational/oak-curriculum-mcp-streamable-http', '@oaknational/oak-design-ink']; devDependency on @oaknational/oak-design-system powers the validate-design-system-consistency gate"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row: packages/design/oak-design-tokens | oak-leaf | 2"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "emitted-surfaces",
+          "depth": "runtime-emitted",
+          "note": "dist/index.css emits the `--oak-color-*` custom-property set and dist/terminal-theme.js ships oakTerminalThemes with Oak brand colour values \u2014 the package's entire output is Oak identity, which is its declared purpose"
+        }
+      ],
+      "targetState": "Keep as the Oak token source of truth; hold the generated CSS and terminal theme consistent with the design system via the consistency gate.",
+      "tranche": "2",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "packages/libs/env-resolution",
+      "publishedName": "@oaknational/env-resolution",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "1",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep generic; move the Oak-named example schemas out of source TSDoc into consumer docs, after which the package is publishable as-is.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/libs/env-resolution/src/resolve-env.ts and src/repo-root.ts \u2014 resolveEnv/findRepoRoot key off pnpm-workspace.yaml and .git markers; grep -ri oak over src returns only @oaknational scope references inside TSDoc comments, none in runtime identifiers or values"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json facts[dirPath=packages/libs/env-resolution].internalDependents = [\"@oaknational/oak-curriculum-mcp-streamable-http\", \"@oaknational/search-cli\"]"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row 'packages/libs/env-resolution|generic|1'"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "TSDoc in src/index.ts:22-23 names OakApiKeyEnvSchema/ElasticsearchEnvSchema and @oaknational/env as the schema home; src/types.ts and src/resolve-env.ts reference @oaknational/result in doc comments. Runtime code and emitted values carry no Oak token."
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/libs/fidelity-review",
+      "publishedName": "@oaknational/fidelity-review",
+      "disposition": "classified",
+      "classification": "mixed",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Parameterise the oak-app sentinel meta-name on ServerSentinel and re-seed test fixtures with neutral ids; the capture/diff/stats/report machinery is then fully generic.",
+      "thinnestSlice": "Move: the 'oak-app' meta-name literal in src/server-identity.ts (becomes a caller-supplied sentinel field) and the Oak-named test fixture ids (picker-oak-fold, oak-curriculum-hub/oak-design-showcase markers). Stay: image-diff, png-codec, visual-stats/correlation/calibration, static-path-guard, orchestrator, register, dev-server spawn/attach mechanics. No split needed \u2014 one parameterisation removes the runtime Oak contract.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/libs/fidelity-review/src/server-identity.ts:41 \u2014 judgeServerIdentity requires probe.body.includes('oak-app'); the Oak-named marker contract is in shipped runtime logic, not docs"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/server-identity.ts:43 runtime failure string 'the server answering is NOT this app (no oak-app marker \u2026)' \u2014 Oak-named token emitted in runtime error output"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json facts[dirPath=packages/libs/fidelity-review].internalDependents = [\"@oaknational/oak-curriculum-hub\", \"@oaknational/oak-design-showcase\"] \u2014 both consumers are Oak demo apps"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "README \u00a7Architectural decisions: ADR-041 dated amendment 2026-08-09 classifies this package as a foundation lib (docs/architecture/architectural-decisions/041-workspace-structure-option-a.md)"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "runtime-emitted",
+          "note": "'oak-app' meta-marker name is the app-identity contract in judgeServerIdentity (src/server-identity.ts:41) and appears in the runtime refusal message (line 43); every consumer's served page must carry an oak-named meta tag."
+        },
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "Test fixtures across src/*.unit.test.ts use Oak demo identities (picker-oak-fold pair ids, 'oak-curriculum-hub'/'oak-design-showcase' markers in dev-server.unit.test.ts:65-110); confined to in-source examples, not runtime output."
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/libs/graph-ingest",
+      "publishedName": "@oaknational/graph-ingest",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep the substrate generic; hold the ADR-179 boundary that Oak corpus mapping lands in graph-corpus-sdk, never here.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "grep -ri oak packages/libs/graph-ingest/src excluding @oaknational returns zero matches \u2014 the 22 oakInSource tokens counted in facts.json are all workspace-scope imports; sub-paths (jsonld-compatible, turtle, source-path, \u2026) are format-generic ingestion modes"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "README \u00a7Architectural decisions cites ADR-179 (transport-agnostic graph substrate) and opens with 'Oak-specific corpus mapping belongs in graph-corpus-sdk; this workspace remains a reusable substrate library'"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json facts[dirPath=packages/libs/graph-ingest].internalDependents = [] \u2014 pre-declared substrate entrypoints, no workspace consumer yet"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/libs/graph-project",
+      "publishedName": "@oaknational/graph-project",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep the projection/adjacency substrate generic per ADR-179; consumers inject their own datasets.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "grep -ri oak packages/libs/graph-project/src excluding @oaknational returns zero matches; src holds only property-graph types, toPropertyGraph/fromPropertyGraph projection over RDF datasets, and adjacency primitives \u2014 no domain vocabulary"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "README \u00a7Architectural decisions cites ADR-173 (graph stack topology) and ADR-179 (transport-agnostic graph substrate); the projection is declared derived-not-canonical over graph-core/dataset"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json facts[dirPath=packages/libs/graph-project].internalDependents = [] \u2014 substrate with pre-declared sub-path exports, no workspace consumer yet"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/libs/logger",
+      "publishedName": "@oaknational/logger",
+      "disposition": "classified",
+      "classification": "mixed",
+      "tranche": "1",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Evict the oak-curriculum-mcp default log path from DEFAULT_STDIO_SINK_CONFIG to the consuming MCP app; the UnifiedLogger/sink/redaction core is then a clean tranche-1 generic foundation. Diverges from the 2026-04-28 'generic' reading because the Oak-app default is shipped runtime state, not docs.",
+      "thinnestSlice": "Move: the '.logs/oak-curriculum-mcp.log' default path in DEFAULT_STDIO_SINK_CONFIG (src/sink-config.ts:100-106) to the MCP app's composition root as a caller-supplied default. Stay: UnifiedLogger, LogEvent/LogSink contracts, error normalisation, express middleware, sink-config parsing. Judgement call: the Symbol('oak.logger.normalized-error') marker mirrors package identity and may stay with the package name.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/libs/logger/src/sink-config.ts:103 \u2014 DEFAULT_STDIO_SINK_CONFIG ships default file path '.logs/oak-curriculum-mcp.log', naming a specific Oak app inside the generic logger"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/types.ts:59 NORMALIZED_ERROR_MARKER = Symbol('oak.logger.normalized-error') and the non-enumerable '__oakNormalizedError' property (src/error-normalisation.ts:39) ship in the runtime artefact; tests assert both stay out of serialised log output (src/error-normalisation.unit.test.ts:24-28)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json facts[dirPath=packages/libs/logger].internalDependents lists six Oak workspaces (curriculum-sdk, oak-curriculum-mcp-streamable-http, oak-search-sdk, sdk-codegen, search-cli, sentry-node)"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row 'packages/libs/logger|generic|1'; ADR-160 history entry (2026-04-19) records the JSON-type ownership move to @oaknational/observability"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "defaults",
+          "depth": "runtime-emitted",
+          "note": "DEFAULT_STDIO_SINK_CONFIG default log path '.logs/oak-curriculum-mcp.log' (src/sink-config.ts:103) bakes an Oak app name into a shipped runtime default \u2014 the driver for the mixed reading."
+        },
+        {
+          "type": "names",
+          "depth": "runtime-emitted",
+          "note": "Symbol('oak.logger.normalized-error') marker and '__oakNormalizedError' property ship in runtime code (src/types.ts:59, src/error-normalisation.ts:39); mitigated: non-enumerable and test-proven absent from serialised output; mirrors package identity."
+        },
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "TSDoc examples in src/express-middleware.ts:182,223 use the 'oak-http' service name; README quick-start repeats it and the '.logs/oak-curriculum-mcp/server.log' sink example."
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/libs/posthog-node",
+      "publishedName": "@oaknational/posthog-node",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Own as Oak's privacy-preserving product-analytics boundary for the MCP runtime; the allowlist event policy IS Oak's analytics model, not a generic adapter.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/libs/posthog-node/src/event-policy-contract.ts:9-10 \u2014 OAK_MCP_SERVER_NAME = 'oak-curriculum-http', ACTOR_MARKER = '__oak_posthog_distinct_id'; OakClientFamily/OakClientSurface types define Oak's client taxonomy"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/event-policy-helpers.ts:141-151 stamps oak_environment/oak_release plus $mcp_server_name='oak-curriculum-http' onto every captured event; ACTOR_PSEUDONYM_PATTERN /^oakph:v1:\u2026/ (line 14) governs every distinct id sent to PostHog"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json facts[dirPath=packages/libs/posthog-node].internalDependents = [\"@oaknational/oak-curriculum-mcp-streamable-http\"] \u2014 single consumer, the Oak MCP app; README declares it the only boundary permitted to import posthog-node/@posthog/mcp"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/libs/search-contracts",
+      "publishedName": "@oaknational/search-contracts",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "tranche": "5",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Own as Oak search contract data. The 2026-04-28 'mixed' reading no longer holds: createFieldInventory() takes no parameters and every runtime export is Oak-bound, so there is no generic entry point to extract; if a second domain ever appears, the matrix pattern (not this package) is the reusable part.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/libs/search-contracts/src/field-inventory.ts:1-16,178 \u2014 imports OAK_LESSONS_MAPPING\u2026OAK_META_MAPPING from @oaknational/sdk-codegen/search and createFieldInventory() is zero-arg, hard-bound to the Oak INVENTORY_CONFIG; SEARCH_INDEX_FAMILIES enumerates Oak curriculum families (lessons, units, threads, sequences)"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/stage-contract-matrix.ts:36-78 \u2014 exported runtime constant STAGE_CONTRACT_MATRIX carries hard-coded Oak workspace owner strings such as 'apps/oak-search-cli/src/adapters/oak-adapter*' and 'packages/sdks/oak-search-sdk/src/retrieval/*' in consumer-visible values"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json facts[dirPath=packages/libs/search-contracts].internalDependents = [\"@oaknational/oak-search-sdk\", \"@oaknational/search-cli\"] \u2014 the Oak search stack only"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row 'packages/libs/search-contracts|mixed|5' \u2014 superseded classification recorded here as the divergence baseline"
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/libs/sentry-node",
+      "publishedName": "@oaknational/sentry-node",
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "1",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep generic; relocate the TestError* fingerprint families from KNOWN_ERROR_FAMILIES to the MCP app's post-redaction beforeSend hook, per the README's own rule that the library list is reserved for consumer-stable families.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/libs/sentry-node/src \u2014 grep -ri oak excluding @oaknational and tests hits only TSDoc comments (runtime-fingerprint.ts:17,44; runtime-sdk.ts:63-72); no Oak token in runtime identifiers or values; DI-hermetic (README \u00a7DI seam: process.env reads banned in src/** at ESLint error severity)"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/runtime-fingerprint.ts:29-34 KNOWN_ERROR_FAMILIES ships 'TestErrorUnhandled'/'TestErrorHandled'/'TestErrorRejected'/'McpError' \u2014 fingerprint tokens emitted on outbound Sentry events; the TestError* classes belong to the Oak MCP app's /test-error diagnostic route (README \u00a7Fingerprinting)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json facts[dirPath=packages/libs/sentry-node].internalDependents = [\"@oaknational/oak-curriculum-mcp-streamable-http\", \"@oaknational/search-cli\"]"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row 'packages/libs/sentry-node|generic|1'; ADR-160 non-bypassable redaction barrier and ADR-078 DI seam cited as the package's governing invariants"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "domain-assumptions",
+          "depth": "runtime-emitted",
+          "note": "KNOWN_ERROR_FAMILIES (src/runtime-fingerprint.ts:29-34) bakes the Oak MCP app's /test-error diagnostic classes into the shared library's fingerprint policy and emits them as fingerprint tokens on outbound events \u2014 contradicting the README's rule that app-specific families go in the consumer's post-redaction hook. Not Oak-named, so it does not flip the classification, but it is a consumer-specific assumption in shipped runtime."
+        },
+        {
+          "type": "names",
+          "depth": "source-embedded-docs",
+          "note": "TSDoc cites Sentry issue ids OAK-OPEN-CURRICULUM-MCP-7/8/9 and 'the Oak Sentry fingerprint policy' (runtime-fingerprint.ts:17,44); runtime-sdk.ts:63-72 comments name Oak apps and future Oak hostnames for trace propagation. Comments only; stripped from emitted behaviour."
+        }
+      ]
+    },
+    {
+      "dirPath": "packages/sdks/graph-corpus-sdk",
+      "publishedName": "@oaknational/graph-corpus-sdk",
+      "disposition": "classified",
+      "classification": "mixed",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/sdks/graph-corpus-sdk/src/curriculum/graph-corpus.ts re-exports graphCorpus from '@oaknational/sdk-codegen/graph-corpus' (the Oak curriculum corpus), while src/eef-strands/eef-toolkit.external-data.ts holds the vendor-neutral EEF Teaching and Learning Toolkit snapshot (EEF_TOOLKIT_DATA) with no Oak coupling beyond @oaknational import specifiers"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents: ['@oaknational/curriculum-sdk'] \u2014 the sole workspace consumer is the Oak-leaf curriculum SDK"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "packages/sdks/graph-corpus-sdk/README.md cites ADR-157 (multi-source open-education integration) and ADR-179 (transport-agnostic graph substrate): a deliberately multi-corpus substrate whose first resident, eef-strands, is Oak-independent education content"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "domain-assumptions",
+          "depth": "runtime-emitted",
+          "note": "The /curriculum subpath ships the Oak curriculum graph corpus in runtime output (re-export of the 36,283-node unit/lesson/misconception/keyword dataset from @oaknational/sdk-codegen/graph-corpus) and its anchored views encode Oak curriculum shapes (subject/key-stage/thread anchors, e.g. keywordsForSubjectKeyStage in src/curriculum/index.ts)"
+        },
+        {
+          "type": "ownership-metadata",
+          "depth": "runtime-emitted",
+          "note": "The otherwise vendor-neutral eef-strands module ships Oak-naming provenance at runtime: meta.licence.attribution_note in src/eef-strands/eef-toolkit.external-data.ts ('may have been downloaded from EEF or supplied to Oak by EEF') is exported inside corpusMeta"
+        }
+      ],
+      "targetState": "Hold as the multi-corpus graph substrate; when separation executes, split the Oak curriculum subpath out and keep eef-strands as the vendor-neutral corpus foundation.",
+      "thinnestSlice": "Move: src/curriculum (Oak curriculum corpus bridge plus the prior-knowledge/misconception/thread-progression/keyword views over Oak curriculum shapes) goes with the Oak estate. Stay: src/eef-strands (vendor-neutral EEF Toolkit corpus foundation \u2014 third-party EEF content whose provenance/licence is pending per meta.licence.attribution_note, outside the Oak licence model) and the root barrel re-exporting generic GraphView/Result types.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "packages/sdks/oak-curriculum-sdk",
+      "publishedName": "@oaknational/curriculum-sdk",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/sdks/oak-curriculum-sdk/package.json: name '@oaknational/curriculum-sdk', description 'TypeScript SDK for Oak National Academy Curriculum API'; src/oak-url-convenience.ts hardcodes teacher-facing URL patterns on https://www.thenational.academy; src/config reads OAK_API_URL / OAK_API_SCHEMA_URL"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents: ['@oaknational/oak-curriculum-hub', '@oaknational/oak-curriculum-mcp-streamable-http', '@oaknational/search-cli'] \u2014 consumed exclusively by Oak product surfaces"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row 'packages/sdks/oak-curriculum-sdk|oak-leaf|4' \u2014 classification unchanged by live evidence; README 'Why This Exists' names the Oak Curriculum API as the package's whole purpose"
+        }
+      ],
+      "targetState": "Keep as the published Oak-leaf typed client for the Oak Curriculum API; no genericisation intended.",
+      "tranche": "4",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "packages/sdks/oak-sdk-codegen",
+      "publishedName": "@oaknational/sdk-codegen",
+      "disposition": "classified",
+      "classification": "mixed",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/sdks/oak-sdk-codegen: code-generation/ hosts the reusable OpenAPI-to-types/Zod/MCP-descriptor pipeline over the generic @oaknational/openapi-zod-client-adapter (imported in code-generation/adapter/index.ts), while schema-cache/api-schema-original.json (Oak's OpenAPI spec) and src/types/generated/ + src/generated/vocab/ are wholly Oak-derived artefacts"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/types/generated/search/es-mappings/oak-lessons.ts ships the oak_lessons index mapping with 'oak_lower' normalizer (line 18), 'oak_text_index' analyzer (line 31), and synonyms_set 'oak-syns' (line 26); generated api-schema text embeds the oak.link domain (src/types/generated/api-schema/api-schema-base.ts:9788 inside the runtime export const schemaBase, and src/types/generated/api-schema/mcp-tools/stubs/tools/get-lessons-summary.ts:50)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents: 6 workspaces \u2014 curriculum-sdk, graph-corpus-sdk, oak-curriculum-mcp-streamable-http, oak-search-sdk, search-cli, search-contracts \u2014 the estate's widest SDK-layer fan-out"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row 'packages/sdks/oak-sdk-codegen|mixed|4'; README implements ADR-108 (SDK workspace decomposition) with ESLint boundary rules keeping generation one-way from the runtime SDK"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "emitted-surfaces",
+          "depth": "runtime-emitted",
+          "note": "Eleven OAK_*_MAPPING Elasticsearch mapping constants (e.g. OAK_LESSONS_MAPPING, OAK_ZERO_HIT_MAPPING in src/types/generated/search/es-mappings/) emit oak_-prefixed index names, 'oak_text_index'/'oak_text_search' analyzers, 'oak_lower' normalizer, and the 'oak-syns' synonyms set into live Elasticsearch clusters"
+        },
+        {
+          "type": "names",
+          "depth": "runtime-emitted",
+          "note": "Generated API schema and MCP tool descriptor prose embeds the oak.link short-link domain \u2014 in the runtime export const schemaBase (api-schema-base.ts:9788/9800/9928), in the runtime MCP tool stub src/types/generated/api-schema/mcp-tools/stubs/tools/get-lessons-summary.ts:50 served to agents in the tool surface, with TSDoc echoes at api-paths-types.ts:3678/3859/3864"
+        },
+        {
+          "type": "domain-assumptions",
+          "depth": "runtime-emitted",
+          "note": "src/generated/vocab/graph-corpus/data.json ships a 36,283-node Oak curriculum graph corpus (unit/lesson/misconception/keyword content across 14+ Oak subjects) loaded at module import by generated/vocab/graph-corpus/index.ts"
+        }
+      ],
+      "targetState": "Extract the generic OpenAPI-to-types/Zod/MCP generation machinery when tranche 4 executes; keep the Oak schema cache and generated Oak artefacts Oak-side.",
+      "thinnestSlice": "Split: the generation machinery (code-generation/ typegen/codegen pipelines, response-map subsystem, bulk/vocab-gen mechanics) could stand as a vendor-neutral generator over any OpenAPI spec. Stay Oak-side: schema-cache/ (Oak's cached OpenAPI spec), src/types/generated/ (Oak API types, Zod schemas, MCP tool descriptors), src/generated/vocab/ (Oak vocabulary and the curriculum graph corpus data), and the OAK_*_MAPPING / oak_* Elasticsearch mapping export surface.",
+      "tranche": "4",
+      "licence": [
+        "code-mit",
+        "content-ogl"
+      ]
+    },
+    {
+      "dirPath": "packages/sdks/oak-search-sdk",
+      "publishedName": "@oaknational/oak-search-sdk",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "packages/sdks/oak-search-sdk/package.json: description 'TypeScript SDK for Oak semantic search \u2014 retrieval, admin, and observability services'; depends on @oaknational/search-contracts and @oaknational/sdk-codegen for Oak index documents and mappings; src/retrieval searches Oak curriculum scopes (lessons, units, threads, sequences)"
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "src/internal/index-resolver.ts hardcodes the runtime Elasticsearch index names oak_lessons, oak_unit_rollup, oak_units, oak_sequences, oak_sequence_facets, oak_threads (lines 53-58) plus ZERO_HIT_INDEX_BASE 'oak_zero_hit_events' (line 38) and INDEX_META_INDEX 'oak_meta' (line 41)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents: ['@oaknational/oak-curriculum-hub', '@oaknational/oak-curriculum-mcp-streamable-http', '@oaknational/search-cli'] \u2014 consumed exclusively by Oak product surfaces"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "2026-04-28 legacy matrix row 'packages/sdks/oak-search-sdk|oak-leaf|5' \u2014 classification unchanged by live evidence; README ties the retrieval design to ADR-110/ADR-130/ADR-134"
+        }
+      ],
+      "targetState": "Keep as the Oak-leaf semantic-search SDK over Oak's index contracts and curriculum scopes.",
+      "tranche": "5",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "plugins/oak-open-curriculum",
+      "publishedName": null,
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "leakage": [],
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "plugins/oak-open-curriculum \u2014 29 tracked files, all Oak-purposed agent content (skills/, workflows/, agents/ referencing Oak curriculum, misconceptions, accessibility guidance); .claude-plugin/plugin.json names Oak National Academy as author with Oak branding"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "plugins/oak-open-curriculum/.claude-plugin/plugin.json license field declares the ratified tri-licence verbatim: MIT code, OGL v3.0 curriculum content, Oak branding reserved (BRANDING.md)"
+        }
+      ],
+      "targetState": "Hold as the Oak agent-platform plugin leaf (subject derived by the owner-approved manifest arm ii-b, 2026-08-14); keep skill content grounded in the live Oak API per the plugin description, never embedded curriculum snapshots.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit",
+        "content-ogl",
+        "brand-reserved"
+      ]
+    },
+    {
+      "dirPath": "research/web-app-deconstruction",
+      "publishedName": null,
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "research/web-app-deconstruction/package.json description: \"...with a particular focus on what makes an Oak web app\" (name @oaknational/web-app-deconstruction, private, license MIT)"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "research/web-app-deconstruction/README.md \u00a7\"Publication and private-source citations\": \"the public projection of a research record whose full-fidelity master lives in Oak's private web-app-deconstruction repository\" (private-link reduction ratified as ADR-215 Decision 4, cited in packages/research-evidence/README.md)"
+        },
+        {
+          "kind": "consumer-topology",
+          "pointer": "facts.json internalDependents=[] for research/web-app-deconstruction; research/web-app-deconstruction/pnpm-workspace.yaml header marks the standalone manifest \"HISTORICAL ... NOT installable in the OCE projection\" \u2014 nothing in the OCE graph consumes the root"
+        }
+      ],
+      "targetState": "Keep as the public projection of Oak's private research record; not an extraction candidate.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "research/web-app-deconstruction/packages/research-evidence",
+      "publishedName": "@oaknational/research-evidence",
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "research/web-app-deconstruction/packages/research-evidence/scripts/component-boundary-inventory.ts:103 const DIRECT_PACKAGE = '@oaknational/oak-components'; and lib/pinned-source-links.ts:6 regex enumerating oaknational/(Database-Tools|Oak-Web-Application|oak-components|oak-openapi|oak-open-curriculum-ecosystem) permalinks; lib/cli.ts:15-16 sibling-checkout defaults 'Oak-Web-Application'/'oak-components'"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "research/web-app-deconstruction/packages/research-evidence/README.md:3-5 declared purpose: \"makes quantitative OWA, Oak Components, Database-Tools, oak-openapi and OCE evidence repeatable without changing any source repository\""
+        },
+        {
+          "kind": "emitted-surface",
+          "pointer": "research/web-app-deconstruction/packages/research-evidence/scripts/openapi-oce-contract-comparison.ts:175-176 injects OAK_GRAPHQL_HOST / OAK_GRAPHQL_SECRET into the pinned provider-route import environment at runtime; every probe emits JSON asserting Oak repository package identities (e.g. scripts/oce-inventory.ts:20 expectedPackage '@oaknational/open-curriculum-ecosystem')"
+        }
+      ],
+      "targetState": "Retain as the Oak-estate measurement harness inside the research projection; no extraction.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ]
+    },
+    {
+      "dirPath": "runtime-only-scripts",
+      "publishedName": null,
+      "disposition": "classified",
+      "classification": "generic-foundation",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit"
+      ],
+      "targetState": "Keep as the ADR-168 pre-install exception home; every script stays dependency-free Node-builtin ESM (.mjs) with a typed .d.mts sibling, and anything without the pre-install constraint moves to a TypeScript workspace.",
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "runtime-only-scripts/validate-package-manager-version.mjs \u2014 imports only node:fs, node:path, node:url; pure pnpm packageManager-pin vs npm_config_user_agent check with no Oak token in source (facts oakMarkers.oakInSource=0)"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "runtime-only-scripts/README.md \u2014 cites ADR-168 (docs/architecture/architectural-decisions/168-typescript-6-baseline-and-workspace-script-architectural-rules.md) permitting dependency-free pre-install .mjs as the narrow exception to the TypeScript-only source rule"
+        }
+      ],
+      "leakage": [
+        {
+          "type": "names",
+          "depth": "docs-level",
+          "note": "README names @oaknational/agent-tools as owner of the unit test and shipped-lifecycle smoke \u2014 the single Oak token in the surface (facts oakInDocs=1); the scripts themselves are portable to any pnpm-pinned repo."
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { blockingRank, latestRunPerCheck } from './check-rollup.js';
 import { parseReviewThreadPages } from './review-threads.js';
 import type { ReviewThreadsSummary } from './review-threads.js';
 
@@ -64,6 +65,14 @@ const rollupItemSchema = z
     status: z.string().optional(),
     conclusion: z.string().nullish(),
     state: z.string().optional(),
+    // Identity and anchor fields for the latest-run-per-check reduction
+    // (check-rollup.ts): without them a superseded run's residue (e.g. a
+    // concurrency-cancelled twin) holds the summary un-green forever.
+    name: z.string().optional(),
+    context: z.string().optional(),
+    workflowName: z.string().nullish(),
+    completedAt: z.string().nullish(),
+    startedAt: z.string().nullish(),
   })
   .loose();
 
@@ -178,10 +187,14 @@ export function classifyCheck(item: RollupItem): CheckBucket {
 }
 
 function summariseChecks(items: readonly RollupItem[]): ChecksSummary {
+  // Reduce to the latest run per check first: superseded residue (e.g. a
+  // concurrency-cancelled twin of a duplicated trigger delivery) must not
+  // hold the summary un-green forever (check-rollup.ts; PR #846).
+  const live = latestRunPerCheck(items, (item) => blockingRank(classifyCheck(item)));
   let passed = 0;
   let failed = 0;
   let pending = 0;
-  for (const item of items) {
+  for (const item of live) {
     const bucket = classifyCheck(item);
     if (bucket === 'passed') {
       passed += 1;
@@ -191,7 +204,7 @@ function summariseChecks(items: readonly RollupItem[]): ChecksSummary {
       pending += 1;
     }
   }
-  return { total: items.length, passed, failed, pending };
+  return { total: live.length, passed, failed, pending };
 }
 
 /**

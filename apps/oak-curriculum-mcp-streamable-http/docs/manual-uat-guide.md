@@ -187,10 +187,19 @@ flag explains it before logging a fault).
 Run from a shell. Substitute `ORIGIN` for the server host (scheme + host only).
 On a no-auth local server, 1.2/1.3 do not apply — auth is disabled.
 
+**Which path to probe on which host (MCP-580).** The canonical host
+(`www.thenational.academy`) forwards only `/mcp` and `/mcp/*` to this app, so a
+root-level probe there reaches the main website and returns its 404 HTML. Rows
+1.1 and 1.2 therefore carry both forms: use the canonical one on `www`, the root
+one on the alpha host and locally. **Send no trailing slash** — `/mcp/healthz/`
+reaches the same handler but matches no auth-skip entry, so it drags the auth
+vendor into the liveness path (a characterised, owner-held trailing-slash class,
+not a defect of this route).
+
 | #   | What           | How                                                                                                                                                                                                                                                                                            | Expected result                                                                       |
 | --- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| 1.1 | Liveness       | `curl -sS -o /dev/null -w '%{http_code}\n' ORIGIN/healthz`                                                                                                                                                                                                                                     | `200`                                                                                 |
-| 1.2 | OAuth metadata | `curl -sS ORIGIN/.well-known/oauth-protected-resource`                                                                                                                                                                                                                                         | HTTP `200`; JSON includes `resource` and `authorization_servers` (PRM fields)         |
+| 1.1 | Liveness       | `curl -sS -o /dev/null -w '%{http_code}\n' ORIGIN/mcp/healthz` (canonical host) or `ORIGIN/healthz` (alpha host, local)                                                                                                                                                                        | `200`, `Cache-Control: no-store`                                                      |
+| 1.2 | OAuth metadata | `curl -sS ORIGIN/.well-known/oauth-protected-resource/mcp` (canonical host — the path-qualified route the handshake advertises) or `ORIGIN/.well-known/oauth-protected-resource` (alpha host, local)                                                                                           | HTTP `200`; JSON includes `resource` and `authorization_servers` (PRM fields)         |
 | 1.3 | Auth challenge | `curl -sS -D - -o /dev/null -X POST ORIGIN/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"uat","version":"1"}}}'` | HTTP `401`; headers include `WWW-Authenticate` with `Bearer` and `resource_metadata=` |
 | 1.4 | Host guard     | Repeat 1.2 with a bogus `-H 'Host: evil.example'`.                                                                                                                                                                                                                                             | `403` on a deployed server whose `ALLOWED_HOSTS` excludes the bogus host.             |
 

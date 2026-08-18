@@ -1,0 +1,167 @@
+/* Public Digital Service — FULL contract (Part A + Part B), v7 "the public service".
+   GDS visual design throughout (colours, type scale, spacing, layout —
+   OGL v3.0), no crown / GDS Transport / GOV.UK trade dress. Invariants
+   untouched: focus ring composition, ≥44px targets, Oak functional state
+   colours, state never colour alone. */
+@import url('brand-a.css');
+:root {
+  /* THE RAMP — the GDS scale: big, bold, tight. 48/36/27/24/19 headings,
+     19/16/14 body, zero tracking, no light weights. */
+  --tracking-heading: 0em;
+  --tracking-body: 0em;
+  /* Fluid display slots (h1-3): unitless PARTS — the kit derives the curve
+     (brand.css §1b). Weight rides --weight-display (brand-a). Floors are
+     fit-derived and gentle: a document's headings sit close to its text. */
+  --type-heading-1-min: 2.25;
+  --type-heading-1-max: 3;
+  --type-heading-1-leading: 1.05;
+  --type-heading-2-min: 1.75;
+  --type-heading-2-max: 2.25;
+  --type-heading-2-leading: 1.11;
+  --type-heading-3-min: 1.375;
+  --type-heading-3-max: 1.6875;
+  --type-heading-3-leading: 1.11;
+  --type-heading-4: 700 1.5rem/1.25 var(--font-display);
+  --type-heading-5: 700 1.1875rem/1.32 var(--font-display);
+  --type-heading-6: 700 1rem/1.25 var(--font-display);
+  --type-heading-7: 700 0.875rem/1.43 var(--font-display);
+  --type-body-1: 400 1.1875rem/1.32 var(--font-sans);
+  --type-body-2: 400 1rem/1.25 var(--font-sans);
+  --type-body-3: 400 0.875rem/1.43 var(--font-sans);
+  --type-body-4: 400 0.875rem/1.43 var(--font-sans);
+  --type-label: 700 1.1875rem/1.32 var(--font-sans);
+  /* Case grammar — GDS is sentence case, no small caps, no tracking */
+  --label-transform: none;
+  --label-variant: normal;
+  --tracking-caps: 0;
+  /* STRUCTURE — GDS page grid: 960px width container, two-thirds/one-third,
+     30px gutters, everything ranged left. */
+  --container-max: 960px;
+  --flow-columns: minmax(0, 2fr) minmax(0, 1fr);
+  --flow-gap: 30px;
+  --key-align: left;
+  --key-justify: stretch;
+  --band-bg: light-dark(#f3f2f1, #1f2021);
+  --band-border: none;
+  --band-pad: var(--inset-l);
+  /* DENSITY — the GDS static spacing scale (10·20·30, insets 15/20/30) */
+  --density: 0.9;
+  --gap-s: 10px;
+  --gap-m: 20px;
+  --gap-l: 30px;
+  --inset-s: 15px;
+  --inset-m: 20px;
+  --inset-l: 30px;
+  --control-pad-block: 8px;
+  --control-pad-inline: 12px;
+  /* 4. Core neutrals — GDS ink and greys: near-black text, white page,
+     light-grey panels. Dark polarity re-derived (GDS ships light-only). */
+  --text-primary: light-dark(#0b0c0c, #f2f3f3);
+  --text-subdued: light-dark(#505a5f, #9da4a8);
+  --text-inverted: light-dark(#ffffff, #0b0c0c);
+  --text-link: light-dark(#1d70b8, #5694ca);
+  --text-link-hover: light-dark(#003078, #8cb8dc);
+  --text-link-visited: light-dark(#4c2c92, #b7a4e0);
+  --bg-primary: light-dark(#ffffff, #0b0c0c);
+  --bg-subtle: light-dark(#fafafa, #151616);
+  --bg-neutral: light-dark(#f3f2f1, #1f2021);
+  --bg-neutral-stronger: light-dark(#dbdad9, #2b2d2e);
+  --bg-inverted: light-dark(#0b0c0c, #ffffff);
+  --bg-btn-secondary: light-dark(#f3f2f1, #1f2021);
+  --bg-raised: light-dark(#ffffff, #1a1b1b);
+  --bg-overlay: light-dark(#ffffff, #1a1b1b);
+  --border-primary: light-dark(#0b0c0c, #f2f3f3);
+  --border-neutral: light-dark(#505a5f, #9da4a8);
+  --border-neutral-lighter: light-dark(#b1b4b6, #3c3f40);
+  /* 5. Buttons — the GDS action button: green plate, white text, hard 2px
+     bottom edge that goes flush when pressed. */
+  --bg-btn-primary: light-dark(#00703c, #00b374);
+  --bg-btn-primary-hover: light-dark(#005a30, #00cc84);
+  --text-btn-primary: light-dark(#ffffff, #0b0c0c);
+  --bg-btn-secondary-hover: light-dark(#dbdad9, #2b2d2e);
+  --btn-shadow: 0 2px 0 0 light-dark(#002d18, #005a30);
+  /* 6. Functional colours stay Oak's — states are meaning, not fashion. */
+  /* 7. Geometry — GDS: square everything; panels borderless, plates hairline */
+  --radius-control: 0px;
+  --radius-container: 0px;
+  --card-border: var(--border-solid-s);
+  --size-target: 44px;
+  /* 8. Signature — flat: GDS has no decorative shadows and no animation;
+     the only depth is the button's mechanical bottom edge. */
+  --shadow-ground: light-dark(#0b0c0c, #f2f3f3);
+  --shadow-accent: none;
+  --shadow-accent-raised: none;
+  --shadow-accent-pressed: none;
+  --shadow-neutral: none;
+  --shadow-press: 0 0 0 0 transparent;
+  --motion-quick: 0ms;
+  --motion-base: 0ms;
+  --surface-page-image: none;
+  --card-bg-image: none;
+  --btn-bg-image: none;
+  /* 10. Component form — GDS tags: flat tinted rectangles, no border,
+     no shadow, square. (Tints come from the Part A decorative ramp.) */
+  --tag-border: none;
+  --tag-shadow: none;
+  --tag-radius: 0px;
+  /* Icon roles → Bootstrap Icons SVG URLs (MIT, jsDelivr) — shared markup
+     resolves to the plain public-service forms */
+  --ic-search: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/search.svg');
+  --ic-download: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/download.svg');
+  --ic-next: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/arrow-right.svg');
+  --ic-prev: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/arrow-left.svg');
+  --ic-external: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/box-arrow-up-right.svg');
+  --ic-close: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/x-lg.svg');
+  --ic-menu: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/list.svg');
+  --ic-tick: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/check-lg.svg');
+  --ic-cross: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/x-lg.svg');
+  --ic-warning: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/exclamation-triangle.svg');
+  --ic-info: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/info-circle.svg');
+  --ic-star: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/star.svg');
+  --ic-book: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/journal-text.svg');
+  --ic-quiz: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/question-circle.svg');
+  --ic-video: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/play-circle.svg');
+  --ic-worksheet: url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/file-earmark-text.svg');
+}
+
+/* COMPOSITION (page-type scoped) — the GDS page grid: a two-thirds reading
+   column with the one-third column alongside (filters/related as the
+   right-hand third), 30px gutters, inside a 960px width container. */
+[data-page='unit'] {
+  --main-columns: minmax(30px, 1fr) minmax(0, 630px) minmax(200px, 300px) minmax(30px, 1fr);
+  --main-gap: 0 30px;
+  --main-areas: 'hero hero hero hero' '. results facets .' '. detail detail .'
+    '. resources resources .' '. support support .' '. cta cta .';
+}
+[data-page='proof'] {
+  --main-columns: minmax(30px, 1fr) minmax(0, 630px) minmax(200px, 300px) minmax(30px, 1fr);
+  --main-gap: 0 30px;
+  --main-areas: 'hero hero hero hero' '. featured support .' '. context context .'
+    '. content content .' '. cta cta .';
+}
+
+/* §11 EXPRESSION LAYER — hook-clean rules (equal specificity, loaded after
+   the page sheet, per the specimen's hook-clean contract). The GDS header
+   grammar: black masthead, brand-blue underline bar, white wayfinding,
+   and the 48px bold page title. */
+.mast {
+  background: var(--bg-inverted);
+  border-bottom: 10px solid var(--color-accent);
+}
+.mast .brand-name,
+.mast .oak-link {
+  color: var(--text-inverted);
+}
+.headline {
+  font: var(--type-heading-1);
+}
+
+/* Flow topology collapses at the kit's narrow seam: multi-column key-item
+   flow needs room the -narrow maps do not have (measured: 132px/66px
+   tracks at a 320px viewport overflowed the reflow floor — the specimen
+   accessibility matrix's finding, 2026-08-10). */
+@media (max-width: 840px) {
+  :root {
+    --flow-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,819 @@
+{
+ "proposals": [
+  {
+   "id": "bounded-context",
+   "proposal": {
+    "axesRecognised": [
+     {
+      "name": "Knowledge provenance / Oak-specificity",
+      "question": "Could a non-Oak organisation adopt this workspace unchanged?",
+      "values": "generic \u2194 oak-configured \u2194 oak-leaf \u2194 oak-proprietary (brand)",
+      "collapsesInto": "Subdomain posture \u2014 this IS DDD's generic-subdomain vs core-domain distinction"
+     },
+     {
+      "name": "Change-cause and clock",
+      "question": "What event obsoletes this workspace's contents?",
+      "values": "upstream API deploy, bulk refresh, index design, editorial decision, brand decision, code change",
+      "collapsesInto": "Byte provenance \u2014 the clock is the shadow of the named conformance contract (which upstream tap regenerates this); the census's own labels smear when clock is treated as primary (oak-vocab-mining labelled codegen-time while its scope says bulk-refresh cadence)"
+     },
+     {
+      "name": "Authorship of bytes",
+      "question": "Who owns the language in these files \u2014 us, our generator, or a foreign system verbatim?",
+      "values": "hand-written \u2194 generated \u2194 byte-preserved capture \u2194 editorial content",
+      "collapsesInto": "Byte provenance \u2014 this is the core of that axis"
+     },
+     {
+      "name": "Reliance depth",
+      "question": "How far from the composition leaf does this sit?",
+      "values": "core primitives \u2192 foundational systems \u2192 domain/SDKs \u2192 composition leaves",
+      "collapsesInto": "Derived, not basis \u2014 depth is recomputable from the dependency graph given posture (generic never imports oak) and context rules; materialising it as tiers forces re-rooting whenever a package gains a consumer"
+     },
+     {
+      "name": "Upstream bounded context",
+      "question": "Which proper-noun external service breaks this, via which published interface?",
+      "values": "Oak platform (spec tap / bulk tap / live tap), Claude Design studio, MCP standard, Clerk, ES, Sentry...",
+      "collapsesInto": "Split across two basis axes: proper-noun domain upstreams seed Bounded context; commodity suppliers (ES, Sentry, Clerk) are the generic pole of Subdomain posture; the specific tap/contract is named by Byte provenance"
+     },
+     {
+      "name": "Licence and travel rights",
+      "question": "Under what terms may these bytes leave the estate?",
+      "values": "MIT / OGL / brand-reserved / mixed",
+      "collapsesInto": "Subdomain posture \u2014 posture predicts travel (generic=MIT-extractable, curriculum content=OGL, brand=reserved); the exact SPDX string is a package.json field the posture axis carries, and edge cases (baselines.json) remain owner facts"
+     },
+     {
+      "name": "Capability family",
+      "question": "Which domain vocabulary do this workspace's identifiers speak?",
+      "values": "search, mcp, graph, design, curriculum-data, agent-practice",
+      "collapsesInto": "Bounded context \u2014 capability family is the domain-language reading of the same partition"
+     },
+     {
+      "name": "Audience/deployment class",
+      "question": "Who consumes the built output?",
+      "values": "npm package, deployed app, demo, internal instrument, research",
+      "collapsesInto": "Demoted to a carrier flag, not an axis \u2014 it never governs boundaries, dependency direction, or edit rights; carried by top-level directory habit (apps/, demos/) plus package.json private/publishConfig"
+     }
+    ],
+    "basis": [
+     {
+      "axis": "Bounded context \u2014 the domain language a workspace speaks: curriculum (the Oak platform's ubiquitous language of lessons/units/threads), search (index docs, facets, ground truths, MRR), design/brand, graph, MCP delivery, agent-practice (sessions, seats, validators \u2014 the estate's own operational domain), generic infrastructure (vendor adapters and language-free mechanics), research",
+      "role": "Workspace boundaries and team navigation, and the primary directory-placement principle: a workspace never mixes two domain languages; cross-context consumption happens only through a published SDK/package surface (context-map translation), never by co-residence",
+      "carrier": "Directory level 2 under packages/ (packages/search/, packages/design/, packages/mcp/, packages/graph/, ...) plus the domain noun in the workspace name; enforced by oak-eslint boundary inventories. Recommendation diverging from the implied tree: packages/codegen/ is a clock-grouping, not a context \u2014 openapi-schema-source and openapi-pipeline belong to generic OpenAPI infrastructure, oak-vocab-mining to the curriculum context (the census's open question 1 invites exactly this tier-name ruling)",
+      "rationale": "DDD's first cut: a model is only coherent inside its context. Every governing conversation in the census is conducted in one domain language at a time; the reorganisation's splits (search-cli into bulk/ingest/eval/ground-truths, sdk-codegen into spec/pipeline/artifacts) are all recoveries of context seams that co-residence had smeared"
+     },
+     {
+      "axis": "Subdomain posture \u2014 DDD's strategic classification: generic subdomain (any organisation could adopt; commodity-supplier-facing) \u2194 oak-configured (generic machinery parameterised by Oak config) \u2194 oak core-domain leaf \u2194 oak-proprietary (brand-reserved, non-travelling)",
+      "role": "Dependency direction (the enforceable predicate: generic never imports oak-prefixed; oak composes generic), licensing/extraction/travel (posture determines the travel destiny \u2014 es-ingest-core can leave for npm, oak-search-ingest cannot), and the extraction roadmap",
+      "carrier": "Name prefix (oak- vs unprefixed: es-ingest-core, mcp-server-express-core, search-eval-harness vs oak-search-ingest) + package.json license and publishConfig fields + a boundary lint rule enforcing the import-direction predicate",
+      "rationale": "The generic/core fault line is where the estate's value stack lives (foundational-building-blocks frame: context specificity is 'a second axis across all layers rather than a synonym for a layer'). It is orthogonal to context \u2014 search contains both es-ingest-core (generic) and oak-search-ingest (core) \u2014 and it alone answers what may travel and which way dependencies flow"
+     },
+     {
+      "axis": "Byte provenance / conformance relationship \u2014 who authors the language in the files and under which named upstream contract: hand-written in our language \u2194 generated projection of a named published interface (DO-NOT-EDIT, regenerated wholesale when THAT contract's event fires: OpenAPI-spec tap, bulk tap, index-design contract, studio export) \u2194 byte-preserved foreign capture \u2194 editorial content (human-authored in the domain's published language, OGL)",
+      "role": "Edit rights and regeneration (the DO-NOT-EDIT boundary, one-declared-generator-per-surface, drift gates), and the change-clock as a derived property: the clock IS the named contract's freshness event, so 'two clocks never share a workspace' becomes 'two conformance contracts never share a workspace' \u2014 same verdict, proper-noun-grounded",
+      "carrier": "The packages/generated/* tier for cross-workspace artefact holders (a deliberate carve-out where the tree materialises this axis instead of context, context surviving in the name prefix: oak-api-*, oak-search-*); in-workspace generated/ directory convention; DO-NOT-EDIT markers; drift-gate validators; the regeneration event named in package.json scripts",
+      "rationale": "ACLs are DDD's answer to foreign models: the generated tiers are frozen translations of upstream published languages, the studio capture is a conformist verbatim import fenced behind its own boundary, editorial corpora are domain-expert knowledge captured as data. The generatedSeparationPolicy's ten clauses are all projections of this one axis \u2014 it is the estate's most-litigated defect class and cannot be derived from the other two"
+     }
+    ],
+    "cardinalityArgument": "Three, and the pressure is real in both directions. Drop to two by merging posture into context and you lose the only enforceable dependency-direction predicate and the entire extraction/travel story: es-ingest-core and oak-search-ingest sit in the same capability with opposite travel destinies, and no context label separates them. Drop provenance instead and you cannot state edit rights: DO-NOT-EDIT artefacts land beside editable code again, which is precisely the defect class (24MB data.json inside a code workspace, cross-workspace writes into src/) the ratified programme exists to cure \u2014 the generatedSeparationPolicy would have no axis to hang on. Go to four by promoting clock to an independent axis and you double-count: the clock is a consequence of which conformance contract a workspace holds, and clock-as-label already misclassifies in the census itself (oak-vocab-mining carries lifecycle codegen-time while its scope text says it runs on the bulk-refresh cadence). Promote reliance depth and you materialise a graph-derived quantity as declared structure, forcing tier churn every time a package gains a consumer \u2014 depth should be recomputed by a validator (validators-must-recompute-not-just-record), not asserted by placement. Every one of the eight observed axes either collapses into one of the three, derives from the dependency graph, or demotes to a metadata flag; each of the three answers at least one governing decision class the other two cannot reach.",
+    "hardCaseClassifications": [
+     {
+      "case": "openapi-schema-source + oak-bulk-data (one upstream, two acquisition workspaces)",
+      "placement": "Same proper-noun upstream, two distinct published interfaces \u2014 the OpenAPI-spec tap and the /api/bulk tap are separate conformance contracts, so DDD predicts one ACL each; provenance names the contract, the differing clocks follow for free. Context: generic-OpenAPI infra (schema-source, parameterised) and curriculum (bulk-data); posture: oak-configured vs oak-leaf",
+      "forcedFit": false,
+      "note": "This case is the strongest argument FOR the DDD basis: 'one service, three taps on three clocks' is exactly 'one supplier, multiple published languages, one ACL per contract'"
+     },
+     {
+      "case": "packages/generated/* tier (four artefact workspaces, different capability families)",
+      "placement": "Provenance-first placement by deliberate carrier assignment: the tree materialises provenance for this class (edit-right enforcement \u2014 Sonar exclusions, DO-NOT-EDIT gates, wholesale regeneration \u2014 binds per-directory), while context survives in the name prefix (oak-api-*, oak-search-*, oak-bulk-*, oak-curriculum-corpus-*)",
+      "forcedFit": false,
+      "note": "A pure context-first tree would scatter these into their contexts; the carve-out is a real tension between two basis axes competing for the same tree level, resolved by carrier design rather than denied"
+     },
+     {
+      "case": "oak-design-studio-capture (467 byte-preserved studio files)",
+      "placement": "Design context, oak posture, provenance = byte-preserved foreign capture: a conformist relationship with the Claude Design studio (their bytes taken verbatim, zero translation) fenced behind its own workspace and quality-gate boundary",
+      "forcedFit": false,
+      "note": "The census's 'converts vigilance fences to structure' is the DDD move exactly: an ACL boundary replacing README/Sonar-exclusion vigilance"
+     },
+     {
+      "case": "agent-tools residue (mixed-justified, Oak platform adapters)",
+      "placement": "Agent-practice context composition leaf, oak-leaf posture; internally it holds several vendor ACLs (Claude/Codex/Cursor platform adapters) plus one bounded generated region beside its generator \u2014 each individually too small to mint",
+      "forcedFit": false,
+      "note": "The basis classifies it cleanly but would split it at scale; its internal multiplicity is tolerated by the minting-threshold judgment, which is proportionality doctrine (consolidate-at-second-consumer), not an axis \u2014 see residue"
+     },
+     {
+      "case": "oak-search-ground-truths (OGL editorial content in a code estate)",
+      "placement": "Search context, oak posture (OGL travel terms carried in the license field), provenance = editorial content: domain-expert-authored knowledge in the domain's published language \u2014 DDD's ubiquitous language captured as data, never governed by the generated rule",
+      "forcedFit": false,
+      "note": "The census's challenger correction (from generated-separation to handwritten) is the provenance axis doing its job"
+     },
+     {
+      "case": "oak-design-assets (brand-reserved rasters)",
+      "placement": "Design context, posture = oak-proprietary (the non-travelling extreme of the posture axis), hand-authored provenance; the licensing seam IS the posture seam",
+      "forcedFit": false
+     },
+     {
+      "case": "research-evidence (research workspace)",
+      "placement": "Research context under DDD's separate-ways context-map pattern: deliberate no-dependency autonomy; oak-internal posture, hand-written probes with all output stdout or gitignored",
+      "forcedFit": true,
+      "note": "Honest stretch: 'research' is a governance zone more than a domain language; the context axis absorbs it but the fit is by pattern (separate-ways) rather than by vocabulary"
+     },
+     {
+      "case": "runtime-only-scripts (three files, maybe-workspace)",
+      "placement": "Agent-practice/operations context, oak-leaf posture, hand-written \u2014 classification is unambiguous; whether it becomes a workspace member at all is a minting-threshold question the basis does not decide",
+      "forcedFit": false,
+      "note": "The open question is proportionality, not taxonomy; either answer (workspace or honest three-file shape) is basis-consistent"
+     },
+     {
+      "case": "apps/ vs demos/ (audience: axis or habit?)",
+      "placement": "Both are composition roots of their contexts; the demo/product distinction is deployment intent, carried as a flag (top-level directory habit + package.json private/deploy config), not a basis axis \u2014 it never governs boundaries, dependency direction, or edit rights",
+      "forcedFit": false,
+      "note": "Verdict: a real distinction, demoted to a carrier flag; promotion would be warranted only if demos acquire distinct governance (see futureTests)"
+     },
+     {
+      "case": "es-ingest-core (generic machinery over a commodity service)",
+      "placement": "Generic subdomain posture (supplier-facing adapter speaking Elasticsearch's language, not Oak's \u2014 any provider could replace it), unprefixed name, MIT, travel-ready; sits in generic infrastructure beside posthog-node/sentry-node rather than inside the Oak search domain",
+      "forcedFit": false,
+      "note": "The posture axis is what separates it from oak-search-ingest despite shared capability \u2014 the case the two-axis (context-only) basis cannot handle"
+     },
+     {
+      "case": "oak-mcp-widget (own toolchain, build artefact embedded in a server)",
+      "placement": "MCP-delivery context, oak posture, hand-written provenance; its build output becomes the published interface the server consumes as an ordinary declared dependency \u2014 the committed generated constant leaving the server's src/ is the provenance axis's no-cross-workspace-writes clause",
+      "forcedFit": false
+     },
+     {
+      "case": "corpus-instruments / repo-validators / agent-session-ops (product or practice?)",
+      "placement": "Neither forced into the product: agent-practice is a bounded context in its own right \u2014 a distinct core domain of the meta-work with its own ubiquitous language (seats, claims, validators, fitness). Posture varies per member: agent-session-ops re-namespaced off OAK_* is portable/generic-posture practice core; repo-validators and corpus-instruments are estate-specific leaves",
+      "forcedFit": false,
+      "note": "The question dissolves under the basis: 'product or practice' is a context question, and practice is a context, not a wart on the product"
+     }
+    ],
+    "residue": [
+     "Minting thresholds: the basis classifies every workspace but never decides whether a classified unit is big enough to BE a workspace (runtime-only-scripts, agent-tools' internal vendor-adapter multiplicity, every 'too-small-to-split rider'). That judgment belongs to proportionality doctrine (consolidate-at-second-consumer, hollow-wrapper rejections) and no axis set supplies it.",
+     "Transitional tree inconsistency: today's packages/core|libs|sdks tiers materialise reliance depth, which this basis treats as graph-derived; the recommended context-first level-2 coexists with the legacy depth tiers until the owner rules on tier names (census open question 1). The basis tolerates the hybrid but does not erase it \u2014 navigation pays the tax meanwhile.",
+     "Exact licence strings remain owner facts: posture predicts the travel class but cannot derive edge rulings \u2014 the licence of evaluation/baselines.json, the OGL/MIT dual marking for oak-search-ground-truths, and the marking of generated workspaces holding OGL-derived data are legal determinations the axis carries in package.json but cannot answer.",
+     "Editorial and brand workspaces have no upstream conformance contract, so their change-cause is a human decision with no derivable clock; the provenance axis names them (editorial / hand-authored) but says nothing about cadence \u2014 freshness expectations for ground truths and synonym vocabularies need separate operational ownership.",
+     "Audience stays demoted: if a demo ever acquires genuinely different governance (security posture, data-handling class, a paying external audience), the flag would need promotion to something enforceable, and the basis as stated has no fourth slot for it."
+    ],
+    "futureTests": [
+     {
+      "futureClass": "A second proper-noun curriculum upstream",
+      "absorbedCleanly": true,
+      "note": "The basis's home case: mint a new bounded context with one ACL per published interface of the new supplier (its own schema-source config, artifact holders, ingest); the generic machinery (openapi-pipeline, es-ingest-core, search-eval-harness) is reused as-is because posture kept it free of Oak knowledge. No re-rooting \u2014 a new sibling context directory and new conformance workspaces only."
+     },
+     {
+      "futureClass": "A new product app",
+      "absorbedCleanly": true,
+      "note": "A new composition root in its context: apps/ flag, thin leaf, consumes context SDKs across published surfaces. All three axes assign values without strain."
+     },
+     {
+      "futureClass": "Extraction of a generic package to npm/another repo",
+      "absorbedCleanly": true,
+      "note": "Extraction is lifting a unit the posture axis already prepared: unprefixed name, MIT license field, lint-enforced zero oak-imports mean the workspace is travel-ready by construction \u2014 the axis's whole purpose."
+     },
+     {
+      "futureClass": "A new commodity provider adapter",
+      "absorbedCleanly": true,
+      "note": "Generic-infrastructure context, supplier-named workspace beside posthog-node/sentry-node/es-ingest-core; posture generic, provenance hand-written. Routine."
+     },
+     {
+      "futureClass": "A second demo consumer team adopting the estate",
+      "absorbedCleanly": true,
+      "note": "Navigation is served by context tiers plus posture naming; demos are flagged entry points. Caveat recorded in residue: if that team's demos acquire distinct governance, the audience flag would need promotion \u2014 the one future that could press a fourth axis into existence."
+     }
+    ]
+   }
+  },
+  {
+   "id": "change-cause",
+   "proposal": {
+    "axesRecognised": [
+     {
+      "name": "change-cause-and-clock",
+      "question": "What single event obsoletes or rewrites this workspace's contents, and on what cadence does that event fire?",
+      "values": "upstream-spec deploy (codegen-time) | bulk-data refresh (ingest-time) | index-design change | editorial curation | product/request-time code change (runtime) | hook-and-lint policy change (lint-time) | evaluation-harness change (test-time) | own-toolchain build (build-time) | mixed-justified (explicit recorded exception)"
+     },
+     {
+      "name": "knowledge-provenance",
+      "question": "Whose knowledge do these bytes encode: reusable mechanism, a brand's configuration of a mechanism, or a brand's own leaf content/composition?",
+      "values": "generic (zero Oak knowledge, parameterised) | oak-configured (generic machinery + Oak config/decorators) | oak-leaf (Oak domain content, adapters, compositions)"
+     },
+     {
+      "name": "byte-authorship",
+      "question": "Who may legitimately change a byte here, and by what act: editing, regenerating wholesale, or re-capturing?",
+      "values": "hand-written code | hand-authored editorial content (ground truths, synonym vocabularies, brand assets, EEF data-as-code) | generated (DO-NOT-EDIT, one declared generator, drift-gated, regenerated wholesale) | byte-preserved third-party capture (studio-source)"
+     },
+     {
+      "name": "audience-deployment-class",
+      "question": "To whom does this workspace ship, under what governance regime?",
+      "values": "published npm package | deployed product app | demo (demonstration instrument, never implicitly a product) | internal instrument (agent-practice / repo tooling) | research record"
+     },
+     {
+      "name": "upstream-bounded-context",
+      "question": "Which proper-noun external service breaks this workspace when it deploys?",
+      "values": "Oak curriculum platform (three taps: spec, /api/bulk, live queries) | commodity providers (Elasticsearch, Sentry, PostHog, Clerk) | none",
+      "collapsesInto": "change-cause-and-clock (a proper-noun upstream is a source of clock values, not an axis: one Oak service yields three distinct clocks and therefore three workspace families \u2014 hard case 1 is the existence proof; the commodity-vs-proper-noun half of the distinction collapses into knowledge-provenance: depending on a swappable commodity does not make code oak-specific, which is exactly the es-ingest-core ruling)"
+     },
+     {
+      "name": "licence-and-travel-rights",
+      "question": "Under what licence do these bytes travel, and how far may they go?",
+      "values": "MIT code | OGL curriculum content | brand-reserved assets | mixed",
+      "collapsesInto": "derived from knowledge-provenance x byte-authorship (code -> MIT; oak-leaf x editorial curriculum content -> OGL; oak-leaf x brand asset -> reserved), declared in the package.json license field and checked by a validator that recomputes the expectation from the two basis axes; derivation is presumptive, not mechanical \u2014 see residue"
+     },
+     {
+      "name": "capability-family",
+      "question": "Which product capability does a human associate this with (search, mcp, graph, design, curriculum-data, agent-practice)?",
+      "values": "search | mcp | graph | design | curriculum-data | codegen | agent-practice",
+      "collapsesInto": "navigation labelling over the basis, not a basis member: it never decides a boundary (packages/generated/* deliberately holds artefacts from four families \u2014 hard case 2), never constrains a dependency, and never grants or denies an edit; it survives as level-2 directory names and name segments purely for human wayfinding"
+     },
+     {
+      "name": "reliance-depth",
+      "question": "How many things stand on this: core primitive, foundational system, domain SDK, or composition leaf?",
+      "values": "core primitives | foundational systems | domain/SDKs | composition leaves",
+      "collapsesInto": "derived from the dependency graph (plus strong correlation with knowledge-provenance per the value-stack frame's own note that context specificity is 'a second axis across all layers'); declaring it as a stored classification would mint a drift surface between declaration and graph, contra validators-must-recompute \u2014 enforcement lives in the boundary rules that recompute direction from actual imports"
+     }
+    ],
+    "basis": [
+     {
+      "axis": "change-cause-and-clock",
+      "role": "workspace boundaries (the two-clocks test is the mandatory-split rule) and tranche sequencing; the primary Parnas axis \u2014 each workspace encapsulates exactly one freshness event",
+      "carrier": "package.json field (a declared per-workspace clock, today the census's lifecycle value) enforced by a repo-validator that recomputes it from the declared generator edges and turbo task graph rather than trusting the declaration; NOT carried by the directory tree",
+      "rationale": "This axis forced more ratified splits than any other: 30+ inventory entries carry dimension=lifecycle, and the generatedSeparationPolicy states it as law ('artefacts on different regeneration clocks never share a workspace... the two-clocks test is what distinguishes a mandatory workspace split from directory hygiene'). It also subsumes upstream identity: the Oak platform is one service but three taps on three clocks, and the inventory splits along the clocks (openapi-schema-source vs oak-bulk-data), not the service."
+     },
+     {
+      "axis": "knowledge-provenance",
+      "role": "dependency direction (generic never imports branded; oak-configured composes generic; oak-leaf composes both) and, jointly with byte-authorship, licensing and extraction/travel \u2014 a generic workspace is pre-cleared for npm/another-repo extraction",
+      "carrier": "name prefix convention (oak-* vs unprefixed: es-ingest-core, mcp-server-express-core, search-eval-harness vs oak-search-ingest, oak-bulk-ingest) plus the oak-eslint boundary fences that enforce the import direction; independently proven by workspace pairs on one clock split by this axis alone",
+      "rationale": "es-ingest-core vs oak-search-ingest and openapi-pipeline vs oak-sdk-codegen are pairs identical on clock and authorship, split purely here \u2014 so it cannot collapse into clock. It is the axis the value-stack frame ratifies ('context specificity is a second axis across all layers rather than a synonym for a layer'), it answers the extraction future-class by construction, and with byte-authorship it derives the licence field, discharging a would-be fifth axis."
+     },
+     {
+      "axis": "byte-authorship",
+      "role": "edit rights and regeneration discipline \u2014 who may change a byte and by what act; jointly with provenance, licensing (editorial content -> OGL, brand assets -> reserved, code -> MIT)",
+      "carrier": "directory level 2 for the generated value only (the packages/generated/* tier materialises it), with the other three values carried by the generatedSeparationPolicy machinery: declared generator edges with drift gates and DO-NOT-EDIT headers for generated files inside dedicated generated/ dirs, a dedicated own-quality-gate workspace for byte-preserved capture (converting the Sonar-exclusion vigilance fence to structure), and editorial-content declaration for the OGL/brand corpora",
+      "rationale": "Independent of clock: openapi-schema-source and oak-api-artifacts share the upstream-spec clock yet must be separate workspaces because one is hand-written and one is regenerated wholesale. Independent of provenance: generated artefacts exist at every provenance level. Ten ratified policy clauses (generatedSeparationPolicy) hang off this axis alone, and it is the only axis with a four-valued answer the census was forced to correct mid-flight (oak-search-ground-truths re-dimensioned because handwritten editorial content is NOT generated) \u2014 evidence the distinction is load-bearing, not decorative."
+     },
+     {
+      "axis": "audience-deployment-class",
+      "role": "directory placement (level 1: packages/ apps/ demos/ research/ plus an instruments tier for the agent-practice estate) team navigation, and publish/deploy governance \u2014 which quality-gate and promotion regime applies",
+      "carrier": "directory level 1, exclusively \u2014 a closed five-value enumeration the top-level tree already materialises; no per-file or per-import enforcement needed",
+      "rationale": "Cannot be derived: oak-curriculum-hub and oak-curriculum-mcp-streamable-http agree on clock, provenance, and authorship yet one is a demonstration instrument and one is a product, governed differently (owner doctrine: demos are demonstration instruments, never implicitly system parts). It also answers the census's own first open question \u2014 where the homeless mints (corpus-instruments, repo-validators, agent-session-ops, es-ingest-core, mcp-server-express-core) land \u2014 by principle rather than habit: internal instruments get an instruments tier, reusable libraries go under packages/, regardless of capability family."
+     }
+    ],
+    "cardinalityArgument": "Four \u2014 but as three-plus-one, which is the owner's 'maybe not' case. Three intensive axes (clock, provenance, authorship) are each proven independent by a ratified workspace pair separated by that axis alone: openapi-schema-source vs oak-bulk-data (clock only \u2014 same upstream service, same key), openapi-schema-source vs oak-api-artifacts (authorship only \u2014 same spec clock), es-ingest-core vs oak-search-ingest (provenance only \u2014 same ingest clock). Drop any one and a ratified boundary in the 66 becomes underivable; drop clock and the entire two-clocks split law loses its axis; drop authorship and the ten-clause generatedSeparationPolicy has no referent; drop provenance and dependency direction plus the extraction future-class dangle. These three jointly derive licence, so a licence axis would be redundant. The fourth axis (audience) is different in kind: extensive, closed, five-valued, carried entirely by the top-level directory names that already exist \u2014 its marginal carrier cost is zero \u2014 and it is not derivable (hub vs MCP server agree on all three intensive axes yet are governed as demo vs product; research/ is a third regime). A three-axis basis is possible only by declaring audience 'naming habit', which hard case 9's evidence contradicts and which would leave apps/demos/research placement, publish governance, and the census's own open question 1 unanswered \u2014 hidden residue larger than the axis. A fifth axis dilutes provably: capability family never decides a boundary, dependency, or edit right (the generated tier spans four families); reliance depth is recomputable from the dependency graph and storing it mints a drift surface; upstream identity is a clock source, not an axis; licence is derived. So: one fewer loses ratified boundaries or hides real governance; one more adds a classification that decides nothing the graph or the other axes do not already decide.",
+    "hardCaseClassifications": [
+     {
+      "case": "openapi-schema-source + oak-bulk-data (one upstream service, two acquisition workspaces)",
+      "placement": "Two workspaces because two clock values \u2014 upstream-spec deploy vs bulk-data refresh \u2014 despite one host and one OAK_API_KEY; provenance: parameterised-generic acquisition vs oak-leaf acquisition; both hand-written, both packages-tier.",
+      "forcedFit": false,
+      "note": "This pair is the existence proof that upstream identity collapses into clock: had the basis carried an upstream-bounded-context axis, it would have argued for ONE workspace here, against the ratified inventory."
+     },
+     {
+      "case": "packages/generated/* tier (four DO-NOT-EDIT artefact workspaces from different capability families)",
+      "placement": "byte-authorship=generated materialised at directory level 2; within the tier, clock still separates workspaces (spec-refresh vs index-design vs ADR-222 bulk truing vs mining cadence) per the two-clocks clause; capability family deliberately NOT honoured \u2014 it is navigation labelling, and this tier is the proof.",
+      "forcedFit": false
+     },
+     {
+      "case": "oak-design-studio-capture (467 byte-preserved third-party studio files)",
+      "placement": "byte-authorship=byte-preserved capture (the axis's fourth value, of which this is the type specimen); provenance oak-leaf; own quality-gate boundary converts the Sonar-exclusion vigilance fence to structure; clock = studio round-trip/capture refresh.",
+      "forcedFit": false
+     },
+     {
+      "case": "agent-tools residue (mixed-justified lifecycle, Oak platform adapters)",
+      "placement": "audience=internal instrument, provenance=oak-leaf (platform adapters, brand marks, Oak-bound content generators), authorship=hand-written; clock=mixed-justified \u2014 the axis's explicit escape value.",
+      "forcedFit": true,
+      "note": "The clock axis genuinely fails to assign one value: several clocks cohabit by explicit too-small-to-mint justification. The basis makes this debt visible and bounded (mixed-justified is a recorded exception carrying its warrant) rather than eliminating it; if the residue grows, the axis says exactly where to cut."
+     },
+     {
+      "case": "oak-search-ground-truths (OGL editorial content inside a code estate)",
+      "placement": "byte-authorship=hand-authored editorial content, provenance=oak-leaf, clock=editorial curation; licence derives to OGL from those two axes (matching the census's own warrant: 'licence/authorship separation... plus an editorial authoring lifecycle').",
+      "forcedFit": false,
+      "note": "The census had to correct this entry's dimension from generated-separation \u2014 the basis's separate authorship values (editorial content vs generated) would have prevented that misclassification."
+     },
+     {
+      "case": "oak-design-assets (brand-reserved raster assets, deliberate licensing seam)",
+      "placement": "byte-authorship=hand-authored content (brand-asset subclass), provenance=oak-leaf; licence derives to brand-reserved; the deliberate seam is provenance x authorship doing its job, needing no dedicated licence axis.",
+      "forcedFit": false,
+      "note": "OGL-vs-brand-reserved requires the content subclass (curriculum content vs brand asset) to be declared \u2014 derivation is presumptive; the license field stays authoritative with a consistency check. Named in residue."
+     },
+     {
+      "case": "research/web-app-deconstruction/packages/research-evidence",
+      "placement": "audience=research record (top-level research/, the governance regime that deliberately suspends extraction and dependency rules); clock=mixed-justified; the audience axis, not any intensive axis, is what actually governs it.",
+      "forcedFit": false
+     },
+     {
+      "case": "runtime-only-scripts (three files, maybe-workspace)",
+      "placement": "Fully classifiable \u2014 clock=runtime, provenance=oak-leaf, authorship=code, audience=internal instrument \u2014 whether or not it becomes a member; the open question is a minimum-size/worthiness threshold, which is proportionality doctrine, not taxonomy.",
+      "forcedFit": false,
+      "note": "The basis is deliberately silent on granularity; named in residue."
+     },
+     {
+      "case": "apps/ vs demos/ (is audience a real axis?)",
+      "placement": "Real axis, and the fourth basis member: hub and the MCP server agree on all three intensive axes yet carry different governance (product vs demonstration instrument; owner doctrine that demos are never implicitly system parts; the showcase purge as an audience-driven event).",
+      "forcedFit": false
+     },
+     {
+      "case": "es-ingest-core (generic machinery over a commodity service)",
+      "placement": "provenance=generic \u2014 depending on a swappable commodity (Elasticsearch) does not make code oak-specific; clock=ingest-time; unprefixed name carries the provenance; pre-cleared for extraction, MIT derived.",
+      "forcedFit": false,
+      "note": "The commodity-vs-proper-noun half of the rejected upstream axis lives here, inside provenance."
+     },
+     {
+      "case": "oak-mcp-widget (own toolchain, build artefact embedded into a server)",
+      "placement": "clock=build-time \u2014 its own build lifecycle is the boundary-maker, distinct from the server's request-time clock; hand-written source whose committed built output leaves the server's src/ and arrives via a declared dependency edge (sanctioned same-freshness-event pattern, generatedSeparationPolicy clause 2).",
+      "forcedFit": false,
+      "note": "A generator and its artefact cohabit because they share one freshness event \u2014 the clock axis, not an exception, licenses this."
+     },
+     {
+      "case": "corpus-instruments / repo-validators / agent-session-ops (agent-practice estate: product or practice?)",
+      "placement": "Practice \u2014 audience=internal instrument answers the product-or-practice question directly; within the tier, clock separates the three (campaign build+run vs lint-time verdicts vs live-seat runtime), and provenance still governs travel (agent-session-ops re-namespaced off OAK_* is portable-generic; the Oak platform adapters stay oak-leaf), consistent with practice-core-portability.",
+      "forcedFit": false
+     }
+    ],
+    "residue": [
+     "Granularity thresholds: no axis decides when a coherent unit is large enough to be a workspace (runtime-only-scripts) or when a seam waits for a second consumer (es-index-lifecycle inside oak-search-index-lifecycle) \u2014 that is proportionality and consolidate-at-second-consumer doctrine, deliberately outside the taxonomy.",
+     "Mixed-justified clocks: the clock axis admits an explicit escape value for workspaces too small to split (agent-tools, build-metadata, research-evidence); the basis names and bounds this debt but cannot eliminate it.",
+     "Licence derivation is presumptive, not mechanical: OGL vs brand-reserved needs the editorial-content subclass (curriculum content vs brand asset) declared, and the census's open licence questions (baselines.json, OGL-derived generated data in oak-curriculum-corpus-data/oak-bulk-artifacts) are owner facts the basis narrows but cannot decide \u2014 the package.json license field remains authoritative with a recomputing consistency check.",
+     "Capability-family labels at directory level 2 (search/, mcp/, design/...) are navigation convention outside the basis; a workspace equal on all four axes could be labelled into two different families (oak-bulk-data: search or curriculum-data?) with no axis to adjudicate \u2014 a naming decision, accepted as such.",
+     "Published-name and semver edges (does the thinned client keep @oaknational/curriculum-sdk; which oak-eslint half keeps the npm name) are consumer-facing decisions no taxonomy answers.",
+     "Tranche sequencing and landing order are informed by the clock axis but decided by the dependency graph and cost \u2014 the basis describes the space, not the migration path through it."
+    ],
+    "futureTests": [
+     {
+      "futureClass": "A second proper-noun curriculum upstream",
+      "absorbedCleanly": true,
+      "note": "New clock values (its spec deploy, its bulk refresh) mint new acquisition/artefact workspaces symmetrically; provenance's middle value is per-brand by construction (generic <-> X-configured <-> X-leaf), and the prefix convention scales. This is precisely where rejecting upstream-identity as an axis pays: there is no 'Oak upstream' root to re-root."
+     },
+     {
+      "futureClass": "A new product app",
+      "absorbedCleanly": true,
+      "note": "audience=deployed app -> apps/, clock=runtime, provenance=oak-leaf composition; zero new machinery."
+     },
+     {
+      "futureClass": "Extraction of a generic package to npm/another repo",
+      "absorbedCleanly": true,
+      "note": "provenance=generic is the pre-registered travel warrant; licence (MIT) derives; the boundary fences already prove the package imports nothing branded, so extraction is a move, not a refactor. The axis was designed for exactly this event."
+     },
+     {
+      "futureClass": "A new commodity provider adapter",
+      "absorbedCleanly": true,
+      "note": "provenance=generic (commodity dependency does not brand code \u2014 the es-ingest-core ruling generalises); posthog-node/sentry-node are existing precedents; clock per the adapter's consumption point."
+     },
+     {
+      "futureClass": "A second demo consumer team adopting the estate",
+      "absorbedCleanly": true,
+      "note": "audience=demo holds their surfaces; their configuration enters as a second instantiation of provenance's configured/leaf values under their own prefix. One honest wrinkle: if their content carries a third licence regime, the presumptive licence derivation gains a case \u2014 handled by the declared license field, but it stretches the derivation shortcut."
+     }
+    ]
+   }
+  },
+  {
+   "id": "dependency-graph",
+   "proposal": {
+    "axesRecognised": [
+     {
+      "name": "Knowledge provenance / Oak-specificity",
+      "question": "Does this workspace's transitive closure contain Oak knowledge, or does Oak knowledge arrive only as configuration at composition?",
+      "values": "generic \u2194 oak-configured \u2194 oak-leaf",
+      "collapsesInto": "Basis axis 3 (knowledge locus) \u2014 the graph can enforce it as a dependency-direction rule with a computable Oak-free-closure test"
+     },
+     {
+      "name": "Change-cause and clock",
+      "question": "What single event class invalidates this workspace's cached build?",
+      "values": "upstream-spec deploy, bulk-data refresh, index design, editorial curation, brand decision, agent-experience design, hook lifecycle, request-time code change \u2014 normalised to the census lifecycle values (codegen-time, ingest-time, build-time, lint-time, test-time, editorial, runtime)",
+      "collapsesInto": "Basis axis 1 (change clock) \u2014 this IS what turbo's task graph and cache-invalidation inputs enforce"
+     },
+     {
+      "name": "Authorship of bytes",
+      "question": "Who may edit these bytes, and what regenerates them?",
+      "values": "hand-written \u2194 generated (declared on-graph generator) \u2194 byte-preserved third-party capture",
+      "collapsesInto": "Basis axis 2 (byte provenance & travel), merged with licence \u2014 both are facts about the bytes' origin and both propagate along the same generator edges"
+     },
+     {
+      "name": "Reliance depth",
+      "question": "How far from the leaves does this workspace sit?",
+      "values": "core primitives \u2192 foundational systems \u2192 domain/SDKs \u2192 composition leaves",
+      "collapsesInto": "DERIVED from the dependency graph \u2014 topological position is computed, never declared; the core/libs/sdks directory tiers are a legacy materialisation of a derived quantity and do no independent classification work"
+     },
+     {
+      "name": "Upstream bounded context",
+      "question": "Which proper-noun external service breaks this workspace when it deploys?",
+      "values": "Oak curriculum platform (three taps: spec/codegen, bulk/ingest, live/runtime) vs commodity providers (Elasticsearch, Sentry, Clerk)",
+      "collapsesInto": "Clock \u00d7 acquisition-workspace pattern \u2014 the graph never sees the remote host, only committed snapshot artefacts; each tap becomes one acquisition workspace on its own clock, and the service's unity survives only in the shared OAK_API_KEY env schema, not the taxonomy. Commodity-vs-proper-noun needs no axis: a commodity is an ordinary replaceable npm/env edge"
+     },
+     {
+      "name": "Licence and travel rights",
+      "question": "Under what terms may these bytes leave the estate?",
+      "values": "MIT code / OGL curriculum content / brand-reserved assets / third-party-terms capture / propagated (generated)",
+      "collapsesInto": "Basis axis 2 (byte provenance & travel) \u2014 declared only at hand-authored roots via package.json license, PROPAGATED along generator edges for all generated workspaces (spec-derived artefacts are MIT; bulk-content-derived corpora are OGL-derived), homogeneity-enforced per workspace root"
+     },
+     {
+      "name": "Capability family",
+      "question": "Which product capability does this workspace serve?",
+      "values": "search, mcp, graph, design, curriculum-data, agent-practice",
+      "collapsesInto": "Decoration derived from graph communities \u2014 capability families are visible as dependency clusters (the search cluster, the design cluster); materialised as level-2 directory names purely for human navigation; the graph enforces nothing about them and no boundary rule should be minted on them"
+     },
+     {
+      "name": "Audience/deployment class",
+      "question": "Who consumes the built output \u2014 npm consumers, deployed users, demo viewers, researchers?",
+      "values": "published npm package, deployed app, demo, internal instrument, research",
+      "collapsesInto": "Decoration \u2014 the graph sees published packages as workspaces with external consumers (a publishConfig fact) and apps/demos/research identically as terminal leaves; the apps/ vs demos/ split is a naming habit, and deployment truth lives in per-app deploy config, not taxonomy"
+     }
+    ],
+    "basis": [
+     {
+      "axis": "Change clock",
+      "role": "Workspace boundaries and build order/caching \u2014 the two-clocks test ('artefacts on different regeneration clocks never share a workspace') is the census's own dominant mint warrant, and it is exactly what turbo enforces as cache invalidation",
+      "carrier": "Derived from the build system and validated: the turbo task graph's declared inputs/outputs per workspace ARE the clock; a declared lifecycle field (package.json metadata mirroring the census values) is checked by a repo-validator that RECOMPUTES the clock from turbo task inputs rather than trusting the declaration (validators-must-recompute)",
+      "rationale": "Of the 32 minted workspaces, the plurality carry dimension=lifecycle; the boundary question 'must these files be separate workspaces?' is answered by 'do they invalidate on different events?', which is the one question the tooling already answers mechanically through caching. Editorial and brand clocks are ordinary values of this axis (a human decision is an invalidation event), which is what separates oak-search-ground-truths and oak-curriculum-synonyms from the code around them without needing an extra axis"
+     },
+     {
+      "axis": "Byte provenance & travel",
+      "role": "Edit rights/regeneration AND licensing/extraction of content \u2014 one axis because both are facts about where the bytes came from and both propagate along the same generator edges",
+      "carrier": "Directory level for the absolute case: the packages/generated/* tier materialises cross-boundary generated artefacts (every file DO-NOT-EDIT, one declared generator edge each); in-workspace generated/ directories for same-clock outputs; package.json license declared ONLY at hand-authored roots (MIT code / OGL content / brand-reserved / third-party-capture terms) and PROPAGATED along generator edges for generated workspaces by a validator that recomputes the propagation (oak-curriculum-corpus-data inherits OGL-derived from bulk content; oak-api-artifacts inherits MIT from spec machinery); drift gates bind each artefact to its sole generator; the captured class carries its own quality-gate scoping (the studio-capture Sonar boundary becomes a workspace fact)",
+      "rationale": "The graph can express authorship as a declared generator edge plus a drift gate that recomputes \u2014 turning the DO-NOT-EDIT convention into structure. Merging licence in is what makes the two census 'licensing seams' (oak-design-assets, oak-search-ground-truths) ordinary root-class separations instead of evidence for a fourth axis: a workspace must be travel-homogeneous at its root, and mixed classes force the seam mechanically"
+     },
+     {
+      "axis": "Knowledge locus",
+      "role": "Dependency direction and extraction \u2014 generic workspaces must have an Oak-free transitive closure (imports AND data), with Oak knowledge entering only as configuration parameters at composition; the extraction-to-npm precondition is this closure test passing",
+      "carrier": "Enforced rule over the dependency graph: oak-eslint boundary inventories + validate-boundaries parity gate hold the declared locus per workspace; the oak-* name prefix is the human-readable echo of the declaration; the enforcement is a computable check (no edge from a generic workspace reaches an oak-declared workspace), so the declaration is recomputed, not trusted",
+      "rationale": "This is the one axis the graph cannot DERIVE but can fully ENFORCE: it is a direction constraint on edges, the same mechanical kind as import-order rules. It answers the extraction future-class directly (es-ingest-core, openapi-pipeline, mcp-server-express-core, agent-session-ops all carry 'reusable' warrants whose only testable meaning is closure Oak-freeness) and it is the axis under which oak-vs-reusable mints in the census were justified"
+     }
+    ],
+    "cardinalityArgument": "Three, because that is the count of independent facts the build system can enforce. Drop to two and a governing decision goes unanswerable: without change clock, the census's plurality mint warrant (two clocks never share a workspace) has no axis and workspace boundaries revert to taste; without byte provenance & travel, edit rights, drift gates, and licence propagation have no home and DO-NOT-EDIT stays a vigilance convention; without knowledge locus, dependency direction and the extraction test lose their only testable definition \u2014 'reusable' becomes prose. Independence is demonstrated pairwise by the estate itself: generic codegen-time (openapi-pipeline), oak-leaf generated (oak-api-artifacts), oak-leaf hand-written editorial (oak-search-ground-truths), generic hand-written ingest-time (es-ingest-core) \u2014 no axis predicts another. Add a fourth and it dilutes: a separate licence axis has its value determined for ~64 of 66 workspaces by provenance roots plus graph propagation (the two seam cases are root-homogeneity inside axis 2); a capability-family axis is derivable as graph communities, enforces nothing, and would tempt boundary rules the locus rule already covers where they matter; a reliance-depth axis is pure topological position, computed for free; an upstream-context axis names a host the graph never sees. The build-graph principle is the razor: an axis earns a basis seat only if some governing decision fails without a declared-and-recomputed carrier for it, and exactly three survive that test.",
+    "hardCaseClassifications": [
+     {
+      "case": "openapi-schema-source + oak-bulk-data (one upstream, two acquisition workspaces)",
+      "placement": "Two workspaces, separated cleanly by change clock (upstream-spec deploy vs bulk-data refresh); both are acquisition workspaces whose job is converting an off-graph upstream into on-graph committed snapshots (schema cache, bulk downloads) \u2014 the pattern the graph-first frame demands; provenance: hand-written machinery with committed machine-produced INPUT snapshots in dedicated dirs; locus: oak-configured vs oak-leaf",
+      "forcedFit": false,
+      "note": "The 'one service' unity is deliberately NOT taxonomised \u2014 three taps, three clocks, three graph entries; the shared host and OAK_API_KEY survive only in the env schema and docs. If cross-tap coordination is ever needed (a breaking platform migration), the basis offers no single handle \u2014 see residue"
+     },
+     {
+      "case": "packages/generated/* tier (four DO-NOT-EDIT artefact workspaces)",
+      "placement": "The directory materialisation of axis 2's generated class \u2014 four workspaces, not one, precisely because axis 1 splits them (spec clock, index-design clock, bulk-truing clock, mining clock); each carries one declared generator edge and a drift gate; their differing capability families are decoration",
+      "forcedFit": false,
+      "note": "This tier is the strongest evidence the basis matches the ratified programme: the census's generatedSeparationPolicy is expressible entirely as axis 2 rules over graph edges"
+     },
+     {
+      "case": "oak-design-studio-capture (467 byte-preserved third-party files)",
+      "placement": "Axis 2 provenance = captured (third value, first-class): not regenerable by any on-graph generator, byte-preserved under third-party terms, own quality-gate boundary; clock = studio round-trip; locus = oak-leaf",
+      "forcedFit": false,
+      "note": "The captured class exists in the axis by design \u2014 the census itself calls it 'its own generated class'; the workspace boundary converts the Sonar-exclusion vigilance fence into structure, which is exactly the graph-first move"
+     },
+     {
+      "case": "agent-tools residue (mixed-justified lifecycle)",
+      "placement": "Oak-leaf, hand-written, clock = MIXED under a declared size-floor exception: bootstrap, platform adapters, and attestation surfaces individually too small to mint",
+      "forcedFit": true,
+      "note": "An honest forced fit on axis 1: the two-clocks rule here operates as a default with an explicit smallness escape, and each mixed-justified workspace (agent-tools, build-metadata, research-evidence) is a standing exception the validator must carry as a named waiver, not silence"
+     },
+     {
+      "case": "oak-search-ground-truths (OGL editorial content in a code estate)",
+      "placement": "Clock = editorial (curation events invalidate), provenance & travel = hand-authored content with OGL root declaration, locus = oak-leaf; typed against oak-bulk-data slug unions via an ordinary graph edge",
+      "forcedFit": false,
+      "note": "Evidence FOR the licence-into-provenance merge: the census's own warrant is 'licence/authorship separation' \u2014 one axis, two consequences. baselines.json (recorded benchmark data) rides as Oak-recorded content in the same root class"
+     },
+     {
+      "case": "oak-design-assets (brand-reserved raster assets)",
+      "placement": "Axis 2 travel class = brand-reserved at root; travel-homogeneity forces the seam from oak-design-system's MIT-code root mechanically; clock = brand decision (editorial-family), locus = oak-leaf",
+      "forcedFit": false,
+      "note": "Under a pure authorship axis this would be forced (hand-authored, same as its neighbours); under the merged provenance-and-travel axis it is the textbook case \u2014 the census already calls it 'a deliberate licensing seam', i.e. an axis-2 root boundary"
+     },
+     {
+      "case": "research/web-app-deconstruction/packages/research-evidence",
+      "placement": "Hand-written, oak-leaf, clock = mixed-justified (docs-time/test-time); its defining property is a GRAPH fact \u2014 deliberately zero dependency edges in either direction (the no-dependency evidence property); the research/ path is navigation naming only",
+      "forcedFit": true,
+      "note": "Forced on axis 1 (a second standing mixed-clock waiver) and its 'research' identity is carried by nothing in the basis \u2014 audience is decoration, and here the decoration is doing real communicative work the basis cannot"
+     },
+     {
+      "case": "runtime-only-scripts (three files, maybe-workspace)",
+      "placement": "Graph-first verdict is decisive where the census left an open question: off-graph files are unenforced territory \u2014 no lint surface, no clock, no locus check \u2014 so adopt the minimal package.json; then clock = runtime, provenance = hand-written, locus = oak-leaf, and all three axes bind",
+      "forcedFit": false,
+      "note": "The basis does not classify non-members; the first principle converts the 'maybe' into 'must join the graph or remain formally outside every guarantee'"
+     },
+     {
+      "case": "apps/ vs demos/ (is audience a real axis?)",
+      "placement": "Not an axis. Both are terminal composition leaves (zero dependents \u2014 a derived graph fact), runtime clock, oak-leaf, hand-written; the apps/demos directory split is a naming habit whose enforceable content is nil, and deployment truth lives in per-app deploy config",
+      "forcedFit": false,
+      "note": "The honest answer to the owner's question 9 is 'naming habit' \u2014 keep it for wayfinding if liked, but mint no rule on it; a demo promoted to an app changes a directory name and nothing the tooling checks"
+     },
+     {
+      "case": "es-ingest-core (generic machinery over a commodity service)",
+      "placement": "Locus = generic (Oak-free closure enforced \u2014 curriculum-pattern files stay Oak-side per the challenger's conservative first cut), clock = ingest-time, provenance = hand-written; Elasticsearch is an ordinary replaceable npm/env edge needing no bounded-context axis",
+      "forcedFit": false,
+      "note": "The commodity-vs-proper-noun distinction dissolves in graph terms: commodities are edges to packages, proper-noun upstreams are acquisition workspaces with committed snapshots"
+     },
+     {
+      "case": "oak-mcp-widget (own toolchain, artefact embedded into a server)",
+      "placement": "Clock = build-time (its own vite toolchain is its own invalidation set \u2014 the census's boundary warrant restated in cache terms); provenance = hand-written source whose built output crosses to the server via a declared dependency edge, with the committed constant in in-workspace generated/ (same freshness event as its generator, per policy line 2); locus = oak-leaf",
+      "forcedFit": false,
+      "note": "Exactly the generator-plus-declared-edge pattern; the pre-split shape (server importing src/generated/widget-html-content.ts inside its own src/) was the axis-2 violation the mint cures"
+     },
+     {
+      "case": "corpus-instruments / repo-validators / agent-session-ops (product or practice?)",
+      "placement": "The basis refuses the question as posed: the graph carries no product/practice bit. repo-validators = oak-leaf, lint-time (consumed by the hook lifecycle \u2014 a graph position); git-lifecycle-guards likewise; corpus-instruments = oak-leaf, own build+run clock; agent-session-ops = generic-leaning after OAK_* re-namespacing, runtime \u2014 and 'is it practice-portable?' reduces to the axis-3 closure test, which is answerable",
+      "forcedFit": false,
+      "note": "The felt product/practice distinction is real to the team but maps onto locus (portability) plus graph position; where it exceeds that mapping it is residue, named below"
+     }
+    ],
+    "residue": [
+     "Team navigation / capability-family grouping: the basis cannot derive or enforce it. Graph communities SUGGEST the families (the search cluster, the design cluster), and level-2 directory names materialise them for humans, but nothing recomputes the assignment and no rule should bind it. Navigation is answered by convention riding the directory carrier, not by the basis \u2014 the one listed governing decision the basis serves only decoratively.",
+     "Cross-tap unity of a single upstream service: the Oak platform's three taps become three unrelated graph entries; a platform-wide breaking migration (new host, new auth) has no single taxonomy handle and must be coordinated through the shared env schema and runbooks.",
+     "The product-vs-practice felt distinction in the agent estate: locus plus graph position approximate it, but the residual sense in which repo-validators is 'the Practice, not the product' is carried nowhere the tooling can see.",
+     "Standing mixed-clock waivers: agent-tools, build-metadata, and research-evidence each hold multiple clocks under explicit justification; the two-clocks rule therefore needs a named-waiver register in the validator, and every waiver is a permanent small hole in axis 1's enforcement.",
+     "Deployment/audience truth (published npm vs deployed app vs demo vs research): carried by per-workspace facts (publishConfig, deploy config, directory naming), never by the basis; a reader wanting 'everything we actually ship to strangers' must query those fields, not the taxonomy.",
+     "Off-graph files: anything outside pnpm-workspace membership (the pre-adoption runtime-only-scripts shape, root-level dotfiles and hooks) is invisible to all three axes; the basis governs only graph members, by construction of its first principle."
+    ],
+    "futureTests": [
+     {
+      "futureClass": "A second proper-noun curriculum upstream",
+      "absorbedCleanly": true,
+      "note": "Mint acquisition workspaces per tap on their own clocks with committed snapshots, exactly as the Oak platform's three; openapi-schema-source and openapi-pipeline are already parameterised so the generic machinery is reused and only new oak-configured/leaf config workspaces appear; no axis gains a value it lacks and nothing re-roots"
+     },
+     {
+      "futureClass": "A new product app",
+      "absorbedCleanly": true,
+      "note": "A new terminal composition leaf: runtime clock, hand-written, oak-leaf; directory placement under apps/ is navigation convention; zero taxonomy change"
+     },
+     {
+      "futureClass": "Extraction of a generic package to npm/another repo",
+      "absorbedCleanly": true,
+      "note": "This is what axis 3 is FOR: the extraction precondition is the already-enforced Oak-free transitive closure passing, and axis 2's root licence declaration (MIT) already travels with it; extraction is a graph subtraction, not a reclassification"
+     },
+     {
+      "futureClass": "A new commodity provider adapter",
+      "absorbedCleanly": true,
+      "note": "Hand-written, generic or oak-configured locus, clock per its consumption point \u2014 the sentry-node/posthog-node/es-ingest-core pattern; commodity dependencies are ordinary edges and need no new axis value"
+     },
+     {
+      "futureClass": "A second demo consumer team adopting the estate",
+      "absorbedCleanly": true,
+      "note": "Cleanly in basis terms (their leaf joins like any other), but this is the class that stresses the residue hardest: newcomers navigate by capability-family names and the apps/demos convention, none of which the basis enforces \u2014 adoption pressure argues for keeping the naming convention curated even though it stays decoration"
+     }
+    ]
+   }
+  },
+  {
+   "id": "navigation",
+   "proposal": {
+    "axesRecognised": [
+     {
+      "name": "Knowledge provenance / Oak-specificity",
+      "question": "Whose knowledge does this code embody \u2014 could any organisation use it, or is it Oak's?",
+      "values": "generic \u2194 oak-configured \u2194 oak-leaf",
+      "collapsesInto": "reach \u2014 Oak-specificity is one rank on the ordered reach scale (generic sits above oak-published above oak-estate); the generic-never-imports-oak fence becomes reach import-monotonicity, and the oak-configured vs oak-leaf gradient flattens to workspace-internal fact (named in residue)"
+     },
+     {
+      "name": "Change-cause and clock",
+      "question": "What single external event invalidates this workspace's contents?",
+      "values": "upstream-spec deploy, bulk-data refresh, index design, editorial curation, brand decision, agent-experience design, build, hook lifecycle, request-time code change, mixed-justified (declared exception)",
+      "collapsesInto": ""
+     },
+     {
+      "name": "Authorship of bytes",
+      "question": "What writes these bytes \u2014 a human's editor, a generator, or a byte-faithful capture?",
+      "values": "hand-written code / hand-authored editorial content / generated artefact / byte-preserved third-party capture",
+      "collapsesInto": ""
+     },
+     {
+      "name": "Reliance depth",
+      "question": "How foundational is this in the dependency stack (core \u2192 foundations \u2192 SDKs \u2192 leaves)?",
+      "values": "core primitives, foundational systems, domain/SDKs, composition leaves",
+      "collapsesInto": "reach (for the direction rule: imports flow from narrower reach to equal-or-wider reach, which subsumes leaves-consume-packages) plus derivation from the dependency graph (for the finer grades: core-vs-libs tiering carries no information the graph does not already prove, so it is computed and validated, never declared as a tree level)"
+     },
+     {
+      "name": "Upstream bounded context",
+      "question": "Which proper-noun external service breaks this when it deploys?",
+      "values": "Oak curriculum platform (three taps: spec/codegen-time, bulk/ingest-time, live/runtime \u2014 one host, one key) vs commodity vendors (Elasticsearch, Sentry, Clerk, PostHog)",
+      "collapsesInto": "change-clock \u2014 the three taps ARE three clocks, which is why one service correctly yields multiple workspaces; the residual fact (which vendor's outage breaks this) is derived from package.json dependencies and needs no declared coordinate. Proper-noun-vs-commodity is a reach fact: Oak-platform coupling is Oak knowledge, commodity coupling is generic"
+     },
+     {
+      "name": "Licence and travel rights",
+      "question": "Under what terms may these bytes leave the estate?",
+      "values": "MIT code / OGL curriculum content / brand-reserved assets / mixed",
+      "collapsesInto": "derived from byte-provenance \u00d7 capability-family \u00d7 reach: code \u2192 MIT; hand-authored content in curriculum families \u2192 OGL; hand-authored content in the design family (brand) \u2192 reserved. package.json license is the materialised RECORD of the derivation, not an independent axis. Where the derivation genuinely fails (generated-from-OGL artefacts) it is named residue, matching the census's own open question"
+     },
+     {
+      "name": "Capability family",
+      "question": "Which capability community owns and evolves this \u2014 where would a future team's floor be?",
+      "values": "curriculum-data, search, mcp, graph, design, agent-practice, platform (generic infrastructure)",
+      "collapsesInto": ""
+     },
+     {
+      "name": "Audience/deployment class",
+      "question": "Who consumes this and in what mode \u2014 npm package, deployed app, demo, internal instrument, research?",
+      "values": "published npm package, deployed app, demo, internal instrument, research record",
+      "collapsesInto": "reach \u2014 deployment classes are the terminal (narrowest) band of the same ordered scale that specificity occupies: generic \u2192 oak-published \u2192 oak-estate-package \u2192 terminal leaves {product-app, demo, research-record, practice-instrument}. One axis then answers both 'may X import Y' and 'may X be extracted', which specificity and audience could only answer jointly"
+     }
+    ],
+    "basis": [
+     {
+      "axis": "Capability family",
+      "role": "Directory placement and team navigation: the primary question-to-file route ('where is the search synonym machinery?' \u2192 packages/search/) and the Conway floor a future team inherits whole (a search team, an mcp/agent-experience team, a design team, a curriculum-data team, an agent-practice team, a platform team)",
+      "carrier": "Directory level 2 under packages/ (packages/<family>/<workspace>); the family segment of leaf-app and demo names; degenerate for research records",
+      "rationale": "Conway's law run forward: directories exist so future owners have a contiguous floor and so navigators land by capability, which is how humans and agents actually phrase questions. The census's own new tiers (packages/search/, packages/mcp/, packages/graph/, packages/design/) show the estate already drifting from depth-tiers to family-tiers; this basis completes the drift. Every workspace in the 66-row inventory takes exactly one family without argument."
+     },
+     {
+      "axis": "Reach (travel/consumption rank)",
+      "role": "Dependency direction, licensing/extraction, and top-level placement: a single ordered scale \u2014 generic \u2192 oak-published \u2192 oak-estate \u2192 terminal leaves {product-app, demo, research-record, practice-instrument} \u2014 with one rule: a workspace may import only equal-or-wider reach. This subsumes generic-never-imports-oak, apps-consume-packages, and answers 'can this leave for npm/another repo' by reading the coordinate",
+      "carrier": "Directory level 1 for the terminal band (apps/, demos/, research/, tools/); the oak- name prefix within packages/ (absence = generic = extraction-ready); package.json private/publishConfig/license; the oak-eslint boundary fence enforcing import monotonicity (recomputed from the dependency graph per validators-must-recompute)",
+      "rationale": "Merging observed axes 1, 8, and the direction half of 4 into one ordered scale is the load-bearing compression: specificity and deployment class never answer different governing questions \u2014 both are 'who may rely on this'. The merge survives its hardest counter-example: oak-curriculum-sdk is npm-published yet Oak-knowledged, and ranking oak-published BELOW generic correctly forbids generic code importing it while still letting it travel; it also surfaces the real constraint that a published package's workspace deps must themselves publish or bundle."
+     },
+     {
+      "axis": "Byte provenance",
+      "role": "Edit rights and regeneration ('may an agent edit this file, and what regenerates it?'), plus \u2014 jointly with family and reach \u2014 licence derivation (code\u2192MIT; content\u00d7curriculum\u2192OGL; content\u00d7brand\u2192reserved)",
+      "carrier": "package.json marker as the machine authority (generated / editorial-content / captured), the -artifacts and -capture name suffixes as the human signal, DO-NOT-EDIT file headers, and the ratified drift-gate validators (one declared generator per tracked generated surface). The ratified generated-separation POLICY (generated never co-resident with hand-written; two clocks never share a workspace) is kept in full; only the implied packages/generated/* PATH is dropped, because the tree's two levels are spent on reach and family \u2014 artefact workspaces home under their family with provenance carried by marker+suffix+validator",
+      "rationale": "Agents are first-class navigators here and their most dangerous failure is hand-editing an artefact; but 'can I edit this?' is answered at the file and by validator, while 'where do the search mappings come from?' is answered by the tree \u2014 so the tree goes to family and provenance rides non-directory carriers. Conway agrees: generated artefacts are owned by their generator's family team, not by a 'generated team' that will never exist. The single learnable fence ('never edit under packages/generated/') is preserved as 'never edit a *-artifacts workspace', enforced mechanically."
+     },
+     {
+      "axis": "Change-clock",
+      "role": "Workspace boundaries: the two-clocks test is the minting criterion (artefacts or code on different freshness events never share a workspace), and the clock coordinate names each workspace's regeneration cadence and what event obligates attention to it",
+      "carrier": "Declared lifecycle field in package.json, recomputed and enforced from the turbo task graph by a repo-validator (declaration alone would rot); never a directory level \u2014 the census's implied packages/codegen/ tier names a clock, not a family, and is a carrier error under this basis",
+      "rationale": "Clock is provably independent of the other three: openapi-schema-source and oak-bulk-data agree on family (curriculum-data), reach (oak-estate), and provenance, and are two workspaces solely because upstream-spec-deploy and bulk-refresh are different events. Remove this axis and the exact defect class this whole programme cures (mixed-clock workspaces like the old oak-sdk-codegen) becomes unstatable. It also cleanly absorbs the upstream-bounded-context observation: one proper-noun service, three taps, three clocks, several workspaces \u2014 as the census already concluded."
+     }
+    ],
+    "cardinalityArgument": "Four, with the tree carrying exactly two of them. One fewer breaks a governing decision outright: drop change-clock and openapi-schema-source/oak-bulk-data re-merge (same family, reach, provenance), recreating the mixed-clock workspace defect the 34\u219266 programme exists to cure; drop byte-provenance and edit-rights, drift gates, and the OGL/MIT/reserved seams have no generator \u2014 agents hand-edit artefacts again; drop reach and dependency direction, extraction rights, and the apps/demos/packages/research top level all lose their common generator (three separate ad-hoc rules reappear); drop family and navigation degenerates to grep while no future team has a contiguous floor to own \u2014 the Conway premise itself. One more dilutes because the candidate fifth axes are each derivable or empty: re-splitting reach into specificity+audience buys only the 'generic deployed app' cell, which this estate cannot populate (every app composes Oak configuration by definition), and its hardest case (published-but-Oak oak-curriculum-sdk) is already expressed as the oak-published rank; re-splitting clock into clock+upstream-context adds only the vendor's name, read off package.json dependencies; reinstating reliance depth adds only what the dependency graph already proves and the reach-monotonicity fence already enforces (which is why core/ vs libs/ as tiers carry no information and fold into a platform family); licence is a recorded derivation, not a coordinate. The FACT constraint lands exactly: a tree materialises at most two axes \u2014 here level 1 is the reach terminal band (apps/, demos/, research/, tools/, packages/) and level 2 is family \u2014 and the remaining two axes ride package.json fields, name affixes, and recomputing validators, all carriers the estate already trusts.",
+    "hardCaseClassifications": [
+     {
+      "case": "openapi-schema-source + oak-bulk-data (one upstream, two acquisition workspaces)",
+      "placement": "Two workspaces in one family: packages/curriculum-data/openapi-schema-source (clock=upstream-spec-deploy) and packages/curriculum-data/oak-bulk-data (clock=bulk-refresh); reach=oak-estate, provenance=hand-written code holding committed machine INPUT snapshots (sanctioned by the acquisition-workspace rule)",
+      "forcedFit": false,
+      "note": "The showcase case for clock's independence: identical on the other three coordinates, split solely by freshness event. The shared host/OAK_API_KEY is config, not structure. Note the census's implied packages/codegen/ home names a clock, not a family \u2014 under this basis that tier dissolves and the owner's open taxonomy question is answered 'family, never clock, as the tier name'."
+     },
+     {
+      "case": "packages/generated/* tier (four DO-NOT-EDIT artefact workspaces, different families)",
+      "placement": "The tier dissolves into per-family artefact workspaces: curriculum-data/oak-api-artifacts, search/oak-search-contract-artifacts, curriculum-data/oak-bulk-artifacts, curriculum-data/oak-curriculum-corpus-data \u2014 each still a generated-only WORKSPACE (ratified policy kept in full), with provenance carried by package.json generated-marker + -artifacts suffix + drift-gate validator + DO-NOT-EDIT headers",
+      "forcedFit": false,
+      "note": "Deliberate divergence from the census's IMPLIED path (which the owner explicitly left open in openQuestionsForOwner). Rationale: the tree's two levels are spent on reach and family; Conway says artefacts are owned by their generator's family team, and the 'one fence to learn' property survives as '*-artifacts is never edited', mechanically enforced. If the owner rates the single-directory fence above family co-location, swapping this one carrier back to a tier costs the basis nothing \u2014 it is a carrier choice, not an axis choice."
+     },
+     {
+      "case": "oak-design-studio-capture (467 byte-preserved studio files)",
+      "placement": "packages/design/oak-design-studio-capture \u2014 family=design, reach=oak-estate, provenance=byte-preserved capture (the fourth provenance value, carrying its own quality-gate boundary exactly as the census ratifies), clock=studio-sync",
+      "forcedFit": false,
+      "note": "The case that proves provenance needs four values, not three: capture is neither hand-written nor generated-by-our-generator \u2014 it is byte-sacred, and the workspace boundary converts the current vigilance fences (Sonar exclusion, README warnings) into structure."
+     },
+     {
+      "case": "agent-tools residue (mixed-justified lifecycle, Oak platform adapters)",
+      "placement": "tools/agent-tools (or retained root) \u2014 reach=practice terminal band, family=agent-practice, provenance=hand-written, clock=mixed-justified",
+      "forcedFit": false,
+      "note": "Placement is unstrained; the clock COORDINATE is the admitted exception value 'mixed-justified' \u2014 the basis names it but cannot decompose it, and this is counted in residue rather than papered over. The census's own too-small-to-split justification is the warrant; the basis records the debt honestly."
+     },
+     {
+      "case": "oak-search-ground-truths (OGL editorial content inside a code estate)",
+      "placement": "packages/search/oak-search-ground-truths \u2014 family=search, reach=oak-estate, provenance=hand-authored editorial content, clock=editorial; licence derives to OGL (content \u00d7 curriculum family)",
+      "forcedFit": false,
+      "note": "Content inside a code estate is unproblematic once provenance is a first-class axis: the workspace boundary is earned by editorial clock + content provenance, and the licence seam falls out of the derivation rather than needing its own axis. Matches the census's challenger-corrected reading (handwritten, not generated)."
+     },
+     {
+      "case": "oak-design-assets (brand-reserved raster assets)",
+      "placement": "packages/design/oak-design-assets \u2014 family=design, reach=oak-estate, provenance=hand-authored content, clock=brand-decision; licence derives to brand-reserved (content \u00d7 design/brand family)",
+      "forcedFit": false,
+      "note": "The case that shows licence derivation needs family as an input: content\u00d7curriculum\u2192OGL but content\u00d7brand\u2192reserved. The census already calls this 'a deliberate licensing seam, already the owner's end-state shape' \u2014 the basis reproduces that verdict by derivation instead of by memory."
+     },
+     {
+      "case": "research/web-app-deconstruction/packages/research-evidence",
+      "placement": "research/web-app-deconstruction/packages/research-evidence, unchanged \u2014 reach=research (terminal band, tree level 1), provenance=hand-written probes with all output stdout/gitignored, clock=mixed-justified (docs-time/test-time, census-accepted)",
+      "forcedFit": false,
+      "note": "Two honest wrinkles, both named in residue: the family coordinate is degenerate for research records (their organising identity is the research subject, not a capability family), and the clock is a declared exception. Reach=research correctly explains why nothing may depend on it \u2014 terminal band, nothing imports leaves."
+     },
+     {
+      "case": "runtime-only-scripts (three files, maybe-workspace)",
+      "placement": "Outside the classified space until minted; if minted: tools/ practice band, family=agent-practice, provenance=hand-written, clock=runtime",
+      "forcedFit": false,
+      "note": "The basis assigns coordinates but does not decide the mint \u2014 whether three files EARN a workspace is a proportionality/two-clock-plus-size judgment the basis locates but cannot make (named in residue as the mint-threshold gap). The census's 'both shapes are honest' verdict is exactly this: coordinates clear, mint open."
+     },
+     {
+      "case": "apps/ vs demos/ \u2014 real axis or naming habit?",
+      "placement": "Real: two distinct values in the reach axis's terminal band, both at tree level 1",
+      "forcedFit": false,
+      "note": "They differ in blast radius (product SLO vs demonstration) and in Conway future \u2014 'a second demo consumer team adopting the estate' is one of the owner's own five future classes, and it needs a floor to land on. A naming habit would collapse under that future; a reach value absorbs it. The distinction is audience-mode, not capability, which is why it lives on reach and not family."
+     },
+     {
+      "case": "es-ingest-core (generic machinery over a commodity service)",
+      "placement": "packages/search/es-ingest-core \u2014 family=search (its current and foreseeable Conway owner), reach=GENERIC (no oak- prefix, no Oak knowledge, extraction-ready by coordinate), provenance=hand-written, clock=ingest-time",
+      "forcedFit": false,
+      "note": "The case that proves family and reach are independent inside packages/: a generic-reach workspace living on the search team's floor. Family follows the owning team, not the vendor; the commodity-vs-proper-noun question is answered by reach (commodity coupling is generic) plus the dependency graph, needing no fifth axis. Alternative reading (family=platform) rejected: no platform team will ever understand ES ingest better than the search team."
+     },
+     {
+      "case": "oak-mcp-widget (own toolchain, build artefact embedded into a server)",
+      "placement": "packages/mcp/oak-mcp-widget \u2014 family=mcp, reach=oak-estate package, provenance=hand-written source with its generated embedded-HTML output in an in-workspace generated/ directory (same-freshness-event rule), clock=build-time (its own vite toolchain, distinct from the server's deploy clock)",
+      "forcedFit": false,
+      "note": "Clock mints the boundary (second toolchain = second clock, as the census found); the embedded artefact stays in-workspace because its regeneration IS the workspace's own build event \u2014 the same policy clause that governs oak-bulk-data's ground-truth outputs."
+     },
+     {
+      "case": "corpus-instruments / repo-validators / agent-session-ops \u2014 product or practice?",
+      "placement": "Practice: all three in the reach terminal band's practice value (tools/), family=agent-practice; clocks split them (runtime instruments vs lint-time validators); agent-session-ops alone carries reach=generic (portable, re-namespaced off OAK_*, extractable to other Practice estates) while repo-validators is estate-bound",
+      "forcedFit": false,
+      "note": "The reach axis answers the product-or-practice question directly: their audience is the estate's own operation, never Oak's product users \u2014 so practice band, not packages/. And the trio proves reach varies within the practice family too: session-ops is generic practice capability with travel rights, validators are not."
+     }
+    ],
+    "residue": [
+     "mixed-justified clock values (agent-tools, build-metadata, research-evidence): the clock axis names the exception but cannot decompose it \u2014 three workspaces hold declared, owner-warranted multi-clock debt the basis records rather than resolves",
+     "licence of generated artefacts derived from OGL curriculum data (oak-curriculum-corpus-data, oak-bulk-artifacts): the provenance\u00d7family\u00d7reach derivation returns 'owner decision', not an answer \u2014 matching the census's own open question; the basis cannot compute it",
+     "the family coordinate is degenerate for research records: a research record's organising identity is its subject (web-app-deconstruction), not a capability family \u2014 family is mandatory only in the shared-package band",
+     "the mint threshold itself: the basis assigns coordinates to any candidate blob but does not decide when a coordinate-distinct blob EARNS a workspace (runtime-only-scripts, the too-small-to-split riders inside oak-sdk-codegen) \u2014 that remains a proportionality/second-consumer judgment outside the basis",
+     "the oak-configured vs oak-leaf gradient is flattened into the single oak-estate reach rank: how deeply parameterised a workspace is (config-behind vs Oak-baked) is workspace-internal fact invisible to the basis, recoverable only by reading the package",
+     "the oak- prefix does double duty as estate-brand and as proper-noun-upstream marker: benign today because they coincide, but a second curriculum upstream forces the naming convention to disambiguate (see future test 1) \u2014 the basis absorbs it, the prefix convention must be amended"
+    ],
+    "futureTests": [
+     {
+      "futureClass": "A second proper-noun curriculum upstream",
+      "absorbedCleanly": true,
+      "note": "New clock values (its spec-deploy, its bulk-refresh) mint new acquisition workspaces inside the existing curriculum-data family \u2014 no new tier, no re-root. Caveat carried in residue: the oak- prefix must stop doubling as 'the upstream' and become per-upstream (e.g. <upstream>-bulk-data), a naming amendment, not a structural one."
+     },
+     {
+      "futureClass": "A new product app",
+      "absorbedCleanly": true,
+      "note": "apps/<family>-<name> \u2014 terminal reach band already exists at tree level 1, family rides the name, dependency direction is already answered (terminal imports anything wider). Zero new structure."
+     },
+     {
+      "futureClass": "Extraction of a generic package to npm or another repo",
+      "absorbedCleanly": true,
+      "note": "The candidate is pre-identified by coordinate (reach=generic, no oak- prefix \u2014 es-ingest-core, search-eval-harness, mcp-server-express-core, eslint-rules, agent-session-ops); extraction is publishing or departing wholesale from its family floor, and the import-monotonicity fence has already guaranteed nothing narrower leaks into it. The basis makes the future-test the owner cares most about (travel) a read, not an audit."
+     },
+     {
+      "futureClass": "A new commodity provider adapter",
+      "absorbedCleanly": true,
+      "note": "reach=generic, family=the consuming capability (or platform for cross-family adapters, as posthog-node/sentry-node are today), clock=runtime \u2014 lands beside its siblings with no deliberation, exactly as the existing adapters sit."
+     },
+     {
+      "futureClass": "A second demo consumer team adopting the estate",
+      "absorbedCleanly": true,
+      "note": "demos/ is a first-class reach value with its own tree-level-1 floor, so the arriving team inherits a contiguous Conway boundary on day one \u2014 this future is the strongest argument that apps-vs-demos is a real axis value and not a naming habit (hard case 9)."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "perProposal": [
+   {
+    "id": "change-cause",
+    "strongestPoint": "Its basis maps one-to-one onto the census's own recorded warrant vocabulary \u2014 dimension: lifecycle / oak-vs-reusable / generated-separation are exactly its clock / provenance / authorship axes \u2014 so every ratified mint is derivable; and its fourth axis (audience) is the only account that explains the oak-curriculum-hub vs oak-curriculum-mcp-streamable-http governance difference (identical on all three intensive axes, governed as demo vs product) and answers level-1 directory placement at zero new carrier cost. Its forced-fit reporting (agent-tools mixed-justified) is honest.",
+    "weakestPoint": "Its flagship clock-only independence pair is contaminated by its own classification: the cardinality argument claims openapi-schema-source vs oak-bulk-data differ 'on clock only', but its hard-case 1 assigns them different provenance too (parameterised-generic vs oak-leaf) \u2014 two axes differ, not one. The clean clock-only proof (the four packages/generated/* workspaces, identical on provenance/authorship/audience, split purely by spec/index-design/bulk-truing/mining clocks) sits in its hard case 2 but is not what the cardinality argument leads with.",
+    "forcedFitsFound": [
+     "Clock carrier under-specified: it names 'today the census's lifecycle value' as the declared carrier, but the census enum is too coarse to state the axis \u2014 all four generated/* workspaces record lifecycle=codegen-time while sitting on four different clocks (oak-vocab-mining's scope even says bulk-refresh cadence). The declared field cannot express the two-clocks law the proposal calls the axis's primary job; the carrier needs event-named values, not build-phase values.",
+     "Level-2 tree collision unacknowledged: level 2 simultaneously carries capability-family names (residue-admitted decoration), the generated/ authorship carve-out, and by the inventory's implied tree a clock-named codegen/ tier \u2014 the carrier conflict P2 and P4 both name is silently absorbed.",
+     "The 'instruments tier' at level 1 is an invented fifth audience value presented as answering census open question 1 \u2014 a proposal, not a derivation; the census leaves those homes explicitly open.",
+     "Licence derivation quietly requires a declared editorial-content subclass (curriculum content vs brand asset) \u2014 a mini-declaration inside the authorship axis; named in residue but under-priced as 'presumptive'."
+    ]
+   },
+   {
+    "id": "bounded-context",
+    "strongestPoint": "Only proposal that explains WHY one upstream service yields multiple workspaces (one ACL per published interface \u2014 the three-taps case as one supplier, three published languages), and it lands two data-confirmed catches nobody else made: oak-vocab-mining's lifecycle label smears (recorded codegen-time, scope says bulk-refresh cadence \u2014 verified in the inventory), and packages/codegen/ names a clock, not a context \u2014 a genuine tier-taxonomy error the owner's open question 1 must rule on. Agent-practice-as-a-bounded-context dissolves hard case 12 more cleanly than any rival.",
+    "weakestPoint": "The clock-into-conformance-contract collapse loses ratified boundaries wholesale. oak-search-index-lifecycle vs oak-search-sdk: same context (search), same posture (oak), same provenance (hand-written), no distinct foreign contract \u2014 the split's entire warrant is ingest-time vs runtime. Likewise logger vs logger-express and design-system-conformance vs oak-design-tokens. The census's plurality dimension (~29 lifecycle entries) is underivable wherever no proper-noun published interface exists \u2014 which is most of them. Its own vocab-mining evidence cuts the other way: the smear proves the recorded FIELD is coarse, not that clock is a shadow of contracts.",
+    "forcedFitsFound": [
+     "agent-tools marked forcedFit:false despite mixed clocks its contract-derivation cannot even name \u2014 the mixed-justified escape value belongs to the clock axis it demoted; the debt is real and the basis has no register for it.",
+     "Audience demoted to a flag while its own residue concedes the demo/product governance difference may force 'promotion to something enforceable' with 'no fourth slot for it' \u2014 the merge is deferred, not solved.",
+     "'A workspace never mixes two domain languages' is untested against contested-family cases: it homes oak-bulk-data in curriculum while the workspace's movesFrom is entirely oak-search-cli \u2014 the assignment is argued, not read off.",
+     "research-evidence admitted as pattern-fit (separate-ways) rather than vocabulary-fit \u2014 honest, but it means the context axis is doing governance-zone work it was not defined for."
+    ]
+   },
+   {
+    "id": "dependency-graph",
+    "strongestPoint": "Best carrier discipline of the four: every declared classification is recomputed (Oak-free-closure test for locus, turbo-input recomputation for clock, licence PROPAGATED along generator edges) \u2014 and licence-propagation is the only mechanism that mechanically narrows the census's open licence question (oak-curriculum-corpus-data / oak-bulk-artifacts inherit OGL-derived from their bulk-content roots). Its runtime-only-scripts verdict ('join the graph or remain outside every guarantee') converts an open question into a principle, and its residue list is the most honest of the four.",
+    "weakestPoint": "It refuses two of the owner's listed governing decisions: team navigation is served 'only decoratively' (admitted), and audience/deployment governance is pushed to per-workspace config fields. Its apps-vs-demos verdict ('naming habit... nothing the tooling checks') contradicts standing owner doctrine that demos are demonstration instruments, never implicitly system parts, under genuinely different governance. A basis scored against the owner's stated decision list fails two rows by its own admission.",
+    "forcedFitsFound": [
+     "The recompute carrier silently degrades to bare declaration exactly where clock is human-decided: editorial and brand clocks (oak-curriculum-synonyms, oak-search-ground-truths, oak-design-system) have no turbo-input signature to recompute from \u2014 'the clock IS what turbo enforces' does not hold for the editorial family.",
+     "'Normalised to the census lifecycle values' adopts the coarse enum that cannot separate the four generated workspaces its own hard case 2 correctly says must be four \u2014 the declared value set contradicts the recomputation story.",
+     "research-evidence's research identity carried by nothing in the basis (admitted, but it is a forced fit on two axes at once: mixed clock waiver plus decoration doing real work).",
+     "Cross-tap unity residue is real but under-priced: a breaking Oak-platform migration touches three acquisition workspaces plus the runtime client with no taxonomy handle \u2014 the shared-env-schema mitigation is a runbook, not a structure."
+    ]
+   },
+   {
+    "id": "navigation",
+    "strongestPoint": "Takes the tree-carrier FACT most seriously \u2014 the only proposal with a complete two-level carrier assignment (reach terminal band at level 1, family at level 2, everything else on package.json fields, affixes, and recomputing validators) \u2014 and lands two catches no rival made: licence derivation genuinely needs family as an input (content\u00d7curriculum\u2192OGL vs content\u00d7brand\u2192reserved), and the oak- prefix currently does double duty as estate-brand and upstream-marker, which a second curriculum upstream breaks (a real naming amendment pre-registered before the future arrives).",
+    "weakestPoint": "The reach merge is unsound on its own hard case 12: agent-session-ops simultaneously carries reach=generic (portable, extractable) AND sits in the reach terminal band (tools/, practice value) \u2014 two values on a supposedly single-valued ordered axis. The generic\u00d7practice-instrument cell its cardinality argument implies empty ('generic deployed app' is the only lost cell) is populated by the census's own oak-vs-reusable entry for agent-session-ops. Specificity and audience answer the same question only until the practice estate asks both at once \u2014 the merge's load-bearing compression fails exactly there.",
+    "forcedFitsFound": [
+     "Dissolving packages/generated/* is presented as a pure carrier choice, but generatedSeparationPolicy clause 1 names 'the packages/generated/* tier' in the ratified policy text itself, not merely as an implied path \u2014 the divergence is flagged but under-priced.",
+     "'Every workspace takes exactly one family without argument' is overstated: oak-bulk-data is argued (placed in curriculum-data while its movesFrom is entirely oak-search-cli), the exact ambiguity P1's residue documents as unadjudicable.",
+     "The import-monotonicity rule ('equal-or-wider reach') formally permits app\u2192demo imports within the terminal band; only the unstated zero-dependents graph fact saves it \u2014 the rule as written is weaker than the rule intended.",
+     "Family degeneracy for research records is named in residue, but the same degeneracy quietly applies to the practice band (tools/ members get family=agent-practice by fiat, making family tautological across one whole level-1 value)."
+    ]
+   }
+  ],
+  "crossCutting": [
+   "The census's recorded lifecycle enum is coarser than the clock axis every proposal needs: all four packages/generated/* workspaces record lifecycle=codegen-time while policy clause 3 distinguishes four clocks (upstream-spec, index-design, ADR-222 truing, mining), and oak-vocab-mining / oak-bulk-artifacts scope-vs-label smears confirm it. Any carrier must name the freshness EVENT, not the build phase; three proposals point at the census field without noting this, and the one that noticed (P2) drew the wrong conclusion from it.",
+   "The census's dimension field is itself the empirical basis confession: {lifecycle, oak-vs-reusable, generated-separation} \u2014 the three intensive axes the proposals converge on \u2014 and zero of 66 entries mint on capability-family, audience, licence, depth, or upstream identity. The ratified inventory's own warrant vocabulary is the strongest single piece of ground evidence in this exercise.",
+   "Tree level 2 is the contested carrier: the census's implied tiers mix family (search/, mcp/, design/, graph/), clock (codegen/), and authorship (generated/) at the same level. Two proposals independently flag codegen/ as a category error (P2: clock-grouping not a context; P4: names a clock not a family). Owner open question 1 is where this must land; no proposal may treat the implied tree as ratified.",
+   "Independence-pair hygiene: the popular openapi-schema-source vs oak-bulk-data pair is NOT a clock-only split (provenance differs too, per P1's own classification). The clean single-axis pairs in the ratified data are: the generated/* tier's internal splits (clock only), openapi-schema-source vs oak-api-artifacts (authorship only), es-ingest-core vs oak-search-ingest (provenance only), and oak-curriculum-hub vs the MCP server (audience only).",
+   "No proposal's basis decides git-lifecycle-guards vs repo-validators \u2014 both lint-time, same provenance, same authorship, same audience; the split warrant is consumer-story coherence (hook window vs validator suites). This confirms unanimously-named residue: minting granularity is genuinely outside any axis set and lives in proportionality doctrine.",
+   "es-ingest-core's directory home exposes the family-vs-posture carrier competition directly: P2 homes it in generic infrastructure beside sentry-node/posthog-node; P4 homes it on the search family floor. Both defend the placement from their basis. The tree can honour only one \u2014 a concrete owner decision the basis war does not settle."
+  ],
+  "convergences": [
+   "Oak-specificity / knowledge provenance is a basis axis in all four proposals, with the same carrier stack independently proposed each time: oak- name prefix, oak-eslint boundary fences, and a recomputing closure/direction check. All four give it the same roles: dependency direction and extraction/travel rights. Unanimous, and ratified-pair-proven (es-ingest-core vs oak-search-ingest).",
+   "Byte authorship/provenance is a basis axis in all four, with byte-preserved third-party capture as a first-class value (oak-design-studio-capture as type specimen) and hand-authored editorial content distinct from generated output (matching the census's challenger correction on oak-search-ground-truths). All four hang edit rights, DO-NOT-EDIT discipline, and drift gates here.",
+   "Change-clock is an independent basis axis in three of four, and the fourth's collapse (P2, clock as shadow of conformance contracts) demonstrably loses ratified clock-only boundaries (oak-search-index-lifecycle vs oak-search-sdk; logger-express). Effective convergence: the three-axis intensive kernel {clock, Oak-specificity, byte-authorship} \u2014 which is exactly the census's own dimension vocabulary.",
+   "Licence is never an independent axis: all four derive or declare it from provenance-adjacent facts, keep package.json license authoritative, and all four independently name the same residue \u2014 the licence of generated workspaces holding OGL-derived curriculum data is an owner fact no basis computes (matching census open question 3).",
+   "Reliance depth is graph-derived and must never be declared as structure: all four, on validators-must-recompute grounds; all four treat today's core/libs/sdks tiers as a legacy materialisation carrying no independent information.",
+   "Upstream bounded context is not an axis: all four dissolve the Oak platform into per-tap clocks/contracts (three taps, several workspaces) and dissolve commodity-vs-proper-noun into the specificity axis (commodity coupling does not brand code \u2014 the es-ingest-core ruling generalised).",
+   "Minting threshold / granularity is outside the basis in all four residue lists (runtime-only-scripts, too-small-to-split riders), belonging to proportionality and consolidate-at-second-consumer doctrine.",
+   "Mixed-justified clocks are a named-waiver debt class in all four (agent-tools, build-metadata, research-evidence) \u2014 recorded exceptions, never silent.",
+   "All five future classes absorb without re-rooting in every proposal \u2014 the axis space is stable under the owner's futures; the only amendments any future forces are naming conventions (P4's oak- prefix disambiguation; P1's licence-derivation stretch under a third licence regime), never structure."
+  ],
+  "disagreements": [
+   "The fourth seat \u2014 audience/deployment class: P1 promotes it to a basis axis (extensive, closed, level-1-carried, non-derivable); P4 folds it into a merged reach scale (which the agent-session-ops double-coordinate breaks); P2 demotes it to a flag with an admitted promotion risk; P3 calls it decoration. The evidence (hub vs MCP server governed differently on identical intensive coordinates; owner doctrine that demos are never implicitly products; level-1 placement being a listed governing decision) favours declared-somewhere-with-a-level-1-carrier, but whether that is 'a fourth basis axis' or 'a governed carrier' is the owner's ruling to make \u2014 it is the genuine cardinality fork between three and four.",
+   "Capability family / bounded context: basis axis (P2, P4) versus navigation decoration (P1, P3). Ground evidence sides with demotion for rule authority \u2014 zero of 66 census entries mint on it, the generated tier deliberately spans four families, and no boundary fence is family-keyed \u2014 but family names must still be curated as the level-2 carrier, and the es-ingest-core placement fork (generic-infra shelf vs search family floor) needs an owner ruling either way.",
+   "packages/generated/* tier: keep as the tree's one provenance carve-out (P1, P2, P3, and ratified policy clause 1 names the tier) versus dissolve into per-family *-artifacts workspaces with marker+suffix+validator carriers (P4, leaning on open question 1's invitation to confirm tier names). 3-1 for keeping; P4's swap is a coherent carrier alternative but trades the single learnable fence against written policy text.",
+   "packages/codegen/ tier fate: P2 and P4 independently rule it a category error (a clock-named tier in a family/context position) and would dissolve or re-home its members; P1 and P3 are silent. Not symmetric disagreement \u2014 a two-flagger finding against a two-proposal gap \u2014 but it changes where openapi-schema-source, openapi-pipeline, and oak-vocab-mining live, so the owner must rule at tier-confirmation time.",
+   "apps/ vs demos/ (hard case 9): real distinction as axis value (P1, P4) vs real-but-flag (P2) vs naming habit with nil enforceable content (P3). Follows entirely from the fourth-seat ruling above."
+  ],
+  "recommendedSynthesis": "Adopt P1's structure with P3's carrier machinery and P4's two named catches; harvest P2 for diagnostics, not for its basis. Concretely: THREE intensive basis axes \u2014 change-clock, Oak-specificity/travel-posture, byte-authorship (four values: hand-written code, editorial content, generated, byte-preserved capture) \u2014 which is exactly the census's own dimension vocabulary, each proven independent by a clean ratified pair (generated/* internal splits for clock; es-ingest-core vs oak-search-ingest for specificity; openapi-schema-source vs oak-api-artifacts for authorship). PLUS audience/deployment as a closed, non-derivable, declared classification carried entirely by tree level 1 (apps/ demos/ research/ tools-or-instruments/ packages/): P1's three-plus-one is the honest cardinality answer to the owner's 'four is almost certainly too much, but maybe not' \u2014 three axes decide boundaries, dependencies, edits, and travel; the plus-one decides level-1 placement and publish/deploy governance, costs no new carrier, and cannot be derived (hub vs MCP server). Reject P4's reach merge (agent-session-ops holds two reach values at once \u2014 specificity and audience must stay separate) and reject P2's clock collapse (it loses oak-search-index-lifecycle vs oak-search-sdk and every no-foreign-contract lifecycle mint). Carriers: clock as a declared per-workspace freshness-EVENT field with values finer than the census lifecycle enum (upstream-spec-deploy, index-design, bulk-truing, mining, editorial, brand, hook, own-build, runtime \u2014 the current enum provably cannot state the two-clocks law), recomputed from turbo/generator edges where a mechanical signature exists and carried as a named waiver where it does not (editorial/brand, mixed-justified); specificity as oak-prefix + boundary fences + recomputing closure test (P3's mechanism); authorship as the packages/generated/* tier kept per ratified policy clause 1, plus markers, drift gates, and the capture workspace's own quality gate; licence as a declared root class propagated along generator edges (P3's propagation \u2014 the best mechanical narrowing of open question 3), package.json authoritative with a recomputing consistency check. Capability family survives as curated level-2 naming with zero rule authority; rename or dissolve packages/codegen/ (two independent flaggers: it names a clock, not a family) and pre-register P4's oak- prefix disambiguation before a second upstream arrives. Depth: computed, never declared. Upstream identity: no axis; carry cross-tap unity in the env schema and a platform-migration runbook (P3's residue, priced up). Named residue to carry forward honestly: minting thresholds (proportionality doctrine), mixed-justified waiver register, OGL-derived-generated licence edges (owner facts), and family-label adjudication for dual-family workspaces (oak-bulk-data; es-ingest-core's shelf) \u2014 an owner naming decision the basis deliberately does not make."
+ }
+}

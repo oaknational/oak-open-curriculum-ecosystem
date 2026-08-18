@@ -36,17 +36,18 @@ switchboard drives three axes:
   high-contrast / colour-safe) through the kit's `oak-theme.js` runtime,
   inlined pre-paint in `app/layout.tsx` so a stored choice applies before
   first paint. A theme choice persists (localStorage, the runtime's
-  contract). Until a choice is made the control reads "Page default" — the
-  state where a brand's own polarity governs (EMC² is dark-first). High
-  contrast also has an OS-level route with no control interaction — a
-  `prefers-contrast: more` request applies it without claiming a choice;
-  colour safe is control-only. With
+  contract). Until a choice is made the control reads "Identity default" —
+  the selectable no-choice state where the identity's own polarity governs
+  (EMC² is dark-first), and choosing it clears a stored choice (DDR-003
+  dated amendment 2026-08-11). High contrast also has an OS-level route
+  with no control interaction — a `prefers-contrast: more` request applies
+  it without claiming a choice; colour safe is control-only. With
   JavaScript disabled, reduced motion and forced colors still work at the
   CSS level, but the high-contrast and colour-safe themes have no route —
   they need the runtime.
 - **Motion** — the orthogonal motion axis (match-device / reduced / full),
   same runtime.
-- **Identity** — Oak, plus the kit's two counter-brands (Freedonia DSE and
+- **Identity** — Oak, plus the kit's two counter-brands (Public Digital Service and
   EMC²), by swapping a `brand.css` link loaded after every bundled sheet so
   the brand wins the cascade at equal specificity.
 
@@ -77,7 +78,7 @@ single entry point and the source of truth for sheet composition and order.
 Fonts are the kit's own self-hosted faces — no `next/font`, no network at
 build. Page markup uses `.oak-*` classes and token roles only; the
 page-level hook rules in `globals.css` (for example `.mast`, which
-Freedonia's expression layer restyles into the GDS masthead grammar)
+PDS's expression layer restyles into the GDS masthead grammar)
 compose token roles and keywords exclusively. The utility bar deliberately
 is not an inverted band: controls on inverted surfaces need the kit's
 inverted focus ring, and a brand that re-polarises the band has no token
@@ -137,6 +138,13 @@ design system. Enforced by instrument, not review vigilance:
   (`prefers-contrast: more` auto-selecting high-contrast; forced colors),
   and keyboard focus visibility in both polarities. The `system`-follows-
   device ride itself is a behaviour test in the UI suite.
+
+  The suite is fully green: the six pds specimen cells that were declared
+  known-red on 2026-08-13 (inverted masthead ink on a non-inverted surface,
+  exactly 1:1) were cured the same day at the cascade generator — the page
+  sheet had declared the masthead surface at higher specificity than the
+  hook-clean contract brand expression layers assume (`specimen.css`, the
+  `.mast` split carries the record). Any red is new information.
 
 ## Fidelity review
 

@@ -190,6 +190,7 @@ async function executeVersionedIngest(
     subjectFilter: options.subjectFilter,
     indexes: [],
     resolveIndex: resolver,
+    includeRestricted: options.includeRestricted,
   });
   if (!prepareResult.ok) {
     return prepareResult;

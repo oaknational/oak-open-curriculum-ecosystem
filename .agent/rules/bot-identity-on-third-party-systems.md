@@ -124,6 +124,23 @@ the first hop. Confirm the id from the API, never from prose:
   account with `repo` and `workflow` scopes, and a failing mint captures zero
   bytes through the direct entry point.
 
+  Three tripwires close the residual paths the guard alone has missed
+  (both instances first-hand, 2026-08-08 and 2026-08-13):
+
+  1. **Pin the cwd before an identity-bearing write.** A persistent shell
+     whose cwd has drifted into a worktree resolves the front door against
+     an unbuilt `dist` — the mint exits 0 printing NOTHING, `$()` captures
+     empty, and the fallback fires despite the guard reading only exit
+     codes. Identity-bearing writes run from the primary root; `pwd` is one
+     token.
+  2. **Guard the token by LENGTH, not exit code** (`[ ${#token} -ge 20 ]`)
+     — an empty read is a failure whatever the exit code.
+  3. **Echo the author back in-band on every bot write** — request
+     `.user.login` / `.user.type` in the same call and read it before
+     proceeding. An empty `GH_TOKEN` is invisible at the call site; the
+     echo-back is the only reliable detector, and it converts a silent
+     misattribution into a same-call stop.
+
 ## Action (all other systems)
 
 Where a bot/agent identity exists (e.g. a Linear agent actor), agent actions

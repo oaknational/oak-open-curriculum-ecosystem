@@ -322,6 +322,75 @@ describe('the root landing page never reaches Clerk (MCP-518)', () => {
   });
 });
 
+/**
+ * The routed health path is public too (MCP-580).
+ *
+ * It shares the `/mcp` prefix and nothing else: it is the only health path the
+ * canonical host can reach, so it is the sole probe that measures the surface
+ * users actually hit. Clerk must not be in that path — a liveness check that
+ * depends on the auth vendor reports the vendor, and a browser-shaped GET that
+ * Clerk observes is handshake-eligible at the vendor (MCP-517/MCP-518).
+ *
+ * Asserted through the assembled app rather than the skip predicate, for the
+ * reason this file's header gives. It has to be here specifically: drop the
+ * routed entry from `CLERK_SKIP_PATHS` and the in-process health suite stays
+ * green, because that suite boots with auth disabled and no Clerk at all. Only
+ * this harness can see the vendor run.
+ */
+describe('the routed health path never reaches Clerk (MCP-580)', () => {
+  const ROUTED_HEALTH = '/mcp/healthz';
+
+  it('answers a monitor-shaped poll without Clerk seeing the request', async () => {
+    const { app, reachedClerk } = await createHarness();
+
+    const res = await request(app)
+      .get(ROUTED_HEALTH)
+      .set('Host', SERVED_HOST)
+      .set('Accept', '*/*')
+      .set('Cookie', SIGNED_IN_COOKIES);
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+    expect(clerkHeaderNames(res.headers)).toStrictEqual([]);
+    expect(reachedClerk).not.toHaveBeenCalled();
+  });
+
+  it('keeps Clerk off a browser-shaped poll, which is the handshake-eligible shape', async () => {
+    // Belt and braces, and the two are worth distinguishing: this shape is also
+    // covered by the public-page-surface fork (any `/mcp/*` path plus browser
+    // headers), so removing the routed entry from `CLERK_SKIP_PATHS` leaves this
+    // case green while the two either side of it go red. Kept because a monitor
+    // configured with a browser Accept must get JSON and no redirect regardless
+    // of which of the two mechanisms is carrying it.
+    const { app, reachedClerk } = await createHarness();
+
+    const res = await request(app)
+      .get(ROUTED_HEALTH)
+      .set('Host', SERVED_HOST)
+      .set('Accept', BROWSER_ACCEPT)
+      .set('Sec-Fetch-Dest', 'document')
+      .set('Cookie', SIGNED_IN_COOKIES);
+
+    expect(res.status).toBe(200);
+    expect(res.status).not.toBe(307);
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+    expect(reachedClerk).not.toHaveBeenCalled();
+  });
+
+  it('keeps Clerk off the HEAD verb a monitor may be configured for', async () => {
+    const { app, reachedClerk } = await createHarness();
+
+    const res = await request(app)
+      .head(ROUTED_HEALTH)
+      .set('Host', SERVED_HOST)
+      .set('Accept', '*/*')
+      .set('Cookie', SIGNED_IN_COOKIES);
+
+    expect(res.status).toBe(200);
+    expect(reachedClerk).not.toHaveBeenCalled();
+  });
+});
+
 describe('the MCP protocol leg still reaches Clerk (MCP-518)', () => {
   it('routes a conformant protocol POST through Clerk', async () => {
     const { app, reachedClerk } = await createHarness();

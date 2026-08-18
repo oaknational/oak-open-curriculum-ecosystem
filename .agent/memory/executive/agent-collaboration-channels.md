@@ -28,6 +28,20 @@ time can appear in prose when helpful, but the state clock is UTC.
 right channel rather than mis-routing peer concerns to reviewers or to
 the owner.)
 
+**Delivery-lane overlay.** Two LIVE delivery lanes sit beside the
+surfaces above without replacing any of them: **s2s** (`SendMessage`,
+Claude-to-Claude, seconds, no durability — a tap on the shoulder that
+accelerates channel 2, never substitutes for any surface here) and
+**ARC** (rapid-comms channel files — operationally a standalone
+file-backed sidebar beside channel 4: choose a decision thread when the
+exchange must be durable and structured from the start, ARC when
+latency and bandwidth dominate and the substance is conserved at
+close). Lane selection and the behaviours that keep them honest
+(decision-mirroring at occurrence, never-require, no permission
+laundering) live in the
+[`comms-channels`](../../skills/comms-channels/SKILL-CANONICAL.md)
+skill.
+
 ## Decision Tree
 
 ```text

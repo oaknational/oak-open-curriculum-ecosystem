@@ -131,14 +131,14 @@ function createFixtureFiles(): readonly BulkFileResult[] {
   ];
 }
 
-async function runIngestionOverFixture() {
+async function runIngestionOverFixture(overrides: { readonly includeRestricted?: boolean } = {}) {
   const deps: BulkIngestionDeps = {
     readAllBulkFiles: vi.fn().mockResolvedValue(createFixtureFiles()),
     collectPhaseResults,
     fetchCategoryMapForSequences: vi.fn().mockResolvedValue(ok(new Map())),
   };
   return prepareBulkIngestion(
-    { bulkDir: 'fixture-dir-unused', client: createMockClient(), indexes: [] },
+    { bulkDir: 'fixture-dir-unused', client: createMockClient(), indexes: [], ...overrides },
     deps,
   );
 }
@@ -179,5 +179,36 @@ describe('bulk ingestion excludes restricted lessons from every produced operati
     expect(result.stats.restrictedLessonsExcluded).toBe(5);
     expect(result.stats.filesProcessed).toBe(2);
     expect(result.stats.lessonsIndexed).toBe(3);
+  });
+});
+
+describe('bulk ingestion retains restricted lessons when includeRestricted is true', () => {
+  it('produces lesson documents for every lesson, restricted included', async () => {
+    const result = await runIngestionOverFixture({ includeRestricted: true });
+
+    const lessonSlugs = result.operations
+      .filter(
+        (entry): entry is SearchLessonsIndexDoc =>
+          typeof entry === 'object' && entry !== null && 'lesson_slug' in entry,
+      )
+      .map((doc) => doc.lesson_slug);
+    expect(lessonSlugs.sort((a, b) => a.localeCompare(b))).toEqual([
+      'maths-hidden-1',
+      'maths-hidden-2',
+      'maths-kept-1',
+      'science-hidden-1',
+      'science-hidden-2',
+      'science-hidden-3',
+      'science-kept-1',
+      'science-kept-2',
+    ]);
+  });
+
+  it('reports zero restricted lessons excluded and indexes every lesson', async () => {
+    const result = await runIngestionOverFixture({ includeRestricted: true });
+
+    expect(result.stats.restrictedLessonsExcluded).toBe(0);
+    expect(result.stats.filesProcessed).toBe(2);
+    expect(result.stats.lessonsIndexed).toBe(8);
   });
 });

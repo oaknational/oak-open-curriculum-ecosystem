@@ -1,54 +1,52 @@
 /*
- * Target-state identity naming for surfaces that must stay clean under the
- * identity-naming ratchet (census-exact contract,
- * .agent/reports/design/pds-identity-rename/census.json): new tracked files
- * never write the outgoing brand slug, so anything keyed by identity in a
- * NEW file derives its names here instead. This module is framework-free
- * and, by construction, token-free — the pending slug is only ever reached
- * through the caller-supplied identity list (imported from its existing
- * carrier, components/useIdentity.ts), never written.
+ * The slug → target-fragment mapping for surfaces keyed by identity.
+ *
+ * Identity slugs and the fragments that name things ABOUT an identity are not
+ * the same vocabulary: `creature` is the slug in `?brand=` URLs and on disk,
+ * while `emc2` is the fragment in pair ids, evidence filenames and description
+ * keys. This module is the one place that maps between them, so no consumer
+ * re-declares the correspondence. Framework-free, so the server route, the
+ * fidelity tooling and the client control can all share it.
  */
 import { err, ok, type Result } from '@oaknational/result';
 
-/** The ratified target-state identity names (wow-verdict-register roster). */
+/** The ratified identity names (wow-verdict-register roster). */
 export type TargetIdentity = 'oak' | 'pds' | 'emc2';
 
-/** Identities already carrying their target name, mapped explicitly. The one
- *  identity still pending its rename is derived by exclusion below. */
-const RENAMED: Readonly<Partial<Record<string, TargetIdentity>>> = {
+/** Every known slug and the fragment that names it. Slugs whose fragment is
+ *  their own name are listed explicitly rather than defaulted: the table is
+ *  the complete statement of the vocabulary, and adding an identity means
+ *  adding a row here. */
+const FRAGMENT_BY_SLUG: Readonly<Partial<Record<string, TargetIdentity>>> = {
   oak: 'oak',
+  pds: 'pds',
   creature: 'emc2',
 };
 
 /**
- * Map every identity slug to its target-state fragment. Exactly one slug may
- * be pending a rename (it maps to `pds`); zero or several pending slugs fail
- * loud, so a later identity addition trips this boundary instead of silently
- * colliding onto `pds`. Pure — callers unwrap at module load so a drifted
- * identity list fails the import, the zod-at-module-init precedent.
+ * Map every identity slug to its fragment. A slug with no row is a drifted
+ * roster, not a defaultable case — it fails loud so a later identity addition
+ * trips this boundary instead of silently naming its evidence after nothing.
+ * Pure; callers unwrap at module load, the zod-at-module-init precedent.
  */
 export function targetFragmentsFor(
   identities: readonly string[],
 ): Result<Readonly<Record<string, TargetIdentity>>, string> {
   const fragments: Record<string, TargetIdentity> = {};
-  const pending: string[] = [];
+  const unknown: string[] = [];
   for (const slug of identities) {
-    const renamed = RENAMED[slug];
-    if (renamed === undefined) {
-      pending.push(slug);
+    const fragment = FRAGMENT_BY_SLUG[slug];
+    if (fragment === undefined) {
+      unknown.push(slug);
     } else {
-      fragments[slug] = renamed;
+      fragments[slug] = fragment;
     }
   }
-  if (pending.length !== 1) {
+  if (unknown.length > 0) {
+    const quoted = unknown.map((slug) => `'${slug}'`).join(', ');
     return err(
-      `identities: expected exactly one identity pending its rename to pds, found ${pending.length} of ${identities.length} — update RENAMED in lib/identities.ts alongside the identity change`,
+      `identities: no target fragment for ${quoted} — add a row to FRAGMENT_BY_SLUG in lib/identities.ts alongside the identity change`,
     );
   }
-  const pendingSlug = pending[0];
-  if (pendingSlug === undefined) {
-    return err('identities: pending slug unexpectedly absent');
-  }
-  fragments[pendingSlug] = 'pds';
   return ok(fragments);
 }

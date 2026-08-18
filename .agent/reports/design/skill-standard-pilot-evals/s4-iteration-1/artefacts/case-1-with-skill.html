@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Industrial Revolution — Year 8 History unit | Oak National Academy</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Page shell reset — matches the pattern every design-system specimen uses */
+      body {
+        margin: 0;
+      }
+
+      /* --- Page-type map: a new data-page value (design-system-usage skill
+         permits minting one when the shipped map doesn't fit). This is a
+         single unit's landing page, not the shipped "unit" browse/filter
+         page, so it gets its own scoped map rather than overloading that
+         one. Single column: hierarchy here is carried by rank and weight,
+         not by a facets/results split. */
+      [data-page='unit-landing'] {
+        --main-columns: minmax(0, 1fr);
+        --main-areas: 'hero' 'results' 'content' 'resources' 'support';
+        --main-columns-narrow: minmax(0, 1fr);
+        --main-areas-narrow: 'hero' 'results' 'content' 'resources' 'support';
+      }
+
+      /* Consistent vertical rhythm between regions — proximity/rhythm over
+         one-off gaps. Hero and support carry their own band padding. */
+      .oak-region-pad {
+        padding-block: var(--space-48);
+      }
+
+      /* --- Hero: uses the system's tone-band component, re-pointing its
+         token surface rather than inventing new background rules --- */
+      .hero-band {
+        --band-bg: var(--surface-decorative-4-subtle);
+        --band-border: var(--border-solid-m) solid var(--border-primary);
+      }
+      .hero-content {
+        max-width: var(--space-960);
+      }
+      .crumb-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-8);
+        list-style: none;
+        margin: 0 0 var(--space-24);
+        padding: 0;
+        font: var(--type-body-3);
+      }
+      .crumb-list li {
+        display: flex;
+        align-items: center;
+        gap: var(--space-8);
+      }
+      .crumb-sep {
+        width: var(--size-icon-s);
+        height: var(--size-icon-s);
+      }
+      .crumb-current {
+        font-weight: var(--weight-bold);
+        color: var(--text-primary);
+      }
+      .hero-title {
+        margin: var(--space-16) 0 var(--space-12);
+        max-width: 20ch;
+      }
+      .hero-teaser {
+        max-width: 60ch;
+        margin: 0 0 var(--space-32);
+      }
+
+      /* --- Lessons (the primary scan target: largest heading, most
+         repeated real estate, the system's full accent shadow) --- */
+      .section-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--space-8);
+        margin-bottom: var(--space-20);
+      }
+      .section-sub {
+        color: var(--text-subdued);
+        margin: 0;
+      }
+      .lesson-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .lesson-card {
+        display: flex;
+        align-items: center;
+        gap: var(--space-16);
+      }
+      .lesson-num {
+        flex: 0 0 auto;
+        width: var(--space-40);
+        height: var(--space-40);
+        border-radius: var(--radius-circle);
+        border: var(--border-solid-m) solid var(--border-primary);
+        background: var(--surface-decorative-1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font: var(--weight-bold) var(--font-size-4) / 1 var(--font-sans);
+        color: var(--text-primary);
+      }
+      .lesson-body {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+      }
+      .lesson-title {
+        margin: 0;
+      }
+      .lesson-desc {
+        color: var(--text-subdued);
+        margin: 0;
+      }
+      .lesson-meta {
+        margin-top: var(--space-4);
+      }
+      .lesson-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-4);
+        color: var(--text-subdued);
+        font: var(--type-body-4);
+      }
+      .lesson-arrow {
+        flex: 0 0 auto;
+      }
+
+      /* --- Unit summary: demoted below the lesson list by BOTH position
+         and a smaller heading class (same h2 rank, smaller size) --- */
+      .unit-summary-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: var(--gap-l);
+        align-items: start;
+      }
+      @media (max-width: 760px) {
+        .unit-summary-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* --- Downloads: a real, findable panel, quieter than the lesson
+         list — grey shadow instead of the signature accent shadow --- */
+      .downloads-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-12);
+        margin-bottom: var(--space-16);
+      }
+      .downloads-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .download-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-12);
+      }
+      .download-meta {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .download-sub {
+        color: var(--text-subdued);
+      }
+
+      /* --- Related units: lowest weight — flat cards, small heading,
+         set inside a quiet tone band that visually closes the page --- */
+      .support-band {
+        --band-bg: var(--bg-subtle);
+        --band-pad: var(--space-40);
+      }
+      .related-head {
+        margin-bottom: var(--space-16);
+        color: var(--text-subdued);
+      }
+      .related-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      }
+      .related-card {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+      }
+      .related-eyebrow {
+        color: var(--text-subdued);
+        text-transform: uppercase;
+      }
+      .related-title {
+        margin: 0;
+      }
+
+      /* --- Footer --- */
+      footer[data-region='footer'] {
+        border-top: var(--border-solid-m) solid var(--border-primary);
+        background: var(--bg-subtle);
+      }
+      .footer-inner {
+        padding-block: var(--space-24);
+      }
+      .footer-text {
+        color: var(--text-subdued);
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body class="oak-scope">
+    <a class="oak-skip-link" href="#main-content">Skip to main content</a>
+    <div class="oak-canvas" data-page="unit-landing">
+      <main id="main-content" class="oak-main oak-region" data-region="main">
+        <!-- HERO: page identity — where the unit is, what it's called, one next action -->
+        <section class="oak-region" data-region="hero">
+          <div class="oak-band hero-band">
+            <div class="oak-container hero-content">
+              <nav aria-label="Breadcrumb">
+                <ol class="crumb-list">
+                  <li><a href="#">Home</a></li>
+                  <li>
+                    <img class="oak-icon crumb-sep" src="assets/icons/chevron-right.svg" alt="" />
+                  </li>
+                  <li><a href="#">Key stage 3</a></li>
+                  <li>
+                    <img class="oak-icon crumb-sep" src="assets/icons/chevron-right.svg" alt="" />
+                  </li>
+                  <li><a href="#">History</a></li>
+                  <li>
+                    <img class="oak-icon crumb-sep" src="assets/icons/chevron-right.svg" alt="" />
+                  </li>
+                  <li class="crumb-current" aria-current="page">Year 8</li>
+                </ol>
+              </nav>
+
+              <div class="oak-cluster oak-cluster--s">
+                <span class="oak-tag oak-tag--pink">
+                  <img src="assets/icons/subject-history.svg" alt="" />
+                  History
+                </span>
+                <span class="oak-tag oak-tag--white">Year 8</span>
+                <span class="oak-tag oak-tag--white">6 lessons</span>
+              </div>
+
+              <h1 class="oak-heading-1 hero-title">
+                The Industrial Revolution: how Britain changed forever
+              </h1>
+              <p class="oak-body-1 hero-teaser">
+                From steam power to smoky new towns — six lessons tracing how factories, trade and
+                city life reshaped Britain between 1750 and 1900.
+              </p>
+
+              <div class="oak-cluster">
+                <a class="oak-btn" href="#lesson-1">
+                  Start with lesson 1
+                  <img class="oak-btn__icon" src="assets/icons/arrow-right.svg" alt="" />
+                </a>
+                <a class="oak-btn oak-btn--secondary" href="#resources">
+                  <img class="oak-btn__icon" src="assets/icons/download.svg" alt="" />
+                  Get all resources
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LESSONS: the primary scan target — largest content heading, most
+             repeated space, the system's signature accent shadow marks these
+             as the main interactive set on the page -->
+        <section class="oak-region oak-region-pad" data-region="results">
+          <div class="oak-container">
+            <div class="section-head">
+              <h2 class="oak-heading-3">Lessons in this unit</h2>
+              <p class="oak-body-3 section-sub">6 lessons · around 6 hours of teaching</p>
+            </div>
+
+            <ol class="lesson-list oak-stack">
+              <li>
+                <a class="oak-card-link" href="#" id="lesson-1">
+                  <article class="oak-card lesson-card">
+                    <span class="lesson-num" aria-hidden="true">1</span>
+                    <div class="lesson-body">
+                      <h3 class="oak-heading-6 lesson-title">What was the Industrial Revolution?</h3>
+                      <p class="oak-body-3 lesson-desc">
+                        Pupils build a timeline of Britain's shift from farms to factories and
+                        meet the inventions that powered it.
+                      </p>
+                      <div class="oak-cluster oak-cluster--s lesson-meta">
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/quiz.svg" alt="" />Quiz
+                        </span>
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/worksheet.svg" alt="" />Worksheet
+                        </span>
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/video.svg" alt="" />Video
+                        </span>
+                      </div>
+                    </div>
+                    <img
+                      class="oak-icon lesson-arrow"
+                      src="assets/icons/chevron-right.svg"
+                      alt=""
+                    />
+                  </article>
+                </a>
+              </li>
+              <li>
+                <a class="oak-card-link" href="#">
+                  <article class="oak-card lesson-card">
+                    <span class="lesson-num" aria-hidden="true">2</span>
+                    <div class="lesson-body">
+                      <h3 class="oak-heading-6 lesson-title">
+                        Why did the Industrial Revolution start in Britain?
+                      </h3>
+                      <p class="oak-body-3 lesson-desc">
+                        Pupils weigh up coal, canals and colonies as pupils consider why Britain
+                        led the way.
+                      </p>
+                      <div class="oak-cluster oak-cluster--s lesson-meta">
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/quiz.svg" alt="" />Quiz
+                        </span>
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/worksheet.svg" alt="" />Worksheet
+                        </span>
+                      </div>
+                    </div>
+                    <img
+                      class="oak-icon lesson-arrow"
+                      src="assets/icons/chevron-right.svg"
+                      alt=""
+                    />
+                  </article>
+                </a>
+              </li>
+              <li>
+                <a class="oak-card-link" href="#">
+                  <article class="oak-card lesson-card">
+                    <span class="lesson-num" aria-hidden="true">3</span>
+                    <div class="lesson-body">
+                      <h3 class="oak-heading-6 lesson-title">
+                        How did factories change the way people worked?
+                      </h3>
+                      <p class="oak-body-3 lesson-desc">
+                        A source-based enquiry into the shift from cottage industry to the factory
+                        floor.
+                      </p>
+                      <div class="oak-cluster oak-cluster--s lesson-meta">
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/quiz.svg" alt="" />Quiz
+                        </span>
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/slide-deck.svg" alt="" />Slides
+                        </span>
+                      </div>
+                    </div>
+                    <img
+                      class="oak-icon lesson-arrow"
+                      src="assets/icons/chevron-right.svg"
+                      alt=""
+                    />
+                  </article>
+                </a>
+              </li>
+              <li>
+                <a class="oak-card-link" href="#">
+                  <article class="oak-card lesson-card">
+                    <span class="lesson-num" aria-hidden="true">4</span>
+                    <div class="lesson-body">
+                      <h3 class="oak-heading-6 lesson-title">
+                        What was life like in industrial towns?
+                      </h3>
+                      <p class="oak-body-3 lesson-desc">
+                        Pupils compare housing, health and overcrowding in Manchester and
+                        Sheffield.
+                      </p>
+                      <div class="oak-cluster oak-cluster--s lesson-meta">
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/worksheet.svg" alt="" />Worksheet
+                        </span>
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/video.svg" alt="" />Video
+                        </span>
+                      </div>
+                    </div>
+                    <img
+                      class="oak-icon lesson-arrow"
+                      src="assets/icons/chevron-right.svg"
+                      alt=""
+                    />
+                  </article>
+                </a>
+              </li>
+              <li>
+                <a class="oak-card-link" href="#">
+                  <article class="oak-card lesson-card">
+                    <span class="lesson-num" aria-hidden="true">5</span>
+                    <div class="lesson-body">
+                      <h3 class="oak-heading-6 lesson-title">
+                        How did the Industrial Revolution affect children?
+                      </h3>
+                      <p class="oak-body-3 lesson-desc">
+                        Pupils read testimony from child workers and debate the case for reform.
+                      </p>
+                      <div class="oak-cluster oak-cluster--s lesson-meta">
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/quiz.svg" alt="" />Quiz
+                        </span>
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/worksheet.svg" alt="" />Worksheet
+                        </span>
+                      </div>
+                    </div>
+                    <img
+                      class="oak-icon lesson-arrow"
+                      src="assets/icons/chevron-right.svg"
+                      alt=""
+                    />
+                  </article>
+                </a>
+              </li>
+              <li>
+                <a class="oak-card-link" href="#">
+                  <article class="oak-card lesson-card">
+                    <span class="lesson-num" aria-hidden="true">6</span>
+                    <div class="lesson-body">
+                      <h3 class="oak-heading-6 lesson-title">
+                        What was the impact of the Industrial Revolution on Britain?
+                      </h3>
+                      <p class="oak-body-3 lesson-desc">
+                        Pupils build a balanced judgement essay weighing progress against its
+                        human cost.
+                      </p>
+                      <div class="oak-cluster oak-cluster--s lesson-meta">
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/quiz.svg" alt="" />Quiz
+                        </span>
+                        <span class="lesson-chip">
+                          <img class="oak-icon" src="assets/icons/slide-deck.svg" alt="" />Slides
+                        </span>
+                      </div>
+                    </div>
+                    <img
+                      class="oak-icon lesson-arrow"
+                      src="assets/icons/chevron-right.svg"
+                      alt=""
+                    />
+                  </article>
+                </a>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- UNIT SUMMARY: same rank in the outline (h2) as the sections
+             either side, but a smaller heading class and a supporting
+             position after the lessons demote it deliberately -->
+        <section class="oak-region oak-region-pad" data-region="content">
+          <div class="oak-container">
+            <div class="unit-summary-grid">
+              <div class="oak-prose">
+                <h2 class="oak-heading-5">About this unit</h2>
+                <p class="oak-body-2">
+                  Britain's landscape, work and daily life were transformed in little more than a
+                  century. This unit follows that change from rural workshops to steam-powered
+                  factories, asking pupils to weigh up who gained and who paid the price.
+                </p>
+                <p class="oak-body-2">
+                  Pupils build on their knowledge of Georgian Britain from Year 7, and this unit
+                  sets up the trade and empire topics that follow later in Year 8.
+                </p>
+              </div>
+              <div class="oak-block oak-key-learning-points">
+                <span class="oak-block-label">What pupils will learn</span>
+                <ol class="oak-body-3">
+                  <li>Why steam power and new machinery changed how goods were made</li>
+                  <li>How and why people moved from the countryside into industrial towns</li>
+                  <li>What working conditions were like in factories and mines</li>
+                  <li>How industrial towns created new problems — and new reforms</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DOWNLOADS: a real, functional panel — findable, but quieter than
+             the lesson list (grey shadow, not the signature accent shadow) -->
+        <section class="oak-region oak-region-pad" data-region="resources" id="resources">
+          <div class="oak-container">
+            <div class="oak-card oak-card--grey-shadow">
+              <div class="downloads-head">
+                <h2 class="oak-heading-5">Downloads</h2>
+                <a class="oak-btn oak-btn--secondary oak-btn--sm" href="#">
+                  <img class="oak-btn__icon" src="assets/icons/download.svg" alt="" />
+                  Download all
+                </a>
+              </div>
+              <ul class="downloads-list oak-stack oak-stack--s">
+                <li class="download-row">
+                  <img class="oak-icon" src="assets/icons/curriculum-plan.svg" alt="" />
+                  <div class="download-meta">
+                    <span class="oak-body-2-bold">Unit overview</span>
+                    <span class="oak-body-4 download-sub">PDF · 2 pages</span>
+                  </div>
+                  <a
+                    class="oak-icon-btn oak-icon-btn--secondary"
+                    href="#"
+                    aria-label="Download unit overview"
+                  >
+                    <img src="assets/icons/download.svg" alt="" />
+                  </a>
+                </li>
+                <li class="download-row">
+                  <img class="oak-icon" src="assets/icons/worksheet.svg" alt="" />
+                  <div class="download-meta">
+                    <span class="oak-body-2-bold">Worksheets pack</span>
+                    <span class="oak-body-4 download-sub">PDF · 6 files, editable</span>
+                  </div>
+                  <a
+                    class="oak-icon-btn oak-icon-btn--secondary"
+                    href="#"
+                    aria-label="Download worksheets pack"
+                  >
+                    <img src="assets/icons/download.svg" alt="" />
+                  </a>
+                </li>
+                <li class="download-row">
+                  <img class="oak-icon" src="assets/icons/slide-deck.svg" alt="" />
+                  <div class="download-meta">
+                    <span class="oak-body-2-bold">Slide decks</span>
+                    <span class="oak-body-4 download-sub">PPTX · 6 files</span>
+                  </div>
+                  <a
+                    class="oak-icon-btn oak-icon-btn--secondary"
+                    href="#"
+                    aria-label="Download slide decks"
+                  >
+                    <img src="assets/icons/download.svg" alt="" />
+                  </a>
+                </li>
+                <li class="download-row">
+                  <img class="oak-icon" src="assets/icons/clipboard.svg" alt="" />
+                  <div class="download-meta">
+                    <span class="oak-body-2-bold">Knowledge organiser</span>
+                    <span class="oak-body-4 download-sub">PDF · 1 page</span>
+                  </div>
+                  <a
+                    class="oak-icon-btn oak-icon-btn--secondary"
+                    href="#"
+                    aria-label="Download knowledge organiser"
+                  >
+                    <img src="assets/icons/download.svg" alt="" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- RELATED UNITS: lowest weight on the page — smallest heading,
+             flat cards with no shadow, set in a quiet tone band that closes
+             the page rather than competing with what's above -->
+        <section class="oak-region" data-region="support">
+          <div class="oak-band support-band">
+            <div class="oak-container">
+              <h2 class="oak-heading-6 related-head">More units in Year 8 History</h2>
+              <div class="oak-grid related-grid">
+                <a class="oak-card-link" href="#">
+                  <article class="oak-card oak-card--flat related-card">
+                    <span class="oak-body-4 related-eyebrow">Previous unit</span>
+                    <h3 class="oak-body-1-bold related-title">
+                      Georgian Britain: trade, society and empire
+                    </h3>
+                  </article>
+                </a>
+                <a class="oak-card-link" href="#">
+                  <article class="oak-card oak-card--flat related-card">
+                    <span class="oak-body-4 related-eyebrow">Next unit</span>
+                    <h3 class="oak-body-1-bold related-title">
+                      The British Empire: expansion and control
+                    </h3>
+                  </article>
+                </a>
+                <a class="oak-card-link" href="#">
+                  <article class="oak-card oak-card--flat related-card">
+                    <span class="oak-body-4 related-eyebrow">Also in Year 8</span>
+                    <h3 class="oak-body-1-bold related-title">
+                      Votes for women: the fight for the franchise
+                    </h3>
+                  </article>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="oak-region" data-region="footer">
+        <div class="oak-container footer-inner">
+          <p class="oak-body-4 footer-text">© Oak National Academy</p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

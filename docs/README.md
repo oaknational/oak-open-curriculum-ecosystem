@@ -27,6 +27,7 @@ last_reviewed: 2026-08-07
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
 - **New to the repo?** → [Root README Quick Start](../README.md#quick-start) for setup, then [CONTRIBUTING.md](../CONTRIBUTING.md) for the development process
 - **A developer working with agents?** → [Working with this Repo for Devs](engineering/working-with-this-repo-for-devs.md) — the practical guide: how you direct the work, what the agents do around you, and what keeps the quality honest
+- **Wondering what a surface or glyph means?** → [Developer Experience](engineering/developer-experience.md) — session surfaces, feedback loops, and the statusline deep-dive
 - **Working with AI?** → Start with the canonical
   [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md),
   or invoke the `oak-start-right-quick` platform adapter (`/oak-start-right-quick`

@@ -366,7 +366,7 @@ The application uses a carefully ordered middleware chain that is **critical for
 ┌─────────────────────────────────────────────────────────────┐
 │ Phase 4: Core Endpoints                                     │
 │  • MCP Factory (per-request transport — ADR-112)           │
-│  • Health Check Handlers (/healthz)                         │
+│  • Health Check Handlers (/healthz, /mcp/healthz)           │
 └─────────────────────────────────────────────────────────────┘
                            ↓
 ┌─────────────────────────────────────────────────────────────┐

@@ -1,0 +1,17 @@
+<!-- NEGATIVE control for the LITERAL-VALUE boundary: no-literal-design-values
+     must FAIL. zero-ad-hoc-css necessarily FAILS too — a literal can only
+     appear inside an authored declaration, so this boundary cannot be pinned
+     in isolation; ad-hoc-css-negative.html is the fixture that fails the
+     declaration count alone. referenced-oak-classes-exist must PASS: the one
+     class named is real.
+
+     The style block writes a raw hex and hard-coded lengths where semantic
+     tokens exist — the exact defect the assertion exists to catch. -->
+<div class="oak-btn">Styled by hand instead of by the system</div>
+<style>
+  .page-callout {
+    background: #f2f2f2;
+    padding: 16px;
+    border-left: 4px solid #ffd166;
+  }
+</style>

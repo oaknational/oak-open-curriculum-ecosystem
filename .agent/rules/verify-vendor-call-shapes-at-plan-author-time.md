@@ -38,6 +38,20 @@ function signature.
   remembered capability matrix (corpus-validated recurring class,
   2026-06-30; see also the per-user memory
   "Platform feature support — check official docs").
+- **When probing a vendor refusal or normalisation before encoding it,
+  enumerate the class's sub-cases and probe the EXACT spelling being
+  encoded.** Two probes of different sub-cases can both be "right" and
+  still mislead: turbo rejected an invalid escape while accepting (and
+  normalising) a valid one, so a single-sub-case probe encoded the
+  wrong verdict for the sibling spelling. Scratch fixtures also diverge
+  from the real repo (git context, children-are-directories) — confirm
+  the decisive probe in-repo before the shape is pinned (worked
+  instance 2026-08-11, the turbo-inputs backslash/`..` matcher).
+- **Plan-time vendor shapes are re-verified at EXECUTION time too**: a
+  ratified plan pinned a fixed port where the module's live contract
+  was `listen(0)` ephemeral — caught only by reading the module before
+  invoking it, and cured as a recorded deviation in the run record,
+  never a product-code hack (worked instance 2026-08-12).
 - **Capability answers come from ORIGINAL vendor sources at time of use,
   never from prior repo research** (owner rule, 2026-07-25) — recorded
   capability verdicts are version-pinned so their staleness is

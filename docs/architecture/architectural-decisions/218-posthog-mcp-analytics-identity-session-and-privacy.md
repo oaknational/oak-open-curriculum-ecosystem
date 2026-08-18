@@ -178,7 +178,13 @@ The closed event envelope may contain:
 - server-observed timestamps and duration;
 - MCP primitive or method and an allowlisted capability name;
 - bounded outcome or error category;
-- protocol, client, environment, and release categories;
+- protocol, client, environment, and release categories. The client
+  categories are three orthogonal closed axes, each derived inside this
+  process and never a forwarded client string, and each an unverified
+  client self-declaration that must never gate access or entitlement:
+  `oak_client_family` (vendor, from the `initialize` handshake only),
+  `oak_client_surface` (form factor) and `oak_client_product` (vendor
+  product, derived per request — see the 2026-08-13 Amendment);
 - the PostHog-scoped actor pseudonym; and
 - a trusted protocol-session projection, only after the future proof
   described above exists.
@@ -574,3 +580,88 @@ This amendment revises the decision record only. The enforced PostHog
 configuration (project retention setting and the Oak-owned scheduled deletion
 job) is re-based from 12 months to 5 years separately, tracked in Linear. The
 tested person-scoped deletion route committed in §5 is unchanged.
+
+## Amendment: `oak_client_product`, a per-request client-product category (2026-08-13)
+
+§3 permits "client categories" without naming them. This amendment records a
+third such axis, `oak_client_product`, with the closed vocabulary
+`claude_ai | claude_code | codex | other | unavailable`. It stays within the
+existing §3 ceiling — the permit bullet already read "client categories", and
+enumerating the three axes in fact narrows it, since a fourth axis now needs its
+own amendment. Like its two siblings it is derived inside this process from a
+self-declaring client header, and only the derived category is emitted; the
+envelope gains one field per automatic event, and no new kind of fact.
+
+**Why a third axis rather than reusing one.** Measured 2026-08-13 (MCP-594):
+every `$mcp_tool_call` reached PostHog with no client attribution at all, so
+tool error rates could not be read by client — the blocker on MCP-574. The
+cause is structural, not a coding slip. `oak_client_family` derives from the
+`initialize` handshake's `clientInfo`, and ADR-112's per-request transport
+destroys the observing instance before the next request arrives, so it can never
+reach a `tools/call`; independent confirmation is that Sentry carries
+`mcp.client.name` on 1,754 spans over 14 days, every one of them an
+`initialize` and none a tool call. `oak_client_surface` _is_ per-request, but is
+a form-factor vocabulary, so it merges Claude Code and Codex into `cli` —
+collapsing precisely the distinction the error-rate question needs. Form factor
+and vendor product are orthogonal, so the axes coexist rather than one widening.
+
+**Why not PostHog's own `harness` dimension.** PostHog resolves that column
+server-side from `$mcp_client_name`, `$mcp_client_user_agent` and
+`$mcp_vendor_client` — raw client strings, two of them raw headers, which the §3
+exclusion list forbids. Emitting them was rejected: live traffic contains opaque
+32-character per-installation identifiers arriving as `clientInfo.name`, so
+forwarding the raw value would place a stable per-installation identifier in the
+envelope. PostHog's built-in column therefore stays empty by decision, and the
+equivalent breakdown is read from `oak_client_product`. Recorded here so a future
+reader does not mistake that empty column for a data defect.
+
+**Standing constraints on the vocabulary.** Every token row must be
+evidence-backed by a client string verified first-hand in live traffic; matching
+is anchored to the header's leading token, so a value that merely contains a
+product name is not treated as that product self-declaring; and a missing or
+non-canonical category drops the event rather than defaulting it. Adding a client
+is a token row plus its derivation-table test row — never a looser match rule,
+and never a forwarded raw string.
+
+**`other` and `unavailable` are separate members, and the line between them is
+container readability — never value presence.**
+
+- `other` — the header container was readable and named no product Oak
+  recognises, **including when it carried no client header at all**. Every client
+  may choose that, so this is a measurement and its share is expected to be
+  non-zero (Oak's own probes and the browser widget live there).
+- `unavailable` — the header container was missing, or opaque to an own-property
+  read, so the derivation could not run. Only a change in transport shape
+  produces it: an SDK release that stops populating `requestInfo`, or a move to a
+  Fetch-native adapter whose `Headers` instance the reader cannot see. It is
+  therefore readable as a defect signal, and a rising share is the alarm on this
+  mechanism's own health.
+
+Drawing the line at value presence instead — the shape first implemented under
+this amendment — let any client raise `unavailable` simply by omitting its
+User-Agent. That made a documented transport alarm client-influenceable, which is
+not an alarm: the same false-green that made `harness = other` unreadable,
+recreated one layer up inside its own cure. The readability decision therefore
+belongs at the reader boundary, which is the only place that can see which
+container it was handed, and the reader reports it explicitly rather than letting
+an empty value list stand for both facts. Corrected on review, 2026-08-13
+(reviewer `mantagen`, agent-authored by Vesta hunts Expanse).
+
+**The value is an unverified self-declaration.** Any client can send
+`user-agent: claude-code/…`; leading-token anchoring makes accidental
+misattribution harder but does not resist deliberate impersonation, and it is
+unauthenticated by construction. It is therefore sound for analytics aggregates
+and service understanding, and **must never gate access, authorisation, quota,
+rate limiting, entitlement, or tiering**. Any conclusion drawn from a per-product
+breakdown — including an error rate — is influenceable by a client that chooses
+to misdeclare, so treat it as evidence about a population rather than proof about
+a named vendor.
+
+**Scope.** The two per-request axes are carried on the three automatic events
+(`$mcp_initialize`, `$mcp_tools_list`, `$mcp_tool_call`) only.
+`$mcp_resource_read` carries no client attribution at all, so a resource-read
+breakdown is not comparable to a tool-call one.
+
+Decided by the Director seat under the five Decision Lenses (two independent
+converging runs), 2026-08-13, on the MCP-594 investigation. The event-contract
+surface obligation is MCP-364's.

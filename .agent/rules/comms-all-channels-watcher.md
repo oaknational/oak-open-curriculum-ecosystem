@@ -181,6 +181,26 @@ whatever tree it lands in, and the "watcher" watches nothing (worked
 instance 2026-07-20: a re-arm from a scratchpad clone auto-installed the
 clone and observed zero events).
 
+### Worktree residency blocks the arm — arm from the primary, before EnterWorktree
+
+Platform worktree isolation (Claude Code `EnterWorktree`) makes the PRIMARY
+coordination home non-writable from a worktree-resident session and refuses
+compound arm commands it cannot prove stay inside the worktree ("This
+session is isolated in the worktree …" — the refusal recorded in-repo
+2026-08-06 in the mutation-evidence mechanics report; three seats hit it
+independently 2026-08-13 and first read it as a fleet regression). The
+watcher, the F-75 poll, and the heartbeat loop therefore arm while the
+session is PRIMARY-resident — at session open, before any `EnterWorktree`
+— and persist across later residency switches (armed monitors keep
+running; a full worktree lane phase can run under a primary-armed
+watcher). A session already worktree-resident that needs an arm exits to
+the primary first (`ExitWorktree` action keep), arms, and re-enters.
+Worktree-resident sessions route primary-surface WRITES (comms sends, ARC
+channel entries, shared memory files) through the commit-warden's intent
+surface or a cross-session send — the same isolation refuses those writes
+directly, by design, and the refusal is the platform's, not this repo's
+hook policy.
+
 **After arming the watcher, run ONE foreground comms sweep covering the
 window from BEFORE session open.** An event landing between session-open
 and watcher-arm is otherwise absorbed into the watcher's baseline and
@@ -548,6 +568,11 @@ naming the rule; the substance lives here for two reasons:
   `behaviour-note`, `heartbeat`).
 - [`use-built-agent-tools-cli`](use-built-agent-tools-cli.md) — governs
   the CLI surface this rule invokes.
+- [`use-monitor-for-event-driven-wake` §A File-Emitting Watcher Is
+  Half-Armed Without a Read Path](use-monitor-for-event-driven-wake.md#a-file-emitting-watcher-is-half-armed-without-a-read-path)
+  — an emit-to-file watcher satisfies no watcher obligation without a wake
+  mechanism or a declared read cadence; enumerate the surfaces that can
+  carry direction to the seat as the arming checklist.
 - [`directed-routing-requires-absorption-ack`](directed-routing-requires-absorption-ack.md)
   — the `ABSORB`-class sibling: this rule's checks stop at `DELIVERY`;
   absorption evidence comes from the ack convention that rule owns.

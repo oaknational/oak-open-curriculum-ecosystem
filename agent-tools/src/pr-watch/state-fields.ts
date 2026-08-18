@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { blockingRank, latestRunPerCheck } from './check-rollup.js';
 import { classifyCheck, type ChecksSummary } from './index.js';
 import type { HarvestedReview } from './reviewer-legs.js';
 import type { NamedCheck } from './state-types.js';
@@ -22,6 +23,7 @@ const namedRollupItemSchema = z
     __typename: z.string(),
     name: z.string().optional(),
     context: z.string().optional(),
+    workflowName: z.string().nullish(),
     status: z.string().optional(),
     conclusion: z.string().nullish(),
     state: z.string().optional(),
@@ -147,7 +149,10 @@ function checksGreenAt(items: readonly NamedRollupItem[], summary: ChecksSummary
  */
 export function parseStateView(raw: unknown): ParsedStateView {
   const parsed = stateViewSchema.parse(raw);
-  const namedChecks = parsed.statusCheckRollup.map((item) => ({
+  const liveChecks = latestRunPerCheck(parsed.statusCheckRollup, (item) =>
+    blockingRank(classifyCheck(item)),
+  );
+  const namedChecks = liveChecks.map((item) => ({
     name: checkName(item),
     bucket: classifyCheck(item),
   }));
@@ -162,7 +167,7 @@ export function parseStateView(raw: unknown): ParsedStateView {
     headRefOid: parsed.headRefOid,
     checks,
     namedChecks,
-    checksGreenAt: checksGreenAt(parsed.statusCheckRollup, checks),
+    checksGreenAt: checksGreenAt(liveChecks, checks),
     autoMergeArmed: parsed.autoMergeRequest,
     reviewRequests: parsed.reviewRequests,
   };

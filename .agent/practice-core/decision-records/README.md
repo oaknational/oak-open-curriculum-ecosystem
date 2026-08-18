@@ -260,3 +260,6 @@ Practice-Core concept ↔ ADR map):
 | [PDR-134](PDR-134-knowledge-strata-carriers-and-the-concept-layer.md) | Knowledge Strata, Carriers, and the Concept Layer | Accepted |
 | [PDR-135](PDR-135-cost-of-change-gradient.md) | The Cost-of-Change Gradient — General Mechanism Below, Specific Value Above | Proposed |
 | [PDR-136](PDR-136-quality-gates-are-a-registered-corpus.md) | Quality Gates Are a Registered Corpus | Accepted |
+| [PDR-137](PDR-137-basis-set-transformation-method.md) | The Basis-Set Transformation Method | Accepted |
+| [PDR-138](PDR-138-visual-verification-for-design-verdicts.md) | Visual Verification for Design Verdicts | Accepted |
+| [PDR-139](PDR-139-provider-independent-capability-composition.md) | Provider-Independent Capability Composition | Proposed |

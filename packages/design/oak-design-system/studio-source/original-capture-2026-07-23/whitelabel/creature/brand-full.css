@@ -119,7 +119,7 @@
 }
 
 /* §EXPRESSION — hook-clean rules on specimen classes (same contract as
-   FDSE §11): the utility strip joins the nocturne instead of flashing an
+   PDS §11): the utility strip joins the nocturne instead of flashing an
    inverted cream bar across the bedtime arcade */
 .util{background:var(--bg-subtle);color:var(--text-primary);border-bottom:var(--border-solid-s) solid var(--bg-neutral-stronger)}
 .util a{color:var(--text-link)}

@@ -105,7 +105,7 @@
   /* PAPER RULE: a brand that re-points --bg-primary off white must carry the
      WHOLE elevation family with it — --bg-btn-secondary, --bg-raised,
      --bg-overlay — or secondary plates and modals punch screen-white holes
-     in the page (Freedonia v6 lesson). */
+     in the page (PDS v6 lesson). */
 
   /* --- 5. Buttons ----------------------------------------------
      Tip — derive hovers instead of picking them:
@@ -144,7 +144,7 @@
        --shadow-accent: 0 6px 0 0 var(--color-accent);
        --shadow-accent-raised: 0 9px 0 0 var(--color-accent);
        --shadow-accent-pressed: 0 2px 0 0 var(--color-accent);
-     · Flat (whitelabel/freedonia): none at all — set the five below to none
+     · Flat (whitelabel/pds): none at all — set the five below to none
        and keep --shadow-press as a 1px drop; affordance then comes from
        fills + underlines + the focus ring.
      The FOCUS RING is not on this surface — never restyle it away. */
@@ -180,7 +180,7 @@
 
   /* --- 9. VOICE — the words are brand surface too -----------------
      Each brand's copy register lives in its BRAND.md and is exercised on
-     its proof page (Oak: warm colleague · FDSE: the public record · EMC²:
+     its proof page (Oak: warm colleague · PDS: the public record · EMC²:
      read-aloud bedtime). The byte-identical comparison page deliberately
      stays voice-NEUTRAL: it is the controlled experiment (CSS-only
      distance, a lower bound). Example Front Pages is where voice runs
@@ -230,6 +230,6 @@
   --main-areas: "hero hero" ". results" …;   (whole-template strings)
   --main-columns-narrow: …;     --main-areas-narrow: …;
 }
-   Worked examples: whitelabel/freedonia/brand-full.css (GDS two-thirds
+   Worked examples: whitelabel/pds/brand-full.css (GDS two-thirds
    document, filter panel right) and whitelabel/creature/brand-full.css
    (quest-log shelf). ============================================== */

@@ -25,6 +25,15 @@ or workflow shape:
 The pressure signal is not "this feels reusable"; it is "the next caller
 would make two places that must evolve together."
 
+**Reclassification is the event.** When the extraction moves code into a
+library, the move itself changes the code's obligations independent of any
+code change: byte-identical code acquires a library threat model (exported
+params become untrusted input to CodeQL's library rules), a stricter lint
+tier (e.g. no-ambient-process), and contract obligations to every caller
+shape. Plan the cures for the reclassification when consolidating, not
+just the move (worked instance 2026-08-09: the fidelity-review extraction
+fired both classes on unchanged code).
+
 ## See Also
 
 [PDR-058 §Surface 2 (design optionality)](../practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md)

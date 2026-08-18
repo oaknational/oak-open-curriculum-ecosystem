@@ -184,6 +184,17 @@ platform adapters alongside (for example `.claude/skills/`); these are the every
 | `pnpm format:root` | Run formatting                               |
 | `pnpm fix`         | Run ESLint, Prettier, and markdownlint fixes |
 
+## Reading the statusline
+
+The bar at the bottom of a Claude Code session is a live glance surface:
+the agent's derived name and coordination glyphs (🧭 means it holds the
+Director seat; 👪/🤝/🧍 show the team shape), the model with context and
+usage percentages, and the git location including the shared
+coordination branch. What each row means, why a segment may be absent,
+and the environment controls — including a payload-diagnosis log — are
+covered in
+[Developer Experience §The Claude Code statusline](developer-experience.md#the-claude-code-statusline).
+
 ## When something looks wrong
 
 - Ask the agent to show its state — grounding, claim, plan, and evidence are all

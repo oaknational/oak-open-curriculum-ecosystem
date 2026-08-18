@@ -70,7 +70,14 @@ by string compare; every DDR-shaped token in any edge list resolves; no
 self-edges, duplicates, or id collisions; contiguous numbering; `depends_on`
 and supersession digraphs acyclic; status↔edge coupling with atomic-flip
 semantics; live records never depend on superseded ones; README index
-recomputed-and-diffed; mermaid soundness never equality. Wiring: agent-tools
+recomputed-and-diffed; mermaid soundness never equality. String-compare id
+resolution is deliberate: `fs.exists` probes lie on APFS's case-insensitive
+default. Rejected as over-reach at approval, recorded so the builder does not
+re-litigate them: mermaid full-equality; requiring all edge keys;
+slug-from-title derivation; strict existence for prose refs; date
+monotonicity/future-date checks; a separate "superseder must be ratified"
+rule. Deterministic and clock-free throughout; an empty corpus is a failure,
+never a pass. Wiring: agent-tools
 script + new last leg of `docs-validators:check` + knip entry + red-proof
 tests. Coupled edits: `docs/design` into reference-direction
 `POLICED_ROOTS` AND `REPO_DOCTRINE_PREFIXES`.
