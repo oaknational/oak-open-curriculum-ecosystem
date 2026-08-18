@@ -2087,3 +2087,79 @@ in the PR so the acceptance number reads honestly against the plan.
   continuity record's clock claims get the same falsifier treatment as any
   other claim. Same error signature as the night's four false-premise
   instances: freshly-authored claim-bearing text, external catch.
+
+## 2026-08-11/12 — Swordfish binds Surf (cdbabc): the Windows-support arc — eight defect classes, six commits, the first hook-chain commit ever landed from a Windows host
+
+Branch `claude/objective-nightingale-b4ba25`, c0b92ced0..f87a3c1b6 (six commits, tree
+clean, PUSH HELD on owner word). Bundle backup: `C:\oak\windows-changeset-backup.bundle`.
+What began as "one resolver is POSIX-only" ended as eight distinct classes: trusted-binary
+allowlists, pnpm .cmd launchability, directory-fsync false-fails, resolver-error rebranding,
+git-path separators, symlink-privilege fixtures, POSIX mode-bit/signal observables, CRLF
+checkout presentation. Lessons worth graduating:
+
+- EXIT CODES IN BAND BIT THREE TIMES in one session (tail-pipes eating verdicts: the
+  estate-run "exit 0", a claims probe, a gate log) despite the rule being loaded in
+  context — the structure-over-vigilance result again, on the seat that had just READ
+  the rule. The cure each time was re-running without the pipe.
+- READ-EDGE NORMALISATION KILLS FAMILIES; instance cures do not. Four validators failed
+  on CRLF checkouts; three were cured one-by-one until the fourth revealed the shared
+  read surface (portability-fs readText) whose one-line normalisation retired the whole
+  class. Candidate pattern: committed-text readers judge CONTENT, never checkout
+  presentation — normalise `\r\n` at the read edge, write LF always.
+- PROBE-FIRST BEAT THEORY TWICE on Windows semantics: `path.isAbsolute('/usr/bin/git')`
+  true-but-drive-relative (the security near-miss), and spawnSync timeout setting BOTH
+  error and signal (the executor's misreport). A ten-line scratch probe settled in
+  seconds what reading could argue about for an hour.
+- SIGNAL DEATHS: Windows reports a signal ONLY for Node-initiated kills (abort/timeout);
+  self-kill surfaces as plain exit 1. Fixtures proving signal contracts must kill from
+  the parent side or they are unprovable off-POSIX.
+- LOAD-FLAKE vs REAL-FAILURE: the discriminator is the isolation re-run. Two workspaces'
+  "failures" in the estate sweep were worker starvation under 10-way parallel vitest
+  (5000ms timeouts); TURBO_CONCURRENCY=1 made commit gates deterministic on this laptop.
+  Owner-facing DX residue: hook concurrency default + app-suite testTimeout.
+- THE MISLEADING-ERROR CLASS CLOSED HONESTLY: post-fix, "Formatting issues found!" fired
+  again — TRUE this time (a real Prettier miss). Typed resolver errors
+  (TrustedGitResolutionError) are what let callers pass refusals through undisguised.
+- RENAMED-REPO RECOVERY RECIPE (the primary was renamed mid-arc): worktree gitdir
+  pointers break both directions → `git worktree repair <worktree-path>` from the
+  primary, then reattach the detached HEAD (`git switch <branch>`; safe when tip==HEAD);
+  pnpm demands a modules purge (CI=true pre-answers); the Bash PreToolUse guard dies
+  until the primary reinstalls (dist imports unresolvable) — PowerShell tool is the
+  bypass for reads meanwhile. Bundle-before-reboot is cheap insurance for any
+  session-spanning boundary.
+- WINDOWS MACHINE SETUP RESIDUE (README candidates): pnpm script-shell must be Git
+  Bash (`pnpm config set script-shell "C:\Program Files\Git\bin\bash.exe"` — package.json
+  scripts are POSIX and cmd.exe chokes); corepack launcher is the trusted pnpm anchor;
+  .gitattributes decision (`* text=auto eol=lf`, one CRLF CSV exception) is with the owner.
+
+- COREPACK PNPM FAILS THE TRUSTED RESOLVER (observed live 2026-08-13): the commit hooks
+  resolve pnpm only from fixed trusted locations; corepack's shim lives in nvm's Node
+  bin dir (not on the list), so a corepack-only Linux/WSL install fails EVERY commit —
+  and main's hook misreports it as "Formatting issues found!", the exact misreport the
+  windows changeset fixes. Cure: pnpm's standalone installer (`~/.local/share/pnpm` is
+  trusted; the binary honours the packageManager pin). README §Windows (via WSL) step 3
+  amended before PR B's commit; main's own Prerequisites corepack bullet carries the
+  same latent trap on any nvm host (follow-up, out of PR B scope — works on
+  macOS/Homebrew only because the shim lands in /opt/homebrew/bin).
+- WSL CLONE REGISTRY DECISION: deliberately left unseeded — it is a single-seat daily
+  driver, not a coordination host; PR B committed with plain `git commit -F` (full hook
+  chain still ran). Warm turbo cache from the clean-main gate made the commit gate ~3
+  minutes, not 30-40.
+
+WINDOW STATE 2026-08-13 (post PR B commit): TWO PRs, all diff in service of Windows
+support. A: seven commits, tip 2526de28c in worktree objective-nightingale-b4ba25,
+frozen gate 131/131, three reviewer rounds adjudicated. B: committed in WSL —
+6e774d0ad on docs/windows-via-wsl (in-WSL committing PROVEN). NOTHING PUSHES until
+owner word (standing). Remaining: fold origin/main into A (250 commits ahead; true
+intersection is 3 test files — semantic care), Linux cross-check of the folded branch
+via local file-protocol fetch into the WSL clone, PR descriptions from the template,
+HOLD at the push line. Three stale worktree registrations (brave-gould, elegant-moore,
+sweet-shamir) left untouched — other seats' state.
+
+- WSL RESIDENCY IS A PRE-FLIGHT CHECK (owner directive 2026-08-14, MCPJam compat
+  scoping session): before dev/implementation work or plan authoring on this machine,
+  verify the session runs in the WSL clone (~/oak/oak-open-curriculum-ecosystem), not
+  the native C:\oak checkout (coordination + windows-support branch only). Caught
+  mid-scoping: MCPJam compat plan was being prepared from the Windows checkout.
+  Desktop app supports WSL sessions via the environment picker (WSL2 only, no
+  default-to-WSL setting yet); or launch claude from a WSL terminal in the clone.
