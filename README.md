@@ -238,13 +238,15 @@ and
 Windows contributors work through [WSL2](https://learn.microsoft.com/windows/wsl/) —
 inside it, every prerequisite above applies as written for Debian/Ubuntu, with
 one pnpm exception covered in step 3. Steps 1-2
-run in Windows PowerShell; steps 3-6 run inside Ubuntu. Requires Windows 11 (or
+run in Windows PowerShell; steps 3-8 run inside Ubuntu. Requires Windows 11 (or
 Windows 10 2004+) with virtualization enabled in firmware — if `wsl --install`
 ends in error `0x80370102`, enable virtualization in your BIOS/UEFI first. The
 steps below were run end to end on Windows 11 in August 2026.
 
 1. **Install WSL and Ubuntu** — in an administrator PowerShell (right-click
-   Start → Terminal (Admin)) run `wsl --install`, approve the elevation prompt,
+   Start → Terminal (Admin)) run `wsl --install -d Ubuntu` (naming the distro
+   matters: with WSL already present, a bare `wsl --install` prints help
+   instead), approve the elevation prompt,
    and create your Unix account when Ubuntu first launches (a reboot is only
    needed if the installer asks for one).
 2. **Cap the VM if the machine has 16 GB or less** — by default WSL2 may take up
@@ -266,11 +268,13 @@ steps below were run end to end on Windows 11 in August 2026.
    gates page rather than die. Apply with `wsl --shutdown` (also from
    PowerShell) — this closes any running Ubuntu session; reopen it with `wsl`.
 
-3. **Install the toolchain inside Ubuntu** — start with
+3. **Install the base toolchain inside Ubuntu** — start with
    `sudo apt update && sudo apt install -y curl git ca-certificates`, then follow
    [Prerequisites](#prerequisites) above; every entry's Debian/Ubuntu
-   instructions apply unchanged (for Node, `nvm install` picks up the version in
-   `.nvmrc`) with one exception: install pnpm with its
+   instructions apply unchanged, with two notes. For Node, install nvm and open
+   a new shell (or `source ~/.bashrc`) so `nvm` is on `PATH`; the `nvm install`
+   itself comes in step 8, from inside the clone, where `.nvmrc` is. For pnpm,
+   use its
    [standalone script](https://pnpm.io/installation#using-a-standalone-script) —
    `curl -fsSL https://get.pnpm.io/install.sh | sh -`, then open a new shell or
    `source ~/.bashrc` — not `corepack enable`. The standalone binary still
@@ -278,11 +282,11 @@ steps below were run end to end on Windows 11 in August 2026.
    only from a fixed list of trusted install locations; the standalone install
    at `~/.local/share/pnpm` is on that list, a corepack shim under nvm's Node
    directory is not, and with corepack alone every commit fails — currently
-   misreported as a formatting failure. Two additions Ubuntu's default sources do
-   not carry. The pre-push hook requires `gitleaks`. Build it with Go, which
-   verifies the module through Go's checksum database — three steps, because a
-   fresh Ubuntu has no Go and `go install` puts binaries in a directory that is
-   not on the shell's `PATH`:
+   misreported as a formatting failure.
+4. **Install gitleaks** — the pre-push hook requires it, and Ubuntu's sources
+   do not carry it. Build it with Go, which verifies the module through Go's
+   checksum database. Three steps, because a fresh Ubuntu has no Go and
+   `go install` puts binaries in a directory that is not on the shell's `PATH`:
 
    ```bash
    sudo apt install -y golang-go
@@ -292,23 +296,25 @@ steps below were run end to end on Windows 11 in August 2026.
 
    The module path really is `zricethezav`: that is the path gitleaks declares
    in its `go.mod`, and `go install github.com/gitleaks/gitleaks/v8@latest`
-   fails with a "module declares its path as" error. If Ubuntu's packaged Go is
-   older than gitleaks requires, `go install` fetches the newer toolchain itself
-   (checksum-verified, the default since Go 1.21). If you would rather install
-   the released binary, mirror the pinned, digest-checked block CI uses
-   (`.github/workflows/ci.yml`, "Install pinned gitleaks") rather than
-   downloading an unverified asset — gitleaks is a security control, so its
-   binary is content-pinned, not just version-pinned, and CI is the one place
-   that version and digest are kept current. Second, the repo's PR and agent
-   tooling uses `gh` (the GitHub CLI), which installs from
-   [GitHub's apt repository](https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
+   fails with a "module declares its path as" error. Ubuntu 24.04 and later
+   package a Go that either meets gitleaks' requirement or fetches the required
+   toolchain itself (checksum-verified); an older Ubuntu stops with a plain Go
+   version error. If you would rather install the released binary, mirror the
+   pinned, digest-checked block CI uses (`.github/workflows/ci.yml`, "Install
+   pinned gitleaks") rather than downloading an unverified asset — gitleaks is
+   a security control, so its binary is content-pinned, not just
+   version-pinned, and CI is the one place that version and digest are kept
+   current.
 
-4. **Give pnpm network patience once** — WSL2's NAT (its network translation
+5. **Install `gh`** (the GitHub CLI) — the repo's PR and agent tooling uses
+   it. Ubuntu's own package lags, so install from
+   [GitHub's apt repository](https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
+6. **Give pnpm network patience once** — WSL2's NAT (its network translation
    layer) can time out fetching large tarballs (`pnpm install` dies with
    `ETIMEDOUT` or `socket hang up`; you can set this after a failed install and
    simply re-run): `pnpm config set fetch-timeout 300000` and
    `pnpm config set fetch-retries 5`.
-5. **Reuse Windows' stored git credentials — only if you already use Git for
+7. **Reuse Windows' stored git credentials — only if you already use Git for
    Windows.** The helper lives in one of two places depending on how Git was
    installed, so find the one you have and configure that path:
 
@@ -324,9 +330,19 @@ steps below were run end to end on Windows 11 in August 2026.
    exists you do not have Git for Windows: authenticate with `gh auth login`
    instead, and do not configure a helper path that is not there.
 
-6. **Continue with [Install and verify](#install-and-verify) below**, cloning
-   inside the Linux filesystem (for example `~/oak`), never under `/mnt/c` —
-   cross-boundary file access is an order of magnitude slower. On a capped VM,
+8. **Clone and verify** — clone inside the Linux filesystem, never under
+   `/mnt/c` (cross-boundary file access is an order of magnitude slower), then
+   install the pinned Node before continuing with
+   [Install and verify](#install-and-verify) below:
+
+   ```bash
+   mkdir -p ~/oak && cd ~/oak
+   git clone https://github.com/oaknational/oak-open-curriculum-ecosystem.git
+   cd oak-open-curriculum-ecosystem
+   nvm install
+   ```
+
+   On a capped VM,
    prefix the verify commands with `TURBO_CONCURRENCY=1` (add
    `VITEST_MAX_WORKERS=2` if memory stays tight — the symptom of a starved
    suite: vitest reports 5000 ms timeouts, or the gate exits with no error text).
@@ -342,7 +358,7 @@ pnpm test && pnpm type-check && pnpm lint
 
 If these pass, your toolchain is working. No API keys are required for unit tests, type-checking, linting, or building.
 
-**Before your first push**: install [gitleaks](https://github.com/gitleaks/gitleaks/releases) (`brew install gitleaks` on macOS). The pre-push hook runs a secrets scan and will block pushes if gitleaks is not installed.
+**Before your first push**: install [gitleaks](https://github.com/gitleaks/gitleaks/releases) (`brew install gitleaks` on macOS; Windows/WSL readers did this in step 4 above). The pre-push hook runs a secrets scan and will block pushes if gitleaks is not installed.
 
 ### Get an API key (optional)
 
