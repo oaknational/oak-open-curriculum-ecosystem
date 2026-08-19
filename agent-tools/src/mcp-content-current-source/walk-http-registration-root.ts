@@ -9,7 +9,6 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
-import { pnpmSpawnEnvironment } from '../spawn/pnpm-env.js';
 import { resolvePnpm } from '../spawn/pnpm-path.js';
 import type { RegistrationRoot, RegistrationSourceEvidence } from './current-source-model.js';
 import { GUIDANCE_SOURCE_ENTRIES } from './prompt-era-lineage.js';
@@ -113,7 +112,7 @@ export async function walkHttpRegistrationRoot(repoRoot: string): Promise<HttpRe
     [...pnpm.value.leadingArgs, 'exec', 'tsx', proofScript],
     {
       cwd: repoRoot,
-      env: pnpmSpawnEnvironment(process.env),
+      env: pnpm.value.env,
       maxBuffer: 16 * 1024 * 1024,
     },
   );

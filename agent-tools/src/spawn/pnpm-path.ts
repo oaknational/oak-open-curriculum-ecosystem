@@ -196,7 +196,7 @@ export function resolvePnpm(
       ),
     );
   }
-  const spawnEnv = pnpmSpawnEnvironment(env);
+  const spawnEnv = pnpmSpawnEnvironment(env, platform);
 
   return ok(
     found.launch === 'direct'

@@ -1,6 +1,7 @@
 import type path from 'node:path';
 
 import { fullyQualifiedWin32 } from '../core/fully-qualified-path.js';
+import { isFilesystemRoot } from '../core/path-separators.js';
 
 /**
  * The `node:path` surface the identity chain's comparisons run through — the
@@ -41,8 +42,25 @@ export function hasDotSegments(value: string): boolean {
 }
 
 /**
- * Comparison form of a path: normalised, with the leading drive letter
+ * Comparison form of a path: normalised, trailing separators removed (unless
+ * the path IS a filesystem root), with the leading drive letter
  * case-normalised on the win32 flavour only.
+ *
+ * `normalize` keeps a trailing separator on every input (`/repo/` stays
+ * `/repo/`), so without the trim `/repo/` and `/repo` compare unequal and a
+ * base handed over with a trailing separator fails every containment check
+ * for paths that are plainly inside it. A root is left alone because trimming
+ * `C:\` yields drive-relative `C:` — the trap {@link isFilesystemRoot}
+ * documents — and `/` would become the empty string; {@link isWithin} handles
+ * the root's own separator when it composes the boundary.
+ *
+ * Only the flavour's OWN separator is trimmed, and only the flavour's own
+ * root shape is exempt. On win32 `normalize` has already turned every `/`
+ * into `\`, so trimming `\` is complete; on POSIX a backslash is an ordinary
+ * filename character, and `/repo/a\` is a different directory from `/repo/a`
+ * — a both-flavour trim would report a member of one as contained in the
+ * other, the over-acceptance this module refuses everywhere else. The shared
+ * both-flavour helper is therefore deliberately NOT used here.
  *
  * Drive letters are case-insensitive on Windows unconditionally and their
  * case varies by source, so comparing them raw is a false escape. Path
@@ -57,9 +75,28 @@ export function hasDotSegments(value: string): boolean {
  */
 export function comparablePath(value: string, pathApi: IdentityPathApi): string {
   const normalised = pathApi.normalize(value);
-  return isWin32Flavour(pathApi) && /^[a-z]:/u.test(normalised)
-    ? `${normalised[0]?.toUpperCase() ?? ''}${normalised.slice(1)}`
-    : normalised;
+  const trimmed = isRootForFlavour(normalised, pathApi)
+    ? normalised
+    : trimTrailingFlavourSeparators(normalised, pathApi.sep);
+  return isWin32Flavour(pathApi) && /^[a-z]:/u.test(trimmed)
+    ? `${trimmed[0]?.toUpperCase() ?? ''}${trimmed.slice(1)}`
+    : trimmed;
+}
+
+/** Whether a normalised path is the flavour's filesystem root. */
+function isRootForFlavour(normalised: string, pathApi: IdentityPathApi): boolean {
+  // The drive-root arm of the shared predicate is win32-only: on POSIX `C:/`
+  // is a relative directory named `C:`, not a root.
+  return isWin32Flavour(pathApi) ? isFilesystemRoot(normalised) : /^\/+$/u.test(normalised);
+}
+
+/** `value` with trailing occurrences of the flavour's separator removed (linear scan). */
+function trimTrailingFlavourSeparators(value: string, separator: string): string {
+  let end = value.length;
+  while (end > 0 && value[end - 1] === separator) {
+    end -= 1;
+  }
+  return value.slice(0, end);
 }
 
 /**
@@ -67,12 +104,17 @@ export function comparablePath(value: string, pathApi: IdentityPathApi): string 
  * absolute paths, and comparing them raw against a `pathApi.sep` boundary
  * falsely classifies a contained path as escaping (an over-refusal, but a
  * wrong verdict either way).
+ *
+ * The boundary is the base plus ONE separator. A filesystem root already ends
+ * in its separator (`/`, `C:\`), so appending another would make the boundary
+ * `//` or `C:\\` and no descendant would ever match — a root `chainRoot`
+ * would reject every member it is meant to contain.
  */
 export function isWithin(base: string, candidate: string, pathApi: IdentityPathApi): boolean {
   const normalisedBase = comparablePath(base, pathApi);
   const normalisedCandidate = comparablePath(candidate, pathApi);
-  return (
-    normalisedCandidate === normalisedBase ||
-    normalisedCandidate.startsWith(`${normalisedBase}${pathApi.sep}`)
-  );
+  const boundary = normalisedBase.endsWith(pathApi.sep)
+    ? normalisedBase
+    : `${normalisedBase}${pathApi.sep}`;
+  return normalisedCandidate === normalisedBase || normalisedCandidate.startsWith(boundary);
 }

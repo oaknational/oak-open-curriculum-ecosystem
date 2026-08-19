@@ -202,6 +202,7 @@ describe('resolvePnpm — the invocation carries its spawn environment', () => {
       HOME: FAKE_HOME,
       UNRELATED: 'kept',
       COREPACK_ENABLE_DOWNLOAD_PROMPT: '0',
+      COREPACK_ENV_FILE: '0',
     });
   });
 
@@ -214,6 +215,24 @@ describe('resolvePnpm — the invocation carries its spawn environment', () => {
 
     expect(result.ok && result.value.env.COREPACK_ROOT).toBeUndefined();
     expect(result.ok && result.value.env.COREPACK_ENABLE_DOWNLOAD_PROMPT).toBe('0');
+  });
+
+  // The resolver's platform and the scrub's platform must be the same one:
+  // Windows reads `corepack_root` as `COREPACK_ROOT`, so a win32 resolution
+  // whose scrub ran as posix would hand the launcher a live redirect.
+  it('scrubs differently-cased corepack knobs on a win32 resolution', () => {
+    const result = resolvePnpm(
+      { ...corepackPolluted, corepack_root: 'D:/attacker', Corepack_Home: 'D:/attacker-home' },
+      onlyExists(String.raw`C:\Program Files\nodejs\node_modules\corepack\dist\pnpm.js`),
+      'win32',
+    );
+
+    expect(result.ok && result.value.env).toEqual({
+      HOME: FAKE_HOME,
+      UNRELATED: 'kept',
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: '0',
+      COREPACK_ENV_FILE: '0',
+    });
   });
 });
 
