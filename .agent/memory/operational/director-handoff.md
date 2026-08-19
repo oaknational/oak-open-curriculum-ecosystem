@@ -84,10 +84,14 @@ the seat, not to any one pilot.
    `--now`:
 
    ```bash
-   # The tool parses claimed_at (bumped on every heartbeat) and --now as UTC
-   # epoch-ms and emits age_seconds + freshness_status itself — no local clock,
-   # no mental arithmetic. Source: claim-reports.ts age_seconds = nowMs −
-   # Date.parse(claimed_at), both UTC.
+   # The tool parses the claim's freshness anchor and --now as UTC epoch-ms and
+   # emits age_seconds + freshness_status itself — no local clock, no mental
+   # arithmetic. Source: claim-reports.ts, freshnessStart = heartbeat_at ??
+   # claimed_at; age_seconds = nowMs − Date.parse(freshnessStart), both UTC.
+   # NOTE (measured 2026-08-19): a heartbeat writes heartbeat_at and leaves
+   # claimed_at at the original open time. Anyone hand-computing from
+   # claimed_at therefore reads a LIVE, heartbeated seat as stale — which is
+   # the very error this section exists to prevent. Let the tool answer.
    pnpm agent-tools:collaboration-state -- claims active-agents \
      --active .agent/state/collaboration/active-claims.json \
      --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -187,6 +191,22 @@ this repo that PDR-117 does not carry.
   constitutive team-visibility, not discretionary infrastructure; an
   un-armed watcher went blind to a simultaneous identical-branch claim. n=2
   retains it; only the heartbeat is in the drop-set.
+  - **The canonical invocation dies under zsh unless the model is quoted.**
+    A bare `--model claude-opus-5[1m]` is a glob pattern: zsh fails the
+    command with `no matches found: claude-opus-5[1m]` before the watcher
+    starts. Use `--model 'claude-opus-5[1m]'`. Measured 2026-08-19; it costs
+    every new seat its first arm, and the failure looks like a tooling bug
+    rather than a quoting one.
+  - **`assert-watcher-live` can read GREEN off a WEDGED watcher.** It checks
+    the heartbeat file, not delivery. Measured 2026-08-19: a watcher with
+    `emitted_count: 0` and a frozen cursor passed the assert. The honest test
+    is cursor movement plus `emitted_count` advancing; process liveness is
+    not awareness.
+  - **The drain step-deadline is the wrong knob for a wedge.** Three watchers
+    died on it in one window; parsing all 1,645 event files takes 0.27s, so
+    volume was never the cost — host contention was (load 19.49 vs 2.50).
+    Raising the deadline makes wedges last longer; lowering it kills healthy
+    drains under load. Pair a short deadline with a foreground mtime sweep.
 - **Stop your own heartbeat at stand-down** or it asserts false "active" liveness
   — a heartbeat loop with no exit ran ~8h of false liveness across an outage.
 - **Verify a PR's inline review comments first-hand**, not just `gh pr checks` —
