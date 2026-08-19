@@ -54,16 +54,17 @@ Set the following **per app** in the deployment platform:
 
 In the [Vercel dashboard](https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp/settings/environment-variables) under Settings > Environment Variables:
 
-| Variable                    | Value                | Notes                                                                                                                 |
-| --------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `OBSERVABILITY_SINKS`       | `["sentry"]`         | Enables the Sentry sink in the orthogonal observability config                                                        |
-| `OBSERVABILITY_FIXTURES`    | `false`              | Fixture tee disabled for production live Sentry                                                                       |
-| `SENTRY_DSN`                | `https://public@...` | HTTP server project DSN from Step 1                                                                                   |
-| `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                | Start at 1.0, reduce if volume is high                                                                                |
-| `SENTRY_AUTH_TOKEN`         | `sntrys-...`         | Organisation auth token. Required at **build time** by `@sentry/esbuild-plugin`. See ADR-163 §6 (amended 2026-04-21). |
-| `SENTRY_ORG`                | Sentry org slug      | Build-time plugin identity; required, no source literal fallback                                                      |
-| `SENTRY_PROJECT`            | Sentry project slug  | Build-time plugin identity; required, no source literal fallback                                                      |
-| `SENTRY_REPO_SLUG`          | `owner/repo`         | Commit attribution repo slug; falls back only to Vercel Git metadata when available                                   |
+| Variable                    | Value                  | Notes                                                                                                                                                                                                                                                                                                                           |
+| --------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SENTRY_MODE`               | `sentry`               | **Gates real delivery.** Defaults to `off` in `packages/core/env/src/schemas/sentry.ts`, and `Sentry.init` is reached only when the mode is exactly `sentry` (`packages/libs/sentry-node/src/runtime.ts` — `off` returns a noop runtime, `fixture` an in-memory one). Omit it and the Sentry sink boots dark.                   |
+| `OBSERVABILITY_SINKS`       | `["sentry","posthog"]` | Selection marker only — selecting `sentry` here does **not** enable delivery; `SENTRY_MODE` above does. Use `["sentry"]` when product analytics is not selected. See [Logging Guidance § Current Observability Contract](../governance/logging-guidance.md#current-observability-contract) for the canonical operator contract. |
+| `OBSERVABILITY_FIXTURES`    | `false`                | Fixture tee disabled for production live Sentry                                                                                                                                                                                                                                                                                 |
+| `SENTRY_DSN`                | `https://public@...`   | HTTP server project DSN from Step 1                                                                                                                                                                                                                                                                                             |
+| `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                  | Start at 1.0, reduce if volume is high                                                                                                                                                                                                                                                                                          |
+| `SENTRY_AUTH_TOKEN`         | `sntrys-...`           | Organisation auth token. Required at **build time** by `@sentry/esbuild-plugin`. See ADR-163 §6 (amended 2026-04-21).                                                                                                                                                                                                           |
+| `SENTRY_ORG`                | Sentry org slug        | Build-time plugin identity; required, no source literal fallback                                                                                                                                                                                                                                                                |
+| `SENTRY_PROJECT`            | Sentry project slug    | Build-time plugin identity; required, no source literal fallback                                                                                                                                                                                                                                                                |
+| `SENTRY_REPO_SLUG`          | `owner/repo`           | Commit attribution repo slug; falls back only to Vercel Git metadata when available                                                                                                                                                                                                                                             |
 
 Auto-resolved (no need to set on Vercel):
 
@@ -87,13 +88,14 @@ at startup to prevent accidental PII collection.
 
 Set in the execution environment (CI, local `.env.local`, or shell):
 
-| Variable                    | Value                                      |
-| --------------------------- | ------------------------------------------ |
-| `OBSERVABILITY_SINKS`       | `["sentry"]`                               |
-| `OBSERVABILITY_FIXTURES`    | `false`                                    |
-| `SENTRY_DSN`                | Search CLI project DSN from Step 1         |
-| `SENTRY_RELEASE`            | Set explicitly (no Vercel auto-resolution) |
-| `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                                      |
+| Variable                    | Value                                         |
+| --------------------------- | --------------------------------------------- |
+| `SENTRY_MODE`               | `sentry` (gates real delivery; default `off`) |
+| `OBSERVABILITY_SINKS`       | `["sentry"]` (selection marker only)          |
+| `OBSERVABILITY_FIXTURES`    | `false`                                       |
+| `SENTRY_DSN`                | Search CLI project DSN from Step 1            |
+| `SENTRY_RELEASE`            | Set explicitly (no Vercel auto-resolution)    |
+| `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                                         |
 
 **Note**: Search CLI Sentry adoption is complete (2026-04-12). Local
 `.env.local` credentials provisioned. The Search CLI has no Vercel
@@ -291,9 +293,18 @@ contract for troubleshooting:
 
 ## Rollback
 
-Remove `SENTRY_DSN` or deploy with the observability runtime configured for its
-noop path and redeploy. The runtime creates a noop observability bundle with no
-Sentry network calls. No code change required.
+Set `SENTRY_MODE=off` and redeploy. The config builder takes its off path
+without reading `SENTRY_DSN` at all, and the runtime returns a noop
+observability bundle that makes no Sentry network calls. No code change
+required. `SENTRY_MODE` is the only safe rollback lever.
+
+Do **not** roll back by removing `SENTRY_DSN` while `SENTRY_MODE` is still
+`sentry`. The live config path requires a DSN, so the app fails the
+observability boundary with `missing_sentry_dsn`, writes that to stderr and
+exits non-zero — it does not degrade to a dark sink
+(`validateDsn` in `packages/libs/sentry-node/src/config-parsing.ts`, reached
+from the live branch of `packages/libs/sentry-node/src/config.ts`; boundary in
+`apps/oak-curriculum-mcp-streamable-http/src/index.ts`).
 
 ## Vercel Log Drains as an Alternative
 
@@ -314,11 +325,16 @@ This is a future evaluation, not a current recommendation.
 
 ## What the Code Does in Each Mode
 
-| Mode      | Sentry SDK           | Logger sinks             | Error capture           | Spans                    | Flush                     |
-| --------- | -------------------- | ------------------------ | ----------------------- | ------------------------ | ------------------------- |
-| `off`     | Not initialised      | stdout only              | Noop                    | Synthetic (context only) | Noop                      |
-| `fixture` | Not initialised      | stdout + in-memory store | In-memory store         | Synthetic (context only) | Noop                      |
-| `sentry`  | Initialised with DSN | stdout + Sentry logger   | Live `captureException` | Real OTel spans          | Bounded flush at shutdown |
+The canonical operator contract for what each `SENTRY_MODE` value means is
+[Logging Guidance § Current Observability Contract](../governance/logging-guidance.md#current-observability-contract);
+if that section and this one disagree, it wins. The table below carries only
+the per-mode code behaviour that section does not.
+
+| `SENTRY_MODE` | Sentry SDK           | Logger sinks             | Error capture           | Spans                    | Flush                     |
+| ------------- | -------------------- | ------------------------ | ----------------------- | ------------------------ | ------------------------- |
+| `off`         | Not initialised      | stdout only              | Noop                    | Synthetic (context only) | Noop                      |
+| `fixture`     | Not initialised      | stdout + in-memory store | In-memory store         | Synthetic (context only) | Noop                      |
+| `sentry`      | Initialised with DSN | stdout + Sentry logger   | Live `captureException` | Real OTel spans          | Bounded flush at shutdown |
 
 ## Observability Boundary
 
@@ -341,9 +357,10 @@ The Oak integration wraps `@sentry/node` behind a DI adapter
 (`@oaknational/sentry-node`) for testability and redaction safety.
 This deviates from the canonical Sentry setup in several documented
 ways. See
-`.agent/plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md`
+`.agent/plans-old-archive/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md`
 for the full gap analysis and remediation plan (completed 2026-04-17,
-archived on the same date).
+archived on the same date; relocated to `.agent/plans-old-archive/` by
+ADR-200).
 
 Key facts verified against official Sentry docs (2026-04-12):
 

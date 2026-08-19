@@ -2,12 +2,31 @@
 
 ## Status
 
-Accepted (Revised 2026-02-26; Amended 2026-05-10)
+Accepted (Revised 2026-02-26; Amended 2026-05-10, 2026-08-12)
 
 **Supersedes**: [ADR-016 (dotenv for configuration)](016-dotenv-for-configuration.md)
 
 **Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-171 (Observability Configuration — Orthogonal Sinks and Fixtures Axes)](171-observability-configuration-orthogonal-axes.md)
 
+> **Amendment note (2026-08-12, actual-state correction — MCP-581)**: the
+> 2026-05-10 note below mis-attributed the observability axes and asserted a
+> bridge that was never built. It is corrected here, not rewritten, so the
+> record of what was decided survives.
+>
+> - The axes are exported from **`@oaknational/env`**
+>   (`packages/core/env/src/schemas/observability-axes.ts`, re-exported from
+>   that package's `observability.ts`), **not** from this ADR's
+>   `@oaknational/env-resolution` pipeline. Instrument: a recursive `grep` for
+>   `OBSERVABILITY` over `packages/libs/env-resolution/src/` returns a single
+>   doc comment (the `observability_sinks_empty_in_preview` warning type) and
+>   no export of either axis.
+> - The **transitional `SENTRY_MODE` bridge in `@oaknational/env-resolution`
+>   was never built**, so `SENTRY_MODE` does not resolve through this
+>   pipeline at all. It remains the load-bearing Sentry delivery switch in the
+>   consuming apps, defaulting to `off`
+>   (`packages/core/env/src/schemas/sentry.ts`). Instrument: a `git grep` for
+>   `SENTRY_MODE` scoped to `packages/libs/env-resolution` returns no output.
+>
 > **Amendment note (2026-05-10)**: Adopt
 > [ADR-171](171-observability-configuration-orthogonal-axes.md)'s
 > orthogonal-axes shape for observability configuration in the resolved
@@ -16,7 +35,7 @@ Accepted (Revised 2026-02-26; Amended 2026-05-10)
 > historical `SENTRY_MODE` continues to resolve through a transitional
 > bridge for unmigrated consumers, removed once every consumer migrates.
 > Warnings-channel handling rides on the typed sink list rather than a
-> separate mode value.
+> separate mode value. _Corrected 2026-08-12 — see the note above._
 >
 > **Revision note (2026-02-26)**: Expanded to five-source hierarchy with
 > app-root discovery via `findAppRoot` (nearest `package.json`). This

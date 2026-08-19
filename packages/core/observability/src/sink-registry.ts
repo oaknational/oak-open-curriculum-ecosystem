@@ -16,7 +16,7 @@
  *
  * @see ../../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md
  * @see ../../../../docs/architecture/architectural-decisions/162-observability-first.md
- * @see ../../../../.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md
+ * @see ../../../../docs/architecture/architectural-decisions/171-observability-configuration-orthogonal-axes.md
  *
  * @packageDocumentation
  */
