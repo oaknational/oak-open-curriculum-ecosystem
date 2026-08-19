@@ -107,7 +107,7 @@ matrix** (Sections 1–13) for a release gate.
 4. **4.1** `search` `{ scope: 'lessons', query: 'photosynthesis', subject: 'science', keyStage: 'ks3' }` — ranked hits with fetchable slugs.
 5. **5.2** `fetch` a lesson id from step 4.
 6. **7.2** `get-prior-knowledge-graph` `{ unitSlugs: ['<a unit slug>'], depth: 1 }` — bounded subgraph, anchors echoed.
-7. If EEF is present: **8.1** `get-eef-evidence` `{ function: 'inspect-strand', strandId: 'eef-tl-feedback' }` and **8.6** read `eef://interpretation`.
+7. **8.1** `get-eef-evidence` `{ function: 'inspect-strand', strandId: 'eef-tl-feedback' }` and **8.6** read `eef://interpretation`.
 8. **12.2** `search` `{}` (no scope) — expect `-32602` (negative control: the server rejects bad input).
 
 Pass = each returns the dual-content shape (or the correct error), no 5xx, no
@@ -320,14 +320,12 @@ arrives in the honest typed shapes only.
 
 The EEF (Education Endowment Foundation) Teaching and Learning Toolkit surface
 is governed by the declarative served-surface definition
-(`src/served-surface/served-surface.ts`), and its rows there are currently
-**dormant**: `get-eef-evidence` and `eef://interpretation` do not appear in
-the live `*/list` inventories, and enabling either is a reviewed change to
-that one definition — there is no runtime flag. (The former
-`OAK_CURRICULUM_MCP_EEF_ENABLED` kill-switch and the EEF prompt are gone:
-the app serves no MCP prompts at all.) When the rows are dormant, every row
-in this section is N-A; the section is retained because the rows below are
-the acceptance contract the surface must meet whenever it is turned live.
+(`src/served-surface/served-surface.ts`), and its rows there are **live**:
+`get-eef-evidence` and `eef://interpretation` appear in the `*/list`
+inventories, and disabling either is a reviewed change to that one definition
+— there is no runtime flag. (The former `OAK_CURRICULUM_MCP_EEF_ENABLED`
+kill-switch and the EEF prompt are gone: the app serves no MCP prompts at
+all.) The rows below are the acceptance contract the live surface must meet.
 
 The surface is a **deterministic projection of a fixed corpus** — the agent does
 the reasoning; the tool returns only the corpus's own facts. Treat any value the
@@ -373,7 +371,7 @@ single-answer language.
 | ---- | ---------------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | 10.1 | `curriculum://model`               | `resources/read`            | `application/json` domain ontology + tool guidance (resource form of 2.1).                                       |
 | 10.2 | `docs://oak/getting-started.md`    | `resources/read`            | `text/markdown` intro: server, auth, first steps.                                                                |
-| 10.3 | `eef://interpretation`             | `resources/read` (also 8.6) | N-A while the row is dormant in the served-surface definition; `text/markdown` EEF reasoning scaffold when live. |
+| 10.3 | `eef://interpretation`             | `resources/read` (also 8.6) | `text/markdown` EEF reasoning scaffold: how to read the evidence faithfully, strand index, methodology, caveats. |
 | 10.4 | `ui://widget/oak-curriculum-app-*` | `resources/read`            | `text/html;profile=mcp-app` widget document (the MCP App surface).                                               |
 
 ---
@@ -426,8 +424,8 @@ Tie outcomes to the
 [release runbook severity model](../../../docs/engineering/milestone-release-runbook.md#severity-model)
 (P0 release stop … P3 backlog). No open **P0/P1** = eligible to trust/ship.
 
-**Smoke subset (quick confidence):** 0.1, 2.1, 2.2, 3.1, 4.1, 5.2, 6.1, plus —
-if EEF is present — 8.1 and 8.6. No 5xx / auth loop on repeated calls.
+**Smoke subset (quick confidence):** 0.1, 2.1, 2.2, 3.1, 4.1, 5.2, 6.1, 8.1
+and 8.6. No 5xx / auth loop on repeated calls.
 
 **Full matrix (release gate):** every section 1–12 (13 where an Apps host is
 available), every listed tool exercised at least once, every graph tool passing
@@ -510,9 +508,8 @@ drift.
 **Tools — curriculum graph (4):** `get-thread-progressions`,
 `get-prior-knowledge-graph`, `get-misconception-graph`, `get-keyword-graph`.
 
-**Tools — EEF (1, DORMANT):** `get-eef-evidence` — a dormant row in the
-served-surface definition; absent from `tools/list` until a reviewed
-definition change turns it live.
+**Tools — EEF (1):** `get-eef-evidence` — a live row in the served-surface
+definition (reactivated 2026-08-19).
 
 **Tools — assets (1):** `download-asset`.
 
@@ -526,12 +523,12 @@ definition change turns it live.
 `user-search-query` — dormant rows in the served-surface definition; absent
 from `tools/list` until a reviewed definition change turns them live.
 
-**Resources (6 served):** `curriculum://model`, `docs://oak/getting-started.md`,
-`ui://widget/oak-curriculum-app-*.html`, and the navigation guidance three:
-`docs://oak/guidance/find-lessons.md`, `docs://oak/guidance/explore-curriculum.md`,
+**Resources (7 served):** `curriculum://model`, `docs://oak/getting-started.md`,
+`eef://interpretation`, `ui://widget/oak-curriculum-app-*.html`, and the
+navigation guidance three: `docs://oak/guidance/find-lessons.md`,
+`docs://oak/guidance/explore-curriculum.md`,
 `docs://oak/guidance/learning-progression.md`. (The creation-oriented three
-guidance documents and `eef://interpretation` exist dormant and never appear in
-`resources/list`; the former `docs://oak/under-the-hood.md` pointer resource was
+guidance documents exist dormant and never appear in `resources/list`; the former `docs://oak/under-the-hood.md` pointer resource was
 deleted by MCP-353 — the orientation content is served inline by the
 `oak-under-the-hood` tool.)
 

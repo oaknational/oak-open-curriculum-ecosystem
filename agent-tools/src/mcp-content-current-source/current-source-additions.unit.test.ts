@@ -81,7 +81,7 @@ describe('buildCurrentSourceAdditions', () => {
         [
           "user-search': 'dormant',",
           "    'user-search-query': 'dormant'",
-          "'get-eef-evidence': 'dormant'",
+          "'get-eef-evidence': 'live'",
           "'docs://oak/getting-started.md': 'live'",
           "'docs://oak/guidance/curriculum-mapping.md': 'dormant'",
         ].join('\n'),

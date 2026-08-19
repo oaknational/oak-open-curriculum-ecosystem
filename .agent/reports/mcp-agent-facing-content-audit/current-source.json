@@ -61,6 +61,7 @@
             "get-changelog",
             "get-changelog-latest",
             "get-curriculum-model",
+            "get-eef-evidence",
             "get-key-stages",
             "get-key-stages-subject-assets",
             "get-key-stages-subject-lessons",
@@ -96,7 +97,6 @@
             "search"
           ],
           "dormant": [
-            "get-eef-evidence",
             "user-search",
             "user-search-query"
           ]
@@ -108,13 +108,13 @@
             "docs://oak/guidance/explore-curriculum.md",
             "docs://oak/guidance/find-lessons.md",
             "docs://oak/guidance/learning-progression.md",
+            "eef://interpretation",
             "ui://widget/oak-curriculum-app-local.html"
           ],
           "dormant": [
             "docs://oak/guidance/adapt-lesson.md",
             "docs://oak/guidance/continue-progression.md",
-            "docs://oak/guidance/curriculum-mapping.md",
-            "eef://interpretation"
+            "docs://oak/guidance/curriculum-mapping.md"
           ]
         },
         "prompts": {

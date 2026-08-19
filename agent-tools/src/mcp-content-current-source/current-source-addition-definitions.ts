@@ -97,7 +97,7 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     file: SERVED_SURFACE,
     reviewedAnchors: [
       structuralAnchor("user-search': 'dormant',\n    'user-search-query': 'dormant'"),
-      structuralAnchor("'get-eef-evidence': 'dormant'"),
+      structuralAnchor("'get-eef-evidence': 'live'"),
       structuralAnchor("'docs://oak/getting-started.md': 'live'"),
       structuralAnchor("'docs://oak/guidance/curriculum-mapping.md': 'dormant'"),
     ],

@@ -74,9 +74,10 @@ export const SERVED_SURFACE = {
     'get-prior-knowledge-graph': 'live',
     'get-misconception-graph': 'live',
     'get-keyword-graph': 'live',
-    // Gated, not removed (owner card 2026-07-23): out of the v1 live set;
-    // the row stays so re-enabling is a one-word reviewed change here.
-    'get-eef-evidence': 'dormant',
+    // Live (reactivated 2026-08-19): the EEF evidence graph tool, with its
+    // interpretation resource below. Gated dormant 2026-07-23 for the v1
+    // live set; disabling it again is a one-word reviewed change here.
+    'get-eef-evidence': 'live',
     'browse-curriculum': 'live',
     'explore-topic': 'live',
     'download-asset': 'live',
@@ -118,11 +119,11 @@ export const SERVED_SURFACE = {
   resources: {
     'docs://oak/getting-started.md': 'live',
     'curriculum://model': 'live',
-    // EEF interpretation: dormant with its tool (owner card 2026-07-23 —
-    // out of the v1 live set; gated, not removed). Previously the
-    // OAK_CURRICULUM_MCP_EEF_ENABLED kill-switch's resource leg, superseded
-    // by this definition (re-enabling is a reviewed change here).
-    'eef://interpretation': 'dormant',
+    // EEF interpretation: live with its tool (reactivated 2026-08-19).
+    // Previously the OAK_CURRICULUM_MCP_EEF_ENABLED kill-switch's resource
+    // leg, superseded by this definition (disabling it is a reviewed change
+    // here).
+    'eef://interpretation': 'live',
     // Computed key, never a literal: tracks the generated per-build URI so
     // gate, registration, and tool advertisement stay one constant (MCP-187).
     [WIDGET_URI]: 'live',

@@ -128,17 +128,17 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const containsMethodField = toolListResult.tools.some((t) => 'method' in t);
     expect(containsMethodField).toBe(false);
     const baseToolNames = [...toolNames];
-    // The canonical served surface: the user-search MCP App pair and the
-    // gated get-eef-evidence tool are dormant in the served-surface
-    // definition (owner card 2026-07-23, v1 live set), so a real client's
-    // tools/list never contains them. The activation seam is covered by the
-    // served-surface integration tests and the MCP App suites.
+    // The canonical served surface: the user-search MCP App pair is dormant
+    // in the served-surface definition (unbuilt experience), so a real
+    // client's tools/list never contains it. The activation seam is covered
+    // by the served-surface integration tests and the MCP App suites.
     const aggregatedTools = [
       'browse-curriculum',
       'download-asset',
       'explore-topic',
       'fetch',
       'get-curriculum-model',
+      'get-eef-evidence',
       'get-keyword-graph',
       'get-misconception-graph',
       'get-prior-knowledge-graph',

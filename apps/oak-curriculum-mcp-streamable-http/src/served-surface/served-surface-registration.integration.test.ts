@@ -73,8 +73,9 @@ describe('served-surface registration (integration)', () => {
     expect(registered.has('user-search')).toBe(true);
     expect(registered.has('user-search-query')).toBe(true);
     // Recomputed from the injected definition: everything enumerated
-    // registers except rows the definition still holds dormant (the gated
-    // EEF tool, under the canonical definition this variant inherits).
+    // registers except any row the definition still holds dormant (none
+    // today under the canonical definition this variant inherits; the
+    // recomputation keeps the pin honest if a row is gated later).
     const stillDormant = Object.values(withUserSearchLive.universalTools).filter(
       (state) => state === 'dormant',
     ).length;

@@ -25,13 +25,15 @@ describe('SERVED_SURFACE', () => {
     expect(new Set(classifiedNames)).toEqual(new Set(registryNames));
   });
 
-  it('marks exactly the unbuilt user-search pair and the gated EEF tool dormant (v1 live set, owner card 2026-07-23)', () => {
+  it('marks exactly the unbuilt user-search MCP App pair dormant', () => {
     const dormant = Object.entries(SERVED_SURFACE.universalTools)
       .filter(([, state]) => state === 'dormant')
       .map(([name]) => name);
-    expect(new Set(dormant)).toEqual(
-      new Set(['user-search', 'user-search-query', 'get-eef-evidence']),
-    );
+    expect(new Set(dormant)).toEqual(new Set(['user-search', 'user-search-query']));
+  });
+
+  it('serves the EEF evidence tool live (reactivated 2026-08-19)', () => {
+    expect(isUniversalToolLive(SERVED_SURFACE, 'get-eef-evidence')).toBe(true);
   });
 
   it('serves the app-local orientation tool live', () => {
@@ -54,11 +56,11 @@ describe('SERVED_SURFACE.resources', () => {
     expect(new Set(Object.keys(SERVED_SURFACE.resources))).toEqual(inventory);
   });
 
-  it('marks exactly the creation-oriented guidance documents and the gated EEF resource dormant (v1 live set)', () => {
+  it('marks exactly the creation-oriented guidance documents dormant (ratified live-set, D11)', () => {
     const dormant = Object.entries(SERVED_SURFACE.resources)
       .filter(([, state]) => state === 'dormant')
       .map(([uri]) => uri);
-    expect(new Set(dormant)).toEqual(new Set([...CREATION_GUIDANCE_URIS, 'eef://interpretation']));
+    expect(new Set(dormant)).toEqual(new Set(CREATION_GUIDANCE_URIS));
   });
 
   it('serves the navigation three guidance documents live', () => {
@@ -67,8 +69,8 @@ describe('SERVED_SURFACE.resources', () => {
     }
   });
 
-  it('gates the EEF interpretation resource dormant with its tool, through the definition — no env flag (owner card 2026-07-23)', () => {
-    expect(isResourceLive(SERVED_SURFACE, 'eef://interpretation')).toBe(false);
+  it('serves the EEF interpretation resource live with its tool, through the definition — no env flag', () => {
+    expect(isResourceLive(SERVED_SURFACE, 'eef://interpretation')).toBe(true);
   });
 
   it('serves the widget resource live under the generated WIDGET_URI (reviewed-change tripwire)', () => {

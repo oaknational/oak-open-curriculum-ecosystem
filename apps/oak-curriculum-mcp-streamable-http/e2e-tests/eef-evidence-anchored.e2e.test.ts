@@ -15,21 +15,16 @@
  * The probe strand is the manual UAT guide's canonical H1 anchor — a fixed
  * published EEF Toolkit strand id.
  *
- * The tool is DORMANT in the canonical definition (owner card 2026-07-23,
- * v1 live set — gated, not removed), so the dual-shape proofs run against a
- * test-injected definition with the row live (the activation seam), keeping
- * the incident regression proof ready for the day the row flips back. The
- * canonical-surface case proves the gate itself end to end.
+ * The tool is LIVE in the canonical definition (reactivated 2026-08-19
+ * after the 2026-07-23 v1-live-set gating), so every proof here runs
+ * against the canonical served surface — the same definition a deployed
+ * client meets.
  */
 
 import { request, type Response } from '../src/test-helpers/loopback-request.js';
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
 import { createApp } from '../src/application.js';
-import {
-  SERVED_SURFACE,
-  type ServedSurfaceDefinition,
-} from '../src/served-surface/served-surface.js';
 import {
   parseSseEnvelope,
   parseJsonRpcResult,
@@ -58,16 +53,7 @@ const EEF_ENVELOPE = z.object({
   status: z.literal('success'),
 });
 
-/** Activation-seam variant: the canonical definition with the EEF row live. */
-const WITH_EEF_LIVE: ServedSurfaceDefinition = {
-  ...SERVED_SURFACE,
-  universalTools: { ...SERVED_SURFACE.universalTools, 'get-eef-evidence': 'live' },
-};
-
-async function callEefEvidence(
-  args: unknown,
-  servedSurface?: ServedSurfaceDefinition,
-): Promise<Response> {
+async function callEefEvidence(args: unknown): Promise<Response> {
   const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
   const app = await createApp({
     staticRoot: await getScratchStaticRoot(),
@@ -76,7 +62,6 @@ async function callEefEvidence(
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     getLandingPageHtml: () =>
       '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
-    ...(servedSurface ? { servedSurface } : {}),
   });
   return request(app)
     .post('/mcp')
@@ -90,32 +75,12 @@ async function callEefEvidence(
     });
 }
 
-describe('get-eef-evidence gating (canonical served surface)', () => {
-  it('rejects tools/call on the dormant tool through the full HTTP stack', async () => {
+describe('get-eef-evidence anchored tools/call (dual response shape, canonical served surface)', () => {
+  it('returns BOTH content blocks and decorated structuredContent for an inspect-strand success', async () => {
     const response = await callEefEvidence({
       function: 'inspect-strand',
       strandId: PROBE_STRAND_ID,
     });
-
-    expect(response.status).toBe(200);
-    const envelope = parseSseEnvelope(response.text);
-    // The dormant row is never registered, so the server answers the call
-    // with an error-flagged tool result (the SDK's unknown-tool shape) —
-    // no EEF content is servable from the canonical surface.
-    const result = parseJsonRpcResult(envelope);
-    expect(result.isError).toBe(true);
-  });
-});
-
-describe('get-eef-evidence anchored tools/call (dual response shape, activation-seam variant)', () => {
-  it('returns BOTH content blocks and decorated structuredContent for an inspect-strand success', async () => {
-    const response = await callEefEvidence(
-      {
-        function: 'inspect-strand',
-        strandId: PROBE_STRAND_ID,
-      },
-      WITH_EEF_LIVE,
-    );
 
     expect(response.status).toBe(200);
     const envelope = parseSseEnvelope(response.text);
@@ -139,7 +104,7 @@ describe('get-eef-evidence anchored tools/call (dual response shape, activation-
   });
 
   it('rejects an anchorless evidence-for-move at the handler boundary', async () => {
-    const response = await callEefEvidence({ function: 'evidence-for-move' }, WITH_EEF_LIVE);
+    const response = await callEefEvidence({ function: 'evidence-for-move' });
 
     expect(response.status).toBe(200);
     const envelope = parseSseEnvelope(response.text);

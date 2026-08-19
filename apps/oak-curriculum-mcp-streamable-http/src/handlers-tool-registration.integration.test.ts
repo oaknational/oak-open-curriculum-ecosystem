@@ -29,16 +29,15 @@ import { SERVED_SURFACE, type ServedSurfaceDefinition } from './served-surface/s
 
 /**
  * Full-enumeration variant: every universal tool live (the user-search MCP
- * App pair and the gated EEF tool are dormant in the canonical definition).
- * These tests prove the registration MECHANISM wires every enumerated tool;
- * the canonical classification itself is proven in the served-surface suites.
+ * App pair is dormant in the canonical definition). These tests prove the
+ * registration MECHANISM wires every enumerated tool; the canonical
+ * classification itself is proven in the served-surface suites.
  */
 const ALL_UNIVERSAL_TOOLS_LIVE: ServedSurfaceDefinition = {
   universalTools: {
     ...SERVED_SURFACE.universalTools,
     'user-search': 'live',
     'user-search-query': 'live',
-    'get-eef-evidence': 'live',
   },
   appLocalTools: {
     ...SERVED_SURFACE.appLocalTools,

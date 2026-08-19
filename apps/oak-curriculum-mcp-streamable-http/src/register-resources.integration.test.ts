@@ -517,9 +517,8 @@ describe('registerAllResources matches the served-surface definition (drift guar
   });
 
   it('a dormant row removes its resource — the definition governs, not any flag', async () => {
-    // Targets a canonically-LIVE row so this stays a live->dormant flip
-    // demonstration (eef://interpretation, the previous target, is now
-    // dormant in the canonical definition and would prove nothing).
+    // Targets a canonically-LIVE row so this is a live->dormant flip
+    // demonstration: the definition alone removes the resource.
     const withModelDormant = {
       ...SERVED_SURFACE,
       resources: { ...SERVED_SURFACE.resources, 'curriculum://model': 'dormant' as const },
