@@ -1,8 +1,8 @@
 ---
 id: mcp-compat-host-checking
 node_type: delivery
-name: "MCPJam host-compatibility checking"
-overview: "Check whether Oak's served surface works in the AI hosts teachers reach it through — on every commit, and on demand against the deployment."
+name: "MCPJam MCP Apps widget compatibility checking"
+overview: "Check whether Oak's MCP Apps widget works in the AI hosts teachers reach the served surface through — on every commit, and on demand against the deployment. Covers the tools and widget lanes; protocol-version negotiation is a named follow-up."
 status: sketch
 ratified_by: null
 ratified_date: null
@@ -24,7 +24,7 @@ owner_gates:
 last_updated: 2026-08-15
 ---
 
-# MCPJam host-compatibility checking
+# MCPJam MCP Apps widget compatibility checking
 
 Lineage: extends the `agent-tools mcp-conformance` harness landed under
 MCP-189, which wraps the lockfile-pinned `@mcpjam/cli`. The architecture
