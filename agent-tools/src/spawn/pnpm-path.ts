@@ -37,10 +37,11 @@ export interface PnpmInvocation {
    *
    * It rides in the contract rather than being left to each call site because
    * both launch modes need it and five of six callers had omitted it: the
-   * corepack launcher (the win32 first candidate) obeys `COREPACK_ROOT` and
-   * `COREPACK_HOME`, which redirect which package-manager build executes, and
-   * the standalone binary refuses to self-switch to the repository's pin when
-   * `COREPACK_ROOT` is inherited. A resolver that hands back a file but not
+   * corepack launcher (the win32 first candidate) obeys every `COREPACK_*`
+   * variable — several of which redirect which package-manager build
+   * executes, or where it is downloaded from — and the standalone binary
+   * refuses to self-switch to the repository's pin when `COREPACK_ROOT` is
+   * inherited. A resolver that hands back a file but not
    * the environment it must run in is a shape that invites the omission.
    */
   readonly env: NodeJS.ProcessEnv;

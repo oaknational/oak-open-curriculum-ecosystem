@@ -1,7 +1,7 @@
 import type path from 'node:path';
 
 import { fullyQualifiedWin32 } from '../core/fully-qualified-path.js';
-import { isFilesystemRoot } from '../core/path-separators.js';
+import { isFilesystemRoot, trimTrailingSeparators } from '../core/path-separators.js';
 
 /**
  * The `node:path` surface the identity chain's comparisons run through — the
@@ -60,7 +60,7 @@ export function hasDotSegments(value: string): boolean {
  * filename character, and `/repo/a\` is a different directory from `/repo/a`
  * — a both-flavour trim would report a member of one as contained in the
  * other, the over-acceptance this module refuses everywhere else. The shared
- * both-flavour helper is therefore deliberately NOT used here.
+ * trim is therefore given the flavour's separator as its predicate.
  *
  * Drive letters are case-insensitive on Windows unconditionally and their
  * case varies by source, so comparing them raw is a false escape. Path
@@ -77,7 +77,7 @@ export function comparablePath(value: string, pathApi: IdentityPathApi): string 
   const normalised = pathApi.normalize(value);
   const trimmed = isRootForFlavour(normalised, pathApi)
     ? normalised
-    : trimTrailingFlavourSeparators(normalised, pathApi.sep);
+    : trimTrailingSeparators(normalised, (character) => character === pathApi.sep);
   return isWin32Flavour(pathApi) && /^[a-z]:/u.test(trimmed)
     ? `${trimmed[0]?.toUpperCase() ?? ''}${trimmed.slice(1)}`
     : trimmed;
@@ -88,15 +88,6 @@ function isRootForFlavour(normalised: string, pathApi: IdentityPathApi): boolean
   // The drive-root arm of the shared predicate is win32-only: on POSIX `C:/`
   // is a relative directory named `C:`, not a root.
   return isWin32Flavour(pathApi) ? isFilesystemRoot(normalised) : /^\/+$/u.test(normalised);
-}
-
-/** `value` with trailing occurrences of the flavour's separator removed (linear scan). */
-function trimTrailingFlavourSeparators(value: string, separator: string): string {
-  let end = value.length;
-  while (end > 0 && value[end - 1] === separator) {
-    end -= 1;
-  }
-  return value.slice(0, end);
 }
 
 /**

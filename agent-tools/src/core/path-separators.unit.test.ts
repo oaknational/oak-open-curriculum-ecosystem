@@ -45,6 +45,15 @@ describe('trimTrailingSeparators', () => {
     expect(trimTrailingSeparators(value)).toBe(expected);
   });
 
+  // A caller may name the separator it means: with only `/` accepted, a
+  // trailing backslash is an ordinary character and survives. (The expected
+  // value ends in a backslash, which String.raw cannot express.)
+  it('trims only the separators the supplied predicate accepts', () => {
+    expect(trimTrailingSeparators(String.raw`/repo/a\/`, (character) => character === '/')).toBe(
+      '/repo/a\\',
+    );
+  });
+
   // A long separator run is where the former `[\\/]+$` replace backtracked
   // super-linearly; the scan is linear, so this returns immediately.
   it('handles a long separator run without super-linear cost', () => {

@@ -24,22 +24,28 @@ export function isFilesystemRoot(value: string): boolean {
 }
 
 /**
- * `value` with any trailing separators of either flavour removed.
+ * `value` with trailing separators removed — of either flavour by default,
+ * or only those `isSeparator` accepts when a caller must trim one flavour's
+ * separator alone (on POSIX a backslash is a filename character, so a
+ * containment comparison there must not treat it as a separator).
  *
  * Written as a scan rather than a `[\\/]+$` replace: that pattern backtracks
  * super-linearly on a long run of separators (SonarCloud flags it on both
  * former call sites), and walking back from the end is linear by
  * construction as well as plainer to read.
  */
-export function trimTrailingSeparators(value: string): string {
+export function trimTrailingSeparators(
+  value: string,
+  isSeparator: (character: string) => boolean = isEitherSeparator,
+): string {
   let end = value.length;
-  while (end > 0 && isSeparator(value[end - 1])) {
+  while (end > 0 && isSeparator(value.charAt(end - 1))) {
     end -= 1;
   }
 
   return value.slice(0, end);
 }
 
-function isSeparator(character: string | undefined): boolean {
+function isEitherSeparator(character: string): boolean {
   return character === '/' || character === '\\';
 }
