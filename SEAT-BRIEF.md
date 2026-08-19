@@ -362,3 +362,69 @@ survived three relays because nobody re-derived it. **A conclusion decays; the e
 - **A `find -maxdepth 2` worktree-warmth probe misses the Director entirely** — coordination writes
   land at depth 4 under `.agent/state/collaboration/`. A zero from it is instrument scope, not
   silence.
+
+## Later rulings, 2026-08-19 afternoon — all binding, all owner-given
+
+**Do not re-ask any of these.** Two are standing instructions to stop raising a subject at all.
+
+- **`mcp.*` PROCEEDS NOW.** A liaison recommendation to defer the host move past 6 September was put to
+  him and **overturned**. Do not re-litigate it.
+- **Pingdom `/mcp/healthz` DEFERRED** until `mcp.*` resolves — blocked by MCP-622. This reverses the
+  reasoning recorded in MCP-622 §"Consequences while paused". Accepted residual risk, stated to him once:
+  no external uptime check across 22–31 August.
+- **Debug logs OFF in production**, standard levels only.
+- **Oak-Web-Application install: DEFERRED, and he has asked us to stop raising it.** Standing
+  instruction. The OWA class stays blocked — `robots.txt`, crawler rules, content signals, `/auth.md` at
+  the `www` root. Plan them as blocked-not-dropped. **The write block is NOT a read block: both OWA and
+  Oak-AI-Lesson-Assistant are PUBLIC and readable with no installation.**
+- **MCP-178: product action, blocked, stop raising it.** Standing instruction. The listing is in the
+  `community` tier; the verified tick is gated on fixing a support-docs page. **Claim-limit that follows:
+  "verified by 6 September" is not achievable through any engineering action available to us.** That
+  limits what may be claimed, not what is built.
+- **`auth.md` and the AI-crawler / content-signals stance: APPROVED**, conditional on verifying current
+  best practice first. The condition is real work — `auth.md` is a WorkOS convention, not an RFC.
+- **Sentry `Test Alert 1` disabled; rule `758827` KEEPS its `Issue resolved` trigger** under monitoring
+  (it has never fired, so the monitoring needs a first firing to mean anything).
+- **`profile` (name + email) is the top engineering item** at his explicit urgency — MCP-345, Urgent,
+  In Progress. `offline_access` is NOT covered by his ruling and stays open.
+
+## Traps this seat measured, afternoon
+
+- **A quota wall can look exactly like a permission wall.** `update_uptime_monitor` on a DISABLED monitor
+  returned `400 "You don't have enough pay-as-you-go available to create a new seat"`. Read as
+  "no permission" it would have produced a wrong human task; it is exhausted PAYG, and the log reduction
+  is the cure. **The monitor also points at the ORIGIN (`curriculum-mcp-alpha…/healthz`), not the public
+  path — the wrong side of the routing layer a host move breaks.**
+- **The HCP Terraform token has a 30-day life and dies silently.** A bare `unauthorized` from
+  `app.terraform.io` means **check the token's age first**. Recovery is `terraform login`, which cannot be
+  done by an agent. The refreshed one expires ~18 September.
+- **Plan rights are PER-WORKSPACE on that org.** The same token can queue runs on 52 of 101 workspaces
+  including `cloudflare-rulesets`, but NOT `cloudflare-misc`. Looks like misconfiguration, not policy.
+- **TFC run-history counts can be TARGETED runs.** Two applied runs read `0 add, 1 change, 0 destroy` —
+  and carried `Warning: Resource targeting is in effect`, touching only an access group. **No DNS was
+  refreshed at all.** The counts looked exactly like the evidence someone was hunting for.
+- **The workspace `terraform-version` is floating `latest`** (last run v1.15.8) while the repo pins 1.9.4
+  for CI and `required_version` is only a floor. **The version that validates is not the version that
+  applies, and the one that applies moves on its own** — over 230 resources on Oak's live DNS zone.
+- **An unproxied host is not in Cloudflare's path at all**, so no ruleset can act on it. Proof pair:
+  the alpha host returns `server: Vercel` with **no `cf-ray`**; `www` returns `server: cloudflare` with
+  `cf-ray` and `cf-cache-status`. This is the answer to "surely the www-scoped rule needs changing now" —
+  not while the record is grey, and then it is **ADD a scope, never REPLACE one**, because `www/mcp` must
+  keep serving the permanent carousel URLs and every installed plugin client.
+- **`ALLOWED_HOSTS` being UNSET is the WORKING state.** Setting it REPLACES the Vercel-derived list rather
+  than merging, so `ALLOWED_HOSTS=mcp.thenational.academy` would 403 the alpha host **and `www/mcp` with
+  it**. A seat that "fixes" the config by pinning it makes things worse while appearing more precise.
+- **`get_project(...).domains` is not a domain inventory and is UNSTABLE** — two identical calls returned
+  two and three entries. Use the project-domains endpoint.
+- **Directed events cross.** An amendment sent 84 seconds after a staffing event did not reach the seat;
+  the staffing report was honestly silent because its author had not read the amendment yet. **Ask whether
+  a directed message was absorbed rather than inferring it from a report's silence** — and control-probe
+  the zeros before concluding absence.
+
+## The cure that generalises, and it earned its place today
+
+**A relayed finding must carry the OBSERVATION, not the INFERENCE.** MCP-307's note read
+_"`ALLOWED_HOSTS` is plural and independent of `CANONICAL_HOST`, so the app can answer on the new host
+with no code change"_. Both stated properties are TRUE; the conclusion is FALSE; and it passed three seats
+unchallenged **because it was true as stated**. A conclusion decays as it travels; the evidence does not.
+Applied to our own output: a config-grounded prediction must be labelled a prediction, never a result.
