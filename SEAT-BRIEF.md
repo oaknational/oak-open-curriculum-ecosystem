@@ -122,3 +122,128 @@ Pathfinder` and share one issue number space** — always name the project when
   events and seen-files all resolve there via `git worktree list` — never seed or
   write coordination state into this worktree, or you create a decoy invisible to
   peers (the F-41 class).
+
+---
+
+# State at handover — 2026-08-19, Raven turns Nocturne (`0aad1a`)
+
+> **Dated. Read this before the sections above where they disagree, and supersede it wholesale
+> when you write your own.** Standing doctrine is above; this is what was true when I stood down.
+
+## Fleet
+
+- **Director: Peony hunts Nectar (`742fb5`)**, seated 07:32Z, PDR-064 Moment 2 broadcast, claim
+  `6228d1f1`. Confirm against `claims list` — do not trust this line.
+- Prior Director Dormouse turns Footfall (`a54547`) stood down retaining nothing.
+- **No implementers live** at handover. Three warden seats reviewed and closed out on 18 Aug.
+- Fleet is n=2 plus you.
+
+## MG's live queue — he is picking these up himself after lunch, 19 Aug
+
+Acts only he can perform. **These are surfaced and acknowledged; do not re-surface them, chase
+them, or treat his silence as loss.**
+
+1. Serve the OpenAI domain-challenge token at `www` → Verify Domain. Token is in the portal.
+   The **apex** copy is the durable one (parent of every candidate subdomain) but the apex→`www`
+   `301` is a Cloudflare edge rule, so it needs item 3.
+2. Pingdom: add `/mcp/healthz` to the existing `www.thenational.academy` check **and report the
+   interval** — MCP-481 AC1 needs 1–5 min and a longer interval fails SILENTLY.
+3. Authenticate the `claude.ai Cloudflare` connector via `/mcp`. **This may already be
+   unnecessary** — see §Open threads.
+4. Install the `emgeebot-oakenfold` GitHub App on `oaknational/Oak-Web-Application` (currently
+   scoped to one repo). Moves the whole OWA class off him.
+5. Sentry UI: retire `Test Alert 1` (`488389`, the only rule with `environment: null`), and decide
+   whether rule `758827` keeps its `Issue resolved trigger` condition — it notifies the production
+   channel when an issue is FIXED, which dilutes the signal during his absence.
+6. One glance: Sentry billing → spend by category. Tests whether the pay-as-you-go wall blocking
+   uptime monitor `1593267` is really ~2M log events/month, ~75% `debug`.
+7. **MCP-178** — the Anthropic listing state. Portal needs a Claude Team/Enterprise org Owner, so
+   no agent can look. **Now a prerequisite for MCP-622**, because a host migration changes the
+   endpoint that listing advertises.
+
+**Owed to him and deliberately NOT delivered:** the R3 error-rate baseline and a `preview`
+alert rule routing to `#mcp-alerts-sentry-preview`. He asked for both. **They are blocked on
+MCP-497's noise being cured** — 99% of production error volume is one non-fault, so any threshold
+derived today is derived from noise. Deliver them after that lands, and say why they waited.
+
+## Discharged — re-asking any of these is a failure of THIS seat, not the asker's
+
+- **MCP-618 / cure A is SETTLED.** Full name + email ship via the `profile` scope. **Country code
+  will NOT be collected** — it is not an OIDC claim and Clerk metadata leaves MCP-first users
+  blank; MG is having the published policy amended to say so. DPO cleared cure A on Slack.
+- **Subdomain: `mcp.thenational.academy`**, path stays `/mcp`. MCP-622 unpaused.
+- **MCP-497 is NOT an outage** and does not block 6 September. Medium, `pre-publish` removed, MG
+  is telling Jim. See §My errors.
+- **Cloud-Config DNS work** assigned to the Director, PR under `mantagen` — because emgeebot is
+  not installed on that repo and 404s there.
+- **Aakesh's OKR board:** links and status permitted, descriptions and comments NOT. Now a
+  tracked rule on `main` (`foreign-board-write-discipline`, PR #906).
+- Claude Code overage, Sentry PAYG as a spend ask, the GitHub PAT, `/mcp/healthz` staleness,
+  carousel crops — all removed from his queue by the previous liaison after probing.
+- Sentry **uptime monitors ARE available on the plan**; the blocker is quota, not tier.
+- Whether the emgeebot/mantagen review carve is unresolved — it is not, it is tracked doctrine.
+
+## Open threads worth knowing
+
+- **The Cloudflare "unreadable config" blocker may be dissolving.** All day it was recorded as
+  in no repository. That was measured against THIS repo. `oaknational/Cloud-Config` holds
+  Cloudflare infrastructure-as-code including `infrastructure/cloudflare/rulesets/`. If the origin
+  rules are there, MG's item 3 above is unnecessary for the routing work. The Director is checking.
+- **PR #867 / MCP-581** is the one live lane: five operator-doc blockers, and it is the standing
+  objection to trusting the production alert set (MCP-544 may only reach Done recorded as _armed
+  but not dependable_).
+- **Rule `758827` has never fired** — `lastTriggered: null` since 13 Aug. A Sentry test
+  notification proves the Slack binding, not the rule's conditions or its environment filter.
+- **My branch:** `chore/owner-liaison`, draft PR **#900** (retention only). Pushed at handover.
+
+## My errors, and the two generators behind them
+
+Recorded because the generators repeat, not for the tally.
+
+**Generator 1 — reasoning about a mechanism instead of its consequence.**
+
+- **MCP-497, the costly one.** Failures carried `mcp.method: server/discover`, so I concluded
+  "fails at first contact, therefore the client gets nothing" and **escalated it to MG as the top
+  priority of the drive**. I never queried the success side. The same users had 6,757 successful
+  `initialize` and 62,963 successful `tools/call`; the user I named as impacted made 864 tool
+  calls. The Director overturned it on measurement. **A failure at a step is not a failure of the
+  journey.**
+- **The country-code fork.** I rejected "partial A" and then offered MG an option that was itself
+  partial A, buying a broader permission grant for no gain. I applied my own test to every option
+  but mine.
+
+**Generator 2 — asserting from a name or from memory instead of opening the thing.**
+
+- **Minted MCP-621 as a duplicate of MCP-617** because I had read MCP-617's _name_ in a handoff and
+  took a one-line description of its hardest open question for the whole ticket.
+- **Told MG to mint an `alerts:write` org token.** No such scope exists, and organisation tokens
+  have fixed scopes. Both asserted from memory, both wrong, corrected before he acted.
+- Read `last_heartbeat_at` when the field is **`heartbeat_at`**, and reported my own live claim as
+  stale.
+
+**Also:** I wrote prose onto Aakesh's board, then recorded the resulting boundary too broadly
+("write nothing"), which would have left both boards permanently disconnected. Both corrected.
+
+**What worked:** n=2 with a Director who contradicts you. Every one of the above was caught within
+minutes — several by the Director, several by me only because I re-measured before asserting.
+**Invite the contradiction actively; it is the mechanism, not either seat's diligence.**
+
+## Mechanics that cost me time
+
+- **`comms watch` drain deadline:** 300000ms timed out on a 1,644-event stream. 600000ms with
+  `--max-events-per-drain 40` survived. Re-arm on the exit notification and sweep the gap.
+- **Comms events are gitignored** (`comms/*`, zero tracked). They are machine-local coordination
+  state, NOT a durable record. So is `handoffs/*`. Anything that must outlive the machine goes to
+  a tracked file on `main`.
+- **This worktree could not commit for two days** — a stale zero-byte `index.lock` from 17 Aug,
+  misdiagnosed as transient contention. Check the lock's age, holder and size before believing a
+  contention story.
+- **`claims heartbeat` takes only `--active --claim-id --now`** — no `--platform`/`--model`, unlike
+  its siblings. Do not fill documented args by analogy.
+- **`check-commit-message` uses `-F <file>`, not `--file`.**
+- **`cmd | tail` reports the pipe's exit code.** Capture to a file and read `$?` unpiped.
+- **A hook enforces positive design statements.** Two comms writes were refused for
+  exception-shaped wording ("carve-out", "not an exception"). State the design as uniform instead —
+  it is better writing anyway.
+- **The GitHub review-request search is eventually consistent**: an early read is a false negative.
+  Verify with the direct API read AND a settled search, never one alone.
