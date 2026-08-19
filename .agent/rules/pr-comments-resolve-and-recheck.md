@@ -83,6 +83,45 @@ edit script that mutates a register without post-condition asserts is a claim, n
 one inverted-slice register edit spawned three bot findings across two rounds; mutation
 scripts carry their own asserts.
 
+## A reviewer never stands down leaving an ownerless re-request
+
+Posting a review **as the owner's account consumes the owner's own review request**. The
+owner works from a `review-requested:<owner>` filter, so each review a seat posts under
+those shared credentials silently drains that filter. The PR then reads
+`CHANGES_REQUESTED`, which looks like "waiting on us" while the truth is "waiting on the
+owner, and invisible to him".
+
+**So a seat may not close its boundary leaving a `CHANGES_REQUESTED` review whose
+re-request has no named owner.** Before standing down, do exactly one of:
+
+- **name the curer in the closeout** — the seat or person who owns answering the findings,
+  so the re-request has an owner; or
+- **restore the review request yourself**, under the bot identity, if no curer is seated.
+
+Worked instance (2026-08-18): two reviewer passes each posted as the owner, each consumed
+his request, and both closed their boundary with nobody owning the restore. Two cured,
+green PRs sat invisible while his queue read zero. Nothing errored and nothing was red — a
+peer's measurement caught it, not any procedure. A third PR was found the next morning to
+have dropped off the same queue by the same mechanism.
+
+**Do not cure this by re-requesting atomically after every review.** On a
+changes-requested review that is wrong: it puts the PR in the owner's queue while the PR
+is actually waiting on cures. A queue full of items that are not his fails exactly as an
+empty queue does — either way the filter stops meaning "these need me". Restore the
+request when it becomes **true**, which is after the cures. An **approving** review is
+different: there the atomic re-request is correct, because nothing further is owed.
+
+### Reading the queue takes three reads, not one
+
+Verifying against the queue search is right but incomplete in the dangerous direction:
+**the search is eventually consistent, so a read taken too soon is a false negative.**
+Measured 2026-08-18: a re-request POSTed successfully and both `gh pr view` and GraphQL
+showed the reviewer immediately, while the search still omitted the PR three seconds
+later, catching up at about twenty-five. Both instruments mislead, in opposite
+directions — the POST echo is true-but-unindexed, the search indexed-but-stale. So:
+**POST, cross-check the direct API or GraphQL, then let the search settle before trusting
+it.** Never treat the POST's own response as proof the queue changed.
+
 ## Dispositions are grounded in verified failure scenarios
 
 Before writing any reply or disposition on a review finding, name the
