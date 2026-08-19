@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { redactCredentials } from './bounded-excerpt.js';
 import { type DriveOutcome, type DriveWitness } from './drive.js';
 
 /**
@@ -93,7 +94,9 @@ export function renderReviewerPack(input: RenderReviewerPackInput): string {
   const header = [
     '# Oak Curriculum MCP — reviewer walkthrough',
     '',
-    `Server: \`${input.target}\``,
+    // The pack is a shareable markdown document; the target is redacted on
+    // the way in, as at every other emit site.
+    `Server: \`${redactCredentials(input.target)}\``,
     '',
     `Generated ${input.provenance.generatedAt} by \`agent-tools mcp-conformance --drive\` (\`@mcpjam/cli\` ${input.provenance.vendorCliVersion}); full run evidence under \`${input.provenance.reportDir}\`.`,
     '',

@@ -61,6 +61,17 @@ describe('validateCliState — the compat operation has its own vocabulary', () 
     ).toBeUndefined();
   });
 
+  it('refuses credentials against an unparseable target — the transport gate fails closed', () => {
+    // A credential-gating check that waves through a URL it cannot inspect is
+    // no gate: the token would still ride the run.
+    const refusal = validateCliState({
+      ...RUNNABLE_COMPAT,
+      credentialsFile: 'tmp/creds.json',
+      target: 'not a url',
+    });
+    expect(refusal).toContain('does not parse as a URL');
+  });
+
   it('refuses --compat with --drive: they are different operations', () => {
     const refusal = validateCliState({ ...RUNNABLE_COMPAT, drive: true });
     expect(refusal).toContain('different operations');
@@ -143,6 +154,38 @@ describe('validateCliState — refusals are loud, the runnable state is silent',
     expect(
       validateCliState({ ...RUNNABLE, target: 'https://user@mcp.example.test/mcp' }),
     ).toContain('must not embed credentials');
+  });
+
+  it('a token in the target query string is refused — the target is echoed into reports', () => {
+    const refusal = validateCliState({
+      ...RUNNABLE,
+      target: 'https://mcp.example.test/mcp?access_token=ya29.SECRET',
+    });
+    expect(refusal).toContain('must not carry credentials in its query or fragment');
+    expect(refusal).toContain('--credentials-file');
+  });
+
+  it('a token in the target fragment is refused too — a fragment is not searchParams', () => {
+    expect(
+      validateCliState({ ...RUNNABLE, target: 'https://mcp.example.test/mcp#token=SECRET' }),
+    ).toContain('must not carry credentials');
+  });
+
+  it('a benign query parameter is NOT refused — the guard names credential keys, not all queries', () => {
+    expect(
+      validateCliState({ ...RUNNABLE, target: 'https://mcp.example.test/mcp?page=2' }),
+    ).toBeUndefined();
+  });
+
+  it('an uncredentialed unparseable target is ACCEPTED even when it carries a credential shape — the deliberate fail-open the emit-site redaction exists for', () => {
+    // The validator cannot inspect what it cannot parse, and an uncredentialed
+    // run puts no token on the wire, so it is let through to the child (which
+    // will reject it on its own terms). This pins that branch, because a reader
+    // who "fixes" it to fail closed removes the one reason the emit sites redact
+    // the target at all — and that belt is what makes this branch safe.
+    expect(
+      validateCliState({ ...RUNNABLE, target: 'ht!tp://user:secret@mcp.example.test/mcp' }),
+    ).toBeUndefined();
   });
 });
 

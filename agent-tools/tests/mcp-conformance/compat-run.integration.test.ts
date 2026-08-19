@@ -1,6 +1,7 @@
 import { err, ok } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
+import { composeCompatRunReport } from '../../src/mcp-conformance/compat-cli.js';
 import { composeCompatArgs, type CompatIo } from '../../src/mcp-conformance/compat-evidence.js';
 import { runCompat } from '../../src/mcp-conformance/compat-run.js';
 import { loadFixtureRaw } from './test-helpers/fixture-loader.js';
@@ -233,6 +234,23 @@ describe('runCompat — a capture of a different deployment can never read as th
 
     expect(runCompat(io, { target: 'http://localhost:3333/mcp/' }).verdict).toBe('pass');
   });
+
+  it('redacts a credential the vendor reflected into its reported target', () => {
+    // The reported `target` is arbitrary server-controlled text and the
+    // mismatch reason rides onto stdout — a server echoing the request URL
+    // with a query-param token must be masked, not printed. (Security review
+    // 2026-08-19: every vendor string on this path is redacted first.)
+    const poisonedStdout = OAK_REPORT.replace(
+      '"target": "http://localhost:3333/mcp"',
+      '"target": "http://localhost:3333/mcp?access_token=ya29.SECRET"',
+    );
+    const { io } = fakeIo({ exitCode: 0, stdout: poisonedStdout });
+
+    const reason = runCompat(io, TARGET).failureReasons.join(' ');
+
+    expect(reason).not.toContain('ya29.SECRET');
+    expect(reason).toContain('access_token=[redacted]');
+  });
 });
 
 describe('runCompat — a good capture reports every host it saw', () => {
@@ -255,5 +273,29 @@ describe('runCompat — a good capture reports every host it saw', () => {
     const claude = runCompat(io, FIXTURE_TARGET).hosts?.find((host) => host.hostId === 'claude');
 
     expect(claude?.provenance).toBe('assumed');
+  });
+});
+
+describe('composeCompatRunReport — the wrapper report redacts its target', () => {
+  it('carries a clean target verbatim', () => {
+    const { io } = fakeIo({ exitCode: 0, stdout: OAK_REPORT });
+    const outcome = runCompat(io, FIXTURE_TARGET);
+
+    expect(composeCompatRunReport(FIXTURE_TARGET.target, outcome).target).toBe(
+      FIXTURE_TARGET.target,
+    );
+  });
+
+  it('masks a credential in the target — the report rides to stdout and summary.json', () => {
+    // The validator refuses credential-bearing targets it can parse; this is
+    // the belt for one it could not, which is still echoed into the report.
+    const { io } = fakeIo({ exitCode: 0, stdout: OAK_REPORT });
+    const outcome = runCompat(io, FIXTURE_TARGET);
+
+    const report = composeCompatRunReport('ht!tp://user:s3cret@h/mcp', outcome);
+
+    expect(report.target).not.toContain('s3cret');
+    expect(report.target).toBe('ht!tp://[redacted]@h/mcp');
+    expect(report.operation).toBe('compat');
   });
 });

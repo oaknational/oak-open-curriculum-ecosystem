@@ -456,12 +456,44 @@ describe('round-8 review cures — report provenance is verified against the req
     expect(reasonsOf(protocol)).toContain('different deployment');
   });
 
+  it('redacts a credential the server reflected into its reported target', () => {
+    // The mismatch reason is emitted to stdout, and the suites run unattended
+    // in CI — a server echoing a query-param token into its reported target
+    // must be masked there, not printed. (Security review 2026-08-19.)
+    const poisoned = PROTOCOL_RAW.replaceAll(
+      'https://curriculum-mcp-alpha.oaknational.dev/mcp',
+      'https://curriculum-mcp-staging.oaknational.dev/mcp?access_token=ya29.SECRET',
+    );
+    const io = fakeIo({
+      runResults: { protocol: ok({ exitCode: 1, stdout: poisoned, stderr: '' }) },
+    });
+
+    const { report } = runMcpConformance(io, verdictInput);
+    const protocol = report.suites.find((s) => s.suite === 'protocol');
+
+    expect(reasonsOf(protocol)).not.toContain('ya29.SECRET');
+    expect(reasonsOf(protocol)).toContain('access_token=[redacted]');
+  });
+
   it('a trailing slash is not a provenance mismatch', () => {
     // URL-normalised comparison: the request and the report may spell the same
     // endpoint differently without that being tool drift.
     const { report } = runMcpConformance(fakeIo(), { ...verdictInput, target: `${TARGET}/` });
 
     expect(report.suites.find((s) => s.suite === 'protocol')?.verdict).toBe('pass');
+  });
+
+  it('the aggregate report redacts a credential in the requested target', () => {
+    // The validator refuses credential-bearing targets it can parse; this is
+    // the belt for one it could not, which still reaches `report.target` — and
+    // that report rides to stdout and into CI job logs.
+    const { report } = runMcpConformance(fakeIo(), {
+      ...verdictInput,
+      target: 'ht!tp://user:s3cret@h/mcp',
+    });
+
+    expect(report.target).not.toContain('s3cret');
+    expect(report.target).toBe('ht!tp://[redacted]@h/mcp');
   });
 });
 

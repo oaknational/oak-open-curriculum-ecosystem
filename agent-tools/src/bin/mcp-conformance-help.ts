@@ -81,7 +81,12 @@ Examples (verdict, seed, drive, then compat):
   pnpm -s mcp:conformance --target https://mcp.example.test/mcp --compat --credentials-file tmp/creds.json
 
 Options:
-  --target <url>             MCP server URL (required), e.g. https://<host>/mcp
+  --target <url>             MCP server URL (required), e.g. https://<host>/mcp.
+                             Must carry no credential: userinfo (user:pass@)
+                             and credential query/fragment params
+                             (access_token, token, api_key, …) are refused,
+                             because every operation echoes the target into
+                             its report. Authenticate via --credentials-file.
   --unattended               Headless credential-free plan (protocol + oauth DCR
                              discovery legs); forbids --credentials-file
   --seed                     Capture-only operation (no baseline verdicts)

@@ -7,6 +7,7 @@
  * semantics cannot drift between operations.
  */
 import { resolveRepoRoot } from '../core/repo-root.js';
+import { redactCredentials } from './bounded-excerpt.js';
 import { type CliState } from './cli-validation.js';
 import { type CompatIo } from './compat-evidence.js';
 import { runCompat, type CompatOutcome } from './compat-run.js';
@@ -23,11 +24,29 @@ function buildCompatIo(repoRoot: string, reportDir: string): CompatIo {
 }
 
 /** The wrapper's aggregate report for a compat run. */
-interface CompatRunReport {
+export interface CompatRunReport {
   readonly schema_version: '1.0.0';
   readonly operation: 'compat';
   readonly target: string;
   readonly outcome: CompatOutcome;
+}
+
+/**
+ * The report as emitted — a pure projection, separated from the IO so the
+ * one rule it carries is describable in a test without a spawn seam.
+ *
+ * The rule: the target is redacted on the way out. A no-op for a validated
+ * target (userinfo and credential query params are refused upstream), and the
+ * belt for the residual case where the target did not parse and so could not
+ * be inspected at validation — it is still echoed here, to stdout.
+ */
+export function composeCompatRunReport(target: string, outcome: CompatOutcome): CompatRunReport {
+  return {
+    schema_version: '1.0.0',
+    operation: 'compat',
+    target: redactCredentials(target),
+    outcome,
+  };
 }
 
 /**
@@ -46,12 +65,7 @@ export function runCompatFromCli(state: CliState, target: string): 0 | 1 {
     ...(state.credentialsFile === undefined ? {} : { credentialsFile: state.credentialsFile }),
   });
 
-  const report: CompatRunReport = {
-    schema_version: '1.0.0',
-    operation: 'compat',
-    target,
-    outcome,
-  };
+  const report = composeCompatRunReport(target, outcome);
   if (!emitRunReportJson(repoRoot, reportDir, `${JSON.stringify(report, null, 2)}\n`)) {
     return 1;
   }

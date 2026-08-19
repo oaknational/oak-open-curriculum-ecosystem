@@ -15,6 +15,7 @@
  */
 import { type Result } from '@oaknational/result';
 
+import { redactCredentials } from './bounded-excerpt.js';
 import { type ConformanceMode, type ConformanceSuite } from './types.js';
 
 /** What a completed child run yields, whatever its exit code. */
@@ -82,7 +83,11 @@ export function findTargetMismatch(
   if (mismatched === undefined) {
     return undefined;
   }
-  return `mcpjam reported target ${JSON.stringify(mismatched)} but the run requested ${JSON.stringify(requestedTarget)} — this capture is of a different deployment; do not verdict it or author a baseline from it`;
+  // Vendor-reported and requested targets both redacted before the reason is
+  // composed — this reason rides onto stdout and into CI job logs (the suites
+  // run unattended in CI), where a server reflecting a credential into its
+  // reported target would otherwise land unmasked.
+  return `mcpjam reported target ${JSON.stringify(redactCredentials(mismatched))} but the run requested ${JSON.stringify(redactCredentials(requestedTarget))} — this capture is of a different deployment; do not verdict it or author a baseline from it`;
 }
 
 /**

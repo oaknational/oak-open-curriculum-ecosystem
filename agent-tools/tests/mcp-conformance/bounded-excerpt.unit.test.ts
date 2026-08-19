@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { boundedExcerpt } from '../../src/mcp-conformance/bounded-excerpt.js';
+import { boundedExcerpt, redactCredentials } from '../../src/mcp-conformance/bounded-excerpt.js';
 
 /**
  * The credential-redaction seam. Excerpts ride failure reasons onto STDOUT
@@ -40,5 +40,81 @@ describe('boundedExcerpt — credential shapes never reach a composed excerpt', 
     const excerpt = boundedExcerpt('stderr', 'ECONNREFUSED 127.0.0.1:3333');
 
     expect(excerpt).toBe(' — stderr: ECONNREFUSED 127.0.0.1:3333');
+  });
+});
+
+/**
+ * The redactor's own coverage, beyond the two header/Bearer shapes. A vendor
+ * error message or a reflected request realistically carries a token in a URL
+ * query param or a JSON field, and those are the paths a security review found
+ * uncovered (2026-08-19). The last case is the load-bearing one: the vendor's
+ * own set redacts a bare `code` key, which would mask the error/status codes
+ * this wrapper exists to display — so `code` is deliberately omitted, and this
+ * test fails the moment someone "completes" the set by adding it back.
+ */
+describe('redactCredentials — query-param and JSON token shapes', () => {
+  it('redacts an OAuth token in a URL query parameter', () => {
+    const out = redactCredentials('reflected https://h/mcp?access_token=ya29.SECRET&page=2');
+
+    expect(out).not.toContain('ya29.SECRET');
+    expect(out).toContain('access_token=[redacted]');
+    // The non-secret neighbour survives — redaction is per-parameter.
+    expect(out).toContain('page=2');
+  });
+
+  it('redacts an api_key query parameter', () => {
+    const out = redactCredentials('GET /x?api_key=AK-SECRET');
+
+    expect(out).not.toContain('AK-SECRET');
+    expect(out).toContain('api_key=[redacted]');
+  });
+
+  it('redacts a token carried as a JSON string field', () => {
+    const out = redactCredentials('{"refresh_token":"rt-SECRET","note":"kept"}');
+
+    expect(out).not.toContain('rt-SECRET');
+    expect(out).toContain('[redacted]');
+    expect(out).toContain('"note":"kept"');
+  });
+
+  it('leaves a `code` field and a `code=` diagnostic intact — the display path', () => {
+    // `code` is intentionally absent from the redactor: masking it would hide
+    // the vendor error codes and exit/status codes the wrapper reports.
+    expect(redactCredentials('{"code":"INTERNAL_ERROR"}')).toBe('{"code":"INTERNAL_ERROR"}');
+    expect(redactCredentials('exit code=1 status code=500')).toBe('exit code=1 status code=500');
+  });
+
+  it('a Bearer prefix does not swallow a following key=value token (the value must still mask)', () => {
+    // Without the vendor's negative lookahead, the Bearer token class — which
+    // admits `_` — consumes `access_token`, `=*` eats the `=`, and the value
+    // survives: `Bearer [redacted]SECRET`. Found by review, 2026-08-19.
+    const out = redactCredentials('Bearer access_token=SECRET-A');
+
+    expect(out).not.toContain('SECRET-A');
+    expect(out).toContain('access_token=[redacted]');
+  });
+
+  it('redacts an all-caps BEARER token — HTTP auth schemes are case-insensitive', () => {
+    expect(redactCredentials('sent BEARER abc.def ok')).toBe('sent Bearer [redacted] ok');
+  });
+
+  it('an unbalanced JSON quote masks the fragment but does not swallow the following lines', () => {
+    // A truncated or crashed stream is exactly where these excerpts matter;
+    // a value class spanning newlines would eat the next diagnostic line with
+    // no marker. The fragment is still masked up to the line end.
+    const out = redactCredentials('{"api_key":"AK-FRAG\nline2: refused "http://h:3333"\nline3: ok');
+
+    expect(out).not.toContain('AK-FRAG');
+    expect(out).toContain('line2: refused "http://h:3333"');
+    expect(out).toContain('line3: ok');
+  });
+
+  it('redacts URL userinfo — the belt for a target the validator could not parse', () => {
+    const out = redactCredentials('requested ht!tp://user:s3cret@h/mcp and https://u@h2/x');
+
+    expect(out).not.toContain('s3cret');
+    expect(out).not.toContain('u@h2');
+    expect(out).toContain('//[redacted]@h/mcp');
+    expect(out).toContain('//[redacted]@h2/x');
   });
 });

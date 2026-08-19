@@ -87,13 +87,20 @@ function validateCompatUsage(state: CliState): string | undefined {
  * A credentialed run against a cleartext target puts the access token on the
  * wire. Loopback is exempt — local capture against a dev server is the
  * documented workflow, and those bytes never leave the machine.
+ *
+ * Fails CLOSED on an unparseable target: a credential-gating check that waves
+ * through a URL it cannot inspect is no gate at all — the token would still
+ * ride the run to whatever the child makes of the string.
  */
 function validateCompatTransportSecurity(state: CliState): string | undefined {
   if (state.credentialsFile === undefined || state.target === undefined) {
     return undefined;
   }
   const parsed = URL.parse(state.target);
-  if (parsed === null || parsed.protocol === 'https:') {
+  if (parsed === null) {
+    return '--credentials-file needs a valid https --target — this target does not parse as a URL';
+  }
+  if (parsed.protocol === 'https:') {
     return undefined;
   }
   const loopback = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(parsed.hostname);
@@ -135,15 +142,61 @@ function validateCommonUsage(state: CliState): string | undefined {
   if (state.target === undefined || state.target.trim() === '') {
     return '--target is required';
   }
-  // Every operation echoes the target verbatim into stdout and retained
-  // reports, so credentials embedded as URL userinfo would escape the
-  // owner-only capture the credential flags protect. Refuse at the edge
-  // rather than sanitising at every emit site.
-  const parsedTarget = URL.parse(state.target);
-  if (parsedTarget !== null && (parsedTarget.username !== '' || parsedTarget.password !== '')) {
+  return validateTargetHasNoEmbeddedCredential(state.target);
+}
+
+/**
+ * Every operation echoes the target verbatim into stdout and retained reports,
+ * so a credential carried in the target would escape the owner-only capture the
+ * credential flags protect. Refuse both shapes at the edge — userinfo
+ * (`user:pass@`) and a token in the query or fragment (`?access_token=…`) —
+ * rather than sanitising at every emit site. The emit-site redaction is the
+ * belt behind these braces, for the fail-open case where the target does not
+ * parse and cannot be inspected here.
+ */
+function validateTargetHasNoEmbeddedCredential(target: string): string | undefined {
+  const parsed = URL.parse(target);
+  if (parsed === null) {
+    return undefined;
+  }
+  if (parsed.username !== '' || parsed.password !== '') {
     return '--target must not embed credentials (user:password@) — the target is echoed into reports; pass credentials via --credentials-file';
   }
+  if (targetCarriesCredentialParam(parsed)) {
+    return '--target must not carry credentials in its query or fragment (access_token, token, code, …) — the target is echoed into reports; pass credentials via --credentials-file';
+  }
   return undefined;
+}
+
+/**
+ * Parameter names whose presence on a target marks it as credential-bearing.
+ * Deliberately BROADER than the redactor's key set in `bounded-excerpt.ts`:
+ * this list REJECTS a target rather than masking display text, so `token` and
+ * bare `code` are safe to name here (no legitimate Oak target carries them)
+ * even though the redactor omits them to avoid masking error/status codes. A
+ * target that authenticates via `?api_key=` in its URL — some third-party MCP
+ * hosts do — is refused by design; this CLI targets Oak's own surface.
+ */
+const TARGET_CREDENTIAL_PARAM_NAMES: ReadonlySet<string> = new Set([
+  'access_token',
+  'refresh_token',
+  'client_secret',
+  'id_token',
+  'code',
+  'code_verifier',
+  'token',
+  'api_key',
+  'apikey',
+]);
+
+/** True when the query string or fragment names a credential parameter. */
+function targetCarriesCredentialParam(url: URL): boolean {
+  const namesACredential = (params: URLSearchParams): boolean =>
+    [...params.keys()].some((key) => TARGET_CREDENTIAL_PARAM_NAMES.has(key.toLowerCase()));
+  // `url.hash` is '' or starts with '#'; slice(1) handles both.
+  return (
+    namesACredential(url.searchParams) || namesACredential(new URLSearchParams(url.hash.slice(1)))
+  );
 }
 
 /**

@@ -173,7 +173,12 @@ function retainThenParse(
   if (!parsed.success) {
     return {
       kind: 'unparseable',
-      reason: `mcpjam compat exited 0 but its stdout did not match the expected report shape: ${parsed.error.message}`,
+      // Defence in depth, not a live threat: the pinned Zod 4 issue message
+      // carries expected/path/values and never the received value (verified
+      // 2026-08-19), so there is no reachable state to test. Kept because a
+      // future Zod that echoes input would otherwise turn this reason into an
+      // unredacted vendor-stdout channel, and the cost is one call.
+      reason: `mcpjam compat exited 0 but its stdout did not match the expected report shape: ${redactCredentials(parsed.error.message)}`,
       exitCode,
       retentionReasons,
       ...retainedPath,
@@ -185,7 +190,11 @@ function retainThenParse(
   if (canonicalTarget(parsed.data.target) !== canonicalTarget(requestedTarget)) {
     return {
       kind: 'target-mismatch',
-      reason: `mcpjam reported target ${JSON.stringify(parsed.data.target)} but the run requested ${JSON.stringify(requestedTarget)} — this capture is of a different deployment; do not read its verdicts as the requested surface's`,
+      // Both targets are redacted before the reason is composed: the vendor's
+      // is arbitrary server-controlled text, and the requested one — though
+      // validated against userinfo and credential query params — is echoed
+      // here as a last belt against a token that slipped a fail-open parse.
+      reason: `mcpjam reported target ${JSON.stringify(redactCredentials(parsed.data.target))} but the run requested ${JSON.stringify(redactCredentials(requestedTarget))} — this capture is of a different deployment; do not read its verdicts as the requested surface's`,
       exitCode,
       retentionReasons,
       ...retainedPath,
