@@ -279,11 +279,23 @@ steps below were run end to end on Windows 11 in August 2026.
    at `~/.local/share/pnpm` is on that list, a corepack shim under nvm's Node
    directory is not, and with corepack alone every commit fails — currently
    misreported as a formatting failure. Two additions Ubuntu's default sources do
-   not carry. The pre-push hook requires `gitleaks`: install it with the Go route
-   the hook itself suggests
-   (`go install github.com/gitleaks/gitleaks/v8@latest`), which verifies the
-   module through Go's checksum database. If you would rather install the
-   released binary, mirror the pinned, digest-checked block CI uses
+   not carry. The pre-push hook requires `gitleaks`. Build it with Go, which
+   verifies the module through Go's checksum database — three steps, because a
+   fresh Ubuntu has no Go and `go install` puts binaries in a directory that is
+   not on the shell's `PATH`:
+
+   ```bash
+   sudo apt install -y golang-go
+   go install github.com/zricethezav/gitleaks/v8@latest
+   echo 'export PATH="$PATH:$(go env GOPATH)/bin"' >> ~/.bashrc && source ~/.bashrc
+   ```
+
+   The module path really is `zricethezav`: that is the path gitleaks declares
+   in its `go.mod`, and `go install github.com/gitleaks/gitleaks/v8@latest`
+   fails with a "module declares its path as" error. If Ubuntu's packaged Go is
+   older than gitleaks requires, `go install` fetches the newer toolchain itself
+   (checksum-verified, the default since Go 1.21). If you would rather install
+   the released binary, mirror the pinned, digest-checked block CI uses
    (`.github/workflows/ci.yml`, "Install pinned gitleaks") rather than
    downloading an unverified asset — gitleaks is a security control, so its
    binary is content-pinned, not just version-pinned, and CI is the one place
