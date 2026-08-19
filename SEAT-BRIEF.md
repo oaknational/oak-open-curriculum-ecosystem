@@ -10,10 +10,16 @@
 - **Branch:** `chore/owner-liaison`, cut from `origin/main`
 - **Role:** `liaison`
 - **Thread:** `mcp-submission-drive`
-- **Director:** Tuna holds Ballast (`a2ce03`), claude / Opus-5, seated 2026-08-17.
-  (Prior Directors on this thread, for record only: Wildfire holds Quench
-  `ee2764` 2026-08-13; Schooner rides Marsh `d9d5b8` and Walrus herds Jetty
-  `a9cd9a` 2026-08-12; Wisteria lifts Verdure `c4294f` 2026-08-06.)
+- **Director:** Peony hunts Nectar (`742fb5`), claude / claude-opus-5[1m],
+  seated 2026-08-19 07:32Z at owner word — PDR-064 Moment 2 broadcast, claim
+  `6228d1f1`. **Do not trust this line over the live registry:** confirm with
+  `claims list` and read the CURRENT Director from a fresh row. This file has
+  twice named a Director two generations stale.
+  (Prior Directors on this thread, for record only: Dormouse turns Footfall
+  `a54547` 2026-08-17 evening to 2026-08-19 morning; Skunk stirs Cavern `db8b9b`
+  and Tuna holds Ballast `a2ce03` 2026-08-17; Wildfire holds Quench `ee2764`
+  2026-08-13; Schooner rides Marsh `d9d5b8` and Walrus herds Jetty `a9cd9a`
+  2026-08-12; Wisteria lifts Verdure `c4294f` 2026-08-06.)
 - **Identity:** assigned at launch by the `SessionStart` hook. Confirm it with
   `pnpm agent-tools:collaboration-state -- identity preflight --platform claude --model Opus-5`.
 
@@ -41,7 +47,21 @@ else, and keep it live for the whole seat. Every question, blocker,
 decision-request, owner-gate and lens-failure any seat raises arrives on that
 stream. Assert it with `comms assert-watcher-live` and keep the F-95 heartbeat
 green. Re-arm on the Monitor's own exit notification, and run the foreground
-sweep after every restart.
+sweep after every restart. The stream is large (1,644 events on 2026-08-19) and
+a drain deadline of 300000ms has been observed to time the watcher out; 600000ms
+with a smaller `--max-events-per-drain` survived.
+
+**Keep your own claim row fresh, and never read a stale peer row as a dead seat.**
+Heartbeats are suspended fleet-wide (PDR-078 §4), so **nothing refreshes your claim
+automatically** and it ages out after `freshness_seconds` (4h) while you are
+demonstrably alive. Measured 2026-08-19: `claims heartbeat` is sound — it moves
+`fresh_until` to `heartbeat_at + 4h` — the mechanism simply has no driver. This
+seat's row went stale twice in two days and caused two peers to compute the fleet
+as `n=2` with no liaison, which is the precise failure this seat exists to prevent.
+**Arm a recurring self-heartbeat at session open**, well inside the window. And when
+reading peers: **absent, stale, and retired are three different states** — only a
+positive stand-down declaration means retired. Note the field is `heartbeat_at`,
+not `last_heartbeat_at`; reading the wrong key reports a fresh row as stale.
 
 ### 2. The owner-facing decision queue
 
@@ -82,10 +102,15 @@ not **whether** it may be asked.
   (owner-confirmed 2026-08-13). The acceptance bar is a **verified tag from
   Anthropic** (owner, 2026-08-17) — an external verdict, not a self-assessment,
   so anything on the path to that tag outranks internal tidiness.
-- **The constraint that governs scheduling** (owner, 2026-08-13): MG's effective
-  availability ends **20 August**. For anything dated after that, the question is
+- **The constraint that governs scheduling** (owner, 2026-08-17, SUPERSEDING the
+  earlier "20 August"): MG is away ~22-31 August and back ~1 September, leaving
+  ~4 working days from 2026-08-17. For anything dated after that, the question is
   not "is it before 6 Sept" but "does it need MG personally, and can that
   dependency be removed or pulled inside the window?"
+- **THE RULE THAT GOVERNS THIS SEAT** (owner, 2026-08-17): route anything
+  MG-needing the **SAME DAY it is discovered, never batched**. A Thursday
+  discovery routed Thursday is fine; the same item held to Friday afternoon
+  costs nine days. Batching is the failure mode this seat exists to prevent.
 - **Boards of record:** `MCP App: First Major Release` (the agent-authored
   engineering project) and `MCP OKR: We reach 8000 requests to the Oak MCP app`
   (the human-authored project, Aakesh Pattani). **Both sit on team `MCP App
