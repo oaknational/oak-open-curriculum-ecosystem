@@ -125,8 +125,13 @@ Pathfinder` and share one issue number space** — always name the project when
 
 ---
 
-# State at handover — 2026-08-19, Raven turns Nocturne (`0aad1a`)
+# State at handover — 2026-08-19 morning, Raven turns Nocturne (`0aad1a`)
 
+> **SUPERSEDED IN PART.** A later section — _State at 2026-08-19 afternoon, Thistle hunts
+> Acorn_ — is the current record. Read that one first and prefer it wherever the two
+> disagree. This section is retained because its error generators and mechanics traps are
+> still live knowledge, not because its state is current.
+>
 > **Dated. Read this before the sections above where they disagree, and supersede it wholesale
 > when you write your own.** Standing doctrine is above; this is what was true when I stood down.
 
@@ -247,3 +252,113 @@ minutes — several by the Director, several by me only because I re-measured be
   it is better writing anyway.
 - **The GitHub review-request search is eventually consistent**: an early read is a false negative.
   Verify with the direct API read AND a settled search, never one alone.
+
+---
+
+# State at 2026-08-19 afternoon, Thistle hunts Acorn (`401aec`)
+
+> **CURRENT.** Supersedes the morning section above wherever the two disagree. Standing doctrine is
+> in the sections before both. Written mid-session rather than at stand-down, because comms is
+> gitignored and same-day substance should not wait for a closeout that may not come.
+
+## Fleet
+
+- **Director: Peony hunts Nectar (`742fb5`)**, claim `6228d1f1`, seated 07:32Z. Confirm with
+  `claims list`; the row's `heartbeat_at` lags because nothing drives it.
+- **Liaison: this seat**, claim `f289d350`, role `liaison`, opened 12:46:38Z with an hourly
+  self-heartbeat.
+- One implementer lane in flight on Cloud-Config DNS. Fleet cap is two seats, so staffed slices
+  QUEUE rather than starting together — read a silent slice as queued, not as progress.
+
+## MG's queue — the morning list, trued
+
+Items 1, 2, 4, 5, 6, 7 of the morning section stand unchanged: surfaced, acknowledged, his.
+**Do not re-surface, chase, or read his silence as loss.** Two have moved:
+
+- **Item 3 (authenticate the `claude.ai` Cloudflare connector) is WITHDRAWN.** The Cloudflare origin
+  rules are in `oaknational/Cloud-Config` as Terraform —
+  `infrastructure/cloudflare/rulesets/header_transforms.tf`, resource
+  `cloudflare_ruleset.http_request_origin`. The "config is in no repository" record was measured
+  against the wrong repository.
+- **The Vercel domain is ADDED and off him.** `mcp.thenational.academy` is a domain on
+  `poc-oak-open-curriculum-mcp`, added at his word once the IaC question resolved.
+
+**Still owed to him and deliberately waiting:** the R3 error-rate baseline and a `preview` alert rule
+to `#mcp-alerts-sentry-preview`, both blocked on MCP-497's noise. Ship them with the reason attached.
+
+## Discharged today — re-asking any of these is a failure of THIS seat
+
+- **`auth.md` and the AI-crawler / content-signals stance: APPROVED** with his condition — _"if that's
+  what the ticket asks for and is current best practice"_. The condition is real work, not a
+  formality: `auth.md` is a WorkOS convention rather than an RFC. **Verify best practice before
+  anything ships; do not re-ask the approval.**
+- **The policy half is largely an Oak-Web-Application change**, so the pending `emgeebot-oakenfold`
+  install on that repo now has a second consumer.
+- **MCP-622's proxied-vs-direct text** is stale text over a discharged decision, on OUR engineering
+  project. True it in place; it is not an owner question.
+- **The Vercel custom domain is not IaC for our project.** `poc-oak-open-curriculum-mcp` appears in
+  zero `.tf` files; every OTHER Oak Vercel project is managed via
+  `oak-terraform-modules/modules/vercel_project`. Ours is the sole exception.
+
+## Measured facts worth not re-deriving
+
+```text
+/.well-known/oauth-authorization-server        200  RFC 8414, unrewritten Clerk binding
+/.well-known/oauth-protected-resource/mcp      200  {"scopes_supported":["email"]}  <- see below
+/.well-known/openid-configuration              404  (a DIFFERENT document from RFC 8414)
+/auth.md                                       404
+robots.txt on www                              200  15 lines, ZERO AI-crawler rules
+Link: header on /mcp                           absent
+Host: mcp.thenational.academy -> our app       403  "host not allowed" (security.ts:63)
+```
+
+- **RFC 9728 is DONE and correct** — path-suffixed per spec and advertised in the 401 challenge.
+  Close that bullet; do not staff it.
+- **The PRM advertises `email` only, so MCP-618's settled `profile` cure would arrive at nobody.**
+  The list is codegen-derived (`mcp-security-policy.ts`, `DEFAULT_AUTH_SCHEME`), so it changes at the
+  generator. And adding a scope is NOT safely additive: Clerk accepted `openid` at registration then
+  returned `invalid_scope` at authorisation _via redirect_, which our server never sees. Prove
+  `profile` with the cookie-deletion method; a synthetic `__client_uat=1` is not equivalent.
+- **`ALLOWED_HOSTS` being plural does not mean the new host is IN it.** It is not. Blue/green needs
+  the env extended AND a redeploy, because Vercel binds env at build time.
+- **A fourth `www` consumer, ours:** `plugins/oak-open-curriculum/.mcp.json` on `main` of the PUBLIC
+  repo hardcodes `https://www.thenational.academy/mcp`. It sets a FLOOR on how long `www/mcp` must
+  keep serving the protocol — installed copies keep pointing there.
+
+## THE GENERATOR THAT PRODUCED FOUR FAILURES IN ONE DAY
+
+**An absence is never evidence until a presence has been shown by the same instrument.** Four
+instances on 2026-08-19, across unrelated surfaces:
+
+1. **MCP-497** — a failure count read as an outage; the success side was never queried.
+2. **`get_project(...).domains`** — an absence read as a domain inventory. Broken by a control probe:
+   the alpha host was also absent while production demonstrably served through it. The field then
+   proved **unstable** — two identical calls returned two and three entries.
+3. **An org-wide code search returning zeros** — where the control returned the same error object, so
+   the zeros meant "instrument broken", not "nothing there".
+4. **`ALLOWED_HOSTS`** — two true properties read as a statement about whether the new host works.
+
+**The cure, because instance 4 passed three seats unchallenged precisely because it was true as
+stated: a relayed finding must carry the OBSERVATION, not the INFERENCE.** MCP-307's note should have
+stopped at _"`ALLOWED_HOSTS` is plural and independent of `CANONICAL_HOST`"_. The clause _"so the app
+can answer on the new host with no code change"_ was a conclusion travelling as a measurement, and it
+survived three relays because nobody re-derived it. **A conclusion decays; the evidence does not.**
+
+## Mechanics this seat measured
+
+- **`comms watch` auto-seeds an empty seen-file forward from now**, so a fresh cursor never replays
+  history. A 300000ms step deadline is fine; the predecessor's 600000ms advice was fixing the wrong
+  variable. The deadline sets how long a wedge SURVIVES, not whether one happens — host contention
+  is the variable (load 19.49 when a watcher died, 2.50 when it did not).
+- **`assert-watcher-live` can pass off a WEDGED watcher.** Process liveness is not delivery liveness.
+  Check `last_drain_at` moving and `emitted_count` advancing in
+  `comms-seen/<name>.json.heartbeat.json`.
+- **`claims heartbeat` prints `recorded heartbeat on claim <id>` — plain text, no JSON.** A guard that
+  greps its stdout for `fresh_until` reports a false alarm. Verify the STORED `heartbeat_at` instead.
+- **The F-75 peer-liveness poll is vacuous for this fleet** — every heartbeat-emitting peer retired on
+  or before 12 Aug, so the poll can only ever re-report the dead. An ACTIVE seat should therefore run
+  the watcher WITHOUT `--exclude-tag heartbeat` rather than pair an empty exclusion with an empty
+  poll; the exclusion's justification is reserve-seat economics, which an active seat does not have.
+- **A `find -maxdepth 2` worktree-warmth probe misses the Director entirely** — coordination writes
+  land at depth 4 under `.agent/state/collaboration/`. A zero from it is instrument scope, not
+  silence.
