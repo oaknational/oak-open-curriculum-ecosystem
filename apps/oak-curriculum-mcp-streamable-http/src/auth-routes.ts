@@ -1,6 +1,6 @@
 import type { Express, RequestHandler } from 'express';
-import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { Logger } from '@oaknational/logger';
+import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
 
 import { createMcpHandler } from './handlers.js';
@@ -12,6 +12,7 @@ import { rewriteAuthServerMetadata, type UpstreamAuthServerMetadata } from './oa
 import type { HttpObservability } from './observability/http-observability.js';
 import { deriveSelfOrigin, hostValidationErrorMessage } from './host-validation-error.js';
 import { MCP_RESOURCE_PATH } from './served-origin.js';
+import { sendDiscoveryDocument } from './discovery-cache-policy.js';
 
 /**
  * Refuses the standalone GET SSE stream with the spec-mandated 405 (MCP-545).
@@ -74,9 +75,9 @@ function registerUnauthenticatedRoutes(
  * (`/.well-known/oauth-protected-resource/mcp`) per RFC 9728 Section 3.1.
  * Both serve identical responses.
  *
- * Every handler here is a Host-allowlist check followed by an in-memory
- * JSON render — no upstream call. Volumetric control is owned at the
- * edge (ADR-219).
+ * Every handler here is a Host-allowlist check followed by an in-memory JSON
+ * render — no upstream call. Volumetric control is owned at the edge (ADR-219),
+ * and every 2xx document leaves through {@link sendDiscoveryDocument} (MCP-413).
  *
  * @param upstreamMetadata - Upstream AS metadata, fetched from Clerk and
  *   injected by the caller. Endpoint URLs are rewritten per-request to
@@ -102,7 +103,7 @@ export function registerPublicOAuthMetadataEndpoints(
       return;
     }
     const selfOrigin = originResult.value;
-    res.json({
+    sendDiscoveryDocument(res, canonicalOrigin, {
       // The published resource and the RFC 8707 expected audience share
       // MCP_RESOURCE_PATH so they can never diverge (MCP-351).
       resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,
@@ -122,7 +123,8 @@ export function registerPublicOAuthMetadataEndpoints(
       res.status(403).json({ error: 'forbidden', error_description: msg });
       return;
     }
-    res.json(rewriteAuthServerMetadata(upstreamMetadata, originResult.value));
+    const document = rewriteAuthServerMetadata(upstreamMetadata, originResult.value);
+    sendDiscoveryDocument(res, canonicalOrigin, document);
   });
 
   if (runtimeConfig.useStubTools) {
