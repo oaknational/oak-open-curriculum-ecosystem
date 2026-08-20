@@ -151,6 +151,25 @@ files      apps/oak-curriculum-mcp-streamable-http/public/carousel/carousel_imag
 sentinel   a test PINS the three /mcp/carousel/carousel_image_N.png paths
 ```
 
+**COLLAPSED BY THE SAME RULING — the five-step choreography below was mostly protecting clients, and the
+client population is empty. What survives is ONE ordering constraint, and it is not about clients at all:**
+
+> **The carousel images must serve from the web application BEFORE the origin rule changes** — because
+> Anthropic's listing holds those literal paths, and **a third party's stored reference is a live external
+> dependency whether or not any client ever dialled `www/mcp`.** The owner's "both places for now" ruling
+> is what satisfies it.
+>
+> **Then** the origin rule together with the `.well-known` documents (enumerate the surface — see below,
+> a `/mcp*`-scoped edit does not discharge the ruling), **then** the HTML leg. **No signposting layer at
+> any step.**
+>
+> **And the sentinel gap still stands**, because it is also about Anthropic's stored URLs rather than about
+> clients: after the split, the copy the listing fetches may be the one with no guard.
+
+**The original five-step order is preserved below as the derivation.** Whoever executes should follow the
+collapsed version above; the steps below explain why each ordering existed, and steps whose only purpose
+was client choreography no longer apply.
+
 **Whoever touches that rule first triggers the other two.** This must be ONE planned change with a stated
 order, not three seats each making a locally-correct edit. **The order, and the reason for each step:**
 
@@ -169,7 +188,27 @@ order, not three seats each making a locally-correct edit. **The order, and the 
 5. **The HTML-leg removal on this repo's `/mcp`** follows or accompanies step 4, and must not precede it in
    a way that leaves `www/mcp` serving nothing.
 
-**REQUIREMENT ON STEP 4, and it is the difference between a diagnosable break and an undiagnosable one.**
+> ### RETIRED BY OWNER RULING, 2026-08-20 — DO NOT IMPLEMENT ANY OF THE FOLLOWING REQUIREMENT
+>
+> Owner, verbatim: *"No, no one has used `www/mcp` in earnest yet so we dont need to handle redirects or
+> signposting."*
+>
+> **So: no self-describing JSON response, no `308`/`307` investigation, no client-log signposting, at any
+> step.** The reasoning below was sound and it was reasoning about a population that does not exist. It is
+> left in place as the record of a requirement that was correctly derived and correctly retired — **not as
+> work.**
+>
+> **This also discharges the `www`-pinned client test from the owner's queue.** That test existed to
+> establish *which population is affected*; he has answered it from product knowledge. **And it lowers the
+> cost of disposition (b) accordingly** — (b) was accepted on the understanding that it breaks installs
+> during his absence, and per his ruling there are no such installs in earnest.
+>
+> **Recorded as product knowledge, NOT as measurement, and the distinction is load-bearing:** no instrument
+> this estate holds can answer "which host did this client dial" (see the telemetry gap below). His
+> assertion is the best available evidence precisely because he holds knowledge no instrument here holds.
+> **Do not let a later seat cite it as measured.**
+
+**REQUIREMENT ON STEP 4 — RETIRED, see the box above. Preserved as derivation, not as work.**
 Today a `www`-pinned client fails at *discovery* — the reference SDK throws before registration, which is
 a protocol error a client can surface and a human can search for. **After the origin rule moves, a pinned
 client POSTing `www/mcp` reaches the web application and receives an HTML page: the same break, with a
@@ -188,6 +227,10 @@ whoever implements it:
 
 **Do not let this become "the web application serves HTML there now" and stop.** The requirement is that a
 protocol client learns where it should go, from the response, without anyone here being reachable.
+
+**SUPERSEDED — the re-homing below was overtaken within the hour by the retirement above. There is nothing
+to re-home because there is nothing to build. Preserved to show the sequence of decisions rather than to be
+acted on.**
 
 **RE-HOMED, 2026-08-20 — this requirement is NO LONGER THIS REPO'S TO IMPLEMENT.** The owner's ruling that
 `www/mcp` has nothing to do with this repo removes our ability to answer there at all. **So the
