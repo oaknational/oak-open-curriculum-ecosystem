@@ -13,6 +13,7 @@ import {
   isAgentSupportTool,
   getAgentSupportToolMetadata,
   getSeeAlsoForTool,
+  SERVER_INSTRUCTIONS_BUDGET,
 } from './agent-support-tool-metadata.js';
 import { toolGuidanceData } from './tool-guidance-data.js';
 import { typeSafeKeys, typeSafeValues, typeSafeEntries } from '../types/helpers/type-helpers.js';
@@ -149,6 +150,38 @@ describe('generateServerInstructions', () => {
     // first-session prior (the curriculum↔orientation separation taken too far).
     expect(instructions).toContain('oak-under-the-hood');
     expect(instructions).toContain('not about curriculum content');
+  });
+
+  it("names Oak's other two agent front doors so an arriving agent can reach them", () => {
+    const instructions = generateServerInstructions();
+
+    // MCP-421: Oak publishes three agent-facing front doors — the main site's
+    // llms.txt, the Open API's machine-readable discovery documents, and this
+    // MCP server. The definition of done is that an agent arriving at any one
+    // of them can reach the other two by following a published link. This
+    // surface is the MCP door's outbound half: the served landing page already
+    // links the Open API's human documentation, but nothing the server serves
+    // named llms.txt or the machine-readable catalogue, so a connected agent
+    // could not discover either. Asserting the URLs (not prose) is what makes
+    // the link followable — a reworded sentence still passes, a dropped or
+    // altered URL does not.
+    expect(instructions).toContain('https://www.thenational.academy/llms.txt');
+    expect(instructions).toContain('https://open-api.thenational.academy/.well-known/api-catalog');
+  });
+
+  it('keeps the served instructions inside the client character budget', () => {
+    const instructions = generateServerInstructions();
+
+    // A host that injects `instructions` into the model's context may cap it,
+    // and the cap observed in a real client is 2048 characters, taking the
+    // TAIL. The string closes with the owner-signed brand-provenance
+    // paragraph, so an overrun severs the non-endorsement clause at the
+    // client — invisible to every other gate here, all of which measure the
+    // generated string rather than the delivered one. This is the only guard
+    // that fails when the string outgrows what a client will carry, so it
+    // stands between a future paragraph and a silently truncated licence
+    // statement. If it goes red, shorten the prose; do not raise the ceiling.
+    expect(instructions.length).toBeLessThanOrEqual(SERVER_INSTRUCTIONS_BUDGET);
   });
 
   it('carries the Oak brand ownership and non-endorsement guidance (MCP-365)', () => {

@@ -741,7 +741,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts",
-      "semanticSha256": "2d86bf6b1cf6241114656a1a2909fbb47ecd0b6f34d5ccd8b9f44c0215301606",
+      "semanticSha256": "c799c5164a4edf01772840c9200180172beb771f8b00e6840f9e36c5c883145a",
       "itemIds": [
         "C049",
         "C050",

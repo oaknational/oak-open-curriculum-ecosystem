@@ -5,7 +5,7 @@
  * addition took that file over the file-size gate: these are the anchor
  * primitives; the definitions file carries the reviewed entries.
  */
-import type { RegistrationAnchorSurface } from './current-source-model.js';
+import type { RegistrationAnchorSurface, SourceLocus } from './current-source-model.js';
 
 export interface ReviewedAdditionAnchor {
   readonly content: string;
@@ -53,5 +53,21 @@ export function sharedEnvelopeAnchor(
       { locus: 'resource-contents', field },
     ],
     registrationValue,
+  };
+}
+
+export interface CurrentSourceAdditionDefinition {
+  readonly id: string;
+  readonly title: string;
+  readonly reviewDomain: string;
+  readonly impactTier: 'high-impact' | 'simple-config';
+  readonly behaviouralIntent: string;
+  readonly workspaceScope: 'in' | 'out-upstream-api';
+  readonly sourceLocus: SourceLocus;
+  readonly file: string;
+  readonly reviewedAnchors: readonly ReviewedAdditionAnchor[];
+  readonly registration?: {
+    readonly state: 'live' | 'dormant';
+    readonly selector: string;
   };
 }

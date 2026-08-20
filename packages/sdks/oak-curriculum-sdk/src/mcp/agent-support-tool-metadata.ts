@@ -82,6 +82,50 @@ export const AGENT_SUPPORT_TOOL_NAMES = typeSafeValues(AGENT_SUPPORT_TOOL_METADA
   .map((t) => t.name);
 
 /**
+ * Where to send an agent for the Oak surfaces this server does not cover.
+ *
+ * @remarks
+ * Oak publishes three agent-facing entry points — the main site's `llms.txt`,
+ * the Oak Open API's machine-readable discovery documents, and this MCP
+ * server — and each names the other two so an arriving agent is never at a
+ * dead end (MCP-421). This constant is this server's half of that.
+ *
+ * Deliberately phrased as a CAPABILITY BOUNDARY, not as a parallel route. The
+ * Open API serves the same curriculum data over plain HTTP with no
+ * authorisation binding, so a sentence that merely advertised it as an easier
+ * path would invite an agent to abandon the audience-bound token, the
+ * tool-level telemetry, and the graph and search tools that have no HTTP
+ * equivalent. Bulk export is the one thing this server genuinely does not do,
+ * so that is what the paragraph offers.
+ *
+ * The URLs are absolute because the reader is an agent on another host, not a
+ * browser on this one.
+ *
+ * Placed BEFORE the brand-provenance paragraph: that paragraph must close the
+ * string, and its `endsWith` test is what holds the ordering. Length matters
+ * here as much as position — see `SERVER_INSTRUCTIONS_BUDGET`.
+ */
+const OTHER_SURFACES_GUIDANCE = `For whole-catalogue bulk export, which this server does not offer, use the Oak Open API: https://open-api.thenational.academy/.well-known/api-catalog. Oak's index for agents is https://www.thenational.academy/llms.txt.`;
+
+/**
+ * Character ceiling for the generated server instructions.
+ *
+ * @remarks
+ * A host that injects `instructions` into the model's context may cap it, and
+ * the cap observed in a real client is 2048 characters, applied per server and
+ * taking the TAIL. That makes length a correctness property here, not a style
+ * preference: the string closes with the owner-signed brand-provenance
+ * paragraph (A011), so an overrun does not degrade gracefully — it silently
+ * severs the non-endorsement clause at the client while every gate in this
+ * repo, which measures the generated string and not the delivered one, stays
+ * green.
+ *
+ * The budget is asserted by a unit test. When it binds, shorten the prose or
+ * move content to a tool; do not raise the ceiling to fit.
+ */
+export const SERVER_INSTRUCTIONS_BUDGET = 2048;
+
+/**
  * Oak brand ownership and non-endorsement guidance (MCP-365, owner-directed).
  *
  * Surfaces at the point of use the pair of duties Oak's data licence already
@@ -139,6 +183,8 @@ Call these tools first to reduce errors when using search, fetch, and browsing t
 Oak's curriculum is fully sequenced: year-ordered progressions, prior-knowledge, misconception, and keyword graphs are served by the anchored graph tools (get-thread-progressions, get-prior-knowledge-graph, get-misconception-graph, get-keyword-graph), so lesson and curriculum plans can build on what a class has already covered.
 
 For questions that are not about curriculum content — about the mechanisms by which the content is delivered, about this MCP app or its associated services, or about the repository itself — use the oak-under-the-hood tool to orient yourself to the Oak Open Curriculum Ecosystem.
+
+${OTHER_SURFACES_GUIDANCE}
 
 ${BRAND_PROVENANCE_GUIDANCE}`;
 }
