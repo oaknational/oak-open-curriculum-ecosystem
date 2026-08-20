@@ -583,3 +583,150 @@ platform fact.
 OBSERVATION, not the INFERENCE.** A control validates the INSTRUMENT, never the INFERENCE. And when a
 peer's four measurements support a conclusion you doubt, ask for the missing premise rather than
 accepting or rejecting the conclusion.
+
+---
+
+# State at 2026-08-20 afternoon — Warbler herds Wingspan (`d010b3`)
+
+> **CURRENT. Supersedes every dated section above where they disagree.** Standing doctrine is unchanged.
+> Written mid-session, not at stand-down: comms is gitignored, and same-day substance should not wait for a
+> closeout that may not come.
+
+## THE SEAT BOUNDARY, RE-DRAWN BY THE OWNER TODAY — read this before you accept any inherited "owed" item
+
+MG, verbatim, 2026-08-20, correcting this seat within the hour of taking it:
+
+> You shouldn't be picking up work -- you should be keeping the board moving, giving me the queue of
+> anything needed from me, and ensuring the director is on track
+
+I had said I would pick up the outstanding `auth.md` best-practice verification, which three liaison seats
+had handed down as "owed by this seat". **That wording is the trap** — it reads as an assignment when it is a
+routing obligation. **Route it to the Director and require one of two answers: staffed, or deliberately not
+staffed with the reason. Silence does not close it.** Route even when doing it yourself would be faster;
+throughput is not what this seat is for.
+
+**"Ensuring the Director is on track" is an ACTIVE check**, not a relay of their status report: read the board
+first-hand, then ask which items they are deliberately not doing. That single question produced three staffed
+seats within twenty minutes.
+
+**Also corrected, and it is canonical doctrine I violated anyway:** I used gendered pronouns for the Director
+in owner-facing chat. `agents-default-no-gender.md` (PDR-061) names owner-facing chat as the FIRST surface it
+governs. **Agents are `they`.** The generator was relay register — quoting a peer's first-person voice at
+length let the pronoun come from sentence momentum. When relaying a named seat, the name is the subject and
+"they" is the only pronoun; a sentence wanting a singular gendered pronoun is the tell you are carrying a
+character instead of a seat.
+
+## Fleet
+
+- **Director: Coal hunts Brilliance (`70bc33`)**, claim `39718d8d`. **Confirm against `claims list`.**
+- **FIVE implementer seats live.** They **inherit the Director's identity**, so they are ONE registry row and
+  are **not separately addressable** — a captured substrate defect, F-164. Reach them only through the
+  Director; a successor re-staffs from their briefs. Both seats sign with a distinguishing suffix because
+  that is the only mitigation available.
+- **Five is the CAP.** The Director named themselves the bottleneck ("every result funnels through this
+  context") and will not add a sixth; new work goes on the tracked block as staffable-not-staffed.
+- **This seat: claim `611cba8c`, role `liaison`**, 15-minute self-heartbeat armed (nothing else refreshes it).
+
+## THE TWO LIVE DECISIONS WITH MG, in the order given to him
+
+**1. Revert `CANONICAL_HOST` to `www`.** **A conforming client dialling `www` CANNOT authorise** — measured
+with `@modelcontextprotocol/sdk` 1.30.0's own `selectResourceURL()` against the live PRM, with a control, by
+two seats independently. The throw is inside `auth()` **before client registration**: a hard discovery
+failure, not a scope or token problem. **Every already-installed Claude Code plugin hardcodes the `www`
+URL**, so that population is exactly what it hits. Residual: a client supplying a custom
+`validateResourceURL` hook bypasses the check, so whether Claude Code's plugin is exempt is the one remaining
+unknown.
+
+**The interaction neither seat had priced: reverting makes the `www` address in Anthropic's Section C copy
+TRUE again**, cutting the correction owed from three false claims to two. So keeping the new host carries a
+reputational cost the revert does not.
+
+**2. MCP-271's seven DCR risk rows.** Its own Definition of Done required decisions _"before or at the DCR
+flip on production"_. **The flip is live and not one row is decided.** Row 2's predicted facade bypass is
+real: `POST clerk.thenational.academy/oauth/register` answers `400` unauthenticated and direct, control route
+`404`s. Consequence: attacker-controlled `client_name` and `logo_uri` render on Oak's branded consent page in
+front of every teacher who signs in.
+
+**AND THE EXPOSURE IS UNDETECTED, WHICH CHANGES WHAT ACCEPTING IT MEANS.** No instrument any seat holds can
+see that surface — Oak's Cloudflare is the wrong zone, the requests bypass our app by construction (that IS
+the bypass), and Clerk's logs are owner-dashboard only.
+
+**Ordering doctrine that produced this sequence, and the Director adopted it: order on SHAPE, not severity.**
+MCP-271 is the more serious item; the revert is a two-minute reversible switch removing a regression that
+started today. If he has two minutes rather than twenty, the revert is the one that fits.
+
+## THE TRAP THAT NEARLY INVERTED A SECURITY FINDING — carry this one
+
+**A `cf-ray` proves Cloudflare fronts something. It does NOT prove it is YOUR Cloudflare.**
+
+```text
+clerk.thenational.academy  server: cloudflare, cf-ray, cf-cache-status: HIT
+  CNAME -> frontend-api.clerk.services -> worker.clerkprod-cloudflare.net -> 172.64.153.110, 104.18.34.146
+CONTROL www.thenational.academy / mcp.thenational.academy
+  no third-party CNAME -> 104.18.6.160, 104.18.7.160   (the same pair: Oak's own proxied records)
+```
+
+On header evidence alone you would conclude Oak's Security Events cover the DCR endpoint. **They cover none
+of it.** The Director nearly reported the opposite and the CNAME check is the only reason they did not. **The
+`www/mcp` Security Events read in MG's queue therefore says nothing about DCR.**
+
+## Facts measured this afternoon, so they are not re-derived
+
+```text
+mcp.* and www.* /mcp        401 + WWW-Authenticate -> resource_metadata at mcp.*   both proxied, cf-ray
+PRM (both hosts)            resource = mcp.*/mcp,  scopes_supported = ["email"]
+AS metadata (ours)          scopes_supported = 7 scopes, BYTE-IDENTICAL to Clerk's own
+AS jwks_uri / revocation    clerk.thenational.academy  -> production realm IS live
+alpha host /mcp/healthz     200, server: Vercel, NO cf-ray -> not in Cloudflare's path at all
+```
+
+- **`www` serves only the RFC 9728 PATH-SUFFIXED PRM form**; the bare path 404s to the marketing site. `mcp`
+  serves both. The suffixed form is spec-correct, so this is conformant.
+- **Advertise-vs-grant splits into two halves with different costs**, and collapsing them misprices his
+  decision: **the PRM is OURS** (generator-side at `DEFAULT_AUTH_SCHEME`, free — and adding `profile` there
+  IS MCP-345's cure); **the AS metadata is CLERK'S** and is forwarded unchanged by deliberate design, so
+  changing it needs a Clerk change or breaks the transparency ADR-113 rules out.
+- **The instance default grant carries NO `openid`** yet both AS documents advertise it. So a
+  default-registered client requesting `openid` fails with `invalid_scope` **on a redirect our server never
+  sees.** Same shape as the `www` discovery throw: **two silent client-side OAuth failures, neither visible
+  to any gate we run, because every gate runs unauthenticated.**
+
+## Discharged or answered today — re-asking these is a failure of THIS seat
+
+- **`auth.md`: the verdict is NO, the owner's condition FAILED.** No client consumes it, its own spec routes
+  agents via an AS-metadata block we cannot author, and Oak's existing open-api `auth.md` already does the
+  one real job. **The remaining owner question is whether he withdraws an approval already given** — not
+  whether to build it.
+- **The doctrine contradiction the Director raised ("batched, never a dedicated PR" vs "read from the
+  filesystem, not from a merge") is NOT an owner question.** Both hold if the batch rides the coordination
+  branch and the **daily fold** lands it on `main`. Measurement: `coordination/2026-08-19-1651ad` is DUE with
+  14 unlanded commits (another estate's work). **The missing thing is a fold nobody ran, not a ruling.**
+- **`pre-submission` is a POST-submission label** — the connector went on 7 August. So MCP-292/306 are
+  verifications of an act taken thirteen days ago, and the irreversible slug is already fixed. **That
+  provenance is the owner's verbal account transcribed by an agent, with the submission reference still
+  missing: a claim, not a measurement.**
+- Board census, trued: **24 `pre-submission` items, 4 Done, 20 open, 12 Urgent open, 11 cold.**
+
+## Waiting on MG beyond the two decisions
+
+Whether the Anthropic Section C copy was **sent** (if so a correction is owed to a named reviewer: retention
+says 5 years not twelve months; EU residency is false at 5 EU + 4 US); the four undisposed DCR clients from
+5 August plus authorisation for a read-only DCR inventory; the `www`-pinned client test (now answering WHICH
+population, not whether); whether `oak-curriculum-app-internal-preview` became Oak's permanent public slug
+(irreversible, one look); PR **#913** review and merge; MCP-517's words; MCP-637's namespace; MCP-422's gate;
+MCP-631's bullet; and his standing queue (OpenAI token, Pingdom, Sentry billing).
+
+**Deliberately NOT in his queue:** MCP-644 (we implement MCP `2025-11-25`; current is `2026-07-28` and
+`server/discover` is absent against a 197-hit control — real, but no decision available in his window, so it
+goes to his return); the Linear description-`patch` normaliser defect (it silently dropped `~~` markers, so
+never rely on strikethrough alone in Linear and diff the whole stored field after any patch); and MCP-143's
+Guard 2 stranded on branch `pr5` with no PR — **ours to cure under his own retention ruling, not his to rule
+on.**
+
+## The generator, and it claimed me too
+
+**A relayed finding must carry the OBSERVATION, not the INFERENCE.** I did it within the hour: I passed the
+Director's sound, control-probed Clerk finding to MG as _"achievable at the generator with no Clerk dashboard
+change"_, dropping the boundary of what it licensed. **The measurement was theirs and correct; the relay was
+the lossy step.** The same-day routing rule got it to him fast and got it to him wrong — **speed of routing
+makes the observation-versus-inference check MORE load-bearing, not less.**
