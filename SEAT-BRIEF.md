@@ -257,7 +257,10 @@ minutes — several by the Director, several by me only because I re-measured be
 
 # State at 2026-08-19 afternoon, Thistle hunts Acorn (`401aec`)
 
-> **CURRENT.** Supersedes the morning section above wherever the two disagree. Standing doctrine is
+> **SUPERSEDED IN PART** by the 2026-08-20 handover section at the foot of this file. Its rulings and
+> traps still stand; its state is a day old. Read the newest section first.
+>
+> **Was current when written.** Supersedes the morning section above wherever the two disagree. Standing doctrine is
 > in the sections before both. Written mid-session rather than at stand-down, because comms is
 > gitignored and same-day substance should not wait for a closeout that may not come.
 
@@ -464,3 +467,119 @@ no commits, absent from the peer list. **They were live and working off the coor
 measurements were right and the conclusion overreached. `ping-before-escalate` is what kept it from
 reaching the owner as fact — but I had already told him the stronger version, and had to correct it.
 **Absent from the coordination surface is not absent from the work; say the first and never the second.**
+
+---
+
+# State at handover — 2026-08-20, Thistle hunts Acorn (`401aec`) → Warbler herds Wingspan
+
+> **CURRENT. Read this first; it supersedes every dated section above where they disagree.** Standing
+> doctrine is in the sections before the dated ones and is unchanged.
+
+## Fleet
+
+- **Director: Coal hunts Brilliance (`70bc33`)**, claim `39718d8d`, seated at PDR-064 Moment 2 08:40:54Z
+  today. Third Director on this thread in 24 hours (Dormouse → Peony → Coal). **Confirm against
+  `claims list`.**
+- **No implementers live** at handover, and an owner assignment to staff four is with the Director
+  (event `8f487b41`).
+- **The Director contradicts you and volunteers its own errors unprompted.** Both Directors today
+  withdrew claims on their own initiative. **Invite that actively; it is the mechanism, not their
+  diligence.**
+
+## THE BIG THING THAT HAPPENED: the host move is DONE
+
+`mcp.thenational.academy` is live, HTTPS, proxied, and self-describing. MG performed every step himself
+this morning with this seat verifying each one:
+
+```text
+DNS record          created by targeted terraform apply from the PR branch, state serial 360
+ALLOWED_HOSTS       #920 merged, released 1.175.1, deployed, additive (a host cannot evict another)
+TLS                 Let's Encrypt, CN=mcp.thenational.academy, valid to 18 Nov 2026
+HTTP                301 -> HTTPS (Vercel added it with the cert)
+CANONICAL_HOST      mcp.thenational.academy — PRM, AS metadata, all OAuth endpoints self-describe there
+proxied = true      cf-ray present; Cloudflare WAF and DDoS now in path
+verified            MG connected mcpjam through the proxy; conformant probe returns 401 + correct challenge
+www                 STILL serving: protocol 401, carousel 200, healthz 200
+```
+
+**Cloud-Config PRs open and under review: #557 (proxied=true) and #558 (WAF block-not-challenge).**
+PR 556, the DNS record, is merged.
+
+## Owner rulings today — re-asking any of these is a failure of THIS seat
+
+- **NOTHING in this repo is served from `www`.** One host only. This dissolved MCP-307's per-host
+  tension and MCP-517's root cause, and it is why the `www` PRM naming `mcp.*` is correct rather than a
+  defect.
+- **Anthropic: we have a direct line and will simply tell them the URL changed.** The
+  origin-immutability question for their listing is CLOSED — do not investigate it. **OpenAI's rule
+  still binds** (host frozen per submission, path free).
+- **The carousel URLs are NOT immovable** — he can have the listing updated. Earlier reasoning that
+  treated them as permanent is superseded. MCP-639 tests whether they are editable.
+- **`mcp.*` proceeded now**, overturning this seat's recommendation to defer past 6 September.
+- **Agents may now work in `oaknational/Oak-Web-Application`** — under the owner credential with an
+  agent disclosure in the PR body, exactly the Cloud-Config #556/#557/#558 pattern. **The `emgeebot`
+  install is still deferred and must not be raised again.**
+- **`auth.md` and the AI-crawler / content-signals stance: APPROVED**, conditional on verifying current
+  best practice. **That verification is still owed by this seat.**
+- **MCP-178 is product-gated; the OWA install is deferred.** Both are standing instructions to stop
+  raising the subject.
+- **Debug logs off in production.** The Sentry PAYG wall blocks even EDITING uptime monitor `1593267`,
+  so MCP-481 cannot complete until the log reduction lands.
+
+## What is waiting on MG
+
+1. **The `www`-pinned client test — the highest-value two minutes available.** Install the Oak plugin
+   (its `.mcp.json` on `main` still hardcodes the `www` URL, so it IS a `www`-pinned client), connect it,
+   make one authenticated call. `www` now advertises `mcp.*` as its canonical resource, so a pinned
+   client meets an RFC 9728 identifier mismatch. **Whether real clients break is untested and only he
+   can test it.** It answers the empirical half of MCP-638, MCP-639 and MCP-640 at once.
+2. **MCP-517** — his own words on the two tests he ran move it In Review → Done.
+3. **MCP-637 namespace** — `thenational.academy/...` versus `io.github.oaknational/...`. Identity, not
+   engineering.
+4. **MCP-631's server-card bullet** still cites SEP-2127 as guidance; only he or Aakesh can amend that
+   text (the OKR-board fence held).
+5. **MCP-422's gate** — the server card waits on the MCP extension reaching accepted status. His
+   "sharpish" instruction and that gate are in tension; the gate is his to keep or lift.
+6. **The advertise-vs-grant ruling** — we advertise `openid`, Oak's Clerk instance grants
+   `email offline_access profile`. Advertise-only-what-we-grant is this seat's recommendation.
+7. **Two Cloudflare dashboard reads**, both cheap and both load-bearing: the `www/mcp` Security Events
+   history (may answer the OWASP question for free), and `Security → WAF → Exceptions` (an exception
+   covering the MCP paths would mean the WAF never evaluated our traffic at all).
+8. **His pre-existing queue**: OpenAI challenge token, Pingdom on `mcp.*` (now unblocked), Sentry
+   billing glance, and the notification follow-up he took himself.
+
+## Traps this seat measured — the expensive ones
+
+- **`rules[0]` in `firewall_managed_rules.tf` is the Cloudflare Managed Ruleset**, on all incoming
+  requests, under `ignore_changes` so invisible in code. **Signature-based, so one match acts** —
+  a more likely false-positive source than OWASP at paranoia-1. #558 scopes OWASP only and says so.
+- **`/mcp/*` is a catch-all** — `/mcp/anything` returns the transport handler's 406 identically to a
+  real path, while outside the prefix returns 404. This falsified this seat's own "nothing to migrate
+  later" claim about the server card.
+- **A Cloudflare rejection never reaches the app**, so Sentry cannot see it and no notification exists.
+  Edge-layer failures are invisible to every alerting surface Oak has.
+- **The comms concept gate blocks the word "parked"** (indefinite-deferral). Name the gate and the
+  decision instead. It also blocks exception-shaped wording like "carve-out".
+- **A `terraform apply` can run from an unmerged branch** — CLI-driven workspace, so the working
+  directory IS the config. `main`'s contents prove nothing about a record's provenance. This produced a
+  false out-of-band-change escalation that nearly reached cloud-ops.
+- **`cloudflare-misc` carries live destructive drift** — an untargeted plan proposes 7 destroys
+  (Zero Trust access for 18 people) and un-proxying two `educator-api` hosts. **Always target.**
+  Cloud-ops know.
+- **Machine sleep kills monitors and wedges the comms watcher at any step deadline.** 300000ms and
+  600000ms failed identically. Sweep in the foreground on waking; never read a quiet stream as a quiet
+  estate.
+
+## The generator, now at seven instances in two days
+
+**A true observation carrying a false conclusion, where the conclusion travels as if it were the
+measurement.** Today's: the alpha host being _reachable_ read as _in use_; `main` lacking a record read
+as _nothing Terraform did it_; two true `ALLOWED_HOSTS` properties read as _the new host works_; four
+accurate liveness measurements read as _the Director is gone_; a proxied host read as _the WAF evaluated
+it_; "no cache rule covers it" read as _nothing to migrate_; and ADR-113's doc comment read as a
+platform fact.
+
+**The cure, and it is the one thing to carry into the seat: a relayed finding must carry the
+OBSERVATION, not the INFERENCE.** A control validates the INSTRUMENT, never the INFERENCE. And when a
+peer's four measurements support a conclusion you doubt, ask for the missing premise rather than
+accepting or rejecting the conclusion.
