@@ -1,8 +1,7 @@
 /**
  * Canonical catalogue of every MCP resource the Oak Curriculum server exposes.
  *
- * This is the single source of truth for resource *listing* surfaces (the
- * landing page's Resources section) and for the registration drift guard.
+ * This is the single source of truth for the registration drift guard.
  * `registerAllResources` registers resources explicitly (it does not iterate
  * this list); an integration test asserts the registered set matches this
  * catalogue, so a resource registered without being listed here — or listed

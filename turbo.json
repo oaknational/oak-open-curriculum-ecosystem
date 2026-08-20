@@ -75,41 +75,33 @@
     "@oaknational/oak-curriculum-mcp-streamable-http#build": {
       "dependsOn": ["^build"],
       "cache": true,
-      // The bake writes these values into .generated/landing-page.html, so
-      // they must be hash-bearing (a cache hit across deployments would
-      // otherwise replay another environment's baked host) AND visible under
-      // strict envMode (APP_VERSION_OVERRIDE is in no default passthrough).
-      // Same reasoning as sdk-codegen's env block above.
+      // Hash-bearing AND visible under strict envMode (APP_VERSION_OVERRIDE
+      // is in no default passthrough). Same reasoning as sdk-codegen's env
+      // block above: the Sentry release identity these feed is stamped into
+      // the bundle at build time, so a cache hit that replayed another
+      // environment's value would misattribute every event (ADR-163).
       //
-      // CANONICAL_HOST is the HIGHEST-PRECEDENCE input to that bake and was
-      // missing from this list (MCP-516). Both halves of the comment above
-      // then failed at once, on production: the variable was set correctly two
-      // days before the defect surfaced, but the task hash did not change when
-      // it was added, so a cached bake made without it was replayed — and
-      // under strict envMode the bake could not read it anyway, falling
-      // through to VERCEL_PROJECT_PRODUCTION_URL, which IS declared. The
+      // Three variables left this list on 2026-08-20 with the landing-page
+      // bake that read them: CANONICAL_HOST, VERCEL_URL and
+      // VERCEL_PROJECT_PRODUCTION_URL. They were here because the bake wrote
+      // the served page's own origin into the artefact, and MCP-516 is why
+      // CANONICAL_HOST in particular was load-bearing: it was set correctly
+      // two days before the defect surfaced, but the task hash did not change
+      // when it was added, so a cached bake made without it was replayed —
+      // and under strict envMode the bake could not read it anyway, falling
+      // through to VERCEL_PROJECT_PRODUCTION_URL, which WAS declared. The
       // canonical host served a page describing itself as another deployment.
-      "env": [
-        "CANONICAL_HOST",
-        "VERCEL_ENV",
-        "VERCEL_URL",
-        "VERCEL_PROJECT_PRODUCTION_URL",
-        "APP_VERSION_OVERRIDE"
-      ],
-      "outputs": [
-        "dist/**",
-        ".tsup/**",
-        ".generated/**",
-        "public/oak-ds/**",
-        "public/oak-assets/**"
-      ],
+      // Nothing in the build reads any of the three now; the runtime reads
+      // CANONICAL_HOST from the environment per request, which was never this
+      // task's concern.
+      "env": ["VERCEL_ENV", "APP_VERSION_OVERRIDE"],
+      "outputs": ["dist/**", ".tsup/**", "public/oak-ds/**", "public/oak-assets/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
-        // The bake stamps the root package version into the page's
-        // app-version meta (ROOT_PACKAGE_VERSION fallback), so a release
-        // bump must invalidate this task or a cache hit replays the
-        // previous release's version into the artefact.
+        // The build stamps the root package version into the app's build
+        // identity, so a release bump must invalidate this task or a cache
+        // hit replays the previous release's version into the artefact.
         "$TURBO_ROOT$/package.json",
         "tsconfig.json",
         "tsconfig.build.json",
@@ -143,13 +135,11 @@
     },
     "@oaknational/oak-curriculum-mcp-streamable-http#test": {
       // Own `build` (which already implies ^build): suites that construct
-      // the app read the copied design system under public/ at boot, and
-      // src/server.ts's boot-read needs the baked landing-page artefact
-      // under .generated/ — the build is both trees' sole writer, and a
-      // cache hit restores them. The design-system hash legs live on
-      // #build and fold into this task's hash through the dependency, so a
-      // design-system-only edit re-runs these suites rather than replaying
-      // a stale green verdict.
+      // the app read the copied design system under public/ at boot — the
+      // build is that tree's sole writer, and a cache hit restores it. The
+      // design-system hash legs live on #build and fold into this task's
+      // hash through the dependency, so a design-system-only edit re-runs
+      // these suites rather than replaying a stale green verdict.
       "dependsOn": ["build"],
       "cache": true,
       "outputs": [],

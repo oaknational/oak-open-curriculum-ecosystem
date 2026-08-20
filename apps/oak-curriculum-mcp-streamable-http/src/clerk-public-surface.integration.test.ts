@@ -1,11 +1,24 @@
 /**
- * The `/mcp` page is public before auth exists in the chain (MCP-518).
+ * Browser traffic reaches this host's own answer, never the auth vendor's
+ * (MCP-518).
  *
- * The web page at `/mcp` is fully public by owner ruling — absolutely anyone
- * may see it — while the MCP server on the same URL follows the coded OAuth
- * flow. The auth contract is therefore per-surface, and the surface fork has
- * to be the FIRST auth-relevant act rather than something that happens after
- * Clerk has already inspected the request.
+ * Browser-shaped requests to `/mcp` and `/` are public by owner ruling — the
+ * auth vendor may not be involved in them at all — while the MCP server on
+ * the same URL follows the coded OAuth flow. The auth contract is therefore
+ * per-surface, and the surface fork has to be the FIRST auth-relevant act
+ * rather than something that happens after Clerk has already inspected the
+ * request.
+ *
+ * The ruling outlived the page it was made for. Since 2026-08-20 this host
+ * serves no HTML: a browser navigation to `/mcp` draws the protocol gate's
+ * 406 and one to `/` draws a 404. That is the correct answer and it is
+ * THIS app's answer. Left to the vendor, the same navigation is answered
+ * with a 307 handshake redirect before any of this app's routing runs —
+ * `@clerk/backend` forces the handshake on any GET whose `Sec-Fetch-Dest` is
+ * `document` or `iframe`, regardless of what the app would have served. So
+ * the exposure survived the page, and so must the fork. Every case below
+ * that used to assert a served document now asserts the typed refusal
+ * instead; not one of them asserted the vendor's absence any less.
  *
  * These cases are assembled through `createApp` with a spy standing in for
  * global `clerkMiddleware` (the `clerkMiddlewareFactory` seam, ADR-078), so
@@ -15,8 +28,9 @@
  *
  * The complement of each browser case is asserted in the same suite: the
  * protocol leg must still reach Clerk and must still answer an anonymous
- * request with the 401 challenge. A change that made the page public by
- * making the endpoint public would pass the first half and fail the second.
+ * request with the 401 challenge. A change that made browser traffic public
+ * by making the endpoint public would pass the first half and fail the
+ * second.
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -48,13 +62,11 @@ const CANONICAL_ORIGIN = `https://${CANONICAL_HOST}`;
  * `__client_uat` above zero is what tells Clerk a session exists, and it is
  * the shape of the MCP-517 synthetic probe that produced the user-visible
  * handshake redirect. Present on every browser case here: the contract is
- * that the page renders regardless of cookie state, so the cases carry the
- * state that used to break it rather than the state that never did.
+ * that the answer is this app's regardless of cookie state, so the cases
+ * carry the state that used to break it rather than the state that never
+ * did.
  */
 const SIGNED_IN_COOKIES = '__client_uat=1758000000; __session=not-a-real-token';
-
-const FAKE_LANDING_PAGE_HTML =
-  '<!doctype html><html lang="en-GB"><body>test landing page</body></html>';
 
 /**
  * The header the real `clerkMiddleware` stamps on every response it handles.
@@ -89,7 +101,6 @@ async function createHarness(env: Record<string, string> = {}): Promise<Harness>
     runtimeConfig: createMockRuntimeConfig({ env }),
     observability: createFakeHttpObservability(),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    getLandingPageHtml: () => FAKE_LANDING_PAGE_HTML,
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: () => clerkMiddleware,
   });
@@ -102,8 +113,8 @@ function clerkHeaderNames(headers: Record<string, unknown>): string[] {
   return Object.keys(headers).filter((name) => name.toLowerCase().startsWith('x-clerk-'));
 }
 
-describe('the public /mcp surface never reaches Clerk (MCP-518)', () => {
-  it('serves the page to a signed-in browser without Clerk seeing the request', async () => {
+describe('browser traffic to /mcp never reaches Clerk (MCP-518)', () => {
+  it('answers a signed-in browser navigation itself, without Clerk seeing the request', async () => {
     const { app, reachedClerk } = await createHarness();
 
     const res = await request(app)
@@ -113,13 +124,13 @@ describe('the public /mcp surface never reaches Clerk (MCP-518)', () => {
       .set('Sec-Fetch-Dest', 'document')
       .set('Cookie', SIGNED_IN_COOKIES);
 
-    expect(res.status).toBe(200);
-    expect(res.headers['content-type']).toMatch(/text\/html/);
-    expect(res.text).toBe(FAKE_LANDING_PAGE_HTML);
+    // The app's own typed refusal, not a 307 to the vendor's handshake.
+    expect(res.status).toBe(406);
+    expect(res.status).not.toBe(307);
     expect(reachedClerk).not.toHaveBeenCalled();
   });
 
-  it('answers the page with no auth-vendor headers and no cookie of its own', async () => {
+  it('answers with no auth-vendor headers and no cookie of its own', async () => {
     const { app } = await createHarness();
 
     const res = await request(app)
@@ -133,7 +144,7 @@ describe('the public /mcp surface never reaches Clerk (MCP-518)', () => {
     expect(res.headers['set-cookie']).toBeUndefined();
   });
 
-  it('serves the page rather than a redirect, whatever the cookie state', async () => {
+  it('answers rather than redirects, whatever the cookie state', async () => {
     const { app, reachedClerk } = await createHarness();
 
     const cookieStates = ['', SIGNED_IN_COOKIES, '__client_uat=1; __session=malformed.jwt'];
@@ -145,15 +156,16 @@ describe('the public /mcp surface never reaches Clerk (MCP-518)', () => {
         .set('Sec-Fetch-Dest', 'document')
         .set('Cookie', cookie);
 
-      expect(res.status, `cookie state ${JSON.stringify(cookie)} did not get the page`).toBe(200);
+      expect(res.status, `cookie state ${JSON.stringify(cookie)} was redirected`).toBe(406);
     }
     expect(reachedClerk).not.toHaveBeenCalled();
   });
 
   it('keeps Clerk off a document navigation whose Accept names no HTML type', async () => {
-    // Handshake-eligible at the vendor on Sec-Fetch-Dest alone. The
-    // negotiation does not serve it — the protocol gate refuses it — but it
-    // must not be redirected into an auth handshake on the way there.
+    // Handshake-eligible at the vendor on Sec-Fetch-Dest alone, even though
+    // no HTML type is named. The protocol gate refuses it, which is the right
+    // answer — but it must not be redirected into an auth handshake on the
+    // way there.
     const { app, reachedClerk } = await createHarness();
 
     const res = await request(app)
@@ -167,7 +179,7 @@ describe('the public /mcp surface never reaches Clerk (MCP-518)', () => {
     expect(reachedClerk).not.toHaveBeenCalled();
   });
 
-  it("keeps Clerk off the page's own static assets under the routed base", async () => {
+  it('keeps Clerk off the served static assets under the routed base', async () => {
     const { app, reachedClerk } = await createHarness();
 
     for (const marker of [OAK_DS_MARKER, OAK_ASSETS_MARKER]) {
@@ -192,10 +204,10 @@ describe('the public /mcp surface never reaches Clerk (MCP-518)', () => {
  * skip" but "did the built app answer without the auth vendor ever running",
  * which is the only form in which the bypass was observable.
  */
-describe('case variants of the public /mcp surface never reach Clerk (MCP-518)', () => {
-  const PAGE_VARIANTS = ['/MCP', '/Mcp', '/MCP/'];
+describe('case variants of /mcp never reach Clerk either (MCP-518)', () => {
+  const PATH_VARIANTS = ['/MCP', '/Mcp', '/MCP/'];
 
-  it.each(PAGE_VARIANTS)('serves %s as the page with no auth vendor involved', async (path) => {
+  it.each(PATH_VARIANTS)('answers %s with no auth vendor involved', async (path) => {
     const { app, reachedClerk } = await createHarness();
 
     const res = await request(app)
@@ -205,9 +217,7 @@ describe('case variants of the public /mcp surface never reach Clerk (MCP-518)',
       .set('Sec-Fetch-Dest', 'document')
       .set('Cookie', SIGNED_IN_COOKIES);
 
-    expect(res.status, `${path} did not serve the page`).toBe(200);
-    expect(res.headers['content-type']).toMatch(/text\/html/);
-    expect(res.text).toBe(FAKE_LANDING_PAGE_HTML);
+    expect(res.status, `${path} was not answered by this app`).toBe(406);
     // The three observable faces of the defect: the redirect, the vendor's
     // headers, and the vendor having run at all.
     expect(res.status).not.toBe(307);
@@ -249,7 +259,7 @@ describe('case variants of the public /mcp surface never reach Clerk (MCP-518)',
     expect(reachedClerk).toHaveBeenCalledWith('GET /mcp');
   });
 
-  it("keeps Clerk off a mixed-case fetch of the page's own stylesheet", async () => {
+  it('keeps Clerk off a mixed-case fetch of the served stylesheet', async () => {
     const { app, reachedClerk } = await createHarness();
 
     const res = await request(app)
@@ -264,14 +274,16 @@ describe('case variants of the public /mcp surface never reach Clerk (MCP-518)',
 });
 
 /**
- * The root landing page (MCP-518 review).
+ * The root path (MCP-518 review).
  *
- * `GET /` serves the identical baked artefact. The owner ruling is about the
- * page, not about one of its URLs, so the fork covers both doors — and for
- * the alpha host, `/` is the front one.
+ * `/` served the same document as `/mcp` until 2026-08-20 and now has no
+ * route at all. The owner ruling was about the surface, not about one of its
+ * URLs, so the fork covers both doors — and it must keep covering `/`: a 404
+ * this app decides is a different outcome from a 307 the auth vendor decides,
+ * and for the alpha host `/` is the front door a browser actually reaches.
  */
-describe('the root landing page never reaches Clerk (MCP-518)', () => {
-  it('serves / to a signed-in browser without Clerk seeing the request', async () => {
+describe('browser traffic to / never reaches Clerk (MCP-518)', () => {
+  it('404s a signed-in browser navigation itself, rather than redirecting it', async () => {
     const { app, reachedClerk } = await createHarness();
 
     const res = await request(app)
@@ -281,32 +293,16 @@ describe('the root landing page never reaches Clerk (MCP-518)', () => {
       .set('Sec-Fetch-Dest', 'document')
       .set('Cookie', SIGNED_IN_COOKIES);
 
-    expect(res.status).toBe(200);
-    expect(res.text).toBe(FAKE_LANDING_PAGE_HTML);
+    // No route answers `/`, and that is the point: the 404 is this app's,
+    // reached without the vendor having a chance to answer first.
+    expect(res.status).toBe(404);
     expect(res.status).not.toBe(307);
     expect(clerkHeaderNames(res.headers)).toStrictEqual([]);
     expect(res.headers['set-cookie']).toBeUndefined();
     expect(reachedClerk).not.toHaveBeenCalled();
   });
 
-  it('tells intermediaries that / now varies by Accept and may not be stored', async () => {
-    // Whether the auth vendor runs on this URL — and so whether the response
-    // carries its headers — became Accept-dependent when the fork reached `/`.
-    // The same two directives its `/mcp` twin sets are what stop a cache from
-    // pairing one request's answer with another's.
-    const { app } = await createHarness();
-
-    const res = await request(app)
-      .get('/')
-      .set('Host', SERVED_HOST)
-      .set('Accept', BROWSER_ACCEPT)
-      .set('Sec-Fetch-Dest', 'document');
-
-    expect(res.headers['cache-control']).toBe('no-store');
-    expect(res.headers['vary']).toMatch(/Accept/i);
-  });
-
-  it("keeps Clerk off the root-mounted copy of the page's static assets", async () => {
+  it('keeps Clerk off the root-mounted copy of the served static assets', async () => {
     const { app, reachedClerk } = await createHarness();
 
     for (const marker of [OAK_DS_MARKER, OAK_ASSETS_MARKER]) {

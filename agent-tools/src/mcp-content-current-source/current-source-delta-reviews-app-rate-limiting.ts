@@ -38,8 +38,10 @@ export const APP_RATE_LIMITING_DELTA_REVIEWS: Readonly<Record<string, CurrentSou
     '8d253a807330e0151ae1195feaed62dca64033b8248acdbb3d7452c8fe575008',
     DELETED_SOURCE,
   ),
+  // 2026-08-20 landing-page removal: `createDnsRebindingMiddleware` leaves the
+  // bootstrap-phase name union with the phase itself. A telemetry label.
   'apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts': excluded(
-    '7be12317e396d81f6ba729ecea321750646b91927f52671e0d07d31b4dde7912',
+    '841c2bf88edc860a8620c3d186583d705114c932430614c61f291fdc11d07ec6',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/asset-download/asset-download-route.ts': excluded(

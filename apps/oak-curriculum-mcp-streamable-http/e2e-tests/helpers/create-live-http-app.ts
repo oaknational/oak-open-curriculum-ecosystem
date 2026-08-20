@@ -28,8 +28,6 @@ export async function createLiveHttpApp(options?: CreateLiveHttpAppOptions): Pro
     runtimeConfig,
     observability,
     getWidgetHtml: () => '<!doctype html><html><body>live-widget</body></html>',
-    getLandingPageHtml: () =>
-      '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     toolHandlerOverrides: options?.overrides,
   });
 

@@ -33,6 +33,36 @@ export function extractHostname(hostHeader: string): string {
   return hostHeader.slice(0, colonIndex);
 }
 
+/**
+ * Host-allowlist middleware: refuses a request whose Host is missing,
+ * malformed, or outside the resolved allow-list.
+ *
+ * @remarks
+ * **RETAINED DELIBERATELY, AND MOUNTED ON NO ROUTE. DO NOT DELETE AS DEAD
+ * CODE — see MCP-650.**
+ *
+ * Its only two mount points were the HTML surfaces (`GET /` and the `/mcp`
+ * HTML-negotiation leg), and both left on 2026-08-20 when this host became
+ * the MCP server and nothing else. The MCP transport never carried this
+ * guard either: `core-endpoints.ts` constructs
+ * `StreamableHTTPServerTransport` with neither `allowedHosts` nor
+ * `enableDnsRebindingProtection`.
+ *
+ * It is kept because MCP 2025-11-25 requires DNS-rebinding protection for
+ * streamable HTTP, this is the app's only working implementation of it, and
+ * `security-config.integration.test.ts` is the only place MCP-634's additive
+ * allow-list is pinned against a RUNNING guard rather than against
+ * `resolveAllowedHosts`'s return value. Mounting it on `POST /mcp` needs its
+ * own allow-list audit and rollback plan — behind the edge, the Host the
+ * origin sees is the platform hostname while the canonical address
+ * deliberately is not in the list (`canonical-forwarded-headers.ts`), so a
+ * wrong list is a total protocol-leg outage. That work is MCP-650, together
+ * with the `CANONICAL_HOST` short-circuit in `host-validation-error.ts` that
+ * makes the auth layer's own Host check inert in production.
+ *
+ * It validates the RAW Host by design: a configured canonical origin governs
+ * self-description only and must never relax it.
+ */
 export function dnsRebindingProtection(
   log: Logger,
   allowedHosts: readonly string[],

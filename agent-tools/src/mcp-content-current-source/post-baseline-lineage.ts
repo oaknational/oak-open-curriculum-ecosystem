@@ -60,43 +60,45 @@ const PREREQUISITE_INJECTION_RETIREMENTS = [
   ['C599', []],
 ] as const;
 
-const LANDING_ROOT = 'apps/oak-curriculum-mcp-streamable-http/src/landing-page';
-const LANDING_COMPONENTS = `${LANDING_ROOT}/components`;
-const LANDING_DOCUMENT = `${LANDING_COMPONENTS}/landing-page-document.tsx`;
-const PAGE_SECTIONS = `${LANDING_COMPONENTS}/page-sections.tsx`;
-export const RESOURCES_SECTION = `${LANDING_COMPONENTS}/resources-section.tsx`;
-export const TOOLS_SECTION = `${LANDING_COMPONENTS}/tools-section.tsx`;
-const DERIVE_VIEW_PROPS = `${LANDING_ROOT}/derive-view-props.ts`;
-
 /**
- * MCP-128 rebuilt the landing page as baked React: the string renderers gave
- * way to components/; the decorative logo's alt text (C342, now alt="") and
- * the grouped expand-hint (C370, native disclosures) retired with the design.
+ * MCP-128 rebuilt the landing page as baked React; the 2026-08-20 owner
+ * instruction removed the page outright, so this host serves no HTML at all
+ * (`mcp.thenational.academy` is the MCP server and nothing else). Every row
+ * whose current source was the page therefore retires: there is no successor
+ * file to point at, because there is no successor surface.
+ *
+ * C355 is the one exception and is NOT here — its canonical-URL resolution
+ * was promoted out of the page to `served-origin.ts` by MCP-351 (see
+ * `SERVED_ORIGIN_PROMOTION` below), and that file serves the MCP protocol.
+ * C354 joins the retirement list for the first time: its source
+ * (`create-snippet.ts`) existed at baseline and survived the React rebuild
+ * unrelocated, so it needed no lineage entry until the file itself went.
  */
-const LANDING_REACT_LINEAGE_ENTRIES = [
-  ['C341', [LANDING_DOCUMENT]],
+const LANDING_PAGE_REMOVAL_RETIREMENTS = [
+  ['C341', []],
   ['C342', []],
-  ['C343', [PAGE_SECTIONS]],
-  ['C344', [PAGE_SECTIONS]],
-  ['C345', [PAGE_SECTIONS]],
-  ['C346', [PAGE_SECTIONS]],
-  ['C347', [PAGE_SECTIONS]],
-  ['C348', [PAGE_SECTIONS]],
-  ['C349', [PAGE_SECTIONS]],
-  ['C350', [PAGE_SECTIONS]],
-  ['C351', [PAGE_SECTIONS]],
-  ['C352', [PAGE_SECTIONS]],
-  ['C353', [LANDING_DOCUMENT]],
-  ['C360', [RESOURCES_SECTION]],
-  ['C361', [RESOURCES_SECTION]],
-  ['C362', [TOOLS_SECTION]],
-  ['C363', [TOOLS_SECTION]],
-  ['C364', [TOOLS_SECTION]],
-  ['C365', [TOOLS_SECTION]],
-  ['C366', [TOOLS_SECTION]],
-  ['C367', [TOOLS_SECTION]],
-  ['C368', [TOOLS_SECTION]],
-  ['C369', [DERIVE_VIEW_PROPS]],
+  ['C343', []],
+  ['C344', []],
+  ['C345', []],
+  ['C346', []],
+  ['C347', []],
+  ['C348', []],
+  ['C349', []],
+  ['C350', []],
+  ['C351', []],
+  ['C352', []],
+  ['C353', []],
+  ['C354', []],
+  ['C360', []],
+  ['C361', []],
+  ['C362', []],
+  ['C363', []],
+  ['C364', []],
+  ['C365', []],
+  ['C366', []],
+  ['C367', []],
+  ['C368', []],
+  ['C369', []],
 ] as const;
 
 const RESOURCE_REGISTRATIONS =
@@ -192,7 +194,7 @@ export const POST_BASELINE_LINEAGE_ENTRIES = [
   ...ORIENTATION_ERA_LINEAGE_ENTRIES,
   ...CONTEXT_HINT_RETIREMENTS,
   ...PREREQUISITE_INJECTION_RETIREMENTS,
-  ...LANDING_REACT_LINEAGE_ENTRIES,
+  ...LANDING_PAGE_REMOVAL_RETIREMENTS,
   ...REGISTRATION_DESCRIPTOR_RELOCATIONS,
   ...UNDER_THE_HOOD_BAKE_RETIREMENTS,
   ...SERVED_ORIGIN_PROMOTION,

@@ -184,9 +184,9 @@ const config: KnipConfig = {
         'e2e-tests/**/*.ts',
       ],
       project: [
-        // .tsx alongside .ts: the landing page is server-rendered React, so a
-        // .ts-only glob leaves every component outside knip's graph — and
-        // anything they alone consume reads as an unused export.
+        // .tsx alongside .ts: the MCP App widget is React, so a .ts-only
+        // glob leaves every component outside knip's graph — and anything
+        // they alone consume reads as an unused export.
         'src/**/*.{ts,tsx}',
         'build-scripts/**/*.ts',
         'e2e-tests/**/*.ts',

@@ -74,11 +74,6 @@ describe('createMcpEsbuildOptions — Oak-owned build contract', () => {
     expect(options.outdir).toBe('dist');
   });
 
-  it('inlines .html imports as text (the baked landing page ships inside the bundle)', () => {
-    const options = createMcpEsbuildOptions();
-    expect(options.loader).toEqual({ '.html': 'text' });
-  });
-
   it('exposes the support entry group for local/importable artefacts', () => {
     expect(MCP_SUPPORT_ENTRY_POINTS).toEqual({
       index: 'src/index.ts',

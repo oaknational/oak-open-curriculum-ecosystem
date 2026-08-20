@@ -25,12 +25,12 @@
     "itemCount": 728,
     "baselineItemCount": 717,
     "additionCount": 11,
-    "availableCount": 684,
-    "retiredCount": 44,
+    "availableCount": 660,
+    "retiredCount": 68,
     "unchangedCount": 496,
     "expandedCount": 0,
-    "modifiedCount": 108,
-    "relocatedCount": 68,
+    "modifiedCount": 107,
+    "relocatedCount": 45,
     "addedCount": 12,
     "workspaceScopeInCount": 612,
     "workspaceScopeOutUpstreamApiCount": 116,
@@ -7958,18 +7958,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/landing-page-document.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/html-head.ts"
       },
       "registrations": []
@@ -7993,18 +7986,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8014,18 +8000,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8035,18 +8014,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8056,18 +8028,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8077,18 +8042,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8098,18 +8056,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8119,18 +8070,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8140,18 +8084,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8161,18 +8098,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 2
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8182,18 +8112,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 2
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8203,18 +8126,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/landing-page-document.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8224,18 +8140,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/create-snippet.ts"
-        ],
-        "evidence": {
-          "revision": "modified",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/create-snippet.ts"
       },
       "registrations": []
@@ -8280,19 +8189,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/resources-section.tsx",
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 2,
-          "anchorCount": 2
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "split",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-prompts-section.ts"
       },
       "registrations": []
@@ -8330,18 +8231,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/resources-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-resources-section.ts"
       },
       "registrations": []
@@ -8351,18 +8245,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/resources-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-resources-section.ts"
       },
       "registrations": []
@@ -8372,18 +8259,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8393,18 +8273,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8414,18 +8287,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8435,18 +8301,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8456,18 +8315,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8477,18 +8329,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8498,18 +8343,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8519,18 +8357,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/derive-view-props.ts"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []

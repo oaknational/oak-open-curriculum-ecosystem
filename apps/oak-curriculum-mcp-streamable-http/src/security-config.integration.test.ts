@@ -15,6 +15,15 @@ import { dnsRebindingProtection } from './security.js';
  * that a host named in `ALLOWED_HOSTS` and a host the platform supplies are
  * both admitted by the same running allow-list, and that a host in neither is
  * still refused.
+ *
+ * Since 2026-08-20 this is also the guard's ONLY home. `dnsRebindingProtection`
+ * was mounted on the two HTML surfaces (`GET /` and the `/mcp`
+ * HTML-negotiation leg) and nowhere else; both left when this host became the
+ * MCP server and nothing else, so the guard is mounted on no app route and
+ * MCP-650 owns giving it one. The malformed-Host and IPv6 cases below moved
+ * here from `e2e-tests/web-security-selective.e2e.test.ts`, where the vehicle
+ * was the deleted page: their subject was always this guard, so they follow it
+ * rather than dying with the URL that used to exercise it.
  */
 
 /** The host production is actually served on, supplied by the platform. */
@@ -68,5 +77,39 @@ describe('dnsRebindingProtection with an additive ALLOWED_HOSTS', () => {
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({ error: 'Forbidden: host not allowed: evil.example' });
+  });
+});
+
+/**
+ * Host VALUES the guard must judge correctly, whatever the allow-list says.
+ *
+ * @remarks
+ * A port must not defeat the comparison, an IPv6 literal must survive its
+ * brackets, and a value shaped to smuggle an allowed host past a naive
+ * substring check must be refused. Moved from
+ * `e2e-tests/web-security-selective.e2e.test.ts`, whose vehicle was the
+ * removed HTML page.
+ */
+describe('dnsRebindingProtection judges the Host value, not its spelling', () => {
+  it.each([
+    ['a bare allowed hostname', 'localhost'],
+    ['an allowed hostname with a port', 'localhost:3333'],
+    ['an allowed IPv4 literal with a port', '127.0.0.1:3333'],
+    ['a bracketed IPv6 literal with a port', '[::1]:3333'],
+    ['a bracketed IPv6 literal with no port', '[::1]'],
+  ])('admits %s', async (_label, host) => {
+    const response = await request(createGuardedApp()).get('/').set('Host', host);
+
+    expect(response.status).toBe(200);
+  });
+
+  it.each([
+    ['userinfo-like syntax hiding a foreign host', 'localhost:3333@evil.example'],
+    ['a bracketed value with trailing junk', '[::1]evil'],
+  ])('refuses %s', async (_label, host) => {
+    const response = await request(createGuardedApp()).get('/').set('Host', host);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty('error');
   });
 });

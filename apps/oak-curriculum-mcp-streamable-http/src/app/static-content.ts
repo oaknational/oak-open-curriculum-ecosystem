@@ -1,40 +1,24 @@
 /**
- * Static content route mounting: landing page and public assets.
+ * Static content route mounting: the public asset trees.
+ *
+ * @remarks
+ * This module used to answer `GET /` with a rendered HTML document as well.
+ * It does not: `mcp.thenational.academy` is the MCP server and nothing else
+ * (owner ruling, 2026-08-20), so `/` has no route here and returns 404. Any
+ * HTML for this product is served by Oak-Web-Application.
  *
  * Extracted from `application.ts` to keep each module under the
  * file-length lint ceiling.
  */
 
 import { static as expressStatic } from 'express';
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
 import type { Logger } from '@oaknational/logger';
 import { err, ok, type Result } from '@oaknational/result';
 
 import { OAK_ASSETS_MARKER, OAK_DS_MARKER, ROUTED_ASSET_BASE } from './static-asset-paths.js';
-
-function addRootLandingPage(
-  app: Express,
-  dnsRebindingMw: RequestHandler,
-  log: Logger,
-  getLandingPageHtml: () => string,
-): void {
-  app.get('/', dnsRebindingMw, (req, res) => {
-    log.debug('landing.get', { path: req.path, method: req.method });
-    // The baked artefact, rendered once at build time — no React, no
-    // derivation, no per-request render (owner ruling; ADR-217 lineage).
-    //
-    // `Vary: Accept` and `no-store` match what the `/mcp` negotiation sets on
-    // the same document (`mcp-middleware.ts`). Both became load-bearing here
-    // once the public-browser fork reached `/` (MCP-518): whether the auth
-    // vendor runs on this URL — and so whether the response carries its
-    // headers — now depends on `Accept`, and no intermediary may pair one
-    // request's answer with another's.
-    res.vary('Accept');
-    res.type('text/html').set('Cache-Control', 'no-store').send(getLandingPageHtml());
-  });
-}
 
 /** Why a static root could not be resolved. */
 export interface StaticRootError {
@@ -154,17 +138,13 @@ function mountStaticAssets(app: Express, log: Logger, staticRoot?: string): void
 
 /** What the static-content mount needs from the app's options. */
 export interface StaticContentOptions {
-  /** The baked landing-page document; see `CreateAppOptions.getLandingPageHtml`. */
-  readonly getLandingPageHtml: () => string;
   readonly staticRoot?: string;
 }
 
 export function mountStaticContentRoutes(
   app: Express,
-  dnsRebindingMw: RequestHandler,
   log: Logger,
   options: StaticContentOptions,
 ): void {
-  addRootLandingPage(app, dnsRebindingMw, log, options.getLandingPageHtml);
   mountStaticAssets(app, log, options.staticRoot);
 }

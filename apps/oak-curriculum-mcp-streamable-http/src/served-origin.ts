@@ -88,27 +88,3 @@ export function resolveServedOrigin(inputs: ServedOriginInputs): string {
 export function resolveServedMcpUrl(inputs: ServedOriginInputs): string {
   return `${resolveServedOrigin(inputs)}${MCP_RESOURCE_PATH}`;
 }
-
-/** The well-known prefix protected-resource metadata is published beneath. */
-export const PROTECTED_RESOURCE_METADATA_PREFIX = '/.well-known/oauth-protected-resource';
-
-/**
- * Resolves the absolute URL of the served protected-resource metadata.
- *
- * @remarks
- * MCP-511. The **path-qualified** form, per RFC 9728 §3.1: the resource path
- * is appended to the well-known prefix, so a resource at `/mcp` publishes its
- * metadata at `/.well-known/oauth-protected-resource/mcp`.
- *
- * The app answers the unqualified path too (see `auth-routes.ts`), and that is
- * correct — RFC 9728 describes both. But only one of them is a truthful
- * description of THIS resource, and only one of them reaches this app on the
- * canonical deployment: the Cloudflare origin rule forwards `/mcp` and
- * `/mcp/*`, so the unqualified path stays on the main website and returns its
- * 404 HTML. Anything that hands a human or a client a metadata URL must use
- * this one. The unqualified route remains for clients that construct it
- * themselves against a root-served deployment, such as the alpha host.
- */
-export function resolveServedPrmUrl(inputs: ServedOriginInputs): string {
-  return `${resolveServedOrigin(inputs)}${PROTECTED_RESOURCE_METADATA_PREFIX}${MCP_RESOURCE_PATH}`;
-}
