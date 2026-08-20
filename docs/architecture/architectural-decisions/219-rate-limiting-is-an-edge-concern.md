@@ -18,8 +18,11 @@ defence layer, in answer to CodeQL `js/missing-rate-limiting`. Three facts
 remove its basis.
 
 1. **The edge owns volumetric control.** Cloudflare and Vercel carry the
-   traffic controls for every served domain. Their strength per domain is an
+   traffic controls for a served domain, and their strength per domain is an
    edge-configuration decision, made and reviewed where the control lives.
+   **This holds per domain, not universally — see the accuracy correction
+   below. It was originally written as "every served domain", which is not
+   true of an unproxied one.**
 
 2. **The upstream quota threat does not exist.** The Oak Open Curriculum API
    rate-limits per key, but this service's key is exempt as an internal
@@ -64,7 +67,53 @@ and it is falsified the moment the edge stops carrying the control.
   second copy of the control to drift against it.
 - Edge configuration is load-bearing: if it is weakened or removed for a
   served domain, nothing in the application compensates, and this decision's
-  premise is falsified.
+  premise is falsified **for that domain**.
+
+## Accuracy correction, 2026-08-20 — the premise does not hold for one served domain
+
+The Context above originally claimed the edge carries traffic controls for
+**every** served domain. **Cloudflare's WAF and rate-limiting rules are in path
+only for a _proxied_ domain.** Measured, with the proxied hosts as controls:
+
+```text
+www.thenational.academy               server: cloudflare, CF-RAY present   PROXIED
+mcp.thenational.academy               server: cloudflare, CF-RAY present   PROXIED (since 2026-08-20)
+curriculum-mcp-alpha.oaknational.dev  server: Vercel,     no CF-RAY        NOT PROXIED
+```
+
+So for `curriculum-mcp-alpha.oaknational.dev` this decision's falsification
+clause **has fired**: Cloudflare's configured controls are demonstrably not in
+path, and the application ships no limiter to compensate.
+
+**Scope of the claim, stated precisely.** Vercel's own platform DDoS baseline
+remains in path for that host, so this is **not** "no volumetric protection".
+It is: _the Cloudflare layer this ADR names as the control's home is absent for
+that domain._ Vercel project firewall rules are not readable from the
+repository, so no claim is made about them either way.
+
+**This pre-dates the 2026-08-20 host work.** The alpha host has always been
+unproxied; the premise was inaccurate when written rather than broken by a
+change. What changed on 2026-08-20 is only that a second host briefly shared the
+condition and no longer does.
+
+**Why it matters beyond accuracy.** `js/missing-rate-limiting` dismissals across
+`auth-routes.ts` and `asset-download-route.ts` are dispositioned against this
+ADR, so they are currently **unsupported for that host**. The sharpest case is
+`/assets/download/:lesson/:type`, whose own docstring records that abuse is
+bounded by this ADR's edge controls _and_ that the service's Oak API key is
+exempt from upstream per-key rate limiting (Context point 2) — on an unproxied
+host the capability stays bounded while the volumetric bound is missing.
+
+**The residual risk is recorded here, NOT accepted.** Accepting it, or proxying
+the host, is an owner decision and has not been made. This correction removes a
+false statement from the record; it does not settle what to do about the
+condition the statement was hiding.
+
+_Source: a retrospective `security-expert` review of PR #920 (2026-08-20)
+surfaced the falsification; the per-host proxy states above were re-measured
+first-hand by the Director seat of `mcp-submission-drive` at ~12:25Z, each
+against a proxied control._
+
 - This server no longer emits 429 of its own; a 429 reaching a client
   originates at the edge or upstream.
 - `js/missing-rate-limiting` will re-fire on new routes. Each occurrence is
