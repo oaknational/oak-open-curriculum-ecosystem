@@ -428,3 +428,39 @@ _"`ALLOWED_HOSTS` is plural and independent of `CANONICAL_HOST`, so the app can 
 with no code change"_. Both stated properties are TRUE; the conclusion is FALSE; and it passed three seats
 unchallenged **because it was true as stated**. A conclusion decays as it travels; the evidence does not.
 Applied to our own output: a config-grounded prediction must be labelled a prediction, never a result.
+
+## Overnight 2026-08-19/20 — the machine slept, and it explains a trap we had misattributed
+
+**State at 01:19Z on 20 Aug, measured not recalled:** `mcp.thenational.academy` still does not resolve;
+Cloud-Config #556 `BLOCKED`/`REVIEW_REQUIRED` untouched since 16:41Z; PR #920 (`ALLOWED_HOSTS` made
+additive) OPEN, `BLOCKED`, no review decision; **zero comms events since 21:40Z**; the one-page switch
+procedure the owner needs for a morning cutover **was never written**. MG has the NOT-READY and the
+decision (slip, or spend his first half-hour chasing Terraform plan rights).
+
+**THE DIAGNOSIS THAT REFRAMES A STANDING TRAP: the comms-watch drain "timeout" is the MACHINE SLEEPING,
+not host contention.** Evidence from one night:
+
+- a watcher at `--step-timeout-ms 300000` died on a drain deadline;
+- re-armed at `600000` on the contention theory, it died the same way;
+- the hourly claim self-heartbeat stopped at the same time, twice;
+- an independent `security-expert` reviewer seat died mid-session, attributed by the Director to the
+  machine sleeping;
+- **zero events, zero file writes and zero commits across a 3.5-hour window** in which a live Director
+  was demonstrably working before and after.
+
+A wall-clock deadline crossed while the host is asleep is **guaranteed** to fire on wake, at any deadline
+value, with any event volume. **So raising the step timeout cannot help and lowering it does not hurt** —
+which is why 300s and 600s failed identically. The standing guidance blames contention and cites load
+averages; that explains the daytime deaths, **not these.** Keep the deadline SHORT so a wedge dies cheap,
+expect deaths across any period the machine may sleep, and treat the mandated post-restart foreground
+sweep as the real recovery path rather than the watcher.
+
+**The seat consequence: overnight, the watcher is not an awareness surface at all.** A liaison spanning a
+sleep window must sweep in the foreground on waking and must not read a quiet stream as a quiet estate.
+
+**And the liveness consequence, which nearly cost a false escalation:** I reported the Director seat as
+"gone dark" on four accurate measurements — cold heartbeat, no coordination writes, no worktree changes,
+no commits, absent from the peer list. **They were live and working off the coordination surface.** The
+measurements were right and the conclusion overreached. `ping-before-escalate` is what kept it from
+reaching the owner as fact — but I had already told him the stronger version, and had to correct it.
+**Absent from the coordination surface is not absent from the work; say the first and never the second.**
