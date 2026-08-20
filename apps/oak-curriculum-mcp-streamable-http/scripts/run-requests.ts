@@ -222,11 +222,6 @@ async function main(): Promise<void> {
         path: '/healthz',
       },
       {
-        name: 'Landing Page',
-        method: 'GET',
-        path: '/',
-      },
-      {
         name: 'MCP Initialize',
         method: 'POST',
         path: '/mcp',

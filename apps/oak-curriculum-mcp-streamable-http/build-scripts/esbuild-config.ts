@@ -72,11 +72,6 @@ export function createMcpEsbuildOptions(
     target: 'es2022',
     sourcemap: 'external',
     packages: 'external',
-    // The baked landing page is imported as a string by the deploy graph
-    // (`src/app/landing-page-baked.ts`): `text` inlines it at bundle time,
-    // so the deployed function carries the page with no runtime filesystem
-    // dependency (the function environment has no `.generated/` artefact).
-    loader: { '.html': 'text' },
     outdir: 'dist',
   };
 }

@@ -97,11 +97,16 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
     '8b2b566c8acc474aae9191216f8154a1d31ccae70f2d0bc585a157fdcc8c481c',
     IMPLEMENTATION_ONLY,
   ),
-  // MCP-518: the surface-fork predicate, composing the negotiation's own
-  // selectsHtmlLeg with the auth vendor's document-navigation eligibility.
-  // A routing decision over method and negotiation headers; serves nothing.
+  // MCP-518: the surface-fork predicate, composing the browser-shape predicate
+  // with the auth vendor's document-navigation eligibility. A routing decision
+  // over method and negotiation headers; serves nothing.
+  //
+  // 2026-08-20 landing-page removal: renamed consumer (requestsHtmlDocument)
+  // and re-grounded prose. The fork's SUBJECT is unchanged and deliberately
+  // retained — the vendor's handshake redirect fires on a document navigation
+  // whether or not this host has a document to serve.
   'apps/oak-curriculum-mcp-streamable-http/src/mcp-public-browser-leg.ts': excluded(
-    '959581bc8a8ca60e63e6badef9a0d74914a3b8bf6108f9640ef6d55deb2d3ffb',
+    '6804fbf21a771b6238e8c7de50e3b8b7ec8808557997ae2cfd8dd865fd9f567e',
     IMPLEMENTATION_ONLY,
   ),
 };

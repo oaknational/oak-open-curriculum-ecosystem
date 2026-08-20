@@ -40,11 +40,18 @@
  *    comma-separated value (`getFirstValueFromHeader` in `@clerk/backend`), and
  *    Vercel has already populated `x-forwarded-host` with the deployment
  *    hostname — so appending would silently change nothing.
- * 2. The `Host` header is never touched. `dnsRebindingProtection` validates the
- *    RAW Host against an allow-list that deliberately excludes the canonical
- *    address (the edge presents the deployment hostname), so rewriting Host
- *    would trip the app's own rebinding guard. Consumers prefer
- *    `x-forwarded-host` over Host, so replacing the forwarded pair suffices.
+ * 2. The `Host` header is never touched. The hosting platform routes on it —
+ *    it is how the deployment is selected at all, and the edge presents the
+ *    deployment hostname while the canonical address deliberately is not one
+ *    the platform would resolve — so rewriting Host would make the request
+ *    unroutable. (Until 2026-08-20 the stated reason was the app's own
+ *    `dnsRebindingProtection`, which read the raw Host; that guard is now
+ *    mounted on no route, MCP-650. The behaviour is unchanged and still
+ *    required, but the reason is platform routing, not the guard — and it
+ *    becomes the guard's again the moment MCP-650 mounts it, whose
+ *    allow-list still excludes the canonical address.) Consumers prefer
+ *    `x-forwarded-host` over Host, so replacing the forwarded pair
+ *    suffices.
  *
  * Express's own proxy-aware getters (`req.hostname`, `req.protocol`) are
  * unaffected and stay Host-derived — correct and deliberate, because

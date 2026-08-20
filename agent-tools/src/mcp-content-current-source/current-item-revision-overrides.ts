@@ -12,7 +12,8 @@ export const CURRENT_ITEM_REVISION_OVERRIDES = {
   ...CURRENT_GENERATED_DESCRIPTION_REVISION_OVERRIDES,
   ...CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES,
   ...CURRENT_SPEC_REFRESH_ITEM_REVISION_OVERRIDES,
-  C354: 'modified',
+  // MCP-448/2026-08-20: C354 retired with the landing page — its revision
+  // verdict now derives from lineage, as C337 and C413 do.
   C355: 'modified',
   C313: 'unchanged',
   // MCP-353: C337 and C413 retired with the deleted under-the-hood pointer

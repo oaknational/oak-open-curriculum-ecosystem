@@ -76,8 +76,6 @@ describe('HTTP boundary argument validation', () => {
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () =>
-        '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -102,8 +100,6 @@ describe('HTTP boundary argument validation', () => {
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () =>
-        '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -128,8 +124,6 @@ describe('HTTP boundary argument validation', () => {
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () =>
-        '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -156,8 +150,6 @@ describe('HTTP boundary argument validation', () => {
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () =>
-        '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     });
     const res = await request(app)
       .post('/mcp')

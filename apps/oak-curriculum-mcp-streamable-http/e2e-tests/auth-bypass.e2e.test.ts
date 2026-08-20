@@ -30,8 +30,6 @@ describe('Auth Bypass for Development (E2E)', () => {
       runtimeConfig,
       observability,
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () =>
-        '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     });
   });
 

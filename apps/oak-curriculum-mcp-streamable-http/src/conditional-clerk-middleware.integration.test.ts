@@ -139,7 +139,7 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
     // POST default the cases above use, because the predicate forks on method
     // and a POST would decide a different question. No Accept is set, which is
     // equivalent to a monitor's `*/*` here: wildcards never select the HTML leg
-    // (`selectsHtmlLeg`), so both shapes reach the path comparison the same way.
+    // (`requestsHtmlDocument`), so both shapes reach the path comparison the same way.
     //
     // The predicate is only half the proof — it cannot show the vendor never
     // ran in the assembled chain. The composed complement is in

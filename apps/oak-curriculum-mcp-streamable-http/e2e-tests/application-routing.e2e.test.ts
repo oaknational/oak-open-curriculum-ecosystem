@@ -54,8 +54,6 @@ async function createAuthEnabledApp(): Promise<Express> {
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    getLandingPageHtml: () =>
-      '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
     mcpAuthClerkDeps: createUnauthenticatedMcpAuthClerkDeps(),
@@ -279,8 +277,6 @@ describe('Application-Level Method-Aware Auth', () => {
         runtimeConfig,
         observability: createMockObservability(runtimeConfig),
         getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-        getLandingPageHtml: () =>
-          '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
       });
     }
 

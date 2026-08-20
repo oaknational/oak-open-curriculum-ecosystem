@@ -54,8 +54,6 @@ async function callPriorKnowledgeGraph(args: unknown): Promise<Response> {
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    getLandingPageHtml: () =>
-      '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
   });
   return request(app)
     .post('/mcp')

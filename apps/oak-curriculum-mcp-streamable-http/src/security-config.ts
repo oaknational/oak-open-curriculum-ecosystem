@@ -17,7 +17,9 @@ const BASE_HOSTS = ['localhost', '127.0.0.1', '::1'] as const;
  *
  * The result always contains `BASE_HOSTS`, so it is never empty — which
  * matters because `dnsRebindingProtection` reads an empty allow-list as "allow
- * every host".
+ * every host". That guard is mounted on no route since 2026-08-20 (MCP-650),
+ * so the property is currently exercised only by the guard's own suite; it
+ * binds again as soon as MCP-650 gives the guard a home.
  *
  * This list also gates `deriveSelfOrigin`, so it bounds which Host a request
  * may be self-described from. Narrowing self-description is `CANONICAL_HOST`'s
@@ -26,7 +28,8 @@ const BASE_HOSTS = ['localhost', '127.0.0.1', '::1'] as const;
  *
  * @param configured - Additional allowed hosts from the ALLOWED_HOSTS env var
  * @param vercelHosts - Array of all Vercel deployment URLs (VERCEL_URL, VERCEL_BRANCH_URL, VERCEL_PROJECT_PRODUCTION_URL)
- * @returns Deduplicated array of allowed hostnames for DNS rebinding protection
+ * @returns Deduplicated array of allowed hostnames, bounding self-origin
+ *   derivation and the DNS-rebinding guard
  * @see https://vercel.com/docs/environment-variables/system-environment-variables
  */
 export function resolveAllowedHosts(
