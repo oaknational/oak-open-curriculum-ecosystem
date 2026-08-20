@@ -109,7 +109,15 @@ After implementing ADR-113, the Cursor OAuth flow was observed to fail: Cursor o
 
 This endpoint is harmless -- spec-compliant clients that fetch AS metadata directly from Clerk will simply not use it. It is only served when auth is enabled (not registered in `DANGEROUSLY_DISABLE_AUTH` mode).
 
-## Troubleshooting: Clerk Rejects `openid` Scope for Dynamic Clients (2026-02-21)
+## Troubleshooting: `invalid_scope` on `openid` for Dynamic Clients (2026-02-21, root cause CORRECTED 2026-08-20)
+
+> **The symptom below is real and was reproduced. The mechanism this section
+> originally asserted -- that Clerk rejects `openid` at authorisation as a
+> platform rule -- is DISPROVEN.** Clerk grants a client exactly the scopes it
+> was registered with. See [Correction (2026-08-20)](#correction-2026-08-20-what-clerk-actually-does)
+> before acting on anything in this section, and do not cite the original
+> mechanism: three seats treated it as a platform constraint and one owner-facing
+> recommendation was made on the strength of it.
 
 ### Symptom
 
@@ -125,7 +133,15 @@ error_description=The requested scope is invalid, unknown, or malformed.
   The OAuth 2.0 Client is not allowed to request scope 'openid'.
 ```
 
-Clerk accepts `openid` during client registration but rejects it during authorisation. The error is returned as query parameters on the `cursor://` callback redirect -- it never reaches the MCP server.
+The error is returned as query parameters on the `cursor://` callback redirect -- it never reaches the MCP server.
+
+**The original reading of this error was wrong.** It said Clerk accepts `openid` at
+registration but rejects it at authorisation, as a property of the platform. What
+actually happened is narrower and is described in
+[Correction (2026-08-20)](#correction-2026-08-20-what-clerk-actually-does): the client
+requesting `openid` here did not hold `openid` in its own registered grant, so the
+request fell outside its grant. A client registered _with_ `openid` uses it without
+error.
 
 ### Why It Is Silent
 
@@ -148,7 +164,73 @@ Two changes prevent compliant clients from requesting the `openid` scope:
 1. **Source of truth**: `openid` removed from `DEFAULT_AUTH_SCHEME.scopes` in `mcp-security-policy.ts`. Cascaded via `pnpm sdk-codegen` to all generated tool security metadata.
 2. **PRM**: `scopes_supported` no longer advertises `openid`, so compliant clients (RFC 9728) do not request it.
 
-The OAuth proxy is fully transparent -- it forwards all parameters (including `scope`) and all upstream AS metadata fields (including `scopes_supported`) unchanged. No filtering is applied at the proxy layer. If a non-compliant client reads `openid` from Clerk's AS metadata and requests it, Clerk will reject it with `error=invalid_scope`.
+The OAuth proxy is fully transparent -- it forwards all parameters (including `scope`) and all upstream AS metadata fields (including `scopes_supported`) unchanged. No filtering is applied at the proxy layer. If a client reads `openid` from the AS metadata and requests it **without having
+registered for it**, Clerk returns `error=invalid_scope` -- because the scope is outside
+that client's grant, not because Clerk refuses `openid` as such.
+
+### Correction (2026-08-20): what Clerk actually does
+
+**Measured 2026-08-19** by an RFC 7591 DCR probe run with a discriminating control
+(Peony hunts Nectar, Director seat, `mcp-submission-drive`), and corroborated by
+Clerk's 2026-07-22 changelog:
+
+> **Clerk grants a dynamically registered client exactly the scopes named in its
+> registration. Where a registration names no scopes, the instance default grant
+> applies. A client registered with `openid` can request and receive `openid`.**
+
+Oak's instance default grant at the time of that measurement was
+`email offline_access profile` plus `user:org:read` -- **no `openid`**. So a client
+that registered without naming scopes held no `openid`, and requesting it at
+authorisation was a request outside its own grant.
+
+**How the original conclusion went wrong, because the shape recurs.** The
+registration call _succeeds_ when a client asks for `openid` -- HTTP 201 -- which is
+what "Clerk accepts `openid` during client registration" was read off. But the
+authoritative field is the **`scope` value in the registration response body**, which
+states the scopes the client actually holds. Reading the status line rather than the
+body produced a true observation (`invalid_scope` at authorisation, reproducible) with
+a false mechanism welded to it, and the mechanism travelled onward as if it had been
+measured.
+
+**This reconciles the symptom rather than contradicting it.** Every observation in the
+sections above still holds: the flow did stop, the error was `invalid_scope`, it was
+delivered by redirect, and Cursor did swallow it silently. Only the _reason_ changes --
+from "Clerk cannot do `openid`" to "these clients were not registered for `openid`".
+
+**What still stands:**
+
+- The resolution below remains correct and remains in force. Removing `openid` from
+  `DEFAULT_AUTH_SCHEME.scopes` and from the PRM's `scopes_supported` does prevent this
+  failure, and it is a reasonable posture regardless of the mechanism: we do not need
+  OIDC identity claims for this resource server.
+- The silence analysis, the HAR diagnosis method, and the Broader Lesson below are
+  unaffected -- they are about how redirect-borne errors hide, not about scope grants.
+
+**What changes in consequence:**
+
+- **`openid` is available if it is ever wanted.** The route is to register clients with
+  it, not to change a Clerk dashboard setting. An owner-facing recommendation was made
+  on the strength of the disproven claim and has been withdrawn.
+- **`profile` and `offline_access` were never blockers either** -- both are already in
+  the instance default grant.
+
+**Live advertised state, measured 2026-08-20 (this correction's author, first-hand):**
+
+```text
+PRM        /.well-known/oauth-protected-resource/mcp   scopes_supported = ["email"]
+ours       /.well-known/oauth-authorization-server      scopes_supported = [openid, profile, email,
+                                                         public_metadata, private_metadata,
+                                                         offline_access, user:org:read]
+Clerk      clerk.thenational.academy/.well-known/…      identical list
+```
+
+So the PRM advertises `email` alone, while the AS metadata -- ours and Clerk's, forwarded
+unchanged per the transparent-proxy property above -- still advertises `openid`. A client
+that discovers scopes from the AS metadata rather than the PRM therefore sees a scope it
+will not be granted unless it registers for it. **Whether that breaks any specific client
+is an open question tracked on MCP-345 (`advertise only what we grant`), not a claim this
+ADR should settle** -- and it is deliberately left open here rather than resolved by
+inference, which is the error this correction exists to undo.
 
 ### Broader Lesson
 
