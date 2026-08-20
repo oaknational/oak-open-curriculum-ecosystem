@@ -169,6 +169,26 @@ order, not three seats each making a locally-correct edit. **The order, and the 
 5. **The HTML-leg removal on this repo's `/mcp`** follows or accompanies step 4, and must not precede it in
    a way that leaves `www/mcp` serving nothing.
 
+**REQUIREMENT ON STEP 4, and it is the difference between a diagnosable break and an undiagnosable one.**
+Today a `www`-pinned client fails at *discovery* — the reference SDK throws before registration, which is
+a protocol error a client can surface and a human can search for. **After the origin rule moves, a pinned
+client POSTing `www/mcp` reaches the web application and receives an HTML page: the same break, with a
+materially worse diagnosis, on installs we cannot reach while the owner is away.**
+
+**So step 4 must not ship as a bare routing swap.** `www/mcp` must answer a *protocol-shaped* request —
+one whose `Accept` is `application/json` or `text/event-stream` rather than `text/html` — with a
+self-describing response that names the new endpoint. Two candidate shapes, and the choice belongs to
+whoever implements it:
+
+- **A JSON error body naming `https://mcp.thenational.academy/mcp`.** Safest: it cannot be mis-followed,
+  and it puts the new address in front of anyone reading a client log.
+- **A `308`/`307` redirect to the new endpoint.** Cleaner when it works, but **verify before choosing it**:
+  clients vary in whether they follow redirects on `POST`, and a redirect interacts with RFC 9728 resource
+  identity in ways this drive has already been bitten by once today.
+
+**Do not let this become "the web application serves HTML there now" and stop.** The requirement is that a
+protocol client learns where it should go, from the response, without anyone here being reachable.
+
 **OPEN OWNER QUESTION, DO NOT STAFF AND DO NOT MOVE AN IMAGE:** where the carousel images should live —
 `www.` (marketing, Sanity-backed, CMS-controllable later) or `mcp.`. **He has not decided.** The liaison
 recommended `www.` via Sanity, on the grounds that three screenshots with paired prompts, already renamed
