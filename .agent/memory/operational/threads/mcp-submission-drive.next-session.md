@@ -132,6 +132,55 @@ from this seat is WITHDRAWN as wrong:**
 end state and is NOT available**, because `CANONICAL_HOST` is single-valued. That is the engineering work,
 and it is what made this situation possible.
 
+### SEQUENCING CONSTRAINT — ONE ORIGIN RULE NOW CARRIES THREE UNRELATED JOBS
+
+**`www/mcp` currently serves (1) the carousel images, (2) the MCP protocol for `www`-pinned clients, and
+(3) is the incoming home of the web application's landing page.** So the Cloudflare `http_request_origin`
+rule for `www/mcp` is **a single act with three consequences**, and one of them is the moment `www`-pinned
+installs stop reaching this app at all.
+
+**Measured state** (owner-liaison seat, 2026-08-20):
+
+```text
+www/mcp/carousel/carousel_image_1.png   200 image/png   <- THIS app, via the www/mcp origin rule
+mcp/mcp/carousel/carousel_image_1.png   200 image/png
+mcp/carousel/carousel_image_1.png       200 image/png
+www/carousel/carousel_image_1.png       404             <- only /mcp* reaches this app on www
+cache-control on all of them            public, max-age=0, must-revalidate   (no edge caching)
+files      apps/oak-curriculum-mcp-streamable-http/public/carousel/carousel_image_{1,2,3}.png
+sentinel   a test PINS the three /mcp/carousel/carousel_image_N.png paths
+```
+
+**Whoever touches that rule first triggers the other two.** This must be ONE planned change with a stated
+order, not three seats each making a locally-correct edit. **The order, and the reason for each step:**
+
+1. **Carousel destination first — the images must serve at their new home BEFORE the origin rule changes.**
+   Their URLs are baked into Anthropic's published listing, so a rule change that precedes the move 404s
+   assets inside a third party's live listing. **The destination is an OPEN owner question — see below.**
+2. **Re-pin the sentinel in the SAME change as the move, never a following pass.** The test pins those
+   three exact paths: move the images without re-pinning and it either goes green against nothing or red
+   for the wrong reason. That is the MCP-606 trap precisely.
+3. **Tell Anthropic the URLs moved, at or before step 4.** The owner has established this is cheap —
+   *"we can tell anthropic they've moved, no problem"* — but it is his line to them, not ours.
+4. **Then the origin-rule change** handing `www/mcp` to the web application. **This is the moment
+   `www`-pinned protocol installs stop reaching this app** — under disposition (b) they already cannot
+   authorise, but this takes them from a failed handshake to a different application entirely. **Accept
+   that deliberately, on the record, not as a side effect of a routing edit.**
+5. **The HTML-leg removal on this repo's `/mcp`** follows or accompanies step 4, and must not precede it in
+   a way that leaves `www/mcp` serving nothing.
+
+**OPEN OWNER QUESTION, DO NOT STAFF AND DO NOT MOVE AN IMAGE:** where the carousel images should live —
+`www.` (marketing, Sanity-backed, CMS-controllable later) or `mcp.`. **He has not decided.** The liaison
+recommended `www.` via Sanity, on the grounds that three screenshots with paired prompts, already renamed
+once, are editorial assets whose every future change currently costs a PR, a deploy and an engineer — and
+that it follows from his own two rulings today (this repo is protocol-only; `www/mcp` is the web
+application's surface). **That is a recommendation awaiting an answer, not a decision.**
+
+**Live tension to state honestly if it comes up:** MCP-458 is Urgent, `pre-submission`, and unstarted with
+the owner's availability ending 20 August. The liaison's advice to him was not to let the destination gate
+the deliverable. So the real question at his ruling is whether this ships before he goes at all, or whether
+the screenshots ship where they are and move later.
+
 ### THE HIGHEST-VALUE REMAINING UNKNOWN
 
 **`www` now serves a PRM whose `resource` is `https://mcp.thenational.academy/mcp`.** So a
