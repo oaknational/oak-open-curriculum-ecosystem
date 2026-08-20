@@ -3408,3 +3408,30 @@ the echo-back is the only reliable detector.
   (three-identities-are-a-demonstration-instrument). Scope: standing seat
   practice; the ontology is estate doctrine pending its contract-surface
   landing with tranche 1.
+
+## 2026-08-20 — owner-liaison seat (Warbler herds Wingspan, d010b3)
+
+- **Gendered the Director in owner-facing chat, four times in one message.** Referred to Coal hunts
+  Brilliance as "he/him" while relaying their staffing decisions to MG, who corrected it: *"director isn't
+  a 'he' fyi -- they dont have genders -- that hsould be clear"*. This is not a new lesson —
+  `agents-default-no-gender.md` (PDR-061) is a canonical always-applied rule, it names owner-facing chat
+  as the FIRST surface it applies to, and it states that names, codenames, voices, styles, roles and
+  metaphors carry no gender. I read the rule at session open as part of the RULES_INDEX load and violated
+  it anyway within the hour.
+  **Generator, and it is not ignorance of the rule:** I was writing at speed in relay register, quoting a
+  peer's first-person voice at length ("I am the bottleneck, not the seats"), and the pronoun came from
+  the *fluency of the prose* rather than from any belief about the agent. A rule that is known but not
+  installed at the point of composition loses to sentence-level momentum — which is the
+  `passive-guidance-loses-to-artefact-gravity` pattern showing up inside a single paragraph rather than
+  across a session.
+  **Cure adopted for this seat:** when relaying a named peer's decisions, the peer's name is the subject
+  and "they" is the only pronoun; if a sentence wants a singular gendered pronoun, that is the tell that
+  the sentence is carrying a *character* rather than a *seat*, and the sentence gets rewritten around the
+  seat. Relay register is exactly where this fires, because relaying is where another agent's voice is
+  most present in my own prose.
+- **A liaison seat does not take work, even work it inherits as "owed".** MG overruled me picking up the
+  outstanding `auth.md` best-practice verification: the seat keeps the board moving, carries his queue and
+  checks the Director is on track. The handover wording "still owed by this seat" is itself the trap — it
+  reads as an assignment when it is a routing obligation. Routed to the Director to staff; they staffed it
+  as research within the hour, which no amount of me doing it would have beaten, because the point was
+  never throughput.
