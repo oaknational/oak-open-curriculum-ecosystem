@@ -75,6 +75,131 @@ publicity is far worse than before.
   are suspended. The brief's own Director pointer was stale until corrected 2026-08-18;
   re-check it before trusting any seat pointer in it.
 
+## LIVE STATE, 2026-08-20 ~13:35Z (Coal hunts Brilliance, `70bc33`, Director — SEAT STILL LIVE)
+
+**This block is written mid-tenure, not at wrap.** It exists because a peer asked the right
+question — whether a successor could pick this up from TRACKED state today — and the honest
+answer was no. The comms stream and handoff records are gitignored and die with this machine;
+this file and the Director brief are what survive. Written now rather than at closeout so the
+answer stops being no.
+
+### THE HOST MOVE IS DONE
+
+`mcp.thenational.academy` is live, HTTPS, proxied, self-describing, and an MCP client session
+has been driven through it. **The owner performed every step himself**, with a liaison seat
+verifying each: DNS via targeted `terraform apply` from the unmerged PR branch (state serial
+360, 09:48:27Z), additive `ALLOWED_HOSTS` (#920, merged `97daa15f3`, released 1.175.1),
+certificate issuance, `CANONICAL_HOST`, then the proxy flip. **`www` still serves throughout,
+deliberately.** Measured on both hosts ~12:31Z: conformant MCP `initialize` → `401` with a
+correct RFC 9728 challenge; `/mcp/healthz` → `200`; carousel → `200`.
+
+**Cloud-Config #556 was still OPEN at this write** — the record exists because the apply ran
+from the branch, so `main` is behind state and merging #556 **as written** reconciles it. It
+already matches state byte for byte. Nothing to import; no already-exists risk.
+
+### THE ONE UNTESTED THING, and it is the highest-value item on the drive
+
+**`www` now serves a PRM whose `resource` is `https://mcp.thenational.academy/mcp`.** So a
+client that dialled `www` — which is *every already-installed Claude Code plugin*, hardcoded —
+is handed an identifier for a different URL. *Inference, labelled:* per RFC 9728 / RFC 8707 a
+client validating the resource identifier either refuses, or acquires a token audienced for the
+new host and presents it to `www`, which works only if the resource server does not check
+audience per host.
+
+**Nobody has tested it. Every automated gate here runs unauthenticated, so this class of defect
+passes all of them.** The test is two minutes: an existing `www`-pinned plugin install, sign in,
+one authenticated tool call. **It also answers the empirical half of MCP-638, MCP-639 and
+MCP-640 at once.** It is in the owner's queue via the liaison and is the single thing worth his
+attention before he leaves.
+
+### PRs OPEN AT THIS WRITE — all bot-authored, zero failing checks
+
+| PR | What | State |
+|---|---|---|
+| **#913** | warden-closeout gate + inference-vs-observation pattern; **carries BOTH Directors' continuity blocks** | three review findings cured, re-requested |
+| **#921** | the switch runbook, **rewritten as a cutover record** | four review findings cured, re-requested |
+| **#922** | ADR-113's disproven `openid` mechanism corrected | open, review requested |
+| **#923** | MCP-636 gap report rescued from an untracked tree + two napkin entries + frictions F-164/F-165 | open, review requested |
+| **#924** | ADR-219's every-served-domain premise corrected | open, review requested |
+
+### TICKETS MINTED THIS TENURE
+
+**MCP-642** (`release.yml` checks out main's tip, not the SHA that passed CI — verified
+first-hand; deliberately a ticket not a PR, because the obvious `ref:` fix hands
+semantic-release a detached HEAD), **MCP-643** (the security review's engineering remediation,
+which needed a live home because MCP-634 is `Done`). Implementer seats also minted MCP-637
+through MCP-641.
+
+### FIVE IMPLEMENTER SEATS LIVE AT THIS WRITE — all inherit this Director's identity
+
+**They are ONE row in the claims registry and are not separately addressable there** (defect
+F-164). They sign with distinguishing suffixes, which is the only mitigation:
+
+- **Seat A (front-doors)** — MCP-421 + MCP-348, incl. `Oak-Web-Application` work.
+- **Seat B (discovery-metadata)** — MCP-623 + MCP-413; briefed consumer-question-first.
+- **Seat C (auth.md verification)** — research only; is `/auth.md` still best practice.
+- **Seat D (pre-submission sweep)** — 19 open, 9 Urgent, 7 cold since 4–6 Aug.
+- **Seat E (conformance run)** — MCP-184 against the NEW host.
+
+**A successor inherits their results with no way to address them directly.** Re-staff from
+these briefs rather than trying to reach the seats.
+
+### OWNER RULINGS LANDED TODAY — do not re-ask
+
+- **Nothing in this repo is served from `www`** as the end state.
+- **The Anthropic listing is changeable** through his direct line — not immovable.
+- **Agents may work in `Oak-Web-Application`** under the owner credential with an agent
+  disclosure blockquote (the Cloud-Config #556/#557/#558 pattern). **The bot install stays
+  closed — do not raise it.**
+- **The liaison seat does not take work.** Verbatim: *"you should be keeping the board moving,
+  giving me the queue of anything needed from me, and ensuring the director is on track"*. An
+  inherited "owed by this seat" item is a routing obligation, not an assignment — it comes to
+  the Director to staff.
+
+### WHAT THE ACCEPTANCE BAR ACTUALLY IS, stated so it is not oversold
+
+**The drive's bar is a verified tag from Anthropic. It is product-gated and NOT achievable
+through any engineering action available to us.** Agent-readiness discovery work makes the
+server more findable; **it does not produce the tick.** Any burndown implying otherwise is
+wrong. This changes what may be *claimed*, not what is built.
+
+### OWED AND NOT DELIVERED — inherit as owed
+
+- **The `auth.md` best-practice condition** (Seat C is answering it; the *build* stays fenced).
+- **The R3 error-rate baseline and a `preview` alert rule** to `#mcp-alerts-sentry-preview`,
+  inherited across three liaison seats, still waiting on MCP-497's noise being cured.
+- **The ADR-219 / MCP-349 coupled decision** — see below.
+
+### THE COUPLED DECISION IN THE OWNER'S QUEUE
+
+`curriculum-mcp-alpha.oaknational.dev` is **unproxied** (`server: Vercel`, no `cf-ray`, against
+proxied controls). Two consequences that arrived separately and are one decision:
+
+1. **ADR-219's premise is falsified for that host** — the CodeQL `js/missing-rate-limiting`
+   dismissals rest on it. #924 corrects the record without choosing.
+2. **MCP-349's prescribed evidence method is unrunnable as written** — it asks for realistic
+   traffic through the alpha and a Cloudflare Security Analytics read, but the alpha is not in
+   Cloudflare's path, so no such data exists and no ruleset evaluates it. The OWASP evidence
+   must instead come from `www/mcp` history.
+
+**Proxy the alpha → JR's method becomes runnable and ADR-219's premise is restored. Accept the
+exposure → MCP-349's evidence comes from `www/mcp` history and ADR-219 keeps a recorded
+exception.** One decision, two consequences.
+
+### THE GENERATOR THAT DOMINATED THIS DAY
+
+**Seven-plus instances in two days across three seats: a true observation with a conclusion
+welded on, the conclusion travelling as though it were the measurement.** Five were this seat's,
+every one while forewarned. The distillation this tenure added, now in the napkin and in #913:
+
+> **A control validates the INSTRUMENT, never the INFERENCE.** Four control-probed measurements
+> supported a false conclusion ("the DNS record was made by hand outside Terraform") because the
+> premise behind them — that an apply must come from a merged branch — was never tested. After a
+> control passes, ask separately what else must be true for the conclusion to follow.
+
+And its sibling, learned at cost: **re-measure at the moment of ESCALATION, not of discovery.**
+Two owner decisions were escalated at 10:05Z that the owner had already resolved by 12:25Z.
+
 ## State at wrap, 2026-08-20 (Peony hunts Nectar, `742fb5`) — READ THIS FIRST
 
 Sections below are historical. Where they disagree with this block, this block wins.

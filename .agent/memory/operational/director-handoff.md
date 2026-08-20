@@ -299,6 +299,37 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
+> **§LIVE-STATE POINTER, 2026-08-20 ~13:35Z (Coal hunts Brilliance, `70bc33`) — READ THIS
+> FIRST; IT SUPERSEDES EVERY BANNER BELOW, INCLUDING PEONY'S.**
+>
+> **The Director seat is LIVE, not handed over.** This banner is written mid-tenure because a
+> peer asked whether a successor could pick the drive up from TRACKED state today, and the
+> answer was no — the tenure's state lived only in gitignored comms events and unmerged
+> branches. Written now so it is durable before it is needed.
+>
+> **Live state lives in the thread record**
+> [`threads/mcp-submission-drive.next-session.md`](threads/mcp-submission-drive.next-session.md)
+> §LIVE STATE, 2026-08-20 ~13:35Z. Read that block first: the host move is DONE; five
+> implementer seats are live and all inherit this Director's identity (one registry row, not
+> separately addressable — defect F-164); five PRs are open with zero failing checks; and the
+> single highest-value untested thing is whether an already-installed `www`-pinned client can
+> still authenticate now that `www` advertises a different canonical resource.
+>
+> **Claim `39718d8d`** (role `director`, 4h freshness, self-heartbeated on a silent 2h monitor
+> because fleet-wide heartbeats are suspended under PDR-078 §4). **Owner channel runs through
+> the liaison seat — never direct to MG.** The liaison seat does NOT take work (owner ruling
+> 2026-08-20): anything it hands over is the Director's to staff.
+>
+> **A doctrine contradiction this tenure inherited and did not resolve:** the owner ruling
+> (2026-07-15) says handover artefacts land BATCHED into the next substantive PR and never a
+> dedicated one, while this brief tells a successor to read the record "from the filesystem, not
+> from a merge". Both cannot hold — a batched artefact sits on an unmerged branch, invisible to
+> exactly that read. The interim mitigation is what happened here: the comms event carries the
+> substance, and **the pointer must name the branch.** These blocks are on
+> `docs/mcp-warden-closeout-review-request-gate` (PR #913) until it merges.
+
+<!-- successive Director banners; newest first -->
+
 > **§LIVE-STATE POINTER, 2026-08-20 08:2xZ (Peony hunts Nectar, `742fb5`) — READ THIS
 > FIRST; IT SUPERSEDES EVERY BANNER BELOW.**
 >
