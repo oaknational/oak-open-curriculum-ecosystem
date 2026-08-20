@@ -659,8 +659,17 @@ no external uptime monitoring, and he is away 22–31 August.
 - **Working off the coordination surface is indistinguishable from absent.** Four
   hours of it here; the liaison correctly pinged before escalating.
 - `--model 'claude-opus-5[1m]'` **must be quoted** or zsh globbing kills the watcher.
-- **`assert-watcher-live` reads green off a wedged watcher** — test cursor movement
-  plus `emitted_count` advancing.
+- **`assert-watcher-live` reads green off a wedged watcher.** The wedge observed
+  here was real: **zero emissions AND a cursor frozen for three hours.**
+  **But do NOT make "`emitted_count` advancing" the test** — the counter advances
+  only when a matching event is *delivered*, so a correct watcher on a quiet
+  stream shows no advance and the test condemns healthy operation. Use instead:
+  **arming** (a successful `claims open` proves a live watcher at the canonical
+  seen-location, since its F-95 gate refuses to write while blind to comms);
+  **delivery** (a controlled probe or the first genuine peer event — your own
+  broadcast does not count, self-authored events are excluded by design); and
+  **absence detection** (the paired `comms peer-liveness` poll plus a foreground
+  mtime sweep, which is what event-watching structurally cannot be).
 
 ### From outside: a real defect nobody had ticketed
 
