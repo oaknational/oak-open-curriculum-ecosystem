@@ -83,6 +83,159 @@ answer was no. The comms stream and handoff records are gitignored and die with 
 this file and the Director brief are what survive. Written now rather than at closeout so the
 answer stops being no.
 
+### TEARDOWN FLEET, 2026-08-20 ~16:40Z — owner-instructed, and THREE OF THE SIX ITEMS WERE WRONG AS BRIEFED
+
+**Owner instruction, verbatim via the liaison:** *"have the director send an agent each to create
+PRs for each of those"*, framed by *"Frankly i don't care about breaking it at the moment, the
+blast radius is very low right now"*. **Target: `mcp.thenational.academy` becomes ONLY the MCP
+server; anything serving assets or HTML comes from OWA.** What stays because it IS the server:
+`/mcp` protocol, both `.well-known` documents, `/oauth/*`, `/mcp/healthz`.
+
+**No redirects, no signposting, no phased cutover** — an earlier ruling established nobody has
+used `www/mcp` in earnest. That ruling is about the SERVED SURFACE, not about landing a red tree.
+
+#### The three corrections, all measured — inherit these, they are the expensive part
+
+1. **`ROUTED_ASSET_BASE` is NOT the carousel's asset mount.** The six-item list said to delete it
+   alongside `public/carousel/`. It is the mount for the **entire static root** — the Oak design
+   system stylesheets, fonts, icons, masthead logo, favicons — and `mountStaticAssets()` in
+   `src/app/static-content.ts` **throws at boot** if its two markers are absent. A literal reading
+   ships an unstyled page or a server that refuses to start.
+   **And its removability is a CONSEQUENCE of the landing-page deletion, not independent of it:**
+   the only non-test consumer of the design-system asset paths in served output is
+   `src/landing-page/components/design-system-refs.ts`. The widget HTML is an MCP resource —
+   inline text, not served from the static root. So the mount is load-bearing until the page goes
+   and dead the moment it does. **Two concurrent seats would collide in `static-content.ts` and
+   each would look green in its own worktree.**
+2. **"Retarget the carousel sentinel at OWA's `www` URLs" is impossible in this repo.** Every test
+   tier here is in-process loopback via `src/test-helpers/loopback-request.js` — `.unit.`,
+   `.integration.`, **and `e2e-tests/`, whose name misleads.** **No test in this repository probes
+   a live external host.** The retarget's home is OWA, where a Playwright spec against OWA's own
+   server already exists in a tier that repo has.
+3. **The `www` origin rule was never `/mcp*`-scoped, and there are TWO rules not one.**
+   `header_transforms.tf` (origin rule, ~446–471) and `config_settings.tf` (cache-settings rule,
+   ~39–49) carry a **byte-identical** expression already covering all five path families: `/mcp`,
+   `/mcp/`, `/.well-known/oauth-protected-resource/mcp`,
+   `/.well-known/oauth-authorization-server`, `/oauth/`. Removing the origin rule alone orphans
+   the cache rule.
+
+#### THE DELETION IS GATED ON A QUESTION ONLY THE OWNER CAN ANSWER
+
+**Which host do Anthropic's stored carousel URLs use — `www` or `mcp.`?** It lives in the
+submission portal. **No agent can measure it, and the two branches have opposite conclusions:**
+if `mcp.`, deleting this repo's copy breaks the listing permanently no matter what OWA does.
+
+Measured live: `www.thenational.academy/mcp/carousel/carousel_image_{1,2,3}.png` return `200
+image/png` with SHA-256 **identical** to `mcp.` and to the local files, because the origin rule
+routes `www/mcp*` to this app. **So `public/carousel/` here is the origin for BOTH candidate hosts
+and OWA's copy is SHADOWED.** Control probe: a non-existent `carousel_image_4.png` returns **406
+`application/json`, not 404**, on both hosts — so a broken listing would fetch a JSON error under
+a 406 and render three broken images, with no 404 anywhere to make it legible.
+
+**Authoritative digests** (repo, both live hosts, git objects, and OWA's deployed preview all
+agreeing):
+
+```text
+carousel_image_1.png   06cbdbf1704e6960afb3ad6b43ddaa42c2c256689e60fe5061cca8c108ffa8a5
+carousel_image_2.png   a28e7c329cfa8714551055212157bbab3f2573ce174f4c11480efe21e0d8401c
+carousel_image_3.png   8bb07d1ebd9ace22377a8040771e91aef0dc4ade88ec6e3c215782d6556a1b80
+```
+
+#### The merge chain — three links, and they must land in this order
+
+1. **`oaknational/Oak-Web-Application#4453`** — carousel images + guards into OWA. **GREEN**: all
+   13 settled checks pass. Needs review.
+2. **`oaknational/Cloud-Config#561`** — removes both `www` MCP rules. **Open.** Must not merge
+   before #4453 has merged **AND deployed**; the PR carries that as a reviewer-addressed block.
+3. **This repo's `public/carousel/` deletion** — needs 1, 2, **and** the owner's host answer.
+
+#### `emgeebot` IS REPO-SCOPED — this corrects standing doctrine
+
+```bash
+gh api /installation/repositories --jq '.repositories[]|.full_name'
+# oaknational/oak-open-curriculum-ecosystem      (total_count: 1)
+```
+
+**The emgeebot GitHub App installation covers exactly one repository.** "emgeebot for every
+GitHub write" holds only *here*. The ambient identity is a property of **this checkout's git
+config**, not of the machine — `~/webdev/oak/owa` is configured as `mantagen`, which is
+why OWA commits carry the owner's name. **For OWA and Cloud-Config the correct pattern is the
+owner credential plus a load-bearing agent-disclosure blockquote first in the PR body**, and
+verifying the *branch* rather than the author.
+
+**`gh api repos/…`'s `permissions` block is NOT a valid lens for this** — it returns all-false
+even for the repo emgeebot can write. `/installation/repositories` is the authority. A 404 from
+Cloud-Config under a minted emgeebot token is the *instrument*, not the target.
+
+#### A LIVE SECURITY EXPOSURE FOUND WHILE CHASING MY OWN ERROR
+
+I briefed a seat to protect host-scoped rules in `firewall_managed_rules.tf`. **They do not exist
+on `main`** — I read them out of the Cloud-Config working tree, which sits on the unmerged
+`feat/MCP-622-mcp-waf-block`, and reported a branch as a baseline. Same class as the DNS-record
+error earlier today.
+
+**Chasing that found something worse. Cloud-Config #557 and #558 are BOTH still open, and
+only the first one's effect is live:**
+
+- **#557 "proxy mcp.thenational.academy"** — **APPLIED**. Measured: `mcp.` returns `server:
+  cloudflare` with `cf-ray`; controls hold (`www` proxied, `curriculum-mcp-alpha` `server: Vercel`
+  with no `cf-ray`). Yet `main`'s `dns_records.tf` says `proxied = false`.
+- **#558 "block rather than challenge on the MCP host so clients get a clean 403"** — **NOT
+  APPLIED.** Instrument: a plan against live state shows **no drift** on
+  `http_request_firewall_managed`, so live equals `main` for that resource.
+
+On `main` that resource is OWASP core, paranoia level 1, **`expression = "true"` — every host in
+the zone** — with `Inbound Anomaly Score Exceeded` set to **`action = "managed_challenge"`,
+`score_threshold = 40`**. **A managed challenge is a browser interstitial and an MCP client cannot
+solve one.** So proxying moved the MCP host INSIDE that scope while the exemption that makes the
+outcome legible to non-browser clients stayed unapplied. **The ask is small and it is the owner's
+own morning's PR: merge and apply #558.**
+
+**Deliberately not measured:** I did not try to trip the WAF to prove reachability. Treat the
+exposure as conditional-and-unmeasured; the fix is cheap either way.
+
+#### A predicted hazard that is NOT live — do not hold #561 for it
+
+`main`'s `dns_records.tf` comment says orange-clouding picks up zone-wide response-header
+transforms "with no matching cache bypass, since the MCP bypass in `rulesets/config_settings.tf`
+is scoped to www only" — **and that www-only bypass is the exact rule #561 deletes**, with the
+host now proxied. That looks like a reason to hold #561. **It is not.** Measured on `mcp.`:
+
+```text
+/.well-known/oauth-authorization-server    200  cf-cache-status: DYNAMIC  cache-control: public, max-age=0, must-revalidate
+/.well-known/oauth-protected-resource/mcp  200  cf-cache-status: DYNAMIC  cache-control: public, max-age=0, must-revalidate
+/mcp/healthz                               200  cf-cache-status: DYNAMIC  cache-control: no-store
+```
+
+`DYNAMIC` on all three — Cloudflare is not caching them and the origin revalidates always. **The
+response-header-transform half is UNTESTED and no claim is made about it.**
+
+#### Two guards in OWA, because one could not block
+
+**`Playwright (Vercel preview)` is NOT a required status check on OWA `main`** (required:
+SonarCloud, Pa11y, `lint, check types`, `terraform-lint-format`, `test, Sonar`). A
+Playwright-only guard **reports** a break without **preventing** one — a future tidy-up deleting
+the images could merge with it red. **A guard that cannot block is not a guard.** So #4453 carries
+the Playwright spec for the *served* contract plus a jest test in the *required* gate pinning each
+filename to its own SHA-256 and PNG magic number — **per file, not set-wise**, because a
+permutation passes every path, count, content-type and aggregate-byte check while breaking the
+submission form's prompt pairing. Mutation-proofed four ways including a 2↔3 swap whose failure
+message names permutation. **If OWA's maintainers prefer one guard, the clean fix is to make
+Playwright required and drop the jest one — a repo-settings decision, deliberately not taken.**
+
+#### Host capacity — the constraint is MEMORY, not CPU
+
+Load average 4.11 and falling from 5.31, but **15G used, 152M unused, 5.7G in compressor**. That
+is why monitors died earlier today. Three concurrent seats was safe on a favourable mix; four
+heavy ones would not be. **Whenever a seat-count trade is put to the owner, memory is the number
+to quote.**
+
+#### Not staffed, deliberately
+
+**OWA's `feat/teachers-mcp-landing-page`** — probably the owner's own in-flight work, and the
+checkout at `~/webdev/oak/owa` sits on it. **Do not staff blind.** An agent pushing over
+the owner's own branch in a foreign repo is the likeliest way to end the OWA authorisation early.
+
 ### THE HOST MOVE IS DONE
 
 `mcp.thenational.academy` is live, HTTPS, proxied, self-describing, and an MCP client session
@@ -241,6 +394,12 @@ future seat read it as ours to build.
 
 ### THE `www` SURFACE IS WIDER THAN `/mcp` — a `/mcp*`-scoped rule change does NOT discharge the ruling
 
+> **SUPERSEDED IN PART, ~16:40Z — see TEARDOWN FLEET above.** The conclusion (the rule must
+> cover more than `/mcp*`) was right; the premise was wrong. The rule was **never `/mcp*`-scoped
+> in the first place** — its expression already names all five path families. The real gap is a
+> **second, byte-identical rule** in `config_settings.tf` that orphans if the origin rule goes
+> alone. Read this section for the surface inventory, not for the rule's scope.
+
 **Measured 2026-08-20, against a control (`/zzz-not-real-control` → 404, so `www` does not blanket-200):**
 
 ```text
@@ -272,6 +431,13 @@ assume the prefix.
   way twice now.
 
 ### THE SENTINEL WILL GUARD THE WRONG COPY — gap and cure
+
+> **SUPERSEDED, ~16:40Z — see TEARDOWN FLEET above.** The gap was real; the cure proposed here
+> is not available. **No test in this repository can probe a live external host** — every tier,
+> `e2e-tests/` included, is in-process loopback. So the sentinel cannot be "retargeted" at OWA;
+> the guard's home is OWA, and OWA#4453 now carries two — a Playwright spec for the served
+> contract and a jest test in the **required** gate, since Playwright is not a required check
+> there. Read this section for why the gap matters, not for what to do about it.
 
 The sentinel suite runs against **this app** and pins the three `/mcp/carousel/...` paths. Its own docs say
 those paths are *"an external contract held by a third party; making the test match the code reverses the
