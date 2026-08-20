@@ -189,12 +189,88 @@ whoever implements it:
 **Do not let this become "the web application serves HTML there now" and stop.** The requirement is that a
 protocol client learns where it should go, from the response, without anyone here being reachable.
 
-**OPEN OWNER QUESTION, DO NOT STAFF AND DO NOT MOVE AN IMAGE:** where the carousel images should live —
-`www.` (marketing, Sanity-backed, CMS-controllable later) or `mcp.`. **He has not decided.** The liaison
-recommended `www.` via Sanity, on the grounds that three screenshots with paired prompts, already renamed
-once, are editorial assets whose every future change currently costs a PR, a deploy and an engineer — and
-that it follows from his own two rulings today (this repo is protocol-only; `www/mcp` is the web
-application's surface). **That is a recommendation awaiting an answer, not a decision.**
+**RE-HOMED, 2026-08-20 — this requirement is NO LONGER THIS REPO'S TO IMPLEMENT.** The owner's ruling that
+`www/mcp` has nothing to do with this repo removes our ability to answer there at all. **So the
+self-describing response must be provided by the web application or by the Cloudflare rule.** The
+requirement stands — the class-change reasoning holds and diagnosability is what matters once nobody here
+is reachable — **but it is now a request to another team's codebase, not a line in ours.** Do not let a
+future seat read it as ours to build.
+
+### THE `www` SURFACE IS WIDER THAN `/mcp` — a `/mcp*`-scoped rule change does NOT discharge the ruling
+
+**Measured 2026-08-20, against a control (`/zzz-not-real-control` → 404, so `www` does not blanket-200):**
+
+```text
+www/.well-known/oauth-protected-resource/mcp   200 application/json   THIS REPO   <- NOT under /mcp
+www/.well-known/oauth-authorization-server     200 application/json   THIS REPO   <- NOT under /mcp
+www/oauth/authorize                            307 -> clerk.thenational.academy/oauth/authorize
+                                                                      THIS REPO   <- NOT under /mcp
+www/mcp/healthz                                200 application/json   THIS REPO
+www/mcp/carousel/carousel_image_1.png          200 image/png          THIS REPO
+www/oauth/register                             404                    never routed
+```
+
+**`www/oauth/authorize` is ours and it is live.** Proven rather than assumed: it 307s to the **identical**
+Clerk destination as the canonical host's `/oauth/authorize`, and this repo defines that route at
+`oauth-proxy/oauth-proxy-routes.ts:72`. **An earlier scope list of this surface missed it** — it probed
+`/oauth/register` (404) and stopped, and register-404-but-authorize-307 is an asymmetry worth knowing.
+
+**So the ruling covers at least three non-`/mcp` paths, and the obvious `/mcp*`-scoped edit leaves this
+repo still answering on `www`.** Whoever writes the rule change must enumerate the surface rather than
+assume the prefix.
+
+**Two consequences, and the first is an improvement:**
+
+- **Once the `.well-known` pair goes, a `www`-pinned client gets a clean `404` instead of a PRM advertising
+  a different host.** An honest "not here" is a *better* failure than a mismatched identifier.
+- **`/oauth/register` has always 404'd on `www`**, so DCR was never reachable there and a `www`-pinned
+  client could never have completed registration on that host. **That narrows what the pinned-client break
+  actually costs** — worth confirming properly rather than resting on single probes, but it points the same
+  way twice now.
+
+### THE SENTINEL WILL GUARD THE WRONG COPY — gap and cure
+
+The sentinel suite runs against **this app** and pins the three `/mcp/carousel/...` paths. Its own docs say
+those paths are *"an external contract held by a third party; making the test match the code reverses the
+direction of authority and lands the break in public instead of in CI."*
+
+**After the ruling there are two copies and the sentinel guards only ours. If the listing stores the `www`
+URL — the likely case — the copy Anthropic actually fetches lives in the web application with no sentinel
+at all, while our guarded copy is the one nobody fetches.** The asset becomes unguarded at exactly the
+moment it becomes load-bearing.
+
+**Cure, and it is cheaper than it looks BECAUSE we are authoring the OWA change ourselves:** put the
+path-exact test **in the web application, in the same PR that adds the images.** The guard then lives where
+the asset lives, which is the correct home, and we can author it because that PR is ours to write under the
+standing OWA authorisation. **Do not reach first for a network probe from this repo's CI** — it would couple
+our gate to another team's deploy and to network flakiness, which buys a red build for someone else's
+outage. **If OWA's conventions will not host such a test, the fallback is a scheduled non-blocking probe
+that alerts rather than a blocking CI gate** — and that fallback should be a recorded decision, not a
+default.
+
+**RULED, 2026-08-20 — the destination question is CLOSED and the answer is BOTH.** Owner, verbatim:
+*"let's add them in OWA so that they're in both places for now."* And separately: *"Let's just get rid of
+`www/mcp` as ANYTHING to do with this repo … it's only causing headaches."*
+
+**He did not pick between the two options put to him; he chose both, and it is a better answer than
+either.** The reason is worth keeping: **we do not know which HOST Anthropic's listing stores.** The
+sentinel's own docs record that Anthropic holds the literal `/mcp/carousel/...` **paths** as an external
+contract, but the host half of those URLs lives in a portal only the owner can open. The listing was
+submitted 7 August, before the host move, so `www` is *likely* — **likely is not measured and we cannot
+measure it.** Serving from both hosts makes the unknown irrelevant. **The recommendation on the table was
+optimising the destination while the binding constraint was an unverifiable external contract.**
+
+**PATH-EXACT REQUIREMENT ON THE OWA WORK.** OWA must serve at exactly:
+
+```text
+/mcp/carousel/carousel_image_1.png
+/mcp/carousel/carousel_image_2.png
+/mcp/carousel/carousel_image_3.png
+```
+
+**Not `/mcp/images/...`, not Sanity-transformed URLs, not renamed files.** The generic filenames are
+deliberate (MCP-606) because the URLs are permanent while the images may be re-exported. **A CMS-backed
+implementation must still answer on those literal paths: the CMS may own the content, never the address.**
 
 **Live tension to state honestly if it comes up:** MCP-458 is Urgent, `pre-submission`, and unstarted with
 the owner's availability ending 20 August. The liaison's advice to him was not to let the destination gate
