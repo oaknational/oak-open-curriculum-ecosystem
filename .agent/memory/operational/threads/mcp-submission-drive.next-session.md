@@ -75,6 +75,90 @@ publicity is far worse than before.
   are suspended. The brief's own Director pointer was stale until corrected 2026-08-18;
   re-check it before trusting any seat pointer in it.
 
+## State at wrap, 2026-08-20 (Peony hunts Nectar, `742fb5`) — READ THIS FIRST
+
+Sections below are historical. Where they disagree with this block, this block wins.
+Full pre-position: comms event `ac68f51b`.
+
+### The live thing: the host switch is TODAY and NOT READY
+
+```text
+dig mcp.thenational.academy   -> nothing        NO DNS RECORD
+Cloud-Config #556             -> BLOCKED, REVIEW_REQUIRED (Terraform plan rights)
+Vercel domain                 -> registered, verified 200
+app accepts new host          -> NO, 403; PR #920 cures it, open
+Clerk allowed origins         -> unstarted, not agent-doable
+```
+
+**No DNS record means nothing to switch to.** #556 needs plan rights on
+`ws-RoT5BsWbN2mQZwZe` — 52 of 101 workspaces are runnable with the owner's
+credential, that one is not, and sibling `cloudflare-rulesets` is. Looks
+unintentional; worth raising with cloud-ops separately from the PR.
+
+Procedure: `docs/operations/mcp-subdomain-switch-runbook.md` (PR #921).
+**Recommendation already with the owner: steps 1–3 only, leave `CANONICAL_HOST` on
+`www`** — it is single-valued, MCP-517 is a live bug in exactly that path, there is
+no external uptime monitoring, and he is away 22–31 August.
+
+### What landed this tenure
+
+- **Vercel domain added** for `mcp.thenational.academy` at owner instruction, after
+  establishing it is not Terraform-managed. **Ours is the only Oak Vercel project not
+  managed as code** — MCP-635 raised, sequenced deliberately after the cutover.
+- **MCP-497 overturned.** Hours from blocking the 6 September gate. The client is
+  Anthropic's connector (627 failures, 12 users) — and those same users have 1,376
+  successful `initialize` calls and 14,217 tool calls. Version negotiation working,
+  not an outage. Owner dropped it to Medium and removed `pre-publish`.
+- **MCP-634** minted, then its own cure corrected: setting `ALLOWED_HOSTS` explicitly
+  would have evicted the host production serves on **and** killed `www/mcp` via the
+  Cloudflare origin rewrite. Cure is union-in-code (PR #920).
+- **MCP-622 trued in three places.** Its "the config is in no repository" sentence is
+  false — the Cloudflare rules are Terraform in `oaknational/Cloud-Config`
+  (`rulesets/header_transforms.tf`, `cloudflare_ruleset.http_request_origin`). That
+  withdrew a dashboard-access request from the owner's queue.
+- **Doctrine landed** (PR #913): the warden-closeout re-request gate, the three-reads
+  queue discipline, and the `relayed-findings-carry-the-inference-not-the-observation`
+  pattern.
+
+### Five disproven beliefs — do not re-inherit them
+
+1. **ADR-113's "Clerk rejects `openid`"** — FALSE, measured by DCR probe with a
+   discriminating control. Clerk grants exactly the registered scopes, or the instance
+   default. **The ADR still carries the wrong sentence; correcting it as a tracked PR
+   is the successor's first task.**
+2. **`profile` is already in Oak's Clerk default grant**, as is `offline_access`.
+3. **MCP-307's "no code change needed"** — both stated properties true, conclusion
+   false. The new host 403s.
+4. **`get_project(...).domains` is not a domain inventory** and is unstable between
+   identical calls.
+5. **MCP-618's premise** conflated Clerk sign-up with OAuth authorisation; the owner
+   dissolved it himself. Names are absent because Clerk's sign-up never asks
+   (`first_name` enabled, `required=False`) — no scope changes that.
+
+### Traps measured this tenure
+
+- **A subagent inherits your PDR-027 identity**, and while it holds a claim
+  `comms append` **and** `comms direct` both refuse to send — you are cut off the
+  coordination lane by your own implementer. Cure: close the finished claim.
+- **The harness reports `exit 0` on a commit the pre-commit hook rejected.** Twice.
+  Check whether HEAD moved, never the notification.
+- **Working off the coordination surface is indistinguishable from absent.** Four
+  hours of it here; the liaison correctly pinged before escalating.
+- `--model 'claude-opus-5[1m]'` **must be quoted** or zsh globbing kills the watcher.
+- **`assert-watcher-live` reads green off a wedged watcher** — test cursor movement
+  plus `emitted_count` advancing.
+
+### From outside: a real defect nobody had ticketed
+
+A third-party review pack surfaced it and it verified first-hand: **`release.yml`
+triggers on `workflow_run` and its checkout supplies no `ref:`**, so it tags the
+branch head at dispatch rather than the SHA that passed CI. The window opens whenever
+two PRs merge inside one CI duration — this repo's normal mode. One line:
+`ref: ${{ github.event.workflow_run.head_sha }}`. The file's own header comment
+claims the opposite.
+
+---
+
 ## State at wrap, 2026-08-17 evening (Skunk stirs Cavern, `db8b9b`) — SUPERSEDED IN PART
 
 **PRECEDENCE, corrected 2026-08-18. Read this before trusting anything in this block.**

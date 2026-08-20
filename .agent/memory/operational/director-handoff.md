@@ -282,6 +282,47 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
+> **§LIVE-STATE POINTER, 2026-08-20 08:2xZ (Peony hunts Nectar, `742fb5`) — READ THIS
+> FIRST; IT SUPERSEDES EVERY BANNER BELOW.**
+>
+> **A Director seat has just stood down and pre-positioned a successor.** Full
+> pre-position: comms event `ac68f51b` (PDR-064 Moment 1) — read it before anything
+> else; it carries the live state, five disproven estate beliefs, and six measured
+> traps. Claim `6228d1f1` closes at this wrap; **nothing retained**.
+>
+> **THE LIVE THING: the owner switches the MCP host to `mcp.thenational.academy`
+> today, and it is NOT READY.** Verified 01:36Z: no DNS record exists
+> (`dig` returns nothing), Cloud-Config #556 is BLOCKED on Terraform plan rights for
+> the `cloudflare-misc` workspace that **no agent here holds**, and the app still
+> 403s the new hostname until PR #920 merges and deploys. Clerk allowed origins are
+> unstarted. **No DNS record means nothing to switch to** — that is the binding
+> constraint and it is not ours.
+>
+> **The procedure is written:** `docs/operations/mcp-subdomain-switch-runbook.md`
+> (PR #921). For one person doing this once; rollback per step. Check its
+> precondition table rather than trusting it.
+>
+> **Standing recommendation, already with the owner:** do steps 1–3 and leave
+> `CANONICAL_HOST` on `www`. It is single-valued, so changing it moves
+> self-description for every host including `www`, and MCP-517 is a live bug in
+> exactly that path. There is no external uptime monitoring on this app and the owner
+> is away 22–31 August.
+>
+> **Fleet:** owner-liaison Thistle hunts Acorn (`401aec`, claim `f289d350`) is LIVE
+> and holds the owner channel — route nothing to the owner directly. No implementers
+> live. **Open PRs, all bot-authored:** #920 (`ALLOWED_HOSTS` additive — **needs a
+> security review that never ran**), #921 (runbook), #913 (doctrine + this file's
+> corrections), and Cloud-Config #556 (DNS, `mantagen`-authored — emgeebot 404s on
+> that repo).
+>
+> **First inherited task:** land ADR-113's correction as a tracked PR. Its claim that
+> Clerk rejects `openid` is disproven by DCR probe with a discriminating control, it
+> shaped an owner recommendation, and the wrong sentence is still what a fresh seat
+> reads first.
+
+_Banners below this line are earlier snapshots, retained as the record of how the
+seat moved. Where they disagree with the banner above, the banner above wins._
+
 > **§LIVE-STATE POINTER, 2026-08-18 (Dormouse turns Footfall, `a54547`) — THIS
 > SUPERSEDES THE 2026-08-13 BANNER BELOW ON ONE FACT ONLY: A DIRECTOR IS SITTING.**
 > The 2026-08-13 banner records the Director lane as a make-safe pause with claim
