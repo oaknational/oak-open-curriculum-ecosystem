@@ -56,6 +56,45 @@ all in-window or newly swept.
 
 ## Live carried items (pointers with owners, not new observations)
 
+### A control validates the INSTRUMENT, never the INFERENCE (2026-08-20, Director seat)
+
+- Four false conclusions in one morning at this seat, each built on measurements that were
+  individually true and individually controlled: (1) a claim intent asserting #556 was verified
+  first-hand when it was inherited; (2) a CNAME-target verdict built on coherent-but-unmeasured
+  reasoning, contradicted by a peer's probe; (3) #920 asserted un-merged two minutes after it
+  merged; (4) "the DNS record was created by hand out-of-band" — disproven by a Terraform state
+  serial advancing at the minute of a targeted apply.
+- **The distillation the fourth one forced.** In (4) every measurement was sound and every control
+  worked: `dig` resolved, #556 was open, `main` carried no record, no merged PR had touched the
+  file, and each read was control-probed. The controls proved the instruments were reading real
+  state rather than erroring — which is exactly their job — and they were **structurally incapable**
+  of catching the wrong premise (that an apply must come from a merged branch; with CLI-driven
+  execution and no VCS connection, the working directory IS the configuration). I had been treating
+  a passing control as though it made the conclusion safe.
+- Behaviour change: after a control passes, ask separately **"what must also be true for my
+  conclusion to follow from this reading, and have I tested THAT?"** Name the premise out loud. A
+  control answers "is my instrument honest"; nothing but naming the premise answers "does my
+  conclusion follow".
+- Corroborating shape from the same two days: Peony's trap-4 watcher rule (`emitted_count` must
+  advance) was drawn from a real wedged watcher and is still wrong, because it false-fails a healthy
+  quiet stream. Same structure — sound instance, over-general rule. Recognising the generator
+  confers no immunity: three seats, four instances, all of us forewarned.
+
+### External capability changes need the submission record, not only green code
+
+- PR #919 (2026-08-19) changed the already-submitted Claude connector from the captured
+  40-tool/6-resource surface to 41 tools/7 resources. The source flip, generated inventories,
+  and CI were coherent, but that evidence could not establish product approval or update the
+  vendor submission state.
+- The decisive cross-check joined the engineering diff to both Linear project records:
+  MCP-106 / MCP-92 / MCP-88 record submission complete, while MCP-178 owns post-review
+  publication and fresh-account verification. A public capability expansion therefore carries
+  an observable release gate: explicit product approval plus an updated submission/listing
+  record (or authoritative proof that the vendor resynchronised the new inventory).
+- Behaviour change: review externally submitted tool/resource additions against the current
+  Linear release project and the captured vendor inventory; keep release/configuration findings
+  separate from code defects, and never let green tests masquerade as product authorisation.
+
 - **F-116 family still uncured** (commit-queue guard rejects the
   `index/head@<worktree>` label the commit skill prescribes; plus the
   lane-claim-at-enqueue facet). Interim practice unchanged — bare
