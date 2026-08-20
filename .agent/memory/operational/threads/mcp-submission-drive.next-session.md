@@ -97,7 +97,42 @@ correct RFC 9728 challenge; `/mcp/healthz` → `200`; carousel → `200`.
 from the branch, so `main` is behind state and merging #556 **as written** reconciles it. It
 already matches state byte for byte. Nothing to import; no already-exists risk.
 
-### THE ONE UNTESTED THING, and it is the highest-value item on the drive
+### THE `www`-PINNED CLIENT QUESTION — ANSWERED 2026-08-20 ~14:00Z, AND THE ANSWER IS THE BAD ONE
+
+**A conforming client dialling `www` CANNOT authorise.** Measured with the reference implementation's own
+code — `@modelcontextprotocol/sdk` 1.30.0 `selectResourceURL()` against the live-fetched PRM — by an
+implementer seat and then reproduced first-hand by this Director:
+
+```text
+https://mcp.thenational.academy/mcp  -> OK      (CONTROL passes)
+https://www.thenational.academy/mcp  -> THROWS  "Protected resource https://mcp.thenational.academy/mcp
+                                                 does not match expected …/www…"
+```
+
+The throw is inside `auth()` **before client registration**, so it is a hard discovery failure. Residual:
+a client supplying a custom `validateResourceURL` hook bypasses the check, so shipping clients divide
+into those on the default path (fail) and those overriding it.
+
+**DISPOSITION: (b) — keep `CANONICAL_HOST` on the new host and accept that `www`-pinned conforming clients
+must re-point.** Two owner inputs settled this, and **the earlier "revert `CANONICAL_HOST`" recommendation
+from this seat is WITHDRAWN as wrong:**
+
+1. **The revert does not defer the mismatch, it INVERTS which population it breaks.** The PRM is
+   host-independent — measured, both hosts serve the identical document driven by `CANONICAL_HOST`. So
+   setting it back to `www` fixes legacy installs and **breaks every client dialling the canonical
+   advertised host**, which is the host being publicised and the one whose third-party verification is
+   this drive's acceptance bar. **Strictly the worse side of the trade.** This seat had the
+   host-independence measurement and failed to carry it through to the revert case; the owner caught it
+   with one question.
+2. **Owner ruling: `www/mcp` becomes OWA's HTML landing page and this repo has nothing to do with it.**
+   So `www/mcp` stops being a protocol endpoint at all, and **the re-point was always unavoidable** — the
+   revert would only have delayed a legacy break by days while breaking the canonical host meanwhile.
+
+**Option (c) — `www` self-describing as `www` while the new host describes itself — remains the correct
+end state and is NOT available**, because `CANONICAL_HOST` is single-valued. That is the engineering work,
+and it is what made this situation possible.
+
+### THE HIGHEST-VALUE REMAINING UNKNOWN
 
 **`www` now serves a PRM whose `resource` is `https://mcp.thenational.academy/mcp`.** So a
 client that dialled `www` — which is *every already-installed Claude Code plugin*, hardcoded —
