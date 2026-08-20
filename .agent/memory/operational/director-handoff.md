@@ -199,9 +199,26 @@ this repo that PDR-117 does not carry.
     rather than a quoting one.
   - **`assert-watcher-live` can read GREEN off a WEDGED watcher.** It checks
     the heartbeat file, not delivery. Measured 2026-08-19: a watcher with
-    `emitted_count: 0` and a frozen cursor passed the assert. The honest test
-    is cursor movement plus `emitted_count` advancing; process liveness is
-    not awareness.
+    `emitted_count: 0` and a frozen cursor passed the assert. Process
+    liveness is not awareness.
+    **Do NOT use "`emitted_count` advancing" as the test** — an earlier
+    version of this brief did, and it is wrong: the counter advances only when
+    a matching event is _delivered_, so a healthy watcher on a quiet stream
+    shows no advance and the test false-fails normal operation. The counter
+    cannot distinguish _quiet_ from _not delivering_. What does:
+    - **arming evidence, mechanical:** `claims open`'s F-95 gate refuses to
+      write into a populated registry while blind to comms, so a successful
+      `claims open` proves a live watcher at the canonical seen-location;
+    - **delivery evidence:** a controlled probe — an event you know should
+      arrive, or the first genuine peer event landing (self-authored events
+      are excluded by design, so your own broadcast is not a probe);
+    - **the absence detector:** the paired `comms peer-liveness` poll and a
+      foreground mtime sweep, which is what event-watching structurally
+      cannot be.
+    The wedged instance was real and the rule drawn from it was still wrong —
+    a sound observation with an over-general conclusion welded on, which is
+    the generator in
+    `patterns/relayed-findings-carry-the-inference-not-the-observation.md`.
   - **The drain step-deadline is the wrong knob for a wedge.** Three watchers
     died on it in one window; parsing all 1,645 event files takes 0.27s, so
     volume was never the cost — host contention was (load 19.49 vs 2.50).

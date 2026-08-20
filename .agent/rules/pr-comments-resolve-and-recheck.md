@@ -92,11 +92,34 @@ those shared credentials silently drains that filter. The PR then reads
 owner, and invisible to him".
 
 **So a seat may not close its boundary leaving a `CHANGES_REQUESTED` review whose
-re-request has no named owner.** Before standing down, do exactly one of:
+re-request has no named owner.**
 
-- **name the curer in the closeout** — the seat or person who owns answering the findings,
-  so the re-request has an owner; or
-- **restore the review request yourself**, under the bot identity, if no curer is seated.
+**Two distinct roles, and conflating them is what made an earlier version of this rule
+self-contradictory.** The **curer** answers the findings. The **restorer** puts the review
+request back when doing so is true. They are often the same seat and need not be.
+
+Before standing down, satisfy the lifecycle below **in precedence order** — the first case
+that applies is the one to follow:
+
+1. **The review was APPROVING.** Re-request atomically, now. Nothing is owed, so the queue
+   entry is true immediately.
+2. **`CHANGES_REQUESTED` and a curer is seated.** Name the curer in the closeout. The curer
+   is the restorer: they restore the request **after** the cures, when it becomes true. Do
+   not restore it now.
+3. **`CHANGES_REQUESTED` and no curer is seated.** The re-request still needs an owner, so
+   assign the **restorer** role explicitly to a durable surface that a successor will read
+   — the thread record's open items, or the Director seat if one is sitting — and name the
+   PR there. **Restoring the request yourself is the LAST RESORT, not the default**, and if
+   you do it you MUST post a comment saying the cures are still outstanding and who owes
+   them. An unannotated restore in this case puts a PR in the owner's queue that is not his
+   to action, which fails in the same way an empty queue does.
+
+**Case 3 is the one that used to be unfollowable.** The rule simultaneously said "restore
+it yourself if no curer is seated" and "restore the request only when it becomes true,
+after the cures" — and where cures are outstanding and nobody is seated, both cannot hold.
+The resolution is that **the obligation at boundary close is that the restore has a named
+owner, not that the restore has happened**, and where the fallback fires the annotation is
+what keeps the queue entry honest.
 
 Worked instance (2026-08-18): two reviewer passes each posted as the owner, each consumed
 his request, and both closed their boundary with nobody owning the restore. Two cured,
@@ -104,12 +127,12 @@ green PRs sat invisible while his queue read zero. Nothing errored and nothing w
 peer's measurement caught it, not any procedure. A third PR was found the next morning to
 have dropped off the same queue by the same mechanism.
 
-**Do not cure this by re-requesting atomically after every review.** On a
-changes-requested review that is wrong: it puts the PR in the owner's queue while the PR
-is actually waiting on cures. A queue full of items that are not his fails exactly as an
-empty queue does — either way the filter stops meaning "these need me". Restore the
-request when it becomes **true**, which is after the cures. An **approving** review is
-different: there the atomic re-request is correct, because nothing further is owed.
+**Why case 1 and case 2 differ — the principle under the lifecycle.** A review request
+is a claim that the PR needs that reviewer *now*. Restore it when the claim is **true**,
+never as a reflex after posting a review. On a changes-requested review the claim is false
+until the cures land, and a queue full of items that are not the owner's fails exactly as
+an empty queue does: either way the filter stops meaning "these need me". On an approving
+review the claim is true at once, because nothing further is owed.
 
 ### Reading the queue takes three reads, not one
 

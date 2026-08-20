@@ -60,8 +60,15 @@ The last was authored by the seat that had spent the day naming this generator i
 
 ## What to do instead
 
-**Record the observation. Stop. Put the inference in a separate sentence, marked as
-yours.**
+**Record the observation. Put the inference in a separate sentence, marked as yours.**
+
+**Scope.** This entry governs **ambiguous observational signals** — a reading that could
+support more than one conclusion about a system's state. It is **not** a licence to
+withhold action, and it does not apply where the source is an **authoritative contract**
+(a published schema, a specification, a vendor's own stated requirement) which says what
+it says without needing corroboration. Nor does it apply where acting is time-critical and
+the conclusion is the only reasonable reading: **record the split and act**, rather than
+treating "stop" as a instruction to wait.
 
 ```text
 BAD   ALLOWED_HOSTS is plural and independent of CANONICAL_HOST, so the app can
@@ -79,12 +86,28 @@ Three supporting moves:
 
 - **When acting on a relayed finding, ask what would be observed if the conclusion were
   false**, then observe that. The cost is usually one request.
-- **An absence is never evidence until a presence has been shown through the same
-  instrument** — the control-probe discipline of
+- **Prefer to establish an absence by showing a presence through the same instrument**
+  — the control-probe discipline of
   [`prove-the-checker-with-a-negative-control`](prove-the-checker-with-a-negative-control.md),
-  applied to findings rather than checkers.
-- **A failure signal is not evidence of harm until the success side has been queried.**
-  Both halves of a surface, or neither.
+  applied to findings rather than checkers. **Stated as a prompt, not a precondition:** for
+  destructive, one-sided or single-shot instruments the control does not exist or is unsafe
+  to run (you cannot control-probe a deletion, and you do not fabricate a security incident
+  to prove the alarm works). Where the control is unavailable or unsafe, **say so in the
+  finding** and act on the evidence you have. An impossible control is not a reason to
+  withhold a real observation.
+- **Ask whether a failure signal alone establishes harm, or only that one path failed.**
+  Querying the success side is usually cheap and usually decisive — but where it is not
+  available, record which half you measured rather than deferring the finding.
+- **A control validates the INSTRUMENT, never the INFERENCE.** This is the limit of the
+  two moves above, and it has its own worked instance: on 2026-08-20 a seat reported that a
+  live DNS record had been created by hand outside Terraform, on four measurements that
+  were each true and each control-probed — the record resolved, its PR was open, `main`
+  carried no such record, and no merged PR had touched the file. It was still false; the
+  owner had applied from an unmerged branch, because with CLI-driven execution the working
+  directory *is* the configuration. **Every control passed and every control was
+  structurally incapable of catching the wrong premise.** After a control passes, ask
+  separately: *what else must be true for my conclusion to follow from this reading, and
+  have I tested that?*
 
 Its nearest sibling is [`referent-narrowing`](referent-narrowing.md), which governs reading
 an instrument's signal for more than it reports. This entry governs the *transmission* step
