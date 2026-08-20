@@ -108,7 +108,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
-      "semanticSha256": "d19554a15174e8472540b189b4f17e089c9d489f0ebeb455984253e6644b36f1",
+      "semanticSha256": "3ce52c234884a66f2460546ddc8ce5b11c3ed1a8e96cff4ff1eabe7c15a31e70",
       "itemIds": [
         "C705",
         "C706",
@@ -191,6 +191,12 @@
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/conditional-clerk-middleware.ts",
       "semanticSha256": "075f96234f69d44fa7429d3d818bf5520f1bd9f54737342cd40805063cd36de4",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
+    },
+    {
+      "file": "apps/oak-curriculum-mcp-streamable-http/src/discovery-cache-policy.ts",
+      "semanticSha256": "ed311edff6b8a89837ba1b747969f00668f676ffa71a19f9459d6f37f66e2aa9",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },

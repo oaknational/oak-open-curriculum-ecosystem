@@ -27,8 +27,15 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // refusal; its body mirrors the SDK's own refusal idiom verbatim (a
   // vendor-shaped wire error, no new Oak-authored agent-facing copy) and
   // the C705–C708 metadata rows are untouched by the delta.
+  //
+  // MCP-413 re-review: both 2xx metadata documents now leave through
+  // `sendDiscoveryDocument`. The C705–C708 documents are byte-identical to the
+  // pre-change render; what is new is a response HEADER (`Cache-Control`, gated
+  // on a configured canonical origin) and, paired with it, suppression of the
+  // client-supplied `X-Correlation-ID` echo on a storable response. The 403
+  // host-validation branch is deliberately left out of both.
   'apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts': reviewed(
-    'd19554a15174e8472540b189b4f17e089c9d489f0ebeb455984253e6644b36f1',
+    '3ce52c234884a66f2460546ddc8ce5b11c3ed1a8e96cff4ff1eabe7c15a31e70',
     ['C705', 'C706', 'C707', 'C708'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-mcp-resource-url.ts': excluded(
@@ -88,6 +95,15 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // and every MCP protocol request still reaches Clerk unchanged.
   'apps/oak-curriculum-mcp-streamable-http/src/conditional-clerk-middleware.ts': excluded(
     '075f96234f69d44fa7429d3d818bf5520f1bd9f54737342cd40805063cd36de4',
+    IMPLEMENTATION_ONLY,
+  ),
+  // MCP-413: what a discovery document is, and the caching policy it is
+  // published under — a line-limit split out of `auth-routes.ts`. Two closed
+  // document shapes plus one `Cache-Control` value and the sender that applies
+  // it. Serves no authored agent-facing content and changes no document body;
+  // the C705–C708 rows stay with the handlers in `auth-routes.ts`.
+  'apps/oak-curriculum-mcp-streamable-http/src/discovery-cache-policy.ts': excluded(
+    'ed311edff6b8a89837ba1b747969f00668f676ffa71a19f9459d6f37f66e2aa9',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-517: mounts the canonical-forwarded-headers shim immediately ahead of
