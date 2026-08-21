@@ -94,6 +94,18 @@ instructive context:
 4. **If no descriptive substitute exists**, the surface may be the
    canonical home of the rule itself — confirm via the rule's path
    and proceed.
+5. **A BLOCKED COMPOUND COMMAND LOSES ALL ITS STEPS, NOT ONLY THE
+   OFFENDING ONE.** The guard refuses the whole call, so any earlier,
+   innocent step in an `&&` or `;` chain **never ran** — even though
+   nothing was wrong with it. **Re-run the innocent steps explicitly, and
+   verify state rather than assuming it.** Three instances: a lost footer
+   cure (2026-08-14); a read-only `git log --all` blocked by a
+   wildcard-*staging* policy, whose chained reads never executed
+   (2026-08-21); and a `git apply` in an `&&` chain that never ran because
+   a later `git add -A` in the same call was refused — the seat verified
+   with `git status` rather than assuming, which is the correct response
+   (2026-08-21). **Do not infer that the earlier steps succeeded from the
+   fact that only the last one was named in the refusal.**
 
 ## Known Git-Command Over-Blocks and Safe Forms
 
@@ -123,6 +135,20 @@ form to use rather than a bypass:
   push (worked instance, PR #324 arc, 2026-07-08). The cure is splitting
   into unambiguous single-intent calls — never reaching for a
   destructive sibling that happens to pass.
+
+- **READ-ONLY commands blocked by write-policy substrings** (two instances,
+  2026-08-21, both correctly handled without reaching for a sibling).
+  `git log --oneline --diff-filter=A --all` was refused by the
+  **wildcard-staging** policy on the `--all` substring — a read-only history
+  query matched a policy about `git add --all`. And `git checkout` appearing
+  in a chain that also contained `git rev-parse --abbrev-ref HEAD` was
+  refused as a **worktree-destruction** operation — in a *freshly cloned*
+  repository, where nothing existed to destroy. Safe forms: drop `--all` and
+  name the refs, or scope the history query; and prefer
+  `git clone --branch <b>` over `checkout` when the goal is a checkout of a
+  known branch (it also avoids the `origin/main`-upstream footgun). **Both
+  are refinement candidates of exactly the kind this section exists to
+  collect: the policy's target is a WRITE, the matched command is a READ.**
 
 These are refinement candidates for the hook (flag-parsing over
 substring), never bypass justifications — use the safe form.

@@ -92,6 +92,33 @@ different costume of the same class:
   claim than reasoning had dared make. Reasoning finds the shape;
   measurement finds the holes.
 
+- **A `--fix` TOOL IS A WRITER, NOT A CHECKER** (2026-08-21, three tools in one
+  day). Running `markdownlint --fix` "to see if the file is clean" **mutates the
+  file**, so a green result says the tool is satisfied with what *it* wrote, not
+  that what you wrote was correct. It silently rewrote a sentence into an `H1`
+  because a `#923` reference wrapped to line-start, cutting one sentence into
+  three fragments — caught only because its own repair then tripped a different
+  rule. **A wrap that produced a valid heading level would have passed silently
+  and corrupted the record.** The same day, commitlint twice read `caught:` and
+  `it:` as footer tokens for the identical reason, and `tsdoc/syntax` failed on an
+  inline code span wrapped across a line. **One generator: a line-start artefact
+  of text wrapping becomes STRUCTURE to a parser.** Cures: read the diff after any
+  `--fix` run on a prose file, and never let an issue reference or a
+  colon-terminated word wrap to the start of a line.
+
+- **A GREEN PLAN IS NOT EVIDENCE THE APPLY WILL SUCCEED** for vendor-validated
+  resources (2026-08-21, measured on a real apply). A Cloudflare ruleset change
+  planned cleanly — valid HCL, Terraform's own validation passed, `0 to add, 1 to
+  change, 0 to destroy` — and the apply then **failed at the vendor API** with
+  error `20014`, *"more than one rule is trying to execute the same managed
+  ruleset"*. **The constraint lives in the vendor's API, not in the schema, so no
+  local instrument could have caught it.** The plan answers *"is this valid HCL
+  and what would change"*; it does not answer *"will the API accept it"*. Two
+  corollaries worth carrying: a recommendation built on the same structure fails
+  identically (the constraint is structural, not value-level), and the workspace's
+  `latest-change-at` **moved anyway** — recording an *attempt*, not a write, which
+  breaks it as a positive control for "did state change".
+
 The connecting discipline: before trusting any verification verdict, name
 the question the method actually answers, and confirm it is the question at
 stake.

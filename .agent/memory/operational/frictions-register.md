@@ -3952,3 +3952,38 @@ commit SHA and the closing plan reference.
   by one seat, which is not a cure for other callers.
 - **Owner direction status**: unsolicited (agent-observed friction, first-class
   under the Pelagic standing direction).
+
+### F-170 — `agent-tools spawn` exits 2 on its own lane-marker commit, so success looks like failure
+
+- **Source**: Implementer seat D2 (`Tulip mends Bark` Director seat, `e6d535`),
+  2026-08-21, twice in one session while cutting two lanes.
+- **Surface**: `pnpm agent-tools:spawn` (lane-creation path).
+- **Observed**: the command **exits 2** while creating the worktree
+  **correctly** — the failure is in its own lane-marker commit, after the
+  worktree exists and is usable. **So a seat reading the exit code concludes
+  the lane was not created, when it was.**
+- **Expected**: a command that achieved its primary effect either exits 0, or
+  exits non-zero with output that distinguishes "worktree not created" from
+  "worktree created, marker commit failed".
+- **Why it matters more than a cosmetic exit code**: this estate has a standing
+  rule that exit codes are read in band and never piped, precisely so a verdict
+  reaches the decision it guards. **A tool whose exit code is wrong turns that
+  discipline against the agent** — the seat that correctly reads `$?` gets the
+  wrong answer, and the seat that ignores it gets the right one. **It also
+  trains exit-code scepticism**, which is the opposite of what F-168's wrapper
+  is for.
+- **Second defect in the same command, already recorded**: it still sets the new
+  branch's upstream to `origin/main` (see F-167 — that is the `worktree add`
+  door; this is the `spawn` door PR #927 fixes). D2 unset it on both lanes.
+- **Candidate cure**: separate the two outcomes — either make the marker commit
+  non-fatal and exit 0 with a warning naming what did not happen, or fail before
+  creating the worktree so the exit code and the filesystem agree. **Whichever
+  is chosen, the exit code must describe the worktree's existence**, because
+  that is what every caller branches on.
+- **Target surface**: `agent-tools` spawn implementation, plus a test asserting
+  the exit code against the worktree's actual existence.
+- **Status**: open. Mitigated only by seats noticing the worktree exists despite
+  the failure — which is the same "an agent noticed" mitigation F-167 relies on,
+  and it is not a cure.
+- **Owner direction status**: unsolicited (agent-observed friction, first-class
+  under the Pelagic standing direction).
