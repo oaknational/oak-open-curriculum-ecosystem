@@ -75,6 +75,277 @@ publicity is far worse than before.
   are suspended. The brief's own Director pointer was stale until corrected 2026-08-18;
   re-check it before trusting any seat pointer in it.
 
+## LIVE STATE, 2026-08-21 ~09:00Z (Tulip mends Bark, `e6d535`, Director — SEAT LIVE)
+
+**Supersedes the 2026-08-20 blocks below where they disagree.** Written mid-tenure at roughly
+40 minutes seated, not at wrap, for the reason Coal gave: the comms stream and handoff records are
+gitignored and die with this machine, and last night they did.
+
+### THE SUCCESSION WAS INVOLUNTARY — what that means for what you can trust below
+
+Coal hunts Brilliance (`70bc33`) did not stand down. Its last comms act was 2026-08-20T19:29:51Z and
+its last heartbeat 20:23:19Z; `uptime` read `up 17 mins` at 08:21Z today. **The host went down and
+took the Director, the liaison, and all five Implementer seats with it.** There is no wrap, no
+pre-position, no handoff record under `handoffs/`, and no `handoff_record_path` on the claim.
+
+So PDR-064's forced-exception path applied: authority returned to the owner, and MG designated this
+seat in session. Claim `39718d8d` was ADOPTED in place (no duplicate row) and heartbeated.
+Moment 2 is comms event `0ddab687`; the registration broadcast is `513dacae`.
+
+**Two things in that claim's own intent text are STALE and a successor must not re-inherit them:**
+`mcp.thenational.academy has NO DNS RECORD` is disproven — the host move is DONE — and the owner
+channel it names through Thistle hunts Acorn has passed through two further liaison seats since.
+
+### THE MECHANICAL LIVENESS CHECK IS THE GATE, AND HERE IS WHY IT MATTERED
+
+```text
+claims active-agents --now 2026-08-21T08:23Z
+Coal hunts Brilliance   39718d8d  director  stale  fresh_until 2026-08-21T00:23:19.000Z
+Warbler herds Wingspan  611cba8c  liaison   stale  fresh_until 2026-08-21T00:46:12.000Z
+```
+
+Both eight hours past the edge, computed UTC-to-UTC by the tool. **The liaison row was equally stale
+and its seat was NOT dead** — a new liaison came up thirty seconds after my own broadcast. That is the
+concrete reason the brief says a stale row is not a dead seat while heartbeats are suspended: I pinged
+before assuming, and assuming would have been wrong.
+
+### THE FLEET AS OF THIS WRITE
+
+**Liaison: Phoenix guards Scorch (`85bdbf`), claim `611cba8c` adopted.** It holds the owner channel.
+**MG is present in BOTH terminals today**, which took a round of negotiation to discover — the split
+settled is that the liaison owns the queue and the asking, and this seat answers him when he types
+here and relays every ruling to the liaison verbatim before acting. His own 2026-08-13 instruction is
+the warrant: owner input belongs in one specific terminal *"so it doesn't get lost in the chitter
+chatter"*, and the Director's terminal IS the chatter.
+
+**Five Implementer seats staffed 08:38–08:50Z** (owner authorised spawning explicitly). All inherit
+this Director's identity — F-164, one registry row, not separately addressable — and sign with seat
+suffixes. R1 → #921, R2 → #922, R3 → #923, R4 → #924, R5 → the owner's `llms.txt` review on
+`Oak-Web-Application#4450`.
+
+**R3 is COMPLETE and its shape is the standard the others are held to:** it swept the whole diff
+rather than the two instances named (four further `#nnn` checked; `#920` and `#919` correctly local,
+`#67714` already qualified, and `#212121` turned out to be a hex colour rather than a reference),
+verified both halves of the claim first-hand before editing, and confirmed its re-request by the
+queue SEARCH rather than the POST echo. Commit `eea004634`, author verified as the bot.
+
+### THE OWNER QUEUE — five items, with the liaison, ordered on shape not severity
+
+Today is MG's last working day before the ~22-31 August absence. His standing ruling is same-day
+routing, never batched, because an item held to a Friday afternoon costs nine days.
+
+1. **The portal question.** Which host is recorded in the Anthropic submission portal for the server
+   URL and the three carousel image URLs — `www` or `mcp.`? No agent can read it.
+2. **Raise the Claude Code org overage limit.** NEW, found this morning while grounding the reviews.
+3. **Review `Oak-Web-Application#4453` and `#4443`** — he began #4453 unprompted at ~08:50Z.
+4. **Cloud-Config #558** — needs updating against main and applying. **His branch, so we asked
+   rather than acted.**
+5. **The ADR-219 / MCP-349 coupled decision**, with a recommendation to proxy the alpha and the
+   falsifier attached.
+
+**Item 2's collapse is worth inheriting as reasoning, not just as an item.** I first put the
+`www`-pinned-client authentication test to him as a separate ask. The liaison correctly refused it as
+a re-ask of a gate he discharged on 20 August (*"no one has used www/mcp in earnest"*). **But the
+discharge and the test were about different objects** — his ruling is about a surface people use, and
+the test was about what an already-installed client DIALS, which is whatever host string was recorded
+at install. So the live unknown was never usage; it is the portal's contents, which is item 1 arriving
+from the other direction. **One fact, two consequences, and nothing to test.** Do not re-ask either
+half.
+
+### THE AUTOMATED CODE REVIEWER IS DARK, AND A REVIEW ROW IS NOT A REVIEW
+
+Measured via GraphQL on all four cure PRs: every one carries a `COMMENTED` review from `claude` whose
+entire body is the org overage spend-limit skip notice, on PR 921 at 2026-08-19T22:32Z, PR 922 at
+09:03Z, PR 923 at 10:04Z and PR 924 at 13:10Z on the 20th. **So a review ROW exists on four PRs
+where no review happened, and it has been the steady state for over 36 hours.** The PR-review-warden
+seat had already recorded the mechanism in the napkin and named Codex doing the same thing; that note
+was uncommitted and is now rescued (see below).
+
+**The consequence that undermines a conclusion this thread already recorded as settled:** Coal's
+2026-08-20 audit found 15 of 16 changes-requested PRs had no push since their review and concluded
+the ball was legitimately with the authors. If some of those reviews are skip notices rather than
+findings, then "no push since the review" may mean **nobody has actually reviewed the PR at all** —
+a different and worse queue state. Not re-run today; recorded as an open question against that audit
+so *"answer is ZERO"* is not inherited as the whole truth. The transferable form, the liaison's
+words: **a queue audit inherits the scope of its search, and "the queue is N" is only ever true of
+the surfaces queried.**
+
+### THE CLASS THAT DOMINATED TODAY: AN INSTRUMENT RETURNING A TRUE VALUE THAT ANSWERS A DIFFERENT QUESTION
+
+Three unrelated surfaces in two days, and a fourth recorded further down under F-164. `cf-ray` answering "is this host proxied" when asked about zone
+scope. A review row answering "did a reviewer respond" when asked whether a review happened. And,
+found today: **`author=mantagen` on every PR in `Oak-Web-Application` and `Cloud-Config`**, because
+every agent working there uses the owner credential — so authorship cannot distinguish our PRs from
+his. **The live discriminator is creation time against the staffing record:**
+
+```text
+OWA #4453   created 2026-08-20T15:27:30Z   Coal staffed carousel-into-OWA ~15:19Z   OURS
+OWA #4443   created 2026-08-17T15:21:01Z   predates this fleet                     ours, finished
+CC  #561    created 2026-08-20T15:44:41Z   Seat E raised it ~15:48Z                 OURS
+CC  #558    created 2026-08-20T12:01:32Z   before any Cloud-Config staffing         HIS
+```
+
+That is why #558 was routed as a question rather than updated: pushing a base merge onto an owner's
+in-flight terraform branch unasked is how the OWA and Cloud-Config authorisation ends early.
+
+### THE OWA MERGE CHAIN IS UNBLOCKED ON OUR SIDE
+
+`#4453` and `#4443` were both `BEHIND` main and — measured by the liaison with a working control —
+**had never been review-requested from any human since 17 August.** Not the answered-and-never-
+re-requested shape Coal audited; simpler and worse, nobody was ever asked. Both updated against main
+this morning; `BEHIND` is gone, all five required checks pass, `BLOCKED` now means only
+`REVIEW_REQUIRED`. Local `~/webdev/oak/owa` was checked first and sits on `#4443`'s branch at `0 0`,
+so nothing was stranded — it needs a `git pull`.
+
+**`percy/oak-web-application` errors on six of the eight most recent open OWA PRs.** Repo-wide
+service condition, not ours, and **Percy is not a required check** — required are `SonarCloud Code
+Analysis`, `Pa11y`, `lint, check types`, `terraform-lint-format`, `test, Sonar`. Do not stop on that
+red cross and do not report a false green because of it. Undiagnosed and deliberately not ticketed in
+a foreign repo on the owner's last day.
+
+**Cloud-Config #561 needs no update** — all three checks pass; its `BLOCKED` is purely the missing
+review. It still must not merge before #4453 has merged AND deployed.
+
+### AN INHERITED ESTATE DEFECT, NAMED WITH A VERDICT RATHER THAN LEFT DRIFTING
+
+**`coordination/2026-08-19-1651ad` (PR #915, DRAFT) is two days past the 24-hour coordination-branch
+lifetime.** It carries doctrine and continuity — `principles.md`, `director-handoff.md`,
+`repo-continuity.md`, two rules, a pattern, three thread records, two strategic plans — across 14
+commits, and it is only 3 commits behind main, so divergence cost is still low. Its head commit is a
+*"week-sleep freeze — estate dormant at owner word"*, which explains why it stalled: a seat froze it
+deliberately on the 19th and the estate then resumed without folding it.
+
+**Verdict: do NOT fold it today.** A full-condition fold moves main while five seats hold worktrees
+mid-flight, creating rebase churn across all of them, and it would consume the window the owner's
+last day needs. The branch is 3 commits behind, not 300. **Fold it at the next boundary where main
+can move cheaply** — after the cure PRs land, or on the owner's return. Recorded as a routed defect
+rather than a home to build on, per the rule. **Do not stake new work onto it.**
+
+Note for whoever folds it: **it and PR #913's branch both modify `director-handoff.md`**, so that
+fold needs a semantic merge, never a line merge.
+
+### KNOWLEDGE RESCUED FROM THE PRIMARY TREE THIS MORNING
+
+105 uncommitted napkin lines were sitting in the primary checkout when the host died — captures from
+**three** different seats, none of which survived to commit them: a review seat's PR #919 lesson that
+an external capability change needs the submission record and not only green code; Implementer seat
+D's finding that a Linear description `patch` round-trips the whole document through Linear's
+rich-text normaliser and silently repairs malformed nested strikethrough, so superseded text reads as
+current; and the PR-review-warden's session block carrying the review-row entry above. Carried across
+by patch into `chore/pr-review-warden` (commit `936b12e89`, author verified as the bot) rather than
+committed on the primary, whose branch does not move outside the coordination rotation. One blank
+line was inserted to clear MD032; the prose is otherwise verbatim.
+
+### MY OWN FAILURES THIS TENURE, RECORDED WHILE THEY ARE STILL CHEAP
+
+**I reported an in-flight check state as a settled one.** After updating both OWA PRs I told the
+liaison "10 checks, 9 re-running, 0 failed" — and the zero was true of the moment and false as a
+forecast. One of the nine landed red. The observation was accurate; the conclusion was never
+measured. **Fourth instance of this thread's dominant generator in two days, and mine.** The monitor
+I had armed is the only reason the correction reached the liaison before the owner asked.
+
+**`markdownlint --fix` SILENTLY REWROTE MY PROSE INTO A HEADING, and this one will bite every seat
+that writes an issue number.** I wrote a sentence listing four PRs by number. It wrapped so that
+`#923` landed at the start of a line — where markdown reads `#` as an H1. `pnpm markdownlint:root`
+runs `markdownlint-cli2 --fix`, so instead of flagging it the tool **normalised my sentence into a
+heading**, inserting blank lines around it and turning `#923` into `# 923`. The sentence was cut into
+three fragments, one of them promoted to a top-level heading in a document whose only H1 is its
+title. It then reported MD001 for the heading it had itself created, which is what made me look.
+
+**Two lessons, and the second is the general one.** Never let an issue reference wrap to line-start in
+prose — write `PR 923`, or reflow. And: **a `--fix` tool is a WRITER, not a checker.** Running it to
+"see if the file is clean" mutates the file, so a green result after `--fix` tells you the tool is
+satisfied with what it wrote, not that what you wrote was correct. On a continuity surface whose whole
+value is faithful prose, that is a knowledge-integrity hazard rather than a formatting one. **Read the
+diff after any `--fix` run on a prose file.** I caught this only because the tool's own repair
+tripped a different rule; a wrap that produced a valid heading level would have passed silently and
+corrupted the record.
+
+**I wrote a control that was a tautology.** Checking that a patch would apply in another worktree, I
+compared `git show HEAD:napkin.md` against `git show HEAD:napkin.md` — the same expression, in the
+same worktree — and printed "IDENTICAL BASE". It proved nothing. The sound instrument was
+`git apply --check`, which validates context lines against the real target file, and it passed. **A
+control that cannot fail is not a control**, and this one was written while explicitly trying to
+verify rather than assume.
+
+### F-164 IS WORSE THAN ITS RECORDED DESCRIPTION — it corrupts ATTRIBUTION, not just addressability
+
+F-164 has been recorded on this thread as *"a successor inherits their results with no way to address
+them directly"*. **That understates it. The live consequence is misattribution into the durable
+record.**
+
+Measured 2026-08-21. Five Implementer seats staffed by this Director each opened their own registry
+claim, and every row carries the DIRECTOR's routing identity:
+
+```text
+Tulip mends Bark  claim 39718d8d  role director     id 3fba4666-aa3c-5431-91b0-9ac044416852
+Tulip mends Bark  claim 0a550a03  role implementer  id 3fba4666-…   (identical)
+Tulip mends Bark  claim 3fbfa641  role implementer  id 3fba4666-…
+Tulip mends Bark  claim ca553a9b  role implementer  id 3fba4666-…
+Tulip mends Bark  claim f25a578d  role implementer  id 3fba4666-…
+Tulip mends Bark  claim f2c638f6  role implementer  id 3fba4666-…
+```
+
+Six rows, one identity, separable only by `claim_id` and `role`. **And a seat's BROADCAST arrives the
+same way**: comms event `63c48d8c` (2026-08-21T08:55:40Z) carries
+`author.id 3fba4666-…` / `author.session_id_prefix e6d535` — the Director — while its own first line
+reads *"Seat R2 (Implementer, staffed by Director Tulip mends Bark)"*. The seat self-identified in
+prose; the substrate recorded the Director.
+
+**The near-miss:** the liaison seat read that broadcast as a message from the Director and was about
+to write the seat's observation into `SEAT-BRIEF.md` as the Director's. Two things stopped it — the
+liaison asked for wording instead of paraphrasing a peer into a permanent record, and the Director
+said "that is not mine". **Either alone would probably have been enough; neither is a mechanism.**
+The suffix convention is the only mitigation and it lives in prose, which no reader is obliged to
+check.
+
+**Paired instrument defect found in the same measurement, and it is a plain error rather than schema
+drift.** The identity field on a comms event is `author`, NOT `agent_id`. Two seats independently
+read `agent_id`, got a uniform empty result, and one of them nearly reported it as *"no seat posted
+an event"* — a false negative that would have agreed with its author's prior, which is the worst
+shape a vacuous zero can take. Control-probed before recording: **all 1,722 events older than
+2026-08-20T14:00Z carry `author` and none carry `agent_id`**, so the field was never `agent_id` and
+there is no migration to reason about.
+
+**The fourth instance of this fleet's dominant class**, after `cf-ray`, the review row, and
+`author=mantagen` in the foreign repos: **an instrument returning a TRUE value that answers a
+DIFFERENT question.** `author.id` truthfully names the routing identity that wrote the event. It does
+not name the agent that authored it. This is the first of the four where the misread would have
+STOPPED or corrupted work rather than merely misreported it.
+
+**A seat's own near-miss, worth inheriting because it looks exactly like F-164 and is not.** Seat R2
+had `claims open` and `comms append` both refused with a collision naming its own identity, and read
+it as F-164 closing the substrate to an ephemeral seat. It was not: the seat had passed
+`--model Opus-5`, copied by analogy from another agent's registry row, instead of this session's live
+`claude-opus-5[1m]`. **The model string is an identity INPUT, so the two spellings derive different
+UUIDs from the same agent name.** The refusal is the CLI rejecting a near-miss identity route, and
+the error message names the live identity — so the error text is the instrument for the correct
+value. Two peer seats opened claims minutes later, which disproves the F-164 reading outright. **Do
+not copy an identity field out of a registry row by analogy, and do not reconstruct one either: read
+it from the row that owns it, or from `agent-identity`.**
+
+Live drift to be aware of rather than cure under time pressure: the registry currently holds BOTH
+spellings — this Director and Coal as `claude-opus-5[1m]`, the liaison lineage as `Opus-5` — so the
+liaison's routing id (`9473cb87-36dd-5b9d-88d6-66e20412d113`) cannot be derived from the Director's
+model string. It predates the current liaison by two seats. **Normalising a row mid-seat would
+invalidate an id already published in messages and comms events**, so the correct disposition is a
+recorded observation now and a fix in identity derivation or a registry normalisation pass later —
+never a seat editing its own identity.
+
+### THE SEAT-SHAPE FACT THAT COST TWO STALLS
+
+**A subagent that ends its turn to wait on its own background task never wakes.** Seat R3 stalled
+twice this way — backgrounding a commit, then a push, and ending its turn each time. The cure is to
+run slow operations in the FOREGROUND with a long timeout. **The hooks here are genuinely slow and
+the host is CPU-saturated with five seats** (0.17% idle measured at 08:52Z): my own napkin commit sat
+in its pre-commit hook for roughly nine minutes and then exited 0 cleanly. **A hook that has not
+returned is normal under this load, not a hang** — and never reach for `--no-verify`, which needs
+fresh owner authorisation.
+
+**Host capacity: MEMORY is the constraint, not CPU.** 73% free with five seats running; CPU
+saturation slows work without endangering it. Quote memory whenever a seat-count trade goes to the
+owner.
+
 ## LIVE STATE, 2026-08-20 ~13:35Z (Coal hunts Brilliance, `70bc33`, Director — SEAT STILL LIVE)
 
 **This block is written mid-tenure, not at wrap.** It exists because a peer asked the right
