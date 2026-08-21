@@ -605,6 +605,9 @@ challenge bootstrap.** *Warrant*: measured — the injected inline script is
 real and is the only inline script present. Removing the directive would break
 bot protection on the HTML surfaces. **This is a recommendation against a
 change that a reviewer reasoning from the guide alone would propose.**
+*Falsifier, and it is live*: PR 928 removes the landing-page HTML surface
+altogether. If it merges, this recommendation **inverts** — see "Adjacent work in
+flight" below. Check whether the application still serves HTML before acting.
 
 **R9 — Prefer a rendered check over any header reasoning for these changes.**
 *Warrant*: no gate in this repository can see a served header, so every CSP
@@ -832,6 +835,62 @@ guard.
 `buildAuthorizeRedirectUrl` appends `URLSearchParams.toString()` to an upstream
 base URL derived deterministically from the Clerk publishable key. No query
 parameter can steer the host.
+
+## Adjacent work in flight — read this before acting on anything above
+
+Three open pull requests overlap this review. The owner is away 22-31 August and
+any of them could merge in that window, so a reader arriving later must check
+their state before applying a recommendation.
+
+**PR 928, "remove the landing-page HTML surface" — this is the one that can
+invalidate recommendations.** It is open, not draft, mergeable, unreviewed, and
+it is a net deletion of about 5,100 lines. It removes the whole
+`src/landing-page/` tree, the baked-page build, and `public/landing-page.css`,
+and it touches `src/security-config.ts`, `src/app/bootstrap-security.ts`,
+`src/app/static-content.ts` and `src/mcp-middleware.ts`. It does **not** touch
+`src/security-headers.ts`.
+
+If it merges, three things in this report change:
+
+- **R8 inverts.** R8 says *do not* remove `script-src 'unsafe-inline'`, because
+  Cloudflare injects an inline challenge bootstrap into the served HTML. Remove
+  the HTML and that justification goes with it, and the directive becomes
+  removable — which is the opposite of what R8 recommends. **Check whether the
+  application still serves any HTML before acting on R8.**
+- **R7 loses most of its value.** Tightening `default-src` and `object-src`
+  matters for HTML rendering. With JSON-only responses, CSP is close to inert
+  for the application's own content, and only the MCP App widget — governed by
+  its own declared policy, not this header — still renders markup.
+- **F3's severity drops but does not vanish.** The edge replacing the
+  application's CSP matters much less when there is no HTML to protect. It still
+  matters, because the replacement is wholesale and would silently weaken any
+  HTML surface reintroduced later.
+
+F1, F2, F8 and the rate-limiting findings are unaffected — none of them depends
+on an HTML surface existing.
+
+**PR 924, "correct ADR-219's every-served-domain premise" — already corrects the
+premise this review's F2 leans on, and it got there first.** It amends ADR-219
+because "Cloudflare and Vercel carry the traffic controls for every served
+domain" is untrue of `curriculum-mcp-alpha.oaknational.dev`, measured on
+2026-08-20. **The unproxied-alpha fact is therefore not a discovery of this
+review**, and this report should not be read as claiming it. Its measurement
+method is sound for what it claims: it uses `server` and `cf-ray` to establish
+the *absence* of Cloudflare on a Vercel-served host, which is a legitimate use
+of header evidence — unlike using the same headers to *attribute* an edge to a
+particular owner, which is the trap this review's Question 1 documents.
+
+What this review adds on top of PR 924: that the alias is a **production domain
+of the production Vercel project**, that it carries **production Clerk and the
+production canonical origin**, that the **WAF** as well as rate limiting is
+absent there (demonstrated with a payload-versus-benign control), that **all
+three Vercel deployment protections are disabled**, and — with F8 — that a
+production token is accepted there. PR 924 narrows an ADR's claim; F1 and F2 say
+the exposure is live and unmonitored.
+
+**PR 932** is the peer seat's Cloudflare and WAF half of this same commission.
+Read together for the full picture; the edge attribution questions this report
+routes onward are answered there.
 
 ## Residual risks I am not certain about
 
