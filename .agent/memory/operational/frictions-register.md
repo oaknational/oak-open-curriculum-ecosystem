@@ -3844,3 +3844,58 @@ commit SHA and the closing plan reference.
   push, which is what every one of the four occurrences relied on.
 - **Owner direction status**: unsolicited (agent-observed friction, first-class
   under the Pelagic standing direction).
+
+### F-168 — two independent seats broke `exit-codes-in-band-never-piped` in one day, in opposite directions; the rule's own named cure does not exist
+
+- **Source**: Director seat `Tulip mends Bark` (`e6d535`) and the owner-liaison
+  seat `Phoenix guards Scorch` (`85bdbf`), both 2026-08-21, independently, within
+  hours. Comms event `e0de5e68`. **This is a RECURRENCE against an existing home,
+  not a new finding** — the rule already exists and already names the cure.
+- **Surface**: every `pnpm agent-tools:*` CLI, at command-composition time.
+- **Observed, two instances with opposite losses**:
+  - The liaison piped a commit-queue guard through `tail`, so `$?` was `tail`'s.
+    **The guard had REFUSED** — it rejected the PDR-117 worktree-scoped claim
+    label — **and the seat staged past the refusal without seeing it.** Caught
+    only because the staged file looked wrong and the guard was re-run unpiped.
+  - The Director piped `check-commit-message` through `grep` and then ran
+    `git commit` with `;` rather than `&&`. The validator **had flagged a real
+    `subject-case` violation**; the commit ran anyway and was refused by the
+    commit-msg hook. **The validator ran, produced the right answer, and was not
+    wired to the decision it existed to inform.**
+- **Expected**: a gate's verdict reaches the decision it guards. Losing a
+  refusal is the dangerous direction — it converts a guard into decoration.
+- **Why this is ERGONOMICS, not two lapses of attention**: both seats were
+  actively holding this discipline — one had written the rule's lesson into
+  tracked state that morning, the other was enforcing it in seat briefs — and
+  both broke it anyway. **Every one of these CLIs emits pnpm banner noise, so
+  the natural and near-universal way to read one is to pipe it, and the pipe
+  silently discards the only value that matters.** The rule asks an agent to
+  fight the shell's default on every single invocation, with no feedback when it
+  loses. Two independent violations in one window, by seats that knew the rule,
+  is evidence about the affordance rather than about the agents.
+- **The rule ALREADY names the cure and it has not been built.**
+  `.agent/rules/exit-codes-in-band-never-piped.md` §Enforcement: *"The
+  structural cure candidate — a gate-runner helper that owns capture — is
+  legitimate future tooling; until it exists, the in-band capture shape above is
+  mandatory."* The rule also identifies itself as the estate-wide traction cure
+  for **PDR-098 recurrence-despite-home**. **So this entry is that PDR's own
+  pattern firing on the rule written to cure it**, which is the strongest
+  available argument that a behavioural layer is not sufficient here.
+- **Candidate cure**: build the gate-runner helper the rule already names —
+  run the command, tee its output to a file and to the terminal, and **exit with
+  the WRAPPED command's status**. Verified absent: `git grep PIPESTATUS` over
+  `agent-tools/**` on `origin/main` returns **0 files**, with a control
+  (`collaboration-state`, 171 files) proving the search is not blind. The
+  workaround both seats independently reached — capture to a file, read `$?`
+  unpiped — is the wrapper's behaviour done by hand each time, which is the
+  usual signal that it wants to be a tool.
+- **Target surface**: `agent-tools` CLI (a `run-gate` / capture-owning helper),
+  plus a line in the rule pointing at it once it exists.
+- **Status**: open, and **deliberately not implemented on 2026-08-21** — stated
+  so the deferral is not read as oversight. Three seats were live against an
+  over-subscribed host (load 9.94 / 17.63 / 14.93 on ten cores), and the day's
+  remaining owner window was committed to work the owner had explicitly asked
+  for. **The cure is small, well-specified, and ready for a lane; it is not
+  urgent-today, and it should not wait for a fourth instance.**
+- **Owner direction status**: unsolicited (agent-observed friction, first-class
+  under the Pelagic standing direction).
