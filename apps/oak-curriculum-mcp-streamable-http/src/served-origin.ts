@@ -43,7 +43,7 @@ export const DEFAULT_LOCAL_PORT = '3333';
  */
 export interface ServedOriginInputs {
   /**
-   * Configured canonical origin (e.g. `https://www.thenational.academy`),
+   * Configured canonical origin (e.g. `https://mcp.thenational.academy`),
    * or `undefined` when no canonical host is configured.
    */
   readonly canonicalOrigin?: string;
@@ -62,8 +62,8 @@ export interface ServedOriginInputs {
  *
  * @example
  * ```typescript
- * resolveServedOrigin({ canonicalOrigin: 'https://www.thenational.academy' });
- * // 'https://www.thenational.academy'
+ * resolveServedOrigin({ canonicalOrigin: 'https://mcp.thenational.academy' });
+ * // 'https://mcp.thenational.academy'
  * resolveServedOrigin({ displayHostname: 'my-app.vercel.app' });
  * // 'https://my-app.vercel.app'
  * resolveServedOrigin({ portEnv: '4000' }); // 'http://localhost:4000'

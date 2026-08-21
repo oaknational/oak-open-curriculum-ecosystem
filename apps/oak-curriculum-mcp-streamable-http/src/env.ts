@@ -70,12 +70,17 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
      * The address this server is served at, when that differs from the
      * hostname reaching it.
      *
-     * Set when an edge serves the app at a canonical address and presents a
-     * different Host to the origin (MCP-172: Cloudflare serves
-     * `www.thenational.academy/mcp` with the Host overridden to the app's own
-     * Vercel hostname). Every self-description surface then names
+     * Set it and every self-description surface names
      * `https://<CANONICAL_HOST>`; absent, the app self-describes per request
-     * as before.
+     * from the arriving Host. Production sets it to `mcp.thenational.academy`,
+     * so every host — the canonical one, the alpha host, a preview — advertises
+     * the same resource, and a token bound to it is accepted at any of them.
+     *
+     * History: MCP-172 introduced it while the app was served at
+     * `www.thenational.academy/mcp` behind a path-scoped Cloudflare origin rule
+     * that overrode the Host, where per-request derivation could not name the
+     * canonical address at all. That rule was withdrawn 2026-08-20, and the
+     * canonical hostname is attached to the Vercel project directly.
      *
      * A bare hostname only — ports, schemes, paths and loopback names are
      * rejected here so a misconfiguration is a startup failure rather than a

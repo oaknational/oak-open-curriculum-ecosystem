@@ -14,43 +14,39 @@ import { MCP_RESOURCE_PATH } from '../served-origin.js';
  * The health path at the app root.
  *
  * @remarks
- * The alpha host serves this app at its own root, so this is the path its
- * probes, the preview-deploy gate, and every local `curl` already use. It is a
- * declared compatibility surface — `static-content.ts` keeps its root asset
- * mount for the same reason — and it stays.
+ * Every host this app is served at serves it from that host's own root — the
+ * canonical host, the alpha host, preview deployments and local development
+ * alike — so this is the path their probes, the preview-deploy gate, and every
+ * local `curl` use. `static-content.ts` mounts its assets at the root for the
+ * same reason.
  *
  * Module-local: consumers want {@link HEALTH_PATHS} (every path the check
- * answers on) or {@link ROUTED_HEALTH_PATH} (the one the canonical host
- * reaches). Nothing outside needs to single out the root path, and exporting it
- * would invite a caller to name the path that does not work on `www`.
+ * answers on) or {@link ROUTED_HEALTH_PATH}. One exported pair is enough, and
+ * nothing outside needs to single out the root path.
  */
 const ROOT_HEALTH_PATH = '/healthz';
 
 /**
- * The health path inside the routed surface — the canonical host's probe
- * target.
+ * The health path inside the routed surface.
  *
  * @remarks
- * MCP-580. The canonical deployment reaches this app through a Cloudflare
- * origin rule scoped to `/mcp` and `/mcp/*`, and the rule does not strip the
- * prefix. So a root-level `/healthz` probe on `www` never arrives here at
- * all — it stays on the main website and collects that site's 404 HTML —
- * while `/mcp/healthz` arrived intact and, until this path was served, met
- * Express's own 404. ADR-162 makes exposing a healthy `/healthz` this
- * repository's single monitoring obligation, and an obligation discharged only
- * on a non-canonical alias is not discharged.
+ * MCP-580. ADR-162 makes exposing a healthy `/healthz` this repository's single
+ * monitoring obligation, and this path discharges it on the routed surface: it
+ * answers wherever the app is served, so a monitor holding it needs no
+ * per-host knowledge. Measured 2026-08-21, both this path and the root path
+ * return 200 with `no-store` on the canonical host.
  *
  * **Derived, not a second spelling of `/mcp`.** Same reasoning as
- * `ROUTED_ASSET_BASE` in `static-asset-paths.ts`, which cures MCP-509 the same
- * way: the edge rule is scoped to the path this app publishes as its MCP
- * resource, so that constant — not a literal repeated here — is what the
- * health path has to sit beneath. An independent literal could drift to
- * somewhere the edge never forwards while the whole suite stayed green.
+ * `ROUTED_ASSET_BASE` in `static-asset-paths.ts`: an independent literal
+ * repeated here could drift from the resource path while the whole suite stayed
+ * green.
  *
- * Widening the Cloudflare rule to claim root-level `/healthz` on `www` is the
- * alternative, and it is not this repository's to take: it would put this app
- * in the main website's namespace, a collision review nobody has done. Staying
- * inside the existing contained route needs no edge change at all.
+ * Why the routed form exists at all is a history record, and it lives once, in
+ * `static-asset-paths.ts` — the withdrawn `www` origin rule and the five path
+ * families it covered. In short: while the app was served under
+ * `www.thenational.academy/mcp`, a root `/healthz` was outside the rule's scope
+ * and reached the main website's 404 instead of this app, so the health path
+ * had to sit inside the routed surface. That rule was withdrawn 2026-08-20.
  *
  * **Probe this path with no trailing slash.** Express is non-strict by
  * default, so `/mcp/healthz/` reaches the same handler — but it matches

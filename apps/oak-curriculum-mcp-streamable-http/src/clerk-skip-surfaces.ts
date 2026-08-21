@@ -32,14 +32,15 @@ import {
  *
  * @remarks
  * The health paths are spread from {@link HEALTH_PATHS} rather than listed,
- * because there are now two of them (MCP-580) and only the routed one is
- * reachable on the canonical host. Naming the root one alone would leave the
- * canonical probe — the only probe that measures the surface users actually
- * hit — running through the auth vendor on every poll: a needless dependency
- * inside a liveness check, and the handshake-redirect exposure the root path
- * was exempted from in the first place. Composing from the constant means a
- * change to the served health layout moves the skip with it instead of leaving
- * a stale literal behind.
+ * because there are two of them (MCP-580) and BOTH must skip. Naming the root
+ * one alone would leave the routed probe running through the auth vendor on
+ * every poll: a needless dependency inside a liveness check, and the
+ * handshake-redirect exposure the root path was exempted from in the first
+ * place. Composing from the constant means a change to the served health layout
+ * moves the skip with it instead of leaving a stale literal behind.
+ *
+ * Every host this app is served at answers on both paths, so a monitor may hold
+ * either and neither may drag the auth vendor into a liveness poll.
  */
 export const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
   '/.well-known/oauth-protected-resource',
@@ -60,16 +61,17 @@ export const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
  *
  * The design-system and brand trees are the public landing page's own
  * subresources (MCP-518). They are static files with no session-dependent
- * content, and they sit under the routed base only because the edge forwards
- * `/mcp*` and nothing else — a shared prefix, never a shared auth contract.
- * Composed from the same constants the static mount and the page's markup
- * use, so a change to the served layout moves the skip with it instead of
- * leaving a stale literal behind.
+ * content; sharing the routed prefix with the MCP endpoint is a URL-layout
+ * fact, never a shared auth contract. Why the routed base is `/mcp` at all is
+ * a history record kept once, in `static-asset-paths.ts`. Composed from the
+ * same constants the static mount and the page's markup use, so a change to
+ * the served layout moves the skip with it instead of leaving a stale literal
+ * behind.
  *
- * Both trees appear twice because `static-content.ts` mounts one handler at
- * two prefixes: the routed base the canonical host reaches, and the app root
- * the alpha host serves from. Naming only the routed copy would leave the
- * alpha host's page fetching its own stylesheet through the auth vendor.
+ * Both trees appear twice because `static-content.ts` mounts one handler at two
+ * prefixes, the routed base and the app root, and every served host answers on
+ * both. Naming only one copy would leave a page fetching its own stylesheet
+ * through the auth vendor.
  */
 export const CLERK_SKIP_PREFIXES: readonly string[] = [
   '/assets/download/',
@@ -85,9 +87,9 @@ export const CLERK_SKIP_PREFIXES: readonly string[] = [
  * @remarks
  * Two, not one: `static-content.ts` answers `GET /` with the same
  * `getLandingPageHtml()` artefact the `/mcp` negotiation serves. The owner
- * ruling is about the page, not about one of its URLs, so the fork has to
- * cover both or the defect simply moves to the other door — which for the
- * alpha host is its front one.
+ * ruling is about the page, not about one of its URLs, so the fork has to cover
+ * both doors — and on every host this app is served at, the root is one of
+ * them.
  */
 const PUBLIC_PAGE_PATHS: ReadonlySet<string> = new Set(['/', MCP_RESOURCE_PATH]);
 

@@ -12,18 +12,21 @@ import { createMockRuntimeConfig } from '../test-helpers/auth-error-test-helpers
  * monitored (MCP-580).
  *
  * ADR-162 makes exposing a healthy `/healthz` this repository's ONE monitoring
- * obligation; everything else about uptime is operated outside it. On the
- * canonical host that obligation was unmet, and the two ways it failed are the
- * two things this suite pins:
+ * obligation; everything else about uptime is operated outside it. This suite
+ * pins both paths the check answers on, and the two failures that made the
+ * routed one necessary:
  *
- * 1. Root `/healthz` never arrives. The Cloudflare origin rule forwards `/mcp`
- *    and `/mcp/*` and nothing else, so a root-level probe stays on the main
- *    website and collects that site's 404 HTML. The health path therefore has
- *    to live inside the routed surface — the same cure shape MCP-509 used for
- *    the landing page's assets, and it needs no edge change.
+ * 1. A root `/healthz` did not arrive at all while the app was served under
+ *    `www.thenational.academy/mcp`: the Cloudflare origin rule forwarded five
+ *    path families and the root was outside all of them, so the probe stayed on
+ *    the main website and collected that site's 404 HTML. The full scope is a
+ *    history record kept once, in `static-asset-paths.ts`. The rule was
+ *    withdrawn 2026-08-20; the app is served at `mcp.thenational.academy` from
+ *    that host's root, so a root probe reaches it there.
  * 2. `/mcp/healthz` DID arrive and still failed, twice over: without an SSE
  *    `Accept` header the `/mcp` accept gate answered 406 before routing, and
- *    with one Express answered its own 404 because no such route existed.
+ *    with one Express answered its own 404 because no such route existed. This
+ *    is the failure the suite still guards, and it is host-independent.
  *
  * Both of those gates are `app.use('/mcp', …)` mounts matching the whole
  * subtree, so the health route only wins by being registered ahead of them.
@@ -33,17 +36,17 @@ import { createMockRuntimeConfig } from '../test-helpers/auth-error-test-helpers
  * measurements rather than the absence of a gate.
  *
  * Paths are spelled as literals throughout, deliberately. What has to be true
- * is that the SERVED path is one the edge rule forwards; composing the probes
- * from the same constant the product code composes would keep this suite green
- * while the served path drifted somewhere Cloudflare never routes.
+ * is that the SERVED path is one every host this app is served at reaches;
+ * composing the probes from the same constant the product code composes would
+ * keep this suite green while the served path drifted somewhere unreachable.
  */
 describe('health endpoint inside the routed surface (MCP-580)', () => {
   let app: Express;
 
-  /** The only health path the canonical host's monitor can reach. */
+  /** The health path inside the routed surface. */
   const ROUTED_HEALTH = '/mcp/healthz';
 
-  /** The alpha compatibility surface's path. */
+  /** The health path at the app root, which every served host answers on. */
   const ROOT_HEALTH = '/healthz';
 
   /** What an external uptime monitor sends; curl's default. */
