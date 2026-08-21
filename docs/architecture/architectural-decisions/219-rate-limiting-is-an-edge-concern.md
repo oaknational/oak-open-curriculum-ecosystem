@@ -20,7 +20,7 @@ remove its basis.
 1. **The edge owns volumetric control.** Cloudflare and Vercel carry the
    traffic controls for a served domain, and their strength per domain is an
    edge-configuration decision, made and reviewed where the control lives.
-   **This holds per domain, not universally — see the accuracy correction
+   **This holds per domain, not universally — see the amendment of 2026-08-20
    below. It was originally written as "every served domain", which is not
    true of an unproxied one.**
 
@@ -68,52 +68,6 @@ and it is falsified the moment the edge stops carrying the control.
 - Edge configuration is load-bearing: if it is weakened or removed for a
   served domain, nothing in the application compensates, and this decision's
   premise is falsified **for that domain**.
-
-## Accuracy correction, 2026-08-20 — the premise does not hold for one served domain
-
-The Context above originally claimed the edge carries traffic controls for
-**every** served domain. **Cloudflare's WAF and rate-limiting rules are in path
-only for a _proxied_ domain.** Measured, with the proxied hosts as controls:
-
-```text
-www.thenational.academy               server: cloudflare, CF-RAY present   PROXIED
-mcp.thenational.academy               server: cloudflare, CF-RAY present   PROXIED (since 2026-08-20)
-curriculum-mcp-alpha.oaknational.dev  server: Vercel,     no CF-RAY        NOT PROXIED
-```
-
-So for `curriculum-mcp-alpha.oaknational.dev` this decision's falsification
-clause **has fired**: Cloudflare's configured controls are demonstrably not in
-path, and the application ships no limiter to compensate.
-
-**Scope of the claim, stated precisely.** Vercel's own platform DDoS baseline
-remains in path for that host, so this is **not** "no volumetric protection".
-It is: _the Cloudflare layer this ADR names as the control's home is absent for
-that domain._ Vercel project firewall rules are not readable from the
-repository, so no claim is made about them either way.
-
-**This pre-dates the 2026-08-20 host work.** The alpha host has always been
-unproxied; the premise was inaccurate when written rather than broken by a
-change. What changed on 2026-08-20 is only that a second host briefly shared the
-condition and no longer does.
-
-**Why it matters beyond accuracy.** `js/missing-rate-limiting` dismissals across
-`auth-routes.ts` and `asset-download-route.ts` are dispositioned against this
-ADR, so they are currently **unsupported for that host**. The sharpest case is
-`/assets/download/:lesson/:type`, whose own docstring records that abuse is
-bounded by this ADR's edge controls _and_ that the service's Oak API key is
-exempt from upstream per-key rate limiting (Context point 2) — on an unproxied
-host the capability stays bounded while the volumetric bound is missing.
-
-**The residual risk is recorded here, NOT accepted.** Accepting it, or proxying
-the host, is an owner decision and has not been made. This correction removes a
-false statement from the record; it does not settle what to do about the
-condition the statement was hiding.
-
-_Source: a retrospective `security-expert` review of PR #920 (2026-08-20)
-surfaced the falsification; the per-host proxy states above were re-measured
-first-hand by the Director seat of `mcp-submission-drive` at ~12:25Z, each
-against a proxied control._
-
 - This server no longer emits 429 of its own; a 429 reaching a client
   originates at the edge or upstream.
 - `js/missing-rate-limiting` will re-fire on new routes. Each occurrence is
@@ -142,3 +96,74 @@ against a proxied control._
 - ADR-158 is superseded but stays readable: its threat model, key-extraction
   analysis and §Honest Limitations are the record of what was built and what
   it could not do.
+
+## Amendment — 2026-08-20: the every-served-domain premise does not hold for an unproxied host
+
+The Context above originally claimed the edge carries traffic controls for
+**every** served domain. The accepted text remains as written, as history;
+this amendment narrows that claim. **Cloudflare's WAF and rate-limiting rules
+are in path only for a _proxied_ domain.** Measured 2026-08-20 at ~12:25Z,
+each host against a proxied control:
+
+```text
+www.thenational.academy               server: cloudflare, CF-RAY present   PROXIED
+mcp.thenational.academy               server: cloudflare, CF-RAY present   PROXIED (since 2026-08-20)
+curriculum-mcp-alpha.oaknational.dev  server: Vercel,     no CF-RAY        NOT PROXIED
+```
+
+So for `curriculum-mcp-alpha.oaknational.dev` this decision's falsification
+clause **has fired**: Cloudflare's configured controls are demonstrably not in
+path, and the application ships no limiter to compensate.
+
+**Scope of the claim, stated precisely.** Vercel's own platform DDoS baseline
+remains in path for that host, so this is **not** "no volumetric protection".
+It is: _the Cloudflare layer this ADR names as the control's home is absent for
+that domain._ Vercel project firewall rules are not readable from the
+repository, so no claim is made about them either way.
+
+**This pre-dates the 2026-08-20 host work.** The alpha host has always been
+unproxied; the premise was inaccurate when written rather than broken by a
+change. What changed on 2026-08-20 is only that a second host briefly shared
+the condition and no longer does.
+
+**What is affected, stated as a class rather than a list.** The affected
+population is the open, growing class named in §Consequences: every
+`js/missing-rate-limiting` disposition on this server's route registrations
+whose recorded rationale is this ADR's edge premise. On an unproxied host that
+rationale is unsupported. The class is deliberately **not** enumerated
+exhaustively here — it grows with each new route, so a frozen list in this ADR
+would go stale silently. Dated exemplars, measured 2026-08-21 against the
+repository's code-scanning alert set:
+
+- **Alerts #5 and #230** (`auth-routes.ts`, both dismissed 2026-07-30) record
+  this ADR's premise verbatim — "the app is behind Cloudflare, which provides
+  rate-limiting". These are the clearest in-class cases.
+- The in-code dispositions that name the rule and cite this ADR sit in
+  `auth-routes.ts` and `oauth-proxy/oauth-proxy-routes.ts`.
+- Dismissals on `app/bootstrap-helpers.ts` are adjacent to the class, not in
+  it: their recorded rationale is misclassification — cross-cutting
+  middleware, not a route handler — rather than the edge premise.
+- Dismissals dated 2026-03-31 and 2026-06-23 rest on the in-process limiter
+  that MCP-411 later removed under this ADR, so their recorded rationale no
+  longer describes the code. That is a separate staleness from the proxy
+  question and is not resolved by this amendment.
+
+**A second population cites this ADR as an abuse bound without carrying a rule
+disposition.** `/assets/download/:lesson/:type` is the sharpest such case: its
+docstring records that abuse is bounded by this ADR's edge controls _and_ that
+the service's Oak API key is exempt from upstream per-key rate limiting
+(Context point 2). On an unproxied host the capability stays bounded by its
+HMAC signature and 5-minute TTL while the volumetric bound the docstring names
+is absent. It is a citation, not a code-scanning dismissal; the two populations
+are distinct and fail differently.
+
+**The residual risk is recorded here, NOT accepted.** Accepting it, or proxying
+the host, is an owner decision and has not been made. This amendment removes a
+false statement from the record; it does not settle what to do about the
+condition the statement was hiding.
+
+_Provenance: a retrospective `security-expert` review of pull request 920
+(2026-08-20) surfaced the falsification. The per-host proxy states above were
+re-measured first-hand on 2026-08-20 at ~12:25Z, each against a proxied
+control; the code-scanning exemplars were measured first-hand on 2026-08-21
+against the repository's dismissed-alert set._
