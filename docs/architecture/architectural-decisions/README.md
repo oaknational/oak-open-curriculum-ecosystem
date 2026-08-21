@@ -137,7 +137,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-110: Thread Search Architecture](110-thread-search-architecture.md)
 - [ADR-111: Secret Scanning Quality Gate](111-secret-scanning-quality-gate.md)
 - [ADR-112: Per-Request MCP Transport](112-per-request-mcp-transport.md)
-- [ADR-113: MCP Spec-Compliant Auth for All Methods](113-mcp-spec-compliant-auth-for-all-methods.md)
+- [ADR-113: MCP Spec-Compliant Auth for All Methods](113-mcp-spec-compliant-auth-for-all-methods.md) (root cause corrected 2026-08-20 — Clerk enforces the client's own registered grant; it does not refuse `openid` as a platform rule)
 - [ADR-114: Layered Sub-agent Prompt Composition Architecture](114-layered-sub-agent-prompt-composition-architecture.md)
 - [ADR-115: Proxy OAuth AS for Cursor](115-proxy-oauth-as-for-cursor.md)
 - [ADR-116: resolveEnv Pipeline Architecture](116-resolve-env-pipeline-architecture.md) (supersedes ADR-016)

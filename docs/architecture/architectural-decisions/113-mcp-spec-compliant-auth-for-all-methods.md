@@ -113,19 +113,19 @@ This endpoint is harmless -- spec-compliant clients that fetch AS metadata direc
 
 > **The symptom below is real and was reproduced. The mechanism this section
 > originally asserted -- that Clerk rejects `openid` at authorisation as a
-> platform rule -- is DISPROVEN.** Clerk grants a client exactly the scopes it
-> was registered with. See [Correction (2026-08-20)](#correction-2026-08-20-what-clerk-actually-does)
+> platform rule -- is DISPROVEN.** Clerk enforces a requested scope against the
+> client's own registered grant. See [Correction (2026-08-20)](#correction-2026-08-20-what-clerk-actually-does)
 > before acting on anything in this section, and do not cite the original
-> mechanism: three seats treated it as a platform constraint and one owner-facing
+> mechanism: seats have treated it as a platform constraint, and an owner-facing
 > recommendation was made on the strength of it.
 
 ### Symptom
 
 The Cursor OAuth flow silently fails. Server logs show a perfect discovery and authorise sequence (PRM, AS metadata, DCR, 302 redirect to Clerk) but no `POST /oauth/token` ever arrives. Cursor loops between `needsAuth` and `Clearing OAuth state (manual_or_external)` with no error message.
 
-### Root Cause
+### The Error As Observed
 
-Clerk's `/oauth/authorize` returns `error=invalid_scope` when a dynamically registered client (created via RFC 7591 DCR) requests the `openid` scope:
+Clerk's authorisation endpoint returned `error=invalid_scope` when the dynamically registered client (created via RFC 7591 DCR) requested the `openid` scope. This is what was seen, not why it happened -- the mechanism is in [Correction (2026-08-20)](#correction-2026-08-20-what-clerk-actually-does):
 
 ```text
 error=invalid_scope
@@ -140,8 +140,8 @@ registration but rejects it at authorisation, as a property of the platform. Wha
 actually happened is narrower and is described in
 [Correction (2026-08-20)](#correction-2026-08-20-what-clerk-actually-does): the client
 requesting `openid` here did not hold `openid` in its own registered grant, so the
-request fell outside its grant. A client registered _with_ `openid` uses it without
-error.
+request fell outside its grant. A client registered _with_ `openid` has the scope
+accepted at authorisation instead of refused.
 
 ### Why It Is Silent
 
@@ -170,18 +170,65 @@ that client's grant, not because Clerk refuses `openid` as such.
 
 ### Correction (2026-08-20): what Clerk actually does
 
-**Measured 2026-08-19** by an RFC 7591 DCR probe run with a discriminating control
-(Peony hunts Nectar, Director seat, `mcp-submission-drive`), and corroborated by
-Clerk's 2026-07-22 changelog:
+**Measured 2026-08-19** by an RFC 7591 DCR probe run with a discriminating control,
+recorded under MCP-636 by an Implementer seat on `mcp-submission-drive`. Clerk's
+2026-07-22 changelog corroborates the registered-grant mechanism; it says nothing
+about the `offline_access` addition below.
 
-> **Clerk grants a dynamically registered client exactly the scopes named in its
-> registration. Where a registration names no scopes, the instance default grant
-> applies. A client registered with `openid` can request and receive `openid`.**
+> **Clerk grants a dynamically registered client the scopes named in its
+> registration -- and, in the one case measured, `offline_access` on top of them,
+> which that client had not registered for. Where a registration names no scopes,
+> the instance default grant applies instead. A client registered with `openid` has
+> `openid` accepted at authorisation rather than refused.**
 
-Oak's instance default grant at the time of that measurement was
-`email offline_access profile` plus `user:org:read` -- **no `openid`**. So a client
-that registered without naming scopes held no `openid`, and requesting it at
-authorisation was a request outside its own grant.
+The probe registered three throwaway clients through Oak's own public DCR endpoint
+and probed each at Clerk's authorisation endpoint. The `Granted` column is the
+`scope` value in each registration's **response body** -- the authoritative field,
+not the HTTP status:
+
+| Client | Registered with                       | Granted                        | `openid` at authorisation |
+| ------ | ------------------------------------- | ------------------------------ | ------------------------- |
+| A      | `openid email`                        | `email offline_access openid`  | accepted                  |
+| B      | `openid email profile offline_access` | all four                       | accepted                  |
+| C      | _(no `scope` field)_                  | `email offline_access profile` | REJECTED                  |
+
+**Client A carries the mechanism.** It received `offline_access` without having
+registered for it, and was refused `profile`, `public_metadata`, `private_metadata`
+and `user:org:read` -- every _other_ advertised scope it had not registered.
+Client C received Oak's instance default grant, `email offline_access profile` --
+**no `openid`**. So a client that registered without naming scopes held no
+`openid`, and requesting it at authorisation was a request outside its own grant.
+
+**What the probe does not settle. Stated as inference and as absence, not as
+measurement.** Two limits bound everything above:
+
+1. **The `offline_access` addition rests on one discriminating row.** Client B named
+   the scope itself and client C took a default that already contains it, so only
+   client A separates "Clerk always adds it" from "this instance happens to grant
+   it". Expect the shape `registered scopes + offline_access`, and read the
+   registration response body rather than assuming either reading.
+2. **No sign-in was completed and no token was ever issued.** The probe stopped at
+   the authorisation endpoint's accept-or-refuse decision, so nothing here is a
+   claim about token contents. That a token carrying `openid` is actually granted,
+   and what Clerk's userinfo returns for it, are both unproven -- MCP-636 records
+   them as such.
+
+**Why the probe is trustworthy: it carries a control that must fail.** Its first
+stage was discarded as an invalid instrument, because Clerk's `/oauth/authorize`
+forwards a deliberately fake scope onward unchanged -- so "`openid` was accepted"
+there measured nothing. Validation happens one hop later, at
+`/oauth/authorize/continue`, where a scope that cannot exist reliably produces:
+
+```text
+error=invalid_scope
+error_description=The requested scope is invalid, unknown, or malformed.
+  The OAuth 2.0 Client is not allowed to request scope 'definitely_not_a_real_scope_636'.
+```
+
+That is the same error string this section records above, fired on demand -- and
+`openid` does not fire it for a client that registered with `openid`. The control
+validates the instrument only: it establishes that the probe can detect a refusal,
+which is what makes the accepted rows meaningful.
 
 **How the original conclusion went wrong, because the shape recurs.** The
 registration call _succeeds_ when a client asks for `openid` -- HTTP 201 -- which is
@@ -197,6 +244,14 @@ sections above still holds: the flow did stop, the error was `invalid_scope`, it
 delivered by redirect, and Cursor did swallow it silently. Only the _reason_ changes --
 from "Clerk cannot do `openid`" to "these clients were not registered for `openid`".
 
+**One detail is unreconciled and is left open rather than inferred.** The 2026-02-21
+sections place the refusal on Clerk's 302 from `/oauth/authorize`; the 2026-08-19
+probe found that endpoint forwarding even an impossible scope onward, with the
+refusal emitted one hop later at `/oauth/authorize/continue`. Which hop produced the
+2026-02-21 redirect error was not re-measured, and the two records may describe
+either a changed endpoint or an imprecise original note. The refusal itself is not
+in doubt; its emitting hop is.
+
 **What still stands:**
 
 - The resolution below remains correct and remains in force. Removing `openid` from
@@ -208,11 +263,23 @@ from "Clerk cannot do `openid`" to "these clients were not registered for `openi
 
 **What changes in consequence:**
 
-- **`openid` is available if it is ever wanted.** The route is to register clients with
-  it, not to change a Clerk dashboard setting. An owner-facing recommendation was made
-  on the strength of the disproven claim and has been withdrawn.
-- **`profile` and `offline_access` were never blockers either** -- both are already in
-  the instance default grant.
+- **`openid` is available if it is ever wanted, by two routes with different reach.**
+  A client that names `openid` in its own registration holds it -- that is the route
+  wherever the registration is ours to shape. Third-party clients self-register via
+  DCR, so for those the lever is Clerk's instance-level `default_scopes` setting,
+  shipped 2026-07-22 for exactly this failure. Its documented limit is that Clerk
+  does not override a `scope` value a client supplies, so `default_scopes` reaches
+  only clients that omit `scope` entirely -- a partial scope list is not helped. It
+  is a write to shared Oak auth infrastructure and therefore an owner decision.
+  A separate owner-facing recommendation was made on the strength of the disproven
+  claim and has been withdrawn.
+- **`offline_access` was never a blocker** -- in the one case measured, Clerk added
+  it to a DCR client's grant without the registration naming it (client A above).
+- **`profile` was never a blocker either, but it is not free** -- it is in the
+  instance default grant (client C above), so a scope-less registration holds it,
+  while a client that names its own scopes is refused it unless it names `profile`
+  too (client A above). `profile` needs no Clerk change, only a registration that
+  names it.
 
 **Live advertised state, measured 2026-08-20 (this correction's author, first-hand):**
 
@@ -243,7 +310,7 @@ OAuth authorisation errors routed via redirect are invisible to the resource ser
 - **Implementation**:
   - `apps/oak-curriculum-mcp-streamable-http/src/mcp-router.ts`
   - `apps/oak-curriculum-mcp-streamable-http/src/conditional-clerk-middleware.ts`
-  - `packages/sdks/oak-curriculum-sdk/code-generation/mcp-security-policy.ts` (scope source of truth)
+  - `packages/sdks/oak-sdk-codegen/code-generation/mcp-security-policy.ts` (scope source of truth)
   - `apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts` (transparent proxy passthrough)
   - `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts` (PRM endpoint)
 

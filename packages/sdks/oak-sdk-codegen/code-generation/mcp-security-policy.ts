@@ -35,19 +35,34 @@ export const PUBLIC_TOOLS: readonly string[] = [
  * Applied to all tools NOT in PUBLIC_TOOLS list.
  *
  * @remarks
- * **Why `openid` is excluded**: Clerk rejects the `openid` (OIDC) scope for
- * dynamically registered clients (RFC 7591 DCR). Clerk accepts `openid` during
- * client registration but returns `error=invalid_scope` during authorisation.
- * This error is routed via redirect to the client's callback URL (per RFC 6749
- * Section 4.1.2.1), bypassing the server entirely and causing a silent failure
- * in clients like Cursor. MCP only needs an OAuth access token, not an OIDC ID
- * token, so `openid` is not required.
+ * **Why `openid` is excluded: Oak's policy choice, not a Clerk limitation.**
+ * This MCP server is an OAuth 2.1 resource server. It authorises tool calls
+ * from an access token and never reads OIDC identity claims, so an ID token
+ * buys it nothing. Requesting a scope the server does not consume would ask
+ * users to consent to more than we use. `email` is the whole of what is read.
  *
- * Because `openid` is not in our PRM `scopes_supported`, compliant clients
- * (RFC 9728) will not request it. The proxy forwards all scopes transparently
- * without filtering.
+ * **Clerk can grant `openid`.** It enforces a requested scope against the
+ * scopes named in that client's own RFC 7591 DCR registration. An earlier
+ * version of this comment asserted the opposite — that Clerk refuses `openid`
+ * for DCR clients as a platform rule, accepting it at registration and
+ * returning `error=invalid_scope` at authorisation. That was DISPROVEN by
+ * first-hand DCR probe on 2026-08-19: the `invalid_scope` failures behind the
+ * original claim were clients requesting a scope outside their own registered
+ * grant, not a platform ceiling. Do not cite a Clerk limitation as the reason
+ * for this value; the reason is the paragraph above. ADR-113 §Correction
+ * (2026-08-20) carries the probe evidence and the two routes by which `openid`
+ * could be granted if it were ever wanted.
  *
- * @see ADR-113 Troubleshooting section (docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md)
+ * **A trap this value does not close.** Because `openid` is not in our PRM
+ * `scopes_supported`, compliant clients (RFC 9728) will not request it. But the
+ * proxy forwards all scopes transparently without filtering, so Clerk's own AS
+ * metadata — which does advertise `openid` — reaches clients unchanged. A
+ * client that discovers scopes from the AS metadata rather than the PRM can
+ * therefore still request `openid` and be refused, by the redirect-borne route
+ * that makes the failure invisible to this server. Tracked on MCP-345; do not
+ * treat this constant as the whole mitigation.
+ *
+ * @see ADR-113 §Correction (2026-08-20) (docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md)
  */
 export const DEFAULT_AUTH_SCHEME = {
   type: 'oauth2',
