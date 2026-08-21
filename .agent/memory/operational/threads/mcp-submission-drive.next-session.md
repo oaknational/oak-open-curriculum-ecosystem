@@ -673,6 +673,63 @@ answer was no. The comms stream and handoff records are gitignored and die with 
 this file and the Director brief are what survive. Written now rather than at closeout so the
 answer stops being no.
 
+### CORRECTION TO THE 2026-08-20 "THREE CORRECTIONS" BLOCK — correction 1 IS ITSELF WRONG
+
+**The block below is labelled "inherit these, they are the expensive part", which is exactly why this
+matters: it is the place a successor trusts most.** Its correction 1 says the `ROUTED_ASSET_BASE`
+mount's *"removability is a CONSEQUENCE of the landing-page deletion, not independent of it"*, on the
+grounds that the only non-test consumer of the design-system asset paths in served output is
+`src/landing-page/components/design-system-refs.ts`.
+
+**The first half is right and the second half is wrong. The mount is NOT scheduled to die with the
+landing page.** Measured against PR #928 — the landing-page teardown itself — on 2026-08-21, and
+independently re-verified by this Director from the PR diff:
+
+```text
+#928 KEEPS   mountStaticAssets(app, log, options.staticRoot)   (context, unchanged)
+#928 KEEPS   the ROUTED_ASSET_BASE import in static-content.ts
+#928 ADDS    + import { OAK_DS_MARKER, ROUTED_ASSET_BASE }
+             + const SERVED_ASSET = `${ROUTED_ASSET_BASE}/${OAK_DS_MARKER}`
+             ~18 new assertions against ${ROUTED_ASSET_BASE}/oak-ds/styles.css
+#928 REMOVES the landing page's CONSUMERS — favicon refs, landing-page.css, OAK_DS_BASE,
+             SHARE_IMAGE_PATH — not the mount
+```
+
+**So the teardown removes the mount's landing-page consumers and rebuilds its test coverage around
+it.** The mount also stays load-bearing on `main` independently: `clerk-skip-surfaces.ts` names both
+routed prefixes in production code, 33 guard assertions across three suites pass against it, and
+`mountStaticAssets()` **throws at boot** if its markers are absent.
+
+**And there is no carousel-specific mount to remove at all** — the images were served purely by
+sitting inside the static root.
+
+**The refutation's shape is what makes it decisive: it uses the very change that was supposed to
+justify the removal.** A seat asked to delete the mount declined **on evidence** rather than
+deferring, which is the right shape — a deferred item returns as inherited work with the wrong
+premise still attached, while a declined-on-evidence item closes the question.
+
+### THE GENERATOR: AN OWNER'S WORDS RELAYED AS A WORK ITEM WITHOUT BEING TESTED AGAINST THE CODE
+
+**A new class, distinct from the instrument findings, because here the "instrument" is the owner.**
+
+The owner's 2026-08-20 teardown list, item 2, reads *"Delete `public/carousel/` and its asset mount
+(`ROUTED_ASSET_BASE`)"*. **That phrasing bundles a coupling — the carousel and "its" mount — which
+does not exist in the code.** The mount is the whole static root's, not the carousel's.
+
+**The phrase was relayed forward as a work item, through six liaison seats and into a Director's own
+seat brief, and nobody tested it against the source.** It survived because it came from the owner,
+and owner-sourced statements are treated as settled — correctly, for intent.
+
+**The discipline: a ruling is AUTHORITATIVE ABOUT INTENT and is NOT EVIDENCE ABOUT THE CODEBASE.**
+His intent — `mcp.thenational.academy` becomes only the MCP server — is binding and was right. His
+incidental technical premise about which code implements that was an ordinary engineering guess and
+needed verifying like any other. **Separating those two is the cure**, and the failure mode is that
+deference to the first silently extends to the second.
+
+**This is why it is worth its own entry rather than filing under the true-value-wrong-question
+class:** nothing misread an instrument. An authority was over-extended from the domain where it is
+absolute into one where it is not.
+
 ### TEARDOWN FLEET, 2026-08-20 ~16:40Z — owner-instructed, and THREE OF THE SIX ITEMS WERE WRONG AS BRIEFED
 
 **Owner instruction, verbatim via the liaison:** *"have the director send an agent each to create
