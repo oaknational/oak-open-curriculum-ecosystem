@@ -1266,3 +1266,93 @@ and remains so.**
   specific to `worktree add`, and cloning sidesteps it entirely.** The seat also declined `git worktree prune`
   on a dead worktree registration, because pruning writes to the owner's repo metadata — the same boundary as
   declining to update his branch.
+
+## THE `www` MIGRATION IS DONE — Cloud-Config #561 applied 2026-08-21 by the owner
+
+**He applied the targeted plan himself after two independent plan runs agreed.** Verified immediately afterwards
+by this seat, and independently by an implementer seat minutes later:
+
+```text
+www/mcp · /.well-known/oauth-protected-resource/mcp · /.well-known/oauth-authorization-server
+        · /oauth/register · /mcp/healthz          ALL 404 text/html   <- off this repo entirely
+www/mcp/carousel/_1,_2,_3.png   200 image/png, digests EXACT MATCH    <- OWA is the origin now
+CONTROL _4.png   406 application/json (our accept-gate)  ->  404 text/html (OWA's own 404)
+mcp.*   PRM 200 (resource=mcp.*/mcp) · AS 200 · POST /oauth/register 400
+        · GET /oauth/authorize 307 -> clerk.thenational.academy · POST /mcp 401 + challenge · healthz 200
+mcp.*   cf-cache-status DYNAMIC on both discovery docs and healthz
+```
+
+**The `406 → 404` on the control is the load-bearing measurement, not the three 200s.** Images still loading
+proves nothing about which origin served them; the control's shape changing from our transport's accept-gate to
+OWA's Next.js 404 is what proves the origin changed hands.
+
+**A fact the plan revealed that had only been inferred: `www/mcp` was routed to
+`curriculum-mcp-alpha.oaknational.dev`** — the removed rule's `host_header` and `origin.host` were both that
+alias. So the host S1 established is a production domain of the production Vercel project was also serving
+`www` all along.
+
+**No cache-bypass rule is needed on `mcp.*`, measured rather than assumed.** All four paths return
+`cf-cache-status: DYNAMIC` with no rule in place — the app sets its own `no-store` / `max-age=0` headers and
+these paths carry no cacheable extension. **Residual worth a low-priority ticket, not a blocker:** the two
+discovery documents send `public, max-age=0, must-revalidate` rather than `no-store`, so they are uncached by
+Cloudflare's default rather than by prohibition.
+
+## OWNER RULING: go forward with #558 AS WRITTEN. Do not re-raise the divergence.
+
+**He was told the divergence explicitly and decided anyway. Re-raising it is a failure of this seat.**
+
+`Cloud-Config#558` was authored 2026-08-20T12:01Z, **before** his security brief of 2026-08-21, and diverges
+from that brief in two measurable places:
+
+```text
+#558 sets   action = "block"        his brief said LOG ONLY for a couple of weeks
+#558 sets   score_threshold = 40    his brief said a HIGH threshold — and Cloudflare LABELS 60 "Low", 25 "High",
+                                    so his words mean the NUMBER 60
+#558 sets   paranoia-level-1 only   MATCHES his brief
+```
+
+**His ruling, verbatim, 2026-08-21:** _"i think i will tweak config after my holiday -- let's go forward with
+this for now"_.
+
+**And #558 is a net improvement on the same population rather than a deferral** — this is the framing to carry,
+because "it does not cure the curriculum blocking" is true and misleading:
+
+```text
+today       curriculum-shaped payload -> managed_challenge at 40 (zone-wide)
+              a non-browser client cannot solve it, so it presents as a HUNG CONNECTION
+              and Cloudflare's rejection never reaches the app, so nothing surfaces it
+after #558  same payload -> block at 40 (mcp.* only) -> a clean 403 the client can report
+```
+
+**Accepted residual, stated to him once:** for the ~9 days of his absence, a teacher asking the MCP app about
+SQL injection or path traversal gets a legible 403 rather than an answer. Bounded — plain SQL, `SELECT *` and
+`<script>` all pass; what trips it is the tautology-plus-comment exploit form and path-traversal metacharacter
+clusters.
+
+**Two gaps #558 does not close, and the PR must say so or it reads as complete coverage:**
+
+- **The Cloudflare Managed Ruleset** (`rules[0]`, signature-based, under `ignore_changes`, invisible to that
+  repo) is untouched and is the likely actor on the measured blocks. **Changing the OWASP score action does not
+  necessarily change what blocks.**
+- **Scoping to `http.host eq "mcp.thenational.academy"` leaves the alpha alias with nothing.** Different zone,
+  production domain, and an XSS-shaped path reaches the application there that the WAF blocks on `mcp.*`. **He
+  has ruled not to touch that endpoint, so this is a stated residual, not a task.**
+
+**Resolved in #558's favour by the migration:** the earlier "covers one of two live front doors" caveat is gone.
+After #561, `mcp.*` is the only front door for the protocol.
+
+**Still blocking #558 mechanically, and both are his:** the branch is `BEHIND` and it is HIS, so nobody rebases
+it without his word; and it needs one approving review from a colleague, because he authored it and cannot
+approve his own PR. **Merge before apply this time** — #557 and #561 are both applied-while-open, and `main`
+declaring one thing while the edge does another twice over stops being an incident.
+
+## His priority ordering, 2026-08-21 afternoon
+
+1. **Teardown follow-ups, as PRs.** Carousel deletion + its `ROUTED_ASSET_BASE` mount + the loopback sentinel as
+   ONE atomic PR (the sentinel is **deleted, not retargeted** — OWA's required jest guard from #4453 now holds
+   that external contract, and every test tier here is in-process loopback so no test here can probe a live
+   host). Plus MCP-651's allowlist, the six docs still calling the landing page live, the four topology
+   comments, and the ADR-217 / ADR-122 governance acts.
+2. **The security work on `mcp.*`** — #558.
+3. **Everything else waits for his return**, on his instruction: the nine held documentation PRs, MCP-653, the
+   GitHub Support purge decision on #4443's history, and the old-branch deletion.
