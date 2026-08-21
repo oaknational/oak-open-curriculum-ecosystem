@@ -10,12 +10,16 @@
 - **Branch:** `chore/owner-liaison`, cut from `origin/main`
 - **Role:** `liaison`
 - **Thread:** `mcp-submission-drive`
-- **Director:** Peony hunts Nectar (`742fb5`), claude / claude-opus-5[1m],
-  seated 2026-08-19 07:32Z at owner word — PDR-064 Moment 2 broadcast, claim
-  `6228d1f1`. **Do not trust this line over the live registry:** confirm with
-  `claims list` and read the CURRENT Director from a fresh row. This file has
-  twice named a Director two generations stale.
-  (Prior Directors on this thread, for record only: Dormouse turns Footfall
+- **Director:** Tulip mends Bark (`e6d535`), claude / claude-opus-5[1m], seated
+  2026-08-21 08:23Z at owner word — PDR-064 Moment 2 broadcast under the
+  forced-exception path, claim `39718d8d` adopted in place. **Do not trust this
+  line over the live registry:** confirm with `claims list` against the PRIMARY
+  registry path and read the CURRENT Director from a fresh row. This file has
+  three times named a Director generations stale, and it went stale again within
+  a day of the last correction.
+  (Prior Directors on this thread, for record only: Coal hunts Brilliance
+  `70bc33` 2026-08-20, died with the host; Peony hunts Nectar `742fb5`
+  2026-08-19 to 2026-08-20 morning; Dormouse turns Footfall
   `a54547` 2026-08-17 evening to 2026-08-19 morning; Skunk stirs Cavern `db8b9b`
   and Tuna holds Ballast `a2ce03` 2026-08-17; Wildfire holds Quench `ee2764`
   2026-08-13; Schooner rides Marsh `d9d5b8` and Walrus herds Jetty `a9cd9a`
@@ -588,7 +592,12 @@ accepting or rejecting the conclusion.
 
 # State at 2026-08-20 afternoon — Warbler herds Wingspan (`d010b3`)
 
-> **CURRENT. Supersedes every dated section above where they disagree.** Standing doctrine is unchanged.
+> **SUPERSEDED IN PART** by the 2026-08-21 section at the foot of this file, which is current. Its traps and
+> its seat-boundary correction still stand and are the most load-bearing paragraphs in this file. **But its
+> §"THE TWO LIVE DECISIONS WITH MG" is stale in a way a successor will act on: decision 1, the
+> `CANONICAL_HOST` revert, was WITHDRAWN by this same seat at 14:59Z the same day after MG caught it with one
+> question. Do not re-open it.** Read the newest section first.
+>
 > Written mid-session, not at stand-down: comms is gitignored, and same-day substance should not wait for a
 > closeout that may not come.
 
@@ -730,3 +739,203 @@ Director's sound, control-probed Clerk finding to MG as _"achievable at the gene
 change"_, dropping the boundary of what it licensed. **The measurement was theirs and correct; the relay was
 the lossy step.** The same-day routing rule got it to him fast and got it to him wrong — **speed of routing
 makes the observation-versus-inference check MORE load-bearing, not less.**
+
+---
+
+# State at 2026-08-21 morning — Phoenix guards Scorch (`85bdbf`)
+
+> **CURRENT. Supersedes every dated section above where they disagree.** Standing doctrine is unchanged.
+> Written at session open rather than at stand-down, because the seat above it died mid-afternoon with no
+> stand-down and 6.5 hours of substance went with it. **Everything in §"The window nobody landed" below was
+> recovered from the gitignored comms stream on this machine. It exists nowhere else.**
+
+## THE MACHINE DIED, AND THAT IS THE WHOLE EXPLANATION — do not diagnose a fleet collapse
+
+Two seats stopped at once and neither wrapped. **The host went down.** `uptime` reported `up 17 mins` at
+08:21Z the next morning; the Director's last heartbeat was `20:23:19Z` and the liaison's `20:46:12Z`, both
+ordinary beats with ordinary work in flight. The last comms event in the whole stream is `19:29:51Z`.
+
+**Neither seat retired. Neither stood down. Neither failed.** Absent, stale and retired are three different
+states, and this is the fourth shape: **killed from outside.** A successor reading two stale rows and an
+eight-hour-silent stream will reach for a collapse story; the correct read is a power event.
+
+**And the loss was near-total for anything not committed.** What survived: everything in git. What did not:
+the comms stream is gitignored, so the only reason the afternoon is in this file at all is that a successor
+swept it before writing. **This is the second consecutive day the same exposure has cost this seat.** Land
+substance the hour it happens; a closeout you plan to write is not a record.
+
+**Verified at pickup, and it is the reassuring half: no work was lost.** All 24 worktrees scanned — every one
+clean except the PRIMARY, which holds only `napkin.md` modified plus two untracked-by-design paths. Seat B's
+~5,100-deletion teardown, held uncommitted at 19:04Z with an explicit loss warning against it, **was committed
+and pushed as #928 before the host died.**
+
+## The window nobody landed — 2026-08-20, 14:08Z to 20:46Z
+
+`SEAT-BRIEF.md`'s previous section was committed at 14:08Z. These are the events after it.
+
+### The `CANONICAL_HOST` revert was WITHDRAWN at 14:59Z — the section above records it as live
+
+MG killed it with one question (`CANONICAL_HOST revert???`) plus one ruling. **Disposition (b): keep the new
+host, and `www`-pinned conforming clients must re-point.** The reasoning that matters, because it is the part
+that generalises:
+
+```text
+NOW      CANONICAL_HOST = mcp.*      PRM.resource = mcp.*/mcp
+  client dials mcp.*/mcp   -> resource matches            OK
+  client dials www/mcp     -> RFC 9728 mismatch, throws   BROKEN  (installed legacy plugins)
+
+REVERTED CANONICAL_HOST = www        PRM.resource = www/mcp
+  client dials www/mcp     -> resource matches            OK      (legacy plugins fixed)
+  client dials mcp.*/mcp   -> RFC 9728 mismatch, throws   BROKEN  (the canonical advertised host)
+```
+
+**The revert does not defer the mismatch, it inverts which population it breaks** — onto the host we publicise
+and whose third-party verification is this drive's acceptance bar. Two seats priced it as "the reversible
+option" and neither said so. **A reversible action is not therefore a cheap one; reversibility says nothing
+about the cost while it is in force.**
+
+### Five owner rulings, all binding, none of them to be re-asked
+
+- **`www/mcp` HTML is Oak-Web-Application's. This repo serves no landing page there and needs nothing to do
+  with it.** ("owa will serve html 'landing page' at www/mcp ... this repo needs nothing to do with it")
+- **Carousel images ship from BOTH hosts for now.** ("let's add them in OWA so that they're in both places for
+  now.") **He did not pick between the options put to him — he chose both**, which dissolves an unverifiable
+  external contract instead of betting on it. The better answer than either offered.
+- **`www/mcp` loses every association with this repo.** ("Let's just get rid of www/mcp as ANYTHING to do with
+  this repo ... it's only causing headaches.") **Scope is wider than the `/mcp` prefix** — both `.well-known`
+  documents are served from `www` and are NOT under `/mcp`, so a `/mcp*`-scoped edit leaves the job silently
+  half-done.
+- **No redirects, no signposting, no phased cutover.** ("No, no one has used www/mcp in earnest yet so we dont
+  need to handle redirects or signposting", and "Frankly i don't care about breaking it at the moment, the
+  blast radius is very low right now.")
+- **An agent each, a PR each, for the teardown.** ("Great -- have the director send an agent each to create PRs
+  for each of those.")
+
+### The teardown, as he scoped it: `mcp.thenational.academy` becomes ONLY the MCP server
+
+**Stays, because it IS the server:** `/mcp` (protocol), both `.well-known` discovery documents, `/oauth/*`,
+`/mcp/healthz`. **Goes:** the landing-page surface, `public/carousel/` and its `ROUTED_ASSET_BASE` mount, the
+`www` origin rules. **The carousel sentinel is RETARGETED at OWA's `www` URLs, never deleted** — it is the only
+guard on an external contract Anthropic holds, and the guard must outlive the asset's move.
+
+**The engineering objection that was raised rather than silently complied with, and it is doctrine:** deleting
+the carousel assets while the sentinel still pins `/mcp/carousel/...` lands a red tree whose own documentation
+says the correct response to a red sentinel is to STOP, not to update the fixture. **His "I don't care about
+breaking it" is about the SERVED SURFACE, not about landing red on `main`.** Those are different things, and
+an instruction about one is not consent for the other.
+
+### A whole class of question we cannot answer, and the ticket that fixes it
+
+**No instrument we hold can say which host a request arrived on.** Measured: PostHog's MCP events
+(`$mcp_initialize`, `$mcp_tool_call`, `$mcp_tools_list`, `$mcp_resource_read`) are all live and none carries a
+hostname, origin or URL property; `oak_client_surface` has exactly one value, `"other"`. Sentry cannot either —
+`sendDefaultPii` is unset and headers pass through the redaction barrier.
+
+**So the host migration was performed with no instrument for "is anyone still on the old host".** That question
+recurs at the `www` removal, at any future move, and at any audit of the cutover. **Add the served host to the
+MCP analytics properties** — it is our own emitter, it is cheap, and it converts a class of unanswerable
+question into a query. It also carries the empirical half of MCP-638/639/640, which is why those three should
+not hold it.
+
+## THE FOUR OWNER-GATED ITEMS, as they stand at 2026-08-21 — the Director put them; this seat holds them
+
+Ordered on **shape, not severity** — what fits the time he has, not what is most serious.
+
+1. **The portal question, thirty seconds.** In the Anthropic submission portal, what host is recorded for the
+   server URL and for the three carousel image URLs — `www.thenational.academy` or `mcp.thenational.academy`?
+   **No agent can read the portal.** If `mcp.` on both, the carousel deletion here is safe once OWA deploys and
+   there is no pinned-client exposure at all. If `www` on either, deleting `public/carousel/` breaks the
+   published listing permanently no matter what OWA does — our copy is the origin for BOTH host URLs and OWA's
+   is shadowed by the edge rule — and the installed base is pinned to a host now advertising a PRM that names a
+   different resource.
+2. **Cloud-Config #558 — merge and apply, one click, his own PR.** #557 is applied, so `mcp.` is proxied and
+   inside a zone-wide OWASP ruleset (`expression = "true"`, Inbound Anomaly Score `managed_challenge` at
+   threshold 40). **An MCP client cannot solve a browser interstitial.** State it as
+   conditional-and-unmeasured — two Directors deliberately declined to trip the WAF to prove it — the point is
+   that the fix costs a click either way.
+3. **Two OWA reviews: #4453 (carousel plus both guards) and #4443 (the landing page).** The whole merge chain
+   waits on them: #4453 must merge AND deploy before Cloud-Config #561 may apply, and #561 is the single act
+   that unveils both OWA surfaces at once. Reviews are constitutively his under the identity doctrine.
+4. **The ADR-219 / MCP-349 coupled decision — one decision, two consequences.** `curriculum-mcp-alpha.oaknational.dev`
+   is unproxied (`server: Vercel`, no `cf-ray`, against proxied controls). That falsifies ADR-219's
+   every-served-domain premise, on which the CodeQL `js/missing-rate-limiting` dismissals rest; and it makes
+   MCP-349's prescribed evidence method unrunnable as written, because it asks for Cloudflare Security Analytics
+   on a host not in Cloudflare's path. **Recommendation: proxy the alpha** — one change discharges both records
+   instead of leaving a permanent exception plus an evidence method needing a rewrite. **Falsifier: if the alpha
+   is deliberately unproxied for a reason nobody wrote down, proxying breaks that path and the exception is
+   correct.** No such reason found in the record.
+
+## THE FINDING THAT MOVED THE CHAIN: three PRs nobody had ever been asked to review
+
+```text
+OWA #4453  OPEN  REVIEW_REQUIRED  mergeStateStatus BEHIND    reviewRequests = NONE
+OWA #4443  OPEN  REVIEW_REQUIRED  mergeStateStatus BEHIND    reviewRequests = NONE
+CC  #561   OPEN  REVIEW_REQUIRED  mergeStateStatus BLOCKED   reviewRequests = [Cloud Ops]   (a team, no individual)
+CC  #558   OPEN  REVIEW_REQUIRED  mergeStateStatus BEHIND    reviewRequests = [Cloud Ops]
+CC  #556   MERGED  APPROVED
+```
+
+**`review-requested:mantagen` open across ALL of `oaknational` returns 10, and not one of the three is in it.**
+Control: the instrument works — it returns #928, #927 and #913 in this repo plus seven older PRs across four
+other repos, and the same instrument returned 32 for all-open here.
+
+**This is not the "answered and never re-requested" failure mode. It is simpler: nobody was ever asked.** Two
+green PRs, days old, in no human's filter, with the entire merge chain behind them. `Cloud Ops` is a team
+assignment — the same automatic-not-a-human-act reading a predecessor control-probed on `jimCresswell`.
+
+**And all three are `BEHIND` or `BLOCKED`**, so a review request without an update-against-`main` first hands
+him a PR that cannot merge. **Sequence the update ahead of the ask.**
+
+## THE GENERATOR THIS SEAT PRODUCED IN ITS FIRST HOUR
+
+**A discharged gate discharges its own question, not the adjacent one it resembles.**
+
+I read MG's ruling — _"no one has used www/mcp in earnest yet"_ — as also settling whether installed clients
+are pinned to `www`, and told the Director to drop that item. **The Director corrected it and was right.** The
+ruling is about a URL people use; the pinning question is about what a client dials, and **a client dials
+whatever was recorded when it was installed, whether or not any human ever typed the URL.** Two different
+objects, one of which he had answered.
+
+**The cure the correction found is better than either framing:** the pinning question and the carousel question
+are the same fact from two directions — what host string is in the portal — so it is ONE item, and no test is
+needed. **When a discharge feels like it covers more than it was asked, look for the object it actually names.**
+
+**Same family as the standing relay generator** (a relayed finding must carry the OBSERVATION, not the
+INFERENCE), now at eight instances across three days: I carried "the population is empty" forward as if it
+settled "which host is pinned". A conclusion decays; the evidence does not.
+
+## Mechanics measured this morning
+
+- **`claims heartbeat` requires `--now <iso>`** — it is not optional. Omitting it exits 2 with
+  `missing required option --now`. A predecessor's note listing the flags as `--active --claim-id --now`
+  reads as three optional flags; the third is mandatory. **Verify by reading the STORED `heartbeat_at`,** never
+  the CLI's stdout — it prints plain text (`recorded heartbeat on claim <id>`) with no JSON and no `fresh_until`.
+- **`claims list` takes `--active <path>` and REJECTS `--platform`/`--model`**, unlike its siblings. Do not fill
+  documented args by analogy in either direction.
+- **A queue audit inherits the scope of its search.** The previous Director audited this repo's 16
+  `CHANGES_REQUESTED` PRs to a sound zero and was blind to three cross-repo PRs nobody had ever been asked to
+  review. Neither instrument was wrong; each was blind where it did not look. **"The queue is N" is only ever
+  true of the surfaces queried** — the same shape as the `cf-ray` zone trap.
+- **A `reviewDecision` of `CHANGES_REQUESTED` is sticky** until a new review lands. #913 is cured at `9ba0d1972`
+  and re-requested and still reads that way. Do not re-cure on the strength of the field.
+- **The comms watcher's cursor auto-seeds forward from now**, so a fresh seat replays nothing. **Sweep the gap
+  in the foreground before trusting the stream** — everything in this section came from that sweep, not from
+  the watcher.
+- **Delivery liveness was verified with a real non-self event**, not a process assert: the incoming Director's
+  08:23:20Z broadcast rendered on the watcher. A green `assert-watcher-live` alone can pass a wedged watcher.
+
+## Fleet at 08:30Z
+
+- **Director: Tulip mends Bark (`e6d535`)**, claim `39718d8d` adopted in place, PDR-064 Moment 2 posted under
+  the forced-exception path (no Moment 1 exists — Coal died with the host). Working the four uncured blocking
+  review findings on #921, #922, #923, #924, then re-staffing the five dead implementer briefs.
+- **Liaison: this seat**, claim `611cba8c` adopted in place, 43-minute self-heartbeat, all-channels watcher with
+  no tag exclusion.
+- **No implementer seats live.** All five died with the host; all five briefs survive and are being re-staffed.
+- **MG is in BOTH terminals.** He seated the Director in the primary checkout and this seat here, minutes apart.
+  The channel question was put to him rather than negotiated between two agents — his attention is his to
+  allocate. Until he rules, the Director answers him when he types there and relays verbatim; this seat holds
+  the queue as the record.
+- **Every worktree that pre-dates PR #927 still carries an `origin/main` upstream.** #927 fixes new spawns only.
+  Run `git branch --unset-upstream` before the first push in any re-entered worktree — three occurrences across
+  sessions, and one nearly pushed a 5,000-line teardown onto `main`.
