@@ -59,13 +59,13 @@ all in-window or newly swept.
 ### A control validates the INSTRUMENT, never the INFERENCE (2026-08-20, Director seat)
 
 - Four false conclusions in one morning at this seat, each built on measurements that were
-  individually true and individually controlled: (1) a claim intent asserting #556 was verified
+  individually true and individually controlled: (1) a claim intent asserting oaknational/Cloud-Config#556 was verified
   first-hand when it was inherited; (2) a CNAME-target verdict built on coherent-but-unmeasured
   reasoning, contradicted by a peer's probe; (3) #920 asserted un-merged two minutes after it
   merged; (4) "the DNS record was created by hand out-of-band" — disproven by a Terraform state
   serial advancing at the minute of a targeted apply.
 - **The distillation the fourth one forced.** In (4) every measurement was sound and every control
-  worked: `dig` resolved, #556 was open, `main` carried no record, no merged PR had touched the
+  worked: `dig` resolved, oaknational/Cloud-Config#556 was open, `main` carried no record, no merged PR had touched the
   file, and each read was control-probed. The controls proved the instruments were reading real
   state rather than erroring — which is exactly their job — and they were **structurally incapable**
   of catching the wrong premise (that an apply must come from a merged branch; with CLI-driven
