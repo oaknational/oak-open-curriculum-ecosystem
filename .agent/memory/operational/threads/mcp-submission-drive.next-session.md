@@ -460,6 +460,91 @@ Related, and worth a successor knowing: **the repo guards block the WHOLE compou
 `git add -A` refusal meant the `git apply` earlier in its `&&` chain never ran; it verified with
 `git status` rather than assuming. A blocked compound leaves the earlier steps un-run.
 
+### ASK WHAT MAKES AN EXTERNAL FACT BINDING BEFORE ASKING WHAT ITS VALUE IS
+
+The single most reusable thing this tenure produced, and it came from the liaison seat.
+
+**The morning's top owner item was "which host do Anthropic's stored carousel URLs use?"** It was
+unanswerable by any agent, it gated a deletion, and it was routed to the owner as the cheapest item on
+his last-day queue. He answered it — `mcp.*/mcp`, final — **and then dissolved the gate with a second
+sentence that had nothing to do with the value: the image URLs are repointable in the Anthropic
+dashboard.**
+
+**The gate's whole force was PERMANENCE**: that deleting `public/carousel/` would break a published
+listing irreversibly. A repointable external reference is a **sequencing dependency**, not a blocker.
+**So the gate would have dissolved even if he had answered `www`.** The question that consumed the
+morning's routing was never the load-bearing one.
+
+**The transferable form: when an unanswerable external fact appears to block work, ask what makes it
+BINDING before asking what its VALUE is.** Reversibility, not identity, is usually what decides
+whether it is a gate. This is cheap to ask and it can retire an owner item outright instead of
+spending the owner's attention on it — which matters most precisely when owner attention is scarcest,
+which is when such items get escalated.
+
+### A GREP IS AN INSTRUMENT AND NOBODY CONTROL-PROBED IT — three sweeps, three populations
+
+The plugin-host defect was swept three times by two seats and produced three different populations:
+
+```text
+sweep 1 (liaison)   exclude-only pathspec ':!*.md'   -> historical report data only; MISSED the defect
+                                                        file AND the guard that pins it
+sweep 2 (liaison)   explicit positive pathspecs      -> 8 hits including the guard
+sweep 3 (Director)  different pattern, outside md    -> 9 hits, but MISSED the shipped SKILL.md line,
+                                                        which carries the BARE host with no scheme
+```
+
+**Sweep 1's result went to the owner as "a one-line fix" before anyone probed it.** Sweep 3 was mine
+and it missed a surface because I searched for `www.thenational.academy/mcp` with a scheme while the
+skill document names the bare host inside a parenthetical.
+
+**Two lessons, and the second is the one that generalises past grep.**
+
+**A grep is an instrument that returns results, and results are not a population.** The control was
+trivial and available: grep for a string you already know is present, and confirm the pattern finds
+it. Nobody ran it. **An exclude-only pathspec is especially treacherous** — it silently changes what
+is searched rather than failing.
+
+**And: a pattern misses variant FORMS of the same fact.** Scheme-ful versus bare host, with and
+without a trailing path, inside a code string versus inside prose. **Sweeping for a value means
+sweeping for its forms, not for one spelling of it.** The seat was therefore told to run its own
+sweep and treat the Director's nine as a starting point rather than an answer — **neither count is
+the population until a third instrument agrees.**
+
+### "RETARGET, NEVER DELETE" WAS SATISFIED BY THE GUARD HAVING MOVED, NOT BY AN EDIT HERE
+
+A worked example of reading an instruction's PURPOSE rather than its words.
+
+The owner's teardown item 3 said to retarget the carousel sentinel rather than delete it. Two seats
+carried that forward as a step. **It is not available here: every test tier in this repository is
+in-process loopback via `src/test-helpers/loopback-request.js`, `e2e-tests/` included despite the
+name. No test here probes a live external host.**
+
+**But the instruction existed to stop the only guard on an external contract being destroyed — and
+that guard has already MOVED.** OWA PR #4453 landed a required jest test pinning each filename to its
+own SHA-256 and PNG magic number, per-file rather than set-wise so a permutation cannot pass, plus a
+served-contract Playwright spec. **So deleting ours destroys nothing; the guarantee now stands in a
+stronger place than it ever stood here** — in a *required* gate in the repo that actually serves the
+asset.
+
+Corrected step: **delete `public/carousel/` AND the loopback sentinel together, citing OWA's required
+jest guard as the surviving guarantee.** The rule the owner's instruction encoded is honoured; it is
+just satisfied elsewhere. **An instruction whose literal action is unavailable is a prompt to find
+what it was protecting, not a prompt to improvise a substitute.**
+
+### THE REAL `www`-PINNED POPULATION WAS OUR OWN SHIPPED PLUGIN
+
+The record spent a week reasoning about installed clients pinned to `www` and looking at Anthropic's
+listing. **The listing was on the new host all along** (owner ruling: `mcp.*/mcp`, final). **The
+pinned population is `plugins/oak-open-curriculum/.mcp.json`, which this repository publishes and
+which hardcodes `https://www.thenational.academy/mcp`.**
+
+Every new install from `main` takes the dying host; already-installed copies hold it. **The owner's
+"nobody has used `www/mcp` in earnest" ruling is about USAGE and does not make a shipped binding
+correct** — after the teardown that file names a dead endpoint in a public repo.
+
+**The lesson is about where we looked.** A week of reasoning about an external population never
+checked what we ourselves ship. The nearest surface was the last one examined.
+
 ### THE SEAT-SHAPE FACT THAT COST TWO STALLS
 
 **A subagent that ends its turn to wait on its own background task never wakes.** Seat R3 stalled
