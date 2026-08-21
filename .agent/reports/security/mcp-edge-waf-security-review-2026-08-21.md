@@ -386,13 +386,35 @@ this conclusion and even names the remedy vocabulary: *"Where edge protection fo
 domain is thinner, the cure is edge configuration — a firewall rule or an origin lock — never an
 in-process counter."*
 
+### 4.1 This is a second, sharper falsification than the one already in flight
+
+**PR 924 in this repository ("correct ADR-219's every-served-domain premise") is already
+correcting this ADR, and my finding is additional rather than duplicate.** Stating the
+difference precisely, because the two are easy to conflate:
+
+| | PR 924's finding | This finding (§4) |
+| --- | --- | --- |
+| Claim falsified | *"Cloudflare and Vercel carry the traffic controls for **every served domain**"* | *"Rate limiting … is **owned at the edge**"* |
+| Mechanism | One served domain (`curriculum-mcp-alpha.oaknational.dev`) is **unproxied**, so the Cloudflare layer is absent | On the hosts that **are** proxied, the Cloudflare layer is present but **carries no rate-limit rule matching this surface** |
+| Depends on the unproxied host? | Yes | **No** |
+
+So PR 924's amendment narrows the premise to proxied domains. **My finding is that the premise
+fails even after that narrowing**, because a proxied host with an empty `http_ratelimit` scope
+has no volumetric control either. Presence of the edge is not possession of the control.
+
+**Recommendation to the Director:** PR 924's amendment should be checked against this, since an
+amendment that narrows the claim to "every *proxied* served domain" would still be inaccurate
+today. That is a one-line strengthening of a PR already in review, not new work.
+
 Two incidental notes:
 
 - The Downloads API rule uses `managed_challenge`. That is fine for a browser-driven download
   surface and is exactly the action the owner has ruled out for MCP. It is precedent in the
   zone, not a model to copy.
 - The `js/missing-rate-limiting` dismissals on `/oauth/register` and `/oauth/token` are, as of
-  today, dismissals whose stated warrant does not hold. Closing the §9 gap restores them.
+  today, dismissals whose stated warrant does not hold on **either** limb — not the Cloudflare
+  limb (no matching rule) and not the application limb (no limiter, by design). Closing the §9
+  gap restores the Cloudflare limb.
 
 ---
 
@@ -1220,7 +1242,26 @@ access and hard blockers without it.
     matching **MUST** be exact string matching, not wildcard or pattern; and the consent cookie
     **MUST NOT** be set until after the user approves, or the consent screen is bypassable.
 - **To the Director:** §2's correction on `#557`'s merge state; §6.2's MCP-644 routing; §9.2's
-  MCP-593 pointer; and §5.1 / R12 left open for the ADR-219 / MCP-349 decision you hold.
+  MCP-593 pointer; §4.1's one-line strengthening for PR 924; and §5.1 / R12 left open for the
+  ADR-219 / MCP-349 decision you hold.
+
+### Independent corroboration from the peer seat
+
+**S1's PR 931 and this document were written without either seat reading the other's work, and
+they converge on the origin exposure from opposite directions.** Worth recording, because
+independent convergence is stronger evidence than either finding alone:
+
+- S1 enumerated **four** live hostnames all serving `x-app-version: 1.175.1`, and identified
+  `curriculum-mcp-alpha.oaknational.dev` as a **production domain of the production Vercel
+  project** — which strengthens my §5.1 considerably. I had established that the host is
+  reachable and unproxied; S1 establishes that it is *production*, not a stale preview.
+- S1 measured an **XSS-shaped path** blocked `403` by Cloudflare and served by the alpha host.
+  I measured **SQLi-, command-injection- and path-traversal-shaped request bodies** with the same
+  split (§3.2). Different payload classes, different request positions (path versus body), same
+  conclusion: the edge mitigates and the origin does not.
+- Together these give the §5.1 asymmetry its full force: **there is a WAF-free path to production,
+  and every rule in §7 and §9 is bypassable through it.** Neither seat should be read as having
+  resolved it; it is the ADR-219 / MCP-349 owner decision.
 
 ---
 
