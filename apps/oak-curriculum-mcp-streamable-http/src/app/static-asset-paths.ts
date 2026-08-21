@@ -14,27 +14,50 @@ import { MCP_RESOURCE_PATH } from '../served-origin.js';
  * URL prefix every first-party asset reference sits beneath.
  *
  * @remarks
- * MCP-509. The canonical deployment reaches this app through a Cloudflare
- * origin rule scoped to `/mcp` and `/mcp/*`; a root-relative asset request
- * never arrives here at all, it stays on the main website and gets that
- * site's 404 HTML. So the page's own references must live inside the routed
- * surface, and the static mount must answer there.
+ * Assets sit under this prefix because the app is reachable there on every
+ * host it is served at, and because deriving the prefix keeps every asset
+ * reference and every test composed from one value (MCP-509).
  *
- * **Derived, not a fourth copy of `'/mcp'`.** The edge rule is scoped to the
- * path this app publishes as its MCP resource, so that path — not a literal
- * spelled here — is what the asset base has to equal. Deriving it means a
- * change to the resource path moves the assets with it, and cannot leave the
- * markup pointing somewhere the edge does not forward. Spelling it again
- * would rebuild the MCP-509 defect in miniature: every consumer and every
- * test composes from this constant, so an independent literal here could
- * drift to a value the edge never routes while the whole suite stayed green.
- * `MCP_RESOURCE_PATH` is itself pinned to a literal by the published
- * protected-resource metadata (`auth-routes.integration.test.ts`).
+ * **Derived, not a fourth copy of `'/mcp'`.** Every consumer and every test
+ * composes from this constant, so an independent literal here could drift from
+ * the resource path while the whole suite stayed green. `MCP_RESOURCE_PATH` is
+ * itself pinned to a literal by the published protected-resource metadata
+ * (`auth-routes.integration.test.ts`).
  *
- * Widening the Cloudflare rule instead — claiming root-level `/oak-ds/*` or
- * `/favicons/*` on `www` — would put this app in the main website's
- * namespace, a collision review nobody has done. Staying inside the existing
- * contained route needs no edge change at all.
+ * A root asset base is also reachable today — `static-content.ts` mounts the
+ * same handler at both bases, and both answer on the canonical host. Whether
+ * one base is enough is a behaviour question, deliberately not settled by this
+ * comment.
+ *
+ * ## Why the value is `/mcp` — a history record
+ *
+ * Until 2026-08-20 the app was served under `www.thenational.academy/mcp`, and
+ * a Cloudflare origin rule decided what reached it. The rule covered **five**
+ * path families:
+ *
+ * ```text
+ * /mcp                                            (exact)
+ * /mcp/                                           (prefix)
+ * /.well-known/oauth-protected-resource/mcp       (exact)
+ * /.well-known/oauth-authorization-server         (exact)
+ * /oauth/                                         (prefix)
+ * ```
+ *
+ * Read from `oaknational/Cloud-Config`'s `main` on 2026-08-21, where the origin
+ * route and a cache-settings rule carried the same expression. This block is
+ * the estate's one written copy of that scope; `health-paths.ts` and
+ * `health-endpoints.integration.test.ts` point here rather than restating it.
+ *
+ * Root-relative requests were outside all five families, so an asset reference
+ * at the root never arrived — it stayed on the main website and got that site's
+ * 404 HTML. That is what forced the routed prefix. Claiming root-level
+ * `/oak-ds/*` or `/favicons/*` on `www` would have put this app in the main
+ * website's namespace, a collision review nobody did.
+ *
+ * The rule was withdrawn 2026-08-20 and the app moved to
+ * `mcp.thenational.academy`, root-served. `www` serves nothing of this app:
+ * measured 2026-08-21, all five families return the website's 404 there. So
+ * this section explains where the value came from and constrains nothing.
  *
  * Assets survive the shared prefix because the static mount is registered
  * BEFORE the `/mcp` accept-header gate (see `application.ts` ordering): a
@@ -58,7 +81,8 @@ import { MCP_RESOURCE_PATH } from '../served-origin.js';
  * the Clerk handshake before ever reaching this mount. That is why these
  * asset prefixes are named in `clerk-skip-surfaces.ts`: the ordering argument
  * above rules out a 401, not a redirect. Both mounted copies of each tree are
- * named there — the routed one and the root one the alpha host serves from.
+ * named there — the routed one and the root one. Every host this app is served
+ * at answers on both, so both copies need the exemption.
  */
 export const ROUTED_ASSET_BASE = MCP_RESOURCE_PATH;
 

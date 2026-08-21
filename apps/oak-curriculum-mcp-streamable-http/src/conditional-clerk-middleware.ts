@@ -11,7 +11,8 @@
  * ## What Skips Clerk
  *
  * - **Path-based**: `/.well-known/*`, `/oauth/*` (RFC 9728), and both health
- *   paths — `/healthz` and the routed `/mcp/healthz` the canonical host reaches
+ *   paths — the root `/healthz` and the routed `/mcp/healthz`, both of which
+ *   the canonical host reaches since it serves this app from its own root
  *   (MCP-580)
  * - **Prefix-based**: HMAC-signed asset downloads, and the landing page's own
  *   static asset trees under both prefixes they are mounted at

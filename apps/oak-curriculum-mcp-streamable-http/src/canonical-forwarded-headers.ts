@@ -7,20 +7,33 @@
  * middleware does not read configuration; it reads request headers, the one
  * interface configuration never reached. This shim closes that gap.
  *
- * Why configuration must supply these headers here (MCP-517). Behind the
- * Cloudflare edge the app is served at `https://www.thenational.academy/mcp`,
- * but the edge MUST override the Host to the app's own Vercel hostname —
- * that is how Vercel selects the serving project. The honest proxy answer
- * (`trust proxy` plus forwarded headers arriving from the edge) is structurally
- * unavailable: Vercel's edge overwrites an inbound `x-forwarded-host` with the
- * Vercel hostname before the app sees it, and this app deliberately refuses
+ * Why configuration must supply these headers here (MCP-517). When this was
+ * written the app was served at `https://www.thenational.academy/mcp` behind a
+ * path-scoped Cloudflare origin rule that overrode the Host to the app's own
+ * Vercel hostname; the honest proxy answer (`trust proxy` plus forwarded
+ * headers arriving from the edge) was structurally unavailable, because
+ * Vercel's edge overwrites an inbound `x-forwarded-host` with the Vercel
+ * hostname before the app sees it and this app deliberately refuses
  * `trust proxy` (`bootstrap-helpers.ts`). So Clerk's `deriveUrlFromHeaders`
  * (`@clerk/backend`) perceived the deployment hostname, minted session-refresh
  * handshakes returning to it, and Clerk's Frontend API rejected them with a
  * 422 `form_param_value_invalid` — stranding every signed-in browser on raw
  * JSON while signed-out traffic sailed through. Clerk's own "deploy behind a
  * proxy" guidance asks for exactly these two headers; the app supplies them
- * from configuration because the proxy chain cannot.
+ * from configuration because the proxy chain could not.
+ *
+ * **The address is now `https://mcp.thenational.academy`, served from that
+ * host's root, and the origin rule was withdrawn 2026-08-20.** The Host
+ * override went with it — MCP-634 measured this app's own rebinding guard
+ * refusing the raw Host `mcp.thenational.academy`, which is only possible if the
+ * client's Host reaches the app unrewritten. The shim's own premise is narrower
+ * than the Host override, though, and survives it on its face: it is Vercel's
+ * edge overwriting `x-forwarded-host`, not Cloudflare rewriting `Host`, that
+ * leaves origin-deriving middleware unable to see the public address. **Whether
+ * that still happens under the new binding is unverified from outside the
+ * platform, so whether this shim is still load-bearing is an open question
+ * deliberately not settled by this comment.** Do not read the paragraph above
+ * as evidence either way; it describes the deployment that motivated the shim.
  *
  * This REMOVES the influence of client- and edge-supplied forwarded headers
  * rather than adding trust in them, so it strengthens rather than weakens the
