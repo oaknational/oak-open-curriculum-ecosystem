@@ -1038,3 +1038,127 @@ push since review" was read as _the ball is with the author_. If some of those r
 than findings, it may instead mean **nobody reviewed the PR at all** — a different and worse queue state.
 **Do not inherit "the answer is ZERO" as the whole truth.** Not re-run on 21 Aug because curing four live
 findings was worth more; recorded as open rather than settled.
+
+## THE STRUCTURAL FINDING OF 2026-08-21 — the owner's re-request instruction cannot work in foreign repos
+
+**His standing instruction of 2026-08-17** — answering a review is not enough, emgeebot MUST re-request from
+`mantagen` or the PR never re-enters his `review-requested:` filter — **is INOPERABLE in `Oak-Web-Application`
+and `Cloud-Config`, by construction. Not by oversight.**
+
+```text
+POST /repos/oaknational/Oak-Web-Application/pulls/4443/requested_reviewers  reviewers[]=mantagen
+  -> 422  "Review cannot be requested from pull request author."
+CONTROL, same endpoint, same moment, non-author reviewer
+  -> 200  reviewer added
+authors: OWA #4443 mantagen · OWA #4450 mantagen · Cloud-Config #561 mantagen
+```
+
+**Every agent PR in those two repos is authored as `mantagen`, because emgeebot has no installation there. GitHub
+refuses to make an author a reviewer of their own pull request. Therefore MG can never appear in
+`reviewRequests` on any of them, and `review-requested:mantagen` can structurally never contain them.**
+
+**This DISSOLVES this seat's own morning finding into something better.** I measured that #4453, #4443 and #4450
+carried no review request and read it as _nobody was ever asked_ — a real gap in diligence. **It was an
+impossibility, not a lapse.** The two readings have opposite cures: "we forgot" is cured by remembering, and
+"GitHub refuses" is cured only by a different mechanism. **Reading it as a lapse would have produced a discipline
+fix for a problem discipline cannot reach.**
+
+**The route that works was demonstrated by neither seat's design:** `johnrobeds` approved OWA#4453 at 08:47Z and
+it merged ten minutes later. A colleague who is neither the author nor an agent.
+
+**So "complete" needs a foreign-repo clause.** Cured, pushed, up to date with `main`, and **in a named human's
+filter** — where in THIS repo that means re-requested from `mantagen`, and in a foreign repo it means requested
+from a **non-author colleague** AND listed to him by this seat, because his filter cannot see it.
+
+**The structural root is the deferred emgeebot install on those repos, which is his standing closed subject.**
+Recorded as the consequence of a ruling he has already made, NOT as a re-ask: while we author under his
+credential there, his own filter discipline cannot reach those repos. **Do not reopen it; do not present the
+consequence as a reason to.**
+
+**An ordering belief this also killed.** This seat told him #4450 needed updating against `main` before it was
+worth his attention. Wrong: #4453 went `BEHIND` again within the hour as eight commits landed, and **merged
+anyway.** `BEHIND` is one command at the merge button and blocks neither review nor approval. **The load-bearing
+act was always getting a non-author reviewer requested.**
+
+## A CONTROL PROBE THAT MUTATED A REAL SYSTEM — disclosed, because the seat that did it disclosed it
+
+Proving the 422 above, the Director requested `orangemug` on OWA#4450 as the control. **The 422 alone already
+established the finding; the control was not needed, and it notified a colleague.** A control probe that changes
+the world is not a probe, it is an action.
+
+**The discipline that generalises: before running a control, ask whether the negative result already settles it.**
+A refusal is self-proving — the endpoint demonstrably parsed and rejected. The control adds confidence only about
+the instrument, which the refusal's own specificity already gave.
+
+`orangemug` is defensible on the merits — he left three of the unresolved threads on #4443 — **but he was not
+chosen on them, and the record says so rather than dressing the side effect up as method.**
+
+## Linear's description-`patch` normaliser: the real mechanism, replacing the `~~` note
+
+The record said the normaliser "silently dropped `~~` markers". **Measured twice in one write on MCP-345: it
+re-splits emphasis that SPANS a code span, at the code-span boundary.**
+
+```text
+written  **`openid` is nonetheless excluded, and that exclusion STILL STANDS.**
+stored   `openid` **is nonetheless excluded, and that exclusion STILL STANDS.**
+written  **Do not read this correction as authorisation to add `openid`.**
+stored   **Do not read this correction as authorisation to add** `openid`**.**
+```
+
+**Both benign — nothing dropped, meaning intact. And it explains the `~~` case: strikethrough spanning a code
+span is re-split too, and `~~` has no valid split form, so the marker is discarded rather than moved.** One
+defect, two outcomes.
+
+**The sharper rule: never let emphasis span a code span in Linear markdown.** Write it wholly inside or wholly
+outside. **Still diff the entire stored field after any patch** — that is the only reason this mutation is known
+to be benign rather than assumed to be.
+
+## THE CLASS, AT SIX INSTANCES IN ONE DAY — an instrument returning a TRUE value that answers a DIFFERENT question
+
+1. **`cf-ray`** — proves Cloudflare fronts something, not that it is YOUR Cloudflare.
+2. **A review row** — proves a reviewer object exists, not that anything was reviewed. Four spend-limit skip
+   notices, two vendors.
+3. **`author=mantagen`** — proves the credential used, not who authored. Nearly updated the owner's own branch.
+4. **The comms `author` field** — proves the routing identity, not the author. Under F-164 a seat's broadcast
+   wears its Director's name; this seat nearly wrote a seat's observation into the permanent record as the
+   Director's. **What stopped it was asking for wording instead of paraphrasing a peer into a permanent record;
+   the Director's refusal of the credit was the second check, not the first. Neither is a mechanism — the suffix
+   convention lives in prose, which no reader is obliged to check.** Paired defect: the identity field is
+   `author`, not `agent_id` — two seats independently read `agent_id`, got a uniform empty result, and one
+   nearly reported it as a negative. **Control: all 1,722 events older than 2026-08-20T14:00Z carry `author` and
+   none carries `agent_id`, so there was never a migration. We were both simply wrong** — a cleaner record than
+   "the schema changed", because it removes a cutover a future seat would go looking for.
+5. **A `Production` deployment row** — proves Vercel deployed a SHA, not that a path returns bytes.
+6. **`reviewRequests: []`** — proves the author is not in their own review-request list, not that nobody was
+   asked. The sharpest of the six, because the true reading and the false one have opposite cures.
+
+**The cure is not vigilance. It is naming what the instrument measures before reading it as an answer.**
+
+**And a seventh shape, from the same day: an instrument that CANNOT discriminate.** The Vercel production URL
+returned `302` for present files and for a nonexistent control alike — deployment protection. **Reported as a
+failed measurement rather than as weak evidence**, which is the class's cure working as designed. A probe with no
+discriminating power has no weak reading; it has no reading.
+
+## Also true at 2026-08-21 09:40Z
+
+- **OWA#4453 MERGED** 08:57:07Z, merge commit `3c36d57d74e3`, approved by `johnrobeds` — **a human colleague who
+  is neither the owner nor an agent, which is live evidence the delegation route works.**
+- **OWA#4454 up**, the logo rebuild: one commit, 17 paths blob-identical to the old tip, both logo paths absent
+  from every commit's full tree, control returning both at `815bcacaccfb` so the probe is not blind. **Claims no
+  erasure:** `refs/pull/4443/head` keeps the blobs reachable, a force-push would not have changed that, and the
+  GitHub Support purge is a separate owner decision. **Three old-branch commits touched the logo paths, not two**
+  — added, modified, removed.
+- **Old-branch deletion is deferred to his word.** His local `~/webdev/oak/owa` sits on it at `36bfa64f50`.
+- **`git worktree add -b <branch> origin/main` sets the upstream to `origin/main` in a FOREIGN repo too.** PR
+  #927 fixed the `agent-tools spawn` path only. **Fourth occurrence of this mechanism across sessions and repos,
+  every one caught by a seat noticing.** It wants a wrapper or a rule, not another watch-item.
+- **MCP-345 corrected on our board** — the disproven Clerk mechanism out of title and banner, the exclusion
+  explicitly still standing as Oak's policy choice, and `offline_access` explicitly NOT settled: only one of the
+  probe's three rows discriminates whether Clerk adds it or this instance grants it.
+- **Six of this drive's PRs are in his filter on the day he leaves** — #913, #921, #922, #923, #924, #929, all
+  mergeable, all documentation. **Recommendation given: hold them for his return.** None is on the path to the
+  Anthropic verdict, and the knowledge is safe in git either way.
+- **Two Director-state commits are committed LOCALLY and deliberately UNPUSHED** on `docs/mcp-warden-closeout-review-request-gate`
+  (`368eea8ec`, `1a6083942`, worktree `oak-warden-closeout-gate`), because pushing would invalidate #913's
+  verified re-request. **They survive a context death and a reboot; they do not survive disk loss. The reason for
+  holding expires when he leaves.**
