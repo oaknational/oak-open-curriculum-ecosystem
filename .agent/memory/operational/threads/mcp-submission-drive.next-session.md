@@ -545,6 +545,74 @@ correct** — after the teardown that file names a dead endpoint in a public rep
 **The lesson is about where we looked.** A week of reasoning about an external population never
 checked what we ourselves ship. The nearest surface was the last one examined.
 
+### A DISTINCT FAILURE MODE: WE ALREADY KNEW — a finding landed and then not applied to the next thing built
+
+**This is NOT the true-value-wrong-question class, and conflating them loses what is useful about it.** In that class an instrument misleads you. Here **nobody was misled: the fact was already measured, written down, and relayed — and then the next artefact was built as though it were not.**
+
+Two instances, two seats, inside one hour, 2026-08-21:
+
+- **The Director.** Measured and landed the finding that GitHub refuses to add a pull request's
+  author as its reviewer, so in `Oak-Web-Application` and `Cloud-Config` — where every agent PR is
+  authored under the owner's credential — the owner can never appear in `reviewRequests`. **Then
+  proposed a stability test scoped to "PRs authored by this fleet", which depends on authorship
+  discriminating in exactly the two repositories where it had just been proved it cannot.**
+- **The liaison.** Measured the repo-wide intermittent Percy failure on `Oak-Web-Application`,
+  reported it to the owner — **then wrote a stability test requiring zero failing checks, which the
+  existence of that Percy condition defeats.**
+
+**The shape: a finding is recorded as knowledge and not carried as a constraint.** Recording it
+feels like completion, so the next design proceeds from the pre-finding model. **Landing a finding
+is not the same as holding it.**
+
+**Why it is worth its own name rather than filing under carelessness:** both seats were, at that
+moment, the estate's most careful readers of the very fact they violated. Attention was not the
+missing thing. **What is missing is a step — after landing a finding, ask what it FORBIDS, and check
+the next artefact against that list.** A finding's value is the options it removes, and a record of
+it does not remove them.
+
+**Cheap mitigation available now, and it is what actually caught both instances:** each seat checked
+the OTHER's design against the shared record. **Neither caught their own.** So the practical cure is
+adversarial review by a peer who holds the same findings — not more care by the author.
+
+### THE TRIGGER'S OWN INSTRUMENT CARRIED THE CLASS — and a fourth state neither seat had
+
+The owner asked not to be contacted until the board was stable, so the liaison built a stability
+test. **Its instrument was `GET /repos/{owner}/{repo}/branches/main/protection`, to read the
+required checks.** On this repository that returns **404 `"Branch not protected"`** — because this
+repo is governed by **rulesets**, not classic branch protection. Control: the same endpoint returns
+the full required set on `Oak-Web-Application`, which is why it appeared to work.
+
+**A 404 read as "no protection" yields an EMPTY required set, and "no required check is failing" is
+then VACUOUSLY TRUE.** The test would have reported the home repository stable **with every check
+red** — and nine of the drive's pull requests live there.
+
+**This is the sharpest instance of the day's dominant class because everything downstream inherits
+it silently:** the trigger deciding when to wake the owner cannot itself be checked by the thing it
+gates.
+
+The required set here, read from ruleset `13402577` (`Protect default branch`, active):
+
+```text
+CodeQL,  SonarCloud Code Analysis,  run-quality-gates,  Vercel
+```
+
+**Cure adopted: a per-repo instrument chosen by which one answers — the rulesets API here, classic
+protection in the foreign repos — and NO FALLBACK. If neither returns a non-empty required set,
+STOP and report the instrument failure.** A fallback to empty is precisely the vacuous pass.
+
+**And a fourth state the test still missed after both corrections: REQUIRED-BUT-ABSENT.** The test
+asked whether anything was running and whether anything required was failing. **It never asked
+whether the required checks RAN AT ALL** — and a required check that never reported is neither
+running nor failing, so a pull request missing `Vercel` entirely would have read stable. Measured
+clean on #930, #913 and #925 (all four required checks present), **so this is latent rather than a
+live miss — but a check that never fires is exactly how a required gate goes quiet.** Three
+conditions, not two: nothing in flight, nothing required failing, **every required check present.**
+
+**Consequence for the Dependabot pair, stated more sharply than "not ours":** `CodeQL` is in this
+repository's own required set, so `#893` and `#894` — the `github/codeql-action` 4.37.7 bumps whose
+Analyze jobs fail, controlled against eleven green PRs — **break a check this repository requires.**
+They cannot merge, and Dependabot will keep re-raising them.
+
 ### THE SEAT-SHAPE FACT THAT COST TWO STALLS
 
 **A subagent that ends its turn to wait on its own background task never wakes.** Seat R3 stalled
