@@ -5,7 +5,121 @@
 Director seat "Tulip mends Bark" (session `e6d535`)
 **Scope**: the exact configuration change recommended for `Cloud-Config#558`, the measurement
 design for the observation window, and the rate-limit rules for the OAuth endpoints
-**Status**: **RECOMMENDATION. Nothing has been applied and nothing has been changed.**
+**Status**: **SUPERSEDED IN PART — see the correction in §0a. The HCL in §3.1, §3.2 and §3.3
+cannot be applied; Cloudflare rejects its structure. The measurement design in §4, §5 and §6
+stands unchanged and is still wanted.**
+
+---
+
+## 0a. CORRECTION, 2026-08-21 — the recommended HCL cannot be applied
+
+**Added by Seat S4** (Implementer, PDR-117, `mcp-submission-drive`, Director seat "Tulip mends
+Bark", session `e6d535`) **after a real apply of `Cloud-Config#558` failed.** Nothing below
+deletes this document's HCL. It is marked, not removed, so a reader can see what was proposed
+and why Cloudflare refused it.
+
+### 0a.1 What was measured
+
+The owner confirmed an apply of `Cloud-Config#558` in the `cloudflare-rulesets` Terraform Cloud
+workspace at **14:47:14**. It **errored at 14:47:51** — run `run-VTjEwK6Yq7rwvUzr`, target
+`cloudflare_ruleset.http_request_firewall_managed`:
+
+```text
+Error: error updating ruleset with ID "c48dd2c4d3a44c039737cc1982422afe"
+  more than one rule is trying to execute the same managed ruleset (20014)
+  at firewall_managed_rules.tf line 22
+```
+
+**Nothing landed.** The apply counters read `additions/changes/destructions: None`, and
+Cloudflare rejects the ruleset PATCH atomically, so there is no half-applied state. Verified
+independently at the edge: `/probe.sql` returns 403 on both `mcp.thenational.academy` and
+`www.thenational.academy` (the pre-existing "Block SQL requests" custom rule), the control
+`/probe.txt` returns 404 on both — so the 403s are the WAF and not a broken zone — and the MCP
+surface is healthy (`/mcp/healthz` 200, `POST /mcp` 401).
+
+### 0a.2 The constraint is on the STRUCTURE, so both amendments fail identically
+
+`Cloud-Config#558` adds a second `execute` rule for the OWASP Core Ruleset
+(`4814384a9e5d4991b9815dcfc25d2f1f`) in the zone's `http_request_firewall_managed` phase: one
+scoped `http.host eq "mcp.thenational.academy"`, one scoped `ne`. **Cloudflare forbids that
+shape.** Vendor-documented, verbatim, from Cloudflare's account-level managed-rulesets page
+read live on 2026-08-21:
+
+> At the zone level, each WAF managed ruleset can only be deployed once. At the account level,
+> you can deploy each managed ruleset more than once.
+
+**Therefore §2.1 and §2.2 do not cure the defect.** Changing `action = "block"` to `"log"` and
+`score_threshold = 40` to `60` changes values inside a structure Cloudflare will not accept.
+The amended HCL in §3.1 fails with the same `20014` at the same line. The two amendments were
+correct about *what the values should be*; they are inert until the structure changes.
+
+Nor can one execute rule carry both behaviours. Cloudflare's override documentation, read live
+on the same date, supports three override levels — ruleset, tag/category, and rule — and
+**none of them accepts a filter expression.** An override applies uniformly to its scope. So a
+single zone-level execute rule cannot give `mcp.thenational.academy` one action and threshold
+while giving every other host another.
+
+### 0a.3 §3.3 contains a SECOND, independent instance of the same defect
+
+Flagged loudly because it is not obvious and it is load-bearing for §4's Day 0 gate G1.
+
+Section 3.3 adds an `execute` rule for the **Cloudflare Managed Ruleset** scoped to the MCP
+host, while §3.3's own premise is that the fenced `rules[0]` placeholder *is the
+dashboard-managed deployment of that same ruleset*. If that premise holds, §3.3's rule is a
+second zone-level deployment of the Cloudflare Managed Ruleset and hits `20014` for exactly the
+same reason. Gate G1 as written ("**Both** managed rulesets scoped to the MCP host") is
+therefore unreachable in its current form.
+
+One corroboration worth recording: `rules[0]` executing the Cloudflare Managed Ruleset has
+coexisted with an OWASP execute rule in this phase for a long time without error. That
+confirms the limit is **one deployment per managed ruleset**, not a cap on the number of
+execute rules in a phase.
+
+### 0a.4 A green `terraform plan` is NOT evidence a Cloudflare ruleset apply will succeed
+
+**This belongs in this document as a general caution, not as a footnote to one defect.**
+
+`20014` is **invisible to `terraform plan`**. The plan for `#558` was clean. The HCL was valid
+v4.29.0 syntax. Terraform's own validation passed. The rule is enforced only by Cloudflare's
+API at PATCH time, so nothing in the Terraform toolchain — and nothing any reviewer held before
+the apply — could have caught it. For `cloudflare_ruleset` changes, treat a plan as proof that
+Terraform understands the configuration and **not** as proof that Cloudflare will accept it.
+
+### 0a.5 A moving `latest-change-at` is NOT evidence that state changed
+
+On this workspace, `latest-change-at` **moved to 14:47:50** even though the apply errored and
+wrote nothing. It records an **attempt**. It had been used as a positive control earlier the
+same day, and on this occasion it would have misled the reader into believing the change
+landed.
+
+### 0a.6 What in this document still stands
+
+**All of it except the HCL.** The measurement design is unaffected by the structural constraint
+and is still wanted, specifically:
+
+- **§4.1** — the Day 0 gate, with the caveat that G1 needs restating against whatever structure
+  replaces §3.1 (see §0a.3).
+- **§4.2** — the weekly control probe, the step that makes a zero mean something.
+- **§4.3** — what to count and against what denominator.
+- **§4.4** — the named list of deliberate tester requests, because passive observation will
+  under-sample the interesting case.
+- **§4.5** — the nine conjunctive Day 14 criteria, and the principle that enforcement happens
+  when the exit criteria are met and not when the calendar says so.
+- **Any actual `block` during the window is a defect, not a datum.**
+- **§5** — the false-positive design and the honest scope of the problem.
+- **§6** — the rate-limit rules on `/oauth/register` and `/oauth/token`, which are custom rules
+  in a different phase and are **not** affected by `20014`.
+- **§1.3** — the sequencing hazard. `Cloud-Config#561` has since merged (`main` is now at
+  `fa179f2a1`), which discharges that specific item.
+
+### 0a.7 The consequence for `Cloud-Config@main`
+
+`Cloud-Config#558` **merged** at 2026-08-21T13:34:22Z. Its
+`infrastructure/cloudflare/rulesets/firewall_managed_rules.tf` is byte-identical between that
+merge commit and current `origin/main`. **So `Cloud-Config@main` now declares a configuration
+Cloudflare will not accept, and any apply in the `cloudflare-rulesets` workspace from `main`
+fails** — including applies for unrelated changes that are already waiting in that workspace.
+Curing that is the first call on this lane, ahead of any new feature.
 
 ---
 
@@ -254,6 +368,13 @@ Copy-pasteable, v4.29.0 syntax, in the idiom of the existing files. **Not applie
 
 ### 3.1 `infrastructure/cloudflare/rulesets/firewall_managed_rules.tf` — Stage 1 (the window)
 
+> **⚠ DO NOT APPLY — see §0a.** Cloudflare rejects this structure with error
+> `20014` (*"more than one rule is trying to execute the same managed ruleset"*),
+> measured on a real apply on 2026-08-21. **The vendor constraint is normative:
+> "At the zone level, each WAF managed ruleset can only be deployed once."** The
+> values below are right; the two-execute-rule shape they sit in is not. Left in
+> place deliberately so the proposal and its refutation are both legible.
+
 This is the amendment to `#558`. Replace `#558`'s added rule with this one, and amend the
 comment on the zone-wide rule below it.
 
@@ -329,6 +450,13 @@ And the zone-wide rule's expression, unchanged from `#558` but with the reason c
 
 ### 3.2 Stage 2 — enforcement, after §4's exit criteria are met
 
+> **⚠ DO NOT APPLY — see §0a.** Cloudflare rejects this structure with error
+> `20014` (*"more than one rule is trying to execute the same managed ruleset"*),
+> measured on a real apply on 2026-08-21. **The vendor constraint is normative:
+> "At the zone level, each WAF managed ruleset can only be deployed once."** The
+> values below are right; the two-execute-rule shape they sit in is not. Left in
+> place deliberately so the proposal and its refutation are both legible.
+
 One field, in one place:
 
 ```diff
@@ -367,6 +495,12 @@ plan output rather than assumed. If it is rejected, the fallback is a custom err
 configured at the ruleset level in the dashboard, and the recommendation stands without it.
 
 ### 3.3 The Cloudflare Managed Ruleset — what CAN be authored blind, and the one step that cannot
+
+> **⚠ PARTIALLY DEAD — see §0a.3.** The ruleset-level-override analysis in this
+> section is SOUND and stands. What does not is any part that adds a SECOND
+> `execute` rule for the same managed ruleset — Cloudflare rejects that shape
+> (`20014`), and §0a.3 records that this section contains an independent instance
+> of the same defect. Read the override reasoning; do not copy the structure.
 
 **This corrects S2 §7.3, which concluded the override "cannot be written blind".** Part of it
 can, and the part that cannot is narrower and sharper than that section implies.
