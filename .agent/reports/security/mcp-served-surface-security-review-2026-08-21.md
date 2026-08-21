@@ -83,6 +83,14 @@ depends on something else also going wrong; **LOW** = hygiene or information
 disclosure; **NON-FINDING** = investigated and refuted, recorded so it is not
 re-raised.
 
+**On ordering**: F1 to F4 answer the four questions the owner asked, and are
+listed first for that reason. **F8 is arguably the most serious finding in the
+document** and the owner did not ask about it — it was met in passing, and the
+specialist reviewer's evidence raised it from a MEDIUM I had scoped narrowly to
+a HIGH about the authorisation boundary itself. A reader with time for one
+finding should read F8. A reader deciding what to change this week should start
+at R1, because it is the cheapest closure of a measured exposure.
+
 | Ref | Finding | Severity |
 | --- | --- | --- |
 | F1 | One production hostname reaches the Vercel origin with no Cloudflare in path; the WAF that blocks a payload on every other hostname does not see it | HIGH |
@@ -92,6 +100,13 @@ re-raised.
 | F5 | Authorization-server metadata advertises seven scopes where the protected resource declares one | MEDIUM |
 | F6 | Upstream Clerk validation errors pass through to unauthenticated callers verbatim | LOW |
 | F7 | The application runs no rate limiting of any kind, by design, and cannot detect the edge ceasing to carry it | MEDIUM |
+| F8 | **No layer in the served stack binds an access token to this resource.** RFC 8707 validation is skipped for opaque tokens — every token production issues — and the Clerk delegation the code relies on does not perform the check | HIGH |
+| F9 | Client-influenced text is interpolated unescaped into a `WWW-Authenticate` challenge, on one of two sibling paths; the other path already fixed exactly this | MEDIUM |
+| F10 | No scope enforcement anywhere: `authInfo.scopes` is read once, for a log count | MEDIUM |
+| F11 | An arbitrary client-supplied `X-Correlation-ID` is reflected into the response, every log line and a Sentry tag, unvalidated and unbounded | LOW |
+| F12 | `ALLOWED_HOSTS` wildcards span dots, so `*.vercel.app` matches `a.b.c.vercel.app` | LOW |
+| F13 | Upstream token-endpoint response bodies are sampled into logs on a malformed-JSON path the redaction rules do not cover | LOW |
+| N5 | "Stack traces are exposed in error responses" — refuted live on both production hosts; the latent configuration dependency is real and recorded | NON-FINDING |
 | N1 | "The consent page lacks `frame-ancestors 'none'`" — refuted; this server serves no consent page | NON-FINDING |
 | N2 | "`script-src 'unsafe-inline'` is an XSS weakness here" — refuted as stated; it exists solely for a Cloudflare-injected script, and on production no `script-src` is served at all | NON-FINDING |
 | N3 | "Preview deployments are a production-data bypass" — refuted; previews bind to the development Clerk instance | NON-FINDING |
@@ -213,14 +228,33 @@ scrubbed from logs, never read as a control. `app.set('trust proxy')` was
 removed with the rate limiter, so the application does not read any
 `X-Forwarded-*` value either.
 
-The complete environment-variable surface (`src/env.ts`) is
-`ALLOWED_HOSTS`, `APP_VERSION_OVERRIDE`, `CANONICAL_HOST`,
-`CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `DANGEROUSLY_DISABLE_AUTH`,
-`GIT_SHA_OVERRIDE`, `OAK_API_BASE_URL`, `OAK_CURRICULUM_MCP_USE_STUB_TOOLS`,
-`PORT`, `REMOTE_MCP_MODE`, `TEST_ERROR_SECRET`. **No variable in that list
-could hold an edge shared secret.** This is a stronger negative than a grep:
-the boundary schema is closed, so a secret-header gate could not be configured
-without a code change.
+**Correction to an earlier draft of this report, kept visible rather than
+quietly fixed.** An earlier version listed twelve environment variables and
+argued that "no variable in that list could hold an edge shared secret", calling
+it a stronger negative than a grep because the boundary schema is closed. **That
+was wrong, and the reviewer refuted it.** `src/env.ts:38-42` composes five
+shared schemas before the app-local `.extend()`:
+
+```ts
+const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
+  .extend(LoggingEnvSchema.shape)
+  .extend(SentryEnvSchema.shape)
+  .extend(BuildEnvSchema.shape)
+  .extend({ /* the app-local fields the earlier draft enumerated */ });
+```
+
+Those contribute `OAK_API_KEY`, `ELASTICSEARCH_API_KEY`, eight `SENTRY_*` and
+eight `VERCEL_*` fields. I had read the local `.extend()` block and treated it
+as the whole schema — the same class of error as analysing generated output
+instead of its generator, in a different guise. The schema already carries
+several secret-bearing slots, so "closed schema" was never the right warrant.
+
+The **conclusion** survives on other evidence: no proof-of-edge gate is
+*implemented*. Independent searches for the mechanism a gate would need found
+`timingSafeEqual` at exactly one site (`src/test-error/test-error-route.ts:40`,
+the diagnostic route's own secret comparison) and no `createHmac` use in the
+application's own source. So the negative rests on the absence of a comparison,
+not on the absence of a configuration slot.
 
 **All three Vercel deployment protections are disabled** on the project:
 
@@ -238,14 +272,29 @@ Vercel-derived hostnames (`src/security-config.ts`), so a project domain is
 allowed by construction — the alpha alias serves the HTML landing page with
 `200`, which measures this directly.
 
+**A production access token is accepted on the alpha alias — and this is now
+established from code, not inferred.** Three measurements compose:
+
+1. `src/auth/mcp-auth/get-mcp-resource-url.ts` derives the expected resource
+   from `deriveSelfOrigin`, documented and implemented as "canonical origin
+   first, else allowlist-validated Host". **With `CANONICAL_HOST` configured,
+   the expected audience is the canonical value on every hostname the
+   deployment answers on — the requested Host is never consulted.**
+2. The live corroboration is independent of that code read: the alpha alias's
+   own protected-resource document advertises
+   `"resource":"https://mcp.thenational.academy/mcp"`. Control: a preview
+   deployment advertises *its own* hostname, so the field genuinely varies and
+   the canonical pinning on the alias is real.
+3. `src/resource-parameter-validator.ts` skips audience validation entirely for
+   non-JWT tokens, returning `{ valid: true }` — and Clerk's OAuth access
+   tokens are opaque (`oat_…`). So for the tokens production actually issues,
+   **no in-application audience check runs at all.**
+
+Either mechanism alone suffices; both are present. This removes the "cheapest
+way to measure" that an earlier draft of this report assigned to the question.
+
 ### INFERRED
 
-- **A production access token minted at `mcp.thenational.academy` is accepted
-  at `curriculum-mcp-alpha.oaknational.dev`.** Warrant: both resolve the same
-  canonical origin and the same Clerk JWKS, and audience validation binds to
-  the canonical origin rather than the requested Host. **This is inference, not
-  measurement** — it needs a real token to confirm, which unauthenticated
-  probing cannot supply.
 - **`www.thenational.academy/mcp` reaches the MCP application through a
   platform rewrite from a different Vercel project.** Warrant: the response
   carries this application's `x-app-version` and CSP, but that hostname is not
@@ -719,6 +768,59 @@ URLs is a real piece of hardening Oak already has. Inferred: preview
 deployments are publicly reachable, which is a data-free information surface
 (they expose build metadata and the landing page) and not a data exposure.
 
+**F8 — audience validation does not run on the tokens production issues.**
+Measured: `src/resource-parameter-validator.ts` checks whether the bearer token
+is in JWT format, and for anything else returns `{ valid: true }` without
+inspecting an audience. Clerk's OAuth access tokens are opaque (`oat_…`), so
+that is the production path. The code documents the reasoning honestly — the
+security assumption is that Clerk's `verifyClerkToken()` at the ingress edge
+"performs resource binding for opaque tokens", and it flags that the path must
+be re-evaluated if a second OAuth provider is added.
+
+The revision matters here. Revision `2025-11-25` — the one we implement — states
+under Token Passthrough that "MCP servers **MUST NOT** accept any tokens that
+were not explicitly issued for the MCP server". This is not a draft-only item.
+
+**The compensating control the code names does not exist.** The reviewer
+asserted this; because a reviewer's claim is a claim, all three legs were then
+read first-hand in the pinned vendor packages, and all three hold:
+
+1. `@clerk/mcp-tools@0.6.0`, `dist/server.mjs`, `verifyClerkToken` — checks
+   `isAuthenticated`, `tokenType === 'oauth_token'`, and the presence of
+   `clientId`, `scopes` and `userId`, then reshapes into `AuthInfo`. **There is
+   no `aud`, no `resource`, and no origin anywhere in the function.**
+2. `@clerk/backend@3.16.1`, `dist/chunk-QOX5XVDR.mjs:128-134` —
+   `assertAudienceClaim` computes
+   `shouldVerifyAudience = audienceList.length > 0 && audList.length > 0` and
+   **returns early when the configured audience list is empty.**
+3. `src/global-auth-context.ts:46-49` constructs `clerkMiddleware` with
+   `publishableKey` and `secretKey` only. **No `audience` is supplied**, so leg
+   2's early return is the live path.
+
+So the comment's "we trust that Clerk's verification performs resource binding
+for opaque tokens" is **false against the pinned dependency versions**. Taken
+with the skip in `resource-parameter-validator.ts`, no layer in the served stack
+compares the presented token to this resource. Any token Oak's Clerk instance
+issues — to any registered OAuth application, for any `resource` parameter — is
+accepted at `POST /mcp`, on any hostname the deployment answers on.
+
+**Not established, and it sets the blast radius**: whether Oak's Clerk instance
+fronts any resource server other than this one. If this MCP server is the only
+one, the exposure is confined to cross-client replay within a consent the user
+did grant. If another Oak API accepts the same instance's tokens, it is
+cross-resource replay. *Cheapest way to measure*: enumerate OAuth applications
+on the Clerk instance.
+
+*Recommendation*: make the audience check mandatory rather than
+format-conditional — either verify through Clerk's OAuth introspection and
+compare the returned binding, or move to Clerk `at+jwt` access tokens and invert
+the opaque branch from `{ valid: true }` to a refusal. *Falsifier*: if Clerk's
+`auth()` already scopes the token to the specific OAuth application and this
+server is the instance's only resource server, the practical exposure is small
+and the fix can be scheduled rather than urgent — but the code comment should
+then be corrected either way, because it currently asserts a control that the
+vendor does not implement.
+
 **Positive finding — the auth-disable flag is guarded at the boundary.**
 `DANGEROUSLY_DISABLE_AUTH` is refused outside local development by a schema
 check in `src/env.ts` (line 127), and the served behaviour confirms auth is on:
@@ -740,11 +842,11 @@ this report:
    set them, the `2025-11-25` MUST is unmet by the system even though no code
    in this repository is at fault. This is the one gap that could turn N1 back
    into a finding. Measure it signed in.
-2. **Token acceptance on the alpha alias is inferred, not measured.** The whole
-   severity of F1 turns on it. If audience validation binds to the requested
-   Host rather than the canonical origin, F1 drops from HIGH to a
-   defence-in-depth concern. Measure it with one authenticated `tools/list`
-   against the alias.
+2. **Whether Oak's Clerk instance fronts any resource server other than this
+   one** (F8's blast radius). The absence of the audience check is now
+   established; what is not established is how far a replayed token reaches.
+   This is the single measurement that would most change the report's severity
+   ordering, and it is cheap: enumerate the instance's OAuth applications.
 3. **The confused-deputy refutation (N4) rests on reading two functions.** It
    is the most consequential inference in the document. If Oak ever introduces
    a static client ID — for instance by registering one Clerk client for all MCP
@@ -767,14 +869,96 @@ this report:
 
 ## Absorbed reviewer verdict
 
-A `security-expert` review of the code half was commissioned in parallel with
-these probes, with the same measurement-versus-inference discipline imposed on
-it. Its disposition is recorded in the section below as accepted, refuted, or
-deferred, with the evidence for each. **A reviewer's confident claim is a
-claim, not a measurement**, and every item was checked against the probes above
-before being accepted.
+A `security-expert` review of the code half was commissioned. The first run
+terminated on an API error before doing any work; the second completed and is
+absorbed below. **A reviewer's confident claim is a claim, not a measurement**,
+so every load-bearing item was checked first-hand before acceptance.
 
-<!-- REVIEWER-DISPOSITION -->
+### Accepted, after independent verification
+
+**The refutation of my own env-schema negative — accepted and corrected in
+place.** The reviewer was right and I was wrong; see the correction under
+Question 1. This is the most useful thing the review produced, because the
+faulty warrant was carrying a conclusion I still believe, and an unsound warrant
+under a true conclusion is exactly what survives review by looking fine.
+
+**F8 raised from MEDIUM to HIGH.** The reviewer supplied the vendor-level
+evidence I had marked NOT ESTABLISHED. I verified all three legs in the pinned
+packages rather than relaying them — `verifyClerkToken` performs no audience
+check, `assertAudienceClaim` early-returns on an empty configured audience, and
+the application supplies none. Accepted.
+
+**F11 — accepted and upgraded from a code read to a live measurement.** The
+reviewer read the correlation-id middleware; I then measured it:
+
+```bash
+curl -sS -D - -o /dev/null -H 'X-Correlation-ID: s1-INJECTED-VALUE-12345' \
+  https://curriculum-mcp-alpha.oaknational.dev/mcp/healthz
+#   x-correlation-id: s1-INJECTED-VALUE-12345
+```
+
+Control: with no header supplied the same endpoint returns a server-generated
+`x-correlation-id: req_1787309983266_883ef0`, so the reflection is real and not
+a coincidence of format. A 2000-character value was also accepted with `200`.
+
+**F9, F10, F12, F13 — accepted on the reviewer's evidence, not re-verified.**
+Each cites a specific file and line, and each is internally coherent with what
+I measured elsewhere. F9 is the sharpest of them: the reviewer found that the
+sibling path (`src/auth/mcp-auth/mcp-auth-responses.ts`) already uses a fixed
+description string *for precisely this reason*, while
+`src/auth-error-response.ts` interpolates client-influenced text — so the estate
+already knows the answer in one place and not the other. I flag these four as
+**accepted-unverified**: a reader acting on them should confirm the cited line
+first.
+
+### Refuted
+
+**Stack traces in error responses — refuted as an active exposure (N5).** The
+reviewer's reasoning was sound and its conclusion was correctly marked
+conditional on `NODE_ENV`, which it could not read. I measured it:
+
+```bash
+curl -sS -X POST https://mcp.thenational.academy/mcp \
+  -H 'content-type: application/json' -d '{"jsonrpc":"2.0",BROKEN'
+#   HTTP 400, body: <pre>Bad Request</pre>   — zero stack frames
+```
+
+Same on the alpha alias. Control: a well-formed body returns `401`, not `400`,
+so the malformed body genuinely reached the error chain. **The latent finding
+stands and is worth fixing** — nothing in the application pins `app.set('env')`,
+so the safety of this path depends entirely on a platform environment variable —
+but it is not an exposure today, and reporting it as one would have been wrong.
+
+### Deferred
+
+**The `DANGEROUSLY_DISABLE_AUTH` and `TEST_ERROR_SECRET` boundary checks define
+"not production" as `VERCEL_ENV` being unset or `development`.** The reviewer is
+right that a non-Vercel host with `VERCEL_ENV` unset would satisfy them. I defer
+this rather than accept it as a finding: this application is deployed on Vercel
+by construction, so the premise requires a deployment that does not exist. It
+belongs on the record as a portability hazard for whoever moves it, not as a
+current defect. Deferred, not dismissed.
+
+**Preview deployments permit the diagnostic route.** Follows from the same
+check, and previews are internet-reachable (measured, under N3). Lower
+consequence than it sounds, because previews bind to the development Clerk
+instance and hold no production data — but the route's own secret is the only
+thing standing in front of it there.
+
+### What the reviewer confirmed rather than changed
+
+Independent confirmation of my proof-of-edge negative, by a different route than
+mine: no `createHmac` in the application's own source and `timingSafeEqual` at
+exactly one unrelated site. Two seats reaching the same negative through
+different searches is worth more than either search alone.
+
+It also confirmed the areas I had listed as unreviewed are now covered — secret
+and PII handling across the log and telemetry sinks (found to be in good shape,
+with one narrow residue now recorded as F13), SSRF in the asset-download proxy
+(origin not caller-controllable; a dot-segment primitive exists but is gated
+behind an HMAC and an existence proof), static-asset traversal (absent), and the
+full code-side enumeration of unauthenticated surfaces. **The gap this report
+had an hour ago is closed**, which is why the section above no longer lists it.
 
 ## For the Director
 
@@ -786,4 +970,18 @@ Routed to the owner: R1 (remove or proxy the alpha alias) is the one item where
 a small configuration change closes a measured HIGH finding, and it is edge or
 platform configuration rather than code. It is stated here rather than applied,
 per the brief.
+
+Needs a ticket and an owner rather than a configuration change: **F8**. It is a
+code change to the authorisation boundary, it is the most serious finding here,
+and it should not wait on the owner's return to at least be sized — the blast
+radius question (does Oak's Clerk instance front any other resource server?) is
+answerable today by someone with Clerk dashboard access, and the answer decides
+whether this is urgent or merely important.
+
+One process note for the record: the `security-expert` invocation failed on an
+API error the first time and returned nothing. Had this seat treated that as
+"the reviewer found nothing", F8 would have shipped at MEDIUM with a
+NOT-ESTABLISHED note, and my own incorrect env-schema warrant would have
+survived unchallenged. **A failed reviewer run is not a clean review**, and the
+retry is what produced the two most valuable changes in this document.
 </content>
