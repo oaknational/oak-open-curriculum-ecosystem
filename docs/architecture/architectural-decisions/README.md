@@ -458,10 +458,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   envelope, minimal deletion-index Person, and October public-beta governance
   boundary; Accepted by owner direction 2026-07-26)
 - [ADR-219: Rate limiting is an edge concern](219-rate-limiting-is-an-edge-concern.md)
-  (volumetric control is owned at the Cloudflare/Vercel edge; the HTTP MCP
-  server runs no in-process limiter; static-analysis findings are
-  adjudicated against the actual architecture; supersedes ADR-158;
-  Accepted 2026-07-30)
+  (volumetric control is owned at the Cloudflare/Vercel edge for a **proxied**
+  domain; the HTTP MCP server runs no in-process limiter; static-analysis
+  findings are adjudicated against the actual architecture; supersedes ADR-158;
+  Accepted 2026-07-30; amended 2026-08-21 — the "every served domain" premise
+  narrowed to proxied domains only)
 - [ADR-220: The comms-event threading edge spans every respondable kind](220-comms-event-threading-edge-across-kinds.md)
   (`in_response_to` is a substrate-wide optional affordance on every kind that
   can be a response — `narrative` and `directed` today, `sync` when ADR-184's
@@ -507,7 +508,7 @@ For understanding authentication, authorization, and observability:
 - **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk; amended 2026-07-26 — transparency scoped against advertised-AS request validation)
 - **[ADR-143](143-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out for the Sentry and OpenTelemetry foundation (§6 superseded in part by ADR-160)
 - **[ADR-158](158-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting ← **Superseded by [ADR-219](219-rate-limiting-is-an-edge-concern.md)**
-- **[ADR-219](219-rate-limiting-is-an-edge-concern.md)** - Rate limiting is an edge concern
+- **[ADR-219](219-rate-limiting-is-an-edge-concern.md)** - Rate limiting is an edge concern (amended 2026-08-21 — premise holds for proxied domains only)
 - **[ADR-159](159-per-workspace-vendor-cli-ownership.md)** - Per-workspace vendor CLI ownership with repo-tracked configuration (formalises the Sentry CLI adoption pattern; applies to all future vendor CLIs)
 - **[ADR-160](160-non-bypassable-redaction-barrier-as-principle.md)** - Non-bypassable redaction barrier as principle (generalises ADR-143 §6 from enumerated list to closure property + test gate; covers every current and future fan-out path)
 - **[ADR-161](161-network-free-pr-check-ci-boundary.md)** - Network-free PR-check CI boundary (PR-check CI runs unit + integration + E2E without network; Vercel deploy and smoke tests own network-capable work)
