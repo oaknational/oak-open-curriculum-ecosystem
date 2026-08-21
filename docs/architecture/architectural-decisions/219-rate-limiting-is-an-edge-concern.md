@@ -69,7 +69,8 @@ and it is falsified the moment the edge stops carrying the control.
   second copy of the control to drift against it.
 - Edge configuration is load-bearing: if it is weakened or removed for a
   served domain, nothing in the application compensates, and this decision's
-  premise is falsified **for that domain**.
+  premise is falsified **for that domain** (scope narrowed in place — see the
+  amendment of 2026-08-21).
 - This server no longer emits 429 of its own; a 429 reaching a client
   originates at the edge or upstream.
 - `js/missing-rate-limiting` will re-fire on new routes. Each occurrence is
@@ -103,9 +104,11 @@ and it is falsified the moment the edge stops carrying the control.
 
 The Context above originally claimed the edge carries traffic controls for
 **every** served domain. **Cloudflare's WAF and rate-limiting rules are in path
-only for a _proxied_ domain.** That claim is narrowed in place in Context point
-1 and marked there; this amendment records the measurement behind the narrowing
-and what follows from it.
+only for a _proxied_ domain.** Two lines of accepted text are narrowed in place
+and marked as narrowed: Context point 1, and the load-bearing §Consequences
+bullet on edge configuration. This amendment records the measurement behind the
+narrowing and what follows from it. Where it quotes either line below, it quotes
+the original wording.
 
 Measured 2026-08-20 at ~12:25Z, each host against a proxied control:
 
@@ -129,10 +132,10 @@ unproxied without ever having been un-proxied — which is itself a gap in the
 original record.
 
 **Scope of the claim, stated precisely.** Vercel's own platform DDoS baseline
-remains in path for that host, so this is **not** "no volumetric protection".
-It is: _the Cloudflare layer this ADR names as the control's home is absent for
-that domain._ Vercel project firewall rules are not readable from the
-repository, so no claim is made about them either way.
+remains in path for that host, so the absence is of one layer, not of all
+volumetric protection: _the Cloudflare layer this ADR names as the control's
+home is absent for that domain._ Vercel project firewall rules are not readable
+from the repository, so no claim is made about them either way.
 
 **What the measurement does and does not establish.** A header read is
 point-in-time: it establishes each host's proxy state at ~12:25Z on 2026-08-20
@@ -143,8 +146,10 @@ is made here about when `mcp.thenational.academy` became proxied.
 
 **What is affected, stated as a class rather than a list.** The affected
 population is the open, growing class named in §Consequences: every
-`js/missing-rate-limiting` disposition on this server's route registrations
-whose recorded rationale is this ADR's edge premise. On an unproxied host the
+`js/missing-rate-limiting` disposition on this server's route registrations that
+rests on this ADR's edge premise — whether its comment records that premise or
+the premise is the only control the comment can have meant. On an unproxied host
+the
 **Cloudflare limb** of that rationale is unsupported; the Vercel limb, where a
 dismissal names it, still holds. The class is deliberately **not** enumerated
 exhaustively here — it grows with each new route, so a frozen list in this ADR
@@ -178,9 +183,9 @@ docstring records that abuse is bounded by this ADR's edge controls _and_ that
 the service's Oak API key is exempt from upstream per-key rate limiting
 (Context point 2). On an unproxied host the capability stays bounded by its
 HMAC signature and 5-minute TTL while the Cloudflare limb of the volumetric
-bound the docstring names is absent. That path carries no code-scanning alert of
-any rule, in any state — it is a citation, not a dismissal. The two populations
-are distinct and fail differently.
+bound the docstring names is absent. It is a citation, not a dismissal: as
+measured 2026-08-21, that path carried no code-scanning alert of any rule in any
+state. The two populations are distinct and fail differently.
 
 **The residual risk is recorded here, NOT accepted.** Accepting it, or proxying
 the host, is an owner decision and has not been made. This amendment removes a
@@ -188,7 +193,8 @@ false statement from the record; it does not settle what to do about the
 condition the statement was hiding.
 
 _Provenance: a retrospective `security-expert` review of pull request 920
-(2026-08-20) surfaced the falsification. The per-host proxy states were
+(2026-08-20) surfaced that the premise did not hold for one served host. The
+per-host proxy states were
 measured first-hand on 2026-08-20 at ~12:25Z, each against a proxied control.
 The alert states, dismissal rationales and the limiter's landing and removal
 dates were measured first-hand on 2026-08-21 against the repository's
