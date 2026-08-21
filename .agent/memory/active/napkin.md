@@ -56,6 +56,21 @@ all in-window or newly swept.
 
 ## Live carried items (pointers with owners, not new observations)
 
+### External capability changes need the submission record, not only green code
+
+- PR #919 (2026-08-19) changed the already-submitted Claude connector from the captured
+  40-tool/6-resource surface to 41 tools/7 resources. The source flip, generated inventories,
+  and CI were coherent, but that evidence could not establish product approval or update the
+  vendor submission state.
+- The decisive cross-check joined the engineering diff to both Linear project records:
+  MCP-106 / MCP-92 / MCP-88 record submission complete, while MCP-178 owns post-review
+  publication and fresh-account verification. A public capability expansion therefore carries
+  an observable release gate: explicit product approval plus an updated submission/listing
+  record (or authoritative proof that the vendor resynchronised the new inventory).
+- Behaviour change: review externally submitted tool/resource additions against the current
+  Linear release project and the captured vendor inventory; keep release/configuration findings
+  separate from code defects, and never let green tests masquerade as product authorisation.
+
 - **F-116 family still uncured** (commit-queue guard rejects the
   `index/head@<worktree>` label the commit skill prescribes; plus the
   lane-claim-at-enqueue facet). Interim practice unchanged — bare
@@ -591,3 +606,94 @@ opus, high 34k/63s sonnet, xhigh 40k/211s haiku; 3 ON-TRACK, 1
 DRIFTING-on-missing-NEXT); architecture panel first-hand verification
 habit paid off — 3 of 4 experts refused to sign a statement whose
 frame was contaminated while verifying its mechanism facts clean.
+
+## 2026-08-20 — Implementer seat D (pre-submission sweep): a Linear description `patch` round-trips the WHOLE document through Linear's rich-text normaliser
+
+Patching MCP-507's description (three surgical `patch` ops, none touching
+the affected region) silently **dropped `~~` markers elsewhere in the
+document**, wherever the existing markdown had malformed *nested*
+strikethrough — e.g. `~~text ~~`code`~~ more~~`. Linear repaired the
+malformed markup on save, which means superseded text that was struck
+through now reads as current. Verified by diffing the stored description
+before and after against the same three ops.
+
+**Why it matters here specifically**: that ticket's stated convention is
+"the original text is preserved in strikethrough rather than deleted, so a
+reader can see what changed and why". The normaliser quietly erodes exactly
+that convention. Meaning survived only because the adjacent correction
+prose said "RESOLVED, the original diagnosis was wrong" in plain text.
+
+**How to apply**: never rely on strikethrough alone to mark superseded text
+in Linear — say it in prose. And after ANY description `patch`, diff the
+whole stored document, not just the region you aimed at; the blast radius
+of a patch is the entire field.
+
+**Also banked this sweep** (all first-hand):
+
+- `<issue>` auto-resolution DID fire on plain `MCP-nnn` text in both
+  descriptions and comments, and on this occasion resolved all three
+  references CORRECTLY (checked the stored `href` slugs, not the API echo).
+  The re-read is still the only way to know.
+- The instrument for "which Clerk realm is production bound to" is
+  source-grounded, not vendor lore: `rewriteAuthServerMetadata` rewrites
+  exactly four fields and passes `jwks_uri`/`revocation_endpoint` through,
+  and `deriveUpstreamOAuthBaseUrl(publishableKey)` derives upstream from the
+  DEPLOYED key — so the served `jwks_uri` is a function of the live binding.
+  A merged fail-closed guard (#757, rejects non-`pk_live_` in production)
+  is a SECOND independent instrument: a healthy production proves the key.
+  A deployed tripwire that is not firing is evidence, not just absence.
+- Honoured a warning found in a dated report rather than a rule: read
+  `jwks_uri` on BOTH hosts across CONSECUTIVE samples (the hosts disagreed
+  for 27s mid-rollout on 2026-08-05). Three samples, both hosts, agreed.
+- A ticket can be Urgent-and-cold because it was never engineering work:
+  three in one sweep (MCP-306 portal act, MCP-461 DPO Google-doc act,
+  MCP-268 owner comms gate). An owner-gated act wearing an engineering
+  ticket's clothes is invisible to BOTH parties.
+- `find`/`grep` over this repo hits `tmp/` and `.claude/worktrees/` copies
+  of the same file; always confirm the primary-checkout path.
+
+<!-- fitness exceeded; needs consolidation -->
+## Session: 2026-08-20 — Mantagen PR review queue
+
+### What Was Done
+
+- Reviewed and posted exact-SHA verdicts for all six PRs in the live
+  `review-requested:mantagen` queue: #925 approved; #913, #921, #922, #923, and
+  #924 received changes requested. Every review carried the agent-authored
+  marker, and the GitHub response echoed `mantagen` plus the expected head SHA.
+- Confirmed the launchd watcher (`uk.thenational.oak-pr-review-watcher`) refreshed
+  on its 120-second interval, exited 0, advanced `pending.tsv`'s mtime, and
+  cleared the file after the live queue became empty.
+
+### Patterns to Remember
+
+- For a multi-commit review whose early fixes are superseded later in the same
+  branch, read `gh pr diff`'s final combined diff for the verdict; `--patch`
+  preserves every intermediate state and can make already-cured defects look
+  live.
+- A review row is not substantive review evidence: Claude and Codex each posted
+  exact-head `COMMENTED` rows that contained only spend-limit skip notices.
+  Read the review body before counting the reviewer leg.
+- Same-day operational records must be checked against later owner rulings in
+  sibling PRs. PR #921's cutover record still declared `www/mcp` a surface that
+  "must keep working" after the owner had ruled, in PR #913's newer continuity
+  state, that this repository should leave that surface.
+- A launchd interval job correctly reads `state = not running` between ticks.
+  Its liveness evidence is the configured interval, last exit code, and observed
+  output-file movement across a tick — not a resident process.
+
+## Session: 2026-08-21 — llms.txt discovery-surface review
+
+### Patterns to Remember
+
+- An aggregated web-search answer overstated that current `llms.txt` guidance
+  specifically recommends raw OpenAPI documents. The first-party v2 proposal
+  instead says links should lead to LLM-friendly content and names API references
+  and tutorials as the dominant software-documentation use case. Official OpenAI,
+  Anthropic, and Gemini files preferentially link Markdown documentation and API
+  reference pages.
+- RFC 9727 `api-catalog` is an adjacent automated API-discovery surface, not
+  intrinsically an LLM-readable surface. When bridging discovery layers from
+  `llms.txt`, prefer the direct Markdown skill or API guide; keep JSON catalogues
+  as secondary machine-client links rather than treating their machine
+  readability as equivalent to LLM friendliness.
