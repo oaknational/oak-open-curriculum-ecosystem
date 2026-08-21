@@ -3795,3 +3795,52 @@ commit SHA and the closing plan reference.
   exactly as emission does). The curator-pass archive cadence (PDR-094)
   remains the companion pressure valve — ~3,600 live events means the
   archive pass is overdue. Route: agent-tooling backlog.
+
+### F-167 — `git worktree add -b <branch> origin/main` sets the new branch's upstream to `origin/main`; PR #927 cured only the `spawn` path
+
+- **Source**: Seat R6 (Implementer, `Tulip mends Bark` Director seat, `e6d535`),
+  2026-08-21, while rebuilding `oaknational/Oak-Web-Application#4443` onto a
+  clean branch. Comms event `e0de5e68`. Fourth observed occurrence of this
+  mechanism across sessions and repositories.
+- **Surface**: bare `git worktree add`, in any repository — including foreign
+  repositories where this estate's lane tooling is not in play.
+- **Observed**: `git worktree add -b <branch> origin/main` emitted
+  `branch '<branch>' set up to track 'origin/main'`. The seat noticed, ran
+  `git branch --unset-upstream`, and pushed by explicit refspec. Had it not
+  noticed, a bare `git push` would have pushed roughly 5,000 lines onto
+  `Oak-Web-Application`'s `main`.
+- **Expected**: cutting a lane branch from a remote-tracking ref sets **no**
+  upstream, so a bare `git push` has no default destination and fails loudly
+  rather than targeting `main`.
+- **Root cause, already established for the sibling door**: the base is
+  `origin/main`, a remote-tracking ref, and `branch.autoSetupMerge` defaults to
+  `true`, so git marks it upstream. **PR #927 fixed this for
+  `agent-tools spawn` by adding `--no-track`** (and its test asserts the flag's
+  POSITION, because after the commit-ish git parses it as a path operand and you
+  get a green test over a dead fix). **`git worktree add` is a second, unguarded
+  door to the identical mechanism** and was out of #927's scope.
+- **Why this is a footgun rather than an error**: the default is silent and
+  correct-looking, the emitted tracking line is easy to skim past, and the
+  failure mode is not a broken command but a *successful push to the wrong
+  branch*. Four occurrences, and every one was prevented only by an agent
+  noticing.
+- **Second-order exposure, already recorded**: every worktree created before
+  #927 landed still carries its `origin/main` upstream. #927 fixes new spawns
+  only, so any seat resuming in a pre-existing worktree must unset before its
+  first push.
+- **Candidate cure**: pass `--no-track` on every `git worktree add` in estate
+  tooling and doctrine, with the same position discipline #927's test enforces;
+  and prefer a repo-local `branch.autoSetupMerge=false` where the estate owns
+  the checkout. A wrapper is the stronger cure than a rule, because the rule
+  cannot bind an agent typing raw git in a foreign repository — which is exactly
+  where the fourth occurrence happened.
+- **Target surface**: agent-tools CLI wrapper and/or a rule; the
+  `set-up-worktree-lane` skill; foreign-repository working doctrine. **The
+  rule-versus-wrapper choice is deliberately NOT made here** — it is a
+  `new-rule-vs-pdr-clause` decision, and a passive rule loses to artefact
+  gravity for raw-git use in a foreign repo.
+- **Status**: open. Mitigated only by seats checking
+  `git rev-parse --abbrev-ref --symbolic-full-name @{u}` before their first
+  push, which is what every one of the four occurrences relied on.
+- **Owner direction status**: unsolicited (agent-observed friction, first-class
+  under the Pelagic standing direction).
