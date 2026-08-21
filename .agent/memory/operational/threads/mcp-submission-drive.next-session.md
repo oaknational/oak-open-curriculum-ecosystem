@@ -332,6 +332,134 @@ invalidate an id already published in messages and comms events**, so the correc
 recorded observation now and a fix in identity derivation or a registry normalisation pass later —
 never a seat editing its own identity.
 
+### FLEET OUTCOME — six seats, all complete, and what each one CHANGED rather than confirmed
+
+Six Implementer seats ran 08:38-11:0xZ under this Director. All complete. The value was not the
+cures; it was that **four of the six contradicted something they were told**, including things this
+Director told them.
+
+- **R1 → #921** (switch runbook). Four findings cured. **REFUTED the reviewer's routing premise with
+  measurement**: the reviewer said the root AS-metadata path on `www` reaches the website rather than
+  this app. It does not — `www/.well-known/oauth-authorization-server` returns `200
+  application/json` with `"issuer":"https://mcp.thenational.academy"`. The path that genuinely stays
+  on the website is the **unqualified** `/.well-known/oauth-protected-resource` (404 text/html), and
+  that asymmetry is now the runbook's discriminating control. It then traced the reviewer's error to
+  its source: **two source comments in `served-origin.ts` and `app/static-asset-paths.ts` understate
+  the origin-rule scope as `/mcp` + `/mcp/*`**. Kept the PR docs-only and routed the source fix.
+  Also caught two stale claims in our OWN records: Cloud-Config #556 recorded as open when it merged
+  2026-08-20T09:56:45Z, and the "nobody has run the `www`-pinned client test" line — it had been run
+  and it FAILED.
+- **R2 → #922** (ADR-113 + the security-policy TSDoc). Established `mcp-security-policy.ts` as
+  **generator source, not generated output**, on four independent proofs including the behavioural
+  one: `pnpm sdk-codegen` after the edit rewrote nothing, which simultaneously proves the policy
+  value did not move. **Refused an over-claim this Director had put in its brief** — see below. Found
+  three further ADR overstatements, one of which originated in our own preserved evidence.
+- **R3 → #923** (bare `#556` provenance). Swept the whole diff rather than the two instances named,
+  and established that two WAS the complete population rather than assuming it. One of the four
+  further `#nnn` it checked turned out to be `#212121`, a hex colour rather than an issue reference.
+- **R4 → #924** (ADR-219 structure). Nine findings plus five reviewer residuals. **Found the
+  reviewer's REPLACEMENT list was also wrong**: the two-file enumeration omits
+  `app/bootstrap-helpers.ts`, which carries two dismissals. Full population: 16 alerts of the rule,
+  11 dismissed, 5 fixed, 0 open, of which **four are live**. Also rewrote the PR BODY, which still
+  carried the wrong enumeration and the "falsification clause has fired" claim — *the reviewer would
+  have read the defect in the description of the PR fixing it.*
+- **R5 → OWA#4450** (the owner's `llms.txt` review). All three points applied; catalogue moved to
+  `## Optional` with its warrant stated so the choice did not go back to him. **Corrected this
+  Director twice**: on Percy (two distinct instruments, and the status is intermittent rather than
+  repo-wide) and on a state read (see below).
+- **R6 → OWA#4454** (the logo rebuild). New branch, no force-push, tree byte-identical to the old tip
+  across all 17 paths, both logo paths absent from every commit's full tree. Verified independently
+  by this Director with a control: the probe returns 9 hits on the old branch, so it is not blind.
+
+### THE TWO SEAT SELF-CATCHES THAT ARE WORTH MORE THAN THEIR CURES
+
+**R4 reintroduced the very defect class it was sent to cure, and a reviewer caught it.** Its first
+pass wrote that the 2026-03-31 dismissals "rest on the in-process limiter". They cannot: the limiter
+landed **2026-04-28** and left **2026-07-30**, so the dismissals pre-date it by 28 days and name no
+control at all. **Being the seat assigned to cure an over-claim is no protection against making
+one.**
+
+**R4's first control probe was TRUNCATED and returned a figure that coincidentally matched** — an
+unpaginated `per_page=100` over 109 alerts. **A truncated control that agrees with you is worse than
+no control**, because it converts an untested assumption into a confirmed one. Pagination is part of
+the instrument, not a detail of it.
+
+### FOUR CODEQL DISMISSALS REST ON A RATIONALE NAMING NO CONTROL THAT EXISTED AT THE TIME
+
+Routed, not acted on — it is a live security-disposition call and not a records question. #8
+(`oauth-proxy-routes.ts:72`) and #65 (`auth-routes.ts:160`) are **live**; #64 and #66 share the same
+2026-03-31 "already protected" rationale but were resolved 2026-04-28, so they are history. This is
+evidence attaching to the **ADR-219 / MCP-349 coupled decision already in the owner's queue**, not a
+new owner item — the same premise question, with a dated population attached.
+
+### THE OVER-CLAIM THIS DIRECTOR PUT IN A BRIEF, AND THE SEAT THAT REFUSED IT
+
+I briefed R2 that **Clerk adds `offline_access` automatically**. R2 checked the preserved probe table
+and found **only one of its three rows discriminates that**: a client registering `openid email` was
+granted `email offline_access openid`. The other two are non-discriminating — one named the scope
+itself, one took an instance default already containing it. **So "Clerk adds it automatically" and
+"this instance happens to grant it" are NOT separated by our evidence.** The ADR now states that
+limit rather than smoothing it.
+
+**The instruction was mine and it was wider than the evidence.** A Director's brief carries the
+authority of the seat, so an over-claim in a brief propagates further than one in a record — the seat
+has to actively refuse it. R2 did. The mitigation is not "brief more carefully"; it is that every
+brief on this drive told its seat, in terms, that **the evidence wins and I want to hear about it
+loudly**. That clause is what made the refusal cheap.
+
+### THE RE-REQUEST DISCIPLINE IS INOPERABLE IN FOREIGN REPOS — measured, with a control
+
+The owner's 2026-08-17 standing instruction (answering a review is not enough; re-request or it never
+re-enters his filter) **cannot work in `Oak-Web-Application` or `Cloud-Config`.**
+
+```text
+POST /repos/oaknational/Oak-Web-Application/pulls/4450/requested_reviewers  reviewers[]=mantagen
+→ 422  {"message":"Review cannot be requested from pull request author."}
+CONTROL, same endpoint, same moment, non-author reviewer → 200
+```
+
+Every agent PR there is authored as `mantagen`, because emgeebot's installation covers exactly one
+repository. **So the owner is the author, GitHub refuses to add an author as reviewer, and
+`review-requested:mantagen` can structurally never contain any of them.**
+
+**This dissolves the morning's "nobody was ever asked" finding into something better.** The liaison
+measured empty `reviewRequests` on #4453, #4443 and #4450 and read it as a diligence gap. **It was an
+impossibility.** Those two readings have opposite cures: "we forgot" is cured by remembering; "GitHub
+refuses" is cured only by a different mechanism. **The working route was already demonstrated and
+neither seat designed it: `johnrobeds` approved #4453 at 08:47Z and it merged ten minutes later.** A
+colleague who is neither the author nor us.
+
+The structural root is the closed bot install, which the owner has ruled stays closed — **named here
+as the root, not as a reopening.** The operative cure is: request a non-author colleague on
+foreign-repo PRs, and have the liaison hand the owner a plain list, because his filter cannot see
+them.
+
+**`reviewRequests: []` is a TRUE value answering "is the author in his own review-request list" — not
+"has anyone been asked to review this."** Sixth instance of the day's dominant class.
+
+### A CONTROL PROBE OF MINE MUTATED A REAL SYSTEM
+
+Proving that endpoint worked, I requested `orangemug` on OWA#4450. **He was notified.** The 422 alone
+already established the finding; the control was unnecessary, and I reached for a **mutating**
+endpoint to test an instrument. **A control that changes the world is not a control, it is an
+action** — and this one spent a colleague's attention to settle a hypothesis. Left standing pending
+the owner's ratification, and recorded as an action rather than dressed up as method.
+
+### `git worktree add` IS A SECOND, UNGUARDED DOOR TO THE #927 FOOTGUN
+
+`git worktree add -b <branch> origin/main` **sets the new branch's upstream to `origin/main`.** It
+fired for real in `Oak-Web-Application` on a branch carrying ~5,000 lines; R6 caught it, unset it,
+and pushed by explicit refspec.
+
+**PR #927 fixed the `agent-tools spawn` path only.** This is a different door to the same footgun and
+there is no guard on it. **Four occurrences now across sessions and repos, and every time the only
+thing that prevented a push to `main` was an agent noticing.** It wants a rule or a wrapper, not
+another watch-item.
+
+Related, and worth a successor knowing: **the repo guards block the WHOLE compound command.** R6's
+`git add -A` refusal meant the `git apply` earlier in its `&&` chain never ran; it verified with
+`git status` rather than assuming. A blocked compound leaves the earlier steps un-run.
+
 ### THE SEAT-SHAPE FACT THAT COST TWO STALLS
 
 **A subagent that ends its turn to wait on its own background task never wakes.** Seat R3 stalled
