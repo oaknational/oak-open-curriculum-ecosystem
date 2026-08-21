@@ -744,7 +744,10 @@ makes the observation-versus-inference check MORE load-bearing, not less.**
 
 # State at 2026-08-21 morning — Phoenix guards Scorch (`85bdbf`)
 
-> **CURRENT. Supersedes every dated section above where they disagree.** Standing doctrine is unchanged.
+> **SUPERSEDED by the handover section at the foot of this file, written at this seat's close.** Its
+> measurements and generators stand; its "what is open" is a day stale. Read the foot first.
+>
+> Originally: **CURRENT. Supersedes every dated section above where they disagree.** Standing doctrine is unchanged.
 > Written at session open rather than at stand-down, because the seat above it died mid-afternoon with no
 > stand-down and 6.5 hours of substance went with it. **Everything in §"The window nobody landed" below was
 > recovered from the gitignored comms stream on this machine. It exists nowhere else.**
@@ -1356,3 +1359,171 @@ declaring one thing while the edge does another twice over stops being an incide
 2. **The security work on `mcp.*`** — #558.
 3. **Everything else waits for his return**, on his instruction: the nine held documentation PRs, MCP-653, the
    GitHub Support purge decision on #4443's history, and the old-branch deletion.
+
+---
+
+# HANDOVER at seat close — 2026-08-21 16:00Z, Phoenix guards Scorch (`85bdbf`)
+
+> **CURRENT. Supersedes every dated section above where they disagree.** Standing doctrine at the top of this
+> file is unchanged. Written at close, with the whole day behind it rather than mid-session.
+
+## Read this first: the drive's shape changed today
+
+**The `www` → `mcp.*` migration is DONE.** That was the open engineering question every earlier section in this
+file is organised around, and it is closed. `www.thenational.academy` serves nothing from this repo. The owner
+applied the routing removal himself and it is verified from both sides.
+
+**So a successor's job is no longer "get the host moved". It is: the security posture on the new host, and the
+review queue.**
+
+## FLEET AND SEAT STATE
+
+- **Director: Tulip mends Bark (`e6d535`)**, claim `39718d8d`. **Confirm against `claims list` — this line has
+  gone stale within a day, three times.**
+- **Nine implementer seats ran and all retired.** R1–R7 (review cures, plugin repoint, logo rebuild), S1–S3
+  (security reviews and the WAF recommendation), C1 (the changelog sweep), D1–D2 (teardown follow-ups), T1 (the
+  terraform plans). None live at close.
+- **This seat: claim `611cba8c`, closed at wrap.** Branch `chore/owner-liaison`, draft PR **#900**, remote at
+  `9008b3138`, `0 0` ahead/behind, clean tree.
+- **The thread record `mcp-submission-drive.next-session.md` is the DIRECTOR's surface**, actively maintained,
+  and it is on `origin/main` rather than this branch. **Do not write it from this seat** — read it, and let the
+  Director own it. This file is the liaison's continuity home.
+
+## WHAT THE OWNER IS PICKING UP ON RETURN — he is away until ~1 September
+
+**His own ordering, given at close.** The handover document he will forward is
+`MCP handover — 21 August, ahead of a week away` on the `MCP App: First Major Release` project.
+
+1. **The Clerk OAuth client list** — one look, and it sets the severity of the token-binding finding.
+2. **Rebuild the WAF rule**, then log-only for a fortnight with internal testers before enforcing.
+3. **MCP-653** — the refresh removes two tools from a submitted connector. Product call, not a merge.
+4. **The review queue** and the WAF threshold tuning.
+
+**Standing instruction from him, still live: do not batch anything MG-needing.** Route the same day. And the
+close instruction he gave at ~13:00Z: **do not message him until the PRs are in a stable state** — that
+condition was met at 15:20Z and reported, so it is discharged, not standing.
+
+## OWNER RULINGS TODAY — binding. Re-asking any of these is a failure of THIS seat.
+
+- **Anthropic's listing has `mcp.*/mcp` as the server URL and that is FINAL.** Image URLs are repointable in
+  their dashboard, which is what dissolved the carousel gate.
+- **`www/mcp` may 404 until OWA's landing page deploys**, which will happen before any marketplace push.
+- **Go forward with `Cloud-Config#558` as written; config tuning after his leave.** He was shown the divergence
+  from his own log-only/threshold-60 brief and decided anyway. **Do not re-raise it.**
+- **Do not touch `curriculum-mcp-alpha.oaknational.dev`.** "not relevant to the release any more." **Note the
+  premise moved after he ruled** — S1 established it is a production domain of the production Vercel project
+  with a live WAF bypass into production. He was told; the ruling stands.
+- **The 87 registered OAuth clients need no action from him.** He said so explicitly when the list was surfaced.
+- **`orangemug` stands as reviewer** on OWA #4450 and #4454.
+
+## THE ONE THING THAT FAILED, AND WHY IT MATTERS BEYOND ITSELF
+
+**`Cloud-Config#558` merged, and its apply was REJECTED by Cloudflare: error `20014`, "more than one rule is
+trying to execute the same managed ruleset".** Two `execute` rules against the same OWASP Core ruleset — one
+`eq mcp`, one `ne mcp` — is not a permitted structure. Reverted as `Cloud-Config#562`, awaiting review.
+
+**Nothing landed.** Verified three ways: the apply's own counters all `None`, `/probe.sql` still 403 on both
+hosts with a benign control at 404, and the MCP surface healthy. **Cloudflare rejects the ruleset PATCH
+atomically.**
+
+**Two consequences a successor must carry:**
+
+1. **`PR #934`'s recommendation is unapplicable as written** — it keeps the same two-rule structure and changes
+   only `block → log` and `40 → 60`. **Its measurement design (day-zero gate, weekly control probe, the
+   fourteen-day criteria) is the valuable part and survives.** Say which half is dead when you route it.
+2. **For Cloudflare rulesets, a green `terraform plan` is NOT evidence the apply will succeed.** The plan
+   validates HCL and diffs state; it never asks the platform whether the shape is permitted. **The constraint
+   was documented and readable at authoring time, and two security reviews of that PR assessed what the rule
+   would DO rather than whether it could EXIST.** That is the review gap, and `verify-vendor-call-shapes-at-plan-author-time`
+   is the rule that would have caught it.
+
+## MECHANICS THIS SEAT MEASURED — the expensive ones
+
+- **`terraform plan`/`apply` against a Terraform Cloud backend QUEUES A RUN in Oak's organisation.** It does not
+  compute locally. So "plan only, no apply" as an instruction is not a mechanism gate — a seat can obey it
+  literally and still trigger an apply if auto-apply is on. **Establish `auto-apply=False` and confirm the run
+  returns `is-confirmable: false` BEFORE queueing.** That is the difference between "I was careful" and "it was
+  structurally impossible".
+- **The TFC credential on this machine is the OWNER'S PERSONAL TOKEN** (`mg-oak`, `is-service-account: False`).
+  Every run an agent queues is attributed to him in Oak's infrastructure audit log. **Disclose it; do not apply
+  under it without explicit per-act authorisation.**
+- **`latest-change-at` on a TFC workspace moves on an ATTEMPTED apply, not only a successful one.** It moved at
+  14:47:50 on the failed #558 apply. I had used it as a positive control earlier in the day; it would have
+  misled me here.
+- **Two workspaces, not one.** `infrastructure/cloudflare/rulesets/` is workspace `cloudflare-rulesets`;
+  `infrastructure/cloudflare/misc/` is `cloudflare-misc`. A plan in one cannot see the other's changes. The
+  owner's four merged PRs spanned both.
+- **A stale zero-byte `index.lock` and genuine transient contention BOTH occurred today, hours apart.** Check
+  age, size and holder before believing either story. The stale one was 2h22m old with no holder; git's own
+  advice to remove it was correct once that was established.
+- **`recordStagedBundle` applies a fingerprint with NO emptiness check.** A failed `git add` left an empty index
+  and the queue recorded a fingerprint of nothing. **Assert `git diff --staged` is non-empty before
+  `record-staged`.** F-169 narrows the consequence: `verify-staged` would still have failed, so the defect is a
+  false attestation in shared coordination state rather than a gate bypass.
+- **`claims heartbeat` requires `--now`; `claims list` rejects `--platform`/`--model`; `claims close` requires
+  `--summary`.** Three siblings, three different arg contracts.
+- **`gh pr list` has no `mergeStateStatus` field** (it is a `pr view` field), and **zsh does not word-split an
+  unquoted `$VAR`** — both cost a silent empty result rather than an error.
+
+## THE FAILURE CLASS THIS DAY WAS MADE OF — seven instruments plus two variants
+
+**An instrument returning a TRUE value that answers a DIFFERENT question.** Every instance was measured:
+
+1. **`cf-ray`** — proves Cloudflare fronts something, not that it is Oak's Cloudflare.
+2. **A review row** — proves a reviewer object exists, not that anything was reviewed. Four spend-limit skip
+   notices, two vendors.
+3. **`author=mantagen`** — proves the credential, not the author. Every agent PR in the foreign repos is his.
+4. **The comms `author` field** — proves the routing identity, not the author. Under F-164 a seat's broadcast
+   wears its Director's name. **Paired defect: the field is `author`, not `agent_id`, and all 1,722 older events
+   confirm there was never a migration — we were simply both wrong.**
+5. **A `Production` deployment row** — proves a SHA deployed, not that a path returns bytes.
+6. **`reviewRequests: []`** — proves the author is not in their own review-request list, not that nobody was
+   asked. **GitHub refuses to make an author a reviewer, so the owner's re-request discipline is INOPERABLE in
+   OWA and Cloud-Config while we author under his credential.**
+7. **A 404 from `/branches/main/protection`** — proves classic protection is absent, not that the branch is
+   unprotected. This repo uses RULESETS. **A trigger built on that 404 would have reported a red board as
+   stable, vacuously.**
+
+**Variant A — an instrument that cannot discriminate at all.** A Vercel URL returned 302 for present and absent
+files alike. **The honest output is "failed measurement", not weak evidence.**
+
+**Variant B — an AUTHORITY over-extended.** An owner's words relayed as a work item without testing the
+technical premise inside them. His teardown list said "delete `public/carousel/` and its `ROUTED_ASSET_BASE`
+mount"; the mount is not carousel-specific and #928 keeps it and adds assertions. **A ruling is authoritative
+about INTENT and is not evidence about the CODEBASE. Deference to the first must not extend silently to the
+second.** Seven liaison relays carried that premise unchecked.
+
+**The cure is not vigilance. It is naming what the instrument measures before reading it as an answer.**
+
+## AND THE ONE THAT IS ABOUT THE SEAT ITSELF
+
+**Getting the routing right is not the same as getting the question right, and the second failure is invisible
+from inside the first.** This seat spent the morning routing a portal question to the owner: measured, framed as
+one fact with two consequences, put first because it was cheapest. **It should never have been on his queue.**
+Its whole force was permanence, and the images were always repointable. **Ask what makes an unanswerable
+external fact BINDING before asking what its VALUE is** — reversibility, not identity, usually decides whether
+it is a gate. That retires owner items outright instead of routing them well.
+
+## OPEN, AND WHO HOLDS IT
+
+- **17 fleet PRs green and awaiting review** in this repo; OWA #4443/#4450/#4454 and Cloud-Config #562 stable.
+  Nothing blocked on anything but a reviewer.
+- **#761 is `DIRTY`** — MCP-143 PR-3, opened 4 August. Its required checks physically cannot run until someone
+  rebases it, so it is neither red nor green but unknowable. **The Director recommends CLOSE with its substance
+  re-ticketed**, on three grounds: its premise partly moved (`CANONICAL_HOST` is set, the host move is done), it
+  cannot be assessed, and alive it becomes a permanent by-name exception in every stability check. **Owner call,
+  after his return.**
+- **Dependabot #893/#894 cannot merge** — they bump `codeql-action` to 4.37.7 which breaks CodeQL, and CodeQL is
+  in this repo's required set. Not ours; nothing records that they must not merge.
+- **MCP-651, MCP-652, MCP-653** minted by this seat. **MCP-345 corrected** — its title and banner asserted a
+  disproven Clerk mechanism while the exclusion decision stands.
+- **Two Linear documents** this seat authored, both on `MCP App: First Major Release`: the changelog-tools
+  explainer and the owner's handover.
+
+## WHAT EXISTS ONLY IN THE GITIGNORED COMMS STREAM
+
+**Roughly sixty directed events between this seat and the Director**, carrying the correction-and-counter-
+correction that produced most of the findings above. **The rulings and the measurements are in tracked state;
+the arguments are not.** Two seats each caught the other in a wrong conclusion repeatedly, and the value was in
+the exchange rather than either seat's output. **A successor gets the conclusions and not the reasoning, and
+that gap is real and unhandled.**
