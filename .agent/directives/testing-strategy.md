@@ -115,6 +115,24 @@ Formal home: [`validation-strategy.md`](validation-strategy.md) (seeded
   silent on upstream content drift (trigger artefact: the MCP-462
   differential examples test that replaced three value-pinned
   tests).
+- **Pinning an absence is not proof** (owner doctrine 2026-08-19,
+  verbatim: "tests should prove behaviour, not configuration, pinning
+  a lack of something does not provide value"): an assertion that a
+  field, property, or capability is ABSENT from a configuration or
+  registration object (`not.toHaveProperty`, negative config pins)
+  proves no behaviour and blocks the surface's deliberate evolution.
+  The designed-sentinel carve-out does not extend to absence — a
+  sentinel attaches a named decision to a VALUE changing, never to a
+  key not existing. A deliberate absence is recorded in the owning
+  ADR or plan; where the absence has observable consequences, prove
+  those consequences behaviourally through the public boundary.
+  Negative-space tests that DRIVE the boundary and observe an
+  outcome (a guard refusing an activation, an error path's observable
+  result) are behaviour proofs, not absence pins — the discriminator
+  is whether the test exercises behaviour or inspects configuration.
+  (Trigger instance: an integration test pinning
+  `not.toHaveProperty('outputSchema')` on a captured registration
+  config.)
 - **No useless tests** - Each test must prove something useful
   about the product code. If a test is only testing the test or
   mocks, delete it.

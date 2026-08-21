@@ -16,8 +16,10 @@ import {
 } from './current-source-delta-review-helpers.js';
 
 export const APP_TEST_HELPERS_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview>> = {
+  // MCP-634: gains an optional `vercelHostnames` override so security-config
+  // tests can exercise the deployed shape.
   'apps/oak-curriculum-mcp-streamable-http/src/test-helpers/auth-error-test-helpers.ts': excluded(
-    '1f09358427ac9ca4f2f0027636515abcfd123c64ae6bf468574c8d767fcccd6c',
+    '5537dc8b2ec64452aae002e87f455e39e8664e8c3353709f5d2001608c3f93d6',
     TEST_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/test-helpers/fakes-mcp-server.ts': excluded(

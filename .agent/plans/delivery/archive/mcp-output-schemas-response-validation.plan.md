@@ -3,7 +3,8 @@ id: mcp-output-schemas-response-validation
 node_type: delivery
 name: "MCP output schemas and response validation"
 overview: "Give every live universal tool a source-derived, object-rooted output contract that the MCP server advertises and enforces."
-status: ratified
+status: superseded
+superseded_by: mcp-output-contracts-implementation
 ratified_by: "Jim Cresswell"
 ratified_date: 2026-07-29
 ratified_where: "Owner morning-card answer 2026-07-29, routed via the Director (comms event 9d32fcfd-bac6-430e-8144-0e16b9d067c9); merge record on PR #619"
@@ -15,16 +16,32 @@ tickets:
   - MCP-332
 depends_on: []
 owner_gates: []
-last_updated: 2026-07-29
+last_updated: 2026-08-19
 ---
 
 # MCP output schemas and response validation
 
+> **Superseded 2026-08-19** (owner word) by
+> [`mcp-output-contracts-implementation`](../mcp-output-contracts-implementation.plan.md)
+> under the `mcp-output-contracts` strategic node. A 14-leg verification
+> fleet proved the design's core in the main and falsified five points
+> the successor corrects: the wire carries three envelope shapes, not
+> one (two composers + one bespoke, `status` typed per provenance); the
+> carrier must be Zod-valued (registration does not accept JSON Schema);
+> conformance must be proven on the serialised `tools/list` wire (the
+> SDK silently drops non-object-rooted schemas while still enforcing
+> them); the "gated on MCP-303 live captures" clause below was stale
+> prose (the drive is acceptance evidence, never a start gate); and
+> acceptance criterion 4's absence-pin test contradicts the owner's
+> 2026-08-19 testing ruling and is re-expressed behaviourally. The
+> changelog-tool 404 defect and cache refresh moved to
+> [`mcp-served-surface-truth`](../mcp-served-surface-truth.plan.md).
+
 On ratification, this delivery node supersedes the executable interpretation
 of the
-[historical June design record](../../plans-backlog-2026-07/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md).
+historical June design record (`../../../plans-backlog-2026-07/sdk-and-mcp-enhancements/archive/superseded/output-schemas-for-mcp-tools.plan.md`).
 That record and its
-[audit](../../reports/output-schema-mcp-plan-audit-2026-06-02.md) remain
+[audit](../../../reports/output-schema-mcp-plan-audit-2026-06-02.md) remain
 lineage evidence and the owner dispositions its legacy execution contract when
 ratification lands. Owner-ratified 2026-07-29 (morning-card answer, routed via
 the Director): this node is the governing execution contract for the
@@ -49,7 +66,7 @@ hand-built. The served-surface definition makes 39 of them live and keeps
 `get-eef-evidence`, `user-search`, and `user-search-query` dormant. The app also
 registers `oak-under-the-hood` separately. Its behaviour-only pointer projection
 intentionally has no output schema, as recorded by the completed
-[tool plan](../../plans-backlog-2026-07/sdk-and-mcp-enhancements/active/oak-under-the-hood.plan.md)
+[tool plan](../../../plans-backlog-2026-07/sdk-and-mcp-enhancements/active/oak-under-the-hood.plan.md)
 and ADR-202.
 
 One object-rooted envelope composer models the successful

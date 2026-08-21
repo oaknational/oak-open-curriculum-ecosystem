@@ -37,7 +37,16 @@ Adopt Option A (conventional) with clear directories:
   original two-name enumeration had gone stale by three): `design-tokens-core`,
   `oak-design-system`, `oak-design-tokens`, `oak-design-ink`,
   `oak-design-assets`, and `oak-design-react` (the ADR-213 §3 React binding
-  tier). See ADR-148 and ADR-213.
+  tier). See ADR-148 and ADR-213. Nested below it (dated amendment
+  2026-08-18), `packages/design/identities/*` is the identity-pack tier:
+  data-only pack workspaces, deliberately OUTSIDE `DESIGN_PACKAGE_IMPORTS`
+  and invisible to the depth-1 design scan — the tier carries no
+  hand-declared inventory (the identity-№N property: adding a pack is a
+  data act), is validated structurally by the `validate-boundaries`
+  identity-pack leg (presence, homogeneity, data-only anatomy), and its
+  packs reach consumers only as `workspace:*` dependencies, never by
+  entering the design boundary tuple. Governed by the
+  `tango-identity-pack` delivery plan.
 - `demos/` – demonstration apps consuming workspace package surfaces only
   (`oak-curriculum-hub`, `oak-design-showcase`). Recorded intent: never
   imported by packages — no boundary rule enforces the inbound direction
@@ -202,7 +211,10 @@ tier, its name settled at this landing per ADR-213 §3. Edges:
 - The design boundary inventory is machine-checked from this landing:
   `DESIGN_PACKAGE_IMPORTS` (`packages/core/oak-eslint/src/rules/boundary.ts`)
   must equal the live `packages/design/` inventory (the validate-boundaries
-  design leg).
+  design leg). _(Dated amendment 2026-08-18: "live inventory" means the
+  depth-1 workspaces — the nested `packages/design/identities/*` pack tier
+  is deliberately excluded from the tuple and carries its own structural
+  leg; see the directory row above.)_
 
 ## Links
 

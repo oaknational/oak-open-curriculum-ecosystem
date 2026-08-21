@@ -478,3 +478,424 @@ Owner resume order (ledger XPLAT-4) executed ahead of the freeze map's (a)/(b):
   is another lane's.
 - Validation-worktree residue to clean at fold: `pr-891-macos-validation`
   (detached, untracked logs only) — prune after the #891 lane settles.
+
+## 2026-08-17 ~12:3xZ — FOLD COMPLETE; rotation to coordination/estate-2026-08-17 (Smith hunts Obsidian, e98f17)
+
+- PR #896 MERGED at `d64bf082f` (bot REST merge at the frozen tip
+  `3f006ca87`; merge method merge). The tip was FROZEN by ARC broadcast
+  after the fold reviewer refused a moving diff (it grew 61→64 files
+  under live lane commits) — freeze honoured by all lanes. Two review
+  rounds from mantagen (owner-confirmed this hour: Matt's BOT on his
+  account) were both correct, both cured (round 1: description rewritten
+  to the actual diff-vs-main claim; round 2: XPLAT-4 authority split +
+  frozen-tip description truing), then DISMISSED under the owner's
+  conditional grant ("if you can honestly say that the requested changes
+  are made then dismiss") — honesty condition verified per round before
+  dismissal.
+- moved for teachers: nothing directly — coordination records only.
+  moved for the Practice: four days of decision/ruling/research records
+  durable on main; the cross-platform research lane opened; the
+  workspace-basis reground citable; PR #897 (gitleaks install-suggestion
+  fix, hook + CONTRIBUTING) merged at `fa0604aa3` same hour.
+- SUCCESSOR: `coordination/estate-2026-08-17` cut from post-fold
+  `origin/main`, pushed, primary resides there. Rotation broadcast on
+  the canonical stream follows this entry's commit. Old branch
+  auto-delete by GitHub is expected, not loss.
+- Loss scan at rotation: working tree carries only this entry (committed
+  with it), the untracked `.watch-comms.sh` (session instrument), and
+  the untracked superseded `workspace-basis-settled-statement-2026-08-17.md`
+  (NOT this seat's — superseded by the regrounding record; left for its
+  author's disposition). No unpushed refs.
+- Windows lane next steps (XPLAT-4 order continues): decision briefs
+  (`.gitattributes`, Windows CI leg, gate settings) → owner card; then
+  the fold of Luke's cure rounds as they land (macOS re-validation
+  offer stands, worktree kept); skills lane (task #10, scope
+  `.agent/skills` only) queues behind per SKILLS-FIRST.
+
+## 2026-08-17 ~16:0xZ — COMPACTION FREEZE 2 (Smith hunts Obsidian, e98f17): MCP-612 mid-landing, quota wall
+
+Owner word: prepare for compaction, then stop all processes. The
+builder subagent died on the session limit (resets 19:30 London) mid
+ENOENT-cure — resume respects quota. RESUME MAP, priority order:
+
+- (a) MCP-612 LANDING (task #15, plan `commit-queue-local-ephemera`,
+  ticket In Progress). The INTERIM SPLIT IS LIVE and stable
+  (active-claims.json 4KB, both readers validated; legacy blob at the
+  gitignored `archive/commit-queue-legacy-2026-08-17.json` until the
+  landing's verification read). Worktree
+  `.claude/worktrees/mcp-612-queue-ephemera` holds the ENTIRE delivery
+  UNCOMMITTED (81 files: builder's re-shape 4690/4690 green at its
+  report, my 11 practice-doc true-ups + seed 1.4.0, adapters
+  regenerated) PLUS a PARTIAL builder cure (ENOENT skip-as-absent —
+  its last state: new `smoke-tests/commit-queue-store.smoke.ts`
+  created, `tests/test-helpers/temp-collaboration-state.ts` mid-edit).
+  Resume: (1) read the worktree diff first-hand before anything;
+  (2) finish the ENOENT cure (plural reader skips-as-absent, corrupt
+  stays loud, pin with a test); (3) apply the test-expert cures —
+  IMMEDIATE-FAIL: the git-spawning check-ignore test moves out of
+  vitest to a validator/smoke (the new smoke file is likely the
+  builder's start on exactly this); UNPINNED: TTL-from-updated_at
+  fixture (queued_at ≠ updated_at), unparseable-legacy-row loud
+  failure, 1.2.0-with-queue NOT migrated, "byte-preserved" wording →
+  value+key-order parity; minors optional (3600s boundary, absent-dir
+  view parity, --now honouring). Code-expert's two suggestions
+  non-blocking (legacy-TTL resurrection window; unreachable expired
+  branches). (4) full suite + gates green, atomic commit (code+tests+
+  docs+adapters, stage by pathspec), push, PR (References MCP-612,
+  incident caveat if the hold stands), merge at trustworthy checks,
+  then acceptance 2+3 (live verification at rebuilt primary;
+  legacy-blob verification read → owner disposition).
+- (b) PR #899 (MCP-609 branch-mint tool + cut-coordination-branch
+  skill, pushed at owner word during the GitHub incident): merge at
+  trustworthy checks + review round; then merge main into
+  coordination/estate-2026-08-17 and resolve the KNOWN fold-skill
+  step-9 divergence to the PR's delegation form (one conflict,
+  deliberate, this seat authored both sides).
+- (c) GitHub incident hold (owner order 13:54Z relayed by Nautilus):
+  no all-clear broadcast observed by this freeze — verify status at
+  resume before any GitHub op beyond what the owner's push exception
+  covered (#899, #774 close, #898 merge all completed under his word).
+- (d) Standing queue behind (a)/(b): skills lane task #10 (#890 is
+  CONFLICTING with post-fold main + cure round at PR comment
+  5314990205 — main-merge + filename-class cures are the opener; scope
+  `.agent/skills` ONLY); then wave 2, Practice evals, PROF-FILTER plan
+  authoring, S3-S6 (task #7). XPLAT tranche B research (census delta,
+  platform verification, guard design) continues alongside; Windows CI
+  leg authoring gates on #891 merge; Luke cure-round macOS
+  re-validation offer stands (worktree pr-891-macos-validation kept).
+- (e) Estate map at freeze: Nautilus round-1b fleet running (launched
+  14:57Z, 1-3h, bounded, no GitHub ops); Yarrow holds design-lane
+  claim 645b9e0b on a records-truth pass (their design-system journal
+  edit rides this shared checkout UNCOMMITTED — theirs, do not stage);
+  the untracked `workspace-basis-settled-statement-2026-08-17.md`
+  remains peer-owned residue (superseded record, author's
+  disposition). Quota note: TUI may switch models silently at
+  exhaustion — verify lineage at resume per the standing memory.
+- (f) Instruments at freeze: comms watcher STOPPED at this freeze
+  (re-arm from `cut-coordination-branch`-era recipe: the watch script
+  is deleted; recreate with `--exclude-tag heartbeat`, supervisor pid,
+  bounded drain). No pr-watch monitors (stopped at the incident hold;
+  F-162 records the exit-condition defect). No crons. Bot tokens
+  deleted.
+
+## 2026-08-17 ~16:5xZ — DIRECTOR SUCCESSION BEGUN (Smith hunts Obsidian → Ocelot binds Tunnel)
+
+Owner word ~16:39Z: "please begin the handover to Ocelot." Deliberate
+succession (PDR-063 §Deliberate succession / PDR-064 two moments):
+Moment 1 pre-positioning broadcast `91a18b86` sent 16:42Z; directed
+pickup event `89eadc78` to Ocelot binds Tunnel (c28ad9); claim
+`b1d00d68` carries `handoff_record_path` →
+`.agent/state/collaboration/handoffs/b1d00d68-director-succession-2026-08-17.md`
+— AUTHORITATIVE for current edit state, in-flight reasoning, decisions
+made/deferred, and the pickup contract. Authority remains with e98f17
+until Ocelot's Moment 2 acknowledgement referencing `91a18b86` lands;
+the outgoing instruments stand down at that broadcast (or die with the
+session — the PDR-064 grace window covers the gap; the record and git
+carry the substance either way).
+
+Consumed from the freeze-2 map above, this session: MCP-612 landed
+LOCALLY at `a8600f2a3` on `feat/mcp-612-commit-queue-local-ephemera`
+(all reviewer cures applied and verified first-hand, TTL pin falsified
+both directions, collect failure path-labelled; whole-tree pre-commit
+green; push, PR, merge, acceptances 2–3 remain — queued behind the
+GitHub hold). #899 still open. The hold STANDS (incident `zkxwbgr0cnmx`
+investigating/critical; the owner's order terminates on incident
+RESOLUTION — verify at githubstatus, then broadcast the all-clear,
+which releases every seat's queued pushes). MCP-615 RATIFIED at the
+owner card (Yarrow, lane commit `afae5c663`). Survey round 1b complete,
+harvest `5a04ce910`, round-2 shape with the owner as a card. The dead
+MCP-612 builder subagent is NOT needed — do not resume it.
+
+## 2026-08-17 ~16:4xZ — DIRECTOR SUCCESSION COMPLETE: Ocelot binds Tunnel holds the seat (Moment 2)
+
+Written by the incoming seat. Sequence, all events on the canonical
+stream: Ocelot registered standby 16:07Z (`4b736731`, grounded
+first-hand incl. the readiness gate's mechanical liveness check);
+Moment 1 + directed pickup per the entry above; Ocelot read the handoff
+record end to end, recomputed premises at pickup (a8600f2a3 verified at
+the mcp-612-queue-ephemera tip, tree clean; Nautilus ACTIVE with the
+1a+1b harvest committed — the record's peer-STAGED-file caution is
+superseded; hold verified still major/critical at 16:46Z), adopted
+claim `b1d00d68` in place, armed the heartbeat pair (240s, one `--now`
+per tick), and broadcast Moment 2 (`a91c1177`) 16:44Z in-response-to
+`91a18b86`. Authority transferred at that broadcast; directed
+absorption ack `46e553f5`; Smith's heartbeat-end + team-member closeout
+landed 16:47Z — tenure complete, nothing retained. Successor ARC
+channels opened at owner word and announced (`4eef465b` design-lane
+with Yarrow; `e331bff4` survey-lane with Nautilus); the prior pairings'
+channels stand as record. Instruments at this seat: canonical watcher
+(heartbeat-excluded F-146 shape) + F-75 delta poll (600s) + heartbeat
+pair + two ARC tails + a GitHub resolution watch (300s; incident
+`zkxwbgr0cnmx`; at indicator none/minor verify `resolved_at`, broadcast
+the all-clear, then run the handoff record's hold-release order). The
+freeze-2 map remains the work queue; item (a) is at the push/PR stage.
+
+## Participating agent identities (succession addendum)
+
+| platform | model | session_id_prefix | agent_name | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| claude-code | claude-fable-5 | c28ad9 | Ocelot binds Tunnel | Director — adopted b1d00d68 at Moment 2 `a91c1177` | 2026-08-17 | 2026-08-17 |
+
+## 2026-08-17 ~20:0xZ — OVERNIGHT STAND-DOWN (Ocelot binds Tunnel, c28ad9): both lanes down clean; Director down last at owner word
+
+Owner overnight order (ledger OVN-1): lanes run owner-independent work,
+stand down when they need him, Director last; operationalised in
+broadcast `651c4dfa`. The evening after the two successions
+(Smith→Ocelot Director; Nautilus→Poppy lane, Moment 2 19:33:59Z):
+Poppy delivered the five-point brief's Phase 1 (Toolkit Atlas baseline
+repo-canonical at `.agent/reports/repo-architecture/oak-toolkit-atlas.html`
+and published; survey post-mortem; salvage register — `6ba9e93c3`,
+`2379d4000`); Yarrow landed T1a-i (`cd84e490c`, MCP-616), the MCP-615
+trail (`843bb4ac8`: ratified node, P6 corrected ontology, R4 re-class),
+and design continuity (`7a28c7fa3`). Round-2 CANCELLED at owner ruling
+(ledger NAUT-1); the five-point brief governs the repo-architecture
+lane (per-user memory `repo-architecture-brief-toolkit-five-points`).
+
+STAND-DOWNS, both clean with heartbeat-ends (the 10-minute retirement
+rule must not fire on either): Poppy 20:00:15Z — claims `95a0678d` +
+`875f1508` retained-with-reason; morning pickup = #889 FIRST at the
+all-clear (owner merge word, ledger OVN-2, canonical mirror `5e012461`:
+"safely" includes a content-truing check against the fleet outcomes),
+then the MCP-619 phase-2 warrant card. Yarrow 20:03:28Z (closeout
+`7c8b57b6`) — claim `645b9e0b` retained; morning = T1a-ii
+(pack-contract authoring, held on a stated quality trade-off, no card
+needed); three-push queue (MCP-613, MCP-615 at `843bb4ac8`, MCP-616 at
+`cd84e490c`) at the all-clear.
+
+GITHUB HOLD STANDS at this write (incident `zkxwbgr0cnmx`
+investigating/critical through the 19:32Z recompute). The ALL-CLEAR
+duty is the Director's and sleeps with this seat: the resuming morning
+seat verifies `resolved_at` first-hand, broadcasts the all-clear ONCE,
+then runs the release order — (1) coordination push (this parcel + the
+nine-plus lane commits ahead of origin); (2) MCP-612
+fetch/main-merge/gates/push/PR/merge at trustworthy checks (worktree
+`mcp-612-queue-ephemera` at `a8600f2a3`); (3) #899 merge + fold-skill
+step-9 delegation-form resolution + coordination main-merge; (4) lane
+queues per the closeouts above. Post-incident CI flakiness =
+park-and-card, never force.
+
+MORNING CARDS (assembly): (1) MCP-619 phase-2 opening warrant (solo
+seat, evidence collected, per-change diagrams, no fleet — Poppy's
+framing endorsed); (2) three `scrap/*-mis-based` branch deletions
+(owner one-click; EnterWorktree base-ref mis-cut ×3, napkin carries
+the pattern); (3) MCP-612 acceptance-3 legacy-blob disposition (fires
+only post-merge); (4) read-if-chosen: Poppy's survey post-mortem
+(carries a fleet-design-review warrant-gate amendment candidate);
+(5) micro: disposition of the untracked peer residue
+`workspace-basis-settled-statement-2026-08-17.md` (author retired).
+
+FRICTIONS for the register at morning: the watcher hourly-backstop +
+turn-notification-lag blind-window pattern (Yarrow's routed
+observation; this seat ran the same recycles benignly — cursor made
+them lossless); F-162 pr-watch ALL-GREEN exit defect still open.
+
+INSTRUMENTS at this stand-down (stop-loop-first): heartbeat pair
+stopped then heartbeat-end broadcast; ARC tails, F-75 poll, GitHub
+resolution watch, canonical watcher stopped last (COLD-PAUSE — with
+every seat down, nothing could act on an overnight resolution anyway).
+Claim `b1d00d68` RETAINED-WITH-REASON: same seat resumes at the
+owner's morning word; silence past the heartbeat-end is intentional
+stand-down, never retirement.
+
+## 2026-08-18 ~11:0xZ — COMPACTION FREEZE (Ocelot binds Tunnel, c28ad9): demo delivered, review rounds mid-ceremony; seat continues
+
+Owner word: prepare for compaction, then stop all monitors. The seat
+CONTINUES at resume; silence past the freeze broadcast is intentional.
+RESUME MAP, priority order:
+
+- (a) DEMO DELIVERED inside the window: MCP-620 both workstreams
+  demo-ready and witnessed (W1 EMC² amplification `0cd8906ad`, W2
+  /tokens page `e0a85e842`, committed on lane branch
+  `jimcresswell/mcp-620-emc-amplification-token-reference-page-demo-motion`,
+  UNPUSHED by design). The OWNER VIEWED the demo and gave feedback
+  DIRECT at Yarrow's seat (his word at this seat ~10:5xZ: "I have
+  given feedback to Yarrow") — the feedback substance lives at their
+  seat; the Director relay was PENDING at this freeze. Yarrow's
+  resume: fold the feedback, then the review/land parcel and the
+  node's resume order (three-push queue MCP-613/615/616 → amendment
+  parcel → demo-work land → T1a-ii with the motion-axis + loop-arm
+  feed → T1b → T2). Plan node ratified at `d19101de6` (pushed).
+- (b) PR #899 (MCP-609): round-2 cures at `7968d28be` (pushed:
+  single-resolution cut, probabilistic sha6 wording in four carriers,
+  24h rule now prescribes the minted form + parse contract — the
+  rule's stale estate-form prescription was an F-161 recreation risk,
+  cured). Round 2 DISMISSED at honest cure; mantagen ROUND 3
+  RE-REQUESTED — at its arrival: harvest full, disposition, then
+  `merge-bot merge --pr 899 --expect mantagen` at SETTLE-READY (the
+  state machine refused a premature merge with
+  SILENT-WAIT-NO-REVIEWER: a review must BIND the current tip; a
+  dismissed round binds nothing).
+- (c) PR #905 (MCP-612; bot-authored replacement of mis-authored #904
+  — ambient-credential breach cured, failure-mode event `5472dbad`):
+  checks 17/17 green, Sonar passed; mantagen FIVE-FINDING
+  CHANGES_REQUESTED round OUTSTANDING (split-write crash-atomicity;
+  NaN-timestamp silent deletion; FIFO order change; claim-open
+  TOCTOU; worktree-decoy validation — file:line in the review). ROUTE
+  a verification+cure round to an implementer seat: each finding
+  reproduced-or-refuted FIRST-HAND at the cited site before cure;
+  goal-alignment note rides finding 3 (QUEUE-LOCAL grades the queue
+  legacy-use). Acknowledged on the PR, NO dismissal. MCP-612
+  acceptances 2+3 (primary rebuild verification; legacy-blob owner
+  card) fire only post-merge.
+- (d) Poppy (repo-architecture): #889 under both OVN-2 riders, in
+  progress, "start slowly" — no outcome report by this freeze; then
+  support posture. MCP-619 phase 2 stays behind the short-term goal
+  and its owner-seen warrant card.
+- (e) Instruments at this freeze: ALL STOPPED (heartbeat pair with
+  heartbeat-end; the #899 round-3 poll; design ARC tail; F-75;
+  canonical watcher last). Re-arm at resume per the canonical
+  recipes; review-arrival polls key on the reviews ARRAY only (the
+  mergeStateStatus field flaps, and pr-watch's ALL-GREEN exit cannot
+  hold through green-but-blocked — F-162). Bot token file DELETED at
+  this freeze; mint per write-window (merge-bot mint-token, wc -c
+  tripwire, author echo BEFORE the first identity-bearing write).
+- (f) Push discipline standing (owner word 2026-08-18): every push's
+  output to an untracked scratch log; background pushes carry the
+  push's OWN exit code — a `; echo` wrapper false-greened one failed
+  push this morning and the log told the truth.
+
+## 2026-08-18 ~13:5xZ — RESUME COMPLETE (Ocelot binds Tunnel, c28ad9): #899 merged and folded back; #905 routed; instruments green
+
+Seat resumed post-compaction at owner word (~12:4xZ). Instruments
+re-armed per the canonical recipes and verified (F-95 both gates;
+registry read-back; the watcher's hourly-backstop recycle at ~13:5xZ
+re-armed on the exit notification). Freeze-map disposition:
+
+- (d→done) #889 MERGED 09:22:47Z `daf56ccad` under both OVN-2 riders —
+  absorbed from Poppy's correction `57167e44`; nothing remains.
+- (c→routed) #905 five-finding verification+cure round routed to Poppy
+  (directive `3eda8a27`, absorption ack in full; verify-first contract,
+  QUEUE-LOCAL legacy-use grading on finding 3, MCP-620 support standby
+  keeps precedence). Post-merge acceptances 2+3 stay on this board.
+- (b→done) #899: mantagen round 3 (two blockers) cured at `eaa75e6e7`
+  (fold step 9 single-BASE resolution; probabilistic sha6 wording in
+  the cut skill + both adapters; carrier sweep clean), dismissed at
+  honest cure, round 4 APPROVED binding the tip, MERGED `791266135`
+  via merge-bot (an external stop killed the first settle run; owner
+  card answered "merge now"). Round-4 tally: zero findings. The
+  fold-skill step-9 delegation-form question is RESOLVED-BY-CURE:
+  step 9 carries the single-resolution block inline plus the pointer.
+- Coordination main-merge `386d3b7e9`: one conflict (fold skill),
+  resolved to main's four-round-reviewed step 9 (the coordination-side
+  interim hand-patch it superseded carried no unique substance);
+  marker-probed both directions; dist rebuilt green after the merge.
+- (a unchanged) Yarrow: feedback-fold relay still pending; three-push
+  queue + node resume order stand. Nothing owed from this seat.
+
+Instruments live at this write: canonical watcher (bqzj6q3kt),
+heartbeat pair, F-75 delta poll, design ARC tail. Next wakes: round
+report from Poppy (#905), Yarrow relay, owner word.
+
+## 2026-08-18 ~21:2xZ — COMPACTION FREEZE 2 (Ocelot binds Tunnel, c28ad9): drift signal fixed as PR #911; seven PRs at cured heads; seat continues
+
+Owner word: fix the broken CI drift signal, then prepare for compaction
+and stop all processes. The seat CONTINUES at resume; silence past the
+freeze broadcast is intentional. RESUME MAP, priority order:
+
+- (a) PR #911 (MCP-626 signal arm, fix/mcp-626-schema-drift-status at
+  8c43a9c2d, bot-authored, jimbot): the schema-drift verdict now
+  renders on VISIBLE surfaces — pure report builder (25 tests; every
+  outcome incl. skipped; injection-escaped versions; verdict-first
+  truncation), stderr/stdout stream contract, and a DEDICATED
+  schema-drift CI job publishing an informational commit status via gh
+  api (fork-guarded, retried, target_url). The pre-execution review
+  VERIFIED that statuses:write on the build job would let build-time
+  code mint a green run-quality-gates (both attribute to app 15368) —
+  the dedicated job is the cure; never move the token back. Awaits
+  Copilot + mantagen rounds; merge leg at settled. MCP-626's OTHER arm
+  (schema-cache refresh 0.7.0→0.11.0, pnpm sdk-codegen:refresh) is a
+  separate slice, untouched. MCP-627 (new): live ruleset has
+  strict_required_status_checks OFF vs ADR-204's ratified ON.
+- (b) #888 (57ca43b5b) / #891 (6f073346f) / #905 (ef0742759): all at
+  cured heads, every review round dismissed-at-verified-cure, fresh
+  Copilot rounds harvested and dispositioned (incl. one REFUTED with
+  vitest-source evidence: VITEST_MAX_WORKERS IS read by v4), awaiting
+  BINDING rounds — dismissed rounds bind nothing and Copilot never
+  approves, so mantagen's cadence (NOT on-demand, owner calibration)
+  or human approval settles them; merge-bot recomputes at any try.
+  MCP-625 carries the deferred owner-only-write symlink bug (verified
+  pre-existing on main) + two small residues.
+- (c) Yarrow (claim 645b9e0b): froze 18:34Z after closing round 1 on
+  all four design PRs, resumed 20:49Z, and was LIVE at this freeze;
+  their round-2 harvest owns
+  #907's red CI (Sonar+browser+aggregate on 62df2091c) and the landed
+  Copilot rounds on #907/#909; #908/#910 wait as in (b). Merge legs
+  for #907-#910 at this seat at settled. Their board facts are on the
+  ARC channel (20:5xZ entry).
+- (d) Host-portability programme (MCP-624, node ratified 2026-08-18):
+  item 3 DONE (macOS gate green on #891); items 2/4 = the merges in
+  (b); items 1, 5-9 queued as delivery slices (principles clause,
+  LF-generator + spawnSync residue, static ratchet, the REQUIRED basic
+  Windows + macOS CI legs, docs, research-child re-true).
+- (e) Instruments at this freeze: ALL STOPPED (heartbeat pair first
+  with heartbeat-end; ARC tail; F-75; canonical watcher last). The
+  owner's evening stop of the PR watches is SUPERSEDED by this freeze;
+  fresh watches are the resume seat's call. Bot tokens deleted; mint
+  per write-window (echo author BEFORE the first identity-bearing
+  write). Push discipline standing: output to an untracked log, the
+  push is the guarded command.
+- (f) This freeze's parcel pushes the evening's HELD ahead-2
+  (7bee8b676 Yarrow round-1 + bb62015c3 ARC rider) with the freeze
+  entry — the compaction order's conserve supersedes the evening
+  stop-work hold. Napkin carries the day-2 lessons: the
+  sensor-into-the-void generator, the FETCH_HEAD single-slot race,
+  the worktree-binary home-registry hazard (until #905 merges +
+  primary rebuild). Routed at the freeze edge: MCP-628 (e2e
+  static-root fixture races copyOakDs staging dir; named one-guard
+  cure) — Yarrow's finding, homed as a ticket, liftable by any seat.
+
+## 2026-08-19 ~11:4xZ — WRAP (Ocelot binds Tunnel, c28ad9): output-contracts lane complete and RATIFIED; fold-to-main is the next leg; seat continues at owner word
+
+Session outcome (owner-directed, four-part): the output-schema truth
+lane ran end to end in one sitting — 14-leg verification fleet (report:
+`.agent/reports/output-schema-truth-fleet-2026-08-19.md`, the durable
+evidence record), documentation trued (testing-strategy absence-pin
+rule; schema-first §Output Contracts; index/continuity sweeps), the
+`mcp-output-contracts` plan family authored, twice-reviewed
+(assumptions HOLD cured in full; docs must-fixes cured), RATIFIED by
+the owner (stamps at `9f20ed3d0`, pushed, remote-verified), and the
+advertisement ruling folded (measure $defs dedup first, lean accept).
+MCP-630 minted (served-surface truth; the live changelog-tool 404
+defect). Prior plans archived with banners. RESUME MAP, priority order:
+
+- (a) COORDINATION FOLD TO MAIN — the branch is OVERDUE per
+  coordination-branch-24h-lifetime (stamp 08-17; now 08-19). The route
+  (rule §Action 3, converge-and-rotate): AFTER Yarrow's design merge
+  drive settles (their merges move main), merge origin/main into the
+  coordination branch (pre-merge divergence analysis), push, land the
+  branch through its fold PR at full condition (archival/record class;
+  product-gravity line in the body; binding review; bot REST-merge,
+  never squash), then cut the fresh day-stamped successor with the
+  cut-coordination-branch skill's tool and broadcast the rotation.
+  This fold is how the ratified plan family — and everything else on
+  the branch — reaches main.
+- (b) mcp-served-surface-truth (MCP-630) pickup: HELD at owner word
+  2026-08-19 ("first pick up not yet") — route ONLY at his word; it
+  sequences after PR #911 lands regardless.
+- (c) This seat's PR board: #911 awaiting binding rounds + the CodeQL
+  inline finding needs a dispositioned round (targets the sanitised
+  path; likely refutable with evidence); #905 19/19 green awaiting a
+  binding round; merge legs at settled. Matt active today — rounds may
+  land on his cadence.
+- (d) Yarrow (owner word at their seat): finish AND MERGE the design
+  PRs (#907-#910, then #912 at stack dissolution) — merge legs at
+  THEIR seat this sitting; the T1a-ii+T1e owner card routes through
+  the Director when surfaced; MCP-628 liftable by any seat.
+- (e) Poppy: MCP-619 change set COMPLETE as design at owner lens-4
+  sweep (seam centrepiece); next = owner review, then migration cards
+  in dependency order (seam first). Atlas at 3d2cdd848.
+- (f) Follow-ups with named homes: testing-strategy.md is over its
+  fitness char-limit (pre-existing; its own split_strategy is the
+  cure, own lane); plan-node-schema needs a dated short-lived-
+  strategic reconciliation clause (owner-word exception exists in the
+  mcp-output-contracts node); MCP-627 ruleset drift open; MEMORY.md
+  index still ~19KB (curator pass).
+- (g) Instruments at this wrap: heartbeat pair stopped first with
+  heartbeat-end, then F-75 poll, canonical watcher last. Lane claim
+  (output-schema truth) CLOSED — work complete. Director claim
+  b1d00d68 RETAINED-WITH-REASON: same seat resumes at the owner's
+  word; silence past the heartbeat-end is intentional stand-down.
+  Shared-checkout disciplines now standing: stage AND commit by
+  explicit pathspec; the push is a task's FINAL command (the
+  false-green echo wrapper recurred 2026-08-19 and is napkin-recorded);
+  three same-window push races say fold windows want quiet branches.

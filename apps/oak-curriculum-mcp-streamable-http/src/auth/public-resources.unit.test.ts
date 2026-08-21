@@ -8,9 +8,9 @@ import { describe, it, expect } from 'vitest';
 import {
   NAVIGATION_GUIDANCE_URIS,
   CREATION_GUIDANCE_URIS,
+  WIDGET_URI,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { isPublicResourceUri } from './public-resources.js';
-import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 describe('isPublicResourceUri', () => {
   describe('returns true for public resources', () => {

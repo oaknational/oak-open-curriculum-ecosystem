@@ -15,22 +15,118 @@
 /* Inverted like the reference (owner reprice 2026-08-10: appearance
    converges — superseding the earlier non-inverted divergence). The ring
    cure is the .foot pattern: every control on the inverted surface rides
-   the kit's inverted family, including the focus ring. */
+   the kit's inverted family, including the focus ring.
+
+   The strip is also STICKY with its real controls (owner word
+   2026-08-18): radios lead, the theme select gathers right — the cure
+   for the arrow-key scroll reset (focusing an offscreen radio scrolls it
+   into view; a control that is always in view never needs the scroll).
+   Sticky forces ONE known row: the controls never wrap (in-container
+   horizontal scroll is the very-narrow escape), so the mast below can
+   stack its own stickiness under a stable strip height. The separator is
+   guaranteed here structurally (owner point: it vanished on PDS and at
+   narrow when it rode identity re-pointing alone). */
 [data-page='unit'] .util {
   background: var(--bg-inverted);
   color: var(--text-inverted);
   --text-link: var(--text-inverted);
   --text-link-hover: var(--text-inverted);
   --text-link-visited: var(--text-inverted);
+  position: sticky;
+  inset-block-start: 0;
+  /* The kit's sticky layer, same as the mast: the two never overlap by
+     geometry (the mast's offset equals the strip's one-row height), so
+     no arithmetic above the token is needed. */
+  z-index: var(--layer-sticky);
+  border-block-end: var(--border-solid-s) solid var(--border-primary);
 }
 
-[data-page='unit'] .util a {
+/* The contract's scoping rule (colors_and_type.css §Focus): the inverted
+   ring is set on the CONTROLS that sit on the inverted surface, never on
+   the band itself — the strip's links, its theme select, and its identity
+   radios all sit on this band. */
+[data-page='unit'] .util a,
+[data-page='unit'] .util .oak-select,
+[data-page='unit'] .util .oak-radio {
   --focus-ring: var(--focus-ring-inverted);
 }
 
 [data-page='unit'] .util-inner {
   align-items: center;
   padding-block: var(--space-8);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  /* The scroll container must be the CONTAINING BLOCK for its own
+     absolutely-positioned descendants (the controls' visually-hidden
+     helper texts), or their static positions ride the nowrap row past
+     the viewport, escape this clip, and put a hard floor under the
+     document's scroll width — measured: a 312px floor that reads green
+     under overlay scrollbars (macOS) and fails SC 1.4.10 the moment a
+     classic scrollbar narrows the layout viewport (CI's Linux). */
+  position: relative;
+}
+[data-page='unit'] .strip-controls {
+  inline-size: 100%;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-8) var(--gap-m);
+}
+
+/* Theme label sits LEFT of its select (owner point 2): the labelled
+   cluster must not wrap inside the one-row strip — and neither may the
+   crumbs, whose internal wrapping at 320px once grew the strip past the
+   mast's sticky offset and slid the mast over the radios (the reflow
+   cell's bgOverlap catch). One row, in-container scroll at the floor. */
+[data-page='unit'] .strip-controls > .oak-cluster,
+[data-page='unit'] .strip-controls .showcase-crumbs {
+  flex-wrap: nowrap;
+}
+
+[data-page='unit'] .strip-controls .showcase-crumbs-nav,
+[data-page='unit'] .strip-controls .identity-radios {
+  /* Rigid, never shrink-to-overlap: the shared .identity-radios reset
+     allows min-inline-size 0 (right for the picker's wrapping chrome),
+     but inside this one-row scrolling strip a shrunken fieldset lets its
+     radios overflow under the theme cluster (the reflow cells' bgOverlap
+     catch, all three identities). */
+  flex: 0 0 auto;
+}
+
+/* Sticky masthead, as the reference has it — stacking BELOW the strip:
+   its offset is one strip row at the kit's target height plus the strip's
+   block padding and rule (a second .mast block once re-declared
+   inset-block-start: 0 later in this file, silently killing this offset —
+   the duplicate-selector class of defect; one block, one truth).
+   Adopting stickiness adopts the WCAG 2.2 2.4.11 obligation with it: the
+   scroll-padding below keeps a focused control from being revealed UNDER
+   the bar, and short viewports de-stick entirely so the bar can never
+   dominate the screen. */
+[data-page='unit'] .mast {
+  position: sticky;
+  inset-block-start: calc(var(--size-target) + var(--space-16) + var(--border-solid-s));
+  z-index: var(--layer-sticky);
+}
+
+/* No strip, no strip-height reserve: the controls=none frames (the
+   side-by-side stages) omit the utility strip entirely, so the mast
+   sticks at the top edge instead of below a band that is not there
+   (review round 3). */
+[data-page='unit'][data-controls='none'] .mast {
+  inset-block-start: 0;
+}
+
+/* The kit's .oak-choice pins --text-primary, and the crumb pattern pins
+   --text-subdued — both are PAGE-ground pairings that land low-contrast
+   on this inverted strip (measured: choice labels light-on-light under
+   the EMC² dark face; crumb separators 2.2:1 grey-on-black under Oak).
+   Everything in the strip inherits the strip's own audited inverted
+   colour instead. */
+[data-page='unit'] .util .oak-choice,
+[data-page='unit'] .util .strip-controls label,
+[data-page='unit'] .util .showcase-crumbs li:not(:last-child)::after,
+[data-page='unit'] .util .showcase-crumbs .here {
+  color: inherit;
 }
 
 /* The audience pair reads "teacher · pupil": the dot is presentation, so
@@ -52,15 +148,6 @@
   margin-inline-start: auto;
 }
 
-/* Sticky masthead, as the reference has it. Adopting stickiness adopts
-   the WCAG 2.2 2.4.11 obligation with it: the scroll-padding below keeps
-   a focused control from being revealed UNDER the bar, and short
-   viewports de-stick entirely so the bar can never dominate the screen. */
-[data-page='unit'] .mast {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: var(--layer-sticky);
-}
 /* Hook-clean contract: brand expression layers restyle the masthead at
    EQUAL specificity from a later-loaded sheet (see the PDS §11 comment),
    so the brand-expressible visual properties — surface and rule — live at

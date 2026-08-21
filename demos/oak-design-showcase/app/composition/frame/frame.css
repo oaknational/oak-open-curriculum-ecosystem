@@ -1,0 +1,102 @@
+/* ============================================================
+   Composition exhibit — layout only, tokens only.
+
+   The boxes are deliberately mute: neutral surface, one border
+   weight, centred label. All the design freedom on this page
+   lives in the FOUR data-layout maps below, which re-point the
+   kit's own --main-columns/--main-areas consumption — the same
+   mechanism a shipped page type uses, so what the demo proves
+   is the engine, not a private trick. The markup renders the
+   eleven regions once, in canonical source order, under every
+   map (owner spec 2026-08-18).
+   ============================================================ */
+
+.comp-frame {
+  background: var(--bg-primary);
+}
+
+.comp-frame .oak-main {
+  --main-gap: var(--gap-s) var(--gap-s);
+  padding: var(--space-16);
+}
+
+.comp-frame .comp-box {
+  background: var(--bg-neutral);
+  border: var(--border-solid-m) solid var(--border-primary);
+  display: grid;
+  place-items: center;
+  min-block-size: var(--space-80);
+}
+
+.comp-frame .comp-box-label {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.comp-frame [data-region='hero'] {
+  min-block-size: var(--space-160);
+}
+
+.comp-frame [data-region='navigation'],
+.comp-frame [data-region='cta'] {
+  min-block-size: var(--space-48);
+}
+
+/* Every map sets BOTH faces: the kit consumes --main-columns/--main-areas
+   above its 840px seam and the -narrow pair at or below it, so a map
+   without narrow faces silently collapses to the kit's canonical narrow
+   stack and the layout control goes dead on phone widths. Each narrow
+   face is the map's own single-column expression — the ORDER still
+   re-arranges, which is what the demo proves at every width. */
+
+/* --- Map 1: DOCUMENT — the canonical stack, source order intact. --- */
+.comp-frame[data-layout='document'] {
+  --main-columns: minmax(0, 1fr);
+  --main-areas: 'hero' 'navigation' 'featured' 'facets' 'results' 'detail' 'content' 'context'
+    'resources' 'support' 'cta';
+  --main-columns-narrow: minmax(0, 1fr);
+  --main-areas-narrow: 'hero' 'navigation' 'featured' 'facets' 'results' 'detail' 'content'
+    'context' 'resources' 'support' 'cta';
+}
+
+/* --- Map 2: MAGAZINE — asymmetric two-column; the long-read column
+       left, a narrow rail right, full-bleed hero and cta. Narrow: the
+       long read leads, the rail content follows. --- */
+.comp-frame[data-layout='magazine'] {
+  --main-columns: minmax(0, 2fr) minmax(0, 1fr);
+  --main-areas: 'hero hero' 'navigation navigation' 'content facets' 'content context'
+    'detail resources' 'results featured' 'cta cta' 'support support';
+  --main-columns-narrow: minmax(0, 1fr);
+  --main-areas-narrow: 'hero' 'navigation' 'content' 'facets' 'context' 'detail' 'resources'
+    'results' 'featured' 'cta' 'support';
+}
+
+/* --- Map 3: DASHBOARD — a tall navigation rail, dense tiles, the hero
+       reduced to one band among equals. Narrow: navigation first, then
+       the tiles in rail order. --- */
+.comp-frame[data-layout='dashboard'] {
+  --main-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
+  --main-areas: 'navigation hero hero facets' 'navigation results detail context'
+    'navigation results detail support' 'navigation featured content resources'
+    'navigation cta cta cta';
+  --main-columns-narrow: minmax(0, 1fr);
+  --main-areas-narrow: 'navigation' 'hero' 'facets' 'results' 'detail' 'context' 'support'
+    'featured' 'content' 'resources' 'cta';
+}
+
+/* --- Map 4: INVERTED — the extreme: visual order fully reversed, the
+       cta leads and the hero closes. DOM order is untouched, which is
+       the whole point (CSS owns appearance, including visual order).
+       Narrow: the same full reversal, single column. --- */
+.comp-frame[data-layout='inverted'] {
+  /* The FULL reverse of the source order (hero…cta becomes cta…hero),
+     read row-major — consecutive pairs from the reversed sequence, so
+     the rendered order matches the accessible description exactly
+     (review round 3: the earlier pairing scrambled the middle six). */
+  --main-columns: minmax(0, 1fr) minmax(0, 1fr);
+  --main-areas: 'cta cta' 'support resources' 'context content' 'detail results' 'facets featured'
+    'navigation navigation' 'hero hero';
+  --main-columns-narrow: minmax(0, 1fr);
+  --main-areas-narrow: 'cta' 'support' 'resources' 'context' 'content' 'detail' 'results' 'facets'
+    'featured' 'navigation' 'hero';
+}

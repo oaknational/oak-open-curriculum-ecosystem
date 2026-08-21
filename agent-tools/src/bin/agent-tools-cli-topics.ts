@@ -7,6 +7,7 @@ import {
   runCommitQueueCli,
 } from '../commit-queue/index.js';
 import { runContextCostCli } from '../context-cost/cli.js';
+import { runCoordinationCli } from '../coordination/cli.js';
 import { repoRoot } from '../core/runtime.js';
 import { runMergeBotCli } from '../merge-bot/cli.js';
 import { runPrWatchCli } from '../pr-watch/cli.js';
@@ -89,6 +90,16 @@ export async function runContextCostTopic(
     stdout,
     stderr,
   });
+}
+
+export function runCoordinationTopic(
+  input: AgentToolsCliInput,
+  args: readonly string[],
+): AgentToolsCliResult {
+  const stdout = new OutputBuffer();
+  const stderr = new OutputBuffer();
+  const exitCode = runCoordinationCli({ args, cwd: input.cwd, stdout, stderr });
+  return { exitCode, stdout: stdout.text(), stderr: stderr.text() };
 }
 
 export async function runSessionMetadataTopic(

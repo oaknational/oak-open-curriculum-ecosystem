@@ -101,7 +101,7 @@ nothing here depends on that branch.
 
 - Evidence: `oak-prod-live-mcp-exercise-2026-06-11.md` (`../../../reports/oak-prod-live-mcp-exercise-2026-06-11.md`)
 - Finding 1 interacts with
-  [`output-schemas-for-mcp-tools.plan.md`](output-schemas-for-mcp-tools.plan.md)
+  `../archive/superseded/output-schemas-for-mcp-tools.plan.md`
   (the envelope/outputSchema arc owns the long-term success-shape contract;
   any S1 change should be coherent with `composeEnvelopeSchema`).
 - Sibling precedent: [`oak-preview-mcp-snagging-2026-04-23.plan.md`](oak-preview-mcp-snagging-2026-04-23.plan.md).

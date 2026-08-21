@@ -72,6 +72,7 @@
     "pre-tool-use-dispatch": "cd .. && pnpm exec tsx agent-tools/src/hook-policy/pre-tool-use-dispatch.ts",
     "check-encoding": "cd .. && node agent-tools/dist/src/encoding/check-encoding.js",
     "check-commit-message": "cd .. && pnpm exec tsx agent-tools/src/commit-advisories/check-commit-message.ts",
+    "workspace-census": "cd .. && pnpm exec tsx agent-tools/src/workspace-census/cli.ts",
     "secret-scan": "cd .. && pnpm exec tsx agent-tools/src/secret-scan/run-push-secret-scan.ts",
     "check-commit-skill-advisories": "cd .. && pnpm exec tsx agent-tools/src/commit-advisories/check-commit-skill-advisories.ts",
     "prevent-accidental-major-version": "cd .. && pnpm exec tsx agent-tools/src/version-guard/prevent-accidental-major-version.ts",

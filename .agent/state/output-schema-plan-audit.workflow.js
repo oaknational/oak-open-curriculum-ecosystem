@@ -1,3 +1,10 @@
+// RETIRED 2026-08-19: the plan this workflow audits is archived
+// (.agent/plans-backlog-2026-07/sdk-and-mcp-enhancements/archive/superseded/
+// output-schemas-for-mcp-tools.plan.md; successors live under .agent/plans/ as
+// the mcp-output-contracts node). Every path below (PLAN and the DOCS array)
+// still names the pre-migration `.agent/plans/sdk-and-mcp-enhancements/` root,
+// which no longer exists — a re-run would silently degrade to doc-not-found
+// verdicts. Do not re-invoke without re-truing paths against a live target.
 export const meta = {
   name: 'output-schema-plan-audit',
   description:

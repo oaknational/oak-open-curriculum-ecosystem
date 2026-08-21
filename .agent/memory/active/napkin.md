@@ -579,6 +579,32 @@ estate's existing rule that cursor movement proves consumption and not delivery.
   (`--max-events-per-drain`) made the replay safe and it doubled as the
   gap-window completeness read; the class to respect is that a replay is a
   FEATURE when bounded and a wedge when not.
+- "RE-CREATE X" INSTRUCTIONS INHERIT X'S OLD FORM (2026-08-17, owner-caught):
+  the freeze map's "re-create watch scripts from the resume map's needs" was
+  executed as recreating SCRIPTS, hand-rolling a PR poller while the built
+  `pr-watch` topic sat in the same `--help` output this seat had read that
+  morning for the claims re-derive. `use-built-agent-tools-cli` violated;
+  cured same hour (script deleted, four pr-watch monitors armed). The
+  re-derive-from-current-surface lesson applies to the INSTRUMENT, not only
+  the invocation. Wrapper scripts remain legitimate ONLY as hook-boundary
+  packaging around a built tool (the comms watcher's `$PPID` + inline-command
+  guard), never as the instrument itself.
+- PR-WATCH EXIT CONDITION IS BLIND TO MERGE/REVIEW STATE (tool feedback,
+  2026-08-17): `pr-watch 890 --watch` exited on ALL-GREEN (checks passed,
+  threads resolved) while the PR sat CONFLICTING + CHANGES_REQUESTED — the
+  one state where the watch is most wanted. Feedback for the frictions
+  register at next parcel: ALL-GREEN should require mergeable + no standing
+  change-request, or grow a --hold-until-merged flag.
+- STAGING A SHARED FILE CAPTURES ITS WHOLE UNCOMMITTED STATE (worked
+  instance 2026-08-17, commit 1104d5128): a one-token md004 rewrap staged
+  the survey lane's in-flight 43/7 edits with it — the explicit pathspec
+  named the FILE, but the file carried a peer's half-state, and the
+  Edit-tool's changed-on-disk note had said so one call earlier. Cure
+  executed: surface-not-revert (custody event e08643cf; content preserved,
+  gate-green). The missing move: on a shared live file, `git diff -- <file>`
+  and a completeness read BEFORE `git add`, staging by hunk is not
+  available to pathspec adds — if the peer state is mid-edit, wait or
+  coordinate; the lint cure was not urgent enough to skip the read.
 
 ## 2026-08-17 — Nautilus calls Plankton: deference contamination is anchor propagation one level up
 
@@ -606,6 +632,654 @@ opus, high 34k/63s sonnet, xhigh 40k/211s haiku; 3 ON-TRACK, 1
 DRIFTING-on-missing-NEXT); architecture panel first-hand verification
 habit paid off — 3 of 4 experts refused to sign a statement whose
 frame was contaminated while verifying its mechanism facts clean.
+
+## 2026-08-17 — Nautilus calls Plankton: freeze harvest (lens passes) + resume map
+
+**Metacognition**: (1) A validator that scans its own outputs needs a
+DECLARED regeneration order — the census parity gate failed its first
+run because `render` rewrites matrix.md, which the facts sweep then
+scans: canonical order is render → facts → check; found by running the
+instrument on itself, which is the cheapest adversary there is. (2) The
+`.agents` exclusion-reason correction (owner: Practice skills /
+plugin skills / vendor-managed skills are THREE unrelated entities):
+when a census row NARRATES estate ontology, the ontology is an owner
+fact — check, never infer from directory names (fluency trap; same
+family as org-and-audience-models-are-owner-facts). (3) The survey
+round-1 budget missed 3× (3.5M vs ≤1.1M estimated): repo-direct
+walkers' tool-READ tokens dominate and were unpriced — fleet budget
+estimates must price read traffic, not just output.
+
+**Free play** (seed kept): schema design for small models is an
+agent-economics contract — two haiku walkers died on the strict
+walker schema (StructuredOutput retry cap), and the atoms
+misuse-register idea applies to workflow schemas too: design the
+schema so the wrong shape is hard to produce. (Discard, visibly: a
+"census predicate is self-healing" framing — it was a reviewer
+coverage catch, nothing self-healed.)
+
+**Concept seed**: facts.json now banks depcruise source-graph + turbo
+task-graph per subject — three future consumers converge on this one
+dataset (atoms register, diagram automation task, tranche-time
+co-change gates); consolidation moment approaching. Survey round-1
+headline for the owner: persona-INVARIANT convergence — 41% of cold
+walkers landed in one dominant cell (5-6 classifications, role/tier
+directory family, generated-in-VCS) whatever the persona; divergence
+was constraint-driven.
+
+**Resume map**: #889 cures pushed (a16b95e09, check PASS 45 subjects,
+description updated) — REMAINING: reply+resolve the 17 threads, then
+re-request Copilot and mantagen, verify CodeQL/Sonar on the new head.
+Survey round 1 banked at
+`.agent/reports/workspace-taxonomy-landscape-survey/round-1-raw.json`
+— owner report owed (archive map, elites, outliers verbatim, escapes,
+round-2 proposal); budget overshoot means round 2 needs owner
+re-authorisation; failed walkers 20/42 re-run via
+resumeFromRunId wf_58877150-712. Basis regrounding awaits the owner's
+ruling; atoms node refined bar awaits his read; MCP-603 ledger
+untouched (worktree + claim + ticket live).
+
+## 2026-08-17 — freeze addendum: a freeze order binds until discharged
+
+**Lesson (owner-corrected at the launch moment)**: after "prepare for
+compaction and stop all processes", the owner's follow-on QUESTIONS
+reopened analysis — not spend. I read continued engagement as licence
+to launch the next fleet pre-compaction; the strict reading is that a
+standing freeze order governs new process starts until the owner
+discharges it ("nope, you have to compact first"). Answering is always
+in order; STARTING is gated. Also practical: never launch a long fleet
+into a context about to compact — the harvest lands in the thin
+post-compaction window. **Post-freeze additions all pushed**: survey
+r1a archive + fleet-design lessons + plan amendment (13881aee6); round
+1b launch spec banked in task #16 (persona-uptake gradient, per-tier
+baselines, challenge-not-extend arms); the 1a elite packet regenerates
+from committed round-1-raw.json (eliteWalker 35).
+
+## 2026-08-17 ~16:4xZ (Yarrow stirs Undergrowth, ab1066, design lane) — records-pass harvest
+
+- STAGED-VS-WORKTREE, THE `git mv` VARIANT (own hands, same day as the
+  staging entry above): Edit-tool edits landed on three plan files, then
+  `git mv` moved them — and mv staged the INDEX (HEAD) blobs, leaving the
+  edits UNSTAGED at the destination paths. The porcelain `RM` rows said
+  exactly that and the M column was read past; the first commit shipped
+  `status: ratified` archive copies. Caught by verify-what-ships
+  (`git show HEAD:` + grep, the d6f664036 lesson applied); cured by
+  add + amend (unpushed, verified no in-flight push at the amend moment).
+  Class rule: edit-then-mv needs a follow-up `git add` on the destination
+  paths (or mv first, edit after) — `git mv` is not `git add` for
+  unstaged content.
+- GH READS UNDER AN UNSEEN HOLD: two `gh pr` reads ran ~14:1xZ, before
+  this seat's first gap sweep surfaced the owner's 13:54Z hold on ALL
+  GitHub operations (the hold rode directed events to other seats). The
+  watcher-before-anything ordering exists for exactly this; even a
+  bounded read-only seat sweeps comms BEFORE its first external call.
+- WORKED WELL: the five-leg opus panel (near-zero finding overlap; the
+  kit-contract falsity independently confirmed three times);
+  anti-deference briefs (owner verbatims govern, seat prose
+  challengeable) — the deference-contamination lesson applied and it
+  held; checking the register's disposition ENUM before committing
+  (fixed→superseded); the lean explicit-pathspec commit path under a
+  sole-writer worktree window.
+
+## 2026-08-17 ~16:0xZ (Smith hunts Obsidian, e98f17, Director) — compaction-freeze-2 harvest (metacognition / free-play / concept-exploration; owner-invoked)
+
+- METACOGNITION: (1) Four owner questions in one afternoon (branch-name
+  suffix, 4MB claims file, monitors-vs-tools, LF/UTF-8 enforcement) each
+  exposed the SAME generator class — vigilance where structure belongs —
+  and each closed with structure (mint tool + skill, TTL store split,
+  built pr-watch, gitattributes + existing encoding gate). Director
+  lesson: an owner question about a surface anomaly is usually pointing
+  at a missing structure, not requesting a fact; answer the fact, then
+  cure the generator in the same motion. (2) Hook concept-guards fired
+  four times today (destructive-verb in prose, "parked", wildcard-add
+  inside a heredoc, machine-local path) and every forced reword IMPROVED
+  the artefact — the guards are functioning as concept checks, not
+  word police; the reappraise-don't-rephrase instruction held. (3) A
+  builder subagent died at the QUOTA WALL mid-cure: the recoverable
+  practice is transcript-resumable agents plus a freeze map that makes
+  partial-state characterisation the FIRST resume step (never assume
+  the last report describes the tree).
+- FREE-PLAY: the queue re-shape converges the estate's state surfaces on
+  one shape — per-event files + derived views + TTL-or-archive (comms
+  already there, queue now, claims halfway). A generic event-store
+  module parameterised per surface is a REAL second-consumer candidate
+  as of today; recorded here, deliberately not built
+  (consolidate-at-second-consumer names the trigger, the MCP-612
+  landing is the wrong vehicle).
+- CONCEPT-EXPLORATION: justified no-run — every open question is formed
+  and carried in freeze map 2 (thread record, same hour): MCP-612
+  landing steps with conserved reviewer cures, #899 merge conditions,
+  fold-skill divergence resolution, incident-hold verification.
+
+## 2026-08-17 ~20:0xZ (Poppy lifts Bark, d427b6, repo-architecture lane) — overnight freeze harvest (metacognition / free-play / wrap; owner-invoked)
+
+Session arc: standby grounding at owner word → lane succession (Moment 2
+b2d33b34, premises recomputed at adoption) → R4 void-from-birth
+provenance trace + identities-not-brands owner ruling captured
+(901c311f) → the owner's five-point toolkit brief + two refinements
+(memory node repo-architecture-brief-toolkit-five-points; MCP-619) →
+baseline evidence sweeps → Oak Toolkit Atlas (repo-canonical at
+.agent/reports/repo-architecture/, published URL bound to the file) →
+survey post-mortem discharged (both at 6ba9e93c3).
+
+- METACOGNITION: (1) ENDS→MEANS CONVERSION, twice owner-caught in one
+  evening — brief point 3 reflected back as "harvesting discipline" /
+  "shopping list"; owner corrected to designed-FINISHABLE foundations,
+  constitutive of the conceptual shape, not extraction mechanics. The
+  generator: an implementer reflex that denominates owner ENDS in
+  action procedures. Cure adopted: reflect the end back
+  verbatim-anchored; let procedures derive downstream of the reflection,
+  never inside it. Both catches were the owner's, not this seat's own
+  passes — point external scrutiny at frame fidelity, not completeness.
+- (2) CORRECTION-CASCADE SIGNATURE (graduation candidate; R4 is the
+  worked instance): a rule that needs repeated shrinking corrections
+  (full prohibition → may-share residue → coincidence-not-concept →
+  void-from-birth) was never grounded — trace provenance at the FIRST
+  correction. Second attribution-drift instance in five days (PR-886
+  2026-08-14; R4 row 2026-08-13→17); the mechanical check candidate
+  (owner-attributed clause = verbatim quote or marked seat reading,
+  nothing between) rides the Director's authority-class board item.
+- (3) Commit discipline compounded as priced: message validated
+  pre-suite, three files staged by explicit pathspec amid peer dirt,
+  first-pass green — against the predecessor seat's two burned suites
+  on header slips. The handoff's §5.6 lesson paid for itself same-day.
+- FREE-PLAY (kept, as associations): the stability gradient reads as
+  pace layering given a time arrow — measured change-clocks make
+  "stability creeps upward" observable (finished ≈ flat clock AND live
+  consumers AND green gates; flat alone is abandonment); finished
+  foundations double as agent context-economics (trust the contract,
+  never the implementation); the design system keeps arriving as the
+  estate's scale model (identity packs ≈ toolkit; near-finished kit
+  primitives ≈ stability gradient) — third instance in one evening.
+  DISCARDED visibly: a crystallisation metaphor; semver-as-cooling.
+- POST-MORTEM meta, pointer only: internal instruments audit
+  MECHANICS; only external reads audit WARRANTS —
+  reports/workspace-taxonomy-landscape-survey/post-mortem-2026-08-17.md
+  §3/§7 carry the full form plus the candidate fleet-design-review
+  amendment (warrant gate first; owner ratifies or not).
+
+## 2026-08-17 evening — design seat (Yarrow, ab1066): Tango node ratified + T1a-i landed; three owner corrections, one generator
+
+- OWNER-FORBIDDEN, absolute: `git commit --amend` as a content-evolution
+  mechanism. I amended one unpushed commit FOUR times folding new
+  substance in ("one clean commit" aesthetic = a squash instinct in a
+  never-squash estate); every amend invalidated shas already published
+  to Linear/comms/ARC, forcing correction messages — the mechanism
+  manufactured its own churn, three signals ignored. Cure: commits only
+  append; the PR body maps the trail once at open. The generator was
+  agent-inscribed mechanics acquiring rule-force with nobody's word
+  behind it — the same void-from-birth class the owner ruled on the R4
+  row the same evening.
+- ONE GENERATOR, three instances in one day (amend habit; per-ruling
+  maximal consolidation ceremony; test over-pinning from a reviewer's
+  cure list): absorbing the nearest authoritative-sounding instruction
+  instead of re-deriving from the governing directive. Reviewer findings
+  are fitness signals, not instructions — re-derive every cure against
+  the doctrine before absorbing. The owner's cure each time: send the
+  seat back to the directives.
+- Contract-form test assertions (the doctrine application shape, owner
+  word "tests prove behaviour... never constrain implementation"): a
+  refusal's observable contract = report exists + names the concern +
+  locates the offender → token presence on the JOINED report; never
+  failure counts, ordering, or message prose. Attribution (which side
+  of a comparison holds the member) IS behaviour: assert "the line
+  naming the member also names its side". Mutation kills survive the
+  relaxation — mutants die on WHAT is reported, not how many strings.
+- Fresh worktrees must be BUILT before trusting resolution-class
+  instruments: depcruise/knip resolve through dist; an unbuilt worktree
+  produced 31 phantom-dep "violations" (every eslint.config.ts →
+  standards-plugin edge unresolvable) that vanished after
+  `pnpm turbo run build`. I chased the yaml glob for three probes
+  first — check `ls <pkg>/dist` before diagnosing config.
+- EnterWorktree base-ref mis-cut: THIRD instance today (mcp-613/615/616
+  all cut from coordination-lineage tips, never origin/main). The
+  fix-forward recipe is stable (branch -m scrap/<name>-mis-based;
+  switch -c <ticket-branch> origin/main; verify merge-base
+  --is-ancestor). Scrap branches await owner one-click deletion. Worth
+  a defect ticket when one exists for the worktree tooling.
+- Watcher mortality pattern: the canonical watcher's 3600s GNU-timeout
+  backstop kills it hourly and turn-based notification lag can leave
+  multi-hour blind windows before the exit notification wakes the seat.
+  The seen-file cursor makes re-arms lossless (drain resumes); for long
+  gaps: manual sweep of the window first, then re-arm with
+  --seed-from-now to avoid the backlog re-flood. Routed to the Director
+  as an estate observation at stand-down.
+- Documents-epoch attractor (owner-corrected as rabbit-hole): after a
+  plan ratifies, the lane's centre of gravity moves to the TREE; each
+  incoming ruling captures cheap (thread record + one comms event at
+  occurrence) and consolidates at natural boundaries — never a
+  six-surface ceremony per event while the build sits at zero.
+- Identity-pack tier shape that survived three reviews: no
+  hand-declared pack inventory anywhere (a tuple = a permanent №N
+  violation, an unconvertible eighth roster surface); tier validated
+  structurally (presence + homogeneity, recomputed from the tree);
+  pure-module + thin-fs-script is the estate's canonical validator
+  partition; packs are data-only workspaces on the oak-design-assets
+  precedent (no scripts, private, own licence surface).
+
+## 2026-08-18 ~11:0xZ (Ocelot binds Tunnel, c28ad9, Director) — compaction-freeze harvest: demo day, three self-caught instrument classes (metacognition / free-play; owner-invoked)
+
+- METACOGNITION, four bites, all my own hands: (1) EXIT-CODE MASKING —
+  a background push wrapped as `git push ...; echo "exit=$?"` reported
+  the WRAPPER's exit; the push had failed and the harness said
+  completed-0. The owner's same-hour push-log-to-file instruction was
+  the instrument that told the truth. Rule already existed
+  (exit-codes-in-band-never-piped); the new facet: a background task's
+  LAST command must BE the guarded command. (2) CWD DRIFT — a `cd` in
+  one compound command left the persistent shell in a worktree; the
+  next background push ran in the WRONG worktree and reported
+  "Everything up-to-date" (true, for the wrong branch). Cure re-adopted
+  from the freeze-1 map: shell pinned to primary root, `git -C` for
+  ALL worktree git. (3) IDENTITY ECHO SEQUENCED LATE — PR #904 was
+  created under the ambient owner credential; the gh-identity echo ran
+  AFTER the write and caught it. The tripwire's value is ONLY
+  before-first-write; cure = close/recreate as bot (#905, author
+  read-back proven), failure-mode event 5472dbad. (4) POLL FILTER
+  MATCHED THE WRONG FIELD — review-arrival poll v1 keyed on a compound
+  state string; mergeStateStatus flapping (BLOCKED→UNKNOWN) tripped
+  "review landed" against a pre-existing quota-skip entry, twice.
+  v2 keyed on the reviews ARRAY alone held. General form: an
+  arrival-poll's comparison set must contain ONLY the arrival surface.
+- REVIEW-CEREMONY LESSON, structural: merge-bot refused a premature
+  merge with SILENT-WAIT-NO-REVIEWER — a DISMISSED round binds no tip,
+  so dismiss-at-honest-cure is HALF a ceremony; the re-request is the
+  other half. The settlement state machine is doctrine-as-instrument:
+  it held the line my own eagerness would have crossed.
+- LANDING-GAP CLASS, worked instance: the MCP-612 finisher's "green"
+  omitted the pre-push-only smoke chain; the stale fixture literal
+  (commit_queue key) sat exactly at the original builder's quota-death
+  seam and only the first real push surfaced it. A quota-killed
+  builder's seam gets a dedicated re-verify at the NEXT gate tier, not
+  just the one it died inside.
+- FREE-PLAY SEEDS (one kept, one discarded visibly): KEPT — "the cure
+  as the demo's opening beat": showing the reduced-motion leak DIE on
+  camera turned a defect into narrative capital; candidate pattern for
+  future owner demos (lead with the falsifier). DISCARDED — a
+  three-instrument numerology (three watchers, three cures, three
+  rounds); routes nowhere.
+- Warden-review quality note for successors: mantagen's agent-authored
+  rounds (PR Review Warden seat, disclosed banner) ran three-for-three
+  REAL on #899 round 2 and five substantive code findings on #905 —
+  harvest them unfiltered and verify first-hand; today they out-found
+  every other leg.
+
+## 2026-08-18 — Poppy lifts Bark: #889 landing + #905 cure round (compaction-freeze harvest)
+
+- Premature home-registry migration (failure-mode event 3dd4134d, cured
+  in-session): a worktree-resolved agent-tools binary run against the
+  PRIMARY registry executed #905's migrate-on-first-contact hours before
+  the code landed — a read-shaped command carrying a write-shaped
+  migration; every seat's heartbeat refused for ~3 minutes. The "primary
+  untouched" discipline binds the RESOLVED BINARY of every invocation,
+  not just the files it names; cwd is load-bearing mid-rollout. The
+  reverse migration proved the preservation contract both ways (claims
+  byte-intact; empty queue = nothing scattered). Hazard stands until
+  #905 merges AND the primary rebuilds (Director's board).
+- Disposition rationale must be verified at the GUARD SITE: my FIFO
+  finding's "advisory order" claim was refuted by the queue guard's
+  mechanical refusal — I had quoted the claims-advisory doctrine for a
+  queue-guard behaviour (vocabulary echo across adjacent surfaces). The
+  corrected grounds (deterministic total order, bounded divergence, no
+  safety property on position) held; adjacent-surface vocabulary never
+  transfers to a disposition.
+- Eliminate the shared resource, never order around it — twice in one
+  round: the claims-file intent pointer (dangling state made
+  unconstructible by deletion) and intent-id boundary validation (was
+  refused only by write-validator step order, the banned
+  correctness-by-timing shape).
+- A repro must fail for the RIGHT reason: the first crash-window fixture
+  crashed at the pre-read (green by accident); the cure landed the
+  failure inside the true window (read-only store dir) AND pinned the
+  matcher to the window's own signature (EACCES at the commit-queue
+  path) so a too-early failure cannot green it vacuously.
+- Suppressed reviewer comments carried ALL of #889's final-round
+  substance (six findings, zero threads) — harvest the full round.
+- I introduced the staleness class I was curing: a plan-trail denominator
+  went stale against the regenerated artefacts within one round (files
+  added after the entry was written). Regenerate LAST, true prose, then
+  re-check prose written EARLIER in the same round.
+- Method-ambiguous evidence pairs don't reproduce: the banked
+  "227 of 1287" grep matched no stated method (136/126/550 under three
+  plausible readings); restated with the method visible. A number in
+  evidence owes its procedure.
+- merge-bot --expect binds the CURRENT tip: a docs push after a review
+  round re-opens the reviewer leg; a killed merge attempt is an
+  ambiguous write — read PR state before retrying.
+- Today's correction sources were reviewers and mechanical layers (gate
+  refusals, hook blocks, knip, the incident's own alarms) rather than
+  the owner — every slip was caught by structure before it propagated;
+  structure-over-vigilance observed working end to end.
+
+## 2026-08-18 ~14:5xZ — play seeds from the #891 pattern read (Ocelot, Director)
+
+- Play seed (association, not finding): "the tier that had never run
+  here was still carrying assumptions nobody could see" (#891 body) is
+  shaped like the estate's seat-rotation discipline — a foreign machine
+  is to code what a successor seat is to records: a fuzzer for
+  assumptions the incumbent can no longer see. Route: none yet.
+- Play seed (corroboration): #891's fourth bug — a smoke test
+  reporting exactly the silence it guards against, because its own
+  hook could not start — is an independent rediscovery of the
+  exit-codes-in-band / guard-shares-the-guarded-channel class. Two
+  unrelated lineages hitting one shape strengthens the doctrine, adds
+  nothing new to it.
+- Discarded at the harvest (visibly): S4036 fixed-allowlist ↔ the
+  identities roster — superficial (both closed lists), forced.
+
+## 2026-08-18 demo day (Yarrow, design lane)
+
+- **The demo-mechanism-persisting generator (P7's origin)**: a mechanism
+  built to prove a capability (identity-as-override-sheet proving live
+  switching) quietly became the architecture; the owner caught it from
+  the tokens page's own badges. Check the warrant when a demo
+  instrument outlives its demo. The day's defect ledger was the
+  evidence: every override-mechanism bug (below) argued for
+  self-containment.
+- **Cross-realm instanceof**: a frame's elements are instances of the
+  FRAME's classes — parent-realm `instanceof HTMLElement` silently
+  rejects every cross-document node. Null-check typed querySelector
+  results instead.
+- **light-dark() resolves at the DECLARING element**: a subtree
+  data-theme cannot flip :root-declared tokens; theme the document
+  root (the composition exhibit's applier pattern).
+- **Focus-scroll is the "scroll reset"**: focusing an offscreen control
+  scrolls it into view — arrow-key radio groups at page top reset the
+  scroll unless the control bar is sticky (always in view = no jump);
+  residual drift is scroll anchoring doing its job.
+- **React-owned nodes are never removed**: a server-rendered <link> is
+  React's; retire by `disabled = true`, never `.remove()` (React
+  restores hoistables). React 19 hoists stylesheets only under a
+  `precedence` prop — otherwise they render in place in the BODY.
+- **Playwright proves the BUILT artefact**: the showcase suites run
+  `next start` on `.next` — rebuild before re-running or you test the
+  previous code (bit twice in one day).
+- **Auto-margin grid items shrink-to-fit** (builder's find): a grid item
+  with `margin-inline: auto` does not stretch to its track — /tokens
+  had only ever looked right by accident.
+- **Multi-ref single push works as documented**: four branches, one
+  push invocation, one pre-push gate run; bot-token window with
+  author read-back BEFORE trusting the ceremony (app/jimbot-oakington-iii
+  confirmed on PR #907 before the remaining three opened).
+- **Builder-agent loop**: reports MUST come via SendMessage (text
+  output is invisible); when a report mis-routes, harvest by
+  verification (gates + rendered pass) rather than blocking on the
+  reply. Four rounds ran clean this way.
+
+## 2026-08-18 evening — review round 1 across four PRs (Yarrow, ab1066)
+
+- **The layout viewport is not the visual viewport**: macOS overlay
+  scrollbars leave clientWidth = 320 while Linux classic scrollbars
+  narrow it (~305) — an SC 1.4.10 pass at exactly 320 with zero slack
+  is a latent CI red. Named failure class with a worked instance
+  ("classic-scrollbar-narrowed floor"): probe BELOW the boundary and
+  measure the floor, never just the boundary; a ~305 probe cell is a
+  DDR-009-warrantable width candidate (routed to the visual-fixes
+  round).
+- **A scroll container must be the CONTAINING BLOCK for its own
+  absolutely-positioned descendants** (`position: relative` on the
+  scroller), or their static positions ride the content past the clip
+  and tax the document's scroll width. Second worked instance
+  (tok-scroll's 228px sideways scroll, then the specimen strip's 312px
+  floor from visually-hidden helpers) — consolidation-trigger reached;
+  distil.
+- **Measure before mechanism**: the CI reflow red pattern-matched
+  elegantly to animation-phase overflow (the no-timing-dependence
+  principle PRIMED the reading) — but the a11y suite emulates reduced
+  motion, so the sway was still. The probe found the true root in two
+  minutes. A beloved principle naming a failure class is itself a bias
+  toward seeing that class. (Both cures were real defects; only one was
+  the CI root — the records keep the distinction.)
+- **Decorative motion must be overflow-closed**: a transformed box
+  extends scrollable overflow, so plate inset ≥ translate amplitude or
+  SC 1.4.10 becomes a function of animation phase. Candidate
+  admission-guard arm for the pack programme (pointer, not spec).
+- **Content-sized columns + nowrap crush siblings**: a color-mix token
+  resolves to a long oklab() string with NO hex form — the strip's
+  auto value column took ~250px of a 288px frame and the name column
+  went 0px wide × 440px tall. Bounded tracks that give by wrapping
+  (2:1 fr split), never by vanishing. Found by a brand-new reflow
+  cell on its first run — coverage as SENSOR (two real defects caught
+  by the new route cells immediately).
+- **Sonar duplicate-selector findings can be live bugs**: a second
+  `.mast` block silently overrode the strip-offset declaration to 0
+  (later block wins). Merge-to-one-block is correctness work.
+- **Batch API writes verify by read-back**: a `curl -sf | jq` for-loop
+  swallowed four review-dismissal failures wordlessly (the only signal
+  was ABSENCE of output). The verify step is part of the write —
+  re-read the state, never trust loop silence (exit-codes-in-band, API
+  edition).
+- **Probe-verified review dispatch pays**: the code-expert gateway
+  verified its load-bearing browser assumptions in a live Chromium
+  (disabled/inert attribute reflection, regex equivalence over 22
+  forms) instead of reasoning them — caught a validator-red blocker
+  pre-push. Ask for probes explicitly in reviewer dispatches.
+- **Cure-in-place rounds accrete duplicates** (reviewer's
+  "friction-ratchet count: 4"): three expressions of one theme rule,
+  two importTargets, a third reflow assertion — each individually
+  defensible. A consolidation pass belongs at round close, and a
+  deliberate divergence gets NAMED at the site (importedStylesheets
+  keeps remote targets by rule; the parity tool filters them).
+- **"A request is not application"**: the binder stamps
+  data-oak-brand-applied at swap completion; DOM presence ≠ cascade
+  state (link.sheet mints ~135ms before load). Same ontology as P7's
+  default-as-scaffold — visible provenance-recorded transitions beat
+  inferred state, two scales in two days.
+
+## 2026-08-18 ~20:1xZ — the drift sensor that fired into the void (Ocelot, Director)
+
+MCP-626's schema drift (cache 0.7.0 vs live 0.11.0) was caught by a
+LIVE SMOKE TEST, not by the CI sensor built for exactly this — yet the
+sensor was firing correctly on every build (warning annotation present
+on today's main run). The failure class: an advisory emitted to a
+surface nobody reads (a `::warning` annotation inside a green job) is
+vigilance wearing structure's clothes. The owner's expectation names
+the bar: an INFORMATIONAL STATUS — drift must be visible at the
+PR/commit surface, not in an annotation list behind a green check.
+Generator: when adding any advisory sensor, the design question is not
+"does it fire?" but "what surface does it land on, and who is
+guaranteed to see it there?" (falsifiable-structure-at-the-surface;
+cousin of exit-codes-in-band — the signal must ride a channel the
+consumer actually reads). Cure homed: MCP-626 second arm.
+
+## 2026-08-18 ~21:1xZ — FETCH_HEAD is a shared single slot (Ocelot, Director)
+
+Mid-read, `git show FETCH_HEAD:README.md` silently switched documents:
+a background pre-push gate's own fetch had overwritten FETCH_HEAD
+between two reads in one turn. FETCH_HEAD is per-repo mutable state
+shared across every worktree and every background process — reading it
+twice is a race whenever any gate, hook, or peer can fetch. Cure shape
+used: fetch into a named ref (`git fetch origin <branch>` then read
+`origin/<branch>`), never read FETCH_HEAD when background git can run.
+Same family as the premature-migration and cwd-drift lessons: shared
+mutable process-level state (cwd, FETCH_HEAD, the home registry) needs
+pinning-by-name, not sequencing-by-hope.
+
+## 2026-08-18 round-2 sitting (Yarrow, design lane)
+
+- **A poll on an absence passes before the event lands.** `expect.poll`
+  invokes immediately and returns on first pass, so asserting "the stale
+  marker is absent" was true BEFORE the held response resolved — the test
+  could not fail on its bug. Regression guards wait on a POSITIVE
+  post-event signal (here: the stale link's REMOVAL), and the calibration
+  is red-proof: revert the cure in place, rebuild, watch the exact
+  assertion time out, restore byte-identical.
+- **`overflow-x: auto` computes the unspecified axis to auto.** A
+  "horizontal-only" scroller picked up ~3px of rounded-border scroll
+  slack on the VERTICAL axis and axe rightly demanded keyboard access to
+  it. Close the artifact axis explicitly (`overflow: auto hidden`) when
+  height is content-driven; a scroll container's contract should name
+  both axes.
+- **Place-only admission re-opens the extension hole inside the place.**
+  Admitting `dtcg/**.json` re-admitted `dtcg/biome.json` — the exact
+  class the tightening existed to refuse. Anchor admission to the
+  format's own suffix (`*.tokens.json`): shape AND home, not home alone.
+  (Found by the gateway's probe, not by my tests — the probe tried the
+  adversarial inputs my cases didn't.)
+- **A 201 is not a write.** The REST `requested_reviewers` call returned
+  201 twice and minted NO `review_requested` timeline events; the MCP
+  route bound instantly. Verify writes on the system's own proof surface
+  (the paginated timeline TAIL — page one is oldest-first), never the
+  status code. Sibling of read-back-on-batch-writes.
+- **Three stacked cures on one element is a solution-class signal.**
+  tok-scroll now carries containing-block positioning, an artifact-axis
+  close, and measured conditional focusability — each individually
+  correct; the accumulation is the trigger for an assumptions-expert
+  look at "every family is its own scroll container" BEFORE a fourth
+  cure lands (gateway's framing, adopted).
+
+## 2026-08-19 round-3 sitting close (Yarrow, design lane)
+
+- **Probe the monitor's QUERY, not just its filter.** The round-3 PR
+  watch ran blind for two hours: `reviewThreads` is not a `gh pr view`
+  field, every poll errored, and `2>/dev/null || continue` swallowed the
+  proof. The corpus-test-the-filter discipline extends to the WHOLE poll
+  path: run the monitor's command once in foreground and read its output
+  BEFORE arming; a monitor that cannot show you a real emission is not
+  armed. (Caught only by an unrelated wake's cross-check.)
+- **Reject a reviewer only against the primary source.** My first
+  re-derivation of the inverted map used a wrong region order and nearly
+  rejected a CORRECT finding; the falsifier for any reject-verdict is
+  the artefact's own tuple (REGIONS), never a reconstruction from
+  memory. Sibling of dont-transmit-assumptions-as-truth, at
+  review-adjudication scale.
+- **`X && echo OK` buries X's failure inside a block.** The commit-msg
+  pre-check failed silently in an && chain and the gate caught it a
+  minute later — exit-codes-in-band applies to SUCCESS MARKERS too: run
+  the check as its own command and print its exit explicitly.
+- **One document, one holder.** Two well-meaning theme holds on the same
+  root would correct each other forever; the cure was ownership by
+  context (standalone: the page holds itself; framed: the parent holds).
+  This is the estate's singleton-authority doctrine (PDR-064's
+  exactly-one-holder invariant) recurring at the DOM level — and the
+  showcase now uses context-decides-the-owner three ways (theme mode,
+  breadcrumbs, holds). Candidate pattern if a fourth appears.
+- **Suppressed-because-cured is a real reviewer state.** Copilot's
+  round-3 "suppressed" list on #909 was the round-2 set verbatim against
+  code that no longer exists — the never-filter rule still applies, and
+  the disposition is a per-item stale-against-cured verdict, not a
+  re-cure.
+
+## 2026-08-19 — phase-2 opening at owner cards (Poppy lifts Bark, d427b6)
+
+- **Play seed (association, not finding): the consumer's resolver is
+  part of the claim.** The Atlas's pixel-unverified mermaid and the
+  registry premature-migration look shaped alike — in both, the
+  verification or execution ran through a resolver other than the
+  consumer's own (the artifact viewer; the resolved binary). A check
+  that does not traverse the consumer's resolution path proves a
+  different claim than the one asserted. Marked as association;
+  visual-verdicts-require-rendered-proof and the resolved-binary
+  discipline may be one pattern wearing two rules.
+- **Comms concept gate re-bite: holding-state vocabulary.** "Parked"
+  rejected on comms send a second time (first 2026-08-18); the claims
+  surface accepts the same word, so the gate is comms-only. Cure that
+  stuck both times: name the GATE (the reopen condition), never the
+  holding state. Second occurrence — distilled.md candidate at next
+  consolidation.
+- **Duplicate freeze broadcast: resolved sender-side (Director,
+  first-hand).** The first send's output was swallowed by a grep pipe,
+  read as a failed send, cross-checked against a comms list that raced
+  the event, and re-sent — both landed. The generator is the standing
+  read-the-failure-surface-never-the-pipe class
+  (exit-codes-in-band-never-piped); tooling innocent, no new lesson
+  beyond the class's reach extending to send-verification.
+- **The artifact viewer scroll refusal, solved: full-screen is the
+  scrollable mode.** The INLINE viewer swallows every programmatic
+  input to the sandboxed content frame — wheel, keyboard, a11y refs
+  (the frame is one opaque "User-generated artifact content" node).
+  The full-screen button re-parents the scroll container and wheel
+  events work normally. Yesterday's "five refused mechanisms" were all
+  aimed at the inline mode; the cure is one click. Enter full-screen
+  FIRST on every artifact pixel-check.
+- **The consumer's-resolver seed got its proof instance same-day.**
+  The real viewer's mermaid renderer strips br tags inside node labels
+  and concatenates the words — a defect invisible to any local mermaid
+  check and present in ALL five Atlas diagrams since authoring. Only
+  the check that traversed the consumer's own resolution path (the
+  live artifact viewer) could catch it. visual-verdicts-require-
+  rendered-proof, evidenced at the exact mechanism level the morning's
+  play seed predicted.
+- **Shared-checkout index race: commit WITH pathspec, not just add.**
+  A concurrent actor's staged renames rode my commit (5916d7069, pure
+  moves, surfaced df383879) because `git add -- <paths>` narrows the
+  ADD while `git commit` still takes the whole index. In a shared
+  primary checkout the cure is structural: `git commit -- <paths>`
+  commits only the named paths regardless of index state, plus a
+  `git diff --cached --stat` read in the commit window. Adopted at
+  this seat from now on; candidate for the stage-by-explicit-pathspec
+  rule's next revision (the rule currently binds staging only).
+- **A classification instrument is a symptom of the system it grades.**
+  The census existed because the tree does not sort; my Change 3 draft
+  executed the instrument's findings row by row — inherited shape from
+  the instrument's own gravity. The owner's lens-4 question ("would
+  this be simpler if we changed the system?") applied to every
+  decision flipped four of five changes from standing activities into
+  constructed properties (the seam, adopt-first, inverted carrier
+  default, the liveness gate). The generator: when a proposal executes
+  an instrument's findings per-row, ask whether the instrument's NEED
+  is the defect. Companion: the context-specificity gradient runs
+  BELOW the repo boundary — ecosystem-canonical → toolkit-owned →
+  oak-pack.
+- **The write-time vocabulary gate covers file writes, not just
+  comms.** Third bite of the fingerprint class, this time on an Atlas
+  edit ("parking space", used in NEGATION — the gate cannot see
+  negation context). The honest cure both times: state the concept
+  positively (name the expiry, name the gate) rather than by contrast
+  with the banned shape — which also reads better.
+
+## 2026-08-19 output-schema truth fleet (Ocelot, Director seat)
+
+- **A design-review stage ahead of a fan-out pays like the rule says.**
+  The frame-challenger leg found, pre-fan-out, that no verification leg
+  was chartered to observe a REAL payload — the one gap that would have
+  made every source-reading verdict confident-but-wrong about schema
+  fit. Two legs then called the live server and the whole synthesis
+  pivoted on what came back (three envelope shapes, not one).
+- **Source-reading cannot settle wire questions.** The June plan's
+  `envelope(payloadSchema)` doctrine survived every document check and
+  died on one live `tools/call`. When the claim is about what a system
+  EMITS, the check must observe the emission (validation-strategy's
+  gate-integrity clause, applied to design doctrine).
+- **`rg` skips dotdirs by default**: a bare `rg` sweep silently excludes
+  `.agent/**`, so documentary absence claims need `rg --hidden` (or
+  `git grep`) plus a published site enumeration. Sibling: plain
+  `grep -r` from root traverses 40+ duplicate worktree checkouts —
+  rg/git-grep exclude them via gitignore.
+- **Universal negatives need published enumerations.** "No registration
+  site carries X" is evidence only when the leg publishes the site list
+  it searched (four `new McpServer(` sites here). An unpublished
+  enumeration is an assertion wearing a verdict.
+- **The false-green push wrapper got RECREATED a day after it was
+  recorded.** `git push > log 2>&1` followed by `echo "push-exit=$?"`
+  in a background task: the task's exit is the echo's 0; the push had
+  been remote-rejected (ref moved mid-gate-suite). The 2026-08-18
+  lesson existed in the freeze map and still lost to habit — passive
+  guidance loses to artefact gravity. Structural cure, no vigilance:
+  the push is the FINAL command of the task, nothing after it, so the
+  task exit IS the push exit; verification stays read-the-remote-tip.
+
+## 2026-08-19 wrap lenses (Ocelot, Director seat)
+
+- **Play seed (kept): the shared primary checkout is one generator
+  behind this window's whole incident class** — index-lock contention,
+  a no-pathspec commit sweeping a peer's staged renames, three push
+  races in ninety minutes. Every cure we reached for is the same move
+  (name-or-own: pathspec staging, pathspec commits, named refs,
+  push-as-final-command). The concept-exploration candidate: does the
+  n≥3 window want a structural cure (per-seat worktrees for
+  coordination writes? a revived commit-warden singleton?) rather than
+  four naming disciplines. Routed as a seed, not a finding.
+- **Play discard (visible)**: "the owner's absence-pin ruling rhymes
+  with the SDK silently dropping non-object schemas — both are
+  declared absences nobody can observe" — forced at the second look;
+  the SDK drop is a defect surface, the ruling is test doctrine.
+  Discarded.
+- **Metacognition**: the day's two strongest catches came from
+  instruments, not vigilance — the pre-fan-out design review (no leg
+  observed a real payload) and the remote-tip read (false-green push).
+  Both are structure-over-vigilance instances; the lesson that DID NOT
+  hold by being written down (push wrapper) held once made structural
+  (push is the final command). Passive guidance loses to artefact
+  gravity, again, measured twice in one day.
 
 ## 2026-08-20 — Implementer seat D (pre-submission sweep): a Linear description `patch` round-trips the WHOLE document through Linear's rich-text normaliser
 

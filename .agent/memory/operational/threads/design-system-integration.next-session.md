@@ -26,6 +26,7 @@ recompute live state from claims/comms/git at pickup.
 | 2026-08-02 | Moss calls Loam | claude-code / claude-fable-5 | `79b433` | Design-lane seat at direct owner word (Director: Falcon hunts Flight `52841f`); movement 1: PR #710 MERGED `58e5be461` — kit 1.8.0 TS-runtime + choice() on main |
 | 2026-08-02 | Corsair hunts Surf | claude-code / claude-fable-5 | `4d3282` | Design-lane successor seat at direct owner word (evening, post-Moss retirement); standby, warm pause — activation gated on the ratified design-system completion plan node + Director/owner word |
 | 2026-08-07 | Civet spins Cavern | claude-code / claude-fable-5 | `054f5e` | Design-lane successor (Saffron→Civet, PDR-063 deliberate succession at owner word, Director ACTIVATE 20:46Z); claim `645b9e0b` adopted 20:46Z after the handoff record read end to end |
+| 2026-08-17 | Yarrow stirs Undergrowth | claude-code / claude-fable-5 | `ab1066` | Critical-analysis sitting + records-truth pass (MCP-613) at direct owner word; claim `645b9e0b` adopted after the winddown record + this record read end to end |
 
 ## Board state at writing (recompute, do not trust)
 
@@ -3268,3 +3269,397 @@ artifact, URL in the session wrap-up).
   caught a non-associative fold and a 404-as-proof misread. Point
   external scrutiny at rendered-proof claims and merge-gating semantics
   first.
+
+## Session update 2026-08-17 (Yarrow stirs Undergrowth, ab1066 — additive; critical-analysis sitting → seven owner rulings → records-truth pass EXECUTED)
+
+- **The sitting**: owner-invoked critical analysis of the lane's records,
+  plans, and intents (metacognition + free-play + concept-exploration
+  lenses; five-leg opus review fleet — assumptions, design-system,
+  accessibility, docs-records, frame-challenge). Panel headline classes,
+  all first-hand-verified: the record layer lagging its landings (the
+  resume map read future-tense over W1 tranche 1 and the masthead cure); a
+  false enforcement claim on the kit's published contract; the three
+  same-day 2026-08-13 ratifications contradicting with zero
+  cross-references; the composition axis unreachable from configuration
+  with both counter-identities converging on Oak's composition below
+  840px; the identity-№N kernel falsifier untested and unowned; the
+  wow-verdict register structurally unfed (one FAIL row on a purged page).
+- **Seven owner rulings at the cards** (captured at occurrence: comms
+  event ec2c307b + per-user memory): (1) a FOURTH IDENTITY is
+  commissioned, owner-named **Tango** — ALL FOUR identities come up to
+  standard as identity PACKS (own package: zod manifest + brand CSS +
+  assets + own licensing surface; the kit gains an identity-consumption
+  surface; the identity-№N regression lands with the pack work), Tango
+  first; (2) Tango's anchor reference is OWNER-PRIVATE — tracked surfaces
+  describe Tango purely in its own terms; (3) records-truth pass: full,
+  one sitting, FIRST; (4) brand admission moves to the pack manifest, the
+  false contract claim struck now; (5) narrow range = capability +
+  per-identity choice, kit work sequenced by Tango's measured needs;
+  (6) `design-showcase-experience` GOVERNS the showcase surface, siblings
+  amended; (7) `design-system-completion` stripped of authority, knowledge
+  conserved.
+- **Records-truth pass EXECUTED (MCP-613)**: commit `6e88cb407` on lane
+  branch `jimcresswell/mcp-613-design-lane-records-truth-pass-cure-the-owed-true-ups-ledger`
+  (worktree `mcp-613-records-truth-pass`, cut from origin/main at
+  1.171.0). Contents: guard claim struck (brand.css §1b + CHANGELOG); R16
+  landed verbatim as a rulings row; a dated landed-state surface in the
+  resume map; the A2 rhythm mechanism re-cut under R15; the plan-internal
+  corrections (print-cell `:root`, stale decision-log rows, the W5
+  F-number withdrawal, §W6 reclassified already-owed); DDR-003/004/009/010
+  trued; rubric revised to v0.1 (criterion 3 narrowed per R13 —
+  recalibration OWED before any blocking verdict); both READMEs re-trued
+  to the shipped routes; the fidelity register's masthead disposition row
+  (closes fleet finding F14); sibling-plan amendments; the
+  completion-sketch authority strip (both gates retired); and three spent
+  nodes ARCHIVED (pr-846-review-fleet, identity-switchboard-first-pixels,
+  public-digital-service-identity — identity-naming census re-pathed).
+  Gates: repo-validators 14 legs green, showcase 137/137, full pre-commit
+  chain green.
+- **PUSH + PR QUEUED behind the GitHub-incident hold** (owner order
+  13:54Z; no all-clear observed at this writing). The branch is
+  local-only; the PR opens at the all-clear broadcast.
+- **Pickup row 6 above (PDR-138 prediction line) was found ALREADY
+  DISCHARGED** — it landed at `659331a69` on 2026-08-14; the row stands as
+  history, no act remains.
+- **Still open on the lane after this pass**: W2 composition rebuild
+  (largest build); W3 controls v2; the W1 remainder (A2 in its re-cut
+  form; slice B EMC² px→rem); the small code cures (png-codec crop bound,
+  check-rollup undated-tie, the e2e static-root fixture race); the
+  skip-link charter disposition; the review-debt slice-2 `ddr-graph`
+  validator question (owner-un-carded); the **Tango identity-pack
+  programme node** — the next planning act, absorbing the a11y and
+  frame-challenge design inputs held in this session's panel reports; and
+  the rubric v0.1 recalibration.
+
+## Session update 2026-08-17 ~16:40Z (Yarrow stirs Undergrowth, ab1066 — additive; MCP-615 Tango pack node AUTHORED, reviewer-cured, committed; ratification card next)
+
+- **Post-compaction resume at owner word** ("continue with the Design
+  work"): seat re-armed per start-right (watcher F-95 green, heartbeat
+  pair on claim 645b9e0b, resume broadcast `a76544da`); Director Smith
+  hunts Obsidian re-entered the same seat and opened the design-lane ARC
+  channel (`rapid-comms/2026-08-17-design-lane-…`); the GitHub hold
+  STANDS (verified first-hand 16:03Z: worse — Major/critical). MCP-613
+  pushes/PR remain queued.
+- **The Tango pack node authored (MCP-615)**:
+  `tango-identity-pack.plan.md` (born-sketch, delivery, serves the
+  strategic node, beneficial edge to design-showcase-experience) plus the
+  paired readiness-review record, committed `714509339` on
+  `jimcresswell/mcp-615-tango-identity-pack-plan-node` (worktree
+  `mcp-615-tango-pack-node`, cut from local origin/main `05cca303f`; a
+  SECOND EnterWorktree mis-base fixed forward — `scrap/mcp-615-mis-based`
+  awaits owner one-click deletion). Gates: pre-commit chain green,
+  plan-corpus 88 conformant.
+- **Shape decisions a successor should know**: one node = pack
+  mechanism plus Tango as proving consumer (follow-on pack migrations
+  are pointers);
+  admission EXTENDS the ratified showcase W1 slice B guard (one
+  instrument, manifest-driven arms, closure-scoped); NO expressive-value
+  generator (authored CSS + validating manifest; asset emission reuses
+  design-tokens-core); the manifest carries eight machine-checkable facts
+  (four themes as full peers with `system` refused; declared polarity;
+  probe targets; motion via `-full` only; target-size floor;
+  forced-color-adjust prohibition; focus-ring untouched; R14 fixed-point
+  rows); the roster re-plumb (T1d) converts SEVEN hand-kept surfaces to a
+  build-time generated module and derives the a11y matrix from it (a pack
+  cannot render ungated); the zero-edit №N property is the end state
+  AFTER that re-plumb, stated honestly.
+- **Review arc**: three opus legs — a11y READY-WITH-FIXES (14),
+  design-system NOT-READY (4 blockers of 20), assumptions/frame
+  READY-WITH-FIXES (20; two seat verdicts refuted: R15's conditional
+  directive had been dropped from the rulings row; Tango's brief had set
+  distance-as-objective, which R15 reserves to EMC²). All 54 findings
+  dispositioned in
+  `.agent/reports/design/tango-pack-plan-readiness-reviews-2026-08-17.md`;
+  blockers cured in the same commit.
+- **Next act**: the four-question ratification card to the owner (ratify
+  incl. the P5 paraphrase confirm and the `packages/design/identities/*`
+  mint — Director's map note 16:37Z: the WSREORG inventory is re-graded
+  historical, a case-argued mint ratified by Jim carries its own warrant;
+  the recognisability S4(b) re-opening by dated amendment; the
+  owner-held verdict home (register vs thread record, unruled); the
+  T2/T3 seam, keep-one-node recommended). At the all-clear: push the
+  MCP-613 and MCP-615 branches, open both PRs, push coordination.
+- Owner-private Tango reference materials secured machine-local at the
+  primary checkout (`.agent/reference-local/tango-identity-anchor/`,
+  untracked) — P2 discipline; re-verify presence at T3 pickup.
+- **RATIFIED same sitting (~16:50Z)**: all four card questions answered
+  with the recommended options — ratify as presented (P5 paraphrase +
+  shared-admission reading + identities workspace mint confirmed); S4(b)
+  dated amendment authorised (lands post-MCP-613); verdict home = THIS
+  THREAD RECORD (the wow-register feeding question stays open on its own
+  merits); keep one node. Stamp landed and the lane commit amended
+  (verified at the shipped blob; unpushed behind the hold).
+  The pack lane is now GOVERNED work: T1a starts at the executing seat's
+  next window (ticket MCP-616 minted); both sibling amendments (showcase
+  cross-ref + S4(b)) queue behind the MCP-613 merge.
+
+## Session update 2026-08-17 ~16:55Z (Yarrow stirs Undergrowth, ab1066 — additive; OWNER RULING P6 captured: eventual state, narrow distinctness; Director succession Smith→Ocelot)
+
+- **Owner word at this seat (~16:45Z), verbatim (also landed as ruling
+  row P6 in the ratified tango-identity-pack node, dated amendment same
+  day)**: "to be clear, the eventual state is that all identities are
+  represented purely as canonical identity packs, that identities are
+  visually designed narrow viewport first, that the system fully
+  supports distinct identities at narrow viewports, and that the EMC2
+  identity and Tango identity at narrow viewports are clearly different
+  from Oak and PDS in layout, order, spacing, feel, with the most
+  difference in EMC2 because that is the identity we have total freedom
+  with" — asked "let me know if it isn't" compatible.
+- **Compatibility adjudication (delivered to the owner same sitting)**:
+  compatible with the ruled corpus, with ONE named supersession — the
+  showcase plan's R4 row consequence "No per-brand narrow maps"
+  (2026-08-13) survives only as "Oak and PDS may legitimately share the
+  narrow base"; as a prohibition it is superseded (ruling 5 of
+  2026-08-17 had already made narrow divergence expressible; P6 directs
+  Tango and EMC² to exercise it). Its dated supersession note on the
+  showcase plan is QUEUED post-MCP-613 with the two sibling amendments
+  (same-file sequencing; named in the Tango node so it never sits
+  silent). Sharpenings landed in the node: the P4 measured-needs record
+  now serves a declared outcome bar; Tango's brief carries
+  clearly-visible-at-narrow character; panel finding 2 (counter-identity
+  narrow convergence below 840px) is upgraded from open-input to a real
+  eventual-state gap — EMC²'s narrow maps ride its own future node.
+- **Lane commit after the P6 amendment: `fca393040`** (supersedes
+  afae5c663 and 714509339 in earlier records; unpushed, amend-not-append
+  since never pushed). Gates re-run green (prettier, markdownlint,
+  plan-corpus 88).
+- **Director succession completed mid-sitting**: Smith hunts Obsidian →
+  **Ocelot binds Tunnel (c28ad9)**, PDR-064 two moments clean (Moment 2
+  event a91c1177); successor design-lane ARC channel
+  `rapid-comms/2026-08-17-design-lane-ocelot-binds-tunnel-and-yarrow-stirs-undergrowth.md`
+  joined (prior channel stands as record). Ocelot runs the GitHub
+  resolution watch; their all-clear broadcast releases this lane's
+  queue: MCP-613 push+PR, MCP-615 push+PR, coordination push.
+
+## Session close 2026-08-17 ~20:05Z (Yarrow stirs Undergrowth, ab1066 — additive; T1a-i LANDED; overnight stand-down, claim RETAINED)
+
+- **T1a-i LANDED at `cd84e490c`** on
+  `jimcresswell/mcp-616-t1a-identities-tier-boundary-leg` (worktree
+  `mcp-616-t1a-identities-tier`, off origin/main `05cca303f`): the
+  `packages/design/identities/*` tier (glob + tier README + design-index
+  row) + the `validate-boundaries` structural leg (pure module
+  `boundary-inventory.ts` with 21 contract-form tests; collect-all
+  script rewrite; tier presence + pack homogeneity — NO hand-declared
+  inventory, the №N-preserving deviation adjudicated SOUND and recorded
+  in the tier README + the review record's execution addendum,
+  `843bb4ac8` on the MCP-615 lane). Full review arc (pre-execution
+  code-expert; config deep; test focused with 25-mutant probe;
+  post-execution gateway) — all dispositioned; both headline mutants
+  proven killed live. Gates green throughout; pre-commit chain green.
+- **Owner doctrine word absorbed mid-slice** ("tests prove behaviour,
+  not configuration, and they never constrain implementation"): the
+  suite re-cut to contract form — token presence on the joined report,
+  never counts/order/prose. The generator lesson (reviewer cures must
+  re-derive against the governing directive; three instances today) is
+  in the napkin 2026-08-17-evening entry.
+- **Owner-forbidden, absolute: `git commit --amend` as content
+  evolution.** Commits only append from here; the MCP-615 lane trail is
+  now three append commits (`21f95b61f` node, `b334f0181` R4 re-class,
+  `843bb4ac8` addendum); MCP-613 unchanged at `6e88cb407`.
+- **Stand-down (owner overnight directive via Director Ocelot,
+  19:46Z)**: remaining queue is either all-clear-gated (three branch
+  pushes + PRs: MCP-613, MCP-615 at `843bb4ac8`, MCP-616 at
+  `cd84e490c`; then the two post-MCP-613-merge sibling amendments +
+  the R4 attribution-correction) or fresh-session-quality work —
+  **T1a-ii is deliberately NOT authored tonight**: it is the
+  pack-contract authoring (manifest field shapes, the per-theme
+  asset-strategy DDR binding all four packs, the DDR-005 amendment),
+  the highest-leverage design surface in the programme, wrong at the
+  tail of a marathon sitting under the day's three absorption lessons.
+  Claim `645b9e0b` RETAINED for the morning pickup (same seat or
+  successor via this record + the ratified plan). Monitors stopped in
+  canonical order at the freeze; scrap branches for owner one-click
+  deletion: `scrap/mcp-613-mis-based`, `scrap/mcp-615-mis-based`,
+  `scrap/mcp-616-mis-based` (EnterWorktree base-ref mis-cut ×3, napkin
+  entry).
+- **Morning resume order**: (1) re-arm per start-right; (2) at the
+  all-clear: the three pushes + PRs (pr-lifecycle, jimbot label), then
+  post-merge amendments; (3) T1a-ii fresh (its pre-execution verdicts
+  are in the review record: flat-tier `identity-pack-schema` workspace,
+  six schema fact-arms, four-theme keying, DDR-012 asset strategy,
+  DDR-005 per-package amendment, B2 settled against the actual CI
+  workflow); (4) T1b parcel after T1a-ii; (5) T2 first Tango pixels —
+  the checkpoint that matters.
+
+- **ONTOLOGY CORRECTION (owner verbatim, ~16:57Z, superseding this
+  entry's "survives only as Oak-and-PDS-may-share" phrasing above)**:
+  "Oak/PDS is not a default for narrow viewports, it is a coincidence
+  that the first two identities we built we public services, and
+  therefore have a shared design heritage routed in GDS" (sic). There
+  is NO shared-narrow-base concept and no sharing arrangement — every
+  identity composes narrow from its own character and anchor; Oak/PDS
+  narrow similarity is heritage coincidence (both GDS-rooted public
+  services). New harvested fact: Oak's design heritage is itself
+  GDS-rooted. Convergence-by-silent-fallthrough (the below-840px
+  mechanism) is a defect class, never mistakable for heritage
+  coincidence. Re-trued in the node (P6 row + P4 reading note + the
+  queued R4 supersession wording) — **lane commit now `f6880f11b`**
+  (supersedes fca393040/afae5c663/714509339; amend-not-append,
+  unpushed). Per-user memory re-trued the same way.
+
+## Session close 2026-08-18 ~15:0xZ (Yarrow stirs Undergrowth, ab1066 — additive; DEMO DAY DELIVERED; P7 ruled; FOUR PRs OPEN; compaction freeze, claim RETAINED)
+
+- **The day's arc**: morning resume at the retained claim → the Director's
+  all-clear (GitHub incident resolved) → the owner set a ~10:00Z demo →
+  the joint MCP-620 node ratified at the Director's gate → executed end
+  to end (slice-1a reduced-motion cure measured 160ms→.01ms; EMC²
+  five-axis amplification; /tokens; /tokens/colours matrix) → TWO direct
+  owner feedback rounds the same day (radio switchboard W3/R9+R12 with
+  measured stage dominance 81%/60%; embedded pages own their controls;
+  fixed breadcrumbs; composition demo rebuilt to owner spec — four
+  layout extremes; craft-area token navigation; PDS label + sourced
+  identity blurbs) → the eleven-point round → **the P7 ruling**.
+- **P7 (owner, 2026-08-18, THE day's headline)**: identities are
+  SELF-CONTAINED; the token CONTRACT is the INVARIANT ("that is what
+  makes it cheap to create new identities"); defaults bind at
+  CONSTRUCTION, never as runtime values; constructor CLI (owner working
+  name `oak-design identity create`). Runtime override graded
+  legacy-demo (the demo-day defect ledger is the evidence). Homes:
+  tango node P7 + T1a-ii reshape + new T1e slice + T2 born-through-
+  constructor note (all `a5ccc6ebe` on the MCP-615 lane); **DDR-012**
+  (docs/design/design-decisions/012, ratified) + README index; the
+  emc2 node's resume step 4; this record.
+- **FOUR PRs OPEN, bot-authored (author read-back verified
+  app/jimbot-oakington-iii), jimbot label, one multi-ref push (gate
+  suite paid once)**: #907 (MCP-620, demo day, tip `3b276f0d6`), #908
+  (MCP-615, node + records + DDR-012, tip `a5ccc6ebe`), #909 (MCP-616,
+  T1a-i, `cd84e490c`), #910 (MCP-613, records pass, `6e88cb407`).
+  claude[bot] review already fired on #907; Copilot requested via the
+  MCP tool on #907/#909 but NOT visible in requested_reviewers at
+  freeze — re-verify at harvest, absence never blocks.
+- **Owner visual feedback OPEN (analysed, not yet built — his round
+  after the matrix)**: (1) composition layout/theme radio groups run
+  together — separate rows; (2) tokens two-column as the NORM (row-level
+  splitting, families span headers; the current pairing letter-wraps
+  values, clips chips, scrollbars) at monitor widths; (3) hard rule:
+  everything visible at all times — no in-table scroll/clip anywhere;
+  (4) narrow nav → slide-out disclosure (also the specimen strip's
+  scrolling row). These are the first execution round after the PR
+  harvests.
+- **Morning resume order**: (1) re-arm per start-right; (2) harvest the
+  four PR review rounds (pr-lifecycle phases 3–7; merge-rulings:
+  bot REST-merge at settled, never squash); (3) the four visual fixes;
+  (4) post-#910-merge amendment parcel (showcase cross-ref, S4(b),
+  R4 attribution-correction, POPPY-1 fold); (5) **T1a-ii + T1e as the
+  owner's "second PR"** — bring ONE decision card: prefix (MAJOR),
+  construction semantics, CLI shape; then T1b → T2 (Tango born through
+  the constructor). Claim `645b9e0b` RETAINED for same-seat resume.
+- Dev server stopped at freeze; scrap branches (mcp-613/615/616/620
+  ×mis-based) still await owner one-click deletion (Director holds the
+  list).
+
+## Session close 2026-08-18 ~18:3xZ (Yarrow stirs Undergrowth, ab1066 — additive; ROUND 1 CLOSED on all four PRs; compaction freeze, claim RETAINED)
+
+- **The sitting's arc**: post-compaction resume at the retained claim →
+  re-arm (watcher/heartbeat/ArcAngel tail, F-95 green) → the Director's
+  two resume notes absorbed (Copilot-binding question CLOSED at the
+  Director's word; the ab0d10906 broad-staging note taken — explicit
+  pathspec at every shared-checkout parcel) → full round-1 harvest of
+  #907/#908/#909/#910 (26 review findings + #907's Sonar 21 + its red
+  CI leg) → every finding cured or dispositioned → ONE multi-ref bot
+  push (gate suite paid once): **#907 `62df2091c`, #908 `41db188a0`,
+  #909 `83c95cc03`, #910 `4d74164b5`** → 8 threads replied+resolved,
+  4 mantagen rounds dismissed-at-cure (verified), response comment per
+  PR (author read-back jimbot-oakington-iii[bot] on every write),
+  Copilot RE-REQUESTED on #907/#909 (timeline-bound), #910 body scope
+  note updated, token deleted.
+- **Working record**: `.agent/reports/design/pr-round-ledger-2026-08-18.md`
+  (committed this parcel) — the state machine's tally store, expected
+  reviewer set (claude[bot]+Codex = quota skip markers, re-check per
+  round; mantagen NOT on-demand, dismiss-at-cure; Copilot on-demand on
+  907/909), round-1 dispositions, and the carried gateway residue with
+  named homes.
+- **Load-bearing diagnoses** (napkin carries the generators): the CI
+  reflow red's measured root = visually-hidden helpers escaping the
+  strip's scroll clip → 312px document floor, red only under CI's
+  classic scrollbars (cure: scroller as containing block; floor ≤296px
+  measured); the colour-strip zero-width-name row (color-mix→oklab, no
+  hex form; 2:1 wrapping tracks); the `.mast` duplicate-selector DEAD
+  DECLARATION (Sonar was right); the sway plates inset past amplitude
+  (overflow-closed decoration — the halo sits 8px/4px tighter,
+  disclosed on the PR); forced-colours radio dot = SelectedItem
+  (rendered-proof verified). A probe-verified code-expert gateway pass
+  (opus) rode the #907 bundle pre-push; blocker + items 2/3/4 + six
+  cheap items absorbed; residue named in the ledger.
+- **State at freeze**: #908 and #910 all-green on their new tips (17/17
+  checks, zero threads, no live review) — likely FIRST to settle;
+  **the Director's merge leg needs nothing from this seat** (merge-bot
+  merge recomputes the settle verdict itself). #907/#909 await Copilot
+  re-review rounds + CI on the new tips. All my PR watches stop with
+  the freeze — round-2 HARVESTS wait for this seat's resume unless the
+  owner/Director redirects.
+- **Morning resume order**: (1) re-arm per start-right; (2) harvest
+  round 2 (pr-lifecycle phases 3–7; the ledger is the tally store;
+  batch one adjudicated round per push; dismiss-at-cure for mantagen;
+  merges per merge rulings at the Director's seat); (3) the owner's
+  four visual fixes as the next BUILD round (composition control rows;
+  tokens two-column-as-norm; the hard no-overflow rule — the
+  classic-scrollbar floor is a DDR-009-warrantable width candidate to
+  decide there; narrow slide-out nav incl. the specimen strip's
+  scrolling row); (4) post-#910-merge amendment parcel (showcase
+  cross-ref, S4(b), R4 attribution-correction, POPPY-1 fold);
+  (5) **T1a-ii + T1e decision card** (prefix MAJOR, construction
+  semantics, CLI shape) → T1b → T2. Claim `645b9e0b` RETAINED for
+  same-seat resume. Scrap branches ×4 still await owner deletion
+  (Director holds the list); napkin remains over rotation threshold
+  (dedicated-sitting item).
+
+## Session close 2026-08-19 ~08:1xZ (Yarrow stirs Undergrowth, ab1066 — additive; the THREE-ACT sitting: round 2 + the owner's visual round as PR #912 + round 3; compaction freeze at owner word, claim RETAINED)
+
+- **Act 1 — round 2 CLOSED** on #907 (`5f1188f0a`) and #909
+  (`1d7852517`): Copilot round-2 findings (every suppressed one
+  included), Sonar 3, and #907's CI red cured or dispositioned; the CI
+  red = the MCP app's e2e fixture racing copyOakDs's staging dir —
+  routed to the Director (comms `88487ce9`), ticketed by them as
+  MCP-628 before their freeze. Gateway absorbed pre-push (the race
+  regression test rebuilt on a POSITIVE post-load signal and
+  red-green-PROVEN by in-place revert; the dtcg JSON admission
+  tightened to the `*.tokens.json` suffix after the probe re-opened
+  the hole inside the place). Threads resolved, response comments,
+  Copilot re-requested via the MCP tool (the REST route 201'd while
+  minting NO timeline events — verify writes on the system's proof
+  surface).
+- **Act 2 — the owner's four visual items BUILT** and shipped as
+  **draft PR #912** (branch `jimcresswell/mcp-620-visual-feedback-round`,
+  four parcels `290eb8070`/`f77af9e9e`/`e46c36477`/`b114d5206`,
+  STACKED on #907): control rows; token rows flowing two columns under
+  spanning headers (table + scroll container + round-2 overflow hook
+  DELETED, net −187 first parcel); the six-width everything-visible
+  invariant incl. the 305px classic-scrollbar warrant; kit-native
+  narrow disclosures (tokens nav + specimen strip). TWO review passes
+  both HOLD → absorbed in full — the a11y deep pass caught two
+  axe-invisible AA failures (uninverted summary focus ring 1.27:1;
+  2.4.11 paint occlusion at 390, elementFromPoint-proven) plus the
+  mounted-details seam cure (zoom/rotation are a11y paths) and the
+  flat-list boilerplate removal (185+69 repeated announcements gone).
+  Suites 34/34 UI + 76/76 a11y at ship.
+- **Act 3 — round 3 CLOSED** on #907 at **`e54be4b4d`**: six suppressed
+  findings adjudicated (five cured — the TRUE inverted maps; one theme
+  HOLDER per document with ownership by context, useFramed hoisted;
+  data-controls mast offset; the TRANSITIVE themed badge with the
+  single-face seed fix — one REJECTED with reasoning at the site);
+  Sonar's S6845 re-fire surfaced with its pre-declared WAI disposition
+  at the action moment. #909 round 3 = suppressed-because-cured, zero
+  live, note posted. Copilot re-requested (timeline-bound 08:04:36Z).
+  Suites 33/33 + 68/68 + 225 unit at push.
+- **The blind-watch lesson**: the round-3 PR poll ran two hours on an
+  invalid `gh pr view` field with errors swallowed — probe a monitor's
+  COMMAND in foreground before arming (napkin, full form).
+- **State at freeze**: lanes mcp-620 (`e54be4b4d`), mcp-616
+  (`1d7852517`), visual-feedback-round (`b114d5206` = PR #912 draft)
+  all CLEAN and IN-SYNC with their origin PRs. #908/#910 untouched
+  all-green at the FROZEN Director's merge legs (their freeze-2 map:
+  estate record §21:2xZ, db878351d). The working record:
+  `.agent/reports/design/pr-round-ledger-2026-08-18.md` (rounds 1–3 +
+  the visual round, committed this parcel).
+- **Resume order (this seat, claim `645b9e0b` retained)**: (1) re-arm
+  per start-right; (2) **#912 merge-forward FIRST** — its base moved to
+  `e54be4b4d`; git MERGE the base branch in (never rebase); named
+  conflict surfaces: specimen.css mast block (both cures keep),
+  demo-routes-a11y white-labelling cell comment; (3) round-4 harvests
+  (#907 awaits Copilot + checks on `e54be4b4d`; Sonar S6845 residual
+  pre-dispositioned); (4) the T1a-ii+T1e owner decision card (prefix
+  MAJOR, construction semantics, CLI shape) at Director resume;
+  (5) post-#910 records parcel (showcase cross-ref, S4(b), R4
+  attribution, POPPY-1 fold, DDR-009 305px amendment). The wide rail's
+  capped nav scroll is the named owner-re-rule residue (PR #912 body).
