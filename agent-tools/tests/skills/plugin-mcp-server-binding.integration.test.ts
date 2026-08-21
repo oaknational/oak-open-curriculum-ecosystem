@@ -19,6 +19,14 @@ import { readRepoDocument } from '../../src/collaboration-state/test-helpers/rep
  * source constant to derive from — for the shipped plugin's binding, this test
  * is the authority rather than a copy of one.
  *
+ * The host is `mcp.thenational.academy` by owner ruling (2026-08-21): that is
+ * the server URL on the Anthropic listing, and `www.thenational.academy/mcp` is
+ * being retired. The server itself corroborates the ruling. Both hosts' RFC
+ * 9728 protected-resource documents name the same resource identifier, and it
+ * is the `mcp` host — so the previous `www` binding pointed installing users at
+ * a URL the server does not claim as its own resource. Do not revert this to
+ * `www` to make an older surface agree; move the surface.
+ *
  * Learned from MCP-509: a guard that reads an absent value asserts nothing.
  * The config is parsed through a schema so a shape change fails loudly instead
  * of quietly comparing `undefined` against `undefined`.
@@ -26,7 +34,7 @@ import { readRepoDocument } from '../../src/collaboration-state/test-helpers/rep
  * ADR-078 helper-mediated committed-artefact reads.
  */
 
-const CANONICAL_MCP_ENDPOINT = 'https://www.thenational.academy/mcp';
+const CANONICAL_MCP_ENDPOINT = 'https://mcp.thenational.academy/mcp';
 
 const PLUGIN_MCP_CONFIG_PATH = 'plugins/oak-open-curriculum/.mcp.json';
 const MCP_ENABLED_SKILL_PATH =
