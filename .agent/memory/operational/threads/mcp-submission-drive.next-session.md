@@ -574,6 +574,44 @@ it does not remove them.
 the OTHER's design against the shared record. **Neither caught their own.** So the practical cure is
 adversarial review by a peer who holds the same findings — not more care by the author.
 
+### A FACT YOU DID NOT GO LOOKING FOR HAS NO SOURCE UNTIL YOU ESTABLISH ONE
+
+**Sibling to the we-already-knew class above, and a distinct generator with two instances in one day —
+both the liaison seat's, both diagnosed by that seat rather than caught by its peer.**
+
+- **Instance 1.** A BROADCAST comms event arrived on the liaison's watcher carrying the Director's
+  `author.id` and `session_id_prefix`, because an implementer seat inherits its Director's identity
+  (F-164). The seat read it as a message FROM the Director and was one commit from writing the
+  implementer's observation into `SEAT-BRIEF.md` as the Director's.
+- **Instance 2.** While diagnosing a transient `index.lock`, the seat glimpsed a peer seat's
+  `git commit` in flight and read part of its commit subject. From that fragment it inferred that two
+  independent security seats had reached the same conclusion, **and attributed the inference to the
+  Director as a finding.** Three steps — glimpse, inference, attribution — none measured. The Director
+  refused it: no such finding had been made and neither report had been read.
+
+**The generator is NOT carelessness about attribution.** It is that **a fragment arriving through an
+incidental channel carries no provenance with it** — a broadcast under a shared identity, a process
+listing seen while chasing something else, a commit subject caught in passing — **and the reader
+supplies the provenance from surrounding context without noticing that none was present.** The
+context is usually right, which is what makes it durable.
+
+**The cure is narrow and mechanical, in the liaison's own words: a fact you did not go looking for
+has no source until you establish one.** Not "be more careful" — a step. Before a fact acquired
+incidentally is used, name where it came from; if you cannot, it is a prompt to go and measure, not a
+datum.
+
+**Why the second instance was the more dangerous one, and worth stating plainly:** had it stood, the
+independent-convergence claim would have been **the strongest thing either security report could
+offer** — and it would have reached the owner, in a security review, on his last day before nine days
+away, with a glimpsed commit subject underneath it. **The value of a claim and the flimsiness of its
+basis were at their maximum simultaneously.** That combination is the one to watch for: the more a
+finding would impress, the harder its provenance should be checked.
+
+**What actually caught both: the OTHER seat, not the author.** Same as the we-already-knew class.
+Two agents holding the same records, each checking the other's claims, caught four instances today
+that neither caught in themselves. **Adversarial peer review by someone holding the same findings is
+doing work that no amount of individual care replaced.**
+
 ### THE TRIGGER'S OWN INSTRUMENT CARRIED THE CLASS — and a fourth state neither seat had
 
 The owner asked not to be contacted until the board was stable, so the liaison built a stability
