@@ -154,6 +154,56 @@ The norm this establishes: a Director's stated fact is a **claim to check, not a
 given**, and checking it costs the fleet nothing. Being corrected four times an
 hour is cheaper than one wrong ask reaching the owner.
 
+## THE FALSIFIER FIRED — 2026-08-21, and this pattern's own instruction is now binding
+
+**This section is not an enrichment. It is the falsifier above being met.** The falsifier reads: *"If
+a seat that has read this pattern still ships an instance on a surface whose ambiguity this pattern
+explicitly names, then passive capture has failed for this class and it needs an action-time gate
+rather than another written cure."*
+
+**On 2026-08-21 that happened at least six times in one working day, across a Director seat, a liaison
+seat and two implementer seats — every one of which had this discipline in its brief or had written
+it into tracked state that same morning.** Two of the seats were, at the moment of failing, the
+estate's most careful readers of this exact class.
+
+The instances, each a true value answering a different question:
+
+| Instrument | True statement | Question it was offered for |
+| --- | --- | --- |
+| `cf-ray` present | Cloudflare fronts this host | Is it OAK's Cloudflare? (a Clerk-operated worker also returns it) |
+| A `COMMENTED` review row | A reviewer responded | Did a review happen? (body was a spend-limit skip notice) |
+| `author=mantagen` on a PR | The owner's credential raised it | Is this ours or his? (every agent PR there uses it) |
+| `reviewRequests: []` | The author is not in his own review list | Has anyone been asked to review? (GitHub *forbids* requesting the author — 422) |
+| `author.id` on a comms event | Which routing identity wrote it | Which agent authored it? (F-164: seats inherit the Director's) |
+| `latest-change-at` moved | The workspace recorded an attempt | Did state change? (Cloudflare rejected the PATCH atomically; nothing was written) |
+| `branches/main/protection` 404 | There is no *classic* branch protection | What does main require? (rulesets carry it — an empty required set makes "nothing required is failing" vacuously true) |
+| `git log --json merged` error | The flag does not exist | Is the PR merged? (returned a field list and **no answer**, which was nearly asserted as one) |
+
+**Two of those deserve naming separately because their failure direction is worse than a wrong
+belief.** The `branches/main/protection` 404 was the instrument *of a trigger deciding when to
+interrupt the owner* — it would have reported the home repository stable with every check red.
+And a **truncated control probe** (unpaginated `per_page=100` over 109 alerts) returned a figure that
+*coincidentally matched*, converting an untested assumption into a confirmed one. **A truncated
+control that agrees with you is worse than no control.**
+
+**What actually caught them: the other seat, never the author.** Four were caught by a peer holding
+the same records checking the author's claim; none was caught in self-review. That is the only
+mitigation with an observed success rate, and it is not a written cure — it is a second reader with
+the same doctrine and licence to refuse.
+
+**Routing, per this pattern's own falsifier and [PDR-098](../../../practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md):**
+this class is now **recurrence-despite-home with the falsifier met**. It goes to the doctrine-traction
+mechanism lane as recurrence evidence — the action-time structural-interrupt design space — **not to
+another paragraph here.** This section exists to make the firing legible and to stop the next
+consolidation treating these as fresh instances of an un-cured class; the *cure* is a gate, and
+designing it is deliberate work this entry does not attempt.
+
+**Deferral honesty on that:** the gate is not designed here because designing an action-time interrupt
+for "name what your instrument actually measured" is a design lane of its own (PDR-098's open
+quadrant), and this pass's constraint was an owner instruction to consolidate rather than to open a
+new design. **Falsifiable:** if a later pass finds this section grown by further instances with no
+gate proposed, the deferral was wrong and the lane should have been opened here.
+
 ## Falsifier
 
 If a seat that has read this pattern still ships an instance on a surface whose

@@ -3795,3 +3795,195 @@ commit SHA and the closing plan reference.
   exactly as emission does). The curator-pass archive cadence (PDR-094)
   remains the companion pressure valve — ~3,600 live events means the
   archive pass is overdue. Route: agent-tooling backlog.
+
+### F-167 — `git worktree add -b <branch> origin/main` sets the new branch's upstream to `origin/main`; PR #927 cured only the `spawn` path
+
+- **Source**: Seat R6 (Implementer, `Tulip mends Bark` Director seat, `e6d535`),
+  2026-08-21, while rebuilding `oaknational/Oak-Web-Application#4443` onto a
+  clean branch. Comms event `e0de5e68`. Fourth observed occurrence of this
+  mechanism across sessions and repositories.
+- **Surface**: bare `git worktree add`, in any repository — including foreign
+  repositories where this estate's lane tooling is not in play.
+- **Observed**: `git worktree add -b <branch> origin/main` emitted
+  `branch '<branch>' set up to track 'origin/main'`. The seat noticed, ran
+  `git branch --unset-upstream`, and pushed by explicit refspec. Had it not
+  noticed, a bare `git push` would have pushed roughly 5,000 lines onto
+  `Oak-Web-Application`'s `main`.
+- **Expected**: cutting a lane branch from a remote-tracking ref sets **no**
+  upstream, so a bare `git push` has no default destination and fails loudly
+  rather than targeting `main`.
+- **Root cause, already established for the sibling door**: the base is
+  `origin/main`, a remote-tracking ref, and `branch.autoSetupMerge` defaults to
+  `true`, so git marks it upstream. **PR #927 fixed this for
+  `agent-tools spawn` by adding `--no-track`** (and its test asserts the flag's
+  POSITION, because after the commit-ish git parses it as a path operand and you
+  get a green test over a dead fix). **`git worktree add` is a second, unguarded
+  door to the identical mechanism** and was out of #927's scope.
+- **Why this is a footgun rather than an error**: the default is silent and
+  correct-looking, the emitted tracking line is easy to skim past, and the
+  failure mode is not a broken command but a *successful push to the wrong
+  branch*. Four occurrences, and every one was prevented only by an agent
+  noticing.
+- **Second-order exposure, already recorded**: every worktree created before
+  #927 landed still carries its `origin/main` upstream. #927 fixes new spawns
+  only, so any seat resuming in a pre-existing worktree must unset before its
+  first push.
+- **Candidate cure**: pass `--no-track` on every `git worktree add` in estate
+  tooling and doctrine, with the same position discipline #927's test enforces;
+  and prefer a repo-local `branch.autoSetupMerge=false` where the estate owns
+  the checkout. A wrapper is the stronger cure than a rule, because the rule
+  cannot bind an agent typing raw git in a foreign repository — which is exactly
+  where the fourth occurrence happened.
+- **Target surface**: agent-tools CLI wrapper and/or a rule; the
+  `set-up-worktree-lane` skill; foreign-repository working doctrine. **The
+  rule-versus-wrapper choice is deliberately NOT made here** — it is a
+  `new-rule-vs-pdr-clause` decision, and a passive rule loses to artefact
+  gravity for raw-git use in a foreign repo.
+- **Status**: open. Mitigated only by seats checking
+  `git rev-parse --abbrev-ref --symbolic-full-name @{u}` before their first
+  push, which is what every one of the four occurrences relied on.
+- **Owner direction status**: unsolicited (agent-observed friction, first-class
+  under the Pelagic standing direction).
+
+### F-168 — two independent seats broke `exit-codes-in-band-never-piped` in one day, in opposite directions; the rule's own named cure does not exist
+
+- **Source**: Director seat `Tulip mends Bark` (`e6d535`) and the owner-liaison
+  seat `Phoenix guards Scorch` (`85bdbf`), both 2026-08-21, independently, within
+  hours. Comms event `e0de5e68`. **This is a RECURRENCE against an existing home,
+  not a new finding** — the rule already exists and already names the cure.
+- **Surface**: every `pnpm agent-tools:*` CLI, at command-composition time.
+- **Observed, two instances with opposite losses**:
+  - The liaison piped a commit-queue guard through `tail`, so `$?` was `tail`'s.
+    **The guard had REFUSED** — it rejected the PDR-117 worktree-scoped claim
+    label — **and the seat staged past the refusal without seeing it.** Caught
+    only because the staged file looked wrong and the guard was re-run unpiped.
+  - The Director piped `check-commit-message` through `grep` and then ran
+    `git commit` with `;` rather than `&&`. The validator **had flagged a real
+    `subject-case` violation**; the commit ran anyway and was refused by the
+    commit-msg hook. **The validator ran, produced the right answer, and was not
+    wired to the decision it existed to inform.**
+- **Expected**: a gate's verdict reaches the decision it guards. Losing a
+  refusal is the dangerous direction — it converts a guard into decoration.
+- **Why this is ERGONOMICS, not two lapses of attention**: both seats were
+  actively holding this discipline — one had written the rule's lesson into
+  tracked state that morning, the other was enforcing it in seat briefs — and
+  both broke it anyway. **Every one of these CLIs emits pnpm banner noise, so
+  the natural and near-universal way to read one is to pipe it, and the pipe
+  silently discards the only value that matters.** The rule asks an agent to
+  fight the shell's default on every single invocation, with no feedback when it
+  loses. Two independent violations in one window, by seats that knew the rule,
+  is evidence about the affordance rather than about the agents.
+- **The rule ALREADY names the cure and it has not been built.**
+  `.agent/rules/exit-codes-in-band-never-piped.md` §Enforcement: *"The
+  structural cure candidate — a gate-runner helper that owns capture — is
+  legitimate future tooling; until it exists, the in-band capture shape above is
+  mandatory."* The rule also identifies itself as the estate-wide traction cure
+  for **PDR-098 recurrence-despite-home**. **So this entry is that PDR's own
+  pattern firing on the rule written to cure it**, which is the strongest
+  available argument that a behavioural layer is not sufficient here.
+- **Candidate cure**: build the gate-runner helper the rule already names —
+  run the command, tee its output to a file and to the terminal, and **exit with
+  the WRAPPED command's status**. Verified absent: `git grep PIPESTATUS` over
+  `agent-tools/**` on `origin/main` returns **0 files**, with a control
+  (`collaboration-state`, 171 files) proving the search is not blind. The
+  workaround both seats independently reached — capture to a file, read `$?`
+  unpiped — is the wrapper's behaviour done by hand each time, which is the
+  usual signal that it wants to be a tool.
+- **Target surface**: `agent-tools` CLI (a `run-gate` / capture-owning helper),
+  plus a line in the rule pointing at it once it exists.
+- **Status**: open, and **deliberately not implemented on 2026-08-21** — stated
+  so the deferral is not read as oversight. Three seats were live against an
+  over-subscribed host (load 9.94 / 17.63 / 14.93 on ten cores), and the day's
+  remaining owner window was committed to work the owner had explicitly asked
+  for. **The cure is small, well-specified, and ready for a lane; it is not
+  urgent-today, and it should not wait for a fourth instance.**
+- **Owner direction status**: unsolicited (agent-observed friction, first-class
+  under the Pelagic standing direction).
+
+### F-169 — `record-staged` writes a bundle fingerprint over an EMPTY index without complaint
+
+- **Source**: owner-liaison seat `Phoenix guards Scorch` (`85bdbf`) observed it live,
+  2026-08-21; Director seat `Tulip mends Bark` (`e6d535`) verified the mechanism
+  against `origin/main` source and **narrowed the reported severity**. Comms
+  event `e0de5e68`.
+- **Surface**: `pnpm agent-tools:commit-queue -- record-staged`.
+- **Observed**: a `git add` failed on a transient `index.lock` (real contention —
+  a peer seat was mid-`git commit` in another worktree — not the stale-lock trap
+  the brief warns about; age, size and holder were checked and it had already
+  cleared). **`record-staged` then exited 0 against an empty index**, writing a
+  `staged_bundle_fingerprint` computed over empty `nameStatus` and empty `patch`.
+  So the queue entry carried a fingerprint attesting to nothing.
+- **Expected**: recording a staged bundle when nothing is staged is a
+  contradiction in terms and should fail loudly.
+- **Mechanism, read from source rather than inferred**:
+  `recordStagedBundle` (`agent-tools/src/commit-queue/core.ts:135`) takes
+  `stagedNameStatus` and `stagedPatch`, calls
+  `createStagedBundleFingerprint` on them, and writes the result
+  **unconditionally. There is no emptiness check on either input.**
+- **SEVERITY IS LOWER THAN FIRST REPORTED, and the correction matters.** The
+  first account held that `verify-staged` would then "compare nothing to nothing
+  and agree", making this a green gate over no work at all. **It would not.**
+  `verifyStagedBundle` (`core.ts:57`) calls
+  `stagedFileMismatch(stagedNameOnly, intent.files)`, which computes
+  `missing = intendedFiles.filter(f => !stagedFiles.includes(f))` — **so with an
+  empty index every intended file is missing and verify FAILS** with "staged
+  files do not exactly match intent files". The both-empty escape is not
+  reachable either: the intent's `files` array is `minItems: 1` in
+  `active-claims.schema.json`. **So the queue's pre-commit verification remains a
+  working backstop.**
+- **What the defect therefore IS**: a **false attestation persisted into shared
+  coordination state**. The registry records a fingerprint that certifies a
+  bundle which does not exist, and any reader trusting `staged_bundle_fingerprint`
+  as evidence that staging happened is misled — including a successor auditing a
+  half-finished commit window, which is exactly when that field is read. **It is
+  a record-integrity defect, not a gate bypass.**
+- **Honesty about my own instrument**: this is a source reading, not an executed
+  reproduction. I did not run `record-staged` against an empty index to confirm
+  the exit code, nor `verify-staged` to confirm it fails. **The liaison's exit-0
+  observation is first-hand; my narrowing of the consequence is read from code
+  and should be reproduced before being relied on.**
+- **Candidate cure**: assert `git diff --staged` is non-empty before calling
+  `record-staged` — the workaround the liaison adopted immediately — and, better,
+  guard it inside `recordStagedBundle` so every caller inherits it: refuse when
+  `stagedNameStatus` normalises to empty. Cheap, local, and no call-site changes.
+- **Target surface**: `agent-tools/src/commit-queue/core.ts`
+  (`recordStagedBundle`), with a unit test asserting the refusal.
+- **Status**: open. Mitigated by the caller-side non-empty assertion now in use
+  by one seat, which is not a cure for other callers.
+- **Owner direction status**: unsolicited (agent-observed friction, first-class
+  under the Pelagic standing direction).
+
+### F-170 — `agent-tools spawn` exits 2 on its own lane-marker commit, so success looks like failure
+
+- **Source**: Implementer seat D2 (`Tulip mends Bark` Director seat, `e6d535`),
+  2026-08-21, twice in one session while cutting two lanes.
+- **Surface**: `pnpm agent-tools:spawn` (lane-creation path).
+- **Observed**: the command **exits 2** while creating the worktree
+  **correctly** — the failure is in its own lane-marker commit, after the
+  worktree exists and is usable. **So a seat reading the exit code concludes
+  the lane was not created, when it was.**
+- **Expected**: a command that achieved its primary effect either exits 0, or
+  exits non-zero with output that distinguishes "worktree not created" from
+  "worktree created, marker commit failed".
+- **Why it matters more than a cosmetic exit code**: this estate has a standing
+  rule that exit codes are read in band and never piped, precisely so a verdict
+  reaches the decision it guards. **A tool whose exit code is wrong turns that
+  discipline against the agent** — the seat that correctly reads `$?` gets the
+  wrong answer, and the seat that ignores it gets the right one. **It also
+  trains exit-code scepticism**, which is the opposite of what F-168's wrapper
+  is for.
+- **Second defect in the same command, already recorded**: it still sets the new
+  branch's upstream to `origin/main` (see F-167 — that is the `worktree add`
+  door; this is the `spawn` door PR #927 fixes). D2 unset it on both lanes.
+- **Candidate cure**: separate the two outcomes — either make the marker commit
+  non-fatal and exit 0 with a warning naming what did not happen, or fail before
+  creating the worktree so the exit code and the filesystem agree. **Whichever
+  is chosen, the exit code must describe the worktree's existence**, because
+  that is what every caller branches on.
+- **Target surface**: `agent-tools` spawn implementation, plus a test asserting
+  the exit code against the worktree's actual existence.
+- **Status**: open. Mitigated only by seats noticing the worktree exists despite
+  the failure — which is the same "an agent noticed" mitigation F-167 relies on,
+  and it is not a cure.
+- **Owner direction status**: unsolicited (agent-observed friction, first-class
+  under the Pelagic standing direction).
