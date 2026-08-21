@@ -69,6 +69,30 @@ retired at that ruling. **Do not reintroduce any of it.**
 was OPEN and awaiting review at the time of writing. Withdrawal is **not** a rollback
 action and is not performed by anything in this document.
 
+### The retirement's own ordering constraint — free if you get it right, a broken window if you do not
+
+**Measured 2026-08-21, browser-shaped `GET /mcp` (`Accept: text/html`), both hosts:**
+
+```text
+https://mcp.thenational.academy/mcp  -> 200 text/html  <title>Oak Curriculum MCP (HTTP)</title>
+https://www.thenational.academy/mcp  -> 200 text/html  <title>Oak Curriculum MCP (HTTP)</title>
+```
+
+So **`www/mcp` today serves THIS repository's own baked landing page**, and
+Oak-Web-Application's page at that path is **shadowed** by the origin rule. That is
+what makes the order of the two retirement changes matter:
+
+- **Cloud-Config #561 first, then this repository's landing-page removal** — the path
+  goes straight from our page to Oak-Web-Application's, with no broken window.
+- **The landing-page removal first** — a human visiting `www/mcp` gets the transport's
+  accept-gate error instead of a page. Measured on `mcp.` today, a request that does not
+  ask for `text/event-stream` draws
+  `{"error":"Accept header must include text/event-stream"}`; the landing-page teardown
+  PR's own report states that after teardown a browser `Accept` draws the same protocol
+  gate (that seat's measurement, not this author's).
+
+**Same two changes, no extra work — only the order.** Sequence #561 first.
+
 ### What that means for an operator reading the rest of this page
 
 - **Nothing here instructs you to preserve `www/mcp`.** Where a check below runs on
