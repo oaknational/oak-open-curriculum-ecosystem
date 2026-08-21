@@ -1162,3 +1162,107 @@ discriminating power has no weak reading; it has no reading.
   (`368eea8ec`, `1a6083942`, worktree `oak-warden-closeout-gate`), because pushing would invalidate #913's
   verified re-request. **They survive a context death and a reboot; they do not survive disk loss. The reason for
   holding expires when he leaves.**
+
+## Cloud-Config #561: a TARGETED apply IS warranted — the answer to his 2026-08-21 question
+
+**He asked: "have an agent run plan on … #561 and let me know if we need a targeted apply or not". The answer is YES, and the reason is a finding rather than a technicality.**
+
+```text
+Plan: 0 to add, 3 to change, 0 to destroy.
+  ~ cloudflare_ruleset.http_request_cache_settings    #561
+  ~ cloudflare_ruleset.http_request_origin            #561
+  ~ cloudflare_ruleset.http_ratelimit                 NOT #561 — out-of-band dashboard drift
+```
+
+**All three are `~ update in-place`. Replace, destroy and `-/+`: NONE — explicitly checked and stated as a fact
+rather than left as an absence.** No `must be replaced`, `forces replacement` or `will be destroyed` anywhere in
+either log; the `-` markers are nested `rules { }` removals inside in-place updates. **So the live origin ruleset
+is edited, not rebuilt.**
+
+**The third resource is DASHBOARD DRIFT, not merged-but-unapplied code** — a different and more interesting thing
+than the `#558` hypothesis the tripwire was watching for:
+
+```text
+cloudflare_ruleset.http_ratelimit would LOSE one rule:
+  description "Downloads api"  enabled = false  action = block
+  20 requests / 60s, mitigation_timeout 86400
+  expression: concat(http.host, http.request.uri.path) wildcard "*/api/downloads/lesson/*"
+  last_updated 2026-03-25
+```
+
+**Two measurements establish it is drift and not code:** a `grep` across all git history for `"Downloads api"`
+returns nothing — it has never been in the configuration, and it is a DIFFERENT rule from the codified
+`"Downloads API limit"` in `rate_limits.tf`, which is unaffected. And no commit has touched `rulesets/` on
+`origin/main` since 2026-08-01, so none since the last apply on 2026-08-04. Terraform's refresh phase names the
+mechanism outright: `Drift detected (update)`.
+
+**So someone created a disabled rate-limit rule in the Cloudflare dashboard on 25 March and never codified it,
+and an UNTARGETED APPLY WOULD SILENTLY DELETE IT.** It is `enabled = false`, so there is **no live-traffic
+consequence** — but parked configuration is deliberate, and disposing of it is a decision in its own right, not
+a side effect of a routing removal.
+
+**The invocation, verified by running it as a plan-only run rather than described** — it yields exactly
+`0 to add, 2 to change, 0 to destroy` with only #561's two resources:
+
+```bash
+cd infrastructure/cloudflare/rulesets
+terraform apply \
+  -target=cloudflare_ruleset.http_request_cache_settings \
+  -target=cloudflare_ruleset.http_request_origin
+```
+
+**The tail that matters: the drift SURVIVES a targeted apply and reappears in every future plan of this
+workspace until someone codifies or deletes the "Downloads api" rule.** It will ambush whoever next runs an
+untargeted apply. Separate follow-up, not part of #561.
+
+**#558 is ABSENT from the plan, exactly as the tripwire predicted.** Nothing merged that we believed had not.
+Also: `cloudflare_ruleset.http_request_firewall_custom` showed `Drift detected (update)` in refresh but produced
+NO planned action, so that drift now matches config — do not read the refresh line as a second finding.
+
+### The plan-only gate was structural, not careful
+
+Settings read from the Terraform Cloud API **before** anything was queued: `auto-apply=False`,
+`auto-apply-run-trigger=False`, `execution-mode=remote`, `vcs-repo=null` (CLI-driven), `locked=False`. Then the
+control fact, which is the one that matters:
+
+```text
+run-Nx4zRV32FotzKohc   planned_and_finished   plan-only=True   is-confirmable=False
+run-3z34jdrWcZcaeqNC   planned_and_finished   plan-only=True   is-confirmable=False
+```
+
+**`is-confirmable: false` means neither run COULD be applied.** `-input=false` throughout, so no prompt was
+answerable even in principle, and `terraform apply` was never run. **The difference between "I was careful" and
+"it was structurally impossible", and the second is what a seat should produce when the cost of being wrong is
+an unintended change to a production edge.**
+
+**Why this gate existed at all: the instruction "plan only, no apply" is TRUE as written and answers a different
+question against a remote backend.** `terraform plan` here queues a run in Oak's Terraform Cloud rather than
+computing locally, so a seat could obey the instruction literally and still trigger an apply if auto-apply were
+on. **This is the day's class arriving in a DIRECTIVE rather than an instrument** — the liaison wrote the intent,
+the Director gated the mechanism, and only the second is safe.
+
+### FOR HIM, and it is not the answer to his question
+
+**The Terraform Cloud token on this machine is his own PERSONAL USER TOKEN** — username `mg-oak`, bound to the
+owner's own Oak account, `is-service-account: False`. **So both plan runs are attributed to HIM in Oak's
+infrastructure audit log.** Nothing improper happened and the runs were unconfirmable. **But an agent has
+created two entries in an infrastructure audit trail under his personal identity, and he should be told rather
+than discover it.** Same pattern as the `mantagen`-authored PRs in the foreign repos, on a surface where the
+audit trail is the whole point.
+
+**And it settles the rights question honestly rather than favourably: plan rights exist AS HIM, not as an agent
+identity. The inherited "no agent holds plan rights" record is neither confirmed nor refuted — it was untested
+and remains so.**
+
+### Two adjacent findings, neither owner-gated
+
+- **`.gitignore:173-174` has the tfplan rule COMMENTED OUT** — `# example: *tfplan*` — so `*.tfplan` is not
+  ignored, and two such files in his working tree sit one `git add -A` from a public repository. **At 86 bytes
+  each against a cloud backend they are almost certainly remote-run pointer stubs rather than value-bearing
+  plans, so this is not escalated as an exposure.** The gitignore gap is the curable thing, and it is a one-line
+  change to a file nobody is mid-editing. **His files were left unread, unmoved and undeleted.**
+- **`git clone --branch` is a clean route past the `worktree add` footgun** — it set upstream to the lane's own
+  ref, not `origin/main`. The footgun did not fire. **Worth adding to F-167's candidate cures: the defect is
+  specific to `worktree add`, and cloning sidesteps it entirely.** The seat also declined `git worktree prune`
+  on a dead worktree registration, because pruning writes to the owner's repo metadata — the same boundary as
+  declining to update his branch.
