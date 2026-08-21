@@ -939,3 +939,102 @@ settled "which host is pinned". A conclusion decays; the evidence does not.
 - **Every worktree that pre-dates PR #927 still carries an `origin/main` upstream.** #927 fixes new spawns only.
   Run `git branch --unset-upstream` before the first push in any re-entered worktree — three occurrences across
   sessions, and one nearly pushed a 5,000-line teardown onto `main`.
+
+## Owner rulings 2026-08-21 — binding, re-asking any of these is a failure of THIS seat
+
+### `Oak-Web-Application#4450` (llms.txt, MCP-348): a curation review, not a rejection
+
+MG, verbatim, routed to the Director for their agents at his explicit word:
+
+> The existing Oak Open API homepage is appropriate: current llms.txt v2 guidance says software
+> documentation—especially API references and tutorials—is a primary use case. OpenAI, Anthropic and Gemini
+> likewise link to Markdown API documentation from their official llms.txt files.
+>
+> I would request one small revision to PR #4450:
+>
+> - Keep the Open API homepage, MCP entry and ecosystem repository.
+> - Replace the JSON Agent Skills index link with the directly useful Oak OpenAPI SKILL.md.
+> - Remove the RFC 9727 API catalogue, or move it to ## Optional.
+>
+> RFC 9727 defines the catalogue for automated API discovery. It is machine-readable, but that does not
+> automatically make it an LLM-friendly discovery surface. The llms.txt guidance prefers concise Markdown
+> content that an agent can consume directly. The catalogue and Agent Skills index are valid adjacent
+> machine/agent discovery surfaces; linking their raw JSON from the primary list is defensible, but weaker
+> than linking the actual Markdown skill.
+>
+> So: Open API yes; raw catalogue/index as primary LLM links, probably no. This is a clarity/curation change
+> rather than a fundamental flaw in the PR.
+
+**His argument is measured, not stylistic, and I verified it before relaying:** both links he demotes serve
+JSON, the one he promotes serves Markdown an agent reads directly.
+
+```text
+index.json  skills[0].url = /.well-known/agent-skills/oak-openapi/SKILL.md
+GET  …/.well-known/agent-skills/oak-openapi/SKILL.md   200  text/markdown  2382 bytes  name: oak-openapi
+GET  …/.well-known/api-catalog                          200  application/linkset+json; profile="…rfc9727"
+```
+
+**He authorised BOTH dispositions for the catalogue — remove, or move to `## Optional`.** The file already
+carries a populated `## Optional` section, so moving costs nothing. The implementing seat picks one and states
+which in the PR description. **Routing that choice back to him would be re-asking a discharged gate.**
+
+The MCP entry he wants kept sits in `## AI Tools`; the other three lines share `## API & Developers`.
+
+### The queue as delivered to him this morning, in the order he received it
+
+1. **The portal question** — server URL and the three carousel image URLs: `www` or `mcp.`?
+2. **Raise the Claude Code monthly overage limit** at `claude.ai/admin-settings/claude-code`. The automated
+   reviewer has been dark since 2026-08-19: #921, #922, #923 and #924 each carry a `claude` `COMMENTED` review
+   whose whole body is the spend-limit skip notice. **A review row exists and says nothing** — so any count of
+   reviewer coverage reads those four as reviewed. The same limit killed a working seat mid-task on 20 Aug
+   holding ~5,100 uncommitted deletions. **Ignore the notice's "reopen this pull request" instruction:** a
+   fresh push triggers the reviewer, and four seats are pushing to those PRs anyway.
+3. **#4453 is under his review as of 08:47Z** — link 1 of the chain. **#4443 beside it, never review-requested
+   from any human since 17 Aug.**
+4. **A question, not an ask: may we update `Cloud-Config#558` against `main`?** It is his own PR and `BEHIND`.
+   Updating an owner's in-flight terraform branch unasked is the class of act the OWA authorisation gets
+   withdrawn over, so it was put as a question.
+5. **ADR-219 / MCP-349, the coupled decision** — recommendation proxy the alpha, with the falsifier attached.
+
+### `#4453`'s red cross is Percy and it blocks nothing — verified independently before relaying
+
+```text
+required_status_checks.contexts on OWA main:
+  SonarCloud Code Analysis · Pa11y · lint, check types · terraform-lint-format · test, Sonar
+  ALL FIVE SUCCESS on #4453
+percy/oak-web-application                                    ERROR      <- not in the required set
+Percy (GitHub Actions leg)                                   SUCCESS
+Manual status: Percy (Preview – oak-web-application-website) SUCCESS
+control across recent open OWA PRs: #4450 ERROR  #4448 ERROR  #4452 SUCCESS  #4446 SUCCESS
+```
+
+**The workflow that runs Percy passes; the Percy service status errors.** A succeeding workflow whose published
+service status errors is a broken reporting path, not a broken build. So `mergeStateStatus=BLOCKED` on #4453
+means exactly `REVIEW_REQUIRED`. **Not claimed:** why Percy errors, or whether it hides a real visual regression
+in OWA. Deliberately not ticketed in a foreign repo on his last day.
+
+**Consequence for the record:** the older note that #4443 had "4 visual changes needing review" may have been
+this same condition rather than genuine pending approvals. Unconfirmed — treat as unknown, not as cleared.
+
+### THE CLASS THIS THREAD KEEPS PAYING FOR, now named
+
+**An instrument returning a TRUE value that answers a DIFFERENT question.** Three unrelated surfaces in two
+days, each one nearly inverting a conclusion:
+
+- **`cf-ray`** proves Cloudflare fronts something, not that it is YOUR Cloudflare. The Clerk host chains out to
+  a Clerk-operated worker, so Oak's Security Events cover none of the DCR surface.
+- **A review row** proves a reviewer object exists, not that anything was reviewed. Four spend-limit skip
+  notices counted as reviews, across two vendors — the napkin note naming Codex as well as `claude` is the
+  second independent observation.
+- **`author=mantagen`** proves the credential used, not who authored the work. Every agent in OWA and
+  Cloud-Config commits under the owner credential by design, so authorship cannot separate our PRs from his.
+  **Creation time against the staffing record is the live instrument.** This one nearly had us update the
+  owner's own branch unasked.
+
+**The cure is not vigilance, it is naming what the instrument measures before reading it as an answer.**
+
+**And it retro-opens a closed audit:** the 2026-08-20 finding that 15 of 16 `CHANGES_REQUESTED` PRs show "no
+push since review" was read as _the ball is with the author_. If some of those reviews are skip notices rather
+than findings, it may instead mean **nobody reviewed the PR at all** — a different and worse queue state.
+**Do not inherit "the answer is ZERO" as the whole truth.** Not re-run on 21 Aug because curing four live
+findings was worth more; recorded as open rather than settled.
