@@ -3899,3 +3899,56 @@ commit SHA and the closing plan reference.
   urgent-today, and it should not wait for a fourth instance.**
 - **Owner direction status**: unsolicited (agent-observed friction, first-class
   under the Pelagic standing direction).
+
+### F-169 — `record-staged` writes a bundle fingerprint over an EMPTY index without complaint
+
+- **Source**: owner-liaison seat `Phoenix guards Scorch` (`85bdbf`) observed it live,
+  2026-08-21; Director seat `Tulip mends Bark` (`e6d535`) verified the mechanism
+  against `origin/main` source and **narrowed the reported severity**. Comms
+  event `e0de5e68`.
+- **Surface**: `pnpm agent-tools:commit-queue -- record-staged`.
+- **Observed**: a `git add` failed on a transient `index.lock` (real contention —
+  a peer seat was mid-`git commit` in another worktree — not the stale-lock trap
+  the brief warns about; age, size and holder were checked and it had already
+  cleared). **`record-staged` then exited 0 against an empty index**, writing a
+  `staged_bundle_fingerprint` computed over empty `nameStatus` and empty `patch`.
+  So the queue entry carried a fingerprint attesting to nothing.
+- **Expected**: recording a staged bundle when nothing is staged is a
+  contradiction in terms and should fail loudly.
+- **Mechanism, read from source rather than inferred**:
+  `recordStagedBundle` (`agent-tools/src/commit-queue/core.ts:135`) takes
+  `stagedNameStatus` and `stagedPatch`, calls
+  `createStagedBundleFingerprint` on them, and writes the result
+  **unconditionally. There is no emptiness check on either input.**
+- **SEVERITY IS LOWER THAN FIRST REPORTED, and the correction matters.** The
+  first account held that `verify-staged` would then "compare nothing to nothing
+  and agree", making this a green gate over no work at all. **It would not.**
+  `verifyStagedBundle` (`core.ts:57`) calls
+  `stagedFileMismatch(stagedNameOnly, intent.files)`, which computes
+  `missing = intendedFiles.filter(f => !stagedFiles.includes(f))` — **so with an
+  empty index every intended file is missing and verify FAILS** with "staged
+  files do not exactly match intent files". The both-empty escape is not
+  reachable either: the intent's `files` array is `minItems: 1` in
+  `active-claims.schema.json`. **So the queue's pre-commit verification remains a
+  working backstop.**
+- **What the defect therefore IS**: a **false attestation persisted into shared
+  coordination state**. The registry records a fingerprint that certifies a
+  bundle which does not exist, and any reader trusting `staged_bundle_fingerprint`
+  as evidence that staging happened is misled — including a successor auditing a
+  half-finished commit window, which is exactly when that field is read. **It is
+  a record-integrity defect, not a gate bypass.**
+- **Honesty about my own instrument**: this is a source reading, not an executed
+  reproduction. I did not run `record-staged` against an empty index to confirm
+  the exit code, nor `verify-staged` to confirm it fails. **The liaison's exit-0
+  observation is first-hand; my narrowing of the consequence is read from code
+  and should be reproduced before being relied on.**
+- **Candidate cure**: assert `git diff --staged` is non-empty before calling
+  `record-staged` — the workaround the liaison adopted immediately — and, better,
+  guard it inside `recordStagedBundle` so every caller inherits it: refuse when
+  `stagedNameStatus` normalises to empty. Cheap, local, and no call-site changes.
+- **Target surface**: `agent-tools/src/commit-queue/core.ts`
+  (`recordStagedBundle`), with a unit test asserting the refusal.
+- **Status**: open. Mitigated by the caller-side non-empty assertion now in use
+  by one seat, which is not a cure for other callers.
+- **Owner direction status**: unsolicited (agent-observed friction, first-class
+  under the Pelagic standing direction).
