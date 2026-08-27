@@ -19,6 +19,10 @@ import { readRepoDocument } from '../../src/collaboration-state/test-helpers/rep
  * source constant to derive from — for the shipped plugin's binding, this test
  * is the authority rather than a copy of one.
  *
+ * Repointed from `www.thenational.academy/mcp` to `mcp.thenational.academy/mcp`
+ * at the owner's domain move (MCP-622, decided 2026-08-19; plugin repoint
+ * MCP-638). The www host no longer serves the MCP protocol.
+ *
  * Learned from MCP-509: a guard that reads an absent value asserts nothing.
  * The config is parsed through a schema so a shape change fails loudly instead
  * of quietly comparing `undefined` against `undefined`.
@@ -26,7 +30,7 @@ import { readRepoDocument } from '../../src/collaboration-state/test-helpers/rep
  * ADR-078 helper-mediated committed-artefact reads.
  */
 
-const CANONICAL_MCP_ENDPOINT = 'https://www.thenational.academy/mcp';
+const CANONICAL_MCP_ENDPOINT = 'https://mcp.thenational.academy/mcp';
 
 const PLUGIN_MCP_CONFIG_PATH = 'plugins/oak-open-curriculum/.mcp.json';
 const MCP_ENABLED_SKILL_PATH =

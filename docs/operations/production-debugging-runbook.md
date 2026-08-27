@@ -2,25 +2,32 @@
 
 This runbook provides step-by-step debugging workflows for the Oak Open Curriculum Ecosystem using Phase 2 observability features (correlation IDs, timing metrics, error enrichment).
 
-**Last Updated**: 2026-08-07  
+**Last Updated**: 2026-08-24  
 **Applies To**: HTTP Server (Vercel), Legacy Stdio Server (local/Claude Desktop)
 
 ## Production Endpoints and Hosts
 
-- **The canonical client URL is `https://www.thenational.academy/mcp` —
-  permanently** (owner ruling, 2026-08-07: "www…/mcp is now and forever the
-  canonical url"). Clients, connector configs, and documentation point here;
-  never re-point a client at a legacy host.
+- **The canonical client URL is `https://mcp.thenational.academy/mcp`**
+  (owner decision, 2026-08-19, recorded on MCP-622 — superseding the
+  2026-08-07 www ruling previously quoted here). Clients, connector configs,
+  and documentation point here; never re-point a client at a legacy host.
+- `www.thenational.academy/mcp` served as the canonical URL from 2026-08-06 to
+  the domain move and no longer serves the MCP protocol (measured 2026-08-24: 404
+  on a protocol-shaped POST and on its protected-resource metadata path).
+  What www should tell already-installed clients is an open ruling on
+  MCP-638.
 - `curriculum-mcp-alpha.oaknational.dev` is a legacy compatibility host;
-  whether it continues to serve is an open owner choice, and the ruling binds
-  the client/production URL and self-description only.
-- The OAuth protected-resource metadata self-describes the canonical host on
-  BOTH hosts (verified in production 2026-08-07), so a client holding an
-  alpha-era resource binding refuses to present its token per RFC 8707 —
-  correct client conduct, not a server defect. The cure is re-registering the
-  client against the canonical URL, never loosening resource validation.
-- Known residue: the root protected-resource-metadata path is unrouted
-  (MCP-347).
+  whether it continues to serve is an open owner choice.
+- The OAuth protected-resource metadata self-describes the canonical host, so
+  a client holding a stale resource binding refuses to present its token per
+  RFC 8707 — correct client conduct, not a server defect. The cure is
+  re-registering the client against the canonical URL, never loosening
+  resource validation.
+- The root protected-resource-metadata path serves on the canonical host
+  (measured 2026-08-24: `/.well-known/oauth-protected-resource` returns 200
+  with the PRM naming the canonical resource) — the domain move cured the
+  previously recorded MCP-347 residue, which was an artefact of the www edge
+  forwarding only the `/mcp*` and suffixed well-known paths.
 
 ## Overview of Observability Features
 
