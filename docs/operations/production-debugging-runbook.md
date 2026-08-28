@@ -9,8 +9,10 @@ This runbook provides step-by-step debugging workflows for the Oak Open Curricul
 
 - **The canonical client URL is `https://mcp.thenational.academy/mcp`**
   (owner decision, 2026-08-19, recorded on MCP-622 — superseding the
-  2026-08-07 www ruling previously quoted here). Clients, connector configs,
-  and documentation point here; never re-point a client at a legacy host.
+  2026-08-07 www ruling previously quoted here). Clients and connector
+  configs point here; never re-point a client at a legacy host. Some
+  app-workspace docs still describe the www-era topology; their rewrite
+  rides the MCP-622 follow-ups.
 - `www.thenational.academy/mcp` served as the canonical URL from 2026-08-06 to
   the domain move and no longer serves the MCP protocol (measured 2026-08-24: 404
   on a protocol-shaped POST and on its protected-resource metadata path).
