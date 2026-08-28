@@ -266,7 +266,9 @@ steps below were run end to end on Windows 11 in August 2026.
    Scale to your machine: cap `memory` at roughly half your RAM, `processors` at
    no more than your core count, and keep swap at least equal to memory so the
    gates page rather than die. Apply with `wsl --shutdown` (also from
-   PowerShell) — this closes any running Ubuntu session; reopen it with `wsl`.
+   PowerShell) — this closes any running Ubuntu session; reopen it with
+   `wsl -d Ubuntu` (naming the distribution again, in case another one is the
+   default on your machine).
 
 3. **Install the base toolchain inside Ubuntu** — start with
    `sudo apt update && sudo apt install -y curl git ca-certificates`, then follow
@@ -353,8 +355,7 @@ steps below were run end to end on Windows 11 in August 2026.
 
 8. **Clone and verify** — clone inside the Linux filesystem, never under
    `/mnt/c` (cross-boundary file access is an order of magnitude slower), then
-   install the pinned Node before continuing with
-   [Install and verify](#install-and-verify) below:
+   install the pinned Node:
 
    ```bash
    mkdir -p ~/oak && cd ~/oak
@@ -363,7 +364,9 @@ steps below were run end to end on Windows 11 in August 2026.
    nvm install
    ```
 
-   On a capped VM,
+   Then pick up [Install and verify](#install-and-verify) below at
+   `pnpm install` — its opening clone commands are the ones you have just
+   run. On a capped VM,
    prefix the verify commands with `TURBO_CONCURRENCY=1` (add
    `VITEST_MAX_WORKERS=2` if memory stays tight — the symptom of a starved
    suite: vitest reports 5000 ms timeouts, or the gate exits with no error text).
