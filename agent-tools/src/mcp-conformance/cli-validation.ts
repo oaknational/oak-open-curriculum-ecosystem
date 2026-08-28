@@ -184,7 +184,10 @@ function validateTarget(target: string, state: CliState): string | undefined {
  * them as parameters) even though the redactor omits them to avoid masking
  * error/status codes. A target that authenticates via `?api_key=` in its
  * URL — some third-party MCP hosts do — is refused by design; this CLI
- * targets Oak's own surface.
+ * targets Oak's own surface. The raw scan intentionally OVER-refuses: a
+ * `code=`/`token=` substring anywhere in the target (a path segment, a
+ * `promo-code=` param) is refused too — a loud false refusal over a silent
+ * credential echo, accepted as a residual.
  */
 const TARGET_CREDENTIAL_PARAM_PATTERN =
   /\b(?:access_token|refresh_token|client_secret|id_token|code|code_verifier|token|api_key|apikey|accessToken|refreshToken|clientSecret|idToken|codeVerifier)=/iu;

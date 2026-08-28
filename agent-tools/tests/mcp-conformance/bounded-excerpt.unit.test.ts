@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { boundedExcerpt, redactCredentials } from '../../src/mcp-conformance/bounded-excerpt.js';
+import {
+  boundedExcerpt,
+  CREDENTIAL_HEADER_NAMES,
+  CREDENTIAL_PARAM_NAMES,
+  redactCredentials,
+} from '../../src/mcp-conformance/bounded-excerpt.js';
 
 /**
  * The credential-redaction seam. Excerpts ride failure reasons onto STDOUT
@@ -111,13 +116,15 @@ describe('redactCredentials — query-param and JSON token shapes', () => {
     expect(redactCredentials('sent BeArEr abc.def ok')).toBe('sent BeArEr [redacted] ok');
   });
 
-  it('redacts bare Basic and DPoP scheme tokens, not only Bearer', () => {
-    const out = redactCredentials('tried Basic dXNlcjpzM2NyZXQ= then DPoP eyJhbGc.SEC.sig');
-
-    expect(out).not.toContain('dXNlcjpzM2NyZXQ');
-    expect(out).not.toContain('eyJhbGc.SEC.sig');
-    expect(out).toContain('Basic [redacted]');
-    expect(out).toContain('DPoP [redacted]');
+  it('leaves ordinary prose after the word "Basic" alone — the bare-scheme rule is Bearer-only', () => {
+    // Bare Basic/DPoP redaction was tried and reverted: `basic` is an English
+    // word, and the rule ate the next word of legitimate diagnostics. Their
+    // bare token forms are ACCEPTED RESIDUALS (header-line forms still mask);
+    // this test pins the decision so the widening does not quietly return.
+    expect(redactCredentials('Basic auth failed for user')).toBe('Basic auth failed for user');
+    expect(redactCredentials('Authorization: Basic dXNlcjpzM2NyZXQ=')).toBe(
+      'Authorization: [redacted]',
+    );
   });
 
   it('redacts api-key-family header lines, whose values follow a colon, not an equals', () => {
@@ -153,5 +160,44 @@ describe('redactCredentials — query-param and JSON token shapes', () => {
     expect(out).not.toContain('u@h2');
     expect(out).toContain('//[redacted]@h/mcp');
     expect(out).toContain('//[redacted]@h2/x');
+  });
+});
+
+/**
+ * THE INVARIANT, enumerated — the filter's whole promise in one table: every
+ * credential name masks in EVERY form its text can take. Three review rounds
+ * each found a name present in one rule and missing from a sibling; the rules
+ * now derive from the exported lists, and this table proves the derivation
+ * covers the cross-product. A name added to a list is tested in all its forms
+ * automatically; a name added to a rule by hand has nowhere to hide.
+ */
+describe('redactCredentials — the names × forms invariant table', () => {
+  const SECRET = 'SEKRIT-3NTROPY-9';
+
+  it.each([...CREDENTIAL_PARAM_NAMES])('%s masks in key=value and JSON-field form', (name) => {
+    const keyValue = redactCredentials(`echo ${name}=${SECRET} end`);
+    expect(keyValue).not.toContain(SECRET);
+    expect(keyValue).toContain('[redacted]');
+
+    const jsonField = redactCredentials(`{"${name}":"${SECRET}"}`);
+    expect(jsonField).not.toContain(SECRET);
+    expect(jsonField).toContain('[redacted]');
+  });
+
+  it.each([...CREDENTIAL_HEADER_NAMES])('%s masks as a header line and as a JSON field', (name) => {
+    const headerLine = redactCredentials(`${name}: ${SECRET}`);
+    expect(headerLine).not.toContain(SECRET);
+    expect(headerLine).toContain('[redacted]');
+
+    const jsonField = redactCredentials(`{"${name}":"${SECRET}"}`);
+    expect(jsonField).not.toContain(SECRET);
+    expect(jsonField).toContain('[redacted]');
+  });
+
+  it('is idempotent over a mixed document — masking masked text changes nothing', () => {
+    const mixed = `Authorization: Bearer ${SECRET}\n{"api_key":"${SECRET}"}\n?access_token=${SECRET}`;
+    const once = redactCredentials(mixed);
+    expect(once).not.toContain(SECRET);
+    expect(redactCredentials(once)).toBe(once);
   });
 });
