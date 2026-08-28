@@ -26,6 +26,7 @@
 
 import {
   DOCUMENTATION_RESOURCES,
+  EEF_INTERPRETATION_RESOURCE,
   NAVIGATION_GUIDANCE_URIS,
   WIDGET_URI,
 } from '@oaknational/curriculum-sdk/public/mcp-tools';
@@ -49,6 +50,10 @@ const PUBLIC_RESOURCE_URIS = [
   // allowlist later turns a creation document live, its public/authed
   // classification is made HERE, at that reviewed change.
   ...NAVIGATION_GUIDANCE_URIS,
+  // EEF interpretation guide (ADR-205 classification made at the reviewed change
+  // turning the row live): static SDK-compiled markdown rendered from the
+  // compile-time EEF corpus — public-reference content, no user or tenant data.
+  EEF_INTERPRETATION_RESOURCE.uri,
 ] as const;
 
 /**

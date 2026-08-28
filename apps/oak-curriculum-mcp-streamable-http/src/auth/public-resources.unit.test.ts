@@ -8,6 +8,7 @@ import { describe, it, expect } from 'vitest';
 import {
   NAVIGATION_GUIDANCE_URIS,
   CREATION_GUIDANCE_URIS,
+  EEF_INTERPRETATION_RESOURCE,
   WIDGET_URI,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { isPublicResourceUri } from './public-resources.js';
@@ -33,6 +34,10 @@ describe('isPublicResourceUri', () => {
       for (const uri of CREATION_GUIDANCE_URIS) {
         expect(isPublicResourceUri(uri), uri).toBe(false);
       }
+    });
+
+    it('classifies the EEF interpretation guide as public (static corpus markdown, no user data)', () => {
+      expect(isPublicResourceUri(EEF_INTERPRETATION_RESOURCE.uri)).toBe(true);
     });
   });
 

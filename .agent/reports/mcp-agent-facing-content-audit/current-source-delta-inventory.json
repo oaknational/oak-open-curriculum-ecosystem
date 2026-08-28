@@ -160,7 +160,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/auth/public-resources.ts",
-      "semanticSha256": "75bbea61c4b91c53a1ec93133852f9841844f94eb448973f9bbecfd855239227",
+      "semanticSha256": "2f38a2e122c5ef80851ab8b18018ce1e188c7cf2f17bd1f1306f52d89833c916",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },

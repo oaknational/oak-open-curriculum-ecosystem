@@ -67,7 +67,7 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // resource (MCP-242's re-review of the pre-deletion file is superseded by
   // that retirement); the file now composes SDK-owned URI sets only.
   'apps/oak-curriculum-mcp-streamable-http/src/auth/public-resources.ts': excluded(
-    '75bbea61c4b91c53a1ec93133852f9841844f94eb448973f9bbecfd855239227',
+    '2f38a2e122c5ef80851ab8b18018ce1e188c7cf2f17bd1f1306f52d89833c916',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-518: the public-path sets, and the case-normalisation rule they are
