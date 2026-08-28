@@ -284,27 +284,35 @@ steps below were run end to end on Windows 11 in August 2026.
    directory is not, and with corepack alone every commit fails — currently
    misreported as a formatting failure.
 4. **Install gitleaks** — the pre-push hook requires it, and Ubuntu's sources
-   do not carry it. Build it with Go, which verifies the module through Go's
-   checksum database. Three steps, because a fresh Ubuntu has no Go and
-   `go install` puts binaries in a directory that is not on the shell's `PATH`:
+   do not carry it. Install the released binary with the same version and
+   content pins CI uses, architecture-aware (gitleaks is a security control,
+   so its binary is content-pinned, not just version-pinned; both digests
+   below come from the official `gitleaks_8.30.0_checksums.txt`, and the x64
+   value is byte-identical to the pin in `.github/workflows/ci.yml`, "Install
+   pinned gitleaks" — CI is where version and digest are kept current, so
+   when CI bumps its pin, mirror it here):
 
    ```bash
-   sudo apt install -y golang-go
-   go install github.com/zricethezav/gitleaks/v8@latest
-   echo 'export PATH="$PATH:$(go env GOPATH)/bin"' >> ~/.bashrc && source ~/.bashrc
+   version=8.30.0
+   case "$(dpkg --print-architecture)" in
+     amd64) asset="gitleaks_${version}_linux_x64.tar.gz"
+            expected=79a3ab579b53f71efd634f3aaf7e04a0fa0cf206b7ed434638d1547a2470a66e ;;
+     arm64) asset="gitleaks_${version}_linux_arm64.tar.gz"
+            expected=b4cbbb6ddf7d1b2a603088cd03a4e3f7ce48ee7fd449b51f7de6ee2906f5fa2f ;;
+     *)     echo "unsupported architecture: $(dpkg --print-architecture)" ;;
+   esac
+   curl -sSfL --proto '=https' --proto-redir '=https' -o "$asset" \
+     "https://github.com/gitleaks/gitleaks/releases/download/v${version}/${asset}"
+   echo "${expected}  ${asset}" | sha256sum -c - &&
+     sudo tar -C /usr/local/bin -xzf "$asset" gitleaks && rm "$asset"
    ```
 
-   The module path really is `zricethezav`: that is the path gitleaks declares
-   in its `go.mod`, and `go install github.com/gitleaks/gitleaks/v8@latest`
-   fails with a "module declares its path as" error. Ubuntu 24.04 and later
-   package a Go that either meets gitleaks' requirement or fetches the required
-   toolchain itself (checksum-verified); an older Ubuntu stops with a plain Go
-   version error. If you would rather install the released binary, mirror the
-   pinned, digest-checked block CI uses (`.github/workflows/ci.yml`, "Install
-   pinned gitleaks") rather than downloading an unverified asset — gitleaks is
-   a security control, so its binary is content-pinned, not just
-   version-pinned, and CI is the one place that version and digest are kept
-   current.
+   If you already have Go, `go install github.com/zricethezav/gitleaks/v8@latest`
+   also works and verifies the module through Go's checksum database. The path
+   really is `zricethezav` — the one gitleaks declares in its `go.mod`; the
+   `github.com/gitleaks/gitleaks/v8` spelling fails with a "module declares
+   its path as" error — and `$(go env GOPATH)/bin` must be on `PATH` for the
+   pre-push hook to find the result.
 
 5. **Install `gh`** (the GitHub CLI) — the repo's PR and agent tooling uses
    it. Ubuntu's own package lags, so install from
@@ -319,16 +327,29 @@ steps below were run end to end on Windows 11 in August 2026.
    installed, so find the one you have and configure that path:
 
    ```bash
-   helper=$(ls "/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe" \
-               /mnt/c/Users/*/AppData/Local/Programs/Git/mingw64/bin/git-credential-manager.exe \
-               2>/dev/null | head -1)
+   localappdata=$(wslpath "$(cmd.exe /c "echo %LOCALAPPDATA%" 2>/dev/null | tr -d '\r')" 2>/dev/null)
+   helper=""
+   for candidate in \
+     "/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe" \
+     "/mnt/c/Program Files/Git/clangarm64/bin/git-credential-manager.exe" \
+     "${localappdata}/Programs/Git/mingw64/bin/git-credential-manager.exe" \
+     "${localappdata}/Programs/Git/clangarm64/bin/git-credential-manager.exe"; do
+     [ -x "$candidate" ] && { helper="$candidate"; break; }
+   done
    [ -n "$helper" ] && git config --global credential.helper "${helper// /\\ }"
    echo "${helper:-no Git for Windows credential helper found}"
    ```
 
-   The first path is an all-users install, the second a per-user one. If neither
-   exists you do not have Git for Windows: authenticate with `gh auth login`
-   instead, and do not configure a helper path that is not there.
+   The first pair are all-users installs (x64, then Windows-on-ARM's
+   `clangarm64` layout), the second pair per-user ones — resolved from the
+   CURRENT user's `%LOCALAPPDATA%` itself (converted with `wslpath`), never
+   globbed across every profile and never reconstructed from `%USERNAME%`:
+   on a shared machine a glob can configure another user's helper, and an
+   account rename can leave the profile directory differing from the
+   username. Each candidate is checked executable before it is configured.
+   If none exists you do not have Git for Windows: authenticate with
+   `gh auth login` instead, and do not configure a helper path that is not
+   there.
 
 8. **Clone and verify** — clone inside the Linux filesystem, never under
    `/mnt/c` (cross-boundary file access is an order of magnitude slower), then
