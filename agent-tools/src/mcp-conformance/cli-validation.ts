@@ -80,7 +80,7 @@ function validateCompatUsage(state: CliState): string | undefined {
   if (state.baselineDir !== undefined) {
     return '--compat keeps no baseline to read — drop --baseline-dir';
   }
-  return validateCompatTransportSecurity(state);
+  return undefined;
 }
 
 /**
@@ -88,22 +88,17 @@ function validateCompatUsage(state: CliState): string | undefined {
  * wire. Loopback is exempt — local capture against a dev server is the
  * documented workflow, and those bytes never leave the machine.
  *
- * Fails CLOSED on an unparseable target: a credential-gating check that waves
- * through a URL it cannot inspect is no gate at all — the token would still
- * ride the run to whatever the child makes of the string.
+ * Lives in the COMMON checks because the exposure is credential-scoped, not
+ * operation-scoped: drive and the authed suites carry the same token as
+ * compat. (Review found the earlier compat-only placement left
+ * `--drive --credentials-file` against `http://` unrefused.) The caller has
+ * already established the target parses as an http(s) URL.
  */
-function validateCompatTransportSecurity(state: CliState): string | undefined {
-  if (state.credentialsFile === undefined || state.target === undefined) {
+function validateTransportSecurity(parsedTarget: URL, state: CliState): string | undefined {
+  if (state.credentialsFile === undefined || parsedTarget.protocol === 'https:') {
     return undefined;
   }
-  const parsed = URL.parse(state.target);
-  if (parsed === null) {
-    return '--credentials-file needs a valid https --target — this target does not parse as a URL';
-  }
-  if (parsed.protocol === 'https:') {
-    return undefined;
-  }
-  const loopback = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(parsed.hostname);
+  const loopback = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(parsedTarget.hostname);
   return loopback
     ? undefined
     : '--credentials-file with a non-https --target would send the token in clear — use https (loopback targets are exempt)';
@@ -142,62 +137,57 @@ function validateCommonUsage(state: CliState): string | undefined {
   if (state.target === undefined || state.target.trim() === '') {
     return '--target is required';
   }
-  return validateTargetHasNoEmbeddedCredential(state.target);
+  return validateTarget(state.target, state);
 }
 
 /**
- * Every operation echoes the target verbatim into stdout and retained reports,
- * so a credential carried in the target would escape the owner-only capture the
- * credential flags protect. Refuse both shapes at the edge — userinfo
- * (`user:pass@`) and a token in the query or fragment (`?access_token=…`) —
- * rather than sanitising at every emit site. The emit-site redaction is the
- * belt behind these braces, for the fail-open case where the target does not
- * parse and cannot be inspected here.
+ * The target checks, in dependency order: it must parse, it must be http(s),
+ * it must carry no credential, and a credentialed run must not put the token
+ * on a cleartext wire.
+ *
+ * FAILS CLOSED on a target that does not parse or is not http(s), for every
+ * operation. Every operation hands the target to `mcpjam --url`, which speaks
+ * HTTP — there is no legitimate non-URL or non-http(s) target — and a
+ * validator that waves through what it cannot inspect is no validator: review
+ * showed the earlier fail-open let a scheme-typo target smuggle `?token=` past
+ * every guard, and a `user:secret@host` target parse as protocol `user:`.
+ * Refusing both classes outright deletes the residual the emit sites'
+ * redaction previously had to justify itself against.
  */
-function validateTargetHasNoEmbeddedCredential(target: string): string | undefined {
+function validateTarget(target: string, state: CliState): string | undefined {
   const parsed = URL.parse(target);
   if (parsed === null) {
-    return undefined;
+    return '--target must be a valid http(s) URL — this target does not parse as a URL';
+  }
+  if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+    return `--target must be an http(s) URL — got protocol ${JSON.stringify(parsed.protocol)}`;
   }
   if (parsed.username !== '' || parsed.password !== '') {
     return '--target must not embed credentials (user:password@) — the target is echoed into reports; pass credentials via --credentials-file';
   }
-  if (targetCarriesCredentialParam(parsed)) {
+  if (TARGET_CREDENTIAL_PARAM_PATTERN.test(target)) {
     return '--target must not carry credentials in its query or fragment (access_token, token, code, …) — the target is echoed into reports; pass credentials via --credentials-file';
   }
-  return undefined;
+  return validateTransportSecurity(parsed, state);
 }
 
 /**
- * Parameter names whose presence on a target marks it as credential-bearing.
+ * Credential-parameter names scanned for over the RAW target string, not the
+ * parsed structure: review showed a fragment carrying its own `?`
+ * (`#/cb?code=…`, the SPA OAuth-callback shape) makes `URLSearchParams` read
+ * the key as `/cb?code` and slip a structural check. A raw scan cannot be
+ * misled by structure.
+ *
  * Deliberately BROADER than the redactor's key set in `bounded-excerpt.ts`:
- * this list REJECTS a target rather than masking display text, so `token` and
- * bare `code` are safe to name here (no legitimate Oak target carries them)
- * even though the redactor omits them to avoid masking error/status codes. A
- * target that authenticates via `?api_key=` in its URL — some third-party MCP
- * hosts do — is refused by design; this CLI targets Oak's own surface.
+ * this pattern REJECTS a target rather than masking display text, so `token`
+ * and bare `code` are safe to name here (no legitimate Oak target carries
+ * them as parameters) even though the redactor omits them to avoid masking
+ * error/status codes. A target that authenticates via `?api_key=` in its
+ * URL — some third-party MCP hosts do — is refused by design; this CLI
+ * targets Oak's own surface.
  */
-const TARGET_CREDENTIAL_PARAM_NAMES: ReadonlySet<string> = new Set([
-  'access_token',
-  'refresh_token',
-  'client_secret',
-  'id_token',
-  'code',
-  'code_verifier',
-  'token',
-  'api_key',
-  'apikey',
-]);
-
-/** True when the query string or fragment names a credential parameter. */
-function targetCarriesCredentialParam(url: URL): boolean {
-  const namesACredential = (params: URLSearchParams): boolean =>
-    [...params.keys()].some((key) => TARGET_CREDENTIAL_PARAM_NAMES.has(key.toLowerCase()));
-  // `url.hash` is '' or starts with '#'; slice(1) handles both.
-  return (
-    namesACredential(url.searchParams) || namesACredential(new URLSearchParams(url.hash.slice(1)))
-  );
-}
+const TARGET_CREDENTIAL_PARAM_PATTERN =
+  /\b(?:access_token|refresh_token|client_secret|id_token|code|code_verifier|token|api_key|apikey|accessToken|refreshToken|clientSecret|idToken|codeVerifier)=/iu;
 
 /**
  * Validates the scanned CLI state, returning the bare refusal reason (no

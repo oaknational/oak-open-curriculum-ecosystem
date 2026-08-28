@@ -61,7 +61,7 @@ describe('validateCliState — the compat operation has its own vocabulary', () 
     ).toBeUndefined();
   });
 
-  it('refuses credentials against an unparseable target — the transport gate fails closed', () => {
+  it('refuses credentials against an unparseable target — the target gate fails closed', () => {
     // A credential-gating check that waves through a URL it cannot inspect is
     // no gate: the token would still ride the run.
     const refusal = validateCliState({
@@ -70,6 +70,25 @@ describe('validateCliState — the compat operation has its own vocabulary', () 
       target: 'not a url',
     });
     expect(refusal).toContain('does not parse as a URL');
+  });
+
+  it('the cleartext refusal covers drive and the suites too — the exposure is credential-scoped', () => {
+    // Review found the earlier compat-only placement left a drive or verdict
+    // run's token on a cleartext wire unrefused.
+    const cleartext = { target: 'http://mcp.example.test/mcp', credentialsFile: 'tmp/creds.json' };
+    expect(validateCliState({ ...RUNNABLE, drive: true, suites: [], ...cleartext })).toContain(
+      'https',
+    );
+    expect(validateCliState({ ...RUNNABLE, ...cleartext })).toContain('https');
+    expect(
+      validateCliState({
+        ...RUNNABLE,
+        drive: true,
+        suites: [],
+        target: 'http://localhost:3333/mcp',
+        credentialsFile: 'tmp/creds.json',
+      }),
+    ).toBeUndefined();
   });
 
   it('refuses --compat with --drive: they are different operations', () => {
@@ -177,15 +196,36 @@ describe('validateCliState — refusals are loud, the runnable state is silent',
     ).toBeUndefined();
   });
 
-  it('an uncredentialed unparseable target is ACCEPTED even when it carries a credential shape — the deliberate fail-open the emit-site redaction exists for', () => {
-    // The validator cannot inspect what it cannot parse, and an uncredentialed
-    // run puts no token on the wire, so it is let through to the child (which
-    // will reject it on its own terms). This pins that branch, because a reader
-    // who "fixes" it to fail closed removes the one reason the emit sites redact
-    // the target at all — and that belt is what makes this branch safe.
+  it('an unparseable target is refused for EVERY operation, credentialed or not — fail closed', () => {
+    // The first cut of this branch failed open uncredentialed, justified by
+    // "the emit sites redact the target". Review falsified that: the
+    // redactor's name set is deliberately narrower than the validator's, so a
+    // scheme-typo target smuggled `?token=` past both layers. Every operation
+    // hands the target to `mcpjam --url`, which needs a URL — there is no
+    // legitimate non-URL target, so nothing is lost by refusing.
     expect(
-      validateCliState({ ...RUNNABLE, target: 'ht!tp://user:secret@mcp.example.test/mcp' }),
-    ).toBeUndefined();
+      validateCliState({ ...RUNNABLE, target: 'mcp.example.test/mcp?token=SECRET' }),
+    ).toContain('does not parse as a URL');
+  });
+
+  it('a non-http(s) protocol is refused — `user:secret@host` parses as protocol `user:`', () => {
+    // WHATWG URL reads `user:SECRET@h.test/mcp` as scheme `user:` with an
+    // empty username, so the userinfo check alone never sees the secret. The
+    // protocol gate closes that class structurally; mcpjam speaks http(s)
+    // only, so no legitimate target is refused.
+    const refusal = validateCliState({ ...RUNNABLE, target: 'user:SECRET@mcp.example.test/mcp' });
+    expect(refusal).toContain('http(s)');
+    expect(validateCliState({ ...RUNNABLE, target: 'ws://mcp.example.test/mcp' })).toContain(
+      'http(s)',
+    );
+  });
+
+  it('a credential in a fragment that carries its own `?` is refused — the SPA callback shape', () => {
+    // `#/cb?code=SECRET` makes URLSearchParams read the key as `/cb?code`,
+    // which slips a structural check; the raw-string scan cannot be misled.
+    expect(
+      validateCliState({ ...RUNNABLE, target: 'https://mcp.example.test/mcp?x=1#/cb?code=SECRET' }),
+    ).toContain('must not carry credentials');
   });
 });
 

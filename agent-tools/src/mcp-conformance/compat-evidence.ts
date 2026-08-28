@@ -173,11 +173,11 @@ function retainThenParse(
   if (!parsed.success) {
     return {
       kind: 'unparseable',
-      // Defence in depth, not a live threat: the pinned Zod 4 issue message
-      // carries expected/path/values and never the received value (verified
-      // 2026-08-19), so there is no reachable state to test. Kept because a
-      // future Zod that echoes input would otherwise turn this reason into an
-      // unredacted vendor-stdout channel, and the cost is one call.
+      // The Zod message embeds vendor stdout in one narrow way: an
+      // unrecognized-keys issue on this .strict() schema echoes the offending
+      // KEY names (values are never echoed — verified against the pinned Zod
+      // 4, 2026-08-19). A key name is vendor text, so it is redacted like
+      // every other vendor string reaching a reason.
       reason: `mcpjam compat exited 0 but its stdout did not match the expected report shape: ${redactCredentials(parsed.error.message)}`,
       exitCode,
       retentionReasons,
@@ -191,9 +191,9 @@ function retainThenParse(
     return {
       kind: 'target-mismatch',
       // Both targets are redacted before the reason is composed: the vendor's
-      // is arbitrary server-controlled text, and the requested one — though
-      // validated against userinfo and credential query params — is echoed
-      // here as a last belt against a token that slipped a fail-open parse.
+      // is arbitrary server-controlled text; the requested one has already
+      // been validated credential-free, so its redaction is pure defence in
+      // depth against a future validation gap.
       reason: `mcpjam reported target ${JSON.stringify(redactCredentials(parsed.data.target))} but the run requested ${JSON.stringify(redactCredentials(requestedTarget))} — this capture is of a different deployment; do not read its verdicts as the requested surface's`,
       exitCode,
       retentionReasons,

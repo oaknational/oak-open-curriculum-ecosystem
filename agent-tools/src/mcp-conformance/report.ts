@@ -41,10 +41,10 @@ export function runMcpConformance(
     report: {
       schema_version: '1.0.0',
       operation: input.operation,
-      // Redacted on the way out, like every target an operation emits: a no-op
-      // for a validated target, the belt for one that did not parse and so
-      // escaped the validator's inspection. This report rides to stdout and
-      // into CI job logs.
+      // Redacted on the way out, like every target an operation emits. The
+      // validator has already refused any credential-bearing target, so this
+      // is defence in depth against a future validation gap — this report
+      // rides to stdout and into CI job logs.
       target: redactCredentials(input.target),
       mode: input.mode,
       suites,

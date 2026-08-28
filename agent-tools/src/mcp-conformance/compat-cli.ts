@@ -35,10 +35,9 @@ export interface CompatRunReport {
  * The report as emitted — a pure projection, separated from the IO so the
  * one rule it carries is describable in a test without a spawn seam.
  *
- * The rule: the target is redacted on the way out. A no-op for a validated
- * target (userinfo and credential query params are refused upstream), and the
- * belt for the residual case where the target did not parse and so could not
- * be inspected at validation — it is still echoed here, to stdout.
+ * The rule: the target is redacted on the way out. The validator has
+ * already refused any credential-bearing target, so this is defence in depth
+ * against a future validation gap — it is still echoed here, to stdout.
  */
 export function composeCompatRunReport(target: string, outcome: CompatOutcome): CompatRunReport {
   return {

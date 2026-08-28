@@ -93,9 +93,10 @@ export interface DriveRunReport {
 
 /**
  * The report as emitted — a pure projection so its one rule is describable
- * without the spawn seam: the target is redacted on the way out (a no-op for
- * a validated target; the belt for one that did not parse and so escaped the
- * validator's inspection). The pack redacts its own copy of the target.
+ * without the spawn seam: the target is redacted on the way out. The
+ * validator has already refused any credential-bearing target, so this is
+ * defence in depth against a future validation gap, not a live path. The
+ * pack redacts its own copy of the target.
  */
 export function composeDriveRunReport(target: string, outcome: DriveOutcome): DriveRunReport {
   return { operation: 'drive', target: redactCredentials(target), outcome };

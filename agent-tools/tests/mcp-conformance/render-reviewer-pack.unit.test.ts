@@ -65,8 +65,8 @@ describe('renderReviewerPack — the walkthrough is a traceable projection of on
   });
 
   it('redacts a credential carried in the target — the pack is a shareable document', () => {
-    // The validator refuses credential-bearing targets it can parse; this is
-    // the belt for one it could not, which still reaches the pack header.
+    // The validator refuses every credential-bearing target, so this belt is
+    // defence in depth against a future validation gap in the pack header.
     const pack = renderReviewerPack({
       target: 'ht!tp://user:s3cret@mcp.example.test/mcp',
       preamble: PREAMBLE,

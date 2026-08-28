@@ -85,17 +85,54 @@ describe('redactCredentials — query-param and JSON token shapes', () => {
   });
 
   it('a Bearer prefix does not swallow a following key=value token (the value must still mask)', () => {
-    // Without the vendor's negative lookahead, the Bearer token class — which
-    // admits `_` — consumes `access_token`, `=*` eats the `=`, and the value
-    // survives: `Bearer [redacted]SECRET`. Found by review, 2026-08-19.
+    // The key=value rule runs BEFORE the scheme rule, so the value is already
+    // masked when the scheme rule's token class (which admits `_`) reaches
+    // it. The vendor guards this with a negative lookahead instead — which
+    // wrongly exempts padded base64 (the next test). Found by review,
+    // 2026-08-19 and 2026-08-21.
     const out = redactCredentials('Bearer access_token=SECRET-A');
 
     expect(out).not.toContain('SECRET-A');
-    expect(out).toContain('access_token=[redacted]');
+    expect(out).toContain('Bearer [redacted]');
   });
 
-  it('redacts an all-caps BEARER token — HTTP auth schemes are case-insensitive', () => {
-    expect(redactCredentials('sent BEARER abc.def ok')).toBe('sent Bearer [redacted] ok');
+  it('redacts a padded base64 bearer token — letters-then-`=` is the common opaque-token shape', () => {
+    // The vendor's lookahead reads `c3VwZXJzZWNyZXQ=` as a key= prefix and
+    // exempts it; rule ordering has no such hole. A regression here means the
+    // lookahead came back.
+    const out = redactCredentials('retrying with Bearer c3VwZXJzZWNyZXQ= now');
+
+    expect(out).not.toContain('c3VwZXJzZWNyZXQ');
+    expect(out).toBe('retrying with Bearer [redacted] now');
+  });
+
+  it('redacts mixed-case scheme spellings, preserving the original spelling', () => {
+    expect(redactCredentials('sent BEARER abc.def ok')).toBe('sent BEARER [redacted] ok');
+    expect(redactCredentials('sent BeArEr abc.def ok')).toBe('sent BeArEr [redacted] ok');
+  });
+
+  it('redacts bare Basic and DPoP scheme tokens, not only Bearer', () => {
+    const out = redactCredentials('tried Basic dXNlcjpzM2NyZXQ= then DPoP eyJhbGc.SEC.sig');
+
+    expect(out).not.toContain('dXNlcjpzM2NyZXQ');
+    expect(out).not.toContain('eyJhbGc.SEC.sig');
+    expect(out).toContain('Basic [redacted]');
+    expect(out).toContain('DPoP [redacted]');
+  });
+
+  it('redacts api-key-family header lines, whose values follow a colon, not an equals', () => {
+    const out = redactCredentials('x-api-key: AK-SECRET-123\napi-key: AK2\nx-auth-token: T3');
+
+    expect(out).not.toContain('AK-SECRET-123');
+    expect(out).not.toContain('AK2');
+    expect(out).not.toContain('T3');
+  });
+
+  it('redacts header-named credentials appearing as JSON fields', () => {
+    const out = redactCredentials('{"cookie":"sid=C-SECRET","authorization":"Bearer B-SECRET"}');
+
+    expect(out).not.toContain('C-SECRET');
+    expect(out).not.toContain('B-SECRET');
   });
 
   it('an unbalanced JSON quote masks the fragment but does not swallow the following lines', () => {
@@ -109,7 +146,7 @@ describe('redactCredentials — query-param and JSON token shapes', () => {
     expect(out).toContain('line3: ok');
   });
 
-  it('redacts URL userinfo — the belt for a target the validator could not parse', () => {
+  it('redacts URL userinfo in vendor-echoed text, which never passed the target validator', () => {
     const out = redactCredentials('requested ht!tp://user:s3cret@h/mcp and https://u@h2/x');
 
     expect(out).not.toContain('s3cret');

@@ -287,8 +287,8 @@ describe('composeCompatRunReport — the wrapper report redacts its target', () 
   });
 
   it('masks a credential in the target — the report rides to stdout and summary.json', () => {
-    // The validator refuses credential-bearing targets it can parse; this is
-    // the belt for one it could not, which is still echoed into the report.
+    // The validator refuses every credential-bearing target, so this belt is
+    // defence in depth against a future validation gap.
     const { io } = fakeIo({ exitCode: 0, stdout: OAK_REPORT });
     const outcome = runCompat(io, FIXTURE_TARGET);
 

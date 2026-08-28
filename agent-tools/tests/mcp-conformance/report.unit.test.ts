@@ -484,9 +484,9 @@ describe('round-8 review cures — report provenance is verified against the req
   });
 
   it('the aggregate report redacts a credential in the requested target', () => {
-    // The validator refuses credential-bearing targets it can parse; this is
-    // the belt for one it could not, which still reaches `report.target` — and
-    // that report rides to stdout and into CI job logs.
+    // The validator refuses every credential-bearing target, so this belt is
+    // defence in depth against a future validation gap — `report.target`
+    // rides to stdout and into CI job logs.
     const { report } = runMcpConformance(fakeIo(), {
       ...verdictInput,
       target: 'ht!tp://user:s3cret@h/mcp',
