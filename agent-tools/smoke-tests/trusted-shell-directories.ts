@@ -1,5 +1,3 @@
-import path from 'node:path';
-
 /**
  * Fixed, root-owned directories holding the shell and core utilities a
  * hermetic smoke's child processes may use, partitioned by platform.
@@ -27,10 +25,14 @@ const TRUSTED_SHELL_DIRECTORIES = {
  * The platform's trusted directories joined as a `PATH` value.
  *
  * @param platform - injected so both branches are provable from any host.
+ * The delimiter follows the INJECTED platform too (`;` on win32, `:`
+ * otherwise), never `path.delimiter` — the host's delimiter would join the
+ * win32 directories with `:` on a POSIX host, splitting every `C:` drive
+ * designator and making the advertised cross-host seam untruthful.
  */
 export function trustedShellPath(platform: NodeJS.Platform = process.platform): string {
   const directories =
     platform === 'win32' ? TRUSTED_SHELL_DIRECTORIES.win32 : TRUSTED_SHELL_DIRECTORIES.posix;
 
-  return directories.join(path.delimiter);
+  return directories.join(platform === 'win32' ? ';' : ':');
 }
