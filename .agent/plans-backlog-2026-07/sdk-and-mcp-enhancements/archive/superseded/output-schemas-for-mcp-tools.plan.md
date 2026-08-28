@@ -62,6 +62,19 @@ isProject: false
 
 # MCP Output Schemas and Response Validation
 
+> **⛔ SUPERSEDED — ARCHIVED 2026-08-19.** The executable interpretation of
+> this June design record was superseded 2026-07-29 by the ratified delivery
+> node (itself now archived at
+> `.agent/plans/delivery/archive/mcp-output-schemas-response-validation.plan.md`);
+> the live successors are the `mcp-output-contracts` strategic node and its
+> delivery plans under `.agent/plans/`. The 2026-08-19 verification fleet
+> FALSIFIED this record's central doctrine against the served wire: there is
+> no single `envelope(payloadSchema)` — the live surface carries three
+> envelope shapes (generated `{status:number, data, summary}`; aggregated
+> root-spread + `summary` + optional `status:'success'`; a bespoke app-local
+> shape). Retained as lineage evidence only; do not execute from this file.
+
+
 **Last Updated**: 2026-06-09 (EEF output-Zod clauses reconciled to the landed A-i/C envelope shape — `answerType` + full/headline member union)
 **Status**: 🟢 DECISION-COMPLETE — owner-ratified 2026-06-09; serial delivery order owner-resolved 2026-06-08 (§Resolved Sequencing). The required field is the closing ratchet; discovery of unschema'd tools is the registry-driven conformance test, not a red type-check.
 **Scope**: Give every MCP tool a truthful, required, object-rooted `outputSchema` — composed by one mechanism over source-derived payload Zod — and expose it through the live registration path.
@@ -163,7 +176,7 @@ The cure — emit a runtime Zod schema at each tool's source — differs per pro
 is phased by readiness.
 
 **Landed-shape note (2026-06-11, owner decision via the
-[2026-06-11 snagging plan](oak-prod-mcp-snagging-2026-06-11.plan.md) S1/PR-2,
+[2026-06-11 snagging plan](../../current/oak-prod-mcp-snagging-2026-06-11.plan.md) S1/PR-2,
 commit `20ad83326`):** `get-eef-evidence` no longer returns the bare
 `EefEvidenceEnvelope` as `structuredContent` with `content: []`. It now emits
 through `formatToolResponse` like every aggregated tool — dual `content`
@@ -370,7 +383,7 @@ state where the field is optional.
 
 ## Lifecycle Triggers
 
-> See [Lifecycle Triggers component](../../../plans/templates/components/lifecycle-triggers.md)
+> See [Lifecycle Triggers component](../../../../plans/templates/components/lifecycle-triggers.md)
 
 Work shape: **executable repo plan** (generated artefacts + shared SDK runtime +
 app registration path). Touch points: start-right at session open; register an
@@ -406,7 +419,7 @@ slice is not completion.
 
 ## Cycle Dependencies and Parallelisation
 
-> See [TDD Cycles component](../../../plans/templates/components/tdd-phases.md)
+> See [TDD Cycles component](../../../../plans/templates/components/tdd-phases.md)
 
 - **W0 first (mostly parallel)** — W0-cycle-1 (envelope utility) gates W1 and W2;
   W0-cycle-2/3/4 (search Zod, EEF Zod, search input dedup) are independent and
@@ -712,7 +725,7 @@ or W2 author), never loosen the test.
 
 ## Quality Gates (`ws-gates`)
 
-> See [Quality Gates component](../../../plans/templates/components/quality-gates.md)
+> See [Quality Gates component](../../../../plans/templates/components/quality-gates.md)
 
 All gates blocking (generated artefacts + shared SDK runtime + app registration).
 
@@ -728,7 +741,7 @@ Per-cycle: focused `pnpm test --filter <workspace>` plus the local gates.
 
 ## Adversarial Review (`ws-review`)
 
-> See [Adversarial Review component](../../../plans/templates/components/adversarial-review.md)
+> See [Adversarial Review component](../../../../plans/templates/components/adversarial-review.md)
 
 - **Plan-phase (done 2026-06-02)**: `assumptions-expert`, `mcp-expert`,
   `type-expert`, `code-expert`, `docs-adr-expert` — findings verified against the
@@ -746,7 +759,7 @@ against the real code before acting; relay a synthesised verified verdict.
 
 ## Risk Assessment
 
-> See [Risk Assessment component](../../../plans/templates/components/risk-assessment.md)
+> See [Risk Assessment component](../../../../plans/templates/components/risk-assessment.md)
 
 | Risk | Mitigation |
 |------|------------|
@@ -764,7 +777,7 @@ against the real code before acting; relay a synthesised verified verdict.
 
 ## Foundation Alignment
 
-> See [Foundation Alignment component](../../../plans/templates/components/foundation-alignment.md)
+> See [Foundation Alignment component](../../../../plans/templates/components/foundation-alignment.md)
 
 - **principles.md** — §Cardinal Rule (one composition mechanism; W1 composes at
   codegen); §Strict and Complete + "WE DON'T HEDGE" (required, object-rooted, no
@@ -784,7 +797,7 @@ against the real code before acting; relay a synthesised verified verdict.
 
 ### Plan-body first-principles check
 
-> See [`plan-body-first-principles-check.md`](../../../rules/plan-body-first-principles-check.md)
+> See [`plan-body-first-principles-check.md`](../../../../rules/plan-body-first-principles-check.md)
 
 - **Shape clause**: required-vs-optional and object-root-vs-union decided at
   plan-author time against the installed SDK + the `inputSchema` precedent — not
@@ -802,7 +815,7 @@ against the real code before acting; relay a synthesised verified verdict.
 
 ## Documentation Propagation
 
-> See [Documentation Propagation component](../../../plans/templates/components/documentation-propagation.md)
+> See [Documentation Propagation component](../../../../plans/templates/components/documentation-propagation.md)
 
 On completion, evaluate whether the Contract-A-vs-Contract-B distinction and the
 required object-rooted `outputSchema` seam warrant an ADR or a reference-doc note.

@@ -30,14 +30,10 @@ test.describe('picker: OS contrast and the access commitment', () => {
     // wins; returning to Identity default returns to the ACCESS face,
     // never the bare one.
     await page.emulateMedia({ contrast: 'more' });
-    const opened = await openPickerStage(page);
-    if (opened === null) {
-      return;
-    }
-    const { aborted, frame } = opened;
+    const { aborted, frame } = await openPickerStage(page);
     await expect.poll(async () => frameThemeAttribute(frame)).toBe('high-contrast');
     await chooseThemeAndExpectInEffect(page, frame, 'dark');
-    await page.getByRole('combobox', { name: 'Theme' }).selectOption(IDENTITY_DEFAULT);
+    await frame.getByRole('combobox', { name: 'Theme' }).selectOption(IDENTITY_DEFAULT);
     await expect.poll(async () => frameThemeAttribute(frame)).toBe('high-contrast');
     assertOnlyKnownExternalOrigins(aborted);
   });
@@ -45,11 +41,7 @@ test.describe('picker: OS contrast and the access commitment', () => {
   test('an explicit picker theme survives live OS contrast flips in both directions', async ({
     page,
   }) => {
-    const opened = await openPickerStage(page);
-    if (opened === null) {
-      return;
-    }
-    const { aborted, frame } = opened;
+    const { aborted, frame } = await openPickerStage(page);
     await chooseThemeAndExpectInEffect(page, frame, 'dark');
 
     // Flip ON: wait until the FRAME sees the emulated media (the marker

@@ -40,6 +40,44 @@ interface BrandLinkOwnership {
   readonly generation: { current: number };
 }
 
+/** Find a server-rendered brand sheet to adopt (the specimen's `?brand=`
+ *  path marks its link with data-oak-brand) — the one sanctioned selector
+ *  read, scoped to the marker this codebase itself renders. Document-wide,
+ *  not head-only: React 19 hoists a component-rendered stylesheet link
+ *  only under a `precedence` prop, so the server's marker link renders IN
+ *  PLACE in the body. */
+function adoptServerSheet(
+  initialIdentity: IdentitySlug | undefined,
+  target: Document,
+): HTMLLinkElement | null {
+  if (initialIdentity === undefined || initialIdentity === BASE_IDENTITY) {
+    return null;
+  }
+  const existing = target.querySelector<HTMLLinkElement>(
+    `link[data-oak-brand='${initialIdentity}']`,
+  );
+  if (existing === null || existing.disabled) {
+    return null;
+  }
+  // The server renders the applied marker with the link (it IS applied at
+  // first paint); re-assert it here so adoption is marker-idempotent and
+  // observers keyed on the marker never see an adopted-but-unmarked sheet.
+  existing.dataset['oakBrandApplied'] = '';
+  return existing;
+}
+
+/** Retire an outgoing sheet. Hook-created links are removed outright; an
+ *  ADOPTED server-rendered link belongs to React's own tree — removal
+ *  fights the framework — so it is DISABLED, leaving React's node alone. */
+function retireLink(link: HTMLLinkElement, ownership: BrandLinkOwnership): void {
+  if (ownership.owned.has(link)) {
+    link.remove();
+    ownership.owned.delete(link);
+  } else {
+    link.disabled = true;
+  }
+}
+
 /** LOAD-THEN-SWAP: the incoming sheet is appended ALONGSIDE the outgoing
  *  one and the swap completes only when it has loaded — a first-hand frame
  *  sampler proved that an in-place href update drops the outgoing sheet a
@@ -53,19 +91,36 @@ function applyBrandIdentity(
   ownership: BrandLinkOwnership,
   target: Document,
 ): void {
+  // EVERY call invalidates in-flight loads, including the nothing-to-swap
+  // path below: with A applied and B still loading, a return to A must
+  // strip B's load of its authority, or the stale load later applies B.
   const thisGeneration = (ownership.generation.current += 1);
+  // Already in effect (adopted server sheet at mount, a repeated set, or
+  // a return to the applied identity mid-flight): nothing to swap.
+  if (ownership.applied.current?.dataset['oakBrand'] === identity) {
+    return;
+  }
   const previous = ownership.applied.current;
   if (identity === BASE_IDENTITY) {
     if (previous !== null) {
-      previous.remove();
-      ownership.owned.delete(previous);
+      retireLink(previous, ownership);
       ownership.applied.current = null;
     }
     return;
   }
-  // The node must be created BY the target document: a link minted from the
-  // host and adopted into a frame is a cross-document node, and the frame is
-  // the second consumer this function was parameterised for.
+  appendBrandLink(identity, thisGeneration, previous, ownership, target);
+}
+
+/** Create, wire, and append the incoming sheet's link — created BY the
+ *  target document (a host-minted link adopted into a frame would be a
+ *  cross-document node; the frame is the second consumer here). */
+function appendBrandLink(
+  identity: IdentitySlug,
+  thisGeneration: number,
+  previous: HTMLLinkElement | null,
+  ownership: BrandLinkOwnership,
+  target: Document,
+): void {
   const link = target.createElement('link');
   link.rel = 'stylesheet';
   link.dataset['oakBrand'] = identity;
@@ -76,11 +131,12 @@ function applyBrandIdentity(
       ownership.owned.delete(link);
       return;
     }
-    previous?.remove();
     if (previous !== null) {
-      ownership.owned.delete(previous);
+      retireLink(previous, ownership);
     }
     ownership.applied.current = link;
+    // Applied marker at SWAP COMPLETION only — a request is not cascade state.
+    link.dataset['oakBrandApplied'] = '';
   });
   link.addEventListener('error', () => {
     // Failed load: keep the previous brand applied rather than flashing to
@@ -104,13 +160,9 @@ function applyBrandIdentity(
  * It returns `null` while the frame is still loading; the effect simply waits
  * for a render in which it does not.
  */
-function useBrandSheet(identity: IdentitySlug, resolveTarget?: () => Document | null): void {
-  const ownedLinks = useRef<Set<HTMLLinkElement>>(new Set());
-  const appliedLink = useRef<HTMLLinkElement | null>(null);
-  const generation = useRef(0);
-
-  // Preload warms the HTTP cache from the host regardless of target, so a
-  // framed swap still gets the load-then-swap path's fast completion.
+/** Preload warms the HTTP cache from the host regardless of target, so a
+ *  framed swap still gets the load-then-swap path's fast completion. */
+function useBrandPreload(): void {
   useEffect(() => {
     for (const slug of IDENTITIES) {
       if (slug !== BASE_IDENTITY) {
@@ -118,6 +170,29 @@ function useBrandSheet(identity: IdentitySlug, resolveTarget?: () => Document | 
       }
     }
   }, []);
+}
+
+function useBrandSheet(
+  identity: IdentitySlug,
+  resolveTarget?: () => Document | null,
+  initialIdentity?: IdentitySlug,
+): void {
+  const ownedLinks = useRef<Set<HTMLLinkElement>>(new Set());
+  const appliedLink = useRef<HTMLLinkElement | null>(null);
+  const generation = useRef(0);
+
+  // A server-rendered brand sheet is ADOPTED as the applied link at mount,
+  // so the apply effect skips the mount render instead of duplicating.
+  // Re-runnable, never a once-flag: strict-mode's rehearsal cleanup clears
+  // `applied`, and this re-establishes it on the second pass.
+  useEffect(() => {
+    const target = resolveTarget === undefined ? document : resolveTarget();
+    if (target !== null && appliedLink.current === null) {
+      appliedLink.current = adoptServerSheet(initialIdentity, target);
+    }
+  }, [initialIdentity, resolveTarget]);
+
+  useBrandPreload();
 
   useEffect(() => {
     const target = resolveTarget === undefined ? document : resolveTarget();
@@ -142,14 +217,19 @@ function useBrandSheet(identity: IdentitySlug, resolveTarget?: () => Document | 
       }
       owned.clear();
       appliedLink.current = null;
+      // A load resolving after unmount must not take the applied path.
+      generation.current += 1;
     };
   }, []);
 }
 
-export function useIdentity(resolveTarget?: () => Document | null): IdentityState {
-  const [identity, setIdentity] = useState<IdentitySlug>(BASE_IDENTITY);
+export function useIdentity(
+  resolveTarget?: () => Document | null,
+  initialIdentity?: IdentitySlug,
+): IdentityState {
+  const [identity, setIdentity] = useState<IdentitySlug>(initialIdentity ?? BASE_IDENTITY);
 
-  useBrandSheet(identity, resolveTarget);
+  useBrandSheet(identity, resolveTarget, initialIdentity);
 
   // The public setter narrows the select's string through the closed slug
   // list before touching state; the raw useState setter stays value-paired

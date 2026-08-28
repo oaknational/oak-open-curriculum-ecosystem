@@ -16,13 +16,22 @@
  * whatever the stage's aspect. A ResizeObserver drives re-fit (no window
  * listeners to leak).
  *
- * Scaling the live frame also scales its hit targets: below scale 44/48
- * the kit's 48px controls render under the 44px minimum — an accepted
- * cost for these preview stages, and full-size interaction is always one
- * link away via each exhibit's open-as-full-page link.
+ * Scaling the live frame also scales its hit targets, so usability has a
+ * floor: below INTERACTIVE_SCALE_FLOOR the kit's 44px-minimum controls
+ * render under WCAG 2.5.8's 24px target minimum — unusably small, and
+ * transform scale is not something browser zoom recovers. Below the floor
+ * the frame goes INERT: the preview stays a live picture, and interaction
+ * belongs to the full-page link each stage renders beside it at native
+ * size. Above the floor the frame is interactive as before.
  */
 import { useEffect } from 'react';
 import type { RefObject } from 'react';
+
+/** 24px (SC 2.5.8 minimum) over the kit's 44px MINIMUM target size (the
+ *  kit's own --size-target is 48px md, so this floor is deliberately the
+ *  stricter denominator — the preview goes inert slightly early rather
+ *  than slightly late). */
+const INTERACTIVE_SCALE_FLOOR = 24 / 44;
 
 export function useScaledViewport(
   stageRef: RefObject<HTMLElement | null>,
@@ -41,6 +50,7 @@ export function useScaledViewport(
       iframe.style.height = `${stage.clientHeight / scale}px`;
       iframe.style.transform = `scale(${scale})`;
       iframe.style.marginInlineStart = `${Math.max(0, (stage.clientWidth - width * scale) / 2)}px`;
+      iframe.inert = scale < INTERACTIVE_SCALE_FLOOR;
     };
     fit();
     const observer = new ResizeObserver(fit);

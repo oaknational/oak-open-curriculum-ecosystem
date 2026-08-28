@@ -1079,6 +1079,14 @@
   .oak-quiz-answer--selected {
     border-width: var(--border-solid-xl);
   }
+  /* The radio's checked dot is a background fill, and forced colours
+     flatten token backgrounds to the same system canvas as the control —
+     the selection disappears. System-colour keywords ARE the forced
+     palette, so SelectedItem keeps the mark visible; the checkbox glyph
+     is border-drawn and survives on its own. */
+  .oak-radio:checked::before {
+    background: SelectedItem;
+  }
 }
 
 /* In the high-contrast theme, surfaces go white — give shape back a border */

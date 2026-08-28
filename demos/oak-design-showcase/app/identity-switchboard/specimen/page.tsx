@@ -20,10 +20,11 @@
  * a pure presentational function over design-system classes; the app-local
  * class names carry layout only, in `specimen.css`, tokens-only.
  */
-import { BASE_IDENTITY, resolveIdentity } from '../../../components/useIdentity';
+import { BASE_IDENTITY, resolveIdentity, type IdentitySlug } from '../../../components/useIdentity';
 
 import { DetailRegion } from './detail';
 import { FacetsRegion } from './facets';
+import { StripControls } from './StripControls';
 import { FooterRegion } from './footer';
 import { HeroRegion } from './hero';
 import { ResourcesRegion } from './resources';
@@ -31,33 +32,16 @@ import { ResultsRegion } from './results';
 import { CtaRegion, SupportRegion } from './support';
 import './specimen.css';
 
-function UtilityRegion(): React.JSX.Element {
+/** The strip carries the page's REAL controls (owner word 2026-08-18): the
+ *  earlier decorative audience switcher and help-centre link never did
+ *  anything, so their space now holds small identity radios and the theme
+ *  select — a deliberate divergence from the export reference, carried in
+ *  the fidelity register. */
+function UtilityRegion({ identity }: { readonly identity: IdentitySlug }): React.JSX.Element {
   return (
     <div className="oak-region util" data-region="utility">
       <div className="oak-container oak-cluster oak-cluster--s util-inner">
-        <span className="oak-body-3">You are viewing the</span>
-        {/* The audience switcher is a set with one current member, so it
-            keeps aria-current — with the value `true`, not `page`: teacher
-            and pupil are audiences, not pages (a11y review ruling). The
-            current one also carries a visible non-colour marker in CSS. */}
-        <nav aria-label="Audience">
-          <ul className="oak-cluster oak-cluster--s nav-list audience-list">
-            <li>
-              <a className="oak-link oak-body-3" href="#main" aria-current="true">
-                teacher
-              </a>
-            </li>
-            <li>
-              <a className="oak-link oak-body-3" href="#main">
-                pupil
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <span className="oak-body-3">experience</span>
-        <a className="oak-link oak-body-3 push" href="#main">
-          Help centre
-        </a>
+        <StripControls initialIdentity={identity} />
       </div>
     </div>
   );
@@ -123,18 +107,45 @@ function MastheadRegion(): React.JSX.Element {
   );
 }
 
+/** The server-rendered brand sheet. data-oak-brand marks it for
+ *  client-side ADOPTION: the strip's binder takes ownership at mount so a
+ *  later switch manages this link instead of stranding it beneath every
+ *  hook-created sheet. The applied marker rides from the server because
+ *  this sheet IS the applied identity at first paint — observers key on
+ *  it. */
+function ServerBrandSheet({
+  identity,
+}: {
+  readonly identity: IdentitySlug;
+}): React.JSX.Element | null {
+  if (identity === BASE_IDENTITY) {
+    return null;
+  }
+  return (
+    <link
+      rel="stylesheet"
+      data-oak-brand={identity}
+      data-oak-brand-applied=""
+      href={`/brands/${identity}/brand.css`}
+    />
+  );
+}
+
 export default async function SpecimenPage({
   searchParams,
 }: {
   readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
 }): Promise<React.JSX.Element> {
-  const identity = resolveIdentity((await searchParams)['brand']);
+  const params = await searchParams;
+  const identity = resolveIdentity(params['brand']);
+  // Exhibit mode (`?controls=none`): the side-by-side page frames this route
+  // three-up with the PARENT owning theme and width, so the strip's own
+  // controls would be noise repeated per frame (owner word 2026-08-18).
+  const showControls = params['controls'] !== 'none';
 
   return (
     <>
-      {identity === BASE_IDENTITY ? null : (
-        <link rel="stylesheet" href={`/brands/${identity}/brand.css`} />
-      )}
+      <ServerBrandSheet identity={identity} />
       {/* The skip link sits BEFORE the canvas, not inside it: the kit's
           reading-flow: grid-rows enhancement on .oak-canvas sorts an
           absolutely-positioned, area-less child to the END of sequential
@@ -156,20 +167,35 @@ export default async function SpecimenPage({
           focus must LAND, and never at the cost of the Tab order. Never
           put a negative tabindex on a direct child of .oak-canvas or
           .oak-main. */}
-      <div className="oak-canvas oak-scope" data-page="unit" data-identity={identity}>
-        <UtilityRegion />
-        <MastheadRegion />
-        <main id="main" className="oak-main oak-region" data-region="main">
-          <HeroRegion />
-          <FacetsRegion />
-          <ResultsRegion />
-          <DetailRegion />
-          <ResourcesRegion />
-          <SupportRegion />
-          <CtaRegion />
-        </main>
-        <FooterRegion />
+      {/* data-controls lets CSS zero the mast's strip-height sticky offset
+          when no strip renders (round 3 — the side-by-side frames). */}
+      <div
+        className="oak-canvas oak-scope"
+        data-page="unit"
+        data-identity={identity}
+        data-controls={showControls ? undefined : 'none'}
+      >
+        {showControls ? <UtilityRegion identity={identity} /> : null}
+        <SpecimenBody />
       </div>
+    </>
+  );
+}
+
+function SpecimenBody(): React.JSX.Element {
+  return (
+    <>
+      <MastheadRegion />
+      <main id="main" className="oak-main oak-region" data-region="main">
+        <HeroRegion />
+        <FacetsRegion />
+        <ResultsRegion />
+        <DetailRegion />
+        <ResourcesRegion />
+        <SupportRegion />
+        <CtaRegion />
+      </main>
+      <FooterRegion />
     </>
   );
 }

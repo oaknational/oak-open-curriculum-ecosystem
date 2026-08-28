@@ -188,7 +188,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/security-config.ts': excluded(
-    'df1573e40a58a0957ffce6c145f29b19951e28c7bf90a6772ddb736033e03b50',
+    '5ffd8c944b7485aa399b8c317db92acfb636b40e1ae4963f8dd028dcf33e4f19',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/security-headers.ts': excluded(

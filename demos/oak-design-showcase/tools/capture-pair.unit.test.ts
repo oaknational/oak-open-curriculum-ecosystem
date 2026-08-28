@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { parseCapturePairArgs } from './capture-pair';
+import { parseCapturePairArgs } from './capture-pair-args';
 
 const BASE = ['--left', 'http://localhost:1/a', '--right', 'http://localhost:1/b', '--out', 'x'];
 

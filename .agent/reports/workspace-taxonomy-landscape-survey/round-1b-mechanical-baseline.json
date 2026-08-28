@@ -1,0 +1,241 @@
+{
+  "provenance": {
+    "generated": "2026-08-17",
+    "method": "universe: census code subjects (coordination/practice surfaces excluded — they co-change with every lane by construction). co-change: git log 12 months, sweep commits excluded (>5 subjects touched), subjects mapped by longest census dirPath, pairs with >=5 shared commits, union-find at strength thresholds (shared / min(commits)); imports: committed census facts.json sourceDependencies (depcruise-derived), substrate separation at in-degree >=8, deterministic label propagation over the residual graph (sorted order, max 20 iterations)",
+    "subjectUniverse": 37
+  },
+  "coChange": {
+    "windowCommits": 1843,
+    "minSharedCommits": 5,
+    "topPairs": [
+      {
+        "pair": "packages/libs/logger <-> packages/sdks/oak-curriculum-sdk",
+        "shared": 11,
+        "strength": 0.92
+      },
+      {
+        "pair": "agent-tools <-> packages/core/result",
+        "shared": 6,
+        "strength": 0.86
+      },
+      {
+        "pair": "apps/oak-curriculum-mcp-streamable-http <-> packages/libs/logger",
+        "shared": 10,
+        "strength": 0.83
+      },
+      {
+        "pair": "packages/libs/graph-ingest <-> packages/libs/graph-project",
+        "shared": 7,
+        "strength": 0.7
+      },
+      {
+        "pair": "packages/sdks/oak-sdk-codegen <-> packages/sdks/oak-search-sdk",
+        "shared": 5,
+        "strength": 0.56
+      },
+      {
+        "pair": "apps/oak-search-cli <-> packages/sdks/oak-search-sdk",
+        "shared": 5,
+        "strength": 0.56
+      },
+      {
+        "pair": "demos/oak-design-showcase <-> packages/libs/fidelity-review",
+        "shared": 11,
+        "strength": 0.55
+      },
+      {
+        "pair": "demos/oak-curriculum-hub <-> packages/libs/fidelity-review",
+        "shared": 10,
+        "strength": 0.5
+      },
+      {
+        "pair": "packages/core/graph-core <-> packages/libs/graph-project",
+        "shared": 5,
+        "strength": 0.5
+      },
+      {
+        "pair": "research/web-app-deconstruction <-> research/web-app-deconstruction/packages/research-evidence",
+        "shared": 6,
+        "strength": 0.46
+      },
+      {
+        "pair": "packages/design/design-tokens-core <-> packages/design/oak-design-tokens",
+        "shared": 5,
+        "strength": 0.42
+      },
+      {
+        "pair": "apps/oak-search-cli <-> packages/sdks/oak-sdk-codegen",
+        "shared": 16,
+        "strength": 0.32
+      },
+      {
+        "pair": "demos/oak-design-showcase <-> packages/design/oak-design-system",
+        "shared": 17,
+        "strength": 0.31
+      },
+      {
+        "pair": "packages/core/graph-core <-> packages/libs/graph-ingest",
+        "shared": 5,
+        "strength": 0.31
+      },
+      {
+        "pair": "demos/oak-curriculum-hub <-> demos/oak-design-showcase",
+        "shared": 23,
+        "strength": 0.31
+      },
+      {
+        "pair": "agent-tools <-> packages/core/oak-eslint",
+        "shared": 15,
+        "strength": 0.27
+      },
+      {
+        "pair": "packages/sdks/graph-corpus-sdk <-> packages/sdks/oak-curriculum-sdk",
+        "shared": 9,
+        "strength": 0.26
+      },
+      {
+        "pair": "apps/oak-curriculum-mcp-streamable-http <-> packages/sdks/oak-curriculum-sdk",
+        "shared": 69,
+        "strength": 0.26
+      },
+      {
+        "pair": "packages/sdks/graph-corpus-sdk <-> packages/sdks/oak-sdk-codegen",
+        "shared": 8,
+        "strength": 0.23
+      },
+      {
+        "pair": "agent-tools <-> apps/oak-curriculum-mcp-streamable-http",
+        "shared": 60,
+        "strength": 0.22
+      }
+    ],
+    "partitionAt50": [
+      [
+        "agent-tools",
+        "packages/core/result"
+      ],
+      [
+        "apps/oak-curriculum-mcp-streamable-http",
+        "packages/libs/logger",
+        "packages/sdks/oak-curriculum-sdk"
+      ],
+      [
+        "apps/oak-search-cli",
+        "packages/sdks/oak-sdk-codegen",
+        "packages/sdks/oak-search-sdk"
+      ],
+      [
+        "demos/oak-curriculum-hub",
+        "demos/oak-design-showcase",
+        "packages/libs/fidelity-review"
+      ],
+      [
+        "packages/core/graph-core",
+        "packages/libs/graph-ingest",
+        "packages/libs/graph-project"
+      ]
+    ],
+    "partitionAt70": [
+      [
+        "agent-tools",
+        "packages/core/result"
+      ],
+      [
+        "apps/oak-curriculum-mcp-streamable-http",
+        "packages/libs/logger",
+        "packages/sdks/oak-curriculum-sdk"
+      ],
+      [
+        "packages/libs/graph-ingest",
+        "packages/libs/graph-project"
+      ]
+    ],
+    "partitionAt85": [
+      [
+        "agent-tools",
+        "packages/core/result"
+      ],
+      [
+        "packages/libs/logger",
+        "packages/sdks/oak-curriculum-sdk"
+      ]
+    ]
+  },
+  "importGraph": {
+    "edges": 146,
+    "substrate": [
+      "packages/core/oak-eslint",
+      "packages/core/observability",
+      "packages/core/result",
+      "packages/core/type-helpers",
+      "packages/core/workspace-config"
+    ],
+    "residualEdges": 47,
+    "partition": [
+      [
+        "agent-tools",
+        "apps/oak-curriculum-mcp-streamable-http",
+        "apps/oak-search-cli",
+        "demos/oak-curriculum-hub",
+        "demos/oak-design-showcase",
+        "packages/core/build-metadata",
+        "packages/core/env",
+        "packages/core/openapi-zod-client-adapter",
+        "packages/core/safe-path",
+        "packages/design/oak-design-react",
+        "packages/design/oak-design-system",
+        "packages/libs/env-resolution",
+        "packages/libs/fidelity-review",
+        "packages/libs/logger",
+        "packages/libs/posthog-node",
+        "packages/libs/search-contracts",
+        "packages/libs/sentry-node",
+        "packages/sdks/graph-corpus-sdk",
+        "packages/sdks/oak-curriculum-sdk",
+        "packages/sdks/oak-sdk-codegen",
+        "packages/sdks/oak-search-sdk"
+      ],
+      [
+        "packages/core/graph-core",
+        "packages/libs/graph-ingest",
+        "packages/libs/graph-project"
+      ],
+      [
+        "packages/design/design-tokens-core",
+        "packages/design/oak-design-ink",
+        "packages/design/oak-design-tokens"
+      ]
+    ]
+  },
+  "agreement": {
+    "pairsGroupedInBoth": 12,
+    "coChangeOnly": 1,
+    "importOnly": 204
+  },
+  "corpusEntries": [
+    {
+      "id": "MECH-cochange",
+      "arm": "mechanical",
+      "tier": "none",
+      "grounding": "measured-record",
+      "variant": "n/a",
+      "origin": "mechanical",
+      "design": {
+        "proposal": "Organisation derived purely from measured change-coupling: units that changed together in >=50% of their commits over 12 months belong in one unit. Method: git co-change union-find at 0.5, pairs with >=5 shared commits. Units not listed form no measured grouping and stand alone. Grouped units: [agent-tools, packages/core/result]; [apps/oak-curriculum-mcp-streamable-http, packages/libs/logger, packages/sdks/oak-curriculum-sdk]; [apps/oak-search-cli, packages/sdks/oak-sdk-codegen, packages/sdks/oak-search-sdk]; [demos/oak-curriculum-hub, demos/oak-design-showcase, packages/libs/fidelity-review]; [packages/core/graph-core, packages/libs/graph-ingest, packages/libs/graph-project].",
+        "notes": "Derived from 1843 commits; thresholds 0.7 and 0.85 give 3 and 2 groups respectively. No model judgement involved."
+      }
+    },
+    {
+      "id": "MECH-imports",
+      "arm": "mechanical",
+      "tier": "none",
+      "grounding": "measured-record",
+      "variant": "n/a",
+      "origin": "mechanical",
+      "design": {
+        "proposal": "Organisation derived purely from the measured import graph: a shared SUBSTRATE tier (units imported by >= 8 others: packages/core/oak-eslint, packages/core/observability, packages/core/result, packages/core/type-helpers, packages/core/workspace-config) beneath residual clusters of units that import each other. Method: hub separation at in-degree >= 8, then label propagation over residual depcruise workspace-level edges. Units not listed form no measured grouping and stand alone. Grouped units: [agent-tools, apps/oak-curriculum-mcp-streamable-http, apps/oak-search-cli, demos/oak-curriculum-hub, demos/oak-design-showcase, packages/core/build-metadata, packages/core/env, packages/core/openapi-zod-client-adapter, packages/core/safe-path, packages/design/oak-design-react, packages/design/oak-design-system, packages/libs/env-resolution, packages/libs/fidelity-review, packages/libs/logger, packages/libs/posthog-node, packages/libs/search-contracts, packages/libs/sentry-node, packages/sdks/graph-corpus-sdk, packages/sdks/oak-curriculum-sdk, packages/sdks/oak-sdk-codegen, packages/sdks/oak-search-sdk]; [packages/core/graph-core, packages/libs/graph-ingest, packages/libs/graph-project]; [packages/design/design-tokens-core, packages/design/oak-design-ink, packages/design/oak-design-tokens].",
+        "notes": "Derived from 146 workspace-level import edges (47 residual after substrate separation). No model judgement involved."
+      }
+    }
+  ]
+}

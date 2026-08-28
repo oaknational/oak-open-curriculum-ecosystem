@@ -154,15 +154,87 @@ loop's exit criteria bind to it.
 
 ## Todos
 
-1. Fleet-design review: walker seed pool, move kernel, scorecard rubric,
-   descriptor set, annealing schedule, budget cap.
-2. Probe set frozen (twelve hard cases + stratified sample) and the
-   facts-sheet for ungrounded walkers authored.
-3. Round 1 (survey) → archive; round 2+ per annealing schedule.
-4. Zoom stages; existing selection machinery over the top basins.
-5. Comparison statement; owner card; archive committed; escapes
+1. ~~Probe set frozen (twelve hard cases + stratified sample) and the
+   facts-sheet for ungrounded walkers authored.~~ Done — carried into
+   the committed 1b briefs with identities stable.
+2. ~~Round 1a (survey) → archive.~~ Done — 46/48 walkers, archive at
+   `round-1-raw.json`, lessons banked.
+3. Round 1b (challenger): instrument committed and decision-complete;
+   fleet-design review with frame-challenger, codex-availability
+   probe, then owner launch word after the PR-889 closeout.
+4. Combined 1a+1b harvest report: archive map, per-tier attractor
+   verdict, elites and outliers verbatim, escapes, descriptor-mismatch
+   findings, round-2 proposal (annealing + move kernel decisions live
+   there, not in 1b).
+5. Zoom stages; existing selection machinery over the top basins.
+6. Comparison statement; owner card; archive committed; escapes
    dispositioned.
 
 ## Amendment trail
 
-- (none yet — born sketch, 2026-08-17)
+- **2026-08-17 — round 1b decision-complete; full instrument authored
+  and committed during the GitHub-incident hold.** Owner direction
+  (verbatim): "please start working towards all required artefacts to
+  run the 1b fleet, we need decision complete plan, a reasoning
+  document detailed our decisions, including the things we decided not
+  to do and why, we need the scripts, we need fleet design documents".
+  Delivered, all committed before launch: walker-visible briefs
+  (`.agent/research/landscape-survey-round1b-briefs-2026-08-17.md`),
+  operational fleet spec
+  (`.agent/research/landscape-survey-round1b-fleet-design-2026-08-17.md`),
+  design rationale with the roads not taken
+  (`.agent/research/landscape-survey-round1b-design-rationale-2026-08-17.md`),
+  the runnable workflow script and the mechanically regenerated
+  falsifier packet (both under the survey report home). Same day the
+  owner added the codex CLI arms ("A few Sol ultra, many Terra medium?
+  Not instead of but in addition to?"): +12 terra-medium seats
+  mirroring the haiku constraint-grade arm and +3 sol-ultra seats
+  (baseline, rich persona, falsifier), probed live via headless
+  `codex exec` before being designed in. The fleet-design review then
+  ran per the rule — assumptions-expert and frame-challenger (both
+  opus) plus a cricket — and its absorbed cures reshaped the round:
+  the ADR-041/README blindness leak closed (class-level FORBIDDEN
+  list, grounding-a allowlist with per-path read logging and a
+  listings cap, READ-NOTHING seal on all non-repo groundings); a
+  de-ontologised free-form arm and decoy-estate stimulus controls
+  added; falsifiers given the power to return "sound" and one
+  falsifier re-aimed at the instrument itself; requirement variants
+  re-cut to differ in concern cardinality (3/7/12, balanced 6/6/6);
+  B2 replication baselines making grounding-b the attractor test's
+  n=2 headline column; grade-3 carrier-ban seats at opus and fable;
+  bounded/owned/reaped discipline on every CLI spawn; and the
+  falsifier packet inlined so no falsifier holds repository access.
+  The fleet is now 64 walkers + 4 decoy controls + 5 falsifier-arm
+  seats + 4 synthesis seats; combined cap ~3.25M tokens, PRESENTED to
+  the owner at the launch-word gate. Launch gates remaining, in
+  order: end-to-end relay smoke on both vendor paths with the real
+  schemas; the zero-cost 1a ADR-041-echo probe over the committed
+  archive; the mechanical baseline (co-change + import-graph
+  partitions injected as `origin=mechanical` corpus entries); the
+  owner's launch word after the PR-889 closeout ("Let's get 889
+  sorted before we run round 1b").
+  Committing the entire walker-visible instrument BEFORE launch also
+  cures 1a's knowledge-preservation miss (its walker texts lived only
+  in the session-persisted script; 1b's probe texts were reconstructed
+  from archive echoes with identities held stable).
+- **2026-08-17 — round-1a lessons folded; round 1b is a challenger, not
+  an extension.** Round 1a ran (46/48 walkers; archive committed at the
+  report home) and its probes exposed three instrument limits: the
+  model-prior question undischarged (40/46 walkers one model), a
+  missing unseeded baseline arm, and probable rubric leakage (the
+  six-item decision-needs list correlating with the 5-6 classification
+  mode). Owner rulings absorbed verbatim into
+  `.agent/research/fleet-design-lessons-2026-08-17.md`: the
+  persona-uptake gradient (Haiku constraints-only with graded
+  stringency; persona depth scales with tier) and the
+  challenge-not-extend requirement ("1a is an interesting point in the
+  landscape... but we know it is biased and twisted in ways that
+  surprised us"). Round 1b therefore adds: per-tier unseeded baselines
+  (prior fingerprints), tier-matched seeding, rubric-blinded prose
+  requirements in two variants, a falsification arm attacking 1a's
+  dominant elite verbatim, independent re-reduction by a different
+  tier with a comparator stage, parser-not-transcriber cross-vendor
+  relays, in-prompt read caps, and no walker self-scores. Budget
+  estimates now price read traffic; 1a's overshoot (~3.5M vs ≤1.1M
+  estimated) is recorded.
+- (born sketch, 2026-08-17)

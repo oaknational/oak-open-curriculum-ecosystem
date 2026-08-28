@@ -1,0 +1,753 @@
+<title>Oak Toolkit Atlas</title>
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --bg-panel: #F1F0EC;
+    --bg-inset: #E9E8E2;
+    --ink: #22272A;
+    --ink-soft: #5A6360;
+    --rule: #D8D6CE;
+    --bark: #8A6A4F;
+    --bark-soft: #C4B3A4;
+    --leaf: #3E7A4E;
+    --leaf-soft: #BFD8C6;
+    --alarm: #B3452E;
+    --chip-bg: #FFFFFF;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16181A;
+      --bg-panel: #1E2124;
+      --bg-inset: #24282B;
+      --ink: #E8E6E1;
+      --ink-soft: #9BA39F;
+      --rule: #33383B;
+      --bark: #C09A76;
+      --bark-soft: #6B5744;
+      --leaf: #7FBF8E;
+      --leaf-soft: #3A5A44;
+      --alarm: #E07B5F;
+      --chip-bg: #24282B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181A;
+    --bg-panel: #1E2124;
+    --bg-inset: #24282B;
+    --ink: #E8E6E1;
+    --ink-soft: #9BA39F;
+    --rule: #33383B;
+    --bark: #C09A76;
+    --bark-soft: #6B5744;
+    --leaf: #7FBF8E;
+    --leaf-soft: #3A5A44;
+    --alarm: #E07B5F;
+    --chip-bg: #24282B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.55;
+    margin: 0;
+    padding: 2.5rem 1.25rem 5rem;
+  }
+  main { max-width: 62rem; margin: 0 auto; }
+  h1, h2, h3 { font-family: var(--sans); text-wrap: balance; line-height: 1.15; }
+  h1 { font-size: 2.1rem; letter-spacing: -0.02em; margin: 0 0 0.4rem; }
+  h2 { font-size: 1.45rem; letter-spacing: -0.01em; margin: 3rem 0 0.75rem; }
+  h3 { font-size: 1.05rem; margin: 1.8rem 0 0.5rem; }
+  p, li { max-width: 68ch; }
+  .kicker {
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-soft); margin: 0 0 0.3rem;
+  }
+  .lede { color: var(--ink-soft); font-size: 1.05rem; max-width: 62ch; margin-top: 0; }
+  .statstrip {
+    display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.6rem 0 0;
+  }
+  .stat {
+    background: var(--bg-panel); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 0.55rem 0.85rem; min-width: 7.5rem;
+  }
+  .stat b { display: block; font-size: 1.25rem; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .stat span { font-size: 0.72rem; color: var(--ink-soft); letter-spacing: 0.04em; text-transform: uppercase; }
+  code, .mono { font-family: var(--mono); font-size: 0.88em; }
+  .legend { display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--ink-soft); margin: 0.8rem 0 0; }
+  .legend i { display: inline-block; width: 0.7em; height: 0.7em; border-radius: 2px; margin-right: 0.4em; }
+  .k-bark { background: var(--bark); }
+  .k-leaf { background: var(--leaf); }
+  .k-alarm { background: var(--alarm); }
+  .fam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 0.8rem; margin: 1.2rem 0; }
+  .fam {
+    background: var(--bg-panel); border: 1px solid var(--rule); border-left: 3px solid var(--bark);
+    border-radius: 6px; padding: 0.8rem 0.9rem;
+  }
+  .fam h4 { margin: 0 0 0.1rem; font-size: 0.92rem; font-family: var(--mono); font-weight: 650; }
+  .fam .role { font-size: 0.75rem; color: var(--ink-soft); margin: 0 0 0.55rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .chip {
+    background: var(--chip-bg); border: 1px solid var(--rule); border-radius: 4px;
+    font-family: var(--mono); font-size: 0.72rem; padding: 0.1rem 0.4rem; white-space: nowrap;
+  }
+  .chip.hot { border-color: var(--bark); }
+  .chip.dead { border-style: dashed; color: var(--ink-soft); }
+  .chip.pub { border-color: var(--leaf); }
+  .badge {
+    display: inline-block; font-size: 0.68rem; font-family: var(--mono);
+    border-radius: 3px; padding: 0 0.35em; margin-left: 0.35em;
+    background: var(--bg-inset); color: var(--ink-soft);
+  }
+  .diagram {
+    background: var(--bg-panel); border: 1px solid var(--rule); border-radius: 8px;
+    padding: 1rem; margin: 1.2rem 0; overflow-x: auto;
+  }
+  .diagram figcaption, .caption {
+    font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.6rem; max-width: 75ch;
+  }
+  pre.mermaid { margin: 0; display: flex; justify-content: center; background: transparent; }
+  table {
+    border-collapse: collapse; width: 100%; font-size: 0.85rem; margin: 1rem 0;
+  }
+  .tablewrap { overflow-x: auto; }
+  th, td { text-align: left; padding: 0.45rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); }
+  td.num { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 0.8rem; white-space: nowrap; }
+  .callout {
+    border-left: 3px solid var(--alarm); background: var(--bg-panel);
+    border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin: 1.2rem 0; max-width: 70ch;
+  }
+  .callout.leaf { border-left-color: var(--leaf); }
+  .callout.bark { border-left-color: var(--bark); }
+  .callout p { margin: 0.25rem 0; }
+  .queue {
+    border: 1px dashed var(--rule); border-radius: 8px; padding: 0.9rem 1.1rem; margin: 0.9rem 0;
+  }
+  .queue h4 { margin: 0 0 0.25rem; font-size: 0.98rem; }
+  .queue .tag {
+    font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--leaf); font-weight: 650;
+  }
+  .queue p { margin: 0.3rem 0 0; font-size: 0.88rem; color: var(--ink-soft); }
+  footer {
+    margin-top: 4rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
+    font-size: 0.78rem; color: var(--ink-soft); max-width: 75ch;
+  }
+  footer p { margin: 0.4rem 0; }
+</style>
+
+<main>
+  <p class="kicker">Oak Open Curriculum Ecosystem · repo architecture · MCP-619</p>
+  <h1>Oak Toolkit Atlas</h1>
+  <p class="lede">The current architecture and workspace arrangement, drawn from live evidence —
+  the ground the toolkit redesign starts from. Change proposals land here beneath the baseline,
+  one diagram each.</p>
+
+  <div class="statstrip">
+    <div class="stat"><b>34</b><span>workspaces</span></div>
+    <div class="stat"><b>10,904</b><span>tracked files</span></div>
+    <div class="stat"><b>161.1 MB</b><span>tracked bytes</span></div>
+    <div class="stat"><b>42.5%</b><span>generated + data</span></div>
+    <div class="stat"><b>1</b><span>deployed service</span></div>
+    <div class="stat"><b>0</b><span>npm-published pkgs</span></div>
+    <div class="stat"><b>5,949</b><span>commits / 12 mo</span></div>
+  </div>
+  <div class="legend">
+    <span><i class="k-bark"></i>current state</span>
+    <span><i class="k-leaf"></i>proposed / target</span>
+    <span><i class="k-alarm"></i>measured anomaly</span>
+  </div>
+
+  <h2>1 · The workspace arrangement as it stands</h2>
+  <p>Thirty-four pnpm members in seven families, plus non-member code surfaces
+  (the Claude Code plugin, <code>runtime-only-scripts</code>, the agent substrate under
+  <code>.agent/</code>). Everything is <code>private: true</code> except
+  <code>@oaknational/curriculum-sdk</code> — and even that is not actually published
+  (<code>npmPublish: false</code> in <code>.releaserc.mjs</code>).</p>
+
+  <div class="fam-grid">
+    <div class="fam"><h4>packages/core</h4><p class="role">10 members — a genuinely closed sink: core depends only on core</p>
+      <div class="chips"><span class="chip hot">result <span class="badge">17←</span></span><span class="chip hot">type-helpers <span class="badge">12←</span></span><span class="chip hot">observability <span class="badge">8←</span></span><span class="chip">build-metadata</span><span class="chip">env</span><span class="chip">graph-core</span><span class="chip">safe-path</span><span class="chip">workspace-config <span class="badge">30← dev</span></span><span class="chip">oak-eslint <span class="badge">31← dev</span></span><span class="chip">openapi-zod-adapter</span></div></div>
+    <div class="fam"><h4>packages/libs</h4><p class="role">8 members — mid-tier machinery</p>
+      <div class="chips"><span class="chip hot">logger <span class="badge">6←</span></span><span class="chip">sentry-node</span><span class="chip">posthog-node</span><span class="chip">search-contracts</span><span class="chip">env-resolution</span><span class="chip">fidelity-review</span><span class="chip dead">graph-ingest <span class="badge">0←</span></span><span class="chip dead">graph-project <span class="badge">0←</span></span></div></div>
+    <div class="fam"><h4>packages/sdks</h4><p class="role">4 members — the domain layer; 87.7% of sdk-codegen's bytes are its own generated output</p>
+      <div class="chips"><span class="chip pub">curriculum-sdk <span class="badge">publishable</span></span><span class="chip hot">sdk-codegen <span class="badge">5←</span></span><span class="chip">oak-search-sdk</span><span class="chip">graph-corpus-sdk</span></div></div>
+    <div class="fam"><h4>packages/design</h4><p class="role">6 members — the design system and its tiers</p>
+      <div class="chips"><span class="chip">oak-design-system</span><span class="chip">oak-design-tokens</span><span class="chip">design-tokens-core</span><span class="chip">oak-design-react</span><span class="chip dead">oak-design-ink <span class="badge">0←</span></span><span class="chip">oak-design-assets</span></div></div>
+    <div class="fam"><h4>apps</h4><p class="role">2 members — the delivery leaves</p>
+      <div class="chips"><span class="chip">oak-curriculum-mcp-streamable-http <span class="badge">Vercel</span></span><span class="chip">oak-search-cli <span class="badge">in-repo CLI</span></span></div></div>
+    <div class="fam"><h4>demos</h4><p class="role">2 members — design-system consumers</p>
+      <div class="chips"><span class="chip">oak-curriculum-hub</span><span class="chip">oak-design-showcase</span></div></div>
+    <div class="fam"><h4>tooling &amp; research</h4><p class="role">agent-tools + one research member; plus non-member surfaces</p>
+      <div class="chips"><span class="chip">agent-tools</span><span class="chip">research-evidence</span><span class="chip dead">plugins/oak-open-curriculum <span class="badge">non-member</span></span><span class="chip dead">runtime-only-scripts <span class="badge">non-member</span></span></div></div>
+  </div>
+  <p class="caption"><code>N←</code> = internal dependents (production edges unless marked dev).
+  Dashed chips: zero consumers anywhere in the repo, or non-member surfaces.
+  Source: per-manifest sweep, 2026-08-17.</p>
+
+  <h2>2 · The runtime dependency spine</h2>
+  <p>Stripping devDependencies changes the picture completely. The two most-depended-upon
+  packages in the estate (<code>oak-eslint</code> at 31, <code>workspace-config</code> at 30)
+  are build/lint infrastructure with <em>zero</em> runtime coupling. What actually carries the
+  running system is a small spine — and it is the embryo of the finished-foundations layer.</p>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TD
+  classDef anomaly stroke:#B3452E,stroke-width:2.5px
+  classDef quiet stroke-dasharray:4 3,opacity:0.75
+
+  subgraph TOPS["apps · demos  (always in flux — emergent expressions)"]
+    MCP["MCP server app"]
+    CLI["oak-search-cli"]
+    HUB["curriculum-hub"]
+  end
+  subgraph SDKS["packages/sdks  (domain layer)"]
+    CSDK["curriculum-sdk"]
+    SSDK["oak-search-sdk"]
+    CODEGEN["sdk-codegen"]
+    GCORP["graph-corpus-sdk"]
+  end
+  subgraph LIBS["packages/libs"]
+    LOG["logger"]
+    SC["search-contracts"]
+    SN["sentry-node"]
+    GI["graph-ingest · 0 consumers"]:::quiet
+  end
+  subgraph CORE["packages/core  (closed sink — the confirmed layer)"]
+    OBS["observability · 8←"]
+    TH["type-helpers · 12←"]
+    RES["result · 17←"]
+  end
+
+  MCP --> CSDK
+  MCP --> SSDK
+  CLI --> CSDK
+  CLI --> SSDK
+  HUB --> CSDK
+  CSDK --> CODEGEN
+  CSDK --> GCORP
+  SSDK --> CODEGEN
+  SSDK --> SC
+  GCORP --> CODEGEN
+  SC -->|lib → sdk, prod| CODEGEN
+  CSDK --> LOG
+  SSDK --> LOG
+  CODEGEN --> LOG
+  SN --> LOG
+  LOG --> OBS
+  OBS --> TH
+  OBS --> RES
+  TH ~~~ RES
+  class SC anomaly
+    </pre>
+    <figcaption>Production <code>workspace:*</code> edges, simplified (apps' nine-package
+    foundation fan-out abbreviated; full edge list in the sweep record). Red:
+    <code>search-contracts</code> (a lib) depends on <code>sdk-codegen</code> (an sdk) in
+    production while <code>oak-search-sdk</code> (an sdk) depends on
+    <code>search-contracts</code> (a lib) — the declared libs/sdks seam is bidirectional in
+    reality. The measured import graph reads as one substrate tier + two small domain
+    clusters + a residual blob, not the four-level hierarchy the directory tree declares.</figcaption>
+  </figure>
+
+  <h2>3 · The delivery plane — what actually ships</h2>
+  <p>For a repo whose destination is <em>a toolkit that can build any digital service</em>,
+  the current delivery plane is one Oak service and zero published building blocks.</p>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart LR
+  classDef ghost stroke-dasharray:5 4,opacity:0.65
+  classDef live stroke:#3E7A4E,stroke-width:2px
+
+  UP["open-api.thenational.academy one upstream, three taps: spec · bulk · live queries"]
+  REPO["the monorepo 34 workspaces"]
+  VERCEL["curriculum-mcp-alpha .oaknational.dev/mcp Express on Vercel + embedded widget"]:::live
+  PLUGIN["Claude Code plugin → www.thenational.academy/mcp"]:::live
+  CLIS["oaksearch · agent-tools CLIs in-repo invocation only, no bin"]
+  NPM["npm registry NOTHING PUBLISHED (npmPublish: false)"]:::ghost
+
+  UP --> REPO
+  REPO --> VERCEL
+  REPO --> PLUGIN
+  REPO --> CLIS
+  REPO -.-> NPM
+    </pre>
+    <figcaption>Every externally-reachable surface, verified from deploy configs and release
+    machinery 2026-08-17. Only <code>curriculum-sdk</code> is even publishable by manifest
+    shape; the release pipeline versions, tags, and changelogs — it never publishes.</figcaption>
+  </figure>
+
+  <h2>4 · Generated bytes and the lifecycle-mixing exemplar</h2>
+  <p>42.5% of tracked bytes are generated output or data payload, and <strong>every generated
+  location is co-resident with hand-written code — there is no generated-only package
+  anywhere in the estate</strong>. The heaviest case is the exemplar for the whole defect
+  class the brief's point 4 names:</p>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TD
+  classDef gen fill-opacity:0.35,stroke-dasharray:5 4
+  classDef clock stroke:#8A6A4F,stroke-width:2px
+
+  subgraph PKG["packages/sdks/oak-sdk-codegen — one workspace, four clocks, 34.3 MB"]
+    AUTH["authored generators code-generation/ · vocab-gen/ · src/bulk/ ~1.5 MB"]:::clock
+    SYN["authored curated synonyms src/synonyms/ — editorial clock"]:::clock
+    T["src/types/generated/ 2.4 MB · upstream-spec clock (29/yr)"]:::gen
+    V["src/generated/vocab/ 30.0 MB · mining clock (~19/yr) incl. the 23.9 MB graph corpus"]:::gen
+    CACHE["schema-cache/ 0.4 MB · refresh clock"]:::gen
+  end
+  BULK["apps/oak-search-cli/bulk-downloads 746 MB · untracked input corpus"]
+  BULK -->|pnpm vocab-gen| V
+  AUTH --> T
+  AUTH --> V
+    </pre>
+    <figcaption>87.7% of this workspace's bytes are its own generated outputs. Its authored
+    generators, curated editorial content, upstream-derived types, mined corpus, and spec
+    cache tick on different clocks inside one boundary — the pattern point 4 ends.</figcaption>
+  </figure>
+
+  <div class="tablewrap"><table>
+    <tr><th>Generated location</th><th>Size</th><th>Regenerated by</th><th>Co-resident with authored code</th></tr>
+    <tr><td><code>oak-sdk-codegen/src/generated/vocab/</code></td><td class="num">30.04 MB</td><td class="num">pnpm vocab-gen</td><td>yes — generators, curated synonyms</td></tr>
+    <tr><td><code>oak-sdk-codegen/src/types/generated/</code></td><td class="num">2.39 MB</td><td class="num">pnpm sdk-codegen</td><td>yes — codegen pipelines</td></tr>
+    <tr><td><code>oak-search-cli/ground-truths/generated/</code></td><td class="num">1.33 MB</td><td class="num">pnpm bulk:codegen</td><td>yes — generation/ sibling</td></tr>
+    <tr><td><code>mcp app src/generated/</code> (widget bundle + orientation digest)</td><td class="num">0.63 MB</td><td class="num">pnpm build:widget · under-the-hood-content:generate</td><td>yes — inside app src/</td></tr>
+    <tr><td>agent-surface adapter stubs (<code>.claude .cursor .agents .codex .gemini</code>)</td><td class="num">~0.53 MB · ~380 files</td><td class="num">pnpm skills:generate</td><td>projected beside canonical <code>.agent/</code></td></tr>
+    <tr><td><code>oak-sdk-codegen/schema-cache/</code></td><td class="num">0.37 MB</td><td class="num">pnpm sdk-codegen:refresh</td><td>yes</td></tr>
+  </table></div>
+  <p class="caption">Adjacent data payloads, distinct from generated code: the design-studio
+  import (<code>studio-source/</code>, 15.1 MB), agent evidence captures
+  (<code>.agent/reports</code> non-markdown, 17.3 MB). One record-honesty defect found:
+  <code>curriculum-sdk/src/types/schema-bridge.ts</code> wears an <code>@generated</code>
+  banner but is hand-written.</p>
+
+  <h2>5 · The real law vs the declared model</h2>
+  <p>The architecture that actually binds is what the gates enforce. Everything else is
+  convention that any commit can silently cross.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Mechanism</th><th>What it enforces</th><th>Coverage</th></tr>
+    <tr><td>dependency-cruiser</td><td>Six directional import strata rules (core/libs/sdks direction)</td><td>Binding; one named exemption; <code>design/*</code> uncovered at this layer</td></tr>
+    <tr><td>ESLint boundary rules (ADR-041)</td><td>Design-package fences</td><td>Live in five of six design packages</td></tr>
+    <tr><td>pnpm membership</td><td>Curated whitelist; one glob admission (<code>packages/design/*</code>)</td><td>Binding at install time</td></tr>
+    <tr><td>Licence quarantine</td><td>Code-MIT / content-OGL / brand-reserved separations</td><td>Workspace-forcing where it applies</td></tr>
+    <tr><td>Editorial / brand change-clock</td><td><em>nothing</em></td><td>No mechanical signature at all</td></tr>
+  </table></div>
+
+  <h2>6 · The measured record — change-clocks and coupling</h2>
+  <p>Twelve months, 5,949 commits, 308 multi-workspace, confound-corrected. Two facts matter
+  for every proposal that follows: the heaviest observed couplings run <em>across</em>
+  today's boundaries, and the change-clocks are real and measurable — which makes the
+  stability gradient an observable, not an aspiration.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Measured coupling (co-change)</th><th>Rate</th><th>Reading</th></tr>
+    <tr><td>vocab-mining ↔ corpus-data</td><td class="num">95%</td><td>changes as one thing across the seam</td></tr>
+    <tr><td>es-ingest-core ↔ search-ingest</td><td class="num">89%</td><td>same</td></tr>
+    <tr><td>fidelity-capture ↔ fidelity-review</td><td class="num">86%</td><td>same</td></tr>
+    <tr><td>SDK MCP layer</td><td class="num">32%</td><td>a genuinely independent cluster</td></tr>
+    <tr><td>curriculum graph views · design conformance</td><td class="num">11% · 11%</td><td>independent clusters</td></tr>
+  </table></div>
+  <div class="tablewrap"><table>
+    <tr><th>Change-clock (ticks / 12 mo)</th><th>Rate</th></tr>
+    <tr><td>upstream-spec (codegen)</td><td class="num">29</td></tr>
+    <tr><td>vocab / mining</td><td class="num">19</td></tr>
+    <tr><td>widget regeneration</td><td class="num">18</td></tr>
+    <tr><td>index-design</td><td class="num">16</td></tr>
+    <tr><td>design source</td><td class="num">10</td></tr>
+    <tr><td>editorial ground truths</td><td class="num">8</td></tr>
+    <tr><td>bulk refreshes</td><td class="num">7</td></tr>
+  </table></div>
+  <p class="caption">Caveats carried with the numbers: batch-commit inflation, rename
+  detection skipped, generator fan-out not yet exempted from co-change. Direction robust,
+  magnitudes approximate. Multi-workspace commit rate baseline: 5.2%.</p>
+
+  <h2>7 · What the baseline says, in four sentences</h2>
+  <div class="callout bark">
+    <p><strong>1.</strong> The declared four-level hierarchy and the real structure diverge — the
+    runtime spine is one small confirmed core sink plus domain clusters, with the declared
+    libs/sdks seam bidirectional in production.</p>
+    <p><strong>2.</strong> The real law is islands of hard enforcement in a sea of convention —
+    six depcruise rules, a design fence, a membership whitelist — while whole change-clock
+    families have no mechanical signature.</p>
+    <p><strong>3.</strong> Lifecycle mixing is universal where generation exists: no
+    generated-only package, four clocks inside one workspace at the worst site, 42.5% of
+    tracked bytes generated-or-data.</p>
+    <p><strong>4.</strong> The toolkit ambition is currently inverted: reusable machinery sits
+    inside Oak leaves (OAuth-for-MCP, the OpenAPI pipeline, index lifecycle machinery), three
+    built libraries have zero consumers, and nothing ships as a building block.</p>
+  </div>
+
+  <h2>8 · Change proposals</h2>
+  <p>The complete change set, each change a designed system property with its own diagram,
+  per the brief's five points: the existing architecture holds no privilege; the thinnest
+  possible Oak on reusable code; foundations <em>designed</em> to library grade and
+  effectively finishable — constitutive of the conceptual shape, not a cleanup phase; one
+  lifecycle per package; a toolkit that can build any digital service. The set was
+  re-derived in full at the owner's lens-4 sweep (2026-08-19: <em>"would this be simpler,
+  or thinner, if we changed the system?"</em> applied to every decision) — the shared
+  generator that survived the sweep: convert standing activities (classifying, finishing,
+  publishing, auditing) into constructed properties, and run the context-specificity
+  gradient below the repo boundary (ecosystem-canonical → toolkit-owned → oak-pack).</p>
+
+  <h3 id="change-1">Change 1 · The foundation layer, designed</h3>
+  <p>Establish a chartered <strong>foundation tier</strong>: a small set of packages, each the
+  canonical form of one standard concept, designed to be <em>finished</em>. This tier is the
+  constitutional part of the toolkit — brief points 3 and 5 made structural — and its design
+  is part of the repo's conceptual shape, not a cleanup phase. The estate's embedded
+  instances serve as demand evidence and test cases; each package is designed from the
+  concept's canonical form, never extracted from incumbent code (point 1 applied at code
+  scale).</p>
+  <p><strong>The charter.</strong> Admission asks <strong>question zero first</strong>
+  (added at the owner's lens-4 sweep, 2026-08-19): <em>does a finished canonical form
+  already exist in the ecosystem?</em> Where it does — an industry contract like
+  OpenTelemetry's provider-neutral observability API, a mature result library — the
+  default is ADOPT (with a thin conformance suite as the assurance bar), because the
+  finish bar is precisely what those packages already paid, and re-deriving them in-estate
+  privileges the incumbent shape one level deeper than point 1 tolerates. Owning is the
+  evidenced exception: concepts with no external canonical form, or concepts small enough
+  that owning a finished forty-line module genuinely beats curating a dependency — the
+  crossover is depth-versus-curation-cost, and the estate's overrides block is the
+  measured instrument for the curation side. Beyond question zero, admission requires a
+  standard concept whose contract can be stated without Oak, any vendor, or any consumer
+  class; at least one embedded estate instance as demand evidence (standard concepts do
+  not wait for a second consumer); and a closed public API statable without present
+  callers. The finish bar, declared at each
+  package's birth: exhaustive tests (property-based where the concept warrants them), full
+  documentation, a performance characterisation, and tier-closed dependencies — foundation
+  depends only on foundation, preserving the one structural property the current core
+  already proves. A finished package is <em>done</em>: its clock is designed flat, and later
+  change is exceptional and deliberate. Finished is an observable, not a mood: ratified
+  contract + green exhaustive suite + perf record + flat clock over a declared window +
+  live consumers (§6 makes the clocks measurable; a flat clock alone can be abandonment).</p>
+  <p><strong>The v1 concept set, with its demand evidence.</strong> Today's core is a mixed
+  bag: genuine concept packages sit beside build infrastructure on a different clock, and
+  two of the ten name a consumer class in their own descriptions — <em>"for MCP
+  applications"</em> inside a tier that must not know its consumers.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Concept (canonical form)</th><th>Demand evidence today</th><th>Today's home → target</th></tr>
+    <tr><td>Explicit error values (result)</td><td class="num">17 internal dependents</td><td><code>core/result</code> → re-chartered to the bar</td></tr>
+    <tr><td>Typed object operations</td><td class="num">12 dependents</td><td><code>core/type-helpers</code> → re-chartered</td></tr>
+    <tr><td>Observability contract</td><td class="num">8 dependents</td><td><code>core/observability</code> → contract only; vendor glue stays outside</td></tr>
+    <tr><td>Environment resolution</td><td>two packages, both consumer-scoped by description</td><td><code>core/env</code> + <code>libs/env-resolution</code> → one package</td></tr>
+    <tr><td>Structured-logging contract</td><td class="num">6 dependents</td><td><code>libs/logger</code> → contract to foundation; sinks and vendors exit</td></tr>
+    <tr><td>Path containment</td><td>MCP app, agent substrate</td><td><code>core/safe-path</code> → re-chartered</td></tr>
+    <tr><td>Deterministic ordering / collation</td><td>duplicated inline (agent-tools comparators; estate-review <code>utf16-order</code>)</td><td>no package today → new</td></tr>
+    <tr><td>Graph primitives (RDF/JS-aligned)</td><td>corpus + curriculum graph chain</td><td><code>core/graph-core</code> → re-chartered</td></tr>
+  </table></div>
+  <p class="caption">And the exits, by lifecycle (point 4 applied at tier scale):
+  <code>oak-eslint</code>, <code>workspace-config</code>, <code>build-metadata</code> move to
+  a build tier on the dev-only clock; <code>openapi-zod-client-adapter</code> rides the
+  generation chain's clock and belongs with Change 2. Names are illustrative — each
+  package's contract is designed at its own card.</p>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart TD
+  classDef moved stroke:#3E7A4E,stroke-width:2px
+  classDef newpkg stroke:#3E7A4E,stroke-width:2.5px,stroke-dasharray:6 3
+  classDef exits stroke-dasharray:4 3,opacity:0.8
+
+  BAR["the finish bar — declared at birth: closed contract · exhaustive tests · docs · perf characterisation · tier-closed deps"]:::moved
+
+  subgraph F["foundation tier — Oak-free by contract, finishable"]
+    direction LR
+    R["result"] ~~~ T["typed object ops"] ~~~ O["observability contract vendor glue exits"]:::moved ~~~ E["environment resolution core/env + libs/env-resolution → one"]:::moved
+    L["logging contract from libs/logger — sinks exit"]:::moved ~~~ S["safe-path"] ~~~ D["deterministic ordering new — today inline duplicates"]:::newpkg ~~~ G["graph-core"]
+  end
+
+  subgraph B["build tier — dev-only clock"]
+    direction LR
+    ESL["oak-eslint"]:::moved ~~~ W["workspace-config"]:::moved ~~~ BM["build-metadata"]:::moved
+  end
+
+  subgraph X["exits the foundation"]
+    direction LR
+    V["sentry-node · posthog-node vendor clock"]:::exits ~~~ OZ["openapi-zod-client-adapter generation clock → Change 2"]:::exits
+  end
+
+  BAR --> F
+    </pre>
+    <figcaption>Target state, with each label carrying its own delta. Green outline:
+    membership or shape changes; dashed green: a new package; dashed grey: leaves the
+    foundation on its own clock. The tier stays a closed sink — foundation depends only on
+    foundation — which is the property the finish bar's "tier-closed deps" preserves.</figcaption>
+  </figure>
+
+  <div class="callout leaf">
+    <p><strong>Warrant.</strong> Brief points 3 and 5 name this layer; the baseline shows its
+    embryo already confirmed (§2's closed core sink) and shows the defects the charter ends:
+    consumer-scoped naming inside core, the env duplication, vendor glue beside contracts,
+    and build infrastructure sharing a tier with runtime foundations. Evidence basis:
+    the manifest and dependents sweeps plus the measured clocks above — no whole-estate
+    enumeration was needed, so the design-first order holds for this change.</p>
+    <p><strong>Falsifiers.</strong> A concept whose contract cannot be stated without Oak,
+    vendor, or consumer specifics is relocated, not admitted. A concept with no embedded
+    estate instance is deferred — demand unevidenced. If a finished package's clock will not
+    go flat because consumers keep forcing contract change, the concept was mis-drawn:
+    split or re-draw it rather than reopening the contract piecemeal. And on question
+    zero, both directions: an adopted external that forces floor-management at a rate
+    exceeding what owning would cost (the overrides-block class, measured) flips that
+    concept to owned; an owned package whose ecosystem equivalent has become the industry
+    contract flips to adopted — per concept, at its own card, never wholesale.</p>
+    <p><strong>Spend.</strong> This change is design; the per-package finish work (contract,
+    tests, docs, perf) is priced per package at its own card before any of it starts.</p>
+  </div>
+  <h3 id="change-2">Change 2 · One clock per package</h3>
+  <p>Brief point 4, made structural: <strong>a package's clock is the thing that changes
+  it</strong> — authored design, upstream spec, regeneration, editorial curation, vendor
+  churn — and no package holds two. Mixed clocks make every tick look like change to
+  everything in the box: clocks become unmeasurable, review rounds oversize, and Change 1's
+  "finished" observable is unreadable exactly where it matters. §4 shows the mixing is
+  universal today — no generated-only package exists, and the worst site holds four clocks
+  in one workspace.</p>
+  <p><strong>The designed concept: the carrier contract, with a disposition rule.</strong>
+  Every generated or derived artefact gets one of three homes, chosen by a rule rather
+  than case-by-case taste — and the rule's default was inverted at the owner's lens-4
+  sweep (2026-08-19): <em>untracked derivation is the default home; tracking must be
+  earned.</em> <em>Untracked build product</em> — the default: derivable at build time,
+  built, never committed (the widget bundle, the orientation digest).
+  <em>Tracked carrier package</em> — only where tracking earns itself through network
+  dependence, expensive compute, or upstream instability, and consumers import the pinned
+  result at source time: the package holds the regeneration command, its input pins (spec
+  version, corpus snapshot, generator version), no authored logic, and a
+  clean-regeneration check (regenerate → empty diff) as its gate — this is what keeps a
+  cold clone building without touching the upstream, the Cardinal Rule's own property.
+  <em>Out-of-tree store</em> — when it is a cache or input corpus (schema-cache, the
+  746&nbsp;MB bulk downloads): named location, refresh contract, never in the tree. The
+  carrier contract is itself a toolkit piece — it works for any generated surface in any
+  digital service.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Site today (§4)</th><th>Clock</th><th>Target home</th></tr>
+    <tr><td><code>sdk-codegen</code> authored generators + pipelines</td><td>authored design</td><td>an OpenAPI-pipeline package — reusable machinery, a toolkit candidate in its own right</td></tr>
+    <tr><td><code>src/synonyms/</code> curated synonyms</td><td>editorial</td><td>editorial package on its own clock</td></tr>
+    <tr><td><code>src/types/generated/</code> (2.7 MB)</td><td>upstream spec (29/yr)</td><td>tracked carrier, spec-pinned</td></tr>
+    <tr><td><code>src/generated/vocab/</code> incl. 23.9 MB corpus</td><td>regeneration (~19/yr)</td><td>tracked carrier, generator+snapshot-pinned</td></tr>
+    <tr><td><code>schema-cache/</code> · CLI <code>bulk-downloads/</code></td><td>refresh</td><td>out-of-tree store with a refresh contract</td></tr>
+    <tr><td>widget bundle · orientation digest (in app <code>src/</code>)</td><td>build</td><td>untracked build product</td></tr>
+    <tr><td>CLI <code>ground-truths/generated/</code></td><td>regeneration</td><td>tracked carrier beside its <code>generation/</code> sibling — same pattern, local scale</td></tr>
+    <tr><td>agent-surface adapter stubs (~380 files)</td><td>projection</td><td>already contract-shaped (<code>skills:generate</code>) — gains the clean-regen check only</td></tr>
+  </table></div>
+  <p class="caption">Plus one record-honesty fix that costs a line: <code>schema-bridge.ts</code>
+  drops its false <code>@generated</code> banner. The measured 95% vocab-mining ↔ corpus-data
+  co-change is engaged, not ignored: it is the expected generator-fan-out signature — when
+  the generator changes, its output regenerates in the same commit — and the split makes it
+  exemptable in the coupling measure instead of a smear across one box.</p>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart LR
+  classDef gen fill-opacity:0.35,stroke-dasharray:5 4
+  classDef target stroke:#3E7A4E,stroke-width:2px
+
+  subgraph NOW["today — one workspace, four clocks, 34.3 MB"]
+    MIX["oak-sdk-codegen generators + synonyms + spec types + mined vocab + schema cache"]
+  end
+
+  subgraph AFTER["target — one clock each"]
+    GEN["openapi-pipeline authored clock · toolkit candidate"]:::target
+    SYN["curated synonyms editorial clock"]:::target
+    TYPES["spec-types carrier upstream clock · spec-pinned"]:::gen
+    VOC["vocab + corpus carrier regeneration clock · snapshot-pinned"]:::gen
+  end
+
+  CACHE["schema cache · bulk corpus out-of-tree store"]:::gen
+  CONTRACT["carrier contract: regeneration command · input pins · no authored logic · clean-regen gate"]:::target
+
+  MIX --> GEN
+  MIX --> SYN
+  MIX --> TYPES
+  MIX --> VOC
+  MIX --> CACHE
+  CONTRACT --- AFTER
+    </pre>
+    <figcaption>The worst site unmixed: five homes, one clock each. The same disposition
+    rule then walks the smaller sites in the table — the pattern is the change, the codegen
+    chain is its proving ground.</figcaption>
+  </figure>
+
+  <div class="callout leaf">
+    <p><strong>Warrant.</strong> Point 4 verbatim, plus two measured facts: the clocks are
+    real and separable (§6 measures five distinct rates inside today's mixed boxes), and
+    generation is 42.5% of tracked bytes — so this one change moves more of the estate's
+    mass than any other. It also feeds Change 1 directly: one-clock packages are what make
+    the stability gradient readable. Evidence basis: §4's byte census and §6's clock
+    record, re-verified against the live tree 2026-08-19 — design-first holds.</p>
+    <p><strong>Falsifiers.</strong> A carrier whose clean-regeneration check cannot be made
+    deterministic names a generator-determinism defect — fix that first; the carrier design
+    is not at fault and does not proceed around it. A carrier whose contents tick on two
+    independent causes with different review needs splits again. If vocab-mining ↔
+    corpus-data co-change persists across the new seam <em>after</em> the fan-out exemption,
+    the seam is drawn wrong — remeasure before proceeding.</p>
+    <p><strong>Spend.</strong> Design only, here; the mechanical moves are cheap but the
+    carrier gates (clean-regen checks) are new CI surface — priced at their own card with
+    the first carrier as the proving instance.</p>
+  </div>
+  <h3 id="change-3">Change 3 · Thin Oak on reusable ground — the seam</h3>
+  <p>Brief point 2, answered at the system level. An earlier draft of this change executed
+  the census's per-package dispositions inside the current tree; the owner's lens-4
+  question (2026-08-19, <em>"would this be simpler, or thinner, if we changed the
+  system?"</em>) superseded it: per-package splits treat leakage one package at a time and
+  leave the leak vector open, with classification as a standing activity. The system
+  change makes thinness a <strong>construction property</strong> instead of a policed
+  one.</p>
+  <p><strong>The change: two sides, one seam, three gates.</strong> The code estate
+  re-homes under two top-level families — <code>toolkit/</code> (generic by construction,
+  publishable by default) and <code>oak/</code> (packs and assemblies) — with the seam
+  enforced by three mechanical gates: <em>imports</em> (<code>toolkit/**</code> never
+  imports <code>oak/**</code> — dependency-cruiser), <em>lexemes</em> (no Oak vocabulary —
+  brand names, curriculum terms, <code>thenational.academy</code> — inside
+  <code>toolkit/</code> sources; the <code>@oaknational</code> npm scope stays, as
+  provenance rather than coupling), and <em>manifests</em> (toolkit packages carry
+  publishable manifests by default). The probe "could a non-Oak service consume this
+  unchanged?" stops being a review question and becomes a construction fact; a machinery
+  package cannot acquire Oak-ness without failing a gate at write time. And
+  <strong>Oak-ness becomes enumerable</strong>: <code>oak/</code> can be pointed at and
+  measured, so "thinner" becomes a number with a trend, not an aspiration.</p>
+  <p><strong>Oak-ness inside <code>oak/</code>, by class.</strong> The three pack classes
+  survive as the oak side's internal structure — identity packs (brand, reserved),
+  content adapters and data packs (OGL), injected configuration (names, policy, env) —
+  plus the assemblies (apps and demos). The licence model lands directory-literal:
+  <code>toolkit/</code> is MIT, the oak side carries the OGL content pointers and the
+  reserved brand, and no component's licence needs more than one word again. The design
+  system remains the proven instance of the pattern — same markup, any identity —
+  now generalised by topology rather than by per-package discipline.</p>
+  <p><strong>The census retires into a migration map.</strong> The classification matrix
+  (45 subjects, owner-carded 2026-08-14) stops being a standing instrument and becomes the
+  one-time re-home plan: the 12 generic-foundation rows move to <code>toolkit/</code>
+  nearly as-is; the 9 mixed rows split once at the seam, each along its already-named
+  line; the 17 oak-leaf rows re-home under <code>oak/</code>. §7's inverted-ambition
+  instances — OAuth-for-MCP, the OpenAPI pipeline, the index lifecycle machinery — exit
+  Oak leaves as toolkit machinery in the same move. After the migration, membership is the
+  classification, and no census of this kind needs running again.</p>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart LR
+  classDef gate stroke:#3E7A4E,stroke-width:2.5px
+
+  subgraph TK["toolkit/ — generic by construction, publishable by default"]
+    direction TB
+    F2["foundation ring — Change 1's finishable cores"]
+    M["machinery — mcp server incl. OAuth, openapi pipeline, search and index lifecycle, design system"]
+  end
+
+  subgraph SEAM["the seam — three mechanical gates"]
+    direction TB
+    G1["imports: toolkit/ never imports oak/"]:::gate
+    G2["lexemes: no Oak vocabulary inside toolkit/ sources"]:::gate
+    G3["manifests: toolkit/ publishable by default"]:::gate
+  end
+
+  subgraph OAK["oak/ — enumerable, measurably thin"]
+    direction TB
+    P["packs — identity · content · config"]
+    A["assemblies — apps and demos"]
+  end
+
+  TK --- SEAM
+  SEAM --- OAK
+  A -->|consumes across the seam| M
+    </pre>
+    <figcaption>The system change: one seam replaces thirty-four per-package judgments.
+    Consumption flows one way across it; the three gates make the toolkit side's
+    generality constructional. Change 1's foundation ring nests inside the toolkit side
+    (its "no consumer class" charter clause becomes redundant with the seam — a
+    simplification); Change 4's publishing becomes the toolkit side's default state
+    rather than an aspiration.</figcaption>
+  </figure>
+
+  <div class="callout leaf">
+    <p><strong>Warrant.</strong> The owner's lens-4 ruling plus three owner principles
+    landing on the same answer: structure over vigilance (a needs-vigilance boundary is
+    unfinished), correctness by construction, and licence legibility. The census evidence
+    supports feasibility — every mixed row already carries a named single split. The
+    one-time re-home is mechanical (import paths, workspace globs, CI wiring) and buys
+    the ongoing classification cost down to zero. The maximal form — a separate published
+    toolkit repo — was considered and deferred: it maximises the seam but pays in
+    change-cost, the owner's core currency; its flip condition is external toolkit
+    adoption with third-party contributors becoming a product goal.</p>
+    <p><strong>Falsifiers.</strong> A substantial class of true hybrids — mixed rows that
+    resist even one split without forking machinery — means the seam is drawn wrong for
+    this estate: stop and remeasure. If the lexeme gate cannot run mechanically without
+    false-positive noise drowning its signal, that leg weakens to review-time and the
+    seam loses one of its three teeth — name it rather than pretending. An Oak element
+    that resists pack or configuration form marks either machinery not yet generic (fix
+    the machinery) or genuinely Oak-constitutive behaviour (it lives in
+    <code>oak/</code>, named as such).</p>
+    <p><strong>Spend.</strong> Design here; the re-home is one migration card (mechanical,
+    Cardinal-Rule machinery already proves the estate can re-align wholesale), and the
+    three gates are new CI surface priced with it. The per-row splits of the earlier
+    draft become steps inside that one card instead of twenty-six separate ones.</p>
+  </div>
+  <h3 id="change-4">Change 4 · The delivery plane — absorbed into the seam</h3>
+  <p>Resolved at the owner's lens-4 sweep (2026-08-19): once Change 3's manifest gate
+  makes the toolkit side publishable by default, "start publishing" stops being a
+  programme and becomes a property — this change's substance lives in the seam, and its
+  diagram is Change 3's. One genuine decision remains as residue and rides the seam's
+  migration card: the release mechanism itself — per-package versioning and publishing
+  against today's single-version pipeline that tags and changelogs but never publishes
+  (<code>npmPublish: false</code>). Publishing stays the exercised proof of separability;
+  the seam is what makes the proof cheap.</p>
+
+  <h3 id="change-5">Change 5 · The workspace-liveness gate</h3>
+  <p>Reshaped at the same sweep from three ad-hoc dispositions into a system change: an
+  estate-level check under which <strong>a workspace with zero consumers and no deployment
+  target fails unless it carries a dated warrant</strong>. Package-level dead-code tooling
+  (knip) cannot see this class — a whole package with no importers is invisible to
+  per-package analysis, which is exactly how three built libraries accumulated silently.
+  The gate composes with Change 1's stability observable (live consumers is one of its
+  legs) and closes the class permanently; the estate's follow-up discipline supplies the
+  warrant shape — every warrant carries its own expiry and its named gate. The first run
+  IS the disposition moment for today's three instances — <code>graph-ingest</code>,
+  <code>graph-project</code>, <code>oak-design-ink</code>: finish, adopt, or retire, each
+  with its evidence, at one card.</p>
+
+  <figure class="diagram">
+    <pre class="mermaid">
+flowchart LR
+  classDef gate stroke:#3E7A4E,stroke-width:2.5px
+  classDef card stroke:#B3452E,stroke-width:2px
+
+  W["every workspace, every gate run"] --> G{"liveness gate"}:::gate
+  G -->|"has consumers or a deployment target"| PASS["passes — alive by evidence"]
+  G -->|"carries a dated, unexpired warrant"| WARR["passes — alive by warrant, clock ticking"]
+  G -->|neither| CARD["disposition card — finish, adopt, or retire"]:::card
+  CARD -.->|first run| THREE["graph-ingest · graph-project · oak-design-ink"]
+    </pre>
+    <figcaption>The gate replaces the audit: unconsumed packages cannot accumulate
+    silently, and every warrant carries its own expiry. The three current instances
+    are the first run's disposition card, not three separate programmes.</figcaption>
+  </figure>
+
+  <div class="callout leaf">
+    <p><strong>Warrant.</strong> The class exists by measurement (three instances in §1's
+    family grid) and per-package tooling structurally cannot catch it. The gate converts a
+    recurring audit into a constructed property — the same generator as every change
+    above.</p>
+    <p><strong>Falsifiers.</strong> If legitimate incubation (a package built ahead of its
+    consumer by design) keeps tripping the gate, the warrant mechanism is too coarse —
+    tune the warrant shape, never the gate's teeth. If the first run cannot reach a
+    disposition for any of the three with evidence in hand, the finish/adopt/retire
+    triad is missing an option — name it.</p>
+    <p><strong>Spend.</strong> The gate is one validator plus a schema for warrants; the
+    first-run dispositions are one card.</p>
+  </div>
+
+  <footer>
+    <p><strong>Provenance.</strong> Workspace/runtime/delivery topology and generated-byte
+    census: first-hand sweeps, 2026-08-17. Classifications and move/stay dispositions:
+    workspace-classification census (45 subjects, owner-carded 2026-08-14). Co-change and
+    clock measurements: 12-month confound-corrected record
+    (workspace-basis-regrounding, 2026-08-17). Fleet-era survey conclusions are
+    deliberately absent: salvage enters as measurement only, with no privileged status.
+    Change-set re-derivation: the owner's lens-4 sweep, 2026-08-19, ruled at two cards —
+    Change 3 redrawn as the seam; the adopt-first admission question, the inverted
+    carrier default, Change 4's absorption, and the liveness gate applied together.</p>
+    <p><strong>Reading discipline.</strong> Every number above is traceable to a named
+    instrument run; where a measurement carries caveats they are stated beside it. Diagrams
+    simplify edge sets for legibility and say so in their captions.</p>
+  </footer>
+</main>

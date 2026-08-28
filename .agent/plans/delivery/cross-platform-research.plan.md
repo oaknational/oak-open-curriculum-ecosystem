@@ -160,7 +160,26 @@ Tranche A first — the manual lane's needs; tranche B never blocks it.
 - Tranche A progress 2026-08-17, same seating: todo 1 SHIPPED and MERGED
   as PR #897 (the hook line and CONTRIBUTING's repeat of it — both
   broken-suggestion sites; code-expert approved, mantagen approved,
-  merge sha `fa0604aa3`). Todo 2 REFUTED with evidence: turbo's
+  merge sha `fa0604aa3`).
+- Todo 3 (decision briefs) DELIVERED at the owner card 2026-08-17
+  ~12:4xZ, while PRs #891 and #888 were both open — acceptance
+  criterion 4 satisfied. Duplication/direction sweep ran first at the
+  owner's word: no branches, no diffs, no Linear tickets exist for any
+  brief topic; the three live only as #891's named follow-ups, so the
+  briefs anchored to their author's stated directions. Card answers,
+  verbatim-anchored: (1) `.gitattributes` — "Estate lands it now, but
+  broader, we only LF and we only allow utf-8" (owner); landing as its
+  own PR with the one-file renormalisation (index verified all-LF bar
+  one CSV; no `.bat`/`.cmd` exceptions needed; `encoding:check` already
+  enforces UTF-8-without-BOM at critical). (2) Windows CI — owner-shaped
+  minimal proof-of-stack leg ("the smallest set that will prove the
+  stack works"): install → build → the #891 binary-spawning smokes;
+  authored only after #891 merges. (3) Remote cache + knobs — accepted
+  as recommended; VERIFIED SAME HOUR that CI remote caching is already
+  ENGAGED ("Remote caching enabled", main run 2026-08-17 log), so the
+  whole gap is local contributor auth (`turbo login`) documentation;
+  README knobs follow-up offered to its author first (PR #891 comment
+  5316308941, the owner-directed pickup notice). Todo 2 REFUTED with evidence: turbo's
   `lint` and `test` tasks declare `dependsOn: ["^build"]` (turbo.json),
   so a fresh clone's documented verify sequence builds dependencies at
   its first step — no README change needed; this record answers the

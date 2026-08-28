@@ -1,0 +1,601 @@
+/* ============================================================
+   Token reference route — layout, density, and the paint that
+   makes a token visible.
+
+   Three halves, and the splits matter.
+
+   LAYOUT. A rail carries the two ways of moving around four
+   hundred tokens — the identity/theme controls and the family
+   jump list — and at wide it stays put beside the tables, which
+   is what turns an empty right-hand margin into reading width.
+
+   DENSITY. One token is one line. A reference you cannot see
+   enough of at once is a reference you cannot compare with, so
+   the row is tuned to the type's own line box: the value and
+   its expression sit side by side, and the theme marker rides
+   beside the name instead of under it.
+
+   PAINT. Each `.tok-paint--<kind>` rule binds ONE standard
+   property to `var(--tok)`, and `--tok` is pointed at the row's
+   own token by the generated sheet the page links
+   (app/tokens/token-vars.ts). So what a colour token looks
+   like, what a length token looks like, lives HERE in a
+   reviewable authored stylesheet the validator walks, and only
+   the per-row name binding is generated. That is the smallest
+   thing that has to be generated, and it is why this page needs
+   no inline styles.
+
+   Every value is a kit role, a scale, or a plain CSS keyword
+   (the owner's no-hardcoded-values invariant, gated by
+   tools/validate-authored-css.ts).
+
+   Narrow first, wide follows (owner ruling 2026-08-13): the base
+   rules ARE the narrow design — stacked rows, controls at the
+   top — and the min-width band (the kit's documented md
+   constant, 960px) spends the extra room on the rail and the
+   four-column table.
+   ============================================================ */
+
+/* .oak-container carries `margin-inline: auto`, and a grid item with an auto
+   margin does NOT stretch to its track — it shrink-to-fits and centres. This
+   page only ever looked right because its tables are wider than the
+   container's cap, so shrink-to-fit landed on the cap anyway; a page whose
+   content is narrower than 1280px reveals the same rule as a half-width
+   layout (measured on the colour matrix). Filling the track makes the width
+   deliberate rather than a consequence of the content. */
+[data-page='tokens'] .tok-page {
+  /* border-box travels WITH the 100%: .oak-container is content-box and
+     carries inline padding, so a plain 100% resolves to the track plus 48px
+     and takes the page sideways at narrow widths (measured). */
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding-block: var(--inset-m);
+}
+
+/* .oak-main is a grid, so each child here is a GRID ITEM whose automatic
+   minimum size is its own min-content width — and anything holding a token
+   table has a very wide one. Without this floor the item refuses to shrink
+   to its track, the whole document scrolls sideways (SC 1.4.10), and the
+   containers below never get the chance to do their job. The kit guards its
+   own tracks the same way, with minmax(0, 1fr). Measured, not
+   precautionary: the page overflowed to 548px at a 320px viewport. */
+[data-page='tokens'] .tok-page > *,
+[data-page='tokens'] .tok-layout > * {
+  min-inline-size: 0;
+}
+
+[data-page='tokens'] .tok-lede {
+  max-inline-size: var(--measure-prose);
+  margin-block-end: var(--space-16);
+}
+
+/* --- The rail: controls + family navigation ----------------- */
+
+[data-page='tokens'] .tok-layout {
+  display: grid;
+  gap: var(--gap-m);
+}
+
+/* At narrow the rail is not a box at all. It has to disappear as a
+   containing block, because a sticky element only sticks WITHIN its
+   container: with the rail as a real box, the controls stopped following
+   the reader the moment the nav beneath them scrolled past. `display:
+   contents` hands its children straight to the layout, so the controls
+   stick for the whole page. At wide it becomes a box again, and the rail
+   itself does the sticking. */
+[data-page='tokens'] .tok-rail {
+  display: contents;
+}
+
+/* The same auto-fit primitive the picker uses, so the two demos read
+   identically. The floor is what the longest option needs, not what fits:
+   at 360px two selects share a row only by clipping "Identity default" to
+   "Identity defa…", and a control whose current value cannot be read is a
+   defect no amount of saved height pays for. Sticky so the controls alone
+   stay with the reader — the jump list would take a third of a phone
+   screen away from the tokens it points at. */
+[data-page='tokens'] .tok-controls {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--space-160), 100%), 1fr));
+  gap: var(--space-4) var(--gap-m);
+  align-items: end;
+  padding-block: var(--space-8);
+  background: var(--bg-primary);
+  position: sticky;
+  top: 0;
+  z-index: var(--layer-sticky);
+}
+
+[data-page='tokens'] .tok-status {
+  margin: 0;
+  align-self: center;
+  color: var(--text-subdued);
+}
+
+/* A sticky band is height a reader has permanently lent you, so each
+   control gives its label the same line as its select rather than a line of
+   its own. Measured at 360px: the stacked shape held the top 190px of a
+   900px screen hostage. */
+[data-page='tokens'] .tok-controls .oak-cluster {
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+[data-page='tokens'] .tok-controls .oak-select {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+[data-page='tokens'] .tok-nav-group {
+  padding-block-end: var(--space-8);
+}
+
+[data-page='tokens'] .tok-nav-label {
+  margin: 0 0 var(--space-4);
+}
+
+[data-page='tokens'] .tok-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-4) var(--space-8);
+}
+
+/* --- Sections ---------------------------------------------- */
+
+[data-page='tokens'] .tok-area {
+  padding-block-start: var(--space-32);
+}
+
+[data-page='tokens'] .tok-area-note {
+  max-inline-size: var(--measure-prose);
+  color: var(--text-subdued);
+  margin-block: var(--space-4) 0;
+}
+
+[data-page='tokens'] .tok-family {
+  padding-block-start: var(--space-20);
+}
+
+[data-page='tokens'] .tok-family h3 {
+  margin: 0 0 var(--space-4);
+}
+
+[data-page='tokens'] .tok-count {
+  color: var(--text-subdued);
+}
+
+[data-page='tokens'] .tok-contract {
+  margin-block: var(--space-12) 0;
+  max-inline-size: var(--measure-prose);
+}
+
+/* --- The table --------------------------------------------- */
+
+[data-page='tokens'] .tok-scroll {
+  /* Positioned so the absolutely-positioned .oak-visually-hidden spans in
+     the cells resolve against THIS box. Without it their containing block
+     is the initial one, so a span sitting 500px into a scrolled table
+     creates scrollable overflow on the PAGE — invisible (it is a clipped
+     1px box) and immune to overflow:hidden here, because an absolutely
+     positioned element is only clipped by an ancestor in its own
+     containing-block chain. Measured: 228px of empty sideways scroll at a
+     320px viewport, which is the reflow failure this container exists to
+     prevent. */
+  position: relative;
+  /* A HORIZONTAL-only scroller. The explicit overflow-y matters: a bare
+     overflow-x: auto computes overflow-y to auto as well, and the rounded
+     border can put a few pixels of artifact slack in scrollHeight — which
+     turns every family into a "scrollable region" that axe then demands
+     keyboard access to. Height is content-driven here, so no real content
+     can ever need vertical scroll; hidden closes the artifact axis. */
+  overflow: auto hidden;
+  border: var(--border-solid-s) solid var(--border-neutral-lighter);
+  border-radius: var(--radius-container);
+}
+
+[data-page='tokens'] .tok-scroll:focus-visible {
+  outline: var(--focus-outline);
+  box-shadow: var(--focus-ring);
+}
+
+/* One token, one line. The kit's table type is set for prose density; a
+   reference wants the body-3 face and a line box the swatch fits inside. */
+[data-page='tokens'] .tok-table {
+  font: var(--type-body-3);
+  letter-spacing: var(--tracking-body);
+}
+
+[data-page='tokens'] .tok-table th,
+[data-page='tokens'] .tok-table td {
+  padding: var(--space-8) var(--space-12);
+  vertical-align: middle;
+}
+
+/* Column names never break: the value column below takes all the slack, so
+   an unprotected header shrinks to its own min-content and "Re-pointed by"
+   stacks into three lines. */
+[data-page='tokens'] .tok-table thead th {
+  padding-block: var(--space-4);
+  color: var(--text-subdued);
+  white-space: nowrap;
+}
+
+/* Row headers carry a name, not emphasis: four hundred bold identifiers
+   would read as four hundred shouts. */
+[data-page='tokens'] .tok-name {
+  white-space: nowrap;
+  font-weight: var(--weight-regular);
+}
+
+/* The theme marker rides beside the name. Text, not a colour: the whole
+   point of the row is that colour is the thing being reported. */
+[data-page='tokens'] .tok-flag {
+  margin-inline-start: var(--space-8);
+  padding-inline: var(--space-4);
+  border: var(--border-solid-s) solid var(--border-neutral);
+  border-radius: var(--radius-xs);
+  color: var(--text-subdued);
+  white-space: nowrap;
+}
+
+/* The value is TEXT ON THE PAGE'S OWN GROUND, beside the swatch and never
+   on it: a value printed over the colour it names would have a contrast
+   ratio that changes with every switch, which is the one thing a token page
+   must not gamble on. */
+/* The value column absorbs the table's slack, so the other three hug their
+   contents and "re-pointed by" sits beside the value it qualifies instead
+   of stranded against the right edge. */
+[data-page='tokens'] .tok-value {
+  inline-size: 100%;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* What the browser paints, then what it was written as. */
+[data-page='tokens'] .tok-expr {
+  color: var(--text-subdued);
+}
+
+/* Identities stay on one line so a re-pointed row is no taller than any
+   other; the column claims the width it needs from the value column, which
+   has slack to give. */
+[data-page='tokens'] .tok-owners {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: var(--space-4);
+}
+
+/* Tag geometry is tuned for touch targets; these are labels in a dense
+   reading table, and nothing here is interactive. The name must not wrap
+   INSIDE the tag either — left to shrink, "Public Digital Service" broke
+   over three lines and took every re-pointed row to 68px. */
+[data-page='tokens'] .tok-owners .oak-tag {
+  flex: 0 0 auto;
+  min-height: 0;
+  padding-block: 0;
+  padding-inline: var(--space-8);
+  font: var(--type-body-4);
+  white-space: nowrap;
+}
+
+/* The identity currently shown is marked by an outlined tag AND named in
+   text inside it — never by the fill alone. */
+[data-page='tokens'] .tok-owner-shown {
+  border: var(--border-solid-m) solid var(--border-primary);
+}
+
+/* --- Specimens: one property each, bound to the row's token -- */
+
+[data-page='tokens'] .tok-paint {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+[data-page='tokens'] .tok-paint--colour {
+  inline-size: var(--space-48);
+  block-size: var(--space-16);
+  border: var(--border-solid-s) solid var(--border-neutral);
+  border-radius: var(--radius-xs);
+  background-color: var(--tok);
+}
+
+/* Shadows need ground to fall on and room to spread, so the sample sits on
+   the page surface with margin around it. */
+[data-page='tokens'] .tok-paint--shadow {
+  inline-size: var(--space-48);
+  block-size: var(--space-16);
+  margin: var(--space-4);
+  border-radius: var(--radius-xs);
+  background: var(--bg-primary);
+  box-shadow: var(--tok);
+}
+
+/* A filter is only visible on something to filter: a solid block of the ink
+   role shows the icon filters flipping with theme. */
+[data-page='tokens'] .tok-paint--filter {
+  inline-size: var(--space-16);
+  block-size: var(--space-16);
+  background: var(--text-primary);
+  filter: var(--tok);
+}
+
+[data-page='tokens'] .tok-paint--radius {
+  inline-size: var(--space-48);
+  block-size: var(--space-20);
+  background: var(--surface-decorative-1);
+  border: var(--border-solid-s) solid var(--border-primary);
+  border-radius: var(--tok);
+}
+
+[data-page='tokens'] .tok-paint--border {
+  inline-size: var(--space-48);
+  block-size: var(--space-16);
+  border-style: solid;
+  border-color: var(--border-primary);
+  border-width: var(--tok);
+}
+
+/* A measuring bar. Capped at the cell so a 1280px scale token cannot force
+   the page sideways; the printed value stays the authority on how long it
+   really is. */
+[data-page='tokens'] .tok-paint--length {
+  block-size: var(--space-8);
+  inline-size: min(var(--tok), 100%);
+  max-inline-size: 100%;
+  background: var(--color-accent);
+  border: var(--border-solid-s) solid var(--border-primary);
+}
+
+[data-page='tokens'] .tok-paint--font {
+  font: var(--tok);
+}
+
+[data-page='tokens'] .tok-paint--family {
+  font-family: var(--tok);
+}
+
+[data-page='tokens'] .tok-paint--weight {
+  font-weight: var(--tok);
+}
+
+[data-page='tokens'] .tok-paint--font-size {
+  font-size: var(--tok);
+  line-height: var(--leading-none);
+}
+
+/* Line height only reads across lines, so this sample is narrow enough to
+   wrap. */
+[data-page='tokens'] .tok-paint--leading {
+  display: block;
+  max-inline-size: var(--space-48);
+  line-height: var(--tok);
+}
+
+[data-page='tokens'] .tok-paint--tracking {
+  letter-spacing: var(--tok);
+}
+
+/* --- Narrow: the row stacks rather than scrolls ------------- */
+
+/* Four columns of code text cannot be read in a phone's width, and a table
+   that scrolls sideways hides the VALUE — the one thing this page exists to
+   show — behind a gesture with no affordance. So below the kit's md
+   constant the row becomes two lines: the name, then the swatch and its
+   value together. Changing a table element's `display` strips its implicit
+   ARIA role in current browsers, which is why every element in the markup
+   states its role explicitly. */
+@media (max-width: 959px) {
+  /* Forty-seven family links ahead of the first token pushed it 1226px down
+     a 360px screen — the jump list was burying what it points at. Capped,
+     it scrolls in its own box; its links keep it keyboard-reachable without
+     a tab stop of its own. */
+  [data-page='tokens'] .tok-nav {
+    max-block-size: var(--space-100);
+    overflow-y: auto;
+    border: var(--border-solid-s) solid var(--border-neutral-lighter);
+    border-radius: var(--radius-container);
+    padding: var(--space-8);
+  }
+
+  [data-page='tokens'] .tok-table,
+  [data-page='tokens'] .tok-table tbody {
+    display: block;
+  }
+
+  /* The column headers name columns that no longer exist here — and this
+     band deliberately drops TABLE SEMANTICS with the table display (the
+     display re-composition above linearises each row into a card; the
+     component carries no explicit table roles for exactly this reason).
+     The linear reading is named per cell instead: the visually-hidden
+     "Value" and "Re-pointed by" labels travel with their cells and hide
+     again at wide, where the visible header row does the naming. */
+  [data-page='tokens'] .tok-table thead {
+    display: none;
+  }
+
+  [data-page='tokens'] .tok-table tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+    padding: var(--space-4) var(--space-12);
+    border-block-end: var(--border-solid-s) solid var(--border-neutral-lighter);
+  }
+
+  [data-page='tokens'] .tok-table th,
+  [data-page='tokens'] .tok-table td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+
+  /* Two lines, and the split is deliberate: the name takes the swatch with
+     it, so the VALUE gets the row's whole width. Measured — sharing a line
+     with the swatch left the value 244px, and `rgb(249, 249, 249) #f9f9f9`
+     wrapped, turning most rows into three lines. An identifier is allowed
+     to break rather than push the row sideways; the alternative is the
+     clipping this whole band exists to cure. */
+  [data-page='tokens'] .tok-name {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  [data-page='tokens'] .tok-specimen {
+    flex: 0 0 auto;
+  }
+
+  /* Two lines, and the order is chosen rather than inherited: the swatch
+     and the identities that re-point the token belong beside its NAME, and
+     the value then gets a whole line to itself — which is what keeps
+     `rgb(249, 249, 249) #f9f9f9` from wrapping. Reading order in the
+     markup stays name, swatch, value, identities; only the painting
+     changes (CSS owns visual order). The identities ride the END of the
+     value's line rather than taking a line of their own — the third line
+     was the card's biggest cost, and the short labels the estate now uses
+     leave room for them beside a value. A long value simply wraps them
+     onto the next line. */
+  [data-page='tokens'] .tok-owners-cell {
+    order: 2;
+    flex: 0 1 auto;
+    margin-inline-start: auto;
+    color: var(--text-subdued);
+  }
+
+  [data-page='tokens'] .tok-value {
+    order: 3;
+    flex: 1 0 100%;
+  }
+
+  [data-page='tokens'] .tok-owners {
+    flex-wrap: wrap;
+  }
+
+  /* Most tokens no identity touches: spending a line on an em dash three
+     hundred times is the opposite of dense. */
+  [data-page='tokens'] [data-owners='0'] .tok-owners-cell {
+    display: none;
+  }
+}
+
+/* --- Wide: the rail, and the four-column table -------------- */
+
+@media (min-width: 960px) {
+  [data-page='tokens'] .tok-page {
+    padding-block: var(--inset-l);
+  }
+
+  [data-page='tokens'] .tok-layout {
+    grid-template-columns: var(--space-240) minmax(0, 1fr);
+    gap: var(--gap-l);
+    align-items: start;
+  }
+
+  /* The rail becomes a real box again — without this it stays
+     `display: contents` from the narrow rules, its children scatter into
+     the two-column grid as separate items, and the tables end up in the
+     240px rail track (measured: a 238px table at a 1440px window). */
+  [data-page='tokens'] .tok-rail {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: var(--layer-sticky);
+    background: var(--bg-primary);
+    padding-inline-end: var(--gap-m);
+    border-inline-end: var(--border-solid-s) solid var(--border-neutral-lighter);
+  }
+
+  [data-page='tokens'] .tok-controls {
+    position: static;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* A sticky rail taller than the window would strand its own tail
+     permanently out of reach, so the list that can grow is the one that
+     scrolls. Its links keep it keyboard-reachable without a tab stop of
+     its own. */
+  [data-page='tokens'] .tok-nav {
+    max-block-size: var(--space-480);
+    overflow-y: auto;
+  }
+
+  /* The column header names these cells at wide, so the labels in the
+     markup take themselves out of the accessibility tree rather than
+     saying it twice. At narrow, where the header row is hidden and table
+     semantics are deliberately dropped, they are the only names the
+     cells have. */
+  [data-page='tokens'] .tok-owners-label,
+  [data-page='tokens'] .tok-value-label {
+    display: none;
+  }
+}
+
+/* --- Monitor widths: two columns of families ---------------- */
+
+/* THE RAIL GIVES ITS WIDTH BACK. Beside a 240px rail a paired column is
+   494px, and a four-column token table needs about 650 — measured, family
+   by family: pairing there left fourteen tables scrolling sideways, which
+   is the failure the narrow layout was reworked to remove and no better for
+   arriving on a big monitor. Tightening the pairing rule until nothing
+   overflowed left one pair on the whole page. So above this width the rail
+   stops being a column and the layout goes full width: the controls stay
+   with the reader as a band, the jump list sits above the tables, and the
+   space the rail was using becomes the second column of tokens.
+
+   A grid, not CSS columns: a column box splits content that overflows it
+   whatever `break-inside` asks, and the tallest families here are taller
+   than any balanced column — so multi-column would have split exactly the
+   tables that must not split. Grid items cannot break, so a family either
+   fits a column or takes the whole row (`data-wide`, set in the markup). */
+@media (min-width: 1440px) {
+  [data-page='tokens'] .tok-rail {
+    display: contents;
+  }
+
+  [data-page='tokens'] .tok-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  [data-page='tokens'] .tok-controls {
+    position: sticky;
+    top: 0;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--space-240), 100%), 1fr));
+  }
+
+  /* Seven craft areas stacked as seven labelled rows put the first token
+     below the fold on a 1440px screen. Flowed into columns the same list
+     is a third of the height, and the width it uses is width the rail just
+     gave back. A group never splits: half a craft area's families in one
+     column and half in the next would be worse than no grouping at all. */
+  [data-page='tokens'] .tok-nav {
+    max-block-size: none;
+    overflow-y: visible;
+    columns: 3;
+    column-gap: var(--gap-l);
+  }
+
+  [data-page='tokens'] .tok-nav-group {
+    break-inside: avoid;
+  }
+
+  [data-page='tokens'] .tok-area-families {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 var(--gap-l);
+    align-items: start;
+  }
+
+  [data-page='tokens'] .tok-family[data-wide='true'] {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Short viewport (the kit's documented 500px constant): a sticky rail on a
+   landscape phone would leave nothing for the tokens. */
+@media (max-height: 500px) {
+  [data-page='tokens'] .tok-rail,
+  [data-page='tokens'] .tok-controls {
+    position: static;
+  }
+}

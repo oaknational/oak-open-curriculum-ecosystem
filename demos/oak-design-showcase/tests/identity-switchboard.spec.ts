@@ -24,6 +24,7 @@ import {
 } from '../components/canonical-widths';
 import { BASE_IDENTITY, IDENTITIES, IDENTITY_LABELS } from '../components/useIdentity';
 import { MEASUREMENT_WIDTH_VALUES } from '../tools/measurement-widths';
+import { assertResolved } from './picker-stage';
 import {
   assertOnlyKnownExternalOrigins,
   brandNameFont,
@@ -126,17 +127,20 @@ test.describe('specimen: keyboard and state semantics', () => {
     expect(Number.parseFloat(cure.scrollPadding)).toBeGreaterThan(0);
   });
 
-  test('the current audience is marked, and not by colour alone', async ({ page }) => {
+  test('the strip carries the real identity control: one radio group, exactly one checked', async ({
+    page,
+  }) => {
+    // Owner word 2026-08-18: the decorative audience switcher gave its
+    // strip space to the page's real controls. Native radio semantics ARE
+    // the not-by-colour-alone state exposure — the checked dot survives
+    // forced-colors — and single-select means exactly one checked.
     await interceptExternalOrigins(page);
     await page.goto(`/identity-switchboard/specimen?brand=${BASE_IDENTITY}`);
-    const audience = page.locator('nav[aria-label="Audience"]');
-    await expect(audience.locator('a[aria-current="true"]')).toHaveCount(1);
-    // The non-colour marker: computed weight separates current from not —
-    // a distinction forced-colors cannot erase.
-    const weights = await audience.evaluate((nav) =>
-      [...nav.querySelectorAll('a')].map((anchor) => getComputedStyle(anchor).fontWeight),
-    );
-    expect(new Set(weights).size).toBeGreaterThan(1);
+    const strip = page.locator('[data-region="utility"]');
+    const radios = strip.getByRole('radio');
+    await expect(radios).toHaveCount(IDENTITIES.length);
+    await expect(strip.locator('input[type="radio"]:checked')).toHaveCount(1);
+    await expect(radios.nth(0)).toBeChecked();
   });
 });
 
@@ -169,15 +173,26 @@ test.describe('side-by-side: three identities, one specimen route', () => {
     // Every frame's document reaches the identity its column names, and
     // its simulated width is the canonical cell.
     for (const [index, identity] of IDENTITIES.entries()) {
-      const handle = await frames.nth(index).elementHandle();
-      const frame = await handle?.contentFrame();
-      expect(frame, `frame ${identity} must resolve`).not.toBeNull();
-      if (frame === null || frame === undefined) {
-        continue;
-      }
+      const frame = await (await frames.nth(index).elementHandle()).contentFrame();
+      assertResolved(frame, `frame ${identity} must resolve`);
       await expect(frame.locator('[data-identity]')).toHaveAttribute('data-identity', identity);
     }
     const width = await frames.first().evaluate((el) => el.style.width);
     expect(width).toBe(`${DEFAULT_VIEWPORT_WIDTH}px`);
+  });
+});
+
+test.describe('specimen mast with the strip absent (?controls=none)', () => {
+  test('the mast sticky offset zeroes — no blank strip row reserved', async ({ page }) => {
+    await interceptExternalOrigins(page);
+    await page.goto(`/identity-switchboard/specimen?brand=${BASE_IDENTITY}&controls=none`);
+    // The sticky offset normally reserves one strip row so mast and strip
+    // stack; with no strip rendered that reservation is a strip-height of
+    // blank space at the top of every framing column (review round 3).
+    const offset = await page.evaluate(() => {
+      const mast = document.querySelector('[data-region="masthead"]');
+      return mast === null ? null : getComputedStyle(mast).insetBlockStart;
+    });
+    expect(offset).toBe('0px');
   });
 });
