@@ -227,7 +227,7 @@ Then over JSON-RPC (`initialize` → `tools/call`):
 > made option 2 untenable: holding the ratified shape would have kept the
 > tool dead for the content-block-only client population. The coherence note
 > (option 3) is reconciled in
-> [`output-schemas-for-mcp-tools.plan.md`](../plans-backlog-2026-07/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md)
+> `../plans-backlog-2026-07/sdk-and-mcp-enhancements/archive/superseded/output-schemas-for-mcp-tools.plan.md`
 > §Provenance landed-shape note: `composeEnvelopeSchema` now applies to EEF
 > uniformly.
 
@@ -241,7 +241,7 @@ Then over JSON-RPC (`initialize` → `tools/call`):
    only if the agent-client population that matters renders
    `structuredContent` (see §5.4 third bullet: gather that evidence first).
 3. **Coherence note**: whatever is chosen should be reconciled with
-   [`output-schemas-for-mcp-tools.plan.md`](../plans-backlog-2026-07/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md)
+   `../plans-backlog-2026-07/sdk-and-mcp-enhancements/archive/superseded/output-schemas-for-mcp-tools.plan.md`
    (`composeEnvelopeSchema` owns the long-term success-shape contract).
 
 ## 8. Remaining snags (tracked, not expanded here)

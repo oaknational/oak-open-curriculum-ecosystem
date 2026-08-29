@@ -81,7 +81,7 @@ Oak already has unusually good prerequisites:
    is the canonical list surface consumed by the HTTP server registration path.
 4. `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` registers every
    universal tool with `registerTool` or `registerAppTool`.
-5. [`../current/output-schemas-for-mcp-tools.plan.md`](../current/output-schemas-for-mcp-tools.plan.md)
+5. `../archive/superseded/output-schemas-for-mcp-tools.plan.md` (superseded — successors under `.agent/plans/`)
    is already queued to make `structuredContent` contracts machine-visible.
 6. [`../active/upstream-api-reference-metadata.plan.md`](../active/upstream-api-reference-metadata.plan.md)
    is already positioned to add method/path/status metadata to generated

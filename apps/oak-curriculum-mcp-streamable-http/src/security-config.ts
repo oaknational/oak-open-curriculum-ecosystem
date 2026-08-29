@@ -7,27 +7,33 @@ const BASE_HOSTS = ['localhost', '127.0.0.1', '::1'] as const;
 /**
  * Resolves the list of allowed hostnames for DNS rebinding protection.
  *
- * Priority:
- * 1. Explicitly configured hosts (if provided, use only these)
- * 2. All Vercel deployment URLs + BASE_HOSTS (when deployed on Vercel)
- * 3. BASE_HOSTS only (local development)
+ * `ALLOWED_HOSTS` is **additive**: configured hosts are unioned with the
+ * platform-derived hosts, never substituted for them. The variable can name a
+ * host; it cannot take one away. Setting it therefore stays safe as the
+ * platform's own hostnames change — `VERCEL_URL` is the *generated deployment*
+ * URL and is a different value on every deployment, so a hand-written list
+ * that replaced the derived set would be correct when written and wrong at the
+ * next deploy.
  *
- * @param configured - Explicitly configured allowed hosts from ALLOWED_HOSTS env var
+ * The result always contains `BASE_HOSTS`, so it is never empty — which
+ * matters because `dnsRebindingProtection` reads an empty allow-list as "allow
+ * every host".
+ *
+ * This list also gates `deriveSelfOrigin`, so it bounds which Host a request
+ * may be self-described from. Narrowing self-description is `CANONICAL_HOST`'s
+ * job, never this variable's: `deriveSelfOrigin` returns the canonical origin
+ * before it ever consults the allow-list.
+ *
+ * @param configured - Additional allowed hosts from the ALLOWED_HOSTS env var
  * @param vercelHosts - Array of all Vercel deployment URLs (VERCEL_URL, VERCEL_BRANCH_URL, VERCEL_PROJECT_PRODUCTION_URL)
- * @returns Array of allowed hostnames for DNS rebinding protection
+ * @returns Deduplicated array of allowed hostnames for DNS rebinding protection
  * @see https://vercel.com/docs/environment-variables/system-environment-variables
  */
 export function resolveAllowedHosts(
   configured: readonly string[] | undefined,
   vercelHosts: readonly string[],
 ): readonly string[] {
-  if (configured && configured.length > 0) {
-    return configured;
-  }
-  if (vercelHosts.length > 0) {
-    return Array.from(new Set([...vercelHosts, ...BASE_HOSTS]));
-  }
-  return BASE_HOSTS;
+  return Array.from(new Set([...(configured ?? []), ...vercelHosts, ...BASE_HOSTS]));
 }
 
 /**

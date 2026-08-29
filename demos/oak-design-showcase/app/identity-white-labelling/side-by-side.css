@@ -69,3 +69,14 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* The parent's shared controls (owner word 2026-08-18): one theme, one
+   width, governing every column; the live status names the shared state. */
+[data-page='side-by-side'] .stage-controls {
+  align-items: flex-end;
+  gap: var(--gap-s) var(--gap-l);
+  padding-block-end: var(--inset-s);
+}
+[data-page='side-by-side'] .stage-status {
+  margin: 0;
+}

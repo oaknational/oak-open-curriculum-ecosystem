@@ -1,0 +1,99 @@
+/* ============================================================
+   Colour matrix — the page that frames the strips.
+
+   Layout only, in kit roles, same discipline as the rest of the
+   showcase: the page chrome must not introduce a colour VALUE,
+   because every colour a reader is meant to judge lives inside
+   the frames.
+
+   Narrow first, wide follows (owner ruling 2026-08-13): the base
+   rules stack the three identities into one column, and the
+   min-width band (the kit's documented md constant, 960px) puts
+   them side by side, which is the comparison the page exists for.
+   ============================================================ */
+
+/* .oak-container carries `margin-inline: auto`, and a grid item with an auto
+   margin does NOT stretch to its track — it shrink-to-fits and centres. Left
+   alone, this page sized itself to its widest child, a 65ch paragraph, and
+   laid three identity columns out in 636px (measured at a 1440px window: two
+   columns, the third wrapping underneath). Filling the track restores the
+   container's own max-width as the only cap. */
+[data-page='colours'] .colours-page {
+  /* border-box travels WITH the 100%: .oak-container is content-box and
+     carries inline padding, so a plain 100% resolves to the track plus 48px
+     and takes the page sideways at 360px (measured). */
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding-block: var(--inset-m);
+}
+
+/* .oak-main is a grid, so each child is a grid item whose automatic
+   minimum size is its min-content width. Without this floor a band full of
+   frames refuses to shrink to its track and the whole document scrolls
+   sideways (SC 1.4.10) — the same guard the reference page carries, for the
+   same reason. */
+[data-page='colours'] .colours-page > * {
+  min-inline-size: 0;
+}
+
+[data-page='colours'] .colours-lede,
+[data-page='colours'] .colours-note {
+  max-inline-size: var(--measure-prose);
+}
+
+[data-page='colours'] .colours-note {
+  color: var(--text-subdued);
+  margin-block: var(--space-8) 0;
+}
+
+[data-page='colours'] .matrix-band {
+  padding-block-start: var(--space-32);
+}
+
+[data-page='colours'] .matrix-band h2 {
+  margin: 0 0 var(--space-8);
+}
+
+/* One column narrow, three wide: the auto-fit floor is what a strip needs
+   to stay legible, so the columns break to a stack rather than squeezing
+   the swatches out of comparability. */
+[data-page='colours'] .matrix-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--space-240), 100%), 1fr));
+  gap: var(--gap-m);
+}
+
+[data-page='colours'] .matrix-cell {
+  margin: 0;
+  min-inline-size: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+
+[data-page='colours'] .matrix-cell-name {
+  margin: 0;
+}
+
+/* A fixed viewport onto a long strip. A hundred and sixty-nine colours will
+   not fit any screen, so each cell is a window of the same height at the
+   same starting offset — which is what lets a reader compare row against
+   row across three identities. The frame scrolls its own content; the page
+   never scrolls sideways to reach it. */
+[data-page='colours'] .matrix-frame {
+  inline-size: 100%;
+  /* The border must live INSIDE the 100% or every cell runs 2px past its
+     column and the page scrolls sideways at 320px (iframes sit outside
+     the border-box reset's reach here — measured by the reflow cell). */
+  box-sizing: border-box;
+  block-size: var(--space-480);
+  border: var(--border-solid-s) solid var(--border-neutral-lighter);
+  border-radius: var(--radius-container);
+  display: block;
+  background: var(--bg-primary);
+}
+
+@media (min-width: 960px) {
+  [data-page='colours'] .colours-page {
+    padding-block: var(--inset-l);
+  }
+}

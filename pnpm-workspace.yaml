@@ -18,6 +18,10 @@ packages:
   - packages/core/type-helpers
   - packages/core/workspace-config
   - packages/design/*
+  # Identity-pack tier: data-only identity workspaces (no scripts; shape
+  # checked by oak-eslint's validate-boundaries tier leg). See
+  # packages/design/identities/README.md.
+  - packages/design/identities/*
   - packages/libs/env-resolution
   - packages/libs/fidelity-review
   - packages/libs/graph-ingest

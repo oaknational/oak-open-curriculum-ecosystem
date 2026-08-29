@@ -80,22 +80,47 @@ body {
   margin-block-start: auto;
 }
 
-/* Composition demo stage: the nested canvases are exhibits inside the
-   page, so the full-viewport minimum is inapplicable there — layout
-   override only, in the demo's own stage scope. */
-.comp-stage .oak-canvas {
-  min-height: auto;
+/* The estate's one identity control (W3, R9+R12): a native radio group
+   shared by the picker and the specimen strip. Structural reset only —
+   the kit's .oak-choice/.oak-radio carry the interactive styling. */
+.identity-radios {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
 }
-.comp-stub {
-  background: var(--surface-decorative-1-soft);
-  border: var(--border-solid-m) solid var(--border-neutral);
-  padding: var(--space-16);
-  min-height: var(--space-48);
+.identity-radios legend {
+  padding: 0;
+  margin-block-end: var(--space-4);
 }
-.comp-stub-label {
-  background: var(--bg-primary);
-  padding-inline: var(--space-8);
+.identity-radio-row {
+  align-items: center;
 }
-.comp-exhibit {
-  padding-block: var(--space-24);
+.identity-help {
+  margin-block: var(--space-4) 0;
+}
+
+/* Fixed-hierarchy showcase breadcrumbs (owner word 2026-08-18) — the
+   specimen's own crumb shape, shared: separators in CSS, terminal item
+   subdued and unlinked. */
+.showcase-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.showcase-crumbs li {
+  display: flex;
+  gap: var(--gap-s);
+  align-items: center;
+}
+.showcase-crumbs li:not(:last-child)::after {
+  content: '/';
+  color: var(--text-subdued);
+}
+.showcase-crumbs .here {
+  color: var(--text-subdued);
 }

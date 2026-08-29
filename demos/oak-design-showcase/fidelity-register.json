@@ -5,7 +5,7 @@
       "id": "global/utility-band-not-inverted",
       "pairId": "global",
       "kind": "visual",
-      "summary": "The utility strip renders on the subtle surface, not the export's inverted band — the largest single block of diff in every pair.",
+      "summary": "The utility strip renders on the subtle surface, not the export's inverted band \u2014 the largest single block of diff in every pair.",
       "evidence": [
         "app/identity-switchboard/specimen/specimen.css",
         "app/globals.css",
@@ -13,7 +13,7 @@
         "demo-evidence/live-picker-oak-fold.png"
       ],
       "disposition": "superseded",
-      "rationale": "Owner reprice 2026-08-10 (screenshot comparison): appearance converges — the strip is now inverted like the reference, with the .foot ring pattern carrying the canonical focus ring on the inverted surface (--focus-ring-inverted on every control). The original blocker (no token to restore the ring) had already been solved for the footer; the cure generalises. The kit inverted-ring token contract stays routed with the DS trunk slice.",
+      "rationale": "Owner reprice 2026-08-10 (screenshot comparison): appearance converges \u2014 the strip is now inverted like the reference, with the .foot ring pattern carrying the canonical focus ring on the inverted surface (--focus-ring-inverted on every control). The original blocker (no token to restore the ring) had already been solved for the footer; the cure generalises. The kit inverted-ring token contract stays routed with the DS trunk slice.",
       "author": "design-lane-implementer",
       "date": "2026-08-10"
     },
@@ -27,7 +27,7 @@
         "demo-evidence/diff-picker-oak-full.png"
       ],
       "disposition": "superseded",
-      "rationale": "Owner reprice 2026-08-10 (screenshot comparison: 'content size and margins in the green header'): the hero converges on the reference's measured rhythm — band flush, inner padding-block 40px, content inset from the container alone (was: band-pad fluid 40-64 on all four sides, +64px inline inset). Scope: the hero; the remaining bands keep the trunk rhythm pending the next fidelity pass.",
+      "rationale": "Owner reprice 2026-08-10 (screenshot comparison: 'content size and margins in the green header'): the hero converges on the reference's measured rhythm \u2014 band flush, inner padding-block 40px, content inset from the container alone (was: band-pad fluid 40-64 on all four sides, +64px inline inset). Scope: the hero; the remaining bands keep the trunk rhythm pending the next fidelity pass.",
       "author": "design-lane-implementer",
       "date": "2026-08-10"
     },
@@ -56,7 +56,7 @@
         "tests/specimen-a11y.spec.ts"
       ],
       "disposition": "deliberate",
-      "rationale": "Export source defect, not reproduced: the bare text node inside the dl is an axe definition-list violation (serious), caught by the specimen matrix's first run. The separator is presentation, so it lives in CSS; visually identical. Upstream home: the export's specimen.html carries the defect for any future consumer — flagged for the next export refresh.",
+      "rationale": "Export source defect, not reproduced: the bare text node inside the dl is an axe definition-list violation (serious), caught by the specimen matrix's first run. The separator is presentation, so it lives in CSS; visually identical. Upstream home: the export's specimen.html carries the defect for any future consumer \u2014 flagged for the next export refresh.",
       "author": "design-lane-implementer",
       "date": "2026-08-10"
     },
@@ -81,9 +81,65 @@
         "demo-evidence/live-picker-chrome.png"
       ],
       "disposition": "deliberate",
-      "rationale": "Owner ruling 2026-08-10: match the appearance and functionality of the PAGE, not necessarily the chrome for selecting theme and identity — the demo chrome is ours to design from the estate's own patterns. Reference-only pair; judged side by side, never pixel-diffed.",
+      "rationale": "Owner ruling 2026-08-10: match the appearance and functionality of the PAGE, not necessarily the chrome for selecting theme and identity \u2014 the demo chrome is ours to design from the estate's own patterns. Reference-only pair; judged side by side, never pixel-diffed.",
       "author": "design-lane-implementer",
       "date": "2026-08-10"
+    },
+    {
+      "id": "global/creature-mcp-620-wide-reorder",
+      "pairId": "global",
+      "kind": "visual",
+      "summary": "EMC2 wide composition diverges from the export: the resources row is promoted to run full-bleed under the hero and the shelf mirrors (results on the wide left track, detail as the right rail).",
+      "evidence": [
+        "packages/design/oak-design-system/studio-source/whitelabel/creature/brand-full.css",
+        "demos/oak-design-showcase/public/brands/creature/brand.css"
+      ],
+      "disposition": "deliberate",
+      "rationale": "Owner wishlist axis 5 (MCP-620, ratified node emc2-amplification-and-token-reference): a greater change to visual layout/order/flow with zero markup change. Wide map amendment only; DOM/reading order untouched; narrow maps stay with the kit pending the queued P6 per-identity narrow composition.",
+      "author": "design-lane-implementer",
+      "date": "2026-08-18"
+    },
+    {
+      "id": "global/creature-mcp-620-night-lights",
+      "pairId": "global",
+      "kind": "visual",
+      "summary": "EMC2 wears glows and ambient motion the export lacks: the Part A decorative families expressed as box-shadow glows (bands, CTA, lesson blocks) plus breathing glow plates and gummy-tag drift.",
+      "evidence": [
+        "packages/design/oak-design-system/studio-source/whitelabel/creature/brand-full.css",
+        "demos/oak-design-showcase/public/brands/creature/brand.css"
+      ],
+      "disposition": "deliberate",
+      "rationale": "Owner wishlist axes 2+3 (MCP-620): more glows in more colours, more animations. Garnish on containers only; glow hues are color-mix over the audited decorative tokens (no new hex); loops carry explicit animation:none arms under both prefers-reduced-motion and data-motion=reduced; high-contrast nulls every glow token.",
+      "author": "design-lane-implementer",
+      "date": "2026-08-18"
+    },
+    {
+      "id": "global/creature-mcp-620-interaction-movement",
+      "pairId": "global",
+      "kind": "visual",
+      "summary": "EMC2 interactive elements move on hover where the export is static: cards lift with a toy tilt onto the raised reward shadow; quiz choices nudge toward the pointer with a floss glow.",
+      "evidence": [
+        "packages/design/oak-design-system/studio-source/whitelabel/creature/brand-full.css",
+        "demos/oak-design-showcase/public/brands/creature/brand.css"
+      ],
+      "disposition": "deliberate",
+      "rationale": "Owner wishlist axis 4 (MCP-620): more movement on interactions. Hover/active/focus only - the identity/theme switch itself stays instantaneous (W3 vestibular ruling); durations ride the motion tokens so the reduced-motion collapse stills them; 44px targets untouched.",
+      "author": "design-lane-implementer",
+      "date": "2026-08-18"
+    },
+    {
+      "id": "global/mcp-620-strip-real-controls",
+      "pairId": "global",
+      "kind": "feature",
+      "summary": "The specimen utility strip carries real identity radios and the theme select instead of the export reference decorative audience switcher and help-centre link.",
+      "evidence": [
+        "app/identity-switchboard/specimen/StripControls.tsx",
+        "app/identity-switchboard/specimen/page.tsx"
+      ],
+      "disposition": "deliberate",
+      "rationale": "Owner word 2026-08-18: the specimen page needs its own SMALL controls in the top black header and the audience/help chrome never did anything. Identity re-skins the host document via the no-arg binder; theme rides the kit runtime; the W3 radio pattern is shared so the estate has one control shape; 44px targets hold (small means visually quiet, never short).",
+      "author": "design-lane-implementer",
+      "date": "2026-08-18"
     }
   ]
 }

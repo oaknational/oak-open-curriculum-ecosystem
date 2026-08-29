@@ -51,8 +51,21 @@ export const BASE_IDENTITY: IdentitySlug = 'oak';
  *  "undefined" until this moved). */
 export const IDENTITY_LABELS: Readonly<Record<IdentitySlug, string>> = {
   oak: 'Oak',
-  pds: 'Public Digital Service',
+  // Owner word 2026-08-18: controls say PDS; the full name lives in the
+  // identity blurbs (IDENTITY_BLURBS below), not in every control row.
+  pds: 'PDS',
   creature: 'EMC²',
+};
+
+/** One sentence per identity for control-chrome context (owner ask
+ *  2026-08-18). Copy assembled from each identity's own recorded sources —
+ *  the kit README (Oak) and the studio-source BRAND.md files — never
+ *  invented. */
+export const IDENTITY_BLURBS: Readonly<Record<IdentitySlug, string>> = {
+  oak: 'Oak — the base identity: warm pastels, thick black borders, the signature lemon offset-shadow, Lexend.',
+  pds: 'PDS (Public Digital Service) — the public record: a document tradition that acquired a website; restraint, permanence, deliberately still.',
+  creature:
+    'EMC² (Educate My Creature Too) — the bedtime arcade: dark-first, candy glows, bevelled toys, ambient motion.',
 };
 
 /**

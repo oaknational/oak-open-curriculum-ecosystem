@@ -137,6 +137,7 @@ start; a situational rule loads at its trigger's moment.
 | `.agent/rules/follow-agent-collaboration-practice.md`                      | core           | —                                                                                                  |
 | `.agent/rules/follow-collaboration-practice.md`                            | core           | —                                                                                                  |
 | `.agent/rules/follow-the-practice.md`                                      | core           | —                                                                                                  |
+| `.agent/rules/foreign-board-write-discipline.md`                           | core           | —                                                                                                  |
 | `.agent/rules/generator-first-mindset.md`                                  | situational    | surface:codegen                                                                                    |
 | `.agent/rules/handoff-messages-self-contained.md`                          | core           | —                                                                                                  |
 | `.agent/rules/hook-policy-substring-discipline.md`                         | core           | —                                                                                                  |

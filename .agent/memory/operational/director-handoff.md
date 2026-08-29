@@ -262,6 +262,30 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
+> **§LIVE-STATE POINTER, 2026-08-18 (Dormouse turns Footfall, `a54547`) — THIS
+> SUPERSEDES THE 2026-08-13 BANNER BELOW ON ONE FACT ONLY: A DIRECTOR IS SITTING.**
+> The 2026-08-13 banner records the Director lane as a make-safe pause with claim
+> `a2286c53` retained stopped-seat-held. That is still true of the
+> **`estate-coordination`** lane. It is NOT true of the estate as a whole: a Director
+> seat is live on the **`mcp-submission-drive`** thread — the estate's current
+> priority lane — seated 2026-08-17 late evening at owner word and resumed
+> 2026-08-18, claim opened with `--role director`.
+>
+> Read `threads/mcp-submission-drive.next-session.md` for that lane's live state;
+> `repo-continuity.md` §Active Threads now carries its index row. Live team at this
+> write: Director `a54547`, owner-liaison Raven turns Nocturne (`0aad1a`), PR Review
+> Warden Sloop spins Spray (`c42e7e`, boundary closed after five reviews).
+>
+> Added because a successor following the required grounding order reached
+> "no Director, make-safe paused" before ever reaching the live lane — the same
+> discoverability failure PR #903 was raised to cure, one surface further out.
+> NOTE ON FITNESS: this file is 1644 lines against a 320 limit. That is a routing
+> signal for its own bounded curation sitting (see `repo-continuity.md` §0a), and
+> explicitly NOT a licence to omit a true load-bearing pointer or to trim the
+> ~42 binding owner rulings below.
+
+---
+
 > **§LIVE-STATE POINTER, 2026-08-13 ~20:0xZ (Smith hunts Obsidian, e98f17) — READ THIS FIRST.**
 > The Director lane's live state no longer accretes here. At the owner-ratified
 > continuity-surface redesign (plan `director-continuity-surface-redesign`, S1/S2

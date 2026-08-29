@@ -1,8 +1,9 @@
 /**
  * Test Helpers: Auth Error Testing
  *
- * Shared test utilities for auth error interception testing.
- * Used by tool-handler-with-auth.unit.test.ts.
+ * Shared test utilities for auth error interception testing, and the
+ * hermetic `createMockRuntimeConfig` factory used across this workspace's
+ * unit and integration tests.
  */
 
 import { vi, expect } from 'vitest';
@@ -38,15 +39,11 @@ interface MockRuntimeConfigOverrides {
    */
   readonly dangerouslyDisableAuth?: boolean;
   /**
-   * EEF feature flag. Defaults to `false` (matching the production default —
-   * the EEF tool + prompt are co-gated OFF). Set `true` to exercise the
-   * enabled path.
+   * Vercel system hostnames, as `runtime-config` derives them from
+   * `VERCEL_URL`, `VERCEL_BRANCH_URL` and `VERCEL_PROJECT_PRODUCTION_URL`.
+   * Defaults to `[]` — the off-Vercel shape.
    */
-  /**
-   * User-search feature flag. Defaults to `false` (matching the production
-   * default — the user-search tools are unregistered). Set `true` to exercise
-   * the enabled path where both user-search tools register.
-   */
+  readonly vercelHostnames?: readonly string[];
 }
 
 const BASE_MOCK_ENV = {
@@ -86,10 +83,13 @@ export function createMockRuntimeConfig(
 export function createMockRuntimeConfig(
   overrides: MockRuntimeConfigOverrides = {},
 ): AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig {
+  const vercelHostnames = overrides.vercelHostnames ?? BASE_SHARED_FIELDS.vercelHostnames;
+
   if (overrides.dangerouslyDisableAuth === true) {
     return {
       env: { ...BASE_MOCK_ENV, ...overrides.env },
       ...BASE_SHARED_FIELDS,
+      vercelHostnames,
       dangerouslyDisableAuth: true,
     } satisfies AuthDisabledRuntimeConfig;
   }
@@ -97,6 +97,7 @@ export function createMockRuntimeConfig(
   return {
     env: { ...BASE_MOCK_ENV, ...BASE_CLERK_KEYS, ...overrides.env },
     ...BASE_SHARED_FIELDS,
+    vercelHostnames,
     dangerouslyDisableAuth: false,
   } satisfies AuthEnabledRuntimeConfig;
 }

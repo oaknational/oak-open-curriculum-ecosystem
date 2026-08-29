@@ -14,24 +14,44 @@
    (md 960px; short-viewport 500px max-height), never invented.
    ============================================================ */
 
+/* Chrome compressed to two thin bands (owner word 2026-08-18: the
+   rendered page is the primary user interest, the controls are
+   important but secondary). Title and lede share one wrapping cluster
+   line; the controls row wraps radios-first at narrow. */
 [data-page='identity-picker'] .picker-head {
-  padding-block: var(--inset-m);
+  padding-block: var(--inset-s);
+}
+
+[data-page='identity-picker'] .picker-head-line {
+  align-items: baseline;
 }
 
 [data-page='identity-picker'] .picker-lede {
   max-inline-size: var(--measure-prose);
+  margin: 0;
 }
 
-/* Controls ride the kit's .oak-grid auto-fit primitive; the override
-   narrows the track floor so the three 48px selects share one row
-   wherever three tracks fit, and wrap without bespoke media queries
-   below that. Gaps stay on the semantic tier so the brand density
-   knob moves this chrome with everything else. */
+/* Controls v3 (owner word 2026-08-18): the frame's strip owns identity
+   and theme, so this row is width + the observed context (status with
+   the full-page link, and the current identity's blurb). Width leads,
+   context fills the remainder and wraps under it at narrow. Gaps stay on
+   the semantic tier so the brand density knob moves this chrome with
+   everything else. */
 [data-page='identity-picker'] .picker-controls {
-  grid-template-columns: repeat(auto-fit, minmax(min(var(--space-160), 100%), 1fr));
-  gap: var(--gap-s) var(--gap-m);
-  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s) var(--gap-l);
+  align-items: flex-end;
   padding-block-end: var(--inset-s);
+}
+
+[data-page='identity-picker'] .picker-context {
+  flex: 1 1 var(--space-360);
+  min-inline-size: 0;
+}
+
+[data-page='identity-picker'] .picker-context p {
+  margin: 0;
 }
 
 /* The caption under the stage: live status + the full-page link,
@@ -44,10 +64,15 @@
    specimen, so it is SHAPED like one. The stationary rectangle matters —
    if the frame resized on each swap, the eye would read the movement
    rather than the re-skin; the width control changes the SIMULATED
-   viewport inside, never the stage. Portrait 3/4 at base makes the demo
-   dominate the narrow first screenful; the wide band restores the 16/10
-   screen ratio. (Bare ratios carry no design value per the classifier's
-   own doctrine; the kit has no viewport-height token to compose here.) */
+   viewport inside, never the stage. Stage dominance (owner word
+   2026-08-18: the embedded page takes much more of the vertical height)
+   comes from the COMPACT CHROME above — title, lede and controls share
+   two thin bands — while the stage keeps the ratio shape: portrait 3/4
+   at base dominates the narrow first screenful, the wide band restores
+   the 16/10 screen ratio, and the scale hook derives the simulated
+   height from this box so the taller visible stage shows more page.
+   (Bare ratios carry no design value per the classifier's own doctrine;
+   the kit has no viewport-height token to compose here.) */
 [data-page='identity-picker'] .picker-stage {
   inline-size: 100%;
   aspect-ratio: 3 / 4;
@@ -68,10 +93,6 @@
 }
 
 @media (min-width: 960px) {
-  [data-page='identity-picker'] .picker-head {
-    padding-block: var(--inset-l);
-  }
-
   [data-page='identity-picker'] .picker-stage {
     aspect-ratio: 16 / 10;
   }

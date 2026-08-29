@@ -1,98 +1,40 @@
-import Link from 'next/link';
 import type { ReactElement } from 'react';
 
 /**
- * The composition demonstration (owner scope, 2026-08-13): page
- * structure maximally configurable via CSS with the markup unchanged.
- * The kit ships page-type composition maps under [data-page] — grid
- * area assignments only, no markup knowledge. This page renders the
- * IDENTICAL region markup once per shipped map (unit, home, proof);
- * every structural difference on screen is the map alone. Regions a
- * map does not name fall to the grid's implicit rows — that is part
- * of the contract, shown rather than hidden.
+ * The composition demonstration, v2 (owner spec 2026-08-18, replacing
+ * the static three-map gallery wholesale): one embedded exhibit of
+ * neutral region boxes, a parent layout control spanning four extremes
+ * of the layout engine, and a light/dark ground — the same markup under
+ * every map, visibly re-arranged by CSS alone. The exhibit and its maps
+ * live at /composition/frame.
  */
+import { ShowcaseBreadcrumbs } from '../../components/ShowcaseBreadcrumbs';
 
-const SHIPPED_MAPS = ['unit', 'home', 'proof'] as const;
-
-/** The union of region names across the shipped maps — one fragment,
- *  rendered identically under every map. */
-const REGIONS = [
-  'hero',
-  'featured',
-  'facets',
-  'results',
-  'content',
-  'detail',
-  'resources',
-  'support',
-  'context',
-  'cta',
-] as const;
-
-function RegionStubs(): ReactElement {
-  return (
-    <>
-      {REGIONS.map((region) => (
-        <section
-          key={region}
-          className={`oak-region comp-stub comp-stub--${region}`}
-          data-region={region}
-          aria-label={`${region} region`}
-        >
-          <span className="oak-body-3 comp-stub-label">{region}</span>
-        </section>
-      ))}
-    </>
-  );
-}
+import { CompositionStage } from './CompositionStage';
+import './composition.css';
 
 export default function CompositionPage(): ReactElement {
   return (
-    <div className="oak-canvas" data-page="home">
-      <header className="oak-region mast" data-region="masthead">
-        <div className="oak-container oak-cluster mast-inner">
-          <span className="oak-heading-6 brand-name">Oak Open Curriculum Design System</span>
-        </div>
-      </header>
-      <main className="oak-main oak-region" data-region="main">
-        <section className="oak-region" data-region="hero">
-          <div className="oak-container hero-inner">
-            <h1 className="oak-heading-2">One markup, many page structures</h1>
-            <p className="oak-body-1">
-              Each block below renders the identical markup &mdash; the same regions in the same
-              order. Only the <code>data-page</code> attribute differs, selecting one of the
-              kit&rsquo;s shipped composition maps. Every structural difference you see is CSS.
-            </p>
-          </div>
-        </section>
-        <section className="oak-region" data-region="content">
-          <div className="oak-container oak-stack oak-stack--l">
-            {SHIPPED_MAPS.map((map) => (
-              <article key={map} className="comp-exhibit oak-stack">
-                <h2 className="oak-heading-5">
-                  <code>data-page=&quot;{map}&quot;</code>
-                </h2>
-                <div className="comp-stage">
-                  <div className="oak-canvas" data-page={map}>
-                    <div className="oak-main oak-region comp-main" data-region="main">
-                      <RegionStubs />
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      </main>
-      <footer className="oak-region foot" data-region="footer">
-        <div className="oak-container foot-inner">
-          <p className="oak-body-3">
-            <Link className="oak-link" href="/">
-              Back to the showcase
-            </Link>
+    <div className="oak-canvas" data-page="composition-demo">
+      <header className="oak-region oak-container comp-head">
+        <ShowcaseBreadcrumbs trail={[{ label: 'Showcase', href: '/' }, { label: 'Composition' }]} />
+        <div className="oak-cluster comp-head-line">
+          <h1 className="oak-heading-6">One markup, many page structures</h1>
+          <p className="oak-body-3 comp-lede">
+            Eleven region boxes, rendered once, in one order — every arrangement below is a
+            composition map re-pointing the kit&rsquo;s own layout engine, with the markup
+            byte-identical throughout.
           </p>
         </div>
-      </footer>
+      </header>
+      {/* No tabindex here, ever: a negative tabindex on a direct child of
+          .oak-canvas excludes its whole subtree from sequential focus under
+          reading-flow: grid-rows (the specimen's documented F01/F02
+          keyboard blackout). data-region pins main to the canvas map's
+          1fr main row instead of auto-placing into the masthead row. */}
+      <main id="main" className="oak-main oak-region oak-container" data-region="main">
+        <CompositionStage />
+      </main>
     </div>
   );
 }

@@ -14,3 +14,6 @@ Design-tier doctrine lives in `docs/governance/` — see
   terminal tools
 - [oak-design-ink/README.md](oak-design-ink/README.md) — reusable React
   primitives for Ink-based terminal interfaces
+- [identities/README.md](identities/README.md) — the identity-pack tier:
+  data-only workspaces, one per identity, with machine-checked tier
+  invariants (no hand-declared inventory by design)

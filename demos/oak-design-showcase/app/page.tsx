@@ -3,12 +3,25 @@ import type { ReactElement } from 'react';
 
 import { SiteFooter } from '../components/SiteFooter';
 
-/** The two demonstration doors. Copy assembled from ratified sources —
- *  the switching door from the previous hero's ratified sentence, the
- *  composition door from the kit's page-type-scoping doc comment. */
+/** The demonstration doors — every demo surface is linked from the front
+ *  door (owner word 2026-08-18). Copy assembled from ratified sources,
+ *  never invented: the switching door from the previous hero's ratified
+ *  sentence, the composition door from the kit's page-type-scoping doc
+ *  comment, the side-by-side door from that page's own lede, the token
+ *  door from the token page's own intro. */
 function DemoDoors(): ReactElement {
   return (
     <div className="oak-container doors">
+      <article className="oak-card oak-stack door">
+        <h2 className="oak-heading-4">One page, side by side</h2>
+        <p className="oak-body-2">
+          Every frame renders the same specimen page &mdash; only the identity sheet changes. Any
+          difference you see is the token contract doing its job.
+        </p>
+        <Link className="oak-btn door-btn" href="/identity-white-labelling">
+          Open the side-by-side demo
+        </Link>
+      </article>
       <article className="oak-card oak-stack door">
         <h2 className="oak-heading-4">Identity and theme switching</h2>
         <p className="oak-body-2">
@@ -29,18 +42,28 @@ function DemoDoors(): ReactElement {
           Open the composition demo
         </Link>
       </article>
+      <article className="oak-card oak-stack door">
+        <h2 className="oak-heading-4">Token reference</h2>
+        <p className="oak-body-2">
+          Every token the system publishes, shown as the value it has right now &mdash; each swatch
+          painted through the token itself, switching with the identity and theme through the
+          cascade.
+        </p>
+        <Link className="oak-btn door-btn" href="/tokens">
+          Open the token reference
+        </Link>
+      </article>
     </div>
   );
 }
 
 /**
- * The showcase landing (owner scope, 2026-08-13): says what the system
- * is and doors the two demonstrations — nothing else. The switchboard
- * lives at its own route; the component specimen sheet is purged. Copy
- * is assembled from ratified sources, never invented: the thesis from
- * the kit README, the switching door from the previous hero's ratified
- * sentence, the composition door from the kit's own page-type-scoping
- * doc comment. main carries NO tabindex (reading-flow subtree rule).
+ * The showcase landing (owner scope, 2026-08-13; doors widened at owner
+ * word 2026-08-18): says what the system is and doors the demonstrations
+ * — nothing else. The switchboard lives at its own route; the component
+ * specimen sheet is purged. Copy is assembled from ratified sources,
+ * never invented (per-door sources in the DemoDoors comment). main
+ * carries NO tabindex (reading-flow subtree rule).
  */
 export default function ShowcasePage(): ReactElement {
   return (
@@ -61,7 +84,7 @@ export default function ShowcasePage(): ReactElement {
                 AA, fully themable, no network dependencies.
               </p>
               <p className="oak-body-1">
-                This showcase demonstrates the system doing its job, live, in two ways.
+                This showcase demonstrates the system doing its job, live.
               </p>
             </div>
           </div>

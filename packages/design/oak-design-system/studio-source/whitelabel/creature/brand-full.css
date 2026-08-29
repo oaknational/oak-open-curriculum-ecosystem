@@ -52,11 +52,18 @@
   --type-label: 800 16px/1.3 var(--font-sans);
   --label-transform: lowercase;
   /* STRUCTURE — the toy shelf: two columns, key items full-width and centred;
-     the shelf is WIDE (arcade cabinet, not document) and motion is springier
-     (still quiet; the motion axis and reduced-motion collapse still govern) */
+     the shelf is WIDE (arcade cabinet, not document) and motion is springier —
+     authored on the -full faces ONLY: the kit derives --motion-* from them and
+     collapses at token level (prefers-reduced-motion / data-motion), which a
+     bare --motion-* override in this later-loading sheet would defeat. */
   --container-max: 1360px;
-  --motion-quick: 160ms;
-  --motion-base: 260ms;
+  --motion-quick-full: 160ms;
+  --motion-base-full: 260ms;
+  /* Ambient loop face — bedtime pace, slower than the kit's 1200ms: the
+     arcade breathes, it never hurries. Loops also carry explicit
+     animation:none arms below (the kit's .oak-skeleton idiom) — a collapsed
+     token would leave an infinite loop spinning at instant speed. */
+  --motion-loop-full: 2600ms;
   --flow-columns: 1fr 1fr;
   --flow-gap: var(--space-32) var(--space-24);
   --key-align: center;
@@ -148,6 +155,29 @@
   --shadow-accent-pressed: 3px 4px 0 0 var(--color-accent);
   --shadow-neutral: 8px 10px 0 0 var(--bg-neutral-stronger);
   --shadow-press: 2px 3px 0 0 var(--shadow-ground);
+  /* 8b. GLOW RAMP — the Part A sweet-shop families expressed as LIGHT
+     (color-mix over the audited decorative tokens, never new hex). Glows
+     are garnish on containers only — text pairings stay on their flat
+     audited grounds. High-contrast nulls every glow below; forced-colors
+     drops shadows natively, so no forced-color-adjust is needed. */
+  --glow-accent: 0 0 36px 6px color-mix(in oklab, var(--color-accent) 65%, transparent);
+  --glow-decorative-1: 0 0 34px 4px
+    color-mix(in oklab, var(--surface-decorative-1) 70%, transparent);
+  --glow-decorative-2: 0 0 34px 4px
+    color-mix(in oklab, var(--surface-decorative-2) 70%, transparent);
+  --glow-decorative-3: 0 0 34px 4px
+    color-mix(in oklab, var(--surface-decorative-3) 70%, transparent);
+  --glow-decorative-4: 0 0 34px 4px
+    color-mix(in oklab, var(--surface-decorative-4) 70%, transparent);
+  --glow-decorative-5: 0 0 40px 6px
+    color-mix(in oklab, var(--surface-decorative-5) 75%, transparent);
+  --glow-decorative-6: 0 0 34px 4px
+    color-mix(in oklab, var(--surface-decorative-6) 70%, transparent);
+  /* 8c. BEVELS - the 3D feel beyond buttons: cards and tags are solid
+     toys with a lit top edge and a weighted base (the same rgba
+     light/ink recipe as --btn-shadow). High-contrast re-points the
+     consuming stacks to its own ink set. */
+  --card-bevel: inset 0 2px 0 rgba(255, 255, 255, 0.14), inset 0 -3px 0 rgba(0, 0, 0, 0.32);
   /* Atmosphere — DIAGONAL nebulas + corner glows (all deep under white text) */
   --surface-page-image:
     linear-gradient(
@@ -165,7 +195,9 @@
   );
   /* 9. Component form — gummy sweets, never lozenges */
   --tag-border: var(--border-solid-m) solid var(--border-primary);
-  --tag-shadow: 3px 4px 0 0 var(--color-accent);
+  --tag-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -2px 0 rgba(0, 0, 0, 0.18),
+    3px 4px 0 0 var(--color-accent);
   --tag-pad: var(--space-4) var(--space-16);
   /* Icon roles → Material Symbols Rounded filled SVG URLs (Apache 2.0,
      jsDelivr @material-symbols/svg-600) — shared markup resolves to the
@@ -259,6 +291,16 @@
   --btn-shadow-pressed: 0 0 0 3px var(--oak-white), 3px 3px 0 0 var(--oak-lemon);
   --btn-raise-transform: translate(-2px, -3px);
   --btn-press-transform: translate(3px, 4px);
+  /* Glows are light on candy — high contrast is pure ink: every glow
+     token nulls to a zero shadow (a bare `none` would invalidate
+     multi-shadow lists that compose these). */
+  --glow-accent: 0 0 0 0 transparent;
+  --glow-decorative-1: 0 0 0 0 transparent;
+  --glow-decorative-2: 0 0 0 0 transparent;
+  --glow-decorative-3: 0 0 0 0 transparent;
+  --glow-decorative-4: 0 0 0 0 transparent;
+  --glow-decorative-5: 0 0 0 0 transparent;
+  --glow-decorative-6: 0 0 0 0 transparent;
 }
 [data-theme='high-contrast'] .oak-scope .oak-btn:hover,
 .oak-scope [data-theme='high-contrast'] .oak-btn:hover {
@@ -267,13 +309,18 @@
 
 /* COMPOSITION (page-type scoped) */
 [data-page='unit'] {
-  /* The toy shelf: the quest log (detail) pinned tall on the left beside
-     the browse stack (results, then the tuning drawer); rewards
-     (resources) and the bedtime CTA run full-bleed; FAQ last */
+  /* The toy shelf, v2 (MCP-620 wide-reorder slice): the prize counter
+     (resources) is PROMOTED to run full-bleed right under the marquee —
+     rewards first at the fair — and the shelf mirrors: browse stack
+     (results, then the tuning drawer) now LEADS on the wide left track
+     with the quest log (detail) as the right rail. Wide map only; the
+     narrow maps stay with the kit pending the queued per-identity narrow
+     composition (P6). DOM/reading order is untouched — this is the
+     CSS-owns-visual-order mechanism, same contract as before. */
   --main-columns: minmax(var(--space-16), 1fr) minmax(0, 720px) minmax(0, 460px)
     minmax(var(--space-16), 1fr);
-  --main-areas: 'hero hero hero hero' '. detail results .' '. detail facets .'
-    'resources resources resources resources' 'cta cta cta cta' '. support support .';
+  --main-areas: 'hero hero hero hero' 'resources resources resources resources' '. results detail .'
+    '. facets detail .' 'cta cta cta cta' '. support support .';
 }
 [data-page='proof'] {
   /* Proof page (owner-ruled composition, 2026-07-25): the creature's pick
@@ -285,6 +332,175 @@
   --main-areas: 'hero' 'featured' 'support' 'context';
   --main-columns-narrow: minmax(0, 1fr);
   --main-areas-narrow: 'hero' 'featured' 'support' 'context';
+}
+
+/* §NIGHT LIGHTS — glows and ambient motion (MCP-620 slices 1b-1d).
+   Everything here is garnish on containers: no text pairing changes, no
+   markup, no new mechanism. Transitions ride the motion tokens (so the
+   kit's token-level collapse stills them); LOOPING animations get the
+   explicit animation:none arms at the end of this section — the kit's
+   .oak-skeleton idiom — under BOTH the OS preference and the in-product
+   data-motion knob. */
+
+/* Tone bands wear a grape aurora that breathes; the bedtime CTA breathes
+   in accent pink. The glow lives on a zero-paint pseudo-plate so the
+   animation is opacity-only (compositor-friendly), and position:relative
+   is layout-neutral here. */
+.oak-scope .oak-band,
+.oak-scope [data-region='cta'] {
+  position: relative;
+}
+.oak-scope .oak-band::after,
+.oak-scope [data-region='cta']::after {
+  content: '';
+  position: absolute;
+  /* The plate's box stays inside the band by MORE than the sway's
+     amplitude (±6px x, ±3px y below): a transformed box extends the
+     document's scrollable overflow, so an inset smaller than the
+     amplitude makes SC 1.4.10 a function of animation phase. The glow is
+     box-shadow — it never creates scrollable overflow, but its origin
+     box moved inward with the plate, so the halo sits 8px/4px tighter
+     to the band than before (a deliberate, rendered-checked trade for
+     phase-independent reflow). */
+  inset: var(--space-4) var(--space-8);
+  /* Negative layer: the visible glow spreads OUTSIDE the box while the
+     plate itself paints behind the band's own background — so nothing
+     overlaps the band's text (axe's bgOverlap class caught the plate
+     sitting over content at 320px). */
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: var(--glow-decorative-5);
+  opacity: 0.35;
+  pointer-events: none;
+  /* Round 2 (owner word): the aurora breathes AND sways — opacity plus a
+     slow drift of the glow plate itself, both compositor-friendly. */
+  animation:
+    emc2-breathe var(--motion-loop) ease-in-out infinite alternate,
+    emc2-sway calc(var(--motion-loop) * 3) ease-in-out infinite alternate;
+}
+.oak-scope [data-region='cta']::after {
+  box-shadow: var(--glow-accent);
+  animation-delay: calc(var(--motion-loop) * -0.5);
+}
+@keyframes emc2-breathe {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 0.95;
+  }
+}
+@keyframes emc2-sway {
+  from {
+    transform: translate(-6px, -2px);
+  }
+  to {
+    transform: translate(6px, 3px);
+  }
+}
+
+/* Gummy-sweet tags bob on the shelf — tiny amplitude, bedtime pace,
+   even/odd counter-phase so the drift reads organic, never mechanical. */
+.oak-scope .oak-tag {
+  animation: emc2-drift calc(var(--motion-loop) * 2) ease-in-out infinite alternate;
+}
+.oak-scope .oak-cluster > :nth-child(even) .oak-tag,
+.oak-scope .oak-cluster > .oak-tag:nth-child(even) {
+  animation-delay: calc(var(--motion-loop) * -1);
+}
+@keyframes emc2-drift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-3px);
+  }
+}
+
+/* Lesson-anatomy blocks wear STATIC glows rotating through the sweet-shop
+   ramp (sherbet, lemon, pistachio, orange cream) — more colours, no motion:
+   a decorated shelf is not a moving one. */
+.oak-scope .oak-block:nth-of-type(4n + 1) {
+  box-shadow: var(--glow-decorative-2);
+}
+.oak-scope .oak-block:nth-of-type(4n + 2) {
+  box-shadow: var(--glow-decorative-3);
+}
+.oak-scope .oak-block:nth-of-type(4n + 3) {
+  box-shadow: var(--glow-decorative-4);
+}
+.oak-scope .oak-block:nth-of-type(4n) {
+  box-shadow: var(--glow-decorative-6);
+}
+
+/* Interaction movement (slice 1d): cards lift with a toy tilt onto the
+   existing raised reward shadow; quiz choices nudge toward the pointer
+   with a floss glow. Buttons keep their ratified 3D states (§STATES).
+   All durations are motion tokens — reduced stills them at token level.
+   The identity/theme SWITCH itself stays instantaneous by design (W3
+   vestibular ruling): nothing here animates on attribute change, only on
+   hover/active/focus. */
+.oak-scope .oak-card {
+  /* Round 2: cards are bevelled toys — lit top edge, weighted base —
+     composed under the candy shadow at rest and the reward at hover. */
+  box-shadow: var(--card-bevel), var(--shadow-accent);
+  transition:
+    transform var(--motion-quick) var(--ease-standard),
+    box-shadow var(--motion-quick) var(--ease-standard);
+}
+.oak-scope .oak-card:hover {
+  transform: translate(-2px, -3px) rotate(-0.4deg);
+  box-shadow: var(--card-bevel), var(--shadow-accent-raised);
+}
+.oak-scope .oak-choice {
+  transition:
+    transform var(--motion-quick) var(--ease-standard),
+    box-shadow var(--motion-quick) var(--ease-standard);
+}
+.oak-scope .oak-choice:hover {
+  transform: translateX(4px);
+  box-shadow: var(--glow-decorative-1);
+}
+.oak-scope .oak-choice:active {
+  transform: translateX(4px) scale(0.98);
+}
+/* Checking a radio pops like pressing a toy button — a FINITE animation on
+   motion tokens, so the collapse makes it imperceptible under reduce with
+   no loop arm needed. */
+.oak-scope .oak-radio:checked {
+  animation: emc2-pop var(--motion-base) var(--ease-standard);
+}
+@keyframes emc2-pop {
+  0% {
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* The sticky masthead wears the accent as a neon halo — the arcade sign
+   over the shelf. The glow token nulls itself in high contrast. */
+.oak-scope [data-region='masthead'] {
+  box-shadow: var(--glow-accent);
+}
+
+/* The loop arms — the kit's .oak-skeleton idiom, both axes. Transitions
+   are already stilled by the token collapse; these stop the infinite
+   loops outright. */
+@media (prefers-reduced-motion: reduce) {
+  .oak-scope .oak-band::after,
+  .oak-scope [data-region='cta']::after,
+  .oak-scope .oak-tag {
+    animation: none;
+  }
+}
+[data-motion='reduced'] .oak-scope .oak-band::after,
+[data-motion='reduced'] .oak-scope [data-region='cta']::after,
+[data-motion='reduced'] .oak-scope .oak-tag {
+  animation: none;
 }
 
 /* Flow topology collapses at the kit's narrow seam: multi-column key-item

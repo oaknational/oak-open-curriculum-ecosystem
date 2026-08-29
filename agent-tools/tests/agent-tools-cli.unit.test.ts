@@ -95,6 +95,17 @@ describe('agent-tools unified CLI', () => {
     expect(result.stdout).toContain('enqueue --claim-id <uuid>');
   });
 
+  it('dispatches coordination help through the single entrypoint', async () => {
+    const result = await runAgentToolsCli({
+      argv: ['coordination', '--help'],
+      env: {},
+      cwd: '/repo',
+    });
+
+    expect(result).toMatchObject({ exitCode: 0, stderr: '' });
+    expect(result.stdout).toContain('coordination successor-name [--base <ref>]');
+  });
+
   it('uses one error shape for unknown topics', async () => {
     const result = await runAgentToolsCli({
       argv: ['unknown-topic'],
@@ -114,6 +125,7 @@ describe('agent-tools unified CLI', () => {
         '  commit-queue',
         '  branch-touched-files',
         '  context-cost',
+        '  coordination',
         '  session-metadata',
         '  codex-exec',
         '  merge-bot',
@@ -148,6 +160,7 @@ describe('agent-tools unified CLI', () => {
           '  commit-queue',
           '  branch-touched-files',
           '  context-cost',
+          '  coordination',
           '  session-metadata',
           '  codex-exec',
           '  merge-bot',
