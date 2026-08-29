@@ -1,4 +1,4 @@
-import { isErr, isOk, unwrap } from '@oaknational/result';
+import { isErr, isOk, unwrap, unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { resolveTrustedGh } from './trusted-gh.js';
@@ -53,26 +53,20 @@ describe('resolveTrustedGh', () => {
   it.each([['linux'], ['darwin']] as const)(
     'on %s the err names only POSIX candidates and the symlink remedy',
     (platform) => {
-      const result = resolveTrustedGh(() => false, platform);
-      expect(isErr(result)).toBe(true);
-      if (isErr(result)) {
-        expect(result.error.message).toMatch(/No trusted gh/u);
-        expect(result.error.message).toMatch(/\/opt\/homebrew\/bin\/gh/u);
-        expect(result.error.message).toMatch(/symlink it at one of those paths/u);
-        expect(result.error.message).not.toMatch(/Program Files/u);
-      }
+      const error = unwrapErr(resolveTrustedGh(() => false, platform));
+      expect(error.message).toMatch(/No trusted gh/u);
+      expect(error.message).toMatch(/\/opt\/homebrew\/bin\/gh/u);
+      expect(error.message).toMatch(/symlink it at one of those paths/u);
+      expect(error.message).not.toMatch(/Program Files/u);
     },
   );
 
   it('on win32 the err names only Windows candidates and the system-wide install remedy', () => {
-    const result = resolveTrustedGh(() => false, 'win32');
-    expect(isErr(result)).toBe(true);
-    if (isErr(result)) {
-      expect(result.error.message).toMatch(/No trusted gh/u);
-      expect(result.error.message).toMatch(/Program Files\\GitHub CLI\\gh\.exe/u);
-      expect(result.error.message).toMatch(/winget install GitHub\.cli/u);
-      expect(result.error.message).not.toMatch(/symlink/u);
-      expect(result.error.message).not.toMatch(/\/usr\/bin/u);
-    }
+    const error = unwrapErr(resolveTrustedGh(() => false, 'win32'));
+    expect(error.message).toMatch(/No trusted gh/u);
+    expect(error.message).toMatch(/Program Files\\GitHub CLI\\gh\.exe/u);
+    expect(error.message).toMatch(/winget install GitHub\.cli/u);
+    expect(error.message).not.toMatch(/symlink/u);
+    expect(error.message).not.toMatch(/\/usr\/bin/u);
   });
 });

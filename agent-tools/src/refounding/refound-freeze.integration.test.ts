@@ -3,7 +3,7 @@ import { mkdtemp, mkdir, readdir, readFile, rm, symlink, writeFile } from 'node:
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import { err, ok } from '@oaknational/result';
+import { err, ok, unwrap, unwrapErr } from '@oaknational/result';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import {
@@ -509,30 +509,21 @@ describe('gitleaks resolution (the pinned-binary attestation seam)', () => {
       (candidate) => candidate === '/usr/local/bin/gitleaks',
       'linux',
     );
-    expect(resolved.ok).toBe(true);
-    if (resolved.ok) {
-      expect(resolved.value).toBe('/usr/local/bin/gitleaks');
-    }
+    expect(unwrap(resolved)).toBe('/usr/local/bin/gitleaks');
   });
 
   it('refuses with the symlink remedy when no trusted path holds gitleaks', () => {
-    const resolved = resolveTrustedGitleaks(() => false, 'linux');
-    expect(resolved.ok).toBe(false);
-    if (!resolved.ok) {
-      expect(resolved.error.message).toContain('No trusted gitleaks binary found');
-      expect(resolved.error.message).toContain('symlink');
-    }
+    const error = unwrapErr(resolveTrustedGitleaks(() => false, 'linux'));
+    expect(error.message).toContain('No trusted gitleaks binary found');
+    expect(error.message).toContain('symlink');
   });
 
   it('refuses unconditionally on win32, naming the missing admin-protected location', () => {
     // Even a gitleaks that "exists" everywhere is refused: no Windows install
     // location is administrator-protected, so none can be a fixed trusted path.
-    const resolved = resolveTrustedGitleaks(() => true, 'win32');
-    expect(resolved.ok).toBe(false);
-    if (!resolved.ok) {
-      expect(resolved.error.message).toContain('No trusted gitleaks binary is possible on Windows');
-      expect(resolved.error.message).toContain('POSIX host');
-    }
+    const error = unwrapErr(resolveTrustedGitleaks(() => true, 'win32'));
+    expect(error.message).toContain('No trusted gitleaks binary is possible on Windows');
+    expect(error.message).toContain('POSIX host');
   });
 
   it('reports the trimmed version line from a clean probe', () => {
@@ -541,10 +532,7 @@ describe('gitleaks resolution (the pinned-binary attestation seam)', () => {
       stdout: 'fake-gitleaks 0.0.0-test\n',
       stderr: '',
     }));
-    expect(version.ok).toBe(true);
-    if (version.ok) {
-      expect(version.value).toBe('fake-gitleaks 0.0.0-test');
-    }
+    expect(unwrap(version)).toBe('fake-gitleaks 0.0.0-test');
   });
 
   it('refuses when the probe cannot launch the binary at all', () => {
@@ -554,10 +542,7 @@ describe('gitleaks resolution (the pinned-binary attestation seam)', () => {
       stdout: '',
       stderr: '',
     }));
-    expect(version.ok).toBe(false);
-    if (!version.ok) {
-      expect(version.error.message).toContain('cannot probe gitleaks version');
-    }
+    expect(unwrapErr(version).message).toContain('cannot probe gitleaks version');
   });
 
   it('refuses a non-zero probe exit, carrying the stderr tail', () => {
@@ -566,11 +551,9 @@ describe('gitleaks resolution (the pinned-binary attestation seam)', () => {
       stdout: '',
       stderr: 'corrupt install\n',
     }));
-    expect(version.ok).toBe(false);
-    if (!version.ok) {
-      expect(version.error.message).toContain('exit 3');
-      expect(version.error.message).toContain('corrupt install');
-    }
+    const error = unwrapErr(version);
+    expect(error.message).toContain('exit 3');
+    expect(error.message).toContain('corrupt install');
   });
 
   it('refuses an empty version report even on exit 0', () => {

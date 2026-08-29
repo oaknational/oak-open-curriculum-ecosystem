@@ -137,8 +137,7 @@ describe('retainRawReport — verbatim retention with caller-shaped paths', () =
 
     const outcome = io.retainRawReport('protocol', 'secret');
 
-    expect(outcome.ok).toBe(false);
-    expect(!outcome.ok && outcome.error).toContain('fchmod refused');
+    expect(outcome).toEqual({ ok: false, error: 'EPERM: fchmod refused' });
     expect(calls).not.toContain('write:17');
     expect(calls).toContain('close:17');
   });

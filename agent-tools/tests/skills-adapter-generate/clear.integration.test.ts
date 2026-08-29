@@ -78,8 +78,7 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
     const result = await clearGeneratedAdapters(repoRoot, fs);
 
     expect(result.kind).toBe('ok');
-    const reported =
-      result.kind === 'ok' ? new Set(result.removed.map(posixPath)) : new Set<string>();
+    const reported = new Set(result.removed?.map(posixPath));
     expect(reported).toEqual(
       new Set(['/repo/.claude/skills/oak-commit', '/repo/.agents/skills/oak-commit']),
     );
@@ -95,9 +94,7 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
     const result = await clearGeneratedAdapters(repoRoot, fs);
 
     expect(result.kind).toBe('ok');
-    expect(result.kind === 'ok' ? result.removed.map(posixPath) : undefined).toEqual([
-      '/repo/.claude/skills/legacy-commit',
-    ]);
+    expect(result.removed?.map(posixPath)).toEqual(['/repo/.claude/skills/legacy-commit']);
     expect(removed).toEqual(['/repo/.claude/skills/legacy-commit']);
   });
 
@@ -205,9 +202,7 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
     // The first dir WAS removed; the error result carries that partial teardown
     // rather than the pre-cure behaviour (an unhandled throw with no state).
     expect(result.kind).toBe('error');
-    expect(result.kind === 'error' ? result.removed?.map(posixPath) : undefined).toEqual([
-      '/repo/.claude/skills/oak-a',
-    ]);
+    expect(result.removed?.map(posixPath)).toEqual(['/repo/.claude/skills/oak-a']);
     expect(removedReal.map(posixPath)).toEqual(['/repo/.claude/skills/oak-a']);
   });
 });
