@@ -14,14 +14,8 @@ impact_areas:
 tickets:
   - MCP-605
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: "The owner names the host bar — which host ids constitute Oak's release-compatibility set — and rules which Gemini surface, if any, is in scope given that the consumer Gemini app carries no user-configurable MCP"
-    expires: 2026-08-17
-  - awaiting: owner-decision
-    clears_when: "The owner rules whether one-time live-render evidence is required per Apps-rendering bar host, given that no catalogue host's facts are marked observed"
-    expires: 2026-08-17
-last_updated: 2026-08-15
+owner_gates: []
+last_updated: 2026-08-29
 ---
 
 # MCPJam MCP Apps widget compatibility checking
@@ -130,44 +124,41 @@ wrapper itself failed, not that the run did.
    flowing into a verdict.** Proof: `repo-safe` — strict schema tests,
    mutation-checked against removing `.strict()`.
 5. **The release bar and the evidence rule are recorded decisions.** Proof:
-   `owner-held` — the owner rules both gates; recorded at this plan's
-   `ratified_where`.
+   `owner-held` — both ruled by the owner 2026-08-29, recorded in §Owner
+   decisions: Gemini out of scope; the checker is a protective layer whose
+   verdicts are never unequivocal, and platform testing owns the release
+   claim.
 
-## Owner decisions
+## Owner decisions (both ruled — owner, 2026-08-29)
 
-### The host bar, and Gemini
+### Gemini, and the host bar
 
-The bundled catalogue carries 16 hosts: `mcpjam`, `claude`, `claude-code`,
-`chatgpt`, `mistral`, `goose`, `slack`, `cursor`, `codex`, `copilot`,
-`vscode`, `agentcore`, `n8n`, `perplexity`, `cline`, `notion`. Note `claude`
-and `claude-code` are distinct entries with different capabilities.
+**Ruled: Gemini is out of scope.** Background that stands: the consumer
+Gemini app carries no user-configurable MCP connection at all (checked
+2026-08-15; custom MCP exists in Gemini Spark, and in Gemini Enterprise as
+an admin-managed connector), so there was no mass-market Gemini surface to
+test in any case.
 
-**Gemini is absent**, and the reason matters: the consumer Gemini app carries
-no user-configurable MCP connection at all (checked 2026-08-15; custom MCP
-exists in Gemini Spark, and in Gemini Enterprise as an admin-managed
-connector). So there is no mass-market Gemini surface to test, and "manual
-UAT" has nowhere to run. If the answer is Enterprise, the work is a
-distribution question rather than a compatibility one.
-
-Recommendation: the owner names the bar set, and rules the Gemini row as
-Spark, Enterprise, or none.
+The other half of the original question — naming a release-compatibility
+host set — is dissolved by the second ruling: this checker underwrites no
+release set, so there is no tool-backed bar to name. The bundled catalogue's
+16 hosts (`mcpjam`, `claude`, `claude-code`, `chatgpt`, `mistral`, `goose`,
+`slack`, `cursor`, `codex`, `copilot`, `vscode`, `agentcore`, `n8n`,
+`perplexity`, `cline`, `notion`) remain what the checks evaluate, not what
+Oak promises.
 
 ### Is a static verdict enough?
 
-Recommendation: **split qualification from regression.** One-time attended
-live-render evidence per Apps-rendering bar host, before the release claim
-rests on it; the static check as the ongoing guard.
+**Ruled: no — and it never will be.** The checker is not a substitute for
+testing in the platforms; it is a layer of protection, and its verdicts must
+never be read as unequivocal. Testing in the real platforms owns the
+"works in X" claim; these checks are the regression tripwire behind it.
 
-The reason is in the data. Every host's facts carry a `provenance` grading
-where they came from — `observed` (a live run) down to `assumed` (a guess) —
-and **nothing in the catalogue is `observed`.** The strongest tier present is
-`vendor-doc` (the vendor ranks `probe` below it). Measured on the retained
-capture, the 16 hosts grade 9 `probe`, 4 `vendor-doc`, 3 `assumed`; `claude`,
-the host the release leans on hardest, is `assumed`.
-
-So a static verdict is a claim about a capability model, not about reality.
-MCPJam's own Inspector pairs this analysis with live widget rendering; the
-CLI ships the static half alone.
+The data that motivated the question still grounds the ruling: every
+catalogue host's facts carry a `provenance` grading, nothing in the
+catalogue is `observed` (the 16 hosts grade 9 `probe`, 4 `vendor-doc`,
+3 `assumed`; `claude` is `assumed`), so a static verdict is a claim about a
+capability model, not about reality.
 
 ## Out of scope
 
