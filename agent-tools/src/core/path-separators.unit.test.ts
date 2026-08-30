@@ -29,6 +29,14 @@ describe('isFilesystemRoot', () => {
       value: String.raw`\\?\UNC\server\share`,
     },
     { label: 'an extended-length drive root', value: '\\\\?\\C:\\' },
+    {
+      label: 'a volume-GUID root',
+      value: '\\\\?\\Volume{01234567-89ab-cdef-0123-456789abcdef}\\',
+    },
+    {
+      label: 'a volume-GUID root without its trailing separator',
+      value: String.raw`\\?\Volume{01234567-89AB-CDEF-0123-456789ABCDEF}`,
+    },
   ])('classifies $label as a root', ({ value }) => {
     expect(isFilesystemRoot(value)).toBe(true);
   });
@@ -44,6 +52,10 @@ describe('isFilesystemRoot', () => {
     {
       label: 'a directory below an extended-length drive root',
       value: String.raw`\\?\C:\comms-seen`,
+    },
+    {
+      label: 'a directory below a volume-GUID root',
+      value: String.raw`\\?\Volume{01234567-89ab-cdef-0123-456789abcdef}\comms-seen`,
     },
     { label: 'a relative path', value: 'comms-seen' },
     { label: 'the empty string', value: '' },

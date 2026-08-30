@@ -24,14 +24,16 @@
  * a root, and without it a caller handing `\\server\share\` over would have
  * a child path composed directly in the share root. The namespaced arm
  * covers the extended-length spellings of the same roots (`\\?\C:\`,
- * `\\?\UNC\server\share\`, and the `\\.\` device forms) — a different
- * prefix, the same directory.
+ * `\\?\UNC\server\share\`, `\\?\Volume{…}\`, and the `\\.\` device forms)
+ * — a different prefix, the same directory.
  */
 export function isFilesystemRoot(value: string): boolean {
   return (
     /^(?:[\\/]+|[A-Za-z]:[\\/]*)$/u.test(value) ||
     /^[\\/]{2}[^\\/]+(?:[\\/]+[^\\/]+)?[\\/]*$/u.test(value) ||
-    /^[\\/]{2}[?.][\\/]+(?:unc(?:[\\/]+[^\\/]+){0,2}|[a-z]:)[\\/]*$/iu.test(value)
+    /^[\\/]{2}[?.][\\/]+(?:unc(?:[\\/]+[^\\/]+){0,2}|[a-z]:|volume\{[0-9a-f-]+\})[\\/]*$/iu.test(
+      value,
+    )
   );
 }
 
