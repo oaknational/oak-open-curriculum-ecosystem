@@ -69,8 +69,12 @@ follow-up on MCP-605, and passing the generic test client's negotiated
 version would not be a substitute — a server can accept several versions at
 once, so a modern client's success says nothing about an older host's).
 
-Per-commit assertions: no host `blocked`, no verdict `unknown`, exactly one
-tool carrying `_meta.ui`, and no text-fallback in Claude or ChatGPT. The
+Per-commit assertions: no GATED host `blocked` or `unknown` (the owner-named
+loud set, 2026-08-30: `chatgpt`, `claude`, `claude-code`, `codex`,
+`copilot`, `cursor`, `mcpjam` — all 16 catalogue hosts are still evaluated,
+but a regression confined to a non-gated host informs rather than gates),
+exactly one tool carrying `_meta.ui`, and no text-fallback in Claude or
+ChatGPT. The
 vendor's `capability_unsupported` findings are deliberately excluded, because
 the mechanism cannot work for a widget of this shape. The vendor derives them
 by regex over widget HTML; a self-contained MCP Apps widget inlines its SDK,
@@ -88,11 +92,17 @@ are degraded-severity, so the exclusion cannot mask a blocking regression.
 
 A catalogue verdict is a claim about a capability model, not about a
 rendered widget — nothing in the bundled catalogue carries `observed`
-provenance. The static gate is therefore the ongoing regression guard;
-whether release claims additionally require one-time live-render evidence
-per bar host is an owner gate recorded in the delivery plan, and the release
-host bar, once ruled, is recorded here or referenced from here rather than
-in a plan field alone.
+provenance. The static gate is therefore the ongoing regression guard.
+
+**Both owner questions are ruled (owner, 2026-08-29).** The checker is not a
+substitute for testing in the platforms: it is a layer of protection, and
+its verdicts must never be read as unequivocal. Testing in the real
+platforms owns every "works in X" claim; these checks are the regression
+tripwire behind it. It follows that the checker underwrites no
+release-compatibility host set — there is no tool-backed release bar to
+name. Gemini is out of scope (the consumer Gemini app carries no
+user-configurable MCP connection). The delivery plan's §Owner decisions
+carries the same rulings.
 
 ## Rationale
 

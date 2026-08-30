@@ -15,7 +15,7 @@ tickets:
   - MCP-605
 depends_on: []
 owner_gates: []
-last_updated: 2026-08-29
+last_updated: 2026-08-30
 ---
 
 # MCPJam MCP Apps widget compatibility checking
@@ -41,12 +41,14 @@ protocol-version negotiation is not evaluated; the per-host protocol check
 is a named follow-up on MCP-605.
 
 Stated precisely, because the gate is narrower than "any degradation fails".
-It fails on: a `blocked` verdict anywhere, an `unknown` verdict anywhere, the
-widget-bearing tool set changing, a paginated tool list, and Claude or
-ChatGPT dropping to a text fallback. A NEW degradation in another host does
-not fail it — degradation is the expected state for the seven hosts that
-render no widgets at all, and a threshold that fired on it would be red from
-the first run.
+It fails on: a `blocked` or `unknown` verdict in a GATED host (the
+owner-named loud set, 2026-08-30: `chatgpt`, `claude`, `claude-code`,
+`codex`, `copilot`, `cursor`, `mcpjam`), the widget-bearing tool set
+changing, a paginated tool list, and Claude or ChatGPT dropping to a text
+fallback. All 16 catalogue hosts are still evaluated for completeness, but a
+regression confined to a non-gated host (Notion, Slack, n8n, …) is a
+live-capture observation, not a commit failure — and degradation anywhere is
+the expected state for hosts that render no widgets at all.
 
 ## Mechanism
 
@@ -58,7 +60,7 @@ An in-repo test at
 `apps/oak-curriculum-mcp-streamable-http/src/served-surface/host-compatibility.integration.test.ts`,
 beside the other served-surface proofs. It asks the in-memory composition
 root for its tool list and its widget, evaluates them against MCPJam's host
-catalogue, and asserts: no host is blocked, no verdict is `unknown`, exactly
+catalogue, and asserts: no gated host is blocked or `unknown`, exactly
 one tool serves a widget, and the widget renders in Claude and ChatGPT.
 
 Two decisions carry it. It uses MCPJam's engine **directly** — their
@@ -129,7 +131,15 @@ wrapper itself failed, not that the run did.
    verdicts are never unequivocal, and platform testing owns the release
    claim.
 
-## Owner decisions (both ruled — owner, 2026-08-29)
+## Owner decisions (ruled — owner, 2026-08-29 and 2026-08-30)
+
+### Which hosts fail the gate loudly?
+
+**Ruled (2026-08-30): the gate's loud set is `chatgpt`, `claude`,
+`claude-code`, `codex`, `copilot`, `cursor`, `mcpjam`.** The other nine
+catalogue hosts are evaluated and reported but do not fail a commit. This
+names which regressions block a commit, not which hosts Oak promises — the
+2026-08-29 ruling that no tool-backed release set exists stands.
 
 ### Gemini, and the host bar
 

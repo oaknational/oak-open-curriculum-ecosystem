@@ -123,6 +123,26 @@ async function evaluateServedSurface(): Promise<SurfaceEvaluation> {
  */
 const evaluation: Promise<SurfaceEvaluation> = evaluateServedSurface();
 
+/**
+ * The hosts whose regressions FAIL THIS GATE, named by the owner
+ * (2026-08-30): the surfaces Oak's users actually reach the server through,
+ * plus the vendor's own reference host. The other catalogue hosts are still
+ * evaluated (the completeness check below covers all 16) and still appear in
+ * live captures, but a regression confined to them does not fail a commit —
+ * nobody at Oak is watching what, say, Notion's MCP client does with our
+ * widget. This names which regressions block a commit, NOT which hosts Oak
+ * promises: per the 2026-08-29 ruling, no tool-backed release set exists.
+ */
+const GATED_HOST_IDS: ReadonlySet<string> = new Set([
+  'chatgpt',
+  'claude',
+  'claude-code',
+  'codex',
+  'copilot',
+  'cursor',
+  'mcpjam',
+]);
+
 describe('served surface — the evaluation actually ran', () => {
   it('evaluated every host in the pinned catalogue, by name', async () => {
     const { hosts } = await evaluation;
@@ -167,27 +187,35 @@ describe('served surface — the evaluation actually ran', () => {
   });
 });
 
-describe('served surface — no AI host is blocked', () => {
-  it('leaves every catalogue host able to use Oak, even where it degrades', async () => {
+describe('served surface — no gated host is blocked', () => {
+  it('leaves every gated host able to use Oak, even where it degrades', async () => {
     const { hosts } = await evaluation;
 
     // `blocked` means a host cannot use the surface at all — an app-only
     // widget with no text fallback is the way to earn it. Degradation is
-    // acceptable and expected; blocking is not.
-    expect(hosts.filter((host) => host.verdict === 'blocked').map((host) => host.hostId)).toEqual(
-      [],
-    );
+    // acceptable and expected; blocking is not. Scoped to the gated set:
+    // a blocked verdict confined to a non-gated host is a live-capture
+    // observation, not a commit failure.
+    expect(
+      hosts
+        .filter((host) => GATED_HOST_IDS.has(host.hostId) && host.verdict === 'blocked')
+        .map((host) => host.hostId),
+    ).toEqual([]);
   });
 
-  it('reaches a determinate verdict for every host', async () => {
+  it('reaches a determinate verdict for every gated host', async () => {
     const { hosts } = await evaluation;
 
     // `unknown` means the engine withheld judgement — a truncated tool list
     // or an unreadable widget. It is honest, and it is also the absence of an
-    // answer, so it must not pass unnoticed.
-    expect(hosts.filter((host) => host.verdict === 'unknown').map((host) => host.hostId)).toEqual(
-      [],
-    );
+    // answer, so it must not pass unnoticed where it gates. The global causes
+    // of `unknown` (a truncated list, an unreadable widget) hit the gated
+    // hosts too, so scoping loses none of that signal.
+    expect(
+      hosts
+        .filter((host) => GATED_HOST_IDS.has(host.hostId) && host.verdict === 'unknown')
+        .map((host) => host.hostId),
+    ).toEqual([]);
   });
 });
 
