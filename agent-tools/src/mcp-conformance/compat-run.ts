@@ -86,9 +86,11 @@ export function runCompat(io: CompatIo, input: CompatRunInput): CompatOutcome {
       };
     // A mismatched capture fails identically to an unparseable one: it is
     // retained for diagnosis, but its verdicts describe a DIFFERENT
-    // deployment, so no host summary may flow from it.
+    // deployment (or a different catalogue than the pinned one), so no host
+    // summary may flow from it.
     case 'unparseable':
     case 'target-mismatch':
+    case 'catalog-mismatch':
       return {
         verdict: 'fail',
         failureReasons: [evidence.reason, ...evidence.retentionReasons],

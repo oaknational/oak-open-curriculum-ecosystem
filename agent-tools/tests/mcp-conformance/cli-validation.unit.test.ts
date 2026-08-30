@@ -220,6 +220,23 @@ describe('validateCliState — refusals are loud, the runnable state is silent',
     );
   });
 
+  it('a PERCENT-ENCODED credential key is refused — the scan reads the decoded form too', () => {
+    // `access%5Ftoken=` is `access_token=` after the single decode a URL
+    // consumer applies; a raw-only scan waved it through (review 2026-08-30).
+    expect(
+      validateCliState({
+        ...RUNNABLE,
+        target: 'https://mcp.example.test/mcp?access%5Ftoken=ya29.SECRET',
+      }),
+    ).toContain('must not carry credentials');
+  });
+
+  it('invalid percent-encoding is refused — what cannot be decoded cannot be inspected', () => {
+    expect(
+      validateCliState({ ...RUNNABLE, target: 'https://mcp.example.test/mcp?x=%GG' }),
+    ).toContain('invalid percent-encoding');
+  });
+
   it('a credential in a fragment that carries its own `?` is refused — the SPA callback shape', () => {
     // `#/cb?code=SECRET` makes URLSearchParams read the key as `/cb?code`,
     // which slips a structural check; the raw-string scan cannot be misled.

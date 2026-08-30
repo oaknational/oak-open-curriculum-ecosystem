@@ -165,10 +165,34 @@ function validateTarget(target: string, state: CliState): string | undefined {
   if (parsed.username !== '' || parsed.password !== '') {
     return '--target must not embed credentials (user:password@) — the target is echoed into reports; pass credentials via --credentials-file';
   }
-  if (TARGET_CREDENTIAL_PARAM_PATTERN.test(target)) {
-    return '--target must not carry credentials in its query or fragment (access_token, token, code, …) — the target is echoed into reports; pass credentials via --credentials-file';
+  const credentialRefusal = refuseCredentialParams(target);
+  if (credentialRefusal !== undefined) {
+    return credentialRefusal;
   }
   return validateTransportSecurity(parsed, state);
+}
+
+/**
+ * Scans in RAW and PERCENT-DECODED form: `access%5Ftoken=` is
+ * `access_token=` after the single decode a URL consumer applies, and a
+ * raw-only scan waved it through (review, 2026-08-30). A target whose
+ * encoding does not decode cannot be inspected, so it is refused — the same
+ * fail-closed rule as an unparseable target.
+ */
+function refuseCredentialParams(target: string): string | undefined {
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(target);
+  } catch {
+    return '--target carries invalid percent-encoding, so it cannot be inspected for embedded credentials — refused; fix the encoding';
+  }
+  if (
+    TARGET_CREDENTIAL_PARAM_PATTERN.test(target) ||
+    TARGET_CREDENTIAL_PARAM_PATTERN.test(decoded)
+  ) {
+    return '--target must not carry credentials in its query or fragment (access_token, token, code, …) — the target is echoed into reports; pass credentials via --credentials-file';
+  }
+  return undefined;
 }
 
 /**

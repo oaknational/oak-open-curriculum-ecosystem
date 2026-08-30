@@ -127,13 +127,33 @@ const compatFindingSchema = z
   .strict();
 
 /**
- * The smallest host count a complete capture can have. The catalogue bundled
- * with the pinned SDK carries 16; this floor is deliberately that number and
- * not "whatever the catalogue says at runtime", because the point is to catch
- * a vendor report that is SHORTER than the catalogue it claims to cover.
- * Raise it when the pin moves and the catalogue grows.
+ * The EXACT host ids the catalogue bundled with the pinned SDK carries,
+ * read from the retained 2026-08-15 capture. Pinned by name, not by count:
+ * review showed a floor-plus-uniqueness rule accepts a swap — a report that
+ * drops `claude` and adds a stranger still counts 16 unique. The set belongs
+ * to the SDK pin; update it deliberately when the pin moves, exactly as the
+ * app's own gate does.
  */
-const CATALOGUE_HOST_FLOOR = 16;
+export const PINNED_CATALOGUE_HOST_IDS = [
+  'agentcore',
+  'chatgpt',
+  'claude',
+  'claude-code',
+  'cline',
+  'codex',
+  'copilot',
+  'cursor',
+  'goose',
+  'mcpjam',
+  'mistral',
+  'n8n',
+  'notion',
+  'perplexity',
+  'slack',
+  'vscode',
+] as const;
+
+const PINNED_HOST_ID_SET: ReadonlySet<string> = new Set(PINNED_CATALOGUE_HOST_IDS);
 
 const compatHostSchema = z
   .object({
@@ -152,12 +172,11 @@ const compatHostSchema = z
  * surface at all; that is a property of the CLI, recorded here so a future
  * reader does not go looking for lane data the wrapper could have kept.
  *
- * `hosts` carries a FLOOR and a uniqueness rule, not a non-empty check: a
- * document naming fewer hosts than the pinned catalogue is an incomplete
- * capture, and letting it parse hands the caller a verdict about hosts nobody
- * evaluated. The compat twin of the suites' every-group-carries-a-case
- * refinement — see the constraint below for why a floor rather than an exact
- * count.
+ * `hosts` must equal the PINNED catalogue's id set exactly, once each: a
+ * document naming fewer, more, or different hosts than the pinned catalogue
+ * is a partial or foreign capture, and letting it parse hands the caller a
+ * verdict about hosts nobody evaluated. The compat twin of the suites'
+ * every-group-carries-a-case refinement.
  */
 export const compatReportSchema = z
   .object({
@@ -177,24 +196,22 @@ export const compatReportSchema = z
         unknown: z.number(),
       })
       .strict(),
-    // The pinned offline catalogue carries a fixed host set, so a capture
-    // naming fewer is INCOMPLETE, not small — and an incomplete capture read
-    // as usable is a verdict about hosts nobody evaluated. A bare non-empty
-    // check accepted a one-host report until review caught it.
-    //
-    // A floor rather than an exact count: the count belongs to the SDK pin,
-    // and hard-coding it here would red the parse on a dependency bump that
-    // legitimately adds a host. The floor catches the failure mode that
-    // actually occurs (a truncated or partial vendor report) while letting
-    // the catalogue grow. The app's own gate asserts the exact set by name.
+    // The pinned offline catalogue carries a FIXED, NAMED host set, so a
+    // usable capture names exactly those ids, once each: fewer is an
+    // incomplete capture, a stranger is a different catalogue, and either
+    // read as usable is a verdict about hosts nobody evaluated. Set equality
+    // over the pinned ids — count and uniqueness fall out of it for free.
     hosts: z
       .array(compatHostSchema)
-      .min(CATALOGUE_HOST_FLOOR, {
-        message: `a compat capture must name at least ${String(CATALOGUE_HOST_FLOOR)} hosts — fewer means the vendor reported a partial catalogue, which has no verdict semantics`,
-      })
-      .refine((hosts) => new Set(hosts.map((host) => host.hostId)).size === hosts.length, {
-        message: 'a compat capture must not name the same host twice',
-      }),
+      .refine(
+        (hosts) =>
+          hosts.length === PINNED_HOST_ID_SET.size &&
+          hosts.every((host) => PINNED_HOST_ID_SET.has(host.hostId)) &&
+          new Set(hosts.map((host) => host.hostId)).size === hosts.length,
+        {
+          message: `a compat capture must name exactly the pinned catalogue's host ids, once each: ${PINNED_CATALOGUE_HOST_IDS.join(', ')} — anything else is a different or partial catalogue, which has no verdict semantics here`,
+        },
+      ),
   })
   .strict();
 

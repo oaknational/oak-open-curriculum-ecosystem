@@ -235,6 +235,22 @@ describe('runCompat — a capture of a different deployment can never read as th
     expect(runCompat(io, { target: 'http://localhost:3333/mcp/' }).verdict).toBe('pass');
   });
 
+  it('fails a capture evaluated against the LIVE catalogue — --offline requested is not --offline honoured', () => {
+    // The argv asks for the bundled catalogue; this proves the wrapper checks
+    // the report's own word for it. A live-catalogue capture's verdicts can
+    // drift with upstream publishes — the exact drift pinning exists to stop.
+    const liveStdout = OAK_REPORT.replace('"catalogSource": "bundled"', '"catalogSource": "live"');
+    const { io, retained } = fakeIo({ exitCode: 0, stdout: liveStdout });
+
+    const outcome = runCompat(io, FIXTURE_TARGET);
+
+    expect(outcome.verdict).toBe('fail');
+    expect(outcome.failureReasons.join(' ')).toContain('not the pinned bundled');
+    expect(outcome.hosts).toBeUndefined();
+    // Retention still happened — the mismatched capture is the evidence.
+    expect(retained).toHaveLength(1);
+  });
+
   it('redacts a credential the vendor reflected into its reported target', () => {
     // The reported `target` is arbitrary server-controlled text and the
     // mismatch reason rides onto stdout — a server echoing the request URL

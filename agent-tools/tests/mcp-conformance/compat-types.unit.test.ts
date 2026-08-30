@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   compatErrorEnvelopeSchema,
   compatReportSchema,
+  PINNED_CATALOGUE_HOST_IDS,
 } from '../../src/mcp-conformance/compat-types.js';
 import { loadCompatReport, loadFixtureRaw } from './test-helpers/fixture-loader.js';
 
@@ -238,6 +239,31 @@ describe('compatReportSchema — the verdict document is parsed strictly', () =>
     report.hosts = fullHostList().concat(fullHostList()[0]);
 
     expect(compatReportSchema.safeParse(report).success).toBe(false);
+  });
+
+  it('refuses a SWAP — sixteen unique hosts is not the same as the RIGHT sixteen', () => {
+    // Review found the earlier floor-plus-uniqueness rule accepted a report
+    // that dropped `claude` and added a stranger: still 16, still unique,
+    // still emitted as usable. Set equality over the pinned ids closes it.
+    const report = minimalReport();
+    const swapped = fullHostList();
+    swapped[CATALOGUE_HOST_IDS.indexOf('claude')] = {
+      hostId: 'shiny-new-host',
+      hostLabel: 'shiny-new-host',
+      verdict: 'works',
+      provenance: 'assumed',
+      findings: [],
+    };
+    report.hosts = swapped;
+
+    expect(compatReportSchema.safeParse(report).success).toBe(false);
+  });
+
+  it('pins the same id set as the schema exports — the two lists cannot drift apart', () => {
+    const byLocale = (a: string, b: string): number => a.localeCompare(b);
+    expect([...PINNED_CATALOGUE_HOST_IDS].sort(byLocale)).toEqual(
+      [...CATALOGUE_HOST_IDS].sort(byLocale),
+    );
   });
 
   it('refuses an unknown top-level key, so a reporter change surfaces loudly', () => {

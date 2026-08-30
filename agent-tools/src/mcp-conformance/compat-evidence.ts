@@ -93,6 +93,18 @@ export type CompatEvidence =
       readonly rawReportPath?: string;
     }
   | {
+      // The report parsed but was NOT evaluated against the pinned bundled
+      // catalogue. `--offline` is only an argv request; this is the check
+      // that the vendor honoured it. A live-catalogue capture's verdicts can
+      // drift with an upstream publish, which is exactly what pinning exists
+      // to prevent — retained for diagnosis, never summarised.
+      readonly kind: 'catalog-mismatch';
+      readonly reason: string;
+      readonly exitCode: number | undefined;
+      readonly retentionReasons: readonly string[];
+      readonly rawReportPath?: string;
+    }
+  | {
       readonly kind: 'parsed';
       readonly report: CompatReport;
       readonly exitCode: number | undefined;
@@ -158,6 +170,13 @@ function describeRunFailure(exitCode: number | undefined, stderr: string): strin
  * capture that would explain it — and parsing precedes the target-identity
  * check, because only a parsed report names the target it describes.
  */
+// Redaction notes for the reasons composed below. Unparseable: the Zod
+// message embeds vendor stdout in one narrow way — an unrecognized-keys issue
+// on this .strict() schema echoes the offending KEY names (values are never
+// echoed; verified against the pinned Zod 4, 2026-08-19), and a key name is
+// vendor text. Target-mismatch: the vendor's target is arbitrary
+// server-controlled text; the requested one is already validated
+// credential-free, so its redaction is defence in depth.
 function retainThenParse(
   io: CompatIo,
   stdout: string,
@@ -169,36 +188,36 @@ function retainThenParse(
     ? []
     : [`the compat report could not be retained: ${retained.error}`];
   const retainedPath = retained.ok ? { rawReportPath: retained.reportedPath } : {};
+  const refusal = (
+    kind: 'unparseable' | 'target-mismatch' | 'catalog-mismatch',
+    reason: string,
+  ): CompatEvidence => ({ kind, reason, exitCode, retentionReasons, ...retainedPath });
+
   const parsed = compatReportSchema.safeParse(safeJsonParse(stdout));
   if (!parsed.success) {
-    return {
-      kind: 'unparseable',
-      // The Zod message embeds vendor stdout in one narrow way: an
-      // unrecognized-keys issue on this .strict() schema echoes the offending
-      // KEY names (values are never echoed — verified against the pinned Zod
-      // 4, 2026-08-19). A key name is vendor text, so it is redacted like
-      // every other vendor string reaching a reason.
-      reason: `mcpjam compat exited 0 but its stdout did not match the expected report shape: ${redactCredentials(parsed.error.message)}`,
-      exitCode,
-      retentionReasons,
-      ...retainedPath,
-    };
+    return refusal(
+      'unparseable',
+      `mcpjam compat exited 0 but its stdout did not match the expected report shape: ${redactCredentials(parsed.error.message)}`,
+    );
   }
   // The suites' worst-answer guard, applied to compat's single target field:
   // a capture of a DIFFERENT deployment is false assurance about a live
   // surface, so it must never flow into per-host verdicts.
   if (canonicalTarget(parsed.data.target) !== canonicalTarget(requestedTarget)) {
-    return {
-      kind: 'target-mismatch',
-      // Both targets are redacted before the reason is composed: the vendor's
-      // is arbitrary server-controlled text; the requested one has already
-      // been validated credential-free, so its redaction is pure defence in
-      // depth against a future validation gap.
-      reason: `mcpjam reported target ${JSON.stringify(redactCredentials(parsed.data.target))} but the run requested ${JSON.stringify(redactCredentials(requestedTarget))} — this capture is of a different deployment; do not read its verdicts as the requested surface's`,
-      exitCode,
-      retentionReasons,
-      ...retainedPath,
-    };
+    return refusal(
+      'target-mismatch',
+      `mcpjam reported target ${JSON.stringify(redactCredentials(parsed.data.target))} but the run requested ${JSON.stringify(redactCredentials(requestedTarget))} — this capture is of a different deployment; do not read its verdicts as the requested surface's`,
+    );
+  }
+  // The determinism gate's other half: the argv REQUESTS --offline, this
+  // verifies the vendor honoured it. The schema deliberately parses `live`
+  // (the boundary parses what the vendor says; the gate judges it), so the
+  // judgement lands here, not in the schema.
+  if (parsed.data.catalogSource !== 'bundled') {
+    return refusal(
+      'catalog-mismatch',
+      `mcpjam evaluated against the ${JSON.stringify(parsed.data.catalogSource)} catalogue, not the pinned bundled one — --offline was requested but not honoured, so these verdicts can drift with upstream publishes; do not use this capture`,
+    );
   }
   return { kind: 'parsed', report: parsed.data, exitCode, retentionReasons, ...retainedPath };
 }
