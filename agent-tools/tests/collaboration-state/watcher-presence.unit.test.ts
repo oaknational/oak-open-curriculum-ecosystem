@@ -316,6 +316,7 @@ describe('watcher path derivers', () => {
     { label: 'a lower-case drive root', dir: 'c:\\' },
     { label: 'a bare drive designator', dir: 'C:' },
     { label: 'a UNC share root', dir: '\\\\server\\share\\' },
+    { label: 'an extended-length UNC share root', dir: '\\\\?\\UNC\\server\\share\\' },
   ])('rejects $label as a comms-seen dir (would derive a root-absolute path)', ({ dir }) => {
     expect(() => commsSeenFileForCodename('Seal hunts Offing', dir)).toThrow(
       /not the filesystem root/u,

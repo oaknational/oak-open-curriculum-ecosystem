@@ -22,6 +22,13 @@ describe('isFilesystemRoot', () => {
     { label: 'a UNC share root with a trailing separator', value: '\\\\server\\share\\' },
     { label: 'a UNC share root in forward-slash form', value: '//server/share/' },
     { label: 'a bare UNC host', value: String.raw`\\server` },
+    // Extended-length spellings are the same roots behind a different prefix.
+    { label: 'an extended-length UNC share root', value: '\\\\?\\UNC\\server\\share\\' },
+    {
+      label: 'an extended-length UNC share root without its trailing separator',
+      value: String.raw`\\?\UNC\server\share`,
+    },
+    { label: 'an extended-length drive root', value: '\\\\?\\C:\\' },
   ])('classifies $label as a root', ({ value }) => {
     expect(isFilesystemRoot(value)).toBe(true);
   });
@@ -30,6 +37,14 @@ describe('isFilesystemRoot', () => {
     { label: 'a directory under the posix root', value: '/comms-seen' },
     { label: 'a directory under a drive root', value: String.raw`C:\comms-seen` },
     { label: 'a directory below a UNC share root', value: String.raw`\\server\share\comms-seen` },
+    {
+      label: 'a directory below an extended-length UNC share root',
+      value: String.raw`\\?\UNC\server\share\comms-seen`,
+    },
+    {
+      label: 'a directory below an extended-length drive root',
+      value: String.raw`\\?\C:\comms-seen`,
+    },
     { label: 'a relative path', value: 'comms-seen' },
     { label: 'the empty string', value: '' },
   ])('does not classify $label as a root', ({ value }) => {
