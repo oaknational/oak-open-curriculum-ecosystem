@@ -1,0 +1,218 @@
+/**
+ * Boundary schemas for the `mcpjam compat` operation — per-host MCP Apps /
+ * widget compatibility verdicts for the served surface (protocol negotiation
+ * is outside the capture's scope — it supplies no connection facts).
+ *
+ * WHY THIS IS A SEPARATE BOUNDARY FROM THE SUITES. The `protocol`, `apps` and
+ * `oauth` suites share one contract that `types.ts` models: a
+ * `--reporter json-summary` document on stdout, present whether the suite
+ * passed or failed, with the exit code carrying no verdict. `compat` inverts
+ * it. Verified first-hand against the lockfile-pinned `@mcpjam/cli` 3.19.0
+ * (resolving `@mcpjam/sdk` 2.4.0), 2026-08-14:
+ *
+ * - There is no `--reporter`; output is the CLI's own projection, emitted
+ *   through the global `--format json` (which is also the non-TTY default).
+ * - A successful run writes its report to STDOUT.
+ * - A failed run writes NOTHING to stdout and describes itself in a
+ *   structured envelope on STDERR, exiting 1 for an operational error or 2
+ *   for a usage error.
+ *
+ * So for a suite, exit 1 means "here is your report"; for compat it means
+ * "there is no report". Admitting compat into `ConformanceSuite` would force
+ * the report schema into a union and invert the evidence gate for one member
+ * of a closed enum — a compatibility bridge. It is a sibling operation
+ * instead, following the `--drive` precedent.
+ */
+import { z } from 'zod';
+
+/**
+ * The structured failure envelope `mcpjam` writes to stderr when a compat run
+ * cannot produce a report.
+ *
+ * This is the wrapper's ONLY evidence on the failure path — stdout is empty —
+ * so it is parsed strictly rather than string-matched, and its `code` and
+ * `message` are carried verbatim into the run's failure reason.
+ *
+ * Reporting the vendor's own words matters more here than it first appears:
+ * the vendor classifies an authorisation failure as `INTERNAL_ERROR`, not
+ * `UNAUTHORIZED` (observed against the deployed alpha with no credentials,
+ * 2026-08-14 — the message names `HTTP 401` while the code does not).
+ * Re-interpreting that into a friendlier code would put this wrapper's guess
+ * where the vendor's evidence belongs, and would drift silently the moment the
+ * vendor's own classification improves.
+ *
+ * `code` is typed as a non-empty string rather than an enum: the vendor's code
+ * vocabulary is its own to extend, and pinning it here would turn a new
+ * vendor code into a parse failure that destroys the diagnostic it arrived
+ * with — the opposite of what the failure path is for. `details` stays
+ * `unknown`: the wrapper never reads it, and pinning vendor-internal
+ * diagnostics would make the boundary brittle for no verdict value.
+ *
+ * `.strict()` on both levels: an unrecognised shape reaching this parser means
+ * the operation's dispatch is wrong (a success report parsed as a failure, or
+ * a reporter change), and that must surface loudly rather than resolve to a
+ * failure the wrapper never observed.
+ */
+export const compatErrorEnvelopeSchema = z
+  .object({
+    error: z
+      .object({
+        code: z.string().min(1),
+        message: z.string().min(1),
+        details: z.unknown().optional(),
+      })
+      .strict(),
+  })
+  .strict();
+
+/**
+ * Per-host verdict. `unknown` is not a failure to report — it is the engine
+ * refusing to guess, and it is load-bearing: a truncated tool list demotes
+ * every would-be `works` to `unknown` rather than asserting a verdict the
+ * evidence cannot support.
+ */
+const compatVerdictSchema = z.enum(['works', 'degraded', 'blocked', 'unknown']);
+
+/**
+ * Where a host-profile fact came from, weakest to strongest as the vendor
+ * ranks them (PROVENANCE_RANK in the engine): `assumed` (a default), `probe`
+ * (the host's own capability handshake), `vendor-doc` (published
+ * documentation), `observed` (a live run).
+ *
+ * Kept on the parsed surface because it grades how far a verdict can be
+ * trusted — the vendor surfaces it so "a verdict never reads as more
+ * authoritative than its weakest source", and the wrapper's summary carries
+ * it through to the reader for the same reason.
+ */
+const compatProvenanceSchema = z.enum(['observed', 'vendor-doc', 'probe', 'assumed']);
+
+/**
+ * Which axis a finding belongs to: `apps` (widget rendering AND widget
+ * capability use — the engine files `capability_unsupported` here too) or
+ * `server` (protocol-level facts, e.g. protocol version).
+ */
+const compatLaneSchema = z.enum(['apps', 'server']);
+
+/**
+ * The vendor's stable machine key per finding class. Pinned as an enum
+ * deliberately, unlike the failure envelope's free-string `code`: a novel
+ * finding class changes what the verdict MEANS, so it must stop the run for
+ * adjudication rather than flow through as an unrecognised string.
+ */
+const compatFindingCodeSchema = z.enum([
+  'app_only_unrenderable',
+  'widget_text_fallback',
+  'capability_unsupported',
+  'protocol_version_mismatch',
+]);
+
+/**
+ * One finding. `title`, `detail` and `remediation` are the vendor's own
+ * words: parsed so the document round-trips, never compared — the vendor
+ * documents them as "default copy, not the contract", and pinning prose
+ * would turn a copy edit into a red gate.
+ */
+const compatFindingSchema = z
+  .object({
+    lane: compatLaneSchema,
+    severity: z.enum(['blocker', 'degraded', 'info']),
+    code: compatFindingCodeSchema,
+    capability: z.string().min(1).optional(),
+    tools: z.array(z.string().min(1)).optional(),
+    title: z.string(),
+    detail: z.string(),
+    remediation: z.string().optional(),
+    provenance: compatProvenanceSchema.optional(),
+  })
+  .strict();
+
+/**
+ * The EXACT host ids the catalogue bundled with the pinned SDK carries,
+ * read from the retained 2026-08-15 capture. Pinned by name, not by count:
+ * review showed a floor-plus-uniqueness rule accepts a swap — a report that
+ * drops `claude` and adds a stranger still counts 16 unique. The set belongs
+ * to the SDK pin; update it deliberately when the pin moves, exactly as the
+ * app's own gate does.
+ */
+export const PINNED_CATALOGUE_HOST_IDS = [
+  'agentcore',
+  'chatgpt',
+  'claude',
+  'claude-code',
+  'cline',
+  'codex',
+  'copilot',
+  'cursor',
+  'goose',
+  'mcpjam',
+  'mistral',
+  'n8n',
+  'notion',
+  'perplexity',
+  'slack',
+  'vscode',
+] as const;
+
+const PINNED_HOST_ID_SET: ReadonlySet<string> = new Set(PINNED_CATALOGUE_HOST_IDS);
+
+const compatHostSchema = z
+  .object({
+    hostId: z.string().min(1),
+    hostLabel: z.string(),
+    verdict: compatVerdictSchema,
+    provenance: compatProvenanceSchema,
+    findings: z.array(compatFindingSchema),
+  })
+  .strict();
+
+/**
+ * The compat report as the CLI projects it — NOT the SDK's richer
+ * `HostCompatReport`. The projection drops the per-lane verdicts and each
+ * host's `verifiedAt`, so per-lane baselining is not available through this
+ * surface at all; that is a property of the CLI, recorded here so a future
+ * reader does not go looking for lane data the wrapper could have kept.
+ *
+ * `hosts` must equal the PINNED catalogue's id set exactly, once each: a
+ * document naming fewer, more, or different hosts than the pinned catalogue
+ * is a partial or foreign capture, and letting it parse hands the caller a
+ * verdict about hosts nobody evaluated. The compat twin of the suites'
+ * every-group-carries-a-case refinement.
+ */
+export const compatReportSchema = z
+  .object({
+    target: z.string().min(1),
+    catalogSource: z.enum(['live', 'bundled']),
+    catalogVersion: z.number(),
+    widgets: z.object({ total: z.number(), appOnly: z.number() }).strict(),
+    // Free-form vendor strings naming what the run could not determine (a
+    // capped tool list, an unreadable widget). Never empty-string entries:
+    // an unnamed unknown is indistinguishable from no unknown at all.
+    unknownDimensions: z.array(z.string().min(1)),
+    summary: z
+      .object({
+        works: z.number(),
+        degraded: z.number(),
+        blocked: z.number(),
+        unknown: z.number(),
+      })
+      .strict(),
+    // The pinned offline catalogue carries a FIXED, NAMED host set, so a
+    // usable capture names exactly those ids, once each: fewer is an
+    // incomplete capture, a stranger is a different catalogue, and either
+    // read as usable is a verdict about hosts nobody evaluated. Set equality
+    // over the pinned ids — count and uniqueness fall out of it for free.
+    hosts: z
+      .array(compatHostSchema)
+      .refine(
+        (hosts) =>
+          hosts.length === PINNED_HOST_ID_SET.size &&
+          hosts.every((host) => PINNED_HOST_ID_SET.has(host.hostId)) &&
+          new Set(hosts.map((host) => host.hostId)).size === hosts.length,
+        {
+          message: `a compat capture must name exactly the pinned catalogue's host ids, once each: ${PINNED_CATALOGUE_HOST_IDS.join(', ')} — anything else is a different or partial catalogue, which has no verdict semantics here`,
+        },
+      ),
+  })
+  .strict();
+
+export type CompatReport = z.infer<typeof compatReportSchema>;
