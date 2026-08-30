@@ -15,6 +15,13 @@ describe('isFilesystemRoot', () => {
     { label: 'windows drive root, forward slash', value: 'C:/' },
     { label: 'windows drive root, lower case', value: 'c:\\' },
     { label: 'bare drive designator', value: 'C:' },
+    // `path.win32.parse` treats a share as a root, so a caller promising to
+    // refuse roots must catch these too — trimming `\\server\share\` and
+    // joining would otherwise compose a child directly in the share root.
+    { label: 'a UNC share root', value: String.raw`\\server\share` },
+    { label: 'a UNC share root with a trailing separator', value: '\\\\server\\share\\' },
+    { label: 'a UNC share root in forward-slash form', value: '//server/share/' },
+    { label: 'a bare UNC host', value: String.raw`\\server` },
   ])('classifies $label as a root', ({ value }) => {
     expect(isFilesystemRoot(value)).toBe(true);
   });
@@ -22,6 +29,7 @@ describe('isFilesystemRoot', () => {
   it.each([
     { label: 'a directory under the posix root', value: '/comms-seen' },
     { label: 'a directory under a drive root', value: String.raw`C:\comms-seen` },
+    { label: 'a directory below a UNC share root', value: String.raw`\\server\share\comms-seen` },
     { label: 'a relative path', value: 'comms-seen' },
     { label: 'the empty string', value: '' },
   ])('does not classify $label as a root', ({ value }) => {

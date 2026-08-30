@@ -73,11 +73,23 @@ function envValue(env: NodeJS.ProcessEnv, name: string): string | undefined {
  * An env-derived win32 root, with any trailing separator trimmed so
  * candidate composition never produces a doubled separator (`D:\pnpm-home\`
  * + `\pnpm.exe` would otherwise probe `D:\pnpm-home\\pnpm.exe`).
+ *
+ * The TRIMMED root itself must be fully qualified, not just the composed
+ * candidate: a bare `C:` (or a `C:\` that trims to it) is drive-relative
+ * space, yet composing `C:` + `\pnpm.exe` yields `C:\pnpm.exe`, which the
+ * later per-candidate filter accepts — quietly turning a caller-influenced
+ * root into an accepted drive-root probe. Refusing the root here keeps the
+ * stated invariant: env-derived locations are honoured only when the value
+ * already names a fixed, drive-qualified directory.
  */
 function win32Root(env: NodeJS.ProcessEnv, name: string): string | undefined {
   const value = envValue(env, name);
+  if (value === undefined) {
+    return undefined;
+  }
+  const trimmed = trimTrailingSeparators(value);
 
-  return value === undefined ? undefined : trimTrailingSeparators(value);
+  return fullyQualifiedWin32(trimmed) ? trimmed : undefined;
 }
 
 function win32Candidates(env: NodeJS.ProcessEnv): readonly PnpmCandidate[] {

@@ -10,17 +10,25 @@
  */
 
 /**
- * Whether `value` is a filesystem ROOT — the POSIX `/` (or a run of them), or
- * a Windows drive root (`C:\`, `c:/`), with or without its trailing separator.
+ * Whether `value` is a filesystem ROOT — the POSIX `/` (or a run of them), a
+ * Windows drive root (`C:\`, `c:/`), or a UNC host/share root
+ * (`\\server\share`, `\\server\share\`, and the bare `\\server`), each with
+ * or without its trailing separator.
  *
  * Callers that compose a child path must refuse a root before trimming.
  * Trimming first destroys the distinction: `/` collapses to the empty string,
  * but `C:\` collapses to `C:`, which is drive-RELATIVE — it resolves against
  * the process's current directory on that drive, so a guard that only checks
- * for emptiness silently admits the Windows root it promised to refuse.
+ * for emptiness silently admits the Windows root it promised to refuse. The
+ * UNC arm exists for the same promise: `path.win32.parse` treats a share as
+ * a root, and without it a caller handing `\\server\share\` over would have
+ * a child path composed directly in the share root.
  */
 export function isFilesystemRoot(value: string): boolean {
-  return /^(?:[\\/]+|[A-Za-z]:[\\/]*)$/u.test(value);
+  return (
+    /^(?:[\\/]+|[A-Za-z]:[\\/]*)$/u.test(value) ||
+    /^[\\/]{2}[^\\/]+(?:[\\/]+[^\\/]+)?[\\/]*$/u.test(value)
+  );
 }
 
 /**

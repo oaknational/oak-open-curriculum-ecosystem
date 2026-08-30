@@ -1,4 +1,4 @@
-import { isErr, isOk, unwrap } from '@oaknational/result';
+import { isErr, isOk, unwrap, unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { type PathExists } from '../core/path-exists.js';
@@ -350,13 +350,33 @@ describe('resolvePnpm — win32', () => {
   });
 
   it('errs with the Windows remedy when pnpm is found nowhere', () => {
-    const result = resolvePnpm({}, () => false, 'win32');
+    const error = unwrapErr(resolvePnpm({}, () => false, 'win32'));
+    expect(error.message).toMatch(/pnpm not found/u);
+    expect(error.message).toContain(COREPACK);
+    expect(error.message).toMatch(/Install Node\.js system-wide/u);
+  });
+
+  // A bare drive designator is drive-relative space, but composing `C:` +
+  // `\pnpm.exe` yields the fully-qualified `C:\pnpm.exe` — so the refusal
+  // must land on the ROOT, or a caller-influenced value becomes an accepted
+  // drive-root probe (and `C:\` itself is not an admin-protected directory).
+  it.each([
+    { label: 'a bare drive designator', root: 'C:' },
+    { label: 'a drive root', root: 'C:\\' },
+    { label: 'a rooted drive-relative path', root: String.raw`\pnpm-home` },
+    { label: 'a UNC share', root: String.raw`\\srv\share` },
+  ])('never derives a candidate from $label in PNPM_HOME', ({ root }) => {
+    const probed: string[] = [];
+    const result = resolvePnpm(
+      { PNPM_HOME: root },
+      (candidate) => {
+        probed.push(candidate);
+        return false;
+      },
+      'win32',
+    );
 
     expect(result.ok).toBe(false);
-    if (!result.ok) {
-      expect(result.error.message).toMatch(/pnpm not found/u);
-      expect(result.error.message).toContain(COREPACK);
-      expect(result.error.message).toMatch(/Install Node\.js system-wide/u);
-    }
+    expect(probed).toEqual([COREPACK]);
   });
 });
