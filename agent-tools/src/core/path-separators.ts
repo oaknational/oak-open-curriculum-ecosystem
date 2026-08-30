@@ -25,15 +25,18 @@
  * a child path composed directly in the share root. The namespaced arm
  * covers the extended-length spellings of the same roots (`\\?\C:\`,
  * `\\?\UNC\server\share\`, `\\?\Volume{…}\`, and the `\\.\` device forms)
- * — a different prefix, the same directory.
+ * — a different prefix, the same directory. Enumeration is deliberate:
+ * delegating to `path.win32.parse` was tried and disproven — its `root`
+ * stops short of the share on extended-length UNC values and of the host on
+ * a bare `\\server`, so a parse-based check re-opens the very holes the
+ * arms close.
  */
 export function isFilesystemRoot(value: string): boolean {
   return (
     /^(?:[\\/]+|[A-Za-z]:[\\/]*)$/u.test(value) ||
     /^[\\/]{2}[^\\/]+(?:[\\/]+[^\\/]+)?[\\/]*$/u.test(value) ||
-    /^[\\/]{2}[?.][\\/]+(?:unc(?:[\\/]+[^\\/]+){0,2}|[a-z]:|volume\{[0-9a-f-]+\})[\\/]*$/iu.test(
-      value,
-    )
+    /^[\\/]{2}[?.][\\/]+unc(?:[\\/]+[^\\/]+){0,2}[\\/]*$/iu.test(value) ||
+    /^[\\/]{2}[?.][\\/]+(?:[a-z]:|volume\{[0-9a-f-]+\})[\\/]*$/iu.test(value)
   );
 }
 
