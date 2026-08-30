@@ -31,7 +31,7 @@ export function isFilesystemRoot(value: string): boolean {
   return (
     /^(?:[\\/]+|[A-Za-z]:[\\/]*)$/u.test(value) ||
     /^[\\/]{2}[^\\/]+(?:[\\/]+[^\\/]+)?[\\/]*$/u.test(value) ||
-    /^[\\/]{2}[?.][\\/]+(?:unc(?:[\\/]+[^\\/]+){0,2}|[A-Za-z]:)[\\/]*$/iu.test(value)
+    /^[\\/]{2}[?.][\\/]+(?:unc(?:[\\/]+[^\\/]+){0,2}|[a-z]:)[\\/]*$/iu.test(value)
   );
 }
 
