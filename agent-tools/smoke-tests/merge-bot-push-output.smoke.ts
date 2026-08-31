@@ -8,6 +8,8 @@ import { resolveTrustedGit } from '../src/core/trusted-git';
 import { realGitExecutor } from '../src/merge-bot/git-executor';
 import { pushHead, resolveGitContext } from '../src/merge-bot/push-git';
 
+import { trustedShellPath } from './trusted-shell-directories';
+
 /**
  * The `merge-bot push` output seam under real volume, against real binaries.
  *
@@ -62,7 +64,7 @@ const GIT = resolveTrustedGit();
  */
 function hermeticEnv(home: string): Record<string, string> {
   return {
-    PATH: '/usr/bin:/bin',
+    PATH: trustedShellPath(),
     HOME: home,
     GIT_CONFIG_GLOBAL: '/dev/null',
     GIT_CONFIG_SYSTEM: '/dev/null',
@@ -123,9 +125,17 @@ function makeRepoWithLoudHook(root: string): { work: string; remote: string } {
   // A gate chain in miniature: it prints far more than any single buffer and
   // exits 0, exactly like a green run of the real one.
   const hook = join(work, '.git', 'hooks', 'pre-push');
+  // git runs hooks through a shell on every platform (Git for Windows ships
+  // its own). The interpreter path must therefore be shell-safe: quoted,
+  // because `C:\Program Files\...` contains spaces, and forward-slashed,
+  // because a backslash is an escape character to `sh` — Windows accepts
+  // either separator. Unquoted, `sh` reads `C:\Program` as the command, the
+  // hook emits an error instead of its payload, and the smoke reports the
+  // silence as the output loss it exists to detect.
+  const shellSafeNode = JSON.stringify(process.execPath.replaceAll('\\', '/'));
   writeFileSync(
     hook,
-    ['#!/bin/sh', `${process.execPath} -e ${JSON.stringify(EMITTER)}`, 'exit 0', ''].join('\n'),
+    ['#!/bin/sh', `${shellSafeNode} -e ${JSON.stringify(EMITTER)}`, 'exit 0', ''].join('\n'),
   );
   chmodSync(hook, 0o755);
   return { work, remote };

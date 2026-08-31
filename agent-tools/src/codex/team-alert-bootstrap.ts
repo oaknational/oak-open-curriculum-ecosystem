@@ -4,6 +4,8 @@ import { join } from 'node:path';
 
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
+import { toLfText } from '../core/lf-text.js';
+
 import { findRequiredStandaloneMarkerRange } from './team-alert-bootstrap-markers.js';
 import {
   projectionTargetMarkerDefect,
@@ -182,7 +184,10 @@ async function readRequiredText(
 
 async function readNodeText(path: string): Promise<Result<string, Error>> {
   try {
-    return ok(await readFile(path, 'utf8'));
+    // LF-normalised at the read edge (see toLfText) so marker structure and
+    // projection equality judge CONTENT — the projection itself is composed
+    // and written LF regardless.
+    return ok(toLfText(await readFile(path, 'utf8')));
   } catch (cause: unknown) {
     return err(errorFrom(cause));
   }

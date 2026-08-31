@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { adapterStubPointerLine } from '../../src/skills-adapter-generate/adapter-stub';
@@ -59,7 +61,7 @@ describe('clearFirst is folded behind the discovery-completeness gate', () => {
 
     const outcome = await generateAdapters({ repoRoot: root, prefix: 'oak-', clearFirst: true });
 
-    expect(outcome.cleared).toContain(`${root}/.claude/skills/oak-stale`);
+    expect(outcome.cleared).toContain(join(root, '.claude/skills/oak-stale'));
     expect(repoPathExists(root, '.claude/skills/oak-stale/SKILL.md')).toBe(false);
     expect(repoPathExists(root, '.claude/skills/oak-commit/SKILL.md')).toBe(true);
   });

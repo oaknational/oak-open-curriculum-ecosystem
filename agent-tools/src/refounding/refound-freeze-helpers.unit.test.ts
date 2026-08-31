@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -85,22 +87,35 @@ describe('findEscapingMatches', () => {
 });
 
 describe('resolveCopySink', () => {
+  // Production passes an already-resolved host-absolute frozen root; the
+  // fixture derives the same host form — anchored at this module's own
+  // filesystem root rather than a bare `path.resolve('/…')`, which would
+  // read the AMBIENT process drive on Windows — so the sink and the
+  // containment check agree on every platform.
+  const frozenRoot = path.join(
+    path.parse(import.meta.dirname).root,
+    'repo',
+    'out',
+    'archive',
+    'frozen-v1',
+  );
+
   it('resolves an ordinary frozen path inside the tree', () => {
-    const sink = resolveCopySink('/repo/out/archive/frozen-v1', 'plans/a.md');
+    const sink = resolveCopySink(frozenRoot, 'plans/a.md');
     expect(sink.ok).toBe(true);
     if (sink.ok) {
-      expect(sink.value).toBe('/repo/out/archive/frozen-v1/plans/a.md');
+      expect(sink.value).toBe(path.join(frozenRoot, 'plans', 'a.md'));
     }
   });
 
   it('refuses a crafted traversal that escapes the frozen tree', () => {
-    const sink = resolveCopySink('/repo/out/archive/frozen-v1', '../../../../etc/passwd');
+    const sink = resolveCopySink(frozenRoot, '../../../../etc/passwd');
     expect(sink.ok).toBe(false);
     if (!sink.ok) {
       expect(sink.error.message).toContain('escapes the frozen tree');
     }
-    expect(resolveCopySink('/repo/out/archive/frozen-v1', '/etc/passwd').ok).toBe(false);
-    expect(resolveCopySink('/repo/out/archive/frozen-v1', '.').ok).toBe(false);
+    expect(resolveCopySink(frozenRoot, '/etc/passwd').ok).toBe(false);
+    expect(resolveCopySink(frozenRoot, '.').ok).toBe(false);
   });
 });
 
@@ -114,8 +129,10 @@ describe('validateOutDirChoice', () => {
   });
 
   it('refuses any path inside .git', () => {
-    expect(validateOutDirChoice('/repo', '/repo/.git').ok).toBe(false);
-    const verdict = validateOutDirChoice('/repo', '/repo/.git/hooks');
+    // The product joins `.git` with host separators; the fixtures derive the
+    // same host form so the containment comparison holds on every platform.
+    expect(validateOutDirChoice('/repo', path.join('/repo', '.git')).ok).toBe(false);
+    const verdict = validateOutDirChoice('/repo', path.join('/repo', '.git', 'hooks'));
     expect(verdict.ok).toBe(false);
     if (!verdict.ok) {
       expect(verdict.error.message).toContain('.git');

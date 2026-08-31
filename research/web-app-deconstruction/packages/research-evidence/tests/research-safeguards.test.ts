@@ -75,7 +75,15 @@ test('internal links cannot escape lexically, by encoding or through symlinks', 
     await writeFile(path.join(docs, 'source.md'), 'source');
     await writeFile(path.join(docs, 'target.md'), 'target');
     await writeFile(outside, 'outside');
-    await symlink(outside, path.join(docs, 'escape.md'));
+    // A symlinked DIRECTORY smuggling outside content, created as a
+    // 'junction' so the fixture needs no privilege on Windows (plain
+    // symlinks require admin or Developer Mode there); the argument is
+    // ignored on POSIX. The refusal under test is unchanged: a link whose
+    // real location escapes the repository is refused.
+    const outsideDocs = path.join(parent, 'outside-docs');
+    await mkdir(outsideDocs);
+    await writeFile(path.join(outsideDocs, 'payload.md'), 'outside');
+    await symlink(outsideDocs, path.join(docs, 'escape'), 'junction');
 
     expect(resolveInternalLink(root, path.join(docs, 'source.md'), './target.md').error).toBeNull();
     expect(
@@ -84,9 +92,9 @@ test('internal links cannot escape lexically, by encoding or through symlinks', 
     expect(
       resolveInternalLink(root, path.join(docs, 'source.md'), '%2e%2e/%2e%2e/outside.md').error,
     ).toMatch(/escapes the repository/);
-    expect(resolveInternalLink(root, path.join(docs, 'source.md'), './escape.md').error).toMatch(
-      /resolves outside the repository/,
-    );
+    expect(
+      resolveInternalLink(root, path.join(docs, 'source.md'), './escape/payload.md').error,
+    ).toMatch(/resolves outside the repository/);
   } finally {
     await rm(parent, { recursive: true, force: true });
   }

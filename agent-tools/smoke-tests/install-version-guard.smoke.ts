@@ -115,15 +115,18 @@ try {
   }
 
   const install = spawnSync(
-    pnpm.value,
-    ['install', '--offline', '--ignore-workspace', '--reporter=silent'],
+    pnpm.value.file,
+    [...pnpm.value.leadingArgs, 'install', '--offline', '--ignore-workspace', '--reporter=silent'],
     {
       cwd: fixtureRoot,
       encoding: 'utf8',
-      // The install root has no `packageManager`, so there is nothing for
-      // corepack to resolve either; `COREPACK_ENABLE_PROJECT_SPEC=0` keeps that
-      // path inert regardless of the ambient corepack state.
-      env: { ...process.env, COREPACK_ENABLE_PROJECT_SPEC: '0' },
+      // Every PnpmInvocation carries the environment it must be spawned with
+      // (`pnpm.value.env`, already scrubbed of COREPACK_ROOT/HOME and auto-pin
+      // settings that could redirect the launcher); the test-specific override
+      // overlays it. The install root has no `packageManager`, so there is
+      // nothing for corepack to resolve either; `COREPACK_ENABLE_PROJECT_SPEC=0`
+      // keeps that path inert regardless of the ambient corepack state.
+      env: { ...pnpm.value.env, COREPACK_ENABLE_PROJECT_SPEC: '0' },
     },
   );
 

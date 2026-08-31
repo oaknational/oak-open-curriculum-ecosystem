@@ -115,7 +115,11 @@ describe('collaboration-state comms integration', () => {
     });
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toBe('wrote comms event message-one to state/comms/message-one.json\n');
+    // The reported event path is host-joined from the comms dir, so the
+    // expectation is derived in host form (the POSIX literal on POSIX).
+    expect(result.stdout).toBe(
+      `wrote comms event message-one to ${pathJoin(commsDir, 'message-one.json')}\n`,
+    );
     expect(fake.readCommsEvents(commsDir)).toStrictEqual([
       directedMessage({
         event_id: 'message-one',
@@ -486,7 +490,9 @@ describe('collaboration-state comms integration', () => {
     });
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toBe('wrote comms event message-two to state/comms/message-two.json\n');
+    expect(result.stdout).toBe(
+      `wrote comms event message-two to ${pathJoin(commsDir, 'message-two.json')}\n`,
+    );
     expect(fake.readCommsEvents(commsDir)).toContainEqual(
       directedMessage({
         event_id: 'message-two',

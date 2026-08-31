@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { runMergeBotCli, type MergeBotCliInput } from './cli.js';
@@ -232,7 +234,11 @@ describe('runMergeBotCli mint-token', () => {
     });
     expect(await run.exit).toBe(0);
     expect(run.out()).toBe('ghs_tok\n');
-    expect(keyReads).toEqual(['/test-home/.config/jimbot-oakington-iii/private-key.pem']);
+    // The product derives a host-joined key path; the expectation derives the
+    // same host form so the assertion holds on every platform.
+    expect(keyReads).toEqual([
+      join('/test-home', '.config', 'jimbot-oakington-iii', 'private-key.pem'),
+    ]);
   });
 
   it('honours explicit flag overrides above the repo config', async () => {

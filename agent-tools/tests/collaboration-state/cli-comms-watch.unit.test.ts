@@ -1,3 +1,5 @@
+import { resolve } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { watchComms } from '../../src/collaboration-state/cli-comms-watch';
@@ -151,7 +153,9 @@ describe('watchComms — liveness default-on (Luminous c2)', () => {
     expect(heartbeatText).toBeDefined();
     const heartbeat = parseWatcherHeartbeat(heartbeatText ?? '');
     expect(heartbeat.watcher_identity.agent_name).toBe('Watcher Self');
-    expect(heartbeat.watched_comms_dir).toBe(COMMS_DIR);
+    // The heartbeat records the LEXICALLY RESOLVED source, so the expectation
+    // is derived in host form (identical to the literal on POSIX).
+    expect(heartbeat.watched_comms_dir).toBe(resolve(COMMS_DIR));
   });
 
   it('writes NO heartbeat when --no-heartbeat opts out', async () => {
@@ -168,7 +172,7 @@ describe('watchComms — liveness default-on (Luminous c2)', () => {
     expect(heartbeatText).toBeDefined();
     const heartbeat = parseWatcherHeartbeat(heartbeatText ?? '');
     expect(heartbeat.watcher_identity.agent_name).toBe('Watcher Self');
-    expect(heartbeat.watched_comms_dir).toBe(COMMS_DIR);
+    expect(heartbeat.watched_comms_dir).toBe(resolve(COMMS_DIR));
     expect(heartbeatAt(DERIVED_HEARTBEAT)).toBeUndefined();
   });
 
@@ -181,7 +185,7 @@ describe('watchComms — liveness default-on (Luminous c2)', () => {
     });
 
     const heartbeat = parseWatcherHeartbeat(heartbeatAt(heartbeatFile) ?? '');
-    expect(heartbeat.watched_comms_dir).toBe('/decoy/.agent/state/collaboration/comms');
+    expect(heartbeat.watched_comms_dir).toBe(resolve('/decoy/.agent/state/collaboration/comms'));
   });
 
   it('records a decoy source when the heartbeat itself is explicitly relocated to the canonical path', async () => {
@@ -194,7 +198,7 @@ describe('watchComms — liveness default-on (Luminous c2)', () => {
     });
 
     const heartbeat = parseWatcherHeartbeat(heartbeatAt(canonicalHeartbeat) ?? '');
-    expect(heartbeat.watched_comms_dir).toBe('/decoy/.agent/state/collaboration/comms');
+    expect(heartbeat.watched_comms_dir).toBe(resolve('/decoy/.agent/state/collaboration/comms'));
   });
 
   it('anchors a relative comms source lexically to the injected invocation cwd', async () => {
@@ -208,7 +212,7 @@ describe('watchComms — liveness default-on (Luminous c2)', () => {
     );
 
     const heartbeat = parseWatcherHeartbeat(heartbeatAt(`${relativeSeen}.heartbeat.json`) ?? '');
-    expect(heartbeat.watched_comms_dir).toBe('/invoking/repository/state/comms');
+    expect(heartbeat.watched_comms_dir).toBe(resolve('/invoking/repository', 'state/comms'));
   });
 });
 

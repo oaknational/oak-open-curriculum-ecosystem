@@ -80,7 +80,9 @@ export interface CheckOutcome {
 
 export type CheckerFs = CarriageReadFs & Pick<DiscoveryFs, 'readFileOrUndefined'>;
 
-const defaultCheckerFs: CheckerFs = {
+/** The real-filesystem checker binding — exported so integration tests can
+ * wrap it, overriding a single facet while every other read stays real. */
+export const defaultCheckerFs: CheckerFs = {
   ...realCarriageReadFs,
   async readFileOrUndefined(path) {
     try {

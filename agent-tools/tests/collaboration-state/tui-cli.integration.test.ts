@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { ok } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
@@ -116,10 +118,12 @@ describe('collaboration-state tui CLI integration', () => {
     });
 
     expect(result.exitCode).toBe(0);
+    // Defaults are host-joined from the repo root, so the expectations are
+    // derived in host form (identical to the POSIX literals on POSIX).
     expect(reads).toEqual([
-      '/workspace/.agent/state/collaboration/active-claims.json',
-      '/workspace/.agent/state/collaboration/closed-claims.archive.json',
-      '/workspace/.agent/state/collaboration/comms',
+      join('/workspace', '.agent/state/collaboration/active-claims.json'),
+      join('/workspace', '.agent/state/collaboration/closed-claims.archive.json'),
+      join('/workspace', '.agent/state/collaboration/comms'),
     ]);
   });
 

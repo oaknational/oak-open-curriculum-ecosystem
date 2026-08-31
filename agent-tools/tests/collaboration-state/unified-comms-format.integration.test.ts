@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -104,7 +106,11 @@ describe('unified comms format CLI behaviour', () => {
     });
 
     expect(direct.exitCode).toBe(0);
-    expect(direct.stdout).toBe('wrote comms event message-one to state/comms/message-one.json\n');
+    // The reported event path is host-joined from the comms dir, so the
+    // expectation is derived in host form (the POSIX literal on POSIX).
+    expect(direct.stdout).toBe(
+      `wrote comms event message-one to ${join(commsDir, 'message-one.json')}\n`,
+    );
     expect(fake.readCommsEvents(commsDir)).toContainEqual({
       schema_version: '2.0.0',
       event_id: 'message-one',

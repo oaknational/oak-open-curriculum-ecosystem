@@ -211,10 +211,13 @@ absolute path.
 **Disposition**: there is none — S4036 is always **FIXED**, never disposed
 `SAFE`. Execute the binary by a fixed absolute path so a user-writable `PATH`
 entry cannot shadow it (the security property is the fixed absolute path, not
-any guarantee the directory is non-writable). For `git`, the canonical fix is
+any guarantee the location is non-writable). For `git`, the canonical fix is
 `resolveTrustedGit()` in `agent-tools/src/core/trusted-git.ts` (an absolute path
-from a fixed allowlist of well-known directories, resolved without consulting
-`PATH`); other binaries follow the same absolute-path shape.
+from a fixed, platform-partitioned allowlist of complete binary paths, resolved
+without consulting `PATH` — partitioned because a rooted POSIX path is
+drive-relative on win32 and a `C:\...` literal is a legal relative filename on
+POSIX, so each platform may only ever probe its own family); other binaries
+follow the same absolute-path shape.
 
 **Why no SAFE class**: PATH-pinning (overriding `env.PATH` to trusted
 directories) does **not** clear S4036 — the analyser flags the by-name call
@@ -222,6 +225,12 @@ regardless — so a SAFE disposition would document a non-fix as acceptable. The
 genuine fix is cheap and available, so per `never-disable-checks` and the
 Two-Outcome Rule above, S4036 resolves to FIXED. A prior allowance for this
 class is reviewed and migrated, never extended.
+
+Where a platform offers no admin-protected install location for a binary, the
+compliant outcome is a loud refusal on that platform, never an allowlist entry
+in user-writable space. The worked instance is
+`agent-tools/src/refounding/refound-gitleaks.ts`, which refuses on win32
+because every gitleaks install location there is user-writable.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 

@@ -254,8 +254,10 @@ pnpm agent-tools merge-bot push
 ```
 
 It mints its own token, resolves the current branch from git itself,
-writes the token to a 0600 file in a private directory that lives exactly
-as long as the transfer, and hands the transfer to the git binary with a
+writes the token to a private file in a private directory that lives
+exactly as long as the transfer (owner-only per the platform-qualified
+statement in `agent-tools/src/merge-bot/push-token-file.ts` — 0600 applies
+on POSIX), and hands the transfer to the git binary with a
 static credential helper reading that file — the child environment names
 only the file's path. Never argv, no force flags, no `--no-verify`, and
 pushes to the default branch refuse by name (see

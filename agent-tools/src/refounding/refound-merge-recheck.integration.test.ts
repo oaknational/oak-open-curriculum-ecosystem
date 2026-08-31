@@ -353,9 +353,13 @@ describe('runMergeRecheck — refusals (nothing written)', () => {
     const fixture = await makeRecheckFixture(RULE_V1);
     const outsideRoot = await mkdtemp(path.join(tmpdir(), 'refound-outside-'));
     tempRoots.push(outsideRoot);
-    const outsideAbsPath = path.join(outsideRoot, 'smuggled.md');
-    await writeFile(outsideAbsPath, '# outside the repository\n');
-    await symlink(outsideAbsPath, path.join(fixture.repoRoot, '.agent/plans/smuggled.md'));
+    // A symlinked DIRECTORY smuggling outside content, created as a
+    // 'junction' so the fixture needs no privilege on Windows (plain
+    // symlinks need admin or Developer Mode there); ignored on POSIX. The
+    // refusal under test is the same: an in-set path whose real location
+    // escapes the repository is refused before anything is written.
+    await writeFile(path.join(outsideRoot, 'payload.md'), '# outside the repository\n');
+    await symlink(outsideRoot, path.join(fixture.repoRoot, '.agent/plans/smuggled'), 'junction');
     await expectRefusalWithoutReport(fixture, 'smuggled');
   });
 });

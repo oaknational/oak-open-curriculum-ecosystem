@@ -1,3 +1,5 @@
+import { join, sep } from 'node:path';
+
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { adapterStubPointerLine } from '../../src/skills-adapter-generate/adapter-stub';
@@ -18,6 +20,11 @@ import {
 const OURS = `---\nname: oak-commit\ndescription: Commit workflow.\n---\n\n# Commit (Claude Code)\n\n${adapterStubPointerLine('commit/SKILL-CANONICAL.md')}\n`;
 const FOREIGN = '# Clerk\n\nVendor skill body — no derivation marker.\n';
 
+// The product joins with the HOST separator (correct for real fs access);
+// the in-memory fakes are keyed and asserted in POSIX form for readability,
+// so lookups and recorded removals normalise first.
+const posixPath = (hostPath: string): string => hostPath.split(sep).join('/');
+
 afterEach(() => {
   cleanupSandboxes();
 });
@@ -33,13 +40,13 @@ function makeClearFs(input: {
   return {
     fs: {
       async listSubdirectoryNames(path) {
-        return { kind: 'ok', names: input.subdirectories.get(path) ?? [] };
+        return { kind: 'ok', names: input.subdirectories.get(posixPath(path)) ?? [] };
       },
       async readStubOrUndefined(path) {
-        return { kind: 'ok', value: input.stubs.get(path) };
+        return { kind: 'ok', value: input.stubs.get(posixPath(path)) };
       },
       async removeDirectory(path) {
-        removed.push(path);
+        removed.push(posixPath(path));
       },
       // The in-memory fixture holds no symlinked ancestors: every path
       // resolves to itself, so the surface-root guard always passes.
@@ -71,7 +78,7 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
     const result = await clearGeneratedAdapters(repoRoot, fs);
 
     expect(result.kind).toBe('ok');
-    const reported = result.kind === 'ok' ? new Set(result.removed) : new Set();
+    const reported = new Set(result.removed?.map(posixPath));
     expect(reported).toEqual(
       new Set(['/repo/.claude/skills/oak-commit', '/repo/.agents/skills/oak-commit']),
     );
@@ -86,7 +93,8 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
 
     const result = await clearGeneratedAdapters(repoRoot, fs);
 
-    expect(result).toEqual({ kind: 'ok', removed: ['/repo/.claude/skills/legacy-commit'] });
+    expect(result.kind).toBe('ok');
+    expect(result.removed?.map(posixPath)).toEqual(['/repo/.claude/skills/legacy-commit']);
     expect(removed).toEqual(['/repo/.claude/skills/legacy-commit']);
   });
 
@@ -117,7 +125,7 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
     const removed: string[] = [];
     const fs: ClearFs = {
       async listSubdirectoryNames(path) {
-        return path === '/repo/.claude/skills'
+        return posixPath(path) === '/repo/.claude/skills'
           ? { kind: 'ok', names: ['oak-commit'] }
           : { kind: 'ok', names: [] };
       },
@@ -143,7 +151,7 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
     const fs: ClearFs = {
       async listSubdirectoryNames(path) {
         // First root has a genuine removal candidate; the SECOND root fails.
-        return path === '/repo/.claude/skills'
+        return posixPath(path) === '/repo/.claude/skills'
           ? { kind: 'ok', names: ['oak-commit'] }
           : { kind: 'error', message: 'cannot list /repo/.agents/skills: EACCES' };
       },
@@ -170,7 +178,7 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
     const removedReal: string[] = [];
     const fs: ClearFs = {
       async listSubdirectoryNames(path) {
-        return path === '/repo/.claude/skills'
+        return posixPath(path) === '/repo/.claude/skills'
           ? { kind: 'ok', names: ['oak-a', 'oak-b'] }
           : { kind: 'ok', names: [] };
       },
@@ -194,10 +202,8 @@ describe('clearGeneratedAdapters (in-memory seam)', () => {
     // The first dir WAS removed; the error result carries that partial teardown
     // rather than the pre-cure behaviour (an unhandled throw with no state).
     expect(result.kind).toBe('error');
-    expect(result.kind === 'error' ? result.removed : undefined).toEqual([
-      '/repo/.claude/skills/oak-a',
-    ]);
-    expect(removedReal).toEqual(['/repo/.claude/skills/oak-a']);
+    expect(result.removed?.map(posixPath)).toEqual(['/repo/.claude/skills/oak-a']);
+    expect(removedReal.map(posixPath)).toEqual(['/repo/.claude/skills/oak-a']);
   });
 });
 
@@ -209,7 +215,7 @@ describe('clearGeneratedAdapters over a real filesystem (the destructive path)',
 
     const result = await clearGeneratedAdapters(root);
 
-    expect(result).toEqual({ kind: 'ok', removed: [`${root}/.claude/skills/oak-commit`] });
+    expect(result).toEqual({ kind: 'ok', removed: [join(root, '.claude/skills/oak-commit')] });
     expect(repoPathExists(root, '.claude/skills/oak-commit')).toBe(false);
     expect(repoPathExists(root, '.claude/skills/clerk/SKILL.md')).toBe(true);
   });
@@ -220,7 +226,7 @@ describe('clearGeneratedAdapters over a real filesystem (the destructive path)',
     writeRepoFile(outside, 'skills/oak-victim/SKILL.md', OURS);
     writeRepoFile(outside, 'skills/oak-victim/scripts/important.sh', 'echo keep\n');
     removeRepoPath(root, '.claude/skills');
-    symlinkRepoPath(root, '.claude/skills', `${outside}/skills`);
+    symlinkRepoPath(root, '.claude/skills', `${outside}/skills`, 'dir');
 
     const result = await clearGeneratedAdapters(root);
 
@@ -236,7 +242,7 @@ describe('clearGeneratedAdapters over a real filesystem (the destructive path)',
     const outside = sandboxRepo();
     writeRepoFile(outside, 'dotclaude/skills/oak-victim/SKILL.md', OURS);
     removeRepoPath(root, '.claude');
-    symlinkRepoPath(root, '.claude', `${outside}/dotclaude`);
+    symlinkRepoPath(root, '.claude', `${outside}/dotclaude`, 'dir');
 
     const result = await clearGeneratedAdapters(root);
 
@@ -251,7 +257,7 @@ describe('clearGeneratedAdapters over a real filesystem (the destructive path)',
     writeRepoFile(root, '.claude/skills/oak-commit/SKILL.md', OURS);
     // ...and a symlinked SECOND surface root pointing at a real external tree.
     writeRepoFile(outside, 'skills/vendor/NOTES.txt', 'external\n');
-    symlinkRepoPath(root, '.agents/skills', `${outside}/skills`);
+    symlinkRepoPath(root, '.agents/skills', `${outside}/skills`, 'dir');
 
     const result = await clearGeneratedAdapters(root);
 

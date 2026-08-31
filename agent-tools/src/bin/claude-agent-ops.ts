@@ -11,6 +11,7 @@ import {
   type CliHandler,
 } from './claude-agent-ops-cli.js';
 import { detectPhaseFromEvents, isValidAgentId, resolveDiffCwd } from '../core/agent-ops.js';
+import { resolvePnpm } from '../spawn/pnpm-path.js';
 import {
   evaluateAgentInfrastructureHealth,
   formatAgentInfrastructureHealthReport,
@@ -221,7 +222,20 @@ function resolveHomePath(): string {
     : exitWithError('Missing HOME environment variable');
 }
 function runPnpmGate(gate: string, root: string): boolean {
-  return spawnSync('pnpm', [gate], { cwd: root, stdio: 'ignore' }).status === 0;
+  // Bare 'pnpm' never reaches spawn (the agent-tools invariant, and on
+  // Windows a shell-less by-name spawn cannot resolve the .cmd shim).
+  const pnpm = resolvePnpm(process.env);
+  if (!pnpm.ok) {
+    writeErrorLine(pnpm.error.message);
+    return false;
+  }
+  return (
+    spawnSync(pnpm.value.file, [...pnpm.value.leadingArgs, gate], {
+      cwd: root,
+      stdio: 'ignore',
+      env: pnpm.value.env,
+    }).status === 0
+  );
 }
 function waitMs(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));

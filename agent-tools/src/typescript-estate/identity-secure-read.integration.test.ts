@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import path from 'node:path';
 
 import { err, ok, unwrapErr, unwrapOrThrow, type Result } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
@@ -11,6 +12,9 @@ import {
   type IdentityNodeObservation,
 } from './identity-secure-read.js';
 
+// Fixtures are POSIX-form, so the path flavour is pinned to `path.posix`
+// throughout — the flavour seam keeps the whole suite provable from any host,
+// and every product-composed path (and error message) stays in POSIX form.
 const CHECKOUT = '/checkout';
 const OWNER_ROOT = '/checkout/agent-tools/dist';
 const SRC_DIR = '/checkout/agent-tools/dist/src';
@@ -58,13 +62,20 @@ class MemoryIdentityFileSystem implements IdentityFileSystemPort<MemoryDescripto
     this.#options = options;
   }
 
+  // The suite pins the product's path flavour to `path.posix`, so the port
+  // is addressed in POSIX form on every host; the key normaliser is the
+  // identity there and simply keeps the fake separator-blind by construction.
+  static #key(value: string): string {
+    return value.split(path.sep).join('/');
+  }
+
   mintNode(kind: IdentityFileKind, bytes?: Uint8Array): MemoryNode {
     this.#nextInode += 1;
     return { kind, device: 7, inode: this.#nextInode, bytes };
   }
 
   setNode(path: string, kind: IdentityFileKind, bytes?: Uint8Array): void {
-    this.nodes.set(path, this.mintNode(kind, bytes));
+    this.nodes.set(MemoryIdentityFileSystem.#key(path), this.mintNode(kind, bytes));
   }
 
   /** Every path a descriptor was successfully created against, in mint order. */
@@ -78,27 +89,28 @@ class MemoryIdentityFileSystem implements IdentityFileSystemPort<MemoryDescripto
   }
 
   lstat(path: string): Result<IdentityNodeObservation | undefined, Error> {
-    const node = this.nodes.get(path);
+    const node = this.nodes.get(MemoryIdentityFileSystem.#key(path));
     return ok(
       node === undefined ? undefined : { kind: node.kind, device: node.device, inode: node.inode },
     );
   }
 
   realpath(path: string): Result<string, Error> {
-    const node = this.nodes.get(path);
+    const node = this.nodes.get(MemoryIdentityFileSystem.#key(path));
     return node === undefined ? err(new Error(`missing ${path}`)) : ok(node.realpath ?? path);
   }
 
   openReadNoFollow(path: string): Result<MemoryDescriptor, Error> {
-    const node = this.nodes.get(path);
+    const key = MemoryIdentityFileSystem.#key(path);
+    const node = this.nodes.get(key);
     if (node === undefined) {
       return err(new Error(`missing ${path}`));
     }
     const descriptor: MemoryDescriptor = {
-      path,
+      path: key,
       node: this.#options.openHijack ?? node,
     };
-    this.#opened.push(path);
+    this.#opened.push(key);
     this.#live.add(descriptor);
     return ok(descriptor);
   }
@@ -144,7 +156,10 @@ function secureFixture(options: MemoryFixtureOptions = {}): MemoryIdentityFileSy
 describe('secure identity read over a filesystem port', () => {
   it('returns the member bytes and leaves no descriptor open', () => {
     const fs = secureFixture();
-    const reader = createSecureIdentityReadPort(createIdentitySecureFilePort(fs));
+    const reader = createSecureIdentityReadPort(
+      createIdentitySecureFilePort(fs, path.posix),
+      path.posix,
+    );
 
     const bytes = unwrapOrThrow(
       reader.readRegularFileNoFollow({
@@ -162,7 +177,10 @@ describe('secure identity read over a filesystem port', () => {
   it('refuses a symlink ancestor without ever opening the leaf', () => {
     const fs = secureFixture();
     fs.setNode(SRC_DIR, 'symlink');
-    const reader = createSecureIdentityReadPort(createIdentitySecureFilePort(fs));
+    const reader = createSecureIdentityReadPort(
+      createIdentitySecureFilePort(fs, path.posix),
+      path.posix,
+    );
 
     const failure = unwrapErr(
       reader.readRegularFileNoFollow({
@@ -178,7 +196,10 @@ describe('secure identity read over a filesystem port', () => {
 
   it('refuses bytes when the parent becomes a symlink during the read and leaves no descriptor open', () => {
     const fs = secureFixture({ driftDuringRead: SRC_DIR });
-    const reader = createSecureIdentityReadPort(createIdentitySecureFilePort(fs));
+    const reader = createSecureIdentityReadPort(
+      createIdentitySecureFilePort(fs, path.posix),
+      path.posix,
+    );
 
     const failure = unwrapErr(
       reader.readRegularFileNoFollow({
@@ -195,7 +216,10 @@ describe('secure identity read over a filesystem port', () => {
 
   it('refuses drift above the owner root when the chain top becomes a symlink after the read', () => {
     const fs = secureFixture({ driftDuringRead: '/checkout/agent-tools' });
-    const reader = createSecureIdentityReadPort(createIdentitySecureFilePort(fs));
+    const reader = createSecureIdentityReadPort(
+      createIdentitySecureFilePort(fs, path.posix),
+      path.posix,
+    );
 
     const failure = unwrapErr(
       reader.readRegularFileNoFollow({
@@ -205,7 +229,7 @@ describe('secure identity read over a filesystem port', () => {
       }),
     );
 
-    expect(failure.message).toContain("'/checkout/agent-tools' is a symlink");
+    expect(failure.message).toContain(`'/checkout/agent-tools' is a symlink`);
     expect(fs.openDescriptorPaths).toEqual([]);
   });
 
@@ -213,7 +237,10 @@ describe('secure identity read over a filesystem port', () => {
     const fs = secureFixture();
     const attacker = fs.mintNode('file', Buffer.from('// ATTACKER BYTES\n'));
     const hijacked = secureFixtureWithHijack(fs, attacker);
-    const reader = createSecureIdentityReadPort(createIdentitySecureFilePort(hijacked));
+    const reader = createSecureIdentityReadPort(
+      createIdentitySecureFilePort(hijacked, path.posix),
+      path.posix,
+    );
 
     const failure = unwrapErr(
       reader.readRegularFileNoFollow({

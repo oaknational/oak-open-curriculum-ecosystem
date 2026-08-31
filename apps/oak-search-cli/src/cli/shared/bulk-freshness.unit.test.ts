@@ -12,6 +12,7 @@
  * no ambient clock.
  */
 
+import { join } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import trackedManifest from '../../../bulk-downloads/manifest.json';
 import {
@@ -52,7 +53,10 @@ const throwingReader: ManifestFsReader = {
   readdirSync: () => [],
 };
 
-const bulkDir = '/app/bulk-downloads';
+// Expressed via join so the fixture carries the host's separator form —
+// the checker joins the manifest path onto this directory, and the joined
+// product path only contains the directory when both share one form.
+const bulkDir = join('/app', 'bulk-downloads');
 
 describe('checkBulkDataFreshness', () => {
   it('returns err manifest_missing with the download cure when the manifest is unreadable', () => {
@@ -154,8 +158,8 @@ describe('checkBulkDataFreshness', () => {
       },
     });
     expect(result.ok).toBe(true);
-    expect(readPaths).toEqual(['/app/bulk-downloads/manifest.json']);
-    expect(listedPaths).toEqual(['/app/bulk-downloads']);
+    expect(readPaths).toEqual([join(bulkDir, 'manifest.json')]);
+    expect(listedPaths).toEqual([bulkDir]);
   });
 
   it('reports a stale-AND-absent bundle as absent, never stale (presence runs before age)', () => {

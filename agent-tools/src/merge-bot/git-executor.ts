@@ -31,6 +31,17 @@ export interface GitCommandResult {
 interface GitCallOptions {
   readonly cwd: string;
   readonly env: Readonly<Record<string, string | undefined>>;
+  /**
+   * Kill the child after this many milliseconds (SIGTERM — spawnSync's own
+   * timeout on the capturing arm; an abort bridge on the file-backed arm).
+   * Also the seam that lets the signal-reporting contract be proven on
+   * every platform, because a Node-initiated kill is the one termination
+   * Windows reports with the signal named. Only the capturing arm can
+   * annotate the CAUSE in `stderr` — the file-backed arm returns empty
+   * streams by design, so there a timeout kill and an external SIGTERM read
+   * identically in the result.
+   */
+  readonly timeoutMs?: number;
 }
 
 /**
@@ -55,6 +66,24 @@ export type GitExecutor = (
   },
 ) => GitCommandResult | Promise<GitCommandResult>;
 
+/** Whether a spawn result's error names the executor's own timeout as the cause. */
+function isTimeoutError(error: Error | undefined): boolean {
+  return error !== undefined && 'code' in error && error.code === 'ETIMEDOUT';
+}
+
+/**
+ * Names the cause when the executor's own timeout delivered the kill —
+ * without it a timeout kill and an externally delivered signal would be
+ * indistinguishable in the result. Capturing-arm only: the file-backed arm
+ * returns empty streams by design, so its abort-kill carries no note (the
+ * `timeoutMs` docblock states this asymmetry).
+ */
+function timeoutNoteFor(error: Error | undefined, timeoutMs: number | undefined): string {
+  return isTimeoutError(error)
+    ? `\ngit killed by executor timeout after ${String(timeoutMs)}ms`
+    : '';
+}
+
 /**
  * Capture the whole of a child's output into the result. Sound ONLY where
  * this tool controls the volume, because the buffer here is `spawnSync`'s
@@ -70,7 +99,19 @@ function capturingGitCall(
     cwd: options.cwd,
     env: { ...options.env },
     encoding: 'utf8',
+    timeout: options.timeoutMs,
   });
+  // Signal first: a timeout kill sets BOTH `error` (ETIMEDOUT) and `signal`,
+  // and a child that ran and was killed is a signal death (the 128 sentinel,
+  // signal named) — never the -1 reserved for a binary that could not run.
+  if (result.signal !== null) {
+    return {
+      status: 128,
+      signal: result.signal,
+      stdout: result.stdout ?? '',
+      stderr: `${result.stderr ?? ''}${timeoutNoteFor(result.error, options.timeoutMs)}`,
+    };
+  }
   if (result.error !== undefined) {
     return {
       status: -1,
@@ -80,9 +121,7 @@ function capturingGitCall(
     };
   }
   return {
-    // One convention across both arms: a signal death is the 128 sentinel
-    // with the signal named, never the -1 reserved for could-not-run.
-    status: result.status ?? (result.signal === null ? -1 : 128),
+    status: result.status ?? -1,
     signal: result.signal,
     stdout: result.stdout,
     stderr: result.stderr,
@@ -115,6 +154,16 @@ function fileBackedGitCall(
   runner: typeof runFileBackedChild,
 ): Promise<GitCommandResult> {
   const sink = { write: (content: Buffer) => options.onOutput(content.toString('utf8')) };
+  // Honour the caller's bound on this arm too (via the runner's abort seam)
+  // so `timeoutMs` is never a silently dropped option; the timer is unref'd
+  // and cleared so it cannot hold the process open.
+  const controller = options.timeoutMs === undefined ? undefined : new AbortController();
+  const timer =
+    controller === undefined
+      ? undefined
+      : setTimeout(() => {
+          controller.abort();
+        }, options.timeoutMs).unref();
   return runner({
     command: file,
     args,
@@ -125,20 +174,27 @@ function fileBackedGitCall(
     // stays next to the stdout that explains it.
     combinedOutput: true,
     replaySinks: { stdout: sink, stderr: sink },
-  }).then(
-    (outcome) => ({
-      status: outcome.exitCode,
-      signal: outcome.signal,
-      stdout: '',
-      stderr: '',
-    }),
-    (cause: unknown) => ({
-      status: -1,
-      signal: null,
-      stdout: '',
-      stderr: `cannot run git: ${cause instanceof Error ? cause.message : String(cause)}`,
-    }),
-  );
+    abortSignal: controller?.signal,
+  })
+    .finally(() => {
+      if (timer !== undefined) {
+        clearTimeout(timer);
+      }
+    })
+    .then(
+      (outcome) => ({
+        status: outcome.exitCode,
+        signal: outcome.signal,
+        stdout: '',
+        stderr: '',
+      }),
+      (cause: unknown) => ({
+        status: -1,
+        signal: null,
+        stdout: '',
+        stderr: `cannot run git: ${cause instanceof Error ? cause.message : String(cause)}`,
+      }),
+    );
 }
 
 /**
@@ -155,6 +211,11 @@ export function realGitExecutor(
     const { onOutput } = options;
     return onOutput === undefined
       ? capturingGitCall(file, args, options)
-      : fileBackedGitCall(file, args, { cwd: options.cwd, env: options.env, onOutput }, runner);
+      : fileBackedGitCall(
+          file,
+          args,
+          { cwd: options.cwd, env: options.env, timeoutMs: options.timeoutMs, onOutput },
+          runner,
+        );
   };
 }

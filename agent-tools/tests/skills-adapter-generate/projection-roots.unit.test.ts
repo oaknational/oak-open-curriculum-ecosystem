@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import type { CarriageReadFs, FsRead } from '../../src/skills-adapter-generate/carriage-fs';
@@ -5,6 +7,11 @@ import { checkAdapters, type CheckerFs } from '../../src/skills-adapter-generate
 import { findStaleProjectionEntries } from '../../src/skills-adapter-generate/projection-roots';
 
 const ok = <T>(value: T): FsRead<T> => ({ kind: 'ok', value });
+
+// The product joins with the HOST separator (correct for real fs access);
+// this fake compares in POSIX form for readability, so every incoming path
+// normalises first.
+const posixPath = (hostPath: string): string => hostPath.split(sep).join('/');
 
 /**
  * Seam fake modelling one entry at one projection root whose SKILL.md
@@ -16,7 +23,7 @@ const ok = <T>(value: T): FsRead<T> => ({ kind: 'ok', value });
 function makeUnreadableStubFs(unreadableStubPath: string): CarriageReadFs {
   return {
     async listSubdirectoryNames(path) {
-      return ok(path.endsWith('/.claude/skills') ? ['oak-broken'] : []);
+      return ok(posixPath(path).endsWith('/.claude/skills') ? ['oak-broken'] : []);
     },
     async listFileNames() {
       return ok([]);
@@ -25,13 +32,13 @@ function makeUnreadableStubFs(unreadableStubPath: string): CarriageReadFs {
       return ok([]);
     },
     async readFileBytesOrUndefined(path) {
-      if (path === unreadableStubPath) {
+      if (posixPath(path) === unreadableStubPath) {
         return { kind: 'failure', message: `cannot read ${path}: EACCES` };
       }
       return ok(undefined);
     },
     async entryKind(path) {
-      if (path === unreadableStubPath) {
+      if (posixPath(path) === unreadableStubPath) {
         return ok('file' as const);
       }
       return ok('absent' as const);
@@ -69,13 +76,13 @@ describe('findStaleProjectionEntries — the cannot-classify arm', () => {
     const fs: CheckerFs = {
       ...base,
       async listSubdirectoryNames(path) {
-        if (path.endsWith('/.agent/skills')) {
+        if (posixPath(path).endsWith('/.agent/skills')) {
           return ok(['parallax']);
         }
         return base.listSubdirectoryNames(path);
       },
       async readFileOrUndefined(path) {
-        return path === canonicalPath ? canonicalBody : undefined;
+        return posixPath(path) === canonicalPath ? canonicalBody : undefined;
       },
     };
 

@@ -29,7 +29,7 @@ describe('readRegularFileTextNoFollow (fd-anchored, no check→use race)', () =>
   it('returns undefined for a symlinked leaf without reading through it — a link is never our stub', async () => {
     const root = sandboxRepo();
     writeRepoFile(root, 'target/real-stub.md', 'a genuine stub a link could otherwise borrow\n');
-    symlinkRepoPath(root, 'skills/oak-x/SKILL.md', join(root, 'target/real-stub.md'));
+    symlinkRepoPath(root, 'skills/oak-x/SKILL.md', join(root, 'target/real-stub.md'), 'file');
 
     const read = await readRegularFileTextNoFollow(join(root, 'skills/oak-x/SKILL.md'));
 
@@ -53,12 +53,16 @@ describe('readRegularFileTextNoFollow (fd-anchored, no check→use race)', () =>
     expect(read).toStrictEqual({ kind: 'ok', value: undefined });
   });
 
-  it('surfaces a non-ENOENT failure instead of swallowing it as absence (a file in the path → ENOTDIR)', async () => {
+  it('classifies a regular file squatting a path component as absence — nothing can exist below a file', async () => {
     const root = sandboxRepo();
     writeRepoFile(root, 'skills/oak-x', 'a regular file where a directory was expected\n');
 
     const read = await readRegularFileTextNoFollow(join(root, 'skills/oak-x/SKILL.md'));
 
-    expect(read.kind).toBe('failure');
+    // POSIX reports this state as ENOTDIR, Windows as ENOENT; both name the
+    // same truth — no entry can exist below a regular file — so the reader
+    // classifies both as absence rather than leaking the host's errno
+    // vocabulary to its callers.
+    expect(read).toStrictEqual({ kind: 'ok', value: undefined });
   });
 });

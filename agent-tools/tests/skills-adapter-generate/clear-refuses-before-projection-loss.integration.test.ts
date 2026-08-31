@@ -1,3 +1,5 @@
+import { join, sep } from 'node:path';
+
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { adapterStubPointerLine } from '../../src/skills-adapter-generate/adapter-stub';
@@ -26,6 +28,10 @@ afterEach(() => {
   cleanupSandboxes();
 });
 
+// Refusal messages name product-joined (host-form) paths; normalise before
+// matching POSIX-form needles.
+const posixForm = (message: string): string => message.split(sep).join('/');
+
 describe('clearFirst preflights emission refusals before the destructive clear', () => {
   it('refuses to clear when a canonical would refuse at emit (a committed symlinked references/): the refusing skill’s own projection is NOT lost', async () => {
     const root = sandboxRepo();
@@ -42,7 +48,7 @@ describe('clearFirst preflights emission refusals before the destructive clear',
     // skill’s existing projection and the emit then refuses to rebuild it — a
     // lost projection, no attacker required (review 2026-08-12, defect 1).
     writeRepoFile(root, '.agent/skills/deploy/SKILL-CANONICAL.md', DEPLOY_CANONICAL);
-    symlinkRepoPath(root, '.agent/skills/deploy/references', '../commit');
+    symlinkRepoPath(root, '.agent/skills/deploy/references', '../commit', 'dir');
     writeRepoFile(
       root,
       '.claude/skills/oak-deploy/SKILL.md',
@@ -57,7 +63,9 @@ describe('clearFirst preflights emission refusals before the destructive clear',
     const outcome = await generateAdapters({ repoRoot: root, prefix: 'oak-', clearFirst: true });
 
     // The refusal is reported and the run fails — but BEFORE any teardown.
-    expect(outcome.refused.some((entry) => entry.includes('deploy/references'))).toBe(true);
+    expect(outcome.refused.some((entry) => posixForm(entry).includes('deploy/references'))).toBe(
+      true,
+    );
     expect(outcome.cleared).toEqual([]);
     expect(outcome.written).toEqual([]);
     // Every projection a clear would have destroyed survives: the refusing
@@ -106,7 +114,7 @@ describe('clearFirst preflights emission refusals before the destructive clear',
     const outcome = await generateAdapters({ repoRoot: root, prefix: 'oak-', clearFirst: true });
 
     expect(outcome.refused).toEqual([]);
-    expect(outcome.cleared).toContain(`${root}/.claude/skills/oak-stale`);
+    expect(outcome.cleared).toContain(join(root, '.claude/skills/oak-stale'));
     expect(repoPathExists(root, '.claude/skills/oak-stale/SKILL.md')).toBe(false);
     expect(repoPathExists(root, '.claude/skills/oak-commit/SKILL.md')).toBe(true);
     expect(repoPathExists(root, '.claude/skills/oak-deploy/SKILL.md')).toBe(true);

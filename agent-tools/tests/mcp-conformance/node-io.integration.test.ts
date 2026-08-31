@@ -1,10 +1,14 @@
-import { chmodSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { unwrapErr } from '@oaknational/result';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { buildMcpConformanceNodeIo, writeRunSummary } from '../../src/mcp-conformance/node-io.js';
+import {
+  buildMcpConformanceNodeIo,
+  retainOwnerOnlyAt,
+  writeRunSummary,
+} from '../../src/mcp-conformance/node-io.js';
+import { type OwnerOnlyWriteOps } from '../../src/mcp-conformance/owner-only-write.js';
 import {
   cleanupSandboxes,
   readSandboxFile,
@@ -17,12 +21,30 @@ afterEach(() => {
 });
 
 /**
- * POSIX permission bits as an octal string (e.g. `'600'`). Read as a string
- * rather than masked numerically so the assertion reads as the `chmod` form
- * an operator would check with.
+ * A pure recorder over the descriptor-ordered write operations. On-disk mode
+ * bits are a POSIX observable (NTFS reports every writable file identically),
+ * so the owner-only guarantee is proven at the level the product actually
+ * controls: WHAT it requested and IN WHAT ORDER — created at 0600, descriptor
+ * tightened before any content, closed, never re-opened by path.
  */
-function permissionsOf(path: string): string {
-  return statSync(path).mode.toString(8).slice(-3);
+function recordingOps(): { readonly calls: string[]; readonly ops: OwnerOnlyWriteOps } {
+  const calls: string[] = [];
+  const ops: OwnerOnlyWriteOps = {
+    open: (_path, _flags, mode) => {
+      calls.push(`open:${mode.toString(8)}`);
+      return 17;
+    },
+    fchmod: (fd, mode) => {
+      calls.push(`fchmod:${String(fd)}:${mode.toString(8)}`);
+    },
+    write: (fd) => {
+      calls.push(`write:${String(fd)}`);
+    },
+    close: (fd) => {
+      calls.push(`close:${String(fd)}`);
+    },
+  };
+  return { calls, ops };
 }
 
 describe('retainRawReport — verbatim retention with caller-shaped paths', () => {
@@ -60,31 +82,64 @@ describe('retainRawReport — verbatim retention with caller-shaped paths', () =
     expect(readSandboxFile(root, 'tmp', 'reports', 'summary.json')).toBe('{"verdict":"pass"}');
   });
 
-  it('a retained report is owner-only — attended runs carry credentials in vendor output', () => {
+  it('a retained report is owner-only by construction — created at 0600, descriptor tightened before any content lands', () => {
+    // Attended runs carry credentials in vendor output. The ordering is the
+    // whole guarantee: `mode` applies at creation only, and a chmod AFTER the
+    // write would expose the payload in the window between them — so the
+    // contract proven here, THROUGH the production retention surface, is
+    // open(0600) → fchmod(0600) → write → close on one descriptor, never a
+    // path re-open. (On-disk mode bits are a POSIX observable NTFS cannot
+    // express, so the requested-operations ordering is the invariant.)
     const root = sandbox();
-    const io = buildMcpConformanceNodeIo(root, join('tmp', 'reports'));
-    io.retainRawReport('protocol', '{"raw":"bytes"}');
-    expect(permissionsOf(join(root, 'tmp', 'reports', 'protocol.json'))).toBe('600');
+    const { calls, ops } = recordingOps();
+    const io = buildMcpConformanceNodeIo(root, join('tmp', 'reports'), ops);
+
+    const outcome = io.retainRawReport('protocol', '{"raw":"bytes"}');
+
+    expect(outcome.ok).toBe(true);
+    expect(calls).toEqual(['open:600', 'fchmod:17:600', 'write:17', 'close:17']);
   });
 
-  it('the aggregate summary is owner-only too — it embeds the same vendor fields', () => {
+  it('the aggregate summary is owner-only through the same ordered write', () => {
     const root = sandbox();
-    writeRunSummary(root, join('tmp', 'reports'), '{"verdict":"pass"}');
-    expect(permissionsOf(join(root, 'tmp', 'reports', 'summary.json'))).toBe('600');
+    const { calls, ops } = recordingOps();
+
+    const outcome = writeRunSummary(root, join('tmp', 'reports'), '{"verdict":"pass"}', ops);
+
+    expect(outcome.ok).toBe(true);
+    expect(calls.indexOf('fchmod:17:600')).toBeGreaterThan(calls.indexOf('open:600'));
+    expect(calls.indexOf('fchmod:17:600')).toBeLessThan(calls.indexOf('write:17'));
   });
 
-  it('an existing world-readable report has its MODE corrected, not just its content', () => {
-    // `mode` on writeFileSync applies at creation only, so a report left by an
-    // earlier run under a looser umask would keep its permissions forever.
+  it('an already-resolved absolute destination gets the same ordered owner-only write', () => {
+    // The reviewer pack (`--pack-out`) embeds vendor failure text from authed
+    // runs — the same content class the summary protects — so the absolute
+    // path entry point must carry the identical ordering contract.
     const root = sandbox();
-    const io = buildMcpConformanceNodeIo(root, join('tmp', 'reports'));
-    io.retainRawReport('protocol', 'first run');
-    const path = join(root, 'tmp', 'reports', 'protocol.json');
-    chmodSync(path, 0o644);
+    const { calls, ops } = recordingOps();
 
-    io.retainRawReport('protocol', 'second run');
+    const outcome = retainOwnerOnlyAt(join(root, 'packs', 'reviewer-pack.md'), 'pack', ops);
 
-    expect(permissionsOf(path)).toBe('600');
+    expect(outcome.ok).toBe(true);
+    expect(calls).toEqual(['open:600', 'fchmod:17:600', 'write:17', 'close:17']);
+  });
+
+  it('a chmod failure is a loud retention failure before any content lands, and the descriptor still closes', () => {
+    const root = sandbox();
+    const { calls, ops } = recordingOps();
+    const failing: OwnerOnlyWriteOps = {
+      ...ops,
+      fchmod: () => {
+        throw new Error('EPERM: fchmod refused');
+      },
+    };
+    const io = buildMcpConformanceNodeIo(root, join('tmp', 'reports'), failing);
+
+    const outcome = io.retainRawReport('protocol', 'secret');
+
+    expect(outcome).toEqual({ ok: false, error: 'EPERM: fchmod refused' });
+    expect(calls).not.toContain('write:17');
+    expect(calls).toContain('close:17');
   });
 });
 

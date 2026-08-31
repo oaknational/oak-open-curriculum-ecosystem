@@ -1,9 +1,17 @@
+import { sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_FIELD_READBACK_LEDGER_PATH,
   parseCliArgs,
   resolveLedgerPath,
 } from '../../../operations/ingestion/field-readback-audit-cli.js';
+
+/**
+ * A POSIX-style path literal expressed in the host's separator form —
+ * the resolver joins with the host separator, so the expectation must
+ * carry the same form without loosening what the row proves.
+ */
+const hostForm = (posixLiteral: string): string => posixLiteral.split('/').join(sep);
 
 describe('field readback audit CLI parsing', () => {
   it('parses --target-version for staged-index audits', () => {
@@ -46,7 +54,7 @@ describe('field readback audit CLI parsing', () => {
 
   it('resolves a relative ledger path from the repo root', () => {
     expect(resolveLedgerPath('.agent/field-gap-ledger.json', '/repo/root')).toBe(
-      '/repo/root/.agent/field-gap-ledger.json',
+      hostForm('/repo/root/.agent/field-gap-ledger.json'),
     );
   });
 

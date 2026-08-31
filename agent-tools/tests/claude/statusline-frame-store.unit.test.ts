@@ -1,13 +1,21 @@
+import { sep } from 'node:path';
+
 import {
   createFsFrameStore,
   type FrameStoreFs,
   resolveFrameStateDir,
 } from '../../src/claude/statusline-frame-store';
 
+/**
+ * The resolved state dir is a real filesystem path built with host joins, so
+ * the expectations derive the same host form from their POSIX spelling.
+ */
+const hostForm = (posixPath: string): string => posixPath.split('/').join(sep);
+
 describe('resolveFrameStateDir', () => {
   it('uses XDG_STATE_HOME when set', () => {
     expect(resolveFrameStateDir({ XDG_STATE_HOME: '/x/state' }, '/workspace/u')).toBe(
-      '/x/state/oak-statusline-frames',
+      hostForm('/x/state/oak-statusline-frames'),
     );
   });
 
@@ -15,7 +23,7 @@ describe('resolveFrameStateDir', () => {
     // The security property of the insecure-temporary-file fix: the per-session
     // state resolves under the user's private state home, not the shared temp dir.
     expect(resolveFrameStateDir({}, '/workspace/u')).toBe(
-      '/workspace/u/.local/state/oak-statusline-frames',
+      hostForm('/workspace/u/.local/state/oak-statusline-frames'),
     );
   });
 });

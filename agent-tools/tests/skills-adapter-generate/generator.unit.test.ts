@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { checkAdapters, type CheckerFs } from '../../src/skills-adapter-generate/checker';
@@ -111,6 +113,16 @@ function asDiscovery(fs: CheckerFs): DiscoveryFs {
   };
 }
 
+// The product joins with the HOST separator (correct for real fs access);
+// these fakes are keyed in POSIX form for readability, so lookups normalise
+// the incoming path first — the fixture then recognises the same paths on
+// every platform.
+const posixPath = (hostPath: string): string => hostPath.split(sep).join('/');
+
+/** Re-key a fixture map into POSIX form so host-joined and literal keys meet. */
+const posixKeyed = <V>(entries: ReadonlyMap<string, V>): ReadonlyMap<string, V> =>
+  new Map([...entries].map(([key, value]) => [posixPath(key), value]));
+
 /**
  * In-memory checker fs. Directory listings are the union of the explicit
  * `directories` map (which can express canonically-empty directories) and
@@ -121,18 +133,21 @@ function makeTreeFs(
   directories: ReadonlyMap<string, readonly string[]>,
   files: ReadonlyMap<string, string>,
 ): CheckerFs {
+  const dirsByPath = posixKeyed(directories);
+  const filesByPath = posixKeyed(files);
   return {
     async readFileOrUndefined(path) {
-      return files.get(path);
+      return filesByPath.get(posixPath(path));
     },
     async readFileBytesOrUndefined(path) {
-      const text = files.get(path);
+      const text = filesByPath.get(posixPath(path));
       return ok(text === undefined ? undefined : encoder.encode(text));
     },
     async listSubdirectoryNames(path) {
-      const names = new Set<string>(directories.get(path) ?? []);
-      const prefix = `${path}/`;
-      for (const filePath of files.keys()) {
+      const posix = posixPath(path);
+      const names = new Set<string>(dirsByPath.get(posix) ?? []);
+      const prefix = `${posix}/`;
+      for (const filePath of filesByPath.keys()) {
         if (!filePath.startsWith(prefix)) {
           continue;
         }
@@ -146,8 +161,8 @@ function makeTreeFs(
     },
     async listFileNames(path) {
       const names: string[] = [];
-      const prefix = `${path}/`;
-      for (const filePath of files.keys()) {
+      const prefix = `${posixPath(path)}/`;
+      for (const filePath of filesByPath.keys()) {
         if (filePath.startsWith(prefix) && !filePath.slice(prefix.length).includes('/')) {
           names.push(filePath.slice(prefix.length));
         }
@@ -163,18 +178,19 @@ function makeTreeFs(
       // Text-map semantics: a key is a regular file; a directory exists
       // when listed explicitly or implied by any file beneath it; the
       // fixture cannot express symlinks (integration suites own those).
-      if (files.has(path)) {
+      const posix = posixPath(path);
+      if (filesByPath.has(posix)) {
         return ok('file' as const);
       }
-      const prefix = `${path}/`;
+      const prefix = `${posix}/`;
       const isDirectory =
-        directories.has(path) ||
-        [...directories.keys()].some((dir) => dir.startsWith(prefix) || dir === path) ||
-        [...files.keys()].some((filePath) => filePath.startsWith(prefix));
+        dirsByPath.has(posix) ||
+        [...dirsByPath.keys()].some((dir) => dir.startsWith(prefix) || dir === posix) ||
+        [...filesByPath.keys()].some((filePath) => filePath.startsWith(prefix));
       return ok(isDirectory ? ('directory' as const) : ('absent' as const));
     },
     async isExecutableOrUndefined(path) {
-      return ok(files.has(path) ? false : undefined);
+      return ok(filesByPath.has(posixPath(path)) ? false : undefined);
     },
     async resolveRealPath(path) {
       return ok(path); // the text-map fixture holds no symlinked ancestors
@@ -569,7 +585,9 @@ describe('checkAdapters carriage', () => {
 
     const result = await checkAdapters({ repoRoot, prefix }, fs);
 
-    expect(result.drifted).toEqual([`${claudeDir}/references/a.md`]);
+    // Product reports host-joined paths; compare in POSIX form (same seam as
+    // the fixture lookups above).
+    expect(result.drifted.map(posixPath)).toEqual([`${claudeDir}/references/a.md`]);
   });
 
   it('reports a carried file missing from a surface', async () => {
@@ -582,7 +600,7 @@ describe('checkAdapters carriage', () => {
 
     const result = await checkAdapters({ repoRoot, prefix }, fs);
 
-    expect(result.missing).toEqual([`${agentsDir}/scripts/tool.py`]);
+    expect(result.missing.map(posixPath)).toEqual([`${agentsDir}/scripts/tool.py`]);
   });
 
   it('reports orphans: projection files whose canonical source is gone', async () => {
@@ -590,7 +608,7 @@ describe('checkAdapters carriage', () => {
 
     const result = await checkAdapters({ repoRoot, prefix }, fs);
 
-    expect(result.orphaned).toEqual([`${claudeDir}/references/deleted-upstream.md`]);
+    expect(result.orphaned.map(posixPath)).toEqual([`${claudeDir}/references/deleted-upstream.md`]);
   });
 });
 

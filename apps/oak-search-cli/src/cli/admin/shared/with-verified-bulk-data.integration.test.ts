@@ -10,6 +10,7 @@
  * All dependencies are injected as simple fakes (ADR-078); the clock is a
  * value read once at command entry.
  */
+import { join, resolve } from 'node:path';
 import { describe, it, expect, vi } from 'vitest';
 import { createFakeCliDeps } from '../../../test-helpers/fake-cli-deps.js';
 import {
@@ -18,8 +19,11 @@ import {
   type WithVerifiedBulkDataInput,
 } from './with-verified-bulk-data.js';
 
-const appRoot = '/app';
-const resolvedBulkDir = '/app/bulk-downloads';
+// Anchored via resolve so the root is genuinely absolute on every host —
+// a POSIX literal like '/app' is drive-relative on Windows, and the gate
+// hands the handler a host-form resolved path derived from this anchor.
+const appRoot = resolve('/app');
+const resolvedBulkDir = join(appRoot, 'bulk-downloads');
 const now = new Date('2026-08-03T12:00:00.000Z');
 
 /** A manifest exactly as `scripts/download-bulk.ts` writes it. */

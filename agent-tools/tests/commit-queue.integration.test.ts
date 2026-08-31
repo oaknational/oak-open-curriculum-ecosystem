@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { ok } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
@@ -326,7 +328,9 @@ describe('commit-queue CLI read commands', () => {
     expect(runnerCalls).toStrictEqual([
       {
         gitRoot: '/repo-worktrees/lane',
-        registryPath: '/repo/.agent/state/collaboration/active-claims.json',
+        // The registry path is a real filesystem path built with host joins
+        // from the coordination home, so the expectation derives the same form.
+        registryPath: join('/repo', '.agent', 'state', 'collaboration', 'active-claims.json'),
       },
     ]);
     expect(stdout.text()).toBe('cafef00dcafef00dcafef00dcafef00dcafef00d\n');

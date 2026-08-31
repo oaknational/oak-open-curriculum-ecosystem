@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { err, ok, unwrapErr } from '@oaknational/result';
@@ -57,8 +59,10 @@ describe('Codex team-alert projection generation', () => {
       },
     };
 
+    // The product emits a host-joined path; the expectation derives the same
+    // host form so the assertion holds on every platform.
     await expect(generateTeamAlertBootstrap(REPO_ROOT, io)).resolves.toStrictEqual(
-      ok(`${REPO_ROOT}/${AGENTS_PATH}`),
+      ok(join(REPO_ROOT, AGENTS_PATH)),
     );
     expect(writes).toStrictEqual([CURRENT_AGENTS]);
   });
