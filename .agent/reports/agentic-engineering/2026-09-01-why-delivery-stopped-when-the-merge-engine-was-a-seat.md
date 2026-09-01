@@ -362,3 +362,71 @@ here are explicitly unverified and should be corrected in place if measured othe
 whether the automated reviewers' spend limits have since been lifted, and whether the
 27 August–1 September zero-merge weeks have any cause beyond the fleet's absence and the
 owner's stated leave.
+
+---
+
+## Addendum 1 (2026-09-01, same session) — P1 was underspecified: "warden" is not a human
+
+The owner's first question on reading P1 was *"a merge-warden? do you mean a human?"* The
+proposal as written did not say, and the omission mattered enough to correct here rather
+than silently.
+
+**The answer is no, and forcing it to be a human would make the freeze worse rather than
+better.** The arc's own numbers rule it out: human merge throughput peaked at 57 in a week
+and typically ran 3–19, against a fleet authoring 100–169 PRs per week. A human warden is
+a throttle, not a cure — it reproduces this queue by construction.
+
+**But an unrestricted agent warden is no longer right either, and that is the legitimate
+half of the question.** In July, an agent merging agent-authored work under an Integration
+bypass was safe *because one engineer was the only other person in the codebase*. With
+several human collaborators now sharing it, the same arrangement means agent-authored
+product changes land without any human having approved them. That is a genuinely different
+risk, and it changed when the topology changed — the same L4 shift that produced every
+other failure in this arc.
+
+**So the duty splits by risk class, not by actor.** Composition of the stuck queue,
+recomputed at writing time over the 34 non-draft open PRs:
+
+| Class | Count | Exemplars |
+|---|---|---|
+| `docs` / `chore` | 15 | #908, #910, #913, #921, #922, #923, #924, #929, #931, #932, #933, #934, #936 |
+| `feat` | 7 | #892, #895, #905, #912, #919, #925, #945 |
+| `fix` | 7 | #891, #911, #927, #930, #935, #940, #944 |
+| `build(deps)` | 2 | #941, #942 |
+| `refactor` | 2 | #890, #928 |
+| untyped | 1 | #761 |
+
+And product-code footprint, measured per PR (files under `apps/` or `packages/` as a
+fraction of the diff):
+
+- **Zero product files**: #911, #921, #924, #927, #930, #935, #940 — all `fix`/`docs`,
+  none touching shipped code.
+- **Mostly or wholly product code**: #928 (90 of 105), #936 (10 of 10), #933 (4 of 4).
+- **Mixed**: #922 (2 of 5), #925 (2 of 11).
+
+So roughly two-thirds of the queue carries no product code at all. A risk-classed warden
+would have cleared that two-thirds without a human touch, while still putting the
+landing-page teardown (#928) and the host-topology change (#936) in front of a person.
+
+### P1, amended
+
+- **The duty is an agent's**, held continuously, with a declared holder in the claims
+  registry — because that is the only actor class the evidence shows can sustain the rate.
+- **The gate is risk-classed, not actor-classed.** Auto-clear when green: `docs`, `chore`,
+  records, knowledge preservation, test-only changes, dependency floors, and any PR whose
+  diff touches no `apps/` or `packages/` product code. Human approval required: any product
+  code, and unconditionally anything touching auth, the edge, or a published surface.
+- **The stand-down protocol is the actual cure**, and it is independent of who holds the
+  duty: a seat cannot complete closeout while its class of the queue is non-empty and no
+  successor holds the duty. The 21 August stand-down was clean by every existing
+  discipline — knowledge conserved, claims closed, heartbeats stopped — and still took the
+  estate's delivery capability with it, because no discipline names capability as a thing
+  that can be handed over.
+
+**Falsifier, amended**: if a risk-classed auto-clear lands a change that a human approval
+would have caught, the classification boundary is wrong and must move — not the duty.
+
+**What this changes about the record's L2 finding**: nothing. The mechanism (an embodied
+capability) stands. What the addendum corrects is the assumption, latent in P1's wording,
+that the cure for a capability held by an agent is to move it to a human. The cure is to
+name it, class it, and require its handover.
