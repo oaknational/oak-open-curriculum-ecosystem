@@ -1,15 +1,35 @@
 # One PR Per Leaf Issue, and the PR Closes It
 
-**HARD RULE** (owner ruling, 2026-09-02, verbatim): *"for future work it should have
-at most one PR per issue (unless it's parent issue) … so the leaf issues must be 1-1
-(or many to one) with a single PR … if not then the issue should be broken down … or
-if the issue requires work across repos or some work in repos or outside them again
-should be split. This should be a HARD RULE. PRs should close issues automatically.
-HARD RULE"*
+**HARD RULE.** A **leaf** issue — one with no children — is delivered by **exactly
+one** pull request, and that pull request closes the issue itself by naming it with a
+closing keyword in the PR body: `Fixes MCP-nnn`, or the equivalent `Closes` /
+`Resolves`. Many leaf issues may map to one PR; one leaf issue may never map to two.
+Work needing a second PR is work whose issue is **mis-scoped**: break it into leaves
+that each land in one PR, splitting at every boundary the work crosses — one leaf per
+repository, in-repo work apart from out-of-repo work, and decision apart from
+delivery. `References`, `Refs:`, `Related:` and a bare `MCP-nnn` mention do **not**
+close; they are correct only against a **parent** issue, or a genuinely related issue
+this PR does not deliver, and the PR states which. A parent issue sits outside the
+one-PR requirement — its children carry the delivery, so it may carry many PRs, and
+it closes when its last child leaf closes.
 
-Per [`rules-have-no-exceptions`](rules-have-no-exceptions.md), this admits no
-convenience exception. The only carve-out is the one the owner named himself: a
-**parent** issue may carry many PRs, because its children carry the delivery.
+The requirement is settled at **two** moments: at ticket-scoping time, where
+cardinality is fixed before a branch exists, and at PR-body authoring time, where the
+closing keyword is fixed before the PR is opened. Per
+[`rules-have-no-exceptions`](rules-have-no-exceptions.md), no convenience case sits
+outside it.
+
+## Origin
+
+This rule is doctrine on the owner's ruling of 2026-09-02, quoted here in full. The
+ellipses are elisions made when the ruling was recorded from chat; the operative
+statement of the rule is the text above, and this quotation is its source:
+
+> "for future work it should have at most one PR per issue (unless it's parent issue)
+> … so the leaf issues must be 1-1 (or many to one) with a single PR … if not then
+> the issue should be broken down … or if the issue requires work across repos or
+> some work in repos or outside them again should be split. This should be a HARD
+> RULE. PRs should close issues automatically. HARD RULE"
 
 ## Trigger
 
