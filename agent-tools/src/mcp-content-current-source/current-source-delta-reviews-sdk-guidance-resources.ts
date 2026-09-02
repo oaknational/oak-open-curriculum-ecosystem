@@ -19,7 +19,7 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
   Record<string, CurrentSourceDeltaReview>
 > = {
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/adapt-lesson.ts': reviewed(
-    'c23235066b550162a954fe38c402e630b9bc908854623a23daff99e02b04e694',
+    'fc3ab05fc77e179350fc047894976d882f4e2540797b2e9ec3ea4954de569927',
     ['A007', 'C183', 'C187', 'C188', 'C202', 'C205', 'C206', 'C207', 'C208', 'C209', 'C334'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/agent-guidance-resources.ts':
@@ -42,7 +42,7 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
     ],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/curriculum-mapping.ts': reviewed(
-    '002ece2ea42677b6b6105f29f68aefdabeea3f8c0a74cc2e1fccfc2524c6588f',
+    '3840067c48f8db6a7c0cc27bdf80549e12e3d13a2b17437822a9b76282c2cd77',
     [
       'A006',
       'C182',
@@ -69,7 +69,7 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/guidance-resource-types.ts':
     excluded('76cf0bd8b14bad736906a9874e1f3211993d5759d658d0eb6bf144e026cd1723', TYPE_ONLY),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/learning-progression.ts': reviewed(
-    'fbd5b1c00d1880414394e10c769bd4cfdd8377dea4bf71f16bc0093d81def371',
+    '0de9eda206c3de56c96fe10c3be16f64f6471ab2d0afc003902b7530ba4b9b16',
     ['A005', 'C181', 'C191', 'C192', 'C200', 'C205', 'C332'],
   ),
 };

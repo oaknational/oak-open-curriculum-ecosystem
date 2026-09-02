@@ -176,11 +176,10 @@ export const toolGuidanceWorkflows = {
       {
         step: 3,
         action:
-          'Get the bounded prior-knowledge subgraph for the thread units found in steps 1-2, anchored by their slugs',
+          'Get the stated prior knowledge for the thread units found in steps 1-2, anchored by their slugs',
         tool: 'get-prior-knowledge-graph',
         example: 'get-prior-knowledge-graph({ unitSlugs: ["<unit-slug-from-step-2>"] })',
-        returns:
-          'Bounded prior-knowledge subgraph for the anchor units (dependencies and prior knowledge requirements)',
+        returns: "Each anchor unit's stated prior-knowledge statements",
       },
     ],
   } satisfies Workflow,

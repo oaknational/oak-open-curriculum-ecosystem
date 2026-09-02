@@ -741,7 +741,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts",
-      "semanticSha256": "2d86bf6b1cf6241114656a1a2909fbb47ecd0b6f34d5ccd8b9f44c0215301606",
+      "semanticSha256": "028902c67f37ef6fc777738f6ebb83b4994cdcbf64ea49d8d777f33b36840e5d",
       "itemIds": [
         "C049",
         "C050",
@@ -879,12 +879,11 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts",
-      "semanticSha256": "c85f003e69fe7f2a2da22d65f517334351a244d1085d4e989817ecf54246bacd",
+      "semanticSha256": "8e0a842a0cf89e24c74e2aeb6b2b8acc7dee5667412b89c8262d1198ebf55570",
       "itemIds": [
         "C246",
         "C247",
         "C248",
-        "C249",
         "C250",
         "C251"
       ]
@@ -962,7 +961,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/adapt-lesson.ts",
-      "semanticSha256": "c23235066b550162a954fe38c402e630b9bc908854623a23daff99e02b04e694",
+      "semanticSha256": "fc3ab05fc77e179350fc047894976d882f4e2540797b2e9ec3ea4954de569927",
       "itemIds": [
         "A007",
         "C183",
@@ -1004,7 +1003,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/curriculum-mapping.ts",
-      "semanticSha256": "002ece2ea42677b6b6105f29f68aefdabeea3f8c0a74cc2e1fccfc2524c6588f",
+      "semanticSha256": "3840067c48f8db6a7c0cc27bdf80549e12e3d13a2b17437822a9b76282c2cd77",
       "itemIds": [
         "A006",
         "C182",
@@ -1054,7 +1053,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/learning-progression.ts",
-      "semanticSha256": "fbd5b1c00d1880414394e10c769bd4cfdd8377dea4bf71f16bc0093d81def371",
+      "semanticSha256": "0de9eda206c3de56c96fe10c3be16f64f6471ab2d0afc003902b7530ba4b9b16",
       "itemIds": [
         "A005",
         "C181",
@@ -1088,6 +1087,31 @@
       "semanticSha256": "0e31c4103c0b45fb5d4f59ff7522684e77adf56978336d8ba7cda817f0580c20",
       "itemIds": [],
       "exclusionReason": "Type-only change; no authored agent-facing content."
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts",
+      "semanticSha256": "126fddd476820e5a45e58c44529b6893fabbdb34608a8cebe41c4b0c1a0a9f23",
+      "itemIds": [
+        "C286",
+        "C287",
+        "C288",
+        "C289",
+        "C290",
+        "C291",
+        "C292",
+        "C293",
+        "C294",
+        "C295",
+        "C296",
+        "C297",
+        "C298",
+        "C299",
+        "C300",
+        "C301",
+        "C302",
+        "C303",
+        "C304"
+      ]
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/orientation-guidance.ts",
@@ -1150,6 +1174,55 @@
       "semanticSha256": "41be855cff939c4a7f95b36bdc2e3d1fecceecdb0a425b791d4d9af7da766d3a",
       "itemIds": [],
       "exclusionReason": "Test support only; this file does not reach an MCP consumer."
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts",
+      "semanticSha256": "1b2371af946d0dee9889b72837099393af9ba60b3ce78977445cf119ec414fbc",
+      "itemIds": [
+        "C011",
+        "C012",
+        "C013",
+        "C014",
+        "C015",
+        "C016",
+        "C017",
+        "C018",
+        "C019",
+        "C020",
+        "C021",
+        "C022",
+        "C023",
+        "C024",
+        "C025",
+        "C026",
+        "C027",
+        "C028",
+        "C029",
+        "C030",
+        "C031",
+        "C032",
+        "C033",
+        "C034",
+        "C035",
+        "C036",
+        "C037",
+        "C038",
+        "C039"
+      ]
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-workflows.ts",
+      "semanticSha256": "28b140a78cc09e38872204f7f5a60894e7b20ffa1a3c3cb6403a19c240c320e5",
+      "itemIds": [
+        "C040",
+        "C041",
+        "C042",
+        "C043",
+        "C044",
+        "C045",
+        "C046",
+        "C047"
+      ]
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts",

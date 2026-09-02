@@ -48,8 +48,9 @@ guidance. MCP tool names may appear prefixed
    topics.
 3. **Order the units** so every prerequisite is taught before the units
    that depend on it: take the unit slugs from step 2 and call
-   \`get-prior-knowledge-graph({ unitSlugs: ["<unit-slug>"] })\` to check
-   the dependencies.
+   \`get-prior-knowledge-graph({ unitSlugs: ["<unit-slug>"] })\` for each
+   unit's stated prior knowledge, and check the statements are met by
+   earlier units.
 4. **Check coverage.** Use \`get-units-summary\` for the national
    curriculum statements each unit covers; confirm coverage is complete
    and surface gaps or unintended overlaps.

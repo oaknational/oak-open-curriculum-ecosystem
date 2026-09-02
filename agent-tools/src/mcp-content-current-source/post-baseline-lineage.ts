@@ -187,6 +187,14 @@ const RATE_LIMITER_REMOVAL_RETIREMENTS = [
  */
 const PRESENTATION_DIRECTIVE_RETIREMENTS = [['C163', []]] as const;
 
+/**
+ * The stated-statements refactor of get-prior-knowledge-graph retired the
+ * depth input (C249) with the subgraph traversal it bounded — the tool now
+ * projects each anchor unit's stated prior-knowledge statements, and a
+ * stray depth argument is stripped at the schema, not served.
+ */
+const PRIOR_KNOWLEDGE_DEPTH_RETIREMENTS = [['C249', []]] as const;
+
 /** All post-baseline lineage, composed for the current-item lineage map. */
 export const POST_BASELINE_LINEAGE_ENTRIES = [
   ...ORIENTATION_ERA_LINEAGE_ENTRIES,
@@ -199,4 +207,5 @@ export const POST_BASELINE_LINEAGE_ENTRIES = [
   ...MCP_AUTH_RESPONSE_RELOCATIONS,
   ...RATE_LIMITER_REMOVAL_RETIREMENTS,
   ...PRESENTATION_DIRECTIVE_RETIREMENTS,
+  ...PRIOR_KNOWLEDGE_DEPTH_RETIREMENTS,
 ] as const;

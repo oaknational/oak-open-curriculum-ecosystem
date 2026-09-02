@@ -1,5 +1,5 @@
 /**
- * Integration tests for the anchored get-prior-knowledge-graph tool (G1b c2).
+ * Integration tests for the anchored get-prior-knowledge-graph tool.
  *
  * @remarks
  * Integration, not unit: the tool reads the compile-time graph corpus, whose
@@ -7,10 +7,9 @@
  * derived from that corpus.
  *
  * These tests describe the TOOL ENVELOPE: input parsing at the MCP boundary,
- * dispatch to the prior-knowledge view, and the response shape (summary
- * TextContent + serialised JSON TextContent + structuredContent). The
- * traversal semantics themselves — predecessor direction, depth bounds,
- * anchor resolution — are specified by the view's own tests in
+ * dispatch to the statements view, and the response shape (summary
+ * TextContent + serialised JSON TextContent + structuredContent). Anchor
+ * resolution semantics are specified by the view's own tests in
  * `@oaknational/graph-corpus-sdk` and are not re-specified here.
  *
  * Anchor fixtures are chosen deterministically from the corpus so the tests
@@ -18,7 +17,6 @@
  */
 
 import { graphCorpus } from '@oaknational/sdk-codegen/graph-corpus';
-import { MAX_PREREQUISITE_DEPTH } from '@oaknational/graph-corpus-sdk/curriculum';
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
 import {
@@ -41,27 +39,29 @@ const knownUnitSlug: string = firstUnitSlug;
 /**
  * Schema-driven narrowing of the carrier's loose `structuredContent` — the
  * test-boundary alternative to a type assertion. Non-strict: the family
- * envelope adds `summary` / `status` alongside the
- * subgraph fields.
+ * envelope adds `summary` / `status` alongside the statements fields.
  */
-const SUBGRAPH_ENVELOPE = z.object({
-  nodes: z.array(z.unknown()),
-  edges: z.array(z.unknown()),
+const STATEMENTS_ENVELOPE = z.object({
+  units: z.array(
+    z.object({
+      unitSlug: z.string(),
+      priorKnowledge: z.array(z.string()),
+      threadSlugs: z.array(z.string()),
+    }),
+  ),
   resolvedAnchors: z.array(z.string()),
   unknownAnchors: z.array(z.string()),
-  depth: z.number(),
 });
 
 const TEXT_CONTENT = z.object({ type: z.literal('text'), text: z.string() });
 
 describe('GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF', () => {
-  it('describes the anchored bounded contract, not a whole-corpus dump', () => {
+  it('describes the anchored stated-statements contract, not a traversal', () => {
     expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).toContain('anchor');
     expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).toContain('unitSlugs');
-    expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).toContain('depth');
-    expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).not.toContain(
-      'complete prior knowledge graph',
-    );
+    expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).toContain('stated prior knowledge');
+    expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).not.toContain('depth');
+    expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).not.toContain('subgraph');
   });
 
   it('has annotations marking it as read-only and idempotent', () => {
@@ -76,7 +76,7 @@ describe('GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF', () => {
 });
 
 describe('runPriorKnowledgeGraphTool', () => {
-  it('returns the bounded subgraph envelope for a known anchor: summary + JSON content and structuredContent', () => {
+  it('returns the statements envelope for a known anchor: summary + JSON content and structuredContent', () => {
     const result = runPriorKnowledgeGraphTool({ unitSlugs: [knownUnitSlug] });
 
     expect(result.isError).toBeUndefined();
@@ -86,13 +86,12 @@ describe('runPriorKnowledgeGraphTool', () => {
     expect(summary).toMatchObject({ type: 'text' });
     expect(json).toMatchObject({ type: 'text' });
 
-    const structured = SUBGRAPH_ENVELOPE.parse(result.structuredContent);
-    // Anchor membership only — the corpus id scheme itself is pinned by the
-    // view's tests and round-tripped exactly by the e2e test.
+    const structured = STATEMENTS_ENVELOPE.parse(result.structuredContent);
     expect(structured.resolvedAnchors).toHaveLength(1);
     expect(structured.resolvedAnchors[0]).toContain(knownUnitSlug);
     expect(structured.unknownAnchors).toStrictEqual([]);
-    expect(structured.depth).toBe(2);
+    expect(structured.units).toHaveLength(1);
+    expect(structured.units[0]?.unitSlug).toBe(knownUnitSlug);
   });
 
   it('reports unknown anchors as information, not an error', () => {
@@ -101,7 +100,7 @@ describe('runPriorKnowledgeGraphTool', () => {
     });
 
     expect(result.isError).toBeUndefined();
-    const structured = SUBGRAPH_ENVELOPE.parse(result.structuredContent);
+    const structured = STATEMENTS_ENVELOPE.parse(result.structuredContent);
     expect(structured.unknownAnchors).toStrictEqual(['definitely-not-a-real-unit-slug-xyz']);
     const summary = TEXT_CONTENT.parse(result.content[0]);
     expect(summary.text).toContain('unknown');
@@ -111,27 +110,18 @@ describe('runPriorKnowledgeGraphTool', () => {
     const result = runPriorKnowledgeGraphTool({ unitSlugs: ['no-such-unit-anywhere'] });
 
     expect(result.isError).toBeUndefined();
-    const structured = SUBGRAPH_ENVELOPE.parse(result.structuredContent);
-    expect(structured.nodes).toStrictEqual([]);
-    expect(structured.edges).toStrictEqual([]);
+    const structured = STATEMENTS_ENVELOPE.parse(result.structuredContent);
+    expect(structured.units).toStrictEqual([]);
     expect(structured.resolvedAnchors).toStrictEqual([]);
     expect(structured.unknownAnchors).toStrictEqual(['no-such-unit-anywhere']);
   });
 
-  it('honours an explicit depth within the ceiling', () => {
-    const result = runPriorKnowledgeGraphTool({ unitSlugs: [knownUnitSlug], depth: 1 });
+  it('strips the retired depth input rather than erroring (old callers keep working)', () => {
+    const result = runPriorKnowledgeGraphTool({ unitSlugs: [knownUnitSlug], depth: 2 });
 
     expect(result.isError).toBeUndefined();
-    expect(SUBGRAPH_ENVELOPE.parse(result.structuredContent).depth).toBe(1);
-  });
-
-  it('rejects a depth beyond the ceiling at the input boundary', () => {
-    const result = runPriorKnowledgeGraphTool({
-      unitSlugs: [knownUnitSlug],
-      depth: MAX_PREREQUISITE_DEPTH + 1,
-    });
-
-    expect(result.isError).toBe(true);
+    const structured = STATEMENTS_ENVELOPE.parse(result.structuredContent);
+    expect(structured.resolvedAnchors).toHaveLength(1);
   });
 
   it('rejects input without unitSlugs at the input boundary', () => {
@@ -168,7 +158,7 @@ describe('get-prior-knowledge-graph wire schema — advertised examples (MCP-303
         result.isError,
         `advertised anchor ${JSON.stringify(exampleAnchor)} must resolve`,
       ).toBeUndefined();
-      const envelope = SUBGRAPH_ENVELOPE.parse(result.structuredContent);
+      const envelope = STATEMENTS_ENVELOPE.parse(result.structuredContent);
       expect(envelope.unknownAnchors).toEqual([]);
       expect(envelope.resolvedAnchors.length).toBeGreaterThan(0);
     }

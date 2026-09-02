@@ -2,8 +2,10 @@
  * Curriculum graph subpath barrel: `@oaknational/graph-corpus-sdk/curriculum`.
  *
  * The generated one-graph corpus (G1a) plus the bounded anchored views over
- * it: `priorKnowledgeSubgraph` (G1b) answers "what is the prior knowledge of
- * these units?" as a depth-bounded predecessor subgraph;
+ * it: `priorKnowledgeStatements` answers "what is the prior knowledge of
+ * these units?" as each unit's stated prior-knowledge statements
+ * (`priorKnowledgeSubgraph` (G1b) remains as the depth-bounded predecessor
+ * subgraph over thread-adjacency edges);
  * `misconceptionsForLessons` / `misconceptionsForUnits` /
  * `misconceptionsForThread` (G2) answer "which misconceptions does this
  * anchor address?" over the thread→unit→lesson→misconception chain;
@@ -35,6 +37,11 @@ export {
   type CurriculumPriorKnowledgeView,
   type PriorKnowledgeSubgraph,
 } from './prior-knowledge-view.js';
+
+export {
+  priorKnowledgeStatements,
+  type PriorKnowledgeStatements,
+} from './prior-knowledge-statements.js';
 
 export {
   buildCurriculumMisconceptionProjection,

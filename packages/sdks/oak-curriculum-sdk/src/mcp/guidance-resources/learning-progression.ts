@@ -33,8 +33,8 @@ Call \`get-curriculum-model\` first for domain definitions and tool guidance.
    for that thread's year-ordered unit progression.
 3. Take the unit slugs of the progression entries from step 2 and call
    \`get-prior-knowledge-graph({ unitSlugs: ["<unit-slug-from-step-2>",
-   "<another-unit-slug-from-step-2>"] })\` with them for unit-level
-   dependencies.
+   "<another-unit-slug-from-step-2>"] })\` with them for each unit's
+   stated prior knowledge.
 4. Map out:
    - The progression from earliest to latest year group
    - Key prerequisites at each stage
