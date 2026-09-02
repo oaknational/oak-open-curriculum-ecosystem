@@ -158,5 +158,6 @@ twice, the cardinality claim is too strong and wants the same proof-shaped excep
   per ticket; the scoping home this rule's clause 1 makes binding.
 - [`pr-lifecycle`](../skills/pr-lifecycle/SKILL-CANONICAL.md) — where the PR body is
   authored and clause 3 is applied.
-- [`rules-have-no-exceptions`](rules-have-no-exceptions.md) — why "HARD RULE" needs
-  no restatement here.
+- [`rules-have-no-exceptions`](rules-have-no-exceptions.md) — why a hard rule admits
+  no convenience case, and why a case that seems not to fit repairs the rule's stated
+  domain instead of escaping it.
