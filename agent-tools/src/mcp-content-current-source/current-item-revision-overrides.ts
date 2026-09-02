@@ -31,4 +31,7 @@ export const CURRENT_ITEM_REVISION_OVERRIDES = {
   C290: 'modified',
   // Server-instructions sequencing sentence rewritten likewise.
   C054: 'modified',
+  // Cross-tool pointers (thread-progressions, search) rewritten likewise.
+  C253: 'modified',
+  C066: 'modified',
 } as const;

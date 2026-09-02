@@ -27,9 +27,9 @@
     "additionCount": 11,
     "availableCount": 683,
     "retiredCount": 45,
-    "unchangedCount": 487,
+    "unchangedCount": 486,
     "expandedCount": 0,
-    "modifiedCount": 116,
+    "modifiedCount": 117,
     "relocatedCount": 68,
     "addedCount": 12,
     "workspaceScopeInCount": 612,
@@ -6047,7 +6047,7 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }

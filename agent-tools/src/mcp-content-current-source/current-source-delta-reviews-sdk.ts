@@ -82,11 +82,11 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     ['C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts': reviewed(
-    '592fe681cd227863d083916ad74e380dcfd0e18605d694965232f89f3e078cef',
+    'b2ee07ef1e5550084db0171499306ca06c5ab4bd04bff76a1e6e013ae0a5117b',
     ['C065', 'C066', 'C067', 'C068'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts': reviewed(
-    '70107401c79893d6f9cbd11d51241376510c7366c8bf67f8c2bf8eb1a02bb52d',
+    'b3a4fcb15ae2f9cf053cd8945e9a5f5df7611eddee2532d5acd5d2edae67c11f',
     ['C252', 'C253', 'C254', 'C255', 'C256', 'C257', 'C258', 'C259', 'C260'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-user-search/tool-definition.ts': reviewed(

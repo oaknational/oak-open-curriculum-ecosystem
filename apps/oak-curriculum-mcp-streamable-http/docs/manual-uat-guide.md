@@ -106,7 +106,7 @@ matrix** (Sections 1–13) for a release gate.
 3. **2.2** `get-changelog-latest` `{}` — upstream API reachable; record the version.
 4. **4.1** `search` `{ scope: 'lessons', query: 'photosynthesis', subject: 'science', keyStage: 'ks3' }` — ranked hits with fetchable slugs.
 5. **5.2** `fetch` a lesson id from step 4.
-6. **7.2** `get-prior-knowledge-graph` `{ unitSlugs: ['<a unit slug>'], depth: 1 }` — bounded subgraph, anchors echoed.
+6. **7.2** `get-prior-knowledge-graph` `{ unitSlugs: ['<a unit slug>'] }` — stated prior-knowledge statements, anchors echoed.
 7. If EEF is present: **8.1** `get-eef-evidence` `{ function: 'inspect-strand', strandId: 'eef-tl-feedback' }` and **8.6** read `eef://interpretation`.
 8. **12.2** `search` `{}` (no scope) — expect `-32602` (negative control: the server rejects bad input).
 
@@ -310,7 +310,7 @@ arrives in the honest typed shapes only.
 | #   | Tool                        | Positive probe                                                                                                                                                          | Negative probe                                                                                                      |
 | --- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | 7.1 | `get-thread-progressions`   | discovery: `{ subject: 'maths', keyStage: 'ks2' }`; detail: `{ threadSlug: 'number-fractions' }` → year-ordered units                                                   | unknown `threadSlug` → reported in `unknownAnchors`, not errored.                                                   |
-| 7.2 | `get-prior-knowledge-graph` | `{ unitSlugs: ['understanding-percentages'], depth: 2 }` → nodes + `prerequisiteFor` edges, all endpoints members                                                       | unknown slug alongside a real one → unknown in `unknownAnchors`, real anchor served.                                |
+| 7.2 | `get-prior-knowledge-graph` | `{ unitSlugs: ['understanding-percentages'] }` → units with stated `priorKnowledge` statements and `threadSlugs`, anchors echoed                                        | unknown slug alongside a real one → unknown in `unknownAnchors`, real anchor served.                                |
 | 7.3 | `get-misconception-graph`   | unit anchor `{ … }`; thread window with `unitOffset`/`unitLimit` → honest window (`hasMore`, whole members)                                                             | `unitOffset` with a _unit_ anchor → typed refusal (offset applies to thread anchor only).                           |
 | 7.4 | `get-keyword-graph`         | `{ subject: 'maths', keyStage: 'ks2', limit: 5 }` → ranked keywords, honest totals (`totalMatchingKeywords`, `hasMore`), per-entry lesson decoration (`hasMoreLessons`) | `limit: 0` → JSON-RPC `-32602` (the schema declares integer [1, 100], so the bound is enforced at the input layer). |
 

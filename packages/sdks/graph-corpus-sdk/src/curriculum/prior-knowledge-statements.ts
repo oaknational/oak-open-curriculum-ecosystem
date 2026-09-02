@@ -22,8 +22,10 @@ import {
   graphCorpus,
   type GraphCorpusNodeId,
   type GraphCorpusUnitNode,
+  type GraphCorpusUnitNodeId,
 } from '@oaknational/sdk-codegen/graph-corpus';
 import { resolveAnchors } from './anchor-resolution.js';
+import { mustGet } from './projection-helpers.js';
 
 /**
  * The stated prior knowledge for a set of anchor units.
@@ -35,12 +37,12 @@ import { resolveAnchors } from './anchor-resolution.js';
  */
 export interface PriorKnowledgeStatements {
   readonly units: readonly GraphCorpusUnitNode[];
-  readonly resolvedAnchors: readonly GraphCorpusNodeId[];
+  readonly resolvedAnchors: readonly GraphCorpusUnitNodeId[];
   readonly unknownAnchors: readonly string[];
 }
 
 /** Maps a bare unit slug to its kind-qualified corpus node id (`unit:<slug>`). */
-function toUnitNodeId(unitSlug: string): GraphCorpusNodeId {
+function toUnitNodeId(unitSlug: string): GraphCorpusUnitNodeId {
   return `unit:${unitSlug}`;
 }
 
@@ -64,13 +66,6 @@ const unitNodesById: ReadonlyMap<GraphCorpusNodeId, GraphCorpusUnitNode> = new M
  */
 export function priorKnowledgeStatements(unitSlugs: readonly string[]): PriorKnowledgeStatements {
   const { resolved, unknown } = resolveAnchors(unitSlugs, toUnitNodeId, unitNodesById);
-  const units = resolved.map((id) => {
-    const node = unitNodesById.get(id);
-    if (node === undefined) {
-      // Unreachable: `resolved` ids come from this map's own key set.
-      throw new Error(`resolved anchor "${id}" missing from the unit node map`);
-    }
-    return node;
-  });
+  const units = resolved.map((id) => mustGet(unitNodesById, id));
   return { units, resolvedAnchors: resolved, unknownAnchors: unknown };
 }

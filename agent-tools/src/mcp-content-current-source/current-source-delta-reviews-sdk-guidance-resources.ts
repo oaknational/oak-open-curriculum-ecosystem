@@ -69,7 +69,7 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/guidance-resource-types.ts':
     excluded('76cf0bd8b14bad736906a9874e1f3211993d5759d658d0eb6bf144e026cd1723', TYPE_ONLY),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/learning-progression.ts': reviewed(
-    '0de9eda206c3de56c96fe10c3be16f64f6471ab2d0afc003902b7530ba4b9b16',
+    '2da2d3692f1573a2879cc0e25b869487091fdc15ec3adbbf93da32f1da370e3f',
     ['A005', 'C181', 'C191', 'C192', 'C200', 'C205', 'C332'],
   ),
 };

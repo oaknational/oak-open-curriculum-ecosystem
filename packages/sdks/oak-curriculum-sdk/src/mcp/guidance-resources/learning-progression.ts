@@ -12,7 +12,7 @@ export const LEARNING_PROGRESSION_GUIDANCE: AgentGuidanceResource = {
   uri: 'docs://oak/guidance/learning-progression.md',
   title: 'Agent guidance: learning progression',
   description:
-    'Workflow guidance for the assistant: understand how a concept builds across year groups by walking progression threads and mapping prerequisite dependencies.',
+    "Workflow guidance for the assistant: understand how a concept builds across year groups by walking progression threads and checking each unit's stated prior knowledge.",
   mimeType: 'text/markdown',
   annotations: { priority: 0.4, audience: ['assistant'] },
   lastModified: '2026-07-23T00:00:00Z',

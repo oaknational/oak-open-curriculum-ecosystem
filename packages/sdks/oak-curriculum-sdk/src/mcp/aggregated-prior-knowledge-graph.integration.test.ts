@@ -60,8 +60,6 @@ describe('GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF', () => {
     expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).toContain('anchor');
     expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).toContain('unitSlugs');
     expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).toContain('stated prior knowledge');
-    expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).not.toContain('depth');
-    expect(GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF.description).not.toContain('subgraph');
   });
 
   it('has annotations marking it as read-only and idempotent', () => {

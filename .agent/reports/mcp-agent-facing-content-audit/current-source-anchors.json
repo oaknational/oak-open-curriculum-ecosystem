@@ -1169,10 +1169,10 @@
             "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts",
             "anchors": [
               {
-                "tokenCount": 17,
-                "tokenSha256": "1e3aaa9364eb9f36a3b5290e68f1db48446896a1fddfd6df4d4794e2bbe7cfab",
-                "indexToken": "semantic",
-                "indexOffset": 6
+                "tokenCount": 31,
+                "tokenSha256": "52d5853f46d1354f3a5e21d370d6d7b0fe9058f7a43b6571c802a307c14ec7e0",
+                "indexToken": "stated",
+                "indexOffset": 28
               }
             ]
           }
@@ -5150,16 +5150,16 @@
     {
       "auditId": "C253",
       "evidence": {
-        "revision": "unchanged",
+        "revision": "modified",
         "targets": [
           {
             "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts",
             "anchors": [
               {
-                "tokenCount": 339,
-                "tokenSha256": "3566b425854f2f9fe3eb6c8ba627301c13dad987a715ceabe80cb1aa2f4c7dd3",
-                "indexToken": "subjectsCovered",
-                "indexOffset": 46
+                "tokenCount": 33,
+                "tokenSha256": "ad0058afd2cc73ff6afc7d0559180c7c132aff8780a5f2c9a8f05ff593f8fe1a",
+                "indexToken": "misconceptions",
+                "indexOffset": 27
               }
             ]
           }

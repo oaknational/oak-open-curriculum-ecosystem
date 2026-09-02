@@ -29,9 +29,9 @@ describe('priorKnowledgeStatements', () => {
     expect(result.units).toHaveLength(1);
     const unit = result.units[0];
     expect(unit?.unitSlug).toBe(knownSlug);
-    // The fields the statements contract serves — present, corpus-typed.
-    expect(Array.isArray(unit?.priorKnowledge)).toBe(true);
-    expect(Array.isArray(unit?.threadSlugs)).toBe(true);
+    // The fields the statements contract serves — verbatim from the corpus.
+    expect(unit?.priorKnowledge).toStrictEqual(firstUnit.priorKnowledge);
+    expect(unit?.threadSlugs).toStrictEqual(firstUnit.threadSlugs);
   });
 
   it('collapses duplicate anchors with set semantics, first occurrence kept', () => {

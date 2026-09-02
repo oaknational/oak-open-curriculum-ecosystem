@@ -40,15 +40,14 @@ const STATEMENTS_ENVELOPE = z.object({
   unknownAnchors: z.array(z.string()),
 });
 
-/** A corpus unit slug, chosen deterministically (lexicographic minimum). */
-const firstUnitSlug = graphCorpus.nodes
+/** A corpus unit node, chosen deterministically (lexicographic minimum slug). */
+const firstUnit = graphCorpus.nodes
   .filter((node) => node.kind === 'unit')
-  .map((node) => node.unitSlug)
-  .sort((a, b) => a.localeCompare(b))[0];
-if (firstUnitSlug === undefined) {
+  .sort((a, b) => a.unitSlug.localeCompare(b.unitSlug))[0];
+if (firstUnit === undefined) {
   throw new Error('corpus has no unit nodes to anchor the e2e test');
 }
-const knownUnitSlug: string = firstUnitSlug;
+const knownUnitSlug: string = firstUnit.unitSlug;
 
 async function callPriorKnowledgeGraph(args: unknown): Promise<Response> {
   const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
@@ -89,6 +88,10 @@ describe('get-prior-knowledge-graph anchored tools/call', () => {
     expect(structured.unknownAnchors).toStrictEqual([]);
     expect(structured.units).toHaveLength(1);
     expect(structured.units[0]?.unitSlug).toBe(knownUnitSlug);
+    // The refactor's core value, proven over the wire: the statements arrive
+    // verbatim from the corpus, not as an empty or reshaped stand-in.
+    expect(structured.units[0]?.priorKnowledge).toStrictEqual(firstUnit.priorKnowledge);
+    expect(structured.units[0]?.threadSlugs).toStrictEqual(firstUnit.threadSlugs);
   });
 
   it('strips the retired depth argument rather than erroring (old callers keep working)', async () => {

@@ -16,8 +16,24 @@ const TOOL_GUIDANCE_DATA = `${SDK_MCP}/tool-guidance-data.ts`;
 const TOOL_GUIDANCE_WORKFLOWS = `${SDK_MCP}/tool-guidance-workflows.ts`;
 const ONTOLOGY_DATA = `${SDK_MCP}/ontology-data.ts`;
 const AGENT_SUPPORT_METADATA = `${SDK_MCP}/agent-support-tool-metadata.ts`;
+const THREAD_PROGRESSIONS = `${SDK_MCP}/aggregated-thread-progressions.ts`;
+const SEARCH_DEF = `${SDK_MCP}/aggregated-search/tool-definition.ts`;
 
 export const CURRENT_PRIOR_KNOWLEDGE_ITEM_ANCHOR_OVERRIDES = {
+  // Cross-tool pointers rewritten for the stated-statements contract: the
+  // thread-progressions description no longer promises prerequisite
+  // subgraphs, and the search cross-tool workflow now names stated prior
+  // knowledge rather than dependencies.
+  C253: {
+    [THREAD_PROGRESSIONS]: [
+      "Complements get-prior-knowledge-graph (each unit's stated prior knowledge) and get-misconception-graph (per-lesson misconceptions along a thread).",
+    ],
+  },
+  C066: {
+    [SEARCH_DEF]: [
+      "- For prior knowledge: search(scope: 'threads') → get-prior-knowledge-graph with the found unit slugs for their stated prior knowledge",
+    ],
+  },
   // The server-instructions sequencing sentence now names each unit's
   // stated prior knowledge rather than claiming a prior-knowledge graph.
   C054: {

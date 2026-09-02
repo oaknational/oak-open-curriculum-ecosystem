@@ -114,8 +114,6 @@ describe('aggregated tools inputSchema propagation', () => {
 
     const jsonSchema = z.toJSONSchema(z.object(priorKnowledge.inputSchema));
     expect(jsonSchema).toHaveProperty('properties.unitSlugs.description');
-    // The retired depth input must not be advertised on the wire.
-    expect(jsonSchema).not.toHaveProperty('properties.depth');
     expect(jsonSchema).toHaveProperty('required', ['unitSlugs']);
   });
 

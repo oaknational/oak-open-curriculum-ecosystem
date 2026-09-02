@@ -15,9 +15,12 @@
  * Those edges encode thread adjacency on the year axis (same-year ordering
  * stated-arbitrary — see `graph-corpus-edges.ts`), not epistemic
  * prerequisites, so the stated statements are the honest surface and the
- * subgraph is no longer served. The wire name is unchanged; the retired
+ * subgraph is no longer served. The wire name is unchanged and the retired
  * `depth` input is stripped, not errored (the schema parses in strip mode),
- * so existing callers keep working.
+ * so legacy calls keep succeeding — but the response is the statements
+ * shape, not the retired nodes/edges/depth envelope. Agent callers read the
+ * contract from the tool description each session; nothing in this repo
+ * consumes the old shape programmatically.
  *
  * Unknown anchor slugs are reported as information in the result envelope,
  * never as a recommendation (ADR-194: the data surface is deterministic;

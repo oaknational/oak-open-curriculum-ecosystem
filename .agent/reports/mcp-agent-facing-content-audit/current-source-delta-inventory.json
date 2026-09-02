@@ -912,7 +912,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts",
-      "semanticSha256": "592fe681cd227863d083916ad74e380dcfd0e18605d694965232f89f3e078cef",
+      "semanticSha256": "b2ee07ef1e5550084db0171499306ca06c5ab4bd04bff76a1e6e013ae0a5117b",
       "itemIds": [
         "C065",
         "C066",
@@ -922,7 +922,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts",
-      "semanticSha256": "70107401c79893d6f9cbd11d51241376510c7366c8bf67f8c2bf8eb1a02bb52d",
+      "semanticSha256": "b3a4fcb15ae2f9cf053cd8945e9a5f5df7611eddee2532d5acd5d2edae67c11f",
       "itemIds": [
         "C252",
         "C253",
@@ -1053,7 +1053,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/learning-progression.ts",
-      "semanticSha256": "0de9eda206c3de56c96fe10c3be16f64f6471ab2d0afc003902b7530ba4b9b16",
+      "semanticSha256": "2da2d3692f1573a2879cc0e25b869487091fdc15ec3adbbf93da32f1da370e3f",
       "itemIds": [
         "A005",
         "C181",
