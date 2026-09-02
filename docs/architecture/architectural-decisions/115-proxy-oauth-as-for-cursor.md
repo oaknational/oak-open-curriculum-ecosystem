@@ -167,7 +167,11 @@ What this exception still forbids:
 - Filtering, dropping, normalising, defaulting or reordering any field of a
   forwarded message. ADR-113's `openid` scope disposition stands unchanged —
   there the upstream _does_ discharge the rule, and the intervention on offer
-  was mutation rather than refusal.
+  was mutation rather than refusal. (ADR-113's _mechanism_ was corrected
+  2026-08-20: Clerk enforces a requested scope against the client's own
+  registered grant, rather than refusing `openid` as a platform rule. The
+  upstream still discharges, so this exception is unaffected — see ADR-113
+  §Correction (2026-08-20).)
 - Partial acceptance: rejecting one `redirect_uris` entry and forwarding the
   rest. All-or-nothing per message; anything else is filtering in a
   validator's coat.

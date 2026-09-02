@@ -59,7 +59,7 @@ MCP tools in this SDK include OAuth 2.1 security metadata to enable ChatGPT comp
 
 Security policy is defined in:
 
-- `code-generation/mcp-security-policy.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/mcp-security-policy.ts`
 
 The policy specifies:
 
@@ -70,13 +70,14 @@ Current configuration:
 
 - Public tools: `get-changelog`, `get-changelog-latest`, `get-rate-limit`
 - Protected tools: All others
-- Required scopes: `openid`, `email`
+- Required scopes: `email` (`openid` is deliberately excluded -- see the
+  `DEFAULT_AUTH_SCHEME` TSDoc in the policy file above for why)
 
 ### Making a Tool Public
 
 To make a tool publicly accessible without authentication:
 
-1. Edit `code-generation/mcp-security-policy.ts`
+1. Edit `packages/sdks/oak-sdk-codegen/code-generation/mcp-security-policy.ts`
 2. Add the tool name to the `PUBLIC_TOOLS` array:
 
 ```typescript
@@ -104,7 +105,7 @@ securitySchemes: [{ type: 'noauth' }];
 **Protected tools**:
 
 ```typescript
-securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }];
+securitySchemes: [{ type: 'oauth2', scopes: ['email'] }];
 ```
 
 Runtime uses this metadata to enforce per-tool authorization.
@@ -113,6 +114,8 @@ Runtime uses this metadata to enforce per-tool authorization.
 
 The generator also emits OAuth scopes metadata for RFC 9728 protected resource discovery:
 
-- Generated file: `src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.ts`
+- Generated file: `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/scopes-supported.ts`
+  (re-exported for SDK consumers from
+  `packages/sdks/oak-curriculum-sdk/src/mcp/scopes-supported.ts`)
 - Exported constant: `SCOPES_SUPPORTED`
 - Runtime imports this to advertise supported scopes to authorization servers
