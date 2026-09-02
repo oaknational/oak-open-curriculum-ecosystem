@@ -3795,3 +3795,69 @@ commit SHA and the closing plan reference.
   exactly as emission does). The curator-pass archive cadence (PDR-094)
   remains the companion pressure valve — ~3,600 live events means the
   archive pass is overdue. Route: agent-tooling backlog.
+
+### F-164 — A subagent inherits the Director's PDR-027 identity, so concurrent implementers are indistinguishable in every record
+
+- **Source**: comms events `ac68f51b` (handover warning, Peony hunts Nectar) and
+  `dd3afd73`; observed live 2026-08-20 by the Director seat Coal hunts Brilliance.
+- **Surface**: PDR-027 identity assignment for subagents; `claims open`;
+  `comms append` / `comms direct`; any outward write that signs with the seat.
+- **Observed**: two faces of one defect, both measured.
+  1. **Claim collision (inherited warning, 2026-08-19).** A subagent's claim is
+     indistinguishable from its parent's — same `agent_name`, same `id`, only
+     `role` differs — and while it holds one, the parent's `comms append` AND
+     `comms direct` both refuse. The Director is cut off the coordination lane by
+     its own implementer. Cure applied at the time: close the finished claim.
+  2. **Attribution indistinguishability (new, 2026-08-20).** Two implementers were
+     run concurrently on disjoint ticket sets. Both signed their Linear writes
+     identically — "the ticket-curation Implementer seat (`70bc33`) staffed by the
+     Director seat Coal hunts Brilliance" — and **one correctly reported the other
+     as an unrecognised seat writing under its own identity.** Nothing was
+     corrupted (the sets were disjoint and each verified its own writes), but the
+     record cannot now attribute a change to either seat.
+- **Expected**: a subagent is distinguishable from its parent and from its
+  siblings in claims, comms and outward-facing attribution, without the parent
+  having to invent a convention per dispatch.
+- **Candidate cure**: derive a per-subagent discriminator at dispatch (parent
+  identity plus a dispatch ordinal or role slug) and carry it in the identity
+  tuple, so `claims open` does not collide and signatures differ. Interim, no
+  code needed: **the dispatching seat briefs each concurrent implementer to sign
+  with a distinguishing suffix**, and continues to forbid subagent claims.
+- **Target surface**: agent-tools identity derivation + `.agent/rules` guidance
+  for dispatching concurrent subagents.
+- **Status**: open — interim mitigation is behavioural and depends on the
+  dispatcher remembering it, which is exactly the property that fails under load.
+- **Owner direction status**: unsolicited (falls under the standing
+  agent-observed-friction direction).
+
+### F-165 — The destructive-git hook policy matches on prose, blocking a command that contains no destructive operation
+
+- **Source**: observed 2026-08-20, Director seat Coal hunts Brilliance.
+- **Surface**: the PreToolUse hook policy that enforces
+  `.agent/rules/never-use-git-to-remove-work.md`.
+- **Observed**: a Bash call was blocked with *"Blocked by repo hook policy:
+  `git restore` is a worktree-destruction operation"*. The call contained
+  **no `git restore`** and no destructive operation of any kind: it was
+  `git push`, a `git credential fill` token mint, and a heredoc writing a PR
+  comment. The comment's subject matter was the review-request lifecycle, so the
+  word "restore" (and "restorer", "Restoring") appeared throughout the prose
+  while `git` appeared separately in the commands. Nothing executed — the block
+  fired before execution, verified by checking that the branch was still unpushed.
+- **Expected**: the policy matches an actual `git <destructive-verb>` invocation,
+  not a co-occurrence of `git` and a destructive verb anywhere in the command
+  text — least of all inside quoted content or a heredoc body.
+- **Candidate cure**: anchor the match to a command position (the verb
+  immediately following `git`, outside quotes and heredoc bodies) rather than a
+  substring scan of the whole command. This is the same failure class
+  `.agent/rules/hook-policy-substring-discipline.md` already names, now with a
+  false-positive instance rather than a false-negative one.
+- **Workaround used**: wrote the comment body with a non-shell file-write tool,
+  then pushed and posted in a short command containing no such prose. **Recorded
+  explicitly because it must not be read as bypassing a guard** — there was no
+  destructive operation to bypass, and the rule's own instruction is to reappraise
+  the concept rather than swap in a sibling command, which is why the content moved
+  rather than the operation changing.
+- **Target surface**: the hook policy's matcher.
+- **Status**: open.
+- **Owner direction status**: unsolicited (standing agent-observed-friction
+  direction).
