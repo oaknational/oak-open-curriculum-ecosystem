@@ -75,6 +75,1260 @@ publicity is far worse than before.
   are suspended. The brief's own Director pointer was stale until corrected 2026-08-18;
   re-check it before trusting any seat pointer in it.
 
+## LIVE STATE, 2026-08-21 ~09:00Z (Tulip mends Bark, `e6d535`, Director — SEAT LIVE)
+
+**Supersedes the 2026-08-20 blocks below where they disagree.** Written mid-tenure at roughly
+40 minutes seated, not at wrap, for the reason Coal gave: the comms stream and handoff records are
+gitignored and die with this machine, and last night they did.
+
+### THE SUCCESSION WAS INVOLUNTARY — what that means for what you can trust below
+
+Coal hunts Brilliance (`70bc33`) did not stand down. Its last comms act was 2026-08-20T19:29:51Z and
+its last heartbeat 20:23:19Z; `uptime` read `up 17 mins` at 08:21Z today. **The host went down and
+took the Director, the liaison, and all five Implementer seats with it.** There is no wrap, no
+pre-position, no handoff record under `handoffs/`, and no `handoff_record_path` on the claim.
+
+So PDR-064's forced-exception path applied: authority returned to the owner, and MG designated this
+seat in session. Claim `39718d8d` was ADOPTED in place (no duplicate row) and heartbeated.
+Moment 2 is comms event `0ddab687`; the registration broadcast is `513dacae`.
+
+**Two things in that claim's own intent text are STALE and a successor must not re-inherit them:**
+`mcp.thenational.academy has NO DNS RECORD` is disproven — the host move is DONE — and the owner
+channel it names through Thistle hunts Acorn has passed through two further liaison seats since.
+
+### THE MECHANICAL LIVENESS CHECK IS THE GATE, AND HERE IS WHY IT MATTERED
+
+```text
+claims active-agents --now 2026-08-21T08:23Z
+Coal hunts Brilliance   39718d8d  director  stale  fresh_until 2026-08-21T00:23:19.000Z
+Warbler herds Wingspan  611cba8c  liaison   stale  fresh_until 2026-08-21T00:46:12.000Z
+```
+
+Both eight hours past the edge, computed UTC-to-UTC by the tool. **The liaison row was equally stale
+and its seat was NOT dead** — a new liaison came up thirty seconds after my own broadcast. That is the
+concrete reason the brief says a stale row is not a dead seat while heartbeats are suspended: I pinged
+before assuming, and assuming would have been wrong.
+
+### THE FLEET AS OF THIS WRITE
+
+**Liaison: Phoenix guards Scorch (`85bdbf`), claim `611cba8c` adopted.** It holds the owner channel.
+**MG is present in BOTH terminals today**, which took a round of negotiation to discover — the split
+settled is that the liaison owns the queue and the asking, and this seat answers him when he types
+here and relays every ruling to the liaison verbatim before acting. His own 2026-08-13 instruction is
+the warrant: owner input belongs in one specific terminal *"so it doesn't get lost in the chitter
+chatter"*, and the Director's terminal IS the chatter.
+
+**Five Implementer seats staffed 08:38–08:50Z** (owner authorised spawning explicitly). All inherit
+this Director's identity — F-164, one registry row, not separately addressable — and sign with seat
+suffixes. R1 → #921, R2 → #922, R3 → #923, R4 → #924, R5 → the owner's `llms.txt` review on
+`Oak-Web-Application#4450`.
+
+**R3 is COMPLETE and its shape is the standard the others are held to:** it swept the whole diff
+rather than the two instances named (four further `#nnn` checked; `#920` and `#919` correctly local,
+`#67714` already qualified, and `#212121` turned out to be a hex colour rather than a reference),
+verified both halves of the claim first-hand before editing, and confirmed its re-request by the
+queue SEARCH rather than the POST echo. Commit `eea004634`, author verified as the bot.
+
+### THE OWNER QUEUE — five items, with the liaison, ordered on shape not severity
+
+Today is MG's last working day before the ~22-31 August absence. His standing ruling is same-day
+routing, never batched, because an item held to a Friday afternoon costs nine days.
+
+1. **The portal question.** Which host is recorded in the Anthropic submission portal for the server
+   URL and the three carousel image URLs — `www` or `mcp.`? No agent can read it.
+2. **Raise the Claude Code org overage limit.** NEW, found this morning while grounding the reviews.
+3. **Review `Oak-Web-Application#4453` and `#4443`** — he began #4453 unprompted at ~08:50Z.
+4. **Cloud-Config #558** — needs updating against main and applying. **His branch, so we asked
+   rather than acted.**
+5. **The ADR-219 / MCP-349 coupled decision**, with a recommendation to proxy the alpha and the
+   falsifier attached.
+
+**Item 2's collapse is worth inheriting as reasoning, not just as an item.** I first put the
+`www`-pinned-client authentication test to him as a separate ask. The liaison correctly refused it as
+a re-ask of a gate he discharged on 20 August (*"no one has used www/mcp in earnest"*). **But the
+discharge and the test were about different objects** — his ruling is about a surface people use, and
+the test was about what an already-installed client DIALS, which is whatever host string was recorded
+at install. So the live unknown was never usage; it is the portal's contents, which is item 1 arriving
+from the other direction. **One fact, two consequences, and nothing to test.** Do not re-ask either
+half.
+
+### THE AUTOMATED CODE REVIEWER IS DARK, AND A REVIEW ROW IS NOT A REVIEW
+
+Measured via GraphQL on all four cure PRs: every one carries a `COMMENTED` review from `claude` whose
+entire body is the org overage spend-limit skip notice, on PR 921 at 2026-08-19T22:32Z, PR 922 at
+09:03Z, PR 923 at 10:04Z and PR 924 at 13:10Z on the 20th. **So a review ROW exists on four PRs
+where no review happened, and it has been the steady state for over 36 hours.** The PR-review-warden
+seat had already recorded the mechanism in the napkin and named Codex doing the same thing; that note
+was uncommitted and is now rescued (see below).
+
+**The consequence that undermines a conclusion this thread already recorded as settled:** Coal's
+2026-08-20 audit found 15 of 16 changes-requested PRs had no push since their review and concluded
+the ball was legitimately with the authors. If some of those reviews are skip notices rather than
+findings, then "no push since the review" may mean **nobody has actually reviewed the PR at all** —
+a different and worse queue state. Not re-run today; recorded as an open question against that audit
+so *"answer is ZERO"* is not inherited as the whole truth. The transferable form, the liaison's
+words: **a queue audit inherits the scope of its search, and "the queue is N" is only ever true of
+the surfaces queried.**
+
+### THE CLASS THAT DOMINATED TODAY: AN INSTRUMENT RETURNING A TRUE VALUE THAT ANSWERS A DIFFERENT QUESTION
+
+Three unrelated surfaces in two days, and a fourth recorded further down under F-164. `cf-ray` answering "is this host proxied" when asked about zone
+scope. A review row answering "did a reviewer respond" when asked whether a review happened. And,
+found today: **`author=mantagen` on every PR in `Oak-Web-Application` and `Cloud-Config`**, because
+every agent working there uses the owner credential — so authorship cannot distinguish our PRs from
+his. **The live discriminator is creation time against the staffing record:**
+
+```text
+OWA #4453   created 2026-08-20T15:27:30Z   Coal staffed carousel-into-OWA ~15:19Z   OURS
+OWA #4443   created 2026-08-17T15:21:01Z   predates this fleet                     ours, finished
+CC  #561    created 2026-08-20T15:44:41Z   Seat E raised it ~15:48Z                 OURS
+CC  #558    created 2026-08-20T12:01:32Z   before any Cloud-Config staffing         HIS
+```
+
+That is why #558 was routed as a question rather than updated: pushing a base merge onto an owner's
+in-flight terraform branch unasked is how the OWA and Cloud-Config authorisation ends early.
+
+### THE OWA MERGE CHAIN IS UNBLOCKED ON OUR SIDE
+
+`#4453` and `#4443` were both `BEHIND` main and — measured by the liaison with a working control —
+**had never been review-requested from any human since 17 August.** Not the answered-and-never-
+re-requested shape Coal audited; simpler and worse, nobody was ever asked. Both updated against main
+this morning; `BEHIND` is gone, all five required checks pass, `BLOCKED` now means only
+`REVIEW_REQUIRED`. Local `~/webdev/oak/owa` was checked first and sits on `#4443`'s branch at `0 0`,
+so nothing was stranded — it needs a `git pull`.
+
+**`percy/oak-web-application` errors on six of the eight most recent open OWA PRs.** Repo-wide
+service condition, not ours, and **Percy is not a required check** — required are `SonarCloud Code
+Analysis`, `Pa11y`, `lint, check types`, `terraform-lint-format`, `test, Sonar`. Do not stop on that
+red cross and do not report a false green because of it. Undiagnosed and deliberately not ticketed in
+a foreign repo on the owner's last day.
+
+**Cloud-Config #561 needs no update** — all three checks pass; its `BLOCKED` is purely the missing
+review. It still must not merge before #4453 has merged AND deployed.
+
+### AN INHERITED ESTATE DEFECT, NAMED WITH A VERDICT RATHER THAN LEFT DRIFTING
+
+**`coordination/2026-08-19-1651ad` (PR #915, DRAFT) is two days past the 24-hour coordination-branch
+lifetime.** It carries doctrine and continuity — `principles.md`, `director-handoff.md`,
+`repo-continuity.md`, two rules, a pattern, three thread records, two strategic plans — across 14
+commits, and it is only 3 commits behind main, so divergence cost is still low. Its head commit is a
+*"week-sleep freeze — estate dormant at owner word"*, which explains why it stalled: a seat froze it
+deliberately on the 19th and the estate then resumed without folding it.
+
+**Verdict: do NOT fold it today.** A full-condition fold moves main while five seats hold worktrees
+mid-flight, creating rebase churn across all of them, and it would consume the window the owner's
+last day needs. The branch is 3 commits behind, not 300. **Fold it at the next boundary where main
+can move cheaply** — after the cure PRs land, or on the owner's return. Recorded as a routed defect
+rather than a home to build on, per the rule. **Do not stake new work onto it.**
+
+Note for whoever folds it: **it and PR #913's branch both modify `director-handoff.md`**, so that
+fold needs a semantic merge, never a line merge.
+
+### KNOWLEDGE RESCUED FROM THE PRIMARY TREE THIS MORNING
+
+105 uncommitted napkin lines were sitting in the primary checkout when the host died — captures from
+**three** different seats, none of which survived to commit them: a review seat's PR #919 lesson that
+an external capability change needs the submission record and not only green code; Implementer seat
+D's finding that a Linear description `patch` round-trips the whole document through Linear's
+rich-text normaliser and silently repairs malformed nested strikethrough, so superseded text reads as
+current; and the PR-review-warden's session block carrying the review-row entry above. Carried across
+by patch into `chore/pr-review-warden` (commit `936b12e89`, author verified as the bot) rather than
+committed on the primary, whose branch does not move outside the coordination rotation. One blank
+line was inserted to clear MD032; the prose is otherwise verbatim.
+
+### MY OWN FAILURES THIS TENURE, RECORDED WHILE THEY ARE STILL CHEAP
+
+**I reported an in-flight check state as a settled one.** After updating both OWA PRs I told the
+liaison "10 checks, 9 re-running, 0 failed" — and the zero was true of the moment and false as a
+forecast. One of the nine landed red. The observation was accurate; the conclusion was never
+measured. **Fourth instance of this thread's dominant generator in two days, and mine.** The monitor
+I had armed is the only reason the correction reached the liaison before the owner asked.
+
+**`markdownlint --fix` SILENTLY REWROTE MY PROSE INTO A HEADING, and this one will bite every seat
+that writes an issue number.** I wrote a sentence listing four PRs by number. It wrapped so that
+`#923` landed at the start of a line — where markdown reads `#` as an H1. `pnpm markdownlint:root`
+runs `markdownlint-cli2 --fix`, so instead of flagging it the tool **normalised my sentence into a
+heading**, inserting blank lines around it and turning `#923` into `# 923`. The sentence was cut into
+three fragments, one of them promoted to a top-level heading in a document whose only H1 is its
+title. It then reported MD001 for the heading it had itself created, which is what made me look.
+
+**Two lessons, and the second is the general one.** Never let an issue reference wrap to line-start in
+prose — write `PR 923`, or reflow. And: **a `--fix` tool is a WRITER, not a checker.** Running it to
+"see if the file is clean" mutates the file, so a green result after `--fix` tells you the tool is
+satisfied with what it wrote, not that what you wrote was correct. On a continuity surface whose whole
+value is faithful prose, that is a knowledge-integrity hazard rather than a formatting one. **Read the
+diff after any `--fix` run on a prose file.** I caught this only because the tool's own repair
+tripped a different rule; a wrap that produced a valid heading level would have passed silently and
+corrupted the record.
+
+**I wrote a control that was a tautology.** Checking that a patch would apply in another worktree, I
+compared `git show HEAD:napkin.md` against `git show HEAD:napkin.md` — the same expression, in the
+same worktree — and printed "IDENTICAL BASE". It proved nothing. The sound instrument was
+`git apply --check`, which validates context lines against the real target file, and it passed. **A
+control that cannot fail is not a control**, and this one was written while explicitly trying to
+verify rather than assume.
+
+### F-164 IS WORSE THAN ITS RECORDED DESCRIPTION — it corrupts ATTRIBUTION, not just addressability
+
+F-164 has been recorded on this thread as *"a successor inherits their results with no way to address
+them directly"*. **That understates it. The live consequence is misattribution into the durable
+record.**
+
+Measured 2026-08-21. Five Implementer seats staffed by this Director each opened their own registry
+claim, and every row carries the DIRECTOR's routing identity:
+
+```text
+Tulip mends Bark  claim 39718d8d  role director     id 3fba4666-aa3c-5431-91b0-9ac044416852
+Tulip mends Bark  claim 0a550a03  role implementer  id 3fba4666-…   (identical)
+Tulip mends Bark  claim 3fbfa641  role implementer  id 3fba4666-…
+Tulip mends Bark  claim ca553a9b  role implementer  id 3fba4666-…
+Tulip mends Bark  claim f25a578d  role implementer  id 3fba4666-…
+Tulip mends Bark  claim f2c638f6  role implementer  id 3fba4666-…
+```
+
+Six rows, one identity, separable only by `claim_id` and `role`. **And a seat's BROADCAST arrives the
+same way**: comms event `63c48d8c` (2026-08-21T08:55:40Z) carries
+`author.id 3fba4666-…` / `author.session_id_prefix e6d535` — the Director — while its own first line
+reads *"Seat R2 (Implementer, staffed by Director Tulip mends Bark)"*. The seat self-identified in
+prose; the substrate recorded the Director.
+
+**The near-miss:** the liaison seat read that broadcast as a message from the Director and was about
+to write the seat's observation into `SEAT-BRIEF.md` as the Director's. Two things stopped it — the
+liaison asked for wording instead of paraphrasing a peer into a permanent record, and the Director
+said "that is not mine". **Either alone would probably have been enough; neither is a mechanism.**
+The suffix convention is the only mitigation and it lives in prose, which no reader is obliged to
+check.
+
+**Paired instrument defect found in the same measurement, and it is a plain error rather than schema
+drift.** The identity field on a comms event is `author`, NOT `agent_id`. Two seats independently
+read `agent_id`, got a uniform empty result, and one of them nearly reported it as *"no seat posted
+an event"* — a false negative that would have agreed with its author's prior, which is the worst
+shape a vacuous zero can take. Control-probed before recording: **all 1,722 events older than
+2026-08-20T14:00Z carry `author` and none carry `agent_id`**, so the field was never `agent_id` and
+there is no migration to reason about.
+
+**The fourth instance of this fleet's dominant class**, after `cf-ray`, the review row, and
+`author=mantagen` in the foreign repos: **an instrument returning a TRUE value that answers a
+DIFFERENT question.** `author.id` truthfully names the routing identity that wrote the event. It does
+not name the agent that authored it. This is the first of the four where the misread would have
+STOPPED or corrupted work rather than merely misreported it.
+
+**A seat's own near-miss, worth inheriting because it looks exactly like F-164 and is not.** Seat R2
+had `claims open` and `comms append` both refused with a collision naming its own identity, and read
+it as F-164 closing the substrate to an ephemeral seat. It was not: the seat had passed
+`--model Opus-5`, copied by analogy from another agent's registry row, instead of this session's live
+`claude-opus-5[1m]`. **The model string is an identity INPUT, so the two spellings derive different
+UUIDs from the same agent name.** The refusal is the CLI rejecting a near-miss identity route, and
+the error message names the live identity — so the error text is the instrument for the correct
+value. Two peer seats opened claims minutes later, which disproves the F-164 reading outright. **Do
+not copy an identity field out of a registry row by analogy, and do not reconstruct one either: read
+it from the row that owns it, or from `agent-identity`.**
+
+Live drift to be aware of rather than cure under time pressure: the registry currently holds BOTH
+spellings — this Director and Coal as `claude-opus-5[1m]`, the liaison lineage as `Opus-5` — so the
+liaison's routing id (`9473cb87-36dd-5b9d-88d6-66e20412d113`) cannot be derived from the Director's
+model string. It predates the current liaison by two seats. **Normalising a row mid-seat would
+invalidate an id already published in messages and comms events**, so the correct disposition is a
+recorded observation now and a fix in identity derivation or a registry normalisation pass later —
+never a seat editing its own identity.
+
+### FLEET OUTCOME — six seats, all complete, and what each one CHANGED rather than confirmed
+
+Six Implementer seats ran 08:38-11:0xZ under this Director. All complete. The value was not the
+cures; it was that **four of the six contradicted something they were told**, including things this
+Director told them.
+
+- **R1 → #921** (switch runbook). Four findings cured. **REFUTED the reviewer's routing premise with
+  measurement**: the reviewer said the root AS-metadata path on `www` reaches the website rather than
+  this app. It does not — `www/.well-known/oauth-authorization-server` returns `200
+  application/json` with `"issuer":"https://mcp.thenational.academy"`. The path that genuinely stays
+  on the website is the **unqualified** `/.well-known/oauth-protected-resource` (404 text/html), and
+  that asymmetry is now the runbook's discriminating control. It then traced the reviewer's error to
+  its source: **two source comments in `served-origin.ts` and `app/static-asset-paths.ts` understate
+  the origin-rule scope as `/mcp` + `/mcp/*`**. Kept the PR docs-only and routed the source fix.
+  Also caught two stale claims in our OWN records: Cloud-Config #556 recorded as open when it merged
+  2026-08-20T09:56:45Z, and the "nobody has run the `www`-pinned client test" line — it had been run
+  and it FAILED.
+- **R2 → #922** (ADR-113 + the security-policy TSDoc). Established `mcp-security-policy.ts` as
+  **generator source, not generated output**, on four independent proofs including the behavioural
+  one: `pnpm sdk-codegen` after the edit rewrote nothing, which simultaneously proves the policy
+  value did not move. **Refused an over-claim this Director had put in its brief** — see below. Found
+  three further ADR overstatements, one of which originated in our own preserved evidence.
+- **R3 → #923** (bare `#556` provenance). Swept the whole diff rather than the two instances named,
+  and established that two WAS the complete population rather than assuming it. One of the four
+  further `#nnn` it checked turned out to be `#212121`, a hex colour rather than an issue reference.
+- **R4 → #924** (ADR-219 structure). Nine findings plus five reviewer residuals. **Found the
+  reviewer's REPLACEMENT list was also wrong**: the two-file enumeration omits
+  `app/bootstrap-helpers.ts`, which carries two dismissals. Full population: 16 alerts of the rule,
+  11 dismissed, 5 fixed, 0 open, of which **four are live**. Also rewrote the PR BODY, which still
+  carried the wrong enumeration and the "falsification clause has fired" claim — *the reviewer would
+  have read the defect in the description of the PR fixing it.*
+- **R5 → OWA#4450** (the owner's `llms.txt` review). All three points applied; catalogue moved to
+  `## Optional` with its warrant stated so the choice did not go back to him. **Corrected this
+  Director twice**: on Percy (two distinct instruments, and the status is intermittent rather than
+  repo-wide) and on a state read (see below).
+- **R6 → OWA#4454** (the logo rebuild). New branch, no force-push, tree byte-identical to the old tip
+  across all 17 paths, both logo paths absent from every commit's full tree. Verified independently
+  by this Director with a control: the probe returns 9 hits on the old branch, so it is not blind.
+
+### THE TWO SEAT SELF-CATCHES THAT ARE WORTH MORE THAN THEIR CURES
+
+**R4 reintroduced the very defect class it was sent to cure, and a reviewer caught it.** Its first
+pass wrote that the 2026-03-31 dismissals "rest on the in-process limiter". They cannot: the limiter
+landed **2026-04-28** and left **2026-07-30**, so the dismissals pre-date it by 28 days and name no
+control at all. **Being the seat assigned to cure an over-claim is no protection against making
+one.**
+
+**R4's first control probe was TRUNCATED and returned a figure that coincidentally matched** — an
+unpaginated `per_page=100` over 109 alerts. **A truncated control that agrees with you is worse than
+no control**, because it converts an untested assumption into a confirmed one. Pagination is part of
+the instrument, not a detail of it.
+
+### FOUR CODEQL DISMISSALS REST ON A RATIONALE NAMING NO CONTROL THAT EXISTED AT THE TIME
+
+Routed, not acted on — it is a live security-disposition call and not a records question. #8
+(`oauth-proxy-routes.ts:72`) and #65 (`auth-routes.ts:160`) are **live**; #64 and #66 share the same
+2026-03-31 "already protected" rationale but were resolved 2026-04-28, so they are history. This is
+evidence attaching to the **ADR-219 / MCP-349 coupled decision already in the owner's queue**, not a
+new owner item — the same premise question, with a dated population attached.
+
+### THE OVER-CLAIM THIS DIRECTOR PUT IN A BRIEF, AND THE SEAT THAT REFUSED IT
+
+I briefed R2 that **Clerk adds `offline_access` automatically**. R2 checked the preserved probe table
+and found **only one of its three rows discriminates that**: a client registering `openid email` was
+granted `email offline_access openid`. The other two are non-discriminating — one named the scope
+itself, one took an instance default already containing it. **So "Clerk adds it automatically" and
+"this instance happens to grant it" are NOT separated by our evidence.** The ADR now states that
+limit rather than smoothing it.
+
+**The instruction was mine and it was wider than the evidence.** A Director's brief carries the
+authority of the seat, so an over-claim in a brief propagates further than one in a record — the seat
+has to actively refuse it. R2 did. The mitigation is not "brief more carefully"; it is that every
+brief on this drive told its seat, in terms, that **the evidence wins and I want to hear about it
+loudly**. That clause is what made the refusal cheap.
+
+### THE RE-REQUEST DISCIPLINE IS INOPERABLE IN FOREIGN REPOS — measured, with a control
+
+The owner's 2026-08-17 standing instruction (answering a review is not enough; re-request or it never
+re-enters his filter) **cannot work in `Oak-Web-Application` or `Cloud-Config`.**
+
+```text
+POST /repos/oaknational/Oak-Web-Application/pulls/4450/requested_reviewers  reviewers[]=mantagen
+→ 422  {"message":"Review cannot be requested from pull request author."}
+CONTROL, same endpoint, same moment, non-author reviewer → 200
+```
+
+Every agent PR there is authored as `mantagen`, because emgeebot's installation covers exactly one
+repository. **So the owner is the author, GitHub refuses to add an author as reviewer, and
+`review-requested:mantagen` can structurally never contain any of them.**
+
+**This dissolves the morning's "nobody was ever asked" finding into something better.** The liaison
+measured empty `reviewRequests` on #4453, #4443 and #4450 and read it as a diligence gap. **It was an
+impossibility.** Those two readings have opposite cures: "we forgot" is cured by remembering; "GitHub
+refuses" is cured only by a different mechanism. **The working route was already demonstrated and
+neither seat designed it: `johnrobeds` approved #4453 at 08:47Z and it merged ten minutes later.** A
+colleague who is neither the author nor us.
+
+The structural root is the closed bot install, which the owner has ruled stays closed — **named here
+as the root, not as a reopening.** The operative cure is: request a non-author colleague on
+foreign-repo PRs, and have the liaison hand the owner a plain list, because his filter cannot see
+them.
+
+**`reviewRequests: []` is a TRUE value answering "is the author in his own review-request list" — not
+"has anyone been asked to review this."** Sixth instance of the day's dominant class.
+
+### A CONTROL PROBE OF MINE MUTATED A REAL SYSTEM
+
+Proving that endpoint worked, I requested `orangemug` on OWA#4450. **He was notified.** The 422 alone
+already established the finding; the control was unnecessary, and I reached for a **mutating**
+endpoint to test an instrument. **A control that changes the world is not a control, it is an
+action** — and this one spent a colleague's attention to settle a hypothesis. Left standing pending
+the owner's ratification, and recorded as an action rather than dressed up as method.
+
+### `git worktree add` IS A SECOND, UNGUARDED DOOR TO THE #927 FOOTGUN
+
+`git worktree add -b <branch> origin/main` **sets the new branch's upstream to `origin/main`.** It
+fired for real in `Oak-Web-Application` on a branch carrying ~5,000 lines; R6 caught it, unset it,
+and pushed by explicit refspec.
+
+**PR #927 fixed the `agent-tools spawn` path only.** This is a different door to the same footgun and
+there is no guard on it. **Four occurrences now across sessions and repos, and every time the only
+thing that prevented a push to `main` was an agent noticing.** It wants a rule or a wrapper, not
+another watch-item.
+
+Related, and worth a successor knowing: **the repo guards block the WHOLE compound command.** R6's
+`git add -A` refusal meant the `git apply` earlier in its `&&` chain never ran; it verified with
+`git status` rather than assuming. A blocked compound leaves the earlier steps un-run.
+
+### ASK WHAT MAKES AN EXTERNAL FACT BINDING BEFORE ASKING WHAT ITS VALUE IS
+
+The single most reusable thing this tenure produced, and it came from the liaison seat.
+
+**The morning's top owner item was "which host do Anthropic's stored carousel URLs use?"** It was
+unanswerable by any agent, it gated a deletion, and it was routed to the owner as the cheapest item on
+his last-day queue. He answered it — `mcp.*/mcp`, final — **and then dissolved the gate with a second
+sentence that had nothing to do with the value: the image URLs are repointable in the Anthropic
+dashboard.**
+
+**The gate's whole force was PERMANENCE**: that deleting `public/carousel/` would break a published
+listing irreversibly. A repointable external reference is a **sequencing dependency**, not a blocker.
+**So the gate would have dissolved even if he had answered `www`.** The question that consumed the
+morning's routing was never the load-bearing one.
+
+**The transferable form: when an unanswerable external fact appears to block work, ask what makes it
+BINDING before asking what its VALUE is.** Reversibility, not identity, is usually what decides
+whether it is a gate. This is cheap to ask and it can retire an owner item outright instead of
+spending the owner's attention on it — which matters most precisely when owner attention is scarcest,
+which is when such items get escalated.
+
+### A GREP IS AN INSTRUMENT AND NOBODY CONTROL-PROBED IT — three sweeps, three populations
+
+The plugin-host defect was swept three times by two seats and produced three different populations:
+
+```text
+sweep 1 (liaison)   exclude-only pathspec ':!*.md'   -> historical report data only; MISSED the defect
+                                                        file AND the guard that pins it
+sweep 2 (liaison)   explicit positive pathspecs      -> 8 hits including the guard
+sweep 3 (Director)  different pattern, outside md    -> 9 hits, but MISSED the shipped SKILL.md line,
+                                                        which carries the BARE host with no scheme
+```
+
+**Sweep 1's result went to the owner as "a one-line fix" before anyone probed it.** Sweep 3 was mine
+and it missed a surface because I searched for `www.thenational.academy/mcp` with a scheme while the
+skill document names the bare host inside a parenthetical.
+
+**Two lessons, and the second is the one that generalises past grep.**
+
+**A grep is an instrument that returns results, and results are not a population.** The control was
+trivial and available: grep for a string you already know is present, and confirm the pattern finds
+it. Nobody ran it. **An exclude-only pathspec is especially treacherous** — it silently changes what
+is searched rather than failing.
+
+**And: a pattern misses variant FORMS of the same fact.** Scheme-ful versus bare host, with and
+without a trailing path, inside a code string versus inside prose. **Sweeping for a value means
+sweeping for its forms, not for one spelling of it.** The seat was therefore told to run its own
+sweep and treat the Director's nine as a starting point rather than an answer — **neither count is
+the population until a third instrument agrees.**
+
+### "RETARGET, NEVER DELETE" WAS SATISFIED BY THE GUARD HAVING MOVED, NOT BY AN EDIT HERE
+
+A worked example of reading an instruction's PURPOSE rather than its words.
+
+The owner's teardown item 3 said to retarget the carousel sentinel rather than delete it. Two seats
+carried that forward as a step. **It is not available here: every test tier in this repository is
+in-process loopback via `src/test-helpers/loopback-request.js`, `e2e-tests/` included despite the
+name. No test here probes a live external host.**
+
+**But the instruction existed to stop the only guard on an external contract being destroyed — and
+that guard has already MOVED.** OWA PR #4453 landed a required jest test pinning each filename to its
+own SHA-256 and PNG magic number, per-file rather than set-wise so a permutation cannot pass, plus a
+served-contract Playwright spec. **So deleting ours destroys nothing; the guarantee now stands in a
+stronger place than it ever stood here** — in a *required* gate in the repo that actually serves the
+asset.
+
+Corrected step: **delete `public/carousel/` AND the loopback sentinel together, citing OWA's required
+jest guard as the surviving guarantee.** The rule the owner's instruction encoded is honoured; it is
+just satisfied elsewhere. **An instruction whose literal action is unavailable is a prompt to find
+what it was protecting, not a prompt to improvise a substitute.**
+
+### THE REAL `www`-PINNED POPULATION WAS OUR OWN SHIPPED PLUGIN
+
+The record spent a week reasoning about installed clients pinned to `www` and looking at Anthropic's
+listing. **The listing was on the new host all along** (owner ruling: `mcp.*/mcp`, final). **The
+pinned population is `plugins/oak-open-curriculum/.mcp.json`, which this repository publishes and
+which hardcodes `https://www.thenational.academy/mcp`.**
+
+Every new install from `main` takes the dying host; already-installed copies hold it. **The owner's
+"nobody has used `www/mcp` in earnest" ruling is about USAGE and does not make a shipped binding
+correct** — after the teardown that file names a dead endpoint in a public repo.
+
+**The lesson is about where we looked.** A week of reasoning about an external population never
+checked what we ourselves ship. The nearest surface was the last one examined.
+
+### A DISTINCT FAILURE MODE: WE ALREADY KNEW — a finding landed and then not applied to the next thing built
+
+**This is NOT the true-value-wrong-question class, and conflating them loses what is useful about it.** In that class an instrument misleads you. Here **nobody was misled: the fact was already measured, written down, and relayed — and then the next artefact was built as though it were not.**
+
+Two instances, two seats, inside one hour, 2026-08-21:
+
+- **The Director.** Measured and landed the finding that GitHub refuses to add a pull request's
+  author as its reviewer, so in `Oak-Web-Application` and `Cloud-Config` — where every agent PR is
+  authored under the owner's credential — the owner can never appear in `reviewRequests`. **Then
+  proposed a stability test scoped to "PRs authored by this fleet", which depends on authorship
+  discriminating in exactly the two repositories where it had just been proved it cannot.**
+- **The liaison.** Measured the repo-wide intermittent Percy failure on `Oak-Web-Application`,
+  reported it to the owner — **then wrote a stability test requiring zero failing checks, which the
+  existence of that Percy condition defeats.**
+
+**The shape: a finding is recorded as knowledge and not carried as a constraint.** Recording it
+feels like completion, so the next design proceeds from the pre-finding model. **Landing a finding
+is not the same as holding it.**
+
+**Why it is worth its own name rather than filing under carelessness:** both seats were, at that
+moment, the estate's most careful readers of the very fact they violated. Attention was not the
+missing thing. **What is missing is a step — after landing a finding, ask what it FORBIDS, and check
+the next artefact against that list.** A finding's value is the options it removes, and a record of
+it does not remove them.
+
+**Cheap mitigation available now, and it is what actually caught both instances:** each seat checked
+the OTHER's design against the shared record. **Neither caught their own.** So the practical cure is
+adversarial review by a peer who holds the same findings — not more care by the author.
+
+### A FACT YOU DID NOT GO LOOKING FOR HAS NO SOURCE UNTIL YOU ESTABLISH ONE
+
+**Sibling to the we-already-knew class above, and a distinct generator with two instances in one day —
+both the liaison seat's, both diagnosed by that seat rather than caught by its peer.**
+
+- **Instance 1.** A BROADCAST comms event arrived on the liaison's watcher carrying the Director's
+  `author.id` and `session_id_prefix`, because an implementer seat inherits its Director's identity
+  (F-164). The seat read it as a message FROM the Director and was one commit from writing the
+  implementer's observation into `SEAT-BRIEF.md` as the Director's.
+- **Instance 2.** While diagnosing a transient `index.lock`, the seat glimpsed a peer seat's
+  `git commit` in flight and read part of its commit subject. From that fragment it inferred that two
+  independent security seats had reached the same conclusion, **and attributed the inference to the
+  Director as a finding.** Three steps — glimpse, inference, attribution — none measured. The Director
+  refused it: no such finding had been made and neither report had been read.
+
+**The generator is NOT carelessness about attribution.** It is that **a fragment arriving through an
+incidental channel carries no provenance with it** — a broadcast under a shared identity, a process
+listing seen while chasing something else, a commit subject caught in passing — **and the reader
+supplies the provenance from surrounding context without noticing that none was present.** The
+context is usually right, which is what makes it durable.
+
+**The cure is narrow and mechanical, in the liaison's own words: a fact you did not go looking for
+has no source until you establish one.** Not "be more careful" — a step. Before a fact acquired
+incidentally is used, name where it came from; if you cannot, it is a prompt to go and measure, not a
+datum.
+
+**Why the second instance was the more dangerous one, and worth stating plainly:** had it stood, the
+independent-convergence claim would have been **the strongest thing either security report could
+offer** — and it would have reached the owner, in a security review, on his last day before nine days
+away, with a glimpsed commit subject underneath it. **The value of a claim and the flimsiness of its
+basis were at their maximum simultaneously.** That combination is the one to watch for: the more a
+finding would impress, the harder its provenance should be checked.
+
+**What actually caught both: the OTHER seat, not the author.** Same as the we-already-knew class.
+Two agents holding the same records, each checking the other's claims, caught four instances today
+that neither caught in themselves. **Adversarial peer review by someone holding the same findings is
+doing work that no amount of individual care replaced.**
+
+### THE TRIGGER'S OWN INSTRUMENT CARRIED THE CLASS — and a fourth state neither seat had
+
+The owner asked not to be contacted until the board was stable, so the liaison built a stability
+test. **Its instrument was `GET /repos/{owner}/{repo}/branches/main/protection`, to read the
+required checks.** On this repository that returns **404 `"Branch not protected"`** — because this
+repo is governed by **rulesets**, not classic branch protection. Control: the same endpoint returns
+the full required set on `Oak-Web-Application`, which is why it appeared to work.
+
+**A 404 read as "no protection" yields an EMPTY required set, and "no required check is failing" is
+then VACUOUSLY TRUE.** The test would have reported the home repository stable **with every check
+red** — and nine of the drive's pull requests live there.
+
+**This is the sharpest instance of the day's dominant class because everything downstream inherits
+it silently:** the trigger deciding when to wake the owner cannot itself be checked by the thing it
+gates.
+
+The required set here, read from ruleset `13402577` (`Protect default branch`, active):
+
+```text
+CodeQL,  SonarCloud Code Analysis,  run-quality-gates,  Vercel
+```
+
+**Cure adopted: a per-repo instrument chosen by which one answers — the rulesets API here, classic
+protection in the foreign repos — and NO FALLBACK. If neither returns a non-empty required set,
+STOP and report the instrument failure.** A fallback to empty is precisely the vacuous pass.
+
+**And a fourth state the test still missed after both corrections: REQUIRED-BUT-ABSENT.** The test
+asked whether anything was running and whether anything required was failing. **It never asked
+whether the required checks RAN AT ALL** — and a required check that never reported is neither
+running nor failing, so a pull request missing `Vercel` entirely would have read stable. Measured
+clean on #930, #913 and #925 (all four required checks present), **so this is latent rather than a
+live miss — but a check that never fires is exactly how a required gate goes quiet.** Three
+conditions, not two: nothing in flight, nothing required failing, **every required check present.**
+
+**Consequence for the Dependabot pair, stated more sharply than "not ours":** `CodeQL` is in this
+repository's own required set, so `#893` and `#894` — the `github/codeql-action` 4.37.7 bumps whose
+Analyze jobs fail, controlled against eleven green PRs — **break a check this repository requires.**
+They cannot merge, and Dependabot will keep re-raising them.
+
+### THE SEAT-SHAPE FACT THAT COST TWO STALLS
+
+**A subagent that ends its turn to wait on its own background task never wakes.** Seat R3 stalled
+twice this way — backgrounding a commit, then a push, and ending its turn each time. The cure is to
+run slow operations in the FOREGROUND with a long timeout. **The hooks here are genuinely slow and
+the host is CPU-saturated with five seats** (0.17% idle measured at 08:52Z): my own napkin commit sat
+in its pre-commit hook for roughly nine minutes and then exited 0 cleanly. **A hook that has not
+returned is normal under this load, not a hang** — and never reach for `--no-verify`, which needs
+fresh owner authorisation.
+
+**Host capacity: MEMORY is the constraint, not CPU.** 73% free with five seats running; CPU
+saturation slows work without endangering it. Quote memory whenever a seat-count trade goes to the
+owner.
+
+## LIVE STATE, 2026-08-20 ~13:35Z (Coal hunts Brilliance, `70bc33`, Director — SEAT STILL LIVE)
+
+**This block is written mid-tenure, not at wrap.** It exists because a peer asked the right
+question — whether a successor could pick this up from TRACKED state today — and the honest
+answer was no. The comms stream and handoff records are gitignored and die with this machine;
+this file and the Director brief are what survive. Written now rather than at closeout so the
+answer stops being no.
+
+### CORRECTION TO THE 2026-08-20 "THREE CORRECTIONS" BLOCK — correction 1 IS ITSELF WRONG
+
+**The block below is labelled "inherit these, they are the expensive part", which is exactly why this
+matters: it is the place a successor trusts most.** Its correction 1 says the `ROUTED_ASSET_BASE`
+mount's *"removability is a CONSEQUENCE of the landing-page deletion, not independent of it"*, on the
+grounds that the only non-test consumer of the design-system asset paths in served output is
+`src/landing-page/components/design-system-refs.ts`.
+
+**The first half is right and the second half is wrong. The mount is NOT scheduled to die with the
+landing page.** Measured against PR #928 — the landing-page teardown itself — on 2026-08-21, and
+independently re-verified by this Director from the PR diff:
+
+```text
+#928 KEEPS   mountStaticAssets(app, log, options.staticRoot)   (context, unchanged)
+#928 KEEPS   the ROUTED_ASSET_BASE import in static-content.ts
+#928 ADDS    + import { OAK_DS_MARKER, ROUTED_ASSET_BASE }
+             + const SERVED_ASSET = `${ROUTED_ASSET_BASE}/${OAK_DS_MARKER}`
+             ~18 new assertions against ${ROUTED_ASSET_BASE}/oak-ds/styles.css
+#928 REMOVES the landing page's CONSUMERS — favicon refs, landing-page.css, OAK_DS_BASE,
+             SHARE_IMAGE_PATH — not the mount
+```
+
+**So the teardown removes the mount's landing-page consumers and rebuilds its test coverage around
+it.** The mount also stays load-bearing on `main` independently: `clerk-skip-surfaces.ts` names both
+routed prefixes in production code, 33 guard assertions across three suites pass against it, and
+`mountStaticAssets()` **throws at boot** if its markers are absent.
+
+**And there is no carousel-specific mount to remove at all** — the images were served purely by
+sitting inside the static root.
+
+**The refutation's shape is what makes it decisive: it uses the very change that was supposed to
+justify the removal.** A seat asked to delete the mount declined **on evidence** rather than
+deferring, which is the right shape — a deferred item returns as inherited work with the wrong
+premise still attached, while a declined-on-evidence item closes the question.
+
+### THE GENERATOR: AN OWNER'S WORDS RELAYED AS A WORK ITEM WITHOUT BEING TESTED AGAINST THE CODE
+
+**A new class, distinct from the instrument findings, because here the "instrument" is the owner.**
+
+The owner's 2026-08-20 teardown list, item 2, reads *"Delete `public/carousel/` and its asset mount
+(`ROUTED_ASSET_BASE`)"*. **That phrasing bundles a coupling — the carousel and "its" mount — which
+does not exist in the code.** The mount is the whole static root's, not the carousel's.
+
+**The phrase was relayed forward as a work item, through six liaison seats and into a Director's own
+seat brief, and nobody tested it against the source.** It survived because it came from the owner,
+and owner-sourced statements are treated as settled — correctly, for intent.
+
+**The discipline: a ruling is AUTHORITATIVE ABOUT INTENT and is NOT EVIDENCE ABOUT THE CODEBASE.**
+His intent — `mcp.thenational.academy` becomes only the MCP server — is binding and was right. His
+incidental technical premise about which code implements that was an ordinary engineering guess and
+needed verifying like any other. **Separating those two is the cure**, and the failure mode is that
+deference to the first silently extends to the second.
+
+**This is why it is worth its own entry rather than filing under the true-value-wrong-question
+class:** nothing misread an instrument. An authority was over-extended from the domain where it is
+absolute into one where it is not.
+
+### TEARDOWN FLEET, 2026-08-20 ~16:40Z — owner-instructed, and THREE OF THE SIX ITEMS WERE WRONG AS BRIEFED
+
+**Owner instruction, verbatim via the liaison:** *"have the director send an agent each to create
+PRs for each of those"*, framed by *"Frankly i don't care about breaking it at the moment, the
+blast radius is very low right now"*. **Target: `mcp.thenational.academy` becomes ONLY the MCP
+server; anything serving assets or HTML comes from OWA.** What stays because it IS the server:
+`/mcp` protocol, both `.well-known` documents, `/oauth/*`, `/mcp/healthz`.
+
+**No redirects, no signposting, no phased cutover** — an earlier ruling established nobody has
+used `www/mcp` in earnest. That ruling is about the SERVED SURFACE, not about landing a red tree.
+
+#### The three corrections, all measured — inherit these, they are the expensive part
+
+1. **`ROUTED_ASSET_BASE` is NOT the carousel's asset mount.** The six-item list said to delete it
+   alongside `public/carousel/`. It is the mount for the **entire static root** — the Oak design
+   system stylesheets, fonts, icons, masthead logo, favicons — and `mountStaticAssets()` in
+   `src/app/static-content.ts` **throws at boot** if its two markers are absent. A literal reading
+   ships an unstyled page or a server that refuses to start.
+   **And its removability is a CONSEQUENCE of the landing-page deletion, not independent of it:**
+   the only non-test consumer of the design-system asset paths in served output is
+   `src/landing-page/components/design-system-refs.ts`. The widget HTML is an MCP resource —
+   inline text, not served from the static root. So the mount is load-bearing until the page goes
+   and dead the moment it does. **Two concurrent seats would collide in `static-content.ts` and
+   each would look green in its own worktree.**
+2. **"Retarget the carousel sentinel at OWA's `www` URLs" is impossible in this repo.** Every test
+   tier here is in-process loopback via `src/test-helpers/loopback-request.js` — `.unit.`,
+   `.integration.`, **and `e2e-tests/`, whose name misleads.** **No test in this repository probes
+   a live external host.** The retarget's home is OWA, where a Playwright spec against OWA's own
+   server already exists in a tier that repo has.
+3. **The `www` origin rule was never `/mcp*`-scoped, and there are TWO rules not one.**
+   `header_transforms.tf` (origin rule, ~446–471) and `config_settings.tf` (cache-settings rule,
+   ~39–49) carry a **byte-identical** expression already covering all five path families: `/mcp`,
+   `/mcp/`, `/.well-known/oauth-protected-resource/mcp`,
+   `/.well-known/oauth-authorization-server`, `/oauth/`. Removing the origin rule alone orphans
+   the cache rule.
+
+#### THE DELETION IS GATED ON A QUESTION ONLY THE OWNER CAN ANSWER
+
+**Which host do Anthropic's stored carousel URLs use — `www` or `mcp.`?** It lives in the
+submission portal. **No agent can measure it, and the two branches have opposite conclusions:**
+if `mcp.`, deleting this repo's copy breaks the listing permanently no matter what OWA does.
+
+Measured live: `www.thenational.academy/mcp/carousel/carousel_image_{1,2,3}.png` return `200
+image/png` with SHA-256 **identical** to `mcp.` and to the local files, because the origin rule
+routes `www/mcp*` to this app. **So `public/carousel/` here is the origin for BOTH candidate hosts
+and OWA's copy is SHADOWED.** Control probe: a non-existent `carousel_image_4.png` returns **406
+`application/json`, not 404**, on both hosts — so a broken listing would fetch a JSON error under
+a 406 and render three broken images, with no 404 anywhere to make it legible.
+
+**Authoritative digests** (repo, both live hosts, git objects, and OWA's deployed preview all
+agreeing):
+
+```text
+carousel_image_1.png   06cbdbf1704e6960afb3ad6b43ddaa42c2c256689e60fe5061cca8c108ffa8a5
+carousel_image_2.png   a28e7c329cfa8714551055212157bbab3f2573ce174f4c11480efe21e0d8401c
+carousel_image_3.png   8bb07d1ebd9ace22377a8040771e91aef0dc4ade88ec6e3c215782d6556a1b80
+```
+
+#### The merge chain — three links, and they must land in this order
+
+1. **`oaknational/Oak-Web-Application#4453`** — carousel images + guards into OWA. **GREEN**: all
+   13 settled checks pass. Needs review.
+2. **`oaknational/Cloud-Config#561`** — removes both `www` MCP rules. **Open.** Must not merge
+   before #4453 has merged **AND deployed**; the PR carries that as a reviewer-addressed block.
+3. **This repo's `public/carousel/` deletion** — needs 1, 2, **and** the owner's host answer.
+
+#### `emgeebot` IS REPO-SCOPED — this corrects standing doctrine
+
+```bash
+gh api /installation/repositories --jq '.repositories[]|.full_name'
+# oaknational/oak-open-curriculum-ecosystem      (total_count: 1)
+```
+
+**The emgeebot GitHub App installation covers exactly one repository.** "emgeebot for every
+GitHub write" holds only *here*. The ambient identity is a property of **this checkout's git
+config**, not of the machine — `~/webdev/oak/owa` is configured as `mantagen`, which is
+why OWA commits carry the owner's name. **For OWA and Cloud-Config the correct pattern is the
+owner credential plus a load-bearing agent-disclosure blockquote first in the PR body**, and
+verifying the *branch* rather than the author.
+
+**`gh api repos/…`'s `permissions` block is NOT a valid lens for this** — it returns all-false
+even for the repo emgeebot can write. `/installation/repositories` is the authority. A 404 from
+Cloud-Config under a minted emgeebot token is the *instrument*, not the target.
+
+#### A LIVE SECURITY EXPOSURE FOUND WHILE CHASING MY OWN ERROR
+
+I briefed a seat to protect host-scoped rules in `firewall_managed_rules.tf`. **They do not exist
+on `main`** — I read them out of the Cloud-Config working tree, which sits on the unmerged
+`feat/MCP-622-mcp-waf-block`, and reported a branch as a baseline. Same class as the DNS-record
+error earlier today.
+
+**Chasing that found something worse. Cloud-Config #557 and #558 are BOTH still open, and
+only the first one's effect is live:**
+
+- **#557 "proxy mcp.thenational.academy"** — **APPLIED**. Measured: `mcp.` returns `server:
+  cloudflare` with `cf-ray`; controls hold (`www` proxied, `curriculum-mcp-alpha` `server: Vercel`
+  with no `cf-ray`). Yet `main`'s `dns_records.tf` says `proxied = false`.
+- **#558 "block rather than challenge on the MCP host so clients get a clean 403"** — **NOT
+  APPLIED.** Instrument: a plan against live state shows **no drift** on
+  `http_request_firewall_managed`, so live equals `main` for that resource.
+
+On `main` that resource is OWASP core, paranoia level 1, **`expression = "true"` — every host in
+the zone** — with `Inbound Anomaly Score Exceeded` set to **`action = "managed_challenge"`,
+`score_threshold = 40`**. **A managed challenge is a browser interstitial and an MCP client cannot
+solve one.** So proxying moved the MCP host INSIDE that scope while the exemption that makes the
+outcome legible to non-browser clients stayed unapplied. **The ask is small and it is the owner's
+own morning's PR: merge and apply #558.**
+
+**Deliberately not measured:** I did not try to trip the WAF to prove reachability. Treat the
+exposure as conditional-and-unmeasured; the fix is cheap either way.
+
+#### A predicted hazard that is NOT live — do not hold #561 for it
+
+`main`'s `dns_records.tf` comment says orange-clouding picks up zone-wide response-header
+transforms "with no matching cache bypass, since the MCP bypass in `rulesets/config_settings.tf`
+is scoped to www only" — **and that www-only bypass is the exact rule #561 deletes**, with the
+host now proxied. That looks like a reason to hold #561. **It is not.** Measured on `mcp.`:
+
+```text
+/.well-known/oauth-authorization-server    200  cf-cache-status: DYNAMIC  cache-control: public, max-age=0, must-revalidate
+/.well-known/oauth-protected-resource/mcp  200  cf-cache-status: DYNAMIC  cache-control: public, max-age=0, must-revalidate
+/mcp/healthz                               200  cf-cache-status: DYNAMIC  cache-control: no-store
+```
+
+`DYNAMIC` on all three — Cloudflare is not caching them and the origin revalidates always. **The
+response-header-transform half is UNTESTED and no claim is made about it.**
+
+#### Two guards in OWA, because one could not block
+
+**`Playwright (Vercel preview)` is NOT a required status check on OWA `main`** (required:
+SonarCloud, Pa11y, `lint, check types`, `terraform-lint-format`, `test, Sonar`). A
+Playwright-only guard **reports** a break without **preventing** one — a future tidy-up deleting
+the images could merge with it red. **A guard that cannot block is not a guard.** So #4453 carries
+the Playwright spec for the *served* contract plus a jest test in the *required* gate pinning each
+filename to its own SHA-256 and PNG magic number — **per file, not set-wise**, because a
+permutation passes every path, count, content-type and aggregate-byte check while breaking the
+submission form's prompt pairing. Mutation-proofed four ways including a 2↔3 swap whose failure
+message names permutation. **If OWA's maintainers prefer one guard, the clean fix is to make
+Playwright required and drop the jest one — a repo-settings decision, deliberately not taken.**
+
+#### Host capacity — the constraint is MEMORY, not CPU
+
+Load average 4.11 and falling from 5.31, but **15G used, 152M unused, 5.7G in compressor**. That
+is why monitors died earlier today. Three concurrent seats was safe on a favourable mix; four
+heavy ones would not be. **Whenever a seat-count trade is put to the owner, memory is the number
+to quote.**
+
+#### Not staffed, deliberately
+
+**OWA's `feat/teachers-mcp-landing-page`** — probably the owner's own in-flight work, and the
+checkout at `~/webdev/oak/owa` sits on it. **Do not staff blind.** An agent pushing over
+the owner's own branch in a foreign repo is the likeliest way to end the OWA authorisation early.
+
+### THE HOST MOVE IS DONE
+
+`mcp.thenational.academy` is live, HTTPS, proxied, self-describing, and an MCP client session
+has been driven through it. **The owner performed every step himself**, with a liaison seat
+verifying each: DNS via targeted `terraform apply` from the unmerged PR branch (state serial
+360, 09:48:27Z), additive `ALLOWED_HOSTS` (#920, merged `97daa15f3`, released 1.175.1),
+certificate issuance, `CANONICAL_HOST`, then the proxy flip. **`www` still serves throughout,
+deliberately.** Measured on both hosts ~12:31Z: conformant MCP `initialize` → `401` with a
+correct RFC 9728 challenge; `/mcp/healthz` → `200`; carousel → `200`.
+
+**Cloud-Config #556 was still OPEN at this write** — the record exists because the apply ran
+from the branch, so `main` is behind state and merging #556 **as written** reconciles it. It
+already matches state byte for byte. Nothing to import; no already-exists risk.
+
+### THE `www`-PINNED CLIENT QUESTION — ANSWERED 2026-08-20 ~14:00Z, AND THE ANSWER IS THE BAD ONE
+
+**A conforming client dialling `www` CANNOT authorise.** Measured with the reference implementation's own
+code — `@modelcontextprotocol/sdk` 1.30.0 `selectResourceURL()` against the live-fetched PRM — by an
+implementer seat and then reproduced first-hand by this Director:
+
+```text
+https://mcp.thenational.academy/mcp  -> OK      (CONTROL passes)
+https://www.thenational.academy/mcp  -> THROWS  "Protected resource https://mcp.thenational.academy/mcp
+                                                 does not match expected …/www…"
+```
+
+The throw is inside `auth()` **before client registration**, so it is a hard discovery failure. Residual:
+a client supplying a custom `validateResourceURL` hook bypasses the check, so shipping clients divide
+into those on the default path (fail) and those overriding it.
+
+**DISPOSITION: (b) — keep `CANONICAL_HOST` on the new host and accept that `www`-pinned conforming clients
+must re-point.** Two owner inputs settled this, and **the earlier "revert `CANONICAL_HOST`" recommendation
+from this seat is WITHDRAWN as wrong:**
+
+1. **The revert does not defer the mismatch, it INVERTS which population it breaks.** The PRM is
+   host-independent — measured, both hosts serve the identical document driven by `CANONICAL_HOST`. So
+   setting it back to `www` fixes legacy installs and **breaks every client dialling the canonical
+   advertised host**, which is the host being publicised and the one whose third-party verification is
+   this drive's acceptance bar. **Strictly the worse side of the trade.** This seat had the
+   host-independence measurement and failed to carry it through to the revert case; the owner caught it
+   with one question.
+2. **Owner ruling: `www/mcp` becomes OWA's HTML landing page and this repo has nothing to do with it.**
+   So `www/mcp` stops being a protocol endpoint at all, and **the re-point was always unavoidable** — the
+   revert would only have delayed a legacy break by days while breaking the canonical host meanwhile.
+
+**Option (c) — `www` self-describing as `www` while the new host describes itself — remains the correct
+end state and is NOT available**, because `CANONICAL_HOST` is single-valued. That is the engineering work,
+and it is what made this situation possible.
+
+### SEQUENCING CONSTRAINT — ONE ORIGIN RULE NOW CARRIES THREE UNRELATED JOBS
+
+**`www/mcp` currently serves (1) the carousel images, (2) the MCP protocol for `www`-pinned clients, and
+(3) is the incoming home of the web application's landing page.** So the Cloudflare `http_request_origin`
+rule for `www/mcp` is **a single act with three consequences**, and one of them is the moment `www`-pinned
+installs stop reaching this app at all.
+
+**Measured state** (owner-liaison seat, 2026-08-20):
+
+```text
+www/mcp/carousel/carousel_image_1.png   200 image/png   <- THIS app, via the www/mcp origin rule
+mcp/mcp/carousel/carousel_image_1.png   200 image/png
+mcp/carousel/carousel_image_1.png       200 image/png
+www/carousel/carousel_image_1.png       404             <- only /mcp* reaches this app on www
+cache-control on all of them            public, max-age=0, must-revalidate   (no edge caching)
+files      apps/oak-curriculum-mcp-streamable-http/public/carousel/carousel_image_{1,2,3}.png
+sentinel   a test PINS the three /mcp/carousel/carousel_image_N.png paths
+```
+
+**COLLAPSED BY THE SAME RULING — the five-step choreography below was mostly protecting clients, and the
+client population is empty. What survives is ONE ordering constraint, and it is not about clients at all:**
+
+> **The carousel images must serve from the web application BEFORE the origin rule changes** — because
+> Anthropic's listing holds those literal paths, and **a third party's stored reference is a live external
+> dependency whether or not any client ever dialled `www/mcp`.** The owner's "both places for now" ruling
+> is what satisfies it.
+>
+> **Then** the origin rule together with the `.well-known` documents (enumerate the surface — see below,
+> a `/mcp*`-scoped edit does not discharge the ruling), **then** the HTML leg. **No signposting layer at
+> any step.**
+>
+> **And the sentinel gap still stands**, because it is also about Anthropic's stored URLs rather than about
+> clients: after the split, the copy the listing fetches may be the one with no guard.
+
+**The original five-step order is preserved below as the derivation.** Whoever executes should follow the
+collapsed version above; the steps below explain why each ordering existed, and steps whose only purpose
+was client choreography no longer apply.
+
+**Whoever touches that rule first triggers the other two.** This must be ONE planned change with a stated
+order, not three seats each making a locally-correct edit. **The order, and the reason for each step:**
+
+1. **Carousel destination first — the images must serve at their new home BEFORE the origin rule changes.**
+   Their URLs are baked into Anthropic's published listing, so a rule change that precedes the move 404s
+   assets inside a third party's live listing. **The destination is an OPEN owner question — see below.**
+2. **Re-pin the sentinel in the SAME change as the move, never a following pass.** The test pins those
+   three exact paths: move the images without re-pinning and it either goes green against nothing or red
+   for the wrong reason. That is the MCP-606 trap precisely.
+3. **Tell Anthropic the URLs moved, at or before step 4.** The owner has established this is cheap —
+   *"we can tell anthropic they've moved, no problem"* — but it is his line to them, not ours.
+4. **Then the origin-rule change** handing `www/mcp` to the web application. **This is the moment
+   `www`-pinned protocol installs stop reaching this app** — under disposition (b) they already cannot
+   authorise, but this takes them from a failed handshake to a different application entirely. **Accept
+   that deliberately, on the record, not as a side effect of a routing edit.**
+5. **The HTML-leg removal on this repo's `/mcp`** follows or accompanies step 4, and must not precede it in
+   a way that leaves `www/mcp` serving nothing.
+
+> ### RETIRED BY OWNER RULING, 2026-08-20 — DO NOT IMPLEMENT ANY OF THE FOLLOWING REQUIREMENT
+>
+> Owner, verbatim: *"No, no one has used `www/mcp` in earnest yet so we dont need to handle redirects or
+> signposting."*
+>
+> **So: no self-describing JSON response, no `308`/`307` investigation, no client-log signposting, at any
+> step.** The reasoning below was sound and it was reasoning about a population that does not exist. It is
+> left in place as the record of a requirement that was correctly derived and correctly retired — **not as
+> work.**
+>
+> **This also discharges the `www`-pinned client test from the owner's queue.** That test existed to
+> establish *which population is affected*; he has answered it from product knowledge. **And it lowers the
+> cost of disposition (b) accordingly** — (b) was accepted on the understanding that it breaks installs
+> during his absence, and per his ruling there are no such installs in earnest.
+>
+> **Recorded as product knowledge, NOT as measurement, and the distinction is load-bearing:** no instrument
+> this estate holds can answer "which host did this client dial" (see the telemetry gap below). His
+> assertion is the best available evidence precisely because he holds knowledge no instrument here holds.
+> **Do not let a later seat cite it as measured.**
+
+**REQUIREMENT ON STEP 4 — RETIRED, see the box above. Preserved as derivation, not as work.**
+Today a `www`-pinned client fails at *discovery* — the reference SDK throws before registration, which is
+a protocol error a client can surface and a human can search for. **After the origin rule moves, a pinned
+client POSTing `www/mcp` reaches the web application and receives an HTML page: the same break, with a
+materially worse diagnosis, on installs we cannot reach while the owner is away.**
+
+**So step 4 must not ship as a bare routing swap.** `www/mcp` must answer a *protocol-shaped* request —
+one whose `Accept` is `application/json` or `text/event-stream` rather than `text/html` — with a
+self-describing response that names the new endpoint. Two candidate shapes, and the choice belongs to
+whoever implements it:
+
+- **A JSON error body naming `https://mcp.thenational.academy/mcp`.** Safest: it cannot be mis-followed,
+  and it puts the new address in front of anyone reading a client log.
+- **A `308`/`307` redirect to the new endpoint.** Cleaner when it works, but **verify before choosing it**:
+  clients vary in whether they follow redirects on `POST`, and a redirect interacts with RFC 9728 resource
+  identity in ways this drive has already been bitten by once today.
+
+**Do not let this become "the web application serves HTML there now" and stop.** The requirement is that a
+protocol client learns where it should go, from the response, without anyone here being reachable.
+
+**SUPERSEDED — the re-homing below was overtaken within the hour by the retirement above. There is nothing
+to re-home because there is nothing to build. Preserved to show the sequence of decisions rather than to be
+acted on.**
+
+**RE-HOMED, 2026-08-20 — this requirement is NO LONGER THIS REPO'S TO IMPLEMENT.** The owner's ruling that
+`www/mcp` has nothing to do with this repo removes our ability to answer there at all. **So the
+self-describing response must be provided by the web application or by the Cloudflare rule.** The
+requirement stands — the class-change reasoning holds and diagnosability is what matters once nobody here
+is reachable — **but it is now a request to another team's codebase, not a line in ours.** Do not let a
+future seat read it as ours to build.
+
+### THE `www` SURFACE IS WIDER THAN `/mcp` — a `/mcp*`-scoped rule change does NOT discharge the ruling
+
+> **SUPERSEDED IN PART, ~16:40Z — see TEARDOWN FLEET above.** The conclusion (the rule must
+> cover more than `/mcp*`) was right; the premise was wrong. The rule was **never `/mcp*`-scoped
+> in the first place** — its expression already names all five path families. The real gap is a
+> **second, byte-identical rule** in `config_settings.tf` that orphans if the origin rule goes
+> alone. Read this section for the surface inventory, not for the rule's scope.
+
+**Measured 2026-08-20, against a control (`/zzz-not-real-control` → 404, so `www` does not blanket-200):**
+
+```text
+www/.well-known/oauth-protected-resource/mcp   200 application/json   THIS REPO   <- NOT under /mcp
+www/.well-known/oauth-authorization-server     200 application/json   THIS REPO   <- NOT under /mcp
+www/oauth/authorize                            307 -> clerk.thenational.academy/oauth/authorize
+                                                                      THIS REPO   <- NOT under /mcp
+www/mcp/healthz                                200 application/json   THIS REPO
+www/mcp/carousel/carousel_image_1.png          200 image/png          THIS REPO
+www/oauth/register                             404                    never routed
+```
+
+**`www/oauth/authorize` is ours and it is live.** Proven rather than assumed: it 307s to the **identical**
+Clerk destination as the canonical host's `/oauth/authorize`, and this repo defines that route at
+`oauth-proxy/oauth-proxy-routes.ts:72`. **An earlier scope list of this surface missed it** — it probed
+`/oauth/register` (404) and stopped, and register-404-but-authorize-307 is an asymmetry worth knowing.
+
+**So the ruling covers at least three non-`/mcp` paths, and the obvious `/mcp*`-scoped edit leaves this
+repo still answering on `www`.** Whoever writes the rule change must enumerate the surface rather than
+assume the prefix.
+
+**Two consequences, and the first is an improvement:**
+
+- **Once the `.well-known` pair goes, a `www`-pinned client gets a clean `404` instead of a PRM advertising
+  a different host.** An honest "not here" is a *better* failure than a mismatched identifier.
+- **`/oauth/register` has always 404'd on `www`**, so DCR was never reachable there and a `www`-pinned
+  client could never have completed registration on that host. **That narrows what the pinned-client break
+  actually costs** — worth confirming properly rather than resting on single probes, but it points the same
+  way twice now.
+
+### THE SENTINEL WILL GUARD THE WRONG COPY — gap and cure
+
+> **SUPERSEDED, ~16:40Z — see TEARDOWN FLEET above.** The gap was real; the cure proposed here
+> is not available. **No test in this repository can probe a live external host** — every tier,
+> `e2e-tests/` included, is in-process loopback. So the sentinel cannot be "retargeted" at OWA;
+> the guard's home is OWA, and OWA#4453 now carries two — a Playwright spec for the served
+> contract and a jest test in the **required** gate, since Playwright is not a required check
+> there. Read this section for why the gap matters, not for what to do about it.
+
+The sentinel suite runs against **this app** and pins the three `/mcp/carousel/...` paths. Its own docs say
+those paths are *"an external contract held by a third party; making the test match the code reverses the
+direction of authority and lands the break in public instead of in CI."*
+
+**After the ruling there are two copies and the sentinel guards only ours. If the listing stores the `www`
+URL — the likely case — the copy Anthropic actually fetches lives in the web application with no sentinel
+at all, while our guarded copy is the one nobody fetches.** The asset becomes unguarded at exactly the
+moment it becomes load-bearing.
+
+**Cure, and it is cheaper than it looks BECAUSE we are authoring the OWA change ourselves:** put the
+path-exact test **in the web application, in the same PR that adds the images.** The guard then lives where
+the asset lives, which is the correct home, and we can author it because that PR is ours to write under the
+standing OWA authorisation. **Do not reach first for a network probe from this repo's CI** — it would couple
+our gate to another team's deploy and to network flakiness, which buys a red build for someone else's
+outage. **If OWA's conventions will not host such a test, the fallback is a scheduled non-blocking probe
+that alerts rather than a blocking CI gate** — and that fallback should be a recorded decision, not a
+default.
+
+**RULED, 2026-08-20 — the destination question is CLOSED and the answer is BOTH.** Owner, verbatim:
+*"let's add them in OWA so that they're in both places for now."* And separately: *"Let's just get rid of
+`www/mcp` as ANYTHING to do with this repo … it's only causing headaches."*
+
+**He did not pick between the two options put to him; he chose both, and it is a better answer than
+either.** The reason is worth keeping: **we do not know which HOST Anthropic's listing stores.** The
+sentinel's own docs record that Anthropic holds the literal `/mcp/carousel/...` **paths** as an external
+contract, but the host half of those URLs lives in a portal only the owner can open. The listing was
+submitted 7 August, before the host move, so `www` is *likely* — **likely is not measured and we cannot
+measure it.** Serving from both hosts makes the unknown irrelevant. **The recommendation on the table was
+optimising the destination while the binding constraint was an unverifiable external contract.**
+
+**PATH-EXACT REQUIREMENT ON THE OWA WORK.** OWA must serve at exactly:
+
+```text
+/mcp/carousel/carousel_image_1.png
+/mcp/carousel/carousel_image_2.png
+/mcp/carousel/carousel_image_3.png
+```
+
+**Not `/mcp/images/...`, not Sanity-transformed URLs, not renamed files.** The generic filenames are
+deliberate (MCP-606) because the URLs are permanent while the images may be re-exported. **A CMS-backed
+implementation must still answer on those literal paths: the CMS may own the content, never the address.**
+
+**Live tension to state honestly if it comes up:** MCP-458 is Urgent, `pre-submission`, and unstarted with
+the owner's availability ending 20 August. The liaison's advice to him was not to let the destination gate
+the deliverable. So the real question at his ruling is whether this ships before he goes at all, or whether
+the screenshots ship where they are and move later.
+
+### THE HIGHEST-VALUE REMAINING UNKNOWN
+
+**`www` now serves a PRM whose `resource` is `https://mcp.thenational.academy/mcp`.** So a
+client that dialled `www` — which is *every already-installed Claude Code plugin*, hardcoded —
+is handed an identifier for a different URL. *Inference, labelled:* per RFC 9728 / RFC 8707 a
+client validating the resource identifier either refuses, or acquires a token audienced for the
+new host and presents it to `www`, which works only if the resource server does not check
+audience per host.
+
+**Nobody has tested it. Every automated gate here runs unauthenticated, so this class of defect
+passes all of them.** The test is two minutes: an existing `www`-pinned plugin install, sign in,
+one authenticated tool call. **It also answers the empirical half of MCP-638, MCP-639 and
+MCP-640 at once.** It is in the owner's queue via the liaison and is the single thing worth his
+attention before he leaves.
+
+### PRs OPEN AT THIS WRITE — all bot-authored, zero failing checks
+
+| PR | What | State |
+|---|---|---|
+| **#913** | warden-closeout gate + inference-vs-observation pattern; **carries BOTH Directors' continuity blocks** | three review findings cured, re-requested |
+| **#921** | the switch runbook, **rewritten as a cutover record** | four review findings cured, re-requested |
+| **#922** | ADR-113's disproven `openid` mechanism corrected | open, review requested |
+| **#923** | MCP-636 gap report rescued from an untracked tree + two napkin entries + frictions F-164/F-165 | open, review requested |
+| **#924** | ADR-219's every-served-domain premise corrected | open, review requested |
+
+### TICKETS MINTED THIS TENURE
+
+**MCP-642** (`release.yml` checks out main's tip, not the SHA that passed CI — verified
+first-hand; deliberately a ticket not a PR, because the obvious `ref:` fix hands
+semantic-release a detached HEAD), **MCP-643** (the security review's engineering remediation,
+which needed a live home because MCP-634 is `Done`). Implementer seats also minted MCP-637
+through MCP-641.
+
+### FIVE IMPLEMENTER SEATS LIVE AT THIS WRITE — all inherit this Director's identity
+
+**They are ONE row in the claims registry and are not separately addressable there** (defect
+F-164). They sign with distinguishing suffixes, which is the only mitigation:
+
+- **Seat A (front-doors)** — MCP-421 + MCP-348, incl. `Oak-Web-Application` work.
+- **Seat B (discovery-metadata)** — MCP-623 + MCP-413; briefed consumer-question-first.
+- **Seat C (auth.md verification)** — research only; is `/auth.md` still best practice.
+- **Seat D (pre-submission sweep)** — 19 open, 9 Urgent, 7 cold since 4–6 Aug.
+- **Seat E (conformance run)** — MCP-184 against the NEW host.
+
+**A successor inherits their results with no way to address them directly.** Re-staff from
+these briefs rather than trying to reach the seats.
+
+### OWNER RULINGS LANDED TODAY — do not re-ask
+
+- **Nothing in this repo is served from `www`** as the end state.
+- **The Anthropic listing is changeable** through his direct line — not immovable.
+- **Agents may work in `Oak-Web-Application`** under the owner credential with an agent
+  disclosure blockquote (the Cloud-Config #556/#557/#558 pattern). **The bot install stays
+  closed — do not raise it.**
+- **The liaison seat does not take work.** Verbatim: *"you should be keeping the board moving,
+  giving me the queue of anything needed from me, and ensuring the director is on track"*. An
+  inherited "owed by this seat" item is a routing obligation, not an assignment — it comes to
+  the Director to staff.
+
+### WHAT THE ACCEPTANCE BAR ACTUALLY IS, stated so it is not oversold
+
+**The drive's bar is a verified tag from Anthropic. It is product-gated and NOT achievable
+through any engineering action available to us.** Agent-readiness discovery work makes the
+server more findable; **it does not produce the tick.** Any burndown implying otherwise is
+wrong. This changes what may be *claimed*, not what is built.
+
+### OWED AND NOT DELIVERED — inherit as owed
+
+- **The `auth.md` best-practice condition** (Seat C is answering it; the *build* stays fenced).
+- **The R3 error-rate baseline and a `preview` alert rule** to `#mcp-alerts-sentry-preview`,
+  inherited across three liaison seats, still waiting on MCP-497's noise being cured.
+- **The ADR-219 / MCP-349 coupled decision** — see below.
+
+### THE COUPLED DECISION IN THE OWNER'S QUEUE
+
+`curriculum-mcp-alpha.oaknational.dev` is **unproxied** (`server: Vercel`, no `cf-ray`, against
+proxied controls). Two consequences that arrived separately and are one decision:
+
+1. **ADR-219's premise is falsified for that host** — the CodeQL `js/missing-rate-limiting`
+   dismissals rest on it. #924 corrects the record without choosing.
+2. **MCP-349's prescribed evidence method is unrunnable as written** — it asks for realistic
+   traffic through the alpha and a Cloudflare Security Analytics read, but the alpha is not in
+   Cloudflare's path, so no such data exists and no ruleset evaluates it. The OWASP evidence
+   must instead come from `www/mcp` history.
+
+**Proxy the alpha → JR's method becomes runnable and ADR-219's premise is restored. Accept the
+exposure → MCP-349's evidence comes from `www/mcp` history and ADR-219 keeps a recorded
+exception.** One decision, two consequences.
+
+### THE GENERATOR THAT DOMINATED THIS DAY
+
+**Seven-plus instances in two days across three seats: a true observation with a conclusion
+welded on, the conclusion travelling as though it were the measurement.** Five were this seat's,
+every one while forewarned. The distillation this tenure added, now in the napkin and in #913:
+
+> **A control validates the INSTRUMENT, never the INFERENCE.** Four control-probed measurements
+> supported a false conclusion ("the DNS record was made by hand outside Terraform") because the
+> premise behind them — that an apply must come from a merged branch — was never tested. After a
+> control passes, ask separately what else must be true for the conclusion to follow.
+
+And its sibling, learned at cost: **re-measure at the moment of ESCALATION, not of discovery.**
+Two owner decisions were escalated at 10:05Z that the owner had already resolved by 12:25Z.
+
+## State at wrap, 2026-08-20 (Peony hunts Nectar, `742fb5`) — READ THIS FIRST
+
+Sections below are historical. Where they disagree with this block, this block wins.
+Full pre-position: comms event `ac68f51b`.
+
+### The live thing: the host switch is TODAY and NOT READY
+
+```text
+dig mcp.thenational.academy   -> nothing        NO DNS RECORD
+Cloud-Config #556             -> BLOCKED, REVIEW_REQUIRED (Terraform plan rights)
+Vercel domain                 -> registered, verified 200
+app accepts new host          -> NO, 403; PR #920 cures it, open
+Clerk allowed origins         -> unstarted, not agent-doable
+```
+
+**No DNS record means nothing to switch to.** #556 needs plan rights on
+`ws-RoT5BsWbN2mQZwZe` — 52 of 101 workspaces are runnable with the owner's
+credential, that one is not, and sibling `cloudflare-rulesets` is. Looks
+unintentional; worth raising with cloud-ops separately from the PR.
+
+Procedure: `docs/operations/mcp-subdomain-switch-runbook.md` (PR #921).
+**Recommendation already with the owner: steps 1–3 only, leave `CANONICAL_HOST` on
+`www`** — it is single-valued, MCP-517 is a live bug in exactly that path, there is
+no external uptime monitoring, and he is away 22–31 August.
+
+### What landed this tenure
+
+- **Vercel domain added** for `mcp.thenational.academy` at owner instruction, after
+  establishing it is not Terraform-managed. **Ours is the only Oak Vercel project not
+  managed as code** — MCP-635 raised, sequenced deliberately after the cutover.
+- **MCP-497 overturned.** Hours from blocking the 6 September gate. The client is
+  Anthropic's connector (627 failures, 12 users) — and those same users have 1,376
+  successful `initialize` calls and 14,217 tool calls. Version negotiation working,
+  not an outage. Owner dropped it to Medium and removed `pre-publish`.
+- **MCP-634** minted, then its own cure corrected: setting `ALLOWED_HOSTS` explicitly
+  would have evicted the host production serves on **and** killed `www/mcp` via the
+  Cloudflare origin rewrite. Cure is union-in-code (PR #920).
+- **MCP-622 trued in three places.** Its "the config is in no repository" sentence is
+  false — the Cloudflare rules are Terraform in `oaknational/Cloud-Config`
+  (`rulesets/header_transforms.tf`, `cloudflare_ruleset.http_request_origin`). That
+  withdrew a dashboard-access request from the owner's queue.
+- **Doctrine landed** (PR #913): the warden-closeout re-request gate, the three-reads
+  queue discipline, and the `relayed-findings-carry-the-inference-not-the-observation`
+  pattern.
+
+### Five disproven beliefs — do not re-inherit them
+
+1. **ADR-113's "Clerk rejects `openid`"** — FALSE, measured by DCR probe with a
+   discriminating control. Clerk grants exactly the registered scopes, or the instance
+   default. **The ADR still carries the wrong sentence; correcting it as a tracked PR
+   is the successor's first task.**
+2. **`profile` is already in Oak's Clerk default grant**, as is `offline_access`.
+3. **MCP-307's "no code change needed"** — both stated properties true, conclusion
+   false. The new host 403s.
+4. **`get_project(...).domains` is not a domain inventory** and is unstable between
+   identical calls.
+5. **MCP-618's premise** conflated Clerk sign-up with OAuth authorisation; the owner
+   dissolved it himself. Names are absent because Clerk's sign-up never asks
+   (`first_name` enabled, `required=False`) — no scope changes that.
+
+### Traps measured this tenure
+
+- **A subagent inherits your PDR-027 identity**, and while it holds a claim
+  `comms append` **and** `comms direct` both refuse to send — you are cut off the
+  coordination lane by your own implementer. Cure: close the finished claim.
+- **The harness reports `exit 0` on a commit the pre-commit hook rejected.** Twice.
+  Check whether HEAD moved, never the notification.
+- **Working off the coordination surface is indistinguishable from absent.** Four
+  hours of it here; the liaison correctly pinged before escalating.
+- `--model 'claude-opus-5[1m]'` **must be quoted** or zsh globbing kills the watcher.
+- **`assert-watcher-live` reads green off a wedged watcher.** The wedge observed
+  here was real: **zero emissions AND a cursor frozen for three hours.**
+  **But do NOT make "`emitted_count` advancing" the test** — the counter advances
+  only when a matching event is *delivered*, so a correct watcher on a quiet
+  stream shows no advance and the test condemns healthy operation. Use instead:
+  **arming** (a successful `claims open` proves a live watcher at the canonical
+  seen-location, since its F-95 gate refuses to write while blind to comms);
+  **delivery** (a controlled probe or the first genuine peer event — your own
+  broadcast does not count, self-authored events are excluded by design); and
+  **absence detection** (the paired `comms peer-liveness` poll plus a foreground
+  mtime sweep, which is what event-watching structurally cannot be).
+
+### From outside: a real defect nobody had ticketed
+
+A third-party review pack surfaced it and it verified first-hand: **`release.yml`
+triggers on `workflow_run` and its checkout supplies no `ref:`**, so it tags the
+branch head at dispatch rather than the SHA that passed CI. The window opens whenever
+two PRs merge inside one CI duration — this repo's normal mode. One line:
+`ref: ${{ github.event.workflow_run.head_sha }}`. The file's own header comment
+claims the opposite.
+
+---
+
 ## State at wrap, 2026-08-17 evening (Skunk stirs Cavern, `db8b9b`) — SUPERSEDED IN PART
 
 **PRECEDENCE, corrected 2026-08-18. Read this before trusting anything in this block.**

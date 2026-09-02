@@ -84,10 +84,14 @@ the seat, not to any one pilot.
    `--now`:
 
    ```bash
-   # The tool parses claimed_at (bumped on every heartbeat) and --now as UTC
-   # epoch-ms and emits age_seconds + freshness_status itself — no local clock,
-   # no mental arithmetic. Source: claim-reports.ts age_seconds = nowMs −
-   # Date.parse(claimed_at), both UTC.
+   # The tool parses the claim's freshness anchor and --now as UTC epoch-ms and
+   # emits age_seconds + freshness_status itself — no local clock, no mental
+   # arithmetic. Source: claim-reports.ts, freshnessStart = heartbeat_at ??
+   # claimed_at; age_seconds = nowMs − Date.parse(freshnessStart), both UTC.
+   # NOTE (measured 2026-08-19): a heartbeat writes heartbeat_at and leaves
+   # claimed_at at the original open time. Anyone hand-computing from
+   # claimed_at therefore reads a LIVE, heartbeated seat as stale — which is
+   # the very error this section exists to prevent. Let the tool answer.
    pnpm agent-tools:collaboration-state -- claims active-agents \
      --active .agent/state/collaboration/active-claims.json \
      --now "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -187,6 +191,39 @@ this repo that PDR-117 does not carry.
   constitutive team-visibility, not discretionary infrastructure; an
   un-armed watcher went blind to a simultaneous identical-branch claim. n=2
   retains it; only the heartbeat is in the drop-set.
+  - **The canonical invocation dies under zsh unless the model is quoted.**
+    A bare `--model claude-opus-5[1m]` is a glob pattern: zsh fails the
+    command with `no matches found: claude-opus-5[1m]` before the watcher
+    starts. Use `--model 'claude-opus-5[1m]'`. Measured 2026-08-19; it costs
+    every new seat its first arm, and the failure looks like a tooling bug
+    rather than a quoting one.
+  - **`assert-watcher-live` can read GREEN off a WEDGED watcher.** It checks
+    the heartbeat file, not delivery. Measured 2026-08-19: a watcher with
+    `emitted_count: 0` and a frozen cursor passed the assert. Process
+    liveness is not awareness.
+    **Do NOT use "`emitted_count` advancing" as the test** — an earlier
+    version of this brief did, and it is wrong: the counter advances only when
+    a matching event is _delivered_, so a healthy watcher on a quiet stream
+    shows no advance and the test false-fails normal operation. The counter
+    cannot distinguish _quiet_ from _not delivering_. What does:
+    - **arming evidence, mechanical:** `claims open`'s F-95 gate refuses to
+      write into a populated registry while blind to comms, so a successful
+      `claims open` proves a live watcher at the canonical seen-location;
+    - **delivery evidence:** a controlled probe — an event you know should
+      arrive, or the first genuine peer event landing (self-authored events
+      are excluded by design, so your own broadcast is not a probe);
+    - **the absence detector:** the paired `comms peer-liveness` poll and a
+      foreground mtime sweep, which is what event-watching structurally
+      cannot be.
+    The wedged instance was real and the rule drawn from it was still wrong —
+    a sound observation with an over-general conclusion welded on, which is
+    the generator in
+    `patterns/relayed-findings-carry-the-inference-not-the-observation.md`.
+  - **The drain step-deadline is the wrong knob for a wedge.** Three watchers
+    died on it in one window; parsing all 1,645 event files takes 0.27s, so
+    volume was never the cost — host contention was (load 19.49 vs 2.50).
+    Raising the deadline makes wedges last longer; lowering it kills healthy
+    drains under load. Pair a short deadline with a foreground mtime sweep.
 - **Stop your own heartbeat at stand-down** or it asserts false "active" liveness
   — a heartbeat loop with no exit ran ~8h of false liveness across an outage.
 - **Verify a PR's inline review comments first-hand**, not just `gh pr checks` —
@@ -261,6 +298,78 @@ first-hand as of 2026-06-25.
   `gh api repos/.../pulls/N/comments`, and `gh pr view N --json comments` by hand.
 
 ## CURRENT HANDOFF STATE
+
+> **§LIVE-STATE POINTER, 2026-08-20 ~13:35Z (Coal hunts Brilliance, `70bc33`) — READ THIS
+> FIRST; IT SUPERSEDES EVERY BANNER BELOW, INCLUDING PEONY'S.**
+>
+> **The Director seat is LIVE, not handed over.** This banner is written mid-tenure because a
+> peer asked whether a successor could pick the drive up from TRACKED state today, and the
+> answer was no — the tenure's state lived only in gitignored comms events and unmerged
+> branches. Written now so it is durable before it is needed.
+>
+> **Live state lives in the thread record**
+> [`threads/mcp-submission-drive.next-session.md`](threads/mcp-submission-drive.next-session.md)
+> §LIVE STATE, 2026-08-20 ~13:35Z. Read that block first: the host move is DONE; five
+> implementer seats are live and all inherit this Director's identity (one registry row, not
+> separately addressable — defect F-164); five PRs are open with zero failing checks; and the
+> single highest-value untested thing is whether an already-installed `www`-pinned client can
+> still authenticate now that `www` advertises a different canonical resource.
+>
+> **Claim `39718d8d`** (role `director`, 4h freshness, self-heartbeated on a silent 2h monitor
+> because fleet-wide heartbeats are suspended under PDR-078 §4). **Owner channel runs through
+> the liaison seat — never direct to MG.** The liaison seat does NOT take work (owner ruling
+> 2026-08-20): anything it hands over is the Director's to staff.
+>
+> **A doctrine contradiction this tenure inherited and did not resolve:** the owner ruling
+> (2026-07-15) says handover artefacts land BATCHED into the next substantive PR and never a
+> dedicated one, while this brief tells a successor to read the record "from the filesystem, not
+> from a merge". Both cannot hold — a batched artefact sits on an unmerged branch, invisible to
+> exactly that read. The interim mitigation is what happened here: the comms event carries the
+> substance, and **the pointer must name the branch.** These blocks are on
+> `docs/mcp-warden-closeout-review-request-gate` (PR #913) until it merges.
+
+<!-- successive Director banners; newest first -->
+
+> **§LIVE-STATE POINTER, 2026-08-20 08:2xZ (Peony hunts Nectar, `742fb5`) — READ THIS
+> FIRST; IT SUPERSEDES EVERY BANNER BELOW.**
+>
+> **A Director seat has just stood down and pre-positioned a successor.** Full
+> pre-position: comms event `ac68f51b` (PDR-064 Moment 1) — read it before anything
+> else; it carries the live state, five disproven estate beliefs, and six measured
+> traps. Claim `6228d1f1` closes at this wrap; **nothing retained**.
+>
+> **THE LIVE THING: the owner switches the MCP host to `mcp.thenational.academy`
+> today, and it is NOT READY.** Verified 01:36Z: no DNS record exists
+> (`dig` returns nothing), Cloud-Config #556 is BLOCKED on Terraform plan rights for
+> the `cloudflare-misc` workspace that **no agent here holds**, and the app still
+> 403s the new hostname until PR #920 merges and deploys. Clerk allowed origins are
+> unstarted. **No DNS record means nothing to switch to** — that is the binding
+> constraint and it is not ours.
+>
+> **The procedure is written:** `docs/operations/mcp-subdomain-switch-runbook.md`
+> (PR #921). For one person doing this once; rollback per step. Check its
+> precondition table rather than trusting it.
+>
+> **Standing recommendation, already with the owner:** do steps 1–3 and leave
+> `CANONICAL_HOST` on `www`. It is single-valued, so changing it moves
+> self-description for every host including `www`, and MCP-517 is a live bug in
+> exactly that path. There is no external uptime monitoring on this app and the owner
+> is away 22–31 August.
+>
+> **Fleet:** owner-liaison Thistle hunts Acorn (`401aec`, claim `f289d350`) is LIVE
+> and holds the owner channel — route nothing to the owner directly. No implementers
+> live. **Open PRs, all bot-authored:** #920 (`ALLOWED_HOSTS` additive — **needs a
+> security review that never ran**), #921 (runbook), #913 (doctrine + this file's
+> corrections), and Cloud-Config #556 (DNS, `mantagen`-authored — emgeebot 404s on
+> that repo).
+>
+> **First inherited task:** land ADR-113's correction as a tracked PR. Its claim that
+> Clerk rejects `openid` is disproven by DCR probe with a discriminating control, it
+> shaped an owner recommendation, and the wrong sentence is still what a fresh seat
+> reads first.
+
+_Banners below this line are earlier snapshots, retained as the record of how the
+seat moved. Where they disagree with the banner above, the banner above wins._
 
 > **§LIVE-STATE POINTER, 2026-08-18 (Dormouse turns Footfall, `a54547`) — THIS
 > SUPERSEDES THE 2026-08-13 BANNER BELOW ON ONE FACT ONLY: A DIRECTOR IS SITTING.**
