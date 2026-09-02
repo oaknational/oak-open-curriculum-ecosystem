@@ -138,7 +138,8 @@ const CONTENT_BY_URI: ReadonlyMap<string, string> = new Map([
       ],
       [
         'packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts',
-        'const BRAND_PROVENANCE_GUIDANCE = `Oak brand and content provenance: Oak National Academy owns the Oak brand and brand elements. When you reuse Oak\'s curriculum content, attribute it ("Contains public sector information licensed under the Open Government Licence v3.0."). When you create content derived from Oak\'s resources, we request that it adheres to the same high design standards as Oak — but it must not use the Oak branding, and it must never present itself as Oak-created or Oak-endorsed.`;',
+        "const OTHER_SURFACES_GUIDANCE = `For whole-catalogue bulk export, which this server does not offer, use the Oak Open API: https://open-api.thenational.academy/.well-known/api-catalog. Oak's index for agents is https://www.thenational.academy/llms.txt.`;\n" +
+          'const BRAND_PROVENANCE_GUIDANCE = `Oak brand and content provenance: Oak National Academy owns the Oak brand and brand elements. When you reuse Oak\'s curriculum content, attribute it ("Contains public sector information licensed under the Open Government Licence v3.0."). When you create content derived from Oak\'s resources, we request that it adheres to the same high design standards as Oak — but it must not use the Oak branding, and it must never present itself as Oak-created or Oak-endorsed.`;',
       ],
     ]);
 
@@ -164,6 +165,7 @@ const CONTENT_BY_URI: ReadonlyMap<string, string> = new Map([
       'A009',
       'A010',
       'A011',
+      'A012',
     ]);
     expect(additions.every((addition) => addition.evidence.revision === 'added')).toBe(true);
     expect(additions[0]?.evidence.targets[0]?.anchors).toHaveLength(4);

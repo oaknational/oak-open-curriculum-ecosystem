@@ -22,8 +22,17 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   // MCP-365: the generated instructions gained the owner-signed
   // brand-provenance closing paragraph (attribution + non-endorsement per
   // LICENCE-DATA.md); C055 re-anchored on its unchanged routing paragraph.
+  // MCP-421: the instructions gained one paragraph routing an arriving agent
+  // to the Oak surfaces this server does not cover (A012), and an exported
+  // character budget for the whole string. Reviewed as agent-facing routing
+  // copy, not owner-signed public copy: it makes no claim about Oak, it
+  // publishes two URLs, and both were fetched live (200 each, with a control
+  // probe under the same prefix returning 404) before being recorded. Phrased
+  // as a capability boundary so it cannot read as an invitation to leave the
+  // authorisation-bound surface. Placed before the brand paragraph, which
+  // still closes the string; C049-C055 are unaffected.
   'packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts': reviewed(
-    '2d86bf6b1cf6241114656a1a2909fbb47ecd0b6f34d5ccd8b9f44c0215301606',
+    'c799c5164a4edf01772840c9200180172beb771f8b00e6840f9e36c5c883145a',
     ['C049', 'C050', 'C051', 'C052', 'C053', 'C054', 'C055'],
   ),
   // MCP-438: the description's embedded presentation directive (the fonts
