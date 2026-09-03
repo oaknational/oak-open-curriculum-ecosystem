@@ -19,8 +19,9 @@ surfaces, hybrid semantic search, knowledge graph integration, and the
 OpenAPI-to-MCP pipeline that lets those pieces be reused inside and beyond Oak.
 
 1. **→ OpenAPI Pipeline Architecture** ([openapi-pipeline.md](./openapi-pipeline.md)) — **read this first** to understand the core pattern.
-2. **→ Current Architecture Overview** (this page) — standard structure and boundaries.
-3. **→ [ADR index](./architectural-decisions/)** — the architectural source of truth; start from the ADRs listed below.
+2. **→ MCP Runtime Topology** ([mcp-runtime-topology.md](./mcp-runtime-topology.md)) — the whole live system in one measured diagram: clients, hostnames, the Cloudflare edge, the application request chain and the services behind it. Read this for what is _deployed_, as against what is _built_.
+3. **→ Current Architecture Overview** (this page) — standard structure and boundaries.
+4. **→ [ADR index](./architectural-decisions/)** — the architectural source of truth; start from the ADRs listed below.
 
 The foundational ADRs that shape the entire codebase — the canonical
 [Start Here: 5 ADRs in 15 Minutes](./architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
@@ -36,6 +37,12 @@ block in the ADR index:
 
 ### Core Architecture (Current)
 
+- Runtime topology: [the deployed MCP system, measured](./mcp-runtime-topology.md)
+  — hostnames and which of them Cloudflare fronts, what the WAF actually
+  blocks, where the application's CSP is replaced by the edge's, where token
+  verification happens relative to the edge, and the four outbound service
+  domains. Everything on it was probed or read from source on a stated date;
+  anything inferred is marked as such.
 - Foundations-first architecture: the
   [software projection of the cost-of-change gradient](./foundations-first.md)
   — how core building blocks, foundational systems, libraries, and products
