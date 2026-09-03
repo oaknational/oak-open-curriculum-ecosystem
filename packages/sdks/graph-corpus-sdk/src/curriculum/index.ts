@@ -3,9 +3,7 @@
  *
  * The generated one-graph corpus (G1a) plus the bounded anchored views over
  * it: `priorKnowledgeStatements` answers "what is the prior knowledge of
- * these units?" as each unit's stated prior-knowledge statements
- * (`priorKnowledgeSubgraph` (G1b) remains exported but is deprecated and
- * unserved — its thread-adjacency edges are synthesised; see its module doc);
+ * these units?" as each unit's stated prior-knowledge statements;
  * `misconceptionsForLessons` / `misconceptionsForUnits` /
  * `misconceptionsForThread` (G2) answer "which misconceptions does this
  * anchor address?" over the thread→unit→lesson→misconception chain;
@@ -28,15 +26,6 @@ export {
   type GraphCorpusThreadNode,
   type GraphCorpusUnitNode,
 } from './graph-corpus.js';
-
-export {
-  DEFAULT_PREREQUISITE_DEPTH,
-  MAX_PREREQUISITE_DEPTH,
-  createCurriculumPriorKnowledgeView,
-  priorKnowledgeSubgraph,
-  type CurriculumPriorKnowledgeView,
-  type PriorKnowledgeSubgraph,
-} from './prior-knowledge-view.js';
 
 export {
   priorKnowledgeStatements,

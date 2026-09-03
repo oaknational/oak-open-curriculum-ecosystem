@@ -5,7 +5,7 @@
  * turns it live). The teacher states their position (subject, year group,
  * what was just covered) and the workflow resolves the next step from
  * Oak's curriculum sequence, checks readiness via each unit's stated prior
- * graph, anticipates the upcoming misconceptions, then plans the resolved
+ * knowledge, anticipates the upcoming misconceptions, then plans the resolved
  * topic grounded in the lesson's own summary, transcript, and quiz.
  */
 

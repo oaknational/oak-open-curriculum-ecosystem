@@ -379,8 +379,8 @@ year-ordered projection. It also preserves same-year adjacency by sorting on a
 unit identifier. The source explicitly says that same-year tie-break is
 arbitrary and not a pedagogical or curricular claim.
 
-[`prior-knowledge-view.ts`](../../../../packages/sdks/graph-corpus-sdk/src/curriculum/prior-knowledge-view.ts)
-then describes these edges as real prerequisites and exposes their predecessors
+`prior-knowledge-view.ts` (deleted by MCP-671)
+described these edges as real prerequisites and exposed their predecessors
 as prior knowledge. The curriculum-mapping guidance consumes the prior-
 knowledge graph as an ordering input.
 
@@ -781,7 +781,7 @@ lack of conviction.
 - [Question schema](https://github.com/oaknational/oak-openapi/blob/f64b8f3fe8bee849016c61e60cc0a454d424369b/src/lib/handlers/questions/types.ts)
 - [Unit summary schema](https://github.com/oaknational/oak-openapi/blob/f64b8f3fe8bee849016c61e60cc0a454d424369b/src/lib/handlers/units/schemas/unitSummaryResponse.schema.ts)
 - [Local graph edge generation](../../../../packages/sdks/oak-sdk-codegen/src/bulk/generators/graph-corpus-edges.ts)
-- [Local prior-knowledge view](../../../../packages/sdks/graph-corpus-sdk/src/curriculum/prior-knowledge-view.ts)
+- Local prior-knowledge view — `prior-knowledge-view.ts`, deleted by MCP-671
 - [Local thread-progression projection](../../../../packages/sdks/graph-corpus-sdk/src/curriculum/thread-progressions-projection.ts)
 - [Deterministic data surface ADR](../../../../docs/architecture/architectural-decisions/191-deterministic-data-surface-agent-reasons.md)
 - [Teacher-as-expert ADR](../../../../docs/architecture/architectural-decisions/194-teacher-as-expert-product-boundary.md)

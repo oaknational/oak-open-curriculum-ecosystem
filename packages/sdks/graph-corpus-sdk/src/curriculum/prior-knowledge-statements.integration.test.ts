@@ -11,6 +11,7 @@
 import { graphCorpus } from '@oaknational/sdk-codegen/graph-corpus';
 import { describe, it, expect } from 'vitest';
 import { priorKnowledgeStatements } from './prior-knowledge-statements.js';
+import { required } from './test-helpers.js';
 
 /** The corpus's unit nodes, the fixture pool. */
 const unitNodes = graphCorpus.nodes.filter((node) => node.kind === 'unit');
@@ -57,12 +58,12 @@ describe('priorKnowledgeStatements', () => {
   });
 
   it('keeps units in resolved-anchor order for multi-anchor calls', () => {
-    const secondUnit = [...unitNodes]
-      .sort((a, b) => a.unitSlug.localeCompare(b.unitSlug))
-      .find((node) => node.unitSlug !== knownSlug);
-    if (secondUnit === undefined) {
-      throw new Error('corpus has fewer than two unit nodes');
-    }
+    const secondUnit = required(
+      [...unitNodes]
+        .sort((a, b) => a.unitSlug.localeCompare(b.unitSlug))
+        .find((node) => node.unitSlug !== knownSlug),
+      'corpus has fewer than two unit nodes',
+    );
 
     const result = priorKnowledgeStatements([secondUnit.unitSlug, knownSlug]);
 

@@ -8,13 +8,13 @@
  * consumers depend on one stable subpath rather than reaching into the
  * generator package's `generated/` tree.
  *
- * The graph VIEW over this corpus — bounded anchored retrieval, the depth
- * default, and the module-load singleton — lives in the `prior-knowledge-view`
- * module. The corpus edges are oriented prerequisite
- * → dependent; the consumed traversal direction is predecessors (prior
- * knowledge), so the view constructs over reversed edges (G1b retired the
- * forward-only G1a construction bridge that previously lived here, per
- * replace-don't-bridge — there was no consumer for the forward direction).
+ * The bounded anchored views over this corpus live in sibling modules
+ * (`prior-knowledge-statements`, `misconception-view`,
+ * `thread-progressions-view`, `keyword-view`). The corpus retains its
+ * `prerequisiteFor` edges, but no view reads them: MCP-671 deleted the
+ * depth-bounded predecessor view because those edges are synthesised from
+ * thread adjacency, not a prerequisite relation the curriculum data records
+ * (see ADR-195's MCP-671 amendment).
  */
 
 export { graphCorpus } from '@oaknational/sdk-codegen/graph-corpus';

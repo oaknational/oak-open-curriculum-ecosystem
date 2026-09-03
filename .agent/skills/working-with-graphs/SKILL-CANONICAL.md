@@ -83,8 +83,8 @@ Two legitimate subgraph shapes exist, and both obey the completeness rule:
 - **Contiguous** — an anchored traversal neighbourhood: everything reachable from the anchors
   within the depth bound, with all internal edges. The EEF strand graph (`maxDepth = 1`) is this
   shape. (So was the prior-knowledge _tool_, until MCP-671 moved it to a field projection on
-  2026-09-03 — see ADR-195's amendment. The depth-bounded view and its synthesised
-  `prerequisiteFor` edges both still exist in the corpus and the SDK; nothing serves them.)
+  2026-09-03 — see ADR-195's amendment. The synthesised `prerequisiteFor`
+  edges remain in the corpus, but the depth-bounded SDK view that read them was deleted.)
 - **Sparse** — an anchored projection whose members are selected by the anchor's scope rather
   than mutual reachability: one thread's year-ordered unit sequence, a unit's lessons with their
   misconceptions, the keywords of every lesson matching subject + key stage. Members may be

@@ -829,7 +829,7 @@ This repository's part is complete when:
 - [Graph-view core](../../../packages/core/graph-core/src/graph-view/create-graph-view.ts)
 - [Keyword view](../../../packages/sdks/graph-corpus-sdk/src/curriculum/keyword-view.ts)
 - [Misconception projection](../../../packages/sdks/graph-corpus-sdk/src/curriculum/misconception-projection.ts)
-- [Prior-knowledge view](../../../packages/sdks/graph-corpus-sdk/src/curriculum/prior-knowledge-view.ts)
+- Prior-knowledge view — `prior-knowledge-view.ts`, deleted by MCP-671 (the synthesised-prerequisite view REPO-001 flags below; the edges remain in the corpus, no view reads them)
 - [Curriculum-mapping guidance](../../../packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/curriculum-mapping.ts)
 - [MCP aggregated exploration](../../../packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-explore/execution.ts)
 - [Hybrid RRF query builders](../../../packages/sdks/oak-search-sdk/src/retrieval/rrf-query-builders.ts)

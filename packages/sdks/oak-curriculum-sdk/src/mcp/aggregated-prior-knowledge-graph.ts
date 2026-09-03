@@ -78,14 +78,14 @@ The query is anchored, never whole-corpus:
 
 The result reports units (each with slug, title, subject, key stage, year, priorKnowledge statements, and thread memberships), resolvedAnchors, and unknownAnchors.
 
-Coverage: 17 of Oak's 1,834 units record no prior-knowledge statements, so an empty priorKnowledge array means Oak states none for that unit — not that the unit is missing from the corpus.
+Coverage: 17 of Oak's 1,834 units record no prior-knowledge statements, so an empty priorKnowledge array means Oak states none for that unit — not that the unit is missing from the corpus. Likewise, 123 units belong to no thread, so an empty threadSlugs array means the unit has no get-thread-progressions context to follow.
 
 Use this to answer questions like:
 - "What should students know before this unit?" (anchor: that unit's slug)
 - "Which prerequisite gaps could explain difficulty with this lesson's unit?"
 - "What earlier units does this scheme of work build on?" (anchor the plan's units, then check the statements against earlier units' content)
 
-Complements get-thread-progressions: use each returned unit's threadSlugs there to see how the concept builds across years.`,
+Complements get-thread-progressions: use each returned unit's threadSlugs (where non-empty) there to see how the concept builds across years.`,
 
   securitySchemes: [{ type: 'oauth2' as const, scopes: SCOPES_SUPPORTED }],
 
