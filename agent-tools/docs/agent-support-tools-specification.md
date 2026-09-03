@@ -10,11 +10,11 @@ Agent support tools are MCP primitives designed to help AI agents understand the
 
 **Current resources (context-providing tool/resource pairs):**
 
-| Resource                           | Tool                        | Priority            | Purpose                                                                             |
-| ---------------------------------- | --------------------------- | ------------------- | ----------------------------------------------------------------------------------- |
-| `curriculum://model`               | `get-curriculum-model`      | 1.0 (essential)     | Combined orientation: domain model + tool guidance                                  |
-| —                                  | `get-prior-knowledge-graph` | 0.5 (supplementary) | Each unit's stated prior-knowledge statements (tool only; the resource was removed) |
-| `curriculum://thread-progressions` | `get-thread-progressions`   | 0.5 (supplementary) | Ordered unit sequences within curriculum threads                                    |
+| Resource                           | Tool                      | Priority            | Purpose                                            |
+| ---------------------------------- | ------------------------- | ------------------- | -------------------------------------------------- |
+| `curriculum://model`               | `get-curriculum-model`    | 1.0 (essential)     | Combined orientation: domain model + tool guidance |
+| `curriculum://prerequisite-graph`  | `get-prerequisite-graph`  | 0.5 (supplementary) | Unit dependencies and prior knowledge requirements |
+| `curriculum://thread-progressions` | `get-thread-progressions` | 0.5 (supplementary) | Ordered unit sequences within curriculum threads   |
 
 ## Architecture Reference
 
