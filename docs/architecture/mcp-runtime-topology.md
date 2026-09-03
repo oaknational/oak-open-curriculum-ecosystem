@@ -17,7 +17,10 @@ measured is marked **inferred** and says why.
 > a hostname, an edge rule, or a service binding changes, the diagram is wrong
 > until someone re-measures it. Re-run the instruments in
 > [How this was measured](#how-this-was-measured) rather than trusting the
-> date.
+> date. This is not hypothetical: one of the four hostnames measured on the
+> first pass was removed hours later, on the day of writing, and the correction
+> is recorded in
+> [The detail the diagram compresses](#the-detail-the-diagram-compresses).
 
 **The canonical client URL is `https://mcp.thenational.academy/mcp`** — owner
 ruling of 2026-09-01, recorded in
@@ -65,9 +68,9 @@ matter most, again independently of colour:
 Node fill groups the tiers loosely, but do not rely on it: the fills differ by
 hue rather than lightness, so they convey nothing in greyscale or to a reader
 with reduced colour vision, and two of the classes (`gap`, and the
-no-edge-control pair) cut across tiers rather than marking one. **Every
-distinction in the diagram is also stated in the node's own text** — that is
-the carrier to trust.
+no-edge-control stadium) mark a property of the element rather than the tier
+it sits in. **Every distinction in the diagram is also stated in the node's
+own text** — that is the carrier to trust.
 
 The diagram is large, and GitHub scales it down to the column width. Use the
 expand control, or read
@@ -77,7 +80,7 @@ whole of its argument.
 ```mermaid
 flowchart TB
     accTitle: Oak MCP runtime topology, measured 2026-09-03
-    accDescr: Six tiers read top to bottom, and every arrow carries a text label describing the relationship. Tier 1, clients, reach Tier 2, hostnames. Claude web and desktop (the dominant client), the Claude Code, Codex and Cursor command-line clients, and the Oak Claude Code plugin all POST to the canonical hostname mcp.thenational.academy; a teacher in a browser reaches its landing page, and also reaches www.thenational.academy/mcp, which is not on this project and returns 404. Two vercel.thenational.academy names and the curriculum-mcp-alpha.oaknational.dev alias are reachable by name, but their own client sets were not measured. Tier 2 to Tier 3, the Cloudflare edge, applies only to the canonical hostname and the two vercel names, which are proxied; an OWASP ruleset at paranoia level 1 returns 403 for SQL injection and cross-site scripting payloads but does not block path traversal, and lets ordinary teacher prose through. Requests under the score threshold pass to a response-header transform, which on the canonical host reduces the application's CSP from 13 directives to 2 and rewrites other security headers, but excludes any host whose name contains vercel. Requests over the threshold are blocked at the edge and stop there, so they reach no Oak instrument at all. No Cloudflare rate-limit rule matches this service. Two paths reach Tier 4, Vercel, without touching the edge: the oaknational.dev alias, which is in a different DNS zone, and the canonical name resolved origin-direct by IP. Tier 4 is one production deployment serving all four hostnames. In Tier 5, the application, the request passes Clerk session middleware, then an accept-header check that returns 406 before the bearer-token check, then bearer-token verification performed in the application after the edge, then the MCP handler; the OAuth proxy, the health check and the landing page sit alongside that chain. Tier 6, services: the application verifies every bearer token with Clerk, queries the Oak Open Curriculum API for curriculum data, runs semantic search against Elasticsearch in europe-west1, sends tool-use events to PostHog EU under an HMAC pseudonym, and sends spans and errors to Sentry.
+    accDescr: Six tiers read top to bottom, and every arrow carries a text label describing the relationship. Tier 1, clients, reach Tier 2, hostnames. Claude web and desktop (the dominant client), the Claude Code, Codex and Cursor command-line clients, and the Oak Claude Code plugin all POST to the canonical hostname mcp.thenational.academy; a teacher in a browser reaches its landing page, and also reaches www.thenational.academy/mcp, which is not on this project and returns 404. Two vercel.thenational.academy names are reachable by name, but their own client sets were not measured. Tier 2 to Tier 3, the Cloudflare edge, applies to all three project hostnames, which are proxied; an OWASP ruleset at paranoia level 1 returns 403 for SQL injection and cross-site scripting payloads but does not block path traversal, and lets ordinary teacher prose through. Requests under the score threshold pass to a response-header transform, which on the canonical host reduces the application's CSP from 13 directives to 2 and rewrites other security headers, but excludes any host whose name contains vercel, so the two vercel names serve the application's own full policy. Requests over the threshold are blocked at the edge and stop there, so they reach no Oak instrument at all. No Cloudflare rate-limit rule matches this service. One path reaches Tier 4, Vercel, without touching the edge at all: the canonical name resolved origin-direct by IP, which any client can do for itself, so no edge control here is an enforceable boundary. Tier 4 is one production deployment serving all three hostnames. In Tier 5, the application, the request passes Clerk session middleware, then an accept-header check that returns 406 before the bearer-token check, then bearer-token verification performed in the application after the edge, then the MCP handler; the OAuth proxy, the health check and the landing page sit alongside that chain. Tier 6, services: the application verifies every bearer token with Clerk, queries the Oak Open Curriculum API for curriculum data, runs semantic search against Elasticsearch in europe-west1, sends tool-use events to PostHog EU under an HMAC pseudonym, and sends spans and errors to Sentry.
 
     subgraph T1["TIER 1 &mdash; CLIENTS, from measured user agents"]
         C1["<b>Claude web and desktop</b><br/>connector — the dominant<br/>client by request volume"]
@@ -87,10 +90,9 @@ flowchart TB
         HUM["<b>A teacher in a browser</b>"]
     end
 
-    subgraph T2["TIER 2 &mdash; HOSTNAMES: four names on ONE Vercel project, plus one that is not on it"]
+    subgraph T2["TIER 2 &mdash; HOSTNAMES: three names on ONE Vercel project, plus one that is not on it"]
         HN1["<b>mcp.thenational.academy</b><br/>CANONICAL, and Cloudflare-proxied"]
         HN2["<b>Two vercel.thenational<br/>.academy names</b><br/>Cloudflare-proxied, but the<br/>header transform excludes them"]
-        HN3(["<b>curriculum-mcp-alpha<br/>.oaknational.dev</b><br/>a different DNS zone,<br/>no Cloudflare in path"])
         IP(["<b>The canonical name, resolved<br/>origin-direct by IP</b><br/>the edge is entirely bypassed"])
         HN4{{"<b>www.thenational.academy/mcp</b><br/>not on this project, and returns 404"}}
     end
@@ -103,7 +105,7 @@ flowchart TB
     end
 
     subgraph T4["TIER 4 &mdash; VERCEL"]
-        VER["<b>One production deployment,<br/>all four hostnames</b><br/>Express on Node 24"]
+        VER["<b>One production deployment,<br/>all three hostnames</b><br/>Express on Node 24"]
     end
 
     subgraph T5["TIER 5 &mdash; THE APPLICATION: an Express chain whose order is load-bearing"]
@@ -131,7 +133,6 @@ flowchart TB
     HUM -->|"GET / as HTML"| HN1
     HUM -->|"returns 404 today"| HN4
     C5 -.->|"reachable by name;<br/>client set NOT measured"| HN2
-    C5 -.->|"reachable by name;<br/>client set NOT measured"| HN3
     C5 -.->|"anyone resolving<br/>the name themselves"| IP
 
     HN1 ==>|"proxied through the edge"| WAF
@@ -140,7 +141,6 @@ flowchart TB
     WAF ==>|"under the score threshold"| HT
     WAF ==>|"over the score threshold"| BLIND
     HT ==>|"forwarded to the origin"| VER
-    HN3 -.->|"straight to the origin,<br/>NO edge in path"| VER
     IP -.->|"straight to the origin,<br/>NO edge in path"| VER
 
     VER ==>|"request enters the chain"| A2
@@ -168,7 +168,7 @@ flowchart TB
 
     class C1,C2,C5,PLG,HUM tierClients
     class HN1,HN2 tierHosts
-    class HN3,IP tierBypass
+    class IP tierBypass
     class WAF,HT tierEdge
     class RL,BLIND,HN4 gap
     class VER,A1,A2,A3,A4,AOA,AHZ,ALP tierApp
@@ -188,7 +188,7 @@ the response's security headers on the way back out — replacing the
 application's own 13-directive Content-Security-Policy with a 2-directive
 one — and forwards the request to Vercel.
 
-Vercel routes all four of the service's hostnames to a single production
+Vercel routes all three of the service's hostnames to a single production
 deployment. Inside it, Clerk session middleware runs first; then an
 accept-header check refuses any request that does not accept
 `text/event-stream` with a 406, and it does so before the bearer-token check,
@@ -199,11 +199,17 @@ from the Oak Open Curriculum API and run semantic search against
 Elasticsearch in `europe-west1`. Tool-use events go to PostHog EU; spans and
 errors go to Sentry.
 
-Two paths reach the same deployment without passing Cloudflare at all: the
-`curriculum-mcp-alpha.oaknational.dev` alias, which lives in a different DNS
-zone and resolves straight to Vercel, and the canonical name resolved
-origin-direct to a Vercel IP by any client that chooses to. On both, the WAF
-is absent and the application's full CSP survives.
+One path reaches the same deployment without passing Cloudflare at all: the
+canonical name resolved origin-direct to a Vercel IP by any client that
+chooses to. On it the WAF is absent and the application's full CSP survives.
+That one path is enough to settle the structural point, and it is the reason
+this document draws it: **no Cloudflare control on this service is an
+enforceable boundary**, because the origin answers requests that never passed
+the edge, and any client can resolve the name for itself. The edge filters the
+default path; it is not a wall around the origin. Until 2026-09-03 a second
+such path existed — see
+[the removed alias](#the-detail-the-diagram-compresses) below — and its
+removal narrows the exposure without changing that conclusion.
 
 ### The detail the diagram compresses
 
@@ -211,13 +217,32 @@ Facts worth having in text, so that nothing measured lives only inside a
 picture:
 
 - **The canonical hostname resolves to Cloudflare anycast addresses**
-  `104.18.6.160` and `104.18.7.160`. The alias resolves through
-  `4a80221ded84b150.vercel-dns-013.com` — the project-scoped Vercel target
-  that the canonical host's DNS record also points at, which is the first-hand
-  evidence that both names are one Vercel project.
+  `104.18.6.160` and `104.18.7.160` — and so do both
+  `*.vercel.thenational.academy` names, the same pair, which is the first-hand
+  evidence that all three are proxied through the same edge. Behind it, the
+  project-scoped Vercel target `4a80221ded84b150.vercel-dns-013.com` resolves
+  to `64.239.123.193` and `64.239.109.193`, and either address serves a
+  request carrying the canonical `Host` header. That is how the origin-direct
+  path is exercised, and it is the first-hand evidence that the canonical name
+  and this Vercel project are one deployment. The authoritative hostname list
+  is the Vercel project API rather than DNS.
 - **The deployment** is `poc-oak-open-curriculum-mcp`, Express on Node 24.x,
-  reporting `x-app-version: 1.178.0` on every hostname. All probes from this
-  vantage point were served from `fra1`.
+  reporting `x-app-version` on every hostname — `1.178.0` on the first pass,
+  and `1.178.1` on the re-probes taken later the same day. All probes from
+  this vantage point were served from `fra1` or `lhr1`.
+- **A fourth hostname existed until 2026-09-03.**
+  `curriculum-mcp-alpha.oaknational.dev` was a Cloudflare-DNS-only record in a
+  different zone, resolving straight to Vercel with no edge in path. It was
+  measured on this document's first pass — serving the application's full
+  13-directive CSP, and letting every WAF payload through to the origin — and
+  the owner removed both the DNS record and the Vercel project domain the same
+  day. Re-probed after removal: `dig` returns `NOERROR` with no answer, from
+  Cloudflare's own nameservers for the zone as well as from a public resolver;
+  `curl` cannot resolve the host; and the Vercel project API no longer lists
+  it. The two jobs it did as evidence now fall to instruments that still
+  exist — the origin-direct-by-IP path for edge bypass, and the
+  `*.vercel.thenational.academy` names for the CSP divergence — and both were
+  re-measured rather than assumed. **No claim below depends on the alias.**
 - **The Elasticsearch indices** reached in production are `oak_lessons`,
   `oak_unit_rollup`, `oak_threads` and `oak_sequence_facets`, on a cluster in
   `europe-west1` on GCP, over `@elastic/elasticsearch` with
@@ -239,23 +264,30 @@ the observed one, and says where the two diverge.
 ### What the WAF actually blocks
 
 Measured 2026-09-03 by `curl` against `/mcp/healthz` with the payload in the
-query string, on each host in turn:
+query string, on each path in turn. The right-hand column is the
+origin-direct-by-IP path (`curl --resolve`), which replaced the removed
+`oaknational.dev` alias as the bypass instrument and was re-measured after the
+removal:
 
-| Payload                            | Canonical host | `*.vercel.…` host | `oaknational.dev` alias |
-| ---------------------------------- | -------------- | ----------------- | ----------------------- |
-| `' OR 1=1--`                       | **403**        | **403**           | 200                     |
-| `UNION SELECT password FROM users` | **403**        | **403**           | 200                     |
-| `<script>alert(1)</script>`        | **403**        | **403**           | 200                     |
-| `<img src=x onerror=alert(1)>`     | **403**        | **403**           | 200                     |
-| `../../etc/passwd` (4 encodings)   | 200            | 200               | 200                     |
-| `explain SQL injection to year 10` | 200            | 200               | 200                     |
+| Payload                            | Canonical host | `*.vercel.…` host | Origin-direct by IP |
+| ---------------------------------- | -------------- | ----------------- | ------------------- |
+| `' OR 1=1--`                       | **403**        | **403**           | 200                 |
+| `UNION SELECT password FROM users` | **403**        | **403**           | 200                 |
+| `<script>alert(1)</script>`        | **403**        | **403**           | 200                 |
+| `<img src=x onerror=alert(1)>`     | **403**        | **403**           | 200                 |
+| `../../etc/passwd` (4 encodings)   | 200            | 200               | 200                 |
+| `explain SQL injection to year 10` | 200            | 200               | 200                 |
 
 Three things follow, and the last one corrects a belief held before this
 measurement.
 
 - **Teacher prose is not caught.** A legitimate curriculum query that names an
   attack technique passes. That was the design worry, and it is not happening.
-- **The alias has no WAF at all.** Every payload reaches the origin.
+- **The origin-direct path has no WAF at all.** Every payload reaches the
+  origin, because the request never touches Cloudflare — `server: Vercel`, and
+  no `cf-ray` on the response. The removed alias returned exactly these values
+  for the same reason, so the column carries the same finding on an instrument
+  that cannot be taken away by a DNS change.
 - **Path traversal is not blocked**, in any of four encodings. This is
   consistent with the Terraform: the ruleset runs paranoia level 1 only, with
   levels 2, 3 and 4 explicitly disabled, and the local-file-inclusion rules
@@ -293,13 +325,26 @@ HTTP probe.**
 `(.+\.|^)thenational\.academy`, excluding any host containing `labs`, any host
 containing `vercel`, and `www` and `owa` by name. Measured against that:
 
-| Header                      | Canonical (edge applies)          | Alias and `vercel.*` (app value) |
-| --------------------------- | --------------------------------- | -------------------------------- |
-| `content-security-policy`   | 2 directives                      | **13 directives**                |
-| `x-frame-options`           | `DENY`                            | `SAMEORIGIN`                     |
-| `referrer-policy`           | `strict-origin-when-cross-origin` | `no-referrer`                    |
-| `strict-transport-security` | adds `preload`                    | no `preload`                     |
-| `permissions-policy`        | set by the edge                   | absent                           |
+| Header                      | Canonical (edge applies)          | `*.vercel.…` (proxied, transform excluded) | Origin-direct by IP (no edge at all) |
+| --------------------------- | --------------------------------- | ------------------------------------------ | ------------------------------------ |
+| `content-security-policy`   | 2 directives                      | **13 directives**                          | **13 directives**                    |
+| `x-frame-options`           | `DENY`                            | `SAMEORIGIN`                               | `SAMEORIGIN`                         |
+| `referrer-policy`           | `strict-origin-when-cross-origin` | `no-referrer`                              | `no-referrer`                        |
+| `strict-transport-security` | adds `preload`                    | **also `preload`**                         | no `preload`                         |
+| `permissions-policy`        | set by the edge                   | absent                                     | absent                               |
+
+**The `strict-transport-security` row is why those two right-hand columns are
+now shown apart, and it is a correction.** An earlier revision of this table
+carried a single "app value" column measured on the `oaknational.dev` alias,
+which served no `preload`. Re-measured 2026-09-03 on the two instruments that
+survive the alias's removal: the `*.vercel.…` names **do** serve `preload`,
+because they are Cloudflare-proxied and HSTS reaches them from the zone rather
+than from the header transform that excludes them. Only the origin-direct
+path, which touches no Cloudflare at all, serves the application's own
+`preload`-free value. The alias could stand in for both columns because it was
+both things at once — not header-transformed _and_ not behind an edge — and
+that is exactly what made it a misleading single instrument. Everything else
+in the two columns agrees.
 
 The edge's CSP is `upgrade-insecure-requests; frame-ancestors 'self';`. The
 application's is a full `default-src 'self'` policy. **The edge's version is
@@ -315,6 +360,14 @@ Cloudflare-proxied — `server: cloudflare`, `cf-ray` present, same edge IPs —
 and the WAF does fire on them, but the header transform's `vercel` exclusion
 means they serve the application's own headers. Cloudflare-fronted and
 header-transform-free at once.
+
+That dual character is also what makes them the right instrument for the
+comparison above, now that the alias is gone. Because the edge still fronts
+them, they isolate the header transform from everything else Cloudflare does:
+the _origin_ demonstrably sends a complete 13-directive policy, and the _edge_
+demonstrably replaces it on the one host the transform selects. A host with no
+edge in front of it could not prove that second half, because on it the
+transform's absence and the edge's absence are the same fact.
 
 ### Rate limiting: no rule reaches this service
 
@@ -403,7 +456,7 @@ sequenceDiagram
     C->>CF: POST /mcp (no token)
     CF->>APP: forwarded
     APP-->>C: 401 + WWW-Authenticate: Bearer resource_metadata=…
-    Note over C,APP: MEASURED: both hosts return the CANONICAL host's<br/>metadata URL — the alias is not self-referential
+    Note over C,APP: MEASURED on the canonical AND a vercel.* host: both return<br/>the CANONICAL metadata URL — a non-canonical host's 401<br/>is not self-referential
     C->>APP: GET /.well-known/oauth-protected-resource/mcp
     APP-->>C: authorization_servers: [clerk.thenational.academy]<br/>scopes_supported: [email] — ONE scope
     C->>APP: GET /.well-known/oauth-authorization-server
@@ -448,9 +501,11 @@ Both were fetched on 2026-09-03:
 | `scopes_supported`                 | 7: `openid`, `profile`, `email`, `public_metadata`, `private_metadata`, `offline_access`, `user:org:read` | 1: `email`                                  |
 
 Two further measured details from that exchange, so they are not trapped in
-the diagram. First, **both hostnames return the canonical host's metadata
-URL** in `WWW-Authenticate` — the alias's 401 is not self-referential, it
-hands the client back to `mcp.thenational.academy`. Second, the rewritten AS
+the diagram. First, **a non-canonical hostname returns the canonical host's
+metadata URL** in `WWW-Authenticate` — re-measured 2026-09-03 against
+`poc-oak-open-curriculum-mcp.vercel.thenational.academy`, whose 401 is not
+self-referential: it hands the client back to `mcp.thenational.academy`. The
+removed alias behaved the same way. Second, the rewritten AS
 document repoints only the endpoints the proxy serves: `jwks_uri` and
 `revocation_endpoint` still name `clerk.thenational.academy` directly, so key
 fetching and revocation do not pass through Oak at all. No code path in this
@@ -636,19 +691,19 @@ three build flavours) and `Cursor/3.18.9` (30). Two scanner families
 
 Every claim above traces to one of these, run on 2026-09-03 unless stated:
 
-| Instrument                                                  | What it established                                                                                                                                                                        |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `dig +short <host> A` / `CNAME`                             | Hostname resolution, and that the alias and the canonical name reach the same Vercel project-scoped DNS target                                                                             |
-| `curl -sS -D -` per host                                    | Headers, status codes, CSP directive counts, `x-app-version`, `server`, `cf-ray`                                                                                                           |
-| `curl --resolve <name>:443:<vercel-ip>`                     | That the canonical name is reachable origin-direct, bypassing the edge                                                                                                                     |
-| `curl --resolve` with a bogus Host                          | That the origin refuses unknown hosts at TLS — it is not an open proxy                                                                                                                     |
-| `curl` with payloads in the query string                    | Actual WAF behaviour per host and per payload class                                                                                                                                        |
-| `curl -X POST` with and without the SSE `accept` header     | That content negotiation refuses at 406 before the bearer-token check — and, by comparing which headers each response carries, that Clerk's session middleware has nonetheless already run |
-| Vercel project API (`get_project`)                          | The authoritative list of four hostnames on one project, and the live production deployment                                                                                                |
-| Sentry span aggregation (`spans` dataset, 14d)              | Client user agents, outbound domains, per-environment Clerk bindings, request volumes                                                                                                      |
-| Source read: `Cloud-Config` `infrastructure/cloudflare/`    | WAF rules, header transforms, rate limits, the proxied DNS record and its reasoning                                                                                                        |
-| Source read: `apps/oak-curriculum-mcp-streamable-http/src/` | Middleware order, route registrations, the auth context schema, the OAuth proxy's upstream targets, the served-surface allowlist                                                           |
-| `gh pr view 4454 --repo oaknational/Oak-Web-Application`    | That the OWA `/mcp` landing page is open and unmerged, so `www/mcp` is still 404                                                                                                           |
+| Instrument                                                  | What it established                                                                                                                                                                                      |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dig +short <host> A` / `CNAME`, and `dig @<zone NS>`       | Hostname resolution: that the canonical and both `*.vercel.…` names share one pair of Cloudflare anycast addresses, and — against the zone's own nameservers — that the removed alias no longer resolves |
+| `curl -sS -D -` per host                                    | Headers, status codes, CSP directive counts, `x-app-version`, `server`, `cf-ray`                                                                                                                         |
+| `curl --resolve <name>:443:<vercel-ip>`                     | That the canonical name is reachable origin-direct, bypassing the edge                                                                                                                                   |
+| `curl --resolve` with a bogus Host                          | That the origin refuses unknown hosts at TLS — it is not an open proxy                                                                                                                                   |
+| `curl` with payloads in the query string                    | Actual WAF behaviour per host and per payload class                                                                                                                                                      |
+| `curl -X POST` with and without the SSE `accept` header     | That content negotiation refuses at 406 before the bearer-token check — and, by comparing which headers each response carries, that Clerk's session middleware has nonetheless already run               |
+| Vercel project API (`get_project`)                          | The authoritative list of three hostnames on one project, the live production deployment, and — re-queried after the DNS change — that the removed alias is off the project too                          |
+| Sentry span aggregation (`spans` dataset, 14d)              | Client user agents, outbound domains, per-environment Clerk bindings, request volumes                                                                                                                    |
+| Source read: `Cloud-Config` `infrastructure/cloudflare/`    | WAF rules, header transforms, rate limits, the proxied DNS record and its reasoning                                                                                                                      |
+| Source read: `apps/oak-curriculum-mcp-streamable-http/src/` | Middleware order, route registrations, the auth context schema, the OAuth proxy's upstream targets, the served-surface allowlist                                                                         |
+| `gh pr view 4454 --repo oaknational/Oak-Web-Application`    | That the OWA `/mcp` landing page is open and unmerged, so `www/mcp` is still 404                                                                                                                         |
 
 ### What is inferred rather than measured
 
@@ -659,23 +714,30 @@ than a gap:
   host and every other host in the zone. Read from Terraform; not
   distinguishable by external probe. See
   [Block or challenge](#block-or-challenge--a-limit-of-this-measurement).
-- **The deployment's region set.** Every probe from this vantage point was
-  served by `fra1`, and the region list is a Vercel project setting that does
-  not appear in this repository. One vantage point cannot measure a region
-  set.
-- **Who uses the `curriculum-mcp-alpha.oaknational.dev` alias**, and who uses
-  the two `*.vercel.thenational.academy` names. Telemetry aggregates across
-  hostnames, so neither client set was isolated. The diagram labels both of
-  those paths "client set NOT measured" for exactly this reason.
+- **The deployment's region set.** Probes from this vantage point were served
+  by `fra1` on the first pass and `lhr1` on the re-probes later the same day,
+  and the region list is a Vercel project setting that does not appear in this
+  repository. Seeing two colos proves the set is larger than one; it still
+  cannot enumerate it, because one vantage point cannot measure a region set.
+- **Who uses the two `*.vercel.thenational.academy` names**, and who resolves
+  the canonical name origin-direct. Telemetry aggregates across hostnames, so
+  neither client set was isolated. The diagram labels both of those paths
+  "client set NOT measured" for exactly this reason. The same gap applied to
+  the removed alias, which is why its removal cannot be reported here as
+  having broken nothing — no instrument in this estate could see who was
+  using it.
 - **Rule 1 of the managed-rules ruleset**, which `lifecycle.ignore_changes`
   places outside Terraform's view.
 - **Whether `OAK_API_URL` is set in the deployed environment.** Source shows
   it undeclared in the application's env schema; the deployed value is
   visible only through the Vercel environment API, which was not consulted.
-- **Whether `oaknational.dev` has any edge in front of it at all.** Measured:
-  Cloudflare's `thenational.academy` zone is not in its path. Not measured:
-  whether that zone is managed elsewhere, since `Cloud-Config` holds only the
-  `thenational.academy` zone.
+- **Whether any other name on this Vercel project can appear without
+  appearing here.** The project API is authoritative for the hostname list at
+  the moment it is queried, and the alias's removal showed that list and DNS
+  can disagree for a window: DNS had already stopped resolving while the
+  project API still carried the domain. Either surface alone can therefore be
+  briefly wrong, in either direction, and only agreement between them is
+  evidence.
 
 ## How fast each claim decays
 
@@ -687,17 +749,17 @@ registered under ADR-223 today, so nothing is out of compliance — but it is an
 obvious candidate, and registering it is the right follow-on. Until then, this
 table is the manual version.
 
-| Claim class                                                  | Decays                                                       | Re-check when                                    |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
-| Cloudflare anycast A records                                 | Days                                                         | Never rely on them; re-resolve                   |
-| `x-app-version`, and the `origin/main` sha                   | Every release                                                | Always; treat the stated version as "as at" only |
-| The 14-day span counts and the user-agent set                | Continuously — it is a rolling window                        | Any time the client mix matters                  |
-| Served-surface tool and resource counts                      | Every merge that touches the allowlist                       | Recompute from `served-surface.ts`               |
-| Cloudflare rules: WAF, header transform, rate limits         | Weeks — and rule 1 is invisible to Terraform by construction | Any edge change, any security review             |
-| Hostname set and which are proxied                           | On a DNS or Vercel domain change                             | Any host addition, and before publicity          |
-| The measured WAF behaviour per payload class                 | On any paranoia-level or threshold change                    | With the rules above                             |
-| Code-derived claims: middleware order, auth schema, PII pins | On the commits that touch them                               | When the cited file changes                      |
-| `www.thenational.academy/mcp` returning 404                  | When OWA pull request 4454 merges                            | Watch that pull request                          |
+| Claim class                                                  | Decays                                                                                                              | Re-check when                                                                                                                                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Cloudflare anycast A records                                 | Days                                                                                                                | Never rely on them; re-resolve                                                                                                                         |
+| `x-app-version`, and the `origin/main` sha                   | Every release                                                                                                       | Always; treat the stated version as "as at" only                                                                                                       |
+| The 14-day span counts and the user-agent set                | Continuously — it is a rolling window                                                                               | Any time the client mix matters                                                                                                                        |
+| Served-surface tool and resource counts                      | Every merge that touches the allowlist                                                                              | Recompute from `served-surface.ts`                                                                                                                     |
+| Cloudflare rules: WAF, header transform, rate limits         | Weeks — and rule 1 is invisible to Terraform by construction                                                        | Any edge change, any security review                                                                                                                   |
+| Hostname set and which are proxied                           | On a DNS or Vercel domain change — **demonstrated: a host was removed hours after this document first measured it** | Any host addition **or removal**, and before publicity. Check DNS and the Vercel project API together; they disagreed for a window during that removal |
+| The measured WAF behaviour per payload class                 | On any paranoia-level or threshold change                                                                           | With the rules above                                                                                                                                   |
+| Code-derived claims: middleware order, auth schema, PII pins | On the commits that touch them                                                                                      | When the cited file changes                                                                                                                            |
+| `www.thenational.academy/mcp` returning 404                  | When OWA pull request 4454 merges                                                                                   | Watch that pull request                                                                                                                                |
 
 ## Related decisions
 
