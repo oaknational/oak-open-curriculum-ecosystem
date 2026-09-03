@@ -3,12 +3,12 @@ boundary: B2-Architecture
 doc_role: index
 authority: architecture-navigation
 status: active
-last_reviewed: 2026-08-02
+last_reviewed: 2026-09-03
 ---
 
 # Architecture
 
-**Last Updated**: 2026-08-02
+**Last Updated**: 2026-09-03
 **Status**: Active architectural index
 
 ## Start Here
@@ -38,11 +38,10 @@ block in the ADR index:
 ### Core Architecture (Current)
 
 - Runtime topology: [the deployed MCP system, measured](./mcp-runtime-topology.md)
-  — hostnames and which of them Cloudflare fronts, what the WAF actually
-  blocks, where the application's CSP is replaced by the edge's, where token
-  verification happens relative to the edge, and the four outbound service
-  domains. Everything on it was probed or read from source on a stated date;
-  anything inferred is marked as such.
+  — the whole runtime in one diagram: clients, hostnames, the Cloudflare edge,
+  the application request chain and the services behind it. It states its
+  measurement date and instruments, and marks every inference; this line
+  deliberately does not restate its findings, which move with the estate.
 - Foundations-first architecture: the
   [software projection of the cost-of-change gradient](./foundations-first.md)
   — how core building blocks, foundational systems, libraries, and products
