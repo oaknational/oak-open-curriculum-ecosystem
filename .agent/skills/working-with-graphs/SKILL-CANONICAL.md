@@ -82,13 +82,22 @@ Two legitimate subgraph shapes exist, and both obey the completeness rule:
 
 - **Contiguous** — an anchored traversal neighbourhood: everything reachable from the anchors
   within the depth bound, with all internal edges. The EEF strand graph (`maxDepth = 1`) is this
-  shape. (The prior-knowledge view was too, until MCP-671 retired its synthesised
-  `prerequisiteFor` edges on 2026-09-03 — see ADR-195's amendment.)
+  shape. (So was the prior-knowledge _tool_, until MCP-671 moved it to a field projection on
+  2026-09-03 — see ADR-195's amendment. The depth-bounded view and its synthesised
+  `prerequisiteFor` edges both still exist in the corpus and the SDK; nothing serves them.)
 - **Sparse** — an anchored projection whose members are selected by the anchor's scope rather
-  than mutual reachability: one thread's year-ordered unit sequence, the prior-knowledge statements
-  the anchor units themselves record, a unit's lessons with their misconceptions, the keywords of every lesson matching subject + key stage. Members may be
+  than mutual reachability: one thread's year-ordered unit sequence, a unit's lessons with their
+  misconceptions, the keywords of every lesson matching subject + key stage. Members may be
   scattered across the wider graph; completeness still means every member matching the scope is
   present (or honestly windowed with totals) — sparse never means sampled.
+
+A third shape is not a subgraph at all, and saying so keeps the two above meaningful:
+
+- **Field projection** — anchor resolution plus a projection of fields the anchor nodes already
+  carry: no member selection, no edges, nothing scattered across the graph. The prior-knowledge
+  statements (`priorKnowledgeStatements`) are this shape. Completeness is trivially satisfied —
+  every anchor's every statement is present — and so is the warning: a field projection served
+  from a tool named `*-graph` will be read as a graph unless the tool description says otherwise.
 
 A projection whose meaning cannot ride `subgraph()` edges (sequence order, frequency ranking) is
 its **own real operation** in the view layer, with its own logic and tests — never a fake edge or

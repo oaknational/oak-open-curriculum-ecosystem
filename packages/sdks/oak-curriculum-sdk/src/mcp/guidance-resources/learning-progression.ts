@@ -2,7 +2,8 @@
  * Agent guidance: understanding how a concept builds across year groups.
  *
  * Navigation guidance (the served live-set): grounds the assistant's
- * progression analysis in Oak's thread and prior-knowledge graph tools.
+ * progression analysis over Oak's threads and each unit's stated prior
+ * knowledge.
  */
 
 import type { AgentGuidanceResource } from './guidance-resource-types.js';

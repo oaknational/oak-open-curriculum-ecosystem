@@ -42,7 +42,7 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
     ],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/curriculum-mapping.ts': reviewed(
-    '234eb0f75062e9071a3cdf8d942763fadd17c36e9e5ce590f40a6085d1a9f9e8',
+    'cee1117cddb526cb4d14a16cd62b34e100cc079c1d174ab1464ab75157bfc571',
     [
       'A006',
       'C182',

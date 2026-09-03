@@ -178,11 +178,16 @@ Each generator serves specific user personas with measurable impact:
 
 #### Prior Knowledge Graph Generator ✅ COMPLETE
 
+> **Amendment (2026-09-03 — MCP-671).** `get-prior-knowledge-graph` no longer serves this
+> generator's `prerequisiteFor` edges; it serves each unit's stated prior-knowledge statements.
+> The edges are still emitted and nothing consumes them. Counts below are as at authoring; the
+> corpus is regenerated with the data. See ADR-195's MCP-671 amendment.
+
 | Aspect        | Details                                                                                                                                                                                                                                       |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Audiences** | Student, Teacher, Parent, AI Agent                                                                                                                                                                                                            |
 | **User Need** | "What should I know before this?"                                                                                                                                                                                                             |
-| **Impact**    | Enables learning path planning. Students identify gaps; teachers diagnose readiness; parents plan homeschool curricula; AI agents check prerequisites before recommending content.                                                            |
+| **Impact**    | Enables learning path planning. Students identify gaps; teachers diagnose readiness; parents plan homeschool curricula; AI agents read what a unit assumes before recommending content.                                                       |
 | **Output**    | `prior-knowledge-graph/` (JSON loader; 1607 units, 3452 edges). The one-graph `graph-corpus/` dataset (1612 unit nodes, 3452 prerequisiteFor edges, materialised `unit:<slug>` ids, zero dangling endpoints) supersedes it for bounded views. |
 | **MCP Tool**  | `get-prior-knowledge-graph`                                                                                                                                                                                                                   |
 

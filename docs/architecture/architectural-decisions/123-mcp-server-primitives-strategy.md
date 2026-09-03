@@ -122,7 +122,7 @@ Seven parameterised workflow templates that the user explicitly invokes (slash c
 | `lesson-planning`      | topic, yearGroup                             | Full lesson build: place the lesson, specify knowledge, misconceptions, sequence, assess, resources                          |
 | `explore-curriculum`   | topic, subject?                              | Broad parallel search across lessons/units/threads                                                                           |
 | `learning-progression` | concept, subject                             | Search threads, map progression, identify gaps                                                                               |
-| `curriculum-mapping`   | subject, keyStage, yearGroup?                | Order units from the thread backbone and prerequisites, check national-curriculum coverage                                   |
+| `curriculum-mapping`   | subject, keyStage, yearGroup?                | Order units from the thread backbone and each unit's stated prior knowledge, check national-curriculum coverage              |
 | `adapt-lesson`         | topic, yearGroup                             | Surface pedagogical signals from Oak's graphs, retrieve EEF evidence, present calibrated options                             |
 | `continue-progression` | subject, yearGroup, justCovered, classNotes? | Resolve the class's position, derive the next step from the thread, readiness + misconceptions, chain into `lesson-planning` |
 

@@ -11,7 +11,7 @@ Delegate to the **sequencing-auditor** agent.
 The agent must:
 
 1. Read the draft sequence into an ordered list of units.
-2. For each unit, retrieve where Oak places it in its thread(s) from `get-thread-progressions`, and the prior knowledge it states it assumes from `get-prior-knowledge-graph`.
+2. Resolve each unit to its Oak slug first (`search` scoped to units, or `browse-curriculum`) — the tools take corpus keys, not the plan's wording — then retrieve the prior knowledge each unit states it assumes, and the year Oak teaches it, from `get-prior-knowledge-graph`.
 3. Report two kinds of finding, kept apart: **ordering breaks against Oak's threads** (a unit placed before one Oak teaches in an earlier year — data), and **assumed knowledge the plan may not have taught yet** (a stated requirement with no earlier unit that plausibly covers it — the agent's judgement).
 4. Report findings as a short table in plan order: unit, finding, whether it is data or judgement, suggested fix.
 

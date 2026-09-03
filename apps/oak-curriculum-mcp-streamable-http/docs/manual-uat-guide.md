@@ -295,13 +295,15 @@ context from Section 3.
 The four anchored graph tools. Acceptance is the **`working-with-graphs`
 doctrine** (see the
 [skill](../../../.agent/skills/working-with-graphs/SKILL-CANONICAL.md)): every
-response uses **structural bounds only** (anchors / depth / granularity), is
+response uses **structural bounds only** (anchors / depth or membership /
+granularity), is
 **complete within its bound**, reports **honest windows** (`hasMore`, totals),
 **echoes the anchors** that navigate to the next bounded call, makes **no
 server-side relevance judgement**, and shows **no soft stubs** — refusal/empty
 arrives in the honest typed shapes only.
 
-> **Size note.** Graph tools return the whole bounded subgraph in one response.
+> **Size note.** Graph tools return the whole bounded result in one response —
+> a subgraph, or for prior knowledge the anchor units' statements.
 > A broad anchor can exceed a host's token limit; where the tool accepts
 > narrowing arguments, scope the call down. "Returns without a transport error
 > and satisfies the checklist" is the pass; a host-side size cap is a known

@@ -45,10 +45,16 @@ captures — EEF graph-tooling rebuild); the EEF plan's Ratified Decisions in
 > year, so they asserted a prerequisite relation the corpus does not record. The tool now serves
 > the prior knowledge each unit itself records — free-text statements naming knowledge, not the
 > units that teach it — anchored on `unitSlugs`; the retired `depth` input is stripped rather
-> than errored. Two clauses below are read subject to this: §1's traversal-depth bound and §5's
-> "prior knowledge defaults to depth 2" no longer describe this tool, which performs no
-> traversal. §2 is unaffected — the dropped edges were never relationships the corpus held, and
-> the other three curriculum graph tools continue to serve recorded ones. Curriculum ownership
+> than errored. Several clauses below are read subject to this. §1's traversal-depth bound and its
+> "returns only the bounded relevant subgraph", §4's "the bounded subgraph travels as
+> `structuredContent`", and the Consequences' "subgraphs it can traverse" describe the other four
+> graph tools; this tool's bound is membership alone and its payload is a node set with no edges.
+> §5's "prior knowledge defaults to depth 2" no longer describes it at all. §3 still binds, and the
+> coverage limit it requires has changed: 17 of 1,834 units record no statements, which the tool
+> description now states. §2 is unaffected — the dropped edges were synthesised at corpus emission
+> from thread adjacency, never relationships the upstream curriculum data records, so no evidenced
+> relationship left the payload; the other three curriculum graph tools continue to serve recorded
+> ones. Curriculum ownership
 > signed off the narrower scope on 2026-09-03; sequencing value moves to the thread-graph of
 > coherently sequenced units (`get-thread-progressions`), paired with these statements. See
 > MCP-671 / PR #958.

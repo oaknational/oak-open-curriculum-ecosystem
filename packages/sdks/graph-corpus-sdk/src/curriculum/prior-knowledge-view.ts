@@ -2,6 +2,14 @@
  * Prior-knowledge view (G1b) — bounded anchored PREDECESSOR retrieval over the
  * one curriculum graph corpus.
  *
+ * @deprecated MCP-671 (2026-09-03). Nothing serves this view. Its
+ * `prerequisiteFor` edges are SYNTHESISED at corpus emission from consecutive
+ * year-ordered thread pairs, with an arbitrary tie-break between units taught
+ * in the same year, so they assert a prerequisite relation the curriculum data
+ * does not record. `get-prior-knowledge-graph` now serves
+ * `priorKnowledgeStatements` — each unit's own stated prior knowledge. Do not
+ * build a new surface on this view. See ADR-195's MCP-671 amendment.
+ *
  * "Prior knowledge of unit X" is the set of units that are (transitively, up to
  * a bounded depth) prerequisites of X — X's PREDECESSORS. The corpus edges are
  * oriented prerequisite (the `source`) to dependent (the `target`): the
@@ -13,7 +21,8 @@
  * is an incoming traversal over the corpus — exactly the prior-knowledge set.
  * Result edges are re-oriented back to the true `prerequisiteFor` direction
  * (prerequisite then dependent) before they leave this module, so consumers
- * always see real corpus edges.
+ * see the edges as the corpus stores them — which is not the same as a
+ * relation the curriculum data records; see the deprecation note above.
  *
  * Bounded retrieval — depth default 2, caller-adjustable up to
  * {@link MAX_PREREQUISITE_DEPTH}. Predecessor-direction neighbourhood sizes,

@@ -78,6 +78,8 @@ The query is anchored, never whole-corpus:
 
 The result reports units (each with slug, title, subject, key stage, year, priorKnowledge statements, and thread memberships), resolvedAnchors, and unknownAnchors.
 
+Coverage: 17 of Oak's 1,834 units record no prior-knowledge statements, so an empty priorKnowledge array means Oak states none for that unit — not that the unit is missing from the corpus.
+
 Use this to answer questions like:
 - "What should students know before this unit?" (anchor: that unit's slug)
 - "Which prerequisite gaps could explain difficulty with this lesson's unit?"

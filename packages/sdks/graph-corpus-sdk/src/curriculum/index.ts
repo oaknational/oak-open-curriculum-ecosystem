@@ -4,8 +4,8 @@
  * The generated one-graph corpus (G1a) plus the bounded anchored views over
  * it: `priorKnowledgeStatements` answers "what is the prior knowledge of
  * these units?" as each unit's stated prior-knowledge statements
- * (`priorKnowledgeSubgraph` (G1b) remains as the depth-bounded predecessor
- * subgraph over thread-adjacency edges);
+ * (`priorKnowledgeSubgraph` (G1b) remains exported but is deprecated and
+ * unserved — its thread-adjacency edges are synthesised; see its module doc);
  * `misconceptionsForLessons` / `misconceptionsForUnits` /
  * `misconceptionsForThread` (G2) answer "which misconceptions does this
  * anchor address?" over the thread→unit→lesson→misconception chain;

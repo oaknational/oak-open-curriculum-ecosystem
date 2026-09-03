@@ -13,7 +13,7 @@
  * @remarks
  * **This is the ONLY resource that agents must always load first.** It
  * provides the domain orientation that enables all other tools and resources.
- * The graph corpora (prerequisite, thread progressions, misconception) have
+ * The graph corpora (prior knowledge, thread progressions, misconception) have
  * no whole-corpus resource form — they are served by their anchored tools
  * and loaded only when the conversation needs them.
  *

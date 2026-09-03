@@ -39,8 +39,9 @@ Judgement call 4 of the graph-estate consolidation):
    generation time (ADR-031), and the tool's hand-written `types.ts` is deleted in the same unit.
    No hand-maintained type parallel to a generated corpus survives the unit.
 2. **The tool rewrite onto the graph corpus substrate** — bounded, anchored retrieval over the
-   one-graph corpus in `graph-corpus-sdk` (per-view construction, or an ordered corpus projection
-   where sequence order is the value), replacing the whole-corpus return.
+   one-graph corpus in `graph-corpus-sdk` (per-view construction, an ordered corpus projection
+   where sequence order is the value, or a projection of fields the anchor nodes carry),
+   replacing the whole-corpus return.
 3. **That tool's projection-derived `outputSchema`** — the schema authority is derived from the
    migrated tool's real projection of the generated data, never hand-authored and never
    speculative.

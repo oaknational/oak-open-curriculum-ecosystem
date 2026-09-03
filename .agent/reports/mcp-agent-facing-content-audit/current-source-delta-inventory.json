@@ -879,7 +879,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts",
-      "semanticSha256": "8e0a842a0cf89e24c74e2aeb6b2b8acc7dee5667412b89c8262d1198ebf55570",
+      "semanticSha256": "090df9fe8ec815cd041dcb2ca7466d727c2de7cae9e9b655add31edc0c33e18a",
       "itemIds": [
         "C246",
         "C247",
@@ -1003,7 +1003,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/curriculum-mapping.ts",
-      "semanticSha256": "234eb0f75062e9071a3cdf8d942763fadd17c36e9e5ce590f40a6085d1a9f9e8",
+      "semanticSha256": "cee1117cddb526cb4d14a16cd62b34e100cc079c1d174ab1464ab75157bfc571",
       "itemIds": [
         "A006",
         "C182",

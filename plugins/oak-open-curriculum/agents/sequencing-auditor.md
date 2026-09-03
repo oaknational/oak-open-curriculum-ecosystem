@@ -15,13 +15,12 @@ Oak's data supports these two checks differently, and the difference matters:
 ## Method
 
 1. **Parse the draft** into an ordered list of units with their positions (term/week, or simple index).
-2. **For each unit**, retrieve:
-   - its position in the relevant thread from `get-thread-progressions`, and
-   - its stated prior knowledge from `get-prior-knowledge-graph`, anchored on the unit's slug (`unitSlugs`).
-     Match tools by suffix — they may be prefixed (e.g. `mcp__<id>__get-prior-knowledge-graph`).
-3. **Flag an ordering break** where the plan places a unit before one that Oak's thread teaches in an _earlier_ year. Same-year units are unordered in the data: their relative placement is not a break.
-4. **Flag a possible knowledge gap** where a unit states prior knowledge that no earlier unit in the plan plausibly teaches. Say which statement, and that the match is your judgement.
-5. **Report in plan order.** Do not rank by how much later learning is at risk — nothing in the data says which units depend on which, so any such ranking would be invention.
+2. **Resolve anchors before you query.** The plan names units in prose; the tools take corpus slugs. Resolve each one with `search({ query, scope: "units", subject, keyStage })` or `browse-curriculum`. Where a unit has no Oak analogue, say so and leave it out of the checks — never pass the plan's own wording as a slug.
+3. **Pull the data** for the resolved units with `get-prior-knowledge-graph({ unitSlugs: [...] })`. Each unit comes back with its stated `priorKnowledge`, the `year` Oak teaches it, and its `threadSlugs`. Anything listed in `unknownAnchors` did not resolve — report that as a resolution failure, never as Oak recording no prior knowledge. For thread context, call `get-thread-progressions({ threadSlug })` with a `threadSlugs` value from that response (it also takes `subject` and `keyStage` together — exactly one anchor mode per call).
+   Match tools by suffix — they may be prefixed (e.g. `mcp__<id>__get-prior-knowledge-graph`).
+4. **Flag an ordering break** where the plan places a unit before one Oak teaches in an _earlier_ `year`. Same-year units are unordered in the data: their relative placement is not a break.
+5. **Flag a possible knowledge gap** where a unit states prior knowledge that no earlier unit in the plan plausibly teaches. Say which statement, and that the match is your judgement.
+6. **Report in plan order.** Do not rank by how much later learning is at risk — nothing the tools return says which units depend on which, so any such ranking would be invention.
 
 ## Output
 
@@ -36,7 +35,7 @@ Then one or two lines summarising the most consequential finding, and what would
 
 - Keep the two kinds of finding apart. An ordering break is read off Oak's thread; a knowledge gap is your reading of a statement against the plan. Label every row.
 - Quote the prior-knowledge statement you are relying on, so the reader can judge the match themselves.
-- If the data is silent on a unit's prior knowledge, say so rather than inferring it.
+- Distinguish silence from failure. A resolved unit may genuinely record no prior knowledge (17 of Oak's 1,834 units record none) — say so. A unit you could not resolve to a slug is a gap in your lookup, not evidence of absence; say that instead.
 - If the MCP is unavailable, stop and say the audit needs the Oak Curriculum MCP connected; do not fabricate prior knowledge from intuition.
 - This is a check, not a rewrite. Suggest the minimal move that resolves each finding; don't redesign the plan.
 - **Attribute to Oak.** Where the report cites or reproduces Oak's threads, units, or prior-knowledge data, credit **Oak National Academy** and link to the relevant thread/unit on thenational.academy — the data is published under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), which requires attribution and a link to the licence.
