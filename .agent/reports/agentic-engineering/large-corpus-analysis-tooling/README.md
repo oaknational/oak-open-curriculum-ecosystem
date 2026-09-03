@@ -91,3 +91,29 @@ instrument, never the milestone.
   legitimately-oversized validate splits into candidate-subset runs via the resume mechanism.
 - Voter cost calibration: ~50k tokens/voter at high effort over grounding-heavy prompts
   (`OBSERVED_VALIDATE_TOKENS_PER_VOTER`, `run-orchestration.ts`).
+
+## Runbook — since-marker run (first used 2026-09-02)
+
+A pass scoped to "napkins since the last processed marker" does not re-map files a prior
+run already mapped. The shape, all file-level, no engine change:
+
+1. **Partition only the post-marker files** (plus any file that shared a window with an
+   out-of-scope file in the prior run, so the new window has a clean file boundary). Use
+   window ids that continue the prior run's numbering so leaf ids stay unique.
+2. **Map** as normal; assess the map checkpoint before spending further: (a) each mapper's
+   `Read` calls cover its file in contiguous line ranges up to the file's line count;
+   (b) every leaf's grounding quote anchors verbatim in its archive after whitespace
+   collapsing (split abridged quotes at their ellipses and anchor the fragments).
+3. **Splice** the prior map checkpoint's leaves for the in-scope files by window into a
+   union map-result (partition and coverage rows added, `leafCount` recomputed, ids
+   unique). The union is the reduce corpus.
+4. **Reduce** over the union, then **dedup in-seat** against the prior run's full
+   adjudicated set (kept and killed): same-mechanism-as-a-keep candidates are not re-voted
+   (their post-marker recurrence is the finding); same-as-a-kill with pre-marker evidence
+   only are not re-voted; everything else forms a filtered reduce-result checkpoint.
+5. **Validate and meta over the filtered checkpoint**; the full reduce result stays
+   committed beside it, and the merged-disposition gate is satisfied over the filtered set.
+   Publish the dedup mapping in the report so any row can be contested.
+
+The meta stage emits absolute home paths; rewrite them repo-relative before committing the
+checkpoint (the driver resolves either form; the path ratchet accepts only the relative one).

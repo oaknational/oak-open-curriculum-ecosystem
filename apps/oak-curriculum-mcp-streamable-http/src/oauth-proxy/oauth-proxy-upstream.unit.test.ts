@@ -140,16 +140,12 @@ describe('rewriteAuthServerMetadata', () => {
   it('works with a production HTTPS origin', () => {
     const result = rewriteAuthServerMetadata(
       TEST_UPSTREAM_METADATA,
-      'https://curriculum-mcp.oaknational.dev',
+      'https://mcp.thenational.academy',
     );
-    expect(result.issuer).toBe('https://curriculum-mcp.oaknational.dev');
-    expect(result.authorization_endpoint).toBe(
-      'https://curriculum-mcp.oaknational.dev/oauth/authorize',
-    );
-    expect(result.token_endpoint).toBe('https://curriculum-mcp.oaknational.dev/oauth/token');
-    expect(result.registration_endpoint).toBe(
-      'https://curriculum-mcp.oaknational.dev/oauth/register',
-    );
+    expect(result.issuer).toBe('https://mcp.thenational.academy');
+    expect(result.authorization_endpoint).toBe('https://mcp.thenational.academy/oauth/authorize');
+    expect(result.token_endpoint).toBe('https://mcp.thenational.academy/oauth/token');
+    expect(result.registration_endpoint).toBe('https://mcp.thenational.academy/oauth/register');
   });
 
   it('passes through non-proxied endpoint URLs unchanged', () => {

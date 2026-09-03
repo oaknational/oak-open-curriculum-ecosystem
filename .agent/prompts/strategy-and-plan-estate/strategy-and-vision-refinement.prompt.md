@@ -8,6 +8,8 @@
   (now homed in the `product-development-governance` collection)
 - **Created:** 2026-06-20 (Fennel tracks Chlorophyll) for the next session. Supersedes
   `define-strategy-content.prompt.md` — the structure that opener asked for now exists.
+- **Amended:** 2026-08-30 — owner declared the Oak Innovation Kit the fourth value
+  stream and `innovation-kit` a distinct first-class strategic node.
 
 ---
 
@@ -42,12 +44,12 @@ owner's to shape.
    stable index + summary; detailed content lives in separate file(s). Split `docs/strategy/README.md`
    into an index over detail files (natural seams: diagnosis, oak-alignment, streams-as-system, the
    per-stream sections, measures). Move the strategic-choice-ID **mechanics** (the contract, the
-   `serves_strategic_choice` field, the validator) to the Body-3 / governed-document-graph governance
+   typed `serves` field (strategic → choice; delivery → node), the validator) to the Body-3 / governed-document-graph governance
    layer — the strategy *lists* the choices; governance owns the contract. Honour the over-structuring
    guard (split on natural seams, not one file per fragment).
 2. **Settle the DEFERRED decisions with the owner — diagnosis and granularity first.** They gate the
    choice set, the IDs, and Body 3. Then per-stream how-we-win / what-we-won't-do / measures. **Balance
-   the app-heavy corpus** across the three streams: the framework stream still needs its
+   the app-heavy corpus** across the four streams: the framework stream still needs its
    internal-transformation content (the rollout model, the team-learns-then-disperses shape, the Practice
    meta-learning loop, internal module reuse). Product-strategy substance is the **owner's** — bring
    structure, questions, verdicts on engineering/estate structure; do not invent the substance.
@@ -61,7 +63,9 @@ owner's to shape.
 
 ## Settled this thread — build on, do not re-open
 
-- Two-part vision; three value streams as the strategy's first organising principle (same system, two zooms).
+- Two-part vision; four value streams as the strategy's first organising principle (same system, two zooms).
+  The Innovation Kit is the fourth stream; its `innovation-kit` strategic node remains a
+  separate plan-estate object serving one `KIT-*` choice.
 - Two co-equal complementary channels (web + AI assistants); **no favourites** in the assistant list —
   ChatGPT, Claude, Copilot, Gemini and others; the choice is the teacher's, not ours.
 - Amplifier-not-replacement ethic at three levels (pupil ← teacher ← our teams).
@@ -70,7 +74,7 @@ owner's to shape.
 - EEF = the concrete ecosystem-convenor exemplar (external org, open materials brought together; source-linked).
 - Imported cluster = suggestions to question-and-validate (owner was in the originating conversation;
   that does not make it correct). Graphs → adopt the thin slice (typed-relationship vocabulary,
-  `product_increment`, a two-edge `serves_strategic_choice`/reachability observe-graph = Body-3
+  `product_increment`, a typed `serves`/reachability observe-graph = Body-3
   enforcement), defer the full typed-graph cathedral. Service-authority (Linear/Figma) → forward design
   for when the team + designer land; home is a directive/ADR, not the strategy corpus.
 

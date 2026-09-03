@@ -128,8 +128,11 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     'da82fc8370788eefc4a61b2778b78a2f6b56ec457dec7a146bd50fa774937f65',
     IMPLEMENTATION_ONLY,
   ),
+  // Pagination echo (2026-09-01 payload audit): the generated-tool envelope
+  // now surfaces the upstream Link-header signal beside status and data.
+  // Plumbing only; the served prose the cited items pin is unchanged.
   'packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts': reviewed(
-    '97b08a93960272d7b636afcd2e1f9ed76b0512227688912d4135bc9eb90b01da',
+    'c83e633368cd3ccb5791e97dac57e58d586b9afa187a47040173dfd02ca57f03',
     ['C057', 'C058'],
   ),
   // MCP-366: requiresDomainContext removed from the registry-descriptor

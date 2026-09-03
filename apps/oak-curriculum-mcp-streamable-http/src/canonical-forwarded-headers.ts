@@ -8,7 +8,7 @@
  * interface configuration never reached. This shim closes that gap.
  *
  * Why configuration must supply these headers here (MCP-517). Behind the
- * Cloudflare edge the app is served at `https://www.thenational.academy/mcp`,
+ * Cloudflare edge the app is served at `https://mcp.thenational.academy/mcp`,
  * but the edge MUST override the Host to the app's own Vercel hostname —
  * that is how Vercel selects the serving project. The honest proxy answer
  * (`trust proxy` plus forwarded headers arriving from the edge) is structurally

@@ -181,6 +181,7 @@ start; a situational rule loads at its trigger's moment.
 | `.agent/rules/oak-chrome-session-is-metered.md`                            | situational    | tool:chrome-browser                                                                                |
 | `.agent/rules/owner-attention-at-action-moments.md`                        | core           | —                                                                                                  |
 | `.agent/rules/pr-comments-resolve-and-recheck.md`                          | situational    | ceremony:pr-lifecycle                                                                              |
+| `.agent/rules/pr-target-is-engraph.md`                                     | core           | —                                                                                                  |
 | `.agent/rules/per-user-memory-is-a-buffer.md`                              | core           | —                                                                                                  |
 | `.agent/rules/permanent-doc-is-the-consolidation-record.md`                | core           | —                                                                                                  |
 | `.agent/rules/ping-before-escalate.md`                                     | situational    | session:team                                                                                       |
@@ -200,6 +201,7 @@ start; a situational rule loads at its trigger's moment.
 | `.agent/rules/register-identity-on-thread-join.md`                         | core           | —                                                                                                  |
 | `.agent/rules/replace-dont-bridge.md`                                      | core           | —                                                                                                  |
 | `.agent/rules/respect-active-agent-claims.md`                              | core           | —                                                                                                  |
+| `.agent/rules/review-feedback-defaults-to-triage.md`                       | situational    | ceremony:pr-lifecycle                                                                              |
 | `.agent/rules/route-blocks-and-questions-to-director.md`                   | core           | —                                                                                                  |
 | `.agent/rules/rules-have-no-exceptions.md`                                 | core           | —                                                                                                  |
 | `.agent/rules/scope-from-goal-before-approach.md`                          | core           | —                                                                                                  |

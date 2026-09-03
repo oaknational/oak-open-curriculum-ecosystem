@@ -21,6 +21,7 @@ export type BootstrapPhaseName =
   | 'createDnsRebindingMiddleware'
   | 'createSecurityHeaders'
   | 'fetchUpstreamMetadata'
+  | 'verifyClerkKeyPairing'
   | 'registerPublicOAuthMetadata'
   | 'registerOAuthProxy'
   | 'addNoCacheToErrors'

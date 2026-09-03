@@ -48,6 +48,48 @@ barrier:
   same stream breaks `jq` on the capture file — `sed '$d'` the trailing
   line (or capture the JSON artefact separately) before parsing or
   conserving as a `.json` file.
+- **`find` on this host is `bfs`**, which rejects GNU-style relative
+  `-newermt "-40 seconds"` (ISO-8601 timestamps only) — a wait-loop built
+  on that predicate spins to timeout without ever becoming true. Compute
+  an absolute ISO timestamp, or run the CLI's own freshness assert.
+- **zsh expands an unquoted `=word`**: `--proto =https` becomes an
+  `=cmd` lookup ("https not found"); quote it (`'=https'`). Same family
+  as the `${VAR:+…}` word-split trap.
+- **Parallel Bash tool calls share ONE working directory**: two same-turn
+  `cd X && …` calls interleave (bit twice during branch restarts,
+  2026-08-24). Serial calls, or absolute paths for anything stateful —
+  and a `cd` in one compound command leaves the persistent shell there
+  for the NEXT call (a background push once ran in the wrong worktree and
+  reported "Everything up-to-date", 2026-08-18). Pin the shell to the
+  primary root and use `git -C <worktree>` for all worktree git.
+- **`FETCH_HEAD` is a shared single slot**: any background gate, hook, or
+  peer fetch overwrites it between two reads in one turn (a
+  `git show FETCH_HEAD:README.md` silently switched documents,
+  2026-08-18). Fetch into a named ref (`git fetch origin <branch>`, then
+  read `origin/<branch>`); never read `FETCH_HEAD` when background git can
+  run. Same family as cwd drift and the home registry: shared mutable
+  process-level state wants pinning-by-name, never sequencing-by-hope.
+- **A hook-BLOCKED compound command loses ALL its steps**, not only the
+  offending one — re-run the innocent steps explicitly (2026-08-14, a lost
+  footer cure).
+- **A harness reset returns the shell to the primary checkout** (a
+  plugin reload, a session restore): a "local server" once ran pre-fix
+  code from the primary while the seat believed it was in its worktree,
+  and a key attributed to the worktree was the primary's (2026-09-02).
+  Re-check `pwd` after any harness reset and label evidence by its true
+  source.
+- **Scratch files poison validation verdicts**: a thread-map JSON written
+  into a validation worktree failed that tree's `prettier --check .` and
+  cost a full gate re-run (2026-08-17). A validation tree contains ONLY the
+  work under test; scratch lives in the session scratchpad — the gate
+  judges the tree it sees, never the tree you meant.
+- **A bare `[[ ]]` that fails reaches an ERR trap with `PIPESTATUS`
+  reading 0** (a keyword's status does not land there the way `test`'s
+  does), so a mechanical `test` to `[[ ]]` rewrite made a failure card
+  print `pipe status: 0` beside a fatal failure (2026-09-01). Route
+  presence checks through the script's own `fail()`; a
+  "behaviour-identical" claim must include the instrumentation's
+  behaviour, not only the control flow.
 
 ## See also (homed elsewhere, not duplicated)
 

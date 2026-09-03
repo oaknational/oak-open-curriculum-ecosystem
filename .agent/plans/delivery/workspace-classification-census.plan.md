@@ -15,7 +15,7 @@ tickets:
 depends_on:
   - plan: survey-machinery-deconstruction
     kind: beneficial
-last_updated: 2026-08-14
+last_updated: 2026-08-30
 ---
 
 # Workspace classification census
@@ -87,8 +87,8 @@ the enumeration instrument; `.ts`/`.tsx`/`.js`/`.mjs`/`.cts`/`.mts`/`.sh`
 at minimum) that are not themselves inside a directory covered by (i),
 (ii), or (ii-b) — coverage judged per file, so a segment holding a nested
 subject AND code outside it keeps its code root. This is what catches the
-per-workspace `runtime-only-scripts/` tiers and the
-deliberately-unregistered research roots without a judgement call. The
+per-workspace `runtime-only-scripts/` tiers and other deliberately
+unregistered tracked code roots without a judgement call. The
 boundary decision this census serves is precisely about surfaces the
 member list cannot see; each derived subject gets a matrix row or a
 recorded exclusion, never silence.
@@ -213,6 +213,16 @@ open holding state.
 
 ## Amendment trail
 
+- **2026-08-30 — retired runnable research workspace reflected; subject set 45→43.** Owner
+  direction moved the web-app-deconstruction's retained analysis/examples into the canonical
+  `.agent/research/` tier and retired its accidental top-level runnable harness. The mechanical
+  predicate is unchanged, but `research/web-app-deconstruction` (the parent of a tracked
+  non-member `package.json`) and
+  `research/web-app-deconstruction/packages/research-evidence` (a pnpm member/package subject) no
+  longer exist, so the live census contains 43 subjects. Their rows are removed rather than
+  reclassified; facts and matrix are regenerated from the post-retirement tracked tree. This
+  amendment records an intentional estate change and does not reopen the ratified classification
+  vocabulary or the historical 45-subject reading.
 - **2026-08-18 — merge-round truing: reground re-grade recorded; false-edge cures; prose counts re-banked.** The workspace-basis re-grounding (2026-08-17, owner correction; record at `.agent/research/workspace-basis-regrounding-2026-08-17.md`) re-grades the round-2 target inventory (34→66) and taxonomy adoption to historical data carrying zero deference weight; the round-2 card path is cancelled at owner ruling, and the work that follows the census is governed by the owner's five-point repo-architecture brief (MCP-619). The decomposition artefacts (decomposition-analysis.json, target-inventory.json, decomposition-synthesis.md — status header re-trued) remain banked as candidate archive material stripped of deference arguments; the current-state census (facts/rows/matrix and the instrument) is unaffected as baseline evidence. Same round, review cures: sourceDependencies no longer fabricates root-subject edges from Node builtins or unresolvable specifiers (both classes verified first-hand, facts regenerated — the runtime-only-scripts `.` edge and two other false residuals cleared); facts parity is byte-exact over the whole artefact envelope via one canonical serialisation shared by `facts` and `check`, with duplicate-subject rejection; artefact orderings use a locale-independent comparator (host-ICU `localeCompare` could render byte-different artefacts across machines). Recorded limitations, deliberate: the depcruise scope is the fixed boundary-gate root list, so a subject outside those roots carries an empty-vs-not-scanned ambiguity in sourceDependencies, and the root subject's `.` catch-all attribution is the same design family (derive cruise scope from the live subject set as follow-on); prose-embedded counts in rows.json are banked snapshots that `check` does not cross-validate against facts.json — this round re-banked them against the regenerated facts, restating the word-boundary grep case-insensitive at 136 of 1296 (the prior 227/1287 pairing reproduced under no stated method). The post-cure Copilot round (2026-08-18, suppressed comments, zero threads) added four instrument follow-ons recorded with the same deferred disposition: the delta's rename fallback (a rename that also changes classification currently reports only under its new directory), a literal ROWS_SCHEMA_VERSION equality check at the rows-artefact boundary, strict rejection of malformed depcruise dependency entries (parity with parseTurboTasks), and the vocabulary membership check's literal widening.
 - **2026-08-17 — review-round cures: predicate text formalised; coverage judged per file; subject 45.** The mechanism's predicate paragraph now enumerates arm (ii-b) explicitly (it had lived only in the amendment trail — a reviewer-caught split state) and records the per-file coverage refinement to arm (iii): a top-level segment holding a nested subject AND code outside it keeps its code root (previously the whole segment was skipped — the reviewer-found gap). Under the refined arm the instrument derives 45 subjects: `.agents` (vendored external skills + generated skill projections) enters with a recorded exclusion. The same round hardened the instrument (full row-shape parse, non-blank evidence pointers, dual-identity coverage, Result-contract resolver parse, legacy-label parse errors, all-rows delta presence with dangling-rename surfacing, TOCTOU-free scanning with declared skips) and extended `check` to recompute facts.json and matrix.md for parity (validators-must-recompute).
 - **2026-08-14 — review card round 2 (~15:3xZ): DIRECTION CONFIRMED; criterion 4 satisfied on the decomposition spine.** The round-2 target inventory (34 workspaces -> 66, one lifecycle each; codegen split into spec-acquisition / reusable pipeline / generated artifact holders; editorial synonyms separated; generated output never co-resident with handwritten code; banked at the census report home: decomposition-analysis.json, target-inventory.json, decomposition-synthesis.md) was presented at the owner's round-2 card with three questions. Answers, verbatim: "Direction confirmed" (the census finalises on this spine — revised matrix dispositions, manifest arm, instrument green); "One programme node (Recommended)" (a single strategic reorganisation node owns the target inventory and sequencing, per-tranche delivery nodes authored at pickup); "Adopt as proposed" (directory taxonomy: packages/codegen/, packages/generated/, packages/search/, packages/mcp/, packages/graph/ join the existing roots; generated/ is the separation tier). Decision card direct to the lane seat.

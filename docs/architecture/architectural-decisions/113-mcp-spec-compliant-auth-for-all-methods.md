@@ -78,7 +78,7 @@ If Clerk latency becomes a concern, the correct mitigation is JWKS caching or Cl
 
 ### Disambiguation: "noauth" Means "No Scope Check"
 
-Tools with `securitySchemes: [{ type: 'noauth' }]` (e.g., `get-changelog`) still need HTTP-level authentication. The `noauth` designation means the tool does not require specific OAuth scopes -- not that it can be called without any authentication token. This distinction is enforced by:
+Tools with `securitySchemes: [{ type: 'noauth' }]` (e.g., `get-rate-limit`) still need HTTP-level authentication. The `noauth` designation means the tool does not require specific OAuth scopes -- not that it can be called without any authentication token. This distinction is enforced by:
 
 - **HTTP layer** (`mcp-router.ts`): All requests go through auth middleware
 - **Tool layer** (`check-mcp-client-auth.ts`): Only tools with `oauth2` security schemes trigger scope verification

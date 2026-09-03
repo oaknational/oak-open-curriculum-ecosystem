@@ -3,12 +3,12 @@ boundary: cross-boundary
 doc_role: index
 authority: docs-root-navigation
 status: active
-last_reviewed: 2026-08-07
+last_reviewed: 2026-08-30
 ---
 
 # Documentation for Oak Open Curriculum Ecosystem
 
-**Last Updated**: 2026-08-07
+**Last Updated**: 2026-08-30
 **Status**: Active index
 
 ## Getting Started
@@ -19,9 +19,11 @@ last_reviewed: 2026-08-07
   your machine, reads the live docs, and meets you there
 - **Evaluating the project?** → [VISION.md](../VISION.md) for the
   timeless framing: Oak's open curriculum as AI-native infrastructure across
-  **three co-equal value streams** — the teacher-facing MCP app, engineering
+  **four co-equal value streams** — the teacher-facing MCP app, engineering
   tools for the wider ecosystem (SDK, semantic search, curriculum graph,
-  evidence surfaces), and the agentic-engineering Practice. Then read the
+  evidence surfaces), the agentic-engineering Practice, and the
+  [Oak Innovation Kit](strategy/stream-innovation-kit.md), which is intended to turn shared
+  capability into excellent working experiences and trustworthy evidence. Then read the
   latest snapshot in the [reports surface](../.agent/reports/) and the live
   [high-level plan](../.agent/plans-backlog-2026-07/high-level-plan.md)
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language

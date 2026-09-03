@@ -47,6 +47,19 @@ class TransientFetchError extends Error {
   }
 }
 
+/**
+ * The fetched document names an issuer other than the URL it was fetched
+ * from. RFC 8414 Section 3.3 requires them to be identical, and the PRM
+ * publishes this issuer to every client as the authorization server, so a
+ * mismatch fails bootstrap rather than being served (MCP-655).
+ */
+class IssuerMismatchError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'IssuerMismatchError';
+  }
+}
+
 function isNetworkOrAbortError(caught: unknown): boolean {
   if (!(caught instanceof Error)) {
     return false;
@@ -60,9 +73,12 @@ function isTransientError(caught: unknown): boolean {
 
 /**
  * Single fetch attempt with timeout: fetches, validates, and returns metadata.
- * Throws {@link TransientFetchError} for 5xx responses so the caller can retry.
+ * Throws {@link TransientFetchError} for 5xx responses so the caller can retry,
+ * and {@link IssuerMismatchError} when the document's `issuer` is not the base
+ * URL it was fetched from (RFC 8414 Section 3.3).
  */
 async function attemptMetadataFetch(
+  upstreamBaseUrl: string,
   metadataUrl: string,
   fetchFn: FetchFn,
   timeoutMs: number,
@@ -83,6 +99,11 @@ async function attemptMetadataFetch(
     const data: unknown = await response.json();
     if (!isUpstreamAuthServerMetadata(data)) {
       throw new Error(`Upstream AS metadata at ${metadataUrl} does not match expected shape`);
+    }
+    if (data.issuer !== upstreamBaseUrl) {
+      throw new IssuerMismatchError(
+        `Upstream AS metadata at ${metadataUrl} names issuer ${data.issuer}, but it was fetched from ${upstreamBaseUrl}; RFC 8414 Section 3.3 requires them to be identical`,
+      );
     }
     return data;
   } finally {
@@ -129,7 +150,13 @@ export async function fetchUpstreamMetadata(
     let lastError: Error | undefined;
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
-        const metadata = await attemptMetadataFetch(metadataUrl, fetchFn, timeoutMs, span);
+        const metadata = await attemptMetadataFetch(
+          upstreamBaseUrl,
+          metadataUrl,
+          fetchFn,
+          timeoutMs,
+          span,
+        );
         return ok(metadata);
       } catch (caught) {
         lastError = toError(caught);

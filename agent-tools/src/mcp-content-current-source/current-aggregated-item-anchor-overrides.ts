@@ -225,10 +225,13 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   },
   // MCP-351: the published PRM resource now composes the shared
   // MCP_RESOURCE_PATH constant, so it cannot diverge from the RFC 8707
-  // expected audience. The served document's shape is unchanged.
+  // expected audience.
+  // MCP-655: `authorization_servers` names the upstream authorization
+  // server's issuer instead of this origin, so a PRM-following client holds
+  // the issuer the authorization response's `iss` carries (RFC 9207 §2.4).
   C706: {
     [AUTH_ROUTES]: [
-      'resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,\n      authorization_servers: [selfOrigin],\n      scopes_supported: SCOPES_SUPPORTED,',
+      'resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,\n      authorization_servers: [upstreamMetadata.issuer],\n      scopes_supported: SCOPES_SUPPORTED,',
     ],
   },
 } as const;

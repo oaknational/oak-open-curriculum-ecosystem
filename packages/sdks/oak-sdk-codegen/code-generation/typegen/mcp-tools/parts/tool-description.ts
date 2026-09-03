@@ -77,14 +77,14 @@ WHEN TO PREFER WHICH KEYWORDS TOOL: this tool returns the LIVE keyword set for a
  *
  * The upstream endpoint enforces a server-side default of \`limit=20\` (spec
  * 0.7.x; live-verified 2026-08-03 — an unpaged science+ks1 call returned 20
- * of 170 keywords), so an unpaged call silently returns a fraction of the
- * keyword set and nothing in the tool result signals that more exist. Until
- * the tool result carries a structural next-page signal, the description
- * instructs agents to page explicitly. Remove when that signal exists.
+ * of 170 keywords), so an unpaged call silently returns only the first page.
+ * Since the pagination echo landed (PR 949), the tool result carries the
+ * structural next-page signal this note previously had to substitute for,
+ * so the guidance now points at that signal instead of a blind page walk.
  */
 const GET_KEYWORDS_PAGINATION_NOTE = `
 
-NOTE: This tool is paginated — the server returns at most 20 keywords unless you pass \`limit\` (max 300), and nothing in the response indicates that more exist. For the complete set, pass \`limit: 300\` and increase \`offset\` by 300 per call until a page returns fewer than 300 keywords.`;
+NOTE: This tool is paginated — the server returns at most 20 keywords unless you pass \`limit\` (max 300). The result's \`pagination\` field reports \`hasMore\` and, when more pages exist, the \`nextOffset\`/\`nextLimit\` to pass; follow it until \`hasMore\` is false. Do not infer completeness by counting items against your limit.`;
 
 /**
  * Guidance appended to tools that can return a large payload at broad scope.

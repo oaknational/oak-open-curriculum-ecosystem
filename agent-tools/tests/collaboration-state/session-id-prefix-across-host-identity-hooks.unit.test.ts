@@ -33,7 +33,7 @@ describe('the PDR-027 session_id_prefix every host hook renders', () => {
     });
 
     const lines = (plan.hookOutput.hookSpecificOutput?.additionalContext ?? '').split('\n');
-    expect(lines).toContain(`PDR-027 session_id_prefix (first 6 of session_id): ${prefix}.`);
+    expect(lines).toContain(`PDR-027 session_id_prefix (first 6 of the PDR-027 seed): ${prefix}.`);
   });
 
   it.each(seedVectors)('the codex hook renders $prefix for $seed', ({ seed, prefix }) => {
@@ -56,7 +56,7 @@ describe('the PDR-027 session_id_prefix every host hook renders', () => {
       });
 
       expect(plan.output.additional_context.split('\n')).toContain(
-        `PDR-027 session_id_prefix (first 6 of composer session_id): ${prefix}`,
+        `PDR-027 session_id_prefix (first 6 of the PDR-027 seed): ${prefix}`,
       );
       expect(plan.mirror?.payload.sessionIdPrefix).toBe(prefix);
     },

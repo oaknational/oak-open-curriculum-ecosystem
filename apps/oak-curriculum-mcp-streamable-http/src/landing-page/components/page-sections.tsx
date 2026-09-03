@@ -101,8 +101,9 @@ export function PageHero(): JSX.Element {
  *
  * @param mcpEndpointUrl - The endpoint URL, derived once on the build side.
  * @param protectedResourceMetadataUrl - Path-qualified PRM URL, likewise derived
- *   once (MCP-511): the unqualified `/.well-known/oauth-protected-resource`
- *   does not reach this app on the canonical deployment.
+ *   once (MCP-511): the RFC 9728 §3.1 discovery URI for a resource at `/mcp`,
+ *   and the form that survives a path-scoped edge. The unqualified path is a
+ *   compatibility alias serving the identical document.
  */
 export function ConnectSection({
   mcpEndpointUrl,

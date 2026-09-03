@@ -9,7 +9,11 @@ request validation that a cited OAuth clause obliges the _advertised_
 authorisation server to perform and that the upstream is demonstrated not to
 perform. Amended 2026-07-30 (MCP-411): the application-layer rate-limiting
 precondition is retired; volumetric control is owned at the edge — see
-[ADR-219](219-rate-limiting-is-an-edge-concern.md).
+[ADR-219](219-rate-limiting-is-an-edge-concern.md). Amended 2026-09-01
+(MCP-655): the Protected Resource Metadata names the upstream authorisation
+server, because a client that validates RFC 9207 must hold the issuer the
+authorisation response carries; the app-origin proxy remains for
+origin-discovering clients — see §Context and Negative consequence 8.
 
 **Related**: [ADR-052 (OAuth 2.1)](052-oauth-2.1-for-mcp-http-authentication.md), [ADR-053 (Clerk)](053-clerk-as-identity-provider.md), [ADR-113 (Spec-Compliant Auth)](113-mcp-spec-compliant-auth-for-all-methods.md)
 
@@ -23,6 +27,8 @@ This affects all configurations where the RS and AS are on different origins:
 - `https://curriculum-mcp.oaknational.dev` (RS) vs `https://native-hippo-15.clerk.accounts.dev` (AS)
 
 MCP Inspector and programmatic clients (e.g. `pnpm smoke:oauth:spec`) are unaffected — the bug is specific to Cursor's `resource_metadata` persistence.
+
+**Amendment 2026-09-01 (MCP-655).** Naming this origin as the authorisation server in the PRM broke every client that validates the authorisation response's `iss` (RFC 9207 §2.4): Claude Code's v2 runtime, the default since 2.1.232, compares a present `iss` with the issuer it recorded from the PRM's authorisation server, and Clerk's redirect carries Clerk's `iss`, so sign-in was refused on preview and production. The PRM now names the upstream's issuer. For Cursor this re-creates the RS≠AS condition above on its _initial_ discovery — Cursor reads the PRM at the 401 and only loses the `resource_metadata` URL across the browser redirect — so the proxy at this origin now serves the post-redirect re-discovery leg alone; Cursor's flow is re-proved on the change's preview before merge (Negative 8).
 
 ### Options Considered
 
@@ -46,7 +52,7 @@ Act as a **proxy OAuth Authorisation Server** by serving three proxy endpoints t
 
 ### Metadata Rewriting
 
-- **PRM** (`/.well-known/oauth-protected-resource` and path-qualified `/mcp` variant per RFC 9728 Section 3.1): `authorization_servers` points to self-origin.
+- **PRM** (`/.well-known/oauth-protected-resource` and path-qualified `/mcp` variant per RFC 9728 Section 3.1): `authorization_servers` names the upstream authorisation server's `issuer` (amended 2026-09-01, MCP-655; it pointed to self-origin from 2026-02-21 until then). The value is the fetched upstream document's `issuer`, which the fetch requires to equal the base URL it was fetched from (RFC 8414 §3.3) or bootstrap fails. Two facts conserved from the MCP-655 final-diff review (2026-09-01), decision-relevant and not defects: the plain PRM route's `resource` value is not RFC 9728 §3.3-identical to the plain resource identifier — the 401 challenge advertises the path-qualified route, which is the one clients follow — so any future plain-route back-compat decision starts from that asymmetry; and RFC 8707 audience validation is a no-op on the upstream's opaque tokens, recorded in the TSDoc at the point it is applied.
 - **AS Metadata** (`/.well-known/oauth-authorization-server`): Fetched from Clerk at startup, cached for process lifetime. `issuer`, `authorization_endpoint`, `token_endpoint`, `registration_endpoint` rewritten to self-origin per-request. All capability fields (`scopes_supported`, `grant_types_supported`, etc.) pass through unchanged.
 
 ### Architecture
@@ -65,7 +71,7 @@ Act as a **proxy OAuth Authorisation Server** by serving three proxy endpoints t
                     │  ┌──────────────────────────────────┐   │
                     │  │  OAuth Metadata                   │   │
                     │  │  /.well-known/oauth-protected-    │   │
-                    │  │    resource → AS points to self   │   │
+                    │  │    resource → AS names Clerk      │   │
                     │  │  /.well-known/oauth-authorization-│   │
                     │  │    server → rewritten from Clerk  │   │
                     │  └──────────────────────────────────┘   │
@@ -181,7 +187,7 @@ This makes the proxy resilient to upstream changes (e.g. Clerk adding new parame
 
 ### Always-On
 
-One code path for all clients, all environments. No client detection, no conditional enablement. MCP Inspector, Claude, and programmatic clients all go through the proxy — the tokens are identical. If Cursor fixes the bug, the proxy can be removed without urgency.
+One code path for all clients, all environments. No client detection, no conditional enablement. Since 2026-09-01 (MCP-655) that one path serves two standard discovery mechanisms: a client that follows the PRM (RFC 9728) is sent to the upstream directly, and a client that discovers the authorisation server from the resource origin (RFC 8414 at this origin) reaches the proxy — the tokens are identical either way, because the proxy forwards to the same upstream. If Cursor fixes the bug, the proxy can be removed without urgency.
 
 ### Open Redirect Prevention
 
@@ -191,7 +197,7 @@ One code path for all clients, all environments. No client detection, no conditi
 
 The proxy works because Clerk issues opaque tokens (`oat_...`), not JWTs. There is no `iss` claim to validate against the AS metadata `issuer`. Token verification happens via Clerk's API (`getAuth()`), which does not check where the client found the AS metadata.
 
-**Risk**: If Clerk offers JWT access tokens in the future, the issuer mismatch (`issuer: "http://localhost:3333"` vs Clerk's actual issuer) will break clients that validate `iss` claims against AS metadata.
+**Risk**: If Clerk offers JWT access tokens in the future, the issuer mismatch (`issuer: "http://localhost:3333"` vs Clerk's actual issuer) will break clients that validate `iss` claims against AS metadata. (Amendment 2026-09-01: the issuer mismatch arrived first by another route — the RFC 9207 `iss` _parameter_ on the authorisation response, not a token claim — see Negative 8; this paragraph's risk still stands for JWT access tokens on the proxy path.)
 
 ### Error Handling
 
@@ -229,7 +235,7 @@ behaviour decision with its own evidence bar.
 
 ### Deployment Preconditions
 
-1. **Host header trust**: The server derives self-origin from the request `Host` header via `deriveSelfOrigin()`. All OAuth metadata (`authorization_servers`, `issuer`, endpoint URLs) uses this value. Ingress (Vercel, reverse proxy) must enforce a canonical host/protocol — otherwise, a malicious `Host` header could cause metadata to advertise incorrect endpoints. Locally, `isLoopbackHost()` forces `http://` for `localhost`; in production, Vercel enforces the canonical domain.
+1. **Host header trust**: The server derives self-origin from the request `Host` header via `deriveSelfOrigin()`. The PRM's `resource`, and the AS metadata's `issuer` and endpoint URLs, use this value; since 2026-09-01 (MCP-655) `authorization_servers` is the upstream's issuer and does not derive from the Host header at all, which takes it out of the Host-manipulation surface. Ingress (Vercel, reverse proxy) must enforce a canonical host/protocol — otherwise, a malicious `Host` header could cause metadata to advertise incorrect endpoints. Locally, `isLoopbackHost()` forces `http://` for `localhost`; in production, Vercel enforces the canonical domain.
 
 2. **Traffic controls**: The proxy endpoints (`/oauth/register`, `/oauth/authorize`, `/oauth/token`) are unauthenticated, public OAuth endpoints and therefore require traffic controls. Edge rate limiting configured at the CDN layer (Cloudflare and Vercel) is the authoritative volumetric control ([ADR-219](219-rate-limiting-is-an-edge-concern.md)); the application runs no in-process limiter. `GET /oauth/authorize` builds a 302 redirect with no upstream call, and Clerk's own throttling bounds the register/token legs — upstream 429s surface to clients through the preserved `Retry-After` mapping.
 
@@ -241,11 +247,11 @@ A community member published a [working solution using this exact pattern with M
 
 ### Positive
 
-1. **Cursor works**: Full OAuth flow completes (DCR → authorize → sign-in → token exchange → authenticated MCP calls).
+1. **Cursor works**: Full OAuth flow completes (DCR → authorize → sign-in → token exchange → authenticated MCP calls). Since the 2026-09-01 PRM amendment (MCP-655) Cursor's initial discovery reaches the upstream directly and the proxy serves its post-redirect re-discovery; the flow is re-proved on that change's preview before merge (Negative 8).
 2. **Other clients unaffected**: MCP Inspector, programmatic clients follow the same path transparently.
 3. **Simple**: ~200 lines of pure functions + ~100 lines of route handlers. No state, no sessions, no token storage.
 4. **Resilient**: Object-spread metadata rewriting automatically picks up new Clerk capability fields.
-5. **Removable, with one precondition**: If Cursor fixes the `resource_metadata` persistence bug, the proxy can be removed. It adds no coupling — but since 2026-07-26 it is the only party enforcing the loopback restriction on registered `redirect_uris`, so removal must first move that control to Clerk configuration or re-verify that upstream now enforces it.
+5. **Removable, with one precondition**: If Cursor fixes the `resource_metadata` persistence bug, the proxy can be removed. It adds no coupling — but since 2026-07-26 it is the only party enforcing the loopback restriction on registered `redirect_uris`, so removal must first move that control to Clerk configuration or re-verify that upstream now enforces it. Since 2026-09-01 that restriction covers origin-discovering registrations only: PRM-following clients register at the upstream's DCR directly (Negative 8).
 
 ### Negative
 
@@ -256,25 +262,26 @@ A community member published a [working solution using this exact pattern with M
 5. **The URL parser is now part of the accept-set definition** (2026-07-26): "parseable, `http:`, host not loopback" is defined by the WHATWG `URL` implementation in the running Node version. An IDNA, IPv6-literal or userinfo parsing change across a Node upgrade moves our accept-set with no ADR change and no necessarily-failing test.
 6. **Accept-set drift from Clerk, asymmetric in consequence** (2026-07-26): nothing keeps our rule aligned with the upstream's. Clerk tightening later costs only a duplicated refusal; Clerk _relaxing_ later makes us the stricter party and breaks a client Clerk would have served, with no upstream signal and the failure attributed to our origin. Registration error bodies are also no longer uniform — ours are our shape, Clerk's are Clerk's.
 7. **Precedent pressure on a one-exception clause** (2026-07-26): future conformance failures will arrive framed as "same as MCP-188". The cited-clause and demonstrated-upstream-gap tests are the only brake.
+8. **The PRM names the upstream; the proxy path cannot satisfy RFC 9207** (2026-09-01, MCP-655): a client that validates the authorisation response's `iss` (RFC 9207 §2.4 — a present `iss` is always compared with the recorded issuer; the current dated MCP authorisation revision (2026-07-28) makes that validation normative for clients, while the prior dated revision (2025-11-25) did not mention RFC 9207) must hold the issuer that Clerk's redirect carries. Under the original decision the PRM named this origin, so Claude Code's v2 runtime (default since 2.1.232) refused sign-in on preview and production. `authorization_servers` now names the upstream's `issuer`, validated at the fetch boundary to equal the URL it was fetched from (RFC 8414 §3.3). Consequences: one upstream authorisation server is presented under two issuer identifiers — the upstream's in the PRM, this origin's in the rewritten AS metadata (RFC 9207 §4 forbids the converse; a client that consults both documents holds conflicting issuers, and the Cursor preview proof is the empirical check); the proxy path still passes through the upstream's `authorization_response_iss_parameter_supported: true` (Positive 4), a promise that document breaches (RFC 9207 §2.3: the metadata `issuer` MUST be identical to the `iss` the authorisation response carries, and on that path they differ) — the served projection of upstream fields is decided on MCP-656; PRM-following clients register at the upstream's DCR directly, outside the MCP-188 refusal (Positive 5) and outside this origin's logs and spans; and the RS≠AS condition this ADR was written to avoid returns for Cursor's initial discovery, the proxy serving only its post-redirect re-discovery — so Cursor's flow, like Claude Code's, is proved on the change's preview before merge. A client that cached this origin as its authorisation server keeps using the proxy path until it re-reads the PRM; a validating client in that state must remove and re-add the server.
 
 ## Implementation
 
-| File                                                               | Role                                                                                                           |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| `src/oauth-proxy/oauth-proxy-upstream.ts`                          | Pure functions: URL derivation, redirect construction, metadata rewriting, Zod type guard                      |
-| `src/oauth-proxy/oauth-proxy-routes.ts`                            | Express router wiring and async error wrapping                                                                 |
-| `src/oauth-proxy/oauth-proxy-handlers.ts`                          | Route handlers (register, authorize, token)                                                                    |
-| `src/oauth-proxy/oauth-proxy-response.ts`                          | Upstream response reading and error-shape normalisation                                                        |
-| `src/oauth-proxy/oauth-proxy-redirect-uri-validation.ts`           | Advertised-AS `redirect_uris` refusal at registration (see Rationale)                                          |
-| `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts`                | Unit tests for the pure upstream functions                                                                     |
-| `src/oauth-proxy/oauth-proxy-redirect-uri-validation.unit.test.ts` | Unit tests pinning the registration refusal's exact scope — what is refused AND what is deliberately forwarded |
-| `src/oauth-proxy/oauth-proxy-routes.integration.test.ts`           | Integration tests over the router, with the upstream faked via DI `fetch`                                      |
-| `src/oauth-proxy/index.ts`                                         | Barrel export                                                                                                  |
-| `src/auth-routes.ts`                                               | PRM + AS metadata endpoints; accepts `upstreamMetadata` via DI                                                 |
-| `src/conditional-clerk-middleware.ts`                              | Proxy paths in `CLERK_SKIP_PATHS`                                                                              |
-| `src/app/oauth-and-caching-setup.ts`                               | Wires metadata + proxy into async bootstrap                                                                    |
-| `src/application.ts`                                               | `createApp` is async; `upstreamMetadata` injectable via `CreateAppOptions`                                     |
-| `e2e-tests/auth-enforcement.e2e.test.ts`                           | End-to-end assertions that the served metadata carries self-origin                                             |
+| File                                                               | Role                                                                                                              |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `src/oauth-proxy/oauth-proxy-upstream.ts`                          | Pure functions: URL derivation, redirect construction, metadata rewriting, Zod type guard                         |
+| `src/oauth-proxy/oauth-proxy-routes.ts`                            | Express router wiring and async error wrapping                                                                    |
+| `src/oauth-proxy/oauth-proxy-handlers.ts`                          | Route handlers (register, authorize, token)                                                                       |
+| `src/oauth-proxy/oauth-proxy-response.ts`                          | Upstream response reading and error-shape normalisation                                                           |
+| `src/oauth-proxy/oauth-proxy-redirect-uri-validation.ts`           | Advertised-AS `redirect_uris` refusal at registration (see Rationale)                                             |
+| `src/oauth-proxy/oauth-proxy-upstream.unit.test.ts`                | Unit tests for the pure upstream functions                                                                        |
+| `src/oauth-proxy/oauth-proxy-redirect-uri-validation.unit.test.ts` | Unit tests pinning the registration refusal's exact scope — what is refused AND what is deliberately forwarded    |
+| `src/oauth-proxy/oauth-proxy-routes.integration.test.ts`           | Integration tests over the router, with the upstream faked via DI `fetch`                                         |
+| `src/oauth-proxy/index.ts`                                         | Barrel export                                                                                                     |
+| `src/auth-routes.ts`                                               | PRM + AS metadata endpoints; accepts `upstreamMetadata` via DI                                                    |
+| `src/conditional-clerk-middleware.ts`                              | Proxy paths in `CLERK_SKIP_PATHS`                                                                                 |
+| `src/app/oauth-and-caching-setup.ts`                               | Wires metadata + proxy into async bootstrap                                                                       |
+| `src/application.ts`                                               | `createApp` is async; `upstreamMetadata` injectable via `CreateAppOptions`                                        |
+| `e2e-tests/auth-enforcement.e2e.test.ts`                           | End-to-end assertions that the PRM names the upstream and the origin's AS metadata and proxy routes are unchanged |
 
 All files within `apps/oak-curriculum-mcp-streamable-http/`.
 
@@ -291,5 +298,8 @@ All files within `apps/oak-curriculum-mcp-streamable-http/`.
 - [Cursor Forum #149511: Token refresh not working](https://forum.cursor.com/t/cursor-does-not-refresh-oauth-tokens-for-mcp-servers/149511)
 - [RFC 9728: OAuth 2.0 Protected Resource Metadata](https://datatracker.ietf.org/doc/html/rfc9728)
 - [RFC 8414: OAuth 2.0 Authorisation Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414)
+- [RFC 9207: OAuth 2.0 Authorization Server Issuer Identification](https://www.rfc-editor.org/rfc/rfc9207.html)
+- [MCP Authorisation Spec (2026-07-28) — Authorization Response Validation](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization)
+- [Claude Code error reference — "Issuer mismatch in authorization response"](https://code.claude.com/docs/en/errors)
 - [MCP Authorisation Spec (2025-11-25)](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)
 - [Working Solution: Entra ID Proxy](https://forum.cursor.com/t/working-solution-mcp-server-oauth-with-microsoft-entra-id-on-azure-container-apps/151813)

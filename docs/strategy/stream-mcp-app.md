@@ -2,11 +2,11 @@
 title: 'Strategy — Stream: the MCP app (teachers)'
 type: strategy
 status: active
-last_updated: 2026-06-26
+last_updated: 2026-08-30
 derives_from:
   - VISION.md
 governed_by:
-  - .agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md
+  - docs/strategy/README.md
 ---
 
 # Stream — the MCP app (teachers)

@@ -262,6 +262,62 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
+> **§FOLD LANDED, 2026-09-02 ~13:xxZ (Finch calls Pinnacle, `c91bd4`, implementer at the
+> #915 landing seat) — THIS SUPERSEDES THE WEEK-SLEEP BANNER BELOW.** The 2026-08-19 fold
+> (`coordination/2026-08-19-1651ad`, PR #915) LANDED on main as `777e9131c` (the PR's merge
+> commit, owner-merged 2026-09-02T14:05Z); the lane that follows at owner word is MCP-661 on
+> `jimcresswell/mcp-661-split-delivery-plan` (the split delivery plan, the #915 routings, one
+> PR). At the fold: the toolkit-re-architecture node is on main, `workspace-reorganisation-programme`
+> is `superseded`, the principles gradient amendments, three graduations and the atlas
+> five-change set ride with it. NO DIRECTOR IS SEATED. The week-sleep ended at owner word on
+> 2026-09-02; Director claim `f04cd57b` (Avocet) and design-lane claim `645b9e0b` (Yarrow)
+> CLOSED at this fold (owner plan-gate answer 2026-09-02: close at the fold landing). NO
+> SUCCESSOR COORDINATION BRANCH is cut after this fold (owner plan-gate answer 2026-09-02); the
+> long-running shape is `handoff/jim-september` (draft PR #951), the primary checkout's branch,
+> where Kiln holds Slag (`1447f4`) runs the napkin-only consolidation as curator and where the
+> dedicated plan-consolidation session works next at the owner's word. Board at the fold:
+> #946, #948, #945, #908 and this fold (#915) merged 2026-09-02; the open bot PR after it
+> is #951. Product-gravity
+> line for this fold's window — _moved for teachers:_ nothing in this fold's own commits (the
+> window's teacher-facing moves, the MCP-655 sign-in cure and the innovation-kit landing, rode
+> their own PRs #946 and #945); _moved for the Practice:_ the ratified toolkit node and its
+> supersession, the principles amendments, three graduations, the atlas, the 19 August estate
+> records. THE PICKUP MAP is `threads/estate-coordination.next-session.md` §2026-09-02 FOLD
+> LANDED. The week-sleep banner below is the prior state.
+
+---
+
+> **§WEEK-SLEEP FREEZE, 2026-08-19 ~15:5xZ (Avocet guards Updraft, `44e2ca`, Director —
+> seated at PDR-064 Moment 2 `84e31e6e` from Ocelot binds Tunnel `c28ad9`).** The estate
+> sleeps for a week at owner word (TEAM-SLEEP broadcast `bbc33e91`). Director claim
+> `f04cd57b` RETAINED-WITH-REASON; every seat's instruments down; every piece of work
+> pushed and PR-carried (sweep record `.agent/reports/week-sleep-sweep-2026-08-19.md`).
+> THE PICKUP MAP is `threads/estate-coordination.next-session.md` §2026-08-19 ~15:5xZ
+> WEEK-SLEEP FREEZE — wake-first: main-merge + rebuild the coordination branch, then land
+> draft fold PR #915 through converge-and-rotate. A successor adopts `f04cd57b` only after
+> this brief's readiness gate (step 3, mechanical check pasted). The fold entry below is
+> the prior state.
+
+---
+
+> **§FOLD ENTRY, 2026-08-19 ~12:2xZ (Ocelot binds Tunnel, `c28ad9`, estate-coordination
+> lane).** `coordination/estate-2026-08-17` FOLDED to main at owner word: convergence
+> merge `bb4e4110c` (clean; peers' in-flight files untouched), fold PR **#914**
+> bot-merged at full condition (four required checks green, zero threads) — merge
+> commit `1651ad2db` — and the day-stamped successor **`coordination/2026-08-19-1651ad`**
+> cut tree-preservingly from post-fold main (Poppy's owner-directed principles/atlas
+> parcel carried across, theirs to commit there). Product-gravity line: _moved for
+> teachers:_ the live changelog-tool defect (two served tools 404 upstream) found,
+> ticketed (MCP-630) and its ratified cure plan landed; the `mcp-output-contracts`
+> programme owner-ratified — machine-checkable, server-enforced results for every
+> assistant-facing tool. _moved for the Practice:_ the 14-leg fleet evidence record,
+> the plan-family restructure it grounded, two directive amendments (absence-pin
+> testing rule; schema-first §Output Contracts), host-portability tier amendment,
+> design-lane round records, atlas/MCP-619 design records, Director continuity.
+> Live estate-coordination state: `threads/estate-coordination.next-session.md`.
+
+---
+
 > **§LIVE-STATE POINTER, 2026-08-18 (Dormouse turns Footfall, `a54547`) — THIS
 > SUPERSEDES THE 2026-08-13 BANNER BELOW ON ONE FACT ONLY: A DIRECTOR IS SITTING.**
 > The 2026-08-13 banner records the Director lane as a make-safe pause with claim

@@ -220,3 +220,21 @@ tool retires them.
   so "no logs" is itself the signature: check module-load/boot-path code
   (top-level awaits, config reads, imports) before instrumenting the
   handler.
+
+## 2026-09-02 fold-carry batch (2026-08-19 instances carried at the fold merge)
+
+- **zsh arrays are 1-indexed.** A `for i in 0 1 …` over `declare -a`
+  silently dropped element 0 (one review thread unreplied, caught by the
+  in-band NOT_FOUND error). Iterate the array itself, never numeric
+  indices, in this shell.
+- **zsh no-word-split, census edition** (recurrence of the row above,
+  2026-09-02): a grep census over a space-joined path list in `$H`
+  returned NONE for every probe because grep searched one nonexistent
+  path and `2>/dev/null` hid the error. An all-NONE census is a probe
+  failure until one known-positive probe in the set reads a hit — carry
+  a positive control in every census.
+- **JSX attribute strings decode HTML entities.** Both SWC and esbuild
+  turn `"&mdash;"` into an em dash in attribute literals — a reviewer
+  finding built on "string props render literally" was premise-false.
+  Verify transform-level claims AT the transform, not from the JSX
+  mental model.

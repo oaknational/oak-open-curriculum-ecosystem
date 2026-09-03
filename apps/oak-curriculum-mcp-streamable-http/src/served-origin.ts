@@ -43,7 +43,7 @@ export const DEFAULT_LOCAL_PORT = '3333';
  */
 export interface ServedOriginInputs {
   /**
-   * Configured canonical origin (e.g. `https://www.thenational.academy`),
+   * Configured canonical origin (e.g. `https://mcp.thenational.academy`),
    * or `undefined` when no canonical host is configured.
    */
   readonly canonicalOrigin?: string;
@@ -62,8 +62,8 @@ export interface ServedOriginInputs {
  *
  * @example
  * ```typescript
- * resolveServedOrigin({ canonicalOrigin: 'https://www.thenational.academy' });
- * // 'https://www.thenational.academy'
+ * resolveServedOrigin({ canonicalOrigin: 'https://mcp.thenational.academy' });
+ * // 'https://mcp.thenational.academy'
  * resolveServedOrigin({ displayHostname: 'my-app.vercel.app' });
  * // 'https://my-app.vercel.app'
  * resolveServedOrigin({ portEnv: '4000' }); // 'http://localhost:4000'
@@ -100,14 +100,14 @@ export const PROTECTED_RESOURCE_METADATA_PREFIX = '/.well-known/oauth-protected-
  * is appended to the well-known prefix, so a resource at `/mcp` publishes its
  * metadata at `/.well-known/oauth-protected-resource/mcp`.
  *
- * The app answers the unqualified path too (see `auth-routes.ts`), and that is
- * correct — RFC 9728 describes both. But only one of them is a truthful
- * description of THIS resource, and only one of them reaches this app on the
- * canonical deployment: the Cloudflare origin rule forwards `/mcp` and
- * `/mcp/*`, so the unqualified path stays on the main website and returns its
- * 404 HTML. Anything that hands a human or a client a metadata URL must use
- * this one. The unqualified route remains for clients that construct it
- * themselves against a root-served deployment, such as the alpha host.
+ * The app answers the unqualified path too (see `auth-routes.ts`) as a
+ * compatibility alias: the same handler serves both, so the documents are
+ * identical, and both routes serve on the canonical deployment (verified
+ * 2026-09-01: the canonical host fronts this app at its root as well as under
+ * `/mcp*`). The path-qualified form is the one RFC 9728 §3.1 derives for a
+ * resource at `/mcp` and the one that survives a path-scoped edge, so anything
+ * that hands a human or a client a metadata URL uses this one; the alias
+ * answers clients that construct the unqualified path themselves.
  */
 export function resolveServedPrmUrl(inputs: ServedOriginInputs): string {
   return `${resolveServedOrigin(inputs)}${PROTECTED_RESOURCE_METADATA_PREFIX}${MCP_RESOURCE_PATH}`;

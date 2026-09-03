@@ -7,6 +7,7 @@
  */
 
 import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../definitions.js';
+import type { PaginationEcho } from '../contract/tool-descriptor.contract.js';
 
 type ToolDescriptorMap = { readonly [TName in ToolName]: ToolEntryForName<TName>['descriptor'] };
 type ToolInvokeParametersMap = {
@@ -34,6 +35,7 @@ export type ToolStatusForName<TName extends ToolName> = ToolValidationSuccess<TN
 export interface ToolResultForName<TName extends ToolName> {
   readonly status: ToolStatusForName<TName>;
   readonly data: ToolValidationSuccess<TName>['data'];
+  readonly pagination?: PaginationEcho;
 }
 export type ToolArgs<TName extends ToolName = ToolName> = ToolArgsForName<TName>;
 export type ToolClient<TName extends ToolName = ToolName> = ToolClientForName<TName>;

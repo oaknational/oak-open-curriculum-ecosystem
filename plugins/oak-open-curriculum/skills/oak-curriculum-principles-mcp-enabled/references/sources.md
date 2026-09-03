@@ -2,7 +2,7 @@
 
 ## The principles
 
-The six curriculum principles and the 15 subject guiding principles are Oak National Academy's. Their full statement, evidence base, and meaning live in the companion **`oak-curriculum-principles`** skill, synthesised from:
+The six curriculum principles and the subject guiding principles for 15 subjects are Oak National Academy's. Their full statement, evidence base, and meaning live in the companion **`oak-curriculum-principles`** skill, synthesised from:
 
 - Emma McCrea, "Our 6 principles guiding our approach to curriculum", Oak National Academy, 5 March 2023 — <https://www.thenational.academy/blog/our-approach-to-curriculum>
 - Oak National Academy curriculum pages — <https://www.thenational.academy/curriculum>

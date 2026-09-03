@@ -49,7 +49,8 @@ function isSchemaObject(value: unknown): value is SchemaObject {
  * createOpenCurriculumSchema unconditionally removes the owner-deferred paths from the
  * sdk document and throws when they are absent, so every fixture must carry them.
  * Local to this file by design: the coupling is deleted together with
- * excluded-paths.ts when MCP-214 lifts the deferral.
+ * excluded-paths.ts when the last deferral entry retires (MCP-214 for the
+ * check-restricted family, MCP-630 for the dead changelog pair).
  */
 const DEFERRED_PATH_STUBS: NonNullable<OpenAPIObject['paths']> = {
   '/key-stages/{keyStage}/subject/{subject}/check-restricted': {
@@ -61,6 +62,18 @@ const DEFERRED_PATH_STUBS: NonNullable<OpenAPIObject['paths']> = {
   '/lessons/check-restricted': {
     post: {
       operationId: 'stub-check-restricted-post',
+      responses: { '200': { description: 'OK' } },
+    },
+  },
+  '/changelog': {
+    get: {
+      operationId: 'stub-changelog-get',
+      responses: { '200': { description: 'OK' } },
+    },
+  },
+  '/changelog/latest': {
+    get: {
+      operationId: 'stub-changelog-latest-get',
       responses: { '200': { description: 'OK' } },
     },
   },

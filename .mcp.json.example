@@ -25,7 +25,7 @@
     },
     "oak-prod": {
       "type": "http",
-      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
+      "url": "https://mcp.thenational.academy/mcp"
     },
     "claude-design": {
       "type": "http",

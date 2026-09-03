@@ -3,7 +3,7 @@
  * address that differs from the hostname reaching it.
  *
  * Behind the Cloudflare edge (MCP-172) the app is served at
- * `https://www.thenational.academy/mcp`, but the edge presents the app's own
+ * `https://mcp.thenational.academy/mcp`, but the edge presents the app's own
  * Vercel hostname in the Host header — that is how Vercel selects the serving
  * project. Per-request derivation therefore cannot name the canonical
  * address, and the self-description surfaces (RFC 9728 protected-resource
@@ -33,7 +33,7 @@
  * @param canonicalHost - `CANONICAL_HOST` as validated at the env boundary
  *   (a bare hostname; ports, schemes, paths and loopback names are rejected
  *   at startup), or `undefined` when the app self-describes per request
- * @returns The origin (e.g. `https://www.thenational.academy`), or
+ * @returns The origin (e.g. `https://mcp.thenational.academy`), or
  *   `undefined` when no canonical host is configured
  */
 export function resolveCanonicalOrigin(canonicalHost: string | undefined): string | undefined {

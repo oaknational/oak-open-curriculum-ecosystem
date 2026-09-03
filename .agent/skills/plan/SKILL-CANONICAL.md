@@ -127,21 +127,54 @@ is not ratified.
 Every non-trivial plan MUST define:
 
 1. **Goal** — the user-impact outcome sought.
-2. **Mechanism** — why the named means produce that outcome.
-3. **Acceptance criteria, each with a proof** — outcome-measuring, not
+2. **User groups and value** — the groups who will experience or consume
+   the outcome (end users — including deliberately proxy ones with an
+   honest claim boundary, stakeholders and audiences, developers and
+   agents, operators), and for each group the value provided, stated in
+   experience terms. Pure innovation is often not meeting a pre-existing
+   need, so proving a pre-existing need in advance is not required where
+   the work's purpose is to reveal possibility: declared offered or
+   hypothesised value (possibility, comprehension, inspiration) with an
+   honest claim boundary satisfies this requirement (owner ruling,
+   2026-08-31; worked instance: the semantic-search-showcase plan, whose
+   first sketch met every then-current requirement while missing its
+   users). Falsifier: if this section fills with interchangeable
+   boilerplate rather than decision-bearing content, the requirement has
+   become ceremony and must be reshaped, not deleted silently.
+3. **Mechanism** — why the named means produce that outcome.
+4. **Acceptance criteria, each with a proof** — outcome-measuring, not
    activity-measuring, and each proof typed (`repo-safe` for
    test/CI-provable, `owner-held` for the owner's confirming act).
-4. **Out of scope** — what the plan explicitly will not do (YAGNI).
-5. **Todos** — sliced at pickup by the implementer, each slice a
+5. **Out of scope** — what the plan explicitly will not do (YAGNI).
+6. **Todos** — sliced at pickup by the implementer, each slice a
    single-story PR within its round budget
    ([PDR-132](../../practice-core/decision-records/PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md):
    round budgets bind at authoring time; slicing at plan time is free,
    slicing at the first over-budget review round is the measured
-   expensive path).
+   expensive path). Slicing at pickup CONSUMES the plan's disposition
+   ledger
+   ([PDR-140](../../practice-core/decision-records/PDR-140-review-response-pricing.md)):
+   the canonical ledger surface is a `## Review dispositions` section
+   in the plan file itself — one dated row per routed finding, naming
+   the source PR, the finding in one line, and the routing rationale —
+   with the plan's linked ticket as the carrier only when the ticket
+   exists and the disposition says so. At pickup the implementer
+   enumerates that section (and the named ticket, when cited), reading
+   and dispositioning every row before implementation begins; an
+   absent section means an empty ledger, never an unchecked one.
 
 Plans are public-repository artefacts: **mechanism only**. Anything
 internal — dates, vendor detail, organisational specifics — rides the
 linked Linear ticket, never the plan body.
+
+A plan that a FRESH session must implement is a self-contained repo
+artefact, never a chat artefact (owner ruling 2026-09-01, verbatim: "it
+must be copied to the repo, so a fresh session can implement it, that
+means it needs to be self contained and not rely on hidden context"):
+mechanism, exact files, tests, any registry ceremony, sequence and proofs
+in the node; dates, versions and deployment URLs on the ticket; the
+seat-facing state (branch, worktree, uncommitted edits) on the thread
+record — three homes, no hidden context.
 
 ## Authoring Disciplines (unchanged by estate structure)
 

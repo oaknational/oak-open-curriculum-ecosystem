@@ -84,8 +84,13 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     });
   });
 
-  describe('authorization_servers field (self-origin proxy)', () => {
-    it('points to self-origin, not upstream Clerk', async () => {
+  describe('authorization_servers field (names the upstream authorization server)', () => {
+    // A client that follows the PRM records this issuer and compares it with the
+    // `iss` on the authorization response (RFC 9207 Section 2.4); the upstream
+    // is the party that redirects back, so the two can only match if the PRM
+    // names the upstream. The expected value is the injected metadata's issuer,
+    // never a literal origin (MCP-655).
+    it('names the upstream authorization server from the injected metadata', async () => {
       const app = await createTestApp();
 
       const res = await request(app)
@@ -94,10 +99,10 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      expect(res.body).toHaveProperty('authorization_servers', ['http://localhost:3333']);
+      expect(res.body).toHaveProperty('authorization_servers', [TEST_UPSTREAM_METADATA.issuer]);
     });
 
-    it('uses https for non-loopback hosts', async () => {
+    it('names the upstream authorization server whatever Host is presented', async () => {
       const app = await createTestApp();
 
       const res = await request(app)
@@ -106,12 +111,12 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      expect(res.body).toHaveProperty('authorization_servers', ['https://api.example.com']);
+      expect(res.body).toHaveProperty('authorization_servers', [TEST_UPSTREAM_METADATA.issuer]);
     });
   });
 
   describe('path-qualified PRM (RFC 9728 Section 3.1)', () => {
-    it('serves PRM at /.well-known/oauth-protected-resource/mcp with self-origin AS', async () => {
+    it('serves PRM at /.well-known/oauth-protected-resource/mcp with the upstream AS', async () => {
       const app = await createTestApp();
 
       const res = await request(app)
@@ -120,7 +125,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       expect(res.status).toBe(200);
 
-      expect(res.body).toHaveProperty('authorization_servers', ['http://localhost:3333']);
+      expect(res.body).toHaveProperty('authorization_servers', [TEST_UPSTREAM_METADATA.issuer]);
       expect(res.body).toHaveProperty('resource', 'http://localhost:3333/mcp');
     });
   });

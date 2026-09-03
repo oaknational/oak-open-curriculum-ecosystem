@@ -51,7 +51,14 @@ export function emitStatusline(rawJson: string, deps: EmitDeps): string {
     bold: BOLD,
     reset: RESET,
   });
-  const plan = planStatuslineExecution(rawJson);
+  const plan = planStatuslineExecution(rawJson, {
+    ...(deps.env.PRACTICE_AGENT_SESSION_ID_CLAUDE === undefined
+      ? {}
+      : { PRACTICE_AGENT_SESSION_ID_CLAUDE: deps.env.PRACTICE_AGENT_SESSION_ID_CLAUDE }),
+    ...(deps.env.CLAUDE_CODE_REMOTE_SESSION_ID === undefined
+      ? {}
+      : { CLAUDE_CODE_REMOTE_SESSION_ID: deps.env.CLAUDE_CODE_REMOTE_SESSION_ID }),
+  });
   if (plan.kind === 'noop') {
     return warningPrefix;
   }

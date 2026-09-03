@@ -131,9 +131,10 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
     });
 
     // The routed twin (MCP-580). It shares the `/mcp` prefix but not the MCP
-    // surface's auth contract: it is the only health path the canonical host
-    // can reach, so if it ran through Clerk the sole probe that measures the
-    // real surface would poll the auth vendor forever.
+    // surface's auth contract: it is the health path a path-scoped edge can
+    // reach (the canonical host serves both forms), so if it ran through
+    // Clerk the probe that measures the real surface behind such an edge
+    // would poll the auth vendor forever.
     //
     // Shaped as the poll actually arrives — a GET — rather than through the
     // POST default the cases above use, because the predicate forks on method

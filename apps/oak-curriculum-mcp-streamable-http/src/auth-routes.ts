@@ -79,8 +79,10 @@ function registerUnauthenticatedRoutes(
  * edge (ADR-219).
  *
  * @param upstreamMetadata - Upstream AS metadata, fetched from Clerk and
- *   injected by the caller. Endpoint URLs are rewritten per-request to
- *   point to this server's origin; capability fields are passed through.
+ *   injected by the caller. The PRM names its `issuer` as the authorization
+ *   server; the AS metadata served at this origin has its endpoint URLs
+ *   rewritten per-request to this server's origin, with capability fields
+ *   passed through.
  */
 export function registerPublicOAuthMetadataEndpoints(
   app: Express,
@@ -102,11 +104,18 @@ export function registerPublicOAuthMetadataEndpoints(
       return;
     }
     const selfOrigin = originResult.value;
+    // The authorization server a PRM-following client is sent to is the
+    // upstream itself: the client records this issuer and compares it with
+    // the `iss` on the authorization response (RFC 9207 Section 2.4), and the
+    // upstream is the party that redirects back, so only its own issuer can
+    // match. The rewritten AS metadata and the /oauth/* proxy at this origin
+    // remain for clients that discover the AS from the resource origin
+    // (ADR-115; MCP-655).
     res.json({
       // The published resource and the RFC 8707 expected audience share
       // MCP_RESOURCE_PATH so they can never diverge (MCP-351).
       resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,
-      authorization_servers: [selfOrigin],
+      authorization_servers: [upstreamMetadata.issuer],
       scopes_supported: SCOPES_SUPPORTED,
     });
   };

@@ -51,6 +51,24 @@ discipline held for expensive chains gets skipped.
   night). The printed marker stays the primary truth; the propagated
   code makes the wrapper honest too. Note `$rc` propagates only when no
   later command replaces `$?` before the exit.
+- **A background task's LAST command must BE the guarded command.**
+  `git push …; echo "exit=$?"` reports the echo's exit, and the harness
+  summarises the task as completed-0 over a remote-rejected push
+  (2026-08-18; recreated at the same seat a day later despite the record
+  — the cure that held is structural: the push is the final command of
+  the task, nothing after it, so the task exit IS the push exit, and
+  verification stays read-the-remote-tip).
+- **Success markers bury failures too.** `X && echo OK` hides X's
+  non-zero exit inside a block that simply prints nothing; run the check
+  as its own command and print its exit explicitly (a commit-message
+  pre-check failed silently inside an `&&` chain and the gate caught it a
+  minute later, 2026-08-19).
+- **API writes: a status code is not a write, and loop silence is not
+  success.** A REST review-request call returned 201 twice and minted no
+  `review_requested` event; a `curl -sf | jq` loop swallowed four
+  review-dismissal failures with absence of output as the only signal
+  (both 2026-08-18). Verify on the system's own proof surface — the
+  timeline tail, the re-read state — after every batch write.
 
 ## Why
 

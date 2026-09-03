@@ -1733,33 +1733,6 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(happy-dom@20.11.2)(vite@8.2.1(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
 
-  research/web-app-deconstruction/packages/research-evidence:
-    devDependencies:
-      '@oaknational/eslint-plugin-standards':
-        specifier: workspace:*
-        version: link:../../../../packages/core/oak-eslint
-      '@oaknational/workspace-config':
-        specifier: workspace:*
-        version: link:../../../../packages/core/workspace-config
-      '@types/node':
-        specifier: ^24.13.3
-        version: 24.13.3
-      eslint:
-        specifier: ^10.8.1
-        version: 10.8.1(jiti@2.7.0)(supports-color@10.2.2)
-      globals:
-        specifier: ^17.9.0
-        version: 17.9.0
-      tsx:
-        specifier: ^4.23.12
-        version: 4.23.12
-      typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.10
-        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(happy-dom@20.11.2)(vite@8.2.1(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
-
 packages:
 
   '@actions/core@3.0.1':

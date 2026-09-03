@@ -7,7 +7,7 @@ const RUNNABLE: CliState = {
   unattended: false,
   seed: false,
   drive: false,
-  target: 'https://curriculum-mcp-alpha.oaknational.dev/mcp',
+  target: 'https://mcp.thenational.academy/mcp',
   suites: ['protocol'],
   credentialsFile: undefined,
   reportDir: undefined,

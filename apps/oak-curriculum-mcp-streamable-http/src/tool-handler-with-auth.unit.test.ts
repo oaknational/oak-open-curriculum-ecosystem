@@ -26,7 +26,7 @@ import type {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
-const TOOL_NAME = 'get-changelog' satisfies UniversalToolName;
+const TOOL_NAME = 'get-rate-limit' satisfies UniversalToolName;
 const RESOURCE_URL = 'https://test.example.com/mcp';
 
 function formatToolResult(execution: ToolExecutionResult): CallToolResult {

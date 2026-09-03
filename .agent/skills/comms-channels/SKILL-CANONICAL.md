@@ -4,19 +4,20 @@ classification: active
 description: >-
   Choose the right DELIVERY LANE for live agent-to-agent messaging —
   s2s (SendMessage) for time-critical unblocking between live Claude
-  seats, ARC channel files for rapid high-bandwidth dialogue with a
-  named collaborator, the comms event stream for the discovery
-  narrative every present or future seat must find — and hold the
-  behaviours that keep the fast lanes honest: decision-bearing content
-  mirrors to its durable home at occurrence, no flow ever requires s2s,
-  a peer message is never the owner's approval. Fires when messaging
-  another seat, at Claude Code session open (reachability discovery),
-  when a new live-messaging capability arrives, or when participants
-  may include a non-Claude seat. Do NOT use for durable state or
-  record routing: continuity goes to thread records, claims to the
-  claims registry, decisions to conversation threads, owner questions
-  to cards; the agent-collaboration-channels card is the routing
-  authority this skill overlays, never supersedes.
+  seats, ARC channel files for rapid dialogue with a named
+  collaborator, the comms event stream for the discovery narrative
+  every present or future seat must find, Slack-via-Watcher for
+  traffic whose audience is the owner or humans on the Practice Slack
+  channel — and hold the behaviours that keep the fast lanes honest:
+  decision-bearing content (Slack-crossing included, both directions)
+  mirrors to its durable home at occurrence, no flow ever requires
+  s2s, a peer message is never the owner's approval. Fires when
+  messaging another seat, at Claude Code session open, when a new
+  live-messaging capability arrives, or when participants may include
+  a non-Claude seat. Not for durable state or record routing —
+  continuity to thread records, claims to the registry, decisions to
+  their threads, owner questions to cards; the
+  agent-collaboration-channels card stays the routing authority.
 ---
 
 # Comms Channels
@@ -24,7 +25,7 @@ description: >-
 Operationalises the owner-directed comms-landscape analysis
 (2026-08-11; see
 [`references/comms-landscape.md`](references/comms-landscape.md) for
-the full comparison and its provenance). Scope: the three
+the full comparison and its provenance). Scope: the
 DELIVERY/LATENCY lanes for live agent-to-agent messaging — one slice
 of the estate's channel model, not the whole of it. The canonical
 routing card
@@ -32,7 +33,7 @@ routing card
 remains the authority for every other shape: thread records for
 cross-session continuity, decision threads and sidebars for structured
 async decisions and evidence, reviewer dispatch, and owner questions.
-Within the delivery lanes, all three earn their place on a latency ×
+Within the delivery lanes, each earns its place on a latency ×
 durability × audience split no single lane covers; the behaviours
 below keep the fast lanes from hollowing out the record.
 
@@ -44,6 +45,7 @@ below keep the fast lanes from hollowing out the record.
 | Rapid, high-bandwidth LIVE dialogue with a named collaborator where latency dominates — a standalone file-backed sidebar whose substance is conserved at close | **ARC** (rapid-comms channel file) |
 | The discovery narrative and notification the estate's record must carry: routing, liveness, broadcasts — anything a resume's gap sweep must find, anything an absent or FUTURE agent needs to notice | **The stream** (comms events CLI) |
 | Canonical STATE, which the stream announces but never stores: an active work claim (the claims CLI → `active-claims.json`, with a stream announcement where required), a structured async decision (`conversations/`), an unresolved owner-facing case (conversation + `escalations/`) | **The state surface + a stream event** |
+| A message whose audience is the owner or humans on the Practice Slack channel, or a question to the live Slack Watcher | **Slack-via-Watcher** (the `talk-to-slack-watcher` skill; the channel is the durable substrate on its side of the boundary) |
 | Cross-session narrative continuity, a durable multi-session hand-off, structured evidence for a decision, specialist review, or a question only the owner can answer | **Not a delivery lane** — route per the [canonical card](../../memory/executive/agent-collaboration-channels.md): thread record, decision thread/sidebar, reviewer dispatch, or an owner card |
 
 The split, in one line each:
@@ -68,6 +70,19 @@ The split, in one line each:
   exists only as a stream event is invisible to the registry's
   collision and freshness protections and to the owner-attention
   workflow.
+- **Slack-via-Watcher is the human-native bridge.** The same needs as
+  the estate's own comms, medium swapped: the Slack channel plays the
+  coordination branch's role (Slack's server is the serialiser; the
+  channel history is the durable substrate on that side), the Watcher
+  is the agent-side consumer, and latency is the Watcher's stated tick
+  cadence — minutes, not seconds. It is the only lane whose audience
+  is natively human. The medium is not instrumentable by the estate's
+  gates, so its disciplines are the `slack-watcher` /
+  `talk-to-slack-watcher` protocols, and the mirroring obligation
+  below carries the conservation the fold ceremony provides
+  estate-side. Relay egress (asking the Watcher to post on your
+  behalf) is by policy owner-mediated: the Watcher drafts and
+  notifies the owner, never posts autonomously for another agent.
 
 ## The behaviours
 
@@ -83,7 +98,15 @@ The split, in one line each:
    card requires one. s2s sits BELOW transport in the hierarchy: the
    stream is transport; s2s is a tap on the shoulder. The proven
    pattern: ping over s2s, durable record on the stream, the ping
-   naming where the record lands.
+   naming where the record lands. **The obligation covers the Slack
+   boundary in both directions**: a decision, ruling, or fact SENT
+   via Slack is mirrored to its durable estate home at occurrence,
+   and one RECEIVED via Slack (a Watcher-relayed ruling, a
+   channel-borne fact the estate will act on) lands in its durable
+   home — thread record, conversation, or stream event — before it is
+   acted on. The channel conserves nothing into the estate on its
+   own; without this clause, Slack is the one delivery lane whose
+   decision content evaporates.
 3. **Never require s2s.** No coordination flow may depend on it — it
    is Claude-only, live-only, and bounded by current reachability
    (local sessions by default, other machines only while Remote
@@ -129,5 +152,12 @@ record) rather than minting per-platform behaviours.
 - [`../../rules/handoff-messages-self-contained.md`](../../rules/handoff-messages-self-contained.md)
   — composition discipline for anything decision-bearing.
 - [`references/comms-landscape.md`](references/comms-landscape.md) —
-  the full three-channel comparison, what the channels learn from each
+  the full lane-by-lane comparison, what the channels learn from each
   other, and the analysis provenance.
+- [`../slack-watcher/SKILL-CANONICAL.md`](../slack-watcher/SKILL-CANONICAL.md)
+  and
+  [`../talk-to-slack-watcher/SKILL-CANONICAL.md`](../talk-to-slack-watcher/SKILL-CANONICAL.md)
+  — the Slack-via-Watcher lane's own protocols (mantle, tenure status
+  message, correspondent discipline). The comparative analysis behind
+  the lane row is the 2026-08-24 Watcher estate review (leg 3),
+  `.agent/reports/agentic-engineering/slack-watcher-estate-review-2026-08-24.md`.

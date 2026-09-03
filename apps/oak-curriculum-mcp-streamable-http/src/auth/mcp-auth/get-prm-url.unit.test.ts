@@ -30,13 +30,13 @@ describe('getPRMUrl', () => {
   });
 
   it('appends the same suffix to a configured canonical origin', () => {
-    const req = { get: () => 'curriculum-mcp-alpha.oaknational.dev' };
+    const req = { get: () => 'example-project.vercel.example' };
 
-    const result = getPRMUrl(req, [], 'https://www.thenational.academy');
+    const result = getPRMUrl(req, [], 'https://mcp.thenational.academy');
 
     expect(result).toStrictEqual({
       ok: true,
-      value: 'https://www.thenational.academy/.well-known/oauth-protected-resource/mcp',
+      value: 'https://mcp.thenational.academy/.well-known/oauth-protected-resource/mcp',
     });
   });
 

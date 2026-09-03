@@ -166,8 +166,10 @@ not-yet-minted concepts.**
 | Blame-referent calibration (retrospective 2026-07-26, PDR-094 arc): agents calibrate to the most salient blame signal (accreted caution, or the last correction), not the standing policy, whenever the policy exists only in the owner's head; a WRITTEN owner-ratified policy line converts reversal-grade corrections on that axis into calibration-grade refinements. Provenance: `.agent/reports/agentic-engineering/2026-07-26-pdr-094-retention-arc-retrospective.md` §Meta root (v1–v2 hoard, v3 over-delete, v4 co-authored referent, all one arc) | By review: NO reversal-grade owner correction on the retention axis (the axis now carries its written line, PDR-094 v4); any retention correction observed is a refinement, not a reversal | A reversal-grade retention correction lands despite the written line — the written-referent cure is insufficient and the mechanism needs an action-time instrument (kill this row into that finding) | 2026-10-26 |
 
 - **PDR-117 missing axes: role-scoped value lens and seat-deliverable framing**
-  `[captured: 2026-08-14 | source: owner corrections 2026-08-10 (Director fold cascade) and
-  2026-08-14 (curator self-executed merge-back; archive/napkin-2026-08-14.md 06:08Z entry) |
+  `[captured: 2026-08-14 | source: owner corrections 2026-08-10 (Director fold cascade),
+  2026-08-14 (curator self-executed merge-back; archive/napkin-2026-08-14.md 06:08Z entry)
+  and 2026-09-02 ("X needs doing" in a support role read as an assignment — a routing fact,
+  not a seat deliverable; archive/napkin-2026-09-02.md 11:2xZ entry) |
   target: PDR-117 amendment — the value lens runs role-scoped BEFORE the licensing/safety
   lens on self-initiated work; a seat's deliverable is its role's output, never legible
   effort; shared-git-state operations route to the warden/Director from non-warden seats |

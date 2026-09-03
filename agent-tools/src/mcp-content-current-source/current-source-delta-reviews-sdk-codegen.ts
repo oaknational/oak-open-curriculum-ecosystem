@@ -24,8 +24,10 @@ export const SDK_CODEGEN_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDel
     '1dadef4f96511ba3a7c8ed3defb8db835173e856dc034a816efe74c6617a81e9',
     IMPLEMENTATION_ONLY,
   ),
+  // MCP-653: DEFERRED_PATHS gained the dead changelog pair (retired by the
+  // MCP-630 schema-cache refresh); SKIPPED_PATHS unchanged.
   'packages/sdks/oak-sdk-codegen/code-generation/excluded-paths.ts': reviewed(
-    '54696cd55ab5ebc2c2015fc30ab3b022f00e97c8a642a101060d0156b34f9aec',
+    '850f69ab6b7bc73763ad1bead4571f98cf49056af83877e5b33f81e17b59d05f',
     ['A002', 'C470'],
   ),
   'packages/sdks/oak-sdk-codegen/code-generation/resolve-schema-source.ts': excluded(
@@ -75,8 +77,10 @@ export const SDK_CODEGEN_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDel
   // MCP-462: reads upstream's numeric bounds off the parameter schema and
   // refuses to emit input surfaces that would silently drop a validation
   // keyword. No change to the served tool prose this file carries.
+  // Pagination echo (2026-09-01 payload audit): collects the offset/limit
+  // operations into the paginated set threaded to the execute-file emitter.
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/mcp-tool-generator.ts': reviewed(
-    'b206fa818bae3b41f2db081076b1a46d92d25bfcaa28c50b39c3477e09e6df78',
+    'ba9d423ddd3c014bd1f63a0a2c9a80c2ea11b5ddc5182603e5087649fd2f77c2',
     ['C471'],
   ),
   // MCP-462: numeric-bound propagation into the tools/list JSON Schema and
@@ -104,10 +108,38 @@ export const SDK_CODEGEN_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDel
       'ac36fbb5a03d7d0abcda97628333ab655d4a6c183e9781a1bd934e8eb11e857d',
       IMPLEMENTATION_ONLY,
     ),
+  // Pagination echo (2026-09-01 payload audit): paginated invokes derive
+  // {hasMore, nextOffset, nextLimit} from the upstream Link header. Emitted
+  // runtime plumbing; the served prose the cited items pin is unchanged.
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts': reviewed(
-    '30f6ee06bf550046782e898b3b4416aa99f693eec8b097f0b97674f586d11390',
+    'cfd851fc8306cd8fcd02975e7d39c756f23824f759a3ab175d07202f0c4e8766',
     ['C475', 'C476', 'C477', 'C478'],
   ),
+  // PR 949 review cure: the public mcp-tools barrel now exports the
+  // PaginationEcho type consumers see on ToolResultForName. Type export
+  // only; no authored agent-facing prose.
+  'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-index-file.ts':
+    excluded('f3aec45038f81fd15fd0a5ab8ab6278cedd440a4852dcdd49ae7f0c99465ec15', TYPE_ONLY),
+  // Pagination echo (2026-09-01 payload audit): the four emitters below gained
+  // the pagination wiring (per-tool passthrough, contract re-export, value
+  // import, optional result field). No authored agent-facing prose.
+  'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-execute-file.ts':
+    excluded(
+      '87f0611682b13d74b0530b2d0dc4cb10cdb068f58211b62e7cba2ef2906cd062',
+      IMPLEMENTATION_ONLY,
+    ),
+  'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts':
+    excluded(
+      '7b3efb0ee10a132148b6d2eb4339b326e44b2921cd6a844260500296d70cc8c9',
+      IMPLEMENTATION_ONLY,
+    ),
+  'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-file.ts':
+    excluded(
+      '77a7a1a80c0faa9b0e59b215601626ec50f084059b731df1befdc61ba8079051',
+      IMPLEMENTATION_ONLY,
+    ),
+  'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-types-file.ts':
+    excluded('9f653c2ed20ce865621dac2fea454fe2e04d0c04b8d6ef143bd992848ee4a17c', TYPE_ONLY),
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/widget-uri-suffix.ts': excluded(
     '8c8c63616d88ddc3a467810c92fb899b241b539e958110d09a1013cdc332238a',
     IMPLEMENTATION_ONLY,
@@ -121,8 +153,12 @@ export const SDK_CODEGEN_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDel
   // consumer; test infrastructure only.
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/test-helpers/schema-cache-reader.ts':
     excluded('f5b9dab9db0897facc78f5d565844ec2ce84e40dd6621eb6f843d19d182988cc', TEST_ONLY),
+  // PR 949 review cure (Claude review finding): the get-keywords pagination
+  // note now points agents at the result's pagination signal (hasMore /
+  // nextOffset) instead of prescribing a blind limit-300 walk — the note's
+  // own removal condition ("when that signal exists") arrived with the echo.
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/tool-description.ts':
-    reviewed('b9d5b7fb4c8023b7103be5c47af1cd46d0e93298ff27c14d1f22e3b1e261b426', [
+    reviewed('f4ebac6b2dd5ae1d705d3e3b51e4af905d75b268845238cd8f60703c026f4355', [
       'C453',
       'C454',
       'C456',
@@ -134,4 +170,10 @@ export const SDK_CODEGEN_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDel
       'C462',
       'C463',
     ]),
+  // MCP-653: the dead changelog pair left PUBLIC_TOOLS with the tools'
+  // disable; no new authored agent-facing content.
+  'packages/sdks/oak-sdk-codegen/code-generation/mcp-security-policy.ts': excluded(
+    'c42fd325da92d26edb5673528079b3747e205756a12cad6431712c5c0f40ad11',
+    IMPLEMENTATION_ONLY,
+  ),
 };

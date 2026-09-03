@@ -108,3 +108,25 @@ describe('planStatuslineExecution', () => {
     });
   });
 });
+
+describe('cloud-seat seed resolution', () => {
+  it('prefers the stripped platform session id over the payload session_id', () => {
+    const plan = planStatuslineExecution(JSON.stringify({ session_id: 'harness-uuid' }), {
+      CLAUDE_CODE_REMOTE_SESSION_ID: 'cse_01FV6rZz5BjSkApAUL6FAj72',
+    });
+
+    expect(plan).toMatchObject({
+      kind: 'render',
+      inputs: { seed: '01FV6rZz5BjSkApAUL6FAj72' },
+    });
+  });
+
+  it('keeps the payload session_id when no platform id is present', () => {
+    const plan = planStatuslineExecution(JSON.stringify({ session_id: 'harness-uuid' }));
+
+    expect(plan).toMatchObject({
+      kind: 'render',
+      inputs: { seed: 'harness-uuid' },
+    });
+  });
+});

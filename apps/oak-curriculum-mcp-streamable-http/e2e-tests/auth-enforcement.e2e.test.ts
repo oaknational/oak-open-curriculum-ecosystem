@@ -27,11 +27,13 @@
  *
  * ## Proxy OAuth AS
  *
- * Our server acts as a proxy OAuth AS so that the resource server and
- * authorization server share the same origin. This works around a
- * confirmed Cursor bug (forum #151331) where `resource_metadata` URL
- * is lost when RS and AS are on different origins. PRM and AS metadata
- * endpoints return self-origin URLs; proxy routes forward to Clerk.
+ * The PRM names the upstream authorization server, so a client that follows
+ * it holds the issuer that the authorization response's `iss` will carry
+ * (RFC 9207 Section 2.4; MCP-655). The server also acts as a proxy OAuth AS
+ * at its own origin — AS metadata rewritten to self-origin, proxy routes
+ * forwarding to Clerk — for clients that discover the AS from the resource
+ * origin: a confirmed Cursor bug (forum #151331) loses the `resource_metadata`
+ * URL across the browser redirect and re-discovers from the origin.
  *
  * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
  * @see https://modelcontextprotocol.io/extensions/apps/overview
@@ -100,9 +102,11 @@ function isAuthServerMetadata(value: unknown): value is AuthServerMetadata {
 }
 
 /**
- * Helper: Validates PRM returns self-origin in authorization_servers
+ * Helper: Validates the PRM names the upstream authorization server — the
+ * injected fixture's issuer, byte for byte (RFC 9207 Section 2.4 forbids
+ * normalisation before comparison).
  */
-async function validatePrmSelfOrigin(app: Express): Promise<string> {
+async function validatePrmNamesUpstream(app: Express): Promise<string> {
   const res = await request(app).get('/.well-known/oauth-protected-resource');
   expect(res.status).toBe(200);
 
@@ -114,7 +118,7 @@ async function validatePrmSelfOrigin(app: Express): Promise<string> {
   expect(metadata.authorization_servers.length).toBeGreaterThan(0);
   const asUrl = metadata.authorization_servers[0];
 
-  expect(asUrl).toMatch(/^https?:\/\/127\.0\.0\.1:\d+$/);
+  expect(asUrl).toBe(TEST_UPSTREAM_METADATA.issuer);
 
   return asUrl;
 }
@@ -253,8 +257,8 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     });
   });
 
-  describe('OAuth Discovery Flow (Proxy — Self-Origin)', () => {
-    it('PRM authorization_servers points to self-origin, not Clerk', async () => {
+  describe('OAuth Discovery Flow (PRM names the upstream; proxy at the origin)', () => {
+    it('PRM authorization_servers names the upstream authorization server', async () => {
       const oauthApp = await createAuthApp();
 
       const step1 = await request(oauthApp)
@@ -271,10 +275,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       expect(step1.status).toBe(401);
       expect(step1.headers['www-authenticate']).toContain('resource_metadata=');
 
-      const asUrl = await validatePrmSelfOrigin(oauthApp);
-
-      expect(asUrl).not.toContain('clerk');
-      expect(asUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
+      await validatePrmNamesUpstream(oauthApp);
     });
 
     it('AS metadata endpoints point to self-origin, not Clerk', async () => {
@@ -352,8 +353,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       expect(metadata.authorization_servers.length).toBeGreaterThan(0);
 
       const asUrl = metadata.authorization_servers[0];
-      expect(asUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
-      expect(asUrl).not.toContain('clerk');
+      expect(asUrl).toBe(TEST_UPSTREAM_METADATA.issuer);
     });
 
     it('serves path-qualified PRM at /.well-known/oauth-protected-resource/mcp (RFC 9728 Section 3.1)', async () => {
@@ -370,8 +370,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
 
       expect(metadata.authorization_servers.length).toBeGreaterThan(0);
       const asUrl = metadata.authorization_servers[0];
-      expect(asUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
-      expect(asUrl).not.toContain('clerk');
+      expect(asUrl).toBe(TEST_UPSTREAM_METADATA.issuer);
     });
 
     it('exposes /.well-known/oauth-protected-resource with advertised scopes metadata', async () => {
@@ -470,26 +469,6 @@ describe('Auth Enforcement - RFC Compliance', () => {
 });
 
 describe('All Tools Require HTTP Auth (noauth = no scope check, not no token)', () => {
-  it('returns HTTP 401 for get-changelog without auth', async () => {
-    const res = await request(await createAuthApp())
-      .post('/mcp')
-      .set('Host', 'localhost')
-      .set('Accept', 'application/json, text/event-stream')
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/call',
-        params: { name: 'get-changelog', arguments: {} },
-      });
-
-    expect(res.status).toBe(401);
-
-    const wwwAuth = res.headers['www-authenticate'];
-    expect(wwwAuth).toBeDefined();
-    expect(wwwAuth).toContain('Bearer');
-    expect(wwwAuth).toContain('resource_metadata=');
-  });
-
   it('returns HTTP 401 for get-rate-limit without auth', async () => {
     const res = await request(await createAuthApp())
       .post('/mcp')

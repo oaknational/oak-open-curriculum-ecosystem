@@ -4,14 +4,14 @@ A fast create-and-review companion to the six principles. Copy, paste, or print.
 
 ## The six principles
 
-| #   | Principle                       | When creating, ask…                                                                                        | Red flag when reviewing                                            |
-| --- | ------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| 1   | **Knowledge & vocabulary rich** | What knowledge will a pupil hold afterwards? Which keywords are taught and defined?                        | Activities with no clear knowledge; words used but never taught    |
-| 2   | **Sequenced & coherent**        | Are prerequisites taught first? Which thread is this, and is the link visible?                             | Arbitrary order; concepts before prerequisites; isolated units     |
-| 3   | **Evidence-informed**           | What's the rationale? Which misconceptions are anticipated and answered?                                   | Evidence-cautioned practices; no misconception planning; fads      |
-| 4   | **Flexible**                    | Is it mapped to the national curriculum and modular? Can a teacher adapt it without breaking the sequence? | Rigid lock-step; no mapping; adaptation silently breaks coherence  |
-| 5   | **Diverse**                     | Whose voices are here and missing? Both windows and mirrors?                                               | Unexamined canon; tokenism; diversity claimed but not in content   |
-| 6   | **Accessible**                  | Can all pupils reach the _same_ ambitious content? Scaffolds that fade?                                    | "Differentiation" that lowers expectations; inaccessible materials |
+| #   | Principle                       | When creating, ask…                                                                                        | Red flag when reviewing                                                 |
+| --- | ------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 1   | **Knowledge & vocabulary rich** | What knowledge will a pupil hold afterwards? Which keywords are taught and defined?                        | Activities with no clear knowledge; words used but never taught         |
+| 2   | **Sequenced & coherent**        | Are prerequisites taught first? Which thread is this, and is the link visible?                             | Arbitrary order; concepts before prerequisites; isolated units          |
+| 3   | **Evidence-informed**           | What's the rationale? Which misconceptions are anticipated and answered?                                   | Evidence-cautioned practices; no misconception planning; fads           |
+| 4   | **Flexible**                    | Is it mapped to the national curriculum and modular? Can a teacher adapt it without breaking the sequence? | Rigid lock-step; no mapping; adaptation silently breaks coherence       |
+| 5   | **Diverse**                     | Whose voices are here and missing? Both windows and mirrors?                                               | Unexamined canon; tokenism; gendered language; diversity not in content |
+| 6   | **Accessible**                  | Can all pupils reach the _same_ ambitious content? Scaffolds that fade?                                    | "Differentiation" that lowers expectations; inaccessible materials      |
 
 ## The stance (hold these first)
 

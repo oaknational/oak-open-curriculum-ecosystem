@@ -20,9 +20,9 @@ artefacts — read the spec when a judgement is close.
 
 ## How this fits with Oak's other skills
 
-- **`oak-curriculum-principles`** holds the **pedagogical** "Accessible" principle (SEND/inclusive
+- **`oak-curriculum-principles`** holds the **educational** "Accessible" principle (SEND/inclusive
   teaching) — the complementary, non-WCAG sense of the word. Use both: an artefact must be both
-  pedagogically accessible _and_ WCAG 2.2 AA.
+  educationally accessible _and_ WCAG 2.2 AA.
 
 WCAG itself is published by the W3C under its document licence; this skill's summary may be reused
 in the spirit of the repository, but always defer to the canonical WCAG 2.2 text above.

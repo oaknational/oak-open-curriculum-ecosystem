@@ -106,13 +106,13 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     reviewDomain: 'engineering-structural',
     impactTier: 'high-impact',
     behaviouralIntent:
-      'Temporarily exclude the check-restricted API family from generated schemas and MCP tools until MCP-214 lifts the deferral.',
+      'Exclude paths whole-pipeline from generated schemas and MCP tools: the check-restricted family until MCP-214 lifts the deferral, and the upstream-removed changelog pair until the MCP-630 schema-cache refresh erases them (MCP-653).',
     workspaceScope: 'in',
     sourceLocus: 'this-repo',
     file: EXCLUDED_PATHS,
     reviewedAnchors: [
       structuralAnchor(
-        "export const DEFERRED_PATHS: readonly DeferredPathEntry[] = [\n  { path: '/key-stages/{keyStage}/subject/{subject}/check-restricted', ticket: 'MCP-214' },\n  { path: '/lessons/check-restricted', ticket: 'MCP-214' },\n];",
+        "export const DEFERRED_PATHS: readonly DeferredPathEntry[] = [\n  { path: '/key-stages/{keyStage}/subject/{subject}/check-restricted', ticket: 'MCP-214' },\n  { path: '/lessons/check-restricted', ticket: 'MCP-214' },\n  { path: '/changelog', ticket: 'MCP-630' },\n  { path: '/changelog/latest', ticket: 'MCP-630' },\n];",
       ),
     ],
   },

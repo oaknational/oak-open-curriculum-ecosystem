@@ -2,11 +2,11 @@
 title: 'Strategy — Stream: the engineering tools (ecosystem)'
 type: strategy
 status: active
-last_updated: 2026-06-20
+last_updated: 2026-08-30
 derives_from:
   - VISION.md
 governed_by:
-  - .agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md
+  - docs/strategy/README.md
 ---
 
 # Stream — the engineering tools (ecosystem)

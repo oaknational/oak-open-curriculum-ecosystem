@@ -30,14 +30,6 @@ describe('toolRequiresAuth', () => {
   });
 
   describe('generated tools with public access', () => {
-    it('returns false for get-changelog (public, noauth)', () => {
-      expect(toolRequiresAuth('get-changelog')).toBe(false);
-    });
-
-    it('returns false for get-changelog-latest (public, noauth)', () => {
-      expect(toolRequiresAuth('get-changelog-latest')).toBe(false);
-    });
-
     it('returns false for get-rate-limit (public, noauth)', () => {
       expect(toolRequiresAuth('get-rate-limit')).toBe(false);
     });

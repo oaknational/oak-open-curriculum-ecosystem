@@ -45,7 +45,7 @@ Any running instance — it does **not** need to be deployed:
 | Local dev (with auth)        | `http://localhost:3333/mcp` | Clerk OAuth (the `qa:oauth` / with-auth variant). Complete OAuth in the host when prompted.           |
 | Vercel preview or production | `{origin}/mcp`              | Clerk OAuth; only Oak test users today. Copy the deployment origin from Vercel (no trailing slash).   |
 
-Production alpha origin: `https://curriculum-mcp-alpha.oaknational.dev`.
+Production origin: `https://mcp.thenational.academy`.
 
 > **Environment edits need a deployment AND a boot check.** Changing a
 > deployment environment's variables can break the running functions, and a
@@ -103,7 +103,7 @@ matrix** (Sections 1–13) for a release gate.
 
 1. **0.1** `tools/list` — the expected tools are present.
 2. **2.1** `get-curriculum-model` `{}` — orientation returns.
-3. **2.2** `get-changelog-latest` `{}` — upstream API reachable; record the version.
+3. **2.2** `get-rate-limit` `{}` — upstream API reachable; live limit/remaining/reset returned.
 4. **4.1** `search` `{ scope: 'lessons', query: 'photosynthesis', subject: 'science', keyStage: 'ks3' }` — ranked hits with fetchable slugs.
 5. **5.2** `fetch` a lesson id from step 4.
 6. **7.2** `get-prior-knowledge-graph` `{ unitSlugs: ['<a unit slug>'] }` — stated prior-knowledge statements, anchors echoed.
@@ -151,16 +151,27 @@ serialised `content` blocks AND the decorated `structuredContent`. This is the
 contract that keeps the server renderable across the whole client population.
 
 > **Client rendering varies — and that is exactly why the dual shape matters.**
-> Different hosts surface different halves of the response: Cursor surfaces only
-> `content` blocks; Claude Code surfaces only `structuredContent`; claude.ai and
-> ChatGPT surface both. A tool that emitted `content: []` (structuredContent
-> only) was historically invisible in content-only clients (rendered
-> `(omitted)`) — the EEF tool's `content: []` shape was aligned onto the dual
-> shape for this reason. When validating in a single host, judge "did the data
-> arrive" by what _that host_ renders, but treat a missing `content[1]`
-> serialised block on a success as a **P1 contract regression**, not a client
-> quirk. Over curl (Appendix B) you always see the full envelope regardless of
-> host.
+> Different hosts surface different halves of the response, and which half is
+> a DATED observation per client version, never a standing fact: Cursor
+> surfaces only `content` blocks; Claude Code on its v2 MCP runtime (2.1.25x,
+> observed 2026-09-02 on an OAuth seat) renders only the `content` text and
+> does not surface `structuredContent`; claude.ai and ChatGPT surface both. A
+> tool that emitted `content: []` (structuredContent only) was historically
+> invisible in content-only clients (rendered `(omitted)`) — the EEF tool's
+> `content: []` shape was aligned onto the dual shape for this reason. When
+> validating in a single host, judge "did the data arrive" by what _that
+> host_ renders, but treat a missing `content[1]` serialised block on a
+> success as a **P1 contract regression**, not a client quirk. Over curl
+> (Appendix B) you always see the full envelope regardless of host.
+>
+> **What a Claude Code seat can and cannot observe** (2026-09-02, same run):
+> `tools/list` yes — the loaded tool set IS the inventory; `resources/list`
+> yes (the resource-listing tool); `prompts/list` NO — a raw JSON-RPC error is
+> not surfaced, only the absence of slash commands; `structuredContent` NO;
+> the server-side `-32602` YES — an empty-args call reaches the server and the
+> SDK's "Input validation error: Invalid arguments for tool …" comes back
+> verbatim. Record every unobservable row as N-A / unverified, never as PASS
+> by inference.
 
 ---
 
@@ -171,7 +182,7 @@ Run first. The live server is the source of truth; reconcile against
 
 | #   | Method           | How             | Expected result                                                                                                                                 |
 | --- | ---------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0.1 | `tools/list`     | List tools.     | The expected tool set is present (Appendix A lists 40 served: 39 live universal + 1 app-local). Note any **addition or removal**.               |
+| 0.1 | `tools/list`     | List tools.     | The expected tool set is present (Appendix A lists 38 served: 37 live universal + 1 app-local). Note any **addition or removal**.               |
 | 0.2 | `resources/list` | List resources. | `curriculum://model`, `docs://oak/getting-started.md`, the three `docs://oak/guidance/*` navigation documents, and the MCP App `ui://…` widget. |
 | 0.3 | `prompts/list`   | Probe prompts.  | JSON-RPC error `-32601` Method not found — the app serves zero prompts (D11); a result listing ANY prompt is a defect.                          |
 
@@ -187,21 +198,21 @@ flag explains it before logging a fault).
 Run from a shell. Substitute `ORIGIN` for the server host (scheme + host only).
 On a no-auth local server, 1.2/1.3 do not apply — auth is disabled.
 
-**Which path to probe on which host (MCP-580).** The canonical host
-(`www.thenational.academy`) forwards only `/mcp` and `/mcp/*` to this app, so a
-root-level probe there reaches the main website and returns its 404 HTML. Rows
-1.1 and 1.2 therefore carry both forms: use the canonical one on `www`, the root
-one on the alpha host and locally. **Send no trailing slash** — `/mcp/healthz/`
-reaches the same handler but matches no auth-skip entry, so it drags the auth
-vendor into the liveness path (a characterised, owner-held trailing-slash class,
-not a defect of this route).
+**Which path to probe (MCP-580).** The canonical host
+(`mcp.thenational.academy`) serves this app at the root as well as under
+`/mcp*` (verified 2026-09-01), so both the root and `/mcp`-prefixed probe forms
+in rows 1.1 and 1.2 work there and locally. **Send no trailing slash** —
+`/mcp/healthz/` reaches the same handler but matches no auth-skip entry, so it
+drags the auth vendor into the liveness path (a characterised, owner-held
+trailing-slash class, not a defect of this route).
 
-| #   | What           | How                                                                                                                                                                                                                                                                                            | Expected result                                                                       |
-| --- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| 1.1 | Liveness       | `curl -sS -o /dev/null -w '%{http_code}\n' ORIGIN/mcp/healthz` (canonical host) or `ORIGIN/healthz` (alpha host, local)                                                                                                                                                                        | `200`, `Cache-Control: no-store`                                                      |
-| 1.2 | OAuth metadata | `curl -sS ORIGIN/.well-known/oauth-protected-resource/mcp` (canonical host — the path-qualified route the handshake advertises) or `ORIGIN/.well-known/oauth-protected-resource` (alpha host, local)                                                                                           | HTTP `200`; JSON includes `resource` and `authorization_servers` (PRM fields)         |
-| 1.3 | Auth challenge | `curl -sS -D - -o /dev/null -X POST ORIGIN/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"uat","version":"1"}}}'` | HTTP `401`; headers include `WWW-Authenticate` with `Bearer` and `resource_metadata=` |
-| 1.4 | Host guard     | Repeat 1.2 with a bogus `-H 'Host: evil.example'`.                                                                                                                                                                                                                                             | `403` on a deployed server whose `ALLOWED_HOSTS` excludes the bogus host.             |
+| #   | What                                   | How                                                                                                                                                                                                                                                                                            | Expected result                                                                                                                                                                                   |
+| --- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.1 | Liveness                               | `curl -sS -o /dev/null -w '%{http_code}\n' ORIGIN/healthz` (`ORIGIN/mcp/healthz` equally routed)                                                                                                                                                                                               | `200`, `Cache-Control: no-store`                                                                                                                                                                  |
+| 1.2 | OAuth metadata                         | `curl -sS ORIGIN/.well-known/oauth-protected-resource/mcp` (the path-qualified route the handshake advertises; the root form `ORIGIN/.well-known/oauth-protected-resource` also serves)                                                                                                        | HTTP `200`; JSON includes `resource` (the canonical `/mcp` URL) and `authorization_servers` naming the upstream authorisation server's issuer (`https://clerk.thenational.academy` on production) |
+| 1.3 | Auth challenge                         | `curl -sS -D - -o /dev/null -X POST ORIGIN/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"uat","version":"1"}}}'` | HTTP `401`; headers include `WWW-Authenticate` with `Bearer` and `resource_metadata=`                                                                                                             |
+| 1.4 | Host guard                             | Repeat 1.2 with a bogus `-H 'Host: evil.example'`.                                                                                                                                                                                                                                             | `403` on a deployed server whose `ALLOWED_HOSTS` excludes the bogus host.                                                                                                                         |
+| 1.5 | RFC 9207 issuer alignment (owner-held) | Remove and re-add the server in Claude Code (v2 runtime — no `MCP_SDK_GENERATION` override; record the version), `/mcp` → Authenticate; then the same from Cursor.                                                                                                                             | Sign-in completes and the tools list loads; the `iss` on the authorisation response equals the issuer the client recorded from 1.2.                                                               |
 
 **Infrastructure checks (once after a preview/production deploy):** Node runtime
 (not Edge); required envs set (`OAK_API_KEY`, `ALLOWED_HOSTS`,
@@ -215,12 +226,10 @@ token returns `200` SSE-wrapped JSON-RPC.
 Call these **first** in any session (the server requires `get-curriculum-model`
 before other curriculum tools).
 
-| #   | Tool                   | How  | Expected result                                                                                                      |
-| --- | ---------------------- | ---- | -------------------------------------------------------------------------------------------------------------------- |
-| 2.1 | `get-curriculum-model` | `{}` | Domain model + tool guidance (key stages, subjects, entity hierarchy, tool categories, workflows, tips). Dual shape. |
-| 2.2 | `get-changelog-latest` | `{}` | Latest upstream API version string + date — confirms upstream Oak API reachability. **Record the version.**          |
-| 2.3 | `get-changelog`        | `{}` | Changelog entries (list form of 2.2).                                                                                |
-| 2.4 | `get-rate-limit`       | `{}` | Rate-limit status for the authenticated principal (may be unlimited for internal users).                             |
+| #   | Tool                   | How  | Expected result                                                                                                                   |
+| --- | ---------------------- | ---- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 2.1 | `get-curriculum-model` | `{}` | Domain model + tool guidance (key stages, subjects, entity hierarchy, tool categories, workflows, tips). Dual shape.              |
+| 2.2 | `get-rate-limit`       | `{}` | Rate-limit status for the authenticated principal (may be unlimited for internal users) — confirms upstream Oak API reachability. |
 
 ---
 
@@ -453,7 +462,7 @@ runbook and the server. See
 ```text
 Oak Curriculum MCP — UAT run record
 Target:        <url or localhost:3333>
-Upstream API:  <version from 2.2 get-changelog-latest>
+Upstream API:  <reachable per 2.2 get-rate-limit; version not exposed via MCP>
 App version:   <x-app-version / get-curriculum-model build, if exposed>
 Date (UTC):    <YYYY-MM-DD>
 Run by:        <engineer / agent + host/client>
@@ -486,14 +495,13 @@ Verdict: GO / NO-GO   (no open P0/P1 to ship)
 ## Appendix A: expected live inventory
 
 The reconciliation reference for Section 0. The live `*/list` methods are
-authoritative; this is the expected full surface (40 served tools / 6 served
+authoritative; this is the expected full surface (38 served tools / 6 served
 resources / 0 prompts, plus the dormant rows noted inline). Tool definitions
 are generated from the OpenAPI schema + aggregated tools, so this list
 changes via `pnpm sdk-codegen` — update this appendix when Section 0 shows a
 drift.
 
-**Tools — orientation (4):** `get-curriculum-model`, `get-changelog-latest`,
-`get-changelog`, `get-rate-limit`.
+**Tools — orientation (2):** `get-curriculum-model`, `get-rate-limit`.
 
 **Tools — discovery & browse (10):** `browse-curriculum`, `explore-topic`,
 `get-subjects`, `get-subjects-key-stages`, `get-subjects-years`,

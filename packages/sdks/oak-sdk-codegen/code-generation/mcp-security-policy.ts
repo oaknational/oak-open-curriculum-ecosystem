@@ -5,27 +5,29 @@
  * Changes to this file trigger regeneration of all tool security metadata.
  *
  * @remarks
- * Tools NOT in PUBLIC_TOOLS require OAuth 2.1 authentication.
- * Tools in PUBLIC_TOOLS are publicly accessible without authentication.
+ * Tools NOT in PUBLIC_TOOLS require OAuth 2.1 authentication with the
+ * DEFAULT_AUTH_SCHEME scopes. Tools in PUBLIC_TOOLS skip only the per-tool
+ * OAuth scope check: the HTTP transport still requires a bearer token for
+ * every tool call, and an unauthenticated call receives 401.
  */
 
 /**
- * List of tools that do not require OAuth authentication.
+ * List of tools that skip the per-tool OAuth scope check.
  *
- * These tools can be called without a Bearer token.
- * Typically used for discovery or public metadata endpoints.
+ * `noauth` means no scope requirement, not anonymous access — the HTTP
+ * transport still demands a bearer token for every tool call and returns
+ * 401 without one. Typically used for discovery or metadata tools whose
+ * responses carry no scope-gated content.
  *
  * @example
  * ```typescript
- * // Make get-key-stages public
+ * // Exempt get-key-stages from the scope check
  * export const PUBLIC_TOOLS = ['get-key-stages'] as const;
  * ```
  */
 export const PUBLIC_TOOLS: readonly string[] = [
-  // Add tool names here to make them public
-  // By default, all tools require authentication
-  'get-changelog',
-  'get-changelog-latest',
+  // Add tool names here to skip the per-tool scope check
+  // By default, all tools carry the DEFAULT_AUTH_SCHEME scopes
   'get-rate-limit',
 ] as const;
 

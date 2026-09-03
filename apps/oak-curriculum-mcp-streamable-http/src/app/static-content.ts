@@ -121,11 +121,11 @@ function mountStaticAssets(app: Express, log: Logger, staticRoot?: string): void
   // PR's deviation ledger.
   //
   // Mounted at BOTH the root and the routed base (MCP-509). The routed mount
-  // is the one the canonical host can actually reach — Cloudflare only sends
-  // `/mcp*` here, so a root-relative request never arrives. The root mount
-  // stays because the alpha host serves this app at its own root and is a
-  // declared compatibility surface; retiring it would break that page
-  // silently. One handler, two prefixes: the two cannot drift apart.
+  // is what a path-scoped edge can reach (the release-era `www` rule sent
+  // only `/mcp*` here); the root mount serves every root-served deployment —
+  // the canonical `mcp.` host included (verified 2026-09-01) — so retiring
+  // either would break a live page silently. One handler, two prefixes: the
+  // two cannot drift apart.
   // `redirect: false` is load-bearing on the routed mount, not hardening.
   // Mounted at `/mcp`, a bare `GET /mcp` arrives as a request for the mount's
   // own directory, and with express.static's default that is a 301 to `/mcp/`,

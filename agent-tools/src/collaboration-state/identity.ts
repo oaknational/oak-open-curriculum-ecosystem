@@ -1,7 +1,25 @@
+/**
+ * Derivation of a collaboration identity from its PDR-027 seed.
+ *
+ * @remarks
+ * The seed → identity half of the identity seam: UUID v5 derivation at the
+ * single sanctioned site, the `session_id_prefix` slice, the write-identity
+ * shapes, and the Codex anonymous-write guard. Which environment value IS
+ * the seed, and in what precedence, is the other half — the sibling module
+ * `collaboration-seed.ts` — which this module consumes.
+ *
+ * @packageDocumentation
+ */
+
 import { v5 as uuidv5 } from 'uuid';
 
 import { deriveIdentity } from '../core/agent-identity/index.js';
 
+import {
+  missingCollaborationIdentitySeedMessage,
+  nonEmptyValue,
+  resolveCollaborationSeed,
+} from './collaboration-seed.js';
 import {
   type CollaborationAgentId,
   type CollaborationAgentIdWrite,
@@ -10,11 +28,6 @@ import {
   type UuidV5,
   uuidV5Schema,
 } from './types.js';
-
-interface SeedCandidate {
-  readonly source: string;
-  readonly value: string;
-}
 
 /**
  * PDR-076a §Cascade item 3 host-local namespace for collaboration-identity
@@ -43,7 +56,9 @@ function deriveIdFromSeed(seed: string): UuidV5 {
 }
 
 /**
- * The PDR-027 `session_id_prefix`: the first 6 characters of the session id.
+ * The PDR-027 `session_id_prefix`: the first 6 characters of the PDR-027 seed
+ * (the untagged platform session id on cloud seats; the harness session id
+ * otherwise — PDR-027, 2026-08-24 amendment).
  * The one canonical derivation — the prefix is the cross-repo join key
  * (per-estate name derivations diverge; the prefix does not), so every
  * display and write site must slice identically or the join silently breaks.
@@ -139,101 +154,4 @@ export function validateSharedStateAgentId(input: {
   }
 
   return { ok: true };
-}
-
-function resolveCollaborationSeed(env: CollaborationStateEnvironment): SeedCandidate | undefined {
-  return firstSeed([
-    { source: 'PRACTICE_AGENT_SESSION_ID_CLAUDE', value: env.PRACTICE_AGENT_SESSION_ID_CLAUDE },
-    { source: 'PRACTICE_AGENT_SESSION_ID_CURSOR', value: env.PRACTICE_AGENT_SESSION_ID_CURSOR },
-    { source: 'PRACTICE_AGENT_SESSION_ID_GEMINI', value: env.PRACTICE_AGENT_SESSION_ID_GEMINI },
-    { source: 'PRACTICE_AGENT_SESSION_ID_CODEX', value: env.PRACTICE_AGENT_SESSION_ID_CODEX },
-    { source: 'CODEX_THREAD_ID', value: env.CODEX_THREAD_ID },
-    { source: 'conversationId', value: env.conversationId },
-    {
-      source: 'ANTIGRAVITY_SOURCE_METADATA.conversationId',
-      value: antigravitySourceMetadataConversationId(env.ANTIGRAVITY_SOURCE_METADATA),
-    },
-  ]);
-}
-
-function missingCollaborationIdentitySeedMessage(platform: string): string {
-  const platformPracticeVar = practiceSessionVarForPlatform(platform);
-  const platformHint =
-    platformPracticeVar === undefined
-      ? ''
-      : ` For ${platform}, the primary Practice seed is ${platformPracticeVar}.`;
-
-  return (
-    'missing collaboration identity seed; set one of ' +
-    'PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, ' +
-    'PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, ' +
-    'CODEX_THREAD_ID, or Antigravity conversationId.' +
-    platformHint
-  );
-}
-
-function practiceSessionVarForPlatform(platform: string): string | undefined {
-  switch (platform.toLowerCase()) {
-    case 'claude':
-      return 'PRACTICE_AGENT_SESSION_ID_CLAUDE';
-    case 'cursor':
-      return 'PRACTICE_AGENT_SESSION_ID_CURSOR';
-    case 'gemini':
-    case 'antigravity':
-      return 'PRACTICE_AGENT_SESSION_ID_GEMINI or Antigravity conversationId';
-    case 'codex':
-      return 'PRACTICE_AGENT_SESSION_ID_CODEX or CODEX_THREAD_ID';
-    default:
-      return undefined;
-  }
-}
-
-function antigravitySourceMetadataConversationId(value: string | undefined): string | undefined {
-  const trimmed = nonEmptyValue(value);
-  if (trimmed === undefined) {
-    return undefined;
-  }
-
-  try {
-    const parsed: unknown = JSON.parse(trimmed);
-    if (
-      typeof parsed === 'object' &&
-      parsed !== null &&
-      'conversationId' in parsed &&
-      typeof parsed.conversationId === 'string'
-    ) {
-      return nonEmptyValue(parsed.conversationId);
-    }
-  } catch {
-    return undefined;
-  }
-
-  return undefined;
-}
-
-function firstSeed(
-  candidates: readonly {
-    readonly source: string;
-    readonly value: string | undefined;
-  }[],
-): SeedCandidate | undefined {
-  for (const candidate of candidates) {
-    const value = nonEmptyValue(candidate.value);
-    if (value !== undefined) {
-      return {
-        source: candidate.source,
-        value,
-      };
-    }
-  }
-
-  return undefined;
-}
-
-function nonEmptyValue(value: string | undefined): string | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : undefined;
 }

@@ -183,6 +183,21 @@ guards or relocations**, and several report stale or silently-green results:
   — both silently rewrite match output. Spell flags separately; the Bash
   hook policy fingerprints the r-first cluster shape (the observed one),
   not the trailing-r shapes, so those still rest on this habit.
+- SonarCloud matches command TEXT, not shell behaviour: curl options
+  expanded from a bash array were invisible to its transport rule while
+  literal-URL calls were flagged, so a behaviour-identical refactor left
+  every finding standing — write the option tokens literally at each call
+  site (2026-09-01). Local `sonar verify --file` answers 403 for this
+  organisation; the class proof is a per-rule grep plus shellcheck, and the
+  gate proof is the PR scan after the push.
+- `lint:shell` syntax-checks only `apps/**/scripts/*.sh` and `.husky/*`;
+  shell under `.agent/claude-harness-integrations/` is outside it and gets
+  shellcheck by hand.
+- In a fresh linked worktree `pnpm install` can report `prepare$ husky …
+Done` while creating NO `.husky/_` shims, so `core.hooksPath` points at
+  nothing and git skips pre-commit and pre-push with zero output (a push
+  log of two lines is the tell, 2026-08-30). After install in any linked
+  worktree, `ls .husky/_/pre-push` before trusting hook coverage.
 - Invisible bytes survive agent tools unreliably: raw ANSI `ESC` (0x1B)
   control bytes render invisibly in the Read tool and do not round-trip
   Write/Edit dependably, so escape sequences composed from read context can
@@ -191,6 +206,18 @@ guards or relocations**, and several report stale or silently-green results:
   Detect with `cat -v` (or `od -c`) against the raw file, never by eye in
   tool output; generate escape sequences from code (`\x1b` literals), not by
   copying rendered context.
+
+### Browser suites prove the BUILT artefact
+
+The showcase Playwright suites run `next start` on `.next` — rebuild before
+re-running, or the suite tests the previous code (bit twice in one day,
+2026-08-18). When a UI red appears only under one runner or one emulation,
+measure before theorising: a CI reflow red pattern-matched to
+animation-phase overflow while the a11y suite emulated reduced motion, so
+the sway was still and a two-minute probe found the true root. A browser
+test that is slow or flaky ONLY in a proxied container is a proxy-CA
+mismatch until proven otherwise (the cloud environment doc's provisioning
+defects list carries the cure).
 
 ### Lockfile desync via pnpm overrides
 

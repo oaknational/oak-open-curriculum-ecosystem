@@ -190,6 +190,17 @@ When the impulse to hedge surfaces:
    amendment, not local hedging.
 3. **Sequence honestly.** A *sequenced deferral* names the plan and
    phase that resolves the work; a hidden hedge is the failure mode.
+4. **State the concept positively — negation is invisible to the
+   fingerprint layer.** The gate matches substrings, not stance, so a
+   sentence *rejecting* a banned shape ("a warrant is a clock, not a
+   parking space") trips exactly like one endorsing it. The cure that
+   also reads better: name the positive concept directly (the expiry,
+   the gate, the named condition) instead of defining it by contrast
+   with the banned shape. This is compliance, not bypass — the
+   concept was never the pathogen; the contrast-framing was carrying
+   its vocabulary. The same cure applies at every write-time
+   fingerprint gate in the estate (two worked instances in one day,
+   2026-08-19, on two different gates).
 
 ## Doctrinal Anchors
 

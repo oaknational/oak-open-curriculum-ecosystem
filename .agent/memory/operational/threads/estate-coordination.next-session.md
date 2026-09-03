@@ -12,6 +12,10 @@ state**, under the same conventions as every other thread.
 
 ## Current Continuation — MAKE-SAFE PAUSE (owner word 2026-08-13 ~19:40Z; multi-day quiet; NOT a closeout)
 
+> **Pointer (2026-09-02, Finch calls Pinnacle c91bd4): the CURRENT state is the last
+> journal section, §2026-09-02 ~13:xxZ — FOLD LANDED. The block below is the 2026-08-13
+> pause, kept as history; every section between is journal.**
+
 - State at pause: fleet wind-down executed at owner word ("no work will
   happen over the next few days … everything safe and trivial to pick back
   up"). The coordination branch folded to main (fold PR referenced in the
@@ -899,3 +903,301 @@ defect). Prior plans archived with banners. RESUME MAP, priority order:
   explicit pathspec; the push is a task's FINAL command (the
   false-green echo wrapper recurred 2026-08-19 and is napkin-recorded);
   three same-window push races say fold windows want quiet branches.
+
+## 2026-08-19 ~12:3xZ — COMPACTION FREEZE 3 (Ocelot binds Tunnel, c28ad9): FOLD COMPLETE — plans on main, successor branch live; seat continues
+
+Owner word: fold to main, cut the successor, prepare for compaction,
+stop all processes. The seat CONTINUES at resume. RESUME MAP:
+
+- (a) FOLD COMPLETE: convergence merge bb4e4110c (clean; stale-capture
+  probe green), fold PR #914 bot-merged at full condition — merge
+  commit 1651ad2db on main. The mcp-output-contracts family, the fleet
+  evidence report, both directive amendments, and all day records are
+  ON MAIN. Successor coordination/2026-08-19-1651ad cut
+  tree-preservingly from post-fold main, pushed, tracking; the primary
+  resides there. Rotation broadcast 625eb128; the d4855c11 hold lifted.
+- (b) AT RESUME, FIRST: check whether main moved (Yarrow's design
+  merges land there); if so, merge origin/main into the successor and
+  REBUILD promptly — until then the primary's dist runs a stale
+  contract (skill step-9 note; worked instance 2026-08-01).
+- (c) Board: #911 awaiting binding rounds + the CodeQL inline finding
+  needs a dispositioned round; #905 19/19 green awaiting a binding
+  round; merge legs at this seat at settled. Design merge legs
+  (#907-#910, #912) at Yarrow's seat under owner word; the T1a-ii+T1e
+  card routes through this seat when surfaced. MCP-627/628 open.
+- (d) MCP-630 pickup HELD at owner word ("not yet") — route ONLY at
+  his word; sequences after #911. Implementation todos 1-8 start-safe
+  whenever he opens the lane.
+- (e) Poppy: mid-parcel at owner word (principles.md gradient
+  amendment, atlas extraction refinement, lane thread record, untracked
+  toolkit-re-architecture plan node) — commits on the successor at the
+  rotation; their word, their lane. Yarrow: design merge drive live.
+- (f) Instruments at this freeze: ALL STOPPED (heartbeat first with
+  heartbeat-end, watcher last). Contract note, self-caught: this
+  window's watcher ran --exclude-tag heartbeat WITHOUT the paired F-75
+  poll (both peers were demonstrably live on directed events; the gap
+  was real but unconsequential — re-arm the full triple at resume).
+  Bot token DELETED at window close. Director claim b1d00d68
+  RETAINED-WITH-REASON: same seat resumes at the owner's word.
+- (g) Carried follow-ups: testing-strategy.md split (over char limit);
+  plan-node-schema short-lived-strategic reconciliation clause;
+  MEMORY.md index curation; MCP-627 ruleset drift.
+
+## 2026-08-19 ~13:1xZ — DIRECTOR SUCCESSION (Ocelot binds Tunnel c28ad9 → Avocet guards Updraft 44e2ca): Moment 1 executed; seat ends at Moment 2
+
+Owner-initiated deliberate succession (PDR-063 §Deliberate succession:
+the lane is AT-REST post-freeze-3, so the handover is
+tracked-surfaces-only — NO claim adoption). Avocet guards Updraft
+(44e2ca) owner-seated ~13:03Z, standby team-start 4d077b1b (foundation
+complete; watcher + F-75 pair live). The claim contract, settled here:
+b1d00d68 CLOSED at Moment 1 with this succession as its summary;
+Avocet opens their OWN Director claim (--role director) at Moment 2 —
+adoption is for in-flight cycle claims, and none exists.
+
+Facts refreshed at Moment 1 (deltas since freeze-3 broadcast 00d07c87):
+
+- main moved to cacf23149 — #907 AND #909 are MERGED (Yarrow's drive);
+  #910 reads DIRTY under the moved base; #912/#908 BLOCKED in settle
+  windows; a NEW PR #913 exists (rules: "a reviewer never stands down
+  leaving an ownerless…") — provenance unverified at this seat, verify
+  at pickup. The successor branch (ecfe11dd1) is BEHIND main: the
+  merge-origin/main-in + REBUILD first-move now binds harder.
+- Everything else stands as the freeze-3 map: #911/#905 binding rounds
+  and merge legs; MCP-630 pickup HELD at owner word; MCP-627/628 open;
+  T1a-ii/T1e unblocked at the design seat (card yes ×3, record
+  c17a4bd7); Poppy's seat DOWN, lane complete and ratified.
+
+Moment 2 requirements on Avocet (PDR-064): pass the director-handoff.md
+readiness gate, broadcast the active-acknowledgement referencing the
+Moment-1 event, open the Director claim, arm the heartbeat pair. Until
+that broadcast lands, routing authority remains with Ocelot's record;
+the owner is conducting and present, so the between-moments detection
+path is owner-held (cadence stays down per the standing stop order).
+
+## 2026-08-19 ~14:2xZ — SUCCESSION COMPLETE (Avocet guards Updraft, 44e2ca, Director): Moment 2, main merged in, primary rebuilt
+
+Moment 2 broadcast 84e31e6e (13:18Z) in response to Ocelot's Moment-1
+adc480c2; readiness gate pasted inside it (registry: Ocelot's b1d00d68
+ABSENT/closed; peer-liveness: Ocelot's heartbeat stopped by intent at
+12:49Z). Own Director claim f04cd57b opened `--role director` on the
+successor branch; heartbeat pair armed on it (comms + claims legs,
+240s, both read back advancing); canonical watcher (heartbeat-excluded)
+paired with the F-75 delta poll. Ocelot's directed ask 1e9f10f9 is
+discharged (their d20bd0a92 + succession commit reached the remote via
+Yarrow's 5da80c1b9 push); their closeout broadcast is outstanding at
+this write.
+
+First leg done: origin/main (cacf23149, release 1.175.0, #909) is IN
+`coordination/2026-08-19-1651ad` — the merge commit is `d2dd64b69`
+(parents e701d7869 + cacf23149; 14 files = Yarrow's two design records
+plus main's 12). Attribution note for the record: the merge landed under
+Yarrow's `docs(design): final tips at the handoff cut` message because
+my merge wrote the shared index while their as-is commit sat in its
+pre-commit hook and my own merge commit stopped at commitlint; git's
+post-hook re-read of index + MERGE_HEAD made theirs the merge commit.
+Content and ancestry correct; no undo attempted (risk-of-loss against a
+peer's staged files). Pushed at 14:15Z, remote tip read back; primary
+`pnpm install && pnpm build` green 14:17Z (FULL TURBO — the pre-push
+gate had built the tree). Broadcasts: window 08e99990, done (in reply).
+
+Estate at this write: Yarrow CLOSED OUT 14:13Z at owner word (handoff to
+a successor; claim 645b9e0b RETAINED with handoff record
+`645b9e0b-design-lane-merge-drive-2026-08-19.md`, pickup by adoption);
+design merge legs #908/#910/#912 at SETTLE-READY fall to the design
+successor (or this seat at settled under the owner's standing
+"green and clean → merged" word); their post-cut 4c3bebac7 rides the
+next push. Poppy DOWN. #913 provenance verified: emgeebot (Matt's
+warden seat), +39-line amendment to `pr-comments-resolve-and-recheck`,
+all checks green, unreviewed — a Practice-rule amendment awaiting a
+review round (route to an Implementer when one frees). #911: CodeQL
+FAILURE to disposition + binding rounds; #905: green, binding round.
+MCP-630 HELD at owner word. Board otherwise as the succession entry.
+
+## 2026-08-19 ~15:5xZ — WEEK-SLEEP FREEZE (Avocet guards Updraft, 44e2ca, Director): estate dormant at owner word; seat frozen, claim retained
+
+Owner word (card answer ~15:4xZ): broadcast TEAM-SLEEP, then freeze this
+seat; the owner's second clone is left as-is (his call later). TEAM-SLEEP
+broadcast `bbc33e91` (stand-down order: heartbeat-end first, F-75 poll,
+watcher LAST); Poppy stood down on it (15:52Z). Yarrow closed out earlier
+(14:13Z, claim 645b9e0b retained for a design successor). Ocelot's seat is
+idle with NO closeout broadcast on the stream at this write (their claim
+closed at Moment 1; nothing of theirs is unpushed). The week-sleep SWEEP is
+the record `.agent/reports/week-sleep-sweep-2026-08-19.md` (on this branch,
+in draft fold PR #915): every worktree branch pushed-and-PR'd or contained
+in main; drafts #916 (MCP-103 workspace) / #917 (MCP-475 build gate) opened
+at this seat; #918 (w01-census scaffold) by the design lane; two red WIP
+fragments preserved verbatim in the record; peer-fleet and closed-PR
+branches reported, untouched.
+
+RESUME MAP (wake-first seat — this seat at the owner's word, or a
+successor adopting claim f04cd57b by PDR-063 adoption after the
+director-handoff.md readiness gate):
+
+- (a) FIRST: `git fetch`; if main moved, merge origin/main into
+  `coordination/2026-08-19-1651ad` on a QUIET tree (no peer commits in
+  flight — a clean tree is not a free index), push via
+  `pnpm agent-tools merge-bot push`, REBUILD the primary. Then the 24h
+  fold rule is overdue by construction: mark draft #915 ready and land it
+  through the converge-and-rotate ceremony; cut the successor branch.
+- (b) Seat-owned merge legs: #911 (CodeQL FAILURE needs a dispositioned
+  round; binding rounds pending), #905 (green, binding round pending; then
+  MCP-612 acceptances 2/3 — acceptance 3 = ONE owner card on the two
+  archive blobs). Merge at SETTLE-READY via
+  `merge-bot merge --pr <n> --expect <reviewer>`.
+- (c) Design merge legs #908 (`9d811d463`) / #910 (`0c30a6932`) / #912
+  (`cbdbda76b`) at SETTLE-READY under the owner's standing "green and clean
+  → merged" word — the design successor's if one is seated, else this seat
+  after harvesting each bound round; #910 reads DIRTY (main-merge first).
+  Claim 645b9e0b + handoff record
+  `645b9e0b-design-lane-merge-drive-2026-08-19.md` carry the design lane.
+- (d) #913 (emgeebot, +39 lines on `pr-comments-resolve-and-recheck`): a
+  Practice-rule amendment from Matt's fleet, all checks green, unreviewed —
+  route a review round to an Implementer. #916/#917/#918 are visibility
+  drafts — the lanes decide.
+- (e) MCP-630 pickup HELD at owner word ("not yet") — route ONLY at his
+  word. MCP-627 (ruleset drift) / MCP-628 (copyOakDs e2e race — reds a
+  parallel full gate intermittently; read before trusting a red
+  `pnpm check`) open.
+- (f) Instruments at this freeze: heartbeat loop stopped explicitly with a
+  heartbeat-end event, then the F-75 poll, the canonical watcher LAST
+  after the freeze broadcast. Director claim f04cd57b RETAINED-WITH-REASON:
+  the estate sleeps; silence past the heartbeat-end is intentional. No bot
+  token held (mint per write-window). Worktree residue left as found: a
+  stale staged report copy in design-plan-truings, the vcw oak-eslint edit
+  staged by this seat's refused commit attempt, the mcp-567 test edit, the
+  pr-891 runner script.
+- (g) Carried follow-ups (unchanged): testing-strategy.md split;
+  plan-node-schema short-lived-strategic clause; MEMORY.md curation;
+  MCP-627; the napkin rotation recorded DUE; the shared-index race generator
+  (per-seat worktrees for coordination writes, or a warden singleton) as a
+  concept-exploration seed.
+
+## 2026-09-02 ~13:xxZ — FOLD LANDED (Finch calls Pinnacle, c91bd4): #915 to main; board re-cut at owner rule; no successor branch; no Director seated
+
+Seat: Finch calls Pinnacle (`c91bd4`, claude-code / claude-fable-5), implementer at
+direct owner word (no Director seated; the week-sleep ended at owner word 2026-09-02).
+
+- **The fold.** `coordination/2026-08-19-1651ad` (draft PR #915, frozen 2026-08-19 at the
+  week-sleep, 14 commits, 19 files) reconciled against main and landed by merge commit.
+  Semantic merges per the semantic-merge skill: `napkin.md` as an append-only union
+  (1267 base + 156 branch + 1602 main = 3025 lines; heading set-diff empty both ways;
+  era witnesses present; git's own `--union` read 3024 because it hoisted the shared
+  blank line — the deterministic construction was used and git's union kept as the
+  cross-check); `repo-continuity.md` as main's body carrying the branch's
+  `typescript-estate-consolidation-review` row (616 lines; numstat 1/1 against main,
+  34/7 against the branch). The other seventeen files were untouched on main since the
+  base and landed as written. Validators green on the merged tree (plan corpus 106
+  conformant; markdownlint 0 issues). Reconciliation merge commit `099f13e5e`.
+- **Owner sequence, verbatim (2026-09-02):** "we will merge 946, 945, 908 then we will
+  look at the plan consolidation -- do not start yet"; "if 915 is workspace topology
+  related it should be in the same list as 908"; after #908 landed: "fix the issues as
+  part of the 915 work. Plan the 915 work before starting". Executed in that order:
+  #946 (55f7a457c), #948 (995eb0aa6), #945 (bf8db3a8e), #908 (a8aa13da1, on this seat's
+  merged head 5e5ff75f8), then this fold.
+- **Board re-cut at owner rule, verbatim (2026-09-02 morning):** "If it is relevant to
+  the workspace topology work it stays, everything else moves or is closed. I don't want
+  any pointers." Executed: #905, #911, #912, #910, #916, #917, #890 moved under the
+  owner's custody and closed on oaknational under the bot with their branches deleted;
+  #918 closed and its branch deleted; #915 and #908 stayed as workspace-topology work.
+- **Three owner plan-gate answers at this fold (2026-09-02):** (1) no successor
+  coordination branch after the fold — `handoff/jim-september` (draft PR #951) is the
+  consolidation home at owner word; the coordination-fold skill's step 9 (the successor
+  cut) is therefore set aside for this fold by owner word, and the skill's own dated
+  amendment routes to the plan-consolidation session; (2) the tango node's T2/AC4 re-scope
+  reads "Fixture consumer first light"; (3) the retained claims of retired seats,
+  `f04cd57b` (Avocet, Director) and `645b9e0b` (Yarrow, design lane), close at the fold
+  landing with closure summaries.
+- **The #908 post-merge round, carried here at owner word.** Copilot's 12:24Z review on
+  the merged tango node re-raised two 19 August suppressed comments never dispositioned:
+  the T1d deferral amendment had not been consolidated through §Mechanism, AC2, AC4 and
+  T2, and the deferral was a scope change the 19 August stamp did not cover. Cured in this
+  fold's third commit (the node re-trued and re-stamped; the readiness record carries the
+  addendum; DDR-012's `informed_by` edges made artefact pointers); the design lane's
+  thread record §Session update 2026-09-02 is the `ratified_where` target.
+- **Owner objective and rulings for the repo-split work, verbatim (2026-09-02
+  ~13:1xZ, at this seat; the durable home for the split plan's authoring).** Objective:
+  "our objective here is to merge 915, then provide a plan, then make sure that the repo
+  strategy is consistent and cohesive around that plan." The purpose, earlier the same
+  hour: "to hand over a maintainable surface for the 'MCP App' to a squad, without
+  burdening them with the agentic engineering material or the libraries etc. It is not
+  quite as straightforward as it sounds, the new repo must be functional, if devs need to
+  come to this repo to make significant changes that is a problem. We are in no way
+  constrained to the workspaces we happen to have today, I am expected multiple
+  workspaces to be split, including non-app workspaces" (sic). Five rulings on the
+  seat's decision list: (1) "yes the search app is effectively part of the MCP app";
+  (2) "the published packages will be on the @oaknational org scope, public, code is
+  MIT, content OGL, any included Oak branding is covered by the Oak branding usage
+  guidelines... so same as everywhere else"; (3) "releases: up to the implementing
+  person, I would go with one release version per repo for now"; (4) "oak-under-the-hood,
+  leave it as an open question for whomever picks up the plan, maybe we split it into two
+  separate skills/tours"; (5) "all Oak work is public and open by default, the name will
+  be oak-open-curriculum-mcp in the oaknational github org". Sequence the objective sets:
+  this fold → the split delivery plan (serving `toolkit-re-architecture`, self-contained
+  for a fresh session, the extraction as the product: the MCP app and the Oak-leaf
+  workspaces it needs building in `oaknational/oak-open-curriculum-mcp` from registry
+  dependencies alone) → the strategy corpus made consistent and cohesive around that plan.
+- **Estate shape after this fold.** The primary checkout sits on `handoff/jim-september`
+  (Kiln holds Slag, `1447f4`, curator, claim `d88ab157`: napkin-only consolidation; every
+  uncommitted change from the 2026-09-02 wrapping seats was committed there at owner
+  word). Next at the owner's word: Kiln merges main into `handoff/jim-september` (the
+  napkin is rotated on that branch and appended on main — the semantic-merge skill's
+  named dangerous shape; Kiln acknowledged the carry-across plan on the stream at 12:59Z);
+  then the split plan; then the strategy consolidation on that branch. Grounding already
+  delivered at this seat for both: the catalogue of every repo-shape plan, research and PR
+  by authority tier, and the 2026-09-02 dependency map of the MCP app (22 workspace
+  packages in its closure: 8 generic foundations, 7 mixed, 7 Oak-leaf; nothing published;
+  a dozen root-level couplings; Practice content reaching the product through the
+  `oak-under-the-hood` tool) — both in owner chat and the seat's per-user memory; the
+  plan re-derives from the corpus and a fresh map, never from the chat.
+- **Review-round routings for the consolidation session (Copilot round on #915,
+  2026-09-02 13:19Z; dispositioned on the PR, recorded here as the session's input).**
+  (1) `toolkit-re-architecture` has no "User groups and value" section — the template
+  requirement (owner ruling 2026-08-31) postdates the node's ratification; the node
+  carries the ledger row; the section is authored at the consolidation session as a
+  dated amendment for the owner's word. (2) The pattern
+  `classification-instrument-is-a-symptom` declares `proven_by_implementation: true` on
+  the strength of an owner-ruled design sweep, while the patterns README defines that
+  barrier as "real shipped code"; the corpus admits decision-move patterns on executed
+  decisions, so the README's barrier wording versus decision patterns is the question
+  for the session, never a landing-seat re-grade. (3) The Castr fixture-pack README says
+  ADR-108's step ordering "is amended by the seam migration" while ADR-108 is unchanged:
+  a sequenced deferral, named, not a hidden one — the ADR amendment lands with the
+  seam-migration delivery plan (ADRs state should-be; means live in plans). (4) Second
+  round, 13:33Z: the Atlas text names four `oak/` pack classes (identity · content ·
+  config · experience-tuning) while its seam diagram renders three — a rendered
+  artefact's diagram edit needs a rendered re-verification, so it is the session's;
+  the tango node's restatement was corrected to four in this fold. Also noted, not
+  cured: the week-sleep sweep report's headline worktree total (47) disagrees with its
+  44 + 5 rows; a dated archival report of a retired seat.
+- **Retired seats' claims.** `f04cd57b` and `645b9e0b` closed at this landing; their
+  handoff records stay on disk under `.agent/state/collaboration/handoffs/` as the
+  instance-tier record of what those seats froze.
+- **LANDED, and the lane that follows (2026-09-02 ~14:2xZ, same seat).** #915 merged as
+  `777e9131c` (the PR's merge commit, owner-merged 14:05:45Z on this seat's final head
+  `475a8193d`). Four Copilot rounds settled (raised 9 → 3 → 2 → 0 open); rounds 3 and 4 were
+  re-raises and housekeeping. Owner word mid-loop, verbatim: "keep 915 tight" (with the
+  pr-lifecycle and proportionality skills invoked — read as this seat's loop checkpoint having
+  failed: no PDR-140 intake declaration or tally at PR-open; failure-mode event `9874ce04`;
+  the curator conserved it as recurrence-despite-home, the declaration clause already living
+  in `review-feedback-defaults-to-triage` §Trigger). Owner word after the merge, verbatim:
+  "for the post-merge routings, take any unaddressed 915 comments as well, then all of that
+  goes into the same branch as the delivery plan, to minimise the total number of prs."
+  Claims `6ce14377` (this seat), `f04cd57b` and `645b9e0b` closed; the #908 Copilot thread
+  replied to and resolved. Kiln merged main into `handoff/jim-september` at `ba7e37d78`
+  (their event 14:24Z; the fold's 156 napkin lines carried and processed).
+  **The lane: MCP-661**, branch `jimcresswell/mcp-661-split-delivery-plan` from main at
+  `777e9131c`, claim `188c28b1`, one PR carrying (a) these record true-ups, (b) the uncured
+  #915 items, (c) the split delivery plan node `oak-open-curriculum-mcp-extraction`
+  (serving `toolkit-re-architecture`). Dispositions of the routings above on that branch:
+  (1) the "User groups and value" section authored on the toolkit node as a dated additive
+  amendment presented for the owner's word (moved off "the consolidation session" at the
+  one-branch word); (2) the patterns README barrier row gains a dated clause admitting
+  decision-move patterns proven by an executed, owner-ruled decision; (3) the Castr README
+  names the amending instrument by id (the delivery plan carries the ADR-108 amendment as a
+  slice; ADR-108 stands until it lands); (4) the Atlas diagram gains `experience-tuning`
+  with a rendered proof in the plan's readiness record; the sweep report gains a dated
+  addendum stating that its 44 + 5 rows cannot re-derive the headline 47. Round 3's cures
+  landed on #915 itself (`475a8193d`: the tango node's `ratified_date`, §Mechanism item 2,
+  AC3; the toolkit node's `last_updated`). Fresh dependency map at this seat (manifests at
+  `777e9131c`): 33 members; the two apps' runtime closure 17 packages, 25 with dev-time
+  deps; 8 outside; nothing published — the delivery plan carries the table.

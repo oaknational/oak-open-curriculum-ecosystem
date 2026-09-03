@@ -48,10 +48,10 @@ describe('resolveBakeOptions', () => {
     const options = resolveBakeOptions({
       VERCEL_ENV: 'production',
       VERCEL_PROJECT_PRODUCTION_URL: 'mcp.example.org',
-      CANONICAL_HOST: 'www.thenational.academy',
+      CANONICAL_HOST: 'mcp.thenational.academy',
     });
 
-    expect(options.canonicalHost).toBe('www.thenational.academy');
+    expect(options.canonicalHost).toBe('mcp.thenational.academy');
     expect(options.vercelHost).toBe('mcp.example.org');
   });
 

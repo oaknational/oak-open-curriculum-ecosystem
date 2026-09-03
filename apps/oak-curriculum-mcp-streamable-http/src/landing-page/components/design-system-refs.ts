@@ -33,8 +33,8 @@ import {
  * @remarks
  * DERIVED from {@link ROUTED_ASSET_BASE} and the copier's own directory name,
  * never re-typed: a literal here could drift from either the static mount or
- * the copy step, and the drift is invisible on the alpha host (which serves
- * this app at its root) while breaking the canonical one.
+ * the copy step, and a root-relative drift would keep rendering on any
+ * root-served deployment while breaking a path-scoped front.
  */
 export const OAK_DS_BASE = `${ROUTED_ASSET_BASE}/${OAK_DS_PUBLIC_DIRNAME}`;
 

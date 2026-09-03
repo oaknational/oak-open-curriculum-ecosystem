@@ -98,6 +98,8 @@ describe('buildCurrentSourceAdditions', () => {
           'export const DEFERRED_PATHS: readonly DeferredPathEntry[] = [',
           "  { path: '/key-stages/{keyStage}/subject/{subject}/check-restricted', ticket: 'MCP-214' },",
           "  { path: '/lessons/check-restricted', ticket: 'MCP-214' },",
+          "  { path: '/changelog', ticket: 'MCP-630' },",
+          "  { path: '/changelog/latest', ticket: 'MCP-630' },",
           '];',
         ].join('\n'),
       ],

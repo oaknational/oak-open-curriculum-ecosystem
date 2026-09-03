@@ -17,9 +17,9 @@ import { dnsRebindingProtection } from './security.js';
  * still refused.
  */
 
-/** The host production is actually served on, supplied by the platform. */
-const PLATFORM_HOST = 'curriculum-mcp-alpha.oaknational.dev';
-/** The new custom domain, named in ALLOWED_HOSTS. */
+/** The platform-supplied deployment host (`VERCEL_PROJECT_PRODUCTION_URL`-class). */
+const PLATFORM_HOST = 'example-project.vercel.example';
+/** The custom domain named in ALLOWED_HOSTS — the canonical address. */
 const CONFIGURED_HOST = 'mcp.thenational.academy';
 
 function createGuardedApp(): ReturnType<typeof express> {

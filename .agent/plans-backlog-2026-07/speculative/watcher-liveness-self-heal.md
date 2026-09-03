@@ -48,6 +48,34 @@ window), theme 17 (liveness-substrate drift).
 - `claim-liveness-crash-reconciliation-and-session-forensics.plan.md`
 - the new `session-and-team-state-statusline-icons.plan.md` (watcher-liveness as a register dimension)
 
+## Input routed 2026-08-24 (Watcher estate review; concept-exploration pass)
+
+Two facts and one candidate shape for the go/no-go below, from the
+Slack Watcher estate review (report
+`.agent/reports/agentic-engineering/slack-watcher-estate-review-2026-08-24.md`,
+leg 2; owner adopted its proposals):
+
+- The Watcher's tenure status message (landed 2026-08-24 in the
+  `slack-watcher` skill) now gives any external actor a durable
+  staleness predicate — the observable this idea's "verify" step
+  previously lacked.
+- Candidate solution shape to weigh AGAINST the verify-and-heal build:
+  **reconcile the mantle, not the process** — a standing
+  fresh-session-per-firing platform Routine whose prompt resolves
+  mantle state per the skill's validity rule and takes the mantle only
+  when the status message is stale beyond threshold. Warrant: the
+  mantle protocol is concurrency-safe by construction (simultaneous
+  takeovers resolve), and fresh-session Routines record `last_run`, so
+  the reconciler's own liveness is observable — the who-watches-the-
+  watcher regress terminates at the platform scheduler. Falsifiers:
+  Routine firing reliability is unmeasured; a fresh session may lack
+  Slack MCP credentials; hourly fresh sessions have a quota price the
+  owner may refuse (`no-unbounded-host-load`).
+- Observed the same day, association-grade: account-synced skills
+  demonstrated remote re-projection surviving local deletion twice in
+  one session — external-authority reconciliation is a mechanism this
+  platform family already exhibits.
+
 ## Next step — the go/no-go gate (spend time critically)
 
 1. **Ground**: read the comms-watch CLI liveness code first-hand; confirm the exact restart gap on

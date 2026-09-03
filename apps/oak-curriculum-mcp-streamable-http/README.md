@@ -296,7 +296,7 @@ signing off a release. Replaces the retired `pnpm smoke:remote` harness
 
 The server normally describes itself from each request's `Host` header. When an
 edge serves it at a different address — Cloudflare serves
-`https://www.thenational.academy/mcp` and overrides the `Host` to the app's own
+`https://mcp.thenational.academy/mcp` and overrides the `Host` to the app's own
 Vercel hostname, which is how Vercel selects the serving project — that
 derivation would advertise the origin hostname instead.
 

@@ -85,7 +85,11 @@ names as a real defect.
   [`pr-lifecycle`](../../pr-lifecycle/SKILL-CANONICAL.md) §"The review-round state machine"
   item 2 owns convergence: the tally store, the mechanical step-back predicate, the epoch
   reset, and the generator-recurrence classification. It is the fully-worked instrument;
-  build the tally, or the trigger cannot fire.
+  build the tally, or the trigger cannot fire. Response-side economics — what answering a
+  finding costs and when it is paid — are owned by
+  [PDR-140](../../../practice-core/decision-records/PDR-140-review-response-pricing.md)
+  (feedback defaults to triage; cures batch into declared settlement pushes), whose intake
+  contract binds at PR-open exactly as PDR-132's budgets bind at authoring.
 - **Changeset size** —
   [PDR-132](../../../practice-core/decision-records/PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md)
   owns the round budget and binds it at authoring time.
@@ -110,6 +114,17 @@ names as a real defect.
 **When a domain instance exists, run it.** This skill does not substitute for the
 mechanical instrument; it is the reason to reach for one, and the fallback when a domain
 has none.
+
+**Proper use, and the anti-pattern this gate is not.** This gate fires at shaping
+moments — before a decision, before the lenses, at authoring — and routes running loops
+to their domain instruments. It is NOT a mid-loop rescue tool: a manual invocation into
+an already-running loop (by owner or agent) is evidence that the domain skill's own
+checkpoint failed to fire, and the disposition is a defect report against that skill
+(PDR-140 clause 8 names this for PR loops), never normalised repeat rescue. Worked
+instance: 2026-08-31, the owner invoked this skill twice in one day to correct a
+spiralling PR review loop — the pokes worked, which is exactly what made the hack
+invisible; the cure was making the pr-lifecycle machine's own transitions carry the
+checkpoints.
 
 ## Worked instance — ten rounds that a live trigger would have stopped at four
 

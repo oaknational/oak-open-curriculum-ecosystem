@@ -34,7 +34,11 @@ scope):
 3. **Could it be simpler without compromising functionality or quality?** — the
    [§First Question](#first-question).
 4. **Would it be simpler if the system changed?** Ask whether moving the system
-   dissolves the problem, rather than solving it inside the current shape.
+   dissolves the problem, rather than solving it inside the current shape. A
+   classification instrument is often a symptom of the system it grades: a
+   census existed because the tree did not sort, and asking this question of
+   each of its findings flipped four of five proposed changes from standing
+   activities into constructed properties (2026-08-19).
 5. **Optimise for user value.**
 
 A question arriving as an either/or is usually a false frame (owner standing
@@ -238,12 +242,25 @@ asserted: a counter-instance (one consumer the "general" layer cannot
 serve unchanged) is a falsifier against generality-by-assertion, not an
 exception to accommodate.
 
+The gradient runs below the repo boundary (owner-directed 2026-08-19):
+the lowest general layer may be the ecosystem itself. Where a finished
+canonical form already exists — an industry contract, a mature library —
+adopt it behind a thin conformance check rather than re-derive it
+in-estate; own only concepts with no external canonical form, or small
+enough that a finished owned module costs less than curating a
+dependency. Both directions stay falsifiable by measured cost. A thin
+highest-specificity layer is also a detachable one (owner-directed
+2026-08-19): an Oak product surface built as configuration, styling, and
+experience tuning on general machinery can be handed off to a product
+squad — extracted to its own home — without dragging the lever machinery
+its tuning turns.
+
 Agent-work capabilities (collaboration, coordination, work management,
 direction, lifecycle, identity, claims, handoff, review routing, and adjacent
 concerns) are Practice-owned by default; host-local tooling implements them.
-For product/tooling code, the scale is: many-repo capability -> repo-generic
-layer -> purpose-specific reusable tool -> thin Oak-wide wrapper -> narrow
-Oak-domain wrapper.
+For product/tooling code, the scale is: ecosystem-canonical form -> many-repo
+capability -> repo-generic layer -> purpose-specific reusable tool -> thin
+Oak-wide wrapper -> narrow Oak-domain wrapper.
 
 Oak-specific state is a pressure signal. Keep it minimal; generated state
 beats authored state. Hand-rolled types beside generated SDK outputs mean

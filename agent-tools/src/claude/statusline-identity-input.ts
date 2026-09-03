@@ -13,6 +13,7 @@
  * @packageDocumentation
  */
 
+import { stripSessionIdTagIfPresent } from '../core/agent-identity/session-seed.js';
 import { isPlainObject, nonBlankString } from '../core/json-narrowing.js';
 
 /**
@@ -75,9 +76,27 @@ interface RateLimitsField {
 }
 
 /**
+ * Environment values the statusline consumes for seed resolution.
+ *
+ * @remarks
+ * On cloud seats the canonical PDR-027 seed is the untagged platform
+ * session id, not the harness `session_id` in the statusline payload; the
+ * statusline must render the same identity the SessionStart hook and
+ * collaboration tooling derive.
+ */
+export interface StatuslineEnvironment {
+  /** Explicit operator seed — outranks the ambient platform id (PDR-027 precedence). */
+  readonly PRACTICE_AGENT_SESSION_ID_CLAUDE?: string;
+  readonly CLAUDE_CODE_REMOTE_SESSION_ID?: string;
+}
+
+/**
  * Translate Claude Code statusline stdin JSON into an execution plan.
  *
  * @param rawJson - The raw JSON text Claude Code passes on stdin.
+ * @param environment - Environment values consulted for seed resolution
+ *   (operator override, then platform session id, then payload
+ *   `session_id`).
  * @returns `noop` when the payload is empty, invalid JSON, or not a JSON
  *   object; otherwise `render` with whatever fields could be extracted. Each
  *   field is narrowed from `unknown` through an explicit guard, so a malformed
@@ -91,7 +110,10 @@ interface RateLimitsField {
  * }
  * ```
  */
-export function planStatuslineExecution(rawJson: string): StatuslinePlan {
+export function planStatuslineExecution(
+  rawJson: string,
+  environment: StatuslineEnvironment = {},
+): StatuslinePlan {
   if (rawJson.length === 0) {
     return { kind: 'noop' };
   }
@@ -104,7 +126,10 @@ export function planStatuslineExecution(rawJson: string): StatuslinePlan {
   return {
     kind: 'render',
     inputs: {
-      seed: nonBlankString(payload.session_id),
+      seed:
+        nonBlankString(environment.PRACTICE_AGENT_SESSION_ID_CLAUDE) ??
+        stripSessionIdTagIfPresent(environment.CLAUDE_CODE_REMOTE_SESSION_ID) ??
+        nonBlankString(payload.session_id),
       cwd: workspaceDir(payload.workspace) ?? nonBlankString(payload.cwd),
       model: modelName(payload.model),
       usedPercentage: contextUsage(payload.context_window),

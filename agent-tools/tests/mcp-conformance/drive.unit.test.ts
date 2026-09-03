@@ -16,7 +16,7 @@ import { loadFixtureRaw } from './test-helpers/fixture-loader.js';
 const TOOLS_LIST_RAW = loadFixtureRaw('tools-list-stub-observed-2026-07-28.json');
 const TOOLS_CALL_RAW = loadFixtureRaw('tools-call-stub-observed-2026-07-28.json');
 
-const TARGET = 'https://curriculum-mcp-alpha.oaknational.dev/mcp';
+const TARGET = 'https://mcp.thenational.academy/mcp';
 
 /**
  * Branch-free parametric fake over the drive's two-method seam: each method

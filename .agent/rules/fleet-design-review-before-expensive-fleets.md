@@ -50,3 +50,29 @@ exactly where independent eyes are cheapest.
 Cheap fleets (a handful of legs, well-trodden shape) do not need this
 ceremony — the rule binds where the spend makes a design defect
 expensive.
+
+## Briefs centre the question, never the predecessor
+
+A baseline document transmits its STANCE, not only its facts: round-1
+census judges handed the 2026-04-28 matrix as their baseline carried its
+"keep as thin leaf" editorial stance unratified into their target states,
+and the round that centred the question instead produced a dramatically
+different result (2026-08-14). A ratification transmits its stance the
+same way: briefs seeded with "ratified structure must be respected"
+converted surface-with-verdict into defend-the-ruling — every panel
+graded the incumbent instead of searching the space (owner diagnosis
+2026-08-17, verbatim: "self-congratulatory theater"). When the owner
+reopens a space ("the original target architecture was WRONG"), prior
+rulings inside it become historical data: write briefs that forbid
+deference to anything in the reopened space, admit only first-hand
+verified mechanism facts and measurements as evidence, and let prior
+decisions enter as ordinary candidates. The anchor-free legs (a cold pass
+forbidden the corpus; raw git measurement) were the only parts of that
+day's work that survived, and they independently agreed with the owner.
+Cure record: `.agent/research/workspace-basis-regrounding-2026-08-17.md`;
+the named concept: `patterns/baseline-transmits-its-stance.md`.
+
+Budget the READ traffic. Repo-direct walker legs are dominated by
+tool-read tokens, not output: the 2026-08-17 survey round missed its
+estimate threefold (3.5M spent against ≤1.1M estimated) because reads
+were unpriced. A fleet estimate names its read model per leg.

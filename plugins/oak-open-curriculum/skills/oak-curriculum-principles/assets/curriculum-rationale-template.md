@@ -8,7 +8,7 @@ Fill in the bracketed prompts and delete this intro line when done.
 
 ## [Title] — curriculum rationale
 
-**What this is:** [curriculum map / unit / lesson / resource]
+**What this is:** [curriculum sequence / unit / lesson / resource]
 **Subject & phase:** [e.g. Year 5 maths]
 **Place in the curriculum:** [which thread(s) it belongs to; what comes immediately before and after]
 **Mapped to:** [national curriculum statements / statutory framework references]

@@ -3,7 +3,19 @@
 
 # Oak Open Curriculum Ecosystem
 
-The [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), delivered three ways: a [Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro) (MCP) [app](https://modelcontextprotocol.io/extensions/apps/overview) that puts [Oak inside ChatGPT, Claude, Copilot, and Gemini](docs/strategy/stream-mcp-app.md) — the AI assistants teachers already use; [engineering tools](docs/strategy/stream-engineering-tools.md) for the wider ecosystem to build with — a generated, type-safe TypeScript SDK, a semantic search service, graph tools generated from Oak data, and evidence surfaces grounded in the wider education sector; and an [openly documented framework for agentic engineering](docs/strategy/stream-agentic-framework.md) that delivers AI-amplified innovation without trading away rigour or excellence.
+The [Oak National Academy Open Curriculum](https://open-api.thenational.academy/)
+becomes AI-native infrastructure through four co-equal value streams: a
+[Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro)
+(MCP) [app](https://modelcontextprotocol.io/extensions/apps/overview) that puts
+[Oak inside ChatGPT, Claude, Copilot, and Gemini](docs/strategy/stream-mcp-app.md) —
+the AI assistants teachers already use; [engineering tools](docs/strategy/stream-engineering-tools.md)
+for the wider ecosystem to build with — a generated, type-safe TypeScript SDK, a semantic
+search service, graph tools generated from Oak data, and evidence surfaces grounded in the
+wider education sector; an [openly documented framework for agentic engineering](docs/strategy/stream-agentic-framework.md)
+that delivers AI-amplified innovation without trading away rigour or excellence; and the
+[Oak Innovation Kit](docs/strategy/stream-innovation-kit.md), which exists to turn those
+latent capabilities into excellent working experiences that expand understanding, generate
+trustworthy evidence, and compound what real use proves reusable.
 
 > **We're turning Oak's open curriculum into AI-native infrastructure — for teachers and the wider ecosystem — and transforming how we build and curate digital products, agent-first, to do it well.**
 
@@ -17,14 +29,16 @@ to build on. Public goods, built in the open.
 **Building capabilities.** Representing knowledge as graphs is a strength we apply
 across domains — Oak's curriculum, the EEF evidence surface, AI-enhanced
 development, and how we run our own work.
+The Oak Innovation Kit is intended to bring these capabilities, the design system, and the
+agent-first Practice together to make ambitious possibilities tangible and testable.
 
-**Vision and strategy**: Start with [VISION.md](VISION.md) — the two-part vision (Oak's curriculum made AI-native for teachers and the ecosystem; and how we build and curate it, agent-first). Then the [strategy](docs/strategy/README.md) — the diagnosis, the three value streams, and how we'll know it's working. For the live delivery roadmap, see the [release-planning corpus](.agent/plans/README.md) (the prior estate is conserved in [the 2026-07 backlog](.agent/plans-backlog-2026-07/BACKLOG.md)).
+**Vision and strategy**: Start with [VISION.md](VISION.md) — the two-part vision (Oak's curriculum made AI-native for teachers and the ecosystem; and how we build and curate it, agent-first). Then the [strategy](docs/strategy/README.md) — the diagnosis, the four value streams, and how we'll know it's working. For the live delivery roadmap, see the [release-planning corpus](.agent/plans/README.md) (the prior estate is conserved in [the 2026-07 backlog](.agent/plans-backlog-2026-07/BACKLOG.md)).
 
 ---
 
 ---
 
-**Current status: Public Beta** — The MCP app server is live at `www.thenational.academy/mcp`. Anyone can create an Oak account to connect; there is no invitation or allowlist. The `curriculum-mcp-alpha.oaknational.dev` host remains available as a compatibility surface.
+**Current status: Public Beta** — The MCP app server is live at `mcp.thenational.academy/mcp`. Anyone can create an Oak account to connect; there is no invitation or allowlist.
 
 ---
 
@@ -52,9 +66,10 @@ collaborate, keep learning, and keep operational knowledge in the repository
 where it stays useful.
 
 Putting Oak inside the AI assistants teachers already use, giving the wider
-ecosystem the tools to build with Oak curriculum content, and the openly
-documented Practice that delivers AI-enhanced innovation are three co-equal value
-streams — none secondary. **Beyond Oak-hosted products**, we publish a
+ecosystem the tools to build with Oak curriculum content, openly documenting the
+Practice that delivers AI-enhanced innovation, and using the Innovation Kit to make
+new possibilities tangible and testable are four co-equal value streams — none
+secondary. **Beyond Oak-hosted products**, we publish a
 deliberate set of reusable sector components — the OpenAPI-to-MCP pipeline,
 SDK-generation patterns, hybrid-search tooling, MCP and MCP App scaffolds, graph
 projection conventions, and the openly documented Practice — so other
@@ -65,7 +80,7 @@ are set out in [What This Repo Provides](#what-this-repo-provides) below.
 **Product owners, school leaders, non-technical evaluators** — you don't need to read the technical content below. Start with:
 
 - [VISION.md](VISION.md) — the two-part vision: what this project delivers (for teachers and the wider ecosystem), and how we build and curate it agent-first; why it matters and the investment case
-- [Strategy](docs/strategy/README.md) — the diagnosis, the three value streams (app, tools, framework), the alignment to Oak's goals, and how we'll measure success
+- [Strategy](docs/strategy/README.md) — the diagnosis, the four value streams (app, tools, framework, Innovation Kit), the alignment to Oak's goals, and how we'll measure success
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
 - [Progress update (April 2026)](.agent/reports/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters; newer reports land in [.agent/reports/](.agent/reports/README.md)
 
@@ -327,7 +342,6 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | `demos/`           | Demonstration web apps at full estate standards: the Curriculum Hub (live search + content stack) and the design-system showcase                         |
 | `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`                                              |
 | `docs/`            | Developer documentation, guides, and the full ADR index                                                                                                  |
-| `research/`        | Imported research records as public projections, outside the product dependency lattice (ADR-215); first record: the web-app-deconstruction study        |
 
 ### Workspace Summaries
 

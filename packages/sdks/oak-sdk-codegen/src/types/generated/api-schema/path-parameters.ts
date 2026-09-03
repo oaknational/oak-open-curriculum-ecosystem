@@ -23,8 +23,6 @@ export type ValidPath = keyof Paths;
  * Convenience map for all the paths
  */
 export const PATHS = {
-  '/changelog': '/changelog',
-  '/changelog/latest': '/changelog/latest',
   '/key-stages': '/key-stages',
   '/key-stages/{keyStage}/subject/{subject}/assets': '/key-stages/{keyStage}/subject/{subject}/assets',
   '/key-stages/{keyStage}/subject/{subject}/lessons': '/key-stages/{keyStage}/subject/{subject}/lessons',
@@ -131,8 +129,6 @@ export type ValidGetPath = {
  * that widen the type system.
  */
 export type GetResponseBody =
-  | Paths['/changelog']['get']['responses'][200]['content']['application/json']
-  | Paths['/changelog/latest']['get']['responses'][200]['content']['application/json']
   | Paths['/key-stages']['get']['responses'][200]['content']['application/json']
   | Paths['/key-stages/{keyStage}/subject/{subject}/assets']['get']['responses'][200]['content']['application/json']
   | Paths['/key-stages/{keyStage}/subject/{subject}/lessons']['get']['responses'][200]['content']['application/json']
@@ -380,14 +376,6 @@ export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
     }
   },
   "NO_PARAMS": {
-    "/changelog": {
-        "path": "/changelog",
-        "paramsKey": "NO_PARAMS"
-    },
-    "/changelog/latest": {
-        "path": "/changelog/latest",
-        "paramsKey": "NO_PARAMS"
-    },
     "/key-stages": {
         "path": "/key-stages",
         "paramsKey": "NO_PARAMS"
@@ -3000,174 +2988,6 @@ export const PATH_OPERATIONS = [
     }
   },
   {
-    "path": "/changelog",
-    "method": "get",
-    "operationId": "changelog-changelog",
-    "summary": "API changelog",
-    "description": "Use when you need the full history of API changes — for surfacing release notes or checking which version introduced a field. Returns every changelog entry with version and date.\n\nNot for: the current version (GET /changelog/latest).",
-    "parameters": [],
-    "responses": {
-      "200": {
-        "description": "Successful response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "version": {
-                    "type": "string"
-                  },
-                  "date": {
-                    "type": "string"
-                  },
-                  "changes": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "version",
-                  "date",
-                  "changes"
-                ],
-                "additionalProperties": false
-              },
-              "example": [
-                {
-                  "version": "0.7.0",
-                  "date": "2026-05-21",
-                  "changes": [
-                    "/subjects/{subject} now exposes `ks4ProgrammeFactors.childSubject` for subjects split into child subjects at KS4 (currently science → biology, chemistry, combined-science, physics)",
-                    "Removed the per-sequence `ks4Options` field from `sequenceSlugs[]` in /subjects, /subjects/{subject}, and /subjects/{subject}/sequences responses; the variant is still encoded in the sequenceSlug suffix"
-                  ]
-                },
-                {
-                  "version": "0.6.0",
-                  "date": "2026-02-19",
-                  "changes": [
-                    "Change to how blocked content is handled, using BAD_REQUEST & .data.cause instead of 451"
-                  ]
-                }
-              ]
-            }
-          }
-        }
-      },
-      "400": {
-        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.BAD_REQUEST"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "API token not provided or invalid",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.UNAUTHORIZED"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.NOT_FOUND"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "path": "/changelog/latest",
-    "method": "get",
-    "operationId": "changelog-latest",
-    "summary": "Latest API version",
-    "description": "Use when you only need the current API version — e.g. a version banner or deployment check. Returns the most recent changelog entry.\n\nNot for: full version history (GET /changelog).",
-    "parameters": [],
-    "responses": {
-      "200": {
-        "description": "Successful response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "version": {
-                  "type": "string"
-                },
-                "date": {
-                  "type": "string"
-                },
-                "changes": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": [
-                "version",
-                "date",
-                "changes"
-              ],
-              "additionalProperties": false,
-              "example": {
-                "version": "0.7.0",
-                "date": "2026-05-21",
-                "changes": [
-                  "/subjects/{subject} now exposes `ks4ProgrammeFactors.childSubject` for subjects split into child subjects at KS4 (currently science → biology, chemistry, combined-science, physics)",
-                  "Removed the per-sequence `ks4Options` field from `sequenceSlugs[]` in /subjects, /subjects/{subject}, and /subjects/{subject}/sequences responses; the variant is still encoded in the sequenceSlug suffix"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "400": {
-        "description": "Bad request - e.g. \"Content is blocked for copyright reasons\"",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.BAD_REQUEST"
-            }
-          }
-        }
-      },
-      "401": {
-        "description": "API token not provided or invalid",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.UNAUTHORIZED"
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "Detail of the request causing the 404, e.g. \"Lesson not found\"",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/error.NOT_FOUND"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
     "path": "/rate-limit",
     "method": "get",
     "operationId": "getRateLimit-getRateLimit",
@@ -3256,9 +3076,7 @@ export const OPERATIONS_BY_ID = {
   "getUnits-getUnit": PATH_OPERATIONS[26],
   "getThreads-getAllThreads": PATH_OPERATIONS[27],
   "getThreads-getThreadUnits": PATH_OPERATIONS[28],
-  "changelog-changelog": PATH_OPERATIONS[29],
-  "changelog-latest": PATH_OPERATIONS[30],
-  "getRateLimit-getRateLimit": PATH_OPERATIONS[31]
+  "getRateLimit-getRateLimit": PATH_OPERATIONS[29]
 } as const;
 
 export type OperationIdToOperationMap = typeof OPERATIONS_BY_ID;

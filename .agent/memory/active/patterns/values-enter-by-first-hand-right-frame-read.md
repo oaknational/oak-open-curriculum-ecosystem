@@ -14,7 +14,8 @@ proven_in: >-
   drawing a pinned-merge 409, 2026-08-07 and again 2026-08-12; a claim-id
   tail typed from memory at a pickup, 2026-08-10). Conserved with full
   detail in .agent/memory/active/archive/napkin-2026-08-14.md (2026-08-08
-  entries).
+  entries). Timestamp instances at two further seats in one session
+  (2026-08-13, conserved in archive/napkin-2026-09-02.md).
 proven_date: 2026-08-08
 related_pattern: observation-that-does-not-bear-on-the-claim
 barrier:
@@ -52,7 +53,19 @@ Mechanically:
   handle to complete from memory.
 - **Timestamps** in records come only from `date -u` run in the same block.
   A copied value must also be in the RIGHT FRAME: tool output timestamps
-  carry unknown timezones — first-hand but wrong-frame is still wrong.
+  carry unknown timezones — first-hand but wrong-frame is still wrong. A
+  `~` prefix does not license a guess: it reads as measured-and-rounded. A
+  wrong stamp is strictly worse than no stamp, because it manufactures a
+  false ORDERING between observations — no stamp invites a question, a
+  wrong one answers it falsely (two seats in one session, 2026-08-13: a
+  correction event stamped "~14:40Z" for a reading taken before 14:35Z
+  would have read a green surface as going red AFTER an all-pass read; a
+  ticket comment stamped "~13:3xZ" sat 35 minutes in the future of its own
+  `createdAt`). Where a stamp is load-bearing, emit it in-band from the
+  same command that takes the measurement, or let the tool stamp it (the
+  claims CLI's `--now`, a tracker's own `createdAt`). Neither seat caught
+  its own stamp; each caught the other's — the cross-check between two
+  seats reading each other's records was the instrument.
 - **Exit codes** run bare on their own line, echo on the next line, no pipe
   anywhere on the line ([`exit-codes-in-band-never-piped`](../../../rules/exit-codes-in-band-never-piped.md)
   is the rule surface; the pattern here is why it must bite at COMPOSE time).

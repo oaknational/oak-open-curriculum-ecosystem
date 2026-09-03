@@ -606,14 +606,25 @@ flowchart LR
   package cannot acquire Oak-ness without failing a gate at write time. And
   <strong>Oak-ness becomes enumerable</strong>: <code>oak/</code> can be pointed at and
   measured, so "thinner" becomes a number with a trend, not an aspiration.</p>
-  <p><strong>Oak-ness inside <code>oak/</code>, by class.</strong> The three pack classes
-  survive as the oak side's internal structure — identity packs (brand, reserved),
-  content adapters and data packs (OGL), injected configuration (names, policy, env) —
+  <p><strong>Oak-ness inside <code>oak/</code>, by class.</strong> The pack classes
+  survive as the oak side's internal structure — identity packs (brand and styling,
+  reserved), content adapters and data packs (OGL), injected configuration (names,
+  policy, env), and experience-tuning packs (the knob settings for toolkit levers) —
   plus the assemblies (apps and demos). The licence model lands directory-literal:
   <code>toolkit/</code> is MIT, the oak side carries the OGL content pointers and the
   reserved brand, and no component's licence needs more than one word again. The design
   system remains the proven instance of the pattern — same markup, any identity —
   now generalised by topology rather than by per-package discipline.</p>
+  <p><strong>Why thin, sharpened (owner refinement, 2026-08-19).</strong> Oak product
+  workspaces are designed to <em>leave</em>: extracted from this repo and handed to a
+  product squad without the machinery coming along. What leaves is the knobs — basic
+  config, styling, user-experience tuning; what stays is the levers — the machinery the
+  tuning turns. This hands the seam its acceptance probe, <strong>the extraction
+  test</strong>: an oak product workspace, moved to a fresh repo, builds from registry
+  dependencies alone (the packed isolated-consumer pattern the estate already applies to
+  the SDK, at product scale). The knob/lever line is also the crispest form of the
+  boundary test: a product squad should be able to re-tune every lever without ever
+  editing machinery.</p>
   <p><strong>The census retires into a migration map.</strong> The classification matrix
   (45 subjects, owner-carded 2026-08-14) stops being a standing instrument and becomes the
   one-time re-home plan: the 12 generic-foundation rows move to <code>toolkit/</code>
@@ -643,7 +654,7 @@ flowchart LR
 
   subgraph OAK["oak/ — enumerable, measurably thin"]
     direction TB
-    P["packs — identity · content · config"]
+    P["packs — identity · content · config · experience-tuning"]
     A["assemblies — apps and demos"]
   end
 
@@ -689,8 +700,11 @@ flowchart LR
   diagram is Change 3's. One genuine decision remains as residue and rides the seam's
   migration card: the release mechanism itself — per-package versioning and publishing
   against today's single-version pipeline that tags and changelogs but never publishes
-  (<code>npmPublish: false</code>). Publishing stays the exercised proof of separability;
-  the seam is what makes the proof cheap.</p>
+  (<code>npmPublish: false</code>). The owner's extraction refinement (same day)
+  promotes this residue: publishing is the <em>prerequisite of product handoff</em>, not
+  just the exercised proof of separability — an extracted workspace resolves its toolkit
+  dependencies from the registry, so the first external consumer of the published
+  toolkit is the extracted squad itself.</p>
 
   <h3 id="change-5">Change 5 · The workspace-liveness gate</h3>
   <p>Reshaped at the same sweep from three ad-hoc dispositions into a system change: an

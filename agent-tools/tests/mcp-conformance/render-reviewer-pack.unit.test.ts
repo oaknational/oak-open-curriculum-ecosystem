@@ -7,7 +7,7 @@ import {
 } from '../../src/mcp-conformance/render-reviewer-pack.js';
 import { type DriveOutcome } from '../../src/mcp-conformance/drive.js';
 
-const TARGET = 'https://curriculum-mcp-alpha.oaknational.dev/mcp';
+const TARGET = 'https://mcp.thenational.academy/mcp';
 
 // The pack's outward-facing sentences are OWNER-GATED copy: the renderer
 // takes them as inputs and never authors them.

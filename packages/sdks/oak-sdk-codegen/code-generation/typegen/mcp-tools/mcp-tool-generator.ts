@@ -7,7 +7,7 @@ import type {
 } from 'openapi3-ts/oas31';
 
 import { generateMcpToolName } from './name-generator.js';
-import { generateToolFile } from './parts/generate-tool-file.js';
+import { generateToolFile, isPaginatedQueryMetadata } from './parts/generate-tool-file.js';
 import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateExecuteFile } from './parts/generate-execute-file.js';
 import { generateRuntimeIndexFile } from './parts/generate-runtime-index-file.js';
@@ -196,6 +196,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
 
   const operationToToolEntries: { operationId: string; toolName: string }[] = [];
   const toolNamesSet = new Set<string>();
+  const paginatedToolNames = new Set<string>();
   const stubPayloads = new Map<string, unknown>();
   const resolveSchemaRef = createSchemaResolver(schema);
 
@@ -207,6 +208,9 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
 
     const { pathParamMetadata, queryParamMetadata } = buildParamMetadataForOperation(operation);
     applyParamDescriptionOverrides(path, pathParamMetadata, queryParamMetadata);
+    if (isPaginatedQueryMetadata(queryParamMetadata)) {
+      paginatedToolNames.add(toolName);
+    }
     const toolFile = generateToolFile(
       toolName,
       path,
@@ -228,7 +232,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   const toolNames = Array.from(toolNamesSet).toSorted(compareCodeUnits);
 
   result.aliases['types.ts'] = generateTypesFile();
-  result.runtime['execute.ts'] = generateExecuteFile(toolNames);
+  result.runtime['execute.ts'] = generateExecuteFile(toolNames, paginatedToolNames);
   result.runtime['index.ts'] = generateRuntimeIndexFile();
   result.data['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
   result.data['scopes-supported.ts'] = generateScopesSupportedFile();

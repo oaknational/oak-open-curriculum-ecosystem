@@ -47,7 +47,12 @@ residency with `EnterWorktree` before its first lane action.
    story (PR #673 lost a close-and-succeed cycle to exactly this; #674
    is its clean successor). Create with the explicit start point —
    `git fetch origin && git worktree add <path> -b <branch>
-   origin/main` — then enter by path.
+   origin/main` — then enter by path. A lane found mis-cut (three
+   instances in one day, 2026-08-17, all from coordination-lineage tips)
+   is fixed forward: rename the mis-based branch `scrap/<name>-mis-based`,
+   `git switch -c <ticket-branch> origin/main`, verify with
+   `git merge-base --is-ancestor`; scrap branches await the owner's
+   deletion.
 2. **Secondary — residency at launch**, when a session is started FOR
    a known lane: launch in the worktree (`cd <worktree> && claude`,
    or `claude --worktree <name>` for `.claude/worktrees/` worktrees).
@@ -75,6 +80,18 @@ residency with `EnterWorktree` before its first lane action.
    lane needs armed from inside the worktree may be refused outright.
    The CLI is the front door; recurring watches belong in agent-tools
    (the watch-commands backlog).
+
+   **A residency switch can kill a primary-armed monitor (observed
+   2026-09-01, Claude Code 2.1.25x):** `EnterWorktree` killed a comms
+   watcher Monitor armed at the primary — the re-armed watcher exited
+   124 within ~30 s of the switch while the first had lived its full
+   3600 s backstop — so the arm-time-capture sentence above did not
+   hold that day. After ANY residency switch, verify each monitor
+   first-hand (heartbeat mtime, the exit notification) and re-arm what
+   died; an n=1 seat covers the gap with `comms list --since <boundary>`
+   sweeps at boundaries. A session RESTORE is the harsher sibling: it
+   resets cwd to the primary and removes every background task (watcher,
+   pr-watch alike), so re-arm before reading the stream (2026-09-02).
 5. **Residency never re-homes coordination surfaces.** Comms, claims,
    and the commit queue stay resolved to the PRIMARY coordination home
    with explicit absolute paths, per `worktree-hygiene` clause 8 and
@@ -126,6 +143,16 @@ entry — re-open only if a lane observes a prompt in practice).
 base (unverified — verify from current platform documentation before
 relying on it; the explicit-start-point sequence in Action clause 1
 needs no configuration).
+
+The worktree-isolation guard (Claude Code 2.1.25x, observed 2026-09-01
+and 2026-09-02) refuses compound commands, `$(…)`, heredocs carrying
+runtime values, `env VAR=… cmd`, `--dir`, and multi-line arms as "too
+complex", and refuses primary-path Write/Edit from a worktree-resident
+session. The working shapes: one plain command per call; a scratch shell
+wrapper, run as one plain command, for env-prefixed commands; and the
+Edit tool for edits — a Bash-hook workaround must never generalise into
+scripted file editing (owner correction 2026-09-02, verbatim: "why are
+you writing python to edit files?").
 
 ## Why a rule, not a PDR clause
 

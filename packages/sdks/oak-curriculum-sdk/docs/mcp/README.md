@@ -40,7 +40,8 @@ for the EEF-specific tool and prompt guidance.
   - selects the matching descriptor (`2xx` maps to `.data`, everything else uses `.error`),
   - fails fast if the status wasn’t documented, pointing to the operation id and the known statuses,
   - validates the payload against each documented schema and returns the discriminant `{ status, data }` when a match succeeds.
-- Authored runtime code does **not** guess or branch on status codes; it simply forwards to the generated executor and surfaces the resulting success or failure envelope.
+- Operations the schema classifies as paginated (an `offset` and a `limit` query parameter) also carry a **pagination echo**: the generated `invoke` derives `{ hasMore: false }` or `{ hasMore: true, nextOffset?, nextLimit? }` from the upstream `Link: rel="next"` response header, and the executor result becomes `{ status, data, pagination }`. Non-paginated operations return `{ status, data }` with no `pagination` field; the classification is read from the OpenAPI schema at sdk-codegen time, not from a hand-maintained list.
+- Authored runtime code does **not** guess or branch on status codes; it simply forwards to the generated executor and surfaces the resulting success or failure envelope, including the `pagination` field when present, so an agent can tell from the payload alone whether more pages exist.
 
 ### Why separate?
 
@@ -63,26 +64,26 @@ Security policy is defined in:
 
 The policy specifies:
 
-- **PUBLIC_TOOLS**: Tools that do not require authentication (e.g., `get-changelog`, `get-rate-limit`)
+- **PUBLIC_TOOLS**: Tools that skip the tool-level OAuth scope check (`noauth`), e.g.
+  `get-rate-limit`. HTTP bearer authentication at the transport still applies — an
+  unauthenticated call returns 401; `noauth` means no scope check, not no token.
 - **DEFAULT_AUTH_SCHEME**: OAuth 2.1 configuration for protected tools
 
 Current configuration:
 
-- Public tools: `get-changelog`, `get-changelog-latest`, `get-rate-limit`
+- Public tools: `get-rate-limit`
 - Protected tools: All others
-- Required scopes: `openid`, `email`
+- Required scopes: `email` (the policy deliberately excludes `openid`; see the `DEFAULT_AUTH_SCHEME` remarks in `mcp-security-policy.ts`)
 
 ### Making a Tool Public
 
-To make a tool publicly accessible without authentication:
+To exempt a tool from the OAuth scope check (transport authentication still applies):
 
 1. Edit `code-generation/mcp-security-policy.ts`
 2. Add the tool name to the `PUBLIC_TOOLS` array:
 
 ```typescript
 export const PUBLIC_TOOLS = [
-  'get-changelog',
-  'get-changelog-latest',
   'get-rate-limit',
   'your-tool-name', // Add here
 ] as const;
@@ -104,7 +105,7 @@ securitySchemes: [{ type: 'noauth' }];
 **Protected tools**:
 
 ```typescript
-securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }];
+securitySchemes: [{ type: 'oauth2', scopes: ['email'] }];
 ```
 
 Runtime uses this metadata to enforce per-tool authorization.

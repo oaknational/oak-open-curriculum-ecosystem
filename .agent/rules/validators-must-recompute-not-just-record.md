@@ -19,6 +19,15 @@ A validator that only records the value, never compares it, is a
 recording surface, not a validation surface. Naming it "validator"
 mis-advertises its function.
 
+A validator that scans its own outputs needs a DECLARED regeneration
+order: a census parity gate failed its first run because `render`
+rewrote the matrix its `facts` sweep then scanned — the canonical order is
+render, then facts, then check — found by running the instrument on
+itself, the cheapest adversary there is (2026-08-17). Regenerate LAST,
+true the prose, then re-check prose written EARLIER in the same round: a
+plan's trail denominator went stale against artefacts regenerated after
+the sentence was written (2026-08-18).
+
 ## Why
 
 Recording without recomputation produces a system where:

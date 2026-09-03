@@ -38,14 +38,14 @@ import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.
 import { TEST_UPSTREAM_METADATA } from './test-helpers/upstream-metadata-fixture.js';
 import { getScratchStaticRoot } from './test-helpers/static-root-fixture.js';
 
-const CANONICAL_HOST = 'www.thenational.academy';
+const CANONICAL_HOST = 'mcp.thenational.academy';
 
 /**
  * What Vercel's edge has ALREADY written into `x-forwarded-host` by the time the
  * app runs — the deployment hostname the Cloudflare origin rule must present so
  * Vercel selects this project. The value the fix has to displace.
  */
-const DEPLOYMENT_HOST = 'curriculum-mcp-alpha.oaknational.dev';
+const DEPLOYMENT_HOST = 'example-project.vercel.example';
 
 /**
  * An allow-listed Host (`BASE_HOSTS`), so the DNS-rebinding guard is satisfied
@@ -197,15 +197,16 @@ describe('canonical origin in forwarded headers (MCP-517)', () => {
       // against the session's authorised party is exact — so a case difference
       // between this header and `resolveCanonicalOrigin`'s output would refuse
       // the refresh.
-      const headers = await headersAfterShim('WWW.Thenational.Academy', EDGE_SUPPLIED_HEADERS);
+      const headers = await headersAfterShim('MCP.Thenational.Academy', EDGE_SUPPLIED_HEADERS);
 
       expect(headers['x-forwarded-host']).toBe(CANONICAL_HOST);
     });
 
     it('never modifies Host, which the DNS-rebinding guard judges', async () => {
-      // The rebinding allow-list deliberately excludes the canonical address —
-      // the edge never presents it — so rewriting Host would trip the app's own
-      // guard.
+      // This test's allow-list deliberately excludes the canonical address
+      // (production names it via ALLOWED_HOSTS since MCP-634) — the edge
+      // never presents it as Host — so rewriting Host here would trip the
+      // app's own guard.
       const headers = await headersAfterShim(CANONICAL_HOST, EDGE_SUPPLIED_HEADERS);
 
       expect(headers.host).toBe(REQUEST_HOST);

@@ -122,6 +122,36 @@ documented lane with:
 Exceptions without documented lanes are shadow gates; they
 compound over CI history and become irremovable by default.
 
+### Dated amendment (2026-08-31, owner-ruled): gate binding and policy authority
+
+The owner's verbatim ruling: **"YOU never disable checks, I can
+change policy."** The two halves are the authority model every
+gate-absolute rule shares:
+
+1. **Gate rules bind the agent absolutely.** An agent never
+   disables, skips, relocates, or weakens a check on its own
+   authority — no confidence level, expediency argument, or session
+   pressure changes this, and an agent never proposes bypass as an
+   option. The absolutes in the gate rules are absolutes *about the
+   agent*.
+2. **Policy change is the owner's power alone**, exercised as a
+   **recorded standing ruling** in the repository's operational
+   surfaces, naming: the session class it covers, the substitute
+   gates that carry every check the changed mechanism provided
+   (matching the original gate's *scope*, not merely its tool), and
+   the condition that re-opens the decision. Within that exact
+   scope the recorded ruling *is* the governing policy; everywhere
+   outside it, the gate rules' absolutes stand unchanged.
+
+Rules that state gate absolutes reference this clause as the single
+home of the authority model rather than each carrying its own copy;
+a recorded ruling narrows a rule's operational scope without
+amending the rule, and the ruling's mechanics live in the repo-bound
+operational surface it names, never in a portable rule. (Provenance:
+minted from a 2026-08-31 cloud-session hook-policy ruling in the
+originating repository, after per-rule scope clauses proved to
+propagate the same reconciliation file-by-file.)
+
 ## Rationale
 
 **Why lane-tracking rather than immediate fix.** Fix-in-scope is

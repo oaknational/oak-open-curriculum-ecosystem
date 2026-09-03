@@ -457,9 +457,10 @@ describe('shouldSkipClerkMiddleware — case variants of the public surface', ()
  * The root landing page (MCP-518, review correction).
  *
  * `static-content.ts` answers `GET /` with the same baked artefact the `/mcp`
- * negotiation serves — it is one page at two URLs, and the alpha host's front
- * door is the `/` one. Forking only `/mcp` left the identical page running
- * through Clerk and handshake-eligible at the other address.
+ * negotiation serves — it is one page at two URLs, and on a root-served
+ * deployment (the canonical host included) the front door is the `/` one.
+ * Forking only `/mcp` left the identical page running through Clerk and
+ * handshake-eligible at the other address.
  */
 describe('shouldSkipClerkMiddleware — the root landing page', () => {
   it('skips Clerk for a browser document GET of /', () => {

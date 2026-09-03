@@ -30,15 +30,29 @@ applications, packages, core workspaces, and the curriculum SDK.
 | codex | GPT-5 | 019fc3 | Lichen guards Phloem | review implementer and documentation-handoff author | 2026-08-02 | 2026-08-03 |
 | claude-code | claude-fable-5 | d427b6 | Poppy lifts Bark | repo-architecture lane — phase-2 claim 67b2ad25 (prior claims 95a0678d + 875f1508 closed 2026-08-19 with reasons in the archive); governing work is the owner's five-point toolkit brief | 2026-08-17 | 2026-08-19 |
 
-## Current Continuation — repo-architecture lane (2026-08-19: phase 2 OPEN at owner cards; design-first)
+## Current Continuation — repo-architecture lane (2026-08-19 wrap: design COMPLETE and RATIFIED; next work is a fresh pickup)
 
-Seat: Poppy lifts Bark (d427b6), phase-2 claim `67b2ad25` opened
-2026-08-19 ~10:02Z. Prior claims `95a0678d` + `875f1508` CLOSED with
-reasons in the archive — both framings historical since the survey
-cancellation. Team-start `8aa3581a`; Director absorption ack on stream
-~10:04Z. The 2026-08-18 day's outcomes (#889 merged `daf56ccad`, #905
-cure round closed with tally `822a8999`, registry incident cured
-`3dd4134d`) are recorded in this file's git history at `45866d61a`.
+WRAPPED 2026-08-19 at owner word ("prepare for handoff"). The lane's
+design work is DONE: the five-change set on the Toolkit Atlas is
+complete, owner-ruled across three decision cards, and the strategic
+node `toolkit-re-architecture` is RATIFIED (owner stamp on the node;
+`workspace-reorganisation-programme` superseded by it in the same
+stamp). Claim `67b2ad25` CLOSED at this wrap — the next work is a
+FRESH PICKUP, not a resume: per the ratified node's §Delivery, the
+seam-migration delivery plan is authored at pickup by its
+implementer (`serves: toolkit-re-architecture`), carrying the
+release-mechanism owner decision and the census migration map. The
+Atlas republish mechanism, the standing #905 hazard state, and the
+artifact-viewer pixel-check mechanism are all recorded in the bullets
+below; the session's card trail is in this section's git history.
+
+Seat this session: Poppy lifts Bark (d427b6), phase-2 claim
+`67b2ad25` opened 2026-08-19 ~10:02Z, closed at wrap. Prior claims
+`95a0678d` + `875f1508` CLOSED with reasons in the archive — both
+framings historical since the survey cancellation. The 2026-08-18
+day's outcomes (#889 merged `daf56ccad`, #905 cure round closed with
+tally `822a8999`, registry incident cured `3dd4134d`) are recorded in
+this file's git history at `45866d61a`.
 
 - **Owner rulings 2026-08-19 (direct cards at this seat)**: (a) phase 2
   GO — foundation-layer design under the five-point toolkit brief
@@ -100,6 +114,49 @@ cure round closed with tally `822a8999`, registry incident cured
   carries Change 4's residue; foundation cards per-concept with
   question zero; carrier moves; gate validator). MCP-619 trued and the
   Director briefed at the full-set boundary 2026-08-19.
+- **CASTR COMPOSITION (owner facts + truing parcel, 2026-08-19
+  post-wrap)** — for the seam implementer:
+  `@engraph/castr` (the owner's repository AND a Practice repo; local
+  at his personal code root) replaces the whole generation strategy —
+  `openapi-zod-client` + `openapi3-ts` — per ADR-108, with ADR-055's
+  side-by-side validation as the adoption shape. The clocks DECOUPLE:
+  the seam migration proceeds now and moves the legacy generation cell
+  (openapi-zod-client-adapter + both libraries) AS ONE BOUNDED UNIT,
+  as-is, quarantine intact, zero internal investment (retirement
+  condition on the adapter README). Castr adoption is a POINTER, not
+  a plan, until a readiness signal — and that clock is
+  OWNER-SCHEDULABLE (owner word 2026-08-19: focus can change to
+  Castr if urgent; it could even move into this repo, though it need
+  not). At the signal, the adoption delivery plan authors at pickup
+  under the ratified node with the contract-fixture pack
+  (`.agent/plans-backlog-2026-07/sector-engagement/castr/`, status
+  banner applied) as its acceptance harness — fixtures RE-PIN at
+  validation time (upstream ticks ~29/yr). The adapter is NOT the
+  publishing proof-piece (withdrawn — successor in flight); the seam
+  card picks one without a retirement condition. Castr's repo was
+  mid-remediation-programme at 0.0.0-development when checked.
+- **RATIFIED 2026-08-19 ~12:2xZ (owner card at this seat, verbatim
+  "Ratify both")**: strategic node `toolkit-re-architecture` — born
+  sketch this sitting, carrying the five-change bet, both owner
+  reasons (extraction + any-service), and the three-rung
+  demonstration ladder — is RATIFIED and governs execution;
+  `workspace-reorganisation-programme` marked `superseded_by` it in
+  the same stamp (plan-corpus validator green on both). Delivery
+  plans author at pickup, seam migration first. The commit parcel
+  (principles amendment + Atlas refinements + both plan stamps + this
+  record) was HELD at the Director's fold window and lands on the
+  successor coordination branch at the rotation broadcast.
+- **Owner extraction refinement + principles amendment, 2026-08-19
+  ~1x:xxZ (post-set)**: verbatim in per-user memory node
+  `repo-architecture-brief-toolkit-five-points` — oak product
+  workspaces are DESIGNED TO LEAVE (handed to a product squad); what
+  leaves is knobs (config, styling, UX tuning), what stays is levers.
+  Folded into the Atlas (Change 3: fourth pack class + the extraction
+  test as the seam's acceptance probe; Change 4: publishing promoted
+  to handoff prerequisite). principles.md §Context Specificity
+  Gradient amended at owner word: gradient runs below the repo
+  boundary (adopt-first) + thin-is-detachable; scale gains
+  ecosystem-canonical form as its lowest rung.
 
 ## Prior continuation — typescript-estate review execution (2026-08-03; conserved — still-live context for the MCP-603 frozen corpus)
 

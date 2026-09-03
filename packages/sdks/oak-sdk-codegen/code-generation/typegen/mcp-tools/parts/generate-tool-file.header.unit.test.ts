@@ -14,6 +14,35 @@ describe('buildImports path resolution', () => {
   });
 });
 
+describe('pagination echo wiring', () => {
+  const offsetLimitQueryMeta: Record<string, ParamMetadata> = {
+    offset: { typePrimitive: 'number', valueConstraint: false, required: false },
+    limit: { typePrimitive: 'number', valueConstraint: false, required: false },
+  };
+
+  it('offset/limit operations import and apply the Link-header pagination echo', () => {
+    const code = generateToolFile(
+      'test-tool',
+      '/test',
+      'GET',
+      'op-id',
+      op(),
+      {},
+      offsetLimitQueryMeta,
+    );
+    expect(code).toContain(
+      "import { derivePaginationFromLinkHeader } from '../contract/tool-descriptor.contract.js';",
+    );
+    expect(code).toContain('return { httpStatus: status, payload, pagination };');
+  });
+
+  it('operations without offset/limit stay free of pagination wiring', () => {
+    const code = generateToolFile('test-tool', '/test', 'GET', 'op-id', op(), {}, {});
+    expect(code).not.toContain('derivePaginationFromLinkHeader');
+    expect(code).toContain('return { httpStatus: status, payload };');
+  });
+});
+
 describe('emitHeader TSDoc safety', () => {
   it('escapes braces in path template parameters', () => {
     const toolName = 'oak-get-lessons-transcript';

@@ -1,7 +1,8 @@
 name: MCP conformance (unattended)
 
 # MCP-189: the unattended MCPJam conformance subset against the deployed
-# alpha — the headless, credential-free plan (protocol 401-posture shape +
+# production endpoint — the headless, credential-free plan (protocol
+# 401-posture shape +
 # oauth DCR discovery legs), verdicted BY NAME against the committed
 # baselines in agent-tools/src/mcp-conformance/baselines/. A new or
 # vanished check or skip fails this job loudly; adjudicate and re-seed the
@@ -14,7 +15,8 @@ name: MCP conformance (unattended)
 #   security adjudication. Authed suites run attended, off CI (MCP-125/176
 #   own the credentialed path).
 # - Triggers stay workflow_dispatch only. NEVER add pull_request: fork PRs
-#   would run modified suite code against the alpha. A schedule: trigger was
+#   would run modified suite code against the production endpoint. A
+#   schedule: trigger was
 #   dropped by owner ruling (2026-07-27, MCP-189): each unattended oauth run
 #   registers a fresh DCR client, so a daily cron created one abandoned
 #   Clerk OAuth client per day — untenable on the production Clerk instance.
@@ -26,7 +28,7 @@ on:
   workflow_dispatch: {}
 
 # One run at a time: overlapping manual dispatches must queue, not
-# double-hit the alpha.
+# double-hit the production endpoint.
 concurrency:
   group: mcp-conformance-unattended
   cancel-in-progress: false
@@ -36,7 +38,7 @@ permissions:
 
 jobs:
   unattended-conformance:
-    name: Unattended suites vs alpha
+    name: Unattended suites vs production
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -61,7 +63,7 @@ jobs:
         # dir, never stdout, so it gives up nothing by being loud.
         run: >-
           pnpm mcp:conformance:ci
-          --target https://curriculum-mcp-alpha.oaknational.dev/mcp
+          --target https://mcp.thenational.academy/mcp
           --unattended
           --report-dir tmp/mcp-conformance/ci
 

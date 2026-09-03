@@ -33,6 +33,14 @@ last_updated: <YYYY-MM-DD>
 <What is true in the world when this bet pays off — stated as an
 observable state, not an activity.>
 
+## User groups and value
+
+<Who experiences or consumes this outcome, and what each group gets, in
+experience terms. Innovation work may declare offered or hypothesised
+value with an honest claim boundary — proving a pre-existing need is
+not required. Where genuinely nobody experiences the outcome directly,
+say so in one line and name where the value routes.>
+
 ## The bet
 
 <Why this outcome, why this way, and what we are deliberately not

@@ -41,6 +41,18 @@ project is being chosen.
   tickets that you know are ours, do not steal tickets that actually
   belong to other teams." Other-creators' platform work stays put, as
   do tickets the owner deliberately placed elsewhere.
+- **Tickets are minted at owner word, never as a default session
+  output** (owner ruling 2026-08-31, verbatim core: "there is no need or
+  desire to produce linear tickets for everything, just because an MCP
+  server isn't authenticated it doesn't mean we should use it"). A
+  connector's presence in the environment is not a request to use it,
+  and its auth state is not surfaced unprompted. Delivery lanes still
+  open ticket-first at their start (the DORA discipline); the ruling
+  governs speculative minting, not lane opening. Before minting for a
+  live finding, characterise it against a control AND search Linear
+  first: a changelog 404 that looked like a fresh regression failed
+  identically on the control preview and was already MCP-626/630/653,
+  two weeks old (2026-09-02).
 
 ## Worked Instances
 

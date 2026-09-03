@@ -44,12 +44,22 @@ frequently creates the condition for another. Never assume the previous round wa
 The loop is:
 
 1. Pull all comments (every surface above).
-2. For each: fix in code, or reject explicitly; reply; resolve the thread.
-3. Push.
-4. **Re-fetch all comments.** If the push produced any new comment, or any thread is
-   unresolved, return to step 2.
-5. The PR is comment-clean only when a push yields **zero new comments and zero unresolved
-   threads**.
+2. For each: fix in code, or reject explicitly with verified rationale, or — per the
+   pr-lifecycle Phase 4 three-way ruling — ticket-and-close a correct-but-out-of-story
+   finding (Director notified, ticket referenced in the reply); reply; resolve the
+   thread. PDR-140's pickup-home ROUTE disposition additionally exists only in its
+   lane — bot-reviewed findings on prose-class artefacts; excluded lanes keep exactly
+   the Phase 4 dispositions, with no pickup routing.
+3. Push if the pass produced a cure or a queued ledger write to land (batched per
+   PDR-140 on bot-lane prose changesets); a disposition-only pass lands no push.
+4. **Re-fetch all comments** — after a push, or after a disposition-only pass (bots post
+   asynchronously either way). If the harvest shows any undispositioned comment, or any
+   thread is unresolved, return to step 2. Cleanliness is judged from the latest
+   harvest, never from a push having happened.
+5. The PR is comment-clean only when the latest harvest shows **zero undispositioned
+   comments and zero unresolved threads** (amended 2026-08-31 with PDR-140: a new
+   comment answered by a valid disposition-with-resolution counts as clean; a new
+   comment nobody has dispositioned never does).
 
 Do not merge, and do not report the PR ready, until step 5 holds.
 
@@ -93,7 +103,13 @@ downstream layer compensates" or on style-level reasoning: across a
 plus one context-blind pass), every disposition later proven wrong was
 grounded in compensating-layer or style-level reasoning, and every
 disposition that survived re-raises was grounded in a verified concrete
-failure scenario or its verified absence. The test discriminates in both
+failure scenario or its verified absence. Truth-verification and cure-placement are
+separate questions (amended 2026-08-31 with PDR-140): the compensating-layer ban governs
+the first — a finding is never refuted by assuming a downstream layer catches it; a
+downstream verification point is a valid cure-placement HOME only when the verifying
+property is cited from the artefact's own acceptance criteria or disposition ledger,
+quoted in the disposition — a verified property, never an assumed one. The test
+discriminates in both
 directions: the estate errs both by over-curing style findings (each
 cure-push mints a fresh review round) and by under-curing real ones behind
 routing language. Durable boundary enforcement beats live-path compensation

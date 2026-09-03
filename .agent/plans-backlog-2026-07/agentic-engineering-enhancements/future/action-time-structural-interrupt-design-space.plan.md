@@ -178,6 +178,24 @@ recognition speed (bites got cheaper and self-caught over the week —
 patterns/passive-guidance §value-model) — the gap the mechanism must close is
 prevention at flow moments, not awareness.
 
+**Recurrence-evidence ledger routed from the 2026-09-02 napkin-only consolidation**
+(the window 2026-08-14 → 2026-09-02; PDR-098 recurrence-despite-home): the
+BATCH-CADENCE ruling recurred four times under owner correction (2026-08-17,
+2026-08-24, 2026-08-26, 2026-08-31 — the last at a seat whose napkin held both
+prior corrections in context), and its cure now has a firing surface (the commit
+skill's cadence gate) whose traction this ledger will measure next; the
+false-green push wrapper was recreated at the same seat one day after its own
+record (2026-08-18 → 19) and held only once made structural (push as the final
+command); the "machinery ≫ judgment" play seed was IN CONTEXT when the same
+seat authored a plan thin on humans (2026-08-31); a decision whose answer a
+principle had already forced was offloaded to the owner despite the deferential
+opt-out clause (2026-08-31); the false-green surface class was rebuilt inside
+its own cure by two independent seats who had just diagnosed it (2026-08-13,
+2026-08-24); the code-owner gate was asserted from a stale record by two seats
+with `query-the-value-never-the-lookalike` loaded (2026-09-02). The calibration
+holds: every bite was cheaper and mostly externally caught, and none was
+prevented by the passive home.
+
 ## The Reconciliation (the distinct value)
 
 The register item demands reconciliation with metacognition and immune-system
@@ -798,3 +816,33 @@ mechanism lane a matched pair — one with the cure landed, one still passive �
   cure; the composition variety is wider, so the fingerprint set needs design rather than one
   pattern. Napkin-first discipline held: this note graduates the recurrence evidence at the
   consolidation the capture promised.
+
+## Worked Instance — 2026-09-02 historical synthesis: recurrence-despite-home measured across five napkin windows
+
+The step-6a engine run over the six napkins from 2026-07-26 to 2026-09-02 (report
+`historical-napkin-synthesis-2026-09-02.md`) carries the ledger's first RATE rather than
+its next anecdote:
+
+- **Pipe-masked verdicts, fourth cure generation.** After the propagated in-band idiom
+  (2026-07-29) and the "guarded command is the task's final command" form (2026-08-18/19),
+  the class still fired at least six times between 2026-08-08 and 2026-08-18 at four seats,
+  and the exit-codes rule was amended again on 2026-09-02 on a fresh instance. Every
+  generation followed a recurrence; none preceded one. The prior run's flat arc holds.
+- **Sixteen of nineteen prior-kept mechanisms recurred within four weeks of the run that
+  verified their homes** — the first measurement of the rate this plan's thesis predicts.
+  The three non-recurrences are quiet actuators, not extinguished classes.
+- **The fabricated-value one-law (2026-08-08) was followed within five days by fabricated
+  timestamps** (2026-08-13) at a different seat; owner-attention items surfaced as prose
+  recurred twice after the card rule and its memory existed (2026-08-07, 2026-08-12).
+- **Measurement gap named.** A napkin corpus can count recurrences but cannot show a cure
+  extinguishing its class (no entry is written when a class stops firing). The mechanism
+  lane's success criterion therefore needs a designed instrument: a per-window census of
+  each class's literal surface signature (pipe-after-gate, exit-echo-after-pipeline,
+  sha-typed-not-substituted), run over the archive, so an interrupt's landing can be
+  followed by a measured absence.
+- **Third-party corroboration from the 2026-08-19 fold, carried at the 2026-09-02
+  merge.** Poppy lifts Bark's wrap that day recorded two same-day instances of
+  commit-by-pathspec recurring at two seats (their own and the Director's) while the
+  rule's five-instance section already existed — and corrected their own draft that
+  had proposed the clause as new. Independent of this session's corpus run, the same
+  shape: the home exists, the mechanism did not fire at the action moment.

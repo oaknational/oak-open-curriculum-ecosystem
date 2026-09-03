@@ -60,7 +60,13 @@ function mapExecutionResult(
 
   return formatToolResponse({
     summary: `${title}: ${String(result.value.status)}`,
-    data: { status: result.value.status, data: result.value.data },
+    data: {
+      status: result.value.status,
+      data: result.value.data,
+      // Paginated tools carry the upstream Link-header signal; surfacing it
+      // here is the only way the agent can tell whether more pages exist.
+      ...(result.value.pagination === undefined ? {} : { pagination: result.value.pagination }),
+    },
     toolName,
     annotationsTitle: title,
   });

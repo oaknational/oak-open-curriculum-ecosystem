@@ -181,19 +181,19 @@ describe('Conditional Clerk keys (DANGEROUSLY_DISABLE_AUTH)', () => {
     it('accepts a bare hostname', () => {
       const result = HttpEnvSchema.safeParse({
         ...withClerkKeys,
-        CANONICAL_HOST: 'www.thenational.academy',
+        CANONICAL_HOST: 'mcp.thenational.academy',
       });
 
       expect(result.success).toBe(true);
     });
 
     it.each([
-      ['a port', 'www.thenational.academy:8443'],
-      ['a scheme', 'https://www.thenational.academy'],
-      ['a path', 'www.thenational.academy/mcp'],
-      ['userinfo', 'www.thenational.academy:443@evil.example'],
-      ['a comma-joined pair', 'www.thenational.academy,evil.example'],
-      ['whitespace', 'www.thenational.academy evil.example'],
+      ['a port', 'mcp.thenational.academy:8443'],
+      ['a scheme', 'https://mcp.thenational.academy'],
+      ['a path', 'mcp.thenational.academy/mcp'],
+      ['userinfo', 'mcp.thenational.academy:443@evil.example'],
+      ['a comma-joined pair', 'mcp.thenational.academy,evil.example'],
+      ['whitespace', 'mcp.thenational.academy evil.example'],
       ['an empty value', ''],
       ['a loopback name', 'localhost'],
     ])('rejects %s at startup rather than at request time', (_label, value) => {
@@ -476,7 +476,7 @@ describe('PostHog product-analytics selection (OBSERVABILITY_SINKS)', () => {
           // do not read the mention as evidence the control is already live.
           // Both values are also accepted in dev/preview.
           ...withLiveClerkKeys,
-          CANONICAL_HOST: 'www.thenational.academy',
+          CANONICAL_HOST: 'mcp.thenational.academy',
           VERCEL_ENV: vercelEnv,
           OBSERVABILITY_SINKS: '["sentry","posthog"]',
           ...validPostHogVars,

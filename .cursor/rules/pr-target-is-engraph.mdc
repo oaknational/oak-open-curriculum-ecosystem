@@ -1,0 +1,6 @@
+---
+description: On the EngraphCode fork, main mirrors upstream and every pull request's base branch is engraph, never main. Set the base explicitly; main is the GitHub default branch, so every surface that infers a base infers the wrong one.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/pr-target-is-engraph.md`.

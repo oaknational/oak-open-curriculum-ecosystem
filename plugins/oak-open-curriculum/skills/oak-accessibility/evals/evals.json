@@ -44,7 +44,7 @@
     {
       "query": "How do I scaffold this Year 9 maths lesson so SEND pupils can access the same content?",
       "should_trigger": false,
-      "note": "pedagogical accessibility — oak-curriculum-principles, not WCAG"
+      "note": "educational accessibility — oak-curriculum-principles, not WCAG"
     },
     {
       "query": "Build me a starter quiz on photosynthesis.",
@@ -75,7 +75,7 @@
         "mentions target size (>=24px) and/or labels and instructions for options",
         "requires captions/transcript if any media is embedded, or notes it if relevant",
         "frames WCAG 2.2 AA as the floor and references checking contrast",
-        "distinguishes this technical accessibility from pedagogical/SEND accessibility or stays correctly scoped to WCAG"
+        "distinguishes this technical accessibility from educational/SEND accessibility or stays correctly scoped to WCAG"
       ]
     }
   ]

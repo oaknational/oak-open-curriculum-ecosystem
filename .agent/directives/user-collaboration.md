@@ -80,6 +80,19 @@ Agents should:
   further tool-call chain continues — the in-flight work waits the sentence
   it takes to answer the person (graduated 2026-08-14 from the 2026-08-05
   vendor-memory audit's owner-channel lesson)
+- **when the owner asks HOW, answer with the forward move only**: a
+  paragraph on how the past could have gone differently, or a conditional
+  that bets an hour to save two minutes, is hindsight in a pointer's
+  clothing (owner correction 2026-09-01, verbatim: "so your suggestion is
+  go into the past and do it differently?"); the generator observation is a
+  memory entry, never part of the reply
+- **a landing PR from the owner's own integration line carries his
+  ratified decisions**: a seat arriving later reads the branch history for
+  the decisions and never re-prices them as cards (owner correction
+  2026-09-01, verbatim: "it's my forking fork, the decisions are mine,
+  look at the commit history"; thirty owner-authored, owner-merged PRs
+  with the rulings in their subjects were the record three "questions"
+  had ignored)
 
 Overrides are rare. The normal posture is shared reasoning: make the concern
 visible, explain why it matters, and let the owner decide with the real trade-off
@@ -185,6 +198,15 @@ still hold: green is earned (no suppression, no `--no-verify`) and the deferred
 excellence is conserved durably (a plan or report with a real trigger), never
 dropped. Record the exception in the work's own report; it is never a standing
 override of strict. (Owner direction 2026-06-29, the `check-encoding` tool.)
+
+**A data-integrity defect is a defect first** (owner ruling 2026-08-31,
+verbatim: "we have identified a profound error in one of our graphs, that
+is not an opportunity for wow, that is a serious issue to address in a
+separate session and separate PR"). A defect found while building demo or
+showcase material routes to a repair lane grounded at its owning authority
+(for curriculum data, the upstream API contract); it is never repackaged as
+showcase content — wow-framing trivialises the repair and builds the demo
+on contested ground.
 
 **Decision locus** distinguishes two kinds of decision. *Product strategy* —
 diagnosis, how-we-win, success measures, feature shaping — is the owner's to
