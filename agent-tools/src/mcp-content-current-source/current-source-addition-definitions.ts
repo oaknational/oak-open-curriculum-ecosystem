@@ -41,7 +41,9 @@ function guidanceMetadataAddition(input: {
   readonly slug: string;
   readonly state: 'live' | 'dormant';
   readonly provenance?: string;
+  readonly lastModified?: string;
 }): CurrentSourceAdditionDefinition {
+  const lastModified = input.lastModified ?? '2026-07-23T00:00:00Z';
   const uri = `docs://oak/guidance/${input.slug}.md`;
   return {
     id: input.id,
@@ -65,11 +67,7 @@ function guidanceMetadataAddition(input: {
         'annotations',
         '{"priority":0.4,"audience":["assistant"]}',
       ),
-      contentsAnchor(
-        "lastModified: '2026-07-23T00:00:00Z'",
-        '_meta.lastModified',
-        '2026-07-23T00:00:00Z',
-      ),
+      contentsAnchor(`lastModified: '${lastModified}'`, '_meta.lastModified', lastModified),
       ...(input.provenance === undefined ? [] : [structuralAnchor(input.provenance)]),
     ],
     registration: { state: input.state, selector: uri },
@@ -134,12 +132,16 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     id: 'A005',
     title: 'Learning progression guidance resource identity and metadata',
     slug: 'learning-progression',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'live',
   }),
   guidanceMetadataAddition({
     id: 'A006',
     title: 'Curriculum mapping guidance resource identity, metadata, and provenance',
     slug: 'curriculum-mapping',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'dormant',
     provenance:
       "provenance:\n      'Derived from the oak-curriculum-mapper skill (oaknational/oak-skills); keep the two in step.'",
@@ -148,6 +150,8 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     id: 'A007',
     title: 'Adapt lesson guidance resource identity and metadata',
     slug: 'adapt-lesson',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'dormant',
   }),
   guidanceMetadataAddition({

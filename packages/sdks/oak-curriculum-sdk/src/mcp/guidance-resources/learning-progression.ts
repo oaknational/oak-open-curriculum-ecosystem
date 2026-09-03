@@ -15,7 +15,7 @@ export const LEARNING_PROGRESSION_GUIDANCE: AgentGuidanceResource = {
     "Workflow guidance for the assistant: understand how a concept builds across year groups by walking progression threads and checking each unit's stated prior knowledge.",
   mimeType: 'text/markdown',
   annotations: { priority: 0.4, audience: ['assistant'] },
-  lastModified: '2026-07-23T00:00:00Z',
+  lastModified: '2026-09-02T00:00:00Z',
 };
 
 export const LEARNING_PROGRESSION_GUIDANCE_MARKDOWN = `# Learning progression — agent workflow guidance

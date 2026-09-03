@@ -18,7 +18,7 @@ export const CURRICULUM_MAPPING_GUIDANCE: AgentGuidanceResource = {
     "Workflow guidance for the assistant: build or audit a curriculum map — unit order across a year or key stage — grounded in Oak's threads, prerequisites, and national-curriculum coverage.",
   mimeType: 'text/markdown',
   annotations: { priority: 0.4, audience: ['assistant'] },
-  lastModified: '2026-07-23T00:00:00Z',
+  lastModified: '2026-09-02T00:00:00Z',
   _meta: {
     provenance:
       'Derived from the oak-curriculum-mapper skill (oaknational/oak-skills); keep the two in step.',

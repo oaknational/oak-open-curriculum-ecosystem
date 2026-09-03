@@ -18,7 +18,7 @@ export const ADAPT_LESSON_GUIDANCE: AgentGuidanceResource = {
     'Workflow guidance for the assistant: adapt an Oak lesson grounded in EEF Teaching and Learning Toolkit evidence, presenting evidence-calibrated options with caveats and attribution intact.',
   mimeType: 'text/markdown',
   annotations: { priority: 0.4, audience: ['assistant'] },
-  lastModified: '2026-07-23T00:00:00Z',
+  lastModified: '2026-09-02T00:00:00Z',
 };
 
 export const ADAPT_LESSON_GUIDANCE_MARKDOWN = `# Adapt a lesson with EEF evidence — agent workflow guidance
