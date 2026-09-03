@@ -25,7 +25,7 @@ When sequencing a topic across lessons or years.
 
 1. `search({ query: "<concept>", scope: "threads", subject })` to find the relevant thread(s).
 2. `get-thread-progressions` anchored by that thread's slug (`threadSlug` — a corpus key, not free text); units are ordered by teaching year, and same-year units are explicitly unordered. This is how Oak builds the concept over time.
-3. `get-prior-knowledge-graph` anchored by the units' slugs (`unitSlugs`) to see unit prerequisites; confirm every prerequisite is taught _before_ the unit that needs it.
+3. `get-prior-knowledge-graph` anchored by the units' slugs (`unitSlugs`) for the prior knowledge each unit states it assumes. The statements name knowledge, not the units that teach it — read them against the earlier units in your sequence and judge whether each is already covered.
 4. **Check your draft:** does it assume knowledge Oak introduces later? Does it skip a step Oak treats as foundational? Adjust the sequence, or note the deviation and your rationale.
 
 **Anchors to sanity-check against:** `number` (110 units), `geometry-and-measure` (59), `ratio-and-proportion` (18) in maths; `exploring-the-gothic` (7) in English; `power-government-and-religion` (23) in history.

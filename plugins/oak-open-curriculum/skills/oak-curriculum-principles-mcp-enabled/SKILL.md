@@ -5,7 +5,8 @@ description: >-
   curriculum data using the Oak Curriculum MCP server. Use when creating or
   reviewing a curriculum, unit, lesson, or resource and you want to check it
   against real Oak content — verifying a teaching sequence against Oak's
-  curriculum threads and prior-knowledge graph, mining real pupil misconceptions
+  curriculum threads and the prior knowledge units state they assume, mining
+  real pupil misconceptions
   to anticipate errors, checking vocabulary and key learning points, checking
   content-guidance and supervision levels, or finding exemplar Oak units and
   lessons that demonstrate a principle. Use whenever the user asks to "compare
@@ -26,9 +27,9 @@ metadata:
 
 # Oak Curriculum Principles — grounded in live data
 
-This skill does one thing the self-contained `oak-curriculum-principles` skill can't: it anchors the six principles in Oak's **real curriculum** — ~164 threads, a prior-knowledge graph, ~12,800 documented misconceptions with teacher responses, vocabulary with definitions, the national curriculum statements units record, and tens of thousands of lessons — through the **Oak Curriculum MCP**.
+This skill does one thing the self-contained `oak-curriculum-principles` skill can't: it anchors the six principles in Oak's **real curriculum** — ~164 threads, the prior knowledge each unit states it assumes, ~12,800 documented misconceptions with teacher responses, vocabulary with definitions, the national curriculum statements units record, and tens of thousands of lessons — through the **Oak Curriculum MCP**.
 
-Use it to move from "this looks well-sequenced" to "this matches Oak's _Number_ thread progression and the prior-knowledge graph," and from "anticipate misconceptions" to "here are the misconceptions Oak has documented for this exact topic."
+Use it to move from "this looks well-sequenced" to "this matches Oak's _Number_ thread progression, and the prior knowledge these units state they assume," and from "anticipate misconceptions" to "here are the misconceptions Oak has documented for this exact topic."
 
 For the _meaning_ of each principle, the evidence base, and the 15 subject guiding principles, use `oak-curriculum-principles`. This skill assumes those principles and focuses on grounding them in data.
 
@@ -45,7 +46,7 @@ The full tool-by-tool mapping with example calls and data shapes is in `referenc
 | Principle                       | Grounding data                                                           | Key tools                                                             |
 | ------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
 | **Knowledge & vocabulary rich** | Keywords _with definitions_, key learning points, pupil outcomes         | `get-lessons-summary`, `get-keywords`, `get-units-summary`            |
-| **Sequenced & coherent**        | ~164 threads with ordered units; unit prerequisites                      | `get-threads`, `get-thread-progressions`, `get-prior-knowledge-graph` |
+| **Sequenced & coherent**        | ~164 threads with year-ordered units; each unit's stated prior knowledge | `get-threads`, `get-thread-progressions`, `get-prior-knowledge-graph` |
 | **Evidence-informed**           | ~12,800 misconceptions + teacher responses; teacher tips                 | `get-misconception-graph`, `get-lessons-summary`                      |
 | **Flexible**                    | National curriculum statements; unit options; tiers; programme structure | `get-units-summary`, `browse-curriculum`, `fetch`                     |
 | **Diverse**                     | The breadth of Oak content; diversity-related threads and exemplars      | `search`, `explore-topic`, `get-threads-units`                        |
@@ -58,7 +59,7 @@ Discovery tools that cut across all of these: `search` (scopes: `lessons`, `unit
 Step-by-step recipes with real slugs are in `references/workflows.md`. The headlines:
 
 - **Benchmark a draft against Oak.** Find Oak's analogue (`explore-topic` / `search`), then compare your knowledge, vocabulary, sequence and misconception-handling against the real unit/lesson.
-- **Verify or build a teaching sequence.** Use `get-threads` → `get-thread-progressions` to see how Oak orders the concept across years, and `get-prior-knowledge-graph` to confirm prerequisites are met before they're needed.
+- **Verify or build a teaching sequence.** Use `get-threads` → `get-thread-progressions` to see how Oak orders the concept across years, and `get-prior-knowledge-graph` to read the prior knowledge each unit states it assumes — then judge whether your sequence teaches it first.
 - **Anticipate misconceptions from real data.** Pull `get-misconception-graph` (or the `misconceptionsAndCommonMistakes` field on a lesson) for the topic, and design responses around the errors Oak has actually documented.
 - **Find exemplars of a principle.** Use `search`/`explore-topic` to surface Oak units and lessons that demonstrate, say, strong vocabulary teaching or diverse text selection, and use them as models.
 - **Review using the real Oak version.** When auditing a resource, fetch Oak's comparable lesson and review the draft against it, principle by principle (see the rubric in `oak-curriculum-principles`).

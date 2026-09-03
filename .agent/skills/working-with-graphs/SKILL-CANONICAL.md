@@ -81,11 +81,12 @@ content are never paged.
 Two legitimate subgraph shapes exist, and both obey the completeness rule:
 
 - **Contiguous** — an anchored traversal neighbourhood: everything reachable from the anchors
-  within the depth bound, with all internal edges. The prior-knowledge view (anchor unit slugs,
-  depth default 2, ceiling 3) and the EEF strand graph (`maxDepth = 1`) are this shape.
+  within the depth bound, with all internal edges. The EEF strand graph (`maxDepth = 1`) is this
+  shape. (The prior-knowledge view was too, until MCP-671 retired its synthesised
+  `prerequisiteFor` edges on 2026-09-03 — see ADR-195's amendment.)
 - **Sparse** — an anchored projection whose members are selected by the anchor's scope rather
-  than mutual reachability: one thread's year-ordered unit sequence, a unit's lessons with their
-  misconceptions, the keywords of every lesson matching subject + key stage. Members may be
+  than mutual reachability: one thread's year-ordered unit sequence, the prior-knowledge statements
+  the anchor units themselves record, a unit's lessons with their misconceptions, the keywords of every lesson matching subject + key stage. Members may be
   scattered across the wider graph; completeness still means every member matching the scope is
   present (or honestly windowed with totals) — sparse never means sampled.
 

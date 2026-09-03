@@ -100,7 +100,9 @@ Executed 2026-06-10/11 under `graph-tools-value-redesign.plan.md`, one replaceme
   one-graph corpus emission with materialised kind-qualified ids, the `./graph-corpus` subpath,
   the hand-written prior-knowledge `types.ts` deleted, and the ADR-086 amendment in the same
   commit; PR #161 — the anchored `unitSlug[]` + depth tool, `curriculum://prior-knowledge-graph`
-  removed, prompts anchor-threaded, `eef-revalidation` signal raised.
+  removed, prompts anchor-threaded, `eef-revalidation` signal raised. (The depth-bounded shape
+  this unit shipped was retired on 2026-09-03, when the tool moved to each unit's stated prior
+  knowledge — see ADR-195's MCP-671 amendment. The migration doctrine below is unaffected.)
 - **G2 — misconception**: PR #163 — chain re-projection with the content-hash mint rule, the
   anchored lesson/unit/thread tool, the hand-written misconception `types.ts` deleted,
   `curriculum://misconception-graph` removed, signal raised.
