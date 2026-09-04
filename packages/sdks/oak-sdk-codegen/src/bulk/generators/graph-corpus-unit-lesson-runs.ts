@@ -151,11 +151,15 @@ export function buildUnitLessonRuns(
   let unitsWithoutAuthoredLessonOrder = 0;
   for (const [unitId, lessonIds] of collectPlacements(edges)) {
     const forUnit = positions.get(unitId);
-    if (forUnit === undefined || forUnit.size === 0) {
-      unitsWithoutAuthoredLessonOrder += 1;
-    }
     const rank = (lessonId: GraphCorpusLessonNodeId): number =>
       forUnit?.get(lessonId) ?? Number.POSITIVE_INFINITY;
+    // Counted over the run's OWN lessons, not the unit's listings. A listing
+    // can name only lessons that have no lesson node (the ghost case), which
+    // leaves positions non-empty while every lesson actually emitted ranks
+    // Infinity — a run that has silently fallen back to id order in full.
+    if (!lessonIds.some((lessonId) => Number.isFinite(rank(lessonId)))) {
+      unitsWithoutAuthoredLessonOrder += 1;
+    }
     runs.push({
       unitId,
       lessonIds: [...lessonIds].sort((a, b) => compareRank(rank(a), rank(b)) || a.localeCompare(b)),
