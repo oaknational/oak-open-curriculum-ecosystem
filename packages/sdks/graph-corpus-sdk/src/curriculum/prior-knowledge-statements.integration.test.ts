@@ -42,6 +42,28 @@ describe('priorKnowledgeStatements', () => {
     expect(result.units).toHaveLength(1);
   });
 
+  it('collapses exact-duplicate statements within a unit, first occurrence kept', () => {
+    // Deterministic fixture: the lexicographically-first unit whose corpus
+    // statements contain a duplicate, so the assertion actually exercises the
+    // collapse. `required` fails loudly if the corpus ever holds no such unit,
+    // rather than letting this test pass vacuously against clean data.
+    const dupUnit = required(
+      [...unitNodes]
+        .sort((a, b) => a.unitSlug.localeCompare(b.unitSlug))
+        .find((node) => new Set(node.priorKnowledge).size !== node.priorKnowledge.length),
+      'corpus has no unit with duplicate prior-knowledge statements to exercise the collapse',
+    );
+
+    const result = priorKnowledgeStatements([dupUnit.unitSlug]);
+    const served = required(result.units[0], 'anchor unit did not resolve').priorKnowledge;
+
+    // Collapsed: no internal duplicates, and shorter than the raw duplicated list.
+    expect(new Set(served).size).toBe(served.length);
+    expect(served.length).toBeLessThan(dupUnit.priorKnowledge.length);
+    // First-occurrence order preserved.
+    expect(served).toStrictEqual([...new Set(dupUnit.priorKnowledge)]);
+  });
+
   it('reports unknown slugs verbatim, never as an error', () => {
     const result = priorKnowledgeStatements([knownSlug, 'no-such-unit-anywhere']);
 
