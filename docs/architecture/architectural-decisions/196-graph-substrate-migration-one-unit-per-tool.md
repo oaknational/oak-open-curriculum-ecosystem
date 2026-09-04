@@ -1,11 +1,12 @@
 # ADR-196: Graph Substrate Migration — One Replacement Unit per Tool
 
-**Status**: Accepted. Owner-ratified 2026-06-02 as the scope clause of
+**Status**: Accepted (amended 2026-09-03 — the G3 delivery bullet corrected).
+Owner-ratified 2026-06-02 as the scope clause of
 `graph-estate-consolidation.plan.md`
 Judgement call 4; executed and validated in full via Track-G of
 `graph-tools-value-redesign.plan.md`
 (2026-06-10/11); recorded as an ADR 2026-06-11.
-**Date**: 2026-06-11
+**Date**: 2026-06-11 (amended 2026-09-03)
 **Related**:
 [ADR-173](173-graph-stack-topology.md) — the graph-stack topology the tools migrate onto
 (`graph-corpus-sdk` as the corpus-adapter layer; real-operations-only query contract);
@@ -106,8 +107,13 @@ Executed 2026-06-10/11 under `graph-tools-value-redesign.plan.md`, one replaceme
   `curriculum://misconception-graph` removed, signal raised.
 - **G3 — thread-progressions**: PR #164 — the ordered corpus projection as its own real
   operation, the anchored tool, `curriculum://thread-progressions` removed, the whole-corpus
-  resource factory deleted with its last consumer, signal raised. Follow-on PR #165 cured a
-  falsified within-thread-ordering premise the unit surfaced (year-axis re-chain).
+  resource factory deleted with its last consumer, signal raised. Follow-on PR #165 re-chained
+  the unit on the year axis, holding that the bulk carried no within-year unit order.
+  **Correction (2026-09-03):** that holding was itself refuted — the bulk sequence array
+  carries Oak's authored unit order within each year — and the sequences were re-based on
+  per-subject curriculum order. The original bullet credited PR #165 with curing a premise
+  that was wrong in the other direction; see the ADR-086 amendment of 2026-09-03 for the
+  measurement and MCP-681 for the delivery.
 - **G4 — bounded keywords** (the same unit shape applied to a new tool): PR #158 kept and
   disambiguated the generated live-API `get-keywords` (never replaced); PR #173 landed
   `get-keyword-graph` as one unit — keyword emission into the corpus, the bounded

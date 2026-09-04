@@ -1,25 +1,29 @@
 /**
  * Thread-progressions view (G3 c1) — bounded anchored retrieval of one
- * thread's year-ordered unit sequence over the one curriculum graph corpus.
+ * thread's curriculum-ordered unit sequences over the one curriculum graph
+ * corpus.
  *
  * Two anchor modes, discovery → detail:
  *
  * - **subject + keyStage** — discovery: bounded thread DESCRIPTORS (no
  *   sequences), so the caller finds the thread slug to anchor by;
- * - **threadSlug** — detail: ONE thread's full year-ordered sequence (median
- *   threads are small; the largest observed spans 77 placements) — never all
- *   164 threads.
+ * - **threadSlug** — detail: ONE thread's full progression (median threads
+ *   are small; the largest observed spans 162 placements) — never all
+ *   threads.
  *
- * Ordering honesty is carried as data and doc: the progression axis is the
- * placement's teaching year (the bulk exports no authoritative within-thread
- * unit ordering — see the projection module); within one year the order is
- * not curricular and ties break deterministically by unitId.
+ * A thread is a tag; the order is the curriculum's. A progression is served
+ * per subject: each run is the thread's units in that subject's curriculum
+ * order — years ascending across the primary and secondary phases, Oak's
+ * authored unit order within a year, "All years" units last — and a thread
+ * spanning several subjects returns parallel runs, never an interleaved
+ * chain. `year` rides each entry as data.
  *
  * The underlying sequence map lives in the `thread-progressions-projection`
  * module, constructed once at module load (the EEF and G2 precedent).
  */
 
 import type {
+  GraphCorpusSequence,
   GraphCorpusThreadNode,
   GraphCorpusThreadNodeId,
   GraphCorpusUnitNode,
@@ -31,18 +35,25 @@ import {
   type CurriculumThreadProgressionsProjection,
 } from './thread-progressions-projection.js';
 
-/** One step of a thread's progression: the unit at its placement year. */
+/** One step of a subject run: the unit at its curriculum position. */
 export interface ThreadProgressionEntry {
   readonly unit: GraphCorpusUnitNode;
-  /** The placement's teaching year (`undefined` = an "All years" unit, sorted last). */
+  /** The placement's teaching year (`undefined` = an "All years" unit). */
   readonly year: number | undefined;
 }
 
-/** One thread's full year-ordered progression. */
+/** One thread's units within one subject, in that subject's curriculum order. */
+export interface SubjectProgression {
+  readonly subject: string;
+  readonly totalUnits: number;
+  readonly entries: readonly ThreadProgressionEntry[];
+}
+
+/** One thread's full progression: one curriculum-ordered run per subject it spans. */
 export interface ThreadProgression {
   readonly thread: GraphCorpusThreadNode;
   readonly totalUnits: number;
-  readonly entries: readonly ThreadProgressionEntry[];
+  readonly progressions: readonly SubjectProgression[];
 }
 
 /** Thread-anchored result: `threads` carries zero or one progression (set semantics). */
@@ -52,11 +63,11 @@ export interface ThreadProgressionSubgraph {
   readonly unknownAnchors: readonly string[];
 }
 
-/** A discovery descriptor: the thread without its sequence (anchor by `thread.threadSlug` next). */
+/** A discovery descriptor: the thread without its sequences (anchor by `thread.threadSlug` next). */
 export interface ThreadDescriptor {
   readonly thread: GraphCorpusThreadNode;
   readonly totalUnits: number;
-  /** The unique subjects of the thread's member units, sorted. */
+  /** The subjects the thread runs through, sorted. */
   readonly subjects: readonly string[];
 }
 
@@ -77,12 +88,12 @@ export interface ThreadProgressionStats {
 const projection: CurriculumThreadProgressionsProjection =
   buildCurriculumThreadProgressionsProjection();
 
-/** The unique subjects carried by the units the thread sequences place, sorted. */
+/** The unique subjects the thread sequences run through, sorted. */
 function sequencedSubjects(p: CurriculumThreadProgressionsProjection): readonly string[] {
   const subjects = new Set<string>();
-  for (const sequence of p.sequencesByThreadId.values()) {
-    for (const placement of sequence.placements) {
-      subjects.add(mustGet(p.unitsById, placement.unitId).subject);
+  for (const sequences of p.sequencesByThreadId.values()) {
+    for (const sequence of sequences) {
+      subjects.add(sequence.subject);
     }
   }
   return [...subjects].sort((a, b) => a.localeCompare(b));
@@ -100,20 +111,27 @@ export const threadProgressionStats: ThreadProgressionStats = {
   subjectsCovered: sequencedSubjects(projection),
 };
 
-/** Builds one thread's progression by joining its sequence placements to unit nodes. */
-function progressionEntry(id: GraphCorpusThreadNodeId): ThreadProgression {
-  const sequence = projection.sequencesByThreadId.get(id);
-  const entries = (sequence?.placements ?? []).map((placement): ThreadProgressionEntry => ({
+/** Joins one subject sequence's placements to their unit nodes. */
+function subjectProgression(sequence: GraphCorpusSequence): SubjectProgression {
+  const entries = sequence.placements.map((placement): ThreadProgressionEntry => ({
     unit: mustGet(projection.unitsById, placement.unitId),
     year: placement.year,
   }));
-  return { thread: mustGet(projection.threadsById, id), totalUnits: entries.length, entries };
+  return { subject: sequence.subject, totalUnits: entries.length, entries };
+}
+
+/** Builds one thread's progression: one curriculum-ordered run per subject. */
+function progressionEntry(id: GraphCorpusThreadNodeId): ThreadProgression {
+  const progressions = (projection.sequencesByThreadId.get(id) ?? []).map(subjectProgression);
+  const totalUnits = progressions.reduce((sum, run) => sum + run.totalUnits, 0);
+  return { thread: mustGet(projection.threadsById, id), totalUnits, progressions };
 }
 
 /**
- * Returns one thread's full year-ordered progression (the detail anchor). An
- * unknown thread slug is reported in `unknownAnchors`, not errored, and
- * returns a well-formed empty result on the same projection path.
+ * Returns one thread's full progression (the detail anchor): one
+ * curriculum-ordered run per subject the thread spans. An unknown thread
+ * slug is reported in `unknownAnchors`, not errored, and returns a
+ * well-formed empty result on the same projection path.
  *
  * @param threadSlug - The anchor thread slug (a corpus key, not free text).
  */
@@ -125,14 +143,16 @@ export function progressionForThread(threadSlug: string): ThreadProgressionSubgr
   return { threads: [progressionEntry(id)], resolvedAnchors: [id], unknownAnchors: [] };
 }
 
-/** Builds a discovery descriptor from one thread's member units. */
-function describeThread(id: GraphCorpusThreadNodeId): ThreadDescriptor {
-  const sequence = projection.sequencesByThreadId.get(id);
-  const placements = sequence?.placements ?? [];
-  const subjects = [
-    ...new Set(placements.map((p) => mustGet(projection.unitsById, p.unitId).subject)),
-  ].sort((a, b) => a.localeCompare(b));
-  return { thread: mustGet(projection.threadsById, id), totalUnits: placements.length, subjects };
+/** Builds a discovery descriptor from one thread's subject sequences. */
+function describeThread(
+  id: GraphCorpusThreadNodeId,
+  sequences: readonly GraphCorpusSequence[],
+): ThreadDescriptor {
+  const totalUnits = sequences.reduce((sum, sequence) => sum + sequence.placements.length, 0);
+  const subjects = [...new Set(sequences.map((sequence) => sequence.subject))].sort((a, b) =>
+    a.localeCompare(b),
+  );
+  return { thread: mustGet(projection.threadsById, id), totalUnits, subjects };
 }
 
 /**
@@ -147,13 +167,16 @@ function describeThread(id: GraphCorpusThreadNodeId): ThreadDescriptor {
  */
 export function progressionsForSubjectKeyStage(subject: string, keyStage: string): ThreadDiscovery {
   const matching: ThreadDescriptor[] = [];
-  for (const sequence of projection.sequencesByThreadId.values()) {
-    const matches = sequence.placements.some((placement) => {
-      const unit = mustGet(projection.unitsById, placement.unitId);
-      return unit.subject === subject && unit.keyStage === keyStage;
-    });
+  for (const [threadId, sequences] of projection.sequencesByThreadId) {
+    const matches = sequences.some(
+      (sequence) =>
+        sequence.subject === subject &&
+        sequence.placements.some(
+          (placement) => mustGet(projection.unitsById, placement.unitId).keyStage === keyStage,
+        ),
+    );
     if (matches) {
-      matching.push(describeThread(sequence.threadId));
+      matching.push(describeThread(threadId, sequences));
     }
   }
   matching.sort((a, b) => a.thread.id.localeCompare(b.thread.id));

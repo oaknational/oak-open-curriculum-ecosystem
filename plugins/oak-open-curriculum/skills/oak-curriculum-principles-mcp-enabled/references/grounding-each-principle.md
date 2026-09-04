@@ -39,7 +39,7 @@ pupilLessonOutcome: "I can add fractions with the same denominator."
 
 **Grounding data.** ~164 threads, each an _ordered_ set of units that build a concept across years; plus a prior-knowledge graph of unit dependencies. This is the principle's strongest data anchor.
 
-**Tools.** `get-threads` (all threads + unit counts), `get-threads-units` (units in a thread), `get-thread-progressions` (one anchored thread's progression; units ordered by teaching year, same-year units unordered), `get-prior-knowledge-graph` (unit prerequisites), `search({ scope: "threads" })`.
+**Tools.** `get-threads` (all threads + unit counts), `get-threads-units` (units in a thread), `get-thread-progressions` (one anchored thread's progression, one run per subject in Oak's curriculum order — years ascending, the subject sequence's unit order within a year), `get-prior-knowledge-graph` (unit prerequisites), `search({ scope: "threads" })`.
 
 **What to look for.** Where your topic sits in a thread; what Oak places before and after it; whether your sequence respects the same prerequisite order.
 
@@ -51,7 +51,7 @@ pupilLessonOutcome: "I can add fractions with the same denominator."
 
 ```text
 search({ query: "fractions", scope: "threads", subject: "maths" })
-get-thread-progressions({ threadSlug })   // the fractions thread, units ordered by teaching year
+get-thread-progressions({ threadSlug })   // the fractions thread, units in Oak's curriculum order
 get-prior-knowledge-graph({ unitSlugs })   // confirm prerequisites precede dependents
 ```
 

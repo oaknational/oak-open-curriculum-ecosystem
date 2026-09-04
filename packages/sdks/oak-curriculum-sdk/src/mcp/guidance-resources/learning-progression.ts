@@ -30,7 +30,8 @@ Call \`get-curriculum-model\` first for domain definitions and tool guidance.
    \`search({ query: "<concept>", scope: "threads", subject: "<subject>" })\`.
 2. Take the most relevant thread slug from step 1 and call
    \`get-thread-progressions({ threadSlug: "<thread-slug-from-step-1>" })\`
-   for that thread's year-ordered unit progression.
+   for that thread's unit progression in Oak's curriculum order (one run
+   per subject the thread spans).
 3. Take the unit slugs of the progression entries from step 2 and call
    \`get-prior-knowledge-graph({ unitSlugs: ["<unit-slug-from-step-2>",
    "<another-unit-slug-from-step-2>"] })\` with them for unit-level

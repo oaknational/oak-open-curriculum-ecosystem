@@ -635,3 +635,39 @@ is the Avocet heading.
   after push — harvest threads before calling the round closed; code-owner
   approval (Jim or Matt) needed to merge; post-deploy check is MCP-669's
   acceptance line (one paginated call via a real Claude client).
+
+## 2026-09-03 ~11:xxZ (Bora binds Feather, 4a2292, implementer) — thread progressions served alphabetically within a year; the tag model, and the bulk array that interleaves years
+
+- DEFECT (owner-found, verified first-hand): the graph corpus sorted a
+  thread's placements by `(year, unitId)`, so 3,588 of 3,973 placements
+  (90.3%) sat in a same-year group ordered alphabetically by slug, and the
+  served `get-thread-progressions` description told agents "within one year
+  the order is not curricular". The generator's narrow claim was true
+  (`unit.threads[].order` is a thread display index, constant per thread —
+  re-verified across all 160 threads today); its conclusion was a category
+  error: a thread is a TAG, and a tag needs no order of its own when the
+  thing it tags is already ordered. The order was in hand the whole time —
+  the extractor's sort on the display index was a no-op, so units reached
+  the sequence builder in bulk array order — and one comparator threw it
+  away. Owner's framing, verbatim substance: "threads are a categorising
+  mechanism and within threads the same unit order as the whole set is
+  still coherent."
+- SURPRISE that reshaped the fix: the bulk `sequence` array is NOT
+  year-grouped — years interleave (maths-primary opens 5, 6, 4, 2, 1, 3) and
+  it is not sorted by within-programme rank either (26 of 32 files fail
+  that). What holds is narrower and sufficient: WITHIN a year the array is
+  Oak's `unitOrder` (160 of 166 programme-years match the live API; the six
+  misses are KS4 years where tiers or exam subjects share one array, plus
+  one PE all-years swap). So the pure "filter the array" model was wrong by
+  one axis; the key is (year, phase, index), year-less last. Cheap check that
+  caught it: an RLE of years per file. Lesson: "the array is ordered" is a
+  claim about SOME key — name the key and test it before building on it.
+- Same-year units also fed `prerequisiteFor` (2,166 of 3,027 edges, 71.6%,
+  were alphabetical adjacency); retiring on MCP-671, not touched here beyond
+  inheriting the new run order.
+- Identity wrinkle: the SessionStart hook named this seat Moss stirs Trunk
+  (2e7cb3) but the collaboration CLI derived Bora binds Feather (4a2292)
+  from the harness id — the hook's env var did not reach the Bash shell.
+  Registry and comms carry Bora; friction for the identity lane.
+- The worktree isolation guard refused a `for … do sed … done` read loop as
+  "too complex"; Read-tool calls per file were the working shape.

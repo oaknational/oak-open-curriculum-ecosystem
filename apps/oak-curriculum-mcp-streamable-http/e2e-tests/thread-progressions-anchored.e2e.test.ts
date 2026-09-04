@@ -35,7 +35,13 @@ const THREAD_ENVELOPE = z.object({
     z.object({
       thread: z.unknown(),
       totalUnits: z.number(),
-      entries: z.array(z.object({ unit: z.unknown(), year: z.number().optional() })),
+      progressions: z.array(
+        z.object({
+          subject: z.string(),
+          totalUnits: z.number(),
+          entries: z.array(z.object({ unit: z.unknown(), year: z.number().optional() })),
+        }),
+      ),
     }),
   ),
   resolvedAnchors: z.array(z.string()),
@@ -100,7 +106,7 @@ async function callThreadProgressions(args: unknown): Promise<Response> {
 }
 
 describe('get-thread-progressions anchored tools/call', () => {
-  it('returns one thread’s year-ordered progression: summary + JSON content and structuredContent', async () => {
+  it('returns one thread’s per-subject curriculum-ordered progression: summary + JSON content and structuredContent', async () => {
     const response = await callThreadProgressions({ threadSlug: knownThreadSlug });
 
     expect(response.status).toBe(200);
@@ -115,7 +121,8 @@ describe('get-thread-progressions anchored tools/call', () => {
     expect(structured.resolvedAnchors).toStrictEqual([`thread:${knownThreadSlug}`]);
     expect(structured.unknownAnchors).toStrictEqual([]);
     expect(structured.threads).toHaveLength(1);
-    expect(structured.threads[0]?.entries.length).toBeGreaterThan(0);
+    expect(structured.threads[0]?.progressions.length).toBeGreaterThan(0);
+    expect(structured.threads[0]?.progressions[0]?.entries.length).toBeGreaterThan(0);
   });
 
   it('returns bounded discovery descriptors for a subject+keyStage anchor', async () => {

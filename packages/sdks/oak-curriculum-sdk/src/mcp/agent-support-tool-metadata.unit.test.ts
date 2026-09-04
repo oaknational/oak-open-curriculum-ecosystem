@@ -121,7 +121,7 @@ describe('generateServerInstructions', () => {
     const instructions = generateServerInstructions();
 
     // The served guidance names the curriculum-connected value the graph
-    // tools deliver (year-ordered progressions, prior-knowledge,
+    // tools deliver (curriculum-ordered thread progressions, prior-knowledge,
     // misconception, and keyword graphs), so connecting agents know plans
     // can build on what a class has already covered.
     expect(instructions).toContain('fully sequenced');

@@ -53,6 +53,7 @@ function makeInput(overrides: Partial<GraphCorpusInput> = {}): GraphCorpusInput 
     priorKnowledge: [],
     threads: [],
     lessons: [],
+    unitLessons: [],
     misconceptions: [],
     keywords: [],
     sourceVersion: '2026-05-21T13:45:16.086Z',
@@ -74,7 +75,8 @@ describe('generateGraphCorpusData', () => {
       {
         unitSlug: 'fractions-year-2',
         unitTitle: 'Fractions Year 2',
-        order: 1,
+        sequenceSlug: 'maths-primary',
+        sequenceIndex: 1,
         subject: 'maths',
         keyStage: 'ks1',
         year: 2,
@@ -82,7 +84,8 @@ describe('generateGraphCorpusData', () => {
       {
         unitSlug: 'fractions-year-3',
         unitTitle: 'Fractions Year 3',
-        order: 2,
+        sequenceSlug: 'maths-primary',
+        sequenceIndex: 2,
         subject: 'maths',
         keyStage: 'ks2',
         year: 3,
@@ -90,7 +93,8 @@ describe('generateGraphCorpusData', () => {
       {
         unitSlug: 'fractions-year-4',
         unitTitle: 'Fractions Year 4',
-        order: 3,
+        sequenceSlug: 'maths-primary',
+        sequenceIndex: 3,
         subject: 'maths',
         keyStage: 'ks2',
         year: 4,
@@ -367,7 +371,8 @@ describe('generateGraphCorpusData', () => {
           {
             unitSlug: 'only-unit',
             unitTitle: 'Only Unit',
-            order: 1,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 1,
             subject: 'science',
             keyStage: 'ks2',
             year: 5,
@@ -437,7 +442,8 @@ describe('generateGraphCorpusData', () => {
           {
             unitSlug: 'cdef',
             unitTitle: 'Unit CDEF',
-            order: 1,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 1,
             subject: 'maths',
             keyStage: 'ks1',
             year: 2,
@@ -453,7 +459,8 @@ describe('generateGraphCorpusData', () => {
           {
             unitSlug: 'def',
             unitTitle: 'Unit DEF',
-            order: 1,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 1,
             subject: 'maths',
             keyStage: 'ks1',
             year: 2,

@@ -48,8 +48,9 @@ guidance. MCP tool names may appear prefixed
    confirmed unit's slug and the thread it belongs to.
 2. **Derive what comes next.** Take the thread slug from step 1 and call
    \`get-thread-progressions({ threadSlug: "<thread-slug-from-step-1>" })\`
-   for the year-ordered unit progression; the unit that follows the
-   class's confirmed position is the candidate next step. KS4 is more
+   for the unit progression in Oak's curriculum order (one run per subject —
+   stay within the class's subject); the unit that follows the class's
+   confirmed position is the candidate next step. KS4 is more
    complex (tiers and exam boards); science at KS4 must be traversed via
    sequences (\`get-sequences\`), not the flat lessons route.
 3. **Check readiness.** Take the next unit's slug from step 2 and call

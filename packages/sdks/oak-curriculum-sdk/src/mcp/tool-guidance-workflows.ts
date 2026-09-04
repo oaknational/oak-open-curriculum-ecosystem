@@ -167,11 +167,11 @@ export const toolGuidanceWorkflows = {
       },
       {
         step: 2,
-        action: 'Get the year-ordered progression for the thread found in step 1',
+        action: 'Get the curriculum-ordered progression for the thread found in step 1',
         tool: 'get-thread-progressions',
         example: 'get-thread-progressions({ threadSlug: "<thread-slug-from-step-1>" })',
         returns:
-          'That thread’s unit progression ordered by teaching year (within one year the order is not curricular)',
+          'That thread’s unit progression, one run per subject in Oak’s curriculum order (years ascending, the subject sequence’s unit order within a year)',
       },
       {
         step: 3,
