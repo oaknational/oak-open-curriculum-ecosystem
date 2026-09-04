@@ -106,9 +106,9 @@ describe('generateGraphCorpusData — unitLessonRuns (authored lesson order)', (
 
   it('takes the minimum position when programme variants disagree', () => {
     // `shared` is 3rd in one variant and 1st in the other, against `other` at
-    // 2. The MINIMUM wins, so `shared` leads — a lesson never appears later
-    // than the curriculum places it in any programme. Taking the maximum (or
-    // the first variant seen) would order these the other way round.
+    // 2. The MINIMUM wins, so `shared` leads. Taking the maximum (or the first
+    // variant seen) would order these the other way round, which is what this
+    // fixture discriminates.
     const corpus = generateGraphCorpusData(
       makeInput({
         lessons: [lessonRecord('shared', 'unit-b'), lessonRecord('other', 'unit-b')],
