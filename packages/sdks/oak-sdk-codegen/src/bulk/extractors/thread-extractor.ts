@@ -132,10 +132,16 @@ function processUnitThreads(
  * The per-slug counter depends on ONE bulk file per `sequenceSlug`, which is
  * how the download is shaped today (`<subject>-<phase>.json`, one
  * `sequenceSlug` each). File enumeration order is therefore irrelevant — each
- * file's own run is counted contiguously. If upstream ever split one
- * `sequenceSlug` across two files, the counter would restart mid-sequence and
- * silently corrupt the ordering, so that invariant is load-bearing rather
- * than incidental.
+ * file's own run is counted contiguously.
+ *
+ * If upstream ever split one `sequenceSlug` across two files, the counter
+ * would NOT restart (`nextIndexBySequence` is keyed by slug and persists for
+ * the whole walk), so the indexes would stay unique. The corruption would be
+ * subtler: the two segments are numbered in the order the files happen to be
+ * enumerated, so an unsorted `readdir` would decide which half of the
+ * sequence sorts first. That is why the one-file-per-slug invariant is
+ * load-bearing rather than incidental — it is what keeps authored order
+ * independent of file discovery.
  *
  * @param units - Array of units with their sequence slug, in bulk file order
  * @returns All threads, slug-sorted, each with every unit carrying its tag

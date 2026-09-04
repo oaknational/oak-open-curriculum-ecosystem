@@ -106,9 +106,9 @@ describe('generateGraphCorpusData — unitLessonRuns (authored lesson order)', (
 
   it('takes the minimum position when programme variants disagree', () => {
     // `shared` is 3rd in one variant and 1st in the other, against `other` at
-    // 2. The MINIMUM wins, so `shared` leads — a lesson never appears later
-    // than the curriculum places it in any programme. Taking the maximum (or
-    // the first variant seen) would order these the other way round.
+    // 2. The MINIMUM wins, so `shared` leads. Taking the maximum (or the first
+    // variant seen) would order these the other way round, which is what this
+    // fixture discriminates.
     const corpus = generateGraphCorpusData(
       makeInput({
         lessons: [lessonRecord('shared', 'unit-b'), lessonRecord('other', 'unit-b')],
@@ -266,6 +266,30 @@ describe('generateGraphCorpusData — unitLessonRuns (authored lesson order)', (
 
     expect(build.unitsWithoutAuthoredLessonOrder).toBe(1);
     expect(build.runs[0]?.lessonIds).toEqual(['lesson:alpha', 'lesson:zulu']);
+  });
+
+  it('counts a unit whose listing names only lessons that are not in the run', () => {
+    // The ghost case as a BLIND SPOT for the stat: the listing is non-empty,
+    // so a naive "does this unit have any authored positions" check passes —
+    // but the only ordered lesson has no lesson node, so every lesson the run
+    // actually emits ranks Infinity and the run is fully id-ordered. The stat
+    // must count this, or the degradation it exists to surface stays silent.
+    const build = buildUnitLessonRuns(
+      [edgeFor('unit-m', 'zulu'), edgeFor('unit-m', 'alpha')],
+      [variant('unit-m', [['ghost-not-in-run', 1]])],
+    );
+
+    expect(build.unitsWithoutAuthoredLessonOrder).toBe(1);
+    expect(build.runs[0]?.lessonIds).toEqual(['lesson:alpha', 'lesson:zulu']);
+  });
+
+  it('does not count a unit where only SOME lessons lack an authored position', () => {
+    const build = buildUnitLessonRuns(
+      [edgeFor('unit-n', 'ordered'), edgeFor('unit-n', 'unordered')],
+      [variant('unit-n', [['ordered', 1]])],
+    );
+
+    expect(build.unitsWithoutAuthoredLessonOrder).toBe(0);
   });
 
   it('counts no unordered units when every unit is listed', () => {

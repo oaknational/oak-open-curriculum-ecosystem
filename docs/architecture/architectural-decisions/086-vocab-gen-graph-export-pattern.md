@@ -50,9 +50,13 @@
 > - **The lesson sort key is (min authored position, lesson id).** A unit node
 >   merges its programme variants, and a variant may place one lesson at a
 >   different position than another (172 of 13,964 pairs, median spread 1).
->   No single scalar satisfies every variant, so the minimum is taken: a
->   lesson never appears LATER than the curriculum places it in any
->   programme. Measured against every programme variant, the served order
+>   No single scalar satisfies every variant, so the minimum is taken as a
+>   BIAS rather than a guarantee: it biases a contested lesson towards its
+>   earliest authored position, because seeing a foundation early is the safe
+>   failure where seeing it late is the harmful one. It does not promise a
+>   lesson never sorts later than some programme places it — conflicting
+>   minima and the id tie-break both leave residual inversions, quantified
+>   next. Measured against every programme variant, the served order
 >   inverts 75 of 56,238 comparable within-programme lesson pairs (0.13%),
 >   against 25,945 (46.13%) for the id-sorted order it replaces. The residual
 >   is structural — lessons genuinely holding different positions in
@@ -75,11 +79,11 @@
 >   that blast radius, at the cost of serialising each unit→lesson pair twice
 >   in `data.json` (once as an edge, once in a run) — 11,172 duplicated
 >   placements, the same trade the `sequences` section already makes.
-> - **`get-misconception-graph` consumes both ordered sections.** Its thread
->   anchor windows units by `sequences` and its unit entries list lessons by
->   `unitLessonRuns`. Estate-wide after the change: 1,484 of 1,484 units with
->   3+ lessons serve their authored order (0 alphabetical, from 1,435 where
->   the two differ), and 0 of 17 multi-subject threads interleave.
+> - **The consumers land separately.** `get-thread-progressions` reads the
+>   corrected `sequences` here. `get-misconception-graph` reads BOTH ordered
+>   sections, but that change is MCP-682: until it lands, that tool still
+>   windows and lists from the id-sorted edge set, and this amendment claims
+>   nothing about its served order.
 > - **Counts recomputed at amendment time** from the regenerated
 >   `graph-corpus/data.json` (2026-09-03 bulk snapshot): 36,077 nodes
 >   (unit 1,835; thread 160; lesson 10,941; misconception 10,937;
