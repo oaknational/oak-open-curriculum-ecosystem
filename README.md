@@ -248,6 +248,144 @@ and
   `mcp-inspector` skill installs at the machine level via
   `pnpm dlx skills add mcpjam/inspector --skill mcp-inspector`.
 
+### Windows (via WSL)
+
+Windows contributors work through [WSL2](https://learn.microsoft.com/windows/wsl/) —
+inside it, every prerequisite above applies as written for Debian/Ubuntu, with
+one pnpm exception covered in step 3. Steps 1-2
+run in Windows PowerShell; steps 3-8 run inside Ubuntu. Requires Windows 11 (or
+Windows 10 2004+) with virtualization enabled in firmware — if `wsl --install`
+ends in error `0x80370102`, enable virtualization in your BIOS/UEFI first. The
+steps below were run end to end on Windows 11 in August 2026.
+
+1. **Install WSL and Ubuntu** — in an administrator PowerShell (right-click
+   Start → Terminal (Admin)) run `wsl --install -d Ubuntu` (naming the distro
+   matters: with WSL already present, a bare `wsl --install` prints help
+   instead), approve the elevation prompt,
+   and create your Unix account when Ubuntu first launches (a reboot is only
+   needed if the installer asks for one).
+2. **Cap the VM if the machine has 16 GB or less** — by default WSL2 may take up
+   to half the machine's RAM with only a quarter of that as swap, and this
+   repository's whole-tree gates can then be OOM-killed inside the VM or starve
+   the Windows side (the symptom: Windows becomes unresponsive and `Vmmem`
+   dominates Task Manager). Back in PowerShell, create the file
+   (`notepad $env:USERPROFILE\.wslconfig`):
+
+   ```ini
+   [wsl2]
+   memory=8GB
+   processors=4
+   swap=8GB
+   ```
+
+   Scale to your machine: cap `memory` at roughly half your RAM, `processors` at
+   no more than your core count, and keep swap at least equal to memory so the
+   gates page rather than die. Apply with `wsl --shutdown` (also from
+   PowerShell) — this closes any running Ubuntu session; reopen it with
+   `wsl -d Ubuntu` (naming the distribution again, in case another one is the
+   default on your machine).
+
+3. **Install the base toolchain inside Ubuntu** — start with
+   `sudo apt update && sudo apt install -y curl git ca-certificates`, then follow
+   [Prerequisites](#prerequisites) above; every entry's Debian/Ubuntu
+   instructions apply unchanged, with two notes. For Node, install nvm and open
+   a new shell (or `source ~/.bashrc`) so `nvm` is on `PATH`; the `nvm install`
+   itself comes in step 8, from inside the clone, where `.nvmrc` is. For pnpm,
+   use its
+   [standalone script](https://pnpm.io/installation#using-a-standalone-script) —
+   `curl -fsSL https://get.pnpm.io/install.sh | sh -`, then open a new shell or
+   `source ~/.bashrc` — not `corepack enable`. The standalone binary still
+   honours the repository's pinned pnpm version. The commit hooks resolve pnpm
+   only from a fixed list of trusted install locations; the standalone install
+   at `~/.local/share/pnpm` is on that list, a corepack shim under nvm's Node
+   directory is not, and with corepack alone every commit fails — currently
+   misreported as a formatting failure.
+4. **Install gitleaks** — the pre-push hook requires it, and Ubuntu's sources
+   do not carry it. Install the released binary with the same version and
+   content pins CI uses, architecture-aware (gitleaks is a security control,
+   so its binary is content-pinned, not just version-pinned; both digests
+   below come from the official `gitleaks_8.30.0_checksums.txt`, and the x64
+   value is byte-identical to the pin in `.github/workflows/ci.yml`, "Install
+   pinned gitleaks" — CI is where version and digest are kept current, so
+   when CI bumps its pin, mirror it here):
+
+   ```bash
+   version=8.30.0
+   case "$(dpkg --print-architecture)" in
+     amd64) asset="gitleaks_${version}_linux_x64.tar.gz"
+            expected=79a3ab579b53f71efd634f3aaf7e04a0fa0cf206b7ed434638d1547a2470a66e ;;
+     arm64) asset="gitleaks_${version}_linux_arm64.tar.gz"
+            expected=b4cbbb6ddf7d1b2a603088cd03a4e3f7ce48ee7fd449b51f7de6ee2906f5fa2f ;;
+     *)     echo "unsupported architecture: $(dpkg --print-architecture)" ;;
+   esac
+   curl -sSfL --proto '=https' --proto-redir '=https' -o "$asset" \
+     "https://github.com/gitleaks/gitleaks/releases/download/v${version}/${asset}"
+   echo "${expected}  ${asset}" | sha256sum -c - &&
+     sudo tar -C /usr/local/bin -xzf "$asset" gitleaks && rm "$asset"
+   ```
+
+   If you already have Go, `go install github.com/zricethezav/gitleaks/v8@latest`
+   also works and verifies the module through Go's checksum database. The path
+   really is `zricethezav` — the one gitleaks declares in its `go.mod`; the
+   `github.com/gitleaks/gitleaks/v8` spelling fails with a "module declares
+   its path as" error — and `$(go env GOPATH)/bin` must be on `PATH` for the
+   pre-push hook to find the result.
+
+5. **Install `gh`** (the GitHub CLI) — the repo's PR and agent tooling uses
+   it. Ubuntu's own package lags, so install from
+   [GitHub's apt repository](https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
+6. **Give pnpm network patience once** — WSL2's NAT (its network translation
+   layer) can time out fetching large tarballs (`pnpm install` dies with
+   `ETIMEDOUT` or `socket hang up`; you can set this after a failed install and
+   simply re-run): `pnpm config set fetch-timeout 300000` and
+   `pnpm config set fetch-retries 5`.
+7. **Reuse Windows' stored git credentials — only if you already use Git for
+   Windows.** The helper lives in one of two places depending on how Git was
+   installed, so find the one you have and configure that path:
+
+   ```bash
+   localappdata=$(wslpath "$(cmd.exe /c "echo %LOCALAPPDATA%" 2>/dev/null | tr -d '\r')" 2>/dev/null)
+   helper=""
+   for candidate in \
+     "/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe" \
+     "/mnt/c/Program Files/Git/clangarm64/bin/git-credential-manager.exe" \
+     "${localappdata}/Programs/Git/mingw64/bin/git-credential-manager.exe" \
+     "${localappdata}/Programs/Git/clangarm64/bin/git-credential-manager.exe"; do
+     [ -x "$candidate" ] && { helper="$candidate"; break; }
+   done
+   [ -n "$helper" ] && git config --global credential.helper "${helper// /\\ }"
+   echo "${helper:-no Git for Windows credential helper found}"
+   ```
+
+   The first pair are all-users installs (x64, then Windows-on-ARM's
+   `clangarm64` layout), the second pair per-user ones — resolved from the
+   CURRENT user's `%LOCALAPPDATA%` itself (converted with `wslpath`), never
+   globbed across every profile and never reconstructed from `%USERNAME%`:
+   on a shared machine a glob can configure another user's helper, and an
+   account rename can leave the profile directory differing from the
+   username. Each candidate is checked executable before it is configured.
+   If none exists you do not have Git for Windows: authenticate with
+   `gh auth login` instead, and do not configure a helper path that is not
+   there.
+
+8. **Clone and verify** — clone inside the Linux filesystem, never under
+   `/mnt/c` (cross-boundary file access is an order of magnitude slower), then
+   install the pinned Node:
+
+   ```bash
+   mkdir -p ~/oak && cd ~/oak
+   git clone https://github.com/oaknational/oak-open-curriculum-ecosystem.git
+   cd oak-open-curriculum-ecosystem
+   nvm install
+   ```
+
+   Then pick up [Install and verify](#install-and-verify) below at
+   `pnpm install` — its opening clone commands are the ones you have just
+   run. On a capped VM,
+   prefix the verify commands with `TURBO_CONCURRENCY=1` (add
+   `VITEST_MAX_WORKERS=2` if memory stays tight — the symptom of a starved
+   suite: vitest reports 5000 ms timeouts, or the gate exits with no error text).
+
 ### Install and verify
 
 ```bash
@@ -259,7 +397,7 @@ pnpm test && pnpm type-check && pnpm lint
 
 If these pass, your toolchain is working. No API keys are required for unit tests, type-checking, linting, or building.
 
-**Before your first push**: install [gitleaks](https://github.com/gitleaks/gitleaks/releases) (`brew install gitleaks` on macOS). The pre-push hook runs a secrets scan and will block pushes if gitleaks is not installed.
+**Before your first push**: install [gitleaks](https://github.com/gitleaks/gitleaks/releases) (`brew install gitleaks` on macOS; Windows/WSL readers did this in step 4 above). The pre-push hook runs a secrets scan and will block pushes if gitleaks is not installed.
 
 ### Get an API key (optional)
 
