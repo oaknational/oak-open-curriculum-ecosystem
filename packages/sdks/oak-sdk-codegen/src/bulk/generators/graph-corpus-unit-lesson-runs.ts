@@ -50,10 +50,16 @@ function isUnitNodeId(id: GraphCorpusNodeId): id is GraphCorpusUnitNodeId {
  * A unit node merges its programme variants (tiers, exam boards, pathways),
  * and a variant may place one lesson at a different position than another —
  * 172 of 13,964 pairs on the 2026-09-03 snapshot, spread a median of 1
- * position. A single scalar cannot satisfy every variant at once, so the
- * minimum is chosen: a lesson then never appears LATER than the curriculum
- * places it in any programme, and seeing a foundation early is the safe
- * failure where seeing it late is the harmful one.
+ * position. A single scalar cannot satisfy every variant at once, so this is
+ * a BIAS, not a guarantee: taking the minimum biases a contested lesson
+ * towards its earliest authored position, because seeing a foundation early
+ * is the safe failure where seeing it late is the harmful one. It does not
+ * promise a lesson never sorts later than some programme places it —
+ * conflicting minima and the lesson-id tie-break both leave residual
+ * inversions, 75 of 56,238 comparable within-programme pairs on this
+ * snapshot. `max`, `mean` and `first-seen` were measured on the same test and
+ * land within 0.06 percentage points; `min` was chosen on explicability, and
+ * `first-seen` rejected as dependent on file enumeration order.
  *
  * One dependency worth naming: `extractUnitLessons` backfills a missing
  * `lessonOrder` with the lesson's index in the bulk array, so a position that

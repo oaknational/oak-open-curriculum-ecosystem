@@ -56,18 +56,24 @@ function yearRank(unit: ThreadUnit): number {
 }
 
 /**
- * Compares two thread units by curriculum position within one subject: year
- * ascending (year-less last), then the bulk sequence index (Oak's authored
- * order within the year). A year belongs to exactly one phase, so the
- * primary file's years precede the secondary file's by construction. The
- * sequence slug is the SECOND tie-break — it separates year-less ("All
- * years") units drawn from different files, where the phase suffix happens
- * to sort primary before secondary; that alphabetical agreement is a
- * coincidence of the naming scheme, not a guaranteed phase order, and
- * nothing here relies on it beyond determinism. The unit's index within its
- * own bulk sequence is the FINAL tie-break, and those indexes are unique per
- * sequence slug by construction, so no residual tie can reach the end of the
- * chain.
+ * Compares two thread units by curriculum position within one subject, in
+ * three terms:
+ *
+ * 1. **year** ascending, year-less ("All years") units last;
+ * 2. **sequence slug**, which separates units that share a year but come from
+ *    different bulk files;
+ * 3. **sequence index**, Oak's authored order within that file's own run.
+ *
+ * The slug term fires whenever two units tie on year, not only for year-less
+ * ones. In practice a year usually belongs to one phase, so the common case
+ * is the "All years" pair — but the comparator does not depend on that being
+ * true, and the tests cover primary and secondary units sharing a year. Where
+ * it does fire, the phase suffix happens to sort primary before secondary;
+ * that alphabetical agreement is a coincidence of the naming scheme, not a
+ * guaranteed phase order, and nothing here relies on it beyond determinism.
+ *
+ * Sequence indexes are unique per slug by construction, so the third term
+ * always resolves and no residual tie reaches the end of the chain.
  *
  * @param a - The first thread unit
  * @param b - The second thread unit

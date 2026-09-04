@@ -50,9 +50,13 @@
 > - **The lesson sort key is (min authored position, lesson id).** A unit node
 >   merges its programme variants, and a variant may place one lesson at a
 >   different position than another (172 of 13,964 pairs, median spread 1).
->   No single scalar satisfies every variant, so the minimum is taken: a
->   lesson never appears LATER than the curriculum places it in any
->   programme. Measured against every programme variant, the served order
+>   No single scalar satisfies every variant, so the minimum is taken as a
+>   BIAS rather than a guarantee: it biases a contested lesson towards its
+>   earliest authored position, because seeing a foundation early is the safe
+>   failure where seeing it late is the harmful one. It does not promise a
+>   lesson never sorts later than some programme places it — conflicting
+>   minima and the id tie-break both leave residual inversions, quantified
+>   next. Measured against every programme variant, the served order
 >   inverts 75 of 56,238 comparable within-programme lesson pairs (0.13%),
 >   against 25,945 (46.13%) for the id-sorted order it replaces. The residual
 >   is structural — lessons genuinely holding different positions in
