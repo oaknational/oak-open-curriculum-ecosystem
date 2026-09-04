@@ -30,8 +30,8 @@ import { mustGet } from './projection-helpers.js';
 /**
  * The stated prior knowledge for a set of anchor units.
  *
- * `units` are the corpus's own unit nodes (each carrying `priorKnowledge`
- * statements and `threadSlugs`), in resolved-anchor order. `resolvedAnchors`
+ * `units` carry each anchor's `priorKnowledge` statements (exact duplicates
+ * collapsed) and `threadSlugs`, in resolved-anchor order. `resolvedAnchors`
  * are the anchor ids found in the corpus; `unknownAnchors` are the input
  * slugs with no matching unit (reported, not an error).
  */
@@ -66,6 +66,11 @@ const unitNodesById: ReadonlyMap<GraphCorpusNodeId, GraphCorpusUnitNode> = new M
  */
 export function priorKnowledgeStatements(unitSlugs: readonly string[]): PriorKnowledgeStatements {
   const { resolved, unknown } = resolveAnchors(unitSlugs, toUnitNodeId, unitNodesById);
-  const units = resolved.map((id) => mustGet(unitNodesById, id));
+  // Collapse exact-duplicate statements (the corpus repeats some verbatim);
+  // set semantics keep first-occurrence order. Other fields are the node's own.
+  const units = resolved.map((id) => {
+    const node = mustGet(unitNodesById, id);
+    return { ...node, priorKnowledge: [...new Set(node.priorKnowledge)] };
+  });
   return { units, resolvedAnchors: resolved, unknownAnchors: unknown };
 }
