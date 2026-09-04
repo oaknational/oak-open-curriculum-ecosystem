@@ -381,8 +381,9 @@ arbitrary and not a pedagogical or curricular claim.
 
 `prior-knowledge-view.ts` (deleted by MCP-671)
 described these edges as real prerequisites and exposed their predecessors
-as prior knowledge. The curriculum-mapping guidance consumes the prior-
-knowledge graph as an ordering input.
+as prior knowledge. The curriculum-mapping guidance previously consumed that graph as an
+ordering input; MCP-671 rewrote it to consume the stated prior-knowledge
+statements.
 
 This is more than imprecise wording. A typed graph edge is a claim. The current
 edge claims dependency where the source data establishes, at most, year-ordered

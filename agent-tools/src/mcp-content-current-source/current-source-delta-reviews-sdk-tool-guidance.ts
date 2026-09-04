@@ -16,7 +16,7 @@ export const SDK_TOOL_GUIDANCE_DELTA_REVIEWS: Readonly<Record<string, CurrentSou
   // The progression guidance, workflow, and ontology pointers rewrote with
   // it (C020, C045, C290; C023's tools arrays are byte-identical).
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts': reviewed(
-    'b67ea75a5b8a6f701580212491ae084c1df61f89cc9243c8da839e6e44740586',
+    'dccbf728deaf38f84016e7e4656c02023524bf94a7a80b9c221dbb9fe7e3dc81',
     ['C246', 'C247', 'C248', 'C250', 'C251'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts': reviewed(
