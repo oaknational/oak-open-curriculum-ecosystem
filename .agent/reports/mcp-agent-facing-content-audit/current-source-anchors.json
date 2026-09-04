@@ -4796,16 +4796,22 @@
     {
       "auditId": "C234",
       "evidence": {
-        "revision": "unchanged",
+        "revision": "modified",
         "targets": [
           {
             "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts",
             "anchors": [
               {
-                "tokenCount": 313,
-                "tokenSha256": "09d1545b874788c979bad11cc78677a4646858f671ee4c31aedbbf64a1135cf1",
-                "indexToken": "Misconceptions",
-                "indexOffset": 18
+                "tokenCount": 24,
+                "tokenSha256": "809310bd490c315204e6cc0801e81a0397f95cee5c54e34b52606e4bbc20d38b",
+                "indexToken": "core",
+                "indexOffset": 4
+              },
+              {
+                "tokenCount": 13,
+                "tokenSha256": "028e7afdcd57b4ba376e0bfa1735a0d6bc7b6d88e9fe3ed70ee97926b5a44ab7",
+                "indexToken": "Ordering",
+                "indexOffset": 0
               }
             ]
           }
@@ -4840,8 +4846,8 @@
             "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts",
             "anchors": [
               {
-                "tokenCount": 17,
-                "tokenSha256": "43798091853f72da3f350ae98a1fbc7451075f770ef81180fbd13625f281dbe6",
+                "tokenCount": 29,
+                "tokenSha256": "882ef9ffbcf696a0dfb935c2b66d8561400c5751da49352a392897110ec197ea",
                 "indexToken": "Unit",
                 "indexOffset": 0
               }
@@ -4859,8 +4865,8 @@
             "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts",
             "anchors": [
               {
-                "tokenCount": 17,
-                "tokenSha256": "5aee06b2794382c7c736ccbbc74f7262767b631328778bfff4a0e5014befb036",
+                "tokenCount": 27,
+                "tokenSha256": "5b902ec9b68db099ab9911d8a1c442eb0dbc9a18343c1b73f03e91537bb95939",
                 "indexToken": "key",
                 "indexOffset": 8
               }

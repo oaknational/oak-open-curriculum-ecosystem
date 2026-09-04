@@ -47,6 +47,38 @@ function referenceAdjacency(edgeType: string): Map<string, string[]> {
 }
 
 const unitsByThread = referenceAdjacency('containsUnit');
+
+/**
+ * WIRING references, re-derived from the corpus's ordered sections. These
+ * prove the view reads `sequences` / `unitLessonRuns` rather than the edge set
+ * — they do NOT prove the ordering itself is correct, because
+ * `orderedUnitsByThread` necessarily repeats the production concat-and-dedupe
+ * shape, so a bug in that shape would reproduce here and still pass. The
+ * ordering is proved instead by the falsification tests below (served order is
+ * one the alphabet could not produce) and, at source, by the hostile-fixture
+ * unit tests over the sequence and unit-lesson-run builders. Membership
+ * references above come from the edges, which is what they are for.
+ */
+function orderedUnitsByThread(): Map<string, string[]> {
+  const byThread = new Map<string, string[]>();
+  for (const sequence of graphCorpus.sequences) {
+    const run = byThread.get(sequence.threadId) ?? [];
+    for (const placement of sequence.placements) {
+      if (!run.includes(placement.unitId)) {
+        run.push(placement.unitId);
+      }
+    }
+    byThread.set(sequence.threadId, run);
+  }
+  return byThread;
+}
+
+function orderedLessonsByUnit(): Map<string, string[]> {
+  return new Map(graphCorpus.unitLessonRuns.map((run) => [run.unitId, [...run.lessonIds]]));
+}
+
+const curriculumUnitsByThread = orderedUnitsByThread();
+const curriculumLessonsByUnit = orderedLessonsByUnit();
 const lessonsByUnit = referenceAdjacency('containsLesson');
 const misconceptionsByLesson = referenceAdjacency('addressesMisconception');
 
@@ -159,12 +191,15 @@ describe('misconception view — bounded anchored chain retrieval', () => {
 
     expect(result.resolvedAnchors).toStrictEqual([unitWithLessons]);
     expect(result.units).toHaveLength(1);
-    const entry = result.units[0];
-    expect(entry?.unit.id).toBe(unitWithLessons);
-    expect(entry?.lessons.map((l) => l.lesson.id)).toStrictEqual(
+    const entry = required(result.units[0], 'unit anchor resolved no entry');
+    expect(entry.unit.id).toBe(unitWithLessons);
+    const servedLessonIds = entry.lessons.map((l) => l.lesson.id);
+    expect(servedLessonIds).toStrictEqual(curriculumLessonsByUnit.get(unitWithLessons));
+    // Membership is unchanged by the ordering fix: the same lessons, reordered.
+    expect([...servedLessonIds].sort((a, b) => a.localeCompare(b))).toStrictEqual(
       lessonsByUnit.get(unitWithLessons),
     );
-    for (const lessonEntry of entry?.lessons ?? []) {
+    for (const lessonEntry of entry.lessons) {
       expect(lessonEntry.misconceptions.map((m) => m.id)).toStrictEqual(
         misconceptionsByLesson.get(lessonEntry.lesson.id) ?? [],
       );
@@ -178,6 +213,91 @@ describe('misconception view — bounded anchored chain retrieval', () => {
     for (const unitEntry of result.units) {
       expect(unitEntry.lessons.map((l) => l.lesson.id)).toContain(multiPlacedLesson.lessonId);
     }
+  });
+
+  // MCP-682: the two hops Oak authors as sequences, proved separately from
+  // the chain-retrieval behaviour above.
+  describe('curriculum ordering', () => {
+    it('serves a unit’s lessons in Oak’s authored order, not in lesson-id order', () => {
+      // Chosen for the property under test: a real unit whose authored lesson
+      // order DIFFERS from id order, so an id-sorted implementation fails here.
+      const reordered = required(
+        graphCorpus.unitLessonRuns.find((run) => {
+          const idSorted = [...run.lessonIds].sort((a, b) => a.localeCompare(b));
+          return run.lessonIds.length > 2 && idSorted.join() !== run.lessonIds.join();
+        }),
+        'corpus has no unit whose authored lesson order differs from id order',
+      );
+
+      const result = misconceptionsForUnits([bareSlug(reordered.unitId)]);
+      const served = result.units[0]?.lessons.map((l) => l.lesson.id) ?? [];
+
+      expect(served).toStrictEqual([...reordered.lessonIds]);
+      expect(served).not.toStrictEqual([...served].sort((a, b) => a.localeCompare(b)));
+    });
+
+    it('preserves thread membership while reordering: the served units are the edge set', () => {
+      // The ordering fix changed ORDER, not membership. Paging the whole thread
+      // must return exactly the units the containsUnit edges place in it —
+      // otherwise a reorder that silently dropped or duplicated a unit would
+      // still satisfy every order assertion in this file.
+      const served: string[] = [];
+      for (let offset = 0; offset < megaThread.unitCount; offset += MAX_THREAD_UNIT_LIMIT) {
+        const page = misconceptionsForThread(bareSlug(megaThread.threadId), {
+          unitOffset: offset,
+          unitLimit: MAX_THREAD_UNIT_LIMIT,
+        });
+        expect(page.ok).toBe(true);
+        if (!page.ok) {
+          return;
+        }
+        served.push(...(page.value.threads[0]?.units ?? []).map((u) => u.unit.id));
+      }
+
+      expect(new Set(served).size).toBe(served.length);
+      expect([...served].sort((a, b) => a.localeCompare(b))).toStrictEqual(
+        unitsByThread.get(megaThread.threadId),
+      );
+    });
+
+    it('serves a thread window in an order the alphabet could not produce', () => {
+      // Falsification, independent of how the view builds its order: find a
+      // thread whose curriculum order provably differs from id order, and prove
+      // the served window is not the id-sorted one.
+      const disagreeing = required(
+        graphCorpus.sequences
+          .map((sequence) => sequence.threadId)
+          .find((threadId) => {
+            const units = curriculumUnitsByThread.get(threadId) ?? [];
+            const idSorted = [...units].sort((a, b) => a.localeCompare(b));
+            return units.length > 2 && idSorted.join() !== units.join();
+          }),
+        'corpus has no thread whose curriculum order differs from id order',
+      );
+
+      const result = misconceptionsForThread(bareSlug(disagreeing), {
+        unitLimit: MAX_THREAD_UNIT_LIMIT,
+      });
+      expect(result.ok).toBe(true);
+      if (!result.ok) {
+        return;
+      }
+      const served = (result.value.threads[0]?.units ?? []).map((u) => u.unit.id);
+      expect(served).not.toStrictEqual([...served].sort((a, b) => a.localeCompare(b)));
+    });
+
+    it('serves authored lesson order inside a thread window too, not just at the unit anchor', () => {
+      const result = misconceptionsForThread(bareSlug(megaThread.threadId), { unitLimit: 10 });
+      expect(result.ok).toBe(true);
+      if (!result.ok) {
+        return;
+      }
+      for (const unitEntry of result.value.threads[0]?.units ?? []) {
+        expect(unitEntry.lessons.map((l) => l.lesson.id)).toStrictEqual(
+          curriculumLessonsByUnit.get(unitEntry.unit.id) ?? [],
+        );
+      }
+    });
   });
 
   it('reports unknown unit anchors with a well-formed empty result', () => {
@@ -198,7 +318,7 @@ describe('misconception view — bounded anchored chain retrieval', () => {
     expect(result.value.resolvedAnchors).toStrictEqual([megaThread.threadId]);
     const entry = required(result.value.threads[0], 'mega-thread anchor resolved no entry');
     const referenceUnits = required(
-      unitsByThread.get(megaThread.threadId),
+      curriculumUnitsByThread.get(megaThread.threadId),
       'mega-thread has no reference units',
     );
     expect(entry.thread.id).toBe(megaThread.threadId);
@@ -225,7 +345,7 @@ describe('misconception view — bounded anchored chain retrieval', () => {
     if (!first.ok || !second.ok) {
       return;
     }
-    const reference = unitsByThread.get(megaThread.threadId) ?? [];
+    const reference = curriculumUnitsByThread.get(megaThread.threadId) ?? [];
     expect(first.value.threads[0]?.units.map((u) => u.unit.id)).toStrictEqual(
       reference.slice(0, 5),
     );
