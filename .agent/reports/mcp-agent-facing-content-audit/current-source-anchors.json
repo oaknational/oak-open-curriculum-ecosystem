@@ -4808,10 +4808,10 @@
                 "indexOffset": 4
               },
               {
-                "tokenCount": 13,
-                "tokenSha256": "028e7afdcd57b4ba376e0bfa1735a0d6bc7b6d88e9fe3ed70ee97926b5a44ab7",
-                "indexToken": "Ordering",
-                "indexOffset": 0
+                "tokenCount": 18,
+                "tokenSha256": "69db8c93a444342a68727a71b9691d6ccad2fadcd5a5bc407eddbbcf31665302",
+                "indexToken": "projection",
+                "indexOffset": 4
               }
             ]
           }

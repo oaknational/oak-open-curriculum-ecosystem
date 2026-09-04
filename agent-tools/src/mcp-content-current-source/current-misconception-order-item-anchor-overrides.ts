@@ -17,7 +17,7 @@ export const CURRENT_MISCONCEPTION_ORDER_ITEM_ANCHOR_OVERRIDES = {
   C234: {
     [MISCONCEPTION_GRAPH]: [
       "- unitSlugs: the core anchor; each unit returns every placed lesson with its misconceptions, in Oak's authored teaching order",
-      "Ordering: units and lessons come in Oak's authored curriculum order",
+      "Ordering is a deterministic projection of Oak's authored order, not a single global sequence.",
     ],
   },
   // The unit-anchor field description.

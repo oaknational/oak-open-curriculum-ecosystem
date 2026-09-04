@@ -81,7 +81,7 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   // units and lessons come in Oak's authored curriculum order, replacing the
   // id-sorted edge adjacency both axes had read.
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts': reviewed(
-    'b2945292910b995b9faa488ac59ac2df91d288c430ed64537a3c5405ef50ca18',
+    'a24054fade803c583ec49151d1e8de84adb28fbe89079870d285d8a4b4c8736d',
     ['C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts': reviewed(

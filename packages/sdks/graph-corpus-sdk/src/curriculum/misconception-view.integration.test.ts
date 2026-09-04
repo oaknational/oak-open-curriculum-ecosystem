@@ -24,7 +24,7 @@ import {
   misconceptionsForThread,
   misconceptionsForUnits,
 } from './misconception-view.js';
-import { bareSlug, required } from './test-helpers.js';
+import { bareSlug, required, unwrapOk } from './test-helpers.js';
 
 /** Independent reference adjacency: source id → sorted target ids, per edge type. */
 function referenceAdjacency(edgeType: string): Map<string, string[]> {
@@ -243,15 +243,13 @@ describe('misconception view — bounded anchored chain retrieval', () => {
       // still satisfy every order assertion in this file.
       const served: string[] = [];
       for (let offset = 0; offset < megaThread.unitCount; offset += MAX_THREAD_UNIT_LIMIT) {
-        const page = misconceptionsForThread(bareSlug(megaThread.threadId), {
-          unitOffset: offset,
-          unitLimit: MAX_THREAD_UNIT_LIMIT,
-        });
-        expect(page.ok).toBe(true);
-        if (!page.ok) {
-          return;
-        }
-        served.push(...(page.value.threads[0]?.units ?? []).map((u) => u.unit.id));
+        const page = unwrapOk(
+          misconceptionsForThread(bareSlug(megaThread.threadId), {
+            unitOffset: offset,
+            unitLimit: MAX_THREAD_UNIT_LIMIT,
+          }),
+        );
+        served.push(...(page.threads[0]?.units ?? []).map((u) => u.unit.id));
       }
 
       expect(new Set(served).size).toBe(served.length);
@@ -275,24 +273,18 @@ describe('misconception view — bounded anchored chain retrieval', () => {
         'corpus has no thread whose curriculum order differs from id order',
       );
 
-      const result = misconceptionsForThread(bareSlug(disagreeing), {
-        unitLimit: MAX_THREAD_UNIT_LIMIT,
-      });
-      expect(result.ok).toBe(true);
-      if (!result.ok) {
-        return;
-      }
-      const served = (result.value.threads[0]?.units ?? []).map((u) => u.unit.id);
+      const result = unwrapOk(
+        misconceptionsForThread(bareSlug(disagreeing), { unitLimit: MAX_THREAD_UNIT_LIMIT }),
+      );
+      const served = (result.threads[0]?.units ?? []).map((u) => u.unit.id);
       expect(served).not.toStrictEqual([...served].sort((a, b) => a.localeCompare(b)));
     });
 
     it('serves authored lesson order inside a thread window too, not just at the unit anchor', () => {
-      const result = misconceptionsForThread(bareSlug(megaThread.threadId), { unitLimit: 10 });
-      expect(result.ok).toBe(true);
-      if (!result.ok) {
-        return;
-      }
-      for (const unitEntry of result.value.threads[0]?.units ?? []) {
+      const result = unwrapOk(
+        misconceptionsForThread(bareSlug(megaThread.threadId), { unitLimit: 10 }),
+      );
+      for (const unitEntry of result.threads[0]?.units ?? []) {
         expect(unitEntry.lessons.map((l) => l.lesson.id)).toStrictEqual(
           curriculumLessonsByUnit.get(unitEntry.unit.id) ?? [],
         );
