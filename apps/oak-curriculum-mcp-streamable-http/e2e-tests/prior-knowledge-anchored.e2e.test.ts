@@ -89,8 +89,12 @@ describe('get-prior-knowledge-graph anchored tools/call', () => {
     expect(structured.units).toHaveLength(1);
     expect(structured.units[0]?.unitSlug).toBe(knownUnitSlug);
     // The refactor's core value, proven over the wire: the statements arrive
-    // verbatim from the corpus, not as an empty or reshaped stand-in.
-    expect(structured.units[0]?.priorKnowledge).toStrictEqual(firstUnit.priorKnowledge);
+    // from the corpus, not as an empty or reshaped stand-in. Compared against
+    // the deduped values — the view collapses exact duplicates by contract, so
+    // raw-equality would be fragile if this unit ever gained repeats.
+    expect(structured.units[0]?.priorKnowledge).toStrictEqual([
+      ...new Set(firstUnit.priorKnowledge),
+    ]);
     expect(structured.units[0]?.threadSlugs).toStrictEqual(firstUnit.threadSlugs);
   });
 

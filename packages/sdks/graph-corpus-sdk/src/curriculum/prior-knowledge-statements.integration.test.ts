@@ -30,8 +30,11 @@ describe('priorKnowledgeStatements', () => {
     expect(result.units).toHaveLength(1);
     const unit = result.units[0];
     expect(unit?.unitSlug).toBe(knownSlug);
-    // The fields the statements contract serves — verbatim from the corpus.
-    expect(unit?.priorKnowledge).toStrictEqual(firstUnit.priorKnowledge);
+    // The fields the statements contract serves. priorKnowledge is compared
+    // against the deduped corpus values — the view's contract collapses exact
+    // duplicates, so raw-equality would be fragile on a corpus where this unit
+    // gains repeats (threadSlugs are served verbatim).
+    expect(unit?.priorKnowledge).toStrictEqual([...new Set(firstUnit.priorKnowledge)]);
     expect(unit?.threadSlugs).toStrictEqual(firstUnit.threadSlugs);
   });
 
