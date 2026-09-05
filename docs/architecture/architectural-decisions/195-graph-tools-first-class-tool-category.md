@@ -50,8 +50,9 @@ captures — EEF graph-tooling rebuild); the EEF plan's Ratified Decisions in
 > `structuredContent`", and the Consequences' "subgraphs it can traverse" describe the other four
 > graph tools; this tool's bound is membership alone and its payload is a node set with no edges.
 > §5's "prior knowledge defaults to depth 2" no longer describes it at all. §3 still binds, and the
-> coverage limit it requires has changed: 17 of 1,834 units record no statements, which the tool
-> description now states. §2 is unaffected — the dropped edges were synthesised at corpus emission
+> coverage limit it requires has changed: some units record no statements and some belong to no
+> thread, which the tool description states qualitatively — not as counts, which would drift on
+> corpus regeneration. §2 is unaffected — the dropped edges were synthesised at corpus emission
 > from thread adjacency, never relationships the upstream curriculum data records, so no evidenced
 > relationship left the payload; the other three curriculum graph tools continue to serve recorded
 > ones. Curriculum ownership
