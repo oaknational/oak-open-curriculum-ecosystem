@@ -105,6 +105,12 @@ Executed 2026-06-10/11 under `graph-tools-value-redesign.plan.md`, one replaceme
 - **G2 — misconception**: PR #163 — chain re-projection with the content-hash mint rule, the
   anchored lesson/unit/thread tool, the hand-written misconception `types.ts` deleted,
   `curriculum://misconception-graph` removed, signal raised.
+  **Correction (2026-09-04):** the projection held that a unit's lessons and a thread's units
+  were sets, and read both off the id-sorted edge array — so the anchored tool paged threads
+  and listed lessons alphabetically. That holding was refuted by the same measurement as G3's:
+  the order was authored and had been discarded. MCP-682 re-based both hops on the corpus's
+  ordered sections (`sequences`, `unitLessonRuns`); the lesson→misconception hop remains a set.
+  See the ADR-086 amendment and its 2026-09-04 follow-on.
 - **G3 — thread-progressions**: PR #164 — the ordered corpus projection as its own real
   operation, the anchored tool, `curriculum://thread-progressions` removed, the whole-corpus
   resource factory deleted with its last consumer, signal raised. Follow-on PR #165 re-chained

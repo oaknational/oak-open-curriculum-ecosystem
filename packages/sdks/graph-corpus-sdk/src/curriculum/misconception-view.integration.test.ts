@@ -258,6 +258,33 @@ describe('misconception view — bounded anchored chain retrieval', () => {
       );
     });
 
+    it('serves a unit the curriculum revisits at two years exactly once', () => {
+      // Deterministically the thread that HAS a revisited unit — the earlier
+      // dedup assertion ran on the mega-thread, which was never shown to
+      // contain one, so the property was exercised zero times.
+      const revisited = required(
+        graphCorpus.sequences.find((sequence) => {
+          const ids = sequence.placements.map((placement) => placement.unitId);
+          return new Set(ids).size !== ids.length;
+        }),
+        'corpus has no sequence that places a unit at two years',
+      );
+      const placements = revisited.placements.map((placement) => placement.unitId);
+      const twice = required(
+        placements.find((id, index) => placements.indexOf(id) !== index),
+        'sequence has no repeated unit',
+      );
+
+      const result = unwrapOk(
+        misconceptionsForThread(bareSlug(revisited.threadId), { unitLimit: MAX_THREAD_UNIT_LIMIT }),
+      );
+      const served = (result.threads[0]?.units ?? []).map((u) => u.unit.id);
+
+      expect(served.filter((id) => id === twice)).toHaveLength(1);
+      expect(result.threads[0]?.totalUnits).toBe(new Set(placements).size);
+      expect(served.indexOf(twice)).toBe(placements.indexOf(twice));
+    });
+
     it('serves a thread window in an order the alphabet could not produce', () => {
       // Falsification, independent of how the view builds its order: find a
       // thread whose curriculum order provably differs from id order, and prove

@@ -37,6 +37,43 @@ const LESSON_ENVELOPE = z.object({
 });
 
 /** A lesson slug carrying a misconception, chosen deterministically (lexicographic minimum edge source). */
+const UNIT_ENVELOPE = z.object({
+  anchorKind: z.literal('unit'),
+  units: z.array(
+    z.object({
+      unit: z.object({ id: z.string() }),
+      lessons: z.array(z.object({ lesson: z.object({ id: z.string() }) })),
+    }),
+  ),
+});
+const THREAD_ENVELOPE = z.object({
+  anchorKind: z.literal('thread'),
+  threads: z.array(
+    z.object({
+      totalUnits: z.number(),
+      hasMore: z.boolean(),
+      units: z.array(z.object({ unit: z.object({ id: z.string() }) })),
+    }),
+  ),
+});
+const idSorted = (ids: readonly string[]): string[] => [...ids].sort((a, b) => a.localeCompare(b));
+// Fixtures chosen for the property under test: a unit whose authored lesson
+// order, and a thread whose curriculum unit order, provably differ from id
+// order — so an id-sorted result anywhere between the view and the wire fails.
+const reorderedRun = graphCorpus.unitLessonRuns.find(
+  (run) => run.lessonIds.length > 2 && run.lessonIds.join() !== idSorted(run.lessonIds).join(),
+);
+if (reorderedRun === undefined) {
+  throw new Error('corpus has no unit whose authored lesson order differs from id order');
+}
+const reorderedSequence = graphCorpus.sequences.find((sequence) => {
+  const ids = sequence.placements.map((placement) => placement.unitId);
+  return ids.length > 2 && ids.join() !== idSorted(ids).join();
+});
+if (reorderedSequence === undefined) {
+  throw new Error('corpus has no thread whose curriculum order differs from id order');
+}
+const bare = (id: string): string => id.slice(id.indexOf(':') + 1);
 const firstLessonId = graphCorpus.edges
   .filter((edge) => edge.type === 'addressesMisconception')
   .map((edge) => edge.source)
@@ -85,6 +122,38 @@ describe('get-misconception-graph anchored tools/call', () => {
     expect(structured.unknownAnchors).toStrictEqual([]);
     expect(structured.lessons).toHaveLength(1);
     expect(structured.lessons[0]?.misconceptions.length).toBeGreaterThan(0);
+  });
+
+  it('serves a unit’s lessons in authored order over the real transport', async () => {
+    const response = await callMisconceptionGraph({ unitSlugs: [bare(reorderedRun.unitId)] });
+    expect(response.status).toBe(200);
+    const structured = UNIT_ENVELOPE.parse(
+      getStructuredContentData(parseJsonRpcResult(parseSseEnvelope(response.text))),
+    );
+    const served = structured.units[0]?.lessons.map((entry) => entry.lesson.id) ?? [];
+
+    expect(served).toStrictEqual([...reorderedRun.lessonIds]);
+    expect(served).not.toStrictEqual(idSorted(served));
+  });
+
+  it('pages a thread’s units in curriculum order over the real transport', async () => {
+    const expected = reorderedSequence.placements.map((placement) => placement.unitId);
+    const response = await callMisconceptionGraph({
+      threadSlug: bare(reorderedSequence.threadId),
+      unitLimit: 25,
+    });
+    expect(response.status).toBe(200);
+    const structured = THREAD_ENVELOPE.parse(
+      getStructuredContentData(parseJsonRpcResult(parseSseEnvelope(response.text))),
+    );
+    const served = structured.threads[0]?.units.map((entry) => entry.unit.id) ?? [];
+    // The window is the first page; this sequence is one subject's run, and a
+    // multi-subject thread's window opens with its first subject — so the
+    // served prefix must equal this run's prefix, in order.
+    const prefix = expected.slice(0, served.length);
+
+    expect(served.slice(0, prefix.length)).toStrictEqual(prefix);
+    expect(served).not.toStrictEqual(idSorted(served));
   });
 
   it('rejects an anchorless call at the input boundary', async () => {

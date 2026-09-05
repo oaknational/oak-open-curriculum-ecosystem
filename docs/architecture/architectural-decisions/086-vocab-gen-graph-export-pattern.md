@@ -84,6 +84,16 @@
 >   sections, but that change is MCP-682: until it lands, that tool still
 >   windows and lists from the id-sorted edge set, and this amendment claims
 >   nothing about its served order.
+>   **Follow-on (2026-09-04, MCP-682 landed):** `get-misconception-graph` now
+>   windows a thread's units from `sequences` (deduplicated to first placement,
+>   so its `totalUnits` counts distinct units where the progression views
+>   count placements) and lists a unit's lessons from `unitLessonRuns`.
+>   Measured over HTTP on the same snapshot: 1,484 of 1,484 units with three
+>   or more lessons serve their authored run, 0 of 17 multi-subject threads
+>   interleave, and the served lesson order agrees with the live API for every
+>   comparable pair in a 96-unit, 16-subject sample (3,014 pairs). The
+>   residual 0.13% against the bulk's programme variants is the variant merge
+>   described under the sort key, not the consumer.
 > - **Counts recomputed at amendment time** from the regenerated
 >   `graph-corpus/data.json` (2026-09-03 bulk snapshot): 36,077 nodes
 >   (unit 1,835; thread 160; lesson 10,941; misconception 10,937;
