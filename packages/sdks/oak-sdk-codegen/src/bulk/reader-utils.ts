@@ -1,5 +1,5 @@
 /**
- * Pure utility functions for bulk download filename parsing.
+ * Pure utility functions for bulk download filename and sequence-slug parsing.
  *
  * @remarks
  * Separated from {@link reader} to avoid transitive dependency on generated
@@ -42,4 +42,16 @@ export function extractSubjectPhase(filename: string): SubjectPhase | undefined 
     return undefined;
   }
   return { subject, phase };
+}
+
+/**
+ * The subject a bulk sequence slug names: the slug with its phase suffix
+ * removed (`maths-primary` → `maths`). A slug carrying no phase suffix names
+ * its subject as-is.
+ *
+ * @param sequenceSlug - The bulk file's sequence slug (e.g., 'french-primary')
+ * @returns The subject slug
+ */
+export function sequenceSubject(sequenceSlug: string): string {
+  return sequenceSlug.replace(/-(primary|secondary)$/, '');
 }

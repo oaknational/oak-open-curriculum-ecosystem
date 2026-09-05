@@ -84,8 +84,8 @@ Two legitimate subgraph shapes exist, and both obey the completeness rule:
   within the depth bound, with all internal edges. The prior-knowledge view (anchor unit slugs,
   depth default 2, ceiling 3) and the EEF strand graph (`maxDepth = 1`) are this shape.
 - **Sparse** — an anchored projection whose members are selected by the anchor's scope rather
-  than mutual reachability: one thread's year-ordered unit sequence, a unit's lessons with their
-  misconceptions, the keywords of every lesson matching subject + key stage. Members may be
+  than mutual reachability: one thread's per-subject curriculum-ordered unit sequence, a unit's lessons with
+  their misconceptions, the keywords of every lesson matching subject + key stage. Members may be
   scattered across the wider graph; completeness still means every member matching the scope is
   present (or honestly windowed with totals) — sparse never means sampled.
 
@@ -118,8 +118,9 @@ resolution). The tool layer is a **thin formatter**: it validates input, calls t
 formats the result (`structuredContent` plus serialised `TextContent`).
 
 Per ADR-191, no layer of a graph tool judges relevance, ranks by opinion, or recommends.
-Deterministic ordering by recorded data — placement count descending with an id tie-break,
-teaching year — is projection, not reasoning: the same inputs always return the same facts, and
+Deterministic ordering by recorded data — placement count descending with an id tie-break, or a
+thread's units in the curriculum's own authored order — is projection, not reasoning: the same
+inputs always return the same facts, and
 the consuming agent does all relevance judgement over them. A graph tool that starts reasoning
 has left the category.
 

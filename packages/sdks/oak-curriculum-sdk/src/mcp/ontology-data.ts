@@ -169,7 +169,7 @@ export const ontologyData = {
     countSummary: `${String(threadProgressionStats.threadCount)} threads across ${String(threadProgressionStats.subjectsCovered.length)} subjects, connecting units into learning progressions`,
     characteristics: [
       'Programme-agnostic: A single thread spans multiple programmes, key stages, and years',
-      'Year-ordered: A thread’s units progress by teaching year (within one year the order is not curricular)',
+      'Curriculum-ordered: A thread’s units follow Oak’s authored curriculum order within each subject — years ascending, and within a year the subject sequence’s unit order; a thread spanning subjects runs separately per subject',
       'Cross-key-stage: Threads enable tracking progression from early years to GCSE',
       'Primary navigation: Threads are used as filters on the Oak website',
     ],

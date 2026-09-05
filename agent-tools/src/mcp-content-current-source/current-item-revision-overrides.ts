@@ -6,6 +6,7 @@ import { CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES } from './current-aggregated
 import { CURRENT_GENERATED_DESCRIPTION_REVISION_OVERRIDES } from './current-generated-description-anchor-overrides.js';
 import { CURRENT_GENERATED_ITEM_REVISION_OVERRIDES } from './current-generated-item-anchor-overrides.js';
 import { CURRENT_SPEC_REFRESH_ITEM_REVISION_OVERRIDES } from './current-spec-refresh-item-anchor-overrides.js';
+import { CURRENT_THREAD_PROGRESSIONS_ITEM_REVISION_OVERRIDES } from './current-thread-progressions-item-anchor-overrides.js';
 
 export const CURRENT_ITEM_REVISION_OVERRIDES = {
   ...CURRENT_GENERATED_ITEM_REVISION_OVERRIDES,
@@ -19,4 +20,5 @@ export const CURRENT_ITEM_REVISION_OVERRIDES = {
   // resource — their revision verdicts now derive from lineage.
   C690: 'unchanged',
   C479: 'modified',
+  ...CURRENT_THREAD_PROGRESSIONS_ITEM_REVISION_OVERRIDES,
 } as const;

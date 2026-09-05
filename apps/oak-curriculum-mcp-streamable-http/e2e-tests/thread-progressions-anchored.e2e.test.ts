@@ -35,7 +35,13 @@ const THREAD_ENVELOPE = z.object({
     z.object({
       thread: z.unknown(),
       totalUnits: z.number(),
-      entries: z.array(z.object({ unit: z.unknown(), year: z.number().optional() })),
+      progressions: z.array(
+        z.object({
+          subject: z.string(),
+          totalUnits: z.number(),
+          entries: z.array(z.object({ unit: z.unknown(), year: z.number().optional() })),
+        }),
+      ),
     }),
   ),
   resolvedAnchors: z.array(z.string()),
@@ -100,7 +106,7 @@ async function callThreadProgressions(args: unknown): Promise<Response> {
 }
 
 describe('get-thread-progressions anchored tools/call', () => {
-  it('returns one thread’s year-ordered progression: summary + JSON content and structuredContent', async () => {
+  it('returns one thread’s per-subject curriculum-ordered progression: summary + JSON content and structuredContent', async () => {
     const response = await callThreadProgressions({ threadSlug: knownThreadSlug });
 
     expect(response.status).toBe(200);
@@ -115,7 +121,40 @@ describe('get-thread-progressions anchored tools/call', () => {
     expect(structured.resolvedAnchors).toStrictEqual([`thread:${knownThreadSlug}`]);
     expect(structured.unknownAnchors).toStrictEqual([]);
     expect(structured.threads).toHaveLength(1);
-    expect(structured.threads[0]?.entries.length).toBeGreaterThan(0);
+    expect(structured.threads[0]?.progressions.length).toBeGreaterThan(0);
+    expect(structured.threads[0]?.progressions[0]?.entries.length).toBeGreaterThan(0);
+  });
+
+  it('serves a run in the curriculum order, not id order, over the real transport', async () => {
+    // Falsification through the wire: pick a sequence whose curriculum order
+    // provably differs from id order, and prove the served entries reproduce
+    // it. A stray sort anywhere between the view and the envelope would
+    // re-alphabetise this and fail here, invisibly to in-process tests.
+    const disagreeing = graphCorpus.sequences.find((sequence) => {
+      const ids = sequence.placements.map((placement) => placement.unitId);
+      const idSorted = [...ids].sort((a, b) => a.localeCompare(b));
+      return ids.length > 2 && ids.join() !== idSorted.join();
+    });
+    if (disagreeing === undefined) {
+      throw new Error('corpus has no sequence whose curriculum order differs from id order');
+    }
+    const slug = disagreeing.threadId.slice(disagreeing.threadId.indexOf(':') + 1);
+
+    const response = await callThreadProgressions({ threadSlug: slug });
+    expect(response.status).toBe(200);
+    const structured = THREAD_ENVELOPE.parse(
+      getStructuredContentData(parseJsonRpcResult(parseSseEnvelope(response.text))),
+    );
+    const run = structured.threads[0]?.progressions.find(
+      (progression) => progression.subject === disagreeing.subject,
+    );
+    const served = (run?.entries ?? []).map(
+      (entry) => z.object({ id: z.string() }).parse(entry.unit).id,
+    );
+    const expected = disagreeing.placements.map((placement) => placement.unitId);
+
+    expect(served).toStrictEqual(expected);
+    expect(served).not.toStrictEqual([...served].sort((a, b) => a.localeCompare(b)));
   });
 
   it('returns bounded discovery descriptors for a subject+keyStage anchor', async () => {

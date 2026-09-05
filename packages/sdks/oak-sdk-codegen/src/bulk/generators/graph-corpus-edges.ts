@@ -1,12 +1,12 @@
 /**
- * Graph-corpus edge builders (G1a + G2; prerequisiteFor re-derived on the
- * year axis at the G3 follow-on).
+ * Graph-corpus edge builders (G1a + G2).
  *
  * @remarks
- * Builds the typed edge sets: `prerequisiteFor` from consecutive
- * year-ordered thread pairs (with dropped-edge provenance for unresolvable
- * endpoints), `containsUnit` (thread→unit), and `containsLesson`
- * (unit→lesson placement). All three deduplicate per (source, target) pair.
+ * Builds the typed edge sets: `prerequisiteFor` from consecutive unit pairs
+ * along each thread's per-subject curriculum-ordered run (with dropped-edge
+ * provenance for unresolvable endpoints), `containsUnit` (thread→unit), and
+ * `containsLesson` (unit→lesson placement). All three deduplicate per
+ * (source, target) pair.
  * `prerequisiteFor` deduplicated at emission since 2026-06-11: identical
  * `{source, type, target}` triples recurring when threads share adjacency
  * carry no decodable signal in the emitted shape (multiplicity-as-signal
@@ -17,7 +17,7 @@
 import type { ExtractedLesson } from '../extractors/index.js';
 import type { ExtractedThread, ThreadUnit } from '../extractors/thread-extractor.js';
 
-import { comparePlacements } from './graph-corpus-sequences.js';
+import { subjectRuns } from './graph-corpus-sequences.js';
 import {
   lessonNodeId,
   threadNodeId,
@@ -63,35 +63,44 @@ export function buildLessonAnchoredEdges(
 }
 
 /**
- * Consecutive (from, to) unit pairs along each thread's year ordering.
+ * Consecutive (from, to) unit pairs along each thread's per-subject
+ * curriculum-ordered run.
  *
  * @remarks
- * Units sort by the {@link comparePlacements} total order — `(year, unitId)`,
- * year-less last — shared with the sequence builder, so chains and sequences
- * carry ONE ordering basis and the derived chain never depends on placement
- * encounter order. The bulk's `unit.threads[].order` is the THREAD's display
- * index (constant per thread) and carries no within-thread ordering; the
- * teaching year is the progression axis. Same-year units still chain (count
- * preservation) in unitId order — a stated-arbitrary tie-break, not a
- * pedagogical claim; within one year the order is not curricular.
+ * Runs come from {@link subjectRuns}, so the chain shares the sequence
+ * builder's GROUPING (per subject) and ORDERING (curriculum position)
+ * exactly, and never depends on placement encounter order. A thread spanning
+ * subjects chains within each subject only; no pair crosses a subject
+ * boundary, because Oak authors no order across subjects.
+ *
+ * What is NOT shared is DEDUPLICATION. `buildSequences` collapses exact
+ * `(unitId, year)` duplicates — the KS4 tier and exam-board variants of one
+ * unit — before emitting placements; this builder walks the raw run. So a
+ * thread carrying such a duplicate yields adjacent pairs, including a
+ * unit paired with itself, that have no counterpart in the emitted sequence.
+ * That is the standing source of the corpus's `selfLoops` count and predates
+ * the curriculum-order change. It is not cured here because these edges are
+ * being retired (MCP-671); sharing the deduplicated placement list is the
+ * fix if they ever stay.
  */
 function threadOrderingPairs(
   threads: readonly ExtractedThread[],
 ): readonly (readonly [ThreadUnit, ThreadUnit])[] {
+  return threads.flatMap((thread) =>
+    subjectRuns(thread).flatMap((run) => consecutivePairs(run.units)),
+  );
+}
+
+/** The (from, to) pairs of neighbouring units along one ordered run. */
+function consecutivePairs(
+  units: readonly ThreadUnit[],
+): readonly (readonly [ThreadUnit, ThreadUnit])[] {
   const pairs: (readonly [ThreadUnit, ThreadUnit])[] = [];
-  for (const thread of threads) {
-    const ordered = [...thread.units].sort((a, b) =>
-      comparePlacements(
-        { unitId: unitNodeId(a.unitSlug), year: a.year },
-        { unitId: unitNodeId(b.unitSlug), year: b.year },
-      ),
-    );
-    for (let i = 0; i < ordered.length - 1; i += 1) {
-      const from = ordered[i];
-      const to = ordered[i + 1];
-      if (from && to) {
-        pairs.push([from, to]);
-      }
+  for (let i = 0; i < units.length - 1; i += 1) {
+    const from = units[i];
+    const to = units[i + 1];
+    if (from && to) {
+      pairs.push([from, to]);
     }
   }
   return pairs;

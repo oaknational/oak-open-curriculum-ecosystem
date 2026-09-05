@@ -4,23 +4,23 @@
  *
  * The tool is a thin parse-and-dispatch over the thread-progressions view in
  * `@oaknational/graph-corpus-sdk/curriculum` — the view owns the retrieval
- * semantics (year-ordered sequences, discovery descriptors, anchor
- * resolution); this module owns only the MCP boundary: input validation
- * (exactly one anchor mode per call — `threadSlug` detail, or
+ * semantics (per-subject curriculum-ordered runs, discovery descriptors,
+ * anchor resolution); this module owns only the MCP boundary: input
+ * validation (exactly one anchor mode per call — `threadSlug` detail, or
  * `subject`+`keyStage` discovery) and the response envelope. There is no
  * whole-corpus path: every call is anchored, and the detail anchor returns
  * ONE thread's progression, never the whole thread estate.
  *
- * Ordering honesty (the G3 grounded falsification): the bulk exports no
- * authoritative within-thread unit ordering, so progressions order by the
- * placement's teaching YEAR — the axis threads advertise (firstYear →
- * lastYear); within one year the order is not curricular. The tool
- * description states this; unknown anchors are reported as information in
- * the result envelope, never errored (ADR-194: the data surface is
- * deterministic; the agent is the only reasoner).
+ * Ordering: a thread is a tag on units and the order is the curriculum's —
+ * each run is Oak's authored unit sequence for one subject, years ascending
+ * (the bulk sequence order within each year); a thread spanning subjects
+ * returns parallel per-subject runs, never an interleaved chain. Unknown
+ * anchors are reported as information in the result envelope, never errored
+ * (ADR-194: the data surface is deterministic; the agent is the only
+ * reasoner).
  *
  * @see `@oaknational/graph-corpus-sdk/curriculum` — the thread-progressions
- *   view (the ordering-basis evidence lives in its TSDoc).
+ *   view (the ordering basis is documented in the corpus sequence builder).
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`)
  *   for the corpus extraction methodology.
  */
@@ -52,7 +52,7 @@ const THREAD_PROGRESSIONS_INPUT = z.object({
     .min(1)
     .optional()
     .describe(
-      'Detail anchor: one thread slug (corpus key). Returns that thread’s full year-ordered unit progression. Exactly one anchor mode per call.',
+      'Detail anchor: one thread slug (corpus key). Returns that thread’s full unit progression, one curriculum-ordered run per subject. Exactly one anchor mode per call.',
     )
     .meta({ examples: ['number-fractions'] }),
   subject: z
@@ -112,11 +112,11 @@ export const GET_THREAD_PROGRESSIONS_TOOL_DEF = {
   title: THREAD_PROGRESSIONS_TOOL_TITLE,
   description: `Returns how an Oak curriculum thread progresses across year groups, for the anchor you name.
 
-Threads connect units into conceptual progressions across years (${String(threadProgressionStats.threadCount)} threads across ${String(threadProgressionStats.subjectsCovered.length)} subjects). Every call is anchored — exactly ONE of:
-- threadSlug: the detail anchor; returns that ONE thread's full unit progression ordered by teaching year (earliest → latest; "All years" units last) — never the whole thread estate.
-- subject + keyStage (both together): the discovery anchor; returns bounded thread descriptors (slug, title, year span, unit count — no sequences) so you can pick a threadSlug to anchor next.
+Threads connect units into conceptual progressions across years (${String(threadProgressionStats.threadCount)} threads across ${String(threadProgressionStats.subjectsCovered.length)} subjects). A thread is a tag on units; the order is the curriculum's. Every call is anchored — exactly ONE of:
+- threadSlug: the detail anchor; returns that ONE thread's full unit progression as one run per subject the thread spans — never the whole thread estate.
+- subject + keyStage (both together): the discovery anchor; returns bounded thread descriptors (slug, title, year span, unit count, subjects — no sequences) so you can pick a threadSlug to anchor next.
 
-Ordering semantics, stated honestly: the progression axis is the teaching year. Within one year the order is not curricular (the curriculum data defines no within-year unit sequence); treat same-year units as a group, not a chain.
+Ordering semantics: each run is Oak's curriculum order for that subject — years ascending (earliest → latest), and within a year the authored unit order of the subject's sequence; "All years" units follow the year-placed ones. A thread spanning subjects (the modern-language grammar and skill threads run through French, German and Spanish) returns parallel per-subject runs; Oak authors no order across subjects, so runs are never interleaved.
 
 Slugs are corpus keys — resolve them first with search (scope "threads"), fetch, or browse-curriculum. An unknown threadSlug is reported in the result's unknownAnchors, not errored; an unmatched subject+keyStage returns a well-formed empty result.
 
@@ -125,7 +125,7 @@ Use this to answer questions like:
 - "How does this thread build from early years to GCSE?" (threadSlug)
 - "Which threads cover algebra at KS3?" (subject + keyStage)
 
-Complements get-prior-knowledge-graph (unit-level prerequisite subgraphs) and get-misconception-graph (per-lesson misconceptions along a thread).`,
+Complements get-prior-knowledge-graph (unit-level prior-knowledge subgraphs) and get-misconception-graph (per-lesson misconceptions along a thread).`,
 
   securitySchemes: [{ type: 'oauth2' as const, scopes: SCOPES_SUPPORTED }],
 
@@ -161,7 +161,9 @@ function summariseProgression(subgraph: ThreadProgressionSubgraph): string {
     progression.thread.firstYear !== undefined && progression.thread.lastYear !== undefined
       ? ` spanning Year ${String(progression.thread.firstYear)}–${String(progression.thread.lastYear)}`
       : '';
-  return `Thread "${progression.thread.title}": ${String(progression.totalUnits)} unit placements${span}, ordered by teaching year.`;
+  const subjects = progression.progressions.map((run) => run.subject).join(', ');
+  const runs = progression.progressions.length;
+  return `Thread "${progression.thread.title}": ${String(progression.totalUnits)} unit placements${span} in ${String(runs)} subject run${runs === 1 ? '' : 's'} (${subjects}), each in curriculum order.`;
 }
 
 /** Summarises a discovery result for the envelope TextContent. */

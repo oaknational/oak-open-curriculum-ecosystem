@@ -24,7 +24,7 @@ When you have a draft unit/lesson and want to compare it to Oak's equivalent.
 When sequencing a topic across lessons or years.
 
 1. `search({ query: "<concept>", scope: "threads", subject })` to find the relevant thread(s).
-2. `get-thread-progressions` anchored by that thread's slug (`threadSlug` — a corpus key, not free text); units are ordered by teaching year, and same-year units are explicitly unordered. This is how Oak builds the concept over time.
+2. `get-thread-progressions` anchored by that thread's slug (`threadSlug` — a corpus key, not free text); units come as one run per subject in Oak's curriculum order (years ascending, the subject sequence's unit order within a year). This is how Oak builds the concept over time.
 3. `get-prior-knowledge-graph` anchored by the units' slugs (`unitSlugs`) to see unit prerequisites; confirm every prerequisite is taught _before_ the unit that needs it.
 4. **Check your draft:** does it assume knowledge Oak introduces later? Does it skip a step Oak treats as foundational? Adjust the sequence, or note the deviation and your rationale.
 

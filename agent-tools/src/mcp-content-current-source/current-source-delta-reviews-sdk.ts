@@ -22,8 +22,10 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   // MCP-365: the generated instructions gained the owner-signed
   // brand-provenance closing paragraph (attribution + non-endorsement per
   // LICENCE-DATA.md); C055 re-anchored on its unchanged routing paragraph.
+  // Thread sequences in curriculum order (2026-09-03): the sequenced-curriculum
+  // paragraph (C054) now names curriculum-ordered thread progressions.
   'packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts': reviewed(
-    '2d86bf6b1cf6241114656a1a2909fbb47ecd0b6f34d5ccd8b9f44c0215301606',
+    'f018e56596b41b518bdbf8a5209bcf208fcbfee15b35dd543cca9676cce70427',
     ['C049', 'C050', 'C051', 'C052', 'C053', 'C054', 'C055'],
   ),
   // MCP-438: the description's embedded presentation directive (the fonts
@@ -86,8 +88,11 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     '592fe681cd227863d083916ad74e380dcfd0e18605d694965232f89f3e078cef',
     ['C065', 'C066', 'C067', 'C068'],
   ),
+  // Thread sequences in curriculum order (2026-09-03): the description
+  // (C253), the detail-anchor field (C254), and the summary (C258) state
+  // per-subject runs in Oak's curriculum order.
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts': reviewed(
-    '70107401c79893d6f9cbd11d51241376510c7366c8bf67f8c2bf8eb1a02bb52d',
+    '7458c00d465c69f7fa38e9273ef974fa42238d4af72e5c442fa765d60135badc',
     ['C252', 'C253', 'C254', 'C255', 'C256', 'C257', 'C258', 'C259', 'C260'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-user-search/tool-definition.ts': reviewed(

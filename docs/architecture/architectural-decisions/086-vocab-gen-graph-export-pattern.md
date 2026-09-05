@@ -1,10 +1,98 @@
 # ADR-086: Vocabulary Mining and Graph Export Pattern
 
-**Status**: Accepted (amended 2026-06-11)  
-**Date**: 2025-12-25 (amended 2026-06-11)  
+**Status**: Accepted (amended 2026-09-03)  
+**Date**: 2025-12-25 (amended 2026-09-03)  
 **Authors**: AI Agent  
 **Deciders**: Engineering Team
 
+> **Amendment (2026-09-03 — the corpus carries curriculum order).**
+>
+> The corpus `edges` array is sorted by (type, source, target) for a
+> deterministic artefact, so it is a SET: it records THAT a relation holds,
+> never in what order. Two views had nonetheless read order off it, and so
+> served the alphabet as though it were curriculum. Both are corrected here,
+> and everything Oak authors as a sequence now lives in an ordered section
+> beside the edges.
+>
+> - **A thread is a tag; the order is the curriculum's.** The G3 sequences
+>   had sorted a thread's placements by `(year, unitId)`, so within a year the
+>   served order was alphabetical by slug (90% of placements sat in a
+>   same-year group), on the premise that the bulk carried no within-thread
+>   unit order. The premise was too narrow: the bulk `sequence` array
+>   ("Ordered list of units for the subject sequence") interleaves years but
+>   holds Oak's authored unit order WITHIN each year — verified against the
+>   live API's `unitOrder` for 160 of 166 programme-years on 2026-09-03. The
+>   six exceptions are KS4 years where several programmes (tiers, exam
+>   subjects) share one array so the bulk order is a merge of their authored
+>   orders, plus one primary-PE "All years" pair.
+>   `unit.threads[].order` is the thread's display index (constant per
+>   thread, verified across all 160 threads) and orders nothing.
+> - **Sequences are now per (thread, subject).** Each sequence is one
+>   thread's units within ONE subject in that subject's curriculum order —
+>   years ascending across the primary and secondary phases, the bulk array's
+>   order within a year, "All years" units after the year-placed ones. A
+>   thread spanning subjects (21 of 160; 17 are the modern-language grammar
+>   and skill threads shared by French, German and Spanish) emits one
+>   sequence per subject, never an interleaved chain: Oak authors no order
+>   across subjects. `GraphCorpusSequence` gains `subject`; corpus version
+>   1.4.0 → 1.5.0. The thread-progressions view and `get-thread-progressions`
+>   serve the same shape (`progressions[]`, one run per subject).
+> - **Unit→lesson order joins the corpus (`unitLessonRuns`).** A unit's
+>   lessons are a taught sequence, but only `sequence[].unitLessons[]` in the
+>   bulk carries `lessonOrder` — the flat `lessons` array that builds the
+>   `containsLesson` edges has no order field at all. The new
+>   `GraphCorpusUnitLessonRun` section joins the two: membership comes from
+>   the edge set (so a run can never disagree with it), order from the
+>   variant listings. Membership had to come from the edges — of the two
+>   sources, 79 (unit, lesson) placements appear only in the lesson records,
+>   and 40 appear only in `unitLessons`, the latter naming lessons with no
+>   lesson node, which would dangle.
+> - **The lesson sort key is (min authored position, lesson id).** A unit node
+>   merges its programme variants, and a variant may place one lesson at a
+>   different position than another (172 of 13,964 pairs, median spread 1).
+>   No single scalar satisfies every variant, so the minimum is taken as a
+>   BIAS rather than a guarantee: it biases a contested lesson towards its
+>   earliest authored position, because seeing a foundation early is the safe
+>   failure where seeing it late is the harmful one. It does not promise a
+>   lesson never sorts later than some programme places it — conflicting
+>   minima and the id tie-break both leave residual inversions, quantified
+>   next. Measured against every programme variant, the served order
+>   inverts 75 of 56,238 comparable within-programme lesson pairs (0.13%),
+>   against 25,945 (46.13%) for the id-sorted order it replaces. The residual
+>   is structural — lessons genuinely holding different positions in
+>   different programmes. `max`, `mean` and `first-seen` were measured too
+>   and land within 0.06 percentage points of `min`; `min` was chosen on
+>   explicability (an authored integer, not an invented average) and
+>   `first-seen` rejected as dependent on file enumeration order. One caveat
+>   on that rejection: `extractUnitLessons` already backfills a missing
+>   `lessonOrder` with the bulk array index, so a lesson lacking an authored
+>   position would receive a file-order one before the sort key ever sees it.
+>   That path is inert on this snapshot (0 of 16,741 rows lack an order) and
+>   is left as-is rather than changed under an ordering ticket; the new
+>   `stats.unitsWithoutAuthoredLessonOrder` counter (0 here) makes the related
+>   whole-unit case visible rather than silent.
+> - **The alternative shape considered and rejected** was a discriminated
+>   `GraphCorpusEdge` union carrying `order` on the `containsLesson` variant
+>   alone. It satisfies the closed-shape rule equally, but forces every
+>   existing consumer of the currently homogeneous edge array to narrow by
+>   edge type for a field only one variant has. The additive section avoids
+>   that blast radius, at the cost of serialising each unit→lesson pair twice
+>   in `data.json` (once as an edge, once in a run) — 11,172 duplicated
+>   placements, the same trade the `sequences` section already makes.
+> - **The consumers land separately.** `get-thread-progressions` reads the
+>   corrected `sequences` here. `get-misconception-graph` reads BOTH ordered
+>   sections, but that change is MCP-682: until it lands, that tool still
+>   windows and lists from the id-sorted edge set, and this amendment claims
+>   nothing about its served order.
+> - **Counts recomputed at amendment time** from the regenerated
+>   `graph-corpus/data.json` (2026-09-03 bulk snapshot): 36,077 nodes
+>   (unit 1,835; thread 160; lesson 10,941; misconception 10,937;
+>   keyword 12,204), 67,346 edges (prerequisiteFor 2,881; containsUnit
+>   3,975; containsLesson 11,172; addressesMisconception 10,937;
+>   containsKeyword 38,381), 199 sequences over 160 threads, and 1,722
+>   unit-lesson runs placing 11,172 lessons (exactly the containsLesson edge
+>   count). Corpus version 1.4.0 → 1.5.0 covers both ordered sections.
+>
 > **Amendment (2026-06-11 — graph-tools-value-redesign, deliverable G4b).**
 >
 > - **Keywords join the one-graph corpus.** The keyword extraction that fed the

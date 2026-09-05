@@ -5,6 +5,71 @@ upstream Oak API + bulk export, and establish a repeatable, observable alignment
 Trigger instance (2026-06-30/07-01): upstream added a `programmes` resource family (5 GET
 endpoints + 5 schemas).
 
+## THREAD SEQUENCES IN CURRICULUM ORDER — lane open, gates green, awaiting the owner's word to push (Bora binds Feather 4a2292, 2026-09-03)
+
+Owner-found defect, owner-directed cure. Branch
+`fix/thread-progressions-curriculum-order` in worktree `thread-sequence-order`,
+cut from `origin/main` `83611f5db`. Claim `8f0ef420` (this thread); lane-open
+comms event `c0b23c22`. **No push, no PR, no ticket yet — the owner gates those.**
+
+**The defect.** The graph corpus sorted each thread's placements by
+`(year, unitId)`, so within a year the served progression was alphabetical by
+slug: 3,588 of 3,973 placements (90.3%) sat in a multi-unit same-year group, and
+the served `get-thread-progressions` description told agents "within one year the
+order is not curricular". The generator's narrow claim was true —
+`unit.threads[].order` is the thread's display index, constant per thread
+(re-verified across all 160 threads) — but its conclusion was a category error.
+A thread is a TAG; a tag needs no order of its own when the thing it tags is
+already ordered. Owner's framing: "threads are a categorising mechanism and
+within threads the same unit order as the whole set is still coherent."
+
+**What the bulk actually carries** (first-hand, 2026-09-03, fresh 32-file
+download): the `sequence` array does NOT group years — years interleave
+(maths-primary opens 5, 6, 4, 2, 1, 3) and it is not sorted by within-programme
+rank either (26 of 32 files fail that). What holds is narrower and sufficient:
+WITHIN a year the array order IS Oak's authored `unitOrder`, verified against the
+live REST API for 160 of 166 programme-years. The six misses are KS4 years where
+several programmes (tiers, exam subjects) share one array, plus one PE all-years
+pair. So the ordering key is `(year, sequenceSlug, sequenceIndex)`, year-less
+last — not the pure "filter the ordered array" model the lane started from.
+
+**The shape now served.** One sequence per `(thread, subject)`, each in that
+subject's curriculum order. `GraphCorpusSequence` gains `subject`; corpus version
+1.4.0 → 1.5.0; 199 sequences over 160 threads. A thread spanning subjects (21 of
+160; 17 are the MFL grammar/skill threads shared by French, German and Spanish)
+returns parallel per-subject runs, never an interleaved chain — Oak authors no
+order across subjects. `ThreadProgression` gains `progressions[]` (one
+`SubjectProgression` per subject) in place of the flat `entries[]`.
+
+**Retracted wording** at every site that claimed within-year units are unordered
+or that the axis is the teaching year alone: the sequence/type/edge generator
+docs, the projection and view, the served tool description and its field
+descriptions, the tool-guidance data and workflows, the ontology thread
+characteristics, the server instructions, two guidance resources, the served tool
+table, both app and repo READMEs, the UAT guide, the working-with-graphs skill,
+two curriculum plugin references, and ADR-086 (amended, with recomputed counts),
+ADR-123 and ADR-196 (amendment notes).
+
+**Verification.** All affected package suites green (sdk-codegen 207,
+graph-corpus-sdk 102, curriculum-sdk 768, the app's thread e2e 4). Content audit
+refreshed and validating (728 items). Live tool exercised across seven anchor
+shapes — single-subject primary→secondary, a 3-language MFL thread, art +
+design-technology, a 3-subject sustainability thread, the RE/Spanish slug
+collision, discovery, and an unknown anchor — plus a PE thread carrying
+"All years" units, which now sort after the year-placed ones.
+
+**Open at handoff.** (a) PR SIZE: 60 files (≈49 authored) — far past the ~5/10/20
+band; the core is genuinely indivisible (the corpus shape forces the SDK, the
+tool, and every doc that describes it, and a split would leave misleading docs
+between landings), but the owner rules whether it lands as one PR. (b) Two
+apparent upstream slug collisions the new shape makes visible rather than hides:
+one Spanish unit tagged `meaning-and-purpose` (otherwise RE) and one English unit
+tagged `nouns-and-determiners` (otherwise MFL) — bug-report candidates, not cured
+here. (c) `/threads/{slug}/units` advertises a `unitOrder` its payload omits, and
+returns a non-curricular order — an upstream defect worth its own report.
+(d) `prerequisiteFor` inherits the new run order but is retiring on MCP-671;
+untouched here beyond that.
+
 ## MCP-590 IN FLIGHT — slice 1 shipped as PR #871; slices 2/3 mapped (Wren calls Downdraft 6b29b5, 2026-08-12 ~18:5xZ)
 
 > **SUPERSEDED / SEAT CLOSED (2026-08-13):** the owner carded this lane to the

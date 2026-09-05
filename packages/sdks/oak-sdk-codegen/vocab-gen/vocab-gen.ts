@@ -113,12 +113,14 @@ async function generateOutputFiles(
 
   // Generate the graph corpus (one-graph foundation + G2 chain + G3 sequences
   // + G4b keywords: unit/thread/lesson/misconception/keyword nodes,
-  // prerequisiteFor + chain edges, year-ordered thread→unit placement
-  // sequences)
+  // prerequisiteFor + chain edges, and the two ordered sections: per-subject
+  // curriculum-ordered thread→unit sequences, and authored-order unit→lesson
+  // runs)
   const graphCorpus = generateGraphCorpusData({
     priorKnowledge: result.extractedData.priorKnowledge,
     threads: result.extractedData.threads,
     lessons: result.extractedData.lessons,
+    unitLessons: result.extractedData.unitLessons,
     misconceptions: result.extractedData.misconceptions,
     keywords: result.extractedData.keywords,
     sourceVersion,
