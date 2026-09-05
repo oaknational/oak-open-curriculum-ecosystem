@@ -45,6 +45,13 @@ export interface ThreadProgressionEntry {
 /** One thread's units within one subject, in that subject's curriculum order. */
 export interface SubjectProgression {
   readonly subject: string;
+  /**
+   * Placements in this run, not distinct units: a unit the curriculum revisits
+   * at two years appears twice here and counts twice. `get-misconception-graph`
+   * windows the same thread by DISTINCT units, so its `totalUnits` can be
+   * smaller for the same thread (2 units estate-wide, both on
+   * politics-parliament-and-government, years 10 and 11).
+   */
   readonly totalUnits: number;
   readonly entries: readonly ThreadProgressionEntry[];
 }
@@ -52,6 +59,7 @@ export interface SubjectProgression {
 /** One thread's full progression: one curriculum-ordered run per subject it spans. */
 export interface ThreadProgression {
   readonly thread: GraphCorpusThreadNode;
+  /** Sum of the per-subject run lengths — placements, not distinct units (see `SubjectProgression.totalUnits`). */
   readonly totalUnits: number;
   readonly progressions: readonly SubjectProgression[];
 }
@@ -66,6 +74,7 @@ export interface ThreadProgressionSubgraph {
 /** A discovery descriptor: the thread without its sequences (anchor by `thread.threadSlug` next). */
 export interface ThreadDescriptor {
   readonly thread: GraphCorpusThreadNode;
+  /** Placements across the thread's sequences, not distinct units (see `SubjectProgression.totalUnits`). */
   readonly totalUnits: number;
   /** The subjects the thread runs through, sorted. */
   readonly subjects: readonly string[];

@@ -56,6 +56,50 @@ describe('committed graph corpus (G2 + G4b real-corpus count guards)', () => {
     });
   });
 
+  // MCP-681/682 — the ordered sections, pinned on the real artefact. These
+  // are the guards the second-round test audit found missing: the synthetic
+  // fixtures prove the rules, but nothing had pinned their outcome on the
+  // committed corpus.
+  it('emits corpus version 1.5.0 (the ordered-sections shape)', () => {
+    expect(graphCorpus.version).toBe('1.5.0');
+  });
+
+  it('emits one unit-lesson run per unit that places lessons (pinned snapshot)', () => {
+    expect(graphCorpus.unitLessonRuns).toHaveLength(1722);
+  });
+
+  it('places in runs exactly the lessons the containsLesson edges place — membership is the edge set', () => {
+    const placed = graphCorpus.unitLessonRuns.reduce((sum, run) => sum + run.lessonIds.length, 0);
+    expect(placed).toBe(graphCorpus.stats.edgeTypeCounts.containsLesson);
+    const byUnit = new Map<string, Set<string>>();
+    for (const edge of graphCorpus.edges) {
+      if (edge.type !== 'containsLesson') {
+        continue;
+      }
+      const set = byUnit.get(edge.source) ?? new Set<string>();
+      set.add(edge.target);
+      byUnit.set(edge.source, set);
+    }
+    for (const run of graphCorpus.unitLessonRuns) {
+      expect(new Set(run.lessonIds)).toEqual(byUnit.get(run.unitId));
+    }
+  });
+
+  it('keeps every sequence placement inside its own subject, corpus-wide', () => {
+    const subjectOf = new Map(
+      graphCorpus.nodes.filter((n) => n.kind === 'unit').map((n) => [n.id, n.subject]),
+    );
+    for (const sequence of graphCorpus.sequences) {
+      for (const placement of sequence.placements) {
+        expect(subjectOf.get(placement.unitId)).toBe(sequence.subject);
+      }
+    }
+  });
+
+  it('reports zero units whose run fell back to id order on the pinned snapshot', () => {
+    expect(graphCorpus.stats.unitsWithoutAuthoredLessonOrder).toBe(0);
+  });
+
   it('emits one containsKeyword edge per unique lesson placement (G4b pinned snapshot)', () => {
     expect(graphCorpus.stats.edgeTypeCounts.containsKeyword).toBe(38381);
   });
