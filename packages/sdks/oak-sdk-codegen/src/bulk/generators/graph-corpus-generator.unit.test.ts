@@ -653,6 +653,7 @@ describe('generateGraphCorpusData', () => {
       expect(result).toHaveProperty('nodes');
       expect(result).toHaveProperty('edges');
       expect(result).toHaveProperty('sequences');
+      expect(result).toHaveProperty('unitLessonRuns');
       expect(result).toHaveProperty('droppedEdges');
       expect(result).toHaveProperty('droppedDuplicates');
       expect(result).toHaveProperty('seeAlso');

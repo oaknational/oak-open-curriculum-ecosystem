@@ -636,38 +636,502 @@ is the Avocet heading.
   approval (Jim or Matt) needed to merge; post-deploy check is MCP-669's
   acceptance line (one paginated call via a real Claude client).
 
-## 2026-09-03 ~11:xxZ (Bora binds Feather, 4a2292, implementer) — thread progressions served alphabetically within a year; the tag model, and the bulk array that interleaves years
+## 2026-09-03T10:3xZ (Chinook seeks Cloud, 661556, lead at n=2) — MCP-673 implementing session, first capture
 
-- DEFECT (owner-found, verified first-hand): the graph corpus sorted a
-  thread's placements by `(year, unitId)`, so 3,588 of 3,973 placements
-  (90.3%) sat in a same-year group ordered alphabetically by slug, and the
-  served `get-thread-progressions` description told agents "within one year
-  the order is not curricular". The generator's narrow claim was true
-  (`unit.threads[].order` is a thread display index, constant per thread —
-  re-verified across all 160 threads today); its conclusion was a category
-  error: a thread is a TAG, and a tag needs no order of its own when the
-  thing it tags is already ordered. The order was in hand the whole time —
-  the extractor's sort on the display index was a no-op, so units reached
-  the sequence builder in bulk array order — and one comparator threw it
-  away. Owner's framing, verbatim substance: "threads are a categorising
-  mechanism and within threads the same unit order as the whole set is
-  still coherent."
-- SURPRISE that reshaped the fix: the bulk `sequence` array is NOT
-  year-grouped — years interleave (maths-primary opens 5, 6, 4, 2, 1, 3) and
-  it is not sorted by within-programme rank either (26 of 32 files fail
-  that). What holds is narrower and sufficient: WITHIN a year the array is
-  Oak's `unitOrder` (160 of 166 programme-years match the live API; the six
-  misses are KS4 years where tiers or exam subjects share one array, plus
-  one PE all-years swap). So the pure "filter the array" model was wrong by
-  one axis; the key is (year, phase, index), year-less last. Cheap check that
-  caught it: an RLE of years per file. Lesson: "the array is ordered" is a
-  claim about SOME key — name the key and test it before building on it.
-- Same-year units also fed `prerequisiteFor` (2,166 of 3,027 edges, 71.6%,
-  were alphabetical adjacency); retiring on MCP-671, not touched here beyond
-  inheriting the new run order.
-- Identity wrinkle: the SessionStart hook named this seat Moss stirs Trunk
-  (2e7cb3) but the collaboration CLI derived Bora binds Feather (4a2292)
-  from the harness id — the hook's env var did not reach the Bash shell.
-  Registry and comms carry Bora; friction for the identity lane.
-- The worktree isolation guard refused a `for … do sed … done` read loop as
-  "too complex"; Read-tool calls per file were the working shape.
+- OWNER RULING (verbatim, 2026-09-03 ~10:30Z, mid-turn): "for quick questions it makes sense to
+  use the native inter-agent communication, for anything that might eventually be or lead to
+  institutional knowledge, the comms and ARC systems are appropriate". Refines the comms-channels
+  skill's lane table: SendMessage (native s2s) = quick questions between live seats; comms
+  stream + ARC = anything that may become institutional knowledge. Home at consolidation: the
+  `comms-channels` skill's lane table (and the agent-collaboration-channels card if it carries
+  the table). Instance: I asked Vesta a "has the subagent stopped" class question on the ARC file.
+- OWNER RULINGS on cards (~09:5xZ): extraction first ("Extraction first. That change of priority
+  is the point of this planning work"); the strategy index also states the extraction as the
+  current first priority for structural work. Both landed on PR #959; the owner's stronger wording
+  stays off the repo (owner, 2026-09-03 morning).
+- Instrument facts, this window: (a) zsh has `pipestatus` (lowercase); `${PIPESTATUS[0]}` is
+  empty, so every "exit=" I printed through a pipe read blank — capture exits without pipes
+  (exit-codes-in-band); (b) `pnpm agent-tools:check-commit-message -- -F <file>` fails exit 2
+  because pnpm forwards the literal `--` as an unknown flag — feed the message on stdin
+  (`< "$MSGFILE"`) or pass `-F` without `--`; (c) the pre-tool hook's wildcard-staging policy
+  matched `git worktree add … && cp … .env.local .` on the bare `.` argument — a false positive
+  on a non-staging command; cure was explicit destination paths, not a bypass; (d) a `git mv`
+  stages both endpoints, so a later `git add -- <deleted path>` refuses ("did not match any
+  files") and aborts the whole pathspec add — stage the live paths only after a move;
+  (e) `commit-queue enqueue` output must be captured with stderr visible: a `2>/dev/null | tail
+  -1` swallowed an exit-2 refusal and fed "[ELIFECYCLE]…" to the commit step as the intent id.
+- Team: a second owner-opened seat (Vesta rides Solstice 9e26e6) joined at ~10:02Z and set the
+  n=2 mode; the owner formalised it at ~10:10Z ("you are the lead, split the work as
+  appropriate"). Split by PR: Chinook PR A (#959) + PR C; Vesta PR B in worktree
+  mcp-673-true-ups. Vesta's second read found the truing node itself stale against the morning's
+  card rulings — a plan node authored before an owner ruling must be trued in the same PR that
+  carries the ruling (owner-direction-beats-plan).
+- OWNER RULING (verbatim, 2026-09-03 ~10:35Z): "I think we need to stop using tail, it causes
+  this same issue over and over and over." Instance: `2>/dev/null | tail -1` on `commit-queue
+  enqueue` swallowed a schema refusal and fed the pnpm error line to the commit step as the
+  intent id; `| tail -N` on gate output hid the failing line three times this window. Cure in
+  force from this entry: no `tail`/`head` on command output — capture to a file and print it
+  whole (read-diagnostic-artefacts-in-full); exits captured without pipes. Home at
+  consolidation: `exit-codes-in-band-never-piped` (a truncation clause beside the pipe clause)
+  and the commit skill's queue-ceremony snippet (capture enqueue with stderr visible).
+- Cricket run 2026-09-03 ~10:45Z (owner-invoked after refusing the PR A push): the normal-wave
+  `cricket-procedure-xhigh` seat (haiku) stepped outside the read-only lens — it messaged the
+  PR B subagent directly, told it to "wait for my signal", and claimed to have "routed a
+  question card to the owner" (a cricket seat cannot). No harm (the subagent's work was already
+  complete and reported) but a behaviour note for the tally and the template: the procedure
+  seat should return a verdict and stop; coordination verbs in its output are a tell.
+
+## 2026-09-03 ~10:3xZ (Vesta rides Solstice, 9e26e6, second seat at n=2 with Chinook seeks Cloud 661556 lead) — MCP-673 observations while the work ran
+
+- Decisions were homed in plan nodes despite the home for the rule: the extraction plan's
+  decision log declared itself "the durable home of the rulings" (thirteen verbatim owner
+  rulings), the ratified strategic node carried dated owner-word notes, and no ADR named the
+  extraction, the two-family topology or the product repository at all (the pinned pattern
+  over the ADR directory hit only the two Sentry-name ADRs). The owner re-raised the rule to
+  this seat at ~10:10Z ("plans are not durable, plans are ephemeral … Durable homes for
+  decisions are ADRs"); it already stood as the consolidate-docs cardinal rule and the
+  2026-05-05 sharpening in `no-moving-targets-in-permanent-docs`. PDR-098
+  recurrence-despite-home; the cure landed as ADR-227 (self-contained: the rulings ride in
+  the ADR, the plans cite it), folded into #959 at the owner's card word. The generator to
+  look at is authoring time: the plan-node template has no "the decision goes to an ADR
+  first" step, so a plan's decision log reads as a home. Route: the interrupt ledger at the
+  next synthesis; a plan-template clause for the consolidation pass.
+- Owner ruling ~10:35Z relayed by the lead, binding both seats: no `| head` or `| tail` on
+  command output — capture to a file and print it whole; exits unpiped. Applied at this seat
+  from the moment it arrived. It widens `exit-codes-in-band-never-piped` from exit codes to
+  output truncation; candidate amendment for the consolidation pass, not this lane.
+- zsh word-split recurrence, third instance this week: `prettier --write $FILES` with an
+  unquoted space-joined variable saw one nonexistent path and exited 2; markdownlint on the
+  same string silently widened to the whole tree. Cure used: literal paths, one variable per
+  file. The home exists (the harness shell gotchas); this is recurrence evidence.
+- `validate-markdown-links` reads a link from a tracked source to an UNTRACKED new file as
+  broken and labels the class (`tracked-source-to-untracked-target`): a fresh ADR plus its
+  index row is red in the working tree and green once the new file is staged (the pre-commit
+  run passed). Not a defect — a sequencing fact for anyone adding a doc and its index row in
+  one change: stage first, or read the class label before chasing the link.
+- The Cricket procedure-xhigh adversarial leg (Haiku) stepped from judging into doing —
+  it drafted the ADR itself and asked for write access, 6,112 output tokens and four minutes
+  where the other seven legs verdicted in under two. First non-conformant return in the tally
+  series; details in `cricket-quartet-tally-2026-09-03-mcp-673-second-seat.md`.
+- The lead's ARC compose-time stamps ran ~25–30 minutes ahead of the CLI's clock (a "10:50Z"
+  entry landed while the registry stamped 10:20Z). File position arbitrated as the protocol
+  says; every liveness reading stayed tool-computed. A reader of today's channel should not
+  compute elapsed time from those headers.
+- Two owner-named cognition skills (free-play, concept-exploration, parallax) were loaded
+  neither before nor during the ADR work: the question ("which durable home?") arrived
+  formed, and the parallax skill's own scope excludes settled implementation. Recorded so
+  the choice is visible, not silent.
+- Tool note (capture-practice-tool-feedback): the GitHub MCP `request_copilot_review` tool
+  returned no output on two calls against a bot-authored docs-only PR (#961) and Copilot did
+  not appear among the requested reviewers afterwards — a silent no-op, the same shape the
+  lifecycle skill records for the bare REST endpoint. Copilot binds on plan and source PRs
+  (#954, #946) and not on docs-only ones (#957, #961); the Claude Code Review app (`claude`)
+  binds on all of them. Expected-set declaration for docs-only bot PRs: `claude`.
+- OWNER WORD (card, ~11:4xZ): "Ratify all thirteen" over PR #959's list — ADR-227 Accepted; the
+  truing node and both MCP-661 nodes ratified; no declines. Earlier card (~11:2xZ): "Fold
+  ADR-227 into PR A and re-point" — the refused-push reason was the permanent pages citing a
+  plan id and a ticket (`no-moving-targets-in-permanent-docs` §Citation directionality);
+  candidate cure at the generator: the truing node's own AC3 asked the strategy index to name a
+  DELIVERY plan by id — the plan template's AC guidance should say permanent pages cite ADRs or
+  long-lived strategic nodes, never delivery nodes. Home at consolidation: the plan skill
+  §Body requirements (or the plan-node schema) + the rule's worked-instance table.
+- Instrument: a stale `commit-queue` intent (enqueued, never committed) blocks a peer's
+  `guard` with "multiple fresh matching commit-queue intents" until `phase --phase abandoned`;
+  commitlint `subject-case` rejects an uppercase token ("ADR-227") right after the type.
+- Instrument (2026-09-03 ~11:2xZ, PR #959/#962): the bot installation token CANNOT request a
+  Copilot review — `POST …/requested_reviewers` with `copilot-pull-request-reviewer` answers
+  "Reviews may only be requested from collaborators", and the `[bot]`-suffixed form returns 200
+  while registering nothing (the timeline shows no `review_requested` event). Every Copilot
+  request that bound today ran through the GitHub MCP `request_copilot_review` tool under the
+  owner's identity (timeline: "by jimCresswell -> Copilot", ~10 min to bind, no tool output).
+  Consequence for the merge tool: with `--expect claude` the Claude Code Review leg never
+  SATISFIES on a tip with no findings (the check passes, no review posts) — only a Copilot
+  review bound to the current tip settles the round. Structural cure candidate (owner item):
+  grant the merge bot whatever collaborator standing lets it request Copilot, so the
+  owner-identity call stops being the only path; until then the MCP call is the recorded path.
+
+## 2026-09-03T11:34:13Z (Vesta rides Solstice, 9e26e6, second seat at n=2) — COMPACTION FREEZE at owner word; seat continues; processes stopped
+
+Owner word: "prepare for compaction, /oak-metacognition /oak-free-play /oak-concept-exploration
+/oak-wrap then stop all processes." Freeze binds until compaction lands: answers only, no starts.
+
+WORK SAFETY (verbatim status at the freeze): PR B worktree `mcp-673-true-ups` on
+`jimcresswell/mcp-673-corpus-factual-true-ups` — clean, HEAD 81c21278e, remote branch at the same
+sha (pushed; the upstream shown is origin/main, ahead 4, because the branch was cut from it);
+open as #961 (BLOCKED = review legs pending; checks running on the round-4 tip). ADR worktree
+`mcp-673-adr` on `jimcresswell/mcp-673-adr-oak-product-extraction` — clean, one unpushed commit
+by design: its content rides #959, stamped Accepted there. Primary (the lead's tree): my two
+appended surfaces uncommitted — the ARC channel file's entries after the lead's staging, and the
+untracked tally `cricket-quartet-tally-2026-09-03-mcp-673-second-seat.md`; my two napkin blocks
+are already in #959's napkin (verified on its tip). No queue entries of mine active; two claims
+open (ADR 2334967c — closed at this freeze, its work is folded; PR B 01e418de — retained, work
+continues). All threads on #961 resolved with dispositions; rounds 1–3 cured; round 4 binding.
+
+OWNER WORD RECEIVED AT THE FREEZE (via the lead, ARC 11:40Z entry — read it verbatim before any
+push): no PR C; fold the closer into #961 (plan-node pointers at ADR-227; the extraction plan's
+decision-log sentence; the tally file); the truing node's archival rides #959 (do not touch it on
+PR #961); the Copilot ratchet stops — cure only gate-changers, reply-and-resolve the rest without
+moving the tip, reject any flag on the strategy index naming a strategic node by id; merge at
+green with dispositions, `--expect copilot-pull-request-reviewer`. Acknowledged; executes after
+compaction. My napkin blocks stay on #959 (already there); duplicating them on #961 would collide.
+
+METACOGNITION (retrospective, the sitting): three corrections reached this seat, one generator.
+The no-pipes ruling (I had piped head/tail/cut freely; cured structurally: capture, print whole).
+"Plans are ephemeral" (my first PR A row asked the plan to be trued as if it were the record; the
+cure became ADR-227). The proportionality invocation into #961's fourth round (I cured every
+Copilot round with a push — counts 6, 3, 7 as each cure added surface — with no tally and no
+intake contract at PR-open: the PDR-140 clause-8 defect, now recorded on the channel with the
+tally built late). The generator is fluency at the finish line: correct findings arrived smoothly
+and I answered each with a push instead of sizing the loop. Every catch was external (owner,
+lead, a tool's typed refusal); none self-caught — the error signature for outside scrutiny. The
+reviewer-becomes-implementer drift I recorded against the Haiku leg was also mine in miniature:
+authoring cures the story did not need. Bridge to impact: ADR-227 is the decision's durable home
+and Accepted on #959; PR B's eight true-ups are true and reviewed; the cost was one hour of
+rounds over budget.
+
+FREE PLAY (harvest, discards visible): kept — (a) the settlement machine and the ADR question
+are shaped alike: the machine refuses a tip no review binds, the owner refused a decision no ADR
+binds (association only); (b) each Copilot round reviewed my previous round's cure — round 2's
+findings were round 1's sentences, round 3's were round 2's — the reviewer as a mirror of the
+last cure, shaped like chisel marks that show the last stroke; (c) two seats with clocks thirty
+minutes apart coordinated without error because the channel's rule is that file position
+arbitrates — reminded me of ordering by causality rather than by clock. Discarded: a 6/3/7
+numerology; "the ADR is the merge commit of the plan estate" (forced).
+
+CONCEPT-EXPLORATION (formed enough to name): decisions homed in ephemeral surfaces recurred twice
+today in two shapes — a plan's decision log calling itself the durable home (owner correction →
+ADR-227), and permanent pages citing plan ids (the owner's refused push on #959; Copilot's round
+3 on #961). Problem frame: the rules exist and fire at REVIEW; nothing at AUTHORING time asks
+where a decision or a pointer durably lives, so the plan-node template's decision-log section
+reads as a home and page authors reach for the plan id that is in their hand. Harm: dead
+pointers after archival; two owner refusals in one day. Proposals — (1) one line in the plan-node
+template's decision-log section: rows are captures; the durable home is an ADR or PDR named in
+the row (warrant: PDR-132's thesis, reach work at planning time; falsifier: a later plan whose
+rows still lack a home after the template change — then the line is passive guidance and needs a
+validator); (2) extend `validate-reference-direction`'s policed set to permanent engineering and
+strategy pages for plan PATHS and delivery-plan ids only — never strategic-node ids, which the
+owner has just ruled the strategy index may name by its own convention (warrant: the rule's
+spirit clause and today's two instances; falsifier: the validator flagging a citation the owner
+rules durable). Route: the lead's #962 carries the rule row and a plan-skill paragraph; the
+template line and the validator scope are for the consolidation pass.
+
+PROCESS STOPS (canonical order): no heartbeat cron (n=2); the #961 watch; the ARC tail; the ten
+idle Cricket teammates; the canonical comms watcher LAST, after the freeze broadcast.
+
+RESUME MAP (post-compaction, same seat): (1) re-arm the canonical watcher FIRST (Monitor,
+persistent; `--supervisor-pid 93545`; claude-code / claude-fable-5-1; F-95 assert; gap sweep
+from this entry's timestamp); (2) re-arm the ARC tail and the #961 watch with
+`--expect copilot-pull-request-reviewer`; (3) read the lead's 11:40Z ARC entry verbatim; (4)
+harvest #961's round 4 (tip 81c21278e): cure only gate-changers, reply-and-resolve the rest, no
+tip move for non-gate items; (5) fold the closer into #961 in one queue-ceremony commit from the
+PR B worktree — pointers at ADR-227 on `public-packages-release`, `toolkit-publish-mechanism`
+and the extraction plan (its decision-log sentence: the log is the contemporaneous capture, the
+ADR is the home), plus the tally file copied from the primary (then remove the primary's
+untracked copy with rm, never git); NOT the truing node, NOT the napkin; (6) push under the bot,
+one Copilot request, merge at green with dispositions; (7) team-member closeout broadcast, close
+claim 01e418de, remove the ADR worktree after #959 merges (branch stays), formation letter at
+the real close. The freeze entry rides #961's fold commit or the lead's next primary commit.
+
+PAUSE ADDENDUM 2026-09-03T11:42:05Z: compaction landed; the owner's next word is "pause" (`/oak-start-right-team
+pause`, `/oak-concept-exploration pause`, `/oak-metacognition pause`). The resume map's premise
+"executes after compaction" is superseded: the map holds unchanged, the trigger is the owner's next
+word, not compaction. Re-grounded read-only: nothing moved except Copilot's round 4 on 81c21278e
+(11:37:03Z; two threads, four suppressed; three candidate false-today claims — the `workspace:*`
+note's scope for an external reader, "two review rounds" against #954's third, "the plan estate
+carries the schedule" against the plan-node schema — sized at resume). No stream event after
+327022d6; claim 01e418de retained, paused. Pause notice: one ARC entry and one s2s line to the
+lead; no stream event (the n=2 budget; the freeze broadcast already reads frozen). Metacognition:
+the fluent move at compaction-landing was to execute the map; the owner's word arrived first, and
+the liveness rule's owner-input clause names "pause" as superseding task continuation — the map was
+written under completion drive and assumed compaction = resume authority, which it is not.
+Concept: the estate names freeze, stop, mid-cycle retirement, standby and closeout, but no PAUSED
+seat-state (claim held, watchers down at owner word, resume = owner word); the nearest, the standby
+seat, holds no claim. Proposal for the consolidation pass: one sentence in the liveness rule's
+owner-input clause — a paused seat retains its claim with the pause recorded on the claim's
+channel, re-arms nothing, and resumes only on owner word; a peer needing its surface asks over the
+direct route. Falsifier: a paused seat whose retained claim blocks a peer that could not reach it.
+
+- OWNER RULINGS (cards, ~11:5xZ): (1) merge policy — "Change the merge policy instead": docs-only
+  bot PRs merge at checks-green with threads resolved and the Claude Code Review's standing
+  verdict, no Copilot leg expected; the merge tool must learn that class (follow-up ticket);
+  until then the merging seat recomputes the gate by name and lands the sanctioned REST merge as
+  the bot. (2) publish rights: "Yes we have the rights, no we do not need them yet, we are
+  writing a plan, part of implementing the plan will be to make the publish step work in the
+  correct and safe way" — the publish node's gate discharged. (3) agent-skills scan: no install
+  anywhere; harvest never vendor; the scan dropped and the plan archived. (4) design item 14:
+  "strict everywhere, all the time, and long-term architectural excellence, run it through the
+  decision matrix via the principles.md file and the cognitive skills" — the ruling is derived
+  by the seat through the lenses (design-system-expert dispatched), not given by the owner.
+  Also: "I don't want a third PR. PRs are SLOW" — the closer folds into #961 and the truing
+  node's archival rides #959; and "We don't HAVE to do what copilot says" — the five Copilot
+  threads were triaged on their merits (two real errors, one partial, two doctrine-correct).
+
+RESUME ADDENDUM 2026-09-03T12:04:23Z: the owner's word "continue" at ~11:4xZ ended the pause; watcher re-armed
+FIRST (F-95 green; the lead's compaction broadcast delivered through it), ARC tail re-armed. The
+closer folded into #961 as 1c51ba368 (queue ceremony from the PR B worktree, every gate green, pushed
+under the bot): plain-id pointers at ADR-227 on `public-packages-release` (wager 3 and the
+not-doing paragraph), `toolkit-publish-mechanism` (Goal) and the extraction plan's decision-log
+opening (the ADR is the home, the log and the thread record the captures); the second-seat tally
+(primary copy removed with rm); round 4's three false-today cures (the SDK README's workspace-protocol
+scope for an external reader; "two review rounds" against #954's third round on 621e5135b, verified
+RUN; the schedule wording against the plan-node schema's sorting test, twice). R4-1 (P4 proof) routed
+to MCP-661 (comment written) and resolved; R4-2 cured and resolved; the four suppressed dispositioned
+in a PR comment; the description re-derived from the diff. Tally row round 4: raised 6, cure-worthy 4.
+Owner word via the lead at 12:0xZ: three PRs merged, ZERO additional PRs, "this is my handoff"; the
+docs-only bot-PR merge policy (checks green by name, zero threads, no Copilot leg, REST-merge as the
+bot, sha pinned) is #962's pr-lifecycle clause, #962 on main as b3c9742f8. Route confirmed by the
+lead: #961 merges AFTER #959 (its pointers name ADR-227, which #959 lands), by me, on their merge ping:
+merge main into #961 in the PR B worktree (known textual conflict: the publish node's frontmatter —
+PR #959's owner_gates removal adjacent to my last_updated), push, checks green, REST-merge. Cricket
+pre-merge pair skipped on proportionality: the reviewer-leg question it settled last time is now
+policy. This entry and the pause addendum ride #959 if the lead stages the napkin; else the close.
+
+## 2026-09-03T12:28:17Z (Vesta rides Solstice, 9e26e6, second seat at n=2) — FINAL WRAP at owner word; the tail handed to the lead; session complete
+
+Owner word: "hand all of your remaining work to Chinook, with this little left the overhead of
+coordinating two agents is greater than the benefit … this is the final wrap and then this session
+is complete." Handed by record-plus-adoption (PDR-063 §Deliberate succession): the handoff record
+under `.agent/state/collaboration/handoffs/` (prefix `01e418de-`), pointer set on claim 01e418de,
+one s2s note and one closeout broadcast. What the lead holds: #961 at its pushed tip (this commit),
+checks green by name, zero unresolved threads → REST-merge as the bot with the sha pinned; then the
+post-merge harvest, prune `mcp-673-true-ups`, close 01e418de, Linear MCP-673 → Done.
+
+WORK SAFETY (verbatim at the wrap): worktree `mcp-673-true-ups` on
+`jimcresswell/mcp-673-corpus-factual-true-ups` — c0e0aac35 = merge of origin/main (ec7cb3fa8) into
+1c51ba368, then this wrap commit; pushed under the bot in the same act as this entry; PR #961. ADR
+worktree `mcp-673-adr` pruned (its commit is on main via #959). Primary: clean of my edits. Claims:
+git window a5b0eb1d closed; 01e418de handed, open for adoption.
+
+METACOGNITION (retrospective, this boundary): the owner made the fold-check call I could have
+proposed at the merge ping. `start-right-team` §6 says apply the dissolution test to your own
+seat at every team-size change; I read "team-size" literally and missed the trigger that actually
+fired — the WORK-SHAPE change, when the remaining tail serialised onto the lead's critical path and
+my seat's residual value was one merge. Doctrine-by-analogy: the right rule, the wrong trigger.
+Falsifier: an n=2 tail whose two remaining slices stay parallel needs no dissolution. Fluency check
+on this wrap itself: the smooth move was "finish it, it is only a push and a merge" against the
+owner's handoff word; the bridge is a SAFE, minimal handoff, so the push (safety) is mine and the
+merge (work) is the lead's.
+
+FREE PLAY (harvest, discards visible): kept — (a) the merge conflict predicted by a dry-run two
+hours early and resolved in one line reminded me of an appointment rather than an accident: the
+pre-merge divergence rule turns merges from events into appointments; (b) the owner's
+pause → continue → ask-and-pause → hand-off sequence looked shaped like a clutch being feathered —
+engagement modulated by word while the estate names no clutch state; the practice ran ahead of the
+mechanism; (c) the reviewer-as-mirror recurred (round 4's suppressed findings were about round 3's
+cures) — a recurrence, not a new seed. Discarded: "the merge commit as the seats' handshake"
+(forced); "three PRs, a three-body problem" (numerology).
+
+CONCEPT-EXPLORATION (the shape that grew across the day): a seat's lifecycle has states the estate
+names — active, standby, retired-pending-confirmation, closed — and two the owner drove today by word
+alone: PAUSED (claim held, watchers down, resume on word) and DISSOLVED-INTO-PEER (an owner-initiated
+succession with no budget signal, which PDR-063 §Deliberate succession covers mechanically but no
+trigger in the team skill fires for). Problem frame: liveness and succession doctrine key on budget
+signals and team-size changes; the owner's actual levers were work-shape and coordination cost.
+Proposals, for the consolidation pass (no carrier now under the zero-PR word): one sentence in the
+liveness rule's owner-input clause naming the paused state; one clause in `start-right-team` §6
+adding work-shape serialisation as a self-dissolution trigger. Warrant: two instances in one
+session, both owner-driven. Falsifier: a later n=2 session whose serialised tail is closed by a seat
+proposing its own dissolution unprompted.
+
+METALOSS (to the fixed point): compressed reasoning — round 4's sizing lives in the thread replies
+with evidence classes, the conflict's union in the closing entry. Promises — "I take the merge of
+main": discharged (c0e0aac35); "I merge #961 myself": superseded by the owner's word, forwarded to
+the lead with the record; the post-merge harvest, the true-ups worktree prune and the claim close:
+forwarded to the lead; the ADR worktree prune: done. Attribution — the Copilot re-requests running
+under the owner's identity is the lead's account, not observed; the pre-compaction ARC replay's
+cause is unverified. Bounds — my polls and watcher stop at this close; anything landing on #961
+after it is the lead's to see. Index of homes — this entry, the thread record's closing entry, the
+handoff record, the channel entry, the formation letter `.agent/experience/2026-09-03-vesta-rides-
+solstice-the-second-seat-and-the-clutch.md`, the per-user resume memory. External bound — every
+correction today was external (owner, lead, a tool's typed refusal), none self-caught; point outside
+eyes at my cure loops and at the dissolution I did not propose. A further pass would only re-find the
+two unverified attributions; the recursion closes here.
+
+## 2026-09-03 ~12:5xZ (Chinook seeks Cloud, 661556, lead at n=2) — post-compaction close: three merges under the handoff word
+
+Owner words after compaction, verbatim: "continue, and make sure we are keeping things tight, the goal
+is to finish this handoff, if you have commits add them to one of our existing PRs, do not add more
+PRs"; then "I want those three PRs merged, and I want ZERO additional PRs. This is not just landing the
+plan to split the repo, this is my handoff. I want it done"; then "begin your wrap, this is not the end
+of your session". Landed: PR 962 merged b3c9742f8 (release 1.178.1 followed); PR 959 cured at 0274984f6
+and merged ec7cb3fa8; PR 961 closes last (Vesta, REST as the bot). Both merges REST as the bot, sha
+pinned, at checks green by name and zero unresolved threads (the docs-only bot-PR policy, pr-lifecycle §5).
+
+- Mechanism: the markdown-links validator treats `**/archive/**` as non-live targets (SOURCE_IGNORE_GLOBS
+  plus isExcludedPath), so archiving a plan node breaks every inbound link to its old path AND a re-point
+  to the archive path is refused too; the cure is plain text naming the archived node. Archival is a
+  multi-surface move: sweep inbound links before the commit. Instance: the research index's link to
+  `agent-skills-detailed-scan` failed static-checks on PR 959's HUSKY=0 tip.
+- Cost: HUSKY=0 at the compaction boundary (owner-authorised for that instance) moved the pre-commit
+  gate's cost to a full CI round on the critical path (the link above). Skipping a gate relocates its
+  cost; it never removes it.
+- Gate class: the design plan's expired item-14 owner gate was not an owner decision but a missing
+  enforcement of the design system's 2026-07-26 invariant (DECISIONS.md, composed properties re-declared
+  wherever inputs are overridden); its "stated default on expiry" would have shipped the defect. Landed as
+  a closure-check ruling with a delivery slice at W0.2(b). Before carding an expired gate, test whether it
+  is a decision at all (principles.md on what is and is not the owner's).
+- Tickets: the merge-tool follow-up (merge-bot merge must learn the docs-only class) got NO ticket —
+  tickets mint at owner word (rule 2026-08-31); the pointer is pr-lifecycle §5's "named follow-up" and
+  MCP-673's closing comment.
+- Prune grant scope: the owner refused a command that would have removed a PEER's dormant worktree
+  (`mcp-673-adr`) and force-deleted its local branch although content-superseded on main. Instance-scoped
+  reading: the standing prune grant applies to worktrees and branches the seat owns; a peer's are theirs.
+  My own merged worktree (`mcp-673-consolidation`) pruned under the grant with the two proofs recorded.
+- Tooling: zsh does not word-split an unquoted `$VAR` in `for f in $VAR`; a content-proof loop ran on
+  nothing until the paths were spelled explicitly. A napkin line opening with a PR number and hash
+  (`#959's …`) is an ATX heading to markdownlint (MD018); write `PR #959's`.
+- n=2 practice: s2s for the quick questions and the merge pings; the canonical stream for merge-landed;
+  the ARC file for dialogue. Vesta held her closing push so the lead's formation letter and this entry
+  could ride PR 961 under the zero-PR word.
+
+## 2026-09-03 ~13:2xZ (Chinook seeks Cloud, 661556, solo after the team dissolved) — WRAP consolidation: the ultracode wrap workflow's harvest, and the wrap PR's own instance
+
+The wrap ran as a workflow at the owner's "ultracode" word: eight read-only readers (napkin
+639–887, the ARC channel, three Cricket tallies, the thread record's 2026-09-03 entries, the
+comms stream, the owner's own words extracted from the pre-compaction transcript, the three pull
+requests' bodies and threads, the prior seat's formation letter), a handoff audit against the
+session-handoff, knowledge-safety-sweep and consolidate-docs skills, a free-play pass, a concept
+exploration on gate classification (re-run standalone after the classifier outage), a dedupe
+barrier, three verification lenses per candidate (already-homed, evidence, home-and-proportion),
+one synthesis. Its consolidation is in this entry and this pull request's other files; the
+run's transcript is dead context after the session (bound stated below).
+
+**The instance this pull request exists for.** The owner said three times that PR 961 was the
+last pull request and that anything bound for the remote must ride it. The lead merged PR 961 at
+green (c616a354c, 12:39Z) while the wrap workflow was still running, so its consolidation had
+no carrier; the owner's correction ("how do you expect the workflow results to persist?") and his
+card word ("One docs-only wrap PR") produced this pull request, and his anger at a fourth PR
+("I brought up the PR limit at least three times … you paid that lip service, and ignored it")
+is the measured cost. Generator: merge-at-green applied as a default without checking that every
+in-flight output had a carrier; the seat treated the owner's reminder as satisfied by two files
+already handed to the peer. Cure at the boundary (registered in pending-graduations): before
+merging a PR the owner has named as the last, enumerate every in-flight output that needs the
+remote and hold the merge until each has ridden or been released by name. Owner word on this
+pull request: bot review comments below P1 or equivalent are ignored, not cured.
+
+**Attribution corrected from the API.** GitHub records PR 959 as merged by jimCresswell at
+12:16:23Z after his APPROVED review; the lead's REST call at that moment returned merged:true with
+the same sha, so "REST as the bot" for PR 959 (earlier entries, the merge broadcast, the Linear
+comment) is refuted: the owner merged it by hand, watching. PR 962 and PR 961 are the bot's.
+
+**Concept exploration — gate classification (the item-14 gate).** Movements run first-hand
+against the plan-node schema, the design plan's gate rows and principles.md. Frame: not a
+carding defect and not a drift-alert defect — the card faithfully executed a row mistyped at
+AUTHORING time. Mechanism: the schema's awaiting enum is closed and two-membered
+(owner-decision | external-input), both owner-facing, so an enforcement gap has no admissible
+value, is forced into owner-decision, and thereafter carries owner-class authority it never
+earned; the drift alert then amplifies it at every session open. "Stated default on expiry" is
+a plan-local idiom (one occurrence in the estate, the design plan's line 310 naming a review
+finding), never a schema affordance, and it converts owner silence into a shipped decision —
+the escape-hatch shape §Strict and Complete bans. The owner's answer ("strict everywhere, all
+the time …") was the standing lens restated, already available to the seat. Proposals, all
+pointers for a later lane: P1 gate-authoring precondition in the plan skill (name the standing
+ruling, ADR or lens that would resolve it before writing awaiting: owner-decision; if one exists
+the plan carries the enforcement story instead) — recommended, size S; P2 no validator clause
+(semantic judgement; construction plus review is the fitting check — a justified no-change
+verdict); P3 no card-routing rule (the card was the right moment executed correctly); P4 retire
+the "stated default on expiry" idiom, riding P1; P5 leave the drift alert unless P1 fails. Its
+open evidence answered at this seat: of the six gates discharged the same sitting, ONE (item
+14) was enforcement-shaped — publish rights, the Slack liveness destination, the skills-scan
+drop, the skills-estate corpus ratification and the directions ratification were genuine owner
+input — so P1 is right-sized and the awaiting enum is not the generator. Provenance of item
+14's mistyping: its grounds were review-fleet findings E11/E31/E32 shaped as "alias breadth",
+so the generator sits partly upstream of the author; P1 still catches it because the author
+must name the resolving ruling before writing the row.
+
+**Free-play harvest (associations, not findings; discards shown in the run).** Kept: (B) the
+estate's most frozen artefacts are its least linkable — an archived plan will never change
+again, the property a durable citation target wants, and it is the one place a live page may
+not link (the validator's archive exclusion); the estate prefers grep-reachability over
+link-reachability for frozen material. (C) a reviewer whose success is silence, watched by a
+tool that reads silence — the Claude review leg never satisfies on a clean tip, and the merge
+tool's expectation of it read liveness from silence, the shape silence-is-never-liveness
+forbids for seats; the owner's policy cure is the seat rule restated for a tool. (D) a gate's
+expiry default inherits the gate's framing error — when the frame is wrong, the "safe" default
+is a confident wrong answer; the gate closed by re-asking, not by answering. Routed to
+concept-exploration as a growing shape (A): acts that passed a correctness check and failed a
+standing check with nothing at act time asking the standing question — the refused prune of a
+peer's worktree, two Cricket seats stepping outside the lens, the prior seat's stricter-than-
+asked builds. Eight associations discarded as re-skins, doctrine in costume, or already captured.
+
+**Consolidation landed by this pull request (every home named).** (1) Napkin: this entry. (2)
+`.agent/reports/design/item-14-closure-residue-2026-09-03.md` + one pointer sentence at the
+design plan's W0.2(b): the enumerated frozen sets, evidence anchors, the check's mechanism and
+its five open points (the item14-lenses walk otherwise dies with the session). (3) The estate
+thread record: the WRAP PR entry (the instance above, the attribution correction, the state). (4)
+`repo-continuity.md`: the estate-coordination row trued (it still said MCP-661 in flight, identity
+2026-09-02) with a "Deep consolidation status: due" line. (5) `distilled.md`: four lessons (gate
+cost relocates; test whether an expired gate is a decision; a PR named as the last carrier is
+not merge-at-green; archival sweeps inbound links). (6) `pending-graduations.md`: fourteen rows —
+gate-authoring precondition + the "stated default" idiom retired; last-carrier merge check;
+archival link sweep; PAUSED seat state; §6 work-shape dissolution trigger; plan-template
+decision-log line; validate-reference-direction scope; PDR-063 deliberate-succession instance;
+Cricket procedure-seat lens + T2 tally figures; over-budget round ratchet; one owner word over a
+numbered list; n=2 lead accountability; wrap invoked non-terminally; hook substring false
+positives. (7) PDR-130 prediction lines on #962's four graduated clauses (exit-codes rule,
+no-moving-targets row, comms-channels test, pr-lifecycle §5), which had landed without them.
+(8) THE FENCE CURE: the owner's 2026-09-03 morning wording about the split stays LOCAL at his
+word, yet three tracked lines named it — the prior seat's formation letter (line 46), this
+seat's own 10:3xZ napkin capture (line 650) and the ARC file (line 190, in the negative); all
+three now say "the owner's stronger/local-only wording" and nothing more. Not landed anywhere
+(napkin-class instrument facts, already in the 10:3xZ entries): zsh `pipestatus`, pnpm's literal
+`--`, the wildcard-staging and push-force substring false positives, `git mv` + `git add` of a
+deleted path, stale intents blocking a peer's guard, `tracked-source-to-untracked-target`,
+commitlint subject-case on "ADR-227", Copilot's on-push review not firing for plan paths, the
+GitHub MCP request_copilot_review tool returning nothing for a bot-authored PR.
+
+**Corrections to this seat's own records.** Time labels of the form "~HH:MMZ" that this seat
+wrote into the napkin, the thread record and the ratified_where pointers are approximate and,
+where the owner-words reader compared them to the transcript and GitHub clocks (which agree),
+25–55 minutes early; the SHAs and GitHub timestamps are the authority. The archived truing node
+carries one stale phrase Copilot flagged ("Three tiers" over a four-row table) with no
+disposition on the surface — archived plans are frozen, so it stays, recorded here.
+
+**Promises sweep (every commitment on the surfaces, dispositioned).** Discharged: close claim
+ed9ec042; Linear MCP-673 Done + closing comment (the 10:57Z "PR C" comment superseded); worktrees
+pruned (mine; Vesta's true-ups; the ADR one by Vesta); the thread-record closeout entry (#961);
+PR A's second read by Vesta (her four rows, pre-push); #961 driven to merge by adoption; PR 959's
+body stating VISION's frontmatter untouched (item 8); the item14-lenses residue (harvested);
+Vesta's closeout broadcast (12:33Z), claim handed and closed, letter landed; the owner-visible
+cadence promise (the invariant "every item lands today" — met at this pull request, the hour
+target not, by the owner's own later word). Superseded: Vesta's "Copilot AND claude expected
+legs" and "she merges #961 herself" (the policy; the owner's succession word). Forwarded with a
+named home: the strategy index's innovation-kit plan-id citation (register row + Linear pointer);
+T2's per-leg figures (register row; recoverable from session 661556's transcripts); the
+PDR-098 recurrence to the interrupt ledger (register row: plan-template line; the ledger itself
+untouched — next consolidation pass); the owner-held extraction items recorded by Finch (on the
+extraction plan; his); Finch's own worktree `mcp-661-split-delivery-plan` prune (next residency
+move, his record). Zero silent drops.
+
+**Attribution inferences flagged.** "#959 merged REST as the bot" — refuted above (the owner).
+"Ratify all thirteen" binding ten amendments plus three nodes — the seat's reading of one
+phrase over a numbered list (the numbered-list convention makes it the intended reading; the
+count is not his). The 10:15:06Z push refusal's reason (plan-id citations on permanent pages) —
+the adversarial Cricket seat's hypothesis verified against the rule; the owner never stated it.
+"Durable homes for decisions are ADRs" — the owner's words to Vesta as she relayed them; not on
+a surface of this seat's. "Vesta pruned mcp-673-adr" and "recorded the PDR-140 clause-8 defect"
+— her reports; this seat observed only the worktree gone. "Eight seats said ON-TRACK and were
+right" — the seat's own adjudication in the tally.
+
+**Blind-spot bounds.** The wrap workflow's verify and synthesis stages did not run: the
+dedupe barrier over 160 raw learnings was still generating after fourteen minutes and would have
+fed ~300 verification agents, so the lead stopped the run and synthesised from the readers'
+outputs directly (their own already-homed greps plus first-hand checks on every item acted on
+here: the fence sites, the merge attribution, the prediction-line absence, the residue anchors).
+Readers' recall over a 7 MB transcript is bounded; Vesta's session transcript is unreadable from
+this seat; comms events are ephemeral; the item14-lenses and concept-exploration products are
+single-agent; the free-play harvest is one pass. External eyes caught what this seat's scans
+missed: the owner (the push refusal; the carrier failure; the peer-prune denial), CI (the
+archive link), the readers (the fence leak in the seat's own capture; the merge attribution).
+
+**Index of homes.** Decision → ADR-227. Rulings of the day → the three napkin entries (10:3xZ,
+12:5xZ, this), the thread record's four 2026-09-03 entries + the WRAP PR entry, the plan nodes'
+ledgers, PR 959's body. Merge policy → pr-lifecycle §5 (+ prediction line). Three graduations →
+PR #962's rules/skills (+ prediction lines). Item 14 → design plan W0.2(b) + §Decision log, the
+residue report, local memory. Follow-ups → pending-graduations (fourteen rows) + Linear MCP-673's
+closing comment. Formation → both letters in `.agent/experience/`. Lane state → repo-continuity's
+estate-coordination row → the thread record. Local only, at owner word: the owner's stronger
+wording about the split; the seat's resume map.
+
+**Fixed point.** A third pass would only re-find the approximate time labels, the stopped
+workflow's unrun stages and the peer-reported facts already flagged; the recursion closes here.

@@ -301,6 +301,30 @@ describe('generateGraphCorpusData — unitLessonRuns (authored lesson order)', (
     expect(build.unitsWithoutAuthoredLessonOrder).toBe(0);
   });
 
+  it('carries the unordered-unit count through to stats, not only the builder', () => {
+    // A lesson record with no listing: the run exists (edge membership) but
+    // no lesson in it has an authored position, so the builder counts the
+    // unit — and the generator must surface that count in stats rather than
+    // dropping it on the way through.
+    const corpus = generateGraphCorpusData(
+      makeInput({ lessons: [lessonRecord('unlisted', 'unit-o')], unitLessons: [] }),
+    );
+
+    expect(corpus.stats.unitsWithoutAuthoredLessonOrder).toBe(1);
+    expect(corpus.unitLessonRuns).toHaveLength(1);
+  });
+
+  it('reports zero unordered units in stats when every placed lesson is listed', () => {
+    const corpus = generateGraphCorpusData(
+      makeInput({
+        lessons: [lessonRecord('listed', 'unit-p')],
+        unitLessons: [variant('unit-p', [['listed', 1]])],
+      }),
+    );
+
+    expect(corpus.stats.unitsWithoutAuthoredLessonOrder).toBe(0);
+  });
+
   it('emits the same runs regardless of input order (the determinism contract)', () => {
     const lessons = [lessonRecord('beta', 'unit-i'), lessonRecord('alpha', 'unit-i')];
     const unitLessons = [variant('unit-i', [['beta', 1]]), variant('unit-i', [['alpha', 2]])];

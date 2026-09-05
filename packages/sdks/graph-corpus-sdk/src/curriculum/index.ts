@@ -24,6 +24,7 @@ export {
   type GraphCorpusNodeId,
   type GraphCorpusSequence,
   type GraphCorpusSequencePlacement,
+  type GraphCorpusUnitLessonRun,
   type GraphCorpusThreadNode,
   type GraphCorpusUnitNode,
 } from './graph-corpus.js';

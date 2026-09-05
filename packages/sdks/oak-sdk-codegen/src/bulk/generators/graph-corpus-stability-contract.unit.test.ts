@@ -177,10 +177,30 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
         lessonSlugs: ['adding-fractions'],
       };
 
+      // Two programme variants of one unit that DISAGREE on a lesson's
+      // position, so the unitLessonRuns section is exercised by the composite
+      // reversal — not left trivially empty by the makeInput default.
+      const listing = (order: number) => ({
+        unitSlug: secondLesson.unitSlug,
+        unitTitle: secondLesson.unitTitle,
+        year: 4,
+        yearSlug: 'year-4',
+        keyStageSlug: 'ks2',
+        lessonCount: 1,
+        lessons: [
+          {
+            lessonSlug: secondLesson.lessonSlug,
+            lessonTitle: secondLesson.lessonTitle,
+            lessonOrder: order,
+            state: 'published',
+          },
+        ],
+      });
       const forward = makeInput({
         priorKnowledge: [basePriorKnowledge],
         threads: [baseThread, secondThread],
         lessons: [baseLesson, secondLesson],
+        unitLessons: [listing(3), listing(1)],
         misconceptions: [baseMisconception, secondMisconception],
         keywords: [firstKeyword, secondKeyword],
       });
@@ -188,13 +208,14 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
         priorKnowledge: [...forward.priorKnowledge].reverse(),
         threads: [...forward.threads].reverse(),
         lessons: [...forward.lessons].reverse(),
+        unitLessons: [...forward.unitLessons].reverse(),
         misconceptions: [...forward.misconceptions].reverse(),
         keywords: [...forward.keywords].reverse(),
       });
 
-      expect(timeless(generateGraphCorpusData(reversed))).toEqual(
-        timeless(generateGraphCorpusData(forward)),
-      );
+      const forwardCorpus = generateGraphCorpusData(forward);
+      expect(timeless(generateGraphCorpusData(reversed))).toEqual(timeless(forwardCorpus));
+      expect(forwardCorpus.unitLessonRuns).toHaveLength(2);
     });
 
     it('emits an identical corpus when one thread’s unit placements arrive in reversed order', () => {
