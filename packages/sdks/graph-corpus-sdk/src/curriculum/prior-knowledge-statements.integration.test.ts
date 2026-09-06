@@ -67,6 +67,26 @@ describe('priorKnowledgeStatements', () => {
     expect(served).toStrictEqual([...new Set(dupUnit.priorKnowledge)]);
   });
 
+  it('returns a known unit that records no statements as empty, not as unknown', () => {
+    // Deterministic fixture: the lexicographically-first unit whose corpus
+    // statements are empty. The contract distinguishes "known, states none"
+    // (resolved, empty list) from "unknown anchor" (reported), so filtering
+    // such units out must not regress unnoticed. `required` fails loudly if
+    // the corpus ever holds no such unit.
+    const emptyUnit = required(
+      [...unitNodes]
+        .sort((a, b) => a.unitSlug.localeCompare(b.unitSlug))
+        .find((node) => node.priorKnowledge.length === 0),
+      'corpus has no unit with an empty prior-knowledge list to exercise the known-empty case',
+    );
+
+    const result = priorKnowledgeStatements([emptyUnit.unitSlug]);
+
+    expect(result.resolvedAnchors).toStrictEqual([`unit:${emptyUnit.unitSlug}`]);
+    expect(result.unknownAnchors).toStrictEqual([]);
+    expect(result.units[0]?.priorKnowledge).toStrictEqual([]);
+  });
+
   it('reports unknown slugs verbatim, never as an error', () => {
     const result = priorKnowledgeStatements([knownSlug, 'no-such-unit-anywhere']);
 

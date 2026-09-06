@@ -407,9 +407,10 @@ Internal modules already use honest names such as
 `keyword-projection`, and the public `get-thread-progressions` operation is
 already correctly named. The remaining public `get-misconception-graph` and
 `get-keyword-graph` names and descriptions present a fixed hierarchy and a
-ranked top-N lookup as graphs. The prior-knowledge surface is structurally
-graph-shaped, but its dependency semantics remain invalid until REPO-001 is
-corrected.
+ranked top-N lookup as graphs. The prior-knowledge surface is now a field
+projection of each unit's stated statements with no edges (MCP-671), served
+under the graph-shaped name `get-prior-knowledge-graph`; the remaining debt is
+that name and the still-emitted synthetic `prerequisiteFor` edges (REPO-001).
 
 **Required correction:** correct the remaining public operation names, titles
 and descriptions for the structure they return. Retain a graph only where
