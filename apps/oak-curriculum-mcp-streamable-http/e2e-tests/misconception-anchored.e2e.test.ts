@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 /**
  * E2E (G2 c3): `tools/call` on the anchored get-misconception-graph.
  *
@@ -64,25 +65,50 @@ const idSorted = (ids: readonly string[]): string[] => [...ids].sort((a, b) => a
 const reorderedRun = graphCorpus.unitLessonRuns.find(
   (run) => run.lessonIds.length > 2 && run.lessonIds.join() !== idSorted(run.lessonIds).join(),
 );
-if (reorderedRun === undefined) {
-  throw new Error('corpus has no unit whose authored lesson order differs from id order');
+assert.ok(
+  reorderedRun !== undefined,
+  'corpus has no unit whose authored lesson order differs from id order',
+);
+// The thread fixture: a thread spanning subjects, small enough that one page
+// holds every unit, with a subject run whose curriculum order differs from id
+// order — so one served page proves the join between subject runs, the
+// revisited-unit dedup, and the order, all over the real transport.
+const THREAD_PAGE_LIMIT = 25;
+const isReordered = (ids: readonly string[]): boolean =>
+  ids.length > 2 && ids.join() !== idSorted(ids).join();
+const sequencesByThread = new Map<string, (typeof graphCorpus.sequences)[number][]>();
+for (const sequence of graphCorpus.sequences) {
+  sequencesByThread.set(sequence.threadId, [
+    ...(sequencesByThread.get(sequence.threadId) ?? []),
+    sequence,
+  ]);
 }
-const reorderedSequence = graphCorpus.sequences.find((sequence) => {
-  const ids = sequence.placements.map((placement) => placement.unitId);
-  return ids.length > 2 && ids.join() !== idSorted(ids).join();
-});
-if (reorderedSequence === undefined) {
-  throw new Error('corpus has no thread whose curriculum order differs from id order');
-}
+const multiSubjectThread = [...sequencesByThread.entries()].find(
+  ([, sequences]) =>
+    sequences.length > 1 &&
+    sequences.reduce((count, sequence) => count + sequence.placements.length, 0) <=
+      THREAD_PAGE_LIMIT &&
+    sequences.some((sequence) => isReordered(sequence.placements.map((p) => p.unitId))),
+);
+assert.ok(
+  multiSubjectThread !== undefined,
+  'corpus has no multi-subject thread that fits one page with a reordered run',
+);
+const [multiSubjectThreadId, multiSubjectSequences] = multiSubjectThread;
+// Each subject run in corpus order, joined; a revisited unit kept at its first placement.
+const expectedThreadPage = [
+  ...new Set(multiSubjectSequences.flatMap((sequence) => sequence.placements.map((p) => p.unitId))),
+];
 const bare = (id: string): string => id.slice(id.indexOf(':') + 1);
 /** A lesson slug carrying a misconception, chosen deterministically (lexicographic minimum edge source). */
 const firstLessonId = graphCorpus.edges
   .filter((edge) => edge.type === 'addressesMisconception')
   .map((edge) => edge.source)
   .sort((a, b) => a.localeCompare(b))[0];
-if (firstLessonId === undefined) {
-  throw new Error('corpus has no addressesMisconception edge to anchor the e2e test');
-}
+assert.ok(
+  firstLessonId !== undefined,
+  'corpus has no addressesMisconception edge to anchor the e2e test',
+);
 const knownLessonSlug: string = firstLessonId.slice(firstLessonId.indexOf(':') + 1);
 
 async function callMisconceptionGraph(args: unknown): Promise<Response> {
@@ -139,22 +165,22 @@ describe('get-misconception-graph anchored tools/call', () => {
   });
 
   it('pages a thread’s units in curriculum order over the real transport', async () => {
-    const expected = reorderedSequence.placements.map((placement) => placement.unitId);
     const response = await callMisconceptionGraph({
-      threadSlug: bare(reorderedSequence.threadId),
-      unitLimit: 25,
+      threadSlug: bare(multiSubjectThreadId),
+      unitLimit: THREAD_PAGE_LIMIT,
     });
     expect(response.status).toBe(200);
     const structured = THREAD_ENVELOPE.parse(
       getStructuredContentData(parseJsonRpcResult(parseSseEnvelope(response.text))),
     );
-    const served = structured.threads[0]?.units.map((entry) => entry.unit.id) ?? [];
-    // The window is the first page; this sequence is one subject's run, and a
-    // multi-subject thread's window opens with its first subject — so the
-    // served prefix must equal this run's prefix, in order.
-    const prefix = expected.slice(0, served.length);
-
-    expect(served.slice(0, prefix.length)).toStrictEqual(prefix);
+    const thread = structured.threads[0];
+    const served = thread?.units.map((entry) => entry.unit.id) ?? [];
+    // One page holds the whole thread, so the served page must be every subject
+    // run joined in corpus order with revisited units once — never interleaved,
+    // never re-sorted between the view and the wire.
+    expect(served).toStrictEqual(expectedThreadPage);
+    expect(thread?.totalUnits).toBe(expectedThreadPage.length);
+    expect(thread?.hasMore).toBe(false);
     expect(served).not.toStrictEqual(idSorted(served));
   });
 
