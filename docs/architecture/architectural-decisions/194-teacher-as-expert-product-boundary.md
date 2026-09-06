@@ -85,8 +85,13 @@ Concretely:
 This principle draws a precise line that downstream surfaces must hold. The line
 is **decision authority**, not who initiates:
 
+> **Amendment (2026-09-03 — MCP-671).** The allowed-assertion example below was
+> "this unit has these prerequisite units". The curriculum data records no such
+> relation — see ADR-195's MCP-671 amendment — so the example now names what the
+> data does hold: each unit's stated prior knowledge.
+
 - **Inform and offer (allowed).** Name _what is present in the data_ ("this lesson
-  carries these misconceptions", "this unit has these prerequisite units", "this
+  carries these misconceptions", "this unit records this prior knowledge", "this
   strand has insufficient evidence"); present _evidenced options and trade-offs_
   for the teacher to weigh ("the evidence rates feedback +6 months, very-low cost,
   extensive; collaborative learning +5 months, limited evidence — with these

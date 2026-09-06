@@ -19,7 +19,7 @@
       "should_trigger": true
     },
     {
-      "query": "Benchmark this draft unit against Oak's curriculum threads and prior-knowledge graph.",
+      "query": "Benchmark this draft unit against Oak's curriculum threads and the prior knowledge its units assume.",
       "should_trigger": true
     },
     {

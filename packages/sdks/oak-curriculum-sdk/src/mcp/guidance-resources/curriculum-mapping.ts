@@ -4,7 +4,7 @@
  * Creation-oriented guidance (retained; served only when the allowlist
  * turns it live). Derived from the \`oak-curriculum-mapper\` skill
  * (oaknational/oak-skills): ordering grounded in Oak's threads and
- * prior-knowledge graph with national-curriculum coverage checked, the
+ * stated prior knowledge with national-curriculum coverage checked, the
  * source skill's attribution carried (Oak data under OGL v3.0).
  */
 
@@ -15,10 +15,10 @@ export const CURRICULUM_MAPPING_GUIDANCE: AgentGuidanceResource = {
   uri: 'docs://oak/guidance/curriculum-mapping.md',
   title: 'Agent guidance: curriculum mapping',
   description:
-    "Workflow guidance for the assistant: build or audit a curriculum map — unit order across a year or key stage — grounded in Oak's threads, prerequisites, and national-curriculum coverage.",
+    "Workflow guidance for the assistant: build or audit a curriculum map — unit order across a year or key stage — grounded in Oak's threads, the prior knowledge each unit states it assumes, and national-curriculum coverage.",
   mimeType: 'text/markdown',
   annotations: { priority: 0.4, audience: ['assistant'] },
-  lastModified: '2026-07-23T00:00:00Z',
+  lastModified: '2026-09-02T00:00:00Z',
   _meta: {
     provenance:
       'Derived from the oak-curriculum-mapper skill (oaknational/oak-skills); keep the two in step.',
@@ -48,8 +48,9 @@ guidance. MCP tool names may appear prefixed
    topics.
 3. **Order the units** so every prerequisite is taught before the units
    that depend on it: take the unit slugs from step 2 and call
-   \`get-prior-knowledge-graph({ unitSlugs: ["<unit-slug>"] })\` to check
-   the dependencies.
+   \`get-prior-knowledge-graph({ unitSlugs: ["<unit-slug>"] })\` for each
+   unit's stated prior knowledge, and check the statements are met by
+   earlier units.
 4. **Check coverage.** Use \`get-units-summary\` for the national
    curriculum statements each unit covers; confirm coverage is complete
    and surface gaps or unintended overlaps.

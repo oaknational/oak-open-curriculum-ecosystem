@@ -1,6 +1,6 @@
 ---
 name: audit-sequence
-description: Check that a draft plan teaches prerequisites before the units that depend on them, walking Oak's prior-knowledge graph and thread progressions.
+description: Check a draft plan against Oak's thread-graph of coherently sequenced units and the prior knowledge statements each unit records. Use when asked to audit, sanity-check, or sequence-check a long-term plan, scheme of work, or unit order.
 argument-hint: <paste or reference the plan to audit>
 ---
 
@@ -11,8 +11,8 @@ Delegate to the **sequencing-auditor** agent.
 The agent must:
 
 1. Read the draft sequence into an ordered list of units.
-2. For each unit, retrieve its prerequisites from `get-prior-knowledge-graph` and its position in `get-thread-progressions`.
-3. Flag every case where a prerequisite is taught later than, or absent from, the unit that depends on it.
-4. Report findings as a short table: unit, missing or late prerequisite, suggested fix.
+2. For each unit, retrieve the prior knowledge it states it assumes from `get-prior-knowledge-graph`, and where Oak places it in its thread(s) from `get-thread-progressions`.
+3. Report two kinds of finding, kept apart: **ordering breaks against Oak's threads** (a unit placed before one Oak teaches in an earlier year — data), and **assumed knowledge the plan may not have taught yet** (a stated requirement with no earlier unit that plausibly covers it — the agent's judgement).
+4. Report findings as a short table in plan order: unit, finding, whether it is data or judgement, suggested fix.
 
-This is a structural check, not a stylistic one. Report only genuine ordering breaks, ranked by how much later downstream learning they put at risk.
+This is a structural check, not a stylistic one. Oak's statements name knowledge, not the units that teach it — so say plainly which findings are read off the data and which are your reading of it.

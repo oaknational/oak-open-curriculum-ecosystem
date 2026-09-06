@@ -188,6 +188,14 @@ const RATE_LIMITER_REMOVAL_RETIREMENTS = [
 const PRESENTATION_DIRECTIVE_RETIREMENTS = [['C163', []]] as const;
 
 /**
+ * The stated-statements refactor of get-prior-knowledge-graph retired the
+ * depth input (C249) with the subgraph traversal it bounded — the tool now
+ * projects each anchor unit's stated prior-knowledge statements, and a
+ * stray depth argument is stripped at the schema, not served.
+ */
+const PRIOR_KNOWLEDGE_DEPTH_RETIREMENTS = [['C249', []]] as const;
+
+/**
  * MCP-653/MCP-630: upstream removed /changelog and /changelog/latest (live
  * spec 0.11.0; both endpoints returned 404), so the two dead tools were
  * disabled ahead of the schema-cache refresh via DEFERRED_PATHS entries.
@@ -218,5 +226,6 @@ export const POST_BASELINE_LINEAGE_ENTRIES = [
   ...MCP_AUTH_RESPONSE_RELOCATIONS,
   ...RATE_LIMITER_REMOVAL_RETIREMENTS,
   ...PRESENTATION_DIRECTIVE_RETIREMENTS,
+  ...PRIOR_KNOWLEDGE_DEPTH_RETIREMENTS,
   ...DEAD_CHANGELOG_TOOL_RETIREMENTS,
 ] as const;

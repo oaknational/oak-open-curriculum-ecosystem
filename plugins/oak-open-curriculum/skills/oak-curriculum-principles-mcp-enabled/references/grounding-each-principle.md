@@ -37,11 +37,11 @@ pupilLessonOutcome: "I can add fractions with the same denominator."
 
 ## 2. Sequenced and coherent
 
-**Grounding data.** ~164 threads, each an _ordered_ set of units that build a concept across years; plus a prior-knowledge graph of unit dependencies. This is the principle's strongest data anchor.
+**Grounding data.** ~164 threads, each an _ordered_ set of units that build a concept across years; plus the prior knowledge each unit states it assumes. This is the principle's strongest data anchor.
 
-**Tools.** `get-threads` (all threads + unit counts), `get-threads-units` (units in a thread), `get-thread-progressions` (one anchored thread's progression; units ordered by teaching year, same-year units unordered), `get-prior-knowledge-graph` (unit prerequisites), `search({ scope: "threads" })`.
+**Tools.** `get-threads` (all threads + unit counts), `get-threads-units` (units in a thread), `get-thread-progressions` (one anchored thread's progression; units ordered by teaching year, same-year units unordered), `get-prior-knowledge-graph` (a unit's stated prior knowledge, as sentences), `search({ scope: "threads" })`.
 
-**What to look for.** Where your topic sits in a thread; what Oak places before and after it; whether your sequence respects the same prerequisite order.
+**What to look for.** Where your topic sits in a thread; what Oak places before and after it; whether your sequence respects the same order.
 
 **Real threads to anchor on.** `number` (110 units, Reception→Y11), `geometry-and-measure` (59), `ratio-and-proportion` (18), `exploring-the-gothic` (7), `power-government-and-religion` (23), `empire-persecution-and-resistance` (16), `physical-systems-and-processes` (34).
 
@@ -52,7 +52,7 @@ pupilLessonOutcome: "I can add fractions with the same denominator."
 ```text
 search({ query: "fractions", scope: "threads", subject: "maths" })
 get-thread-progressions({ threadSlug })   // the fractions thread, units ordered by teaching year
-get-prior-knowledge-graph({ unitSlugs })   // confirm prerequisites precede dependents
+get-prior-knowledge-graph({ unitSlugs })   // what each unit states pupils should already know
 ```
 
 **Use it:** if your unit assumes knowledge that Oak's thread teaches _later_, your sequence has a gap.
@@ -122,7 +122,7 @@ get-threads-units({ thread: "representation-and-identity" })
 
 ## 6. Accessible
 
-**Grounding data.** Lessons carry content guidance and supervision levels; the prior-knowledge graph supports sensible chunking; assets include captioning.
+**Grounding data.** Lessons carry content guidance and supervision levels; each unit's stated prior knowledge supports sensible chunking; assets include captioning.
 
 **Tools.** `get-lessons-summary` (`contentGuidance`, `supervisionLevel`), `get-prior-knowledge-graph`, `get-lessons-assets`.
 

@@ -11,7 +11,7 @@
       "name": "oak-open-curriculum",
       "displayName": "Oak National Academy",
       "source": "./plugins/oak-open-curriculum",
-      "description": "Work with Oak National Academy's live curriculum graph: surface the pupil misconceptions Oak has documented for a topic, and audit a draft plan for prerequisites taught after the units that depend on them. Includes Oak's six curriculum principles and its WCAG 2.2 AA accessibility guidance — grounded in real Oak data.",
+      "description": "Work with Oak National Academy's live curriculum graph: surface the pupil misconceptions Oak has documented for a topic, and audit a draft plan against how Oak sequences the same units and the prior knowledge each unit states it assumes. Includes Oak's six curriculum principles and its WCAG 2.2 AA accessibility guidance — grounded in real Oak data.",
       "license": "MIT (code — see LICENCE). Curriculum content from the Oak Open Curriculum API: Open Government Licence v3.0 — see LICENCE-DATA.md for upstream terms. Oak branding is not MIT-licensed — see BRANDING.md and https://support.thenational.academy/using-the-oak-brand",
       "keywords": ["education", "curriculum", "national-curriculum", "oak", "teaching"]
     }

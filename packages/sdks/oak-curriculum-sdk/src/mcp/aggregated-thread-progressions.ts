@@ -125,7 +125,7 @@ Use this to answer questions like:
 - "How does this thread build from early years to GCSE?" (threadSlug)
 - "Which threads cover algebra at KS3?" (subject + keyStage)
 
-Complements get-prior-knowledge-graph (unit-level prerequisite subgraphs) and get-misconception-graph (per-lesson misconceptions along a thread).`,
+Complements get-prior-knowledge-graph (each unit's stated prior knowledge) and get-misconception-graph (per-lesson misconceptions along a thread).`,
 
   securitySchemes: [{ type: 'oauth2' as const, scopes: SCOPES_SUPPORTED }],
 

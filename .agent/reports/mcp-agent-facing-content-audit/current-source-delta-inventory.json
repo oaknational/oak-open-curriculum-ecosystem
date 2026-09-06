@@ -759,7 +759,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts",
-      "semanticSha256": "2d86bf6b1cf6241114656a1a2909fbb47ecd0b6f34d5ccd8b9f44c0215301606",
+      "semanticSha256": "028902c67f37ef6fc777738f6ebb83b4994cdcbf64ea49d8d777f33b36840e5d",
       "itemIds": [
         "C049",
         "C050",
@@ -897,12 +897,11 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts",
-      "semanticSha256": "c85f003e69fe7f2a2da22d65f517334351a244d1085d4e989817ecf54246bacd",
+      "semanticSha256": "1924e8dee287092e097a13bf40ac46647f38ee69e8fd683c777c7e2a23854ba8",
       "itemIds": [
         "C246",
         "C247",
         "C248",
-        "C249",
         "C250",
         "C251"
       ]
@@ -931,7 +930,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts",
-      "semanticSha256": "592fe681cd227863d083916ad74e380dcfd0e18605d694965232f89f3e078cef",
+      "semanticSha256": "b2ee07ef1e5550084db0171499306ca06c5ab4bd04bff76a1e6e013ae0a5117b",
       "itemIds": [
         "C065",
         "C066",
@@ -941,7 +940,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts",
-      "semanticSha256": "70107401c79893d6f9cbd11d51241376510c7366c8bf67f8c2bf8eb1a02bb52d",
+      "semanticSha256": "b3a4fcb15ae2f9cf053cd8945e9a5f5df7611eddee2532d5acd5d2edae67c11f",
       "itemIds": [
         "C252",
         "C253",
@@ -980,7 +979,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/adapt-lesson.ts",
-      "semanticSha256": "c23235066b550162a954fe38c402e630b9bc908854623a23daff99e02b04e694",
+      "semanticSha256": "f719c1a74b527b70b4954b8224aec1d38ebd343e65910284aa2d30657be1fd86",
       "itemIds": [
         "A007",
         "C183",
@@ -1022,7 +1021,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/curriculum-mapping.ts",
-      "semanticSha256": "002ece2ea42677b6b6105f29f68aefdabeea3f8c0a74cc2e1fccfc2524c6588f",
+      "semanticSha256": "cee1117cddb526cb4d14a16cd62b34e100cc079c1d174ab1464ab75157bfc571",
       "itemIds": [
         "A006",
         "C182",
@@ -1072,7 +1071,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/learning-progression.ts",
-      "semanticSha256": "fbd5b1c00d1880414394e10c769bd4cfdd8377dea4bf71f16bc0093d81def371",
+      "semanticSha256": "f9c4b656d4870ee1c6aa7a0a69ed2c59e942f3791052a374122e7b1b8d6f9c8c",
       "itemIds": [
         "A005",
         "C181",
@@ -1106,6 +1105,31 @@
       "semanticSha256": "0e31c4103c0b45fb5d4f59ff7522684e77adf56978336d8ba7cda817f0580c20",
       "itemIds": [],
       "exclusionReason": "Type-only change; no authored agent-facing content."
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts",
+      "semanticSha256": "126fddd476820e5a45e58c44529b6893fabbdb34608a8cebe41c4b0c1a0a9f23",
+      "itemIds": [
+        "C286",
+        "C287",
+        "C288",
+        "C289",
+        "C290",
+        "C291",
+        "C292",
+        "C293",
+        "C294",
+        "C295",
+        "C296",
+        "C297",
+        "C298",
+        "C299",
+        "C300",
+        "C301",
+        "C302",
+        "C303",
+        "C304"
+      ]
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/orientation-guidance.ts",
@@ -1168,6 +1192,55 @@
       "semanticSha256": "41be855cff939c4a7f95b36bdc2e3d1fecceecdb0a425b791d4d9af7da766d3a",
       "itemIds": [],
       "exclusionReason": "Test support only; this file does not reach an MCP consumer."
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts",
+      "semanticSha256": "1b2371af946d0dee9889b72837099393af9ba60b3ce78977445cf119ec414fbc",
+      "itemIds": [
+        "C011",
+        "C012",
+        "C013",
+        "C014",
+        "C015",
+        "C016",
+        "C017",
+        "C018",
+        "C019",
+        "C020",
+        "C021",
+        "C022",
+        "C023",
+        "C024",
+        "C025",
+        "C026",
+        "C027",
+        "C028",
+        "C029",
+        "C030",
+        "C031",
+        "C032",
+        "C033",
+        "C034",
+        "C035",
+        "C036",
+        "C037",
+        "C038",
+        "C039"
+      ]
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-workflows.ts",
+      "semanticSha256": "28b140a78cc09e38872204f7f5a60894e7b20ffa1a3c3cb6403a19c240c320e5",
+      "itemIds": [
+        "C040",
+        "C041",
+        "C042",
+        "C043",
+        "C044",
+        "C045",
+        "C046",
+        "C047"
+      ]
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts",

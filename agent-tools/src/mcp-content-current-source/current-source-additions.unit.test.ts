@@ -8,6 +8,12 @@ import type { RegistrationSourceEvidence } from './current-source-model.js';
 describe('buildCurrentSourceAdditions', () => {
   it('builds distinct evidence for every reviewed post-baseline item', () => {
     expect(currentSourceAdditionFiles()).toHaveLength(11);
+    // The three resources revised for the stated-statements contract carry
+    // their revision date; the rest keep the original capture date.
+    const guidanceLastModified = (slug: string): string =>
+      ['learning-progression', 'curriculum-mapping', 'adapt-lesson'].includes(slug)
+        ? '2026-09-02T00:00:00Z'
+        : '2026-07-23T00:00:00Z';
     const guidanceFixture = (slug: string): readonly [string, string] => [
       `packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/${slug}.ts`,
       [
@@ -15,7 +21,7 @@ describe('buildCurrentSourceAdditions', () => {
         `uri: 'docs://oak/guidance/${slug}.md'`,
         "mimeType: 'text/markdown'",
         "annotations: { priority: 0.4, audience: ['assistant'] }",
-        "lastModified: '2026-07-23T00:00:00Z'",
+        `lastModified: '${guidanceLastModified(slug)}'`,
         ...(slug === 'curriculum-mapping'
           ? [
               'provenance:',
@@ -68,7 +74,7 @@ describe('buildCurrentSourceAdditions', () => {
           {
             locus: 'resource-contents',
             field: '_meta.lastModified',
-            value: '2026-07-23T00:00:00Z',
+            value: guidanceLastModified(slug),
           },
         ],
         channels:

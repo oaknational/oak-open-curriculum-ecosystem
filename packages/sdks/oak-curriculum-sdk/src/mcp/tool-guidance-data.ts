@@ -109,7 +109,7 @@ export const toolGuidanceData = {
         'get-prior-knowledge-graph',
       ],
       description: 'Explore how concepts develop across years through curriculum threads.',
-      whenToUse: `When you want to understand how a concept builds from early years to GCSE, or find prerequisite/follow-up content. Use get-thread-progressions anchored by a threadSlug for one thread's year-ordered progression, or by subject + keyStage to discover which of the ${String(threadProgressionStats.threadCount)} threads to anchor. Use get-prior-knowledge-graph with anchor unit slugs for the bounded prior-knowledge (prerequisite) subgraph of those units.`,
+      whenToUse: `When you want to understand how a concept builds from early years to GCSE, or find prerequisite/follow-up content. Use get-thread-progressions anchored by a threadSlug for one thread's year-ordered progression, or by subject + keyStage to discover which of the ${String(threadProgressionStats.threadCount)} threads to anchor. Use get-prior-knowledge-graph with anchor unit slugs for each unit's stated prior knowledge — the statements Oak records about what pupils are assumed to know before it.`,
     } satisfies ToolCategory,
 
     programmes: {

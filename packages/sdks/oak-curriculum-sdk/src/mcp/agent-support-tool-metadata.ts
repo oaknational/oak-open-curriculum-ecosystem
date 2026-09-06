@@ -136,7 +136,7 @@ ${relationshipLines.join('\n')}
 
 Call these tools first to reduce errors when using search, fetch, and browsing tools.
 
-Oak's curriculum is fully sequenced: year-ordered progressions, prior-knowledge, misconception, and keyword graphs are served by the anchored graph tools (get-thread-progressions, get-prior-knowledge-graph, get-misconception-graph, get-keyword-graph), so lesson and curriculum plans can build on what a class has already covered.
+Oak's curriculum is fully sequenced: year-ordered progressions, misconception and keyword graphs, and each unit's stated prior knowledge are served by the anchored tools (get-thread-progressions, get-misconception-graph, get-keyword-graph, get-prior-knowledge-graph), so lesson and curriculum plans can build on what a class has already covered.
 
 For questions that are not about curriculum content — about the mechanisms by which the content is delivered, about this MCP app or its associated services, or about the repository itself — use the oak-under-the-hood tool to orient yourself to the Oak Open Curriculum Ecosystem.
 

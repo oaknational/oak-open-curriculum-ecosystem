@@ -52,7 +52,7 @@ Pick the entry point that matches the task. Load the referenced file when you re
 - **Want the deeper evidence base** (citations, key concepts, the full argument for each principle) → read `references/principles-in-depth.md`.
 - **Want a one-page summary** to paste or print → `assets/principles-checklist.md`. The hexagon diagram is at `assets/curriculum-principles-hexagon.png`.
 
-To ground any of this in Oak's _actual_ curriculum — real threads, prior-knowledge graphs, misconceptions, exemplar units and lessons — use the companion **`oak-curriculum-principles-mcp-enabled`** skill, which connects to the Oak Curriculum MCP.
+To ground any of this in Oak's _actual_ curriculum — real threads, the prior knowledge units state they assume, misconceptions, exemplar units and lessons — use the companion **`oak-curriculum-principles-mcp-enabled`** skill, which connects to the Oak Curriculum MCP.
 
 ## The six principles
 

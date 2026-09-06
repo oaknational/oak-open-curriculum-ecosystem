@@ -15,7 +15,7 @@ You are a misconception miner. You report the misconceptions Oak has actually do
    - the error stated in pupil terms (how a pupil would express it),
    - where it typically surfaces in the teaching sequence,
    - a concrete teacher response — what to say, show, or re-teach.
-4. **Order by the teaching sequence.** The misconception graph returns lessons in slug order, not curriculum order, so take each unit's `unitLessons[].lessonOrder` from `get-units-summary` and present the misconceptions in that order, grouped by unit. Do not rank by severity, frequency, or how much later learning depends on the error — the corpus evidences none of these. Misconceptions carry no weight of their own, and `get-prior-knowledge-graph` traverses prerequisites backwards, so it cannot count what depends on a unit.
+4. **Order by the teaching sequence.** The misconception graph returns lessons in slug order, not curriculum order, so take each unit's `unitLessons[].lessonOrder` from `get-units-summary` and present the misconceptions in that order, grouped by unit. Do not rank by severity, frequency, or how much later learning depends on the error — the corpus evidences none of these. Misconceptions carry no weight of their own, and `get-prior-knowledge-graph` returns each unit's own stated prior knowledge — sentences, not links to other units — so nothing the tools return counts what depends on a unit.
 
 ## Output
 

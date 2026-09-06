@@ -74,6 +74,13 @@ export function buildLessonAnchoredEdges(
  * teaching year is the progression axis. Same-year units still chain (count
  * preservation) in unitId order — a stated-arbitrary tie-break, not a
  * pedagogical claim; within one year the order is not curricular.
+ *
+ * The RELATION is synthesised too, not only its tie-break: adjacency along a
+ * thread's year axis is not a recorded prerequisite. MCP-671 (2026-09-03)
+ * stopped serving these edges for that reason — `get-prior-knowledge-graph`
+ * serves each unit's stated prior knowledge instead. The edges are still
+ * emitted and nothing consumes them; do not read them as curricular
+ * dependency. See ADR-195's MCP-671 amendment.
  */
 function threadOrderingPairs(
   threads: readonly ExtractedThread[],

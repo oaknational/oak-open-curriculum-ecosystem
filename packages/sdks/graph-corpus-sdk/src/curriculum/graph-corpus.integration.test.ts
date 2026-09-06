@@ -15,7 +15,6 @@
 import { describe, expect, it } from 'vitest';
 
 import { graphCorpus } from './graph-corpus.js';
-import { createCurriculumPriorKnowledgeView } from './prior-knowledge-view.js';
 
 const EDGE_TYPES = [
   'prerequisiteFor',
@@ -55,9 +54,5 @@ describe('curriculum graph corpus (integration over the emitted dataset)', () =>
       (edge) => !ids.has(edge.source) || !ids.has(edge.target),
     );
     expect(dangling).toHaveLength(0);
-  });
-
-  it('constructs the prior-knowledge view over the corpus without throwing', () => {
-    expect(() => createCurriculumPriorKnowledgeView(3)).not.toThrow();
   });
 });

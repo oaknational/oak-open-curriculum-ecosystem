@@ -39,6 +39,27 @@ captures — EEF graph-tooling rebuild); the EEF plan's Ratified Decisions in
 (the executed Track-G arc); the client-behaviour research
 [`mcp-client-tool-result-consumption-2026-05-28.md`](../../../.agent/research/mcp-client-tool-result-consumption-2026-05-28.md).
 
+> **Amendment (2026-09-03 — MCP-671, prior knowledge as stated statements).**
+> `get-prior-knowledge-graph` no longer serves a `prerequisiteFor` subgraph. Those edges were
+> synthesised from thread adjacency on the year axis, with a stated-arbitrary tie-break inside a
+> year, so they asserted a prerequisite relation the corpus does not record. The tool now serves
+> the prior knowledge each unit itself records — free-text statements naming knowledge, not the
+> units that teach it — anchored on `unitSlugs`; the retired `depth` input is stripped rather
+> than errored. Several clauses below are read subject to this. §1's traversal-depth bound and its
+> "returns only the bounded relevant subgraph", §4's "the bounded subgraph travels as
+> `structuredContent`", and the Consequences' "subgraphs it can traverse" describe the other four
+> graph tools; this tool's bound is membership alone and its payload is a node set with no edges.
+> §5's "prior knowledge defaults to depth 2" no longer describes it at all. §3 still binds, and the
+> coverage limit it requires has changed: some units record no statements and some belong to no
+> thread, which the tool description states qualitatively — not as counts, which would drift on
+> corpus regeneration. §2 is unaffected — the dropped edges were synthesised at corpus emission
+> from thread adjacency, never relationships the upstream curriculum data records, so no evidenced
+> relationship left the payload; the other three curriculum graph tools continue to serve recorded
+> ones. Curriculum ownership
+> signed off the narrower scope on 2026-09-03; sequencing value moves to the thread-graph of
+> coherently sequenced units (`get-thread-progressions`), paired with these statements. See
+> MCP-671 / PR #958.
+
 ## Context
 
 Oak's MCP surface delivers graph-shaped curriculum and evidence data to AI agents. The first
