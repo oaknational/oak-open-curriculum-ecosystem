@@ -76,7 +76,7 @@ export const GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF = {
 The query is anchored, never whole-corpus:
 - unitSlugs: the anchor units. Slugs are corpus keys — resolve them first with search, fetch, or browse-curriculum. Unknown slugs are reported in the result's unknownAnchors, not errored.
 
-The result reports units (each with slug, title, subject, key stage, year, priorKnowledge statements, and thread memberships), resolvedAnchors, and unknownAnchors.
+The result reports units — each with unitSlug, unitTitle, subject, keyStage, year (absent for the few units Oak records without one), priorKnowledge statements, and threadSlugs — plus resolvedAnchors and unknownAnchors.
 
 Coverage: some units record no prior-knowledge statements, so an empty priorKnowledge array means Oak states none for that unit — not that the unit is missing from the corpus. Likewise, some units belong to no thread, so an empty threadSlugs array means the unit has no get-thread-progressions context to follow.
 
