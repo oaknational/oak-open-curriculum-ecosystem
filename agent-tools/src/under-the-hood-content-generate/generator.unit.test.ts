@@ -134,6 +134,41 @@ describe('buildDigest', () => {
     expect(digest).toContain('https://www.thenational.academy/about-us/who-we-are');
   });
 
+  it('accepts a canonical-MCP-host citation in a served section', () => {
+    const digest = unwrap(
+      buildDigest('# A\n\nConnect at `https://mcp.thenational.academy/mcp`.\n', {
+        served: ['# A'],
+        excluded: new Map(),
+      }),
+    );
+    expect(digest).toContain('https://mcp.thenational.academy/mcp');
+  });
+
+  it('accepts an allowlisted host in any letter case', () => {
+    const digest = unwrap(
+      buildDigest('# A\n\nSee `HTTPS://MCP.THENATIONAL.ACADEMY/mcp`.\n', {
+        served: ['# A'],
+        excluded: new Map(),
+      }),
+    );
+    expect(digest).toContain('HTTPS://MCP.THENATIONAL.ACADEMY/mcp');
+  });
+
+  it.each([
+    'https://mcp.thenational.academy.example.com/x',
+    'https://www.thenational.academy.example.com/x',
+    'https://mcp.thenational.academy@evil.example.com/x',
+    'https://mcp.thenational.academy:8443/x',
+    'https://mcp.thenational.academy%2f@evil.example.com/x',
+  ])('rejects %s — not the allowlisted origin, despite the matching prefix', (url) => {
+    const result = buildDigest(`# A\n\nSee \`${url}\`.\n`, {
+      served: ['# A'],
+      excluded: new Map(),
+    });
+    expect(isErr(result)).toBe(true);
+    expect(unwrapErr(result)).toMatch(/outside the served-citation allowlist/);
+  });
+
   it('fails loudly on duplicate canonical headings', () => {
     const result = buildDigest('# A\n\nFirst.\n\n# A\n\nSecond copy.\n', {
       served: ['# A'],
