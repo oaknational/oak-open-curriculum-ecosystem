@@ -104,16 +104,6 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
       'Lesson anchor: lesson slugs (corpus keys). Each lesson carries at most two misconceptions.',
     ],
   },
-  C236: {
-    ['packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts']: [
-      'Unit anchor: unit slugs (corpus keys). Returns each unit with every placed lesson',
-    ],
-  },
-  C237: {
-    ['packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts']: [
-      'Thread anchor: one thread slug (corpus key). Returns a unit-granular window',
-    ],
-  },
   C255: {
     ['packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts']: [
       'Discovery anchor (with keyStage): a subject slug, e.g. "maths". Returns bounded thread descriptors',

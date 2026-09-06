@@ -36,7 +36,7 @@ const LESSON_ENVELOPE = z.object({
   unknownAnchors: z.array(z.string()),
 });
 
-/** A lesson slug carrying a misconception, chosen deterministically (lexicographic minimum edge source). */
+/** The unit-anchored envelope: each unit's lessons in the order the wire delivers them. */
 const UNIT_ENVELOPE = z.object({
   anchorKind: z.literal('unit'),
   units: z.array(
@@ -46,6 +46,7 @@ const UNIT_ENVELOPE = z.object({
     }),
   ),
 });
+/** The thread-anchored envelope: the window's units in the order the wire delivers them, with its honest totals. */
 const THREAD_ENVELOPE = z.object({
   anchorKind: z.literal('thread'),
   threads: z.array(
@@ -74,6 +75,7 @@ if (reorderedSequence === undefined) {
   throw new Error('corpus has no thread whose curriculum order differs from id order');
 }
 const bare = (id: string): string => id.slice(id.indexOf(':') + 1);
+/** A lesson slug carrying a misconception, chosen deterministically (lexicographic minimum edge source). */
 const firstLessonId = graphCorpus.edges
   .filter((edge) => edge.type === 'addressesMisconception')
   .map((edge) => edge.source)

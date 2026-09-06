@@ -94,6 +94,11 @@
 >   comparable pair in a 96-unit, 16-subject sample (3,014 pairs). The
 >   residual 0.13% against the bulk's programme variants is the variant merge
 >   described under the sort key, not the consumer.
+>   Per exam board the merge shows more: of 209 board views of KS4 science
+>   units on the same snapshot, 180 serve their board's order exactly and 29
+>   do not (156 of 3,656 pairs), because a unit node carries every programme
+>   variant (since G1a, 2026-06-10) and one run cannot match every board. That
+>   merge is the standing design, not this consumer.
 > - **Counts recomputed at amendment time** from the regenerated
 >   `graph-corpus/data.json` (2026-09-03 bulk snapshot): 36,077 nodes
 >   (unit 1,835; thread 160; lesson 10,941; misconception 10,937;

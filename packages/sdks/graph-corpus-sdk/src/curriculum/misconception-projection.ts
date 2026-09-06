@@ -105,7 +105,11 @@ function buildLessonsByUnitId(
   return byUnit;
 }
 
-/** The module-load projection: per-kind node indexes plus chain adjacency. */
+/**
+ * The module-load projection: per-kind node indexes, the two ordered-section
+ * indexes (unit → lessons, thread → units), and the one set-valued edge
+ * adjacency (lesson → misconceptions).
+ */
 export interface CurriculumMisconceptionProjection {
   readonly lessonsById: ReadonlyMap<GraphCorpusNodeId, GraphCorpusLessonNode>;
   readonly unitsById: ReadonlyMap<GraphCorpusNodeId, GraphCorpusUnitNode>;
@@ -134,7 +138,8 @@ function buildAdjacency<TNode extends { readonly id: GraphCorpusNodeId }>(
 
 /**
  * Builds the misconception projection over the one graph corpus: per-kind node
- * indexes plus the three chain adjacency maps. Exported for the startup-cost
+ * indexes, the two ordered-section indexes, and the misconception adjacency
+ * map. Exported for the startup-cost
  * proof; runtime consumers use the view module's module-load singleton.
  */
 export function buildCurriculumMisconceptionProjection(): CurriculumMisconceptionProjection {
