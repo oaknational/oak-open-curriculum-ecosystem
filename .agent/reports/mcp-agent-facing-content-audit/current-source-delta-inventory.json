@@ -882,7 +882,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts",
-      "semanticSha256": "d1890c49b2aede5ea09d7cda118ac83d9471f14ab72d9f7ea9813af5580a5d60",
+      "semanticSha256": "a24054fade803c583ec49151d1e8de84adb28fbe89079870d285d8a4b4c8736d",
       "itemIds": [
         "C233",
         "C234",

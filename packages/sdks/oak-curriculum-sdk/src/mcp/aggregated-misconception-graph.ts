@@ -4,8 +4,9 @@
  *
  * The tool is a thin parse-and-dispatch over the misconception view in
  * `@oaknational/graph-corpus-sdk/curriculum` — the view owns the chain
- * retrieval semantics (anchor resolution, id-sorted windows, heavy-tail
- * coverage honesty); this module owns only the MCP boundary: input validation
+ * retrieval semantics (anchor resolution, curriculum-ordered windows,
+ * heavy-tail coverage honesty); this module owns only the MCP boundary: input
+ * validation
  * (exactly one anchor mode per call; the unit window belongs to the thread
  * anchor) and the response envelope. There is no whole-corpus path: every
  * call is anchored to the lessons, units, or thread the caller names.
@@ -63,7 +64,7 @@ const MISCONCEPTION_INPUT = z.object({
     .array(z.string().min(1))
     .optional()
     .describe(
-      'Unit anchor: unit slugs (corpus keys). Returns each unit with every placed lesson and its misconceptions. Exactly one anchor mode per call.',
+      'Unit anchor: unit slugs (corpus keys). Returns each unit with every placed lesson and its misconceptions, in Oak’s authored teaching order. Exactly one anchor mode per call.',
     )
     .meta({ examples: [['comparing-fractions']] }),
   threadSlug: z
@@ -71,7 +72,7 @@ const MISCONCEPTION_INPUT = z.object({
     .min(1)
     .optional()
     .describe(
-      'Thread anchor: one thread slug (corpus key). Returns a unit-granular window over the thread with honest coverage (totalUnits, hasMore). Exactly one anchor mode per call.',
+      'Thread anchor: one thread slug (corpus key). Returns a unit-granular window over the thread in Oak’s curriculum order, with honest coverage (totalUnits, hasMore). Exactly one anchor mode per call.',
     )
     .meta({ examples: ['number-fractions'] }),
   unitOffset: z
@@ -129,8 +130,10 @@ export const GET_MISCONCEPTION_GRAPH_TOOL_DEF = {
 
 Misconceptions are extracted per lesson from the Oak curriculum and reached through the thread → unit → lesson → misconception chain. Every call is anchored — exactly ONE of:
 - lessonSlugs: the leaf anchor; each lesson carries at most two misconceptions.
-- unitSlugs: the core anchor; each unit returns every placed lesson with its misconceptions (typical bodies 2–11 KB per unit).
-- threadSlug (+ optional unitOffset/unitLimit): a unit-granular window over one thread, default ${String(DEFAULT_THREAD_UNIT_LIMIT)} units per page (maximum ${String(MAX_THREAD_UNIT_LIMIT)}), with totalUnits and hasMore reported so partial coverage is always visible. unitOffset/unitLimit are valid ONLY with threadSlug — combining them with lessonSlugs or unitSlugs is rejected.
+- unitSlugs: the core anchor; each unit returns every placed lesson with its misconceptions, in Oak's authored teaching order (typical bodies 2–11 KB per unit).
+- threadSlug (+ optional unitOffset/unitLimit): a unit-granular window over one thread in Oak's curriculum order (years ascending within a subject, the subject's authored unit order within a year), default ${String(DEFAULT_THREAD_UNIT_LIMIT)} units per page (maximum ${String(MAX_THREAD_UNIT_LIMIT)}), with totalUnits and hasMore reported so partial coverage is always visible. unitOffset/unitLimit are valid ONLY with threadSlug — combining them with lessonSlugs or unitSlugs is rejected.
+
+Ordering is a deterministic projection of Oak's authored order, not a single global sequence. A thread's units are grouped by subject, each subject's run in curriculum order (years ascending, the authored unit order within a year), and the runs are concatenated — Oak records no order ACROSS subjects, so the join between runs carries no pedagogical claim. A unit's lessons follow the authored lesson order of the programmes that place them; where variants disagree the earliest recorded position is used with a slug tie-break, and a lesson no variant orders follows the ordered ones. What this rules out is the alphabet: the order is never the id-sorted one it used to be.
 
 Slugs are corpus keys — resolve them first with search, fetch, or browse-curriculum. Unknown slugs are reported in the result's unknownAnchors, not errored.
 
