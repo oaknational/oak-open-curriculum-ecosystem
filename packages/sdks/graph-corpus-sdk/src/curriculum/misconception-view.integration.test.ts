@@ -328,14 +328,9 @@ describe('misconception view — bounded anchored chain retrieval', () => {
   });
 
   it('windows a mega-thread to the default unit limit with honest totals (heavy tail)', () => {
-    const result = misconceptionsForThread(bareSlug(megaThread.threadId));
-
-    expect(result.ok).toBe(true);
-    if (!result.ok) {
-      return;
-    }
-    expect(result.value.resolvedAnchors).toStrictEqual([megaThread.threadId]);
-    const entry = required(result.value.threads[0], 'mega-thread anchor resolved no entry');
+    const value = unwrapOk(misconceptionsForThread(bareSlug(megaThread.threadId)));
+    expect(value.resolvedAnchors).toStrictEqual([megaThread.threadId]);
+    const entry = required(value.threads[0], 'mega-thread anchor resolved no entry');
     const referenceUnits = required(
       curriculumUnitsByThread.get(megaThread.threadId),
       'mega-thread has no reference units',
@@ -360,30 +355,23 @@ describe('misconception view — bounded anchored chain retrieval', () => {
       unitLimit: 5,
     });
 
-    expect(first.ok && second.ok).toBe(true);
-    if (!first.ok || !second.ok) {
-      return;
-    }
+    const firstPage = unwrapOk(first);
+    const secondPage = unwrapOk(second);
     const reference = curriculumUnitsByThread.get(megaThread.threadId) ?? [];
-    expect(first.value.threads[0]?.units.map((u) => u.unit.id)).toStrictEqual(
-      reference.slice(0, 5),
-    );
-    expect(second.value.threads[0]?.units.map((u) => u.unit.id)).toStrictEqual(
+    expect(firstPage.threads[0]?.units.map((u) => u.unit.id)).toStrictEqual(reference.slice(0, 5));
+    expect(secondPage.threads[0]?.units.map((u) => u.unit.id)).toStrictEqual(
       reference.slice(5, 10),
     );
   });
 
   it('returns an empty window with hasMore false for an offset beyond the thread length', () => {
-    const result = misconceptionsForThread(bareSlug(megaThread.threadId), {
-      unitOffset: megaThread.unitCount,
-      unitLimit: 5,
-    });
-
-    expect(result.ok).toBe(true);
-    if (!result.ok) {
-      return;
-    }
-    const entry = result.value.threads[0];
+    const value = unwrapOk(
+      misconceptionsForThread(bareSlug(megaThread.threadId), {
+        unitOffset: megaThread.unitCount,
+        unitLimit: 5,
+      }),
+    );
+    const entry = value.threads[0];
     expect(entry?.units).toStrictEqual([]);
     expect(entry?.hasMore).toBe(false);
     expect(entry?.totalUnits).toBe(megaThread.unitCount);
@@ -428,15 +416,10 @@ describe('misconception view — bounded anchored chain retrieval', () => {
   });
 
   it('reports an unknown thread anchor with a well-formed empty result', () => {
-    const result = misconceptionsForThread('no-such-thread-slug-xyz');
-
-    expect(result.ok).toBe(true);
-    if (!result.ok) {
-      return;
-    }
-    expect(result.value.threads).toStrictEqual([]);
-    expect(result.value.resolvedAnchors).toStrictEqual([]);
-    expect(result.value.unknownAnchors).toStrictEqual(['no-such-thread-slug-xyz']);
+    const value = unwrapOk(misconceptionsForThread('no-such-thread-slug-xyz'));
+    expect(value.threads).toStrictEqual([]);
+    expect(value.resolvedAnchors).toStrictEqual([]);
+    expect(value.unknownAnchors).toStrictEqual(['no-such-thread-slug-xyz']);
   });
 
   it('exposes thread reachability on unit entries: threadSlugs is the membership surface', () => {
