@@ -1,6 +1,6 @@
 ---
 name: audit-sequence
-description: Check a draft plan against Oak's thread-graph of coherently sequenced units and the prior knowledge statements each unit records. Use when asked to audit, sanity-check, or sequence-check a long-term plan, scheme of work, or unit order.
+description: Check a draft plan against Oak's thread-graph of coherently sequenced units and the prior knowledge statements each unit records. Use when asked to audit, sanity-check, or sequence-check a long-term plan, scheme of work, or unit order. Requires the Oak Curriculum MCP.
 ---
 
 Audit the draft sequence the user has shared. If they have not given you one, ask for it before going further.

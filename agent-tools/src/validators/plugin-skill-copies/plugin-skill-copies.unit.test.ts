@@ -77,25 +77,40 @@ describe('findSkillCopyDrift', () => {
     ]);
   });
 
-  it('treats a whole skill absent from the copy as every source file missing', () => {
+  it('reports a whole skill absent from the copy as one finding on the skill itself', () => {
     const reader = memoryReader({
       'source/alpha': { 'SKILL.md': 'x\n', 'references/a.md': 'x\n' },
     });
 
-    const report = findSkillCopyDrift(check(), reader);
-
-    expect(report.filesCompared).toBe(0);
-    expect(report.findings.map((f) => f.kind)).toStrictEqual([
-      'missing-in-copy',
-      'missing-in-copy',
-    ]);
-  });
-
-  it('compares nothing and finds nothing when both sides are absent, so the caller can refuse', () => {
-    expect(findSkillCopyDrift(check(), memoryReader({}))).toStrictEqual({
-      findings: [],
+    expect(findSkillCopyDrift(check(), reader)).toStrictEqual({
+      findings: [{ skill: 'alpha', relativePath: '.', kind: 'missing-in-copy' }],
       filesCompared: 0,
     });
+  });
+
+  it('reports a configured skill absent from both sides rather than comparing two empty trees', () => {
+    expect(findSkillCopyDrift(check(), memoryReader({}))).toStrictEqual({
+      findings: [
+        { skill: 'alpha', relativePath: '.', kind: 'missing-in-source' },
+        { skill: 'alpha', relativePath: '.', kind: 'missing-in-copy' },
+      ],
+      filesCompared: 0,
+    });
+  });
+
+  it('still reports a vanished skill when another configured skill compares clean', () => {
+    const reader = memoryReader({
+      'source/alpha': { 'SKILL.md': 'x\n' },
+      'copy/alpha': { 'SKILL.md': 'x\n' },
+    });
+
+    const report = findSkillCopyDrift(check({ skills: ['alpha', 'beta'] }), reader);
+
+    expect(report.filesCompared).toBe(1);
+    expect(report.findings).toStrictEqual([
+      { skill: 'beta', relativePath: '.', kind: 'missing-in-source' },
+      { skill: 'beta', relativePath: '.', kind: 'missing-in-copy' },
+    ]);
   });
 
   it('orders findings by skill then path, so output is stable across runs', () => {

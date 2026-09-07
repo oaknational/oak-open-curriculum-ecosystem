@@ -1,6 +1,6 @@
 ---
 name: find-misconceptions
-description: Surface the known pupil misconceptions for a topic, each paired with how the error shows up and a concrete teacher response. Use when asked what pupils get wrong, what errors or misconceptions to anticipate, or to find common mistakes for a topic or year group.
+description: Surface the known pupil misconceptions for a topic from Oak's misconception graph, each paired with how the error shows up and a concrete teacher response. Use when asked what pupils get wrong, what errors or misconceptions to anticipate, or to find common mistakes for a topic or year group. Requires the Oak Curriculum MCP.
 ---
 
 Find the misconceptions for the topic the user has named. If they have not said which year group or key stage, ask before going further.

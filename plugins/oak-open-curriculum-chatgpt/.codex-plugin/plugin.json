@@ -8,7 +8,7 @@
   },
   "homepage": "https://www.thenational.academy",
   "repository": "https://github.com/oaknational/oak-open-curriculum-ecosystem",
-  "license": "MIT",
+  "license": "MIT (code — see LICENCE). Curriculum content from the Oak Open Curriculum API: Open Government Licence v3.0 — see LICENCE-DATA.md for upstream terms. Oak branding is not MIT-licensed — see BRANDING.md and https://support.thenational.academy/using-the-oak-brand",
   "keywords": ["education", "curriculum", "national-curriculum", "oak", "teaching"],
   "skills": "./skills/",
   "interface": {

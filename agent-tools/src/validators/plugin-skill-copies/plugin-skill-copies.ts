@@ -35,7 +35,11 @@ export interface SkillCopyCheck {
   readonly skills: readonly string[];
 }
 
-/** One difference between source and copy, addressed by skill and skill-relative path. */
+/**
+ * One difference between source and copy, addressed by skill and skill-relative
+ * path. A whole skill directory absent on one side is reported once, with
+ * `relativePath` `'.'`, so a configured skill can never vanish silently.
+ */
 export interface SkillCopyFinding {
   readonly skill: string;
   readonly relativePath: string;
@@ -81,8 +85,19 @@ export function findSkillCopyDrift(
   const findings: SkillCopyFinding[] = [];
   let filesCompared = 0;
   for (const skill of [...check.skills].sort(byText)) {
-    const source = reader.read(skillPath(check.sourceRoot, skill)) ?? new Map<string, Uint8Array>();
-    const copy = reader.read(skillPath(check.copyRoot, skill)) ?? new Map<string, Uint8Array>();
+    const source = reader.read(skillPath(check.sourceRoot, skill));
+    const copy = reader.read(skillPath(check.copyRoot, skill));
+    // A configured skill absent on either side is a finding in its own right,
+    // never an empty tree that compares clean against the other side.
+    if (source === undefined) {
+      findings.push({ skill, relativePath: '.', kind: 'missing-in-source' });
+    }
+    if (copy === undefined) {
+      findings.push({ skill, relativePath: '.', kind: 'missing-in-copy' });
+    }
+    if (source === undefined || copy === undefined) {
+      continue;
+    }
     const one = compareSkill(skill, source, copy);
     findings.push(...one.findings);
     filesCompared += one.filesCompared;
