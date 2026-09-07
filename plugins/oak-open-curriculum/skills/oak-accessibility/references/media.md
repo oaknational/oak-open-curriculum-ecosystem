@@ -7,7 +7,9 @@ Oak's lessons lean heavily on video and animated explanation, so this is high-st
 - **Synchronised captions** (WCAG 1.2.2, A) — accurate, properly timed, identifying speakers and
   meaningful sound. **Open or closed**, but present. Auto-generated captions must be **reviewed and
   corrected** before publishing (subject vocabulary and names are where they fail).
-- **Transcript** — a full text alternative, useful for everyone and required as a fallback.
+- **Transcript** — a full text alternative, useful for everyone and strongly recommended. At AA it
+  is not required for video that has captions and audio description (a full media alternative is
+  1.2.8, AAA); it **is** required for audio-only media (1.2.1, A).
 - **Audio description** (1.2.3 A / 1.2.5 AA) when important information is shown visually but not
   spoken (e.g. an on-screen diagram the narrator doesn't read out). Prefer scripting narration so it
   describes what's shown, which avoids needing a separate described track.
