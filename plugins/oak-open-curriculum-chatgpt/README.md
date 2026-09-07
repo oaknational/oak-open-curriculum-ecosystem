@@ -1,7 +1,8 @@
 # Oak Open Curriculum — ChatGPT and Codex package
 
 This directory is the ChatGPT/Codex packaging of the Claude plugin in `../oak-open-curriculum/`.
-It is a **checked-in copy**, not a build output, and the Claude plugin is not changed by it.
+It is a **checked-in copy**, not a build output. The Claude plugin is the source: a correction to
+a shared skill lands there first and is re-copied here, never the other way round.
 
 ## Why a separate package
 
