@@ -117,6 +117,7 @@ const config: KnipConfig = {
         'src/validators/ratified-lists/validate-ratified-lists.ts',
         'src/validators/portability/validate-portability.ts',
         'src/validators/subagents/validate-subagents.ts',
+        'src/validators/plugin-skill-copies/validate-plugin-skill-copies.ts',
         'src/practice-fitness/validate-practice-fitness.ts',
         'src/ci/ci-schema-drift-check.ts',
         'src/ci/ci-turbo-report.ts',

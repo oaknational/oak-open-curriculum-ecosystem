@@ -1,0 +1,12 @@
+{
+  "name": "oak-open-curriculum-ecosystem",
+  "interface": { "displayName": "Oak National Academy" },
+  "plugins": [
+    {
+      "name": "oak-open-curriculum",
+      "source": { "source": "local", "path": "./plugins/oak-open-curriculum-chatgpt" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Education"
+    }
+  ]
+}
