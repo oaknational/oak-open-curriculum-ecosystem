@@ -1,6 +1,6 @@
 # Data-grounded workflows
 
-End-to-end recipes that use the Oak Curriculum MCP to apply the six principles to real work. Each assumes you have called `get-curriculum-model` once. Tool names may be prefixed in your setup — match by suffix.
+End-to-end recipes that use the Oak Curriculum MCP to apply the six principles to real work. Each assumes you have called `get-curriculum-model` once. Tool names may be prefixed in your setup, and hyphens may appear as underscores — match by suffix, treating `-` and `_` as the same.
 
 ---
 

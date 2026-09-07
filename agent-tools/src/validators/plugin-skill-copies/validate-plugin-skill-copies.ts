@@ -66,9 +66,17 @@ if (report.findings.length > 0) {
   for (const finding of report.findings) {
     writeErrorLine(`  ${finding.kind}  ${finding.skill}/${finding.relativePath}`);
   }
-  writeErrorLine(
-    `Fix: the Claude plugin is the source. Re-copy each listed skill from ${SOURCE_SKILLS} to ${COPY_SKILLS} (omit evals/).`,
-  );
+  const sourceGaps = report.findings.filter((f) => f.kind === 'missing-in-source');
+  if (sourceGaps.length > 0) {
+    writeErrorLine(
+      `Fix (missing-in-source): the Claude plugin is the source and it lacks the listed path(s) — restore them under ${SOURCE_SKILLS} (or remove the skill from this validator's shared list) before re-copying.`,
+    );
+  }
+  if (sourceGaps.length < report.findings.length) {
+    writeErrorLine(
+      `Fix (missing-in-copy / content-differs): re-copy each listed skill from ${SOURCE_SKILLS} to ${COPY_SKILLS} (omit evals/).`,
+    );
+  }
   process.exit(1);
 }
 

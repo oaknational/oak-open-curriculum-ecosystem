@@ -54,6 +54,9 @@ export interface SkillCopyReport {
 
 const byText = (a: string, b: string): number => a.localeCompare(b);
 
+/** The file every skill directory must contain (Agent Skills specification). */
+const SKILL_MANIFEST = 'SKILL.md';
+
 /** Join a root and a skill name with `/`, the separator both readers understand. */
 function skillPath(root: string, skill: string): string {
   return `${root}/${skill}`;
@@ -97,6 +100,15 @@ export function findSkillCopyDrift(
     }
     if (source === undefined || copy === undefined) {
       continue;
+    }
+    // A skill directory without SKILL.md is not a skill. Absent on one side it
+    // surfaces through the file comparison; absent on both it would not, so
+    // report it explicitly.
+    if (!source.has(SKILL_MANIFEST) && !copy.has(SKILL_MANIFEST)) {
+      findings.push(
+        { skill, relativePath: SKILL_MANIFEST, kind: 'missing-in-source' },
+        { skill, relativePath: SKILL_MANIFEST, kind: 'missing-in-copy' },
+      );
     }
     const one = compareSkill(skill, source, copy);
     findings.push(...one.findings);

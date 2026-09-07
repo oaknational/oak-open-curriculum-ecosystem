@@ -98,6 +98,21 @@ describe('findSkillCopyDrift', () => {
     });
   });
 
+  it('reports a skill whose SKILL.md is missing on both sides, even when its other files match', () => {
+    const reader = memoryReader({
+      'source/alpha': { 'references/a.md': 'x\n' },
+      'copy/alpha': { 'references/a.md': 'x\n' },
+    });
+
+    expect(findSkillCopyDrift(check(), reader)).toStrictEqual({
+      findings: [
+        { skill: 'alpha', relativePath: 'SKILL.md', kind: 'missing-in-source' },
+        { skill: 'alpha', relativePath: 'SKILL.md', kind: 'missing-in-copy' },
+      ],
+      filesCompared: 1,
+    });
+  });
+
   it('still reports a vanished skill when another configured skill compares clean', () => {
     const reader = memoryReader({
       'source/alpha': { 'SKILL.md': 'x\n' },

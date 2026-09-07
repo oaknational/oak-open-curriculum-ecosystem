@@ -33,7 +33,8 @@ applies. Tick only what you've actually verified — if you can't confirm an ite
 
 ## Media
 
-- [ ] Video has accurate, reviewed captions + a transcript
+- [ ] Video has accurate, reviewed captions (a transcript is recommended, not required at AA)
+- [ ] Audio-only media has a transcript
 - [ ] Audio description (or description-in-narration) where visual-only info exists
 - [ ] Nothing flashes more than 3×/second; no autoplay with sound; reduced-motion respected
 

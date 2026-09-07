@@ -1,6 +1,6 @@
 # Grounding each principle in Oak data
 
-For each of the six principles: the Oak Curriculum MCP tools that ground it, what to look for in the data, and an example call. Tool names may carry a prefix in your setup — match by suffix. Always call `get-curriculum-model` once before other tools.
+For each of the six principles: the Oak Curriculum MCP tools that ground it, what to look for in the data, and an example call. Tool names may carry a prefix in your setup, and hyphens may appear as underscores — match by suffix, treating `-` and `_` as the same. Always call `get-curriculum-model` once before other tools.
 
 IDs for `fetch` are prefixed: `lesson:<slug>`, `unit:<slug>`, `thread:<slug>`, `subject:<slug>`.
 

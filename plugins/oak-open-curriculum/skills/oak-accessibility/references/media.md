@@ -34,6 +34,7 @@ Oak's lessons lean heavily on video and animated explanation, so this is high-st
 
 ## Before sign-off
 
-Confirm: captions present and corrected; transcript available; audio description (or
+Confirm: captions present and corrected; transcript present for audio-only media (and
+recommended for video); audio description (or
 description-in-narration) where visual-only info exists; nothing flashes; autoplay-with-sound
 avoided. Then run `assets/accessibility-checklist.md`.

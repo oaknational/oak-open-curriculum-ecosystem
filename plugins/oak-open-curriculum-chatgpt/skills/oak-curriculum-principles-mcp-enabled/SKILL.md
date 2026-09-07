@@ -36,7 +36,7 @@ For the _meaning_ of each principle, the evidence base, and the subject guiding 
 ## Before you start
 
 1. **Call `get-curriculum-model` first.** It returns the domain model (key stages, subjects, entity hierarchy, threads, the property graph) and tool guidance in one call. The other tools are more accurate once it's loaded. Do this once per session.
-2. **Tool names may be prefixed.** Depending on how the MCP is connected, tools may appear with a prefix (e.g. `mcp__<id>__get-threads`). Match tools by the suffix shown here (`get-threads`, `search`, `fetch`, …).
+2. **Tool names may be prefixed, and hyphens may become underscores.** Depending on how the MCP is connected, tools may appear with a prefix, with or without `-` replaced by `_` (e.g. `get-threads` may appear as `mcp__<id>__get-threads` or `mcp__<id>__get_threads`). Match tools by the suffix shown here (`get-threads`, `search`, `fetch`, …), treating `-` and `_` as the same.
 3. **Treat the data as a model, not a mandate.** Oak's curriculum is one high-quality reference, not the only right answer. Use it to inform judgement, exactly as the principles intend.
 
 ## What's available (and which principle it grounds)
