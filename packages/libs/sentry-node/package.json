@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@oaknational/build-metadata": "workspace:*",
+    "@oaknational/env": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",

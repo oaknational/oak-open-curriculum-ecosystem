@@ -49,6 +49,10 @@ warning?}`) plus §4 override-pair validation for local-dev release
   this sibling resolver; the runtime does not.
 - **Error mapping**: `describeConfigError`, `mapCloseError`, `mapFlushError`
   — `Result<T, E>` error adapters for the shutdown and configuration paths.
+- **Bootstrap failure reporter**: `reportBootstrapFailure`,
+  `BOOTSTRAP_REPORT_DEADLINE_MS` — the one path by which a configuration
+  failure that happens BEFORE observability exists still reaches Sentry.
+  See [Bootstrap failure reporter](#bootstrap-failure-reporter-mcp-480).
 
 ## SENTRY_MODE modes
 
@@ -139,6 +143,88 @@ The closure is enforced by
 (18 tests, three-part closure + automated bypass validation). If a future
 SDK release adds a new mutating hook and the test suite is not updated in
 the same commit, the tests fail.
+
+## Bootstrap failure reporter (MCP-480)
+
+A composition root resolves its runtime configuration before it can build
+observability, because observability is built _from_ that configuration. A
+configuration failure therefore throws while no Sentry client exists — it is
+unreportable by construction. That is not hypothetical: a malformed
+`POSTHOG_PSEUDONYM_KEYRING` on the MCP app's preview environment produced a bare
+`FUNCTION_INVOCATION_FAILED`, nothing in Sentry at all, and about an hour of
+diagnosis by guesswork.
+
+`reportBootstrapFailure` closes that gap under a deliberately bounded contract.
+It does NOT soften the refusal — fail-fast is the privacy boundary and stays —
+it only makes the refusal legible before it happens.
+
+```ts
+import { reportBootstrapFailure } from '@oaknational/sentry-node';
+
+const loaded = loadRuntimeConfig({ processEnv, startDir });
+
+if (!loaded.ok) {
+  const boundaryError = new Error(loaded.error.message);
+  await reportBootstrapFailure({
+    env: processEnv,
+    serviceName: 'my-service',
+    boundaryError,
+  });
+  throw boundaryError;
+}
+```
+
+### The contract
+
+Every clause binds, and each is proven at the package boundary in
+`bootstrap-reporter.integration.test.ts`:
+
+- **Activation.** It activates only from Sentry inputs that parse strictly under
+  the shared `SentryEnvSchema` (`@oaknational/env`) with `SENTRY_MODE=sentry`
+  and a usable `SENTRY_DSN`. `off` and `fixture` stay authoritative — they make
+  no network call and the bootstrap path does not get to override them. On
+  inputs the schema rejects (an unknown mode, a non-boolean flag) the reporter
+  stays silent: no activation, no network call, no new failure.
+- **Redaction.** It sanitises through the shared ADR-160 barrier with no bypass.
+  The pre-SDK pass runs `redactNormalizedError`; the SDK options carry
+  `createSentryRedactionHooks()` — the same single producer every other `init()`
+  in this package uses, spread last so no local hook can run after it. The two
+  operator-supplied strings that `beforeSend` cannot reach — `environment` and
+  `release`, which travel as top-level event fields _and_ as tags — are redacted
+  once as they enter the bootstrap config, so every downstream use is clean by
+  construction.
+- **No values.** It carries only what the boundary error already says. The
+  governing estate rule for the messages it transports is _name the guard, never
+  the value_.
+- **Bounded.** One capture attempt, one flush, at most
+  `BOOTSTRAP_REPORT_DEADLINE_MS` (500 ms) for that flush, no retry. The SDK is
+  given the deadline as its own timeout AND raced against an independent one, so
+  an adapter that ignores its timeout cannot extend a boot refusal. That bound
+  is **per call** — a host that retries a failed boot per request must memoise
+  the report itself, or a broken deployment sends one event per inbound request.
+  The MCP app does this in its `boot-failure-report.ts`; copy the pattern.
+- **Never masks.** Initialisation, capture, or flush failing, rejecting, or
+  hanging never replaces the original boundary error. The function never throws
+  and never rejects; the caller rethrows exactly what it was going to rethrow,
+  delayed only by the deadline.
+
+### What it does not carry
+
+No release resolution. The runtime application version is a build-time value the
+pre-runtime path does not have, and requiring it would silence the reporter
+exactly where it is needed; `SENTRY_RELEASE_OVERRIDE` is used when a deployment
+supplies one. No tracing, no logs, no PII. Events are tagged
+`oak.boot_failure: 'true'` so a server that never started is separable from one
+that failed while running.
+
+### Migration edge
+
+The activation axis is stated against the surface as it exists: consumers
+resolve the shared `SentryEnvSchema` and gate delivery on `SENTRY_MODE`. When an
+app adopts the ADR-171 orthogonal axes (`OBSERVABILITY_SINKS` typed list,
+fixture as an orthogonal tee), "live mode selected" restates as "the `sentry`
+sink selected", the fixture tee stays no-network, and the redaction barrier
+remains unconditional on both shapes.
 
 ## Fixture store
 

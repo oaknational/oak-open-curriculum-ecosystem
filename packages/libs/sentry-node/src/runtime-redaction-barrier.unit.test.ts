@@ -48,7 +48,7 @@ import type {
  * confirming the conformance tests would fail in the absence of the
  * barrier.
  *
- * When a new fan-out hook is added to `createSentryHooks` in
+ * When a new fan-out hook is added to `createSentryRedactionHooks` in
  * `runtime-sdk.ts`:
  *
  * - extend `BARRIER_HOOKS` with its literal name,
@@ -58,7 +58,7 @@ import type {
  *
  * The compile-time gate at `BARRIER_HOOKS` — combined with the
  * set-equality test in Part 1 against `keyof SentryRedactionHooks` (the
- * return type of `createSentryHooks`) — detects a new hook wired in
+ * return type of `createSentryRedactionHooks`) — detects a new hook wired in
  * `runtime-sdk.ts` without a matching `BARRIER_HOOKS` update at
  * `pnpm type-check` time. The explicit registry plus code review remain
  * the authoritative enforce-edge.
@@ -67,7 +67,7 @@ import type {
 // --- Barrier registry ----------------------------------------------------
 
 /**
- * Enumerates every fan-out hook name wired by `createSentryHooks` in
+ * Enumerates every fan-out hook name wired by `createSentryRedactionHooks` in
  * `runtime-sdk.ts`. This registry IS the conformance gate: ADR-160's
  * closure property requires that adding a new fan-out path extend this
  * registry (plus coverage below) in the same change set. The
@@ -537,7 +537,7 @@ describe('ADR-160 Part 3: redacted-at-destination', () => {
 /**
  * Bypass-harness shape is pinned to the same `SentryRedactionHooks` type
  * the production adapter wires (per A.6 SR-5). A new hook added to
- * `createSentryHooks` in `runtime-sdk.ts` fails `pnpm type-check` here
+ * `createSentryRedactionHooks` in `runtime-sdk.ts` fails `pnpm type-check` here
  * until the harness adds a case — closing the drift the session plan's
  * first draft carried as a local `MinimalHooks` alias.
  */
@@ -612,7 +612,7 @@ describe('ADR-160 bypass validation: omitting a redactor leaves PII visible', ()
 
   it('SentryRedactionHooks keys and BARRIER_HOOKS are set-equal (structural closure gate)', () => {
     // Per A.6 SR-5. Exercises the compile-time coupling between the adapter
-    // return type and this file's explicit registry. If `createSentryHooks`
+    // return type and this file's explicit registry. If `createSentryRedactionHooks`
     // in `runtime-sdk.ts` adds or removes a hook, the import of
     // `SentryRedactionHooks` forces a type-check break here unless
     // `BARRIER_HOOKS` is updated in the same change set.

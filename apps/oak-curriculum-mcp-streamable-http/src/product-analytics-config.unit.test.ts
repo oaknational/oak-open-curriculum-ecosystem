@@ -147,35 +147,69 @@ describe('resolveProductAnalyticsConfig — selected-mode rejections', () => {
       expect(result.error.message).toContain(discriminator);
     }
   });
+});
 
+describe('resolveProductAnalyticsConfig — which keyring guard refused', () => {
   // Every ring below carries the selected active id (k2026_01) where its
   // shape allows one, so the ACTIVE-ID rule cannot mask the keyring rule
-  // under test; the discriminator assertion pins which rule fired.
+  // under test; the asserted fragments pin WHICH guard fired.
+  //
+  // The four guards — JSON, strict shape, base64url canonicality, and
+  // id/key-material uniqueness — used to collapse into one opaque
+  // message, which cost about an hour of guesswork in a live incident
+  // (MCP-480). Each arm now names its guard plus safe shape facts.
   it.each([
-    ['malformed JSON', 'not json'],
+    ['malformed JSON', 'not json', ['POSTHOG_PSEUDONYM_KEYRING is not valid JSON']],
     [
       'a JSON object rather than an array',
       JSON.stringify({ id: 'k2026_01', key: ZERO_KEY_BASE64URL }),
+      ['must be a JSON array of key records'],
     ],
-    ['an empty array', '[]'],
+    ['an empty array', '[]', ['must hold at least one key record']],
+    [
+      'an entry that is not an object',
+      JSON.stringify(['k2026_01']),
+      ['entry 0 of 1', 'must be an object with exactly the properties'],
+    ],
+    [
+      'two unrecognised properties on one record',
+      JSON.stringify([{ id: 'k2026_01', key: ZERO_KEY_BASE64URL, extra: true, another: 1 }]),
+      ['entry 0 of 1', '2 unrecognised properties'],
+    ],
     [
       'a record with unknown fields',
       JSON.stringify([{ id: 'k2026_01', key: ZERO_KEY_BASE64URL, extra: true }]),
+      ['entry 0 of 1', '1 unrecognised property'],
     ],
-    ['a record missing the key field', JSON.stringify([{ id: 'k2026_01' }])],
-    ['a record with a non-string id', JSON.stringify([{ id: 7, key: ZERO_KEY_BASE64URL }])],
-    ['an empty id', JSON.stringify([{ id: '', key: ZERO_KEY_BASE64URL }])],
+    [
+      'a record missing the key field',
+      JSON.stringify([{ id: 'k2026_01' }]),
+      ['entry 0 of 1', 'has no string "key"'],
+    ],
+    [
+      'a record with a non-string id',
+      JSON.stringify([{ id: 7, key: ZERO_KEY_BASE64URL }]),
+      ['entry 0 of 1', 'has no string "id"'],
+    ],
+    [
+      'an empty id',
+      JSON.stringify([{ id: '', key: ZERO_KEY_BASE64URL }]),
+      ['entry 0 of 1', '"id" outside the key-id rule'],
+    ],
     [
       'an id outside the adapter key-id contract (uppercase)',
       JSON.stringify([{ id: 'K2026_01', key: ZERO_KEY_BASE64URL }]),
+      ['entry 0 of 1', '"id" outside the key-id rule'],
     ],
     [
       'an id outside the adapter key-id contract (leading separator)',
       JSON.stringify([{ id: '-k2026', key: ZERO_KEY_BASE64URL }]),
+      ['entry 0 of 1', '"id" outside the key-id rule'],
     ],
     [
       'an id outside the adapter key-id contract (33 characters)',
       JSON.stringify([{ id: `k${'a'.repeat(32)}`, key: ZERO_KEY_BASE64URL }]),
+      ['entry 0 of 1', '"id" outside the key-id rule'],
     ],
     [
       'duplicate ids',
@@ -183,6 +217,7 @@ describe('resolveProductAnalyticsConfig — selected-mode rejections', () => {
         { id: 'k2026_01', key: ZERO_KEY_BASE64URL },
         { id: 'k2026_01', key: ONE_KEY_BASE64URL },
       ]),
+      ['entry 1 of 2', 'repeats the "id" of entry 0'],
     ],
     [
       'duplicate key material under distinct ids',
@@ -190,32 +225,68 @@ describe('resolveProductAnalyticsConfig — selected-mode rejections', () => {
         { id: 'k2026_01', key: ZERO_KEY_BASE64URL },
         { id: 'k2', key: ZERO_KEY_BASE64URL },
       ]),
+      ['entry 1 of 2', 'repeats the key material of entry 0'],
     ],
     [
       'padded base64',
       JSON.stringify([{ id: 'k2026_01', key: Buffer.alloc(32, 0).toString('base64') }]),
+      ['entry 0 of 1', '"key" of 44 characters', '43 unpadded base64url characters'],
     ],
     [
       'a non-canonical encoding that decodes to the same bytes',
       JSON.stringify([{ id: 'k2026_01', key: `${ZERO_KEY_BASE64URL.slice(0, 42)}B` }]),
+      ['entry 0 of 1', 'non-canonical base64url "key"'],
     ],
     [
       'key material shorter than 32 bytes',
       JSON.stringify([{ id: 'k2026_01', key: Buffer.alloc(31, 0).toString('base64url') }]),
+      ['entry 0 of 1', '"key" of 42 characters'],
     ],
     [
       'key material longer than 32 bytes',
       JSON.stringify([{ id: 'k2026_01', key: Buffer.alloc(33, 0).toString('base64url') }]),
+      ['entry 0 of 1', '"key" of 44 characters'],
     ],
-  ])('rejects a keyring with %s via the keyring rule itself', (_label, keyring) => {
+    [
+      'a bad record after a good one',
+      JSON.stringify([
+        { id: 'k2026_01', key: ZERO_KEY_BASE64URL },
+        { id: 'k2026_02', key: 'too-short' },
+      ]),
+      ['entry 1 of 2', '"key" of 9 characters'],
+    ],
+  ])('names the guard that rejected a keyring with %s', (_label, keyring, fragments) => {
     const result = resolveProductAnalyticsConfig({
       ...selectedEnv,
       POSTHOG_PSEUDONYM_KEYRING: keyring,
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.error.message).toContain('pseudonym keyring failed strict validation');
+      for (const fragment of fragments) {
+        expect(result.error.message).toContain(fragment);
+      }
     }
+  });
+
+  it('gives each of the four keyring guards a message of its own', () => {
+    const messages = [
+      'not json',
+      JSON.stringify([{ id: 'k2026_01' }]),
+      JSON.stringify([{ id: 'k2026_01', key: `${ZERO_KEY_BASE64URL.slice(0, 42)}B` }]),
+      JSON.stringify([
+        { id: 'k2026_01', key: ZERO_KEY_BASE64URL },
+        { id: 'k2', key: ZERO_KEY_BASE64URL },
+      ]),
+    ].map((keyring) => {
+      const result = resolveProductAnalyticsConfig({
+        ...selectedEnv,
+        POSTHOG_PSEUDONYM_KEYRING: keyring,
+      });
+      expect(result.ok).toBe(false);
+      return result.ok ? '' : result.error.message;
+    });
+
+    expect(new Set(messages).size).toBe(messages.length);
   });
 
   it('rejects an active key id that resolves no keyring entry', () => {
@@ -230,11 +301,31 @@ describe('resolveProductAnalyticsConfig — selected-mode rejections', () => {
   });
 
   it('never includes supplied values in a failure — no key material, no api key, no raw keyring', () => {
+    // Canaries planted in every position an operator-supplied value can
+    // occupy: the id, the key material, the unrecognised property name,
+    // and the raw keyring text itself.
+    const canaryKeyring = JSON.stringify([
+      { id: 'canary-id-9f31', key: `${ZERO_KEY_BASE64URL.slice(0, 42)}B`, canaryProp: 1 },
+    ]);
     const failures = [
-      resolveProductAnalyticsConfig({ ...selectedEnv, POSTHOG_PSEUDONYM_KEYRING: 'not json' }),
+      resolveProductAnalyticsConfig({
+        ...selectedEnv,
+        POSTHOG_PSEUDONYM_KEYRING: 'not json canary-raw-77a2',
+      }),
+      resolveProductAnalyticsConfig({
+        ...selectedEnv,
+        POSTHOG_PSEUDONYM_KEYRING: canaryKeyring,
+      }),
       resolveProductAnalyticsConfig({
         ...selectedEnv,
         POSTHOG_PSEUDONYM_KEYRING: JSON.stringify([{ id: 'k1', key: 'short' }]),
+      }),
+      resolveProductAnalyticsConfig({
+        ...selectedEnv,
+        POSTHOG_PSEUDONYM_KEYRING: JSON.stringify([
+          { id: 'k2026_01', key: ZERO_KEY_BASE64URL },
+          { id: 'k2026_02', key: ZERO_KEY_BASE64URL },
+        ]),
       }),
       resolveProductAnalyticsConfig({ ...selectedEnv, POSTHOG_HOST: 'https://us.i.posthog.com' }),
       resolveProductAnalyticsConfig({
@@ -248,6 +339,10 @@ describe('resolveProductAnalyticsConfig — selected-mode rejections', () => {
       if (!result.ok) {
         const serialised = JSON.stringify(result.error);
         expect(serialised).not.toContain(ZERO_KEY_BASE64URL);
+        expect(serialised).not.toContain(ZERO_KEY_BASE64URL.slice(0, 42));
+        expect(serialised).not.toContain('canary-id-9f31');
+        expect(serialised).not.toContain('canaryProp');
+        expect(serialised).not.toContain('canary-raw-77a2');
         expect(serialised).not.toContain('phc_test_project_key');
         expect(serialised).not.toContain('us.i.posthog.com');
         expect(serialised).not.toContain('k_absent');

@@ -55,7 +55,7 @@ export const OBSERVABILITY_SINKS_SCHEMA = z
         code: 'custom',
         message:
           `OBSERVABILITY_SINKS must be a JSON array literal ` +
-          `(e.g. '["sentry"]' or '[]'). Received non-JSON value: ${raw}`,
+          `(e.g. '["sentry"]' or '[]'). The supplied value is not JSON.`,
       });
       return z.NEVER;
     }
@@ -65,7 +65,7 @@ export const OBSERVABILITY_SINKS_SCHEMA = z
         code: 'custom',
         message:
           `OBSERVABILITY_SINKS must be a JSON array of ` +
-          `[${OBSERVABILITY_SINK_KINDS.join(', ')}]. Received: ${raw}`,
+          `[${OBSERVABILITY_SINK_KINDS.join(', ')}]. The supplied value is not.`,
       });
       return z.NEVER;
     }
