@@ -4,35 +4,33 @@
  * Plugin skill-copy validator.
  *
  * The ChatGPT/Codex package (`plugins/oak-open-curriculum-chatgpt/`) carries
- * the Claude plugin's three shared skills as checked-in copies. This gate
- * recomputes the byte-level comparison on every run and fails the build when a
- * copy drifts from its source, naming each file so the fix is a re-copy, not a
- * search. `evals/` is excluded: it is authoring tooling, not shipped skill
- * content.
+ * the Claude plugin's shared skills as checked-in copies. This gate discovers
+ * which skills exist under both roots, recomputes the byte-level comparison of
+ * each on every run, and fails the build when a copy drifts from its source,
+ * naming each file so the fix is a re-copy, not a search. `evals/` is
+ * excluded: it is authoring tooling, not shipped skill content.
  *
  * Wired into root `repo-validators:check` (pre-commit and CI).
- * Exit 0 = identical; 1 = drift found; 2 = misconfiguration (a root missing,
- * or nothing compared — an empty scan is a refusal, never a pass).
+ * Exit 0 = identical; 1 = drift found; 2 = refusal (a root missing, no skill
+ * shared by both roots, or nothing compared — an empty scan is never a pass).
+ * The verdict is decided by the pure `decideSkillCopyVerdict`, so each exit
+ * code is asserted in unit tests rather than only observable by running this
+ * binary.
  *
  * @packageDocumentation
  */
 
-import { existsSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 
 import { resolveRepoRoot } from '../../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../../core/terminal-output.js';
 
 import { createFileSystemSkillTreeReader } from './plugin-skill-copies-fs.js';
-import { findSkillCopyDrift } from './plugin-skill-copies.js';
+import { decideSkillCopyVerdict, findSkillCopyDrift } from './plugin-skill-copies.js';
 
 const SOURCE_SKILLS = 'plugins/oak-open-curriculum/skills';
 const COPY_SKILLS = 'plugins/oak-open-curriculum-chatgpt/skills';
-const SHARED_SKILLS = [
-  'oak-accessibility',
-  'oak-curriculum-principles',
-  'oak-curriculum-principles-mcp-enabled',
-] as const;
 const IGNORED_DIRS = ['evals'] as const;
 
 const repoRoot = resolveRepoRoot(import.meta.url);
@@ -49,37 +47,22 @@ for (const [label, dir] of [
   }
 }
 
+// Roots are resolved through symlinks so a linked root compares its real
+// contents rather than being skipped as a non-directory.
 const report = findSkillCopyDrift(
-  { sourceRoot, copyRoot, skills: SHARED_SKILLS },
+  { sourceRoot: realpathSync(sourceRoot), copyRoot: realpathSync(copyRoot) },
   createFileSystemSkillTreeReader(IGNORED_DIRS),
 );
+const verdict = decideSkillCopyVerdict(report, {
+  sourceRoot: SOURCE_SKILLS,
+  copyRoot: COPY_SKILLS,
+});
 
-if (report.filesCompared === 0 && report.findings.length === 0) {
-  writeErrorLine('validate-plugin-skill-copies: compared no files — refusing to report clean.');
-  process.exit(2);
+for (const line of verdict.lines) {
+  if (verdict.code === 0) {
+    writeLine(line);
+  } else {
+    writeErrorLine(line);
+  }
 }
-
-if (report.findings.length > 0) {
-  writeErrorLine(
-    `validate-plugin-skill-copies: ${report.findings.length} difference(s) between ${SOURCE_SKILLS} and ${COPY_SKILLS}:`,
-  );
-  for (const finding of report.findings) {
-    writeErrorLine(`  ${finding.kind}  ${finding.skill}/${finding.relativePath}`);
-  }
-  const sourceGaps = report.findings.filter((f) => f.kind === 'missing-in-source');
-  if (sourceGaps.length > 0) {
-    writeErrorLine(
-      `Fix (missing-in-source): the Claude plugin is the source and it lacks the listed path(s) — restore them under ${SOURCE_SKILLS} (or remove the skill from this validator's shared list) before re-copying.`,
-    );
-  }
-  if (sourceGaps.length < report.findings.length) {
-    writeErrorLine(
-      `Fix (missing-in-copy / content-differs): re-copy each listed skill from ${SOURCE_SKILLS} to ${COPY_SKILLS} (omit evals/).`,
-    );
-  }
-  process.exit(1);
-}
-
-writeLine(
-  `validate-plugin-skill-copies: ${SHARED_SKILLS.length} shared skills identical (${report.filesCompared} files compared).`,
-);
+process.exit(verdict.code);

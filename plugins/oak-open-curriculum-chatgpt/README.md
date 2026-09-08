@@ -10,7 +10,8 @@ ChatGPT and Codex read a plugin's `skills/` directory and nothing else. The Clau
 its two capabilities in `agents/`, reached through workflows that use `$ARGUMENTS` substitution;
 neither exists in ChatGPT. So here:
 
-- the three shared skills are byte-identical copies of the Claude ones (`evals/` excluded);
+- every skill present in both plugins is a byte-identical copy of the Claude one (`evals/`
+  excluded); the validator discovers that set from the two trees rather than keeping a list;
 - `audit-sequence` and `find-misconceptions` are each workflow + agent merged into one
   self-contained skill, with three edits: the argument line becomes "the plan/topic the user
   has shared; ask if missing", the delegation line and Claude-only frontmatter go, and the
