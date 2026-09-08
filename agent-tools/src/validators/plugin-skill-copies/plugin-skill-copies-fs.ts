@@ -4,18 +4,27 @@
  * @remarks
  * Kept apart from the pure comparison so the comparison can be tested with
  * in-memory trees. The filesystem itself is injected as a small facade
- * (ADR-078) so this walker is unit-tested too: which directories it skips,
- * how deep it goes, what it counts as a file, and how it treats symlinks are
- * the decisions that determine what the gate sees, and a regression in any of
- * them would otherwise pass every test while the gate reported clean.
+ * (ADR-078) so this walker is unit-tested too: which directory it skips, how
+ * deep it goes, what it counts as a file, and that a symlink is reported and
+ * never followed are the decisions that determine what the gate sees, and a
+ * regression in any of them would otherwise pass every test while the gate
+ * reported clean.
+ *
+ * Only directory listings with entry types and file reads are used, so the
+ * facade is a lookup over declared entries and needs no path resolution.
  *
  * @packageDocumentation
  */
 
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import type { SkillTree, SkillTreeReader } from './plugin-skill-copies.js';
+import type {
+  SkillEntry,
+  SkillRootListing,
+  SkillTree,
+  SkillTreeReader,
+} from './plugin-skill-copies.js';
 
 /** The subset of a directory entry the walker reads. */
 export interface SkillDirectoryEntry {
@@ -27,34 +36,34 @@ export interface SkillDirectoryEntry {
 
 /** The subset of the filesystem the walker uses; `node:fs` satisfies it. */
 export interface SkillFileSystem {
-  readonly existsSync: (target: string) => boolean;
-  readonly readdirSync: (directory: string) => readonly SkillDirectoryEntry[];
-  readonly readFileSync: (file: string) => Uint8Array;
-  /** Follows symlinks; used to classify an entry that is a link. */
-  readonly statSync: (target: string) => { isDirectory(): boolean; isFile(): boolean };
+  /** The entries of a directory, or `undefined` when the path is not a readable directory. */
+  readonly readDirectory: (directory: string) => readonly SkillDirectoryEntry[] | undefined;
+  readonly readFile: (file: string) => Uint8Array;
 }
 
 /** The real filesystem. */
 const nodeSkillFileSystem: SkillFileSystem = {
-  existsSync,
-  readdirSync: (directory) => readdirSync(directory, { withFileTypes: true }),
-  readFileSync,
-  statSync,
+  readDirectory: (directory) => {
+    try {
+      return readdirSync(directory, { withFileTypes: true });
+    } catch {
+      // Not a readable directory here; the comparison reports the consequence
+      // (missing skill, nothing shared) as a finding rather than a crash.
+      return undefined;
+    }
+  },
+  readFile: (file) => readFileSync(file),
 };
 
 /** The file a directory must hold to count as a skill (Agent Skills specification). */
 const SKILL_MANIFEST = 'SKILL.md';
 
-type EntryKind = 'directory' | 'file' | 'other';
+type EntryKind = 'directory' | 'file' | 'symlink' | 'other';
 
-/** Classify an entry, following a symlink to what it points at so links are neither skipped nor mis-typed. */
-function entryKind(fs: SkillFileSystem, entry: SkillDirectoryEntry, fullPath: string): EntryKind {
+/** Classify an entry without following it: a symlink is a symlink whatever it points at. */
+function entryKind(entry: SkillDirectoryEntry): EntryKind {
   if (entry.isSymbolicLink()) {
-    const target = fs.statSync(fullPath);
-    if (target.isDirectory()) {
-      return 'directory';
-    }
-    return target.isFile() ? 'file' : 'other';
+    return 'symlink';
   }
   if (entry.isDirectory()) {
     return 'directory';
@@ -62,49 +71,87 @@ function entryKind(fs: SkillFileSystem, entry: SkillDirectoryEntry, fullPath: st
   return entry.isFile() ? 'file' : 'other';
 }
 
+/** Whether a directory holds a regular file named `SKILL.md`. */
+function holdsSkillManifest(fs: SkillFileSystem, directory: string): boolean {
+  const entries = fs.readDirectory(directory) ?? [];
+  return entries.some((entry) => entry.name === SKILL_MANIFEST && entryKind(entry) === 'file');
+}
+
+/** List a root: its skill directories and any symlinked entries. */
+function listRoot(fs: SkillFileSystem, root: string): SkillRootListing | undefined {
+  const entries = fs.readDirectory(root);
+  if (entries === undefined) {
+    return undefined;
+  }
+  const skills = entries
+    .filter((entry) => entryKind(entry) === 'directory')
+    .filter((entry) => holdsSkillManifest(fs, path.join(root, entry.name)))
+    .map((entry) => entry.name);
+  const symlinks = entries
+    .filter((entry) => entryKind(entry) === 'symlink')
+    .map((entry) => entry.name);
+  return { skills, symlinks };
+}
+
+interface WalkContext {
+  readonly fs: SkillFileSystem;
+  readonly ignoreDirs: readonly string[];
+  readonly tree: Map<string, SkillEntry>;
+}
+
+/** Record one directory's entries into the tree, descending into subdirectories. */
+function walkDirectory(context: WalkContext, current: string, prefix: string): void {
+  for (const entry of context.fs.readDirectory(current) ?? []) {
+    const relative = prefix === '' ? entry.name : `${prefix}/${entry.name}`;
+    recordEntry(context, entry, path.join(current, entry.name), relative);
+  }
+}
+
+/** Record one entry: descend into a directory (unless ignored at the top level), keep a file's bytes, note a symlink. */
+function recordEntry(
+  context: WalkContext,
+  entry: SkillDirectoryEntry,
+  fullPath: string,
+  relative: string,
+): void {
+  const kind = entryKind(entry);
+  if (kind === 'directory') {
+    // The ignore list applies at the top level of a skill only.
+    const atTopLevel = !relative.includes('/');
+    if (!atTopLevel || !context.ignoreDirs.includes(entry.name)) {
+      walkDirectory(context, fullPath, relative);
+    }
+  } else if (kind === 'file') {
+    context.tree.set(relative, { kind: 'file', bytes: context.fs.readFile(fullPath) });
+  } else if (kind === 'symlink') {
+    context.tree.set(relative, { kind: 'symlink' });
+  }
+}
+
+/** Read one skill directory into a tree, or `undefined` when it is not a readable directory. */
+function readSkill(
+  fs: SkillFileSystem,
+  ignoreDirs: readonly string[],
+  skillDir: string,
+): SkillTree | undefined {
+  if (fs.readDirectory(skillDir) === undefined) {
+    return undefined;
+  }
+  const tree = new Map<string, SkillEntry>();
+  walkDirectory({ fs, ignoreDirs, tree }, skillDir, '');
+  return tree;
+}
+
 /**
- * Create a reader over `fs` that lists skill directories under a root and walks
- * one skill directory, skipping any directory whose name is in `ignoreDirs`
- * (at any depth).
+ * Create a reader over `fs` that lists a root's skill directories and walks one
+ * skill directory, skipping top-level directories named in `ignoreDirs`.
  */
 export function createFileSystemSkillTreeReader(
   ignoreDirs: readonly string[],
   fs: SkillFileSystem = nodeSkillFileSystem,
 ): SkillTreeReader {
-  const listSkills = (root: string): readonly string[] | undefined => {
-    if (!fs.existsSync(root)) {
-      return undefined;
-    }
-    return fs
-      .readdirSync(root)
-      .filter((entry) => entryKind(fs, entry, path.join(root, entry.name)) === 'directory')
-      .filter((entry) => fs.existsSync(path.join(root, entry.name, SKILL_MANIFEST)))
-      .map((entry) => entry.name)
-      .sort((a, b) => a.localeCompare(b));
+  return {
+    listRoot: (root) => listRoot(fs, root),
+    read: (skillDir) => readSkill(fs, ignoreDirs, skillDir),
   };
-
-  const read = (skillDir: string): SkillTree | undefined => {
-    if (!fs.existsSync(skillDir)) {
-      return undefined;
-    }
-    const tree = new Map<string, Uint8Array>();
-    const walk = (current: string, prefix: string): void => {
-      for (const entry of fs.readdirSync(current)) {
-        const fullPath = path.join(current, entry.name);
-        const relative = prefix === '' ? entry.name : `${prefix}/${entry.name}`;
-        const kind = entryKind(fs, entry, fullPath);
-        if (kind === 'directory') {
-          if (!ignoreDirs.includes(entry.name)) {
-            walk(fullPath, relative);
-          }
-        } else if (kind === 'file') {
-          tree.set(relative, fs.readFileSync(fullPath));
-        }
-      }
-    };
-    walk(skillDir, '');
-    return tree;
-  };
-
-  return { listSkills, read };
 }
