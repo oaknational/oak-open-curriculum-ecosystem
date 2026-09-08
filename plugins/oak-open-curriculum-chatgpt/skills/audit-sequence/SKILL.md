@@ -1,6 +1,14 @@
 ---
 name: audit-sequence
-description: Check a draft plan against Oak's thread-graph of coherently sequenced units and the prior knowledge statements each unit records. Use when asked to audit, sanity-check, or sequence-check a long-term plan, scheme of work, or unit order. Requires the Oak Curriculum MCP.
+description: Check a draft plan against Oak's thread-graph of coherently sequenced units and the prior knowledge statements each unit records. Use when asked to audit, sanity-check, or sequence-check a long-term plan, scheme of work, or unit order. Reports ordering breaks and knowledge gaps only. Not for a general review against Oak's curriculum principles (use oak-curriculum-principles-mcp-enabled) or for listing what pupils get wrong (use find-misconceptions). Requires the Oak Curriculum MCP.
+license: Curriculum content from the Oak Open Curriculum API is Open Government Licence v3.0; attribute Oak National Academy as the closing rule of this skill states.
+compatibility: >-
+  Requires the Oak Curriculum MCP server (mcp.thenational.academy/mcp)
+  connected to the agent. Without it, stop and say so — there is no offline
+  fallback for a data-backed audit.
+metadata:
+  author: Oak National Academy
+  version: '0.1.0'
 ---
 
 Audit the draft sequence the user has shared. If they have not given you one, ask for it before going further.

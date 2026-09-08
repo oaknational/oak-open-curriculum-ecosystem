@@ -4,16 +4,17 @@ description: >-
   Ground Oak National Academy's six curriculum principles in Oak's *live*
   curriculum data using the Oak Curriculum MCP server. Use when creating or
   reviewing a curriculum, unit, lesson, or resource and you want to check it
-  against real Oak content — verifying a teaching sequence against Oak's
-  curriculum threads and the prior knowledge units state they assume, mining
-  real pupil misconceptions
-  to anticipate errors, checking vocabulary and key learning points, checking
-  content-guidance and supervision levels, or finding exemplar Oak units and
-  lessons that demonstrate a principle. Use whenever the user asks to "compare
-  with Oak", "check this against Oak's curriculum", "find an Oak exemplar",
-  "what does Oak do here", or to benchmark a draft against Oak. Requires the Oak
-  Curriculum MCP. Pairs with the oak-curriculum-principles skill, which holds
-  the principles in full, with the evidence base, and subject principles.
+  against real Oak content: a teaching sequence against Oak's curriculum
+  threads and the prior knowledge units state they assume, real pupil
+  misconceptions, vocabulary and key learning points, content-guidance and
+  supervision levels, or exemplar Oak units and lessons for a principle. Use
+  whenever the user asks to "compare with Oak", "check this against Oak's
+  curriculum", "find an Oak exemplar", "what does Oak do here", or to benchmark
+  a draft against Oak. Requires the Oak Curriculum MCP. Pairs with the
+  oak-curriculum-principles skill, which holds the principles in full. Not for
+  a structural audit of one plan's unit order or a misconception list for one
+  topic: audit-sequence and find-misconceptions each run that single check and
+  report a table; this skill grounds a broader curriculum review.
 license: Curriculum principles © Oak National Academy. See references/sources.md.
 compatibility: >-
   Requires the Oak Curriculum MCP server (mcp.thenational.academy/mcp)
@@ -22,7 +23,7 @@ compatibility: >-
   self-contained skill.
 metadata:
   author: Oak National Academy
-  version: '1.1.0'
+  version: '1.1.1'
 ---
 
 # Oak Curriculum Principles — grounded in live data
