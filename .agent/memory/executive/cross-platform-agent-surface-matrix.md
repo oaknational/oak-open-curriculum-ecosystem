@@ -293,8 +293,8 @@ Failure semantics:
   hooks, but plugin bundle support is not the same as repo-local wiring.
 - User-facing plugin packages under `plugins/` (Claude Code, and ChatGPT/Codex
   via the root `.agents/plugins/marketplace.json`) are product deliverables,
-  not adapter families; ADR-125 §user-facing skills and each package README
-  govern them (2026-09-08).
+  not adapter families; ADR-125 §Skill classes and validation jurisdiction and
+  the ChatGPT/Codex package README govern them (2026-09-08).
 - Tracked project platform config is part of the agentic system contract;
   local overrides are additive where the platform supports them.
 - Unsupported states are written down explicitly rather than inferred

@@ -22,12 +22,12 @@ and the [cross-platform matrix](./cross-platform-agent-surface-matrix.md).
 | `.agent/memory/active/patterns/` | Reusable solutions ([README](../active/patterns/README.md)) |
 | `.agent/plans/` | Implementation plans, execution tracking |
 
-## Host-Local Operational Tooling
+## Host-Local, Non-Practice Surfaces
 
 | Location | Purpose |
 |----------|---------|
 | `agent-tools/` | TypeScript implementation of optional Practice-operational CLIs |
-| `plugins/*/` | User-facing plugin packages (product, not Practice; ADR-125 §user-facing skills) |
+| `plugins/*/` | User-facing plugin packages — product, not Practice (ADR-125 §Skill classes) |
 
 `agent-tools/` is not portable Practice Core content and is not a platform adapter. It
 is this repo's TypeScript implementation of capabilities that may need equivalents in

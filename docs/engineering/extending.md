@@ -107,7 +107,7 @@ Rules, skills, commands, and sub-agents follow the three-layer artefact model
 parity required to keep `pnpm portability:check` green.
 
 User-facing plugin packages under `plugins/` are outside this recipe: they are
-product deliverables (ADR-125 §user-facing skills), and the ChatGPT/Codex package
+product deliverables (ADR-125 §Skill classes and validation jurisdiction), and the ChatGPT/Codex package
 README (`plugins/oak-open-curriculum-chatgpt/README.md`) records how a shared
 skill is copied there and gated.
 

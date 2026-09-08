@@ -544,7 +544,7 @@ generation prefix) are configurable parameters, not class boundaries:
   (for teachers) and engineering skills (for ed-tech engineers building
   on the curriculum SDK). Home today: `plugins/oak-open-curriculum/`
   (Claude Code) and its ChatGPT/Codex packaging
-  `plugins/oak-open-curriculum-chatgpt/`, listed by the root
+  `plugins/oak-open-curriculum-chatgpt/`, the latter listed by the root
   `.agents/plugins/marketplace.json` (2026-09-08 amendment).
   These are product deliverables assured under validation-strategy's
   tiers (teacher-facing content sits at the Critical/Standard tier);
@@ -571,15 +571,16 @@ decision.
 
 ### 2026-09-08 — Second user-facing plugin package (ChatGPT and Codex)
 
-ChatGPT and Codex read a plugin's `skills/` directory only, so the Claude
-plugin's workflow+agent capabilities cannot ship there unchanged. The
-owner ruled (PR #968, MCP-692) that the ChatGPT/Codex packaging is a
-second checked-in package, `plugins/oak-open-curriculum-chatgpt/`, not a
-restructuring of the Claude plugin and not a generator output: the
-adapter pipeline never touches user-facing skills (2026-08-12 above), so
-the copies are hand-made and honest because `validate-plugin-skill-copies`
-recomputes their byte-identity with the Claude source on every run and
-discovers the shared set from the two trees. The root
+ChatGPT and Codex read a plugin's `skills/` directory only (observed
+2026-09-07; the package README carries the dated sideload record), so the
+Claude plugin's workflow+agent capabilities cannot ship there unchanged.
+The owner ruled (PR #968, MCP-692) that the ChatGPT/Codex packaging is a
+second checked-in package, `plugins/oak-open-curriculum-chatgpt/` — not a
+restructuring of the Claude plugin, and not a generator output, because
+the adapter pipeline never touches user-facing skills (2026-08-12 above).
+The copies are hand-made; `validate-plugin-skill-copies` keeps them honest
+by recomputing their byte-identity with the Claude source on every run and
+discovering the shared set from the two trees rather than from a list. The root
 `.agents/plugins/marketplace.json` lists the package for Codex local
 marketplaces; it is a product surface, not a Practice projection.
 `plugins/oak-open-curriculum-chatgpt/README.md` is the package's own
