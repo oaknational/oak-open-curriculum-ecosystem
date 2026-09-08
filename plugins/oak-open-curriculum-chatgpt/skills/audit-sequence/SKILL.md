@@ -37,7 +37,7 @@ Then one or two lines summarising the most consequential finding, and what would
 
 ## Rules
 
-- Keep the two kinds of finding apart. An ordering break across years is read off Oak's thread; a same-year break at an earlier authored position is your judgement, because a key stage 4 run merges exam-board variants; a knowledge gap is your reading of a statement against the plan. Label every row.
+- Keep the two kinds of finding apart. An earlier-year ordering break is read off Oak's thread; a same-year one is your judgement against a merged run, and a knowledge gap is your reading of a statement against the plan. Label every row.
 - Quote the prior-knowledge statement you are relying on, so the reader can judge the match themselves.
 - If a unit records no prior knowledge, say so rather than inferring it.
 - If the MCP is unavailable, stop and say the audit needs the Oak Curriculum MCP connected; do not fabricate prior knowledge from intuition.

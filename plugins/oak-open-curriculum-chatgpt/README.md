@@ -23,8 +23,11 @@ neither exists in ChatGPT. So here:
 Both properties, and the agreement of the two manifests, are recomputed by
 `agent-tools/tests/skills/chatgpt-plugin-package-invariants.integration.test.ts`.
 
-A repo validator fails the build when a shared copy drifts from its Claude source. The
-durable fix is a generator (MCP-342); until then the copy is honest because it is checked.
+A repo validator fails the build when a shared copy drifts from its Claude source, and an
+integration test (`chatgpt-merged-skill-derivation.integration.test.ts`) fails it when either
+merged skill and its Claude agent stop matching from the first heading onward, in either
+direction. The durable fix is a generator (MCP-342); until then the copies are honest because
+they are checked.
 
 ## Sideload for testing (desktop app)
 
