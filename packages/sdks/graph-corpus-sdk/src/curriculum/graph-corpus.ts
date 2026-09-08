@@ -26,6 +26,7 @@ export type {
   GraphCorpusNodeId,
   GraphCorpusSequence,
   GraphCorpusSequencePlacement,
+  GraphCorpusUnitLessonRun,
   GraphCorpusThreadNode,
   GraphCorpusUnitNode,
 } from '@oaknational/sdk-codegen/graph-corpus';

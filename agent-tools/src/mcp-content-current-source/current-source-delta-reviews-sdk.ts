@@ -22,11 +22,12 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   // MCP-365: the generated instructions gained the owner-signed
   // brand-provenance closing paragraph (attribution + non-endorsement per
   // LICENCE-DATA.md); C055 re-anchored on its unchanged routing paragraph.
-  // Stated-statements refactor: the server-instructions sequencing sentence
-  // now names each unit's stated prior knowledge rather than claiming a
-  // prior-knowledge graph is served.
+  // Stated-statements refactor (MCP-671) and thread sequences in curriculum
+  // order (MCP-681): the server-instructions sequencing sentence (C054) now
+  // names curriculum-ordered thread progressions and each unit's stated
+  // prior knowledge rather than a prior-knowledge graph.
   'packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts': reviewed(
-    '028902c67f37ef6fc777738f6ebb83b4994cdcbf64ea49d8d777f33b36840e5d',
+    '423f78d9882261f797f978ee978a002bfd730f79b2a9a5ae15d71ea09eed54fe',
     ['C049', 'C050', 'C051', 'C052', 'C053', 'C054', 'C055'],
   ),
   // MCP-438: the description's embedded presentation directive (the fonts
@@ -85,8 +86,11 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     'b2ee07ef1e5550084db0171499306ca06c5ab4bd04bff76a1e6e013ae0a5117b',
     ['C065', 'C066', 'C067', 'C068'],
   ),
+  // Thread sequences in curriculum order (2026-09-03): the description
+  // (C253), the detail-anchor field (C254), and the summary (C258) state
+  // per-subject runs in Oak's curriculum order.
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts': reviewed(
-    'b3a4fcb15ae2f9cf053cd8945e9a5f5df7611eddee2532d5acd5d2edae67c11f',
+    'd15d7c6fd2ceaf7c090587673efc6cbdc68286fd32763c22b4be6d48d56991fe',
     ['C252', 'C253', 'C254', 'C255', 'C256', 'C257', 'C258', 'C259', 'C260'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-user-search/tool-definition.ts': reviewed(

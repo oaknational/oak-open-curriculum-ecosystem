@@ -42,7 +42,7 @@ This server exposes Oak's curriculum through the three MCP primitive types, each
 **Tools** (model-controlled) — currently 37 curriculum tools: 24 generated
 from the OpenAPI schema plus 13 aggregated tools. The aggregated set covers
 search/browse/fetch flows, orientation, the curriculum graph tools
-(`get-thread-progressions` for year-ordered sequences,
+(`get-thread-progressions` for curriculum-ordered sequences,
 `get-prior-knowledge-graph`, `get-misconception-graph`,
 `get-keyword-graph`), EEF evidence, `download-asset`, and
 the MCP App user-search pair (`user-search`, `user-search-query`). The AI

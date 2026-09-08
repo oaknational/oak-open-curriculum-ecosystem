@@ -1,5 +1,11 @@
 /**
  * Unit tests for thread extraction.
+ *
+ * @remarks
+ * A thread is a tag; a unit's curriculum position is its index in its bulk
+ * sequence. These tests describe that each membership carries the unit's
+ * subject, phase, and per-sequence index, and that the bulk's thread display
+ * index never orders anything.
  */
 import { describe, expect, it } from 'vitest';
 
@@ -70,18 +76,66 @@ describe('extractThreads', () => {
     expect(result[0].units).toHaveLength(2);
   });
 
-  it('orders units within thread by order field', () => {
+  it('records each membership with the subject, sequence, and per-sequence index of its unit', () => {
+    const units = [
+      {
+        unit: createUnit({ unitSlug: 'untagged-first', threads: [] }),
+        sequenceSlug: 'maths-primary',
+      },
+      {
+        unit: createUnit({
+          unitSlug: 'fractions-y3',
+          threads: [{ slug: 'number-fractions', order: 9, title: 'Number: Fractions' }],
+        }),
+        sequenceSlug: 'maths-primary',
+      },
+      {
+        unit: createUnit({
+          unitSlug: 'ratio-y7',
+          keyStageSlug: 'ks3',
+          year: 7,
+          threads: [{ slug: 'number-fractions', order: 9, title: 'Number: Fractions' }],
+        }),
+        sequenceSlug: 'maths-secondary',
+      },
+    ];
+
+    const result = extractThreads(units);
+
+    expect(result[0].units).toEqual([
+      {
+        unitSlug: 'fractions-y3',
+        unitTitle: 'Test Unit',
+        subject: 'maths',
+        sequenceSlug: 'maths-primary',
+        sequenceIndex: 1,
+        keyStage: 'ks2',
+        year: 4,
+      },
+      {
+        unitSlug: 'ratio-y7',
+        unitTitle: 'Test Unit',
+        subject: 'maths',
+        sequenceSlug: 'maths-secondary',
+        sequenceIndex: 0,
+        keyStage: 'ks3',
+        year: 7,
+      },
+    ]);
+  });
+
+  it('keeps units in bulk encounter order regardless of the thread display index', () => {
     const units = [
       {
         unit: createUnit({
-          unitSlug: 'fractions-y4',
+          unitSlug: 'later-in-sequence-higher-index',
           threads: [{ slug: 'number-fractions', order: 3, title: 'Number: Fractions' }],
         }),
         sequenceSlug: 'maths-primary',
       },
       {
         unit: createUnit({
-          unitSlug: 'fractions-y3',
+          unitSlug: 'earlier-in-sequence-lower-index',
           threads: [{ slug: 'number-fractions', order: 2, title: 'Number: Fractions' }],
         }),
         sequenceSlug: 'maths-primary',
@@ -90,8 +144,27 @@ describe('extractThreads', () => {
 
     const result = extractThreads(units);
 
-    expect(result[0].units[0].unitSlug).toBe('fractions-y3');
-    expect(result[0].units[1].unitSlug).toBe('fractions-y4');
+    expect(result[0].units.map((unit) => unit.unitSlug)).toEqual([
+      'later-in-sequence-higher-index',
+      'earlier-in-sequence-lower-index',
+    ]);
+    expect(result[0].units.map((unit) => unit.sequenceIndex)).toEqual([0, 1]);
+  });
+
+  it('names the subject as the sequence slug without its phase suffix', () => {
+    const units = [
+      {
+        unit: createUnit({
+          threads: [{ slug: 'design', order: 1, title: 'Design' }],
+        }),
+        sequenceSlug: 'design-technology-secondary',
+      },
+    ];
+
+    const result = extractThreads(units);
+
+    expect(result[0].units[0].subject).toBe('design-technology');
+    expect(result[0].units[0].sequenceSlug).toBe('design-technology-secondary');
   });
 
   it('calculates year span', () => {

@@ -23,7 +23,8 @@ import { join } from 'node:path';
 
 import type { Logger } from '@oaknational/logger';
 import { bulkDownloadFileSchema, type BulkDownloadFile } from '../types/generated/bulk/index.js';
-import { extractSubjectPhase, type SubjectPhase } from './reader-utils.js';
+import { unwrapOrThrow } from '@oaknational/result';
+import { checkBulkFileSet, extractSubjectPhase, type SubjectPhase } from './reader-utils.js';
 
 export { extractSubjectPhase, type SubjectPhase } from './reader-utils.js';
 
@@ -111,6 +112,11 @@ export async function readAllBulkFiles(
   const files = await discoverBulkFiles(basePath, logger);
   const results: BulkFileResult[] = [];
 
+  // Unrecognised names are refused before any parse, so a misnamed subject
+  // file cannot drop out silently (ADR-088 boundary: the reader is the one
+  // throwing edge of the bulk read, so the Result is raised here as itself).
+  unwrapOrThrow(checkBulkFileSet(files.map((filename) => ({ filename, sequenceSlug: undefined }))));
+
   for (const filename of files) {
     const subjectPhase = extractSubjectPhase(filename);
     if (!subjectPhase) {
@@ -119,6 +125,15 @@ export async function readAllBulkFiles(
     const data = await parseBulkFile(basePath, filename, logger);
     results.push({ filename, subjectPhase, data });
   }
+
+  unwrapOrThrow(
+    checkBulkFileSet(
+      results.map((result) => ({
+        filename: result.filename,
+        sequenceSlug: result.data.sequenceSlug,
+      })),
+    ),
+  );
 
   return results;
 }

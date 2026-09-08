@@ -65,6 +65,36 @@ const knownSubjectKeyStage = required(
   'corpus has no sequenced unit to derive a subject+keyStage anchor',
 );
 
+/** A thread the corpus runs through more than one subject, chosen deterministically. */
+const multiSubjectThreadSlug = required(
+  (() => {
+    const counts = new Map<string, number>();
+    for (const sequence of graphCorpus.sequences) {
+      counts.set(sequence.threadId, (counts.get(sequence.threadId) ?? 0) + 1);
+    }
+    const found = [...counts.entries()]
+      .filter(([, count]) => count > 1)
+      .sort(([a], [b]) => a.localeCompare(b))[0];
+    return found ? bareSlug(found[0]) : undefined;
+  })(),
+  'corpus has no thread spanning several subjects',
+);
+
+/** A thread confined to one subject, chosen deterministically. */
+const singleSubjectThreadSlug = required(
+  (() => {
+    const counts = new Map<string, number>();
+    for (const sequence of graphCorpus.sequences) {
+      counts.set(sequence.threadId, (counts.get(sequence.threadId) ?? 0) + 1);
+    }
+    const found = [...counts.entries()]
+      .filter(([, count]) => count === 1)
+      .sort(([a], [b]) => a.localeCompare(b))[0];
+    return found ? bareSlug(found[0]) : undefined;
+  })(),
+  'corpus has no single-subject thread',
+);
+
 const TEXT_CONTENT = z.object({ type: z.literal('text'), text: z.string() });
 
 /** Non-strict envelope narrowing per anchor kind (the family envelope adds summary/status fields). */
@@ -74,7 +104,13 @@ const THREAD_ENVELOPE = z.object({
     z.object({
       thread: z.unknown(),
       totalUnits: z.number(),
-      entries: z.array(z.object({ unit: z.unknown(), year: z.number().optional() })),
+      progressions: z.array(
+        z.object({
+          subject: z.string(),
+          totalUnits: z.number(),
+          entries: z.array(z.object({ unit: z.unknown(), year: z.number().optional() })),
+        }),
+      ),
     }),
   ),
   resolvedAnchors: z.array(z.string()),
@@ -98,11 +134,11 @@ describe('GET_THREAD_PROGRESSIONS_TOOL_DEF', () => {
     expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).not.toContain('complete static graph');
   });
 
-  it('states the year-axis ordering semantics honestly', () => {
-    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain('teaching year');
-    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain(
-      'Within one year the order is not curricular',
-    );
+  it('states the curriculum-order semantics: per-subject runs, never a cross-subject interleave', () => {
+    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain('curriculum order');
+    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain('one run per subject');
+    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain('never interleaved');
+    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).not.toContain('not curricular');
   });
 
   it('is read-only, idempotent, and closed-world', () => {
@@ -153,7 +189,51 @@ describe('runThreadProgressionsTool — thread detail anchor', () => {
     const envelope = THREAD_ENVELOPE.parse(result.structuredContent);
     expect(envelope.threads).toHaveLength(1);
     expect(envelope.resolvedAnchors).toEqual([`thread:${knownThreadSlug}`]);
-    expect(envelope.threads[0]?.entries.length).toBeGreaterThan(0);
+    expect(envelope.threads[0]?.progressions.length).toBeGreaterThan(0);
+    expect(envelope.threads[0]?.progressions[0]?.entries.length).toBeGreaterThan(0);
+  });
+
+  it('returns exactly one run for a thread confined to a single subject', () => {
+    const result = runThreadProgressionsTool({ threadSlug: singleSubjectThreadSlug });
+
+    const envelope = THREAD_ENVELOPE.parse(result.structuredContent);
+    expect(envelope.threads[0]?.progressions).toHaveLength(1);
+  });
+
+  it('returns one run per subject for a thread spanning several subjects', () => {
+    const expectedRuns = graphCorpus.sequences.filter(
+      (sequence) => sequence.threadId === `thread:${multiSubjectThreadSlug}`,
+    ).length;
+    const result = runThreadProgressionsTool({ threadSlug: multiSubjectThreadSlug });
+
+    const envelope = THREAD_ENVELOPE.parse(result.structuredContent);
+    expect(expectedRuns).toBeGreaterThan(1);
+    expect(envelope.threads[0]?.progressions).toHaveLength(expectedRuns);
+  });
+
+  // The summary is content[0] — the only block a text-only host renders — so
+  // the per-subject shape and the ordering basis must survive in prose, not
+  // only in structuredContent.
+  it('states the run count, the subjects, and the ordering basis in the summary text', () => {
+    const result = runThreadProgressionsTool({ threadSlug: multiSubjectThreadSlug });
+    const summary = result.content[0];
+    const subjects = graphCorpus.sequences
+      .filter((sequence) => sequence.threadId === `thread:${multiSubjectThreadSlug}`)
+      .map((sequence) => sequence.subject);
+
+    const text = TEXT_CONTENT.parse(summary).text;
+    expect(text).toContain(`${String(subjects.length)} subject runs`);
+    expect(text).toContain('curriculum order');
+    for (const subject of subjects) {
+      expect(text).toContain(subject);
+    }
+  });
+
+  it('says "subject run" in the singular for a single-subject thread', () => {
+    const result = runThreadProgressionsTool({ threadSlug: singleSubjectThreadSlug });
+
+    const text = TEXT_CONTENT.parse(result.content[0]).text;
+    expect(text).toContain('1 subject run (');
   });
 
   it('reports an unknown thread slug without erroring (well-formed empty)', () => {
@@ -174,7 +254,7 @@ describe('runThreadProgressionsTool — subject+keyStage discovery anchor', () =
     const envelope = DISCOVERY_ENVELOPE.parse(result.structuredContent);
     expect(envelope.threads.length).toBeGreaterThan(0);
     expect(envelope.threads.length).toBeLessThan(graphCorpus.sequences.length);
-    expect(envelope.threads[0]).not.toHaveProperty('entries');
+    expect(envelope.threads[0]).not.toHaveProperty('progressions');
   });
 
   it('returns a well-formed empty result for an unmatched anchor', () => {

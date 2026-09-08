@@ -1,3 +1,14 @@
+## [1.178.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.178.5...v1.178.6) (2026-09-08)
+
+
+### Bug Fixes
+
+* **graph-corpus:** carry Oak's authored curriculum order ([c6b6ff2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/c6b6ff257e50b2b3f9dbdc3587c8710b239ccf4b))
+* **graph-corpus:** disclose the KS4 exam-board merge and harden the bulk reader (MCP-681) ([3b44c41](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3b44c41bec95389e8cf57ec1d1870580af00c7d5))
+* **graph-corpus:** export the run type; pin the ordered sections on the artefact ([5f1e638](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5f1e6385a39679eab58bfe6bcac4878a6a73ef91))
+* **graph-corpus:** measure the fallback stat over the run, not the listing ([df134ee](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/df134eed5a0954d4397afebfc017396f92e53dd2)), closes [#965](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/965)
+* **plugin:** audit same-year order too, now the tool serves it (MCP-681) ([3365403](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/336540339cfe1d5ff5037d14962a0f8bb7005888))
+
 ## [1.178.5](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.178.4...v1.178.5) (2026-09-07)
 
 

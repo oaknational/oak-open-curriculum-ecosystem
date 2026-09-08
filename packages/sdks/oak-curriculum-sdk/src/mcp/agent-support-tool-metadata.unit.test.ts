@@ -121,9 +121,9 @@ describe('generateServerInstructions', () => {
     const instructions = generateServerInstructions();
 
     // The served guidance names the curriculum-connected value the anchored
-    // tools deliver (year-ordered progressions, misconception and keyword
-    // graphs, and each unit's stated prior knowledge), so connecting agents
-    // know plans can build on what a class has already covered.
+    // tools deliver (curriculum-ordered thread progressions, misconception and
+    // keyword graphs, and each unit's stated prior knowledge), so connecting
+    // agents know plans can build on what a class has already covered.
     expect(instructions).toContain('fully sequenced');
     expect(instructions).toContain('get-thread-progressions');
     expect(instructions).toContain('build on what a class has already covered');

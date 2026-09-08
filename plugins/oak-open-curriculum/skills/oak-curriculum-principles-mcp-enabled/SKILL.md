@@ -43,14 +43,14 @@ For the _meaning_ of each principle, the evidence base, and the subject guiding 
 
 The full tool-by-tool mapping with example calls and data shapes is in `references/grounding-each-principle.md`. The short version:
 
-| Principle                       | Grounding data                                                           | Key tools                                                             |
-| ------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| **Knowledge & vocabulary rich** | Keywords _with definitions_, key learning points, learning outcomes      | `get-lessons-summary`, `get-keywords`, `get-units-summary`            |
-| **Sequenced & coherent**        | ~164 threads with year-ordered units; each unit's stated prior knowledge | `get-threads`, `get-thread-progressions`, `get-prior-knowledge-graph` |
-| **Evidence-informed**           | ~12,800 misconceptions + teacher responses; teacher tips                 | `get-misconception-graph`, `get-lessons-summary`                      |
-| **Flexible**                    | National curriculum statements; unit options; tiers; programme structure | `get-units-summary`, `browse-curriculum`, `fetch`                     |
-| **Diverse**                     | The breadth of Oak content; diversity-related threads and exemplars      | `search`, `explore-topic`, `get-threads-units`                        |
-| **Accessible**                  | Content guidance, supervision levels; prior knowledge for chunking       | `get-lessons-summary`, `get-prior-knowledge-graph`                    |
+| Principle                       | Grounding data                                                                                             | Key tools                                                             |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **Knowledge & vocabulary rich** | Keywords _with definitions_, key learning points, learning outcomes                                        | `get-lessons-summary`, `get-keywords`, `get-units-summary`            |
+| **Sequenced & coherent**        | ~164 threads with units in Oak's curriculum order, one run per subject; each unit's stated prior knowledge | `get-threads`, `get-thread-progressions`, `get-prior-knowledge-graph` |
+| **Evidence-informed**           | ~12,800 misconceptions + teacher responses; teacher tips                                                   | `get-misconception-graph`, `get-lessons-summary`                      |
+| **Flexible**                    | National curriculum statements; unit options; tiers; programme structure                                   | `get-units-summary`, `browse-curriculum`, `fetch`                     |
+| **Diverse**                     | The breadth of Oak content; diversity-related threads and exemplars                                        | `search`, `explore-topic`, `get-threads-units`                        |
+| **Accessible**                  | Content guidance, supervision levels; prior knowledge for chunking                                         | `get-lessons-summary`, `get-prior-knowledge-graph`                    |
 
 Discovery tools that cut across all of these: `search` (scopes: `lessons`, `units`, `threads`, `sequences`, `suggest`), `explore-topic` (searches scopes in parallel), `browse-curriculum` (structure/facets), and `fetch` (prefixed IDs: `lesson:`, `unit:`, `thread:`, `subject:`).
 

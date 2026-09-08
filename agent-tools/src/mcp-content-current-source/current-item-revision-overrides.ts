@@ -6,6 +6,7 @@ import { CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES } from './current-aggregated
 import { CURRENT_GENERATED_DESCRIPTION_REVISION_OVERRIDES } from './current-generated-description-anchor-overrides.js';
 import { CURRENT_GENERATED_ITEM_REVISION_OVERRIDES } from './current-generated-item-anchor-overrides.js';
 import { CURRENT_SPEC_REFRESH_ITEM_REVISION_OVERRIDES } from './current-spec-refresh-item-anchor-overrides.js';
+import { CURRENT_THREAD_PROGRESSIONS_ITEM_REVISION_OVERRIDES } from './current-thread-progressions-item-anchor-overrides.js';
 
 export const CURRENT_ITEM_REVISION_OVERRIDES = {
   ...CURRENT_GENERATED_ITEM_REVISION_OVERRIDES,
@@ -19,18 +20,7 @@ export const CURRENT_ITEM_REVISION_OVERRIDES = {
   // resource — their revision verdicts now derive from lineage.
   C690: 'unchanged',
   C479: 'modified',
-  // get-prior-knowledge-graph now serves stated prior-knowledge statements,
-  // not the thread-adjacency subgraph; the progression guidance rewritten.
-  C020: 'modified',
-  // The six tools arrays themselves are byte-identical; only the baseline
-  // anchor spanning the surrounding toolCategories literal broke.
-  C023: 'unchanged',
-  // trackProgression step 3 rewritten for the stated-statements contract.
-  C045: 'modified',
-  // relatedResources prior-knowledge pointer rewritten likewise.
+  ...CURRENT_THREAD_PROGRESSIONS_ITEM_REVISION_OVERRIDES,
+  // relatedResources prior-knowledge pointer rewritten for stated statements (MCP-671).
   C290: 'modified',
-  // Server-instructions sequencing sentence rewritten likewise.
-  C054: 'modified',
-  // Cross-tool pointers (thread-progressions, search) rewritten likewise.
-  C253: 'modified',
 } as const;

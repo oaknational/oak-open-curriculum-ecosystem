@@ -21,6 +21,13 @@ Accepted (amended 2026-07-23)
 > detail, or subject + keyStage discovery) is the thread-progression value
 > surface, ordered by teaching year.
 >
+> **Amendment (2026-09-03 — thread sequences in curriculum order).** The
+> thread-progression surface now serves one run per subject in Oak's
+> authored curriculum order (years ascending; within a year, the subject
+> sequence's unit order), replacing the year-only ordering above whose
+> within-year tie-break was alphabetical. Basis: ADR-086 amendment of the
+> same date.
+>
 > **Amendment (2026-06-11 — position-anchored-teaching-continuity, w1-c1).**
 > The Prompts section below was reconciled with the shipped estate, which
 > had drifted: the served set is seven prompts (the table previously listed

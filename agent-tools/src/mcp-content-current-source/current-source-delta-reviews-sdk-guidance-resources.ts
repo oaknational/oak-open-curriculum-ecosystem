@@ -24,8 +24,11 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/agent-guidance-resources.ts':
     reviewed('b72948f5ade5d279b502b43ae5970439985c3d69fcfdab763f865c4bb6156f3a', ['A009']),
+  // Thread sequences in curriculum order (2026-09-03): step 2 names the
+  // per-subject curriculum-ordered progression; the anchored rows are
+  // unchanged.
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/continue-progression.ts': reviewed(
-    'd49dc9764828029247ba20261bce0c5c3f39b6e552ebe632458fe0fd3f979e16',
+    '9ea922d4da51b9c879be5ff1a29776b114a174a6879e217b396341bb0720535e',
     [
       'A008',
       'C184',
@@ -68,8 +71,11 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/guidance-resource-types.ts':
     excluded('76cf0bd8b14bad736906a9874e1f3211993d5759d658d0eb6bf144e026cd1723', TYPE_ONLY),
+  // Thread sequences in curriculum order (2026-09-03): step 2 names the
+  // per-subject curriculum-ordered progression; the anchored rows are
+  // unchanged.
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/learning-progression.ts': reviewed(
-    'f9c4b656d4870ee1c6aa7a0a69ed2c59e942f3791052a374122e7b1b8d6f9c8c',
+    'd219784edc89eea8fb1e6387d7552bedbc972fe221a38f47deb435b90f656368',
     ['A005', 'C181', 'C191', 'C192', 'C200', 'C205', 'C332'],
   ),
 };
