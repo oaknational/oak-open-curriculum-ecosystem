@@ -1,10 +1,11 @@
 {
-  "_about": "Regression evals for oak-curriculum-principles-mcp-enabled. Trigger evals should fire for 'compare/check against Oak / live data' phrasing and defer generic principles work to the self-contained skill. The quality eval requires the Oak Curriculum MCP; grade the with-skill (MCP) run against a no-tools baseline. First pass: with-skill caught a Year-3-vs-Year-5 placement error the baseline missed (4/4 vs 2/4).",
+  "_about": "Regression evals for oak-curriculum-principles-mcp-enabled. Trigger evals should fire for 'compare/check against Oak / live data' phrasing and defer generic principles work to the self-contained skill. The quality eval requires the Oak Curriculum MCP; grade the with-skill (MCP) run against a no-tools baseline. First pass: with-skill caught a Year-3-vs-Year-5 placement error the baseline missed (4/4 vs 2/4). Trigger set revised 2026-09-08 with the do-not-use boundary (skill 1.1.1): two single-check queries now route to audit-sequence and find-misconceptions; the first-pass result above predates that revision.",
   "skill": "oak-curriculum-principles-mcp-enabled",
   "trigger_evals": [
     {
       "query": "Check whether my draft fractions sequence matches how Oak orders it across the year groups.",
-      "should_trigger": true
+      "should_trigger": false,
+      "note": "one plan's unit order; audit-sequence"
     },
     {
       "query": "Compare my Year 7 'cells' lesson against Oak's and tell me what I'm missing.",
@@ -12,14 +13,15 @@
     },
     {
       "query": "What misconceptions does Oak document for adding fractions with the same denominator?",
-      "should_trigger": true
+      "should_trigger": false,
+      "note": "one topic's misconception list; find-misconceptions"
     },
     {
       "query": "Find me an Oak exemplar unit that shows strong vocabulary teaching in KS3 science.",
       "should_trigger": true
     },
     {
-      "query": "Benchmark this draft unit against Oak's curriculum threads and the prior knowledge its units assume.",
+      "query": "Benchmark this draft unit against Oak across the six principles: sequencing, misconceptions, vocabulary and exemplars.",
       "should_trigger": true
     },
     {

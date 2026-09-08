@@ -1,5 +1,5 @@
 {
-  "_about": "Regression evals for audit-sequence (ChatGPT/Codex package). 'trigger_evals' test that the description fires for audit / sanity-check / sequence-check phrasing about a plan's unit order, and not for principles reviews or misconception requests, which belong to the sibling skills named in its do-not-use sentence. 'quality_evals' require the Oak Curriculum MCP and are graded with assertions against a no-tools baseline. Definitions written 2026-09-08; first pass not yet run — the evals job covering all five skills runs them.",
+  "_about": "Regression evals for audit-sequence (the Claude workflow and its ChatGPT/Codex merged skill share this description). 'trigger_evals' test that the description fires for audit / sanity-check / sequence-check phrasing about a plan's unit order, and not for principles reviews or misconception requests, which belong to the sibling skills named in its do-not-use sentence. 'quality_evals' require the Oak Curriculum MCP and are graded with assertions against a no-tools baseline. Definitions written 2026-09-08; first pass not yet run — the evals job covering all five skills runs them.",
   "skill": "audit-sequence",
   "trigger_evals": [
     {

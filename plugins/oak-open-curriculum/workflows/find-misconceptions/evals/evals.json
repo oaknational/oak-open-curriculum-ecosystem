@@ -1,5 +1,5 @@
 {
-  "_about": "Regression evals for find-misconceptions (ChatGPT/Codex package). 'trigger_evals' test that the description fires for 'what do pupils get wrong / misconceptions / common mistakes' phrasing for a topic, and not for plan audits or principles reviews, which belong to the sibling skills named in its do-not-use sentence. 'quality_evals' require the Oak Curriculum MCP and are graded with assertions against a no-tools baseline. Definitions written 2026-09-08; first pass not yet run — the evals job covering all five skills runs them.",
+  "_about": "Regression evals for find-misconceptions (the Claude workflow and its ChatGPT/Codex merged skill share this description). 'trigger_evals' test that the description fires for 'what do pupils get wrong / misconceptions / common mistakes' phrasing for a topic, and not for plan audits or principles reviews, which belong to the sibling skills named in its do-not-use sentence. 'quality_evals' require the Oak Curriculum MCP and are graded with assertions against a no-tools baseline. Definitions written 2026-09-08; first pass not yet run — the evals job covering all five skills runs them.",
   "skill": "find-misconceptions",
   "trigger_evals": [
     {
@@ -46,7 +46,7 @@
       "prompt": "What misconceptions do pupils have about photosynthesis in Year 9, and how should I respond to each?",
       "assertions": [
         "resolves lesson/unit/thread slugs first and then calls the misconception graph anchored on them, rather than passing free text",
-        "reports only misconceptions Oak has documented, each stated in pupil terms",
+        "reports the misconceptions Oak has documented, each stated in pupil terms, and labels any inferred error as not documented",
         "pairs each misconception with where it surfaces and a concrete teacher response",
         "distinguishes corpus corroboration (authored quiz distractors) from frequency claims, and makes no frequency claim",
         "closes with the OGL v3.0 attribution to Oak National Academy"

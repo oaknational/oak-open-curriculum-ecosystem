@@ -1,6 +1,6 @@
 ---
 name: find-misconceptions
-description: Surface the known pupil misconceptions for a topic from Oak's misconception graph, each paired with how the error shows up and a concrete teacher response. Use when asked what pupils get wrong, what errors or misconceptions to anticipate, or to find common mistakes for a topic or year group. Reports documented misconceptions only. Not for checking a plan's unit order (use audit-sequence) or for a general review against Oak's curriculum principles (use oak-curriculum-principles-mcp-enabled). Requires the Oak Curriculum MCP.
+description: Surface the pupil misconceptions Oak has documented for a topic, each paired with where it surfaces in the teaching sequence and a concrete teacher response. Use when asked what pupils get wrong, what errors or misconceptions to anticipate, or to find common mistakes for a topic or year group. Reports the misconceptions Oak has documented; any inferred error is labelled as such. Not for checking a plan's unit order (use audit-sequence) or for a general review against Oak's curriculum principles (use oak-curriculum-principles-mcp-enabled). Requires the Oak Curriculum MCP.
 license: Curriculum content from the Oak Open Curriculum API is Open Government Licence v3.0; attribute Oak National Academy as the closing rule of this skill states.
 compatibility: >-
   Requires the Oak Curriculum MCP server (mcp.thenational.academy/mcp)
