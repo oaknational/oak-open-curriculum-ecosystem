@@ -1,0 +1,65 @@
+{
+  "_about": "Regression evals for find-misconceptions (ChatGPT/Codex package). 'trigger_evals' test that the description fires for 'what do pupils get wrong / misconceptions / common mistakes' phrasing for a topic, and not for plan audits or principles reviews, which belong to the sibling skills named in its do-not-use sentence. 'quality_evals' require the Oak Curriculum MCP and are graded with assertions against a no-tools baseline. Definitions written 2026-09-08; first pass not yet run — the evals job covering all five skills runs them.",
+  "skill": "find-misconceptions",
+  "trigger_evals": [
+    {
+      "query": "What misconceptions do pupils have about photosynthesis in Year 9?",
+      "should_trigger": true
+    },
+    {
+      "query": "What do Year 4 pupils typically get wrong about fractions? I want to plan for it.",
+      "should_trigger": true
+    },
+    {
+      "query": "Common mistakes when teaching the causes of the First World War at KS3?",
+      "should_trigger": true
+    },
+    {
+      "query": "Which errors should I anticipate when introducing negative numbers?",
+      "should_trigger": true
+    },
+    {
+      "query": "Audit my Year 7 science plan against how Oak sequences the same units.",
+      "should_trigger": false,
+      "note": "audit-sequence"
+    },
+    {
+      "query": "Check this unit against Oak's curriculum principles.",
+      "should_trigger": false,
+      "note": "oak-curriculum-principles-mcp-enabled"
+    },
+    {
+      "query": "Write a quiz on photosynthesis for Year 9.",
+      "should_trigger": false,
+      "note": "authoring; misconceptions may inform it but the request is for a quiz"
+    },
+    {
+      "query": "Why do my Year 9s keep forgetting their homework?",
+      "should_trigger": false,
+      "note": "behaviour, not subject misconceptions"
+    }
+  ],
+  "quality_evals": [
+    {
+      "id": "photosynthesis-y9",
+      "requires": "Oak Curriculum MCP",
+      "prompt": "What misconceptions do pupils have about photosynthesis in Year 9, and how should I respond to each?",
+      "assertions": [
+        "resolves lesson/unit/thread slugs first and then calls the misconception graph anchored on them, rather than passing free text",
+        "reports only misconceptions Oak has documented, each stated in pupil terms",
+        "pairs each misconception with where it surfaces and a concrete teacher response",
+        "distinguishes corpus corroboration (authored quiz distractors) from frequency claims, and makes no frequency claim",
+        "closes with the OGL v3.0 attribution to Oak National Academy"
+      ]
+    },
+    {
+      "id": "no-year-group",
+      "requires": "Oak Curriculum MCP",
+      "prompt": "What do pupils get wrong about fractions?",
+      "assertions": [
+        "asks for the year group or key stage before pulling misconceptions",
+        "does not answer for every key stage at once or guess one silently"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "_about": "Regression evals for audit-sequence (ChatGPT/Codex package). 'trigger_evals' test that the description fires for audit / sanity-check / sequence-check phrasing about a plan's unit order, and not for principles reviews or misconception requests, which belong to the sibling skills named in its do-not-use sentence. 'quality_evals' require the Oak Curriculum MCP and are graded with assertions against a no-tools baseline. Definitions written 2026-09-08; first pass not yet run — the evals job covering all five skills runs them.",
+  "skill": "audit-sequence",
+  "trigger_evals": [
+    {
+      "query": "Audit my Year 7 science long-term plan against how Oak sequences the same units.",
+      "should_trigger": true
+    },
+    {
+      "query": "Sanity-check the unit order in this KS2 maths scheme of work — is anything taught before what it depends on?",
+      "should_trigger": true
+    },
+    {
+      "query": "Here is our Year 9 history sequence for next year. Check it for prerequisite problems.",
+      "should_trigger": true
+    },
+    {
+      "query": "Does this order of geography units hold up against Oak's threads?",
+      "should_trigger": true
+    },
+    {
+      "query": "Review my Year 8 English curriculum against Oak's six curriculum principles.",
+      "should_trigger": false,
+      "note": "principles review; oak-curriculum-principles-mcp-enabled"
+    },
+    {
+      "query": "What misconceptions do pupils have about photosynthesis in Year 9?",
+      "should_trigger": false,
+      "note": "find-misconceptions"
+    },
+    {
+      "query": "Write me a medium-term plan for Year 4 forces.",
+      "should_trigger": false,
+      "note": "authoring, not auditing an existing order"
+    },
+    {
+      "query": "Is my department's timetable balanced across the two terms?",
+      "should_trigger": false,
+      "note": "workload, not curriculum sequencing"
+    }
+  ],
+  "quality_evals": [
+    {
+      "id": "y7-science-plan-order",
+      "requires": "Oak Curriculum MCP",
+      "prompt": "Audit this Year 7 science plan against Oak. Autumn 1: Cells. Autumn 2: Chemical reactions. Spring 1: Particles. Spring 2: Forces. Summer 1: Reproduction. Summer 2: Energy.",
+      "assertions": [
+        "retrieves each unit's stated prior knowledge and thread position from Oak data rather than reasoning from general knowledge",
+        "for any unit placed before one that Oak orders earlier in the same subject, flags the break and says whether the data or its own judgement supports it; if the order holds, says so rather than inventing a finding",
+        "reports findings in plan order in a table with a data-or-judgement column and a suggested fix",
+        "does not rank units by downstream risk or invent dependencies the tools do not return",
+        "does not comment on pace, style, or pedagogy beyond ordering"
+      ]
+    },
+    {
+      "id": "no-plan-given",
+      "requires": "Oak Curriculum MCP",
+      "prompt": "Can you audit my sequence?",
+      "assertions": [
+        "asks for the plan before calling any tool",
+        "does not fabricate a plan or produce an audit table without one"
+      ]
+    }
+  ]
+}
