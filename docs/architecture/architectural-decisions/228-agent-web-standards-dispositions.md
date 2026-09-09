@@ -88,14 +88,49 @@ The spec is v0.91, status "Proposal", dated 26 August 2026
 (`agenticresourcediscovery.org/spec/`, read 2026-09-09). Contributing
 organisations named on the site and in the spec include Microsoft, Google,
 Hugging Face, GoDaddy, Cisco, Databricks, GitHub, Nvidia, Salesforce,
-ServiceNow, Snowflake and AWS. No formal steering committee or oversight board
-is named anywhere on the site or in the spec — the site says only that ARD "is
-being developed by a working group with participants from Microsoft, Google,
-Hugging Face, GoDaddy, and others". So ARD's governance is weaker than its
-sponsor list suggests, and weaker than A2A's.
+ServiceNow, Snowflake and AWS.
 
-It is adopted anyway, because it passes test (2) decisively and test (3)
-cleanly. Two live consumers were confirmed on 2026-09-09: GitHub's Agent Finder
+**ARD has a documented governance structure**, on a `/governance` page that 301s
+to `/governance/` (read 2026-09-09). Two bodies: an **Oversight Board** that
+"decides what ARD should become", and **Maintainers** who "decide how, and own
+the technical calls". Seated as published:
+
+| Body            | Members                                                                                                                                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Oversight Board | Google (Todd Segal), Hugging Face (Shaun Smith), Microsoft (Dhruv Chand), Amazon (Jeffrey Damick), Cisco (Luca Muscariello)                |
+| Maintainers     | R.V. Guha (Chair, member at large), Nick Cooper (member at large), Junjie Bu (Google), Shaun Smith (Hugging Face), Dhruv Chand (Microsoft) |
+
+Two rules are unusually clean for a v0.91 proposal. The Board seats **at most one
+member per company**, and eligibility requires a shipped product rather than
+interest — under the heading "No payments": "A seat is earned through product
+commitment, not financial contribution. ARD accepts no money for participation,
+and no seat, vote, or influence is available for purchase." The Maintainers
+carry an independence floor: "At least two members are members at large, not
+employed by any company holding a board seat. This is what keeps technical
+control from tracking commercial representation."
+
+Read the two tables separately, because they merge easily and the merge
+misleads. **Guha chairs the Maintainers, not the Board.** The independence rule
+is a _Maintainers_ rule — the Board is entirely company-seated — and the
+published roster meets its floor exactly, at two of five, with the other three
+Maintainers employed by companies that also hold board seats.
+
+Three qualifications sit against that. The page's own "Still to be decided"
+section leaves term lengths, how members at large are nominated, quorum and
+tie-breaking, and how a company joins the Board after the initial cohort all
+open, to be settled by the two bodies "once they are seated". Whether ARD sits
+under a neutral host — "W3C, an AI foundation, or similar" — is deferred
+"roughly twelve months out". And all of it is **self-asserted on the project's
+own site**, where A2A's is externally registered: IANA records `agent-card.json`
+as `permanent` with the Linux Foundation as change controller. A real board with
+a clean independence rule is a genuine signal; an entry in someone else's
+registry is a stronger one. ARD's governance is younger and less externally
+anchored than A2A's, which is a different statement from having none.
+
+The adopt verdict does not rest on any of that, which is why the governance
+caveats above do not disturb it. It rests on tests (2) and (3): live publishers
+and live consumers, and a claim Oak can honour. Two consumers were confirmed on
+2026-09-09: GitHub's Agent Finder
 for Copilot, shipped 2026-06-17 and stated by GitHub to implement ARD; and
 `hf discover`, built into the Hugging Face CLI, whose client reads
 `ai-catalog.json` and whose server offers semantic search over catalogued
@@ -125,9 +160,18 @@ both, with identical content**, until the ecosystem converges. The
 `.well-known` placement is correct for this file on its own merits: a site
 catalogue is genuinely site-wide metadata.
 
+This is already the implementation. Oak-Web-Application PR #4510
+(`feat/mcp-715-ard-manifest`, open 2026-09-09) serves both paths and emits both
+relations from `next.config.ts` — `</.well-known/ard.json>; rel="ard"` and
+`</.well-known/ai-catalog.json>; rel="ai-catalog"` — carrying the same reasoning
+in its own comments: "Spec §5.1 says a publisher need only serve `ard.json` …
+The spec is the newer thing; deployed consumers are not." This ADR records the
+decision that lane already took; it asks nothing new of it.
+
 _Revisit trigger:_ the three domains above serve `/.well-known/ard.json`, at
-which point the predecessor copy is retired; or ARD reaches v1.0 with a named
-governance body, at which point its governance row here is restated.
+which point the predecessor copy is retired; or ARD seats its bodies and closes
+its "Still to be decided" list, or moves to a neutral host, at which point the
+governance paragraph above is restated.
 
 ### 2. A2A — decline, on applicability only
 
@@ -370,9 +414,11 @@ capability and correctly hosts its skills — and it is not decided here.
 
 1. **The `www` ARD lane publishes two files, not one** — `/.well-known/ard.json`
    for spec conformance and `/.well-known/ai-catalog.json` for the consumers
-   that exist, with identical content and a `Link: rel="ard"` header. Publishing
-   only the v0.91 path would have been conformant and unread. This is the one
-   finding here that changes work already in flight.
+   that exist, with identical content and both `Link` relations emitted.
+   Publishing only the v0.91 path would have been conformant and unread. This
+   asks nothing new of that lane: Oak-Web-Application PR #4510 already does it,
+   and reached the conclusion independently. What this ADR adds is the durable
+   record of why, so the redundant-looking second path survives the next tidy-up.
 2. **Five scanner rows will stay red, deliberately**: A2A, WebMCP, DNS-AID, MCP
    Server Card, and `auth.md` completeness. This ADR is the answer when they are
    re-raised, and each red row now has a named trigger that would turn it green
@@ -416,7 +462,9 @@ capability and correctly hosts its skills — and it is not decided here.
 
 ## Evidence
 
-Measured first-hand on 2026-09-09 for this record: the ARD spec page and site;
+Measured first-hand on 2026-09-09 for this record: the ARD spec page, site and
+`/governance/` page (reached through the 301 from `/governance`);
+Oak-Web-Application PR #4510's `next.config.ts` diff;
 `ai-catalog.json` and `ard.json` on `github.com`, `huggingface.co` and
 `developers.cloudflare.com`, with their `Link` headers; the IANA Well-Known
 URIs registry, with control rows; the A2A release list; the WebMCP draft and
