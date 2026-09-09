@@ -24,14 +24,20 @@ disclaimer names Cloudflare, and every outbound link measured on 2026-09-09
 resolves to Cloudflare property — `cloudflare.com/agents/`,
 `cloudflare.com/content-signals/`,
 `cloudflare.com/fundamentals/reference/markdown-for-agents/`,
-`cloudflare.com/web-bot-auth/`, plus its privacy policy and website terms. Its
-sole remaining gate between `www` and the next scored level is Cloudflare's own
-Content Signals initiative, which Cloudflare's own lead acknowledges is not
-standardised and which the IETF AIPREF working group is separately drafting
-towards a Proposed Standard. A scorecard whose unmet rows are its author's
-products is a marketing surface with a useful checklist attached. It is worth
-reading as a prompt and worthless as an authority, and it does not set Oak's
-roadmap.
+`cloudflare.com/web-bot-auth/`, plus its privacy policy and website terms.
+
+The gate it holds `www` behind is Cloudflare's own Content Signals initiative —
+reported by the day's assessment as the sole remaining one, and **not
+independently measured here**: the scanner renders client-side, so no score for
+Oak has ever been retrieved into a tracked record. Content Signals is not a
+standard. Cloudflare's own lead acknowledges as much, and the IETF AIPREF
+working group is separately drafting `train-ai` and `search` towards a Proposed
+Standard.
+
+Whether or not Content Signals is the last row, the shape is clear enough to
+decide on: a scorecard whose unmet rows are its author's products is a marketing
+surface with a useful checklist attached. It is worth reading as a prompt and
+worthless as an authority, and it does not set Oak's roadmap.
 
 This ADR is therefore not a conformance exercise. It applies the estate's
 existing origin-truth principle — metadata lives on the host that owns the
@@ -331,7 +337,8 @@ Carried from the same day's verification pass rather than re-measured here: the
 39-domain DNS-AID adoption sweep (whose per-domain list was never written down —
 hence the eleven-domain re-probe above), the scanner's own "OAuth Protected
 Resource Metadata was not found" warning text, the scanner's probe-path list,
-and the Chrome "Proposed" status for WebMCP. Surrounding working in
+the Chrome "Proposed" status for WebMCP, and Content Signals being the scanner's
+last unmet row for `www`. Surrounding working in
 [`standards-verification-2026-09-09.report.md`](../../../.agent/plans-backlog-2026-07/discovery/current/standards-verification-2026-09-09.report.md),
 [`agent-readiness-collation-2026-09-09.md`](../../../.agent/reports/agent-readiness-collation-2026-09-09.md)
 and
