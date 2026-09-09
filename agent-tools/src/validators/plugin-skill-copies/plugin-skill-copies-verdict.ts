@@ -47,10 +47,8 @@ function remediationLines(
     );
   }
   if (kinds.has('missing-in-copy') || kinds.has('content-differs')) {
-    const omit =
-      labels.ignoredDirs.length > 0
-        ? ` (omit ${labels.ignoredDirs.map((dir) => `${dir}/`).join(', ')})`
-        : '';
+    const ignored = labels.ignoredDirs.map((dir) => `${dir}/`).join(', ');
+    const omit = ignored === '' ? '' : ` (omit ${ignored})`;
     lines.push(
       `Fix (missing-in-copy / content-differs): re-copy each listed skill from ${labels.sourceRoot} to ${labels.copyRoot}${omit}.`,
     );

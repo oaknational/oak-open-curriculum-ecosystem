@@ -26,15 +26,22 @@ export function readRepoDocument(repoRelativePath: string): Promise<string> {
   return readFile(repoPath(repoRelativePath), 'utf8');
 }
 
+function entryKind(entry: {
+  isDirectory(): boolean;
+  isFile(): boolean;
+}): RepoDirectoryEntry['kind'] {
+  if (entry.isDirectory()) {
+    return 'directory';
+  }
+  return entry.isFile() ? 'file' : 'other';
+}
+
 /** The entries directly under a repo-relative directory, in name order. */
 export async function listRepoDirectory(
   repoRelativePath: string,
 ): Promise<readonly RepoDirectoryEntry[]> {
   const entries = await readdir(repoPath(repoRelativePath), { withFileTypes: true });
   return entries
-    .map((entry): RepoDirectoryEntry => ({
-      name: entry.name,
-      kind: entry.isDirectory() ? 'directory' : entry.isFile() ? 'file' : 'other',
-    }))
+    .map((entry): RepoDirectoryEntry => ({ name: entry.name, kind: entryKind(entry) }))
     .sort((a, b) => a.name.localeCompare(b.name, 'en'));
 }
