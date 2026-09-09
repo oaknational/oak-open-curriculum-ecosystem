@@ -26,18 +26,42 @@ resolves to Cloudflare property — `cloudflare.com/agents/`,
 `cloudflare.com/fundamentals/reference/markdown-for-agents/`,
 `cloudflare.com/web-bot-auth/`, plus its privacy policy and website terms.
 
-The gate it holds `www` behind is Cloudflare's own Content Signals initiative —
-reported by the day's assessment as the sole remaining one, and **not
-independently measured here**: the scanner renders client-side, so no score for
-Oak has ever been retrieved into a tracked record. Content Signals is not a
-standard. Cloudflare's own lead acknowledges as much, and the IETF AIPREF
-working group is separately drafting `train-ai` and `search` towards a Proposed
-Standard.
+**The scanner will tell you its own gating requirements, and that is the single
+most useful thing about it.** Three consecutive seats reasoned about this
+scorecard without knowing it, and one of them twice told the owner a score was
+unobtainable, because the page renders client-side and a plain fetch returns
+only framework text. It has a JSON API:
 
-Whether or not Content Signals is the last row, the shape is clear enough to
-decide on: a scorecard whose unmet rows are its author's products is a marketing
-surface with a useful checklist attached. It is worth reading as a prompt and
-worthless as an authority, and it does not set Oak's roadmap.
+```bash
+curl -X POST https://isitagentready.com/api/scan \
+  -H 'content-type: application/json' \
+  -d '{"url":"https://www.thenational.academy"}'
+```
+
+The response carries `level`, `levelName`, a per-check `status` with request and
+response `evidence`, and a `nextLevel` object naming the exact checks standing
+between the host and its next level, each with `specUrls`. Measured for all
+three Oak hosts on 2026-09-09:
+
+| Host                           | Level                 | `nextLevel` requires                      |
+| ------------------------------ | --------------------- | ----------------------------------------- |
+| `www.thenational.academy`      | 1, Basic Web Presence | `contentSignals` — one check              |
+| `mcp.thenational.academy`      | 0, Not Ready          | `robotsTxt`, `sitemap`, `linkHeaders`     |
+| `open-api.thenational.academy` | 4, Agent-Integrated   | `authMd`, `mcpServerCard`, `a2aAgentCard` |
+
+So `www`'s sole gate to level 2 is Cloudflare's own Content Signals initiative,
+which is not a standard: Cloudflare's own lead acknowledges as much, and the
+IETF AIPREF working group is separately drafting `train-ai` and `search` towards
+a Proposed Standard. And `open-api`'s route to level 5 runs through
+`mcpServerCard`, whose `specUrls` point at SEP-2127 — a pull request that is
+open, unmerged and carrying `CHANGES_REQUESTED`.
+
+That is the whole framing. A scorecard whose unmet rows are its author's own
+initiative, or someone's open pull request, is a marketing surface with a useful
+checklist attached. It is worth reading as a prompt and worthless as an
+authority, and it does not set Oak's roadmap. Read the API rather than the page,
+and read `nextLevel` and the per-check `evidence` rather than the headline
+number — the number is the least informative field in the response.
 
 This ADR is therefore not a conformance exercise. It applies the estate's
 existing origin-truth principle — metadata lives on the host that owns the
@@ -200,12 +224,11 @@ expire the moment the extension matured. **This ADR supersedes that rationale.**
 The stronger argument is that the paths the scanner probes are wrong paths, and
 would still be wrong paths after the extension stabilised.
 
-The scanner probes `/.well-known/mcp.json`,
-`/.well-known/mcp/server-card.json` and `/.well-known/mcp/server-cards.json`
-(the probe list is carried from the same day's verification pass; the scanner
-runs client-side and its path list was not re-extracted for this record). The
-MCP extension's own discovery document lists both of those placement classes
-under "Alternatives considered … not recommended" (read from
+The scanner probes exactly three paths, read out of its own `mcpServerCard`
+evidence array on 2026-09-09: `/.well-known/mcp/server-card.json`,
+`/.well-known/mcp/server-cards.json` and `/.well-known/mcp.json`, all 404 on
+`open-api`. The MCP extension's own discovery document lists both of those
+placement classes under "Alternatives considered … not recommended" (read from
 `modelcontextprotocol/ext-server-card`, `docs/discovery.md` §Alternatives
 considered, 2026-09-09):
 
@@ -273,15 +296,22 @@ and the counter-example is live. Measured 2026-09-09:
 | `https://workos.com/.well-known/oauth-protected-resource`   | 404                  |
 | `https://workos.com/.well-known/oauth-authorization-server` | 404                  |
 
-`workos.com` — the convention's own author — passes the scanner's `auth.md`
-check while failing both OAuth checks, and the scanner emits its own warning
-saying so: "OAuth Protected Resource Metadata was not found; using auth.md
-instructions only". The two are independent.
+Both were re-run through the scanner's own API on 2026-09-09, so the
+counter-example is measured inside the instrument that makes the claim:
 
-Oak's file fails the scanner's completeness check for a different reason
-entirely: it honestly states that there is no machine-callable registration
-endpoint, because there is not one. The only route to a green row is building
-automated agent self-provisioning of API keys. That is a product decision about
+| Host                           | `authMd`                                                                    | `oauthProtectedResource` |
+| ------------------------------ | --------------------------------------------------------------------------- | ------------------------ |
+| `workos.com`                   | **pass** — "Auth.md support detected (anonymous)"                           | fail                     |
+| `open-api.thenational.academy` | fail — "auth.md exists but OAuth Protected Resource Metadata was not found" | fail                     |
+
+`workos.com` — the convention's own author — passes the `auth.md` check while
+failing the OAuth one. So the check has more than one satisfaction route, and
+PRM is not a precondition; the pass WorkOS earns is the "anonymous" route.
+
+Oak's file fails for a different reason entirely: it honestly states that there
+is no machine-callable registration endpoint, because there is not one. The only
+route to a green row is building automated agent self-provisioning of API keys.
+That is a product decision about
 who may obtain a key without a human in the loop, and it belongs to the owner
 and to whoever accepts the abuse and cost exposure. It is not a conformance
 gap, and it must not be executed as one.
@@ -289,6 +319,50 @@ gap, and it must not be executed as one.
 _Revisit trigger:_ a product decision to offer automated key self-provisioning.
 Documentation completeness gaps that do not require that decision — rate limits
 and a support path — stay with MCP-427.
+
+## Two things the estate will otherwise re-litigate
+
+### The PRM failure on the MCP host is real, and fixing it will not move the score
+
+Two research lanes independently concluded that the scanner's
+`oauthProtectedResource: fail` on `mcp.thenational.academy` was a false
+negative. Both were wrong, and the reason is worth writing down once.
+
+Measured 2026-09-09: Oak serves **byte-identical** documents at
+`/.well-known/oauth-protected-resource` and
+`/.well-known/oauth-protected-resource/mcp` — the same SHA-256 — and both claim
+`"resource": "https://mcp.thenational.academy/mcp"`. RFC 9728 §3.3 requires the
+`resource` value to equal the resource identifier the metadata URL was
+constructed from. The root-form URL is constructed from the bare origin, so at
+that path the document's own claim contradicts its location, and a conformant
+client must discard it. The same bytes are right at `/mcp` and wrong at the
+root. The scanner is correct. This is MCP-347.
+
+What misled both lanes is the scanner's summary line, which reads "No OAuth
+Protected Resource Metadata found" — a not-found phrasing for what is actually a
+mismatch. Its `evidence` array says so plainly, and this is exactly why the
+per-check evidence is the field to read: the root fetch is recorded as `200`
+with outcome `positive`, and the following `validate` step reports
+`JSON missing or invalid "resource" field, or resource mismatch`.
+
+**The corollary is the part that matters for planning.** The conformant cure —
+stop serving the root path — will not flip this check. The scanner probes the
+root, and would then read a genuine not-found instead of a mismatch, reporting
+the same failure. **MCP-347 is worth doing on RFC 9728 merits and must not be
+sold as a score win.**
+
+### Agent Skills publication has two unticketed failures
+
+Measured through the scanner's API on 2026-09-09: `agentSkills` **passes** on
+`open-api.thenational.academy` ("Agent Skills index exists with valid JSON") and
+**fails** on both `www.thenational.academy` and `mcp.thenational.academy`
+("Agent Skills index not found").
+
+Neither failure is ticketed. MCP-704 is not this: it concerns the _link
+relation_ that would point the apex catalogue at the index, not the publication
+of an index on a host that has none. Whether either host should publish one is
+an open question the origin-truth principle bears on — `open-api` owns the API
+capability and correctly hosts its skills — and it is not decided here.
 
 ## Consequences
 
@@ -315,9 +389,28 @@ and a support path — stay with MCP-427.
    shape changed once already. A reader finding an undated restatement of any of
    these elsewhere in the estate should trust the measurement, not the
    restatement.
-7. **A vendor scorecard is evidence, never a backlog.** The general rule this
+7. **`www`'s robots.txt cannot be hand-edited, so the Content Signals row has no
+   obvious home yet.** `.gitignore:83` in the web application lists
+   `public/robots.txt` as a build artefact; it is generated at `postbuild` by
+   `next-sitemap` from `next-sitemap.config.js` (`generateRobotsTxt: true`,
+   policies declared under `robotsTxtOptions`), verified 2026-09-09. A
+   `Content-Signal` directive therefore belongs either in the generator
+   configuration or at the Cloudflare edge, not in a file in the repository.
+   **Which of the two is an open question this ADR does not settle**, and it is
+   downstream of the prior one the estate has also not settled: whether
+   `ai-train=yes`, already published on `open-api`, was ever ratified and should
+   be what every host says.
+8. **Read the scanner through its API, and never quote its headline number.**
+   `POST /api/scan` returns `nextLevel` and per-check `evidence`; the summary
+   `message` on a failing check can say "not found" for what the evidence shows
+   to be a mismatch, which is how two lanes talked themselves into a false
+   negative that was not one.
+9. **A vendor scorecard is evidence, never a backlog.** The general rule this
    ADR establishes: when a scored surface is operated by a party that sells the
-   remedy, its rows are read as prompts and answered on Oak's own tests.
+   remedy, its rows are read as prompts and answered on Oak's own tests. The
+   corollary from MCP-347: a fix worth making on standards merits is not sold as
+   a score win, and a score row that would not move is not an argument against
+   making it.
 
 ## Evidence
 
@@ -330,15 +423,16 @@ WebKit standards-position issue 670; the IETF Datatracker record for
 `_agent` DNS probe with controls; SEP-2127's state and review decision; the
 `ext-server-card` README and `docs/discovery.md`; the GitHub, Hugging Face and
 Oak `server-card` endpoints; `auth.md` and the two OAuth well-known paths on
-both `open-api.thenational.academy` and `workos.com`; and the
-`isitagentready.com` page source.
+both `open-api.thenational.academy` and `workos.com`; the `isitagentready.com`
+page source and four `POST /api/scan` runs (the three Oak hosts and
+`workos.com`), with their `nextLevel` and per-check `evidence`; the two
+`oauth-protected-resource` documents on the MCP host, compared by SHA-256; and
+the web application's `.gitignore` and `next-sitemap.config.js`.
 
 Carried from the same day's verification pass rather than re-measured here: the
 39-domain DNS-AID adoption sweep (whose per-domain list was never written down —
-hence the eleven-domain re-probe above), the scanner's own "OAuth Protected
-Resource Metadata was not found" warning text, the scanner's probe-path list,
-the Chrome "Proposed" status for WebMCP, and Content Signals being the scanner's
-last unmet row for `www`. Surrounding working in
+hence the eleven-domain re-probe above), and the Chrome "Proposed" status for
+WebMCP. Surrounding working in
 [`standards-verification-2026-09-09.report.md`](../../../.agent/plans-backlog-2026-07/discovery/current/standards-verification-2026-09-09.report.md),
 [`agent-readiness-collation-2026-09-09.md`](../../../.agent/reports/agent-readiness-collation-2026-09-09.md)
 and
