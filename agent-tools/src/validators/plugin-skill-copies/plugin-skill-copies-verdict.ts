@@ -32,7 +32,13 @@ export interface SkillCopyCheckLabels {
 
 const PREFIX = 'validate-plugin-skill-copies:';
 
-/** The remediation line for each finding kind present, so every printed fix is actionable. */
+/**
+ * The remediation line for each finding kind present, so every printed fix is
+ * actionable. A remediation must be able to clear the state it names, and must
+ * not offer deletion as an equal alternative to restoring: the trees cannot say
+ * whether a copy-only skill lost a source skill or a workflow, so that line
+ * names both restore paths and puts removal last.
+ */
 function remediationLines(
   findings: readonly SkillCopyFinding[],
   labels: SkillCopyCheckLabels,
@@ -46,7 +52,7 @@ function remediationLines(
   }
   if (kinds.has('missing-derivation')) {
     lines.push(
-      `Fix (missing-derivation): the listed skill exists only in ${labels.copyRoot} and has no same-named workflow under ${labels.derivedRoot} to derive from — restore that workflow, or remove the copy if the skill is gone.`,
+      `Fix (missing-derivation): the listed skill exists only in ${labels.copyRoot} — nothing under ${labels.sourceRoot} or ${labels.derivedRoot} accounts for it. Restore whichever it came from: the same-named skill under ${labels.sourceRoot} if it was copied, or the same-named workflow under ${labels.derivedRoot} if it was merged. Remove the copy only when the skill is deliberately gone: it may be the last one left.`,
     );
   }
   if (kinds.has('not-shipped')) {

@@ -146,8 +146,13 @@ async function readCodexManifest() {
   return CodexManifestSchema.parse(await readJson(CODEX_MANIFEST_PATH));
 }
 
-async function readClaudeSharedFields() {
-  return SharedManifestFieldsSchema.parse(await readJson(CLAUDE_MANIFEST_PATH));
+/** The Claude manifest: the shared fields, plus the display name Codex carries inside `interface`. */
+const ClaudeManifestSchema = SharedManifestFieldsSchema.extend({
+  displayName: z.string().min(1),
+});
+
+async function readClaudeManifest() {
+  return ClaudeManifestSchema.parse(await readJson(CLAUDE_MANIFEST_PATH));
 }
 
 /** The frontmatter block of a skill, parsed as YAML and checked against the contract. */
@@ -216,10 +221,12 @@ describe('ChatGPT/Codex package invariants', () => {
 
   it('describes the same product as the Claude manifest, field for field', async () => {
     const codex = await readCodexManifest();
-    const claude = await readClaudeSharedFields();
+    const { displayName, ...shared } = await readClaudeManifest();
 
-    expect(SharedManifestFieldsSchema.parse(codex)).toStrictEqual(claude);
+    expect(SharedManifestFieldsSchema.parse(codex)).toStrictEqual(shared);
     expect(codex.interface.longDescription).toBe(codex.description);
+    // The two hosts hold the same name in different places; nothing else compares them.
+    expect(codex.interface.displayName).toBe(displayName);
   });
 
   it('gives every shipped skill a frontmatter name matching its directory', async () => {

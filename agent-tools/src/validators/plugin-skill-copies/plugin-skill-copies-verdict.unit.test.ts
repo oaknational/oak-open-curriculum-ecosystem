@@ -142,7 +142,7 @@ describe('decideSkillCopyVerdict', () => {
     expect(fixLines(verdict.lines)[0]).not.toContain('omit');
   });
 
-  it('points a missing derivation at the workflows root, and not-shipped content at the copy', () => {
+  it('offers both restore paths for a missing derivation, and not-shipped content at the copy', () => {
     const verdict = decideSkillCopyVerdict(
       {
         ...clean,
@@ -158,8 +158,21 @@ describe('decideSkillCopyVerdict', () => {
     expect(verdict.code).toBe(1);
     expect(fixes).toHaveLength(2);
     expect(fixes[0]).toContain(LABELS.derivedRoot);
-    expect(fixes[0]).not.toContain(LABELS.sourceRoot);
+    expect(fixes[0]).toContain(LABELS.sourceRoot);
     expect(fixes[1]).toContain(`remove the listed path(s) from ${LABELS.copyRoot}`);
+  });
+
+  it('puts restoring a deleted source skill before removing its only remaining copy', () => {
+    const verdict = decideSkillCopyVerdict(
+      { ...clean, findings: [{ skill: 'alpha', relativePath: '.', kind: 'missing-derivation' }] },
+      LABELS,
+    );
+
+    // The state a deleted shared skill produces: the copy is all that is left,
+    // so the line must reach restoring it before it mentions removing anything.
+    const line = fixLines(verdict.lines)[0] ?? '';
+    expect(line.indexOf(LABELS.sourceRoot)).toBeGreaterThan(-1);
+    expect(line.indexOf(LABELS.sourceRoot)).toBeLessThan(line.indexOf('Remove the copy'));
   });
 
   it('points the symlink remediation at the repository rule', () => {
