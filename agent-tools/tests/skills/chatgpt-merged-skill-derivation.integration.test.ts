@@ -99,7 +99,11 @@ async function listCopyOnlySkills(): Promise<readonly string[]> {
     listRepoDirectory(SKILLS_ROOT),
     listRepoDirectory(CLAUDE_SKILLS_ROOT),
   ]);
-  const claudeNames = new Set(claude.map((entry) => entry.name));
+  // Directories only, on both sides: a file or symlink named like a packaged
+  // skill is not a Claude skill, and must not hide that skill from this scan.
+  const claudeNames = new Set(
+    claude.filter((entry) => entry.kind === 'directory').map((entry) => entry.name),
+  );
   return packaged
     .filter((entry) => entry.kind === 'directory' && !claudeNames.has(entry.name))
     .map((entry) => entry.name);

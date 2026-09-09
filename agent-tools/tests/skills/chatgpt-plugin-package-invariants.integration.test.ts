@@ -39,6 +39,13 @@ const SKILLS_ROOT = `${PACKAGE_ROOT}/skills`;
 /** Agent Skills specification: the description a host routes on is at most 1024 characters. */
 const MAX_DESCRIPTION_LENGTH = 1024;
 
+/** Agent Skills specification: a skill name is kebab-case and at most 64 characters. */
+const SKILL_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const MAX_NAME_LENGTH = 64;
+
+/** Agent Skills specification: the compatibility note is at most 500 characters. */
+const MAX_COMPATIBILITY_LENGTH = 500;
+
 /** The fields the two manifests describe the same product with; they drift only by mistake. */
 const SharedManifestFieldsSchema = z.object({
   name: z.string().min(1),
@@ -108,13 +115,25 @@ const MarketplaceSchema = z
   })
   .strict();
 
-/** The frontmatter a shipped skill carries (Agent Skills specification fields only). Strict: no host-specific field ships. */
+/**
+ * The frontmatter a shipped skill carries (Agent Skills specification fields
+ * only). Strict, so no host-specific field ships, and each field is held to the
+ * constraint the specification's own reference validator enforces
+ * (`.agents/skills/skill-creator/scripts/quick_validate.py`): a skill that
+ * passes here is one a host will ingest. Description length has its own test,
+ * which reports every offender rather than stopping at the first.
+ */
 const SkillFrontmatterSchema = z
   .object({
-    name: z.string().min(1),
-    description: z.string().min(1),
+    name: z.string().min(1).max(MAX_NAME_LENGTH).regex(SKILL_NAME),
+    description: z
+      .string()
+      .min(1)
+      .refine((text) => !/[<>]/.test(text), {
+        message: 'description must not contain angle brackets',
+      }),
     license: z.string().min(1),
-    compatibility: z.string().min(1).optional(),
+    compatibility: z.string().min(1).max(MAX_COMPATIBILITY_LENGTH).optional(),
     metadata: z.object({ author: z.string().min(1), version: z.string().min(1) }).strict(),
   })
   .strict();
