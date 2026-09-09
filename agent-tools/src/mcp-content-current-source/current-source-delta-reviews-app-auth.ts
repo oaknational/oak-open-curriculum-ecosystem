@@ -7,6 +7,7 @@
  * explicit exclusion reason says why the change adds no governed content.
  */
 import {
+  CRAWLER_FACING_ONLY,
   excluded,
   IMPLEMENTATION_ONLY,
   reviewed,
@@ -103,9 +104,23 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-580 re-review: the health entry is now spread from `HEALTH_PATHS`, so
   // the routed `/mcp/healthz` the canonical host reaches is auth-exempt exactly
   // as the root path already was. Still a routing decision over path literals.
+  //
+  // MCP-703 re-review: `/robots.txt` joins the always-skip set, consumed from
+  // the route module's exported constant so the served route and the
+  // exemption share one owner. Still a routing decision.
   'apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts': excluded(
-    'c96fa6a897a638088c9841c8a4dbb85229ae7f800a14ac52c57b25cce91b9203',
+    '4b8fbb148d9a4674c0c1b638ceb60da08465e375ec915bf286be7907f2a94327',
     IMPLEMENTATION_ONLY,
+  ),
+  // MCP-703: the MCP host's `robots.txt`, registered in Phase 2.5 of
+  // `oauth-and-caching-setup.ts` (whose hash moves in the app ledger for that
+  // route composition alone). The served text is Oak-authored, so this is not an
+  // implementation-only change — but its audience is web crawlers, which
+  // never speak MCP, so it reaches no MCP consumer. See CRAWLER_FACING_ONLY
+  // for why that distinction is drawn rather than collapsed.
+  'apps/oak-curriculum-mcp-streamable-http/src/robots-txt.ts': excluded(
+    '176b11817f8881d6510d4d5d68f93ec1df488c869d60aaaee3450f9aa0137853',
+    CRAWLER_FACING_ONLY,
   ),
   // MCP-518: the Clerk conditional now forks on the request's surface before
   // its MCP method, so a browser view of the fully public page — at `/mcp` and

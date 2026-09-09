@@ -292,6 +292,24 @@ signing off a release. Replaces the retired `pnpm smoke:remote` harness
 - `GET /.well-known/oauth-protected-resource` returns the canonical resource and authorisation servers
 - 401 responses include a `WWW-Authenticate` header with `resource` and `authorization_uri` to guide clients
 
+### Crawler directives
+
+- `GET /robots.txt` returns this host's crawler directives as `text/plain` (MCP-703). Public,
+  registered before Clerk middleware, and served in every auth mode — a crawler arrives with no
+  credentials, so a file reachable only through the auth vendor is an unfetchable one.
+- The body is not a copy of `www`'s. This host publishes no crawlable page set, so it names **no
+  sitemap**; `/.well-known/` is explicitly `Allow`ed so the discovery documents stay fetchable
+  under RFC 9309 §2.2.2's longest-match rule; and only the authorisation endpoints, the signed
+  expiring asset URLs and the liveness probes are disallowed. It names no origin, so it is
+  identical on every host this app answers on.
+- This meets the `robots.txt` half of agent-readiness baseline `AR-A6`. That criterion also asks
+  for sitemap coverage "or a named exception with owner-approved rationale", so the no-sitemap
+  rationale above is **raised for ratification, not self-approved**.
+- Content Signals values (`search`, `ai-input`, `ai-train`) are deliberately absent: that is
+  `AR-A7`, an editorial and legal decision about values, undecided for this host. `open-api`
+  already publishes its own set, so cross-host consistency belongs to that decision rather than
+  to this baseline file.
+
 ### Canonical address
 
 The server normally describes itself from each request's `Host` header. When an
