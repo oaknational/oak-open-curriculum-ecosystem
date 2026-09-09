@@ -227,10 +227,12 @@ would still be wrong paths after the extension stabilised.
 The scanner probes exactly three paths, read out of its own `mcpServerCard`
 evidence array on 2026-09-09: `/.well-known/mcp/server-card.json`,
 `/.well-known/mcp/server-cards.json` and `/.well-known/mcp.json`, all 404 on
-`open-api`. The MCP extension's own discovery document lists both of those
-placement classes under "Alternatives considered … not recommended" (read from
-`modelcontextprotocol/ext-server-card`, `docs/discovery.md` §Alternatives
-considered, 2026-09-09):
+`open-api`. All three are `.well-known` placements, and the MCP extension's own
+discovery document rules that class out by name — its worked example is
+`/.well-known/mcp/server-card`, one path segment from what the scanner asks for.
+The second bullet below is quoted too because it forecloses the other plausible
+wrong home (read from `modelcontextprotocol/ext-server-card`,
+`docs/discovery.md` §Alternatives considered, 2026-09-09):
 
 > The following placements were considered and **not** recommended:
 >
