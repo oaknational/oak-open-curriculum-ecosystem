@@ -51,7 +51,11 @@ identical to the merged skills' for consistency between the plugins, not as a ro
 
 ## Sideload for testing (desktop app)
 
-Steps observed in the Codex desktop app, 2026-09-07.
+Steps observed in the Codex desktop app, 2026-09-07, and re-verified in the ChatGPT desktop app
+on 2026-09-09 with the package built from `00fa027eb` (marketplace added by path; all five skills
+listed with their current descriptions; no desktop-only badge; `$find-misconceptions` resolved a
+unit slug, called the misconception graph and quizzes, and attributed under OGL v3.0;
+`$audit-sequence` with no plan asked for one).
 
 1. `codex plugin marketplace add <repo root>` — the root `.agents/plugins/marketplace.json`
    lists this package.
@@ -63,6 +67,15 @@ Steps observed in the Codex desktop app, 2026-09-07.
 Tool names arrived prefixed and with hyphens as underscores (`mcp__codex_apps__oak_<tool>`
 via the connector, `mcp__<id>__<tool>` via a direct entry; observed 2026-09-07), so
 the merged skills say to match by suffix treating `-` and `_` as the same.
+
+## Submitting through the OpenAI plugin portal
+
+The portal builds the plugin from its own steps (Info, MCP, Skills, Prompts) and never reads
+`.codex-plugin/plugin.json`. Its Skills step accepts a zip holding one `skills/` folder that
+contains the skill folders; a zip with the package at its root (manifest beside `skills/`) is
+refused with "Skill zip must contain one skill root or one directory of skill roots" (observed
+2026-09-09). The MCP step is where the Oak server (`https://mcp.thenational.academy/mcp`) is
+attached for the portal version.
 
 ## Not done here
 
