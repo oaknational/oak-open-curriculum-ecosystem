@@ -58,9 +58,7 @@ function remediationLines(
 
 function membershipLines(report: SkillCopyReport): readonly string[] {
   const lines: string[] = [];
-  if (report.sourceOnly.length > 0) {
-    lines.push(`  source-only (not compared): ${report.sourceOnly.join(', ')}`);
-  }
+  // Source-only skills are findings (missing-in-copy), listed with the findings, not here.
   if (report.copyOnly.length > 0) {
     lines.push(`  copy-only (not compared): ${report.copyOnly.join(', ')}`);
   }

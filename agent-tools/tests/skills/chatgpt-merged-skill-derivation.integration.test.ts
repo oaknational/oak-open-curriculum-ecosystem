@@ -29,7 +29,16 @@ import { readRepoDocument } from '../../src/collaboration-state/test-helpers/rep
  */
 
 const AGENTS_ROOT = 'plugins/oak-open-curriculum/agents';
+const WORKFLOWS_ROOT = 'plugins/oak-open-curriculum/workflows';
 const SKILLS_ROOT = 'plugins/oak-open-curriculum-chatgpt/skills';
+
+/** The routing text both plugins carry for the same-named skill; it drifts only by mistake. */
+const DescriptionSchema = z.object({ description: z.string().min(1) });
+
+async function readDescription(repoRelativePath: string): Promise<string> {
+  const { frontmatter } = splitFrontmatter(await readRepoDocument(repoRelativePath));
+  return DescriptionSchema.parse(parseYaml(frontmatter)).description;
+}
 
 /**
  * Each merged skill, the agent it derives from, and the two declared edits:
@@ -113,6 +122,15 @@ describe.each(DERIVATIONS)(
         opening,
         `${pair.agent.head[0]} ${dependencySentence}`,
       ]);
+    });
+
+    it('carries the Claude workflow’s description word for word, so both plugins route alike', async () => {
+      const [workflow, merged] = await Promise.all([
+        readDescription(`${WORKFLOWS_ROOT}/${skill}/SKILL.md`),
+        readDescription(`${SKILLS_ROOT}/${skill}/SKILL.md`),
+      ]);
+
+      expect(merged).toBe(workflow);
     });
   },
 );

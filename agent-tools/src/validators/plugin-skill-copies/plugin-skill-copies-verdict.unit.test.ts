@@ -44,13 +44,13 @@ describe('decideSkillCopyVerdict', () => {
     expect(verdict.lines[1]).toContain('copy-only (not compared): merged');
   });
 
-  it('refuses when no skill is shared, naming both roots and each side so the cause is visible', () => {
+  it('refuses when no skill is shared, naming both roots, the copy-only skills and each finding', () => {
     const verdict = decideSkillCopyVerdict(
       {
         sharedSkills: [],
         sourceOnly: ['alpha'],
         copyOnly: ['merged'],
-        findings: [],
+        findings: [{ skill: 'alpha', relativePath: '.', kind: 'missing-in-copy' }],
         filesCompared: 0,
       },
       LABELS,
@@ -61,8 +61,8 @@ describe('decideSkillCopyVerdict', () => {
     expect(verdict.lines[0]).toContain(LABELS.sourceRoot);
     expect(verdict.lines[0]).toContain(LABELS.copyRoot);
     expect(verdict.lines.slice(1)).toStrictEqual([
-      '  source-only (not compared): alpha',
       '  copy-only (not compared): merged',
+      '  missing-in-copy  alpha/.',
     ]);
   });
 

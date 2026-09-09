@@ -55,19 +55,24 @@ const SharedManifestFieldsSchema = z.object({
  */
 const CodexManifestSchema = SharedManifestFieldsSchema.extend({
   skills: z.literal('./skills/'),
-  interface: z.object({
-    displayName: z.string().min(1),
-    shortDescription: z.string().min(1),
-    longDescription: z.string().min(1),
-    developerName: z.string().min(1),
-    category: z.string().min(1),
-    capabilities: z.array(z.unknown()),
-    websiteURL: z.url(),
-    privacyPolicyURL: z.url(),
-    termsOfServiceURL: z.url(),
-    defaultPrompt: z.array(z.string().min(1).max(128)).max(3),
-  }),
+  interface: z
+    .object({
+      displayName: z.string().min(1),
+      shortDescription: z.string().min(1),
+      longDescription: z.string().min(1),
+      developerName: z.string().min(1),
+      category: z.string().min(1),
+      capabilities: z.array(z.unknown()),
+      websiteURL: z.url(),
+      privacyPolicyURL: z.url(),
+      termsOfServiceURL: z.url(),
+      defaultPrompt: z.array(z.string().min(1).max(128)).max(3),
+    })
+    .strict(),
 }).strict();
+
+/** Everything the package ships at its root; anything else (a stray `.mcp.json`, say) is a packaging defect. */
+const SHIPPED_ROOT_ENTRIES = ['.codex-plugin', 'README.md', 'skills'] as const;
 
 const SkillFrontmatterSchema = z.object({
   name: z.string().min(1),
@@ -110,11 +115,19 @@ async function listShippedSkills(): Promise<readonly string[]> {
 }
 
 describe('ChatGPT/Codex package invariants', () => {
-  it('declares skills and presentation metadata only, so no server can badge it desktop-only', async () => {
-    // A successful strict parse is the assertion: any other top-level key is rejected.
+  it('declares skills and presentation metadata only, so the manifest names no server, hook or app', async () => {
+    // A successful strict parse is the assertion: any other key, at either level, is rejected.
     const manifest = await readCodexManifest();
 
     expect(manifest.skills).toBe('./skills/');
+  });
+
+  it('ships exactly the manifest, the README and the skills at its root, so no companion file can badge it desktop-only', async () => {
+    const entries = await listRepoDirectory(PACKAGE_ROOT);
+
+    expect(entries.map((entry) => entry.name)).toStrictEqual(
+      [...SHIPPED_ROOT_ENTRIES].sort((a, b) => a.localeCompare(b, 'en')),
+    );
   });
 
   it('declares no capabilities, the value that passed OpenAI ingestion', async () => {

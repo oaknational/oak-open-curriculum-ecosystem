@@ -12,9 +12,11 @@
  *
  * Membership is recomputed too, never listed: a shared skill is any skill
  * directory (one holding a `SKILL.md` file) present under both roots. A new
- * shared skill is covered the moment it exists on both sides, and a skill
- * present on one side only is reported for visibility, not compared
- * (`validators-must-recompute-not-just-record`).
+ * shared skill is covered the moment it exists on both sides. A skill present
+ * under the source only is a `missing-in-copy` finding, because the copy is
+ * meant to carry every source skill and a deleted copy must not pass; a skill
+ * present under the copy only is reported for visibility, since a package may
+ * add skills of its own (`validators-must-recompute-not-just-record`).
  *
  * Symlinks are never followed. The repository forbids them (principles.md
  * §No symlinks), and a link that happened to resolve to matching bytes would
@@ -69,7 +71,7 @@ export interface SkillCopyFinding {
 export interface SkillCopyReport {
   /** Skills present under both roots, in stable order; these are the ones compared. */
   readonly sharedSkills: readonly string[];
-  /** Skills present under the source root only; reported, not compared. */
+  /** Skills present under the source root only; each is also a `missing-in-copy` finding. */
   readonly sourceOnly: readonly string[];
   /** Skills present under the copy root only; reported, not compared. */
   readonly copyOnly: readonly string[];
@@ -113,9 +115,12 @@ export function findSkillCopyDrift(
   const sourceOnly = source.skills.filter((skill) => !copySet.has(skill)).sort(byText);
   const copyOnly = copy.skills.filter((skill) => !sourceSet.has(skill)).sort(byText);
 
-  const findings: SkillCopyFinding[] = [...new Set([...source.symlinks, ...copy.symlinks])]
-    .sort(byText)
-    .map((name) => ({ skill: name, relativePath: '.', kind: 'symlink' as const }));
+  const findings: SkillCopyFinding[] = [
+    ...[...new Set([...source.symlinks, ...copy.symlinks])]
+      .sort(byText)
+      .map((name) => ({ skill: name, relativePath: '.', kind: 'symlink' as const })),
+    ...sourceOnly.map((skill) => ({ skill, relativePath: '.', kind: 'missing-in-copy' as const })),
+  ];
   let filesCompared = 0;
   for (const skill of sharedSkills) {
     const one = compareSkill(

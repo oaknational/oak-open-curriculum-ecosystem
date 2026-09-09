@@ -63,9 +63,37 @@ describe('findSkillCopyDrift', () => {
       sharedSkills: ['alpha'],
       sourceOnly: ['beta'],
       copyOnly: ['merged'],
-      findings: [],
+      findings: [{ skill: 'beta', relativePath: '.', kind: 'missing-in-copy' }],
       filesCompared: 1,
     });
+  });
+
+  it('reports a source skill absent from the copy as missing-in-copy, so a deleted copy cannot pass', () => {
+    const reader = memoryReader({
+      'source/alpha': { 'SKILL.md': 'x\n' },
+      'source/accessibility': { 'SKILL.md': 'a\n', 'references/wcag.md': 'w\n' },
+      'copy/alpha': { 'SKILL.md': 'x\n' },
+    });
+
+    const report = findSkillCopyDrift(CHECK, reader);
+
+    expect(report.sharedSkills).toStrictEqual(['alpha']);
+    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'accessibility', relativePath: '.', kind: 'missing-in-copy' },
+    ]);
+  });
+
+  it('does not treat a skill the copy adds on its own as a finding', () => {
+    const reader = memoryReader({
+      'source/alpha': { 'SKILL.md': 'x\n' },
+      'copy/alpha': { 'SKILL.md': 'x\n' },
+      'copy/merged': { 'SKILL.md': 'm\n' },
+    });
+
+    const report = findSkillCopyDrift(CHECK, reader);
+
+    expect(report.copyOnly).toStrictEqual(['merged']);
+    expect(report.findings).toStrictEqual([]);
   });
 
   it('covers a newly added shared skill without any list being edited', () => {
@@ -134,7 +162,7 @@ describe('findSkillCopyDrift', () => {
       sharedSkills: [],
       sourceOnly: ['alpha'],
       copyOnly: ['merged'],
-      findings: [],
+      findings: [{ skill: 'alpha', relativePath: '.', kind: 'missing-in-copy' }],
       filesCompared: 0,
     });
   });
@@ -150,6 +178,9 @@ describe('findSkillCopyDrift', () => {
     expect(report.sharedSkills).toStrictEqual([]);
     expect(report.sourceOnly).toStrictEqual(['alpha']);
     expect(report.copyOnly).toStrictEqual([]);
+    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'alpha', relativePath: '.', kind: 'missing-in-copy' },
+    ]);
   });
 
   it('reports a shared skill whose tree cannot be read as a finding on the skill itself', () => {

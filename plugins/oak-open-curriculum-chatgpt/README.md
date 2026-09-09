@@ -29,7 +29,9 @@ workflows. So here:
 - `interface.capabilities` is `[]`, the value the OpenAI sideload accepted on 2026-09-07.
 
 The last two, no `.mcp.json` and `capabilities: []`, and the agreement of the two manifests
-are recomputed by `agent-tools/tests/skills/chatgpt-plugin-package-invariants.integration.test.ts`.
+are recomputed by `agent-tools/tests/skills/chatgpt-plugin-package-invariants.integration.test.ts`:
+the manifest is parsed through a strict schema at both levels, and the package root is held to
+exactly `.codex-plugin`, `README.md` and `skills`, so a companion file cannot appear unnoticed.
 
 That validator fails the build when a shared copy drifts from its Claude source. An
 integration test, `agent-tools/tests/skills/chatgpt-merged-skill-derivation.integration.test.ts`,

@@ -16,7 +16,7 @@
  * @packageDocumentation
  */
 
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 import type {
@@ -36,21 +36,25 @@ export interface SkillDirectoryEntry {
 
 /** The subset of the filesystem the walker uses; `node:fs` satisfies it. */
 export interface SkillFileSystem {
-  /** The entries of a directory, or `undefined` when the path is not a readable directory. */
+  /** The entries of a directory; `undefined` when the path is absent or not a directory. Other IO failures propagate. */
   readonly readDirectory: (directory: string) => readonly SkillDirectoryEntry[] | undefined;
   readonly readFile: (file: string) => Uint8Array;
 }
 
-/** The real filesystem. */
+/**
+ * The real filesystem. An absent path, or one that is not a directory, reads as
+ * `undefined` so the comparison reports the consequence (missing skill, nothing
+ * shared) as a finding. Any other IO failure (permissions, a directory vanishing
+ * mid-scan) is left to surface at the CLI boundary, which exits 2: a broken
+ * scan must never look like an empty one.
+ */
 const nodeSkillFileSystem: SkillFileSystem = {
   readDirectory: (directory) => {
-    try {
-      return readdirSync(directory, { withFileTypes: true });
-    } catch {
-      // Not a readable directory here; the comparison reports the consequence
-      // (missing skill, nothing shared) as a finding rather than a crash.
+    const stat = statSync(directory, { throwIfNoEntry: false });
+    if (stat === undefined || !stat.isDirectory()) {
       return undefined;
     }
+    return readdirSync(directory, { withFileTypes: true });
   },
   readFile: (file) => readFileSync(file),
 };
