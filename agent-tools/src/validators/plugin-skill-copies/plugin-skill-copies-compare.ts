@@ -109,16 +109,21 @@ export function compareSkill(
   return { findings, filesCompared };
 }
 
-/** Findings for a derived copy-only skill: symlinks anywhere, and authoring-only content. */
+/**
+ * Findings for a derived copy-only skill: symlinks anywhere, and authoring-only
+ * content. A tree that cannot be read (the skill vanished between the root
+ * listing and the walk) is a finding on the skill itself, never an empty tree.
+ */
 export function copyOnlyFindings(
   skill: string,
   tree: SkillTree | undefined,
   notShipped: readonly string[],
 ): SkillCopyFinding[] {
+  if (tree === undefined) {
+    return [{ skill, relativePath: '.', kind: 'missing-in-copy' }];
+  }
   const findings: SkillCopyFinding[] = [];
-  const entries = [...(tree ?? new Map<string, SkillEntry>()).entries()].sort(([a], [b]) =>
-    byText(a, b),
-  );
+  const entries = [...tree.entries()].sort(([a], [b]) => byText(a, b));
   for (const [relativePath, entry] of entries) {
     if (entry.kind === 'symlink') {
       findings.push({ skill, relativePath, kind: 'symlink' });

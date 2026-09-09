@@ -154,6 +154,26 @@ describe('findSkillCopyDrift', () => {
     ]);
   });
 
+  it('reports a derived copy-only skill whose tree cannot be read as missing, never as an empty tree', () => {
+    const skillsByRoot: Readonly<Record<string, readonly string[]>> = {
+      source: ['alpha'],
+      copy: ['alpha', 'merged'],
+      derived: ['merged'],
+    };
+    const reader: SkillTreeReader = {
+      listRoot: (root) => ({ skills: skillsByRoot[root] ?? [], invalid: [], symlinks: [] }),
+      read: (skillDir) =>
+        skillDir.endsWith('/merged') ? undefined : new Map([['SKILL.md', file('x\n')]]),
+    };
+
+    const report = findSkillCopyDrift(CHECK, reader);
+
+    expect(report.filesCompared).toBe(1);
+    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'merged', relativePath: '.', kind: 'missing-in-copy' },
+    ]);
+  });
+
   it('reports authoring content in a shared copy as not shipped, not as content the source lacks', () => {
     const reader = memoryReader({
       'source/alpha': { 'SKILL.md': 'x\n' },
