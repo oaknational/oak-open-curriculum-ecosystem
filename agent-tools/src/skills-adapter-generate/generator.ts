@@ -23,16 +23,11 @@ import { clearGeneratedAdapters, type ClearResult } from './clear.js';
 import { emissionRefusalsBeforeClear, nonRoundTrippableRefusal } from './emission-refusals.js';
 import { classifyEmissionTarget, foreignTargetRefusal } from './emission-target.js';
 import { adapterTargetPath, renderAdapter, type AdapterSurface } from './adapter-render.js';
-import { discoverCanonicals, type ParsedCanonical } from './discovery.js';
+import { discoverCanonicals, type ParsedCanonical, type SkippedDirectory } from './discovery.js';
 import { isDiscoveryComplete, sweepStaleProjections } from './projection-roots.js';
 
-export { discoverCanonicals, parseFrontmatter, type DiscoveryFs } from './discovery.js';
-export {
-  adapterTargetPath,
-  buildAdapterFrontmatter,
-  renderAdapter,
-  type AdapterSurface,
-} from './adapter-render.js';
+export { discoverCanonicals, type DiscoveryFs, type SkippedDirectory } from './discovery.js';
+export { adapterTargetPath, renderAdapter, type AdapterSurface } from './adapter-render.js';
 
 export interface GeneratorOptions {
   readonly repoRoot: string;
@@ -47,7 +42,7 @@ export interface GeneratorOptions {
 
 export interface GenerateOutcome {
   readonly written: readonly string[];
-  readonly skipped: readonly string[];
+  readonly skipped: readonly SkippedDirectory[];
   readonly duplicates: readonly string[];
   /** Carried copies removed because their canonical source is gone. A cure
    * the run applied, reported for observability — never a failure state. */
@@ -68,11 +63,12 @@ export interface GenerateOutcome {
   readonly cleared: readonly string[];
 }
 
-export type ParsedCanonicalSkill = ParsedCanonical;
-
 /** The no-emission outcome: every stream empty except the discovery streams the
  * caller already computed. Spread with per-gate overrides at each early return. */
-function emptyOutcome(skipped: readonly string[], duplicates: readonly string[]): GenerateOutcome {
+function emptyOutcome(
+  skipped: readonly SkippedDirectory[],
+  duplicates: readonly string[],
+): GenerateOutcome {
   return { written: [], pruned: [], refused: [], sweptStale: [], cleared: [], skipped, duplicates };
 }
 

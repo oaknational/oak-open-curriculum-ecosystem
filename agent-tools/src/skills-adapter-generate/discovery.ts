@@ -19,17 +19,17 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import { err, ok, type Result } from '@oaknational/result';
 import { parse as parseYaml } from 'yaml';
 
 import {
-  validateCanonicalFrontmatter,
+  validateAgentSkillsFrontmatter,
   type CanonicalFrontmatter,
+  type FrontmatterRead,
 } from './canonical-frontmatter.js';
 import { walkSkillTree } from './skill-tree-walk.js';
 
 export const CANONICAL_FILENAME = 'SKILL-CANONICAL.md';
-
-export type { CanonicalFrontmatter } from './canonical-frontmatter.js';
 
 export interface ParsedCanonical {
   readonly id: string;
@@ -48,10 +48,22 @@ export interface DiscoveryFs {
   listSubdirectoryNames(path: string): Promise<readonly string[]>;
 }
 
+/**
+ * A directory holding content no harness can summon, and WHY. Structured
+ * rather than pre-joined: a canonical refused for one mistyped field reads
+ * nothing like a directory with no canonical at all, the operator must be
+ * shown which it is, and the display join belongs at the one print
+ * boundary rather than in this seam.
+ */
+export interface SkippedDirectory {
+  readonly relativeDir: string;
+  readonly reason: string;
+}
+
 export interface DiscoveryOutcome {
   readonly canonicals: readonly ParsedCanonical[];
   /** Directories holding content no harness can summon. Loud by contract. */
-  readonly skipped: readonly string[];
+  readonly skipped: readonly SkippedDirectory[];
   /** Leaf ids seen more than once. The emitted adapter namespace is flat, so
    * a duplicate would silently last-writer-win; discovery reports it and the
    * generator refuses to emit. */
@@ -86,7 +98,7 @@ export async function discoverCanonicals(
   fs: DiscoveryFs = realDiscoveryFs,
 ): Promise<DiscoveryOutcome> {
   const canonicals: ParsedCanonical[] = [];
-  const skipped: string[] = [];
+  const skipped: SkippedDirectory[] = [];
   const canonicalsRoot = join(repoRoot, '.agent', 'skills');
 
   // Topology lives in the shared walker (the canonical owner of the
@@ -104,14 +116,24 @@ export async function discoverCanonicals(
     {
       async onCanonical(relativeDir) {
         const parsed = await parseCanonicalAt(canonicalsRoot, relativeDir, fs);
-        if (parsed === 'absent' || parsed === 'unparseable') {
-          skipped.push(relativeDir);
+        if (parsed.ok) {
+          canonicals.push(parsed.value);
         } else {
-          canonicals.push(parsed);
+          // The reason rides the skipped entry so the CLI names the field
+          // that refused, not merely the directory: for a conforming file
+          // with one mistyped value, "no readable canonical" is false.
+          skipped.push({ relativeDir, reason: parsed.error });
         }
       },
       onDeadEnd(relativeDir) {
-        skipped.push(relativeDir);
+        // "no READABLE canonical", not "no canonical": `hasCanonical` reads
+        // through `readFileOrUndefined`, which collapses every error —
+        // EACCES included — to `undefined`, so a present-but-unreadable
+        // file lands here too and asserting absence would be false.
+        skipped.push({
+          relativeDir,
+          reason: `no readable ${CANONICAL_FILENAME} at any ratified tier`,
+        });
       },
     },
   );
@@ -119,22 +141,30 @@ export async function discoverCanonicals(
   return { canonicals, skipped, duplicates: duplicateLeafIds(canonicals) };
 }
 
+type CanonicalRead = Result<ParsedCanonical, string>;
+
 async function parseCanonicalAt(
   canonicalsRoot: string,
   relativeDir: string,
   fs: DiscoveryFs,
-): Promise<ParsedCanonical | 'absent' | 'unparseable'> {
+): Promise<CanonicalRead> {
   const canonicalPath = join(canonicalsRoot, relativeDir, CANONICAL_FILENAME);
   const text = await fs.readFileOrUndefined(canonicalPath);
   if (text === undefined) {
-    return 'absent';
+    return err(`no readable ${CANONICAL_FILENAME}`);
   }
-  const frontmatter = parseFrontmatter(text);
-  if (frontmatter === undefined) {
-    return 'unparseable';
+  const read = parseFrontmatter(text);
+  if (!read.ok) {
+    return read;
   }
   const id = relativeDir.split('/').at(-1) ?? relativeDir;
-  return { id, relativeDir, frontmatter, canonicalPath, canonicalFilename: CANONICAL_FILENAME };
+  return ok({
+    id,
+    relativeDir,
+    frontmatter: read.value,
+    canonicalPath,
+    canonicalFilename: CANONICAL_FILENAME,
+  });
 }
 
 function duplicateLeafIds(canonicals: readonly ParsedCanonical[]): readonly string[] {
@@ -155,16 +185,28 @@ function duplicateLeafIds(canonicals: readonly ParsedCanonical[]): readonly stri
  * (`canonical-frontmatter.ts`, which owns the contract and documents what
  * it admits, strips, and refuses).
  *
- * Returns undefined when the file lacks a frontmatter fence or the block
- * fails the schema. The caller reads `undefined` as an unparseable
- * canonical, which the generator and the drift checker both fail on loudly
- * rather than emitting a projection that disagrees with its source.
+ * Every refusal carries a REASON — no frontmatter fence, unreadable YAML,
+ * or a field the specification does not admit — because the operator-facing
+ * end of this path is a CLI line naming what to fix. The generator and the
+ * drift checker both fail loudly on a refused canonical rather than
+ * emitting a projection that disagrees with its source.
  */
-export function parseFrontmatter(text: string): CanonicalFrontmatter | undefined {
+export function parseFrontmatter(text: string): FrontmatterRead {
   const fenceMatch = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(text);
   if (fenceMatch === null) {
-    return undefined;
+    return err('no YAML frontmatter fence');
   }
   const yamlBody = fenceMatch[1] ?? '';
-  return validateCanonicalFrontmatter(parseYaml(yamlBody));
+  let parsed: unknown;
+  try {
+    parsed = parseYaml(yamlBody);
+  } catch (error) {
+    // A malformed YAML block is a refusal like any other, never a crash
+    // through the CLI's top-level catch: the operator needs the skill named
+    // alongside the parse error, not a bare YAMLParseError.
+    return err(
+      `unreadable YAML frontmatter: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+  return validateAgentSkillsFrontmatter(parsed);
 }

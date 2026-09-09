@@ -14,43 +14,63 @@ import { argv, exit, stderr, stdout } from 'node:process';
 
 import { checkAdapters } from '../skills-adapter-generate/checker.js';
 import { CLI_USAGE, parseCliFlags, type CliFlags } from '../skills-adapter-generate/cli-flags.js';
-import { generateAdapters, generateExitCode } from '../skills-adapter-generate/generator.js';
+import {
+  generateAdapters,
+  generateExitCode,
+  type SkippedDirectory,
+} from '../skills-adapter-generate/generator.js';
+
+/**
+ * Render one entry per line, indented. EVERY reported list uses this: a
+ * `skipped` entry now carries its refusal reason, and a zod message
+ * contains commas of its own ("expected string, received number"), so
+ * comma-joining two refusals onto one line produces a sentence no operator
+ * can split back into entries.
+ */
+function indentedList(entries: readonly string[]): string {
+  return entries.map((entry) => `  ${entry}`).join('\n');
+}
+
+/**
+ * The ONE place a skipped directory becomes a display line. Discovery
+ * carries `{ relativeDir, reason }` so the seam stays structured; both the
+ * check and the generate path print it through here, so the two renderings
+ * cannot drift.
+ */
+function skippedLines(skipped: readonly SkippedDirectory[]): string {
+  return indentedList(skipped.map((entry) => `${entry.relativeDir} — ${entry.reason}`));
+}
 
 function reportCheckFailures(result: Awaited<ReturnType<typeof checkAdapters>>): void {
   if (result.skipped.length > 0) {
     stderr.write(
-      `Skipped directories (content no harness can summon): ${result.skipped.join(', ')}\n`,
+      `Skipped directories (content no harness can summon), with the reason for each:\n${skippedLines(result.skipped)}\n`,
     );
   }
   if (result.duplicates.length > 0) {
     stderr.write(
-      `Duplicate canonical leaf ids (the flat adapter namespace cannot hold both): ${result.duplicates.join(', ')}\n`,
+      `Duplicate canonical leaf ids (the flat adapter namespace cannot hold both):\n${indentedList(result.duplicates)}\n`,
     );
   }
   if (result.missing.length > 0) {
-    const missingList = result.missing.map((p) => `  ${p}`).join('\n');
-    stderr.write(`Missing projection files:\n${missingList}\n`);
+    stderr.write(`Missing projection files:\n${indentedList(result.missing)}\n`);
   }
   if (result.drifted.length > 0) {
-    const driftedList = result.drifted.map((p) => `  ${p}`).join('\n');
-    stderr.write(`Drifted projection files:\n${driftedList}\n`);
+    stderr.write(`Drifted projection files:\n${indentedList(result.drifted)}\n`);
   }
   if (result.orphaned.length > 0) {
-    const orphanedList = result.orphaned.map((p) => `  ${p}`).join('\n');
     stderr.write(
-      `Orphaned carried files (canonical source gone; a generator run prunes them):\n${orphanedList}\n`,
+      `Orphaned carried files (canonical source gone; a generator run prunes them):\n${indentedList(result.orphaned)}\n`,
     );
   }
   if (result.stale.length > 0) {
-    const staleList = result.stale.map((p) => `  ${p}`).join('\n');
     stderr.write(
-      `Stale Practice-namespace entries (no discovered canonical; a generator run removes them):\n${staleList}\n`,
+      `Stale Practice-namespace entries (no discovered canonical; a generator run removes them):\n${indentedList(result.stale)}\n`,
     );
   }
   if (result.refused.length > 0) {
-    const refusedList = result.refused.map((p) => `  ${p}`).join('\n');
     stderr.write(
-      `Refusals (canonical symlinks or read failures — the verdict above is incomplete until these are cured):\n${refusedList}\n`,
+      `Refusals (canonical symlinks or read failures — the verdict above is incomplete until these are cured):\n${indentedList(result.refused)}\n`,
     );
   }
   stderr.write('Regenerate with `pnpm skills:generate`, then `pnpm skills:check` to confirm.\n');
@@ -60,11 +80,19 @@ async function runCheck(repoRoot: string, prefix: string): Promise<number> {
   const result = await checkAdapters({ repoRoot, prefix });
   if (result.canonicalCount === 0) {
     if (result.refused.length > 0) {
-      const refusedList = result.refused.map((p) => `  ${p}`).join('\n');
-      stderr.write(`Refusals:\n${refusedList}\n`);
+      stderr.write(`Refusals:\n${indentedList(result.refused)}\n`);
+    }
+    // The reasons belong on THIS branch too. An estate whose canonicals
+    // were all refused for a mistyped field also lands here, and blaming
+    // the `.agent/skills` root would be false while discarding the field
+    // name that says what to fix.
+    if (result.skipped.length > 0) {
+      stderr.write(
+        `Skipped directories (content no harness can summon), with the reason for each:\n${skippedLines(result.skipped)}\n`,
+      );
     }
     stderr.write(
-      'Zero canonical skills discovered — a missing or unreadable `.agent/skills` root, not an empty estate. Refusing to certify.\n',
+      'Zero canonical skills discovered — a missing or unreadable `.agent/skills` root, or every canonical refused; never an empty estate. Refusing to certify.\n',
     );
     return 1;
   }
@@ -110,24 +138,21 @@ async function runGenerate(repoRoot: string, flags: CliFlags): Promise<number> {
 
 function reportGenerateOutcome(outcome: Awaited<ReturnType<typeof generateAdapters>>): void {
   if (outcome.cleared.length > 0) {
-    const clearedList = outcome.cleared.map((p) => `  ${p}`).join('\n');
     stdout.write(
       `Cleared ${String(outcome.cleared.length)} Practice-projection directories before ` +
-        `regeneration (entries without the class marker are not ours; untouched):\n${clearedList}\n`,
+        `regeneration (entries without the class marker are not ours; untouched):\n${indentedList(outcome.cleared)}\n`,
     );
   }
   stdout.write(`Wrote ${String(outcome.written.length)} projection files.\n`);
   if (outcome.pruned.length > 0) {
-    const prunedList = outcome.pruned.map((p) => `  ${p}`).join('\n');
     stdout.write(
-      `Pruned ${String(outcome.pruned.length)} orphaned carried files:\n${prunedList}\n`,
+      `Pruned ${String(outcome.pruned.length)} orphaned carried files:\n${indentedList(outcome.pruned)}\n`,
     );
   }
   if (outcome.sweptStale.length > 0) {
-    const sweptList = outcome.sweptStale.map((p) => `  ${p}`).join('\n');
     stdout.write(
       `Removed ${String(outcome.sweptStale.length)} stale Practice-namespace entries ` +
-        `(no discovered canonical):\n${sweptList}\n`,
+        `(no discovered canonical):\n${indentedList(outcome.sweptStale)}\n`,
     );
   }
   if (outcome.duplicates.length > 0) {
@@ -139,15 +164,15 @@ function reportGenerateOutcome(outcome: Awaited<ReturnType<typeof generateAdapte
   }
   if (outcome.skipped.length > 0) {
     stderr.write(
-      `ERROR — directories with no readable SKILL-CANONICAL.md: ${outcome.skipped.join(', ')}\n` +
+      `ERROR — canonicals discovery refused, with the reason for each:\n${skippedLines(outcome.skipped)}\n` +
         'These entries hold content no harness can summon (a directory at any of the three ratified ' +
-        'tiers without a parseable canonical, or a dead end below them). Fix the canonical before regenerating.\n',
+        'tiers with no canonical, unreadable YAML, or frontmatter the Agent Skills specification does ' +
+        'not admit). Fix the canonical named above before regenerating.\n',
     );
   }
   if (outcome.refused.length > 0) {
-    const refusedList = outcome.refused.map((p) => `  ${p}`).join('\n');
     stderr.write(
-      `ERROR — refused emissions (canonical symlinks or read failures; nothing was written or pruned for these):\n${refusedList}\n`,
+      `ERROR — refused emissions (canonical symlinks or read failures; nothing was written or pruned for these):\n${indentedList(outcome.refused)}\n`,
     );
   }
 }
