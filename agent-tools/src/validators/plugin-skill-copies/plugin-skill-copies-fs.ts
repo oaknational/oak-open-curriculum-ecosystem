@@ -16,7 +16,7 @@
  * @packageDocumentation
  */
 
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { lstatSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import type {
@@ -50,7 +50,8 @@ export interface SkillFileSystem {
  */
 const nodeSkillFileSystem: SkillFileSystem = {
   readDirectory: (directory) => {
-    const stat = statSync(directory, { throwIfNoEntry: false });
+    // lstat, not stat: a symlinked directory is not a directory to this walker.
+    const stat = lstatSync(directory, { throwIfNoEntry: false });
     if (stat === undefined || !stat.isDirectory()) {
       return undefined;
     }
@@ -81,20 +82,23 @@ function holdsSkillManifest(fs: SkillFileSystem, directory: string): boolean {
   return entries.some((entry) => entry.name === SKILL_MANIFEST && entryKind(entry) === 'file');
 }
 
-/** List a root: its skill directories and any symlinked entries. */
+/** List a root: its skill directories, directories that are not valid skills, and any symlinked entries. */
 function listRoot(fs: SkillFileSystem, root: string): SkillRootListing | undefined {
   const entries = fs.readDirectory(root);
   if (entries === undefined) {
     return undefined;
   }
-  const skills = entries
-    .filter((entry) => entryKind(entry) === 'directory')
+  const directories = entries.filter((entry) => entryKind(entry) === 'directory');
+  const skills = directories
     .filter((entry) => holdsSkillManifest(fs, path.join(root, entry.name)))
+    .map((entry) => entry.name);
+  const invalid = directories
+    .filter((entry) => !holdsSkillManifest(fs, path.join(root, entry.name)))
     .map((entry) => entry.name);
   const symlinks = entries
     .filter((entry) => entryKind(entry) === 'symlink')
     .map((entry) => entry.name);
-  return { skills, symlinks };
+  return { skills, invalid, symlinks };
 }
 
 interface WalkContext {

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parse as parseYaml } from 'yaml';
 import { z } from 'zod';
 
+import { splitFrontmatter } from '../../src/collaboration-state/test-helpers/frontmatter.js';
 import {
   listRepoDirectory,
   readRepoDocument,
@@ -93,9 +94,9 @@ async function readClaudeSharedFields() {
 
 /** The frontmatter block of a skill, parsed as YAML and checked against the contract. */
 function parseSkillFrontmatter(skill: string, markdown: string) {
-  const fence = /^---\n([\s\S]*?)\n---\n/.exec(markdown);
-  expect(fence, `${skill}/SKILL.md has no frontmatter block`).not.toBeNull();
-  return SkillFrontmatterSchema.parse(parseYaml(fence?.[1] ?? ''));
+  const split = splitFrontmatter(markdown);
+  expect(split, `${skill}/SKILL.md has no frontmatter block`).toBeDefined();
+  return SkillFrontmatterSchema.parse(parseYaml(split?.frontmatter ?? ''));
 }
 
 /** Every entry under `skills/` must be a skill directory; anything else is a packaging defect. */

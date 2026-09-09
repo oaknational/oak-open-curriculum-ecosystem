@@ -38,11 +38,13 @@ export type SkillEntry =
 /** The entries of one skill directory, keyed by path relative to that directory. */
 export type SkillTree = ReadonlyMap<string, SkillEntry>;
 
-/** What a root directory holds: skill directories, and any symlinked entries (reported, never followed). */
+/** What a root directory holds: skill directories, directories that are not valid skills, and symlinked entries. */
 export interface SkillRootListing {
-  /** Names of directories directly under the root that hold a `SKILL.md` file. */
+  /** Names of directories directly under the root that hold a regular `SKILL.md` file. */
   readonly skills: readonly string[];
-  /** Names of entries directly under the root that are symlinks. */
+  /** Names of directories directly under the root that lack a regular `SKILL.md`; each is a finding. */
+  readonly invalid: readonly string[];
+  /** Names of entries directly under the root that are symlinks (reported, never followed). */
   readonly symlinks: readonly string[];
 }
 
@@ -93,7 +95,9 @@ interface SkillComparison {
   readonly filesCompared: number;
 }
 
-const EMPTY_ROOT: SkillRootListing = { skills: [], symlinks: [] };
+const EMPTY_ROOT: SkillRootListing = { skills: [], invalid: [], symlinks: [] };
+
+const SKILL_MANIFEST = 'SKILL.md';
 
 /**
  * Discover the shared skills between the two roots and report each difference.
@@ -115,10 +119,21 @@ export function findSkillCopyDrift(
   const sourceOnly = source.skills.filter((skill) => !copySet.has(skill)).sort(byText);
   const copyOnly = copy.skills.filter((skill) => !sourceSet.has(skill)).sort(byText);
 
+  // A directory under a root that is not a valid skill (no regular SKILL.md) is a
+  // finding on its manifest, on whichever side it sits: a source skill whose
+  // manifest vanished must not let its stale copy pass as "copy-only".
   const findings: SkillCopyFinding[] = [
     ...[...new Set([...source.symlinks, ...copy.symlinks])]
       .sort(byText)
       .map((name) => ({ skill: name, relativePath: '.', kind: 'symlink' as const })),
+    ...[...source.invalid].sort(byText).map((skill) => ({
+      skill,
+      relativePath: SKILL_MANIFEST,
+      kind: 'missing-in-source' as const,
+    })),
+    ...[...copy.invalid]
+      .sort(byText)
+      .map((skill) => ({ skill, relativePath: SKILL_MANIFEST, kind: 'missing-in-copy' as const })),
     ...sourceOnly.map((skill) => ({ skill, relativePath: '.', kind: 'missing-in-copy' as const })),
   ];
   let filesCompared = 0;

@@ -3,9 +3,10 @@
  *
  * @remarks
  * Kept pure and apart from the CLI so every exit code is asserted in unit
- * tests rather than only observable by running the binary. An empty
- * intersection or an empty comparison is a refusal (2), never a pass: a
- * validator that compared nothing has proved nothing.
+ * tests rather than only observable by running the binary. Exit 0 means
+ * identical; 1 means findings; 2 is a refusal: no skill shared by both roots,
+ * or nothing compared and nothing found. A validator that compared nothing
+ * and found nothing has proved nothing, and must never pass.
  *
  * @packageDocumentation
  */
@@ -77,9 +78,13 @@ export function decideSkillCopyVerdict(
         `${PREFIX} no skill directory is present under both ${labels.sourceRoot} and ${labels.copyRoot} — refusing to report clean.`,
         ...membershipLines(report),
         ...report.findings.map(describeFinding),
+        ...remediationLines(report.findings, labels),
       ],
     };
   }
+  // Nothing compared AND nothing found is the vacuous case that must not pass.
+  // Findings with nothing compared (a shared skill that could not be read) are
+  // drift, exit 1, because they name something to fix.
   if (report.filesCompared === 0 && report.findings.length === 0) {
     return { code: 2, lines: [`${PREFIX} compared no files — refusing to report clean.`] };
   }

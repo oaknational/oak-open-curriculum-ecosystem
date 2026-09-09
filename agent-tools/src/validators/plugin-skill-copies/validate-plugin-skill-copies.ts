@@ -13,8 +13,9 @@
  * symlinks).
  *
  * Wired into root `repo-validators:check` (pre-commit and CI).
- * Exit 0 = identical; 1 = drift found; 2 = refusal (a root missing, no skill
- * shared by both roots, nothing compared, or an IO failure — an empty or
+ * Exit 0 = identical; 1 = findings (drift, a missing or invalid skill, a
+ * symlink); 2 = refusal (a root missing or symlinked, no skill shared by both
+ * roots, nothing compared and nothing found, or an IO failure — an empty or
  * broken scan is never a pass). The verdict is decided by the pure
  * `decideSkillCopyVerdict`, so each exit code is asserted in unit tests rather
  * than only observable by running this binary.
@@ -22,7 +23,7 @@
  * @packageDocumentation
  */
 
-import { existsSync } from 'node:fs';
+import { lstatSync } from 'node:fs';
 import path from 'node:path';
 
 import { resolveRepoRoot } from '../../core/repo-root.js';
@@ -44,8 +45,16 @@ for (const [label, dir] of [
   ['source', sourceRoot],
   ['copy', copyRoot],
 ] as const) {
-  if (!existsSync(dir)) {
+  // lstat: a root that is itself a symlink is refused, never followed.
+  const stat = lstatSync(dir, { throwIfNoEntry: false });
+  if (stat === undefined) {
     writeErrorLine(`validate-plugin-skill-copies: ${label} skills root is missing: ${dir}`);
+    process.exit(2);
+  }
+  if (stat.isSymbolicLink() || !stat.isDirectory()) {
+    writeErrorLine(
+      `validate-plugin-skill-copies: ${label} skills root is not a real directory (symlinks are not permitted, principles.md §No symlinks): ${dir}`,
+    );
     process.exit(2);
   }
 }

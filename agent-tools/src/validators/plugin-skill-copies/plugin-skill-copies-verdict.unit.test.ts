@@ -60,10 +60,12 @@ describe('decideSkillCopyVerdict', () => {
     expect(verdict.lines[0]).toContain('refusing to report clean');
     expect(verdict.lines[0]).toContain(LABELS.sourceRoot);
     expect(verdict.lines[0]).toContain(LABELS.copyRoot);
-    expect(verdict.lines.slice(1)).toStrictEqual([
+    expect(verdict.lines.slice(1, 3)).toStrictEqual([
       '  copy-only (not compared): merged',
       '  missing-in-copy  alpha/.',
     ]);
+    expect(fixLines(verdict.lines)).toHaveLength(1);
+    expect(fixLines(verdict.lines)[0]).toContain('re-copy');
   });
 
   it('refuses when shared skills exist but nothing was compared', () => {

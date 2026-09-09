@@ -81,14 +81,19 @@ describe('createFileSystemSkillTreeReader', () => {
 
       expect(createFileSystemSkillTreeReader([], fs).listRoot('/r')).toStrictEqual({
         skills: ['alpha', 'zeta'],
+        invalid: ['notes'],
         symlinks: [],
       });
     });
 
-    it('does not count a directory named SKILL.md as a manifest', () => {
+    it('lists a directory named SKILL.md as an invalid skill, not a manifest', () => {
       const fs = memoryFileSystem({ '/r/odd/SKILL.md/inner.md': text('x') });
 
-      expect(createFileSystemSkillTreeReader([], fs).listRoot('/r')?.skills).toStrictEqual([]);
+      expect(createFileSystemSkillTreeReader([], fs).listRoot('/r')).toStrictEqual({
+        skills: [],
+        invalid: ['odd'],
+        symlinks: [],
+      });
     });
 
     it('reports a symlinked entry under the root instead of following it', () => {
@@ -99,6 +104,7 @@ describe('createFileSystemSkillTreeReader', () => {
 
       expect(createFileSystemSkillTreeReader([], fs).listRoot('/r')).toStrictEqual({
         skills: ['alpha'],
+        invalid: [],
         symlinks: ['linked'],
       });
     });

@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { parse as parseYaml } from 'yaml';
 import { z } from 'zod';
 
+import {
+  splitFrontmatter as splitDocument,
+  type SplitDocument,
+} from '../../src/collaboration-state/test-helpers/frontmatter.js';
 import { readRepoDocument } from '../../src/collaboration-state/test-helpers/repo-doc.js';
 
 /**
@@ -71,13 +75,11 @@ interface SplitBody {
   readonly sections: string;
 }
 
-function splitFrontmatter(markdown: string): {
-  readonly frontmatter: string;
-  readonly body: string;
-} {
-  const fence = /^---\n([\s\S]*?)\n---\n/.exec(markdown);
-  expect(fence, 'document has no frontmatter block').not.toBeNull();
-  return { frontmatter: fence?.[1] ?? '', body: markdown.slice(fence?.[0].length ?? 0) };
+/** The shared splitter, with the missing-fence case turned into a named failure here. */
+function splitFrontmatter(markdown: string): SplitDocument {
+  const split = splitDocument(markdown);
+  expect(split, 'document has no frontmatter block').toBeDefined();
+  return split ?? { frontmatter: '', body: markdown };
 }
 
 function splitBody(body: string): SplitBody {

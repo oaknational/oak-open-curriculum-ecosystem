@@ -37,6 +37,10 @@ function memoryReader(trees: Trees): SkillTreeReader {
         .filter((dir) => dir.startsWith(`${root}/`))
         .map((dir) => dir.slice(root.length + 1))
         .filter((name) => !name.includes('/') && 'SKILL.md' in (trees[`${root}/${name}`] ?? {})),
+      invalid: Object.keys(trees)
+        .filter((dir) => dir.startsWith(`${root}/`))
+        .map((dir) => dir.slice(root.length + 1))
+        .filter((name) => !name.includes('/') && !('SKILL.md' in (trees[`${root}/${name}`] ?? {}))),
       symlinks: [],
     }),
     read: (skillDir) => {
@@ -112,7 +116,7 @@ describe('findSkillCopyDrift', () => {
     ]);
   });
 
-  it('does not treat a directory without SKILL.md as a skill on either side', () => {
+  it('reports a directory without a SKILL.md as a finding on its manifest, on whichever side it sits', () => {
     const reader = memoryReader({
       'source/alpha': { 'SKILL.md': 'x\n' },
       'source/notes': { 'README.md': 'not a skill\n' },
@@ -123,7 +127,26 @@ describe('findSkillCopyDrift', () => {
     const report = findSkillCopyDrift(CHECK, reader);
 
     expect(report.sharedSkills).toStrictEqual(['alpha']);
-    expect(report.findings).toStrictEqual([]);
+    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'notes', relativePath: 'SKILL.md', kind: 'missing-in-source' },
+      { skill: 'notes', relativePath: 'SKILL.md', kind: 'missing-in-copy' },
+    ]);
+  });
+
+  it('does not let a stale copy pass when the source skill has lost its SKILL.md', () => {
+    const reader = memoryReader({
+      'source/alpha': { 'SKILL.md': 'x\n' },
+      'source/accessibility': { 'references/wcag.md': 'w\n' },
+      'copy/alpha': { 'SKILL.md': 'x\n' },
+      'copy/accessibility': { 'SKILL.md': 'stale\n', 'references/wcag.md': 'w\n' },
+    });
+
+    const report = findSkillCopyDrift(CHECK, reader);
+
+    expect(report.copyOnly).toStrictEqual(['accessibility']);
+    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'accessibility', relativePath: 'SKILL.md', kind: 'missing-in-source' },
+    ]);
   });
 
   it('names the file whose bytes differ and still counts it as compared', () => {
@@ -169,7 +192,8 @@ describe('findSkillCopyDrift', () => {
 
   it('treats a root that cannot be listed as holding no skills', () => {
     const reader: SkillTreeReader = {
-      listRoot: (root) => (root === 'source' ? { skills: ['alpha'], symlinks: [] } : undefined),
+      listRoot: (root) =>
+        root === 'source' ? { skills: ['alpha'], invalid: [], symlinks: [] } : undefined,
       read: () => new Map([['SKILL.md', file('x\n')]]),
     };
 
@@ -185,7 +209,7 @@ describe('findSkillCopyDrift', () => {
 
   it('reports a shared skill whose tree cannot be read as a finding on the skill itself', () => {
     const reader: SkillTreeReader = {
-      listRoot: () => ({ skills: ['alpha'], symlinks: [] }),
+      listRoot: () => ({ skills: ['alpha'], invalid: [], symlinks: [] }),
       read: (skillDir) =>
         skillDir === 'source/alpha' ? new Map([['SKILL.md', file('x\n')]]) : undefined,
     };
@@ -200,7 +224,7 @@ describe('findSkillCopyDrift', () => {
 
   it('reports a symlink inside a shared skill as a finding and does not count it as compared', () => {
     const reader: SkillTreeReader = {
-      listRoot: () => ({ skills: ['alpha'], symlinks: [] }),
+      listRoot: () => ({ skills: ['alpha'], invalid: [], symlinks: [] }),
       read: (skillDir) =>
         new Map<string, SkillEntry>([
           ['SKILL.md', file('x\n')],
@@ -220,6 +244,7 @@ describe('findSkillCopyDrift', () => {
     const reader: SkillTreeReader = {
       listRoot: (root) => ({
         skills: ['alpha'],
+        invalid: [],
         symlinks: root === 'copy' ? ['linked-skill'] : [],
       }),
       read: () => new Map([['SKILL.md', file('x\n')]]),
