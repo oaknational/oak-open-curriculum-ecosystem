@@ -14,9 +14,13 @@
  * directory (one holding a `SKILL.md` file) present under both roots. A new
  * shared skill is covered the moment it exists on both sides. A skill present
  * under the source only is a `missing-in-copy` finding, because the copy is
- * meant to carry every source skill and a deleted copy must not pass; a skill
- * present under the copy only is reported for visibility, since a package may
- * add skills of its own (`validators-must-recompute-not-just-record`).
+ * meant to carry every source skill and a deleted copy must not pass. A skill
+ * present under the copy only is legitimate only when it derives from a
+ * same-named skill directory under the derived root (the Claude plugin's
+ * workflows, which the merged skills are built from); otherwise it is a stale
+ * copy of a deleted source skill and a `missing-in-source` finding. Nothing is
+ * listed: every membership question is answered from the three trees
+ * (`validators-must-recompute-not-just-record`).
  *
  * Symlinks are never followed. The repository forbids them (principles.md
  * §No symlinks), and a link that happened to resolve to matching bytes would
@@ -54,12 +58,18 @@ export interface SkillTreeReader {
   readonly read: (skillDir: string) => SkillTree | undefined;
 }
 
-/** What to compare: the two skill roots. Which skills are shared is discovered from them. */
+/** What to compare: the two skill roots, and the root that legitimises copy-only skills. */
 export interface SkillCopyCheck {
   /** Root holding the authoritative skills. */
   readonly sourceRoot: string;
   /** Root holding the copies. */
   readonly copyRoot: string;
+  /**
+   * Root whose skill directories a copy-only skill must be derived from (the
+   * Claude plugin's workflows). A copy-only skill with no same-named directory
+   * here is a stale copy of a deleted source skill, and a finding.
+   */
+  readonly derivedRoot: string;
 }
 
 /** One difference between source and copy, addressed by skill and skill-relative path. */
@@ -75,7 +85,7 @@ export interface SkillCopyReport {
   readonly sharedSkills: readonly string[];
   /** Skills present under the source root only; each is also a `missing-in-copy` finding. */
   readonly sourceOnly: readonly string[];
-  /** Skills present under the copy root only; reported, not compared. */
+  /** Skills present under the copy root only; not compared, and a finding unless derived from the derived root. */
   readonly copyOnly: readonly string[];
   readonly findings: readonly SkillCopyFinding[];
   /** File pairs compared, so an empty scan cannot pass as clean. */
@@ -113,29 +123,22 @@ export function findSkillCopyDrift(
 ): SkillCopyReport {
   const source = reader.listRoot(check.sourceRoot) ?? EMPTY_ROOT;
   const copy = reader.listRoot(check.copyRoot) ?? EMPTY_ROOT;
+  const derived = reader.listRoot(check.derivedRoot) ?? EMPTY_ROOT;
   const sourceSet = new Set(source.skills);
   const copySet = new Set(copy.skills);
+  const derivedSet = new Set(derived.skills);
+  const sourceInvalidSet = new Set(source.invalid);
   const sharedSkills = source.skills.filter((skill) => copySet.has(skill)).sort(byText);
   const sourceOnly = source.skills.filter((skill) => !copySet.has(skill)).sort(byText);
   const copyOnly = copy.skills.filter((skill) => !sourceSet.has(skill)).sort(byText);
+  // A copy-only skill with no derivation source is a stale copy of a deleted
+  // source skill. One already reported as an invalid source directory is not
+  // reported twice.
+  const staleCopies = copyOnly.filter(
+    (skill) => !derivedSet.has(skill) && !sourceInvalidSet.has(skill),
+  );
 
-  // A directory under a root that is not a valid skill (no regular SKILL.md) is a
-  // finding on its manifest, on whichever side it sits: a source skill whose
-  // manifest vanished must not let its stale copy pass as "copy-only".
-  const findings: SkillCopyFinding[] = [
-    ...[...new Set([...source.symlinks, ...copy.symlinks])]
-      .sort(byText)
-      .map((name) => ({ skill: name, relativePath: '.', kind: 'symlink' as const })),
-    ...[...source.invalid].sort(byText).map((skill) => ({
-      skill,
-      relativePath: SKILL_MANIFEST,
-      kind: 'missing-in-source' as const,
-    })),
-    ...[...copy.invalid]
-      .sort(byText)
-      .map((skill) => ({ skill, relativePath: SKILL_MANIFEST, kind: 'missing-in-copy' as const })),
-    ...sourceOnly.map((skill) => ({ skill, relativePath: '.', kind: 'missing-in-copy' as const })),
-  ];
+  const findings: SkillCopyFinding[] = membershipFindings(source, copy, sourceOnly, staleCopies);
   let filesCompared = 0;
   for (const skill of sharedSkills) {
     const one = compareSkill(
@@ -147,6 +150,33 @@ export function findSkillCopyDrift(
     filesCompared += one.filesCompared;
   }
   return { sharedSkills, sourceOnly, copyOnly, findings, filesCompared };
+}
+
+/**
+ * The findings that membership alone decides, before any file is compared:
+ * symlinked entries under either root; a directory under either root that is
+ * not a valid skill (no regular SKILL.md), reported on its manifest so a source
+ * skill whose manifest vanished cannot let its stale copy pass as copy-only;
+ * source skills with no copy; and copy-only skills with no derivation source.
+ */
+function membershipFindings(
+  source: SkillRootListing,
+  copy: SkillRootListing,
+  sourceOnly: readonly string[],
+  staleCopies: readonly string[],
+): SkillCopyFinding[] {
+  const at = (relativePath: string, kind: SkillCopyFinding['kind']) => (skill: string) => ({
+    skill,
+    relativePath,
+    kind,
+  });
+  return [
+    ...[...new Set([...source.symlinks, ...copy.symlinks])].sort(byText).map(at('.', 'symlink')),
+    ...[...source.invalid].sort(byText).map(at(SKILL_MANIFEST, 'missing-in-source')),
+    ...[...copy.invalid].sort(byText).map(at(SKILL_MANIFEST, 'missing-in-copy')),
+    ...sourceOnly.map(at('.', 'missing-in-copy')),
+    ...staleCopies.map(at('.', 'missing-in-source')),
+  ];
 }
 
 /** Compare one shared skill's two trees; a tree that cannot be read is a finding on the skill itself. */

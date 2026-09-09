@@ -13,7 +13,9 @@ workflows. So here:
 
 - every skill present in both plugins is a byte-identical copy of the Claude one (`evals/`
   excluded); `validate-plugin-skill-copies` (in `pnpm repo-validators:check`) discovers that
-  set from the two trees rather than keeping a list;
+  set from the two trees rather than keeping a list, fails when a Claude skill has no copy
+  here, and fails when a skill here has no Claude source unless it derives from a Claude
+  workflow of the same name;
 - `audit-sequence` and `find-misconceptions` each merge a Claude workflow and its agent into
   one self-contained skill. The agent's body is carried byte-identical from its first heading
   onward. The edits: the workflow's `$ARGUMENTS` line and its restatement of the method become
@@ -30,8 +32,9 @@ workflows. So here:
 
 The last two, no `.mcp.json` and `capabilities: []`, and the agreement of the two manifests
 are recomputed by `agent-tools/tests/skills/chatgpt-plugin-package-invariants.integration.test.ts`:
-the manifest is parsed through a strict schema at both levels, and the package root is held to
-exactly `.codex-plugin`, `README.md` and `skills`, so a companion file cannot appear unnoticed.
+the manifest is parsed through a strict schema at both levels, the package root is held to
+exactly `.codex-plugin`, `README.md` and `skills`, so a companion file cannot appear unnoticed,
+and the root marketplace file must list exactly this package under the manifest's name.
 
 That validator fails the build when a shared copy drifts from its Claude source. An
 integration test, `agent-tools/tests/skills/chatgpt-merged-skill-derivation.integration.test.ts`,

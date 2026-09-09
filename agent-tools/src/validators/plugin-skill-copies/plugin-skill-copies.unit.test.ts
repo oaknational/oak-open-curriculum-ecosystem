@@ -52,7 +52,7 @@ function memoryReader(trees: Trees): SkillTreeReader {
   };
 }
 
-const CHECK: SkillCopyCheck = { sourceRoot: 'source', copyRoot: 'copy' };
+const CHECK: SkillCopyCheck = { sourceRoot: 'source', copyRoot: 'copy', derivedRoot: 'derived' };
 
 describe('findSkillCopyDrift', () => {
   it('discovers the skills present under both roots and compares only those', () => {
@@ -61,6 +61,7 @@ describe('findSkillCopyDrift', () => {
       'source/beta': { 'SKILL.md': '# beta\n' },
       'copy/alpha': { 'SKILL.md': '# alpha\n' },
       'copy/merged': { 'SKILL.md': '# merged\n' },
+      'derived/merged': { 'SKILL.md': '# workflow\n' },
     });
 
     expect(findSkillCopyDrift(CHECK, reader)).toStrictEqual<SkillCopyReport>({
@@ -87,17 +88,33 @@ describe('findSkillCopyDrift', () => {
     ]);
   });
 
-  it('does not treat a skill the copy adds on its own as a finding', () => {
+  it('accepts a copy-only skill that derives from a same-named directory under the derived root', () => {
     const reader = memoryReader({
       'source/alpha': { 'SKILL.md': 'x\n' },
       'copy/alpha': { 'SKILL.md': 'x\n' },
       'copy/merged': { 'SKILL.md': 'm\n' },
+      'derived/merged': { 'SKILL.md': 'w\n' },
     });
 
     const report = findSkillCopyDrift(CHECK, reader);
 
     expect(report.copyOnly).toStrictEqual(['merged']);
     expect(report.findings).toStrictEqual([]);
+  });
+
+  it('reports a copy-only skill with no derivation source as a stale copy, so a deleted source skill cannot pass', () => {
+    const reader = memoryReader({
+      'source/alpha': { 'SKILL.md': 'x\n' },
+      'copy/alpha': { 'SKILL.md': 'x\n' },
+      'copy/accessibility': { 'SKILL.md': 'stale\n' },
+    });
+
+    const report = findSkillCopyDrift(CHECK, reader);
+
+    expect(report.copyOnly).toStrictEqual(['accessibility']);
+    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'accessibility', relativePath: '.', kind: 'missing-in-source' },
+    ]);
   });
 
   it('covers a newly added shared skill without any list being edited', () => {
@@ -179,6 +196,7 @@ describe('findSkillCopyDrift', () => {
     const reader = memoryReader({
       'source/alpha': { 'SKILL.md': 'x\n' },
       'copy/merged': { 'SKILL.md': 'y\n' },
+      'derived/merged': { 'SKILL.md': 'w\n' },
     });
 
     expect(findSkillCopyDrift(CHECK, reader)).toStrictEqual<SkillCopyReport>({

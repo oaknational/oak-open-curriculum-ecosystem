@@ -75,6 +75,37 @@ const CodexManifestSchema = SharedManifestFieldsSchema.extend({
 /** Everything the package ships at its root; anything else (a stray `.mcp.json`, say) is a packaging defect. */
 const SHIPPED_ROOT_ENTRIES = ['.codex-plugin', 'README.md', 'skills'] as const;
 
+const MARKETPLACE_PATH = '.agents/plugins/marketplace.json';
+
+/**
+ * The Codex local-marketplace file that `codex plugin marketplace add <repo root>`
+ * reads: exactly one entry, pointing at this package, with the policy values
+ * Codex's marketplace enum accepts (`codex-rs/core-plugins/src/marketplace.rs`).
+ */
+const MarketplaceSchema = z
+  .object({
+    name: z.string().min(1),
+    interface: z.object({ displayName: z.string().min(1) }).strict(),
+    plugins: z
+      .array(
+        z
+          .object({
+            name: z.string().min(1),
+            source: z.object({ source: z.literal('local'), path: z.string().min(1) }).strict(),
+            policy: z
+              .object({
+                installation: z.enum(['AVAILABLE', 'INSTALLED_BY_DEFAULT', 'NOT_AVAILABLE']),
+                authentication: z.enum(['ON_INSTALL', 'ON_USE']),
+              })
+              .strict(),
+            category: z.string().min(1),
+          })
+          .strict(),
+      )
+      .length(1),
+  })
+  .strict();
+
 const SkillFrontmatterSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
@@ -129,6 +160,15 @@ describe('ChatGPT/Codex package invariants', () => {
     expect(entries.map((entry) => entry.name)).toStrictEqual(
       [...SHIPPED_ROOT_ENTRIES].sort((a, b) => a.localeCompare(b, 'en')),
     );
+  });
+
+  it('is the one plugin the root marketplace file lists, under the manifest name, with a local path to this package', async () => {
+    const marketplace = MarketplaceSchema.parse(await readJson(MARKETPLACE_PATH));
+    const manifest = await readCodexManifest();
+    const entry = marketplace.plugins[0];
+
+    expect(entry?.name).toBe(manifest.name);
+    expect(entry?.source.path).toBe(`./${PACKAGE_ROOT}`);
   });
 
   it('declares no capabilities, the value that passed OpenAI ingestion', async () => {
