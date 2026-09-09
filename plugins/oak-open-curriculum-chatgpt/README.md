@@ -37,6 +37,13 @@ fails it when a merged skill and its Claude agent stop matching from the first h
 The durable fix is a generator (MCP-342); until then the copies are honest because they are
 checked.
 
+Routing check (2026-09-09): the five descriptions were tested as an installed skill list
+against eighteen teacher requests with known right answers, in twelve independent runs (Opus,
+judging from the descriptions alone; current and proposed wording; the ChatGPT list and the
+Claude list). Every run routed every request correctly. The descriptions therefore carry the
+do-not-use boundaries and nothing more, and the two Claude workflow descriptions were made
+identical to the merged skills' for consistency between the plugins, not as a routing fix.
+
 ## Sideload for testing (desktop app)
 
 Steps observed in the Codex desktop app, 2026-09-07.
