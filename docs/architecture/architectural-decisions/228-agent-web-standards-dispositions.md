@@ -7,9 +7,8 @@
   necessary"; the dispositions were taken at the Director seat and its
   implementer lane, from the measurements cited below
 - **Related:** [ADR-223](223-perishable-claims-carry-risk-based-freshness-metadata.md)
-  — every claim here is dated because it is perishable;
-  [ADR-205](205-public-resource-classification-pattern.md) — what Oak publishes
-  publicly, and why each item is deliberate
+  — every claim here carries its measurement date because every one of them is
+  perishable
 
 ## Context
 
@@ -165,16 +164,20 @@ answered rather than out-shipped.
 `draft-mozleywilliams-dnsop-dnsaid-02`, "DNS for AI Discovery". Queried
 against the IETF Datatracker API on 2026-09-09: revision `-02`, dated
 2026-05-27, `stream: null`, no intended standards level, no standards level,
-expiring **2026-11-28**. The document is an individual submission; the IESG has
-not started processing it. The `dnsop` in the filename is the authors'
-convention and not evidence of working-group adoption — a
-`name__contains=dnsaid` query returns exactly one document.
+expiring **2026-11-28**, `draft-iesg` state `idexists` — "The IESG has not
+started processing this draft, or has stopped processing it without
+publication". The document is an individual submission. The `dnsop` in the
+filename is the authors' convention and not evidence of working-group adoption
+— a `name__contains=dnsaid` query returns exactly one document.
 
-Adoption was swept across 39 domains with control probes and returned zero,
-including the draft authors' own employers (Infoblox, Deutsche Telekom,
-Amazon). That figure is carried from the 2026-09-09 verification pass rather
-than re-measured here; the domain-by-domain evidence lives in
-[`standards-verification-2026-09-09.report.md`](../../../.agent/plans-backlog-2026-07/discovery/current/standards-verification-2026-09-09.report.md).
+Adoption is zero. A 39-domain sweep on 2026-09-09 found nothing; that sweep's
+per-domain list was not written to a tracked record, so an eleven-domain subset
+was re-probed for this ADR — `_agent` TXT and SVCB records at `infoblox.com`,
+`telekom.com`, `amazon.com` (the draft authors' own employers),
+`cloudflare.com`, `github.com`, `huggingface.co`, `openai.com`,
+`anthropic.com`, `microsoft.com`, `google.com` and `thenational.academy`. Every
+one returned nothing, against controls (`_dmarc.cloudflare.com` TXT,
+`google.com` TXT) that returned records.
 
 A DNS record nobody resolves is not discovery, and Oak's discoverable resources
 already have working entry points.
@@ -317,16 +320,18 @@ Measured first-hand on 2026-09-09 for this record: the ARD spec page and site;
 `developers.cloudflare.com`, with their `Link` headers; the IANA Well-Known
 URIs registry, with control rows; the A2A release list; the WebMCP draft and
 WebKit standards-position issue 670; the IETF Datatracker record for
-`draft-mozleywilliams-dnsop-dnsaid`; SEP-2127's state and review decision; the
+`draft-mozleywilliams-dnsop-dnsaid` and its IESG state; the eleven-domain
+`_agent` DNS probe with controls; SEP-2127's state and review decision; the
 `ext-server-card` README and `docs/discovery.md`; the GitHub, Hugging Face and
 Oak `server-card` endpoints; `auth.md` and the two OAuth well-known paths on
 both `open-api.thenational.academy` and `workos.com`; and the
 `isitagentready.com` page source.
 
 Carried from the same day's verification pass rather than re-measured here: the
-39-domain DNS-AID adoption sweep, the scanner's own
-"OAuth Protected Resource Metadata was not found" warning text, and the Chrome
-"Proposed" status for WebMCP. Full working in
+39-domain DNS-AID adoption sweep (whose per-domain list was never written down —
+hence the eleven-domain re-probe above), the scanner's own "OAuth Protected
+Resource Metadata was not found" warning text, the scanner's probe-path list,
+and the Chrome "Proposed" status for WebMCP. Surrounding working in
 [`standards-verification-2026-09-09.report.md`](../../../.agent/plans-backlog-2026-07/discovery/current/standards-verification-2026-09-09.report.md),
 [`agent-readiness-collation-2026-09-09.md`](../../../.agent/reports/agent-readiness-collation-2026-09-09.md)
 and
