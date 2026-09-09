@@ -6,6 +6,18 @@ actually serves today. Where they disagree, the measurement wins.
 
 ## The external scanner, and why its score is not quoted here
 
+> **SUPERSEDED later on 2026-09-09.** The scores below were called
+> unretrievable because the page renders client-side. It has a JSON API —
+> `POST https://isitagentready.com/api/scan` with `{"url": "https://<host>"}` —
+> returning `level`, per-check `status` with request and response `evidence`,
+> and a `nextLevel` object naming the exact checks between a host and its next
+> level. Measured that day: `www` level 1 (needs only `contentSignals`), `mcp`
+> level 0 (needs `robotsTxt`, `sitemap`, `linkHeaders`), `open-api` level 4
+> (needs `authMd`, `mcpServerCard`, `a2aAgentCard`). Full working in
+> [ADR-228](../../docs/architecture/architectural-decisions/228-agent-web-standards-dispositions.md).
+> Read the API, not the page — and read `nextLevel` and the per-check
+> `evidence`, never the headline number.
+
 `isitagentready.com/www.thenational.academy` renders its result client-side, so
 the page fetches as the tool's framework text with no scan output. **No score
 for Oak is reproduced in this document, because none was retrieved.** What the
