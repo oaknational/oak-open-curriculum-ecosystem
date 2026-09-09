@@ -24,7 +24,9 @@ export interface SkillCopyVerdict {
 export interface SkillCopyCheckLabels {
   readonly sourceRoot: string;
   readonly copyRoot: string;
-  /** Top-level directories the comparison skips, named in the re-copy remediation. */
+  /** The root a copy-only skill must derive from (the Claude workflows), named in that remediation. */
+  readonly derivedRoot: string;
+  /** Top-level directories the comparison skips on the source side, named in the re-copy remediation. */
   readonly ignoredDirs: readonly string[];
 }
 
@@ -42,9 +44,19 @@ function remediationLines(
       'Fix (symlink): replace each listed symlink with a real file or directory; symlinks are not permitted in the repository (principles.md §No symlinks).',
     );
   }
+  if (kinds.has('missing-derivation')) {
+    lines.push(
+      `Fix (missing-derivation): the listed skill exists only in ${labels.copyRoot} and has no same-named workflow under ${labels.derivedRoot} to derive from — restore that workflow, or remove the copy if the skill is gone.`,
+    );
+  }
+  if (kinds.has('not-shipped')) {
+    lines.push(
+      `Fix (not-shipped): remove the listed path(s) from ${labels.copyRoot} — authoring-only content is not shipped in the package.`,
+    );
+  }
   if (kinds.has('missing-in-source')) {
     lines.push(
-      `Fix (missing-in-source): ${labels.sourceRoot} is the source and it lacks the listed path(s) — restore them there before re-copying, or remove them from ${labels.copyRoot} if they are not shipped content (such as evals/).`,
+      `Fix (missing-in-source): ${labels.sourceRoot} is the source and it lacks the listed path(s) — restore them there before re-copying, or remove them from ${labels.copyRoot} if they do not belong.`,
     );
   }
   if (kinds.has('missing-in-copy') || kinds.has('content-differs')) {

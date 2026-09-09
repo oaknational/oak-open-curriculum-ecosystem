@@ -52,7 +52,12 @@ function memoryReader(trees: Trees): SkillTreeReader {
   };
 }
 
-const CHECK: SkillCopyCheck = { sourceRoot: 'source', copyRoot: 'copy', derivedRoot: 'derived' };
+const CHECK: SkillCopyCheck = {
+  sourceRoot: 'source',
+  copyRoot: 'copy',
+  derivedRoot: 'derived',
+  notShipped: ['evals'],
+};
 
 describe('findSkillCopyDrift', () => {
   it('discovers the skills present under both roots and compares only those', () => {
@@ -113,7 +118,50 @@ describe('findSkillCopyDrift', () => {
 
     expect(report.copyOnly).toStrictEqual(['accessibility']);
     expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
-      { skill: 'accessibility', relativePath: '.', kind: 'missing-in-source' },
+      { skill: 'accessibility', relativePath: '.', kind: 'missing-derivation' },
+    ]);
+  });
+
+  it('walks a derived copy-only skill and reports authoring content that must not ship', () => {
+    const reader = memoryReader({
+      'source/alpha': { 'SKILL.md': 'x\n' },
+      'copy/alpha': { 'SKILL.md': 'x\n' },
+      'copy/merged': { 'SKILL.md': 'm\n', 'evals/evals.json': '{}\n', 'references/r.md': 'r\n' },
+      'derived/merged': { 'SKILL.md': 'w\n' },
+    });
+
+    expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'merged', relativePath: 'evals/evals.json', kind: 'not-shipped' },
+    ]);
+  });
+
+  it('walks a derived copy-only skill and reports a symlink inside it', () => {
+    const reader: SkillTreeReader = {
+      listRoot: (root) => ({
+        skills: root === 'source' ? [] : ['merged'],
+        invalid: [],
+        symlinks: [],
+      }),
+      read: () =>
+        new Map<string, SkillEntry>([
+          ['SKILL.md', file('m\n')],
+          ['references/link.md', { kind: 'symlink' }],
+        ]),
+    };
+
+    expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'merged', relativePath: 'references/link.md', kind: 'symlink' },
+    ]);
+  });
+
+  it('reports authoring content in a shared copy as not shipped, not as content the source lacks', () => {
+    const reader = memoryReader({
+      'source/alpha': { 'SKILL.md': 'x\n' },
+      'copy/alpha': { 'SKILL.md': 'x\n', 'evals/evals.json': '{}\n' },
+    });
+
+    expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'alpha', relativePath: 'evals/evals.json', kind: 'not-shipped' },
     ]);
   });
 

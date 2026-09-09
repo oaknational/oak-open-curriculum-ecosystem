@@ -73,7 +73,7 @@ try {
   refuseUnlessRealDirectory('copy skills', roots.copyRoot);
   refuseUnlessRealDirectory('derived (workflows)', roots.derivedRoot);
   report = findSkillCopyDrift(
-    roots,
+    { ...roots, notShipped: IGNORED_DIRS },
     createFileSystemSkillTreeReader(new Map([[roots.sourceRoot, IGNORED_DIRS]])),
   );
 } catch (error: unknown) {
@@ -84,6 +84,7 @@ try {
 const verdict = decideSkillCopyVerdict(report, {
   sourceRoot: SOURCE_SKILLS,
   copyRoot: COPY_SKILLS,
+  derivedRoot: DERIVED_SKILLS,
   ignoredDirs: IGNORED_DIRS,
 });
 

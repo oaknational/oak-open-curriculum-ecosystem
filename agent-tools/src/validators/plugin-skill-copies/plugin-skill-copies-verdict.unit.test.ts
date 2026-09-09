@@ -19,6 +19,7 @@ import type { SkillCopyReport } from './plugin-skill-copies.js';
 const LABELS: SkillCopyCheckLabels = {
   sourceRoot: 'plugins/a/skills',
   copyRoot: 'plugins/b/skills',
+  derivedRoot: 'plugins/a/workflows',
   ignoredDirs: ['evals'],
 };
 
@@ -139,6 +140,26 @@ describe('decideSkillCopyVerdict', () => {
     );
 
     expect(fixLines(verdict.lines)[0]).not.toContain('omit');
+  });
+
+  it('points a missing derivation at the workflows root, and not-shipped content at the copy', () => {
+    const verdict = decideSkillCopyVerdict(
+      {
+        ...clean,
+        findings: [
+          { skill: 'merged', relativePath: '.', kind: 'missing-derivation' },
+          { skill: 'alpha', relativePath: 'evals/evals.json', kind: 'not-shipped' },
+        ],
+      },
+      LABELS,
+    );
+
+    const fixes = fixLines(verdict.lines);
+    expect(verdict.code).toBe(1);
+    expect(fixes).toHaveLength(2);
+    expect(fixes[0]).toContain(LABELS.derivedRoot);
+    expect(fixes[0]).not.toContain(LABELS.sourceRoot);
+    expect(fixes[1]).toContain(`remove the listed path(s) from ${LABELS.copyRoot}`);
   });
 
   it('points the symlink remediation at the repository rule', () => {

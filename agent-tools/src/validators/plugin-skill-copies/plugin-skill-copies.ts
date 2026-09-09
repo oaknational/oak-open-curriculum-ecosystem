@@ -18,14 +18,17 @@
  * present under the copy only is legitimate only when it derives from a
  * same-named skill directory under the derived root (the Claude plugin's
  * workflows, which the merged skills are built from); otherwise it is a stale
- * copy of a deleted source skill and a `missing-in-source` finding. Nothing is
+ * copy of a deleted source skill and a `missing-derivation` finding. Nothing is
  * listed: every membership question is answered from the three trees
  * (`validators-must-recompute-not-just-record`).
  *
  * Symlinks are never followed. The repository forbids them (principles.md
  * §No symlinks), and a link that happened to resolve to matching bytes would
- * still ship as a link, not as content. A symlink anywhere in a compared tree,
- * or a symlinked entry under a root, is a finding of its own.
+ * still ship as a link, not as content. A symlink anywhere in a packaged
+ * skill, shared or copy-only, or a symlinked entry under a root, is a finding
+ * of its own. Authoring-only content (`notShipped`, the `evals/` directories)
+ * is likewise a finding wherever it appears in the copy: shared skills are
+ * compared without it, and derived copy-only skills are walked for it.
  *
  * Pure: the filesystem is injected as a {@link SkillTreeReader} (ADR-078), so
  * the comparison is testable against in-memory trees and the CLI wrapper owns
@@ -35,12 +38,15 @@
  * @packageDocumentation
  */
 
-/** One entry of a skill directory: a regular file's bytes, or a symlink (never followed). */
-export type SkillEntry =
-  { readonly kind: 'file'; readonly bytes: Uint8Array } | { readonly kind: 'symlink' };
+import {
+  byText,
+  compareSkill,
+  copyOnlyFindings,
+  type SkillCopyFinding,
+  type SkillTree,
+} from './plugin-skill-copies-compare.js';
 
-/** The entries of one skill directory, keyed by path relative to that directory. */
-export type SkillTree = ReadonlyMap<string, SkillEntry>;
+export type { SkillCopyFinding, SkillEntry, SkillTree } from './plugin-skill-copies-compare.js';
 
 /** What a root directory holds: skill directories, directories that are not valid skills, and symlinked entries. */
 export interface SkillRootListing {
@@ -70,13 +76,11 @@ export interface SkillCopyCheck {
    * here is a stale copy of a deleted source skill, and a finding.
    */
   readonly derivedRoot: string;
-}
-
-/** One difference between source and copy, addressed by skill and skill-relative path. */
-export interface SkillCopyFinding {
-  readonly skill: string;
-  readonly relativePath: string;
-  readonly kind: 'missing-in-copy' | 'missing-in-source' | 'content-differs' | 'symlink';
+  /**
+   * Top-level directory names that are authoring tooling and must not ship in
+   * the copy (`evals`). Their presence in any packaged skill is a finding.
+   */
+  readonly notShipped: readonly string[];
 }
 
 /** The outcome: what was discovered, what differed, and how much was compared. */
@@ -92,17 +96,9 @@ export interface SkillCopyReport {
   readonly filesCompared: number;
 }
 
-/** Alphabetical order under a fixed locale, so output is identical on every machine. */
-const byText = (a: string, b: string): number => a.localeCompare(b, 'en');
-
 /** Join a root and a skill name with `/`, the separator both readers understand. */
 function skillPath(root: string, skill: string): string {
   return `${root}/${skill}`;
-}
-
-interface SkillComparison {
-  readonly findings: readonly SkillCopyFinding[];
-  readonly filesCompared: number;
 }
 
 const EMPTY_ROOT: SkillRootListing = { skills: [], invalid: [], symlinks: [] };
@@ -145,9 +141,17 @@ export function findSkillCopyDrift(
       skill,
       reader.read(skillPath(check.sourceRoot, skill)),
       reader.read(skillPath(check.copyRoot, skill)),
+      check.notShipped,
     );
     findings.push(...one.findings);
     filesCompared += one.filesCompared;
+  }
+  // Derived copy-only skills have no source to compare against, but they ship,
+  // so they are walked for symlinks and authoring-only content all the same.
+  for (const skill of copyOnly.filter((name) => derivedSet.has(name))) {
+    findings.push(
+      ...copyOnlyFindings(skill, reader.read(skillPath(check.copyRoot, skill)), check.notShipped),
+    );
   }
   return { sharedSkills, sourceOnly, copyOnly, findings, filesCompared };
 }
@@ -175,50 +179,6 @@ function membershipFindings(
     ...[...source.invalid].sort(byText).map(at(SKILL_MANIFEST, 'missing-in-source')),
     ...[...copy.invalid].sort(byText).map(at(SKILL_MANIFEST, 'missing-in-copy')),
     ...sourceOnly.map(at('.', 'missing-in-copy')),
-    ...staleCopies.map(at('.', 'missing-in-source')),
+    ...staleCopies.map(at('.', 'missing-derivation')),
   ];
-}
-
-/** Compare one shared skill's two trees; a tree that cannot be read is a finding on the skill itself. */
-function compareSkill(
-  skill: string,
-  source: SkillTree | undefined,
-  copy: SkillTree | undefined,
-): SkillComparison {
-  if (source === undefined || copy === undefined) {
-    const kind = source === undefined ? 'missing-in-source' : 'missing-in-copy';
-    return { findings: [{ skill, relativePath: '.', kind }], filesCompared: 0 };
-  }
-  const findings: SkillCopyFinding[] = [];
-  let filesCompared = 0;
-  const paths = new Set([...source.keys(), ...copy.keys()]);
-  for (const relativePath of [...paths].sort(byText)) {
-    const outcome = compareEntry(source.get(relativePath), copy.get(relativePath));
-    if (outcome === 'identical' || outcome === 'content-differs') {
-      filesCompared += 1;
-    }
-    if (outcome !== 'identical') {
-      findings.push({ skill, relativePath, kind: outcome });
-    }
-  }
-  return { findings, filesCompared };
-}
-
-type EntryOutcome = SkillCopyFinding['kind'] | 'identical';
-
-/** The outcome for one relative path present in at least one tree. */
-function compareEntry(
-  original: SkillEntry | undefined,
-  copied: SkillEntry | undefined,
-): EntryOutcome {
-  if (original?.kind === 'symlink' || copied?.kind === 'symlink') {
-    return 'symlink';
-  }
-  if (original === undefined) {
-    return 'missing-in-source';
-  }
-  if (copied === undefined) {
-    return 'missing-in-copy';
-  }
-  return Buffer.compare(original.bytes, copied.bytes) === 0 ? 'identical' : 'content-differs';
 }

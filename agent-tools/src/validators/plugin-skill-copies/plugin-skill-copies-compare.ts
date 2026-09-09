@@ -1,0 +1,130 @@
+/**
+ * Per-skill comparison for the skill-copy validator: the byte comparison of a
+ * shared skill's two trees, and the walk of a derived copy-only skill for
+ * content that must not ship.
+ *
+ * @remarks
+ * Pure; operates on the trees the reader produced. Membership decisions
+ * (which skills are shared, source-only, copy-only, derived) live in
+ * `plugin-skill-copies.ts`; the exit decision lives in
+ * `plugin-skill-copies-verdict.ts`.
+ *
+ * @packageDocumentation
+ */
+
+/** One entry of a skill directory: a regular file's bytes, or a symlink (never followed). */
+export type SkillEntry =
+  { readonly kind: 'file'; readonly bytes: Uint8Array } | { readonly kind: 'symlink' };
+
+/** The entries of one skill directory, keyed by path relative to that directory. */
+export type SkillTree = ReadonlyMap<string, SkillEntry>;
+
+/**
+ * One difference between source and copy, addressed by skill and skill-relative
+ * path. `not-shipped` is authoring content present in the copy; `missing-derivation`
+ * is a copy-only skill with no same-named workflow to derive from.
+ */
+export interface SkillCopyFinding {
+  readonly skill: string;
+  readonly relativePath: string;
+  readonly kind:
+    | 'missing-in-copy'
+    | 'missing-in-source'
+    | 'content-differs'
+    | 'symlink'
+    | 'not-shipped'
+    | 'missing-derivation';
+}
+
+/** Alphabetical order under a fixed locale, so output is identical on every machine. */
+export const byText = (a: string, b: string): number => a.localeCompare(b, 'en');
+
+export interface SkillComparison {
+  readonly findings: readonly SkillCopyFinding[];
+  readonly filesCompared: number;
+}
+
+type EntryOutcome = SkillCopyFinding['kind'] | 'identical';
+
+/** Whether a skill-relative path sits under a top-level directory that must not ship. */
+function isNotShipped(relativePath: string, notShipped: readonly string[]): boolean {
+  const top = relativePath.split('/')[0] ?? '';
+  return relativePath.includes('/') && notShipped.includes(top);
+}
+
+/** The outcome for one relative path present in at least one tree. */
+function compareEntry(
+  original: SkillEntry | undefined,
+  copied: SkillEntry | undefined,
+): EntryOutcome {
+  if (original?.kind === 'symlink' || copied?.kind === 'symlink') {
+    return 'symlink';
+  }
+  if (original === undefined) {
+    return 'missing-in-source';
+  }
+  if (copied === undefined) {
+    return 'missing-in-copy';
+  }
+  return Buffer.compare(original.bytes, copied.bytes) === 0 ? 'identical' : 'content-differs';
+}
+
+/** The outcome for one path of a shared skill: authoring content in the copy is not shipped, whatever the source holds. */
+function sharedEntryOutcome(
+  relativePath: string,
+  source: SkillTree,
+  copy: SkillTree,
+  notShipped: readonly string[],
+): EntryOutcome {
+  const copied = copy.get(relativePath);
+  if (copied !== undefined && isNotShipped(relativePath, notShipped)) {
+    return 'not-shipped';
+  }
+  return compareEntry(source.get(relativePath), copied);
+}
+
+/** Compare one shared skill's two trees; a tree that cannot be read is a finding on the skill itself. */
+export function compareSkill(
+  skill: string,
+  source: SkillTree | undefined,
+  copy: SkillTree | undefined,
+  notShipped: readonly string[],
+): SkillComparison {
+  if (source === undefined || copy === undefined) {
+    const kind = source === undefined ? 'missing-in-source' : 'missing-in-copy';
+    return { findings: [{ skill, relativePath: '.', kind }], filesCompared: 0 };
+  }
+  const findings: SkillCopyFinding[] = [];
+  let filesCompared = 0;
+  const paths = new Set([...source.keys(), ...copy.keys()]);
+  for (const relativePath of [...paths].sort(byText)) {
+    const outcome = sharedEntryOutcome(relativePath, source, copy, notShipped);
+    if (outcome === 'identical' || outcome === 'content-differs') {
+      filesCompared += 1;
+    }
+    if (outcome !== 'identical') {
+      findings.push({ skill, relativePath, kind: outcome });
+    }
+  }
+  return { findings, filesCompared };
+}
+
+/** Findings for a derived copy-only skill: symlinks anywhere, and authoring-only content. */
+export function copyOnlyFindings(
+  skill: string,
+  tree: SkillTree | undefined,
+  notShipped: readonly string[],
+): SkillCopyFinding[] {
+  const findings: SkillCopyFinding[] = [];
+  const entries = [...(tree ?? new Map<string, SkillEntry>()).entries()].sort(([a], [b]) =>
+    byText(a, b),
+  );
+  for (const [relativePath, entry] of entries) {
+    if (entry.kind === 'symlink') {
+      findings.push({ skill, relativePath, kind: 'symlink' });
+    } else if (isNotShipped(relativePath, notShipped)) {
+      findings.push({ skill, relativePath, kind: 'not-shipped' });
+    }
+  }
+  return findings;
+}
