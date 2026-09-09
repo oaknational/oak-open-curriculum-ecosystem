@@ -79,7 +79,7 @@ export const DEFAULT_TRACE_PROPAGATION_TARGETS: readonly string[] = Object.freez
  *
  * @remarks Exported so ADR-160 conformance tests can constrain bypass
  * helpers to the exact same key-set the adapter wires — any new hook
- * wired in {@link createSentryHooks} without a matching test-registry
+ * wired in {@link createSentryRedactionHooks} without a matching test-registry
  * update is caught at `pnpm type-check` rather than at runtime.
  */
 export type SentryRedactionHooks = Pick<
@@ -87,7 +87,20 @@ export type SentryRedactionHooks = Pick<
   'beforeBreadcrumb' | 'beforeSend' | 'beforeSendLog' | 'beforeSendSpan' | 'beforeSendTransaction'
 >;
 
-function createSentryHooks(postRedactionHooks?: SentryPostRedactionHooks): SentryRedactionHooks {
+/**
+ * Build the ADR-160 redaction hook-set wired into every Sentry
+ * `init()` this library performs.
+ *
+ * @remarks Exported so the bootstrap reporter composes the SAME
+ * barrier rather than a parallel policy: there is exactly one
+ * producer of these hooks, so a bypass path cannot exist by
+ * construction. Consumers outside this library must not call
+ * `Sentry.init` themselves — they compose through
+ * {@link createSentryInitOptions} or the bootstrap reporter.
+ */
+export function createSentryRedactionHooks(
+  postRedactionHooks?: SentryPostRedactionHooks,
+): SentryRedactionHooks {
   return {
     beforeSend(event, hint) {
       // Composition order is load-bearing: redaction MUST run before
@@ -147,7 +160,7 @@ export function createSentryInitOptions(
         ...(config.gitSha ? { 'git.commit.sha': config.gitSha } : {}),
       },
     },
-    ...createSentryHooks(options.postRedactionHooks),
+    ...createSentryRedactionHooks(options.postRedactionHooks),
   };
 }
 

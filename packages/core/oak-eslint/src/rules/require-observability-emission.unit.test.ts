@@ -56,6 +56,18 @@ ruleTester.run('require-observability-emission', requireObservabilityEmissionRul
       filename: APP_FILE,
       code: `export async function withBareLog() { log('x'); }`,
     },
+    // 6b. Bare `reportBootstrapFailure` — the pre-runtime capture path a
+    // composition root uses when no logger or observability object exists yet.
+    {
+      filename: APP_FILE,
+      code: `
+          export async function loadOrReportAndThrow(deps) {
+            const error = new Error('boot refused');
+            await reportBootstrapFailure({ env: deps.env, boundaryError: error });
+            throw error;
+          }
+        `,
+    },
     // 5. Private (non-exported) async function with no emission — out of scope.
     {
       filename: APP_FILE,

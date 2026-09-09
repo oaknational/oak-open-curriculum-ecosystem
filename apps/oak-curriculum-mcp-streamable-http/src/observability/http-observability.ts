@@ -32,7 +32,8 @@ import { createSentryDelegates } from './sentry-observability-delegates.js';
 export { describeHttpObservabilityError } from './http-observability-error.js';
 export type { HttpSpanHandle, HttpSpanOptions, HttpSyncSpanOptions } from './span-helpers.js';
 
-const DEFAULT_HTTP_SERVICE_NAME = 'oak-curriculum-mcp-streamable-http';
+/** Service tag for this app's telemetry, shared with the boot-failure reporter. */
+export const DEFAULT_HTTP_SERVICE_NAME = 'oak-curriculum-mcp-streamable-http';
 
 interface CreateHttpObservabilityOptions {
   readonly serviceName?: string;

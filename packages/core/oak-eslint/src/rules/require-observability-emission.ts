@@ -74,6 +74,20 @@ const CAPTURE_METHODS = new Set<string>([
   'addEvent',
 ]);
 
+/**
+ * Emissions invoked as bare identifiers rather than through a namespace
+ * or delegate.
+ *
+ * @remarks `log` is the estate's bare logging shim.
+ * `reportBootstrapFailure` is `@oaknational/sentry-node`'s pre-runtime
+ * capture path (MCP-480): a composition root refusing to boot has no
+ * `logger` and no observability object yet, so its emission cannot take
+ * a member-call shape. Recognising it here keeps that genuine emission
+ * out of the sentinel escape hatch, which exists for functions that
+ * emit NOTHING.
+ */
+const BARE_EMISSION_CALLS = new Set<string>(['log', 'reportBootstrapFailure']);
+
 const SENTINEL_PATTERN = /observability-emission-exempt:/iu;
 
 type ExportAnchor = TSESTree.ExportNamedDeclaration | TSESTree.ExportDefaultDeclaration;
@@ -194,7 +208,7 @@ function memberRootName(callee: TSESTree.CallExpression['callee']): string | nul
 function isEmissionCall(node: TSESTree.CallExpression): boolean {
   const callee = node.callee;
 
-  if (callee.type === 'Identifier' && callee.name === 'log') return true;
+  if (callee.type === 'Identifier' && BARE_EMISSION_CALLS.has(callee.name)) return true;
 
   if (callee.type === 'MemberExpression') {
     const root = memberRootName(callee);

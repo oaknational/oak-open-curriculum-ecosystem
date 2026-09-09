@@ -1490,6 +1490,9 @@ importers:
       '@oaknational/build-metadata':
         specifier: workspace:*
         version: link:../../core/build-metadata
+      '@oaknational/env':
+        specifier: workspace:*
+        version: link:../../core/env
       '@oaknational/logger':
         specifier: workspace:*
         version: link:../logger
@@ -4473,6 +4476,7 @@ packages:
   '@xmldom/xmldom@0.8.13':
     resolution: {integrity: sha512-KRYzxepc14G/CEpEGc3Yn+JKaAeT63smlDr+vjB8jRfgTBBI9wRj/nkQEO+ucV8p8I9bfKLWp37uHgFrbntPvw==}
     engines: {node: '>=10.0.0'}
+    deprecated: this version has critical issues, please update to the latest version
 
   '@zod/core@0.11.6':
     resolution: {integrity: sha512-03Bv82fFSfjDAvMfdHHdGSS6SOJs0iCcJlWJv1kJHRtoTT02hZpyip/2Lk6oo4l4FtjuwTrsEQTwg/LD8I7dJA==}

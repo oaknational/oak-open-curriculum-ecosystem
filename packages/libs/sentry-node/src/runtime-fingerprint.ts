@@ -44,7 +44,7 @@ export const SENTRY_DEFAULT_FINGERPRINT = '{{ default }}';
  * Apply the Oak Sentry fingerprint policy to an outbound error event.
  *
  * @remarks
- * Composed into `createSentryHooks` `beforeSend` AFTER the redaction
+ * Composed into `createSentryRedactionHooks` `beforeSend` AFTER the redaction
  * barrier (`redactSentryEvent`) so PII can never leak into a
  * fingerprint key. The function is pure: it returns a new event when
  * a fingerprint is assigned and returns the input event unchanged

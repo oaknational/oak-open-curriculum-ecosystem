@@ -158,6 +158,70 @@ so the handler contract is covered without booting the Sentry SDK. See
 [`src/app/bootstrap-error-handlers.ts`](../src/app/bootstrap-error-handlers.ts)
 for the DI type.
 
+## Boot-failure reporting (before observability exists)
+
+`loadConfiguredApp` resolves the runtime configuration **before** it builds
+observability, because observability is built _from_ that configuration:
+
+```ts
+// src/server.ts
+const loaded = await loadLoadedRuntimeOrThrow(); // throws HERE on bad config
+const runtimeConfig = loaded.runtimeConfig;
+const observability = createObservabilityOrThrow(runtimeConfig); // Sentry built HERE
+```
+
+A configuration failure therefore used to throw two lines before any Sentry
+client existed — unreportable by construction. A malformed
+`POSTHOG_PSEUDONYM_KEYRING` on preview surfaced as a bare
+`FUNCTION_INVOCATION_FAILED`, with nothing in Sentry (MCP-480).
+
+That one refusal now routes through the shared bootstrap reporter
+([`src/boot-failure-report.ts`](../src/boot-failure-report.ts) →
+`reportBootstrapFailure` in `@oaknational/sentry-node`) before the boundary
+rethrows. The refusal itself is unchanged: same message, same throw, same
+fail-fast. Booting without valid pseudonymisation configuration remains a
+privacy defect, not a degraded mode — this makes the refusal visible, never
+softer.
+
+The reporter's contract (activation only from strictly-parsed live Sentry
+inputs, the shared ADR-160 barrier with no bypass, one capture attempt, a 500 ms
+flush deadline, and never masking the boundary error) is documented in the
+[package README](../../../packages/libs/sentry-node/README.md#bootstrap-failure-reporter-mcp-480)
+and proven end to end from this workspace in
+[`src/boot-failure-report.integration.test.ts`](../src/boot-failure-report.integration.test.ts).
+
+Boot-failure events carry `service: oak-curriculum-mcp-streamable-http` — the
+same service tag as runtime events, exported from
+[`src/observability/http-observability.ts`](../src/observability/http-observability.ts)
+so the two can never drift — plus `oak.boot_failure: 'true'`, which separates a
+server that never started from one that failed while running.
+
+Only refusals _upstream of_ observability are reported this way. Every later
+refusal on the boot path already has a live Sentry client to travel through, so
+routing them here would add a second path to no benefit.
+
+### Configuration guards name the guard, never the value
+
+The reporter carries the boundary error's own message, so that message has to be
+worth reading. The pseudonym-keyring resolver previously collapsed four distinct
+failures into `pseudonym keyring failed strict validation`. It now distinguishes
+them and reports safe shape facts — entry count, entry index, field name,
+lengths — while never emitting a supplied id, key, property name, or the raw
+keyring:
+
+| Guard        | Example message                                                                                                                                             |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| JSON parse   | `POSTHOG_PSEUDONYM_KEYRING is not valid JSON. It must be a JSON array of {"id","key"} records; a truncated value or unescaped quotes are the usual causes.` |
+| Strict shape | `POSTHOG_PSEUDONYM_KEYRING entry 0 of 2 has a "key" of 44 characters; it must be exactly 43 unpadded base64url characters …`                                |
+| Canonicality | `POSTHOG_PSEUDONYM_KEYRING entry 1 of 3 has a non-canonical base64url "key": its 43 characters decode to 32 bytes that re-encode differently …`             |
+| Uniqueness   | `POSTHOG_PSEUDONYM_KEYRING entry 2 of 3 repeats the "id" of entry 0. Every id in the keyring must be distinct.`                                             |
+
+The governing rule for the estate is **name the guard, never the value**. The
+failure types in
+[`src/product-analytics-keyring-diagnostics.ts`](../src/product-analytics-keyring-diagnostics.ts)
+have nowhere to put a value, so the rule holds by construction rather than by
+care.
+
 ## Manual spans
 
 Beyond the per-request `oak.http.request.mcp`, the app emits targeted manual

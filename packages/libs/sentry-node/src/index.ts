@@ -5,6 +5,7 @@ export {
   resolveSentryRelease,
 } from './config.js';
 export { resolveGitSha } from './config-resolution.js';
+export { BOOTSTRAP_REPORT_DEADLINE_MS, reportBootstrapFailure } from './bootstrap-reporter.js';
 export { createFixtureSentryStore } from './fixture.js';
 export { describeConfigError, mapCloseError, mapFlushError } from './runtime-error.js';
 export {
@@ -14,6 +15,11 @@ export {
   DEFAULT_TRACE_PROPAGATION_TARGETS,
 } from './runtime-sdk.js';
 export { createSentryLogSink, flushSentry, initialiseSentry } from './runtime.js';
+export type {
+  BootstrapReportInput,
+  BootstrapReportOutcome,
+  BootstrapReportSilentReason,
+} from './bootstrap-reporter.js';
 export type {
   FixtureSentryCapture,
   FixtureSentryContextCapture,

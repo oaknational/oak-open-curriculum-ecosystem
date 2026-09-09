@@ -124,7 +124,7 @@ describe('createRuntimeConfigFromValidatedEnv', () => {
         expect(posthogKeys).toEqual([]);
       });
 
-      it('fails boot when the selected keyring is deep-invalid', () => {
+      it('fails boot naming the keyring guard when the selected keyring is deep-invalid', () => {
         const result = composeLoadedRuntimeFromValidatedEnv({
           ...selectedEnv,
           POSTHOG_PSEUDONYM_KEYRING: JSON.stringify([
@@ -134,7 +134,7 @@ describe('createRuntimeConfigFromValidatedEnv', () => {
 
         expect(result.ok).toBe(false);
         if (!result.ok) {
-          expect(result.error.message).toContain('pseudonym keyring failed strict validation');
+          expect(result.error.message).toContain('POSTHOG_PSEUDONYM_KEYRING entry 0 of 1');
           expect(JSON.stringify(result.error)).not.toContain(zeroKey);
         }
       });
