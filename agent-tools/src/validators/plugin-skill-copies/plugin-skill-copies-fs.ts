@@ -19,6 +19,7 @@
 import { lstatSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
+import { SKILL_MANIFEST } from './plugin-skill-copies-compare.js';
 import type {
   SkillEntry,
   SkillRootListing,
@@ -59,9 +60,6 @@ const nodeSkillFileSystem: SkillFileSystem = {
   },
   readFile: (file) => readFileSync(file),
 };
-
-/** The file a directory must hold to count as a skill (Agent Skills specification). */
-const SKILL_MANIFEST = 'SKILL.md';
 
 type EntryKind = 'directory' | 'file' | 'symlink' | 'other';
 

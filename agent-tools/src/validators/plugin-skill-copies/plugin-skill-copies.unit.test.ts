@@ -154,6 +154,25 @@ describe('findSkillCopyDrift', () => {
     ]);
   });
 
+  it('reports a derived copy-only skill whose SKILL.md vanished after listing as not shipped, never as clean', () => {
+    const skillsByRoot: Readonly<Record<string, readonly string[]>> = {
+      source: ['alpha'],
+      copy: ['alpha', 'merged'],
+      derived: ['merged'],
+    };
+    const reader: SkillTreeReader = {
+      listRoot: (root) => ({ skills: skillsByRoot[root] ?? [], invalid: [], symlinks: [] }),
+      read: (skillDir) =>
+        skillDir.endsWith('/merged')
+          ? new Map([['references/r.md', file('r\n')]])
+          : new Map([['SKILL.md', file('x\n')]]),
+    };
+
+    expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'merged', relativePath: '.', kind: 'not-shipped' },
+    ]);
+  });
+
   it('reports a derived copy-only skill whose tree cannot be read as missing, never as an empty tree', () => {
     const skillsByRoot: Readonly<Record<string, readonly string[]>> = {
       source: ['alpha'],
@@ -201,37 +220,65 @@ describe('findSkillCopyDrift', () => {
     ]);
   });
 
-  it('reports a directory without a SKILL.md as a finding on its manifest, on whichever side it sits', () => {
-    const reader = memoryReader({
-      'source/alpha': { 'SKILL.md': 'x\n' },
-      'source/notes': { 'README.md': 'not a skill\n' },
-      'copy/alpha': { 'SKILL.md': 'x\n' },
-      'copy/notes': { 'README.md': 'different\n' },
+  describe('a directory that is not a skill', () => {
+    it('reports a source directory without a SKILL.md on its manifest, and its copy as not shipped', () => {
+      const reader = memoryReader({
+        'source/alpha': { 'SKILL.md': 'x\n' },
+        'source/notes': { 'README.md': 'not a skill\n' },
+        'copy/alpha': { 'SKILL.md': 'x\n' },
+        'copy/notes': { 'README.md': 'different\n' },
+      });
+
+      const report = findSkillCopyDrift(CHECK, reader);
+
+      expect(report.sharedSkills).toStrictEqual(['alpha']);
+      expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'notes', relativePath: 'SKILL.md', kind: 'missing-in-source' },
+        { skill: 'notes', relativePath: '.', kind: 'not-shipped' },
+      ]);
     });
 
-    const report = findSkillCopyDrift(CHECK, reader);
+    it('reports a copy that has lost its SKILL.md on that manifest, so it is re-copied from its source skill', () => {
+      const reader = memoryReader({
+        'source/alpha': { 'SKILL.md': 'x\n' },
+        'source/beta': { 'SKILL.md': 'y\n', 'references/r.md': 'r\n' },
+        'copy/alpha': { 'SKILL.md': 'x\n' },
+        'copy/beta': { 'references/r.md': 'r\n' },
+      });
 
-    expect(report.sharedSkills).toStrictEqual(['alpha']);
-    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
-      { skill: 'notes', relativePath: 'SKILL.md', kind: 'missing-in-source' },
-      { skill: 'notes', relativePath: 'SKILL.md', kind: 'missing-in-copy' },
-    ]);
-  });
-
-  it('does not let a stale copy pass when the source skill has lost its SKILL.md', () => {
-    const reader = memoryReader({
-      'source/alpha': { 'SKILL.md': 'x\n' },
-      'source/accessibility': { 'references/wcag.md': 'w\n' },
-      'copy/alpha': { 'SKILL.md': 'x\n' },
-      'copy/accessibility': { 'SKILL.md': 'stale\n', 'references/wcag.md': 'w\n' },
+      expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'beta', relativePath: 'SKILL.md', kind: 'missing-in-copy' },
+        { skill: 'beta', relativePath: '.', kind: 'missing-in-copy' },
+      ]);
     });
 
-    const report = findSkillCopyDrift(CHECK, reader);
+    it('reports a stray copy directory with no source skill as not shipped, so re-copying is never the only fix', () => {
+      const reader = memoryReader({
+        'source/alpha': { 'SKILL.md': 'x\n' },
+        'copy/alpha': { 'SKILL.md': 'x\n' },
+        'copy/stray': { 'README.md': 'not a skill\n' },
+      });
 
-    expect(report.copyOnly).toStrictEqual(['accessibility']);
-    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
-      { skill: 'accessibility', relativePath: 'SKILL.md', kind: 'missing-in-source' },
-    ]);
+      expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'stray', relativePath: '.', kind: 'not-shipped' },
+      ]);
+    });
+
+    it('does not let a stale copy pass when the source skill has lost its SKILL.md', () => {
+      const reader = memoryReader({
+        'source/alpha': { 'SKILL.md': 'x\n' },
+        'source/accessibility': { 'references/wcag.md': 'w\n' },
+        'copy/alpha': { 'SKILL.md': 'x\n' },
+        'copy/accessibility': { 'SKILL.md': 'stale\n', 'references/wcag.md': 'w\n' },
+      });
+
+      const report = findSkillCopyDrift(CHECK, reader);
+
+      expect(report.copyOnly).toStrictEqual(['accessibility']);
+      expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'accessibility', relativePath: 'SKILL.md', kind: 'missing-in-source' },
+      ]);
+    });
   });
 
   it('names the file whose bytes differ and still counts it as compared', () => {

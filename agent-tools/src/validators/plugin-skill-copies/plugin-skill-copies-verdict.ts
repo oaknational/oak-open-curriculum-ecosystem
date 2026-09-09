@@ -51,7 +51,7 @@ function remediationLines(
   }
   if (kinds.has('not-shipped')) {
     lines.push(
-      `Fix (not-shipped): remove the listed path(s) from ${labels.copyRoot} — authoring-only content is not shipped in the package.`,
+      `Fix (not-shipped): remove the listed path(s) from ${labels.copyRoot} — authoring-only content, and a directory that is not a skill, are not shipped in the package.`,
     );
   }
   if (kinds.has('missing-in-source')) {

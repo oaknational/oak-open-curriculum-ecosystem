@@ -19,10 +19,15 @@ export type SkillEntry =
 /** The entries of one skill directory, keyed by path relative to that directory. */
 export type SkillTree = ReadonlyMap<string, SkillEntry>;
 
+/** The file a directory must hold, as a regular file, to count as a skill (Agent Skills specification). */
+export const SKILL_MANIFEST = 'SKILL.md';
+
 /**
  * One difference between source and copy, addressed by skill and skill-relative
- * path. `not-shipped` is authoring content present in the copy; `missing-derivation`
- * is a copy-only skill with no same-named workflow to derive from.
+ * path. `not-shipped` is content in the copy that must not ship: authoring-only
+ * content, or a directory under the copy root that is not a skill.
+ * `missing-derivation` is a copy-only skill with no same-named workflow to
+ * derive from.
  */
 export interface SkillCopyFinding {
   readonly skill: string;
@@ -112,7 +117,9 @@ export function compareSkill(
 /**
  * Findings for a derived copy-only skill: symlinks anywhere, and authoring-only
  * content. A tree that cannot be read (the skill vanished between the root
- * listing and the walk) is a finding on the skill itself, never an empty tree.
+ * listing and the walk) is a finding on the skill itself, never an empty tree;
+ * a tree whose manifest vanished in that window is no longer a skill, and is
+ * reported as the directory that is not shipped rather than walked as one.
  */
 export function copyOnlyFindings(
   skill: string,
@@ -121,6 +128,9 @@ export function copyOnlyFindings(
 ): SkillCopyFinding[] {
   if (tree === undefined) {
     return [{ skill, relativePath: '.', kind: 'missing-in-copy' }];
+  }
+  if (tree.get(SKILL_MANIFEST)?.kind !== 'file') {
+    return [{ skill, relativePath: '.', kind: 'not-shipped' }];
   }
   const findings: SkillCopyFinding[] = [];
   const entries = [...tree.entries()].sort(([a], [b]) => byText(a, b));

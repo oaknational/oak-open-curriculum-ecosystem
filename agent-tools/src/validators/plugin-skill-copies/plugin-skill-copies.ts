@@ -28,7 +28,11 @@
  * skill, shared or copy-only, or a symlinked entry under a root, is a finding
  * of its own. Authoring-only content (`notShipped`, the `evals/` directories)
  * is likewise a finding wherever it appears in the copy: shared skills are
- * compared without it, and derived copy-only skills are walked for it.
+ * compared without it, and derived copy-only skills are walked for it. A
+ * directory under the copy root that is not a skill (no regular `SKILL.md`) is
+ * `missing-in-copy` on its manifest when a same-named source skill exists, so
+ * it is re-copied, and `not-shipped` otherwise, so it is removed: only one of
+ * those remediations can clear each state.
  *
  * Pure: the filesystem is injected as a {@link SkillTreeReader} (ADR-078), so
  * the comparison is testable against in-memory trees and the CLI wrapper owns
@@ -42,6 +46,7 @@ import {
   byText,
   compareSkill,
   copyOnlyFindings,
+  SKILL_MANIFEST,
   type SkillCopyFinding,
   type SkillTree,
 } from './plugin-skill-copies-compare.js';
@@ -103,12 +108,12 @@ function skillPath(root: string, skill: string): string {
 
 const EMPTY_ROOT: SkillRootListing = { skills: [], invalid: [], symlinks: [] };
 
-const SKILL_MANIFEST = 'SKILL.md';
-
 /**
- * Discover the shared skills between the two roots and report each difference.
+ * Discover the shared skills between the source and copy roots and report each difference.
  *
- * @param check - the two roots.
+ * @param check - the source and copy roots to compare, the derived root whose
+ *   skill directories legitimise copy-only skills, and the top-level directory
+ *   names that must not ship in the copy.
  * @param reader - how roots and skill directories are read; the CLI passes the real filesystem.
  * @returns the discovered membership, every finding in deterministic (skill, path) order,
  *   and the number of file pairs compared.
@@ -158,10 +163,13 @@ export function findSkillCopyDrift(
 
 /**
  * The findings that membership alone decides, before any file is compared:
- * symlinked entries under either root; a directory under either root that is
- * not a valid skill (no regular SKILL.md), reported on its manifest so a source
- * skill whose manifest vanished cannot let its stale copy pass as copy-only;
- * source skills with no copy; and copy-only skills with no derivation source.
+ * symlinked entries under either root; a source directory that is not a valid
+ * skill (no regular SKILL.md), reported on its manifest so a source skill whose
+ * manifest vanished cannot let its stale copy pass as copy-only; a copy
+ * directory that is not a valid skill, reported on its manifest when a
+ * same-named source skill exists (re-copy it) and as not shipped otherwise
+ * (remove it); source skills with no copy; and copy-only skills with no
+ * derivation source.
  */
 function membershipFindings(
   source: SkillRootListing,
@@ -174,10 +182,13 @@ function membershipFindings(
     relativePath,
     kind,
   });
+  const sourceSkills = new Set(source.skills);
+  const copyInvalid = [...copy.invalid].sort(byText);
   return [
     ...[...new Set([...source.symlinks, ...copy.symlinks])].sort(byText).map(at('.', 'symlink')),
     ...[...source.invalid].sort(byText).map(at(SKILL_MANIFEST, 'missing-in-source')),
-    ...[...copy.invalid].sort(byText).map(at(SKILL_MANIFEST, 'missing-in-copy')),
+    ...copyInvalid.filter((s) => sourceSkills.has(s)).map(at(SKILL_MANIFEST, 'missing-in-copy')),
+    ...copyInvalid.filter((s) => !sourceSkills.has(s)).map(at('.', 'not-shipped')),
     ...sourceOnly.map(at('.', 'missing-in-copy')),
     ...staleCopies.map(at('.', 'missing-derivation')),
   ];

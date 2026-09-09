@@ -19,7 +19,9 @@ import {
  * so no server, hook, or app can be declared, which is what keeps the plugin
  * off the desktop-only badge), `interface.capabilities` is the value that
  * passed ingestion, the two manifests describe one product, and every shipped
- * skill meets the frontmatter contract.
+ * skill meets the frontmatter contract exactly: the schema is strict, so a
+ * Claude-only field (`argument-hint`, `skills`, `model`) the merge drops cannot
+ * return unnoticed.
  *
  * Learned from MCP-509: a guard that reads an absent value asserts nothing.
  * The manifest is parsed through a strict schema so a shape change fails
@@ -106,10 +108,16 @@ const MarketplaceSchema = z
   })
   .strict();
 
-const SkillFrontmatterSchema = z.object({
-  name: z.string().min(1),
-  description: z.string().min(1),
-});
+/** The frontmatter a shipped skill carries (Agent Skills specification fields only). Strict: no host-specific field ships. */
+const SkillFrontmatterSchema = z
+  .object({
+    name: z.string().min(1),
+    description: z.string().min(1),
+    license: z.string().min(1),
+    compatibility: z.string().min(1).optional(),
+    metadata: z.object({ author: z.string().min(1), version: z.string().min(1) }).strict(),
+  })
+  .strict();
 
 async function readJson(repoRelativePath: string): Promise<unknown> {
   return JSON.parse(await readRepoDocument(repoRelativePath));
