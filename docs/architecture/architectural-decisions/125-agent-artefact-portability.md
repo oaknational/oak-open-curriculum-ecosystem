@@ -23,6 +23,14 @@ skill-discovery, and MCP surfaces without creating another canonical content
 home. This amendment is architectural authority, not a wired-state claim; the
 cross-platform surface matrix remains the live target-versus-wired record.
 Owner-directed through the first-class Copilot CLI plan estate.
+**Amended**: 2026-09-09 — the adapter table's spec-portable frontmatter
+pass-through (`license`, `compatibility`, `metadata`, `allowed-tools`) is now
+IMPLEMENTED in the generator, closing an implementation lag against this ADR's
+own contract. Discovery parses the optional fields strictly — a present-but-malformed
+field refuses the canonical rather than being dropped — and both surfaces emit
+them verbatim in the Agent Skills specification's own field order. The
+`metadata.claude-*` derivation to Claude top-level fields remains specified and
+unimplemented: no canonical declares such a key yet. No decision changes here.
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md), [PDR-035 (Agent Work Capabilities Belong to the Practice)](../../../.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md), [PDR-051 (Vendor-Agnostic Skills Standardisation)](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md), [ADR-165 (Agent Work Practice Phenotype Boundary)](165-agent-work-practice-phenotype-boundary.md)
 
 ## Context
@@ -744,6 +752,37 @@ instead of a warning on a zero exit. The Layer 2 wrapper description, the
 prefix paragraph, and structural invariant 5 — which still described the
 abandoned canonicalise-ingested model — were updated to the vendored model
 in the same amendment, so the ADR carries one model for lock entries.
+
+### 2026-09-09 — Spec-portable frontmatter pass-through implemented
+
+The Layer 2 adapter table has specified spec-portable frontmatter
+pass-through since the 2026-05-09 amendment, but the generator read only
+`name` and `description`: a canonical's `compatibility` and `metadata` were
+parsed away and never reached the surfaces vendors actually read. The nine
+`cognition/parallax*` canonicals carried `metadata.owned`,
+`metadata.version`, and `metadata.collection`, and two of them a
+`compatibility` line, none of it visible to any consuming harness.
+
+The generator now passes `license`, `compatibility`, `metadata`, and
+`allowed-tools` through to both surfaces verbatim, in the Agent Skills
+specification's own field order, after the rewritten `name` and the
+preserved `description`. One key list drives both the parse and the
+emission, so the set cannot drift between reading a canonical and writing
+its projections.
+
+Validation is strict at the parse boundary: a spec-portable field that is
+present but malformed — a non-string `license`, `compatibility`, or
+`allowed-tools`, or a `metadata` that is not a string→string map (the
+unquoted YAML `version: 1.0` parses to a number) — makes the canonical
+unparseable, which the generator and the drift checker already fail on
+loudly. Silently dropping such a field would publish adapters that
+disagree with their canonical.
+
+Non-spec canonical keys are unchanged and still canonical-only:
+`classification` (structural invariant 9), `concern`, and `domain` are never
+projected. The stub body shape — one title line and the class-marker
+pointer line — is untouched, so a wider frontmatter does not affect
+Practice-projection class recognition.
 
 ## References
 

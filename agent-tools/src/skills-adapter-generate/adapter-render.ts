@@ -10,16 +10,21 @@ import { join } from 'node:path';
 import { stringify as stringifyYaml } from 'yaml';
 
 import { adapterStubPointerLine } from './adapter-stub.js';
-import type { CanonicalFrontmatter, ParsedCanonical } from './discovery.js';
+import {
+  specPortableFrontmatter,
+  type CanonicalFrontmatter,
+  type SpecPortableFrontmatter,
+} from './canonical-frontmatter.js';
+import type { ParsedCanonical } from './discovery.js';
 
 const ADAPTER_FILENAME = 'SKILL.md';
 
 export type AdapterSurface = 'claude' | 'agents';
 
-interface AdapterFrontmatter {
+type AdapterFrontmatter = {
   readonly name: string;
   readonly description: string;
-}
+} & SpecPortableFrontmatter;
 
 export function renderAdapter(
   parsed: ParsedCanonical,
@@ -51,6 +56,15 @@ export function adapterTargetPath(
 /**
  * Construct the adapter frontmatter from the canonical's frontmatter.
  * Always renames the skill: `<prefix><id>`. Description is preserved.
+ *
+ * The `name` is the ONLY field the adapter rewrites — the projection name
+ * carries the owned-skill prefix while canonical identity stays unprefixed.
+ * Every spec-portable optional field (`license`, `compatibility`,
+ * `metadata`, `allowed-tools`) passes through VERBATIM per ADR-125's
+ * adapter table, in the specification's own field order, so a canonical's
+ * environment requirements and metadata reach the surfaces vendors
+ * actually read. Non-spec canonical keys (`classification`, `concern`,
+ * `domain`) are canonical-only and never projected.
  */
 export function buildAdapterFrontmatter(
   canonical: CanonicalFrontmatter,
@@ -60,6 +74,7 @@ export function buildAdapterFrontmatter(
   return {
     name: `${prefix}${id}`,
     description: canonical.description,
+    ...specPortableFrontmatter(canonical),
   };
 }
 

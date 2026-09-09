@@ -11,20 +11,25 @@
  * these shapes, a member directory without a canonical, a fourth tree
  * level, and a canonical with unparseable frontmatter are all skipped
  * loudly: they hold content no harness can summon.
+ *
+ * The frontmatter CONTRACT — the Agent Skills schema, what it strips, and
+ * the spec-portable slice both adapter surfaces carry — lives in
+ * `canonical-frontmatter.ts`; this module owns the walk and the seam.
  */
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { parse as parseYaml } from 'yaml';
 
+import {
+  validateCanonicalFrontmatter,
+  type CanonicalFrontmatter,
+} from './canonical-frontmatter.js';
 import { walkSkillTree } from './skill-tree-walk.js';
 
 export const CANONICAL_FILENAME = 'SKILL-CANONICAL.md';
 
-export interface CanonicalFrontmatter {
-  name: string;
-  description: string;
-}
+export type { CanonicalFrontmatter } from './canonical-frontmatter.js';
 
 export interface ParsedCanonical {
   readonly id: string;
@@ -145,11 +150,15 @@ function duplicateLeafIds(canonicals: readonly ParsedCanonical[]): readonly stri
 }
 
 /**
- * Parse the leading YAML frontmatter block from a markdown file body.
- * Returns undefined if the file lacks a valid frontmatter fence or omits
- * the required `name`/`description` fields. Extra YAML keys (e.g.
- * `classification`) are silently discarded so the returned value matches
- * the declared {@link CanonicalFrontmatter} shape exactly.
+ * Extract the leading YAML frontmatter block from a markdown file body and
+ * validate it against the Agent Skills frontmatter schema
+ * (`canonical-frontmatter.ts`, which owns the contract and documents what
+ * it admits, strips, and refuses).
+ *
+ * Returns undefined when the file lacks a frontmatter fence or the block
+ * fails the schema. The caller reads `undefined` as an unparseable
+ * canonical, which the generator and the drift checker both fail on loudly
+ * rather than emitting a projection that disagrees with its source.
  */
 export function parseFrontmatter(text: string): CanonicalFrontmatter | undefined {
   const fenceMatch = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(text);
@@ -157,21 +166,5 @@ export function parseFrontmatter(text: string): CanonicalFrontmatter | undefined
     return undefined;
   }
   const yamlBody = fenceMatch[1] ?? '';
-  const parsed: unknown = parseYaml(yamlBody);
-  if (!hasNameAndDescription(parsed)) {
-    return undefined;
-  }
-  return { name: parsed.name, description: parsed.description };
-}
-
-function hasNameAndDescription(
-  value: unknown,
-): value is { readonly name: string; readonly description: string } {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  if (!('name' in value) || !('description' in value)) {
-    return false;
-  }
-  return typeof value.name === 'string' && typeof value.description === 'string';
+  return validateCanonicalFrontmatter(parseYaml(yamlBody));
 }
