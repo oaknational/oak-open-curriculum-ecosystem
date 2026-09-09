@@ -154,12 +154,19 @@ describe('ChatGPT/Codex package invariants', () => {
     expect(manifest.skills).toBe('./skills/');
   });
 
-  it('ships exactly the manifest, the README and the skills at its root, so no companion file can badge it desktop-only', async () => {
-    const entries = await listRepoDirectory(PACKAGE_ROOT);
+  it('ships exactly the manifest, the README and the skills at its root, as real entries, so no companion file or symlink can badge it desktop-only', async () => {
+    const [root, manifestDir] = await Promise.all([
+      listRepoDirectory(PACKAGE_ROOT),
+      listRepoDirectory(`${PACKAGE_ROOT}/.codex-plugin`),
+    ]);
 
-    expect(entries.map((entry) => entry.name)).toStrictEqual(
-      [...SHIPPED_ROOT_ENTRIES].sort((a, b) => a.localeCompare(b, 'en')),
+    // Kinds are classified without following links, so a symlinked entry reads as "other" and fails here.
+    expect(root).toStrictEqual(
+      [...SHIPPED_ROOT_ENTRIES]
+        .map((name) => ({ name, kind: name === 'README.md' ? 'file' : 'directory' }))
+        .sort((a, b) => a.name.localeCompare(b.name, 'en')),
     );
+    expect(manifestDir).toStrictEqual([{ name: 'plugin.json', kind: 'file' }]);
   });
 
   it('is the one plugin the root marketplace file lists, under the manifest name, with a local path to this package', async () => {

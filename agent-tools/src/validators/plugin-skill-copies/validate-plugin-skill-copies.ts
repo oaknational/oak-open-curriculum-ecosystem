@@ -8,7 +8,9 @@
  * which skills exist under both roots, recomputes the byte-level comparison of
  * each on every run, and fails the build when a copy drifts from its source,
  * naming each file so the fix is a re-copy, not a search. A top-level `evals/`
- * directory is excluded: it is authoring tooling, not shipped skill content.
+ * directory is excluded on the source side only: it is authoring tooling, not
+ * shipped skill content, so a copy that carries one is reported as content the
+ * source lacks.
  * Symlinks are reported as findings and never followed (principles.md §No
  * symlinks).
  *
@@ -70,7 +72,10 @@ try {
   refuseUnlessRealDirectory('source skills', roots.sourceRoot);
   refuseUnlessRealDirectory('copy skills', roots.copyRoot);
   refuseUnlessRealDirectory('derived (workflows)', roots.derivedRoot);
-  report = findSkillCopyDrift(roots, createFileSystemSkillTreeReader(IGNORED_DIRS));
+  report = findSkillCopyDrift(
+    roots,
+    createFileSystemSkillTreeReader(new Map([[roots.sourceRoot, IGNORED_DIRS]])),
+  );
 } catch (error: unknown) {
   writeErrorLine(`validate-plugin-skill-copies: could not read the skill trees — ${String(error)}`);
   process.exit(2);

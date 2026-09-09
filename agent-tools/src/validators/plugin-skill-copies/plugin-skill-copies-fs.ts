@@ -136,6 +136,19 @@ function recordEntry(
   }
 }
 
+/** Top-level directory names to skip, keyed by the root they apply under. */
+export type IgnoreTopLevelUnder = ReadonlyMap<string, readonly string[]>;
+
+/** The ignore list for a skill directory: that of the root it sits under, else none. */
+function ignoreListFor(ignore: IgnoreTopLevelUnder, skillDir: string): readonly string[] {
+  for (const [root, dirs] of ignore) {
+    if (skillDir === root || skillDir.startsWith(`${root}/`)) {
+      return dirs;
+    }
+  }
+  return [];
+}
+
 /** Read one skill directory into a tree, or `undefined` when it is not a readable directory. */
 function readSkill(
   fs: SkillFileSystem,
@@ -152,14 +165,16 @@ function readSkill(
 
 /**
  * Create a reader over `fs` that lists a root's skill directories and walks one
- * skill directory, skipping top-level directories named in `ignoreDirs`.
+ * skill directory. Top-level directories named in `ignore` are skipped only
+ * under the root they are keyed by, so authoring-only directories excluded on
+ * the source side still surface as extra content when a copy carries them.
  */
 export function createFileSystemSkillTreeReader(
-  ignoreDirs: readonly string[],
+  ignore: IgnoreTopLevelUnder,
   fs: SkillFileSystem = nodeSkillFileSystem,
 ): SkillTreeReader {
   return {
     listRoot: (root) => listRoot(fs, root),
-    read: (skillDir) => readSkill(fs, ignoreDirs, skillDir),
+    read: (skillDir) => readSkill(fs, ignoreListFor(ignore, skillDir), skillDir),
   };
 }

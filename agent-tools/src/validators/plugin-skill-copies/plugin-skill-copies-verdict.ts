@@ -44,7 +44,7 @@ function remediationLines(
   }
   if (kinds.has('missing-in-source')) {
     lines.push(
-      `Fix (missing-in-source): ${labels.sourceRoot} is the source and it lacks the listed path(s) — restore them there before re-copying.`,
+      `Fix (missing-in-source): ${labels.sourceRoot} is the source and it lacks the listed path(s) — restore them there before re-copying, or remove them from ${labels.copyRoot} if they are not shipped content (such as evals/).`,
     );
   }
   if (kinds.has('missing-in-copy') || kinds.has('content-differs')) {

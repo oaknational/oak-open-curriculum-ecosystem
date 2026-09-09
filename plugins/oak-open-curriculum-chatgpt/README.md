@@ -12,7 +12,8 @@ workflow that passes the user's input as `$ARGUMENTS`; ChatGPT has neither agent
 workflows. So here:
 
 - every skill present in both plugins is a byte-identical copy of the Claude one (`evals/`
-  excluded); `validate-plugin-skill-copies` (in `pnpm repo-validators:check`) discovers that
+  left out of the copy, and refused if it appears here); `validate-plugin-skill-copies` (in
+  `pnpm repo-validators:check`) discovers that
   set from the two trees rather than keeping a list, fails when a Claude skill has no copy
   here, and fails when a skill here has no Claude source unless it derives from a Claude
   workflow of the same name;

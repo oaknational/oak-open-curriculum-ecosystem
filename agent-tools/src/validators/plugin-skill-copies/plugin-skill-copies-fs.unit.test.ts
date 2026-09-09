@@ -79,7 +79,7 @@ describe('createFileSystemSkillTreeReader', () => {
         '/r/loose-file.md': text('not a directory'),
       });
 
-      expect(createFileSystemSkillTreeReader([], fs).listRoot('/r')).toStrictEqual({
+      expect(createFileSystemSkillTreeReader(new Map(), fs).listRoot('/r')).toStrictEqual({
         skills: ['alpha', 'zeta'],
         invalid: ['notes'],
         symlinks: [],
@@ -89,7 +89,7 @@ describe('createFileSystemSkillTreeReader', () => {
     it('lists a directory named SKILL.md as an invalid skill, not a manifest', () => {
       const fs = memoryFileSystem({ '/r/odd/SKILL.md/inner.md': text('x') });
 
-      expect(createFileSystemSkillTreeReader([], fs).listRoot('/r')).toStrictEqual({
+      expect(createFileSystemSkillTreeReader(new Map(), fs).listRoot('/r')).toStrictEqual({
         skills: [],
         invalid: ['odd'],
         symlinks: [],
@@ -102,7 +102,7 @@ describe('createFileSystemSkillTreeReader', () => {
         '/r/linked': { kind: 'symlink' },
       });
 
-      expect(createFileSystemSkillTreeReader([], fs).listRoot('/r')).toStrictEqual({
+      expect(createFileSystemSkillTreeReader(new Map(), fs).listRoot('/r')).toStrictEqual({
         skills: ['alpha'],
         invalid: [],
         symlinks: ['linked'],
@@ -111,7 +111,7 @@ describe('createFileSystemSkillTreeReader', () => {
 
     it('answers undefined for a root that does not exist', () => {
       expect(
-        createFileSystemSkillTreeReader([], memoryFileSystem({})).listRoot('/missing'),
+        createFileSystemSkillTreeReader(new Map(), memoryFileSystem({})).listRoot('/missing'),
       ).toBeUndefined();
     });
   });
@@ -124,7 +124,7 @@ describe('createFileSystemSkillTreeReader', () => {
         '/r/s/assets/deep/img.txt': text('deep'),
       });
 
-      const tree = createFileSystemSkillTreeReader([], fs).read('/r/s');
+      const tree = createFileSystemSkillTreeReader(new Map(), fs).read('/r/s');
 
       expect(entriesOf(tree)).toStrictEqual([
         ['assets/deep/img.txt', 'file'],
@@ -142,11 +142,27 @@ describe('createFileSystemSkillTreeReader', () => {
         '/r/s/references/keep.md': text('keep'),
       });
 
-      const tree = createFileSystemSkillTreeReader(['evals'], fs).read('/r/s');
+      const tree = createFileSystemSkillTreeReader(new Map([['/r', ['evals']]]), fs).read('/r/s');
 
       expect(entriesOf(tree)).toStrictEqual([
         ['references/evals/nested.md', 'file'],
         ['references/keep.md', 'file'],
+        ['SKILL.md', 'file'],
+      ]);
+    });
+
+    it('ignores nothing under a root the ignore list is not keyed by, so a copy that carries evals/ is seen', () => {
+      const fs = memoryFileSystem({
+        '/copy/s/SKILL.md': text('top'),
+        '/copy/s/evals/case.md': text('eval'),
+      });
+
+      const tree = createFileSystemSkillTreeReader(new Map([['/r', ['evals']]]), fs).read(
+        '/copy/s',
+      );
+
+      expect(entriesOf(tree)).toStrictEqual([
+        ['evals/case.md', 'file'],
         ['SKILL.md', 'file'],
       ]);
     });
@@ -157,7 +173,7 @@ describe('createFileSystemSkillTreeReader', () => {
         '/r/s/pipe': { kind: 'other' },
       });
 
-      expect(entriesOf(createFileSystemSkillTreeReader([], fs).read('/r/s'))).toStrictEqual([
+      expect(entriesOf(createFileSystemSkillTreeReader(new Map(), fs).read('/r/s'))).toStrictEqual([
         ['SKILL.md', 'file'],
       ]);
     });
@@ -168,7 +184,7 @@ describe('createFileSystemSkillTreeReader', () => {
         '/r/s/references/link.md': { kind: 'symlink' },
       });
 
-      expect(entriesOf(createFileSystemSkillTreeReader([], fs).read('/r/s'))).toStrictEqual([
+      expect(entriesOf(createFileSystemSkillTreeReader(new Map(), fs).read('/r/s'))).toStrictEqual([
         ['references/link.md', 'symlink'],
         ['SKILL.md', 'file'],
       ]);
@@ -176,7 +192,7 @@ describe('createFileSystemSkillTreeReader', () => {
 
     it('answers undefined for a skill directory that does not exist', () => {
       expect(
-        createFileSystemSkillTreeReader([], memoryFileSystem({})).read('/r/none'),
+        createFileSystemSkillTreeReader(new Map(), memoryFileSystem({})).read('/r/none'),
       ).toBeUndefined();
     });
   });
