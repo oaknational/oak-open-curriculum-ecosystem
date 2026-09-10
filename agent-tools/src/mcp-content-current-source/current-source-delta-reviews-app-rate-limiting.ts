@@ -38,8 +38,15 @@ export const APP_RATE_LIMITING_DELTA_REVIEWS: Readonly<Record<string, CurrentSou
     '8d253a807330e0151ae1195feaed62dca64033b8248acdbb3d7452c8fe575008',
     DELETED_SOURCE,
   ),
+  // Re-attested 2026-09-10 against the landing-page-removal merge, which
+  // combines two independent edits to one union of bootstrap-phase NAMES:
+  // `createDnsRebindingMiddleware` leaves with the phase itself (2026-08-20
+  // landing-page removal), and `verifyClerkKeyPairing` arrived on main. Both
+  // are telemetry labels; neither is authored agent-facing content, so
+  // IMPLEMENTATION_ONLY still holds and the hash is re-pinned to the merged
+  // state rather than to either side's.
   'apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts': excluded(
-    'c822d0405b9787892cc1b42dcc1cbdf92d426a9eb65863fcaaafeb79cfb13e27',
+    '27bab786d5f6604288e339b9d44b4854907a64eb766f5f0ad10528eb051f9e5f',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/asset-download/asset-download-route.ts': excluded(

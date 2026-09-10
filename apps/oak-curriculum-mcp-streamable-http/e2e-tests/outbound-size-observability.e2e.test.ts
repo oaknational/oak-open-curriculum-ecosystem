@@ -84,8 +84,6 @@ async function createAppWithRecordingLogger() {
     runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
     observability,
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    getLandingPageHtml: () =>
-      '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
   });
   return { app, logger };
 }

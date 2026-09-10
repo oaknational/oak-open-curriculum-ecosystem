@@ -5,6 +5,7 @@ import { createFakeHttpObservability } from './test-helpers/observability-fakes.
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
 import type { Express } from 'express';
 import { getScratchStaticRoot } from './test-helpers/static-root-fixture.js';
+import { ROUTED_ASSET_BASE } from './app/static-asset-paths.js';
 
 /**
  * Integration tests for HTTP security headers.
@@ -26,45 +27,66 @@ describe('Security Headers (Integration)', () => {
       runtimeConfig,
       observability,
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () =>
-        '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     });
   });
 
-  describe('Landing page (/) - HTML endpoint', () => {
+  /**
+   * The served asset surface is the vehicle, not a document.
+   *
+   * @remarks
+   * These cases were written against `GET /`, which served an HTML page
+   * until 2026-08-20; the app now serves no HTML at all. Their subject was
+   * never the page — it is helmet's emitted header, which
+   * `bootstrap-security.ts` mounts app-wide — so they moved to the
+   * browser-fetched surface that remains. The asset URL is the truest
+   * available vehicle: it is what a browser still retrieves from this
+   * origin, and it is what `font-src` and `img-src` actually govern.
+   */
+  describe('Served asset surface — browser-fetched response', () => {
     it('has Content-Security-Policy header', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       expect(res.headers['content-security-policy']).toBeDefined();
     });
 
     it('CSP includes restrictive default-src', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
       expect(csp).toContain("default-src 'self'");
     });
 
-    it('CSP allows inline styles for landing page', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+    it('CSP allows inline styles, which only Cloudflare challenge pages need', async () => {
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
       expect(csp).toContain("'unsafe-inline'");
     });
 
     it('CSP permits the fonts the served page actually requests', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
       // Asserted on the emitted header, not the directive object: font-src is
       // set, so it overrides default-src instead of inheriting it. A host-only
-      // value here blocks /oak-ds/fonts/*.ttf and the page renders in system
-      // faces — silently, with only a console violation to show for it.
+      // value here blocks /oak-ds/fonts/*.ttf outright, and a consumer of
+      // these assets falls back to system faces with only a console
+      // violation to show for it.
       expect(csp).toContain("font-src 'self'");
     });
 
     it('CSP names no third-party host', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
       const csp = res.headers['content-security-policy'] ?? '';
 
       // Categorical, not an enumeration of known hosts: in a CSP source
@@ -80,7 +102,9 @@ describe('Security Headers (Integration)', () => {
     });
 
     it('CSP allows same-origin and inline scripts for Cloudflare', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
       // Cloudflare injects inline scripts for bot detection that load from /cdn-cgi/
@@ -88,20 +112,26 @@ describe('Security Headers (Integration)', () => {
     });
 
     it('has X-Content-Type-Options: nosniff', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       expect(res.headers['x-content-type-options']).toBe('nosniff');
     });
 
     it('has X-Frame-Options header', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       // helmet sets SAMEORIGIN by default
       expect(res.headers['x-frame-options']).toBe('SAMEORIGIN');
     });
 
     it('has Strict-Transport-Security header', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
       const hsts = res.headers['strict-transport-security'];
 
       expect(hsts).toBeDefined();
@@ -109,49 +139,62 @@ describe('Security Headers (Integration)', () => {
     });
 
     it('has X-DNS-Prefetch-Control: off', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       expect(res.headers['x-dns-prefetch-control']).toBe('off');
     });
 
     it('has X-Permitted-Cross-Domain-Policies: none', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       expect(res.headers['x-permitted-cross-domain-policies']).toBe('none');
     });
 
     it('has Referrer-Policy header', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       expect(res.headers['referrer-policy']).toBeDefined();
     });
 
     it('has Cross-Origin-Opener-Policy: same-origin-allow-popups', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       expect(res.headers['cross-origin-opener-policy']).toBe('same-origin-allow-popups');
     });
 
     it('has Cross-Origin-Resource-Policy: cross-origin (for MCP clients)', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       expect(res.headers['cross-origin-resource-policy']).toBe('cross-origin');
     });
 
-    it('still returns 200 and HTML content', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+    it('still serves the asset, so these header assertions are not vacuous', async () => {
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
       expect(res.status).toBe(200);
-      expect(res.type).toBe('text/html');
+      expect(res.type).toBe('text/css');
     });
 
-    it('exposes the runtime app version in the response header and HTML metadata', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+    it('exposes the runtime app version in the response header', async () => {
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
 
-      // Header only: under the bake, `/` serves the BUILD's artefact (a test
-      // fake here), so the runtime version reaches responses through the
-      // header. The baked page's own meta tag is proven where it is rendered,
-      // in render-landing-page.unit.test.tsx.
+      // `mountAppVersionHeader` sets this app-wide, so any served response
+      // carries it. There is no HTML metadata twin any more — the page that
+      // used to carry a matching `<meta name="app-version">` is gone.
       expect(res.headers['x-app-version']).toBe('0.0.0-test');
     });
   });
@@ -254,9 +297,18 @@ describe('Security Headers (Integration)', () => {
     });
   });
 
-  describe('Security header consistency', () => {
-    it('landing page has X-Content-Type-Options: nosniff', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+  /**
+   * Consistency across response KINDS: an asset body and a JSON body must
+   * carry the same headers, because the middleware is mounted app-wide and
+   * not per-route. The two `GET /` rows this block used to hold were exact
+   * duplicates of their `/healthz` twins once the page's vehicle moved to
+   * the asset surface, so they are collapsed rather than transcribed.
+   */
+  describe('Security header consistency across response kinds', () => {
+    it('the asset surface has X-Content-Type-Options: nosniff', async () => {
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
       expect(res.headers['x-content-type-options']).toBe('nosniff');
     });
 
@@ -265,8 +317,10 @@ describe('Security Headers (Integration)', () => {
       expect(res.headers['x-content-type-options']).toBe('nosniff');
     });
 
-    it('landing page has Cross-Origin-Resource-Policy: cross-origin', async () => {
-      const res = await request(app).get('/').set('Host', 'localhost');
+    it('the asset surface has Cross-Origin-Resource-Policy: cross-origin', async () => {
+      const res = await request(app)
+        .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+        .set('Host', 'localhost');
       expect(res.headers['cross-origin-resource-policy']).toBe('cross-origin');
     });
 

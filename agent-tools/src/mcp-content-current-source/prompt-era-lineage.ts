@@ -5,11 +5,7 @@
  * Empty targets mean the content retired. Multiple targets preserve split
  * lineage where one historical row now contributes to more than one source.
  */
-import {
-  POST_BASELINE_LINEAGE_ENTRIES,
-  RESOURCES_SECTION,
-  TOOLS_SECTION,
-} from './post-baseline-lineage.js';
+import { POST_BASELINE_LINEAGE_ENTRIES } from './post-baseline-lineage.js';
 
 const GUIDANCE_ROOT = 'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources' as const;
 
@@ -86,7 +82,7 @@ const PROMPT_ERA_LINEAGE_ENTRIES = [
   ['C334', [ADAPT]],
   ['C335', [CONTINUE]],
   ['C356', []],
-  ['C357', [RESOURCES_SECTION, TOOLS_SECTION]],
+  ['C357', []],
   ['C358', []],
   ['C359', []],
   ['C370', []],

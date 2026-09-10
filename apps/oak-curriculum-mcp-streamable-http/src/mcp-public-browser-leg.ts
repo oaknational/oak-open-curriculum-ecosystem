@@ -1,25 +1,29 @@
 /**
- * Which requests to the MCP endpoint belong to its fully public browser leg.
+ * Which requests to the MCP endpoint are browser traffic rather than protocol
+ * traffic.
  *
  * ## Why This Exists
  *
- * The web page at `/mcp` is public unconditionally by owner ruling (MCP-518),
- * while the MCP server on the same URL follows the coded OAuth flow. The auth
- * contract is per-surface, so deciding which surface a request belongs to has
- * to be the FIRST auth-relevant act — not something that happens after the
- * auth vendor has already inspected the request and possibly answered it.
+ * Browser-shaped requests to this host are public unconditionally by owner
+ * ruling (MCP-518), while the MCP server on the same URL follows the coded
+ * OAuth flow. The auth contract is per-surface, so deciding which surface a
+ * request belongs to has to be the FIRST auth-relevant act — not something
+ * that happens after the auth vendor has already inspected the request and
+ * possibly answered it.
  *
- * This module is that decision, kept apart from both consumers: the
- * negotiation that serves the page (`mcp-middleware.ts`) and the conditional
- * that keeps Clerk off it (`conditional-clerk-middleware.ts`). It is where
- * the one vendor-specific fact in the fork lives, so the negotiation stays
- * free of any knowledge of who is authenticating.
+ * The ruling outlived the page it was made for. Since 2026-08-20 this host
+ * serves no HTML at all, so a browser navigation here now receives the
+ * protocol gate's own 406 — but only if it reaches that gate. Left to the
+ * auth vendor, the same navigation is answered with a handshake REDIRECT
+ * before any of this app's routing runs, which is what MCP-518 closed and
+ * what this module keeps closed. The subject is the auth fork, never the
+ * serving of a document.
  *
- * @see mcp-middleware.ts — `selectsHtmlLeg`, the serving half of the fork
+ * @see mcp-middleware.ts — `requestsHtmlDocument`, the browser-shape predicate
  * @see conditional-clerk-middleware.ts — the skip half
  */
 
-import { selectsHtmlLeg } from './mcp-middleware.js';
+import { requestsHtmlDocument } from './mcp-middleware.js';
 
 /**
  * `Sec-Fetch-Dest` values the auth vendor reads as a document request.
@@ -64,19 +68,20 @@ function namesEventStream(accept: string | undefined): boolean {
 }
 
 /**
- * True for a request to the MCP endpoint's fully public browser leg.
+ * True for a request to the MCP endpoint that is browser traffic.
  *
  * @remarks
  * Two clauses, and both are needed:
  *
- * 1. {@link selectsHtmlLeg} — the SAME predicate the negotiation serves the
- *    page by, imported rather than restated, so what bypasses auth and what
- *    receives the page cannot drift apart.
- * 2. A document or iframe navigation the vendor finds handshake-eligible even
- *    though the negotiation will not serve it: `Sec-Fetch-Dest` says
- *    navigation while `Accept` names no HTML type. Clause 1 alone would be
- *    narrower than the class the vendor redirects, which is the defect
- *    MCP-518 exists to close.
+ * 1. {@link requestsHtmlDocument} — an explicit request for an HTML document.
+ * 2. A document or iframe navigation that names no HTML media type at all:
+ *    `Sec-Fetch-Dest` says navigation while `Accept` is silent. Clause 1
+ *    alone would be narrower than the class the vendor redirects, which is
+ *    the defect MCP-518 exists to close.
+ *
+ * Neither clause serves anything. Both reach the protocol gate's 406, which
+ * is the whole point: a typed refusal from this app rather than a redirect
+ * from its auth vendor.
  *
  * The protocol leg is excluded first and unconditionally: a request naming
  * `text/event-stream` keeps its auth machinery however browser-shaped it
@@ -85,13 +90,13 @@ function namesEventStream(accept: string | undefined): boolean {
  * survive, so it would be an outage rather than a bypass.
  *
  * @param req - Method and negotiation headers, read off the request
- * @returns true when the request is a public page view, never protocol traffic
+ * @returns true when the request is browser traffic, never protocol traffic
  */
 export function selectsPublicBrowserLeg(req: BrowserLegRequest): boolean {
   if (namesEventStream(req.accept)) {
     return false;
   }
-  if (selectsHtmlLeg(req.method, req.accept)) {
+  if (requestsHtmlDocument(req.method, req.accept)) {
     return true;
   }
   return req.method === 'GET' && NAVIGATION_FETCH_DESTS.has((req.secFetchDest ?? '').toLowerCase());

@@ -24,7 +24,6 @@ import { fileURLToPath } from 'node:url';
 import { setupExpressErrorHandler } from '@sentry/node';
 
 import { createApp } from '../src/application.js';
-import { readBakedLandingPageHtml } from '../src/app/landing-page-artefact.js';
 import { bootstrapApp } from '../src/bootstrap-app.js';
 import {
   composeProductAnalyticsRuntime,
@@ -164,12 +163,6 @@ async function main() {
 
   const observability = observabilityResult.value;
 
-  // Same boot-read as src/index.ts, in the same order: the baked artefact
-  // must exist before the harness starts (run the app build first), and the
-  // read happens BEFORE the analytics runtime is composed — a missing
-  // artefact must not strand a freshly created client with no close owner.
-  const landingPageHtml = readBakedLandingPageHtml();
-
   // Same composition as src/index.ts (MCP-241/243): the harness exercises
   // the production analytics path — off mode is the exact inert runtime —
   // and closes it through the shared process close owner.
@@ -199,7 +192,6 @@ async function main() {
       await createApp({
         ...options,
         getWidgetHtml: () => WIDGET_HTML_CONTENT,
-        getLandingPageHtml: () => landingPageHtml,
         transportObserver: analytics.transportObserver,
         productAnalyticsSink: analytics.sink,
         setupSentryErrorHandler:
@@ -216,7 +208,6 @@ async function main() {
   log.info('Harness ready for requests', {
     bootstrapMs: Date.now() - startTime,
     healthCheck: `http://localhost:${runtimeConfig.env.PORT ?? '3333'}/healthz`,
-    landingPage: `http://localhost:${runtimeConfig.env.PORT ?? '3333'}/`,
     mcpEndpoint: `http://localhost:${runtimeConfig.env.PORT ?? '3333'}/mcp`,
   });
 }

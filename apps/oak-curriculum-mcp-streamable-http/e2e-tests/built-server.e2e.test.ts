@@ -1,5 +1,5 @@
 /**
- * E2E tests for core server behaviour: healthcheck, landing page, MCP endpoint.
+ * E2E tests for core server behaviour: healthcheck, root path, MCP endpoint.
  *
  * These tests verify the same behaviours previously tested via subprocess + fetch,
  * now using in-process DI with supertest (no network IO). Deploy-entry contract
@@ -29,11 +29,12 @@ describe('Core server behaviour', () => {
     });
   });
 
-  it('serves root landing page as HTML', async () => {
+  it('serves nothing at the root', async () => {
+    // The root answered with a rendered HTML page until 2026-08-20; this host
+    // is now the MCP server and nothing else, so no route claims `/`.
     const response = await request(app).get('/');
 
-    expect(response.status).toBe(200);
-    expect(response.headers['content-type']).toContain('text/html');
+    expect(response.status).toBe(404);
   });
 
   it('accepts MCP initialise request on the /mcp endpoint', async () => {

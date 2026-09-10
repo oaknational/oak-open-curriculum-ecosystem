@@ -74,8 +74,6 @@ async function callEefEvidence(
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    getLandingPageHtml: () =>
-      '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     ...(servedSurface ? { servedSurface } : {}),
   });
   return request(app)

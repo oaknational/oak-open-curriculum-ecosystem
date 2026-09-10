@@ -1,9 +1,11 @@
 /**
  * Served-origin resolution — the one place that answers "what address is
  * this deployment serving at?" for self-description surfaces that are fixed
- * per deployment: the landing page's og:url and endpoint snippet (baked at
- * build time), the tool-level auth-error resource URL (derived at the
- * composition root), and the registration-proof composition.
+ * per deployment: the MCP Registry entry's endpoint and protected-resource
+ * metadata URLs (`scripts/generate-server-json.ts`), the tool-level
+ * auth-error resource URL (derived at the composition root), and the
+ * registration-proof composition. It also fed the landing page's og:url and
+ * endpoint snippet until that page was removed on 2026-08-20.
  *
  * Precedence, most-authoritative first:
  * 1. The configured canonical origin (`CANONICAL_HOST` resolved by
@@ -89,8 +91,15 @@ export function resolveServedMcpUrl(inputs: ServedOriginInputs): string {
   return `${resolveServedOrigin(inputs)}${MCP_RESOURCE_PATH}`;
 }
 
-/** The well-known prefix protected-resource metadata is published beneath. */
-export const PROTECTED_RESOURCE_METADATA_PREFIX = '/.well-known/oauth-protected-resource';
+/**
+ * The well-known prefix protected-resource metadata is published beneath.
+ *
+ * Module-local: {@link resolveServedPrmUrl} is the only reader. It was
+ * exported until 2026-08-20 for the landing page's link assertions, and that
+ * suite went with the page. The published routes themselves are unaffected —
+ * `auth-routes.ts` states both well-known paths as its own literals.
+ */
+const PROTECTED_RESOURCE_METADATA_PREFIX = '/.well-known/oauth-protected-resource';
 
 /**
  * Resolves the absolute URL of the served protected-resource metadata.
