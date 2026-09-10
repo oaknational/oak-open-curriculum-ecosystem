@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 14 August 2026  
+**Last Updated**: 30 August 2026
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -23,6 +23,16 @@
 ---
 
 ## Research by Topic
+
+### ✨ Oak Innovation Kit & demonstrations
+
+Research that informs the fourth value stream's open-ended demonstration portfolio,
+idea-to-evidence path, and exercised-reuse discipline. Strategy authority remains in
+[`docs/strategy/`](../../docs/strategy/README.md).
+
+| Document | Purpose | Key insights |
+| --- | --- | --- |
+| [innovation-kit/README.md](innovation-kit/README.md) | Local entry point for the proposed definition, dated evidence, worked scenarios, bounded investigations and historical deconstruction | The Kit as the governed, portable part of a complete product-creation system; fast and good through governed compression, explicit obligations, truthful operation and stewardship |
 
 ### 🔍 Semantic Search & Elasticsearch
 
@@ -47,7 +57,7 @@ Understanding Oak's curriculum structure and knowledge representation.
 | Document | Purpose | Key Insights |
 |----------|---------|--------------|
 | [curriculum-ontology.md](curriculum-ontology.md) | Curriculum knowledge model | Subjects, key stages, threads, units, lessons |
-| [curriculum-structure-3d-model.md](curriculum-structure-3d-model.md) | 3D curriculum visualization | Spatial metaphor for curriculum navigation |
+| [curriculum-structure-3d-model.md](curriculum-structure-3d-model.md) | Spatial curriculum model | Three-axis metaphor for curriculum navigation |
 | [ONTOLOGY_RESEARCH_SUMMARY.md](ONTOLOGY_RESEARCH_SUMMARY.md) | Ontology research summary | |
 | [official-api-ontology-comparison.md](official-api-ontology-comparison.md) | API vs ontology comparison | |
 | [kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md) | Graph-serving platform comparison | Direct-use baseline plus Neo4j/Stardog strengths, weaknesses, unknowns, and prototype-worthy use cases for external features |
@@ -99,6 +109,7 @@ developer-experience inputs used to improve Oak's agentic engineering system.
 | Document | Purpose | Key Insights |
 |----------|---------|--------------|
 | **[agentic-engineering/](agentic-engineering/README.md)** | Agentic-engineering lane index | Theme-based routing for operating model, reviewer systems, safety/evidence, continuity, and graph-memory research |
+| [agentic-engineering/concept-intake/](agentic-engineering/concept-intake/README.md) | Concept inventory and candidate intake | Research-only catalogues; entries may restate current authority, which remains governed by canonical sources |
 | **[developer-experience/](developer-experience/)** | Developer-experience research index | Onboarding, enforcement, and external research guide |
 | ├─ [README.md](developer-experience/README.md) | Developer-experience index | Entry point for local DX research and the local novel repair lane |
 | ├─ [architectural-enforcement-playbook.md](developer-experience/architectural-enforcement-playbook.md) | Architectural enforcement | Guardrails, prompts, and enforcement posture |
@@ -159,6 +170,12 @@ Research on API structure and data analysis.
 | [approaches-to-knowledge-strategic-report.md](approaches-to-knowledge-strategic-report.md) | Knowledge strategy | |
 
 ---
+
+## Recent Additions (2026-08-30)
+
+| Document | Summary |
+| --- | --- |
+| [innovation-kit/README.md](innovation-kit/README.md) | Local router for the decomposed Innovation Kit definition, dated current-estate evidence, source/provenance map, worked analytical scenarios, bounded investigations and analysis-only web-app deconstruction. |
 
 ## Recent Additions (2026-08-13)
 
@@ -271,6 +288,25 @@ When you discover something valuable:
 2. **Add to this index** — Categorize appropriately
 3. **Link from plans** — Reference the research
 4. **Update "Recent Additions"** — Date and summarize
+
+### Importing External Research Records
+
+An externally authored research record enters this surface as a faithful public
+projection
+([ADR-226](../../docs/architecture/architectural-decisions/226-agent-research-surface-for-imported-records.md)):
+
+1. **Copy content faithfully** — a record is evidence; its documents keep their
+   source bytes and stay exempt from house prose formatting.
+2. **Exclude owner-directed private material** — the presumption is publication;
+   only content with a specific shown harm is withheld.
+3. **Reduce private-repository permalinks to plain-text citations** — keep the
+   file name, line range and pinned revision; point to a stable index in the
+   private source repository that resolves the citations and records the withheld
+   minimum. Permalinks into public repositories stay live.
+4. **Keep the record self-contained and its integrity discipline authoritative**
+   — no product workspace imports from a record and a record imports no product
+   workspace; any executable content is held to OCE gates, and only
+   dependency-free leaf packages are registered in the workspace.
 
 ### Research Document Template
 

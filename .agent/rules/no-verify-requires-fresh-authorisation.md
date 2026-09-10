@@ -22,6 +22,17 @@ syntax used to achieve the skip is the agent's responsibility, and any mechanism
 above counts as a skip whether the owner's authorisation language named that
 specific spelling or not.
 
+**A standing owner ruling may narrow this rule's scope for a named session
+class** (authority model: PDR-025 §Gate binding and policy authority — the
+agent is bound absolutely; policy change is the owner's power alone). Where the owner has recorded such a ruling in the repository's
+operational surfaces — naming the session class, the substitute gates that
+carry every check the skipped hooks provided, and the condition that
+re-opens the decision — the standing ruling *is* the owner authorisation
+within that exact scope. The ruling itself and its mechanics live in the
+repo-bound operational surface it names, never in this portable rule.
+Everywhere outside a recorded ruling's scope, this rule's per-invocation
+requirement stands unchanged.
+
 If a hook is failing:
 
 1. **Fix the cause.** The hook is failing because something is wrong. Find what.

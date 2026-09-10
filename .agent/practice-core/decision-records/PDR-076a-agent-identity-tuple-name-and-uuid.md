@@ -45,7 +45,8 @@ implementation bridge).
 PDR-027 established the thread/session/identity vocabulary and the
 additive-identity rule. Its identity row carries four fields:
 `agent_name`, `platform`, `model`, `session_id_prefix` (the first
-six characters of the harness session id, or `unknown`). The
+six characters of the PDR-027 seed — the untagged platform session id
+on cloud seats, the harness session id otherwise — or `unknown`). The
 `session_id_prefix` is both the routing disambiguator (when two
 sessions on the same platform/model share a derived name) and the
 short form rendered in chat surfaces.

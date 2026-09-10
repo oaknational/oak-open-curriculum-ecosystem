@@ -21,13 +21,7 @@ const execFileAsync = promisify(execFile);
 const GRAPH_BUFFER_BYTES = 256 * 1024 * 1024;
 
 /** The depcruise roots the estate's own boundary gate cruises. */
-const DEPCRUISE_ROOTS = [
-  'apps',
-  'packages',
-  'agent-tools',
-  'demos',
-  'research/web-app-deconstruction/packages',
-];
+const DEPCRUISE_ROOTS = ['apps', 'packages', 'agent-tools', 'demos'];
 
 const TURBO_TASKS = ['build', 'lint', 'test', 'type-check'];
 

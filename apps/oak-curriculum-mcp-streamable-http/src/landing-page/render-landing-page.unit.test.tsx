@@ -61,23 +61,20 @@ describe('renderLandingPageHtml', () => {
       // request-path metadata surfaces follow (MCP-351).
       const behindEdge = renderLandingPageHtml({
         vercelHost: 'origin-only.vercel.app',
-        canonicalHost: 'www.thenational.academy',
+        canonicalHost: 'mcp.thenational.academy',
       });
 
-      expect(behindEdge).toContain('https://www.thenational.academy/mcp');
-      expect(behindEdge).toContain('rel="canonical" href="https://www.thenational.academy"');
+      expect(behindEdge).toContain('https://mcp.thenational.academy/mcp');
+      expect(behindEdge).toContain('rel="canonical" href="https://mcp.thenational.academy"');
       expect(behindEdge).not.toContain('origin-only.vercel.app');
-    });
-
-    it('never carries a hard-coded deployment hostname', () => {
-      expect(html).not.toContain('curriculum-mcp-alpha');
     });
   });
 
   describe('asset posture', () => {
     it('loads the design system from the app-served copy', () => {
-      // Routed-base-prefixed since MCP-509: the canonical host forwards only
-      // `/mcp*` to this app, so a root-relative stylesheet never arrives.
+      // Routed-base-prefixed since MCP-509: the page is served under `/mcp`,
+      // and a path-scoped edge forwards only `/mcp*`, so the prefixed form
+      // is the one that works wherever the page is served.
       expect(html).toContain(`<link rel="stylesheet" href="${OAK_DS_BASE}/styles.css"/>`);
     });
 

@@ -37,6 +37,10 @@ const RAW_USER_AGENT = `${RAW_UA_SENTINEL} Claude-User (claude-code/1.0) raw-hos
 /** Verified first-hand in Oak's inbound traffic, 7 days to 2026-08-13 (~3,100 requests). */
 const OBSERVED_CLAUDE_CODE_VERSION = '2.1.226';
 const OBSERVED_CLAUDE_CODE_USER_AGENT = `claude-code/${OBSERVED_CLAUDE_CODE_VERSION} (cli)`;
+/** The observed value with bytes a client may append that must never reach the wire. */
+const CLAUDE_CODE_USER_AGENT_WITH_RAW_SUFFIX = `${OBSERVED_CLAUDE_CODE_USER_AGENT} ${RAW_UA_SENTINEL}`;
+/** What MCP-687 rebuilds from the observed value: product spelling, major version, surface. */
+const REBUILT_CLAUDE_CODE_USER_AGENT = 'claude-code/2 (cli)';
 const UUID_V7 = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 const RELEASE: ResolvedRelease = {
   value: 'release-2026-07-26',
@@ -260,10 +264,10 @@ function expectNoForbiddenContent(value: unknown): void {
   expect(serialised).not.toContain(RAW_UA_SENTINEL);
   expect(serialised).not.toContain('$mcp_client_name');
   expect(serialised).not.toContain('$mcp_client_version');
-  // The remaining two properties PostHog's own `harness` column resolves from.
-  // ADR-218 §3 excludes all three as raw client strings, so the wire assertion
-  // covers the ADR's whole rejection list rather than two thirds of it.
-  expect(serialised).not.toContain('$mcp_client_user_agent');
+  // PostHog's own `harness` column resolves from these two plus the client name.
+  // ADR-218 §3 excludes the raw values; since MCP-687 the ONE exception is a
+  // `$mcp_client_user_agent` rebuilt from closed pieces, pinned byte-for-byte
+  // where it is expected and asserted absent where it is not.
   expect(serialised).not.toContain('$mcp_vendor_client');
   expect(serialised).not.toContain('$mcp_parameters');
   expect(serialised).not.toContain('$mcp_response');
@@ -418,8 +422,10 @@ describe('PostHog final wire', () => {
         expect(row.properties.oak_client_surface).toBe('cli');
         // The product axis is anchored to the LEADING token, so a value that
         // merely buries a product name mid-string is not treated as that product
-        // self-declaring — it stays genuinely unidentifiable (MCP-594).
+        // self-declaring — it stays genuinely unidentifiable (MCP-594), and no
+        // rebuilt user agent is emitted for it either (MCP-687).
         expect(row.properties.oak_client_product).toBe('other');
+        expect(row.properties).not.toHaveProperty('$mcp_client_user_agent');
       }
       expectNoForbiddenContent(batch);
     } finally {
@@ -427,13 +433,13 @@ describe('PostHog final wire', () => {
     }
   });
 
-  it('carries a self-declaring client product onto the wire without shipping the raw value', async () => {
+  it('carries a client product and a rebuilt user agent onto the wire without the raw value', async () => {
     const subject = createSubject(200);
     let connection: McpConnection | undefined;
 
     try {
       connection = await connectInstrumentedRuntime(subject, {
-        'user-agent': OBSERVED_CLAUDE_CODE_USER_AGENT,
+        'user-agent': CLAUDE_CODE_USER_AGENT_WITH_RAW_SUFFIX,
       });
       await connection.client.listTools();
 
@@ -450,8 +456,11 @@ describe('PostHog final wire', () => {
       for (const row of batch) {
         assert(isRecord(row) && isRecord(row.properties), 'Expected a PostHog event row');
         expect(row.properties.oak_client_product).toBe('claude_code');
+        // MCP-687: the value PostHog's harness column reads is the rebuilt
+        // shape — product spelling, major version, closed build surface — and
+        // neither the full version nor anything the client appended after it.
+        expect(row.properties.$mcp_client_user_agent).toBe(REBUILT_CLAUDE_CODE_USER_AGENT);
       }
-      // The category reaches PostHog; the raw client-controlled string never does.
       expect(JSON.stringify(batch)).not.toContain(OBSERVED_CLAUDE_CODE_VERSION);
       expectNoForbiddenContent(batch);
     } finally {

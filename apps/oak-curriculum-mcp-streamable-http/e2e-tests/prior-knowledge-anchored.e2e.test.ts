@@ -1,8 +1,8 @@
 /**
- * E2E (G1b c2): `tools/call` on the anchored get-prior-knowledge-graph.
+ * E2E: `tools/call` on the anchored get-prior-knowledge-graph.
  *
  * Exercises the real corpus path through the full HTTP stack — no upstream
- * stub is involved because the aggregated graph tool reads the compile-time
+ * stub is involved because the aggregated tool reads the compile-time
  * corpus, not the live API. The anchor is chosen deterministically from the
  * corpus so the test describes behaviour over any valid corpus.
  */
@@ -26,26 +26,28 @@ const ACCEPT = 'application/json, text/event-stream';
 /**
  * Schema-driven narrowing of the loose `structuredContent` record — the
  * test-boundary alternative to a type assertion. Non-strict: the family
- * envelope adds `summary` / `status` alongside the
- * subgraph fields.
+ * envelope adds `summary` / `status` alongside the statements fields.
  */
-const SUBGRAPH_ENVELOPE = z.object({
-  nodes: z.array(z.unknown()),
-  edges: z.array(z.unknown()),
+const STATEMENTS_ENVELOPE = z.object({
+  units: z.array(
+    z.object({
+      unitSlug: z.string(),
+      priorKnowledge: z.array(z.string()),
+      threadSlugs: z.array(z.string()),
+    }),
+  ),
   resolvedAnchors: z.array(z.string()),
   unknownAnchors: z.array(z.string()),
-  depth: z.number(),
 });
 
-/** A corpus unit slug, chosen deterministically (lexicographic minimum). */
-const firstUnitSlug = graphCorpus.nodes
+/** A corpus unit node, chosen deterministically (lexicographic minimum slug). */
+const firstUnit = graphCorpus.nodes
   .filter((node) => node.kind === 'unit')
-  .map((node) => node.unitSlug)
-  .sort((a, b) => a.localeCompare(b))[0];
-if (firstUnitSlug === undefined) {
+  .sort((a, b) => a.unitSlug.localeCompare(b.unitSlug))[0];
+if (firstUnit === undefined) {
   throw new Error('corpus has no unit nodes to anchor the e2e test');
 }
-const knownUnitSlug: string = firstUnitSlug;
+const knownUnitSlug: string = firstUnit.unitSlug;
 
 async function callPriorKnowledgeGraph(args: unknown): Promise<Response> {
   const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
@@ -70,7 +72,7 @@ async function callPriorKnowledgeGraph(args: unknown): Promise<Response> {
 }
 
 describe('get-prior-knowledge-graph anchored tools/call', () => {
-  it('returns the bounded subgraph for an anchor unit: summary + JSON content and structuredContent', async () => {
+  it('returns the stated prior knowledge for an anchor unit: summary + JSON content and structuredContent', async () => {
     const response = await callPriorKnowledgeGraph({ unitSlugs: [knownUnitSlug] });
 
     expect(response.status).toBe(200);
@@ -81,12 +83,31 @@ describe('get-prior-knowledge-graph anchored tools/call', () => {
     const content = getContentArray(result);
     expect(content).toHaveLength(2);
 
-    const structured = SUBGRAPH_ENVELOPE.parse(getStructuredContentData(result));
+    const structured = STATEMENTS_ENVELOPE.parse(getStructuredContentData(result));
     expect(structured.resolvedAnchors).toStrictEqual([`unit:${knownUnitSlug}`]);
     expect(structured.unknownAnchors).toStrictEqual([]);
-    expect(structured.depth).toBe(2);
-    expect(Array.isArray(structured.nodes)).toBe(true);
-    expect(Array.isArray(structured.edges)).toBe(true);
+    expect(structured.units).toHaveLength(1);
+    expect(structured.units[0]?.unitSlug).toBe(knownUnitSlug);
+    // The refactor's core value, proven over the wire: the statements arrive
+    // from the corpus, not as an empty or reshaped stand-in. Compared against
+    // the deduped values — the view collapses exact duplicates by contract, so
+    // raw-equality would be fragile if this unit ever gained repeats.
+    expect(structured.units[0]?.priorKnowledge).toStrictEqual([
+      ...new Set(firstUnit.priorKnowledge),
+    ]);
+    expect(structured.units[0]?.threadSlugs).toStrictEqual(firstUnit.threadSlugs);
+  });
+
+  it('strips the retired depth argument rather than erroring (old callers keep working)', async () => {
+    const response = await callPriorKnowledgeGraph({ unitSlugs: [knownUnitSlug], depth: 2 });
+
+    expect(response.status).toBe(200);
+    const envelope = parseSseEnvelope(response.text);
+    const result = parseJsonRpcResult(envelope);
+    expect(result.isError).not.toBe(true);
+
+    const structured = STATEMENTS_ENVELOPE.parse(getStructuredContentData(result));
+    expect(structured.resolvedAnchors).toStrictEqual([`unit:${knownUnitSlug}`]);
   });
 
   it('rejects an anchorless call at the input boundary', async () => {

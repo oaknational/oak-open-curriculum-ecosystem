@@ -81,9 +81,9 @@ describe('landing-page first-party destinations', () => {
   it('links to the path-qualified metadata URL, not the unqualified one', () => {
     // RFC 9728 §3.1: a resource at `/mcp` publishes its metadata at
     // `/.well-known/oauth-protected-resource/mcp`. The app answers the
-    // unqualified path too, and that is correct for a root-served deployment
-    // such as the alpha host — but it is not this resource's metadata URL, and
-    // it does not reach this app through the canonical host's edge rule.
+    // unqualified path too, and both forms serve on the canonical host
+    // (verified 2026-09-01) — but only the path-qualified one is this
+    // resource's metadata URL, and only it survives a path-scoped edge.
     expect(metadataPath()).toBe(`${PROTECTED_RESOURCE_METADATA_PREFIX}${MCP_RESOURCE_PATH}`);
   });
 

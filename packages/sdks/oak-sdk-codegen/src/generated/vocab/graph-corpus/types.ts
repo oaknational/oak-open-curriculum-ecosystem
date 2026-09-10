@@ -31,4 +31,5 @@ export type {
   GraphCorpusDroppedDuplicate,
   GraphCorpusSequence,
   GraphCorpusSequencePlacement,
+  GraphCorpusUnitLessonRun,
 } from '../../../bulk/generators/graph-corpus-generator.js';

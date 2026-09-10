@@ -10,6 +10,9 @@ const RESOURCE_REGISTRATIONS =
   'apps/oak-curriculum-mcp-streamable-http/src/resource-registrations.ts';
 const MCP_AUTH_RESPONSES =
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth-responses.ts';
+const OAUTH_PROXY_UPSTREAM =
+  'apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts';
+const AUTH_ROUTES = 'apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts';
 
 export const CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES: Readonly<
   Record<string, Readonly<Record<string, readonly string[]>>>
@@ -66,5 +69,19 @@ export const CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES: Readonly<
   },
   C400: {
     [MCP_AUTH_RESPONSES]: ["res.status(403).json({ error: 'Forbidden' });"],
+  },
+  // MCP-345: the AS metadata rewrite takes the advertised scopes and states
+  // them as scopes_supported, so the served document names the PRM's set
+  // rather than the upstream list; the route passes SCOPES_SUPPORTED.
+  C408: {
+    [OAUTH_PROXY_UPSTREAM]: [
+      'export function rewriteAuthServerMetadata(\n  upstreamMetadata: UpstreamAuthServerMetadata,\n  localOrigin: string,\n  advertisedScopes: readonly string[],\n): UpstreamAuthServerMetadata {',
+      'registration_endpoint: `${localOrigin}/oauth/register`,\n    scopes_supported: [...advertisedScopes],',
+    ],
+  },
+  C707: {
+    [AUTH_ROUTES]: [
+      'res.json(rewriteAuthServerMetadata(upstreamMetadata, originResult.value, SCOPES_SUPPORTED));',
+    ],
   },
 };

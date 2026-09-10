@@ -41,6 +41,16 @@ const OBSERVED_USER_AGENTS = {
   codex: 'codex-mcp-client/0.147.0-alpha.6.5',
   unidentifiable: 'python-httpx/0.28.1',
 } as const;
+/** Bytes a client may append that must never reach a capture record. */
+const RAW_UA_SUFFIX = 'raw-host-SENTINEL-9f31';
+/** What MCP-687 rebuilds from each observed value: product spelling, major version, surface. */
+const REBUILT_USER_AGENTS = {
+  claudeAi: 'Claude-User',
+  claudeCode: 'claude-code/2 (cli)',
+  codex: 'codex-mcp-client/0',
+} as const;
+/** The full version the observed Claude Code value carries and the rebuild must not. */
+const OBSERVED_CLAUDE_CODE_FULL_VERSION = '2.1.226';
 
 const AUTH_EXTRA: MessageExtraInfo = {
   authInfo: {
@@ -115,6 +125,34 @@ function extraWithUserAgent(userAgent: string): MessageExtraInfo {
  * by client, and the one the handshake's `clientInfo` provably cannot reach under
  * ADR-112's per-request transport.
  */
+/** Drives the handshake and the tools list so every capture kind exists. */
+function emitHandshakeAndToolsList(
+  subject: Subject,
+  extra: MessageExtraInfo,
+  clientInfo: { readonly name: string; readonly version: string },
+): void {
+  subject.delegate.emit(
+    {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'initialize',
+      params: { protocolVersion: PROTOCOL_VERSION, capabilities: {}, clientInfo },
+    },
+    extra,
+  );
+  void subject.transport.send({
+    jsonrpc: '2.0',
+    id: 1,
+    result: { protocolVersion: PROTOCOL_VERSION },
+  });
+  subject.delegate.emit({ jsonrpc: '2.0', id: 2, method: 'tools/list' }, extra);
+  void subject.transport.send({
+    jsonrpc: '2.0',
+    id: 2,
+    result: { tools: [{ name: 'get-lessons-summary' }] },
+  });
+}
+
 function emitToolCall(subject: Subject, extra: MessageExtraInfo, isError = false): void {
   subject.delegate.emit(
     { jsonrpc: '2.0', id: 7, method: 'tools/call', params: { name: 'get-lessons-summary' } },
@@ -196,30 +234,7 @@ describe('createPostHogMcpTransportObserver client product', () => {
     const subject = createSubject();
     const extra = extraWithUserAgent(OBSERVED_USER_AGENTS.claudeCode);
 
-    subject.delegate.emit(
-      {
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'initialize',
-        params: {
-          protocolVersion: PROTOCOL_VERSION,
-          capabilities: {},
-          clientInfo: { name: 'claude-code', version: '2.1.226' },
-        },
-      },
-      extra,
-    );
-    void subject.transport.send({
-      jsonrpc: '2.0',
-      id: 1,
-      result: { protocolVersion: PROTOCOL_VERSION },
-    });
-    subject.delegate.emit({ jsonrpc: '2.0', id: 2, method: 'tools/list' }, extra);
-    void subject.transport.send({
-      jsonrpc: '2.0',
-      id: 2,
-      result: { tools: [{ name: 'get-lessons-summary' }] },
-    });
+    emitHandshakeAndToolsList(subject, extra, { name: 'claude-code', version: '2.1.226' });
     emitToolCall(subject, extra);
 
     expect(subject.initializeCaptures[0]?.properties.oak_client_product).toBe('claude_code');
@@ -267,18 +282,62 @@ describe('createPostHogMcpTransportObserver client product', () => {
     expect(unreadable.toolCallCaptures[0]?.properties.oak_client_product).toBe('unavailable');
   });
 
-  it('never ships the raw client header value alongside the category', () => {
+  // MCP-687: the rebuilt user agent carries the product spelling, a major
+  // version of at most two digits and a closed build surface, and nothing else
+  // from the header. The raw value, with whatever a client appended, never
+  // reaches a capture record or the wire; nor does the full version.
+  it('ships the rebuilt user agent, never the raw client header value', () => {
     const subject = createSubject();
 
-    emitToolCall(subject, extraWithUserAgent(OBSERVED_USER_AGENTS.claudeCode));
+    emitToolCall(
+      subject,
+      extraWithUserAgent(`${OBSERVED_USER_AGENTS.claudeCode} ${RAW_UA_SUFFIX}`),
+    );
 
     const capture = subject.toolCallCaptures[0];
     expect(capture?.properties.oak_client_product).toBe('claude_code');
+    expect(capture?.properties.$mcp_client_user_agent).toBe(REBUILT_USER_AGENTS.claudeCode);
     expect(
       JSON.stringify(capture),
       'the raw client-controlled header value must never reach a capture record',
-    ).not.toContain('2.1.226');
-    expect(JSON.stringify(throughFinalPolicy({ ...capture?.properties }))).not.toContain('2.1.226');
+    ).not.toContain(RAW_UA_SUFFIX);
+    expect(JSON.stringify(capture)).not.toContain(OBSERVED_CLAUDE_CODE_FULL_VERSION);
+    const final = throughFinalPolicy({ ...capture?.properties });
+    expect(final?.properties).toEqual(
+      expect.objectContaining({ $mcp_client_user_agent: REBUILT_USER_AGENTS.claudeCode }),
+    );
+    expect(JSON.stringify(final)).not.toContain(RAW_UA_SUFFIX);
+    expect(JSON.stringify(final)).not.toContain(OBSERVED_CLAUDE_CODE_FULL_VERSION);
+  });
+
+  it.each([
+    ['Claude.ai', OBSERVED_USER_AGENTS.claudeAi, REBUILT_USER_AGENTS.claudeAi],
+    ['Claude Code', OBSERVED_USER_AGENTS.claudeCode, REBUILT_USER_AGENTS.claudeCode],
+    ['Codex', OBSERVED_USER_AGENTS.codex, REBUILT_USER_AGENTS.codex],
+  ])(
+    'carries a rebuilt user agent for %s onto every capture kind',
+    (_label, userAgent, expected) => {
+      const subject = createSubject();
+      const extra = extraWithUserAgent(userAgent);
+
+      emitHandshakeAndToolsList(subject, extra, { name: 'x', version: '1' });
+      emitToolCall(subject, extra);
+
+      expect(subject.initializeCaptures[0]?.properties.$mcp_client_user_agent).toBe(expected);
+      expect(subject.toolsListCaptures[0]?.properties.$mcp_client_user_agent).toBe(expected);
+      expect(subject.toolCallCaptures[0]?.properties.$mcp_client_user_agent).toBe(expected);
+    },
+  );
+
+  it('omits the user agent, rather than defaulting it, for an unidentifiable client', () => {
+    const subject = createSubject();
+
+    emitToolCall(subject, extraWithUserAgent(OBSERVED_USER_AGENTS.unidentifiable));
+
+    const capture = subject.toolCallCaptures[0];
+    expect(capture?.properties.oak_client_product).toBe('other');
+    expect(capture?.properties).not.toHaveProperty('$mcp_client_user_agent');
+    expect(JSON.stringify(capture)).not.toContain('python-httpx');
   });
 
   it('drops an event whose product category is absent, rather than defaulting it to other', () => {

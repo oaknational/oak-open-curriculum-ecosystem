@@ -24,7 +24,7 @@ import {
   createMockExpressResponse,
 } from './test-helpers/fakes.js';
 
-const CANONICAL_HOST = 'www.thenational.academy';
+const CANONICAL_HOST = 'mcp.thenational.academy';
 const CANONICAL_ORIGIN = `https://${CANONICAL_HOST}`;
 
 /**
@@ -52,7 +52,7 @@ async function createTestApp(env: Record<string, string>) {
 
 describe('canonical origin (MCP-269)', () => {
   describe('with CANONICAL_HOST configured', () => {
-    it('protected-resource metadata names the canonical resource and authorization server', async () => {
+    it('protected-resource metadata names the canonical resource and the upstream authorization server', async () => {
       const app = await createTestApp({ CANONICAL_HOST });
 
       const res = await request(app)
@@ -61,7 +61,9 @@ describe('canonical origin (MCP-269)', () => {
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('resource', `${CANONICAL_ORIGIN}/mcp`);
-      expect(res.body).toHaveProperty('authorization_servers', [CANONICAL_ORIGIN]);
+      // The authorization server is the upstream's issuer whatever address the
+      // resource is served at (RFC 9207 Section 2.4; MCP-655).
+      expect(res.body).toHaveProperty('authorization_servers', [TEST_UPSTREAM_METADATA.issuer]);
     });
 
     it('authorization-server metadata rewrites issuer and endpoints onto the canonical origin', async () => {

@@ -10,11 +10,15 @@
     },
     "cursor-oak-prod": {
       "type": "http",
-      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
+      "url": "https://mcp.thenational.academy/mcp"
     },
-    "cursor-oak-preview-1": {
+    "cursor-oak-preview-946": {
       "type": "http",
-      "url": "https://poc-oak-open-curriculum-mcp-git-docs-agent-collaboration-7b7314.vercel.thenational.academy/mcp"
+      "url": "https://poc-oak-open-curriculum-mcp-git-fix-mcp-oauth-metadata-i-91790f.vercel.thenational.academy/mcp"
+    },
+    "cursor-oak-preview-945": {
+      "type": "http",
+      "url": "https://poc-oak-open-curriculum-mcp-git-feat-innovation-kit-updates.vercel.thenational.academy/mcp"
     },
     "cursor-oak-local": {
       "type": "http",

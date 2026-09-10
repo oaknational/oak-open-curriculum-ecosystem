@@ -16,7 +16,7 @@ The principles draw on, among others: Agodini et al. (NCEE/IES) on curriculum ef
 
 ## Using and attributing
 
-The **principles themselves are pedagogical and transferable** — you can apply them to Oak work or to entirely independent curriculum work. This skill is deliberately not brand-locked: it does not require Oak's name, logo, or voice in your output.
+The **principles themselves are educational and transferable** — you can apply them to Oak work or to entirely independent curriculum work. This skill is deliberately not brand-locked: it does not require Oak's name, logo, or voice in your output.
 
 If you reproduce the principles in published work, attribute them to **Oak National Academy** and link to the source blog. If you are producing **Oak-branded** material, follow Oak's brand and editorial guidance.
 

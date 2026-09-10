@@ -12,6 +12,7 @@
   "exclude": [
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
+    "src/**/*.typecheck.ts",
     "node_modules",
     "dist",
     "test-cache",

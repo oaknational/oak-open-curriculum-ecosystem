@@ -28,6 +28,19 @@ deliverable.
 4. No artefact possible right now? Then the verdict is not available —
    say what is proven and what is not, instead.
 
+**Claude.ai artifact pages — the render path that works (2026-08-19,
+first-hand):** the INLINE artifact viewer swallows every programmatic
+input to its sandboxed content frame — wheel scroll, keyboard paging,
+accessibility refs (the frame reads as one opaque node) — so an inline
+pixel-check stalls at the first viewport and reads as "the viewer
+refuses to scroll". FULL-SCREEN mode scrolls normally. Enter
+full-screen first, always, then walk the page. The same check caught a
+renderer fact no local read can see: mermaid node labels have their
+`<br/>` tags stripped with the words concatenated — write labels with
+spaces and let the renderer wrap. Both facts are consumer's-resolver
+facts: only the check that traverses the real viewer's own path can
+prove or disprove them.
+
 ## Failure Mode Prevented
 
 The F01/F02 keyboard blackout (PR #846): two demo pages shipped with

@@ -213,12 +213,12 @@ describe('Oak Open Curriculum Design System static serving', () => {
   });
 
   it('references every first-party subresource inside the routed surface, and serves each', async () => {
-    // MCP-509. The canonical deployment reaches this app through a Cloudflare
-    // origin rule scoped to `/mcp` and `/mcp/*`. A root-relative reference
-    // therefore never arrives here at all — it stays on the main website and
-    // returns its 404 HTML, so the canonical page renders unstyled with no
-    // logo and no favicon while every request this app *does* receive is
-    // healthy.
+    // MCP-509. Under a path-scoped edge (the release-era `www` rule forwarded
+    // only `/mcp` and `/mcp/*`) a root-relative reference never arrives here
+    // at all — it stays on the fronting site and returns its 404 HTML, so the
+    // page renders unstyled with no logo and no favicon while every request
+    // this app *does* receive is healthy. The canonical `mcp.` host serves the
+    // root too, but the page must render behind either edge shape.
     //
     // ONE test asserts both halves on ONE set, and that is the point. This
     // suite previously had two scrapes: one proved references resolve over
@@ -295,10 +295,11 @@ describe('Oak Open Curriculum Design System static serving', () => {
     expect(res.headers['content-type']).toContain('text/css');
   });
 
-  it('still serves the unprefixed paths, so the alpha surface keeps rendering', async () => {
-    // The alpha host serves this app at its own root and is a declared
-    // compatibility surface (MCP-509 acceptance). Retiring the root mount
-    // would break it silently.
+  it('still serves the unprefixed paths, so root-served deployments keep rendering', async () => {
+    // Root-served deployments reach this app at `/` — the canonical host
+    // does (verified 2026-09-01), and the legacy deployment host is a
+    // declared compatibility surface (MCP-509 acceptance). Retiring the root
+    // mount would break those pages silently.
     const res = await request(app).get('/oak-ds/styles.css').set('Host', 'localhost');
 
     expect(res.status).toBe(200);

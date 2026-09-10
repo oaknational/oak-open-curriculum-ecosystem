@@ -41,7 +41,9 @@ function guidanceMetadataAddition(input: {
   readonly slug: string;
   readonly state: 'live' | 'dormant';
   readonly provenance?: string;
+  readonly lastModified?: string;
 }): CurrentSourceAdditionDefinition {
+  const lastModified = input.lastModified ?? '2026-07-23T00:00:00Z';
   const uri = `docs://oak/guidance/${input.slug}.md`;
   return {
     id: input.id,
@@ -65,11 +67,7 @@ function guidanceMetadataAddition(input: {
         'annotations',
         '{"priority":0.4,"audience":["assistant"]}',
       ),
-      contentsAnchor(
-        "lastModified: '2026-07-23T00:00:00Z'",
-        '_meta.lastModified',
-        '2026-07-23T00:00:00Z',
-      ),
+      contentsAnchor(`lastModified: '${lastModified}'`, '_meta.lastModified', lastModified),
       ...(input.provenance === undefined ? [] : [structuralAnchor(input.provenance)]),
     ],
     registration: { state: input.state, selector: uri },
@@ -108,13 +106,13 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     reviewDomain: 'engineering-structural',
     impactTier: 'high-impact',
     behaviouralIntent:
-      'Temporarily exclude the check-restricted API family from generated schemas and MCP tools until MCP-214 lifts the deferral.',
+      'Exclude paths whole-pipeline from generated schemas and MCP tools: the check-restricted family until MCP-214 lifts the deferral, and the upstream-removed changelog pair until the MCP-630 schema-cache refresh erases them (MCP-653).',
     workspaceScope: 'in',
     sourceLocus: 'this-repo',
     file: EXCLUDED_PATHS,
     reviewedAnchors: [
       structuralAnchor(
-        "export const DEFERRED_PATHS: readonly DeferredPathEntry[] = [\n  { path: '/key-stages/{keyStage}/subject/{subject}/check-restricted', ticket: 'MCP-214' },\n  { path: '/lessons/check-restricted', ticket: 'MCP-214' },\n];",
+        "export const DEFERRED_PATHS: readonly DeferredPathEntry[] = [\n  { path: '/key-stages/{keyStage}/subject/{subject}/check-restricted', ticket: 'MCP-214' },\n  { path: '/lessons/check-restricted', ticket: 'MCP-214' },\n  { path: '/changelog', ticket: 'MCP-630' },\n  { path: '/changelog/latest', ticket: 'MCP-630' },\n];",
       ),
     ],
   },
@@ -134,12 +132,16 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     id: 'A005',
     title: 'Learning progression guidance resource identity and metadata',
     slug: 'learning-progression',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'live',
   }),
   guidanceMetadataAddition({
     id: 'A006',
     title: 'Curriculum mapping guidance resource identity, metadata, and provenance',
     slug: 'curriculum-mapping',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'dormant',
     provenance:
       "provenance:\n      'Derived from the oak-curriculum-mapper skill (oaknational/oak-skills); keep the two in step.'",
@@ -148,6 +150,8 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     id: 'A007',
     title: 'Adapt lesson guidance resource identity and metadata',
     slug: 'adapt-lesson',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'dormant',
   }),
   guidanceMetadataAddition({

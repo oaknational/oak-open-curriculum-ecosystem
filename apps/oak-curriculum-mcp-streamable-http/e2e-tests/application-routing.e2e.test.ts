@@ -10,7 +10,7 @@
  *
  * Test coverage per Phase 2, Sub-Phase 2.5 requirements:
  * 1. Discovery methods (initialize, tools/list)
- * 2. Public generated tools (get-changelog, get-changelog-latest, get-rate-limit)
+ * 2. Public generated tools (get-rate-limit)
  * 3. Auth-required generated tools (get-key-stages, get-programmes)
  * 4. Aggregated tools (search, fetch)
  * 5. DANGEROUSLY_DISABLE_AUTH compatibility
@@ -111,38 +111,6 @@ describe('Application-Level Method-Aware Auth', () => {
   });
 
   describe('All tools require HTTP auth (noauth = no scope check, not no token)', () => {
-    it('returns HTTP 401 for get-changelog without token', async () => {
-      const response = await request(await createAuthEnabledApp())
-        .post('/mcp')
-        .set('Accept', ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'tools/call',
-          params: {
-            name: 'get-changelog',
-          },
-        });
-
-      expect(response.status).toBe(401);
-    });
-
-    it('returns HTTP 401 for get-changelog-latest without token', async () => {
-      const response = await request(await createAuthEnabledApp())
-        .post('/mcp')
-        .set('Accept', ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'tools/call',
-          params: {
-            name: 'get-changelog-latest',
-          },
-        });
-
-      expect(response.status).toBe(401);
-    });
-
     it('returns HTTP 401 for get-rate-limit without token', async () => {
       const response = await request(await createAuthEnabledApp())
         .post('/mcp')

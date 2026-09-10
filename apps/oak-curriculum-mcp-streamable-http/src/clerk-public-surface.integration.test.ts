@@ -39,7 +39,7 @@ const PROTOCOL_ACCEPT = 'application/json, text/event-stream';
 /** The allow-listed Host these requests arrive on. */
 const SERVED_HOST = 'localhost';
 
-const CANONICAL_HOST = 'www.thenational.academy';
+const CANONICAL_HOST = 'mcp.thenational.academy';
 const CANONICAL_ORIGIN = `https://${CANONICAL_HOST}`;
 
 /**
@@ -267,8 +267,8 @@ describe('case variants of the public /mcp surface never reach Clerk (MCP-518)',
  * The root landing page (MCP-518 review).
  *
  * `GET /` serves the identical baked artefact. The owner ruling is about the
- * page, not about one of its URLs, so the fork covers both doors — and for
- * the alpha host, `/` is the front one.
+ * page, not about one of its URLs, so the fork covers both doors — and on a
+ * root-served deployment, the canonical host included, `/` is the front one.
  */
 describe('the root landing page never reaches Clerk (MCP-518)', () => {
   it('serves / to a signed-in browser without Clerk seeing the request', async () => {

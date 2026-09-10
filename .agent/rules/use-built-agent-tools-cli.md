@@ -58,6 +58,23 @@ gets re-derived (often re-derived wrong); the permanent command amortises
 across every future agent. The owner decides build-now vs backlog vs
 keep-scratchpad.
 
+## "Re-create X" Inherits X's Old Form
+
+An instruction to re-create an instrument is executed by re-deriving the
+INSTRUMENT from the current `--help`, never by rebuilding the previous
+invocation. A freeze map's "re-create the watch scripts from the resume
+map's needs" was executed as recreating SCRIPTS — a PR poller hand-rolled
+while the built `pr-watch` topic sat in the same `--help` output the seat
+had read that morning (owner-caught 2026-08-17; the script was deleted
+and four `pr-watch` monitors armed the same hour) — and the class
+re-committed at a second seat with that entry loaded (2026-09-01: a
+hand-rolled PR watch beside `pnpm agent-tools:pr-watch`). The
+re-derive-from-current-surface discipline binds the instrument, not only
+the invocation. A wrapper script is legitimate ONLY as hook-boundary
+packaging around a built tool (the comms watcher's `$PPID` and
+inline-command guard; a token-minting `gh` wrapper), never as the
+instrument itself.
+
 ## Sequencing Around Dist Rebuilds
 
 The built-artefact contract cuts both ways: a whole-repo `pnpm check` or
@@ -68,7 +85,17 @@ CLI invocation dies on the module loader while the dist is half-written
 CLI-dependent steps AFTER a running check/build chain completes; never
 interleave them. The same family applies after a worktree branch switch:
 rebuild agent-tools before trusting its CLIs from that tree (the
-stale-dist-after-switch class; see the frictions register).
+stale-dist-after-switch class; see the frictions register). The same
+inversion in a FRESH worktree: dependency-cruiser and knip resolve through
+`dist`, so an unbuilt worktree reports phantom violations (31 unresolvable
+edges vanished after `pnpm turbo run build`, 2026-08-17) — `ls <pkg>/dist`
+before diagnosing configuration. And the "primary untouched" discipline
+binds the RESOLVED BINARY of every invocation, not only the files it
+names: a worktree-resolved agent-tools binary run against the primary's
+registry executed a migrate-on-first-contact hours before its code landed,
+and every seat's heartbeat refused for three minutes (2026-08-18) — a
+read-shaped command can carry a write-shaped migration, and cwd is
+load-bearing mid-rollout.
 
 ## Why This Rule Exists
 
@@ -89,6 +116,20 @@ gate chains order the Turbo build before dist-importing checks, and **the
 primary's dist is rebuilt immediately after merging main** — main may name
 artefacts the old dist lacks, and every dist-binding surface degrades
 silently until the rebuild.
+
+## Probe Usage With `--help`, Never With a Well-Formed Call
+
+A CLI "usage probe" with real arguments is a write. Diagnosing a `comms
+direct` exit-2 (missing `--platform`/`--model`) by re-running it with
+`--body test` and the missing flags WROTE a one-word directed event to a
+peer before the real acknowledgement (2026-08-19); a second seat
+re-derived the same discipline independently two weeks later after its
+own usage errors (2026-09-02: `--help` before the first invocation of
+any subcommand in the session). The rule: read `<topic> <action> --help`
+before a subcommand's first use; the first well-formed invocation is the
+real one. Where a subcommand rejects `--help` (the merge-bot token mint
+does), read its source or the topic help — never invoke it to learn its
+flags.
 
 ## Related Surfaces
 
