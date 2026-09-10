@@ -20,6 +20,11 @@ export const CURRENT_ITEM_REVISION_OVERRIDES = {
   // resource — their revision verdicts now derive from lineage.
   C690: 'unchanged',
   C479: 'modified',
+  // MCP-345: the served AS metadata's scopes_supported now states the PRM's
+  // advertised set (SCOPES_SUPPORTED) instead of the upstream list, so a
+  // client choosing scopes from that document no longer requests openid.
+  C408: 'modified',
+  C707: 'modified',
   ...CURRENT_THREAD_PROGRESSIONS_ITEM_REVISION_OVERRIDES,
   // relatedResources prior-knowledge pointer rewritten for stated statements (MCP-671).
   C290: 'modified',

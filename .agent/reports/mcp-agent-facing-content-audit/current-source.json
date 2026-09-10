@@ -27,9 +27,9 @@
     "additionCount": 11,
     "availableCount": 675,
     "retiredCount": 53,
-    "unchangedCount": 473,
+    "unchangedCount": 472,
     "expandedCount": 0,
-    "modifiedCount": 122,
+    "modifiedCount": 123,
     "relocatedCount": 68,
     "addedCount": 12,
     "workspaceScopeInCount": 612,
@@ -9285,9 +9285,9 @@
           "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {
