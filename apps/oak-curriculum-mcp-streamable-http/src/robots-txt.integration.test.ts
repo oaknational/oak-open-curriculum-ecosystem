@@ -1,10 +1,13 @@
 /**
  * Integration tests for the MCP host's `robots.txt` (MCP-703).
  *
- * The served text is pinned verbatim rather than compared against the module's
- * own constant — the module deliberately does not export it — because what a
- * reviewer needs to be able to read is the body a crawler receives, and a test
- * asserting `body === BODY` would ratify any future edit silently.
+ * The served text is pinned verbatim in ONE case rather than compared against
+ * the module's own constant — the module deliberately does not export it —
+ * because what a reviewer needs to be able to read is the body a crawler
+ * receives, and a test asserting `body === BODY` would ratify any future edit
+ * silently. The other cases assert their own property and nothing more, so a
+ * body edit produces one failure naming the criterion rather than three
+ * naming none.
  *
  * Two properties are then asserted separately, over parsed directives rather
  * than raw bytes, because they are the ticket's acceptance conditions and the
@@ -13,13 +16,34 @@
  * The second is the one with forward value — it fires when a future author
  * adds a value *and* refreshes the pin.
  *
- * The last case is the one the pin cannot reach: whether the route is mounted
- * before Clerk. A predicate correct in isolation but registered after the auth
- * vendor would pass every assertion above and still 404 in production, which
- * is exactly what this path does today. It is described the way
- * `clerk-public-surface.integration.test.ts` describes the same property — a
- * spy standing in for global `clerkMiddleware` through the
- * `clerkMiddlewareFactory` seam (ADR-078).
+ * ## What the Clerk-spy case does and does not measure
+ *
+ * It measures that the request never reaches the auth vendor: a spy stands in
+ * for global `clerkMiddleware` through the `clerkMiddlewareFactory` seam
+ * (ADR-078) and must not be called, with an in-band control probe so the
+ * negative cannot pass vacuously. That is worth pinning — the live 404 at this
+ * path today is answered by Clerk.
+ *
+ * It does NOT measure registration order, and it cannot attribute the result
+ * to either mechanism, because TWO independent things keep the auth vendor out
+ * of this path and either alone is sufficient: the route is registered before
+ * `clerkMiddleware` (so the handler responds and never calls `next()`), and
+ * `/robots.txt` is in `CLERK_SKIP_PATHS` (so the conditional wrapper returns
+ * before calling the injected handler). Measured on review (MCP-703), each
+ * varied on its own from the shipped configuration:
+ *
+ * - registration moved after the global auth phase, skip entry kept — all six
+ *   cases pass;
+ * - skip entry removed, registration kept before Clerk — all six cases pass;
+ * - both removed together — three cases fail.
+ *
+ * So this case pins the property "the request never reaches the auth vendor",
+ * which is the one worth pinning: the live 404 here today is answered by
+ * Clerk. It is not a mount-order assertion, and reading it as one would be
+ * reading a conjunction as one of its terms. Order is a product-code invariant
+ * asserted by the module docblock and `docs/middleware-chain.md`; the
+ * falsifiable check on it is the production `curl` for absent
+ * `x-clerk-auth-*` headers, recorded on the PR.
  */
 import { describe, it, expect, vi } from 'vitest';
 import type { RequestHandler } from 'express';
@@ -98,7 +122,25 @@ describe('robots.txt (Integration)', () => {
 
     expect(res.status).toBe(200);
     expect(res.type).toBe('text/plain');
-    expect(res.text).toBe(EXPECTED_BODY);
+    expect(
+      res.text,
+      'the crawler-facing body is reviewed text (MCP-703): an edit to it must be restated here, so it is read again rather than ratified silently',
+    ).toBe(EXPECTED_BODY);
+  });
+
+  it('carries nosniff, so it cannot be moved ahead of the security headers unnoticed', async () => {
+    const app = await createTestApp();
+
+    const res = await request(app).get(ROBOTS_PATH);
+
+    // This is now the earliest public handler on the host. The shared
+    // pre-auth phase this lane sketches would register it earlier still, and
+    // registering it ahead of helmet would strip the security headers from a
+    // public response with nothing else here to notice.
+    expect(
+      res.headers['x-content-type-options'],
+      'robots.txt must still be served through the helmet security-headers middleware',
+    ).toBe('nosniff');
   });
 
   it('keeps the discovery documents fetchable and names no sitemap', async () => {
@@ -136,11 +178,15 @@ describe('robots.txt (Integration)', () => {
 
     const res = await request(app).get(ROBOTS_PATH);
 
+    // The property is that the route exists in this mode at all — it is
+    // registered outside the auth-enabled branch of `setupOAuthAndCaching`.
+    // The body itself is pinned once, above.
     expect(res.status).toBe(200);
-    expect(res.text).toBe(EXPECTED_BODY);
+    expect(res.type).toBe('text/plain');
+    expect(directivesOf(res.text)).toContain('User-agent: *');
   });
 
-  it('answers without the request ever reaching Clerk', async () => {
+  it('answers without the request ever reaching the auth vendor', async () => {
     const reachedClerk = vi.fn<(label: string) => void>();
     const app = await createTestApp({
       clerkMiddlewareFactory: (): RequestHandler => (req, _res, next) => {
@@ -152,8 +198,10 @@ describe('robots.txt (Integration)', () => {
     const res = await request(app).get(ROBOTS_PATH);
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe(EXPECTED_BODY);
-    expect(reachedClerk).not.toHaveBeenCalled();
+    expect(
+      reachedClerk,
+      'a crawler carries no credentials, so this response must be produced without the auth vendor in the path',
+    ).not.toHaveBeenCalled();
 
     // Control probe: the spy must be capable of firing, or the assertion
     // above would pass against a middleware that never runs for any path and

@@ -58,6 +58,12 @@
  * identically from every host this app answers on and has no Host check to
  * fail.
  *
+ * That identical body has no `Disallow: /` to keep preview deployments out of
+ * an index, and it does not need one: Vercel sends `x-robots-tag: noindex` on
+ * preview responses itself. Measured on the MCP-703 preview (2026-09-10) at
+ * `/`, at a discovery document and at this path, with the canonical host's `/`
+ * carrying no such header as the control.
+ *
  * @see https://www.rfc-editor.org/rfc/rfc9309.html — Robots Exclusion Protocol
  */
 import type { Express } from 'express';
