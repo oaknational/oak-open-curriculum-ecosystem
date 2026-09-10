@@ -88,6 +88,27 @@ function sharedEntryOutcome(
   return compareEntry(source.get(relativePath), copied);
 }
 
+/**
+ * The manifest findings for a shared skill, for the one state the path
+ * comparison cannot see: it walks the union of the two trees, so a `SKILL.md`
+ * absent from both (vanished after the root listing) leaves matching reference
+ * files comparing as identical, and a directory that is no longer a skill
+ * passes. A manifest present but not a regular file is already a walk finding.
+ */
+function vanishedManifestFindings(
+  skill: string,
+  source: SkillTree,
+  copy: SkillTree,
+): SkillCopyFinding[] {
+  if (source.has(SKILL_MANIFEST) || copy.has(SKILL_MANIFEST)) {
+    return [];
+  }
+  return [
+    { skill, relativePath: SKILL_MANIFEST, kind: 'missing-in-source' },
+    { skill, relativePath: SKILL_MANIFEST, kind: 'missing-in-copy' },
+  ];
+}
+
 /** Compare one shared skill's two trees; a tree that cannot be read is a finding on the skill itself. */
 export function compareSkill(
   skill: string,
@@ -99,7 +120,7 @@ export function compareSkill(
     const kind = source === undefined ? 'missing-in-source' : 'missing-in-copy';
     return { findings: [{ skill, relativePath: '.', kind }], filesCompared: 0 };
   }
-  const findings: SkillCopyFinding[] = [];
+  const findings: SkillCopyFinding[] = vanishedManifestFindings(skill, source, copy);
   let filesCompared = 0;
   const paths = new Set([...source.keys(), ...copy.keys()]);
   for (const relativePath of [...paths].sort(byText)) {

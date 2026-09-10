@@ -340,6 +340,22 @@ describe('findSkillCopyDrift', () => {
     ]);
   });
 
+  it('reports a shared skill whose SKILL.md vanished on both sides, never as identical', () => {
+    const reader: SkillTreeReader = {
+      listRoot: () => ({ skills: ['alpha'], invalid: [], symlinks: [] }),
+      // Both manifests gone after the listing; the reference files still match.
+      read: () => new Map([['references/r.md', file('r\n')]]),
+    };
+
+    const report = findSkillCopyDrift(CHECK, reader);
+
+    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+      { skill: 'alpha', relativePath: 'SKILL.md', kind: 'missing-in-source' },
+      { skill: 'alpha', relativePath: 'SKILL.md', kind: 'missing-in-copy' },
+    ]);
+    expect(report.filesCompared).toBe(1);
+  });
+
   it('reports a shared skill whose tree cannot be read as a finding on the skill itself', () => {
     const reader: SkillTreeReader = {
       listRoot: () => ({ skills: ['alpha'], invalid: [], symlinks: [] }),

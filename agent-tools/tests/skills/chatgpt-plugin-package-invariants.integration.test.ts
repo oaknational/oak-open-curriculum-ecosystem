@@ -208,6 +208,10 @@ describe('ChatGPT/Codex package invariants', () => {
 
     expect(entry?.name).toBe(manifest.name);
     expect(entry?.source.path).toBe(`./${PACKAGE_ROOT}`);
+    // The shipped policy, not merely a value the enum accepts: NOT_AVAILABLE
+    // would make the package uninstallable, and ON_INSTALL would ask for
+    // authorisation before a tool is ever called.
+    expect(entry?.policy).toStrictEqual({ installation: 'AVAILABLE', authentication: 'ON_USE' });
   });
 
   it('declares no capabilities, the value that passed OpenAI ingestion', async () => {
